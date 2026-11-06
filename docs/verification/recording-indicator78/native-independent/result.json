@@ -1,0 +1,515 @@
+{
+  "status": "PASS-PACKAGE-IDENTITY",
+  "manifest": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/recording-indicator78/native-build/result.json",
+  "sourceHead": "52056b4a0af01a7ddead657c2df36da59cdf71c6",
+  "inputCount": 279,
+  "trackedInputBytesMatchSourceCommit": 279,
+  "generatedInputOnly": [],
+  "inputBeforeAfterAndCurrentMatch": true,
+  "originalAndDerivedInventoriesUnchanged": {
+    "mac-original.app": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3"
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16826112,
+        "sha256": "067da61e53925832e9a8737892e8769346e526129730f1e2ec43fe210ca480f4"
+      }
+    ],
+    "备忘录.app": [
+      {
+        "path": "Contents/Info.plist",
+        "bytes": 1193,
+        "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3"
+      },
+      {
+        "path": "Contents/MacOS/notes-clone",
+        "bytes": 16746416,
+        "sha256": "21f47cc9efbebd9ae928b27ff0900cdffedcbd2b761d7e31910964aa7ffd9335"
+      },
+      {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+      }
+    ]
+  },
+  "onlySigningPathsChanged": [
+    "Contents/MacOS/notes-clone",
+    "Contents/_CodeSignature/CodeResources"
+  ],
+  "zip": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/recording-indicator78/备忘录-Mac23.zip",
+    "bytes": 5014535,
+    "sha256": "9c28504a718e7924834a98ff941e718c385de9cfe42b8586b67b98e94d57a6ec"
+  },
+  "zipEntriesMatchDerivedAndModes": [
+    {
+      "name": "备忘录.app/Contents/_CodeSignature/CodeResources",
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    {
+      "name": "备忘录.app/Contents/MacOS/notes-clone",
+      "bytes": 16746416,
+      "sha256": "21f47cc9efbebd9ae928b27ff0900cdffedcbd2b761d7e31910964aa7ffd9335"
+    },
+    {
+      "name": "__MACOSX/备忘录.app/Contents/MacOS/._notes-clone",
+      "bytes": 163,
+      "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+    },
+    {
+      "name": "__MACOSX/备忘录.app/Contents/._MacOS",
+      "bytes": 163,
+      "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+    },
+    {
+      "name": "备忘录.app/Contents/Info.plist",
+      "bytes": 1193,
+      "sha256": "d46147baa9f71c64309a9cf5f13cb749d67818ee5b9f0682dfe43a6b83b9c8c3"
+    },
+    {
+      "name": "__MACOSX/备忘录.app/Contents/._Info.plist",
+      "bytes": 163,
+      "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+    },
+    {
+      "name": "__MACOSX/备忘录.app/._Contents",
+      "bytes": 163,
+      "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+    }
+  ],
+  "info": {
+    "CFBundleDevelopmentRegion": "English",
+    "CFBundleDisplayName": "备忘录",
+    "CFBundleExecutable": "notes-clone",
+    "CFBundleIdentifier": "com.local.notesclone",
+    "CFBundleInfoDictionaryVersion": "6.0",
+    "CFBundleName": "备忘录",
+    "CFBundlePackageType": "APPL",
+    "CFBundleShortVersionString": "0.1.0",
+    "CFBundleVersion": "0.1.0",
+    "CSResourcesFileMapped": true,
+    "LSApplicationCategoryType": "public.app-category.productivity",
+    "LSMinimumSystemVersion": "12.0",
+    "LSRequiresCarbon": true,
+    "NSHighResolutionCapable": true,
+    "NSMicrophoneUsageDescription": "将录音添加到本地备忘录。",
+    "NSCameraUsageDescription": "拍摄照片添加到本地备忘录。"
+  },
+  "machOSectionContentsUnchangedBySigning": [
+    {
+      "segment": "__TEXT",
+      "section": "__text",
+      "length": 7908592,
+      "sha256": "a31791aa8edfa0360ed4a756fd6f5edce5e70a152a3b94f22fa2c21c8c311bd6",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__text_startup",
+      "length": 428,
+      "sha256": "b3e7d10070e9a2518aa1c52e06ce113f6b9d0d006700468a99f27ad938c494a1",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__stubs",
+      "length": 3576,
+      "sha256": "88fba4dfa34c8565047debe32a2d2e9333d95d3f46c95fd45388dbb4f4d59e86",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__objc_stubs",
+      "length": 10240,
+      "sha256": "a0cfb7a78b29ab143fc522ff09db8a7bb40f753b8660de4fab4b17e1fab493f3",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__init_offsets",
+      "length": 4,
+      "sha256": "0e06628b3c8a1d3dbe0618ec2668bddc5aa4a07dc49e15e7d9235d932c573f3e",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__objc_methlist",
+      "length": 2684,
+      "sha256": "b27b6d66476692e43dd0fcb0ea226a56769c00d9c9445ab5f10ab6c27e817566",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__gcc_except_tab",
+      "length": 540080,
+      "sha256": "34868474f96e0605f8df2edfc8c222fb37584198e059067202b8d83686fdc7d1",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__const",
+      "length": 1901568,
+      "sha256": "058d7d996583149c499d92ad0ec153c1dda87fc4c438cd512310c4c69f6782c7",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__cstring",
+      "length": 130338,
+      "sha256": "89365db234642ccbcc8b8b201373b628a0c1f5f52469c33e175cc5b3647a2d2b",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__objc_methname",
+      "length": 8599,
+      "sha256": "2a2416639465300f5c1c9c4a268124ded9608f8c57084b00058f81c9e0189199",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__objc_classname",
+      "length": 341,
+      "sha256": "43a9a3821d13a899f1de34e5dc1547ded6e222210d1b0483bb5de659591ec09c",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__objc_methtype",
+      "length": 1760,
+      "sha256": "fbecd86d87d86b3aba9d99f18a06ffd24b173f62ccdc9fa187b9738d194aa6d6",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__ustring",
+      "length": 674,
+      "sha256": "ee20455fc3f601a78852b6ffd077233c8889c4b841ea197c7fe9778c0830b925",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__unwind_info",
+      "length": 181568,
+      "sha256": "d74ae5598d7754db99049e986be1e24342f595fee8848b8e7c5208467d9e0fe0",
+      "zeroFill": false
+    },
+    {
+      "segment": "__TEXT",
+      "section": "__eh_frame",
+      "length": 962948,
+      "sha256": "b6947058f79724920a38d3433bae59a6892b089ba844a081806e8a5546633eb1",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__got",
+      "length": 3272,
+      "sha256": "25c7ab93c4b4136a63b800f2e0611e5e964ca5a51607c3a4e305c9d15bab7435",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__const",
+      "length": 197456,
+      "sha256": "96dc661efcdf30f255f20c7d1f93eb35d37bad1ad33675311fbc21a4fbf3d9fc",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__cfstring",
+      "length": 6240,
+      "sha256": "936d8a2865b90ab27f1cb3edf22ce3e3bee00dbced6bbe82fb4f72dfb6811cbe",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__objc_classlist",
+      "length": 104,
+      "sha256": "c48b078b293320244a4b19a1dad3d55e93ee600ea2d6af0396a1c8df670c29e9",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__objc_protolist",
+      "length": 32,
+      "sha256": "c9d7f67bd1dfe8f7d33f3db933ab44cb2944d8f14c861dc83c189484c2d07f5d",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__objc_imageinfo",
+      "length": 8,
+      "sha256": "94039884329d3732c577860f40d0dfdf883ff89dac332f87216e692c08892fa2",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__objc_arraydata",
+      "length": 1096,
+      "sha256": "31423a7e7a5ef4647da996071bb21f8a86e81adc2d6133fd7bf987dfabce3a9c",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__objc_arrayobj",
+      "length": 552,
+      "sha256": "869d180ad23e129e34ee894e937a98f9f44f45e5bcdbbb61b74a1350ac1fe988",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__objc_dictobj",
+      "length": 320,
+      "sha256": "1f774a06a87d7cf18172a81daedc6a663f341acd8b3472f47019a1d8262a5d44",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA_CONST",
+      "section": "__objc_intobj",
+      "length": 24,
+      "sha256": "6bfbda4dea5528811649349af0de5de270a09831067eba8e32a31a99845d11ef",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__objc_const",
+      "length": 5008,
+      "sha256": "e8fed3296041f90f241e4f44f6d6858fb1ee052f7e1b1c95ea918551a656426c",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__objc_selrefs",
+      "length": 3024,
+      "sha256": "56ddfba8e5af6fec436f505376875ea61efa4bf73129230dc9797a80db996534",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__objc_classrefs",
+      "length": 408,
+      "sha256": "e82961b483ef8631e92c6e49b67af425f8a5be7ec60c9d68ea5b40a2a4c6a9dd",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__objc_superrefs",
+      "length": 64,
+      "sha256": "28d18f88c19f2194659a1add7155e0d94b1b7f7143c393a3d6d59dbeefcaefd3",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__objc_ivar",
+      "length": 208,
+      "sha256": "adf595189f589bc91ed38c362a39c7157161023dbb0edae11c03f664d220cf5f",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__objc_data",
+      "length": 1040,
+      "sha256": "910998b0c261485b27a9ff27d0e6f46fbb87b900cf7ad2c4e00251f784b98ac9",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__data",
+      "length": 18992,
+      "sha256": "d18df8a5fa4531b0a3edefcf90dbc0e85257cee5a245f55e5706a1b3c5957940",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__thread_vars",
+      "length": 384,
+      "sha256": "b151a15b7b8a70580d9b63b93b2ffe07a41b67feb5b4bde1a9c108067db183b4",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__thread_data",
+      "length": 120,
+      "sha256": "3a33ad708d05f1861b37727ba14351ddbaa5570fa8b5273198bb4e627898cc5f",
+      "zeroFill": false
+    },
+    {
+      "segment": "__DATA",
+      "section": "__thread_bss",
+      "length": 240,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "zeroFill": true
+    },
+    {
+      "segment": "__DATA",
+      "section": "__common",
+      "length": 10360,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "zeroFill": true
+    },
+    {
+      "segment": "__DATA",
+      "section": "__bss",
+      "length": 5744,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "zeroFill": true
+    }
+  ],
+  "signatureCommands": [
+    {
+      "label": "original-strict",
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/recording-indicator78/mac-original.app"
+      ],
+      "naturalExitCode": 1,
+      "wallMs": 31.41,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "623322531fca6ec79e1f582353f30a5b2704fa03ab543f69d4effb239ae7a028"
+    },
+    {
+      "label": "original-display",
+      "argv": [
+        "/usr/bin/codesign",
+        "-dv",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/recording-indicator78/mac-original.app"
+      ],
+      "naturalExitCode": 0,
+      "wallMs": 6.15,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "17d6cff5e89b4b040dae00ea45b3febdee524ccd8871f9425540469a2f6bebec"
+    },
+    {
+      "label": "original-entitlements",
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/recording-indicator78/mac-original.app"
+      ],
+      "naturalExitCode": 0,
+      "wallMs": 6.27,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "a8c57a45296e3fa40d6395e8eedf8fa9a6be815c51895cfb50e32e6d7f0343f4"
+    },
+    {
+      "label": "derived-strict",
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/recording-indicator78/备忘录.app"
+      ],
+      "naturalExitCode": 0,
+      "wallMs": 21.02,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "354f4ee209669f29d196eb687a699d1aa6902344528b07ec8054f95b2936d963"
+    },
+    {
+      "label": "derived-display",
+      "argv": [
+        "/usr/bin/codesign",
+        "-dv",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/recording-indicator78/备忘录.app"
+      ],
+      "naturalExitCode": 0,
+      "wallMs": 18.75,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "74ba0db1ee3ee6501bb82e95f548cd5a1768c74f388769b3349743a55e420f7e"
+    },
+    {
+      "label": "derived-entitlements",
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        "-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/recording-indicator78/备忘录.app"
+      ],
+      "naturalExitCode": 0,
+      "wallMs": 8.66,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "1de85f320285ae2f145d686b73ab0fed881de864bc9bf2752add867a9e28a0cd"
+    }
+  ],
+  "frontendPayloads": [
+    {
+      "label": "original",
+      "path": "assets/index-CCe0bfBw.js",
+      "decodedBytes": 1023758,
+      "decodedSha256": "6b91b0aa52ef1b93f5ec54bcfcb163ea2fd60fdeee29d1089ffb96b616fa2b9a",
+      "rawDistEqual": true
+    },
+    {
+      "label": "original",
+      "path": "assets/index-DY8u7lO1.css",
+      "decodedBytes": 80971,
+      "decodedSha256": "674cef6e975dbc31740576e8984e6d3a1ff423fa0cfb932629cea3ec51da5a10",
+      "rawDistEqual": true
+    },
+    {
+      "label": "original",
+      "path": "assets/native-recording-access-CHwsSY6L.js",
+      "decodedBytes": 1018,
+      "decodedSha256": "7bd18f94a418f7c02d9e0e2f1b93a091a3a2956e9580fdc952b66f3558577a80",
+      "rawDistEqual": true
+    },
+    {
+      "label": "original",
+      "path": "index.html",
+      "decodedBytes": 478,
+      "decodedSha256": "d5bca7654c7d6df4e6339dbfe78362c946ff81a0404caf5b2fc2a40bfe7e7c18",
+      "rawDistEqual": false
+    },
+    {
+      "label": "derived",
+      "path": "assets/index-CCe0bfBw.js",
+      "decodedBytes": 1023758,
+      "decodedSha256": "6b91b0aa52ef1b93f5ec54bcfcb163ea2fd60fdeee29d1089ffb96b616fa2b9a",
+      "rawDistEqual": true
+    },
+    {
+      "label": "derived",
+      "path": "assets/index-DY8u7lO1.css",
+      "decodedBytes": 80971,
+      "decodedSha256": "674cef6e975dbc31740576e8984e6d3a1ff423fa0cfb932629cea3ec51da5a10",
+      "rawDistEqual": true
+    },
+    {
+      "label": "derived",
+      "path": "assets/native-recording-access-CHwsSY6L.js",
+      "decodedBytes": 1018,
+      "decodedSha256": "7bd18f94a418f7c02d9e0e2f1b93a091a3a2956e9580fdc952b66f3558577a80",
+      "rawDistEqual": true
+    },
+    {
+      "label": "derived",
+      "path": "index.html",
+      "decodedBytes": 478,
+      "decodedSha256": "d5bca7654c7d6df4e6339dbfe78362c946ff81a0404caf5b2fc2a40bfe7e7c18",
+      "rawDistEqual": false
+    }
+  ],
+  "completeWallMs": 2037.13,
+  "limits": [
+    "Read-only file/signature/resource audit; no build, sign, launch, install, GUI, mic, user/Android data access.",
+    "Local adhoc signature only, no DeveloperID or notarization.",
+    "Current embedded payload identity does not establish WKWebView rendering/runtime or Apple Notes pixel parity."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "executionDate": "2026-11-06",
+  "workingDirectory": "/Users/water/work/2026/Apple-Notes-Clone",
+  "executionOrder": "Independent original/derived extraction in parallel; audit sequentially after both exited 0.",
+  "commands": [
+    {
+      "label": "extract-original",
+      "argv": [
+        "/usr/bin/time",
+        "-p",
+        "node",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/recording-indicator78/native-independent/extract-assets.mjs",
+        "docs/verification/recording-indicator78/native-build/result.json",
+        "artifacts/recording-indicator78/mac-original.app/Contents/MacOS/notes-clone",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/recording-indicator78/native-independent/original-assets"
+      ],
+      "naturalExitCode": 0,
+      "completeProcessRealSeconds": 0.06,
+      "stdout": "extract-original.stdout.txt",
+      "stderr": "extract-original.stderr.txt"
+    },
+    {
+      "label": "extract-derived",
+      "argv": [
+        "/usr/bin/time",
+        "-p",
+        "node",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/recording-indicator78/native-independent/extract-assets.mjs",
+        "docs/verification/recording-indicator78/native-build/result.json",
+        "artifacts/recording-indicator78/备忘录.app/Contents/MacOS/notes-clone",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/recording-indicator78/native-independent/derived-assets"
+      ],
+      "naturalExitCode": 0,
+      "completeProcessRealSeconds": 0.06,
+      "stdout": "extract-derived.stdout.txt",
+      "stderr": "extract-derived.stderr.txt"
+    },
+    {
+      "label": "audit",
+      "argv": [
+        "/usr/bin/time",
+        "-p",
+        "python3",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/recording-indicator78/native-independent/audit.py",
+        "docs/verification/recording-indicator78/native-build/result.json"
+      ],
+      "naturalExitCode": 0,
+      "completeProcessRealSeconds": 2.1,
+      "stdout": "audit.stdout.txt",
+      "stderr": "audit.stderr.txt"
+    }
+  ]
+}
