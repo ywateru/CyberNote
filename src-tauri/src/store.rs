@@ -171,6 +171,7 @@ impl TryFrom<AttachmentRecord> for Attachment {
     }
 }
 pub struct Store {
+    instance_id: Uuid,
     db: Connection,
     root: PathBuf,
     keys: HashMap<String, [u8; 32]>,
@@ -183,6 +184,7 @@ impl Store {
         fs::create_dir_all(root.as_ref())?;
         let db = Connection::open(root.as_ref().join("notes.sqlite3"))?;
         let mut s = Self {
+            instance_id: Uuid::new_v4(),
             db,
             root: root.as_ref().into(),
             keys: HashMap::new(),

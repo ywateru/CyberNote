@@ -42,8 +42,11 @@ struct Terminal {
     id: String,
     participants: HashSet<String>,
     outcome: &'static str,
+    authority: Token,
+    store_instance: Uuid,
 }
 struct Quiet {
+    store_instance: Uuid,
     id: String,
     epoch: u64,
     participants: HashSet<String>,
@@ -94,6 +97,7 @@ impl Session {
         }
         let id = Uuid::new_v4().to_string();
         self.quiet.current = Some(Quiet {
+            store_instance: self.store.sync_store_instance(),
             id: id.clone(),
             epoch: self.epoch,
             participants,
@@ -174,6 +178,30 @@ impl Session {
             .find(|t| t.id == id)
             .map(|t| t.outcome)
     }
+    pub(crate) fn sync_check_committed_resolution(
+        &self,
+        operation: &str,
+        original_session: &str,
+        window: &str,
+        live: &HashSet<String>,
+    ) -> Result<()> {
+        let terminal = self
+            .quiet
+            .completed
+            .iter()
+            .find(|t| t.id == operation)
+            .ok_or_else(|| denied("同步操作已结束"))?;
+        if self.id != original_session
+            || terminal.outcome != "commit"
+            || terminal.store_instance != self.store.sync_store_instance()
+            || !terminal.participants.contains(window)
+        {
+            return Err(denied("同步操作所属会话已改变"));
+        }
+        // Only this operation's committed epoch is accepted. A later access
+        // change, Store replacement or closed caller still rejects the read.
+        self.sync_check_window(window, live, &terminal.authority)
+    }
     pub(crate) fn sync_abort(&mut self) {
         if let Some(q) = &mut self.quiet.current {
             q.aborted = true;
@@ -186,7 +214,8 @@ impl Session {
         let Some(q) = self.quiet.current.as_ref() else {
             return Ok(None);
         };
-        if q.aborted
+        if q.store_instance != self.store.sync_store_instance()
+            || q.aborted
             || q.epoch != self.epoch
             || q.participants != *live
             || self.pending.is_some()
@@ -320,6 +349,8 @@ impl Session {
             id: q.id,
             participants: q.participants,
             outcome,
+            authority: self.sync_media_token(),
+            store_instance: q.store_instance,
         });
         while self.quiet.completed.len() > 64 {
             self.quiet.completed.pop_front();

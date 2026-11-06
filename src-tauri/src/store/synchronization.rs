@@ -268,6 +268,10 @@ fn summaries(db: &Connection) -> Result<Vec<VersionSummary>> {
 }
 
 impl Store {
+    pub(crate) fn sync_store_instance(&self) -> Uuid {
+        self.instance_id
+    }
+
     fn flush_in(&self, db: &Connection) -> Result<()> {
         let workspace = identity(db)?.workspace_id;
         let mut query =

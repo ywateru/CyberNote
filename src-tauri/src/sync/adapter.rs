@@ -580,12 +580,12 @@ impl Runtime {
                     digest,
                     keep_all,
                 } => {
-                    let event = self
-                        .shared
-                        .0
-                        .lock()
-                        .map_err(|_| error("sync_internal"))?
-                        .sync_begin(
+                    let (event, store_instance) = {
+                        let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                        let live = self.host.participants();
+                        s.sync_check_window(window, &live, expected)?;
+                        let store_instance = s.store.sync_store_instance();
+                        let event = s.sync_begin(
                             live,
                             Some(Resolution {
                                 kind,
@@ -594,6 +594,8 @@ impl Runtime {
                                 keep_all,
                             }),
                         )?;
+                        (event, store_instance)
+                    };
                     let operation = event["operationId"]
                         .as_str()
                         .ok_or_else(|| error("sync_internal"))?
@@ -608,19 +610,30 @@ impl Runtime {
                     }
                     let deadline = Instant::now() + Duration::from_secs(11);
                     loop {
-                        let outcome = self
-                            .shared
-                            .0
-                            .lock()
-                            .map_err(|_| error("sync_internal"))?
-                            .sync_terminal_outcome(&operation);
-                        match outcome {
-                            Some("commit") => break,
+                        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                        if s.sync_session_id() != expected.session_id
+                            || s.store.sync_store_instance() != store_instance
+                        {
+                            return Err(error("access_changed"));
+                        }
+                        match s.sync_terminal_outcome(&operation) {
+                            Some("commit") => {
+                                s.sync_check_committed_resolution(
+                                    &operation,
+                                    &expected.session_id,
+                                    window,
+                                    &self.host.participants(),
+                                )?;
+                                conflicts = Some(Self::conflict_rows(&s.store)?);
+                                break;
+                            }
                             Some(_) => return Err(error("sync_deferred")),
                             None if Instant::now() < deadline => {
+                                drop(s);
                                 thread::sleep(Duration::from_millis(25))
                             }
                             None => {
+                                drop(s);
                                 self.shared
                                     .0
                                     .lock()
@@ -630,7 +643,6 @@ impl Runtime {
                             }
                         }
                     }
-                    conflicts = Some(self.conflicts(window, expected)?);
                 }
             }
             Ok(())
@@ -674,11 +686,14 @@ impl Runtime {
             return Ok(json!([]));
         }
         s.sync_check_window(window, &self.host.participants(), expected)?;
+        Self::conflict_rows(&s.store)
+    }
+    fn conflict_rows(store: &Store) -> Result<Value> {
         let mut result = vec![];
-        for c in s.store.sync_conflicts()? {
+        for c in store.sync_conflicts()? {
             let mut variants = vec![];
             for v in c.versions {
-                let wire = s.store.sync_version(&v.digest)?;
+                let wire = store.sync_version(&v.digest)?;
                 let note = wire.payload.as_ref().and_then(|p| p.get("note"));
                 variants.push(json!({"digest":v.digest,"title":v.title.unwrap_or_else(||"已永久删除".into()),"updatedAt":v.updated_at,"deleted":note.is_some_and(|n|!n["deletedAt"].is_null()),"purged":v.tombstone,"locked":v.locked,"attachmentCount":wire.payload.as_ref().and_then(|p|p["attachments"].as_array()).map_or(0,Vec::len)}));
             }
@@ -1349,3 +1364,7 @@ mod media_tests;
 #[cfg(test)]
 #[path = "adapter_retry_tests.rs"]
 mod retry_tests;
+
+#[cfg(test)]
+#[path = "adapter_resolve_tests.rs"]
+mod resolve_tests;
