@@ -1,0 +1,190 @@
+{
+  "status": "PASS-READONLY-CURRENT91-ROUTES02-EVIDENCE",
+  "resultSha256": "5a303432d282c649f00865d43b7df5d8474faaf603d6e85bb33a30b4cca0aa6b",
+  "checks": [
+    {
+      "name": "tunnel authenticated separate Store adoption"
+    },
+    {
+      "name": "tunnel host to client note"
+    },
+    {
+      "name": "tunnel client to host edit"
+    },
+    {
+      "name": "tunnel-image.png metadata arrives"
+    },
+    {
+      "name": "tunnel-image.png remote read original SHA",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "name": "tunnel-image.png export original SHA"
+    },
+    {
+      "name": "tunnel-image.png separate managed file SHA"
+    },
+    {
+      "name": "tunnel reverse owner arrives"
+    },
+    {
+      "name": "tunnel-audio.wav metadata arrives"
+    },
+    {
+      "name": "tunnel-audio.wav remote read original SHA",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "name": "tunnel-audio.wav export original SHA"
+    },
+    {
+      "name": "tunnel-audio.wav separate managed file SHA"
+    },
+    {
+      "name": "wss incorrect Noise PSK rejected before Store enable"
+    },
+    {
+      "name": "Tunnel-bad-key natural process exit"
+    },
+    {
+      "name": "quick-tunnel-1 owned tunnel terminated"
+    },
+    {
+      "name": "tunnel-new-hostname authenticated separate Store adoption"
+    },
+    {
+      "name": "tunnel-new-hostname host to client note"
+    },
+    {
+      "name": "tunnel-new-hostname client to host edit"
+    },
+    {
+      "name": "tunnel-new-hostname-image.png metadata arrives"
+    },
+    {
+      "name": "tunnel-new-hostname-image.png remote read original SHA",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "name": "tunnel-new-hostname-image.png export original SHA"
+    },
+    {
+      "name": "tunnel-new-hostname-image.png separate managed file SHA"
+    },
+    {
+      "name": "tunnel-new-hostname reverse owner arrives"
+    },
+    {
+      "name": "tunnel-new-hostname-audio.wav metadata arrives"
+    },
+    {
+      "name": "tunnel-new-hostname-audio.wav remote read original SHA",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "name": "tunnel-new-hostname-audio.wav export original SHA"
+    },
+    {
+      "name": "tunnel-new-hostname-audio.wav separate managed file SHA"
+    },
+    {
+      "name": "new Quick Tunnel endpoint preserves Noise host and workspace identity"
+    },
+    {
+      "name": "same client remembers new wss endpoint"
+    },
+    {
+      "name": "Tunnel-client natural process exit"
+    },
+    {
+      "name": "cold restart preserves new wss endpoint"
+    },
+    {
+      "name": "same client cold restart reconnects through new hostname"
+    },
+    {
+      "name": "Tunnel-client-restart natural process exit"
+    },
+    {
+      "name": "quick-tunnel-2 owned tunnel terminated"
+    },
+    {
+      "name": "Tunnel-host natural process exit"
+    },
+    {
+      "name": "no async quiet protocol errors"
+    },
+    {
+      "name": "frozen binary unchanged"
+    },
+    {
+      "name": "source fingerprint unchanged"
+    },
+    {
+      "name": "route harness unchanged"
+    }
+  ],
+  "sourceAndBinarySameAsFailed01": true,
+  "verifiedRealWssEndpoints": 2,
+  "wrongPskCode": "sync_transport",
+  "all22FilesHashed": true,
+  "owned6PidsDead": true,
+  "processes": [
+    {
+      "name": "Tunnel-host",
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "name": "Tunnel-client",
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "name": "Tunnel-bad-key",
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    {
+      "name": "Tunnel-client-restart",
+      "exit": {
+        "code": 0,
+        "signal": null
+      }
+    }
+  ],
+  "tunnels": [
+    {
+      "name": "quick-tunnel-1",
+      "exit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "forced": true
+    },
+    {
+      "name": "quick-tunnel-2",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false
+    }
+  ],
+  "limits": [
+    "First route01 remains FAILED; route02 is unchanged separate fresh tunnel-only pass",
+    "Tunnel1 forced SIGKILL after existing grace retained; tunnel2 natural0",
+    "Virtual WG/EasyTier unverified",
+    "No device/runtime/new routes/DB queries by independent reviewer"
+  ]
+}

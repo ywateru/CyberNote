@@ -1,0 +1,5 @@
+# PASS — exact seven native tool commits integration
+
+Temporary independent Git index applied all seven commits cleanly onto rootHEAD a1fbd334ab019dd06d99aad127d64ed7f00233a7 in requested order. No root index/worktree/branch mutation. Final changed paths exactly four native files; final bytes each equal frozen eec86a7c. All other paths including main observers and91harness manifests remain untouched. Four node syntax checks and existing13diagnostic/17provider host checks natural0; no devices/runtime/DB.
+
+Source map: f349cda1 originally blocked assertionleak;198b3dfe repaired boundary admitted pure2cba482a. v2delta8f39a24d admitted77387537. Fixedtouch e472b68a admitteda7bccba7; finite stages433604cd admittedeefc43e1; explicitmouse98d228b0 admitted01f5f17d; fixedimageeec86a7c admitted838e708d. Preserve original failed tool/runtime evidence and exactcommit histories; do not merge whole old native branch or replace existing observers/manifests. Source/host admission does not imply final actual export/coldboot acceptance.
