@@ -1,0 +1,26 @@
+{
+  "status": "PASS-SOURCE-ONLY-COMPILE-REUSE-CONTINUATION",
+  "sourceCommit": "9fbd2dbc496c802245867a2ce92874d51e70c8c9",
+  "driverSHA256": "d4a039d4df5f0564d0ccdf74901b808318e61ac66494765fc020ba50d22e3cb4",
+  "actualOriginalObservation": {
+    "displayedFlags": "0x20002(adhoc,linker-signed)",
+    "entitlementDisplayExit": 0,
+    "entitlementStdoutEmpty": true,
+    "strictVerifyExit": 1,
+    "infoPlistBinding": "not bound",
+    "sealedResources": "none"
+  },
+  "correction": "Original is recorded as actual None, not required to contain source entitlement. Derived still requires explicit source entitlement exact dictionary and strict0.",
+  "continuationBinding": [
+    "new finalize02 evidence and fresh derived/ZIP/dist paths",
+    "preserved prior failed result hash and approved before/after input equality",
+    "prior natural compile0 and copy0 required",
+    "current raw complete file inventory equals original recorded inventory",
+    "no compile/copy-original repeat, no prior evidence overwrite"
+  ],
+  "executionAdmission": "Direct source PASS sent to author before root-authorized finalization; actual package independently audited in run01/result.json",
+  "limits": [
+    "Reviewer observed codesign display only, no signing/build/launch",
+    "First driver overstrict original plist requirement corrected; initial failure retained, not product source failure"
+  ]
+}
