@@ -61,8 +61,10 @@ export async function pairViaUI(client,invitation,{step=async(_label,operation)=
   await step('pair-open-settings',()=>client.tap('button[aria-label="设置"]'));
   await step('pair-data-tab',()=>client.tap('#preferences-tab-data'));
   await step('pair-device-name',()=>client.fill('input[aria-label="同步设备名称"]','SYNC87 Android'));
-  await step('pair-open-join',()=>client.tap('.sync-settings button','加入同步'));
+  await step('pair-name-keyboard',async()=>{if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(250);}});
+  await step('pair-open-join',async()=>{await client.tap('.sync-settings button','加入同步');await client.wait('!!document.querySelector(".sync-pair")','actual join panel');});
   await step('pair-invitation',()=>client.fill('input[aria-label="粘贴完整配对串"]',invitation));
+  await step('pair-invitation-keyboard',async()=>{if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(250);}});
   await step('pair-submit',()=>client.tap('.sync-settings button','连接并加入'));
   await step('pair-confirmed',()=>client.wait('!!document.querySelector(".sync-peer")&&!document.querySelector(".sync-pair")','native UI pair',40000));
   await step('pair-close-settings',()=>client.tap('button[aria-label="关闭设置"]'));
