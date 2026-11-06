@@ -1,0 +1,115 @@
+{
+  "scope": "actual owned5584 original reply argument logpoint + real release outcomes, same paired desktop Store live; no reply return results observed",
+  "passiveInstall": {
+    "version": 1,
+    "active": true,
+    "eventCounts": {
+      "probe": 0,
+      "prepare": 0,
+      "release": 0,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 0,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "not-read",
+      "current": "unknown",
+      "windows": [],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    }
+  },
+  "replySnapshot": {
+    "enabled": true,
+    "counts": {
+      "probe": {
+        "blockedTrue": 0,
+        "blockedFalse": 4,
+        "unknown": 0
+      },
+      "prepare": {
+        "readyTrue": 4,
+        "readyFalse": 0,
+        "unknown": 0
+      },
+      "other": 0
+    },
+    "sourceVerified": true,
+    "replyResultsObserved": false
+  },
+  "passiveSnapshot": {
+    "version": 1,
+    "active": true,
+    "eventCounts": {
+      "probe": 5,
+      "prepare": 5,
+      "release": 5,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 5,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "read",
+      "current": "main",
+      "windows": [
+        "main"
+      ],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    }
+  },
+  "ok": true,
+  "logpointCleanup": {
+    "disabled": true,
+    "breakpointRemoved": true,
+    "stateRemoved": true
+  },
+  "passiveCleanup": {
+    "version": 1,
+    "active": false,
+    "eventCounts": {
+      "probe": 5,
+      "prepare": 5,
+      "release": 5,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 5,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "read",
+      "current": "main",
+      "windows": [
+        "main"
+      ],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    },
+    "cleanup": {
+      "localUnregistered": true,
+      "nativeUnregistered": true
+    }
+  },
+  "clientClosed": true,
+  "wallSeconds": 20.856615875
+}
