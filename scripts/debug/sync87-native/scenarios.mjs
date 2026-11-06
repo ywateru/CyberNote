@@ -7,11 +7,12 @@ import { join } from 'node:path';
 import { guard } from './client.mjs';
 import { goHome,openNote,eventually,saveImageOriginal } from './native-ui.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
-export async function assertNativeOriginal(client,id,file) {
+async function verifiedNativeOriginal(client,id,file) {
   const read=await client.readAttachment(id),bytes=Buffer.from(read.data,'base64');
   assert.equal(bytes.length,file.bytes);assert.equal(hash(bytes),file.sha256);
-  return{id,bytes:bytes.length,sha256:file.sha256,source:'actual-native-read_attachment'};
+  return {proof:{id,bytes:bytes.length,sha256:file.sha256,source:'actual-native-read_attachment'},read};
 }
+export async function assertNativeOriginal(client,id,file){return (await verifiedNativeOriginal(client,id,file)).proof;}
 export const mobileInputText=marker=>marker+'\nAndroid真实输入与保存';
 export const desktopInputText=marker=>marker+' desktop real Session input';
 // Capture the actual sending Store after all attachment document commits. Keep
@@ -76,8 +77,8 @@ export async function desktopMedia({client,peer,state,output,saveState,convergen
   await waitForNoteReplica(()=>client.workspace(),expected,state.desktopFiles,'desktop media to mobile',convergenceTimeoutMs);
   const w=await client.workspace();assert(attachmentIds.every(a=>w.attachments.some(x=>x.id===a&&x.noteId===id)));
   const originals=[],media=[];for(let i=0;i<state.desktopFiles.length;i++){
-    const file=state.desktopFiles[i],attachmentId=attachmentIds[i];originals.push(await assertNativeOriginal(client,attachmentId,file));
-    const source=await client.readAttachment(attachmentId);media.push({id:attachmentId,name:file.name,mime:source.mime,data:source.data});
+    const file=state.desktopFiles[i],attachmentId=attachmentIds[i],verified=await verifiedNativeOriginal(client,attachmentId,file);originals.push(verified.proof);
+    const source=verified.read;media.push({id:attachmentId,name:file.name,mime:source.mime,data:source.data});
   }
   await openNote(client,id);await visibleSyntheticEditor(client,expected,media);
   state.desktopNote.attachmentIds=attachmentIds;await saveState(state);await client.snapshot(output,'desktop-media');

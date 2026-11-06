@@ -105,7 +105,7 @@ export async function connect({receipt,port=19400}) {
       await guard('tap',{x:Math.round(rect.x+p.x*rect.width/viewport.width),y:Math.round(rect.y+p.y*rect.height/viewport.height)});
     };
     const insert=async text=>{assert(typeof text==='string'&&text.length<=16384);await send('Input.insertText',{text});};
-    const fill=async(selector,text)=>{await tap(selector);await send('Input.dispatchKeyEvent',{type:'keyDown',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await insert(text);};
+    const fill=async(selector,text)=>{await nativeTap(selector);await wait(`(()=>{const targets=[...document.querySelectorAll(${JSON.stringify(selector)})].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&!e.disabled});return targets.length===1&&document.activeElement===targets[0]})()`,'exact visible native input focus');await send('Input.dispatchKeyEvent',{type:'keyDown',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await send('Input.dispatchKeyEvent',{type:'keyUp',key:'a',code:'KeyA',modifiers:2,windowsVirtualKeyCode:65});await insert(text);};
     const workspace=()=>read('window.__TAURI_INTERNALS__.invoke("load_workspace")'); // observation only
     const readAttachment=async id=>{
       assert(typeof id==='string'&&/^[0-9a-f-]{36}$/.test(id));
