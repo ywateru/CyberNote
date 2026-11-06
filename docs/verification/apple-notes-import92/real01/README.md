@@ -8,4 +8,6 @@ Narrow diagnosis without more Notes reads: the previous admitted fixed-runtime01
 
 The source adapter should emit one row for identical metadata bearing the same stable ID, and refuse conflicting same-ID metadata as source_changed. Host duplicate rejection remains strict. This needs source-owner repair and independent admission before another actual run. No repeated source invocation or direct append fallback occurred.
 
-Read-only Python SQLite target supplement could not open the private DB (OperationalError), so it adds no target-baseline assertions. Original target is retained; no modification to bypass access was attempted.
+Read-only Python SQLite target supplement opened the private DB connection but its first table query failed (OperationalError), so it adds no target-baseline assertions. File header is SQLite and size40960B; no raw exception description was emitted. Original target is retained; no modification to bypass access was attempted.
+
+The retained owned target DB was initially0644 under the0700 private parent. After all owned processes ended, only this run’s private target/capture files were chmod0600 for retention. Source permissions were not touched.
