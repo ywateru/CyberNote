@@ -1,7 +1,7 @@
 ---
 id: app-data-management79-ui
 scope: attachment-flicker-image-export-data-management-ui-debug-integration
-status: ready
+status: in-progress
 depends-on: [app-recording-indicator78]
 ---
 
