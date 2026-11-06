@@ -1,5 +1,8 @@
 # 交付计划
 
+2026-11-06最新优先：[录音标识与对勾保存78](tasks/app-recording-indicator78.md)进行中。用户要求原owner列表角标与实时卡动效，并修复录音中✓不能保存而×可保存；截图已保全，先真实DOM复现再独审。Mac77保持通过，Android76保留、原手机录音现场不动。
+
+
 2026-11-06：[Mac截图三处修正77](tasks/app-mac-feedback77.md)已完成限定源码/浏览器范围，[独立复审](reviews/app-mac-feedback77-recheck.md)PASS（51+6）；主线桌面148、手机笔记9/录音43/附件43、build/production均自然exit0。移除Mac底部新建按钮、右键按真实坐标限制边界、标题/摘要安全橙黄高亮（连续字距和220px首命中修复）。Mac22本地包已构建且派生严格签名通过；整窗原生像素继续开放。Android原生76继续ready，原录音现场不动。
 
 
