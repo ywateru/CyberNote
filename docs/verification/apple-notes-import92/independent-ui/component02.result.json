@@ -1,0 +1,43 @@
+{
+  "passed": false,
+  "sourceCommit": "c5c8c72d23666848789bca085f121d5e635e4be0",
+  "componentSha256": "f88fae391036dd2c2cfdd6ea1dd52c08e0d41a0c6cf664bb85d02ef77168121a",
+  "wallMs": 6566.132708,
+  "scope": "actual React AppleNotesImport component/browser with synthetic import bridge only; no Rust/Notes/App Store",
+  "observed": {
+    "state": {
+      "open": true,
+      "state": {
+        "id": "review-job",
+        "phase": "cancelling",
+        "completed": 0,
+        "total": 1,
+        "items": [
+          {
+            "key": "opaque-key",
+            "title": "合成笔记",
+            "folder": "合成目录",
+            "status": "ok",
+            "reason": ""
+          }
+        ],
+        "results": [],
+        "error": "",
+        "truncated": false,
+        "commit": null
+      },
+      "selected": [
+        "opaque-key"
+      ],
+      "error": ""
+    },
+    "polls": 1,
+    "finishes": [],
+    "rendererErrors": []
+  },
+  "error": "cancelling heartbeat stopped polling before terminal and busy cleanup",
+  "cleanup": {
+    "browserClosed": true,
+    "serverClosed": true
+  }
+}
