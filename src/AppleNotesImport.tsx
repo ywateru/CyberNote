@@ -68,7 +68,9 @@ export default function AppleNotesImport({
       if (
         current?.id === next.id &&
         ((appleImportTerminal(current) && !appleImportTerminal(next)) ||
-          (current.phase === "cancelling" && !appleImportTerminal(next)))
+          (current.phase === "cancelling" &&
+            next.phase !== "cancelling" &&
+            !appleImportTerminal(next)))
       )
         return;
       stateRef.current = next;
