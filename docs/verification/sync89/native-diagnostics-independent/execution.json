@@ -1,0 +1,32 @@
+[
+  {
+    "name": "session",
+    "argv": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "session::synchronization",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 1.158410208
+  },
+  {
+    "name": "trusted-reader",
+    "argv": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "trusted_diagnostics_read_requires_window_token_and_has_no_opt_in_or_mutation",
+      "--",
+      "--nocapture"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.5643830830000001
+  }
+]
