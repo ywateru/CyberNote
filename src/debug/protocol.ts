@@ -1,3 +1,4 @@
+import type { StorageView } from "../storage-usage";
 import type { JSONContent } from "@tiptap/react";
 import type { FolderDraft } from "../smart-draft";
 import type { Settings } from "../types";
@@ -66,13 +67,20 @@ export type DebugCommandArguments = {
       | "archive.import"
       | "data.open"
       | "data.refresh"
+      | "image.info"
+      | "image.close"
       | "app.close"
       | "app.quit"
       | "drawing.open"
       | `native.${string}`
   ]: Record<string, never>;
 } & {
-  "data.filter": { query?: string; kind?: "all" | "image" | "audio" | "video" | "file" | "unowned"; page?: number };
+  "data.navigate": { view: StorageView };
+  "data.filter": {
+    query?: string;
+    kind?: "all" | "image" | "audio" | "video" | "file" | "unowned";
+    page?: number;
+  };
   "data.exportAttachment": { id: string };
   "image.preview": { id: string };
   "image.save": { id: string };

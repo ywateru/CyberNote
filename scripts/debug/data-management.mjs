@@ -26,7 +26,7 @@ export async function runDataManagement(runtime, { command, check, output }) {
   const capture=async name=>{await saveJSON(resolve(output,name+'.snapshot.json'),await snapshot(page,{selector:'.app',maxChars:35000,maxNodes:180}));await page.screenshot({path:resolve(output,name+'.png')});};
   const add=async name=>{await chooseFiles(page,[{name,mimeType:'image/png',buffer:tinyPNG}]);await idle(page);await page.waitForFunction(()=>[...document.querySelectorAll('.image-open img')].every(x=>x.naturalWidth>0));};
   const configure=value=>page.evaluate(value=>window.__DEBUG_PLATFORM__.configure(value),value);
-  const open=async()=>{await command('data.open');await page.waitForSelector('.data-root');};
+  const open=async()=>{await command('data.open');await page.waitForSelector('.storage-summary');await page.locator('.data-storage-details summary').click();};
   const close=async()=>{await page.getByRole('button',{name:'关闭数据管理',exact:true}).click();await idle(page);};
   const emit=async(name,payload)=>page.evaluate(({name,payload})=>window.__DEBUG_PLATFORM__.emit(name,payload),{name,payload});
   const prepare=async()=>{backend.suspended=['note-a'];backend.operationId='data79-prepare';const value=backend.state();await emit('notes-access',{phase:'prepare',operationId:backend.operationId,noteIds:['note-a'],access:value.access});};
@@ -69,6 +69,7 @@ export async function runDataManagement(runtime, { command, check, output }) {
 
   await command('menu.open',{menu:'app'});await page.getByRole('button',{name:'数据管理',exact:true}).click();await idle(page);
   check('Actual more-settings entry opens data management with real bridge DTO',await page.locator('.data-root').count()===1&&(await page.locator('.data-management').innerText()).includes('32.0 KB'));
+  await command('data.navigate',{view:'all'});
   check('DB/WAL/SHM statuses and actual filesystem timestamp are rendered without payload reads',(await page.locator('.data-management').innerText()).includes('notes.sqlite3-shm')&&(await page.locator('.data-management').innerText()).includes('不存在')===false&&await page.locator('[data-file-path="notes.sqlite3-shm"]').getByText('缺失',{exact:false}).count()>0);
   const reads=backend.calls.filter(c=>c.command==='read_attachment').length;
   await page.getByRole('button',{name:`导出 ${attachment.displayName}`,exact:true}).click();await idle(page);
@@ -76,14 +77,14 @@ export async function runDataManagement(runtime, { command, check, output }) {
   backend.dataExtras=Array.from({length:45},(_,i)=>({relativePath:`other/${i}-`+'超长路径'.repeat(8)+'.bin',category:'other',size:i,modifiedAt:1760000000000,exists:true,status:'file'}));
   backend.dataExtras.push({relativePath:'empty-directory',category:'other',size:null,modifiedAt:1760000000000,exists:true,status:'directory'},{relativePath:'blocked-link',category:'other',size:null,modifiedAt:1760000000000,exists:true,status:'symlink'});
   await command('data.refresh');
-  check('All files are counted and paginated without silent truncation',(await page.locator('.data-count').innerText()).includes('49 / 全部 49')&&await page.locator('.data-file-list .data-file').count()===20);
+  check('All files are counted and paginated without silent truncation',(await page.locator('.data-count').innerText()).includes('52 / 全部 52')&&await page.locator('.data-file-list .data-file').count()===20);
   await page.getByRole('button',{name:'下一页',exact:true}).click();
   check('Actual pagination reveals next files', (await page.locator('.data-pagination').innerText()).includes('第 2 / 3 页'));
   await command('data.filter',{kind:'image'});check('Command filter uses actual file view',await page.locator('.data-file-list .data-file').count()===2);
   await page.getByRole('textbox',{name:'搜索本地文件'}).fill('absent79');check('Filename search has explicit empty state',await page.getByText('没有匹配的文件',{exact:true}).count()===1);
   await command('data.filter',{query:'',kind:'all'});
   for (const [width,theme] of [[320,'light'],[390,'dark']]) {
-    await close();await page.setViewportSize({width,height:844});await command('settings.update',{settings:{theme}});await open();
+    await close();await page.setViewportSize({width,height:844});await command('settings.update',{settings:{theme}});await open();await command('data.navigate',{view:'all'});
     const geometry=await page.locator('.data-management').evaluate(node=>{const r=node.getBoundingClientRect();const close=node.querySelector('[aria-label="关闭数据管理"]').getBoundingClientRect();return {width:r.width,scrollWidth:node.scrollWidth,clientWidth:node.clientWidth,close:{left:close.left,right:close.right,top:close.top,bottom:close.bottom},viewport:innerWidth};});metrics.push({width,theme,geometry});
     check(`${width}px ${theme} data management retains reachable close and no horizontal overflow`,geometry.scrollWidth<=geometry.clientWidth&&geometry.close.left>=0&&geometry.close.right<=width&&geometry.close.top>=0);
     await capture(`data79-${width}-${theme}`);
@@ -110,7 +111,7 @@ export async function runDataManagement(runtime, { command, check, output }) {
   await close();await command('editor.insertText',{text:' AFTER-BACKUP79'});await command('app.flush');await open();
   // Explicit protocol events reproduce the real import prepare/commit UI lifecycle.
   backend.call=async(c,a)=>{if(c==='import_archive'){await prepare();await page.waitForSelector('.access-cover');const result=await originalCall(c,a);await commit();return {...result,value:backend.state()};}return originalCall(c,a);};
-  await page.getByRole('button',{name:'导入备份…',exact:true}).click();await idle(page);await page.waitForSelector('.data-root');
+  await page.getByRole('button',{name:'导入备份…',exact:true}).click();await idle(page);await page.waitForSelector('.storage-summary');
   check('Import prepare/commit keeps the open management page and refreshes statistics after sensitive state clears',await page.locator('.data-management').count()===1&&!(backend.workspace.notes.find(n=>n.id==='note-a').plainText).includes('AFTER-BACKUP79'));
   backend.call=originalCall;await close();await command('recording.open');await command('recording.action',{action:'toggle'});await open();
   check('Active recording disables both backups with explicit unsaved-audio explanation',await page.getByRole('button',{name:'导入备份…',exact:true}).isDisabled()&&await page.getByRole('button',{name:'导出完整备份…',exact:true}).isDisabled()&&(await page.locator('.data-management').innerText()).includes('内存中的录音尚未备份'));

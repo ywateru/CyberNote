@@ -30,6 +30,7 @@ const info = (revision = 1, searchSequence = 0) => ({
 });
 const projection = (key = "A", value = "", ack = 0, context = { id: key }) => ({
   key,
+  searchScope: "trusted-same-owner-document",
   context,
   state: {
     layout: "threeColumn",
@@ -332,6 +333,116 @@ await test("overlay queued behind a failing in-flight normal update is delivered
     h.controller.stop();
     await settle();
   }
+});
+await test("late search never crosses ordinary navigation, document or authority scope, including overlay history", async () => {
+  for (const reason of ["navigation-B", "document-v2", "authority-epoch2"])
+    for (const useOverlay of [false, true]) {
+      const updates = [],
+        h = harness({
+          update: async (state) => {
+            updates.push(state);
+            return info(state.revision);
+          },
+        });
+      const first = projection("A", "trusted-A");
+      first.searchScope = "scope-A";
+      h.controller.set(first);
+      await settle();
+      if (useOverlay) {
+        const overlay = projection("overlay-A", "trusted-A");
+        overlay.searchScope = "scope-A";
+        overlay.state.contentOverlay = true;
+        h.controller.set(overlay);
+        await settle();
+      }
+      const next = projection(reason, "new-current");
+      next.searchScope = reason;
+      h.controller.set(next);
+      await settle();
+      const count = h.events.length;
+      h.emit(
+        7,
+        { kind: "search", value: "old-confidential", phase: "commit" },
+        1,
+      );
+      await settle();
+      assert.equal(h.events.length, count);
+      assert(
+        updates.every((state) => state.search.value !== "old-confidential"),
+      );
+      h.controller.stop();
+      await settle();
+    }
+});
+await test("missing or empty trust scope cannot retain pre-overlay search", async () => {
+  for (const scope of [undefined, ""]) {
+    const h = harness();
+    const first = projection("unscoped");
+    first.searchScope = scope;
+    h.controller.set(first);
+    await settle();
+    const overlay = projection("unscoped-overlay");
+    overlay.searchScope = scope;
+    overlay.state.contentOverlay = true;
+    h.controller.set(overlay);
+    await settle();
+    h.emit(7, { kind: "search", value: "untrusted", phase: "commit" }, 1);
+    await settle();
+    assert.equal(h.events.length, 0);
+    assert(
+      h.calls
+        .filter((c) => Array.isArray(c) && c[0] === "update")
+        .every((c) => c[1].search.value !== "untrusted"),
+    );
+    h.controller.stop();
+    await settle();
+  }
+});
+await test("in-flight scope change acknowledges old transport sequence without adopting old value", async () => {
+  const pending = deferred(),
+    updates = [];
+  const h = harness({
+    update: async (state) => {
+      updates.push(state);
+      if (updates.length === 1) return pending.promise;
+      return info(state.revision);
+    },
+  });
+  const first = projection("A");
+  first.searchScope = "A";
+  h.controller.set(first);
+  await settle();
+  const changing = projection("A-render", "A-query");
+  changing.searchScope = "A";
+  h.controller.set(changing);
+  const next = projection("B", "B-query");
+  next.searchScope = "B";
+  h.controller.set(next);
+  h.emit(7, { kind: "search", value: "private-A", phase: "commit" }, 1);
+  assert.equal(h.events.length, 0);
+  pending.resolve(info(2, 7));
+  await settle();
+  assert.equal(updates.at(-1).search.value, "B-query");
+  assert.equal(updates.at(-1).search.acknowledgedEvent, 7);
+  h.controller.stop();
+  await settle();
+});
+await test("invalidate while native update is in-flight cannot restore old search provenance", async () => {
+  const pending = deferred(),
+    h = harness({ update: async () => pending.promise });
+  h.controller.set(projection());
+  await settle();
+  h.controller.set(projection("pending"));
+  h.controller.invalidate((context) => {
+    context.id = "sealed";
+  });
+  pending.resolve(info(2));
+  await settle();
+  h.emit(3, { kind: "search", value: "sealed", phase: "commit" }, 1);
+  h.emit(4, { kind: "search", value: "sealed", phase: "commit" }, 2);
+  assert.equal(h.events.length, 0);
+  h.controller.stop();
+  await settle();
 });
 await test("a rejected overlay desired is not retried in a busy loop", async () => {
   let updates = 0;

@@ -6,6 +6,9 @@ import type {
 } from "../plugins/tauri-plugin-notes-ui/guest-js";
 export interface ToolbarProjection<C> {
   key: string;
+  /** Trust scope excludes presentation/query, includes navigation, authority,
+   * editor identity and document version. Only overlays may retain old search. */
+  searchScope: string;
   state: Omit<ToolbarState, "revision">;
   context: C;
 }
@@ -36,7 +39,8 @@ export class NativeToolbar<C> {
   private started = false;
   private revision = 0;
   private sequence = 0;
-  private search?: { value: string; sequence: number };
+  private search?: { value: string; sequence: number; scope: string };
+  private lastSearchSequence = 0;
   private waitSearch = 0;
   private composing = false;
   private appliedHash = "";
@@ -49,6 +53,12 @@ export class NativeToolbar<C> {
   ) {}
   set(projection: ToolbarProjection<C>) {
     if (this.disposed) return;
+    if (this.desired && this.desired.searchScope !== projection.searchScope) {
+      this.searchRecords.clear();
+      this.search = undefined;
+      this.composing = false;
+      this.waitSearch = 0;
+    }
     this.desired = projection;
     // A caret-only transaction must refresh the bookmark without closing an open native menu.
     if (this.binding && this.appliedHash === this.hash(projection))
@@ -61,19 +71,23 @@ export class NativeToolbar<C> {
   }
   private merged(projection: ToolbarProjection<C>) {
     const state = projection.state;
-    if (
-      state.search &&
-      this.search &&
-      state.search.acknowledgedEvent < this.search.sequence
-    )
+    const search =
+      this.search?.scope === projection.searchScope ? this.search : undefined;
+    const acknowledged = Math.max(
+      this.lastSearchSequence,
+      search?.sequence || 0,
+    );
+    if (state.search && state.search.acknowledgedEvent < acknowledged)
       return {
         ...projection,
         state: {
           ...state,
           search: {
             ...state.search,
-            value: this.search.value,
-            acknowledgedEvent: this.search.sequence,
+            // A known old-scope event acknowledges transport sequence only. Its
+            // value never crosses a navigation/document/authority boundary.
+            value: search?.value ?? state.search.value,
+            acknowledgedEvent: acknowledged,
           },
         },
       };
@@ -143,9 +157,18 @@ export class NativeToolbar<C> {
       return;
     this.sequence = event.sequence;
     if (event.intent.kind === "search") {
-      this.search = { value: event.intent.value, sequence: event.sequence };
+      this.lastSearchSequence = event.sequence;
       this.composing = false;
       if (this.waitSearch <= event.sequence) this.waitSearch = 0;
+      if (projection.searchScope !== this.desired?.searchScope) {
+        void this.pump();
+        return;
+      }
+      this.search = {
+        value: event.intent.value,
+        sequence: event.sequence,
+        scope: projection.searchScope,
+      };
       this.intent(event.intent, projection.context, event.sequence);
       // Acknowledge the actual native value immediately, before React publishes its new query.
       void this.pump();
@@ -192,6 +215,7 @@ export class NativeToolbar<C> {
           });
           if (this.disposed) break;
           this.binding = info;
+          const wasOverlay = this.appliedOverlay;
           this.appliedOverlay = !!projection.state.contentOverlay;
           if (!this.appliedOverlay) {
             this.composing = false;
@@ -201,7 +225,16 @@ export class NativeToolbar<C> {
           this.info(info);
           for (const [old, record] of this.records)
             if (old < info.stateRevision) {
-              if (record.state.search) this.searchRecords.set(old, record);
+              if (
+                record.state.search &&
+                typeof projection.searchScope === "string" &&
+                projection.searchScope.length > 0 &&
+                record.searchScope === projection.searchScope &&
+                (wasOverlay ||
+                  this.appliedOverlay ||
+                  record.state.contentOverlay)
+              )
+                this.searchRecords.set(old, record);
               this.records.delete(old);
             }
           while (this.searchRecords.size > 64)
@@ -260,6 +293,9 @@ export class NativeToolbar<C> {
     contexts.forEach(clean);
     this.records.clear();
     this.searchRecords.clear();
+    this.search = undefined;
+    this.composing = false;
+    this.waitSearch = 0;
     this.desired = undefined;
     this.appliedHash = "";
     this.early = [];

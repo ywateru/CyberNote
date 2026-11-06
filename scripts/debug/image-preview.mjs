@@ -1,4 +1,5 @@
 import { resolve } from "node:path";
+import { readFile } from "node:fs/promises";
 import { api, idle, state, snapshot, saveJSON } from "./runtime.mjs";
 import { chooseFiles, tinyPNG } from "./mobile-attachments.mjs";
 export async function runImagePreview(runtime, { command, check, output }) {
@@ -196,7 +197,36 @@ export async function runImagePreview(runtime, { command, check, output }) {
   });
   await runtime.reset();
   if (!runtime.mobile) {
-    // Simulated Tauri transport with non-Mac platform exercises fallback handlers.
+    // Exact official Tauri 2.12.5 drag.js (Cargo.lock), vendored unchanged with
+    // upstream copyright. Exercise injected runtime + React event chain together.
+    const dragScript = await readFile(
+      new URL("./fixtures/tauri-drag-2.12.5.js", import.meta.url),
+      "utf8",
+    );
+    await page.addScriptTag({
+      content: dragScript.replace("__TEMPLATE_os_name__", '"linux"'),
+    });
+    const doubleClick = async (selector) => {
+      const node = page.locator(selector).first();
+      await node.dispatchEvent("mousedown", {
+        button: 0,
+        detail: 2,
+        clientX: 1,
+        clientY: 1,
+      });
+      await node.dispatchEvent("mouseup", {
+        button: 0,
+        detail: 2,
+        clientX: 1,
+        clientY: 1,
+      });
+      await node.dispatchEvent("dblclick", {
+        button: 0,
+        detail: 2,
+        clientX: 1,
+        clientY: 1,
+      });
+    };
     const count = await page.evaluate(
       () => window.__DEBUG_PLATFORM__.calls.length,
     );
@@ -205,15 +235,16 @@ export async function runImagePreview(runtime, { command, check, output }) {
       ".notes-header",
       ".editor-header",
     ])
-      await page.locator(selector).dispatchEvent("dblclick");
+      await doubleClick(selector);
     const calls = await page.evaluate(
       (start) => window.__DEBUG_PLATFORM__.calls.slice(start),
       count,
     );
     check(
-      "All fallback blank header double clicks dispatch one simulated native toggle each",
-      calls.filter((x) => x.command === "plugin:window|toggle_maximize")
-        .length === 3,
+      "Official Tauri drag injection and React together dispatch exactly one toggle per blank header",
+      calls.filter(
+        (x) => x.command === "plugin:window|internal_toggle_maximize",
+      ).length === 3,
     );
     const countControls = await page.evaluate(
       () => window.__DEBUG_PLATFORM__.calls.length,
@@ -225,7 +256,7 @@ export async function runImagePreview(runtime, { command, check, output }) {
       ".desktop-search input",
       ".tiptap",
     ])
-      await page.locator(selector).first().dispatchEvent("dblclick");
+      await doubleClick(selector);
     check(
       "Fallback button/search/editor double clicks do not dispatch native zoom",
       !(
@@ -233,7 +264,7 @@ export async function runImagePreview(runtime, { command, check, output }) {
           (start) => window.__DEBUG_PLATFORM__.calls.slice(start),
           countControls,
         )
-      ).some((x) => x.command === "plugin:window|toggle_maximize"),
+      ).some((x) => x.command === "plugin:window|internal_toggle_maximize"),
     );
   }
   // Direct production media-source/component lifetime probe: disposal must hide
@@ -247,14 +278,10 @@ export async function runImagePreview(runtime, { command, check, output }) {
     "Actual media source disposal synchronously hides overlay bytes and calls close once",
     lifetime.closed === 1 && lifetime.hidden && !lifetime.hasSrc,
   );
-  const disabledFallback = await page.evaluate(async () =>
-    (
-      await import("/scripts/debug/image-preview-lifetime.tsx")
-    ).probeDisabledWindowDrag(),
-  );
   check(
-    "native=false filtered drag helper never invokes a Tauri operation",
-    disabledFallback === 0,
+    "Mobile headers have no native desktop drag regions",
+    !runtime.mobile ||
+      (await page.locator("[data-tauri-drag-region]").count()) === 0,
   );
   await saveJSON(
     resolve(output, "image80-final.snapshot.json"),

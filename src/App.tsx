@@ -1,5 +1,5 @@
+import { isStorageView } from "./storage-usage";
 import { ImagePreview, ImagePreviewContext, type ImagePreviewRequest } from "./ImagePreview";
-import { dragBackgroundDoubleClick } from "./window-drag";
 import type { DebugAdapter } from "./debug/protocol";
 import {
   SearchListPreview,
@@ -4656,6 +4656,17 @@ function App() {
       !!liveEditor?.isEditable;
     const stamp = accessGate.stamp(noteId || undefined);
     nativeToolbar.current.set({
+      searchScope: JSON.stringify([
+        folderId,
+        noteId,
+        view,
+        galleryEditor,
+        separate,
+        page,
+        stamp,
+        liveEditor ? nativeEditorIds.current.get(liveEditor) : null,
+        liveEditor ? nativeDocumentVersions.current.get(liveEditor) || 0 : 0,
+      ]),
       key: JSON.stringify([
         nativeScope,
         contentOverlay,
@@ -4821,6 +4832,12 @@ function App() {
         "data.refresh": () => {
           if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
           return dataManagementHandle.current.refresh();
+        },
+        "data.navigate": ({ view }) => {
+          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          if (typeof view !== "string" || !isStorageView(view))
+            throw Error("未知存储类别");
+          return dataManagementHandle.current.navigate(view);
         },
         "data.filter": (args) => {
           if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
@@ -5346,8 +5363,7 @@ function App() {
         {!nativeTop && (
           <div
             className="sidebar-toolbar"
-            data-tauri-drag-region
-            onDoubleClick={event => dragBackgroundDoubleClick(event, native && !mobile, () => getCurrentWindow().toggleMaximize())}
+            data-tauri-drag-region={native && !mobile ? "deep" : undefined}
           >
             {!native && (
               <div className="preview-lights">
@@ -5504,7 +5520,10 @@ function App() {
         className={`notes-pane ${view === "gallery" ? "gallery-pane" : ""}`}
       >
         {!nativeTop && (
-          <header className="notes-header" data-tauri-drag-region onDoubleClick={event => dragBackgroundDoubleClick(event, native && !mobile, () => getCurrentWindow().toggleMaximize())}>
+          <header
+            className="notes-header"
+            data-tauri-drag-region={native && !mobile ? "deep" : undefined}
+          >
             {mobile ? (
               <>
                 <button className="back-button" onClick={back}>
@@ -5816,8 +5835,7 @@ function App() {
         {!nativeTop && (
           <header
             className="editor-header"
-            onDoubleClick={event => dragBackgroundDoubleClick(event, native && !mobile, () => getCurrentWindow().toggleMaximize())}
-            data-tauri-drag-region
+            data-tauri-drag-region={native && !mobile ? "deep" : undefined}
             onMouseDown={(e) => {
               if ((e.target as HTMLElement).closest("button"))
                 e.preventDefault();

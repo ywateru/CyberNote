@@ -2,7 +2,6 @@ import { createElement } from "react";
 import { createRoot } from "react-dom/client";
 import { ImagePreview } from "../../src/ImagePreview";
 import { createAttachmentMediaSource } from "../../src/attachment-media";
-import { dragBackgroundDoubleClick } from "../../src/window-drag";
 export async function probeImageSourceDisposal() {
   const host = document.createElement("div");
   host.className = "app";
@@ -49,18 +48,4 @@ export async function probeImageSourceDisposal() {
     source.dispose();
     host.remove();
   }
-}
-export function probeDisabledWindowDrag() {
-  let count = 0;
-  const target = document.createElement("div");
-  dragBackgroundDoubleClick(
-    {
-      target,
-      defaultPrevented: false,
-      preventDefault() {},
-    } as unknown as Parameters<typeof dragBackgroundDoubleClick>[0],
-    false,
-    () => count++,
-  );
-  return count;
 }
