@@ -2,6 +2,8 @@
 
 用户目标：在Mac客户端直接把系统自带“备忘录”的数据复制进本应用；源笔记、文件夹和附件不得被修改、移动或删除。研究依据以本机 Notes.sdef、CocoaStandard.sdef、实际只读读取和一手项目源码为准，结果归档于research/apple-notes-import92。
 
+固定JXA与Rust host的字段、调用允许集合及错误分类以[来源协议v1](apple-notes-source-protocol.md)为准。
+
 ## 数据与只读边界
 
 仅Mac显示入口。使用固定的原生只读Apple Events/JXA适配器读取账户/文件夹层次、稳定ID、标题、HTML正文、纯文本、创建/修改时间及附件。附件的save只允许写入本应用新建且拥有的暂存目录，含义是导出副本，不保存note本体；禁止source make/set/delete/move/import、源数据库写入或checkpoint、改变源文件权限、终止Notes。正常读取无需先导出系统Notes备份，也不要求用户手工逐条复制。
