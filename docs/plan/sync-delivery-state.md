@@ -50,6 +50,10 @@
 
 后续定位：cycle02在可用磁盘低于8GiB时触发reviewed保护停机（外层exit2/403.385秒）；installed hash mismatch落在保护停机的读窗口，首次读的具体bytes/SHA未被旧guard保存，不编造截断细节。未重新安装，须同data下完整installed hash再确认。根正常移除已完成63独审干净源码检出、保留branch/证据，64含untracked cache树未删；[清理记录](../verification/sync87/source-checkout-cleanup02.json)。作者和reviewer分别sparse无关历史verification检出，保留Git对象/分支/当前证据及全部产品输入，free恢复约10.39GiB。cycle03使用原data继续，guard下限不变。
 
+原生工具后续精确范围：`febe6174`安装parser与`d27e18ca`宿主父子链已独审并合主线；原两链反例/修复证据均保留。普通输入/步骤/137一次只读重试在 `9c648b1f` 获独审核心PASS但发现home隐藏DOM误PASS和副日志任意message两个P2；`95aa2c3f`修复，经`7dd48715`独审4+14自然0关闭。共用readNativeUI和Recent/attachmentsOpen增量`176f3dcd`经`df37c287`独审8项自然0，仅工具scope。不冒称真实选取/保存/导出通过。以上后续工具源仍在native作者分支，主线已保全独审证据，等实际阶段最终接收。
+
+截至cycle05：系统chooser打开与取消、Store无新增已实际通过；Downloads目录点击和Recent长按未证明选中，尚无PNG/TXT/WAV实际保存。旧错名`home-filled.png`是失败比例实验中的编辑页，不用于正式首页；`home.png`是真实有卡片画廊，最终须新`home-visible-final`正向gate。下一优先为Recent普通单选PNG→实际Store，避免多选阻塞基本保存。cycle05再次在<8GiB保护停机，原失败/未发生tap均保全；[第三批清理](../verification/sync87/source-checkout-cleanup03.json)正常删除完成且clean/无进程的63/68/69源检出，含untracked的64/66仍跳过，branch/证据/targets/SDK/所有data保留。cycle06同data、5584、reviewed guard继续，完整goal仍active。
+
 ## 用户原现场和范围
 
 原Android约13秒未保存录音完全不碰：禁止安装、启动、停止、重启、读取、导出、备份原应用或旧AVD（含5580）。ADB显式5584，无默认serial，无kill-server。只用合成PNG/TXT/WAV，无真实mic；Apple Notes删除实验不做。已有直接执行授权沿用，无重复询权限。
