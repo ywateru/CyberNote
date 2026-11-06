@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "d8ff33362cb2bc9adfac9cbd205b90ae3bbead73",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "4a522defa3b5a2342435a91e9c77a473022767ea2bc54f60189a9383920602ea",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      " M src/attachment-target.ts",
+      " M src/bridge.ts",
+      "?? scripts/debug/sync-window.mjs",
+      "?? src/network-sync.ts"
+    ]
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "4a522defa3b5a2342435a91e9c77a473022767ea2bc54f60189a9383920602ea",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      " M src/attachment-target.ts",
+      " M src/bridge.ts",
+      "?? scripts/debug/sync-window.mjs",
+      "?? src/network-sync.ts"
+    ]
+  },
+  "sourceInputsChanged": false,
+  "platform": "desktop-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "elapsedMs": 4850,
+  "result": {
+    "groups": [
+      {
+        "group": "notes",
+        "pass": true,
+        "checks": [
+          "Semantic create persists a new workspace note and rendered editor",
+          "Editor transaction saved body and DOM agrees",
+          "Pin and paper semantic patch reaches persistent workspace",
+          "Delete moves actual note into trash",
+          "Restore leaves trash",
+          "Real lock modal makes note unauthorized and hides editable content",
+          "Real unlock modal restores authorized editable note",
+          "Purge requires real confirmation and removes workspace note and DOM",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 1839
+      }
+    ],
+    "passedChecks": 9,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": [],
+  "output": "/private/tmp/apple-notes-sync86-frontend/docs/verification/sync86-frontend/develop/attempt06/notes"
+}

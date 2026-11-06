@@ -1,0 +1,46 @@
+{
+  "sourceCommit": "5950bd3074e4335d4a863b2194012d0173b0dc63",
+  "baseline": "d8ff33362cb2bc9adfac9cbd205b90ae3bbead73",
+  "files": {
+    "scripts/check-attachment-submission.mjs": "1adc976ebd67cb7c4546c702f9fec0f31bb2964503dfac752ee0a2e7ed04c328",
+    "scripts/debug/sync-window.mjs": "82e3b2fec9525be777187c42b6ad2b9af49468f8b4a38259af31dc49b0a4722f",
+    "src/App.tsx": "197c9e19c0887b4f1cadcdc6cc81a3c7b2b09e837372f25e65459e67cfe10003",
+    "src/attachment-target.ts": "0230ad006408875232fd06d11905b1723832eb982badf172d2baa843ef54dbc0",
+    "src/bridge.ts": "d6506161c10155064adffe45652b451cd39e68abf1a844a8ab796cc304eb5337",
+    "src/network-sync.ts": "3b46699920df0bd3fd6fc205399c489273505ba4cac095fd0f0c6cf3b939837e"
+  },
+  "checks": [
+    {
+      "command": "node scripts/debug/sync-window.mjs docs/verification/sync86-frontend/develop/final",
+      "naturalExit": 0,
+      "passedChecks": 34,
+      "evidence": "final/report.json"
+    },
+    {
+      "command": "pnpm build",
+      "naturalExit": 0,
+      "evidence": "final/build.log"
+    },
+    {
+      "command": "node scripts/debug/cli.mjs group notes --out docs/verification/sync86-frontend/develop/final/notes",
+      "naturalExit": 0,
+      "passedChecks": 9,
+      "evidence": "final/notes/summary.json"
+    },
+    {
+      "command": "node scripts/debug/cli.mjs check-production --production dist --out docs/verification/sync86-frontend/develop/final/production",
+      "naturalExit": 0,
+      "evidence": "final/production/summary.json"
+    },
+    {
+      "command": "git diff --check",
+      "naturalExit": 0
+    },
+    {
+      "command": "node scripts/check-attachment-submission.mjs",
+      "naturalExit": 1,
+      "evidence": "attempt01/attachment-submission.log",
+      "scope": "Legacy data-URL harness cannot resolve bridge relative ./data-management import; not counted as passing."
+    }
+  ]
+}

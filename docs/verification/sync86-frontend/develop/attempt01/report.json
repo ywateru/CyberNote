@@ -1,0 +1,156 @@
+{
+  "sourceHead": "d8ff33362cb2bc9adfac9cbd205b90ae3bbead73",
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "3efba93a7efe63a8e76ed39bb2eb09c9c071d1a2dc212eea23027c7aec0f9a05",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      " M src/attachment-target.ts",
+      " M src/bridge.ts",
+      "?? scripts/debug/sync-window.mjs",
+      "?? src/network-sync.ts"
+    ]
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "3efba93a7efe63a8e76ed39bb2eb09c9c071d1a2dc212eea23027c7aec0f9a05",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      " M src/attachment-target.ts",
+      " M src/bridge.ts",
+      "?? scripts/debug/sync-window.mjs",
+      "?? src/network-sync.ts"
+    ]
+  },
+  "sourceChanged": false,
+  "checks": [
+    "Probe reads real App protection without freeze, access transition, remount or focus change",
+    "Prepare freezes the target before draining its existing save queue",
+    "Ready follows real save queue ACK and leaves no pending or failed target body",
+    "Abort preserves the same target DOM and restores original editability",
+    "Prepare and abort retain the actual Tiptap Undo history",
+    "An unrelated active editor remains writable and saves while B is frozen",
+    "Real PM composition and TagComposition protect the owner and defer prepare without forcing an end",
+    "The real final IME body saves through the ordinary App handler",
+    "Navigation waits for a linearized terminal receipt while the target remains frozen",
+    "The original navigation continues after the terminal cancellation receipt",
+    "An old release cannot thaw a newer operation",
+    "A late pending ready receipt cannot recreate a finished freeze",
+    "A lost cancellation reply is recovered using the same operation and backend terminal receipt"
+  ],
+  "replies": [
+    {
+      "phase": "probe",
+      "operationId": "2bc4d6ea-e0ae-48a8-8fb4-604503c9317a",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "13b12d9a-f5b7-495c-ac1a-70d4784ce373",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "7b6b2c35-48e3-4005-b994-b959c939531b",
+      "ready": true
+    },
+    {
+      "phase": "probe",
+      "operationId": "1080314f-60e1-4362-89bf-ead1c32b218a",
+      "protectedNoteIds": [
+        "note-a"
+      ],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "cb479411-fa41-4250-a62d-a234fecc91a2",
+      "ready": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "ff8a8d46-b9ed-43a3-9473-f11aadee7359",
+      "protectedNoteIds": [],
+      "blocked": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "311943da-5310-45af-a7bd-58c2ba17ec99",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "311943da-5310-45af-a7bd-58c2ba17ec99",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c50a9ae0-6bc8-4bd5-a67e-09f0c2ed97a9",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "0b90d824-7f9b-4f0b-bc31-983ecf287b8d",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "0b90d824-7f9b-4f0b-bc31-983ecf287b8d",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "2aa1490f-d702-4818-8b6d-7da08113152c",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "2aa1490f-d702-4818-8b6d-7da08113152c",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "2aa1490f-d702-4818-8b6d-7da08113152c",
+      "ready": false
+    },
+    {
+      "phase": "probe",
+      "operationId": "9e9e7753-3c5e-4958-b9a2-332a399f325d",
+      "protectedNoteIds": [],
+      "blocked": false
+    }
+  ],
+  "failure": {
+    "message": "An open picker protects its exact captured note owner",
+    "stack": "AssertionError [ERR_ASSERTION]: An open picker protects its exact captured note owner\n    at check (file:///private/tmp/apple-notes-sync86-frontend/scripts/debug/sync-window.mjs:17:38)\n    at file:///private/tmp/apple-notes-sync86-frontend/scripts/debug/sync-window.mjs:128:3"
+  },
+  "naturalExit": 1,
+  "elapsedMs": 8357,
+  "scope": "Production React/Tiptap/App handlers and real Chromium CDP IME; notes-sync/sync_window_reply plus local storage/device IPC are explicit JS fixture. No Rust/network/Android device or real microphone proof.",
+  "pageErrors": []
+}
