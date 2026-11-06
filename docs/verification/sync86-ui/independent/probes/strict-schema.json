@@ -1,0 +1,148 @@
+{
+  "tests": [
+    {
+      "name": "null status.workspaceId",
+      "rejected": true
+    },
+    {
+      "name": "null status.deviceId",
+      "rejected": true
+    },
+    {
+      "name": "null status.listenAddress",
+      "rejected": true
+    },
+    {
+      "name": "null status.lastSyncAt",
+      "rejected": true
+    },
+    {
+      "name": "null status.error",
+      "rejected": true
+    },
+    {
+      "name": "null result.invitation",
+      "rejected": true
+    },
+    {
+      "name": "null result.conflicts",
+      "rejected": true
+    },
+    {
+      "name": "null peer.endpoint",
+      "rejected": true
+    },
+    {
+      "name": "null peer.lastSyncAt",
+      "rejected": true
+    },
+    {
+      "name": "null variant.updatedAt",
+      "rejected": true
+    },
+    {
+      "name": "missing status.state",
+      "rejected": true
+    },
+    {
+      "name": "missing status.deviceName",
+      "rejected": true
+    },
+    {
+      "name": "missing status.peers",
+      "rejected": true
+    },
+    {
+      "name": "missing status.pendingCount",
+      "rejected": true
+    },
+    {
+      "name": "missing status.conflictCount",
+      "rejected": true
+    },
+    {
+      "name": "missing peer.id",
+      "rejected": true
+    },
+    {
+      "name": "missing peer.name",
+      "rejected": true
+    },
+    {
+      "name": "missing peer.connected",
+      "rejected": true
+    },
+    {
+      "name": "unknown outer",
+      "rejected": true
+    },
+    {
+      "name": "unknown peer",
+      "rejected": true
+    },
+    {
+      "name": "unknown conflict",
+      "rejected": true
+    },
+    {
+      "name": "unknown variant",
+      "rejected": true
+    },
+    {
+      "name": "invalid pending -1",
+      "rejected": true
+    },
+    {
+      "name": "invalid pending 1.1",
+      "rejected": true
+    },
+    {
+      "name": "invalid pending 9007199254740992",
+      "rejected": true
+    },
+    {
+      "name": "invalid pending 1",
+      "rejected": true
+    },
+    {
+      "name": "invalid pending true",
+      "rejected": true
+    },
+    {
+      "name": "invalid peers limit",
+      "rejected": true
+    },
+    {
+      "name": "invalid variants limit",
+      "rejected": true
+    },
+    {
+      "name": "invalid uppercase digest",
+      "rejected": true
+    },
+    {
+      "name": "endpoint https://host",
+      "rejected": true
+    },
+    {
+      "name": "endpoint ws://u:p@host",
+      "rejected": true
+    },
+    {
+      "name": "endpoint ws://host#x",
+      "rejected": true
+    },
+    {
+      "name": "endpoint ws://host?q=x",
+      "rejected": true
+    },
+    {
+      "name": "endpoint garbage",
+      "rejected": true
+    }
+  ],
+  "valid": [
+    true,
+    true
+  ]
+}

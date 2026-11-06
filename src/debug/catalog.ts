@@ -180,6 +180,14 @@ add("settings", "settings.tab", "Select actual preferences tab", { tab: e(["sett
 add("settings", "sidebar.toggle", "Use sidebar preference handler");
 add("data", "data.open", "Open actual local data management page");
 add("data", "data.refresh", "Refresh real data-management bridge snapshot");
+for (const id of ["status", "now", "stop", "resume", "conflicts"])
+  add("sync", `sync.${id}`, "Actual device synchronization handler; fixture proves UI only");
+add("sync", "sync.host.start", "Start local sync host", { deviceName: s(true), port: { type: "number", required: true } });
+add("sync", "sync.invite", "Generate ephemeral pairing invitation without returning secret to command output", { endpoint: s(true) });
+add("sync", "sync.pair", "Join using full invitation", { invitation: s(true), deviceName: s(true) });
+add("sync", "sync.revoke", "Open actual local revoke confirmation", { peerId: s(true) });
+add("sync", "sync.resolve", "Open actual local conflict resolution confirmation", { kind: e(["note", "folder"]), entityId: s(true), digest: s(true), keepAll: { type: "boolean", required: true } });
+
 add("data", "data.navigate", "Navigate actual storage overview or category detail", {
   view: e(["overview", "all", "image", "audio", "video", "attachments", "database", "logs", "other"]),
 });

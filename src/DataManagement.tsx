@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import {
   Download,
@@ -85,8 +86,10 @@ export default function DataManagement({
   archiveBusy,
   accessKey,
   accessBlocked,
+  synchronization,
 }: {
   active: boolean;
+  synchronization?: ReactNode;
   onHandle: (handle: DataManagementHandle | null) => void;
   onArchive: (mode: "export" | "import") => Promise<ArchiveResult>;
   backupBlocked: boolean;
@@ -569,6 +572,7 @@ export default function DataManagement({
                 包含已保存的备忘录、文件夹、设置和全部登记附件原文件，其他窗口未提交的草稿不在备份中。合并导入，冲突保留为副本，并应用备份设置。
               </p>
             </section>
+            {synchronization}
             {data && usage && (
               <>
                 {data.warnings.length > 0 && (

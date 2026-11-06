@@ -1,6 +1,6 @@
 # APP-SYNC86-UI 设备同步设置与命令
 
-状态 in-progress（UI可与84/85并行，生产接线另任务）。技能docs-sprint分配的develop角色。只在根分配worktree修改，不操作设备/真实麦克风/用户数据，不push。
+状态 in-progress（产品9ed9a078已独审通过4c85204b，根正在合入与主线整合；生产接线另任务）。技能docs-sprint分配的develop角色。只在根分配worktree修改，不操作设备/真实麦克风/用户数据，不push。
 
 objective：按[UI](../../ui/sync-settings.md)与[架构](../../architecture/sync.md)实现真实React同步设置组件、严格类型/IPC包装、挂到数据总览、程序化调试指令和必要DOM验证。明确当前真实IPC尚待86 adapter，不把fixture当网络完成。
 
@@ -12,4 +12,4 @@ verification：pnpm build/typecheck及精确定向真实App DOM+显式IPC fixtur
 
 产出准确源码commit、任务测试自然退出/前后hash/截图HTML及真实边界，不自行merge主线，不标同步goal完成。
 
-2026-11-06作者冻结：产品a9221a0e、文档/证据最终c7aec14f。桌面48/手机浏览器48/原设置52与build/production作者通过，独立verify进行中。IPC fixture界面证据不代表真实网络/Android。
+2026-11-06作者首冻a9221a0e，44px宽度P2修复后产品9ed9a078、证据3f81b2f0、独审4c85204b。桌面48/手机浏览器48/原设置52与build/production作者通过，独审57严格边界＋修后48/15限定通过，原失败保留于docs/verification/sync86-ui。IPC fixture界面证据不代表真实网络/Android。

@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "group": "sync-settings",
+      "pass": false,
+      "checks": [
+        "Settings-only visit never requests sync state or creates identity",
+        "Initial inventory failure still exposes synchronization and backup controls"
+      ],
+      "error": "Default status query does not enable sync or generate identity",
+      "elapsedMs": 235
+    }
+  ]
+}

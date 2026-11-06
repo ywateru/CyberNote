@@ -1,0 +1,31 @@
+{
+  "results": [
+    {
+      "group": "sync-settings",
+      "pass": false,
+      "checks": [
+        "Settings-only visit never requests sync state or creates identity",
+        "Initial inventory failure still exposes synchronization and backup controls",
+        "Default status query does not enable sync or generate identity",
+        "Synchronization occupies the existing data scroll after backup, without another dialog",
+        "All ten semantic sync commands are available in the DEV allowlist",
+        "Strict DEV contract rejects sync.host.start invalid input",
+        "Strict DEV contract rejects sync.resolve invalid input",
+        "Strict DEV contract rejects sync.now invalid input",
+        "Host command invokes the true component handler with an explicit fixture IPC boundary",
+        "Status refresh retains the input value and focus",
+        "Invitation appears only after explicit generation and never enters command output/live region/localStorage",
+        "Copy uses actual clipboard boundary",
+        "Clipboard failure remains actionable instead of claiming a copy",
+        "Switching tabs removes generated invitation and clears secret",
+        "Hidden panel rejects sync commands",
+        "Returning to data does not recreate invitation",
+        "A late invitation response cannot recreate secret after tab change",
+        "Failed native operation stays explicit and never claims synchronization success",
+        "Retry calls real handler and clears prior action error"
+      ],
+      "error": "Durable pending data is distinguished from applied success",
+      "elapsedMs": 1117
+    }
+  ]
+}

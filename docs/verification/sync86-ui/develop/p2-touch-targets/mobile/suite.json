@@ -1,0 +1,73 @@
+{
+  "results": [
+    {
+      "group": "sync-settings",
+      "pass": true,
+      "checks": [
+        "Settings-only visit never requests sync state or creates identity",
+        "Initial inventory failure still exposes synchronization and backup controls",
+        "Default status query does not enable sync or generate identity",
+        "Synchronization occupies the existing data scroll after backup, without another dialog",
+        "All ten semantic sync commands are available in the DEV allowlist",
+        "Strict DEV contract rejects sync.host.start invalid input",
+        "Strict DEV contract rejects sync.resolve invalid input",
+        "Strict DEV contract rejects sync.now invalid input",
+        "Host command invokes the true component handler with an explicit fixture IPC boundary",
+        "Status refresh retains the input value and focus",
+        "Invitation appears only after explicit generation and never enters command output/live region/localStorage",
+        "HTML debug snapshots never serialize generated invitation secrets",
+        "Copy uses actual clipboard boundary",
+        "Clipboard failure remains actionable instead of claiming a copy",
+        "Switching tabs removes generated invitation and clears secret",
+        "Hidden panel rejects sync commands",
+        "Returning to data does not recreate invitation",
+        "A late invitation response cannot recreate secret after tab change",
+        "A late invitation response after closing cannot publish into reopened settings",
+        "Failed native operation stays explicit and never claims synchronization success",
+        "Retry calls real handler and clears prior action error",
+        "Durable pending data is distinguished from applied success",
+        "Double clicking a synchronous handler generates only one IPC mutation",
+        "Stop renders resumable paused state",
+        "Revoke requires visible local confirmation and does not call IPC yet",
+        "Cancelling revoke preserves the peer",
+        "Confirmed revoke uses the real action handler",
+        "Conflict UI displays versions, locked/deleted metadata and attachment counts",
+        "Keeping one branch is explicit and confirmed before IPC",
+        "Single-branch confirmation dispatches the production UI resolve handler",
+        "Keep-all path uses its separate explicit confirmation",
+        "Strict IPC wrapper rejects malformed counts without presenting success",
+        "Category details do not display synchronization block",
+        "Data and existing note documents remain unchanged by synchronization UI fixture",
+        "320px light has no horizontal overflow and shares reachable vertical scroll",
+        "320px dark has no horizontal overflow and shares reachable vertical scroll",
+        "390px light has no horizontal overflow and shares reachable vertical scroll",
+        "390px dark has no horizontal overflow and shares reachable vertical scroll",
+        "1280px light has no horizontal overflow and shares reachable vertical scroll",
+        "1280px dark has no horizontal overflow and shares reachable vertical scroll",
+        "Closing/reopening never retains a visible pairing secret",
+        "HTML debug snapshots never serialize pasted invitation secrets",
+        "Pairing input conceals the invitation",
+        "Switching tabs clears unsent pairing input",
+        "Pair handler dispatches IPC once and clears invitation on success",
+        "Ordinary browser clearly requires the installed app and never falls back to fixture synchronization",
+        "Strict native response validation rejects unknown fields, invalid booleans/states/times and digests",
+        "No uncaught application page errors"
+      ],
+      "elapsedMs": 5829
+    }
+  ],
+  "groups": [
+    "sync-settings"
+  ],
+  "scope": {
+    "platform": "mobile-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  }
+}

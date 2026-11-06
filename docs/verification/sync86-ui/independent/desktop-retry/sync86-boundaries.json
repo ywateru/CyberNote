@@ -1,0 +1,16 @@
+{
+  "scope": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  },
+  "real": "React App, strict TypeScript IPC wrapper, actual handlers, DOM/HTML, clipboard boundary invocation",
+  "fixture": "sync_command responses only; no Rust/socket/Noise/merge/Android native proof",
+  "source": "scripts/debug/sync-settings.mjs"
+}

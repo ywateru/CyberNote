@@ -1,3 +1,4 @@
+import { runSyncSettings } from './sync-settings.mjs';
 import { runQuickHome } from './quick-home.mjs';
 import { runStorageOverview, runStorageBackupAvailability } from './storage-overview.mjs';
 import { runStorageNavigation } from './storage-navigation.mjs';
@@ -13,7 +14,7 @@ import { compareSnapshots, compareScreenshots } from './compare.mjs';
 import { runMobileRecording } from './mobile-recording.mjs';
 import { runMobileAttachments } from './mobile-attachments.mjs';
 
-export const groupNames = ['contract', 'notes', 'folders', 'editor', 'search-tags', 'settings', 'attachments-ocr', 'archive', 'recording', 'mac-feedback', 'recording-indicator', 'data-management', 'image-preview', 'storage-overview', 'preferences'];
+export const groupNames = ['contract', 'notes', 'folders', 'editor', 'search-tags', 'settings', 'attachments-ocr', 'archive', 'recording', 'mac-feedback', 'recording-indicator', 'data-management', 'image-preview', 'storage-overview', 'preferences', 'sync-settings'];
 export async function runGroups(runtime, names, output) {
   const results = [], page = runtime.page, exercised = new Map();
   const descriptors = await page.evaluate(() => window.__NOTES_DEBUG__.list());
@@ -26,6 +27,8 @@ export async function runGroups(runtime, names, output) {
     try {
       if (name === 'quick-home' && runtime.mobile) {
         await runQuickHome(runtime,{command,check,output});
+      } else if (name === 'sync-settings') {
+        await runSyncSettings(runtime,{command,check,output});
       } else if (name === 'preferences') {
         await runPreferences(runtime,{command,check,output});
       } else if (name === 'storage-overview') {
