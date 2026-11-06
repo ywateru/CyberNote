@@ -83,6 +83,17 @@ class NotesScanPlugin(private val activity: Activity): Plugin(activity) {
                 fail("invalid_document", "无效文档传输限制")
             val uri = android.net.Uri.parse(args.getString("uri"))
             if (uri.scheme != "content" || uri.authority.isNullOrEmpty()) fail("invalid_document", "需要系统文档 URI")
+            if (direction == "write") {
+                // A system picker URI is not proof that the provider is external.
+                // Our FileProvider can address sandbox cache files: never truncate
+                // one through ContentResolver and bypass the Rust path guard.
+                @Suppress("DEPRECATION")
+                val providers = activity.packageManager.getPackageInfo(
+                    activity.packageName, android.content.pm.PackageManager.GET_PROVIDERS
+                ).providers?.mapNotNull { it.authority } ?: emptyList()
+                if (DocumentUris.isManagedAuthority(uri.authority!!, activity.packageName, providers))
+                    fail("protected_target", "导出目标不能替换应用自己的文档或缓存")
+            }
             val root = java.io.File(activity.applicationInfo.dataDir).canonicalFile
             val parent = java.io.File(root, ".document-io")
             val file = java.io.File(args.getString("path"))
