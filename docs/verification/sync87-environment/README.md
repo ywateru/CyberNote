@@ -1,5 +1,7 @@
 # APP-SYNC87 独立Android环境工具
 
+最新作者结果为 **ENVIRONMENT-READY ONLY**：[受控keylink修复及第三次真实冷启](key-link-repair/RESULT.md)。原两次NOT-READY失败与不成立的PCI推断均保留在原记录，并由新报告明确纠正；独立审查待根安排。
+
 本层只准备隔离环境与生命周期。不会构建或安装APK；不证明App、原生provider、网络路线、同步或原版像素通过。执行证据在源码冻结后另行提交，独立审查由根协调。
 
 固定资源是 `/private/tmp/apple-notes-sync87-environment-01`；`ANDROID_AVD_HOME` 为其中 `avd-home`，AVD 为 `notes-sync87-isolated`，新serial为 `emulator-5584`，端口5584/5585。所有工具调用必须同时显式提供serial和AVD；旧serial、缺serial、错误AVD、非本轮owned PID、已停止/复用PID均拒绝。工具没有通用ADB透传和APK安装入口，不能通过它安装任何旧包。

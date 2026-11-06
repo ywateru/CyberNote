@@ -1,0 +1,16 @@
+3434:             !android_op_writable_system ||
+3435:             feature_is_enabled(kFeature_DynamicPartition)) {
+3436:             std::unique_ptr<char, void (*)(void*)> verifiedBootParamsPath(
+3437:                     avdInfo_getVerifiedBootParamsPath(avd), free);
+3438:             android::verifiedboot::getParametersFromFile(
+3439:                     verifiedBootParamsPath.get(),  // NULL here is OK
+3440:                     &verified_boot_params);
+3441:             if (feature_is_enabled(kFeature_DynamicPartition)) {
+3442:                 std::string boot_dev("androidboot.boot_devices=");
+3443:                 std::unique_ptr<char, void (*)(void*)>
+3444:                         dynamicPartitionBootDevice(
+3445:                                 avdInfo_getDynamicPartitionBootDevice(avd),
+3446:                                 free);
+3447:                 boot_dev.append(dynamicPartitionBootDevice.get());
+3448:                 verified_boot_params.push_back(boot_dev);
+3449:             }

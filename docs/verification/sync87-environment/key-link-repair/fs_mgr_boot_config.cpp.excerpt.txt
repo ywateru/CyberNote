@@ -1,0 +1,42 @@
+37:         while (((found = cmdline.find_first_of(" \"", found)) != cmdline.npos) &&
+38:                (cmdline[found] == quote)) {
+39:             // unbalanced quote is ok
+40:             if ((found = cmdline.find(quote, found + 1)) == cmdline.npos) break;
+41:             ++found;
+42:         }
+43:         std::string piece;
+44:         auto source = cmdline.substr(base, found - base);
+45:         std::remove_copy(source.begin(), source.end(),
+46:                          std::back_insert_iterator<std::string>(piece), quote);
+47:         auto equal_sign = piece.find('=');
+48:         if (equal_sign == piece.npos) {
+49:             if (!piece.empty()) {
+50:                 // no difference between <key> and <key>=
+51:                 result.emplace_back(std::move(piece), "");
+52:             }
+53:         } else {
+54:             result.emplace_back(piece.substr(0, equal_sign), piece.substr(equal_sign + 1));
+55:         }
+56:         if (found == cmdline.npos) break;
+57:         base = found + 1;
+58:     }
+59: 
+60:     return result;
+61: }
+62: 
+63: bool fs_mgr_get_boot_config_from_kernel(const std::string& cmdline, const std::string& android_key,
+64:                                         std::string* out_val) {
+65:     FS_MGR_CHECK(out_val != nullptr);
+66: 
+67:     const std::string cmdline_key("androidboot." + android_key);
+68:     for (const auto& [key, value] : fs_mgr_parse_boot_config(cmdline)) {
+69:         if (key == cmdline_key) {
+70:             *out_val = value;
+71:             return true;
+72:         }
+73:     }
+74: 
+75:     *out_val = "";
+76:     return false;
+77: }
+78: 
