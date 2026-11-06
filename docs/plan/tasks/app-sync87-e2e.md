@@ -1,6 +1,6 @@
 # APP-SYNC87 双端、路由与准确包验收
 
-状态 in-progress：84/85/86源码独审、主线完整整合、实际双App DOM、LAN与匿名wss以及Mac27/Android17独立核包均已完成；新隔离Android实际运行验收正在进行，随后须独审。准确来源和恢复入口见[交付状态](../sync-delivery-state.md)。目标是最终完整双向同步交付，不以文档/UI/某个普通笔记slice代替。根协调，不操作原Android未保存录音现场。
+状态 in-progress：84/85/86源码独审、主线完整整合、实际双App DOM、LAN与匿名wss以及Mac28/Android18独立核包均已完成；新隔离Android实际配对/完整上行已独审通过，反向完整笔记未收敛，仍在同一绑定Store上定位。准确来源和恢复入口见[交付状态](../sync-delivery-state.md)。目标是最终完整双向同步交付，不以文档/UI/某个普通笔记slice代替。根协调，不操作原Android未保存录音现场。
 
 ## 生产路径
 
