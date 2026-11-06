@@ -1,0 +1,49 @@
+[
+  {
+    "name": "python-guards",
+    "argv": [
+      "python3",
+      "scripts/debug/sync87-native/check_guards.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.08104383399999998
+  },
+  {
+    "name": "node-guards",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-client.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.027125416000000013
+  },
+  {
+    "name": "prepare",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/run.mjs",
+      "--mode",
+      "prepare",
+      "--output",
+      "/private/tmp/notes-sync87-native-independent-01"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.02629425000000002
+  },
+  {
+    "name": "malformed-input",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/run.mjs",
+      "--mode",
+      "serve",
+      "--output",
+      "/private/tmp/notes-sync87-native-independent-01",
+      "--receipt",
+      "/private/tmp/no-device-used.json"
+    ],
+    "exitCode": 2,
+    "wallSeconds": 0.024733583000000003,
+    "syntheticSecretInOutput": false
+  }
+]
