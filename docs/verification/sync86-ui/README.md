@@ -49,3 +49,23 @@
 真实 Rust sync_command / Session quiet gate / 网络加密认证 / 双进程与多设备收敛 / 附件 / locked / 删除恢复与冲突副本，均由84/85/86生产适配与独审证明。当前分支没有这些功能的产品实现，fixture通过不代表网络可用。
 
 未操作原 Android 设备、未安装APK、未读取/备份旧13秒录音、未调用真实麦克风、未操作原版删除测试、未push或部署。未打Tauri包，node_modules只是现主线依赖的symlink。独立verify与主线完整回归由根编排。
+
+
+## P2 两轴触达修复（独审后）
+
+独审原结论、原失败及57项严格边界证据完整保留在 `docs/plan/reviews/app-sync86-ui.md` 与 `independent/`，本次没有覆盖原件或将它们改记为重新通过。
+
+新产品冻结 `9ed9a07851ca2d00a6da51441c82c3513e458f22`，只改2个文件、3行新增/1行替换：`SyncSettings.css` 的同步按钮补 `min-width:44px`（保留 `min-height:44px`）；作者布局断言同步检查实际 `width < 44 || height < 44`。没有修改旧Preferences、coordinator、Rust或设备。
+
+仅运行受影响的同步组与构建/生产排除检查：
+
+| 命令 | 自然退出 | 证据 |
+| --- | --- | --- |
+| `pnpm debug group sync-settings --out /tmp/sync86-ui-p2-desktop` | 0，48项 | `develop/p2-touch-targets/desktop/summary.json` |
+| `pnpm debug group sync-settings --mobile --out /tmp/sync86-ui-p2-mobile` | 0，48项 | `develop/p2-touch-targets/mobile/summary.json` |
+| `pnpm build` | 0 | `develop/p2-touch-targets/build/result.json`、`build.txt` |
+| `pnpm debug check-production --production dist --out /tmp/sync86-ui-p2-production` | 0 | `develop/p2-touch-targets/production/summary.json` |
+
+三份summary的sourceHead均为新冻结提交，130项sourceInputsAtStart/sourceInputs指纹均为 `db24c8ca15e77c772de7f9a759c1c711cc3525e1c9549f25f447ba5367c9dba0`，源码前后不变且clean，pageErrors为空。desktop/mobile各保存320×360短屏、390/1280浅深六组实际HTML/PNG/几何数据，smallButtons现在同时按宽高检查且均为0。新证据manifest单独放在 `develop/p2-touch-targets/manifest.json`。
+
+原Preferences52项与独立57项只保留其原产品适用层，没有重跑无关矩阵。当前等待同一独审者对P2及受影响同步组复验；这些仍是合成IPC的真实UI证据，不代表Rust网络或Android原生验收。
