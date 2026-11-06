@@ -50,7 +50,7 @@ WireVersion V1：workspaceId、kind(note/folder)、entityId、vector(BTreeMap UU
 
 ## 应用桥接及UI
 
-远端消息先进入独立持久inbox，不直接覆盖活跃编辑器。准备apply使用独立quiet两阶段屏障，不能直接复用现notes-access prepare（会全窗cover、stop录音和destroy editor）。先通知窗口等待真实TagComposition与PM事务settled且不设Session.pending，允许最终IME保存intent；目标editor短暂freeze并flush收齐ACK后，再开commit gate并重新校验dirty generation/heads/依赖targets，变化则abort/reprepare。picker/附件ACK/录音owner仍活跃时延后其依赖变更，不为了远端apply强行pause/close；无关实体继续apply。不能把pending=false当composition完成。接收ACK只对持久inbox和blob为已收，另区分已应用状态。接收不可伪造本地window/epoch/token。保持当前编辑焦点和Undo，不因不相关远端变化重挂。普通内容/置顶/命名仅metadata，不统一bump noteEpoch；锁定/删除/sealed切换才撤销目标授权。可信snapshot若证明session、noteEpoch、owner/editor/document均不变，允许附件与录音目标重绑已变化的全局epoch，不能删其他校验。
+远端消息先进入独立持久inbox，不直接覆盖活跃编辑器。生产使用sync_plan_apply(excluded)→SyncApplyPlan{generation,excludedNoteIds,eligibleDigests,targets,changes}→sync_apply_plan，后者在同一事务重验生成计划的业务行/heads/projection/inbox/dirty/counter与目标闭包；过期返回sync_plan_stale。headless的sync_apply_pending仅供无窗口进程包装，不给网络backend自动调用。准备apply使用独立quiet两阶段屏障，不能直接复用现notes-access prepare（会全窗cover、stop录音和destroy editor）。先通知窗口等待真实TagComposition与PM事务settled且不设Session.pending，允许最终IME保存intent；目标editor短暂freeze并flush收齐ACK后，再开commit gate并重新校验dirty generation/heads/依赖targets，变化则abort/reprepare。picker/附件ACK/录音owner仍活跃时延后其依赖变更，不为了远端apply强行pause/close；无关实体继续apply。不能把pending=false当composition完成。接收ACK只对持久inbox和blob为已收，另区分已应用状态。接收不可伪造本地window/epoch/token。保持当前编辑焦点和Undo，不因不相关远端变化重挂。普通内容/置顶/命名仅metadata，不统一bump noteEpoch；锁定/删除/sealed切换才撤销目标授权。可信snapshot若证明session、noteEpoch、owner/editor/document均不变，允许附件与录音目标重绑已变化的全局epoch，不能删其他校验。
 
 继续两个现有顶部标签，在“数据”区域加入“设备同步”子区域：
 
