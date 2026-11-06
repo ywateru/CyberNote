@@ -151,6 +151,24 @@ def app_identity(serial,avd,expected=None):
 
 PICKER_KEYS = {'TAB': '61', 'DPAD_DOWN': '20', 'DPAD_UP': '19', 'DPAD_CENTER': '23', 'ENTER': '66', 'SPACE': '62'}
 PICKER_COMPONENT = r'(?:com\.google\.android\.documentsui|com\.android\.documentsui)/com\.android\.documentsui\.picker\.PickActivity'
+COUNTS_DEX = Path('/private/tmp/notes-sync87-native-counts-helper01/dex/classes.dex')
+COUNTS_DEX_SHA256 = 'f98199e0a4bc9432760fa47eee2f0c0baa0c17edd5278172f9059f0776fff2a3'
+COUNTS_SOURCE_SHA256 = 'daa1d8c584715070f7b1a4a95d0c600be25d393e061cdb6def0b1a92780bc5d9'
+def counts_preflight(state_path,expected):
+    require(type(expected) is dict and set(expected)=={'pid','startTicks','package'} and type(expected['pid']) is int and expected['pid']>1 and expected['package']==PACKAGE and type(expected['startTicks']) is str and re.fullmatch(r'[0-9]+',expected['startTicks']), 'exact app lifetime required for readonly counts')
+    require(state_path=='/private/tmp/notes-sync87-native-final-02/state.json','exact final02 state required')
+    p=Path(state_path);require(p.is_file() and not p.is_symlink() and p.resolve()==p,'direct final02 state required')
+    s=json.loads(p.read_text());require(s.get('version')==1 and s.get('runId')=='74da049123' and s.get('serial')==SERIAL and s.get('avd')==AVD and any(n.get('id')=='256cf1ef-b7c6-4c1e-a8ab-31cb5e6be460' for n in s.get('notes',[])), 'known final02 scenario required')
+    source=Path(__file__).resolve().parent/'android/SyncTargetCounts.java'
+    for path,digest in [(source,COUNTS_SOURCE_SHA256),(COUNTS_DEX,COUNTS_DEX_SHA256)]:
+        require(path.is_file() and not path.is_symlink() and path.resolve()==path,'direct reviewed helper required')
+        require(hashlib.sha256(path.read_bytes()).hexdigest()==digest,'reviewed helper changed')
+def counts_result(value):
+    try:r=json.loads(value)
+    except Exception:raise Refused('readonly counts returned invalid JSON') from None
+    require(type(r) is dict and set(r)=={'ok','counts'} and r['ok'] is True and type(r['counts']) is dict and set(r['counts'])=={'inboxTotal','targetInbox','targetNotes','targetProjection','targetSeen'},'readonly counts schema mismatch')
+    require(all(type(n) is int and 0<=n<=2147483647 for n in r['counts'].values()),'readonly counts must be bounded integers')
+    return r['counts']
 
 def picker_key(foreground, key):
     require(type(key) is str and key in PICKER_KEYS, 'fixed picker navigation key required')
@@ -168,7 +186,7 @@ def picker_key(foreground, key):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--serial',required=True);p.add_argument('--avd',required=True)
-    p.add_argument('operation',choices=['status','install','start','stop','home','back','identity','tap','hold','uia','ime','push','pull','forward','unforward','verify-app','foreground','screenshot','installed','prepare-export','checkpoint','picker-key'])
+    p.add_argument('operation',choices=['status','install','start','stop','home','back','identity','tap','hold','uia','ime','push','pull','forward','unforward','verify-app','foreground','screenshot','installed','prepare-export','checkpoint','picker-key','sync-target-counts'])
     p.add_argument('--key');p.add_argument('--run-state');p.add_argument('--export-index',type=int);p.add_argument('--name');p.add_argument('--receipt');p.add_argument('--path');p.add_argument('--remote');p.add_argument('--x',type=int);p.add_argument('--y',type=int);p.add_argument('--port',type=int);p.add_argument('--app-identity')
     a=p.parse_args();target(a.serial,a.avd)
     invoke=lambda tail,**kw:adb(a.serial,a.avd,tail,**kw)
@@ -234,6 +252,14 @@ def main():
             fd=os.open(target_file,os.O_CREAT|os.O_EXCL|os.O_WRONLY|os.O_NOFOLLOW,0o600)
             with os.fdopen(fd,'wb') as stream:stream.write(payload);stream.flush();os.fsync(stream.fileno())
             result={'path':str(target_file),'bytes':len(payload),'sha256':actual,'originalBytesVerified':True}
+    elif a.operation=='sync-target-counts':
+        expected=json.loads(a.app_identity) if a.app_identity else None;counts_preflight(a.run_state,expected)
+        before=app_identity(a.serial,a.avd,expected)
+        invoke(['push',str(COUNTS_DEX),'/data/local/tmp/notes-sync87-target-counts.dex'])
+        app_identity(a.serial,a.avd,expected)
+        try:raw=invoke(['shell','run-as',PACKAGE,'env','CLASSPATH=/data/local/tmp/notes-sync87-target-counts.dex','app_process','/system/bin','SyncTargetCounts'],timeout=15)
+        except Exception:raise Refused('readonly counts helper failed') from None
+        result={'counts':counts_result(raw),'appIdentityBefore':before,'appIdentityAfter':app_identity(a.serial,a.avd,expected),'fixedSyntheticTarget':True}
     elif a.operation=='picker-key':
         require(type(a.key) is str and a.key in PICKER_KEYS, 'fixed picker navigation key required')
         expected=json.loads(a.app_identity) if a.app_identity else None
