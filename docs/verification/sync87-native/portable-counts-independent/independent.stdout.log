@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "sourceCommit": "a65a6853565bfcf72dd99e8fd33dd1c6e53b6977",
+  "javaSha256": "b7cdb5f07dc5da82ba0902bd010535f5baad91649eef685bc6bd8ef9f9157c73",
+  "dexSha256": "ec0358fff130bc00cf501304806f81e80a12eb74e2854e24e9e67001ecea41b7",
+  "scope": "actualDEX/source/fixedoutput host only; no devices/helperexecution",
+  "checks": [
+    "two exact readonly queries with fixed appDB/target",
+    "org.json reads two rootkeys with exact string type/target checks; no payload output",
+    "10000row cap and total mismatch refusal",
+    "actualDEX no optional SQLiteJSON/write/stacktrace paths",
+    "new failurestages refused and success output onlyfiveboundedintegers"
+  ],
+  "limits": [
+    "two readonly query snapshots are sequential; not atomic across concurrent apply"
+  ]
+}
