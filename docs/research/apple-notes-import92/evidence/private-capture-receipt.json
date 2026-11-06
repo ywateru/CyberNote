@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "read-only lstat of existing research-owned staging; no Notes calls",
+  "scope": "Read-only lstat after chmod0600 of own private capture files only; source Notes untouched. Original before receipt retained.",
   "directories": [
     {
       "ownerMatches": true,
@@ -30,100 +30,101 @@
   ],
   "rawCaptureFiles": [
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 168,
       "sha256": "27e8547c406eaa9fd65b977ecfe0f5b3c3f9a4aac1ebbc134d75e70f1819594b"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 12631,
       "sha256": "491998327ce4e84778ef7e1d169932be6faab85bf01ae39b230b714620fe30e3"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 16,
       "sha256": "fbf211fdb10403258993a3ba5fed9bf435d3f1c1bf488f7a11dcadd2a3f8871a"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 19,
       "sha256": "126db999e93728eb432f4d0a1a866af28c29e3a8957d0e3160d8397b4e4d0211"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 56,
       "sha256": "e24d785b3b4d548a3c1cd81b623440ac020cc516a3ea24d6653461a523f3c26d"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 2,
       "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 3258,
       "sha256": "13477794bb09e171a2030af19bb3a6ac04d1b4e987f40ce78af22d3020c39b06"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 8692,
       "sha256": "4be71dec9414928f2a9d48cedd5e0909f20cf168a4d0d8c4e428d41754949c5a"
     },
     {
-      "mode": "0o644",
+      "mode": "0o600",
       "ownerMatches": true,
       "bytes": 0,
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }
-  ]
+  ],
+  "allPrivateFiles0600": true
 }
