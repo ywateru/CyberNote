@@ -8,7 +8,7 @@ fn convert_review(html_text: &str) -> Value {
 fn text_content(n:&Value)->String { if n["type"]=="text" { return n["text"].as_str().unwrap().to_string(); } n["content"].as_array().map(|c|c.iter().map(text_content).collect()).unwrap_or_default() }
 #[test]
 fn review_six_div_formatting_whitespace_has_no_extra_paragraphs() {
- let d=convert_review("<div><h1>合成标题</h1></div>\n<div>甲<br>乙</div>\n<div><br></div>\n<div>丙<br>丁</div>\n<div>戊</div>\n<div>己</div>\n");
+ let d=convert_review("<div><h1>合成标题</h1></div>\n<div>甲<br>乙</div>\n<div><br></div>\n<div>丙<br>丁</div>\n<div>戊<br></div>\n<div>己</div>\n");
  let b=d["content"].as_array().unwrap();assert_eq!(b.len(),6,"outside formatting whitespace must not become paragraphs");
  assert_eq!(b[0]["type"],"heading");assert_eq!(b[0]["attrs"]["level"],1);
  assert_eq!(b.iter().map(text_content).collect::<Vec<_>>(),vec!["合成标题","甲乙","","丙丁","戊","己"]);
