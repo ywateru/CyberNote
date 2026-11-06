@@ -37,3 +37,22 @@
 ## 源保持验证
 
 产品真实集成应在导入前后私下记录同一组稳定ID、名称、HTML/纯文本、日期、附件ID/元数据摘要并比较；公开只留相等布尔/数量/哈希。保持原目标笔记、设置和录音状态。系统Notes启动后可能独立后台维护，源SQLite文件mtime不是内容保持的充分或必要证据。当前研究仅提供上述样本保持证据，尚未证明实际产品完整导入。
+
+## 一手参考项目与选择
+
+以下仅查看固定提交源码/许可证，未运行第三方导出器，没有把它们指向用户Notes。下载文件摘要见 `evidence/primary-sources.json`。
+
+| 一手参考 | 可借鉴内容 | 本任务的限制/选择 |
+| --- | --- | --- |
+| [cmcz/note-exporter-applescript，e1c5ae4](https://github.com/cmcz/note-exporter-applescript/blob/e1c5ae433b86031c2f99c7c800a8c2dc34c4597a/export_notes.scpt) | 编译AppleScript用osadecompile只读反编译；先读body，再对attachments发save，确认普通AppleScript的调用形式 | 直接以源标题/附件名拼路径，且吞掉save异常，不能照搬安全/结果语义。[MIT许可](https://github.com/cmcz/note-exporter-applescript/blob/e1c5ae433b86031c2f99c7c800a8c2dc34c4597a/LICENSE)。 |
+| [ecylmz/apple-notes-md，007fcff2](https://github.com/ecylmz/apple-notes-md/blob/007fcff217bd1e1f0e088ed5f1a52ff046994f45/internal/extractor/extractor.go) | Go调用固定JXA，按账户/文件夹读HTML与日期；converter有基础富文本、checkbox及data-URL图片处理 | 源读取器没有native附件save路径；清单HTML是测试fixture，不能当成本机实际Notes输出。它把多种读取异常变成空正文或兜底标题，错误里也可能带原始stderr；本任务采用显式失败和有限错误。[MIT许可](https://github.com/ecylmz/apple-notes-md/blob/007fcff217bd1e1f0e088ed5f1a52ff046994f45/LICENSE)。 |
+| [Obsidian Importer，143eaea](https://github.com/obsidianmd/obsidian-importer/blob/143eaea333e2212b524c49e8330a7550d4924adc/src/formats/apple-notes.ts) | 成熟的不同路线：复制DB/WAL/SHM到临时区后只读打开，解压protobuf，独立还原表格/扫描/绘图/文件；[转换器](https://github.com/obsidianmd/obsidian-importer/blob/143eaea333e2212b524c49e8330a7550d4924adc/src/formats/apple-notes/convert-note.ts)从属性run中的checklist.done和typeUti还原语义 | 证明丰富对象需要额外格式解码，不能据此声称JXA HTML完整，也不能据类型表猜本机失败附件的类型。作为后续离线副本解码参考，当前不接入、不访问源DB。[MIT许可](https://github.com/obsidianmd/obsidian-importer/blob/143eaea333e2212b524c49e8330a7550d4924adc/LICENSE)。 |
+| [Apple Cloud Notes Parser，4754a2b](https://github.com/threeplanetssoftware/apple_cloud_notes_parser/blob/4754a2b62686570cca46690d101079e80cf6ae66/README.md) | 解释私有protobuf/表格/嵌入对象与备份解析，是Obsidian路线的背景参考 | README说明会往处理数据库加解析列，并有解密能力；不能拿源库直接运行，也不引入解锁/密码流程。[MIT许可](https://github.com/threeplanetssoftware/apple_cloud_notes_parser/blob/4754a2b62686570cca46690d101079e80cf6ae66/LICENSE)。 |
+
+当前选择固定JXA/AppleEvents作为第一来源适配器，复用应用现有HTML解析和schema校验，不引入Go/Ruby/Obsidian运行时。以上许可允许按条件使用，但本轮仅参考设计；若以后复制实现片段，须保留对应版权与许可声明。不要安装综合MCP服务来完成单向只读导入，因为其读写工具面并非本功能所需。
+
+[Apple官方macOS26使用指南](https://support.apple.com/guide/notes/import-export-and-print-notes-not201900c07/4.13/mac/26)列有PDF/Markdown界面导出；这是用户交互出口，不代表本机sdef提供Markdown批量导出命令。本机字典仅列native format，不能自行构造不存在的Markdown AppleEvent。研究未操作这些GUI出口。
+
+### 能力边界的实用结论
+
+基础标题、HTML、纯文本、日期、层级已真实可读。普通附件副本保存、表格与清单的真实源语义在本机样本中仍未证明。对 -10000 没找到足以指认本机原因的一手Notes实现证据；该码不能硬映射成“特殊对象不支持”“未下载”或“权限拒绝”。产品应保留 `attachment_export_failed` 数值码和独立 `attachment_reference_missing` 警告，用户可看到部分结果。更完整的特殊对象路线需要另行设计只读一致快照与格式解码，并经过单独边界审查，不能由本研究自动启用。
