@@ -14,6 +14,8 @@ import { chooseFiles, tinyPNG } from "./mobile-attachments.mjs";
 export async function runQuickHome(runtime, { command, check, output }) {
   const { page, backend } = runtime;
   if (!runtime.mobile) throw Error("quick-home is mobile scoped");
+  await page.setViewportSize(runtime.viewport);
+  await runtime.reset();
   const baseCall = backend.call.bind(backend);
   const plus = () => page.locator(".mobile-add-note");
   const current = async () => {

@@ -10,6 +10,10 @@ import {
 
 export async function runPreferences(runtime, { command, check, output }) {
   const { page, backend } = runtime;
+  if (runtime.mobile) {
+    await page.setViewportSize(runtime.viewport);
+    await runtime.reset();
+  }
   const close = () =>
     page.getByRole("button", { name: "关闭设置", exact: true }).click();
   const tab = (name) => page.getByRole("tab", { name, exact: true });
