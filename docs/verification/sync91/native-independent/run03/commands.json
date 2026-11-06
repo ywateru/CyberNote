@@ -1,0 +1,73 @@
+[
+  {
+    "label": "mac-original-extract",
+    "argv": [
+      "node",
+      "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync91/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync91/mac-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/mac-original.app/Contents/MacOS/notes-clone",
+      "/private/tmp/sync91-mac-review-extract-run03/mac-original"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.05585,
+    "stdoutSha256": "ed4b0ab74e452ce0c93767f2a629688ddbd684377d9908362f485fd2071ec1f0",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "mac-derived-extract",
+    "argv": [
+      "node",
+      "/private/tmp/apple-notes-sync87-webview-review/docs/verification/sync91/native-independent/extract-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync91/mac-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app/Contents/MacOS/notes-clone",
+      "/private/tmp/sync91-mac-review-extract-run03/mac-derived"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.053803,
+    "stdoutSha256": "917a6e3de6b945fc4db80c353a2e66ace0bb20f937d43f2033759b59c7821472",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "original-strict",
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/mac-original.app"
+    ],
+    "naturalExitCode": 1,
+    "wallSeconds": 0.024208,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "5bb6866faed9bab3eda07a43e320058a7c446924a35c96e0b5f0e7cc7c355fd9"
+  },
+  {
+    "label": "derived-strict",
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.013514,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "c464bfa7eb01d0421f3619375ad4c5c784f9d1508cd058fae93adc5b64c601bf"
+  },
+  {
+    "label": "derived-signature",
+    "argv": [
+      "/usr/bin/codesign",
+      "-dv",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.004384,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "6faf573a36de312ad5ffbfefaa6d2d7ef1eabe36c13f904b6be147ecbe1d8a3c"
+  }
+]
