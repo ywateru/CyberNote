@@ -1,0 +1,125 @@
+{
+  "scope": "actual original reply+receipt parser entry and real release outcomes; same paired desktop Store live; parser entry is not completed validation",
+  "observationMilliseconds": 12000,
+  "passiveInstall": {
+    "version": 1,
+    "active": true,
+    "eventCounts": {
+      "probe": 0,
+      "prepare": 0,
+      "release": 0,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 0,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "not-read",
+      "current": "unknown",
+      "windows": [],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    }
+  },
+  "replySnapshot": {
+    "enabled": true,
+    "counts": {
+      "probe": {
+        "blockedTrue": 0,
+        "blockedFalse": 4,
+        "unknown": 0
+      },
+      "prepare": {
+        "readyTrue": 5,
+        "readyFalse": 0,
+        "unknown": 0
+      },
+      "other": 0
+    },
+    "receiptOutcomes": {
+      "pending": 9,
+      "abort": 0,
+      "commit": 0,
+      "unknown": 0
+    },
+    "sourceVerified": true,
+    "replyResultsObserved": false,
+    "receiptOutcomesObserved": true,
+    "replyExceptionsObserved": false
+  },
+  "passiveSnapshot": {
+    "version": 1,
+    "active": true,
+    "eventCounts": {
+      "probe": 5,
+      "prepare": 5,
+      "release": 5,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 5,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "read",
+      "current": "main",
+      "windows": [
+        "main"
+      ],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    }
+  },
+  "ok": true,
+  "logpointCleanup": {
+    "disabled": true,
+    "breakpointRemoved": true,
+    "breakpointsRemoved": 2,
+    "stateRemoved": true
+  },
+  "passiveCleanup": {
+    "version": 1,
+    "active": false,
+    "eventCounts": {
+      "probe": 5,
+      "prepare": 5,
+      "release": 5,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 5,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "read",
+      "current": "main",
+      "windows": [
+        "main"
+      ],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    },
+    "cleanup": {
+      "localUnregistered": true,
+      "nativeUnregistered": true
+    }
+  },
+  "clientClosed": true,
+  "wallSeconds": 21.54184225
+}
