@@ -206,6 +206,7 @@ import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
 import { attachmentExportPending } from "./attachment-export";
 import DataManagement, { type DataManagementHandle } from "./DataManagement";
+import AppleNotesImport, { type AppleNotesImportHandle } from "./AppleNotesImport";
 import SyncSettings, { type SyncSettingsHandle } from "./SyncSettings";
 import type { SyncCommand } from "./sync-client";
 import Preferences, { type PreferencesTab } from "./Preferences";
@@ -660,6 +661,7 @@ function App() {
   const [syncCover, setSyncCover] = useState(false);
   const syncCoverRef = useRef(false);
   const dataManagementHandle = useRef<DataManagementHandle | null>(null);
+  const appleNotesImportHandle = useRef<AppleNotesImportHandle | null>(null);
   const syncSettingsHandle = useRef<SyncSettingsHandle | null>(null);
   const [archiveBusy, setArchiveBusy] = useState(false);
   const archiveRunning = useRef(false);
@@ -2627,6 +2629,32 @@ function App() {
     },
     [flush, hydrate, restoreSelection, synchronization, fail, record],
   );
+  const prepareAppleImport = useCallback(async () => {
+    if (archiveRunning.current) throw Error("数据操作正在进行中");
+    if (recordingTicket.current || record) throw Error("请先完成录音，再导入备忘录");
+    archiveRunning.current = true;
+    setArchiveBusy(true);
+    try {
+      await networkSync.cancel();
+      await flush();
+      if (recordingTicket.current || record || quitState.current) throw Error("当前无法开始导入");
+    } catch (error) {
+      archiveRunning.current = false;
+      setArchiveBusy(false);
+      throw error;
+    }
+  }, [flush, record]);
+  const finishAppleImport = useCallback(async (changed: boolean) => {
+    try {
+      if (changed) {
+        const synced = await synchronizeRef.current();
+        if (!synced.success) throw synced.error;
+        if (!synchronization.current(synced)) throw new MetadataStale();
+        await dataManagementHandle.current?.refresh();
+      }
+    } catch (error) { fail(error); }
+    finally { archiveRunning.current = false; setArchiveBusy(false); }
+  }, [synchronization, fail]);
   const openSeparate = async (n: Note) => {
     await networkSync.cancel();
     if (quitState.current) return;
@@ -5162,6 +5190,15 @@ function App() {
           await syncSettingsHandle.current.run({ ...args, type } as SyncCommand);
           return syncSettingsHandle.current?.inspect();
         }])),
+        ...Object.fromEntries(["open", "scan", "start", "cancel", "inspect"].map((action) => [`appleImport.${action}`, (args: Record<string, unknown>) => {
+          if (modal !== "preferences" || preferencesTab !== "data" || !appleNotesImportHandle.current) throw Error("请先在Mac主窗口打开数据标签");
+          const handle = appleNotesImportHandle.current;
+          if (action === "start") return handle.start(args.keys as string[] | undefined);
+          if (action === "open") return handle.open();
+          if (action === "scan") return handle.scan();
+          if (action === "cancel") return handle.cancel();
+          return handle.inspect();
+        }])),
         "data.refresh": () => {
           if (modal !== "preferences" || preferencesTab !== "data" || !dataManagementHandle.current) throw Error("请先打开数据标签");
           return dataManagementHandle.current.refresh();
@@ -6427,6 +6464,14 @@ function App() {
           returnFocus={preferencesTrigger.current}
           data={<DataManagement
             active={preferencesTab === "data"}
+            appleImport={native && macNative && !separate ? <AppleNotesImport
+              active={preferencesTab === "data"}
+              blocked={archiveBusy || !!recordingTicket.current || record || !!accessSuspended.length || !!accessGate.state?.operationId}
+              accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}:${ws.access?.operationId || ""}`}
+              onPrepare={prepareAppleImport}
+              onFinish={finishAppleImport}
+              onHandle={(handle) => { appleNotesImportHandle.current = handle; }}
+            /> : undefined}
             synchronization={<SyncSettings active={preferencesTab === "data"} onHandle={(handle) => { syncSettingsHandle.current = handle; }} />}
             onHandle={(handle) => { dataManagementHandle.current = handle; }}
             onArchive={archive}

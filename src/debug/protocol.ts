@@ -68,6 +68,10 @@ export type DebugCommandArguments = {
       | "archive.export"
       | "archive.import"
       | "settings.open"
+      | "appleImport.open"
+      | "appleImport.scan"
+      | "appleImport.cancel"
+      | "appleImport.inspect"
       | "data.open"
       | "data.refresh"
       | "sync.status"
@@ -113,6 +117,7 @@ export type DebugCommandArguments = {
       | "grid-medium"
       | "grid-large";
   };
+  "appleImport.start": { keys?: string[] };
   "folder.open": { id?: string };
   "folder.rename": { id: string };
   "folder.delete": { id: string };

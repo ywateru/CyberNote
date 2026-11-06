@@ -271,6 +271,8 @@ add(
   },
   "Fixture fixed synthetic media only; actual Session/PCM/revisions/body ACK",
 );
+for (const id of ["open", "scan", "start", "cancel", "inspect"])
+  add("appleImport", `appleImport.${id}`, `Apple Notes import ${id}`, id === "start" ? { keys: { type: "array" } } : {}, "Fixed source OS boundary; actual additive Session/Store persistence");
 for (const id of ["export", "import"])
   add(
     "archive",

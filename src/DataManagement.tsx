@@ -87,9 +87,11 @@ export default function DataManagement({
   accessKey,
   accessBlocked,
   synchronization,
+  appleImport,
 }: {
   active: boolean;
   synchronization?: ReactNode;
+  appleImport?: ReactNode;
   onHandle: (handle: DataManagementHandle | null) => void;
   onArchive: (mode: "export" | "import") => Promise<ArchiveResult>;
   backupBlocked: boolean;
@@ -546,6 +548,7 @@ export default function DataManagement({
                 </div>
               </>
             )}
+            {appleImport}
             <section className="data-backup-section" aria-label="本地备份">
               <h3>本地备份</h3>
               <div className="data-backup-actions">

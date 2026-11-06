@@ -19,15 +19,26 @@ if (!process.argv[2] || !target)
     "Usage: CARGO_TARGET_DIR=exclusively-assigned-cache node scripts/debug/build-rust-attachments.mjs FRESH_OUTPUT",
   );
 const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
-const files = ["src-tauri/src/store.rs", "src-tauri/src/session.rs", "src-tauri/src/sync.rs", "src-tauri/src/recording_window.rs"];
-for (const dir of ["store", "session", "sync"])
+const files = [
+  "src-tauri/src/store.rs",
+  "src-tauri/src/session.rs",
+  "src-tauri/src/sync.rs",
+  "src-tauri/src/recording_window.rs",
+  "src-tauri/src/apple_notes_source.js",
+];
+for (const dir of ["store", "session", "sync", "apple_notes_import"])
   for (const ent of await readdir(resolve(root, "src-tauri/src", dir), {
     recursive: true,
     withFileTypes: true,
   }))
     if (ent.isFile())
       files.push(resolve(ent.parentPath, ent.name).slice(root.length + 1));
-for (const name of ["Cargo.toml", "Cargo.lock", "transport.rs"])
+for (const name of [
+  "Cargo.toml",
+  "Cargo.lock",
+  "transport.rs",
+  "apple_import.rs",
+])
   files.push("scripts/debug/rust/" + name);
 files.push("scripts/debug/build-rust-attachments.mjs");
 files.sort();
@@ -39,7 +50,16 @@ const harness = resolve(out, "harness");
 await mkdir(harness);
 await cp(resolve(root, "scripts/debug/rust"), harness, { recursive: true });
 await mkdir(resolve(harness, "current"));
-for (const name of ["store.rs", "store", "session.rs", "session", "sync.rs", "sync"])
+for (const name of [
+  "store.rs",
+  "store",
+  "session.rs",
+  "session",
+  "sync.rs",
+  "sync",
+  "apple_notes_import",
+  "apple_notes_source.js",
+])
   await cp(
     resolve(root, "src-tauri/src", name),
     resolve(harness, "current", name),
@@ -47,18 +67,29 @@ for (const name of ["store.rs", "store", "session.rs", "session", "sync.rs", "sy
   );
 // Compile the original production local registry functions verbatim. Only
 // AppHandle/State wrappers are supplied by stdin; no recording algorithm fake.
-const recordingSource = await readFile(resolve(root, "src-tauri/src/recording_window.rs"), "utf8");
+const recordingSource = await readFile(
+  resolve(root, "src-tauri/src/recording_window.rs"),
+  "utf8",
+);
 const sliceOnce = (text, from, until) => {
   if (text.split(from).length !== 2 || text.split(until).length !== 2)
     throw Error("Production recording source boundary changed");
-  const start = text.indexOf(from), end = text.indexOf(until);
+  const start = text.indexOf(from),
+    end = text.indexOf(until);
   if (end <= start) throw Error("Invalid production recording source boundary");
   return text.slice(start, end);
 };
-const core = sliceOnce(recordingSource, "#[derive(Clone, Serialize)]\n#[serde(rename_all = \"camelCase\")]\npub struct Identity", "#[tauri::command]\npub fn register_recording_local");
+const core = sliceOnce(
+  recordingSource,
+  '#[derive(Clone, Serialize)]\n#[serde(rename_all = "camelCase")]\npub struct Identity',
+  "#[tauri::command]\npub fn register_recording_local",
+);
 const reveal = sliceOnce(core, "pub fn reveal_owner(", "fn document_window(");
-await writeFile(resolve(harness, "current/recording_local_core.rs"),
-  'use serde::Serialize;\nuse serde_json::{json,Value};\nuse std::{collections::{HashMap,HashSet},sync::Mutex};\n' + core.replace(reveal, ""));
+await writeFile(
+  resolve(harness, "current/recording_local_core.rs"),
+  "use serde::Serialize;\nuse serde_json::{json,Value};\nuse std::{collections::{HashMap,HashSet},sync::Mutex};\n" +
+    core.replace(reveal, ""),
+);
 const metadata = {
   sourceHead: execFileSync("git", ["rev-parse", "HEAD"], {
     encoding: "utf8",

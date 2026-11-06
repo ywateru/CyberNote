@@ -6,6 +6,9 @@ mod session;
 mod store;
 #[path = "current/sync.rs"]
 mod sync;
+#[path="current/apple_notes_import/core.rs"]
+mod apple_import_core;
+mod apple_import;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use serde_json::{json, Value};
 use session::{Session, Token};
@@ -344,6 +347,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let inflight = Arc::new(AtomicUsize::new(0));
     let mut workers = vec![];
     let mut local_recordings = local_recordings::Transport::default();
+    let apple_import=apple_import::Transport::new(shared.clone(),host.clone());
     for line in io::stdin().lock().lines() {
         let line = line?;
         if line.len() > 20 * 1024 * 1024 {
@@ -387,6 +391,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         let result = (|| -> Result<Value> {
             match field(&row, "command")? {
                 "poll_events" => Ok(Value::Null),
+                "debug_apple_source" | "apple_notes_scan" | "apple_notes_status" | "apple_notes_start" | "apple_notes_cancel" => apple_import.command(&row),
                 "register_recording_local"
                 | "recording_local_validate"
                 | "recording_local_started"
