@@ -1,7 +1,7 @@
 ---
 id: app-android-quick-home83
 scope: android-direct-gallery-and-one-tap-create-editor
-status: pending
+status: in-progress
 depends-on: [app-preferences82]
 ---
 
