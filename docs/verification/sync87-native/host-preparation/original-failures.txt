@@ -1,0 +1,11 @@
+Host preparation on 2026-11-06, before any emulator/ADB invocation.
+1. The first synthetic PNG constant had a valid IHDR/IEND but invalid IDAT CRC:
+   IHDR 13 True; IDAT 13 False; IEND 0 True.
+   It was rejected during host byte inspection and replaced with a PNG generated
+   from standard zlib/CRC chunks. This was a test-fixture error, not a product failure.
+   Initial fixture-only run remains /private/tmp/notes-sync87-native-hostcheck01.
+2. First guard unittest run: 8 tests, errors=2, Python AttributeError:
+   module 'hashlib' has no attribute 'file_digest'.
+   This host Python predates that API. Replaced with bounded streaming SHA256.
+   The wrapper shell continued to Node checks, so wrapper exit0 was not a Python
+   test pass. Individual Python unittest result above is the authoritative failure.
