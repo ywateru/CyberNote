@@ -1,0 +1,17 @@
+
+running 6 tests
+test store::apple_import::independent_review::review_append_crash_worker ... ignored
+test store::apple_import::independent_review::review_unsupported_underline_is_preserved_or_reported ... FAILED
+test store::apple_import::independent_review::review_unsupported_svg_never_claims_complete_import ... FAILED
+test store::apple_import::independent_review::review_source_names_cannot_choose_managed_paths ... ok
+test store::apple_import::independent_review::review_append_abort_retains_existing_data_settings_keys_and_files ... ok
+test store::apple_import::independent_review::review_append_actual_process_death_before_and_after_commit ... ok
+
+failures:
+
+failures:
+    store::apple_import::independent_review::review_unsupported_svg_never_claims_complete_import
+    store::apple_import::independent_review::review_unsupported_underline_is_preserved_or_reported
+
+test result: FAILED. 3 passed; 2 failed; 1 ignored; 0 measured; 197 filtered out; finished in 0.22s
+
