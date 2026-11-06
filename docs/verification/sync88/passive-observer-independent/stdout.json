@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "sourceCommit": "0ca0b018a34d4632e49e57e5fc0e7ed2c89699f1",
+  "scope": "host-only actual expression semantics, no CDP/ADB/devices/process/window operation",
+  "checks": [
+    "payload accessors not invoked and no identity leakage",
+    "oversize readonly labels unavailable/redacted",
+    "immutable invoke unchanged, reply observation explicitly unavailable",
+    "own cleanup preserves original listener/callback",
+    "installation race rolls back own subscription and preserves newer global"
+  ]
+}

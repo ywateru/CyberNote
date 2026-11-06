@@ -1,0 +1,21 @@
+{
+  "scope": "host-only; no device/CDP, network, database or product modifications",
+  "command": [
+    "node",
+    "scripts/debug/sync87-native/check-passive-observer.mjs"
+  ],
+  "naturalExit": 0,
+  "wallSeconds": 0.025865499999999993,
+  "passed": 18,
+  "files": [
+    {
+      "path": "scripts/debug/sync87-native/passive-observer.mjs",
+      "sha256": "51b0588a1e44f9244f93374204b9fded55d2e7f585d3f2a517dcc011774aa82b"
+    },
+    {
+      "path": "scripts/debug/sync87-native/check-passive-observer.mjs",
+      "sha256": "0b973a11141f76ead0df4b49b7274f101769190be7c0f72d6a1e9a98a8fc5bc7"
+    }
+  ],
+  "nativeInvokeObservation": "unavailable by exact installed Tauri2.12.5 core.js nonwritable/nonconfigurable invoke descriptor; module never replaces invoke or ipc/callback dispatch and never attaches outcome handlers to application promises"
+}
