@@ -1,7 +1,7 @@
 ---
 id: app-recording-indicator78
 scope: mac-active-recording-owner-badge-live-card-and-finish-button
-status: in-progress
+status: done
 depends-on: [app-mac-feedback77]
 ---
 
@@ -32,3 +32,13 @@ depends-on: [app-mac-feedback77]
 最低完整回归：pnpm build、production排除、桌面当前148+新增检查、手机notes9/recording43/attachments43。合成媒体可Mock，录制/累计编码/保存正文ACK走真实产品。记录源码输入指纹、自然exit、完整wall、pageErrors与失败证据。无需真实麦克风，不读取用户录音/笔记，不启动/停止/安装或改原Android约13秒未保存录音现场，不做原版删除测试。不再询问运行许可。
 
 完成后根生成Mac23本地包并独立核对实际内嵌资源和严格签名，真实原生和完整像素仍按各自证据，不外推。Android原生76继续保留后续。
+
+# delivery
+
+2026-11-06限定完成。产品206557bb、runner8fc060dd，独审f54f9f95 PASS（48项+桌面/手机静态整图与几何严格相同），主合入e4276d8b。修改前已真实DOM复现controller canFinish=true而✓disabled；修正桌面能力投影、列表角标/当前实时卡动效、phase/owner去重与迟到回调校验。手机完成策略保持。
+
+主线六项全部自然exit0：build/production、桌面197、手机notes9/recording43/attachments43；90输入前后指纹09fb9ee8b4702499400963dbf4f16693cd5c8646565f06823aa9daeb39f4b9ce，各pageErrors为空。见[主线整合](../../verification/recording-indicator78/integration/README.md)。
+
+Mac23以52056b4a构建，279构建输入不变，35.423秒；原始包严格签名失败保留，派生副本adhoc严格验证通过。独立从原/派生exe解码JS/CSS逐字等本次dist，HTML完整token等价；ZIP全部内容/权限/CRC核同，SHA256 9c28504a718e7924834a98ff941e718c385de9cfe42b8586b67b98e94d57a6ec。见[构建](../../verification/recording-indicator78/native-build/README.md)和[独立核包](../../verification/recording-indicator78/native-independent/README.md)。
+
+既有正文保存双次故障的全局旧错误提示仍按“全局重试→侧栏✓”恢复，已明确记录，不无条件清除其他错误。原Android未保存录音现场不动，Android原生76保持后续；不授予真实原生硬件、Rust本轮持久化或原版整窗像素通过。
