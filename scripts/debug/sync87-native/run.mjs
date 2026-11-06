@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /** NDJSON native session; invitations accepted in stdin memory only. */
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, appendFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { resolve, basename } from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
@@ -63,6 +63,12 @@ async function openFilePicker(c){
   await c.wait('!!document.querySelector("[role=menu]")','attachment menu');
   await c.tap('[role="menu"] button','附加文件');
 }
+async function nativeStep(label,operation){
+  assert(/^[a-z0-9-]+$/.test(label));const start=performance.now();
+  await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'start',time:new Date().toISOString()})+'\n');
+  try{const value=await operation();await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'pass',wallSeconds:(performance.now()-start)/1000})+'\n');return value;}
+  catch(error){await appendFile(resolve(output,'native-steps.jsonl'),JSON.stringify({step:label,phase:'fail',wallSeconds:(performance.now()-start)/1000})+'\n');throw error;}
+}
 async function persistedNote(c,id,expected=0){
   const end=Date.now()+15000;
   while(Date.now()<end){const w=await c.workspace();const n=w.notes.find(n=>n.id===id);const attachments=w.attachments.filter(a=>a.noteId===id);if(n&&attachments.length>=expected&&n.revision>0)return{note:n,attachments};await pause(150);}
@@ -94,14 +100,14 @@ async function execute(request){
     }
     case 'attachments':{
       const c=await app();const owner=s.notes.at(-1);assert(owner,'create test note first');
-      await openNote(c,owner.id);
+      await nativeStep('attachments-open-note',()=>openNote(c,owner.id));
       if(/mInputShown=true/.test(await guard('ime'))){await guard('back');await pause(200);} // close actual IME only
-      await openFilePicker(c);const before=await persistedNote(c,owner.id);await guard('back');await pause(300);
+      await nativeStep('attachments-open-cancel',()=>openFilePicker(c));const before=await persistedNote(c,owner.id);await nativeStep('attachments-cancel',()=>guard('back'));await pause(300);
       assert.equal((await persistedNote(c,owner.id)).attachments.length,before.attachments.length,'cancel must add no attachment');
-      await openFilePicker(c);await chooserFiles(s,[s.files[0].name,s.files[1].name],{multi:true});
+      await nativeStep('attachments-open-multiple',()=>openFilePicker(c));await nativeStep('attachments-choose-multiple',()=>chooserFiles(s,[s.files[0].name,s.files[1].name],{multi:true}));
       const two=await persistedNote(c,owner.id,before.attachments.length+2);
       await c.wait('!![...document.querySelectorAll(".tiptap img")].find(x=>x.complete&&x.naturalWidth>0)','decoded native image');
-      await openFilePicker(c);await chooserFiles(s,[s.files[2].name]);const three=await persistedNote(c,owner.id,before.attachments.length+3);
+      await nativeStep('attachments-open-continuous',()=>openFilePicker(c));await nativeStep('attachments-choose-continuous',()=>chooserFiles(s,[s.files[2].name]));const three=await persistedNote(c,owner.id,before.attachments.length+3);
       for(const file of s.files)assert(three.attachments.some(a=>a.displayName===file.name),'selected original filename must persist');
       await c.snapshot(output,'attachments');return {cancelPreserved:true,multipleCount:two.attachments.length,continuousCount:three.attachments.length,names:three.attachments.map(x=>x.displayName)};
     }
