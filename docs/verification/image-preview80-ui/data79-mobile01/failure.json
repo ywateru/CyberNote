@@ -1,0 +1,96 @@
+{
+  "message": "data-management: Active recording disables both backups with explicit unsaved-audio explanation",
+  "stack": "Error: data-management: Active recording disables both backups with explicit unsaved-audio explanation\n    at runGroups (file:///private/tmp/apple-notes-image-preview80/scripts/debug/scenarios.mjs:139:301)\n    at async file:///private/tmp/apple-notes-image-preview80/scripts/debug/cli.mjs:81:256",
+  "metadata": {
+    "platform": "mobile-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "099750d840706edc098920eab609153ba878c7ad658b9f7a12086e44127e96c8",
+    "fileCount": 118,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      " M plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      " M plugins/tauri-plugin-notes-ui/src/model.rs",
+      " M plugins/tauri-plugin-notes-ui/src/tests.rs",
+      " M scripts/debug/cli.mjs",
+      " M scripts/debug/data-management.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M scripts/debug/source-identity.mjs",
+      " M src/App.tsx",
+      " M src/Editor.tsx",
+      " M src/debug/catalog.ts",
+      " M src/native-toolbar-controller.ts",
+      " M src/use-attachment-media.ts",
+      "?? scripts/debug/image-preview-lifetime.tsx",
+      "?? scripts/debug/image-preview.mjs",
+      "?? scripts/native/",
+      "?? src/ImagePreview.css",
+      "?? src/ImagePreview.tsx",
+      "?? src/window-drag.ts"
+    ]
+  },
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "099750d840706edc098920eab609153ba878c7ad658b9f7a12086e44127e96c8",
+    "fileCount": 118,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      " M plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      " M plugins/tauri-plugin-notes-ui/src/model.rs",
+      " M plugins/tauri-plugin-notes-ui/src/tests.rs",
+      " M scripts/debug/cli.mjs",
+      " M scripts/debug/data-management.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M scripts/debug/source-identity.mjs",
+      " M src/App.tsx",
+      " M src/Editor.tsx",
+      " M src/debug/catalog.ts",
+      " M src/native-toolbar-controller.ts",
+      " M src/use-attachment-media.ts",
+      "?? scripts/debug/image-preview-lifetime.tsx",
+      "?? scripts/debug/image-preview.mjs",
+      "?? scripts/native/",
+      "?? src/ImagePreview.css",
+      "?? src/ImagePreview.tsx",
+      "?? src/window-drag.ts"
+    ]
+  },
+  "workspaceCounts": {
+    "notes": 2,
+    "folders": 3,
+    "attachments": 1
+  },
+  "elapsedMs": 16501,
+  "pageErrors": []
+}

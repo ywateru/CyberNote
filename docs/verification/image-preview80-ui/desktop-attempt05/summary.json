@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "mode": "group",
+  "sourceHead": "1c25b4c5030cfc9cc2196a2687ddcc225c8d9170",
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "ed43746198e74825626d6878ac152ded49c56ae6864569c7c9104502e003a6c7",
+    "fileCount": 117,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      " M plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      " M plugins/tauri-plugin-notes-ui/src/model.rs",
+      " M scripts/debug/cli.mjs",
+      " M scripts/debug/data-management.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M scripts/debug/source-identity.mjs",
+      " M src/App.tsx",
+      " M src/Editor.tsx",
+      " M src/debug/catalog.ts",
+      " M src/native-toolbar-controller.ts",
+      " M src/use-attachment-media.ts",
+      "?? scripts/debug/image-preview.mjs",
+      "?? scripts/native/",
+      "?? src/ImagePreview.css",
+      "?? src/ImagePreview.tsx",
+      "?? src/window-drag.ts"
+    ]
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "ed43746198e74825626d6878ac152ded49c56ae6864569c7c9104502e003a6c7",
+    "fileCount": 117,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M plugins/tauri-plugin-notes-ui/guest-js/index.ts",
+      " M plugins/tauri-plugin-notes-ui/macos/toolbar.m",
+      " M plugins/tauri-plugin-notes-ui/src/model.rs",
+      " M scripts/debug/cli.mjs",
+      " M scripts/debug/data-management.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M scripts/debug/source-identity.mjs",
+      " M src/App.tsx",
+      " M src/Editor.tsx",
+      " M src/debug/catalog.ts",
+      " M src/native-toolbar-controller.ts",
+      " M src/use-attachment-media.ts",
+      "?? scripts/debug/image-preview.mjs",
+      "?? scripts/native/",
+      "?? src/ImagePreview.css",
+      "?? src/ImagePreview.tsx",
+      "?? src/window-drag.ts"
+    ]
+  },
+  "sourceInputsChanged": false,
+  "platform": "desktop-browser",
+  "backend": "isolated-js-protocol-fixture",
+  "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+  "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+  "browser": "156.0.8078.80",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "elapsedMs": 8202,
+  "result": {
+    "groups": [
+      {
+        "group": "image-preview",
+        "pass": true,
+        "checks": [
+          "Body contains only the image preview trigger, no outside save or export status",
+          "Preview is a direct protected app child outside editor ancestors",
+          "Opening preview focuses its actual close control",
+          "Information uses authorized name, MIME, original byte length and natural image size with no invented timestamp",
+          "Tab wraps from close to information",
+          "Shift Tab wraps back to close",
+          "320px light reservedTop 0 keeps all header actions visible, nonoverlapping and no horizontal overflow",
+          "390px dark reservedTop 0 keeps all header actions visible, nonoverlapping and no horizontal overflow",
+          "800px light reservedTop 52 keeps all header actions visible, nonoverlapping and no horizontal overflow",
+          "800px dark reservedTop 52 keeps all header actions visible, nonoverlapping and no horizontal overflow",
+          "Close restores image trigger focus without changing editor JSON",
+          "Escape closes actual preview and returns focus",
+          "Opening/info/closing preview adds no Undo entry",
+          "Navigation closes preview and removes protected image bytes from overlay",
+          "Access prepare closes app-level preview synchronously under protected cover",
+          "All fallback blank header double clicks dispatch one simulated native toggle each",
+          "Fallback button/search/editor double clicks do not dispatch native zoom",
+          "No uncaught application page errors"
+        ],
+        "elapsedMs": 3164
+      }
+    ],
+    "passedChecks": 18,
+    "limitations": [
+      "Default IPC persistence and native quit/OCR/platform are explicit simulations; Rust Store/OS/TCC/hardware not proven.",
+      "Apple Notes has no HTML. This suite compares clone DOM/screenshots; original pixels require preserved manual reference assets.",
+      "Listed unsupported native menu features remain product limitations. Catalog availability is separate from scenario execution."
+    ]
+  },
+  "pageErrors": []
+}
