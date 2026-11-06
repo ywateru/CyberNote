@@ -20,7 +20,7 @@ export async function goHome(client) {
 export async function openNote(client,id) {
   assert(/^[0-9a-f-]{36}$/.test(id));await goHome(client);
   await client.tap('button.note-row[data-note-id="'+id+'"]');
-  await client.wait('!!document.querySelector(".mobile.page-editor .tiptap")','actual mobile note');
+  await client.wait('document.querySelector(".app.mobile.page-editor [data-mobile-editor-note]")?.dataset.mobileEditorNote==='+JSON.stringify(id),'exact actual mobile note owner');
 }
 async function enterRunDirectory(state,leaf) {
   const nodes=parseNodes(await guard('uia'));assert(nodes.some(provider),'actual DocumentsUI required');
