@@ -36,6 +36,24 @@ export async function waitForNoteReplica(readWorkspace,expected,files,label,time
   },label+' complete document/plainText and media',timeoutMs);
 }
 const textProof=note=>({id:note.id,documentSha256:hash(JSON.stringify(note.document)),plainTextSha256:hash(note.plainText),completeDocumentAndPlainTextVerified:true});
+export function visibleSyntheticEditorExpression(expected,media=[]) {
+  return `(()=>{const id=${JSON.stringify(expected.id)},plain=${JSON.stringify(expected.plainText)},media=${JSON.stringify(media)};
+    const visible=e=>{if(!e)return false;for(let p=e;p;p=p.parentElement){const c=getComputedStyle(p);if(c.display==='none'||c.visibility!=='visible'||+c.opacity===0)return false;}const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&r.x<innerWidth&&r.y<innerHeight&&r.right>0&&r.bottom>0};
+    const apps=[...document.querySelectorAll('.app.mobile.page-editor')].filter(visible);if(apps.length!==1)return false;
+    const editors=[...apps[0].querySelectorAll('[data-mobile-editor-note] .tiptap')].filter(visible);if(editors.length!==1)return false;
+    const e=editors[0];if(e.closest('[data-mobile-editor-note]')?.dataset.mobileEditorNote!==id)return false;
+    const blocks=[...e.children].filter(x=>!x.matches('.node-attachment,.attachment-node'));if(blocks.map(x=>x.innerText).join('\\n')!==plain)return false;
+    if(blocks[0]?.innerText!==plain.split('\\n')[0])return false;
+    return media.every(m=>{const cards=[...e.querySelectorAll('.attachment-node[data-attachment-id]')].filter(x=>x.dataset.attachmentId===m.id);if(cards.length!==1||!visible(cards[0]))return false;
+      const card=cards[0],kind=m.mime.startsWith('image/')?'img':'audio',elements=card.querySelectorAll(kind);if(elements.length!==1)return false;const element=elements[0],control=kind==='img'?card.querySelector('.image-open'):card.querySelector('.audio-card');if(!visible(control))return false;
+      if(kind==='img'&&(!visible(element)||!element.complete||element.naturalWidth<=0||element.alt!==m.name))return false;
+      if(kind==='audio'&&(!Number.isFinite(element.duration)||element.duration<=0||card.querySelector('.audio-title-toggle')?.textContent.trim()!==m.name))return false;
+      return (element.currentSrc||element.src)==='data:'+m.mime+';base64,'+m.data;
+    });})()`;
+}
+async function visibleSyntheticEditor(client,expected,media=[]) {
+  await client.wait(visibleSyntheticEditorExpression(expected,media),'unique visible exact owner editor, full body and exact original media sources');
+}
 export async function textRoundtrip({client,peer,state,output,saveState,convergenceTimeoutMs=40000}) {
   const mobile=state.notes.at(-1);assert(mobile);assert(!state.desktopNote,'separate text stage must not replace an existing desktop note');
   const mobileExpected=captureExpectedNote(await client.workspace(),mobile.id,mobileInputText(mobile.marker));
@@ -43,7 +61,7 @@ export async function textRoundtrip({client,peer,state,output,saveState,converge
   const marker='SYNC87-DESKTOP-'+state.runId,id=await peer.create(desktopInputText(marker));
   const desktopExpected=captureExpectedNote(await peer.workspace(),id,desktopInputText(marker));
   const receivedDesktop=await waitForNoteReplica(()=>client.workspace(),desktopExpected,[],'desktop to mobile text',convergenceTimeoutMs);
-  await openNote(client,id);await client.wait('document.querySelector(".tiptap")?.innerText.includes('+JSON.stringify(desktopExpected.plainText)+')','complete desktop text visible');
+  await openNote(client,id);await visibleSyntheticEditor(client,desktopExpected);
   state.desktopNote={id,marker,attachmentIds:[]};await saveState(state);await client.snapshot(output,'text-roundtrip');
   const result={mobileToDesktop:textProof(receivedMobile),desktopToMobile:textProof(receivedDesktop),scope:'actual Android UI/native Store and real DesktopPeer; separate text-only stage; no media or export acceptance'};
   await writeFile(join(output,'text-roundtrip.json'),JSON.stringify(result,null,2)+'\n');return result;
@@ -55,9 +73,11 @@ export async function desktopMedia({client,peer,state,output,saveState,convergen
   const expected=captureExpectedNote(await peer.workspace(),id,desktopInputText(marker));
   await waitForNoteReplica(()=>client.workspace(),expected,state.desktopFiles,'desktop media to mobile',convergenceTimeoutMs);
   const w=await client.workspace();assert(attachmentIds.every(a=>w.attachments.some(x=>x.id===a&&x.noteId===id)));
-  const originals=[];for(let i=0;i<state.desktopFiles.length;i++)originals.push(await assertNativeOriginal(client,attachmentIds[i],state.desktopFiles[i]));
-  await openNote(client,id);await client.wait('[...document.querySelectorAll(".tiptap img")].some(x=>x.complete&&x.naturalWidth>0)','synced image decode');
-  await client.wait('[...document.querySelectorAll(".tiptap audio")].some(x=>Number.isFinite(x.duration)&&x.duration>0)','synced synthetic audio metadata');
+  const originals=[],media=[];for(let i=0;i<state.desktopFiles.length;i++){
+    const file=state.desktopFiles[i],attachmentId=attachmentIds[i];originals.push(await assertNativeOriginal(client,attachmentId,file));
+    const source=await client.readAttachment(attachmentId);media.push({id:attachmentId,name:file.name,mime:source.mime,data:source.data});
+  }
+  await openNote(client,id);await visibleSyntheticEditor(client,expected,media);
   state.desktopNote.attachmentIds=attachmentIds;await saveState(state);await client.snapshot(output,'desktop-media');
   const result={originals,completeDocumentAndPlainTextVerified:true,decodedImageAndAudio:true,scope:'desktop-created synthetic originals to native Android; Android picker and native export remain separate'};
   await writeFile(join(output,'desktop-media.json'),JSON.stringify(result,null,2)+'\n');return result;
