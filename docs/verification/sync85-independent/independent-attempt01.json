@@ -1,0 +1,15 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "scripts/sync-network-test/Cargo.toml",
+    "--offline",
+    "--test",
+    "independent85",
+    "--",
+    "--nocapture"
+  ],
+  "exitCode": 101,
+  "wallSeconds": 9.275088625
+}

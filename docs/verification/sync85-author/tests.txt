@@ -1,0 +1,46 @@
+   Compiling notes-sync-network-tests v0.1.0 (/private/tmp/apple-notes-sync85/scripts/sync-network-test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.34s
+     Running unittests lib.rs (scripts/sync-network-test/target/debug/deps/notes_sync_network_tests-fd27585d994ef05f)
+
+running 7 tests
+test identity::tests::malformed_endpoint_identity_and_symlink_are_rejected ... ok
+test network::transport::tests::interrupted_blob_resumes_and_hash_failure_cannot_publish ... ok
+test network::transport::tests::partial_staging_budget_cannot_be_bypassed_with_new_hashes ... ok
+test identity::tests::invitation_expiration_and_revocation_are_durable ... ok
+test network::transport::tests::head_depth_length_and_unoffered_blob_rejected_before_staging ... ok
+test network::transport::tests::unauthenticated_unknown_protocol_and_oversized_frame_never_reach_backend ... ok
+test network::transport::tests::encrypted_replay_and_tampering_close_connection_without_second_request ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+     Running unittests src/bin/sync-peer.rs (scripts/sync-network-test/target/debug/deps/sync_peer-e4f56dbce86ea95f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/network.rs (scripts/sync-network-test/target/debug/deps/network-90f61401442df750)
+
+running 6 tests
+test stop_releases_socket_short_unauthenticated_connections_and_restart ... ok
+test credentials_are_private_persistent_and_never_present_in_status ... ok
+test wrong_psk_host_key_workspace_duplicate_redeem_and_unknown_fields_fail_closed ... ok
+test provisional_pairing_survives_adoption_failure_and_restart ... ok
+test pagination_and_large_head_blob_are_bidirectional_and_idempotent ... ok
+test revoked_live_connection_cannot_read_or_write_more_data ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.02s
+
+     Running tests/process.rs (scripts/sync-network-test/target/debug/deps/process-7b657b978dc599d4)
+
+running 1 test
+test two_processes_bidirectional_persisted_reconnect_and_multi_device_forwarding ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.95s
+
+   Doc-tests notes_sync_network_tests
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

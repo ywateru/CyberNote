@@ -1,0 +1,22 @@
+   Compiling notes-sync-network-tests v0.1.0 (/private/tmp/apple-notes-sync85/scripts/sync-network-test)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.31s
+     Running tests/independent85.rs (scripts/sync-network-test/target/debug/deps/independent85-973d3fcede1a3953)
+
+running 3 tests
+test prepared_credentials_survive_ready_file_failure_after_successful_adoption ... ok
+test required_blobs_rejection_precedes_blob_io_on_push_and_pull ... ok
+INDEPENDENT_SAME_BLOB_FAILURE counts=[1, 1, 1] B=ServiceStatus { listening: None, connections: [ConnectionStatus { peer_id: "5ba603e7-afc7-4177-b1c9-bfc3b7921c11", phase: "error", last_success: None, error: Some(Protocol) }] } C=ServiceStatus { listening: None, connections: [ConnectionStatus { peer_id: "f994c1d3-434c-4942-9c6a-fb8f5c5b5d86", phase: "idle", last_success: Some(1793948512), error: None }] }
+
+thread 'simultaneous_same_blob_uploads_automatically_converge_without_manual_retry' (42544603) panicked at tests/independent85.rs:118:13:
+shared-blob concurrent uploads must recover automatically; no sync_now was called
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test simultaneous_same_blob_uploads_automatically_converge_without_manual_retry ... FAILED
+
+failures:
+
+failures:
+    simultaneous_same_blob_uploads_automatically_converge_without_manual_retry
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.42s
+
+error: test failed, to rerun pass `--test independent85`
