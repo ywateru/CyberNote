@@ -1,6 +1,6 @@
 # 开发命令与布局检查
 
-2026-11-06，任务70/71/73/75/77/78/79/80/81。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
+2026-11-06，任务70/71/73/75/77/78/79/80/81/82/83。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
 
 [77历史整合](verification/mac-feedback77/integration/README.md)为桌面十组148项、手机笔记9/录音43/附件43，构建/生产排除通过。`pnpm debug group mac-feedback --out FRESH_DIR`单独运行该批47项真实事件/HTML/字符Range/位置回归；完整组另含45项contract，真实deadline允许首次transport尚未返回时没有lastState，不伪造状态。
 
@@ -25,9 +25,13 @@ pnpm debug group data-management --out /private/tmp/notes-debug-data
 pnpm debug group data-management --mobile --out /private/tmp/notes-debug-mobile-data
 pnpm debug group image-preview --out /private/tmp/notes-debug-image-preview
 pnpm debug group storage-overview --out /private/tmp/notes-debug-storage-overview
+pnpm debug group preferences --out /private/tmp/notes-debug-preferences
+pnpm debug group quick-home --mobile --out /private/tmp/notes-debug-quick-home
 ```
 
 默认在新建临时目录和独立 headless Chrome context 中启动真实 `/src/main.tsx`、App、Tiptap、保存队列、录音 Panel/Session/RecordingPcm 和附件正文确认流程。默认后端明确为 `isolated-js-protocol-fixture`，**没有证明 Rust Store 持久化**。不启动安装应用、不接触现有手机、不调用真实麦克风、不读取用户录音、不编译 Rust 或安装包。桌面 viewport 为1280×800；`--mobile` 为390×844和触摸/Android UA，是浏览器手机布局检查，不是 Android WebView或IME验收。桌面全组主回归（原九组、`mac-feedback`及`recording-indicator`）以桌面为基准；手机执行`notes`、独立`recording`与`attachments`小组及自定义script/snapshot，桌面专用录音栏和原生退出场景不扩张为手机通过。
+
+82的 `preferences` 组验证共享“设置／数据”标签、首次加载与切换保留、键盘和关闭焦点；`settings.open` 打开设置，`settings.tab {"tab":"data"}` 切到数据，`modal.open` 的 settings/data 名称保留为兼容入口。83的 `quick-home` 仅接受 `--mobile`，已纳入手机 `attachments` 组合而不进入桌面全组。它通过真实＋、创建收据、注册编辑器和返回处理器，覆盖冷启无隐藏编辑器／媒体读取、单次新建、延迟和失败恢复、来源目录、智能目录空结果编辑、保存重载、退出屏障及窄屏布局。浏览器聚焦和 keyboard bridge 调用不等于真机 IME 已验收。各次准确结论见[82＋83交付](verification/mobile-home8283/README.md)。
 
 需要本机已安装 Chrome 和 playwright-core。默认寻找 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` 和 `/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules/playwright-core/index.mjs`；其他机器用 `CHROME_PATH`、`PLAYWRIGHT_CORE_PATH` 或 `--chrome`、`--playwright` 指定。runner不自动安装依赖。
 
