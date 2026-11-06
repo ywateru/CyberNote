@@ -1,0 +1,20 @@
+[
+  {
+    "name": "original-host",
+    "args": [
+      "node",
+      "scripts/debug/sync87-native/check-client.mjs"
+    ],
+    "exitCode": 0,
+    "wallMs": 28
+  },
+  {
+    "name": "independent",
+    "args": [
+      "node",
+      "docs/verification/sync87-native/native-webview-chain-independent/check.mjs"
+    ],
+    "exitCode": 1,
+    "wallMs": 26
+  }
+]
