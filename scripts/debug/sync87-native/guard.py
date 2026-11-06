@@ -198,8 +198,8 @@ def main():
         args=['shell','input','tap',str(a.x),str(a.y)] if a.operation=='tap' else ['shell','input','swipe',str(a.x),str(a.y),str(a.x),str(a.y),'700']
         result=invoke(args)
     elif a.operation=='uia':
-        invoke(['shell','uiautomator','dump','/sdcard/Download/notes-sync87-uia.xml'],timeout=25)
-        result=invoke(['exec-out','cat','/sdcard/Download/notes-sync87-uia.xml'])
+        invoke(['shell','uiautomator','dump','/data/local/tmp/notes-sync87-uia.xml'],timeout=25)
+        result=invoke(['exec-out','cat','/data/local/tmp/notes-sync87-uia.xml'])
     elif a.operation=='ime':result=invoke(['shell','dumpsys','input_method'])
     elif a.operation=='screenshot':
         dst=Path(a.path)
