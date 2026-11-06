@@ -1,0 +1,39 @@
+{
+  "scope": "host-only Java/Dex compilation; helper not executed; no device",
+  "source": "/private/tmp/apple-notes-sync87-native/scripts/debug/sync87-native/android/SyncTargetCounts.java",
+  "sourceSha256": "daa1d8c584715070f7b1a4a95d0c600be25d393e061cdb6def0b1a92780bc5d9",
+  "dex": "/private/tmp/notes-sync87-native-counts-helper01/dex/classes.dex",
+  "dexSha256": "f98199e0a4bc9432760fa47eee2f0c0baa0c17edd5278172f9059f0776fff2a3",
+  "commands": [
+    {
+      "argv": [
+        "/opt/zerobrew/opt/openjdk@17/bin/javac",
+        "-source",
+        "8",
+        "-target",
+        "8",
+        "-bootclasspath",
+        "/Users/water/Library/Android/sdk/platforms/android-36/android.jar",
+        "-d",
+        "/private/tmp/notes-sync87-native-counts-helper01/classes",
+        "/private/tmp/apple-notes-sync87-native/scripts/debug/sync87-native/android/SyncTargetCounts.java"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.29070075
+    },
+    {
+      "argv": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/d8",
+        "--min-api",
+        "26",
+        "--lib",
+        "/Users/water/Library/Android/sdk/platforms/android-36/android.jar",
+        "--output",
+        "/private/tmp/notes-sync87-native-counts-helper01/dex",
+        "/private/tmp/notes-sync87-native-counts-helper01/classes/SyncTargetCounts.class"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.5235091249999999
+    }
+  ]
+}

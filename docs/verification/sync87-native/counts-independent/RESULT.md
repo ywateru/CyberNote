@@ -1,0 +1,9 @@
+# Fixed synthetic target read-only counts helper independent PASS
+
+Reviewed frozen4d3b98bb7e2d25b30c426ca175e23142cdbc6e91 vsd0096346. Exact Java SHAdaa1d8c584715070f7b1a4a95d0c600be25d393e061cdb6def0b1a92780bc5d9 and DEXSHAf98199e0a4bc9432760fa47eee2f0c0baa0c17edd5278172f9059f0776fff2a3 match compile receipt and frozen guard. Compilation was previously done by author with javac/d8 natural0; reviewer did not rebuild or execute the helper.
+
+Actual DEX disassembly retained: sole SyncTargetCounts class; fixed app-files DB and exact synthetic eac3 target, no arguments, appUID>=10000/canonical-file checks, openDatabase flag1(OPEN_READONLY) and isReadOnly assertion. One rawQuery returns five scalar counts; bound target is repeated four times. No row/body/config/secret output or SQL/file/network mutation call path exists in the inspected code. Fixed error response omits exception details.
+
+Independent actual guard host stub confirms exact final02 state/source/DEX hashes; fixed shell-private push then run-as appUID app_process/15-second limit; same expected PID/startTicks observed before/middle/after. No arbitrary SQL/path/target is introduced. Extra output keys, bool, negative, overflow and arbitraryerror results are refused; only five bounded integers are returned. Wrong5580 is refused before any stub call. Exact check process and disassembly evidence retained. No real runtime/backend/ADB/device/helper execution was performed.
+
+Immediate admission sent via /private/tmp/sync87-counts-review-status.md and author/root messages before evidence commit. Actual helper availability, SQLite JSON1 and runtime behavior are still unverified and must record failure if they fail. This narrow diagnosis does not prove synchronization, media, provider/export or restart gates; it does not mutate ACK/reply/status or replace any Store. Bound final02peer Store and original user recording/devices stay preserved.

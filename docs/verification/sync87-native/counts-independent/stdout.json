@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "sourceCommit": "4d3b98bb7e2d25b30c426ca175e23142cdbc6e91",
+  "javaSha256": "daa1d8c584715070f7b1a4a95d0c600be25d393e061cdb6def0b1a92780bc5d9",
+  "dexSha256": "f98199e0a4bc9432760fa47eee2f0c0baa0c17edd5278172f9059f0776fff2a3",
+  "scope": "source/DEX disassembly/host stub only, no Java helper execution/runtime/ADB/device",
+  "checks": [
+    "one fixed target/db/readonly open flag and one rawQuery in actual DEX",
+    "source and DEX hashes match frozen guard",
+    "bounded integer output rejects extra fields/bools/negative/overflow/error secrets",
+    "exact fixed push+run-as15s and three same-lifetime observations",
+    "wrong serial refused before stub invocation"
+  ]
+}
