@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "sourceCommit": "cfa14fe12636f351232d5658b48cc9952e123cc0",
+  "sourceScriptSha256": "dca43bc464514bb14572ce2181faf0ce11d821d76ed532512cfadee4fab5cba8",
+  "commandShape": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "apple_notes_import::core::tests::actual_readonly_source_worker_to_isolated_store",
+    "--",
+    "--ignored",
+    "--exact",
+    "--test-threads=1"
+  ],
+  "targetDir": "/private/tmp/apple-notes-sync84-target",
+  "inputFile0600": true,
+  "parent0700": true,
+  "targetPreviouslyAbsent": true,
+  "sourceSelection": "single prior verified attachment-free note; private ID only",
+  "privateCaptureFiles0600": true,
+  "rawCaptureHashes": {
+    "cargo.stdout.private": "f78b49082916cbabb268a38e6ec5683a345ea3e15e31039fdcad0dc1d536ac9c",
+    "cargo.stderr.private": "b5ee20d89028e719fa8afe9db3c6b3918c1cdeb13ee19c4e48c40c2c0d596bfe"
+  },
+  "resultScope": "original failed actual worker run; no import/reopen/dedup PASS"
+}
