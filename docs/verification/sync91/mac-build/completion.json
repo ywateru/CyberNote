@@ -1,0 +1,130 @@
+{
+  "status": "built-await-independent-audit",
+  "approvedCommit": "b373ac95e1d26faf03e37e5ee6c68bccf5074e00",
+  "buildHead": "c6de6a6884f97230ed2d6119efc8613dd5198ebe",
+  "productInputs322Equal": true,
+  "frontendExactAndroid21": true,
+  "archive": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Mac29.zip",
+    "bytes": 6720140,
+    "sha256": "a8896b23d08a2a30832780ef50b97c964d9310fa4a85e47d34226a1cb82227fd"
+  },
+  "executable": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app/Contents/MacOS/notes-clone",
+    "sha256": "45315eff899b1d42b731f3044f391262d9b2d65fc34216fe748a72ebc85ab92a"
+  },
+  "executableBytes": 20924528,
+  "originalVerificationExit": 1,
+  "derivedVerificationExit": 0,
+  "changedPaths": [
+    "Contents/MacOS/notes-clone",
+    "Contents/_CodeSignature/CodeResources"
+  ],
+  "originalUnchanged": true,
+  "commands": [
+    {
+      "name": "mac-build",
+      "command": [
+        "pnpm",
+        "mac:build"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 24.629
+    },
+    {
+      "name": "copy-original",
+      "command": [
+        "ditto",
+        "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/release/bundle/macos/备忘录.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/mac-original.app"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.022
+    },
+    {
+      "name": "verify-original",
+      "command": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/mac-original.app"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 0.027
+    },
+    {
+      "name": "copy-derived",
+      "command": [
+        "ditto",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/mac-original.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.016
+    },
+    {
+      "name": "sign-derived",
+      "command": [
+        "codesign",
+        "--force",
+        "--sign",
+        "-",
+        "--timestamp=none",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.035
+    },
+    {
+      "name": "verify-derived",
+      "command": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.036
+    },
+    {
+      "name": "inspect-derived",
+      "command": [
+        "codesign",
+        "-dv",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.01
+    },
+    {
+      "name": "archive",
+      "command": [
+        "ditto",
+        "-c",
+        "-k",
+        "--sequesterRsrc",
+        "--keepParent",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录.app",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Mac29.zip"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.426
+    },
+    {
+      "name": "copy-frontend",
+      "command": [
+        "ditto",
+        "/Users/water/work/2026/Apple-Notes-Clone/dist",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/mac-dist"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.027
+    }
+  ],
+  "deviceOperations": []
+}
