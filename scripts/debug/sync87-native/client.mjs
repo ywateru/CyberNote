@@ -25,11 +25,27 @@ export function chooseTarget(targets,port) {
 }
 export function parseNodes(xml) {
   const decode=s=>s.replace(/&(amp|quot|apos|lt|gt);/g,(_,x)=>({amp:'&',quot:'"',apos:"'",lt:'<',gt:'>'}[x]));
-  return [...xml.matchAll(/<node\s+([^>]+)>/g)].map(m=>{
-    const attrs=Object.fromEntries([...m[1].matchAll(/([a-z-]+)="([^"]*)"/g)].map(a=>[a[1],decode(a[2])]));
+  const nodes=[],stack=[];
+  for(const token of xml.matchAll(/<node\b([^>]*)>|<\/node\s*>/g)) {
+    if(token[1]===undefined){assert(stack.length,'unbalanced native XML');stack.pop();continue;}
+    const attrs=Object.fromEntries([...token[1].matchAll(/([a-z-]+)="([^"]*)"/g)].map(a=>[a[1],decode(a[2])]));
     const bounds=/^\[(\d+),(\d+)\]\[(\d+),(\d+)\]$/.exec(attrs.bounds||'');
-    if(bounds)attrs.rect={x:+bounds[1],y:+bounds[2],width:+bounds[3]-bounds[1],height:+bounds[4]-bounds[2]};return attrs;
-  });
+    if(bounds)attrs.rect={x:+bounds[1],y:+bounds[2],width:+bounds[3]-bounds[1],height:+bounds[4]-bounds[2]};
+    attrs.nodeIndex=nodes.length;attrs.parentIndex=stack.at(-1)??null;nodes.push(attrs);
+    if(!/\/\s*$/.test(token[1]))stack.push(attrs.nodeIndex);
+  }
+  assert.equal(stack.length,0,'unbalanced native XML');return nodes;
+}
+export function nativeWebViewRect(nodes) {
+  const views=nodes.filter(n=>n.class==='android.webkit.WebView');
+  assert(views.length>0,'app WebView rectangle absent');
+  for(const view of views){assert.equal(view.package,PACKAGE,'foreign WebView host');assert(view.rect?.width>0&&view.rect.height>0,'invalid WebView rectangle');}
+  const first=views[0];
+  for(let i=1;i<views.length;i++){
+    assert.equal(views[i].parentIndex,views[i-1].nodeIndex,'different WebView hosts');
+    assert.deepEqual(views[i].rect,first.rect,'different WebView rectangles');
+  }
+  return first.rect;
 }
 export async function nativeNode(match,{hold=false,timeout=12000}={}) {
   const end=Date.now()+timeout;
@@ -67,8 +83,7 @@ export async function connect({receipt,port=19400}) {
     const tap=async(selector,text)=>{const p=await point(selector,text);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
     const nativeTap=async(selector)=>{
       const p=await point(selector);const nodes=parseNodes(await guard('uia'));
-      const views=nodes.filter(n=>n.class==='android.webkit.WebView'&&n.package===PACKAGE&&n.rect?.width>0);
-      assert.equal(views.length,1,'exactly one app WebView rectangle');const rect=views[0].rect;
+      const rect=nativeWebViewRect(nodes);
       const viewport=await read('({width:innerWidth,height:innerHeight})');
       await guard('tap',{x:Math.round(rect.x+p.x*rect.width/viewport.width),y:Math.round(rect.y+p.y*rect.height/viewport.height)});
     };
