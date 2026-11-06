@@ -4,6 +4,7 @@
 use super::*;
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet, HashSet};
+#[path = "apple_import/html.rs"]
 mod html;
 const RAW_MIME: &str = "application/vnd.local-notes.apple-import+json";
 fn fail(code: &str, message: &str) -> AppError {
@@ -403,4 +404,5 @@ impl Store {
     }
 }
 #[cfg(test)]
+#[path = "apple_import/tests.rs"]
 mod tests;
