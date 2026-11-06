@@ -1,0 +1,3 @@
+# Actual Android19 provider continuation18
+
+attachmentsOpen failed ACTION_FAILED18.730375292s; wrapper natural2/25.062586375s. Fixed step attachments-open-only failed guard-command-failed8.283392667s; guard bounded137 retained. Safe read after failure confirms original synthetic editor, samePID4321/startTicks6265, mediaMenu=true. Therefore first attachment button did open menu; subsequent nativeUIA based control selection failed. No DocumentsUI selection/save occurred and no new PNG/WAV saving assertion is made. Final02 sole real TXT remains the previously proven33B file. No URI injection, action retry, data deletion or originaldevice/microphone access.
