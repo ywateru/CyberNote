@@ -1154,6 +1154,10 @@ try {
   const databaseEvidence = [];
   for (const directory of new Set(devices.map((d) => d.store))) {
     try {
+      assert(devices.every(d => d.backend.lifecycle.exit &&
+        d.runtime.rustEvents.resourceClosures.some(event =>
+          event.event === "browser-process-exit" && event.terminal)),
+      "Every owned Rust and browser process must exit before immutable SQLite evidence");
       const sql = `import sqlite3,json,sys,hashlib,os
 p=sys.argv[1]
 wal=p+'-wal'

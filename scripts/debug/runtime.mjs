@@ -15,6 +15,9 @@ export async function openRuntime(options = {}) {
   const root = resolve(options.root || process.cwd());
   const directory = await mkdtemp(resolve(options.tmp || tmpdir(), 'notes-debug70-'));
   let browser,
+    browserServer,
+    browserServerClosed = false,
+    browserProcessExit,
     context,
     vite,
     server,
@@ -71,6 +74,7 @@ export async function openRuntime(options = {}) {
   const cleanup = async ({ keep = options.keep } = {}) => {
     // Teardown always owns all resources, even after a failed poll/event/IPC.
     // Preserve the first failure while awaiting every independent cleanup.
+    const cleanupStarted = performance.now();
     let failure;
     const attempt = async fn => { try { await fn(); } catch (error) { failure ||= error; } };
     if (participantsRegistered) await attempt(async () => {
@@ -84,9 +88,22 @@ export async function openRuntime(options = {}) {
     await attempt(() => options.rustEvents
       ? closeResource(context, 'close', () => context.close(), () => contextClosed)
       : context?.close());
-    await attempt(() => options.rustEvents
-      ? closeResource(browser, 'disconnected', () => browser.close(), () => !browser?.isConnected())
-      : browser?.close());
+    await attempt(async () => {
+      if (!browserServer) {
+        await browser?.close();
+        return;
+      }
+      let timer;
+      try {
+        await Promise.race([
+          browserServer.close(),
+          new Promise((_, reject) => { timer = setTimeout(() => reject(Error("Owned browser server close timed out")), 10000); }),
+        ]);
+      } finally { clearTimeout(timer); }
+      if (!browserServerClosed || browser?.isConnected() ||
+          browserProcessExit?.code !== 0 || browserProcessExit?.signal !== null)
+        throw Error("Owned browser process did not close naturally");
+    });
     for (const socket of sockets) socket.destroy();
     const closeServer = new Promise(done => {
       if (!server) return done();
@@ -99,6 +116,7 @@ export async function openRuntime(options = {}) {
     ]).finally(() => clearTimeout(closeTimer)));
     await attempt(() => backend?.close());
     if (!keep) await attempt(() => rm(directory, { recursive: true, force: true }));
+    if (options.rustEvents) resourceClosures.push({ event: "cleanup", terminal: !failure, wallMs: performance.now() - cleanupStarted });
     if (failure) throw failure;
   };
   try {
@@ -133,7 +151,28 @@ export async function openRuntime(options = {}) {
     await new Promise((done, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', done); }); const origin = 'http://127.0.0.1:' + server.address().port;
     const playwrightPath = options.playwright || process.env.PLAYWRIGHT_CORE_PATH || playwrightDefault; if (!existsSync(playwrightPath)) throw Error('Set PLAYWRIGHT_CORE_PATH to an installed playwright-core; no dependencies are installed by this runner.');
     const { chromium } = await import(pathToFileURL(playwrightPath));
-    browser = await chromium.launch({ executablePath: options.chrome || process.env.CHROME_PATH || chromeDefault, headless: true, args: ['--autoplay-policy=no-user-gesture-required', '--mute-audio', '--disable-background-timer-throttling'] });
+    const launchOptions = { executablePath: options.chrome || process.env.CHROME_PATH || chromeDefault, headless: true, args: ['--autoplay-policy=no-user-gesture-required', '--mute-audio', '--disable-background-timer-throttling'] };
+    if (options.rustEvents) {
+      // Public process ownership lets us close this child's inherited log pipes
+      // after its actual exit. Chrome updater/crashpad descendants may otherwise
+      // keep stderr open, delaying Playwright's child `close` indefinitely.
+      browserServer = await chromium.launchServer({ ...launchOptions, host: "127.0.0.1" });
+      const ownedProcess = browserServer.process();
+      ownedProcess.once("exit", (code, signal) => {
+        browserProcessExit = { code, signal };
+        const pipes = ownedProcess.stdio.filter(pipe => typeof pipe?.destroy === "function");
+        for (const pipe of pipes) pipe.destroy();
+        resourceClosures.push({ event: "browser-process-exit", terminal: true, pid: ownedProcess.pid, code, signal, stdioDestroyed: pipes.every(pipe => pipe.destroyed) });
+      });
+      browserServer.once("close", (code, signal) => {
+        browserServerClosed = true;
+        resourceClosures.push({ event: "browser-server-close", terminal: true, code, signal });
+      });
+      browser = await chromium.connect(browserServer.wsEndpoint());
+      browser.once("disconnected", () => resourceClosures.push({ event: "disconnected", terminal: true }));
+    } else {
+      browser = await chromium.launch(launchOptions);
+    }
     const viewport = options.mobile ? { width: 390, height: 844 } : { width: 1280, height: 800 };
     context = await browser.newContext({ viewport, ...(options.mobile ? { isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/130 Mobile Safari/537.36' } : {}) });
     context.on('close', () => { contextClosed = true; });
