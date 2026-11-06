@@ -1,0 +1,9 @@
+# Independent bounded actual15 review: facts accepted; final native INCOMPLETE
+
+Reviewed pureauthor b2395abf (main b9026619), safe actual archived bytes matched output originals. Original Android18 function-entry observer reports probe.blockedFalse4/blockedTrue0/unknown0; prepare.readyTrue4/readyFalse0/unknown0; fixed exact-source/location verification required by admitted7f tool and sourceVerified true. These are original ENTRY argument categories ONLY, not return/native acceptance. Concurrent passive observer starts earlier:5probe/5prepare/5release, abort5/commit0; aggregate intervals cannot correlate individual operations. Logpoint disabled/breakpointRemoved/stateRemoved, own local/native listeners unregistered and clientClosed alltrue.
+
+After observation, admitted fixed helper returns exacttargetInbox1/note0/projection0/seen0 (inboxTotal1), samePID3891/startTicks8144 beforeafter. Queries sequential/non-atomic. Thus exact target remains delivered/unapplied despite original readytrue calls. Do not infer native accepted those replies or choose product repair solely from these aggregates.
+
+Actual same-existing-Store continuation proof attached with original root/database inodes35260086/35260089, root-issued exact de873 source receipt, exact160 manifests/3knownchanges/product321/frozenDOM checks. Original14 frontendUnchangedfalse retained verbatim; previous report archived. Cycle15 peerpid27801 backendnatural0/noerrors/binary/frontend unchangedtrue, wrappernatural0/219.472701666s. Lifecycle14 natural0/622.980190417s; lifecycle15 was still holding at author archive time (not claimedterminal).
+
+No reviewer device/CDP/runtime/DB-query operations. Source+safe byte inspection only. Full two-way native convergence/media/provider/export/reopen/coldboot still not accepted. Pure independent evidence update follows.

@@ -1,0 +1,87 @@
+{
+  "authorEvidenceCommit": "b2395abf",
+  "files": [
+    {
+      "path": "/private/tmp/apple-notes-sync87-native/docs/verification/sync87-native/native-ready-true15/cycle15-reply-logpoint01.json",
+      "bytes": 2367,
+      "sha256": "70ed35bcd962c5ae4fd2e2018e7f30608d968cb83c5045fe479379f1faf11cf4"
+    },
+    {
+      "path": "/private/tmp/apple-notes-sync87-native/docs/verification/sync87-native/native-ready-true15/cycle15-target-counts07-after-ready.json",
+      "bytes": 606,
+      "sha256": "6d8b493bd9bbfc7e80c97185ef53c7f586f7aa39e6fa78b40a9ce8b5d048b25a"
+    },
+    {
+      "path": "/private/tmp/apple-notes-sync87-native/docs/verification/sync87-native/native-ready-true15/cycle15-peer.execution.json",
+      "bytes": 359,
+      "sha256": "a9c7f2755bdc49112fc37faaf0f3c584cc74f4ab9f7866c6dc15204a0a8518d7"
+    },
+    {
+      "path": "/private/tmp/apple-notes-sync87-native/docs/verification/sync87-native/native-ready-true15/desktop-peer-lifecycle.json",
+      "bytes": 134328,
+      "sha256": "847a811f16a4d0c53425df34bec1815b91ac9351c431ca9a6556aa94f05dac39"
+    },
+    {
+      "path": "/private/tmp/apple-notes-sync87-native/docs/verification/sync87-native/native-ready-true15/cycle14-original-failed-source-aggregate.json",
+      "bytes": 3057,
+      "sha256": "f87f19808144704e1d50fdd8ab28c2b5628fb12cfdcbbb9ad380e3775db77937"
+    },
+    {
+      "path": "/private/tmp/apple-notes-sync87-native/docs/verification/sync87-native/native-ready-true15/lifecycle14.execution.json",
+      "bytes": 298,
+      "sha256": "a966c9760e41072ea09ac8bf56f467682f30b6c49d6b255e355f67090c4bf68a"
+    }
+  ],
+  "peer15": {
+    "pid": 27801,
+    "root": "/private/tmp/notes-sync87-native-final-02/desktop-peer",
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "forcedOrFailed": false,
+    "pageErrorCount": 0,
+    "binaryUnchanged": true,
+    "frontendUnchanged": true,
+    "wallSeconds": 195.751097625
+  },
+  "sameStoreIdentities": {
+    "output": {
+      "device": 16777233,
+      "inode": 35246605
+    },
+    "root": {
+      "device": 16777233,
+      "inode": 35260086
+    },
+    "sync": {
+      "device": 16777233,
+      "inode": 35262235
+    },
+    "database": {
+      "device": 16777233,
+      "inode": 35260089,
+      "size": 135168,
+      "sha256": "cd7fc65482a4c0c8c2d7459b68ab7bbf3b355e3f2b39ef793725d0a6130694a6"
+    }
+  },
+  "typedContinuation": {
+    "kind": "exact-cycle14-admitted-count-tool-continuation",
+    "originalAggregateFrontendUnchanged": false,
+    "changedPaths": [
+      "scripts/debug/sync87-native/android/SyncTargetCounts.java",
+      "scripts/debug/sync87-native/check-counts.py",
+      "scripts/debug/sync87-native/guard.py"
+    ],
+    "productInputsUnchanged": true,
+    "domDependenciesUnchanged": true,
+    "continuationSourceReceipt": {
+      "path": "/private/tmp/sync87-cycle14-continuation-review/receipt.json",
+      "authorizedBy": "root-sync87-cycle14-continuation-review",
+      "sourceCommit": "de873fd4f567736dcca061cb66a448e33c72be8b",
+      "sha256": "41a258bd959c4ce666f0897018da1aeca347b2418815606693382edeb1cb95f5"
+    }
+  },
+  "productInputCount": 321,
+  "original14FalsePreserved": true
+}
