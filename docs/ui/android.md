@@ -1,5 +1,7 @@
 # Android（iPhone 录屏基准）
 
+2026-11-06新增[快速画廊首页83](android-quick-home.md)：手机默认画廊/黄色＋/简洁编辑覆盖下文旧文件夹root、列表footer与部分编辑顶部呈现；其他本地保存、附件、录音与输入契约保留。83尚待开发与独审，不将本条文档视为已交付。
+
 ## 证据
 
 原视频：`references/mobile/original/07aca5e6d2ae4aa6e7ea09260c09d118.mp4`，114.583334 秒，224×480，30 fps，8,452,211 字节。SHA-256：`2bed50027479becf059cc32b68c361107a0c3f840f027f79933a4b99bc4e394d`。每 4 秒抽帧，`frames/frame-001.png` 从 0s 起；`contact-sheet.jpg` 是 6 列总览。

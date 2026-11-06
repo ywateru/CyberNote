@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-06：[Android快速画廊首页83](tasks/app-android-quick-home83.md)等待82独审合入后串行开发；手机打开即画廊、一键新建聚焦、精简编辑，82/83合并回归出包。
+
 2026-11-06：[统一设置与数据82](tasks/app-preferences82.md)进行中，按用户第三图合并设置和数据；冻结后独审及主线回归/双端出包。
 
 2026-11-06：[空间总览81](tasks/app-storage-overview81.md)、[图片预览与标题栏80](tasks/app-image-preview80.md)及[组合8081](tasks/app-ui-hierarchy8081.md)限定完成，最终ad3a069f经独审SOURCE-READY、主线356/9+43+197与build/production、Mac25/Android15准确构建/独立核包通过。[交付](../verification/ui-hierarchy8081/README.md)保留中间失败与真实边界；原Android现场保持，本轮3个已合隔离worktree/分支已清理。
