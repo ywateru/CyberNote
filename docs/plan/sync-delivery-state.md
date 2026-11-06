@@ -4,14 +4,14 @@
 
 |层|当前状态|准确源码/审查|工作树|
 |---|---|---|---|
-|84真实Store核心|作者冻结，独审进行中|d484ab95＋证据e69d7a7c；前次111 lean原始exit101（104pass/4fail/3ignored）保留，新独审分离路径fixture问题与产品|/private/tmp/apple-notes-sync84，codex/sync84-core|
-|85认证网络/身份|独审pass，等84后组合合入|c88982a6修复，作者7d206973，独审59fc3f32；真实19项通过，原并发退出101保留|/private/tmp/apple-notes-sync85，codex/sync85-network|
+|84真实Store核心|独审确认locked drawing校验P2，等待独审commit后修复|d484ab95＋证据e69d7a7c；前次111 lean原始exit101（104pass/4fail/3ignored）保留，新独审分离路径fixture问题与产品|/private/tmp/apple-notes-sync84，codex/sync84-core|
+|85认证网络/身份|独审pass，已合入主线0ab39d70；Cargo锁与模块入口待84/86组合|c88982a6修复，作者7d206973，独审59fc3f32；真实19项通过，原并发退出101保留|/private/tmp/apple-notes-sync85，codex/sync85-network|
 |86同步设置UI|已合入＋主线整合pass|9ed9a078，独审4c85204b，主线合并d8ff3336；48＋48＋52与build/production通过|旧UI工作树/分支已正常移除，全部证据在主线|
 |86前端quiet协调|开发中|固定probe/prepare/release与线性化取消收据；不同agent开发，后续独审|/private/tmp/apple-notes-sync86-frontend，codex/sync86-frontend，基线d8ff3336|
 |86Rust adapter/Session/真实transport|pending|待84/85通过合入后分配，文件与前端不重叠|未创建|
 |87真实双端/路由/新Android/准确包|pending|两个独立生产Rust进程＋App DOM＋全新隔离Android，不用fixture代替|未创建|
 
-84完整lean旧失败：Session fixture基于CARGO_MANIFEST_DIR在lean crate错位；3旧archive测试在应用data root内导出，早于84的生产契约已拒绝。新独审保留原失败，独立harness只纠正测试路径，原冻结产品不改。独审尚未出结论，不能写为通过。
+84完整lean旧失败：Session fixture基于CARGO_MANIFEST_DIR在lean crate错位；3旧archive测试在应用data root内导出，早于84的生产契约已拒绝。新独审保留原失败，独立harness只纠正测试路径，原冻结产品不改。独立harness修正测试环境后113pass/3ignored/3filtered；另locked wire含drawing仍被ACK已确认P2，当前不能写为通过。
 
 根负责规格/派发/合并及主线完整整合；代码开发和独立审查由不同agent完成。恢复时新agent使用明确当前任务和工作树，不能恢复旧debug70任务；所有shell显式workdir，禁止写主线。原失败保留，修复后只复验受影响边界。
 
