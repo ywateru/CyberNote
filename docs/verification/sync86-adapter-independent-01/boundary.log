@@ -1,0 +1,22 @@
+PASS strict no-arg command rejects hidden input
+PASS strict Token rejects unknown fields
+PASS actual window rejects forged label
+PASS stale session rejects command
+PASS headless apply rejects live participants
+PASS invalid commands leave sync disabled
+PASS real prepare targets actual received note
+PASS cancel after ready returns linearized abort
+PASS cancel releases abort and retains inbox
+PASS terminal abort receipt remains idempotent
+PASS participant addition aborts prepared plan
+PASS actual five second prepare timeout retains inbox
+PASS only later successful gate commits real SQLite row
+PASS real metadata is delivered before commit release
+PASS late cancel cannot change committed terminal outcome
+PASS probe protection preserves real owner pending
+PASS production never silently headless-applies with no windows
+PASS returning real participant permits normal commit
+PASS A natural exit
+PASS B natural exit
+PASS product source remains unchanged
+PASS immutable binary remains unchanged
