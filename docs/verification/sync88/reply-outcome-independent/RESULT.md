@@ -1,0 +1,7 @@
+# Independent narrow second-point admission PASS — bcd0e34a
+
+Frozen bcd0e34a5004442d127f9bfbd0e033e6c307a2db/moduleSHA1d6d43f71366d925de59cbd5d571c6548b8b7958e21bd37ad8fa6ba75ac68126. Exact Android18 bundleSHA9db1203eb6fdf37ceb7338541943c28671f40645ec3af453d94788f836c374cf and static original c5(t,e)48:70569 verified; unique declaration and sole IM(await sync_window_reply) callsite. Reads ONLY own descriptor t.outcome finite pending/abort/commit/unknown, saturation, alwaysfalse/catch. ParserENTRY precedes normalization/validation; outcome observation is NOT completed receipt validation, successful original async function return or native acceptance proof. No exceptions observed, operationId e never read.
+
+Both exact same-script sourcepoints/fullSHA verified disabled before activation;2ownbreakpoints removal continues on first failure, flags explicit/ownstate disabled andremoved. No IPC/callback/function wrapping, ACK/events/sourcepatch/pause/resume. Original32host + independent7source/VMchecks natural0 (null/proxy, inheritance/getter, saturation, disabled/newowner, exactsourcepoint/callsite, invalidscript/range). First independent fixture expected one extra character beyond parserentry slice; preserved and corrected expected string only, same source/bundle.
+
+Soleoperator may execute guarded actual second-point observation now; reviewer no device/CDP/runtime operations. Actual oldWebView second location resolution/receiptoutcomes still unproven, full sync remainsINCOMPLETE. Pureevidencefollows.

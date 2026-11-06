@@ -1,0 +1,24 @@
+{
+  "author": {
+    "command": [
+      "node",
+      "scripts/debug/sync87-native/check-reply-logpoint.mjs"
+    ],
+    "exitCode": 0,
+    "passed": 32
+  },
+  "independent": {
+    "command": [
+      "node",
+      "/private/tmp/sync87-reply-outcome-independent.mjs"
+    ],
+    "exitCode": 0,
+    "checks": 7
+  },
+  "independentAttempt01": {
+    "exitCode": 1,
+    "failure": "reviewer fixture expected const n=CD(t);i but exact slice ends const n=CD(t);; corrected only expected string"
+  },
+  "wallSeconds": "not captured",
+  "scope": "host/source only, no devices or actual Debugger/CDP"
+}
