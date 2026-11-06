@@ -151,9 +151,9 @@ def app_identity(serial,avd,expected=None):
 
 PICKER_KEYS = {'TAB': '61', 'DPAD_DOWN': '20', 'DPAD_UP': '19', 'DPAD_CENTER': '23', 'ENTER': '66', 'SPACE': '62'}
 PICKER_COMPONENT = r'(?:com\.google\.android\.documentsui|com\.android\.documentsui)/com\.android\.documentsui\.picker\.PickActivity'
-COUNTS_DEX = Path('/private/tmp/notes-sync87-native-counts-helper02/dex/classes.dex')
-COUNTS_DEX_SHA256 = '88898d00c8499846d197f1b976195364548dc332ae20596987e641822565afc8'
-COUNTS_SOURCE_SHA256 = '55fdc7af6f7fb6c7de06373a1722257289cb17d005e25358888597b457364611'
+COUNTS_DEX = Path('/private/tmp/notes-sync87-native-counts-helper03/dex/classes.dex')
+COUNTS_DEX_SHA256 = '877d02dd60c1df03e0a70579e3e4c9e3e363e0d2072455ee85cc44a5a3fa5e1e'
+COUNTS_SOURCE_SHA256 = '5b7daae84f94f714c2de616fd14ccb95b86c7bdd1eb0f2dddb4877b66df70ef8'
 def counts_preflight(state_path,expected):
     require(type(expected) is dict and set(expected)=={'pid','startTicks','package'} and type(expected['pid']) is int and expected['pid']>1 and expected['package']==PACKAGE and type(expected['startTicks']) is str and re.fullmatch(r'[0-9]+',expected['startTicks']), 'exact app lifetime required for readonly counts')
     require(state_path=='/private/tmp/notes-sync87-native-final-02/state.json','exact final02 state required')
