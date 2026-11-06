@@ -1,0 +1,163 @@
+{
+  "failures": [
+    {
+      "message": "timeout: tunnel-audio.wav metadata arrives",
+      "stack": "Error: timeout: tunnel-audio.wav metadata arrives\n    at eventually (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:97:9)\n    at async media (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:302:3)\n    at async exercise (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:375:3)\n    at async file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:712:19"
+    }
+  ],
+  "checks": 32,
+  "ownedChildrenNatural": true,
+  "routes": {
+    "virtualNetwork": {
+      "verified": false,
+      "reason": "No explicitly owned reachable WireGuard/EasyTier peer network supplied; generic utun and 198.18/15 proxy address are not proof of either product.",
+      "commands": {
+        "wg": null,
+        "easytier-core": null,
+        "easytier-cli": null
+      },
+      "interfaces": [
+        {
+          "name": "utun0",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::3d5d:998c:dd36:300"
+            }
+          ]
+        },
+        {
+          "name": "utun1",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::e3a9:8462:12ef:8c89"
+            }
+          ]
+        },
+        {
+          "name": "utun2",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::7155:a2c9:81f0:c511"
+            }
+          ]
+        },
+        {
+          "name": "utun3",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::ce81:b1c:bd2c:69e"
+            }
+          ]
+        },
+        {
+          "name": "utun4",
+          "addresses": [
+            {
+              "family": "IPv4",
+              "address": "198.18.0.1"
+            }
+          ]
+        }
+      ],
+      "usage": "Set invite endpoint to ws://<reachable-virtual-IP>:<listen-port> (or TLS wss endpoint); system client owns network and routes."
+    },
+    "lan": {
+      "endpoint": "ws://192.168.0.119:60749",
+      "interface": "en0",
+      "samePhysicalHost": true,
+      "verified": true
+    },
+    "quickTunnel": {
+      "verified": false,
+      "attempts": 1,
+      "endpoint": "wss://students-staff-nested-jvc.trycloudflare.com"
+    }
+  },
+  "replicaCounters": {
+    "tunnel-host": {
+      "notes": 2,
+      "attachments": 1,
+      "sync_heads": 2,
+      "sync_inbox": 0,
+      "sync_dirty": 0,
+      "sync_projection": 2,
+      "blobFiles": [
+        {
+          "bytes": 68,
+          "suffix": ".blob"
+        }
+      ],
+      "unpublishedStageCount": 0,
+      "incomingStaging": []
+    },
+    "tunnel-client": {
+      "notes": 2,
+      "attachments": 2,
+      "sync_heads": 2,
+      "sync_inbox": 0,
+      "sync_dirty": 0,
+      "sync_projection": 2,
+      "blobFiles": [
+        {
+          "bytes": 160044,
+          "suffix": ".blob"
+        },
+        {
+          "bytes": 68,
+          "suffix": ".blob"
+        }
+      ],
+      "unpublishedStageCount": 0,
+      "incomingStaging": []
+    }
+  },
+  "originCounters": [
+    {
+      "name": "quick-tunnel-1",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "originConnections": [
+        {
+          "openedMs": 19777,
+          "toHostBytes": 640,
+          "fromHostBytes": 129,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 20531
+        },
+        {
+          "openedMs": 22560,
+          "toHostBytes": 646,
+          "fromHostBytes": 129,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 23110
+        },
+        {
+          "openedMs": 24890,
+          "toHostBytes": 139064,
+          "fromHostBytes": 6335,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 54258
+        },
+        {
+          "openedMs": 56186,
+          "toHostBytes": 35730,
+          "fromHostBytes": 1616,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 69046
+        }
+      ]
+    }
+  ],
+  "assessment": "After all owned processes naturally exited: receiving host has neither the160044byteblob nor a pending inbox row, and no publication stages. Sending client retains complete160044byteblob. Transparent origin shows two upgraded encrypted-data connections totaling174794 upstream bytes with a reconnect. This bounds failure before durable target metadata/materialization; it does not prove a particular network cause, frame acknowledgement or raw socket error. Keep source/time budgets unchanged for fresh tunnel-only rerun."
+}

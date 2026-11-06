@@ -1,0 +1,38 @@
+{
+  "sourceProductCommit": "3e1f72cda09b1804dff6914f239fde066c2fd60b",
+  "approvedMain": "b373ac95e1d26faf03e37e5ee6c68bccf5074e00",
+  "product322Equal": true,
+  "binary": {
+    "path": "/private/tmp/sync91-transport-final01/notes-current-attachment-transport",
+    "bytes": 25801472,
+    "sha256": "cd1e2b6fc989a9d09d69bc889704bb1fbc26bd7aa95248eea21c31c482a86077",
+    "mode": "0555"
+  },
+  "dom": {
+    "checks": 39,
+    "exitCode": 0,
+    "wallSeconds": 79.531619625,
+    "sourceChanged": false
+  },
+  "route01": {
+    "checks": 32,
+    "exitCode": 1,
+    "wallSeconds": 82.380465791,
+    "failures": [
+      {
+        "message": "timeout: tunnel-audio.wav metadata arrives",
+        "stack": "Error: timeout: tunnel-audio.wav metadata arrives\n    at eventually (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:97:9)\n    at async media (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:302:3)\n    at async exercise (file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:375:3)\n    at async file:///private/tmp/apple-notes-viewport88/scripts/debug/sync87-routes.mjs:712:19"
+      }
+    ]
+  },
+  "route02": {
+    "checks": 39,
+    "exitCode": 0,
+    "wallSeconds": 121.394878667,
+    "failures": [],
+    "tunnelForcedCount": 1
+  },
+  "deviceOperations": [],
+  "sourceChanges": [],
+  "status": "author-complete-await-independent-audit"
+}

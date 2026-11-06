@@ -1,0 +1,595 @@
+{
+  "mode": "tunnel",
+  "scriptHead": "7ea640a29231f231f8d5475b3972dc02f5239721",
+  "script": {
+    "sha256": "6d53b6b3256958046d1f3794f9ccec1513b2dce7e17acc37192bdcd12041f044",
+    "after": "6d53b6b3256958046d1f3794f9ccec1513b2dce7e17acc37192bdcd12041f044"
+  },
+  "sourceBefore": {
+    "head": "7ea640a29231f231f8d5475b3972dc02f5239721",
+    "dirty": "",
+    "files": 56,
+    "sha256": "38d3c61778f8d6466f64130a77fa11674f2f1248eb73e556919d463e385f516a"
+  },
+  "sourceAfter": {
+    "head": "7ea640a29231f231f8d5475b3972dc02f5239721",
+    "dirty": "",
+    "files": 56,
+    "sha256": "38d3c61778f8d6466f64130a77fa11674f2f1248eb73e556919d463e385f516a"
+  },
+  "binary": {
+    "path": "/private/tmp/sync91-transport-final01/notes-current-attachment-transport",
+    "sha256": "cd1e2b6fc989a9d09d69bc889704bb1fbc26bd7aa95248eea21c31c482a86077",
+    "after": "cd1e2b6fc989a9d09d69bc889704bb1fbc26bd7aa95248eea21c31c482a86077"
+  },
+  "routes": {
+    "virtualNetwork": {
+      "verified": false,
+      "reason": "No explicitly owned reachable WireGuard/EasyTier peer network supplied; generic utun and 198.18/15 proxy address are not proof of either product.",
+      "commands": {
+        "wg": null,
+        "easytier-core": null,
+        "easytier-cli": null
+      },
+      "interfaces": [
+        {
+          "name": "utun0",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::3d5d:998c:dd36:300"
+            }
+          ]
+        },
+        {
+          "name": "utun1",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::e3a9:8462:12ef:8c89"
+            }
+          ]
+        },
+        {
+          "name": "utun2",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::7155:a2c9:81f0:c511"
+            }
+          ]
+        },
+        {
+          "name": "utun3",
+          "addresses": [
+            {
+              "family": "IPv6",
+              "address": "fe80::ce81:b1c:bd2c:69e"
+            }
+          ]
+        },
+        {
+          "name": "utun4",
+          "addresses": [
+            {
+              "family": "IPv4",
+              "address": "198.18.0.1"
+            }
+          ]
+        }
+      ],
+      "usage": "Set invite endpoint to ws://<reachable-virtual-IP>:<listen-port> (or TLS wss endpoint); system client owns network and routes."
+    },
+    "quickTunnel": {
+      "verified": true,
+      "attempts": 1,
+      "endpoint": "wss://nonprofit-hearing-acc-ozone.trycloudflare.com",
+      "badKeyCode": "sync_transport",
+      "secondEndpoint": "wss://however-consultancy-cornell-illinois.trycloudflare.com"
+    }
+  },
+  "checks": [
+    {
+      "name": "tunnel authenticated separate Store adoption"
+    },
+    {
+      "name": "tunnel host to client note"
+    },
+    {
+      "name": "tunnel client to host edit"
+    },
+    {
+      "name": "tunnel-image.png metadata arrives"
+    },
+    {
+      "name": "tunnel-image.png remote read original SHA",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "name": "tunnel-image.png export original SHA"
+    },
+    {
+      "name": "tunnel-image.png separate managed file SHA"
+    },
+    {
+      "name": "tunnel reverse owner arrives"
+    },
+    {
+      "name": "tunnel-audio.wav metadata arrives"
+    },
+    {
+      "name": "tunnel-audio.wav remote read original SHA",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "name": "tunnel-audio.wav export original SHA"
+    },
+    {
+      "name": "tunnel-audio.wav separate managed file SHA"
+    },
+    {
+      "name": "wss incorrect Noise PSK rejected before Store enable"
+    },
+    {
+      "name": "Tunnel-bad-key natural process exit"
+    },
+    {
+      "name": "quick-tunnel-1 owned tunnel terminated"
+    },
+    {
+      "name": "tunnel-new-hostname authenticated separate Store adoption"
+    },
+    {
+      "name": "tunnel-new-hostname host to client note"
+    },
+    {
+      "name": "tunnel-new-hostname client to host edit"
+    },
+    {
+      "name": "tunnel-new-hostname-image.png metadata arrives"
+    },
+    {
+      "name": "tunnel-new-hostname-image.png remote read original SHA",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "name": "tunnel-new-hostname-image.png export original SHA"
+    },
+    {
+      "name": "tunnel-new-hostname-image.png separate managed file SHA"
+    },
+    {
+      "name": "tunnel-new-hostname reverse owner arrives"
+    },
+    {
+      "name": "tunnel-new-hostname-audio.wav metadata arrives"
+    },
+    {
+      "name": "tunnel-new-hostname-audio.wav remote read original SHA",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "name": "tunnel-new-hostname-audio.wav export original SHA"
+    },
+    {
+      "name": "tunnel-new-hostname-audio.wav separate managed file SHA"
+    },
+    {
+      "name": "new Quick Tunnel endpoint preserves Noise host and workspace identity"
+    },
+    {
+      "name": "same client remembers new wss endpoint"
+    },
+    {
+      "name": "Tunnel-client natural process exit"
+    },
+    {
+      "name": "cold restart preserves new wss endpoint"
+    },
+    {
+      "name": "same client cold restart reconnects through new hostname"
+    },
+    {
+      "name": "Tunnel-client-restart natural process exit"
+    },
+    {
+      "name": "quick-tunnel-2 owned tunnel terminated"
+    },
+    {
+      "name": "Tunnel-host natural process exit"
+    },
+    {
+      "name": "no async quiet protocol errors"
+    },
+    {
+      "name": "frozen binary unchanged"
+    },
+    {
+      "name": "source fingerprint unchanged"
+    },
+    {
+      "name": "route harness unchanged"
+    }
+  ],
+  "processes": [
+    {
+      "name": "Tunnel-host",
+      "root": "/private/tmp/sync87-routes-final91-02/tunnel-host",
+      "pid": 71256,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "wallMs": 121174,
+      "events": 34,
+      "errors": [],
+      "timings": [
+        {
+          "type": "startHost",
+          "wallMs": 26,
+          "ok": true
+        },
+        {
+          "type": "createInvite",
+          "wallMs": 8,
+          "ok": true
+        },
+        {
+          "type": "createInvite",
+          "wallMs": 8,
+          "ok": true
+        },
+        {
+          "type": "createInvite",
+          "wallMs": 10,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "Tunnel-client",
+      "root": "/private/tmp/sync87-routes-final91-02/tunnel-client",
+      "pid": 71257,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "wallMs": 114128,
+      "events": 26,
+      "errors": [],
+      "timings": [
+        {
+          "type": "pair",
+          "wallMs": 3652,
+          "ok": true
+        },
+        {
+          "type": "status",
+          "wallMs": 0,
+          "ok": true
+        },
+        {
+          "type": "pair",
+          "wallMs": 2384,
+          "ok": true
+        },
+        {
+          "type": "status",
+          "wallMs": 1,
+          "ok": true
+        },
+        {
+          "type": "status",
+          "wallMs": 0,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "Tunnel-bad-key",
+      "root": "/private/tmp/sync87-routes-final91-02/tunnel-bad-key",
+      "pid": 72094,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "wallMs": 2457,
+      "events": 0,
+      "errors": [],
+      "timings": [
+        {
+          "type": "pair",
+          "wallMs": 2062,
+          "ok": false,
+          "code": "sync_transport"
+        },
+        {
+          "type": "status",
+          "wallMs": 0,
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "Tunnel-client-restart",
+      "root": "/private/tmp/sync87-routes-final91-02/tunnel-client",
+      "pid": 72298,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0,
+      "wallMs": 5804,
+      "events": 4,
+      "errors": [],
+      "timings": [
+        {
+          "type": "status",
+          "wallMs": 0,
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "tunnels": [
+    {
+      "name": "quick-tunnel-1",
+      "pid": 71258,
+      "args": [
+        "tunnel",
+        "--config",
+        "/private/tmp/sync87-routes-final91-02/quick-tunnel-1/config.yml",
+        "--origincert",
+        "/private/tmp/sync87-routes-final91-02/quick-tunnel-1/unused-cert.pem",
+        "--no-autoupdate",
+        "--metrics",
+        "127.0.0.1:0",
+        "--loglevel",
+        "info",
+        "--protocol",
+        "http2",
+        "--retries",
+        "1",
+        "--grace-period",
+        "1s",
+        "--url",
+        "http://127.0.0.1:62138"
+      ],
+      "endpoint": "wss://nonprofit-hearing-acc-ozone.trycloudflare.com",
+      "exit": {
+        "code": null,
+        "signal": "SIGKILL"
+      },
+      "forced": true,
+      "wallMs": 76527,
+      "wsProbes": [
+        {
+          "connected": false,
+          "closed": false
+        },
+        {
+          "connected": false,
+          "closed": false
+        },
+        {
+          "connected": true,
+          "closed": true
+        }
+      ],
+      "originConnections": [
+        {
+          "openedMs": 23914,
+          "toHostBytes": 648,
+          "fromHostBytes": 129,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 24526
+        },
+        {
+          "openedMs": 26092,
+          "toHostBytes": 222317,
+          "fromHostBytes": 7444,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 76530
+        },
+        {
+          "openedMs": 66894,
+          "toHostBytes": 848,
+          "fromHostBytes": 278,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 67911
+        }
+      ]
+    },
+    {
+      "name": "quick-tunnel-2",
+      "pid": 72152,
+      "args": [
+        "tunnel",
+        "--config",
+        "/private/tmp/sync87-routes-final91-02/quick-tunnel-2/config.yml",
+        "--origincert",
+        "/private/tmp/sync87-routes-final91-02/quick-tunnel-2/unused-cert.pem",
+        "--no-autoupdate",
+        "--metrics",
+        "127.0.0.1:0",
+        "--loglevel",
+        "info",
+        "--protocol",
+        "http2",
+        "--retries",
+        "1",
+        "--grace-period",
+        "1s",
+        "--url",
+        "http://127.0.0.1:62413"
+      ],
+      "endpoint": "wss://however-consultancy-cornell-illinois.trycloudflare.com",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "wallMs": 44292,
+      "wsProbes": [
+        {
+          "connected": true,
+          "closed": true
+        }
+      ],
+      "originConnections": [
+        {
+          "openedMs": 11608,
+          "toHostBytes": 657,
+          "fromHostBytes": 129,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 12383
+        },
+        {
+          "openedMs": 13732,
+          "toHostBytes": 7678,
+          "fromHostBytes": 7073,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 37774
+        },
+        {
+          "openedMs": 38781,
+          "toHostBytes": 1048,
+          "fromHostBytes": 1754,
+          "upgradeRequest": true,
+          "upgradeResponse": true,
+          "closedMs": 43831
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/cloudflared-help.txt",
+      "size": 15261,
+      "sha256": "66c63678d86360c1bd234b1feb78a2678e41a7de07eb37a232a9b4f332e0a4dc"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/quick-tunnel-1/config.yml",
+      "size": 88,
+      "sha256": "7ee2c04bc9eac9e5ca34d4e8fbaf3793f55f9789b5cfcb3cb46a694365a6399a"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/quick-tunnel-2/config.yml",
+      "size": 88,
+      "sha256": "748dc84df6bca877beff8fd1658802deba7d3f365ba4d458288a7adad75f8ab6"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-audio.wav",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-bad-key/notes.sqlite3",
+      "size": 40960,
+      "sha256": "6528149922d3eeb30e21b4cd0eef8a0983bfa7f9d5ce6e9f0cf8308a5032ea9a"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-client/attachments/op-026f1775-a05e-47fb-9528-c97e19792e50-193c54c2-1f87-45d7-8503-61d87c3dde0e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-client/attachments/op-87bc2fe6-32a2-4189-8be8-e51c1360fe59-6f8a59ef-68e6-4261-b027-a97101e203b5.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-client/attachments/s84-789e5a319ab55c4aee77a4c7261067de1bc5ffb94141a2c1bfc452f00b6807c6-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-client/attachments/s84-8dab5f3dfe49bdb7ba7362b8a07b1db804a1326a5e66e5050a196ed490930fd4-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-client/attachments/s84-9724e25560827fc67b284131e1e14970b553a22265972522afb1554d3cc5d1e7-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-client/attachments/s84-f69d749becf7184b44d353b80084d2fd902fad207d80135c8db2f5ea6dc61fdd-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-client/notes.sqlite3",
+      "size": 143360,
+      "sha256": "bdb5053d6ef8bd507f3c8adc08f27eef976f8ceca7329cd1156c2fd5690e97d7"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-host/attachments/op-c939323e-0adc-468f-a94d-8b0325468215-d4d2a0b4-dc7b-470e-9460-6bcf8554e90a.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-host/attachments/op-de52db60-16ec-4d7f-b2f0-b5a4039e0fda-1efcae20-55b3-4764-b5ad-44c6a8a673e2.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-host/attachments/s84-789e5a319ab55c4aee77a4c7261067de1bc5ffb94141a2c1bfc452f00b6807c6-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-host/attachments/s84-8dab5f3dfe49bdb7ba7362b8a07b1db804a1326a5e66e5050a196ed490930fd4-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-host/attachments/s84-9724e25560827fc67b284131e1e14970b553a22265972522afb1554d3cc5d1e7-b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e.blob",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-host/attachments/s84-f69d749becf7184b44d353b80084d2fd902fad207d80135c8db2f5ea6dc61fdd-c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425.blob",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-host/notes.sqlite3",
+      "size": 143360,
+      "sha256": "f68a411348294e2aa36d763daf556033bf0a5efa954fa3df33c2acbcd9e9b35d"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-image.png",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-new-hostname-audio.wav",
+      "size": 160044,
+      "sha256": "b43dde9816f8047e0c351a5a756f99d75433396ce8f4ac0b36dc1d825f26127e"
+    },
+    {
+      "path": "/private/tmp/sync87-routes-final91-02/tunnel-new-hostname-image.png",
+      "size": 68,
+      "sha256": "c054eec0ca71070d8406b12c9e0b1745c861d337f4818c5fe8334e1b4c0dc425"
+    }
+  ],
+  "wallMs": 121303,
+  "failures": []
+}
