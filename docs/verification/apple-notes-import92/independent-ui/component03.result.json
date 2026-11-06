@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "sourceCommit": "adffa10c",
+  "componentSha256": "dcfcfb0bb63bd0eab1edb7cd31c1f2c7651cf7ce1915aa7e8be829ca4c6f79fc",
+  "wallMs": 6632.019792,
+  "scope": "actual React AppleNotesImport component/browser with synthetic import bridge only; no Rust/Notes/App Store",
+  "observed": {
+    "state": {
+      "open": true,
+      "state": {
+        "id": "review-job",
+        "phase": "cancelled",
+        "completed": 0,
+        "total": 1,
+        "items": [
+          {
+            "key": "opaque-key",
+            "title": "合成笔记",
+            "folder": "合成目录",
+            "status": "ok",
+            "reason": ""
+          }
+        ],
+        "results": [],
+        "error": "",
+        "truncated": false,
+        "commit": null
+      },
+      "selected": [
+        "opaque-key"
+      ],
+      "error": ""
+    },
+    "polls": 3,
+    "finishes": [
+      false
+    ],
+    "rendererErrors": []
+  },
+  "cleanup": {
+    "browserClosed": true,
+    "serverClosed": true
+  }
+}
