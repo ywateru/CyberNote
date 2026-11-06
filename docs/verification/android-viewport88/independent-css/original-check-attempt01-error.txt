@@ -1,0 +1,1 @@
+Original reviewer check naturally exited1 after4.2548s. AssertionError at line23: assert(after.input.y>=0&&after.input.y+after.input.height<=shape.height). Reviewer fixture assumed locator.fill scrolls; corrected to explicit normal scrollIntoViewIfNeeded before fill, consistent with actual native client point() calling scrollIntoView. No product CSS changed by reviewer.
