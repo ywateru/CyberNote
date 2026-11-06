@@ -1,0 +1,44 @@
+{
+  "status": "built-await-independent-audit",
+  "approvedCommit": "b373ac95e1d26faf03e37e5ee6c68bccf5074e00",
+  "buildHead": "5f9dd30f2c0b94d6fa110a66c88c756d26b15edc",
+  "inputCount": 322,
+  "allApprovedBeforeAfterEqual": true,
+  "frontendExactAndroid20": true,
+  "nativeLibrary": {
+    "entry": "lib/arm64-v8a/libnotes_clone_lib.so",
+    "bytes": 213444256,
+    "sha256": "ded4e40f045330f4de73cc66444d33b543c332bff5f1e3fc8c20e264c2873fdb"
+  },
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Android21.apk",
+    "bytes": 238738727,
+    "sha256": "e9e1142e9d24a13b533767173c236d1d10841d62d9709aec69e652cf0c9eb60a"
+  },
+  "commands": [
+    {
+      "name": "android-build",
+      "command": [
+        "pnpm",
+        "android:build",
+        "--debug"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 26.074
+    },
+    {
+      "name": "apk-signature",
+      "command": [
+        "/Users/water/Library/Android/sdk/build-tools/36.0.0/apksigner",
+        "verify",
+        "--verbose",
+        "--print-certs",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync91/备忘录-Android21.apk"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.793
+    }
+  ],
+  "deviceOperations": [],
+  "macBuildStarted": false
+}
