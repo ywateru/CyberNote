@@ -459,6 +459,8 @@ function App() {
   const [searchNoteId, setSearchNoteId] = useState<string | null>(null);
   const [page, setPage] = useState<"folders" | "notes" | "editor">(initialMobile ? "notes" : "folders");
   const [query, setQuery] = useState("");
+  const [searchDraft, setSearchDraft] = useState<string | null>(null);
+  const searchIntent = useRef(0);
   const [searching, setSearching] = useState(false);
   const [filter, setFilter] = useState("");
   // undefined = physical folder; null = all committed tags; name = exact tag.
@@ -715,6 +717,23 @@ function App() {
   }));
   const quietMounted = useRef(true);
   const quietWrites = useRef(0);
+  // Keep user input responsive while the projection still owns the frozen note.
+  // Recheck after each terminal: another operation may have arrived meanwhile.
+  const afterQuiet = useCallback(async (action: () => void | Promise<unknown>) => {
+    while (networkSync.frozen()) await networkSync.cancel();
+    if (quietMounted.current && !quitState.current) await action();
+  }, [networkSync]);
+  const changeSearch = useCallback((next: { query?: string; searching?: boolean; resetFilter?: boolean }) => {
+    const intent = ++searchIntent.current;
+    if (next.query !== undefined) setSearchDraft(next.query);
+    return afterQuiet(() => {
+      cancelCreateFocus();
+      if (next.query !== undefined) setQuery(next.query);
+      if (next.searching !== undefined) setSearching(next.searching);
+      if (next.resetFilter) setFilter(value => value === "tags" ? value : "");
+      if (searchIntent.current === intent) setSearchDraft(null);
+    });
+  }, [afterQuiet, cancelCreateFocus]);
   const fileInput = useRef<HTMLInputElement>(null);
   const cameraInput = useRef<HTMLInputElement>(null);
   const searchInput = useRef<HTMLInputElement>(null);
@@ -1240,14 +1259,31 @@ function App() {
       };
     },
     freeze: (ids, cancel) => {
-      const held = new Map<Editor, { id: string; editable: boolean; stamp: AccessStamp; document: JSONContent }>();
+      const held = new Map<Editor, { id: string; editable: boolean; stamp: AccessStamp; document: JSONContent; dom: HTMLElement }>();
+      const focused = [...editorsRef.current.values()].find(instance => !instance.isDestroyed && ids.includes(nativeEditorOwners.current.get(instance) || "") && instance.view.dom.contains(document.activeElement));
+      const focus = focused && document.hasFocus() ? {
+        editor: focused, dom: focused.view.dom, selection: focused.state.selection.getBookmark(), moved: false,
+      } : undefined;
+      const relinquishFocus = () => { if (focus) focus.moved = true; };
+      const focusIn = (event: FocusEvent) => {
+        if (focus && event.target instanceof Node && event.target !== document.body && !focus.dom.contains(event.target)) relinquishFocus();
+      };
+      const focusKey = (event: KeyboardEvent) => { if (event.key === "Tab") relinquishFocus(); };
+      const visibility = () => { if (document.hidden) relinquishFocus(); };
+      if (focus) {
+        document.addEventListener("focusin", focusIn, true);
+        document.addEventListener("pointerdown", relinquishFocus, true);
+        document.addEventListener("keydown", focusKey, true);
+        document.addEventListener("visibilitychange", visibility);
+        window.addEventListener("blur", relinquishFocus);
+      }
       const scope = pickerRuntime.current.scope;
       const key = new PluginKey("notes-sync-quiet");
       const input = (event: Event) => { if (event.cancelable) event.preventDefault(); };
       for (const id of ids) {
         const instance = editorsRef.current.get(id);
         if (!instance || instance.isDestroyed) continue;
-        held.set(instance, { id, editable: instance.isEditable, stamp: accessGate.stamp(id), document: instance.getJSON() });
+        held.set(instance, { id, editable: instance.isEditable, stamp: accessGate.stamp(id), document: instance.getJSON(), dom: instance.view.dom });
         instance.registerPlugin(new Plugin({ key, filterTransaction: tr => {
           if (!tr.docChanged) return true;
           cancel();
@@ -1270,6 +1306,11 @@ function App() {
         },
         current: () => pickerRuntime.current.scope === scope && [...held].every(([instance, value]) => !instance.isDestroyed && editorsRef.current.get(value.id) === instance && nativeEditorOwners.current.get(instance) === value.id && sameQuietAuthority(value.stamp, accessGate.stamp(value.id)) && documentsEqual(value.document, instance.getJSON())),
         release: () => {
+          document.removeEventListener("focusin", focusIn, true);
+          document.removeEventListener("pointerdown", relinquishFocus, true);
+          document.removeEventListener("keydown", focusKey, true);
+          document.removeEventListener("visibilitychange", visibility);
+          window.removeEventListener("blur", relinquishFocus);
           for (const [instance, value] of held) {
             if (instance.isDestroyed) continue;
             instance.unregisterPlugin(key);
@@ -1279,6 +1320,14 @@ function App() {
             const allowed = quietMounted.current && sameQuietAuthority(value.stamp, accessGate.stamp(value.id)) && editorsRef.current.get(value.id) === instance && nativeEditorOwners.current.get(instance) === value.id && !!note && !note.deletedAt && (!note.locked || accessGate.state?.notes[value.id]?.authorized === true);
             restoreEditor(instance, value.editable && allowed);
             if (allowed && pickerRuntime.current.editor === instance) editorGate.activate(instance, !!quitState.current || synchronizingRef.current || !!accessGate.state?.operationId || blockedNotes.current.has(value.id) || !!accessGate.state?.suspended.includes(value.id));
+            if (allowed && focus?.editor === instance && !focus.moved && instance.isEditable &&
+              pickerRuntime.current.scope === scope && pickerRuntime.current.editor === instance &&
+              instance.view.dom === value.dom && value.dom === focus.dom && value.dom.isConnected &&
+              documentsEqual(value.document, instance.getJSON()) && document.hasFocus() &&
+              (document.activeElement === document.body || value.dom.contains(document.activeElement))) {
+              instance.view.dispatch(instance.state.tr.setSelection(focus.selection.resolve(instance.state.doc)));
+              instance.view.focus();
+            }
           }
           if (quietMounted.current) updateQuietWindow(value => value + 1);
         },
@@ -1340,7 +1389,7 @@ function App() {
     [flush, hydrate, refresh],
   );
   const updateSettings = useCallback(
-    (patch: Settings) => {
+    (patch: Settings) => afterQuiet(() => {
       if (patch.view) setGalleryEditor(false);
       wsRef.current = {
         ...wsRef.current,
@@ -1354,8 +1403,8 @@ function App() {
         void work.finally(() => debugPending.current.delete(work));
       }
       return work;
-    },
-    [fail],
+    }),
+    [fail, afterQuiet],
   );
   useEffect(() => {
     if (!workspaceLoaded || folderId === "all" || currentFolder) return;
@@ -2601,13 +2650,15 @@ function App() {
     }
   };
   const focusGlobalSearch = useCallback(() => {
-    setSearching(true);
-    if (native && macNative) {
-      const toolbar = nativeToolbar.current;
-      if (toolbar) void toolbar.focusSearch().catch(fail);
-      else fail(new Error("原生搜索尚未就绪"));
-    } else setTimeout(() => searchInput.current?.focus(), 0);
-  }, [fail]);
+    void afterQuiet(() => {
+      setSearching(true);
+      if (native && macNative) {
+        const toolbar = nativeToolbar.current;
+        if (toolbar) void toolbar.focusSearch().catch(fail);
+        else fail(new Error("原生搜索尚未就绪"));
+      } else setTimeout(() => searchInput.current?.focus(), 0);
+    }).catch(fail);
+  }, [fail, afterQuiet]);
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (quitState.current) {
@@ -2640,8 +2691,7 @@ function App() {
         if (page === "editor" || !mobile) {
           setShowFind(true);
         } else {
-          setSearching(true);
-          searchInput.current?.focus();
+          focusGlobalSearch();
         }
       }
       if (e.key === "Escape") {
@@ -2650,9 +2700,8 @@ function App() {
         else if (modal) setModal(null);
         else if (menu) setMenu(null);
         else if (showFind) setShowFind(false);
-        else if (searching) {
-          setSearching(false);
-          setQuery("");
+        else if (searching || searchDraft !== null) {
+          void changeSearch({ searching: false, query: "" }).catch(fail);
         } else if (mobile && page !== "folders") back();
       }
     };
@@ -2667,6 +2716,8 @@ function App() {
     menu,
     showFind,
     searching,
+    searchDraft,
+    changeSearch,
     focusGlobalSearch,
   ]);
   useEffect(() => {
@@ -3323,16 +3374,14 @@ function App() {
         ref={searchInput}
         aria-label="搜索备忘录"
         placeholder={mobile ? "搜索笔记" : "搜索"}
-        value={query}
-        onFocus={() => {cancelCreateFocus();setSearching(true);}}
+        value={searchDraft ?? query}
+        onFocus={() => { void changeSearch({ searching: true }).catch(fail); }}
         onChange={(e) => {
-          cancelCreateFocus();
-          setQuery(e.target.value);
-          setFilter((value) => (value === "tags" ? value : ""));
+          void changeSearch({ query: e.target.value, resetFilter: true }).catch(fail);
         }}
       />
-      {query ? (
-        <button aria-label="清除搜索" onClick={() => setQuery("")}>
+      {(searchDraft ?? query) ? (
+        <button aria-label="清除搜索" onClick={() => { void changeSearch({ query: "" }).catch(fail); }}>
           <X size={14} />
         </button>
       ) : null}
@@ -4614,16 +4663,14 @@ function App() {
     return target;
   };
   nativeHandler.current = (intent, context, sequence) => {
-    if (networkSync.frozen(context.noteId)) {
+    if (networkSync.frozen(context.noteId) || (intent.kind === "search" && networkSync.frozen())) {
       void networkSync.cancel().then(() => nativeHandler.current(intent, context, sequence));
       return;
     }
     if (quitState.current) return;
     if (intent.kind === "search") {
       setNativeSearchAck(sequence);
-      setQuery(intent.phase === "cancel" ? "" : intent.value);
-      setSearching(intent.phase !== "cancel");
-      setFilter((value) => (value === "tags" ? value : ""));
+      void changeSearch({ query: intent.phase === "cancel" ? "" : intent.value, searching: intent.phase !== "cancel", resetFilter: true }).catch(fail);
       return;
     }
     if (intent.kind === "windowActivity") return;
@@ -5133,22 +5180,22 @@ function App() {
           if (modal !== "preferences" || preferencesTab !== "data" || !dataManagementHandle.current) throw Error("请先打开数据标签");
           return dataManagementHandle.current.exportAttachment(id as string);
         },
-        "folder.select": ({ id }) => {
+        "folder.select": ({ id }) => afterQuiet(() => {
           assert();
           if (id !== "all" && !wsRef.current.folders.some((f) => f.id === id))
             throw Error("文件夹不存在");
           chooseFolder(id as string);
-        },
-        "note.select": ({ id }) => {
+        }),
+        "note.select": ({ id }) => afterQuiet(() => {
           assert();
           const n = wsRef.current.notes.find((n) => n.id === id);
           if (!n) throw Error("备忘录不存在");
           chooseNote(n);
-        },
-        "tag.select": ({ name }) => {
+        }),
+        "tag.select": ({ name }) => afterQuiet(() => {
           assert();
           chooseTag(name as string | null);
-        },
+        }),
         "note.create": () => {
           assert();
           return createNote();
@@ -5297,19 +5344,16 @@ function App() {
           if (typeof method !== "function" || !method.call(chain).run())
             throw Error("当前表格操作不可用");
         },
-        "search.set": ({ query: value }) => {
+        "search.set": ({ query: value }) => afterQuiet(() => {
           assert();
-          cancelCreateFocus();
-          setQuery(value as string);
-          setSearching(true);
-          setFilter((f) => (f === "tags" ? f : ""));
-        },
+          return changeSearch({ query: value as string, searching: true, resetFilter: true });
+        }),
         "search.find": ({ query: value }) => {
           assert(true);
           setFind(value as string);
           setShowFind(true);
         },
-        "settings.update": ({ settings: change }) => {
+        "settings.update": ({ settings: change }) => afterQuiet(() => {
           assert();
           const patch = change as Settings;
           const keys = [
@@ -5324,7 +5368,7 @@ function App() {
           if (Object.keys(patch).some((k) => !keys.includes(k)))
             throw Error("未知设置字段");
           return updateSettings(patch);
-        },
+        }),
         "sidebar.toggle": () => {
           assert();
           changeSidebar((v) => !v);
@@ -5690,9 +5734,11 @@ function App() {
               <button
                 className="text-button"
                 onClick={() => {
-                  setSearching(false);
-                  setQuery("");
-                  setFilter("");
+                  void afterQuiet(() => {
+                    setSearching(false);
+                    setQuery("");
+                    setFilter("");
+                  }).catch(fail);
                 }}
               >
                 取消
@@ -5703,8 +5749,10 @@ function App() {
         {mobile && searching ? (
           <SearchSuggestions
             onChoose={(f) => {
-              setFilter(f);
-              setPage("notes");
+              void afterQuiet(() => {
+                setFilter(f);
+                setPage("notes");
+              }).catch(fail);
             }}
           />
         ) : (
@@ -5764,8 +5812,10 @@ function App() {
                     <button
                       aria-label="清除标签筛选"
                       onClick={() => {
-                        setTagFilter(undefined);
-                        setFilter("");
+                        void afterQuiet(() => {
+                          setTagFilter(undefined);
+                          setFilter("");
+                        }).catch(fail);
                       }}
                     >
                       清除
@@ -5857,9 +5907,11 @@ function App() {
                 <button
                   className="text-button"
                   onClick={() => {
-                    setSearching(false);
-                    setQuery("");
-                    setFilter("");
+                    void afterQuiet(() => {
+                      setSearching(false);
+                      setQuery("");
+                      setFilter("");
+                    }).catch(fail);
                   }}
                 >
                   取消
