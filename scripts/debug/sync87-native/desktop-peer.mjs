@@ -10,8 +10,8 @@ import { openRuntime,api,idle } from '../runtime.mjs';
 import { sourceFingerprint } from '../source-identity.mjs';
 import { chooseFiles } from '../mobile-attachments.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
-export const DOM_DEPENDENCIES={"scripts/debug/runtime.mjs": "36474af5a3f96bdaf55ff9c97a4f2cc8428b199f7bb1632b2c9463778848cec4", "scripts/debug/rust-backend.mjs": "3df944b85e2e65e10a4a1eaaae5b23c6b107b73ecfd9ed071bd8de9b2f988d0f", "scripts/debug/sync-rust-dom.mjs": "eafbc2ae69aacdf291094996b6d2184d6096ee87366fed7f531a81e666f9e1a9"};
-export async function verifyDOMDependencies(root){for(const [name,digest] of Object.entries(DOM_DEPENDENCIES))assert.equal(hash(await readFile(join(root,name))),digest,"Frozen DOM dependency changed");return {sourceCommit:"3352b913149b827a61d66e961e9ae9ac8d5522a9",files:DOM_DEPENDENCIES};}
+export const DOM_DEPENDENCIES={"scripts/debug/runtime.mjs":"f6d84cfc6b48a33b4d8c12c98e84e8635dd093b507ccdca87539b12c4b092618","scripts/debug/rust-backend.mjs":"3df944b85e2e65e10a4a1eaaae5b23c6b107b73ecfd9ed071bd8de9b2f988d0f","scripts/debug/sync-rust-dom.mjs":"b8fe79058842c73303b4019e172842cd6ab74803a09f83f365d5ad6cfed62ff7"};
+export async function verifyDOMDependencies(root){for(const [name,digest] of Object.entries(DOM_DEPENDENCIES))assert.equal(hash(await readFile(join(root,name))),digest,"Frozen DOM dependency changed");return {sourceCommit:"b08c77289203691c30026ce673116721c5ca5a59",files:DOM_DEPENDENCIES};}
 export function validatePeerReceipt(value) {
   assert(value&&typeof value==='object'&&!Array.isArray(value));
   assert.deepEqual(Object.keys(value).sort(),['authorizedBy','binary','buildLabel','sha256','sourceCommit']);

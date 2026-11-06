@@ -121,7 +121,7 @@ Root provides a second receipt with exactly:
   "binary": "/absolute/immutable/notes-current-attachment-transport",
   "sha256": "64 lowercase hex",
   "sourceCommit": "40 lowercase hex",
-  "buildLabel": "build10"
+  "buildLabel": "build11"
 }
 ```
 
@@ -129,7 +129,9 @@ Build10 or later is required: earlier build08/build09 candidates were blocked.
 The binary must be direct, executable and match its reviewed hash. No build or
 backend process is launched without the receipt. Its hash is checked again at
 close. The peer reuses `../runtime.mjs` and `../rust-backend.mjs` from frozen
-sync86-dom3352b913, transplanted by root as candidate dependency0c3de151.
+sync86-dom b08c77289203691c30026ce673116721c5ca5a59. Root aligned the
+product to the exact Mac27/Android17 321-input package manifests before applying
+the shared6d33147e/b08c7728 browser-process cleanup and stale-observation repairs.
 The exact three-file map (including reference sync-rust-dom.mjs) is checked at
 open/close and recorded; full frontend/source fingerprints are recorded before
 and after. No private runtime copy or mutable external worktree is used.
@@ -140,9 +142,13 @@ delivers notes-sync/access/metadata to the App handlers. Only those handlers may
 produce quiet/access replies; this tool never invents probe/ready/access ACKs.
 There is no headless_apply, temporary fake participant or database write bypass.
 Runtime cleanup unregisters the actual page, stops the poller, drains events,
-closes its browser/server and awaits only its own child process. Browser window,
+closes its owned BrowserServer/browser process pipes with natural exit and
+terminal resource records, then awaits only its own Rust child process. Browser window,
 provider and media boundaries remain simulated; this is not a native Mac app.
-This candidate dependency has not yet passed build10 actual DOM acceptance.
+The original3352/exact10 smoke is historical evidence. Final dependency pairing
+uses root immutable11 and requires a new single actual DesktopPeer DOM smoke;
+its passing result does not replace independent dependency review or Android
+package/device acceptance.
 
 The peer advertises the Android emulator's10.0.2.2 host alias on a selected local
 service port. No VPN, tunnel or user route is changed. Invitation is held in
