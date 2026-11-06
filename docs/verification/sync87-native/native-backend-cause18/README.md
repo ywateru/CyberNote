@@ -7,3 +7,5 @@ Actual baseline after upgrade/start and BEFORE reopening peer: commits0, aborts5
 Portable fixed readonly target counts: inboxTotal1, exact targetInbox1, targetNotes/projection/seen0. Two sequential queries, not atomic. Two initial caller omissions were refused before device helper execution and retained. This proves actual delivered target remains unapplied and first recorded applyError; it does not reveal raw database cause or prove an algorithm fix. No raw errors/tokens/invitations emitted.
 
 Initial wrapper18 was accidentally started with closed stdin and naturally exited0 without action or peer. Corrected TTY wrapper18b natural0/268.727388916s. Same peer natural0/160.761466625s, both source and binary unchanged true, pageErrorCount0, no forced shutdown. Explicit close0.890096333s occurred before lifecycle deadline. Lifecycle18 still live at evidence freeze and terminal will be appended separately.
+
+Lifecycle18 collected natural outer0; exact wrapper wall time in cycle18-lifecycle.execution.json, emulator natural0, no forced signal. Owned caffeinate was terminated by reviewed finally cleanup with signal15 after emulator exit.

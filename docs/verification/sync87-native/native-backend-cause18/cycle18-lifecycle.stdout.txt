@@ -1,0 +1,370 @@
+{"time_utc": "2026-11-06T14:56:53Z", "kind": "owned_awake_started", "pid": 41076, "argv": ["/usr/bin/caffeinate", "-dimsu", "-t", "840", "-w", "41075"]}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "command", "argv": ["/Users/water/Library/Android/sdk/emulator/emulator", "-version"], "wall_seconds": 0.532, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Android emulator version 37.1.11.0 (build_id 15917651) (CL:N/A)\nCopyright (C) 2006-2024 The Android Open Source Project and many others.\nThis program is a derivative of the QEMU CPU emulator (www.qemu.org).\n\n  This software is licensed under the terms of the GNU General Public\n  License version 2, as published by the Free Software Foundation, and\n  may be copied, distributed, and modified under those terms.\n\n  This program is distributed in the hope that it will be useful,\n  but WITHOUT ANY WARRANTY; without even the implied warranty of\n  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n  GNU General Public License for more details.\n\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "version"], "wall_seconds": 0.019, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Android Debug Bridge version 1.0.41\nVersion 36.0.0-13206524\nInstalled as /Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb\nRunning on Darwin 25.4.0 (arm64)\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "command", "argv": ["/opt/zerobrew/bin/cloudflared", "--version"], "wall_seconds": 0.025, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "cloudflared version 2026.7.2 (built 2026-07-15T11:01:07Z)\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5037", "-sTCP:LISTEN"], "wall_seconds": 0.046, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "77085\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "disk", "free_bytes": 10043199488, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "ports_free", "ports": [5584, 5585]}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart="], "wall_seconds": 0.002, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026    \n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "emulator_started", "root": "/private/tmp/apple-notes-sync87-environment-01", "avd": "notes-sync87-isolated", "serial": "emulator-5584", "pid": 41084, "argv": ["/Users/water/Library/Android/sdk/emulator/emulator", "-avd", "notes-sync87-isolated", "-port", "5584", "-datadir", "/private/tmp/apple-notes-sync87-environment-01/data", "-data", "/private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img", "-cache", "/private/tmp/apple-notes-sync87-environment-01/data/cache.img", "-cache-size", "128", "-memory", "2048", "-cores", "2", "-no-snapshot", "-no-audio", "-no-window", "-no-boot-anim", "-no-metrics", "-gpu", "software", "-show-kernel", "-camera-back", "none", "-camera-front", "none"], "owner_token": "b2512dbc3af14beca596de63e1cc10aa", "status": "starting", "supervisor_pid": 41075, "emulator_log": "/private/tmp/apple-notes-sync87-environment-01/emulator-20261106T145654.log", "source_sha256": "19af54e0a9ad1f611a8b4bc62f880fbd33efc0f3ad8cdd9b2fb4416cb811ecf2", "lstart": "Fri Nov  6 22:56:54 2026"}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "disk", "free_bytes": 10043174912, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.002, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/emulator -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.039, "natural_exit": 1, "signal": null, "timed_out": false, "stdout": "", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:54Z", "kind": "not_ready", "reason": "console listener is not the owned PID"}
+{"time_utc": "2026-11-06T14:56:56Z", "kind": "disk", "free_bytes": 10042785792, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:56:56Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.006, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:56Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.065, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:58Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 1.741, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:56:58Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "sys.boot_completed"], "wall_seconds": 0.011, "natural_exit": 1, "signal": null, "timed_out": false, "stdout": "", "stderr": "adb: device offline\n"}
+{"time_utc": "2026-11-06T14:56:58Z", "kind": "not_ready", "reason": "command failed: /Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"}
+{"time_utc": "2026-11-06T14:57:00Z", "kind": "disk", "free_bytes": 10042953728, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:00Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.005, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:00Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.048, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:00Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.008, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:00Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "sys.boot_completed"], "wall_seconds": 0.008, "natural_exit": 1, "signal": null, "timed_out": false, "stdout": "", "stderr": "adb: device offline\n"}
+{"time_utc": "2026-11-06T14:57:00Z", "kind": "not_ready", "reason": "command failed: /Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"}
+{"time_utc": "2026-11-06T14:57:02Z", "kind": "disk", "free_bytes": 10042957824, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:02Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.008, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:02Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.059, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:02Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.011, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:02Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "sys.boot_completed"], "wall_seconds": 0.009, "natural_exit": 1, "signal": null, "timed_out": false, "stdout": "", "stderr": "adb: device offline\n"}
+{"time_utc": "2026-11-06T14:57:02Z", "kind": "not_ready", "reason": "command failed: /Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"}
+{"time_utc": "2026-11-06T14:57:04Z", "kind": "disk", "free_bytes": 10042863616, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:04Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.007, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:04Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.055, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:04Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.01, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:04Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "sys.boot_completed"], "wall_seconds": 0.009, "natural_exit": 1, "signal": null, "timed_out": false, "stdout": "", "stderr": "adb: device offline\n"}
+{"time_utc": "2026-11-06T14:57:04Z", "kind": "not_ready", "reason": "command failed: /Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"}
+{"time_utc": "2026-11-06T14:57:06Z", "kind": "disk", "free_bytes": 10042818560, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:06Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.006, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:06Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.053, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:06Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.009, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:06Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "sys.boot_completed"], "wall_seconds": 0.008, "natural_exit": 1, "signal": null, "timed_out": false, "stdout": "", "stderr": "adb: device offline\n"}
+{"time_utc": "2026-11-06T14:57:06Z", "kind": "not_ready", "reason": "command failed: /Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb"}
+{"time_utc": "2026-11-06T14:57:08Z", "kind": "disk", "free_bytes": 10042540032, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:08Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.003, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:08Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.04, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:08Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.009, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:08Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "sys.boot_completed"], "wall_seconds": 0.048, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "disk", "free_bytes": 10042339328, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.003, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.054, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.011, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "sys.boot_completed"], "wall_seconds": 0.073, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "1\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.004, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.045, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.01, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "ro.build.version.sdk"], "wall_seconds": 0.057, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "30\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.004, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.047, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.011, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "shell", "getprop", "ro.product.cpu.abi"], "wall_seconds": 0.029, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "arm64-v8a\n", "stderr": ""}
+{"time_utc": "2026-11-06T14:57:10Z", "kind": "ready", "root": "/private/tmp/apple-notes-sync87-environment-01", "avd": "notes-sync87-isolated", "serial": "emulator-5584", "pid": 41084, "argv": ["/Users/water/Library/Android/sdk/emulator/emulator", "-avd", "notes-sync87-isolated", "-port", "5584", "-datadir", "/private/tmp/apple-notes-sync87-environment-01/data", "-data", "/private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img", "-cache", "/private/tmp/apple-notes-sync87-environment-01/data/cache.img", "-cache-size", "128", "-memory", "2048", "-cores", "2", "-no-snapshot", "-no-audio", "-no-window", "-no-boot-anim", "-no-metrics", "-gpu", "software", "-show-kernel", "-camera-back", "none", "-camera-front", "none"], "owner_token": "b2512dbc3af14beca596de63e1cc10aa", "status": "ready", "supervisor_pid": 41075, "emulator_log": "/private/tmp/apple-notes-sync87-environment-01/emulator-20261106T145654.log", "source_sha256": "19af54e0a9ad1f611a8b4bc62f880fbd33efc0f3ad8cdd9b2fb4416cb811ecf2", "lstart": "Fri Nov  6 22:56:54 2026", "ready_wall_seconds": 16.671, "sdk": "30", "abi": "arm64-v8a"}
+{"time_utc": "2026-11-06T14:57:12Z", "kind": "disk", "free_bytes": 10041532416, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:14Z", "kind": "disk", "free_bytes": 10039160832, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:16Z", "kind": "disk", "free_bytes": 10039099392, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:18Z", "kind": "disk", "free_bytes": 10038325248, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:20Z", "kind": "disk", "free_bytes": 10037596160, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:22Z", "kind": "disk", "free_bytes": 10037125120, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:24Z", "kind": "disk", "free_bytes": 10037055488, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:26Z", "kind": "disk", "free_bytes": 10036887552, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:28Z", "kind": "disk", "free_bytes": 10036903936, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:30Z", "kind": "disk", "free_bytes": 10036629504, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:32Z", "kind": "disk", "free_bytes": 10036506624, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:34Z", "kind": "disk", "free_bytes": 10036400128, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:36Z", "kind": "disk", "free_bytes": 10036350976, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:38Z", "kind": "disk", "free_bytes": 10013773824, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:40Z", "kind": "disk", "free_bytes": 10018557952, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:42Z", "kind": "disk", "free_bytes": 10011713536, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:44Z", "kind": "disk", "free_bytes": 10008190976, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:46Z", "kind": "disk", "free_bytes": 10006183936, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:48Z", "kind": "disk", "free_bytes": 10006020096, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:50Z", "kind": "disk", "free_bytes": 10011222016, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:52Z", "kind": "disk", "free_bytes": 10011123712, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:54Z", "kind": "disk", "free_bytes": 10011291648, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:56Z", "kind": "disk", "free_bytes": 10006204416, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:57:58Z", "kind": "disk", "free_bytes": 10005790720, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:00Z", "kind": "disk", "free_bytes": 10005606400, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:02Z", "kind": "disk", "free_bytes": 10005811200, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:04Z", "kind": "disk", "free_bytes": 10004426752, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:06Z", "kind": "disk", "free_bytes": 10003857408, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:08Z", "kind": "disk", "free_bytes": 10003800064, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:10Z", "kind": "disk", "free_bytes": 10003779584, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:12Z", "kind": "disk", "free_bytes": 10003881984, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:14Z", "kind": "disk", "free_bytes": 10003894272, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:16Z", "kind": "disk", "free_bytes": 10000379904, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:18Z", "kind": "disk", "free_bytes": 10000228352, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:20Z", "kind": "disk", "free_bytes": 9999818752, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:22Z", "kind": "disk", "free_bytes": 9999462400, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:24Z", "kind": "disk", "free_bytes": 9999433728, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:26Z", "kind": "disk", "free_bytes": 9999409152, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:28Z", "kind": "disk", "free_bytes": 9999753216, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:30Z", "kind": "disk", "free_bytes": 9999753216, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:32Z", "kind": "disk", "free_bytes": 9999572992, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:34Z", "kind": "disk", "free_bytes": 9999654912, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:36Z", "kind": "disk", "free_bytes": 9999646720, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:38Z", "kind": "disk", "free_bytes": 9999540224, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:41Z", "kind": "disk", "free_bytes": 9999347712, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:43Z", "kind": "disk", "free_bytes": 9999306752, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:45Z", "kind": "disk", "free_bytes": 9999425536, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:47Z", "kind": "disk", "free_bytes": 9999437824, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:49Z", "kind": "disk", "free_bytes": 9999110144, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:51Z", "kind": "disk", "free_bytes": 9998782464, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:53Z", "kind": "disk", "free_bytes": 9999626240, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:55Z", "kind": "disk", "free_bytes": 10000273408, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:57Z", "kind": "disk", "free_bytes": 10000322560, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:58:59Z", "kind": "disk", "free_bytes": 10000195584, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:01Z", "kind": "disk", "free_bytes": 9999892480, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:03Z", "kind": "disk", "free_bytes": 9999794176, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:05Z", "kind": "disk", "free_bytes": 9999368192, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:07Z", "kind": "disk", "free_bytes": 9999323136, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:09Z", "kind": "disk", "free_bytes": 9999003648, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:11Z", "kind": "disk", "free_bytes": 9998794752, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:13Z", "kind": "disk", "free_bytes": 9998938112, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:15Z", "kind": "disk", "free_bytes": 9998831616, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:17Z", "kind": "disk", "free_bytes": 9998802944, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:19Z", "kind": "disk", "free_bytes": 9998737408, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:21Z", "kind": "disk", "free_bytes": 9998561280, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:23Z", "kind": "disk", "free_bytes": 9998536704, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:25Z", "kind": "disk", "free_bytes": 9998409728, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:27Z", "kind": "disk", "free_bytes": 9998376960, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:29Z", "kind": "disk", "free_bytes": 9998655488, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:31Z", "kind": "disk", "free_bytes": 9998524416, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:33Z", "kind": "disk", "free_bytes": 9998422016, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:35Z", "kind": "disk", "free_bytes": 9995210752, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:37Z", "kind": "disk", "free_bytes": 9995214848, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:39Z", "kind": "disk", "free_bytes": 9992953856, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:41Z", "kind": "disk", "free_bytes": 9992540160, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:43Z", "kind": "disk", "free_bytes": 9992159232, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:45Z", "kind": "disk", "free_bytes": 9991954432, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:47Z", "kind": "disk", "free_bytes": 9991684096, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:49Z", "kind": "disk", "free_bytes": 9995923456, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:51Z", "kind": "disk", "free_bytes": 9995866112, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:53Z", "kind": "disk", "free_bytes": 9995669504, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:55Z", "kind": "disk", "free_bytes": 9995628544, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:57Z", "kind": "disk", "free_bytes": 9995317248, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T14:59:59Z", "kind": "disk", "free_bytes": 9995255808, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:01Z", "kind": "disk", "free_bytes": 9995276288, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:03Z", "kind": "disk", "free_bytes": 9995137024, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:05Z", "kind": "disk", "free_bytes": 9994866688, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:07Z", "kind": "disk", "free_bytes": 9995169792, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:09Z", "kind": "disk", "free_bytes": 9995116544, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:11Z", "kind": "disk", "free_bytes": 9994985472, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:13Z", "kind": "disk", "free_bytes": 9995194368, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:15Z", "kind": "disk", "free_bytes": 9995083776, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:17Z", "kind": "disk", "free_bytes": 9994883072, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:19Z", "kind": "disk", "free_bytes": 9994977280, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:21Z", "kind": "disk", "free_bytes": 9994952704, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:23Z", "kind": "disk", "free_bytes": 9994919936, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:25Z", "kind": "disk", "free_bytes": 9994883072, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:27Z", "kind": "disk", "free_bytes": 9998495744, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:29Z", "kind": "disk", "free_bytes": 9998061568, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:31Z", "kind": "disk", "free_bytes": 10002112512, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:33Z", "kind": "disk", "free_bytes": 9999167488, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:35Z", "kind": "disk", "free_bytes": 9999081472, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:37Z", "kind": "disk", "free_bytes": 9999409152, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:39Z", "kind": "disk", "free_bytes": 9999187968, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:41Z", "kind": "disk", "free_bytes": 9999327232, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:43Z", "kind": "disk", "free_bytes": 9999224832, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:45Z", "kind": "disk", "free_bytes": 9999048704, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:47Z", "kind": "disk", "free_bytes": 9998884864, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:49Z", "kind": "disk", "free_bytes": 9999044608, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:51Z", "kind": "disk", "free_bytes": 9998721024, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:53Z", "kind": "disk", "free_bytes": 9998622720, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:55Z", "kind": "disk", "free_bytes": 9998548992, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:57Z", "kind": "disk", "free_bytes": 9998458880, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:00:59Z", "kind": "disk", "free_bytes": 9998704640, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:01Z", "kind": "disk", "free_bytes": 9998340096, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:03Z", "kind": "disk", "free_bytes": 9998483456, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:05Z", "kind": "disk", "free_bytes": 9998389248, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:07Z", "kind": "disk", "free_bytes": 9998503936, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:09Z", "kind": "disk", "free_bytes": 9994211328, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:11Z", "kind": "disk", "free_bytes": 9994207232, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:13Z", "kind": "disk", "free_bytes": 9994285056, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:15Z", "kind": "disk", "free_bytes": 9994346496, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:17Z", "kind": "disk", "free_bytes": 9994301440, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:19Z", "kind": "disk", "free_bytes": 9977860096, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:21Z", "kind": "disk", "free_bytes": 10225410048, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:23Z", "kind": "disk", "free_bytes": 10224844800, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:25Z", "kind": "disk", "free_bytes": 10237841408, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:27Z", "kind": "disk", "free_bytes": 10237796352, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:29Z", "kind": "disk", "free_bytes": 10237521920, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:31Z", "kind": "disk", "free_bytes": 10237390848, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:33Z", "kind": "disk", "free_bytes": 10237280256, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:35Z", "kind": "disk", "free_bytes": 10241642496, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:37Z", "kind": "disk", "free_bytes": 10241298432, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:39Z", "kind": "disk", "free_bytes": 10241417216, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:41Z", "kind": "disk", "free_bytes": 10241470464, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:43Z", "kind": "disk", "free_bytes": 10241421312, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:45Z", "kind": "disk", "free_bytes": 10241273856, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:47Z", "kind": "disk", "free_bytes": 10241097728, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:49Z", "kind": "disk", "free_bytes": 10241298432, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:51Z", "kind": "disk", "free_bytes": 10241196032, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:53Z", "kind": "disk", "free_bytes": 10241331200, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:55Z", "kind": "disk", "free_bytes": 10241269760, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:57Z", "kind": "disk", "free_bytes": 10240741376, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:01:59Z", "kind": "disk", "free_bytes": 10241007616, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:01Z", "kind": "disk", "free_bytes": 10236755968, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:03Z", "kind": "disk", "free_bytes": 10236702720, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:05Z", "kind": "disk", "free_bytes": 10236579840, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:07Z", "kind": "disk", "free_bytes": 10236493824, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:09Z", "kind": "disk", "free_bytes": 10236571648, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:11Z", "kind": "disk", "free_bytes": 10236481536, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:13Z", "kind": "disk", "free_bytes": 10242404352, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:15Z", "kind": "disk", "free_bytes": 10242457600, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:17Z", "kind": "disk", "free_bytes": 10242408448, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:19Z", "kind": "disk", "free_bytes": 10242162688, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:21Z", "kind": "disk", "free_bytes": 10241925120, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:23Z", "kind": "disk", "free_bytes": 10242154496, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:25Z", "kind": "disk", "free_bytes": 10242039808, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:27Z", "kind": "disk", "free_bytes": 10241986560, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:29Z", "kind": "disk", "free_bytes": 10242154496, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:31Z", "kind": "disk", "free_bytes": 10241978368, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:33Z", "kind": "disk", "free_bytes": 10241654784, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:35Z", "kind": "disk", "free_bytes": 10241433600, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:37Z", "kind": "disk", "free_bytes": 10241409024, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:39Z", "kind": "disk", "free_bytes": 10241245184, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:41Z", "kind": "disk", "free_bytes": 10241138688, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:43Z", "kind": "disk", "free_bytes": 10241011712, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:45Z", "kind": "disk", "free_bytes": 10242146304, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:47Z", "kind": "disk", "free_bytes": 10242322432, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:49Z", "kind": "disk", "free_bytes": 10242232320, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:51Z", "kind": "disk", "free_bytes": 10242183168, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:53Z", "kind": "disk", "free_bytes": 10242019328, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:55Z", "kind": "disk", "free_bytes": 10241597440, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:57Z", "kind": "disk", "free_bytes": 10241703936, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:02:59Z", "kind": "disk", "free_bytes": 10241720320, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:01Z", "kind": "disk", "free_bytes": 10241376256, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:03Z", "kind": "disk", "free_bytes": 10241175552, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:05Z", "kind": "disk", "free_bytes": 10238701568, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:07Z", "kind": "disk", "free_bytes": 10237218816, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:09Z", "kind": "disk", "free_bytes": 10236977152, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:11Z", "kind": "disk", "free_bytes": 10239242240, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:13Z", "kind": "disk", "free_bytes": 10238939136, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:15Z", "kind": "disk", "free_bytes": 10239107072, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:17Z", "kind": "disk", "free_bytes": 10238803968, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:19Z", "kind": "disk", "free_bytes": 10238091264, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:21Z", "kind": "disk", "free_bytes": 10241945600, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:23Z", "kind": "disk", "free_bytes": 10241220608, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:25Z", "kind": "disk", "free_bytes": 10241441792, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:27Z", "kind": "disk", "free_bytes": 10242289664, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:29Z", "kind": "disk", "free_bytes": 10242318336, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:31Z", "kind": "disk", "free_bytes": 10242039808, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:33Z", "kind": "disk", "free_bytes": 10242039808, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:35Z", "kind": "disk", "free_bytes": 10242035712, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:37Z", "kind": "disk", "free_bytes": 10241835008, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:39Z", "kind": "disk", "free_bytes": 10241470464, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:41Z", "kind": "disk", "free_bytes": 10241581056, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:43Z", "kind": "disk", "free_bytes": 10241462272, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:45Z", "kind": "disk", "free_bytes": 10241499136, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:47Z", "kind": "disk", "free_bytes": 10241314816, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:49Z", "kind": "disk", "free_bytes": 10240970752, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:51Z", "kind": "disk", "free_bytes": 10241069056, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:53Z", "kind": "disk", "free_bytes": 10240770048, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:55Z", "kind": "disk", "free_bytes": 10240593920, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:57Z", "kind": "disk", "free_bytes": 10240499712, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:03:59Z", "kind": "disk", "free_bytes": 10240638976, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:01Z", "kind": "disk", "free_bytes": 10240581632, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:03Z", "kind": "disk", "free_bytes": 10240434176, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:05Z", "kind": "disk", "free_bytes": 10240184320, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:07Z", "kind": "disk", "free_bytes": 10239897600, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:09Z", "kind": "disk", "free_bytes": 10239741952, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:11Z", "kind": "disk", "free_bytes": 10239406080, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:13Z", "kind": "disk", "free_bytes": 10239500288, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:15Z", "kind": "disk", "free_bytes": 10239336448, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:17Z", "kind": "disk", "free_bytes": 10239057920, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:19Z", "kind": "disk", "free_bytes": 10238726144, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:21Z", "kind": "disk", "free_bytes": 10238279680, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:23Z", "kind": "disk", "free_bytes": 10236792832, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:25Z", "kind": "disk", "free_bytes": 10236764160, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:27Z", "kind": "disk", "free_bytes": 10235756544, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:29Z", "kind": "disk", "free_bytes": 10235686912, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:31Z", "kind": "disk", "free_bytes": 10235707392, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:33Z", "kind": "disk", "free_bytes": 10235863040, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:35Z", "kind": "disk", "free_bytes": 10235801600, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:37Z", "kind": "disk", "free_bytes": 10235752448, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:39Z", "kind": "disk", "free_bytes": 10235674624, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:41Z", "kind": "disk", "free_bytes": 10235461632, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:43Z", "kind": "disk", "free_bytes": 10235600896, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:45Z", "kind": "disk", "free_bytes": 10235564032, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:47Z", "kind": "disk", "free_bytes": 10235482112, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:49Z", "kind": "disk", "free_bytes": 10235322368, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:51Z", "kind": "disk", "free_bytes": 10235461632, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:53Z", "kind": "disk", "free_bytes": 10235322368, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:55Z", "kind": "disk", "free_bytes": 10235449344, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:57Z", "kind": "disk", "free_bytes": 10235211776, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:04:59Z", "kind": "disk", "free_bytes": 10234933248, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:01Z", "kind": "disk", "free_bytes": 10234368000, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:03Z", "kind": "disk", "free_bytes": 10234609664, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:05Z", "kind": "disk", "free_bytes": 10234540032, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:07Z", "kind": "disk", "free_bytes": 10234413056, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:09Z", "kind": "disk", "free_bytes": 10234712064, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:11Z", "kind": "disk", "free_bytes": 10231283712, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:13Z", "kind": "disk", "free_bytes": 10231398400, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:15Z", "kind": "disk", "free_bytes": 10231332864, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:17Z", "kind": "disk", "free_bytes": 10231205888, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:19Z", "kind": "disk", "free_bytes": 10231091200, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:21Z", "kind": "disk", "free_bytes": 10220855296, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:23Z", "kind": "disk", "free_bytes": 10220785664, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:25Z", "kind": "disk", "free_bytes": 10218479616, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:27Z", "kind": "disk", "free_bytes": 10218201088, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:29Z", "kind": "disk", "free_bytes": 10218389504, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:31Z", "kind": "disk", "free_bytes": 10218090496, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:33Z", "kind": "disk", "free_bytes": 10218135552, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:35Z", "kind": "disk", "free_bytes": 10218123264, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:37Z", "kind": "disk", "free_bytes": 10217951232, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:39Z", "kind": "disk", "free_bytes": 10218119168, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:41Z", "kind": "disk", "free_bytes": 10218053632, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:43Z", "kind": "disk", "free_bytes": 10217885696, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:45Z", "kind": "disk", "free_bytes": 10217848832, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:47Z", "kind": "disk", "free_bytes": 10217197568, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:49Z", "kind": "disk", "free_bytes": 10216980480, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:51Z", "kind": "disk", "free_bytes": 10216923136, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:53Z", "kind": "disk", "free_bytes": 10215231488, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:55Z", "kind": "disk", "free_bytes": 10215006208, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:57Z", "kind": "disk", "free_bytes": 10214977536, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:05:59Z", "kind": "disk", "free_bytes": 10215038976, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:01Z", "kind": "disk", "free_bytes": 10214936576, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:03Z", "kind": "disk", "free_bytes": 10214834176, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:05Z", "kind": "disk", "free_bytes": 10214821888, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:07Z", "kind": "disk", "free_bytes": 10214977536, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:09Z", "kind": "disk", "free_bytes": 10214805504, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:11Z", "kind": "disk", "free_bytes": 10214731776, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:13Z", "kind": "disk", "free_bytes": 10214776832, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:15Z", "kind": "disk", "free_bytes": 10214735872, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:17Z", "kind": "disk", "free_bytes": 10214313984, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:19Z", "kind": "disk", "free_bytes": 10214379520, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:21Z", "kind": "disk", "free_bytes": 10214285312, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:23Z", "kind": "disk", "free_bytes": 10214141952, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:25Z", "kind": "disk", "free_bytes": 10214305792, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:27Z", "kind": "disk", "free_bytes": 10213715968, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:29Z", "kind": "disk", "free_bytes": 10213351424, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:31Z", "kind": "disk", "free_bytes": 10213220352, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:33Z", "kind": "disk", "free_bytes": 10213122048, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:35Z", "kind": "disk", "free_bytes": 10213318656, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:37Z", "kind": "disk", "free_bytes": 10213359616, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:39Z", "kind": "disk", "free_bytes": 10213310464, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:41Z", "kind": "disk", "free_bytes": 10213208064, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:43Z", "kind": "disk", "free_bytes": 10212876288, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:45Z", "kind": "disk", "free_bytes": 10212798464, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:47Z", "kind": "disk", "free_bytes": 10212683776, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:49Z", "kind": "disk", "free_bytes": 10213048320, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:51Z", "kind": "disk", "free_bytes": 10212847616, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:53Z", "kind": "disk", "free_bytes": 10212749312, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:55Z", "kind": "disk", "free_bytes": 10212790272, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:57Z", "kind": "disk", "free_bytes": 10212589568, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:06:59Z", "kind": "disk", "free_bytes": 10212548608, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:07:01Z", "kind": "disk", "free_bytes": 10212376576, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:07:03Z", "kind": "disk", "free_bytes": 10212130816, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:07:05Z", "kind": "disk", "free_bytes": 10212036608, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:07:07Z", "kind": "disk", "free_bytes": 10211958784, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:07:09Z", "kind": "disk", "free_bytes": 10211921920, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:07:10Z", "kind": "disk", "free_bytes": 10211905536, "min_free_bytes": 8589934592}
+{"time_utc": "2026-11-06T15:07:10Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.006, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T15:07:10Z", "kind": "command", "argv": ["/bin/ps", "-p", "41084", "-o", "lstart=", "-o", "command="], "wall_seconds": 0.006, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "Fri Nov  6 22:56:54 2026     /Users/water/Library/Android/sdk/emulator/qemu/darwin-aarch64/qemu-system-aarch64-headless -avd notes-sync87-isolated -port 5584 -datadir /private/tmp/apple-notes-sync87-environment-01/data -data /private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img -cache /private/tmp/apple-notes-sync87-environment-01/data/cache.img -cache-size 128 -memory 2048 -cores 2 -no-snapshot -no-audio -no-window -no-boot-anim -no-metrics -gpu software -show-kernel -camera-back none -camera-front none\n", "stderr": ""}
+{"time_utc": "2026-11-06T15:07:10Z", "kind": "command", "argv": ["/usr/sbin/lsof", "-nP", "-t", "-iTCP:5584", "-sTCP:LISTEN"], "wall_seconds": 0.071, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "41084\n", "stderr": ""}
+{"time_utc": "2026-11-06T15:07:10Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "avd", "name"], "wall_seconds": 0.023, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "notes-sync87-isolated\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T15:07:10Z", "kind": "command", "argv": ["/Applications/极空间.app/Contents/Resources/app.asar.unpacked/bin/platform-tools/adb", "-s", "emulator-5584", "emu", "kill"], "wall_seconds": 0.009, "natural_exit": 0, "signal": null, "timed_out": false, "stdout": "OK: killing emulator, bye bye\nOK\n", "stderr": ""}
+{"time_utc": "2026-11-06T15:07:12Z", "kind": "emulator_exit", "root": "/private/tmp/apple-notes-sync87-environment-01", "avd": "notes-sync87-isolated", "serial": "emulator-5584", "pid": 41084, "argv": ["/Users/water/Library/Android/sdk/emulator/emulator", "-avd", "notes-sync87-isolated", "-port", "5584", "-datadir", "/private/tmp/apple-notes-sync87-environment-01/data", "-data", "/private/tmp/apple-notes-sync87-environment-01/data/userdata-qemu.img", "-cache", "/private/tmp/apple-notes-sync87-environment-01/data/cache.img", "-cache-size", "128", "-memory", "2048", "-cores", "2", "-no-snapshot", "-no-audio", "-no-window", "-no-boot-anim", "-no-metrics", "-gpu", "software", "-show-kernel", "-camera-back", "none", "-camera-front", "none"], "owner_token": "b2512dbc3af14beca596de63e1cc10aa", "status": "stopped", "supervisor_pid": 41075, "emulator_log": "/private/tmp/apple-notes-sync87-environment-01/emulator-20261106T145654.log", "source_sha256": "19af54e0a9ad1f611a8b4bc62f880fbd33efc0f3ad8cdd9b2fb4416cb811ecf2", "lstart": "Fri Nov  6 22:56:54 2026", "ready_wall_seconds": 16.671, "sdk": "30", "abi": "arm64-v8a", "emulator_natural_exit": 0, "emulator_signal": null}
+{"time_utc": "2026-11-06T15:07:12Z", "kind": "cycle_finished", "wall_seconds": 618.366}
+{"time_utc": "2026-11-06T15:07:12Z", "kind": "owned_awake_exit", "pid": 41076, "natural_exit": null, "signal": 15}
