@@ -60,8 +60,8 @@ async function chooserFiles(s,names,{multi=false}={}){
 }
 async function openFilePicker(c){
   await c.tap('button[aria-label="添加附件"]');
-  const point=await c.read(`(()=>{const a=[...document.querySelectorAll('[role="menu"] button')].filter(e=>e.textContent.trim()==='附加文件');if(a.length!==1)throw Error('file action absent');const r=a[0].getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}})()`);
-  await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[point]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  await c.wait('!!document.querySelector("[role=menu]")','attachment menu');
+  await c.tap('[role="menu"] button','附加文件');
 }
 async function persistedNote(c,id,expected=0){
   const end=Date.now()+15000;
