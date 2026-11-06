@@ -48,9 +48,10 @@ async function chooserFiles(s,names,{multi=false}={}){
   const folder=basename(s.remote);
   if(!nodes.some(n=>n.text===folder)){
     const root=nodes.find(n=>chooserPackage(n)&&/^(Show roots|显示根目录|显示侧栏|打开导航抽屉)$/.test(n['content-desc']||''));
-    if(root)await nativeNode(n=>chooserPackage(n)&&n['content-desc']===root['content-desc']);
+    const downloadVisible=nodes.some(n=>chooserPackage(n)&&/^(Downloads|下载内容|下载)$/.test(n.text||'')&&n['resource-id']?.endsWith('/title'));
+    if(root&&!downloadVisible)await nativeNode(n=>chooserPackage(n)&&n['content-desc']===root['content-desc']);
     xml=await guard('uia');await writeFile(resolve(output,'chooser-roots-'+Date.now()+'.xml'),xml);
-    await nativeNode(n=>chooserPackage(n)&&/^(Downloads|下载内容|下载)$/.test(n.text||'')&&n.clickable==='true');
+    await nativeNode(n=>chooserPackage(n)&&/^(Downloads|下载内容|下载)$/.test(n.text||'')&&n['resource-id']?.endsWith('/title'));
   }
   await nativeText(folder);await pause(200);
   if(multi){
@@ -112,6 +113,10 @@ async function execute(request){
       await nativeStep('attachments-open-continuous',()=>openFilePicker(c));await nativeStep('attachments-choose-continuous',()=>chooserFiles(s,[s.files[2].name]));const three=await persistedNote(c,owner.id,before.attachments.length+3);
       for(const file of s.files)assert(three.attachments.some(a=>a.displayName===file.name),'selected original filename must persist');
       await c.snapshot(output,'attachments');return {cancelPreserved:true,multipleCount:two.attachments.length,continuousCount:three.attachments.length,names:three.attachments.map(x=>x.displayName)};
+    }
+    case 'attachmentsChooseMultiple': {
+      const owner=s.notes.at(-1);assert(owner);await nativeStep('attachments-existing-chooser-multiple',()=>chooserFiles(s,s.files.slice(0,2).map(f=>f.name),{multi:true}));
+      const c=await app(),actual=await persistedNote(c,owner.id,2);assert.equal(actual.attachments.length,2);for(const f of s.files.slice(0,2))assert(actual.attachments.some(a=>a.displayName===f.name));return{count:2,names:actual.attachments.map(a=>a.displayName)};
     }
     case 'attachmentsMultiple':
     case 'attachmentsAudio': {
