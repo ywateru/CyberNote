@@ -1,46 +1,48 @@
 # 双端同步当前交付状态
 
-更新：2026-11-06。用于中断恢复；[正式规格](../architecture/sync.md)、[窗口协议](../architecture/sync-coordinator.md)和任务文件仍是行为契约。完整同步目标持续active，单层pass不等于交付。
+更新：2026-11-06。供中断恢复；[正式规格](../architecture/sync.md)、[窗口协议](../architecture/sync-coordinator.md)和任务文件仍是行为契约。**完整同步目标 active，正在进行新隔离 Android 的实际运行验收。** 已交付 gallery83，不再重做快速首页。
 
-|层|当前状态|准确源码/审查|工作树|
-|---|---|---|---|
-|84真实Store核心|独审pass，合入feff050d；主线121项118pass/3ignored|修复7da43718；独审447e1360；旧drawing失败保留|旧84树/分支已正常清理，缓存保留|
-|85认证网络/身份|独审pass，合入0ab39d70；组合依赖3754d60b；主线19项自然0|修复c88982a6；独审59fc3f32；原并发退出101保留|旧85树/分支已清理，缓存迁至/private/tmp/apple-notes-sync85-target|
-|86同步设置UI|合入d8ff3336，主线完整受影响组pass|修复9ed9a078；独审4c85204b|旧UI树/分支已清理|
-|86前端quiet协调|两P2独审复审pass，合入85b9e0eb；根34+41+notes9/build/production自然0|产品0c84e589；独审092ea058；根证据b563eb64＋原始log bfda3f79|旧前端树/分支已清理；原blocked与反例完整保留|
-|86Rust adapter/Session|最终cd334bc8独审0feb310d PASS，主线9cbbb150已合入，根完整整合进行中|exact11原49+14自然0，独审7项及17af负向；原媒体64MiB/22/stale证据按17af范围复用，未冒称11重跑|/private/tmp/apple-notes-sync86-adapter只读供DOM/routes，暂保留|
-|86两实际App DOM|3352b913接exact11正式运行39项业务通过，但外层Node未退出，工具清理修复中|formal01原件保留；浏览器/Rust自然结束后唯一owned esbuild服务PipeWrap残留，须另freeze并完整自然退出复跑及独审|/private/tmp/apple-notes-sync86-dom，codex/sync86-dom，作者sync86_dom_develop|
-|87隔离Android环境|独审285970a1 pass且已合入，ENVIRONMENT-READY ONLY|工具62ca1cf0，17 guards；第三次18.751秒ready；未安装新APK|资源/private/tmp/apple-notes-sync87-environment-01保留；emulator-5584 stopped；环境工作树已清理|
-|87新Android原生|初版HOST-TOOLS已合入；后续803c680d工具独审d122daf3发现P2正文断言不足，原作者窄修中，设备仍等待新APK|host82与独立guard9/单实际DesktopPeer10通过，不证明两方向完整正文；缺失/错误/截断正文负向补齐后再复审；ADB/boot/install均0|/private/tmp/apple-notes-sync87-native，只host；原独审candidate工作树已正常清理，branch保留|
-|87实际路由与换址UI|UI已独审/主线通过；固定immutable11实际LAN和匿名wss复验正在执行|UI66958c1d/runner7323d818；原build TLS panic保留，源码修复不能代替真实路线实测|路线runner尚未合入；/private/tmp/apple-notes-sync87-routes作者接续|
-|87准确包/完整目标|pending|Mac27/Android17拟号未构建；临时build驱动仅准备，未执行|根协调最终主线测试和准确包|
+## 已接收与剩余门槛
 
-根负责规格、派发、合入和主线完整整合；开发和独审由不同agent负责。恢复时只给明确当前任务/工作树，不能唤醒旧debug70任务。所有shell显式workdir，禁止其他agent写main；原失败保全，修复后只恢复受影响边界。
+| 层 | 当前状态 | 准确来源与证据 |
+| --- | --- | --- |
+| 84 Store / 85 认证网络 / 86 设置与协调 | 已独审合入 | 84 `feff050d`、85 `0ab39d70`、设置 `d8ff3336`、协调 `85b9e0eb`；历史失败保留于各自证据目录 |
+| 86 Rust adapter / Session | 最终产品已独审并整合 | 产品 `cd334bc8`，独审 `0feb310d`，主线合入 `9cbbb150` |
+| 主线完整产品回归 | PASS，十条命令自然0 | [完整整合](../verification/sync87/main-integration/README.md)：桌面464、手机笔记9/录音43/附件组合290/同步设置56，Store159 pass/3既有ignored、网络23，build/production/Tauri check；未因后续纯工具合入重跑全套 |
+| 86 两实际 App DOM | 作者与不同代理各39项自然0 | 最终工具 `b08c7728`，作者 `40b93a6a`、独审 `c66e18db`；[独审](reviews/app-sync86-dom-integration-independent.md)。两个 React/Tiptap、独立 Rust/SQLite/Noise、同目录重启、真实 renderer ACK；不是 fixture 或 Android |
+| 87 实际 LAN / 匿名 wss | 已独审接收 | harness `7323d818`、作者 `bd4e531e`、独审 `55b71804`；[56项实际路线](../verification/sync87-routes/build11/README.md)、[独审32项审计](../verification/sync87-routes/independent-build11/RESULT.md)。含第二 hostname 新邀请及原目录冷启；实际 WireGuard/EasyTier 无现成对端，未验证 |
+| Mac27 / Android17 准确包 | 已构建，独立核包 PASS | 两端321项产品输入相同；[Mac](../verification/sync87/native-build/result.json)、[Android](../verification/sync87/android-build/result.json)、[独立核包](../verification/sync87/native-independent/README.md)。Mac ad-hoc、Android debug，不等于原生运行 |
+| 87 原生验收工具 | 最终依赖与断言已独审 | 完整正文修复 `cb202998` / 独审 `97b048ae`；精确依赖 `16ce5779`，作者 smoke `5f0fd4df`，独审 `ad48a884`，主线合入 `5a07d842`。final11单实际 DesktopPeer10项自然0，非双端设备证明 |
+| 87 新隔离 Android 环境 | 既有 ready，实际 APK 验收进行中 | AVD `notes-sync87-isolated`，仅 `emulator-5584`；资源 `/private/tmp/apple-notes-sync87-environment-01`。reviewed lifecycle 保持至少8GiB free；不得降低 guard |
+| 87 最终实际 Android | **待完成，已派发原工具作者** | 工作树 `/private/tmp/apple-notes-sync87-native`，分支 `codex/sync87-native`，作者 `/root/sync87_native_develop`。最终实际结果还需不同代理独审 |
 
-## 证据与资源
+主线后续工具整合的 notes9 与真实LAN21已恢复通过；最初LAN因root输出路径不符合准入规则而在启动前拒绝，原 failed 汇总保留，见[窄恢复记录](../verification/sync87/shared-tool-integration/README.md)。不把调用错误改写成产品失败，也不覆写成原运行通过。
 
-84原lean111项exit101及drawing失败保留；后续作者112、独审121、根121各准确标示。组合依赖与84/85主线结果见[证据](../verification/sync8485-main-integration/README.md)。前端原34项未覆盖两P2的事实保留，修复后[独审](reviews/app-sync86-frontend-recheck.md)和[根整合](../verification/sync86-frontend/main-integration/README.md)已完成，不外推Rust/App/原生。
+## 当前准确产物和准入
 
-87环境前两次缺super/fatal reboot失败wrapper exit2保留；同新data仅修controlled encryption-key link后第三次自然0、18.751秒ready，随后owned emulator自然0停止。独审P3收窄：资源目录总量增加；base userdata allocated_bytes前后均105316352，不归因该文件。环境ready不证明APK/provider/sync。
+- Mac：`artifacts/sync87/备忘录-Mac27.zip`，6,694,032字节，SHA256 `7d86122f52c904ecc6a24f3407913de4c2e352b936b6937056094d4edf04fc7f`。
+- Android：`artifacts/sync87/备忘录-Android17.apk`，236,444,967字节，SHA256 `e54b7da52b95a65d23f308214ff8e2fa6a93079935f617b6603828e435c68173`。
+- 对端 immutable11：`/private/tmp/sync86-transport-build11/notes-current-attachment-transport`，SHA256 `333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800`，产品 `cd334bc88513a89c490788d2e2e27c7967575f4a`，mode0555。旧可变 target 路径不得替代它。
+- 最终 peer receipt `/private/tmp/sync87-peer-final11/receipt.json`，authority `root-sync87-peer-review`；APK receipt `/private/tmp/sync87-apk-final17/receipt.json`，authority `root-sync87-package-review`。均mode0600，已实际准入与hash检查。
+- 产品包冻结后未修改321项产品输入；后续主线合入仅验收工具与证据。
 
-86组合媒体预算按0f95545a规格：网络最多3文件/256MiB＋本地capture串行1文件/256MiB，合计≤4文件/512MiB，单blob≤256MiB；网络完成文件严格校验/fsync后同文件系统rename直接发布，不复制第二份。后端新完整回归初次142pass/2fail/3ignored、网络lib8pass/1fail原件在作者树待保全；不能追认为pass。
+## 下一步
 
-主线src-tauri/target、node_modules、SDK及84/85复用target保留。后端作者2026-11-06最后Tauri check自然0、14.47秒后已释放main target；如后续再次借用须明确所有权，不并发build污染准确输入。
+1. 仅新5584安装准确Android17；核 AVD、emulator PID、app PID、CDP identity。实际 gallery/＋/聚焦/中文正文保存、系统chooser取消/多选/连续PNG/TXT/WAV、图片导出原SHA、应用重开持久化。
+2. 实际手机设置 UI 配对真实 DesktopPeer；双向完整document/plainText及PNG/WAV原字节、前台重连、同data应用重启、同data冷启动恢复。冷启动拆prepare/verify并用已审生命周期，核新bootUUID和同userdata dev/inode/size。
+3. 保留失败，必要时原作者窄修、不同代理复核；不放宽断言。结束owned children/forwards/lifecycle后提交紧凑安全证据。
+4. 不同代理独审实际结果；更新最终使用说明与交付文档。真实运行未完成前不得 complete goal。
 
-## 数据与设备保全
+## 证据和资源保全
 
-用户原Android约13秒未保存录音现场完全不碰：禁止安装/启动/停止/重启/读取/导出/备份原应用或旧AVD（含emulator-5580）。所有ADB/CDP显式新serial并核新AVD/PID/WebView，禁止kill-server。真实mic不用，录音仅合成媒体；Apple Notes不做删除实验。用户已有直接执行授权沿用，不重复询权限。
+正式01双App业务39通过但Node未退出，实际定位为Chrome stderr被crashpad/updater继承；修复后另有driver TypeError失败，最终formal03完整自然退出。原件均在[DOM作者证据](../verification/sync86-dom-integration/README.md)，不能称早先是esbuild。当前引用媒体收敛已证明，SQLite附件行数4/2含本地未引用checkpoint，不宣称孤儿GC完成。
 
-当前用户可安装包仍为[快速首页82/83](../verification/mobile-home8283/README.md) Mac26/Android16；直接画廊、黄色＋一键输入已交付，不重做。它们不包含当前新增同步。新包生成、核包和设备安装分别记账，不能提前宣称完成。
+原TLS CryptoProvider panic、长持Session gate、PlanStale错误分类、locked resolve提交后旧Token、正文断言缺失等均有独立失败及修复证据，按准确源码和binary范围解释，不能追认旧版本通过。首个实际cloudflared在SIGTERM后8秒仍未退出，最后SIGKILL；第二个自然0。所有真实Rust进程自然退出与工具清理准确区分。
 
-最新阻断：独审fb6a265f/c11dcc56确认两条媒体IO长持Session；原作者按短snapshot gate、锁外IO、最终凭据重验修复，复用不可变File凭据与独立路径hard-link契约分别见2df2ecda/b8b87db2。真实双进程独审22项（不是早先口头24）通过，锁探针自然101为负向失败。实际wss升级101后Rust在CryptoProvider选择处panic，22ms错误被误报timeout；原作者同时修TLS初始化与channel错误分类，不能延长timeout掩盖。
+已正常清理完成的adapter/routes/DOM/package-review及较旧干净源工作树，分支/已提交证据保留，见[source-checkout-cleanup](../verification/sync87/source-checkout-cleanup.json)。当前native工作树保留；共享SDK、node_modules、主线target、84/85target保留，不并发借用target编译。根负责文档/派发/合入/主线整合与准确包，开发和独审由不同代理负责，不唤醒旧debug70。
 
-DOM03/04/05原清理失败、错误primary假设保全；清理问题已定位为关闭回调promise未结算，观察实际terminal事件后smoke02自然0。探索06三Rust自然0、三页面无pageErrors，最终失败为SQLite只读证据打开；3352b913改为全部children退出且WAL缺失/0之后immutable只读、前后DB hash相同。07因backend源码漂移在启动前拒绝，原log保留；build09回归未通过，尚未启动DOM/routes复验，继续等修复冻结。native输入P2已经原作者修复、独立18项实际子进程反例及8+10+21复审通过，主线host整合也通过，原blocked/泄露原件保留；精确导出与peer/lifecycle扩充及实际设备仍待单独完成。所有host准备和修复均ADB0。
+## 用户原现场和范围
 
-f2491f61专项量化：64MiB cold preflight/flush/receive/quiet准备均能并发真实Session.workspace读取与普通编辑；最长一次读取44.137ms，File凭据复用后quiet plan/apply为7/9ms；媒体专项8pass，152pass/3ignored完整Store和Tauri check自然0。其不可变build09为 `/private/tmp/sync86-transport-build09/notes-current-attachment-transport`，SHA256 `895902782389431c4a3462b2bb3e80cd24c26b87248247ee96a1a62b8943afb4`，25609824B，mode0555。实际双进程初始note/folder18s未收敛失败在 `/private/tmp/sync86-media-process-final`，不能凭上述单层pass接受产品。root只读核hash；为DOM准备的 `/private/tmp/sync86-transport-build09-dom-input` 仅改build.json的binary.path指向不可变09，有原manifest与provenance，未运行。原独审尚未启动新昂贵/动态source测试，作者可继续修复；新源码与binary需另freeze和复审。
+原Android约13秒未保存录音完全不碰：禁止安装、启动、停止、重启、读取、导出、备份原应用或旧AVD（含5580）。ADB显式5584，无默认serial，无kill-server。只用合成PNG/TXT/WAV，无真实mic；Apple Notes删除实验不做。已有直接执行授权沿用，无重复询权限。
 
-09真实安全trace证明本机PlanStale被wire归为Invalid，客户端视为Protocol不再自动重试。17af6dfc最小修复在serve本地stale时终止本次socket，让既有Transport退避自动重连，不增wire/timeout。exact10为 `/private/tmp/sync86-transport-build10/notes-current-attachment-transport`，SHA256 `2f21f7ff9f6abad3b341585a16e973714c81af7c93eef0f4e2a435bd2eb53515`。独审2a6d404确认原22、实际64MiB读取+ordinary写/stale保留再重试、File/其他peer/trigger回滚同根重启及receive边界真实自动重连通过，两个大文件最长读取27.060/11.314ms。source17af和binary10范围准确保留，不追认后续源。
-
-10在locked resolve已经release commit并提升epoch后，回包又用提交前Token读conflicts，误报access_changed。作者先前“只是driver未重取Token”判断已被后续事件推翻，原10及driver有界重试失败全部保留；不靠driver重试放行。11拟按正式架构的终态Token＋原Session/Store实例＋live window短gate纯读conflicts，普通Conflicts仍expected检查。原独审已idle释放target，11freeze后只做此最小差异/locked keep-one/keep-all与关闭/身份替换窄复审，未改变媒体分支证据准确映射复用。
-
-root已核10的46源文件与17af逐字节匹配，候选peer receipt仅授权单Mac实际DOM smoke；工具803c680d smoke10项自然0/8.764秒，真实React/Tiptap/Store/PNG原字节与正常关闭，未涉及resolve/第二peer/原生设备。依赖0c3de151为root把3352b913三共享文件cherry到native候选，未进主线；无脚本伪造renderer probe/ready/ACK。完整双App矩阵、路线及新APK仍未完成。
+快速画廊/黄色＋及设置双标签已随[Mac26/Android16](../verification/mobile-home8283/README.md)交付；它们不含本轮新增同步。Mac27/Android17准确包已生成，实际原生验收仍待完成。API30模拟器、真实双App DOM、Store/socket、包身份与苹果整窗像素分别记账；硬件、多Android版本、真实WireGuard/EasyTier及原版像素不因这些层通过而自动通过。

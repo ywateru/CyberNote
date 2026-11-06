@@ -1,0 +1,68 @@
+{
+  "head": "81524d5a77898569f934fdffe02ac3a76ea53e49",
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "2f3604754ee1fe314b993a5a38c7845051b9e335b71dfd645c1fa58ec6ddcbad",
+    "fileCount": 147,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "2f3604754ee1fe314b993a5a38c7845051b9e335b71dfd645c1fa58ec6ddcbad",
+    "fileCount": 147,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputUnchanged": true,
+  "runs": [
+    {
+      "name": "notes",
+      "args": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "group",
+        "notes",
+        "--out",
+        "/private/tmp/sync87-main-shared-tool-integration/notes"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 9.478750833000001
+    },
+    {
+      "name": "lan",
+      "args": [
+        "node",
+        "scripts/debug/sync87-routes.mjs",
+        "/private/tmp/sync86-transport-build11/notes-current-attachment-transport",
+        "/Users/water/work/2026/Apple-Notes-Clone",
+        "/private/tmp/sync87-main-shared-tool-integration/lan",
+        "lan",
+        "333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800"
+      ],
+      "exitCode": 1,
+      "wallSeconds": 0.024104166999999996
+    }
+  ],
+  "status": "failed"
+}
