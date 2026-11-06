@@ -17,6 +17,7 @@ export async function installPageObserver() {
   // Do not bypass that via ipc/callback wrappers or alter promise observation.
   const invokeImmutable = !descriptor.writable && !descriptor.configurable;
   const counts = { probe: 0, prepare: 0, release: 0, other: 0 };
+  const releaseOutcomes = { commit: 0, abort: 0, unknown: 0 };
   const bump = name => { if (counts[name] < 1000000) counts[name]++; };
   const ownValue = (object, name) => {
     if (!object || (typeof object !== 'object' && typeof object !== 'function')) return undefined;
@@ -28,11 +29,16 @@ export async function installPageObserver() {
   const passive = envelope => {
     if (!active) return;
     try {
-      const phase = ownValue(ownValue(envelope, 'payload'), 'phase');
+      const payload = ownValue(envelope, 'payload'), phase = ownValue(payload, 'phase');
       bump(phase === 'probe' || phase === 'prepare' || phase === 'release' ? phase : 'other');
+      if (phase === 'release') {
+        const outcome = ownValue(payload, 'outcome');
+        const name = outcome === 'commit' || outcome === 'abort' ? outcome : 'unknown';
+        if (releaseOutcomes[name] < 1000000) releaseOutcomes[name]++;
+      }
     } catch { bump('other'); }
   };
-  const copy = () => ({ version: 1, active, eventCounts: { ...counts }, labels: { state: labels.state, current: labels.current, windows: [...labels.windows], nonMainLabelsRedacted: true }, replyObservation: { available: false, reason: invokeImmutable ? 'native-invoke-immutable' : 'not-installed', invokeImmutable } });
+  const copy = () => ({ version: 1, active, eventCounts: { ...counts }, releaseOutcomes: { ...releaseOutcomes }, labels: { state: labels.state, current: labels.current, windows: [...labels.windows], nonMainLabelsRedacted: true }, replyObservation: { available: false, reason: invokeImmutable ? 'native-invoke-immutable' : 'not-installed', invokeImmutable } });
   const controller = {
     async snapshot() {
       if (active) {

@@ -1,0 +1,21 @@
+{
+  "naturalExit": 0,
+  "wallSeconds": 0.024692875,
+  "checks": 20,
+  "newCases": 2,
+  "scope": "Host-only minimal passive release outcome delta; no devices, CDP, network, DB, source App/bridge/backend or original invoke changes.",
+  "command": [
+    "node",
+    "scripts/debug/sync87-native/check-passive-observer.mjs"
+  ],
+  "files": [
+    {
+      "path": "scripts/debug/sync87-native/passive-observer.mjs",
+      "sha256": "25cdfe66089fd9f0d3c8eea31160c66219d9738cadff0059ff30482fe91183d6"
+    },
+    {
+      "path": "scripts/debug/sync87-native/check-passive-observer.mjs",
+      "sha256": "2a4d3b550bb5254e3f9d234e8e0dde85bf8cfb950f1c07800224d14ae003d50b"
+    }
+  ]
+}

@@ -38,8 +38,9 @@ function host(options = {}) {
   };
   const context = vm.createContext({ window: win, location: { origin: options.origin || 'http://tauri.localhost' }, localStorage: { getItem: () => null } });
   const evaluate = expression => vm.runInContext(expression, context);
-  const emit = phase => { for (const id of listeners.values()) callbacks.get(id)?.({ payload: { phase, operationId: 'DO_NOT_RETAIN_OPERATION', sessionId: 'DO_NOT_RETAIN_SESSION', document: 'DO_NOT_RETAIN_DOCUMENT' } }); };
-  return { win, internals, original, calls, callbacks, listeners, evaluate, emit, get appEvents() { return appEvents; } };
+  const emitEnvelope = envelope => { for (const id of listeners.values()) callbacks.get(id)?.(envelope); };
+  const emit = phase => emitEnvelope({ payload: { phase, operationId: 'DO_NOT_RETAIN_OPERATION', sessionId: 'DO_NOT_RETAIN_SESSION', document: 'DO_NOT_RETAIN_DOCUMENT' } });
+  return { win, internals, original, calls, callbacks, listeners, evaluate, emit, emitEnvelope, get appEvents() { return appEvents; } };
 }
 {
   const h = host(); const descriptor = Object.getOwnPropertyDescriptor(h.internals, 'invoke');
@@ -94,5 +95,21 @@ function host(options = {}) {
   const h = host({ origin: 'https://example.invalid' });
   await assert.rejects(h.evaluate(installExpression), /actual production native page/);
   check('foreign origin refuses without any native call', h.calls.length === 0);
+}
+{
+  const h = host(); await h.evaluate(installExpression);
+  for (const outcome of ['commit', 'abort', 'SECRET_UNKNOWN_OUTCOME', undefined]) h.emitEnvelope({ payload: { phase: 'release', outcome } });
+  h.emitEnvelope({ payload: { phase: 'prepare', outcome: 'commit' } });
+  const snap = await h.evaluate(snapshotExpression);
+  check('release outcome counts use fixed commit abort unknown categories only', snap.releaseOutcomes.commit === 1 && snap.releaseOutcomes.abort === 1 && snap.releaseOutcomes.unknown === 2 && snap.eventCounts.release === 4 && !JSON.stringify(snap).includes('SECRET'));
+  await h.evaluate(cleanupExpression);
+}
+{
+  const h = host(); await h.evaluate(installExpression); let getterCalls = 0;
+  const payload = { phase: 'release' }; Object.defineProperty(payload, 'outcome', { get() { getterCalls++; throw Error('must not execute outcome getter'); } });
+  h.emitEnvelope({ payload });
+  const snap = await h.evaluate(snapshotExpression);
+  check('outcome accessor never executes and is counted as unknown', getterCalls === 0 && snap.releaseOutcomes.unknown === 1 && snap.eventCounts.release === 1 && h.appEvents === 1);
+  await h.evaluate(cleanupExpression);
 }
 console.log(JSON.stringify({ passed: checks, scope: 'host-only passive listener semantics and exact immutable Tauri invoke shape; no actual native callback delivery, device, network, database or product change' }));
