@@ -13,3 +13,5 @@
 集成链逐条验收：run/setup→SyncService（默认off）→独立identity→Store enable/adopt；business SQL→同事务dirty→checkpoint→inventory；peer socket→Noise→head/blob→独立staging→Store inbox（durable）；inbox→plan/quiet prepare→实际PM settled与flush ACK→generation重验→Session短gate→Store apply→notes-metadata/必要access→App hydrate。远端不取得本机Token/IPC。UI sync_command→production service，debug只调用同handler。UI fixture、Network opaque tests、真实Store integration、Android IME各自独立记账，前层通过不能替代后层。
 
 根做规格、编排、合并与主线完整整合，develop实现，独立verify冻结准确commit；一次发现失败保持原件，只修与复验受影响边界，不刷无关全套。
+
+86生产接线拆为文件不交叠的Rust adapter与[frontend](../tasks/app-sync86-frontend.md)，共享固定[本机窗口协议](../../architecture/sync-coordinator.md)。两者从已独审合并模块的同一基线创建worktree，最终同一真实Rust/DOM集成门槛。

@@ -33,3 +33,5 @@ run/setup创建共享Session和惰性Sync runtime state；status不启用Store�
 新模块通过后才根主线一次受影响整合；保留原始失败，修正后只恢复相关边界。全部同步目标包括87路由和实际新Android运行/包验证，单adapter测试不标goal complete。
 
 未启用库首次pair必须先创建可恢复本机device/Noise身份，再构建backend；其workspace查询在adopt前不得假称已启用。仅Noise成功Prepared后调用84可指定device的enable/adopt入口。Store已启用时用Store device打开85 IdentityStore，严格拒绝文件身份漂移；status无副作用。冷启失败pair也可恢复相同本机UUID；不通过读写私钥JSON猜字段绕85身份API，需要公共只读加载入口时由85所有者明确增加并复验。
+
+实现分工细化：本任务作者拥有Rust adapter/Session/lib/生命周期/真实Rust与headless测试；前端quiet接线由[86 frontend](app-sync86-frontend.md)独立worktree并行开发，均遵循[固定窗口协议](../../architecture/sync-coordinator.md)，避免两人改App/bridge同路径。生产整合及独审必须汇合两者，不能只backend或只fixture验收。
