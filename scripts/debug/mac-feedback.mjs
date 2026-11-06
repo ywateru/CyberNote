@@ -68,15 +68,15 @@ export async function runMacFeedback(runtime, { command, check, output }) {
     "Mac removes only bottom new-folder entry",
     (await page.locator('.folder-footer [aria-label="新建文件夹"]').count()) ===
       0 &&
-      (await page.locator('.folder-footer [aria-label="更多设置"]').count()) ===
+      (await page.locator('.folder-footer [aria-label="设置"]').count()) ===
         1,
   );
   const footer = await page.locator(".folder-footer").boundingBox(),
     more = await page
-      .locator('.folder-footer [aria-label="更多设置"]')
+      .locator('.folder-footer [aria-label="设置"]')
       .boundingBox();
   check(
-    "Remaining bottom more button retains right alignment",
+    "Remaining bottom settings button retains right alignment",
     footer.x + footer.width - (more.x + more.width) <= 9,
   );
   await command("folder.open");

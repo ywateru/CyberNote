@@ -5,10 +5,8 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type KeyboardEvent,
 } from "react";
 import {
-  X,
   Download,
   RefreshCw,
   ChevronLeft,
@@ -80,7 +78,7 @@ const icons = {
 const emptyFilter: DetailFilter = { query: "", page: 0 };
 const pageSize = 20;
 export default function DataManagement({
-  onClose,
+  active,
   onHandle,
   onArchive,
   backupBlocked,
@@ -88,7 +86,7 @@ export default function DataManagement({
   accessKey,
   accessBlocked,
 }: {
-  onClose: () => void;
+  active: boolean;
   onHandle: (handle: DataManagementHandle | null) => void;
   onArchive: (mode: "export" | "import") => Promise<ArchiveResult>;
   backupBlocked: boolean;
@@ -108,6 +106,17 @@ export default function DataManagement({
   >({});
   const panel = useRef<HTMLElement>(null),
     backButton = useRef<HTMLButtonElement>(null);
+  const activeRef = useRef(active),
+    authorityGeneration = useRef(0);
+  activeRef.current = active;
+  const assertActive = () => {
+    if (!activeRef.current) throw Error("请先切换到数据标签");
+  };
+  const canFocus = () =>
+    activeRef.current &&
+    alive.current &&
+    !!panel.current?.isConnected &&
+    !!panel.current.getClientRects().length;
   const alive = useRef(true),
     request = useRef(0),
     working = useRef(false),
@@ -138,7 +147,13 @@ export default function DataManagement({
       }
     }
   };
+  const requestRefresh = async () => {
+    assertActive();
+    return refresh();
+  };
   const exportFile = async (id: string) => {
+    assertActive();
+    const generation = authorityGeneration.current;
     if (working.current) throw Error("文件操作正在进行中");
     const file = dataRef.current?.files.find((x) => x.attachment?.id === id);
     if (!file?.attachment?.exportable)
@@ -152,9 +167,11 @@ export default function DataManagement({
         id,
         file.attachment.displayName || "附件",
       );
-      if (alive.current && saved) setNotice("附件已导出");
+      if (alive.current && generation === authorityGeneration.current && saved)
+        setNotice("附件已导出");
     } catch (cause) {
-      if (alive.current) setActionError(fileOperationError(cause));
+      if (alive.current && generation === authorityGeneration.current)
+        setActionError(fileOperationError(cause));
       throw cause;
     } finally {
       working.current = false;
@@ -165,6 +182,7 @@ export default function DataManagement({
     }
   };
   const archive = async (mode: "export" | "import") => {
+    assertActive();
     if (working.current || archiveBusy || backupBlocked || accessBlocked)
       return;
     working.current = true;
@@ -185,10 +203,12 @@ export default function DataManagement({
     }
   };
   const navigate = (next: StorageView) => {
+    assertActive();
     if (!isStorageView(next)) throw Error("未知存储类别");
     setView(next);
   };
   const filter = (value: Filter) => {
+    assertActive();
     if (
       value.kind !== undefined &&
       !Object.prototype.hasOwnProperty.call(legacyStorageViews, value.kind)
@@ -227,6 +247,7 @@ export default function DataManagement({
     };
   }, []);
   useLayoutEffect(() => {
+    authorityGeneration.current++;
     request.current++;
     dataRef.current = null;
     loadingRef.current = false;
@@ -242,7 +263,7 @@ export default function DataManagement({
   }, [accessKey, accessBlocked]);
   useEffect(() => {
     onHandle({
-      refresh,
+      refresh: requestRefresh,
       filter,
       navigate,
       exportAttachment: exportFile,
@@ -255,41 +276,6 @@ export default function DataManagement({
     });
     return () => onHandle(null);
   });
-  useEffect(() => {
-    const previous =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
-    panel.current
-      ?.querySelector<HTMLButtonElement>('[aria-label="关闭数据管理"]')
-      ?.focus();
-    return () => {
-      if (previous?.isConnected) previous.focus();
-    };
-  }, []);
-  const focusInside = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      event.stopPropagation();
-      onClose();
-      return;
-    }
-    if (event.key !== "Tab") return;
-    const nodes = Array.from(
-      panel.current?.querySelectorAll<HTMLElement>(
-        'button:not(:disabled), input:not(:disabled), select:not(:disabled), summary, [tabindex="0"]',
-      ) || [],
-    ).filter((node) => node.getClientRects().length > 0);
-    const first = nodes[0],
-      last = nodes.at(-1);
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last?.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first?.focus();
-    }
-  };
   const usage = useMemo(() => (data ? storageUsage(data) : null), [data]);
   const selectedGroup = usage?.groups.find((group) => group.id === view);
   const details =
@@ -315,14 +301,20 @@ export default function DataManagement({
   const back = () => {
     navigate("overview");
     requestAnimationFrame(() =>
-      panel.current
-        ?.querySelector<HTMLButtonElement>(`[data-storage-category="${view}"]`)
-        ?.focus(),
+      canFocus()
+        ? panel.current
+            ?.querySelector<HTMLButtonElement>(
+              `[data-storage-category="${view}"]`,
+            )
+            ?.focus()
+        : undefined,
     );
   };
   const openCategory = (category: StorageCategory | "all") => {
     navigate(category);
-    requestAnimationFrame(() => backButton.current?.focus());
+    requestAnimationFrame(() => {
+      if (canFocus()) backButton.current?.focus();
+    });
   };
   const fileRow = (file: ManagedFile, index: number) => (
     <article
@@ -377,343 +369,321 @@ export default function DataManagement({
     </article>
   );
   return (
-    <div className="data-management-backdrop">
-      <section
-        ref={panel}
-        className="data-management"
-        data-storage-view={view}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="data-management-title"
-        onKeyDown={focusInside}
-      >
-        <header className="data-management-header">
-          {view !== "overview" && (
+    <section
+      ref={panel}
+      className="data-management"
+      data-storage-view={view}
+      aria-label="本地数据管理"
+    >
+      <header className="data-management-header">
+        {view !== "overview" && (
+          <button
+            ref={backButton}
+            type="button"
+            className="data-back"
+            aria-label="返回数据管理总览"
+            onClick={back}
+          >
+            <ChevronLeft size={20} />
+            <span>数据管理</span>
+          </button>
+        )}
+        <h2 id="data-management-title">{title}</h2>
+        <button
+          type="button"
+          className="data-refresh"
+          aria-label="刷新数据管理"
+          disabled={accessBlocked}
+          onClick={() => void requestRefresh().catch(() => {})}
+        >
+          <RefreshCw size={16} />
+          <span>刷新</span>
+        </button>
+      </header>
+      <div className="data-management-scroll" key={view}>
+        {loading && (
+          <p className="data-loading" role="status">
+            正在读取本地文件信息…{data ? "保留上次结果" : ""}
+          </p>
+        )}
+        {error && (
+          <div className="data-error" role="alert">
+            {error}
             <button
-              ref={backButton}
               type="button"
-              className="data-back"
-              aria-label="返回数据管理总览"
-              onClick={back}
+              onClick={() => void requestRefresh().catch(() => {})}
             >
-              <ChevronLeft size={20} />
-              <span>数据管理</span>
+              重试读取
             </button>
-          )}
-          <h2 id="data-management-title">{title}</h2>
-          <button
-            type="button"
-            className="data-refresh"
-            aria-label="刷新数据管理"
-            disabled={accessBlocked}
-            onClick={() => void refresh().catch(() => {})}
-          >
-            <RefreshCw size={16} />
-            <span>刷新</span>
-          </button>
-          <button
-            type="button"
-            className="data-close"
-            aria-label="关闭数据管理"
-            onClick={onClose}
-          >
-            <X size={20} />
-          </button>
-        </header>
-        <div className="data-management-scroll" key={view}>
-          {loading && (
-            <p className="data-loading" role="status">
-              正在读取本地文件信息…{data ? "保留上次结果" : ""}
-            </p>
-          )}
-          {error && (
-            <div className="data-error" role="alert">
-              {error}
-              <button
-                type="button"
-                onClick={() => void refresh().catch(() => {})}
-              >
-                重试读取
-              </button>
-            </div>
-          )}
-          {actionError && (
-            <p className="data-error" role="alert">
-              {actionError}
-            </p>
-          )}
-          {notice && (
-            <p className="data-notice" role="status">
-              {notice}
-            </p>
-          )}
-          {backupBlocked && (
-            <p className="data-warning" role="status">
-              请先完成录音，再导入或导出备份；内存中的录音尚未备份。
-            </p>
-          )}
-          {view === "overview" ? (
-            <>
-              {data && usage && (
-                <>
-                  <section
-                    className="storage-summary"
-                    aria-label="本地存储占用"
-                  >
-                    <div className="storage-summary-heading">
-                      <h3>本地数据</h3>
-                      <p>
-                        已用{" "}
-                        <strong data-storage-total={data.totals.totalBytes}>
-                          {formatFileSize(data.totals.totalBytes)}
-                        </strong>
-                      </p>
-                    </div>
-                    {usage.consistent && data.totals.totalBytes > 0 ? (
-                      <div
-                        className="storage-bar"
-                        role="img"
-                        aria-label={`应用文件总占用 ${formatFileSize(data.totals.totalBytes)}，${usage.groups.map((group) => `${group.label} ${formatFileSize(group.bytes)}`).join("，")}`}
-                      >
-                        {usage.groups
-                          .filter((group) => group.bytes > 0)
-                          .map((group) => (
-                            <span
-                              key={group.id}
-                              data-storage-segment={group.id}
-                              data-storage-bytes={group.bytes}
-                              style={{
-                                width: `${(group.bytes / data.totals.totalBytes) * 100}%`,
-                                backgroundColor: group.color,
-                              }}
-                            />
-                          ))}
-                      </div>
-                    ) : (
-                      <div className="storage-bar-empty">
-                        {usage.consistent
-                          ? "暂无已知大小的文件占用"
-                          : "文件信息已变化，请刷新后查看占比"}
-                      </div>
-                    )}
-                    <div className="storage-legend" aria-label="按类型查看文件">
-                      {usage.groups.map((group) => (
-                        <button
-                          key={group.id}
-                          type="button"
-                          onClick={() => openCategory(group.id)}
-                          aria-label={`查看${group.label}，${formatFileSize(group.bytes)}，${group.files.length} 项`}
-                        >
-                          <i style={{ backgroundColor: group.color }} />
-                          <span>{group.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                    <p className="storage-summary-note">
-                      应用数据文件大小合计
-                      {usage.unknownPaths > 0
-                        ? `；另有 ${usage.unknownPaths} 项目录、缺失或大小未知，未计入占用`
-                        : ""}
-                      。
+          </div>
+        )}
+        {actionError && (
+          <p className="data-error" role="alert">
+            {actionError}
+          </p>
+        )}
+        {notice && (
+          <p className="data-notice" role="status">
+            {notice}
+          </p>
+        )}
+        {backupBlocked && (
+          <p className="data-warning" role="status">
+            请先完成录音，再导入或导出备份；内存中的录音尚未备份。
+          </p>
+        )}
+        {view === "overview" ? (
+          <>
+            {data && usage && (
+              <>
+                <section className="storage-summary" aria-label="本地存储占用">
+                  <div className="storage-summary-heading">
+                    <h3>本地数据</h3>
+                    <p>
+                      已用{" "}
+                      <strong data-storage-total={data.totals.totalBytes}>
+                        {formatFileSize(data.totals.totalBytes)}
+                      </strong>
                     </p>
-                  </section>
-                  <div className="storage-category-list" aria-label="存储类型">
-                    {usage.groups.map((group) => {
-                      const Icon = icons[group.id];
-                      return (
-                        <button
-                          key={group.id}
-                          type="button"
-                          className="storage-category"
-                          data-storage-category={group.id}
-                          onClick={() => openCategory(group.id)}
-                          style={
-                            { "--storage-color": group.color } as CSSProperties
-                          }
-                        >
-                          <span className="storage-category-icon">
-                            <Icon size={19} />
-                          </span>
-                          <span className="storage-category-label">
-                            {group.label}
-                            <small>
-                              {group.files.length} 项
-                              {group.unknown
-                                ? `，${group.unknown} 项未计大小`
-                                : ""}
-                            </small>
-                          </span>
-                          <span
-                            className="storage-category-size"
-                            data-storage-category-bytes={group.bytes}
-                          >
-                            {formatFileSize(group.bytes)}
-                          </span>
-                          <ChevronRight size={17} aria-hidden="true" />
-                        </button>
-                      );
-                    })}
-                    <button
-                      type="button"
-                      className="storage-all-files"
-                      data-storage-category="all"
-                      onClick={() => openCategory("all")}
-                    >
-                      <span>查看全部文件</span>
-                      <span>{data.files.length} 项</span>
-                      <ChevronRight size={17} />
-                    </button>
                   </div>
-                </>
-              )}
-              <section className="data-backup-section" aria-label="本地备份">
-                <h3>本地备份</h3>
-                <div className="data-backup-actions">
+                  {usage.consistent && data.totals.totalBytes > 0 ? (
+                    <div
+                      className="storage-bar"
+                      role="img"
+                      aria-label={`应用文件总占用 ${formatFileSize(data.totals.totalBytes)}，${usage.groups.map((group) => `${group.label} ${formatFileSize(group.bytes)}`).join("，")}`}
+                    >
+                      {usage.groups
+                        .filter((group) => group.bytes > 0)
+                        .map((group) => (
+                          <span
+                            key={group.id}
+                            data-storage-segment={group.id}
+                            data-storage-bytes={group.bytes}
+                            style={{
+                              width: `${(group.bytes / data.totals.totalBytes) * 100}%`,
+                              backgroundColor: group.color,
+                            }}
+                          />
+                        ))}
+                    </div>
+                  ) : (
+                    <div className="storage-bar-empty">
+                      {usage.consistent
+                        ? "暂无已知大小的文件占用"
+                        : "文件信息已变化，请刷新后查看占比"}
+                    </div>
+                  )}
+                  <div className="storage-legend" aria-label="按类型查看文件">
+                    {usage.groups.map((group) => (
+                      <button
+                        key={group.id}
+                        type="button"
+                        onClick={() => openCategory(group.id)}
+                        aria-label={`查看${group.label}，${formatFileSize(group.bytes)}，${group.files.length} 项`}
+                      >
+                        <i style={{ backgroundColor: group.color }} />
+                        <span>{group.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <p className="storage-summary-note">
+                    应用数据文件大小合计
+                    {usage.unknownPaths > 0
+                      ? `；另有 ${usage.unknownPaths} 项目录、缺失或大小未知，未计入占用`
+                      : ""}
+                    。
+                  </p>
+                </section>
+                <div className="storage-category-list" aria-label="存储类型">
+                  {usage.groups.map((group) => {
+                    const Icon = icons[group.id];
+                    return (
+                      <button
+                        key={group.id}
+                        type="button"
+                        className="storage-category"
+                        data-storage-category={group.id}
+                        onClick={() => openCategory(group.id)}
+                        style={
+                          { "--storage-color": group.color } as CSSProperties
+                        }
+                      >
+                        <span className="storage-category-icon">
+                          <Icon size={19} />
+                        </span>
+                        <span className="storage-category-label">
+                          {group.label}
+                          <small>
+                            {group.files.length} 项
+                            {group.unknown
+                              ? `，${group.unknown} 项未计大小`
+                              : ""}
+                          </small>
+                        </span>
+                        <span
+                          className="storage-category-size"
+                          data-storage-category-bytes={group.bytes}
+                        >
+                          {formatFileSize(group.bytes)}
+                        </span>
+                        <ChevronRight size={17} aria-hidden="true" />
+                      </button>
+                    );
+                  })}
                   <button
                     type="button"
-                    disabled={
-                      backupBlocked ||
-                      archiveBusy ||
-                      !!operation ||
-                      accessBlocked
-                    }
-                    onClick={() => void archive("import")}
+                    className="storage-all-files"
+                    data-storage-category="all"
+                    onClick={() => openCategory("all")}
                   >
-                    {operation === "import" ? "导入中…" : "导入备份…"}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={
-                      backupBlocked ||
-                      archiveBusy ||
-                      !!operation ||
-                      accessBlocked
-                    }
-                    onClick={() => void archive("export")}
-                  >
-                    {operation === "export" ? "导出中…" : "导出完整备份…"}
+                    <span>查看全部文件</span>
+                    <span>{data.files.length} 项</span>
+                    <ChevronRight size={17} />
                   </button>
                 </div>
-                <p className="data-explanation">
-                  包含已保存的备忘录、文件夹、设置和全部登记附件原文件，其他窗口未提交的草稿不在备份中。合并导入，冲突保留为副本，并应用备份设置。
-                </p>
-              </section>
-              {data && usage && (
-                <>
-                  {data.warnings.length > 0 && (
-                    <p className="data-warning" role="status">
-                      本次采样有 {data.warnings.length}{" "}
-                      项提示，请查看下方数据位置与详情。
-                    </p>
-                  )}
-                  {!usage.consistent && (
-                    <p className="data-warning" role="status">
-                      分类文件大小与采样总量不一致，请刷新；总占用仍显示本次数据库返回的文件总量。
-                    </p>
-                  )}
-                  <details className="data-storage-details">
-                    <summary>数据位置与详情</summary>
-                    <p className="data-root">
-                      <strong>数据目录</strong>
-                      <span>{data.rootPath}</span>
-                    </p>
-                    <p className="data-sampled">
-                      采样时间：{formatFileTime(data.capturedAt)}
-                      {loading ? "（保留上次结果）" : ""}
-                    </p>
-                    <p className="data-explanation">
-                      备忘录 {data.counts.notes} · 文件夹 {data.counts.folders}{" "}
-                      · 实际文件 {data.counts.physicalFiles} 项 · 已登记附件{" "}
-                      {data.counts.attachments} 项 · 缺失附件{" "}
-                      {data.counts.missingAttachments} 项
-                    </p>
-                    {usage.duplicateRecords > 0 && (
-                      <p className="data-explanation">
-                        有 {usage.duplicateRecords}{" "}
-                        条记录共用已有文件路径，占用只计算一次，详细列表保留全部登记。
-                      </p>
-                    )}
-                    {data.warnings.map((text, index) => (
-                      <p className="data-warning" role="status" key={index}>
-                        {text}
-                      </p>
-                    ))}
-                  </details>
-                </>
-              )}
-            </>
-          ) : data && usage ? (
-            <>
-              <div className="storage-detail-heading">
-                <h3>{title}</h3>
-                <p>
-                  <strong>
-                    {formatFileSize(
-                      view === "all"
-                        ? data.totals.totalBytes
-                        : (selectedGroup?.bytes ?? 0),
-                    )}
-                  </strong>
-                  <span>
-                    {details.length} 项
-                    {selectedGroup?.unknown
-                      ? `，${selectedGroup.unknown} 项未计大小`
-                      : ""}
-                  </span>
-                </p>
+              </>
+            )}
+            <section className="data-backup-section" aria-label="本地备份">
+              <h3>本地备份</h3>
+              <div className="data-backup-actions">
+                <button
+                  type="button"
+                  disabled={
+                    backupBlocked || archiveBusy || !!operation || accessBlocked
+                  }
+                  onClick={() => void archive("import")}
+                >
+                  {operation === "import" ? "导入中…" : "导入备份…"}
+                </button>
+                <button
+                  type="button"
+                  disabled={
+                    backupBlocked || archiveBusy || !!operation || accessBlocked
+                  }
+                  onClick={() => void archive("export")}
+                >
+                  {operation === "export" ? "导出中…" : "导出完整备份…"}
+                </button>
               </div>
               <p className="data-explanation">
-                查看文件信息，导出登记附件的原始文件。未归属、旧录音版本和临时文件可能仍用于恢复，此处不会自动清理。
+                包含已保存的备忘录、文件夹、设置和全部登记附件原文件，其他窗口未提交的草稿不在备份中。合并导入，冲突保留为副本，并应用备份设置。
               </p>
-              <div className="data-filters">
-                <input
-                  aria-label="搜索本地文件"
-                  placeholder="搜索文件名 / 路径"
-                  value={query}
-                  onChange={(event) => filter({ query: event.target.value })}
-                />
-              </div>
-              <p className="data-count">
-                匹配 {matches.length} / 全部 {details.length} 项
-              </p>
-              <div className="data-file-columns" aria-hidden="true">
-                <span>名称与类型</span>
-                <span>大小 / 最后修改时间</span>
-                <span />
-              </div>
-              <div className="data-file-list">
-                {matches
-                  .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
-                  .map(fileRow)}
-                {!matches.length && (
-                  <p className="data-empty">
-                    {query ? "没有匹配的文件" : "此类别暂无文件"}
+            </section>
+            {data && usage && (
+              <>
+                {data.warnings.length > 0 && (
+                  <p className="data-warning" role="status">
+                    本次采样有 {data.warnings.length}{" "}
+                    项提示，请查看下方数据位置与详情。
                   </p>
                 )}
-              </div>
-              <nav className="data-pagination" aria-label="文件分页">
-                <button
-                  type="button"
-                  disabled={currentPage === 0}
-                  onClick={() => filter({ page: currentPage - 1 })}
-                >
-                  上一页
-                </button>
+                {!usage.consistent && (
+                  <p className="data-warning" role="status">
+                    分类文件大小与采样总量不一致，请刷新；总占用仍显示本次数据库返回的文件总量。
+                  </p>
+                )}
+                <details className="data-storage-details">
+                  <summary>数据位置与详情</summary>
+                  <p className="data-root">
+                    <strong>数据目录</strong>
+                    <span>{data.rootPath}</span>
+                  </p>
+                  <p className="data-sampled">
+                    采样时间：{formatFileTime(data.capturedAt)}
+                    {loading ? "（保留上次结果）" : ""}
+                  </p>
+                  <p className="data-explanation">
+                    备忘录 {data.counts.notes} · 文件夹 {data.counts.folders} ·
+                    实际文件 {data.counts.physicalFiles} 项 · 已登记附件{" "}
+                    {data.counts.attachments} 项 · 缺失附件{" "}
+                    {data.counts.missingAttachments} 项
+                  </p>
+                  {usage.duplicateRecords > 0 && (
+                    <p className="data-explanation">
+                      有 {usage.duplicateRecords}{" "}
+                      条记录共用已有文件路径，占用只计算一次，详细列表保留全部登记。
+                    </p>
+                  )}
+                  {data.warnings.map((text, index) => (
+                    <p className="data-warning" role="status" key={index}>
+                      {text}
+                    </p>
+                  ))}
+                </details>
+              </>
+            )}
+          </>
+        ) : data && usage ? (
+          <>
+            <div className="storage-detail-heading">
+              <h3>{title}</h3>
+              <p>
+                <strong>
+                  {formatFileSize(
+                    view === "all"
+                      ? data.totals.totalBytes
+                      : (selectedGroup?.bytes ?? 0),
+                  )}
+                </strong>
                 <span>
-                  第 {currentPage + 1} / {pages} 页
+                  {details.length} 项
+                  {selectedGroup?.unknown
+                    ? `，${selectedGroup.unknown} 项未计大小`
+                    : ""}
                 </span>
-                <button
-                  type="button"
-                  disabled={currentPage + 1 >= pages}
-                  onClick={() => filter({ page: currentPage + 1 })}
-                >
-                  下一页
-                </button>
-              </nav>
-            </>
-          ) : null}
-        </div>
-      </section>
-    </div>
+              </p>
+            </div>
+            <p className="data-explanation">
+              查看文件信息，导出登记附件的原始文件。未归属、旧录音版本和临时文件可能仍用于恢复，此处不会自动清理。
+            </p>
+            <div className="data-filters">
+              <input
+                aria-label="搜索本地文件"
+                placeholder="搜索文件名 / 路径"
+                value={query}
+                onChange={(event) => filter({ query: event.target.value })}
+              />
+            </div>
+            <p className="data-count">
+              匹配 {matches.length} / 全部 {details.length} 项
+            </p>
+            <div className="data-file-columns" aria-hidden="true">
+              <span>名称与类型</span>
+              <span>大小 / 最后修改时间</span>
+              <span />
+            </div>
+            <div className="data-file-list">
+              {matches
+                .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
+                .map(fileRow)}
+              {!matches.length && (
+                <p className="data-empty">
+                  {query ? "没有匹配的文件" : "此类别暂无文件"}
+                </p>
+              )}
+            </div>
+            <nav className="data-pagination" aria-label="文件分页">
+              <button
+                type="button"
+                disabled={currentPage === 0}
+                onClick={() => filter({ page: currentPage - 1 })}
+              >
+                上一页
+              </button>
+              <span>
+                第 {currentPage + 1} / {pages} 页
+              </span>
+              <button
+                type="button"
+                disabled={currentPage + 1 >= pages}
+                onClick={() => filter({ page: currentPage + 1 })}
+              >
+                下一页
+              </button>
+            </nav>
+          </>
+        ) : null}
+      </div>
+    </section>
   );
 }

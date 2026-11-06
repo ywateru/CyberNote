@@ -27,7 +27,7 @@ export async function runDataManagement(runtime, { command, check, output }) {
   const add=async name=>{await chooseFiles(page,[{name,mimeType:'image/png',buffer:tinyPNG}]);await idle(page);await page.waitForFunction(()=>[...document.querySelectorAll('.image-open img')].every(x=>x.naturalWidth>0));};
   const configure=value=>page.evaluate(value=>window.__DEBUG_PLATFORM__.configure(value),value);
   const open=async()=>{await command('data.open');await page.waitForSelector('.storage-summary');await page.locator('.data-storage-details summary').click();};
-  const close=async()=>{await page.getByRole('button',{name:'关闭数据管理',exact:true}).click();await idle(page);};
+  const close=async()=>{await page.getByRole('button',{name:'关闭设置',exact:true}).click();await idle(page);};
   const emit=async(name,payload)=>page.evaluate(({name,payload})=>window.__DEBUG_PLATFORM__.emit(name,payload),{name,payload});
   const prepare=async()=>{backend.suspended=['note-a'];backend.operationId='data79-prepare';const value=backend.state();await emit('notes-access',{phase:'prepare',operationId:backend.operationId,noteIds:['note-a'],access:value.access});};
   const commit=async()=>{backend.suspended=[];backend.operationId=null;backend.accessEpoch++;backend.noteEpochs['note-a']=(backend.noteEpochs['note-a']||0)+1;const value=backend.state();await emit('notes-access',{phase:'commit',operationId:'data79-prepare',noteIds:['note-a'],access:value.access});};
@@ -67,8 +67,8 @@ export async function runDataManagement(runtime, { command, check, output }) {
   await command('editor.insertText',{text:' IMAGE-UNDO79'});await command('editor.undo');
   check('Image export adds no document or Undo entry',!JSON.stringify((await state(page)).editorJSON).includes('IMAGE-UNDO79')&&JSON.stringify((await state(page)).editorJSON)===before);
 
-  await command('menu.open',{menu:'app'});await page.getByRole('button',{name:'数据管理',exact:true}).click();await idle(page);
-  check('Actual more-settings entry opens data management with real bridge DTO',await page.locator('.data-root').count()===1&&(await page.locator('.data-management').innerText()).includes('32.0 KB'));
+  if(runtime.mobile){await command('menu.open',{menu:'view'});await page.getByRole('button',{name:'数据管理',exact:true}).click();}else{await page.locator('.folder-footer [aria-label="设置"]').click();await page.getByRole('tab',{name:'数据',exact:true}).click();}await idle(page);
+  check('Actual unified settings data entry opens data management with real bridge DTO',await page.locator('.data-root').count()===1&&(await page.locator('.data-management').innerText()).includes('32.0 KB'));
   await command('data.navigate',{view:'all'});
   check('DB/WAL/SHM statuses and actual filesystem timestamp are rendered without payload reads',(await page.locator('.data-management').innerText()).includes('notes.sqlite3-shm')&&(await page.locator('.data-management').innerText()).includes('不存在')===false&&await page.locator('[data-file-path="notes.sqlite3-shm"]').getByText('缺失',{exact:false}).count()>0);
   const reads=backend.calls.filter(c=>c.command==='read_attachment').length;
@@ -85,7 +85,7 @@ export async function runDataManagement(runtime, { command, check, output }) {
   await command('data.filter',{query:'',kind:'all'});
   for (const [width,theme] of [[320,'light'],[390,'dark']]) {
     await close();await page.setViewportSize({width,height:844});await command('settings.update',{settings:{theme}});await open();await command('data.navigate',{view:'all'});
-    const geometry=await page.locator('.data-management').evaluate(node=>{const r=node.getBoundingClientRect();const close=node.querySelector('[aria-label="关闭数据管理"]').getBoundingClientRect();return {width:r.width,scrollWidth:node.scrollWidth,clientWidth:node.clientWidth,close:{left:close.left,right:close.right,top:close.top,bottom:close.bottom},viewport:innerWidth};});metrics.push({width,theme,geometry});
+    const geometry=await page.locator('.preferences').evaluate(node=>{const r=node.getBoundingClientRect();const close=node.querySelector('[aria-label="关闭设置"]').getBoundingClientRect();return {width:r.width,scrollWidth:node.scrollWidth,clientWidth:node.clientWidth,close:{left:close.left,right:close.right,top:close.top,bottom:close.bottom},viewport:innerWidth};});metrics.push({width,theme,geometry});
     check(`${width}px ${theme} data management retains reachable close and no horizontal overflow`,geometry.scrollWidth<=geometry.clientWidth&&geometry.close.left>=0&&geometry.close.right<=width&&geometry.close.top>=0);
     await capture(`data79-${width}-${theme}`);
   }
@@ -101,7 +101,7 @@ export async function runDataManagement(runtime, { command, check, output }) {
   backend.call=async(c,a)=>{const result=await originalCall(c,a);if(c==='get_data_management'&&result.ok){const index=++inventoryCalls;result.value.rootPath=index===1?'/synthetic/old-late':'/synthetic/new-latest';if(index===1)await new Promise(done=>setTimeout(done,220));}return result;};
   const first=api(page,'data.refresh');await page.waitForTimeout(35);const second=api(page,'data.refresh');await Promise.all([first,second]);await idle(page);
   check('Late older refresh cannot overwrite newer snapshot',(await page.locator('.data-root').innerText()).includes('/synthetic/new-latest'));
-  const pending=api(page,'data.refresh');await page.getByRole('button',{name:'关闭数据管理',exact:true}).click();await pending;await idle(page);
+  const pending=api(page,'data.refresh');await page.getByRole('button',{name:'关闭设置',exact:true}).click();await pending;await idle(page);
   check('Closed management page is not revived by late refresh',await page.locator('.data-management').count()===0);
   backend.call=originalCall;
 

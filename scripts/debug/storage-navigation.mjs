@@ -67,5 +67,5 @@ export async function runStorageNavigation(runtime, { command, check }) {
   await command("data.navigate", { view: "image" });
   await command("data.filter", { page: 1 });
   check("Page-only filter retains image detail", (await view()) === "image");
-  await page.getByRole("button", { name: "关闭数据管理", exact: true }).click();
+  await page.getByRole("button", { name: "关闭设置", exact: true }).click();
 }
