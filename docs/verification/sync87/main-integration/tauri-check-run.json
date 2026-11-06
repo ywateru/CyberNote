@@ -1,0 +1,17 @@
+{
+  "name": "tauri-check",
+  "args": [
+    "cargo",
+    "check",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "src-tauri/Cargo.toml"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 69.848,
+  "environmentOverrides": {
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "2"
+  }
+}

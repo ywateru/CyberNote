@@ -1,0 +1,332 @@
+{
+  "exports": 0,
+  "statuses": [],
+  "images": [],
+  "workspace": {
+    "folders": [
+      {
+        "id": "default",
+        "name": "备忘录",
+        "kind": "default",
+        "parentId": null,
+        "sortOrder": 0,
+        "createdAt": 1
+      },
+      {
+        "id": "quick",
+        "name": "快速备忘录",
+        "kind": "quick",
+        "parentId": null,
+        "sortOrder": -1,
+        "createdAt": 1
+      },
+      {
+        "id": "trash",
+        "name": "最近删除",
+        "kind": "trash",
+        "parentId": null,
+        "sortOrder": 9999,
+        "createdAt": 1
+      }
+    ],
+    "notes": [
+      {
+        "id": "note-a",
+        "folderId": "default",
+        "title": "新备忘录",
+        "plainText": "\nFixture A",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "attachment",
+              "attrs": {
+                "id": "7c4c5010-1d0a-436f-955f-8480c870801e",
+                "name": "revoked-export79.png",
+                "kind": "image"
+              }
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture A"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1793958792501,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": true,
+        "paperStyle": "plain",
+        "revision": 2
+      },
+      {
+        "id": "note-b",
+        "folderId": "default",
+        "title": "Fixture B",
+        "plainText": "Fixture B",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture B"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 1
+      }
+    ],
+    "attachments": [
+      {
+        "id": "7c4c5010-1d0a-436f-955f-8480c870801e",
+        "noteId": "note-a",
+        "kind": "image",
+        "displayName": "revoked-export79.png",
+        "mime": "image/png",
+        "size": 68,
+        "relativePath": "synthetic/f626d6f0-9c8a-45db-a7fd-a7aac6b9e152"
+      }
+    ],
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title"
+    },
+    "access": {
+      "sessionId": "debug70-5eee179f-99a4-4c2e-8e39-c05271fa9720",
+      "epoch": 2,
+      "notes": {
+        "note-a": {
+          "epoch": 1,
+          "authorized": false
+        },
+        "note-b": {
+          "epoch": 0,
+          "authorized": true
+        }
+      },
+      "suspended": [],
+      "operationId": null
+    },
+    "metadata": {
+      "sessionId": "debug70-5eee179f-99a4-4c2e-8e39-c05271fa9720",
+      "sequence": 2
+    }
+  },
+  "state": {
+    "workspace": {
+      "folders": [
+        {
+          "id": "default",
+          "name": "备忘录",
+          "sortOrder": 0,
+          "createdAt": 1,
+          "kind": "default",
+          "parentId": null
+        },
+        {
+          "id": "quick",
+          "name": "快速备忘录",
+          "sortOrder": -1,
+          "createdAt": 1,
+          "kind": "quick",
+          "parentId": null
+        },
+        {
+          "id": "trash",
+          "name": "最近删除",
+          "sortOrder": 9999,
+          "createdAt": 1,
+          "kind": "trash",
+          "parentId": null
+        }
+      ],
+      "notes": [
+        {
+          "id": "note-a",
+          "folderId": "default",
+          "title": "新备忘录",
+          "plainText": "\nFixture A",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "attachment",
+                "attrs": {
+                  "id": "7c4c5010-1d0a-436f-955f-8480c870801e",
+                  "name": "revoked-export79.png",
+                  "kind": "image"
+                }
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Fixture A"
+                  }
+                ]
+              }
+            ]
+          },
+          "createdAt": 1,
+          "updatedAt": 1793958792501,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": true,
+          "paperStyle": "plain",
+          "revision": 2
+        },
+        {
+          "id": "note-b",
+          "folderId": "default",
+          "title": "Fixture B",
+          "plainText": "Fixture B",
+          "document": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Fixture B"
+                  }
+                ]
+              }
+            ]
+          },
+          "createdAt": 1,
+          "updatedAt": 1,
+          "pinned": false,
+          "deletedAt": null,
+          "originalFolderId": null,
+          "locked": false,
+          "paperStyle": "plain",
+          "revision": 1
+        }
+      ],
+      "attachments": [
+        {
+          "id": "7c4c5010-1d0a-436f-955f-8480c870801e",
+          "noteId": "note-a",
+          "kind": "image",
+          "displayName": "revoked-export79.png",
+          "mime": "image/png",
+          "size": 68,
+          "relativePath": "synthetic/f626d6f0-9c8a-45db-a7fd-a7aac6b9e152"
+        }
+      ],
+      "settings": {
+        "selectedFolder": "default",
+        "selectedNote": "note-a",
+        "theme": "light",
+        "sort": "title"
+      },
+      "access": {
+        "sessionId": "debug70-5eee179f-99a4-4c2e-8e39-c05271fa9720",
+        "epoch": 2,
+        "notes": {
+          "note-a": {
+            "epoch": 1,
+            "authorized": false
+          },
+          "note-b": {
+            "epoch": 0,
+            "authorized": true
+          }
+        },
+        "suspended": [],
+        "operationId": null
+      },
+      "metadata": {
+        "sessionId": "debug70-5eee179f-99a4-4c2e-8e39-c05271fa9720",
+        "sequence": 2
+      }
+    },
+    "editorJSON": null,
+    "editorSelection": null,
+    "error": "",
+    "notice": "",
+    "selection": {
+      "folderId": "all",
+      "noteId": "note-a",
+      "page": "editor",
+      "query": "",
+      "searching": false,
+      "menu": null,
+      "modal": null,
+      "listed": [
+        "note-a",
+        "note-b"
+      ]
+    },
+    "save": {
+      "pending": 0,
+      "queued": 1,
+      "failed": 0,
+      "saving": 0
+    },
+    "quietWindow": {
+      "frozen": false,
+      "sessionId": "debug70-5eee179f-99a4-4c2e-8e39-c05271fa9720",
+      "protectedNoteIds": [],
+      "blocked": false,
+      "editors": []
+    },
+    "busy": false,
+    "failure": {
+      "serial": 0,
+      "message": ""
+    },
+    "recording": {
+      "active": false,
+      "state": null
+    },
+    "ocr": {
+      "phase": "choose",
+      "text": "",
+      "error": ""
+    },
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title"
+    },
+    "synchronization": null,
+    "preferences": {
+      "open": false,
+      "tab": "settings"
+    },
+    "creation": {
+      "pending": false,
+      "receipt": null,
+      "source": null,
+      "error": "",
+      "focusTarget": null
+    },
+    "folderForm": false
+  }
+}
