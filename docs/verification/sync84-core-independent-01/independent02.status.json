@@ -1,0 +1,23 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "/private/tmp/apple-notes-sync84/docs/verification/sync84-core-independent-01/runner/Cargo.toml",
+    "--no-fail-fast",
+    "--",
+    "--skip",
+    "store::tests::archive_attachments_and_cycle_guards",
+    "--skip",
+    "store::recorded_at_tests::recorded_at_archive_v2_twice_remaps_ids_and_preserves_date_and_bytes",
+    "--skip",
+    "store::recorded_at_tests::recorded_at_invalid_archives_reject_atomically_and_v1_stays_unknown"
+  ],
+  "cwd": "/private/tmp/apple-notes-sync84",
+  "startedUTC": "2026-11-06T07:23:42.527079+00:00",
+  "targetDir": "/private/tmp/apple-notes-sync84-target",
+  "wallSeconds": 8.943897958,
+  "naturalExitCode": 0
+}

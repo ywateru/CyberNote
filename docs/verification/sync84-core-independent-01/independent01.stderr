@@ -1,0 +1,68 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/apple-notes-sync84/docs/verification/sync84-core-independent-01/runner)
+error[E0583]: file not found for module `tests`
+  --> /private/tmp/apple-notes-sync84/src-tauri/src/session.rs:22:1
+   |
+22 | mod tests;
+   | ^^^^^^^^^^
+   |
+   = help: to create the module `tests`, create file "/private/tmp/apple-notes-sync84/src-tauri/src/tests.rs" or "/private/tmp/apple-notes-sync84/src-tauri/src/tests/mod.rs"
+   = note: if there is a `mod tests` elsewhere in the crate already, import it with `use crate::...` instead
+
+error[E0624]: method `attachments` is private
+   --> independent.rs:77:385
+    |
+ 77 | ...import_archive(&archive).unwrap();let media=target.attachments().unwrap();assert_eq!(media.len(),2);assert_ne!(media[0].id,media...
+    |                                                       ^^^^^^^^^^^ private method
+    |
+   ::: /private/tmp/apple-notes-sync84/src-tauri/src/store.rs:242:5
+    |
+242 |     fn attachments(&self) -> Result<Vec<Attachment>> {
+    |     ------------------------------------------------ private method defined here
+
+error[E0624]: method `attachments` is private
+   --> independent.rs:77:1001
+    |
+ 77 | ...p();f.import_archive(&again).unwrap();assert_eq!(f.attachments().unwrap().len(),2);assert!(f.attachments().unwrap().iter().all(|...
+    |                                                       ^^^^^^^^^^^ private method
+    |
+   ::: /private/tmp/apple-notes-sync84/src-tauri/src/store.rs:242:5
+    |
+242 |     fn attachments(&self) -> Result<Vec<Attachment>> {
+    |     ------------------------------------------------ private method defined here
+
+error[E0624]: method `attachments` is private
+   --> independent.rs:77:1043
+    |
+ 77 | ...rt_eq!(f.attachments().unwrap().len(),2);assert!(f.attachments().unwrap().iter().all(|a|a.recorded_at==Some(DATE)));
+    |                                                       ^^^^^^^^^^^ private method
+    |
+   ::: /private/tmp/apple-notes-sync84/src-tauri/src/store.rs:242:5
+    |
+242 |     fn attachments(&self) -> Result<Vec<Attachment>> {
+    |     ------------------------------------------------ private method defined here
+
+error[E0624]: method `attachments` is private
+   --> independent.rs:84:265
+    |
+ 84 | ...;target.import_archive(&p).unwrap();assert!(target.attachments().unwrap().iter().all(|a|a.recorded_at.is_none()));let p=output.p...
+    |                                                       ^^^^^^^^^^^ private method
+    |
+   ::: /private/tmp/apple-notes-sync84/src-tauri/src/store.rs:242:5
+    |
+242 |     fn attachments(&self) -> Result<Vec<Attachment>> {
+    |     ------------------------------------------------ private method defined here
+
+error[E0624]: method `attachment_path` is private
+   --> independent.rs:88:503
+    |
+ 88 | ...ext/plain",b"hello".to_vec()).unwrap();assert!(s.attachment_path("../secrets").is_err());assert!(s.export_archive(&root.path().j...
+    |                                                     ^^^^^^^^^^^^^^^ private method
+    |
+   ::: /private/tmp/apple-notes-sync84/src-tauri/src/store.rs:760:5
+    |
+760 |     fn attachment_path(&self, relative: &str) -> Result<PathBuf> {
+    |     ------------------------------------------------------------ private method defined here
+
+Some errors have detailed explanations: E0583, E0624.
+For more information about an error, try `rustc --explain E0583`.
+error: could not compile `notes-sync84-store-tests` (lib test) due to 6 previous errors
