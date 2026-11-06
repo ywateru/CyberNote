@@ -2,7 +2,7 @@
 
 更新：2026-11-06。供中断恢复；[正式规格](../architecture/sync.md)、[窗口协议](../architecture/sync-coordinator.md)和任务文件仍是行为契约。**完整同步目标 active，正在进行新隔离 Android 的实际运行验收。** 已交付 gallery83，不再重做快速首页。
 
-最新阻断与修复：cycle08真实Android17确认WebView不支持dvh，设置面板1579.5px超出568px视口，实际pair-device-name屏外失败；[原始证据](../verification/sync87-native/native-settings-overflow08/README.md)保留。[viewport88](tasks/app-android-viewport88.md)三条vh回退`6553ef6f`已独审并主线合入`cb3bc1cf`，作者手机设置50/桌面52/手机同步设置56及build通过，独审12CSS布局案例通过；真实新Android尚待准确Android18/Mac28构建与核包，不能把旧包配对记为成功。构建状态`/private/tmp/sync88-build-status.md`，核包状态`/private/tmp/sync88-package-review-status.md`；root新18回执尚待核包后签发。
+最新状态：Android18/Mac28 已准确出包并通过[独立核包](../verification/sync88/native-independent/README.md)。三条 vh 回退修复了实际 API30 WebView 的设置页越界；Android18 实际设置面板现为360×568、y0，名称输入通过。final02/cycle11 的实际配对11步及 Android→桌面完整中文 document/plainText 已独立确认；桌面→Android 新笔记等待超时，完整目标仍 active。[独立证据](../verification/sync87-native/final-actual-independent/RESULT.md)保留原失败。当前须复用成功绑定的同一 DesktopPeer Store 做实时诊断；全局 pending1 不足以证明缺失的桌面笔记已入 inbox，关闭 peer 后的连接错误也不能倒推超时前网络状态。
 
 ## 已接收与剩余门槛
 
@@ -16,24 +16,25 @@
 | Mac27 / Android17 准确包 | 已构建，独立核包 PASS | 两端321项产品输入相同；[Mac](../verification/sync87/native-build/result.json)、[Android](../verification/sync87/android-build/result.json)、[独立核包](../verification/sync87/native-independent/README.md)。Mac ad-hoc、Android debug，不等于原生运行 |
 | 87 原生验收工具 | 最终依赖与断言已独审 | 完整正文修复 `cb202998` / 独审 `97b048ae`；精确依赖 `16ce5779`，作者 smoke `5f0fd4df`，独审 `ad48a884`，主线合入 `5a07d842`。final11单实际 DesktopPeer10项自然0，非双端设备证明 |
 | 87 新隔离 Android 环境 | 既有 ready，实际 APK 验收进行中 | AVD `notes-sync87-isolated`，仅 `emulator-5584`；资源 `/private/tmp/apple-notes-sync87-environment-01`。reviewed lifecycle 保持至少8GiB free；不得降低 guard |
-| 87 最终实际 Android | **stage01已实际通过；附件与同步阶段仍进行中** | 工作树 `/private/tmp/apple-notes-sync87-native`，分支 `codex/sync87-native`，作者 `/root/sync87_native_develop`。最终实际结果还需不同代理独审 |
+| 87 最终实际 Android | **实际配对与完整上行通过；反向未通过** | 工作树 `/private/tmp/apple-notes-sync87-native`，作者 `/root/sync87_native_resume`；[final02独审](../verification/sync87-native/final-actual-independent/RESULT.md)。实际PNG选取/原字节保存及应用重开保持另有证据，媒体/导出/完整冷启仍待完成 |
+| viewport88 / Mac28 / Android18 | 三条 CSS 回退已独审；准确包已独立核对 | 产品 `6553ef6f`，主线 `cb3bc1cf`；[准确新包](../verification/sync88/native-independent/README.md)，真实 Android18 设置几何已修复 |
 
 主线后续工具整合的 notes9 与真实LAN21已恢复通过；最初LAN因root输出路径不符合准入规则而在启动前拒绝，原 failed 汇总保留，见[窄恢复记录](../verification/sync87/shared-tool-integration/README.md)。不把调用错误改写成产品失败，也不覆写成原运行通过。
 
 ## 当前准确产物和准入
 
-- Mac：`artifacts/sync87/备忘录-Mac27.zip`，6,694,032字节，SHA256 `7d86122f52c904ecc6a24f3407913de4c2e352b936b6937056094d4edf04fc7f`。
-- Android：`artifacts/sync87/备忘录-Android17.apk`，236,444,967字节，SHA256 `e54b7da52b95a65d23f308214ff8e2fa6a93079935f617b6603828e435c68173`。
-- 对端 immutable11：`/private/tmp/sync86-transport-build11/notes-current-attachment-transport`，SHA256 `333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800`，产品 `cd334bc88513a89c490788d2e2e27c7967575f4a`，mode0555。旧可变 target 路径不得替代它。
-- 最终 peer receipt `/private/tmp/sync87-peer-final11/receipt.json`，authority `root-sync87-peer-review`；APK receipt `/private/tmp/sync87-apk-final17/receipt.json`，authority `root-sync87-package-review`。均mode0600，已实际准入与hash检查。
-- 产品包冻结后未修改321项产品输入；后续主线合入仅验收工具与证据。
+- Mac：`artifacts/sync88/备忘录-Mac28.zip`，6,694,058字节，SHA256 `8199b8feeccc548a08d5921f4473b50f0156661a021bc29e41f0ead95f76aa2d`；ad-hoc、未公证。
+- Android：`artifacts/sync88/备忘录-Android18.apk`，236,444,967字节，SHA256 `c2c5c2ce528c83cca9bc0a31740af3614ce778a529e51df7c5554dd31718bd5c`；arm64/API26+、debug签名/debuggable。
+- 两端321项构建输入一致，准确源码 `2956f8fb49d8fd5b76cdcaa8de2be82126b8cfcb`；相比27/17仅产品 Preferences.css 三条vh回退。旧包保留，非本轮最终同步验收交付。
+- 对端 immutable11：`/private/tmp/sync86-transport-build11/notes-current-attachment-transport`，SHA256 `333fcd44e19ebbd30ece11b7a595816249a9458a46fb03523855ae8c51215800`，产品 `cd334bc88513a89c490788d2e2e27c7967575f4a`，mode0555。旧可变 target 路径不得替代它；CSS回退不影响Rust输入。
+- peer receipt `/private/tmp/sync87-peer-final11/receipt.json`，authority `root-sync87-peer-review`；Android18 receipt `/private/tmp/sync88-apk-final18/receipt.json`，authority `root-sync87-package-review`。均mode0600，已独立核包及root APK/ELF完整hash确认。
 
 ## 下一步
 
-1. 仅新5584安装准确Android17；核 AVD、emulator PID、app PID、CDP identity。实际 gallery/＋/聚焦/中文正文保存、系统chooser取消/多选/连续PNG/TXT/WAV、图片导出原SHA、应用重开持久化。
-2. 实际手机设置 UI 配对真实 DesktopPeer；双向完整document/plainText及PNG/WAV原字节、前台重连、同data应用重启、同data冷启动恢复。冷启动拆prepare/verify并用已审生命周期，核新bootUUID和同userdata dev/inode/size。
-3. 保留失败，必要时原作者窄修、不同代理复核；不放宽断言。结束owned children/forwards/lifecycle后提交紧凑安全证据。
-4. 不同代理独审实际结果；更新最终使用说明与交付文档。真实运行未完成前不得 complete goal。
+1. 保留 final02 成功绑定的 `/private/tmp/notes-sync87-native-final-02/desktop-peer` Store 和原失败。先窄审578e8af4的同Store重开工具，再用新5584同userdata周期采集实时安全状态、缺失合成笔记的精确入站计数，区分未送达与安全应用阻塞。
+2. 按实际证据定位并修复必要产品边界，独立复核。完成双向完整document/plainText及PNG/WAV原字节/owner/实际解码；不重置、不重新配对、不伪造ACK或强制apply。
+3. 继续真实provider多选/连续PNG/TXT/WAV、图片导出原SHA、前台重连、同data应用重开及冷启动身份/原字节保持。原actual-01含工具XML附件的失败现场完整保留，新formal02仅跟踪新合成笔记，旧笔记不删除。
+4. 结束owned children后冻结安全证据，不同代理独审；更新最终使用说明与交付。真实验收未完成前不得 complete goal。
 
 ## 证据和资源保全
 
@@ -70,4 +71,4 @@ cycle07已自然结束：外层0/618.949821708秒。真实系统Images筛选→T
 
 原Android约13秒未保存录音完全不碰：禁止安装、启动、停止、重启、读取、导出、备份原应用或旧AVD（含5580）。ADB显式5584，无默认serial，无kill-server。只用合成PNG/TXT/WAV，无真实mic；Apple Notes删除实验不做。已有直接执行授权沿用，无重复询权限。
 
-快速画廊/黄色＋及设置双标签已随[Mac26/Android16](../verification/mobile-home8283/README.md)交付；它们不含本轮新增同步。Mac27/Android17准确包已生成，实际原生验收仍待完成。API30模拟器、真实双App DOM、Store/socket、包身份与苹果整窗像素分别记账；硬件、多Android版本、真实WireGuard/EasyTier及原版像素不因这些层通过而自动通过。
+快速画廊/黄色＋及设置双标签已随[Mac26/Android16](../verification/mobile-home8283/README.md)交付；它们不含本轮新增同步。Mac28/Android18准确包已生成并独立核包；实际反向同步及其余原生验收仍待完成。API30模拟器、真实双App DOM、Store/socket、包身份与苹果整窗像素分别记账；硬件、多Android版本、真实WireGuard/EasyTier及原版像素不因这些层通过而自动通过。
