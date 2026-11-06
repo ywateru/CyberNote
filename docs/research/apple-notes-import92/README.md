@@ -64,3 +64,13 @@
 对既有研究目录的只读lstat发现所有5个目录均0700，但16个后续原始捕获文件初始0644，父目录一直阻止其他用户遍历；已仅修正本轮自有临时文件至0600。`private-capture-before-mode-repair.json` 保留原状态，`private-capture-receipt.json` 记录修正后模式与原字节摘要。没有再次读取Notes或访问其原始数据库。附件JS模板本身接受任意argv路径，必须由host封闭构造并验证，不能将其单独当作生产安全边界。
 
 提交71efb83a的名称提前写了模式修正，实际该条修改脚本因stdin编码错误未执行；下一提交才执行了自有捕获文件chmod。原收据与历史均保留，不把未执行的修正记成已完成。
+
+## 已审固定产品脚本的实际运行（runtime01）
+
+产品脚本 `src-tauri/src/apple_notes_source.js` 在b33a5838冻结，SHA-256 `dca43bc464514bb14572ce2181faf0ce11d821d76ed532512cfadee4fab5cba8`。独立source-only审查通过后，执行了限定真实来源验证，聚合证据见 `evidence/fixed-source-runtime01.json`。
+
+- 固定scan自然退出0，12.020秒；1账户、7文件夹、126笔记，全部可读、未截断。scan没有读取正文。global folder加递归去重、container()桥接及账户/文件夹祖先验证实际可用。
+- 仅选择早前已读取且无附件的一条现有笔记，先以独立限量读取取before，再调用固定read，最后取after。固定read自然退出0，0.435秒，byId定位成功，stable=true；HTML/纯文本与before一致，ID/标题/文件夹/修改时间匹配。before和after的全部记录字段、HTML、纯文本、附件数精确相等。
+- host本轮新建0700目录，预分配1000个随机、不存在且互异的导出路径；所有捕获文件0600，stderr均0字节；实际导出文件数0。没有增加附件样本，没有激活、修改或终止源Notes，也没有访问源数据库。
+
+该验证证明固定脚本的真实API及单条读取，不是最终Rust进程host、Store事务或产品导入验收。当前普通附件实际成功导出与复杂对象保真仍未证明；早期-10000结果继续保留。
