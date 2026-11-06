@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "group": "preferences",
+      "pass": false,
+      "checks": [
+        "Footer replaces only its more control with the actual settings gear",
+        "Actual platform settings entry opens one shared dialog on settings tab",
+        "Settings-only visit does not mount or sample local data",
+        "Two icon tabs expose selected controls and labelled panels",
+        "Actual settings controls persist existing fields through the real settings handler",
+        "Settings survive a renderer reload using the persistence fixture",
+        "Close locked notes uses the existing action",
+        "Arrow Right selects and focuses data, sampling only on first visit",
+        "Hidden data panel is inert without remounting its snapshot or shell",
+        "Hidden data.refresh rejects starting a new operation",
+        "Hidden data.navigate rejects starting a new operation",
+        "Hidden data.filter rejects starting a new operation",
+        "Hidden data.exportAttachment rejects starting a new operation",
+        "End returns to data with snapshot, category, query, page and scroll retained",
+        "Home selects and focuses settings",
+        "Arrow Left wraps to data",
+        "Backup cancellation stays in the shared shell without claiming success",
+        "Backup errors remain explicit and keep the current data",
+        "In-flight backup keeps the shared shell interactive on settings",
+        "Completing a hidden backup does not steal settings focus",
+        "Completed backup notice survives switching tabs",
+        "Backup import and settings hydrate preserve the selected tab and shared shell"
+      ],
+      "error": "Hidden authority changes clear data and reject late protected inventory without moving focus",
+      "elapsedMs": 2779
+    }
+  ]
+}

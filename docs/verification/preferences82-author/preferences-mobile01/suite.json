@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "group": "preferences",
+      "pass": false,
+      "checks": [
+        "Actual platform settings entry opens one shared dialog on settings tab",
+        "Settings-only visit does not mount or sample local data",
+        "Two icon tabs expose selected controls and labelled panels",
+        "Actual settings controls persist existing fields through the real settings handler",
+        "Settings survive a renderer reload using the persistence fixture"
+      ],
+      "error": "Close locked notes uses the existing action",
+      "elapsedMs": 1596
+    }
+  ]
+}

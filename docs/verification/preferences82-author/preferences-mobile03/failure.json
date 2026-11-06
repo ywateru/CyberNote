@@ -1,0 +1,90 @@
+{
+  "message": "preferences: locator.evaluate: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('tab', { name: '设置', exact: true })\u001b[22m\n",
+  "stack": "Error: preferences: locator.evaluate: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('tab', { name: '设置', exact: true })\u001b[22m\n\n    at runGroups (file:///private/tmp/apple-notes-preferences82/scripts/debug/scenarios.mjs:158:301)\n    at async file:///private/tmp/apple-notes-preferences82/scripts/debug/cli.mjs:81:256",
+  "metadata": {
+    "platform": "mobile-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "sourceInputsAtStart": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "deb10f826c45c2356919e216f6c88f4b7b6848b2e187110ddb764b44f29a181f",
+    "fileCount": 125,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/cli.mjs",
+      " M scripts/debug/data-management.mjs",
+      " M scripts/debug/mac-feedback.mjs",
+      " M scripts/debug/platform.mjs",
+      " M scripts/debug/runtime.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M scripts/debug/storage-navigation.mjs",
+      " M scripts/debug/storage-overview.mjs",
+      " M src/App.tsx",
+      " M src/DataManagement.css",
+      " M src/DataManagement.tsx",
+      " M src/debug/catalog.ts",
+      " M src/debug/protocol.ts",
+      "?? scripts/debug/preferences.mjs",
+      "?? src/Preferences.css",
+      "?? src/Preferences.tsx"
+    ]
+  },
+  "sourceInputs": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "deb10f826c45c2356919e216f6c88f4b7b6848b2e187110ddb764b44f29a181f",
+    "fileCount": 125,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/cli.mjs",
+      " M scripts/debug/data-management.mjs",
+      " M scripts/debug/mac-feedback.mjs",
+      " M scripts/debug/platform.mjs",
+      " M scripts/debug/runtime.mjs",
+      " M scripts/debug/scenarios.mjs",
+      " M scripts/debug/storage-navigation.mjs",
+      " M scripts/debug/storage-overview.mjs",
+      " M src/App.tsx",
+      " M src/DataManagement.css",
+      " M src/DataManagement.tsx",
+      " M src/debug/catalog.ts",
+      " M src/debug/protocol.ts",
+      "?? scripts/debug/preferences.mjs",
+      "?? src/Preferences.css",
+      "?? src/Preferences.tsx"
+    ]
+  },
+  "workspaceCounts": {
+    "notes": 2,
+    "folders": 3,
+    "attachments": 0
+  },
+  "elapsedMs": 20503,
+  "pageErrors": []
+}

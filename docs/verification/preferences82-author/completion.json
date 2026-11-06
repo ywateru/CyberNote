@@ -1,0 +1,13 @@
+{
+  "sourceCommit": "8fd3e35f",
+  "sourceSha256": "7a7025e49d58a4846ee6a4d984833b88c4723c9043b1859d9611fba3e4ce6ac7",
+  "sourceFileCount": 125,
+  "checks": [
+    {"command":"pnpm exec tsc -b --pretty false","log":"typecheck04.log","exitCode":0,"naturalExit":true},
+    {"command":"node scripts/debug/cli.mjs group preferences --out docs/verification/preferences82-author/preferences-desktop07","log":"preferences-desktop07.log","exitCode":0,"naturalExit":true,"checks":52,"pageErrors":[]},
+    {"command":"node scripts/debug/cli.mjs group preferences --mobile --out docs/verification/preferences82-author/preferences-mobile07","log":"preferences-mobile07.log","exitCode":0,"naturalExit":true,"checks":50,"pageErrors":[]}
+  ],
+  "scope":"Browser JS persistence and explicit synthetic device/IPC fixture. No native OS, TCC, Rust Store, real microphone or installed app claim.",
+  "productionBuildPerformedByAuthor":false,
+  "sourceInputsChangedDuringFinalRuns":false
+}
