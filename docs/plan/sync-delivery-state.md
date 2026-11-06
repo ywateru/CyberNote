@@ -56,6 +56,14 @@
 
 cycle06已自然退出0/621.144281459秒。实际Images筛选有效、PNG行普通tap/hold仍未返回选择；经独立准入的正常TAB已使唯一PNG行获得真实系统焦点（自然0/3.455303708秒），随后的ENTER因周期已结束在guard处拒绝，未发输入。准确原始结果见[cycle06进展](../verification/sync87-native/native-picker-progress06/README.md)。最终picker-key工具`406c76f7`经独审`a99760d4`准入，含原始混合用户反例、真实foreground完整hash和严格字段计数复验；该审查只证明工具，不证明实际选取。继续同data下一周期TAB/ENTER，并独立推进真实设置配对与完整双向正文、桌面媒体收敛，原provider保存/导出门槛不删除。
 
+### Cycle07与本轮恢复
+
+cycle07已自然结束：外层0/618.949821708秒。真实系统Images筛选→TAB→ENTER已返回App，单PNG保存、原始read_attachment与实际HTML图片源70字节逐字节相同、SHA256 `5099baff37e3b6c8fb58023ec7c22d211544a060e6dde4276e4e84b4beffdac8`，实际解码通过；选择阶段自然0/22.477824209秒。独立只读回算已完成，正式完整原生结果仍待最终冻结归档。
+
+两次真实connectDesktop配对未通过；attempt02的Node与修复stdin的外层wrapper均自然2，原第一次buffered daemon Fatal与原输出保留。尚未派发text/media，不能据PNG保存推断手机同步通过。`a4ac8b4d`的精确可见owner、同一已hash媒体读复用及真实目标聚焦经独审`71c6bbe8`准入，已随主线`1be8cb97`合入；原隐藏DOM与跨读反例保留。
+
+2026-11-06恢复时实际ps无live qemu/lifecycle/native runner，不凭旧session或state文件重启。作者树clean `7038a648`：新增`90b3ff15`/`7038a648`固定pair步骤和脱敏焦点/viewport诊断待窄审，随后同userdata cycle08定位准确失败步骤，继续真实配对/双向正文/媒体/重开与冷启。原旧agent模型不可用，现由`/root/sync87_native_resume`唯一操作5584，`/root/read_private_tmp_sync87_review_resume_task_md`独立窄审；任务和共享状态位于`/private/tmp/sync87-{native,review}-resume-{task,status}.md`，用于绕过恢复后agent消息载荷无法解读的问题。原生最终独审尚待分派，不重跑已通过的全产品套件。
+
 ## 用户原现场和范围
 
 原Android约13秒未保存录音完全不碰：禁止安装、启动、停止、重启、读取、导出、备份原应用或旧AVD（含5580）。ADB显式5584，无默认serial，无kill-server。只用合成PNG/TXT/WAV，无真实mic；Apple Notes删除实验不做。已有直接执行授权沿用，无重复询权限。
