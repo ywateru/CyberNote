@@ -92,6 +92,38 @@ fn safe_link(href: &str) -> bool {
     !href.chars().any(char::is_control)
         && url::Url::parse(href).is_ok_and(|u| matches!(u.scheme(), "http" | "https" | "mailto"))
 }
+// Only HTML's ASCII formatting whitespace can be a block separator. NBSP and
+// other Unicode spaces remain content, as do whitespace-only explicit elements.
+fn formatting_text(e: &Element) -> bool {
+    !e.text.is_empty()
+        && e.text
+            .bytes()
+            .all(|b| matches!(b, b' ' | b'\t' | b'\n' | b'\r' | 0x0c))
+}
+fn block_boundary(e: &Element) -> bool {
+    matches!(
+        e.tag.as_str(),
+        "html"
+            | "body"
+            | "p"
+            | "div"
+            | "h1"
+            | "h2"
+            | "h3"
+            | "ul"
+            | "ol"
+            | "table"
+            | "tr"
+            | "td"
+            | "th"
+            | "tbody"
+            | "thead"
+            | "tfoot"
+            | "blockquote"
+            | "pre"
+            | "hr"
+    )
+}
 struct Convert<'a> {
     media: &'a BTreeMap<String, Attachment>,
     used: HashSet<String>,
@@ -119,6 +151,37 @@ impl Convert<'_> {
                 None
             }
         }
+    }
+    fn children(&mut self, e: &Element, marks: &[Value]) -> Vec<Value> {
+        // Track adjacent structural siblings in linear time. Formatting text is
+        // skipped only at a block edge or between blocks, never in an inline run
+        // or inside pre. An empty div/p still goes through wrap_blocks itself.
+        let mut following = vec![None; e.children.len()];
+        let mut next = None;
+        for (i, child) in e.children.iter().enumerate().rev() {
+            following[i] = next;
+            if !formatting_text(child) {
+                next = Some(block_boundary(child));
+            }
+        }
+        let mut previous = None;
+        let mut out = Vec::new();
+        for (i, child) in e.children.iter().enumerate() {
+            let whitespace = formatting_text(child);
+            let right = following[i];
+            let gap = whitespace
+                && e.tag != "pre"
+                && previous.unwrap_or(true)
+                && right.unwrap_or(true)
+                && (previous.is_some() || right.is_some());
+            if !gap {
+                out.extend(self.nodes(child, marks));
+            }
+            if !whitespace {
+                previous = Some(block_boundary(child));
+            }
+        }
+        out
     }
     fn nodes(&mut self, e: &Element, marks: &[Value]) -> Vec<Value> {
         if !e.text.is_empty() {
@@ -187,10 +250,7 @@ impl Convert<'_> {
         let children = if matches!(e.tag.as_str(), "ul" | "ol") {
             Vec::new()
         } else {
-            e.children
-                .iter()
-                .flat_map(|c| self.nodes(c, &next))
-                .collect::<Vec<_>>()
+            self.children(e, &next)
         };
         match e.tag.as_str() {
             "br" => vec![json!({"type":"hardBreak"})],

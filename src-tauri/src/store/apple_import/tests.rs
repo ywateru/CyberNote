@@ -280,3 +280,66 @@ fn independent_svg_counterexample_reports_loss_and_underline_uses_real_schema() 
     styled.html = "<p style='font-size:72px;font-family:fantasy'>样式</p>".into();
     assert!(!prepare_one(styled).unwrap().warnings.is_empty());
 }
+
+#[test]
+fn formatting_whitespace_between_source_blocks_does_not_create_paragraphs() {
+    let html = "<div><h1>Synthetic title</h1></div>\n<div><br></div>\n<div>Synthetic body</div>\n<div><br></div>\n<div><br></div>\n<div><br></div>\n";
+    let (document, warnings) = html::convert(html, &BTreeMap::new(), &[]).unwrap();
+    assert!(warnings.is_empty());
+    assert_eq!(
+        document["content"],
+        json!([
+            {"type":"heading","attrs":{"level":1},"content":[{"type":"text","text":"Synthetic title"}]},
+            {"type":"paragraph","content":[{"type":"hardBreak"}]},
+            {"type":"paragraph","content":[{"type":"text","text":"Synthetic body"}]},
+            {"type":"paragraph","content":[{"type":"hardBreak"}]},
+            {"type":"paragraph","content":[{"type":"hardBreak"}]},
+            {"type":"paragraph","content":[{"type":"hardBreak"}]}
+        ])
+    );
+}
+
+#[test]
+fn formatting_whitespace_fix_preserves_explicit_empty_inline_pre_and_nbsp() {
+    let (document, _) = html::convert("<div></div>\n<div><br></div>\n<p>甲 <b>乙</b> 丙</p>\n<pre> 甲  乙 \n丙\t丁</pre>\n<div>&nbsp;</div>\n", &BTreeMap::new(), &[]).unwrap();
+    assert_eq!(
+        document["content"],
+        json!([
+            {"type":"paragraph","content":[]},
+            {"type":"paragraph","content":[{"type":"hardBreak"}]},
+            {"type":"paragraph","content":[{"type":"text","text":"甲 "},{"type":"text","text":"乙","marks":[{"type":"bold"}]},{"type":"text","text":" 丙"}]},
+            {"type":"paragraph","content":[{"type":"text","text":" 甲  乙 \n丙\t丁"}]},
+            {"type":"paragraph","content":[{"type":"text","text":"\u{a0}"}]}
+        ])
+    );
+}
+
+#[test]
+fn formatting_whitespace_copy_keeps_original_raw_plain_and_dates() {
+    let mut input = source();
+    input.attachments.clear();
+    input.html =
+        "<div><h1>Synthetic title</h1></div>\n<div><br></div>\n<div>Synthetic body</div>\n".into();
+    input.plain_text = "Exact original plain\n\nSynthetic body".into();
+    let original_html = input.html.clone();
+    let original_plain = input.plain_text.clone();
+    let temporary = tempfile::tempdir().unwrap();
+    let mut store = Store::open(temporary.path()).unwrap();
+    let result = store
+        .append_apple_notes(prepare(vec![input]).unwrap())
+        .unwrap();
+    let note = store.note(result[0].note_id.as_ref().unwrap()).unwrap();
+    assert_eq!(note.document["content"].as_array().unwrap().len(), 4); // three blocks and managed raw record
+    assert_eq!(note.plain_text, original_plain);
+    assert_eq!((note.created_at, note.updated_at), (1000, 2000));
+    let raw = store
+        .attachments()
+        .unwrap()
+        .into_iter()
+        .find(|a| a.mime == RAW_MIME)
+        .unwrap();
+    let record: RawRecord =
+        serde_json::from_slice(&store.managed_attachment_bytes(&raw).unwrap()).unwrap();
+    assert_eq!(record.snapshot["html"], original_html);
+    assert!(record.valid());
+}
