@@ -31,3 +31,13 @@ mod independent_review;
 ```
 
 Exact cargo command/target/duration/exit are recorded in the result JSON. Target84 was used only after author explicitly released it, and released after this run. No broad suite rerun. Author test evidence is distinct and not used as substitute for these results.
+
+## Narrow repair recheck
+
+Product repair `9f1eb115793c02144ea2a6e52eed08c4c4061554`: maps `u` to schema underline; unsupported semantic tags/objects and CSS now emit fixed warnings. Static delta leaves Store/file transaction code unchanged.
+
+`repair03`: **3 passed, natural cargo exit0 /12.677661542s**. Original SVG and underline assertions in unchanged `review-tests.rs` pass. One added `review-css-tests.rs` case covers font-size/font-family/text-align and checks actual managed raw JSON preparation retains exact original HTML. No repetition of unchanged passed transaction/crash/path tests.
+
+First attempt to write the repair harness failed before file creation/cargo because cherry-pick reapplied the sparse exclude to evidence; materialized only this evidence directory, then ran `repair03`. No product/runtime assertion was bypassed. Test-only includes restored after run. Target84 released. Original `checks01` and `checks02` failures remain intact.
+
+**Phase1 admission: PASS after narrow repair.** This covers source-independent Store/converter and existing journal integration only. Fixed source worker, host ownership/regular-file validation, Session gates, UI, actual Apple Notes and final package acceptance remain separate pending stages.
