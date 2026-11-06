@@ -1,0 +1,76 @@
+{
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "f516189f46a71e8a1bbeb76722ca1a278e2b97953ac855068804c9abffc1c209",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "f516189f46a71e8a1bbeb76722ca1a278e2b97953ac855068804c9abffc1c209",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "sourceChanged": false,
+  "elapsedMs": 6662,
+  "naturalExit": 1,
+  "scope": "Real App/DOM/Undo/metadata/quit listeners; explicit JS IPC fixture, no Rust/device proof",
+  "checks": [
+    {
+      "case": "Equal-body metadata while frozen keeps owner/DOM/focus and does not cancel",
+      "pass": false
+    },
+    {
+      "case": "Actual Undo remains after equal-body metadata plus quiet abort",
+      "pass": true
+    },
+    {
+      "case": "Tag filter click waits for terminal receipt",
+      "pass": true
+    },
+    {
+      "case": "External body projection fallback cancels the obsolete owner lease",
+      "pass": true
+    },
+    {
+      "case": "Quit stays outside admission until terminal cancellation receipt",
+      "pass": true
+    },
+    {
+      "case": "Admitted quit state blocks a new quiet probe",
+      "pass": true
+    }
+  ],
+  "observations": [
+    {
+      "case": "Committed remote body changes search projection owner",
+      "actualNote": null,
+      "stillFrozen": true,
+      "cancelSent": true,
+      "interpretation": "Existing remote-body hydrate is allowed; actual owner/scope change sends cancel. Equal-body metadata above does not."
+    }
+  ],
+  "pageErrors": []
+}
