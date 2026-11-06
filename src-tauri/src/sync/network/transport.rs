@@ -605,7 +605,7 @@ mod tests {
     fn partial_staging_budget_cannot_be_bypassed_with_new_hashes() {
         let dir = tempfile::tempdir().unwrap();
         let (s, b) = shared(dir.path(), &uuid::Uuid::new_v4().to_string());
-        for i in 0..4 {
+        for i in 0..3 {
             let reference = BlobRef {
                 sha256: format!("{i:064x}"),
                 size: 10,
@@ -614,19 +614,19 @@ mod tests {
                 .write(b.as_ref(), &reference, 0, b"x", false)
                 .unwrap();
         }
-        let fifth = BlobRef {
+        let fourth = BlobRef {
             sha256: "f".repeat(64),
             size: 10,
         };
         assert_eq!(
             s.staging
-                .write(b.as_ref(), &fifth, 0, b"x", false)
+                .write(b.as_ref(), &fourth, 0, b"x", false)
                 .unwrap_err(),
             SyncError::Limit
         );
         assert_eq!(
             std::fs::read_dir(dir.path().join("stage")).unwrap().count(),
-            4
+            3
         );
     }
     #[test]

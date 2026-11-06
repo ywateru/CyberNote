@@ -52,6 +52,12 @@ impl Store {
         safe_directory(&self.root.join(".sync"))?;
         safe_directory(&self.root.join(".sync/blobs"))?;
         safe_directory(&self.root.join(".sync/staging"))?;
+        // Stable infrastructure belongs to opt-in/recovery, so a failed blob
+        // validation cannot introduce an otherwise absent publication lock.
+        BlobStorage {
+            root: self.root.clone(),
+        }
+        .publication_file()?;
         Ok(())
     }
     pub(in crate::store) fn sync_recover_staging(&self) -> Result<()> {
@@ -119,8 +125,17 @@ pub(crate) struct BlobStorage {
     root: PathBuf,
 }
 impl BlobStorage {
-    fn publication_guard(&self) -> Result<File> {
+    fn publication_file(&self) -> Result<File> {
         self.sync_directories()?;
+        let path = self.root.join(".sync/blob-publish.lock");
+        match fs::symlink_metadata(&path) {
+            Ok(meta) if !meta.is_file() || meta.file_type().is_symlink() || meta.len() != 0 => {
+                return Err(invalid("同步发布锁不是安全的本地文件"));
+            }
+            Ok(_) => (),
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => (),
+            Err(e) => return Err(e.into()),
+        }
         let mut options = OpenOptions::new();
         options.create(true).truncate(false).read(true).write(true);
         #[cfg(unix)]
@@ -128,7 +143,23 @@ impl BlobStorage {
             use std::os::unix::fs::OpenOptionsExt;
             options.mode(0o600);
         }
-        let file = options.open(self.root.join(".sync/blob-publish.lock"))?;
+        let file = options.open(&path)?;
+        let current = fs::symlink_metadata(path)?;
+        if !current.is_file() || current.file_type().is_symlink() || current.len() != 0 {
+            return Err(invalid("同步发布锁不是安全的本地文件"));
+        }
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::MetadataExt;
+            let opened = file.metadata()?;
+            if opened.dev() != current.dev() || opened.ino() != current.ino() {
+                return Err(invalid("同步发布锁身份已变化"));
+            }
+        }
+        Ok(file)
+    }
+    fn publication_guard(&self) -> Result<File> {
+        let file = self.publication_file()?;
         fs2::FileExt::lock_exclusive(&file)?;
         Ok(file)
     }

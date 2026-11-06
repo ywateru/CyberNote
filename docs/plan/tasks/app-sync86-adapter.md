@@ -53,3 +53,7 @@ run/setup创建共享Session和惰性Sync runtime state；status不启用Store�
 已有业务明确禁止含附件note加锁，也禁止locked note添加附件；locked wire的空document与附件引用一致性同样排除locked+media。本实现不扩展此schema、不引入alias或放宽验证。真实进程分别验证plain图片/音频并发keep-all与locked文本并发keep-all；locked+media只验证现有拒绝边界。
 
 本作者验证使用独立临时SQLite与生产socket/Noise/Store/Session，没有真实用户库、真实麦克风或设备操作。原Android未保存录音现场未触碰。独立双App DOM、UI录音/picker生命周期、87路由与新Android包/实际运行仍是整体交付门禁，单Rust adapter回归不能代替它们。完整命令、自然退出与故意SIGKILL、原始失败和修正后结果记录在`docs/verification/sync86-adapter-author/`。
+
+双App DOM所需stdin命令另接`register_recording_local`、`recording_local_validate/started/revision/release`，参数与生产Tauri命令一致；builder按唯一源码边界提取`recording_window.rs`的纯registry代码原样编译，若边界变化立即构建失败，不维护另一份录音算法。`workspace_action`对lock/delete等真实barrier使用独立线程发送`notes-access prepare`，等待实际窗口`acknowledge_access`，再由同一Session的`finish`产生终态与metadata；不自动ACK。实际OS窗口关闭/退出仍不在该stdin证明范围内。
+
+冻结`10cd8326`后的完整回归保留了两个失败：旧网络quota fixture按4文件构造，与主线3文件正式规格不符；invalid blob测试发现首次发布锁文件在失败输入后出现。后续最小修正将fixture改为正式3文件，并在启用/已启用恢复时初始化稳定发布锁，使损坏blob失败保持原文件快照；status仍不启用Store或创建identity。追加stdin wrappers、回归修正与它们的最终验证使用后续冻结提交，不能把`10cd8326`已有通过结果追认为追加范围已验。

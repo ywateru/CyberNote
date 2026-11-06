@@ -1,4 +1,5 @@
-//! Explicit synthetic-workspace transport. OS lifecycle remains a browser Fake.
+//! Explicit synthetic-workspace transport. Store, quiet/access barriers and
+//! local recording registry are production code; OS windows/media remain external.
 #[path = "current/session.rs"]
 mod session;
 #[path = "current/store.rs"]
@@ -22,7 +23,7 @@ fn field<'a>(args: &'a Value, key: &str) -> Result<&'a str> {
         .as_str()
         .ok_or_else(|| error("invalid", "Missing string argument"))
 }
-fn command(session: &mut Session, row: &Value) -> Result<Value> {
+fn command(session: &mut Session, row: &Value, host: &StdinWindows) -> Result<Value> {
     let args = &row["args"];
     let window = field(row, "window")?;
     let token =
@@ -45,13 +46,23 @@ fn command(session: &mut Session, row: &Value) -> Result<Value> {
             } else if Session::requires_barrier(&action) {
                 Err(error("transport_unsupported", "Access barriers require real window participants; not provided by this attachment runner"))
             } else {
-                session.ordinary(action, &token()?).map(|(value, _)| value)
+                let result = session.ordinary(action, &token()?);
+                if let Ok((_, Some(event))) = &result {
+                    host.emit("notes-access", event)?;
+                }
+                result.map(|(value, _)| value)
             }
         }
-        "acknowledge_access" => Err(error(
-            "transport_unsupported",
-            "No simulated ACK/import/export barrier in attachment transport",
-        )),
+        "acknowledge_access" => {
+            session.acknowledge(
+                field(args, "operationId")?,
+                window,
+                args["success"]
+                    .as_bool()
+                    .ok_or_else(|| error("invalid", "Missing access ACK success"))?,
+            )?;
+            Ok(Value::Null)
+        }
         "debug_access_begin" => session.begin(
             args["action"].clone(),
             std::collections::HashSet::from([window.to_string()]),
@@ -192,6 +203,118 @@ impl WindowHost for StdinWindows {
         Ok(())
     }
 }
+mod local_recordings {
+    include!("current/recording_local_core.rs");
+    #[derive(Default)]
+    pub(super) struct Transport(Registry);
+    impl Transport {
+        pub(super) fn command(&mut self, row: &Value) -> crate::store::Result<Value> {
+            let args = &row["args"];
+            let window = super::field(row, "window")?;
+            let session = super::field(args, "sessionId")?;
+            let operation = super::field(args, "operationId")?;
+            let failed = |message: String| super::error("recording_identity", &message);
+            if row["command"] == "register_recording_local" {
+                return serde_json::to_value(
+                    register_local(&mut self.0, session.into(), operation.into(), window)
+                        .map_err(failed)?,
+                )
+                .map_err(Into::into);
+            }
+            let incarnation = super::field(args, "incarnation")?;
+            match super::field(row, "command")? {
+                "recording_local_validate" => {
+                    local_entry(&mut self.0, session, operation, incarnation, window)
+                        .map_err(failed)?;
+                }
+                "recording_local_started" => {
+                    let entry = local_entry(&mut self.0, session, operation, incarnation, window)
+                        .map_err(failed)?;
+                    if entry.started || entry.final_ack {
+                        return Err(failed("录音会话已经开始".into()));
+                    }
+                    entry.started = true;
+                }
+                "recording_local_revision" => {
+                    acknowledge_local(
+                        &mut self.0,
+                        session,
+                        operation,
+                        incarnation,
+                        window,
+                        args["revision"]
+                            .as_u64()
+                            .ok_or_else(|| super::error("invalid", "Missing recording revision"))?,
+                        args["finalIntent"].as_bool().ok_or_else(|| {
+                            super::error("invalid", "Missing recording finalIntent")
+                        })?,
+                    )
+                    .map_err(failed)?;
+                }
+                "recording_local_release" => {
+                    release_local(
+                        &mut self.0,
+                        session,
+                        operation,
+                        incarnation,
+                        window,
+                        args["saved"]
+                            .as_bool()
+                            .ok_or_else(|| super::error("invalid", "Missing recording saved"))?,
+                        args["revision"]
+                            .as_u64()
+                            .ok_or_else(|| super::error("invalid", "Missing recording revision"))?,
+                    )
+                    .map_err(failed)?;
+                }
+                _ => {
+                    return Err(super::error(
+                        "transport_unsupported",
+                        "Unsupported recording command",
+                    ))
+                }
+            }
+            Ok(Value::Null)
+        }
+    }
+}
+fn workspace_barrier(
+    shared: &sync::adapter::SharedSession,
+    host: &StdinWindows,
+    row: &Value,
+) -> Result<Value> {
+    let expected = serde_json::from_value(row["args"]["expected"].clone())?;
+    let mut session = shared
+        .0
+        .lock()
+        .map_err(|_| error("internal", "Session unavailable"))?;
+    let live = host.participants();
+    if !live.contains(field(row, "window")?) {
+        return Err(error(
+            "access_changed",
+            "Access caller is not a live document participant",
+        ));
+    }
+    let event = session.begin(row["args"]["action"].clone(), live, &expected)?;
+    let operation = field(&event, "operationId")?.to_string();
+    if host.emit("notes-access", &event).is_err() {
+        if let Some(p) = session.pending.as_mut() {
+            p.failure = Some("无法通知所有窗口，锁定未执行".into());
+        }
+    }
+    let (mut session, wait) = shared
+        .1
+        .wait_timeout_while(session, std::time::Duration::from_secs(10), |s| !s.ready())
+        .map_err(|_| error("internal", "Session unavailable"))?;
+    let (result, event) = session.finish(&operation, &host.participants(), wait.timed_out())?;
+    let metadata = session.take_metadata_event();
+    drop(session);
+    host.emit("notes-access", &event)?;
+    if let Some(event) = metadata {
+        host.emit("notes-metadata", &event)?;
+    }
+    result
+}
 fn respond(output: &Mutex<()>, host: &StdinWindows, row: &Value, result: Result<Value>) {
     let _output = output.lock().unwrap();
     let events = std::mem::take(&mut *host.events.lock().unwrap());
@@ -220,6 +343,7 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
     let output = Arc::new(Mutex::new(()));
     let inflight = Arc::new(AtomicUsize::new(0));
     let mut workers = vec![];
+    let mut local_recordings = local_recordings::Transport::default();
     for line in io::stdin().lock().lines() {
         let line = line?;
         if line.len() > 20 * 1024 * 1024 {
@@ -227,7 +351,10 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         }
         let row: Value = serde_json::from_str(&line)?;
         workers.retain(|worker: &std::thread::JoinHandle<()>| !worker.is_finished());
-        if row["command"] == "sync_command" {
+        if row["command"] == "sync_command"
+            || (row["command"] == "workspace_action"
+                && Session::requires_barrier(&row["args"]["action"]))
+        {
             if inflight.fetch_add(1, Ordering::AcqRel) >= 4 {
                 inflight.fetch_sub(1, Ordering::AcqRel);
                 respond(
@@ -242,8 +369,12 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
             let host = host.clone();
             let output = output.clone();
             let inflight = inflight.clone();
+            let shared = shared.clone();
             workers.push(std::thread::spawn(move || {
                 let result = (|| {
+                    if row["command"] == "workspace_action" {
+                        return workspace_barrier(&shared, &host, &row);
+                    }
                     let command = serde_json::from_value(row["args"]["command"].clone())?;
                     let expected = serde_json::from_value(row["args"]["expected"].clone())?;
                     runtime.command(command, field(&row, "window")?, &expected)
@@ -256,6 +387,20 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
         let result = (|| -> Result<Value> {
             match field(&row, "command")? {
                 "poll_events" => Ok(Value::Null),
+                "register_recording_local"
+                | "recording_local_validate"
+                | "recording_local_started"
+                | "recording_local_revision"
+                | "recording_local_release" => {
+                    let _session = shared.0.lock().unwrap();
+                    if !host.participants().contains(field(&row, "window")?) {
+                        return Err(error(
+                            "recording_identity",
+                            "Recording owner is not a live document participant",
+                        ));
+                    }
+                    local_recordings.command(&row)
+                }
                 "set_document_participants" => {
                     let windows: Vec<String> =
                         serde_json::from_value(row["args"]["windows"].clone())?;
@@ -293,7 +438,10 @@ fn main() -> std::result::Result<(), Box<dyn std::error::Error>> {
                 }
                 _ => {
                     let mut s = shared.0.lock().unwrap();
-                    let result = command(&mut s, &row);
+                    let result = command(&mut s, &row, &host);
+                    if row["command"] == "acknowledge_access" {
+                        shared.1.notify_all();
+                    }
                     if let Some(event) = s.take_metadata_event() {
                         host.emit("notes-metadata", &event)?;
                     }

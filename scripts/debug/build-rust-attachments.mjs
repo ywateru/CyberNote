@@ -19,7 +19,7 @@ if (!process.argv[2] || !target)
     "Usage: CARGO_TARGET_DIR=exclusively-assigned-cache node scripts/debug/build-rust-attachments.mjs FRESH_OUTPUT",
   );
 const digest = (bytes) => createHash("sha256").update(bytes).digest("hex");
-const files = ["src-tauri/src/store.rs", "src-tauri/src/session.rs", "src-tauri/src/sync.rs"];
+const files = ["src-tauri/src/store.rs", "src-tauri/src/session.rs", "src-tauri/src/sync.rs", "src-tauri/src/recording_window.rs"];
 for (const dir of ["store", "session", "sync"])
   for (const ent of await readdir(resolve(root, "src-tauri/src", dir), {
     recursive: true,
@@ -45,6 +45,20 @@ for (const name of ["store.rs", "store", "session.rs", "session", "sync.rs", "sy
     resolve(harness, "current", name),
     { recursive: true },
   );
+// Compile the original production local registry functions verbatim. Only
+// AppHandle/State wrappers are supplied by stdin; no recording algorithm fake.
+const recordingSource = await readFile(resolve(root, "src-tauri/src/recording_window.rs"), "utf8");
+const sliceOnce = (text, from, until) => {
+  if (text.split(from).length !== 2 || text.split(until).length !== 2)
+    throw Error("Production recording source boundary changed");
+  const start = text.indexOf(from), end = text.indexOf(until);
+  if (end <= start) throw Error("Invalid production recording source boundary");
+  return text.slice(start, end);
+};
+const core = sliceOnce(recordingSource, "#[derive(Clone, Serialize)]\n#[serde(rename_all = \"camelCase\")]\npub struct Identity", "#[tauri::command]\npub fn register_recording_local");
+const reveal = sliceOnce(core, "pub fn reveal_owner(", "fn document_window(");
+await writeFile(resolve(harness, "current/recording_local_core.rs"),
+  'use serde::Serialize;\nuse serde_json::{json,Value};\nuse std::{collections::{HashMap,HashSet},sync::Mutex};\n' + core.replace(reveal, ""));
 const metadata = {
   sourceHead: execFileSync("git", ["rev-parse", "HEAD"], {
     encoding: "utf8",
