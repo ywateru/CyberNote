@@ -1,6 +1,6 @@
 # APP-SYNC86 两个实际App页面与生产Rust同步整合
 
-状态 pending，depends-on 86 frontend修复独审合入、86 adapter冻结并独审合入。根负责准确源组合与完整整合，脚本实现和独立复核由不同代理。
+状态 in-progress（测试基础设施先行），前端已独审合入85b9e0eb；真实最终验收depends-on 86 adapter冻结并独审合入。允许先按固定stdin协议实现严格异步事件泵，验证时明确标识使用的后端冻结源码；未合入后端不得宣称主线生产集成通过。根负责准确源组合与完整整合，脚本实现和独立复核由不同代理。
 
 objective：两个真实React/Tiptap App DOM分别连接独立当前源码Rust transport、独立SQLite/附件目录，使用真实84 Store＋85 Noise socket＋86 Runtime/Session quiet gate运行用户路径。不得用FakeBackend/JS merge或注入伪metadata替代该层。仅设备、合成媒体、clipboard/dialog等明确本机测试边界可模拟。
 

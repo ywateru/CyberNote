@@ -9,7 +9,7 @@
 |86同步设置UI|已合入＋主线整合pass|9ed9a078，独审4c85204b，主线合并d8ff3336；48＋48＋52与build/production通过|旧UI工作树/分支已正常移除，全部证据在主线|
 |86前端quiet协调|独审复审pass，合入85b9e0eb，主线34+41+notes9/build/production自然0|修复0c84e589；独审092ea058关闭两P2，原blocked/反例保留|合并后的前端工作树与分支正常清理，证据在主线|
 |86Rust adapter/Session/真实transport|in-progress|基线组合主线3754d60b之后；文件与前端不重叠|/private/tmp/apple-notes-sync86-adapter，codex/sync86-adapter|
-|87独立环境准备|in-progress|新AVD/HOME/data/serial工具；尚未安装同步APK|/private/tmp/apple-notes-sync87-environment，codex/sync87-environment|
+|87独立环境准备|独审285970a1 pass，已合入主线，ENVIRONMENT-READY ONLY|工具62ca1cf0；17 guards；第三次18.751秒ready；尚未安装同步APK|新资源/private/tmp/apple-notes-sync87-environment-01保留、emulator-5584 stopped，工作树清理|
 |87真实双端/路由/新Android/准确包|pending|两个独立生产Rust进程＋App DOM＋全新隔离Android，不用fixture代替|未创建|
 
 84原完整lean111项exit101及drawing失败均保留。归档fixture/编译时路径和locked raw验证分别修复后，作者112项109pass/3ignored，独审121项118pass/3ignored，主线组合复验121项118pass/3ignored；不得用当前pass改写旧结果。组合依赖与两模块主线完整结果见[证据](../verification/sync8485-main-integration/README.md)。
@@ -29,3 +29,5 @@ Android快速首页83和统一设置82已交付，包见[mobile-home8283](../ver
 86实际两App DOM的生产连接与媒体/IME/取消验收见[整合任务](tasks/app-sync86-dom-integration.md)，待前后端源码独审合入后启动。87环境首次新AVD180秒offline，exit2/owned PID自然0停止；同新data一次software GPU/show-kernel诊断进行中，不能称ready。
 
 87新环境最小keylink修复62ca1cf0已实际冷启成功：同data、仅owned symlink，boot_devices a003800→a003600，18.751秒boot_complete，cycle21.715秒自然0。旧两次缺super失败保留，尚未App安装/provider/sync原生验收；环境作者整理证据后独审。86发现网络与Store独立stage重复计额，采用规格明确的网络3/256MiB＋Store串行1/256MiB与直接发布，防合计超过4/512MiB。
+
+最新恢复：前端已合入且根受影响全套通过；87环境独审通过并正常合入，base userdata allocated未变化，目录总量增长不归因该文件。两App测试基础设施可先按冻结stdin契约开发，真实最终结论仍等待86后端独审合入。

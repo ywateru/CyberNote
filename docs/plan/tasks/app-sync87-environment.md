@@ -15,3 +15,5 @@ path：本任务docs/verification/sync87-environment/、scripts/debug/sync87-env
 磁盘当前约17GiB、已有共享target/SDK必须保留。创建前检查预算，cold boot需no-snapshot/no-audio；如boot会分配过大userdata/内存，先采用有界配置并报告。若启动独立AVD，保存精确PID、AVD名、serial、启动/ready/停止命令和自然退出；最后停止仅本轮owned PID，保留合成目录用于随后安装，不自动清数据。不要启动cloudflared/公开任何库，只核二进制和匿名临时路线前置条件；WireGuard/EasyTier无现成安全网只记录未具备，不擅自配置用户网络。
 
 verification：工具必须默认拒绝旧serial/缺serial/非本轮AVD，拒绝任何安装旧APK和未显式路径；记录准确命令、退出/wall、磁盘与资源界限。源码先冻结commit，再纯证据commit，交根独审并合入。环境层不证明App、网络、provider或像素通过。所有shell显式当前worktree，不写主线；不merge/push/管理worktree。证据不得包含用户文件/邀请secret。
+
+2026-11-06：独立审查285970a1通过（ENVIRONMENT-READY ONLY），已合入主线；新emulator-5584目前stopped、可供准确新APK验收，原设备不操作。17 guards及证据清单独审通过；P3文字收窄：目录总占用增加，base userdata allocated_bytes前后均105316352，不能把增长归因该文件。原作者证据与两次失败保留。
