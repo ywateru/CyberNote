@@ -1,0 +1,13 @@
+{
+  "results": [
+    {
+      "group": "image-preview",
+      "pass": false,
+      "checks": [
+        "Body contains only the image preview trigger, no outside save or export status"
+      ],
+      "error": "locator.evaluate: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.image-preview')\u001b[22m\n",
+      "elapsedMs": 10318
+    }
+  ]
+}
