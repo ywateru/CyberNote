@@ -69,6 +69,12 @@ export async function reviewCycle14ToolContinuation(output, previous) {
   const changed=before.files.filter((f,i)=>f.sha256!==after.files[i].sha256).map(x=>x.path);
   assert.deepEqual(changed,['scripts/debug/sync87-native/android/SyncTargetCounts.java','scripts/debug/sync87-native/check-counts.py','scripts/debug/sync87-native/guard.py']);
   for(const f of after.files){if(f.path==='scripts/debug/sync87-native/desktop-peer.mjs')continue;const actual=await readFile(join(sourceRoot,f.path));assert.equal(actual.length,f.bytes);assert.equal(hash(actual),f.sha256);}
+  const selfPath='scripts/debug/sync87-native/desktop-peer.mjs';
+  const receiptPath='/private/tmp/sync87-cycle14-continuation-review/receipt.json';
+  const receiptStat=await lstat(receiptPath);assert(receiptStat.isFile()&&!receiptStat.isSymbolicLink());assert.equal(await realpath(receiptPath),receiptPath);
+  const receipt=JSON.parse(await readFile(receiptPath,'utf8'));assert.deepEqual(Object.keys(receipt).sort(),['authorizedBy','sha256','sourceCommit']);
+  assert.equal(receipt.authorizedBy,'root-sync87-cycle14-continuation-review');assert(/^[0-9a-f]{64}$/.test(receipt.sha256));assert(/^[0-9a-f]{40}$/.test(receipt.sourceCommit));
+  assert.equal(hash(await readFile(join(sourceRoot,selfPath))),receipt.sha256);assert.equal(hash(git(['show',receipt.sourceCommit+':'+selfPath])),receipt.sha256);
   const current=await sourceFingerprint(sourceRoot);assert.equal(current.fileCount,160);assert.equal(current.gitDirty,false);
   const productReportPath='/Users/water/work/2026/Apple-Notes-Clone/docs/verification/sync88/android-build/result.json';
   const productBytes=await readFile(productReportPath);assert.equal(hash(productBytes),'a4c7040dd58f720cb75d4061316df2042bf1966fa099854bdf0267e315b0d976');
@@ -78,7 +84,7 @@ export async function reviewCycle14ToolContinuation(output, previous) {
   const lifecyclePath=join(output,'lifecycle14.execution.json'),lifecycleBytes=await readFile(lifecyclePath),lifecycle=JSON.parse(lifecycleBytes);
   assert.equal(lifecycle.exitCode,0);assert.deepEqual(lifecycle.argv,['python3','scripts/debug/sync87-environment/lifecycle.py','cycle','--serial','emulator-5584','--avd','notes-sync87-isolated','--boot-timeout','180','--hold-seconds','600']);
   for(const [name,path] of [['root',join(output,'desktop-peer')],['database',join(output,'desktop-peer/notes.sqlite3')]]){const stat=await lstat(path);assert.equal(stat.dev,previous.reopenProof.identities[name].device);assert.equal(stat.ino,previous.reopenProof.identities[name].inode);}
-  return {kind:'exact-cycle14-admitted-count-tool-continuation',originalAggregateFrontendUnchanged:false,manifests,changedPaths:changed,productInputs:product.inputBefore,productInputsUnchanged:true,domDependenciesUnchanged:true,currentFrontend:current,lifecycle:{path:lifecyclePath,sha256:hash(lifecycleBytes),exitCode:0},originalPeerNaturalExit:true};
+  return {kind:'exact-cycle14-admitted-count-tool-continuation',originalAggregateFrontendUnchanged:false,manifests,changedPaths:changed,productInputs:product.inputBefore,productInputsUnchanged:true,domDependenciesUnchanged:true,currentFrontend:current,continuationSourceReceipt:{path:receiptPath,...receipt},lifecycle:{path:lifecyclePath,sha256:hash(lifecycleBytes),exitCode:0},originalPeerNaturalExit:true};
 }
 export async function reviewExistingStore(output,runId,reviewed) {
   assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output));assert(/^[0-9a-f]{10}$/.test(runId));
