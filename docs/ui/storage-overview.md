@@ -39,3 +39,7 @@
 完整保留79导入合并/冲突副本/设置应用、已保存内容备份说明、活动录音禁用、取消/失败/重试/重复去重、刷新旧请求丢弃和访问切换清理。data.filter调试命令必须能进入对应详情；旧kind含all/image/audio/video/file/unowned保持语义可用，新增分类/返回总览调试调用有类型校验。数据管理新导航接真实导出/归档，不用mock功能替代。
 
 与80原生contentOverlay联动：主App拥有native状态，面板自身适配--native-top，管理标题/关闭/刷新不被native toolbar覆盖。320/390手机与800/1280桌面浅深主题，长文件名/路径、很多类别和零/未知/大数据均无横向溢出/重叠，详情可滚动且关闭/返回始终可达；Tab焦点和Escape正确。核对占比、去重、分类详情过滤/返回、所有文件可达、原导出/备份/权限回归，保留截图与HTML证据。原Android录音现场不操作；程序化/native核验不替代原版整窗像素。
+
+## 调试导航接口
+
+DataManagementHandle新增`navigate(view)`，`inspect()`附加当前`view`；枚举overview/all/image/audio/video/attachments/database/logs/other。公开调试`data.navigate {view}`在App/catalog/protocol校验后调用真实handle。旧`data.filter`kind all/image/audio/video/file/unowned仍可用并进入对应详情，其中file→attachments，unowned→other；仅query/page时保留当前详情，总览时进入all。每个详情各自保留query/page，返回总览不重复读取快照。各分类行/图例走同一navigate处理。模块81实现handle，组合8081注册公开命令和导航回归。

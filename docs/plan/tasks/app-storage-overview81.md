@@ -2,7 +2,7 @@
 id: app-storage-overview81
 scope: data-management-storage-overview-category-drill-down-and-shared-overlay-integration
 status: in-progress
-depends-on: [app-data-management79, app-image-preview80]
+depends-on: [app-data-management79]
 ---
 
 # objective
@@ -20,3 +20,5 @@ docs/INDEX.md、docs/ui/storage-overview.md、docs/ui/data-management.md、docs/
 # verification
 
 类型总和与实际快照相符/物理路径去重/未知和缺失不冒充0；总览/分类/全部明细可达，搜索/分页/返回/刷新与乱序、真实导出与备份/录音阻止/撤权回归；320/390/800/1280浅深DOM几何与截图；保留80标题栏与预览，App原生toolbar隐藏/恢复；完整回归/准确包按组合结果完成。原Android约13秒现场完全保持。
+
+80与81各自在79冻结API之上开发且产品路径不重叠；组合原生状态/新导航runner验收由[组合整合](app-ui-hierarchy8081.md)执行，依赖两模块冻结。
