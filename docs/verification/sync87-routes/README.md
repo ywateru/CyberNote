@@ -1,5 +1,7 @@
 # Sync87 实际路线与既有设备更新连接
 
+2026-11-06 更新：准确 immutable11 的实际 LAN 与匿名 wss 新验收已通过（56项/92.337秒），见 [build11 作者报告](build11/README.md)。以下为先前 build08 的完整历史报告，其 TLS panic/失败原件保持不变；新结果没有追改旧 binary 的结论。实际 WireGuard/EasyTier 仍未验证，新结果等待另一代理独审。
+
 2026-11-06。**UI SOURCE-READY；真实 LAN/Store/socket PASS；匿名 wss BLOCKED，尚未完成公网路线。** 本报告为作者证据，等待不同代理独审。Android、真实双 App DOM、原版整窗像素不属于本层。
 
 ## 准确输入

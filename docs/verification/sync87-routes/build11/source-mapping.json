@@ -1,0 +1,25 @@
+{
+  "binaryProducerProductCommit": "cd334bc88513a89c490788d2e2e27c7967575f4a",
+  "observedSourceHead": "0feb310ddae132adb13652ba909b323a72280c3c",
+  "commands": [
+    "git",
+    "diff",
+    "--exit-code",
+    "cd334bc88513a89c490788d2e2e27c7967575f4a",
+    "0feb310ddae132adb13652ba909b323a72280c3c",
+    "--",
+    "src-tauri/src",
+    "src-tauri/Cargo.toml",
+    "src-tauri/Cargo.lock",
+    "scripts/debug/rust",
+    "scripts/debug/build-rust-attachments.mjs"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "",
+  "meaning": "No change in selected production and transport input paths between immutable11 product commit and observed pure-evidence source HEAD; harness fingerprints55 tracked input files, root producer audit separately counts47 production files.",
+  "harnessProductCommit": "7323d818",
+  "harnessObservedHead": "4e3a3f3713c716c25505ab5525c3a2b2dff765f2",
+  "harnessSha256": "6d53b6b3256958046d1f3794f9ccec1513b2dce7e17acc37192bdcd12041f044",
+  "evidenceOnlyContinuation": true
+}
