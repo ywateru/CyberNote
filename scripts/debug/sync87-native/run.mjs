@@ -157,6 +157,21 @@ async function execute(request){
       try{await pairViaUI(await app(),invitation,{step:nativeStep});}catch(error){try{await writeFile(resolve(output,'pair-ui-failure-'+Date.now()+'.json'),JSON.stringify(await observePairingUI(await app()),null,2)+'\n');}catch{}throw error;}finally{invitation=undefined;}
       await(await app()).snapshot(output,'paired-desktop');return{paired:true,endpoint:address.endpoint,desktopPid:peer.backend.pid};
     }
+    case 'reopenDesktop':{
+      assert(!peer,'desktop peer already running');assert(typeof options['--peer-receipt']==='string','root peer receipt required');
+      peer=await DesktopPeer.reopen(options['--peer-receipt'],output,s.runId);
+      return{reopenedSameStore:true,desktopPid:peer.backend.pid,root:peer.root};
+    }
+    case 'observeSync':{
+      assert(peer,'same owned peer must be open');const c=await app(),mobile=await c.workspace(),desktop=await peer.workspace();
+      const nativeStatus=await c.read(`(async()=>{const w=await window.__TAURI_INTERNALS__.invoke('load_workspace');return(await window.__TAURI_INTERNALS__.invoke('sync_command',{command:{type:'status'},expected:{sessionId:w.access.sessionId,epoch:w.access.epoch}})).status})()`);
+      const desktopStatus=(await peer.call('sync_command',{command:{type:'status'},expected:peer.expected()})).status;
+      const status=value=>{assert(['disabled','paused','listening','connecting','syncing','idle','error'].includes(value.state));assert(Number.isSafeInteger(value.pendingCount)&&value.pendingCount>=0);assert(Number.isSafeInteger(value.conflictCount)&&value.conflictCount>=0);return{state:value.state,pendingCount:value.pendingCount,conflictCount:value.conflictCount,error:typeof value.error==='string'&&/^sync_[a-z_]{1,80}$/.test(value.error)?value.error:null,workspaceIdSha256:hash(value.workspaceId||''),deviceIdSha256:hash(value.deviceId||''),peers:value.peers.map(p=>({identitySha256:hash(p.id),connected:p.connected,lastSyncAt:p.lastSyncAt}))};};
+      const ids=new Set([...s.notes.map(n=>n.id),...desktop.notes.filter(n=>n.plainText==='SYNC87-DESKTOP-'+s.runId+' desktop real Session input').map(n=>n.id)]);
+      const replica=(workspace,id)=>{const note=workspace.notes.find(n=>n.id===id);return note?{exists:true,documentSha256:hash(JSON.stringify(note.document)),plainTextSha256:hash(note.plainText)}:{exists:false};};
+      const result={native:status(nativeStatus),desktop:status(desktopStatus),nativeAccess:{operationPresent:!!mobile.access?.operationId,suspendedCount:mobile.access?.suspended.length},replicas:[...ids].map(id=>({id,native:replica(mobile,id),desktop:replica(desktop,id)}))};
+      await writeFile(resolve(output,'sync-status-'+Date.now()+'.json'),JSON.stringify(result,null,2)+'\n');return result;
+    }
     case 'textRoundtrip':assert(peer);return textRoundtrip({client:await app(),peer,state:s,output,saveState:save});
     case 'desktopMedia':assert(peer);return desktopMedia({client:await app(),peer,state:s,output,saveState:save});
     case 'roundtrip':assert(peer);return roundtrip({client:await app(),peer,state:s,output,saveState:save});

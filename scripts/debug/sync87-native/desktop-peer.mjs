@@ -46,17 +46,41 @@ async function freePort() {
   const server=createServer();await new Promise((done,fail)=>{server.once('error',fail);server.listen(0,'127.0.0.1',done);});
   const port=server.address().port;await new Promise(done=>server.close(done));return port;
 }
+export async function reviewExistingStore(output,runId,reviewed) {
+  assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output));assert(/^[0-9a-f]{10}$/.test(runId));
+  const root=join(output,'desktop-peer');
+  for(const name of ['state.json','desktop-peer-lifecycle.json']){const path=join(output,name),stat=await lstat(path);assert(stat.isFile()&&!stat.isSymbolicLink());assert.equal(await realpath(path),path);}
+      const state=JSON.parse(await readFile(join(output,'state.json'),'utf8'));
+      assert.equal(state.runId,runId);assert.equal(state.serial,'emulator-5584');assert.equal(state.avd,'notes-sync87-isolated');
+      const previous=JSON.parse(await readFile(join(output,'desktop-peer-lifecycle.json'),'utf8'));
+      assert.equal(previous.root,root);assert.equal(previous.kind,'actual-react-tiptap-dom-real-rust-session-store-network');
+      assert.equal(previous.binarySha256,reviewed.receipt.sha256);assert.equal(previous.sourceCommit,reviewed.receipt.sourceCommit);
+      assert.deepEqual(previous.exit,{code:0,signal:null});assert.equal(previous.forcedOrFailed,false);assert.equal(previous.pageErrorCount,0);assert.equal(previous.binaryUnchanged,true);assert.equal(previous.frontendUnchanged,true);
+      const identities={};
+      for(const [name,path,directory] of [['output',output,true],['root',root,true],['sync',join(root,'.sync'),true],['database',join(root,'notes.sqlite3'),false]]){
+        const stat=await lstat(path);assert(!stat.isSymbolicLink());assert.equal(await realpath(path),path);assert(directory?stat.isDirectory():stat.isFile());
+        if(!directory)assert(stat.size>0);identities[name]={device:stat.dev,inode:stat.ino,...(!directory?{size:stat.size,sha256:hash(await readFile(path))}:{})};
+      }
+      const archive=join(output,'desktop-peer-lifecycle-before-reopen-'+String(Date.now())+'.json');await writeFile(archive,JSON.stringify(previous,null,2)+'\n',{flag:'wx',mode:0o600});
+      return {kind:'same-existing-owned-store',identities,previousLifecycle:archive};
+}
 export class DesktopPeer {
-  static async open(receiptPath,output,runId) {
+  static async reopen(receiptPath,output,runId) { return DesktopPeer.open(receiptPath,output,runId,true); }
+  static async open(receiptPath,output,runId,reopenExisting=false) {
     assert(/^\/private\/tmp\/notes-sync87-native-[a-z0-9-]+$/.test(output));assert(/^[0-9a-f]{10}$/.test(runId));
-    const reviewed=await reviewedPeer(receiptPath),root=join(output,'desktop-peer');await mkdir(root,{mode:0o700});
+    const reviewed=await reviewedPeer(receiptPath),root=join(output,'desktop-peer');let reopenProof;
+    assert.equal(typeof reopenExisting,'boolean');
+    if(reopenExisting)reopenProof=await reviewExistingStore(output,runId,reviewed);else await mkdir(root,{mode:0o700});
     const self=new DesktopPeer();Object.assign(self,{reviewed,root,output,runId,closed:false,started:performance.now()});
+    self.reopenProof=reopenProof;
     self.frontendRoot=resolve(fileURLToPath(new URL('../../../',import.meta.url)));
     self.domDependencies=await verifyDOMDependencies(self.frontendRoot);
     self.frontendBefore=await sourceFingerprint(self.frontendRoot);
     try{
       self.runtime=await openRuntime({root:self.frontendRoot,transport:reviewed.receipt.binary,storeDirectory:root,rustEvents:true,bundleDebug:true,transportOptions:{timeoutMs:40000,closeTimeoutMs:10000,recordPolls:false},beforeRustEvent:event=>{validatePeerEvent(event,self.access?.sessionId);}});
-      self.backend=self.runtime.backend;self.page=self.runtime.page;await self.workspace();return self;
+      self.backend=self.runtime.backend;self.page=self.runtime.page;await self.workspace();
+      if(reopenProof){for(const [name,path] of [['root',root],['database',join(root,'notes.sqlite3')]]){const stat=await lstat(path);assert.equal(stat.dev,reopenProof.identities[name].device);assert.equal(stat.ino,reopenProof.identities[name].inode);}}
+      return self;
     }catch(error){if(self.runtime)await self.close();throw error;}
   }
   async call(command,args={}) {
@@ -112,7 +136,7 @@ export class DesktopPeer {
       const binaryUnchanged=hash(await readFile(this.reviewed.receipt.binary))===this.reviewed.receipt.sha256;
       await verifyDOMDependencies(this.frontendRoot);
       const frontendAfter=await sourceFingerprint(this.frontendRoot);
-      const report={kind:'actual-react-tiptap-dom-real-rust-session-store-network',domDependencies:this.domDependencies,frontendBefore:this.frontendBefore,frontendAfter,frontendUnchanged:this.frontendBefore.sha256===frontendAfter.sha256,pid:this.backend.pid,root:this.root,sourceCommit:this.reviewed.receipt.sourceCommit,binarySha256:this.reviewed.receipt.sha256,buildLabel:this.reviewed.receipt.buildLabel,exit,forcedOrFailed:!!failed,pageErrorCount:this.runtime.errors.length,events:this.runtime.rustEvents.history.length,resourceClosures:this.runtime.rustEvents.resourceClosures,binaryUnchanged,wallSeconds:(performance.now()-this.started)/1000};
+      const report={kind:'actual-react-tiptap-dom-real-rust-session-store-network',domDependencies:this.domDependencies,frontendBefore:this.frontendBefore,frontendAfter,frontendUnchanged:this.frontendBefore.sha256===frontendAfter.sha256,pid:this.backend.pid,root:this.root,sourceCommit:this.reviewed.receipt.sourceCommit,binarySha256:this.reviewed.receipt.sha256,buildLabel:this.reviewed.receipt.buildLabel,exit,forcedOrFailed:!!failed,pageErrorCount:this.runtime.errors.length,events:this.runtime.rustEvents.history.length,resourceClosures:this.runtime.rustEvents.resourceClosures,binaryUnchanged,...(this.reopenProof?{reopenProof:this.reopenProof}:{}),wallSeconds:(performance.now()-this.started)/1000};
       await writeFile(join(this.output,'desktop-peer-lifecycle.json'),JSON.stringify(report,null,2)+'\n');
       assert(!failed&&exit?.code===0&&!exit.signal&&binaryUnchanged&&report.frontendUnchanged&&this.runtime.errors.length===0,'peer did not close naturally with unchanged binary');return report;
     })();return this.closePromise;
