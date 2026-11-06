@@ -4,7 +4,7 @@ import java.io.File;
 
 /** One fixed synthetic target, read-only counts. No body/config/key output. */
 public final class SyncTargetCounts {
-  private static final String DB = "/data/user/0/com.local.notesclone/files/notes.sqlite3";
+  private static final String DB = "/data/data/com.local.notesclone/notes.sqlite3";
   private static final String TARGET = "eac3b7e0-12cd-43cc-a1c0-2457e8cc4320";
   private static final String QUERY = "SELECT "
     + "(SELECT count(*) FROM sync_inbox),"
