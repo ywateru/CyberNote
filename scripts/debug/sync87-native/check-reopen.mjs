@@ -2,9 +2,12 @@
 import { mkdir,writeFile,readFile,rm,symlink,lstat } from 'node:fs/promises';
 import {randomBytes} from 'node:crypto';import assert from 'node:assert/strict';import {join} from 'node:path';
 import {reviewExistingStore} from './desktop-peer.mjs';
+import {parseRequest} from './protocol.mjs';import {safeSyncStatus} from './status.mjs';
 const output='/private/tmp/notes-sync87-native-reopen-host-'+randomBytes(4).toString('hex'),root=join(output,'desktop-peer'),runId='0123456789';
 const reviewed={receipt:{sha256:'1'.repeat(64),sourceCommit:'2'.repeat(40)}};
 const prior={root,kind:'actual-react-tiptap-dom-real-rust-session-store-network',binarySha256:reviewed.receipt.sha256,sourceCommit:reviewed.receipt.sourceCommit,exit:{code:0,signal:null},forcedOrFailed:false,pageErrorCount:0,binaryUnchanged:true,frontendUnchanged:true};let checks=0;
+for(const action of ['reopenDesktop','observeSync']){assert.equal(parseRequest(Buffer.from(JSON.stringify({action}))).ok,true);assert.equal(parseRequest(Buffer.from(JSON.stringify({action,invitation:'SECRET_SENTINEL'}))).ok,false);checks++;}
+const status=safeSyncStatus({state:'error',pendingCount:1,conflictCount:0,error:'sync_SECRET_SENTINEL',workspaceId:'synthetic',deviceId:'synthetic',peers:[{id:'synthetic',connected:false,lastSyncAt:{secret:'SECRET_SENTINEL'}}]});assert.equal(status.error,'REDACTED_UNKNOWN');assert.equal(status.peers[0].lastSyncPresent,false);assert(!JSON.stringify(status).includes('SECRET_SENTINEL'));checks++;
 try{
  await mkdir(join(root,'.sync'),{recursive:true});await writeFile(join(output,'state.json'),JSON.stringify({runId,serial:'emulator-5584',avd:'notes-sync87-isolated'}));await writeFile(join(output,'desktop-peer-lifecycle.json'),JSON.stringify(prior));await writeFile(join(root,'notes.sqlite3'),'INERT HOST FIXTURE; NOT A DATABASE');
  const before=await lstat(join(root,'notes.sqlite3')),proof=await reviewExistingStore(output,runId,reviewed);assert.equal(proof.kind,'same-existing-owned-store');assert.equal(proof.identities.database.inode,before.ino);assert.equal(JSON.parse(await readFile(proof.previousLifecycle,'utf8')).root,root);checks++;
