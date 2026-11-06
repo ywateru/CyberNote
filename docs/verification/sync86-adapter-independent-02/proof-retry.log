@@ -1,0 +1,16 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/sync86-independent-review-02/lock-harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.75s
+     Running unittests root.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_sync84_store_tests-030dc32bff5cf8dd)
+
+running 5 tests
+test store::archive::tests::independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads ... ok
+INDEPENDENT_PROOF peer-generation=true trigger-after-link-rollback=true same-root-reopen=true dirty-inbox-preserved=true retry=true independent-paths=true
+test store::synchronization::media::independent_proof_recheck::independent_peer_receive_stales_scope_and_rollback_keeps_owned_links_for_retry ... ok
+test store::synchronization::tests::independent_blobs_stage_then_publish_and_survive_conflict_copy_purge ... ok
+INDEPENDENT_PROOF restored-mtime=true replaced-inode=true external-nlink=true symlink=true
+test store::synchronization::media::independent_proof_recheck::independent_restored_mtime_replacement_and_external_link_invalidate_proof ... ok
+INDEPENDENT_RETRY boundary=receive_head real-generation-stale=true attempts=2 automatic=true two-quiet-commits=true dirty-inbox=0 wall_ms=1533
+test sync::adapter::independent_retry_recheck::independent_receiver_actual_generation_stale_reconnects_without_manual_wake ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 148 filtered out; finished in 2.52s
+

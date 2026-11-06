@@ -1,0 +1,17 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "/private/tmp/sync86-independent-review-02/lock-harness/Cargo.toml",
+    "independent_",
+    "--",
+    "--nocapture",
+    "--skip",
+    "independent_64mib"
+  ],
+  "wallMs": 7104,
+  "exitCode": 0
+}

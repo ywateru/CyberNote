@@ -1,0 +1,47 @@
+[
+  {
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "--manifest-path",
+      "/private/tmp/sync86-independent-review-02/lock-harness/Cargo.toml",
+      "tls_provider_tests",
+      "--",
+      "--nocapture"
+    ],
+    "wallMs": 375,
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "--manifest-path",
+      "/private/tmp/sync86-independent-review-02/lock-harness/Cargo.toml",
+      "channel_tests",
+      "--",
+      "--nocapture"
+    ],
+    "wallMs": 78,
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--locked",
+      "--manifest-path",
+      "/private/tmp/sync86-independent-review-02/lock-harness/Cargo.toml",
+      "budget_tests",
+      "--",
+      "--nocapture"
+    ],
+    "wallMs": 87,
+    "exitCode": 0
+  }
+]
