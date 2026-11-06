@@ -1,0 +1,185 @@
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-import92-develop/src-tauri)
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `stage_attachment`, `stage_archive`, and `import_stage` are never used
+   --> src/session.rs:171:19
+    |
+ 60 | impl Session {
+    | ------------ methods in this implementation
+...
+171 |     pub(crate) fn stage_attachment(
+    |                   ^^^^^^^^^^^^^^^^
+...
+180 |     pub(crate) fn stage_archive(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+...
+184 |     pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^
+
+warning: method `stage_archive` is never used
+   --> src/store/archive.rs:616:19
+    |
+435 | impl Store {
+    | ---------- method in this implementation
+...
+616 |     pub(crate) fn stage_archive(&self) -> Result<super::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+
+warning: method `path` is never used
+  --> src/store/data_management.rs:79:12
+   |
+78 | impl DocumentStage {
+   | ------------------ method in this implementation
+79 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: methods `document_stage` and `stage_attachment` are never used
+   --> src/store/data_management.rs:316:19
+    |
+159 | impl Store {
+    | ---------- methods in this implementation
+...
+316 |     pub(crate) fn document_stage(&self) -> Result<DocumentStage> {
+    |                   ^^^^^^^^^^^^^^
+...
+446 |     pub(crate) fn stage_attachment(&self, id: &str) -> Result<(DocumentStage, AttachmentExport)> {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: method `public_key` is never used
+   --> src/sync/identity.rs:312:12
+    |
+175 | impl IdentityStore {
+    | ------------------ method in this implementation
+...
+312 |     pub fn public_key(&self) -> Result<String> {
+    |            ^^^^^^^^^^
+
+warning: `notes-clone` (lib test) generated 10 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.60s
+     Running unittests src/lib.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_clone_lib-00a9094c6921bb11)
+public archive corpus: legacy-empty-title: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: plain-and-empty-paragraphs: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: default-heading-attributes: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: all-supported-nodes-and-marks: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: schema-allows-empty-table-row: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: default-attachment-and-drawing: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: inline-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: block-inside-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-inside-table: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-doc: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: nested-doc: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: list-item-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: row-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: cell-at-doc-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-in-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: block-in-heading: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-blockquote: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-bullet-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-ordered-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-task-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-directly-in-bullet-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: task-item-in-ordered-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: list-item-in-task-list: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: list-item-needs-leading-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: task-item-needs-leading-paragraph: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-table: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: paragraph-in-row: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-cell: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: text-directly-in-cell: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-hard-break: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-rule: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-attachment: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: content-inside-drawing: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: hard-break-in-code-block: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: marked-text-in-code-block: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: marked-block-at-root: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: duplicate-marks: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: out-of-order-marks: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: code-excludes-other-marks: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-mark: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: empty-text: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: non-string-text: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: text-node-child-content: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: non-text-node-text-field: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-string: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-outside-config: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: heading-level-null: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: checked-is-not-boolean: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: ordered-start-is-not-integer: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colspan-zero: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-rowspan-string: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colwidth-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-colwidth-count-mismatch: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-align-unknown: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-strokes-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-point-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: drawing-tool-unknown: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: link-href-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: highlight-color-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: attachment-name-object: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-paragraph-attribute: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: unknown-bold-attribute: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: table-grid-budget: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: dash-list-valid: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: dash-list-invalid-attribute: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-committed: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-bold-split-span: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-2: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-3: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-4: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-5: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-6: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-7: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-8: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-name-9: accepted; document unchanged; export/import/bytes/reopen preserved
+public archive corpus: tag-bad-name-10: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-11: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-12: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-13: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-14: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-15: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-16: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-bad-name-17: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-wrong-text: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-split-parent: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-unmarked-gap: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-nontext-gap: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-different-name-gap: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-unknown-attr: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-missing-attr: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-wrong-type: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-with-link: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-with-code: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-on-nontext: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-in-codeblock: rejected; workspace/files/settings/reopen unchanged
+public archive corpus: tag-old-plain-text: accepted; document unchanged; export/import/bytes/reopen preserved

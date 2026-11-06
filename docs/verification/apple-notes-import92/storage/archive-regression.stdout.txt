@@ -1,0 +1,31 @@
+
+running 14 tests
+test store::archive::tests::crash_worker ... ignored, subprocess worker; invoked by real_subprocess_interruption_recovers_before_and_after_sqlite_commit
+test store::archive::tests::recovery_refuses_journal_path_that_could_delete_an_old_file ... 
+running 1 test
+ok
+test store::archive::tests::export_failure_preserves_previous_archive_and_cannot_replace_live_store ... ok
+test store::archive::tests::file_publish_failure_preserves_old_bytes_and_recovery_cleans_only_new_paths ... ok
+test store::archive::tests::database_failure_after_files_publish_rolls_back_all_entities_and_settings ... ok
+test store::archive::tests::qa_bad_second_blob_preserves_existing_attachment_database_settings_and_source ... ok
+test store::archive::tests::seven_papers_and_dash_lists_preserve_drawings_through_save_reopen_and_archive ... ok
+test store::archive::tests::input_limits_are_explicit_and_leave_workspace_unchanged ... ok
+test store::archive::tests::invalid_archive_graphs_and_metadata_never_mutate_existing_workspace ... ok
+
+running 1 test
+test store::archive::tests::independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads ... ok
+test store::archive::tests::stale_selection_defaults_without_losing_other_settings ... ok
+test store::archive::tests::valid_import_restores_settings_hierarchy_bytes_and_preserves_colliding_entities ... ok
+
+running 1 test
+
+running 1 test
+
+running 1 test
+
+running 1 test
+test store::archive::tests::real_subprocess_interruption_recovers_before_and_after_sqlite_commit ... ok
+test store::archive::tests::shared_editor_schema_corpus_uses_public_import_and_preserves_state_on_rejection ... ok
+
+test result: ok. 13 passed; 0 failed; 1 ignored; 0 measured; 182 filtered out; finished in 3.61s
+

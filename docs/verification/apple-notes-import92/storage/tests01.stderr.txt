@@ -1,0 +1,103 @@
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-import92-develop/src-tauri)
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `stage_attachment`, `stage_archive`, and `import_stage` are never used
+   --> src/session.rs:171:19
+    |
+ 60 | impl Session {
+    | ------------ methods in this implementation
+...
+171 |     pub(crate) fn stage_attachment(
+    |                   ^^^^^^^^^^^^^^^^
+...
+180 |     pub(crate) fn stage_archive(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+...
+184 |     pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^
+
+warning: method `stage_archive` is never used
+   --> src/store/archive.rs:616:19
+    |
+435 | impl Store {
+    | ---------- method in this implementation
+...
+616 |     pub(crate) fn stage_archive(&self) -> Result<super::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+
+warning: method `path` is never used
+  --> src/store/data_management.rs:79:12
+   |
+78 | impl DocumentStage {
+   | ------------------ method in this implementation
+79 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: methods `document_stage` and `stage_attachment` are never used
+   --> src/store/data_management.rs:316:19
+    |
+159 | impl Store {
+    | ---------- methods in this implementation
+...
+316 |     pub(crate) fn document_stage(&self) -> Result<DocumentStage> {
+    |                   ^^^^^^^^^^^^^^
+...
+446 |     pub(crate) fn stage_attachment(&self, id: &str) -> Result<(DocumentStage, AttachmentExport)> {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: method `public_key` is never used
+   --> src/sync/identity.rs:312:12
+    |
+175 | impl IdentityStore {
+    | ------------------ method in this implementation
+...
+312 |     pub fn public_key(&self) -> Result<String> {
+    |            ^^^^^^^^^^
+
+warning: `notes-clone` (lib test) generated 10 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.43s
+     Running unittests src/lib.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_clone_lib-00a9094c6921bb11)
+
+thread 'store::apple_import::tests::complete_backup_restores_raw_and_dedup_after_owner_remapping' (44154660) panicked at src/store/apple_import/tests.rs:10:161:
+called `Result::unwrap()` on an `Err` value: AppError { code: "archive_invalid", message: "缺少系统文件夹", commit: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'store::apple_import::tests::moved_prior_copy_is_not_reused_as_future_source_folder' (44154664) panicked at src/store/apple_import/tests.rs:19:158:
+called `Result::unwrap()` on an `Err` value: AppError { code: "archive_invalid", message: "缺少系统文件夹", commit: None }
+
+thread 'store::apple_import::tests::rich_append_reopen_dedup_changed_copy_and_settings' (44154665) panicked at src/store/apple_import/tests.rs:5:72:
+called `Result::unwrap()` on an `Err` value: AppError { code: "archive_invalid", message: "缺少系统文件夹", commit: None }
+
+thread 'store::apple_import::tests::transaction_failure_does_not_publish_success_or_leave_orphans' (44154666) panicked at src/store/apple_import/tests.rs:25:602:
+called `Result::unwrap()` on an `Err` value: AppError { code: "archive_invalid", message: "缺少系统文件夹", commit: None }
+error: test failed, to rerun pass `--lib`
