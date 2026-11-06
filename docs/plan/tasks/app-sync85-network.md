@@ -1,6 +1,6 @@
 # APP-SYNC85 认证网络与配对
 
-状态 ready。根规格：[sync](../../architecture/sync.md)。84并行实现Store；本任务先独立生产网络/凭据服务，随后统一适配。冻结后独审。
+状态 in-progress。根规格：[sync](../../architecture/sync.md)。84并行实现Store；本任务先独立生产网络/凭据服务，随后统一适配。冻结后独审。
 
 实现 `src-tauri/src/sync/network.rs`、`identity.rs`（可子目录）、对应真实网络/crypto tests；不得修改84持有的Store/model/sync.rs。可在独立test crate #[path] 编译实际模块；最终Cargo.toml snow/tungstenite/rustls等依赖通过单独patch交根整合，不在主线运行。标准库线程或runtime均可，socket网络绝不持Store锁。生产服务设计SyncBackend trait短暂调用持久层，返回Opaque JSON版本及摘要/本机blob reader，网络不猜Store细节。
 
@@ -11,3 +11,5 @@
 官方资料优先 docs.rs/snow 与 noiseprotocol.org/noise.html；HTTP已确认可读，浏览器搜索工具当前无返回，保留实际来源与抓取证据，不编造引用。云隧道只设计同一wss端点兼容，自动公开真实库禁止。源码冻结commit、必要tests及未解决风险交根，不自行merge。
 
 独审设计修订：receive_head仅持久inbox，Receipt{durable,applied}区分已收与已应用；16MiB head必须分片重组，有总量/时限/深度预算，非仅blob分片。Prepared凭据→幂等DB adopt→Ready崩溃恢复，不允许身份文件与Store workspace失配时发数据。
+
+2026-11-06作者冻结：依赖5759ebe0、产品f58f63c8、证据dad423fc。14项真实网络/身份测试与clippy/fmt作者通过，独立verify进行中；未合入、未接生产Store，不视为双端同步交付。

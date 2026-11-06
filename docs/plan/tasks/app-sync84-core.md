@@ -1,6 +1,6 @@
 # APP-SYNC84 持久同步核心
 
-状态 ready。根规格：[sync](../../architecture/sync.md)。主线起点 f4caa90e。开发与独审分离，冻结源码commit之后再独审，不操作设备、不用真实麦克风、不push。
+状态 in-progress。根规格：[sync](../../architecture/sync.md)。主线起点 f4caa90e。开发与独审分离，冻结源码commit之后再独审，不操作设备、不用真实麦克风、不push。
 
 实现委派的边界：生产 Store同步扩展schema+触发dirty原子捕获、raw wire版本向量/摘要/冲突删除、文件blob/staging、确定性投影和完整性验证、显式冲突解决。新增 `src-tauri/src/store/synchronization.rs`及子文件、`src-tauri/src/sync/model.rs`，必要的Store/open接入和sha2依赖。网络另85，不实现JS网络fixture冒充核心，不修改UI。schema初始化必须兼容旧库并对坏扩展schema拒绝，只有用户开启sync才bootstrap。
 
