@@ -1,0 +1,102 @@
+{
+  "status": "PASS-NARROW-ACTUAL-FOREGROUND24",
+  "authorCommit": "730d05ae",
+  "files": [
+    {
+      "name": "README.md",
+      "bytes": 1112,
+      "sha256": "c746ba17e8353e2e7e9d1b2a4dcdda19f0c57e1e51eed58aa209df1acf0d7750"
+    },
+    {
+      "name": "cycle24-lifecycle.execution.json",
+      "bytes": 259,
+      "sha256": "92d3ee25dfe5c2455bb21479885cbbf31056e74d1c289772d090cba3191c8cae",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle24-lifecycle.stdout.txt",
+      "bytes": 2398,
+      "sha256": "bfa7983afe241a5ff1ad1d6c5d33ff8dbaa5126a0b65eef0df95d3e59a4296c8",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle24b-foreground-native-full-proof.json",
+      "bytes": 5999,
+      "sha256": "e9492e8135eb058f2502766e273242750c4264ce0d4f211f03063b67e41fcdae",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle24b-foreground-peer-equality.json",
+      "bytes": 4167,
+      "sha256": "1b1a0b41f8a6142e01195b61e4f3fbc4cfade1ed54b5ff5f38d8c72c2222973b",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle24b-peer.execution.json",
+      "bytes": 364,
+      "sha256": "616988055225ba1ff63bc76c7e40d06076e331fd6792158e10e6ba673e079253",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle24b-peer.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle24b-peer.stdout.txt",
+      "bytes": 1025,
+      "sha256": "9818a5ac2ee95b29ce97d54212b3814a62bb8ade319b12c54ea401466455b4e1",
+      "originalOutputExact": true
+    },
+    {
+      "name": "desktop-peer-lifecycle.json",
+      "bytes": 3056,
+      "sha256": "28ed17d5a7f6aaf18f8a073a41e7ce7b81cf7c16eaf2c34c1a6dee713021f0d2",
+      "originalOutputExact": true
+    },
+    {
+      "name": "foreground-reconnected.png",
+      "bytes": 45650,
+      "sha256": "c29ed593a071df628e74e88818157c9fa163b5461d29aa837db0c8b1b6eb9782",
+      "originalOutputExact": true
+    },
+    {
+      "name": "foreground.json",
+      "bytes": 361,
+      "sha256": "408ca253c687e45cf288a1ed4618830d2388fa8066be4e19d4a65f4e7e7a9a8d",
+      "originalOutputExact": true
+    }
+  ],
+  "foreground": {
+    "beforeApp": {
+      "pid": 3993,
+      "startTicks": "3206",
+      "package": "com.local.notesclone"
+    },
+    "afterApp": {
+      "pid": 3993,
+      "startTicks": "3206",
+      "package": "com.local.notesclone"
+    },
+    "desktopPausedAndResumed": true,
+    "automaticMobileConvergence": true,
+    "manualMobileSyncCommand": false,
+    "marker": "SYNC87-FOREGROUND-74da049123"
+  },
+  "twoFullDocumentsAndPlainTextIndependentlyCompared": true,
+  "fiveOriginalProofsMatchKnownFixturesAndClosedPeer": true,
+  "peerExit": {
+    "code": 0,
+    "signal": null
+  },
+  "peerBinaryAndFrontendUnchanged": true,
+  "peerRootInode": 35260086,
+  "peerDatabaseInode": 35260089,
+  "limits": [
+    "Native and closedpeer are sequential observations not atomic crossStore snapshot",
+    "Original24 portoccupied refusal retained;24b normal run separate",
+    "No reviewerdevice/runtime/DBqueries",
+    "Imageexport/mediafullDOM stillpending"
+  ]
+}
