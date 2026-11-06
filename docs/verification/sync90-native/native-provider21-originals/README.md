@@ -1,0 +1,7 @@
+# Actual final02 continuous PNG and WAV save on Android20
+
+Fresh declared explicit normalMouse method98d228b0, independently admitted after separate touch menu-wait failure. Actual exact final02 editor/MainActivity foreground, two fixed App controls via normalMouse8.931516834s. RealDocumentsUI Recent normalTAB thenDPAD_DOWN focused exactPNG; inspected focused subtree containing exact synthetic filename, then SPACEonce returned app. Actual Store revision3/PNG70B originalSHA5099baff…; WebView real image decoded.
+
+Continuous second mouse provider open8.523448875s, native normalAudio chip, exact final02 WAV shown first. NormalTAB focused exactWAV verified via original nativeUIA subtree; SPACEonce selected. RealStore revision4 contains exactly3 owned attachments: TXT33B, PNG70B, WAV32044B. All3 read_attachment original bytes/SHA match deterministic fixtures; newPNG id0f515289-764d-460e-90ca-95637ebc3676, WAV787c0e3c-b97e-47a4-9d62-4b3c9cbee4d3.
+
+Complete known Chinese plainText asserted; expected full document captured from actual sending Store after both image/audio attachment nodes were committed, no stale preattachment document assumption. No microphone/URI injection/debug fixture/browser replacement/data deletion. Current actual appPID3937/startTicks5205. This proves real continuous file selection/save/originals and native image decode; multi-selection/export/apprestart/coldboot/fullbidirectionalnetwork remain separate gates. Lifecycle21 still live at freeze/nopeer; terminal appended later.
