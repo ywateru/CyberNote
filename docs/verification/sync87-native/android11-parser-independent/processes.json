@@ -1,0 +1,22 @@
+[
+  {
+    "name": "original-guards",
+    "args": [
+      "python3",
+      "-B",
+      "scripts/debug/sync87-native/check_guards.py"
+    ],
+    "exitCode": 0,
+    "wallMs": 99
+  },
+  {
+    "name": "independent",
+    "args": [
+      "python3",
+      "-B",
+      "docs/verification/sync87-native/android11-parser-independent/check.py"
+    ],
+    "exitCode": 0,
+    "wallMs": 61
+  }
+]

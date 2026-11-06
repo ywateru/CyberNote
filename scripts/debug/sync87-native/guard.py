@@ -56,6 +56,16 @@ def receipt(path):
         require(any(name.startswith('lib/arm64-v8a/') and name.endswith('.so') for name in obj['entries']), 'reviewed arm64 native library required')
     return obj
 
+def install_result(value):
+    require(value in ('Success', 'Performing Streamed Install\nSuccess'), 'installation did not report Success')
+    return value
+
+def installed_apk_path(value):
+    # Android 11 uses a randomized ~~token parent; bind the app directory to this package.
+    pattern = r'package:/data/app/(?:~~[A-Za-z0-9_=+-]+/)?' + re.escape(PACKAGE) + r'-[A-Za-z0-9_=+-]+/base\.apk'
+    require(type(value) is str and re.fullmatch(pattern, value), 'unexpected installed APK path')
+    return value[len('package:'):]
+
 def owned_file(path):
     p = Path(path)
     require(p.is_absolute() and p.is_file() and not p.is_symlink(), 'direct host fixture file required')
@@ -150,14 +160,14 @@ def main():
     if a.operation=='install':
         reviewed=receipt(a.receipt)
         result=invoke(['install','-r',reviewed['apk']],timeout=60)
-        require(result=='Success','installation did not report Success')
+        install_result(result)
         result={'installed':True,'sha256':reviewed['sha256'],'sourceCommit':reviewed['sourceCommit'],'buildLabel':reviewed['buildLabel']}
     elif a.operation=='status':result={'emulator':ownership(a.serial,a.avd)}
     elif a.operation in ('start','installed'):
         reviewed=receipt(a.receipt)
         location=invoke(['shell','pm','path',PACKAGE])
-        require(re.fullmatch(r'package:/data/app/[A-Za-z0-9_./=+-]+/base\.apk',location),'unexpected installed APK path')
-        payload=invoke(['exec-out','cat',location[len('package:'):]],binary=True)
+        apk_path=installed_apk_path(location)
+        payload=invoke(['exec-out','cat',apk_path],binary=True)
         require(hashlib.sha256(payload).hexdigest()==reviewed['sha256'],'installed package differs from reviewed APK')
         result={'sha256':reviewed['sha256']}
         if a.operation=='start':result=invoke(['shell','am','start','-W','-n',PACKAGE+'/.MainActivity'])

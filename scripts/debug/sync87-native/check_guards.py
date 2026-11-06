@@ -15,6 +15,15 @@ class Guards(unittest.TestCase):
  def test_old_target_rejected(self):
   for serial,avd in [('emulator-5580',g.AVD),('',g.AVD),(g.SERIAL,'old-avd'),('emulator-5586',g.AVD)]:
    with self.assertRaises(g.Refused):g.target(serial,avd)
+ def test_actual_android_install_stdout(self):
+  for value in ['Success','Performing Streamed Install\nSuccess']:self.assertEqual(g.install_result(value),value)
+  for value in ['','Failure [INSTALL_FAILED]','Success\nFailure','Performing Streamed Install\nSuccess\nextra','adb: failed','Success ']:
+   with self.assertRaises(g.Refused):g.install_result(value)
+ def test_actual_android_package_path(self):
+  for value in ['package:/data/app/~~Hay4zLfJ9o5yX9tiZ5p-PA==/com.local.notesclone-EYHwC0h5qTQ0Ks66x7YpZQ==/base.apk','package:/data/app/com.local.notesclone-token/base.apk']:
+   self.assertEqual(g.installed_apk_path(value),value[len('package:'):])
+  for value in ['','package:/data/app/../base.apk','package:/data/app/~~token/other.pkg-token/base.apk','package:/data/app/~~token/com.local.notesclone-token/split.apk','package:/data/app/~~token/com.local.notesclone-token/base.apk\npackage:/data/app/other/base.apk','package:/data/app/~~token/com.local.notesclone-token/../base.apk','package:/data/app/a/b/com.local.notesclone-token/base.apk','package:/data/app/~~/com.local.notesclone-token/base.apk','package:/data/app/~~token/com.local.notesclone-token/base.apk;id']:
+   with self.assertRaises(g.Refused):g.installed_apk_path(value)
  def test_paths(self):
   self.assertEqual(g.device_path('/sdcard/Download/notes-sync87-ab/sync87-ab.png'),'/sdcard/Download/notes-sync87-ab/sync87-ab.png')
   for x in ['/sdcard/foo.png','/sdcard/Download/notes-sync87-ab/../sync87-ab.png','/sdcard/Download/notes-sync87-ab/sync87-ab.png;id','/sdcard/Download/notes-sync87-ab','/data/user/0/com.local.notesclone/a']:
