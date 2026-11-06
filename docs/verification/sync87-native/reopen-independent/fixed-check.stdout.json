@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "sourceCommit": "d0096346765cc5371d70b5f430d9253374dbd83f",
+  "scope": "source/host only, fake inert filesystem, no real runtime/backend/ADB/device",
+  "checks": [
+    "reopenDesktop same-original-sample now reachable, extra invitation refused",
+    "observeSync same-original-sample now reachable, extra invitation refused",
+    "same code-shaped secret and arbitrary timestamp redacted; type/size bounds reject",
+    "canonical existing store accepted without DB mutation; wrong serial and .sync symlink refused"
+  ]
+}
