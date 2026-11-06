@@ -80,14 +80,15 @@ function MediaView({ node }: NodeViewProps) {
 }
 function ImageAttachment({ id, src, name }: { id: string; src: string; name: string }) {
   const [preview, setPreview] = useState(false), [busy, setBusy] = useState(false), [notice, setNotice] = useState(""), [error, setError] = useState("");
-  const running = useRef(false), live = useRef(true);
+  const running = useRef(false), live = useRef(true), identity = useRef(id);
+  identity.current = id;
   useEffect(() => { live.current = true; return () => { live.current = false; }; }, [id]);
   const save = async () => {
     if (running.current) return;
     running.current = true; setBusy(true); setNotice(""); setError("");
-    try { if (await saveAttachmentOriginal(id, name)) { if (live.current) setNotice("图片已保存"); } }
-    catch (cause) { if (live.current) setError(cause instanceof Error ? cause.message : String(cause)); }
-    finally { running.current = false; if (live.current) setBusy(false); }
+    try { if (await saveAttachmentOriginal(id, name)) { if (live.current && identity.current === id) setNotice("图片已保存"); } }
+    catch (cause) { if (live.current && identity.current === id) setError(cause instanceof Error ? cause.message : String(cause)); }
+    finally { running.current = false; if (live.current && identity.current === id) setBusy(false); }
   };
   return <div className="image-attachment" onMouseDown={event => event.preventDefault()}>
     <button type="button" className="image-open" aria-label={`预览图片 ${name}`} disabled={!src} onClick={() => setPreview(true)}><img src={src || undefined} alt={name} draggable={false}/></button>

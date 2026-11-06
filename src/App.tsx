@@ -199,6 +199,7 @@ import { AccessChanged } from "./access-client";
 import { MetadataStale } from "./metadata-client";
 import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
+import { attachmentExportPending } from "./attachment-export";
 import DataManagement, { type DataManagementHandle } from "./DataManagement";
 import type { ArchiveResult } from "./data-management";
 import { documentsEqual } from "./document-equality";
@@ -639,6 +640,7 @@ function App() {
     new TrustedSynchronization<Workspace>(),
   ).current;
   const synchronizingRef = useRef(false);
+  const synchronizationWork = useRef<Promise<SynchronizationResult<Workspace>> | null>(null);
   const initializedSelection = useRef(false);
   const metadataRefreshRef = useRef<
     (force?: boolean) => Promise<Workspace | undefined>
@@ -1058,7 +1060,12 @@ function App() {
             continue;
           }
           if (error instanceof AccessChanged) {
-            await synchronizeRef.current();
+            // A concurrent trusted validation intentionally invalidates older
+            // metadata reads. Reuse its proof instead of upgrading that quiet
+            // validation to a new full-window request.
+            if (synchronizingRef.current && synchronizationWork.current)
+              await synchronizationWork.current;
+            else await synchronizeRef.current();
             return;
           }
           fail(error);
@@ -1694,7 +1701,7 @@ function App() {
     const knownSession = accessGate.state?.sessionId;
     const quiet = options?.quiet && initializedSelection.current && !!knownSession &&
       !accessGate.state?.operationId && !accessGate.state?.suspended.length && !syncCoverRef.current;
-    return synchronization.request(
+    const work = synchronization.request(
       () => {
         invalidateAccessRequests();
         if (!quiet) coverSynchronization();
@@ -1746,6 +1753,11 @@ function App() {
         // Keep cached content covered until a trusted retry succeeds.
       },
     );
+    synchronizationWork.current = work;
+    void work.finally(() => {
+      if (synchronizationWork.current === work) synchronizationWork.current = null;
+    }).catch(() => {});
+    return work;
   };
   accessHandler.current = (event) => {
     if (event.phase === "prepare") {
@@ -4727,6 +4739,7 @@ function App() {
         busy:
           loading ||
           archiveBusy ||
+          attachmentExportPending() ||
           !!dataManagementHandle.current?.inspect().busy ||
           synchronizingRef.current ||
           !!metadataRefreshRunning.current ||
