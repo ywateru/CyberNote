@@ -9,7 +9,7 @@ use crate::{
         synchronization::{Resolution, WindowReply},
         Session, Token,
     },
-    store::{AppError, Result},
+    store::{AppError, Result, Store},
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
@@ -26,6 +26,37 @@ use std::{
     time::{Duration, Instant},
 };
 pub(crate) type SharedSession = Arc<(Mutex<Session>, Condvar)>;
+fn prepared_store<T>(
+    shared: &SharedSession,
+    incoming: &[WireVersion],
+    bootstrap: bool,
+    operation: impl FnOnce(&mut Store) -> Result<T>,
+) -> Result<T> {
+    prepared_store_checked(shared, incoming, bootstrap, |_| Ok(()), operation)
+}
+fn prepared_store_checked<T>(
+    shared: &SharedSession,
+    incoming: &[WireVersion],
+    bootstrap: bool,
+    validate: impl Fn(&Session) -> Result<()>,
+    operation: impl FnOnce(&mut Store) -> Result<T>,
+) -> Result<T> {
+    let (snapshot, authority) = {
+        let s = shared.0.lock().map_err(|_| error("sync_internal"))?;
+        validate(&s)?;
+        (
+            s.store.sync_media_snapshot(incoming, bootstrap)?,
+            s.sync_media_token(),
+        )
+    };
+    let media = snapshot.verify()?;
+    let mut s = shared.0.lock().map_err(|_| error("sync_internal"))?;
+    s.check(&authority, None)
+        .map_err(|_| error("sync_plan_stale"))?;
+    validate(&s)?;
+    s.store.sync_with_media(media, operation)
+}
+
 pub(crate) trait WindowHost: Send + Sync + 'static {
     fn participants(&self) -> HashSet<String>;
     fn emit(&self, event: &str, payload: &Value) -> Result<()>;
@@ -57,6 +88,7 @@ fn backend_error(e: AppError) -> SyncError {
         "sync_workspace_mismatch" => SyncError::WorkspaceMismatch,
         "sync_device_mismatch" => SyncError::Authentication,
         "sync_limit" => SyncError::Limit,
+        "sync_plan_stale" => SyncError::PlanStale,
         "sync_invalid" | "sync_blob_corrupt" => SyncError::Protocol,
         _ => SyncError::Backend,
     }
@@ -104,14 +136,15 @@ impl SyncBackend for StoreBackend {
         })
     }
     fn adopt_workspace(&self, workspace: &str) -> super::identity::Result<()> {
-        self.with(|s| {
-            s.store
+        prepared_store(&self.shared, &[], true, |store| {
+            store
                 .sync_enable_with_device(Some(workspace), &self.device)
                 .map(|_| ())
         })
+        .map_err(backend_error)
     }
     fn flush(&self) -> super::identity::Result<()> {
-        self.with(|s| s.store.sync_flush())
+        prepared_store(&self.shared, &[], false, |store| store.sync_flush()).map_err(backend_error)
     }
     fn inventory(
         &self,
@@ -141,14 +174,17 @@ impl SyncBackend for StoreBackend {
         self.with(|s| Ok(serde_json::to_value(s.store.sync_version(digest)?)?))
     }
     fn required_blobs(&self, version: &Value) -> super::identity::Result<Vec<network::BlobRef>> {
-        let (references, storage) = self.with(|s| {
-            let wire: WireVersion = serde_json::from_value(version.clone())?;
-            s.store.sync_validate_receive(std::slice::from_ref(&wire))?;
-            Ok((
-                s.store.sync_required_blobs(&wire)?,
-                s.store.sync_blob_storage()?,
-            ))
-        })?;
+        let wire: WireVersion =
+            serde_json::from_value(version.clone()).map_err(|_| SyncError::Protocol)?;
+        let (references, storage) =
+            prepared_store(&self.shared, std::slice::from_ref(&wire), false, |store| {
+                store.sync_validate_receive(std::slice::from_ref(&wire))?;
+                Ok((
+                    store.sync_required_blobs(&wire)?,
+                    store.sync_blob_storage()?,
+                ))
+            })
+            .map_err(backend_error)?;
         // Actual cache/disk checks do not keep the Session locked. Receive and
         // immutable publication repeat their own checks after the socket wait.
         storage
@@ -193,14 +229,15 @@ impl SyncBackend for StoreBackend {
             .map_err(backend_error)
     }
     fn receive_head(&self, v: Value) -> super::identity::Result<network::Receipt> {
-        self.with(|s| {
-            let wire: WireVersion = serde_json::from_value(v)?;
-            let r = s.store.sync_receive(vec![wire])?;
+        let wire: WireVersion = serde_json::from_value(v).map_err(|_| SyncError::Protocol)?;
+        prepared_store(&self.shared, std::slice::from_ref(&wire), false, |store| {
+            let r = store.sync_receive(vec![wire.clone()])?;
             Ok(network::Receipt {
                 durable: r.durable,
                 applied: false,
             })
         })
+        .map_err(backend_error)
     }
 }
 #[derive(Clone, Deserialize)]
@@ -445,12 +482,13 @@ impl Runtime {
                         .unwrap()
                         .device_id()
                         .map_err(network_error)?;
-                    self.shared
-                        .0
-                        .lock()
-                        .map_err(|_| error("sync_internal"))?
-                        .store
-                        .sync_enable_with_device(None, &device)?;
+                    prepared_store_checked(
+                        &self.shared,
+                        &[],
+                        true,
+                        |s| s.sync_check_window(window, &self.host.participants(), expected),
+                        |store| store.sync_enable_with_device(None, &device),
+                    )?;
                     let c = Config {
                         version: 1,
                         device_name,
@@ -534,7 +572,7 @@ impl Runtime {
                         .map_err(network_error)?;
                 }
                 Command::Conflicts {} => {
-                    conflicts = Some(self.conflicts()?);
+                    conflicts = Some(self.conflicts(window, expected)?);
                 }
                 Command::Resolve {
                     kind,
@@ -592,7 +630,7 @@ impl Runtime {
                             }
                         }
                     }
-                    conflicts = Some(self.conflicts()?);
+                    conflicts = Some(self.conflicts(window, expected)?);
                 }
             }
             Ok(())
@@ -613,12 +651,29 @@ impl Runtime {
             json!({"status":status,"invitation":invitation,"conflicts":conflicts}),
         ))
     }
-    fn conflicts(&self) -> Result<Value> {
-        let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+    fn conflicts(&self, window: &str, expected: &Token) -> Result<Value> {
+        if self
+            .shared
+            .0
+            .lock()
+            .map_err(|_| error("sync_internal"))?
+            .store
+            .sync_identity()?
+            .is_some()
+        {
+            prepared_store_checked(
+                &self.shared,
+                &[],
+                false,
+                |s| s.sync_check_window(window, &self.host.participants(), expected),
+                |store| store.sync_flush(),
+            )?;
+        }
+        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
         if s.store.sync_identity()?.is_none() {
             return Ok(json!([]));
         }
-        s.store.sync_flush()?;
+        s.sync_check_window(window, &self.host.participants(), expected)?;
         let mut result = vec![];
         for c in s.store.sync_conflicts()? {
             let mut variants = vec![];
@@ -727,26 +782,52 @@ impl Runtime {
     fn coordinate(&self) {
         // No runtime lock is required while waiting for renderers. A network
         // pair command can remain in flight while stdin/IPC processes replies.
+        let preparation = (|| -> Result<_> {
+            let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+            if s.store.sync_identity()?.is_some()
+                && (s.sync_has_operation()
+                    || (self.active.load(Ordering::Acquire) && s.store.sync_pending_count()? > 0))
+            {
+                Ok(Some((
+                    s.store.sync_media_snapshot(&[], false)?,
+                    s.sync_media_token(),
+                )))
+            } else {
+                Ok(None)
+            }
+        })()
+        .and_then(|value| {
+            value
+                .map(|(snapshot, id)| snapshot.verify().map(|media| (media, id)))
+                .transpose()
+        });
         let result = (|| -> Result<_> {
             let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
             let live = self.host.participants();
-            let tick = s.sync_tick(&live);
-            if tick.is_err() {
-                s.sync_abort();
-            }
-            let mut events = vec![];
-            match tick {
-                Ok(Some((event, access))) => {
-                    if let Some(metadata) = s.take_metadata_event() {
-                        events.push(("notes-metadata", metadata));
+            let installed = match preparation {
+                Ok(Some((media, authority))) if s.check(&authority, None).is_ok() => {
+                    match s.store.sync_begin_media(media) {
+                        Ok(()) => true,
+                        Err(_) => {
+                            s.sync_abort();
+                            false
+                        }
                     }
-                    if let Some(access) = access {
-                        events.push(("notes-access", access));
-                    }
-                    events.push(("notes-sync", event));
                 }
-                Err(_) => {
-                    if let Some((event, access)) = s.sync_tick(&live)? {
+                Err(_) | Ok(Some(_)) => {
+                    s.sync_abort();
+                    false
+                }
+                Ok(None) => false,
+            };
+            let outcome = (|| -> Result<_> {
+                let tick = s.sync_tick(&live);
+                if tick.is_err() {
+                    s.sync_abort();
+                }
+                let mut events = vec![];
+                match tick {
+                    Ok(Some((event, access))) => {
                         if let Some(metadata) = s.take_metadata_event() {
                             events.push(("notes-metadata", metadata));
                         }
@@ -755,20 +836,36 @@ impl Runtime {
                         }
                         events.push(("notes-sync", event));
                     }
+                    Err(_) => {
+                        if let Some((event, access)) = s.sync_tick(&live)? {
+                            if let Some(metadata) = s.take_metadata_event() {
+                                events.push(("notes-metadata", metadata));
+                            }
+                            if let Some(access) = access {
+                                events.push(("notes-access", access));
+                            }
+                            events.push(("notes-sync", event));
+                        }
+                    }
+                    _ => {}
                 }
-                _ => {}
-            }
-            if events.is_empty()
-                && self.active.load(Ordering::Acquire)
-                && !live.is_empty()
-                && s.store.sync_identity()?.is_some()
-                && s.store.sync_pending_count()? > 0
-            {
-                if let Ok(event) = s.sync_begin(live, None) {
-                    events.push(("notes-sync", event));
+                if events.is_empty()
+                    && installed
+                    && self.active.load(Ordering::Acquire)
+                    && !live.is_empty()
+                    && s.store.sync_identity()?.is_some()
+                    && s.store.sync_pending_count()? > 0
+                {
+                    if let Ok(event) = s.sync_begin(live, None) {
+                        events.push(("notes-sync", event));
+                    }
                 }
+                Ok(events)
+            })();
+            if installed {
+                s.store.sync_end_media();
             }
-            Ok(events)
+            outcome
         })();
         if let Ok(events) = result {
             for (name, event) in events {
@@ -1244,3 +1341,7 @@ mod local_stage_budget_tests {
         );
     }
 }
+
+#[cfg(test)]
+#[path = "adapter_media_tests.rs"]
+mod media_tests;

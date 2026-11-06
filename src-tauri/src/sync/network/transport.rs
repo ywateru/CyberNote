@@ -105,11 +105,29 @@ fn noise_read(h: &mut HandshakeState, bytes: &[u8]) -> Result<Vec<u8>> {
     out.truncate(n);
     Ok(out)
 }
+fn tls_connector() -> Result<tokio_tungstenite::Connector> {
+    // Bind this client to one explicit provider; do not depend on process-wide
+    // auto-detection, which panics when transitive feature sets are ambiguous.
+    let roots = rustls::RootCertStore::from_iter(webpki_roots::TLS_SERVER_ROOTS.iter().cloned());
+    let config = rustls::ClientConfig::builder_with_provider(Arc::new(
+        rustls::crypto::ring::default_provider(),
+    ))
+    .with_safe_default_protocol_versions()
+    .map_err(|_| SyncError::Transport)?
+    .with_root_certificates(roots)
+    .with_no_client_auth();
+    Ok(tokio_tungstenite::Connector::Rustls(Arc::new(config)))
+}
 pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(SecureSocket, String)> {
     super::super::identity::endpoint(&invite.endpoint)?;
     let (mut ws, _) = timeout(
         NETWORK_TIMEOUT,
-        tokio_tungstenite::connect_async_with_config(&invite.endpoint, Some(config()), true),
+        tokio_tungstenite::connect_async_tls_with_config(
+            &invite.endpoint,
+            Some(config()),
+            true,
+            Some(tls_connector()?),
+        ),
     )
     .await
     .map_err(|_| SyncError::Timeout)?
@@ -735,5 +753,18 @@ mod tests {
             std::fs::read_dir(dir.path().join("stage")).unwrap().count(),
             0
         );
+    }
+}
+
+#[cfg(test)]
+mod tls_provider_tests {
+    use super::*;
+    #[test]
+    fn production_connector_has_explicit_ring_provider_and_public_roots() {
+        let tokio_tungstenite::Connector::Rustls(config) = tls_connector().unwrap() else {
+            panic!("rustls connector required")
+        };
+        assert!(!config.crypto_provider().cipher_suites.is_empty());
+        assert!(config.enable_sni);
     }
 }

@@ -84,6 +84,9 @@ impl Store {
         })
     }
     pub fn sync_blob_path(&self, hash: &str) -> Result<PathBuf> {
+        if let Some(media) = &self.sync_media {
+            return media.blob_path(hash);
+        }
         self.sync_blob_storage()?.sync_blob_path(hash)
     }
     pub fn sync_store_blob(&self, hash: &str, size: u64, reader: impl Read) -> Result<()> {
@@ -91,6 +94,16 @@ impl Store {
             .sync_store_blob(hash, size, reader)
     }
     pub(super) fn capture_blob(&self, attachment: &Attachment) -> Result<String> {
+        if let Some(media) = &self.sync_media {
+            let (hash, size) = self.sync_local_hash(attachment)?;
+            if !media.has_blob(&BlobRef {
+                hash: hash.clone(),
+                size,
+            })? {
+                return Err(err("sync_missing_blob", "本地媒体尚未在锁外完成capture"));
+            }
+            return Ok(hash);
+        }
         let source = self.attachment_path(&attachment.relative_path)?;
         let (hash, size) = hash_file(&source)?;
         if size != attachment.size {
@@ -100,6 +113,9 @@ impl Store {
         Ok(hash)
     }
     pub(super) fn has_blob(&self, reference: &BlobRef) -> Result<bool> {
+        if let Some(media) = &self.sync_media {
+            return media.has_blob(reference);
+        }
         let path = self
             .root
             .join(".sync/blobs")
@@ -122,7 +138,7 @@ impl Store {
 /// reference, so hashing/copying a large local file never holds their mutex.
 #[derive(Clone)]
 pub(crate) struct BlobStorage {
-    root: PathBuf,
+    pub(super) root: PathBuf,
 }
 impl BlobStorage {
     fn publication_file(&self) -> Result<File> {
@@ -269,6 +285,13 @@ impl BlobStorage {
         if references.len() > 1024 {
             return Err(limit("单版本附件数量超过1024"));
         }
+        self.validate_media_allocation(references, |r| self.contains(&r.hash, r.size))
+    }
+    pub(super) fn validate_media_allocation(
+        &self,
+        references: &[BlobRef],
+        has: impl Fn(&BlobRef) -> Result<bool>,
+    ) -> Result<()> {
         let mut unique = BTreeMap::new();
         let mut missing = 0u64;
         let mut largest = 0u64;
@@ -279,7 +302,7 @@ impl BlobStorage {
                 }
                 continue;
             }
-            if !self.contains(&reference.hash, reference.size)? {
+            if !has(reference)? {
                 missing = missing
                     .checked_add(reference.size)
                     .ok_or_else(|| limit("blob预算溢出"))?;
@@ -322,7 +345,7 @@ impl BlobStorage {
         Ok(true)
     }
 
-    fn sync_directories(&self) -> Result<()> {
+    pub(super) fn sync_directories(&self) -> Result<()> {
         safe_directory(&self.root.join(".sync"))?;
         safe_directory(&self.root.join(".sync/blobs"))?;
         safe_directory(&self.root.join(".sync/staging"))

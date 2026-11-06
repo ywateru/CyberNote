@@ -30,6 +30,7 @@ pub enum SyncError {
     Timeout,
     Stopped,
     Backend,
+    PlanStale,
     Busy,
     Transport,
 }

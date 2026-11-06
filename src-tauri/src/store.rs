@@ -175,6 +175,8 @@ pub struct Store {
     root: PathBuf,
     keys: HashMap<String, [u8; 32]>,
     receipt: Option<CommitReceipt>,
+    sync_media: Option<synchronization::media::VerifiedMedia>,
+    sync_media_cache: std::collections::BTreeMap<PathBuf, synchronization::media::VerifiedFile>,
 }
 impl Store {
     pub fn open(root: impl AsRef<Path>) -> Result<Self> {
@@ -185,6 +187,8 @@ impl Store {
             root: root.as_ref().into(),
             keys: HashMap::new(),
             receipt: None,
+            sync_media: None,
+            sync_media_cache: std::collections::BTreeMap::new(),
         };
         s.validate_sync_schema()?;
         s.initialize_storage()?;

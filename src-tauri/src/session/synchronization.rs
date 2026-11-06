@@ -56,6 +56,16 @@ struct Quiet {
     resolution: Option<Resolution>,
 }
 impl Session {
+    pub(crate) fn sync_media_token(&self) -> Token {
+        Token {
+            session_id: self.id.clone(),
+            epoch: self.epoch,
+            note_epoch: None,
+        }
+    }
+    pub(crate) fn sync_has_operation(&self) -> bool {
+        self.quiet.current.is_some()
+    }
     pub(crate) fn sync_session_id(&self) -> &str {
         &self.id
     }

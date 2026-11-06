@@ -8,6 +8,8 @@ use std::{
 };
 #[path = "synchronization/blob.rs"]
 mod blob;
+#[path = "synchronization/media.rs"]
+pub(crate) mod media;
 #[path = "synchronization/projection.rs"]
 mod projection;
 #[path = "synchronization/schema.rs"]
@@ -462,6 +464,9 @@ impl Store {
     /// Read-only network allocation gate. Repeated inside receive because local
     /// state can change while a socket transfers the validated media.
     pub(crate) fn sync_validate_receive(&self, versions: &[WireVersion]) -> Result<()> {
+        self.sync_validate_receive_inner(versions, true)
+    }
+    fn sync_validate_receive_inner(&self, versions: &[WireVersion], files: bool) -> Result<()> {
         if !enabled(&self.db)? {
             return Err(err("sync_disabled", "尚未开启同步"));
         }
@@ -551,8 +556,9 @@ impl Store {
                         || local.display_name != attachment.display_name
                         || local.size != attachment.size
                         || local.recorded_at != attachment.recorded_at
-                        || blob::hash_file(&self.attachment_path(&local.relative_path)?)?
-                            != (attachment.sha256.clone(), attachment.size)
+                        || (files
+                            && self.sync_local_hash(&local)?
+                                != (attachment.sha256.clone(), attachment.size))
                     {
                         return Err(err(
                             "sync_attachment_conflict",
@@ -695,7 +701,7 @@ impl Store {
     }
     fn generation(&self, db: &Connection) -> Result<String> {
         let mut snapshot = Vec::new();
-        for sql in ["SELECT body FROM notes ORDER BY id","SELECT body FROM folders ORDER BY id","SELECT body FROM attachments ORDER BY id","SELECT printf('%s:%s',kind,entity_id) FROM sync_dirty ORDER BY kind,entity_id","SELECT printf('%s:%s:%d',digest,vector,redacted) FROM sync_heads ORDER BY digest","SELECT printf('%s:%s:%s',kind,entity_id,digest) FROM sync_projection ORDER BY kind,entity_id","SELECT digest FROM sync_inbox ORDER BY digest","SELECT printf('%s:%s:%s:%d',kind,entity_id,actor_id,counter) FROM sync_frontiers ORDER BY kind,entity_id,actor_id","SELECT printf('%s:%s:%s:%s',kind,entity_id,head_digest,actor_id) FROM sync_branches ORDER BY kind,entity_id,head_digest","SELECT printf('%s:%s:%s',kind,entity_id,actor_id) FROM sync_local_actors ORDER BY kind,entity_id,actor_id","SELECT printf('%s:%s:%d',workspace_id,device_id,counter) FROM sync_identity"] {
+        for sql in ["SELECT body FROM notes ORDER BY id","SELECT body FROM folders ORDER BY id","SELECT body FROM attachments ORDER BY id","SELECT printf('%s:%s',kind,entity_id) FROM sync_dirty ORDER BY kind,entity_id","SELECT printf('%s:%s:%d',digest,vector,redacted) FROM sync_heads ORDER BY digest","SELECT printf('%s:%s:%s',kind,entity_id,digest) FROM sync_projection ORDER BY kind,entity_id","SELECT digest FROM sync_inbox ORDER BY digest","SELECT printf('%s:%s:%s:%d',kind,entity_id,actor_id,counter) FROM sync_frontiers ORDER BY kind,entity_id,actor_id","SELECT printf('%s:%s:%s:%s',kind,entity_id,head_digest,actor_id) FROM sync_branches ORDER BY kind,entity_id,head_digest","SELECT printf('%s:%s:%s',kind,entity_id,actor_id) FROM sync_local_actors ORDER BY kind,entity_id,actor_id","SELECT printf('%s:%s:%d',workspace_id,device_id,counter) FROM sync_identity", "SELECT descriptor FROM sync_attachments ORDER BY id", "SELECT printf('%s:%s:%s:%s',kind,entity_id,vector,digest) FROM sync_seen ORDER BY kind,entity_id,vector"] {
             let mut q=db.prepare(sql)?;
             let rows=q.query_map([],|r|r.get::<_,String>(0))?.collect::<std::result::Result<Vec<_>,_>>()?;
             snapshot.push(rows);
