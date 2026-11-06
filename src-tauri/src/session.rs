@@ -154,6 +154,23 @@ impl Session {
         }
         Ok(())
     }
+    pub(crate) fn apple_import_access(&self, token: &Token) -> Result<()> {
+        self.require_global_document_access(token)?;
+        if self.sync_has_operation() {
+            return Err(denied("同步正在提交，请稍后导入"));
+        }
+        Ok(())
+    }
+    pub(crate) fn append_apple_notes(
+        &mut self,
+        batch: crate::store::apple_import::PreparedBatch,
+        token: &Token,
+    ) -> Result<Value> {
+        self.prepare_metadata(true)?;
+        self.apple_import_access(token)?;
+        let result = self.apply_store(|store| Ok(json!({"results":store.append_apple_notes(batch)?})));
+        self.finish_value(result)
+    }
     pub(crate) fn data_management(&self, token: &Token) -> Result<Value> {
         self.require_global_document_access(token)?;
         self.tagged(serde_json::to_value(self.store.data_management()?)?)

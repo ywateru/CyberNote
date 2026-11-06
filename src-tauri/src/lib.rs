@@ -1,3 +1,4 @@
+mod apple_notes_import;
 mod media_permission;
 mod recording_window;
 mod session;
@@ -494,9 +495,13 @@ async fn import_archive(
 pub fn run() {
     let builder = tauri::Builder::default()
         .manage(recording_window::Recordings::default())
+        .manage(apple_notes_import::Imports::default())
         .on_window_event(|window, event| {
             if matches!(event, tauri::WindowEvent::Destroyed) {
                 recording_window::destroyed(window.app_handle(), window.label());
+                if let Some(imports) = window.try_state::<apple_notes_import::Imports>() {
+                    apple_notes_import::destroyed(&imports, window.label());
+                }
                 if let Some(state) = window.try_state::<AppState>() {
                     if let Ok(mut session) = state.0 .0.lock() {
                         session.forget_attachment_window(window.label());
@@ -649,6 +654,10 @@ pub fn run() {
         export_attachment,
         export_archive,
         import_archive,
+        apple_notes_import::apple_notes_scan,
+        apple_notes_import::apple_notes_status,
+        apple_notes_import::apple_notes_start,
+        apple_notes_import::apple_notes_cancel,
         recording_window::register_recording_local,
         recording_window::recording_local_validate,
         recording_window::recording_local_started,
@@ -676,6 +685,10 @@ pub fn run() {
         export_attachment,
         export_archive,
         import_archive,
+        apple_notes_import::apple_notes_scan,
+        apple_notes_import::apple_notes_status,
+        apple_notes_import::apple_notes_start,
+        apple_notes_import::apple_notes_cancel,
         proof_access_record,
         recording_window::register_recording_local,
         recording_window::recording_local_validate,

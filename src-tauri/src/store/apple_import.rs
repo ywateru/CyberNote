@@ -43,7 +43,7 @@ pub(crate) struct SourceNote {
     pub status: String,
     pub attachments: Vec<SourceAttachment>,
 }
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct ItemResult {
     pub key: String,
