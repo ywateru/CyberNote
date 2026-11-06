@@ -1,0 +1,179 @@
+{
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "9536fe6f700aa10a6420dab5e98dc2f4b1627244eb7d5d9a39117a85fbbfaf2c",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx"
+    ]
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "9536fe6f700aa10a6420dab5e98dc2f4b1627244eb7d5d9a39117a85fbbfaf2c",
+    "fileCount": 132,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx"
+    ]
+  },
+  "elapsedMs": 6546,
+  "naturalExit": 0,
+  "rows": [
+    {
+      "stage": "before-prepare",
+      "state": {
+        "frozen": false,
+        "sessionId": "debug70-931805c3-71dc-41f1-9b5a-ddead589c5d0",
+        "protectedNoteIds": [],
+        "blocked": false,
+        "editors": [
+          {
+            "id": "note-a",
+            "composing": false,
+            "pendingComposition": false,
+            "editable": true,
+            "frozen": false,
+            "owner": "note-a",
+            "externalVersion": 0
+          }
+        ]
+      },
+      "selected": "note-a",
+      "replies": [],
+      "dom": {
+        "same": true,
+        "connected": true,
+        "activeSame": true,
+        "activeTag": "DIV",
+        "activeClass": "tiptap ProseMirror ProseMirror-focused"
+      }
+    },
+    {
+      "stage": "prepared",
+      "state": {
+        "frozen": true,
+        "sessionId": "debug70-931805c3-71dc-41f1-9b5a-ddead589c5d0",
+        "protectedNoteIds": [],
+        "blocked": false,
+        "editors": [
+          {
+            "id": "note-a",
+            "composing": false,
+            "pendingComposition": false,
+            "editable": false,
+            "frozen": true,
+            "owner": "note-a",
+            "externalVersion": 0
+          }
+        ]
+      },
+      "selected": "note-a",
+      "replies": [
+        {
+          "phase": "prepare",
+          "operationId": "focus-probe",
+          "ready": true
+        }
+      ],
+      "dom": {
+        "same": true,
+        "connected": true,
+        "activeSame": false,
+        "activeTag": "BODY",
+        "activeClass": ""
+      }
+    },
+    {
+      "stage": "metadata",
+      "state": {
+        "frozen": true,
+        "sessionId": "debug70-931805c3-71dc-41f1-9b5a-ddead589c5d0",
+        "protectedNoteIds": [],
+        "blocked": false,
+        "editors": [
+          {
+            "id": "note-a",
+            "composing": false,
+            "pendingComposition": false,
+            "editable": false,
+            "frozen": true,
+            "owner": "note-a",
+            "externalVersion": 0
+          }
+        ]
+      },
+      "selected": "note-a",
+      "replies": [
+        {
+          "phase": "prepare",
+          "operationId": "focus-probe",
+          "ready": true
+        }
+      ],
+      "dom": {
+        "same": true,
+        "connected": true,
+        "activeSame": false,
+        "activeTag": "BODY",
+        "activeClass": ""
+      }
+    },
+    {
+      "stage": "released",
+      "state": {
+        "frozen": false,
+        "sessionId": "debug70-931805c3-71dc-41f1-9b5a-ddead589c5d0",
+        "protectedNoteIds": [],
+        "blocked": false,
+        "editors": [
+          {
+            "id": "note-a",
+            "composing": false,
+            "pendingComposition": false,
+            "editable": true,
+            "frozen": false,
+            "owner": "note-a",
+            "externalVersion": 0
+          }
+        ]
+      },
+      "selected": "note-a",
+      "replies": [
+        {
+          "phase": "prepare",
+          "operationId": "focus-probe",
+          "ready": true
+        }
+      ],
+      "dom": {
+        "same": true,
+        "connected": true,
+        "activeSame": true,
+        "activeTag": "DIV",
+        "activeClass": "tiptap ProseMirror ProseMirror-focused"
+      }
+    }
+  ],
+  "pageErrors": []
+}

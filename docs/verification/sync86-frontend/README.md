@@ -46,3 +46,7 @@ attachment/recording 的 global epoch 允许可信 snapshot 下前进重绑，�
 `notes-sync`、`sync_window_reply`、metadata/access、文件/录音本机 IPC、临时库与 chooser 都是明确 fixture 边界。最终报告不证明生产 Rust coordinator、SQLite merge、真实 socket/Noise、双页面独立 transport 或 Android。锁定 B 的 global epoch 场景是 fixture 后端发布可信 workspace 的本机边界测试，不是对端网络合并结果。
 
 没有修改 Rust/lib/Session/网络/身份或 Rust runner，没有创建/删除工作树、合并或 push。没有访问、安装、启停、读取或备份原 Android/旧 AVD，原约 13 秒未保存录音现场未操作。root 后续整合两个真实 App DOM 各接独立生产 Rust transport，并安排独立源码审查；本开发证据不替代这些步骤。
+
+## 2026-11-06 独审 P2 修复轮
+
+独审在原冻结源码中确认 HTML 搜索/Escape 先改变 owner 和 release 丢失 editor 焦点两项 P2；原 [blocked 报告](../../plan/reviews/app-sync86-frontend.md)与全部原失败证据保留。修复源码已单独冻结为 `0c84e589398f90a403f0db7665cb6bebb9db37bb`，作者在干净冻结提交上重跑原 34 项、新增 41 项、notes 9、build、生产入口排除及 diff-check，全部自然 0。完整修复说明、同一 133 文件指纹、原始失败和 final 原件见 [repair/README.md](repair/README.md)；此为开发回归证据，仍待 root 安排原独审者复审，不自行改写独审结论。

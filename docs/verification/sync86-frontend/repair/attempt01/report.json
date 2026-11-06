@@ -1,0 +1,768 @@
+{
+  "sourceHead": "b4d4cdd3e9085a8f949a109a64f919eb7efbc402",
+  "before": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "400c5a9b6f2defd65f0048a3dbabd13bb20c5d1b507f5ef89ce4743678216241",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      "?? scripts/debug/sync-window-navigation.mjs"
+    ]
+  },
+  "after": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "400c5a9b6f2defd65f0048a3dbabd13bb20c5d1b507f5ef89ce4743678216241",
+    "fileCount": 133,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M src/App.tsx",
+      "?? scripts/debug/sync-window-navigation.mjs"
+    ]
+  },
+  "sourceChanged": false,
+  "checks": [
+    "HTML typing keeps the old applied query and editor owner until terminal receipt",
+    "Multiple real HTML input events keep the latest draft visible during cancellation",
+    "The final typed query applies after terminal and selects the matching owner",
+    "Real Escape retains the old owner and applied search until terminal",
+    "Escape exits search and returns to the original owner after terminal",
+    "Programmatic global search defers its projection and retains the request",
+    "Programmatic search applies its original query after terminal",
+    "Clear search click continues to wait for terminal",
+    "Clear search click replays after terminal",
+    "Programmatic tag filter preserves the old owner until terminal",
+    "Programmatic tag filter replays after terminal",
+    "Programmatic view changes defer owner and layout until terminal",
+    "Programmatic view change replays after terminal",
+    "Folder click continues to wait for terminal",
+    "Folder click replays after terminal",
+    "Search focus defers searching state while retaining the new input focus",
+    "Search focus state replays after terminal without restoring the old editor focus",
+    "Global search keyboard shortcut defers projection until terminal",
+    "Global search keyboard shortcut replays after terminal",
+    "Prepare preserves DOM and selection while the actual focused editor is parked",
+    "Equal-body metadata keeps the same frozen editor and does not cancel the lease",
+    "Abort restores the original focused editor and exact selection on the same DOM",
+    "Actual keyboard Undo still reaches history after focus restoration",
+    "Moving focus to the actual search input prevents editor focus theft on release"
+  ],
+  "observations": [
+    {
+      "name": "HTML typing held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "HTML typing after terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-b",
+        "page": "folders",
+        "query": "Fixture B",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-b"
+        ]
+      },
+      "frozen": false,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        },
+        {
+          "id": "note-b",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": true,
+          "frozen": false,
+          "owner": "note-b",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": false
+    },
+    {
+      "name": "Escape held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-b",
+        "page": "folders",
+        "query": "Fixture B",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        },
+        {
+          "id": "note-b",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-b",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Escape after terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": false,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": true,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": false
+    },
+    {
+      "name": "Debug search held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Clear search held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-b",
+        "page": "folders",
+        "query": "Fixture B",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": false,
+          "owner": "note-a",
+          "externalVersion": 0
+        },
+        {
+          "id": "note-b",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-b",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Programmatic tag filter held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "folders",
+        "query": "",
+        "searching": true,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Programmatic view filter held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Folder click held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Search focus held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "Search shortcut held before terminal",
+      "selection": {
+        "folderId": "default",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "frozen": true,
+      "editors": [
+        {
+          "id": "note-a",
+          "composing": false,
+          "pendingComposition": false,
+          "editable": false,
+          "frozen": true,
+          "owner": "note-a",
+          "externalVersion": 0
+        }
+      ],
+      "replyPending": true
+    },
+    {
+      "name": "focused editor prepared",
+      "focus": {
+        "sameDOM": true,
+        "focused": false,
+        "sameSelection": true,
+        "sameDocument": true,
+        "editable": false,
+        "pageFocused": true,
+        "activeTag": "BODY"
+      }
+    },
+    {
+      "name": "focused editor released",
+      "focus": {
+        "sameDOM": true,
+        "focused": true,
+        "sameSelection": true,
+        "sameDocument": true,
+        "editable": true,
+        "pageFocused": true,
+        "activeTag": "DIV"
+      }
+    },
+    {
+      "name": "failure",
+      "state": {
+        "workspace": {
+          "folders": [
+            {
+              "id": "default",
+              "name": "备忘录",
+              "sortOrder": 0,
+              "createdAt": 1,
+              "kind": "default",
+              "parentId": null
+            },
+            {
+              "id": "quick",
+              "name": "快速备忘录",
+              "sortOrder": -1,
+              "createdAt": 1,
+              "kind": "quick",
+              "parentId": null
+            },
+            {
+              "id": "trash",
+              "name": "最近删除",
+              "sortOrder": 9999,
+              "createdAt": 1,
+              "kind": "trash",
+              "parentId": null
+            }
+          ],
+          "notes": [
+            {
+              "id": "note-a",
+              "folderId": "default",
+              "title": "Fixture A",
+              "plainText": "Fixture A",
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fixture A"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "createdAt": 1,
+              "updatedAt": 1793952006802,
+              "pinned": true,
+              "deletedAt": null,
+              "originalFolderId": null,
+              "locked": false,
+              "paperStyle": "plain",
+              "revision": 3
+            },
+            {
+              "id": "note-b",
+              "folderId": "default",
+              "title": "Fixture B",
+              "plainText": "Fixture B",
+              "document": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fixture B"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "createdAt": 1,
+              "updatedAt": 1,
+              "pinned": false,
+              "deletedAt": null,
+              "originalFolderId": null,
+              "locked": false,
+              "paperStyle": "plain",
+              "revision": 1
+            }
+          ],
+          "attachments": [],
+          "settings": {
+            "selectedFolder": "default",
+            "selectedNote": "note-a",
+            "theme": "light",
+            "sort": "title",
+            "view": "list"
+          },
+          "access": {
+            "sessionId": "debug70-bce1d618-c6b9-4c8b-8220-ed50757b8472",
+            "epoch": 1,
+            "notes": {
+              "note-a": {
+                "epoch": 0,
+                "authorized": true
+              },
+              "note-b": {
+                "epoch": 0,
+                "authorized": true
+              }
+            },
+            "suspended": [],
+            "operationId": null
+          },
+          "metadata": {
+            "sessionId": "debug70-bce1d618-c6b9-4c8b-8220-ed50757b8472",
+            "sequence": 3
+          }
+        },
+        "editorJSON": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture A"
+                }
+              ]
+            }
+          ]
+        },
+        "editorSelection": {
+          "type": "text",
+          "anchor": 2,
+          "head": 6
+        },
+        "error": "",
+        "notice": "",
+        "selection": {
+          "folderId": "default",
+          "noteId": "note-a",
+          "page": "notes",
+          "query": "",
+          "searching": false,
+          "menu": null,
+          "modal": null,
+          "listed": [
+            "note-a",
+            "note-b"
+          ]
+        },
+        "save": {
+          "pending": 0,
+          "queued": 1,
+          "failed": 0,
+          "saving": 0
+        },
+        "quietWindow": {
+          "frozen": true,
+          "sessionId": "debug70-bce1d618-c6b9-4c8b-8220-ed50757b8472",
+          "protectedNoteIds": [],
+          "blocked": false,
+          "editors": [
+            {
+              "id": "note-a",
+              "composing": false,
+              "pendingComposition": false,
+              "editable": false,
+              "frozen": true,
+              "owner": "note-a",
+              "externalVersion": 0
+            }
+          ]
+        },
+        "busy": false,
+        "failure": {
+          "serial": 0,
+          "message": ""
+        },
+        "recording": {
+          "active": false,
+          "state": null
+        },
+        "ocr": {
+          "phase": "choose",
+          "text": "",
+          "error": ""
+        },
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "note-a",
+          "theme": "light",
+          "sort": "title",
+          "view": "list"
+        },
+        "synchronization": null,
+        "preferences": {
+          "open": false,
+          "tab": "settings"
+        },
+        "creation": {
+          "pending": false,
+          "receipt": null,
+          "source": null,
+          "error": "",
+          "focusTarget": null
+        },
+        "folderForm": false
+      }
+    }
+  ],
+  "replies": [
+    {
+      "phase": "prepare",
+      "operationId": "048c8a6c-f4cd-4488-ad8b-a0a04f400456",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "048c8a6c-f4cd-4488-ad8b-a0a04f400456",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "08093ff8-86a2-4b96-bf9b-b078745e2bce",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "08093ff8-86a2-4b96-bf9b-b078745e2bce",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c969a983-1e46-4816-bd27-ce87fc505d05",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "c969a983-1e46-4816-bd27-ce87fc505d05",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "601774ea-6cec-40a1-8b37-57cd73bda8b7",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "601774ea-6cec-40a1-8b37-57cd73bda8b7",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "b646142e-21f2-451a-b660-4ab18f078e2d",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "b646142e-21f2-451a-b660-4ab18f078e2d",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "a5f06a1a-333b-4eeb-b952-6a1f7e245197",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "a5f06a1a-333b-4eeb-b952-6a1f7e245197",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "7d5471f1-eed7-472e-814a-51f8cc371a80",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "7d5471f1-eed7-472e-814a-51f8cc371a80",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "278c05b0-4bb7-49c4-ac24-ee382bb1cd4b",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "278c05b0-4bb7-49c4-ac24-ee382bb1cd4b",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "de921599-e543-46dd-a90c-b74831c05e2c",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "de921599-e543-46dd-a90c-b74831c05e2c",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "d11a608b-b040-43e9-ab60-ecf2965396b0",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "641bdbbf-2f7f-44a2-ba3f-06d12d1f9766",
+      "ready": true
+    },
+    {
+      "phase": "prepare",
+      "operationId": "641bdbbf-2f7f-44a2-ba3f-06d12d1f9766",
+      "ready": false
+    },
+    {
+      "phase": "prepare",
+      "operationId": "b3944e89-5adb-4edf-817d-cd674333f0ba",
+      "ready": true
+    }
+  ],
+  "failure": {
+    "message": "locator.click: Element is not visible\nCall log:\n\u001b[2m  - waiting for locator('.folder-large-title')\u001b[22m\n\u001b[2m    - locator resolved to <h1 class=\"folder-large-title\">文件夹</h1>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n",
+    "stack": "locator.click: Element is not visible\nCall log:\n\u001b[2m  - waiting for locator('.folder-large-title')\u001b[22m\n\u001b[2m    - locator resolved to <h1 class=\"folder-large-title\">文件夹</h1>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\n    at /private/tmp/apple-notes-sync86-frontend/scripts/debug/sync-window-navigation.mjs:182:45"
+  },
+  "naturalExit": 1,
+  "elapsedMs": 8353,
+  "scope": "Real React/Tiptap/Chromium DOM, input, keyboard and focus with explicit local sync/metadata/IPC fixture. No Rust, network, real mic or Android device proof."
+}
