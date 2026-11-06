@@ -46,3 +46,7 @@ ToolbarState新增可选`contentOverlay:boolean`，serde缺省false以兼容旧�
 普通native update仍在途时打开contentOverlay，若旧update随后因search_composition/stale_search拒绝，不得让较新的overlay desired永远停在队列；只对确有更新的desired继续处理，不重试同一失败请求造成自旋。关闭overlay也应恢复工具组，不能被此前搜索阻塞标志永久挡住。
 
 若为保留输入法未完成输入而保留旧revision搜索事件，必须提供明确`searchScope`：App根据导航、当前笔记、authority stamp、编辑器身份和正文版本生成，排除overlay状态与query值。同scope且确有overlay转换时才允许有限旧搜索provenance；普通无overlay更新/跨导航/正文/authority改变不能接受旧值或触发旧intent。scope改变、invalidate/stop/release清历史；已知旧scope序号最多仅确认transport，不能采用其query。历史数量有界；旧revision普通action继续拒绝。需要deferred更新及restore、旧action、scope变化和invalidate-inflight反例。
+
+## 设置合并82
+
+[统一设置与数据82](preferences.md)沿用contentOverlay状态，settings与data两标签均打开时为true，切换标签不恢复底层原生编辑工具。此状态仍不进nativeScope/searchScope，关闭整个设置界面再恢复；图片预览自身契约保持。
