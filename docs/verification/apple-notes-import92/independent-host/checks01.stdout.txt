@@ -1,0 +1,15 @@
+
+running 4 tests
+test apple_notes_import::core::independent_host::review_host_replaced_stage_is_never_cleaned_as_owned ... ok
+test apple_notes_import::core::independent_host::review_host_aggregate_media_is_refused_before_unbounded_buffering ... FAILED
+test apple_notes_import::core::independent_host::review_host_real_session_rechecks_token_and_emits_single_quiet_metadata_commit ... ok
+test apple_notes_import::core::independent_host::review_host_live_export_size_guard_reaps_owned_child ... FAILED
+
+failures:
+
+failures:
+    apple_notes_import::core::independent_host::review_host_aggregate_media_is_refused_before_unbounded_buffering
+    apple_notes_import::core::independent_host::review_host_live_export_size_guard_reaps_owned_child
+
+test result: FAILED. 2 passed; 2 failed; 0 ignored; 0 measured; 211 filtered out; finished in 0.09s
+
