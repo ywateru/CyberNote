@@ -15,4 +15,6 @@ for(const value of [{...point,x:360},{...point,width:721},{...point,y:NaN},{...p
   const c=fake({value});await assert.rejects(openOwnedProvider(c),e=>e.message==='owned provider touch refused'&&!e.cause&&!Object.hasOwn(e,'actual'));assert.equal(c.calls.filter(c=>c[0]==='send').length,0);
 }
 const failed=fake({failAt:1});await assert.rejects(openOwnedProvider(failed),{message:'owned provider touch refused'});assert.equal(failed.calls.filter(c=>c[0]==='send').length,1);
-console.log(JSON.stringify({ok:true,checks:8}));
+await assert.rejects(openOwnedProvider(fake({failAt:1})),e=>e.stage==='attachment-start'&&e.message==='owned provider touch refused'&&!e.cause);
+const waiting=fake();waiting.wait=async()=>{throw Error('SECRET_WAIT');};await assert.rejects(openOwnedProvider(waiting),e=>e.stage==='menu-wait'&&e.message==='owned provider touch refused'&&!e.cause);assert.equal(waiting.calls.filter(c=>c[0]==='send').length,2);
+console.log(JSON.stringify({ok:true,checks:10}));

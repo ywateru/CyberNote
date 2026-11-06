@@ -1,8 +1,10 @@
 /** Normal CDP touch for two fixed visible provider controls on the owned final02 note. */
 import assert from 'node:assert/strict';
+export const providerStages=Object.freeze(['menu-read','attachment-read','attachment-start','attachment-end','menu-wait','file-read','file-start','file-end']);
 
-async function touch(client, control) {
+async function touch(client, control, checkpoint) {
   assert(['attachment','file'].includes(control));
+  checkpoint(control+'-read');
   const point = await client.read(`(()=>{
     if(!document.querySelector('.mobile.page-editor')||document.querySelector('.tiptap h1')?.textContent!=='SYNC87-74da049123-1')throw Error('owned editor required');
     const control=${JSON.stringify(control)};
@@ -22,17 +24,19 @@ async function touch(client, control) {
   assert(Object.values(descriptors).every(d=>Object.hasOwn(d,'value')&&typeof d.value==='number'&&Number.isFinite(d.value)));
   const {x,y,width,height}=Object.fromEntries(Object.entries(descriptors).map(([k,d])=>[k,d.value]));
   assert(width>0&&width<=720&&height>0&&height<=1280&&x>=0&&y>=0&&x<width&&y<height);
-  await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
-  await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  checkpoint(control+'-start');await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});
+  checkpoint(control+'-end');await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
 }
 
 export async function openOwnedProvider(client) {
+  let stage='menu-read';const checkpoint=value=>{assert(providerStages.includes(value));stage=value;};
   try {
     const menu=await client.read('!!document.querySelector(".menu-media[role=menu]")');
     assert(typeof menu==='boolean');
-    if(!menu)await touch(client,'attachment');
+    if(!menu)await touch(client,'attachment',checkpoint);
+    checkpoint('menu-wait');
     await client.wait('!!document.querySelector(".menu-media[role=menu]")','fixed attachment menu');
-    await touch(client,'file');
+    await touch(client,'file',checkpoint);
     return {normalTouch:true};
-  } catch { throw Error('owned provider touch refused'); }
+  } catch { const error=Error('owned provider touch refused');Object.defineProperty(error,'stage',{value:stage,enumerable:true});throw error; }
 }
