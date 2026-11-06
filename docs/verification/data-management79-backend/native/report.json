@@ -1,0 +1,47 @@
+{
+  "head": "d74d76f486b69fe2b27da533b84be4e341a25bc4",
+  "commands": [
+    {
+      "name": "mac-cargo-check",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "src-tauri/Cargo.toml"
+      ],
+      "cwd": "/private/tmp/apple-notes-data79-backend",
+      "environment": {
+        "CARGO_TARGET_DIR": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target"
+      },
+      "exitCode": 0,
+      "wallSeconds": 16.275190875
+    },
+    {
+      "name": "android-cargo-check",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "--target",
+        "aarch64-linux-android"
+      ],
+      "cwd": "/private/tmp/apple-notes-data79-backend",
+      "environment": {
+        "CARGO_TARGET_DIR": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+        "CC_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang",
+        "CXX_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang++",
+        "AR_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar",
+        "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android26-clang",
+        "ANDROID_NDK_HOME": "/Users/water/Library/Android/sdk/ndk/27.2.12479018"
+      },
+      "exitCode": 0,
+      "wallSeconds": 59.27592075000001
+    }
+  ]
+}

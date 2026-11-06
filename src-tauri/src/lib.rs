@@ -107,6 +107,16 @@ async fn mutate(
     action: Value,
     expected: Token,
 ) -> Result<Value> {
+    mutate_with_stage(app, state, window, action, expected, None).await
+}
+async fn mutate_with_stage(
+    app: tauri::AppHandle,
+    state: &AppState,
+    window: &str,
+    action: Value,
+    expected: Token,
+    stage: Option<store::DocumentStage>,
+) -> Result<Value> {
     if action["type"] == "saveNote" {
         return session_command(&app, state, |session| session.save(window, action));
     }
@@ -146,6 +156,8 @@ async fn mutate(
     let shared = state.0.clone();
     // Condvar releases the Store mutex while windows drain registered saves.
     let outcome = tauri::async_runtime::spawn_blocking(move || -> Result<_> {
+        // The worker owns import staging even if the command future is dropped.
+        let _stage = stage;
         let guard = shared.0.lock().map_err(|_| failure("数据锁错误"))?;
         let (mut guard, wait) = shared
             .1
@@ -301,9 +313,85 @@ fn read_note_text(id: String, expected: Token, state: State<AppState>) -> Result
     session.tagged(session.store.note_text(&id)?)
 }
 #[tauri::command]
-fn export_archive(path: String, expected: Token, state: State<AppState>) -> Result<()> {
-    let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-    session.export_archive(&PathBuf::from(path), &expected)
+fn get_data_management(expected: Token, state: State<AppState>) -> Result<Value> {
+    state
+        .0
+         .0
+        .lock()
+        .map_err(|_| failure("数据锁错误"))?
+        .data_management(&expected)
+}
+#[cfg(target_os = "android")]
+fn copy_document(
+    app: &tauri::AppHandle,
+    uri: &str,
+    stage: &store::DocumentStage,
+    direction: &str,
+    max_bytes: u64,
+    expected: Option<u64>,
+) -> Result<u64> {
+    use tauri_plugin_notes_scan::NotesScanExt;
+    app.notes_scan()
+        .copy_document(uri, stage.path(), direction, max_bytes, expected)
+        .map_err(|e| AppError {
+            code: e.code,
+            message: format!("文档传输失败：{}", e.message),
+            commit: None,
+        })
+}
+#[tauri::command]
+async fn export_attachment(
+    id: String,
+    path: String,
+    expected: Token,
+    app: tauri::AppHandle,
+) -> Result<Value> {
+    // The blocking worker owns the Session guard through native flush/close.
+    // A revocation cannot interleave between authorization and publication.
+    tauri::async_runtime::spawn_blocking(move || {
+        let state = app.state::<AppState>();
+        let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
+        #[cfg(target_os = "android")]
+        if path.starts_with("content://") {
+            let (stage, info) = session.stage_attachment(&id, &expected)?;
+            copy_document(
+                &app,
+                &path,
+                &stage,
+                "write",
+                100 * 1024 * 1024,
+                Some(info.bytes),
+            )?;
+            return serde_json::to_value(info).map_err(Into::into);
+        }
+        if path.contains("://") {
+            return Err(failure("此平台不支持该导出地址"));
+        }
+        serde_json::to_value(session.export_attachment(&id, &PathBuf::from(path), &expected)?)
+            .map_err(Into::into)
+    })
+    .await
+    .map_err(|e| failure(e.to_string()))?
+}
+#[tauri::command]
+async fn export_archive(path: String, expected: Token, app: tauri::AppHandle) -> Result<()> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let state = app.state::<AppState>();
+        let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
+        #[cfg(target_os = "android")]
+        if path.starts_with("content://") {
+            let stage = session.stage_archive(&expected)?;
+            let size = std::fs::metadata(stage.path())?.len();
+            copy_document(&app, &path, &stage, "write", 256 * 1024 * 1024, Some(size))?;
+            return Ok(());
+        }
+        if path.contains("://") {
+            return Err(failure("此平台不支持该导出地址"));
+        }
+        session.export_archive(&PathBuf::from(path), &expected)
+    })
+    .await
+    .map_err(|e| failure(e.to_string()))?
 }
 #[tauri::command]
 async fn import_archive(
@@ -313,12 +401,48 @@ async fn import_archive(
     app: tauri::AppHandle,
     state: State<'_, AppState>,
 ) -> Result<Value> {
-    mutate(
+    #[cfg(target_os = "android")]
+    let stage = if path.starts_with("content://") {
+        let host = app.clone();
+        let token = expected.clone();
+        let uri = path.clone();
+        Some(
+            tauri::async_runtime::spawn_blocking(move || {
+                let state = host.state::<AppState>();
+                let stage = state
+                    .0
+                     .0
+                    .lock()
+                    .map_err(|_| failure("数据锁错误"))?
+                    .import_stage(&token)?;
+                copy_document(&host, &uri, &stage, "read", 256 * 1024 * 1024, None)?;
+                Ok::<_, AppError>(stage)
+            })
+            .await
+            .map_err(|e| failure(e.to_string()))??,
+        )
+    } else {
+        None
+    };
+    #[cfg(target_os = "android")]
+    let path = stage
+        .as_ref()
+        .map(|s| s.path().to_string_lossy().into_owned())
+        .unwrap_or(path);
+    if path.contains("://") {
+        return Err(failure("此平台不支持该导入地址"));
+    }
+    #[cfg(not(target_os = "android"))]
+    let stage = None;
+    // Ownership crosses into the real barrier worker. Cancellation of this
+    // command cannot unlink a payload still needed by its pending import.
+    mutate_with_stage(
         app,
         &state,
         window.label(),
         json!({"type":"importArchive","path":path}),
         expected,
+        stage,
     )
     .await
 }
@@ -466,6 +590,8 @@ pub fn run() {
         query_attachment_operation,
         cancel_attachment_operation,
         read_attachment,
+        get_data_management,
+        export_attachment,
         export_archive,
         import_archive,
         recording_window::register_recording_local,
@@ -488,6 +614,8 @@ pub fn run() {
         query_attachment_operation,
         cancel_attachment_operation,
         read_attachment,
+        get_data_management,
+        export_attachment,
         export_archive,
         import_archive,
         proof_access_record,

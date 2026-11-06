@@ -143,6 +143,44 @@ impl Session {
         }
         self.store.export_archive(path)
     }
+    fn require_global_document_access(&self, token: &Token) -> Result<()> {
+        self.check(token, None)?;
+        if self.pending.is_some() {
+            return Err(denied("锁定状态正在同步，请稍候"));
+        }
+        Ok(())
+    }
+    pub(crate) fn data_management(&self, token: &Token) -> Result<Value> {
+        self.require_global_document_access(token)?;
+        self.tagged(serde_json::to_value(self.store.data_management()?)?)
+    }
+    pub(crate) fn export_attachment(
+        &self,
+        id: &str,
+        path: &std::path::Path,
+        token: &Token,
+    ) -> Result<crate::store::AttachmentExport> {
+        let owner = self.store.attachment_note(id)?;
+        self.sensitive(&owner, token)?;
+        self.store.export_attachment(id, path)
+    }
+    pub(crate) fn stage_attachment(
+        &self,
+        id: &str,
+        token: &Token,
+    ) -> Result<(crate::store::DocumentStage, crate::store::AttachmentExport)> {
+        let owner = self.store.attachment_note(id)?;
+        self.sensitive(&owner, token)?;
+        self.store.stage_attachment(id)
+    }
+    pub(crate) fn stage_archive(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+        self.require_global_document_access(token)?;
+        self.store.stage_archive()
+    }
+    pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+        self.require_global_document_access(token)?;
+        self.store.document_stage()
+    }
     pub fn sensitive(&self, note: &str, token: &Token) -> Result<()> {
         self.check(token, Some(note))?;
         if self

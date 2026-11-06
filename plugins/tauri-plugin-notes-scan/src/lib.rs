@@ -160,6 +160,35 @@ impl<R: Runtime> NotesScan<R> {
         }
     }
 
+    /// Host-only document bridge. Deliberately absent from Request, the Rust
+    /// invoke_handler and the permission command list. Call off the main thread.
+    #[cfg(target_os = "android")]
+    pub fn copy_document(
+        &self,
+        uri: &str,
+        path: &std::path::Path,
+        direction: &str,
+        max_bytes: u64,
+        expected_bytes: Option<u64>,
+    ) -> Result<u64> {
+        if !uri.starts_with("content://")
+            || !matches!(direction, "read" | "write")
+            || max_bytes > 256 * 1024 * 1024
+        {
+            return Err(ScanError::new("invalid_document", "无效文档操作"));
+        }
+        let value: Value = self.handle.run_mobile_plugin("copyDocument", serde_json::json!({
+            "uri": uri, "path": path, "direction": direction, "maxBytes": max_bytes, "expectedBytes": expected_bytes,
+        })).map_err(|e| ScanError::new("document_io", e.to_string()))?;
+        let bytes = value["bytes"]
+            .as_u64()
+            .ok_or_else(|| ScanError::new("document_io", "缺少文档传输长度"))?;
+        if bytes > max_bytes || expected_bytes.is_some_and(|expected| expected != bytes) {
+            return Err(ScanError::new("document_io", "文档传输长度不符"));
+        }
+        Ok(bytes)
+    }
+
     /// Destination is a host-chosen staging path, NOT a WebView argument. Requires ready state.
     /// Commit all host metadata/attachments first, then acknowledge the native session.
     pub async fn copy_file_to(
