@@ -8,6 +8,8 @@ import readline from 'node:readline';
 import assert from 'node:assert/strict';
 import { connect, guard, pause, parseNodes, nativeNode, SERIAL, AVD } from './client.mjs';
 const hash=b=>createHash('sha256').update(b).digest('hex');
+const actions=new Set(['install','start','pushFixtures','home','createNote','attachments','exportImage','pair','observe','background','foreground','reopen','close']);
+const logIdentity=request=>({requestId:typeof request?.requestId==='string'&&/^[a-zA-Z0-9_-]{1,64}$/.test(request.requestId)?request.requestId:undefined,action:actions.has(request?.action)?request.action:'invalid'});
 const options=Object.fromEntries(process.argv.slice(2).reduce((pairs,x,i,a)=>{if(i%2===0)pairs.push([x,a[i+1]]);return pairs;},[]));
 assert(Object.keys(options).every(x=>['--output','--receipt','--mode'].includes(x)),'unknown option');
 assert(['prepare','serve'].includes(options['--mode']),'explicit --mode prepare|serve required');
@@ -127,6 +129,6 @@ if(options['--mode']==='prepare')console.log(JSON.stringify({ok:true,prepared:aw
 else{
   assert(typeof options['--receipt']==='string'&&options['--receipt'].startsWith('/'),'root receipt required');await state();
   const input=readline.createInterface({input:process.stdin,crlfDelay:Infinity});
-  try{for await(const line of input){const start=performance.now();let request;try{assert(line.length<=32768);request=JSON.parse(line);const result=await execute(request);console.log(JSON.stringify({requestId:request.requestId,ok:true,action:request.action,wallSeconds:(performance.now()-start)/1000,result}));}catch(error){console.log(JSON.stringify({requestId:request?.requestId,ok:false,action:request?.action,error:error.name,message:/pair|invitation/i.test(request?.action||'')?'native UI pairing failed; no secret recorded':error.message,wallSeconds:(performance.now()-start)/1000}));process.exitCode=2;break;}}}
+  try{for await(const line of input){const start=performance.now();let request;try{assert(line.length<=32768);request=JSON.parse(line);const result=await execute(request);console.log(JSON.stringify({requestId:request.requestId,ok:true,action:request.action,wallSeconds:(performance.now()-start)/1000,result}));}catch(error){console.log(JSON.stringify({...logIdentity(request),ok:false,error:error.name,message:/pair|invitation/i.test(request?.action||'')?'native UI pairing failed; no secret recorded':error.message,wallSeconds:(performance.now()-start)/1000}));process.exitCode=2;break;}}}
   finally{await context?.close();}
 }
