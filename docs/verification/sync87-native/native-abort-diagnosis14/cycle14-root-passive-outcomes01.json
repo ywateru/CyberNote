@@ -1,0 +1,93 @@
+{
+  "scope": "actual same paired peer live; rootPath only + admitted passive release outcomes",
+  "rootPath": "UNEXPECTED_ROOT_REDACTED",
+  "install": {
+    "version": 1,
+    "active": true,
+    "eventCounts": {
+      "probe": 0,
+      "prepare": 0,
+      "release": 0,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 0,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "not-read",
+      "current": "unknown",
+      "windows": [],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    }
+  },
+  "snapshot": {
+    "version": 1,
+    "active": true,
+    "eventCounts": {
+      "probe": 4,
+      "prepare": 4,
+      "release": 4,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 4,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "read",
+      "current": "main",
+      "windows": [
+        "main"
+      ],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    }
+  },
+  "ok": true,
+  "cleanup": {
+    "version": 1,
+    "active": false,
+    "eventCounts": {
+      "probe": 4,
+      "prepare": 4,
+      "release": 4,
+      "other": 0
+    },
+    "releaseOutcomes": {
+      "commit": 0,
+      "abort": 4,
+      "unknown": 0
+    },
+    "labels": {
+      "state": "read",
+      "current": "main",
+      "windows": [
+        "main"
+      ],
+      "nonMainLabelsRedacted": true
+    },
+    "replyObservation": {
+      "available": false,
+      "reason": "native-invoke-immutable",
+      "invokeImmutable": true
+    },
+    "cleanup": {
+      "localUnregistered": true,
+      "nativeUnregistered": true
+    }
+  },
+  "clientClosed": true,
+  "wallSeconds": 19.187854959
+}
