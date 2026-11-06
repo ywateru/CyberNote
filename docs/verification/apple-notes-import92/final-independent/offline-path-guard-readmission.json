@@ -1,0 +1,17 @@
+{
+  "status": "PASS-SOURCE-ONLY-PATH-GUARD-CORRECTION",
+  "originalDriverSHA256": "aff0f818960a8a389b1474b3d9246a26929db0b115f233eaaaeca49480ccdc69",
+  "repairedDriverSHA256": "84a63584ad69ad05535ec80ac9f733b0ba26e1bc67b320372b5f1d2f83cd9b1c",
+  "delta": "Only two retained/new managed raw relativePath regexes changed from json assumption to exact UUID-UUID.blob",
+  "productionBasis": "src-tauri/src/store/archive.rs assigns format!(\"{transaction_id}-{}.blob\", id())",
+  "unchanged": [
+    "immutable binary/source guards",
+    "private output ownership/modes",
+    "manual expected document",
+    "raw bytes/scalars/reopen/dedup/baseline",
+    "owned backend natural closure checks"
+  ],
+  "firstFailureScope": "Operator reported preflight before spawning backend/newStore; original driver/output preserved. No product failure inferred.",
+  "reviewerPrivateSourceReads": false,
+  "reviewerRuntime": false
+}
