@@ -1,0 +1,90 @@
+{
+  "sourceCommit": "59e1e3563e1144f8c1e7894398b9808a1237c7fc",
+  "commands": [
+    {
+      "name": "python-boundaries",
+      "argv": [
+        "python3",
+        "scripts/debug/sync87-native/check_guards.py"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.09556391599999998
+    },
+    {
+      "name": "cdp-xml",
+      "argv": [
+        "node",
+        "scripts/debug/sync87-native/check-client.mjs"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.02680133300000001
+    },
+    {
+      "name": "input-redaction",
+      "argv": [
+        "node",
+        "scripts/debug/sync87-native/check-input.mjs"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 1.5519270829999998
+    },
+    {
+      "name": "scenario-boundaries",
+      "argv": [
+        "node",
+        "scripts/debug/sync87-native/check-scenarios.mjs"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 0.11006500000000008
+    },
+    {
+      "name": "desktop-dom-smoke",
+      "argv": [
+        "node",
+        "scripts/debug/sync87-native/check-desktop-smoke.mjs",
+        "/private/tmp/sync87-peer-review-build10/receipt.json",
+        "/private/tmp/notes-sync87-native-desktop-smoke-01"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 10.037192874999999
+    }
+  ],
+  "before": {
+    "scripts/debug/runtime.mjs": "36474af5a3f96bdaf55ff9c97a4f2cc8428b199f7bb1632b2c9463778848cec4",
+    "scripts/debug/rust-backend.mjs": "3df944b85e2e65e10a4a1eaaae5b23c6b107b73ecfd9ed071bd8de9b2f988d0f",
+    "scripts/debug/sync-rust-dom.mjs": "eafbc2ae69aacdf291094996b6d2184d6096ee87366fed7f531a81e666f9e1a9",
+    "scripts/debug/sync87-native/README.md": "2dfdea1d787eca2003b4b9ebd174fc53cb39042217028e77e00b4da380de0a7a",
+    "scripts/debug/sync87-native/check-client.mjs": "a7e4a24d7bc0e92ce8b172ea764559f8e083ebfa66c8b4d8c1fd7f1fa5183aef",
+    "scripts/debug/sync87-native/check-desktop-smoke.mjs": "6b90345dca24fad2e09f1b084f5b16a8739389cf9e8eaa122045effc4b3f8ef3",
+    "scripts/debug/sync87-native/check-input.mjs": "353562a64c1e2649c5cccd62ed585f44d50beb176250baa237fcac670a5003dc",
+    "scripts/debug/sync87-native/check-scenarios.mjs": "9662536d2542fb397e8de3a39c780c2ea9c2ba54ec685d7352870db756f46b26",
+    "scripts/debug/sync87-native/check_guards.py": "16e9a8019a975e37a6e379ce95f3fd2a2c5f5c2ec365c2fc4393b5de2175868b",
+    "scripts/debug/sync87-native/client.mjs": "cfc77d6a93d251d70593b6ede57fcd9bc5ff8f49e49ac535c3dd3ce37a1e0836",
+    "scripts/debug/sync87-native/desktop-peer.mjs": "31531ffd0d80830e3dcc2f4a76f10327c1749b7e918d1ff5d356c1026de62d23",
+    "scripts/debug/sync87-native/guard.py": "910ac7973074290e90dc34586419a2eae59e993d43f237e55b5878a04450612e",
+    "scripts/debug/sync87-native/native-ui.mjs": "a1b9b6169a2f18f9fb108a0df7739148190ed419606956a800ed1b58229e718f",
+    "scripts/debug/sync87-native/protocol.mjs": "19e89fa13c4eff4bae997b9d0c6bf4a1d86867c5e823a1883562831575e3a0a6",
+    "scripts/debug/sync87-native/run.mjs": "0b9e8d4a91b6ac806422ab3869d146463822a1d844fa3189382f348376ec181d",
+    "scripts/debug/sync87-native/scenarios.mjs": "3d410913a23f8fd5460d17accbfe036c84f1147dde8c92fdb94b478c5b8e38a0"
+  },
+  "after": {
+    "scripts/debug/runtime.mjs": "36474af5a3f96bdaf55ff9c97a4f2cc8428b199f7bb1632b2c9463778848cec4",
+    "scripts/debug/rust-backend.mjs": "3df944b85e2e65e10a4a1eaaae5b23c6b107b73ecfd9ed071bd8de9b2f988d0f",
+    "scripts/debug/sync-rust-dom.mjs": "eafbc2ae69aacdf291094996b6d2184d6096ee87366fed7f531a81e666f9e1a9",
+    "scripts/debug/sync87-native/README.md": "2dfdea1d787eca2003b4b9ebd174fc53cb39042217028e77e00b4da380de0a7a",
+    "scripts/debug/sync87-native/check-client.mjs": "a7e4a24d7bc0e92ce8b172ea764559f8e083ebfa66c8b4d8c1fd7f1fa5183aef",
+    "scripts/debug/sync87-native/check-desktop-smoke.mjs": "6b90345dca24fad2e09f1b084f5b16a8739389cf9e8eaa122045effc4b3f8ef3",
+    "scripts/debug/sync87-native/check-input.mjs": "353562a64c1e2649c5cccd62ed585f44d50beb176250baa237fcac670a5003dc",
+    "scripts/debug/sync87-native/check-scenarios.mjs": "9662536d2542fb397e8de3a39c780c2ea9c2ba54ec685d7352870db756f46b26",
+    "scripts/debug/sync87-native/check_guards.py": "16e9a8019a975e37a6e379ce95f3fd2a2c5f5c2ec365c2fc4393b5de2175868b",
+    "scripts/debug/sync87-native/client.mjs": "cfc77d6a93d251d70593b6ede57fcd9bc5ff8f49e49ac535c3dd3ce37a1e0836",
+    "scripts/debug/sync87-native/desktop-peer.mjs": "31531ffd0d80830e3dcc2f4a76f10327c1749b7e918d1ff5d356c1026de62d23",
+    "scripts/debug/sync87-native/guard.py": "910ac7973074290e90dc34586419a2eae59e993d43f237e55b5878a04450612e",
+    "scripts/debug/sync87-native/native-ui.mjs": "a1b9b6169a2f18f9fb108a0df7739148190ed419606956a800ed1b58229e718f",
+    "scripts/debug/sync87-native/protocol.mjs": "19e89fa13c4eff4bae997b9d0c6bf4a1d86867c5e823a1883562831575e3a0a6",
+    "scripts/debug/sync87-native/run.mjs": "0b9e8d4a91b6ac806422ab3869d146463822a1d844fa3189382f348376ec181d",
+    "scripts/debug/sync87-native/scenarios.mjs": "3d410913a23f8fd5460d17accbfe036c84f1147dde8c92fdb94b478c5b8e38a0"
+  },
+  "sourceUnchanged": true,
+  "noAndroidOrAdb": true
+}

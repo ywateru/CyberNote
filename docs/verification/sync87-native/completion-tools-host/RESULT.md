@@ -1,0 +1,30 @@
+# SYNC87 native completion tools: host preparation and candidate DOM smoke
+
+2026-11-06. Author source freeze `59e1e3563e1144f8c1e7894398b9808a1237c7fc`, one-line source-root normalization `803c680d` (full `803c680d69348db908627050bc8daa85e17a9b1f`). These are candidate tool changes awaiting independent review, not mainline/native acceptance.
+
+Root supplied candidate dependency cherry `0c3de151` from `3352b913149b827a61d66e961e9ae9ac8d5522a9`: only shared `runtime.mjs`, `rust-backend.mjs`, and reference `sync-rust-dom.mjs`. The peer checks their exact three SHA256 values at open and close; the map is in desktop-peer.mjs and lifecycle evidence. It reuses that runtime and does not fork it. Root separately authorized the immutable build10 receipt in peer-receipt.json, binary SHA256 `2f21f7ff9f6abad3b341585a16e973714c81af7c93eef0f4e2a435bd2eb53515`, Rust source `17af6dfc148e5d84de924ac47b69611e627e5722`; root provenance maps46 inputs to that source. Build10 is a candidate; root subsequently identified an unrelated locked-conflict resolve issue and is preparing build11. This smoke never calls resolve.
+
+## Implemented tool boundaries
+
+- Exact owned run/state/manifest checks for fixture push and image export. Actual DocumentsUI save navigation, exact original filename, then exact owned export path and guarded original-byte SHA256 pull. Known manifest only; no generic pull path. The provider UI remains unexecuted.
+- DesktopPeer now mounts actual React/Tiptap App backed by the reviewed Rust Session/SQLite Store. Shared runtime registers the actual page, continuously polls events from all responses through one sink, and calls actual App handlers. Removed every tool-generated quiet probe/ready/access ACK. No headless_apply, false renderer registration, private runtime copy, DB edit or JS protocol-fixture fallback is used.
+- Actual Android settings pairing, bidirectional text/PNG/WAV, foreground reconnect, app process restart and split same-data isolated cold-boot scenario code is prepared. These scenarios have not run. Cold-boot preparation returns awaitingOwnedLifecycleCycle; root must perform the reviewed existing same-data lifecycle cycle. PID/start ticks, reviewed installed APK and CDP identity are rechecked.
+- Original input-redaction source920eb6b1 and independently accepted396a7fa4 behavior retained. Invitations stay in memory, safe fixed failures remain, sensitive input prevents screenshots, and HTML observations scrub input values.
+
+## Host checks
+
+`processes.json` retains exact argv, stdout/stderr, natural exit code, complete subprocess wall time, and per-file before/after hashes for source freeze59e1e356. Python guard18 methods, CDP/XML10 checks, negative/redaction21 checks, and new scenario boundary33 checks all exit0. No Android/ADB subprocess is reachable in the mocked guard tests; native reads in scenario checks are explicit stubs, and the inert receipt fixture is never executed. These82 checks prove tool boundaries only.
+
+Original fixture failure before freeze is preserved in original-host-failure.txt: tempfile generated an underscore rejected by the strict owned path grammar. Only the test fixture was changed to UUID-hex exclusive creation; path restrictions were not weakened. Original wall time is unavailable and not invented.
+
+## Single real desktop DOM smoke
+
+Root explicitly authorized a candidate host-only smoke after source freeze. The exact source59e1e356 first smoke exits0 with10 checks and complete outer wall10.037192875s. It starts one owned real Rust process and temporary Store, mounts actual App DOM, starts host and generates invitation through actual handlers (secret remains memory-only and settings close before observations), creates and updates text through Tiptap/save queue, reads persisted real Store, adds a synthetic PNG through actual FileChooser/FileReader/attachment handlers, verifies original read/export and separate managed file SHA256, decodes the actual image, pauses host and closes runtime. Page errors0, Rust natural exit0/signalnull, no forced termination, browser context and browser terminal events observed. Five backend events pass through the actual event sink. It does not establish the two-peer quiet/apply matrix.
+
+First smoke exposed a recording inconsistency only: DesktopPeer used a root path with trailing slash while the outer recorder used normalized cwd. Both before/after pairs were unchanged, but the path-prefix hash inputs differed. Preserve first result under desktop-smoke01/. One-line fix803c680d normalizes that path before fingerprinting; no product or dependency changed. Only affected scenario boundaries33 and exact same candidate smoke10 checks were repeated, with new output `/private/tmp/notes-sync87-native-desktop-smoke-02`. Natural exits0, complete smoke outer wall8.763687791s. Raw per-command processes and both source maps are under normalized-root-recheck/. Outer and peer fingerprints now match before/after exactly: `21dd34ed32508d508b659ee53c6fa081df566f2b8cea38f58d2b52ff9e571c02`,149 files, source clean. All exact3 dependency files and reviewed binary remain unchanged.
+
+The two temporary Stores and synthetic PNG outputs remain only under owned /private/tmp run folders. Evidence copies contain safe result/lifecycle metadata and receipt hashes, not Store databases, invitation strings, private media or arbitrary IPC frames. No raw runtime errors or stderr frames are serialized into scenario results.
+
+## Open scope
+
+Zero emulator starts, installs, ADB/CDP calls or other native device operations in this continuation. The original Android roughly13-second unsaved recording remains untouched. No real microphone, Apple Notes, user Store, VPN, tunnel, route or ADB server management. No Android package receipt exists, so actual provider/IME/WebView, mobile-side pairing, bidirectional notes/PNG/WAV, foreground restore, app restart and same-data cold boot await root's reviewed final package and backend. Single candidate DOM smoke is not a full sync86 matrix, native Mac application run, independent review, mainline merge or end-user completion claim.
