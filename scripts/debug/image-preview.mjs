@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 import { readFile } from "node:fs/promises";
+import { runImageExportKeyboard } from "./image-preview-keyboard.mjs";
 import { api, idle, state, snapshot, saveJSON } from "./runtime.mjs";
 import { chooseFiles, tinyPNG } from "./mobile-attachments.mjs";
 export async function runImagePreview(runtime, { command, check, output }) {
@@ -144,6 +145,7 @@ export async function runImagePreview(runtime, { command, check, output }) {
         .locator(".image-open")
         .evaluate((n) => document.activeElement === n)),
   );
+  await runImageExportKeyboard(runtime, { command, check, output, id });
   await command("editor.insertText", { text: " UNDO80" });
   await command("editor.undo");
   check(
@@ -277,6 +279,10 @@ export async function runImagePreview(runtime, { command, check, output }) {
   check(
     "Actual media source disposal synchronously hides overlay bytes and calls close once",
     lifetime.closed === 1 && lifetime.hidden && !lifetime.hasSrc,
+  );
+  check(
+    "Hidden, disconnected, disposed and unmounted previews do not consume global Escape or Tab",
+    lifetime.inactiveKeyboardIgnored,
   );
   check(
     "Mobile headers have no native desktop drag regions",

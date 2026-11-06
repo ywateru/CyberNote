@@ -45,6 +45,49 @@ export function ImagePreview({
   useLayoutEffect(() => {
     live.current = true;
     close.current?.focus({ preventScroll: true });
+    // Export disables its focused button; native dialogs may also return focus
+    // to body. Keep the active preview keyboard boundary at document capture.
+    const keyboard = (event: KeyboardEvent) => {
+      const element = root.current;
+      if (
+        !live.current ||
+        !element?.isConnected ||
+        element.hidden ||
+        element.getClientRects().length === 0 ||
+        getComputedStyle(element).visibility === "hidden"
+      )
+        return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const buttons = Array.from(
+        element.querySelectorAll<HTMLButtonElement>("button:not(:disabled)"),
+      );
+      const first = buttons[0],
+        last = buttons.at(-1);
+      if (
+        event.shiftKey &&
+        (document.activeElement === first ||
+          !element.contains(document.activeElement))
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+        last?.focus();
+      } else if (
+        !event.shiftKey &&
+        (document.activeElement === last ||
+          !element.contains(document.activeElement))
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+        first?.focus();
+      }
+    };
+    document.addEventListener("keydown", keyboard, true);
     const release = request.source.bindController(() => {
       if (!live.current) return;
       live.current = false;
@@ -56,6 +99,7 @@ export function ImagePreview({
     });
     return () => {
       live.current = false;
+      document.removeEventListener("keydown", keyboard, true);
       release();
       if (
         request.trigger.isConnected &&
@@ -92,37 +136,6 @@ export function ImagePreview({
       role="dialog"
       aria-modal="true"
       aria-label="图片预览"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          event.preventDefault();
-          event.stopPropagation();
-          onClose();
-        }
-        if (event.key === "Tab") {
-          const buttons = Array.from(
-            root.current?.querySelectorAll<HTMLButtonElement>(
-              "button:not(:disabled)",
-            ) || [],
-          );
-          const first = buttons[0],
-            last = buttons.at(-1);
-          if (
-            event.shiftKey &&
-            (document.activeElement === first ||
-              !root.current?.contains(document.activeElement))
-          ) {
-            event.preventDefault();
-            last?.focus();
-          } else if (
-            !event.shiftKey &&
-            (document.activeElement === last ||
-              !root.current?.contains(document.activeElement))
-          ) {
-            event.preventDefault();
-            first?.focus();
-          }
-        }
-      }}
     >
       <header>
         <strong title={request.name}>{request.name}</strong>

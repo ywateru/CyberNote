@@ -19,6 +19,7 @@ export async function probeImageSourceDisposal() {
   const mount = document.createElement("div");
   host.append(mount);
   const root = createRoot(mount);
+  let unmounted = false;
   try {
     root.render(
       createElement(ImagePreview, {
@@ -37,14 +38,42 @@ export async function probeImageSourceDisposal() {
       requestAnimationFrame(() => requestAnimationFrame(() => done())),
     );
     const overlay = host.querySelector<HTMLElement>(".image-preview")!;
+    const keysIgnored = () =>
+      ["Escape", "Tab"].every((key) => {
+        const event = new KeyboardEvent("keydown", {
+          key,
+          bubbles: true,
+          cancelable: true,
+        });
+        document.dispatchEvent(event);
+        return !event.defaultPrevented;
+      });
+    overlay.hidden = true;
+    const hiddenIgnored = keysIgnored();
+    overlay.hidden = false;
+    mount.remove();
+    const disconnectedIgnored = keysIgnored();
+    host.append(mount);
     source.dispose();
-    return {
+    const result = {
       closed,
       hidden: overlay.hidden,
       hasSrc: overlay.querySelector("img")!.hasAttribute("src"),
     };
-  } finally {
+    const disposedIgnored = keysIgnored();
     root.unmount();
+    unmounted = true;
+    return {
+      ...result,
+      inactiveKeyboardIgnored:
+        hiddenIgnored &&
+        disconnectedIgnored &&
+        disposedIgnored &&
+        keysIgnored() &&
+        closed === 1,
+    };
+  } finally {
+    if (!unmounted) root.unmount();
     source.dispose();
     host.remove();
   }
