@@ -20,6 +20,7 @@ import {
   type ReactNode,
   type PointerEvent as ReactPointerEvent,
 } from "react";
+import { flushSync } from "react-dom";
 import { type Editor, type JSONContent } from "@tiptap/react";
 import { editorSaveSnapshot } from "./editor-save-snapshot";
 import { useEditorCommit } from "./use-editor-commit";
@@ -1714,8 +1715,10 @@ function App() {
           try {
             const data = await loadWorkspace(true);
             if (quiet && (data.access?.sessionId !== knownSession || data.access?.operationId || data.access?.suspended.length)) {
-              coverSynchronization();
-              // Commit the security cover before publishing a different authority.
+              // rAF alone does not commit React state: a deferred cover update
+              // could otherwise batch with the trusted publish that clears it.
+              // This runs after an async load, outside React's render/effects.
+              flushSync(coverSynchronization);
               await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
             }
             return data;
