@@ -65,3 +65,24 @@ frozen-a4ab/commands.json 保留每个子进程的自然退出和完整墙钟时
 - Import prepare/commit 在 IPC 协议边界注入，App clearSensitive、trusted synchronization、Host 生命周期仍真实执行。fixture 归档不是 Rust notesbackup 格式。
 - 数据管理页面只读取清单 DTO，不读取附件 payload。几何覆盖 320 浅色与 390 深色，保留 PNG、HTML/geometry snapshot。
 - runtime reset 不再清除 pageErrors；异常跨测试 reset 保留到 CLI summary。
+
+## 独审陌生 authority 竞争及最终修正
+
+上面的第一轮通过不代表竞争不存在。独审在冻结 1833 runner 的一次真实新组运行中捕获陌生 session 无 committed cover：21 帧、7 次 MutationObserver，cover/hidden 均 0，旧 editor 随后已拆除。原件复制在 revision04-authority-cover/independent-before-unknown-session-timeline.json。
+
+产品修正 1e16c9fe：quiet 异步 load 返回陌生 session、operation 或 suspended 时，使用 react-dom flushSync 提交遮罩，再进入已有 rAF 和可信 hydrate。单纯 rAF 不是 React state 的提交屏障，旧实现可能把 true 与稍后 false 合批。flushSync 仅在 await load 之后的异步分支运行，不在 render/effect 中调用；正常已知 authority quiet 路径不触及它。原授权/metadata gates、原 owner、实际 Host commit 均保留。
+
+修正源码指纹 db1ce52c7bc97aa4dde4035290d3a23c9f9da68c59167e907c61ed0be92b848a。revision04 两端新组 33 项均通过，pageErrors=[]、源码未变：
+
+| 平台 | 正常 quiet 帧 / cover / hidden / 身份变化 | 陌生 session 帧 / cover / hidden | 自然完整墙钟 |
+| --- | --- | --- | ---: |
+| desktop | 90 / 0 / 0 / 0 | 24 / 1 / 1 | 401.934 s |
+| mobile | 95 / 0 / 0 / 0 | 21 / 1 / 1 | 444.559 s |
+
+build 自然 exit 0、11.676 s。两个浏览器组均在约 20 秒输出通过 summary，但 Node cleanup 长时间保留 Vite HTTP listener 和 esbuild，最终自行自然 exit 0；没有终止或 process.exit 包装。其异常长的完整墙钟原样保留在 command JSON。只读 inspector 诊断仅针对作者 desktop 进程，未注入应用/源码状态；mobile 未连接 inspector，亦自行自然退出。
+
+外部 runtime 副本分段探针检查 context、browser、Vite watcher/ws、client/SSR container/optimizer、HTTP server 的关闭，完整 33 项探针自然完成，client pending=[]，未复现等待。探针和日志在 revision04，不能据它认定原延迟根因。
+
+runner 最小设置修正 ad982ee8：显式预构建 react-dom 与 react-dom/client。当前 plugin-react 默认 include 已有 root react-dom，但不含 client 入口；这里不重写 cleanup，不增加退出超时/强制退出。revision05-react-entries 串行对照新组自然 exit 0、23.544 s，33 项、pageErrors=[]、源码不变；正常 98 帧 cover/hidden/身份变化均 0，陌生 session 23 帧有 1 cover/1 hidden。最终作者源码指纹 c1ec0c7ee06f84889438ae6a427b89e7895da8b02996b5e14e0931f9d040c4fd。
+
+此单次对照证明显式双入口设置能够完成当前复测，尚未证实异常长 cleanup 的唯一根因；性能异常记录为 OPEN，根任务负责最终串行整合验证和独审自然退出确认。
