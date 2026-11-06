@@ -1,0 +1,122 @@
+781: /* Look for a named file inside the AVD's content directory.
+782:  * Returns NULL if it doesn't exist, or a strdup() copy otherwise.
+783:  */
+784: static char* _avdInfo_getContentFilePath(const AvdInfo* i,
+785:                                          const char* fileName) {
+786:     char temp[MAX_PATH], *p = temp, *end = p + sizeof(temp);
+787: 
+788:     p = bufprint(p, end, "%s" PATH_SEP "%s", i->contentPath, fileName);
+789:     if (p >= end) {
+790:         derror("can't access virtual device content directory");
+791:         return NULL;
+792:     }
+793:     if (!path_exists(temp)) {
+794:         return NULL;
+795:     }
+796:     return ASTRDUP(temp);
+797: }
+798: 
+1452: char* avdInfo_getEncryptionKeyImagePath(const AvdInfo* i) {
+1453:     const char* imageName = _imageFileNames[AVD_IMAGE_ENCRYPTIONKEY];
+1454:     return _avdInfo_getContentFilePath(i, imageName);
+1455: }
+1456: 
+1503: /*
+1504:     arm is pretty tricky: the system image device path
+1505:     changes depending on the number of disks: the last
+1506:     one seems always a003e00, we need to know how many
+1507:     devices it actually has
+1508: */
+1509: const char* const arm_device_id[] = {
+1510:         "a003e00", "a003c00", "a003a00", "a003800", "a003600", "a003400",
+1511: };
+1512: 
+1513: static bool has_vendor(const AvdInfo* i) {
+1514:     char* path = avdInfo_getVendorInitImagePath(i);
+1515:     if (path) {
+1516:         free(path);
+1517:         return true;
+1518:     }
+1519:     path = avdInfo_getVendorImagePath(i);
+1520:     if (path) {
+1521:         free(path);
+1522:         return true;
+1523:     }
+1524:     return false;
+1525: }
+1526: 
+1527: static bool has_encryption(const AvdInfo* i) {
+1528:     char* path = avdInfo_getEncryptionKeyImagePath(i);
+1529:     if (path) {
+1530:         free(path);
+1531:         return true;
+1532:     }
+1533:     return false;
+1534: }
+1535: 
+1536: static char* get_device_path(const AvdInfo* info, const char* image) {
+1537:     const char* device_table[6] = {"", "", "", "", "", ""};
+1538:     int i = 0;
+1539:     device_table[i++] = "sdcard";
+1540:     if (has_encryption(info)) {
+1541:         device_table[i++] = "encryption";
+1542:     }
+1543:     device_table[i++] = "system";
+1544:     device_table[i++] = "userdata";
+1545:     if (has_vendor(info)) {
+1546:         device_table[i++] = "vendor";
+1547:     }
+1548:     device_table[i++] = "cache";
+1549:     int count = ARRAY_SIZE(device_table);
+1550:     for (i = 0; i < count; ++i) {
+1551:         if (strcmp(image, device_table[i]) == 0) {
+1552:             break;
+1553:         }
+1554:     }
+1555:     if (i == count) {
+1556:         return NULL;
+1557:     }
+1558:     char buf[1024];
+1559: 
+1560:     if (is_armish(info)) {
+1561:         snprintf(buf, sizeof(buf),
+1562:                  "/dev/block/platform/%s.virtio_mmio/by-name/%s",
+1563:                  arm_device_id[i], image);
+1564:     }
+1565:     return strdup(buf);
+1566: }
+1567: 
+1568: char* avdInfo_getVendorImageDevicePathInGuest(const AvdInfo* i) {
+1569:     if (!has_vendor(i)) {
+1570:         return NULL;
+1571:     }
+1572: 
+1573:     if (is_x86ish(i)) {
+1574:         if (has_encryption(i)) {
+1575:             return strdup(
+1576:                     "/dev/block/pci/pci0000:00/0000:00:07.0/by-name/vendor");
+1577:         } else {
+1578:             return strdup(
+1579:                     "/dev/block/pci/pci0000:00/0000:00:06.0/by-name/vendor");
+1580:         }
+1581:     } else {
+1582:         return get_device_path(i, "vendor");
+1583:     }
+1584:     return NULL;
+1585: }
+1586: 
+1587: char* avdInfo_getDynamicPartitionBootDevice(const AvdInfo* i) {
+1588:     if (is_x86ish(i)) {
+1589:         return strdup("pci0000:00/0000:00:03.0 pci0000:00/0000:00:06.0");
+1590:     }
+1591: 
+1592:     char* system_path = get_device_path(i, "system");
+1593:     if (!system_path) {
+1594:         return NULL;
+1595:     }
+1596: 
+1597:     char* bootdev = strdup(system_path + strlen("/dev/block/platform/"));
+1598:     char* end = strstr(bootdev, "/by-name/system");
+1599:     *end = '\0';
+1600:     return bootdev;
+1601: }
