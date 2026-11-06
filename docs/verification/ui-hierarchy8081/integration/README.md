@@ -9,6 +9,6 @@
 | desktop all | 356项 | 85.550 |
 | mobile notes | 9项 | 11.128 |
 | mobile recording | 43项 | 13.791 |
-| mobile attachments | 199项 | 63.642 |
+| mobile attachments | 197项 | 63.642 |
 
 桌面与手机附件已包含图片预览、存储总览/备份可用性/公开导航及原79回归。手机浏览器使用合成平台，未安装或操作原 Android 设备；硬件、原生provider及原版整窗像素不由此结论代替。summary/catalog/suite保留各次实际覆盖和原始限制。
