@@ -1,0 +1,16 @@
+   Compiling notes-sync84-store-tests v0.1.0 (/private/tmp/apple-notes-sync84/scripts/sync84)
+error[E0282]: type annotations needed
+   --> ../../src-tauri/src/store/synchronization.rs:124:13
+    |
+124 | ...   let missing_blobs=missing.into_iter().map(|(hash,size)|BlobRef{hash,size}).collect();
+    |           ^^^^^^^^^^^^^
+125 | ...   Ok(SyncApplyReport{durable:missing_blobs.is_empty(),applied:applied&&pending.is_empty(),pending:pending.len(),missing_blobs,c...
+    |                                  ------------- type must be known at this point
+    |
+help: consider giving `missing_blobs` an explicit type
+    |
+124 |         let missing_blobs: Vec<_>=missing.into_iter().map(|(hash,size)|BlobRef{hash,size}).collect();
+    |                          ++++++++
+
+For more information about this error, try `rustc --explain E0282`.
+error: could not compile `notes-sync84-store-tests` (lib test) due to 1 previous error

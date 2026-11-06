@@ -1,0 +1,34 @@
+
+running 29 tests
+test store::synchronization::tests::crash84_child ... ok
+test store::synchronization::tests::actor_and_counter_budgets_roll_back_without_losing_dirty ... ok
+test store::synchronization::tests::bad_extension_schema_is_rejected_and_failed_bootstrap_leaves_old_store_usable ... ok
+test store::synchronization::tests::dirty_is_transactional_for_replace_smart_archive_and_attachment_owner ... ok
+test store::synchronization::tests::blob_budgets_duplicate_hash_staging_recovery_and_corruption_are_explicit ... ok
+test store::synchronization::tests::concurrent_folder_cycle_projection_converges_in_reverse_delivery_order ... ok
+test store::synchronization::tests::apply_and_flush_faults_roll_back_capture_counter_inbox_heads_and_rows ... ok
+test store::synchronization::tests::branch_actor_forks_deterministically_and_reuses_across_restart ... ok
+test store::synchronization::tests::initial_enable_is_opt_in_and_persistent ... ok
+test store::synchronization::tests::concurrent_heads_converge_and_local_edit_does_not_implicitly_join ... ok
+test store::synchronization::tests::deleted_beats_old_edit_restore_is_causal_and_purge_does_not_resurrect ... ok
+test store::synchronization::tests::frontier_protects_pending_and_compacted_history_after_restart ... ok
+test store::synchronization::tests::known_version_with_missing_blob_cannot_ack_durable ... ok
+test store::synchronization::tests::independent_blobs_stage_then_publish_and_survive_conflict_copy_purge ... ok
+test store::synchronization::tests::malformed_wire_system_edits_paths_time_depth_and_head_overflow_are_atomic ... ok
+test store::synchronization::tests::prepared_identity_adoption_is_atomic_opt_in_and_cannot_drift ... ok
+test store::synchronization::tests::out_of_order_folder_dependency_reprojects_existing_note_and_reports_derived_target ... ok
+test store::synchronization::tests::remote_attachment_id_cannot_replace_unreferenced_local_bytes ... ok
+test store::synchronization::tests::plans_exclude_busy_owner_and_folder_updates_but_apply_unrelated_notes ... ok
+test store::synchronization::tests::real_sigkill_preserves_exact_business_and_dirty_commit_boundary ... ok
+test store::synchronization::tests::same_vector_different_content_rejected_even_after_compaction ... ok
+test store::synchronization::tests::stale_plan_cannot_cover_a_new_local_edit_or_changed_target ... ok
+test store::synchronization::tests::unseen_concurrent_version_after_purge_is_preserved_as_conflict_only ... ok
+test store::synchronization::tests::causal_round_trip_restarts_and_does_not_echo_local_operations ... ok
+test store::synchronization::tests::lock_clears_staged_causal_ancestors_before_flush_and_keeps_concurrent_plaintext ... ok
+test store::synchronization::tests::remote_lock_retires_local_media_metadata_and_preserves_explicit_plaintext_conflict ... ok
+test store::synchronization::tests::locked_heads_round_trip_and_keep_all_without_decryption ... ok
+test store::synchronization::tests::lock_prunes_linear_plaintext_inside_business_sql_and_rolls_back_on_failure ... ok
+test store::synchronization::tests::inbox_count_limit_and_wire_shape_are_strict ... ok
+
+test result: ok. 29 passed; 0 failed; 0 ignored; 0 measured; 82 filtered out; finished in 1.81s
+
