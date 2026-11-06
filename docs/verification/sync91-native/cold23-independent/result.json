@@ -1,0 +1,99 @@
+{
+  "status": "PASS-ACTUAL-COLD23-AND-EXACT-TESTSTATE-RECOVERY",
+  "files": [
+    {
+      "name": "README.md",
+      "bytes": 1334,
+      "sha256": "ba0921488f66bde65017b4fdfdad5d0840e349ff53a8d282b89af2f4d10ba098"
+    },
+    {
+      "name": "cold-boot-after.json",
+      "bytes": 438,
+      "sha256": "01c78a513e338666a42a396b6b711a1162bf644f8ed7af245c3d8273342837c8",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cold-boot-restored.png",
+      "bytes": 78167,
+      "sha256": "923041ed8b416b4fe7f700c33cbfe46291f01f8f6ba46386031dea85fa1babb0",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle23-coldboot-verify.execution.json",
+      "bytes": 57,
+      "sha256": "b23f290fb3c87be0155c949ac92af519edfc7d545c3540005461475cc7a9a18e",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle23-coldboot-verify.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle23-coldboot-verify.stdout.txt",
+      "bytes": 475,
+      "sha256": "ecef56699393d5286c9531157f4b734cfe0808e1103991ca2f207bedcad58afd",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle23-export-open01.json",
+      "bytes": 480,
+      "sha256": "b1a1dda0c0dbfa71873bea8be82d662bd65967125ba7c16399e1910aa29b1d93",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle23-image-info.png",
+      "bytes": 44428,
+      "sha256": "742a965716c649db241ba8e36bd309473cbb65e241e9a7d1a6243ebc1a299160",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle23-media-readonly-dom01.json",
+      "bytes": 138,
+      "sha256": "0011dd120b143ac7c2ea42309df2e594acf257a19be88dcac23ee60bfee7b986",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle23-recovery-preflight.json",
+      "bytes": 2381,
+      "sha256": "835ede137f40bd3c296211eea72cf1558a56686597d9de853485402ea6de189c",
+      "originalOutputExact": true
+    },
+    {
+      "name": "cycle23-teststate-recovery.json",
+      "bytes": 444,
+      "sha256": "f914aa0312c1ba05e1bd2bc58bda0de42ab66a8421856ec432c64aff43aa7909",
+      "originalOutputExact": true
+    }
+  ],
+  "beforeCheckpoint": {
+    "emulatorPid": 64172,
+    "emulatorStart": "Fri Nov  6 23:51:43 2026",
+    "bootId": "c0b714ec-2559-4e3f-b417-467279edccdc",
+    "userdataDevice": 16777233,
+    "userdataInode": 34363619,
+    "userdataSize": 6442450944
+  },
+  "afterCheckpoint": {
+    "emulatorPid": 72350,
+    "emulatorStart": "Sat Nov  7 00:04:44 2026",
+    "bootId": "c334da19-6cd4-4125-8879-41cfdd790041",
+    "userdataDevice": 16777233,
+    "userdataInode": 34363619,
+    "userdataSize": 6442450944
+  },
+  "coldVerifySourceContract": "deepEqual full selected documents+all attachment metadata then actualread_attachment length/SHA for all5 known fixtures",
+  "notes": 2,
+  "attachments": 5,
+  "onlyStateChange": "desktopNote.attachmentIds",
+  "stateBeforeSha256": "656ccf2e380c6d12a5ab6defd0ac9e4d5387d6e6f0b5aac254f85e2d608cfeca",
+  "stateAfterSha256": "bd05a06b7d65ab845a1d32fbb59dab57056345053044f25d1a5a0e57c036013d",
+  "limits": [
+    "Cold checkpoint does not separately capture plainText field",
+    "Screenshot confirms PNG info70B1x1; no originalpixel claim",
+    "CreateDocument request is not saved/exported originalSHA proof",
+    "OriginaldesktopMedia action and exportnavigation failures retained; foreground/decode/fullDOM pending",
+    "Reviewer inspected safe files/source only; no devices/runtime/DB queries"
+  ]
+}
