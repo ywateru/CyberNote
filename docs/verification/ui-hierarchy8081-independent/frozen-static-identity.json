@@ -1,0 +1,38 @@
+{
+  "status": "PASS-EXACT-OFFICIAL-DRAG-AND-FROZEN-SOURCE",
+  "commit": "74108461",
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "bytes": 243420,
+      "sha256": "aac0b289a84810440df1703b5000c90b91b3142adb175c937a53dfa59474bc91",
+      "matchesFrozen": true
+    },
+    {
+      "path": "src/native-toolbar-controller.ts",
+      "bytes": 11229,
+      "sha256": "448dd305f1f3223f71ab61079ae8dcfbecd15b7075beb87fccf510d27c07a6e1",
+      "matchesFrozen": true
+    },
+    {
+      "path": "scripts/check-native-toolbar.mjs",
+      "bytes": 20175,
+      "sha256": "3f8cbd52415fc5c8b7a5753eecf836134eba79204af9b3f7cfa07fa65952425f",
+      "matchesFrozen": true
+    },
+    {
+      "path": "scripts/debug/fixtures/tauri-drag-2.12.5.js",
+      "bytes": 4367,
+      "sha256": "2d47d2e302512024af4ded95b89f8b1f5c8d83530d287c252052112901a59888",
+      "matchesFrozen": true
+    }
+  ],
+  "officialCargoSource": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/tauri-2.12.5/src/window/scripts/drag.js",
+  "officialSha256": "2d47d2e302512024af4ded95b89f8b1f5c8d83530d287c252052112901a59888",
+  "staticFindings": {
+    "inflightOverlayReschedule": "FIXED-STATIC",
+    "crossScopeOldSearchValue": "FIXED-STATIC",
+    "officialDragDuplicateReactHandler": "REMOVED",
+    "macDragEventTest": "Author runner uses linux injection; independent macos-specific event chain pending dist release."
+  }
+}

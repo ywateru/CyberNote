@@ -1,0 +1,51 @@
+{
+  "status": "FAIL",
+  "sourceBefore": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+  "sourceAfter": "ffa7cdaff8e2694db35f4199063284307d15fbf6f803d13c442a173931118ad4",
+  "sourceUnchanged": true,
+  "runnerSha256": "55a8f83cdfc2657de5d441de4eaa7c9d7be73913223efc3093011b8adbf13fca",
+  "wallSeconds": 7.360659,
+  "checks": [
+    ".sidebar-toolbar macOS double-down does not toggle",
+    ".sidebar-toolbar macOS stationary double-up toggles once",
+    ".sidebar-toolbar React dblclick adds no second toggle",
+    ".notes-header macOS double-down does not toggle",
+    ".notes-header macOS stationary double-up toggles once",
+    ".notes-header React dblclick adds no second toggle",
+    ".editor-header macOS double-down does not toggle",
+    ".editor-header macOS stationary double-up toggles once",
+    ".editor-header React dblclick adds no second toggle",
+    "Official macOS moved double click cancels window toggle",
+    ".sidebar-toolbar button interactive double click has no window toggle",
+    ".notes-header button interactive double click has no window toggle",
+    ".editor-header button interactive double click has no window toggle",
+    ".desktop-search input interactive double click has no window toggle",
+    ".tiptap interactive double click has no window toggle",
+    "Preview opens via actual image button as protected direct App child",
+    "No save control remains on body image",
+    "Preview information uses actual authorized bytes/MIME/natural dimensions",
+    "Preview header geometry respects simulated 52px native chrome",
+    "Preview save cancel writes nothing and shows no success",
+    "Preview exports original attachment bytes once"
+  ],
+  "failure": {
+    "message": "Escape removes global preview without document mutation",
+    "stack": "AssertionError [ERR_ASSERTION]: Escape removes global preview without document mutation\n    at check (file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/ui-hierarchy8081-independent/run-focused-dom.mjs:15:29)\n    at file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/ui-hierarchy8081-independent/run-focused-dom.mjs:47:55"
+  },
+  "scope": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  },
+  "limits": [
+    "Official macos JS mousedown/mouseup/dblclick handlers and production React DOM in isolated Chrome; IPC/window actions and inventory filesystem are synthetic.",
+    "52px preview chrome is CSS geometry simulation; real AppKit proof is separately preserved in native/.",
+    "No device, installed application, user data or real microphone access."
+  ]
+}

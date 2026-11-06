@@ -1,0 +1,55 @@
+{
+  "status": "PASS-FROZEN-NATIVE-AND-MODEL",
+  "frozenBaseline": "7d180411",
+  "inputBeforeAfterMatch": true,
+  "native": {
+    "frameRestored": true,
+    "before": "{{120, 120}, {1000, 600}}",
+    "controlsWinHitTest": true,
+    "hiddenSearchFocusRefused": true,
+    "restoredGroups": 1,
+    "rootAboveContent": 1,
+    "drags": 1,
+    "zooms": 4,
+    "frameChanged": 1,
+    "scope": "Isolated production ObjC bind/update/root, real NSWindow zoom geometry and real AppKit field editor/marked text. Drag overridden to count without blocking. No installed app or real input. Rust serialization/model tests run separately.",
+    "zoomed": "{{53, 0}, {1387, 903}}",
+    "realMarkedText": true,
+    "overlayHiddenWithStaleAckAndMarkedText": true,
+    "reservedTop": 52,
+    "lateNormalStateRejected": true,
+    "retainedSearchAndExactValue": true,
+    "restored": "{{120, 120}, {1000, 600}}",
+    "normalGroupsVisible": true
+  },
+  "nativeCommands": "native-commands.json",
+  "rustModel": {
+    "argv": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "plugins/tauri-plugin-notes-ui/Cargo.toml",
+      "--locked",
+      "--offline",
+      "--lib",
+      "content_overlay_is_optional_and_survives_strict_transport_serialization",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/private/tmp/apple-notes-ui8081-candidate",
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "naturalExitCode": 0,
+    "wallSeconds": 31.374019,
+    "stdoutSha256": "86e5d91a7a87f73f568de441b3fa8b4366d0a491b19f67d9c8e7169a1fcdf08f",
+    "stderrSha256": "e3ab01bf673490016eeae3c4f82dfc961fb7709eeb258f16c1138911bf5c10a3"
+  },
+  "limits": [
+    "Native AppKit production Objective-C isolated harness; drag overridden to avoid real input.",
+    "Rust executes one new plugin model serialization/default test, 25 other tests filtered out.",
+    "No installed app, real microphone, Android device, production webview or browser/dist operation."
+  ]
+}

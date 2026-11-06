@@ -1,0 +1,124 @@
+{
+  "head": "44ea616bd29804ceabe8dce18947925c6e3524d7",
+  "output": "/private/tmp/notes-ui8081-root-pvvegh14",
+  "start": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9",
+    "fileCount": 122,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "runs": [
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 8.322,
+      "log": "/private/tmp/notes-ui8081-root-pvvegh14/build.log"
+    },
+    {
+      "name": "production",
+      "command": [
+        "pnpm",
+        "debug",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/notes-ui8081-root-pvvegh14/production"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 3.119,
+      "log": "/private/tmp/notes-ui8081-root-pvvegh14/production.log"
+    },
+    {
+      "name": "desktop",
+      "command": [
+        "pnpm",
+        "test:debug",
+        "--out",
+        "/private/tmp/notes-ui8081-root-pvvegh14/desktop"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 85.55,
+      "log": "/private/tmp/notes-ui8081-root-pvvegh14/desktop.log"
+    },
+    {
+      "name": "mobile-notes",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "notes",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-ui8081-root-pvvegh14/mobile-notes"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 11.128,
+      "log": "/private/tmp/notes-ui8081-root-pvvegh14/mobile-notes.log"
+    },
+    {
+      "name": "mobile-recording",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "recording",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-ui8081-root-pvvegh14/mobile-recording"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 13.791,
+      "log": "/private/tmp/notes-ui8081-root-pvvegh14/mobile-recording.log"
+    },
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-ui8081-root-pvvegh14/mobile-attachments"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 63.642,
+      "log": "/private/tmp/notes-ui8081-root-pvvegh14/mobile-attachments.log"
+    }
+  ],
+  "end": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "0818145c2f31dc49b58cba93ba30711747e82c405cdb6bc0923b14bc92457ab9",
+    "fileCount": 122,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputUnchanged": true,
+  "status": "pass"
+}

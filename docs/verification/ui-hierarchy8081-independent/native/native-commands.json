@@ -1,0 +1,38 @@
+[
+  {
+    "label": "native-compile",
+    "argv": [
+      "clang",
+      "-fobjc-arc",
+      "-fblocks",
+      "-mmacosx-version-min=12.0",
+      "-Wall",
+      "-Wextra",
+      "-Wno-unused-parameter",
+      "scripts/native/image-preview80.m",
+      "plugins/tauri-plugin-notes-ui/macos/format.m",
+      "-framework",
+      "AppKit",
+      "-framework",
+      "QuartzCore",
+      "-o",
+      "/private/tmp/apple-notes-ui8081-independent/native/image-preview80-harness"
+    ],
+    "cwd": "/private/tmp/apple-notes-ui8081-candidate",
+    "naturalExitCode": 0,
+    "wallSeconds": 1.058441,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "native-run",
+    "argv": [
+      "/private/tmp/apple-notes-ui8081-independent/native/image-preview80-harness"
+    ],
+    "cwd": "/private/tmp/apple-notes-ui8081-candidate",
+    "naturalExitCode": 0,
+    "wallSeconds": 0.606882,
+    "stdoutSha256": "a18df8e12aeeafa59e3dc5e97b3f9d124eff2083c50b02cb3a74078b5db1552b",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]
