@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "sourceCommit": "921ce6d4fb69040e1099632cd44888928ab9030b",
+  "scope": "host-only actualexpression; no devices/nativeeventdelivery/ACK observation",
+  "checks": [
+    "release commit/abort/unknown only and prepare outcome ignored",
+    "outcome accessor not invoked or leaked",
+    "original consumer preserved, invoke unchanged",
+    "snapshot outcome counts copied not exposed by reference",
+    "only original passive readonly/cleanup commands"
+  ]
+}

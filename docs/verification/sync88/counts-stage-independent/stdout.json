@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "sourceCommit": "d2510e6bca68dce734f8a515a678bf3a37be2adc",
+  "javaSha256": "55fdc7af6f7fb6c7de06373a1722257289cb17d005e25358888597b457364611",
+  "dexSha256": "88898d00c8499846d197f1b976195364548dc332ae20596987e641822565afc8",
+  "scope": "fixed source/actual DEX/stage-parser host only; no helper/runtime/ADB/device execution",
+  "checks": [
+    "fixedDB/query/target unchanged",
+    "actualDEX single readonly query and finite stages, no System.exit/write path",
+    "all8failurestages remain refused counts with fixed stage diagnostic",
+    "unknown and nonstring stage do not leak",
+    "success counts parser unchanged"
+  ]
+}

@@ -1,0 +1,279 @@
+Processing '/private/tmp/notes-sync87-native-counts-helper02/dex/classes.dex'...
+Opened '/private/tmp/notes-sync87-native-counts-helper02/dex/classes.dex', DEX version '038'
+Class #0            -
+  Class descriptor  : 'LSyncTargetCounts;'
+  Access flags      : 0x0011 (PUBLIC FINAL)
+  Superclass        : 'Ljava/lang/Object;'
+  Interfaces        -
+  Static fields     -
+    #0              : (in LSyncTargetCounts;)
+      name          : 'DB'
+      type          : 'Ljava/lang/String;'
+      access        : 0x001a (PRIVATE STATIC FINAL)
+      value         : "/data/user/0/com.local.notesclone/files/notes.sqlite3"
+    #1              : (in LSyncTargetCounts;)
+      name          : 'QUERY'
+      type          : 'Ljava/lang/String;'
+      access        : 0x001a (PRIVATE STATIC FINAL)
+      value         : "SELECT (SELECT count(*) FROM sync_inbox),(SELECT count(*) FROM sync_inbox WHERE json_extract(wire,'$.kind')='note' AND json_extract(wire,'$.entityId')=?),(SELECT count(*) FROM notes WHERE id=?),(SELECT count(*) FROM sync_projection WHERE kind='note' AND entity_id=?),(SELECT count(*) FROM sync_seen WHERE kind='note' AND entity_id=?)"
+    #2              : (in LSyncTargetCounts;)
+      name          : 'TARGET'
+      type          : 'Ljava/lang/String;'
+      access        : 0x001a (PRIVATE STATIC FINAL)
+      value         : "eac3b7e0-12cd-43cc-a1c0-2457e8cc4320"
+  Instance fields   -
+  Direct methods    -
+    #0              : (in LSyncTargetCounts;)
+      name          : '<init>'
+      type          : '()V'
+      access        : 0x10001 (PUBLIC CONSTRUCTOR)
+      code          -
+      registers     : 1
+      ins           : 1
+      outs          : 1
+      insns size    : 4 16-bit code units
+00036c:                                        |[00036c] SyncTargetCounts.<init>:()V
+00037c: 7010 1100 0000                         |0000: invoke-direct {v0}, Ljava/lang/Object;.<init>:()V // method@0011
+000382: 0e00                                   |0003: return-void
+      catches       : (none)
+      positions     :
+        0x0000 line=6
+      locals        :
+        0x0000 - 0x0004 reg=0 this LSyncTargetCounts;
+
+    #1              : (in LSyncTargetCounts;)
+      name          : 'main'
+      type          : '([Ljava/lang/String;)V'
+      access        : 0x0009 (PUBLIC STATIC)
+      code          -
+      registers     : 12
+      ins           : 1
+      outs          : 4
+      insns size    : 318 16-bit code units
+000384:                                        |[000384] SyncTargetCounts.main:([Ljava/lang/String;)V
+000394: 1a00 0500                              |0000: const-string v0, "/data/user/0/com.local.notesclone/files/notes.sqlite3" // string@0005
+000398: 1a01 3100                              |0002: const-string v1, "eac3b7e0-12cd-43cc-a1c0-2457e8cc4320" // string@0031
+00039c: 1a02 0b00                              |0004: const-string v2, "IDENTITY" // string@000b
+0003a0: 21bb                                   |0006: array-length v11, v11
+0003a2: 390b 1101                              |0007: if-nez v11, 0118 // +0111
+0003a6: 7100 0b00 0000                         |0009: invoke-static {}, Landroid/os/Process;.myUid:()I // method@000b
+0003ac: 0a0b                                   |000c: move-result v11
+0003ae: 1303 1027                              |000d: const/16 v3, #int 10000 // #2710
+0003b2: 343b 0901                              |000f: if-lt v11, v3, 0118 // +0109
+0003b6: 1a02 0900                              |0011: const-string v2, "FILE" // string@0009
+0003ba: 220b 0700                              |0013: new-instance v11, Ljava/io/File; // type@0007
+0003be: 7020 0c00 0b00                         |0015: invoke-direct {v11, v0}, Ljava/io/File;.<init>:(Ljava/lang/String;)V // method@000c
+0003c4: 6e10 0e00 0b00                         |0018: invoke-virtual {v11}, Ljava/io/File;.isFile:()Z // method@000e
+0003ca: 0a03                                   |001b: move-result v3
+0003cc: 3803 f600                              |001c: if-eqz v3, 0112 // +00f6
+0003d0: 1a02 0700                              |001e: const-string v2, "CANONICAL" // string@0007
+0003d4: 6e10 0d00 0b00                         |0020: invoke-virtual {v11}, Ljava/io/File;.getCanonicalPath:()Ljava/lang/String; // method@000d
+0003da: 0c0b                                   |0023: move-result-object v11
+0003dc: 6e20 1200 0b00                         |0024: invoke-virtual {v11, v0}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@0012
+0003e2: 0a0b                                   |0027: move-result v11
+0003e4: 380b e400                              |0028: if-eqz v11, 010c // +00e4
+0003e8: 1a02 2000                              |002a: const-string v2, "OPEN" // string@0020
+0003ec: 120b                                   |002c: const/4 v11, #int 0 // #0
+0003ee: 1213                                   |002d: const/4 v3, #int 1 // #1
+0003f0: 7130 0900 b003                         |002e: invoke-static {v0, v11, v3}, Landroid/database/sqlite/SQLiteDatabase;.openDatabase:(Ljava/lang/String;Landroid/database/sqlite/SQLiteDatabase$CursorFactory;I)Landroid/database/sqlite/SQLiteDatabase; // method@0009
+0003f6: 0c0b                                   |0031: move-result-object v11
+0003f8: 1a00 2100                              |0032: const-string v0, "QUERY" // string@0021
+0003fc: 1a02 2300                              |0034: const-string v2, "SELECT (SELECT count(*) FROM sync_inbox),(SELECT count(*) FROM sync_inbox WHERE json_extract(wire,'$.kind')='note' AND json_extract(wire,'$.entityId')=?),(SELECT count(*) FROM notes WHERE id=?),(SELECT count(*) FROM sync_projection WHERE kind='note' AND entity_id=?),(SELECT count(*) FROM sync_seen WHERE kind='note' AND entity_id=?)" // string@0023
+000400: 2440 1200 1111                         |0036: filled-new-array {v1, v1, v1, v1}, [Ljava/lang/String; // type@0012
+000406: 0c01                                   |0039: move-result-object v1
+000408: 6e30 0a00 2b01                         |003a: invoke-virtual {v11, v2, v1}, Landroid/database/sqlite/SQLiteDatabase;.rawQuery:(Ljava/lang/String;[Ljava/lang/String;)Landroid/database/Cursor; // method@000a
+00040e: 0c01                                   |003d: move-result-object v1
+000410: 1a00 2200                              |003e: const-string v0, "SCHEMA" // string@0022
+000414: 6e10 0800 0b00                         |0040: invoke-virtual {v11}, Landroid/database/sqlite/SQLiteDatabase;.isReadOnly:()Z // method@0008
+00041a: 0a02                                   |0043: move-result v2
+00041c: 3802 a700                              |0044: if-eqz v2, 00eb // +00a7
+000420: 7210 0300 0100                         |0046: invoke-interface {v1}, Landroid/database/Cursor;.getColumnCount:()I // method@0003
+000426: 0a02                                   |0049: move-result v2
+000428: 1254                                   |004a: const/4 v4, #int 5 // #5
+00042a: 3342 a000                              |004b: if-ne v2, v4, 00eb // +00a0
+00042e: 7210 0500 0100                         |004d: invoke-interface {v1}, Landroid/database/Cursor;.moveToFirst:()Z // method@0005
+000434: 0a02                                   |0050: move-result v2
+000436: 3802 9a00                              |0051: if-eqz v2, 00eb // +009a
+00043a: 1a00 2800                              |0053: const-string v0, "VALUES" // string@0028
+00043e: 2342 1100                              |0055: new-array v2, v4, [J // type@0011
+000442: 1205                                   |0057: const/4 v5, #int 0 // #0
+000444: 0156                                   |0058: move v6, v5
+000446: 3546 2200                              |0059: if-ge v6, v4, 007b // +0022
+00044a: 7220 0400 6100                         |005b: invoke-interface {v1, v6}, Landroid/database/Cursor;.getLong:(I)J // method@0004
+000450: 0b07                                   |005e: move-result-wide v7
+000452: 4c07 0206                              |005f: aput-wide v7, v2, v6
+000456: 4507 0206                              |0061: aget-wide v7, v2, v6
+00045a: 1609 0000                              |0063: const-wide/16 v9, #int 0 // #0
+00045e: 3107 0709                              |0065: cmp-long v7, v7, v9
+000462: 3a07 0e00                              |0067: if-ltz v7, 0075 // +000e
+000466: 4507 0206                              |0069: aget-wide v7, v2, v6
+00046a: 1709 ffff ff7f                         |006b: const-wide/32 v9, #float nan // #7fffffff
+000470: 3107 0709                              |006e: cmp-long v7, v7, v9
+000474: 3c07 0500                              |0070: if-gtz v7, 0075 // +0005
+000478: d806 0601                              |0072: add-int/lit8 v6, v6, #int 1 // #01
+00047c: 28e5                                   |0074: goto 0059 // -001b
+00047e: 2202 0900                              |0075: new-instance v2, Ljava/lang/IllegalStateException; // type@0009
+000482: 7010 1000 0200                         |0077: invoke-direct {v2}, Ljava/lang/IllegalStateException;.<init>:()V // method@0010
+000488: 2702                                   |007a: throw v2
+00048a: 1a00 2600                              |007b: const-string v0, "TRAILING" // string@0026
+00048e: 7210 0600 0100                         |007d: invoke-interface {v1}, Landroid/database/Cursor;.moveToNext:()Z // method@0006
+000494: 0a04                                   |0080: move-result v4
+000496: 3904 6400                              |0081: if-nez v4, 00e5 // +0064
+00049a: 6204 0300                              |0083: sget-object v4, Ljava/lang/System;.out:Ljava/io/PrintStream; // field@0003
+00049e: 2206 0c00                              |0085: new-instance v6, Ljava/lang/StringBuilder; // type@000c
+0004a2: 7010 1300 0600                         |0087: invoke-direct {v6}, Ljava/lang/StringBuilder;.<init>:()V // method@0013
+0004a8: 1a07 4200                              |008a: const-string v7, "{\"ok\":true,\"counts\":{\"inboxTotal\":" // string@0042
+0004ac: 6e20 1500 7600                         |008c: invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+0004b2: 0c06                                   |008f: move-result-object v6
+0004b4: 4507 0205                              |0090: aget-wide v7, v2, v5
+0004b8: 6e30 1400 7608                         |0092: invoke-virtual {v6, v7, v8}, Ljava/lang/StringBuilder;.append:(J)Ljava/lang/StringBuilder; // method@0014
+0004be: 0c05                                   |0095: move-result-object v5
+0004c0: 1a06 0100                              |0096: const-string v6, ",\"targetInbox\":" // string@0001
+0004c4: 6e20 1500 6500                         |0098: invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+0004ca: 0c05                                   |009b: move-result-object v5
+0004cc: 4506 0203                              |009c: aget-wide v6, v2, v3
+0004d0: 6e30 1400 6507                         |009e: invoke-virtual {v5, v6, v7}, Ljava/lang/StringBuilder;.append:(J)Ljava/lang/StringBuilder; // method@0014
+0004d6: 0c03                                   |00a1: move-result-object v3
+0004d8: 1a05 0200                              |00a2: const-string v5, ",\"targetNotes\":" // string@0002
+0004dc: 6e20 1500 5300                         |00a4: invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+0004e2: 0c03                                   |00a7: move-result-object v3
+0004e4: 1225                                   |00a8: const/4 v5, #int 2 // #2
+0004e6: 4505 0205                              |00a9: aget-wide v5, v2, v5
+0004ea: 6e30 1400 5306                         |00ab: invoke-virtual {v3, v5, v6}, Ljava/lang/StringBuilder;.append:(J)Ljava/lang/StringBuilder; // method@0014
+0004f0: 0c03                                   |00ae: move-result-object v3
+0004f2: 1a05 0300                              |00af: const-string v5, ",\"targetProjection\":" // string@0003
+0004f6: 6e20 1500 5300                         |00b1: invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+0004fc: 0c03                                   |00b4: move-result-object v3
+0004fe: 1235                                   |00b5: const/4 v5, #int 3 // #3
+000500: 4505 0205                              |00b6: aget-wide v5, v2, v5
+000504: 6e30 1400 5306                         |00b8: invoke-virtual {v3, v5, v6}, Ljava/lang/StringBuilder;.append:(J)Ljava/lang/StringBuilder; // method@0014
+00050a: 0c03                                   |00bb: move-result-object v3
+00050c: 1a05 0400                              |00bc: const-string v5, ",\"targetSeen\":" // string@0004
+000510: 6e20 1500 5300                         |00be: invoke-virtual {v3, v5}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+000516: 0c03                                   |00c1: move-result-object v3
+000518: 1245                                   |00c2: const/4 v5, #int 4 // #4
+00051a: 4505 0205                              |00c3: aget-wide v5, v2, v5
+00051e: 6e30 1400 5306                         |00c5: invoke-virtual {v3, v5, v6}, Ljava/lang/StringBuilder;.append:(J)Ljava/lang/StringBuilder; // method@0014
+000524: 0c02                                   |00c8: move-result-object v2
+000526: 1a03 4300                              |00c9: const-string v3, "}}" // string@0043
+00052a: 6e20 1500 3200                         |00cb: invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+000530: 0c02                                   |00ce: move-result-object v2
+000532: 6e10 1600 0200                         |00cf: invoke-virtual {v2}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0016
+000538: 0c02                                   |00d2: move-result-object v2
+00053a: 6e20 0f00 2400                         |00d3: invoke-virtual {v4, v2}, Ljava/io/PrintStream;.println:(Ljava/lang/String;)V // method@000f
+000540: 3801 0500                              |00d6: if-eqz v1, 00db // +0005
+000544: 7210 0200 0100                         |00d8: invoke-interface {v1}, Landroid/database/Cursor;.close:()V // method@0002
+00054a: 380b 0900                              |00db: if-eqz v11, 00e4 // +0009
+00054e: 6e10 0700 0b00                         |00dd: invoke-virtual {v11}, Landroid/database/sqlite/SQLiteDatabase;.close:()V // method@0007
+000554: 2804                                   |00e0: goto 00e4 // +0004
+000556: 0d0b                                   |00e1: move-exception v11
+000558: 0702                                   |00e2: move-object v2, v0
+00055a: 283c                                   |00e3: goto 011f // +003c
+00055c: 2859                                   |00e4: goto 013d // +0059
+00055e: 2202 0900                              |00e5: new-instance v2, Ljava/lang/IllegalStateException; // type@0009
+000562: 7010 1000 0200                         |00e7: invoke-direct {v2}, Ljava/lang/IllegalStateException;.<init>:()V // method@0010
+000568: 2702                                   |00ea: throw v2
+00056a: 2202 0900                              |00eb: new-instance v2, Ljava/lang/IllegalStateException; // type@0009
+00056e: 7010 1000 0200                         |00ed: invoke-direct {v2}, Ljava/lang/IllegalStateException;.<init>:()V // method@0010
+000574: 2702                                   |00f0: throw v2
+000576: 0d02                                   |00f1: move-exception v2
+000578: 3801 0a00                              |00f2: if-eqz v1, 00fc // +000a
+00057c: 7210 0200 0100                         |00f4: invoke-interface {v1}, Landroid/database/Cursor;.close:()V // method@0002
+000582: 2805                                   |00f7: goto 00fc // +0005
+000584: 0d01                                   |00f8: move-exception v1
+000586: 6e20 1700 1200                         |00f9: invoke-virtual {v2, v1}, Ljava/lang/Throwable;.addSuppressed:(Ljava/lang/Throwable;)V // method@0017
+00058c: 2702                                   |00fc: throw v2
+00058e: 0d01                                   |00fd: move-exception v1
+000590: 0702                                   |00fe: move-object v2, v0
+000592: 2802                                   |00ff: goto 0101 // +0002
+000594: 0d01                                   |0100: move-exception v1
+000596: 380b 0a00                              |0101: if-eqz v11, 010b // +000a
+00059a: 6e10 0700 0b00                         |0103: invoke-virtual {v11}, Landroid/database/sqlite/SQLiteDatabase;.close:()V // method@0007
+0005a0: 2805                                   |0106: goto 010b // +0005
+0005a2: 0d0b                                   |0107: move-exception v11
+0005a4: 6e20 1700 b100                         |0108: invoke-virtual {v1, v11}, Ljava/lang/Throwable;.addSuppressed:(Ljava/lang/Throwable;)V // method@0017
+0005aa: 2701                                   |010b: throw v1
+0005ac: 220b 0900                              |010c: new-instance v11, Ljava/lang/IllegalStateException; // type@0009
+0005b0: 7010 1000 0b00                         |010e: invoke-direct {v11}, Ljava/lang/IllegalStateException;.<init>:()V // method@0010
+0005b6: 270b                                   |0111: throw v11
+0005b8: 220b 0900                              |0112: new-instance v11, Ljava/lang/IllegalStateException; // type@0009
+0005bc: 7010 1000 0b00                         |0114: invoke-direct {v11}, Ljava/lang/IllegalStateException;.<init>:()V // method@0010
+0005c2: 270b                                   |0117: throw v11
+0005c4: 220b 0900                              |0118: new-instance v11, Ljava/lang/IllegalStateException; // type@0009
+0005c8: 7010 1000 0b00                         |011a: invoke-direct {v11}, Ljava/lang/IllegalStateException;.<init>:()V // method@0010
+0005ce: 270b                                   |011d: throw v11
+0005d0: 0d0b                                   |011e: move-exception v11
+0005d2: 620b 0300                              |011f: sget-object v11, Ljava/lang/System;.out:Ljava/io/PrintStream; // field@0003
+0005d6: 2200 0c00                              |0121: new-instance v0, Ljava/lang/StringBuilder; // type@000c
+0005da: 7010 1300 0000                         |0123: invoke-direct {v0}, Ljava/lang/StringBuilder;.<init>:()V // method@0013
+0005e0: 1a01 4100                              |0126: const-string v1, "{\"ok\":false,\"error\":\"READONLY_COUNTS_FAILED\",\"stage\":\"" // string@0041
+0005e4: 6e20 1500 1000                         |0128: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+0005ea: 0c00                                   |012b: move-result-object v0
+0005ec: 6e20 1500 2000                         |012c: invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+0005f2: 0c00                                   |012f: move-result-object v0
+0005f4: 1a01 0000                              |0130: const-string v1, "\"}" // string@0000
+0005f8: 6e20 1500 1000                         |0132: invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;.append:(Ljava/lang/String;)Ljava/lang/StringBuilder; // method@0015
+0005fe: 0c00                                   |0135: move-result-object v0
+000600: 6e10 1600 0000                         |0136: invoke-virtual {v0}, Ljava/lang/StringBuilder;.toString:()Ljava/lang/String; // method@0016
+000606: 0c00                                   |0139: move-result-object v0
+000608: 6e20 0f00 0b00                         |013a: invoke-virtual {v11, v0}, Ljava/io/PrintStream;.println:(Ljava/lang/String;)V // method@000f
+00060e: 0e00                                   |013d: return-void
+      catches       : 11
+        0x0006 - 0x0032
+          <any> -> 0x011e
+        0x0032 - 0x0034
+          <any> -> 0x0100
+        0x0034 - 0x003e
+          <any> -> 0x00fd
+        0x003e - 0x00d6
+          <any> -> 0x00f1
+        0x00d8 - 0x00db
+          <any> -> 0x00fd
+        0x00dd - 0x00e0
+          <any> -> 0x00e1
+        0x00e5 - 0x00f1
+          <any> -> 0x00f1
+        0x00f4 - 0x00f7
+          <any> -> 0x00f8
+        0x00f9 - 0x00fd
+          <any> -> 0x00fd
+        0x0103 - 0x0106
+          <any> -> 0x0107
+        0x0108 - 0x011e
+          <any> -> 0x011e
+      positions     :
+        0x0000 line=16
+        0x0006 line=18
+        0x0011 line=19
+        0x0018 line=20
+        0x001e line=21
+        0x002a line=22
+        0x002c line=23
+        0x0032 line=24
+        0x0034 line=25
+        0x003e line=26
+        0x0040 line=27
+        0x0053 line=28
+        0x0057 line=29
+        0x007b line=30
+        0x0083 line=31
+        0x00d6 line=32
+        0x00db line=33
+        0x00e1 line=34
+        0x00e4 line=36
+        0x00e5 line=30
+        0x00eb line=27
+        0x00f1 line=25
+        0x00fd line=23
+        0x010c line=21
+        0x0112 line=20
+        0x0118 line=18
+        0x011e line=34
+        0x011f line=35
+        0x013d line=37
+      locals        :
+        0x0000 - 0x013e reg=11 (null) [Ljava/lang/String;
+
+  Virtual methods   -
+  source_file_idx   : 36 (SyncTargetCounts.java)
+
