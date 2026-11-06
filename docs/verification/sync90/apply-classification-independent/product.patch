@@ -1,0 +1,406 @@
+diff --git a/src-tauri/src/session/synchronization.rs b/src-tauri/src/session/synchronization.rs
+index 8f9769b4..29ec5056 100644
+--- a/src-tauri/src/session/synchronization.rs
++++ b/src-tauri/src/session/synchronization.rs
+@@ -79,12 +79,131 @@ impl AbortReason {
+         Self::ExternalAbort,
+     ];
+ }
++/// Fixed, non-sensitive categories; the original AppError is never modified.
++#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize)]
++#[serde(rename_all = "camelCase")]
++enum ApplyError {
++    DatabaseForeignKey,
++    DatabaseUnique,
++    DatabaseNotNull,
++    DatabaseCheck,
++    DatabaseTrigger,
++    DatabaseReadonly,
++    DatabaseBusy,
++    DatabaseLocked,
++    DatabaseNoSuchTable,
++    DatabaseNoSuchColumn,
++    DatabaseNoSuchFunction,
++    DatabaseSyntax,
++    DatabaseFull,
++    DatabaseIo,
++    DatabaseOther,
++    Filesystem,
++    Document,
++    SyncInvalid,
++    SyncLimit,
++    SyncPendingFlush,
++    SyncMissingBlob,
++    SyncBlobCorrupt,
++    SyncMediaPublish,
++    SyncEquivocation,
++    SyncDisabled,
++    SyncWorkspaceMismatch,
++    SyncAttachmentConflict,
++    NotFound,
++    Other,
++}
++impl ApplyError {
++    const ALL: [Self; 29] = [
++        Self::DatabaseForeignKey,
++        Self::DatabaseUnique,
++        Self::DatabaseNotNull,
++        Self::DatabaseCheck,
++        Self::DatabaseTrigger,
++        Self::DatabaseReadonly,
++        Self::DatabaseBusy,
++        Self::DatabaseLocked,
++        Self::DatabaseNoSuchTable,
++        Self::DatabaseNoSuchColumn,
++        Self::DatabaseNoSuchFunction,
++        Self::DatabaseSyntax,
++        Self::DatabaseFull,
++        Self::DatabaseIo,
++        Self::DatabaseOther,
++        Self::Filesystem,
++        Self::Document,
++        Self::SyncInvalid,
++        Self::SyncLimit,
++        Self::SyncPendingFlush,
++        Self::SyncMissingBlob,
++        Self::SyncBlobCorrupt,
++        Self::SyncMediaPublish,
++        Self::SyncEquivocation,
++        Self::SyncDisabled,
++        Self::SyncWorkspaceMismatch,
++        Self::SyncAttachmentConflict,
++        Self::NotFound,
++        Self::Other,
++    ];
++    fn classify(error: &crate::store::AppError) -> Self {
++        match error.code.as_str() {
++            "database" => Self::sqlite(&error.message),
++            "filesystem" => Self::Filesystem,
++            "document" => Self::Document,
++            "sync_invalid" => Self::SyncInvalid,
++            "sync_limit" => Self::SyncLimit,
++            "sync_pending_flush" => Self::SyncPendingFlush,
++            "sync_missing_blob" => Self::SyncMissingBlob,
++            "sync_blob_corrupt" => Self::SyncBlobCorrupt,
++            "sync_media_publish" => Self::SyncMediaPublish,
++            "sync_equivocation" => Self::SyncEquivocation,
++            "sync_disabled" => Self::SyncDisabled,
++            "sync_workspace_mismatch" => Self::SyncWorkspaceMismatch,
++            "sync_attachment_conflict" => Self::SyncAttachmentConflict,
++            "not_found" => Self::NotFound,
++            _ => Self::Other,
++        }
++    }
++    fn sqlite(message: &str) -> Self {
++        // SQLite detail strings can contain names/content. Inspect at most 4096
++        // bytes with fixed recognizers, retain no string or captured segment.
++        if message.len() > 4096 {
++            return Self::DatabaseOther;
++        }
++        match message {
++            "FOREIGN KEY constraint failed" => Self::DatabaseForeignKey,
++            "too many levels of trigger recursion" => Self::DatabaseTrigger,
++            "attempt to write a readonly database" => Self::DatabaseReadonly,
++            "database is locked" => Self::DatabaseBusy,
++            "database table is locked" | "database schema is locked" => Self::DatabaseLocked,
++            "database or disk is full" => Self::DatabaseFull,
++            "disk I/O error" => Self::DatabaseIo,
++            _ if message.starts_with("UNIQUE constraint failed: ") => Self::DatabaseUnique,
++            _ if message.starts_with("NOT NULL constraint failed: ") => Self::DatabaseNotNull,
++            _ if message.starts_with("CHECK constraint failed: ") => Self::DatabaseCheck,
++            _ if message.starts_with("database table is locked: ")
++                || message.starts_with("database schema is locked: ") =>
++            {
++                Self::DatabaseLocked
++            }
++            _ if message.starts_with("no such table: ") => Self::DatabaseNoSuchTable,
++            _ if message.starts_with("no such column: ") => Self::DatabaseNoSuchColumn,
++            _ if message.starts_with("no such function: ") => Self::DatabaseNoSuchFunction,
++            _ if message.starts_with("near ") && message.ends_with(": syntax error") => {
++                Self::DatabaseSyntax
++            }
++            _ => Self::DatabaseOther,
++        }
++    }
++}
+ #[derive(Default)]
+ struct DiagnosticCounts {
+     commits: u64,
+     aborts: u64,
+     latest_abort_reason: Option<AbortReason>,
+     reasons: [u64; 19],
++    latest_apply_error: Option<ApplyError>,
++    apply_errors: [u64; ApplyError::ALL.len()],
+ }
+ #[derive(Default)]
+ pub(super) struct QuietState {
+@@ -110,6 +229,7 @@ struct Quiet {
+     phase: &'static str,
+     aborted: bool,
+     abort_reason: Option<AbortReason>,
++    apply_error: Option<ApplyError>,
+     started: Instant,
+     plan: Option<SyncApplyPlan>,
+     resolution: Option<Resolution>,
+@@ -162,6 +282,7 @@ impl Session {
+             phase: "probe",
+             aborted: false,
+             abort_reason: None,
++            apply_error: None,
+             started: Instant::now(),
+             plan: None,
+             resolution,
+@@ -274,6 +395,12 @@ impl Session {
+             q.abort_reason.get_or_insert(reason);
+         }
+     }
++    fn sync_note_apply_error(&mut self, error: &crate::store::AppError) {
++        if let Some(q) = &mut self.quiet.current {
++            q.apply_error
++                .get_or_insert_with(|| ApplyError::classify(error));
++        }
++    }
+     fn sync_note_abort_reason(&mut self, reason: AbortReason) {
+         if let Some(q) = &mut self.quiet.current {
+             q.abort_reason.get_or_insert(reason);
+@@ -289,9 +416,14 @@ impl Session {
+             .into_iter()
+             .map(|reason| (reason, d.reasons[reason as usize]))
+             .collect();
+-        json!({"version":1,"commits":d.commits,"aborts":d.aborts,
++        let apply_errors: BTreeMap<_, _> = ApplyError::ALL
++            .into_iter()
++            .map(|category| (category, d.apply_errors[category as usize]))
++            .collect();
++        json!({"version":2,"commits":d.commits,"aborts":d.aborts,
+             "latestAbortReason":d.latest_abort_reason,"abortReasons":reasons,
+-            "activePhase":self.quiet.current.as_ref().map(|q|q.phase)})
++            "activePhase":self.quiet.current.as_ref().map(|q|q.phase),
++            "latestApplyError":d.latest_apply_error,"applyErrors":apply_errors})
+     }
+     pub(crate) fn sync_tick(
+         &mut self,
+@@ -411,6 +543,9 @@ impl Session {
+         });
+         if let Err(e) = result {
+             if self.last_commit.is_none() {
++                if e.code != "sync_plan_stale" {
++                    self.sync_note_apply_error(&e);
++                }
+                 self.sync_abort_reason(if e.code == "sync_plan_stale" {
+                     AbortReason::PlanStale
+                 } else {
+@@ -469,6 +604,11 @@ impl Session {
+             d.aborts = d.aborts.saturating_add(1);
+             d.reasons[reason as usize] = d.reasons[reason as usize].saturating_add(1);
+             d.latest_abort_reason = Some(reason);
++            if let Some(category) = q.apply_error {
++                d.apply_errors[category as usize] =
++                    d.apply_errors[category as usize].saturating_add(1);
++                d.latest_apply_error = Some(category);
++            }
+         } else if outcome == "commit" {
+             d.commits = d.commits.saturating_add(1);
+         }
+@@ -726,8 +866,14 @@ mod tests {
+         assert!(s.store.note(&nid).is_err());
+         assert_eq!(s.store.sync_pending_count().unwrap(), 1);
+         assert!(observed["activePhase"].is_null());
++        assert!(observed["latestApplyError"].is_null());
++        assert!(observed["applyErrors"]
++            .as_object()
++            .unwrap()
++            .values()
++            .all(|v| v == 0));
+         let object = observed.as_object().unwrap();
+-        assert_eq!(object.len(), 6);
++        assert_eq!(object.len(), 8);
+         assert_eq!(
+             object["abortReasons"].as_object().unwrap().len(),
+             AbortReason::ALL.len()
+@@ -739,6 +885,159 @@ mod tests {
+         assert!(!serialized.contains("epoch"));
+     }
+     #[test]
++    fn fixed_apply_error_classifier_never_retains_original_detail() {
++        let error = |code: &str, message: &str| crate::store::AppError {
++            code: code.into(),
++            message: message.into(),
++            commit: None,
++        };
++        let sql = [
++            (
++                "FOREIGN KEY constraint failed",
++                ApplyError::DatabaseForeignKey,
++            ),
++            (
++                "UNIQUE constraint failed: SECRET.column",
++                ApplyError::DatabaseUnique,
++            ),
++            (
++                "NOT NULL constraint failed: SECRET.column",
++                ApplyError::DatabaseNotNull,
++            ),
++            ("CHECK constraint failed: SECRET", ApplyError::DatabaseCheck),
++            (
++                "too many levels of trigger recursion",
++                ApplyError::DatabaseTrigger,
++            ),
++            (
++                "attempt to write a readonly database",
++                ApplyError::DatabaseReadonly,
++            ),
++            ("database is locked", ApplyError::DatabaseBusy),
++            (
++                "database table is locked: SECRET",
++                ApplyError::DatabaseLocked,
++            ),
++            ("database schema is locked", ApplyError::DatabaseLocked),
++            ("no such table: SECRET", ApplyError::DatabaseNoSuchTable),
++            ("no such column: SECRET", ApplyError::DatabaseNoSuchColumn),
++            (
++                "no such function: SECRET",
++                ApplyError::DatabaseNoSuchFunction,
++            ),
++            ("near SECRET: syntax error", ApplyError::DatabaseSyntax),
++            ("database or disk is full", ApplyError::DatabaseFull),
++            ("disk I/O error", ApplyError::DatabaseIo),
++            (
++                "SECRET /private/path arbitrary trigger message",
++                ApplyError::DatabaseOther,
++            ),
++            ("constraint failed", ApplyError::DatabaseOther),
++            (
++                "prefix UNIQUE constraint failed: SECRET",
++                ApplyError::DatabaseOther,
++            ),
++        ];
++        for (message, category) in sql {
++            let original = error("database", message);
++            assert_eq!(ApplyError::classify(&original), category);
++            assert_eq!(original.message, message);
++            assert!(!serde_json::to_string(&category).unwrap().contains("SECRET"));
++        }
++        assert_eq!(
++            ApplyError::classify(&error("database", &"X".repeat(4097))),
++            ApplyError::DatabaseOther
++        );
++        for (code, category) in [
++            ("filesystem", ApplyError::Filesystem),
++            ("document", ApplyError::Document),
++            ("sync_invalid", ApplyError::SyncInvalid),
++            ("sync_limit", ApplyError::SyncLimit),
++            ("sync_pending_flush", ApplyError::SyncPendingFlush),
++            ("sync_missing_blob", ApplyError::SyncMissingBlob),
++            ("sync_blob_corrupt", ApplyError::SyncBlobCorrupt),
++            ("sync_media_publish", ApplyError::SyncMediaPublish),
++            ("sync_equivocation", ApplyError::SyncEquivocation),
++            ("sync_disabled", ApplyError::SyncDisabled),
++            ("sync_workspace_mismatch", ApplyError::SyncWorkspaceMismatch),
++            (
++                "sync_attachment_conflict",
++                ApplyError::SyncAttachmentConflict,
++            ),
++            ("not_found", ApplyError::NotFound),
++            ("SECRET-code", ApplyError::Other),
++        ] {
++            assert_eq!(ApplyError::classify(&error(code, "SECRET")), category);
++        }
++        // SQL-looking detail on a non-database error cannot select a DB category.
++        assert_eq!(
++            ApplyError::classify(&error("SECRET", "FOREIGN KEY constraint failed")),
++            ApplyError::Other
++        );
++    }
++    #[test]
++    fn real_apply_database_failure_preserves_error_rollback_first_category_and_release_counts() {
++        let (d, mut s) = session();
++        let nid = incoming(&mut s);
++        let id = begin(&mut s);
++        prepare(&mut s, &id);
++        let t = token(&s);
++        s.sync_reply(
++            "main",
++            WindowReply::Prepare {
++                operation_id: id,
++                ready: true,
++            },
++            &t,
++        )
++        .unwrap();
++        let db = rusqlite::Connection::open(d.path().join("notes.sqlite3")).unwrap();
++        db.execute_batch("CREATE TRIGGER fail90 BEFORE UPDATE ON sync_identity WHEN OLD.capture=0 AND NEW.capture=1 BEGIN SELECT RAISE(ABORT,'NOT NULL constraint failed: SECRET'); END").unwrap();
++        let original = s.sync_tick(&HashSet::from(["main".into()])).unwrap_err();
++        assert_eq!(original.code, "database");
++        assert_eq!(original.message, "NOT NULL constraint failed: SECRET");
++        assert!(original.commit.is_none());
++        assert!(s.last_commit.is_none());
++        assert_eq!(s.sync_diagnostics()["applyErrors"]["databaseNotNull"], 0);
++        assert!(s.sync_diagnostics()["latestApplyError"].is_null());
++        s.sync_note_apply_error(&crate::store::AppError {
++            code: "filesystem".into(),
++            message: "SECRET".into(),
++            commit: None,
++        });
++        s.sync_abort_reason(AbortReason::EvaluationError);
++        s.quiet.diagnostics.apply_errors[ApplyError::DatabaseNotNull as usize] = u64::MAX;
++        assert_eq!(
++            s.sync_tick(&HashSet::from(["main".into()]))
++                .unwrap()
++                .unwrap()
++                .0["outcome"],
++            "abort"
++        );
++        let observed = s.sync_diagnostics();
++        assert_eq!(observed["version"], 2);
++        assert_eq!(observed["latestAbortReason"], "applyError");
++        assert_eq!(observed["abortReasons"]["applyError"], 1);
++        assert_eq!(observed["latestApplyError"], "databaseNotNull");
++        assert_eq!(observed["applyErrors"]["databaseNotNull"], u64::MAX);
++        assert_eq!(observed["applyErrors"]["filesystem"], 0);
++        assert_eq!(
++            observed["applyErrors"].as_object().unwrap().len(),
++            ApplyError::ALL.len()
++        );
++        assert!(!observed.to_string().contains("SECRET"));
++        assert_eq!(observed, s.sync_diagnostics());
++        assert!(s.store.note(&nid).is_err());
++        assert_eq!(s.store.sync_pending_count().unwrap(), 1);
++        assert_eq!(
++            db.query_row("SELECT capture FROM sync_identity", [], |r| r
++                .get::<_, u64>(0))
++                .unwrap(),
++            1
++        );
++        db.execute_batch("DROP TRIGGER fail90").unwrap();
++    }
++    #[test]
+     fn metadata_failure_propagates_unchanged_and_retains_reason_through_adapter_abort() {
+         let (_d, mut s) = session();
+         let nid = incoming(&mut s);
+@@ -772,6 +1071,12 @@ mod tests {
+             "prepareMetadataError"
+         );
+         assert_eq!(s.sync_diagnostics()["abortReasons"]["evaluationError"], 0);
++        assert!(s.sync_diagnostics()["latestApplyError"].is_null());
++        assert!(s.sync_diagnostics()["applyErrors"]
++            .as_object()
++            .unwrap()
++            .values()
++            .all(|v| v == 0));
+         assert_eq!(s.store.sync_pending_count().unwrap(), 1);
+         assert!(s.store.note(&nid).is_err());
+     }
+diff --git a/src-tauri/src/sync/adapter.rs b/src-tauri/src/sync/adapter.rs
+index f1261180..5beac1de 100644
+--- a/src-tauri/src/sync/adapter.rs
++++ b/src-tauri/src/sync/adapter.rs
+@@ -989,7 +989,7 @@ mod tests {
+         let expected = token(&shared);
+         let before = shared.0.lock().unwrap().workspace().unwrap();
+         let first = runtime.diagnostics("main", &expected).unwrap();
+-        assert_eq!(first["version"], 1);
++        assert_eq!(first["version"], 2);
+         assert_eq!(first["commits"], 0);
+         assert_eq!(first["aborts"], 0);
+         assert_eq!(first, runtime.diagnostics("main", &expected).unwrap());
