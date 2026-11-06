@@ -1,0 +1,57 @@
+{
+  "head": "809643845d385fafae60f5678869d70b2aeca066",
+  "output": "/private/tmp/notes-mobile-home8283-final-roz8hl6q",
+  "start": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "1a7374f011f8d8e89134b6068e4b8e21615a8ea12d2b437999ba7f20fbef4e94",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "runs": [
+    {
+      "name": "mobile-attachments",
+      "command": [
+        "pnpm",
+        "debug",
+        "group",
+        "attachments",
+        "--mobile",
+        "--out",
+        "/private/tmp/notes-mobile-home8283-final-roz8hl6q/mobile-attachments"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 69.003,
+      "log": "/private/tmp/notes-mobile-home8283-final-roz8hl6q/mobile-attachments.log"
+    }
+  ],
+  "end": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "1a7374f011f8d8e89134b6068e4b8e21615a8ea12d2b437999ba7f20fbef4e94",
+    "fileCount": 126,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": false,
+    "gitStatus": []
+  },
+  "inputUnchanged": true,
+  "status": "pass"
+}

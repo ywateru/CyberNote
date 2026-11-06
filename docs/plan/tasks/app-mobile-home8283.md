@@ -1,7 +1,7 @@
 ---
 id: app-mobile-home8283
 scope: preferences82-and-android-quick-home83-integrated-delivery
-status: pending
+status: done
 depends-on: [app-preferences82, app-android-quick-home83]
 ---
 
@@ -22,3 +22,5 @@ docs/ui/preferences.md、docs/ui/android-quick-home.md、docs/testing.md、docs/
 冻结源码标识和sourceFingerprint前后相同；pnpm build（真实tsc -b）、production排除、桌面all、手机notes/recording/attachments六项自然退出0；attachments包含preferences与quick-home，若不含则明确补单组。Mac和Android串行build，复用主依赖和target，不清共享缓存；逐包记录完整输入before/after、准确frontend、签名、实际内嵌资源及归档等核验。旧Mac原签名失败原件保留、派生adhoc严格通过；APK debug签名，不安装原设备。布局截图来自合成fixture并明确不是原版整窗像素；未测试真机IME/系统chooser/硬件录音不冒认。回归失败须修复后只重跑受影响边界再恢复组合，不覆盖原始失败。
 
 正常清理本轮已合入且clean的worktree/分支；不动历史worktree/主node_modules/target/用户数据或原Android未保存录音现场。最终中文回复包含Android主要行为、82保留交付、截图/包/验证报告绝对路径。
+
+2026-11-06最终gate：本轮限定目标已完成。82/83独审及主线桌面408/手机9+43+290通过，整合两次runner失败保全后仅复跑受影响组；准确Mac26/Android构建16与独立核包PASS。详见[组合交付](../../verification/mobile-home8283/README.md)。真实Android IME/provider、原版整窗像素及原手机现场保留不由此done替代。

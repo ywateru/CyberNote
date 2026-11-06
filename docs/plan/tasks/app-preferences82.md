@@ -24,3 +24,5 @@ docs/INDEX.md、docs/ui/preferences.md、docs/ui/storage-overview.md、docs/ui/i
 用户追加83后，82源码独审通过即合入以供83串行开发；主线完整六项与双端出包推迟到[组合8283](app-mobile-home8283.md)，不重复生成仅82中间包。
 
 2026-11-06源码交付gate：8fd3e35f产品/dd1d19fd作者证据已合入；独审32项自然0、SOURCE-READY，无blocking，作者52/50及tsc -b通过。125输入7a7025e49d58a4846ee6a4d984833b88c4723c9043b1859d9611fba3e4ce6ac7不变。此done限定源码与独审，组合主线全回归及Mac26/Android16交付由app-mobile-home8283承接，尚未完成。
+
+2026-11-06组合交付补充：上述“尚未完成”是源码gate时点，现82/83组合主线/双端准确包与独立核包已完成，详见[交付](../../verification/mobile-home8283/README.md)。本轮未触原Android录音现场。

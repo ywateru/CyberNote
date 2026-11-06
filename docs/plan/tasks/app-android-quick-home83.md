@@ -1,7 +1,7 @@
 ---
 id: app-android-quick-home83
 scope: android-direct-gallery-and-one-tap-create-editor
-status: in-progress
+status: done
 depends-on: [app-preferences82]
 ---
 
@@ -20,3 +20,5 @@ docs/INDEX.md、docs/ui/android-quick-home.md、docs/research/android-quick-home
 # verification
 
 新增mobile quick-home组覆盖真实点击＋、单次创建收据/元数据/访问/真实editor focus/保存重载、失败/延迟/导航竞态、初始化/Back/搜索、锁定不泄漏、桌面偏好保持、设置和媒体入口，320/390/430/800短屏浅深布局。旧手机组保留保存断言。82+83最终一次主线完整回归/生产排除/准确构建/精简独立核包；真实AndroidIME及整窗像素另列，不冒认。
+
+2026-11-06最终gate：本轮限定目标已完成。82/83独审及主线桌面408/手机9+43+290通过，整合两次runner失败保全后仅复跑受影响组；准确Mac26/Android构建16与独立核包PASS。详见[组合交付](../../verification/mobile-home8283/README.md)。真实Android IME/provider、原版整窗像素及原手机现场保留不由此done替代。

@@ -1,5 +1,7 @@
 # 开发命令与布局检查
 
+2026-11-06最新[82/83组合验收](verification/mobile-home8283/integration/README.md)：桌面408、手机notes9/recording43/attachments290通过；attachments包含preferences及quick-home。两个runner衔接修复仅等待真实返回焦点、在手机组入口恢复声明viewport，原断言保留；首次失败与恢复按准确相同产品输入映射，不重复无关全组。
+
 2026-11-06，任务70/71/73/75/77/78/79/80/81/82/83。此入口用于日常开发，不替代原版像素校准、真实 Rust Store、系统退出、权限和硬件验收。测试策略以 [testing.md](testing.md) 为准。
 
 [77历史整合](verification/mac-feedback77/integration/README.md)为桌面十组148项、手机笔记9/录音43/附件43，构建/生产排除通过。`pnpm debug group mac-feedback --out FRESH_DIR`单独运行该批47项真实事件/HTML/字符Range/位置回归；完整组另含45项contract，真实deadline允许首次transport尚未返回时没有lastState，不伪造状态。
