@@ -1,0 +1,19 @@
+# APP92 actual worker integration02 — worker PASS, document spacing finding retained
+
+Product source ecad727e (accepted host plus independently admitted source identity normalization), fixed JXA SHA `6d05ee7ec69b0ac5509cfdb29fc335ae6e7c005415bbb6fe83eb715ab274843d`. Original real01 failure retained separately; no original run files reused or overwritten. This run used a fresh0700 parent/new target Store, private0600 input containing only the same previously verified attachment-free source ID, and private0600 stdout/stderr. No source ID/title/body entered repository or public logs.
+
+Exact ignored test `apple_notes_import::core::tests::actual_readonly_source_worker_to_isolated_store` natural exit0 /43.027s, no outer timeout. It used the production core scan/start/status worker, real SystemSource/fixed osascript/OwnedStage validation, and real Session/Store; only GUI AppHandle/window lifetime uses the test Host. It is not actual Tauri DOM acceptance or a replacement append path. Target84 was released immediately when the test exited.
+
+The test's safe report confirms one copied item, one repeat skipped after Store reopen, exact retained title/plaintext/dates/raw HTML, settings equality, and source note exact before/after equality. Before-read rejected attachment-bearing/locked/unstable source; no real attachment was exported, no extra source item was selected, and no source mutation/DB access occurred. The newly copied raw-original record is one independently managed file.
+
+## Read-only target supplements
+
+After the test process exited, regular read-only SQLite lookup failed with exit14 (retained aggregate), and an initial immutable lookup stopped on absent sync_identity schema. A subsequent `mode=ro&immutable=1` lookup succeeded after confirming both WAL and SHM absent. This read targets only our new isolated data, not source Notes; it did not modify the database. Counts:2 notes,1 raw attachment, sync schema never initialized. No network synchronization service was created by the RealHost test.
+
+Exactly one note in the known default synthetic folder matches every constant from Store createNote constructor: empty heading document, title/plainText, pinned/deleted/locked/paperStyle/revision/sealed/originalFolderId; its creation/modification times agree. This is a post-run comparison with constructor constants, not an archived before/after full-ID/time snapshot. Synthetic settings values remain, while the test itself checked complete settings equality during both rounds. Retained target/raw/capture files were protected0600 inside the always0700 parent after execution; source permissions were untouched.
+
+## Separate document fidelity finding — not blanket rich-content PASS
+
+Independent target-document text extraction did **not** equal source raw plaintext, even allowing a terminal-newline difference. All nonempty content lines remain in order and stored plainText equals raw source plainText, but paragraph spacing needs repair. Safe shape: source HTML has6 div elements (including1 nested h1),4 br elements and6 whitespace-only tokens outside blocks; target has12 text blocks,10 whitespace-only blocks. Independent HTML display-block sequence also differs. A likely contributor is formatting whitespace between HTML blocks being converted into extra paragraphs. This is a diagnosis direction, not a proven sole cause.
+
+Thus this run proves actual source->production worker->persistent Store copy/reopen/retry/source-preservation behavior for one simple note. It does not prove exact document paragraph structure, original pixel parity, comprehensive rich formatting, real attachment export or full-library migration. Main developer/root were notified; source adapter needs no further change for this finding. No repeated source call was made to investigate the retained target.
