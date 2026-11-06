@@ -25,4 +25,4 @@
 
 macOS 自动化用途文字和签名 entitlement 由打包流程检查；这不替代每台 Mac 自身的系统授权。产品只读取本机系统接口，没有 iCloud 登录或远程读取功能。
 
-验证分层、原始失败和最终包证据见[本轮交付记录](verification/apple-notes-import92/DELIVERY.md)；交付前状态见[恢复状态](plan/apple-notes-import92-state.md)。
+验证分层、原始失败和最终包证据见[本轮交付记录](verification/apple-notes-import92/DELIVERY.md)；实现与验证状态见[恢复状态](plan/apple-notes-import92-state.md)。
