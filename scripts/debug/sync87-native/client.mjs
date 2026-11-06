@@ -26,7 +26,7 @@ export function chooseTarget(targets,port) {
 export function parseNodes(xml) {
   const decode=s=>s.replace(/&(amp|quot|apos|lt|gt);/g,(_,x)=>({amp:'&',quot:'"',apos:"'",lt:'<',gt:'>'}[x]));
   const nodes=[],stack=[];
-  for(const token of xml.matchAll(/<node\s+([^>]+)>|<\/node\s*>/g)) {
+  for(const token of xml.matchAll(/<node\b([^>]*)>|<\/node\s*>/g)) {
     if(token[1]===undefined){assert(stack.length,'unbalanced native XML');stack.pop();continue;}
     const attrs=Object.fromEntries([...token[1].matchAll(/([a-z-]+)="([^"]*)"/g)].map(a=>[a[1],decode(a[2])]));
     const bounds=/^\[(\d+),(\d+)\]\[(\d+),(\d+)\]$/.exec(attrs.bounds||'');
@@ -37,8 +37,10 @@ export function parseNodes(xml) {
   assert.equal(stack.length,0,'unbalanced native XML');return nodes;
 }
 export function nativeWebViewRect(nodes) {
-  const views=nodes.filter(n=>n.class==='android.webkit.WebView'&&n.package===PACKAGE&&n.rect?.width>0&&n.rect.height>0);
-  assert(views.length>0,'app WebView rectangle absent');const first=views[0];
+  const views=nodes.filter(n=>n.class==='android.webkit.WebView');
+  assert(views.length>0,'app WebView rectangle absent');
+  for(const view of views){assert.equal(view.package,PACKAGE,'foreign WebView host');assert(view.rect?.width>0&&view.rect.height>0,'invalid WebView rectangle');}
+  const first=views[0];
   for(let i=1;i<views.length;i++){
     assert.equal(views[i].parentIndex,views[i-1].nodeIndex,'different WebView hosts');
     assert.deepEqual(views[i].rect,first.rect,'different WebView rectangles');
