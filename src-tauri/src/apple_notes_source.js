@@ -126,8 +126,9 @@ function run(argv) {
       }
       return false;
     }
-    var noteObjects = collection(app.notes(), 100000), notes = [];
-    for (var j = 0; j < Math.min(noteObjects.length, maxNotes); j++) {
+    var noteObjects = collection(app.notes(), 100000), notes = [], noteIds = Object.create(null);
+    var j = 0;
+    for (; j < noteObjects.length && notes.length < maxNotes; j++) {
       var source = noteObjects[j];
       var item = { id: null, title: '', folderId: null, status: 'unreadable', reason: 'property_unreadable' };
       try {
@@ -142,9 +143,16 @@ function run(argv) {
         item.reason = noteDetail.reason;
         if (noteDetail.code !== null) item.code = noteDetail.code;
       }
+      if (item.id !== null && noteIds[item.id]) {
+        // Notes may expose the same stable object more than once. Only exact
+        // metadata duplicates coalesce; a racing/conflicting view is refused.
+        if (JSON.stringify(noteIds[item.id]) !== JSON.stringify(item)) fail('source_changed');
+        continue;
+      }
+      if (item.id !== null) noteIds[item.id] = item;
       notes.push(item);
     }
-    return { version: 1, status: 'ok', reason: null, accounts: accounts, folders: folders, notes: notes, truncated: noteObjects.length > maxNotes };
+    return { version: 1, status: 'ok', reason: null, accounts: accounts, folders: folders, notes: notes, truncated: j < noteObjects.length };
   }
   function read(app, request) {
     var source = app.notes.byId(request.noteId);

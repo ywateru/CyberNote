@@ -1,0 +1,214 @@
+TAP version 13
+# Subtest: source parses and scan preserves complete nested ancestry without bodies or saves
+ok 1 - source parses and scan preserves complete nested ancestry without bodies or saves
+  ---
+  duration_ms: 1.349709
+  type: 'test'
+  ...
+# Subtest: scan cap reports truncation rather than silently losing notes
+ok 2 - scan cap reports truncation rather than silently losing notes
+  ---
+  duration_ms: 0.330459
+  type: 'test'
+  ...
+# Subtest: identical stable-ID metadata duplicates in real response shape coalesce
+ok 3 - identical stable-ID metadata duplicates in real response shape coalesce
+  ---
+  duration_ms: 0.608292
+  type: 'test'
+  ...
+# Subtest: same-ID conflicting name refuses entire scan
+ok 4 - same-ID conflicting name refuses entire scan
+  ---
+  duration_ms: 0.432416
+  type: 'test'
+  ...
+# Subtest: same-ID conflicting container refuses entire scan
+ok 5 - same-ID conflicting container refuses entire scan
+  ---
+  duration_ms: 0.764625
+  type: 'test'
+  ...
+# Subtest: same-ID conflicting passwordProtected refuses entire scan
+ok 6 - same-ID conflicting passwordProtected refuses entire scan
+  ---
+  duration_ms: 0.2715
+  type: 'test'
+  ...
+# Subtest: same-ID property error conflicts with a readable row rather than disappearing
+ok 7 - same-ID property error conflicts with a readable row rather than disappearing
+  ---
+  duration_ms: 0.291958
+  type: 'test'
+  ...
+# Subtest: missing ancestor affects notes without inventing root
+ok 8 - missing ancestor affects notes without inventing root
+  ---
+  duration_ms: 0.280166
+  type: 'test'
+  ...
+# Subtest: ancestry cycle is unreadable without recursion or activation
+ok 9 - ancestry cycle is unreadable without recursion or activation
+  ---
+  duration_ms: 0.629083
+  type: 'test'
+  ...
+# Subtest: locked read never gets body or exports
+ok 10 - locked read never gets body or exports
+  ---
+  duration_ms: 1.002792
+  type: 'test'
+  ...
+# Subtest: read keeps required body/dates and nullable CID/name in original attachment order
+ok 11 - read keeps required body/dates and nullable CID/name in original attachment order
+  ---
+  duration_ms: 0.502
+  type: 'test'
+  ...
+# Subtest: native export -10000 retained as failed item and never retried
+ok 12 - native export -10000 retained as failed item and never retried
+  ---
+  duration_ms: 0.343709
+  type: 'test'
+  ...
+# Subtest: insufficient paths preserves unsupported items without out-of-bounds save
+ok 13 - insufficient paths preserves unsupported items without out-of-bounds save
+  ---
+  duration_ms: 0.294667
+  type: 'test'
+  ...
+# Subtest: over 1000 attachments refuses whole note before any export
+ok 14 - over 1000 attachments refuses whole note before any export
+  ---
+  duration_ms: 0.894083
+  type: 'test'
+  ...
+# Subtest: source id changed during export is not stable
+ok 15 - source id changed during export is not stable
+  ---
+  duration_ms: 0.255542
+  type: 'test'
+  ...
+# Subtest: source title changed during export is not stable
+ok 16 - source title changed during export is not stable
+  ---
+  duration_ms: 0.234667
+  type: 'test'
+  ...
+# Subtest: source folder changed during export is not stable
+ok 17 - source folder changed during export is not stable
+  ---
+  duration_ms: 0.424
+  type: 'test'
+  ...
+# Subtest: source date changed during export is not stable
+ok 18 - source date changed during export is not stable
+  ---
+  duration_ms: 0.383375
+  type: 'test'
+  ...
+# Subtest: wrong source ID cannot be imported
+ok 19 - wrong source ID cannot be imported
+  ---
+  duration_ms: 0.614709
+  type: 'test'
+  ...
+# Subtest: source failure -1743 produces finite private-safe output
+ok 20 - source failure -1743 produces finite private-safe output
+  ---
+  duration_ms: 1.321958
+  type: 'test'
+  ...
+# Subtest: source failure -1712 produces finite private-safe output
+ok 21 - source failure -1712 produces finite private-safe output
+  ---
+  duration_ms: 0.324541
+  type: 'test'
+  ...
+# Subtest: source failure -1728 produces finite private-safe output
+ok 22 - source failure -1728 produces finite private-safe output
+  ---
+  duration_ms: 0.226292
+  type: 'test'
+  ...
+# Subtest: failed body is not imported as an empty note
+ok 23 - failed body is not imported as an empty note
+  ---
+  duration_ms: 0.371792
+  type: 'test'
+  ...
+# Subtest: invalid extra source code has no source calls
+ok 24 - invalid extra source code has no source calls
+  ---
+  duration_ms: 0.263333
+  type: 'test'
+  ...
+# Subtest: invalid zero cap has no source calls
+ok 25 - invalid zero cap has no source calls
+  ---
+  duration_ms: 0.212709
+  type: 'test'
+  ...
+# Subtest: invalid large cap has no source calls
+ok 26 - invalid large cap has no source calls
+  ---
+  duration_ms: 0.236917
+  type: 'test'
+  ...
+# Subtest: invalid unknown mode has no source calls
+ok 27 - invalid unknown mode has no source calls
+  ---
+  duration_ms: 0.209542
+  type: 'test'
+  ...
+# Subtest: invalid relative path has no source calls
+ok 28 - invalid relative path has no source calls
+  ---
+  duration_ms: 0.285833
+  type: 'test'
+  ...
+# Subtest: invalid traversal has no source calls
+ok 29 - invalid traversal has no source calls
+  ---
+  duration_ms: 0.284125
+  type: 'test'
+  ...
+# Subtest: invalid duplicate has no source calls
+ok 30 - invalid duplicate has no source calls
+  ---
+  duration_ms: 0.369959
+  type: 'test'
+  ...
+# Subtest: invalid different parents has no source calls
+ok 31 - invalid different parents has no source calls
+  ---
+  duration_ms: 0.299459
+  type: 'test'
+  ...
+# Subtest: invalid null ID has no source calls
+ok 32 - invalid null ID has no source calls
+  ---
+  duration_ms: 0.219667
+  type: 'test'
+  ...
+# Subtest: invalid malformed JSON has no source calls
+ok 33 - invalid malformed JSON has no source calls
+  ---
+  duration_ms: 0.270541
+  type: 'test'
+  ...
+# Subtest: wrong argv count has no source calls
+ok 34 - wrong argv count has no source calls
+  ---
+  duration_ms: 0.252958
+  type: 'test'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 60.824458

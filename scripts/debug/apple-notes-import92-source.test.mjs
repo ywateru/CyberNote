@@ -69,6 +69,27 @@ test('scan cap reports truncation rather than silently losing notes', () => {
   const f = fixture({ notes: [note, note] }); const result = f.execute({ ...scan, maxNotes: 1 });
   assert.equal(result.notes.length, 1); assert.equal(result.truncated, true);
 });
+test('identical stable-ID metadata duplicates in real response shape coalesce', () => {
+  const note = { id: () => 'n', name: () => 'Synthetic note', container: () => ({ id: () => 'folder-1' }), passwordProtected: () => false };
+  const other = { ...note, id: () => 'other' };
+  const f = fixture({ notes: [note, note, other, other, other] });
+  const result = f.execute(scan);
+  assert.equal(result.status, 'ok'); assert.equal(result.notes.length, 2); assert.equal(result.truncated, false);
+  assert.deepEqual(result.notes.map(x => x.id), ['n', 'other']);
+});
+for (const field of ['name', 'container', 'passwordProtected']) test(`same-ID conflicting ${field} refuses entire scan`, () => {
+  const note = { id: () => 'n', name: () => 'Synthetic note', container: () => ({ id: () => 'folder-1' }), passwordProtected: () => false };
+  const changed = { ...note, [field]: field === 'name' ? () => 'Changed' : field === 'container' ? () => ({ id: () => 'folder-2' }) : () => true };
+  const result = fixture({ notes: [note, changed] }).execute(scan);
+  assert.equal(result.status, 'unreadable'); assert.equal(result.reason, 'source_changed'); assert.deepEqual(result.notes, []);
+});
+test('same-ID property error conflicts with a readable row rather than disappearing', () => {
+  const note = { id: () => 'n', name: () => 'Synthetic note', container: () => ({ id: () => 'folder-1' }), passwordProtected: () => false };
+  const broken = { ...note, passwordProtected: () => { throw Object.assign(new Error('SYNTHETIC_SECRET'), { errorNumber: -1728 }); } };
+  const result = fixture({ notes: [note, broken] }).execute(scan);
+  assert.equal(result.status, 'unreadable'); assert.equal(result.reason, 'source_changed');
+  assert.equal(JSON.stringify(result).includes('SYNTHETIC_SECRET'), false);
+});
 test('missing ancestor affects notes without inventing root', () => {
   const f = fixture({ parentId: 'missing-folder' }); const result = f.execute(scan);
   assert.equal(result.notes[0].status, 'unreadable'); assert.equal(result.notes[0].reason, 'hierarchy_unreadable');
