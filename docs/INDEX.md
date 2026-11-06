@@ -1,5 +1,7 @@
 # Apple Notes Clone
 
+2026-11-06：同步后续生产接线见[86 adapter](plan/tasks/app-sync86-adapter.md)，[最终双端与路由87](plan/tasks/app-sync87-e2e.md)；各层证明范围独立。
+
 2026-11-06：[双向同步规格](architecture/sync.md)与[持久核心84](plan/tasks/app-sync84-core.md)、[认证网络85](plan/tasks/app-sync85-network.md)已开始设计实施；现有Mac26/Android16不含网络同步。
 
 2026-11-06：82统一设置与83手机快速画廊已完成本轮限定交付。手机直接画廊、亮黄＋一键输入，设置/数据顶部双标签；主线桌面408/手机9+43+290、受影响组恢复与Mac26/Android构建16准确构建及独立核包通过。[交付和原始失败](verification/mobile-home8283/README.md)、手机IME/provider及原版整窗像素边界可查，原Android录音现场未动。
