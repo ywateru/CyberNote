@@ -1,0 +1,32 @@
+{
+  "baseline": "11464bc8",
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/apple-notes-sync84-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "files": [
+    {
+      "path": "src-tauri/src/session/synchronization.rs",
+      "sha256": "2e67dbc6d957ca776cde0d35a62473d67eba43b124d6dbca7518837a505bf616"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter.rs",
+      "sha256": "961f9e606443a0ef2ea9ba53ffce0a92899252cbefdff38e4b1a48badb7e4a8c"
+    }
+  ],
+  "sessionCommand": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "session::synchronization",
+    "--",
+    "--nocapture"
+  ],
+  "sessionExitCode": 0,
+  "sessionTests": 12,
+  "sessionCargoExecutionSeconds": 0.73,
+  "sessionExternalWallSeconds": null
+}

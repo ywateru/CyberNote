@@ -1,0 +1,14 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "sync::adapter::tests::trusted_diagnostics_read_requires_window_token_and_has_no_opt_in_or_mutation",
+    "--",
+    "--nocapture"
+  ],
+  "exitCode": 0,
+  "wallSeconds": 19.585703582999997
+}

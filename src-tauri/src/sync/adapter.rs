@@ -989,7 +989,7 @@ mod tests {
         let expected = token(&shared);
         let before = shared.0.lock().unwrap().workspace().unwrap();
         let first = runtime.diagnostics("main", &expected).unwrap();
-        assert_eq!(first["version"], 1);
+        assert_eq!(first["version"], 2);
         assert_eq!(first["commits"], 0);
         assert_eq!(first["aborts"], 0);
         assert_eq!(first, runtime.diagnostics("main", &expected).unwrap());
