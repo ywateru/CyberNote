@@ -520,6 +520,84 @@ export async function runSyncSettings(runtime, { command, check, output }) {
       (await pair.count()) === 0 &&
       backend.sync.deviceName === "UI 合成手机",
   );
+  // Existing devices must be able to use a fresh invitation after a tunnel
+  // hostname changes. IPC stays an explicit fixture here; real sockets are
+  // separately covered by sync87-routes.
+  const previousIdentity = {
+    workspaceId: backend.sync.workspaceId,
+    deviceId: backend.sync.deviceId,
+  };
+  const update = page.getByRole("button", { name: "更新连接", exact: true });
+  check(
+    "An enabled device exposes Update Connection",
+    await update.isEnabled(),
+  );
+  await update.click();
+  await pair.fill(secret);
+  await page.getByRole("button", { name: "取消连接", exact: true }).click();
+  check(
+    "Cancelling an endpoint update removes the unsent secret",
+    (await pair.count()) === 0,
+  );
+  await update.click();
+  await pair.fill(secret);
+  await command("settings.tab", { tab: "settings" });
+  await command("settings.tab", { tab: "data" });
+  check(
+    "Tab changes clear an existing-device endpoint update",
+    (await pair.count()) === 0,
+  );
+  await update.click();
+  await pair.fill(secret);
+  await close();
+  await command("data.open");
+  check(
+    "Closing settings clears an existing-device endpoint update",
+    (await pair.count()) === 0,
+  );
+  await update.click();
+  await pair.fill(secret);
+  await command("sync.stop");
+  check(
+    "Stopping synchronization clears an open endpoint update",
+    (await pair.count()) === 0,
+  );
+  check(
+    "Paused devices explain Resume before Update Connection",
+    (await update.isDisabled()) &&
+      (await sync().innerText()).includes("请先继续同步，再更新连接"),
+  );
+  await command("sync.resume");
+  await update.click();
+  await pair.fill(secret);
+  backend.configure({ fail: { "sync-pair": 1 } });
+  await page.getByRole("button", { name: "连接并加入", exact: true }).click();
+  await idle(page);
+  check(
+    "A failed endpoint update retains the form and local identity",
+    (await pair.count()) === 1 &&
+      (await page.locator(".sync-error").count()) === 1 &&
+      backend.sync.workspaceId === previousIdentity.workspaceId &&
+      backend.sync.deviceId === previousIdentity.deviceId,
+  );
+  const beforeUpdate = calls("pair");
+  backend.configure({ delay: { "sync-pair": 300 } });
+  await page
+    .getByRole("button", { name: "连接并加入", exact: true })
+    .evaluate((node) => {
+      node.click();
+      node.click();
+    });
+  await idle(page);
+  backend.configure({ delay: { "sync-pair": 0 } });
+  check(
+    "Update Connection reuses singleflight pair and clears the secret on success",
+    calls("pair") === beforeUpdate + 1 &&
+      (await pair.count()) === 0 &&
+      backend.sync.workspaceId === previousIdentity.workspaceId &&
+      backend.sync.deviceId === previousIdentity.deviceId &&
+      (await page.locator(".sync-error").count()) === 0,
+  );
   const beforeBrowserIPC = calls("status");
   const unavailable = await page.evaluate(async () => {
     const old = window.isTauri;
