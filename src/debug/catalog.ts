@@ -174,6 +174,12 @@ add("settings", "settings.update", "Persist application settings", {
   settings: o(),
 });
 add("settings", "sidebar.toggle", "Use sidebar preference handler");
+add("data", "data.open", "Open actual local data management page");
+add("data", "data.refresh", "Refresh real data-management bridge snapshot");
+add("data", "data.filter", "Filter or paginate actual file listing", { query: s(), kind: e(["all", "image", "audio", "video", "file", "unowned"], false), page: { type: "number" } });
+add("data", "data.exportAttachment", "Export original attachment from management listing", { id: s(true) }, "Native dialog and original-owner export boundary");
+add("data", "image.preview", "Open actual image preview", { id: s(true) });
+add("data", "image.save", "Use actual image save control", { id: s(true) }, "Native dialog and original-byte export boundary");
 add("menus", "menu.open", "Open existing menu", {
   menu: e([
     "format",

@@ -199,6 +199,8 @@ import { AccessChanged } from "./access-client";
 import { MetadataStale } from "./metadata-client";
 import type { AccessStamp } from "./access-client";
 import NoteEditor from "./Editor";
+import DataManagement, { type DataManagementHandle } from "./DataManagement";
+import type { ArchiveResult } from "./data-management";
 import { documentsEqual } from "./document-equality";
 import {
   projectSearchNote,
@@ -617,12 +619,17 @@ function App() {
   const [accessSuspended, setAccessSuspended] = useState<string[]>([]);
   const [synchronizing, setSynchronizing] = useState(false);
   const [syncError, setSyncError] = useState("");
+  const [syncCover, setSyncCover] = useState(false);
+  const syncCoverRef = useRef(false);
+  const dataManagementHandle = useRef<DataManagementHandle | null>(null);
+  const [archiveBusy, setArchiveBusy] = useState(false);
+  const archiveRunning = useRef(false);
   const blockedNotes = useRef(new Set<string>());
   const saveFailures = useRef(new Map<string, unknown>());
   const accessHandler = useRef<(event: AccessEvent) => void>(() => {});
   const clearSensitive = useRef<(ids: string[]) => void>(() => {});
   const synchronizeRef = useRef<
-    () => Promise<SynchronizationResult<Workspace>>
+    (options?: { quiet?: boolean }) => Promise<SynchronizationResult<Workspace>>
   >(async () => ({
     success: false,
     sequence: 0,
@@ -1659,7 +1666,7 @@ function App() {
       formatTarget.current = null;
       paperTarget.current = null;
       setMenu(null);
-      setModal(null);
+      setModal((current) => current === "data" ? current : null);
       setModalValue("");
       setDraw(null);
       setRecord(false);
@@ -1679,10 +1686,18 @@ function App() {
     }
     setContextNote(null);
   };
-  synchronizeRef.current = () =>
-    synchronization.request(
+  const coverSynchronization = () => {
+    syncCoverRef.current = true;
+    setSyncCover(true);
+  };
+  synchronizeRef.current = (options) => {
+    const knownSession = accessGate.state?.sessionId;
+    const quiet = options?.quiet && initializedSelection.current && !!knownSession &&
+      !accessGate.state?.operationId && !accessGate.state?.suspended.length && !syncCoverRef.current;
+    return synchronization.request(
       () => {
         invalidateAccessRequests();
+        if (!quiet) coverSynchronization();
         synchronizingRef.current = true;
         setSynchronizing(true);
         setSyncError("");
@@ -1690,7 +1705,13 @@ function App() {
       async () => {
         for (;;) {
           try {
-            return await loadWorkspace(true);
+            const data = await loadWorkspace(true);
+            if (quiet && (data.access?.sessionId !== knownSession || data.access?.operationId || data.access?.suspended.length)) {
+              coverSynchronization();
+              // Commit the security cover before publishing a different authority.
+              await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+            }
+            return data;
           } catch (error) {
             if (!(error instanceof MetadataStale)) throw error;
           }
@@ -1714,16 +1735,21 @@ function App() {
         setAccessSuspended([...blockedNotes.current]);
         synchronizingRef.current = false;
         setSynchronizing(false);
+        syncCoverRef.current = false;
+        setSyncCover(false);
         setWorkspaceLoaded(true);
       },
       (e) => {
+        coverSynchronization();
         fail(e);
         setSyncError(errText(e));
         // Keep cached content covered until a trusted retry succeeds.
       },
     );
+  };
   accessHandler.current = (event) => {
     if (event.phase === "prepare") {
+      coverSynchronization();
       if (
         tagCompositionTarget.current &&
         event.noteIds.includes(tagCompositionTarget.current.noteId)
@@ -2217,12 +2243,16 @@ function App() {
     }
   };
   const archive = useCallback(
-    async (mode: "export" | "import") => {
+    async (mode: "export" | "import"): Promise<ArchiveResult> => {
       setMenu(null);
+      if (archiveRunning.current) return { status: "error", message: "备份操作正在进行中" };
+      if (recordingTicket.current || record) return { status: "error", message: "请先完成录音，再导入或导出备份。内存中的录音尚未备份。" };
+      archiveRunning.current = true;
+      setArchiveBusy(true);
       try {
         if (!native) {
           setNotice("请在已安装的 Mac 或 Android 应用中导入、导出本地备份。");
-          return;
+          return { status: "error", message: "请在已安装的应用中操作本地备份" };
         }
         await flush();
         const path =
@@ -2235,7 +2265,9 @@ function App() {
                 multiple: false,
                 filters: [{ name: "备忘录备份", extensions: ["notesbackup"] }],
               });
-        if (typeof path !== "string") return;
+        if (typeof path !== "string") return { status: "cancelled" };
+        if (recordingTicket.current || record) throw Error("请先完成录音，再操作备份");
+        await flush();
         if (mode === "export") {
           await exportArchive(path);
           setNotice("本地备份已导出");
@@ -2252,11 +2284,16 @@ function App() {
           if (imported.maintenanceError) fail(imported.maintenanceError);
           setNotice("本地备份已导入");
         }
+        return { status: "success" };
       } catch (e) {
         fail(e);
+        return { status: "error", message: errText(e) };
+      } finally {
+        archiveRunning.current = false;
+        setArchiveBusy(false);
       }
     },
-    [flush, hydrate, restoreSelection, synchronization, fail],
+    [flush, hydrate, restoreSelection, synchronization, fail, record],
   );
   const openSeparate = async (n: Note) => {
     if (quitState.current) return;
@@ -2451,7 +2488,7 @@ function App() {
         throw Error("原识别文字的待保存正文已改变，请保持窗口打开");
     } else await flush();
     if (!owned()) throw Error("原录音或文字识别会话已关闭");
-    const synced = await synchronizeRef.current();
+    const synced = await synchronizeRef.current({ quiet: !recording && !ocr });
     if (!owned()) throw Error("原录音会话已关闭");
     if (synced.success && synchronization.current(synced)) {
       // The trusted response may resolve before React restores the original
@@ -4105,8 +4142,11 @@ function App() {
               <div className="menu-divider" />
               <MenuRow
                 icon={<SettingsIcon size={18} />}
-                onClick={() => openModal("settings")}
+                onClick={() => openModal("data")}
               >
+                数据管理
+              </MenuRow>
+              <MenuRow icon={<SettingsIcon size={18} />} onClick={() => openModal("settings")}>
                 设置
               </MenuRow>
             </>
@@ -4159,20 +4199,25 @@ function App() {
               </MenuRow>
               <MenuRow
                 icon={<ArrowDownToLine size={18} />}
+                disabled={archiveBusy || !!recordingTicket.current || record}
                 onClick={() => archive("export")}
               >
                 导出本地备份
               </MenuRow>
               <MenuRow
                 icon={<ArrowUpFromLine size={18} />}
+                disabled={archiveBusy || !!recordingTicket.current || record}
                 onClick={() => archive("import")}
               >
                 导入本地备份
               </MenuRow>
               <MenuRow
                 icon={<SettingsIcon size={18} />}
-                onClick={() => openModal("settings")}
+                onClick={() => openModal("data")}
               >
+                数据管理
+              </MenuRow>
+              <MenuRow icon={<SettingsIcon size={18} />} onClick={() => openModal("settings")}>
                 设置
               </MenuRow>
             </>
@@ -4681,6 +4726,8 @@ function App() {
         },
         busy:
           loading ||
+          archiveBusy ||
+          !!dataManagementHandle.current?.inspect().busy ||
           synchronizingRef.current ||
           !!metadataRefreshRunning.current ||
           debugPending.current.size > 0 ||
@@ -4717,6 +4764,29 @@ function App() {
         "app.refresh": () => refresh(),
         "app.back": () => androidBack.current(),
         "app.dismissError": () => setError(""),
+        "data.open": () => openModal("data"),
+        "image.preview": ({ id }) => {
+          const button = document.querySelector<HTMLButtonElement>(`.attachment-node[data-attachment-id="${CSS.escape(id as string)}"] .image-open`);
+          if (!button || button.disabled) throw Error("图片尚未可预览");
+          button.click();
+        },
+        "image.save": ({ id }) => {
+          const button = document.querySelector<HTMLButtonElement>(`.attachment-node[data-attachment-id="${CSS.escape(id as string)}"] .save-image`);
+          if (!button || button.disabled) throw Error("图片尚未可保存");
+          button.click();
+        },
+        "data.refresh": () => {
+          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          return dataManagementHandle.current.refresh();
+        },
+        "data.filter": (args) => {
+          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          return dataManagementHandle.current.filter(args);
+        },
+        "data.exportAttachment": ({ id }) => {
+          if (!dataManagementHandle.current) throw Error("数据管理尚未打开");
+          return dataManagementHandle.current.exportAttachment(id as string);
+        },
         "folder.select": ({ id }) => {
           assert();
           if (id !== "all" && !wsRef.current.folders.some((f) => f.id === id))
@@ -5135,7 +5205,7 @@ function App() {
     <div
       ref={appSurface}
       inert={quitPending}
-      className={`app ${nativeTop ? "native-toolbar" : ""} ${synchronizing || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
+      className={`app ${nativeTop ? "native-toolbar" : ""} ${syncCover || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
       style={
         {
           "--sidebar-width": `${settings.sidebarWidth || 228}px`,
@@ -5922,7 +5992,7 @@ function App() {
           }}
         />
       )}
-      {(synchronizing || accessSuspended.length > 0) && (
+      {(syncCover || accessSuspended.length > 0) && (
         <div className="access-cover" role="status">
           <div>
             {syncError ? (
@@ -5938,7 +6008,18 @@ function App() {
           </div>
         </div>
       )}
-      {modal && (
+      {modal === "data" && (
+        <DataManagement
+          onClose={() => setModal(null)}
+          onHandle={(handle) => { dataManagementHandle.current = handle; }}
+          onArchive={archive}
+          backupBlocked={!!recordingTicket.current || record}
+          archiveBusy={archiveBusy}
+          accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}:${ws.access?.operationId || ""}`}
+          accessBlocked={!!accessSuspended.length || !!accessGate.state?.operationId}
+        />
+      )}
+      {modal && modal !== "data" && (
         <div
           className="modal-backdrop"
           onClick={() => (modal === "paper" ? closePaper() : setModal(null))}
@@ -6147,14 +6228,17 @@ function App() {
                 </div>
                 <div className="settings-section">
                   <h3>本地数据</h3>
+                  <MenuRow onClick={() => openModal("data")} icon={<FileText size={18} />}>数据管理</MenuRow>
                   <MenuRow
-                    onClick={() => archive("export")}
+                    disabled={archiveBusy || !!recordingTicket.current || record}
+                onClick={() => archive("export")}
                     icon={<ArrowDownToLine size={18} />}
                   >
                     导出本地备份
                   </MenuRow>
                   <MenuRow
-                    onClick={() => archive("import")}
+                    disabled={archiveBusy || !!recordingTicket.current || record}
+                onClick={() => archive("import")}
                     icon={<ArrowUpFromLine size={18} />}
                   >
                     导入本地备份
