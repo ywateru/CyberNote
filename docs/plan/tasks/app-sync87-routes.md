@@ -11,3 +11,6 @@
 WireGuard/EasyTier只读检查有无可安全用的现成网络；没有则记录未具备与应用使用虚拟IP的入口，不为测试建网或伪造VPN pass。QuickTunnel网络/外部服务不可达时保留真实失败、有限重试，不能无限等待；明确功能路径与当前环境限制，再把可操作阻断报root处理。
 
 源码脚本先冻结，再最终实际路线验证和纯证据提交；交不同代理独审，根最后复用已有低层测试而不无理由重跑。完整同步目标不由本层单独完成。
+
+
+路线实验发现已启用设备无法通过UI输入新邀请的明确缺口，根扩展本任务最小修复范围为src/SyncSettings.tsx及scripts/debug/sync-settings.mjs受影响定向测试，按docs/ui/sync-settings.md新增“更新连接”入口复用原handler；不得改其他生产/后端或首页。先实际证明同workspace新邀请可更新endpoint/重启身份持久，再冻结UI源码并验证已启用路径、singleflight/取消secret清理、错误不丢原配置及窄屏。UI修复需另agent独审，路线作者不得自审。旧UI缺口及初次隧道timeout原件保留。
