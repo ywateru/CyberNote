@@ -1,0 +1,129 @@
+{
+  "status": "PASS-MINIMAL-POLLUTED-MOBILE-ENTRIES",
+  "checks": [
+    {
+      "label": "preferences: global reset deliberately preserves 1280px polluted desktop layout",
+      "pass": true
+    },
+    {
+      "label": "preferences: actual entry first assertion: Actual platform settings entry opens one shared dialog on settings tab",
+      "pass": true
+    },
+    {
+      "label": "preferences: exact entry function stopped after first business assertion",
+      "pass": true
+    },
+    {
+      "label": "preferences: entry restores exact declared 390x844 viewport and mobile App",
+      "pass": true
+    },
+    {
+      "label": "Preferences polluted entry uses actual mobile gear and shared settings dialog",
+      "pass": true
+    },
+    {
+      "label": "Preferences close restores actual mobile home gear focus",
+      "pass": true
+    },
+    {
+      "label": "quick-home: global reset deliberately preserves 1280px polluted desktop layout",
+      "pass": true
+    },
+    {
+      "label": "quick-home: actual entry first assertion: Cold start opens all active notes directly with no editor focus or desktop view write",
+      "pass": true
+    },
+    {
+      "label": "quick-home: exact entry function stopped after first business assertion",
+      "pass": true
+    },
+    {
+      "label": "quick-home: entry restores exact declared 390x844 viewport and mobile App",
+      "pass": true
+    },
+    {
+      "label": "Quick-home polluted entry initializes all gallery with null selection and no hidden editor",
+      "pass": true
+    },
+    {
+      "label": "Quick-home actual plus creates once and focuses exact connected new editor",
+      "pass": true
+    },
+    {
+      "label": "No page errors during the two exact entry prefixes",
+      "pass": true
+    },
+    {
+      "label": "All126 inputs remain byte-identical during polluted-entry verification",
+      "pass": true
+    }
+  ],
+  "records": [
+    {
+      "entry": "preferences",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selection": {
+        "folderId": "all",
+        "noteId": "note-a",
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": "preferences",
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "preferences": {
+        "open": true,
+        "tab": "settings"
+      }
+    },
+    {
+      "entry": "quick-home",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "selection": {
+        "folderId": "all",
+        "noteId": null,
+        "page": "notes",
+        "query": "",
+        "searching": false,
+        "menu": null,
+        "modal": null,
+        "listed": [
+          "note-a",
+          "note-b"
+        ]
+      },
+      "preferences": {
+        "open": false,
+        "tab": "settings"
+      }
+    }
+  ],
+  "sourceFingerprint": "1a7374f011f8d8e89134b6068e4b8e21615a8ea12d2b437999ba7f20fbef4e94",
+  "runnerSha256": "1507f44e6ac37ea615354112f159f3eba3756f4515a81ffd7ab915babb73d1de",
+  "wallSeconds": 7.418334708000001,
+  "scope": {
+    "platform": "mobile-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "limits": [
+    "Only actual runPreferences/runQuickHome entry prefixes; dedicated sentinel stops at first business assertion, followed by direct DOM action checks. No full group rerun.",
+    "Real App DOM/handlers with synthetic IPC/storage, no actual Android IME/provider or original pixel proof."
+  ]
+}
