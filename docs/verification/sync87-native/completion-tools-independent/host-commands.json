@@ -1,0 +1,38 @@
+[
+  {
+    "name": "python-guards",
+    "argv": [
+      "python3",
+      "scripts/debug/sync87-native/check_guards.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.095765042
+  },
+  {
+    "name": "node-target",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-client.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.030371499999999996
+  },
+  {
+    "name": "input",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-input.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 1.5607536249999998
+  },
+  {
+    "name": "scenarios",
+    "argv": [
+      "node",
+      "scripts/debug/sync87-native/check-scenarios.mjs"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.09462645900000011
+  }
+]
