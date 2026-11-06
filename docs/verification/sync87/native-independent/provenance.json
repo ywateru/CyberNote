@@ -1,0 +1,48 @@
+{
+  "role": "Independent read-only Mac27 / Android17 package audit",
+  "reviewWorktree": "/private/tmp/apple-notes-sync87-package-review",
+  "reviewBranch": "codex/sync87-package-review",
+  "baseCommit": "5e552c563bf63364943d1cc41efec9ba8caf3cec",
+  "frozenToolCommit": "53f00505590659d7b066bb89a4e3add3b6992724",
+  "auditRuns": 1,
+  "scope": "Writes only owned review evidence and owned temporary extraction copies. No product source mutation, compilation, signing, installation, launch, ADB, device, microphone or user-data access.",
+  "tools": [
+    {
+      "path": "docs/verification/sync87/native-independent/audit-packages.py",
+      "bytes": 18205,
+      "sha256": "54fa1e72e64ad9d08c0e7b62fccb10367bd1c8d3628b3768edf7e6555d4d847f",
+      "identicalToFrozenToolCommit": true,
+      "template": {
+        "path": "docs/verification/mobile-home8283/native-independent/audit-packages.py",
+        "commit": "5e552c563bf63364943d1cc41efec9ba8caf3cec",
+        "bytes": 12334,
+        "sha256": "fddc8414a9d58dfcec520ede567a94e54ff1cad97b43f2a65213556fea733a97"
+      }
+    },
+    {
+      "path": "docs/verification/sync87/native-independent/extract-assets.mjs",
+      "bytes": 3551,
+      "sha256": "4cc3f8387a214fc044a813e0307c4b009ac08cdf73bb39610391b2d6f90c5473",
+      "identicalToFrozenToolCommit": true,
+      "template": {
+        "path": "docs/verification/mobile-home8283/native-independent/extract-assets.mjs",
+        "commit": "5e552c563bf63364943d1cc41efec9ba8caf3cec",
+        "bytes": 3551,
+        "sha256": "4cc3f8387a214fc044a813e0307c4b009ac08cdf73bb39610391b2d6f90c5473"
+      }
+    }
+  ],
+  "extractDirectory": "/private/tmp/sync87-package-review-extract-run01",
+  "inputSourceHeads": {
+    "mac": "8b855420ef7f97bc618ee6b1fdf83caf7156e468",
+    "android": "5e552c563bf63364943d1cc41efec9ba8caf3cec"
+  },
+  "inputCountEach": 321,
+  "crossPackageInputsByteIdentical": true,
+  "contextRecoveryExtraReads": [
+    "mainline git status, branch, log, package.json, existing gallery docs and source filename search",
+    "local skill texts",
+    "agent status listing"
+  ],
+  "extraReadsProductMutationOrExecution": false
+}
