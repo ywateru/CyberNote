@@ -35,6 +35,8 @@
 
 权限prepare/撤权/陌生session、真正需要强同步及任何同步失败仍立即隐藏受保护内容。强请求与quiet并发时不能降级遮挡；失败保留遮挡直至可信恢复，不显示旧受保护正文。附件写入的metadata被动读取若因在途trusted同步失效，可等待该同步完成；没有在途同步或真正失败时仍按强同步处理，不能吞撤权。用全过程MutationObserver+rAF记录cover、visibility、原Host/Tiptap/媒体节点身份，不能只测最终状态。修复前必须先在合成附件添加链复现遮罩。
 
+quiet异步响应一旦识别陌生session/operation/suspended，须先实际提交保护遮罩，再继续可信hydrate；单独等待requestAnimationFrame不能视为React已提交遮罩的证据。正常同authority的附件分支不因该保护增加全屏遮挡。
+
 ## 真实存储与只读接口
 
 现媒体已在`app_data_dir/attachments/`，SQLite仅有元数据、正文引用及operation journal；不迁移或重写已有媒体，不把base64写进SQLite。浏览器显示和备份JSON中的Base64是传输/归档格式，不能据此声称媒体存于数据库。当前附件journal、累计录音旧版本/Undo保留和导入恢复契约继续有效。
