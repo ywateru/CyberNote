@@ -1,0 +1,1 @@
+Initial infrastructure-only probe failed: fixed 45ms wait observed events.length=0, expected=1. Node child startup had not delivered the first response. Natural parent exit=1. Original assertion was 0 !== 1. No real App/Rust proof. Corrected probe waits actual event with a 2s bounded deadline, while sync response is intentionally pending for 2.5s.

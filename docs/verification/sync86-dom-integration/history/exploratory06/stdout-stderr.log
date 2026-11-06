@@ -1,0 +1,147 @@
+RUN A note.create
+RUN A editor.insertText
+RUN B note.create
+RUN B editor.insertText
+RUN A data.open
+RUN A sync.host.start
+RUN A sync.status
+RUN A sync.invite
+RUN B data.open
+RUN B sync.pair
+RUN A app.back
+RUN B app.back
+PASS Two real App pages pair over authenticated sockets and retain both preexisting SQLite records
+RUN A folder.open
+RUN A folder.updateDraft
+RUN A folder.submit
+RUN A folder.open
+RUN A folder.updateDraft
+RUN A folder.submit
+RUN A folder.select
+RUN A note.create
+RUN A editor.insertText
+RUN A note.patch
+PASS Actual folder forms, smart query, note creation and pin project to peer DOM and Store
+RUN B note.select
+RUN B editor.setContent
+PASS Reverse actual Tiptap edit converges through independent Rust sockets
+RUN A note.select
+RUN A editor.insertText
+RUN B note.select
+RUN B editor.setContent
+PASS Unrelated remote metadata preserves actual editor DOM, editor identity and focus
+RUN A editor.undo
+PASS Unrelated network apply preserves actual local Undo history
+RUN A note.create
+RUN A editor.insertText
+RUN B note.select
+RUN B editor.setContent
+PASS Real target prepare freezes and waits for actual local pending save ACK
+PASS Pending local body and remote version both survive prepare flush
+RUN A note.create
+RUN A editor.insertText
+RUN B note.select
+RUN B editor.setContent
+PASS Actual HTML search waits for terminal abort despite a lost first receipt
+PASS Latest HTML search draft remains visible while original owner stays frozen
+PASS Actual retained abort receipt releases navigation to its final draft query
+PASS Terminal abort does not steal deliberate HTML search focus
+RUN A search.set
+RUN A note.create
+RUN A editor.insertText
+RUN B note.select
+RUN B editor.setContent
+PASS Real same-owner navigation abort restores same DOM, selection and editor focus
+RUN A note.select
+RUN B note.select
+RUN B editor.setContent
+PASS Actual CDP IME and TagComposition keep owner update in real durable inbox
+PASS Actual IME final transaction saves without a forced composition end
+PASS Both concurrent text heads survive naturally settled local composition
+RUN A folder.select
+RUN A note.create
+RUN A editor.insertText
+RUN B note.select
+RUN B editor.setContent
+PASS Actual FileChooser retains captured owner while remote update waits durably
+RUN B note.select
+RUN B editor.setContent
+PASS Actual chooser/FileReader/journal/body ACK stores one original image reference
+PASS Actual Rust attachment read preserves original image bytes
+RUN A image.preview
+RUN A image.save
+RUN A image.close
+PASS Actual image preview save uses Rust original-byte export
+RUN A note.create
+RUN A editor.insertText
+RUN B note.create
+RUN B editor.insertText
+RUN B note.create
+RUN B editor.insertText
+RUN A note.select
+RUN A recording.open
+RUN A recording.action
+RUN A recording.action
+PASS Actual desktop checkpoint ACK retains full recording ticket owner
+RUN B note.select
+RUN B editor.setContent
+RUN B note.select
+RUN B editor.setContent
+RUN B note.select
+RUN B modal.open
+RUN B modal.submit
+RUN B note.select
+RUN B note.delete
+PASS Actual unrelated lock/delete advance global authority without invalidating recording owner
+RUN A recording.action
+RUN A recording.action
+PASS Actual recording rebinds trusted global epoch and checkpoints again to original owner
+PASS Full ticket remains protected after final journal/body ACK before actual release
+PASS Only actual Rust local release ACK ends original recording protection
+PASS Recorded original bytes persist outside SQLite and independently decode with nonzero late samples
+RUN A note.select
+RUN B note.create
+RUN B editor.insertText
+RUN A note.select
+RUN B note.select
+RUN B modal.open
+RUN B modal.submit
+PASS Selected target remote lock never restores stale editable DOM after release
+PASS Actual Session rejects pre-lock token after target authority changes
+PASS Actual Rust IPC rejects unknown reply fields on a retained terminal operation
+PASS Actual Session rejects foreign expected Session without restoring target editor
+RUN A note.select
+RUN A data.open
+RUN A sync.stop
+RUN A app.back
+RUN B data.open
+RUN B sync.stop
+RUN B app.back
+RUN A data.open
+RUN A sync.status
+RUN A app.back
+RUN A note.select
+RUN A editor.setContent
+PASS A owned process exited naturally
+RUN A-restart data.open
+RUN A-restart sync.status
+RUN A-restart app.back
+PASS Same-directory new Rust process preserves paused state and device identity
+RUN A-restart note.select
+PASS New App and Session restore actual body and original attachment bytes
+RUN B data.open
+RUN B sync.resume
+RUN B app.back
+RUN A-restart data.open
+RUN A-restart sync.resume
+RUN A-restart app.back
+PASS Paused local dirty survives restart and converges after actual resume
+PASS Real delivered event chain contains probe, prepare and terminal commit
+PASS B owned process exited naturally
+PASS A-restart owned process exited naturally
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+sqlite3.OperationalError: unable to open database file
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+sqlite3.OperationalError: unable to open database file

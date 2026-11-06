@@ -1,0 +1,24 @@
+{
+  "id": 1,
+  "result": {
+    "result": {
+      "type": "object",
+      "value": {
+        "code": "ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING"
+      }
+    },
+    "exceptionDetails": {
+      "exceptionId": 1,
+      "text": "Uncaught (in promise) TypeError: A dynamic import callback was not specified.",
+      "lineNumber": 0,
+      "columnNumber": 0,
+      "exception": {
+        "type": "object",
+        "subtype": "error",
+        "className": "TypeError",
+        "description": "TypeError [ERR_VM_DYNAMIC_IMPORT_CALLBACK_MISSING]: A dynamic import callback was not specified.\n    at importModuleDynamicallyCallback (node:internal/modules/esm/utils:272:9)\n    at <anonymous>:1:1",
+        "objectId": "-4088957716838342239.1.1"
+      }
+    }
+  }
+}

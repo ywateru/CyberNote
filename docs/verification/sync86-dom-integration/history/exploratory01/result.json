@@ -1,0 +1,1300 @@
+{
+  "sourceHead": "fea86d23bf1a1f83e14b2560d5c03179621cb5ae",
+  "sourceBefore": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "4e7f36bd6875ebfb5bdc9364956de12352ecc4fd46bc1afac8ae01aa7f7d6ab6",
+    "fileCount": 136,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/runtime.mjs",
+      " M scripts/debug/rust-backend.mjs",
+      "?? scripts/debug/sync-rust-dom.mjs"
+    ]
+  },
+  "sourceAfter": {
+    "algorithm": "sha256(path NUL bytes NUL, sorted)",
+    "sha256": "4e7f36bd6875ebfb5bdc9364956de12352ecc4fd46bc1afac8ae01aa7f7d6ab6",
+    "fileCount": 136,
+    "paths": [
+      "src/**",
+      "scripts/debug/**",
+      "plugins/tauri-plugin-notes-ui/**",
+      "scripts/native/**",
+      "package.json",
+      "pnpm-lock.yaml",
+      "vite.config.ts",
+      "tsconfig.json"
+    ],
+    "gitDirty": true,
+    "gitStatus": [
+      "M scripts/debug/runtime.mjs",
+      " M scripts/debug/rust-backend.mjs",
+      "?? scripts/debug/sync-rust-dom.mjs"
+    ]
+  },
+  "sourceChanged": false,
+  "backend": {
+    "root": "/private/tmp/apple-notes-sync86-adapter",
+    "sourceHead": "10cd8326d4775c6af6844ebaf87c4818ff785781",
+    "gitDirty": true,
+    "buildSourceHead": "10cd8326d4775c6af6844ebaf87c4818ff785781",
+    "binary": {
+      "path": "/private/tmp/sync86-dom-exploratory01/notes-sync-dom-transport",
+      "sha256": "7f175bd42789837b1aa7cd253dc291536b876439602c762196ffea4b8ce0a706"
+    },
+    "sources": {
+      "scripts/debug/build-rust-attachments.mjs": "0ace1c00e9aa03f1c2c55a7c471eb7dc7c549a1792e3b7611bec87ce8e08f621",
+      "scripts/debug/rust/Cargo.lock": "974a73ba41d7b8859919150f5c8746a016e6506c3b7a97428e226d6241793e88",
+      "scripts/debug/rust/Cargo.toml": "d87d736f9b37c10c8686d077656a30a6c383fd27c8f80375205d29ea72c81522",
+      "scripts/debug/rust/transport.rs": "e33af9f51761f63a1e4c2854399fa31530316a74f3efafa919e6cdc83ae28dfc",
+      "src-tauri/src/recording_window.rs": "37b0a640ea5fa59163bffda053c54dc61b6f4f08fb9afb4c3e9e3bf5e4d9b5ad",
+      "src-tauri/src/session.rs": "b6ea60787e21c05e0d7a8b726777332acb65e9b8c682bc6f00c4a69fb5c2204a",
+      "src-tauri/src/session/metadata.rs": "76b571060e87bbf4a12961430793d6897128852930de22b258111c19b07b0cdc",
+      "src-tauri/src/session/smart_tests.rs": "3d0b99daa1842fd45a6f1ec8fe38ab935d7cb8f7590e43eeb7f9fe13dfb4a509",
+      "src-tauri/src/session/synchronization.rs": "f81f66cbeef05dec62137d3f6a7d7604a3023ed7d8f2a96cd1f904e0d67b44ab",
+      "src-tauri/src/session/tests.rs": "e47c13dc71db3d173e90a8140863411d974db4717f1a25372f8f909689b21b83",
+      "src-tauri/src/store.rs": "a7c77e1d9b8760c6dc87206ad8520c6efdb526e815a0c281e41a5cfe3c9f06f4",
+      "src-tauri/src/store/archive.rs": "7ba91b39201e9d33dc71c80d327a284416089613464e054bd63086858aa3bf0f",
+      "src-tauri/src/store/archive/document-cases.json": "297f9f7cd64b5489f9da69c4a54715f3b934a5634d2ed502c30505a81555e950",
+      "src-tauri/src/store/archive/document-schema.json": "7cd6c3e442d968ef99019b14fcc48cf037693d7daae0506b0c47a2ec00fb007c",
+      "src-tauri/src/store/archive/document.rs": "6dd018af7abb782fced57a7f46594fe8a39701777f976af34d5b6162e2daa611",
+      "src-tauri/src/store/archive/tests.rs": "4dfa432e123f4b9c71e2af3ab9a10796d21f2edf7adf101ee8dbacde4bc42f43",
+      "src-tauri/src/store/attachment_operations.rs": "92943f23aa259d78343f47d6d216c7e2c7486d2938fea343cdfbe3df02aa30a4",
+      "src-tauri/src/store/attachment_operations/tests.rs": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4",
+      "src-tauri/src/store/commits.rs": "9fcd33383d4e3bce0a78774863323a04b1bc9b9b5fe5faf074f1a6d3963bb4e3",
+      "src-tauri/src/store/data_management.rs": "fd82736bf5526e9ea44060fc7caa19e7e9600c5f88556108bbe909d2e60a0897",
+      "src-tauri/src/store/folder_name_tests.rs": "de0598fed3287661d7cf347b981e4c3ea3cc955300eb7a1d2905d3fcfc924da4",
+      "src-tauri/src/store/metadata_tests.rs": "c9806fc8a1877842c14c11021348d7676f35725a6e17a20439c49a051e8e4ee0",
+      "src-tauri/src/store/open.rs": "dffa8804c67b1786ac4134e1aef56a5bfa9502b323fe6676117075ea68ce4442",
+      "src-tauri/src/store/open_tests.rs": "13b2a33a6d4c9329fb9821412b4810f364cf1481a5a3fa378b0bf2ac1d936a07",
+      "src-tauri/src/store/recorded_at_tests.rs": "b84fba310f4f9aae734661ec409bbda6d40b17cbe12158430f1f797a7610fbf7",
+      "src-tauri/src/store/smart.rs": "3e952b05c19256f7144287760c287d615e41b7c55a559e80d7fa8cfba12d124e",
+      "src-tauri/src/store/smart_tests.rs": "a9c8b2a4a11ce143c9f9a42bf6f9c30e2b3845148596e6d58e031469603121dd",
+      "src-tauri/src/store/synchronization.rs": "8493d6a1f02f07ce5e6a285711e6aa820f14edb7a10ec4f96aacf251777f715b",
+      "src-tauri/src/store/synchronization/blob.rs": "e652bb2061052bb86baf2239110b518f8398280405454828d6e9ee9cc9fcb44d",
+      "src-tauri/src/store/synchronization/projection.rs": "fe5b6cb91ef919bb37c7aa7cbb7f91effd66cb14aa4ee2a375f85c4b2d1a8fae",
+      "src-tauri/src/store/synchronization/schema.rs": "ecc324147398915baed2937157ffe8bccf65da5a86bbc778265099af8f69d09b",
+      "src-tauri/src/store/synchronization/tests.rs": "dd82b6e804b94f52440f42af8437b5803c7a26c7474da49e5582b87f81f57870",
+      "src-tauri/src/store/synchronization/validation.rs": "2d0b0c0403c918a7bdd9f48c2430d07e9435c7f5540a167d5beb9c0ae52e9621",
+      "src-tauri/src/sync.rs": "bb67787192aaab58fa7af7d6d973b1ff579811427b9f496e1b07a43d8feee6cd",
+      "src-tauri/src/sync/adapter.rs": "0cc63c17d1b2bef3034b84840fb90070523b4369cf9659c619b12c897a5774ab",
+      "src-tauri/src/sync/identity.rs": "20aa255714d9b20b17746bbad61662c103f44faaf6059bbe201be25014cf27b9",
+      "src-tauri/src/sync/model.rs": "ad7a7982efb972d73f1d9f78bd84874182a97c674f592866904f69cc96ba361d",
+      "src-tauri/src/sync/network.rs": "446ddeb5df7ffcc2733857a21614e3ea39f96a1831a4692abbef34ceff75e493",
+      "src-tauri/src/sync/network/service.rs": "cbf22740b43de3bfb2c41046aca13ae796c540e4f19ac624bbe8a048e199330d",
+      "src-tauri/src/sync/network/staging.rs": "e530fe4b3ac5cb626d42b50f6bff8bc3272affb731cc39ddb1d43341e2f0ebc9",
+      "src-tauri/src/sync/network/transport.rs": "c82eb2db02dc2d7a889905368b4429a670cbf373bae1e38a5d588419b1187766",
+      "src-tauri/src/sync/network/wire.rs": "c58e2ebfd3bb9e41c144709d871e1a74d3414ea4a2c47d7799fb629f2865eb00"
+    }
+  },
+  "checks": [
+    "A owned process exited naturally",
+    "B owned process exited naturally"
+  ],
+  "limitations": [],
+  "observations": [],
+  "processes": [
+    {
+      "name": "A",
+      "directory": "/private/tmp/sync86-dom-exploratory01/store-A",
+      "lifecycle": {
+        "pid": 4867,
+        "closing": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0
+      },
+      "pageErrors": [],
+      "calls": [
+        {
+          "requestId": 1,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 2,
+          "command": "set_document_participants",
+          "ok": true
+        },
+        {
+          "requestId": 3,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 4,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 5,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 6,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 7,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 8,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 9,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 10,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 11,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 12,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 13,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 14,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 15,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 16,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 17,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 18,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 19,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 20,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 21,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 22,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 23,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 24,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 25,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 26,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 27,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 28,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 29,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 30,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 31,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 32,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 33,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 34,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 35,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 36,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 37,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 38,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 39,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 40,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 41,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 42,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 43,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 44,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 45,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 46,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 47,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 48,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 49,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 50,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 51,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 52,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 53,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 54,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 55,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 56,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 57,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 58,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 59,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 60,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 61,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 62,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 63,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 64,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 65,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 66,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 67,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 68,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 69,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 70,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 71,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 72,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 73,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 74,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 75,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 76,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 77,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 78,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 79,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 80,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 81,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 82,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 83,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 84,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 85,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 86,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 87,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 88,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 89,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 90,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 91,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 92,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 93,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 94,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 95,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 96,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 97,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 98,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 99,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 100,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 101,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 102,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 103,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 104,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 105,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 106,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 107,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 108,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 109,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 110,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 111,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 112,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 113,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 114,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 115,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 116,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 117,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 118,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 119,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 120,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 121,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 122,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 123,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 124,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 125,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 126,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 127,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 128,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 129,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 130,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 131,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 132,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 133,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 134,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 135,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 136,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 137,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 138,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 139,
+          "command": "workspace_action",
+          "type": "createNote",
+          "ok": true
+        },
+        {
+          "requestId": 140,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 141,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 142,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 143,
+          "command": "workspace_action",
+          "type": "settings",
+          "ok": true
+        },
+        {
+          "requestId": 144,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 145,
+          "command": "register_save_intent",
+          "noteId": "9c680a44-9abe-4475-8398-7d4c33bb33d0",
+          "ok": true
+        },
+        {
+          "requestId": 146,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 147,
+          "command": "workspace_action",
+          "type": "saveNote",
+          "ok": true
+        },
+        {
+          "requestId": 148,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 149,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 150,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 151,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 152,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 153,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 154,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 155,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 156,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 157,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 158,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 159,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 160,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 161,
+          "command": "sync_command",
+          "type": "status",
+          "ok": true,
+          "status": {
+            "conflictCount": 0,
+            "deviceName": "",
+            "peers": [],
+            "pendingCount": 0,
+            "state": "disabled"
+          }
+        },
+        {
+          "requestId": 162,
+          "command": "get_data_management",
+          "ok": true
+        },
+        {
+          "requestId": 163,
+          "command": "get_data_management",
+          "ok": true
+        },
+        {
+          "requestId": 164,
+          "command": "sync_command",
+          "type": "status",
+          "ok": true,
+          "status": {
+            "conflictCount": 0,
+            "deviceName": "",
+            "peers": [],
+            "pendingCount": 0,
+            "state": "disabled"
+          }
+        },
+        {
+          "requestId": 165,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 166,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 167,
+          "command": "set_document_participants",
+          "ok": true
+        }
+      ],
+      "events": [
+        {
+          "name": "notes-metadata",
+          "payload": {
+            "changes": [
+              {
+                "id": "9c680a44-9abe-4475-8398-7d4c33bb33d0",
+                "kind": "note",
+                "revision": 0
+              }
+            ],
+            "metadata": {
+              "sequence": 1,
+              "sessionId": "e5287092-247e-457c-9db8-8fe039b5c147"
+            }
+          }
+        },
+        {
+          "name": "notes-metadata",
+          "payload": {
+            "changes": [
+              {
+                "id": "9c680a44-9abe-4475-8398-7d4c33bb33d0",
+                "kind": "note",
+                "revision": 1
+              }
+            ],
+            "metadata": {
+              "sequence": 2,
+              "sessionId": "e5287092-247e-457c-9db8-8fe039b5c147"
+            }
+          }
+        }
+      ],
+      "polling": {
+        "polls": 152,
+        "stopped": true
+      }
+    },
+    {
+      "name": "B",
+      "directory": "/private/tmp/sync86-dom-exploratory01/store-B",
+      "lifecycle": {
+        "pid": 4897,
+        "closing": true,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "pending": 0
+      },
+      "pageErrors": [],
+      "calls": [
+        {
+          "requestId": 1,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 2,
+          "command": "set_document_participants",
+          "ok": true
+        },
+        {
+          "requestId": 3,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 4,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 5,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 6,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 7,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 8,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 9,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 10,
+          "command": "workspace_action",
+          "type": "createNote",
+          "ok": true
+        },
+        {
+          "requestId": 11,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 12,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 13,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 14,
+          "command": "workspace_action",
+          "type": "settings",
+          "ok": true
+        },
+        {
+          "requestId": 15,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 16,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 17,
+          "command": "register_save_intent",
+          "noteId": "17a78f13-753a-47a2-baf0-7940e35e21e7",
+          "ok": true
+        },
+        {
+          "requestId": 18,
+          "command": "workspace_action",
+          "type": "saveNote",
+          "ok": true
+        },
+        {
+          "requestId": 19,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 20,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 21,
+          "command": "load_workspace",
+          "ok": true
+        },
+        {
+          "requestId": 22,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 23,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 24,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 25,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 26,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 27,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 28,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 29,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 30,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 31,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 32,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 33,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 34,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 35,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 36,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 37,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 38,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 39,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 40,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 41,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 42,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 43,
+          "command": "poll_events",
+          "ok": true
+        },
+        {
+          "requestId": 44,
+          "command": "set_document_participants",
+          "ok": true
+        }
+      ],
+      "events": [
+        {
+          "name": "notes-metadata",
+          "payload": {
+            "changes": [
+              {
+                "id": "17a78f13-753a-47a2-baf0-7940e35e21e7",
+                "kind": "note",
+                "revision": 0
+              }
+            ],
+            "metadata": {
+              "sequence": 1,
+              "sessionId": "9ca89baa-20b9-4fc2-b249-7259594c6f38"
+            }
+          }
+        },
+        {
+          "name": "notes-metadata",
+          "payload": {
+            "changes": [
+              {
+                "id": "17a78f13-753a-47a2-baf0-7940e35e21e7",
+                "kind": "note",
+                "revision": 1
+              }
+            ],
+            "metadata": {
+              "sequence": 2,
+              "sessionId": "9ca89baa-20b9-4fc2-b249-7259594c6f38"
+            }
+          }
+        }
+      ],
+      "polling": {
+        "polls": 33,
+        "stopped": true
+      }
+    }
+  ],
+  "wallMs": 11612,
+  "failure": {
+    "message": "请填写设备名称和 1–65535 之间的端口",
+    "stack": "Error: 请填写设备名称和 1–65535 之间的端口\n    at api (file:///private/tmp/apple-notes-sync86-dom/scripts/debug/runtime.mjs:132:600)\n    at async Device.command (file:///private/tmp/apple-notes-sync86-dom/scripts/debug/sync-rust-dom.mjs:111:20)\n    at async file:///private/tmp/apple-notes-sync86-dom/scripts/debug/sync-rust-dom.mjs:190:3"
+  }
+}

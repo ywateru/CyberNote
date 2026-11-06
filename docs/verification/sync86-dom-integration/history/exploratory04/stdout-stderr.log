@@ -1,0 +1,45 @@
+RUN A note.create
+RUN A editor.insertText
+RUN B note.create
+RUN B editor.insertText
+RUN A data.open
+RUN A sync.host.start
+RUN A sync.status
+RUN A sync.invite
+RUN B data.open
+RUN B sync.pair
+RUN A app.back
+RUN B app.back
+PASS Two real App pages pair over authenticated sockets and retain both preexisting SQLite records
+RUN A folder.open
+RUN A folder.updateDraft
+RUN A folder.submit
+RUN A folder.open
+RUN A folder.updateDraft
+RUN A folder.submit
+RUN A folder.select
+RUN A note.create
+RUN A editor.insertText
+RUN A note.patch
+PASS Actual folder forms, smart query, note creation and pin project to peer DOM and Store
+RUN B note.select
+RUN B editor.setContent
+PASS Reverse actual Tiptap edit converges through independent Rust sockets
+RUN A note.select
+RUN A editor.insertText
+RUN B note.select
+RUN B editor.setContent
+PASS Unrelated remote metadata preserves actual editor DOM, editor identity and focus
+RUN A editor.undo
+PASS Unrelated network apply preserves actual local Undo history
+RUN A note.create
+RUN A editor.insertText
+RUN B note.select
+RUN B editor.setContent
+PASS Real target prepare freezes and waits for actual local pending save ACK
+AssertionError [ERR_ASSERTION]: Pending local body and remote version both survive prepare flush
+    at check (file:///private/tmp/apple-notes-sync86-dom/scripts/debug/sync-rust-dom.mjs:75:3)
+    at file:///private/tmp/apple-notes-sync86-dom/scripts/debug/sync-rust-dom.mjs:336:3
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+PASS A owned process exited naturally
+PASS B owned process exited naturally

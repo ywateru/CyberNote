@@ -1,0 +1,77 @@
+{
+  "pid": 20244,
+  "resources": [
+    "PipeWrap"
+  ],
+  "handles": [
+    {
+      "kind": "Socket",
+      "handleFd": 35,
+      "handleKind": "Pipe",
+      "destroyed": false,
+      "readable": true,
+      "writable": true,
+      "keys": [
+        "connecting",
+        "_hadError",
+        "_parent",
+        "_host",
+        "_closeAfterHandlingError",
+        "_events",
+        "_readableState",
+        "_writableState",
+        "allowHalfOpen",
+        "_maxListeners",
+        "_eventsCount",
+        "_sockname",
+        "_pendingData",
+        "_pendingEncoding",
+        "server",
+        "_server"
+      ],
+      "events": [
+        {
+          "name": "close",
+          "listeners": [
+            {
+              "name": "",
+              "source": "() => {\n          maybeClose(this);\n        }"
+            }
+          ]
+        },
+        {
+          "name": "error",
+          "listeners": [
+            {
+              "name": "onerror",
+              "source": "function onerror(err) {\n    self.emit('error', err);\n  }"
+            }
+          ]
+        },
+        {
+          "name": "data",
+          "listeners": [
+            {
+              "name": "ondata",
+              "source": "function ondata(data) {\n    self[kNormalWrite](data);\n  }"
+            }
+          ]
+        },
+        {
+          "name": "end",
+          "listeners": [
+            {
+              "name": "onReadableStreamEnd",
+              "source": "function onReadableStreamEnd() {\n  if (!this.allowHalfOpen) {\n    this.write = writeAfterFIN;\n  }\n}"
+            },
+            {
+              "name": "onend",
+              "source": "function onend() {\n    if (\n      typeof self[kLine_buffer] === 'string' &&\n        self[kLine_buffer].length > 0\n    ) {\n      self.emit('line', self[kLine_buffer]);\n    }\n    self.close();\n  }"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requests": []
+}
