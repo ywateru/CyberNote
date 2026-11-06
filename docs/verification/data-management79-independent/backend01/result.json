@@ -1,0 +1,580 @@
+{
+  "status": "PASS",
+  "binary": "/private/tmp/data79-independent-build01/notes-independent-data79-transport",
+  "binarySha256": "e4a30bcd9aaefccaae2212e84df39aa37bb61fdcbaef1f4cb3585175b306d621",
+  "checks": [
+    {
+      "name": "tagged real snapshot preserves no title/document payload",
+      "pass": true
+    },
+    {
+      "name": "all actual paths including empty directory and unowned files retained",
+      "pass": true
+    },
+    {
+      "name": "symlink is reported without outside traversal or bytes",
+      "pass": true
+    },
+    {
+      "name": "independent filesystem stat and historical mtime equal every ordinary file",
+      "pass": true
+    },
+    {
+      "name": "physical totals equal separate filesystem oracle without directory duplication",
+      "pass": true
+    },
+    {
+      "name": "actual original file outside SQLite: image/png",
+      "pass": true
+    },
+    {
+      "name": "ID export preserves complete bytes and receipt: image/png",
+      "pass": true
+    },
+    {
+      "name": "actual original file outside SQLite: audio/wav",
+      "pass": true
+    },
+    {
+      "name": "ID export preserves complete bytes and receipt: audio/wav",
+      "pass": true
+    },
+    {
+      "name": "actual original file outside SQLite: application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "ID export preserves complete bytes and receipt: application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "independent SQLite inspection has metadata TEXT and no original media Base64",
+      "pass": true
+    },
+    {
+      "name": "managed target protection: source/notes.sqlite3",
+      "pass": true
+    },
+    {
+      "name": "managed target protection: source/notes.sqlite3-wal",
+      "pass": true
+    },
+    {
+      "name": "managed target protection: source/notes.sqlite3-shm",
+      "pass": true
+    },
+    {
+      "name": "managed target protection: nested-other/protected",
+      "pass": true
+    },
+    {
+      "name": "managed target protection: attachments/protected",
+      "pass": true
+    },
+    {
+      "name": "canonical alias cannot reenter private root",
+      "pass": true
+    },
+    {
+      "name": "symlink destination cannot replace existing file",
+      "pass": true
+    },
+    {
+      "name": "metadata size mismatch is visible, actual, warned and nonexportable",
+      "pass": true
+    },
+    {
+      "name": "mismatch export fails without touching existing output",
+      "pass": true
+    },
+    {
+      "name": "missing metadata attachment retained with null size and exact missing count",
+      "pass": true
+    },
+    {
+      "name": "missing original export fails",
+      "pass": true
+    },
+    {
+      "name": "managed source symlink cannot export outside bytes",
+      "pass": true
+    },
+    {
+      "name": "all failed exports retained preexisting target",
+      "pass": true
+    },
+    {
+      "name": "real OS unreadable original is reported and nonexportable",
+      "pass": true
+    },
+    {
+      "name": "unreadable original cannot export",
+      "pass": true
+    },
+    {
+      "name": "archive contains all registered original media and correct recordedAt version",
+      "pass": true
+    },
+    {
+      "name": "pending access blocks inventory",
+      "pass": true
+    },
+    {
+      "name": "pending access blocks single attachment export",
+      "pass": true
+    },
+    {
+      "name": "real Session timeout abort has no imported copy",
+      "pass": true
+    },
+    {
+      "name": "new PID and new session after clean close",
+      "pass": true
+    },
+    {
+      "name": "old process token cannot read new process inventory",
+      "pass": true
+    },
+    {
+      "name": "new PID retains confirmed original document and all metadata",
+      "pass": true
+    },
+    {
+      "name": "new PID original payload: image/png",
+      "pass": true
+    },
+    {
+      "name": "new PID original payload: audio/wav",
+      "pass": true
+    },
+    {
+      "name": "new PID original payload: application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "unowned recovery-like file was never cleaned by inventory/restart",
+      "pass": true
+    },
+    {
+      "name": "fresh Session archive roundtrip exact bytes: image/png",
+      "pass": true
+    },
+    {
+      "name": "fresh Session archive roundtrip exact bytes: audio/wav",
+      "pass": true
+    },
+    {
+      "name": "fresh Session archive roundtrip exact bytes: application/octet-stream",
+      "pass": true
+    },
+    {
+      "name": "second import merges copies without overwriting first records",
+      "pass": true
+    },
+    {
+      "name": "second new PID retains both imported copies",
+      "pass": true
+    }
+  ],
+  "processes": [
+    {
+      "pid": 19970,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0
+    },
+    {
+      "pid": 19996,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0
+    },
+    {
+      "pid": 19997,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0
+    },
+    {
+      "pid": 19998,
+      "closing": true,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "pending": 0
+    }
+  ],
+  "completeWallMs": 845.578084,
+  "details": {
+    "initial": {
+      "access": {
+        "epoch": 1,
+        "notes": {
+          "535ce1e0-b57f-4e0a-9eef-5f3484ffe0d1": {
+            "authorized": true,
+            "epoch": 0
+          }
+        },
+        "operationId": null,
+        "sessionId": "9d823ff5-00a2-48c7-b652-e74e4eb16817",
+        "suspended": []
+      },
+      "capturedAt": 1793932505822,
+      "counts": {
+        "attachments": 3,
+        "folders": 3,
+        "missingAttachments": 0,
+        "notes": 1,
+        "physicalFiles": 8
+      },
+      "files": [
+        {
+          "category": "other",
+          "exists": true,
+          "modifiedAt": 1793932505821,
+          "relativePath": "attachments",
+          "size": null,
+          "status": "directory"
+        },
+        {
+          "attachment": {
+            "declaredSize": 68,
+            "displayName": "独审原图 图.png",
+            "exportable": true,
+            "id": "6a7b8345-c819-4a3b-8fa3-136e552a7dd2",
+            "kind": "image",
+            "mime": "image/png",
+            "noteId": "535ce1e0-b57f-4e0a-9eef-5f3484ffe0d1",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1580702706000,
+          "relativePath": "attachments/op-69803a96-3a7a-4434-a662-35abd5de80a0-6a7b8345-c819-4a3b-8fa3-136e552a7dd2.blob",
+          "size": 68,
+          "status": "file"
+        },
+        {
+          "attachment": {
+            "declaredSize": 1027,
+            "displayName": "独审附件.bin",
+            "exportable": true,
+            "id": "2cdba822-c3c8-4b81-b13a-8aff564c2864",
+            "kind": "file",
+            "mime": "application/octet-stream",
+            "noteId": "535ce1e0-b57f-4e0a-9eef-5f3484ffe0d1",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1580702706000,
+          "relativePath": "attachments/op-872877e7-c8ac-42d5-b7fa-9067c76a438d-2cdba822-c3c8-4b81-b13a-8aff564c2864.blob",
+          "size": 1027,
+          "status": "file"
+        },
+        {
+          "attachment": {
+            "declaredSize": 2444,
+            "displayName": "独审累计录音.wav",
+            "exportable": true,
+            "id": "27fc27d2-797b-4d55-a859-3017b5efd519",
+            "kind": "audio",
+            "mime": "audio/wav",
+            "noteId": "535ce1e0-b57f-4e0a-9eef-5f3484ffe0d1",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1580702706000,
+          "relativePath": "attachments/op-b6cb3f3f-0cc4-4590-8422-c66c9f68f14f-27fc27d2-797b-4d55-a859-3017b5efd519.blob",
+          "size": 2444,
+          "status": "file"
+        },
+        {
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1793932505821,
+          "relativePath": "attachments/orphan-retained.blob",
+          "size": 36,
+          "status": "file"
+        },
+        {
+          "category": "other",
+          "exists": true,
+          "modifiedAt": 1793932505822,
+          "relativePath": "external-link",
+          "size": null,
+          "status": "symlink"
+        },
+        {
+          "category": "other",
+          "exists": true,
+          "modifiedAt": 1793932505821,
+          "relativePath": "nested-other",
+          "size": null,
+          "status": "directory"
+        },
+        {
+          "category": "other",
+          "exists": true,
+          "modifiedAt": 1793932505821,
+          "relativePath": "nested-other/long 路径.txt",
+          "size": 16,
+          "status": "file"
+        },
+        {
+          "category": "database",
+          "exists": true,
+          "modifiedAt": 1793932505800,
+          "relativePath": "notes.sqlite3",
+          "size": 40960,
+          "status": "file"
+        },
+        {
+          "category": "shm",
+          "exists": true,
+          "modifiedAt": 1793932505800,
+          "relativePath": "notes.sqlite3-shm",
+          "size": 32768,
+          "status": "file"
+        },
+        {
+          "category": "wal",
+          "exists": true,
+          "modifiedAt": 1793932505820,
+          "relativePath": "notes.sqlite3-wal",
+          "size": 78312,
+          "status": "file"
+        },
+        {
+          "category": "other",
+          "exists": true,
+          "modifiedAt": 1793932505821,
+          "relativePath": "空目录",
+          "size": null,
+          "status": "directory"
+        }
+      ],
+      "metadata": {
+        "sequence": 5,
+        "sessionId": "9d823ff5-00a2-48c7-b652-e74e4eb16817"
+      },
+      "rootPath": "/private/tmp/data79-independent-backend01/source",
+      "totals": {
+        "attachmentBytes": 3575,
+        "auxiliaryBytes": 111080,
+        "databaseBytes": 40960,
+        "declaredAttachmentBytes": 3539,
+        "otherBytes": 16,
+        "totalBytes": 155631
+      },
+      "version": 1,
+      "warnings": []
+    },
+    "final": {
+      "access": {
+        "epoch": 1,
+        "notes": {
+          "535ce1e0-b57f-4e0a-9eef-5f3484ffe0d1": {
+            "authorized": true,
+            "epoch": 0
+          },
+          "99a1dc66-093c-42b3-b058-932d9e2b9d90": {
+            "authorized": true,
+            "epoch": 0
+          }
+        },
+        "operationId": null,
+        "sessionId": "eca498a4-e301-4bb2-9c8e-052a46cdceeb",
+        "suspended": []
+      },
+      "capturedAt": 1793932505982,
+      "counts": {
+        "attachments": 6,
+        "folders": 3,
+        "missingAttachments": 0,
+        "notes": 2,
+        "physicalFiles": 9
+      },
+      "files": [
+        {
+          "category": "import",
+          "exists": true,
+          "modifiedAt": 1793932505971,
+          "relativePath": ".imports",
+          "size": null,
+          "status": "directory"
+        },
+        {
+          "category": "other",
+          "exists": true,
+          "modifiedAt": 1793932505963,
+          "relativePath": "attachments",
+          "size": null,
+          "status": "directory"
+        },
+        {
+          "attachment": {
+            "declaredSize": 68,
+            "displayName": "独审原图 图.png",
+            "exportable": true,
+            "id": "83541d56-ea76-4e2b-b367-46a099fb3327",
+            "kind": "image",
+            "mime": "image/png",
+            "noteId": "99a1dc66-093c-42b3-b058-932d9e2b9d90",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1793932505944,
+          "relativePath": "attachments/87358b56-5059-4599-b3ff-4530f03bef44-219de66e-2022-4a02-a9cb-f44c854cc754.blob",
+          "size": 68,
+          "status": "file"
+        },
+        {
+          "attachment": {
+            "declaredSize": 1027,
+            "displayName": "独审附件.bin",
+            "exportable": true,
+            "id": "2f8fc25a-c2ea-4cee-ba4c-23cb588c47b6",
+            "kind": "file",
+            "mime": "application/octet-stream",
+            "noteId": "99a1dc66-093c-42b3-b058-932d9e2b9d90",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1793932505951,
+          "relativePath": "attachments/87358b56-5059-4599-b3ff-4530f03bef44-7c535554-0b63-4edd-9fda-94fe937b9038.blob",
+          "size": 1027,
+          "status": "file"
+        },
+        {
+          "attachment": {
+            "declaredSize": 2444,
+            "displayName": "独审累计录音.wav",
+            "exportable": true,
+            "id": "f57445db-7e76-42bf-b0d5-19a28c82ed89",
+            "kind": "audio",
+            "mime": "audio/wav",
+            "noteId": "99a1dc66-093c-42b3-b058-932d9e2b9d90",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1793932505947,
+          "relativePath": "attachments/87358b56-5059-4599-b3ff-4530f03bef44-d718c7d2-b040-46b6-a8dd-6f16401b8931.blob",
+          "size": 2444,
+          "status": "file"
+        },
+        {
+          "attachment": {
+            "declaredSize": 68,
+            "displayName": "独审原图 图.png",
+            "exportable": true,
+            "id": "6a7b8345-c819-4a3b-8fa3-136e552a7dd2",
+            "kind": "image",
+            "mime": "image/png",
+            "noteId": "535ce1e0-b57f-4e0a-9eef-5f3484ffe0d1",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1793932505912,
+          "relativePath": "attachments/e0a5ca30-814b-4c15-81b4-4ad5bc58dcd1-32ff78a5-0632-45af-b13c-991664dcc480.blob",
+          "size": 68,
+          "status": "file"
+        },
+        {
+          "attachment": {
+            "declaredSize": 1027,
+            "displayName": "独审附件.bin",
+            "exportable": true,
+            "id": "2cdba822-c3c8-4b81-b13a-8aff564c2864",
+            "kind": "file",
+            "mime": "application/octet-stream",
+            "noteId": "535ce1e0-b57f-4e0a-9eef-5f3484ffe0d1",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1793932505919,
+          "relativePath": "attachments/e0a5ca30-814b-4c15-81b4-4ad5bc58dcd1-4afef4e3-03da-4376-b12f-147249708cb0.blob",
+          "size": 1027,
+          "status": "file"
+        },
+        {
+          "attachment": {
+            "declaredSize": 2444,
+            "displayName": "独审累计录音.wav",
+            "exportable": true,
+            "id": "27fc27d2-797b-4d55-a859-3017b5efd519",
+            "kind": "audio",
+            "mime": "audio/wav",
+            "noteId": "535ce1e0-b57f-4e0a-9eef-5f3484ffe0d1",
+            "referenced": true
+          },
+          "category": "attachment",
+          "exists": true,
+          "modifiedAt": 1793932505915,
+          "relativePath": "attachments/e0a5ca30-814b-4c15-81b4-4ad5bc58dcd1-57f1a03c-dd63-474f-834a-bfa313c7b8b1.blob",
+          "size": 2444,
+          "status": "file"
+        },
+        {
+          "category": "database",
+          "exists": true,
+          "modifiedAt": 1793932505975,
+          "relativePath": "notes.sqlite3",
+          "size": 40960,
+          "status": "file"
+        },
+        {
+          "category": "shm",
+          "exists": true,
+          "modifiedAt": 1793932505978,
+          "relativePath": "notes.sqlite3-shm",
+          "size": 32768,
+          "status": "file"
+        },
+        {
+          "category": "wal",
+          "exists": true,
+          "modifiedAt": 1793932505978,
+          "relativePath": "notes.sqlite3-wal",
+          "size": 0,
+          "status": "file"
+        }
+      ],
+      "metadata": {
+        "sequence": 0,
+        "sessionId": "eca498a4-e301-4bb2-9c8e-052a46cdceeb"
+      },
+      "rootPath": "/private/tmp/data79-independent-backend01/restored",
+      "totals": {
+        "attachmentBytes": 7078,
+        "auxiliaryBytes": 32768,
+        "databaseBytes": 40960,
+        "declaredAttachmentBytes": 7078,
+        "otherBytes": 0,
+        "totalBytes": 80806
+      },
+      "version": 1,
+      "warnings": []
+    }
+  },
+  "limits": [
+    "Real Rust Session/Store in fresh synthetic directories, no native GUI/provider/microphone or user data access.",
+    "Direct import_archive cases use the transport single synthetic participant; production App ACK is tested separately through the independent barrier adapter."
+  ]
+}

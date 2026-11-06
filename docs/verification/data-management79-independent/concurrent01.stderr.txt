@@ -1,0 +1,18 @@
+node:path:1186
+      validateString(path, `paths[${i}]`);
+      ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "paths[2]" argument must be of type string. Received an instance of Array
+    at resolve (node:path:1186:7)
+    at Array.map (<anonymous>)
+    at file:///Users/water/work/2026/Apple-Notes-Clone/docs/verification/data-management79-independent/concurrent.mjs:6:40
+    at ModuleJob.run (node:internal/modules/esm/module_job:274:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}
+
+Node.js v22.16.0
+real 0.02
+user 0.01
+sys 0.00

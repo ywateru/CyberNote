@@ -1,0 +1,14 @@
+        // Independent probe only: preserve the actual Session event alongside
+        // the inner result. No ACK or store mutation is fabricated here.
+        "debug_independent_finish_event" => {
+            let (result, event) = session.finish(
+                field(args, "operationId")?,
+                &std::collections::HashSet::from([window.to_string()]),
+                args["timeout"].as_bool().unwrap_or(false),
+            )?;
+            let reply = match result {
+                Ok(value) => json!({"ok":true,"value":value}),
+                Err(error) => json!({"ok":false,"error":error}),
+            };
+            Ok(json!({"reply":reply,"event":event}))
+        }
