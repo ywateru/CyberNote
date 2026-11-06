@@ -1,0 +1,39 @@
+
+running 10 tests
+test store::synchronization::tests::dirty_is_transactional_for_replace_smart_archive_and_attachment_owner ... FAILED
+test store::synchronization::tests::initial_enable_is_opt_in_and_persistent ... ok
+test store::synchronization::tests::independent_blobs_stage_then_publish_and_survive_conflict_copy_purge ... FAILED
+test store::synchronization::tests::unseen_concurrent_version_after_purge_is_preserved_as_conflict_only ... ok
+test store::synchronization::tests::same_vector_different_content_rejected_even_after_compaction ... ok
+test store::synchronization::tests::deleted_beats_old_edit_restore_is_causal_and_purge_does_not_resurrect ... FAILED
+test store::synchronization::tests::concurrent_heads_converge_and_local_edit_does_not_implicitly_join ... ok
+test store::synchronization::tests::causal_round_trip_restarts_and_does_not_echo_local_operations ... ok
+test store::synchronization::tests::locked_heads_round_trip_and_keep_all_without_decryption ... ok
+test store::synchronization::tests::lock_prunes_linear_plaintext_inside_business_sql_and_rolls_back_on_failure ... ok
+
+failures:
+
+---- store::synchronization::tests::dirty_is_transactional_for_replace_smart_archive_and_attachment_owner stdout ----
+
+thread 'store::synchronization::tests::dirty_is_transactional_for_replace_smart_archive_and_attachment_owner' (42505613) panicked at ../../src-tauri/src/store/synchronization/tests.rs:53:162:
+called `Result::unwrap()` on an `Err` value: AppError { code: "invalid", message: "未知操作: createSmartFolder", commit: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- store::synchronization::tests::independent_blobs_stage_then_publish_and_survive_conflict_copy_purge stdout ----
+
+thread 'store::synchronization::tests::independent_blobs_stage_then_publish_and_survive_conflict_copy_purge' (42505614) panicked at ../../src-tauri/src/store/synchronization/tests.rs:114:221:
+called `Result::unwrap()` on an `Err` value: AppError { code: "archive_invalid", message: "attachment 属性 mime 不在当前 schema 中", commit: None }
+
+---- store::synchronization::tests::deleted_beats_old_edit_restore_is_causal_and_purge_does_not_resurrect stdout ----
+
+thread 'store::synchronization::tests::deleted_beats_old_edit_restore_is_causal_and_purge_does_not_resurrect' (42505612) panicked at ../../src-tauri/src/store/synchronization/tests.rs:83:85:
+assertion failed: heads(&a.db).unwrap().len() > 1
+
+
+failures:
+    store::synchronization::tests::deleted_beats_old_edit_restore_is_causal_and_purge_does_not_resurrect
+    store::synchronization::tests::dirty_is_transactional_for_replace_smart_archive_and_attachment_owner
+    store::synchronization::tests::independent_blobs_stage_then_publish_and_survive_conflict_copy_purge
+
+test result: FAILED. 7 passed; 3 failed; 0 ignored; 0 measured; 82 filtered out; finished in 0.84s
+

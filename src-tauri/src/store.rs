@@ -26,6 +26,8 @@ pub(crate) use data_management::{AttachmentExport, DocumentStage};
 mod commits;
 #[path = "store/open.rs"]
 mod open;
+#[path = "store/synchronization.rs"]
+mod synchronization;
 #[path = "store/smart.rs"]
 mod smart;
 pub(crate) use attachment_operations::AttachmentOwner;
@@ -184,6 +186,7 @@ impl Store {
             keys: HashMap::new(),
             receipt: None,
         };
+        s.validate_sync_schema()?;
         s.initialize_storage()?;
         s.db.execute_batch(
             "PRAGMA journal_mode=WAL; PRAGMA secure_delete=ON; PRAGMA foreign_keys=ON;",
@@ -191,6 +194,7 @@ impl Store {
         fs::create_dir_all(s.root.join("attachments"))?;
         s.recover_imports()?;
         s.recover_attachment_operations()?;
+        s.sync_recover_staging()?;
         Ok(s)
     }
     fn put_folder(&mut self, f: &Folder) -> Result<()> {
@@ -1229,7 +1233,7 @@ mod tests {
     #[test]
     fn archive_attachments_and_cycle_guards() {
         let t = tempfile::tempdir().unwrap();
-        let mut s = Store::open(t.path()).unwrap();
+        let mut s = Store::open(t.path().join("data")).unwrap();
         let f = s
             .action(json!({"type":"createFolder","name":"工作"}))
             .unwrap();

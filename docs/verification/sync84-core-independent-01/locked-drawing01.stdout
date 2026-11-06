@@ -1,0 +1,18 @@
+
+running 1 test
+test independent::locked_wire_must_reject_unencrypted_drawing_body ... FAILED
+
+failures:
+
+---- independent::locked_wire_must_reject_unencrypted_drawing_body stdout ----
+
+thread 'independent::locked_wire_must_reject_unencrypted_drawing_body' (42597812) panicked at independent.rs:97:2:
+locked wire with plaintext drawing was accepted: Ok(SyncApplyReport { durable: true, applied: false, pending: 1, missing_blobs: [], changes: [], conflicts: 0 })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    independent::locked_wire_must_reject_unencrypted_drawing_body
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 119 filtered out; finished in 0.21s
+

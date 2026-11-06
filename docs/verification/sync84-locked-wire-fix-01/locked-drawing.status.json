@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "7da43718bc96fbf3d7a5e577aa65d2b5b3807307",
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "docs/verification/sync84-core-independent-01/runner/Cargo.toml",
+    "locked_wire_must_reject_unencrypted_drawing_body",
+    "--",
+    "--exact",
+    "independent::locked_wire_must_reject_unencrypted_drawing_body"
+  ],
+  "cwd": "/private/tmp/apple-notes-sync84",
+  "target": "/private/tmp/apple-notes-sync84-target",
+  "exitCode": 0,
+  "wallSeconds": 3.48203182220459,
+  "independentRegressionSha256": "e72f60614b5702b119b6cb8ba3da97d7d1f44ec46b8922c9e7a41783062ef159"
+}
