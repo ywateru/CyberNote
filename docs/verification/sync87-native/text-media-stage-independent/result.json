@@ -1,0 +1,45 @@
+{
+  "status": "P2_FINDINGS",
+  "frozenAuthor": "55296767",
+  "results": [
+    {
+      "name": "Both new actions reject injected state/URI/path fields",
+      "pass": true
+    },
+    {
+      "name": "Complete text positive normal UI path reaches scoped result",
+      "pass": true
+    },
+    {
+      "name": "P2 hidden text editor must not be accepted as visible",
+      "pass": false,
+      "error": "Missing expected rejection."
+    },
+    {
+      "name": "Two media originals length/SHA and decode gates succeed on exact synthetic boundaries",
+      "pass": true
+    },
+    {
+      "name": "Corrupt original bytes refuse before save or UI proof",
+      "pass": true
+    },
+    {
+      "name": "Image and audio decode failures each refuse before save",
+      "pass": true
+    },
+    {
+      "name": "Wrong attachment owner refuses before native original access",
+      "pass": true
+    },
+    {
+      "name": "P2 hidden decoded media editor must not be accepted as visible",
+      "pass": false,
+      "error": "Missing expected rejection."
+    }
+  ],
+  "hostOnly": true,
+  "adbCalls": 0,
+  "deviceActions": 0,
+  "syntheticOutputsOnly": true,
+  "limits": "Real scenario/helper code with synthetic Store/DOM/native-read; no actual UI, media decoding, network, ownership runtime or device acceptance."
+}
