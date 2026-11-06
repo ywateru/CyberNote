@@ -17,6 +17,8 @@ export function useAttachmentMedia(id: string, kind: string) {
     version: number;
     source: AttachmentMediaSource;
     name: string;
+    mime: string;
+    bytes: number;
     recordedAt?: number;
   } | null>(null);
   const [failure, setFailure] = useState<{
@@ -56,6 +58,8 @@ export function useAttachmentMedia(id: string, kind: string) {
             version,
             source,
             name: value.name,
+            mime: value.mime,
+            bytes: atob(value.data).length,
             recordedAt,
           });
           return;

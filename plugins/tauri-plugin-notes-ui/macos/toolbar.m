@@ -50,7 +50,7 @@ static NSColor *sidebarTintColor(void) {
     if(self.reserveTrafficLights && own.x<88) return nil;
     return [super hitTest:point];
 }
-- (void)mouseDown:(NSEvent *)event { [self.window performWindowDragWithEvent:event]; }
+- (void)mouseDown:(NSEvent *)event { if(event.clickCount==2)[self.window zoom:self];else [self.window performWindowDragWithEvent:event]; }
 @end
 // These offsets calibrate visible content only; the control frames and menu anchors stay put.
 // Values use the top-left coordinate convention of the retained 2x toolbar measurements.
@@ -279,9 +279,10 @@ static NSPoint contentOffsetFor(NSString *action) {
 - (NSDictionary *)apply:(NSDictionary *)state {
     NSDictionary *searchState=state[@"search"];
     BOOL hasSearch=searchState && (id)searchState!=NSNull.null;
-    if(hasSearch && [searchState[@"acknowledgedEvent"] unsignedLongLongValue]<self.searchSequence)
+    BOOL contentOverlay=[state[@"contentOverlay"] boolValue];
+    if(!contentOverlay && hasSearch && [searchState[@"acknowledgedEvent"] unsignedLongLongValue]<self.searchSequence)
         return @{@"code":@"stale_search",@"message":@"请先合并最新原生搜索事件"};
-    if(hasSearch && self.search.currentEditor && [self.search.currentEditor isKindOfClass:NSTextView.class]) {
+    if(!contentOverlay && hasSearch && self.search.currentEditor && [self.search.currentEditor isKindOfClass:NSTextView.class]) {
         NSTextView *editor=(NSTextView *)self.search.currentEditor;
         if(editor.hasMarkedText && ![searchState[@"value"] isEqual:self.search.stringValue])
             return @{@"code":@"search_composition",@"message":@"搜索正在输入法组字，请等待提交后更新文字"};
@@ -327,7 +328,7 @@ static NSPoint contentOffsetFor(NSString *action) {
         && hasSearch && [searchState[@"value"] length]>0;
     self.count.stringValue=zeroSearch?@"无结果":[NSString stringWithFormat:@"%@ 个备忘录",state[@"folderCount"]];
     [self.count setAccessibilityLabel:self.count.stringValue];
-    if(hasSearch) {self.search.enabled=[searchState[@"enabled"] boolValue];
+    if(hasSearch && !contentOverlay) {self.search.enabled=[searchState[@"enabled"] boolValue];
         if(![self.search.stringValue isEqual:searchState[@"value"]]) self.search.stringValue=searchState[@"value"];}
     else {self.search.enabled=NO;}
     if(@available(macOS 26.0,*)) {
@@ -365,6 +366,11 @@ static NSPoint contentOffsetFor(NSString *action) {
     self.layoutGroups=[NSMutableSet set];
     for(NotesUIButton *button in self.buttons.allValues)button.hidden=YES;
     BOOL full=(self.window.styleMask&NSWindowStyleMaskFullSizeContentView)!=0;self.root.reserveTrafficLights=full;
+    if([self.state[@"contentOverlay"] boolValue]) {
+        for(NSView *group in self.groups.allValues)group.hidden=YES;
+        self.sidebarBackground.hidden=YES;self.title.hidden=YES;self.count.hidden=YES;self.overflow=@[];
+        return;
+    }
     CGFloat traffic=full?94:12;NSDictionary *columns=self.state[@"columns"];
     BOOL sidebar=[columns[@"sidebarVisible"] boolValue];CGFloat side=sidebar?[columns[@"sidebarWidth"] doubleValue]:0;
     self.sidebarBackground.hidden=sidebar;
@@ -481,7 +487,7 @@ static NSPoint contentOffsetFor(NSString *action) {
     NSDictionary *searchState=self.state[@"search"];
     if(!searchState || (id)searchState==NSNull.null || !self.search)
         return @{@"code":@"search_missing",@"message":@"当前窗口没有搜索控件"};
-    if(![searchState[@"enabled"] boolValue] || !self.search.enabled)
+    if([self.state[@"contentOverlay"] boolValue] || ![searchState[@"enabled"] boolValue] || !self.search.enabled)
         return @{@"code":@"search_disabled",@"message":@"当前窗口搜索已禁用"};
     NSTextView *editor=[self.search.currentEditor isKindOfClass:NSTextView.class]?(NSTextView *)self.search.currentEditor:nil;
     // Repeated requests while editing (including marked text) are a no-op.
@@ -533,6 +539,7 @@ static NSPoint contentOffsetFor(NSString *action) {
     self.activeMenu=menu;[menu popUpMenuPositioningItem:nil atLocation:NSZeroPoint inView:button];self.activeMenu=nil;
 }
 - (void)buttonClicked:(NotesUIButton *)button {
+    if([self.state[@"contentOverlay"] boolValue])return;
     NSString *action=button.notesAction;
     if([action isEqual:@"overflow"]) {
         NSMenu *overflow=[[NSMenu alloc] initWithTitle:@"其他工具"];overflow.autoenablesItems=NO;
@@ -627,6 +634,7 @@ char *notes_ui_update(const char *binding,const char *json) {
     @try {NotesUIController *controller=controllers[[NSString stringWithUTF8String:binding]];
         if(!controller||controller.disposed)return failure(@"stale_binding",@"原生顶部绑定不存在");
         NSDictionary *state=decode(json);if(!state)return failure(@"invalid_state",@"顶部状态解析失败");
+        if([state[@"revision"] unsignedLongLongValue]<=[controller.state[@"revision"] unsignedLongLongValue])return failure(@"stale_revision",@"顶部状态版本已经过期");
         NSDictionary *error=[controller apply:state];if(error)return encoded(@{@"ok":@NO,@"error":error});
         return encoded(@{@"ok":@YES,@"native":[controller information]});
     }@catch(NSException *exception){return failure(@"native",exception.reason?:@"更新原生顶部失败");}

@@ -1,0 +1,132 @@
+.app > .image-preview {
+  position: absolute;
+  inset: var(--native-top, 0px) 0 0;
+  z-index: 180;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  padding: 18px;
+  background: var(--paper, #fff);
+  color: var(--ink, #202020);
+  isolation: isolate;
+}
+.app > .image-preview[hidden] {
+  display: none;
+}
+.app > .image-preview > header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-width: 0;
+  flex: none;
+}
+.app > .image-preview > header > strong {
+  min-width: 0;
+  flex: 1 1 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+}
+.image-preview-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.app > .image-preview button {
+  min-height: 32px;
+  border: 1px solid var(--line, #d6d6d6);
+  border-radius: 7px;
+  padding: 4px 10px;
+  background: var(--grouped, #f5f5f5);
+  color: inherit;
+  white-space: nowrap;
+  font: inherit;
+  font-size: 13px;
+}
+.app > .image-preview button:focus-visible {
+  outline: 2px solid #e5ac00;
+  outline-offset: 2px;
+}
+.app > .image-preview > figure {
+  min-height: 0;
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0 0;
+  overflow: auto;
+}
+.app > .image-preview > figure > img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border: 0;
+  border-radius: 0;
+}
+.image-preview-info {
+  flex: none;
+  max-height: 35%;
+  overflow: auto;
+  background: var(--grouped, #f5f5f5);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 14px 0 0;
+  font-size: 13px;
+}
+.image-preview-info > div {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
+  margin: 5px 0;
+}
+.image-preview-info dt {
+  color: var(--secondary, #767676);
+}
+.image-preview-info dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.app > .image-preview .image-export-status {
+  flex: none;
+  margin: 12px 0 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 480px) {
+  .app > .image-preview {
+    padding: 12px;
+  }
+  .app > .image-preview > header > strong {
+    flex-basis: 100%;
+  }
+  .image-preview-actions {
+    gap: 6px;
+  }
+  .app > .image-preview button {
+    min-height: 36px;
+  }
+}
+
+.image-attachment {
+  position: relative;
+}
+.image-attachment .image-open {
+  display: block;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-width: 100%;
+  cursor: zoom-in;
+}
+.image-attachment .image-open img {
+  display: block;
+}
