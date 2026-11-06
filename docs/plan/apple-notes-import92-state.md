@@ -7,8 +7,8 @@
 | 工作 | 分支/工作树 | 当前门槛 |
 | --- | --- | --- |
 | 只读能力/固定JXA | codex/apple-notes-import92-research；/private/tmp/apple-notes-import92-research | 研究冻结，现负责src-tauri/src/apple_notes_source.js固定适配器；接口与主开发先冻结，无Rust/UI改动 |
-| 产品开发 | codex/apple-notes-import92-develop；/private/tmp/apple-notes-import92-develop | 第一阶段9bd6cc0f真实Store追加/安全转换冻结，7→9测试通过；Rust host/Session/UI继续，待源码独审后整合 |
-| 独立审查 | codex/apple-notes-import92-review；/private/tmp/apple-notes-import92-review | 设计/研究静态预审已合；当前审Store冻结和真实针对性验证，共享target84交接后才能运行 |
+| 产品开发 | codex/apple-notes-import92-develop；/private/tmp/apple-notes-import92-develop | 第一阶段9bd6cc0f冻结，作者真实Store10通过、archive13通过/1既有ignored，证据f041536b未合；Rust host/Session/UI继续 |
+| 独立审查 | codex/apple-notes-import92-review；/private/tmp/apple-notes-import92-review | Store独审原SVG与下划线格式损失无警告反例失败，blocking P2交原作者窄修；SQLabort、commit前后子进程恢复及源名路径边界3项独立通过；未准入Store |
 
 研究私有状态/private/tmp/apple-notes-import92-research-status.md；开发私有状态/private/tmp/apple-notes-import92-develop-status.md。真实源标题、正文、ID和附件不进入仓库或日志，只留私有临时目录。不得执行Notes源make/set/delete/move/import或修改源DB，不创建/删除真实源测试数据；附件save仅指新建自有目录的副本导出。
 
@@ -16,4 +16,4 @@
 
 已确认实现选择：原始HTML/元数据作为明确标注的受管JSON文件附件，纳入现有统计、完整备份与受管文件生命周期；去重由来源/内容hash及真实owner重建，不另留漂移成功表。有新内容的批次创建独立根与来源层次，全部已存在时不建目录，避免误复用用户已移动或改名的旧层次。
 
-固定JXA与Rust host接口先冻结在/private/tmp/apple-notes-import92-source-contract.md（主开发写，源适配器作者确认）；源码产物需独立审查。允许为folder容器形状做最小只读验证，保持私有捕获，不追加无关真实正文扫描。共享target84是唯一现阶段Rust测试缓存，必须明确释放/接手，不并发修改。
+固定JXA与Rust host接口已提交9a7e079d [来源协议v1](../architecture/apple-notes-source-protocol.md)，私有旧文件不再作为独立契约；源码产物需独立审查。允许为folder容器形状做最小只读验证，保持私有捕获，不追加无关真实正文扫描。共享target84是唯一现阶段Rust测试缓存，必须明确释放/接手，不并发修改；当前独审已释放供原作者修复P2。
