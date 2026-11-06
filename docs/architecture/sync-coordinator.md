@@ -29,3 +29,7 @@ probe报告真实PM composing/TagComposition.pending、活跃录音ticket直到�
 release只恢复当前operation保存的旧editable/焦点，不抢别的页面焦点。恢复前重验当前可信授权、noteEpoch与editor owner；远端已锁定/删除或实例归属已变时继续受现有授权gate限制，不能用旧editable=true重新开放。组件unmount/窗口销毁同样释放；后端最终gate重新检查真实participants和目标intents/access pending以及84 generation/targets。网络IO与等待不持Session mutex。无窗口headless显式调用apply仅用于真实无窗口测试进程，生产app不能因暂时没有reply就降级直写。
 
 协议允许在正式生产接线前为明确调试fixture注入事件；该层不证明真实Rust。最终86/87必须两个真实App DOM各接独立Rust transport，观察事件和实际数据库，并验证A录音中B更新及B锁定删除、A本身更新延后、PM组字settled、picker/最终ACK、窗口增删和stale计划。
+
+## 原生只读诊断
+
+[SYNC89](../plan/tasks/app-sync89-native-apply-diagnostics.md)提供独立受本地窗口和访问令牌保护的 `sync_diagnostics` 读取。快照仅含Session本次生命周期的固定原因枚举、饱和计数及可选当前phase；没有业务内容或身份/令牌/路径。读取不驱动同步或改变安全门槛。原因在原判断位置附记并保留首次触发原因，不能用诊断重构原分支或吞掉错误。普通Status与网络协议保持原契约。进程重启的零值不能证明旧流程没有失败。
