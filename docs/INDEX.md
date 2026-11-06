@@ -1,4 +1,4 @@
-2026-11-07 当前：[Mac 系统备忘录导入92](plan/tasks/app-apple-notes-import92.md)进行中。入口位于设置→数据，采用只读读取和附件副本导出，保留源数据与现有目标笔记/设置；[导入契约](architecture/apple-notes-import.md)及[恢复状态](plan/apple-notes-import92-state.md)为本轮依据。真实源读取、目标持久化、界面、独审和Mac30尚未完成，不将脚本字典能力当实际导入成功。
+2026-11-07 当前：[Mac 系统备忘录导入92](plan/tasks/app-apple-notes-import92.md)进行最终整合。Store/host/UI及段落修复已独审合入；实际来源到隔离Store的导入/重开/重复跳过通过，App DOM20项通过。当前准备最终主线新构建、保留私有快照的离线结构复验和准确Mac30独立核包。真实附件导出失败及原段落问题分别留证，不宣称全部格式/附件已经证明。入口为设置→数据→从 Apple 备忘录导入；[恢复状态](plan/apple-notes-import92-state.md)记录当前门槛。
 
 2026-11-07：[Mac29 / Android21 同步交付](verification/sync91/DELIVERY.md)完成本轮要求级验收和独立复核。相同322项产品输入；原Android反向失败在同数据/配对上修复，双向完整文档及原文件、冷启、前台恢复、系统图片导出通过。当前源码实际双App39项、LAN和匿名wss定向39项已验证；原公网超时、音频Blob调试读回限制及未测VPN/硬件范围逐项保留。所有owned测试运行已关闭，[使用说明](sync-usage.md)与[恢复状态](plan/sync-delivery-state.md)已更新。下方是历史阶段记录。
 

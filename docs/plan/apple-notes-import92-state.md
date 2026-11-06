@@ -1,29 +1,40 @@
 # APP92 恢复状态
 
-目标：Mac客户端从系统自带备忘录复制导入，保持源笔记、目录和附件不变。状态in-progress；上一轮同步已交付，不再启动Android或旧模拟器。
+目标：Mac 客户端从系统自带备忘录复制导入，保持源笔记、目录和附件不变。状态 **in-progress**。上一轮同步及 Android 画廊已交付；本轮不启动 Android 或旧模拟器，原约13秒未保存录音现场保持。
 
-基线4c597db6，契约b3de664d及后续47068bba/46581ba0，见[导入契约](../architecture/apple-notes-import.md)和[任务](tasks/app-apple-notes-import92.md)。[只读研究](../research/apple-notes-import92/README.md)已合入aed3dff1/be3ac66e：实际有限元数据/6正文读取成功，所采样源字段前后相同；3附件的副本导出失败-10000且无文件，CID未在HTML出现，不冒称附件成功或推断对象类型。原超时/-1728调用错误保留。设计独审9eff65f6/541f0483已合入，仅预审而非产品验收。
+契约见[导入设计](../architecture/apple-notes-import.md)、[来源协议](../architecture/apple-notes-source-protocol.md)及[任务](tasks/app-apple-notes-import92.md)。入口为设置 → 数据 → 从 Apple 备忘录导入。
 
-| 工作 | 分支/工作树 | 当前门槛 |
+## 当前主线和工作交接
+
+主线已合入 Store、固定 JXA、host/core/Session、UI/debug 及所有已准入修复。最后格式修复 `6febd39f` 已合为 `a8bc2452`；独立证据 `895652c1` 已合为 `7a602cca`。尚无 Mac30 包。
+
+| 工作 | 工作树 / 负责代理 | 当前门槛 |
 | --- | --- | --- |
-| 只读能力/固定JXA | codex/apple-notes-import92-research；/private/tmp/apple-notes-import92-research | 源脚本bc558511精确重复归一化窄修待独审；原b33来源脚本独审及真实API通过，实际sourceStore首轮失败未导入 |
-| 产品开发 | codex/apple-notes-import92-develop；/private/tmp/apple-notes-import92-develop | Store/host及资源修复均已独审合入；UI/debug c5c8c72d及作者DOM17尚未准入，长取消轮询blocker窄修中，未出包 |
-| 独立审查 | codex/apple-notes-import92-review；/private/tmp/apple-notes-import92-review | 当前UI取消竞争与source重复归一化审查；原Store、host及其修复已通过，详见下方当前进展 |
+| 主线集成、新 lean、实际 App DOM | `/private/tmp/apple-notes-import92-develop`；开发代理 | 已获 target84 排他使用权，按当前主线最终检查；真实来源测试默认 ignored，不再读取 Notes |
+| 保留真实内容的离线回放 | `/private/tmp/apple-notes-import92-real`；研究代理 | 方案已准备，等待最终修复后新 immutable lean；仅用保留私有快照，新建目标 Store |
+| 独立核查 | `/private/tmp/apple-notes-import92-review`；独审代理 | 格式修复已 PASS 并释放84；准备最终集成及 Mac30 包核查 |
 
-## 后续当前进展
+共享 Rust 缓存仅 `/private/tmp/apple-notes-sync84-target`，排他交接。不可并发修改。代码与测试由作者实现，不同代理独审，root 维护文档及合入。
 
-- Host独审原2资源反例失败（1daf48c6，主线c6ea0b76），bb1aff7f窄修后原样2+预算差异1通过，独证5b672813已合main d18e8bde。host本体和修复已合main93dcb2b9/0ab345bd；磁盘监测为soft-watch，不宣称能强制终止Notes内部save。
-- 实际来源验收使用新tree/private/tmp/apple-notes-import92-real，branchcodex/apple-notes-import92-real，base cfa14fe1。首轮自然101/29.176秒，before单条SystemSource成功，但worker scan phaseerror，未到目标导入；安全证据257058e5已合main60cd55c0，补充ee483e93待合。既有真实扫描有3个完全一致的重复ID行；当前失败未输出错误码，不能据此宣称本轮根因日志已实证。
-- 固定源脚本窄修bc558511在研究tree冻结：精确一致重复行合并，同ID任何metadata冲突拒绝source_changed，host重复ID拒绝不放宽。34VM/静态语法通过，当前独审新增反例；准入前不重跑真实来源。
-- UI/debug冻结c5c8c72d在开发tree，尚未合主线。作者实际React→同core/realStore的DOM矩阵已17通过，原备份命令遮挡失败保留；不涵盖长取消竞争。独审已实际React/browser复现取消350ms仍cancelling后停止轮询（1450ms仅1poll、未finish），原作者正在窄修，未准入UI。
-- 共享target84现在无构建占用；作者lean build03完成后复制binary供DOM，不占target。之后真实source重跑须先独审准入和明确排他交接；原Android及所有设备继续不操作。尚无Mac30包。
+## 已通过的范围
 
-研究私有状态/private/tmp/apple-notes-import92-research-status.md；开发私有状态/private/tmp/apple-notes-import92-develop-status.md。真实源标题、正文、ID和附件不进入仓库或日志，只留私有临时目录。不得执行Notes源make/set/delete/move/import或修改源DB，不创建/删除真实源测试数据；附件save仅指新建自有目录的副本导出。
+- Store/转换、host/core/Session 及资源修复已独审合入。追加导入保留现有笔记/设置，不走备份替换路径。受管 JSON 文件保留原 HTML/元数据；去重从文件及实际 owner 重建。host 磁盘监测是 soft-watch，不宣称能强制终止 Notes 内部的 save。
+- 固定来源脚本对完全一致的重复元数据行做归一化，同 ID 冲突仍拒绝，host 不放宽重复 ID。独立 VM 反例及真实来源后续运行分别留证。
+- UI/debug 实际 React/Tiptap → 同生产 core → Session/SQLite/文件20项通过；仅 OS 来源、窗口/对话框边界 synthetic。包括层级、格式/日期、媒体/raw 独立文件、PNG 原字节导出、去重、取消、备份恢复和恢复后去重、手机隐藏入口。数据统计仅非空 smoke，不冒称精确字节审计。长取消原反例在修复后实际 React 复跑通过，原失败保留。
+- real02 实际 SystemSource → worker → 隔离目标 Store 自然0/43.027秒，导入1、重开及重复 existing1；标题/plainText/日期/raw HTML 精确，源前后采样字段相同，原有合成基线和设置保持。原 real01 自然101/29.176秒和只读查询失败原样保留。
+- real02 私有结构检查另发现块间 ASCII 排版空白造成多余空段落，不能把该轮追认为完整段落保真。最后修复只去除块间/边缘排版空白，保留显式空 div/br、inline 空格、pre 和 NBSP。作者受影响14项通过；不同代理3个冻结反例修复后全部通过，自然0/13.571秒；临时旧 html.rs 原样对照3项全部失败，自然101/2.736秒。raw/plain/date/fingerprint 均验证。临时改动已恢复。
 
-完成链：只读研究→协议冻结→目标Store与UI实现→不同代理独审→主线整合→实际源到隔离目标与实际App DOM→Mac30准确构建/独立核包。各层结果分别记账。保留旧Mac29/Android21及原Android13秒未保存录音现场，当前不进行任何Android操作。
+## 尚待完成
 
-已确认实现选择：原始HTML/元数据作为明确标注的受管JSON文件附件，纳入现有统计、完整备份与受管文件生命周期；去重由来源/内容hash及真实owner重建，不另留漂移成功表。有新内容的批次创建独立根与来源层次，全部已存在时不建目录，避免误复用用户已移动或改名的旧层次。
+1. 当前主线相关 Rust/前端集成、新精确 lean、同实际 App DOM20项。
+2. 用该精确新 binary 将保留 real02 私有内容离线导入全新 Store，核对六个显示块及四个显式换行、raw、重开。此层 Source 是保留 fixture，不新增 Notes 读取，不修改原 real02 目标。
+3. 准确构建 Mac30，并由不同代理独立核对动态源码输入、内嵌前端、ZIP、实际签名 entitlement 和 `NSAppleEventsUsageDescription`。旧 adhoc 重签必须显式保留 Apple Events entitlement。
+4. 更新使用说明、最终交付记录及任务状态后再完成目标。
 
-固定JXA与Rust host接口已提交9a7e079d及093f20fa [来源协议v1](../architecture/apple-notes-source-protocol.md)，私有旧文件不再作为独立契约；源码产物需独立审查。共享target84是唯一现阶段Rust测试缓存，必须明确释放/接手，不并发修改。真实source、App DOM、host所有权/取消/输出限额与准确包各自独立记账，不能以已通过Store或VM替代。
+## 能力边界和隐私
 
-真实source待执行入口：apple_notes_import::core::tests::actual_readonly_source_worker_to_isolated_store，默认ignored，仅测试编译。APPLE_IMPORT92_PRIVATE_INPUT为0600私有JSON路径，内容仅研究者私下定位的noteId；APPLE_IMPORT92_PRIVATE_OUTPUT为新私有目录。生产同core/SystemSource/OwnedStage与真实SessionStore，不另写append。完整stdout/stderr/target数据留私有目录；只提交safe-report.json中的固定安全聚合字段并检查无源信息。具体准备见/private/tmp/apple-notes-import92-real-integration-plan.md，未执行不能算通过。
+真实源首次采样读取成功；3个附件副本导出实际失败 -10000 且无文件，CID 未在 HTML 出现，不能推断类型、云端状态或权限原因。普通图片/音频/PDF/复杂对象的实际 Notes 导出、真实清单/表格未获成功证明；synthetic 转换/存储测试单独记账。失败附件笔记明确跳过，不能显示为完全成功。打包 App 自身自动化授权运行尚未证明，不能用 core 源读取或 entitlement 核包替代。
+
+真实源标题、正文、ID、附件仅留私有本地目录；仓库与命令输出只含安全布尔/计数/hash。不得执行 Notes 源 make/set/delete/move/import、修改源 DB/权限或终止 Notes；附件 save 只导出副本到全新自有暂存。Mac29/Android21 保留，本轮只出 Mac30。
+
+离线方案：`/private/tmp/apple-notes-import92-offline-replay-plan.md`。原实际来源私有入口仍默认 ignored，当前不再执行。各层证明不可互相替代。
