@@ -8,11 +8,12 @@
 |85认证网络/身份|独审pass，合入0ab39d70；组合依赖3754d60b；主线19项自然0|修复c88982a6；独审59fc3f32；原并发退出101保留|旧85树/分支已清理，缓存迁至/private/tmp/apple-notes-sync85-target|
 |86同步设置UI|合入d8ff3336，主线完整受影响组pass|修复9ed9a078；独审4c85204b|旧UI树/分支已清理|
 |86前端quiet协调|两P2独审复审pass，合入85b9e0eb；根34+41+notes9/build/production自然0|产品0c84e589；独审092ea058；根证据b563eb64＋原始log bfda3f79|旧前端树/分支已清理；原blocked与反例完整保留|
-|86Rust adapter/Session|in-progress，10cd8326还需追加修复与stdin接线，不是最终冻结交付|49项扩展真实进程pass；最后完整回归发现锁文件副作用与旧4文件fixture，修复中|/private/tmp/apple-notes-sync86-adapter，codex/sync86-adapter，作者sync86_adapter_develop|
+|86Rust adapter/Session|独审c11dcc56 blocked，原作者修复中；未合入|fb6a265f/作者1b4c5d87全套通过仍漏Session内媒体IO；64MiB preflight4708ms/flush13637ms持锁，原证据保留|/private/tmp/apple-notes-sync86-adapter，codex/sync86-adapter，作者sync86_adapter_develop|
 |86两实际App DOM|基础设施in-progress，真实最终验收待后端冻结独审|每页独立真实Rust/SQLite/socket，持续事件泵；不用FakeBackend或有页面headless bypass|/private/tmp/apple-notes-sync86-dom，codex/sync86-dom，作者sync86_dom_develop|
 |87隔离Android环境|独审285970a1 pass且已合入，ENVIRONMENT-READY ONLY|工具62ca1cf0，17 guards；第三次18.751秒ready；未安装新APK|资源/private/tmp/apple-notes-sync87-environment-01保留；emulator-5584 stopped；环境工作树已清理|
 |87新Android原生|工具准备in-progress，安装等待准确新同步APK核包|任务app-sync87-native；只能新serial/新PID/CDP，不能跑旧16包冒称新功能|/private/tmp/apple-notes-sync87-native，codex/sync87-native，作者sync87_native_develop|
-|87路由/准确包/完整目标|pending|真实localhost/LAN/匿名隧道逐项证据；VPN无现成安全网络则准确列限制；Mac27/Android17拟号未构建|根协调最终主线测试和准确包|
+|87实际路由与换址UI|in-progress，探索LAN/同workspace新邀请保身份通过；隧道仍调试，未最终验收|6cfcffa9规格：已配对设备增加“更新连接”；旧UI只在disabled可join是缺口|/private/tmp/apple-notes-sync87-routes，codex/sync87-routes，作者sync87_routes_develop|
+|87准确包/完整目标|pending|Mac27/Android17拟号未构建；临时build驱动仅准备，未执行|根协调最终主线测试和准确包|
 
 根负责规格、派发、合入和主线完整整合；开发和独审由不同agent负责。恢复时只给明确当前任务/工作树，不能唤醒旧debug70任务。所有shell显式workdir，禁止其他agent写main；原失败保全，修复后只恢复受影响边界。
 
@@ -31,3 +32,5 @@
 用户原Android约13秒未保存录音现场完全不碰：禁止安装/启动/停止/重启/读取/导出/备份原应用或旧AVD（含emulator-5580）。所有ADB/CDP显式新serial并核新AVD/PID/WebView，禁止kill-server。真实mic不用，录音仅合成媒体；Apple Notes不做删除实验。用户已有直接执行授权沿用，不重复询权限。
 
 当前用户可安装包仍为[快速首页82/83](../verification/mobile-home8283/README.md) Mac26/Android16；直接画廊、黄色＋一键输入已交付，不重做。它们不包含当前新增同步。新包生成、核包和设备安装分别记账，不能提前宣称完成。
+
+最新阻断：独审fb6a265f/c11dcc56确认两条媒体IO长持Session；原作者按短snapshot gate、锁外IO、最终凭据重验修复。真实双进程独审22项（不是早先口头24）通过，锁探针自然101为负向失败。DOM03/04/05清理长时间未结算，实际原因仍定位中，不归因Vite；静态opt-in bundle仍有清理问题，原失败及错误primary假设均保全。native工具7fd245ba/证据4f790962主机准备完成，未独审/boot/安装；需原生review与准确APK后followup作者实际执行。
