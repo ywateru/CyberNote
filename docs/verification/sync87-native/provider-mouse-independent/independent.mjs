@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';import {openOwnedProvider,openOwnedProviderMouse} from '/private/tmp/apple-notes-sync87-native/scripts/debug/sync87-native/provider-touch.mjs';
+const fake=({menu=false,waitFail=false}={})=>{const sent=[];return {sent,read:async s=>s.startsWith('!!')?menu:{x:20,y:30,width:360,height:568},wait:async()=>{if(waitFail)throw Error('SECRET_WAIT')},send:async(...args)=>sent.push(args)}};let checks=0;
+const already=fake({menu:true});assert.deepEqual(await openOwnedProviderMouse(already),{normalMouse:true});assert.deepEqual(already.sent.map(x=>x[0]),['Input.dispatchMouseEvent','Input.dispatchMouseEvent']);assert.deepEqual(already.sent.map(x=>x[1].type),['mousePressed','mouseReleased']);checks++;
+const blocked=fake({waitFail:true});await assert.rejects(openOwnedProviderMouse(blocked),e=>e.stage==='menu-wait'&&e.message==='owned provider touch refused'&&!e.cause&&!e.actual);assert.equal(blocked.sent.length,2);assert(blocked.sent.every(x=>x[0]==='Input.dispatchMouseEvent'));checks++;
+const old=fake();assert.deepEqual(await openOwnedProvider(old),{normalTouch:true});assert.equal(old.sent.length,4);assert(old.sent.every(x=>x[0]==='Input.dispatchTouchEvent'));checks++;
+console.log(JSON.stringify({checks,scope:'hostexplicitmethod/noautofallbackonly; no devices/CDP/input'}));
