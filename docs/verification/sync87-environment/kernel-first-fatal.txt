@@ -1,0 +1,25 @@
+[    5.072396] init: Loaded kernel module /lib/modules/xhci-hcd.ko
+[    5.073718] init: Loading module /lib/modules/xhci-pci.ko with args ""
+[    5.122217] init: Loaded kernel module /lib/modules/xhci-pci.ko
+[    5.124049] init: [libfs_mgr]ReadFstabFromDt(): failed to read fstab from dt
+[    5.125830] init: Using Android DT directory /proc/device-tree/firmware/android/
+[    5.130764] init: realpath failed: /dev/block/by-name/super: No such file or directory
+[    5.132327] init: Failed to mount required partitions early ...
+[    5.133454] init: InitFatalReboot: signal 6
+[    5.138407] init: #00 pc 0000000000302c20  /init (UnwindStackCurrent::UnwindFromContext(unsigned long, void*)+96)
+[    5.140355] init: #01 pc 0000000000274e88  /init (android::init::InitFatalReboot(int)+208)
+[    5.141921] init: #02 pc 0000000000275268  /init (android::init::InstallRebootSignalHandlers()::$_22::__invoke(int)+32)
+[    5.143870] init: #03 pc 00000000000005d0  [vdso:0000007f87ba8000] (__kernel_rt_sigreturn)
+[    5.145397] init: #04 pc 0000000000376b84  /init (abort+160)
+[    5.146380] init: #05 pc 0000000000277b50  /init (android::init::InitAborter(char const*)+44)
+[    5.147963] init: #06 pc 00000000002c521c  /init (android::base::SetAborter(std::__1::function<void (char const*)>&&)::$_3::__invoke(char const*)+76)
+[    5.150391] init: #07 pc 00000000002c4a3c  /init (android::base::LogMessage::~LogMessage()+320)
+[    5.151885] init: #08 pc 000000000026ca38  /init (android::init::FirstStageMain(int, char**)+5796)
+[    5.153268] init: #09 pc 0000000000375a18  /init (__real_libc_init(void*, void (*)(), int (*)(int, char**, char**), structors_array_t const*, bionic_tcb*)+576)
+[    5.155517] init: Reboot ending, jumping to kernel
+[    5.156671] cfg80211: failed to load regulatory.db
+[    5.252589] reboot: Restarting system with command 'bootloader'
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x610f0000]
+[    0.000000] Linux version 5.4.249-android11-2-00004-g212a7aaded26-ab10688362 (build-user@build-host) (Android (7284624, based on r416183b) clang version 12.0.5 (https://android.googlesource.com/toolchain/llvm-project c935d99d7cf2016289302412d708641d52d2f7ee), LLD 12.0.5 (/buildbot/src/android/llvm-toolchain/out/llvm-project/lld c935d99d7cf2016289302412d708641d52d2f7ee)) #1 SMP PREEMPT Mon Aug 21 12:17:45 UTC 2023
+[    0.000000] Machine model: linux,ranchu
+[    0.000000] printk: debug: skip boot console de-registration.
