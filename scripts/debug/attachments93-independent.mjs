@@ -23,6 +23,7 @@ const until = async (label, predicate, timeout = 10000) => {
 try {
   runtime = await openRuntime({ root, keep: true, bundleDebug: true, nativeToolbar: true });
   const { page, backend } = runtime;
+  await page.evaluate(() => { window.__independent93Events = []; document.addEventListener('contextmenu', event => window.__independent93Events.push({ constructor: event.constructor.name, x: event.clientX ?? null, y: event.clientY ?? null, trusted: event.isTrusted }), true); });
   const menu = page.getByRole('menu', { name: '附件菜单', exact: true });
   const check = async (name, action) => {
     try { await action(); rows.push({ name, status: 'passed' }); }
@@ -43,16 +44,16 @@ try {
   ]);
   await idle(page);
   const attachments = structuredClone(backend.workspace.attachments);
-  const file = attachments.find(a => a.kind === 'file');
+  let owner = 'note-a', file = attachments.find(a => a.kind === 'file');
   const card = id => page.locator(`.attachment-node[data-attachment-id="${id}"]:visible`);
   const selectDom = async id => { await page.locator(`.note-row[data-note-id="${id}"]`).click(); await idle(page); };
   const open = async (id, point) => {
     const element = card(id); await element.scrollIntoViewIfNeeded();
-    if (point) await element.dispatchEvent('contextmenu', { clientX: point.x, clientY: point.y, bubbles: true, cancelable: true });
-    else await element.click({ button: 'right', position: { x: 12, y: 12 } });
+    if (point) await element.evaluate((node, point) => node.dispatchEvent(new MouseEvent('contextmenu', { clientX: point.x, clientY: point.y, bubbles: true, cancelable: true })), point);
+    else if (await element.locator('.image-open').count()) await element.locator('.image-open').click({ button: 'right' });
+    else await element.click({ button: 'right' });
     await menu.waitFor();
   };
-  const document = { type: 'doc', content: [{ type: 'attachment', attrs: { id: file.id, kind: file.kind, name: file.displayName } }] };
   await check('All four persisted media kinds open the real menu without changing document', async () => {
     const before = JSON.stringify((await state(page)).editorJSON);
     for (const attachment of attachments) {
@@ -64,12 +65,14 @@ try {
     }
     assert.equal(JSON.stringify((await state(page)).editorJSON), before);
   });
-  await api(page, 'editor.setContent', { document }); await api(page, 'app.flush'); await idle(page);
+  await api(page, 'note.create'); await idle(page); owner = (await state(page)).selection.noteId;
+  await chooseFiles(page, [{ name: 'independent93-single.txt', mimeType: 'text/plain', buffer: Buffer.from('original single attachment93') }]); await idle(page);
+  file = structuredClone(backend.workspace.attachments.find(a => a.noteId === owner && a.kind === 'file'));
   await check('Last attachment removal persists and Undo/Redo keeps original bytes', async () => {
     const original = backend.files.get(file.id);
     await open(file.id); await menu.getByRole('menuitem', { name: '从备忘录中移除', exact: true }).click(); await api(page, 'app.flush'); await idle(page);
     assert.equal(refs((await state(page)).editorJSON).length, 0);
-    assert.equal(refs(backend.workspace.notes.find(n => n.id === 'note-a').document).length, 0);
+    assert.equal(refs(backend.workspace.notes.find(n => n.id === owner).document).length, 0);
     assert.equal(backend.files.get(file.id), original);
     await api(page, 'editor.undo'); await api(page, 'app.flush'); await idle(page);
     assert.deepEqual(refs((await state(page)).editorJSON), [file.id]);
@@ -83,7 +86,7 @@ try {
     assert.match(await page.evaluate(() => document.activeElement.textContent), /从备忘录中移除/);
     await page.keyboard.press('Home'); await page.keyboard.press('ArrowDown'); await page.keyboard.press('Enter');
     await page.getByRole('dialog', { name: '附件信息', exact: true }).waitFor();
-    assert.match(await page.getByRole('dialog', { name: '附件信息', exact: true }).innerText(), /independent93.txt/);
+    assert.match(await page.getByRole('dialog', { name: '附件信息', exact: true }).innerText(), /independent93-single.txt/);
     await page.keyboard.press('Escape');
     assert.equal(await page.getByRole('dialog', { name: '附件信息', exact: true }).count(), 0);
     assert.equal(await card(file.id).evaluate(element => element === document.activeElement), true);
@@ -95,16 +98,19 @@ try {
       assert(bounds.x >= 8 && bounds.y >= 8 && bounds.x + bounds.width <= viewport.width - 7 && bounds.y + bounds.height <= viewport.height - 7, JSON.stringify(bounds));
       await page.keyboard.press('Escape');
     }
+    await card(file.id).evaluate(node => node.dispatchEvent(new Event('contextmenu', { bubbles: true, cancelable: true }))); await menu.waitFor();
+    const fallback = await menu.boundingBox(); assert(fallback.x >= 8 && fallback.y >= 8 && fallback.x + fallback.width <= viewport.width - 7 && fallback.y + fallback.height <= viewport.height - 7, JSON.stringify(fallback));
+    await page.keyboard.press('Escape');
   });
   await check('Switching owner closes menu and old information', async () => {
     await open(file.id); await selectDom('note-b');
     assert.equal(await menu.count(), 0);
-    await selectDom('note-a');
+    await selectDom(owner);
     await open(file.id); await menu.getByRole('menuitem', { name: '显示信息', exact: true }).click();
     await page.getByRole('dialog', { name: '附件信息', exact: true }).waitFor();
     await selectDom('note-b');
     assert.equal(await page.getByRole('dialog', { name: '附件信息', exact: true }).count(), 0);
-    await selectDom('note-a');
+    await selectDom(owner);
   });
   await check('Delayed save picker cannot export after owner navigation', async () => {
     const before = backend.exports.length;
@@ -114,6 +120,7 @@ try {
     await page.locator('.note-row[data-note-id="note-b"]').click();
     await idle(page); assert.equal(backend.exports.length, before);
   });
+  await saveJSON(resolve(output, 'context-events.json'), await page.evaluate(() => window.__independent93Events));
   await writeFile(resolve(output, 'final.html'), await page.content());
   await page.screenshot({ path: resolve(output, 'final.png') });
 } catch (error) { failure ||= error; }
