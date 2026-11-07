@@ -1,0 +1,48 @@
+{
+  "sourceHead": "e2f307ba9def762fcf771f9857ff2a9ac6d2aa8e",
+  "finalHead": "e2f307ba9def762fcf771f9857ff2a9ac6d2aa8e",
+  "checks": [
+    {
+      "name": "All four persisted media kinds open the real menu without changing document",
+      "status": "failed",
+      "error": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.attachment-node[data-attachment-id=\"bdf526c2-b5db-4435-8acf-e89414c48d8b\"]:visible')\u001b[22m\n\u001b[2m    - locator resolved to <div tabindex=\"0\" contenteditable=\"false\" data-node-view-wrapper=\"\" class=\"attachment-node image\" data-attachment-id=\"bdf526c2-b5db-4435-8acf-e89414c48d8b\">…</div>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div tabindex=\"0\" role=\"textbox\" translate=\"no\" spellcheck=\"true\" aria-label=\"备忘录正文\" contenteditable=\"true\" data-paper-style=\"plain\" class=\"tiptap ProseMirror ProseMirror-focused\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div tabindex=\"0\" role=\"textbox\" translate=\"no\" spellcheck=\"true\" aria-label=\"备忘录正文\" contenteditable=\"true\" data-paper-style=\"plain\" class=\"tiptap ProseMirror ProseMirror-focused\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div tabindex=\"0\" role=\"textbox\" translate=\"no\" spellcheck=\"true\" aria-label=\"备忘录正文\" contenteditable=\"true\" data-paper-style=\"plain\" class=\"tiptap ProseMirror ProseMirror-focused\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at open (/private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:52:24)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:59:7\n    at async check (/private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:28:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:56:3"
+    },
+    {
+      "name": "Last attachment removal persists and Undo/Redo keeps original bytes",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  [\n+   'bdf526c2-b5db-4435-8acf-e89414c48d8b',\n+   '93e34af8-b071-4dbb-b2b4-1c0a42bd3a66',\n+   '3ce9f20b-2c4b-43f8-a4ac-81d3075d59de',\n    '5e4499bf-e07d-42e9-aa1b-8906c9a38c29'\n  ]\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:75:12\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:28:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:68:3"
+    },
+    {
+      "name": "Menu keys navigate, Enter shows information, Escape restores attachment focus",
+      "status": "passed"
+    },
+    {
+      "name": "Right-click coordinates clamp at all viewport corners",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: {\"x\":0,\"y\":800,\"width\":248,\"height\":109}\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:95:7\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:28:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:91:3"
+    },
+    {
+      "name": "Switching owner closes menu and old information",
+      "status": "passed"
+    },
+    {
+      "name": "Delayed save picker cannot export after owner navigation",
+      "status": "passed"
+    }
+  ],
+  "status": "failed",
+  "error": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.attachment-node[data-attachment-id=\"bdf526c2-b5db-4435-8acf-e89414c48d8b\"]:visible')\u001b[22m\n\u001b[2m    - locator resolved to <div tabindex=\"0\" contenteditable=\"false\" data-node-view-wrapper=\"\" class=\"attachment-node image\" data-attachment-id=\"bdf526c2-b5db-4435-8acf-e89414c48d8b\">…</div>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div tabindex=\"0\" role=\"textbox\" translate=\"no\" spellcheck=\"true\" aria-label=\"备忘录正文\" contenteditable=\"true\" data-paper-style=\"plain\" class=\"tiptap ProseMirror ProseMirror-focused\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div tabindex=\"0\" role=\"textbox\" translate=\"no\" spellcheck=\"true\" aria-label=\"备忘录正文\" contenteditable=\"true\" data-paper-style=\"plain\" class=\"tiptap ProseMirror ProseMirror-focused\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div tabindex=\"0\" role=\"textbox\" translate=\"no\" spellcheck=\"true\" aria-label=\"备忘录正文\" contenteditable=\"true\" data-paper-style=\"plain\" class=\"tiptap ProseMirror ProseMirror-focused\">…</div> intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at open (/private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:52:24)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:59:7\n    at async check (/private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:28:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/attachments93-independent.mjs:56:3",
+  "metadata": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "frontendTransport": "isolated-static-debug-bundle",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  },
+  "wallMs": 20843
+}

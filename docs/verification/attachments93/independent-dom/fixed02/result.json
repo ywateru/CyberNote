@@ -1,0 +1,44 @@
+{
+  "sourceHead": "4c7434a43b32136cb2cb311fd84c4b86a6fe0b4c",
+  "finalHead": "4c7434a43b32136cb2cb311fd84c4b86a6fe0b4c",
+  "checks": [
+    {
+      "name": "All four persisted media kinds open the real menu without changing document",
+      "status": "passed"
+    },
+    {
+      "name": "Last attachment removal persists and Undo/Redo keeps original bytes",
+      "status": "passed"
+    },
+    {
+      "name": "Menu keys navigate, Enter shows information, Escape restores attachment focus",
+      "status": "passed"
+    },
+    {
+      "name": "Right-click coordinates clamp at all viewport corners",
+      "status": "passed"
+    },
+    {
+      "name": "Switching owner closes menu and old information",
+      "status": "passed"
+    },
+    {
+      "name": "Delayed save picker cannot export after owner navigation",
+      "status": "passed"
+    }
+  ],
+  "status": "passed",
+  "metadata": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "frontendTransport": "isolated-static-debug-bundle",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  },
+  "wallMs": 14091
+}
