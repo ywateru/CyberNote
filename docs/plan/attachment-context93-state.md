@@ -11,3 +11,5 @@ backend作者冻结06678a98→129b8740已交独审，尚未合main；source-only
 全部测试隔离合成Store/媒体/OS，禁止读取或修改真实Notes/用户DB/麦克风；不启动/停止/安装/读取任何Android设备或旧AVD，原约13秒未保存录音现场完全保持。最终通过后只打Mac31（新artifact目录），保留Mac30/Android21，并独审动态input/ZIP/内嵌前端/JXA/实际entitlement和strict signature。无新增用户permission需求，授权沿用。
 
 独立菜单fixture已冻结123d460f+7cbe4f03，待精确UIfreeze；覆盖四类型、移除Undo/Redo、键盘/信息/Esc/视口、owner失效及迟到picker。所有首失败保留，source-only不等同runtime。当前原Mac30派生包/Android21保持。
+
+用户最新补充：正常来源附件照常导入，只取消应用额外插入的记录类可见卡；同名普通JSON必须显示。作者backend066→129已root合入8c4d1190→53872301，作者32/1ignored及独审四fixture均通过；独审84已释放。菜单首freeze d365425d+geometry诊断6b8b2829，作者dom01/02/03定位失败，疑普通Event无clientX导致NaN样式；拟finite fallback+显式MouseEvent窄修。独审DOM01中keyboard/info/Esc、owner关闭、迟到picker拒export已通过；clamp同失败，四类型1px目标点击和Undo setup同历史组需修测试方法再判产品。尚无Mac31。
