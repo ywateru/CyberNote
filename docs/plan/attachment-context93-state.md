@@ -1,15 +1,15 @@
 # APP93 当前交接状态
 
-本轮用户请求：导入不添加可见“Apple备忘录原始记录.json”附件；全部用户附件有右键菜单。最新任务为[APP93](tasks/app-attachment-context93.md)，UI见[附件菜单](../ui/attachment-context-menu.md)。上一轮APP92/Mac30已完成，旧goal为complete，不恢复Android/同步/来源探测。
+本轮用户要求：正常来源附件照常导入，只取消应用额外生成的“Apple 备忘录原始记录.json”等可见记录卡；全部用户附件增加右键菜单。同名普通 JSON 仍然显示。规格见[任务](tasks/app-attachment-context93.md)、[菜单 UI](../ui/attachment-context-menu.md)。APP92/Mac30 已完成，旧 goal 为 complete，不恢复 Android、同步或来源探测。
 
-根主线基线f0c1c29e，规格2af34667→3cf9c257→4d3722e3。作者 `/root/attachments93_develop` tree `/private/tmp/apple-notes-attachments93-develop` branchcodex/attachments93-develop；独审 `/root/attachments93_review` tree `/private/tmp/apple-notes-attachments93-review`。docs-sprint流程：root文档/合入，作者实现，不同代理独审；代码不得main直接写。
+遵循 docs-sprint：root 维护文档、合入；作者 `/root/attachments93_develop` 在 `/private/tmp/apple-notes-attachments93-develop` 实现，不同代理 `/root/attachments93_review` 在对应 review worktree 验证。主线 backend 作者06678a98→129b8740已合入8c4d1190→53872301；菜单d365425d→6b8b2829→6eb1da6d→cf5be539→63d1fd70完整合入3160c360→c9554422。独立DOM脚本/证据已合入ded9a5e7；作者新增普通PDF/WAV/TXT、实时卡和Undo尾段断言的6246ef66待实际结果后合入。
 
-内部记录保留既有serialized attachment reference保持严格wire兼容。public正文投影剥除有效RAW_MIME+真实owner记录引用，workspace元数据可带internal:true派生标记供用户表面过滤及lock/conflict能力，标记不进入持久化/wire。saveNote先验证原输入，再合回原owner内部ref，回包与workspace一致。新旧普通卡/附件浏览/含附件指示均不显示raw，数据管理如实计占用。普通同名JSON/坏记录不误隐藏，正常附件导出拒内部raw。备份、重开、去重及两实际Store严格wire/publication必须定向验证。
+内部记录沿用既有受管文件/serialized attachment reference，保持严格 wire 兼容。Store 只对 owner、保留 MIME、大小及真实 RawRecord 均有效的节点作 public 投影；workspace 派生 internal 标记不入持久化或 wire。saveNote 先验证公开输入，再合回原 owner 内部引用；旧记录只读投影不改时间/revision。数据管理仍如实计内部占用。普通同名文件、损坏/伪造记录不误隐藏。
 
-backend作者冻结06678a98→129b8740已交独审，尚未合main；source-only原mut及raw-only/嵌套block+投影非法问题已窄修，作者full产品manifest apple_自然0/32通过1真实source ignored。原误对lean harness跑test的配置缺失失败保留，未当产品验证通过。新immutable lean02已编译供DOM使用。菜单typecheck初版通过，源码/runner将冻结后执行实际DOM。尚无Mac31。shared target `/private/tmp/apple-notes-sync84-target` 已由作者明确释放，现独审获排他运行预先冻结22924793四个独立反例，结束需主动释放。复用92真实ReactDOM+Rust transport，不再造框架，不重复广泛旧网络/设备suite。
+后端作者完整产品 apple_ 测试自然0，32通过/1真实来源ignored；独审四个真实Store反例自然0，覆盖空嵌套合法投影、非法输入先拒、同名普通JSON/伪MIME/损坏/大小、内部引用唯一及两个实际Store严格wire、重开和重复导入。证据见[独审Rust](../verification/attachments93/independent-rust01/README.md)。shared target84 两代理均已释放。
 
-全部测试隔离合成Store/媒体/OS，禁止读取或修改真实Notes/用户DB/麦克风；不启动/停止/安装/读取任何Android设备或旧AVD，原约13秒未保存录音现场完全保持。最终通过后只打Mac31（新artifact目录），保留Mac30/Android21，并独审动态input/ZIP/内嵌前端/JXA/实际entitlement和strict signature。无新增用户permission需求，授权沿用。
+独立菜单DOM02自然0，6/6通过、含清理14.091秒：真实React/Tiptap的四类右键、真实新笔记FileChooser插入后的移除/Undo/Redo、键盘/信息/Esc、四角和缺坐标回退、owner切换、保存框期间迟到export拒绝。原DOM01定位/目标方法问题与独立真实Undo失败保留。Undo合并历史的产品缺陷由closeHistory修复；作者导入fixture末尾atom在Undo后由既有TrailingNode补标准空段，另记录全部原节点/属性还原及唯一允许尾段，不以漏附件为成功。见[独审DOM](../verification/attachments93/independent-dom/README.md)。
 
-独立菜单fixture已冻结123d460f+7cbe4f03，待精确UIfreeze；覆盖四类型、移除Undo/Redo、键盘/信息/Esc/视口、owner失效及迟到picker。所有首失败保留，source-only不等同runtime。当前原Mac30派生包/Android21保持。
+接下来完成作者扩展实际App DOM、正常浅色卡片菜单截图和typecheck/Vite/生产调试排除，收档完整源身份后给Mac31构建准入。只打新artifacts/attachments93，不覆盖Mac30/Android21。不同代理只读核对动态产品输入、ZIP、内嵌前端/JXA、真实entitlement和strict signature；目前尚无Mac31，不提前声称交付完成。
 
-用户最新补充：正常来源附件照常导入，只取消应用额外插入的记录类可见卡；同名普通JSON必须显示。作者backend066→129已root合入8c4d1190→53872301，作者32/1ignored及独审四fixture均通过；独审84已释放。菜单首freeze d365425d+geometry诊断6b8b2829，作者dom01/02/03定位失败，疑普通Event无clientX导致NaN样式；拟finite fallback+显式MouseEvent窄修。独审DOM01中keyboard/info/Esc、owner关闭、迟到picker拒export已通过；clamp同失败，四类型1px目标点击和Undo setup同历史组需修测试方法再判产品。尚无Mac31。
+全部数据为隔离合成Store/文件/媒体，OS来源与对话框为合成边界。不读真实Notes/用户数据库/麦克风，不操作任何Android设备或AVD，原约13秒未保存录音现场完全保留。原生来源附件导出/完整像素与设备运行不由DOM结果代证。主线未跟踪output/imagegen为既有内容，保持不动。
