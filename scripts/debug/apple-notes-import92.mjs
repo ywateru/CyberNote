@@ -535,6 +535,7 @@ try {
       {
         passed: !failure,
         frontendHead,
+        rendererErrors: runtimes.flatMap(rt => rt.errors),
         frontendSources,
         frontendSourcesUnchanged: (await Promise.all(Object.entries(frontendSources).map(async ([path, digest]) => hash(await readFile(resolve(root, path))) === digest))).every(Boolean),
         checks,

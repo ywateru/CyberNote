@@ -67,9 +67,6 @@ export function AttachmentMenuProvider({
   const [saving, setSaving] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null),
     panel = useRef<HTMLElement>(null);
-  useLayoutEffect(() => {
-    onOverlay(!!menu || !!info || saving !== null);
-  }, [menu, info, saving, onOverlay]);
   const current = useRef({ scope, permission, onError });
   current.current = { scope, permission, onError };
   const valid = (value: { request: AttachmentMenuRequest; scope: string }) =>
@@ -220,6 +217,9 @@ export function AttachmentMenuProvider({
         if (valid(menu)) current.current.onError(cause);
       });
   };
+  useLayoutEffect(() => {
+    onOverlay(!!menu || !!info || saving !== null);
+  }, [menu, info, saving, onOverlay]);
   const access = menu ? permission(menu.request) : null;
   const ready = !!menu?.request.source;
   const reason = menu?.request.temporary
@@ -234,7 +234,13 @@ export function AttachmentMenuProvider({
       {menu &&
         createPortal(
           <div
-            ref={root}
+            ref={element => {
+              root.current = element;
+              if (element) {
+                element.style.left = `${Math.max(8, Math.min(menu.request.point.x, innerWidth - element.offsetWidth - 8))}px`;
+                element.style.top = `${Math.max(topInset + 8, Math.min(menu.request.point.y, innerHeight - element.offsetHeight - 8))}px`;
+              }
+            }}
             className="popover attachment-context-menu"
             role="menu"
             aria-label="附件菜单"
