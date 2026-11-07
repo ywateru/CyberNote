@@ -161,6 +161,10 @@ impl Store {
         let root = self.root.canonicalize()?;
         let notes = self.notes()?;
         let attachments = self.attachments()?;
+        let internal = notes
+            .iter()
+            .flat_map(|n| self.internal_import_ids(n, &attachments))
+            .collect::<std::collections::HashSet<_>>();
         let mut warnings = vec![];
         let mut rows = BTreeMap::new();
         // Missing DB sidecars remain visible, even with no physical directory entry.
@@ -246,7 +250,11 @@ impl Store {
             } else {
                 None
             };
-            row.attachment = Some(AttachmentInfo {
+            let is_internal = internal.contains(&attachment.id);
+            if is_internal {
+                row.category = "import".into();
+            }
+            row.attachment = (!is_internal).then_some(AttachmentInfo {
                 id: attachment.id.clone(),
                 note_id: attachment.note_id,
                 kind: attachment.kind,
@@ -399,6 +407,15 @@ impl Store {
             .ok_or_else(|| err("not_found", "附件不存在"))?;
         if !self.authorized(&attachment.note_id)? {
             return Err(err("access_changed", "备忘录已锁定或删除，请重新解锁"));
+        }
+        if self
+            .internal_import_ids(
+                &self.note(&attachment.note_id)?,
+                std::slice::from_ref(&attachment),
+            )
+            .contains(attachment_id)
+        {
+            return Err(err("internal_attachment", "内部导入记录请通过完整备份导出"));
         }
         let bytes = self.managed_attachment_bytes(&attachment)?;
         Ok((

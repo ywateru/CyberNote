@@ -15,10 +15,10 @@ use std::{
     time::{SystemTime, UNIX_EPOCH},
 };
 use uuid::Uuid;
-#[path = "store/archive.rs"]
-mod archive;
 #[path = "store/apple_import.rs"]
 pub(crate) mod apple_import;
+#[path = "store/archive.rs"]
+mod archive;
 #[path = "store/attachment_operations.rs"]
 mod attachment_operations;
 #[path = "store/data_management.rs"]
@@ -28,10 +28,10 @@ pub(crate) use data_management::{AttachmentExport, DocumentStage};
 mod commits;
 #[path = "store/open.rs"]
 mod open;
-#[path = "store/synchronization.rs"]
-mod synchronization;
 #[path = "store/smart.rs"]
 mod smart;
+#[path = "store/synchronization.rs"]
+mod synchronization;
 pub(crate) use attachment_operations::AttachmentOwner;
 pub(crate) use commits::CommitReceipt;
 pub(crate) use smart::{SmartMembership, SmartQuery};
@@ -264,7 +264,14 @@ impl Store {
         self.committed("note", &n.id, Some(n.revision));
         Ok(())
     }
-    fn visible(&self, mut n: Note) -> Result<Note> {
+    fn visible(&self, n: Note) -> Result<Note> {
+        Ok(self.visible_with_import_ids(n, &self.attachments()?)?.0)
+    }
+    fn visible_with_import_ids(
+        &self,
+        mut n: Note,
+        attachments: &[Attachment],
+    ) -> Result<(Note, std::collections::HashSet<String>)> {
         if n.locked {
             if let Some(k) = self.keys.get(&n.id) {
                 n.document = decrypt(
@@ -277,7 +284,9 @@ impl Store {
                 n.plain_text = doc_text(&n.document);
             }
         }
-        Ok(n)
+        let internal = self.internal_import_ids(&n, attachments);
+        Self::project_import_references(&mut n.document, &internal);
+        Ok((n, internal))
     }
     fn validate_document(&self, doc: &Value, note: &Note) -> Result<()> {
         archive::validate_live_document(doc, note, &self.attachments()?)
@@ -330,16 +339,36 @@ impl Store {
         Ok(json!({"title":n.title,"text":n.plain_text}))
     }
     pub fn workspace(&self) -> Result<Value> {
-        let ns = self
+        let attachments = self.attachments()?;
+        let projected = self
             .notes()?
             .into_iter()
-            .map(|n| self.visible(n))
+            .map(|n| self.visible_with_import_ids(n, &attachments))
+            .collect::<Result<Vec<_>>>()?;
+        let internal = projected
+            .iter()
+            .flat_map(|(_, ids)| ids.iter().cloned())
+            .collect::<std::collections::HashSet<_>>();
+        let ns = projected
+            .into_iter()
+            .map(|(note, _)| note)
+            .collect::<Vec<_>>();
+        let attachments = attachments
+            .into_iter()
+            .map(|a| {
+                let hidden = internal.contains(&a.id);
+                let mut value = serde_json::to_value(a)?;
+                if hidden {
+                    value["internal"] = json!(true);
+                }
+                Ok(value)
+            })
             .collect::<Result<Vec<_>>>()?;
         let settings: String =
             self.db
                 .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
         Ok(
-            json!({"folders":self.folders()?,"notes":ns,"attachments":self.attachments()?,"settings":serde_json::from_str::<Value>(&settings)?}),
+            json!({"folders":self.folders()?,"notes":ns,"attachments":attachments,"settings":serde_json::from_str::<Value>(&settings)?}),
         )
     }
     pub fn action(&mut self, a: Value) -> Result<Value> {
@@ -365,7 +394,7 @@ impl Store {
                 if baseline >= copy.revision {
                     return Err(err("invalid", "当前没有可另存的旧版本冲突"));
                 }
-                let document = a
+                let mut document = a
                     .get("document")
                     .ok_or_else(|| err("invalid", "缺少文档"))?
                     .clone();
@@ -443,6 +472,8 @@ impl Store {
                     .get("document")
                     .ok_or_else(|| err("invalid", "缺少文档"))?
                     .clone();
+                self.validate_document(&document, &n)?;
+                self.preserve_import_references(&mut document, &n)?;
                 self.validate_document(&document, &n)?;
                 let text = doc_text(&document);
                 n.title = text
@@ -923,15 +954,27 @@ mod tests {
         let created = store.action(json!({"type":"createNote"})).unwrap();
         let id = created["id"].as_str().unwrap().to_string();
         let doc = tag_document();
-        let saved = store.action(json!({"type":"saveNote","id":id,"revision":0,"document":doc})).unwrap();
+        let saved = store
+            .action(json!({"type":"saveNote","id":id,"revision":0,"document":doc}))
+            .unwrap();
         assert_eq!(saved["plainText"], "#UI对照");
         let before = serde_json::to_value(store.note(&id).unwrap()).unwrap();
         let mut bad = doc.clone();
         bad["content"][0]["content"][1]["text"] = json!("坏跨度");
-        assert!(store.action(json!({"type":"saveNote","id":id,"revision":1,"document":bad})).is_err());
-        assert_eq!(serde_json::to_value(store.note(&id).unwrap()).unwrap(), before);
-        assert!(store.action(json!({"type":"lockNote","id":id,"password":"abcdef"})).is_err());
-        assert_eq!(serde_json::to_value(store.note(&id).unwrap()).unwrap(), before);
+        assert!(store
+            .action(json!({"type":"saveNote","id":id,"revision":1,"document":bad}))
+            .is_err());
+        assert_eq!(
+            serde_json::to_value(store.note(&id).unwrap()).unwrap(),
+            before
+        );
+        assert!(store
+            .action(json!({"type":"lockNote","id":id,"password":"abcdef"}))
+            .is_err());
+        assert_eq!(
+            serde_json::to_value(store.note(&id).unwrap()).unwrap(),
+            before
+        );
         let archive = temp.path().join("tag.notesbackup");
         store.export_archive(&archive).unwrap();
         drop(store);
@@ -950,18 +993,38 @@ mod tests {
         assert!(target.import_archive(&bad_archive).is_err());
         assert_eq!(target.workspace().unwrap(), target_before);
         drop(target);
-        assert_eq!(Store::open(temp.path().join("target")).unwrap().workspace().unwrap(), target_before);
+        assert_eq!(
+            Store::open(temp.path().join("target"))
+                .unwrap()
+                .workspace()
+                .unwrap(),
+            target_before
+        );
         // Old unmarked # text still uses the ordinary lock/encryption path.
         let mut store = Store::open(&root).unwrap();
         let plain = json!({"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"ordinary #UI对照"}]}]});
-        store.action(json!({"type":"saveNote","id":id,"revision":1,"document":plain})).unwrap();
-        store.action(json!({"type":"lockNote","id":id,"password":"abcdef"})).unwrap();
-        store.action(json!({"type":"unlockNote","id":id,"password":"abcdef"})).unwrap();
-        assert_eq!(store.visible(store.note(&id).unwrap()).unwrap().document, plain);
+        store
+            .action(json!({"type":"saveNote","id":id,"revision":1,"document":plain}))
+            .unwrap();
+        store
+            .action(json!({"type":"lockNote","id":id,"password":"abcdef"}))
+            .unwrap();
+        store
+            .action(json!({"type":"unlockNote","id":id,"password":"abcdef"}))
+            .unwrap();
+        assert_eq!(
+            store.visible(store.note(&id).unwrap()).unwrap().document,
+            plain
+        );
         let sealed_before = serde_json::to_value(store.note(&id).unwrap()).unwrap();
         let rev = store.note(&id).unwrap().revision;
-        assert!(store.action(json!({"type":"saveNote","id":id,"revision":rev,"document":doc})).is_err());
-        assert_eq!(serde_json::to_value(store.note(&id).unwrap()).unwrap(), sealed_before);
+        assert!(store
+            .action(json!({"type":"saveNote","id":id,"revision":rev,"document":doc}))
+            .is_err());
+        assert_eq!(
+            serde_json::to_value(store.note(&id).unwrap()).unwrap(),
+            sealed_before
+        );
         store.action(json!({"type":"closeLocks"})).unwrap();
         assert!(store.keys.is_empty());
         assert!(!store.workspace().unwrap().to_string().contains("noteTag"));
@@ -973,9 +1036,14 @@ mod tests {
         n.sealed = Some(encrypt(&doc, &key, &salt).unwrap());
         store.put_note(&n).unwrap();
         let poisoned = serde_json::to_value(store.note(&id).unwrap()).unwrap();
-        assert!(store.action(json!({"type":"unlockNote","id":id,"password":"abcdef"})).is_err());
+        assert!(store
+            .action(json!({"type":"unlockNote","id":id,"password":"abcdef"}))
+            .is_err());
         assert!(store.keys.is_empty());
-        assert_eq!(serde_json::to_value(store.note(&id).unwrap()).unwrap(), poisoned);
+        assert_eq!(
+            serde_json::to_value(store.note(&id).unwrap()).unwrap(),
+            poisoned
+        );
         store.keys.insert(id.clone(), key);
         assert!(store.visible(store.note(&id).unwrap()).is_err());
         store.keys.clear();
@@ -985,7 +1053,9 @@ mod tests {
         let mut imported = Store::open(temp.path().join("opaque-target")).unwrap();
         imported.import_archive(&opaque).unwrap();
         assert_eq!(imported.note(&id).unwrap().sealed, n.sealed);
-        assert!(imported.action(json!({"type":"unlockNote","id":id,"password":"abcdef"})).is_err());
+        assert!(imported
+            .action(json!({"type":"unlockNote","id":id,"password":"abcdef"}))
+            .is_err());
         assert!(imported.keys.is_empty());
     }
     #[test]

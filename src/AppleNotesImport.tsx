@@ -413,8 +413,7 @@ export default function AppleNotesImport({
                 </div>
               </details>
               <p>
-                原始 HTML 与来源信息保存在每条笔记末尾的“Apple
-                备忘录原始记录.json”文件，可随完整备份导出。
+                原始 HTML 与来源信息作为内部导入记录保留，随完整备份导出，不显示为笔记附件。
               </p>
             </>
           )}

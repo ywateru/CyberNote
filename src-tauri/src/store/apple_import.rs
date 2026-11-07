@@ -1,4 +1,4 @@
-//! Copy-only source import. Raw records are ordinary managed file attachments,
+//! Copy-only source import. Raw records are internal managed file attachments,
 //! so byte accounting, backups, owner remapping, purge and synchronization use
 //! the existing attachment lifecycle. There is no independent success ledger.
 use super::*;
@@ -223,6 +223,9 @@ fn prepare_one(source: SourceNote) -> Result<PreparedNote> {
         size: raw.len() as u64,
         recorded_at: None,
     };
+    // The serialized reference is an internal ownership edge required by the
+    // existing strict backup/sync format. Store::visible projects it out before
+    // any editor or user attachment surface receives this note.
     let mut document = document;
     document["content"].as_array_mut().unwrap().push(json!({"type":"attachment","attrs":{"id":raw_id,"kind":"file","name":raw_attachment.display_name}}));
     files.insert(raw_attachment.id.clone(), B64.encode(raw));
@@ -287,6 +290,71 @@ pub(crate) fn prepare(notes: Vec<SourceNote>) -> Result<PreparedBatch> {
     Ok(batch)
 }
 impl Store {
+    /// Verify only candidates actually owned by this note. The declared size
+    /// bounds IO before opening a file; filename alone never identifies a record.
+    pub(super) fn internal_import_ids(
+        &self,
+        note: &Note,
+        attachments: &[Attachment],
+    ) -> HashSet<String> {
+        attachments
+            .iter()
+            .filter(|a| {
+                a.note_id == note.id
+                    && a.kind == "file"
+                    && a.mime == RAW_MIME
+                    && a.size <= 16 * 1024 * 1024
+                    && self
+                        .managed_attachment_bytes(a)
+                        .ok()
+                        .and_then(|b| serde_json::from_slice::<RawRecord>(&b).ok())
+                        .is_some_and(|raw| raw.valid())
+            })
+            .map(|a| a.id.clone())
+            .collect()
+    }
+    pub(super) fn project_import_references(document: &mut Value, ids: &HashSet<String>) {
+        if let Some(children) = document.get_mut("content").and_then(Value::as_array_mut) {
+            children.retain(|n| {
+                !(n["type"] == "attachment"
+                    && n["attrs"]["id"].as_str().is_some_and(|id| ids.contains(id)))
+            });
+            for child in children {
+                Self::project_import_references(child, ids);
+            }
+        }
+    }
+    /// Restore existing private ownership edges after validating the public
+    /// editor document. No new record or user-visible Undo transaction is made.
+    pub(super) fn preserve_import_references(
+        &self,
+        document: &mut Value,
+        original: &Note,
+    ) -> Result<()> {
+        let ids = self.internal_import_ids(original, &self.attachments()?);
+        if ids.is_empty() {
+            return Ok(());
+        }
+        fn collect(value: &Value, ids: &HashSet<String>, found: &mut BTreeMap<String, Value>) {
+            if value["type"] == "attachment" {
+                if let Some(id) = value["attrs"]["id"].as_str().filter(|id| ids.contains(*id)) {
+                    found.insert(id.into(), value.clone());
+                }
+            }
+            if let Some(children) = value["content"].as_array() {
+                for child in children {
+                    collect(child, ids, found);
+                }
+            }
+        }
+        let mut references = BTreeMap::new();
+        collect(&original.document, &ids, &mut references);
+        Self::project_import_references(document, &ids);
+        if let Some(children) = document.get_mut("content").and_then(Value::as_array_mut) {
+            children.extend(references.into_values());
+        }
+        Ok(())
+    }
     /// Called only after Session authorization. The source worker has already
     /// completed and owns no source capabilities by this publication boundary.
     pub(crate) fn append_apple_notes(

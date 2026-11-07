@@ -43,6 +43,8 @@ export interface Note {
   sealed?: unknown;
 }
 export interface Attachment {
+  /** Derived public metadata; never persisted or part of the sync wire. */
+  internal?: boolean;
   id: string;
   noteId: string;
   kind: string;

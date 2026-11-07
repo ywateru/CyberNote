@@ -1,4 +1,135 @@
 use super::*;
+#[test]
+fn internal_records_are_projected_and_preserved_across_public_save() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut store = Store::open(temp.path()).unwrap();
+    let result = store
+        .append_apple_notes(prepare(vec![source()]).unwrap())
+        .unwrap();
+    let nid = result[0].note_id.as_ref().unwrap();
+    let before = store.note(nid).unwrap();
+    let raw = store
+        .attachments()
+        .unwrap()
+        .into_iter()
+        .find(|a| a.mime == RAW_MIME)
+        .unwrap();
+    let workspace = store.workspace().unwrap();
+    assert!(workspace["attachments"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|a| a["id"] == raw.id && a["internal"] == true));
+    let public = store.visible(before.clone()).unwrap();
+    assert!(!public.document.to_string().contains(&raw.id));
+    assert_eq!(
+        (public.created_at, public.updated_at, public.revision),
+        (before.created_at, before.updated_at, before.revision)
+    );
+    assert_eq!(store.note(nid).unwrap().document, before.document);
+    let saved = store.action(json!({"type":"saveNote","id":nid,"revision":before.revision,"document":public.document})).unwrap();
+    assert!(!saved["document"].to_string().contains(&raw.id));
+    assert_eq!(
+        store
+            .note(nid)
+            .unwrap()
+            .document
+            .to_string()
+            .matches(&raw.id)
+            .count(),
+        1
+    );
+    assert_eq!(
+        store
+            .export_attachment(&raw.id, &temp.path().join("raw.json"))
+            .unwrap_err()
+            .code,
+        "internal_attachment"
+    );
+    let inventory = serde_json::to_value(store.data_management().unwrap()).unwrap();
+    assert!(inventory["files"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|f| f["category"] == "import" && f.get("attachment").is_none()));
+    assert_eq!(store.action(json!({"type":"saveNote","id":nid,"revision":before.revision,"document":public.document})).unwrap_err().code, "conflict");
+    drop(store);
+    let mut store = Store::open(temp.path()).unwrap();
+    assert!(!store
+        .visible(store.note(nid).unwrap())
+        .unwrap()
+        .document
+        .to_string()
+        .contains(&raw.id));
+    assert_eq!(
+        store
+            .append_apple_notes(prepare(vec![source()]).unwrap())
+            .unwrap()[0]
+            .status,
+        "existing"
+    );
+}
+#[test]
+fn invalid_or_replaced_record_is_never_hidden_by_name_or_mime() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut store = Store::open(temp.path()).unwrap();
+    let result = store
+        .append_apple_notes(prepare(vec![source()]).unwrap())
+        .unwrap();
+    let nid = result[0].note_id.as_ref().unwrap();
+    let raw = store
+        .attachments()
+        .unwrap()
+        .into_iter()
+        .find(|a| a.mime == RAW_MIME)
+        .unwrap();
+    let path = store.attachment_path(&raw.relative_path).unwrap();
+    let original = fs::read(&path).unwrap();
+    let mut corrupt = original.clone();
+    corrupt[0] = b'!';
+    fs::write(&path, &corrupt).unwrap();
+    assert!(store
+        .visible(store.note(nid).unwrap())
+        .unwrap()
+        .document
+        .to_string()
+        .contains(&raw.id));
+    fs::write(&path, &original).unwrap();
+    assert!(!store
+        .visible(store.note(nid).unwrap())
+        .unwrap()
+        .document
+        .to_string()
+        .contains(&raw.id));
+    fs::write(&path, b"{}").unwrap();
+    assert!(store
+        .visible(store.note(nid).unwrap())
+        .unwrap()
+        .document
+        .to_string()
+        .contains(&raw.id));
+    fs::remove_file(&path).unwrap();
+    assert!(store
+        .visible(store.note(nid).unwrap())
+        .unwrap()
+        .document
+        .to_string()
+        .contains(&raw.id));
+    let mut same = source();
+    same.id = "another-note".into();
+    same.attachments[0].name = "Apple 备忘录原始记录.json".into();
+    same.attachments[0].mime = "application/json".into();
+    let result = store
+        .append_apple_notes(prepare(vec![same]).unwrap())
+        .unwrap();
+    let other = store
+        .visible(store.note(result[0].note_id.as_ref().unwrap()).unwrap())
+        .unwrap();
+    assert!(other
+        .document
+        .to_string()
+        .contains("Apple 备忘录原始记录.json"));
+}
 fn source() -> SourceNote {
     SourceNote{id:"synthetic-note-stable".into(),folders:vec![SourceFolder{id:"synthetic-account".into(),name:"测试账户".into()},SourceFolder{id:"synthetic-folder".into(),name:"测试目录".into()}],title:"合成富文本".into(),html:"<h1>合成标题</h1><p><b>粗体</b> <i>斜体</i> <a href='https://example.test'>链接</a></p><ul data-type='taskList'><li data-checked='true'>已完成</li></ul><table><tr><td>A</td><td>B</td></tr></table><img src='cid:synthetic-cid'>".into(),plain_text:"合成标题 粗体 斜体 链接 已完成 A B".into(),created_at_ms:1000,updated_at_ms:2000,status:"ok".into(),attachments:vec![SourceAttachment{id:"synthetic-image".into(),cid:"synthetic-cid".into(),name:"合成图片.png".into(),mime:"image/png".into(),status:"ok".into(),bytes:vec![1,2,3,4]}]}
 }

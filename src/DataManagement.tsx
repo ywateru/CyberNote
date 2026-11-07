@@ -334,7 +334,7 @@ export default function DataManagement({
           {file.attachment
             ? kinds[file.attachment.kind] || file.attachment.kind
             : file.category === "import"
-              ? "导入记录"
+              ? "内部导入记录"
               : file.category === "database"
                 ? "数据库"
                 : ["wal", "shm"].includes(file.category)

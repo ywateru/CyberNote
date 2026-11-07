@@ -779,7 +779,7 @@ function App() {
         return false;
       if (
         ["audio", "image", "file", "video"].includes(filter) &&
-        !ws.attachments.some((a) => a.noteId === n.id && a.kind === filter)
+        !ws.attachments.some((a) => !a.internal && a.noteId === n.id && a.kind === filter)
       )
         return false;
       return true;
@@ -5979,7 +5979,7 @@ function App() {
               }).format(n.updatedAt);
               const previewText =
                 n.plainText.split("\n").slice(1).filter(Boolean).join(" ") ||
-                (ws.attachments.some((a) => a.noteId === n.id)
+                (ws.attachments.some((a) => !a.internal && a.noteId === n.id)
                   ? "附件"
                   : "无更多文本");
               const highlightQuery = !mobile ? query : "";
@@ -6667,10 +6667,10 @@ function App() {
               <>
                 <h2>附件</h2>
                 <div className="attachment-browser">
-                  {ws.attachments.filter((a) => a.noteId === current?.id)
+                  {ws.attachments.filter((a) => !a.internal && a.noteId === current?.id)
                     .length ? (
                     ws.attachments
-                      .filter((a) => a.noteId === current?.id)
+                      .filter((a) => !a.internal && a.noteId === current?.id)
                       .map((a) => (
                         <div key={a.id}>
                           <FileText size={24} />
