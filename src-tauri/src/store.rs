@@ -394,7 +394,7 @@ impl Store {
                 if baseline >= copy.revision {
                     return Err(err("invalid", "当前没有可另存的旧版本冲突"));
                 }
-                let mut document = a
+                let document = a
                     .get("document")
                     .ok_or_else(|| err("invalid", "缺少文档"))?
                     .clone();
@@ -468,7 +468,7 @@ impl Store {
                 if n.revision != rev {
                     return Err(err("conflict", "备忘录已更改，请重新打开后重试"));
                 }
-                let document = a
+                let mut document = a
                     .get("document")
                     .ok_or_else(|| err("invalid", "缺少文档"))?
                     .clone();

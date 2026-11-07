@@ -314,13 +314,21 @@ impl Store {
             .collect()
     }
     pub(super) fn project_import_references(document: &mut Value, ids: &HashSet<String>) {
+        let block_required = matches!(
+            document["type"].as_str(),
+            Some("doc" | "blockquote" | "tableCell" | "tableHeader")
+        );
         if let Some(children) = document.get_mut("content").and_then(Value::as_array_mut) {
+            let had_children = !children.is_empty();
             children.retain(|n| {
                 !(n["type"] == "attachment"
                     && n["attrs"]["id"].as_str().is_some_and(|id| ids.contains(id)))
             });
-            for child in children {
+            for child in children.iter_mut() {
                 Self::project_import_references(child, ids);
+            }
+            if had_children && children.is_empty() && block_required {
+                children.push(json!({"type":"paragraph"}));
             }
         }
     }

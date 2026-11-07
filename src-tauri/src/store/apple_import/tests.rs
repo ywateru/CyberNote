@@ -39,10 +39,12 @@ fn internal_records_are_projected_and_preserved_across_public_save() {
             .count(),
         1
     );
+    let destination = tempfile::tempdir().unwrap();
     assert_eq!(
         store
-            .export_attachment(&raw.id, &temp.path().join("raw.json"))
-            .unwrap_err()
+            .export_attachment(&raw.id, &destination.path().join("raw.json"))
+            .err()
+            .unwrap()
             .code,
         "internal_attachment"
     );
@@ -129,6 +131,101 @@ fn invalid_or_replaced_record_is_never_hidden_by_name_or_mime() {
         .document
         .to_string()
         .contains("Apple 备忘录原始记录.json"));
+}
+#[test]
+fn old_raw_only_and_nested_documents_project_to_valid_empty_blocks() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut store = Store::open(temp.path()).unwrap();
+    let result = store
+        .append_apple_notes(prepare(vec![source()]).unwrap())
+        .unwrap();
+    let nid = result[0].note_id.as_ref().unwrap();
+    let mut note = store.note(nid).unwrap();
+    let raw = note.document["content"]
+        .as_array()
+        .unwrap()
+        .last()
+        .unwrap()
+        .clone();
+    for document in [
+        json!({"type":"doc","content":[raw.clone()]}),
+        json!({"type":"doc","content":[{"type":"blockquote","content":[raw.clone()]}]}),
+    ] {
+        note.document = document;
+        store.validate_document(&note.document, &note).unwrap();
+        store.put_note(&note).unwrap();
+        let visible = store.visible(note.clone()).unwrap();
+        store.validate_document(&visible.document, &note).unwrap();
+        assert!(visible.document.to_string().contains("paragraph"));
+        store.action(json!({"type":"saveNote","id":nid,"revision":note.revision,"document":visible.document})).unwrap();
+        note = store.note(nid).unwrap();
+    }
+}
+#[test]
+fn strict_existing_wire_carries_internal_record_through_real_store_publication() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut first = Store::open(temp.path().join("first")).unwrap();
+    let workspace = first.sync_enable(None).unwrap().workspace_id;
+    let mut peer = Store::open(temp.path().join("peer")).unwrap();
+    peer.sync_enable(Some(&workspace)).unwrap();
+    let result = first
+        .append_apple_notes(prepare(vec![source()]).unwrap())
+        .unwrap();
+    let nid = result[0].note_id.as_ref().unwrap();
+    let public = first.visible(first.note(nid).unwrap()).unwrap();
+    first.action(json!({"type":"saveNote","id":nid,"revision":public.revision,"document":public.document})).unwrap();
+    first.sync_flush().unwrap();
+    let wires = first
+        .sync_inventory()
+        .unwrap()
+        .iter()
+        .map(|v| first.sync_version(&v.digest).unwrap())
+        .collect::<Vec<_>>();
+    let wire = wires.iter().find(|w| w.entity_id == *nid).unwrap();
+    let payload = wire.payload.as_ref().unwrap();
+    let attachments = payload["attachments"].as_array().unwrap();
+    assert_eq!(attachments.len(), 2);
+    for a in attachments {
+        assert!(payload["note"]["document"]
+            .to_string()
+            .contains(a["id"].as_str().unwrap()));
+    }
+    for wire in &wires {
+        for blob in first.sync_required_blobs(wire).unwrap() {
+            peer.sync_store_blob(
+                &blob.hash,
+                blob.size,
+                fs::File::open(first.sync_blob_path(&blob.hash).unwrap()).unwrap(),
+            )
+            .unwrap();
+        }
+    }
+    peer.sync_receive(wires).unwrap();
+    let verified = peer
+        .sync_media_snapshot(&[], false)
+        .unwrap()
+        .verify()
+        .unwrap();
+    peer.sync_with_media(verified, |s| s.sync_apply_pending())
+        .unwrap();
+    let raw = peer
+        .attachments()
+        .unwrap()
+        .into_iter()
+        .find(|a| a.mime == RAW_MIME)
+        .unwrap();
+    assert!(!peer
+        .visible(peer.note(nid).unwrap())
+        .unwrap()
+        .document
+        .to_string()
+        .contains(&raw.id));
+    assert_eq!(
+        peer.append_apple_notes(prepare(vec![source()]).unwrap())
+            .unwrap()[0]
+            .status,
+        "existing"
+    );
 }
 fn source() -> SourceNote {
     SourceNote{id:"synthetic-note-stable".into(),folders:vec![SourceFolder{id:"synthetic-account".into(),name:"测试账户".into()},SourceFolder{id:"synthetic-folder".into(),name:"测试目录".into()}],title:"合成富文本".into(),html:"<h1>合成标题</h1><p><b>粗体</b> <i>斜体</i> <a href='https://example.test'>链接</a></p><ul data-type='taskList'><li data-checked='true'>已完成</li></ul><table><tr><td>A</td><td>B</td></tr></table><img src='cid:synthetic-cid'>".into(),plain_text:"合成标题 粗体 斜体 链接 已完成 A B".into(),created_at_ms:1000,updated_at_ms:2000,status:"ok".into(),attachments:vec![SourceAttachment{id:"synthetic-image".into(),cid:"synthetic-cid".into(),name:"合成图片.png".into(),mime:"image/png".into(),status:"ok".into(),bytes:vec![1,2,3,4]}]}
@@ -336,17 +433,18 @@ fn raw_records_count_in_inventory_and_no_raw_source_ids_are_persisted() {
     let inventory = serde_json::to_value(store.data_management().unwrap()).unwrap();
     assert_eq!(inventory["counts"]["attachments"], 2);
     assert_eq!(
-        inventory["totals"]["attachmentBytes"],
+        inventory["totals"]["declaredAttachmentBytes"],
         attachments.iter().map(|a| a.size).sum::<u64>()
     );
     let row = inventory["files"]
         .as_array()
         .unwrap()
         .iter()
-        .find(|r| r["attachment"]["id"] == raw.id)
+        .find(|r| r["relativePath"] == format!("attachments/{}", raw.relative_path))
         .unwrap();
-    assert_eq!(row["attachment"]["referenced"], true);
-    assert_eq!(row["attachment"]["exportable"], true);
+    assert_eq!(row["category"], "import");
+    assert!(row.get("attachment").is_none());
+    assert_eq!(row["size"], raw.size);
 }
 #[test]
 fn corrupt_or_missing_raw_record_cannot_suppress_a_copy() {
