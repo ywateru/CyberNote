@@ -1,5 +1,7 @@
 // Real production Editor and App in an isolated offline headless browser.
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -13,6 +15,43 @@ const { chromium } = await import(
 );
 const output = resolve(process.argv[2] || "artifacts/tags-browser");
 await mkdir(output, { recursive: true });
+const sourcePaths = execFileSync("git", [
+  "ls-files",
+  "-z",
+  "--",
+  "src",
+  "package.json",
+  "pnpm-lock.yaml",
+  "scripts/check-tags-browser.mjs",
+  "scripts/check-editor-keyboard94-cases.mjs",
+])
+  .toString()
+  .split("\0")
+  .filter(Boolean)
+  .sort();
+const sources = async () =>
+  Object.fromEntries(
+    await Promise.all(
+      sourcePaths.map(async (path) => [
+        path,
+        createHash("sha256")
+          .update(await readFile(path))
+          .digest("hex"),
+      ]),
+    ),
+  );
+const sourceBefore = await sources();
+await writeFile(
+  resolve(output, "source-before.json"),
+  JSON.stringify(
+    {
+      head: execFileSync("git", ["rev-parse", "HEAD"]).toString().trim(),
+      files: sourceBefore,
+    },
+    null,
+    2,
+  ) + "\n",
+);
 const entry = `
 import React from 'react';import{createRoot}from'react-dom/client';import NoteEditor from '/src/Editor.tsx';import App from '/src/App.tsx';import{documentTags,projectTags,tagSelectionAfterAccess}from'/src/note-tags.ts';import{documentText}from'/src/types.ts';import{action}from'/src/bridge.ts';import'/src/style.css';
 window.tags={documentTags,projectTags,tagSelectionAfterAccess,documentText};window.action=action;window.changes=[];window.editors={};
@@ -585,4 +624,21 @@ try {
   await browser?.close();
   await new Promise((done) => server.close(done));
   await vite.close();
+  const sourceAfter = await sources();
+  await writeFile(
+    resolve(output, "source-after.json"),
+    JSON.stringify(
+      {
+        unchanged: JSON.stringify(sourceBefore) === JSON.stringify(sourceAfter),
+        files: sourceAfter,
+      },
+      null,
+      2,
+    ) + "\n",
+  );
+  assert.deepEqual(
+    sourceAfter,
+    sourceBefore,
+    "Frozen source changed during browser run",
+  );
 }
