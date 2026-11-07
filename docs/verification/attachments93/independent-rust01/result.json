@@ -1,0 +1,23 @@
+{
+  "head": "7cbe4f03605fa00fad6bc22ffd8109dc219d3f2b",
+  "sourceOriginalSha256": "2143619f5c04e62ca3bd2438f691a9c341d0482d316ee32836430b8a7704d17b",
+  "fixtureSha256": "affb4686e9106ed78f5d5ba53651db7447591e0bbbc0b37a5e3ffc98a0b11f61",
+  "target": "/private/tmp/apple-notes-sync84-target",
+  "fixtureModuleOnly": true,
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--offline",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "independent93_",
+    "--",
+    "--test-threads=1"
+  ],
+  "sourceWithTestHookSha256": "b8fb1955301bcc7b11063b5785d9625719431b0f7ced604515ff74d2d62f8bf2",
+  "exitCode": 0,
+  "sourceRestoredSha256": "2143619f5c04e62ca3bd2438f691a9c341d0482d316ee32836430b8a7704d17b",
+  "sourceRestored": true,
+  "wallSeconds": 42.568
+}
