@@ -10,3 +10,9 @@
 - 当前仓库未配置 remote，本次是本地整合，没有远程推送。
 
 验证范围为分支祖先/产品字节相同、文档链接和交付入口；产品测试不为纯快进与文档整理重复执行。相关产品最终检查见[Mac32](../editor94/DELIVERY.md)、[Mac31](../attachments93/DELIVERY.md)及[Android21](../sync91/DELIVERY.md)。
+
+## 独立只读复核
+
+另一代理对整理提交 `4cfac8a6944ce9f497f47c28af539031c4388675` 复核 PASS：main 包含 task/app-001 的 `a87633cfa7b2937f6c4ae39e73ede67e1e2e0b0e`，task→main 只有上述四个文档变化。动态341个产品路径、Git blob/文件模式和工作目录字节均等于任务分支及 Mac32 批准源码 `3684205a`。
+
+历史 README 正文除相对 Markdown 链接加 `../../` 外与原文件逐字相同，头部原 SHA 准确；plan 历史正文未改。当前 README、plan 新头与整合说明的33个链接均存在，Mac32 ZIP/App、Android21 APK及交付记录入口正确。remote 为空；tracked 工作区干净，原 output/、tmp/保持。独审未切换分支、修改 main、运行产品测试/编译/设备或处理旧 worktree。本段为核验后的文档补记，没有新增产品变化。
