@@ -1,5 +1,7 @@
 # APP94 当前状态
 
+当前结论：本轮交付完成。[Mac32 包与验证范围](../verification/editor94/DELIVERY.md)。下方实施阶段记录保留原时点，最后“最终状态”为恢复入口；不再等待本任务的实现、验证或出包。
+
 当前任务为[标签回车提交与正文 Tab94](tasks/app-editor-keyboard94.md)，用户最新反馈这两处键盘缺陷；APP93/Mac31 已完成，不重做附件/同步/Android旧验收，无新goal。
 
 root负责文档/合入；原作者 /root/attachments93_develop 使用原tree /private/tmp/apple-notes-attachments93-develop 的新分支codex/editor94-develop，独审 /root/attachments93_review 在原reviewtree新分支codex/editor94-review。两者基于主线d09a26e8，架构规格随后bf40620d。docs-sprint明确允许并要求作者实现/不同代理审查，不写main产品。
@@ -13,3 +15,11 @@ root负责文档/合入；原作者 /root/attachments93_develop 使用原tree /p
 最终源码独审已通过：7f1dd4df→a625a898→ca73d1ff→630d9b8c完整链，最后一项将高优先输入plugin与Mark schema分开，保持原mark rank/归档manifest，不改Rust schema。独审source04自然0/17通过/49.866秒含清理，boundary03自然0/5通过，全部86 tracked src哈希前后相同且clean、无renderer错误；独立schema96通过。原source02中间cherry状态不作准入，cleanup卡住后仅owned node/esbuild SIGTERM exit143，证据待完整收档，不冒称natural0。
 
 主线完整作者链已合入31865357→3684205a。批准精确产品source3684205aab7b837ee917ec25fde2c9a0cdd93c24，Mac32 driver67cdade4已合入443a75a6。作者获准在最终相关检查均自然0后独占84从main出包，输出artifacts/editor94和docs/verification/editor94/mac-build；reviewer最终只读核包已预准入，但必须等待manifest status pass和最终ZIP，不核半包。尚未有Mac32交付结论。
+
+## 最终状态
+
+APP94作者final630d9b8c仅两src变化已完整合主线3684205a；final作者15/15、原标签回归27/27、schema96、typecheck/build/production排除均自然0，前后源hash一致，证据d0fc7f0d已main合入a9a4e1ff。独审完整17+5、schema96和每轮原失败/无效中间态均归档，主线deefef6b；源码无未解blocking。
+
+Mac32实际entry a9a4e1ff1898cf689269044b1d0d7c8d51654c79、approvedProductHead3684205aab7b837ee917ec25fde2c9a0cdd93c24。341动态产品输入before/build/package完全相等，build自然0/43.655秒。ZIP artifacts/editor94/备忘录-Mac32.zip为7,048,136字节，SHA256 d898df41ea066d0fc95cae1962f41dc733e9694f0fe3466307a47cf17109af71。原raw strict1/无entitlement保留，派生显式源权限/Info准确、strict0。全部构建日志已main e7371adc。
+
+不同代理最终只读核包自然0/13.047403秒，341输入、完整ZIP字节/权限、完整内嵌前端/JXA、签名外Mach-O字节、实际entitlement/Info/derived strict0均通过，见final-independent。未运行App或使用设备/用户数据，旧Mac31/Android21保留。作者已释放target84，确认无cargo/rustc；不遗留测试运行。root既有未跟踪output/和tmp/保持不动。真实原生IME、手机设备和原生按键送达未由受控DOM/核包替代，交付记录明确范围。

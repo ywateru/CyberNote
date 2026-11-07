@@ -1,6 +1,6 @@
 # APP94 标签回车提交与正文 Tab
 
-状态：in-progress。基线 APP93/Mac31，用户反馈 `#标签` 仅空格可提交、Enter 不提交；正文 Tab 跳焦点而未插入制表符。
+状态：completed（本轮编辑器修复、定向源码/浏览器验证及 Mac32 准确出包范围）。[交付记录](../../verification/editor94/DELIVERY.md)。基线 APP93/Mac31，用户反馈 `#标签` 仅空格可提交、Enter 不提交；正文 Tab 跳焦点而未插入制表符。
 
 ## 契约
 

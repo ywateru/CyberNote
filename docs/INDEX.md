@@ -1,4 +1,4 @@
-2026-11-07 当前：[标签回车与正文 Tab94](plan/tasks/app-editor-keyboard94.md)进行中。修复标签 Enter 提交并保留正常换段、普通正文 Tab 插入制表符；保留 IME、表格/列表优先及正文外焦点边界。作者实现/不同代理独审，Mac31 保持，验证后构建 Mac32。
+2026-11-07 当前：[标签回车与正文 Tab94](verification/editor94/DELIVERY.md)已完成本轮修复交付，Mac32 准确构建并独立核包通过。标签 Enter 提交后正常换段，普通正文 Tab 插入制表符，保留表格/列表优先、组字与非文本选区保护。作者15项/既有27项、独审17+5项、schema96及生产入口排除通过；341动态产品输入与完整嵌入资源/实际签名独核通过。原失败、受控IME/设备/原生运行限制见[交付记录](verification/editor94/DELIVERY.md)，Mac31/Android21保留。
 
 2026-11-07：[导入记录内部化与附件右键菜单93](verification/attachments93/DELIVERY.md)完成本轮交付，Mac31 已构建并独立核包。正常图片/录音/PDF/文件继续导入，额外来源记录不再显示为正文卡片；普通同名 JSON 不误隐藏。统一菜单支持预览/播放、保存、信息和可撤销移除；作者43项实际 App/Store、独审4项Store/6项DOM及341动态产品输入/完整嵌入资源/最终签名均通过。[UI契约](ui/attachment-context-menu.md)、[恢复状态](plan/attachment-context93-state.md)及真实来源/设备/像素限制分别记账，Mac30/Android21保留。
 
