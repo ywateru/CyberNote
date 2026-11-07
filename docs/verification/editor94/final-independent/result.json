@@ -1,0 +1,654 @@
+{
+  "status": "PASS-MAC32-PACKAGE-IDENTITY-AND-ENTITLEMENTS",
+  "scope": "read-only actual package identity; no build/sign/launch/Notes/device/user data",
+  "mac": {
+    "status": "PASS-PACKAGE-IDENTITY",
+    "manifest": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/editor94/mac-build/result.json",
+    "source": {
+      "head": "a9a4e1ff1898cf689269044b1d0d7c8d51654c79",
+      "approvedProductHead": "3684205aab7b837ee917ec25fde2c9a0cdd93c24",
+      "count": 341,
+      "dynamicCompletePathsCurrentGitAndBeforeAfterMatch": true,
+      "originalCompileReused": false
+    },
+    "archive": {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录-Mac32.zip",
+      "bytes": 7048136,
+      "sha256": "d898df41ea066d0fc95cae1962f41dc733e9694f0fe3466307a47cf17109af71"
+    },
+    "onlySigningPathsChanged": [
+      "Contents/MacOS/notes-clone",
+      "Contents/_CodeSignature/CodeResources"
+    ],
+    "zipFileEntries": [
+      {
+        "path": "备忘录.app/Contents/_CodeSignature/CodeResources",
+        "bytes": 2200,
+        "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+      },
+      {
+        "path": "备忘录.app/Contents/MacOS/notes-clone",
+        "bytes": 21800352,
+        "sha256": "cbcffe267fe599adc6495b4b5d917f9673b5ed8084382bad22831d4dd9691afe"
+      },
+      {
+        "path": "__MACOSX/备忘录.app/Contents/MacOS/._notes-clone",
+        "bytes": 163,
+        "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+      },
+      {
+        "path": "__MACOSX/备忘录.app/Contents/._MacOS",
+        "bytes": 163,
+        "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+      },
+      {
+        "path": "备忘录.app/Contents/Info.plist",
+        "bytes": 1347,
+        "sha256": "2dfac1203bf3225205e85d38cd06127c6297dddbf64e4aff3c873de92ec7b5b7"
+      },
+      {
+        "path": "__MACOSX/备忘录.app/Contents/._Info.plist",
+        "bytes": 163,
+        "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+      },
+      {
+        "path": "__MACOSX/备忘录.app/._Contents",
+        "bytes": 163,
+        "sha256": "dcc6b886300d062bb67c5d0b05a269013ced06231aaa4450c3edfd19926d283d"
+      }
+    ],
+    "info": {
+      "CFBundleDevelopmentRegion": "English",
+      "CFBundleDisplayName": "备忘录",
+      "CFBundleExecutable": "notes-clone",
+      "CFBundleIdentifier": "com.local.notesclone",
+      "CFBundleInfoDictionaryVersion": "6.0",
+      "CFBundleName": "备忘录",
+      "CFBundlePackageType": "APPL",
+      "CFBundleShortVersionString": "0.1.0",
+      "CFBundleVersion": "0.1.0",
+      "CSResourcesFileMapped": true,
+      "LSApplicationCategoryType": "public.app-category.productivity",
+      "LSMinimumSystemVersion": "12.0",
+      "LSRequiresCarbon": true,
+      "NSHighResolutionCapable": true,
+      "NSMicrophoneUsageDescription": "将录音添加到本地备忘录。",
+      "NSCameraUsageDescription": "拍摄照片添加到本地备忘录。",
+      "NSAppleEventsUsageDescription": "只读系统备忘录并将所选笔记及附件复制到本应用；不会修改原笔记。"
+    },
+    "machOSectionContentsUnchanged": [
+      {
+        "segment": "__TEXT",
+        "section": "__text",
+        "length": 10469308,
+        "zeroFill": false,
+        "sha256": "07c3a6ac98b0cd28e6024572655a2fe0a21034b4ea8d4dcae0882033d15249c7"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__text_startup",
+        "length": 428,
+        "zeroFill": false,
+        "sha256": "ebd7611fc1d65a663b42ec71c484ce77359f099339a34e241ec0170323cb02bb"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__stubs",
+        "length": 3828,
+        "zeroFill": false,
+        "sha256": "fd094ce44d33374b13dd36e3453aeb8682c16a080eba32faab52c0e3baa845bf"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_stubs",
+        "length": 10304,
+        "zeroFill": false,
+        "sha256": "31e7f0a88eb4268253be512a5b92ae42953ae52459899bcac83612a38ca09c58"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__init_offsets",
+        "length": 4,
+        "zeroFill": false,
+        "sha256": "a099e0398e43228def4142ef0fa65da21ff34a4173885787ce826e5a4c542986"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methlist",
+        "length": 2684,
+        "zeroFill": false,
+        "sha256": "559f10f2f568508b83c4d682ea53248b9bafc008b1a7ab01116d612943af93f7"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__gcc_except_tab",
+        "length": 686092,
+        "zeroFill": false,
+        "sha256": "427ccedca30b5cca3d1a04c7c100022167782193e29bca714206d57e17eb61ea"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__const",
+        "length": 2440496,
+        "zeroFill": false,
+        "sha256": "26f48df74a100491789b652be57737372abe5c291e7abf18b6487c3a1bb50393"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__cstring",
+        "length": 153780,
+        "zeroFill": false,
+        "sha256": "a212ef5668eed4d64be4fce82869aeb635935835abb1d563a3d2516e3983377a"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methname",
+        "length": 8616,
+        "zeroFill": false,
+        "sha256": "dc3b7fbe44ae5ef41bc84dc1d262fa6fa2c892d703ea1aa88469d259710c1238"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_classname",
+        "length": 341,
+        "zeroFill": false,
+        "sha256": "43a9a3821d13a899f1de34e5dc1547ded6e222210d1b0483bb5de659591ec09c"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methtype",
+        "length": 1760,
+        "zeroFill": false,
+        "sha256": "fbecd86d87d86b3aba9d99f18a06ffd24b173f62ccdc9fa187b9738d194aa6d6"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__ustring",
+        "length": 696,
+        "zeroFill": false,
+        "sha256": "7db0b61fb9b5ef9ee8f12b1e772a3ff09ffed6f02e4414be42e1adbdd1b72576"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__unwind_info",
+        "length": 236952,
+        "zeroFill": false,
+        "sha256": "d27e86932e557a79c613536f3f2fdba6d5f97431f7e83c87d22a68f1670a3845"
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__eh_frame",
+        "length": 1276292,
+        "zeroFill": false,
+        "sha256": "0b5c2328de0b2d722b28a96259153b3f2607d5abca2de410871bc473e7725d55"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__got",
+        "length": 3440,
+        "zeroFill": false,
+        "sha256": "36d416eb2f89df9124f9d1a3406a5126371e350ec4f46f0b4d843abfe72e15a6"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__const",
+        "length": 525208,
+        "zeroFill": false,
+        "sha256": "7797b18aa3d744028d62bfe0542d7e6b75c29544e0defde4ca6fda15519048a0"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__cfstring",
+        "length": 6336,
+        "zeroFill": false,
+        "sha256": "c940855d873e2ca54c6369fc90ed9d08b58f9b885c780c6221221daddc39db47"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_classlist",
+        "length": 104,
+        "zeroFill": false,
+        "sha256": "6da49d00a66a7d65a4f683222e240001eea1ed0f3ec539d9a07575285341069c"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_protolist",
+        "length": 32,
+        "zeroFill": false,
+        "sha256": "8db68d564979564f9a032cbf6a5711e3e0ae0e566db613efdb4531ee4deb55fc"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_imageinfo",
+        "length": 8,
+        "zeroFill": false,
+        "sha256": "94039884329d3732c577860f40d0dfdf883ff89dac332f87216e692c08892fa2"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_arraydata",
+        "length": 1096,
+        "zeroFill": false,
+        "sha256": "979a288bf4afc3ce84d798d32f17ece6ddb5ffd8889b8cf3240e52005e6a54f0"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_arrayobj",
+        "length": 552,
+        "zeroFill": false,
+        "sha256": "a0e39a3668698c19953cf39d3023437f7d1b2b0934b59efc1fb742bd4ac156fb"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_dictobj",
+        "length": 320,
+        "zeroFill": false,
+        "sha256": "cb611d50dd0dfe2388478d4ced8de78f0ac7a0f5b9e361ed4fc53390e1c2ac7f"
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_intobj",
+        "length": 24,
+        "zeroFill": false,
+        "sha256": "f6fa407a46223a768cb4bc4ba5b1c3b59b244825945aa1ef64f0f3c3087f142b"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_const",
+        "length": 5008,
+        "zeroFill": false,
+        "sha256": "7d9bc1c98fd737c6f3666b722849dd5a914a4db82d71cf74cf952777e2e880b2"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_selrefs",
+        "length": 3040,
+        "zeroFill": false,
+        "sha256": "a9d0ee28a305f8afdf87172513a2fb1077a68d19eb86bc90182f20f6074f14a3"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_classrefs",
+        "length": 408,
+        "zeroFill": false,
+        "sha256": "9b93d3b4783b1900fd7a1db15c6711a8ba813379297dee3e433e423afe52b3d2"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_superrefs",
+        "length": 64,
+        "zeroFill": false,
+        "sha256": "13edf60403e38803edba7e5aa2431cac99a7d290241302b8f68be40de83a2fa8"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_ivar",
+        "length": 208,
+        "zeroFill": false,
+        "sha256": "adf595189f589bc91ed38c362a39c7157161023dbb0edae11c03f664d220cf5f"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_data",
+        "length": 1040,
+        "zeroFill": false,
+        "sha256": "62c2a633d5821c7e02d3c88c4ade8a4bd44e9a2a99779293f5a6b614d99cd29b"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__data",
+        "length": 19032,
+        "zeroFill": false,
+        "sha256": "305212c1ef8771b3ca95164ef15531bd8b036decaf7c2c4b6a529b7c190f5494"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_vars",
+        "length": 456,
+        "zeroFill": false,
+        "sha256": "d7023671f1e7bd1016b05328144e11f117552669f424eab309082d32d45635e4"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_data",
+        "length": 120,
+        "zeroFill": false,
+        "sha256": "3a33ad708d05f1861b37727ba14351ddbaa5570fa8b5273198bb4e627898cc5f"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_bss",
+        "length": 576,
+        "zeroFill": true,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__common",
+        "length": 10488,
+        "zeroFill": true,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "segment": "__DATA",
+        "section": "__bss",
+        "length": 5744,
+        "zeroFill": true,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "completeMachOPrefixSigningDelta": {
+      "signature": {
+        "dataOffset": 21739152,
+        "originalBytes": 170000,
+        "derivedBytes": 61200
+      },
+      "onlyMaskedLoadCommandFields": [
+        [
+          3312,
+          8,
+          "__LINKEDIT.vmsize"
+        ],
+        [
+          3328,
+          8,
+          "__LINKEDIT.filesize"
+        ],
+        [
+          5276,
+          4,
+          "LC_CODE_SIGNATURE.datasize"
+        ]
+      ],
+      "entirePrefixBytesCompared": 21739152,
+      "normalizedPrefixSha256": "51b4dd0c362cf748bb70ef10cfe6481e643d33079f4daec8933b37ebc2b89614",
+      "nonSignatureContentEqual": true
+    },
+    "embeddedFrontend": [
+      {
+        "path": "assets/index-C1SpZGPk.css",
+        "bytes": 102224,
+        "sha256": "dc8a359b4d50c7b1a4baae7c556b9df00ff7456e8ee2257716f901c9ceaab33d",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "assets/index-DTFAG6gg.js",
+        "bytes": 1108463,
+        "sha256": "b48e80fe03b089150e660bb8ccc13ee9cf7c19ce92d5904bc901e1833ea4a2ff",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "assets/native-recording-access-DJ4dM4QT.js",
+        "bytes": 1018,
+        "sha256": "6afd2b4d576ce7196c3b3ae6a17bbce83ed4e9f1103c1ee16c5ee3cf0b96b5eb",
+        "rawSnapshotEqual": true
+      },
+      {
+        "path": "index.html",
+        "bytes": 478,
+        "sha256": "55a50ebbabfe89b1613f07b6e0c280812b4024b4bdb588cf88d32834990e8952",
+        "rawSnapshotEqual": false,
+        "completeOrderedHTMLTokensEqual": true,
+        "tokens": [
+          [
+            "decl",
+            "doctype html"
+          ],
+          [
+            "start",
+            "html",
+            [
+              [
+                "lang",
+                "zh-CN"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "head",
+            []
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "charset",
+                "UTF-8"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "content",
+                "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+              ],
+              [
+                "name",
+                "viewport"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "meta",
+            [
+              [
+                "content",
+                "#f2f2f7"
+              ],
+              [
+                "name",
+                "theme-color"
+              ]
+            ]
+          ],
+          [
+            "start",
+            "title",
+            []
+          ],
+          [
+            "data",
+            "备忘录"
+          ],
+          [
+            "end",
+            "title"
+          ],
+          [
+            "start",
+            "script",
+            [
+              [
+                "crossorigin",
+                ""
+              ],
+              [
+                "src",
+                "/assets/index-DTFAG6gg.js"
+              ],
+              [
+                "type",
+                "module"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "script"
+          ],
+          [
+            "start",
+            "link",
+            [
+              [
+                "crossorigin",
+                ""
+              ],
+              [
+                "href",
+                "/assets/index-C1SpZGPk.css"
+              ],
+              [
+                "rel",
+                "stylesheet"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "head"
+          ],
+          [
+            "start",
+            "body",
+            []
+          ],
+          [
+            "start",
+            "div",
+            [
+              [
+                "id",
+                "root"
+              ]
+            ]
+          ],
+          [
+            "end",
+            "div"
+          ],
+          [
+            "end",
+            "body"
+          ],
+          [
+            "end",
+            "html"
+          ]
+        ]
+      }
+    ]
+  },
+  "actualSignedEntitlements": {
+    "original": null,
+    "derived": {
+      "com.apple.security.automation.apple-events": true
+    }
+  },
+  "actualInfoUsageSourceEqual": true,
+  "fixedNativeJXAScriptSHA256": "6d05ee7ec69b0ac5509cfdb29fc335ae6e7c005415bbb6fe83eb715ab274843d",
+  "nativeSyntheticSourceCommandAbsent": true,
+  "limits": [
+    "Dynamic source/before-after, ZIP, actual code signature and complete embedded assets; not hermetic reproducibility",
+    "Ad-hoc local signature, no notarization or packaged TCC/runtime/native attachment export acceptance",
+    "Original bundler signature/entitlements reported faithfully; derived strictverify must pass"
+  ],
+  "commands": [
+    {
+      "label": "mac-original-extract",
+      "argv": [
+        "node",
+        "/private/tmp/apple-notes-attachments93-review/scripts/native/extract-editor94-assets.mjs",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/editor94/mac-build/result.json",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/mac-original.app/Contents/MacOS/notes-clone",
+        "/private/tmp/apple-notes-editor94-review-final-independent01/extracted/mac-original"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.068737,
+      "stdoutSha256": "46d7841ed7a7bb54a31a2bd4f09014e7fe6d0d2ce527767b9757ed81e44cddfe",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "mac-derived-extract",
+      "argv": [
+        "node",
+        "/private/tmp/apple-notes-attachments93-review/scripts/native/extract-editor94-assets.mjs",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/editor94/mac-build/result.json",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录.app/Contents/MacOS/notes-clone",
+        "/private/tmp/apple-notes-editor94-review-final-independent01/extracted/mac-derived"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.065297,
+      "stdoutSha256": "7469ac96d0b2c440adfc1490f654e196cf8f01c7117d692d115873d2cd8e9aee",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "original-strict",
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/mac-original.app"
+      ],
+      "naturalExitCode": 1,
+      "wallSeconds": 0.029507,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "4b0107db1f6b13d3ded959bdc1932bda8a253a28243af182222007512a96de13"
+    },
+    {
+      "label": "derived-strict",
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录.app"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.016745,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "69c0154b2d84f2941bfd9033816f821606fc2452d5eec6b765635267ea1cf5de"
+    },
+    {
+      "label": "derived-signature",
+      "argv": [
+        "/usr/bin/codesign",
+        "-dv",
+        "--verbose=4",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录.app"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.005958,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "47480516170ae16865dfe7c05376086df58db7b6fef8aa8742ec26dfbfc91351"
+    },
+    {
+      "label": "original-entitlements",
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        ":-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/mac-original.app"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.00595,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "6576d80e3d39b102a7b028f4678c2289376b673d614deb7ed74f9de88fcd3c48"
+    },
+    {
+      "label": "derived-entitlements",
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--entitlements",
+        ":-",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录.app"
+      ],
+      "naturalExitCode": 0,
+      "wallSeconds": 0.005372,
+      "stdoutSha256": "9511674cb80035d75385e59b0e936a724daf7965266e375c1bc1b1c189264ea8",
+      "stderrSha256": "b5d333dc2d6bba6cdb9b89a8fe9b3d8ee37c5b8c5ecc8e11bd548a7f2c0a374a"
+    }
+  ],
+  "completeWallSeconds": 13.047403
+}

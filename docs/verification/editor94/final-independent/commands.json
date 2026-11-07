@@ -1,0 +1,101 @@
+[
+  {
+    "label": "mac-original-extract",
+    "argv": [
+      "node",
+      "/private/tmp/apple-notes-attachments93-review/scripts/native/extract-editor94-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/editor94/mac-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/mac-original.app/Contents/MacOS/notes-clone",
+      "/private/tmp/apple-notes-editor94-review-final-independent01/extracted/mac-original"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.068737,
+    "stdoutSha256": "46d7841ed7a7bb54a31a2bd4f09014e7fe6d0d2ce527767b9757ed81e44cddfe",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "mac-derived-extract",
+    "argv": [
+      "node",
+      "/private/tmp/apple-notes-attachments93-review/scripts/native/extract-editor94-assets.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/editor94/mac-build/result.json",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录.app/Contents/MacOS/notes-clone",
+      "/private/tmp/apple-notes-editor94-review-final-independent01/extracted/mac-derived"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.065297,
+    "stdoutSha256": "7469ac96d0b2c440adfc1490f654e196cf8f01c7117d692d115873d2cd8e9aee",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "original-strict",
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/mac-original.app"
+    ],
+    "naturalExitCode": 1,
+    "wallSeconds": 0.029507,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "4b0107db1f6b13d3ded959bdc1932bda8a253a28243af182222007512a96de13"
+  },
+  {
+    "label": "derived-strict",
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.016745,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "69c0154b2d84f2941bfd9033816f821606fc2452d5eec6b765635267ea1cf5de"
+  },
+  {
+    "label": "derived-signature",
+    "argv": [
+      "/usr/bin/codesign",
+      "-dv",
+      "--verbose=4",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.005958,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "47480516170ae16865dfe7c05376086df58db7b6fef8aa8742ec26dfbfc91351"
+  },
+  {
+    "label": "original-entitlements",
+    "argv": [
+      "/usr/bin/codesign",
+      "-d",
+      "--entitlements",
+      ":-",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/mac-original.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.00595,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "6576d80e3d39b102a7b028f4678c2289376b673d614deb7ed74f9de88fcd3c48"
+  },
+  {
+    "label": "derived-entitlements",
+    "argv": [
+      "/usr/bin/codesign",
+      "-d",
+      "--entitlements",
+      ":-",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/editor94/备忘录.app"
+    ],
+    "naturalExitCode": 0,
+    "wallSeconds": 0.005372,
+    "stdoutSha256": "9511674cb80035d75385e59b0e936a724daf7965266e375c1bc1b1c189264ea8",
+    "stderrSha256": "b5d333dc2d6bba6cdb9b89a8fe9b3d8ee37c5b8c5ecc8e11bd548a7f2c0a374a"
+  }
+]

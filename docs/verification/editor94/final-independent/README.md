@@ -1,0 +1,15 @@
+# APP94 Mac32 independent final package audit
+
+**PASS-MAC32-PACKAGE-IDENTITY-AND-ENTITLEMENTS**, natural exit 0, 13.047403 seconds. This audit only read the admitted final package, source and build evidence; it did not launch, build, sign, install or access Notes, user data, devices or target84.
+
+Approved integrated main product source: `3684205aab7b837ee917ec25fde2c9a0cdd93c24`. Actual build entry: `a9a4e1ff1898cf689269044b1d0d7c8d51654c79`. All 341 dynamically discovered product paths match current clean source, approved Git, build-entry Git and before/build/packaging inventories. The build driver equals both its build-entry source and captured snapshot. The actual build completed naturally in 43.655 seconds; no original compile reuse or continuation.
+
+ZIP `artifacts/editor94/备忘录-Mac32.zip`: 7,048,136 bytes, SHA-256 `d898df41ea066d0fc95cae1962f41dc733e9694f0fe3466307a47cf17109af71`. Derived executable SHA-256 `cbcffe267fe599adc6495b4b5d917f9673b5ed8084382bad22831d4dd9691afe`.
+
+Every original/derived bundle file and every ZIP entry's full bytes, mode, CRC and safe unique path were verified. The complete frontend asset set was decoded independently from both executables: all non-HTML bytes equal the build snapshot; index.html has identical complete ordered tokens. Exact native JXA bytes match source; debug/synthetic frontend/native source markers are absent. Every Mach-O section and all 21,739,152 bytes before the signature match after masking only three signature size fields. Only the executable signature and CodeResources changed between preserved original and derived bundles.
+
+The derived application passes actual `codesign --verify --deep --strict`; its signed entitlement dictionary exactly equals source (`com.apple.security.automation.apple-events: true`). The preserved original has no entitlement dictionary and strict exit 1, faithfully recorded. Info.plist camera/microphone/Apple Events purposes match source; minimum macOS is 12.0. The final signature is local ad hoc, with TeamIdentifier not set.
+
+`result.json` contains the full results, complete HTML token comparison, Mach-O section/signature deltas and ZIP hashes. `commands.json` and individual stdout/stderr retain actual command exits. `invocation.json` binds source driver, manifest, build logs and exact scripts. Both extracted-result files record the complete decoded resource identities without duplicating frontend payloads. The exact accepted APP93/APP92 audit methods were adapted to APP94 paths and identity, with no fixed input/resource counts.
+
+No package audit attempt failed. Earlier product, runner fixture and cleanup failures remain separately recorded in this feature's independent baseline/first-source/recheck folders. This is package/source/signature identity evidence, not hermetic reproducibility, notarization, native IME/TCC/runtime, native attachment-export UI or device acceptance. The independent source gate is recorded separately as 17 actual-keyboard + 5 boundary + 96 schema cases.

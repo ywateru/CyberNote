@@ -1,0 +1,149 @@
+{
+  "command": [
+    "python3",
+    "scripts/native/audit-editor94-mac.py",
+    "/Users/water/work/2026/Apple-Notes-Clone",
+    "3684205aab7b837ee917ec25fde2c9a0cdd93c24",
+    "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/editor94/mac-build/result.json",
+    "/private/tmp/apple-notes-editor94-review-final-independent01"
+  ],
+  "naturalExitCode": 0,
+  "auditScriptSha256": "952add7bb1a3286c5918c725245dfa971f0291c620e351a98ad0d443b48628b6",
+  "extractorSha256": "4cc3f8387a214fc044a813e0307c4b009ac08cdf73bb39610391b2d6f90c5473",
+  "buildManifestSha256": "bb23ff6da238df73c848acb0c91b116c47c2d5f5e32895a28e1d56c2a75eaefd",
+  "buildDriverSha256": "0e4aec031f58deb2cb298015669de78f70144c1470929f18519b0519962886e0",
+  "buildDriverCurrentBuildEntryAndSnapshotEqual": true,
+  "buildResult": {
+    "name": "mac-build",
+    "command": [
+      "pnpm",
+      "mac:build"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 43.655
+  },
+  "buildLogs": [
+    {
+      "path": "docs/verification/editor94/mac-build/archive.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/archive.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/copy-derived.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/copy-derived.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/copy-frontend.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/copy-frontend.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/copy-original.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/copy-original.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/entitlements-derived.stderr.log",
+      "bytes": 200,
+      "sha256": "b5d333dc2d6bba6cdb9b89a8fe9b3d8ee37c5b8c5ecc8e11bd548a7f2c0a374a"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/entitlements-derived.stdout.log",
+      "bytes": 244,
+      "sha256": "9511674cb80035d75385e59b0e936a724daf7965266e375c1bc1b1c189264ea8"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/entitlements-original.stderr.log",
+      "bytes": 203,
+      "sha256": "6576d80e3d39b102a7b028f4678c2289376b673d614deb7ed74f9de88fcd3c48"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/entitlements-original.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/inspect-derived.stderr.log",
+      "bytes": 912,
+      "sha256": "47480516170ae16865dfe7c05376086df58db7b6fef8aa8742ec26dfbfc91351"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/inspect-derived.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/inspect-original.stderr.log",
+      "bytes": 907,
+      "sha256": "b37a2443c8a3548c88018b37fd016b05240b9801736d192b79b0dcd52710d45a"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/inspect-original.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/mac-build.stderr.log",
+      "bytes": 6609,
+      "sha256": "4917157bbbab2b1be7ff6b18997c2802b1759993baa80f2f7efb3ce0e7c7ba75"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/mac-build.stdout.log",
+      "bytes": 664,
+      "sha256": "4f7a7a3a3fd1dc1a2ed216ac9477246ce8c5b9ac3369aeb4ce715fac805b0ad5"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/sign-derived.stderr.log",
+      "bytes": 104,
+      "sha256": "4b22da4e9af11a0543d91346fc3b1db0bc67530c47409af091371cb2e99f35de"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/sign-derived.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/verify-derived.stderr.log",
+      "bytes": 201,
+      "sha256": "69c0154b2d84f2941bfd9033816f821606fc2452d5eec6b765635267ea1cf5de"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/verify-derived.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/verify-original.stderr.log",
+      "bytes": 145,
+      "sha256": "4b0107db1f6b13d3ded959bdc1932bda8a253a28243af182222007512a96de13"
+    },
+    {
+      "path": "docs/verification/editor94/mac-build/verify-original.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "buildLogReview": "Natural release build and application bundle completed; 22 warnings; no compile reuse or continuation. Full original outputs retained in main mac-build evidence.",
+  "noBuildSignLaunchNotesDevicesUserDataOrSharedTarget": true
+}
