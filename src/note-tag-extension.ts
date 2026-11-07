@@ -1,4 +1,4 @@
-import { Mark, mergeAttributes } from "@tiptap/core";
+import { Extension, Mark, mergeAttributes } from "@tiptap/core";
 import { Plugin, PluginKey, type EditorState } from "@tiptap/pm/state";
 import type { Node as PMNode } from "@tiptap/pm/model";
 import type { EditorView } from "@tiptap/pm/view";
@@ -37,8 +37,6 @@ function candidateAt(doc: PMNode, to: number) {
 
 export const NoteTag = Mark.create({
   name: "noteTag",
-  // Observe candidate Enter before the existing list/table/base keymaps.
-  priority: 1100,
   addOptions() {
     return { allowCommit: true };
   },
@@ -66,6 +64,19 @@ export const NoteTag = Mark.create({
       mergeAttributes(rest, { "data-note-tag": name, class: "note-tag" }),
       0,
     ];
+  },
+  addExtensions() {
+    return [NoteTagInput.configure({ allowCommit: this.options.allowCommit })];
+  },
+});
+
+// Input priority is independent of the mark's schema rank, which must remain
+// compatible with archived documents and the Rust schema manifest.
+const NoteTagInput = Extension.create({
+  name: "notesTagInput",
+  priority: 1100,
+  addOptions() {
+    return { allowCommit: true };
   },
   addProseMirrorPlugins() {
     const editor = this.editor;
