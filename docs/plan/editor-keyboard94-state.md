@@ -9,3 +9,7 @@ root负责文档/合入；原作者 /root/attachments93_develop 使用原tree /p
 独审先冻结真实旧Enter/Tab失败，随后对作者精确freeze定向复验。全部数据隔离合成，禁止真实Notes/用户DB/麦克风及任何Android设备/旧AVD操作。原未保存录音继续保留。target84当前自由但使用必须先明确交接，不新建大缓存。通过后以最终main精确source构建新Mac32到artifacts/editor94，保留Mac31；不同代理只读独立核包。未跟踪output/和tmp/为既有内容，root不清理。
 
 实施进展：独审先冻结1df1e329→f3a75fc5→21248135，baseline02自然1/21.999秒，17组12通过/5目标缺陷失败，rendererErrors空；同runner和原失败已main合入51de3663。作者初source7f1dd4df仅改NoteTag及schema，采用同步remaining Enter pipeline+同批append映射真实split（不使用跨事件pending），beforeinput insertParagraph复用pipeline；普通Tab低优先fallback。作者首修复dom02仍失败，定位失败列表命令的noop事务提前消费candidate，窄修进行中。root/独审另发现NodeSelection atom缺TextSelection守卫可能Tab删除，独审保留反例，作者修。尚未合产品源码/打Mac32，不能声称目标已过。
+
+最终源码独审已通过：7f1dd4df→a625a898→ca73d1ff→630d9b8c完整链，最后一项将高优先输入plugin与Mark schema分开，保持原mark rank/归档manifest，不改Rust schema。独审source04自然0/17通过/49.866秒含清理，boundary03自然0/5通过，全部86 tracked src哈希前后相同且clean、无renderer错误；独立schema96通过。原source02中间cherry状态不作准入，cleanup卡住后仅owned node/esbuild SIGTERM exit143，证据待完整收档，不冒称natural0。
+
+主线完整作者链已合入31865357→3684205a。批准精确产品source3684205aab7b837ee917ec25fde2c9a0cdd93c24，Mac32 driver67cdade4已合入443a75a6。作者获准在最终相关检查均自然0后独占84从main出包，输出artifacts/editor94和docs/verification/editor94/mac-build；reviewer最终只读核包已预准入，但必须等待manifest status pass和最终ZIP，不核半包。尚未有Mac32交付结论。
