@@ -433,6 +433,10 @@ try {
   await page.keyboard.press("ArrowDown");
   check("APP93 menu keyboard navigates actual enabled actions", await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).evaluate(n => n === document.activeElement));
   await page.keyboard.press("Escape");
+  await api(page, "settings.update", { settings: { theme: "light" } });
+  await openMenu("file");
+  await page.screenshot({ path: resolve(out, "attachment-file-menu-light.png") });
+  await page.keyboard.press("Escape");
   await chooseFiles(page, [{ name: "合成视频.mp4", mimeType: "video/mp4", buffer: Buffer.from("synthetic media OS boundary") }]);
   await api(page, "app.flush");
   await page.waitForSelector('.attachment-node.video video');
@@ -464,7 +468,7 @@ try {
   await page.evaluate(path => { window.__DEBUG_PLATFORM__.dialogDelay = 600; window.__DEBUG_PLATFORM__.configure({ dialog: { save: [path] } }); }, late);
   await openMenu("file");
   await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).click();
-  await api(page, "note.select", { id: baseline.notes[0].id });
+  await page.locator(`.note-row[data-note-id="${baseline.notes[0].id}"]`).click();
   await new Promise(done => setTimeout(done, 700));
   check("APP93 delayed picker refuses old owner action after navigation", rt.backend.calls.filter(c => c.command === "export_attachment").length === beforeDelayed);
   await page.evaluate(() => { window.__DEBUG_PLATFORM__.dialogDelay = 0; });
