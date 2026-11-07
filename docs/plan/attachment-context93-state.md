@@ -1,0 +1,11 @@
+# APP93 当前交接状态
+
+本轮用户请求：导入不添加可见“Apple备忘录原始记录.json”附件；全部用户附件有右键菜单。最新任务为[APP93](tasks/app-attachment-context93.md)，UI见[附件菜单](../ui/attachment-context-menu.md)。上一轮APP92/Mac30已完成，旧goal为complete，不恢复Android/同步/来源探测。
+
+根主线基线f0c1c29e，规格2af34667→3cf9c257→4d3722e3。作者 `/root/attachments93_develop` tree `/private/tmp/apple-notes-attachments93-develop` branchcodex/attachments93-develop；独审 `/root/attachments93_review` tree `/private/tmp/apple-notes-attachments93-review`。docs-sprint流程：root文档/合入，作者实现，不同代理独审；代码不得main直接写。
+
+内部记录保留既有serialized attachment reference保持严格wire兼容。public正文投影剥除有效RAW_MIME+真实owner记录引用，workspace元数据可带internal:true派生标记供用户表面过滤及lock/conflict能力，标记不进入持久化/wire。saveNote先验证原输入，再合回原owner内部ref，回包与workspace一致。新旧普通卡/附件浏览/含附件指示均不显示raw，数据管理如实计占用。普通同名JSON/坏记录不误隐藏，正常附件导出拒内部raw。备份、重开、去重及两实际Store严格wire/publication必须定向验证。
+
+backend作者冻结06678a98已交独审，未合main；独审source-only发现saveNote mut编译阻塞并已告作者。菜单前端作者实现中。无本轮测试结果、无Mac31。shared target `/private/tmp/apple-notes-sync84-target` 作者排他（已livecheck无其他cargo）；需明确释放后独审才用。复用92真实ReactDOM+Rust transport，不再造框架，不重复广泛旧网络/设备suite。
+
+全部测试隔离合成Store/媒体/OS，禁止读取或修改真实Notes/用户DB/麦克风；不启动/停止/安装/读取任何Android设备或旧AVD，原约13秒未保存录音现场完全保持。最终通过后只打Mac31（新artifact目录），保留Mac30/Android21，并独审动态input/ZIP/内嵌前端/JXA/实际entitlement和strict signature。无新增用户permission需求，授权沿用。
