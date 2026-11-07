@@ -12,7 +12,7 @@ export interface AttachmentOperationResult {
 
 export function documentReferencesAttachment(
   document: JSONContent,
-  attachment: Attachment,
+  attachment: Pick<Attachment, "id" | "kind">,
 ): boolean {
   return (
     (document.type === "attachment" &&

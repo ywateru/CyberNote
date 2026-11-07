@@ -117,7 +117,7 @@ export function ImagePreview({
     setError("");
     try {
       if (
-        (await saveAttachmentOriginal(request.id, request.name)) &&
+        (await saveAttachmentOriginal(request.id, request.name, () => live.current && request.trigger.isConnected)) &&
         live.current
       )
         setNotice("图片已保存");

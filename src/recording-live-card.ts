@@ -36,6 +36,36 @@ export function mountRecordingCard({ editor, bookmark }: RecordingCardTarget) {
   card.setAttribute("role", "group");
   card.setAttribute("aria-label", "进行中的录音");
   card.dataset.recordingLiveCard = "true";
+  card.tabIndex = 0;
+  const contextMenu = (point: { x: number; y: number }) =>
+    window.dispatchEvent(
+      new CustomEvent("attachment-context-request", {
+        detail: {
+          editor,
+          kind: "audio",
+          name: "新录音",
+          trigger: card,
+          point,
+          temporary: true,
+        },
+      }),
+    );
+  card.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    contextMenu({ x: event.clientX, y: event.clientY });
+  });
+  card.addEventListener("keydown", (event) => {
+    if (
+      event.key === "ContextMenu" ||
+      (event.shiftKey && event.key === "F10")
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      const bounds = card.getBoundingClientRect();
+      contextMenu({ x: bounds.left + 12, y: bounds.top + 12 });
+    }
+  });
   const metadata = document.createElement("span");
   metadata.className = "live-recording-metadata";
   const title = document.createElement("strong");

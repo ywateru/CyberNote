@@ -6,7 +6,7 @@ import { mkdir, readFile, writeFile, copyFile, chmod } from "node:fs/promises";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { openRuntime, api, state, idle } from "./runtime.mjs";
-import { tinyPNG } from "./mobile-attachments.mjs";
+import { tinyPNG, chooseFiles } from "./mobile-attachments.mjs";
 const [buildArg, outArg] = process.argv.slice(2);
 if (!buildArg || !outArg)
   throw Error(
@@ -232,6 +232,9 @@ try {
       ).length === 2,
   );
   const rich = ws.notes.find((n) => n.title === "合成富文本");
+  const internal = ws.attachments.filter(a => a.internal);
+  check("APP93 internal records absent from all public note documents", internal.length === 2 && internal.every(a => !JSON.stringify(ws.notes.find(n => n.id === a.noteId).document).includes(a.id)));
+
   check(
     "rich existing Editor schema and original dates retained",
     rich.createdAt === 1000 &&
@@ -336,6 +339,92 @@ try {
       ).snapshot.html.includes("<"),
     ),
   );
+
+  await page.getByRole("button", { name: "关闭设置", exact: true }).click();
+  await api(page, "folder.select", { id: "all" });
+  await api(page, "note.select", { id: rich.id });
+  await page.waitForSelector('.attachment-node.image img');
+  await until("all imported media loaded", () => page.locator('.attachment-node.image img').evaluate(n => n.naturalWidth > 0));
+  check("APP93 actual Editor contains user media only", await page.locator('.attachment-node').count() === 3 && !(await page.locator('.note-document').innerText()).includes('Apple 备忘录原始记录.json'));
+  const menu = page.getByRole("menu", { name: "附件菜单", exact: true });
+  const openMenu = async (kind) => {
+    await page.locator(`.attachment-node.${kind}`).first().dispatchEvent("contextmenu", { clientX: 1277, clientY: 795 });
+    await menu.waitFor();
+  };
+  await openMenu("image");
+  const bounds = await menu.boundingBox();
+  check("APP93 menu clamps bottom and right edges", bounds.x >= 8 && bounds.y >= 8 && bounds.x + bounds.width <= 1272 && bounds.y + bounds.height <= 792);
+  await page.screenshot({ path: resolve(out, "attachment-image-menu-dark.png") });
+  await menu.getByRole("menuitem", { name: "显示信息", exact: true }).click();
+  const information = page.getByRole("dialog", { name: "附件信息", exact: true });
+  await information.waitFor();
+  check("APP93 information uses real authorized original bytes", (await information.innerText()).includes("image/png") && (await information.innerText()).includes(`${tinyPNG.length} 字节`));
+  await page.screenshot({ path: resolve(out, "attachment-information.png") });
+  await information.getByRole("button", { name: "关闭", exact: true }).click();
+  await openMenu("image");
+  await menu.getByRole("menuitem", { name: "预览图片", exact: true }).click();
+  await page.getByRole("dialog", { name: "图片预览", exact: true }).waitFor();
+  check("APP93 image action uses existing preview", await page.locator('.image-preview img').count() === 1);
+  await api(page, "image.close");
+  const menuExport = resolve(out, "menu-original.png");
+  await page.evaluate(path => window.__DEBUG_PLATFORM__.configure({ dialog: { save: [path] } }), menuExport);
+  await openMenu("image");
+  await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).click();
+  await until("menu original export", async () => { try { return hash(await readFile(menuExport)) === hash(tinyPNG); } catch { return false; } });
+  check("APP93 menu exports exact original bytes", hash(await readFile(menuExport)) === hash(tinyPNG));
+  const callsBeforeCancel = rt.backend.calls.filter(c => c.command === "export_attachment").length;
+  await page.evaluate(() => window.__DEBUG_PLATFORM__.configure({ dialog: { save: [null] } }));
+  await openMenu("file");
+  await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).click();
+  await idle(page);
+  check("APP93 cancelled picker publishes no export", rt.backend.calls.filter(c => c.command === "export_attachment").length === callsBeforeCancel);
+  const badPath = resolve(out, "missing-directory", "failure.txt");
+  await page.evaluate(path => window.__DEBUG_PLATFORM__.configure({ dialog: { save: [path] } }), badPath);
+  await openMenu("file");
+  await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).click();
+  await until("export error visible", () => page.locator('.error-banner').count().then(n => n > 0));
+  check("APP93 failed export reports a retryable error", await page.locator('.error-banner').count() === 1);
+  await api(page, "app.dismissError");
+  const beforeRemove = JSON.stringify((await state(page)).editorJSON);
+  await openMenu("file");
+  await menu.getByRole("menuitem", { name: "从备忘录中移除", exact: true }).click();
+  await until("file node removed", () => page.locator('.attachment-node.file').count().then(n => n === 0));
+  await api(page, "app.flush");
+  await api(page, "editor.undo");
+  await api(page, "app.flush");
+  check("APP93 remove and Undo preserve original public document and managed files", JSON.stringify((await state(page)).editorJSON) === beforeRemove && (await state(page)).workspace.attachments.length === 5);
+  await openMenu("audio");
+  check("APP93 saved audio exposes real play capability", await menu.getByRole("menuitem", { name: "播放", exact: true }).isEnabled());
+  await page.screenshot({ path: resolve(out, "attachment-audio-menu-dark.png") });
+  await page.keyboard.press("Escape");
+  check("APP93 Escape restores focused attachment", await page.locator('.attachment-node.audio').evaluate(n => n === document.activeElement));
+  await page.locator('.attachment-node.audio').press("Shift+F10");
+  await menu.waitFor();
+  await page.keyboard.press("ArrowDown");
+  check("APP93 menu keyboard navigates actual enabled actions", await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).evaluate(n => n === document.activeElement));
+  await page.keyboard.press("Escape");
+  await chooseFiles(page, [{ name: "合成视频.mp4", mimeType: "video/mp4", buffer: Buffer.from("synthetic media OS boundary") }]);
+  await api(page, "app.flush");
+  await page.waitForSelector('.attachment-node.video video');
+  await page.locator('.attachment-node.video video').evaluate(n => {
+    let paused = true; Object.defineProperty(n, "paused", { get: () => paused });
+    n.play = async () => { paused = false; n.dispatchEvent(new Event("play")); };
+    n.pause = () => { paused = true; n.dispatchEvent(new Event("pause")); };
+  });
+  await openMenu("video");
+  await menu.getByRole("menuitem", { name: "播放", exact: true }).click();
+  await openMenu("video");
+  check("APP93 video action invokes scoped synthetic playback boundary", await menu.getByRole("menuitem", { name: "暂停", exact: true }).isEnabled());
+  await menu.getByRole("menuitem", { name: "暂停", exact: true }).click();
+  const late = resolve(out, "must-not-export-after-navigation.txt");
+  const beforeDelayed = rt.backend.calls.filter(c => c.command === "export_attachment").length;
+  await page.evaluate(path => { window.__DEBUG_PLATFORM__.dialogDelay = 600; window.__DEBUG_PLATFORM__.configure({ dialog: { save: [path] } }); }, late);
+  await openMenu("file");
+  await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).click();
+  await api(page, "note.select", { id: baseline.notes[0].id });
+  await new Promise(done => setTimeout(done, 700));
+  check("APP93 delayed picker refuses old owner action after navigation", rt.backend.calls.filter(c => c.command === "export_attachment").length === beforeDelayed);
+  await page.evaluate(() => { window.__DEBUG_PLATFORM__.dialogDelay = 0; });
   await page.reload();
   await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1);
   await idle(page);

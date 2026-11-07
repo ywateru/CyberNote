@@ -3415,3 +3415,46 @@ a {
   .mobile .mobile-gallery .note-row-wrap.swiped .swipe-actions { visibility: visible; }
   .mobile .mobile-list-search .search-box { border-radius: 22px; height: 44px; }
 }
+
+/* Shared attachment actions reuse the application's native-like menu material. */
+.attachment-context-menu {
+  position: fixed;
+  z-index: 90;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 80px);
+}
+.attachment-context-menu .menu-row:disabled:hover {
+  background: transparent;
+  color: inherit;
+}
+.attachment-context-menu .menu-row:focus-visible {
+  background: var(--accent);
+  color: white;
+  outline: none;
+}
+.attachment-menu-reason {
+  margin: 5px 10px;
+  font-size: 11px;
+  color: var(--secondary);
+  line-height: 1.4;
+}
+.attachment-info {
+  position: fixed;
+  z-index: 89;
+  right: 20px;
+  bottom: 20px;
+  width: min(360px, calc(100vw - 32px));
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+  padding: 16px;
+  color: var(--ink);
+  background: var(--menu);
+  backdrop-filter: blur(32px);
+  border-radius: 13px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .19);
+}
+.attachment-info header { display: flex; justify-content: space-between; gap: 12px; }
+.attachment-info header button { color: var(--accent); }
+.attachment-info dl { margin-bottom: 0; font-size: 13px; }
+.attachment-info dt { color: var(--secondary); margin-top: 12px; }
+.attachment-info dd { margin: 3px 0 0; overflow-wrap: anywhere; }

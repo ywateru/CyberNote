@@ -20,6 +20,7 @@ import {
   RotateCw,
 } from "lucide-react";
 import { native } from "./bridge";
+import { useAttachmentContextMenu } from "./AttachmentContextMenu";
 import { useImagePreview } from "./ImagePreview";
 import { useAttachmentMedia } from "./use-attachment-media";
 import type { AttachmentMediaSource } from "./attachment-media";
@@ -31,14 +32,103 @@ import {
   initialAudioPlaybackState,
 } from "./audio-playback";
 
-function MediaView({ node }: NodeViewProps) {
+function MediaView({ node, editor, getPos }: NodeViewProps) {
+  const menu = useAttachmentContextMenu();
+  const element = useRef<HTMLDivElement>(null),
+    video = useRef<HTMLVideoElement>(null);
+  const audioControl = useRef<{
+    playing: boolean;
+    available: boolean;
+    toggle: () => void;
+  } | null>(null);
+  const preview = useImagePreview();
   const { id, name, kind } = node.attrs;
   const { media, error, retry } = useAttachmentMedia(id, kind);
   const src = media?.source.src ?? "";
+  const showMenu = (point: { x: number; y: number }) => {
+    const trigger = element.current;
+    if (!trigger) return;
+    const image = trigger.querySelector<HTMLButtonElement>(".image-open");
+    const playback =
+      kind === "audio" && audioControl.current?.available
+        ? audioControl.current
+        : kind === "video" && video.current && src
+          ? {
+              playing: !video.current.paused,
+              toggle: async () => {
+                if (!video.current) return;
+                if (video.current.paused) await video.current.play();
+                else video.current.pause();
+              },
+            }
+          : undefined;
+    menu.open({
+      editor,
+      id,
+      kind,
+      name: media?.name ?? name,
+      trigger,
+      point,
+      source: media?.source,
+      mime: media?.mime,
+      bytes: media?.bytes,
+      recordedAt: media?.recordedAt,
+      error,
+      preview:
+        image && media
+          ? () =>
+              preview.open({
+                id,
+                source: media.source,
+                name: media.name,
+                mime: media.mime,
+                bytes: media.bytes,
+                trigger: image,
+              })
+          : undefined,
+      playback,
+      remove: () => {
+        const position = getPos();
+        if (
+          !editor.isEditable ||
+          editor.isDestroyed ||
+          typeof position !== "number"
+        )
+          return;
+        const current = editor.state.doc.nodeAt(position);
+        if (current?.type.name !== "attachment" || current.attrs.id !== id)
+          return;
+        editor.view.dispatch(
+          editor.state.tr
+            .delete(position, position + current.nodeSize)
+            .scrollIntoView(),
+        );
+        editor.view.focus();
+      },
+    });
+  };
   return (
     <NodeViewWrapper
       className={`attachment-node ${kind}`}
       data-attachment-id={id}
+      ref={element}
+      tabIndex={0}
+      onContextMenu={(event: React.MouseEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        showMenu({ x: event.clientX, y: event.clientY });
+      }}
+      onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (
+          event.key === "ContextMenu" ||
+          (event.shiftKey && event.key === "F10")
+        ) {
+          event.preventDefault();
+          event.stopPropagation();
+          const bounds = event.currentTarget.getBoundingClientRect();
+          showMenu({ x: bounds.left + 12, y: bounds.top + 12 });
+        }
+      }}
       contentEditable={false}
     >
       {error ? (
@@ -61,9 +151,10 @@ function MediaView({ node }: NodeViewProps) {
           name={media?.name ?? name}
           recordedAt={media?.recordedAt}
           source={media?.source}
+          playbackRef={audioControl}
         />
       ) : kind === "video" ? (
-        <video src={src} controls />
+        <video ref={video} src={src} controls />
       ) : (
         <a className="file-card" href={src} download={name}>
           <FileText size={30} />
@@ -77,25 +168,69 @@ function MediaView({ node }: NodeViewProps) {
     </NodeViewWrapper>
   );
 }
-function ImageAttachment({ id, media, name }: { id: string; media: ReturnType<typeof useAttachmentMedia>["media"]; name: string }) {
-  const preview = useImagePreview(), trigger = useRef<HTMLButtonElement>(null);
+function ImageAttachment({
+  id,
+  media,
+  name,
+}: {
+  id: string;
+  media: ReturnType<typeof useAttachmentMedia>["media"];
+  name: string;
+}) {
+  const preview = useImagePreview(),
+    trigger = useRef<HTMLButtonElement>(null);
   const closeSource = preview.closeSource;
-  useLayoutEffect(() => () => { if(media) closeSource(media.source); }, [media?.source, closeSource]);
-  return <div className="image-attachment" onMouseDown={event => event.preventDefault()}>
-    <button ref={trigger} type="button" className="image-open" aria-label={`预览图片 ${name}`} disabled={!media} onClick={() => {if(media&&trigger.current)preview.open({id,source:media.source,name:media.name,mime:media.mime,bytes:media.bytes,trigger:trigger.current});}}><img src={media?.source.src} alt={name} draggable={false}/></button>
-  </div>;
+  useLayoutEffect(
+    () => () => {
+      if (media) closeSource(media.source);
+    },
+    [media?.source, closeSource],
+  );
+  return (
+    <div
+      className="image-attachment"
+      onMouseDown={(event) => event.preventDefault()}
+    >
+      <button
+        ref={trigger}
+        type="button"
+        className="image-open"
+        aria-label={`预览图片 ${name}`}
+        disabled={!media}
+        onClick={() => {
+          if (media && trigger.current)
+            preview.open({
+              id,
+              source: media.source,
+              name: media.name,
+              mime: media.mime,
+              bytes: media.bytes,
+              trigger: trigger.current,
+            });
+        }}
+      >
+        <img src={media?.source.src} alt={name} draggable={false} />
+      </button>
+    </div>
+  );
 }
 type AudioPlayerProps = {
   src: string;
   name: string;
   recordedAt?: number;
   source?: AttachmentMediaSource;
+  playbackRef?: React.RefObject<{
+    playing: boolean;
+    available: boolean;
+    toggle: () => void;
+  } | null>;
 };
 export function AudioPlayer({
   src,
   name,
   recordedAt,
   source,
+  playbackRef,
 }: AudioPlayerProps) {
   // Different attachments get different media elements and controller lifetimes.
   // In-flight events or play promises from the previous source cannot affect it.
@@ -106,6 +241,7 @@ export function AudioPlayer({
       name={name}
       recordedAt={recordedAt}
       source={source}
+      playbackRef={playbackRef}
     />
   );
 }
@@ -114,6 +250,7 @@ function AudioPlayerSession({
   name,
   recordedAt,
   source,
+  playbackRef,
 }: AudioPlayerProps) {
   const audio = useRef<HTMLAudioElement>(null);
   const controller = useRef<ReturnType<typeof createAudioPlayback> | null>(
@@ -133,6 +270,18 @@ function AudioPlayerSession({
     };
     return source ? source.bindController(stop) : stop;
   }, [src, source]);
+  if (playbackRef)
+    playbackRef.current = {
+      playing: playback.playing,
+      available: !!src && !playback.mediaError,
+      toggle: () => controller.current?.toggle(),
+    };
+  useLayoutEffect(
+    () => () => {
+      if (playbackRef) playbackRef.current = null;
+    },
+    [playbackRef],
+  );
   const { playing, duration, time } = playback;
   const error =
     playback.mediaError || playback.playError || playback.durationError;

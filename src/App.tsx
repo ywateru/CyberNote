@@ -1,4 +1,5 @@
 import { isStorageView } from "./storage-usage";
+import { AttachmentMenuProvider, type AttachmentMenuRequest } from "./AttachmentContextMenu";
 import { ImagePreview, ImagePreviewContext, type ImagePreviewRequest } from "./ImagePreview";
 import type { DebugAdapter } from "./debug/protocol";
 import {
@@ -449,6 +450,7 @@ function App() {
   const debugRecordingState = useRef<RecordingViewState | null>(null);
   const separate = new URLSearchParams(location.search).get("note");
   const initialMobile = useRef(window.innerWidth < 700 && !separate).current;
+  const [attachmentOverlay, setAttachmentOverlay] = useState(false);
   const [ws, setWs] = useState<Workspace>(empty);
   const wsRef = useRef(ws);
   wsRef.current = ws;
@@ -4588,7 +4590,7 @@ function App() {
   };
   const previewAuthority = JSON.stringify(accessGate.stamp(noteId || undefined));
   const imagePreviewOpen = !!imagePreview && imagePreview.owner === noteId && imagePreview.authority === previewAuthority && !quitPending && !syncCover && !synchronizing && !accessSuspended.length && !accessGate.state?.operationId && !modal && !folderForm && (!mobile || page === "editor");
-  const contentOverlay = imagePreviewOpen || modal === "preferences";
+  const contentOverlay = imagePreviewOpen || attachmentOverlay || modal === "preferences";
   useLayoutEffect(() => {if(imagePreview && !imagePreviewOpen)setImagePreview(null);}, [imagePreview, imagePreviewOpen]);
   const nativeScope = JSON.stringify([
     folderId,
@@ -4663,7 +4665,7 @@ function App() {
         (blockedNotes.current.has(context.noteId) ||
           accessGate.state?.suspended.includes(context.noteId))) ||
       (!overlay &&
-        (modal || imagePreviewOpen || folderForm || draw || record || ocrOperation.current))
+        (modal || imagePreviewOpen || attachmentOverlay || folderForm || draw || record || ocrOperation.current))
     )
       throw new Error("备忘录或授权状态已改变，请重新执行操作");
     if (
@@ -4977,6 +4979,7 @@ function App() {
       !accessGate.state?.operationId &&
       !modal &&
       !imagePreviewOpen &&
+      !attachmentOverlay &&
       !draw &&
       !record &&
       !ocr;
@@ -5636,6 +5639,21 @@ function App() {
   };
   return (
     <ImagePreviewContext.Provider value={{open:openImagePreview, closeSource:closePreviewSource}}>
+    <AttachmentMenuProvider
+      scope={JSON.stringify([nativeScope, page, previewAuthority, loading, synchronizing, accessSuspended, modal, folderForm, !!draw, quitPending, menu, imagePreviewOpen, networkSync.frozen(noteId)])}
+      topInset={nativeTop ? nativeInfo?.native.reservedTop || 0 : 0}
+      onOverlay={setAttachmentOverlay}
+      onError={fail}
+      permission={(request: AttachmentMenuRequest) => {
+        const allowed = !quitState.current && !loading && !syncCoverRef.current && !synchronizingRef.current && !accessGate.state?.operationId && !accessGate.state?.suspended.length && !networkSync.frozen(noteId) && !modal && !folderForm && !draw && !menu && !imagePreviewOpen && !!noteId && !!current && !current.deletedAt && !!editor && !editor.isDestroyed && request.editor === editor && (!mobile || page === "editor") && (!current.locked || !!accessGate.state?.notes[noteId]?.authorized) && request.trigger.isConnected && !request.trigger.closest('[hidden], [inert], .access-sync');
+        if (request.temporary) return { allowed: !!allowed, writable: false, saved: false };
+        const attachment = wsRef.current.attachments.find(a => a.id === request.id && a.noteId === noteId && !a.internal);
+        const referenced = !!editor && !!request.id && documentReferencesAttachment(editor.getJSON(), { id: request.id, kind: request.kind });
+        const ticket = recordingTicket.current;
+        const ownedRecording = !!ticket && ticket.batch.operationIds.some(id => attachmentSubmissions.current.get(id)?.attachment?.id === request.id);
+        return { allowed: !!allowed && referenced, writable: !!allowed && referenced && !!editor?.isEditable && !ownedRecording, saved: !!attachment && !ownedRecording };
+      }}
+    >
     <div className="recording-layout">
     <div
       ref={appSurface}
@@ -6781,6 +6799,7 @@ function App() {
         </aside>
       )}
     </div>
+    </AttachmentMenuProvider>
     </ImagePreviewContext.Provider>
   );
 }
