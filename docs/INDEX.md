@@ -1,4 +1,6 @@
-2026-11-07 当前：[导入记录内部化与附件右键菜单93](verification/attachments93/DELIVERY.md)完成本轮交付，Mac31 已构建并独立核包。正常图片/录音/PDF/文件继续导入，额外来源记录不再显示为正文卡片；普通同名 JSON 不误隐藏。统一菜单支持预览/播放、保存、信息和可撤销移除；作者43项实际 App/Store、独审4项Store/6项DOM及341动态产品输入/完整嵌入资源/最终签名均通过。[UI契约](ui/attachment-context-menu.md)、[恢复状态](plan/attachment-context93-state.md)及真实来源/设备/像素限制分别记账，Mac30/Android21保留。
+2026-11-07 当前：[标签回车与正文 Tab94](plan/tasks/app-editor-keyboard94.md)进行中。修复标签 Enter 提交并保留正常换段、普通正文 Tab 插入制表符；保留 IME、表格/列表优先及正文外焦点边界。作者实现/不同代理独审，Mac31 保持，验证后构建 Mac32。
+
+2026-11-07：[导入记录内部化与附件右键菜单93](verification/attachments93/DELIVERY.md)完成本轮交付，Mac31 已构建并独立核包。正常图片/录音/PDF/文件继续导入，额外来源记录不再显示为正文卡片；普通同名 JSON 不误隐藏。统一菜单支持预览/播放、保存、信息和可撤销移除；作者43项实际 App/Store、独审4项Store/6项DOM及341动态产品输入/完整嵌入资源/最终签名均通过。[UI契约](ui/attachment-context-menu.md)、[恢复状态](plan/attachment-context93-state.md)及真实来源/设备/像素限制分别记账，Mac30/Android21保留。
 
 2026-11-07：[Mac 系统备忘录复制导入92](verification/apple-notes-import92/DELIVERY.md)本轮交付完成，Mac30已准确构建并由不同代理独立核包。设置→数据可读取、选择并复制系统备忘录，保留源数据；已有内容跳过，变化另建副本，原HTML为独立受管附件。实际源到隔离Store、最终App DOM20项、Rust28项和保留私有快照83项已通过；ZIP/340动态产品输入/内嵌前端/JXA/实际签名声明独审通过。[使用说明](apple-notes-import-usage.md)与[恢复状态](plan/apple-notes-import92-state.md)已更新。真实附件导出失败及系统授权/复杂对象保真边界单列，Mac29/Android21与原设备现场保留。下方为历史阶段记录。
 
