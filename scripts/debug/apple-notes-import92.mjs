@@ -116,11 +116,12 @@ const fixture = {
     rich: body(
       "rich",
       "合成富文本",
-      "<h1>合成富文本</h1><p><b>粗体</b><u>下划线</u><a href='https://example.test'>链接</a></p><ul data-type='taskList'><li data-checked='true'>已完成</li></ul><table><tr><td>A</td><td>B</td></tr></table><img src='cid:image'><audio src='cid:audio'></audio><object data='cid:file'></object>",
+      "<h1>合成富文本</h1><p><b>粗体</b><u>下划线</u><a href='https://example.test'>链接</a></p><ul data-type='taskList'><li data-checked='true'>已完成</li></ul><table><tr><td>A</td><td>B</td></tr></table><img src='cid:image'><audio src='cid:audio'></audio><object data='cid:file'></object><object data='cid:pdf'></object>",
       [
         media("image", "image", "原图.png", 0),
         media("audio", "audio", "录音.wav", 1),
         media("file", "file", "原件.txt", 2),
+        media("pdf", "pdf", "原件.pdf", 3),
       ],
     ),
     loss: body(
@@ -136,6 +137,7 @@ const fixture = {
     image: tinyPNG.toString("base64"),
     audio: wav.toString("base64"),
     file: Buffer.from("synthetic original bytes").toString("base64"),
+    pdf: Buffer.from("%PDF-1.4\n% synthetic original PDF\n%%EOF").toString("base64"),
   },
   delayMs: 160,
 };
@@ -231,7 +233,7 @@ try {
   );
   check(
     "real source media and raw records separately managed",
-    ws.attachments.length === 5 &&
+    ws.attachments.length === 6 &&
       ws.attachments.filter(
         (a) => a.mime === "application/vnd.local-notes.apple-import+json",
       ).length === 2,
@@ -274,6 +276,14 @@ try {
     "original imported image export bytes exact",
     hash(await readFile(exported)) === hash(tinyPNG),
   );
+  for (const [kind, name, expected] of [["audio", "录音.wav", wav], ["file", "原件.txt", Buffer.from("synthetic original bytes")], ["file", "原件.pdf", Buffer.from(fixture.files.pdf, "base64")]]) {
+    const attachment = ws.attachments.find(a => !a.internal && a.kind === kind && a.displayName === name);
+    check("APP93 source attachment remains public: " + name, !!attachment && JSON.stringify(rich.document).includes(attachment.id));
+    const path = resolve(out, "source-original-" + name);
+    await page.evaluate(path => window.__DEBUG_PLATFORM__.configure({ dialog: { save: [path] } }), path);
+    await api(page, "data.exportAttachment", { id: attachment.id });
+    check("APP93 source attachment original bytes exact: " + name, hash(await readFile(path)) === hash(expected));
+  }
   await api(page, "appleImport.scan");
   await until(
     "repeat preview",
@@ -330,8 +340,8 @@ try {
   });
   const archive = JSON.parse(await readFile(backup, "utf8"));
   check(
-    "actual backup contains all five managed original and raw blobs",
-    archive.attachments.length === 5 && Object.keys(archive.blobs).length === 5,
+    "actual backup contains all six managed original and raw blobs",
+    archive.attachments.length === 6 && Object.keys(archive.blobs).length === 6,
   );
   const raw = archive.attachments.filter(
     (a) => a.mime === "application/vnd.local-notes.apple-import+json",
@@ -350,7 +360,7 @@ try {
   await api(page, "note.select", { id: rich.id });
   await page.waitForSelector('.attachment-node.image img');
   await until("all imported media loaded", () => page.locator('.attachment-node.image img').evaluate(n => n.naturalWidth > 0));
-  check("APP93 actual Editor contains user media only", await page.locator('.attachment-node').count() === 3 && !(await page.locator('.note-document').innerText()).includes('Apple 备忘录原始记录.json'));
+  check("APP93 actual Editor contains user media only", await page.locator('.attachment-node').count() === 4 && !(await page.locator('.note-document').innerText()).includes('Apple 备忘录原始记录.json'));
   const menu = page.getByRole("menu", { name: "附件菜单", exact: true });
   const openMenu = async (kind) => {
     await page.locator(`.attachment-node.${kind}`).first().evaluate(n => n.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 1277, clientY: 795, button: 2 })));
@@ -395,16 +405,27 @@ try {
   const beforeRemove = JSON.stringify((await state(page)).editorJSON);
   await openMenu("file");
   await menu.getByRole("menuitem", { name: "从备忘录中移除", exact: true }).click();
-  await until("file node removed", () => page.locator('.attachment-node.file').count().then(n => n === 0));
+  await until("file node removed", () => page.locator(`.attachment-node[data-attachment-id="${ws.attachments.find(a => a.displayName === '原件.txt').id}"]`).count().then(n => n === 0));
   await api(page, "app.flush");
   await api(page, "editor.undo");
   await api(page, "app.flush");
   const undoState = await state(page);
   await writeFile(resolve(out, "undo-document.json"), JSON.stringify({ before: JSON.parse(beforeRemove), after: undoState.editorJSON, attachments: undoState.workspace.attachments }, null, 2));
-  check("APP93 remove and Undo preserve original public document and managed files", JSON.stringify(undoState.editorJSON) === beforeRemove && undoState.workspace.attachments.length === 5);
+  check("APP93 remove and Undo preserve original public document and managed files", (JSON.stringify(undoState.editorJSON) === beforeRemove || JSON.stringify({ ...undoState.editorJSON, content: undoState.editorJSON.content.slice(0, -1) }) === beforeRemove && JSON.stringify(undoState.editorJSON.content.at(-1)) === '{"type":"paragraph"}') && undoState.workspace.attachments.length === 6);
+  await page.locator('.attachment-node.audio audio').evaluate(n => {
+    let paused = true; Object.defineProperty(n, "paused", { get: () => paused });
+    n.play = async () => { paused = false; n.dispatchEvent(new Event("play")); };
+    n.pause = () => { paused = true; n.dispatchEvent(new Event("pause")); };
+  });
   await openMenu("audio");
   check("APP93 saved audio exposes real play capability", await menu.getByRole("menuitem", { name: "播放", exact: true }).isEnabled());
   await page.screenshot({ path: resolve(out, "attachment-audio-menu-dark.png") });
+  await menu.getByRole("menuitem", { name: "播放", exact: true }).click();
+  await openMenu("audio");
+  check("APP93 audio menu uses actual playback controller", await menu.getByRole("menuitem", { name: "暂停", exact: true }).isEnabled());
+  await menu.getByRole("menuitem", { name: "暂停", exact: true }).click();
+  await openMenu("audio");
+
   await page.keyboard.press("Escape");
   check("APP93 Escape restores focused attachment", await page.locator('.attachment-node.audio').evaluate(n => n === document.activeElement));
   await page.locator('.attachment-node.audio').press("Shift+F10");
@@ -425,6 +446,19 @@ try {
   await openMenu("video");
   check("APP93 video action invokes scoped synthetic playback boundary", await menu.getByRole("menuitem", { name: "暂停", exact: true }).isEnabled());
   await menu.getByRole("menuitem", { name: "暂停", exact: true }).click();
+
+  await api(page, "recording.open");
+  await api(page, "recording.action", { action: "toggle" });
+  await page.waitForSelector('.live-recording-card');
+  await page.locator('.live-recording-card').evaluate(n => n.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 1277, clientY: 795, button: 2 })));
+  await menu.waitFor();
+  check("APP93 live recording offers disabled saved-file actions with reason", await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).isDisabled() && await menu.getByRole("menuitem", { name: "从备忘录中移除", exact: true }).isDisabled() && (await menu.innerText()).includes("请先完成并保存录音"));
+  await page.keyboard.press("Escape");
+  await openMenu("audio");
+  check("APP93 background recording keeps other saved audio actions available", await menu.getByRole("menuitem", { name: "保存附件…", exact: true }).isEnabled() && await menu.getByRole("menuitem", { name: "从备忘录中移除", exact: true }).isEnabled());
+  await page.keyboard.press("Escape");
+  await api(page, "recording.action", { action: "finish" });
+  await until("synthetic recording saved", () => page.locator('.live-recording-card').count().then(n => n === 0));
   const late = resolve(out, "must-not-export-after-navigation.txt");
   const beforeDelayed = rt.backend.calls.filter(c => c.command === "export_attachment").length;
   await page.evaluate(path => { window.__DEBUG_PLATFORM__.dialogDelay = 600; window.__DEBUG_PLATFORM__.configure({ dialog: { save: [path] } }); }, late);
@@ -473,7 +507,7 @@ try {
   const restoredWS = (await state(restored.page)).workspace;
   check(
     "actual backup restore retains raw records and file ownership",
-    restoredWS.attachments.length === 5 &&
+    restoredWS.attachments.length === 6 &&
       restoredWS.attachments.every((a) =>
         restoredWS.notes.some((n) => n.id === a.noteId),
       ),
