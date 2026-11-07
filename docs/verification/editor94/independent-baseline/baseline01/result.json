@@ -1,0 +1,89 @@
+{
+  "sourceHead": "1df1e32902e0c498815f552893e10ee9f838d99a",
+  "finalHead": "1df1e32902e0c498815f552893e10ee9f838d99a",
+  "checks": [
+    {
+      "name": "Real Enter commits English_tag-94, keeps newline/save and does not carry tag to next paragraph",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   'English_tag-94'\n- ]\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:55:12\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:48:50"
+    },
+    {
+      "name": "Real Enter commits 中文标签, keeps newline/save and does not carry tag to next paragraph",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   '中文标签'\n- ]\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:55:12\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:48:50"
+    },
+    {
+      "name": "Space still commits the same legal tag through real input",
+      "status": "passed"
+    },
+    {
+      "name": "Illegal/embedded/overlong names stay unmarked after real Enter",
+      "status": "passed"
+    },
+    {
+      "name": "Code block, inline code and link stay unmarked; Enter retains their existing behavior",
+      "status": "passed"
+    },
+    {
+      "name": "Noncollapsed selection is replaced by real Enter without committing a tag",
+      "status": "passed"
+    },
+    {
+      "name": "Chromium actual IME Enter/Tab cannot prematurely mark or insert tab",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nundefined !== '#组字'\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:91:50\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:80:3"
+    },
+    {
+      "name": "Real paragraph Tab inserts literal tab and retains focus/save/Undo",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'ab' !== 'a\\tb'\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:98:12\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:94:48"
+    },
+    {
+      "name": "Real heading Tab inserts literal tab and retains focus/save/Undo",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'ab' !== 'a\\tb'\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:98:12\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:94:48"
+    },
+    {
+      "name": "Real Tab replaces a text selection with one literal tab",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'abcdef' !== 'ab\\tef'\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:104:12\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:102:3"
+    },
+    {
+      "name": "List Tab/Shift+Tab keeps indentation priority over literal insertion",
+      "status": "passed"
+    },
+    {
+      "name": "Table Tab/Shift+Tab navigates cells and last-cell Tab keeps row creation",
+      "status": "passed"
+    },
+    {
+      "name": "Shift/Control/Meta/Alt Tab do not write ordinary text",
+      "status": "passed"
+    },
+    {
+      "name": "Noneditable actual Editor rejects Enter and Tab mutations",
+      "status": "passed"
+    },
+    {
+      "name": "Tab outside the body retains native focus navigation and document bytes",
+      "status": "failed",
+      "error": "locator.focus: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByPlaceholder('搜索')\u001b[22m\n\n    at /private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:133:60\n    at async check (/private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:131:3"
+    }
+  ],
+  "status": "failed",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   'English_tag-94'\n- ]\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:55:12\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:48:50",
+  "metadata": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "frontendTransport": "isolated-static-debug-bundle",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  },
+  "rendererErrors": [],
+  "wallMs": 49250
+}
