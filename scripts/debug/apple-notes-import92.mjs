@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { mkdir, readFile, writeFile, copyFile, chmod } from "node:fs/promises";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { openRuntime, api, state, idle } from "./runtime.mjs";
 import { tinyPNG, chooseFiles } from "./mobile-attachments.mjs";
 const [buildArg, outArg] = process.argv.slice(2);
@@ -24,6 +25,10 @@ for (const [path, digest] of Object.entries(build.sources))
     "exact current backend input " + path,
   );
 assert.equal(hash(await readFile(build.binary.path)), build.binary.sha256);
+const frontendPaths = execFileSync("git", ["ls-files", "-z", "src", "scripts/debug/apple-notes-import92.mjs"], { encoding: "utf8" }).split("\0").filter(Boolean);
+const frontendSources = Object.fromEntries(await Promise.all(frontendPaths.map(async path => [path, hash(await readFile(resolve(root, path)))])));
+const frontendHead = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
+
 await mkdir(out);
 const binary = resolve(out, "import-core-transport");
 await copyFile(build.binary.path, binary);
@@ -353,6 +358,8 @@ try {
   };
   await openMenu("image");
   const bounds = await menu.boundingBox();
+  await writeFile(resolve(out, "menu-geometry.json"), JSON.stringify({ bounds, viewport: page.viewportSize(), computed: await menu.evaluate(n => ({ left: n.style.left, top: n.style.top, width: n.offsetWidth, height: n.offsetHeight, right: getComputedStyle(n).right, bottom: getComputedStyle(n).bottom, margin: getComputedStyle(n).margin })) }, null, 2));
+  await page.screenshot({ path: resolve(out, "attachment-image-menu-dark.png") });
   check("APP93 menu clamps bottom and right edges", bounds.x >= 8 && bounds.y >= 8 && bounds.x + bounds.width <= 1272 && bounds.y + bounds.height <= 792);
   await page.screenshot({ path: resolve(out, "attachment-image-menu-dark.png") });
   await menu.getByRole("menuitem", { name: "显示信息", exact: true }).click();
@@ -527,6 +534,9 @@ try {
     JSON.stringify(
       {
         passed: !failure,
+        frontendHead,
+        frontendSources,
+        frontendSourcesUnchanged: (await Promise.all(Object.entries(frontendSources).map(async ([path, digest]) => hash(await readFile(resolve(root, path))) === digest))).every(Boolean),
         checks,
         wallMs: performance.now() - start,
         error: failure?.message,
