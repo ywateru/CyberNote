@@ -8,6 +8,7 @@ import {
   type JSONContent,
   type NodeViewProps,
 } from "@tiptap/react";
+import { closeHistory } from "@tiptap/pm/history";
 import { createEditorExtensions } from "./editor-schema";
 import { editorSaveSnapshot } from "./editor-save-snapshot";
 export { AttachmentNode, DrawingNode } from "./editor-schema";
@@ -99,7 +100,7 @@ function MediaView({ node, editor, getPos }: NodeViewProps) {
         if (current?.type.name !== "attachment" || current.attrs.id !== id)
           return;
         editor.view.dispatch(
-          editor.state.tr
+          closeHistory(editor.state.tr)
             .delete(position, position + current.nodeSize)
             .scrollIntoView(),
         );

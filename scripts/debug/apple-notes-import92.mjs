@@ -399,7 +399,9 @@ try {
   await api(page, "app.flush");
   await api(page, "editor.undo");
   await api(page, "app.flush");
-  check("APP93 remove and Undo preserve original public document and managed files", JSON.stringify((await state(page)).editorJSON) === beforeRemove && (await state(page)).workspace.attachments.length === 5);
+  const undoState = await state(page);
+  await writeFile(resolve(out, "undo-document.json"), JSON.stringify({ before: JSON.parse(beforeRemove), after: undoState.editorJSON, attachments: undoState.workspace.attachments }, null, 2));
+  check("APP93 remove and Undo preserve original public document and managed files", JSON.stringify(undoState.editorJSON) === beforeRemove && undoState.workspace.attachments.length === 5);
   await openMenu("audio");
   check("APP93 saved audio exposes real play capability", await menu.getByRole("menuitem", { name: "播放", exact: true }).isEnabled());
   await page.screenshot({ path: resolve(out, "attachment-audio-menu-dark.png") });
