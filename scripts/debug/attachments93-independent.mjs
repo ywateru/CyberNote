@@ -45,6 +45,7 @@ try {
   const attachments = structuredClone(backend.workspace.attachments);
   const file = attachments.find(a => a.kind === 'file');
   const card = id => page.locator(`.attachment-node[data-attachment-id="${id}"]:visible`);
+  const selectDom = async id => { await page.locator(`.note-row[data-note-id="${id}"]`).click(); await idle(page); };
   const open = async (id, point) => {
     const element = card(id); await element.scrollIntoViewIfNeeded();
     if (point) await element.dispatchEvent('contextmenu', { clientX: point.x, clientY: point.y, bubbles: true, cancelable: true });
@@ -96,21 +97,21 @@ try {
     }
   });
   await check('Switching owner closes menu and old information', async () => {
-    await open(file.id); await api(page, 'note.select', { id: 'note-b' }); await idle(page);
+    await open(file.id); await selectDom('note-b');
     assert.equal(await menu.count(), 0);
-    await api(page, 'note.select', { id: 'note-a' }); await idle(page);
+    await selectDom('note-a');
     await open(file.id); await menu.getByRole('menuitem', { name: '显示信息', exact: true }).click();
     await page.getByRole('dialog', { name: '附件信息', exact: true }).waitFor();
-    await api(page, 'note.select', { id: 'note-b' }); await idle(page);
+    await selectDom('note-b');
     assert.equal(await page.getByRole('dialog', { name: '附件信息', exact: true }).count(), 0);
-    await api(page, 'note.select', { id: 'note-a' }); await idle(page);
+    await selectDom('note-a');
   });
   await check('Delayed save picker cannot export after owner navigation', async () => {
     const before = backend.exports.length;
     await page.evaluate(() => { window.__DEBUG_PLATFORM__.dialogDelay = 600; window.__DEBUG_PLATFORM__.dialogResults.save.push('/synthetic-fixture/independent93-stale.txt'); });
     await open(file.id); await menu.getByRole('menuitem', { name: '保存附件…', exact: true }).click();
     await until('save picker entered', () => page.evaluate(() => window.__DEBUG_PLATFORM__.calls.some(row => row.command === 'plugin:dialog|save')));
-    await api(page, 'note.select', { id: 'note-b' });
+    await page.locator('.note-row[data-note-id="note-b"]').click();
     await idle(page); assert.equal(backend.exports.length, before);
   });
   await writeFile(resolve(output, 'final.html'), await page.content());
