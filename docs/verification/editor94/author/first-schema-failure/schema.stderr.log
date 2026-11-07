@@ -1,0 +1,457 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Editor schema changed; review the Rust content/attribute rules and regenerate its manifest explicitly.
++ actual - expected
+... Skipped lines
+
+  {
+    marks: {
+      bold: {
+        attrs: {},
+        excludes: [
+          'bold'
+        ],
++       rank: 2
+-       rank: 3
+      },
+      code: {
+        attrs: {},
+        excludes: [
+-         'noteTag',
+          'link',
+          'textStyle',
+          'bold',
+          'code',
+          'italic',
+          'strike',
+          'underline',
++         'noteTag',
+          'highlight'
+        ],
++       rank: 3
+-       rank: 4
+      },
+      highlight: {
+        attrs: {
+          color: {
+            default: null,
+...
+        ],
++       rank: 4
+-       rank: 5
+      },
+      link: {
+        attrs: {
+          class: {
+            default: null,
+...
+        ],
++       rank: 0
+-       rank: 1
+      },
+      noteTag: {
+        attrs: {
+          name: {
+            required: true
+...
+        excludes: [
++         'code',
+          'noteTag',
+-         'code'
+        ],
++       rank: 7
+-       rank: 0
+      },
+      strike: {
+        attrs: {},
+        excludes: [
+          'strike'
+        ],
++       rank: 5
+-       rank: 6
+      },
+      textStyle: {
+        attrs: {
+          color: {
+            default: null,
+...
+        ],
++       rank: 1
+-       rank: 2
+      },
+      underline: {
+        attrs: {},
+        excludes: [
+          'underline'
+        ],
++       rank: 6
+-       rank: 7
+      }
+    },
+    nodes: {
+      attachment: {
+        attrs: {
+...
+        marks: [
+-         'noteTag',
+          'link',
+          'textStyle',
+          'bold',
+          'code',
+          'italic',
+          'strike',
+          'underline',
++         'noteTag',
+          'highlight'
+        ]
+      },
+      horizontalRule: {
+        attrs: {},
+...
+        marks: [
+-         'noteTag',
+          'link',
+          'textStyle',
+          'bold',
+          'code',
+          'italic',
+          'strike',
+          'underline',
++         'noteTag',
+          'highlight'
+        ]
+      },
+      table: {
+        attrs: {},
+
+    at file:///private/tmp/apple-notes-attachments93-develop/scripts/check-editor-schema.mjs:102:8 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: {
+    version: 1,
+    nodes: {
+      paragraph: {
+        content: 'inline*',
+        groups: [ 'block' ],
+        marks: [
+          'link',      'textStyle',
+          'bold',      'code',
+          'italic',    'strike',
+          'underline', 'noteTag',
+          'highlight'
+        ],
+        attrs: {}
+      },
+      blockquote: { content: 'block+', groups: [ 'block' ], marks: [], attrs: {} },
+      bulletList: {
+        content: 'listItem+',
+        groups: [ 'block', 'list' ],
+        marks: [],
+        attrs: { listStyle: { required: false, default: 'bullet' } }
+      },
+      codeBlock: {
+        content: 'text*',
+        groups: [ 'block' ],
+        marks: [],
+        attrs: { language: { required: false, default: null } }
+      },
+      doc: { content: 'block+', groups: [], marks: [], attrs: {} },
+      hardBreak: { content: '', groups: [ 'inline' ], marks: [], attrs: {} },
+      heading: {
+        content: 'inline*',
+        groups: [ 'block' ],
+        marks: [
+          'link',      'textStyle',
+          'bold',      'code',
+          'italic',    'strike',
+          'underline', 'noteTag',
+          'highlight'
+        ],
+        attrs: { level: { required: false, default: 1 } }
+      },
+      horizontalRule: { content: '', groups: [ 'block' ], marks: [], attrs: {} },
+      listItem: { content: 'paragraph block*', groups: [], marks: [], attrs: {} },
+      orderedList: {
+        content: 'listItem+',
+        groups: [ 'block', 'list' ],
+        marks: [],
+        attrs: {
+          start: { required: false, default: 1 },
+          type: { required: false, default: null }
+        }
+      },
+      text: { content: '', groups: [ 'inline' ], marks: [], attrs: {} },
+      taskList: {
+        content: 'taskItem+',
+        groups: [ 'block', 'list' ],
+        marks: [],
+        attrs: {}
+      },
+      taskItem: {
+        content: 'paragraph block*',
+        groups: [],
+        marks: [],
+        attrs: { checked: { required: false, default: false } }
+      },
+      table: {
+        content: 'tableRow+',
+        groups: [ 'block' ],
+        marks: [],
+        attrs: {}
+      },
+      tableCell: {
+        content: 'block+',
+        groups: [],
+        marks: [],
+        attrs: {
+          colspan: { required: false, default: 1 },
+          rowspan: { required: false, default: 1 },
+          colwidth: { required: false, default: null },
+          align: { required: false, default: null }
+        }
+      },
+      tableHeader: {
+        content: 'block+',
+        groups: [],
+        marks: [],
+        attrs: {
+          colspan: { required: false, default: 1 },
+          rowspan: { required: false, default: 1 },
+          colwidth: { required: false, default: null },
+          align: { required: false, default: null }
+        }
+      },
+      tableRow: {
+        content: '(tableCell | tableHeader)*',
+        groups: [],
+        marks: [],
+        attrs: {}
+      },
+      attachment: {
+        content: '',
+        groups: [ 'block' ],
+        marks: [],
+        attrs: {
+          id: { required: false, default: '' },
+          name: { required: false, default: '附件' },
+          kind: { required: false, default: 'file' }
+        }
+      },
+      drawing: {
+        content: '',
+        groups: [ 'block' ],
+        marks: [],
+        attrs: { strokes: { required: false, default: [] } }
+      }
+    },
+    marks: {
+      link: {
+        rank: 0,
+        excludes: [ 'link' ],
+        attrs: {
+          href: { required: false, default: null },
+          target: { required: false, default: '_blank' },
+          rel: { required: false, default: 'noopener noreferrer nofollow' },
+          class: { required: false, default: null },
+          title: { required: false, default: null }
+        }
+      },
+      textStyle: {
+        rank: 1,
+        excludes: [ 'textStyle' ],
+        attrs: { color: { required: false, default: null } }
+      },
+      bold: { rank: 2, excludes: [ 'bold' ], attrs: {} },
+      code: {
+        rank: 3,
+        excludes: [
+          'link',      'textStyle',
+          'bold',      'code',
+          'italic',    'strike',
+          'underline', 'noteTag',
+          'highlight'
+        ],
+        attrs: {}
+      },
+      italic: { rank: 4, excludes: [ 'italic' ], attrs: {} },
+      strike: { rank: 5, excludes: [ 'strike' ], attrs: {} },
+      underline: { rank: 6, excludes: [ 'underline' ], attrs: {} },
+      noteTag: {
+        rank: 7,
+        excludes: [ 'code', 'noteTag' ],
+        attrs: { name: { required: true } }
+      },
+      highlight: {
+        rank: 8,
+        excludes: [ 'highlight' ],
+        attrs: { color: { required: false, default: null } }
+      }
+    }
+  },
+  expected: {
+    version: 1,
+    nodes: {
+      paragraph: {
+        content: 'inline*',
+        groups: [ 'block' ],
+        marks: [
+          'noteTag',   'link',
+          'textStyle', 'bold',
+          'code',      'italic',
+          'strike',    'underline',
+          'highlight'
+        ],
+        attrs: {}
+      },
+      blockquote: { content: 'block+', groups: [ 'block' ], marks: [], attrs: {} },
+      bulletList: {
+        content: 'listItem+',
+        groups: [ 'block', 'list' ],
+        marks: [],
+        attrs: { listStyle: { required: false, default: 'bullet' } }
+      },
+      codeBlock: {
+        content: 'text*',
+        groups: [ 'block' ],
+        marks: [],
+        attrs: { language: { required: false, default: null } }
+      },
+      doc: { content: 'block+', groups: [], marks: [], attrs: {} },
+      hardBreak: { content: '', groups: [ 'inline' ], marks: [], attrs: {} },
+      heading: {
+        content: 'inline*',
+        groups: [ 'block' ],
+        marks: [
+          'noteTag',   'link',
+          'textStyle', 'bold',
+          'code',      'italic',
+          'strike',    'underline',
+          'highlight'
+        ],
+        attrs: { level: { required: false, default: 1 } }
+      },
+      horizontalRule: { content: '', groups: [ 'block' ], marks: [], attrs: {} },
+      listItem: { content: 'paragraph block*', groups: [], marks: [], attrs: {} },
+      orderedList: {
+        content: 'listItem+',
+        groups: [ 'block', 'list' ],
+        marks: [],
+        attrs: {
+          start: { required: false, default: 1 },
+          type: { required: false, default: null }
+        }
+      },
+      text: { content: '', groups: [ 'inline' ], marks: [], attrs: {} },
+      taskList: {
+        content: 'taskItem+',
+        groups: [ 'block', 'list' ],
+        marks: [],
+        attrs: {}
+      },
+      taskItem: {
+        content: 'paragraph block*',
+        groups: [],
+        marks: [],
+        attrs: { checked: { required: false, default: false } }
+      },
+      table: {
+        content: 'tableRow+',
+        groups: [ 'block' ],
+        marks: [],
+        attrs: {}
+      },
+      tableCell: {
+        content: 'block+',
+        groups: [],
+        marks: [],
+        attrs: {
+          colspan: { required: false, default: 1 },
+          rowspan: { required: false, default: 1 },
+          colwidth: { required: false, default: null },
+          align: { required: false, default: null }
+        }
+      },
+      tableHeader: {
+        content: 'block+',
+        groups: [],
+        marks: [],
+        attrs: {
+          colspan: { required: false, default: 1 },
+          rowspan: { required: false, default: 1 },
+          colwidth: { required: false, default: null },
+          align: { required: false, default: null }
+        }
+      },
+      tableRow: {
+        content: '(tableCell | tableHeader)*',
+        groups: [],
+        marks: [],
+        attrs: {}
+      },
+      attachment: {
+        content: '',
+        groups: [ 'block' ],
+        marks: [],
+        attrs: {
+          id: { required: false, default: '' },
+          name: { required: false, default: '附件' },
+          kind: { required: false, default: 'file' }
+        }
+      },
+      drawing: {
+        content: '',
+        groups: [ 'block' ],
+        marks: [],
+        attrs: { strokes: { required: false, default: [] } }
+      }
+    },
+    marks: {
+      noteTag: {
+        rank: 0,
+        excludes: [ 'noteTag', 'code' ],
+        attrs: { name: { required: true } }
+      },
+      link: {
+        rank: 1,
+        excludes: [ 'link' ],
+        attrs: {
+          href: { required: false, default: null },
+          target: { required: false, default: '_blank' },
+          rel: { required: false, default: 'noopener noreferrer nofollow' },
+          class: { required: false, default: null },
+          title: { required: false, default: null }
+        }
+      },
+      textStyle: {
+        rank: 2,
+        excludes: [ 'textStyle' ],
+        attrs: { color: { required: false, default: null } }
+      },
+      bold: { rank: 3, excludes: [ 'bold' ], attrs: {} },
+      code: {
+        rank: 4,
+        excludes: [
+          'noteTag',   'link',
+          'textStyle', 'bold',
+          'code',      'italic',
+          'strike',    'underline',
+          'highlight'
+        ],
+        attrs: {}
+      },
+      italic: { rank: 5, excludes: [ 'italic' ], attrs: {} },
+      strike: { rank: 6, excludes: [ 'strike' ], attrs: {} },
+      underline: { rank: 7, excludes: [ 'underline' ], attrs: {} },
+      highlight: {
+        rank: 8,
+        excludes: [ 'highlight' ],
+        attrs: { color: { required: false, default: null } }
+      }
+    }
+  },
+  operator: 'deepStrictEqual'
+}
+
+Node.js v22.16.0

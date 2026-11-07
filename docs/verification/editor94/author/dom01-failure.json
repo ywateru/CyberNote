@@ -1,0 +1,152 @@
+{
+  "sourceRoot": "/private/tmp/apple-notes-attachments93-develop",
+  "results": [
+    {
+      "name": "Enter commits 标签 and splits without mark leakage",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   '标签'\n- ]\n",
+      "snapshot": {
+        "doc": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#标签"
+                }
+              ]
+            }
+          ]
+        },
+        "tags": [],
+        "text": "#标签",
+        "selection": {
+          "type": "text",
+          "anchor": 4,
+          "head": 4
+        },
+        "changes": 0
+      }
+    },
+    {
+      "name": "Enter commits Project_94 and splits without mark leakage",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   'Project_94'\n- ]\n",
+      "snapshot": {
+        "doc": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#Project_94"
+                }
+              ]
+            }
+          ]
+        },
+        "tags": [],
+        "text": "#Project_94",
+        "selection": {
+          "type": "text",
+          "anchor": 12,
+          "head": 12
+        },
+        "changes": 0
+      }
+    },
+    {
+      "name": "Enter mark and split Undo/Redo as one action",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   'Undo'\n- ]\n",
+      "snapshot": {
+        "doc": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#Undo"
+                }
+              ]
+            }
+          ]
+        },
+        "tags": [],
+        "text": "#Undo",
+        "selection": {
+          "type": "text",
+          "anchor": 6,
+          "head": 6
+        },
+        "changes": 0
+      }
+    },
+    {
+      "name": "beforeinput insertParagraph without keydown commits and splits",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ []\n- [\n-   'Soft键盘'\n- ]\n",
+      "snapshot": {
+        "doc": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "#Soft键盘"
+                }
+              ]
+            }
+          ]
+        },
+        "tags": [],
+        "text": "#Soft键盘",
+        "selection": {
+          "type": "text",
+          "anchor": 8,
+          "head": 8
+        },
+        "changes": 0
+      }
+    },
+    {
+      "name": "ordinary Tab inserts literal tab and retains focus with Undo",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'left' !== 'left\\t'\n",
+      "snapshot": {
+        "doc": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "left"
+                }
+              ]
+            }
+          ]
+        },
+        "tags": [],
+        "text": "left",
+        "selection": {
+          "type": "text",
+          "anchor": 5,
+          "head": 5
+        },
+        "changes": 0
+      }
+    }
+  ],
+  "error": "Error: 5 keyboard94 cases failed; original results preserved",
+  "stack": "Error: 5 keyboard94 cases failed; original results preserved\n    at runKeyboard94Checks (file:///private/tmp/apple-notes-attachments93-develop/scripts/check-editor-keyboard94-cases.mjs:60:23)\n    at async file:///private/tmp/apple-notes-attachments93-develop/scripts/check-tags-browser.mjs:148:5"
+}

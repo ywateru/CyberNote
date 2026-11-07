@@ -1,0 +1,126 @@
+{
+  "sourceRoot": "/private/tmp/apple-notes-attachments93-develop",
+  "sourceHead": "630d9b8cd9592a9c9f1b597cd462bd95b836cb41",
+  "sourceChangesFromBase": [
+    "src/editor-schema.ts",
+    "src/note-tag-extension.ts"
+  ],
+  "commands": [
+    {
+      "name": "dom05",
+      "command": [
+        "node",
+        "scripts/check-tags-browser.mjs",
+        "/private/tmp/apple-notes-editor94-author-dom05"
+      ],
+      "environment": {
+        "KEYBOARD94_ONLY": "1"
+      },
+      "exitCode": 0,
+      "wallSeconds": 9.317
+    },
+    {
+      "name": "tags02",
+      "command": [
+        "node",
+        "scripts/check-tags-browser.mjs",
+        "/private/tmp/apple-notes-editor94-author-tags02"
+      ],
+      "environment": {},
+      "exitCode": 0,
+      "wallSeconds": 10.725
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 4.355
+    },
+    {
+      "name": "build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 9.2
+    },
+    {
+      "name": "production",
+      "command": [
+        "node",
+        "scripts/debug/cli.mjs",
+        "check-production",
+        "--production",
+        "dist",
+        "--out",
+        "/private/tmp/apple-notes-editor94-author-qa02/production"
+      ],
+      "exitCode": 0,
+      "wallSeconds": 4.673
+    },
+    {
+      "command": [
+        "pnpm",
+        "test:schema"
+      ],
+      "exitCode": 0,
+      "documentCases": 96
+    }
+  ],
+  "keyboardChecks": 15,
+  "tagRegressionChecks": 27,
+  "sourceUnchanged": true,
+  "frontendFiles": [
+    {
+      "path": "assets/index-C1SpZGPk.css",
+      "bytes": 102224,
+      "sha256": "dc8a359b4d50c7b1a4baae7c556b9df00ff7456e8ee2257716f901c9ceaab33d"
+    },
+    {
+      "path": "assets/index-DTFAG6gg.js",
+      "bytes": 1108463,
+      "sha256": "b48e80fe03b089150e660bb8ccc13ee9cf7c19ce92d5904bc901e1833ea4a2ff"
+    },
+    {
+      "path": "assets/native-recording-access-DJ4dM4QT.js",
+      "bytes": 1018,
+      "sha256": "6afd2b4d576ce7196c3b3ae6a17bbce83ed4e9f1103c1ee16c5ee3cf0b96b5eb"
+    },
+    {
+      "path": "index.html",
+      "bytes": 498,
+      "sha256": "0ea56b676e5d1fafbf2a891c16eff3d666521a4fa67103619e336d9cb7118415"
+    }
+  ],
+  "priorRuns": [
+    {
+      "run": "dom01",
+      "exitCode": 1,
+      "scope": "Original product; focus command did not always complete before real keypress. Direct beforeinput failure is valid; independent baseline is the exact keyboard failure evidence."
+    },
+    {
+      "run": "dom02",
+      "exitCode": 1,
+      "scope": "First product Enter failed because unsuccessful Tiptap command dispatched a noop transaction."
+    },
+    {
+      "run": "dom03",
+      "exitCode": 1,
+      "scope": "Enter passed; Tab raw document held the literal tab but documentText.trimEnd assertion was wrong. Product edit occurred near run; not immutable final evidence."
+    },
+    {
+      "run": "dom04",
+      "exitCode": 0,
+      "scope": "15 passed before separate input-extension schema-rank correction; superseded by final dom05."
+    },
+    {
+      "run": "first-schema-failure",
+      "exitCode": 1,
+      "scope": "Real schema rank drift from Mark priority; fixed by separate NoteTagInput priority without updating manifest."
+    }
+  ]
+}

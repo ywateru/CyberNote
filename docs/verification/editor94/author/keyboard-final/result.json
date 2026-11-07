@@ -1,0 +1,71 @@
+{
+  "results": [
+    {
+      "name": "Enter commits 标签 and splits without mark leakage",
+      "ok": true
+    },
+    {
+      "name": "Enter commits Project_94 and splits without mark leakage",
+      "ok": true
+    },
+    {
+      "name": "Enter mark and split Undo/Redo as one action",
+      "ok": true
+    },
+    {
+      "name": "beforeinput insertParagraph without keydown commits and splits",
+      "ok": true
+    },
+    {
+      "name": "ordinary Tab inserts literal tab and retains focus with Undo",
+      "ok": true
+    },
+    {
+      "name": "Enter retains existing heading behavior",
+      "ok": true
+    },
+    {
+      "name": "Enter retains existing bulletList behavior",
+      "ok": true
+    },
+    {
+      "name": "Enter retains existing taskList behavior",
+      "ok": true
+    },
+    {
+      "name": "Enter retains existing table behavior",
+      "ok": true
+    },
+    {
+      "name": "soft Enter event-composing guard",
+      "ok": true
+    },
+    {
+      "name": "soft Enter view-composing guard",
+      "ok": true
+    },
+    {
+      "name": "soft Enter duplicate guard",
+      "ok": true
+    },
+    {
+      "name": "Tab preserves attachment NodeSelection",
+      "ok": true
+    },
+    {
+      "name": "Tab preserves drawing NodeSelection",
+      "ok": true
+    },
+    {
+      "name": "blocked Enter cannot mark a same-tick later split",
+      "ok": true
+    }
+  ],
+  "errors": [],
+  "sourceRoot": "/private/tmp/apple-notes-attachments93-develop",
+  "limitations": [
+    "Headless Chromium, not native runtime or pixel parity.",
+    "Composition events are controlled browser events; real Android/iOS IME remains unknown.",
+    "Access projection tested through production pure module; multiwindow native event transport remains covered by existing access checks."
+  ]
+}

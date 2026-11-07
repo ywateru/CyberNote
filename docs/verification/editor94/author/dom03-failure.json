@@ -1,0 +1,52 @@
+{
+  "sourceRoot": "/private/tmp/apple-notes-attachments93-develop",
+  "results": [
+    {
+      "name": "Enter commits 标签 and splits without mark leakage",
+      "ok": true
+    },
+    {
+      "name": "Enter commits Project_94 and splits without mark leakage",
+      "ok": true
+    },
+    {
+      "name": "Enter mark and split Undo/Redo as one action",
+      "ok": true
+    },
+    {
+      "name": "beforeinput insertParagraph without keydown commits and splits",
+      "ok": true
+    },
+    {
+      "name": "ordinary Tab inserts literal tab and retains focus with Undo",
+      "ok": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'left' !== 'left\\t'\n",
+      "snapshot": {
+        "doc": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "left\t"
+                }
+              ]
+            }
+          ]
+        },
+        "tags": [],
+        "text": "left",
+        "selection": {
+          "type": "text",
+          "anchor": 6,
+          "head": 6
+        },
+        "changes": 9
+      }
+    }
+  ],
+  "error": "Error: 1 keyboard94 cases failed; original results preserved",
+  "stack": "Error: 1 keyboard94 cases failed; original results preserved\n    at runKeyboard94Checks (file:///private/tmp/apple-notes-attachments93-develop/scripts/check-editor-keyboard94-cases.mjs:95:11)\n    at async file:///private/tmp/apple-notes-attachments93-develop/scripts/check-tags-browser.mjs:149:5"
+}

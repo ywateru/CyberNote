@@ -1,0 +1,34 @@
+[
+  {
+    "name": "typecheck",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 4.355
+  },
+  {
+    "name": "build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 9.2
+  },
+  {
+    "name": "production",
+    "command": [
+      "node",
+      "scripts/debug/cli.mjs",
+      "check-production",
+      "--production",
+      "dist",
+      "--out",
+      "/private/tmp/apple-notes-editor94-author-qa02/production"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 4.673
+  }
+]
