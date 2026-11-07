@@ -77,6 +77,38 @@ try {
     await setup(doc(p('#select')), 2, 8); await page.keyboard.press('Enter');
     const after = await persisted(); assert.equal(tags(after).length, 0); assert.equal(after.content[0].content[0].text, '#'); assert.equal(after.content.length, 2);
   });
+  await check('Blocked Enter plus same-event unrelated transaction does not consume a pending tag', async () => {
+    await setup(doc(p('#pending'), p('other')), 9);
+    await body().evaluate(node => {
+      const editor = node.editor; window.independent94PriorKey = editor.options.editorProps.handleKeyDown;
+      editor.setOptions({ editorProps: { ...editor.options.editorProps, handleKeyDown(view, event) {
+        if (event.key !== 'Enter') return false;
+        // A higher-priority application handler consumes Enter and edits another
+        // paragraph in the same call stack. The tag paragraph never splits.
+        view.dispatch(view.state.tr.insertText('x', view.state.doc.content.size - 1));
+        return true;
+      } } });
+    });
+    try {
+      await page.keyboard.press('Enter'); const after = await persisted();
+      assert.equal(after.content.length, 2); assert.equal(after.content[0].content[0].text, '#pending');
+      assert.equal(after.content[1].content[0].text, 'otherx'); assert.equal(tags(after).length, 0);
+    } finally { await body().evaluate(node => node.editor.setOptions({ editorProps: { ...node.editor.options.editorProps, handleKeyDown: window.independent94PriorKey } })); }
+  });
+  await check('Blocked Enter with no transaction leaves no pending tag for later edits', async () => {
+    await setup(doc(p('#waiting'), p('other')), 9);
+    await body().evaluate(node => {
+      const editor = node.editor; window.independent94PriorKey = editor.options.editorProps.handleKeyDown;
+      editor.setOptions({ editorProps: { ...editor.options.editorProps, handleKeyDown: (_view, event) => event.key === 'Enter' } });
+    });
+    await page.keyboard.press('Enter');
+    await body().evaluate(node => {
+      const editor = node.editor;
+      editor.setOptions({ editorProps: { ...editor.options.editorProps, handleKeyDown: window.independent94PriorKey } });
+      editor.view.dispatch(editor.state.tr.insertText('x', editor.state.doc.content.size - 1));
+    });
+    const after = await persisted(); assert.equal(after.content.length, 2); assert.equal(tags(after).length, 0);
+  });
   await check('Chromium actual IME Enter/Tab cannot prematurely mark or insert tab', async () => {
     await setup(doc(p('')), 1); const cdp = await page.context().newCDPSession(page);
     try {
