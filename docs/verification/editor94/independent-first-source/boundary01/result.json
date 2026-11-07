@@ -1,0 +1,170 @@
+{
+  "sourceHead": "f9df83b7edadca0e5cd056c18e6c60a99aa69746",
+  "checks": [
+    {
+      "name": "Real Tab cannot replace a selected drawing atom with literal text",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    content: [\n      {\n+       content: [\n+         {\n+           text: '\\t',\n+           type: 'text'\n+         }\n+       ],\n+       type: 'paragraph'\n-       attrs: {\n-         strokes: []\n-       },\n-       type: 'drawing'\n      },\n      {\n        content: [\n          {\n            text: 'tail',\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:24:140\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:453:9)\n    at process.callbackTrampoline (node:internal/async_hooks:130:17)\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:19:49)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:20:3"
+    },
+    {
+      "name": "Real Select All followed by Tab cannot replace whole-document nontext selection",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    content: [\n      {\n-       attrs: {\n-         strokes: []\n-       },\n-       type: 'drawing'\n-     },\n-     {\n        content: [\n          {\n+           text: '\\t',\n-           text: 'tail',\n            type: 'text'\n          }\n        ],\n        type: 'paragraph'\n      }\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:30:139\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:453:9)\n    at process.callbackTrampoline (node:internal/async_hooks:130:17)\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:19:49)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:26:3"
+    },
+    {
+      "name": "A later false handler selection transaction does not prevent the same real Enter from committing",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:46:99\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:19:49)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:32:3"
+    },
+    {
+      "name": "Cancelable beforeinput insertParagraph commits exactly one tag and one split",
+      "status": "failed",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:52:82\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:19:49)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:48:3"
+    },
+    {
+      "name": "Composing or noncancelable beforeinput cannot mutate or commit",
+      "status": "passed"
+    }
+  ],
+  "observations": [
+    {
+      "kind": "atom",
+      "selection": {
+        "type": "node",
+        "anchor": 0
+      },
+      "before": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "drawing",
+            "attrs": {
+              "strokes": []
+            }
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "tail"
+              }
+            ]
+          }
+        ]
+      },
+      "after": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "\t"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "tail"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "kind": "all",
+      "selection": {
+        "type": "all"
+      },
+      "before": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "drawing",
+            "attrs": {
+              "strokes": []
+            }
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "tail"
+              }
+            ]
+          }
+        ]
+      },
+      "after": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "\t"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "kind": "false-handler",
+      "calls": [
+        {
+          "thisBound": true
+        }
+      ],
+      "after": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "#ordered"
+              }
+            ]
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "beforeinput",
+      "prevented": true,
+      "after": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "#beforeinput"
+              }
+            ]
+          },
+          {
+            "type": "paragraph"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "failed",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    content: [\n      {\n+       content: [\n+         {\n+           text: '\\t',\n+           type: 'text'\n+         }\n+       ],\n+       type: 'paragraph'\n-       attrs: {\n-         strokes: []\n-       },\n-       type: 'drawing'\n      },\n      {\n        content: [\n          {\n            text: 'tail',\n\n    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:24:140\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:453:9)\n    at process.callbackTrampoline (node:internal/async_hooks:130:17)\n    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:19:49)\n    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-boundaries.mjs:20:3",
+  "rendererErrors": []
+}

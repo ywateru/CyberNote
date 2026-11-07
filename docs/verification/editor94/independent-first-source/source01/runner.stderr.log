@@ -1,0 +1,23 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ []
+- [
+-   'English_tag-94'
+- ]
+
+    at file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:55:12
+    at async check (file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:41:11)
+    at async file:///private/tmp/apple-notes-attachments93-review/scripts/debug/editor94-independent.mjs:48:50 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [],
+  expected: [ 'English_tag-94' ],
+  operator: 'deepStrictEqual'
+}
+
+Node.js v22.16.0
