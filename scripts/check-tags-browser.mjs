@@ -100,6 +100,7 @@ const tagDoc = {
   ],
 };
 const results = [];
+const keyboard94 = process.env.KEYBOARD94_ONLY === "1";
 try {
   browser = await chromium.launch({
     executablePath: process.env.CHROME_PATH,
@@ -142,6 +143,10 @@ try {
         changes: window.changes.length,
       };
     });
+  if (keyboard94) {
+    const { runKeyboard94Checks } = await import("./check-editor-keyboard94-cases.mjs");
+    await runKeyboard94Checks({ page, mount, note, snapshot, results });
+  } else {
   await mount([note("a"), note("b")]);
   await page.locator(".tiptap").first().click();
   await page.keyboard.insertText("#UI对照");
@@ -528,6 +533,7 @@ try {
     name: "actual-App-pending-tag-preserved-with-save-registration-error-without-durable-write",
     ok: true,
   });
+  }
   assert.deepEqual(errors, []);
   await writeFile(
     resolve(output, "result.json"),
@@ -547,6 +553,11 @@ try {
     ) + "\n",
   );
   console.log(`Passed ${results.length} production tag checks: ${output}`);
+} catch (error) {
+  await writeFile(resolve(output, "failure.json"), JSON.stringify({
+    sourceRoot: process.cwd(), results, error: String(error), stack: error.stack,
+  }, null, 2) + "\n");
+  throw error;
 } finally {
   await browser?.close();
   await new Promise((done) => server.close(done));
