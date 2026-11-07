@@ -1,0 +1,16 @@
+{
+  "reason": "Unadmitted intermediate source; actions completed, existing runtime cleanup hung >2min; root authorized owned-only timeout termination",
+  "naturalExit": false,
+  "processes": [
+    {
+      "pid": 56944,
+      "observedBefore": "56944 88815 02:51 node scripts/debug/editor94-independent.mjs /private/tmp/apple-notes-editor94-review-source02",
+      "signal": "SIGTERM"
+    },
+    {
+      "pid": 56960,
+      "observedBefore": "56960 56944 02:51 /Users/water/work/2026/Apple-Notes-Clone/node_modules/.pnpm/@esbuild+darwin-arm64@0.25.12/node_modules/@esbuild/darwin-arm64/bin/esbuild --service=0.25.12 --ping",
+      "signal": "SIGTERM"
+    }
+  ]
+}

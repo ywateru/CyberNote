@@ -1,0 +1,781 @@
+{
+  "sourceBefore": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "2887d1987206fe5980d04b83d34d30979af69a80618d6003cae8f4c102eb12c4"
+    },
+    {
+      "path": "src/AppleNotesImport.css",
+      "sha256": "866c17d5080d5cd21d899e3a552d18e8927020d7f08dc479ca5e64be53e4f343"
+    },
+    {
+      "path": "src/AppleNotesImport.tsx",
+      "sha256": "267c69566796e95b42314757adb9521b19fc77ceaec795b4870a101e7b396443"
+    },
+    {
+      "path": "src/AttachmentContextMenu.tsx",
+      "sha256": "58cff6e861a5bf7885dc5fb87bd5b6d9c098c3a9cf243ddd9dbe8de1737f03a7"
+    },
+    {
+      "path": "src/DataManagement.css",
+      "sha256": "418c6ddda632ec796af712187481285d074d8023ea44f43146d8f3bd4c6db3b6"
+    },
+    {
+      "path": "src/DataManagement.tsx",
+      "sha256": "5c4232a04a869814ef53dfd5b0ed64e9ca320a3306f48f77c8e1dc9445224180"
+    },
+    {
+      "path": "src/DesktopRecordingPanel.tsx",
+      "sha256": "ad9618e3038cbd75c38acf452725cbd1b4ad981d627f5356c7eb7c08c1e7359b"
+    },
+    {
+      "path": "src/Editor.tsx",
+      "sha256": "9e2deb2878825d3e3de2fcd1ff1d5df88de99e253a55054dc7e650df22a830fb"
+    },
+    {
+      "path": "src/ImagePreview.css",
+      "sha256": "0a00b8d4f2bbf3bb42e07227719e1bb133154fdb2225c7720504662a3d398b9f"
+    },
+    {
+      "path": "src/ImagePreview.tsx",
+      "sha256": "80ab402b657056656ec0508ee0cc5bfd391b6361bf65b98bd9ae9aac97b3f29a"
+    },
+    {
+      "path": "src/MobileFolderIcons.tsx",
+      "sha256": "bcfb1e37dc95761342ec3c4669c3444a432c7236c90ea239160f5b9d4283395f"
+    },
+    {
+      "path": "src/OcrPanel.css",
+      "sha256": "7739e459f3be0637ab7e36a52841acc77a0bde2619f5c9d5691d9b98995fca30"
+    },
+    {
+      "path": "src/OcrPanel.tsx",
+      "sha256": "92f09c5c3271f1cceea92dafb692c848f0da94f88e67c442a34494a69cb8040a"
+    },
+    {
+      "path": "src/Preferences.css",
+      "sha256": "98c78d2eea6a53abe3ce7d294adafe8a565c02d0e8cf12b7aa0ed928ef0f288f"
+    },
+    {
+      "path": "src/Preferences.tsx",
+      "sha256": "0a16031291a2071dbdd68abefb3247c3ea14fddb263e943f71d9701ddc71fcbc"
+    },
+    {
+      "path": "src/RecordingDock.tsx",
+      "sha256": "47330efe587a9e7a2f76f8e37e81d812fa330b9b21809afada02e5349f426a15"
+    },
+    {
+      "path": "src/RecordingPanel.css",
+      "sha256": "dfe0ff8600903acbe9c94a313ddb5e0dc23f78a70fbdada6854300598a8b32a2"
+    },
+    {
+      "path": "src/RecordingPanel.tsx",
+      "sha256": "baf0d3f3b2acaf6422792907cbc0c602dc1befb42f3a985acd5c716d408b4a47"
+    },
+    {
+      "path": "src/RecordingView.tsx",
+      "sha256": "8d0334f1fb568e37d00d7c0fa40056d7828f5cfa494c1abc285ee485b5fd6d63"
+    },
+    {
+      "path": "src/RecordingWindow.tsx",
+      "sha256": "6fa7e00355491796db5c7fa5863fb68eef0b4f54d4eeca5a327b931e9de8bb9e"
+    },
+    {
+      "path": "src/SmartFolderForm.tsx",
+      "sha256": "c9e2f155f41a31ef733b1c9c5edb3d2090366567cf34662bbfd911c1cdfb1312"
+    },
+    {
+      "path": "src/SyncSettings.css",
+      "sha256": "c55f5e19896003c0aa7115bfc9f04d39c5e45ed5874c27e6d5f51205416658b7"
+    },
+    {
+      "path": "src/SyncSettings.tsx",
+      "sha256": "8d17d8dff3b74f4157fb4143fe2e18e694d18a15896b6567e5f39b3d857a194c"
+    },
+    {
+      "path": "src/access-client.ts",
+      "sha256": "2ac79fec3a00ae972f22bac2c6534aa1468b719a8be4b18c7e803549c9d99f98"
+    },
+    {
+      "path": "src/apple-notes-import.ts",
+      "sha256": "a0500c7536447482b51c48852ad2b985e82be511d869b208a0ed6c7484dbc649"
+    },
+    {
+      "path": "src/attachment-export.ts",
+      "sha256": "6b49269292be832ac76750e65cc3409475672b6558f7bf55f9a3abfd50072f53"
+    },
+    {
+      "path": "src/attachment-media.ts",
+      "sha256": "2ff17ef91d36ea1a26054004ec243dd2ee1d62e5320fd38b5054d669cffae945"
+    },
+    {
+      "path": "src/attachment-submission.ts",
+      "sha256": "23dc47c3faeaad034c616fa36c825f80b6ec92732c91f5010ebe612454a2aa63"
+    },
+    {
+      "path": "src/attachment-target.ts",
+      "sha256": "0230ad006408875232fd06d11905b1723832eb982badf172d2baa843ef54dbc0"
+    },
+    {
+      "path": "src/audio-playback.ts",
+      "sha256": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942"
+    },
+    {
+      "path": "src/bridge.ts",
+      "sha256": "d6506161c10155064adffe45652b451cd39e68abf1a844a8ab796cc304eb5337"
+    },
+    {
+      "path": "src/data-management.ts",
+      "sha256": "30e27f6de1383e716abee9ca28f2751082039269119271e56275e1bb6ea4cde6"
+    },
+    {
+      "path": "src/debug/catalog.ts",
+      "sha256": "d9b32f573af2c3ca62f9a8b6bb85b7b8d8b2f2dfcacb7c285317bde32fdec262"
+    },
+    {
+      "path": "src/debug/protocol.ts",
+      "sha256": "c70b62145dd1d6f4f1fc9e40757d52239cf9bc2e08efc81e7c80344222ba3cb4"
+    },
+    {
+      "path": "src/debug/runtime.ts",
+      "sha256": "8551b886f5915b5cc6082fbab8a567b1284cf3694266e875c836581843cdeee1"
+    },
+    {
+      "path": "src/desktop-recording-session.ts",
+      "sha256": "348e0298d2a7d825977c4efc881768e2a7042d969ac4a4551f6178a75874f23c"
+    },
+    {
+      "path": "src/document-equality.ts",
+      "sha256": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d"
+    },
+    {
+      "path": "src/editor-actions.ts",
+      "sha256": "de5092e2b9a1304bd013b4198dc577d5f79f8effb52a5743ffe669c41db03e36"
+    },
+    {
+      "path": "src/editor-save-snapshot.ts",
+      "sha256": "4ca9f9b64f52c3558b1a843c61f0ef8d810af45743c26f2cf57974c03564d5dd"
+    },
+    {
+      "path": "src/editor-schema.ts",
+      "sha256": "c05e5aa6e527e02ae3c2c1e319bb4d211ab1e2cb27b8c83dd8f27d6cb140c9f2"
+    },
+    {
+      "path": "src/main.tsx",
+      "sha256": "2a05d75ba3bc21a60366dea66f7eca99a90683bb15907b2b75df6ce686e2a7a5"
+    },
+    {
+      "path": "src/metadata-client.ts",
+      "sha256": "ca3efa81802ffdf9e5d5478dd429d2aa742d19e1e5beb04946ac4642843e9c1f"
+    },
+    {
+      "path": "src/native-keyboard.ts",
+      "sha256": "4bbaa029000f125a5382f40670e3cea2adc28b417ea7384fd66b3cfa74b1a410"
+    },
+    {
+      "path": "src/native-recording-access.ts",
+      "sha256": "3cd44eec8fec1e9cff7535a8c3df1289090ee3025a952cab786b0db3712261d7"
+    },
+    {
+      "path": "src/native-toolbar-controller.ts",
+      "sha256": "448dd305f1f3223f71ab61079ae8dcfbecd15b7075beb87fccf510d27c07a6e1"
+    },
+    {
+      "path": "src/native-toolbar-state.ts",
+      "sha256": "bb03630f2e9bb7a3e4a5c0200cf55667f36c26e55e682e6c5b87c6c1d8683200"
+    },
+    {
+      "path": "src/native-toolbar.ts",
+      "sha256": "c70c97cdd7d84cad8a7bb3587687afb43a87d3cf371740830d4bd63f2dcf423e"
+    },
+    {
+      "path": "src/network-sync.ts",
+      "sha256": "3b46699920df0bd3fd6fc205399c489273505ba4cac095fd0f0c6cf3b939837e"
+    },
+    {
+      "path": "src/note-tag-extension.ts",
+      "sha256": "00fd2d2b199ccbc225785f8792718ee23ce94b92b4cf258d6d5f2c4a27b9cab9"
+    },
+    {
+      "path": "src/note-tags.ts",
+      "sha256": "2d5460e5a70bcb7b6a5a91631e25ca6ff05c1b3aeeb79b45a4a145415c174a2f"
+    },
+    {
+      "path": "src/ocr-host.ts",
+      "sha256": "7657e32faac6495ca78a8973cac84350447534ab887e59ad3c868b08152e184f"
+    },
+    {
+      "path": "src/ocr-native.ts",
+      "sha256": "382cdda5d67f7ac043d520edbbdffc0389679ea55dae5596a4460e11d7c079d5"
+    },
+    {
+      "path": "src/ordinary-folder-keyboard.ts",
+      "sha256": "92d8b53054997432dfd451d9f63dbb3c79fcc42669453f2f1879a13f019ac81d"
+    },
+    {
+      "path": "src/ordinary-folder-option.ts",
+      "sha256": "45cbf5bda26cf1630311f8fbc7a10ea05aa5ebcb61cd6805e070f55d758c0fe1"
+    },
+    {
+      "path": "src/proof-access.ts",
+      "sha256": "64b235d209e03649d340354b1aa187efd2fe872cfbc9e007951306359c3ca3ca"
+    },
+    {
+      "path": "src/recording-clock.ts",
+      "sha256": "4982340b02af9210bdf0e1055c677aac94fc0e4bb191ed38ce1f0c88a5bfb658"
+    },
+    {
+      "path": "src/recording-coordinator.ts",
+      "sha256": "a56eaae1a42f1ba7141055b52eb40f54b0729c5f2fae9b6077a895bd127fa904"
+    },
+    {
+      "path": "src/recording-live-card.ts",
+      "sha256": "0b508b9a317d9b5a81a9e0947c35a63a5b502ff63cc91b2d4558224500ffcfab"
+    },
+    {
+      "path": "src/recording-metadata.ts",
+      "sha256": "7f09b9b0908016cfebe924cc63c87256ed51be1a6bf122d544a1233cbb93d5b0"
+    },
+    {
+      "path": "src/recording-pcm.ts",
+      "sha256": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2"
+    },
+    {
+      "path": "src/recording-playback.ts",
+      "sha256": "41a9f95f8673da17e532be9984022327a5449ea224db779134bbe642bceaeb95"
+    },
+    {
+      "path": "src/recording-replacement.ts",
+      "sha256": "b8b97b03d6f30e0ca398532d55d2e0c110c903c859b234312254900e2d8e71e3"
+    },
+    {
+      "path": "src/recording-revision-relay.ts",
+      "sha256": "df1fe9769029a0c122d8c7827d2809d3da70a876dca385fb84fb97b627120f29"
+    },
+    {
+      "path": "src/recording-revisions.ts",
+      "sha256": "9673961f92da60d6293998fd0d789f80c68e1992a517a62c77c9fce59764ebaa"
+    },
+    {
+      "path": "src/recording-session.ts",
+      "sha256": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc"
+    },
+    {
+      "path": "src/recording-waveform.tsx",
+      "sha256": "13f56a1281c3564b36b410472af35ac78852291e351df3d866c98af07f870f68"
+    },
+    {
+      "path": "src/recording-window-transport.ts",
+      "sha256": "66370d6c8318860a404a4da27ee7b941a067bfba248ade13a6c6e6d6afb3841a"
+    },
+    {
+      "path": "src/save-queue.ts",
+      "sha256": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef"
+    },
+    {
+      "path": "src/save-revisions.ts",
+      "sha256": "3fbf025c8c57cbcc78cdc13d8b62962b0235feb89ea3cd23b5af8547bc940d6a"
+    },
+    {
+      "path": "src/search-editor-gate.ts",
+      "sha256": "9dbe5495db5d9538d8b0fd7acfc8a63acaedb1c7f41c5325a58b79101407016d"
+    },
+    {
+      "path": "src/search-list-text.tsx",
+      "sha256": "05e69c169503412722088e0e06d1eff04e675e1435f6c5c0071d477dbc0be3bc"
+    },
+    {
+      "path": "src/search-selection.ts",
+      "sha256": "243d637f056fe8fadd1a5dc1c47c4689c6b865d82a764b6da1a9e44ec91d3a3a"
+    },
+    {
+      "path": "src/secure-id.ts",
+      "sha256": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab"
+    },
+    {
+      "path": "src/sidebar-preference.ts",
+      "sha256": "02efda1c3dd671475fd4c0c229b6aa242c0ec1485253ad2a0371721cb2c4a13d"
+    },
+    {
+      "path": "src/smart-draft.ts",
+      "sha256": "a97480a10d85fcb50091987af187d0132608528349748f6488715988004abca6"
+    },
+    {
+      "path": "src/smart-folders.css",
+      "sha256": "398511f11d0152e7d5a1fce1e965a5099e6d197bb29987d0838282a87aadf166"
+    },
+    {
+      "path": "src/smart-folders.ts",
+      "sha256": "22a5e1b8b4767cb1a74df5ab9cc680c8aef3f4b62b0ddac72746006fa8d85d53"
+    },
+    {
+      "path": "src/storage-usage.ts",
+      "sha256": "98b6643991d446df427788381cc73d29ac2174428554ee500feecf383b0159b1"
+    },
+    {
+      "path": "src/style.css",
+      "sha256": "878d2892c849951135c4ec5608eea4d522d3203ee58ea37f9126a6ef7dad1f1d"
+    },
+    {
+      "path": "src/sync-client.ts",
+      "sha256": "49745690fe52fdfe7458746c2f7e4d3e8f2b050bd8ec07b0ba3e1b53b96f3463"
+    },
+    {
+      "path": "src/tag-composition.ts",
+      "sha256": "e81b2a519a803b4ecd5b58605832a823088aac448a4812674143e4ca6be79715"
+    },
+    {
+      "path": "src/trusted-synchronization.ts",
+      "sha256": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128"
+    },
+    {
+      "path": "src/types.ts",
+      "sha256": "6b8df68d03d50c89b8f797f59a1df5d6bd700fecca3f9c2f22e9493034aba063"
+    },
+    {
+      "path": "src/use-attachment-media.ts",
+      "sha256": "3d5f51d05056659cff4d4c1f2e7faf6d901c9356cec35622a7bbb9227669b883"
+    },
+    {
+      "path": "src/use-editor-commit.ts",
+      "sha256": "6245351f825d3f24fc4df06413be51a3bfa56feabe3f5586931eb94e64f7b809"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    }
+  ],
+  "sourceAfter": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "2887d1987206fe5980d04b83d34d30979af69a80618d6003cae8f4c102eb12c4"
+    },
+    {
+      "path": "src/AppleNotesImport.css",
+      "sha256": "866c17d5080d5cd21d899e3a552d18e8927020d7f08dc479ca5e64be53e4f343"
+    },
+    {
+      "path": "src/AppleNotesImport.tsx",
+      "sha256": "267c69566796e95b42314757adb9521b19fc77ceaec795b4870a101e7b396443"
+    },
+    {
+      "path": "src/AttachmentContextMenu.tsx",
+      "sha256": "58cff6e861a5bf7885dc5fb87bd5b6d9c098c3a9cf243ddd9dbe8de1737f03a7"
+    },
+    {
+      "path": "src/DataManagement.css",
+      "sha256": "418c6ddda632ec796af712187481285d074d8023ea44f43146d8f3bd4c6db3b6"
+    },
+    {
+      "path": "src/DataManagement.tsx",
+      "sha256": "5c4232a04a869814ef53dfd5b0ed64e9ca320a3306f48f77c8e1dc9445224180"
+    },
+    {
+      "path": "src/DesktopRecordingPanel.tsx",
+      "sha256": "ad9618e3038cbd75c38acf452725cbd1b4ad981d627f5356c7eb7c08c1e7359b"
+    },
+    {
+      "path": "src/Editor.tsx",
+      "sha256": "9e2deb2878825d3e3de2fcd1ff1d5df88de99e253a55054dc7e650df22a830fb"
+    },
+    {
+      "path": "src/ImagePreview.css",
+      "sha256": "0a00b8d4f2bbf3bb42e07227719e1bb133154fdb2225c7720504662a3d398b9f"
+    },
+    {
+      "path": "src/ImagePreview.tsx",
+      "sha256": "80ab402b657056656ec0508ee0cc5bfd391b6361bf65b98bd9ae9aac97b3f29a"
+    },
+    {
+      "path": "src/MobileFolderIcons.tsx",
+      "sha256": "bcfb1e37dc95761342ec3c4669c3444a432c7236c90ea239160f5b9d4283395f"
+    },
+    {
+      "path": "src/OcrPanel.css",
+      "sha256": "7739e459f3be0637ab7e36a52841acc77a0bde2619f5c9d5691d9b98995fca30"
+    },
+    {
+      "path": "src/OcrPanel.tsx",
+      "sha256": "92f09c5c3271f1cceea92dafb692c848f0da94f88e67c442a34494a69cb8040a"
+    },
+    {
+      "path": "src/Preferences.css",
+      "sha256": "98c78d2eea6a53abe3ce7d294adafe8a565c02d0e8cf12b7aa0ed928ef0f288f"
+    },
+    {
+      "path": "src/Preferences.tsx",
+      "sha256": "0a16031291a2071dbdd68abefb3247c3ea14fddb263e943f71d9701ddc71fcbc"
+    },
+    {
+      "path": "src/RecordingDock.tsx",
+      "sha256": "47330efe587a9e7a2f76f8e37e81d812fa330b9b21809afada02e5349f426a15"
+    },
+    {
+      "path": "src/RecordingPanel.css",
+      "sha256": "dfe0ff8600903acbe9c94a313ddb5e0dc23f78a70fbdada6854300598a8b32a2"
+    },
+    {
+      "path": "src/RecordingPanel.tsx",
+      "sha256": "baf0d3f3b2acaf6422792907cbc0c602dc1befb42f3a985acd5c716d408b4a47"
+    },
+    {
+      "path": "src/RecordingView.tsx",
+      "sha256": "8d0334f1fb568e37d00d7c0fa40056d7828f5cfa494c1abc285ee485b5fd6d63"
+    },
+    {
+      "path": "src/RecordingWindow.tsx",
+      "sha256": "6fa7e00355491796db5c7fa5863fb68eef0b4f54d4eeca5a327b931e9de8bb9e"
+    },
+    {
+      "path": "src/SmartFolderForm.tsx",
+      "sha256": "c9e2f155f41a31ef733b1c9c5edb3d2090366567cf34662bbfd911c1cdfb1312"
+    },
+    {
+      "path": "src/SyncSettings.css",
+      "sha256": "c55f5e19896003c0aa7115bfc9f04d39c5e45ed5874c27e6d5f51205416658b7"
+    },
+    {
+      "path": "src/SyncSettings.tsx",
+      "sha256": "8d17d8dff3b74f4157fb4143fe2e18e694d18a15896b6567e5f39b3d857a194c"
+    },
+    {
+      "path": "src/access-client.ts",
+      "sha256": "2ac79fec3a00ae972f22bac2c6534aa1468b719a8be4b18c7e803549c9d99f98"
+    },
+    {
+      "path": "src/apple-notes-import.ts",
+      "sha256": "a0500c7536447482b51c48852ad2b985e82be511d869b208a0ed6c7484dbc649"
+    },
+    {
+      "path": "src/attachment-export.ts",
+      "sha256": "6b49269292be832ac76750e65cc3409475672b6558f7bf55f9a3abfd50072f53"
+    },
+    {
+      "path": "src/attachment-media.ts",
+      "sha256": "2ff17ef91d36ea1a26054004ec243dd2ee1d62e5320fd38b5054d669cffae945"
+    },
+    {
+      "path": "src/attachment-submission.ts",
+      "sha256": "23dc47c3faeaad034c616fa36c825f80b6ec92732c91f5010ebe612454a2aa63"
+    },
+    {
+      "path": "src/attachment-target.ts",
+      "sha256": "0230ad006408875232fd06d11905b1723832eb982badf172d2baa843ef54dbc0"
+    },
+    {
+      "path": "src/audio-playback.ts",
+      "sha256": "8722b3ff14e731d017f727891b961b6eb6ad17de8e8a40572c033b2efb05c942"
+    },
+    {
+      "path": "src/bridge.ts",
+      "sha256": "d6506161c10155064adffe45652b451cd39e68abf1a844a8ab796cc304eb5337"
+    },
+    {
+      "path": "src/data-management.ts",
+      "sha256": "30e27f6de1383e716abee9ca28f2751082039269119271e56275e1bb6ea4cde6"
+    },
+    {
+      "path": "src/debug/catalog.ts",
+      "sha256": "d9b32f573af2c3ca62f9a8b6bb85b7b8d8b2f2dfcacb7c285317bde32fdec262"
+    },
+    {
+      "path": "src/debug/protocol.ts",
+      "sha256": "c70b62145dd1d6f4f1fc9e40757d52239cf9bc2e08efc81e7c80344222ba3cb4"
+    },
+    {
+      "path": "src/debug/runtime.ts",
+      "sha256": "8551b886f5915b5cc6082fbab8a567b1284cf3694266e875c836581843cdeee1"
+    },
+    {
+      "path": "src/desktop-recording-session.ts",
+      "sha256": "348e0298d2a7d825977c4efc881768e2a7042d969ac4a4551f6178a75874f23c"
+    },
+    {
+      "path": "src/document-equality.ts",
+      "sha256": "629d2729ac47626f6618f13d6858c98dc5a0f654a4b53ba70f6ec0731204db7d"
+    },
+    {
+      "path": "src/editor-actions.ts",
+      "sha256": "de5092e2b9a1304bd013b4198dc577d5f79f8effb52a5743ffe669c41db03e36"
+    },
+    {
+      "path": "src/editor-save-snapshot.ts",
+      "sha256": "4ca9f9b64f52c3558b1a843c61f0ef8d810af45743c26f2cf57974c03564d5dd"
+    },
+    {
+      "path": "src/editor-schema.ts",
+      "sha256": "c05e5aa6e527e02ae3c2c1e319bb4d211ab1e2cb27b8c83dd8f27d6cb140c9f2"
+    },
+    {
+      "path": "src/main.tsx",
+      "sha256": "2a05d75ba3bc21a60366dea66f7eca99a90683bb15907b2b75df6ce686e2a7a5"
+    },
+    {
+      "path": "src/metadata-client.ts",
+      "sha256": "ca3efa81802ffdf9e5d5478dd429d2aa742d19e1e5beb04946ac4642843e9c1f"
+    },
+    {
+      "path": "src/native-keyboard.ts",
+      "sha256": "4bbaa029000f125a5382f40670e3cea2adc28b417ea7384fd66b3cfa74b1a410"
+    },
+    {
+      "path": "src/native-recording-access.ts",
+      "sha256": "3cd44eec8fec1e9cff7535a8c3df1289090ee3025a952cab786b0db3712261d7"
+    },
+    {
+      "path": "src/native-toolbar-controller.ts",
+      "sha256": "448dd305f1f3223f71ab61079ae8dcfbecd15b7075beb87fccf510d27c07a6e1"
+    },
+    {
+      "path": "src/native-toolbar-state.ts",
+      "sha256": "bb03630f2e9bb7a3e4a5c0200cf55667f36c26e55e682e6c5b87c6c1d8683200"
+    },
+    {
+      "path": "src/native-toolbar.ts",
+      "sha256": "c70c97cdd7d84cad8a7bb3587687afb43a87d3cf371740830d4bd63f2dcf423e"
+    },
+    {
+      "path": "src/network-sync.ts",
+      "sha256": "3b46699920df0bd3fd6fc205399c489273505ba4cac095fd0f0c6cf3b939837e"
+    },
+    {
+      "path": "src/note-tag-extension.ts",
+      "sha256": "00fd2d2b199ccbc225785f8792718ee23ce94b92b4cf258d6d5f2c4a27b9cab9"
+    },
+    {
+      "path": "src/note-tags.ts",
+      "sha256": "2d5460e5a70bcb7b6a5a91631e25ca6ff05c1b3aeeb79b45a4a145415c174a2f"
+    },
+    {
+      "path": "src/ocr-host.ts",
+      "sha256": "7657e32faac6495ca78a8973cac84350447534ab887e59ad3c868b08152e184f"
+    },
+    {
+      "path": "src/ocr-native.ts",
+      "sha256": "382cdda5d67f7ac043d520edbbdffc0389679ea55dae5596a4460e11d7c079d5"
+    },
+    {
+      "path": "src/ordinary-folder-keyboard.ts",
+      "sha256": "92d8b53054997432dfd451d9f63dbb3c79fcc42669453f2f1879a13f019ac81d"
+    },
+    {
+      "path": "src/ordinary-folder-option.ts",
+      "sha256": "45cbf5bda26cf1630311f8fbc7a10ea05aa5ebcb61cd6805e070f55d758c0fe1"
+    },
+    {
+      "path": "src/proof-access.ts",
+      "sha256": "64b235d209e03649d340354b1aa187efd2fe872cfbc9e007951306359c3ca3ca"
+    },
+    {
+      "path": "src/recording-clock.ts",
+      "sha256": "4982340b02af9210bdf0e1055c677aac94fc0e4bb191ed38ce1f0c88a5bfb658"
+    },
+    {
+      "path": "src/recording-coordinator.ts",
+      "sha256": "a56eaae1a42f1ba7141055b52eb40f54b0729c5f2fae9b6077a895bd127fa904"
+    },
+    {
+      "path": "src/recording-live-card.ts",
+      "sha256": "0b508b9a317d9b5a81a9e0947c35a63a5b502ff63cc91b2d4558224500ffcfab"
+    },
+    {
+      "path": "src/recording-metadata.ts",
+      "sha256": "7f09b9b0908016cfebe924cc63c87256ed51be1a6bf122d544a1233cbb93d5b0"
+    },
+    {
+      "path": "src/recording-pcm.ts",
+      "sha256": "733870292dc2e3f6fd87fa4bac9cf504c5da2bfe136d79556c289803bf1800c2"
+    },
+    {
+      "path": "src/recording-playback.ts",
+      "sha256": "41a9f95f8673da17e532be9984022327a5449ea224db779134bbe642bceaeb95"
+    },
+    {
+      "path": "src/recording-replacement.ts",
+      "sha256": "b8b97b03d6f30e0ca398532d55d2e0c110c903c859b234312254900e2d8e71e3"
+    },
+    {
+      "path": "src/recording-revision-relay.ts",
+      "sha256": "df1fe9769029a0c122d8c7827d2809d3da70a876dca385fb84fb97b627120f29"
+    },
+    {
+      "path": "src/recording-revisions.ts",
+      "sha256": "9673961f92da60d6293998fd0d789f80c68e1992a517a62c77c9fce59764ebaa"
+    },
+    {
+      "path": "src/recording-session.ts",
+      "sha256": "fe002d7bc3670821d25884fb776fb961def3960af9e257681a57fe613581f6bc"
+    },
+    {
+      "path": "src/recording-waveform.tsx",
+      "sha256": "13f56a1281c3564b36b410472af35ac78852291e351df3d866c98af07f870f68"
+    },
+    {
+      "path": "src/recording-window-transport.ts",
+      "sha256": "66370d6c8318860a404a4da27ee7b941a067bfba248ade13a6c6e6d6afb3841a"
+    },
+    {
+      "path": "src/save-queue.ts",
+      "sha256": "9c30b3d300e8476cecfdca4d0b78e6c7462425f7b89acab4167fbeb8935493ef"
+    },
+    {
+      "path": "src/save-revisions.ts",
+      "sha256": "3fbf025c8c57cbcc78cdc13d8b62962b0235feb89ea3cd23b5af8547bc940d6a"
+    },
+    {
+      "path": "src/search-editor-gate.ts",
+      "sha256": "9dbe5495db5d9538d8b0fd7acfc8a63acaedb1c7f41c5325a58b79101407016d"
+    },
+    {
+      "path": "src/search-list-text.tsx",
+      "sha256": "05e69c169503412722088e0e06d1eff04e675e1435f6c5c0071d477dbc0be3bc"
+    },
+    {
+      "path": "src/search-selection.ts",
+      "sha256": "243d637f056fe8fadd1a5dc1c47c4689c6b865d82a764b6da1a9e44ec91d3a3a"
+    },
+    {
+      "path": "src/secure-id.ts",
+      "sha256": "04eb982510ffd3b6a6931f3f61ddbf1cc53d981d2e8aac281a5110c7c112c3ab"
+    },
+    {
+      "path": "src/sidebar-preference.ts",
+      "sha256": "02efda1c3dd671475fd4c0c229b6aa242c0ec1485253ad2a0371721cb2c4a13d"
+    },
+    {
+      "path": "src/smart-draft.ts",
+      "sha256": "a97480a10d85fcb50091987af187d0132608528349748f6488715988004abca6"
+    },
+    {
+      "path": "src/smart-folders.css",
+      "sha256": "398511f11d0152e7d5a1fce1e965a5099e6d197bb29987d0838282a87aadf166"
+    },
+    {
+      "path": "src/smart-folders.ts",
+      "sha256": "22a5e1b8b4767cb1a74df5ab9cc680c8aef3f4b62b0ddac72746006fa8d85d53"
+    },
+    {
+      "path": "src/storage-usage.ts",
+      "sha256": "98b6643991d446df427788381cc73d29ac2174428554ee500feecf383b0159b1"
+    },
+    {
+      "path": "src/style.css",
+      "sha256": "878d2892c849951135c4ec5608eea4d522d3203ee58ea37f9126a6ef7dad1f1d"
+    },
+    {
+      "path": "src/sync-client.ts",
+      "sha256": "49745690fe52fdfe7458746c2f7e4d3e8f2b050bd8ec07b0ba3e1b53b96f3463"
+    },
+    {
+      "path": "src/tag-composition.ts",
+      "sha256": "e81b2a519a803b4ecd5b58605832a823088aac448a4812674143e4ca6be79715"
+    },
+    {
+      "path": "src/trusted-synchronization.ts",
+      "sha256": "86eea623393304e770c4f0310eb79f0638911a48abc70cb8514d86c2a1d40128"
+    },
+    {
+      "path": "src/types.ts",
+      "sha256": "6b8df68d03d50c89b8f797f59a1df5d6bd700fecca3f9c2f22e9493034aba063"
+    },
+    {
+      "path": "src/use-attachment-media.ts",
+      "sha256": "3d5f51d05056659cff4d4c1f2e7faf6d901c9356cec35622a7bbb9227669b883"
+    },
+    {
+      "path": "src/use-editor-commit.ts",
+      "sha256": "6245351f825d3f24fc4df06413be51a3bfa56feabe3f5586931eb94e64f7b809"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    }
+  ],
+  "sourceHead": "7dad1d1f3b0f77676e62cce67631bb497bbb27e9",
+  "finalHead": "7dad1d1f3b0f77676e62cce67631bb497bbb27e9",
+  "checks": [
+    {
+      "name": "Real Enter commits English_tag-94, keeps newline/save and does not carry tag to next paragraph",
+      "status": "passed"
+    },
+    {
+      "name": "Real Enter commits 中文标签, keeps newline/save and does not carry tag to next paragraph",
+      "status": "passed"
+    },
+    {
+      "name": "Space still commits the same legal tag through real input",
+      "status": "passed"
+    },
+    {
+      "name": "Illegal/embedded/overlong names stay unmarked after real Enter",
+      "status": "passed"
+    },
+    {
+      "name": "Code block, inline code and link stay unmarked; Enter retains their existing behavior",
+      "status": "passed"
+    },
+    {
+      "name": "Noncollapsed selection is replaced by real Enter without committing a tag",
+      "status": "passed"
+    },
+    {
+      "name": "Blocked Enter plus same-event unrelated transaction does not consume a pending tag",
+      "status": "passed"
+    },
+    {
+      "name": "Blocked Enter with no transaction leaves no pending tag for later edits",
+      "status": "passed"
+    },
+    {
+      "name": "Chromium actual IME Enter/Tab cannot prematurely mark or insert tab",
+      "status": "passed"
+    },
+    {
+      "name": "Real paragraph Tab inserts literal tab and retains focus/save/Undo",
+      "status": "passed"
+    },
+    {
+      "name": "Real heading Tab inserts literal tab and retains focus/save/Undo",
+      "status": "passed"
+    },
+    {
+      "name": "Real Tab replaces a text selection with one literal tab",
+      "status": "passed"
+    },
+    {
+      "name": "List Tab/Shift+Tab keeps indentation priority over literal insertion",
+      "status": "passed"
+    },
+    {
+      "name": "Table Tab/Shift+Tab navigates cells and last-cell Tab keeps row creation",
+      "status": "passed"
+    },
+    {
+      "name": "Shift/Control/Meta/Alt Tab do not write ordinary text",
+      "status": "passed"
+    },
+    {
+      "name": "Noneditable actual Editor rejects Enter and Tab mutations",
+      "status": "passed"
+    },
+    {
+      "name": "Tab outside the body retains native focus navigation and document bytes",
+      "status": "passed"
+    }
+  ],
+  "status": "passed",
+  "metadata": {
+    "platform": "desktop-browser",
+    "backend": "isolated-js-protocol-fixture",
+    "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+    "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+    "browser": "156.0.8078.80",
+    "frontendTransport": "isolated-static-debug-bundle",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    }
+  },
+  "rendererErrors": [],
+  "wallMs": 49866
+}
