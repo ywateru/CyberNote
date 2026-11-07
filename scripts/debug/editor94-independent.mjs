@@ -88,7 +88,7 @@ try {
       observations.push({ ime: { before, afterKeys: await current(), composing: await body().evaluate(node => node.editor.view.composing) } });
       await focus(); await cdp.send('Input.insertText', { text: '#组字' }); await idle(page);
       assert.equal(await body().evaluate(node => node.editor.view.composing), false);
-      await page.keyboard.press('Enter'); assert.equal(tags(await persisted())[0]?.text, '#组字');
+      const settled = await persisted(); assert.equal(settled.content[0].content[0].text, '#组字'); assert.equal(tags(settled).length, 0);
     } finally { await cdp.detach(); }
   });
   for (const kind of ['paragraph', 'heading']) await check(`Real ${kind} Tab inserts literal tab and retains focus/save/Undo`, async () => {
@@ -130,7 +130,8 @@ try {
   });
   await check('Tab outside the body retains native focus navigation and document bytes', async () => {
     const before = await setup(doc(p('outside')), 2);
-    const input = page.getByPlaceholder('搜索'); await input.focus(); await page.keyboard.press('Tab');
+    await api(page, 'search.find', { query: '' });
+    const input = page.getByPlaceholder('在备忘录中查找'); await input.focus(); await page.keyboard.press('Tab');
     assert.equal(await input.evaluate(node => node === document.activeElement), false); assert.equal(await focused(), false); assert.deepEqual(await current(), before);
   });
   await saveJSON(resolve(output, 'keyboard-events.json'), await page.evaluate(() => window.independent94Events));
