@@ -25,7 +25,7 @@
 
 macOS 自动化用途文字和签名 entitlement 由打包流程检查；这不替代每台 Mac 自身的系统授权。产品只读取本机系统接口，没有 iCloud 登录或远程读取功能。
 
-导入基础能力与真实来源限制见[APP92 交付记录](verification/apple-notes-import92/DELIVERY.md)；内部记录显示调整与附件菜单的当前进度见[APP93 恢复状态](plan/attachment-context93-state.md)。
+导入基础能力与真实来源限制见[APP92 交付记录](verification/apple-notes-import92/DELIVERY.md)；内部记录显示调整、附件菜单与 Mac31 包见[APP93 交付记录](verification/attachments93/DELIVERY.md)。
 
 ## 附件菜单（Mac31）
 
