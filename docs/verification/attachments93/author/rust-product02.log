@@ -1,0 +1,246 @@
+warning: method `export_path` is never used
+  --> src/apple_notes_import/core.rs:36:19
+   |
+33 | impl OwnedStage {
+   | --------------- method in this implementation
+...
+36 |     pub(crate) fn export_path(&self, index: usize) -> Result<&std::path::Path> {
+   |                   ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `read_export` is never used
+   --> src/apple_notes_import/core.rs:784:19
+    |
+741 | impl OwnedStage {
+    | --------------- method in this implementation
+...
+784 |     pub(crate) fn read_export(&self, index: usize) -> Result<Vec<u8>> {
+    |                   ^^^^^^^^^^^
+
+warning: fields `started`, `revision`, and `checkpoint_revision` are never read
+  --> src/recording_window.rs:23:5
+   |
+20 | struct Entry {
+   |        ----- fields in this struct
+...
+23 |     started: bool,
+   |     ^^^^^^^
+24 |     terminal: bool,
+25 |     revision: Option<(u64, bool)>,
+   |     ^^^^^^^^
+26 |     checkpoint_revision: u64,
+   |     ^^^^^^^^^^^^^^^^^^^
+
+warning: function `entry` is never used
+  --> src/recording_window.rs:89:4
+   |
+89 | fn entry<'a>(
+   |    ^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `route_message` is never used
+   --> src/recording_window.rs:460:4
+    |
+460 | fn route_message(
+    |    ^^^^^^^^^^^^^
+
+warning: function `visibility_target` is never used
+   --> src/recording_window.rs:558:4
+    |
+558 | fn visibility_target(
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `stage_attachment`, `stage_archive`, and `import_stage` are never used
+   --> src/session.rs:188:19
+    |
+ 60 | impl Session {
+    | ------------ methods in this implementation
+...
+188 |     pub(crate) fn stage_attachment(
+    |                   ^^^^^^^^^^^^^^^^
+...
+197 |     pub(crate) fn stage_archive(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+...
+201 |     pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^
+
+warning: method `smart_projection` is never used
+  --> src/session/metadata.rs:98:19
+   |
+ 4 | impl Session {
+   | ------------ method in this implementation
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: function `validated_tags` is never used
+  --> src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: method `stage_archive` is never used
+   --> src/store/archive.rs:616:19
+    |
+435 | impl Store {
+    | ---------- method in this implementation
+...
+616 |     pub(crate) fn stage_archive(&self) -> Result<super::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+
+warning: method `path` is never used
+  --> src/store/data_management.rs:79:12
+   |
+78 | impl DocumentStage {
+   | ------------------ method in this implementation
+79 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: methods `document_stage` and `stage_attachment` are never used
+   --> src/store/data_management.rs:324:19
+    |
+159 | impl Store {
+    | ---------- methods in this implementation
+...
+324 |     pub(crate) fn document_stage(&self) -> Result<DocumentStage> {
+    |                   ^^^^^^^^^^^^^^
+...
+463 |     pub(crate) fn stage_attachment(&self, id: &str) -> Result<(DocumentStage, AttachmentExport)> {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> src/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `sync_apply_pending` is never used
+   --> src/store/synchronization.rs:810:12
+    |
+272 | impl Store {
+    | ---------- method in this implementation
+...
+810 |     pub fn sync_apply_pending(&mut self) -> Result<SyncApplyReport> {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: method `sync_enable` is never used
+   --> src/store/synchronization/schema.rs:127:12
+    |
+ 84 | impl Store {
+    | ---------- method in this implementation
+...
+127 |     pub fn sync_enable(&mut self, workspace: Option<&str>) -> Result<SyncIdentity> {
+    |            ^^^^^^^^^^^
+
+warning: method `public_key` is never used
+   --> src/sync/identity.rs:312:12
+    |
+175 | impl IdentityStore {
+    | ------------------ method in this implementation
+...
+312 |     pub fn public_key(&self) -> Result<String> {
+    |            ^^^^^^^^^^
+
+warning: `notes-clone` (lib) generated 22 warnings
+   Compiling notes-clone v0.1.0 (/private/tmp/apple-notes-attachments93-develop/src-tauri)
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `notes-clone` (lib test) generated 10 warnings (9 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.12s
+     Running unittests src/lib.rs (/private/tmp/apple-notes-sync84-target/debug/deps/notes_clone_lib-e8f37e768f2e7e23)
+
+running 33 tests
+test apple_notes_import::core::tests::actual_readonly_source_worker_to_isolated_store ... ignored, requires explicitly supplied private readonly source fixture and new output directory
+test apple_notes_import::core::tests::finite_failure_has_no_source_error_text ... ok
+test apple_notes_import::core::tests::bad_ancestry_is_not_guessed ... ok
+test apple_notes_import::core::tests::duplicate_source_identity_and_folder_cycles_are_rejected ... ok
+test apple_notes_import::core::tests::scan_resolves_ancestry_and_hides_source_identifiers ... ok
+test apple_notes_import::core::tests::stale_job_identity_is_rejected ... ok
+test apple_notes_import::core::tests::owned_export_rejects_links_and_reads_exact_owned_regular_bytes ... ok
+test apple_notes_import::core::tests::read_validates_stability_and_incomplete_media_never_becomes_source_note ... ok
+test apple_notes_import::core::tests::oversized_combined_metadata_is_rejected_before_loading_any_attachment ... ok
+test apple_notes_import::core::tests::stage_export_budget_stops_only_owned_process_before_timeout ... ok
+test store::apple_import::tests::formatting_whitespace_between_source_blocks_does_not_create_paragraphs ... ok
+test store::apple_import::tests::failed_or_locked_source_never_creates_empty_note_or_success_record ... ok
+test store::apple_import::tests::fingerprints_ignore_dates_and_random_ids_but_include_media_bytes_and_order ... ok
+test store::apple_import::tests::formatting_whitespace_fix_preserves_explicit_empty_inline_pre_and_nbsp ... ok
+test store::apple_import::tests::independent_svg_counterexample_reports_loss_and_underline_uses_real_schema ... ok
+test store::apple_import::tests::inert_html_never_executes_or_keeps_remote_images ... ok
+test apple_notes_import::core::tests::owned_process_cancel_and_timeout_reap_only_the_owned_child ... ok
+test apple_notes_import::core::tests::changed_access_during_read_and_foreign_owner_cannot_publish ... ok
+test store::apple_import::tests::formatting_whitespace_copy_keeps_original_raw_plain_and_dates ... ok
+test apple_notes_import::core::tests::cancel_after_publication_started_reports_committed_outcome ... ok
+test apple_notes_import::core::tests::same_core_worker_runs_preview_read_stage_session_store_and_duplicate_retry ... ok
+test apple_notes_import::core::tests::cancel_and_window_disappearance_during_read_prevent_real_store_commit ... ok
+
+thread 'store::apple_import::tests::internal_records_are_projected_and_preserved_across_public_save' (44918632) panicked at src/store/apple_import/tests.rs:42:5:
+assertion `left == right` failed
+  left: "invalid"
+ right: "internal_attachment"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test store::apple_import::tests::corrupt_or_missing_raw_record_cannot_suppress_a_copy ... ok
+test store::apple_import::tests::unplaced_attachments_keep_source_order_and_warn ... ok
+test store::apple_import::tests::internal_records_are_projected_and_preserved_across_public_save ... FAILED
+test store::apple_import::tests::old_raw_only_and_nested_documents_project_to_valid_empty_blocks ... ok
+test store::apple_import::tests::raw_records_count_in_inventory_and_no_raw_source_ids_are_persisted ... ok
+test store::apple_import::tests::moved_prior_copy_is_not_reused_as_future_source_folder ... ok
+test store::apple_import::tests::invalid_or_replaced_record_is_never_hidden_by_name_or_mime ... ok
+test store::apple_import::tests::transaction_failure_does_not_publish_success_or_leave_orphans ... ok
+test store::apple_import::tests::complete_backup_restores_raw_and_dedup_after_owner_remapping ... ok
+test store::apple_import::tests::rich_append_reopen_dedup_changed_copy_and_settings ... ok
+test store::apple_import::tests::strict_existing_wire_carries_internal_record_through_real_store_publication ... ok
+
+failures:
+
+failures:
+    store::apple_import::tests::internal_records_are_projected_and_preserved_across_public_save
+
+test result: FAILED. 31 passed; 1 failed; 1 ignored; 0 measured; 187 filtered out; finished in 0.63s
+
+error: test failed, to rerun pass `--lib`

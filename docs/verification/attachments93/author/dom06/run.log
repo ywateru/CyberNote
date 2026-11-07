@@ -1,0 +1,38 @@
+PASS baseline real Store note saved
+PASS actual preview lists hierarchy and locked reason
+PASS source raw IDs absent from rendered HTML
+PASS complete result distinguishes imported loss and export failure
+PASS real Store append preserves baseline and settings
+PASS real source media and raw records separately managed
+PASS APP93 internal records absent from all public note documents
+PASS rich existing Editor schema and original dates retained
+PASS actual result DOM exposes loss and source failure details
+PASS original imported image export bytes exact
+PASS APP93 source attachment remains public: 录音.wav
+PASS APP93 source attachment original bytes exact: 录音.wav
+PASS APP93 source attachment remains public: 原件.txt
+PASS APP93 source attachment original bytes exact: 原件.txt
+PASS APP93 source attachment remains public: 原件.pdf
+PASS APP93 source attachment original bytes exact: 原件.pdf
+PASS repeat same worker skips copies without duplicates
+PASS cancel scan stops owned worker without writes
+PASS actual backup contains all six managed original and raw blobs
+PASS raw source HTML is a separate backup file
+PASS APP93 actual Editor contains user media only
+PASS APP93 menu clamps bottom and right edges
+PASS APP93 information uses real authorized original bytes
+PASS APP93 image action uses existing preview
+PASS APP93 menu exports exact original bytes
+PASS APP93 cancelled picker publishes no export
+PASS APP93 failed export reports a retryable error
+PASS APP93 remove and Undo preserve original public document and managed files
+PASS APP93 saved audio exposes real play capability
+PASS APP93 audio menu uses actual playback controller
+PASS APP93 Escape restores focused attachment
+PASS APP93 menu keyboard navigates actual enabled actions
+PASS APP93 video action invokes scoped synthetic playback boundary
+PASS APP93 live recording offers disabled saved-file actions with reason
+PASS APP93 background recording keeps other saved audio actions available
+Error: 备忘录或授权状态已改变，请重新执行操作
+    at api (file:///private/tmp/apple-notes-attachments93-develop/scripts/debug/runtime.mjs:200:600)
+    at async file:///private/tmp/apple-notes-attachments93-develop/scripts/debug/apple-notes-import92.mjs:467:3
