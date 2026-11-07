@@ -12,6 +12,41 @@ import { TableKit } from "@tiptap/extension-table";
 import Highlight from "@tiptap/extension-highlight";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
+import { Plugin } from "@tiptap/pm/state";
+
+const LiteralTab = Extension.create({
+  name: "notesLiteralTab",
+  // Table navigation and list indentation retain their normal first chance.
+  priority: 50,
+  addProseMirrorPlugins() {
+    const editor = this.editor;
+    return [
+      new Plugin({
+        props: {
+          handleKeyDown(view, event) {
+            if (
+              event.key !== "Tab" ||
+              event.shiftKey ||
+              event.ctrlKey ||
+              event.altKey ||
+              event.metaKey ||
+              event.isComposing ||
+              event.keyCode === 229 ||
+              view.composing ||
+              editor.isDestroyed ||
+              !editor.isEditable ||
+              view.state.selection.$from.parent.type.spec.code ||
+              view.state.selection.$to.parent.type.spec.code
+            )
+              return false;
+            view.dispatch(view.state.tr.insertText("\t").scrollIntoView());
+            return true;
+          },
+        },
+      }),
+    ];
+  },
+});
 
 const ListStyle = Extension.create({
   name: "notesListStyle",
@@ -83,6 +118,7 @@ export function createEditorExtensions(
       trailingNode: { notAfter: ["heading", "paragraph"] },
     }),
     NoteTag.configure({ allowCommit: options.allowTags !== false }),
+    LiteralTab,
     ListStyle,
     TaskList,
     TaskItem.configure({ nested: true }),
