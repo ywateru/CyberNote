@@ -23,8 +23,10 @@ export async function runKeyboard94Checks({
       });
     }
   };
-  const focusEnd = () =>
-    page.evaluate(() => window.editors.a.commands.focus("end"));
+  const focusEnd = async () => {
+    await page.evaluate(() => window.editors.a.commands.focus("end"));
+    await page.waitForFunction(() => window.editors.a.view.hasFocus());
+  };
   for (const name of ["标签", "Project_94"]) {
     await check(
       `Enter commits ${name} and splits without mark leakage`,

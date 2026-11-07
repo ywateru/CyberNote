@@ -176,7 +176,16 @@ export const NoteTag = Mark.create({
       },
       appendTransaction(transactions, old, state) {
         const candidate = entering;
-        entering = undefined;
+        // Tiptap's unsuccessful list commands can dispatch empty transactions
+        // before the base keymap splits. Keep the candidate only across those
+        // exact no-ops, within the synchronous handler stack above.
+        entering =
+          candidate &&
+          old === candidate.state &&
+          state.doc === old.doc &&
+          state.selection.eq(old.selection)
+            ? { ...candidate, state }
+            : undefined;
         if (
           !writable() ||
           editor.view.composing ||
