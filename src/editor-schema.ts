@@ -12,7 +12,7 @@ import { TableKit } from "@tiptap/extension-table";
 import Highlight from "@tiptap/extension-highlight";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
-import { Plugin } from "@tiptap/pm/state";
+import { Plugin, TextSelection } from "@tiptap/pm/state";
 
 const LiteralTab = Extension.create({
   name: "notesLiteralTab",
@@ -35,6 +35,9 @@ const LiteralTab = Extension.create({
               view.composing ||
               editor.isDestroyed ||
               !editor.isEditable ||
+              !(view.state.selection instanceof TextSelection) ||
+              !view.state.selection.$from.parent.isTextblock ||
+              !view.state.selection.$to.parent.isTextblock ||
               view.state.selection.$from.parent.type.spec.code ||
               view.state.selection.$to.parent.type.spec.code
             )
