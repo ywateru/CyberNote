@@ -2,6 +2,8 @@
 // Independent APP94 checks: real App/Tiptap keyboard events and normal save port.
 // Only the existing isolated backend/OS fixture is synthetic; no production hook.
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -10,6 +12,9 @@ const output = resolve(process.argv[2] || '');
 if (!process.argv[2]) throw Error('Usage: node scripts/debug/editor94-independent.mjs FRESH_OUTPUT');
 await mkdir(output);
 const head = () => execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+const sourceInputs = () => execFileSync('git', ['ls-files', '-z', '--', 'src'], { encoding: 'utf8' }).split('\0').filter(Boolean).sort().map(path => ({ path, sha256: createHash('sha256').update(readFileSync(path)).digest('hex') }));
+const sourceBefore = sourceInputs();
+assert.equal(execFileSync('git', ['status', '--porcelain', '--', 'src'], { encoding: 'utf8' }).trim(), '');
 const sourceHead = head(), began = performance.now(), checks = [], observations = [];
 let runtime, failure;
 const text = value => ({ type: 'text', text: value });
@@ -173,6 +178,7 @@ try {
 } catch (error) { failure ||= error; }
 finally {
   if (runtime) { try { await runtime.cleanup(); } catch (error) { failure ||= error; } }
-  await saveJSON(resolve(output, 'result.json'), { sourceHead, finalHead: head(), checks, status: failure ? 'failed' : 'passed', error: failure?.stack, metadata: runtime?.metadata, rendererErrors: runtime?.errors, wallMs: Math.round(performance.now() - began) });
+  const sourceAfter = sourceInputs(); if (JSON.stringify(sourceBefore) !== JSON.stringify(sourceAfter)) failure ||= Error('Source changed during run');
+  await saveJSON(resolve(output, 'result.json'), { sourceBefore, sourceAfter, sourceHead, finalHead: head(), checks, status: failure ? 'failed' : 'passed', error: failure?.stack, metadata: runtime?.metadata, rendererErrors: runtime?.errors, wallMs: Math.round(performance.now() - began) });
 }
 if (failure) throw failure;

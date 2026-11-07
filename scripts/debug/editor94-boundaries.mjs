@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 // Independent source-review counterexamples on the actual App Editor.
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { openRuntime, api, idle, state, saveJSON } from './runtime.mjs';
 const out = resolve(process.argv[2] || ''); if (!process.argv[2]) throw Error('FRESH_OUTPUT required'); await mkdir(out);
+const sourceInputs = () => execFileSync('git', ['ls-files', '-z', '--', 'src'], { encoding: 'utf8' }).split('\0').filter(Boolean).sort().map(path => ({ path, sha256: createHash('sha256').update(readFileSync(path)).digest('hex') }));
+const sourceBefore = sourceInputs();
+assert.equal(execFileSync('git', ['status', '--porcelain', '--', 'src'], { encoding: 'utf8' }).trim(), '');
 const sourceHead = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 const checks = [], observations = []; let runtime, failure;
 const p = value => ({ type: 'paragraph', ...(value ? { content: [{ type: 'text', text: value }] } : {}) });
@@ -60,5 +65,5 @@ try {
   });
   assert.deepEqual(runtime.errors, []);
 } catch (error) { failure ||= error; }
-finally { if (runtime) { try { await runtime.cleanup(); } catch (error) { failure ||= error; } } await saveJSON(resolve(out, 'result.json'), { sourceHead, checks, observations, status: failure ? 'failed' : 'passed', error: failure?.stack, rendererErrors: runtime?.errors }); }
+finally { if (runtime) { try { await runtime.cleanup(); } catch (error) { failure ||= error; } } const sourceAfter = sourceInputs(); if (JSON.stringify(sourceBefore) !== JSON.stringify(sourceAfter)) failure ||= Error('Source changed during run'); await saveJSON(resolve(out, 'result.json'), { sourceBefore, sourceAfter, sourceHead, checks, observations, status: failure ? 'failed' : 'passed', error: failure?.stack, rendererErrors: runtime?.errors }); }
 if (failure) throw failure;
