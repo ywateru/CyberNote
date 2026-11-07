@@ -103,7 +103,9 @@ export function AttachmentMenuProvider({
     if (!menu) return;
     const element = root.current;
     if (!element) return;
-    const { x, y } = menu.request.point;
+    const bounds = menu.request.trigger.getBoundingClientRect();
+    const x = Number.isFinite(menu.request.point.x) ? menu.request.point.x : bounds.left + 12;
+    const y = Number.isFinite(menu.request.point.y) ? menu.request.point.y : bounds.top + 12;
     element.style.left = `${Math.max(8, Math.min(x, innerWidth - element.offsetWidth - 8))}px`;
     element.style.top = `${Math.max(topInset + 8, Math.min(y, innerHeight - element.offsetHeight - 8))}px`;
     const buttons = () =>
@@ -234,13 +236,7 @@ export function AttachmentMenuProvider({
       {menu &&
         createPortal(
           <div
-            ref={element => {
-              root.current = element;
-              if (element) {
-                element.style.left = `${Math.max(8, Math.min(menu.request.point.x, innerWidth - element.offsetWidth - 8))}px`;
-                element.style.top = `${Math.max(topInset + 8, Math.min(menu.request.point.y, innerHeight - element.offsetHeight - 8))}px`;
-              }
-            }}
+            ref={root}
             className="popover attachment-context-menu"
             role="menu"
             aria-label="附件菜单"

@@ -353,7 +353,7 @@ try {
   check("APP93 actual Editor contains user media only", await page.locator('.attachment-node').count() === 3 && !(await page.locator('.note-document').innerText()).includes('Apple 备忘录原始记录.json'));
   const menu = page.getByRole("menu", { name: "附件菜单", exact: true });
   const openMenu = async (kind) => {
-    await page.locator(`.attachment-node.${kind}`).first().dispatchEvent("contextmenu", { clientX: 1277, clientY: 795 });
+    await page.locator(`.attachment-node.${kind}`).first().evaluate(n => n.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: 1277, clientY: 795, button: 2 })));
     await menu.waitFor();
   };
   await openMenu("image");
