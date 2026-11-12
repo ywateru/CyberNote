@@ -52,6 +52,21 @@ async function distFingerprint(root) {
   assert(Object.keys(files).length, "Static frontend dist must exist");
   return { sha256: hash(JSON.stringify(Object.fromEntries(Object.entries(files).sort()))), files };
 }
+export function verifyBuildRecord(record, report) {
+  assert(record.binary?.sha256 === report.binary.sha256 && record.sourceSha256 === report.sourceBefore.sha256 && record.staticFrontendSha256 === report.staticFrontendBefore.sha256,
+    "Build record matches binary and canonical source/static frontend fingerprints");
+  const toolComparison = {};
+  if (record.nativeTools) {
+    const recorded = Object.fromEntries(Object.entries(record.nativeTools.files).sort());
+    assert.equal(hash(JSON.stringify(recorded)), record.nativeTools.sha256, "Recorded native tool map integrity");
+    assert.equal(recorded["src-tauri/src/sync_e2e.rs"], report.sourceBefore.files["src-tauri/src/sync_e2e.rs"], "Embedded native module matches build record");
+    for (const [name, current] of Object.entries(report.tools)) {
+      const previous = recorded["scripts/verification/" + name];
+      toolComparison[name] = { currentSha256:current, recordedSha256:previous ?? null, matchesRecorded:current===previous };
+    }
+  }
+  return { matched:true, productBinaryAndFrontendMatch:true, executedToolsComparedSeparately:toolComparison };
+}
 const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jGZkAAAAASUVORK5CYII=", "base64");
 const txt = Buffer.from("原始附件：中文 UTF-8\r\nsecond line\nNUL:\0 完。\n", "utf8");
 const refs = (node) => [...(node?.type === "attachment" ? [node.attrs.id] : []), ...(node?.content || []).flatMap(refs)];
@@ -196,9 +211,7 @@ export async function run(argv = process.argv.slice(2)) {
   };
   if (opts["build-record"]) {
     const record = JSON.parse(await readFile(resolve(opts["build-record"]), "utf8"));
-    assert(record.binary?.sha256 === binarySha256 && record.sourceSha256 === sourceBefore.sha256 && record.staticFrontendSha256 === distBefore.sha256,
-      "Build record matches binary and source/static frontend fingerprints");
-    report.buildRecord = { sha256: await fileHash(resolve(opts["build-record"])), matched: true };
+    report.buildRecord = { sha256: await fileHash(resolve(opts["build-record"])), ...verifyBuildRecord(record, report) };
   } else report.limitations.push("No external build record supplied: source/dist hashes describe run-time inputs; matching embedded binary provenance requires a separate build record.");
   const apps = [], stores = [resolve(output, "store-A"), resolve(output, "store-B")];
   const check = (name, condition = true) => {

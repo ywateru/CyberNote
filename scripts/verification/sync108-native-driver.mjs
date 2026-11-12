@@ -156,7 +156,7 @@ export class NativeApp extends EventEmitter {
     } else {
       if (!frame.error || !/^[A-Z_]{1,80}$/.test(frame.error.code || "") || Object.hasOwn(frame, "value")) throw failure("INVALID_RESPONSE");
       const error = failure(frame.error.code);
-      if (["documentProbe", "debugRegistration", "appIdle", "startupHandoff", "evalEntered", "evalNotObserved"].includes(frame.error.phase)) {
+      if (["nativePageFinished", "documentProbe", "debugRegistration", "appIdle", "startupHandoff", "evalEntered", "evalNotObserved"].includes(frame.error.phase)) {
         error.phase = frame.error.phase;
         this.lifecycle.failurePhase = error.phase;
         if (JSON.stringify(frame.error.diagnostic ?? null).length <= 8192)
