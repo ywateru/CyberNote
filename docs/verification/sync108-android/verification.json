@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "verifiedAt": "2026-11-12T11:07:25.563Z",
+  "scope": "isolated Android package preparation and real UI document persistence; no pairing or network sync performed yet",
+  "worktree": "/private/tmp/cybernote-sync108-android",
+  "branch": "codex/sync108-android",
+  "source": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-12T10:58:39.298Z",
+    "target": "android",
+    "sourceRevision": "67b35ca55c3861ee079c054ee1e434d935dff5bf",
+    "sourceFingerprint": "f34853c6cf8687b880ab0c088085b4af89e2ae8a695bbce7f0cac88c96e9dc84",
+    "sourceDirty": true,
+    "inputCount": 447,
+    "releasePreparedAt": null
+  },
+  "apk": {
+    "path": "/private/tmp/cybernote-sync108-android/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+    "sha256": "e13efeefefa45752388218ebb91466f5c8253278810384d54e9b815dce440af5",
+    "bytes": 343695163,
+    "abi": "arm64-v8a",
+    "debuggable": true,
+    "appId": "com.local.notesclone.sync108",
+    "displayName": "CyberNote Sync Test",
+    "activity": "com.local.notesclone.MainActivity",
+    "minSdk": 26,
+    "targetSdk": 36
+  },
+  "nativeLibrarySHA256": "0d1a048c5b066f2a33327f053c831f3513a5454df9cf97ead0e0c5a1c42c4c80",
+  "device": {
+    "serial": "98895a3147304c3132",
+    "model": "Samsung SM-G9500",
+    "android": "9",
+    "abi": "arm64-v8a",
+    "initialPackageAbsent": true,
+    "initialUnlocked": true,
+    "uid": 10210,
+    "dataDir": "/data/user/0/com.local.notesclone.sync108",
+    "pid": 23814
+  },
+  "owned": {
+    "serial": "98895a3147304c3132",
+    "package": "com.local.notesclone.sync108",
+    "pid": 23814,
+    "local": "tcp:59445",
+    "remote": "localabstract:webview_devtools_remote_23814",
+    "pageId": "2C20821140632D59316F7E11169448FE",
+    "pageURL": "http://tauri.localhost/",
+    "retainedForHandoff": true,
+    "reverseMappingsCreated": []
+  },
+  "smoke": {
+    "status": "pass",
+    "pid": 23814,
+    "noteId": "490c9d24-d6a8-4c64-a899-d7d880ebf28e",
+    "revision": 5,
+    "documentSHA256": "c87ccc54fbf031240857b2f427a2c00a6fb21051b57ba37d692f1e70ba33ae67",
+    "plainTextSHA256": "89d1b8432033786714bc638ee46dd8cac527b30bb0e852b1265a8fa76bfb6f2b",
+    "checks": [
+      "isolated package force-stop and relaunch",
+      "full saved note equality after restart",
+      "reopened actual editor full document equality",
+      "sync remains disabled, zero peers",
+      "real device-name Input and join UI handlers; empty invitation field; sync stays disabled"
+    ],
+    "pairingExecuted": false,
+    "invitationGenerated": false
+  },
+  "priorAttempt": {
+    "status": "failed",
+    "cause": "CDP Enter without CR text joined body to heading; fixed with text/unmodifiedText CR; next real UI run passed",
+    "noteId": "65fc36e9-7807-472e-b7b4-9f1f292348ef",
+    "syntheticDataRetained": true
+  },
+  "boundaries": {
+    "originalAppContentsRead": false,
+    "originalAppStopped": false,
+    "originalAppOverwritten": false,
+    "originalAppCleared": false,
+    "invitationGenerated": false,
+    "pairingExecuted": false,
+    "attachmentReadExecuted": false,
+    "desktopOrThreeDeviceSyncExecuted": false,
+    "productionApplicationIdChanged": false,
+    "releaseMetadataChanged": false
+  },
+  "tools": {
+    "node": "v22.16.0",
+    "jdk": "17",
+    "ndk": "27.2.12479018",
+    "cargoTarget": "worktree-local src-tauri/target; APFS clone of original cache, no shared writable Cargo target",
+    "gradle": "worktree-local gradle-home/init.d, shared normal Gradle cache/wrapper symlinks"
+  },
+  "evidenceFiles": [
+    "artifacts/sync108-android/editor-before-restart.png",
+    "artifacts/sync108-android/editor-after-restart.png",
+    "artifacts/sync108-android/sync-settings-unpaired.png",
+    "artifacts/sync108-android/smoke-before-restart.json",
+    "artifacts/sync108-android/smoke-after-restart.json",
+    "artifacts/sync108-android/smoke-result.json",
+    "artifacts/sync108-android/owned.json"
+  ]
+}
