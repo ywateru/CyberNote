@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "scope": "single-authorized-frozen-direct-navigation-continuation",
+  "preflight": {
+    "schemaVersion": 1,
+    "recordedAt": "2026-11-12T21:43:49.372Z",
+    "mainSource": "151914b22b9248ca7a60d17cb3036bf4c8a70fda",
+    "serial": "98895a3147304c3132",
+    "deviceOnline": true,
+    "package": "com.local.notesclone.account109",
+    "pid": 15212,
+    "pidCmdlineMatches": true,
+    "pidUidMatchesUser0": true,
+    "installedApkSha256": "a87cc372a4d84924e905e19abd12837dff36a4b86c23599fe0ce36ba6d7575f5",
+    "installedMatchesD69": true,
+    "unlocked": true,
+    "ownedAppUser0Foreground": true,
+    "chromeUser0Foreground": false,
+    "browserOrKnownOwnedPidForwards": [],
+    "reverseAbsent": true,
+    "nativeLeaseAbsent": true,
+    "browserLeaseAbsent": true,
+    "liveEnvelopePresent": false,
+    "liveHostedDriverPresent": false,
+    "probeSha256": "f1ba343ceb9ed80711868e744b0340f3e96fda5f6913c9d5da25d8a640607fea"
+  },
+  "probe": {
+    "schemaVersion": 1,
+    "recordedAt": "2026-11-12T21:43:56.657Z",
+    "scope": "user0-Chrome-direct-navigation-public-metadata-only",
+    "method": "direct-Page.navigate",
+    "responseBodyRead": false,
+    "requestHeadersRead": false,
+    "appGrantAccessed": false,
+    "dnsTlsOverrides": false,
+    "otherPagesEnumerated": false,
+    "results": [
+      {
+        "endpoint": "health",
+        "limitMs": 30000,
+        "elapsedMs": 30100,
+        "stopLoadingSent": true,
+        "result": "diagnostic_deadline_no_http",
+        "navigationCommandFailed": true
+      },
+      {
+        "endpoint": "oidc-discovery-control",
+        "limitMs": 20000,
+        "elapsedMs": 909,
+        "stopLoadingSent": true,
+        "httpStatus": 200
+      }
+    ],
+    "ownedMapping": {
+      "serial": "98895a3147304c3132",
+      "pid": 12765,
+      "local": "tcp:49510",
+      "remote": "localabstract:chrome_devtools_remote"
+    },
+    "user0BrowserEndpointPidVerified": true,
+    "user0ChromeForeground": true,
+    "cleanup": {
+      "onlyCreatedTargetClosed": true,
+      "exactForwardAbsent": true,
+      "leaseReleased": true,
+      "ownedSandboxForeground": false
+    }
+  },
+  "finalCleanup": {
+    "recordedAt": "2026-11-12T21:45:01.261Z",
+    "ownedAppUser0Foreground": true,
+    "exactCreatedForwardAbsent": true,
+    "browserOrKnownOwnedPidForwardsAbsent": true,
+    "reverseAbsent": true,
+    "browserLeaseAbsent": true,
+    "nativeLeaseAbsent": true,
+    "onlyCreatedTargetClosed": true,
+    "signInAttempted": false,
+    "networkSettingsChanged": false,
+    "originalAppOperated": false,
+    "appDataWriteRequested": false
+  },
+  "conclusion": {
+    "phoneCanonicalNoHttpConditionStillPresent": true,
+    "logtoDiscoveryStillHttp200": true,
+    "underlyingCauseProven": false,
+    "nativeProfileRequestStageProven": false,
+    "macLockState": "user-reported-locked; not inspected by phone operator"
+  },
+  "limits": [
+    "health observation bounded at 30s, control at 20s; Page.stopLoading sent for each",
+    "navigationCommandFailed is the own 25s CDP timeout, not a browser network-error classification",
+    "No login, credential entry, grant/body/header/cookie read, app-data write, network change or bypass",
+    "No further network repetition after this attempt",
+    "PID/foreground and cleanup are timestamped historical observations, not future liveness assumptions"
+  ]
+}
