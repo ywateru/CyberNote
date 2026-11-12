@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CyberNote 设置设计稿</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f5f7;color:#1d1d1f;font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}
+main{max-width:1500px;margin:auto;padding:32px 24px}
+h1{font-size:26px;margin:0 0 8px}p{margin:0;color:#6e6e73}
+nav{display:flex;flex-wrap:wrap;gap:10px 22px;margin:22px 0 30px}
+a{color:#8a5b00;text-underline-offset:4px}
+section{margin:0 0 40px;scroll-margin-top:20px}h2{font-size:20px;margin:0 0 4px}
+section p{margin-bottom:12px}img{display:block;width:100%;height:auto;border:1px solid #e5e5ea;border-radius:8px}
+a:focus-visible{outline:3px solid #c78600;outline-offset:5px}
+footer{border-top:1px solid #e5e5ea;padding-top:20px;margin-top:30px}
+</style>
+<main>
+<h1>CyberNote 设置设计稿</h1>
+<p>桌面五分类 / 移动三屏流程。使用 imagegen CLI 生成并经人工审阅；示意内容，尚未实现。</p>
+<nav>
+<a href="#appearance">外观与字号</a><a href="#notes">备忘录</a><a href="#sync">设备同步</a>
+<a href="#storage">存储空间</a><a href="#backup">导入与备份</a><a href="#mobile">移动设置流程</a>
+</nav>
+<section id="appearance"><h2>桌面 · 外观与字号</h2><p>三种外观与两组独立字号预览。 <a href="desktop-appearance-final.png">查看原图</a></p><img src="desktop-appearance-final.png" alt="桌面外观与字号设计稿"></section>
+<section id="notes"><h2>桌面 · 备忘录</h2><p>列表偏好与锁定备忘录操作。 <a href="desktop-notes-final.png">查看原图</a></p><img src="desktop-notes-final.png" alt="桌面备忘录设置设计稿" loading="lazy"></section>
+<section id="sync"><h2>桌面 · 设备同步</h2><p>连接状态、设备与常用操作，技术字段按需展开。 <a href="desktop-sync-final.png">查看原图</a></p><img src="desktop-sync-final.png" alt="桌面设备同步设计稿" loading="lazy"></section>
+<section id="storage"><h2>桌面 · 存储空间</h2><p>应用文件分类占比与文件入口。 <a href="desktop-storage-final.png">查看原图</a></p><img src="desktop-storage-final.png" alt="桌面存储空间设计稿" loading="lazy"></section>
+<section id="backup"><h2>桌面 · 导入与备份</h2><p>完整备份和 Apple 备忘录导入。 <a href="desktop-backup-final.png">查看原图</a></p><img src="desktop-backup-final.png" alt="桌面导入与备份设计稿" loading="lazy"></section>
+<section id="mobile"><h2>移动 · 首页与子页</h2><p>设置首页、外观与字号、未开启同步三个屏幕。 <a href="mobile-settings-final.png">查看原图</a></p><img src="mobile-settings-final.png" alt="移动设置三屏设计稿" loading="lazy"></section>
+<footer><p>桌面工具栏保持可见；实际实现沿用现有原生命令和图标。设备、时间和容量均为示意。生成稿不代表已完成应用修复。</p></footer>
+</main>
+</html>
