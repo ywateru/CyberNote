@@ -54,10 +54,19 @@ impl SyncService {
         identity: Arc<IdentityStore>,
         staging_directory: PathBuf,
     ) -> Result<Self> {
+        Self::with_policy(backend, identity, staging_directory, None)
+    }
+    pub(crate) fn with_policy(
+        backend: Arc<dyn SyncBackend>,
+        identity: Arc<IdentityStore>,
+        staging_directory: PathBuf,
+        policy: Option<Arc<dyn ReplicationPolicy>>,
+    ) -> Result<Self> {
         if backend.device_id()? != identity.device_id()? {
             return Err(SyncError::Authentication);
         }
         let shared = Arc::new(Shared {
+            policy,
             backend,
             identity,
             staging: staging::Staging::open(staging_directory)?,
@@ -346,7 +355,12 @@ async fn pair_loop(
         }
     };
     let preparation = (|| {
-        let peer = shared.identity.remember_peer(&invite, &device)?;
+        shared.authorize(&device, &invite.host_key)?;
+        let mut durable = invite.clone();
+        if shared.policy.is_some() {
+            durable.endpoint = "wss://account.invalid/".into();
+        }
+        let peer = shared.identity.remember_peer(&durable, &device)?;
         shared.backend.adopt_workspace(&peer.workspace_id)?;
         shared.identity.commit_pairing(&peer.invitation_id)
     })();
@@ -368,6 +382,8 @@ struct Client {
 }
 impl Client {
     fn authorized(&self) -> Result<()> {
+        self.shared
+            .authorize(&self.peer.device_id, &self.peer.host_key)?;
         let p = self.shared.identity.peer(&self.peer.invitation_id)?;
         if p.host_key != self.peer.host_key || p.device_id != self.peer.device_id {
             return Err(SyncError::Authentication);
@@ -636,7 +652,17 @@ async fn client_loop(
             version: 1,
             workspace_id: peer.workspace_id.clone(),
             invitation_id: id.clone(),
-            endpoint: peer.endpoint.clone(),
+            endpoint: match &shared.policy {
+                Some(policy) => match policy.endpoint(&peer.device_id) {
+                    Ok(endpoint) => endpoint,
+                    Err(error) => {
+                        shared.status(&id, "authorization_pending", Some(error), false);
+                        tokio::select! {_=sleep(Duration::from_secs(2))=>{},_=wake.notified()=>{},_=stop.changed()=>break}
+                        continue;
+                    }
+                },
+                None => peer.endpoint.clone(),
+            },
             host_key: peer.host_key.clone(),
             psk: peer.psk.clone(),
             expires_at: 0,

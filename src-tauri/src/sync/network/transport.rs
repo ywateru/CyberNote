@@ -159,6 +159,7 @@ pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(Secure
     if encode(remote) != invite.host_key {
         return Err(SyncError::Authentication);
     }
+    s.authorize(&host.device, &invite.host_key)?;
     let device = Device {
         device: s.backend.device_id()?,
     };
@@ -236,6 +237,7 @@ pub(super) async fn server(
     let device: Device = serde_json::from_slice(&noise_read(&mut h, &bytes)?)
         .map_err(|_| SyncError::Authentication)?;
     let client_key = encode(h.get_remote_static().ok_or(SyncError::Authentication)?);
+    s.authorize(&device.device, &client_key)?;
     s.identity.authorize(
         &hello.invitation,
         &hello.workspace,
@@ -316,6 +318,7 @@ pub(super) async fn serve(
     let mut handler = wire::Handler::new();
     let mut last = Instant::now();
     loop {
+        s.authorize(&device, &key)?;
         s.identity
             .check_authorized(&id, &workspace, &key, &device)?;
         if s.backend.workspace_id()? != workspace {
@@ -329,6 +332,7 @@ pub(super) async fn serve(
             continue;
         };
         last = Instant::now();
+        s.authorize(&device, &key)?;
         s.identity
             .check_authorized(&id, &workspace, &key, &device)?;
         let response = match handler.handle(&s, request) {
@@ -339,6 +343,7 @@ pub(super) async fn serve(
             Err(SyncError::PlanStale) => return Err(SyncError::PlanStale),
             Err(e) => wire::Response::Error { code: e.into() },
         };
+        s.authorize(&device, &key)?;
         s.identity
             .check_authorized(&id, &workspace, &key, &device)?;
         if matches!(&response, wire::Response::Stored { .. }) {
@@ -438,6 +443,7 @@ mod tests {
         let identity =
             Arc::new(IdentityStore::open(&dir.join("identity"), &backend.device).unwrap());
         let s = Arc::new(Shared {
+            policy: None,
             backend: backend.clone(),
             identity,
             staging: staging::Staging::open(dir.join("stage")).unwrap(),
@@ -471,6 +477,53 @@ mod tests {
         let n = socket.noise.write_message(&plain, &mut out).unwrap();
         out.truncate(n);
         out
+    }
+    struct Gate(AtomicBool);
+    impl ReplicationPolicy for Gate {
+        fn authorize(&self, _: &str, _: &str) -> Result<()> {
+            if self.0.load(Ordering::Acquire) {
+                Ok(())
+            } else {
+                Err(SyncError::Revoked)
+            }
+        }
+        fn endpoint(&self, _: &str) -> Result<String> {
+            Err(SyncError::Transport)
+        }
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn account_gate_closes_already_authenticated_stream_without_business_reads() {
+        let dir = tempfile::tempdir().unwrap();
+        let workspace = uuid::Uuid::new_v4().to_string();
+        let (mut host, backend) = shared(dir.path(), &workspace);
+        let gate = Arc::new(Gate(AtomicBool::new(true)));
+        Arc::get_mut(&mut host).unwrap().policy = Some(gate.clone());
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let invite = host
+            .identity
+            .invite(
+                &workspace,
+                &format!("ws://{}/", listener.local_addr().unwrap()),
+            )
+            .unwrap();
+        let (_tx, stop) = watch::channel(false);
+        let server = tokio::spawn(async move {
+            let (tcp, _) = listener.accept().await.unwrap();
+            serve(host, tcp, stop).await
+        });
+        let client_dir = tempfile::tempdir().unwrap();
+        let (client_shared, _) = shared(client_dir.path(), &workspace);
+        let (mut socket, _) = client(&client_shared, &invite).await.unwrap();
+        gate.0.store(false, Ordering::Release);
+        assert!(socket
+            .rpc(&wire::Request::Inventory {
+                after: None,
+                limit: 1
+            })
+            .await
+            .is_err());
+        assert_eq!(server.await.unwrap(), Err(SyncError::Revoked));
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 0);
     }
     #[tokio::test(flavor = "current_thread")]
     async fn local_stale_closes_socket_for_backoff_instead_of_poisoning_peer_protocol() {

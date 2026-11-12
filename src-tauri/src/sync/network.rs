@@ -97,13 +97,26 @@ impl From<&Peer> for PairingStatus {
         }
     }
 }
+/// Account policy is optional only for legacy manual services. Implementations
+/// must be synchronous snapshots; no network or OAuth under Store/Session locks.
+pub(crate) trait ReplicationPolicy: Send + Sync {
+    fn authorize(&self, device: &str, noise_key: &str) -> Result<()>;
+    fn endpoint(&self, device: &str) -> Result<String>;
+}
 pub(crate) struct Shared {
+    policy: Option<Arc<dyn ReplicationPolicy>>,
     backend: Arc<dyn SyncBackend>,
     identity: Arc<IdentityStore>,
     staging: staging::Staging,
     status: Mutex<ServiceStatus>,
 }
 impl Shared {
+    fn authorize(&self, device: &str, key: &str) -> Result<()> {
+        if let Some(policy) = &self.policy {
+            policy.authorize(device, key)?;
+        }
+        Ok(())
+    }
     fn status(&self, id: &str, phase: &str, error: Option<SyncError>, success: bool) {
         if let Ok(mut s) = self.status.lock() {
             let index = s.connections.iter().position(|v| v.peer_id == id);

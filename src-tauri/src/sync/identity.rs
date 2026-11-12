@@ -144,6 +144,10 @@ pub(crate) struct Peer {
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 struct Grant {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    expected_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    expected_device: Option<String>,
     workspace_id: String,
     psk: String,
     expires_at: u64,
@@ -256,6 +260,15 @@ impl IdentityStore {
                     uuid(id)?;
                     uuid(&g.workspace_id)?;
                     key(&g.psk)?;
+                    if g.expected_key.is_some() != g.expected_device.is_some() {
+                        return Err(SyncError::CorruptIdentity);
+                    }
+                    if let Some(k) = &g.expected_key {
+                        key(k)?;
+                    }
+                    if let Some(d) = &g.expected_device {
+                        uuid(d)?;
+                    }
                     if let Some(k) = &g.client_key {
                         key(k)?;
                     }
@@ -345,6 +358,8 @@ impl IdentityStore {
             d.grants.insert(
                 id.clone(),
                 Grant {
+                    expected_key: None,
+                    expected_device: None,
                     workspace_id: workspace_id.into(),
                     psk: psk.clone(),
                     expires_at,
@@ -363,6 +378,39 @@ impl IdentityStore {
                 expires_at,
             })
         })
+    }
+    /// Only the enrolled Noise key/device may consume this grant; an unconsumed
+    /// grant still expires. Never emulate consumption by pre-filling client_key.
+    pub(crate) fn invite_enrolled(
+        &self,
+        workspace: &str,
+        address: &str,
+        device: &str,
+        public_key: &str,
+    ) -> Result<PairingInvite> {
+        uuid(device)?;
+        key(public_key)?;
+        let invite = self.invite(workspace, address)?;
+        self.update(|d| {
+            let grant = d
+                .grants
+                .get_mut(&invite.invitation_id)
+                .ok_or(SyncError::Authentication)?;
+            grant.expected_key = Some(public_key.into());
+            grant.expected_device = Some(device.into());
+            Ok(())
+        })?;
+        Ok(invite)
+    }
+    pub(crate) fn peer_for_device(&self, device: &str) -> Result<Option<String>> {
+        Ok(self
+            .data
+            .lock()
+            .map_err(|_| SyncError::Io)?
+            .peers
+            .iter()
+            .find(|(_, p)| p.device_id == device)
+            .map(|(id, _)| id.clone()))
     }
     pub(crate) fn server_psk(&self, id: &str, workspace: &str) -> Result<Vec<u8>> {
         let d = self.data.lock().map_err(|_| SyncError::Io)?;
@@ -395,6 +443,11 @@ impl IdentityStore {
             }
             if g.workspace_id != workspace {
                 return Err(SyncError::WorkspaceMismatch);
+            }
+            if g.expected_key.as_deref().is_some_and(|k| k != client_key)
+                || g.expected_device.as_deref().is_some_and(|d| d != device)
+            {
+                return Err(SyncError::Authentication);
             }
             match (&g.client_key, &g.device_id) {
                 (Some(k), Some(dev)) if k == client_key && dev == device => Ok(()),
@@ -562,6 +615,52 @@ fn persist(path: &Path, data: &Data) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn enrolled_grant_rejects_wrong_device_and_key_before_first_use_across_restart() {
+        let dir = tempfile::tempdir().unwrap();
+        let device = Uuid::new_v4().to_string();
+        let workspace = Uuid::new_v4().to_string();
+        let expected = Uuid::new_v4().to_string();
+        let public = encode(&[7; 32]);
+        let store = IdentityStore::open(dir.path(), &device).unwrap();
+        let invite = store
+            .invite_enrolled(&workspace, "ws://127.0.0.1:1234/", &expected, &public)
+            .unwrap();
+        drop(store);
+        let store = IdentityStore::open(dir.path(), &device).unwrap();
+        assert_eq!(
+            store.authorize(
+                &invite.invitation_id,
+                &workspace,
+                &encode(&[8; 32]),
+                &expected
+            ),
+            Err(SyncError::Authentication)
+        );
+        assert_eq!(
+            store.authorize(
+                &invite.invitation_id,
+                &workspace,
+                &public,
+                &Uuid::new_v4().to_string()
+            ),
+            Err(SyncError::Authentication)
+        );
+        store
+            .authorize(&invite.invitation_id, &workspace, &public, &expected)
+            .unwrap();
+        store
+            .update(|d| {
+                d.grants.get_mut(&invite.invitation_id).unwrap().expires_at = 0;
+                Ok(())
+            })
+            .unwrap();
+        // Consumption still has original durable-pin semantics, not invite expiry.
+        store
+            .check_authorized(&invite.invitation_id, &workspace, &public, &expected)
+            .unwrap();
+        assert!(store.server_psk(&invite.invitation_id, &workspace).is_ok());
+    }
     #[test]
     fn invitation_expiration_and_revocation_are_durable() {
         let dir = tempfile::tempdir().unwrap();

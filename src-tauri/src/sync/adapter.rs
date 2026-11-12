@@ -454,6 +454,76 @@ impl Runtime {
         }
         Ok(())
     }
+    /// Account runtime owns a separate Noise credential namespace and listener.
+    /// This only enables the existing Store/Session apply coordinator. It never
+    /// adopts an arbitrary renderer-supplied workspace or starts manual peers.
+    pub(crate) fn account_identity(&self) -> Result<Arc<IdentityStore>> {
+        let inner = self.inner.lock().map_err(|_| error("sync_internal"))?;
+        if inner.config.is_some() {
+            return Err(error("sync_workspace_mismatch"));
+        }
+        let device = self
+            .shared
+            .0
+            .lock()
+            .map_err(|_| error("sync_internal"))?
+            .store
+            .sync_identity()?
+            .map(|i| i.device_id);
+        let dir = self.root.join(".account/noise");
+        let existing = IdentityStore::existing_device_id(&dir).map_err(network_error)?;
+        let device = match (device, existing) {
+            (Some(a), Some(b)) if a != b => return Err(error("sync_device_mismatch")),
+            (Some(a), _) | (_, Some(a)) => a,
+            _ => uuid::Uuid::new_v4().to_string(),
+        };
+        Ok(Arc::new(
+            IdentityStore::open(&dir, &device).map_err(network_error)?,
+        ))
+    }
+    pub(crate) fn activate_account(
+        &self,
+        workspace: &str,
+        identity: Arc<IdentityStore>,
+        policy: Arc<dyn network::ReplicationPolicy>,
+    ) -> Result<SyncService> {
+        let inner = self.inner.lock().map_err(|_| error("sync_internal"))?;
+        if inner.config.is_some() {
+            return Err(error("sync_workspace_mismatch"));
+        }
+        let device = identity.device_id().map_err(network_error)?;
+        prepared_store(&self.shared, &[], true, |store| {
+            store
+                .sync_enable_with_device(Some(workspace), &device)
+                .map(|_| ())
+        })?;
+        let backend = Arc::new(StoreBackend {
+            shared: self.shared.clone(),
+            device,
+        });
+        let service = SyncService::with_policy(
+            backend,
+            identity,
+            self.root.join(".account/staging"),
+            Some(policy),
+        )
+        .map_err(network_error)?;
+        self.active.store(true, Ordering::Release);
+        Ok(service)
+    }
+    pub(crate) fn pause_account(&self) {
+        self.active.store(false, Ordering::Release);
+        if let Ok(mut s) = self.shared.0.lock() {
+            s.sync_abort();
+        }
+    }
+    pub(crate) fn account_metrics(&self) -> Result<(u64, u64)> {
+        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+        Ok((
+            s.store.sync_pending_count()? as u64,
+            s.store.sync_conflict_count()? as u64,
+        ))
+    }
     pub(crate) fn command(
         &self,
         command: Command,
@@ -461,6 +531,17 @@ impl Runtime {
         expected: &Token,
     ) -> Result<Value> {
         let is_status = matches!(command, Command::Status {});
+        if self.root.join(".account/binding.json").exists()
+            && matches!(
+                command,
+                Command::StartHost { .. }
+                    | Command::Pair { .. }
+                    | Command::Resume {}
+                    | Command::CreateInvite { .. }
+            )
+        {
+            return Err(error("sync_workspace_mismatch"));
+        }
         let live = self.host.participants();
         self.shared
             .0
@@ -809,7 +890,9 @@ impl Runtime {
                     || (self.active.load(Ordering::Acquire) && s.store.sync_pending_count()? > 0))
             {
                 Ok(Some((
-                    s.store.sync_media_snapshot(&[], false)?.reserve_keep_all(s.sync_media_keep_all()),
+                    s.store
+                        .sync_media_snapshot(&[], false)?
+                        .reserve_keep_all(s.sync_media_keep_all()),
                     s.sync_media_token(),
                 )))
             } else {
