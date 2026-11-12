@@ -132,7 +132,7 @@ pub(crate) enum TransactionStatus {
     Cancelled,
     Committed,
 }
-/// Cancel is linearized against durable commit. `false` means commit already won.
+/// Cancel is linearized against the commit phase. `false` means commit already began.
 #[derive(Clone)]
 pub struct AuthorizationCancellation(pub(crate) Arc<Mutex<TransactionStatus>>);
 impl AuthorizationCancellation {

@@ -114,6 +114,16 @@ the host uses it for profile/CyberGrid. It is separate from the resource identif
 
 ## Logto registration parameter and verification
 
+Authorization explicitly uses `CoreAuthPrompt::Consent` (`prompt=consent`),
+matching the official SDK default. A real hosted PKCE recheck by the main agent
+confirmed `prompt=login` omitted the refresh token while `prompt=consent` returned
+one for the same Native client, scopes and resource. The crate still rejects a
+missing/empty refresh token; it never assumes `offline_access` alone is enough.
+If forced reauthentication is added later, the library supports adding both
+`CoreAuthPrompt::Login` and `CoreAuthPrompt::Consent` to produce `login consent`;
+do not replace consent with login. This release keeps the frozen API and always
+requests consent.
+
 Sign-up uses `first_screen=register`, based on Logto's official JS SDK
 `packages/js/src/core/sign-in.ts` and `packages/js/src/types/index.ts`:
 <https://github.com/logto-io/js/tree/master/packages/js/src>.
@@ -133,6 +143,8 @@ The normal suite uses an explicit test-only transport fixture, actual OAuth/OIDC
 library requests and independent ring-generated ES384 signed JWTs. It is not a
 real user login. The separately ignored live test performs only public discovery
 and JWKS GETs using production HTTPS policy, and constructs then drops an
-unopened authorization URL. It has passed against the supplied public pins; no
-user, token grant, browser login, refresh grant or real revocation was performed.
+unopened authorization URL. It has passed against the supplied public pins; this crate
+author did not perform any user/token grant, browser login, refresh grant or
+real revocation. The main agent's separately reported real consent result is
+recorded above and is not part of the fixture pass count.
 Platform listener/deep-link handling and real hosted login remain integration work.

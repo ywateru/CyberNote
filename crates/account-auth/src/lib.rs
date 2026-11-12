@@ -14,8 +14,8 @@ use oauth2::{
 };
 use openidconnect::{
     core::{
-        CoreAuthenticationFlow, CoreClient, CoreJwsSigningAlgorithm, CoreProviderMetadata,
-        CoreRevocableToken, CoreTokenResponse, CoreTokenType,
+        CoreAuthPrompt, CoreAuthenticationFlow, CoreClient, CoreJwsSigningAlgorithm,
+        CoreProviderMetadata, CoreRevocableToken, CoreTokenResponse, CoreTokenType,
     },
     AccessTokenHash, ClientId, IssuerUrl, Nonce, TokenResponse,
 };
@@ -175,6 +175,7 @@ impl AuthClient {
                 Nonce::new_random,
             )
             .set_pkce_challenge(challenge)
+            .add_prompt(CoreAuthPrompt::Consent)
             .add_extra_param("resource", self.inner.config.resource.as_str());
         for scope in &SCOPES[1..] {
             authorization = authorization.add_scope(Scope::new((*scope).to_owned()));
@@ -339,7 +340,7 @@ impl AuthClient {
         grant.identity = identity.as_ref().ok().cloned();
         let outcome = if !transaction.cancellation.active() {
             Err(AuthError::Cancelled)
-        } else if grant.refresh.is_none() {
+        } else if grant.refresh.as_ref().is_none_or(|token| token.is_empty()) {
             Err(AuthError::InvalidIdentity)
         } else {
             identity

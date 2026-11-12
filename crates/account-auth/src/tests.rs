@@ -242,6 +242,7 @@ async fn pkce_signup_scopes_and_exact_redirect_are_pinned() {
     assert_eq!(pairs["response_type"], "code");
     assert_eq!(pairs["code_challenge_method"], "S256");
     assert_eq!(pairs["first_screen"], "register");
+    assert_eq!(pairs["prompt"], "consent");
     assert_eq!(pairs["scope"], "openid profile offline_access connect");
     assert_eq!(pairs["resource"], "https://fixture.example/api");
     assert!(!pairs.contains_key("code_verifier"));
@@ -376,6 +377,16 @@ async fn successful_identity_and_rotation_are_private_persistent_serial_and_rest
             .await,
         Err(AuthError::Busy)
     ));
+    // Expire the cached token so concurrent readers must share one actual rotation.
+    client
+        .inner
+        .state
+        .lock()
+        .await
+        .grant
+        .as_mut()
+        .unwrap()
+        .expires_at = now().unwrap() - 1;
     let mut tasks = Vec::new();
     for _ in 0..16 {
         let c = client.clone();
@@ -384,24 +395,24 @@ async fn successful_identity_and_rotation_are_private_persistent_serial_and_rest
         }));
     }
     for t in tasks {
-        assert_eq!(t.await.unwrap().secret(), "fixture-access-1");
+        assert_eq!(t.await.unwrap().secret(), "fixture-access-2");
     }
-    assert_eq!(f.tokens.load(Ordering::SeqCst), 1);
+    assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
     assert_eq!(
         client
             .access_token(Duration::ZERO, true)
             .await
             .unwrap()
             .secret(),
-        "fixture-access-2"
+        "fixture-access-3"
     );
     let saved: Value =
         serde_json::from_slice(&fs::read(dir.path().join("grant.json")).unwrap()).unwrap();
-    assert_eq!(saved["refresh"], "fixture-refresh-2");
+    assert_eq!(saved["refresh"], "fixture-refresh-3");
     drop(client);
     let restored = f.client(&dir).await;
     assert_eq!(restored.restore().await.unwrap(), Some(identity));
-    assert_eq!(f.tokens.load(Ordering::SeqCst), 3);
+    assert_eq!(f.tokens.load(Ordering::SeqCst), 4);
     restored.logout().await.unwrap();
     assert!(!dir.path().join("grant.json").exists());
 }
