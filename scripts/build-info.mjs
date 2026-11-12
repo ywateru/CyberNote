@@ -85,7 +85,7 @@ export function releaseStamp(root = projectRoot, now = new Date()) {
 }
 export function validateStamp(stamp, root = projectRoot) {
   const current = releaseStamp(root);
-  if (stamp?.schema !== 1 || stamp.version !== current.version || stamp.sourceRevision !== current.sourceRevision || stamp.sourceFingerprint !== current.sourceFingerprint || !Number.isFinite(Date.parse(stamp.preparedAt))) throw Error('Release stamp is stale or invalid; prepare again from the current source');
+  if (stamp?.schema !== 1 || stamp.version !== current.version || stamp.sourceRevision !== current.sourceRevision || stamp.sourceFingerprint !== current.sourceFingerprint || stamp.sourceDirty !== current.sourceDirty || stamp.inputCount !== current.inputCount || !Number.isFinite(Date.parse(stamp.preparedAt))) throw Error('Release stamp is stale or invalid; prepare again from the current source');
   return stamp;
 }
 export function createBuildInfo({ root = projectRoot, development = false, stampPath = process.env.CYBERNOTE_RELEASE_STAMP, now = new Date(), target = process.env.CYBERNOTE_BUILD_TARGET || process.env.TAURI_ENV_PLATFORM || 'web' } = {}) {
