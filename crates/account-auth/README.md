@@ -42,6 +42,8 @@ one owner, Tokio mutex, connection policy and process-lifetime file lock.
   PKCE S256, state and nonce. Scopes are `openid profile offline_access connect`;
   `profile` can supply `preferred_username`. No unadvertised `username` scope is
   requested. Both code and refresh requests explicitly include pinned `resource`.
+  Refresh omits `scope` to inherit the original grant, matching Logto's resource
+  refresh request; returned scopes, when present, must still include `connect`.
 - `complete_callback(AuthorizationTransaction, Url) -> Identity` consumes the
   transaction. `Identity { issuer, subject, display_name, username: Option<String> }`
   is safe to serialize. `AccessToken` and authorization transactions are not

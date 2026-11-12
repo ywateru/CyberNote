@@ -40,6 +40,8 @@ struct Fixture {
     nonce: SyncMutex<String>,
     challenge: SyncMutex<String>,
     changes: SyncMutex<Value>,
+    refresh_scope: SyncMutex<String>,
+    omit_refresh_id: AtomicBool,
     tokens: AtomicUsize,
     revokes: AtomicUsize,
     fail_refresh: AtomicBool,
@@ -75,6 +77,8 @@ impl Fixture {
             nonce: SyncMutex::new(String::new()),
             challenge: SyncMutex::new(String::new()),
             changes: SyncMutex::new(json!({})),
+            refresh_scope: SyncMutex::new("connect".into()),
+            omit_refresh_id: AtomicBool::new(false),
             tokens: AtomicUsize::new(0),
             revokes: AtomicUsize::new(0),
             fail_refresh: AtomicBool::new(false),
@@ -136,15 +140,15 @@ impl Fixture {
             form.get("resource").map(String::as_str),
             Some("https://fixture.example/api")
         );
-        if form.get("grant_type").map(String::as_str) == Some("refresh_token") {
+        let is_refresh = form.get("grant_type").map(String::as_str) == Some("refresh_token");
+        if is_refresh {
             assert_eq!(
                 form.get("refresh_token").unwrap(),
                 &format!("fixture-refresh-{}", self.tokens.load(Ordering::SeqCst))
             );
-            assert_eq!(
-                form.get("scope").map(String::as_str),
-                Some("openid profile offline_access connect")
-            );
+            // Resource access-token scopes differ from the original OIDC scopes.
+            // Refresh must inherit its grant rather than resubmit authorization scopes.
+            assert!(!form.contains_key("scope"));
             if self.fail_refresh.load(Ordering::SeqCst) {
                 return Ok(response(
                     400,
@@ -199,6 +203,12 @@ impl Fixture {
             "expires_in":3600,"scope":"openid profile offline_access connect","id_token":id});
         if self.omit_refresh.load(Ordering::SeqCst) {
             body.as_object_mut().unwrap().remove("refresh_token");
+        }
+        if is_refresh {
+            body["scope"] = json!(self.refresh_scope.lock().unwrap().clone());
+            if self.omit_refresh_id.load(Ordering::SeqCst) {
+                body.as_object_mut().unwrap().remove("id_token");
+            }
         }
         Ok(response(200, body))
     }
@@ -667,6 +677,52 @@ async fn rotation_persistence_failure_retains_new_owner_in_memory_until_durable_
     assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
     let saved: Value = serde_json::from_slice(&fs::read(path).unwrap()).unwrap();
     assert_eq!(saved["refresh"], "fixture-refresh-2");
+}
+
+#[tokio::test]
+async fn refresh_inherits_scope_and_requires_connect_with_or_without_an_id_token() {
+    for omit_id in [false, true] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let client = f.client(&dir).await;
+        let identity = f.login(&client).await;
+        f.omit_refresh_id.store(omit_id, Ordering::SeqCst);
+        // The fixture checks resource and rejects any scope in the refresh request.
+        assert_eq!(
+            client
+                .access_token(Duration::ZERO, true)
+                .await
+                .unwrap()
+                .secret(),
+            "fixture-access-2"
+        );
+        assert_eq!(
+            client
+                .inner
+                .state
+                .lock()
+                .await
+                .grant
+                .as_ref()
+                .unwrap()
+                .identity,
+            Some(identity)
+        );
+        *f.refresh_scope.lock().unwrap() = "profile".into();
+        assert_eq!(
+            client.access_token(Duration::ZERO, true).await.unwrap_err(),
+            AuthError::InvalidIdentity
+        );
+        assert!(client.cleanup_required().await);
+        assert!(matches!(
+            client.access_token(Duration::ZERO, false).await,
+            Err(AuthError::NoSession)
+        ));
+        let saved: Value =
+            serde_json::from_slice(&fs::read(dir.path().join("grant.json")).unwrap()).unwrap();
+        assert_eq!(saved["refresh"], "fixture-refresh-3");
+        client.logout().await.unwrap();
+    }
 }
 
 #[tokio::test]

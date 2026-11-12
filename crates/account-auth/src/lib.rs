@@ -529,12 +529,10 @@ impl AuthClient {
         let nonce = Zeroizing::new(g.nonce.clone());
         let old_identity = g.identity.clone().ok_or(AuthError::InvalidIdentity)?;
         let client = self.client(state).await?;
-        let mut request = client
+        // Omit scope to retain the original grant, matching Logto's resource refresh.
+        let request = client
             .exchange_refresh_token(&refresh)
             .add_extra_param("resource", self.inner.config.resource.as_str());
-        for s in SCOPES {
-            request = request.add_scope(Scope::new(s.to_owned()));
-        }
         let response = request
             .request_async(&self.inner.http)
             .await
