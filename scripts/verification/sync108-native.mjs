@@ -207,7 +207,7 @@ export async function run(argv = process.argv.slice(2)) {
     console.log("PASS " + name); // Names only; never arguments, responses or exceptions.
   };
   const open = async (name, directory) => {
-    const app = new NativeApp(binary, directory, { name });
+    const app = new NativeApp(binary, directory, { name, env: { NOTES_SYNC_E2E_SLOT: name.startsWith("A") ? "left" : "right" } });
     apps.push(app);
     const ready = await app.ready();
     assert(["tauri://localhost", "http://tauri.localhost"].includes(ready.location), "Static native frontend origin");
@@ -245,6 +245,20 @@ export async function run(argv = process.argv.slice(2)) {
     a = await open("A", stores[0]);
     b = await open("B", stores[1]);
     check("two independently owned native processes", a.app.child.pid !== b.app.child.pid);
+    for (const device of [a, b]) {
+      const clock = await device.app.evaluate(`(async()=>{
+        let raf=0,timer=0,finished=false;
+        const began=performance.now();
+        const tick=()=>{if(!finished){raf++;requestAnimationFrame(tick);}};
+        requestAnimationFrame(tick);
+        const handle=setInterval(()=>timer++,25);
+        await new Promise(done=>setTimeout(done,250));
+        finished=true;clearInterval(handle);
+        return {raf,timer,elapsedMs:Math.round(performance.now()-began),visibility:document.visibilityState};
+      })()`);
+      report.observations.push({ name:device.app.name+":render-clock-with-both-windows", ...clock });
+      check(device.app.name+" owned webview advances real rAF and timers", clock.raf > 0 && clock.timer > 0);
+    }
     const statusA = await a.sync("sync.status"), statusB = await b.sync("sync.status");
     check("fresh disabled stores do not create synchronization identity", [statusA, statusB].every((s) => s.state === "disabled" && !s.deviceId && !s.workspaceId));
     if (!opts.smoke) {

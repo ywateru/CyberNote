@@ -156,6 +156,12 @@ export class NativeApp extends EventEmitter {
     } else {
       if (!frame.error || !/^[A-Z_]{1,80}$/.test(frame.error.code || "") || Object.hasOwn(frame, "value")) throw failure("INVALID_RESPONSE");
       const error = failure(frame.error.code);
+      if (["documentProbe", "debugRegistration", "appIdle", "startupHandoff", "evalEntered", "evalNotObserved"].includes(frame.error.phase)) {
+        error.phase = frame.error.phase;
+        this.lifecycle.failurePhase = error.phase;
+        if (JSON.stringify(frame.error.diagnostic ?? null).length <= 8192)
+          this.lifecycle.nativeDiagnostic = frame.error.diagnostic ?? null;
+      }
       if (frame.error.code === "NATIVE_TIMEOUT") this.#fail(error);
       else {
         const pending = this.#pending;
@@ -179,8 +185,17 @@ export class NativeApp extends EventEmitter {
         try {
           this.lifecycle.readinessFailure = await this.evaluate(`(async () => {
             const root=document.getElementById('root'), surface=document.getElementById('startup');
-            const s=window.__NOTES_DEBUG__ ? (await window.__NOTES_DEBUG__.execute('app.state')).result : null;
+            let s=null,raf=0,timer=0,finished=false;
+            const began=performance.now();
+            const tick=()=>{if(!finished){raf++;requestAnimationFrame(tick);}};
+            requestAnimationFrame(tick);
+            const clock=setInterval(()=>timer++,25);
+            let stateCompleted=false;
+            if(window.__NOTES_DEBUG__) void window.__NOTES_DEBUG__.execute('app.state').then(v=>{s=v.result;stateCompleted=true;}).catch(()=>{});
+            await new Promise(done=>setTimeout(done,350));
+            finished=true;clearInterval(clock);
             return {readyState:document.readyState,visibility:document.visibilityState,debug:!!window.__NOTES_DEBUG__,
+              renderClock:{raf,timer,elapsedMs:Math.round(performance.now()-began),stateCompleted},
               startup:surface?.dataset.state || (surface ? 'present' : 'detached'),
               root:root ? {inert:root.inert,ariaHidden:root.getAttribute('aria-hidden'),ariaBusy:root.getAttribute('aria-busy')} : null,
               app:s ? {busy:s.busy,save:s.save,hasError:!!s.error,failureSerial:s.failure?.serial,
