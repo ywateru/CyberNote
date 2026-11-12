@@ -195,16 +195,24 @@ export async function run(argv = process.argv.slice(2)) {
       if (name === 'A') a = new Desktop(app); else b = new Desktop(app);
     }
     assert.notEqual(apps[0].child.pid, apps[1].child.pid);
-    const [identityA, identityB] = await Promise.all([a.sync('sync.status'), b.sync('sync.status')]);
-    assert(identityA.deviceId && identityB.deviceId && identityA.workspaceId && identityB.workspaceId);
-    assert.notEqual(identityA.deviceId, identityB.deviceId); assert.notEqual(identityA.workspaceId, identityB.workspaceId);
-    assert.equal((await a.workspace()).notes.length, 0); assert.equal((await b.workspace()).notes.length, 0);
-    report.identities = { A: { deviceId: identityA.deviceId, initialWorkspaceId: identityA.workspaceId }, B: { deviceId: identityB.deviceId, initialWorkspaceId: identityB.workspaceId } };
+    report.phase = 'fresh-desktop-isolation';
+    const [initialA, initialB] = await Promise.all([a.sync('sync.status'), b.sync('sync.status')]);
+    assert.equal(initialA.state, 'disabled'); assert.equal(initialB.state, 'disabled');
+    const [workspaceA, workspaceB] = await Promise.all([a.workspace(), b.workspace()]);
+    assert.equal(workspaceA.notes.length, 0); assert.equal(workspaceB.notes.length, 0);
+    assert.notEqual(workspaceA.access.sessionId, workspaceB.access.sessionId, 'Fresh native sessions are independent');
+    // Device/workspace identities deliberately do not exist before opt-in.
+    report.phase = 'desktop-pairing';
     await a.sync('sync.host.start', { deviceName: 'Sync108 Three A', port: await freePort() });
     const status = await a.sync('sync.status'); const endpoint = status.listenAddress?.replace('0.0.0.0', '127.0.0.1');
     assert(endpoint && new URL(endpoint).hostname === '127.0.0.1', 'A is the owned loopback rendezvous');
     let invitation = await a.invite(endpoint);
     try { await b.sync('sync.pair', { invitation, deviceName: 'Sync108 Three B' }); } finally { invitation = undefined; }
+    const [identityA, identityB] = await Promise.all([a.sync('sync.status'), b.sync('sync.status')]);
+    assert(identityA.deviceId && identityB.deviceId && identityA.workspaceId && identityB.workspaceId);
+    assert.notEqual(identityA.deviceId, identityB.deviceId); assert.equal(identityA.workspaceId, identityB.workspaceId);
+    report.identities = { A: { deviceId: identityA.deviceId, workspaceId: identityA.workspaceId }, B: { deviceId: identityB.deviceId, workspaceId: identityB.workspaceId } };
+    report.phase = 'android-pairing';
     reverse = createOwnedReverse(Number(new URL(endpoint).port));
     report.topology = { A: endpoint, B: 'desktop loopback to A', C: `ws://127.0.0.1:${reverse.device.slice(4)}`, reverse };
     launchAndroid(); c = await connectAndroid(); report.android.initialPid = c.owned.pid;
@@ -215,7 +223,9 @@ export async function run(argv = process.argv.slice(2)) {
     await c.closeSettings();
     const identityC = (await c.syncStatus()).status;
     assert(identityC.deviceId && identityC.deviceId !== identityA.deviceId && identityC.deviceId !== identityB.deviceId);
-    report.identities.C = { deviceId: identityC.deviceId, initialState: androidBefore.status.state };
+    assert.equal(identityC.workspaceId, identityA.workspaceId);
+    report.identities.C = { deviceId: identityC.deviceId, workspaceId: identityC.workspaceId, initialState: androidBefore.status.state };
+    report.phase = 'three-peer-cases';
 
     await runCase('3P-01', 'A to B and C: formatted full document plus PNG original', async () => {
       const id = await a.create(documentFor('SYNC108 三端 A PNG', '甲端原生 App 创建：粗体中文与原字节 PNG。'));
