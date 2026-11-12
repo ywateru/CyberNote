@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "efb10f8b8b684234829c95c3f578ad6b3d86ffbb",
+  "sourceTree": "e0b8bc703c29889dd3aba7add9d9d27c8b8787e1",
+  "toolCommit": "901532283c994026a55de99473291dd307c10728",
+  "toolSha256": "862e7732b6f9b8ef0cad679bce6287331829854b25fd8368c72d7384f79d870c",
+  "initScriptSha256": "72532de9c987777f774349eb3e067f6951a7834977a0809e98030d4a9d5e8b01",
+  "packageId": "com.local.notesclone.account109",
+  "activity": "com.local.notesclone.MainActivity",
+  "displayName": "CyberNote Account Test",
+  "sdkSource": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+  "licenseFiles": 1139,
+  "gradleHome": "/private/tmp/cybernote-account109-gradle",
+  "target": "/private/tmp/cybernote-account109-target",
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "VITE_NOTES_ACCOUNT_NATIVE": "1",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "command": [
+    "/Users/water/.local/node-v22.16.0-darwin-arm64/bin/node",
+    "scripts/android.mjs",
+    "build",
+    "--debug",
+    "--target",
+    "aarch64",
+    "--apk",
+    "--ci"
+  ]
+}
