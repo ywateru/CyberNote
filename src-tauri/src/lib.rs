@@ -4,6 +4,7 @@ mod attachment_media;
 mod media_permission;
 mod recording_window;
 mod session;
+mod startup;
 mod store;
 mod sync;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
@@ -595,6 +596,24 @@ async fn import_archive(
 }
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    #[cfg(desktop)]
+    let options = startup::Options::parse(std::env::args_os().skip(1)).unwrap_or_else(|error| {
+        eprintln!("CyberNote startup rejected: {error}");
+        std::process::exit(2);
+    });
+    #[cfg(mobile)]
+    let options = startup::Options::default();
+    let mut context = tauri::generate_context!();
+    if options.data_dir.is_some() {
+        // Do not retain permission to read the default library in custom mode.
+        // The canonical selected attachments directory is granted during setup.
+        context.config_mut().app.security.asset_protocol.scope =
+            tauri::utils::config::FsScope::AllowedPaths(Vec::new());
+    }
+    // Keep the lease outside App state too: App/Store must finish dropping before
+    // another process is permitted to open this directory.
+    let workspace = Arc::new(std::sync::OnceLock::<startup::Workspace>::new());
+    let startup_workspace = workspace.clone();
     let builder = tauri::Builder::default()
         .manage(recording_window::Recordings::default())
         .manage(apple_notes_import::Imports::default())
@@ -626,8 +645,14 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notes_scan::init())
         .plugin(tauri_plugin_notes_media::init())
-        .setup(|app| {
-            let root = app.path().app_data_dir()?;
+        .setup(move |app| {
+            let selected = startup_workspace
+                .get()
+                .ok_or_else(|| std::io::Error::other("workspace not initialized"))?;
+            let root = selected.root.clone();
+            let media_cache = selected.media_cache.clone();
+            app.asset_protocol_scope()
+                .allow_directory(root.join("attachments"), true)?;
             let shared = Arc::new((
                 Mutex::new(Session::new(
                     Store::open(&root).map_err(|e| std::io::Error::other(e.message))?,
@@ -649,7 +674,7 @@ pub fn run() {
             let media =
                 tauri::async_runtime::block_on(attachment_media::runtime::MediaRuntime::start_with_provider(
                     shared.clone(),
-                    app.path().app_cache_dir()?.join("attachment-thumbnails-v1"),
+                    media_cache,
                     origins,
                     Some(Arc::new(NativeThumbnailProvider(app.handle().clone()))),
                 ))
@@ -846,10 +871,28 @@ pub fn run() {
         recording_window::recording_quit_sealed,
         recording_window::recording_quit_ack
     ]);
-    builder
-        .build(tauri::generate_context!())
-        .expect("Notes failed to start")
-        .run(|app, event| match event {
+    let app = builder
+        .build(context)
+        .unwrap_or_else(|error| {
+            eprintln!("CyberNote startup rejected: {error}");
+            std::process::exit(1);
+        });
+    // Tauri runs setup inside its event-loop callback and panics on an error.
+    // Resolve and lease the directory before entering it, so invalid paths and
+    // duplicate instances fail clearly before windows or SQLite are opened.
+    let selected = app
+        .path()
+        .app_data_dir()
+        .and_then(|data| {
+            let cache = app.path().app_cache_dir()?;
+            startup::Workspace::open(&options, &data, &cache).map_err(tauri::Error::Io)
+        })
+        .unwrap_or_else(|error| {
+            eprintln!("CyberNote startup rejected: {error}");
+            std::process::exit(1);
+        });
+    workspace.set(selected).expect("workspace initialized once");
+    app.run(|app, event| match event {
             tauri::RunEvent::Exit => {
                 if let Some(media) = app.try_state::<MediaState>() {
                     media.0.stop();
@@ -877,6 +920,7 @@ pub fn run() {
             }
             _ => {}
         });
+    drop(workspace);
 }
 
 #[cfg(test)]

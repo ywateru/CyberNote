@@ -1,0 +1,26 @@
+{
+  "rust": {
+    "command": "CARGO_TARGET_DIR=/private/tmp/cybernote-sync108-target cargo test --manifest-path src-tauri/Cargo.toml --lib --locked --offline",
+    "passed": 227,
+    "failed": 0,
+    "ignored": 4,
+    "seconds": 89.46,
+    "startupTests": 9
+  },
+  "typecheck": {
+    "command": "pnpm typecheck",
+    "exit": 0
+  },
+  "nativeBuild": {
+    "command": "CARGO_TARGET_DIR=/private/tmp/cybernote-sync108-target CARGO_NET_OFFLINE=true pnpm tauri build --debug --bundles app --ci --no-sign",
+    "exit": 0,
+    "app": "/private/tmp/cybernote-sync108-target/debug/bundle/macos/CyberNote.app",
+    "frontend": "production embedded; no dev server required"
+  },
+  "retainedFailure": {
+    "test": "distinct_non_utf8_roots_do_not_share_a_lossy_cache_key",
+    "originalBoundary": "APFS creation of invalid UTF8 directory",
+    "originalResult": "8 passed / 1 failed; OS error 92 Illegal byte sequence",
+    "correction": "Pure OS-byte cache key distinction assertion; actual invalid directory creation is not required."
+  }
+}
