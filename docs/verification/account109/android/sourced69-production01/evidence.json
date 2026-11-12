@@ -1,0 +1,239 @@
+{
+  "schema": 1,
+  "status": "local-production-build-and-staging-passed",
+  "scope": "Android unsigned arm64 package/static identity proof only; no install, visible UI, account, sync or deployment acceptance",
+  "sourceSnapshot": "d69ffbce2ad1284e6c7ce830f6840ba083148aab",
+  "sanitizedHead": "d7f3e2a9431f80ae5711a6a8f3fb3c55b86e3cbd",
+  "sanitizedTree": "dd810c45833ffb999a292a1ffc8bbe9a9df9fd27",
+  "sourceFingerprint": "3f3b76ebfe6c8a146cb35ffad5b4daeff2696c05612dc8846a55a2d450de2058",
+  "inputCount": 1619,
+  "sourceDirty": false,
+  "sourceAndPristineClean": true,
+  "newRootVerificationBeforeAndAfterBuild": true,
+  "retainedFiles": 1770,
+  "publishTests": {
+    "passed": 19,
+    "failed": 0
+  },
+  "versionCheck": true,
+  "typecheck": true,
+  "build": {
+    "command": [
+      "pnpm",
+      "exec",
+      "tauri",
+      "android",
+      "build",
+      "--target",
+      "aarch64",
+      "--apk",
+      "--ci",
+      "--verbose"
+    ],
+    "successfulBuildExitCode": 0,
+    "successfulBuildSeconds": 186.666,
+    "stageExitCode": 0,
+    "cargoJobs": 2,
+    "gradleWorkers": 2,
+    "cacheStrategy": "APFS clone into independent target; exact tauri-package cache invalidation after preserved first failure",
+    "firstAttempt": {
+      "exitCode": 1,
+      "seconds": 200.752,
+      "failure": "Kotlin cannot resolve generated TauriActivity; cloned Tauri build-script cache still points to baseline source output",
+      "trackedSourceClean": true
+    },
+    "recovery": {
+      "command": [
+        "cargo",
+        "clean",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--package",
+        "tauri",
+        "--release",
+        "--target",
+        "aarch64-linux-android"
+      ],
+      "isolatedOwnedTargetOnly": true,
+      "removedBytesReported": "33.7 MiB",
+      "normalTauriActivityCodegenConfirmed": true,
+      "trackedSourceEdited": false,
+      "generatedClassCopied": false,
+      "workflowEdited": false
+    },
+    "tools": {
+      "node": "22.16.0",
+      "pnpm": "10.15.0",
+      "rust": "1.97.1",
+      "java": "Homebrew OpenJDK17.0.19; workflow host is Ubuntu/Temurin17",
+      "sdk": 36,
+      "buildTools": "36.0.0",
+      "ndk": "27.2.12479018"
+    },
+    "frontendEnvironment": {
+      "VITE_NOTES_ACCOUNT_NATIVE": "absent",
+      "VITE_NOTES_DEBUG": "absent",
+      "VITE_NOTES_ACCOUNT_UI": "absent",
+      "otherInheritedViteOrTauriOverrides": "absent"
+    },
+    "cargoOffline": true,
+    "lockedOfflineCargoMetadataCheck": true,
+    "cargoBuildLockedFlagAsserted": false,
+    "actualCargoFeatures": {
+      "notes-clone-*/lib-notes_clone_lib.json": [
+        {
+          "path": "aarch64-linux-android/release/.fingerprint/notes-clone-3cecca753b1ac10a/lib-notes_clone_lib.json",
+          "features": "[]"
+        }
+      ],
+      "tauri-*/lib-tauri.json": [
+        {
+          "path": "aarch64-linux-android/release/.fingerprint/tauri-30dfb5e4be294b5a/lib-tauri.json",
+          "features": "[\"common-controls-v6\", \"compression\", \"custom-protocol\", \"dbus\", \"default\", \"dynamic-acl\", \"http-range\", \"protocol-asset\", \"tauri-runtime-wry\", \"webkit2gtk\", \"webview2-com\", \"wry\", \"x11\"]"
+        }
+      ]
+    },
+    "lockfilesUnchanged": {
+      "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+      "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+      "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+      "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+    }
+  },
+  "package": {
+    "filename": "CyberNote-android-arm64-unsigned.apk",
+    "size": 51613687,
+    "sha256": "82f79f7e306fd60f2148132eae1f727efb7876fdcfb0bc1b7b59087d1565145d",
+    "nativeSha256": "82982d160e8a66b170fb979ef4fba0b87d605e8411adc75aa7d829da07e6e1b2",
+    "noticesSha256": "e4a8dce92e437712e07a2e3fb0c27575da8131e61ca1cfea510444f5b9d4abcd",
+    "stagedReceiptSha256": "18c4da535ef97fd72b7f1ada4b74dd1503d9d549590a7e5550b3272109877e36",
+    "apksigner": {
+      "exitCode": 1,
+      "stderr": [
+        "DOES NOT VERIFY",
+        "ERROR: Missing META-INF/MANIFEST.MF"
+      ],
+      "unsignedConfirmed": true
+    },
+    "manifest": {
+      "package": "com.local.notesclone",
+      "versionName": "0.1.0",
+      "versionCode": 1000,
+      "minSdk": 26,
+      "targetSdk": 36,
+      "debuggable": false,
+      "testOnly": false,
+      "method": "SDK36 aapt2 decode actual binary manifest; absent flags use Android false defaults"
+    },
+    "callbackSchemeFilters": 1,
+    "sourceManifestHashMatchesPin": "e7e9dfaaffe1d0a6430f0dccddd3faa262293e1eae789cc1c54021ab9b361d32",
+    "duplicateZipEntries": false,
+    "elfLibraries": [
+      {
+        "entry": "lib/arm64-v8a/libcloudflared.so",
+        "size": 28812032,
+        "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      },
+      {
+        "entry": "lib/arm64-v8a/libimage_processing_util_jni.so",
+        "size": 32528,
+        "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      },
+      {
+        "entry": "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+        "size": 11064544,
+        "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      },
+      {
+        "entry": "lib/arm64-v8a/libnotes_clone_lib.so",
+        "size": 76519032,
+        "sha256": "82982d160e8a66b170fb979ef4fba0b87d605e8411adc75aa7d829da07e6e1b2",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      },
+      {
+        "entry": "lib/arm64-v8a/libsurface_util_jni.so",
+        "size": 4896,
+        "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      }
+    ],
+    "providerPin": {
+      "path": "vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so",
+      "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+      "size": 28812032,
+      "source": {
+        "url": "https://github.com/cloudflare/cloudflared",
+        "revision": "b749dfd998f4bced81f48727b9c971cfc3056865",
+        "version": "2026.9.0"
+      },
+      "licenses": [
+        "vendor/cybergrid-sdk/provider-assets/LICENSE",
+        "vendor/cybergrid-sdk/provider-assets/THIRD_PARTY_NOTICES.md"
+      ],
+      "provenance": {
+        "manifest": "vendor/cybergrid-sdk/provider-assets/manifest.json",
+        "platform": "android-arm64"
+      }
+    },
+    "notices": {
+      "rustLicenseFiles": 9,
+      "rustProvenanceFiles": 1,
+      "sdkLicenseBundleFiles": 1138,
+      "totalZipEntries": 1200,
+      "allRustAndSdkDeclaredHashesMatch": true,
+      "all1200PayloadsByteForByteMatch": true
+    }
+  },
+  "compiledGate": {
+    "binding": "bp()||!1",
+    "helper": "function bp(){return!!(globalThis||window).isTauri}",
+    "cases": [
+      {
+        "isTauri": false,
+        "available": false
+      },
+      {
+        "isTauri": true,
+        "available": true
+      }
+    ],
+    "assetSha256": "0a975a97262c230d36c68a327d61a691e04ddb9d41343de4a1e7b852c5a28d4d",
+    "encoding": "brotli",
+    "encodedSha256": "ee3b4677c0ed34dabb79fccca25cb61000308d2f6201047a05fb5121a3f40237",
+    "exactBytesEmbeddedInPackagedNative": true,
+    "wholeAppOrBundleExecuted": false
+  },
+  "cleanup": {
+    "ownedBuildGroupsRemaining": [],
+    "ownedGradleDaemonsRemaining": [],
+    "termination": "all normal exits; no kill/global daemon stop"
+  },
+  "baselinePreservation": {
+    "documentationCommit": "fd2c485c52a9a09e5353ae80a98540124846e044",
+    "source5d30AndroidBuildExitCode": 0,
+    "source5d30CleanSourceDriverExitCode": 1,
+    "source5d30StageExitCode": 1,
+    "source5d30ValidReceipt": false,
+    "baselineApkSha256Unchanged": "f4647da47f0384dfe85d09d2fa1b124282e335eef3885c20e5c6ed2b6d559f85",
+    "originalMacPackageSha256Unchanged": "a79a3fa077d9ed8b828c1c2309140ac16f8c31035c8af699ba9e9a2ea6d18895",
+    "oldTargetNotCleaned": true
+  }
+}
