@@ -207,6 +207,7 @@ export async function run(argv = process.argv.slice(2)) {
     checks: [], observations: [], processes: [], databaseEvidence: [],
     limitations: ["Synthetic test notes and File[] from the existing attachment.submit handler; no OS file-picker or physical keyboard claim.",
       "Raw expressions execute only in the explicitly enabled test feature; read_attachment uses the actual App access snapshot.",
+      "DESK-11 partial: real quiet prepare/commit while the target editor is open; deterministic overlap with an in-flight local save or IME composition is not covered.",
       "No Android results are implied by the desktop suite."] ,
   };
   if (opts["build-record"]) {
@@ -306,12 +307,45 @@ export async function run(argv = process.argv.slice(2)) {
         { type: "paragraph", content: [{ type: "text", marks: [{ type: "bold" }], text: "加粗中文与 emoji 🌏" }, { type: "text", text: "\n第二行 " }, { type: "text", marks: [{ type: "noteTag", attrs: { name: "sync108" } }], text: "#sync108" }] },
         { type: "bulletList", content: [{ type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "列表内容保留" }] }] }] },
       ] };
+      await b.select(localA);
+      // Passive observation only: the production App owns every quiet reply.
+      // Keep operation IDs in a bounded in-memory set, never in the report.
+      const quietBefore = (await b.state()).quietWindow.editors.find((e) => e.id === localA)?.externalVersion;
+      assert(Number.isInteger(quietBefore), "Peer target has a real mounted editor");
+      await b.app.evaluate(`(async()=>{
+        const seen=new Set(), counts={prepare:0,commit:0,abort:0};
+        const api=window.__TAURI_INTERNALS__;
+        const handler=api.transformCallback(({payload:p})=>{
+          if(p.phase==='prepare' && p.noteIds?.includes(arg) && seen.size<64){seen.add(p.operationId);counts.prepare++;}
+          if(p.phase==='release' && seen.delete(p.operationId)){
+            if(p.outcome==='commit')counts.commit++;else if(p.outcome==='abort')counts.abort++;
+          }
+        });
+        const eventId=await api.invoke('plugin:event|listen',{event:'notes-sync',target:{kind:'Any'},handler});
+        window.__SYNC108_QUIET_OBSERVER__={counts,eventId,handler};
+        return true;
+      })()`, localA);
       await a.select(localA);
       await a.command("editor.setContent", { document: formatted });
       const savedA = await a.note(localA);
       check("actual editor retains Chinese heading bold and list", savedA.plainText.includes("加粗中文与 emoji 🌏") &&
         JSON.stringify(savedA.document).includes('"bold"') && JSON.stringify(savedA.document).includes('"bulletList"'));
       await sameBody(a, b, localA, "A to B full Chinese document and formatting");
+      await until("real quiet target commit and editor release", async () => {
+        const s=await b.state(), editor=s.quietWindow.editors.find((e)=>e.id===localA);
+        const counts=await b.app.evaluate(`({...window.__SYNC108_QUIET_OBSERVER__.counts})`);
+        return counts.prepare>0 && counts.commit>0 && editor?.externalVersion>quietBefore && editor.editable && !editor.frozen && !s.quietWindow.frozen && s.save.pending===0 && s.save.failed===0;
+      });
+      const quietCounts = await b.app.evaluate(`(async()=>{
+        const o=window.__SYNC108_QUIET_OBSERVER__;
+        window.__TAURI_EVENT_PLUGIN_INTERNALS__.unregisterListener('notes-sync',o.eventId);
+        await window.__TAURI_INTERNALS__.invoke('plugin:event|unlisten',{event:'notes-sync',eventId:o.eventId});
+        window.__TAURI_INTERNALS__.unregisterCallback(o.handler);
+        delete window.__SYNC108_QUIET_OBSERVER__;
+        return o.counts;
+      })()`);
+      report.observations.push({name:"DESK-11-partial-real-quiet",...quietCounts,localSaveOverlap:false});
+      check("real quiet commits open target and restores editable editor without pending saves");
       await b.edit(localB, "乙端反向编辑：完整中文与标点。\n下一段不会丢失");
       await b.command("editor.select", { from: 1, to: 4 });
       await b.command("editor.format", { command: "italic" });
@@ -333,6 +367,23 @@ export async function run(argv = process.argv.slice(2)) {
       check("folder move pin paper and tag projection reach peer", (await b.state()).selection.listed.includes(localA));
       await b.command("tag.select", { name: null });
       await b.command("folder.select", { id: "all" });
+
+      await a.command("folder.open");
+      await a.command("folder.updateDraft", { draft: { name: "同步智能筛选", smart: true, combine: "all", rules: [
+        {key:0,type:"tags",mode:"allSelected",names:["sync108"],pinned:true},
+        {key:1,type:"pinned",mode:"allSelected",names:[],pinned:true},
+      ] } });
+      await a.command("folder.submit");
+      const smart = (await a.workspace()).folders.find((f)=>f.name==="同步智能筛选");
+      assert(smart?.kind==="smart", "Real folder form creates smart definition");
+      await until("smart definition reaches B", async()=>{
+        const actual=(await b.workspace()).folders.find((f)=>f.id===smart.id);
+        return actual?.kind==="smart" && actual.name===smart.name && JSON.stringify(actual.query)===JSON.stringify(smart.query);
+      });
+      await b.command("folder.select",{id:smart.id});
+      const smartListed=(await b.state()).selection.listed;
+      check("DESK-04 smart folder definition and tag plus pin filtering reach peer", smartListed.includes(localA) && !smartListed.includes(localB));
+      await b.command("folder.select",{id:"all"});
 
       mediaNote = await a.create("PNG 与 TXT 原始字节附件");
       const fixtures = [["sync108-original.png", png], ["sync108-original.txt", txt]];

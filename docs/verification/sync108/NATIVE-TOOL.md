@@ -156,3 +156,15 @@ Attachments currently use the existing synthetic File[] debug handler and the
 real attachment/save pipeline; it does not claim OS picker interaction. This
 acceptance status is determined by a complete business + persisted evidence +
 natural cleanup run, never by partial business checks or Node fixtures alone.
+
+### Desktop case boundaries
+
+The next full suite includes DESK-04 smart-folder creation through the real folder
+form, replication of its tag+pin query, and peer membership/exclusion checks.
+DESK-11 is partial: a passive listener counts actual backend `notes-sync` target
+prepare and commit-release events while the target editor is mounted; the test
+also requires trusted document version advancement, editability restored and no
+pending/failed saves. The listener never sends a quiet reply. This does not prove
+a deterministic in-flight local save/IME overlap, and must not be reported as the
+whole DESK-11 case passing. No new native module or rebuild is needed for these
+Node-only scenarios.
