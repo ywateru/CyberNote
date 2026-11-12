@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "phase": "clipboard-transfer-rejected-before-input",
+  "code": "CLIPBOARD_CAPTURE_INVALID",
+  "diagnosticBoundary": "pbpaste-or-json-parse; underlying error deliberately not retained",
+  "clipboardReadAttempted": true,
+  "validatedCapture": false,
+  "clipboardRetried": false,
+  "credentialsEntered": false,
+  "loginSubmitted": false,
+  "credentialValuesRecorded": false,
+  "authorizationUrlRecorded": false,
+  "tokenRecorded": false,
+  "providerErrorRecorded": false,
+  "postFailureObservation": {
+    "trustedHostedOriginConfirmed": true,
+    "loginFormEditable": true,
+    "nativeAuthorizing": true,
+    "nativePaused": false,
+    "profilePresent": false,
+    "syncEnabled": false
+  },
+  "callbackSuccessEstablished": false,
+  "nextStep": "renewed credential transfer required; revalidate current native transaction before any UI input"
+}
