@@ -1,0 +1,20 @@
+// Opt-in isolated debug candidate; production/release identity stays unchanged.
+gradle.beforeProject { project ->
+    if (project.path == ':app') {
+        project.pluginManager.withPlugin('com.android.application') {
+            project.extensions.getByName('androidComponents').finalizeDsl { android ->
+                if (android.defaultConfig.applicationId != 'com.local.notesclone') {
+                    throw new GradleException('account109 requires the expected production base ID')
+                }
+                android.buildTypes.getByName('debug').applicationIdSuffix = '.account109'
+                def resources = new File(project.layout.buildDirectory.get().asFile, 'account109-res/values')
+                resources.mkdirs()
+                new File(resources, 'strings.xml').text = '''<resources>
+  <string name="app_name">CyberNote Account Test</string>
+  <string name="main_activity_title">CyberNote Account Test</string>
+</resources>'''
+                android.sourceSets.getByName('debug').res.srcDir(resources.parentFile)
+            }
+        }
+    }
+}
