@@ -165,22 +165,40 @@ def require_android_release_manifest(package, tools, expected_package, expected_
     if len(packages) != 1 or not re.fullmatch(r'package="' + re.escape(expected_package) + r'"(?: \(Raw: "' + re.escape(expected_package) + r'"\))?', packages[0]):
         raise RuntimeError('Android package differs from production identifier')
     android = 'http://schemas.android.com/apk/res/android:'
-    versions = [a for a in manifests[0]['attributes'] if a.startswith(android + 'versionName(')]
-    if len(versions) != 1 or not re.fullmatch(re.escape(android) + r'versionName\(0x[0-9a-fA-F]+\)="' + re.escape(expected_version) + r'"(?: \(Raw: "' + re.escape(expected_version) + r'"\))?', versions[0]):
+
+    def framework_values(attributes, name, resource_id):
+        values = []
+        for attribute in attributes:
+            parsed = re.fullmatch(r'(.+)\(0x([0-9a-fA-F]+)\)=(.*)', attribute)
+            if parsed is None:
+                continue
+            actual_id = int(parsed[2], 16)
+            if actual_id == resource_id or parsed[1].rsplit(':', 1)[-1] == name:
+                # AXML's resource map is authoritative for framework flags.
+                # An altered string name must not turn an enabled flag into
+                # an apparently absent (default false) attribute.
+                if actual_id != resource_id or parsed[1] != android + name:
+                    raise RuntimeError('Inconsistent Android framework attribute name or ID')
+                values.append(parsed[3])
+        if len(values) > 1:
+            raise RuntimeError('Duplicate Android framework attribute')
+        return values
+
+    versions = framework_values(manifests[0]['attributes'], 'versionName', 0x0101021c)
+    if len(versions) != 1 or not re.fullmatch(r'"' + re.escape(expected_version) + r'"(?: \(Raw: "' + re.escape(expected_version) + r'"\))?', versions[0]):
         raise RuntimeError('Android version differs from package.json')
     if not re.fullmatch(r'\d+\.\d+\.\d+', expected_version):
         raise RuntimeError('Unsupported Android release version')
     major, minor, patch = map(int, expected_version.split('.'))
     expected_code = major * 1000000 + minor * 1000 + patch
-    codes = [a for a in manifests[0]['attributes'] if a.startswith(android + 'versionCode(')]
-    code = re.fullmatch(re.escape(android) + r'versionCode\(0x[0-9a-fA-F]+\)=(0x[0-9a-fA-F]+|\d+)', codes[0]) if len(codes) == 1 else None
+    codes = framework_values(manifests[0]['attributes'], 'versionCode', 0x0101021b)
+    code = re.fullmatch(r'(0x[0-9a-fA-F]+|\d+)', codes[0]) if len(codes) == 1 else None
     if (minor >= 1000 or patch >= 1000 or expected_code <= 0 or code is None
             or int(code[1], 16 if code[1].startswith('0x') else 10) != expected_code):
         raise RuntimeError('Android versionCode differs from package.json')
-    for flag in ('debuggable', 'testOnly'):
-        prefix = android + flag + '('
-        values = [a for a in apps[0]['attributes'] if a.startswith(prefix)]
-        if len(values) > 1 or any(not re.fullmatch(re.escape(prefix) + r'0x[0-9a-fA-F]+\)=(?:false|0x00000000)', a) for a in values):
+    for flag, resource_id in (('debuggable', 0x0101000f), ('testOnly', 0x01010272)):
+        values = framework_values(apps[0]['attributes'], flag, resource_id)
+        if any(a not in ('false', '0x00000000') for a in values):
             raise RuntimeError('Expected a non-debuggable, non-test-only Android release')
 
 
