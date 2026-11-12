@@ -1,0 +1,109 @@
+name: Build native arm64 packages
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: native-packages-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  macos-arm64:
+    runs-on: macos-15
+    timeout-minutes: 60
+    env:
+      CARGO_TARGET_DIR: ${{ runner.temp }}/cybernote-macos-target
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Require real arm64 runner
+        run: test "$(uname -m)" = arm64
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+      - name: Require sanitized source-only checkout
+        run: node scripts/publish/verify.mjs
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.97.1
+          targets: aarch64-apple-darwin
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check retained source and script closure
+        run: |
+          pnpm version:check
+          pnpm test:publish
+          pnpm typecheck
+      - name: Test archive import from public fixtures
+        run: cargo test --locked --manifest-path src-tauri/Cargo.toml --lib independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads
+      - name: Build macOS arm64 app
+        run: pnpm exec tauri build --target aarch64-apple-darwin --bundles app --ci
+      - name: Stage exact package and notices
+        run: python3 scripts/publish/stage-packages.py --platform macos
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CyberNote-macos-arm64
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            release-packages/CyberNote-macos-arm64.zip
+            release-packages/CyberNote-macos-arm64-notices.zip
+            release-packages/CyberNote-macos-arm64.json
+            release-packages/CyberNote-macos-arm64.sha256
+  android-arm64:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      CARGO_TARGET_DIR: ${{ runner.temp }}/cybernote-android-target
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+      - name: Require sanitized source-only checkout
+        run: node scripts/publish/verify.mjs
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install exact SDK and NDK
+        run: |
+          sdkmanager 'platform-tools' 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.2.12479018'
+          echo "NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> "$GITHUB_ENV"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.97.1
+          targets: aarch64-linux-android
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check retained source and script closure
+        run: |
+          pnpm version:check
+          pnpm test:publish
+          pnpm typecheck
+      - name: Assemble unsigned release arm64 APK
+        run: pnpm exec tauri android build --target aarch64 --apk --ci
+      - name: Stage exact package and notices
+        run: python3 scripts/publish/stage-packages.py --platform android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CyberNote-android-arm64-unsigned
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            release-packages/CyberNote-android-arm64-unsigned.apk
+            release-packages/CyberNote-android-arm64-notices.zip
+            release-packages/CyberNote-android-arm64.json
+            release-packages/CyberNote-android-arm64.sha256
