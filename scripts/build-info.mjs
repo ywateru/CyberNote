@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, existsSync, realpathSync } from 'node:fs';
 import { resolve, relative, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -20,7 +20,7 @@ const generatedDirectories = new Set([
 // newly added plugins. Do not exclude other Android sources or arbitrary
 // directories named `generated`: MainActivity and handwritten plugins are inputs.
 const pluginAndroidOutput = /^plugins\/[^/]+\/android\/\.tauri$/;
-const roots = ['src', 'public', 'plugins', 'src-tauri', 'index.html', 'package.json', 'pnpm-lock.yaml', 'tsconfig.json', 'vite.config.ts', 'scripts/android.mjs', 'scripts/build-info.mjs', 'scripts/versions.mjs', 'scripts/release.mjs', 'scripts/native'];
+const roots = ['src', 'public', 'plugins', 'src-tauri', 'crates', 'vendor', 'index.html', 'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'patches', 'tsconfig.json', 'vite.config.ts', 'scripts/android.mjs', 'scripts/build-info.mjs', 'scripts/versions.mjs', 'scripts/release.mjs', 'scripts/native'];
 export function productFiles(root = projectRoot) {
   const files = [];
   const walk = (path) => {
@@ -35,15 +35,34 @@ export function productFiles(root = projectRoot) {
   for (const entry of roots) walk(resolve(root, entry));
   return files.sort();
 }
-export function sourceIdentity(root = projectRoot) {
+export function sourceIdentity(root = projectRoot, { metadataPath = process.env.CYBERNOTE_DEPLOY_METADATA } = {}) {
   const hash = createHash('sha256'), files = productFiles(root);
   for (const file of files) {
     const bytes = readFileSync(resolve(root, file));
     hash.update(file + '\0' + bytes.length + '\0'); hash.update(bytes);
   }
-  const revision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-  const dirty = !!execFileSync('git', ['status', '--porcelain', '--untracked-files=normal'], { cwd: root, encoding: 'utf8' }).trim();
-  return { sourceRevision: revision, sourceFingerprint: hash.digest('hex'), sourceDirty: dirty, inputCount: files.length };
+  const fingerprint = hash.digest('hex');
+  let metadata;
+  if (metadataPath) {
+    metadata = JSON.parse(readFileSync(resolve(root, metadataPath), 'utf8'));
+    if (metadata.schema !== 1 || metadata.provenance !== 'trusted-checkout' ||
+        !/^[a-f0-9]{40,64}$/.test(metadata.sourceRevision ?? '') ||
+        metadata.sourceFingerprint !== fingerprint || metadata.inputCount !== files.length ||
+        typeof metadata.sourceDirty !== 'boolean') throw Error('Deployment metadata does not match actual product bytes');
+  }
+  // Do not accidentally identify an archive using an enclosing, unrelated Git repo.
+  if (existsSync(resolve(root, '.git'))) {
+    const top = execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: root, encoding: 'utf8' }).trim();
+    if (realpathSync(top) !== realpathSync(root)) throw Error('Build root is not the Git checkout root');
+    const revision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+    const dirty = !!execFileSync('git', ['status', '--porcelain', '--untracked-files=normal'], { cwd: root, encoding: 'utf8' }).trim();
+    if (metadata && (metadata.sourceRevision !== revision || metadata.sourceDirty !== dirty)) throw Error('Deployment metadata disagrees with checkout');
+    return { sourceRevision: revision, sourceFingerprint: fingerprint, sourceDirty: dirty, inputCount: files.length };
+  }
+  if (!metadata) throw Error('No .git: provide CYBERNOTE_DEPLOY_METADATA from the trusted source checkout');
+  // Revision provenance belongs to the explicit metadata producer. The fingerprint
+  // and count above are ALWAYS recomputed locally, never copied as claimed bytes.
+  return { sourceRevision: metadata.sourceRevision, sourceFingerprint: fingerprint, sourceDirty: metadata.sourceDirty, inputCount: files.length };
 }
 export function packageVersion(root = projectRoot) {
   const version = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')).version;

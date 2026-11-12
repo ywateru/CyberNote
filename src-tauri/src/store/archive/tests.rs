@@ -651,9 +651,9 @@ fn seven_papers_and_dash_lists_preserve_drawings_through_save_reopen_and_archive
 #[test]
 fn independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads() {
     let invalid = [
-        ("inline-at-doc-root", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/inline-at-doc-root.notesbackup")),
-        ("block-inside-paragraph", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/block-inside-paragraph.notesbackup")),
-        ("paragraph-inside-table", include_str!("../../../../docs/verification/qa-fix-00/schema-fixtures/paragraph-inside-table.notesbackup")),
+        ("inline-at-doc-root", include_str!("../../../tests/fixtures/archive/inline-at-doc-root.notesbackup")),
+        ("block-inside-paragraph", include_str!("../../../tests/fixtures/archive/block-inside-paragraph.notesbackup")),
+        ("paragraph-inside-table", include_str!("../../../tests/fixtures/archive/paragraph-inside-table.notesbackup")),
     ];
     let f = fixture();
     let mut store = populate_local(&f.root);
@@ -672,7 +672,7 @@ fn independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads() {
     drop(store);
     assert_eq!(snapshot(&Store::open(&f.root).unwrap()), before);
     let legacy = include_str!(
-        "../../../../docs/verification/qa-001/store-probes/fixtures/valid.notesbackup"
+        "../../../tests/fixtures/archive/legacy-valid.notesbackup"
     );
     let path = f._temp.path().join("legacy.notesbackup");
     fs::write(&path, legacy).unwrap();
