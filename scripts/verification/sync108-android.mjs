@@ -5,12 +5,13 @@
  * especially for pair: never put invitations in argv, files or diagnostics.
  */
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdir, readFile, writeFile, copyFile, symlink, rm } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, copyFile, symlink } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import os from 'node:os';
+import { acquireDriverLease, guardDriverMethods } from './sync108-android-lifecycle.mjs';
 
 export const SERIAL = '98895a3147304c3132';
 export const PACKAGE = 'com.local.notesclone.sync108';
@@ -96,14 +97,15 @@ export async function removeOwnedForward(owned) {
 
 export async function connectAndroid() {
   // Exclusive live driver; stale locks are intentionally not deleted automatically.
-  await mkdir(lockPath).catch(() => { throw Error(`Driver busy or stale lock: ${lockPath}`); });
+  const lease = await acquireDriverLease(lockPath);
   let ws, owned;
   let id = 0;
   const pending = new Map();
   const diagnostics = { phase: 'connect', selector: null };
   const failure = (code, phase = diagnostics.phase, selector = diagnostics.selector) => Object.assign(Error(code), { code, phase, selector });
-  const assertPid = () => { if (ownPid() !== owned.pid) throw failure('ANDROID_PID_CHANGED'); };
+  const assertPid = () => { lease.assertOpen(); if (ownPid() !== owned.pid) throw failure('ANDROID_PID_CHANGED'); };
   const send = (method, params = {}) => new Promise((resolve, reject) => {
+    lease.assertOpen();
     const call = ++id;
     const phase = `${diagnostics.phase}:${method}`, selector = diagnostics.selector;
     const timer = setTimeout(() => { pending.delete(call); reject(failure('ANDROID_CDP_TIMEOUT', phase, selector)); }, 15000);
@@ -116,13 +118,12 @@ export async function connectAndroid() {
     if (r.exceptionDetails) throw failure('ANDROID_PAGE_EVALUATION_FAILED');
     return r.result?.value;
   };
-  const close = async ({ keepForward = false } = {}) => {
+  const close = ({ keepForward = false } = {}) => lease.close(async () => {
     ws?.close();
     for (const p of pending.values()) { clearTimeout(p.timer); p.reject(Error('CDP closed')); }
     pending.clear();
-    try { if (owned && !keepForward) await removeOwnedForward(owned); }
-    finally { await rm(lockPath, { recursive: true }); }
-  };
+    if (owned && !keepForward) await removeOwnedForward(owned);
+  });
   try {
     const pid = ownPid();
     const remote = `localabstract:webview_devtools_remote_${pid}`;
@@ -290,7 +291,7 @@ export async function connectAndroid() {
       },
     };
     await wait(() => evaluate(`!!(window.__TAURI_INTERNALS__&&document.querySelector('.app'))`), 'native app ready');
-    return api;
+    return guardDriverMethods(api, lease);
   } catch (error) { await close(); throw error; }
 }
 
