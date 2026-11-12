@@ -75,7 +75,7 @@ export async function verifyBrowserEndpoint({port,pid,WebSocketImpl,fetchImpl=fe
  try{
   const version=await(await fetchImpl(`http://127.0.0.1:${port}/json/version`,{signal:AbortSignal.timeout(3000)})).json();
   const url=new URL(version.webSocketDebuggerUrl);
-  if(url.protocol!=='ws:'||!['localhost','127.0.0.1'].includes(url.hostname)||Number(url.port)!==port||url.username||url['pass'+'word']||!url.pathname.startsWith('/devtools/browser/'))throw fail('BROWSER_ENDPOINT_AUTHORITY_MISMATCH');
+  if(url.protocol!=='ws:'||!['localhost','127.0.0.1'].includes(url.hostname)||Number(url.port)!==port||url.username||url['pass'+'word']||!(url.pathname==='/devtools/browser'||url.pathname.startsWith('/devtools/browser/')))throw fail('BROWSER_ENDPOINT_AUTHORITY_MISMATCH');
   const result=await new Promise((resolve,reject)=>{
    timer=setTimeout(()=>reject(fail('BROWSER_ENDPOINT_OWNER_TIMEOUT')),5000);
    socket=new WebSocketImpl(url);

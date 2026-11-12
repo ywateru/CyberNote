@@ -165,7 +165,7 @@ test('foreground ActivityRecord must name user0 and the exact package',()=>{
 });
 
 test('global browser endpoint must prove selected OS PID before page access',async t=>{
- for(const scenario of ['match','other-user','ambiguous','unsupported','malformed','wrong-authority','fetch-error'])await t.test(scenario,async()=>{
+ for(const scenario of ['match','root-path','other-user','ambiguous','unsupported','malformed','wrong-authority','fetch-error'])await t.test(scenario,async()=>{
   let closed=0,sent=[];
   class FakeSocket{
    constructor(){queueMicrotask(()=>this.onopen());}
@@ -175,9 +175,9 @@ test('global browser endpoint must prove selected OS PID before page access',asy
    });}
    close(){closed++;}
   }
-  const fetchImpl=async()=>{if(scenario==='fetch-error')throw Error('offline-private-detail');return{json:async()=>({webSocketDebuggerUrl:`ws://127.0.0.1:${scenario==='wrong-authority'?9999:4567}/devtools/browser/offline-marker`})};};
+  const fetchImpl=async()=>{if(scenario==='fetch-error')throw Error('offline-private-detail');return{json:async()=>({webSocketDebuggerUrl:`ws://127.0.0.1:${scenario==='wrong-authority'?9999:4567}/devtools/browser${scenario==='root-path'?'':'/offline-marker'}`})};};
   const operation=verifyBrowserEndpoint({port:4567,pid:101,WebSocketImpl:FakeSocket,fetchImpl});
-  if(scenario==='match')assert.deepEqual(await operation,{browserEndpointPidVerified:true});
+  if(['match','root-path'].includes(scenario))assert.deepEqual(await operation,{browserEndpointPidVerified:true});
   else await assert.rejects(operation,error=>{assert.equal(error.message.includes('offline-private-detail'),false);assert.equal(error.cause,undefined);return error.code===({'other-user':'BROWSER_ENDPOINT_OWNER_MISMATCH',ambiguous:'BROWSER_ENDPOINT_OWNER_MISMATCH','wrong-authority':'BROWSER_ENDPOINT_AUTHORITY_MISMATCH'}[scenario]||'BROWSER_ENDPOINT_OWNER_UNAVAILABLE');});
   assert.equal(closed,['wrong-authority','fetch-error'].includes(scenario)?0:1);
   assert.deepEqual(sent,['wrong-authority','fetch-error'].includes(scenario)?[]:[{id:1,method:'SystemInfo.getProcessInfo'}]);

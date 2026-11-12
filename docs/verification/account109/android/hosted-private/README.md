@@ -120,3 +120,10 @@ failures/skips, zero device commands**. Offline cases cover cross-user foregroun
 matching/mismatched/ambiguous browser OS PID, unsupported/malformed responses,
 authority mismatch, sanitized fetch failure and audit socket closure. Historical
 logs remain unchanged. No product source or auth acceptance rule changed.
+
+The first new preparation safely rejected this Chrome's valid browser root socket
+`/devtools/browser` before page enumeration or SignIn. The preserved fixed-code
+receipt is `socket-authority-red01.json`. Both that exact root and browser child
+paths are now accepted with the same scheme/loopback/owned-port/no-user-info and
+SystemInfo OS PID requirements. `user0-socket-green02.txt` passes **34/34**,
+including the real root-path shape; no test device commands are permitted.

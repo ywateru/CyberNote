@@ -1,0 +1,217 @@
+TAP version 13
+# Subtest: each supported Input event passes its own guard before dispatch
+ok 1 - each supported Input event passes its own guard before dispatch
+  ---
+  duration_ms: 0.793625
+  type: 'test'
+  ...
+# Subtest: hidden, unfocused, wrong-origin and changed-document targets receive no Input
+    # Subtest: visible
+    ok 1 - visible
+      ---
+      duration_ms: 0.144792
+      type: 'test'
+      ...
+    # Subtest: focused
+    ok 2 - focused
+      ---
+      duration_ms: 0.044458
+      type: 'test'
+      ...
+    # Subtest: fieldFocused
+    ok 3 - fieldFocused
+      ---
+      duration_ms: 0.069083
+      type: 'test'
+      ...
+    # Subtest: origin
+    ok 4 - origin
+      ---
+      duration_ms: 0.0325
+      type: 'test'
+      ...
+    # Subtest: href
+    ok 5 - href
+      ---
+      duration_ms: 0.070083
+      type: 'test'
+      ...
+    # Subtest: frameId
+    ok 6 - frameId
+      ---
+      duration_ms: 0.030291
+      type: 'test'
+      ...
+    # Subtest: loaderId
+    ok 7 - loaderId
+      ---
+      duration_ms: 0.169167
+      type: 'test'
+      ...
+    1..7
+ok 2 - hidden, unfocused, wrong-origin and changed-document targets receive no Input
+  ---
+  duration_ms: 1.150208
+  type: 'test'
+  ...
+# Subtest: lease, foreground and lock failures prevent dispatch
+ok 3 - lease, foreground and lock failures prevent dispatch
+  ---
+  duration_ms: 0.260625
+  type: 'test'
+  ...
+# Subtest: expiry after awaited native check prevents Input and cannot extend preparedAt
+ok 4 - expiry after awaited native check prevents Input and cannot extend preparedAt
+  ---
+  duration_ms: 0.142542
+  type: 'test'
+  ...
+# Subtest: page changes during native IPC and final ownership changes prevent Input
+ok 5 - page changes during native IPC and final ownership changes prevent Input
+  ---
+  duration_ms: 0.08175
+  type: 'test'
+  ...
+# Subtest: navigation invalidation and no longer authorizing prevent every later Input
+ok 6 - navigation invalidation and no longer authorizing prevent every later Input
+  ---
+  duration_ms: 0.072583
+  type: 'test'
+  ...
+# Subtest: consumer routes all twelve mouse/key/text events through sendInput with the minimum expiry
+ok 7 - consumer routes all twelve mouse/key/text events through sendInput with the minimum expiry
+  ---
+  duration_ms: 0.241709
+  type: 'test'
+  ...
+# Subtest: async post-Input recorder rejection is awaited, sanitized and cannot return success
+ok 8 - async post-Input recorder rejection is awaited, sanitized and cannot return success
+  ---
+  duration_ms: 1161.258916
+  type: 'test'
+  ...
+# Subtest: native terminal requires exact synthetic user, paused, disabled and owned foreground
+ok 9 - native terminal requires exact synthetic user, paused, disabled and owned foreground
+  ---
+  duration_ms: 0.107708
+  type: 'test'
+  ...
+# Subtest: observer await boundary rechecks lock, foreground and deadline before success
+    # Subtest: stable
+    ok 1 - stable
+      ---
+      duration_ms: 5.774542
+      type: 'test'
+      ...
+    # Subtest: lock
+    ok 2 - lock
+      ---
+      duration_ms: 0.074416
+      type: 'test'
+      ...
+    # Subtest: foreground
+    ok 3 - foreground
+      ---
+      duration_ms: 0.025667
+      type: 'test'
+      ...
+    # Subtest: deadline
+    ok 4 - deadline
+      ---
+      duration_ms: 0.026166
+      type: 'test'
+      ...
+    1..4
+ok 10 - observer await boundary rechecks lock, foreground and deadline before success
+  ---
+  duration_ms: 6.04725
+  type: 'test'
+  ...
+# Subtest: observer deadline includes awaited connection setup
+ok 11 - observer deadline includes awaited connection setup
+  ---
+  duration_ms: 0.045167
+  type: 'test'
+  ...
+# Subtest: observer device recheck crossing deadline cannot report success
+ok 12 - observer device recheck crossing deadline cannot report success
+  ---
+  duration_ms: 0.044916
+  type: 'test'
+  ...
+# Subtest: browser PID selection requires exact user-0 Chrome UID and cmdline
+ok 13 - browser PID selection requires exact user-0 Chrome UID and cmdline
+  ---
+  duration_ms: 0.164666
+  type: 'test'
+  ...
+# Subtest: foreground ActivityRecord must name user0 and the exact package
+ok 14 - foreground ActivityRecord must name user0 and the exact package
+  ---
+  duration_ms: 0.122042
+  type: 'test'
+  ...
+# Subtest: global browser endpoint must prove selected OS PID before page access
+    # Subtest: match
+    ok 1 - match
+      ---
+      duration_ms: 0.252458
+      type: 'test'
+      ...
+    # Subtest: root-path
+    ok 2 - root-path
+      ---
+      duration_ms: 0.049917
+      type: 'test'
+      ...
+    # Subtest: other-user
+    ok 3 - other-user
+      ---
+      duration_ms: 0.062375
+      type: 'test'
+      ...
+    # Subtest: ambiguous
+    ok 4 - ambiguous
+      ---
+      duration_ms: 0.1245
+      type: 'test'
+      ...
+    # Subtest: unsupported
+    ok 5 - unsupported
+      ---
+      duration_ms: 0.095458
+      type: 'test'
+      ...
+    # Subtest: malformed
+    ok 6 - malformed
+      ---
+      duration_ms: 0.048375
+      type: 'test'
+      ...
+    # Subtest: wrong-authority
+    ok 7 - wrong-authority
+      ---
+      duration_ms: 0.025958
+      type: 'test'
+      ...
+    # Subtest: fetch-error
+    ok 8 - fetch-error
+      ---
+      duration_ms: 0.029792
+      type: 'test'
+      ...
+    1..8
+ok 15 - global browser endpoint must prove selected OS PID before page access
+  ---
+  duration_ms: 0.819375
+  type: 'test'
+  ...
+1..15
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1221.679875

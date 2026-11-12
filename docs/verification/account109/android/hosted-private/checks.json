@@ -5,7 +5,7 @@
     {
       "runtimePath": "/private/tmp/account109-hosted-memory-driver.mjs",
       "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-memory-driver.mjs",
-      "sha256": "0816ec5f38f0de8a4cd2282c7db4a3a8be563ba340159ae9574c9d7ab69551da"
+      "sha256": "ba09e571e091fecf62148aad30faa9f722268c164b76055db3c89f853edc3c4c"
     },
     {
       "runtimePath": "/private/tmp/account109-hosted-memory-consumer.mjs",
@@ -25,13 +25,13 @@
   ],
   "offlineTests": {
     "command": "node --test docs/verification/account109/android/hosted-private/source/account109-hosted-private.test.mjs",
-    "passed": 33,
+    "passed": 34,
     "failed": 0,
     "skipped": 0,
     "externalCommands": 0,
     "liveAuthEvidence": false,
-    "log": "user0-socket-green01.txt",
-    "logSha256": "42e20933b2776e48f1a7ad6168e744d64ddc543cb9299530880c99c58cf35084"
+    "log": "user0-socket-green02.txt",
+    "logSha256": "b072b47ff58f147bd7a5ef558920c97ab02d1cdac8b32ea868b09afeb4e2cc96"
   },
   "preservedInitialFailure": "red01.json",
   "productionSourceChanged": false,
@@ -64,5 +64,6 @@
       "oldEnvelopeRevoked": true
     },
     "proofBoundary": "point-in-time browser endpoint proof; page socket remains bound, every Input rechecks selected user0 PID/UID and u0 foreground; Native callback authority unchanged"
-  }
+  },
+  "preservedEndpointPreparationFailure": "socket-authority-red01.json"
 }
