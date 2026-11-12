@@ -208,6 +208,20 @@ contains only fixed labels and booleans. It never prints authorization/callback
 URLs, codes, tokens, grant contents, subject, profile or provider error bodies.
 Browser/OS process metadata remains outside this output guarantee.
 
+The same example also sends the Rust `AccessToken` directly as Bearer to the
+fixed `https://cybernote-sync.vercel.app/api/v1/account/profile` after initial
+authorization, forced refresh and reopened-owner restore. The client uses normal
+TLS verification, HTTPS only, no environment proxy adoption or redirects, a
+five-second connection timeout and fifteen-second total request timeout. Only
+HTTP 200 and at most 16 KiB of streamed response bytes are accepted. It checks
+schema version 1, the verified issuer/subject, nonempty product/workspace, and
+the same product/workspace on both later calls. Profile-stage JSON reports only
+`verified`, `sameOwner`, and (after the first call) `workspaceStable` booleans;
+response bodies, workspace IDs and errors containing request data are never
+printed. A profile failure follows the same logout/owner-retention path. No
+enrollment, note transfer or other account/service mutation is performed by these
+read-only profile requests.
+
 SIGINT or SIGTERM requests cancellation. In-flight authentication operations are
 awaited before cleanup; code-exchange cancellation uses the transaction handle
 and still waits for settlement. Every outcome after owner initialization attempts
@@ -221,6 +235,7 @@ death or filesystem loss retains the same limits documented for the library;
 the example cannot make network rotation and durable persistence atomic.
 
 Compilation and local library tests are not live evidence. Only the operator's
-explicit successful execution establishes this Rust-owner stage, separately
-from later native product login, existing-browser-SSO registration and runtime
-acceptance. No DNS/IP override, TLS bypass or service configuration is added.
+explicit successful execution establishes this Rust-owner and deployed-profile
+continuity stage. It remains separate from native product login,
+existing-browser-SSO registration and runtime acceptance. No DNS/IP override,
+TLS bypass or service configuration is added.

@@ -7,7 +7,7 @@ mod callback;
 #[cfg(target_os = "macos")]
 mod macos {
     use super::callback;
-    use account_auth::{AuthClient, AuthError, PinnedConfig};
+    use account_auth::{AccessToken, AuthClient, AuthError, Identity, PinnedConfig};
     use std::{
         fs::{self, DirBuilder},
         future::Future,
@@ -23,6 +23,18 @@ mod macos {
     };
     use tokio_util::sync::CancellationToken;
     use url::Url;
+    const PROFILE_URL: &str = "https://cybernote-sync.vercel.app/api/v1/account/profile";
+    const MAX_PROFILE_BYTES: usize = 16 * 1024;
+
+    #[derive(serde::Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    struct Profile {
+        schema_version: u32,
+        issuer: String,
+        subject: String,
+        product_id: String,
+        workspace_id: String,
+    }
 
     struct Failure {
         stage: &'static str,
@@ -43,6 +55,18 @@ mod macos {
         if stage == "restore_empty" && ok {
             value["restored_none"] = true.into();
             value["cleanup_required"] = false.into();
+        }
+        if ok
+            && matches!(
+                stage,
+                "profile_initial" | "profile_refresh" | "profile_reopen"
+            )
+        {
+            value["verified"] = true.into();
+            value["sameOwner"] = true.into();
+            if stage != "profile_initial" {
+                value["workspaceStable"] = true.into();
+            }
         }
         let mut output = io::stdout().lock();
         // A closed output pipe must not panic and discard an in-memory owner.
@@ -159,6 +183,91 @@ mod macos {
         result
     }
 
+    fn decode_profile(
+        stage: &'static str,
+        bytes: &[u8],
+        identity: &Identity,
+        previous: Option<&Profile>,
+    ) -> Result<Profile, Failure> {
+        if bytes.len() > MAX_PROFILE_BYTES {
+            return Err(failure(stage, "profile_too_large"));
+        }
+        let profile: Profile =
+            serde_json::from_slice(bytes).map_err(|_| failure(stage, "profile_invalid_schema"))?;
+        if profile.schema_version != 1
+            || profile.issuer != identity.issuer
+            || profile.subject != identity.subject
+            || profile.product_id.trim().is_empty()
+            || profile.workspace_id.trim().is_empty()
+        {
+            return Err(failure(stage, "profile_invalid_owner_or_schema"));
+        }
+        if let Some(previous) = previous {
+            if profile.issuer != previous.issuer
+                || profile.subject != previous.subject
+                || profile.product_id != previous.product_id
+            {
+                return Err(failure(stage, "profile_owner_changed"));
+            }
+            if profile.workspace_id != previous.workspace_id {
+                return Err(failure(stage, "profile_workspace_changed"));
+            }
+        }
+        Ok(profile)
+    }
+
+    async fn profile(
+        stage: &'static str,
+        client: &reqwest::Client,
+        access: &AccessToken,
+        identity: &Identity,
+        previous: Option<&Profile>,
+        stop: &CancellationToken,
+    ) -> Result<Profile, Failure> {
+        if stop.is_cancelled() {
+            return Err(failure(stage, "cancelled"));
+        }
+        let request = async {
+            let mut response = client
+                .get(PROFILE_URL)
+                .bearer_auth(access.secret())
+                .send()
+                .await
+                .map_err(|_| failure(stage, "profile_network"))?;
+            if response.status() != reqwest::StatusCode::OK {
+                return Err(failure(stage, "profile_http_status"));
+            }
+            if response
+                .content_length()
+                .is_some_and(|n| n > MAX_PROFILE_BYTES as u64)
+            {
+                return Err(failure(stage, "profile_too_large"));
+            }
+            let mut bytes = zeroize::Zeroizing::new(Vec::new());
+            while let Some(chunk) = response
+                .chunk()
+                .await
+                .map_err(|_| failure(stage, "profile_network"))?
+            {
+                if chunk.len() > MAX_PROFILE_BYTES - bytes.len() {
+                    return Err(failure(stage, "profile_too_large"));
+                }
+                bytes.extend_from_slice(&chunk);
+            }
+            decode_profile(stage, &bytes, identity, previous)
+        };
+        // A read-only GET can be cancelled; no refresh/rotation owner is abandoned.
+        tokio::select! {
+            biased;
+            _ = stop.cancelled() => Err(failure(stage, "cancelled")),
+            result = request => {
+                let profile = result?;
+                event(stage, true, "profile_verified", true);
+                Ok(profile)
+            }
+        }
+    }
+
     async fn exercise(
         owner: &mut Option<AuthClient>,
         path: &Path,
@@ -203,14 +312,47 @@ mod macos {
             }
         };
         event("callback", true, "verified", true);
+        let client = reqwest::Client::builder()
+            .https_only(true)
+            .no_proxy()
+            .redirect(reqwest::redirect::Policy::none())
+            .connect_timeout(Duration::from_secs(5))
+            .timeout(Duration::from_secs(15))
+            .build()
+            .map_err(|_| failure("profile_initial", "profile_client_failed"))?;
+        let initial_access = await_auth(
+            "profile_initial",
+            auth.access_token(Duration::ZERO, false),
+            stop,
+        )
+        .await?;
+        let initial_profile = profile(
+            "profile_initial",
+            &client,
+            &initial_access,
+            &identity,
+            None,
+            stop,
+        )
+        .await?;
+        drop(initial_access);
         let access = await_auth(
             "refresh",
             auth.access_token(Duration::from_secs(30), true),
             stop,
         )
         .await?;
-        drop(access);
         event("refresh", true, "forced_refresh_succeeded", true);
+        profile(
+            "profile_refresh",
+            &client,
+            &access,
+            &identity,
+            Some(&initial_profile),
+            stop,
+        )
+        .await?;
+        drop(access);
         drop(owner.take());
         event("restart", true, "owner_closed", true);
         *owner = Some(
@@ -228,6 +370,22 @@ mod macos {
             return Err(failure("restore", "subject_mismatch"));
         }
         event("restore", true, "same_subject", true);
+        let access = await_auth(
+            "profile_reopen",
+            reopened.access_token(Duration::ZERO, false),
+            stop,
+        )
+        .await?;
+        profile(
+            "profile_reopen",
+            &client,
+            &access,
+            &identity,
+            Some(&initial_profile),
+            stop,
+        )
+        .await?;
+        drop(access);
         Ok(())
     }
 
@@ -349,6 +507,94 @@ mod macos {
             atomic::{AtomicBool, Ordering},
             Arc,
         };
+
+        fn profile_fixture() -> (Identity, serde_json::Value) {
+            let identity = Identity {
+                issuer: "https://fixture.example/oidc".into(),
+                subject: "fixture-subject".into(),
+                display_name: "Fixture".into(),
+                username: None,
+            };
+            let value = serde_json::json!({"schemaVersion": 1, "issuer": identity.issuer,
+                "subject": identity.subject, "productId": "fixture-product", "workspaceId": "fixture-workspace"});
+            (identity, value)
+        }
+
+        #[test]
+        fn profile_rejects_wrong_schema_owner_empty_workspace_and_oversized_body() {
+            let (identity, value) = profile_fixture();
+            let bytes = serde_json::to_vec(&value).unwrap();
+            assert!(decode_profile("profile_initial", &bytes, &identity, None).is_ok());
+            for (field, replacement) in [
+                ("schemaVersion", serde_json::json!(2)),
+                ("issuer", serde_json::json!("https://other.example/oidc")),
+                ("subject", serde_json::json!("other-subject")),
+                ("workspaceId", serde_json::json!("")),
+                ("workspaceId", serde_json::json!(" \n\t")),
+                ("productId", serde_json::json!("")),
+            ] {
+                let mut bad = value.clone();
+                bad[field] = replacement;
+                assert!(decode_profile(
+                    "profile_initial",
+                    &serde_json::to_vec(&bad).unwrap(),
+                    &identity,
+                    None
+                )
+                .is_err());
+            }
+            let mut missing = value;
+            missing.as_object_mut().unwrap().remove("workspaceId");
+            assert!(decode_profile(
+                "profile_initial",
+                &serde_json::to_vec(&missing).unwrap(),
+                &identity,
+                None
+            )
+            .is_err());
+            let mut oversized = bytes;
+            oversized.resize(MAX_PROFILE_BYTES + 1, b' ');
+            assert_eq!(
+                decode_profile("profile_initial", &oversized, &identity, None)
+                    .err()
+                    .map(|e| e.code),
+                Some("profile_too_large")
+            );
+        }
+
+        #[test]
+        fn profile_continuity_requires_same_product_and_workspace() {
+            let (identity, value) = profile_fixture();
+            let bytes = serde_json::to_vec(&value).unwrap();
+            let initial = decode_profile("profile_initial", &bytes, &identity, None)
+                .ok()
+                .unwrap();
+            for stage in ["profile_refresh", "profile_reopen"] {
+                assert!(decode_profile(stage, &bytes, &identity, Some(&initial)).is_ok());
+                for (field, replacement, code) in [
+                    (
+                        "workspaceId",
+                        "other-workspace",
+                        "profile_workspace_changed",
+                    ),
+                    ("productId", "other-product", "profile_owner_changed"),
+                ] {
+                    let mut changed = value.clone();
+                    changed[field] = replacement.into();
+                    assert_eq!(
+                        decode_profile(
+                            stage,
+                            &serde_json::to_vec(&changed).unwrap(),
+                            &identity,
+                            Some(&initial)
+                        )
+                        .err()
+                        .map(|e| e.code),
+                        Some(code)
+                    );
+                }
+            }
+        }
 
         #[tokio::test]
         async fn cancellation_drains_operation_before_cleanup_can_run() {
