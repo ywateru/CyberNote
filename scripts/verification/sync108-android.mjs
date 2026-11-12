@@ -101,17 +101,19 @@ export async function connectAndroid() {
   let id = 0;
   const pending = new Map();
   const diagnostics = { phase: 'connect', selector: null };
-  const assertPid = () => { if (ownPid() !== owned.pid) throw Error('App PID changed; reconnect'); };
+  const failure = (code, phase = diagnostics.phase, selector = diagnostics.selector) => Object.assign(Error(code), { code, phase, selector });
+  const assertPid = () => { if (ownPid() !== owned.pid) throw failure('ANDROID_PID_CHANGED'); };
   const send = (method, params = {}) => new Promise((resolve, reject) => {
     const call = ++id;
-    const timer = setTimeout(() => { pending.delete(call); reject(Error(`CDP timeout: ${method}`)); }, 15000);
-    pending.set(call, { resolve, reject, timer });
+    const phase = `${diagnostics.phase}:${method}`, selector = diagnostics.selector;
+    const timer = setTimeout(() => { pending.delete(call); reject(failure('ANDROID_CDP_TIMEOUT', phase, selector)); }, 15000);
+    pending.set(call, { resolve, reject, timer, phase, selector });
     ws.send(JSON.stringify({ id: call, method, params }));
   });
   const evaluate = async expression => {
     assertPid();
     const r = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
-    if (r.exceptionDetails) throw Error('CDP page evaluation failed');
+    if (r.exceptionDetails) throw failure('ANDROID_PAGE_EVALUATION_FAILED');
     return r.result?.value;
   };
   const close = async ({ keepForward = false } = {}) => {
@@ -155,7 +157,7 @@ export async function connectAndroid() {
       const call = pending.get(message.id);
       if (!call) return;
       pending.delete(message.id); clearTimeout(call.timer);
-      if (message.error) call.reject(Error('CDP command rejected'));
+      if (message.error) call.reject(failure('ANDROID_CDP_COMMAND_REJECTED', call.phase, call.selector));
       else call.resolve(message.result);
     };
     const wait = async (check, label, timeout = 15000) => {
@@ -174,6 +176,7 @@ export async function connectAndroid() {
       await pause();
     };
     const key = async (key, code, windowsVirtualKeyCode, modifiers = 0) => {
+      diagnostics.phase = 'Input.dispatchKeyEvent';
       assertPid();
       await send('Input.dispatchKeyEvent', { type: 'keyDown', key, code, windowsVirtualKeyCode, modifiers,
         ...(key === 'Enter' ? { text: '\r', unmodifiedText: '\r' } : {}) });
