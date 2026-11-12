@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "status": "historical-failures-preserved",
+  "nativeReady02": {
+    "original": {
+      "path": "/private/tmp/cybernote-sync108/docs/verification/sync108/native-ready02/handshake.json",
+      "sha256": "67e59ddabf7185ef5ec2c68cc4559f327d3df29c4c99757a4dd3e909e209c684"
+    },
+    "buildEvidence": {
+      "path": "/private/tmp/cybernote-sync108/docs/verification/sync108/native-ready02/build-evidence.json",
+      "sha256": "999c5d7a21a2e81eaf5b02a6190705bfda74c1dce4d066ce975918d98fb838bc"
+    },
+    "binarySha256": "b85972f5ead438ad53403749d4603cfef0f5e11734c8752e62fe9526a5a2552e",
+    "status": "failed",
+    "failureCodes": [
+      "NATIVE_TIMEOUT",
+      "NATIVE_TIMEOUT"
+    ],
+    "processes": [
+      {
+        "name": "ready02-left",
+        "pid": 10936,
+        "exit": {
+          "code": 70,
+          "signal": null
+        },
+        "naturalExit": false,
+        "forcedSignals": []
+      },
+      {
+        "name": "ready02-right",
+        "pid": 10937,
+        "exit": {
+          "code": 70,
+          "signal": null
+        },
+        "naturalExit": false,
+        "forcedSignals": []
+      }
+    ],
+    "ownedDataAndCacheRemoved": true,
+    "boundary": "Mendel two-App Ready-only handshake, not a desktop business suite run"
+  },
+  "browserStartupOriginalHang": {
+    "original": {
+      "path": "/private/tmp/sync108-startup-diag-20261112/gate-diagnosis.jsonl",
+      "sha256": "e717a079909b5cd288062785211e6de8592bb1ec892ffe5cdfcff0e71b3338d4"
+    },
+    "status": "historical-hang-preserved",
+    "summary": "Chrome157 blocked app.js gate + fonts.ready dependency; bounded real font status/rAF and CDP capture fix subsequently verified 17+4 checks."
+  },
+  "browserSettingsOldDesktopAssertion": {
+    "original": {
+      "path": "/private/tmp/sync108-sync-settings-reset-fixed-desktop-20261112-01/failure.json",
+      "sha256": "8bdd5c1fa274483e371a283c9abf1879f9f40642affb92efbb8f3802b7daf7ca"
+    },
+    "suite": {
+      "path": "/private/tmp/sync108-sync-settings-reset-fixed-desktop-20261112-01/suite.json",
+      "sha256": "a5be2f7471c5fb2b384cc980041a8f8a8267643b5a781936870b4d03ae2f7bcd"
+    },
+    "geometry": {
+      "path": "/private/tmp/sync108-sync-settings-desktop-layout-diag-20261112-01/geometry.json",
+      "sha256": "d3cbdb9745f9fb8db4628069170e1f063e93393e1489428c9cc79b8bfa7ffd0b"
+    },
+    "completedChecks": 38,
+    "status": "historical-failure-preserved",
+    "summary": "Old 44px desktop control-size assertion; actual28–42px. Main reports desktop28/mobile44 assertion correction and separate fresh revalidation; not rerun here."
+  }
+}

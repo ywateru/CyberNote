@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "original": {
+    "path": "/private/tmp/cybernote-sync108/docs/verification/sync108/native-ready03/canonical-native-build.json",
+    "sha256": "1ddd4c04da7d9cad525762cba3d169016e4024798e74b5ec79645fd160a8eb07"
+  },
+  "binary": {
+    "path": "/private/tmp/sync108-native-desktop-run06/sync108-native-app",
+    "sha256": "771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723"
+  },
+  "sourceCommit": "e3225038cd47f00774e08a8cf10e32ab2335668f",
+  "sourceSha256": "e0718b71cde5440dce56d62ca43416891da77fe8db4f696fe5bf770455381b00",
+  "staticFrontendSha256": "ac755157f95eebd047f0f2830c0877abcecb72780f5f1ec5036d77be4fa82dc6",
+  "nativeModuleCommit": "736469ee",
+  "libHookCommit": "e3225038cd47f00774e08a8cf10e32ab2335668f",
+  "suiteCommit": "50a2ac9f",
+  "executedTools": {
+    "sync108-native.mjs": "e19da5ea1c4840c3a4aa952ee94a4ff76653d1544d24680444263aee46e995f0",
+    "sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2"
+  },
+  "comparison": {
+    "sha256": "1ddd4c04da7d9cad525762cba3d169016e4024798e74b5ec79645fd160a8eb07",
+    "matched": true,
+    "productBinaryAndFrontendMatch": true,
+    "executedToolsComparedSeparately": {
+      "sync108-native.mjs": {
+        "currentSha256": "e19da5ea1c4840c3a4aa952ee94a4ff76653d1544d24680444263aee46e995f0",
+        "recordedSha256": "d1aa018af427828c8fcd70c8d99bf39e794266701963b53ff9e703b108cbe505",
+        "matchesRecorded": false
+      },
+      "sync108-native-driver.mjs": {
+        "currentSha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+        "recordedSha256": "13338173a212592c45a3cf8d1c12968c56791317aa609140b7438d800cd113a0",
+        "matchesRecorded": false
+      }
+    }
+  },
+  "frontend": {
+    "buildCommand": "NODE_ENV=development VITE_NOTES_DEBUG=1 pnpm build",
+    "staticDebug": true,
+    "differencesFromProduction": [
+      "import.meta.env.DEV=true",
+      "VITE_NOTES_DEBUG=1",
+      "NODE_ENV=development",
+      "Rust sync-e2e feature and debug_assertions",
+      "NOTES_SYNC_E2E=1 owned child environment"
+    ]
+  },
+  "build": {
+    "sourceCommit": "e3225038cd47f00774e08a8cf10e32ab2335668f",
+    "frontendCommand": "NODE_ENV=development VITE_NOTES_DEBUG=1 pnpm build",
+    "nativeCommand": "CARGO_TARGET_DIR=/private/tmp/cybernote-sync108-target cargo build --manifest-path src-tauri/Cargo.toml --features sync-e2e,tauri/custom-protocol --locked --offline",
+    "compileGates": [
+      "feature=sync-e2e",
+      "debug_assertions",
+      "desktop"
+    ],
+    "runtimeGate": "NOTES_SYNC_E2E=1",
+    "noBuildPerformedForThisManifest": true
+  },
+  "inputCount": 450,
+  "boundary": "Canonical binary/product/static frontend matched before actual run; executed Node tools separately hashed. No compile by driver task.",
+  "scopeExpansionCommit": "fd00a8a4",
+  "acceptedRun": "run06"
+}

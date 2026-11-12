@@ -1,0 +1,93 @@
+{
+  "directory": "/private/tmp/sync108-native-desktop-run03",
+  "status": "failed",
+  "resultSha256": "ec28e592d100e8d1155cfed124ee34cf8ecea512007aa63b7a9c9b8f006541fb",
+  "startedAt": "2026-11-12T11:22:41.007Z",
+  "finishedAt": "2026-11-12T11:24:24.854Z",
+  "binarySha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4",
+  "productFingerprint": "310f285a758fe5d0e79a030776c02657599b55f35e9b51db873ebcaa38784024",
+  "inputsUnchanged": true,
+  "completedChecks": 17,
+  "failure": {
+    "code": "TIMEOUT",
+    "completedChecks": 17,
+    "operations": [
+      {
+        "name": "A",
+        "lastAction": "idle"
+      },
+      {
+        "name": "B",
+        "lastAction": "shutdown"
+      },
+      {
+        "name": "B-reconnect",
+        "lastAction": "ready"
+      }
+    ]
+  },
+  "processes": [
+    {
+      "name": "A",
+      "pid": 8930,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": []
+    },
+    {
+      "name": "B",
+      "pid": 8986,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": []
+    },
+    {
+      "name": "B-reconnect",
+      "pid": 9100,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": false,
+      "forcedSignals": [],
+      "failureCode": "TIMEOUT"
+    }
+  ],
+  "databaseEvidence": [
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run03/store-A",
+      "integrity": "ok",
+      "counts": {
+        "notes": 3,
+        "attachments": 2,
+        "sync_heads": 4,
+        "sync_inbox": 0,
+        "sync_dirty": 0,
+        "sync_projection": 4
+      },
+      "walBytes": 836392,
+      "originalFilesUnchanged": true
+    },
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run03/store-B",
+      "integrity": "ok",
+      "counts": {
+        "notes": 3,
+        "attachments": 2,
+        "sync_heads": 4,
+        "sync_inbox": 0,
+        "sync_dirty": 0,
+        "sync_projection": 4
+      },
+      "walBytes": 721032,
+      "originalFilesUnchanged": true
+    }
+  ],
+  "originalResultPath": "/private/tmp/sync108-native-desktop-run03/result.json"
+}

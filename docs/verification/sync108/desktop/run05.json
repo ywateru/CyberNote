@@ -1,0 +1,532 @@
+{
+  "directory": "/private/tmp/sync108-native-desktop-run05",
+  "status": "passed",
+  "resultSha256": "e477e25328fcd7b72235a2a91f08068fef2b71b442ef9b4a645723aa91bc4a0e",
+  "startedAt": "2026-11-12T11:40:59.435Z",
+  "finishedAt": "2026-11-12T11:41:42.305Z",
+  "binarySha256": "771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723",
+  "productFingerprint": "e0718b71cde5440dce56d62ca43416891da77fe8db4f696fe5bf770455381b00",
+  "inputsUnchanged": true,
+  "completedChecks": 33,
+  "checks": [
+    {
+      "name": "two independently owned native processes",
+      "status": "pass"
+    },
+    {
+      "name": "A owned webview advances real rAF and timers",
+      "status": "pass"
+    },
+    {
+      "name": "B owned webview advances real rAF and timers",
+      "status": "pass"
+    },
+    {
+      "name": "fresh disabled stores do not create synchronization identity",
+      "status": "pass"
+    },
+    {
+      "name": "pair shares workspace with distinct device identities and preserves host identity",
+      "status": "pass"
+    },
+    {
+      "name": "pair merges existing A note into B",
+      "status": "pass"
+    },
+    {
+      "name": "pair merges existing B note into A",
+      "status": "pass"
+    },
+    {
+      "name": "actual editor retains Chinese heading bold and list",
+      "status": "pass"
+    },
+    {
+      "name": "A to B full Chinese document and formatting",
+      "status": "pass"
+    },
+    {
+      "name": "real quiet commits open target and restores editable editor without pending saves",
+      "status": "pass"
+    },
+    {
+      "name": "B applies real editor italic format",
+      "status": "pass"
+    },
+    {
+      "name": "B to A full Chinese document and formatting",
+      "status": "pass"
+    },
+    {
+      "name": "folder move pin paper and tag projection reach peer",
+      "status": "pass"
+    },
+    {
+      "name": "DESK-04 smart folder definition and tag plus pin filtering reach peer",
+      "status": "pass"
+    },
+    {
+      "name": "attachment references and full body converge",
+      "status": "pass"
+    },
+    {
+      "name": "PNG and TXT original SHA256 match on both native stores",
+      "status": "pass"
+    },
+    {
+      "name": "peer native webview decodes replicated image",
+      "status": "pass"
+    },
+    {
+      "name": "B deletion reaches A",
+      "status": "pass"
+    },
+    {
+      "name": "restore retains full body and attachment references",
+      "status": "pass"
+    },
+    {
+      "name": "restored attachment original bytes remain intact",
+      "status": "pass"
+    },
+    {
+      "name": "offline B process exits naturally",
+      "status": "pass"
+    },
+    {
+      "name": "B restarts as a new owned process",
+      "status": "pass"
+    },
+    {
+      "name": "offline native restart reconnect catches up",
+      "status": "pass"
+    },
+    {
+      "name": "concurrent base reaches both native apps",
+      "status": "pass"
+    },
+    {
+      "name": "actual conflict UI retains concurrent Chinese heads",
+      "status": "pass"
+    },
+    {
+      "name": "confirmed keepAll preserves both full Chinese documents on A and B",
+      "status": "pass"
+    },
+    {
+      "name": "stdin EOF flushes and exits native A naturally",
+      "status": "pass"
+    },
+    {
+      "name": "same-directory restart preserves paused state and device identity",
+      "status": "pass"
+    },
+    {
+      "name": "restarted native store retains full pending local document",
+      "status": "pass"
+    },
+    {
+      "name": "restarted store retains existing note IDs",
+      "status": "pass"
+    },
+    {
+      "name": "persisted offline dirty resumes across native restart",
+      "status": "pass"
+    },
+    {
+      "name": "three repeated real sync requests are idempotent on both projections",
+      "status": "pass"
+    },
+    {
+      "name": "repeated sync has no pending inbox or conflicts",
+      "status": "pass"
+    }
+  ],
+  "sourceHead": "e3225038cd47f00774e08a8cf10e32ab2335668f",
+  "staticFrontendSha256": "ac755157f95eebd047f0f2830c0877abcecb72780f5f1ec5036d77be4fa82dc6",
+  "tools": {
+    "sync108-native.mjs": "fc6336d4a18a8884774b05cd363732f94495c634225b5384b743c36eaab5d2c1",
+    "sync108-native-driver.mjs": "6b871692d149df46aef747bbb8b985b46fe342da45d2e2c8fc3777ba9618a946"
+  },
+  "buildRecord": {
+    "sha256": "1ddd4c04da7d9cad525762cba3d169016e4024798e74b5ec79645fd160a8eb07",
+    "matched": true,
+    "productBinaryAndFrontendMatch": true,
+    "executedToolsComparedSeparately": {
+      "sync108-native.mjs": {
+        "currentSha256": "fc6336d4a18a8884774b05cd363732f94495c634225b5384b743c36eaab5d2c1",
+        "recordedSha256": "d1aa018af427828c8fcd70c8d99bf39e794266701963b53ff9e703b108cbe505",
+        "matchesRecorded": false
+      },
+      "sync108-native-driver.mjs": {
+        "currentSha256": "6b871692d149df46aef747bbb8b985b46fe342da45d2e2c8fc3777ba9618a946",
+        "recordedSha256": "13338173a212592c45a3cf8d1c12968c56791317aa609140b7438d800cd113a0",
+        "matchesRecorded": false
+      }
+    }
+  },
+  "processes": [
+    {
+      "name": "A",
+      "pid": 12845,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": [],
+      "stderrBytes": 58,
+      "stdoutNoiseBytes": 0
+    },
+    {
+      "name": "B",
+      "pid": 12857,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": [],
+      "stderrBytes": 58,
+      "stdoutNoiseBytes": 0
+    },
+    {
+      "name": "B-reconnect",
+      "pid": 13011,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": [],
+      "stderrBytes": 58,
+      "stdoutNoiseBytes": 0
+    },
+    {
+      "name": "A-restart",
+      "pid": 13076,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": [],
+      "stderrBytes": 58,
+      "stdoutNoiseBytes": 0
+    }
+  ],
+  "databaseEvidence": [
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run05/store-A",
+      "integrity": "ok",
+      "counts": {
+        "notes": 5,
+        "attachments": 2,
+        "sync_heads": 7,
+        "sync_inbox": 0,
+        "sync_dirty": 0,
+        "sync_projection": 7
+      },
+      "identity": [
+        [
+          "3834eb10-0908-4dcb-bc63-743e10cf78f5",
+          "eea3b739-aee0-45ab-9315-b38053c2e426"
+        ]
+      ],
+      "walBytes": 1380232,
+      "originalFiles": {
+        "notes.sqlite3": "4b0c615564ffa9b4b367995efbce045e3e225c2a28207b68af3957e17a336344",
+        "notes.sqlite3-wal": "6adf6c8247a035798aed0f62cb4daef75cb34874198ee8b46ddeea35b0cb0315",
+        "notes.sqlite3-shm": "eb01975ff1150ff562c9604b184cf47bd3313ccf308f823770baf7c734fd424c"
+      },
+      "originalFilesUnchanged": true,
+      "readOnlySnapshot": true,
+      "snapshotDatabaseUnchanged": true,
+      "snapshotDirectory": "/private/tmp/sync108-native-desktop-run05/sqlite-readonly-A"
+    },
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run05/store-B",
+      "integrity": "ok",
+      "counts": {
+        "notes": 5,
+        "attachments": 2,
+        "sync_heads": 7,
+        "sync_inbox": 0,
+        "sync_dirty": 0,
+        "sync_projection": 7
+      },
+      "identity": [
+        [
+          "3834eb10-0908-4dcb-bc63-743e10cf78f5",
+          "b35d41db-6ba2-4ea7-b056-51d7b6b44ecf"
+        ]
+      ],
+      "walBytes": 1231912,
+      "originalFiles": {
+        "notes.sqlite3": "67647c74d0e9a6e710e2a6dae858b0b051b1a9541a69c004eae874ad82c24a72",
+        "notes.sqlite3-wal": "267e79eb3661005dd234057661d316290337b26aa2d1e15b0a566af360a1fdc2",
+        "notes.sqlite3-shm": "18d26cc15209a2907bf603934b3cc4be94fef417450670f75c8572d99a2d2165"
+      },
+      "originalFilesUnchanged": true,
+      "readOnlySnapshot": true,
+      "snapshotDatabaseUnchanged": true,
+      "snapshotDirectory": "/private/tmp/sync108-native-desktop-run05/sqlite-readonly-B"
+    }
+  ],
+  "databaseComparison": {
+    "projectionEqual": true,
+    "projectionEntries": 7,
+    "projectionSha256": "2509225c341b886041dc8f225d1fb081b07dd03e4b90592ea7af953b1b891640",
+    "sameWorkspaceDistinctDevices": true
+  },
+  "runtimeObservations": [
+    {
+      "name": "A:native-ready",
+      "pid": 12845,
+      "document": {
+        "debug": true,
+        "interactive": true,
+        "readyState": "complete",
+        "rootHidden": null,
+        "rootInert": false,
+        "startup": "detached",
+        "timeOrigin": 1794483660663,
+        "visibility": "visible"
+      },
+      "documentProbes": 11,
+      "interactive": true,
+      "location": "tauri://localhost",
+      "native": true,
+      "nativePage": {
+        "finished": true,
+        "finishes": 1,
+        "starts": 1,
+        "url": "tauri://localhost"
+      },
+      "nativeWindow": {
+        "focused": true,
+        "minimized": false,
+        "position": {
+          "x": 112,
+          "y": 58
+        },
+        "size": {
+          "height": 1400,
+          "width": 2000
+        },
+        "visible": true
+      },
+      "startupDetached": true,
+      "version": 1,
+      "window": "main"
+    },
+    {
+      "name": "B:native-ready",
+      "pid": 12857,
+      "document": {
+        "debug": true,
+        "interactive": true,
+        "readyState": "complete",
+        "rootHidden": null,
+        "rootInert": false,
+        "startup": "detached",
+        "timeOrigin": 1794483661432,
+        "visibility": "visible"
+      },
+      "documentProbes": 11,
+      "interactive": true,
+      "location": "tauri://localhost",
+      "native": true,
+      "nativePage": {
+        "finished": true,
+        "finishes": 1,
+        "starts": 1,
+        "url": "tauri://localhost"
+      },
+      "nativeWindow": {
+        "focused": true,
+        "minimized": false,
+        "position": {
+          "x": 112,
+          "y": 58
+        },
+        "size": {
+          "height": 1400,
+          "width": 2000
+        },
+        "visible": true
+      },
+      "startupDetached": true,
+      "version": 1,
+      "window": "main"
+    },
+    {
+      "name": "A:render-clock-with-both-windows",
+      "elapsedMs": 250,
+      "raf": 16,
+      "timer": 9,
+      "visibility": "visible"
+    },
+    {
+      "name": "B:render-clock-with-both-windows",
+      "elapsedMs": 251,
+      "raf": 16,
+      "timer": 9,
+      "visibility": "visible"
+    },
+    {
+      "name": "DESK-11-partial-real-quiet",
+      "abort": 0,
+      "commit": 1,
+      "prepare": 1,
+      "localSaveOverlap": false
+    },
+    {
+      "name": "A:original",
+      "noteId": "fb035fbd-a253-4325-92f3-4dded70bf6e2",
+      "attachmentId": "488014fc-536c-4e70-803a-ee17aa28fcae",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+    },
+    {
+      "name": "A:original",
+      "noteId": "fb035fbd-a253-4325-92f3-4dded70bf6e2",
+      "attachmentId": "f15796e6-2352-45a8-ae33-e8e8088e6a3a",
+      "bytes": 54,
+      "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+    },
+    {
+      "name": "B:original",
+      "noteId": "fb035fbd-a253-4325-92f3-4dded70bf6e2",
+      "attachmentId": "488014fc-536c-4e70-803a-ee17aa28fcae",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+    },
+    {
+      "name": "B:original",
+      "noteId": "fb035fbd-a253-4325-92f3-4dded70bf6e2",
+      "attachmentId": "f15796e6-2352-45a8-ae33-e8e8088e6a3a",
+      "bytes": 54,
+      "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+    },
+    {
+      "name": "B:original",
+      "noteId": "fb035fbd-a253-4325-92f3-4dded70bf6e2",
+      "attachmentId": "488014fc-536c-4e70-803a-ee17aa28fcae",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+    },
+    {
+      "name": "B:original",
+      "noteId": "fb035fbd-a253-4325-92f3-4dded70bf6e2",
+      "attachmentId": "f15796e6-2352-45a8-ae33-e8e8088e6a3a",
+      "bytes": 54,
+      "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+    },
+    {
+      "name": "B-reconnect:native-ready",
+      "pid": 13011,
+      "document": {
+        "debug": true,
+        "interactive": true,
+        "readyState": "complete",
+        "rootHidden": null,
+        "rootInert": false,
+        "startup": "detached",
+        "timeOrigin": 1794483684969,
+        "visibility": "visible"
+      },
+      "documentProbes": 12,
+      "interactive": true,
+      "location": "tauri://localhost",
+      "native": true,
+      "nativePage": {
+        "finished": true,
+        "finishes": 1,
+        "starts": 1,
+        "url": "tauri://localhost"
+      },
+      "nativeWindow": {
+        "focused": true,
+        "minimized": false,
+        "position": {
+          "x": 110,
+          "y": 58
+        },
+        "size": {
+          "height": 1400,
+          "width": 2000
+        },
+        "visible": true
+      },
+      "startupDetached": true,
+      "version": 1,
+      "window": "main"
+    },
+    {
+      "name": "A-restart:native-ready",
+      "pid": 13076,
+      "document": {
+        "debug": true,
+        "interactive": true,
+        "readyState": "complete",
+        "rootHidden": null,
+        "rootInert": false,
+        "startup": "detached",
+        "timeOrigin": 1794483694573,
+        "visibility": "visible"
+      },
+      "documentProbes": 11,
+      "interactive": true,
+      "location": "tauri://localhost",
+      "native": true,
+      "nativePage": {
+        "finished": true,
+        "finishes": 1,
+        "starts": 1,
+        "url": "tauri://localhost"
+      },
+      "nativeWindow": {
+        "focused": true,
+        "minimized": false,
+        "position": {
+          "x": 110,
+          "y": 58
+        },
+        "size": {
+          "height": 1400,
+          "width": 2000
+        },
+        "visible": true
+      },
+      "startupDetached": true,
+      "version": 1,
+      "window": "main"
+    },
+    {
+      "name": "A-restart:original",
+      "noteId": "fb035fbd-a253-4325-92f3-4dded70bf6e2",
+      "attachmentId": "488014fc-536c-4e70-803a-ee17aa28fcae",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+    },
+    {
+      "name": "A-restart:original",
+      "noteId": "fb035fbd-a253-4325-92f3-4dded70bf6e2",
+      "attachmentId": "f15796e6-2352-45a8-ae33-e8e8088e6a3a",
+      "bytes": 54,
+      "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+    },
+    {
+      "name": "converged-projection",
+      "sha256": "729176c72267b58be4d7333177af4f22294693ffa84a6e77d492cb161efdfadc"
+    }
+  ],
+  "limitations": [
+    "Synthetic test notes and File[] from the existing attachment.submit handler; no OS file-picker or physical keyboard claim.",
+    "Raw expressions execute only in the explicitly enabled test feature; read_attachment uses the actual App access snapshot.",
+    "DESK-11 partial: real quiet prepare/commit while the target editor is open; deterministic overlap with an in-flight local save or IME composition is not covered.",
+    "No Android results are implied by the desktop suite."
+  ],
+  "originalResultPath": "/private/tmp/sync108-native-desktop-run05/result.json"
+}

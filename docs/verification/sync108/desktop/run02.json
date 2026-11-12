@@ -1,0 +1,58 @@
+{
+  "directory": "/private/tmp/sync108-native-desktop-run02",
+  "status": "failed",
+  "resultSha256": "85f7fe57af498ebe962b0212580877f6bdfc45d544d4d95cc659fe17a98ba27c",
+  "startedAt": "2026-11-12T11:20:46.375Z",
+  "finishedAt": "2026-11-12T11:21:22.115Z",
+  "binarySha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4",
+  "productFingerprint": "310f285a758fe5d0e79a030776c02657599b55f35e9b51db873ebcaa38784024",
+  "inputsUnchanged": true,
+  "completedChecks": 29,
+  "failure": {
+    "code": "IMMUTABLE_EVIDENCE_FAILED"
+  },
+  "processes": [
+    {
+      "name": "A",
+      "pid": 8364,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": []
+    },
+    {
+      "name": "B",
+      "pid": 8379,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": []
+    },
+    {
+      "name": "B-reconnect",
+      "pid": 8466,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": []
+    },
+    {
+      "name": "A-restart",
+      "pid": 8485,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "forcedSignals": []
+    }
+  ],
+  "databaseEvidence": [],
+  "originalResultPath": "/private/tmp/sync108-native-desktop-run02/result.json"
+}

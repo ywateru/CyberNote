@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "commit": "50a2ac9f",
+  "kind": "node-protocol-fixture-only",
+  "review": {
+    "path": "/private/tmp/app-sync108-tools-independent.md",
+    "sha256AtFix": "a5e23297e5dd14bed5d33ea34942f015f1159d18649cc49887a40f65741e5f81"
+  },
+  "counterexample": "Valid shutdown reply, truncated prefixed tail with no newline, child exits zero.",
+  "before": {
+    "helperCommit": "fd00a8a4",
+    "command": "node --test --test-name-pattern='successful shutdown followed by a truncated tail' scripts/verification/sync108-native-driver.test.mjs",
+    "exitCode": 1,
+    "tests": 1,
+    "failed": 1,
+    "failure": "Missing expected rejection."
+  },
+  "after": {
+    "command": "node --test scripts/verification/sync108-native-driver.test.mjs",
+    "exitCode": 0,
+    "passed": 12,
+    "failed": 0,
+    "integratedTailFixture": {
+      "closeRejects": "TRUNCATED_FRAME",
+      "childExitCode": 0,
+      "naturalExit": false,
+      "forcedSignals": []
+    }
+  },
+  "files": {
+    "scripts/verification/sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+    "scripts/verification/sync108-native-driver.test.mjs": "c129e3390c95e2b4b4f381884062a8d0f81ee11ce822f7c10877fcd4eb36bab6",
+    "scripts/verification/sync108-native.mjs": "e19da5ea1c4840c3a4aa952ee94a4ff76653d1544d24680444263aee46e995f0"
+  },
+  "boundary": "Node child fixture is not native business evidence; final helper must also complete fresh native suite. No native rebuild."
+}
