@@ -15,7 +15,7 @@
     {
       "runtimePath": "/private/tmp/account109-hosted-terminal-observer.mjs",
       "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-terminal-observer.mjs",
-      "sha256": "7a6031b1f175d4b940e55c3e08d1865cd9fc6debd16f4f9591af825d72ff79eb"
+      "sha256": "836758296c2eec82a74a1944228279ef1fd0a95f5bacdcf08c675f101442657d"
     },
     {
       "runtimePath": "/private/tmp/account109-hosted-rsa-envelope.mjs",
@@ -25,18 +25,24 @@
   ],
   "offlineTests": {
     "command": "node --test docs/verification/account109/android/hosted-private/source/account109-hosted-private.test.mjs",
-    "passed": 16,
+    "passed": 23,
     "failed": 0,
     "skipped": 0,
     "externalCommands": 0,
     "liveAuthEvidence": false,
-    "log": "green02.txt",
-    "logSha256": "4839ee8f9d9191f047672e436be737a8b74cbf7f35bc4db06c4c93d84b42040e"
+    "log": "observer-green01.txt",
+    "logSha256": "8aaebba7e21439d5f8f000bf72321c4e30b7ac849f1409e93afedec1aa2cb27c"
   },
   "preservedInitialFailure": "red01.json",
   "productionSourceChanged": false,
   "newProductionAuthIpc": false,
   "realCredentialTransferAttempted": false,
   "liveEnvelopePublicKeyReady": false,
-  "evidenceBoundary": "Temporal association of new SignIn and newly changed trusted-origin page; native AuthClient validates callback; native terminal requires exact expected synthetic user."
+  "evidenceBoundary": "Temporal association of new SignIn and newly changed trusted-origin page; native AuthClient validates callback; native terminal requires exact expected synthetic user.",
+  "observerAwaitRepair": {
+    "red": "observer-red01.txt",
+    "redSummary": "stable case passed; locked/foreground/deadline changes incorrectly succeeded before repair",
+    "greenCases": "status-await lock/foreground/deadline changes reject; stable native terminal passes; connection/device-read deadline crossings reject",
+    "deviceAccess": false
+  }
 }

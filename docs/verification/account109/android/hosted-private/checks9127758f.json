@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "scope": "private-tool-review-fix; offline fixtures only",
+  "files": [
+    {
+      "runtimePath": "/private/tmp/account109-hosted-memory-driver.mjs",
+      "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-memory-driver.mjs",
+      "sha256": "4126af957497d4cf2b018d1d25ee990687fd02cb1c6b26ce70bd823f0ee32c4d"
+    },
+    {
+      "runtimePath": "/private/tmp/account109-hosted-memory-consumer.mjs",
+      "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-memory-consumer.mjs",
+      "sha256": "f4988c1ab20ac541b207275e5f292a21316e5f33fcb2918bcf47e92d9e6f4423"
+    },
+    {
+      "runtimePath": "/private/tmp/account109-hosted-terminal-observer.mjs",
+      "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-terminal-observer.mjs",
+      "sha256": "7a6031b1f175d4b940e55c3e08d1865cd9fc6debd16f4f9591af825d72ff79eb"
+    },
+    {
+      "runtimePath": "/private/tmp/account109-hosted-rsa-envelope.mjs",
+      "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-rsa-envelope.mjs",
+      "sha256": "4e12c0539391ea9df5f786920fb44de36a0d7be68f837359afa87bdf619002ab"
+    }
+  ],
+  "offlineTests": {
+    "command": "node --test docs/verification/account109/android/hosted-private/source/account109-hosted-private.test.mjs",
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0,
+    "externalCommands": 0,
+    "liveAuthEvidence": false,
+    "log": "green02.txt",
+    "logSha256": "4839ee8f9d9191f047672e436be737a8b74cbf7f35bc4db06c4c93d84b42040e"
+  },
+  "preservedInitialFailure": "red01.json",
+  "productionSourceChanged": false,
+  "newProductionAuthIpc": false,
+  "realCredentialTransferAttempted": false,
+  "liveEnvelopePublicKeyReady": false,
+  "evidenceBoundary": "Temporal association of new SignIn and newly changed trusted-origin page; native AuthClient validates callback; native terminal requires exact expected synthetic user."
+}

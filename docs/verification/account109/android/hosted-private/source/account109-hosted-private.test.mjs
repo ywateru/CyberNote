@@ -12,7 +12,7 @@ test.after(()=>{childProcess.execFileSync=originalExec;syncBuiltinESMExports();a
 const {createInputGuard,createGuardedSender}=await import('./account109-hosted-memory-driver.mjs');
 const {prepareConsumer}=await import('./account109-hosted-memory-consumer.mjs');
 const {prepareEnvelope}=await import('./account109-hosted-rsa-envelope.mjs');
-const {classifyTerminal}=await import('./account109-hosted-terminal-observer.mjs');
+const {classifyTerminal,observeTerminal}=await import('./account109-hosted-terminal-observer.mjs');
 const preparedAt=1800000000000;
 const binding={href:'https://auth.x.aixgg.com/offline-marker',frameId:'offline-frame',loaderId:'offline-loader'};
 const page=()=>({...binding,origin:'https://auth.x.aixgg.com',visible:true,focused:true,fieldFocused:true});
@@ -100,4 +100,41 @@ test('native terminal requires exact synthetic user, paused, disabled and owned 
  assert.equal(classifyTerminal({...synthetic,state:'authorizing'},true),null);
  assert.equal(classifyTerminal({...synthetic,enabled:true},true).code,'UNEXPECTED_SYNC_ENABLED');
  assert.equal(classifyTerminal({...synthetic,state:'error'},true).phase,'callback-native-error');
+});
+
+
+test('observer await boundary rechecks lock, foreground and deadline before success',async t=>{
+ for(const change of ['stable','lock','foreground','deadline'])await t.test(change,async()=>{
+  let clock=1000,unlocked=true,foreground=true,closed=0,reads=0;
+  const result=await observeTerminal({timeoutMs:50,now:()=>clock,
+   connect:async()=>({accountStatus:async()=>{reads++;await Promise.resolve();if(change==='lock')unlocked=false;if(change==='foreground')foreground=false;if(change==='deadline')clock=1050;return{state:'paused',profile:{username:'cybernoteqa20261113a'},enabled:false};},close:async()=>{closed++;}}),
+   probe:()=>({unlocked,ownedAppForeground:foreground}),sleep:async()=>{throw Error('OFFLINE_UNEXPECTED_SLEEP');},
+  });
+  assert.equal(reads,1);assert.equal(closed,1);
+  if(change==='stable'){
+   assert.equal(result.phase,'native-paused-profile-observed');assert.equal(result.sameSyntheticUser,true);
+  }else{
+   assert.notEqual(result.phase,'native-paused-profile-observed');assert.notEqual(result.nativeCallbackAccepted,true);
+   assert.equal(result.code,{lock:'DEVICE_AUTH_REQUIRED',foreground:'OWNED_APP_NOT_FOREGROUND',deadline:'NATIVE_PAUSED_PROFILE_NOT_OBSERVED'}[change]);
+  }
+  assert.equal('username' in result,false);assert.equal('profile' in result,false);
+ });
+});
+
+test('observer deadline includes awaited connection setup',async()=>{
+ let clock=1000,closed=0,reads=0;
+ const result=await observeTerminal({timeoutMs:50,now:()=>clock,
+  connect:async()=>{await Promise.resolve();clock=1050;return{accountStatus:async()=>{reads++;return{};},close:async()=>{closed++;}};},
+  probe:()=>({unlocked:true,ownedAppForeground:true}),sleep:async()=>{throw Error('OFFLINE_UNEXPECTED_SLEEP');},
+ });
+ assert.equal(result.code,'NATIVE_PAUSED_PROFILE_NOT_OBSERVED');assert.equal(reads,0);assert.equal(closed,1);
+});
+
+test('observer device recheck crossing deadline cannot report success',async()=>{
+ let clock=1000,probes=0,closed=0;
+ const result=await observeTerminal({timeoutMs:50,now:()=>clock,
+  connect:async()=>({accountStatus:async()=>({state:'paused',profile:{username:'cybernoteqa20261113a'},enabled:false}),close:async()=>{closed++;}}),
+  probe:()=>{if(++probes===2)clock=1050;return{unlocked:true,ownedAppForeground:true};},sleep:async()=>{throw Error('OFFLINE_UNEXPECTED_SLEEP');},
+ });
+ assert.equal(result.code,'NATIVE_PAUSED_PROFILE_NOT_OBSERVED');assert.equal(probes,2);assert.equal(closed,1);
 });

@@ -45,7 +45,7 @@ the offline error-boundary test and must never be used as native auth evidence.
 There is no pbpaste fallback. JavaScript reference cleanup does not guarantee
 string zeroization.
 
-Offline tests: **16 passed, zero failures/skips**, with an external-command trap
+Offline tests: **23 passed, zero failures/skips**, with an external-command trap
 confirming **zero child-process commands**. Tests cover hidden/unfocused pages,
 origin/document/ownership changes, expiry during native-read waiting, per-event
 guarding, recorder async rejection, minimum expiry, and synthetic identity
@@ -59,3 +59,23 @@ No real credential was transferred and no real login was submitted during this
 repair. Old live envelope keys were retired before editing. These tests do not
 prove actual callback success. Await review closure before creating a new live
 one-shot key; use only the frozen reviewed modules for the next authorized run.
+
+## Observer post-await receipt repair
+
+The original 9127758f observer reused pre-status device observations. A focused
+red test reproduced its incorrect success after status-await lock, foreground
+and deadline changes; `observer-red01.txt` preserves that result. The repaired
+real `observeTerminal` path rechecks deadline after native status, re-reads current
+policy/foreground, and checks deadline again after the device read before any
+classification. Its deadline also includes connection setup. Loss of app
+foreground during that wait, lock or expiry cannot produce a positive receipt.
+Initial Chrome foreground while still authorizing may be observed while waiting
+for the real callback; this is not a successful native terminal.
+
+Trusted clock, device and connection probes exercise the real async observer
+function in offline tests. Stable same-user paused state passes; lock, foreground
+or time changes during status await reject; connection and device-read deadline
+crossings also reject. The full offline suite is now 23/23 with no external
+commands. The final log is `observer-green01.txt`; `checks9127758f.json` preserves
+the earlier frozen manifest. These probes do not establish live callback success
+or an atomic OS snapshot. No production source, IPC or real credential is involved.
