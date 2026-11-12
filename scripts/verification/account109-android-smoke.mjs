@@ -22,7 +22,7 @@ try {
   launchAndroid(); assertInteractive();
   client = await connectAndroid(); report.owned = client.owned;
   report.appDataRoot = run('shell', 'run-as', PACKAGE, 'pwd').trim();
-  assert.equal(report.appDataRoot, `/data/user/0/${PACKAGE}`);
+  assert.ok([`/data/user/0/${PACKAGE}`, `/data/data/${PACKAGE}`].includes(report.appDataRoot));
   const initial = await client.accountStatus();
   assert.equal(initial.state, 'signedOut');
   assert.equal(initial.enabled, false); assert.equal(initial.profile, undefined); assert.equal(initial.error, undefined);
