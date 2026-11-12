@@ -15,7 +15,7 @@ const sha256 = data => createHash('sha256').update(data).digest('hex');
 const pin = 'f2a3961536e5c69b13c7dbc661953d9243becbae';
 const git = (root, ...args) => execFileSync('git', ['-C', root, ...args], { encoding: 'utf8' }).trim();
 
-export async function prepareCandidate({ root = toolRoot, expectedSource, gradleHome = '/private/tmp/cybernote-account109-gradle' }) {
+export async function prepareCandidate({ root = toolRoot, expectedSource, gradleHome = '/private/tmp/cybernote-account109-gradle', targetDir = '/private/tmp/cybernote-account109-target' }) {
   if (!/^[0-9a-f]{40}$/.test(expectedSource || '')) throw Error('A full exact source SHA is required');
   if (git(root, 'rev-parse', 'HEAD') !== expectedSource) throw Error('Candidate source differs from requested SHA');
   if (git(root, 'status', '--porcelain', '--untracked-files=normal')) throw Error('Candidate worktree must be clean');
@@ -29,6 +29,9 @@ export async function prepareCandidate({ root = toolRoot, expectedSource, gradle
     if (bytes.length !== file.bytes || sha256(bytes) !== file.sha256) throw Error(`SDK license mismatch: ${file.destination}`);
   }
   if (!existsSync(path.join(root, 'node_modules'))) throw Error('Prepare node_modules before building');
+  if (!path.isAbsolute(targetDir) || (existsSync(targetDir) && lstatSync(targetDir).isSymbolicLink())) {
+    throw Error('Candidate target must be an absolute non-symlink directory');
+  }
   // This home is private to Account109; reuse artifact caches, never daemon state.
   if (existsSync(gradleHome) && lstatSync(gradleHome).isSymbolicLink()) throw Error('Gradle home must not be a symlink');
   const marker = path.join(gradleHome, '.account109-build-owner');
@@ -47,12 +50,15 @@ export async function prepareCandidate({ root = toolRoot, expectedSource, gradle
   await copyFile(init, path.join(gradleHome, 'init.d/account109.gradle'));
   const env = {
     ...process.env,
-    NODE_ENV: 'development', VITE_NOTES_DEBUG: '1', VITE_NOTES_ACCOUNT_NATIVE: '1',
+    NODE_ENV: 'development', VITE_NOTES_DEBUG: '1',
     GRADLE_USER_HOME: gradleHome,
     GRADLE_OPTS: '-Dorg.gradle.workers.max=2 -Dorg.gradle.parallel=false -Dorg.gradle.configuration-cache=false -Dorg.gradle.daemon=false',
-    CARGO_TARGET_DIR: '/private/tmp/cybernote-account109-target', CARGO_BUILD_JOBS: '2',
+    CARGO_TARGET_DIR: targetDir, CARGO_BUILD_JOBS: '2',
     CARGO_PROFILE_DEV_DEBUG: '0', CARGO_PROFILE_TEST_DEBUG: '0', CARGO_INCREMENTAL: '0',
   };
+  // Test the shipped native default rather than an inherited opt-in or opt-out.
+  delete env.VITE_NOTES_ACCOUNT_NATIVE;
+  delete env.VITE_NOTES_ACCOUNT_UI;
   const manifest = {
     schemaVersion: 1, sourceCommit: expectedSource, sourceTree: git(root, 'rev-parse', 'HEAD^{tree}'),
     toolCommit: git(toolRoot, 'rev-parse', 'HEAD'),
@@ -60,7 +66,12 @@ export async function prepareCandidate({ root = toolRoot, expectedSource, gradle
     packageId: 'com.local.notesclone.account109', activity: 'com.local.notesclone.MainActivity',
     displayName: 'CyberNote Account Test', sdkSource: pin, licenseFiles: receipt.fileCount,
     gradleHome, target: env.CARGO_TARGET_DIR,
-    buildFlags: Object.fromEntries(['NODE_ENV', 'VITE_NOTES_DEBUG', 'VITE_NOTES_ACCOUNT_NATIVE',
+    removedEnvironmentFlags: ['VITE_NOTES_ACCOUNT_NATIVE', 'VITE_NOTES_ACCOUNT_UI'],
+    accountCapability: 'default-native',
+    lockfiles: Object.fromEntries(['pnpm-lock.yaml', 'src-tauri/Cargo.lock',
+      'crates/account-auth/Cargo.lock', 'vendor/cybergrid-sdk/Cargo.lock'].map(name =>
+        [name, sha256(readFileSync(path.join(root, name)))])),
+    buildFlags: Object.fromEntries(['NODE_ENV', 'VITE_NOTES_DEBUG',
       'CARGO_TARGET_DIR', 'CARGO_BUILD_JOBS', 'CARGO_PROFILE_DEV_DEBUG', 'CARGO_PROFILE_TEST_DEBUG',
       'CARGO_INCREMENTAL'].map(name => [name, env[name]])),
     command: [process.execPath, 'scripts/android.mjs', 'build', '--debug', '--target', 'aarch64', '--apk', '--ci'],
