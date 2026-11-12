@@ -124,8 +124,8 @@ export class NativeApp extends EventEmitter {
     });
     this.child.on("close", (code, signal) => {
       this.lifecycle.close = { code, signal };
-      this.lifecycle.stdoutNoiseBytes = this.decoder.noiseBytes;
       try { this.decoder.end(); } catch (error) { this.#fail(error); }
+      this.lifecycle.stdoutNoiseBytes = this.decoder.noiseBytes;
       this.#helloReject(failure("EXIT_BEFORE_HELLO"));
       if (this.#pending) this.#fail(failure("EXIT_BEFORE_RESPONSE"));
       this.#closedResolve(this.lifecycle);
@@ -148,25 +148,33 @@ export class NativeApp extends EventEmitter {
     }
     if (!this.metadata || frame.type !== "response" || !this.#pending || frame.id !== this.#pending.id || typeof frame.ok !== "boolean")
       throw failure("UNEXPECTED_RESPONSE");
-    const pending = this.#pending;
-    this.#pending = undefined;
     if (frame.ok) {
       if (!Object.hasOwn(frame, "value") || Object.hasOwn(frame, "error")) throw failure("INVALID_RESPONSE");
+      const pending = this.#pending;
+      this.#pending = undefined;
       pending.resolve(frame.value);
     } else {
-      if (!frame.error || !/^[A-Z_]{1,80}$/.test(frame.error.code || "")) throw failure("INVALID_RESPONSE");
+      if (!frame.error || !/^[A-Z_]{1,80}$/.test(frame.error.code || "") || Object.hasOwn(frame, "value")) throw failure("INVALID_RESPONSE");
       const error = failure(frame.error.code);
-      if (frame.error.code === "NATIVE_TIMEOUT") this.#fatal = error;
-      pending.reject(error);
+      if (frame.error.code === "NATIVE_TIMEOUT") this.#fail(error);
+      else {
+        const pending = this.#pending;
+        this.#pending = undefined;
+        pending.reject(error);
+      }
     }
   }
   async ready(timeoutMs = 60_000) {
-    await bounded(this.hello, timeoutMs, "HELLO_TIMEOUT");
-    const ready = await this.request({ op: "ready" }, timeoutMs);
-    if (ready?.version !== 1 || ready.native !== true || ready.window !== "main") throw failure("NOT_NATIVE_DEBUG_APP");
-    return ready;
+    try {
+      await bounded(this.hello, timeoutMs, "HELLO_TIMEOUT");
+      const ready = await this.request({ op: "ready" }, timeoutMs);
+      if (ready?.version !== 1 || ready.native !== true || ready.window !== "main" || ready.interactive !== true || ready.startupDetached !== true)
+        throw failure("NOT_NATIVE_DEBUG_APP");
+      return ready;
+    } catch (error) { this.#fail(error); throw error; }
   }
   request(action, timeoutMs = 30_000) {
+    if (this.#closing) return Promise.reject(failure("APP_CLOSING"));
     const task = this.#tail.then(async () => {
       if (this.#fatal) throw this.#fatal;
       if (this.lifecycle.exit) throw failure("APP_EXITED");
@@ -174,6 +182,7 @@ export class NativeApp extends EventEmitter {
       const line = encodeRequest(id, action, timeoutMs);
       const response = new Promise((resolve, reject) => { this.#pending = { id, resolve, reject }; });
       this.lifecycle.commands++;
+      this.lifecycle.lastAction = action.op === "execute" ? action.command : action.op;
       this.child.stdin.write(line, (error) => { if (error) this.#fail(failure("STDIN_ERROR")); });
       try { return await bounded(response, timeoutMs + 3000, "DRIVER_TIMEOUT"); }
       catch (error) {
@@ -199,6 +208,8 @@ export class NativeApp extends EventEmitter {
       if (!cleanupFailure) {
         try {
           if (eof) { await this.#tail; this.child.stdin.end(); }
+          // #close starts before #closing is assigned, so this shutdown enters
+          // the same serial queue; subsequent public requests are refused.
           else { await this.request({ op: "shutdown" }); this.child.stdin.end(); }
         } catch (error) { cleanupFailure = error; this.child.stdin.end(); }
       } else this.child.stdin.end();

@@ -60,9 +60,9 @@ const refs = (node) => [...(node?.type === "attachment" ? [node.attrs.id] : []),
 const documentFor = (text) => ({ type: "doc", content: [{ type: "paragraph", content: [{ type: "text", text }] }] });
 const bodyDigest = (note) => hash(JSON.stringify({ document: note.document, plainText: note.plainText }));
 const projection = (ws) => ({
-  folders: ws.folders.map((f) => ({ ...f })).sort((a, b) => a.id.localeCompare(b.id)),
+  folders: ws.folders.map(({ createdAt, definitionRevision, ...f }) => f).sort((a, b) => a.id.localeCompare(b.id)),
   notes: ws.notes.map(({ revision, ...note }) => note).sort((a, b) => a.id.localeCompare(b.id)),
-  attachments: ws.attachments.map((a) => ({ ...a })).sort((a, b) => a.id.localeCompare(b.id)),
+  attachments: ws.attachments.map(({ relativePath, ...a }) => a).sort((a, b) => a.id.localeCompare(b.id)),
 });
 
 class Device {
@@ -260,7 +260,7 @@ export async function run(argv = process.argv.slice(2)) {
 
       const formatted = { type: "doc", content: [
         { type: "heading", attrs: { level: 1 }, content: [{ type: "text", text: "中文标题：原生双端" }] },
-        { type: "paragraph", content: [{ type: "text", marks: [{ type: "bold" }], text: "加粗中文与 emoji 🌏" }, { type: "text", text: "\n第二行 #sync108" }] },
+        { type: "paragraph", content: [{ type: "text", marks: [{ type: "bold" }], text: "加粗中文与 emoji 🌏" }, { type: "text", text: "\n第二行 " }, { type: "text", marks: [{ type: "noteTag", attrs: { name: "sync108" } }], text: "#sync108" }] },
         { type: "bulletList", content: [{ type: "listItem", content: [{ type: "paragraph", content: [{ type: "text", text: "列表内容保留" }] }] }] },
       ] };
       await a.select(localA);
@@ -374,7 +374,8 @@ export async function run(argv = process.argv.slice(2)) {
       const restarted = await a.sync("sync.status");
       check("same-directory restart preserves paused state and device identity", restarted.state === "paused" && restarted.deviceId === identityA && a.app.child.pid !== priorA);
       check("restarted native store retains full pending local document", bodyDigest(await a.note(localB)) === bodyDigest(persisted));
-      check("restarted store retains existing note IDs", beforeRestart.notes.every((n) => (n.id === localB) || true));
+      const restartedIds = new Set((await a.workspace()).notes.map((n) => n.id));
+      check("restarted store retains existing note IDs", beforeRestart.notes.every((n) => restartedIds.has(n.id)));
       await originals(a, mediaNote, fixtures);
       await a.sync("sync.resume");
       await b.sync("sync.resume");
