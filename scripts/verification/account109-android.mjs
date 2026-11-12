@@ -78,7 +78,8 @@ export async function removeOwnedForward(owned) {
   return false;
 }
 
-export async function connectAndroid() {
+export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket } = {}) {
+  if (typeof WebSocketImpl !== 'function') throw Object.assign(Error('ANDROID_WEBSOCKET_UNAVAILABLE'), { code: 'ANDROID_WEBSOCKET_UNAVAILABLE' });
   // Exclusive live driver; stale locks are intentionally not deleted automatically.
   const lease = await acquireDriverLease(lockPath);
   let ws, owned;
@@ -130,7 +131,7 @@ export async function connectAndroid() {
     }
     owned.pageId = target.id;
     owned.pageURL = target.url;
-    ws = new WebSocket(socketURL);
+    ws = new WebSocketImpl(socketURL);
     await new Promise((resolve, reject) => {
       const timer = setTimeout(() => reject(Error('CDP connect timeout')), 10000);
       ws.onopen = () => { clearTimeout(timer); resolve(); };
