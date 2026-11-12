@@ -13,3 +13,12 @@ src-tauri/gen/android/app/src/main/jniLibs/
 src-tauri/gen/android/app/src/main/assets/
 
 src-tauri/gen/schemas/
+
+# Tauri/Gradle outputs owned by Android plugins, including new local plugins.
+plugins/*/android/build/
+plugins/*/android/.gradle/
+plugins/*/android/.tauri/
+src-tauri/gen/android/.tauri/
+
+# Image generation scratch requests; reviewed design outputs live in output/.
+/tmp/
