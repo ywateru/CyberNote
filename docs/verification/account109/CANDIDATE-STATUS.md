@@ -16,6 +16,8 @@
 
 ## macOS 候选与实际启动尝试
 
+后续已从干净主线 `ad18a872` 重新构建包含最新修复的 debug 候选，前端及原生构建均通过，二进制已保留；本次 Mac 仍锁定，未重复启动验收。身份、命令及边界见 [最新 macOS 候选](macos/LATEST-CANDIDATE.md)。下文保留旧候选的原始尝试记录。
+
 候选源码 `c7b18541a6d86adcb6b7c755c6a4a96aaa5f8fc8`，静态前端源码 fingerprint `90e542d5a1dd28efbacfab85b84a160e181dd01fce7e5f6f5f83f9d12b212f1b`，512 个产品输入，构建时 Git 工作区干净。
 
 ```sh
