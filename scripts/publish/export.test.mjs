@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { exportSnapshot, digest, manifestName, safePath, scanBytes } from './export.mjs';
 import { publicScripts } from './package-transform.mjs';
+import { transformSmartFixture } from './package-transform.mjs';
 
 function fixture(t) {
   const parent = realpathSync(mkdtempSync(join(tmpdir(), 'publish-boundary-'))), root = join(parent, 'source');
@@ -64,4 +65,12 @@ test('hash tampering, process paths, credentials and symlink tree entries fail c
   writeFileSync(path, JSON.stringify(manifest)); git(['add', manifestName, 'src/link.ts']);
   git(['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'symlink inventory']);
   assert.throws(() => exportSnapshot({ root }), /Not a regular tracked file/);
+});
+test('public smart corpus redirect is exact and idempotent, without changing development source', () => {
+  const original = Buffer.from('include_str!("../../../docs/fixtures/smart-projection09.json")');
+  const output = transformSmartFixture(original);
+  assert(output.toString().includes('../../tests/fixtures/archive/smart-projection09.json'));
+  assert.deepEqual(transformSmartFixture(output), output);
+  assert(original.toString().includes('../../../docs/'));
+  assert.throws(() => transformSmartFixture(Buffer.from('unreviewed fixture')), /Unexpected/);
 });

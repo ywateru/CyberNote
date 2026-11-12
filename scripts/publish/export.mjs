@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync, chmodSync, realpathSync } from 'node:fs';
 import { resolve, dirname, isAbsolute, posix, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { transformPackage } from './package-transform.mjs';
+import { transformPackage, transformSmartFixture } from './package-transform.mjs';
 
 export const manifestName = 'scripts/publish/manifest.json';
 export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -97,6 +97,8 @@ export function planExport(root, ref = 'HEAD') {
   for (const required of ['src-tauri/fonts/OFL.txt', 'src-tauri/fonts/NotoSansCJKsc-Regular.otf', 'services/coordinator/LICENSE', 'pnpm-workspace.yaml', 'patches/prosemirror-view@1.42.9.patch']) if (!files.has(required)) throw Error(`Required license/build input missing: ${required}`);
   const transformed = transformPackage(files.get('package.json'));
   files.set('package.json', transformed.bytes);
+  const smartTest = 'src-tauri/src/store/smart_tests.rs';
+  if (files.has(smartTest)) files.set(smartTest, transformSmartFixture(files.get(smartTest)));
   for (const [target, source] of Object.entries({ 'README.md': 'scripts/publish/README.public.md', '.gitignore': 'scripts/publish/gitignore.public', 'LICENSE': 'scripts/publish/LICENSE.project-reserved.txt', 'THIRD_PARTY_NOTICES.md': 'scripts/publish/THIRD_PARTY_NOTICES.md' })) {
     if (!files.has(source) || files.has(target)) throw Error('Invalid public template transform');
     files.set(target, files.get(source)); modes.set(target, '100644');
@@ -106,6 +108,7 @@ export function planExport(root, ref = 'HEAD') {
   // bytes. SELF is the sole nonrecursive control-file hash exemption.
   const exportedManifest = structuredClone(manifest);
   exportedManifest.files['package.json'] = digest(transformed.bytes);
+  if (files.has(smartTest)) exportedManifest.files[smartTest] = digest(files.get(smartTest));
   files.set(manifestName, Buffer.from(JSON.stringify(exportedManifest, null, 2) + '\n'));
   return { tree, manifest, files, modes, removedScripts: transformed.removed };
 }

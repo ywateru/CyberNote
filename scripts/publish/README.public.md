@@ -29,10 +29,12 @@ explicitly on other machines; the local helper has macOS development defaults.
 `pnpm android:build` targets arm64 APK. The CI release APK is explicitly unsigned;
 an authorized distributor must sign it before installation/distribution.
 
-`pnpm test:rust` runs Rust tests. Archive fixtures are synthetic, reproducible
+`pnpm test:rust` runs Rust tests. The four archive backup fixtures are synthetic, reproducible
 with `node scripts/publish/generate-fixtures.mjs`, and contain no imported notes.
 Historical browser/device commands have deliberately been removed from the public
 package scripts; the exporter reports the removed names and checks retained paths.
+The shared synthetic smart-projection corpus is retained under the fixture
+directory; an exact export-only include rewrite removes its old docs dependency.
 
 ## Coordinator and deployment
 
