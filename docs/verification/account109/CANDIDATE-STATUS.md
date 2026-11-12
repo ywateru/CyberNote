@@ -15,7 +15,9 @@
 | 主线发布输入及打包策略 | 完成 notice、包内身份、stamp 及新历史验收修复后，publish 测试共 15/15 通过，0 跳过；这不是最终发布批准。 |
 | 最终服务部署 | READY，health 200、固定四 scopes、公钥 JWKS 200、匿名 profile/enrollment 401。详见工作区检查点。 |
 | 真实 Rust owner | `b5df1e53` 的显式 live-smoke 进程退出 0，14 阶段全部成功；真实授权、强制 refresh、owner 重开、3 次部署 profile 连续性、logout 后 restore None。详见 [真实 Rust owner 验证](auth/RUST-LIVE-OWNER.md)，不替代产品 Runtime 或多端验收。 |
-| Android 产品冒烟 | `6537b74b` 隔离候选在真实手机通过 6 项检查，包含完整本地 document/plainText、更新保留及真实 UI 发起/取消授权；[真机记录](android/README.md)保留初始失败和修复后结果。没有完成凭据输入、认证回跳或多端同步。 |
+| Android 产品冒烟 | `6537b74b` 隔离候选在真实手机通过 6 项检查，包含完整本地 document/plainText、更新保留及真实 UI 发起/取消授权；[真机记录](android/README.md)保留初始失败和修复后结果。后续真实登录失败另见下项，不能用冒烟通过替代认证验收。 |
+| Android 真实托管登录 | [hosted-live01](android/hosted-live01/README.md) 已执行一次真实凭据输入和提交，返回原生应用后权威状态为 `error/account_network`，无 profile、同步未启用；未证明原生回跳验证成功。没有自动重试。 |
+| Android 公共端点诊断 | 同一次后续直接导航中，canonical Vercel `/healthz` 在 30 秒内无 HTTP 结果，Logto discovery 对照约 606 ms 返回 200。此前 opaque-origin fetch 均在 15 秒截止；直接导航排除了该方法的 CORS 歧义，但不能定位 DNS/TCP/TLS 或原生失败阶段。见 [原始诊断](android/hosted-live01/public-navigation03.json)。 |
 | 净化源码完整 macOS 构建 | 独立新历史 `59dea828` 完成 arm64 production Tauri release app bundle 和 staging，包内身份及 1,200 项 notices 字节经独立复核；账户入口显式启用、无 debug fixture/测试 feature。未运行 App，详见 [macOS 候选](macos/LATEST-CANDIDATE.md)。 |
 | 默认账户入口最新包 | `5d30f16c` 经独立新历史 `6906f10d` 构建完整 arm64 production 包，不设置 native/debug/fixture 标志；实际包内默认原生门控、身份与许可经 Pauli 独立复核。未运行 App；旧 opt-in 包保留为历史。 |
 
@@ -55,8 +57,8 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 
 ## 尚未执行或尚未完成
 
-- 产品内真实托管登录、双桌面账户自动发现和完整 document/plainText/附件原字节比对。
-- Android 隔离账户测试包的真实登录回跳和三端同步。原用户应用及旧 Sync108 合成测试包保持原地。
-- 最终精确源码清单、新历史导出和远程 GitHub Actions 实际包构建；新增许可文件还需纳入最终导出及 notices ZIP 复验。
+- macOS 产品内真实托管登录、双桌面账户自动发现和完整 document/plainText/附件原字节比对。最近可见启动尝试受 Mac 锁定限制；继续前须重新确认解锁和候选身份。
+- Android 隔离账户测试包已尝试真实托管登录但失败；成功登录、原生回跳验收及三端同步尚未完成。继续前须确认手机可正常访问 canonical coordinator；当前证据未确定网络故障层级。原用户应用及旧 Sync108 合成测试包保持原地。
+- 当前精确源码清单、新历史本地导出、完整 macOS 包及 notices 复验已完成，见上文 `6906f10d`。远程 GitHub 发布和 Actions 实际包构建尚未执行；若后续产品源码调整，须刷新清单和重做对应验证。
 
 验收操作与通过标准继续使用 [ACCOUNT-TEST-CASES.md](ACCOUNT-TEST-CASES.md)。原开发仓库没有被直接推送，未执行最终发布。

@@ -5,7 +5,7 @@
 On 2026-11-13 the isolated Account109 package was installed, started, and updated
 in place on Samsung Android 9 arm64, serial `98895a3147304c3132`. The original
 `com.local.notesclone` application and Sync108 sandbox were not controlled or read.
-The current exact integrated main source is
+The installed candidate's exact integrated main source is
 `6537b74bf2c957be2ada5511778f597400877029`, including bootstrap cancellation guard
 and fresh signed-out metrics repair. The current application PID observed at the
 end of verification was `21082`, with private root
@@ -40,11 +40,13 @@ The [actual device02 suite](device02/result.json) passed all six checks:
 5. Returning through normal `am start` and clicking Cancel returns native signedOut without profile/error.
 6. Cancellation preserves the synthetic complete document/plainText.
 
-The final UI is the foreground Account settings panel: signedOut, Login enabled,
-no pending Cancel action. No credentials were entered, synchronization remains
-disabled, and no authenticated callback, owner binding, automatic peer discovery,
-or cross-device replication success is claimed. Hosted credential input is the
-next integration step. All synthetic notes are retained.
+At the end of device02 the foreground Account settings panel was signedOut,
+Login enabled, with no pending Cancel action. That suite did not enter
+credentials. A later real hosted-login attempt did enter and submit synthetic
+credentials but failed with native `account_network`, as recorded below.
+Synchronization remains disabled; successful native callback acceptance, owner
+binding, automatic peer discovery and cross-device replication remain unverified.
+All synthetic notes are retained.
 
 Each CDP connection forwarded only
 `localabstract:webview_devtools_remote_<verified-owned-PID>` to an allocated local
@@ -61,6 +63,31 @@ no reverse mappings, and no Account109 driver lock. The package is left running.
 | Fresh-status unit red/green | Red reproduced `no such table: sync_inbox`; repair returns zero metrics only for an unactivated Store, without enabling sync or creating identity. Account suite 13/13 passed. See [native evidence](../native/fresh-status/checks.json). |
 | build02, derived `5c8e0ad4` | Build passed, not installed; superseded to use the canonical integrated main SHA directly. [Receipt](build02/receipt.json). |
 | build03, main `6537b74b` | Build/static checks passed; in-place update preserved synthetic data; device02 six checks passed. |
+| [hosted-live01](hosted-live01/README.md) | One real guarded credential input and submit; returned to the owned app with native `error/account_network`, no profile and sync disabled. Login failed; no automatic retry. |
+
+## Latest hosted-login failure and network diagnosis
+
+The [single live attempt](hosted-live01/result.json) supersedes device02's
+signed-out checkpoint as the latest authentication observation. The following
+[read-only native diagnosis](hosted-live01/native-diagnostic01.json) confirmed
+`state=error`, safe code `account_network`, and no regular grant/binding files
+under the unique account directory. No secret file bodies were read. This does
+not establish which native request failed or that callback validation succeeded.
+
+After bounded cross-origin fetch probes produced no HTTP result, a
+[direct-navigation control](hosted-live01/public-navigation03.json) used only a
+new owned user0 Chrome target: canonical Vercel `/healthz` produced no Document
+HTTP status within 30 seconds; the fixed Logto discovery control returned 200 in
+about 606 ms. This removes the earlier fetch/CORS ambiguity but does not locate
+a DNS/TCP/TLS cause or equate Chrome with native reqwest. See the
+[full evidence and limits](hosted-live01/README.md).
+
+The one-use envelope was disposed and exact owned forwards, created target and
+leases were cleaned up. The isolated app was restored to user0 foreground;
+original apps and synthetic data were retained. The next integration step is to
+confirm normal canonical coordinator reachability and then run a separately
+recorded login attempt. Successful same-account login and three-device data
+convergence remain outstanding.
 
 Bootstrap tests separately proved the prior async verification window could mint
 an invitation after gate close/owner cancellation. Guard repair is in main
@@ -128,9 +155,12 @@ authoritative evidence.
 ordering, rejection without submission, read/parse error separation, expiry,
 single-use behavior, external error sanitization, expiry after acknowledgement,
 and reference cleanup when a page/transaction guard fails.
-They do not access the clipboard or device and do not prove live login. A fresh
-authorized transfer and a fresh private consumer instance remain necessary;
-the failed instance cannot be reused.
+They do not access the clipboard or device and do not prove live login. The
+later single-use RSA envelope and guarded consumer attempt is recorded in
+[hosted-live01](hosted-live01/README.md); it reached submit but failed at the
+native terminal. Consumed or failed transfer instances cannot be reused. A
+future attempt must inspect the current native/hosted state first, because the
+real browser flow may retain an SSO session.
 
 ## Original build01 record
 
