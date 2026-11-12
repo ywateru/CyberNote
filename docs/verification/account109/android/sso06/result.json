@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "scope": "one-fresh-d69-native-SignIn-existing-SSO-no-credentials",
+  "preflight": {
+    "schemaVersion": 1,
+    "recordedAt": "2026-11-12T21:46:34.072Z",
+    "package": "com.local.notesclone.account109",
+    "serial": "98895a3147304c3132",
+    "pid": 15212,
+    "pidUidMatchesUser0": true,
+    "installedApkSha256": "a87cc372a4d84924e905e19abd12837dff36a4b86c23599fe0ce36ba6d7575f5",
+    "installedMatchesD69": true,
+    "unlocked": true,
+    "ownedAppUser0Foreground": true,
+    "callbackHandlerExactlyOwned": true,
+    "noOldOwnedForwards": true,
+    "noOldNativeLease": true,
+    "noOldBrowserLease": true,
+    "initialState": "signedOut",
+    "profilePresent": false,
+    "errorPresent": false,
+    "safeErrorCode": null,
+    "enabled": false
+  },
+  "startedAt": "2026-11-12T21:48:10.070Z",
+  "maxObservationMs": 120000,
+  "terminalObservedAfterMs": 65186,
+  "uiSignInCalls": 1,
+  "automaticRetry": false,
+  "credentialConsumerUsed": false,
+  "credentialInputAttempted": false,
+  "grantCopied": false,
+  "callbackUrlCopiedOut": false,
+  "rawSchemeEventInspected": false,
+  "preparation": {
+    "phase": "hosted-preparation-returned",
+    "preparationStage": "trusted-form",
+    "code": "BROWSER_USER0_NOT_FOREGROUND",
+    "uiSignInInvoked": true,
+    "credentialInputAttempted": false
+  },
+  "guardedObserver": {
+    "phase": "callback-native-error",
+    "ownedAppForeground": true,
+    "nativeErrorPresent": true,
+    "profilePresent": false,
+    "syncEnabled": false
+  },
+  "nativeTerminal": {
+    "phase": "native-authoritative-readonly-terminal",
+    "recordedAt": "2026-11-12T21:49:15.256Z",
+    "withinObservationDeadline": true,
+    "state": "error",
+    "nativePaused": false,
+    "profilePresent": false,
+    "nativeErrorPresent": true,
+    "safeErrorCode": "account_network",
+    "usernamePresent": false,
+    "sameSyntheticUser": false,
+    "syncEnabled": false,
+    "ownedAppUser0Foreground": true,
+    "deviceUnlocked": true
+  },
+  "cancellation": {
+    "used": false,
+    "reason": "native-error-terminal-not-authorizing"
+  },
+  "cleanup": {
+    "recordedAt": "2026-11-12T21:50:10.939Z",
+    "browserOrKnownOwnedPidForwardsAbsent": true,
+    "reverseAbsent": true,
+    "nativeLeaseAbsent": true,
+    "browserLeaseAbsent": true,
+    "ownedAppUser0Foreground": true,
+    "testCreatedBrowserTarget": false,
+    "preparationDriverClosed": true,
+    "guardedObserverDriverClosed": true,
+    "finalReadDriverClosed": true
+  },
+  "sources": [
+    {
+      "path": "/private/tmp/account109-hosted-memory-driver.mjs",
+      "sha256": "ba09e571e091fecf62148aad30faa9f722268c164b76055db3c89f853edc3c4c"
+    },
+    {
+      "path": "/private/tmp/account109-hosted-terminal-observer.mjs",
+      "sha256": "5d3705f7b9c526a330bffaedcbf1bc4977e0431bb4cdc6d2b9d5d953d90334c1"
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-native/scripts/verification/account109-android.mjs",
+      "sha256": "bb742bfee8b462d9d6de1eace5f40fac9a8e352c68673306bc3a5f46c17af448"
+    }
+  ],
+  "conclusion": {
+    "latestD69NativeAccountNetworkReproduced": true,
+    "independentOfChromeHealthInference": true,
+    "nativePausedProfileLoginPass": false,
+    "expectedSyntheticUserVerified": false,
+    "usernameAbsenceDoesNotMeanAnotherUser": true,
+    "underlyingNetworkOrEndpointCauseProven": false
+  },
+  "limits": [
+    "Native error/profile status is authoritative; no auth/token/provider raw response recorded",
+    "Fresh SignIn/new-origin-page association is temporal; Native AuthClient alone validates callback state/PKCE/issuer/nonce",
+    "No credential entry, browser/network setting change, DNS/TLS bypass, sync enablement or business data write",
+    "No auth or sync success claim; native error left intact for diagnosis"
+  ]
+}
