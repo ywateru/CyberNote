@@ -174,3 +174,53 @@ resolution while retaining canonical hostnames and TLS certificate verification.
 It did not change global DNS. The product has no IP pin, DNS override, TLS bypass,
 or fallback to the harness addresses; product runtime/platform integration remains
 to be verified under its actual network conditions.
+
+## Explicit macOS Rust-owner live smoke
+
+`examples/live_smoke.rs` is an opt-in real `AuthClient` check, not a fixture login
+and not a native App/Runtime, two-desktop, sync or device acceptance result. It
+uses the fixed public pins above and directly imports the repository's existing
+`src-tauri/src/account/callback.rs` loopback module. That module must be present
+in the checkout; no platform files or production owner APIs are changed.
+An explicit `live-smoke` build feature keeps this platform example out of ordinary
+standalone library test builds, including older checkouts without the platform module.
+
+```sh
+cargo check --locked --manifest-path crates/account-auth/Cargo.toml \
+  --features live-smoke --example live_smoke
+cargo run --quiet --locked --manifest-path crates/account-auth/Cargo.toml \
+  --features live-smoke --example live_smoke -- /private/tmp/cybernote-auth-live-smoke-01
+```
+
+The sole argument is an absolute, previously nonexistent owner directory. Its
+parent must already exist and be canonical (for example `/private/tmp`, not the
+`/tmp` symlink). The example creates the directory as 0700 and uses the production
+0600 grant/lock store inside it. It rejects existing directories, including ones
+left by an earlier attempt, and never removes directories or credential files
+itself. Use a new directory name for a new run; preserve failed-run owners.
+
+It binds `127.0.0.1:17897` before `begin_authorization`, requests sign-in with the
+crate's consent policy, then invokes `/usr/bin/open` with stdout/stderr suppressed.
+It passes the complete callback, including `iss`, to `AuthClient`, forces refresh,
+drops the owner, reopens it, checks that restore has the same issuer/subject,
+then logs out and checks restore is `None` and cleanup is false. JSON stage output
+contains only fixed labels and booleans. It never prints authorization/callback
+URLs, codes, tokens, grant contents, subject, profile or provider error bodies.
+Browser/OS process metadata remains outside this output guarantee.
+
+SIGINT or SIGTERM requests cancellation. In-flight authentication operations are
+awaited before cleanup; code-exchange cancellation uses the transaction handle
+and still waits for settlement. Every outcome after owner initialization attempts
+logout. On cleanup/reopen failure the process keeps the owner/runtime alive and
+retries every five seconds, using safe error labels. **Do not force-kill a failed
+cleanup or delete its owner directory**: after a checkpoint failure the newest
+sole owner may still exist only in process memory. Once cleanup succeeds the
+process exits; an earlier stage/cleanup failure still yields a failing exit code.
+Directory/initialization failures occur before any grant request. Abrupt process
+death or filesystem loss retains the same limits documented for the library;
+the example cannot make network rotation and durable persistence atomic.
+
+Compilation and local library tests are not live evidence. Only the operator's
+explicit successful execution establishes this Rust-owner stage, separately
+from later native product login, existing-browser-SSO registration and runtime
+acceptance. No DNS/IP override, TLS bypass or service configuration is added.
