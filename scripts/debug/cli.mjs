@@ -20,7 +20,7 @@ const usage = `Notes debug v1 (isolated synthetic data, no installed app is open
   pnpm debug check-production --production dist
   pnpm debug compare baseline.json current.json
   pnpm debug compare-shot baseline.png current.png
-Flags: --out DIR --keep --mobile --transport EXISTING_BINARY --timeout MS.
+Flags: --account-ui (explicit test-only account UI; no native auth) --out DIR --keep --mobile --transport EXISTING_BINARY --timeout MS.
 No Rust compilation or package launch is performed. --transport is opt-in and never falls back on failure.
 Steps: [{"command":"note.create","args":{}},{"command":"editor.insertText","args":{"text":"Hello"}},{"command":"app.flush"}].
 Special script steps: {"platform":{"advanceMs":1000,"mediaFail":{"decode":1},"fail":{"save":2},"delay":{"save":250}}}, {"snapshot":{"selector":".app"}}, {"screenshot":"result.png"}, {"waitForIdle":{"timeoutMs":1000}}.
@@ -31,7 +31,7 @@ function parse(argv) {
   const valued = new Set(['out', 'selector', 'transport', 'timeout', 'production', 'chrome', 'playwright', 'tmp']);
   for (let i = 0; i < argv.length; i++) {
     const value = argv[i]; if (!value.startsWith('--')) { positional.push(value); continue; }
-    const flag = value.slice(2); if (['keep', 'mobile'].includes(flag)) options[flag] = true;
+    const flag = value.slice(2); if (['keep', 'mobile', 'account-ui'].includes(flag)) options[flag] = true;
     else if (valued.has(flag)) { if (!argv[i + 1] || argv[i + 1].startsWith('--')) throw Error('Missing --' + flag + ' value'); options[flag] = argv[++i]; }
     else throw Error('Unknown flag --' + flag);
   }
@@ -56,8 +56,9 @@ try {
   else if (mode === 'compare') { if (args.length !== 2) throw Error('compare needs two snapshot paths'); console.log(bounded(compareSnapshots(JSON.parse(await readFile(args[0], 'utf8')), JSON.parse(await readFile(args[1], 'utf8'))))); }
   else {
     const allowed = ['list', 'execute', 'script', 'snapshot', 'group', 'all', 'check-production', 'compare-shot']; if (!allowed.includes(mode)) throw Error('Unknown CLI mode ' + mode);
-    if (options.mobile && (mode === 'all' || mode === 'group' && !['notes', 'recording', 'attachments', 'data-management', 'image-preview', 'storage-overview', 'preferences', 'quick-home', 'sync-settings'].includes(args[0]))) throw Object.assign(Error('Automated mobile browser coverage is groups notes, recording, attachments, data-management, image-preview, storage-overview, preferences and quick-home only. The complete suite is desktop-scoped; execute/script/snapshot remain available with --mobile.'), { code: 'UNSUPPORTED' });
+    if (options.mobile && (mode === 'all' || mode === 'group' && !['notes', 'recording', 'attachments', 'data-management', 'image-preview', 'storage-overview', 'preferences', 'quick-home', 'sync-settings', 'account-settings'].includes(args[0]))) throw Object.assign(Error('Automated mobile browser coverage is groups notes, recording, attachments, data-management, image-preview, storage-overview, preferences and quick-home only. The complete suite is desktop-scoped; execute/script/snapshot remain available with --mobile.'), { code: 'UNSUPPORTED' });
     if (mode === 'check-production' && !options.production) throw Error('check-production requires --production pointing to a normal frontend build');
+    if (mode === 'group' && args[0] === 'account-settings' && !options['account-ui']) throw Error('account-settings requires explicit --account-ui (JS IPC fixture only)');
     sourceInputsAtStart = await sourceFingerprint(process.cwd()); runtime = await openRuntime(options); const page = runtime.page; const output = options.out ? resolve(options.out) : runtime.directory; await mkdir(output, { recursive: true });
     let result;
     if (mode === 'list') result = { version: 1, commands: await page.evaluate(() => window.__NOTES_DEBUG__.list()) };
@@ -79,7 +80,7 @@ try {
       }
       if (!terminal) await idle(page, options.timeout); result = { steps: results, ...(terminal ? { completion: terminal } : {}), state: await state(page) };
     } else if (mode === 'snapshot') { const snap = await snapshot(page, { selector: options.selector || '.app' }); await saveJSON(resolve(output, 'snapshot.json'), snap); await page.screenshot({ path: resolve(output, 'screenshot.png') }); result = { snapshot: resolve(output, 'snapshot.json'), screenshot: resolve(output, 'screenshot.png') }; }
-    else if (mode === 'all' || mode === 'group') { const names = mode === 'all' ? groupNames : [args[0]]; if (names.some((name) => !groupNames.includes(name) && !(options.mobile && ['attachments','quick-home'].includes(name)))) throw Error('Unknown scenario group'); result = await runGroups(runtime, names, output); }
+    else if (mode === 'all' || mode === 'group') { const names = mode === 'all' ? groupNames.filter(name => name !== 'account-settings' || options['account-ui']) : [args[0]]; if (names.some((name) => !groupNames.includes(name) && !(options.mobile && ['attachments','quick-home'].includes(name)))) throw Error('Unknown scenario group'); result = await runGroups(runtime, names, output); }
     else if (mode === 'compare-shot') { if (args.length !== 2) throw Error('compare-shot needs two PNG paths'); result = await compareScreenshots(page, args[0], args[1]); }
     else if (mode === 'check-production') { const bundle = await productionMarkers(resolve(runtime.root, options.production)); const absent = await page.evaluate(() => !('__NOTES_DEBUG__' in window)); if (!absent) throw Error('Production debug API is present'); await page.goto(runtime.origin + '/?notesDebug=1&VITE_NOTES_DEBUG=1'); await page.waitForSelector('.app'); if (!await page.evaluate(() => !('__NOTES_DEBUG__' in window))) throw Error('Production URL restored debug API'); result = { productionAPIAbsent: true, urlCannotEnable: true, bundle, platformMockInjectedByRunnerOnly: true }; }
     const sourceInputs = await sourceFingerprint(runtime.root); const summary = { version: 1, mode, sourceHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: runtime.root, encoding: 'utf8' }).trim(), sourceInputs, sourceInputsAtStart, sourceInputsChanged: sourceInputs.sha256 !== sourceInputsAtStart.sha256, ...runtime.metadata, elapsedMs: Math.round(performance.now() - started), result, pageErrors: runtime.errors };

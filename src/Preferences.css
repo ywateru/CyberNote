@@ -140,9 +140,10 @@
 .preferences-mobile .preferences-body { background: var(--grouped); }
 .preferences-mobile .preferences-navigation { flex: 1; border: 0; padding: 20px 16px; gap: 0; }
 .preferences-mobile .preferences-navigation > button { background: var(--paper); border-radius: 0; min-height: 58px; padding: 12px 14px; gap: 10px; border-bottom: 1px solid var(--line); }
-.preferences-mobile .preferences-navigation > button:first-child,.preferences-mobile .preferences-navigation > button:nth-child(3) { border-radius: 10px 10px 0 0; }
-.preferences-mobile .preferences-navigation > button:nth-child(2),.preferences-mobile .preferences-navigation > button:nth-child(5) { border-radius: 0 0 10px 10px; border-bottom: 0; }
-.preferences-mobile .preferences-navigation > button:nth-child(3) { margin-top: 24px; }
+.preferences-mobile .preferences-navigation > button[data-preferences-page="account"] { border-radius: 10px; margin-bottom: 24px; border-bottom: 0; }
+.preferences-mobile .preferences-navigation > button[data-preferences-page="settings"],.preferences-mobile .preferences-navigation > button[data-preferences-page="sync"] { border-radius: 10px 10px 0 0; }
+.preferences-mobile .preferences-navigation > button[data-preferences-page="notes"],.preferences-mobile .preferences-navigation > button[data-preferences-page="backup"] { border-radius: 0 0 10px 10px; border-bottom: 0; }
+.preferences-mobile .preferences-navigation > button[data-preferences-page="sync"] { margin-top: 24px; }
 .preferences-mobile .preferences-navigation small { margin-left: auto; color: var(--secondary); font-size: .85em; white-space: nowrap; }
 .preferences-mobile .preferences-navigation > button > svg:last-child { width: 16px; flex-basis: 16px; color: var(--secondary); }
 .preferences-mobile .preferences-navigation-note { margin: 0 8px; padding-top: 20px; }

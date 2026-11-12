@@ -1,18 +1,21 @@
 import { useLayoutEffect, useEffect, useRef, useState, type ReactNode } from "react";
-import { Database, X, ChevronLeft, ChevronRight, Type, Notebook, RefreshCw, Archive, Folder, PanelsTopLeft, NotebookText, HardDrive, Upload } from "lucide-react";
+import { Database, X, ChevronLeft, ChevronRight, Type, Notebook, RefreshCw, Archive, Folder, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound } from "lucide-react";
 import { fontSizeOptions, fontSizeOption, type FontSize } from "./font-size";
 import type { Settings } from "./types";
 import "./Preferences.css";
 import PreferencesInterfaceDetails from "./PreferencesInterfaceDetails";
+import { accountUIAvailable } from "./account-client";
 import { buildInfo } from "./build-info";
 
-export const preferencePages = [
+const allPreferencePages = [
+  { id: "account", label: "账户与同步", icon: UserRound, desktopIcon: UserRound },
   { id: "settings", label: "外观与字号", icon: Type, desktopIcon: PanelsTopLeft },
   { id: "notes", label: "备忘录", icon: Notebook, desktopIcon: NotebookText },
   { id: "sync", label: "设备同步", icon: RefreshCw, desktopIcon: RefreshCw },
   { id: "data", label: "存储空间", icon: Database, desktopIcon: HardDrive },
   { id: "backup", label: "导入与备份", icon: Archive, desktopIcon: Upload },
 ] as const;
+export const preferencePages = allPreferencePages.filter(page => page.id !== "account" || accountUIAvailable);
 export type PreferencesTab = typeof preferencePages[number]["id"] | "home";
 export function isPreferencesTab(value: unknown): value is PreferencesTab {
   return value === "home" || preferencePages.some(page => page.id === value);
@@ -46,7 +49,7 @@ function PreferenceChoices<T extends string>({ label, value, options, onChange, 
   </div>;
 }
 
-export default function Preferences({ tab, onTab, onClose, onBack, settings, onSettings, onCloseLocks, returnFocus, data, synchronization, mobile }: {
+export default function Preferences({ tab, onTab, onClose, onBack, settings, onSettings, onCloseLocks, returnFocus, data, synchronization, account, mobile }: {
   tab: PreferencesTab;
   onTab: (tab: PreferencesTab) => void;
   onClose: () => void;
@@ -57,6 +60,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   returnFocus: HTMLElement | null;
   data: ReactNode;
   synchronization: ReactNode;
+  account: ReactNode;
   mobile: boolean;
 }) {
   const root = useRef<HTMLElement>(null), close = useRef<HTMLButtonElement>(null), heading = useRef<HTMLHeadingElement>(null);
@@ -191,6 +195,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
               </fieldset>
               <p className="preferences-footnote">更改立即生效</p>
             </div>
+            <div id="preferences-panel-account" className="preferences-panel preferences-settings" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "账户与同步" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-account"} hidden={tab !== "account"} inert={tab !== "account"}>{accountUIAvailable && tab === "account" && account}</div>
             <div id="preferences-panel-sync" className="preferences-panel preferences-sync" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "设备同步" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-sync"} hidden={tab !== "sync"} inert={tab !== "sync"}>{(visitedSync || tab === "sync") && synchronization}</div>
             <div id="preferences-panel-data" className="preferences-panel preferences-data" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? current?.label : undefined} aria-labelledby={mobile ? undefined : `preferences-tab-${tab === "backup" ? "backup" : "data"}`} hidden={tab !== "data" && tab !== "backup"} inert={tab !== "data" && tab !== "backup"}>{(visitedData || tab === "data" || tab === "backup") && data}</div>
           </div>

@@ -1,5 +1,6 @@
 // Isolated IPC/device boundaries for the real App/Editor/SaveQueue/recorders.
 // The default protocol fixture is NOT the production Rust Store or OS/TCC.
+import { accountFixture } from './account-fixture.mjs';
 import { randomUUID } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 export { rustBackend } from './rust-backend.mjs';
@@ -22,7 +23,7 @@ export function seededWorkspace() {
 }
 export class FakeBackend {
   kind = 'isolated-js-protocol-fixture';
-  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.sync = null; this.syncConflicts = []; this.mediaLeases=new Map();this.mediaReads=[];this.mediaOrigin=null; }
+  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.account = null; this.sync = null; this.syncConflicts = []; this.mediaLeases=new Map();this.mediaReads=[];this.mediaOrigin=null; }
   reset() { const mediaOrigin=this.mediaOrigin;Object.assign(this, new FakeBackend(this.directory));this.mediaOrigin=mediaOrigin; }
   // Functional transport fixture only: a real HTTP URL and Range path exercise
   // browser loading. This is not a native provider/Rust or performance proof.
@@ -50,6 +51,7 @@ export class FakeBackend {
       else if (command === 'register_save_intent' || command === 'acknowledge_access') value = null;
       else if (command === 'read_note_text') { const note = this.assertNote(args.id); value = this.tagged({ title: note.title, text: note.plainText }); }
       else if (command === 'workspace_action') value = await this.action(args.action || {});
+      else if (command === 'account_command') value = await accountFixture(this, args.command);
       else if (command === 'sync_command') { if (args.expected?.sessionId !== this.sessionId || args.expected?.epoch !== this.accessEpoch) throw failure('Stale local sync authority', 'access_changed'); value = await this.syncCommand(args.command); }
       else if (command === 'store_attachment' || command === 'store_attachment_operation') {
         this.assertNote(args.noteId); await this.boundary('store');

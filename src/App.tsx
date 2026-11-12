@@ -165,6 +165,8 @@ import DataManagement, { type DataManagementHandle } from "./DataManagement";
 import AppleNotesImport, { type AppleNotesImportHandle } from "./AppleNotesImport";
 import SyncSettings, { type SyncSettingsHandle } from "./SyncSettings";
 import type { SyncCommand } from "./sync-client";
+import AccountSettings, { type AccountSettingsHandle } from "./AccountSettings";
+import { accountUIAvailable, type AccountCommand } from "./account-client";
 import Preferences, { isPreferencesTab, type PreferencesTab } from "./Preferences";
 import type { ArchiveResult } from "./data-management";
 import { documentsEqual } from "./document-equality";
@@ -464,6 +466,8 @@ function App() {
   const syncCoverRef = useRef(false);
   const dataManagementHandle = useRef<DataManagementHandle | null>(null);
   const appleNotesImportHandle = useRef<AppleNotesImportHandle | null>(null);
+  const accountSettingsHandle = useRef<AccountSettingsHandle | null>(null);
+  const accountConflictsRequested = useRef(false);
   const syncSettingsHandle = useRef<SyncSettingsHandle | null>(null);
   const [archiveBusy, setArchiveBusy] = useState(false);
   const archiveRunning = useRef(false);
@@ -2017,6 +2021,7 @@ function App() {
   };
   const preferencesBack = () => {
     if (appleNotesImportHandle.current?.inspect().open) { void appleNotesImportHandle.current.close().catch(fail); return; }
+    if (preferencesTab === "account" && accountSettingsHandle.current?.dismiss()) return;
     if (preferencesTab === "sync" && syncSettingsHandle.current?.dismiss()) return;
     if (preferencesTab === "data" && dataManagementHandle.current?.inspect().view !== "overview" && dataManagementHandle.current) { dataManagementHandle.current.navigate("overview"); return; }
     if (mobile && preferencesTab !== "home") setPreferencesTab("home");
@@ -3483,6 +3488,7 @@ function App() {
         },
         ocr: ocrState,
         settings,
+        account: accountSettingsHandle.current?.inspect() || null,
         synchronization: syncSettingsHandle.current?.inspect() || null,
         preferences: { open: modal === "preferences", tab: preferencesTab },
         editorSession: session.inspect(),
@@ -3517,6 +3523,11 @@ function App() {
         },
         "image.info": () => {const button=document.querySelector<HTMLButtonElement>('.image-preview [aria-label="图片信息"]');if(!button)throw Error("图片预览尚未打开");button.click();},
         "image.close": () => setImagePreview(null),
+        ...Object.fromEntries(["status", "signIn", "signUp", "cancel", "signOut", "syncNow", "setEnabled"].map(type => [`account.${type}`, async (args: Record<string, unknown>) => {
+          if (!accountUIAvailable || modal !== "preferences" || preferencesTab !== "account" || !accountSettingsHandle.current) throw Error("请先打开账户与同步");
+          await accountSettingsHandle.current.run({ ...args, type } as AccountCommand);
+          return accountSettingsHandle.current?.inspect();
+        }])),
         ...Object.fromEntries([
           ["sync.status", "status"], ["sync.host.start", "startHost"], ["sync.invite", "createInvite"],
           ["sync.pair", "pair"], ["sync.now", "syncNow"], ["sync.stop", "stop"], ["sync.resume", "resume"],
@@ -4840,7 +4851,14 @@ function App() {
           onTab={setPreferencesTab}
           onClose={() => setModal(null)}
           onBack={preferencesBack}
-          synchronization={<SyncSettings active={preferencesTab === "sync"} onHandle={handle => { syncSettingsHandle.current = handle; }} />}
+          account={accountUIAvailable && <AccountSettings active={preferencesTab === "account"} onHandle={handle => { accountSettingsHandle.current = handle; }} onConflicts={() => { accountConflictsRequested.current = true; setPreferencesTab("sync"); }} />}
+          synchronization={<SyncSettings active={preferencesTab === "sync"} onHandle={handle => {
+            syncSettingsHandle.current = handle;
+            if (handle && preferencesTab === "sync" && accountConflictsRequested.current) {
+              accountConflictsRequested.current = false;
+              queueMicrotask(() => { void handle.run({ type: "conflicts" }).catch(fail); });
+            }
+          }} />}
           settings={settings}
           onSettings={patch => updateSettings(patch, true)}
           onCloseLocks={() => patch({type: "closeLocks"})}

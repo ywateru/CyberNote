@@ -1,0 +1,43 @@
+.account-settings { min-width: 0; overflow-wrap: anywhere; }
+.account-settings .preferences-page-title { margin-bottom: 6px; }
+.account-intro { color: var(--secondary); margin: 0 0 26px; }
+.account-group { padding: 20px 0; border-bottom: 1px solid var(--line); }
+.account-group:first-of-type { padding-top: 0; }
+.account-settings h4 { margin: 0 0 8px; font-size: 1em; font-weight: 600; }
+.account-settings p { line-height: 1.6; }
+.account-profile { display: flex; align-items: flex-start; gap: 14px; }
+.account-profile > div { min-width: 0; flex: 1; }
+.account-profile p { margin: 0; color: var(--secondary); }
+.account-avatar { display: grid; place-items: center; width: 46px; height: 46px; flex-shrink: 0; background: var(--grouped); border-radius: 50%; color: var(--secondary); }
+.account-avatar svg { width: 25px; height: 25px; }
+.account-identifier { user-select: text; -webkit-user-select: text; }
+.account-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.account-settings button { min-height: max(28px, var(--interface-hit-min, 28px)); min-width: 64px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--line); border-radius: var(--interface-radius-button, 7px); background: var(--grouped); white-space: normal; overflow-wrap: anywhere; text-align: center; }
+.account-settings .account-primary { background: var(--selection); color: var(--accent); border-color: transparent; }
+.account-help { color: var(--secondary); font-size: .9em; margin: 10px 0; }
+.account-toggle { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.account-toggle label { flex: 1; font-weight: 600; cursor: pointer; }
+.account-toggle input { flex-shrink: 0; width: 38px; height: 28px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.account-state { margin: 16px 0 10px; font-weight: 500; }
+.account-metrics { margin: 0; }
+.account-metrics > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; margin: 8px 0; }
+.account-metrics dt { color: var(--secondary); }
+.account-metrics dd { margin: 0; }
+.account-devices { padding: 0; margin: 0; list-style: none; }
+.account-devices li { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.account-devices li:last-child { border: 0; }
+.account-devices svg { flex-shrink: 0; width: 22px; color: var(--secondary); }
+.account-devices li > div { min-width: 0; }
+.account-devices strong { font-weight: 500; }
+.account-devices p { margin: 4px 0 0; color: var(--secondary); font-size: .9em; }
+.account-error { margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: 9px; color: var(--danger, #c53527); }
+.account-error p { margin: 0 0 12px; }
+.account-confirmation { margin: 18px 0; padding: 16px; background: var(--grouped); border: 1px solid var(--accent); border-radius: 9px; }
+.account-confirmation p { margin: 0; }
+.account-notice { color: var(--secondary); font-size: .9em; }
+.account-notice:empty { display: none; }
+.preferences-mobile .account-group { padding: 16px; margin-bottom: 18px; border: 0; border-radius: 10px; background: var(--paper); }
+.preferences-mobile .account-settings button { min-height: 44px; min-width: 80px; }
+.preferences-mobile .account-toggle input { width: 44px; height: 44px; }
+.preferences-mobile .account-intro { margin-bottom: 18px; }
+@media (max-width: 350px) { .account-profile { gap: 10px; } .account-avatar { width: 36px; height: 36px; } .preferences-mobile .account-actions > button { flex: 1; } }

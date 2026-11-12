@@ -4,6 +4,8 @@ import { api, idle, state, saveJSON, openRuntime } from "./runtime.mjs";
 export async function runPreferences(runtime, { command, check, output }) {
   const { page, backend } = runtime;
   const mobile = runtime.mobile;
+  const accountUI = runtime.accountUI;
+  const categoryCount = accountUI ? 6 : 5;
   const labels = {system:"跟随系统",light:"浅色",dark:"深色",tiny:"极小",small:"小",medium:"中",large:"大",huge:"极大"};
   const choose = async (name,value) => {
     if (mobile) await page.getByRole("combobox",{name,exact:true}).selectOption(value);
@@ -28,19 +30,21 @@ export async function runPreferences(runtime, { command, check, output }) {
   await idle(page);
   check("Actual settings entry opens the platform-specific initial page", await selected(mobile ? "home" : "settings"));
   check("Appearance-only visits do not mount data or synchronization", inventories() === 0 && await page.locator(".data-management,.sync-settings").count() === 0);
+  check("Default backend has no account UI or account IPC", accountUI || (await page.locator("[data-preferences-page=account]").count() === 0 && !backend.calls.some(row => row.command === "account_command")));
   const names = ["外观与字号", "备忘录", "设备同步", "存储空间", "导入与备份"];
   if (mobile) {
-    check("Mobile uses five category rows instead of desktop tabs", await page.locator(".preferences-navigation > button").count() === 5 && await page.getByRole("tablist").count() === 0);
+    check("Mobile uses expected category rows instead of desktop tabs", await page.locator(".preferences-navigation > button").count() === categoryCount && await page.getByRole("tablist").count() === 0);
     await page.getByRole("button", {name:/外观与字号/}).click();
   } else {
-    check("Desktop exposes five labelled category tabs", await page.getByRole("tablist",{name:"设置分类"}).count() === 1 && await page.getByRole("tab").count() === 5);
+    check("Desktop exposes expected labelled category tabs", await page.getByRole("tablist",{name:"设置分类"}).count() === 1 && await page.getByRole("tab").count() === categoryCount);
     await page.getByRole("tab", {name:names[0]}).focus();
     await page.keyboard.press("ArrowDown");
     check("Desktop arrow keys switch and focus the next category", await selected("notes") && await page.getByRole("tab",{name:"备忘录",exact:true}).evaluate(n=>n===document.activeElement));
     await page.keyboard.press("End");
     check("Desktop End selects backup", await selected("backup"));
     await page.keyboard.press("Home");
-    check("Desktop Home returns to appearance", await selected("settings"));
+    check("Desktop Home returns to first available category", await selected(accountUI ? "account" : "settings"));
+    await select("settings");
   }
   await choose("外观","dark"); await idle(page);
   const editorBefore = backend.workspace.settings.editorFontSize;
@@ -54,7 +58,9 @@ export async function runPreferences(runtime, { command, check, output }) {
   for (const [label,value] of [["排序方式","created"],[mobile?"桌面显示方式":"显示方式","gallery"]]) {
     await page.getByRole("combobox",{name:label,exact:true}).selectOption(value); await idle(page);
   }
-  await page.getByRole("checkbox",{name:mobile?"桌面按日期分组":"按日期分组"}).uncheck(); await idle(page);
+  // Controlled settings persist asynchronously; assert after the real save settles.
+  await page.getByRole("checkbox",{name:mobile?"桌面按日期分组":"按日期分组"}).click(); await idle(page);
+  check("Date grouping control reflects persisted unchecked state", !await page.getByRole("checkbox",{name:mobile?"桌面按日期分组":"按日期分组"}).isChecked());
   await page.getByRole("button",{name:"关闭所有已锁定的备忘录",exact:true}).click(); await idle(page);
   check("Existing appearance, note ordering, list and lock actions remain connected", backend.workspace.settings.theme==="dark" && backend.workspace.settings.sort==="created" && backend.workspace.settings.view==="gallery" && backend.workspace.settings.groupDates===false && backend.calls.some(row=>row.command==="workspace_action"&&row.type==="closeLocks"));
   await select("settings");
@@ -129,7 +135,7 @@ export async function runPreferences(runtime, { command, check, output }) {
   await page.evaluate(()=>document.activeElement?.blur());await page.keyboard.press("Tab");
   check("Body Tab enters only visible settings controls",await page.locator(mobile?'.preferences-back':'.preferences-close').evaluate(n=>n===document.activeElement));
   await page.keyboard.press("Shift+Tab");
-  check("Shift Tab wraps within the visible category",await (mobile ? page.getByRole('combobox',{name:'编辑器字体大小',exact:true}) : page.getByRole('radiogroup',{name:'编辑器字体大小',exact:true}).getByRole('radio',{checked:true})).evaluate(n=>n===document.activeElement));
+  check("Shift Tab wraps to the final visible interface-details control",await page.getByRole("button",{name:"界面细节",exact:true}).evaluate(n=>n===document.activeElement));
   await page.evaluate(()=>document.activeElement?.blur());await page.keyboard.press("Escape");await idle(page);
   if(mobile){check("Mobile Escape returns to category index",await selected("home"));await page.keyboard.press("Escape");await idle(page);}
   check("Escape closes settings and restores an entry control",await page.locator('.preferences').count()===0 && await page.evaluate(()=>document.activeElement!==document.body&&!!document.activeElement?.getClientRects().length));
