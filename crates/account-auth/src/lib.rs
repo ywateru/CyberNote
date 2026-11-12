@@ -241,6 +241,18 @@ impl AuthClient {
         .await
         .map_err(|_| AuthError::RefreshFailed)?
     }
+    /// Read-only local state: the host can offer explicit grant cleanup without a profile.
+    /// This does not discover, refresh, revoke, create an identity, or return credentials.
+    pub async fn cleanup_required(&self) -> bool {
+        self.inner
+            .state
+            .lock()
+            .await
+            .grant
+            .as_ref()
+            .is_some_and(|g| !g.usable)
+    }
+
     pub async fn logout(&self) -> Result<(), AuthError> {
         let client = self.clone();
         tokio::spawn(async move {

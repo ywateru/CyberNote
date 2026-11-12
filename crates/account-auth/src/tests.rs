@@ -47,6 +47,7 @@ struct Fixture {
     wrong_jwks: AtomicBool,
     wrong_signature: AtomicBool,
     wrong_alg: AtomicBool,
+    omit_refresh: AtomicBool,
     pause_token: AtomicBool,
     entered: tokio::sync::Notify,
     release: tokio::sync::Notify,
@@ -81,6 +82,7 @@ impl Fixture {
             wrong_jwks: AtomicBool::new(false),
             wrong_signature: AtomicBool::new(false),
             wrong_alg: AtomicBool::new(false),
+            omit_refresh: AtomicBool::new(false),
             pause_token: AtomicBool::new(false),
             entered: tokio::sync::Notify::new(),
             release: tokio::sync::Notify::new(),
@@ -193,11 +195,12 @@ impl Fixture {
             self.entered.notify_one();
             self.release.notified().await;
         }
-        Ok(response(
-            200,
-            json!({"token_type":"Bearer","access_token":format!("fixture-access-{n}"),"refresh_token":format!("fixture-refresh-{n}"),
-            "expires_in":3600,"scope":"openid profile offline_access connect","id_token":id}),
-        ))
+        let mut body = json!({"token_type":"Bearer","access_token":format!("fixture-access-{n}"),"refresh_token":format!("fixture-refresh-{n}"),
+            "expires_in":3600,"scope":"openid profile offline_access connect","id_token":id});
+        if self.omit_refresh.load(Ordering::SeqCst) {
+            body.as_object_mut().unwrap().remove("refresh_token");
+        }
+        Ok(response(200, body))
     }
     async fn client(self: &Arc<Self>, dir: &TempDir) -> AuthClient {
         let cfg = config();
@@ -641,4 +644,53 @@ async fn live_public_logto_discovery_is_compatible() {
         .any(|(k, v)| k == "first_screen" && v == "register"));
     drop(transaction);
     assert!(!dir.path().join("grant.json").exists());
+}
+
+#[tokio::test]
+async fn missing_refresh_and_failed_revocation_offer_safe_explicit_cleanup_without_profile() {
+    let f = Fixture::new();
+    let dir = private_temp();
+    let client = f.client(&dir).await;
+    assert!(!client.cleanup_required().await);
+    f.omit_refresh.store(true, Ordering::SeqCst);
+    f.fail_revoke.store(true, Ordering::SeqCst);
+    let (transaction, callback) = f.begin(&client, false).await;
+    assert_eq!(
+        client
+            .complete_callback(transaction, callback)
+            .await
+            .unwrap_err(),
+        AuthError::InvalidIdentity
+    );
+    let network_before = (
+        f.tokens.load(Ordering::SeqCst),
+        f.revokes.load(Ordering::SeqCst),
+    );
+    assert!(client.cleanup_required().await);
+    assert_eq!(
+        (
+            f.tokens.load(Ordering::SeqCst),
+            f.revokes.load(Ordering::SeqCst)
+        ),
+        network_before
+    );
+    assert!(matches!(client.restore().await, Err(AuthError::NoSession)));
+    assert!(matches!(
+        client
+            .begin_authorization(config().redirect_uris[0].clone(), false)
+            .await,
+        Err(AuthError::Busy)
+    ));
+    assert_eq!(
+        client.logout().await.unwrap_err(),
+        AuthError::RevocationFailed
+    );
+    assert!(client.cleanup_required().await);
+    f.fail_revoke.store(false, Ordering::SeqCst);
+    client.logout().await.unwrap();
+    assert!(!client.cleanup_required().await);
+    assert!(client.restore().await.unwrap().is_none());
+    f.omit_refresh.store(false, Ordering::SeqCst);
+    f.login(&client).await;
+    assert!(!client.cleanup_required().await);
 }

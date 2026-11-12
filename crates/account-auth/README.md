@@ -54,6 +54,10 @@ one owner, Tokio mutex, connection policy and process-lifetime file lock.
   does no network work. Refresh ID tokens are verified when supplied; OIDC
   allows omission on refresh, in which case the protected, previously verified
   identity is retained under the same grant.
+- `cleanup_required() -> bool` reads local owner state only. It is true for a
+  quarantined/unusable grant even when no identity/profile exists, so the host
+  can show an explicit cleanup action and fixed `account_cleanup_required` code.
+  It performs no network work and returns no credentials.
 - `logout() -> ()` first quarantines the grant, then revokes it, then removes
   it durably. Revocation/storage failures keep the sole grant owner for retry;
   quarantined grants cannot return access tokens or restore an active identity.
