@@ -6,7 +6,10 @@ use serde::Deserialize;
 use serde_json::{json, Value};
 use std::{
     io::{self, BufRead, Write},
-    sync::{mpsc, Arc, Mutex},
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        mpsc, Arc, Condvar, Mutex,
+    },
     time::{Duration, Instant},
 };
 use tauri::{Listener, Manager};
@@ -16,6 +19,55 @@ const MAX_REQUEST: usize = 2_100_000;
 const MAX_REPLY: usize = 8_000_000;
 const MAX_EXPRESSION: usize = 128_000;
 const MAX_ID: u64 = 9_007_199_254_740_991;
+struct PageState {
+    ready: bool,
+    starts: u64,
+    finishes: u64,
+    url: String,
+}
+static PAGE: Mutex<PageState> = Mutex::new(PageState {
+    ready: false,
+    starts: 0,
+    finishes: 0,
+    url: String::new(),
+});
+static PAGE_CHANGED: Condvar = Condvar::new();
+static READY_ACCEPTED: AtomicBool = AtomicBool::new(false);
+
+/// Wire from the existing main on_page_load callback under the module cfg.
+/// The native lifecycle is observed before any JS eval is permitted.
+pub fn page_load(label: &str, payload: &tauri::webview::PageLoadPayload<'_>) {
+    if label != "main" || std::env::var("NOTES_SYNC_E2E").as_deref() != Ok("1") {
+        return;
+    }
+    let Ok(mut state) = PAGE.lock() else { return };
+    match payload.event() {
+        tauri::webview::PageLoadEvent::Started => {
+            state.ready = false;
+            state.starts += 1;
+            READY_ACCEPTED.store(false, Ordering::SeqCst);
+        }
+        tauri::webview::PageLoadEvent::Finished => {
+            state.ready = true;
+            state.finishes += 1;
+        }
+    }
+    // Never record URL queries, fragments, document text or event arguments.
+    let url = payload.url();
+    state.url = format!(
+        "{}://{}{}",
+        url.scheme(),
+        url.host_str().unwrap_or(""),
+        url.path()
+    )
+    .chars()
+    .take(200)
+    .collect();
+    PAGE_CHANGED.notify_all();
+}
+fn page_snapshot(state: &PageState) -> Value {
+    json!({"finished":state.ready,"starts":state.starts,"finishes":state.finishes,"url":state.url})
+}
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "camelCase")]
@@ -217,6 +269,24 @@ fn serve(app: &tauri::AppHandle) -> io::Result<()> {
 fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
     if matches!(request.action, Action::Ready) {
         let deadline = Instant::now() + Duration::from_millis(request.timeout_ms);
+        {
+            let Ok(mut page) = PAGE.lock() else {
+                return error(json!(request.id), "PAGE_STATE_ERROR");
+            };
+            while !page.ready {
+                let remaining = deadline.saturating_duration_since(Instant::now());
+                if remaining.is_zero() {
+                    let mut result = error(json!(request.id), "TIMEOUT");
+                    result["error"]["phase"] = json!("nativePageFinished");
+                    result["error"]["diagnostic"] = page_snapshot(&page);
+                    return result;
+                }
+                let Ok((next, _)) = PAGE_CHANGED.wait_timeout(page, remaining) else {
+                    return error(json!(request.id), "PAGE_STATE_ERROR");
+                };
+                page = next;
+            }
+        }
         let mut probes = 0;
         let mut last = Value::Null;
         while Instant::now() < deadline {
@@ -254,7 +324,12 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
                 };
                 let mut result = dispatch_once(app, &ready, None);
                 if result.get("ok") == Some(&json!(true)) {
+                    READY_ACCEPTED.store(true, Ordering::SeqCst);
                     result["value"]["documentProbes"] = json!(probes);
+                    result["value"]["nativePage"] = PAGE
+                        .lock()
+                        .map(|p| page_snapshot(&p))
+                        .unwrap_or(Value::Null);
                     if let Some(window) = app.get_webview_window("main") {
                         result["value"]["nativeWindow"] = json!({
                             "visible":window.is_visible().ok(), "minimized":window.is_minimized().ok(),
@@ -274,6 +349,9 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
         result["error"]["phase"] = json!("documentProbe");
         result["error"]["diagnostic"] = json!({"documentProbes":probes,"lastDocument":last});
         return result;
+    }
+    if !matches!(request.action, Action::Shutdown) && !READY_ACCEPTED.load(Ordering::SeqCst) {
+        return error(json!(request.id), "NOT_READY");
     }
     dispatch_once(app, request, None)
 }
