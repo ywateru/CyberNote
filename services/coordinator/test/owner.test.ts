@@ -4,10 +4,12 @@ import {spawn,type ChildProcess} from 'node:child_process';
 import {once} from 'node:events';
 import {createServer} from 'node:net';
 import {redisFixture} from './redis-fixture.js';
+import {generateKeyPairSync} from 'node:crypto';
 async function port(){const s=createServer();await new Promise<void>(r=>s.listen(0,'127.0.0.1',r));const p=(s.address() as {port:number}).port;await new Promise<void>(r=>s.close(()=>r()));return p;}
 test('actual stateless Node processes coexist and SIGKILL/restart preserves Redis epoch/session',{timeout:20000},async t=>{
  const f=await redisFixture(t);if(!f)return;const children:ChildProcess[]=[];t.after(async()=>{for(const c of children)if(c.exitCode===null&&c.signalCode===null){c.kill('SIGTERM');await once(c,'exit');}});
  const launch=async()=>{const p=await port(),env:NodeJS.ProcessEnv={...process.env,NODE_ENV:'test',PORT:String(p),CYBERGRID_BIND:'127.0.0.1',REDIS_URL:f.url,CYBERGRID_REDIS_PREFIX:f.prefix,CYBERGRID_PUBLIC_ORIGIN:'https://grid.example',LOGTO_ISSUER:'https://fixture.invalid/oidc',LOGTO_BROWSER_CLIENT_ID:'FixtureSPA',LOGTO_MANAGEMENT_CLIENT_ID:'FixtureDirectory',LOGTO_MANAGEMENT_CLIENT_SECRET:'fixture-unused'};delete env.UPSTASH_REDIS_REST_URL;delete env.UPSTASH_REDIS_REST_TOKEN;
+ env.CYBERNOTE_ENROLLMENT_JWK=JSON.stringify(generateKeyPairSync('ec',{namedCurve:'secp384r1'}).privateKey.export({format:'jwk'}));
  env.CYBERNOTE_WORKSPACE_SEED=Buffer.alloc(32,17).toString('base64url');env.LOGTO_RESOURCE='https://grid.example/api';env.CYBERGRID_PRODUCTS=JSON.stringify({version:1,products:[{id:'FixtureNative',name:'Fixture',nativeClientIds:['FixtureNative'],browserClientIds:['FixtureSPA']}]});delete env.LOGTO_MANAGEMENT_CLIENT_ID;delete env.LOGTO_MANAGEMENT_CLIENT_SECRET;
  const c=spawn(process.execPath,['--import','tsx','src/main.ts'],{env,stdio:['ignore','pipe','pipe']});children.push(c);c.stderr!.resume();await new Promise<void>((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(Error('Node startup deadline')),8000);c.stdout!.on('data',chunk=>{out+=String(chunk);if(out.includes('Node service listening')){clearTimeout(timer);resolve();}});c.once('exit',()=>{clearTimeout(timer);reject(Error('Node exited before ready'));});});return {c,base:'http://127.0.0.1:'+p};};
  const a=await launch(),b=await launch();const epoch=async(base:string)=>(await fetch(base+'/api/v1/console/auth/config')).headers.get('x-cybergrid-epoch');assert.equal(await epoch(a.base),await epoch(b.base));

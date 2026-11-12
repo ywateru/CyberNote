@@ -1,6 +1,6 @@
 # account109 登录与双桌面验收用例
 
-2026-11-13。状态：**真实托管登录/注册和双桌面账户自动同步尚未执行**。当前 UI 由显式测试 gate 开放；浏览器 JS IPC fixture 只验证 React、命令包装、状态恢复、布局和生命周期，不能替代下述真实验收。无 Android 范围。
+2026-11-13。状态：**产品内真实托管登录/注册、双桌面及 Android 账户自动同步尚未执行**。独立浏览器测试已验证托管注册/PKCE→真实服务 profile/enrollment，但不能替代产品内下述验收。当前 UI 由显式测试 gate 开放；浏览器 JS IPC fixture 只验证 React、命令包装、状态恢复、布局和生命周期。
 
 ## 前置条件与隔离
 
@@ -16,10 +16,13 @@ ACCOUNT109_CASE_ROOT=$(mktemp -d /private/tmp/account109-real.XXXXXX)
 export ACCOUNT109_CASE_ROOT
 mkdir -p "$ACCOUNT109_CASE_ROOT/desktop-a" "$ACCOUNT109_CASE_ROOT/desktop-b" "$ACCOUNT109_CASE_ROOT/assets"
 python3 - <<'PY'
-import base64, hashlib, os
+import hashlib, os, struct, zlib
 from pathlib import Path
 p = Path(os.environ['ACCOUNT109_CASE_ROOT']) / 'assets'
-(p/'account109.png').write_bytes(base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg=='))
+def chunk(kind, data):
+    return struct.pack('>I',len(data))+kind+data+struct.pack('>I',zlib.crc32(kind+data)&0xffffffff)
+pixels=b''.join(b'\0'+bytes([32,128,224])*64 for _ in range(48))
+(p/'account109.png').write_bytes(b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',64,48,8,2,0,0,0))+chunk(b'IDAT',zlib.compress(pixels))+chunk(b'IEND',b''))
 (p/'account109.bin').write_bytes(bytes(range(256))*16)
 for f in sorted(p.iterdir()):
     print(f.name, len(f.read_bytes()), hashlib.sha256(f.read_bytes()).hexdigest())
@@ -44,7 +47,7 @@ PY
 
 ## 同账户双桌面自动同步
 
-AUTH-02/03 完成后执行；两端均使用账户 A。每项设定 60 秒观察窗口；超时记失败并保留待处理/错误状态，不无限等待，也不以“立即同步已发送”判通过。
+AUTH-02/03 完成后执行；两端均使用账户 A。首次发现/建连最多观察 120 秒，已连接后的数据收敛每项最多 60 秒；超时记失败并保留待处理/错误状态，不无限等待，也不以“立即同步已发送”判通过。
 
 | ID | 可执行操作 | 通过标准与最小证据 |
 | --- | --- | --- |
@@ -56,6 +59,17 @@ AUTH-02/03 完成后执行；两端均使用账户 A。每项设定 60 秒观察
 | SYNC-06 关闭 UI/重启 | 账户页关闭期间在另一端修改；再分别重启 A、B 的同一数据目录，重新执行双向小改动。 | 关页不停止账户同步；重启保留 workspace/device、正文和附件；再次自动连接及补齐，不手工配对。 |
 | SYNC-07 退出停止 | A 退出账户后，在 B 新建合成笔记；在 A 本地继续编辑。 | A 不再收发账户数据，本地保存正常；重新登录原账号后按 Runtime 权威状态恢复，未登录窗口无误报成功。 |
 
+## 少量 Android 三端用例
+
+Singer 为唯一 ADB 操作者；使用独立测试 applicationId 和空数据根，不覆盖原用户应用，不复制账号 grant 或手工配对邀请。先通过 `adb devices -l` 核对授权设备与系统版本；只向 app 私有数据根的合成导出读取结果，避免整机截图/日志混入个人内容。三端均登录合成账户 A。
+
+| ID | 可执行操作 | 通过标准与最小证据 |
+| --- | --- | --- |
+| ANDROID-01 登录与自动发现 | 手机上通过真实系统浏览器登录；仅确认账户同步，返回应用并关闭账户页。 | 桌面 A、B 与 Android 自动建立可信同 owner/workspace 关联；设备 actor 不同，无手工 token/邀请传递。 |
+| ANDROID-02 桌面→手机 | A 新建含中文格式正文、PNG 与 bin 的合成笔记，等待手机应用后导出。 | 手机与 A 的 document/plainText、附件原字节长度/SHA 一致；B 同样收到。 |
+| ANDROID-03 手机→双桌面 | 手机上新建/修改合成正文并附加合成文件，等待 A、B 应用。 | 双桌面与手机的完整 document/plainText 和附件原字节一致，不能只比较标题或设备 online。 |
+| ANDROID-04 暂停与前台恢复 | 手机暂停账户同步，A 修改；手机继续本地编辑后恢复同步，再执行一次离开/返回前台。 | 暂停不收发、仍能编辑；恢复后补齐且本地版本不丢；前台恢复自动重连，未宣称系统杀进程后常驻后台。 |
+
 ## 当前执行边界
 
-已执行的浏览器 fixture 及命令见 [UI 检查点](ui/README.md)。以上 AUTH/SYNC 真实用例目前全部为“未执行”，待 native/auth/server/build 接线满足前置条件后逐项填写实际结果。原生命令注册且冻结 DTO 兼容后，才可在本分支的隔离候选构建启用真实能力并执行本清单；正式交付必须具备上述真实链证据，不能用 fixture green 代替。
+已执行的浏览器 fixture 及命令见 [UI 检查点](ui/README.md)。以上产品内 AUTH/SYNC/ANDROID 用例目前全部为“未执行”，待 native/auth/server/build 接线满足前置条件后逐项填写实际结果。原生命令注册且冻结 DTO 兼容后，才可在隔离候选构建启用真实能力并执行本清单；正式交付必须具备上述真实链证据，不能用 fixture green 代替。

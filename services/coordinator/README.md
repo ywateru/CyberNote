@@ -20,12 +20,17 @@ deployment configuration are included. The CyberNote entrypoints require:
 - `CYBERNOTE_WORKSPACE_SEED`: persistent, canonical unpadded base64url encoding
   of 32–96 random bytes. Missing or invalid values fail startup. Keep it stable
   across deployments; rotation changes account workspace IDs.
+- `CYBERNOTE_ENROLLMENT_JWK`: dedicated stable private EC P-384 JWK for signing
+  five-minute device enrollment JWTs. It must match its public point and never
+  appear in client config or logs. The public JWKS contains no private fields.
+- `CYBERGRID_PUBLIC_ORIGIN`: required fixed HTTPS coordinator origin, also used
+  as the enrollment JWT issuer. Request forwarding headers never choose it.
 - `CYBERGRID_REDIS_PREFIX`: explicit isolated namespace, with upstream format
   and length restrictions.
 - `CYBERGRID_REDIS_TRANSPORT=tcp` and `REDIS_URL=rediss://…` for TLS Redis.
   Upstream transport selection and certificate validation are retained.
 
-`CYBERGRID_PUBLIC_ORIGIN` can pin the public HTTPS origin. Upstream callback,
+The public origin is pinned for the account service. Upstream callback,
 endpoint-provider, limits, registration-mode and browser-origin options remain
 available. Static policy mode does not need Logto Management credentials.
 
@@ -58,6 +63,23 @@ audience, ES384 signature, user subject, issued-at/expiry, `client_id`, optional
 `azp`/grant/type constraints, whole-word `connect`, and static Native membership.
 Successful JSON contains exactly `schemaVersion: 1`, `subject`, `issuer`,
 `productId`, and `workspaceId`. Responses are not cacheable.
+
+`POST /api/v1/account/enrollment` accepts the same verified Native bearer token
+and only `{deviceId,noisePublicKey}`. IDs are canonical UUIDv4; public keys are
+canonical unpadded base64url of 32 bytes. It returns
+`{schemaVersion:1,token,expiresAt}`. The ES384 JWT binds verified account issuer,
+subject, canonical product/workspace, persistent device and Noise public key,
+`purpose:pair`, fixed coordinator issuer, audience `cybernote-enrollment-v1`,
+issued-at, five-minute expiry and unique jti. It does not grant arbitrary access
+to another account or prove key possession; the native bootstrap validates the
+proof and the existing Noise handshake proves private-key possession.
+`GET /api/v1/account/jwks` publishes only the matching signing public key. Clients
+must pin this coordinator origin and reject wrong ownership, purpose or expiry.
+Signing uses the same Redis store's shared atomic quotas: 30 enrollment POSTs
+per source IP/minute before identity verification, then 60 per verified
+issuer/subject/product/minute across source addresses. Keys are domain-separated
+hashes. Excess requests return 429 and Retry-After 60; public JWKS GET does not
+consume signing quota. These limits are separate from device auth/exchange.
 
 Workspace IDs are UUIDv8 values derived from the first 128 bits of HMAC-SHA256
 over the JSON array `['cybernote.account.workspace', 1, issuer, subject,

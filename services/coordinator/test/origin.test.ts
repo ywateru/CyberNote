@@ -58,16 +58,18 @@ test('real ES384 verifier retains fixed resource; a request-host audience cannot
  assert.equal((await identity.verify(await token(DEFAULT_RESOURCE))).clientId,A);await assert.rejects(()=>token('https://request.example/api').then(value=>identity.verify(value)),(e:any)=>e.code==='INVALID_IDENTITY');
 });
 
-test('actual Node entrypoint starts without PUBLIC_ORIGIN and serves native HTTP plus HTTPS-forwarded config',{timeout:10000},async t=>{
+test('account Node entrypoint pins PUBLIC_ORIGIN and ignores request-forwarded origins',{timeout:10000},async t=>{
  const {spawn}=await import('node:child_process'),{mkdtemp,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path'),{createServer}=await import('node:net');
  const redis=await (await import('./redis-fixture.js')).redisFixture(t);if(!redis)return;
  const dir=await mkdtemp(join(tmpdir(),'cybergrid-optional-origin-')),probe=createServer();await new Promise<void>(r=>probe.listen(0,'127.0.0.1',r));const port=(probe.address() as {port:number}).port;await new Promise<void>(r=>probe.close(()=>r()));
  const childEnv:NodeJS.ProcessEnv={...process.env,...env,NODE_ENV:'test',CYBERGRID_BIND:'127.0.0.1',PORT:String(port),REDIS_URL:redis.url,CYBERGRID_REDIS_PREFIX:redis.prefix,LOGTO_MANAGEMENT_CLIENT_ID:'FixtureDirectory',LOGTO_MANAGEMENT_CLIENT_SECRET:'fixture-not-used'};delete childEnv.CYBERGRID_PUBLIC_ORIGIN;delete childEnv.LOGTO_RESOURCE;delete childEnv.UPSTASH_REDIS_REST_URL;delete childEnv.UPSTASH_REDIS_REST_TOKEN;
  childEnv.CYBERNOTE_WORKSPACE_SEED=Buffer.alloc(32,17).toString('base64url');childEnv.LOGTO_RESOURCE=DEFAULT_RESOURCE;childEnv.CYBERGRID_PRODUCTS=JSON.stringify({version:1,products:[{id:'FixtureNative',name:'Fixture',nativeClientIds:['FixtureNative'],browserClientIds:[SPA]}]});delete childEnv.LOGTO_MANAGEMENT_CLIENT_ID;delete childEnv.LOGTO_MANAGEMENT_CLIENT_SECRET;
+ childEnv.CYBERGRID_PUBLIC_ORIGIN='https://grid.example';
+ childEnv.CYBERNOTE_ENROLLMENT_JWK=JSON.stringify((await import('node:crypto')).generateKeyPairSync('ec',{namedCurve:'secp384r1'}).privateKey.export({format:'jwk'}));
  const child=spawn(process.execPath,['--import','tsx','src/main.ts'],{env:childEnv,stdio:['ignore','pipe','pipe']});
  t.after(async()=>{if(child.exitCode===null&&child.signalCode===null){child.kill('SIGTERM');await once(child,'exit');}await rm(dir,{recursive:true,force:true});});
  child.stderr.resume();await new Promise<void>((r,reject)=>{let out='';child.stdout.on('data',c=>{out+=String(c);if(out.includes('Node service listening'))r();});child.once('exit',()=>reject(Error('entrypoint exited before ready')));});
  const base='http://127.0.0.1:'+port;assert.equal(await(await fetch(base+'/healthz')).text(),'ok\n');
- const local=await(await fetch(base+'/api/v1/console/auth/config')).json() as any;assert.equal(local.resource,DEFAULT_RESOURCE);assert.equal(local.redirectUri,base+DEFAULT_CALLBACK);
- const external=await(await fetch(base+'/api/v1/console/auth/config',{headers:{'x-forwarded-host':'external.example','x-forwarded-proto':'https'}})).json() as any;assert.equal(external.resource,DEFAULT_RESOURCE);assert.equal(external.redirectUri,'https://external.example'+DEFAULT_CALLBACK);
+ const local=await(await fetch(base+'/api/v1/console/auth/config')).json() as any;assert.equal(local.resource,DEFAULT_RESOURCE);assert.equal(local.redirectUri,'https://grid.example'+DEFAULT_CALLBACK);
+ const external=await(await fetch(base+'/api/v1/console/auth/config',{headers:{'x-forwarded-host':'external.example','x-forwarded-proto':'https'}})).json() as any;assert.equal(external.resource,DEFAULT_RESOURCE);assert.equal(external.redirectUri,'https://grid.example'+DEFAULT_CALLBACK);
 });

@@ -6,6 +6,7 @@ import {createAccountCoordinator} from '../src/account-config.js';
 import {coordinatorAuthConfiguration} from '../src/deployment-config.js';
 import {LogtoIdentity} from '../src/identity.js';
 import {ProductPolicy} from '../src/products.js';
+import {generateKeyPairSync} from 'node:crypto';
 
 const issuer='https://fixture.example/oidc',resource='https://cybernote.example/api';
 const rawProducts=JSON.stringify({version:1,products:[
@@ -83,8 +84,10 @@ test('explicit seed, static policy, resource and isolated namespace are mandator
  assert.deepEqual(workspaceSeed(seed.toString('base64url')),seed);
  const env={CYBERNOTE_WORKSPACE_SEED:seed.toString('base64url'),CYBERGRID_PRODUCTS:rawProducts,
   LOGTO_RESOURCE:resource,LOGTO_ISSUER:issuer,LOGTO_BROWSER_CLIENT_ID:'ConsoleA',
+  CYBERGRID_PUBLIC_ORIGIN:'https://coordinator.example',
+  CYBERNOTE_ENROLLMENT_JWK:JSON.stringify(generateKeyPairSync('ec',{namedCurve:'secp384r1'}).privateKey.export({format:'jwk'})),
   CYBERGRID_REDIS_PREFIX:'cybernote-fixture',CYBERGRID_REDIS_TRANSPORT:'tcp',REDIS_URL:'rediss://fixture.invalid:6379'};
- for(const name of ['CYBERNOTE_WORKSPACE_SEED','CYBERGRID_PRODUCTS','LOGTO_RESOURCE','CYBERGRID_REDIS_PREFIX'])assert.throws(()=>createAccountCoordinator({...env,[name]:undefined}));
+ for(const name of ['CYBERNOTE_WORKSPACE_SEED','CYBERGRID_PRODUCTS','LOGTO_RESOURCE','CYBERGRID_REDIS_PREFIX','CYBERGRID_PUBLIC_ORIGIN','CYBERNOTE_ENROLLMENT_JWK'])assert.throws(()=>createAccountCoordinator({...env,[name]:undefined}));
  assert.throws(()=>createAccountCoordinator({...env,LOGTO_BROWSER_CLIENT_ID:'OtherConsole'}));
  assert.throws(()=>createAccountCoordinator({...env,LOGTO_ISSUER:'http://fixture.example/oidc'}));
  const coordinator=createAccountCoordinator(env);coordinator.close();

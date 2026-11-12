@@ -1,7 +1,7 @@
 ---
 id: app-account109-native
 scope: Native Logto login and CyberGrid authenticated automatic sync
-status: pending
+status: in-progress
 depends-on: []
 ---
 
@@ -14,6 +14,8 @@ depends-on: []
 `docs/architecture/account-sync.md`、`docs/ui/account-sync.md`、`docs/plan/analysis/account109.md`；SDK与官方Logto样例冻结f2a39615。先提交原生调查报告冻结明确接线再进入实现。
 
 ## research checkpoint
+
+2026-11-13 继续执行完整 goal：主代理已创建原生与认证独立实现工作树，恢复实现。认证采用统一 Rust OIDC owner；平台回跳与自动同步由原生模块管理，设备 enrollment 以架构新增短期签名 JWT 契约为准。下段为上一轮整理提交时点。
 
 2026-11-13：有界静态调查已完成，报告归档至[原生SDK与认证接入调查](../analysis/account109-native-research.md)，与原始`/private/tmp/account109-native-research.md`字节一致，SHA256 `7b1bd34d27221ced63ddf078f41f2fad90aead98dd78e074defaa86f091d11aa`。当前按用户要求暂停实现扩展；本任务仍为pending，调查不代表原生登录或自动同步已实现或通过运行验证。
 

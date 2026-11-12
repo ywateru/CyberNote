@@ -1,6 +1,7 @@
 import {createAccountProfile,workspaceSeed} from './account-profile.js';
 import {createConfiguredCoordinator} from './config.js';
-import {coordinatorAuthConfiguration} from './deployment-config.js';
+import {coordinatorAuthConfiguration,publicOrigin} from './deployment-config.js';
+import {createEnrollment,enrollmentSigner} from './account-enrollment.js';
 import {LogtoIdentity} from './identity.js';
 import {ProductPolicy} from './products.js';
 import type {Handler} from './http.js';
@@ -14,9 +15,18 @@ export function createAccountCoordinator(env:NodeJS.ProcessEnv=process.env) {
  const products=new ProductPolicy(env.CYBERGRID_PRODUCTS);
  const auth=coordinatorAuthConfiguration(env);
  if(!products.browser(auth.clientId))throw Error('Console client must belong to static product policy');
- const profile=createAccountProfile({identity:new LogtoIdentity(auth),products,issuer:auth.issuer,seed});
+ const origin=publicOrigin(env.CYBERGRID_PUBLIC_ORIGIN);
+ if(!origin)throw Error('Explicit CYBERGRID_PUBLIC_ORIGIN required');
+ const signer=enrollmentSigner(env.CYBERNOTE_ENROLLMENT_JWK);
+ const options={identity:new LogtoIdentity(auth),products,issuer:auth.issuer,seed};
  const coordinator=createConfiguredCoordinator(env);
- const handle:Handler=(request,ip)=>new URL(request.url).pathname==='/api/v1/account/profile'
-  ?profile(request,ip):coordinator.handle(request,ip);
+ const profile=createAccountProfile(options),enrollment=createEnrollment({...options,origin,signer,
+  rate:(key,limit)=>coordinator.store.rate(key,Date.now(),limit)});
+ const handle:Handler=(request,ip)=>{
+  const path=new URL(request.url).pathname;
+  if(path==='/api/v1/account/profile')return profile(request,ip);
+  if(path==='/api/v1/account/enrollment'||path==='/api/v1/account/jwks')return enrollment(request,ip);
+  return coordinator.handle(request,ip);
+ };
  return {...coordinator,handle};
 }
