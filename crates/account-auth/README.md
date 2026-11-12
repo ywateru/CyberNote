@@ -152,3 +152,15 @@ author did not perform any user/token grant, browser login, refresh grant or
 real revocation. The main agent's separately reported real consent result is
 recorded above and is not part of the fixture pass count.
 Platform listener/deep-link handling and real hosted login remain integration work.
+
+On 2026-11-13 the main agent separately reported that its independent live
+harness obtained a consent grant, refreshed a resource access token, and observed
+the same verified profile owner/workspace. Refresh-token rotation occurred;
+revocation of the refresh token returned HTTP 200, and a subsequent refresh with
+that revoked token returned HTTP 400. These results establish live provider and
+service behavior for that harness, **not execution of this product crate**.
+Because of a local fake-DNS fault, that test process alone overrode public DNS
+resolution while retaining canonical hostnames and TLS certificate verification.
+It did not change global DNS. The product has no IP pin, DNS override, TLS bypass,
+or fallback to the harness addresses; product runtime/platform integration remains
+to be verified under its actual network conditions.
