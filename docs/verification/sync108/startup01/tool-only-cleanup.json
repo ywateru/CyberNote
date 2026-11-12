@@ -1,0 +1,74 @@
+{
+  "boundary": "tool-only Python child processes and injected cleanup error; no native App assertion",
+  "passed": true,
+  "checks": [
+    {
+      "case": "normal owned SIGTERM and idempotence",
+      "passed": true,
+      "cleanup": {
+        "preExitCode": null,
+        "unexpectedExit": false,
+        "sentSignals": [
+          "SIGTERM"
+        ],
+        "forcedKill": false,
+        "termTimedOut": false,
+        "errors": [],
+        "finalReturnCode": -15,
+        "passed": true
+      }
+    },
+    {
+      "case": "SIGTERM ignored then actual SIGKILL",
+      "passed": true,
+      "cleanup": {
+        "preExitCode": null,
+        "unexpectedExit": false,
+        "sentSignals": [
+          "SIGTERM",
+          "SIGKILL"
+        ],
+        "forcedKill": true,
+        "termTimedOut": true,
+        "errors": [],
+        "finalReturnCode": -9,
+        "passed": false
+      }
+    },
+    {
+      "case": "unexpected pre-cleanup exit",
+      "passed": true,
+      "cleanup": {
+        "preExitCode": 7,
+        "unexpectedExit": true,
+        "sentSignals": [],
+        "forcedKill": false,
+        "termTimedOut": false,
+        "errors": [],
+        "finalReturnCode": 7,
+        "passed": false
+      }
+    },
+    {
+      "case": "injected cleanup errors",
+      "passed": true,
+      "cleanup": {
+        "preExitCode": null,
+        "unexpectedExit": false,
+        "sentSignals": [],
+        "forcedKill": false,
+        "termTimedOut": false,
+        "errors": [
+          "OSError",
+          "OSError"
+        ],
+        "finalReturnCode": null,
+        "passed": false
+      }
+    },
+    {
+      "case": "final result includes cleanup and rejects forced kill, pre-exit, cache errors",
+      "passed": true
+    }
+  ]
+}

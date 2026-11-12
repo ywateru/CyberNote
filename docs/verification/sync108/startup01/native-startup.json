@@ -1,0 +1,167 @@
+{
+  "boundary": "current native macOS processes; startup only, no UI/sync acceptance",
+  "binary": "/private/tmp/cybernote-sync108-target/debug/notes-clone",
+  "binarySha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4",
+  "binaryKind": "sync-e2e feature binary, not historical production-source startup App",
+  "runtimeDriverEnabled": false,
+  "sourceBase": "a99441e1ac264a62315f79c847fd8a5d54ac3945",
+  "startupSourcesSha256": {
+    "src-tauri/src/lib.rs": "94cf4b59212a436a990a157b5660d26a3109701b9a50a94740ef1f75cb120c88",
+    "src-tauri/src/startup.rs": "4a2e7fd7abe340dd2906df75e1e966819de268605cc71ca0dd4cd2529f5b35f8",
+    "src-tauri/src/startup_tests.rs": "ae5021ad02c9445f660ac6ef6e72c423bbb9f8ccd061d1095cca3f089e3004ba"
+  },
+  "checks": [
+    {
+      "case": [
+        "--data-dir"
+      ],
+      "exit": 2,
+      "error": "CyberNote startup rejected: --data-dir requires an absolute path",
+      "passed": true
+    },
+    {
+      "case": [
+        "--data-dir",
+        ""
+      ],
+      "exit": 2,
+      "error": "CyberNote startup rejected: --data-dir requires a nonempty absolute path",
+      "passed": true
+    },
+    {
+      "case": [
+        "--data-dir",
+        "relative"
+      ],
+      "exit": 2,
+      "error": "CyberNote startup rejected: --data-dir requires a nonempty absolute path",
+      "passed": true
+    },
+    {
+      "case": [
+        "--unknown"
+      ],
+      "exit": 2,
+      "error": "CyberNote startup rejected: unknown argument; usage: CyberNote [--data-dir /absolute/path]",
+      "passed": true
+    },
+    {
+      "case": [
+        "--data-dir",
+        "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/must-not-exist",
+        "--data-dir",
+        "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/other"
+      ],
+      "exit": 2,
+      "error": "CyberNote startup rejected: --data-dir may only be specified once",
+      "passed": true
+    },
+    {
+      "case": [
+        "--data-dir",
+        "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/must-not-exist",
+        "--unknown"
+      ],
+      "exit": 2,
+      "error": "CyberNote startup rejected: unknown argument; usage: CyberNote [--data-dir /absolute/path]",
+      "passed": true
+    },
+    {
+      "case": [
+        "--data-dir",
+        "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/blocked"
+      ],
+      "exit": 1,
+      "error": "CyberNote startup rejected: File exists (os error 17)",
+      "passed": true
+    },
+    {
+      "case": [
+        "--data-dir",
+        "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/desktop-a"
+      ],
+      "exit": 1,
+      "error": "CyberNote startup rejected: cannot lock data directory /private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/desktop-a (already in use or unavailable): Resource temporarily unavailable (os error 35)",
+      "passed": true
+    },
+    {
+      "case": [
+        "--data-dir",
+        "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/alias-a"
+      ],
+      "exit": 1,
+      "error": "CyberNote startup rejected: cannot lock data directory /private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/desktop-a (already in use or unavailable): Resource temporarily unavailable (os error 35)",
+      "passed": true
+    },
+    {
+      "case": "two native directories, isolated caches, same-dir and alias refusal, restart",
+      "passed": true
+    }
+  ],
+  "processes": [
+    {
+      "pid": 9281,
+      "root": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/desktop-a",
+      "mediaCache": "/Users/water/Library/Caches/com.local.notesclone/workspaces/b04117c0729dab7931268774c50c7e360c7486e08a76280f8d592ca4acb64f49/attachment-thumbnails-v1",
+      "exit": -15,
+      "openedSelectedSqlite": true,
+      "managedHttpListener": true,
+      "cleanup": {
+        "preExitCode": null,
+        "unexpectedExit": false,
+        "sentSignals": [
+          "SIGTERM"
+        ],
+        "forcedKill": false,
+        "termTimedOut": false,
+        "errors": [],
+        "finalReturnCode": -15,
+        "passed": true
+      }
+    },
+    {
+      "pid": 9289,
+      "root": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/desktop-b",
+      "mediaCache": "/Users/water/Library/Caches/com.local.notesclone/workspaces/13d6e9e92482e3d7d942cdda0bf805914caa91814bc453397250bc56b0df4121/attachment-thumbnails-v1",
+      "exit": -15,
+      "openedSelectedSqlite": true,
+      "managedHttpListener": true,
+      "cleanup": {
+        "preExitCode": null,
+        "unexpectedExit": false,
+        "sentSignals": [
+          "SIGTERM"
+        ],
+        "forcedKill": false,
+        "termTimedOut": false,
+        "errors": [],
+        "finalReturnCode": -15,
+        "passed": true
+      }
+    },
+    {
+      "pid": 9299,
+      "root": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-native-xs5dvc91/desktop-a",
+      "mediaCache": "/Users/water/Library/Caches/com.local.notesclone/workspaces/b04117c0729dab7931268774c50c7e360c7486e08a76280f8d592ca4acb64f49/attachment-thumbnails-v1",
+      "exit": -15,
+      "openedSelectedSqlite": true,
+      "managedHttpListener": true,
+      "cleanup": {
+        "preExitCode": null,
+        "unexpectedExit": false,
+        "sentSignals": [
+          "SIGTERM"
+        ],
+        "forcedKill": false,
+        "termTimedOut": false,
+        "errors": [],
+        "finalReturnCode": -15,
+        "passed": true
+      }
+    }
+  ],
+  "checksComplete": true,
+  "cleanupErrors": [],
+  "ownedCachesRemoved": true,
+  "passed": true
+}
