@@ -10,6 +10,8 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { deflateSync } from 'node:zlib';
 import { NativeApp, until, delay } from './sync108-native-driver.mjs';
+import { verifyBuildRecord } from './sync108-native.mjs';
+import { productFiles, sourceIdentity } from '../build-info.mjs';
 import {
   SERIAL, PACKAGE, connectAndroid, launchAndroid, ownPid, backgroundAndroid,
   reclaimBackgroundAndroid, createOwnedReverse, removeOwnedReverse, removeOwnedForward,
@@ -29,15 +31,16 @@ const safeFailure = (error, diagnostics) => ({
 async function fileHash(file) {
   const h = createHash('sha256'); for await (const chunk of createReadStream(file)) h.update(chunk); return h.digest('hex');
 }
-// Same build provenance algorithm as the committed two-native runner.
+// Same canonical product enumeration as the committed two-native runner.
 async function sourceFingerprint(root) {
-  const files = execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard', '--',
-    'src', 'src-tauri/src', 'src-tauri/Cargo.toml', 'src-tauri/Cargo.lock', 'src-tauri/tauri.conf.json',
-    'src-tauri/capabilities', 'plugins', 'scripts/verification/sync108-native*', 'scripts/build-info.mjs',
-    'package.json', 'pnpm-lock.yaml', 'vite.config.ts', 'index.html'], { cwd: root }).toString().split('\0').filter(Boolean);
   const manifest = {};
-  for (const name of [...new Set(files)].sort()) manifest[name] = await fileHash(resolve(root, name));
-  return { sha256: hash(JSON.stringify(manifest)), files: manifest };
+  for (const name of productFiles(root)) manifest[name] = await fileHash(resolve(root, name));
+  return { sha256: sourceIdentity(root).sourceFingerprint, algorithm: 'build-info.sourceIdentity/productFiles', files: manifest };
+}
+async function toolFingerprint() {
+  return Object.fromEntries(await Promise.all(['sync108-three-peers.mjs', 'sync108-native.mjs', 'sync108-native-driver.mjs',
+    'sync108-android.mjs', 'sync108-android-lifecycle.mjs', '../build-info.mjs', '../versions.mjs'].map(async name =>
+    [name, await fileHash(fileURLToPath(new URL(name, import.meta.url)))])));
 }
 async function distFingerprint(root) {
   const base = resolve(root, 'dist'), files = {};
@@ -137,9 +140,8 @@ export async function run(argv = process.argv.slice(2)) {
   assert(output !== root && !output.startsWith(root + sep), 'Evidence must be outside frozen source');
   const record = JSON.parse(await readFile(opts['build-record'], 'utf8'));
   const before = await sourceFingerprint(root), distBefore = await distFingerprint(root), inputSHA = await fileHash(opts.binary);
-  assert.equal(record.binary?.sha256, inputSHA, 'Frozen binary SHA must match');
-  assert.equal(record.sourceSha256, before.sha256, 'Frozen source SHA must match');
-  assert.equal(record.staticFrontendSha256, distBefore.sha256, 'Frozen static frontend SHA must match');
+  const tools = await toolFingerprint();
+  const buildValidation = verifyBuildRecord(record, { binary: { sha256: inputSHA }, sourceBefore: before, staticFrontendBefore: distBefore, tools });
   await mkdir(output); // Never reuse a previous test directory.
   const binary = resolve(output, 'three-peer-native-app'); await copyFile(opts.binary, binary); await chmod(binary, 0o700);
   assert.equal(await fileHash(binary), inputSHA, 'Owned binary snapshot matches frozen input');
@@ -147,6 +149,7 @@ export async function run(argv = process.argv.slice(2)) {
     schema: 1, kind: 'two-native-desktop-plus-physical-android', status: 'running', startedAt: new Date().toISOString(),
     binary: { path: binary, sha256: inputSHA }, sourceBefore: before, staticFrontendBefore: distBefore,
     buildRecordSHA256: await fileHash(opts['build-record']), sourceHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
+    buildValidation, tools,
     driverCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: resolve(fileURLToPath(new URL('../..', import.meta.url))), encoding: 'utf8' }).trim(),
     android: { serial: SERIAL, package: PACKAGE }, topology: {}, cases: [], observations: [], processes: [], cleanup: [],
     boundaries: ['Desktop static debug frontend and gated sync-e2e NativeApp stdio transport; actual App/Session/SQLite/network.',
@@ -329,6 +332,8 @@ export async function run(argv = process.argv.slice(2)) {
     assert.equal(sourceAfter.sha256, before.sha256, 'Frozen source unchanged during run');
     assert.equal(distAfter.sha256, distBefore.sha256, 'Static frontend unchanged during run');
     assert.equal(await fileHash(binary), inputSHA);
+    assert.equal(await fileHash(opts.binary), inputSHA, 'Input binary remains frozen');
+    assert.deepEqual(await toolFingerprint(), tools, 'Actual imported tools remain frozen');
     report.sourceAfterSHA256 = sourceAfter.sha256; report.staticFrontendAfterSHA256 = distAfter.sha256;
     report.status = 'pass';
   } catch (error) {
@@ -341,7 +346,11 @@ export async function run(argv = process.argv.slice(2)) {
       catch { report.cleanup.push({ name: 'active-CDP', status: 'fail' }); report.status = 'fail'; }
     }
     for (const app of apps.reverse()) {
-      try { await app.close(); report.cleanup.push({ name: `${app.name}:natural-close`, status: 'pass', lifecycle: app.lifecycle }); }
+      try {
+        await app.close();
+        assert(!app.lifecycle.failureCode && app.lifecycle.naturalExit, 'No late protocol fatal may count as natural close');
+        report.cleanup.push({ name: `${app.name}:natural-close`, status: 'pass', lifecycle: app.lifecycle });
+      }
       catch { report.cleanup.push({ name: `${app.name}:natural-close`, status: 'fail', lifecycle: app.lifecycle }); report.status = 'fail'; }
     }
     if (reverse) {
