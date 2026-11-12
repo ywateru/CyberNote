@@ -51,3 +51,15 @@ pnpm debug check-production --production dist --out docs/verification/account109
 - 本地证据：`matrix-desktop-02/`、`matrix-mobile-02/`、`preferences-resume-01/`、`sync-resume-01/` 和 `typecheck-resume-01.log`、`build-resume-01.log`。`matrix-desktop-01/` 保留了刻意挂起 IPC 时错误等待全局 idle 的驱动失败；矩阵已改为等待明确 DOM 状态后释放响应。
 
 待接线缺口：已提交并注册的 native `account_command`、Pauli 认证、server enrollment 和可追溯候选 App 就绪后，才切本分支真实能力并按短用例执行隔离双桌面验收。当前没有使用外部账户、操作 Android、启动用户已有资料库或将 fixture 结果描述为自动同步成功。
+
+## Enrollment 独立复核（2026-11-13）
+
+只读审查主工作区尚未提交的 `account-enrollment.ts`、`account-profile.ts`、`account-config.ts` 与账户定向测试。原 P2「签名入口未接共享限流」已接受修复：POST 在验 JWT 前扣 source 30/min，确认身份后扣 issuer/subject/canonical product 的 owner 60/min；不同前缀及 SHA-256 key 经同一 `coordinator.store.rate` 原子 Redis 实现；超限返回 429 / Retry-After 60，公钥 GET 不扣额度。未发现新增 P1/P2；授权、严格输入和账户/device/Noise 签名绑定维持有限接受。Native 固定 origin 取公钥、完整 proof 校验及 Noise 私钥持有证明仍待真实验收。
+
+独立复跑 **8/8 通过、0 skip**，包含两个 handler 实例共享真实本机 Redis 的 source/owner 配额及 owner 隔离；未重跑全套。首轮因 PATH 缺少 Redis 失败，指定本机已有二进制后通过，分别保留 ignored `enrollment-review-rate-02.log` / `enrollment-review-rate-03.log`。在主工作区 `services/coordinator` 执行：
+
+```sh
+REQUIRE_REDIS=1 REDIS_TEST_SERVER=/private/tmp/cybergrid-redis-build/redis-7.4.3/src/redis-server node --import tsx --test test/account-enrollment.test.ts test/account-profile.test.ts
+```
+
+这些服务测试使用本机临时 Redis、临时签名密钥和合成 JWT，不是浏览器 JS IPC fixture，也没有访问实际部署或外部账户。主代理报告的 live PKCE/profile/enrollment 成功及负向 401/400 未由本作者执行，不替代双桌面自动同步验收。复核时主线尚未注册 `account_command`，继续保留生产 UI gate。
