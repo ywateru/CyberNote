@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-12T20:42:15.800Z",
+  "scope": "user0-Chrome-direct-navigation-public-metadata-only",
+  "method": "direct-Page.navigate",
+  "responseBodyRead": false,
+  "requestHeadersRead": false,
+  "appGrantAccessed": false,
+  "dnsTlsOverrides": false,
+  "otherPagesEnumerated": false,
+  "results": [
+    {
+      "endpoint": "health",
+      "limitMs": 30000,
+      "elapsedMs": 30005,
+      "stopLoadingSent": true,
+      "result": "diagnostic_deadline_no_http",
+      "navigationCommandFailed": true
+    },
+    {
+      "endpoint": "oidc-discovery-control",
+      "limitMs": 20000,
+      "elapsedMs": 606,
+      "stopLoadingSent": true,
+      "httpStatus": 200
+    }
+  ],
+  "ownedMapping": {
+    "serial": "98895a3147304c3132",
+    "pid": 12765,
+    "local": "tcp:60353",
+    "remote": "localabstract:chrome_devtools_remote"
+  },
+  "user0BrowserEndpointPidVerified": true,
+  "user0ChromeForeground": true,
+  "cleanup": {
+    "onlyCreatedTargetClosed": true,
+    "exactForwardAbsent": true,
+    "leaseReleased": true,
+    "ownedSandboxForeground": true,
+    "initialImmediateForegroundCheck": false
+  }
+}

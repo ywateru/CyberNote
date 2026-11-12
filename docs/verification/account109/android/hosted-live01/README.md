@@ -101,3 +101,39 @@ the browser lease, and the second restored the isolated account test app to u0
 foreground by normal start. There was no new SignIn, token copy or sync enablement.
 The initial query-string import reload failed locally before executing probe02;
 a separate module filename loaded the exact archived revised source instead.
+
+## Bounded direct-navigation control
+
+The user requested one different-method follow-up to eliminate opaque-origin
+fetch/CORS uncertainty. `public-navigation03.json` records this actual phone run;
+`public-navigation-source.json` freezes its exact source hash. Only a newly owned
+user0 Chrome target was used. Ownership was verified through the browser endpoint
+OS PID before creating/attaching that target. Existing pages were not enumerated.
+
+The first direct `Page.navigate` targeted canonical `/healthz`. No Document HTTP
+status or allowlisted `net::ERR_*` arrived within 30,005 ms, and the tool sent
+`Page.stopLoading`. `navigationCommandFailed:true` records the tool's own
+25-second CDP RPC timeout; it is not a browser transport error code. The result is
+`diagnostic_deadline_no_http`, not a fabricated HTTP or net error.
+
+Because health had no HTTP status, the permitted control directly navigated to
+the pinned issuer's OIDC discovery document. Network.responseReceived for that
+Document reported **HTTP 200** in about **606 ms**. Loading was stopped. No fetch
+execution, response-body, header or cookie inspection was used in this method.
+No App credential, DNS override, TLS-ignore option or network-setting change was
+involved, and no login/sync operation was initiated.
+
+The contrast demonstrates that this phone/user0 Chrome could obtain an HTTPS
+Document response from the auth origin while canonical Vercel health did not
+produce an HTTP result within the native enrollment client's relevant time
+window. It removes the earlier fetch/CORS ambiguity and supports investigating
+the canonical-origin path or a transient request stall. It still does not identify
+DNS versus TCP/TLS versus server wait, establish a browser net error, prove which
+stage failed in the original native request, or prove equivalence of Chrome and
+Rust network stacks. Host 200 evidence is separate user-reported context.
+
+The tool closed only its created target and exact owned forward, and released
+its lease. The immediate check after normal sandbox start was initially false;
+a later read-only foreground check confirmed the test app had resumed as u0.
+Both observations are retained, and final owned sandbox foreground is true. No
+additional network request or login retry was performed during this cleanup.
