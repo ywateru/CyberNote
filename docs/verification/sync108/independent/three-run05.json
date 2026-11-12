@@ -1,0 +1,184 @@
+{
+  "observedAt": "2026-11-12T11:56:39.275485+00:00",
+  "scope": "incremental read-only audit on independently reviewed run04; no devices/process control/test-suite/build execution; SQL only against memory-reconstructed DB+WAL",
+  "acceptedResult": {
+    "run": "three-run05",
+    "status": "pass",
+    "cases": 4,
+    "resultSHA256": "69db7999d25fc137b4c8c8c465d343ab5c1885af11ba8b83074493e7ac2ca152",
+    "archiveByteIdentical": true,
+    "archiveCommit": "7000cdde",
+    "driverCommit": "d18e90b1b52550eb80180eb0caa55af83ea420e7",
+    "actualTools": {
+      "sync108-three-peers.mjs": "aa50287324579553f98d5d726893901a47d2c23670ed1d8273053f5cc717fd51",
+      "sync108-native.mjs": "1ef7b60f9ecf1351d01d76493f91c6445bf36c30f7cd058179feebdd75769751",
+      "sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+      "sync108-android.mjs": "816e76779dc242d8e4d76af8937278185cbf2c8642a205eace1e84ac87e021bc",
+      "sync108-android-lifecycle.mjs": "6d68900e4d17126c14a90e3010588e0ba2bf0a065199f97f5077a3cf4fb6e786",
+      "../build-info.mjs": "7e1f0b70b67e0e79375291b78def9fcc9782b540d5ab227a6e70d811afdb4362",
+      "../versions.mjs": "acc8814f817ebfc39367f852280a6debe7a90f4d0b2d11a94ea03effa6082d0c"
+    },
+    "allActualToolHashesMatchImmutableBlobs": true,
+    "onlyToolChangeFromRun04": "sync108-native-driver.mjs",
+    "helperMatches50a2AndDesktopRun07": true,
+    "sameFourCaseImplementationsAsRun04": true,
+    "sameCanonicalProductDistBinaryAndBuildRecord": true,
+    "sameRun02IdentitiesRootsEndpoints": true
+  },
+  "databaseSupplement": {
+    "boundary": "Read retained run02 stores after run05; no immutable end-of-run DB snapshot is asserted. Complete run05 body and original-byte digests match runtime receipts. Original DB/WAL/SHM unchanged by review.",
+    "databases": [
+      {
+        "originals": {
+          "notes.sqlite3": "a502ea128ddd066185a7d4c419066b7dadd8ad4322b5a6300e9d9fbebd73d61f",
+          "notes.sqlite3-shm": "644572ef943e007642cd5009b8a3356870223fba5548734e63e0b2963115a983",
+          "notes.sqlite3-wal": "01aea58506f52ba7ed00e312da7c5d9865d60359eed0ee2f115ac2d6bd96d553"
+        },
+        "walBytes": 1503832,
+        "pageSize": 4096,
+        "validFrames": 365,
+        "lastCommittedFrame": 365,
+        "databasePages": 41,
+        "walChecksumsVerified": true,
+        "method": "Read original DB/WAL bytes; validate header/salts/rolling checksums; apply through last commit to memory only; normalize reconstructed SQLite WAL header for readonly deserialize",
+        "name": "A",
+        "integrity": "ok",
+        "fullBodyDigests": {
+          "bb2380fa-41b8-4389-87e0-960838fbac3c": "c7101c2dbd8d6bb2d571887e31fff10a21c38ac8f1b04f72ff223b95b8060d5b",
+          "7b847c74-ca8b-4e47-bd3c-57a1edd42d33": "646eb2b5c7d2cdfb6e8c3fd34d59015fdf41862831a6803acef026f84657cdfd",
+          "9c419814-0996-4110-a770-b4fe732ed14c": "5b81054eb7fc05bded693780fa7aa4e6758d27cbf3efc2e9ad2e9bc094f9e6ba",
+          "d6fd8a6e-2d6a-421c-97b5-2d2a74d91be0": "749688c02f56431429b391d18842e834406b0335dc757f120ecc28b8e9203a34"
+        },
+        "exactCIntendedTitleOrderedParagraphsAndPlainText": true,
+        "attachments": [
+          {
+            "id": "b6ef54ab-a8bd-41cb-a01a-0af859f9fcd7",
+            "noteId": "bb2380fa-41b8-4389-87e0-960838fbac3c",
+            "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a",
+            "bytes": 3677
+          },
+          {
+            "id": "8aa6a913-eee7-41e5-96d7-f9c7131aeceb",
+            "noteId": "9c419814-0996-4110-a770-b4fe732ed14c",
+            "sha256": "932b45ce935d2d7efef0b5d83bf36d18cc323f62baa60a02691afb596dce0277",
+            "bytes": 298
+          },
+          {
+            "id": "c80b51c1-fc57-4ab6-8923-4ce641a804f6",
+            "noteId": "d6fd8a6e-2d6a-421c-97b5-2d2a74d91be0",
+            "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a",
+            "bytes": 3677
+          }
+        ],
+        "currentCounts": {
+          "notes": 11,
+          "attachments": 7,
+          "sync_dirty": 0,
+          "sync_inbox": 0
+        },
+        "originalFilesUnchangedByReview": true
+      },
+      {
+        "originals": {
+          "notes.sqlite3": "1012fbe75ffcb42454db79f87f3e0366faac66af6081833b293fdd2f5187e748",
+          "notes.sqlite3-shm": "6691be77f39ca86a14a19a000457451ba003b1307abd6c2d28716447b1c078d4",
+          "notes.sqlite3-wal": "14678e298db1721f3f1ab5772960526ab644e611774af287b6142af953df218e"
+        },
+        "walBytes": 1236032,
+        "pageSize": 4096,
+        "validFrames": 300,
+        "lastCommittedFrame": 300,
+        "databasePages": 41,
+        "walChecksumsVerified": true,
+        "method": "Read original DB/WAL bytes; validate header/salts/rolling checksums; apply through last commit to memory only; normalize reconstructed SQLite WAL header for readonly deserialize",
+        "name": "B",
+        "integrity": "ok",
+        "fullBodyDigests": {
+          "bb2380fa-41b8-4389-87e0-960838fbac3c": "c7101c2dbd8d6bb2d571887e31fff10a21c38ac8f1b04f72ff223b95b8060d5b",
+          "7b847c74-ca8b-4e47-bd3c-57a1edd42d33": "646eb2b5c7d2cdfb6e8c3fd34d59015fdf41862831a6803acef026f84657cdfd",
+          "9c419814-0996-4110-a770-b4fe732ed14c": "5b81054eb7fc05bded693780fa7aa4e6758d27cbf3efc2e9ad2e9bc094f9e6ba",
+          "d6fd8a6e-2d6a-421c-97b5-2d2a74d91be0": "749688c02f56431429b391d18842e834406b0335dc757f120ecc28b8e9203a34"
+        },
+        "exactCIntendedTitleOrderedParagraphsAndPlainText": true,
+        "attachments": [
+          {
+            "id": "b6ef54ab-a8bd-41cb-a01a-0af859f9fcd7",
+            "noteId": "bb2380fa-41b8-4389-87e0-960838fbac3c",
+            "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a",
+            "bytes": 3677
+          },
+          {
+            "id": "8aa6a913-eee7-41e5-96d7-f9c7131aeceb",
+            "noteId": "9c419814-0996-4110-a770-b4fe732ed14c",
+            "sha256": "932b45ce935d2d7efef0b5d83bf36d18cc323f62baa60a02691afb596dce0277",
+            "bytes": 298
+          },
+          {
+            "id": "c80b51c1-fc57-4ab6-8923-4ce641a804f6",
+            "noteId": "d6fd8a6e-2d6a-421c-97b5-2d2a74d91be0",
+            "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a",
+            "bytes": 3677
+          }
+        ],
+        "currentCounts": {
+          "notes": 11,
+          "attachments": 7,
+          "sync_dirty": 0,
+          "sync_inbox": 0
+        },
+        "originalFilesUnchangedByReview": true
+      }
+    ]
+  },
+  "backgroundRecovery": {
+    "oldPid": 29187,
+    "newPid": 31384,
+    "identityPreserved": true,
+    "controlledHomeAmKillNotSpontaneousMemoryPressure": true
+  },
+  "cleanup": {
+    "allFourOwnedRunReceiptsPass": true,
+    "bothNativeExitAndClose0NoForcedSignalsOrFailureCode": true,
+    "authorFinalCleanup": {
+      "schema": 1,
+      "checkedAt": "2026-11-12T11:51:43.362402+00:00",
+      "serial": "98895a3147304c3132",
+      "package": "com.local.notesclone.sync108",
+      "packageRetained": true,
+      "pid": 31384,
+      "forwardListEmpty": true,
+      "reverseListEmpty": true,
+      "driverLock": {
+        "path": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/cybernote-sync108-98895a3147304c3132.lock",
+        "absent": true,
+        "legacyTmpPathAlsoAbsent": true
+      },
+      "preparationForward59445": "Exactly removed in run01; no mapping remains.",
+      "dataPolicy": "Original run02 desktop Store roots and C identity retained; all synthetic data retained. No clear/reinstall or original user package operations.",
+      "gradle": {
+        "ownedHome": "/private/tmp/cybernote-sync108-android/artifacts/sync108-android/gradle-home",
+        "daemon535Ownership": "Exact Gradle classpath and open daemon-535.out.log in isolated home; gradle --status reported only 535 IDLE.",
+        "kotlinOwnership": "PIDs 544/651 had parent 535 and classpaths under the isolated home.",
+        "stopMethod": "Gradle 9.6.1 --stop under the isolated GRADLE_USER_HOME, no builds and no kill signals.",
+        "stopReply": "1 Daemon stopped",
+        "pidsAbsentAfterStop": [
+          535,
+          544,
+          651
+        ]
+      },
+      "phoneOperationsForReceipt": "Only read-only pid/cmdline, package path and mapping enumeration. No UI or pairing."
+    },
+    "authorReceiptSHA256": "317121abdb91da71459d4fb8b1709555f4e3bf9d345adb6d6013a10add86ab86",
+    "sourceAndArchivedReceiptVerifiedWithoutLiveDeviceQueries": true
+  },
+  "archives": {
+    "allFilesVerified": 17,
+    "manifestAndImmutable7000cddeBlobsMatch": true
+  },
+  "formalBaselines": {
+    "desktop": "run07 35 checks",
+    "three": "run05 4 cases",
+    "run06And04": "preliminary only; failures run01-03 retained"
+  }
+}

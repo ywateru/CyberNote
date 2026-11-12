@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-12T11:53:57.754Z",
+  "productFingerprint": "e0718b71cde5440dce56d62ca43416891da77fe8db4f696fe5bf770455381b00",
+  "inputCount": 450,
+  "mainProductMatchesDesktopAndAndroidDesktopPeers": true,
+  "desktop": {
+    "originalResultSHA256": "e37d585a5009f70f6efac553ae1fe93ced109e7d4ee59b01b0eaec66beeb85ae",
+    "status": "passed",
+    "checks": 35,
+    "tools": {
+      "sync108-native.mjs": {
+        "recorded": "78b17a3d9165e1f3b85a58dd7375a2cfaa430a55bb26876479ec0e7b9ebbe0d0",
+        "current": "78b17a3d9165e1f3b85a58dd7375a2cfaa430a55bb26876479ec0e7b9ebbe0d0",
+        "matches": true
+      },
+      "sync108-native-driver.mjs": {
+        "recorded": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+        "current": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+        "matches": true
+      }
+    }
+  },
+  "three": {
+    "acceptedRun": "run05",
+    "originalResultSHA256": "69db7999d25fc137b4c8c8c465d343ab5c1885af11ba8b83074493e7ac2ca152",
+    "status": "pass",
+    "cases": [
+      {
+        "id": "3P-01",
+        "status": "pass"
+      },
+      {
+        "id": "3P-02",
+        "status": "pass"
+      },
+      {
+        "id": "3P-03",
+        "status": "pass"
+      },
+      {
+        "id": "3P-04",
+        "status": "pass"
+      }
+    ],
+    "tools": {
+      "sync108-three-peers.mjs": {
+        "recorded": "aa50287324579553f98d5d726893901a47d2c23670ed1d8273053f5cc717fd51",
+        "current": "aa50287324579553f98d5d726893901a47d2c23670ed1d8273053f5cc717fd51",
+        "matches": true
+      },
+      "sync108-native.mjs": {
+        "recorded": "1ef7b60f9ecf1351d01d76493f91c6445bf36c30f7cd058179feebdd75769751",
+        "current": "78b17a3d9165e1f3b85a58dd7375a2cfaa430a55bb26876479ec0e7b9ebbe0d0",
+        "matches": false
+      },
+      "sync108-native-driver.mjs": {
+        "recorded": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+        "current": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+        "matches": true
+      },
+      "sync108-android.mjs": {
+        "recorded": "816e76779dc242d8e4d76af8937278185cbf2c8642a205eace1e84ac87e021bc",
+        "current": "816e76779dc242d8e4d76af8937278185cbf2c8642a205eace1e84ac87e021bc",
+        "matches": true
+      },
+      "sync108-android-lifecycle.mjs": {
+        "recorded": "6d68900e4d17126c14a90e3010588e0ba2bf0a065199f97f5077a3cf4fb6e786",
+        "current": "6d68900e4d17126c14a90e3010588e0ba2bf0a065199f97f5077a3cf4fb6e786",
+        "matches": true
+      },
+      "../build-info.mjs": {
+        "recorded": "7e1f0b70b67e0e79375291b78def9fcc9782b540d5ab227a6e70d811afdb4362",
+        "current": "7e1f0b70b67e0e79375291b78def9fcc9782b540d5ab227a6e70d811afdb4362",
+        "matches": true
+      },
+      "../versions.mjs": {
+        "recorded": "acc8814f817ebfc39367f852280a6debe7a90f4d0b2d11a94ea03effa6082d0c",
+        "current": "acc8814f817ebfc39367f852280a6debe7a90f4d0b2d11a94ea03effa6082d0c",
+        "matches": true
+      }
+    },
+    "allCleanupPassed": true,
+    "noRecordedTerminalFailure": true,
+    "verifierDifference": "The three-peer runner imported an earlier sync108-native.mjs solely for canonical fingerprint/build-verifier functions. Its recorded bytes are preserved; later desktop-only business cases do not alter these exports. Final native-driver helper matches 50a2 and main exactly."
+  }
+}

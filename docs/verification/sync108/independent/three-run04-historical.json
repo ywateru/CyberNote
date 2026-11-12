@@ -1,0 +1,227 @@
+{
+  "observedAt": "2026-11-12T11:55:33.082665+00:00",
+  "scope": "read-only source and saved evidence; no app/device/test execution; original SQLite files read only, SQL against memory-only reconstruction",
+  "run04": {
+    "status": "pass",
+    "caseCount": 4,
+    "resultSHA256": "7dab4612a93db86a51bc245723194837dadfeac26e778841764838c9cfe1bed0",
+    "driverCommit": "7ff7e8461c276b11e74bcce60a30a733bdcc130e",
+    "tools": {
+      "sync108-three-peers.mjs": "aa50287324579553f98d5d726893901a47d2c23670ed1d8273053f5cc717fd51",
+      "sync108-native.mjs": "1ef7b60f9ecf1351d01d76493f91c6445bf36c30f7cd058179feebdd75769751",
+      "sync108-native-driver.mjs": "6b871692d149df46aef747bbb8b985b46fe342da45d2e2c8fc3777ba9618a946",
+      "sync108-android.mjs": "816e76779dc242d8e4d76af8937278185cbf2c8642a205eace1e84ac87e021bc",
+      "sync108-android-lifecycle.mjs": "6d68900e4d17126c14a90e3010588e0ba2bf0a065199f97f5077a3cf4fb6e786",
+      "../build-info.mjs": "7e1f0b70b67e0e79375291b78def9fcc9782b540d5ab227a6e70d811afdb4362",
+      "../versions.mjs": "acc8814f817ebfc39367f852280a6debe7a90f4d0b2d11a94ea03effa6082d0c"
+    },
+    "allSevenActualToolsMatchImmutableBlobs": true,
+    "android7b789LockFixActuallyUsed": true,
+    "native50a2ActuallyUsed": false,
+    "oldHelperCompensation": "Frozen three-runner awaits app.close then rejects failureCode or non-naturalExit; both actual lifecycles exit0/close0 without failureCode",
+    "binarySHA256": "771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723",
+    "buildRecordSHA256": "f2d773ac7a300b8667dae68c12a01b20a8daa910375ab39c1e985543e4b0f0c2",
+    "canonicalOriginalSHA256": "1ddd4c04da7d9cad525762cba3d169016e4024798e74b5ec79645fd160a8eb07",
+    "canonicalProductAndDistMatchIndependentRun07Audit": true
+  },
+  "continuation": {
+    "previousResultSHA256": "eb7121790273190ff95df83ec8c8d32d74d5b3c9910796067ac928bb5630dd18",
+    "previousFailedResultPreserved": true,
+    "sameThreeIdentitiesAndEndpoints": true,
+    "sameDesktopRootsAndInodes": true,
+    "initialCStateRun02": "disabled",
+    "initialCStateRun04": "error",
+    "readyBuildTransitionExplicitInRecord": true
+  },
+  "persistedDataSupplement": {
+    "boundary": "Original run02 stores were continued again by run05 after run04. Current DB/WAL is not a frozen end-of-run04 snapshot. Four run04 complete body digests and three originals still verify exactly; review makes no claim of global end-of-run04 counts or projection.",
+    "laterRun05ResultSHA256": "69db7999d25fc137b4c8c8c465d343ab5c1885af11ba8b83074493e7ac2ca152",
+    "databases": [
+      {
+        "originals": {
+          "notes.sqlite3": "a502ea128ddd066185a7d4c419066b7dadd8ad4322b5a6300e9d9fbebd73d61f",
+          "notes.sqlite3-shm": "644572ef943e007642cd5009b8a3356870223fba5548734e63e0b2963115a983",
+          "notes.sqlite3-wal": "01aea58506f52ba7ed00e312da7c5d9865d60359eed0ee2f115ac2d6bd96d553"
+        },
+        "walBytes": 1503832,
+        "pageSize": 4096,
+        "validFrames": 365,
+        "lastCommittedFrame": 365,
+        "databasePages": 41,
+        "walChecksumsVerified": true,
+        "method": "Read original DB/WAL bytes; validate header/salts/rolling checksums; apply through last commit to memory only; normalize reconstructed SQLite WAL header for readonly deserialize",
+        "name": "A",
+        "integrity": "ok",
+        "identityMatchesRun02And04": true,
+        "run04FullNoteDigests": {
+          "67021a71-c105-4808-9bf1-f52aa427ed34": "db1c80a176a92d7fa941eb340e810e147ed6782e7184d06e19f6997511a8f446",
+          "b33f2e79-7a9e-49af-97a3-6234c56a11da": "646eb2b5c7d2cdfb6e8c3fd34d59015fdf41862831a6803acef026f84657cdfd",
+          "fcc52df7-a1b3-4a4b-8943-cc4c26145f03": "90714118542978569d87f2f13f617c03312578c58b8b8d8a007aed714f7208b4",
+          "570cee19-a338-4e76-a61a-151f46ad88fb": "3abc49e1d789fa5855c05f2268da36ebdc8069a725016bf48758284ea96a47fa"
+        },
+        "androidIntendedTitleAndOrderedParagraphsExact": true,
+        "attachments": [
+          {
+            "id": "4e8c299c-abc4-4a3a-8280-ce8d03cf74e2",
+            "noteId": "67021a71-c105-4808-9bf1-f52aa427ed34",
+            "bytes": 3677,
+            "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a"
+          },
+          {
+            "id": "798b8a24-ae72-48a0-871c-0790b0c9675f",
+            "noteId": "fcc52df7-a1b3-4a4b-8943-cc4c26145f03",
+            "bytes": 298,
+            "sha256": "932b45ce935d2d7efef0b5d83bf36d18cc323f62baa60a02691afb596dce0277"
+          },
+          {
+            "id": "5d02bb30-3769-4eec-933a-e6f31f35357c",
+            "noteId": "570cee19-a338-4e76-a61a-151f46ad88fb",
+            "bytes": 3677,
+            "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a"
+          }
+        ],
+        "currentCounts": {
+          "notes": 11,
+          "attachments": 7,
+          "sync_dirty": 0,
+          "sync_inbox": 0
+        },
+        "originalFilesUnchangedByReview": true
+      },
+      {
+        "originals": {
+          "notes.sqlite3": "1012fbe75ffcb42454db79f87f3e0366faac66af6081833b293fdd2f5187e748",
+          "notes.sqlite3-shm": "6691be77f39ca86a14a19a000457451ba003b1307abd6c2d28716447b1c078d4",
+          "notes.sqlite3-wal": "14678e298db1721f3f1ab5772960526ab644e611774af287b6142af953df218e"
+        },
+        "walBytes": 1236032,
+        "pageSize": 4096,
+        "validFrames": 300,
+        "lastCommittedFrame": 300,
+        "databasePages": 41,
+        "walChecksumsVerified": true,
+        "method": "Read original DB/WAL bytes; validate header/salts/rolling checksums; apply through last commit to memory only; normalize reconstructed SQLite WAL header for readonly deserialize",
+        "name": "B",
+        "integrity": "ok",
+        "identityMatchesRun02And04": true,
+        "run04FullNoteDigests": {
+          "67021a71-c105-4808-9bf1-f52aa427ed34": "db1c80a176a92d7fa941eb340e810e147ed6782e7184d06e19f6997511a8f446",
+          "b33f2e79-7a9e-49af-97a3-6234c56a11da": "646eb2b5c7d2cdfb6e8c3fd34d59015fdf41862831a6803acef026f84657cdfd",
+          "fcc52df7-a1b3-4a4b-8943-cc4c26145f03": "90714118542978569d87f2f13f617c03312578c58b8b8d8a007aed714f7208b4",
+          "570cee19-a338-4e76-a61a-151f46ad88fb": "3abc49e1d789fa5855c05f2268da36ebdc8069a725016bf48758284ea96a47fa"
+        },
+        "androidIntendedTitleAndOrderedParagraphsExact": true,
+        "attachments": [
+          {
+            "id": "4e8c299c-abc4-4a3a-8280-ce8d03cf74e2",
+            "noteId": "67021a71-c105-4808-9bf1-f52aa427ed34",
+            "bytes": 3677,
+            "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a"
+          },
+          {
+            "id": "5d02bb30-3769-4eec-933a-e6f31f35357c",
+            "noteId": "570cee19-a338-4e76-a61a-151f46ad88fb",
+            "bytes": 3677,
+            "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a"
+          },
+          {
+            "id": "798b8a24-ae72-48a0-871c-0790b0c9675f",
+            "noteId": "fcc52df7-a1b3-4a4b-8943-cc4c26145f03",
+            "bytes": 298,
+            "sha256": "932b45ce935d2d7efef0b5d83bf36d18cc323f62baa60a02691afb596dce0277"
+          }
+        ],
+        "currentCounts": {
+          "notes": 11,
+          "attachments": 7,
+          "sync_dirty": 0,
+          "sync_inbox": 0
+        },
+        "originalFilesUnchangedByReview": true
+      }
+    ]
+  },
+  "backgroundRecovery": {
+    "method": "am kill background package",
+    "pidBefore": 23814,
+    "pidAfter": 29187,
+    "originalIdentityPreserved": true,
+    "frozenSourceHasNoManualPairResumeSyncNowOnRelaunch": true,
+    "boundary": "Controlled Home + am kill background process, not proof of spontaneous OS memory-pressure eviction"
+  },
+  "cleanup": {
+    "allFourReceiptsPass": true,
+    "records": [
+      {
+        "name": "active-CDP",
+        "owned": {
+          "serial": "98895a3147304c3132",
+          "package": "com.local.notesclone.sync108",
+          "pid": 29187,
+          "local": "tcp:50055",
+          "remote": "localabstract:webview_devtools_remote_29187",
+          "pageId": "E3493F3680DFC55B4CA5593E882EFAE9",
+          "pageURL": "http://tauri.localhost/"
+        },
+        "status": "pass"
+      },
+      {
+        "name": "B:natural-close",
+        "status": "pass",
+        "lifecycle": {
+          "name": "B",
+          "directory": "/private/tmp/sync108-three-20261112-02/store-B",
+          "stderrBytes": 58,
+          "commands": 196,
+          "forcedSignals": [],
+          "pid": 14490,
+          "lastAction": "shutdown",
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "close": {
+            "code": 0,
+            "signal": null
+          },
+          "stdoutNoiseBytes": 0,
+          "naturalExit": true
+        }
+      },
+      {
+        "name": "A:natural-close",
+        "status": "pass",
+        "lifecycle": {
+          "name": "A",
+          "directory": "/private/tmp/sync108-three-20261112-02/store-A",
+          "stderrBytes": 58,
+          "commands": 115,
+          "forcedSignals": [],
+          "pid": 14481,
+          "lastAction": "shutdown",
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "close": {
+            "code": 0,
+            "signal": null
+          },
+          "stdoutNoiseBytes": 0,
+          "naturalExit": true
+        }
+      },
+      {
+        "name": "owned-reverse",
+        "status": "pass",
+        "owned": {
+          "serial": "98895a3147304c3132",
+          "package": "com.local.notesclone.sync108",
+          "device": "tcp:37529",
+          "host": "tcp:61778"
+        }
+      }
+    ],
+    "boundary": "Source and receipts verified. No live adb or device queries by reviewer; isolated APK/data and test files intentionally retained. Intermediate old-CDP close awaited in source but no separate receipt."
+  }
+}

@@ -429,6 +429,55 @@
           "sha256": "3f082d0f0128f0abbae9972c3c201b74e6278b6b321c77304a9cd7bb348328b0"
         }
       ]
+    },
+    {
+      "name": "startup-fixed02",
+      "status": "pass",
+      "checks": {
+        "desktop": 17,
+        "mobile": 4
+      },
+      "cleanup": {
+        "desktop": {
+          "passed": true
+        },
+        "mobile": {
+          "passed": true
+        }
+      },
+      "scope": {
+        "platform": "desktop-browser",
+        "backend": "isolated-js-protocol-fixture",
+        "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+        "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+        "browser": "157.0.8103.51",
+        "frontendTransport": "isolated-static-debug-bundle",
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "observations": {
+        "screenshotCapture": "CDP Page.captureScreenshot",
+        "fontWait": "FontFaceSet.status with bounded rAF polling; no document.fonts.ready",
+        "gated": {
+          "readyState": "interactive",
+          "fontStatus": "loaded",
+          "applicationMounted": false
+        }
+      },
+      "receipts": [
+        {
+          "path": "/private/tmp/sync108-workspace-checks/startup-fixed02/desktop-result.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/startup-fixed02/desktop-result.json",
+          "sha256": "dd0b5727570679f409e0383a6da821ca83abf37a4644b29b4a385adbcba50db9"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/startup-fixed02/mobile-result.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/startup-fixed02/mobile-result.json",
+          "sha256": "b3659b142b18c0cfd9bc5ebf548da3b0467bbe7c77b7f4e3ff2fb2e791499df8"
+        }
+      ]
     }
   ]
 }

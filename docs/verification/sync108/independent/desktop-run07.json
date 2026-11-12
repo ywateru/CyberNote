@@ -1,0 +1,170 @@
+{
+  "observedAt": "2026-11-12T11:51:47.411053+00:00",
+  "scope": "independent disk-read-only verification; no app/device/test-suite/compile execution; SQLite SQL only against reconstructed memory, READONLY deserialize",
+  "nativeRun07": {
+    "reportSha256": "e37d585a5009f70f6efac553ae1fe93ced109e7d4ee59b01b0eaec66beeb85ae",
+    "checks": 35,
+    "binarySha256": "771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723",
+    "processesVerified": true
+  },
+  "canonical": {
+    "manifestSha256": "1ddd4c04da7d9cad525762cba3d169016e4024798e74b5ec79645fd160a8eb07",
+    "sourceCommit": "e3225038cd47f00774e08a8cf10e32ab2335668f",
+    "productFileCount": 450,
+    "allSourceBlobsAndFramedHashMatch": true,
+    "sourceFingerprint": "e0718b71cde5440dce56d62ca43416891da77fe8db4f696fe5bf770455381b00",
+    "staticFrontendSha256": "ac755157f95eebd047f0f2830c0877abcecb72780f5f1ec5036d77be4fa82dc6",
+    "distFilesVerified": 9
+  },
+  "executedTools": {
+    "commit": "17ad7372",
+    "files": {
+      "sync108-native.mjs": "78b17a3d9165e1f3b85a58dd7375a2cfaa430a55bb26876479ec0e7b9ebbe0d0",
+      "sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2"
+    },
+    "matchCommitBlobs": true,
+    "actualBuildInfoSha256": "7e1f0b70b67e0e79375291b78def9fcc9782b540d5ab227a6e70d811afdb4362",
+    "builderBuildInfoSha256": "7e1f0b70b67e0e79375291b78def9fcc9782b540d5ab227a6e70d811afdb4362"
+  },
+  "databases": [
+    {
+      "originals": {
+        "notes.sqlite3": "8205a7151eeac47c9674c769fbc0562366bdea473d8987015c2fe606d1407aa9",
+        "notes.sqlite3-shm": "a3a8d405e1db1dd985e0eda44a8585facd5db2ebae8a703d8aedebec9b003adb",
+        "notes.sqlite3-wal": "28bda4fd4f8d763fad38800c9eba0b59c5cb11ea784a5055d8fda88f67a787b0"
+      },
+      "walBytes": 1450272,
+      "pageSize": 4096,
+      "validFrames": 352,
+      "lastCommittedFrame": 352,
+      "databasePages": 36,
+      "walChecksumsVerified": true,
+      "method": "Read original DB/WAL bytes; validate header/salts/rolling checksums; apply through last commit to memory only; normalize reconstructed SQLite WAL header for readonly deserialize",
+      "integrity": "ok",
+      "counts": {
+        "notes": 6,
+        "attachments": 3,
+        "sync_heads": 8,
+        "sync_inbox": 0,
+        "sync_dirty": 0,
+        "sync_projection": 8
+      },
+      "identity": [
+        [
+          "f450de1f-4f6b-42e2-af13-d3328504d908",
+          "618c13b7-8f63-42e2-bb11-740bf87a9c20"
+        ]
+      ],
+      "projectionMatchesReport": true,
+      "noteDocumentAndPlainTextSha256": {
+        "1bba6adb-ed63-4222-9a83-a65485b329d3": "b7c42f5cc767e6fd6a8e0a69465ad4ca37d43c7892de31fa9e9ee6f2f1209fdd",
+        "2dc48f9a-f9ae-42c1-91c1-f66117bf2092": "c76ddcd586b5ffb71513ac7e4e34b3db1a64556c5ddb62a03a0669b170d337b4",
+        "436929b1-b90b-4173-9b9b-808e416bb244": "03c82763b03a1a3886de2acc050f3bd291f4cac9d2369078e27b63326da335ef",
+        "4d0313fd-0c1a-4fcf-ab63-5768282376d0": "139d3130309de03e4f21156c29e4e3075fdaf3895cd4c74833355ddaa34deaf9",
+        "b1a1a67e-3904-4ebc-b4a5-240ed05d73c0": "8d8184011166a0e7f4611f992d36119e1392f635c5ab8e80ab2e98ed6da596d7",
+        "b6c89a58-f805-4b6f-9cd4-872f5cd4d73f": "a1aa1cc362b7d02ff75e9aa15a06ddc9a054fde77eccf487669d721faab89463"
+      },
+      "attachments": [
+        {
+          "id": "1fa59dc3-0347-4bb3-b91f-7f257740214d",
+          "bytes": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "id": "b1cd633f-8212-412b-b542-c3692ee7fdaa",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        },
+        {
+          "id": "ea2ca306-a641-4aac-b6ac-84691848a88f",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        }
+      ],
+      "originalFilesStillUnchanged": true
+    },
+    {
+      "originals": {
+        "notes.sqlite3": "52d6c8b40d78d3aaeef8f07569d6983928c7170559f3c6295f328ec8f183bf32",
+        "notes.sqlite3-shm": "8f214c3701283d6bec5c1211e247c5c456a76f74f7982f22db7a00ef110d8187",
+        "notes.sqlite3-wal": "8c4b23d94fdd76dd9413eff5480d3f094ed3d2cd0ccb599aaaf6fa687b1d1d80"
+      },
+      "walBytes": 1367872,
+      "pageSize": 4096,
+      "validFrames": 332,
+      "lastCommittedFrame": 332,
+      "databasePages": 36,
+      "walChecksumsVerified": true,
+      "method": "Read original DB/WAL bytes; validate header/salts/rolling checksums; apply through last commit to memory only; normalize reconstructed SQLite WAL header for readonly deserialize",
+      "integrity": "ok",
+      "counts": {
+        "notes": 6,
+        "attachments": 3,
+        "sync_heads": 8,
+        "sync_inbox": 0,
+        "sync_dirty": 0,
+        "sync_projection": 8
+      },
+      "identity": [
+        [
+          "f450de1f-4f6b-42e2-af13-d3328504d908",
+          "5228a5ad-8d34-4b42-9713-857e1f18ec4c"
+        ]
+      ],
+      "projectionMatchesReport": true,
+      "noteDocumentAndPlainTextSha256": {
+        "1bba6adb-ed63-4222-9a83-a65485b329d3": "b7c42f5cc767e6fd6a8e0a69465ad4ca37d43c7892de31fa9e9ee6f2f1209fdd",
+        "2dc48f9a-f9ae-42c1-91c1-f66117bf2092": "c76ddcd586b5ffb71513ac7e4e34b3db1a64556c5ddb62a03a0669b170d337b4",
+        "436929b1-b90b-4173-9b9b-808e416bb244": "03c82763b03a1a3886de2acc050f3bd291f4cac9d2369078e27b63326da335ef",
+        "4d0313fd-0c1a-4fcf-ab63-5768282376d0": "139d3130309de03e4f21156c29e4e3075fdaf3895cd4c74833355ddaa34deaf9",
+        "b1a1a67e-3904-4ebc-b4a5-240ed05d73c0": "8d8184011166a0e7f4611f992d36119e1392f635c5ab8e80ab2e98ed6da596d7",
+        "b6c89a58-f805-4b6f-9cd4-872f5cd4d73f": "a1aa1cc362b7d02ff75e9aa15a06ddc9a054fde77eccf487669d721faab89463"
+      },
+      "attachments": [
+        {
+          "id": "1fa59dc3-0347-4bb3-b91f-7f257740214d",
+          "bytes": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "id": "b1cd633f-8212-412b-b542-c3692ee7fdaa",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        },
+        {
+          "id": "ea2ca306-a641-4aac-b6ac-84691848a88f",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        }
+      ],
+      "originalFilesStillUnchanged": true
+    }
+  ],
+  "finalConvergence": {
+    "semanticProjectionsEqual": true,
+    "independentProjectionSha256": "1edeeaa383466376f5169863bcef0359d4e6e2bc1a178f79babbb720e2025975",
+    "matchesRuntimeObservation": true,
+    "sharedWorkspaceDistinctDevices": true,
+    "persistedDirtyDocumentFullDigestMatches": true
+  },
+  "browser": {
+    "archivedReceiptsVerified": 19,
+    "allOriginalAndArchiveHashesMatch": true,
+    "fixed02SettingsEach56": true,
+    "allMobileAndNarrowDesktop44": true,
+    "startupFixed02": [
+      {
+        "platform": "desktop",
+        "checks": 17,
+        "cleanupPassed": true,
+        "sha256": "dd0b5727570679f409e0383a6da821ca83abf37a4644b29b4a385adbcba50db9"
+      },
+      {
+        "platform": "mobile",
+        "checks": 4,
+        "cleanupPassed": true,
+        "sha256": "b3659b142b18c0cfd9bc5ebf548da3b0467bbe7c77b7f4e3ff2fb2e791499df8"
+      }
+    ]
+  }
+}

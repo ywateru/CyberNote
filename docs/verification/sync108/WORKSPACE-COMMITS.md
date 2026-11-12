@@ -41,3 +41,9 @@
 启动脚本原先在拦截模块加载时等待 `document.fonts.ready`，形成相互等待；现以有界字体状态、绘制帧和CDP截图检查。reset原先未等待启动层移除，现等待真实inert/aria-hidden解除。设置桌面的后续失败是旧测试统一要求44px按钮：现有全局界面规则明确桌面下限28px、手机44px，测试据实际 `.preferences-mobile` 分支检查，窄桌面进入手机布局仍要求44px。只修测试契约与失败诊断，没有调整产品按钮布局。
 
 双桌面和三端的实际业务结果分别记入本目录的执行报告；不得用以上浏览器/协议结果替代。
+
+## 最终收尾
+
+双桌面最终run07为35项通过（含B→A反向原文件），三端最终run05为4场景通过，原始失败及run04等中间通过轮次均保留。最终共享native helper包含关闭后尾帧fatal检查；Android独占锁支持owner token与幂等close；浏览器启动结果在清理完成后计算。主工作区Node故障/协议17项通过，最终产品指纹与两类真实运行匹配，实际执行工具版本分别记录，见[integration-check.json](integration-check.json)。
+
+源码、工具、文档和证据均按独立实现/修复/验证提交整合到main，未合入代理父级的临时巨大快照或Gradle输出。测试APK、桌面binary、原JSON与日志在ignored `artifacts/sync108/`保全，数据库/私钥不提交。ADB映射与driver lock已清理、owned Gradle/Kotlin正常停机，桌面测试PID全部退出；手机独立测试包与合成数据保留。无Git远程地址，因此未推送。

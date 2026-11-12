@@ -1,7 +1,7 @@
 ---
 id: app-sync108-current
 scope: 当前源码双桌面独立数据目录与少量安卓三端同步验收
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -38,3 +38,11 @@ depends-on: []
 # 完成条件
 
 当前源功能完善经不同代理复核，双原生桌面独立目录实测与少量真实 Android 三端场景实际完成，测试用例和可复跑入口/报告入库。任何未通过项明确保留，不能以 headless 或浏览器替代原生测试并标记目标完成。
+
+# 完成记录
+
+2026-11-12：已完成桌面显式数据目录、目录lease和缓存/asset隔离；作者完整Rust227通过/4既有ignored、独立startup9通过、网络23通过。当前两个真实桌面App最终run07完整35项通过，真实Android三端最终run05四场景通过；原run02双根及三个设备身份保留，未清数据重配。用例、原始失败、版本/源码/工具身份、DB/WAL只读取证与owned资源清理均入库，见[总报告](../../verification/sync108/RESULT.md)。
+
+[最终独立审阅](../reviews/app-sync108-final-independent.md)接受正式07/05证据，三项工具P2关闭，无新增P1/P2阻塞；只读复算完整正文、原附件和DB/WAL，不重跑设备或写业务库。
+
+DESK-11的打开目标编辑器/真实quiet协调通过，但确定制造本地保存或IME合成重叠的加强时序没有执行，明确部分覆盖；局域网/VPN与后台常驻不在本轮范围。原工作区未提交工作已检查并分组提交；仓库无remote，仅本地main提交。

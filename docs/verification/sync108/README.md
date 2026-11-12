@@ -1,13 +1,13 @@
-# Sync108 三端原生验收
+# Sync108 同步验收
 
-此目录保存本轮两原生桌面 App + 三星 Android 9 隔离包的执行说明及结果。当前 **run02 的 3P-01 已实测通过；3P-02 在 Android 输入前因工具导航失败，run03 在桌面 Ready 超时；等待协调者明确最新 PageLoad Ready binary / source freeze 后同根续测**。各次原始失败保留，不能把静态检查或准备结果作为四项通过。
+此目录保存2026-11-12当前源码的启动隔离、两个原生桌面 App 与三星 Android 9 隔离包的实际同步验收。最终双桌面run07完整35项通过；三端run05四项全部通过，保留原run02两个数据目录与三设备身份续测。[总报告](RESULT.md)、[完整用例](TEST-CASES.md)、[桌面结果](DESKTOP-RESULT.md)、[三端证据](three/README.md)和[工作区整理](WORKSPACE-COMMITS.md)分别记账。原失败全部保留，后续通过不改写旧结果。
 
 ## 所有权与真实边界
 
 - Android 子任务唯一操作 serial `98895a3147304c3132`，仅控制 `com.local.notesclone.sync108`。原 `com.local.notesclone` 不读取、不停止、不覆盖、不清理。准备轮已有的两个合成 smoke note 保留，允许随配对合并；只按本次创建的 ID 断言，不以全局精确笔记数作为三端通过条件。
 - 桌面 NativeApp 来自 Dewey 已提交的 `0897543db8b6246497fcfba0f93c9157b0903732`，ready handoff 修正来自 `af1ac64a`。Android 分支分别 cherry-pick 为 `b5ac2fae`、`6fcffd87`。suite 不复制作者未提交源码作为证明。
 - 后续协议加固来自 `564e85b9`；有界 Ready 诊断来自 `cbf299d9`、`a7f4b52c`，导航探测与窗口位置 hook 来自 `4d5df08b`。suite 指定 A left / B right，并只读检查两个原生 webview 的真实 rAF/timer 时钟；诊断不能替代 Ready 成功。
-- A/B 使用同一个冻结 binary 的独立拷贝、两个全新绝对 data-dir 和独立原生 PID，静态前端原点必须是 `tauri://localhost` 或 `http://tauri.localhost`。不使用 Vite 服务或浏览器替代桌面 App。
+- 双桌面A/B使用同一个冻结binary的独立拷贝、两个全新绝对data-dir和独立原生PID；三端run04/05续用run02的A/B数据目录。静态前端原点为 `tauri://localhost` 或 `http://tauri.localhost`，无需Vite服务。
 - A 是集合点。B 通过桌面 loopback 配对到 A，C 通过本轮动态分配的 `adb -s SERIAL reverse --no-rebind tcp:0 tcp:A_PORT` 访问 A。邀请仅在内存中转交，不写 argv、输出、snapshot、文件或邀请 hash。
 - 桌面文字走 debug 注册的真实 App handler；附件走真实 `attachment.choose` 捕获目标，再由 `DataTransfer` 构造真实 FileList 并 dispatch 原 file input 的 change，进入产品 FileReader / AttachmentSubmission / 原文件存储 / 正文保存 ACK。仅 OS 文件选择窗口的打开被临时抑制。没有 SQL 写入或伪造 ACK。
 - 手机使用原生 App 中 CDP Input 点击和输入，观察仅使用只读 Tauri invoke / editor document。APK 的产品源码仍是准备轮完整快照；新增桌面 startup/hook 只影响桌面测试入口。对应 Android 指纹见 `../sync108-android/verification.json`。
@@ -25,20 +25,20 @@
 
 ## 冻结输入与运行
 
-**不再执行旧 binary；等待协调者给出最新 PageLoad Ready 构建的 SHA/manifest。** 后续 evidence output 必须全新，但通过 continuation 保留 run02 两个原始 Store 及手机配对：
+最终桌面测试构建SHA256为 `771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723`，源450输入指纹 `e0718b71cde5440dce56d62ca43416891da77fe8db4f696fe5bf770455381b00`。真实PageLoad及构建记录见 [native-ready03/README.md](native-ready03/README.md)。可复跑入口如下，输出必须使用新目录；继续当前配对使用 `--continue-from`：
 
 ```sh
 node scripts/verification/sync108-three-peers.mjs \
   --binary /private/tmp/cybernote-sync108-target/debug/notes-clone \
   --root /ABS/FROZEN_SOURCE_ROOT \
-  --output /private/tmp/sync108-three-20261112-04 \
+  --output /private/tmp/sync108-three-FRESH \
   --build-record /ABS/FROZEN_BUILD_RECORD.json \
   --continue-from /private/tmp/sync108-three-20261112-02
 ```
 
 fresh output 必须不存在，不能复用任何双端 suite 目录。build record 必须包含 `binary.sha256`、`sourceSha256`、`staticFrontendSha256`，分别匹配 binary、已提交双端 runner 同算法的源码清单 hash、dist 文件清单 hash。suite 验证这些值后才拷贝启动进程，结束时重新核对源码/dist/owned binary 没有漂移。APK 指纹单独记录，不混为桌面 binary 的源码证明。
 
-若 continuation 改用协调者授权的新 Ready hook 构建，build record 还需显式提供 `continuationBuild.previousResultSHA256`、`continuationBuild.previousBinarySHA256`，分别精确匹配原 run02 证据和旧 binary，`continuationBuild.reason` 固定为 `test-feature-ready-fix`。结果记录旧→新构建变化；新 binary/source/dist 的冻结校验不变。原始路径必须仍为 run02 `store-A` / `store-B`，原 A/B/C device/workspace 身份、A/C 连接端点均验证不变，不调用新配对，不 clear/reinstall C。
+continuation改用新Ready hook构建时，build record另需 `continuationBuild.previousResultSHA256`、`continuationBuild.previousBinarySHA256`，分别精确匹配原run02证据和旧binary，reason固定为 `test-feature-ready-fix`。run04/05已记录旧→新构建变化，验证同一run02 `store-A` / `store-B`、A/B/C device/workspace和A/C连接端点；没有重新配对、清数据或重装C。
 
 Android `createNote` 先经真实返回按钮回到列表，再点击新建，读取新增 ID；只在对应 `.tiptap[data-note-id="ID"][contenteditable="true"]` 可见且取得焦点后发送 Input。保存按同一 ID 等待标题/各段正文；suite 继续检查三端完整 document/plainText 深相等。超时保留 phase/selector/code，新建 ID 已知时只读记录其完整正文规范化 hash，区分 Input、保存和 convergence。多个新增 ID 会明确报歧义，不猜测 owner。
 
@@ -50,6 +50,6 @@ fresh output 的 `result.json` 记录固定 case 名、状态、PID/data-dir、�
 
 finally 清理每个 active CDP forward、owned reverse。准备轮 `tcp:59445 → webview_devtools_remote_23814` 已在 run01 精确确认归属后清理，续测不再传 retained-forward。不会调用 remove-all、按包名/端口批量杀进程或删目录。A/B 两个实际进程通过 NativeApp close 保存后自然退出；若降级到信号或协议关闭未成功则清理标记失败。手机 App 和全部合成数据保留。
 
-执行后本目录再加入结果摘要与本地 `result.json` 的 hash/路径，包含所有失败尝试及后续修复，不能把未执行或未通过 case 标为完成。
+桌面测试binary已另存主工作区 ignored `artifacts/sync108/desktop/sync108-native-app`；安卓APK在 `artifacts/sync108/sync108-android-test.apk`。二者仅用于本轮测试，不是发布安装包。静态debug前端、测试feature、Android独立包名及平台构建差异在报告中分别记录。
 
 各次原始失败及当前定位见 [attempts.md](attempts.md)。
