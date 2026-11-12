@@ -1,9 +1,9 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
 
-// Opt in only when building with the registered native account_command/runtime.
-// Browser fixtures keep their separate development-only capability.
+// The registered native account_command/runtime is available by default.
+// Browser fixtures require all three development flags; native can opt out.
 export const accountUIAvailable =
-  (import.meta.env.VITE_NOTES_ACCOUNT_NATIVE === "1" && isTauri()) ||
+  (import.meta.env.VITE_NOTES_ACCOUNT_NATIVE !== "0" && isTauri()) ||
   (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" && import.meta.env.VITE_NOTES_ACCOUNT_UI === "1");
 
 // Frozen account109 DTO. The native singleton owns authorization and networking.

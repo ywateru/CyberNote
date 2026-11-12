@@ -1,5 +1,25 @@
 # account109 UI 阶段性检查点
 
+## 当前行为：原生默认开放账户入口（2026-11-13）
+
+基于已合入 native `account_command`/runtime 的 `main 0d499676` 收口能力门控。Tauri 默认显示“账户与同步”分类；`VITE_NOTES_ACCOUNT_NATIVE` 未设置或为 `1` 均开放，为 `0` 时关闭原生能力分支。普通浏览器默认隐藏该分类，生产浏览器即使同时设置 debug/account fixture 标志也不能开启。这里只改变入口可用性，不自动登录或开启同步，设置初始外观页保持现有行为。
+
+开发 fixture 仍须同时满足 `DEV`、`VITE_NOTES_DEBUG=1`、`VITE_NOTES_ACCOUNT_UI=1`。浏览器 debug 平台会模拟 Tauri 标记，因此 runner 在 Vite 开发服务器和独立编译测试包中显式固定 `VITE_NOTES_ACCOUNT_NATIVE=0`，通过 `--account-ui` 单独启用合成 IPC；此固定值仅用于测试 runner。真实客户端仍只调用已注册的 `account_command`，无 token/授权 URL 注入或生产 fake fallback。
+
+验证结果：真实 client 的 Vite compiled capability **24/24** 通过，覆盖 native 未设置/`1`/`0`、浏览器与 Tauri、生产 fixture 隔离和开发 fixture 必需标志；`pnpm typecheck` 通过。默认 Preferences **146/146**、0 page error，确认五分类且不发账户 IPC；显式 fixture 在开发服务器/独立编译测试包两条路径均显示六分类，切入账户页后取得合成 signedOut 状态，0 page error。
+
+```sh
+node scripts/debug/account-native-capability.mjs
+pnpm typecheck
+pnpm debug group preferences --out docs/verification/account109/ui/recheck-native-default-preferences
+```
+
+本地 ignored 证据：`native-default-capability-01.log`、`typecheck-native-default-01.log`、`native-default-preferences-01/`、`native-default-fixture-smoke-02.log`。小探针首轮漏切账户页导致状态等待超时，修正探针后两路径通过；失败 `native-default-fixture-smoke-01.log` 保留。日志、截图及 HTML 不进入本提交。
+
+**验收边界：**compiled capability 仅编译真实 client 并替换环境值/Tauri 检测标记，不执行 native IPC。Preferences 和两路径探针是浏览器 JS IPC fixture，不证明真实授权、常驻 Runtime 或跨端同步。本轮没有启动原生 App、操作设备/外部账号、发布或部署；产品真实验收仍待完成。主代理维护的 ACCOUNT-TEST-CASES.md 未修改。下文保留历史阶段记录，其中“默认关闭”“native 尚未注册”描述仅对应当时基线，以本节为当前行为。
+
+## 历史阶段记录
+
 分支 `codex/account109-ui`，基线 `737a9dcc`。本次保存账户 UI 开发成果，**不代表登录或账户同步已经可用**。当前主线尚无 Rust `account_command`，本次未实现或修改 native、服务端、CI、根依赖，也未操作实际设备或外部服务。
 
 默认能力关闭：仅同时满足开发模式、`VITE_NOTES_DEBUG=1` 和显式 `VITE_NOTES_ACCOUNT_UI=1` 时开放账户页；debug runner 使用 `--account-ui` 显式设置该能力。生产构建始终关闭。默认桌面设置仍打开“外观与字号”，保留五项分类，不挂载账户组件、不请求账户 IPC。测试显式开启后，账户为第六项分类中的首项，原设备同步入口保留。

@@ -8,19 +8,26 @@ const saved = Object.getOwnPropertyDescriptor(globalThis, "isTauri");
 const results = [];
 try {
   for (const [name, dev, native, debug, fixture, expected] of [
-    ["default production", false, "0", "0", "0", [false, false]],
-    ["native production opt-in", false, "1", "0", "0", [false, true]],
-    ["fixture flags cannot enable production", false, "0", "1", "1", [false, false]],
+    ["default production", false, undefined, undefined, undefined, [false, true]],
+    ["explicit native production", false, "1", "0", "0", [false, true]],
+    ["native production opt-out", false, "0", "0", "0", [false, false]],
+    ["production fixture flags with native default", false, undefined, "1", "1", [false, true]],
+    ["production fixture flags with explicit native", false, "1", "1", "1", [false, true]],
+    ["fixture flags cannot override production opt-out", false, "0", "1", "1", [false, false]],
+    ["default development", true, undefined, undefined, undefined, [false, true]],
+    ["development native opt-out", true, "0", undefined, undefined, [false, false]],
     ["fixture requires debug", true, "0", "0", "1", [false, false]],
+    ["fixture requires explicit account flag", true, "0", "1", "0", [false, false]],
+    ["debug alone with native default", true, undefined, "1", undefined, [false, true]],
     ["explicit development fixture", true, "0", "1", "1", [true, true]],
   ]) {
     const result = await build({
       configFile: false, logLevel: "silent",
       define: {
         "import.meta.env.DEV": JSON.stringify(dev),
-        "import.meta.env.VITE_NOTES_ACCOUNT_NATIVE": JSON.stringify(native),
-        "import.meta.env.VITE_NOTES_DEBUG": JSON.stringify(debug),
-        "import.meta.env.VITE_NOTES_ACCOUNT_UI": JSON.stringify(fixture),
+        "import.meta.env.VITE_NOTES_ACCOUNT_NATIVE": native === undefined ? "undefined" : JSON.stringify(native),
+        "import.meta.env.VITE_NOTES_DEBUG": debug === undefined ? "undefined" : JSON.stringify(debug),
+        "import.meta.env.VITE_NOTES_ACCOUNT_UI": fixture === undefined ? "undefined" : JSON.stringify(fixture),
       },
       build: { write: false, minify: false,
         lib: { entry: resolve("src/account-client.ts"), formats: ["es"] } },
