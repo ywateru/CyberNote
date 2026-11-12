@@ -1,9 +1,9 @@
 {
   "binary": {
     "path": "/private/tmp/cybernote-sync108-target/debug/notes-clone",
-    "sha256": "03bbc16d876e4671edbd5f1e9d1631c21095c2627c1f17994c2db54be2b67398"
+    "sha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4"
   },
-  "sourceSha256": "8a63f54db9c24e2a48aaec08d90d96f1a92158ed73ad4848cc28f8eb4252ba21",
+  "sourceSha256": "46e835519c8227c0c6344f5477b97da59412738dc68b40f14a3c29f69e7bbc9a",
   "staticFrontendSha256": "ac755157f95eebd047f0f2830c0877abcecb72780f5f1ec5036d77be4fa82dc6",
   "sourceFiles": {
     "index.html": "1048f1b00c7684bcd23c9722d22d82155d716a7ffb32d403b0e87dd608716b07",
@@ -371,7 +371,7 @@
     "src-tauri/src/sync/network/staging.rs": "e530fe4b3ac5cb626d42b50f6bff8bc3272affb731cc39ddb1d43341e2f0ebc9",
     "src-tauri/src/sync/network/transport.rs": "c53590d4d480d0fa74c1621318e6bb2b9da1ca46ddea854dd7fa487fe69957c3",
     "src-tauri/src/sync/network/wire.rs": "c58e2ebfd3bb9e41c144709d871e1a74d3414ea4a2c47d7799fb629f2865eb00",
-    "src-tauri/src/sync_e2e.rs": "ae243841312def3c4fa9f959d4b94967805aa88776981b035e314d39174e0798",
+    "src-tauri/src/sync_e2e.rs": "654cc08f22851802881615177489b3231c85119f865a4e6cdc453c45e405c352",
     "src-tauri/src/sync_test_root84.rs": "155f2c7fbfd3949ed9cbaab7d96d77c64e8f88916f1ce27aa4f48b776852e742",
     "src-tauri/tauri.conf.json": "8d4c2a337a1100415d7464acf0f786345ebb1732524e9912132171588323b8e2",
     "src/App.tsx": "5d744d5e9ac746123b055fe31f13f786c27116c49d008efe82a1c67a1002adab",
@@ -531,23 +531,33 @@
   ],
   "runtimeGate": "NOTES_SYNC_E2E=1",
   "handshake": {
-    "boundary": "one actual native App; driver hookup handshake only; no business sync acceptance",
+    "boundary": "one actual native App; interactive startup handoff and driver handshake only; no business sync acceptance",
     "binary": "/private/tmp/cybernote-sync108-target/debug/notes-clone",
     "ready": {
+      "interactive": true,
       "location": "tauri://localhost",
       "native": true,
+      "startupDetached": true,
       "version": 1,
       "window": "main"
+    },
+    "domAfterReady": {
+      "ariaBusy": false,
+      "ariaHidden": false,
+      "inert": false,
+      "inertAttribute": false,
+      "rootPresent": true,
+      "startupPresent": false
     },
     "workspaceRead": true,
     "noteCount": 0,
     "lifecycle": {
-      "name": "hook-handshake",
-      "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-hook-cUvuqG",
+      "name": "interactive-ready-handshake",
+      "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready-0qFrbB",
       "stderrBytes": 58,
-      "commands": 3,
+      "commands": 4,
       "forcedSignals": [],
-      "pid": 6758,
+      "pid": 7334,
       "exit": {
         "code": 0,
         "signal": null
@@ -561,5 +571,8 @@
     },
     "passed": true,
     "ownedDataAndCacheRemoved": true
-  }
+  },
+  "sourceCommit": "7a64e3b14f5c970038d1817717c35a5bb90702e7",
+  "readyFixOriginalCommit": "af1ac64a38a2630af76b9e363629ab4509fd0856",
+  "staticFrontendReused": true
 }
