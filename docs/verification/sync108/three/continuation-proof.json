@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "originalResult": "/private/tmp/sync108-three-20261112-02/result.json",
+  "originalResultSHA256": "eb7121790273190ff95df83ec8c8d32d74d5b3c9910796067ac928bb5630dd18",
+  "identitiesObservedInRun02": {
+    "A": {
+      "deviceId": "6a6e3bcc-4eef-4a73-b978-306a0f755809",
+      "workspaceId": "a0111fa3-a489-4f6a-baa2-4e97f0e2adc5"
+    },
+    "B": {
+      "deviceId": "7041f65c-8f54-44e4-81e9-5d296b97778e",
+      "workspaceId": "a0111fa3-a489-4f6a-baa2-4e97f0e2adc5"
+    },
+    "C": {
+      "deviceId": "65cb2043-5c2d-48a4-9304-4b46055dbc5e",
+      "workspaceId": "a0111fa3-a489-4f6a-baa2-4e97f0e2adc5",
+      "initialState": "disabled"
+    }
+  },
+  "originalTopology": {
+    "A": "ws://127.0.0.1:61778",
+    "B": "desktop loopback to A",
+    "C": "ws://127.0.0.1:37529",
+    "reverse": {
+      "serial": "98895a3147304c3132",
+      "package": "com.local.notesclone.sync108",
+      "device": "tcp:37529",
+      "host": "tcp:61778"
+    }
+  },
+  "originalStores": {
+    "A": "/private/tmp/sync108-three-20261112-02/store-A",
+    "B": "/private/tmp/sync108-three-20261112-02/store-B"
+  },
+  "run03Continuation": {
+    "previousOutput": "/private/tmp/sync108-three-20261112-02",
+    "previousResultSHA256": "eb7121790273190ff95df83ec8c8d32d74d5b3c9910796067ac928bb5630dd18",
+    "originalIdentities": {
+      "A": {
+        "deviceId": "6a6e3bcc-4eef-4a73-b978-306a0f755809",
+        "workspaceId": "a0111fa3-a489-4f6a-baa2-4e97f0e2adc5"
+      },
+      "B": {
+        "deviceId": "7041f65c-8f54-44e4-81e9-5d296b97778e",
+        "workspaceId": "a0111fa3-a489-4f6a-baa2-4e97f0e2adc5"
+      },
+      "C": {
+        "deviceId": "65cb2043-5c2d-48a4-9304-4b46055dbc5e",
+        "workspaceId": "a0111fa3-a489-4f6a-baa2-4e97f0e2adc5",
+        "initialState": "disabled"
+      }
+    },
+    "originalTopology": {
+      "A": "ws://127.0.0.1:61778",
+      "B": "desktop loopback to A",
+      "C": "ws://127.0.0.1:37529",
+      "reverse": {
+        "serial": "98895a3147304c3132",
+        "package": "com.local.notesclone.sync108",
+        "device": "tcp:37529",
+        "host": "tcp:61778"
+      }
+    },
+    "originalFreshStores": true
+  },
+  "run03RuntimeIdentityRecheckCompleted": false,
+  "limitation": "run03 stopped at A Ready TIMEOUT, before runtime identity recheck; continuation metadata is preserved, not a successful resumed suite."
+}

@@ -1,0 +1,266 @@
+{
+  "schema": 1,
+  "kind": "three-peer-attempt-archive",
+  "archivedAt": "2026-11-12T11:39:22.768266+00:00",
+  "attempts": [
+    {
+      "run": "run01",
+      "originalPath": "/private/tmp/sync108-three-20261112-01/result.json",
+      "archive": "run01.result.json",
+      "sha256": "6cd6d77f764b53347615e9862171bab922d6dfc62f71c40250fe3cfb0bd5fe4a",
+      "bytes": 77822,
+      "status": "fail",
+      "cases": [],
+      "failure": {
+        "code": "ERR_ASSERTION"
+      },
+      "cleanup": [
+        {
+          "name": "B:natural-close",
+          "status": "pass",
+          "lifecycle": {
+            "name": "B",
+            "directory": "/private/tmp/sync108-three-20261112-01/store-B",
+            "stderrBytes": 58,
+            "commands": 14,
+            "forcedSignals": [],
+            "pid": 8273,
+            "lastAction": "shutdown",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": true
+          }
+        },
+        {
+          "name": "A:natural-close",
+          "status": "pass",
+          "lifecycle": {
+            "name": "A",
+            "directory": "/private/tmp/sync108-three-20261112-01/store-A",
+            "stderrBytes": 58,
+            "commands": 14,
+            "forcedSignals": [],
+            "pid": 8263,
+            "lastAction": "shutdown",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": true
+          }
+        },
+        {
+          "name": "retained-preparation-CDP",
+          "status": "pass",
+          "owned": {
+            "serial": "98895a3147304c3132",
+            "package": "com.local.notesclone.sync108",
+            "pid": 23814,
+            "local": "tcp:59445",
+            "remote": "localabstract:webview_devtools_remote_23814",
+            "pageId": "2C20821140632D59316F7E11169448FE",
+            "pageURL": "http://tauri.localhost/"
+          }
+        }
+      ]
+    },
+    {
+      "run": "run02",
+      "originalPath": "/private/tmp/sync108-three-20261112-02/result.json",
+      "archive": "run02.result.json",
+      "sha256": "eb7121790273190ff95df83ec8c8d32d74d5b3c9910796067ac928bb5630dd18",
+      "bytes": 80510,
+      "status": "fail",
+      "cases": [
+        {
+          "id": "3P-01",
+          "name": "A to B and C: formatted full document plus PNG original",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:22:25.146Z",
+          "finishedAt": "2026-11-12T11:22:29.498Z"
+        },
+        {
+          "id": "3P-02",
+          "name": "C real UI create to A then B: complete document and plaintext",
+          "status": "fail",
+          "startedAt": "2026-11-12T11:22:29.499Z",
+          "failureCode": "ASSERTION_OR_DRIVER_FAILURE",
+          "finishedAt": "2026-11-12T11:22:45.026Z"
+        }
+      ],
+      "failure": {
+        "code": "ASSERTION_OR_DRIVER_FAILURE"
+      },
+      "cleanup": [
+        {
+          "name": "active-CDP",
+          "owned": {
+            "serial": "98895a3147304c3132",
+            "package": "com.local.notesclone.sync108",
+            "pid": 23814,
+            "local": "tcp:61801",
+            "remote": "localabstract:webview_devtools_remote_23814",
+            "pageId": "2C20821140632D59316F7E11169448FE",
+            "pageURL": "http://tauri.localhost/"
+          },
+          "status": "pass"
+        },
+        {
+          "name": "B:natural-close",
+          "status": "pass",
+          "lifecycle": {
+            "name": "B",
+            "directory": "/private/tmp/sync108-three-20261112-02/store-B",
+            "stderrBytes": 58,
+            "commands": 55,
+            "forcedSignals": [],
+            "pid": 8676,
+            "lastAction": "shutdown",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": true
+          }
+        },
+        {
+          "name": "A:natural-close",
+          "status": "pass",
+          "lifecycle": {
+            "name": "A",
+            "directory": "/private/tmp/sync108-three-20261112-02/store-A",
+            "stderrBytes": 58,
+            "commands": 93,
+            "forcedSignals": [],
+            "pid": 8661,
+            "lastAction": "shutdown",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": true
+          }
+        },
+        {
+          "name": "owned-reverse",
+          "status": "pass",
+          "owned": {
+            "serial": "98895a3147304c3132",
+            "package": "com.local.notesclone.sync108",
+            "device": "tcp:37529",
+            "host": "tcp:61778"
+          }
+        }
+      ]
+    },
+    {
+      "run": "run03",
+      "originalPath": "/private/tmp/sync108-three-20261112-03/result.json",
+      "archive": "run03.result.json",
+      "sha256": "531712097ac578ccac46617b5f88b18618b47132c4585d3f8495a29669fb727f",
+      "bytes": 77309,
+      "status": "fail",
+      "cases": [],
+      "failure": {
+        "code": "TIMEOUT"
+      },
+      "cleanup": [
+        {
+          "name": "A:natural-close",
+          "status": "fail",
+          "lifecycle": {
+            "name": "A",
+            "directory": "/private/tmp/sync108-three-20261112-02/store-A",
+            "stderrBytes": 58,
+            "commands": 1,
+            "forcedSignals": [],
+            "pid": 9619,
+            "lastAction": "ready",
+            "failureCode": "TIMEOUT",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": false
+          }
+        }
+      ]
+    }
+  ],
+  "formalFourCasePass": {
+    "available": false,
+    "reason": "Only run01–03 results are present; no all-four-case passing result located. Latest PageLoad Ready binary handoff and continuation execution are outstanding."
+  },
+  "verifiedPartialPass": {
+    "run": "run02",
+    "case": {
+      "id": "3P-01",
+      "name": "A to B and C: formatted full document plus PNG original",
+      "status": "pass",
+      "startedAt": "2026-11-12T11:22:25.146Z",
+      "finishedAt": "2026-11-12T11:22:29.498Z"
+    },
+    "observations": [
+      {
+        "name": "A to B/C full PNG document",
+        "noteId": "1fa8e002-2ad9-4b5e-9482-f557629adefc",
+        "targets": [
+          "B",
+          "C"
+        ],
+        "fullDocumentAndPlainTextSHA256": "c9cab2d79f99211201ea5d136724d4e60e9e2a876f9106fc87d5124b5924356b",
+        "plainTextChars": 62
+      },
+      {
+        "name": "A:read-original",
+        "noteId": "1fa8e002-2ad9-4b5e-9482-f557629adefc",
+        "attachmentId": "d75aa98e-5338-472d-9860-294d5e1ca836",
+        "bytes": 3677,
+        "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a"
+      },
+      {
+        "name": "B:read-original",
+        "noteId": "1fa8e002-2ad9-4b5e-9482-f557629adefc",
+        "attachmentId": "d75aa98e-5338-472d-9860-294d5e1ca836",
+        "bytes": 3677,
+        "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a"
+      },
+      {
+        "name": "C:read-original",
+        "noteId": "1fa8e002-2ad9-4b5e-9482-f557629adefc",
+        "attachmentId": "d75aa98e-5338-472d-9860-294d5e1ca836",
+        "bytes": 3677,
+        "sha256": "3cab9ba707426dcea5e90bc86e8e90db7998a45c2f92e0bd65d040c800ae823a"
+      }
+    ]
+  },
+  "continuationProof": "continuation-proof.json",
+  "apkPreservation": "android-apk-preservation.json"
+}
