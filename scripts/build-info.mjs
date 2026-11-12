@@ -12,6 +12,7 @@ const generatedFiles = new Set(['src-tauri/gen/android/tauri.settings.gradle', '
 const generatedDirectories = new Set([
   'src-tauri/gen/schemas',
   'src-tauri/gen/android/.tauri',
+  'src-tauri/gen/android/.kotlin',
   'src-tauri/gen/android/app/src/main/assets',
   'src-tauri/gen/android/app/src/main/jniLibs',
   'src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated',
