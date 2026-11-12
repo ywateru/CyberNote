@@ -137,3 +137,14 @@ its lease. The immediate check after normal sandbox start was initially false;
 a later read-only foreground check confirmed the test app had resumed as u0.
 Both observations are retained, and final owned sandbox foreground is true. No
 additional network request or login retry was performed during this cleanup.
+
+## Subsequent host public-status recheck
+
+The main workspace independently rechecked the three fixed canonical public
+endpoints using Python urllib with default system DNS/TLS, no authorization and
+no network configuration changes. [host-public-recheck02.json](host-public-recheck02.json)
+records health **200**, auth config **200**, and anonymous profile **401**, in
+about 1.7–2.9 seconds. No response bodies were read. These are direct host test
+results, distinct from the earlier branch's reported host context. They confirm
+host reachability at that time; they do not prove phone reachability or identify
+the failed native request stage.
