@@ -7,6 +7,8 @@ fn main() {
         "focus_search",
         "keyboard_navigation",
         "recording_access",
+        "popup_menu",
+        "cancel_popup_menu",
     ])
     .build();
     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("macos") {
@@ -14,6 +16,8 @@ fn main() {
             .file("macos/toolbar.m")
             .file("macos/format.m")
             .file("macos/keyboard.m")
+            .file("macos/attachments.m")
+            .file("macos/menu.m")
             .flag("-fobjc-arc")
             .flag("-fblocks")
             .flag("-mmacosx-version-min=12.0")
@@ -36,6 +40,7 @@ fn main() {
             "QuartzCore",
             "WebKit",
             "AVFoundation",
+            "UniformTypeIdentifiers",
         ] {
             println!("cargo:rustc-link-lib=framework={framework}");
         }
@@ -43,6 +48,9 @@ fn main() {
         println!("cargo:rerun-if-changed=macos/format.m");
         println!("cargo:rerun-if-changed=macos/format.h");
         println!("cargo:rerun-if-changed=macos/keyboard.m");
+        println!("cargo:rerun-if-changed=macos/attachments.m");
+        println!("cargo:rerun-if-changed=macos/menu.m");
+        println!("cargo:rerun-if-changed=macos/menu.h");
         println!("cargo:rerun-if-changed=macos/termination.m");
         println!("cargo:rerun-if-changed=macos/recording_access.m");
     }

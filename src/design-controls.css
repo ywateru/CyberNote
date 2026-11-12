@@ -1,0 +1,158 @@
+/* Product control geometry. Typography and drawing SVGs remain independent.
+   These declarations come after the page layouts; there is one size policy for
+   Web controls, while each page continues to own placement and responsive flow. */
+.recording-layout {
+  --control-icon: calc(24px * var(--ui-scale, 1) * var(--interface-icon-scale, 1));
+  --control-icon-small: calc(18px * var(--ui-scale, 1) * var(--interface-icon-scale, 1));
+}
+.app { isolation: isolate; z-index: var(--layer-content-overlay); }
+.recording-layout > .recording-dock { isolation: isolate; z-index: var(--layer-content); }
+.recording-layout :is(button, [role="button"], summary),
+.recording-layout :is(select, input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"])) {
+  min-height: var(--interface-hit-min) !important;
+}
+.recording-layout :is(button, [role="button"], summary) {
+  min-width: var(--interface-hit-min) !important;
+  border-radius: var(--interface-radius-button) !important;
+}
+.recording-layout :is(select, input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), textarea) {
+  border-radius: var(--interface-radius-button) !important;
+}
+.recording-layout label:has(> input:is([type="checkbox"], [type="radio"])) {
+  min-height: var(--interface-hit-min);
+}
+/* Only UI glyphs: neither arbitrary inline artwork nor editor/drawing/waveform
+   canvases are resized. A lucide inside an explicit button is an action icon. */
+.recording-layout :is(button, [role="button"], summary) > svg,
+.recording-layout :is(button, [role="button"]) .lucide,
+.recording-layout :is(.folder-row, .search-box, .preferences-interface-preview, .preferences-navigation, .attachment-info, .note-folder, .note-list-metadata) > svg {
+  width: var(--control-icon) !important;
+  height: var(--control-icon) !important;
+  flex-shrink: 0;
+}
+.recording-layout :is(.icon-button, .desktop-tool, .preferences-close, .preferences-back, .preview-close) {
+  width: max(var(--interface-hit-min), calc(42px * var(--ui-scale, 1) * var(--interface-hit-scale)));
+  height: max(var(--interface-hit-min), calc(42px * var(--ui-scale, 1) * var(--interface-hit-scale))) !important;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+.recording-layout :is(.folder-row, .note-row, .gallery-card, .attachment-gallery-card,
+  .preferences-group, .preferences-interface-preview, .preferences-editor-preview,
+  .attachment-node, .audio-card, .file-card, .storage-summary, .storage-category,
+  .apple-import-panel, .sync-section, .search-box, .attachment-gallery-categories) {
+  border-radius: var(--interface-radius-card) !important;
+}
+.recording-layout :is(.preferences, .modal, .recording-sheet, .image-preview-window,
+  .attachment-info, .smart-form, .ocr-panel) {
+  border-radius: var(--interface-radius-panel) !important;
+}
+.recording-layout :is(.unified-menu.popover, .popover, .submenu-surface) {
+  border-radius: var(--interface-radius-menu) !important;
+}
+.recording-layout .unified-menu .menu-row {
+  min-height: calc(var(--interface-menu-min) + 2 * var(--interface-menu-extra)) !important;
+  padding-block: calc(3px + var(--interface-menu-extra));
+  border-radius: var(--interface-radius-button) !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.recording-layout .unified-menu .menu-row svg {
+  width: calc(20px * var(--ui-scale, 1) * var(--interface-icon-scale)) !important;
+  height: calc(20px * var(--ui-scale, 1) * var(--interface-icon-scale)) !important;
+}
+.recording-layout .unified-menu .menu-label { overflow-wrap: anywhere; }
+.recording-layout .unified-menu button:not(.menu-row) {
+  min-height: calc(var(--interface-menu-min) + 2 * var(--interface-menu-extra)) !important;
+}
+.recording-layout .recording-presentation-menu > [role="menuitem"] {
+  min-height: calc(var(--interface-menu-min) + 2 * var(--interface-menu-extra)) !important;
+  padding-block: calc(3px + var(--interface-menu-extra));
+}
+.recording-layout .folder-disclosure { position: static; margin-left: -8px; flex-shrink: 0; }
+.recording-layout .folder-disclosure svg { width: var(--control-icon-small); height: var(--control-icon-small); }
+.recording-layout .folder-row { height: auto; min-height: var(--interface-hit-min) !important; padding-block: 3px; }
+.recording-layout .tag-chips { gap: 5px; }
+.recording-layout .tag-chips button { padding: 4px 8px; }
+.recording-layout .desktop-toolbar-actions { flex-shrink: 0; }
+.recording-layout .desktop-search { flex-shrink: 1; min-width: 0; }
+.recording-layout .desktop-search .search-box { max-width: 100%; }
+.recording-layout .desktop-search .search-box button { flex-shrink: 0; }
+.recording-layout .preferences-font-choices {
+  grid-template-columns: repeat(5, minmax(var(--interface-hit-min), 1fr));
+}
+.recording-layout .preferences :is(.preferences-appearance-card, .preferences-font-choice) {
+  height: auto;
+  border-radius: var(--interface-radius-button) !important;
+}
+.recording-layout .preferences-appearance-card { min-height: 72px; }
+.recording-layout :is(.preferences-details-toggle, .preferences-details-reset) > svg { width: var(--control-icon-small); height: var(--control-icon-small); }
+.recording-layout .preferences-navigation > button > svg { flex-basis: var(--control-icon); }
+.recording-layout .preferences-desktop .preferences-navigation {
+  flex-basis: max(196px, calc(140px * var(--ui-scale) + 80px));
+}
+.recording-layout .preferences-mobile .preferences-back {
+  width: auto;
+  white-space: nowrap;
+  gap: 2px;
+}
+.recording-layout :is(.preferences-row, .modal-actions, .drawing-overlay header, .drawing-overlay footer) { flex-wrap: wrap; }
+.recording-layout .preferences-detail-control input[type="range"] { width: 100%; }
+.recording-layout .error-banner { flex-wrap: wrap; overflow-wrap: anywhere; }
+/* Semantic circles are not square buttons even at radius=0. */
+.recording-layout :is(.audio-play-toggle, .recording-primary, .recording-play,
+  .recording-mobile-play, .mobile-add-note, .drawing-colors button, .recording-controls .recording-red-core) { border-radius: 50% !important; }
+.recording-layout .drawing-colors button { width: var(--interface-hit-min); height: var(--interface-hit-min); }
+.recording-layout .drawing-colors { flex-wrap: wrap; }
+/* Reserve an actual gutter for touch targets outside contenteditable. Table
+   selection outlines still follow the cells; chrome never overlaps cell text. */
+.recording-layout .tiptap .tableWrapper {
+  margin-left: var(--interface-hit-min);
+  margin-top: calc(var(--interface-hit-min) + 12px);
+}
+.recording-layout .table-axis-handle.column { height: calc(var(--interface-hit-min) + 2px); }
+.recording-layout .table-axis-handle.column:not(.chosen) {
+  width: calc(var(--interface-hit-min) + 2px) !important;
+  transform: translate(calc(15px - 50%), calc(-100% - 7px));
+}
+/* Match chosen-state specificity: the legacy mobile 22px width must not
+   shrink this container while its actual button targets stay 44px or larger.
+   Include both 1px borders so the child hit box fits inside the gutter. */
+.recording-layout .table-axis-handle.row,
+.recording-layout .table-axis-handle.row.chosen { width: calc(var(--interface-hit-min) + 2px); }
+.recording-layout .table-axis-handle.row:not(.chosen) {
+  height: calc(var(--interface-hit-min) + 2px) !important;
+  transform: translate(calc(-100% - 7px), calc(15px - 50%));
+}
+.recording-layout .table-axis-handle.column.chosen { min-width: calc(2 * var(--interface-hit-min) + 2px); }
+.recording-layout .table-axis-handle.row.chosen { min-height: calc(2 * var(--interface-hit-min) + 2px); }
+.recording-layout .table-axis-handle > button { flex-shrink: 0; }
+.recording-layout .table-axis-arrow { flex-basis: var(--interface-hit-min) !important; }
+/* A modal menu is portalled outside clipped modal content, but retains its
+   semantic layer. Ordinary menus never appear in front of a modal. */
+.recording-layout .unified-menu[data-menu-layer="modal"] { z-index: var(--layer-modal-menu); }
+.recording-layout .unified-menu[data-menu-layer="modal"] .submenu-surface { z-index: var(--layer-modal-menu); }
+.recording-layout:has(> .app.access-sync) > .recording-dock { visibility: hidden; pointer-events: none; }
+.recording-layout .image-preview-window > header { flex-wrap: wrap; }
+.recording-layout .image-preview-actions { max-width: 100%; flex-wrap: wrap; }
+.recording-layout .image-preview-window > header > strong { flex-basis: 120px; }
+@media (max-width: 699px) {
+  .recording-layout { --control-icon: calc(24px * var(--interface-icon-scale)); --control-icon-small: calc(18px * var(--interface-icon-scale)); }
+  .recording-layout .mobile-editor-toolbar { gap: 0; justify-content: space-around; }
+  .recording-layout .preferences-font-choices { grid-template-columns: repeat(auto-fit, minmax(var(--interface-hit-min), 1fr)); }
+  .recording-layout .preferences-appearance-choices { gap: 6px; }
+  .recording-layout .preferences-appearance-card { padding-inline: 5px; }
+  .recording-layout .preferences-appearance-sample i { width: 25%; }
+  .recording-layout .preferences-interface-preview { flex-wrap: wrap; }
+  .recording-layout .preferences-interface-preview small { white-space: normal; }
+  .recording-layout .preferences-mobile .preferences { border-radius: 0 !important; }
+  .recording-layout .drawing-overlay header { height: auto; min-height: 56px; padding: 4px 8px; }
+  .recording-layout .drawing-overlay footer { max-height: 35dvh; overflow: auto; }
+}
+@media (max-height: 540px) and (min-width: 700px) {
+  .recording-layout .preferences-desktop { padding: 8px; }
+  .recording-layout .preferences-desktop .preferences-navigation { padding-top: 60px; padding-bottom: 8px; overflow-y: auto; }
+  .recording-layout .preferences-desktop .preferences-settings { padding-top: 60px; }
+}

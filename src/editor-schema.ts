@@ -4,6 +4,7 @@ import {
   mergeAttributes,
   type NodeViewRenderer,
 } from "@tiptap/core";
+import { tablePointerLifecycle } from "./table-pointer-lifecycle";
 import { NoteTag } from "./note-tag-extension";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
@@ -13,6 +14,11 @@ import Highlight from "@tiptap/extension-highlight";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Plugin, TextSelection } from "@tiptap/pm/state";
+
+const TablePointerLifecycle = Extension.create({
+  name: "notesTablePointerLifecycle",
+  addProseMirrorPlugins: () => [tablePointerLifecycle()],
+});
 
 const LiteralTab = Extension.create({
   name: "notesLiteralTab",
@@ -126,6 +132,7 @@ export function createEditorExtensions(
     TaskList,
     TaskItem.configure({ nested: true }),
     TableKit.configure({ table: { resizable: true } }),
+    TablePointerLifecycle,
     Highlight.configure({ multicolor: true }),
     TextStyle,
     Color,

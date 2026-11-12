@@ -10,6 +10,9 @@ pub enum Action {
     ViewOptions,
     BackToGallery,
     NewNote,
+    Settings,
+    RecordAudio,
+    InsertTag,
     Format,
     Checklist,
     Table,
@@ -68,6 +71,7 @@ pub enum MenuCommand {
     GroupByDate,
     ViewAttachments,
     ConvertTableToText,
+    ConvertTextToTable,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -75,6 +79,8 @@ pub enum MenuCommand {
 pub enum MenuEntry {
     Item {
         command: MenuCommand,
+        #[serde(rename = "folderId", default, skip_serializing_if = "Option::is_none")]
+        folder_id: Option<String>,
         label: String,
         enabled: bool,
         selected: bool,
@@ -143,7 +149,24 @@ pub struct ToolbarState {
     pub menus: Vec<MenuDefinition>,
     pub search: Option<SearchState>,
     pub glass_style: GlassStyle,
+    #[serde(default = "default_font_scale")]
+    pub font_scale: f64,
+    #[serde(default = "default_font_scale")]
+    pub icon_scale: f64,
+    #[serde(default = "default_font_scale")]
+    pub hit_scale: f64,
+    #[serde(default)]
+    pub appearance: Appearance,
 }
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum Appearance {
+    #[default]
+    System,
+    Light,
+    Dark,
+}
+fn default_font_scale() -> f64 { 1.0 }
 fn text(value: &str, max: usize) -> Result<()> {
     if value.chars().count() > max || value.contains('\0') {
         return Err(Error::new("invalid_state", "文字过长或包含空字符"));
@@ -161,16 +184,23 @@ impl ToolbarState {
                 "版本和计数必须在 JavaScript 安全整数范围内，版本须大于零",
             ));
         }
+        if !self.font_scale.is_finite() || !(0.5..=1.5).contains(&self.font_scale) {
+            return Err(Error::new("invalid_state", "界面字号无效"));
+        }
+        if !self.icon_scale.is_finite() || !(0.8..=1.2).contains(&self.icon_scale)
+            || !self.hit_scale.is_finite() || !(1.0..=1.3).contains(&self.hit_scale) {
+            return Err(Error::new("invalid_state", "界面图标或操作区域比例无效"));
+        }
         let c = &self.columns;
         if !c.sidebar_width.is_finite()
             || !c.list_width.is_finite()
-            || !(160.0..=600.0).contains(&c.sidebar_width)
-            || !(180.0..=800.0).contains(&c.list_width)
+            || !(80.0..=1200.0).contains(&c.sidebar_width)
+            || !(100.0..=1600.0).contains(&c.list_width)
         {
             return Err(Error::new("invalid_state", "分栏尺寸无效"));
         }
         text(&self.folder_title, 256)?;
-        if self.actions.len() > 11 || self.menus.len() > 11 {
+        if self.actions.len() > 14 || self.menus.len() > 11 {
             return Err(Error::new("invalid_state", "工具项数量超限"));
         }
         let mut actions = HashSet::new();
@@ -185,6 +215,7 @@ impl ToolbarState {
                         | Action::ToggleSidebar
                         | Action::ViewOptions
                         | Action::NewNote
+                        | Action::Settings
                 )
             {
                 return Err(Error::new(
@@ -219,12 +250,12 @@ impl ToolbarState {
                 .actions
                 .iter()
                 .any(|a| a.action == *action && a.enabled),
-            Intent::Menu { owner, command } => {
+            Intent::Menu { owner, command, folder_id } => {
                 self.actions.iter().any(|a| a.action == *owner && a.enabled)
                     && self
                         .menus
                         .iter()
-                        .any(|m| m.owner == *owner && enabled_command(&m.items, *command))
+                        .any(|m| m.owner == *owner && enabled_command(&m.items, *command, folder_id.as_deref()))
             }
             Intent::Search { value, .. } => {
                 self.search.as_ref().is_some_and(|s| s.enabled) && value.chars().count() <= 4096
@@ -266,20 +297,26 @@ fn validate_entries(
     entries: &[MenuEntry],
     depth: usize,
     count: &mut usize,
-    commands: &mut HashSet<MenuCommand>,
+    commands: &mut HashSet<(MenuCommand, Option<String>)>,
 ) -> Result<()> {
     if depth > 2 || entries.is_empty() {
         return Err(Error::new("invalid_state", "菜单为空或嵌套过深"));
     }
     for entry in entries {
         *count += 1;
-        if *count > 96 {
-            return Err(Error::new("invalid_state", "菜单项超过96项"));
+        if *count > 512 {
+            return Err(Error::new("invalid_state", "菜单项超过512项"));
         }
         match entry {
-            MenuEntry::Item { command, label, .. } => {
+            MenuEntry::Item { command, folder_id, label, .. } => {
                 text(label, 128)?;
-                if label.trim().is_empty() || !commands.insert(*command) {
+                if let Some(id) = folder_id {
+                    text(id, 128)?;
+                    if *command != MenuCommand::MoveNote || id.trim().is_empty() {
+                        return Err(Error::new("invalid_state", "无效移动目标"));
+                    }
+                }
+                if label.trim().is_empty() || !commands.insert((*command, folder_id.clone())) {
                     return Err(Error::new("invalid_state", "菜单命令重复或名称为空"));
                 }
             }
@@ -295,14 +332,15 @@ fn validate_entries(
     }
     Ok(())
 }
-fn enabled_command(entries: &[MenuEntry], command: MenuCommand) -> bool {
+fn enabled_command(entries: &[MenuEntry], command: MenuCommand, folder_id: Option<&str>) -> bool {
     entries.iter().any(|e| match e {
         MenuEntry::Item {
             command: c,
+            folder_id: target,
             enabled,
             ..
-        } => *c == command && *enabled,
-        MenuEntry::Submenu { items, .. } => enabled_command(items, command),
+        } => *c == command && target.as_deref() == folder_id && *enabled,
+        MenuEntry::Submenu { items, .. } => enabled_command(items, command, folder_id),
         _ => false,
     })
 }
@@ -318,7 +356,7 @@ pub enum SearchPhase {
 #[serde(tag = "kind", rename_all = "camelCase", deny_unknown_fields)]
 pub enum Intent {
     Action { action: Action },
-    Menu { owner: Action, command: MenuCommand },
+    Menu { owner: Action, command: MenuCommand, #[serde(rename = "folderId", default, skip_serializing_if = "Option::is_none")] folder_id: Option<String> },
     Search { value: String, phase: SearchPhase },
     WindowActivity { active: bool },
 }
@@ -352,6 +390,8 @@ pub struct NativeInfo {
     pub symbol_fallbacks: Vec<SymbolFallback>,
     pub window_number: i64,
     pub scale_factor: f64,
+    #[serde(default)]
+    pub popup_menus: bool,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]

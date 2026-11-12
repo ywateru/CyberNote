@@ -30,5 +30,9 @@ export function nativeToolbarTransport(): ToolbarTransport {
     inspect: () => toolbar.inspect(),
     focusSearch: () => toolbar.focusSearch(),
     unbind: () => toolbar.unbind(),
+    scheduleUpdate: (flush) => {
+      const frame = requestAnimationFrame(flush);
+      return () => cancelAnimationFrame(frame);
+    },
   };
 }

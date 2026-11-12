@@ -1,4 +1,5 @@
 import java.util.Properties
+import groovy.json.JsonSlurper
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -14,6 +15,13 @@ val tauriProperties = Properties().apply {
     }
 }
 
+// package.json is the application version source; Tauri/Cargo are checked beforeBuild.
+val cyberNoteVersion = (JsonSlurper().parse(file("../../../../package.json")) as Map<*, *>)["version"] as String
+val cyberNoteParts = cyberNoteVersion.split(".").map { it.toInt() }
+val cyberNoteVersionCode = cyberNoteParts[0] * 1_000_000 + cyberNoteParts[1] * 1_000 + cyberNoteParts[2]
+require(cyberNoteParts[1] < 1000 && cyberNoteParts[2] < 1000 && cyberNoteVersionCode > 0) { "Version cannot be encoded as an Android versionCode" }
+require(tauriProperties.getProperty("tauri.android.versionName", cyberNoteVersion) == cyberNoteVersion) { "Tauri Android version differs from package.json" }
+
 android {
     compileSdk = 36
     namespace = "com.local.notesclone"
@@ -22,8 +30,8 @@ android {
         applicationId = "com.local.notesclone"
         minSdk = 26
         targetSdk = 36
-        versionCode = tauriProperties.getProperty("tauri.android.versionCode", "1").toInt()
-        versionName = tauriProperties.getProperty("tauri.android.versionName", "1.0")
+        versionCode = cyberNoteVersionCode
+        versionName = cyberNoteVersion
     }
     buildTypes {
         getByName("debug") {

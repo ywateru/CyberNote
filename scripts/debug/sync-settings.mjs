@@ -24,33 +24,16 @@ export async function runSyncSettings(runtime, { command, check, output }) {
     calls("status") === 0 && (await sync().count()) === 0 && !backend.sync,
   );
   backend.configure({ fail: { inventory: 100 } });
-  await command("settings.tab", { tab: "data" });
-  check(
-    "Initial inventory failure still exposes synchronization and backup controls",
-    (await sync().count()) === 1 &&
-      (await page.locator(".data-error").count()) === 1 &&
-      (await page
-        .getByRole("button", { name: "导入备份…", exact: true })
-        .isEnabled()),
-  );
+  await command("settings.tab", { tab: "sync" });
+  check("Synchronization is accessible without storage inventory", (await sync().count()) === 1 && !backend.calls.some(row => row.command === "get_data_management"));
   backend.configure({ fail: { inventory: 0 } });
-  await command("data.refresh");
   check(
     "Default status query does not enable sync or generate identity",
     backend.sync.state === "disabled" &&
       !backend.sync.deviceId &&
       (await sync().getAttribute("data-sync-state")) === "disabled",
   );
-  check(
-    "Synchronization occupies the existing data scroll after backup, without another dialog",
-    (await sync().evaluate(
-      (node) =>
-        node.parentElement.className === "data-management-scroll" &&
-        !!node.previousElementSibling?.classList.contains(
-          "data-backup-section",
-        ),
-    )) && (await page.getByRole("dialog").count()) === 1,
-  );
+  check("Synchronization has its own scrolling settings category", await sync().evaluate(node => !!node.closest(".preferences-sync")) && (await page.getByRole("dialog").count()) === 1);
   const descriptors = await page.evaluate(() => window.__NOTES_DEBUG__.list());
   const ids = [
     "status",
@@ -175,7 +158,7 @@ export async function runSyncSettings(runtime, { command, check, output }) {
     hidden = error.code;
   }
   check("Hidden panel rejects sync commands", hidden === "APP_ERROR");
-  await command("settings.tab", { tab: "data" });
+  await command("settings.tab", { tab: "sync" });
   check(
     "Returning to data does not recreate invitation",
     (await page.locator('[aria-label="生成的配对串"]').count()) === 0,
@@ -207,11 +190,11 @@ export async function runSyncSettings(runtime, { command, check, output }) {
   });
   try {
     await began;
-    await page.getByRole("tab", { name: "设置", exact: true }).click();
+    await api(page,"settings.tab", { tab: "settings" });
     release();
     await pending;
     await idle(page);
-    await command("settings.tab", { tab: "data" });
+    await command("settings.tab", { tab: "sync" });
     check(
       "A late invitation response cannot recreate secret after tab change",
       (await page.locator('[aria-label="生成的配对串"]').count()) === 0,
@@ -243,7 +226,7 @@ export async function runSyncSettings(runtime, { command, check, output }) {
     closeRelease();
     await closePending;
     await idle(page);
-    await command("data.open");
+    await command("settings.open"); await command("settings.tab", { tab: "sync" });
     check(
       "A late invitation response after closing cannot publish into reopened settings",
       (await page.locator('[aria-label="生成的配对串"]').count()) === 0,
@@ -415,10 +398,11 @@ export async function runSyncSettings(runtime, { command, check, output }) {
       (await page.locator(".sync-error").count()) === 1,
   );
   await command("sync.status");
+  await command("settings.tab", { tab: "data" });
   await command("data.navigate", { view: "all" });
   check(
     "Category details do not display synchronization block",
-    (await sync().count()) === 0,
+    !(await sync().isVisible()),
   );
   await command("data.navigate", { view: "overview" });
   check(
@@ -431,9 +415,9 @@ export async function runSyncSettings(runtime, { command, check, output }) {
       await close();
       await page.setViewportSize({ width, height: width === 320 ? 360 : 844 });
       await command("settings.update", { settings: { theme } });
-      await command("data.open");
+      await command("settings.open"); await command("settings.tab", { tab: "sync" });
       const geometry = await sync().evaluate((node) => {
-        const container = node.closest(".data-management-scroll");
+        const container = node.closest(".preferences-sync");
         return {
           smallButtons: [...node.querySelectorAll("button")].filter(
             (x) =>
@@ -480,14 +464,14 @@ export async function runSyncSettings(runtime, { command, check, output }) {
     }),
   );
   await close();
-  await command("data.open");
+  await command("settings.open"); await command("settings.tab", { tab: "sync" });
   check(
     "Closing/reopening never retains a visible pairing secret",
     (await page.locator('[aria-label="生成的配对串"]').count()) === 0,
   );
   // Fresh local state tests join password input and secret clearing.
   await runtime.reset();
-  await command("data.open");
+  await command("settings.open"); await command("settings.tab", { tab: "sync" });
   await page.getByRole("button", { name: "加入同步", exact: true }).click();
   const pair = page.locator('[aria-label="粘贴完整配对串"]');
   await pair.fill(secret);
@@ -502,7 +486,7 @@ export async function runSyncSettings(runtime, { command, check, output }) {
     (await pair.getAttribute("type")) === "password",
   );
   await command("settings.tab", { tab: "settings" });
-  await command("settings.tab", { tab: "data" });
+  await command("settings.tab", { tab: "sync" });
   check(
     "Switching tabs clears unsent pairing input",
     (await pair.count()) === 0,
@@ -542,7 +526,7 @@ export async function runSyncSettings(runtime, { command, check, output }) {
   await update.click();
   await pair.fill(secret);
   await command("settings.tab", { tab: "settings" });
-  await command("settings.tab", { tab: "data" });
+  await command("settings.tab", { tab: "sync" });
   check(
     "Tab changes clear an existing-device endpoint update",
     (await pair.count()) === 0,
@@ -550,7 +534,7 @@ export async function runSyncSettings(runtime, { command, check, output }) {
   await update.click();
   await pair.fill(secret);
   await close();
-  await command("data.open");
+  await command("settings.open"); await command("settings.tab", { tab: "sync" });
   check(
     "Closing settings clears an existing-device endpoint update",
     (await pair.count()) === 0,
@@ -603,7 +587,7 @@ export async function runSyncSettings(runtime, { command, check, output }) {
     const old = window.isTauri;
     window.isTauri = false;
     try {
-      const { syncCommand } = await import("/src/sync-client.ts");
+      const { syncCommand } = window.__DEBUG_SYNC_MODULE__ || await import("/src/sync-client.ts");
       await syncCommand({ type: "status" });
       return "";
     } catch (error) {
@@ -617,7 +601,7 @@ export async function runSyncSettings(runtime, { command, check, output }) {
     unavailable.includes("已安装") && calls("status") === beforeBrowserIPC,
   );
   const badResultCount = await page.evaluate(async () => {
-    const { validateSyncResult } = await import("/src/sync-client.ts");
+    const { validateSyncResult } = window.__DEBUG_SYNC_MODULE__ || await import("/src/sync-client.ts");
     const base = {
       state: "disabled",
       deviceName: "",

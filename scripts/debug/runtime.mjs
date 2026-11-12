@@ -126,13 +126,17 @@ export async function openRuntime(options = {}) {
     if (options.bundleDebug) {
       if (options.production || options.enabled === false) throw Error("Bundled debug runtime cannot be a production-exclusion check");
       production = resolve(directory, 'debug-bundle');
-      await buildVite({ root, configFile: false, plugins: [react()], logLevel: 'error', define: { 'import.meta.env.DEV': 'true', 'import.meta.env.VITE_NOTES_DEBUG': JSON.stringify('1'), 'process.env.NODE_ENV': JSON.stringify('development') }, build: { outDir: production, emptyOutDir: true, minify: false, cssCodeSplit: false, rollupOptions: { input: resolve(root, 'src/main.tsx'), output: { entryFileNames: 'app.js', assetFileNames: '[name][extname]' } } } });
-      await writeFile(resolve(production, 'index.html'), '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/style.css"></head><body><div id="root"></div><script type="module" src="/app.js"></script></body></html>');
+      const debugEntry = resolve(directory, 'debug-entry.mjs');
+      await writeFile(debugEntry, `import ${JSON.stringify(resolve(root, 'src/main.tsx'))}; import * as sync from ${JSON.stringify(resolve(root, 'src/sync-client.ts'))}; import * as storage from ${JSON.stringify(resolve(root, 'src/storage-usage.ts'))}; import * as data from ${JSON.stringify(resolve(root, 'src/data-management.ts'))}; window.__DEBUG_SYNC_MODULE__ = sync; window.__DEBUG_STORAGE_MODULE__ = storage; window.__DEBUG_DATA_MODULE__ = data;`);
+      await buildVite({ root, configFile: false, plugins: [react()], logLevel: 'error', define: { 'import.meta.env.DEV': 'true', 'import.meta.env.VITE_NOTES_DEBUG': JSON.stringify('1'), 'process.env.NODE_ENV': JSON.stringify('development') }, build: { outDir: production, emptyOutDir: true, minify: false, cssCodeSplit: false, rollupOptions: { input: debugEntry, output: { entryFileNames: 'app.js', assetFileNames: '[name][extname]' } } } });
+      const startupHtml = await readFile(resolve(root, 'index.html'), 'utf8');
+      await writeFile(resolve(production, 'index.html'), startupHtml.replace('</head>', '<link rel="stylesheet" href="/style.css"></head>').replace('/src/main.tsx', '/app.js'));
     }
-    const html = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>';
+    const html = await readFile(resolve(root, 'index.html'), 'utf8');
     server = createServer(async (request, response) => {
       try {
         const pathname = new URL(request.url, 'http://127.0.0.1').pathname;
+        if(pathname.startsWith('/media/')&&backend.serveMedia){backend.serveMedia(request,response);return;}
         if (pathname === '/__debug_ipc' || pathname === '/__debug_control') {
           let body = ''; for await (const chunk of request) { body += chunk; if (body.length > 20 * 1024 * 1024) throw Error('Bounded fixture IPC payload exceeded'); }
           const input = JSON.parse(body); const value = pathname === '/__debug_control' ? await backend.configure(input) : await backend.call(input.command, input.args);
@@ -147,8 +151,9 @@ export async function openRuntime(options = {}) {
       } catch (error) { response.statusCode = 500; response.end(JSON.stringify({ error: String(error) })); }
     });
     server.on('connection', (socket) => { sockets.add(socket); socket.on('close', () => sockets.delete(socket)); });
-    if (!production) vite = await createViteServer({ root, configFile: false, cacheDir: resolve(directory, 'vite-cache'), optimizeDeps: { include: ['react-dom', 'react-dom/client'] }, plugins: [react({ exclude: /\/(?:node_modules|vite-cache)\// })], define: { 'import.meta.env.VITE_NOTES_DEBUG': JSON.stringify(options.enabled === false ? '0' : '1') }, server: { middlewareMode: true, hmr: { server } }, appType: 'custom' });
+    if (!production) vite = await createViteServer({ root, configFile: false, cacheDir: resolve(directory, 'vite-cache'), optimizeDeps: { include: ['react-dom', 'react-dom/client'] }, plugins: [react({ exclude: /\/(?:node_modules|vite-cache)\// })], define: { 'import.meta.env.VITE_NOTES_DEBUG': JSON.stringify(options.enabled === false ? '0' : '1') }, server: { middlewareMode: true, watch: { ignored: ["**/artifacts/**", "**/output/**", "**/src-tauri/target/**", "**/plugins/**/target/**", "**/src-tauri/gen/android/**"] }, hmr: { server } }, appType: 'custom' });
     await new Promise((done, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', done); }); const origin = 'http://127.0.0.1:' + server.address().port;
+    if(backend.kind==='isolated-js-protocol-fixture')backend.mediaOrigin=origin;
     const playwrightPath = options.playwright || process.env.PLAYWRIGHT_CORE_PATH || playwrightDefault; if (!existsSync(playwrightPath)) throw Error('Set PLAYWRIGHT_CORE_PATH to an installed playwright-core; no dependencies are installed by this runner.');
     const { chromium } = await import(pathToFileURL(playwrightPath));
     const launchOptions = { executablePath: options.chrome || process.env.CHROME_PATH || chromeDefault, headless: true, args: ['--autoplay-policy=no-user-gesture-required', '--mute-audio', '--disable-background-timer-throttling'] };
@@ -182,6 +187,7 @@ export async function openRuntime(options = {}) {
     await page.goto(origin + '/?notesDebug=1', { waitUntil: 'domcontentloaded', timeout: 30000 });
     if (options.enabled === false || options.production) await page.waitForSelector('.app');
     else { await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); }
+    await page.waitForSelector('#startup', {state: 'detached'});
     if (options.rustEvents) {
       eventPage = page;
       eventReady = true;

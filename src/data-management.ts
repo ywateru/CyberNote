@@ -18,6 +18,8 @@ export type ManagedFile = {
 };
 export type DataManagementSnapshot = {
   version: 1;
+  // Separate rebuildable cache. Existing totals still describe Store files only.
+  mediaCache?: { version: 1; bytes: number; files: number; quota: number };
   capturedAt: number;
   rootPath: string;
   files: ManagedFile[];
@@ -73,6 +75,9 @@ export function validateDataManagement(
     !value.counts
   )
     throw Error("数据管理快照格式无效");
+  if (value.mediaCache !== undefined && (!value.mediaCache || value.mediaCache.version !== 1 ||
+      !integer(value.mediaCache.bytes) || !integer(value.mediaCache.files) || !integer(value.mediaCache.quota)))
+    throw Error("缩略图缓存统计无效");
   for (const key of [
     "databaseBytes",
     "auxiliaryBytes",

@@ -7,10 +7,31 @@
       content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
     />
     <meta name="theme-color" content="#f2f2f7" />
-    <title>备忘录</title>
+    <title>CyberNote</title>
+    <link rel="icon" type="image/svg+xml" href="/cybernote.svg" />
+    <link rel="stylesheet" href="/startup.css" />
+    <link rel="stylesheet" href="/src/design-tokens.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div id="startup" class="startup" data-state="loading" role="status" aria-label="正在打开 CyberNote" aria-live="polite" aria-busy="true">
+      <div class="startup-content">
+        <svg class="startup-logo" viewBox="0 0 1024 1024" fill="none" aria-hidden="true">
+          <image href="/cybernote.svg" width="1024" height="1024" />
+          <!-- Trace the existing logo; keep the square eyes and original artwork. -->
+          <path class="startup-trace" pathLength="100" d="M319 80H705C731 80 750 91 764 114L981 454C995 476 996 496 984 518L784 895C765 929 744 944 709 944H315C282 944 258 931 241 900L44 532C28 505 28 485 42 460L258 120C276 91 291 80 319 80Z" />
+          <g class="startup-eyes">
+            <rect x="310" y="314" width="118" height="118" />
+            <rect x="598" y="314" width="118" height="118" />
+          </g>
+        </svg>
+        <div class="startup-name">CyberNote</div>
+        <p id="startup-message" class="startup-message">正在打开备忘录…</p>
+        <button id="startup-retry" class="startup-retry" type="button" hidden>重新加载</button>
+        <noscript><p class="startup-message">请启用 JavaScript 后重新打开。</p></noscript>
+      </div>
+    </div>
+    <div id="root" inert aria-hidden="true" aria-busy="true"></div>
+    <script src="/startup.js"></script>
+    <script id="app-entry" type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -163,7 +163,9 @@ export async function runGroups(runtime, names, output) {
     } catch (error) {
       results.push({ group: name, pass: false, checks, error: error.message, elapsedMs: Math.round(performance.now() - started) });
       try { const s = await state(page); await saveJSON(resolve(output, name + '-failure.state.json'), { selection: s.selection, save: s.save, busy: s.busy, failure: s.failure, recording: s.recording, error: s.error, ocr: s.ocr }); } catch {}
-      await saveJSON(resolve(output, name + '-failure.snapshot.json'), await snapshot(page, { selector: '.app', maxChars: 16000, maxNodes: 80 })); await page.screenshot({ path: resolve(output, name + '-failure.png') }); await saveJSON(resolve(output, 'suite.json'), { results }); throw Object.assign(Error(name + ': ' + error.message), { results });
+      await saveJSON(resolve(output, 'suite.json'), { results });
+      try { await saveJSON(resolve(output, name + '-failure.snapshot.json'), await snapshot(page, { selector: '.app', maxChars: 16000, maxNodes: 80 })); await page.screenshot({ path: resolve(output, name + '-failure.png') }); } catch {}
+      throw Object.assign(Error(name + ': ' + error.message, { cause: error }), { results });
     }
   }
   await saveJSON(resolve(output, 'catalog-coverage.json'), { commands: descriptors.map((row) => ({ ...row, status: row.mode === 'unsupported' ? 'unsupported' : exercised.has(row.id) ? 'executed' : 'not-exercised', executions: exercised.get(row.id) || 0, ...(row.mode !== 'unsupported' && !exercised.has(row.id) ? { limitation: 'Catalog validation/availability is separate from executed scenario coverage.' } : {}) })) });

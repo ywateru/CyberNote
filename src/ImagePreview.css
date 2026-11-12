@@ -1,68 +1,106 @@
 .app > .image-preview {
-  position: absolute;
-  inset: var(--native-top, 0px) 0 0;
-  z-index: 180;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  overflow: hidden;
-  padding: 18px;
-  background: var(--paper, #fff);
-  color: var(--ink, #202020);
+  position: fixed;
+  width: min(880px, 68vw);
+  height: min(680px, 74vh);
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - var(--native-top, 0px) - 16px);
+  z-index: var(--layer-preview);
+
+  color: #303030;
   isolation: isolate;
 }
 .app > .image-preview[hidden] {
   display: none;
 }
-.app > .image-preview > header {
+.image-preview-window {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 1600px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 65%);
+  border-radius: 28px;
+  background: #b3b3b3;
+  box-shadow: 0 20px 70px rgb(0 0 0 / 35%);
+}
+.app > .image-preview.expanded {
+  inset: calc(var(--native-top, 0px) + 12px) 12px 12px;
+  width: auto;
+  height: auto;
+}
+.image-preview-window > header {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  min-width: 0;
+  gap: 10px;
+  min-height: 52px;
+  cursor: move;
+  touch-action: none;
+  user-select: none;
+  padding: 7px 14px;
   flex: none;
-}
-.app > .image-preview > header > strong {
   min-width: 0;
-  flex: 1 1 180px;
+}
+.image-preview-window > header > strong {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 15px;
+  font-size: calc(15px * var(--ui-font-scale, 1));
+  font-weight: 650;
 }
 .image-preview-actions {
   display: flex;
-  gap: 8px;
+  gap: 5px;
   align-items: center;
   flex-shrink: 0;
-  margin-left: auto;
 }
 .app > .image-preview button {
-  min-height: 32px;
-  border: 1px solid var(--line, #d6d6d6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 30px;
+  min-height: 30px;
+  border: 0;
   border-radius: 7px;
-  padding: 4px 10px;
-  background: var(--grouped, #f5f5f5);
+  padding: 5px;
+  background: transparent;
   color: inherit;
   white-space: nowrap;
   font: inherit;
   font-size: 13px;
 }
-.app > .image-preview button:focus-visible {
-  outline: 2px solid #e5ac00;
-  outline-offset: 2px;
+.app > .image-preview .preview-close {
+  min-width: 18px;
+  min-height: 18px;
+  width: 18px;
+  height: 18px;
+  padding: 2px;
+  border-radius: 50%;
+  background: #555;
+  color: #bbb;
 }
-.app > .image-preview > figure {
+.app > .image-preview .preview-open-system {
+  background: rgb(0 0 0 / 8%);
+  border-radius: 18px;
+  padding: 6px 14px;
+  margin-left: 5px;
+}
+.image-preview-window > figure {
   min-height: 0;
   min-width: 0;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 16px 0 0;
+  margin: 0;
   overflow: auto;
 }
-.app > .image-preview > figure > img {
+.image-preview-window > figure > img {
   display: block;
   max-width: 100%;
   max-height: 100%;
@@ -72,14 +110,17 @@
   border: 0;
   border-radius: 0;
 }
+.image-preview-window > figure.vector > img {
+  width: 100%;
+  height: 100%;
+}
 .image-preview-info {
   flex: none;
   max-height: 35%;
   overflow: auto;
-  background: var(--grouped, #f5f5f5);
-  border-radius: 8px;
-  padding: 12px;
-  margin: 14px 0 0;
+  background: rgb(255 255 255 / 25%);
+  padding: 12px 18px;
+  margin: 0;
   font-size: 13px;
 }
 .image-preview-info > div {
@@ -89,7 +130,7 @@
   margin: 5px 0;
 }
 .image-preview-info dt {
-  color: var(--secondary, #767676);
+  color: #555;
 }
 .image-preview-info dd {
   margin: 0;
@@ -97,22 +138,29 @@
 }
 .app > .image-preview .image-export-status {
   flex: none;
-  margin: 12px 0 0;
+  margin: 0;
+  padding: 8px 18px;
   font-size: 13px;
   overflow-wrap: anywhere;
 }
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .app > .image-preview {
-    padding: 12px;
+    width: calc(100vw - 24px);
+    height: 65vh;
   }
-  .app > .image-preview > header > strong {
-    flex-basis: 100%;
+  .image-preview-window {
+    border-radius: 16px;
+  }
+  .image-preview-window > header {
+    gap: 5px;
+    padding: 8px;
+    flex-wrap: wrap;
   }
   .image-preview-actions {
-    gap: 6px;
+    margin-left: auto;
   }
-  .app > .image-preview button {
-    min-height: 36px;
+  .image-preview-window > header > strong {
+    flex-basis: calc(100% - 70px);
   }
 }
 
@@ -125,8 +173,22 @@
   padding: 0;
   background: transparent;
   max-width: 100%;
-  cursor: zoom-in;
+  cursor: default;
 }
 .image-attachment .image-open img {
   display: block;
+}
+.image-attachment.vector .image-open,
+.image-attachment.vector .image-open img {
+  width: 100%;
+}
+
+/* Keep the selection on the image, rather than outlining the full-width block. */
+.tiptap .attachment-node.image.ProseMirror-selectednode,
+.tiptap .attachment-node.image:focus {
+  outline: none;
+}
+.tiptap .attachment-node.image:focus-visible img {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

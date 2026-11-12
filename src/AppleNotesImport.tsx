@@ -11,6 +11,7 @@ import {
 import "./AppleNotesImport.css";
 export type AppleNotesImportHandle = {
   open: () => void;
+  close: () => Promise<void>;
   scan: () => Promise<void>;
   start: (keys?: string[]) => Promise<void>;
   cancel: () => Promise<void>;
@@ -207,6 +208,7 @@ export default function AppleNotesImport({
   useEffect(() => {
     onHandle({
       open,
+      close,
       scan,
       start,
       cancel,
@@ -218,7 +220,7 @@ export default function AppleNotesImport({
       }),
     });
     return () => onHandle(null);
-  }, [onHandle, open, scan, start, cancel, selected, error]);
+  }, [onHandle, open, close, scan, start, cancel, selected, error]);
   const ready = state?.items.filter((i) => i.status === "ok").length || 0;
   const busy =
     !!state &&

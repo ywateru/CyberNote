@@ -26,7 +26,7 @@ await writeFile(
   }).outputText,
 );
 // Bound production import chain: each module is transpiled from this tree.
-for (const name of ["note-tags", "note-tag-extension"]) {
+for (const name of ["note-tags", "note-tag-extension", "table-pointer-lifecycle"]) {
   const source = await readFile(resolve(root, `src/${name}.ts`), "utf8");
   await writeFile(
     resolve(output, `${name}.mjs`),
@@ -42,10 +42,9 @@ for (const name of ["note-tags", "note-tag-extension"]) {
 }
 await writeFile(
   factoryPath,
-  (await readFile(factoryPath, "utf8")).replaceAll(
-    '"./note-tag-extension"',
-    '"./note-tag-extension.mjs"',
-  ),
+  (await readFile(factoryPath, "utf8"))
+    .replaceAll('"./note-tag-extension"', '"./note-tag-extension.mjs"')
+    .replaceAll('"./table-pointer-lifecycle"', '"./table-pointer-lifecycle.mjs"'),
 );
 const { createEditorExtensions } = await import(pathToFileURL(factoryPath));
 const nodeView = () => {

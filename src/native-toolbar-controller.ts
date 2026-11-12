@@ -20,6 +20,8 @@ export interface ToolbarTransport {
   inspect(): Promise<BindingInfo>;
   focusSearch(): Promise<BindingInfo>;
   unbind(): Promise<void>;
+  /** Coalesce presentation updates; the desired trust scope changes immediately. */
+  scheduleUpdate?(flush: () => void): () => void;
 }
 const codeOf = (error: unknown) => (error as { code?: string })?.code;
 
@@ -45,6 +47,7 @@ export class NativeToolbar<C> {
   private composing = false;
   private appliedHash = "";
   private ready?: Promise<void>;
+  private cancelScheduled?: () => void;
   constructor(
     private transport: ToolbarTransport,
     private intent: (intent: Intent, context: C, sequence: number) => void,
@@ -61,13 +64,24 @@ export class NativeToolbar<C> {
     }
     this.desired = projection;
     // A caret-only transaction must refresh the bookmark without closing an open native menu.
-    if (this.binding && this.appliedHash === this.hash(projection))
+    if (this.binding && this.appliedHash === this.hash(projection)) {
       this.records.set(this.binding.stateRevision, projection);
+      return;
+    }
     if (!this.started) {
       this.started = true;
       this.ready = this.start();
       void this.ready.catch(this.error);
-    } else void this.pump();
+    } else if (projection.state.contentOverlay || this.appliedOverlay) {
+      this.cancelScheduled?.();
+      this.cancelScheduled = undefined;
+      void this.pump();
+    } else if (!this.cancelScheduled && this.transport.scheduleUpdate) {
+      this.cancelScheduled = this.transport.scheduleUpdate(() => {
+        this.cancelScheduled = undefined;
+        void this.pump();
+      });
+    } else if (!this.transport.scheduleUpdate) void this.pump();
   }
   private merged(projection: ToolbarProjection<C>) {
     const state = projection.state;
@@ -284,6 +298,8 @@ export class NativeToolbar<C> {
     if (!this.disposed) this.info(info);
   }
   invalidate(clean: (context: C) => void) {
+    this.cancelScheduled?.();
+    this.cancelScheduled = undefined;
     const contexts = new Set(
       [...this.records.values(), ...this.searchRecords.values()].map(
         (record) => record.context,
@@ -301,6 +317,8 @@ export class NativeToolbar<C> {
     this.early = [];
   }
   stop() {
+    this.cancelScheduled?.();
+    this.cancelScheduled = undefined;
     this.disposed = true;
     this.desired = undefined;
     this.early = [];

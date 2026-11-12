@@ -10,6 +10,7 @@ import { formatFileTime } from "./data-management";
 import "./SyncSettings.css";
 
 export type SyncSettingsHandle = {
+  dismiss: () => boolean;
   run: (command: SyncCommand) => Promise<void>;
   inspect: () => {
     status: SyncStatus | null;
@@ -110,7 +111,7 @@ export default function SyncSettings({
     background = false,
   ) => {
     if (!activeRef.current || !alive.current)
-      throw Error("请先打开数据总览中的设备同步");
+      throw Error("请先打开设备同步");
     if (command.type === "status" && (working.current || reading.current))
       return;
     if (working.current) throw Error("同步操作正在进行中，请稍候");
@@ -204,6 +205,11 @@ export default function SyncSettings({
   }, [active]);
   useEffect(() => {
     onHandle({
+      dismiss: () => {
+        if (confirmation) { setConfirmation(null); return true; }
+        if (joining || invitation || conflicts) { setJoining(false); setPairing(""); setInvitation(""); setConflicts(null); return true; }
+        return false;
+      },
       run: (command) => run(command),
       inspect: () => ({
         ...snapshot.current,

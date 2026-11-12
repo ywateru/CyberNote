@@ -1,3 +1,4 @@
+import { attachmentSourcePool } from "./attachment-source-pool";
 import {
   useEffect,
   useLayoutEffect,
@@ -20,7 +21,7 @@ import {
   Files,
   Folder,
 } from "lucide-react";
-import { getDataManagement } from "./bridge";
+import { getDataManagement, clearAttachmentMediaCache } from "./bridge";
 import { saveAttachmentOriginal } from "./attachment-export";
 import {
   fileOperationError,
@@ -86,11 +87,11 @@ export default function DataManagement({
   archiveBusy,
   accessKey,
   accessBlocked,
-  synchronization,
+  section = "storage",
   appleImport,
 }: {
   active: boolean;
-  synchronization?: ReactNode;
+  section?: "storage" | "backup";
   appleImport?: ReactNode;
   onHandle: (handle: DataManagementHandle | null) => void;
   onArchive: (mode: "export" | "import") => Promise<ArchiveResult>;
@@ -115,7 +116,7 @@ export default function DataManagement({
     authorityGeneration = useRef(0);
   activeRef.current = active;
   const assertActive = () => {
-    if (!activeRef.current) throw Error("请先切换到数据标签");
+    if (!activeRef.current) throw Error("请先打开存储空间或导入与备份");
   };
   const canFocus = () =>
     activeRef.current &&
@@ -155,6 +156,13 @@ export default function DataManagement({
   const requestRefresh = async () => {
     assertActive();
     return refresh();
+  };
+  const clearMediaCache=async()=>{
+    assertActive();if(working.current||accessBlocked)return;const generation=authorityGeneration.current;
+    working.current=true;setOperation("media-cache");setActionError("");setNotice("");
+    try{await clearAttachmentMediaCache();attachmentSourcePool.clearThumbnails();if(alive.current&&generation===authorityGeneration.current)setNotice("缩略图缓存已清理，查看附件时会重新生成");}
+    catch(cause){if(alive.current&&generation===authorityGeneration.current)setActionError(fileOperationError(cause));}
+    finally{working.current=false;if(alive.current){setOperation("");await refresh().catch(()=>{});}}
   };
   const exportFile = async (id: string) => {
     assertActive();
@@ -264,8 +272,8 @@ export default function DataManagement({
     setFilters({});
   }, [accessKey, accessBlocked]);
   useEffect(() => {
-    if (!accessBlocked) void refresh().catch(() => {});
-  }, [accessKey, accessBlocked]);
+    if (!accessBlocked && active && section === "storage" && !dataRef.current && !loadingRef.current) void refresh().catch(() => {});
+  }, [accessKey, accessBlocked, active, section]);
   useEffect(() => {
     onHandle({
       refresh: requestRefresh,
@@ -299,7 +307,7 @@ export default function DataManagement({
     currentPage = Math.min(page, pages - 1);
   const title =
     view === "overview"
-      ? "数据管理"
+      ? "存储空间"
       : view === "all"
         ? "全部文件"
         : selectedGroup?.label || "文件详情";
@@ -381,7 +389,7 @@ export default function DataManagement({
       aria-label="本地数据管理"
     >
       <header className="data-management-header">
-        {view !== "overview" && (
+        {section === "storage" && view !== "overview" && (
           <button
             ref={backButton}
             type="button"
@@ -393,8 +401,8 @@ export default function DataManagement({
             <span>数据管理</span>
           </button>
         )}
-        <h2 id="data-management-title">{title}</h2>
-        <button
+        <h2 id="data-management-title">{section === "backup" ? "导入与备份" : title}</h2>
+        {section === "storage" && <button
           type="button"
           className="data-refresh"
           aria-label="刷新数据管理"
@@ -403,9 +411,9 @@ export default function DataManagement({
         >
           <RefreshCw size={16} />
           <span>刷新</span>
-        </button>
+        </button>}
       </header>
-      <div className="data-management-scroll" key={view}>
+      <div className="data-management-scroll" key={view} hidden={section !== "storage"} inert={section !== "storage"}>
         {loading && (
           <p className="data-loading" role="status">
             正在读取本地文件信息…{data ? "保留上次结果" : ""}
@@ -422,17 +430,17 @@ export default function DataManagement({
             </button>
           </div>
         )}
-        {actionError && (
+        {section === "storage" && actionError && (
           <p className="data-error" role="alert">
             {actionError}
           </p>
         )}
-        {notice && (
+        {section === "storage" && notice && (
           <p className="data-notice" role="status">
             {notice}
           </p>
         )}
-        {backupBlocked && (
+        {section === "storage" && backupBlocked && (
           <p className="data-warning" role="status">
             请先完成录音，再导入或导出备份；内存中的录音尚未备份。
           </p>
@@ -498,6 +506,15 @@ export default function DataManagement({
                       : ""}
                     。
                   </p>
+                  {data.mediaCache && (
+                    <section aria-label="缩略图缓存" style={{ marginTop: 18 }}>
+                      <h3>缩略图缓存</h3>
+                      <p>{formatFileSize(data.mediaCache.bytes)} · {data.mediaCache.files} 项 · 上限 {formatFileSize(data.mediaCache.quota)}</p>
+                      <button type="button" disabled={!!operation || accessBlocked} onClick={() => void clearMediaCache()}>
+                        {operation === "media-cache" ? "正在清理…" : "清理缩略图缓存"}
+                      </button>
+                    </section>
+                  )}
                 </section>
                 <div className="storage-category-list" aria-label="存储类型">
                   {usage.groups.map((group) => {
@@ -548,34 +565,6 @@ export default function DataManagement({
                 </div>
               </>
             )}
-            {appleImport}
-            <section className="data-backup-section" aria-label="本地备份">
-              <h3>本地备份</h3>
-              <div className="data-backup-actions">
-                <button
-                  type="button"
-                  disabled={
-                    backupBlocked || archiveBusy || !!operation || accessBlocked
-                  }
-                  onClick={() => void archive("import")}
-                >
-                  {operation === "import" ? "导入中…" : "导入备份…"}
-                </button>
-                <button
-                  type="button"
-                  disabled={
-                    backupBlocked || archiveBusy || !!operation || accessBlocked
-                  }
-                  onClick={() => void archive("export")}
-                >
-                  {operation === "export" ? "导出中…" : "导出完整备份…"}
-                </button>
-              </div>
-              <p className="data-explanation">
-                包含已保存的备忘录、文件夹、设置和全部登记附件原文件，其他窗口未提交的草稿不在备份中。合并导入，冲突保留为副本，并应用备份设置。
-              </p>
-            </section>
-            {synchronization}
             {data && usage && (
               <>
                 {data.warnings.length > 0 && (
@@ -690,6 +679,38 @@ export default function DataManagement({
             </nav>
           </>
         ) : null}
+      </div>
+      <div className="data-management-scroll data-backup-scroll" hidden={section !== "backup"} inert={section !== "backup"}>
+        {section === "backup" && actionError && <p className="data-error" role="alert">{actionError}</p>}
+        {section === "backup" && notice && <p className="data-notice" role="status">{notice}</p>}
+        {section === "backup" && backupBlocked && <p className="data-warning" role="status">请先完成录音，再导入或导出备份；内存中的录音尚未备份。</p>}
+            {appleImport}
+            <section className="data-backup-section" aria-label="本地备份">
+              <h3>本地备份</h3>
+              <div className="data-backup-actions">
+                <button
+                  type="button"
+                  disabled={
+                    backupBlocked || archiveBusy || !!operation || accessBlocked
+                  }
+                  onClick={() => void archive("import")}
+                >
+                  {operation === "import" ? "导入中…" : "导入备份…"}
+                </button>
+                <button
+                  type="button"
+                  disabled={
+                    backupBlocked || archiveBusy || !!operation || accessBlocked
+                  }
+                  onClick={() => void archive("export")}
+                >
+                  {operation === "export" ? "导出中…" : "导出完整备份…"}
+                </button>
+              </div>
+              <p className="data-explanation">
+                包含已保存的备忘录、文件夹、设置和全部登记附件原文件，其他窗口未提交的草稿不在备份中。合并导入，冲突保留为副本，并应用备份设置。
+              </p>
+            </section>
       </div>
     </section>
   );

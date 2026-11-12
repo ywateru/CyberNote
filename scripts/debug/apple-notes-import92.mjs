@@ -172,7 +172,7 @@ try {
   await api(page, "settings.update", { settings: { theme: "dark" } });
   const baseline = (await state(page)).workspace;
   check("baseline real Store note saved", baseline.notes.length === 1);
-  await api(page, "data.open");
+  await api(page, "settings.open"); await api(page, "settings.tab", {tab:"backup"});
   await page.waitForSelector(".apple-import-entry");
   await page
     .getByRole("button", {
@@ -379,7 +379,7 @@ try {
   await page.screenshot({ path: resolve(out, "attachment-information.png") });
   await information.getByRole("button", { name: "关闭", exact: true }).click();
   await openMenu("image");
-  await menu.getByRole("menuitem", { name: "预览图片", exact: true }).click();
+  await menu.getByRole("menuitem", { name: "快速查看附件", exact: true }).click();
   await page.getByRole("dialog", { name: "图片预览", exact: true }).waitFor();
   check("APP93 image action uses existing preview", await page.locator('.image-preview img').count() === 1);
   await api(page, "image.close");
@@ -479,7 +479,7 @@ try {
     "same Store reopening retains imported data",
     (await state(page)).workspace.notes.length === 3,
   );
-  await api(page, "data.open");
+  await api(page, "settings.open"); await api(page, "settings.tab", {tab:"backup"});
   await api(page, "data.refresh");
   check(
     "data inventory sees all retained files",
@@ -496,7 +496,7 @@ try {
     keep: true,
   });
   runtimes.push(restored);
-  await api(restored.page, "data.open");
+  await api(restored.page, "settings.open"); await api(restored.page, "settings.tab", {tab:"backup"});
   await restored.page.evaluate(
     (path) => window.__DEBUG_PLATFORM__.configure({ dialog: { open: [path] } }),
     backup,
@@ -553,7 +553,7 @@ try {
     keep: true,
   });
   runtimes.push(mobile);
-  await api(mobile.page, "data.open");
+  await api(mobile.page, "settings.open"); await api(mobile.page, "settings.tab", {tab:"backup"});
   check(
     "Mac source entry absent in actual mobile App DOM",
     (await mobile.page.locator(".apple-import-entry").count()) === 0,

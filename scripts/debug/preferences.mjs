@@ -1,615 +1,179 @@
 import { resolve } from "node:path";
-import {
-  api,
-  idle,
-  state,
-  snapshot,
-  saveJSON,
-  openRuntime,
-} from "./runtime.mjs";
+import { api, idle, state, saveJSON, openRuntime } from "./runtime.mjs";
 
 export async function runPreferences(runtime, { command, check, output }) {
   const { page, backend } = runtime;
-  if (runtime.mobile) {
-    await page.setViewportSize(runtime.viewport);
-    await runtime.reset();
-  }
-  const close = () =>
-    page.getByRole("button", { name: "关闭设置", exact: true }).click();
-  const tab = (name) => page.getByRole("tab", { name, exact: true });
-  const selected = async (value) =>
-    (await state(page)).preferences?.tab === value;
-  const inventories = () =>
-    backend.calls.filter((row) => row.command === "get_data_management").length;
-  const notesBefore = JSON.stringify(
-    backend.workspace.notes.map((note) => note.document),
-  );
-  if (runtime.mobile) {
-    await command("note.select", { id: "note-a" });
+  const mobile = runtime.mobile;
+  const labels = {system:"跟随系统",light:"浅色",dark:"深色",tiny:"极小",small:"小",medium:"中",large:"大",huge:"极大"};
+  const choose = async (name,value) => {
+    if (mobile) await page.getByRole("combobox",{name,exact:true}).selectOption(value);
+    else await page.getByRole("radiogroup",{name,exact:true}).getByRole("radio",{name:labels[value],exact:true}).click();
+  };
+  const choice = async name => {
+    if (mobile) return page.getByRole("combobox",{name,exact:true}).inputValue();
+    const label = await page.getByRole("radiogroup",{name,exact:true}).getByRole("radio",{checked:true}).innerText();
+    return Object.keys(labels).find(value=>labels[value]===label);
+  };
+
+  const close = () => page.getByRole("button", {name:"关闭设置", exact:true}).click();
+  const select = async id => { await command("settings.tab", {tab:id}); };
+  const selected = async id => (await state(page)).preferences?.tab === id;
+  const inventories = () => backend.calls.filter(row => row.command === "get_data_management").length;
+  const notesBefore = JSON.stringify(backend.workspace.notes.map(note => note.document));
+  if (mobile) {
+    await command("note.select", {id:"note-a"});
     await command("app.back");
     await page.locator(".mobile-home-settings").click();
+  } else await page.locator('.desktop-settings').click();
+  await idle(page);
+  check("Actual settings entry opens the platform-specific initial page", await selected(mobile ? "home" : "settings"));
+  check("Appearance-only visits do not mount data or synchronization", inventories() === 0 && await page.locator(".data-management,.sync-settings").count() === 0);
+  const names = ["外观与字号", "备忘录", "设备同步", "存储空间", "导入与备份"];
+  if (mobile) {
+    check("Mobile uses five category rows instead of desktop tabs", await page.locator(".preferences-navigation > button").count() === 5 && await page.getByRole("tablist").count() === 0);
+    await page.getByRole("button", {name:/外观与字号/}).click();
   } else {
-    check(
-      "Footer replaces only its more control with the actual settings gear",
-      (await page
-        .locator('.folder-footer [aria-label="设置"] svg.lucide-settings')
-        .count()) === 1 &&
-        (await page
-          .locator('.folder-footer [aria-label="更多设置"]')
-          .count()) === 0,
-    );
-    await page.locator('.folder-footer [aria-label="设置"]').click();
+    check("Desktop exposes five labelled category tabs", await page.getByRole("tablist",{name:"设置分类"}).count() === 1 && await page.getByRole("tab").count() === 5);
+    await page.getByRole("tab", {name:names[0]}).focus();
+    await page.keyboard.press("ArrowDown");
+    check("Desktop arrow keys switch and focus the next category", await selected("notes") && await page.getByRole("tab",{name:"备忘录",exact:true}).evaluate(n=>n===document.activeElement));
+    await page.keyboard.press("End");
+    check("Desktop End selects backup", await selected("backup"));
+    await page.keyboard.press("Home");
+    check("Desktop Home returns to appearance", await selected("settings"));
   }
-  await idle(page);
-  check(
-    "Actual platform settings entry opens one shared dialog on settings tab",
-    (await selected("settings")) &&
-      (await page.getByRole("dialog").count()) === 1 &&
-      (await page.locator(".preferences-backdrop").count()) === 1,
-  );
-  check(
-    "Settings-only visit does not mount or sample local data",
-    inventories() === 0 &&
-      (await page.locator(".data-management").count()) === 0,
-  );
-  check(
-    "Two icon tabs expose selected controls and labelled panels",
-    (await page.getByRole("tablist", { name: "设置与数据" }).count()) === 1 &&
-      (await tab("设置").getAttribute("aria-selected")) === "true" &&
-      (await tab("数据").locator("svg").count()) === 1,
-  );
-  for (const [label, value] of [
-    ["外观", "dark"],
-    ["排序方式", "created"],
-    [runtime.mobile ? "桌面显示方式" : "显示方式", "gallery"],
-  ]) {
-    await page
-      .getByRole("combobox", { name: label, exact: true })
-      .selectOption(value);
-    await idle(page);
+  await choose("外观","dark"); await idle(page);
+  const editorBefore = backend.workspace.settings.editorFontSize;
+  for (const value of ["tiny","small","medium","large","huge"]) {
+    await choose("界面字体大小",value); await idle(page);
+    check(`Interface ${value} persists independently`, backend.workspace.settings.interfaceFontSize===value && backend.workspace.settings.editorFontSize===editorBefore);
   }
-  await page
-    .getByRole("checkbox", {
-      name: runtime.mobile ? "桌面按日期分组" : "按日期分组",
-    })
-    .uncheck();
-  await idle(page);
-  check(
-    "Actual settings controls persist existing fields through the real settings handler",
-    backend.workspace.settings.theme === "dark" &&
-      backend.workspace.settings.sort === "created" &&
-      backend.workspace.settings.view === "gallery" &&
-      backend.workspace.settings.groupDates === false,
-  );
-  await close();
-  await page.reload();
-  await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1);
-  await idle(page);
-  await command("settings.open");
-  check(
-    "Settings survive a renderer reload using the persistence fixture",
-    (await page
-      .getByRole("combobox", { name: "外观", exact: true })
-      .inputValue()) === "dark" &&
-      (await page
-        .getByRole("combobox", { name: "排序方式", exact: true })
-        .inputValue()) === "created" &&
-      !(await page
-        .getByRole("checkbox", {
-          name: runtime.mobile ? "桌面按日期分组" : "按日期分组",
-        })
-        .isChecked()),
-  );
-  await page
-    .getByRole("combobox", {
-      name: runtime.mobile ? "桌面显示方式" : "显示方式",
-      exact: true,
-    })
-    .selectOption("list");
-  await idle(page);
-  await page
-    .getByRole("button", { name: "关闭所有已锁定的备忘录", exact: true })
-    .click();
-  await idle(page);
-  check(
-    "Close locked notes uses the existing action",
-    backend.calls.some(
-      (row) => row.command === "workspace_action" && row.type === "closeLocks",
-    ),
-  );
-  backend.dataExtras = Array.from({ length: 48 }, (_, i) => ({
-    relativePath: `other/entry-${i}-` + "很长的本地文件名".repeat(10),
-    category: "other",
-    size: i,
-    modifiedAt: 1760000000000,
-    exists: true,
-    status: "file",
-  }));
-  await tab("设置").focus();
-  await page.keyboard.press("ArrowRight");
-  await idle(page);
-  await page.waitForSelector(".storage-summary");
-  check(
-    "Arrow Right selects and focuses data, sampling only on first visit",
-    (await selected("data")) &&
-      (await tab("数据").evaluate((node) => node === document.activeElement)) &&
-      // Development StrictMode replays the initial effect. Later tab switches
-      // must preserve this count, independent of that development detail.
-      inventories() > 0,
-  );
-  await page.evaluate(() => {
-    window.__preferences82Shell = document.querySelector(".preferences");
-    window.__preferences82Data = document.querySelector(".data-management");
-  });
-  await command("data.navigate", { view: "all" });
-  await command("data.filter", { query: "entry", page: 1 });
-  await page.locator(".data-management-scroll").evaluate((node) => {
-    node.scrollTop = 90;
-    window.__preferences82Scroll = node.scrollTop;
-  });
-  const beforeSwitch = inventories();
-  await tab("设置").click();
-  await idle(page);
-  check(
-    "Hidden data panel is inert without remounting its snapshot or shell",
-    (await page.locator("#preferences-panel-data").getAttribute("hidden")) !==
-      null &&
-      (await page.locator("#preferences-panel-data").getAttribute("inert")) !==
-        null &&
-      (await page.evaluate(
-        () =>
-          window.__preferences82Data ===
-            document.querySelector(".data-management") &&
-          window.__preferences82Shell ===
-            document.querySelector(".preferences"),
-      )),
-  );
-  for (const [id, args] of [
-    ["data.refresh", {}],
-    ["data.navigate", { view: "image" }],
-    ["data.filter", { query: "wrong" }],
-    ["data.exportAttachment", { id: "unknown" }],
-  ]) {
-    let code;
-    try {
-      await api(page, id, args);
-    } catch (error) {
-      code = error.code;
-    }
-    check(
-      `Hidden ${id} rejects starting a new operation`,
-      code === "APP_ERROR",
-    );
+  await choose("编辑器字体大小","small"); await idle(page);
+  check("Both font previews and separate five-step controls are available", await page.locator('.preferences-interface-preview,.preferences-editor-preview').count()===2 && (mobile ? await page.getByRole('combobox',{name:'编辑器字体大小',exact:true}).locator('option').count() : await page.getByRole('radiogroup',{name:'编辑器字体大小',exact:true}).getByRole('radio').count())===5);
+  await select("notes");
+  for (const [label,value] of [["排序方式","created"],[mobile?"桌面显示方式":"显示方式","gallery"]]) {
+    await page.getByRole("combobox",{name:label,exact:true}).selectOption(value); await idle(page);
   }
-  await tab("设置").focus();
-  await page.keyboard.press("End");
-  await idle(page);
-  check(
-    "End returns to data with snapshot, category, query, page and scroll retained",
-    (await selected("data")) &&
-      inventories() === beforeSwitch &&
-      (await page
-        .locator(".data-management")
-        .getAttribute("data-storage-view")) === "all" &&
-      (await page
-        .getByRole("textbox", { name: "搜索本地文件" })
-        .inputValue()) === "entry" &&
-      (await page.locator(".data-pagination").innerText()).includes(
-        "第 2 / 3 页",
-      ) &&
-      (await page
-        .locator(".data-management-scroll")
-        .evaluate((node) => node.scrollTop === window.__preferences82Scroll)),
-  );
-  await page.keyboard.press("Home");
-  await idle(page);
-  check(
-    "Home selects and focuses settings",
-    (await selected("settings")) &&
-      (await tab("设置").evaluate((node) => node === document.activeElement)),
-  );
-  await page.keyboard.press("ArrowLeft");
-  await idle(page);
-  check(
-    "Arrow Left wraps to data",
-    (await selected("data")) &&
-      (await tab("数据").evaluate((node) => node === document.activeElement)),
-  );
-  await command("data.navigate", { view: "overview" });
-  await page
-    .getByRole("button", { name: "导出完整备份…", exact: true })
-    .scrollIntoViewIfNeeded();
-  const configure = (value) =>
-    page.evaluate((value) => window.__DEBUG_PLATFORM__.configure(value), value);
-  await configure({ dialog: { save: [null] } });
-  await page
-    .getByRole("button", { name: "导出完整备份…", exact: true })
-    .click();
-  await idle(page);
-  check(
-    "Backup cancellation stays in the shared shell without claiming success",
-    (await page.locator(".preferences").count()) === 1 &&
-      !(await page.locator(".data-management").innerText()).includes(
-        "完整备份已导出",
-      ),
-  );
-  backend.configure({ fail: { archive: 1 } });
-  await page
-    .getByRole("button", { name: "导出完整备份…", exact: true })
-    .click();
-  await idle(page).catch(() => {});
-  check(
-    "Backup errors remain explicit and keep the current data",
-    (await page.locator(".data-error").innerText()).includes(
-      "Controlled archive",
-    ) && (await page.locator(".storage-summary").count()) === 1,
-  );
+  await page.getByRole("checkbox",{name:mobile?"桌面按日期分组":"按日期分组"}).uncheck(); await idle(page);
+  await page.getByRole("button",{name:"关闭所有已锁定的备忘录",exact:true}).click(); await idle(page);
+  check("Existing appearance, note ordering, list and lock actions remain connected", backend.workspace.settings.theme==="dark" && backend.workspace.settings.sort==="created" && backend.workspace.settings.view==="gallery" && backend.workspace.settings.groupDates===false && backend.calls.some(row=>row.command==="workspace_action"&&row.type==="closeLocks"));
+  await select("settings");
+  backend.configure({fail:{settings:1}});
+  await choose("外观","light");await idle(page).catch(()=>{});
+  check("Settings save failures are reported inside the settings panel",(await page.locator('.preferences-error').innerText()).includes("Controlled settings"));
   await command("app.dismissError");
-  const archiveCall = backend.call.bind(backend);
-  let releaseArchive, archiveStarted;
-  const archiveBegan = new Promise((resolve) => {
-    archiveStarted = resolve;
-  });
-  backend.call = async (id, args) => {
-    if (id === "export_archive") {
-      archiveStarted();
-      await new Promise((resolve) => {
-        releaseArchive = resolve;
-      });
-    }
-    return archiveCall(id, args);
-  };
-  try {
-    await page
-      .getByRole("button", { name: "导出完整备份…", exact: true })
-      .click();
-    await archiveBegan;
-    await tab("设置").click();
-    check(
-      "In-flight backup keeps the shared shell interactive on settings",
-      (await selected("settings")) &&
-        (await tab("设置").evaluate((node) => node === document.activeElement)),
-    );
-    releaseArchive();
-    await idle(page);
-    check(
-      "Completing a hidden backup does not steal settings focus",
-      await tab("设置").evaluate((node) => node === document.activeElement),
-    );
-  } finally {
-    releaseArchive?.();
-    backend.call = archiveCall;
+  await choose("外观","dark");await idle(page);
+  await close(); await page.reload(); await page.waitForFunction(()=>window.__NOTES_DEBUG__?.version===1); await idle(page);
+  await command("settings.open"); await select("settings");
+  check("Appearance and font choices survive renderer reload", await choice("外观")==="dark" && await choice("界面字体大小")==="huge" && await choice("编辑器字体大小")==="small");
+  backend.dataExtras=Array.from({length:48},(_,i)=>({relativePath:`other/entry-${i}-`+"很长的本地文件名".repeat(10),category:"other",size:i,modifiedAt:1760000000000,exists:true,status:"file"}));
+  await select("data"); await page.waitForSelector(".storage-summary");
+  check("Storage and backup have distinct surfaces", await page.locator(".storage-summary").isVisible() && !await page.getByRole("button",{name:"导入备份…",exact:true}).isVisible());
+  await page.evaluate(()=>{window.__preferencesData=document.querySelector('.data-management');window.__preferencesShell=document.querySelector('.preferences');});
+  await command("data.navigate",{view:"all"}); await command("data.filter",{query:"entry",page:1});
+  await page.locator('.data-management-scroll:not([hidden])').evaluate(n=>{n.scrollTop=90;window.__preferencesScroll=n.scrollTop;});
+  const count=inventories();
+  await select("backup");
+  check("Backup uses the retained module and no new inventory request", await page.getByRole("button",{name:"导出完整备份…",exact:true}).isVisible() && inventories()===count && await page.evaluate(()=>window.__preferencesData===document.querySelector('.data-management')));
+  await select("settings");
+  for(const id of ["data.refresh","data.navigate","data.filter"]) {
+    let code;try{await api(page,id,id==="data.navigate"?{view:"all"}:id==="data.filter"?{query:"wrong"}:{});}catch(e){code=e.code;}
+    check(`Hidden ${id} cannot start operations`,code==="APP_ERROR");
   }
-  await tab("数据").click();
-  await idle(page);
-  check(
-    "Completed backup notice survives switching tabs",
-    (await page.locator(".data-notice").innerText()).includes("完整备份已导出"),
-  );
-  await page.getByRole("button", { name: "导入备份…", exact: true }).click();
-  await idle(page);
-  check(
-    "Backup import and settings hydrate preserve the selected tab and shared shell",
-    (await selected("data")) &&
-      (await page.evaluate(
-        () =>
-          window.__preferences82Shell ===
-          document.querySelector(".preferences"),
-      )) &&
-      (await page.locator(".data-notice").innerText()).includes(
-        "本地备份已导入",
-      ),
-  );
-  // Hold a real inventory response, hide its panel, then cross an authority boundary.
-  const originalCall = backend.call.bind(backend);
-  let release, started;
-  const began = new Promise((resolve) => {
-    started = resolve;
-  });
-  let hold = true;
-  backend.call = async (id, args) => {
-    const result = await originalCall(id, args);
-    if (id === "get_data_management" && hold) {
-      hold = false;
-      result.value.rootPath = "/synthetic/stale-hidden82";
-      started();
-      await new Promise((resolve) => {
-        release = resolve;
-      });
-    }
-    return result;
-  };
-  const pending = api(page, "data.refresh").then(
-    () => ({ ok: true }),
-    (error) => ({ code: error.code }),
-  );
+  await select("data");
+  check("Storage query, pagination and scroll survive category changes", inventories()===count && await page.getByRole("textbox",{name:"搜索本地文件"}).inputValue()==="entry" && (await page.locator('.data-pagination').innerText()).includes("第 2 / 3 页") && await page.locator('.data-management-scroll:not([hidden])').evaluate(n=>n.scrollTop===window.__preferencesScroll));
+  await command("app.back");
+  check("Back from storage details returns to overview first", await selected("data") && await page.locator('.storage-summary').isVisible());
+  await select("backup");
+  await page.evaluate(()=>window.__DEBUG_PLATFORM__.configure({dialog:{save:[null]}}));
+  await page.getByRole("button",{name:"导出完整备份…",exact:true}).click();await idle(page);
+  check("Cancelled backup stays in settings without success notice", await selected("backup") && !(await page.locator('.data-backup-scroll').innerText()).includes("完整备份已导出"));
+  backend.configure({fail:{archive:1}});
+  await page.getByRole("button",{name:"导出完整备份…",exact:true}).click();await idle(page).catch(()=>{});
+  check("Backup errors remain visible on the backup page", (await page.locator('.data-backup-scroll .data-error').innerText()).includes("Controlled archive"));
+  await command("app.dismissError");
+  const original=backend.call.bind(backend);let release,started;
+  const began=new Promise(r=>started=r);
+  backend.call=async(id,args)=>{if(id==="export_archive"){started();await new Promise(r=>release=r);}return original(id,args);};
   try {
-    await began;
-    await tab("设置").click();
-    backend.suspended = ["note-a"];
-    backend.operationId = "preferences82-prepare";
-    await page.evaluate(
-      (value) => window.__DEBUG_PLATFORM__.emit("notes-access", value),
-      {
-        phase: "prepare",
-        operationId: backend.operationId,
-        noteIds: ["note-a"],
-        access: backend.state().access,
-      },
-    );
-    await page.waitForFunction(
-      () =>
-        document.querySelector(".preferences[data-preferences-tab=settings]") &&
-        document.querySelectorAll(".storage-summary").length === 0,
-    );
-    release();
-    await pending;
-    await idle(page);
-    check(
-      "Hidden authority changes clear data and reject late protected inventory without hidden data taking focus",
-      (await selected("settings")) &&
-        !(await page.locator(".preferences").innerText()).includes(
-          "stale-hidden82",
-        ) &&
-        (await page.locator(".storage-summary").count()) === 0 &&
-        // The existing access-cover hides the whole shell during prepare and
-        // the browser can move focus to BODY; hidden data must never take it.
-        (await page
-          .locator("#preferences-panel-data")
-          .evaluate((node) => !node.contains(document.activeElement))),
-    );
-    backend.suspended = [];
-    backend.operationId = null;
-    backend.accessEpoch++;
-    backend.noteEpochs["note-a"] = (backend.noteEpochs["note-a"] || 0) + 1;
-    await page.evaluate(
-      (value) => window.__DEBUG_PLATFORM__.emit("notes-access", value),
-      {
-        phase: "commit",
-        operationId: "preferences82-prepare",
-        noteIds: ["note-a"],
-        access: backend.state().access,
-      },
-    );
-    await idle(page);
-    await tab("数据").click();
-    await idle(page);
-    await page.waitForSelector(".storage-summary");
-    check(
-      "Authorized recovery refreshes the existing data instance without reviving old values",
-      (await page.evaluate(
-        () =>
-          window.__preferences82Data ===
-          document.querySelector(".data-management"),
-      )) &&
-        !(await page.locator(".data-management").innerText()).includes(
-          "stale-hidden82",
-        ),
-    );
-  } finally {
-    release?.();
-    backend.call = originalCall;
-  }
-  await close();
-  await command("settings.open");
-  check(
-    "Reopening settings resets entry tab and lazy data lifetime",
-    (await selected("settings")) &&
-      (await page.locator(".data-management").count()) === 0,
-  );
-  let invalid;
+    await page.getByRole("button",{name:"导出完整备份…",exact:true}).click();await began;
+    await api(page,"settings.tab",{tab:"settings"});await page.waitForSelector('.preferences[data-preferences-tab="settings"]');release();await idle(page);
+    check("In-flight backup completes without replacing the settings shell", await selected("settings") && await page.evaluate(()=>window.__preferencesShell===document.querySelector('.preferences')));
+  } finally {release?.();backend.call=original;}
+  await select("backup");
+  check("Completed backup feedback survives navigation", (await page.locator('.data-backup-scroll .data-notice').innerText()).includes("完整备份已导出"));
+  await page.getByRole("button",{name:"导入备份…",exact:true}).click();await idle(page);
+  check("Backup import retains the selected page", await selected("backup") && (await page.locator('.data-backup-scroll .data-notice').innerText()).includes("本地备份已导入"));
+  await select("sync");await page.waitForSelector('.sync-settings');
+  check("Synchronization is an independent category", await page.locator('.sync-settings').isVisible() && !await page.locator('.data-management').isVisible());
+  await select("settings");let syncCode;try{await api(page,"sync.status");}catch(e){syncCode=e.code;}
+  check("Hidden synchronization cannot start operations",syncCode==="APP_ERROR");
+  await select("data");
+  const inventoryCall=backend.call.bind(backend);let releaseInventory,inventoryStarted;
+  const inventoryBegan=new Promise(resolve=>inventoryStarted=resolve);
+  backend.call=async(id,args)=>{const result=await inventoryCall(id,args);if(id==="get_data_management"){result.value.rootPath="/synthetic/stale-hidden-settings";inventoryStarted();await new Promise(resolve=>releaseInventory=resolve);}return result;};
+  const pendingInventory=api(page,"data.refresh").catch(error=>({code:error.code}));
   try {
-    await api(page, "settings.tab", { tab: "cloud" });
-  } catch (error) {
-    invalid = error.code;
-  }
-  check(
-    "Unknown tab is rejected by the public enum before changing settings",
-    invalid === "INVALID_ARGUMENT" && (await selected("settings")),
-  );
-  await page.evaluate(() => document.activeElement?.blur());
-  await page.keyboard.press("Tab");
-  check(
-    "Body Tab enters only visible controls of the shared dialog",
-    await page
-      .locator(".preferences-close")
-      .evaluate((node) => node === document.activeElement),
-  );
+    await inventoryBegan;await api(page,"settings.tab",{tab:"settings"});
+    backend.suspended=["note-a"];backend.operationId="settings-redesign-prepare";
+    await page.evaluate(value=>window.__DEBUG_PLATFORM__.emit("notes-access",value),{phase:"prepare",operationId:backend.operationId,noteIds:["note-a"],access:backend.state().access});
+    await page.waitForFunction(()=>document.querySelectorAll('.storage-summary').length===0);
+    releaseInventory();await pendingInventory;
+    check("Hidden authority changes clear storage and block late inventory publication",await selected("settings")&&await page.locator('.storage-summary').count()===0&&!(await page.locator('.preferences').innerText()).includes("stale-hidden-settings"));
+    backend.call=inventoryCall;backend.suspended=[];backend.operationId=null;backend.accessEpoch++;backend.noteEpochs["note-a"]=(backend.noteEpochs["note-a"]||0)+1;
+    await page.evaluate(value=>window.__DEBUG_PLATFORM__.emit("notes-access",value),{phase:"commit",operationId:"settings-redesign-prepare",noteIds:["note-a"],access:backend.state().access});
+    await idle(page);await select("data");await page.waitForSelector('.storage-summary');
+    check("Authorized recovery refreshes the retained storage module",await page.evaluate(()=>window.__preferencesData===document.querySelector('.data-management'))&&!(await page.locator('.data-management').innerText()).includes("stale-hidden-settings"));
+  }finally{releaseInventory?.();backend.call=inventoryCall;}
+  await close();await command("settings.open");await select("settings");
+  await page.evaluate(()=>document.activeElement?.blur());await page.keyboard.press("Tab");
+  check("Body Tab enters only visible settings controls",await page.locator(mobile?'.preferences-back':'.preferences-close').evaluate(n=>n===document.activeElement));
   await page.keyboard.press("Shift+Tab");
-  check(
-    "Reverse Tab wraps to the visible settings action",
-    await page
-      .getByRole("button", { name: "关闭所有已锁定的备忘录", exact: true })
-      .evaluate((node) => node === document.activeElement),
-  );
-  await page.evaluate(() => document.activeElement?.blur());
-  await page.keyboard.press("Escape");
-  await idle(page);
-  check(
-    "Body Escape closes the shell and restores a visible entry",
-    (await page.locator(".preferences").count()) === 0 &&
-      (await page.evaluate(
-        () =>
-          document.activeElement !== document.body &&
-          !!document.activeElement?.getClientRects().length,
-      )),
-  );
-  check(
-    "Preferences interactions never rewrite note documents or Undo content",
-    notesBefore ===
-      JSON.stringify(backend.workspace.notes.map((note) => note.document)),
-  );
-  // Active synthetic microphone session remains owned across preferences tabs.
-  await runtime.reset();
-  await command("note.select", { id: "note-a" });
-  await command("recording.open");
-  await command("recording.action", { action: "toggle" });
-  await command("settings.open");
-  await command("settings.tab", { tab: "data" });
-  check(
-    "Recording remains active on the data tab and backup actions stay disabled",
-    (await state(page)).recording.active &&
-      (await state(page)).recording.state.phase === "recording" &&
-      (await page
-        .getByRole("button", { name: "导出完整备份…", exact: true })
-        .isDisabled()) &&
-      (await page
-        .getByRole("button", { name: "导入备份…", exact: true })
-        .isDisabled()),
-  );
-  await command("settings.tab", { tab: "settings" });
-  await command("settings.tab", { tab: "data" });
-  check(
-    "Repeated tab switches do not stop or reassign the recording",
-    (await state(page)).recording.active &&
-      (await state(page)).recording.state.phase === "recording" &&
-      backend.workspace.attachments.length === 0,
-  );
-  await command("modal.cancel");
-  await command("recording.action", { action: "close" });
-  await runtime.reset();
-  backend.configure({ fail: { inventory: 100 } });
-  await command("data.open");
-  check(
-    "First inventory failure still leaves backup recovery controls available",
-    (await page
-      .getByRole("button", { name: "重试读取", exact: true })
-      .count()) === 1 &&
-      (await page
-        .getByRole("button", { name: "导入备份…", exact: true })
-        .isEnabled()) &&
-      (await page
-        .getByRole("button", { name: "导出完整备份…", exact: true })
-        .isEnabled()),
-  );
-  backend.configure({ fail: { inventory: 0 } });
-  await page.getByRole("button", { name: "重试读取", exact: true }).click();
-  await idle(page);
-  const metrics = [];
-  for (const width of [320, 390, 800, 1280])
-    for (const theme of ["light", "dark"]) {
-      await close();
-      await page.setViewportSize({ width, height: 844 });
-      await command("settings.update", { settings: { theme } });
-      await command("settings.open");
-      for (const value of ["settings", "data"]) {
-        await command("settings.tab", { tab: value });
-        const geometry = await page.locator(".preferences").evaluate((node) => {
-          const r = node.getBoundingClientRect(),
-            close = node
-              .querySelector(".preferences-close")
-              .getBoundingClientRect();
-          return {
-            left: r.left,
-            right: r.right,
-            top: r.top,
-            bottom: r.bottom,
-            clientWidth: node.clientWidth,
-            scrollWidth: node.scrollWidth,
-            close: close.toJSON(),
-            overflows: [...node.querySelectorAll("*")]
-              .filter(
-                (x) =>
-                  !x.closest("[hidden]") &&
-                  x.getClientRects().length &&
-                  x.getBoundingClientRect().right > innerWidth + 1,
-              )
-              .map((x) => x.className),
-          };
-        });
-        metrics.push({ width, theme, tab: value, geometry });
-        check(
-          `${width}px ${theme} ${value} fits one shell with reachable tabs and close`,
-          geometry.left >= 0 &&
-            geometry.right <= width &&
-            geometry.top >= 0 &&
-            geometry.bottom <= 844 &&
-            geometry.scrollWidth <= geometry.clientWidth &&
-            geometry.close.right <= width &&
-            !geometry.overflows.length,
-        );
-        if (
-          (width === 320 && theme === "light" && value === "settings") ||
-          (width === 390 && theme === "dark" && value === "data") ||
-          (width === 800 && theme === "dark" && value === "settings") ||
-          (width === 1280 && theme === "light" && value === "data")
-        )
-          await page.screenshot({
-            path: resolve(
-              output,
-              `preferences82-${width}-${theme}-${value}.png`,
-            ),
-          });
-      }
+  check("Shift Tab wraps within the visible category",await (mobile ? page.getByRole('combobox',{name:'编辑器字体大小',exact:true}) : page.getByRole('radiogroup',{name:'编辑器字体大小',exact:true}).getByRole('radio',{checked:true})).evaluate(n=>n===document.activeElement));
+  await page.evaluate(()=>document.activeElement?.blur());await page.keyboard.press("Escape");await idle(page);
+  if(mobile){check("Mobile Escape returns to category index",await selected("home"));await page.keyboard.press("Escape");await idle(page);}
+  check("Escape closes settings and restores an entry control",await page.locator('.preferences').count()===0 && await page.evaluate(()=>document.activeElement!==document.body&&!!document.activeElement?.getClientRects().length));
+  check("Settings never rewrite note documents",notesBefore===JSON.stringify(backend.workspace.notes.map(n=>n.document)));
+  await runtime.reset();backend.configure({fail:{inventory:100}});await command('data.open');
+  check("Failed inventory has a retry action",await page.getByRole('button',{name:'重试读取',exact:true}).count()===1);
+  await select('backup');
+  check("Backup recovery remains available when storage sampling fails",await page.getByRole('button',{name:'导入备份…',exact:true}).isEnabled() && await page.getByRole('button',{name:'导出完整备份…',exact:true}).isEnabled());
+  backend.configure({fail:{inventory:0}});await close();
+  const metrics=[];
+  for(const width of mobile?[320,390]:[800,1280]) for(const theme of ['light','dark']) for(const font of ['tiny','small','medium','large','huge']) {
+    await page.setViewportSize({width,height:mobile?844:800});await command('settings.update',{settings:{theme,interfaceFontSize:font,editorFontSize:font}});await command('settings.open');
+    for(const tab of mobile?['home','settings','notes','sync','data','backup']:['settings','notes','sync','data','backup']) {
+      await select(tab);
+      const geometry=await page.locator('.preferences').evaluate(n=>{const r=n.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,overflow:[...n.querySelectorAll('*')].filter(x=>!x.closest('[hidden]')&&x.getClientRects().length&&getComputedStyle(x).visibility!=='hidden'&&(x.getBoundingClientRect().right>innerWidth+1||x.getBoundingClientRect().left< -1)).map(x=>String(x.className))};});
+      metrics.push({width,theme,font,tab,geometry});
+      check(`${width}px ${theme} ${font} ${tab} stays within viewport`,geometry.left>=0&&geometry.right<=width&&geometry.top>=0&&geometry.bottom<=(mobile?844:800)&&!geometry.overflow.length);
+      if(font==='small'&&((width===1280&&theme==='light')||(width===390&&theme==='light')||(width===320&&theme==='dark'&&tab==='settings')))await page.screenshot({path:resolve(output,`settings-${width}-${theme}-${tab}.png`)});
     }
-  await page.setViewportSize({ width: 320, height: 360 });
-  check(
-    "Short screens keep shared close and tabs fixed while data scrolls",
-    (await page
-      .locator(".preferences-close")
-      .evaluate(
-        (node) => node.getBoundingClientRect().bottom <= innerHeight,
-      )) &&
-      (await tab("设置").isVisible()) &&
-      (await page
-        .locator(".data-management-scroll")
-        .evaluate(
-          (node) =>
-            node.scrollHeight > node.clientHeight &&
-            getComputedStyle(node).overflowY === "auto",
-        )),
-  );
-  await saveJSON(resolve(output, "preferences82-layout.json"), {
-    metrics,
-    scope: runtime.metadata,
-  });
-  await saveJSON(
-    resolve(output, "preferences82-final.snapshot.json"),
-    await snapshot(page, { selector: ".preferences", maxChars: 35000 }),
-  );
-  await close();
-  await page.setViewportSize(runtime.viewport);
-  // Mac-specific App projection, with toolbar IPC explicitly simulated.
-  if (!runtime.mobile) {
-    const mac = await openRuntime({ nativeToolbar: true });
-    try {
-      const run = async (id, args) => {
-        await api(mac.page, id, args);
-        await idle(mac.page);
-      };
-      await run("settings.open");
-      await mac.page.waitForFunction(
-        () =>
-          window.__DEBUG_PLATFORM__.toolbarStates.at(-1)?.contentOverlay ===
-          true,
-      );
-      const settingOverlay = await mac.page.evaluate(
-        () => window.__DEBUG_PLATFORM__.toolbarStates.at(-1).contentOverlay,
-      );
-      await run("settings.tab", { tab: "data" });
-      const dataOverlay = await mac.page.evaluate(
-        () => window.__DEBUG_PLATFORM__.toolbarStates.at(-1).contentOverlay,
-      );
-      await run("modal.cancel");
-      await mac.page.waitForFunction(
-        () =>
-          window.__DEBUG_PLATFORM__.toolbarStates.at(-1)?.contentOverlay ===
-          false,
-      );
-      await saveJSON(resolve(output, "preferences82-native-projection.json"), {
-        scope:
-          "Actual App -> NativeToolbar -> guest transport, synthetic Mac platform and native IPC only; no AppKit rendering claim",
-        states: await mac.page.evaluate(
-          () => window.__DEBUG_PLATFORM__.toolbarStates,
-        ),
-        pageErrors: mac.errors,
-      });
-      check(
-        "Actual App native projection protects both tabs and restores toolbar after closing",
-        settingOverlay && dataOverlay && mac.errors.length === 0,
-      );
-    } finally {
-      await mac.cleanup();
-    }
+    await close();
   }
+  await page.setViewportSize({width:mobile?320:800,height:360});await command('settings.open');await select('settings');
+  check("Short screens retain close control and scrollable content",await page.locator('.preferences-close').evaluate(n=>n.getBoundingClientRect().bottom<=innerHeight)&&await page.locator('.preferences-settings:not([hidden])').evaluate(n=>n.scrollHeight>n.clientHeight&&getComputedStyle(n).overflowY==='auto'));
+  if (!mobile) {
+    await close(); await page.setViewportSize({width:1440,height:1000});
+    await command('settings.update',{settings:{theme:'system',interfaceFontSize:'small',editorFontSize:'medium'}});
+    await page.locator('.desktop-settings').click();await idle(page);
+    check('Desktop reference uses three theme cards and two five-step segmented controls',await page.getByRole('radiogroup').count()===3&&await page.getByRole('radio').count()===13);
+    const geometry=await page.locator('.preferences').boundingBox();
+    check('Desktop reference panel uses the target 920 by 660 geometry',Math.abs(geometry.width-920)<1&&Math.abs(geometry.height-660)<1&&Math.abs(geometry.x-260)<1&&Math.abs(geometry.y-170)<1);
+    await page.locator('.preferences-page-title').first().click();
+    await page.waitForFunction(()=>!document.querySelector('[data-button-activated]'));
+    await page.screenshot({path:resolve(output,'settings-reference-1440.png')});
+    await page.getByRole('radiogroup',{name:'界面字体大小',exact:true}).getByRole('radio',{checked:true}).focus();
+    await page.keyboard.press('ArrowRight');await idle(page);
+    check('Segmented font choices support arrows and retain focus',await choice('界面字体大小')==='medium'&&await page.getByRole('radiogroup',{name:'界面字体大小',exact:true}).getByRole('radio',{checked:true}).evaluate(n=>n===document.activeElement));
+  }
+  await saveJSON(resolve(output,'settings-layout.json'),{metrics,scope:runtime.metadata});await close();await page.setViewportSize(runtime.viewport);
+  if(!mobile){const mac=await openRuntime({nativeToolbar:true,bundleDebug:true});try{
+    await api(mac.page,'settings.open');await idle(mac.page);await mac.page.waitForFunction(()=>window.__DEBUG_PLATFORM__.toolbarStates.at(-1)?.contentOverlay===true);
+    const overlay=await mac.page.evaluate(()=>window.__DEBUG_PLATFORM__.toolbarStates.at(-1));
+    check('Native settings retains protective overlay and stable action inventory',overlay.contentOverlay===true&&overlay.actions.length>0&&overlay.actions.every(a=>!a.enabled));
+    await api(mac.page,'modal.cancel');await idle(mac.page);await mac.page.waitForFunction(()=>window.__DEBUG_PLATFORM__.toolbarStates.at(-1)?.contentOverlay===false);
+    check('Closing settings restores native toolbar actions',await mac.page.evaluate(()=>window.__DEBUG_PLATFORM__.toolbarStates.at(-1).actions.some(a=>a.enabled)));
+    await saveJSON(resolve(output,'settings-native-projection.json'),{scope:'Synthetic native IPC projection; AppKit geometry tested separately',states:await mac.page.evaluate(()=>window.__DEBUG_PLATFORM__.toolbarStates),pageErrors:mac.errors});
+  }finally{await mac.cleanup();}}
 }

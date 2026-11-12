@@ -16,6 +16,27 @@ use tauri::{
 };
 
 pub const EVENT_NAME: &str = "notes-ui://intent";
+/// Host-only file/clipboard integration. The caller holds owner authorization
+/// and schedules this on AppKit's main thread; no renderer paths are accepted.
+#[cfg(target_os = "macos")]
+pub fn attachment_desktop(value: &serde_json::Value) -> Result<serde_json::Value> {
+    use std::ffi::{c_char, CStr, CString};
+    extern "C" {
+        fn notes_ui_attachment_desktop(input: *const c_char) -> *mut c_char;
+        fn notes_ui_free(value: *mut c_char);
+    }
+    let input = CString::new(value.to_string()).map_err(|_| Error::new("attachment", "无效附件参数"))?;
+    unsafe {
+        let raw = notes_ui_attachment_desktop(input.as_ptr());
+        if raw.is_null() { return Err(Error::new("attachment", "附件系统操作失败")); }
+        let output = serde_json::from_slice::<serde_json::Value>(CStr::from_ptr(raw).to_bytes());
+        notes_ui_free(raw);
+        let output = output.map_err(|_| Error::new("attachment", "无效系统附件响应"))?;
+        if let Some(message) = output["error"].as_str() { return Err(Error::new("attachment", message)); }
+        if output["ok"] == false { return Err(Error::new("attachment", "系统未接受附件操作")); }
+        Ok(output)
+    }
+}
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct KeyboardNavigation {
     pub enabled: bool,
@@ -282,6 +303,69 @@ async fn keyboard_navigation<R: Runtime>(
     own_window(&window, &window_label)?;
     state.keyboard_navigation(window).await
 }
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct PopupMenuRequest {
+    token: String,
+    x: f64,
+    y: f64,
+    viewport_width: f64,
+    items: Vec<PopupMenuItem>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct PopupMenuItem {
+    kind: String,
+    label: String,
+    index: u32,
+    enabled: bool,
+    selected: bool,
+    symbol: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    items: Vec<PopupMenuItem>,
+}
+impl PopupMenuRequest {
+    fn validate(&self) -> Result<()> {
+        valid_binding_id(&self.token)?;
+        if !self.x.is_finite() || !self.y.is_finite() || !self.viewport_width.is_finite()
+            || !(1.0..=32768.0).contains(&self.viewport_width) || self.x.abs() > 32768.0 || self.y.abs() > 32768.0
+            || self.items.is_empty() || self.items.len() > 100 {
+            return Err(Error::new("menu", "无效菜单尺寸或数量"));
+        }
+        fn entries(items: &[PopupMenuItem], depth: usize, count: &mut usize, indices: &mut std::collections::HashSet<u32>) -> Result<()> {
+          if depth > 2 || items.is_empty() { return Err(Error::new("menu", "无效子菜单")); }
+          for item in items {
+            *count += 1;
+            if *count > 512 || !indices.insert(item.index) || !["item", "separator", "submenu"].contains(&item.kind.as_str()) || item.label.chars().count() > 256
+                || item.label.contains('\0') || item.symbol.len() > 80 || !item.symbol.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'.') {
+                return Err(Error::new("menu", "无效菜单条目"));
+            }
+            if item.kind == "submenu" { entries(&item.items, depth + 1, count, indices)?; }
+            else if !item.items.is_empty() { return Err(Error::new("menu", "非子菜单包含子项")); }
+          }
+          Ok(())
+        }
+        entries(&self.items, 0, &mut 0, &mut std::collections::HashSet::new())
+    }
+}
+#[tauri::command]
+async fn popup_menu<R: Runtime>(window: Window<R>, window_label: String, request: PopupMenuRequest) -> Result<Option<u32>> {
+    own_window(&window, &window_label)?;
+    request.validate()?;
+    #[cfg(target_os = "macos")]
+    { let app = window.app_handle().clone(); macos::popup_menu(&app, window, request).await }
+    #[cfg(not(target_os = "macos"))]
+    { Err(unsupported()) }
+}
+#[tauri::command]
+async fn cancel_popup_menu<R: Runtime>(window: Window<R>, window_label: String, token: String) -> Result<()> {
+    own_window(&window, &window_label)?;
+    valid_binding_id(&token)?;
+    #[cfg(target_os = "macos")]
+    { let app = window.app_handle().clone(); macos::cancel_popup_menu(&app, window, token).await }
+    #[cfg(not(target_os = "macos"))]
+    { Err(unsupported()) }
+}
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("notes-ui")
         .invoke_handler(tauri::generate_handler![
@@ -291,7 +375,9 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             inspect,
             focus_search,
             keyboard_navigation,
-            recording_access
+            recording_access,
+            popup_menu,
+            cancel_popup_menu
         ])
         .setup(|app, _| {
             #[cfg(target_os = "macos")]
@@ -452,5 +538,46 @@ mod recording_error_wire_tests {
                 "code": "microphone_timeout", "message": "same message", "stage": "native_result", "requestId": "42"
             })
         );
+    }
+}
+
+#[cfg(test)]
+mod popup_menu_tests {
+    use super::*;
+    fn request() -> PopupMenuRequest {
+        PopupMenuRequest { token: uuid::Uuid::new_v4().to_string(), x: 22.0, y: 105.0, viewport_width: 1280.0,
+            items: vec![PopupMenuItem { kind: "item".into(), label: "拷贝".into(), index: 0, enabled: true, selected: false, symbol: "doc.on.doc".into(), items: vec![] }] }
+    }
+    #[test]
+    fn validates_bounded_own_window_menu_payloads() {
+        assert!(request().validate().is_ok());
+        for value in [f64::NAN, f64::INFINITY, -f64::INFINITY, 32769.0] {
+            let mut r=request();r.x=value;assert!(r.validate().is_err());
+        }
+        for width in [0.0, -1.0, f64::NAN, 32769.0] { let mut r=request();r.viewport_width=width;assert!(r.validate().is_err()); }
+        let mut r=request();r.token="foreign-token".into();assert!(r.validate().is_err());
+        let mut r=request();r.items.clear();assert!(r.validate().is_err());
+        let mut r=request();r.items=vec![r.items[0].clone();101];assert!(r.validate().is_err());
+    }
+    #[test]
+    fn menu_items_are_ui_only_bounded_text_and_symbols() {
+        for label in ["x\0y".to_string(), "字".repeat(257)] { let mut r=request();r.items[0].label=label;assert!(r.validate().is_err()); }
+        for symbol in ["../file", "symbol\0name", "http://example.invalid"] { let mut r=request();r.items[0].symbol=symbol.into();assert!(r.validate().is_err()); }
+        let mut r=request();r.items[0].kind="execute".into();assert!(r.validate().is_err());
+        assert!(serde_json::from_value::<PopupMenuRequest>(serde_json::json!({"token":uuid::Uuid::new_v4().to_string(),"x":0,"y":0,"viewportWidth":800,"items":[],"path":"/tmp/no"})).is_err());
+    }
+    #[test]
+    fn submenu_indices_are_unique_and_nesting_is_bounded() {
+        let mut r=request();
+        let mut child=r.items[0].clone();child.index=1;
+        r.items[0].kind="submenu".into();r.items[0].items=vec![child.clone()];
+        assert!(r.validate().is_ok());
+        r.items[0].items[0].index=0;
+        assert!(r.validate().is_err());
+        r.items[0].items.clear();
+        assert!(r.validate().is_err());
+        r.items[0].items=vec![child];
+        for i in 2..5 { let mut parent=r.items[0].clone();parent.index=i;parent.items=std::mem::take(&mut r.items);r.items=vec![parent]; }
+        assert!(r.validate().is_err());
     }
 }

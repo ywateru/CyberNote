@@ -16,6 +16,7 @@ export async function runQuickHome(runtime, { command, check, output }) {
   if (!runtime.mobile) throw Error("quick-home is mobile scoped");
   await page.setViewportSize(runtime.viewport);
   await runtime.reset();
+  await page.waitForSelector("#startup", { state: "detached" });
   const baseCall = backend.call.bind(backend);
   const plus = () => page.locator(".mobile-add-note");
   const current = async () => {
@@ -29,6 +30,7 @@ export async function runQuickHome(runtime, { command, check, output }) {
   const reset = async () => {
     backend.call = baseCall;
     await runtime.reset();
+    await page.waitForSelector("#startup", { state: "detached" });
   };
   const focused = async (id) =>
     page.evaluate((id) => {
@@ -66,11 +68,11 @@ export async function runQuickHome(runtime, { command, check, output }) {
       !(await page.evaluate(() => document.activeElement?.matches(".tiptap"))),
   );
   check(
-    "Home has one visible create action, folder/settings and no old count footer or fake microphone",
+    "Home has one visible create action, view/folder/settings and no old count footer or fake microphone",
     (await page
       .getByRole("button", { name: "新建备忘录", exact: true })
       .count()) === 1 &&
-      (await page.locator(".mobile-home-actions button").count()) === 2 &&
+      (await page.locator(".mobile-home-actions button").count()) === 3 &&
       (await page.locator(".notes-footer:visible").count()) === 0 &&
       (await page.locator(".mobile-list-search svg.lucide-mic").count()) === 0,
   );
@@ -128,7 +130,7 @@ export async function runQuickHome(runtime, { command, check, output }) {
     "Editor Back returns to source all gallery and retains saved body",
     (await state(page)).selection.folderId === "all" &&
       (await state(page)).selection.page === "notes" &&
-      (await page.locator(`[data-note-id="${first}"]`).innerText()).includes(
+      (await page.locator(`.note-row[data-note-id="${first}"]`).innerText()).includes(
         "真实保存正文",
       ),
   );
@@ -237,7 +239,7 @@ export async function runQuickHome(runtime, { command, check, output }) {
   );
   await idle(page);
   await page.locator('.editor-tools:visible [aria-label="添加附件"]').click();
-  await page.getByRole("button", { name: "录音", exact: true }).click();
+  await page.getByRole("menuitem", { name: "录音", exact: true }).click();
   await idle(page);
   await command("recording.action", { action: "toggle" });
   await page.evaluate(() => window.__DEBUG_PLATFORM__.advance(1300));
@@ -392,26 +394,29 @@ export async function runQuickHome(runtime, { command, check, output }) {
     !(await page.locator(".notes-pane").innerHTML()).includes(
       "LOCKED-SECRET-83",
     ) &&
-      (await page.locator('[data-note-id="note-a"]').innerText()).includes(
+      (await page.locator('.note-row[data-note-id="note-a"]').innerText()).includes(
         "已锁定",
       ),
   );
   await page.locator(".mobile-home-settings").click();
   await idle(page);
   check(
-    "Home settings opens shared settings tab with desktop-only view labels",
-    (await state(page)).preferences.tab === "settings" &&
-      (await page
-        .getByRole("combobox", { name: "桌面显示方式", exact: true })
-        .count()) === 1 &&
-      (await page
-        .getByRole("checkbox", { name: "桌面按日期分组", exact: true })
-        .count()) === 1,
+    "Home settings opens mobile category navigation",
+    (await state(page)).preferences.tab === "home" &&
+      (await page.getByRole("navigation", { name: "设置分类" }).count()) === 1,
   );
-  await page.getByRole("tab", { name: "数据", exact: true }).click();
+  await page.getByRole("button", { name: "外观与字号", exact: false }).click();
   await idle(page);
   check(
-    "Shared data tab remains reachable from quick home",
+    "Mobile appearance page remains reachable from quick home",
+    (await state(page)).preferences.tab === "settings" &&
+      (await page.getByRole("combobox", { name: "界面字体大小", exact: true }).count()) === 1,
+  );
+  await page.getByRole("button", { name: "返回设置", exact: true }).click();
+  await page.getByRole("button", { name: "存储空间", exact: false }).click();
+  await idle(page);
+  check(
+    "Shared storage page remains reachable from quick home",
     (await page.locator(".storage-summary").count()) === 1,
   );
   await page.getByRole("button", { name: "关闭设置", exact: true }).click();
@@ -438,7 +443,7 @@ export async function runQuickHome(runtime, { command, check, output }) {
       ).includes(backend.workspace.attachments[0].id),
   );
   const readsBeforeCold = backend.calls.filter(
-    (c) => c.command === "read_attachment",
+    (c) => c.command === "acquire_attachment_source",
   ).length;
   const savedSelectedNote = backend.workspace.settings.selectedNote;
   await page.reload();
@@ -449,10 +454,9 @@ export async function runQuickHome(runtime, { command, check, output }) {
     (await state(page)).selection.noteId === null &&
       (await page.locator(".tiptap").count()) === 0 &&
       backend.workspace.settings.selectedNote === savedSelectedNote &&
-      backend.calls.filter((c) => c.command === "read_attachment").length ===
-        readsBeforeCold,
+      !backend.calls.some(c=>c.command==="read_attachment") && !backend.calls.some(c=>c.command==="acquire_attachment_source"&&c.purpose==="original"),
   );
-  await page.locator('[data-note-id="note-a"]').click();
+  await page.locator('.note-row[data-note-id="note-a"]').click();
   await idle(page);
   await page.waitForFunction(() => {
     const img = document.querySelector(".attachment-node img");
@@ -462,11 +466,10 @@ export async function runQuickHome(runtime, { command, check, output }) {
     "Opening a media card mounts only its chosen editor and reads its saved attachment",
     (await state(page)).selection.noteId === "note-a" &&
       (await page.locator(".tiptap").count()) === 1 &&
-      backend.calls.filter((c) => c.command === "read_attachment").length >
-        readsBeforeCold,
+      backend.calls.filter((c) => c.command === "acquire_attachment_source").length > readsBeforeCold && !backend.calls.some(c=>c.command==="read_attachment"),
   );
   await page.locator('.editor-tools:visible [aria-label="添加附件"]').click();
-  await page.getByRole("button", { name: "录音", exact: true }).click();
+  await page.getByRole("menuitem", { name: "录音", exact: true }).click();
   await idle(page);
   await command("recording.action", { action: "toggle" });
   await page.evaluate(() => window.__DEBUG_PLATFORM__.advance(1300));

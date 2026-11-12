@@ -117,7 +117,7 @@ a {
   overflow: hidden;
   box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.025);
   position: relative;
-  z-index: 2;
+  z-index: var(--layer-content-overlay);
 }
 .sidebar-toolbar {
   height: 43px;
@@ -144,9 +144,6 @@ a {
   border-radius: 8px;
   flex-shrink: 0;
   transition: background 0.1s;
-}
-.icon-button:hover {
-  background: rgba(128, 128, 128, 0.1);
 }
 .icon-button svg {
   width: 21px;
@@ -188,7 +185,7 @@ a {
 }
 .preview-badge {
   position: absolute;
-  z-index: 200;
+  z-index: var(--layer-menu);
   bottom: 4px;
   left: 8px;
   font-size: 9px;
@@ -242,9 +239,6 @@ a {
 }
 .folder-row.selected .count {
   font-weight: 400;
-}
-.folder-row:hover:not(.selected) {
-  background: rgba(128, 128, 128, 0.06);
 }
 .account-title {
   font-size: 12px;
@@ -388,16 +382,13 @@ a {
   background: var(--paper);
   border-radius: 9px;
   position: relative;
-  z-index: 1;
+  z-index: var(--layer-content-overlay);
   -webkit-user-select: none;
   user-select: none;
   transition: transform 0.18s;
 }
 .note-row.selected {
   background: var(--selection);
-}
-.note-row:hover:not(.selected) {
-  background: rgba(128, 128, 128, 0.06);
 }
 .note-row strong {
   font-size: 14px;
@@ -495,7 +486,7 @@ a {
   padding: 7px 8px 7px 12px;
   flex-shrink: 0;
   position: relative;
-  z-index: 5;
+  z-index: var(--layer-editor);
   background: linear-gradient(var(--paper), var(--paper));
   user-select: none;
   -webkit-user-select: none;
@@ -539,9 +530,6 @@ a {
   padding: 0 6px;
   height: 36px;
   border-radius: 9px;
-}
-.format-button:hover {
-  background: rgba(128, 128, 128, 0.1);
 }
 .share-group {
   margin-left: 0;
@@ -772,7 +760,7 @@ a {
   font-weight: 400;
 }
 .tiptap .selectedCell:after {
-  z-index: 2;
+  z-index: var(--layer-content-overlay);
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -794,6 +782,26 @@ a {
 .tiptap .tableWrapper {
   overflow-x: auto;
 }
+.note-document { position: relative; }
+.tiptap .tableWrapper { margin-top: 28px; }
+.table-controls { position: absolute; inset: 0; pointer-events: none; z-index: var(--layer-editor); color: var(--ink, #252525); }
+.table-axis-handle { position: absolute; display: flex; pointer-events: auto; border: 1px solid #b7b7b7; border-radius: 5px; background: var(--paper, #fafafa); color: #b0b0b0; box-sizing: border-box; }
+.table-axis-handle.column { height: calc(15px * var(--ui-scale, 1)); transform: translateY(calc(-100% - 7px * var(--ui-scale, 1))); }
+.table-axis-handle.row { width: calc(15px * var(--ui-scale, 1)); transform: translateX(calc(-100% - 7px * var(--ui-scale, 1))); flex-direction: column; }
+.table-axis-handle button { display: flex; justify-content: center; align-items: center; flex: 1; min-width: 0; min-height: 0; border: 0; padding: 0; color: inherit; background: transparent; border-radius: 4px; cursor: pointer; }
+.table-axis-handle svg { width: 20px; height: 20px; flex-shrink: 0; }
+.table-axis-handle.row.chosen svg { width: 14px; height: 14px; }
+.table-axis-handle.chosen { background: #ffb923; border-color: #ffb923; color: white; }
+.table-axis-handle.column.chosen { height: calc(27px * var(--ui-scale, 1)); transform: translateY(-100%); border-radius: 8px 8px 0 0; }
+.table-axis-handle.row.chosen { width: calc(27px * var(--ui-scale, 1)); transform: translateX(-100%); border-radius: 8px 0 0 8px; }
+.table-axis-handle.column .table-axis-arrow { flex: 0 0 calc(32px * var(--ui-scale, 1)); }
+.table-axis-handle.row .table-axis-arrow { flex: 0 0 calc(22px * var(--ui-scale, 1)); }
+.table-axis-handle button:focus-visible, .table-axis-menu button:focus-visible { outline: 2px solid #a96900; outline-offset: -2px; }
+.table-selection-outline { position: absolute; outline: 3px solid #ffb923; outline-offset: -1px; pointer-events: none; }
+.table-selection-outline i { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: #ffb923; }
+.note-document:has(.table-selection-outline) .selectedCell:after { background: transparent; }
+.table-axis-menu { pointer-events: auto; }
+.mobile .table-axis-handle.row.chosen { width: 22px; }
 .attachment-node {
   margin: 12px 0;
   max-width: 100%;
@@ -813,6 +821,9 @@ a {
 .attachment-node.ProseMirror-selectednode img,
 .drawing-node.ProseMirror-selectednode {
   outline: 2px solid var(--accent);
+}
+.audio-waveform-row {
+  display: none;
 }
 .audio-card {
   background: #e8e7eb;
@@ -955,7 +966,7 @@ a {
   top: 56px;
   bottom: 0;
   width: 7px;
-  z-index: 10;
+  z-index: var(--layer-toolbar);
   cursor: col-resize;
   touch-action: none;
 }
@@ -1080,7 +1091,7 @@ a {
   background: var(--grouped);
   padding: 5px 15px;
   border-bottom: 1px solid var(--line);
-  z-index: 4;
+  z-index: var(--layer-editor);
   flex-shrink: 0;
 }
 .find-bar input {
@@ -1132,12 +1143,12 @@ a {
 .menu-scrim {
   position: absolute;
   inset: 0;
-  z-index: 30;
+  z-index: var(--layer-menu);
   background: transparent;
 }
 .popover {
   position: absolute;
-  z-index: 31;
+  z-index: var(--layer-menu);
   width: 248px;
   background: var(--menu);
   border-radius: 13px;
@@ -1216,14 +1227,14 @@ a {
   font-size: 13px;
   line-height: 19px;
 }
-.menu-row:hover {
+.menu-row:not(:disabled):not([aria-disabled="true"]):hover {
   background: var(--accent);
   color: white;
 }
 .menu-row.danger {
   color: var(--danger);
 }
-.menu-row.danger:hover {
+.menu-row.danger:not(:disabled):not([aria-disabled="true"]):hover {
   background: var(--danger);
   color: #fff;
 }
@@ -1308,7 +1319,7 @@ a {
   left: 15px;
   right: 15px;
   top: 55px;
-  z-index: 100;
+  z-index: var(--layer-notice);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1342,14 +1353,14 @@ a {
   color: #fff;
   font-size: 13px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  z-index: 150;
+  z-index: var(--layer-notice);
   backdrop-filter: blur(10px);
   text-align: center;
 }
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  z-index: 50;
+  z-index: var(--layer-modal);
   background: rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
@@ -1538,7 +1549,7 @@ a {
 .drawing-overlay {
   position: absolute;
   inset: 0;
-  z-index: 60;
+  z-index: var(--layer-modal);
   display: flex;
   flex-direction: column;
   background: var(--paper);
@@ -1612,7 +1623,7 @@ a {
 .recording-backdrop {
   position: absolute;
   inset: 0;
-  z-index: 60;
+  z-index: var(--layer-modal);
   background: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
@@ -1847,8 +1858,9 @@ a {
     width: 20px;
   }
 }
-@media (max-width: 699px) {
-  :root {
+/* Mobile layout follows the platform identity, including native Android landscape. */
+@media all {
+  .mobile {
     font-size: 17px;
     --accent: #c69e00;
     -webkit-font-smoothing: antialiased;
@@ -1889,18 +1901,18 @@ a {
   .mobile .sidebar-toolbar {
     display: none;
   }
-  .mobile-folder-nav {
+  :where(.mobile) .mobile-folder-nav {
     height: 42px;
     display: flex;
     justify-content: flex-end;
     padding: 6px 17px 0;
     flex-shrink: 0;
   }
-  .mobile-folder-nav button {
+  :where(.mobile) .mobile-folder-nav button {
     font-size: 17px;
     color: var(--accent);
   }
-  .folder-large-title {
+  :where(.mobile) .folder-large-title {
     display: block;
     margin: 4px 16px 9px;
     font-weight: 700;
@@ -1915,8 +1927,8 @@ a {
   .mobile.page-folders .mobile-quick-folder-row > svg:first-child {
     margin-right: 7px;
   }
-  .mobile-folder-search,
-  .mobile-list-search {
+  :where(.mobile) .mobile-folder-search,
+  :where(.mobile) .mobile-list-search {
     display: flex;
     align-items: center;
     gap: 9px;
@@ -1944,7 +1956,7 @@ a {
     width: 15px;
     height: 17px;
   }
-  .text-button {
+  :where(.mobile) .text-button {
     color: var(--accent);
     font-size: 17px;
     white-space: nowrap;
@@ -2047,7 +2059,7 @@ a {
     align-items: center;
     justify-content: space-between;
   }
-  .back-button {
+  :where(.mobile) .back-button {
     display: flex;
     align-items: center;
     color: var(--accent);
@@ -2058,7 +2070,7 @@ a {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .back-button svg {
+  :where(.mobile) .back-button svg {
     height: 25px;
     width: 22px;
     stroke-width: 2.3;
@@ -2078,7 +2090,7 @@ a {
     height: 21px;
     stroke-width: 1.7;
   }
-  .notes-large-title {
+  :where(.mobile) .notes-large-title {
     display: block;
     font-size: 34px;
     line-height: 41px;
@@ -2087,7 +2099,7 @@ a {
     letter-spacing: 0.3px;
     flex-shrink: 0;
   }
-  .mobile-list-search {
+  :where(.mobile) .mobile-list-search {
     margin-bottom: 12px;
   }
   .mobile .notes-scroll {
@@ -2118,7 +2130,7 @@ a {
     bottom: 0;
     height: 0.5px;
     background: var(--line);
-    z-index: 3;
+    z-index: var(--layer-content-overlay);
     pointer-events: none;
   }
   .mobile .note-entry:has(.date-section) .note-row-wrap {
@@ -2187,32 +2199,32 @@ a {
     background: var(--paper);
     color: var(--accent);
   }
-  .mobile-header-actions {
+  :where(.mobile) .mobile-header-actions {
     display: flex;
     gap: 12px;
     align-items: center;
     flex-shrink: 0;
   }
-  .mobile-header-actions .icon-button {
+  :where(.mobile) .mobile-header-actions .icon-button {
     width: 24px;
     height: 32px;
     border-radius: 0;
     color: var(--accent);
   }
-  .mobile-header-actions .icon-button svg {
+  :where(.mobile) .mobile-header-actions .icon-button svg {
     width: 22px;
     height: 22px;
     stroke-width: 1.6;
   }
-  .mobile-header-actions .icon-button[aria-label="更多"] svg {
+  :where(.mobile) .mobile-header-actions .icon-button[aria-label="更多"] svg {
     border: 1.5px solid currentColor;
     border-radius: 50%;
     width: 22px;
     height: 22px;
     padding: 1px;
   }
-  .mobile-header-actions .icon-button[aria-label="撤销"] svg,
-  .mobile-header-actions .icon-button[aria-label="重做"] svg {
+  :where(.mobile) .mobile-header-actions .icon-button[aria-label="撤销"] svg,
+  :where(.mobile) .mobile-header-actions .icon-button[aria-label="重做"] svg {
     border: 1.3px solid currentColor;
     border-radius: 50%;
     width: 21px;
@@ -2306,7 +2318,7 @@ a {
     background: #f8f8fa;
     border-top: 0.5px solid #dedee3;
     color: var(--ink);
-    padding: 0 12px;
+    padding: 0 6px;
   }
   .mobile .editor-tools > .icon-button {
     height: 38px;
@@ -2387,27 +2399,44 @@ a {
     height: 44px;
     transform: translateY(-50%);
   }
-  .mobile .audio-detail {
-    display: grid;
-    grid-template-columns: 44px minmax(0, 1fr) 38px 44px;
-    gap: 6px;
-    padding: 0 8px 8px;
+  .mobile .audio-waveform-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 10px;
+    color: var(--secondary);
+    font-size: 12px;
   }
-  .mobile .audio-detail button {
-    width: 44px;
-    height: 44px;
-    justify-content: center;
-  }
-  .mobile .audio-detail button small {
-    left: 14px;
-    top: 17px;
-  }
-  .mobile .audio-detail input {
-    height: 44px;
+  .mobile .audio-waveform-track {
+    position: relative;
+    flex: 1;
     min-width: 0;
+    height: 44px;
+  }
+  .mobile .audio-waveform-track svg {
+    display: block;
+    width: 100%;
+    height: 44px;
+  }
+  .mobile .audio-waveform-unplayed { fill: #b7b6bd; }
+  .mobile .audio-waveform-played { fill: var(--accent); }
+  .mobile .audio-waveform-track input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
     touch-action: pan-y;
   }
-  .mobile .audio-detail > span {
+  .mobile .audio-waveform-track:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  .mobile .audio-waveform-row > span {
+    flex-shrink: 0;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
   }
@@ -2431,11 +2460,11 @@ a {
   .mobile .menu-row:not(:last-child) {
     border-bottom: 0.5px solid rgba(128, 128, 128, 0.2);
   }
-  .mobile .menu-row:hover {
+  .mobile .menu-row:not(:disabled):not([aria-disabled="true"]):hover {
     background: rgba(128, 128, 128, 0.1);
     color: var(--ink);
   }
-  .mobile .menu-row.danger:hover {
+  .mobile .menu-row.danger:not(:disabled):not([aria-disabled="true"]):hover {
     color: var(--danger);
   }
   .mobile .menu-divider {
@@ -2670,18 +2699,18 @@ a {
     overflow-y: auto;
     flex: 1;
   }
-  .search-suggestions h3 {
+  :where(.mobile) .search-suggestions h3 {
     font-size: 19px;
     line-height: 25px;
     margin: 0 0 7px;
     font-weight: 650;
   }
-  .search-suggestions > div {
+  :where(.mobile) .search-suggestions > div {
     background: var(--paper);
     border-radius: 8px;
     overflow: hidden;
   }
-  .search-suggestions button {
+  :where(.mobile) .search-suggestions button {
     display: flex;
     width: 100%;
     align-items: center;
@@ -2691,10 +2720,10 @@ a {
     border-bottom: 0.5px solid var(--line);
     text-align: left;
   }
-  .search-suggestions button:last-child {
+  :where(.mobile) .search-suggestions button:last-child {
     border: 0;
   }
-  .search-suggestions svg {
+  :where(.mobile) .search-suggestions svg {
     width: 23px;
     height: 23px;
     color: var(--accent);
@@ -2765,7 +2794,7 @@ a {
     bottom: 0;
     width: 174px;
     background: #ff3b30;
-    z-index: 0;
+    z-index: var(--layer-content);
   }
   .mobile .swipe-actions button {
     width: 58px;
@@ -2893,6 +2922,137 @@ a {
   .dark .mobile .folder-row:not(:last-child):after,
   .dark .mobile .folder-group > div:not(:last-child) > .folder-row:after {
     background: #38383a;
+  }
+}
+/* Keep the original shared narrow-window styles for desktop/separate windows. */
+@media (max-width: 699px) {
+  :root {
+    font-size: 17px;
+    --accent: #c69e00;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mobile-folder-nav {
+    height: 42px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 6px 17px 0;
+    flex-shrink: 0;
+  }
+  .mobile-folder-nav button {
+    font-size: 17px;
+    color: var(--accent);
+  }
+  .folder-large-title {
+    display: block;
+    margin: 4px 16px 9px;
+    font-weight: 700;
+    font-size: 34px;
+    line-height: 41px;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+  .mobile-folder-search,
+  .mobile-list-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 16px;
+    flex-shrink: 0;
+  }
+  .text-button {
+    color: var(--accent);
+    font-size: 17px;
+    white-space: nowrap;
+  }
+  .back-button {
+    display: flex;
+    align-items: center;
+    color: var(--accent);
+    font-size: 17px;
+    gap: 1px;
+    white-space: nowrap;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .back-button svg {
+    height: 25px;
+    width: 22px;
+    stroke-width: 2.3;
+  }
+  .notes-large-title {
+    display: block;
+    font-size: 34px;
+    line-height: 41px;
+    margin: 2px 16px 8px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+  .mobile-list-search {
+    margin-bottom: 12px;
+  }
+  .mobile-header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .mobile-header-actions .icon-button {
+    width: 24px;
+    height: 32px;
+    border-radius: 0;
+    color: var(--accent);
+  }
+  .mobile-header-actions .icon-button svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.6;
+  }
+  .mobile-header-actions .icon-button[aria-label="更多"] svg {
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    padding: 1px;
+  }
+  .mobile-header-actions .icon-button[aria-label="撤销"] svg,
+  .mobile-header-actions .icon-button[aria-label="重做"] svg {
+    border: 1.3px solid currentColor;
+    border-radius: 50%;
+    width: 21px;
+    height: 21px;
+    padding: 3px;
+  }
+  .search-suggestions h3 {
+    font-size: 19px;
+    line-height: 25px;
+    margin: 0 0 7px;
+    font-weight: 650;
+  }
+  .search-suggestions > div {
+    background: var(--paper);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .search-suggestions button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    font-size: 16px;
+    border-bottom: 0.5px solid var(--line);
+    text-align: left;
+  }
+  .search-suggestions button:last-child {
+    border: 0;
+  }
+  .search-suggestions svg {
+    width: 23px;
+    height: 23px;
+    color: var(--accent);
+    stroke-width: 1.5;
   }
 }
 @keyframes page-in {
@@ -3033,10 +3193,6 @@ a {
   padding: 6px 12px;
   border-radius: 5px;
 }
-.format-style:hover {
-  background: var(--accent);
-  color: white;
-}
 .format-style.style-1 {
   font-size: 20px;
   font-weight: 700;
@@ -3136,9 +3292,11 @@ a {
   background-size: 28px 28px;
 }
 
-@media (max-width: 699px) {
+/* Mobile layout follows the platform identity, including native Android landscape. */
+
+@media all {
   .mobile.format-open .editor-pane {
-    padding-bottom: var(--format-height);
+    padding-bottom: min(var(--format-height), 48vh);
   }
   .mobile .mobile-format-panel {
     position: absolute;
@@ -3147,6 +3305,7 @@ a {
     bottom: 0;
     top: auto;
     width: 100%;
+    max-width: 100%;
     height: var(--format-height);
     max-height: 48vh;
     border: 0;
@@ -3155,7 +3314,7 @@ a {
     background: #f8f6f9;
     padding: 0 16px env(safe-area-inset-bottom, 12px);
     overflow-y: auto;
-    z-index: 45;
+    z-index: var(--layer-editor);
     backdrop-filter: none;
   }
   .mobile.format-open .menu-scrim {
@@ -3163,17 +3322,17 @@ a {
     background: transparent;
     pointer-events: none;
   }
-  .format-panel-header {
+  :where(.mobile) .format-panel-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 48px;
   }
-  .format-panel-header strong {
+  :where(.mobile) .format-panel-header strong {
     font-size: 17px;
     font-weight: 650;
   }
-  .format-panel-header button {
+  :where(.mobile) .format-panel-header button {
     background: #e6e4e8;
     color: #89868e;
     width: 27px;
@@ -3316,6 +3475,36 @@ a {
     line-height: 1.25;
     margin: 0;
   }
+  .dark :where(.mobile) .mobile-format-panel {
+    background: #252326;
+  }
+  .dark :where(.mobile) .format-control-group {
+    background: #3a383d;
+  }
+}
+
+/* Keep the original shared narrow-window styles for desktop/separate windows. */
+
+@media (max-width: 699px) {
+  .format-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+  }
+  .format-panel-header strong {
+    font-size: 17px;
+    font-weight: 650;
+  }
+  .format-panel-header button {
+    background: #e6e4e8;
+    color: #89868e;
+    width: 27px;
+    height: 27px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+  }
   .dark .mobile-format-panel {
     background: #252326;
   }
@@ -3330,7 +3519,7 @@ a {
 .access-cover {
   position: absolute;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--layer-access);
   display: grid;
   place-items: center;
   background: var(--paper);
@@ -3351,7 +3540,6 @@ a {
 .tag-browser { margin-top: 14px; }
 .tag-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 14px 12px; }
 .tag-chips button { border: 0; border-radius: 5px; padding: 4px 7px; font: inherit; font-size: 12px; background: #dedddb; color: inherit; }
-.tag-chips button:hover { background: #cecdca; }
 .tag-chips button.selected { background: #f2ce58; color: #3a2d05; }
 
 .desktop .note-row-title {
@@ -3374,30 +3562,32 @@ a {
 }
 
 /* Mobile quick home uses its own presentation; desktop view stays a preference. */
-.mobile .mobile-home-actions { display: flex; align-items: center; gap: 8px; }
-@media (max-width: 699px) {
+.mobile .mobile-home-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+/* Mobile layout follows the platform identity, including native Android landscape. */
+@media all {
   .mobile .notes-pane { position: relative; }
-  .mobile .notes-header { min-height: 52px; height: 52px; padding: 0 12px; }
+  .mobile .notes-header { min-height: 64px; height: 64px; padding: 6px 12px 6px 16px; gap: 4px; }
+  .mobile .notes-header > .back-button { flex: 0 0 36px; min-height: 44px; justify-content: center; }
   .mobile .notes-header .icon-button { width: 44px; height: 44px; border: 0; color: var(--ink); padding: 10px; }
   .mobile .notes-header .icon-button svg { width: 25px; height: 25px; stroke-width: 1.7; }
-  .mobile .notes-large-title { font-size: 34px; margin: 4px 16px 14px; line-height: 1.25; }
+  .mobile .notes-header .notes-large-title { flex: 1; min-width: 0; font-size: 34px; margin: 0; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .mobile .mobile-list-search { margin-bottom: 16px; }
   .mobile .notes-scroll.mobile-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; align-items: start; gap: 12px; padding: 0 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
-  .mobile-gallery > .empty-state { grid-column: 1 / -1; padding: 48px 8px; }
+  :where(.mobile) .mobile-gallery > .empty-state { grid-column: 1 / -1; padding: 48px 8px; }
   .mobile .mobile-gallery .note-entry { min-width: 0; }
   .mobile .mobile-gallery .note-row-wrap { width: 100%; border-radius: 18px; overflow: hidden; }
   .mobile .mobile-gallery .note-row-wrap::after { display: none; }
   .mobile .mobile-gallery .note-row { min-height: 144px; width: 100%; padding: 16px; border-radius: 18px; text-align: left; }
-  .mobile-note-card { min-width: 0; width: 100%; }
+  :where(.mobile) .mobile-note-card { min-width: 0; width: 100%; }
   .mobile .mobile-note-card strong { font-size: 18px; line-height: 1.35; font-weight: 650; white-space: normal; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
-  .mobile-note-card strong svg { margin-right: 4px; color: var(--accent); }
-  .mobile-note-card p { font-size: 14px; line-height: 1.45; color: var(--secondary); margin: 12px 0 15px; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
-  .mobile-card-date { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--secondary); }
-  .mobile-card-date svg { color: var(--accent); }
-  .mobile-add-note { position: absolute; z-index: 6; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: #ffbc00; color: white; box-shadow: 0 3px 12px #0001; }
-  .mobile-add-note svg { width: 31px; height: 31px; stroke-width: 2; }
-  .mobile-add-note:disabled { opacity: .5; }
-  .mobile-add-note:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  :where(.mobile) .mobile-note-card strong svg { margin-right: 4px; color: var(--accent); }
+  :where(.mobile) .mobile-note-card p { font-size: 14px; line-height: 1.45; color: var(--secondary); margin: 12px 0 15px; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+  :where(.mobile) .mobile-card-date { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--secondary); }
+  :where(.mobile) .mobile-card-date svg { color: var(--accent); }
+  :where(.mobile) .mobile-add-note { position: absolute; z-index: var(--layer-editor); right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: #ffbc00; color: white; box-shadow: 0 3px 12px #0001; }
+  :where(.mobile) .mobile-add-note svg { width: 31px; height: 31px; stroke-width: 2; }
+  :where(.mobile) .mobile-add-note:disabled { opacity: .5; }
+  :where(.mobile) .mobile-add-note:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
   .mobile .editor-header { min-height: 52px; height: 52px; padding: 0 12px; }
   .mobile .editor-header .back-button { flex: none; max-width: 44px; min-width: 44px; min-height: 44px; justify-content: center; }
   .mobile .mobile-header-actions { gap: 4px; }
@@ -3409,7 +3599,21 @@ a {
   .mobile .editor-tools > .icon-button,
   .mobile .editor-tools .format-button { min-width: 44px; width: 44px; height: 44px; }
 }
+/* Keep the original shared narrow-window styles for desktop/separate windows. */
 @media (max-width: 699px) {
+  .mobile-gallery > .empty-state { grid-column: 1 / -1; padding: 48px 8px; }
+  .mobile-note-card { min-width: 0; width: 100%; }
+  .mobile-note-card strong svg { margin-right: 4px; color: var(--accent); }
+  .mobile-note-card p { font-size: 14px; line-height: 1.45; color: var(--secondary); margin: 12px 0 15px; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+  .mobile-card-date { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--secondary); }
+  .mobile-card-date svg { color: var(--accent); }
+  .mobile-add-note { position: absolute; z-index: var(--layer-editor); right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: #ffbc00; color: white; box-shadow: 0 3px 12px #0001; }
+  .mobile-add-note svg { width: 31px; height: 31px; stroke-width: 2; }
+  .mobile-add-note:disabled { opacity: .5; }
+  .mobile-add-note:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+}
+/* Mobile layout follows the platform identity, including native Android landscape. */
+@media all {
   .mobile .mobile-gallery .note-entry .note-row-wrap { border-radius: 18px; }
   .mobile .mobile-gallery .swipe-actions { visibility: hidden; }
   .mobile .mobile-gallery .note-row-wrap.swiped .swipe-actions { visibility: visible; }
@@ -3417,21 +3621,7 @@ a {
 }
 
 /* Shared attachment actions reuse the application's native-like menu material. */
-.attachment-context-menu {
-  position: fixed;
-  z-index: 90;
-  max-width: calc(100vw - 16px);
-  max-height: calc(100vh - 80px);
-}
-.attachment-context-menu .menu-row:disabled:hover {
-  background: transparent;
-  color: inherit;
-}
-.attachment-context-menu .menu-row:focus-visible {
-  background: var(--accent);
-  color: white;
-  outline: none;
-}
+.attachment-context-menu { position: fixed; }
 .attachment-menu-reason {
   margin: 5px 10px;
   font-size: 11px;
@@ -3440,7 +3630,7 @@ a {
 }
 .attachment-info {
   position: fixed;
-  z-index: 89;
+  z-index: var(--layer-preview);
   right: 20px;
   bottom: 20px;
   width: min(360px, calc(100vw - 32px));

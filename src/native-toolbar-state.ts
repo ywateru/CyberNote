@@ -1,5 +1,8 @@
+import { fontScales } from "./font-size";
 import type { Editor } from "@tiptap/react";
-import type { Note, Settings } from "./types";
+import type { Folder, Note, Settings } from "./types";
+import { isPhysicalOwner } from "./smart-folders";
+import { parseInterfaceDetails } from "./interface-details";
 import type {
   ToolbarState,
   MenuEntry,
@@ -17,6 +20,7 @@ const separator: MenuEntry = { kind: "separator" };
 export function toolbarState(input: {
   layout: ToolbarState["layout"];
   sidebar: boolean;
+  attachmentBrowse?: boolean;
   settings: Settings;
   folderTitle: string;
   folderCount: number;
@@ -25,7 +29,10 @@ export function toolbarState(input: {
   available: boolean;
   editable: boolean;
   current?: Note;
+  folders?: Folder[];
   editor: Editor | null;
+  hasTextSelection?: boolean;
+  textToTableAvailable?: boolean;
 }): Omit<ToolbarState, "revision"> {
   const {
     layout,
@@ -42,6 +49,7 @@ export function toolbarState(input: {
   } = input;
   const active = (name: string, attrs?: Record<string, unknown>) =>
     editable && !!editor?.isActive(name, attrs);
+  const moveFolders = (input.folders ?? []).filter(isPhysicalOwner);
   const action = (action: Action, enabled = available, selected = false) => ({
     action,
     enabled,
@@ -59,12 +67,15 @@ export function toolbarState(input: {
       : []),
     ...(layout === "galleryExpanded" ? [action("backToGallery")] : []),
     action("newNote"),
+    action("settings"),
     ...(!browsing
       ? [
           action("format", editable),
           action("checklist", editable, active("taskList")),
           action("table", editable, active("table")),
           action("attachment", editable),
+          action("recordAudio", editable),
+          action("insertTag", editable),
           action("share", editable),
           action("more", available && !!current && !current.deletedAt),
         ]
@@ -72,8 +83,12 @@ export function toolbarState(input: {
   ];
   const viewItems: MenuEntry[] = [
     item(
-      settings.view === "gallery" ? "viewList" : "viewGallery",
-      settings.view === "gallery" ? "列表视图" : "画廊视图",
+      input.attachmentBrowse || settings.view === "gallery"
+        ? "viewList"
+        : "viewGallery",
+      input.attachmentBrowse || settings.view === "gallery"
+        ? "列表视图"
+        : "画廊视图",
       available,
     ),
     separator,
@@ -95,7 +110,7 @@ export function toolbarState(input: {
     },
     item("groupByDate", "按日期分组", available, settings.groupDates !== false),
     separator,
-    item("viewAttachments", "查看附件", false),
+    item("viewAttachments", "查看附件", available, !!input.attachmentBrowse),
   ];
   const format: MenuEntry[] = [
     item("bold", "粗体", editable, active("bold")),
@@ -162,7 +177,20 @@ export function toolbarState(input: {
                   items: [item("convertTableToText", "转换为文本", editable)],
                 },
               ]
-            : []),
+            : input.hasTextSelection
+              ? [
+                  {
+                    owner: "table" as const,
+                    items: [
+                      item(
+                        "convertTextToTable",
+                        "将所选文字转换为表格",
+                        editable && !!input.textToTableAvailable,
+                      ),
+                    ],
+                  },
+                ]
+              : []),
           {
             owner: "attachment" as const,
             items: [
@@ -173,7 +201,7 @@ export function toolbarState(input: {
               separator,
               item("takePhoto", "拍照", false),
               item("scanDocument", "扫描文稿", false),
-              item("addSketch", "添加速绘", false),
+              item("addSketch", "添加速绘", editable),
             ],
           },
           {
@@ -192,7 +220,20 @@ export function toolbarState(input: {
               ),
               separator,
               item("findInNote", "在备忘录中查找", editable),
-              item("moveNote", "移到…", editable),
+              {
+                kind: "submenu" as const,
+                label: "移动到",
+                items: moveFolders.length
+                  ? moveFolders.map((folder) => ({
+                      kind: "item" as const,
+                      command: "moveNote" as const,
+                      folderId: folder.id,
+                      label: folder.name,
+                      enabled: editable && folder.id !== current?.folderId,
+                      selected: folder.id === current?.folderId,
+                    }))
+                  : [item("moveNote", "没有可用文件夹", false)],
+              },
               item("recentNotes", "最近备忘录", false),
               {
                 kind: "submenu" as const,
@@ -222,8 +263,8 @@ export function toolbarState(input: {
     layout,
     columns: {
       sidebarVisible: sidebar && !independent,
-      sidebarWidth: settings.sidebarWidth || 228,
-      listWidth: settings.listWidth || 280,
+      sidebarWidth: settings.sidebarWidth || 272,
+      listWidth: settings.listWidth || 390,
     },
     folderTitle,
     folderCount,
@@ -234,5 +275,9 @@ export function toolbarState(input: {
       ? null
       : { enabled: available, value: query, acknowledgedEvent: searchAck },
     glassStyle: "regular",
+    fontScale: fontScales(settings).interface,
+    iconScale: parseInterfaceDetails(settings.interfaceDetails).iconScale / 100,
+    hitScale: parseInterfaceDetails(settings.interfaceDetails).desktopHitScale / 100,
+    appearance: settings.theme || "system",
   };
 }

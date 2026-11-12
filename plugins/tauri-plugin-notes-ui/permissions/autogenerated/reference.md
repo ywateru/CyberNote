@@ -1,6 +1,6 @@
 ## Default Permission
 
-Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.
+Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy, UI-only context/dropdown menus and teardown. No note storage access.
 
 #### This default permission set includes the following:
 
@@ -10,6 +10,8 @@ Own-window toolbar binding, state updates, inspection, search focus, read-only m
 - `allow-inspect`
 - `allow-focus-search`
 - `allow-keyboard-navigation`
+- `allow-popup-menu`
+- `allow-cancel-popup-menu`
 
 ## Permission Table
 
@@ -42,6 +44,32 @@ Enables the bind command without any pre-configured scope.
 <td>
 
 Denies the bind command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:allow-cancel-popup-menu`
+
+</td>
+<td>
+
+Enables the cancel_popup_menu command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:deny-cancel-popup-menu`
+
+</td>
+<td>
+
+Denies the cancel_popup_menu command without any pre-configured scope.
 
 </td>
 </tr>
@@ -120,6 +148,32 @@ Enables the keyboard_navigation command without any pre-configured scope.
 <td>
 
 Denies the keyboard_navigation command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:allow-popup-menu`
+
+</td>
+<td>
+
+Enables the popup_menu command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`notes-ui:deny-popup-menu`
+
+</td>
+<td>
+
+Denies the popup_menu command without any pre-configured scope.
 
 </td>
 </tr>

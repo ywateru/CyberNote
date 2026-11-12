@@ -8,6 +8,16 @@ import {
 import type { AttachmentMediaSource } from "./attachment-media";
 import { saveAttachmentOriginal } from "./attachment-export";
 import { fileOperationError } from "./data-management";
+import { desktopAttachmentAction, native } from "./bridge";
+import {
+  X,
+  Maximize2,
+  Minimize2,
+  Info,
+  Share,
+  ExternalLink,
+  Download,
+} from "lucide-react";
 import "./ImagePreview.css";
 export type ImagePreviewRequest = {
   id: string;
@@ -20,8 +30,11 @@ export type ImagePreviewRequest = {
   authority?: string;
   session?: string;
 };
+export type ImagePreviewIntent = Omit<ImagePreviewRequest, "source"> & {
+  source?: AttachmentMediaSource;
+};
 export const ImagePreviewContext = createContext<{
-  open: (request: ImagePreviewRequest) => void;
+  open: (request: ImagePreviewIntent) => void;
   closeSource: (source: AttachmentMediaSource) => void;
 }>({ open: () => {}, closeSource: () => {} });
 export const useImagePreview = () => useContext(ImagePreviewContext);
@@ -36,7 +49,19 @@ export function ImagePreview({
     close = useRef<HTMLButtonElement>(null),
     live = useRef(false),
     running = useRef(false);
+  const [position, setPosition] = useState(() => ({
+    x: Math.max(12, innerWidth * 0.3),
+    y: Math.max(100, innerHeight * 0.13),
+  }));
+  const drag = useRef<{
+    id: number;
+    x: number;
+    y: number;
+    left: number;
+    top: number;
+  } | null>(null);
   const [info, setInfo] = useState(false),
+    [expanded, setExpanded] = useState(false),
     [size, setSize] = useState<{ width: number; height: number } | null>(null),
     [busy, setBusy] = useState(false),
     [notice, setNotice] = useState(""),
@@ -44,47 +69,22 @@ export function ImagePreview({
     [imageError, setImageError] = useState("");
   useLayoutEffect(() => {
     live.current = true;
+    const surface = root.current!;
     close.current?.focus({ preventScroll: true });
-    // Export disables its focused button; native dialogs may also return focus
-    // to body. Keep the active preview keyboard boundary at document capture.
     const keyboard = (event: KeyboardEvent) => {
-      const element = root.current;
       if (
+        event.defaultPrevented ||
         !live.current ||
-        !element?.isConnected ||
-        element.hidden ||
-        element.getClientRects().length === 0 ||
-        getComputedStyle(element).visibility === "hidden"
+        !root.current?.isConnected ||
+        root.current.hidden ||
+        root.current.getClientRects().length === 0 ||
+        !root.current.contains(event.target as Node)
       )
         return;
       if (event.key === "Escape") {
         event.preventDefault();
         event.stopPropagation();
         onClose();
-        return;
-      }
-      if (event.key !== "Tab") return;
-      const buttons = Array.from(
-        element.querySelectorAll<HTMLButtonElement>("button:not(:disabled)"),
-      );
-      const first = buttons[0],
-        last = buttons.at(-1);
-      if (
-        event.shiftKey &&
-        (document.activeElement === first ||
-          !element.contains(document.activeElement))
-      ) {
-        event.preventDefault();
-        event.stopPropagation();
-        last?.focus();
-      } else if (
-        !event.shiftKey &&
-        (document.activeElement === last ||
-          !element.contains(document.activeElement))
-      ) {
-        event.preventDefault();
-        event.stopPropagation();
-        first?.focus();
       }
     };
     document.addEventListener("keydown", keyboard, true);
@@ -102,6 +102,7 @@ export function ImagePreview({
       document.removeEventListener("keydown", keyboard, true);
       release();
       if (
+        surface.contains(document.activeElement) &&
         request.trigger.isConnected &&
         request.trigger.offsetParent !== null &&
         !request.trigger.closest(".access-sync")
@@ -109,6 +110,25 @@ export function ImagePreview({
         request.trigger.focus({ preventScroll: true });
     };
   }, [request]);
+  const clamp = (x: number, y: number) => {
+    const rect = root.current?.getBoundingClientRect();
+    const top =
+      parseFloat(
+        getComputedStyle(root.current!.closest(".app")!).getPropertyValue(
+          "--native-top",
+        ),
+      ) || 0;
+    return {
+      x: Math.max(8, Math.min(x, innerWidth - (rect?.width ?? 0) - 8)),
+      y: Math.max(top + 8, Math.min(y, innerHeight - (rect?.height ?? 0) - 8)),
+    };
+  };
+  useLayoutEffect(() => {
+    const resize = () => setPosition((value) => clamp(value.x, value.y));
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, [expanded]);
   const save = async () => {
     if (running.current || !live.current) return;
     running.current = true;
@@ -117,7 +137,11 @@ export function ImagePreview({
     setError("");
     try {
       if (
-        (await saveAttachmentOriginal(request.id, request.name, () => live.current && request.trigger.isConnected)) &&
+        (await saveAttachmentOriginal(
+          request.id,
+          request.name,
+          () => live.current,
+        )) &&
         live.current
       )
         setNotice("图片已保存");
@@ -125,95 +149,194 @@ export function ImagePreview({
       if (live.current) setError(fileOperationError(cause));
     } finally {
       running.current = false;
-      if (live.current) setBusy(false);
+      if (live.current) {
+        setBusy(false);
+        if (document.activeElement === document.body)
+          close.current?.focus({ preventScroll: true });
+      }
+    }
+  };
+  const system = async (action: "open" | "share") => {
+    if (!live.current || running.current) return;
+    running.current = true;
+    setBusy(true);
+    setError("");
+    try {
+      await desktopAttachmentAction(request.id, action);
+    } catch (cause) {
+      if (live.current) setError(fileOperationError(cause));
+    } finally {
+      running.current = false;
+      if (live.current) {
+        setBusy(false);
+        if (document.activeElement === document.body)
+          close.current?.focus({ preventScroll: true });
+      }
     }
   };
   return (
     <section
       ref={root}
-      className="image-preview"
+      className={`image-preview ${expanded ? "expanded" : ""}`}
+      style={expanded ? undefined : { left: position.x, top: position.y }}
       data-preview-id={request.id}
       role="dialog"
-      aria-modal="true"
+      aria-modal="false"
       aria-label="图片预览"
     >
-      <header>
-        <strong title={request.name}>{request.name}</strong>
-        <div className="image-preview-actions">
-          <button
-            type="button"
-            aria-label="图片信息"
-            aria-expanded={info}
-            onClick={() => setInfo((v) => !v)}
-          >
-            信息
-          </button>
-          <button
-            className="save-image"
-            type="button"
-            disabled={busy}
-            onClick={() => void save()}
-          >
-            {busy ? "正在导出…" : "导出原图…"}
-          </button>
+      <div className={`image-preview-window ${expanded ? "expanded" : ""}`}>
+        <header
+          onDoubleClick={(event) => {
+            if (!(event.target as HTMLElement).closest("button"))
+              setExpanded((value) => !value);
+          }}
+          onPointerDown={(event) => {
+            if (
+              expanded ||
+              event.button !== 0 ||
+              (event.target as HTMLElement).closest("button")
+            )
+              return;
+            event.preventDefault();
+            event.currentTarget.setPointerCapture(event.pointerId);
+            drag.current = {
+              id: event.pointerId,
+              x: event.clientX,
+              y: event.clientY,
+              left: position.x,
+              top: position.y,
+            };
+          }}
+          onPointerMove={(event) => {
+            const start = drag.current;
+            if (start?.id === event.pointerId)
+              setPosition(
+                clamp(
+                  start.left + event.clientX - start.x,
+                  start.top + event.clientY - start.y,
+                ),
+              );
+          }}
+          onPointerUp={() => {
+            drag.current = null;
+          }}
+          onPointerCancel={() => {
+            drag.current = null;
+          }}
+          onLostPointerCapture={() => {
+            drag.current = null;
+          }}
+        >
           <button
             ref={close}
             type="button"
+            className="preview-close"
             aria-label="关闭图片预览"
             onClick={onClose}
           >
-            关闭
+            <X size={14} />
           </button>
-        </div>
-      </header>
-      {info && (
-        <dl className="image-preview-info">
-          <div>
-            <dt>文件名</dt>
-            <dd>{request.name}</dd>
+          <button
+            type="button"
+            className="preview-expand"
+            aria-label={expanded ? "还原预览窗口" : "放大预览窗口"}
+            aria-pressed={expanded}
+            onClick={() => setExpanded((v) => !v)}
+          >
+            {expanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </button>
+          <strong title={request.name}>{request.name}</strong>
+          <div className="image-preview-actions">
+            <button
+              type="button"
+              aria-label="图片信息"
+              aria-expanded={info}
+              onClick={() => setInfo((v) => !v)}
+            >
+              <Info size={19} />
+            </button>
+            {native && /Mac/.test(navigator.platform) && (
+              <button
+                type="button"
+                aria-label="共享附件"
+                disabled={busy}
+                onClick={() => void system("share")}
+              >
+                <Share size={20} />
+              </button>
+            )}
+            <button
+              className="save-image"
+              type="button"
+              disabled={busy}
+              aria-label="导出原图…"
+              title="导出原图…"
+              onClick={() => void save()}
+            >
+              <Download size={19} />
+            </button>
+            {native && /Mac/.test(navigator.platform) && (
+              <button
+                type="button"
+                className="preview-open-system"
+                disabled={busy}
+                onClick={() => void system("open")}
+              >
+                <ExternalLink size={16} />
+                <span>通过默认应用打开</span>
+              </button>
+            )}
           </div>
-          <div>
-            <dt>类型</dt>
-            <dd>{request.mime}</dd>
-          </div>
-          <div>
-            <dt>原始大小</dt>
-            <dd>{request.bytes.toLocaleString()} 字节</dd>
-          </div>
-          <div>
-            <dt>尺寸</dt>
-            <dd>
-              {size
-                ? `${size.width} × ${size.height} 像素`
-                : imageError
-                  ? "无法读取"
-                  : "正在读取…"}
-            </dd>
-          </div>
-        </dl>
-      )}
-      {(notice || error || imageError) && (
-        <p
-          className="image-export-status"
-          role={error || imageError ? "alert" : "status"}
-        >
-          {error || imageError || notice}
-        </p>
-      )}
-      <figure>
-        <img
-          src={request.source.src}
-          alt={request.name}
-          draggable={false}
-          onError={() => setImageError("无法解码图片，原始文件仍可导出。")}
-          onLoad={(event) =>
-            setSize({
-              width: event.currentTarget.naturalWidth,
-              height: event.currentTarget.naturalHeight,
-            })
-          }
-        />
-      </figure>
+        </header>
+        {info && (
+          <dl className="image-preview-info">
+            <div>
+              <dt>文件名</dt>
+              <dd>{request.name}</dd>
+            </div>
+            <div>
+              <dt>类型</dt>
+              <dd>{request.mime}</dd>
+            </div>
+            <div>
+              <dt>原始大小</dt>
+              <dd>{request.bytes.toLocaleString()} 字节</dd>
+            </div>
+            <div>
+              <dt>尺寸</dt>
+              <dd>
+                {size
+                  ? `${size.width} × ${size.height} 像素`
+                  : imageError
+                    ? "无法读取"
+                    : "正在读取…"}
+              </dd>
+            </div>
+          </dl>
+        )}
+        {(notice || error || imageError) && (
+          <p
+            className="image-export-status"
+            role={error || imageError ? "alert" : "status"}
+          >
+            {error || imageError || notice}
+          </p>
+        )}
+        <figure className={request.mime === "image/svg+xml" ? "vector" : ""}>
+          <img
+            src={request.source.src}
+            alt={request.name}
+            draggable={false}
+            onError={() => setImageError("无法解码图片，原始文件仍可导出。")}
+            onLoad={(event) =>
+              setSize({
+                width: event.currentTarget.naturalWidth,
+                height: event.currentTarget.naturalHeight,
+              })
+            }
+          />
+        </figure>
+      </div>
     </section>
   );
 }

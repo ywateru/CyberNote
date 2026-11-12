@@ -19,6 +19,8 @@ use uuid::Uuid;
 pub(crate) mod apple_import;
 #[path = "store/archive.rs"]
 mod archive;
+#[path = "store/attachment_media.rs"]
+pub(crate) mod attachment_media;
 #[path = "store/attachment_operations.rs"]
 mod attachment_operations;
 #[path = "store/data_management.rs"]
@@ -325,11 +327,7 @@ impl Store {
             .collect())
     }
     pub(crate) fn attachment_note(&self, aid: &str) -> Result<String> {
-        self.attachments()?
-            .into_iter()
-            .find(|a| a.id == aid)
-            .map(|a| a.note_id)
-            .ok_or_else(|| err("not_found", "附件不存在"))
+        Ok(self.attachment(aid)?.note_id)
     }
     pub(crate) fn note_text(&self, nid: &str) -> Result<Value> {
         if !self.authorized(nid)? {
@@ -724,6 +722,7 @@ impl Store {
                 {
                     settings[k] = v.clone();
                 }
+                archive::validate_settings(&settings)?;
                 self.db.execute(
                     "UPDATE settings SET body=?1 WHERE id=1",
                     [settings.to_string()],

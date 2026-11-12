@@ -169,7 +169,7 @@
     border-radius: inherit;
     background: rgba(255, 59, 48, 0.33);
     pointer-events: none;
-    z-index: -1;
+    z-index: var(--layer-decoration);
   }
   .mobile .recording-backdrop .recording-sheet .recording-primary-idle,
   .mobile .recording-backdrop .recording-sheet .recording-primary-requesting {
@@ -366,7 +366,7 @@
   top: 78px;
   left: 12px;
   right: 12px;
-  z-index: 10;
+  z-index: var(--layer-toolbar);
   color: var(--danger);
   background: var(--paper);
   font-size: 12px;
@@ -380,7 +380,7 @@
 .recording-desktop.recording-backdrop {
   position: absolute;
   inset: 0;
-  z-index: 5;
+  z-index: var(--layer-editor);
   min-height: 0;
   padding: 0;
   background: var(--paper);
@@ -640,7 +640,7 @@
   position: absolute;
   top: 29px;
   right: -32px;
-  z-index: 20;
+  z-index: var(--layer-menu);
   width: max-content;
   height: 30px;
   padding: 5px 12px;
@@ -821,7 +821,7 @@
   margin: 0;
   min-height: 0;
   max-height: 36px;
-  z-index: 1;
+  z-index: var(--layer-content-overlay);
 }
 .recording-desktop .recording-notice:not(:empty) {
   background: var(--paper);

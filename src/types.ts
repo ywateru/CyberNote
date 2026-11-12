@@ -1,3 +1,5 @@
+import type { InterfaceDetails } from "./interface-details";
+import type { FontSize } from "./font-size";
 import type { JSONContent } from "@tiptap/react";
 export type TagMode = "allSelected" | "anySelected" | "anyTag" | "noTags";
 export type SmartRule =
@@ -55,6 +57,9 @@ export interface Attachment {
   recordedAt?: number | null;
 }
 export interface Settings {
+  interfaceDetails?: InterfaceDetails;
+  interfaceFontSize?: FontSize;
+  editorFontSize?: FontSize;
   theme?: "system" | "light" | "dark";
   view?: "list" | "gallery";
   sort?: "updated" | "created" | "title";

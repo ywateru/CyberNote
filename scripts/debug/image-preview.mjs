@@ -1,6 +1,9 @@
 import { resolve } from "node:path";
 import { readFile } from "node:fs/promises";
-import { runImageExportKeyboard } from "./image-preview-keyboard.mjs";
+import {
+  runImageExportKeyboard,
+  tabOutsidePreview,
+} from "./image-preview-keyboard.mjs";
 import { api, idle, state, snapshot, saveJSON } from "./runtime.mjs";
 import { chooseFiles, tinyPNG } from "./mobile-attachments.mjs";
 export async function runImagePreview(runtime, { command, check, output }) {
@@ -50,19 +53,14 @@ export async function runImagePreview(runtime, { command, check, output }) {
       !info.includes("拍摄时间") &&
       !info.includes("修改时间"),
   );
-  await page.keyboard.press("Tab");
+  const preview = page.getByRole("dialog", { name: "图片预览", exact: true });
+  const lastButton = preview.locator("header button").last();
+  await lastButton.focus();
+  const tabFocus = await tabOutsidePreview(page);
+  await saveJSON(resolve(output, "preview-tab-focus.json"), tabFocus);
   check(
-    "Tab wraps from close to information",
-    await page
-      .getByRole("button", { name: "图片信息", exact: true })
-      .evaluate((n) => document.activeElement === n),
-  );
-  await page.keyboard.press("Shift+Tab");
-  check(
-    "Shift Tab wraps back to close",
-    await page
-      .getByRole("button", { name: "关闭图片预览", exact: true })
-      .evaluate((n) => document.activeElement === n),
+    "Nonmodal preview lets Tab leave its contents in ordinary document order",
+    !tabFocus.inside && (await preview.getAttribute("aria-modal")) === "false",
   );
   for (const [width, theme, reservedTop] of [
     [320, "light", 0],
@@ -92,11 +90,13 @@ export async function runImagePreview(runtime, { command, check, output }) {
         buttons: [...n.querySelectorAll("header button")].map((x) => ({
           rect: rect(x),
           label: x.getAttribute("aria-label") || x.textContent,
-          visible:
+          visible: x.contains(
             document.elementFromPoint(
-              x.getBoundingClientRect().x + 4,
-              x.getBoundingClientRect().y + 4,
-            ) === x,
+              x.getBoundingClientRect().x + x.getBoundingClientRect().width / 2,
+              x.getBoundingClientRect().y +
+                x.getBoundingClientRect().height / 2,
+            ),
+          ),
         })),
         figure: rect(n.querySelector("figure")),
         image: rect(n.querySelector("figure img")),
@@ -113,14 +113,25 @@ export async function runImagePreview(runtime, { command, check, output }) {
             x.rect.top >= reservedTop &&
             x.visible,
         ) &&
-        value.buttons.every(
-          (x, i) => !i || x.rect.left >= value.buttons[i - 1].rect.right,
+        value.buttons.every((x, i) =>
+          value.buttons
+            .slice(i + 1)
+            .every(
+              (other) =>
+                x.rect.right <= other.rect.left ||
+                other.rect.right <= x.rect.left ||
+                x.rect.bottom <= other.rect.top ||
+                other.rect.bottom <= x.rect.top,
+            ),
         ),
     );
     await page.screenshot({
       path: resolve(output, `image80-${width}-${theme}.png`),
     });
   }
+  await preview
+    .getByRole("button", { name: "关闭图片预览", exact: true })
+    .focus();
   await command("image.close");
   await page.setViewportSize(runtime.viewport);
   await page
@@ -153,11 +164,12 @@ export async function runImagePreview(runtime, { command, check, output }) {
     JSON.stringify((await state(page)).editorJSON) === before,
   );
   await command("image.preview", { id });
-  await command("app.back");
   await command("note.select", { id: "note-b" });
   check(
-    "Navigation closes preview and removes protected image bytes from overlay",
-    (await page.locator(".image-preview").count()) === 0,
+    "Navigation retains original-owner floating preview while main note changes",
+    (await page.locator(".image-preview").count()) === 1 &&
+      (await page.locator(".image-preview").getAttribute("data-preview-id")) ===
+        id,
   );
   await command("note.select", { id: "note-a" });
   await command("image.preview", { id });

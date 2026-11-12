@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import {writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {openRuntime,api,idle,state} from '../debug/runtime.mjs';
+const out=resolve('artifacts/table95-independent');await mkdir(out,{recursive:true});
+const p=t=>({type:'paragraph',content:[{type:'text',text:t}]});
+const table=v=>({type:'table',content:[0,1].map(r=>({type:'tableRow',content:[0,1].map(c=>({type:'tableCell',content:[p(v+r+c)]}))}))});
+const fixture={type:'doc',content:[p('before'),table('A'),table('B'),p('after')]};
+const runtime=await openRuntime();const {page}=runtime;const checks=[];
+try{
+ await api(page,'folder.select',{id:'all'});await api(page,'note.select',{id:'note-a'});await api(page,'editor.setContent',{document:fixture});await api(page,'app.flush');await idle(page);
+ const initial=(await state(page)).editorJSON;
+ await page.locator('.tiptap td').first().click();
+ await page.getByRole('button',{name:'选择行',exact:true}).click();
+ await page.getByRole('menu',{name:'行操作'}).waitFor();
+ assert.equal(await page.locator('.tiptap table').first().locator('.selectedCell').count(),2);
+ assert.equal(await page.locator('.tiptap table').last().locator('.selectedCell').count(),0);
+ checks.push('one dots click selects exact row and opens shared menu');
+ await page.keyboard.press('Escape');await page.getByRole('menu',{name:'行操作'}).waitFor({state:'hidden'});
+ assert.equal(await page.locator(':focus').getAttribute('aria-label'),'选择行');checks.push('Escape restores focus to dots');
+ await page.getByRole('button',{name:'行操作',exact:true}).click();await page.getByRole('menu',{name:'行操作'}).waitFor();
+ await page.getByRole('menuitem',{name:'在下面添加行'}).click();await idle(page);
+ const doc=(await state(page)).editorJSON;assert.equal(doc.content[1].content.length,3);assert.deepEqual(doc.content[2],initial.content[2]);
+ checks.push('arrow reopens selection menu; insertion changes only target table');
+ await api(page,'app.flush');await page.locator('.tiptap table').last().locator('td').first().click();await page.getByRole('button',{name:'选择列',exact:true}).click();
+ await page.getByRole('menu',{name:'列操作'}).waitFor();await api(page,'note.select',{id:'note-b'});await idle(page);
+ assert.equal(await page.locator('.table-axis-menu').count(),0);assert.deepEqual(runtime.backend.workspace.notes.find(n=>n.id==='note-a').document,doc);
+ checks.push('navigation removes old menu and preserves original saved document');
+ assert.deepEqual(runtime.errors,[]);await page.screenshot({path:resolve(out,'menu-navigation.png')});
+ await writeFile(resolve(out,'menu-result.json'),JSON.stringify({source:'7e047e08',checks,limit:'Chrome real App with isolated simulated Store/IPC; no AppKit/WebKit or physical Mac gesture coverage'},null,2)+'\n');console.log(checks);
+}finally{await runtime.cleanup()}

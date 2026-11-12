@@ -134,7 +134,7 @@ try {
   const snapshot = () =>
     page.evaluate(() => {
       const a = document.querySelector("audio");
-      const range = document.querySelector('input[type="range"]');
+      const range = document.querySelector('.audio-detail input[type="range"]');
       return {
         label: document.querySelector(".audio-summary small")?.textContent,
         max: Number(range?.max),
@@ -154,7 +154,9 @@ try {
   assert.equal(loaded.paused, true);
   assert.ok(loaded.max > 66 && loaded.max < 67);
   assert.equal(loaded.alerts.length, 0);
-  await page.locator('input[type="range"]').fill("30");
+  await page.getByRole("slider", { name: "录音波形进度", exact: true }).fill("15");
+  await page.waitForFunction(() => Math.abs(document.querySelector("audio").currentTime - 15) < 0.1);
+  await page.locator('.audio-detail input[type="range"]').fill("30");
   await page.waitForFunction(
     () => Math.abs(document.querySelector("audio").currentTime - 30) < 0.1,
   );
@@ -168,15 +170,15 @@ try {
   await page.waitForFunction(
     () => Math.abs(document.querySelector("audio").currentTime - 30) < 0.1,
   );
-  await page.locator('input[type="range"]').fill("0");
+  await page.locator('.audio-detail input[type="range"]').fill("0");
   await page.getByRole("button", { name: "后退15秒" }).click();
   const lower = await snapshot();
   assert.equal(lower.currentTime, 0);
-  await page.locator('input[type="range"]').fill("66");
+  await page.locator('.audio-detail input[type="range"]').fill("66");
   await page.getByRole("button", { name: "前进15秒" }).click();
   const upper = await snapshot();
   assert.ok(Math.abs(upper.currentTime - loaded.max) < 0.1);
-  await page.locator('input[type="range"]').fill("10");
+  await page.locator('.audio-detail input[type="range"]').fill("10");
   // Inject one actual element play rejection to verify that the rendered
   // production controller exposes it. Restore before explicit user retry.
   await page.evaluate(() => {

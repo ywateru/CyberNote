@@ -1,6 +1,29 @@
+import { AttachmentMetadataContext } from "./use-attachment-media";
+import { attachmentSourcePool } from "./attachment-source-pool";
+import { useSystemEvents } from "./platform/system-events";
+import { createMobileLayout } from "./platform/layout";
+import { useNativePlatform } from "./platform/native-platform";
+import { useAttachmentPresentation } from "./attachment-operations/presentation";
+import { useAttachmentOperations } from "./attachment-operations/operations";
+import type { PickerTarget, RecordingTicket, LocalRecordingIdentity } from "./attachment-operations/contracts";
+import type { NativeContext } from "./platform/contracts";
+import AppMenus from "./editor-menus/AppMenus";
+import IconButton from "./editor-menus/IconButton";
+import { useNavigation } from "./navigation/use-navigation";
+import { useEditorSession } from "./editor-session/use-editor-session";
+import DrawingPanel from "./DrawingPanel";
+import NoteThumbnail from "./NoteThumbnail";
+import AttachmentGallery from "./AttachmentGallery";
+import { startup } from "./startup";
+import { NativeMenuContext, MenuItem as MenuRow } from "./Menu";
+import DesktopToolbar, { type DesktopToolbarAction } from "./DesktopToolbar";
+import { interfaceMetrics, fontScales } from "./font-size";
+import { interfaceDetailVariables, parseInterfaceDetails } from "./interface-details";
+import { ConfirmedSettings } from "./confirmed-settings";
 import { isStorageView } from "./storage-usage";
-import { AttachmentMenuProvider, type AttachmentMenuRequest } from "./AttachmentContextMenu";
-import { ImagePreview, ImagePreviewContext, type ImagePreviewRequest } from "./ImagePreview";
+import { AttachmentMenuProvider } from "./AttachmentContextMenu";
+import { AttachmentTransferContext } from "./attachment-clipboard";
+import { ImagePreview, ImagePreviewContext } from "./ImagePreview";
 import type { DebugAdapter } from "./debug/protocol";
 import {
   SearchListPreview,
@@ -20,8 +43,6 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type ReactNode,
-  type PointerEvent as ReactPointerEvent,
 } from "react";
 import { flushSync } from "react-dom";
 import { type Editor, type JSONContent } from "@tiptap/react";
@@ -57,16 +78,10 @@ import { SaveRevisions } from "./save-revisions";
 import { SidebarPreference } from "./sidebar-preference";
 import { secureId } from "./secure-id";
 import { invoke } from "@tauri-apps/api/core";
-import { validRecordingAction, type RecordingPhase, type RecordingViewState } from "./recording-coordinator";
+import { validRecordingAction, type RecordingViewState } from "./recording-coordinator";
 import DesktopRecordingPanel, {
   type DesktopRecordingPanelHandle,
 } from "./DesktopRecordingPanel";
-type LocalRecordingIdentity = {
-  sessionId: string;
-  operationId: string;
-  owner: string;
-  incarnation: string;
-};
 import { mountRecordingCard } from "./recording-live-card";
 import { enqueueSave, type SaveOutcome } from "./save-queue";
 import {
@@ -79,48 +94,13 @@ import {
 } from "./attachment-submission";
 import {
   rebindAttachmentTarget,
-  type AttachmentTarget,
 } from "./attachment-target";
-type PickerTarget = AttachmentTarget<Editor, SelectionBookmark>;
-type PickerBatch = {
-  target: PickerTarget;
-  operationIds: string[];
-  files?: File[];
-  cancelRequested?: boolean;
-  recording?: RecordingTicket;
-};
-type RecordingTicket = {
-  revisions?: RecordingRevisions<PickerTarget>;
-  batch: PickerBatch;
-  accepting: boolean;
-  detached: boolean;
-  file?: File;
-  recordedAt?: number;
-  running?: Promise<void>;
-  cancelling?: Promise<void>;
-  desktop?: boolean;
-  opening?: Promise<void>;
-  registration?: {
-    sessionId: string;
-    operationId: string;
-    error?: string;
-    cancelRequested?: boolean;
-    cancelling?: Promise<void>;
-  };
-  editorCommits?: Set<AbortController>;
-  local?: {
-    identity: LocalRecordingIdentity;
-    handle?: DesktopRecordingPanelHandle;
-    ready: Promise<DesktopRecordingPanelHandle>;
-    attach: (handle: DesktopRecordingPanelHandle) => void;
-    card?: ReturnType<typeof mountRecordingCard>;
-  };
-};
-import { exit, onBackButtonPress } from "@tauri-apps/api/app";
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import { exit } from "@tauri-apps/api/app";
+import { getCurrentWindow, type CloseRequestedEvent } from "@tauri-apps/api/window";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import {
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Search,
@@ -131,52 +111,32 @@ import {
   FolderPlus,
   PanelLeft,
   Folder,
-  FolderOpen,
   FolderCog,
-  StickyNote,
   Trash2,
   Pin,
   CheckCheck,
-  Table2,
+  ListTodo,
+  AudioLines,
+  Tag,
+  Table,
   Paperclip,
   Share,
   Undo2,
   Redo2,
   PenTool,
-  Check,
-  List,
-  ListOrdered,
-  Bold,
-  Italic,
-  Underline,
-  Strikethrough,
   Lock,
-  Grid2X2,
-  FileText,
   Mic,
   Image,
-  Camera,
-  ScanText,
-  ScanLine,
-  Highlighter,
-  Copy,
-  ArrowDownToLine,
-  ArrowUpFromLine,
-  Eraser,
   Settings as SettingsIcon,
   Volume2,
   Hash,
   NotebookPen,
   ListMinus,
-  IndentIncrease,
-  IndentDecrease,
-  Quote,
 } from "lucide-react";
 import {
   action,
   loadWorkspace,
   native,
-  storeAttachment,
   storeAttachmentOperation,
   queryAttachmentOperation,
   cancelAttachmentOperation,
@@ -193,14 +153,9 @@ import {
   markWorkspaceApplied,
 } from "./bridge";
 import {
-  NativeToolbar,
-  nativeToolbarTransport,
   macNative,
-  type Intent,
   type MenuCommand,
 } from "./native-toolbar";
-import { toolbarState } from "./native-toolbar-state";
-import type { BindingInfo } from "../plugins/tauri-plugin-notes-ui/guest-js";
 import { AccessChanged } from "./access-client";
 import { MetadataStale } from "./metadata-client";
 import type { AccessStamp } from "./access-client";
@@ -210,7 +165,7 @@ import DataManagement, { type DataManagementHandle } from "./DataManagement";
 import AppleNotesImport, { type AppleNotesImportHandle } from "./AppleNotesImport";
 import SyncSettings, { type SyncSettingsHandle } from "./SyncSettings";
 import type { SyncCommand } from "./sync-client";
-import Preferences, { type PreferencesTab } from "./Preferences";
+import Preferences, { isPreferencesTab, type PreferencesTab } from "./Preferences";
 import type { ArchiveResult } from "./data-management";
 import { documentsEqual } from "./document-equality";
 import {
@@ -228,14 +183,12 @@ import {
 } from "./ocr-host";
 import { ocrNative } from "./ocr-native";
 import OcrPanel from "./OcrPanel";
-import linesSmallPreview from "../assets/mobile-paper-previews/lines-small.svg";
-import linesMediumPreview from "../assets/mobile-paper-previews/lines-medium.svg";
-import linesLargePreview from "../assets/mobile-paper-previews/lines-large.svg";
-import gridSmallPreview from "../assets/mobile-paper-previews/grid-small.svg";
-import gridMediumPreview from "../assets/mobile-paper-previews/grid-medium.svg";
-import gridLargePreview from "../assets/mobile-paper-previews/grid-large.svg";
-import { convertTableToText, toggleListStyle } from "./editor-actions";
-import { NodeSelection, Selection, type SelectionBookmark } from "@tiptap/pm/state";
+import {
+  canConvertTextToTable,
+  convertTextToTable,
+  convertTableToText,
+} from "./editor-actions";
+import { NodeSelection } from "@tiptap/pm/state";
 import {
   documentText,
   type DrawingStroke,
@@ -246,44 +199,6 @@ import {
   type AccessEvent,
   blankDoc,
 } from "./types";
-
-const desktopPaperOptions = [
-  "plain",
-  "lines-small",
-  "lines-medium",
-  "lines-large",
-  "grid-small",
-  "grid-medium",
-  "grid-large",
-] as const;
-type PaperOption = (typeof desktopPaperOptions)[number];
-const mobilePaperOptions = [
-  "plain",
-  "lines-small",
-  "lines-medium",
-  "lines-large",
-  "grid-small",
-  "grid-medium",
-  "grid-large",
-] as const satisfies readonly PaperOption[];
-const paperOptionLabels: Record<PaperOption, string> = {
-  plain: "空白",
-  "lines-small": "密横线",
-  "lines-medium": "中横线",
-  "lines-large": "疏横线",
-  "grid-small": "密网格",
-  "grid-medium": "中网格",
-  "grid-large": "疏网格",
-};
-const paperPreviewUrls: Record<Exclude<PaperOption, "plain">, string> = {
-  "lines-small": linesSmallPreview,
-  "lines-medium": linesMediumPreview,
-  "lines-large": linesLargePreview,
-  "grid-small": gridSmallPreview,
-  "grid-medium": gridMediumPreview,
-  "grid-large": gridLargePreview,
-};
-type PaperPreviewStyle = CSSProperties & { "--paper-preview-url": string };
 
 const empty: Workspace = {
   folders: [],
@@ -304,69 +219,6 @@ const errText = (e: unknown): string =>
   typeof e === "object" && e !== null && "message" in e
     ? String(e.message)
     : String(e);
-interface NativeContext {
-  noteId: string | null;
-  scope: string;
-  stamp: AccessStamp;
-  editor: Editor | null;
-  bookmark: SelectionBookmark | null;
-  documentVersion: number;
-}
-function IconButton({
-  label,
-  children,
-  onClick,
-  active,
-  disabled,
-  className = "",
-}: {
-  label: string;
-  children: ReactNode;
-  onClick?: () => void;
-  active?: boolean;
-  disabled?: boolean;
-  className?: string;
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      title={label}
-      className={`icon-button ${active ? "active" : ""} ${className}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      {children}
-    </button>
-  );
-}
-function MenuRow({
-  children,
-  icon,
-  onClick,
-  danger = false,
-  checked = false,
-  disabled = false,
-}: {
-  children: ReactNode;
-  icon?: ReactNode;
-  onClick?: () => void;
-  danger?: boolean;
-  checked?: boolean;
-  disabled?: boolean;
-}) {
-  return (
-    <button
-      type="button"
-      className={`menu-row ${danger ? "danger" : ""}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      <span className="menu-label">{children}</span>
-      <span className="menu-icon">{checked ? <Check size={17} /> : icon}</span>
-    </button>
-  );
-}
 // Keep the pre-search editor mounted so its pending document and Undo history
 // remain owned by the same note. A parked editor is neither visible nor writable.
 function SearchEditorHost({
@@ -449,26 +301,29 @@ function App() {
   const debugPending = useRef(new Set<Promise<unknown>>());
   const debugRecordingState = useRef<RecordingViewState | null>(null);
   const separate = new URLSearchParams(location.search).get("note");
-  const initialMobile = useRef(window.innerWidth < 700 && !separate).current;
-  const [attachmentOverlay, setAttachmentOverlay] = useState(false);
+  const mobileLayout = useRef(createMobileLayout(native, navigator.userAgent, !!separate)).current;
+  const initialMobile = useRef(mobileLayout(window.innerWidth)).current;
+
   const [ws, setWs] = useState<Workspace>(empty);
   const wsRef = useRef(ws);
   wsRef.current = ws;
   const [loading, setLoading] = useState(true);
   const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
   const [error, setError] = useState("");
-  const [folderId, setFolderId] = useState(initialMobile ? "all" : "default");
-  const [baseNoteId, setNoteId] = useState<string | null>(null);
-  const [searchNoteId, setSearchNoteId] = useState<string | null>(null);
-  const [page, setPage] = useState<"folders" | "notes" | "editor">(initialMobile ? "notes" : "folders");
-  const [query, setQuery] = useState("");
-  const [searchDraft, setSearchDraft] = useState<string | null>(null);
+  const { navigation, state: navigationState } = useNavigation(!!initialMobile);
+  const { folderId, baseNoteId, searchNoteId, page, query, searchDraft, searching, filter, tagFilter, galleryEditor, attachmentBrowser, mobileCreatedEditor } = navigationState;
+  const { setFolderId, setNoteId, setSearchNoteId, setPage, setQuery, setSearchDraft, setSearching, setFilter, setTagFilter, setGalleryEditor, setAttachmentBrowser } = navigation;
   const searchIntent = useRef(0);
-  const [searching, setSearching] = useState(false);
-  const [filter, setFilter] = useState("");
-  // undefined = physical folder; null = all committed tags; name = exact tag.
-  const [tagFilter, setTagFilter] = useState<string | null | undefined>();
-  const [menu, setMenu] = useState<string | null>(null);
+  const { session, state: editorSession } = useEditorSession();
+  const menu = editorSession.menu;
+  const setMenu = session.setMenu;
+  const editing = editorSession.body === "editing";
+  const formatOpen = editorSession.formatOpen;
+  const formatHeight = editorSession.formatHeight;
+  const draw = editorSession.drawing;
+  const record = !!editorSession.recording?.visible;
+  const recordingIndicator = editorSession.indicator;
+  const projectRecordingIndicator = session.projectRecordingIndicator;
   const [modal, setModal] = useState<string | null>(null);
   const [modalValue, setModalValue] = useState("");
   const [preferencesTab, setPreferencesTab] = useState<PreferencesTab>("settings");
@@ -496,17 +351,11 @@ function App() {
   const [editors, setEditors] = useState<ReadonlyMap<string, Editor>>(
     new Map(),
   );
-  const mobileNavigation = useRef(0);
   const createFlight = useRef<Promise<void> | null>(null);
   const [creatingNote, setCreatingNote] = useState(false);
   const [creationError, setCreationError] = useState("");
   const createReceipt = useRef<{ id: string; source: string } | null>(null);
-  const createFocus = useRef<{ id: string; navigation: number } | null>(null);
-  const [mobileCreatedEditor, setMobileCreatedEditor] = useState<string | null>(null);
-  const cancelCreateFocus = useCallback(() => {
-    mobileNavigation.current++;
-    createFocus.current = null;
-  }, []);
+  const cancelCreateFocus = session.cancelFocus;
   const tagCompositions = useRef(new Map<string, TagComposition>());
   const tagCompositionTarget = useRef<{
     noteId: string;
@@ -533,38 +382,14 @@ function App() {
   } | null>(null);
   const [quitPending, setQuitPending] = useState(false);
   const appSurface = useRef<HTMLDivElement | null>(null);
-  const [imagePreview, setImagePreview] = useState<ImagePreviewRequest | null>(null);
-  const imagePreviewRef = useRef(imagePreview);
-  imagePreviewRef.current = imagePreview;
-  const hideImagePreview = useCallback(() => {
-    // Access transitions must seal the old image before a queued React commit.
-    const surface = appSurface.current?.querySelector<HTMLElement>(".image-preview");
-    if(surface) {surface.hidden = true;surface.querySelector("img")?.removeAttribute("src");}
-    setImagePreview(null);
-  }, []);
-  const previewOpener = useRef((_: ImagePreviewRequest) => {});
-  const openImagePreview = useCallback((request: ImagePreviewRequest) => previewOpener.current(request), []);
-  const closePreviewSource = useCallback((source: ImagePreviewRequest["source"]) => setImagePreview(value => value?.source === source ? null : value), []);
+  const { presentation, state: attachmentPresentation } = useAttachmentPresentation();
+  const {imagePreview,attachmentJump}=attachmentPresentation;
+  const {setImagePreview,setAttachmentJump,hideImagePreview,openImagePreview,closePreviewSource,imagePreviewRef,validGalleryEntry,openAttachmentBrowser,revealGalleryAttachment}=presentation;
   const editorsRef = useRef(editors);
   editorsRef.current = editors;
-  const [editing, setEditing] = useState(false);
-  const [galleryEditor, setGalleryEditor] = useState(false);
-  const [, updateFormatState] = useState(0);
-  const [formatHeight, setFormatHeight] = useState(290);
-  const formatTarget = useRef<{
-    noteId: string;
-    editor: Editor;
-    bookmark: SelectionBookmark;
-  } | null>(null);
-  const paperTarget = useRef<{
-    noteId: string;
-    editor: Editor;
-    bookmark: SelectionBookmark;
-    editable: boolean;
-  } | null>(null);
-  const viewportHeight = useRef(window.innerHeight);
-  const keyboardHeight = useRef(0);
   const [sidebar, setSidebar] = useState(true);
+  const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(() => new Set());
+  const [pinnedCollapsed, setPinnedCollapsed] = useState(false);
   const sidebarRequested = useRef(true);
   const initializedSidebar = useRef(false);
   const ownsSidebarPreference = native && macNative && !separate;
@@ -579,17 +404,12 @@ function App() {
         () => loadWorkspace(),
       ),
   );
-  const nativeToolbar = useRef<NativeToolbar<NativeContext> | null>(null);
-  const [nativeInfo, setNativeInfo] = useState<BindingInfo | null>(null);
-  const [nativeSearchAck, setNativeSearchAck] = useState(0);
-  const nativeMenuHandler = useRef<(command: string) => void>(() => {});
-  const nativeHandler = useRef<
-    (intent: Intent, context: NativeContext, sequence: number) => void
-  >(() => {});
-  const nativeDocumentVersions = useRef(new WeakMap<Editor, number>());
-  const nativeEditorIds = useRef(new WeakMap<Editor, number>());
-  const nativeEditorOwners = useRef(new WeakMap<Editor, string>());
-  const nativeEditorCounter = useRef(0);
+  const { platform: nativePlatform, state: nativePlatformState } = useNativePlatform();
+  const nativeToolbar = nativePlatform.toolbar;
+  const nativeInfo = nativePlatformState.info;
+  const nativeEditorOwners = nativePlatform.owners;
+  const nativeDocumentVersions = nativePlatform.versions;
+  const nativeHandler = {current: nativePlatform.handle};
   const ocrOperation = useRef<OcrHost<PickerTarget> | null>(null);
   const [ocr, setOcr] = useState<OcrHost<PickerTarget> | null>(null);
   const [ocrState, setOcrState] = useState<OcrState>({
@@ -607,18 +427,6 @@ function App() {
   const waitRecordingEditorCommit = useEditorCommit();
   const recordingPanel = useRef<RecordingPanelHandle | null>(null);
   const [, updateRecordingOwner] = useState(0);
-  const [recordingIndicator, setRecordingIndicator] = useState<{
-    owner: string;
-    phase: RecordingPhase;
-  } | null>(null);
-  const recordingIndicatorRef = useRef(recordingIndicator);
-  const projectRecordingIndicator = (value: typeof recordingIndicator) => {
-    const previous = recordingIndicatorRef.current;
-    if (previous?.owner === value?.owner && previous?.phase === value?.phase)
-      return;
-    recordingIndicatorRef.current = value;
-    setRecordingIndicator(value);
-  };
   const resumeDocumentAdmission = useRef<(id: string) => void>(() => {});
   const recordingLifecycle = useRef({
     active: (): boolean => false,
@@ -626,31 +434,23 @@ function App() {
     suspend: (_ids: string[]) => {},
     detach: () => {},
   });
-  // Every picker and recording retains its explicit original owner.
-  const pickerTargets = useRef(new Map<HTMLInputElement, PickerBatch>());
-  const attachmentSubmissions = useRef(
-    new Map<string, AttachmentSubmission<PickerTarget>>(),
-  );
-  const attachmentBatches = useRef(new Set<PickerBatch>());
-  const pickerRuntime = useRef<{
-    scope: string;
-    noteId: string | null;
-    editor: Editor | null;
-    available: boolean;
-    ocrAvailable: boolean;
-    recordingAvailable: boolean;
-  }>({
-    scope: "",
-    noteId: null,
-    editor: null,
-    available: false,
-    ocrAvailable: false,
-    recordingAvailable: false,
-  });
-  const nativeAssert = useRef<
-    (context: NativeContext, editing?: boolean, overlay?: boolean) => void
-  >(() => {});
+  const attachmentOperations = useAttachmentOperations();
+  const { targets: pickerTargets, submissions: attachmentSubmissions, batches: attachmentBatches, runtime: pickerRuntime } = attachmentOperations;
+  const { submitAttachmentBatch, discardUninsertedAttachments, fileSelected, capturePickerTarget, pasteAttachments, openAttachmentPicker } = attachmentOperations;
+  const nativeAssert = {current: nativePlatform.assert};
   const [settings, setSettings] = useState<Settings>({});
+  const [settingsOwner] = useState(() => new ConfirmedSettings(value => {
+    setSettings(value);
+    wsRef.current = { ...wsRef.current, settings: value };
+    setWs(previous => ({ ...previous, settings: value }));
+  }));
+  const settingsReads = useRef(new WeakMap<Workspace, number>());
+  const readSettingsWorkspace = useCallback(async (trusted = false) => {
+    const ticket = settingsOwner.ticket();
+    const data = await loadWorkspace(trusted);
+    settingsReads.current.set(data, ticket);
+    return data;
+  }, [settingsOwner]);
   const [saving, setSaving] = useState(0);
   const unlocked = new Set(
     ws.notes
@@ -698,14 +498,12 @@ function App() {
   const [find, setFind] = useState("");
   const [showFind, setShowFind] = useState(false);
   const [notice, setNotice] = useState("");
-  const [draw, setDraw] = useState<{
-    strokes: DrawingStroke[];
-    pos?: number;
-  } | null>(null);
-  const [record, setRecord] = useState(false);
   const [mobile, setMobile] = useState(!!initialMobile);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const metrics = interfaceMetrics(settings, windowWidth);
+  const desktopSidebarWidth = metrics.sidebarWidth;
+  const desktopListWidth = metrics.listWidth;
   const mobileMode = useRef(!!initialMobile);
-  const paperOptions = mobile ? mobilePaperOptions : desktopPaperOptions;
   const queues = useRef(new Map<string, Promise<SaveOutcome>>());
   const revisions = useRef(new SaveRevisions());
   const externalVersions = useRef(new Map<string, number>());
@@ -731,7 +529,7 @@ function App() {
     const intent = ++searchIntent.current;
     if (next.query !== undefined) setSearchDraft(next.query);
     return afterQuiet(() => {
-      cancelCreateFocus();
+      session.invalidate("navigation");
       if (next.query !== undefined) setQuery(next.query);
       if (next.searching !== undefined) setSearching(next.searching);
       if (next.resetFilter) setFilter(value => value === "tags" ? value : "");
@@ -763,7 +561,7 @@ function App() {
       } else if (!folderMembers.has(n.id)) return false;
       if (
         query &&
-        !`${n.title}\n${n.plainText}`
+        !`${n.title}\n${n.plainText}\n${attachmentBrowser ? ws.attachments.filter(a => a.noteId === n.id && !a.internal).map(a => a.displayName).join("\n") : ""}`
           .toLocaleLowerCase()
           .includes(query.toLocaleLowerCase())
       )
@@ -912,49 +710,32 @@ function App() {
         : contextNote || noteId),
   );
   const editor = noteId ? editors.get(noteId) || null : null;
-  useLayoutEffect(() => {
-    if (mobile || menu !== "note") return;
-    const element = noteMenuElement.current;
-    if (!element) return;
-    const place = () => {
-      const margin = 8;
-      const target = document.querySelector<HTMLElement>(
-        `.note-row[data-note-id="${CSS.escape(contextNote || noteId || "")}"]`,
-      );
-      const rect = target?.getBoundingClientRect();
-      const point = noteMenuPoint || {
-        x: rect ? Math.max(margin, rect.left + 16) : margin,
-        y: rect ? Math.max(margin, rect.top + Math.min(rect.height, 32)) : 52,
-      };
-      element.style.maxWidth = `${Math.max(0, window.innerWidth - margin * 2)}px`;
-      element.style.maxHeight = `${Math.max(0, window.innerHeight - margin * 2)}px`;
-      const menuRect = element.getBoundingClientRect();
-      element.style.left = `${Math.max(margin, Math.min(point.x, window.innerWidth - menuRect.width - margin))}px`;
-      element.style.top = `${Math.max(margin, Math.min(point.y, window.innerHeight - menuRect.height - margin))}px`;
-    };
-    place();
-    const observer = new ResizeObserver(place);
-    observer.observe(element);
-    window.addEventListener("resize", place);
-    window.addEventListener("scroll", place, true);
-    return () => {
-      observer.disconnect();
-      for (const property of ["left", "top", "max-width", "max-height"])
-        element.style.removeProperty(property);
-      window.removeEventListener("resize", place);
-      window.removeEventListener("scroll", place, true);
-    };
-  }, [
-    mobile,
-    menu,
-    noteMenuPoint,
-    contextNote,
-    noteId,
-    sidebar,
-    view,
-    settings.sidebarWidth,
-    settings.listWidth,
-  ]);
+  session.configure({
+    noteId, editor, mobile,
+    visible: !!current && !current.deletedAt && (!mobile || page === "editor") && !attachmentBrowser,
+    blocked: !!quitState.current || !!modal || !!folderForm || !!ocr || record || loading || synchronizingRef.current || syncCoverRef.current || !!accessGate.state?.operationId || !!(noteId && (accessSuspended.includes(noteId) || blockedNotes.current.has(noteId) || networkSync.frozen(noteId) || accessGate.state?.suspended.includes(noteId))),
+    authorized: !!noteId && !!accessGate.state?.notes[noteId]?.authorized,
+    owner: editor ? nativeEditorOwners.current.get(editor) ?? null : null,
+  });
+  const imageAuthority = (id: string) => {
+    const stamp = accessGate.stamp(id);
+    return JSON.stringify([stamp.sessionId, stamp.epoch, id, stamp.noteEpoch]);
+  };
+  const galleryAvailable = attachmentBrowser && !loading && !syncCover && !synchronizing && !quitPending &&
+    !modal && !folderForm && !draw && !accessSuspended.length && !accessGate.state?.operationId && !networkSync.frozen();
+  presentation.configure({
+    workspace: () => wsRef.current, editor: id => editorsRef.current.get(id), pending: id => pendingDocs.current.get(id),
+    authority: imageAuthority, authorized: id => !!accessGate.state?.notes[id]?.authorized,
+    galleryBlocked: id => !!quitState.current || syncCoverRef.current || synchronizingRef.current || !!accessGate.state?.operationId || !!accessGate.state?.suspended.length || networkSync.frozen(id),
+    previewBlocked: () => !!quitState.current || syncCoverRef.current || !!accessGate.state?.operationId || !!accessGate.state?.suspended.length || !!modal,
+    visibilityBlocked: () => quitPending || syncCover || !!accessSuspended.length || !!accessGate.state?.operationId,
+    covered: () => syncCoverRef.current, noteId, currentEditor: editor, browser: attachmentBrowser, mobile, page,
+    surface: () => appSurface.current, afterQuiet, fail: error => fail(error), notice: text => setNotice(text),
+    openBrowser: () => navigation.openAttachmentBrowser(), reveal: owner => navigation.revealAttachment(owner),
+    menuBlocked: () => !!quitState.current || loading || syncCoverRef.current || synchronizingRef.current || !!accessGate.state?.operationId || !!accessGate.state?.suspended.length || networkSync.frozen(noteId) || !!modal || !!folderForm || !!draw || !!menu,
+    ownedRecording: id => {const ticket=recordingTicket.current;return !!ticket && ticket.batch.operationIds.some(operation => attachmentSubmissions.current.get(operation)?.attachment?.id === id);},
+  });
+  const galleryEntries = presentation.projectGallery(listed,galleryAvailable,query);
   const onReady = useCallback(
     (id: string, instance: Editor | null) => {
       const previousComposition = tagCompositions.current.get(id);
@@ -1025,7 +806,7 @@ function App() {
       setContextNote(null);
       setMenu(null);
       setShowFind(false);
-      setEditing(false);
+      session.bodyFocus(false);
     }
   }, [desktopSearch, query, filter, tagFilter]);
   const fail = useCallback((e: unknown) => {
@@ -1085,14 +866,16 @@ function App() {
         title: text.split("\n")[0] || "新备忘录",
       };
     });
+    const settingsTicket = settingsReads.current.get(data);
+    if (settingsTicket !== undefined || !passive)
+      settingsOwner.observe(data.settings, settingsTicket);
     const next = {
       ...data,
       notes,
-      ...(passive ? { settings: wsRef.current.settings } : {}),
+      settings: settingsOwner.snapshot(),
     };
     wsRef.current = next;
     setWs(next);
-    if (!passive) setSettings(data.settings);
     markWorkspaceApplied(next);
     return true;
   }, []);
@@ -1132,7 +915,7 @@ function App() {
         )
           return;
         try {
-          const data = await loadWorkspace();
+          const data = await readSettingsWorkspace();
           if (
             metadataDisposed.current ||
             synchronizingRef.current ||
@@ -1185,6 +968,8 @@ function App() {
           void synchronizeRef.current();
           return;
         }
+        const attachments=event.changes.filter(change=>change.kind==="attachment").map(change=>change.id);
+        if(attachments.length)attachmentSourcePool.invalidate(attachments);
         if (metadataGate.needsRefresh) void metadataRefreshRef.current(false);
       });
       if (disposed) {
@@ -1207,22 +992,18 @@ function App() {
   }, [hydrate, fail, separate]);
   useEffect(() => {
     const resize = () => {
-      const nextMobile = window.innerWidth < 700 && !separate;
+      setWindowWidth(window.innerWidth);
+      const nextMobile = mobileLayout(window.innerWidth);
       if (!!nextMobile !== mobileMode.current) cancelCreateFocus();
       mobileMode.current = !!nextMobile;
       setMobile(!!nextMobile);
-      viewportHeight.current = Math.max(
-        viewportHeight.current,
-        window.innerHeight,
-      );
-      const difference = viewportHeight.current - window.innerHeight;
-      if (difference > 120) keyboardHeight.current = difference;
     };
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
+    if (workspaceLoaded) startup.theme(theme);
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const apply = () => {
       document.documentElement.classList.toggle(
@@ -1233,7 +1014,7 @@ function App() {
     apply();
     media.addEventListener("change", apply);
     return () => media.removeEventListener("change", apply);
-  }, [theme]);
+  }, [theme, workspaceLoaded]);
   const flush = useCallback(async () => {
     await Promise.all([...queues.current.values()]);
     if (pendingDocs.current.size || saveFailures.current.size)
@@ -1243,7 +1024,7 @@ function App() {
   }, []);
   const refresh = useCallback(async () => {
     await flush();
-    hydrate(await loadWorkspace());
+    hydrate(await readSettingsWorkspace());
   }, [flush, hydrate]);
   quietHost.current = {
     snapshot: () => {
@@ -1281,6 +1062,7 @@ function App() {
         document.addEventListener("visibilitychange", visibility);
         window.addEventListener("blur", relinquishFocus);
       }
+      if (ids.includes(noteId || "")) session.invalidate("sync");
       const scope = pickerRuntime.current.scope;
       const key = new PluginKey("notes-sync-quiet");
       const input = (event: Event) => { if (event.cancelable) event.preventDefault(); };
@@ -1330,7 +1112,7 @@ function App() {
               documentsEqual(value.document, instance.getJSON()) && document.hasFocus() &&
               (document.activeElement === document.body || value.dom.contains(document.activeElement))) {
               instance.view.dispatch(instance.state.tr.setSelection(focus.selection.resolve(instance.state.doc)));
-              instance.view.focus();
+              session.restoreAuthorizedFocus(instance, () => allowed && pickerRuntime.current.scope === scope && pickerRuntime.current.editor === instance && documentsEqual(value.document, instance.getJSON()));
             }
           }
           if (quietMounted.current) updateQuietWindow(value => value + 1);
@@ -1393,22 +1175,22 @@ function App() {
     [flush, hydrate, refresh],
   );
   const updateSettings = useCallback(
-    (patch: Settings) => afterQuiet(() => {
+    (patch: Settings, throwOnFailure = false) => afterQuiet(() => {
       if (patch.view) setGalleryEditor(false);
-      wsRef.current = {
-        ...wsRef.current,
-        settings: { ...wsRef.current.settings, ...patch },
-      };
-      setSettings((prev) => ({ ...prev, ...patch }));
-      setWs((prev) => ({ ...prev, settings: { ...prev.settings, ...patch } }));
-      const work = action({ type: "settings", settings: patch }).catch(fail);
+      const work = Promise.resolve().then(() => settingsOwner.write(patch,
+        settings => action({ type: "settings", settings }),
+        async () => (await loadWorkspace()).settings,
+      )).catch(cause => {
+        fail(cause);
+        if (throwOnFailure) throw cause;
+      });
       if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
         debugPending.current.add(work);
-        void work.finally(() => debugPending.current.delete(work));
+        void work.then(() => debugPending.current.delete(work), () => debugPending.current.delete(work));
       }
       return work;
     }),
-    [fail, afterQuiet],
+    [fail, afterQuiet, settingsOwner],
   );
   useEffect(() => {
     if (!workspaceLoaded || folderId === "all" || currentFolder) return;
@@ -1661,17 +1443,7 @@ function App() {
       setSaving((v) => Math.max(0, v - 1));
     }
   };
-  useEffect(() => {
-    const hidden = () => {
-      if (document.visibilityState === "hidden") {
-        flush().catch(fail);
-      }
-    };
-    document.addEventListener("visibilitychange", hidden);
-    let unlisten: (() => void) | undefined;
-    if (native)
-      getCurrentWindow()
-        .onCloseRequested(async (event) => {
+  const handleCloseRequested = async (event: CloseRequestedEvent) => {
           if (networkSync.frozen()) {
             event.preventDefault();
             await networkSync.cancel();
@@ -1738,15 +1510,7 @@ function App() {
               fail(e);
             }
           }
-        })
-        .then((fn) => (unlisten = fn));
-    return () => {
-      document.removeEventListener("visibilitychange", hidden);
-      ocrLifecycle.current.detach();
-      recordingLifecycle.current.detach();
-      unlisten?.();
-    };
-  }, [flush, fail, ownsSidebarPreference, sidebarPreference]);
+  };
   useEffect(() => {
     if (!native) return;
     const releases: (() => void)[] = [];
@@ -1878,6 +1642,13 @@ function App() {
   }, [flush, fail, ownsSidebarPreference, sidebarPreference]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
+    attachmentSourcePool.revoke(ids);
+    appSurface.current?.querySelectorAll<HTMLElement>(".attachment-gallery-card").forEach(card => {
+      if (!ids.includes(card.dataset.noteId || "")) return;
+      card.hidden = true;
+      card.querySelectorAll("img,video,audio").forEach(element => { if (element instanceof HTMLMediaElement) element.pause(); element.removeAttribute("src"); });
+    });
+    for (const id of ids) appSurface.current?.querySelectorAll<HTMLImageElement>(`.note-row[data-note-id="${CSS.escape(id)}"] .note-thumbnail img`).forEach(image => image.removeAttribute("src"));
     if(imagePreviewRef.current?.owner && ids.includes(imagePreviewRef.current.owner)) hideImagePreview();
     if (
       tagCompositionTarget.current &&
@@ -1907,14 +1678,10 @@ function App() {
     }
     if (noteId && ids.includes(noteId)) {
       barrierEditor.current = null;
-      formatTarget.current = null;
-      paperTarget.current = null;
-      setMenu(null);
+      session.invalidate("access");
       setModal((current) => current === "preferences" ? current : null);
       setModalValue("");
-      setDraw(null);
-      setRecord(false);
-      setEditing(false);
+      session.recordVisibility(false);
       setShowFind(false);
       setFind("");
     }
@@ -1932,6 +1699,11 @@ function App() {
   };
   const coverSynchronization = () => {
     syncCoverRef.current = true;
+    appSurface.current?.querySelectorAll<HTMLElement>(".attachment-gallery-card").forEach(card => {
+      card.hidden = true;
+      card.querySelectorAll("img,video,audio").forEach(element => { if (element instanceof HTMLMediaElement) element.pause(); element.removeAttribute("src"); });
+    });
+    appSurface.current?.querySelectorAll<HTMLImageElement>(".note-thumbnail img").forEach(image => image.removeAttribute("src"));
     hideImagePreview();
     setSyncCover(true);
   };
@@ -1950,7 +1722,7 @@ function App() {
       async () => {
         for (;;) {
           try {
-            const data = await loadWorkspace(true);
+            const data = await readSettingsWorkspace(true);
             if (quiet && (data.access?.sessionId !== knownSession || data.access?.operationId || data.access?.suspended.length)) {
               // rAF alone does not commit React state: a deferred cover update
               // could otherwise batch with the trusted publish that clears it.
@@ -2001,6 +1773,7 @@ function App() {
   };
   accessHandler.current = (event) => {
     if (event.phase === "prepare") {
+      attachmentSourcePool.revoke(event.noteIds);
       coverSynchronization();
       if (
         tagCompositionTarget.current &&
@@ -2075,128 +1848,8 @@ function App() {
     }));
     void synchronizeRef.current();
   };
-  useEffect(() => {
-    const visible = () => {
-      if (document.visibilityState === "visible")
-        void metadataRefreshRef.current();
-    };
-    document.addEventListener("visibilitychange", visible);
-    window.addEventListener("online", visible);
-    let unlisten: (() => void) | undefined;
-    if (native)
-      getCurrentWindow()
-        .onFocusChanged(({ payload }) => {
-          if (payload) void metadataRefreshRef.current();
-        })
-        .then((fn) => {
-          unlisten = fn;
-        })
-        .catch(fail);
-    return () => {
-      document.removeEventListener("visibilitychange", visible);
-      window.removeEventListener("online", visible);
-      unlisten?.();
-    };
-  }, [fail]);
-  const keyboard = (show: boolean) => {
-    const api = (
-      window as unknown as {
-        NotesKeyboard?: { show: () => void; hide: () => void };
-      }
-    ).NotesKeyboard;
-    if (show) api?.show();
-    else api?.hide();
-  };
-  useLayoutEffect(() => {
-    const intent = createFocus.current;
-    if (!intent) return;
-    if (!mobile || intent.navigation !== mobileNavigation.current || page !== "editor" || modal || menu || folderForm || quitPending) {
-      createFocus.current = null;
-      return;
-    }
-    const instance = editors.get(intent.id);
-    if (noteId !== intent.id || !instance || instance.isDestroyed || !instance.isEditable || nativeEditorOwners.current.get(instance) !== intent.id || !instance.view.dom.isConnected || !instance.view.dom.getClientRects().length || synchronizingRef.current || accessGate.state?.operationId || accessGate.state?.suspended.includes(intent.id) || !accessGate.state?.notes[intent.id]?.authorized) return;
-    createFocus.current = null;
-    instance.view.dispatch(instance.state.tr.setSelection(Selection.atEnd(instance.state.doc)));
-    instance.view.focus();
-    keyboard(true);
-    setEditing(true);
-  });
-  const closeFormat = (restoreKeyboard = false) => {
-    const target = formatTarget.current;
-    setMenu(null);
-    if (target && target.noteId === noteId && target.editor === editor) {
-      editor.view.dispatch(
-        editor.state.tr.setSelection(target.bookmark.resolve(editor.state.doc)),
-      );
-      if (restoreKeyboard) {
-        editor.commands.focus(undefined, { scrollIntoView: false });
-        keyboard(true);
-        setEditing(true);
-      } else {
-        editor.commands.blur();
-        keyboard(false);
-        setEditing(false);
-      }
-    }
-    formatTarget.current = null;
-  };
-  const closePaper = () => {
-    const target = paperTarget.current;
-    paperTarget.current = null;
-    setModal(null);
-    if (target && !target.editor.isDestroyed) {
-      restoreEditor(target.editor, target.editable);
-      if (target.noteId === noteId && target.editor === editor)
-        target.editor.view.dispatch(
-          target.editor.state.tr.setSelection(
-            target.bookmark.resolve(target.editor.state.doc),
-          ),
-        );
-      target.editor.view.dom.blur();
-      keyboard(false);
-      setEditing(false);
-    }
-  };
-  const openFormat = () => {
-    if (!editor || !noteId) return;
-    if (menu === "format") {
-      closeFormat(mobile);
-      return;
-    }
-    formatTarget.current = {
-      noteId,
-      editor,
-      bookmark: editor.state.selection.getBookmark(),
-    };
-    setFormatHeight(
-      Math.max(
-        260,
-        Math.min(380, keyboardHeight.current || viewportHeight.current * 0.36),
-      ),
-    );
-    setMenu("format");
-    if (mobile) {
-      editor.commands.blur();
-      keyboard(false);
-    }
-  };
-  const formatCommand = (command: (e: Editor) => unknown) => {
-    if (quitState.current) return;
-    const target = formatTarget.current;
-    if (!target || target.noteId !== noteId || target.editor !== editor) return;
-    editor.view.dispatch(
-      editor.state.tr.setSelection(target.bookmark.resolve(editor.state.doc)),
-    );
-    command(editor);
-    target.bookmark = editor.state.selection.getBookmark();
-    updateFormatState((v) => v + 1);
-    if (!mobile) {
-      setMenu(null);
-      formatTarget.current = null;
-      editor.commands.focus(undefined, { scrollIntoView: false });
-    }
-  };
+  const openFormat = session.openFormat;
+  const formatCommand = session.formatCommand;
   useEffect(() => {
     const releases = [...editors.values()].map((instance) => {
       const changed = ({
@@ -2223,90 +1876,23 @@ function App() {
     });
     return () => releases.forEach((release) => release());
   }, [editors]);
-  useEffect(() => {
-    if (!editor) return;
-    const changed = ({
-      transaction,
-    }: {
-      transaction: import("@tiptap/pm/state").Transaction;
-    }) => {
-      for (const target of [formatTarget.current, paperTarget.current])
-        if (target && target.editor === editor && target.noteId === noteId)
-          target.bookmark = target.bookmark.map(transaction.mapping);
-      updateFormatState((v) => v + 1);
-    };
-    editor.on("transaction", changed);
-    return () => {
-      editor.off("transaction", changed);
-    };
-  }, [editor, noteId]);
-  useEffect(() => {
-    formatTarget.current = null;
-    setMenu((value) => (value === "format" ? null : value));
-    const target = paperTarget.current;
-    if (target && target.noteId !== noteId) {
-      if (!target.editor.isDestroyed)
-        restoreEditor(target.editor, target.editable);
-      paperTarget.current = null;
-      setModal((value) => (value === "paper" ? null : value));
-    }
-  }, [noteId]);
-  const chooseFolder = (id: string) => {
-    if (networkSync.frozen()) { void networkSync.cancel().then(() => chooseFolder(id)); return; }
-    cancelCreateFocus();
-    setMobileCreatedEditor(null);
-    clearTagComposition();
-    setTagFilter(undefined);
-    setGalleryEditor(false);
-    setFolderId(id);
-    setPage("notes");
-    setQuery("");
-    setFilter("");
-    setSearching(false);
-    setMenu(null);
-    if (noteId && ws.folders.find((f) => f.id === id)?.kind === "smart")
-      parkedSmartEditors.current.add(noteId);
-    const first =
-      projectFolders(
-        wsRef.current,
-        blockedNotes.current.size ? [...blockedNotes.current] : [],
-        sort,
-      ).get(id)?.firstId ?? null;
-    setNoteId(first);
-    updateSettings({ selectedFolder: id, selectedNote: first || "" });
-  };
-  const chooseTag = (name: string | null) => {
-    if (networkSync.frozen()) { void networkSync.cancel().then(() => chooseTag(name)); return; }
-    cancelCreateFocus();
-    setMobileCreatedEditor(null);
-    clearTagComposition();
-    setTagFilter(name);
-    setFilter("");
-    setSearchNoteId(null);
-    setGalleryEditor(false);
-    setPage("notes");
-    setMenu(null);
-  };
-  const chooseNote = (n: Note) => {
-    if (networkSync.frozen()) { void networkSync.cancel().then(() => chooseNote(n)); return; }
-    cancelCreateFocus();
-    setMobileCreatedEditor(null);
-    clearTagComposition();
-    if (!mobile && view === "gallery") setGalleryEditor(true);
-    if (contentSearch) setSearchNoteId(n.id);
-    else setNoteId(n.id);
-    setPage("editor");
-    setMenu(null);
-    setSwiped(null);
-    setShowFind(false);
-    setEditing(false);
-    if (!contentSearch) updateSettings({ selectedNote: n.id });
-  };
+  navigation.configure({
+    workspace: () => wsRef.current, blocked: () => [...blockedNotes.current],
+    noteId, mobile, contentSearch, view, sort, separate: !!separate && native,
+    sync: networkSync, session, clearComposition: clearTagComposition,
+    clearJump: () => setAttachmentJump(null), clearSwipe: () => setSwiped(null),
+    clearFind: () => setShowFind(false), closeModal: () => setModal(null), parkSmart: id => parkedSmartEditors.current.add(id),
+    settings: updateSettings, flush, closeWindow: () => { void getCurrentWindow().close(); }, fail,
+  });
+  const { chooseFolder, chooseTag, chooseNote, openFolders, back } = navigation;
+  useEffect(() => presentation.followJump(editor,attachmentBrowser,noteId), [presentation,attachmentJump,attachmentBrowser,noteId,editor]);
   const createNote = useCallback(
     (validate?: () => void): Promise<void> => {
       if (createFlight.current) return createFlight.current;
-      const source = folderId, navigation = mobileNavigation.current;
-      if (mobile) { createFocus.current = null; setCreatingNote(true); setCreationError(""); }
+      const source = folderId;
+      session.invalidate("navigation");
+      const navigationGeneration = session.generation;
+      if (mobile) { setCreatingNote(true); setCreationError(""); }
       const work = (async () => {
       quietWrites.current++;
       try {
@@ -2336,27 +1922,9 @@ function App() {
           return;
         }
         if (mobile && createReceipt.current?.id === createdId) createReceipt.current = null;
-        if (mobile && navigation !== mobileNavigation.current) return;
+        if (navigationGeneration !== session.generation) return;
         revisions.current.confirmed(n.id, n.revision);
-        clearTagComposition();
-        setTagFilter(undefined);
-        setFolderId(mobile ? source : fid);
-        if (mobile) setMobileCreatedEditor(n.id);
-        setSearchNoteId(null);
-        setFilter("");
-        setNoteId(n.id);
-        setPage("editor");
-        setGalleryEditor(true);
-        setMenu(null);
-        setQuery("");
-        setSearching(false);
-        setEditing(true);
-        updateSettings({ selectedFolder: mobile ? source : fid, selectedNote: n.id });
-        if (mobile) createFocus.current = {id:n.id,navigation};
-        else setTimeout(
-          () => document.querySelector<HTMLElement>(".tiptap")?.focus(),
-          100,
-        );
+        navigation.adoptCreated(n, { source, folderId: fid, generation: navigationGeneration });
       } catch (e) {
         if (mobile) setCreationError(errText(e));
         fail(e);
@@ -2369,22 +1937,11 @@ function App() {
     [fail, flush, folderId, updateSettings, clearTagComposition, mobile],
   );
   const newNote = useCallback(() => createNote(), [createNote]);
-  const openFolders = () => {
-    if (networkSync.frozen()) { void networkSync.cancel().then(openFolders); return; }
-    cancelCreateFocus();
-    setSearching(false);
-    setQuery("");
-    setFilter("");
-    setTagFilter(undefined);
-    setPage("folders");
-  };
   const finishEditing = async () => {
+    const intent = session.captureBodyIntent();
     await networkSync.cancel();
-    cancelCreateFocus();
     await flush();
-    editor?.commands.blur();
-    keyboard(false);
-    setEditing(false);
+    session.completeBodyIntent(intent);
   };
   const saveFolderDraft = async (draft: FolderDraft, committedId?: string) => {
     quietWrites.current++;
@@ -2422,10 +1979,10 @@ function App() {
     } finally { quietWrites.current--; }
   };
   const openModal = (type: string, value = "") => {
-    cancelCreateFocus();
+    session.invalidate("overlay");
     if (type === "settings" || type === "data") {
       if (modal !== "preferences") preferencesTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      setPreferencesTab(type === "data" ? "data" : "settings");
+      setPreferencesTab(type === "data" ? "data" : mobile ? "home" : "settings");
       setModal("preferences");
       setMenu(null);
       return;
@@ -2454,73 +2011,27 @@ function App() {
       fail(Error("含标签的备忘录不能锁定，请先移除标签。"));
       return;
     }
-    if (type === "paper" && mobile && editor && noteId) {
-      paperTarget.current = {
-        noteId,
-        editor,
-        bookmark: editor.state.selection.getBookmark(),
-        editable: editor.isEditable,
-      };
-      // Android Back can hide the IME while leaving contenteditable focused.
-      // Freeze and blur synchronously before presenting this full-page picker.
-      editor.view.dom.blur();
-      editor.setEditable(false, false);
-      keyboard(false);
-      setEditing(false);
-    }
     setModal(type);
     setModalValue(value);
     setMenu(null);
   };
-  const back = () => {
-    if (networkSync.frozen()) { void networkSync.cancel().then(back); return; }
-    cancelCreateFocus();
-    setMenu(null);
-    setEditing(false);
-    setShowFind(false);
-    if (mobile) {
-      editor?.commands.blur();
-      keyboard(false);
-      if (page === "editor") {setPage("notes");setMobileCreatedEditor(null);}
-      else chooseFolder("all");
-      void flush().catch(fail);
-    }
-    else if (view === "gallery" && galleryEditor) setGalleryEditor(false);
-    else if (separate && native) getCurrentWindow().close();
-    else if (page === "editor") setPage("notes");
-    else {
-      setPage("folders");
-      setSearching(false);
-      setQuery("");
-      setFilter("");
-    }
+  const preferencesBack = () => {
+    if (appleNotesImportHandle.current?.inspect().open) { void appleNotesImportHandle.current.close().catch(fail); return; }
+    if (preferencesTab === "sync" && syncSettingsHandle.current?.dismiss()) return;
+    if (preferencesTab === "data" && dataManagementHandle.current?.inspect().view !== "overview" && dataManagementHandle.current) { dataManagementHandle.current.navigate("overview"); return; }
+    if (mobile && preferencesTab !== "home") setPreferencesTab("home");
+    else setModal(null);
   };
   const androidBack = useRef<() => void>(() => {});
-  androidBack.current = () => {
-    if (networkSync.frozen()) { void networkSync.cancel().then(() => androidBack.current()); return; }
-    if (imagePreview) setImagePreview(null);
-    else if (folderForm) folderFormHandle.current?.cancel();
-    else if (ocrOperation.current) void cancelOcr().catch(fail);
-    else if (modal === "paper") closePaper();
-    else if (modal) setModal(null);
-    else if (menu === "format") closeFormat(false);
-    else if (menu) setMenu(null);
-    else if (draw) setDraw(null);
-    else if (record) recordingPanel.current?.close();
-    else if (showFind) setShowFind(false);
-    else if (searching) {
-      setSearching(false);
-      setQuery("");
-    } else if (
-      editor?.isFocused &&
-      viewportHeight.current - window.innerHeight > 120
-    ) {
-      editor.commands.blur();
-      keyboard(false);
-      setEditing(false);
-    } else if (mobile ? page !== "notes" || folderId !== "all" : page !== "folders") back();
-    else {
-      cancelCreateFocus();
+  navigation.configureBack({
+    preview: !!imagePreview, closePreview: () => setImagePreview(null),
+    folderForm: !!folderForm, cancelFolderForm: () => folderFormHandle.current?.cancel(),
+    ocr: !!ocrOperation.current, cancelOcr: () => {void cancelOcr().catch(fail);},
+    modal, preferencesBack, closeModal: () => setModal(null),
+    menu, format: formatOpen, drawing: !!draw, recording: record,
+    closeRecording: () => recordingPanel.current?.close(), find: showFind,
+    editorFocused: !!editor?.isFocused, session,
+    requestExit: () => {
       if (mobile && createFlight.current) {setNotice("正在创建备忘录，请稍候");return;}
       if (pickerTargets.current.size || attachmentBatches.current.size) {fail(Error("附件操作尚未完成，请稍候再退出。"));return;}
       flush()
@@ -2529,23 +2040,9 @@ function App() {
           else setError("还有未保存的更改，请重试保存。");
         })
         .catch(fail);
-    }
-  };
-  useEffect(() => {
-    if (!native || !/Android/i.test(navigator.userAgent)) return;
-    let disposed = false;
-    let unregister: (() => Promise<void>) | undefined;
-    onBackButtonPress(() => androidBack.current())
-      .then((listener) => {
-        if (disposed) void listener.unregister();
-        else unregister = () => listener.unregister();
-      })
-      .catch(fail);
-    return () => {
-      disposed = true;
-      void unregister?.();
-    };
-  }, [fail]);
+    },
+  });
+  androidBack.current = navigation.androidBack;
   const patch = async (a: Record<string, unknown>) => {
     try {
       const original = wsRef.current.notes.find((n) => n.id === a.id);
@@ -2682,137 +2179,15 @@ function App() {
   const focusGlobalSearch = useCallback(() => {
     void afterQuiet(() => {
       setSearching(true);
-      if (native && macNative) {
-        const toolbar = nativeToolbar.current;
-        if (toolbar) void toolbar.focusSearch().catch(fail);
-        else fail(new Error("原生搜索尚未就绪"));
-      } else setTimeout(() => searchInput.current?.focus(), 0);
+      nativePlatform.focusSearch(() => searchInput.current);
     }).catch(fail);
   }, [fail, afterQuiet]);
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (quitState.current) {
-        e.preventDefault();
-        return;
-      }
-      if (folderForm) return;
-      if (ocrOperation.current && e.key !== "Escape") return;
-      // AppKit menu accelerators also work while NSSearchField owns first responder.
-      if (
-        native &&
-        macNative &&
-        (e.metaKey || e.ctrlKey) &&
-        ["n", "f"].includes(e.key.toLowerCase())
-      )
-        return;
-      if ((e.metaKey || e.ctrlKey) && e.key === "n") {
-        e.preventDefault();
-        newNote();
-      }
-      if (
-        (e.metaKey || e.ctrlKey) &&
-        e.shiftKey &&
-        e.key.toLowerCase() === "f"
-      ) {
-        e.preventDefault();
-        focusGlobalSearch();
-      } else if ((e.metaKey || e.ctrlKey) && e.key === "f") {
-        e.preventDefault();
-        if (page === "editor" || !mobile) {
-          setShowFind(true);
-        } else {
-          focusGlobalSearch();
-        }
-      }
-      if (e.key === "Escape") {
-        if (ocrOperation.current) void cancelOcr().catch(fail);
-        else if (modal === "paper") closePaper();
-        else if (modal) setModal(null);
-        else if (menu) setMenu(null);
-        else if (showFind) setShowFind(false);
-        else if (searching || searchDraft !== null) {
-          void changeSearch({ searching: false, query: "" }).catch(fail);
-        } else if (mobile && page !== "folders") back();
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [
-    newNote,
-    folderForm,
-    page,
-    mobile,
-    modal,
-    menu,
-    showFind,
-    searching,
-    searchDraft,
-    changeSearch,
-    focusGlobalSearch,
-  ]);
-  useEffect(() => {
-    if (!native) return;
-    let disposed = false;
-    let unlisten: (() => void) | undefined;
-    getCurrentWindow()
-      .listen<string>("menu-action", (e) => {
-        if (native && macNative) {
-          nativeMenuHandler.current(e.payload);
-          return;
-        }
-        switch (e.payload) {
-          case "new_note":
-            newNote();
-            break;
-          case "new_folder":
-            openModal("newFolder");
-            break;
-          case "sidebar":
-            changeSidebar((v) => !v);
-            break;
-          case "gallery":
-            updateSettings({ view: view === "list" ? "gallery" : "list" });
-            break;
-          case "search":
-            focusGlobalSearch();
-            break;
-          case "find_in_note":
-            setShowFind(true);
-            break;
-          case "export":
-            archive("export");
-            break;
-          case "import":
-            archive("import");
-            break;
-        }
-      })
-      .then((fn) => {
-        if (disposed) fn();
-        else unlisten = fn;
-      })
-      .catch(fail);
-    return () => {
-      disposed = true;
-      unlisten?.();
-    };
-  }, [
-    newNote,
-    view,
-    updateSettings,
-    archive,
-    focusGlobalSearch,
-    fail,
-    changeSidebar,
-  ]);
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const d = (e as CustomEvent).detail;
-      setDraw({ strokes: d.strokes, pos: d.pos });
-    };
-    window.addEventListener("edit-drawing", handler);
-    return () => window.removeEventListener("edit-drawing", handler);
-  }, []);
+  const openDrawing = (strokes: DrawingStroke[] = [], pos?: number, instance = editor) => {
+    if (!instance || instance !== editor || !noteId || instance.isDestroyed || !instance.isEditable || nativeEditorOwners.current.get(instance) !== noteId || !accessGate.state?.notes[noteId]?.authorized || accessGate.state?.operationId || synchronizingRef.current) return;
+    const originalNode = pos === undefined ? undefined : instance.state.doc.nodeAt(pos) || undefined;
+    if (pos !== undefined && originalNode?.type.name !== "drawing") return;
+    session.openDrawing({ strokes, pos, editor: instance, noteId, authority: imageAuthority(noteId), bookmark: instance.state.selection.getBookmark(), originalNode, originalDocument: instance.state.doc });
+  };
   useEffect(() => {
     if (!notice) return;
     const t = setTimeout(() => setNotice(""), 3500);
@@ -2937,7 +2312,10 @@ function App() {
         saveFailures.current.has(target.noteId)
       )
         throw Error("原笔记更改尚未保存，录音仍保留；请先重试保存正文");
-      const synced = await synchronizeRef.current();
+      // Each recording revision validates before storage/insertion and around
+      // the journal ACK. These trusted reads must not blank the whole window
+      // four times; actual access transitions still escalate to the cover.
+      const synced = await synchronizeRef.current({ quiet: true });
       if (!owned()) throw Error("原录音归属已失效，音频仍保留");
       if (synced.success && synchronization.current(synced)) {
         // A trusted read resolves before React restores the active Host gate.
@@ -3024,130 +2402,6 @@ function App() {
       if (!outcome.saved) throw outcome.error;
     }
   };
-  const submitAttachmentBatch = async (batch: PickerBatch) => {
-    if (batch.cancelRequested)
-      throw Error("附件取消尚未核定，请重试取消；不会继续插入正文");
-    if (!batch.files) throw Error("附件选择结果尚未提供");
-    const target = batch.target;
-    for (const [index, file] of batch.files.entries()) {
-      if (batch.cancelRequested) throw Error("本次附件已请求取消");
-      const operationId = batch.operationIds[index];
-      let submission = attachmentSubmissions.current.get(operationId);
-      if (!submission) {
-        submission = new AttachmentSubmission(
-          operationId,
-          target.noteId,
-          target,
-          file,
-          batch.recording?.recordedAt,
-        );
-        attachmentSubmissions.current.set(operationId, submission);
-      }
-      const operation = submission;
-      await operation.run({
-        validate: () =>
-          batch.recording?.local
-            ? validateRecordingTarget(batch.recording, operation.inserted)
-            : validatePickerTarget(target, batch.recording, operation.inserted),
-        storage: native
-          ? {
-              kind: "journal",
-              store: () =>
-                storeAttachmentOperation(
-                  operationId,
-                  target.noteId,
-                  file,
-                  operation.recordedAt,
-                ),
-              query: () => queryAttachmentOperation(operationId, target.noteId),
-            }
-          : {
-              kind: "preview",
-              store: () =>
-                storeAttachment(target.noteId, file, operation.recordedAt),
-            },
-        insert: (attachment) => {
-          const instance = target.editor;
-          if (batch.recording?.local) {
-            const selection = target.bookmark.resolve(instance.state.doc);
-            // Map the user's current selection through a normal insertion. No
-            // focus or selected-note change, including while A is parked for B.
-            const inserted = instance.commands.insertContentAt(
-              { from: selection.from, to: selection.to },
-              {
-                type: "attachment",
-                attrs: {
-                  id: attachment.id,
-                  name: attachment.displayName,
-                  kind: attachment.kind,
-                },
-              },
-              { updateSelection: false },
-            );
-            if (!inserted) throw Error("原编辑器未接受录音，音频仍保留");
-            return;
-          }
-          instance.view.dispatch(
-            instance.state.tr.setSelection(
-              target.bookmark.resolve(instance.state.doc),
-            ),
-          );
-          try {
-            const inserted = instance
-              .chain()
-              .focus()
-              .insertContent({
-                type: "attachment",
-                attrs: {
-                  id: attachment.id,
-                  name: attachment.displayName,
-                  kind: attachment.kind,
-                },
-              })
-              .command(({ tr }) => {
-                // Tiptap may select a just-inserted atomic block. Leaving that
-                // automatic NodeSelection would replace it with the next file
-                // in this batch (or the next chooser), despite no user selection.
-                if (
-                  tr.selection instanceof NodeSelection &&
-                  tr.selection.node.type.name === "attachment" &&
-                  tr.selection.node.attrs.id === attachment.id
-                ) {
-                  const after = tr.selection.to;
-                  if (!tr.doc.resolve(after).nodeAfter?.isTextblock)
-                    tr.insert(after, instance.schema.nodes.paragraph.create());
-                  tr.setSelection(Selection.near(tr.doc.resolve(after), 1));
-                }
-                return true;
-              })
-              .run();
-            if (!inserted)
-              throw Error("编辑器未接受附件插入，已保留原附件；请重试");
-          } finally {
-            if (documentReferencesAttachment(instance.getJSON(), attachment)) {
-              target.bookmark = instance.state.selection.getBookmark();
-              target.documentVersion =
-                nativeDocumentVersions.current.get(instance) || 0;
-              target.document = instance.getJSON();
-              target.trustedDocument = editorSaveSnapshot(target.document);
-            }
-          }
-        },
-        references: (attachment) =>
-          !target.editor.isDestroyed &&
-          documentReferencesAttachment(target.editor.getJSON(), attachment),
-        awaitDocumentAck: () => awaitAttachmentDocumentAck(operation, target),
-        refresh: async () => {
-          if (batch.recording) finishRecording(batch.recording);
-          await refresh();
-        },
-      });
-    }
-    attachmentBatches.current.delete(batch);
-    for (const operationId of batch.operationIds)
-      attachmentSubmissions.current.delete(operationId);
-    setMenu(null);
-  };
   const retryAttachments = async () => {
     let debugComplete: (() => void) | undefined;
     if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
@@ -3157,11 +2411,7 @@ function App() {
     }
     try {
       for (const [id, doc] of [...pendingDocs.current]) await saveDoc(id, doc);
-      for (const batch of [...attachmentBatches.current]) {
-        if (batch.recording && batch.cancelRequested)
-          await cancelRecording(batch.recording);
-        else await submitAttachmentBatch(batch);
-      }
+      await attachmentOperations.retry();
       if (ocrOperation.current) await retryOcr();
       if (
         !pendingDocs.current.size &&
@@ -3171,86 +2421,6 @@ function App() {
       ) setError("");
     } finally {
       debugComplete?.();
-    }
-  };
-  const discardUninsertedAttachments = async () => {
-    for (const batch of attachmentBatches.current) {
-      if (batch.recording) {
-        await cancelRecording(batch.recording);
-        continue;
-      }
-      await validatePickerTarget(batch.target);
-      const operations = batch.operationIds.map((id) =>
-        attachmentSubmissions.current.get(id),
-      );
-      if (operations.some((op) => op?.inserted))
-        throw Error("附件已在本窗口正文中，须先确认保存；不会删除待保存的附件");
-      // Seal admission before awaiting cancellation. A late storage/query result
-      // can no longer race a safe backend cancellation and insert its old node.
-      batch.cancelRequested = true;
-      for (const op of operations) op?.invalidate();
-      // StorageAttempted includes FileReader time, before the store IPC exists.
-      // Keep every identity until all admitted work has really settled; a
-      // cancel of an unknown op cannot prevent a later store for that same op.
-      await Promise.all(operations.map((op) => op?.settleForCancellation()));
-      await validatePickerTarget(batch.target);
-      for (const op of operations) {
-        if (!op) continue;
-        if (
-          op.attachment &&
-          documentReferencesAttachment(
-            op.target.editor.getJSON(),
-            op.attachment,
-          )
-        )
-          throw Error("附件已在本窗口正文中，不能取消");
-        if (native && op.storageAttempted) {
-          const result = await cancelAttachmentOperation(
-            op.operationId,
-            op.noteId,
-          );
-          if (result.status !== "aborted" && result.status !== "notPersisted")
-            throw Error(
-              `附件已保留待恢复（${result.reason || result.status}）`,
-            );
-        }
-        op.invalidate();
-        attachmentSubmissions.current.delete(op.operationId);
-      }
-      batch.target.invalidated = true;
-      attachmentBatches.current.delete(batch);
-    }
-    setError("");
-  };
-  const fileSelected = async (
-    input: HTMLInputElement,
-    suppliedFiles?: readonly File[],
-  ) => {
-    const files = suppliedFiles || input.files;
-    const batch = pickerTargets.current.get(input);
-    pickerTargets.current.delete(input);
-    let debugComplete: (() => void) | undefined;
-    if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
-      const work = new Promise<void>((resolve) => {
-        debugComplete = resolve;
-      });
-      debugPending.current.add(work);
-      void work.finally(() => debugPending.current.delete(work));
-    }
-    try {
-      if (!files?.length) return; // Picker cancellation has not started storage.
-      if (!batch) throw Error("附件选择缺少原目标，请重新选择");
-      batch.files = Array.from(files);
-      for (let i = 1; i < batch.files.length; i++)
-        batch.operationIds.push(secureId());
-      attachmentBatches.current.add(batch);
-      await submitAttachmentBatch(batch);
-    } catch (e) {
-      if (!batch?.cancelRequested) fail(e);
-    } finally {
-      debugComplete?.();
-      if (fileInput.current) fileInput.current.value = "";
-      if (cameraInput.current) cameraInput.current.value = "";
     }
   };
   const shareTarget = async (target?: NativeContext) => {
@@ -3357,7 +2527,7 @@ function App() {
     <div key={f.id}>
       <button
         className={`folder-row ${mobile && f.kind === "quick" ? "mobile-quick-folder-row" : ""} ${tagFilter === undefined && folderId === f.id ? "selected" : ""}`}
-        style={{ paddingLeft: mobile ? 16 : 16 + depth * 14 }}
+        style={{ paddingLeft: mobile ? 16 : (14 + depth * 30) * metrics.scale }}
         onClick={() => chooseFolder(f.id)}
         onContextMenu={(e) => {
           e.preventDefault();
@@ -3373,13 +2543,22 @@ function App() {
         onTouchEnd={stopLong}
         onTouchMove={stopLong}
       >
+        {!mobile && ws.folders.some(child => child.parentId === f.id) && (
+          <span className="folder-disclosure" role="button" tabIndex={0}
+            aria-label={`${collapsedFolders.has(f.id) ? "展开" : "收起"}${f.name}`}
+            aria-expanded={!collapsedFolders.has(f.id)}
+            onClick={event => { event.stopPropagation(); setCollapsedFolders(previous => { const next = new Set(previous); if (next.has(f.id)) next.delete(f.id); else next.add(f.id); return next; }); }}
+            onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); event.stopPropagation(); event.currentTarget.click(); } }}>
+            <ChevronDown size={14} className={collapsedFolders.has(f.id) ? "collapsed" : ""} />
+          </span>
+        )}
         {f.kind === "smart" ? (
           <FolderCog />
         ) : f.kind === "quick" ? (
           mobile ? (
             <MobileQuickFolderIcon />
           ) : (
-            <StickyNote />
+            <NotebookPen />
           )
         ) : f.kind === "trash" ? (
           <Trash2 />
@@ -3388,11 +2567,11 @@ function App() {
         ) : (
           <Folder />
         )}
-        <span>{f.name}</span>
+        <span className="folder-name">{f.name}</span>
         <span className="count">{count(f.id)}</span>
         {mobile && <ChevronRight className="chevron" />}
       </button>
-      {ws.folders
+      {(!collapsedFolders.has(f.id) || mobile) && ws.folders
         .filter((x) => x.parentId === f.id)
         .map((x) => folderRow(x, depth + 1))}
     </div>
@@ -3403,7 +2582,7 @@ function App() {
       <input
         ref={searchInput}
         aria-label="搜索备忘录"
-        placeholder={mobile ? "搜索笔记" : "搜索"}
+        placeholder={mobile ? "搜索笔记" : "搜索备忘录"}
         value={searchDraft ?? query}
         onFocus={() => { void changeSearch({ searching: true }).catch(fail); }}
         onChange={(e) => {
@@ -3417,90 +2596,26 @@ function App() {
       ) : null}
     </div>
   );
-  const capturePickerTarget = (context?: NativeContext): PickerBatch => {
-    const live = pickerRuntime.current;
-    const instance = context ? context.editor : live.editor;
-    if (
-      quitState.current ||
-      synchronizingRef.current ||
-      !live.noteId ||
-      !instance ||
-      instance.isDestroyed ||
-      !instance.isEditable ||
-      !live.available ||
-      blockedNotes.current.has(live.noteId) ||
-      accessGate.state?.operationId
-    )
-      throw Error("当前备忘录不可添加附件，请同步完成后重试");
-    if (context) nativeAssert.current(context, true);
-    const owner = nativeEditorOwners.current.get(instance);
-    if (owner !== live.noteId) throw Error("附件编辑器归属已改变");
-    const original = wsRef.current.notes.find((n) => n.id === live.noteId);
-    if (!original) throw Error("原附件备忘录不存在");
-    if (original.locked) throw Error("已锁定备忘录不支持附件，请先移除锁定");
-    const target: PickerTarget = {
-      noteId: live.noteId,
-      scope: live.scope,
-      stamp: accessGate.stamp(live.noteId),
-      editor: instance,
-      owner,
-      bookmark: context?.bookmark || instance.state.selection.getBookmark(),
-      documentVersion: nativeDocumentVersions.current.get(instance) || 0,
-      externalVersion: externalVersions.current.get(live.noteId) || 0,
-      document: instance.getJSON(),
-      // Compare each representation with its own captured original. Schema
-      // defaults in the Editor must neither hide raw changes nor reject an
-      // unchanged imported document that omits an optional default field.
-      trustedDocument:
-        pendingDocs.current.get(live.noteId) || original.document,
-      invalidated: false,
-    };
-    return { target, operationIds: [secureId()] } satisfies PickerBatch;
-  };
-  const openAttachmentPicker = (
-    input: HTMLInputElement | null,
-    accept?: string,
-    context?: NativeContext,
-  ) => {
-    try {
-      if (!input) throw Error("附件选择器尚未就绪");
-      const batch = capturePickerTarget(context);
-      const previous = pickerTargets.current.get(input);
-      if (previous) previous.target.invalidated = true;
-      pickerTargets.current.set(input, batch);
-      if (accept !== undefined) input.accept = accept;
-      input.click();
-    } catch (e) {
-      if (input) {
-        const batch = pickerTargets.current.get(input);
-        if (batch) batch.target.invalidated = true;
-        pickerTargets.current.delete(input);
-      }
-      fail(e);
-    }
-  };
-  useEffect(() => {
-    const inputs = [fileInput.current, cameraInput.current];
-    const cancelled = (event: Event) => {
-      const input = event.currentTarget as HTMLInputElement;
-      const batch = pickerTargets.current.get(input);
-      if (batch) batch.target.invalidated = true;
-      pickerTargets.current.delete(input);
-    };
-    for (const input of inputs) input?.addEventListener("cancel", cancelled);
-    return () => {
-      for (const input of inputs)
-        input?.removeEventListener("cancel", cancelled);
-    };
-  }, []);
+  useEffect(() => attachmentOperations.listen([fileInput.current,cameraInput.current]), [attachmentOperations]);
+  attachmentOperations.configure({
+    workspace: () => wsRef.current, quitting: () => !!quitState.current, synchronizing: () => synchronizingRef.current,
+    blocked: id => blockedNotes.current.has(id), owner: instance => nativeEditorOwners.current.get(instance),
+    documentVersion: instance => nativeDocumentVersions.current.get(instance) || 0, externalVersion: id => externalVersions.current.get(id) || 0,
+    pendingDocument: id => pendingDocs.current.get(id), assertNative: (context,editing) => nativeAssert.current(context,editing),
+    validatePickerTarget, validateRecordingTarget, awaitDocumentAck: awaitAttachmentDocumentAck,
+    finishRecording: ticket => finishRecording(ticket), cancelRecording: ticket => cancelRecording(ticket), refresh,
+    closeMenu: () => setMenu(null), clearError: () => setError(""), fail,
+    inputs: () => [fileInput.current,cameraInput.current], debugPending: debugPending.current,
+  });
   const finishRecording = (ticket: RecordingTicket) => {
     ticket.accepting = false;
     for (const controller of ticket.editorCommits || []) controller.abort();
     ticket.local?.card?.dispose();
     if (ticket.local) return; // Unmount only after native cleanup is confirmed.
     if (recordingTicket.current === ticket) {
+      session.recordClosed(ticket.batch.target.noteId);
       recordingTicket.current = null;
-      if (!ticket.detached) setRecord(false);
+      if (!ticket.detached) session.recordVisibility(false);
     }
   };
   const recordingReferenced = (ticket: RecordingTicket) => {
@@ -3543,7 +2658,7 @@ function App() {
     // cancellation; otherwise the same ticket would reject its own cleanup.
     sealRecording(ticket);
     if (recordingTicket.current === ticket && !ticket.detached)
-      setRecord(false);
+      session.recordVisibility(false);
     if (ticket.cancelling) return ticket.cancelling;
     const work = (async () => {
       const operation = attachmentSubmissions.current.get(
@@ -3722,6 +2837,7 @@ function App() {
     ticket.accepting = false;
     local.card?.dispose();
     for (const controller of ticket.editorCommits || []) controller.abort();
+    session.recordClosed(ticket.batch.target.noteId);
     recordingTicket.current = null;
     projectRecordingIndicator(null);
     updateRecordingOwner((value) => value + 1);
@@ -3800,9 +2916,10 @@ function App() {
     };
     batch.recording = ticket;
     recordingTicket.current = ticket;
+    session.recordOpened(batch.target.noteId, desktop);
     setMenu(null);
     if (desktop) void registerDesktopRecording(ticket).catch(fail);
-    else setRecord(true);
+    else session.recordVisibility(true);
   };
   recordingLifecycle.current = {
     active: () => !!recordingTicket.current,
@@ -3829,7 +2946,7 @@ function App() {
       await ticket.opening;
       if (recordingTicket.current !== ticket) return;
       sealRecording(ticket);
-      if (!ticket.detached) setRecord(false);
+      if (!ticket.detached) session.recordVisibility(false);
       const operation = attachmentSubmissions.current.get(
         ticket.batch.operationIds[0],
       );
@@ -3986,8 +3103,7 @@ function App() {
     setOcrState(operation.state);
     setOcr(operation);
     setMenu(null);
-    target.editor.commands.blur();
-    setEditing(false);
+    session.browse("overlay");
   };
   const processOcr = (operation: OcrHost<PickerTarget>, source: OcrSource) => {
     if (ocrOperation.current !== operation || operation.detached) return;
@@ -4024,6 +3140,13 @@ function App() {
       }
     },
   };
+  const openTableMenu = () => {
+    if (!editor?.isEditable) return;
+    if (editor.isActive("table") || !editor.state.selection.empty)
+      setMenu(menu === "table" ? null : "table");
+    else
+      editor.chain().focus().insertTable({ rows: 2, cols: 2, withHeaderRow: false }).run();
+  };
   const tools = (bottom = false) => (
     <div
       className={`editor-tools ${bottom ? "bottom-tools" : ""}`}
@@ -4038,7 +3161,7 @@ function App() {
             label="核对清单"
             onClick={() => editor?.chain().focus().toggleTaskList().run()}
           >
-            <CheckCheck />
+            {mobile ? <CheckCheck /> : <ListTodo />}
           </IconButton>
           <IconButton
             label="添加附件"
@@ -4046,8 +3169,11 @@ function App() {
           >
             <Paperclip />
           </IconButton>
-          <IconButton label="绘画" onClick={() => setDraw({ strokes: [] })}>
+          <IconButton label="绘画" onClick={() => openDrawing()}>
             <PenTool />
+          </IconButton>
+          <IconButton label="录音" disabled={!editor?.isEditable} onClick={() => { try { openRecording(); } catch (error) { fail(error); } }}>
+            <Mic />
           </IconButton>
         </>
       ) : (
@@ -4064,21 +3190,13 @@ function App() {
             active={editor?.isActive("taskList")}
             onClick={() => editor?.chain().focus().toggleTaskList().run()}
           >
-            <CheckCheck />
+            {mobile ? <CheckCheck /> : <ListTodo />}
           </IconButton>
           <IconButton
             label="表格"
-            onClick={() =>
-              editor?.isActive("table")
-                ? setMenu(menu === "table" ? null : "table")
-                : editor
-                    ?.chain()
-                    .focus()
-                    .insertTable({ rows: 2, cols: 2, withHeaderRow: false })
-                    .run()
-            }
+            onClick={openTableMenu}
           >
-            <Table2 />
+            <Table />
           </IconButton>
           <IconButton
             label="添加附件"
@@ -4086,16 +3204,22 @@ function App() {
           >
             <Paperclip />
           </IconButton>
+          {!mobile && <>
+            <button className="toolbar-labeled-button" aria-label="录音" disabled={!editor?.isEditable} onClick={() => openRecording()}><Mic /><span>录音</span></button>
+            <button className="toolbar-labeled-button" aria-label="标签" disabled={!editor?.isEditable} onClick={() => editor?.chain().focus().insertContent("#").run()}><Hash /><span>标签</span></button>
+          </>}
           {mobile && (
             <>
-              <IconButton label="绘画" onClick={() => setDraw({ strokes: [] })}>
+              <IconButton label="录音" disabled={!editor?.isEditable} onClick={() => { try { openRecording(); } catch (error) { fail(error); } }}>
+                <Mic />
+              </IconButton>
+              <IconButton label="绘画" onClick={() => openDrawing()}>
                 <PenTool />
               </IconButton>
               <IconButton
                 label="收起键盘"
                 onClick={() => {
-                  editor?.commands.blur();
-                  setEditing(false);
+                  session.browse("confirm");
                 }}
               >
                 <X />
@@ -4157,450 +3281,33 @@ function App() {
       fail(e);
     }
   };
-  const renderMenu = () => {
-    if (!menu) return null;
-    const n = selected;
-    return (
-      <>
-        <div
-          className="menu-scrim"
-          onClick={() => {
-            if (menu === "format") closeFormat(false);
-            else setMenu(null);
-            setContextNote(null);
-          }}
-        />
-        <div
-          ref={noteMenuElement}
-          className={`popover menu-${menu} ${mobile && menu === "format" ? "mobile-format-panel" : ""}`}
-          role={menu === "format" && mobile ? "dialog" : "menu"}
-          aria-label={menu === "format" ? "格式" : undefined}
-          onPointerDown={(e) => {
-            if ((e.target as HTMLElement).closest("button")) e.preventDefault();
-          }}
-          onMouseDown={(e) => {
-            if ((e.target as HTMLElement).closest("button")) e.preventDefault();
-          }}
-        >
-          {menu === "format" && (
-            <FormatControls
-              editor={editor}
-              mobile={mobile}
-              run={formatCommand}
-              onClose={() => closeFormat(true)}
-            />
-          )}
-          {menu === "media" && (
-            <>
-              <MenuRow
-                disabled={!!current?.locked}
-                icon={<FileText size={19} />}
-                onClick={() => {
-                  openAttachmentPicker(fileInput.current, "");
-                  setMenu(null);
-                }}
-              >
-                附加文件
-              </MenuRow>
-              <MenuRow
-                disabled={!!current?.locked}
-                icon={<Volume2 size={19} />}
-                onClick={() => {
-                  try {
-                    openRecording();
-                  } catch (error) {
-                    fail(error);
-                  }
-                }}
-              >
-                录音
-              </MenuRow>
-              <div className="menu-divider" />
-              <MenuRow
-                disabled={!!current?.locked}
-                icon={<Image size={19} />}
-                onClick={() => {
-                  openAttachmentPicker(fileInput.current, "image/*,video/*");
-                  setMenu(null);
-                }}
-              >
-                选取照片或视频
-              </MenuRow>
-              <MenuRow
-                disabled={!!current?.locked}
-                icon={<Camera size={19} />}
-                onClick={() => {
-                  openAttachmentPicker(cameraInput.current);
-                  setMenu(null);
-                }}
-              >
-                拍照或录像
-              </MenuRow>
-              <MenuRow
-                disabled={!!current?.locked}
-                icon={<ScanLine size={19} />}
-                onClick={() => {
-                  setMenu(null);
-                  setNotice(
-                    "当前可拍摄并插入文稿照片；自动裁边与扫描归档尚待实现。",
-                  );
-                  openAttachmentPicker(cameraInput.current);
-                }}
-              >
-                扫描文稿
-              </MenuRow>
-              <MenuRow
-                disabled={!!current?.locked}
-                icon={<ScanText size={19} />}
-                onClick={() => {
-                  setMenu(null);
-                  try {
-                    openOcr();
-                  } catch (error) {
-                    fail(error);
-                  }
-                }}
-              >
-                扫描文本
-              </MenuRow>
-              <div className="menu-divider" />
-              <MenuRow
-                disabled={!!current?.locked}
-                icon={<PenTool size={19} />}
-                onClick={() => {
-                  setMenu(null);
-                  setDraw({ strokes: [] });
-                }}
-              >
-                添加绘画
-              </MenuRow>
-            </>
-          )}
-          {menu === "table" && (
-            <>
-              <MenuRow
-                onClick={() => {
-                  if (editor) {
-                    convertTableToText(editor);
-                    if (!mobile) editor.commands.focus();
-                  }
-                  setMenu(null);
-                }}
-              >
-                转换为文本
-              </MenuRow>
-              <div className="menu-divider" />
-              <MenuRow
-                onClick={() => editor?.chain().focus().addRowAfter().run()}
-              >
-                在下面添加行
-              </MenuRow>
-              <MenuRow
-                onClick={() => editor?.chain().focus().addRowBefore().run()}
-              >
-                在上面添加行
-              </MenuRow>
-              <MenuRow
-                onClick={() => editor?.chain().focus().addColumnAfter().run()}
-              >
-                在后面添加列
-              </MenuRow>
-              <MenuRow
-                onClick={() => editor?.chain().focus().addColumnBefore().run()}
-              >
-                在前面添加列
-              </MenuRow>
-              <div className="menu-divider" />
-              <MenuRow
-                danger
-                onClick={() => editor?.chain().focus().deleteRow().run()}
-              >
-                删除行
-              </MenuRow>
-              <MenuRow
-                danger
-                onClick={() => editor?.chain().focus().deleteColumn().run()}
-              >
-                删除列
-              </MenuRow>
-              <MenuRow
-                danger
-                onClick={() => {
-                  editor?.chain().focus().deleteTable().run();
-                  setMenu(null);
-                }}
-              >
-                删除表格
-              </MenuRow>
-            </>
-          )}
-          {(menu === "more" || menu === "note") && n && (
-            <>
-              {n.deletedAt ? (
-                <>
-                  <MenuRow
-                    icon={<Undo2 size={18} />}
-                    onClick={() => patch({ type: "restoreNote", id: n.id })}
-                  >
-                    恢复
-                  </MenuRow>
-                  <MenuRow
-                    danger
-                    icon={<Trash2 size={18} />}
-                    onClick={() => openModal("purge")}
-                  >
-                    永久删除
-                  </MenuRow>
-                </>
-              ) : (
-                <>
-                  <div className="menu-quick">
-                    <button
-                      onClick={() =>
-                        patch({
-                          type: "patchNote",
-                          id: n.id,
-                          pinned: !n.pinned,
-                        })
-                      }
-                    >
-                      <Pin size={19} />
-                      <span>{n.pinned ? "取消置顶" : "置顶"}</span>
-                    </button>
-                    <button
-                      onClick={() =>
-                        n.locked
-                          ? unlocked.has(n.id)
-                            ? patch({ type: "removeLock", id: n.id })
-                            : openModal("unlock")
-                          : openModal("lock")
-                      }
-                    >
-                      <Lock size={19} />
-                      <span>{n.locked ? "移除锁定" : "锁定"}</span>
-                    </button>
-                    {!mobile && (
-                      <button
-                        onClick={() => {
-                          setMenu(null);
-                          openSeparate(n);
-                        }}
-                      >
-                        <NotebookPen size={19} />
-                        <span>单独打开</span>
-                      </button>
-                    )}
-                  </div>
-                  <div className="menu-divider" />
-                  <MenuRow
-                    icon={<Search size={18} />}
-                    onClick={() => {
-                      setShowFind(true);
-                      setMenu(null);
-                    }}
-                  >
-                    在备忘录中查找
-                  </MenuRow>
-                  <MenuRow
-                    icon={<Folder size={18} />}
-                    onClick={() => openModal("move")}
-                  >
-                    移动备忘录
-                  </MenuRow>
-                  <MenuRow
-                    icon={<Table2 size={18} />}
-                    onClick={() => openModal("paper")}
-                  >
-                    横线与网格
-                  </MenuRow>
-                  <MenuRow
-                    icon={<Grid2X2 size={18} />}
-                    onClick={() => openModal("attachments")}
-                  >
-                    附件视图
-                  </MenuRow>
-                  <MenuRow
-                    icon={<Copy size={18} />}
-                    onClick={() => {
-                      flush()
-                        .then(() => readNoteText(n.id))
-                        .then((data) =>
-                          navigator.clipboard.writeText(data.text),
-                        )
-                        .then(() => setNotice("已复制"))
-                        .catch(fail);
-                      setMenu(null);
-                    }}
-                  >
-                    拷贝备忘录
-                  </MenuRow>
-                  <MenuRow icon={<Share size={18} />} onClick={shareNote}>
-                    发送副本
-                  </MenuRow>
-                  <div className="menu-divider" />
-                  <MenuRow
-                    danger
-                    icon={<Trash2 size={18} />}
-                    onClick={async () => {
-                      await patch({ type: "deleteNote", id: n.id });
-                      setNoteId(null);
-                      if (mobile) setPage("notes");
-                    }}
-                  >
-                    删除
-                  </MenuRow>
-                </>
-              )}
-            </>
-          )}
-          {menu === "view" && (
-            <>
-              <MenuRow
-                icon={<List size={18} />}
-                checked={view === "list"}
-                onClick={() => {
-                  updateSettings({ view: "list" });
-                  setMenu(null);
-                }}
-              >
-                列表
-              </MenuRow>
-              <MenuRow
-                icon={<Grid2X2 size={18} />}
-                checked={view === "gallery"}
-                onClick={() => {
-                  updateSettings({ view: "gallery" });
-                  setMenu(null);
-                }}
-              >
-                画廊
-              </MenuRow>
-              <div className="menu-divider" />
-              {[
-                { key: "updated", text: "按编辑日期排序" },
-                { key: "created", text: "按创建日期排序" },
-                { key: "title", text: "按标题排序" },
-              ].map((s) => (
-                <MenuRow
-                  key={s.key}
-                  checked={sort === s.key}
-                  onClick={() => {
-                    updateSettings({ sort: s.key as Settings["sort"] });
-                    setMenu(null);
-                  }}
-                >
-                  {s.text}
-                </MenuRow>
-              ))}
-              <MenuRow
-                checked={settings.groupDates !== false}
-                onClick={() => {
-                  updateSettings({ groupDates: settings.groupDates === false });
-                  setMenu(null);
-                }}
-              >
-                按日期分组
-              </MenuRow>
-              <div className="menu-divider" />
-              <MenuRow
-                icon={<SettingsIcon size={18} />}
-                onClick={() => openModal("data")}
-              >
-                数据管理
-              </MenuRow>
-              <MenuRow icon={<SettingsIcon size={18} />} onClick={() => openModal("settings")}>
-                设置
-              </MenuRow>
-            </>
-          )}
-          {menu === "folder" && (
-            <>
-              <MenuRow
-                icon={<SquarePen size={18} />}
-                onClick={() =>
-                  openModal(
-                    "renameFolder",
-                    ws.folders.find((f) => f.id === contextFolder)?.name,
-                  )
-                }
-              >
-                {ws.folders.find((f) => f.id === contextFolder)?.kind ===
-                "smart"
-                  ? "编辑智能文件夹"
-                  : "重新命名"}
-              </MenuRow>
-              <MenuRow
-                icon={<FolderPlus size={18} />}
-                onClick={() => openModal("newFolder")}
-              >
-                新建文件夹
-              </MenuRow>
-              <MenuRow
-                danger
-                icon={<Trash2 size={18} />}
-                onClick={() =>
-                  openModal(
-                    ws.folders.find((f) => f.id === contextFolder)?.kind ===
-                      "smart"
-                      ? "deleteSmartFolder"
-                      : "deleteFolder",
-                  )
-                }
-              >
-                删除文件夹
-              </MenuRow>
-            </>
-          )}
-          {menu === "app" && (
-            <>
-              <MenuRow
-                icon={<FolderPlus size={18} />}
-                onClick={() => openModal("newFolder")}
-              >
-                新建文件夹
-              </MenuRow>
-              <MenuRow
-                icon={<ArrowDownToLine size={18} />}
-                disabled={archiveBusy || !!recordingTicket.current || record}
-                onClick={() => archive("export")}
-              >
-                导出本地备份
-              </MenuRow>
-              <MenuRow
-                icon={<ArrowUpFromLine size={18} />}
-                disabled={archiveBusy || !!recordingTicket.current || record}
-                onClick={() => archive("import")}
-              >
-                导入本地备份
-              </MenuRow>
-              <MenuRow
-                icon={<SettingsIcon size={18} />}
-                onClick={() => openModal("data")}
-              >
-                数据管理
-              </MenuRow>
-              <MenuRow icon={<SettingsIcon size={18} />} onClick={() => openModal("settings")}>
-                设置
-              </MenuRow>
-            </>
-          )}
-        </div>
-      </>
-    );
-  };
+  const renderMenu = (menuType: string | null = menu) => <AppMenus
+    surface={{ menu: menuType, mobile, target: contextNote ?? noteId, revision: selected?.revision, element: noteMenuElement, point: noteMenuPoint, layoutKey: JSON.stringify([sidebar,view,settings.sidebarWidth,settings.listWidth]),
+      close: format => {if(format)session.closeFormat("outside");else setMenu(null);setContextNote(null);}, action: () => setMenu(null) }}
+    format={{ editor, run: formatCommand, close: () => session.closeFormat("confirm") }}
+    media={{ locked: !!current?.locked, attach: accept => openAttachmentPicker(fileInput.current,accept), camera: () => openAttachmentPicker(cameraInput.current), record: openRecording, ocr: openOcr, draw: openDrawing, notice: setNotice, fail, close: () => setMenu(null) }}
+    table={{ editor, mobile, close: () => setMenu(null) }}
+    note={{ selected, folders: ws.folders, unlocked, mobile, menu: menuType || "", patch, modal: openModal, separate: openSeparate,
+      find: () => setShowFind(true), attachments: openAttachmentBrowser, flush, notice: setNotice, fail, share: shareNote,
+      deleted: () => {setNoteId(null);if(mobile)setPage("notes");}, close: () => setMenu(null) }}
+    view={{ attachmentBrowser, view, sort, settings, separate: !!separate, chooseView: view => {setAttachmentBrowser(false);updateSettings({view});}, attachments: openAttachmentBrowser, update: updateSettings, modal: openModal, close: () => setMenu(null) }}
+    folder={{ folder: ws.folders.find(folder=>folder.id===contextFolder), modal: openModal }}
+    app={{ archiveBusy, recording: !!recordingTicket.current || record, archive: mode => {void archive(mode);}, modal: openModal }}
+  />;
   const previewAuthority = JSON.stringify(accessGate.stamp(noteId || undefined));
-  const imagePreviewOpen = !!imagePreview && imagePreview.owner === noteId && imagePreview.authority === previewAuthority && !quitPending && !syncCover && !synchronizing && !accessSuspended.length && !accessGate.state?.operationId && !modal && !folderForm && (!mobile || page === "editor");
-  const contentOverlay = imagePreviewOpen || attachmentOverlay || modal === "preferences";
-  useLayoutEffect(() => {if(imagePreview && !imagePreviewOpen)setImagePreview(null);}, [imagePreview, imagePreviewOpen]);
+  const imagePreviewOpen = presentation.previewOpen;
+  const contentOverlay = modal === "preferences";
   const nativeScope = JSON.stringify([
     folderId,
     noteId,
     view,
     galleryEditor,
+    attachmentBrowser,
     separate,
     query,
   ]);
   const attachmentBaseAvailable =
+    !attachmentBrowser &&
     !networkSync.frozen(noteId) &&
     !quitPending &&
     !loading &&
@@ -4649,398 +3356,22 @@ function App() {
       void cancelOcr(operation).catch(fail);
     }
   }, [nativeScope, page, editor]);
-  nativeAssert.current = (context, editing = false, overlay = false) => {
-    const live = accessGate.stamp(context.noteId || undefined);
-    if (
-      quitState.current ||
-      networkSync.frozen(context.noteId) ||
-      context.scope !== nativeScope ||
-      context.noteId !== noteId ||
-      JSON.stringify(live) !== JSON.stringify(context.stamp) ||
-      loading ||
-      synchronizing ||
-      accessSuspended.length ||
-      accessGate.state?.operationId ||
-      (context.noteId &&
-        (blockedNotes.current.has(context.noteId) ||
-          accessGate.state?.suspended.includes(context.noteId))) ||
-      (!overlay &&
-        (modal || imagePreviewOpen || attachmentOverlay || folderForm || draw || record || ocrOperation.current))
-    )
-      throw new Error("备忘录或授权状态已改变，请重新执行操作");
-    if (
-      editing &&
-      (!current ||
-        current.deletedAt ||
-        !context.editor ||
-        context.editor !== editor ||
-        nativeEditorOwners.current.get(context.editor) !== context.noteId ||
-        editor.isDestroyed ||
-        !editor.isEditable ||
-        !context.bookmark ||
-        (current.locked && !accessGate.state?.notes[current.id]?.authorized) ||
-        (nativeDocumentVersions.current.get(editor) || 0) !==
-          context.documentVersion)
-    )
-      throw new Error("编辑内容或选区已改变，请重新选择后执行操作");
-  };
-  const nativeSelection = (context: NativeContext) => {
-    nativeAssert.current(context, true);
-    const target = context.editor!;
-    target.view.dispatch(
-      target.state.tr.setSelection(context.bookmark!.resolve(target.state.doc)),
-    );
-    return target;
-  };
-  nativeHandler.current = (intent, context, sequence) => {
-    if (networkSync.frozen(context.noteId) || (intent.kind === "search" && networkSync.frozen())) {
-      void networkSync.cancel().then(() => nativeHandler.current(intent, context, sequence));
-      return;
-    }
-    if (quitState.current) return;
-    if (intent.kind === "search") {
-      setNativeSearchAck(sequence);
-      void changeSearch({ query: intent.phase === "cancel" ? "" : intent.value, searching: intent.phase !== "cancel", resetFilter: true }).catch(fail);
-      return;
-    }
-    if (intent.kind === "windowActivity") return;
-    try {
-      nativeAssert.current(context);
-      const command: MenuCommand | undefined =
-        intent.kind === "menu" ? intent.command : undefined;
-      if (intent.kind === "action") {
-        switch (intent.action) {
-          case "newFolder":
-            setContextFolder(null);
-            openModal("newFolder");
-            return;
-          case "toggleSidebar":
-            changeSidebar((value) => !value);
-            return;
-          case "backToGallery":
-            back();
-            return;
-          case "newNote":
-            void createNote(() => nativeAssert.current(context));
-            return;
-          case "share":
-            void shareTarget(context);
-            return;
-          case "checklist":
-            nativeSelection(context).chain().focus().toggleTaskList().run();
-            return;
-          case "table":
-            nativeSelection(context)
-              .chain()
-              .focus()
-              .insertTable({ rows: 2, cols: 2, withHeaderRow: false })
-              .run();
-            return;
-          default:
-            throw new Error("原生菜单未提供可执行命令");
-        }
-      }
-      switch (command) {
-        case "viewGallery":
-          updateSettings({ view: "gallery" });
-          return;
-        case "viewList":
-          updateSettings({ view: "list" });
-          return;
-        case "sortDefault":
-        case "sortModified":
-          updateSettings({ sort: "updated" });
-          return;
-        case "sortCreated":
-          updateSettings({ sort: "created" });
-          return;
-        case "sortTitle":
-          updateSettings({ sort: "title" });
-          return;
-        case "groupByDate":
-          updateSettings({ groupDates: settings.groupDates === false });
-          return;
-        case "findInNote":
-          nativeSelection(context);
-          setShowFind(true);
-          return;
-        case "moveNote":
-          nativeSelection(context);
-          setContextNote(null);
-          openModal("move");
-          return;
-        case "pinNote":
-        case "deleteNote":
-        case "lockNote": {
-          nativeSelection(context);
-          const validate = () => nativeAssert.current(context, true);
-          if (command === "lockNote" && !current!.locked) {
-            setContextNote(null);
-            openModal("lock");
-            return;
-          }
-          const action =
-            command === "pinNote"
-              ? {
-                  type: "patchNote",
-                  id: context.noteId,
-                  pinned: !current!.pinned,
-                }
-              : {
-                  type: command === "deleteNote" ? "deleteNote" : "removeLock",
-                  id: context.noteId,
-                };
-          void doAction(action, validate)
-            .then(() => {
-              if (command === "deleteNote")
-                setNoteId((id) => (id === context.noteId ? null : id));
-            })
-            .catch(fail);
-          return;
-        }
-        case "choosePhotoVideo":
-        case "attachFile":
-          nativeSelection(context);
-          openAttachmentPicker(
-            fileInput.current,
-            command === "choosePhotoVideo" ? "image/*,video/*" : "",
-            context,
-          );
-          return;
-        case "recognizeImageText":
-          nativeSelection(context);
-          openOcr(context);
-          return;
-        case "recordAudio":
-          nativeSelection(context);
-          openRecording(context);
-          return;
-      }
-      const target = nativeSelection(context);
-      const chain = target.chain().focus();
-      const colors: Partial<Record<MenuCommand, string>> = {
-        colorPurple: "#e8c1f0",
-        colorPink: "#f6bfd4",
-        colorOrange: "#fac69c",
-        colorMint: "#b3dfbd",
-        colorBlue: "#bad6f3",
-      };
-      if (command && colors[command]) {
-        chain.setHighlight({ color: colors[command] }).run();
-        return;
-      }
-      switch (command) {
-        case "bold":
-          chain.toggleBold().run();
-          break;
-        case "italic":
-          chain.toggleItalic().run();
-          break;
-        case "underline":
-          chain.toggleUnderline().run();
-          break;
-        case "strikethrough":
-          chain.toggleStrike().run();
-          break;
-        case "highlight":
-          chain.toggleHighlight({ color: "#e8c1f0" }).run();
-          break;
-        case "colorDefault":
-          chain.unsetHighlight().run();
-          break;
-        case "styleTitle":
-          chain.setHeading({ level: 1 }).run();
-          break;
-        case "styleHeading":
-          chain.setHeading({ level: 2 }).run();
-          break;
-        case "styleSubheading":
-          chain.setHeading({ level: 3 }).run();
-          break;
-        case "styleBody":
-          chain.setParagraph().run();
-          break;
-        case "styleMonospaced":
-          chain.toggleCodeBlock().run();
-          break;
-        case "listBullet":
-          toggleListStyle(target, "bullet");
-          break;
-        case "listDash":
-          toggleListStyle(target, "dash");
-          break;
-        case "listNumber":
-          chain.toggleOrderedList().run();
-          break;
-        case "blockquote":
-          chain.toggleBlockquote().run();
-          break;
-        case "convertTableToText":
-          convertTableToText(target);
-          break;
-        default:
-          throw new Error("此原生命令尚未实现");
-      }
-    } catch (error) {
-      fail(error);
-    }
-  };
-  nativeMenuHandler.current = (command) => {
-    if (networkSync.frozen()) { void networkSync.cancel().then(() => nativeMenuHandler.current(command)); return; }
-    if (quitState.current) return;
-    const context: NativeContext = {
-      noteId,
-      scope: nativeScope,
-      stamp: accessGate.stamp(noteId || undefined),
-      editor,
-      bookmark:
-        editor && !editor.isDestroyed
-          ? editor.state.selection.getBookmark()
-          : null,
-      documentVersion: editor
-        ? nativeDocumentVersions.current.get(editor) || 0
-        : 0,
-    };
-    try {
-      nativeAssert.current(context);
-      switch (command) {
-        case "new_note":
-          nativeHandler.current(
-            { kind: "action", action: "newNote" },
-            context,
-            0,
-          );
-          break;
-        case "new_folder":
-          nativeHandler.current(
-            { kind: "action", action: "newFolder" },
-            context,
-            0,
-          );
-          break;
-        case "sidebar":
-          nativeHandler.current(
-            { kind: "action", action: "toggleSidebar" },
-            context,
-            0,
-          );
-          break;
-        case "gallery":
-          updateSettings({ view: view === "list" ? "gallery" : "list" });
-          break;
-        case "search":
-          focusGlobalSearch();
-          break;
-        case "find_in_note":
-          nativeSelection(context);
-          setShowFind(true);
-          break;
-        case "export":
-          void archive("export");
-          break;
-        case "import":
-          void archive("import");
-          break;
-      }
-    } catch (error) {
-      fail(error);
-    }
-  };
-  useLayoutEffect(() => {
-    if (!native || !macNative) return;
-    const toolbar = new NativeToolbar<NativeContext>(
-      nativeToolbarTransport(),
-      (intent, context, sequence) =>
-        nativeHandler.current(intent, context, sequence),
-      setNativeInfo,
-      fail,
-    );
-    nativeToolbar.current = toolbar;
-    return () => {
-      toolbar.stop();
-      if (nativeToolbar.current === toolbar) nativeToolbar.current = null;
-    };
-  }, [fail]);
-  useLayoutEffect(() => {
-    if (!native || !macNative || !nativeToolbar.current) return;
-    const liveEditor =
-      editor &&
-      !editor.isDestroyed &&
-      nativeEditorOwners.current.get(editor) === noteId
-        ? editor
-        : null;
-    if (liveEditor && !nativeEditorIds.current.has(liveEditor))
-      nativeEditorIds.current.set(liveEditor, ++nativeEditorCounter.current);
-    const available =
-      !quitPending &&
-      !loading &&
-      !synchronizing &&
-      !accessSuspended.length &&
-      !accessGate.state?.operationId &&
-      !modal &&
-      !imagePreviewOpen &&
-      !attachmentOverlay &&
-      !draw &&
-      !record &&
-      !ocr;
-    const editable =
-      available &&
-      !!current &&
-      !current.deletedAt &&
-      !blockedNotes.current.has(current.id) &&
-      !networkSync.frozen(current.id) &&
-      (!current.locked || !!accessGate.state?.notes[current.id]?.authorized) &&
-      !!liveEditor?.isEditable;
-    const stamp = accessGate.stamp(noteId || undefined);
-    nativeToolbar.current.set({
-      searchScope: JSON.stringify([
-        folderId,
-        noteId,
-        view,
-        galleryEditor,
-        separate,
-        page,
-        stamp,
-        liveEditor ? nativeEditorIds.current.get(liveEditor) : null,
-        liveEditor ? nativeDocumentVersions.current.get(liveEditor) || 0 : 0,
-      ]),
-      key: JSON.stringify([
-        nativeScope,
-        contentOverlay,
-        stamp,
-        liveEditor ? nativeEditorIds.current.get(liveEditor) : null,
-        liveEditor ? nativeDocumentVersions.current.get(liveEditor) || 0 : 0,
-      ]),
-      context: {
-        noteId,
-        scope: nativeScope,
-        stamp,
-        editor: liveEditor,
-        bookmark: liveEditor?.state.selection.getBookmark() || null,
-        documentVersion: liveEditor
-          ? nativeDocumentVersions.current.get(liveEditor) || 0
-          : 0,
-      },
-      state: { ...toolbarState({
-        layout: separate
-          ? "independentNote"
-          : view === "gallery"
-            ? galleryEditor
-              ? "galleryExpanded"
-              : "galleryBrowse"
-            : "threeColumn",
-        sidebar,
-        settings,
-        folderTitle: listTitle,
-        folderCount: listed.length,
-        query,
-        searchAck: nativeSearchAck,
-        available,
-        editable,
-        current,
-        editor: liveEditor,
-      }), contentOverlay },
-    });
+  nativePlatform.configure({
+    target: {noteId,scope:nativeScope,current,editor,loading,synchronizing,accessSuspended,modal,folderForm:!!folderForm,draw:!!draw,record,ocr:!!ocrOperation.current,quitPending,
+      quitting:()=>!!quitState.current,blocked:id=>blockedNotes.current.has(id)},
+    projection: {folderId,view,galleryEditor,attachmentBrowser,separate,page,sidebar,settings:{...settings,sidebarWidth:desktopSidebarWidth,listWidth:desktopListWidth},listTitle,count:listed.length,query,contentOverlay},
+    actions: {networkSync,changeSearch,setContextFolder,openModal,changeSidebar,back,createNote,shareTarget,openRecording,openAttachmentBrowser,setAttachmentBrowser,updateSettings,setShowFind,
+      workspace:()=>wsRef.current,doAction,setContextNote,setNoteId,pick:(accept,context)=>openAttachmentPicker(fileInput.current,accept,context),openOcr,openDrawing,focusGlobalSearch,archive:mode=>{void archive(mode);},fail},
+  });
+  const nativeSelection = nativePlatform.selection;
+  useSystemEvents({
+    keys: {quitting:!!quitState.current,folderForm:!!folderForm,ocr:!!ocrOperation.current,mobile,page,attachmentBrowser,modal:!!modal,menu:!!menu,format:formatOpen,drawing:!!draw,find:showFind,searching,searchDraft:searchDraft!==null,
+      create:newNote,globalSearch:focusGlobalSearch,findInNote:()=>setShowFind(true),cancelOcr:()=>{void cancelOcr().catch(fail);},closeModal:()=>setModal(null),closeMenu:()=>setMenu(null),
+      closeFormat:()=>session.closeFormat("escape"),closeDrawing:()=>session.closeDrawing("escape"),closeFind:()=>setShowFind(false),clearSearch:()=>{void changeSearch({searching:false,query:""}).catch(fail);},back},
+    androidBack:navigation.androidBack,nativeMenu:nativePlatform.menu,
+    legacyMenu:{create:newNote,newFolder:()=>openModal("newFolder"),toggleSidebar:()=>changeSidebar(value=>!value),toggleGallery:()=>{setAttachmentBrowser(false);updateSettings({view:view==="list"?"gallery":"list"});},search:focusGlobalSearch,find:()=>setShowFind(true),attachmentBrowser,archive:mode=>{void archive(mode);}},
+    refreshMetadata:()=>{void metadataRefreshRef.current();},saveHidden:()=>{void flush().catch(fail);},closeRequested:handleCloseRequested,
+    detachOwners:()=>{ocrLifecycle.current.detach();recordingLifecycle.current.detach();},fail,drawing:openDrawing,
   });
   // The whole adapter is eliminated by Vite in a normal production build.
   // It captures existing handlers, not a second implementation of the actions.
@@ -5101,8 +3432,9 @@ function App() {
           query,
           searching,
           tagFilter,
-          menu,
+          menu: menu ?? (formatOpen ? "format" : null),
           modal,
+          attachmentBrowser,
           listed: listed.map((n) => n.id),
         },
         save: {
@@ -5153,7 +3485,8 @@ function App() {
         settings,
         synchronization: syncSettingsHandle.current?.inspect() || null,
         preferences: { open: modal === "preferences", tab: preferencesTab },
-        creation: { pending: creatingNote, receipt: createReceipt.current?.id || null, source: createReceipt.current?.source || null, error: creationError, focusTarget: createFocus.current?.id || null },
+        editorSession: session.inspect(),
+        creation: { pending: creatingNote, receipt: createReceipt.current?.id || null, source: createReceipt.current?.source || null, error: creationError, focusTarget: editorSession.pendingFocus?.noteId || null },
         folderForm: !!folderForm,
       }),
       handlers: {
@@ -5167,14 +3500,14 @@ function App() {
         "settings.open": () => openModal("settings"),
         "settings.tab": ({ tab }) => {
           if (modal !== "preferences") throw Error("设置尚未打开");
-          if (tab !== "settings" && tab !== "data") throw Error("未知设置标签");
-          setPreferencesTab(tab);
+          if (!isPreferencesTab(tab)) throw Error("未知设置分类");
+          setPreferencesTab(tab === "home" && !mobile ? "settings" : tab);
         },
         "data.open": () => openModal("data"),
         "image.preview": ({ id }) => {
           const button = document.querySelector<HTMLButtonElement>(`.attachment-node[data-attachment-id="${CSS.escape(id as string)}"] .image-open`);
           if (!button || button.disabled) throw Error("图片尚未可预览");
-          button.click();
+          button.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
         },
         "image.save": ({ id }) => {
           if(!imagePreviewOpen || imagePreview?.id !== id) throw Error("请先打开对应图片预览");
@@ -5189,12 +3522,12 @@ function App() {
           ["sync.pair", "pair"], ["sync.now", "syncNow"], ["sync.stop", "stop"], ["sync.resume", "resume"],
           ["sync.revoke", "revoke"], ["sync.conflicts", "conflicts"], ["sync.resolve", "resolve"],
         ].map(([id, type]) => [id, async (args: Record<string, unknown>) => {
-          if (modal !== "preferences" || preferencesTab !== "data" || !syncSettingsHandle.current) throw Error("请先打开数据总览中的设备同步");
+          if (modal !== "preferences" || preferencesTab !== "sync" || !syncSettingsHandle.current) throw Error("请先打开设备同步");
           await syncSettingsHandle.current.run({ ...args, type } as SyncCommand);
           return syncSettingsHandle.current?.inspect();
         }])),
         ...Object.fromEntries(["open", "scan", "start", "cancel", "inspect"].map((action) => [`appleImport.${action}`, (args: Record<string, unknown>) => {
-          if (modal !== "preferences" || preferencesTab !== "data" || !appleNotesImportHandle.current) throw Error("请先在Mac主窗口打开数据标签");
+          if (modal !== "preferences" || preferencesTab !== "backup" || !appleNotesImportHandle.current) throw Error("请先在Mac主窗口打开导入与备份");
           const handle = appleNotesImportHandle.current;
           if (action === "start") return handle.start(args.keys as string[] | undefined);
           if (action === "open") return handle.open();
@@ -5373,6 +3706,7 @@ function App() {
         "editor.table": ({ action: tableAction }) => {
           const e = editable();
           if (tableAction === "convertToText") return convertTableToText(e);
+          if (tableAction === "convertToTable") return convertTextToTable(e);
           if (tableAction === "insert")
             return e
               .chain()
@@ -5404,6 +3738,9 @@ function App() {
             "sidebarWidth",
             "listWidth",
             "macSidebarVisible",
+            "interfaceFontSize",
+            "editorFontSize",
+            "interfaceDetails",
           ];
           if (Object.keys(patch).some((k) => !keys.includes(k)))
             throw Error("未知设置字段");
@@ -5417,7 +3754,7 @@ function App() {
           assert();
           cancelCreateFocus();
           if (["format", "media", "table"].includes(String(value))) assert(true);
-          if (value === "table" && !editor?.isActive("table"))
+          if (value === "table" && !editor?.isActive("table") && !canConvertTextToTable(editor))
             throw Object.assign(Error("当前选区不在表格中"), {
               code: "UNAVAILABLE",
             });
@@ -5610,7 +3947,7 @@ function App() {
         },
         "drawing.open": () => {
           assert(true);
-          setDraw({ strokes: [] });
+          openDrawing();
         },
       },
     };
@@ -5632,37 +3969,54 @@ function App() {
     };
   }, []);
   const nativeTop = !mobile && !!nativeInfo;
-  previewOpener.current = request => {
-    const attachment = wsRef.current.attachments.find(value => value.id === request.id);
-    if(quitState.current || syncCoverRef.current || accessGate.state?.operationId || accessGate.state?.suspended.length || !noteId || modal || !attachment || attachment.noteId !== noteId || !editor || editor.isDestroyed || !documentReferencesAttachment(editor.getJSON(),attachment) || !request.trigger.isConnected || request.trigger.offsetParent === null || (current?.locked && !accessGate.state?.notes[noteId]?.authorized)) return;
-    setImagePreview({...request,owner:noteId,authority:previewAuthority,session:secureId()});
-  };
+  // The HTML splash exists before React starts. Release it once the restored
+  // selection, editor and (on macOS) native toolbar have committed to the DOM.
+  // This is a one-time handoff; ordinary sync and note switches never recreate it.
+  const startupReady = !loading && workspaceLoaded && !syncCover && !synchronizing &&
+    (!current || current.deletedAt || (current.locked && !unlocked.has(current.id)) || (!!editor && !editor.isDestroyed)) &&
+    (!native || !macNative || mobile || !!nativeInfo || !!error);
+  useEffect(() => {
+    if (!loading && !workspaceLoaded && (syncError || error)) startup.fail();
+    if (!startupReady) return;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => startup.ready());
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [startupReady, loading, workspaceLoaded, syncError, error]);
   return (
+    <NativeMenuContext.Provider value={nativeTop && nativeInfo?.native.popupMenus === true}>
+    <AttachmentMetadataContext.Provider value={ws.attachments}>
     <ImagePreviewContext.Provider value={{open:openImagePreview, closeSource:closePreviewSource}}>
+    <AttachmentTransferContext.Provider value={{paste:pasteAttachments}}>
     <AttachmentMenuProvider
       scope={JSON.stringify([nativeScope, page, previewAuthority, loading, synchronizing, accessSuspended, modal, folderForm, !!draw, quitPending, menu, imagePreviewOpen, networkSync.frozen(noteId)])}
       topInset={nativeTop ? nativeInfo?.native.reservedTop || 0 : 0}
-      onOverlay={setAttachmentOverlay}
       onError={fail}
-      permission={(request: AttachmentMenuRequest) => {
-        const allowed = !quitState.current && !loading && !syncCoverRef.current && !synchronizingRef.current && !accessGate.state?.operationId && !accessGate.state?.suspended.length && !networkSync.frozen(noteId) && !modal && !folderForm && !draw && !menu && !imagePreviewOpen && !!noteId && !!current && !current.deletedAt && !!editor && !editor.isDestroyed && request.editor === editor && (!mobile || page === "editor") && (!current.locked || !!accessGate.state?.notes[noteId]?.authorized) && request.trigger.isConnected && !request.trigger.closest('[hidden], [inert], .access-sync');
-        if (request.temporary) return { allowed: !!allowed, writable: false, saved: false };
-        const attachment = wsRef.current.attachments.find(a => a.id === request.id && a.noteId === noteId && !a.internal);
-        const referenced = !!editor && !!request.id && documentReferencesAttachment(editor.getJSON(), { id: request.id, kind: request.kind });
-        const ticket = recordingTicket.current;
-        const ownedRecording = !!ticket && ticket.batch.operationIds.some(id => attachmentSubmissions.current.get(id)?.attachment?.id === request.id);
-        return { allowed: !!allowed && referenced, writable: !!allowed && referenced && !!editor?.isEditable && !ownedRecording, saved: !!attachment && !ownedRecording };
-      }}
+      permission={presentation.permission}
     >
-    <div className="recording-layout">
+    <div className={`recording-layout ${mobile ? "mobile-controls" : "desktop-controls"}`} style={{
+      ...interfaceDetailVariables(settings.interfaceDetails, mobile),
+      "--ui-font-scale": fontScales(settings).interface,
+      "--ui-scale": mobile ? 1 : metrics.scale,
+    } as CSSProperties}>
     <div
       ref={appSurface}
       inert={quitPending}
-      className={`app ${nativeTop ? "native-toolbar" : ""} ${syncCover || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${menu === "format" && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
+      className={`app ${nativeTop ? "native-toolbar" : ""} ${syncCover || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${attachmentBrowser ? "attachment-browse gallery-browse" : view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${formatOpen && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
       style={
         {
-          "--sidebar-width": `${settings.sidebarWidth || 228}px`,
-          "--list-width": `${settings.listWidth || 280}px`,
+          ...interfaceDetailVariables(settings.interfaceDetails, mobile),
+          "--sidebar-width": `${desktopSidebarWidth}px`,
+          "--list-width": `${desktopListWidth}px`,
+          "--ui-font-scale": fontScales(settings).interface,
+          "--ui-scale": mobile ? 1 : metrics.scale,
+          "--editor-scale": fontScales(settings).editor,
+          "--toolbar-height": `${metrics.toolbarHeight}px`,
+          "--editor-font-scale": fontScales(settings).editor,
           "--format-height": `${formatHeight}px`,
           "--native-top": `${nativeInfo?.native.reservedTop || 0}px`,
         } as React.CSSProperties
@@ -5746,7 +4100,7 @@ function App() {
           }}
         />
       )}
-      <aside className="sidebar">
+      <aside className="sidebar" inert={modal === "preferences"}>
         {!nativeTop && (
           <div
             className="sidebar-toolbar"
@@ -5761,17 +4115,12 @@ function App() {
             )}
             <div className="sidebar-actions">
               <IconButton
-                label="添加文件夹"
-                onClick={() => openModal("newFolder")}
-              >
-                <FolderPlus />
-              </IconButton>
-              <IconButton
                 label="隐藏文件夹"
                 onClick={() => changeSidebar(false)}
               >
                 <PanelLeft />
               </IconButton>
+              <IconButton label="添加文件夹" onClick={() => openModal("newFolder")}><FolderPlus /></IconButton>
             </div>
           </div>
         )}
@@ -5825,7 +4174,7 @@ function App() {
                 className={`folder-row ${tagFilter === undefined && folderId === "all" ? "selected" : ""}`}
                 onClick={() => chooseFolder("all")}
               >
-                <FolderOpen />
+                <Folder />
                 <span>全部备忘录</span>
                 <span className="count">{count("all")}</span>
                 {mobile && <ChevronRight className="chevron" />}
@@ -5845,7 +4194,7 @@ function App() {
               tagFilter !== undefined ||
               filter === "tags") && (
               <section className="tag-browser" aria-label="标签">
-                <div className="account-title">⌄ 标签</div>
+                <div className="account-title">标签</div>
                 <div className="tag-chips">
                   <button
                     className={tagFilter === null ? "selected" : ""}
@@ -5903,16 +4252,17 @@ function App() {
       </aside>
       {!mobile && sidebar && !separate && (
         <ResizeHandle
-          width={settings.sidebarWidth || 228}
-          min={180}
-          max={360}
+          width={desktopSidebarWidth}
+          min={Math.round(220 * metrics.scale)}
+          max={Math.round(360 * metrics.scale)}
           className="sidebar-resize"
-          onChange={(w) => setSettings((s) => ({ ...s, sidebarWidth: w }))}
-          onEnd={(w) => updateSettings({ sidebarWidth: w })}
+          onChange={(w) => setSettings((s) => ({ ...s, sidebarWidth: w / metrics.scale }))}
+          onEnd={(w) => updateSettings({ sidebarWidth: w / metrics.scale })}
         />
       )}
       <section
-        className={`notes-pane ${mobile || view === "gallery" ? "gallery-pane" : ""}`}
+        className={`notes-pane ${mobile || view === "gallery" || attachmentBrowser ? "gallery-pane" : ""}`}
+        inert={modal === "preferences"}
       >
         {!nativeTop && (
           <header
@@ -5921,8 +4271,12 @@ function App() {
           >
             {mobile ? (
               <>
-                {folderId !== "all" ? <button className="back-button" aria-label="返回全部笔记" onClick={() => chooseFolder("all")}><ChevronLeft />笔记</button> : <span />}
+                {folderId !== "all" && <button className="back-button" aria-label="返回全部笔记" onClick={() => chooseFolder("all")}><ChevronLeft /></button>}
+                <h1 className="notes-large-title" title={filter ? "搜索结果" : folderId === "all" ? "笔记" : folderLabel}>
+                  {filter ? "搜索结果" : folderId === "all" ? "笔记" : folderLabel}
+                </h1>
                 <div className="mobile-home-actions">
+                  <IconButton label="显示选项" onClick={() => setMenu(menu === "view" ? null : "view")}><MoreHorizontal /></IconButton>
                   <IconButton label="文件夹" onClick={openFolders}><Folder /></IconButton>
                   <IconButton label="设置" className="mobile-home-settings" onClick={() => openModal("settings")}><SettingsIcon /></IconButton>
                 </div>
@@ -5947,15 +4301,15 @@ function App() {
                 >
                   <MoreHorizontal />
                 </IconButton>
+                <span className="toolbar-divider" aria-hidden="true" />
+                <IconButton label="新建备忘录" className="list-new-note" onClick={newNote} disabled={creatingNote}><SquarePen /></IconButton>
+                {attachmentBrowser && <div className="gallery-header-search">{searchBox}</div>}
               </>
             )}
           </header>
         )}
         {mobile && (
           <>
-            <h1 className="notes-large-title">
-              {filter ? "搜索结果" : folderId === "all" ? "笔记" : folderLabel}
-            </h1>
             <div className="mobile-list-search">
               {searchBox}
               {searching && (
@@ -5975,7 +4329,16 @@ function App() {
             </div>
           </>
         )}
-        <div
+        {attachmentBrowser ? <AttachmentGallery
+          key={JSON.stringify([folderId, tagFilter])}
+          entries={galleryEntries}
+          available={galleryAvailable}
+          scope={JSON.stringify([folderId, query, filter, tagFilter, modal, !!folderForm, accessGate.state?.sessionId, accessGate.state?.epoch])}
+          reveal={revealGalleryAttachment}
+          validate={validGalleryEntry}
+          onError={fail}
+          topInset={nativeTop ? nativeInfo?.native.reservedTop || 0 : 0}
+        /> : <div
           className={`notes-scroll ${mobile ? "mobile-gallery" : view === "gallery" ? "gallery" : ""}`}
           onClick={() => setSwiped(null)}
         >
@@ -6005,14 +4368,20 @@ function App() {
                 !n.locked && highlightQuery
                   ? searchListSnippet(previewText, highlightQuery)
                   : previewText;
+              const thumbnail = !n.locked && !syncCover && !accessSuspended.length && !accessGate.state?.operationId
+                ? ws.attachments.find(a => !a.internal && a.noteId === n.id && (a.kind === "image" || a.mime.startsWith("image/")) && documentReferencesAttachment(n.document, a))
+                : undefined;
               return (
                 <div
                   key={n.id}
                   className={`note-entry ${!mobile && view === "gallery" ? "gallery-entry" : ""}`}
                 >
                   {(index === 0 || groupName(listed[index - 1]) !== group) &&
-                    group && !mobile && <div className="date-section">{group}</div>}
+                    group && !mobile && <div className={`date-section ${group === "置顶" ? "pinned-section" : ""}`}>
+                      {group === "置顶" ? <button className="pinned-heading" onClick={() => setPinnedCollapsed(value => !value)} aria-expanded={!pinnedCollapsed}><Pin size={18} fill="currentColor" /><span>置顶</span><ChevronDown className={pinnedCollapsed ? "collapsed" : ""} size={18} /></button> : group}
+                    </div>}
                   <div
+                    hidden={!mobile && n.pinned && pinnedCollapsed}
                     className={`note-row-wrap ${swiped === n.id ? "swiped" : ""}`}
                   >
                     <div className="swipe-actions">
@@ -6035,7 +4404,8 @@ function App() {
                         onClick={(e) => {
                           e.stopPropagation();
                           setContextNote(n.id);
-                          openModal("move");
+                          setSwiped(null);
+                          setMenu("move");
                         }}
                       >
                         <Folder size={20} />
@@ -6052,7 +4422,7 @@ function App() {
                       </button>
                     </div>
                     <button
-                      className={`note-row ${noteId === n.id ? "selected" : ""}`}
+                      className={`note-row ${thumbnail ? "has-thumbnail" : ""} ${n.pinned ? "pinned-note" : ""} ${noteId === n.id ? "selected" : ""}`}
                       data-note-id={n.id}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -6137,6 +4507,7 @@ function App() {
                           )}
                           {searchListText(n.title, highlightQuery)}
                         </strong>
+                          {!mobile && <time className="note-list-time">{group === "今天" || group === "置顶" ? time : group === "昨天" ? `昨天 ${time}` : new Date(n.updatedAt).toLocaleDateString("zh-CN")}</time>}
                           {!mobile &&
                             recordingIndicator?.phase === "recording" &&
                             recordingIndicator.owner === n.id && (
@@ -6174,6 +4545,11 @@ function App() {
                             )}
                           </span>
                         </div>
+                        {!mobile && !n.locked && (() => {
+                          const audio = ws.attachments.find(a => !a.internal && a.noteId === n.id && a.kind === "audio");
+                          const names = documentTags(n.document);
+                          return audio || names.length ? <div className="note-list-metadata">{audio && <span><AudioLines size={17} />录音</span>}{audio && names.length > 0 && <i />}{names.length > 0 && <span><Tag size={17} />#{names[0]}</span>}</div> : null;
+                        })()}
                         {(folderId === "all" || query) && (
                           <span className="note-folder">
                             <Folder size={11} />
@@ -6184,6 +4560,7 @@ function App() {
                           </span>
                         )}
                       </div>
+                      {thumbnail && <NoteThumbnail key={`${thumbnail.id}:${imageAuthority(n.id)}`} id={thumbnail.id} kind={thumbnail.kind} />}
                       </>}
                     </button>
                   </div>
@@ -6191,7 +4568,7 @@ function App() {
               );
             })
           )}
-        </div>
+        </div>}
         {mobile ? <button type="button" className="mobile-add-note" aria-label="新建备忘录" aria-busy={creatingNote} onClick={newNote} disabled={creatingNote || loading || !workspaceLoaded}><Plus aria-hidden="true" /></button> : <div className="notes-footer">
           <span>{listed.length}个备忘录</span>
           <IconButton label="新建备忘录" onClick={newNote}>
@@ -6201,16 +4578,17 @@ function App() {
       </section>
       {!mobile && !separate && (
         <ResizeHandle
-          width={settings.listWidth || 280}
-          min={220}
-          max={440}
+          width={desktopListWidth}
+          min={Math.round(280 * metrics.scale)}
+          max={Math.round(480 * metrics.scale)}
           className="list-resize"
-          onChange={(w) => setSettings((s) => ({ ...s, listWidth: w }))}
-          onEnd={(w) => updateSettings({ listWidth: w })}
+          onChange={(w) => setSettings((s) => ({ ...s, listWidth: w / metrics.scale }))}
+          onEnd={(w) => updateSettings({ listWidth: w / metrics.scale })}
         />
       )}
       <main
         className="editor-pane"
+        inert={modal === "preferences"}
         onTouchStart={(e) => {
           if (e.touches[0].clientX < 24)
             swipe.current = {
@@ -6230,7 +4608,7 @@ function App() {
           swipe.current = null;
         }}
       >
-        {!nativeTop && (
+        {!nativeTop && !attachmentBrowser && (
           <header
             className="editor-header"
             data-tauri-drag-region={native && !mobile ? "deep" : undefined}
@@ -6272,17 +4650,7 @@ function App() {
                   >
                     <MoreHorizontal />
                   </IconButton>
-                  {current && (
-                    <button
-                      className="mobile-editor-done icon-button"
-                      aria-label="完成编辑"
-                      onClick={() => {
-                        void finishEditing().catch(fail);
-                      }}
-                    >
-                      <Check />
-                    </button>
-                  )}
+
                 </div>
               </>
             ) : (
@@ -6298,31 +4666,28 @@ function App() {
                 )}
                 <IconButton
                   label="新建备忘录"
-                  className="new-note-top glass-button"
+                  className={`new-note-top glass-button ${!separate && view === "list" ? "toolbar-duplicate-compose" : ""}` }
                   onClick={newNote}
                 >
                   <SquarePen />
                 </IconButton>
-                {current && (
-                  <>
-                    <div className="glass-group">{tools()}</div>
-                    <div className="glass-group share-group">
-                      <IconButton label="共享" onClick={shareNote}>
-                        <Share />
-                      </IconButton>
-                      <IconButton
-                        label="更多"
-                        onClick={() => {
-                          setContextNote(null);
-                          setMenu(menu === "more" ? null : "more");
-                        }}
-                      >
-                        <MoreHorizontal />
-                      </IconButton>
-                    </div>
-                  </>
-                )}
-                <div className="desktop-search">{searchBox}</div>
+                <DesktopToolbar
+                  hitScale={parseInterfaceDetails(settings.interfaceDetails).desktopHitScale / 100}
+                  iconScale={parseInterfaceDetails(settings.interfaceDetails).iconScale / 100}
+                  scale={metrics.scale}
+                  actions={current ? ([
+                    { id: "format", label: "格式", icon: <ListMinus />, expanded: formatOpen, onClick: openFormat },
+                    { id: "checklist", label: "核对清单", icon: <ListTodo />, active: editor?.isActive("taskList"), onClick: () => { editor?.chain().focus().toggleTaskList().run(); } },
+                    { id: "table", label: "表格", icon: <Table />, expanded: menu === "table", onClick: openTableMenu },
+                    { id: "attachment", label: "添加附件", icon: <Paperclip />, expanded: menu === "media", onClick: () => setMenu(menu === "media" ? null : "media") },
+                    { id: "recordAudio", label: "录音", icon: <Mic />, disabled: !editor?.isEditable, onClick: () => openRecording() },
+                    { id: "insertTag", label: "标签", icon: <Hash />, disabled: !editor?.isEditable, onClick: () => { editor?.chain().focus().insertContent("#").run(); } },
+                    { id: "share", label: "共享", icon: <Share />, onClick: shareNote },
+                    { id: "more", label: "更多", icon: <MoreHorizontal />, expanded: menu === "more", onClick: () => { setContextNote(null); setMenu(menu === "more" ? null : "more"); } },
+                  ] satisfies DesktopToolbarAction[]) : []}
+                  search={searchBox}
+                  settings={<IconButton label="设置" className="desktop-settings" onClick={() => openModal("settings")}><SettingsIcon /></IconButton>}
+                />
               </>
             )}
           </header>
@@ -6399,6 +4764,7 @@ function App() {
               note={note}
               active={note.id === noteId}
               blocked={
+                draw?.editor === editors.get(note.id) ||
                 quitPending ||
                 synchronizingRef.current ||
                 !!accessGate.state?.operationId ||
@@ -6412,11 +4778,7 @@ function App() {
               onReady={onReady}
               onDate={() => setNotice(`创建于 ${fmtDate(note.createdAt)}`)}
               onFocus={(focused) => {
-                setEditing(focused);
-                if (focused && mobile && menu === "format") {
-                  setMenu(null);
-                  formatTarget.current = null;
-                }
+                session.bodyFocus(focused);
               }}
             />
           );
@@ -6425,7 +4787,7 @@ function App() {
           current &&
           !current.deletedAt &&
           (!current.locked || unlocked.has(current.id)) &&
-          menu !== "format" &&
+          !formatOpen &&
           (editing ? tools() : tools(true))}
         {saving > 0 && (
           <div className="save-status" aria-live="polite">
@@ -6433,6 +4795,7 @@ function App() {
           </div>
         )}
       </main>
+      {formatOpen && renderMenu("format")}
       {renderMenu()}
       {folderForm && (
         <SmartFolderForm
@@ -6476,21 +4839,23 @@ function App() {
           tab={preferencesTab}
           onTab={setPreferencesTab}
           onClose={() => setModal(null)}
+          onBack={preferencesBack}
+          synchronization={<SyncSettings active={preferencesTab === "sync"} onHandle={handle => { syncSettingsHandle.current = handle; }} />}
           settings={settings}
-          onSettings={updateSettings}
+          onSettings={patch => updateSettings(patch, true)}
           onCloseLocks={() => patch({type: "closeLocks"})}
           returnFocus={preferencesTrigger.current}
           data={<DataManagement
-            active={preferencesTab === "data"}
+            active={preferencesTab === "data" || preferencesTab === "backup"}
+            section={preferencesTab === "backup" ? "backup" : "storage"}
             appleImport={native && macNative && !separate ? <AppleNotesImport
-              active={preferencesTab === "data"}
+              active={preferencesTab === "backup"}
               blocked={archiveBusy || !!recordingTicket.current || record || !!accessSuspended.length || !!accessGate.state?.operationId}
               accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}:${ws.access?.operationId || ""}`}
               onPrepare={prepareAppleImport}
               onFinish={finishAppleImport}
               onHandle={(handle) => { appleNotesImportHandle.current = handle; }}
             /> : undefined}
-            synchronization={<SyncSettings active={preferencesTab === "data"} onHandle={(handle) => { syncSettingsHandle.current = handle; }} />}
             onHandle={(handle) => { dataManagementHandle.current = handle; }}
             onArchive={archive}
             backupBlocked={!!recordingTicket.current || record}
@@ -6503,7 +4868,7 @@ function App() {
       {modal && modal !== "preferences" && (
         <div
           className="modal-backdrop"
-          onClick={() => (modal === "paper" ? closePaper() : setModal(null))}
+          onClick={() => setModal(null)}
         >
           <div
             className={`modal modal-${modal}`}
@@ -6630,107 +4995,30 @@ function App() {
                 </button>
               </>
             )}
-            {modal === "paper" && (
-              <>
-                <div className="sheet-top">
-                  <button onClick={closePaper}>取消</button>
-                  <strong>横线与网格</strong>
-                  <span />
-                </div>
-                <p className="paper-description">
-                  更改此备忘录中手写输入的横线或网格样式。
-                </p>
-                <div className="paper-options">
-                  {paperOptions.map((p) => (
-                    <button
-                      key={p}
-                      aria-label={paperOptionLabels[p]}
-                      data-paper-style={p}
-                      className={`paper-option ${p === "plain" ? "paper-blank" : ""} paper-${p} ${current?.paperStyle === p ? "selected" : ""}`}
-                      onClick={async () => {
-                        if (current?.paperStyle === p) {
-                          closePaper();
-                          return;
-                        }
-                        await patch({
-                          type: "patchNote",
-                          id: current?.id,
-                          paperStyle: p,
-                        });
-                        closePaper();
-                      }}
-                    >
-                      {mobile && p !== "plain" && (
-                        <span
-                          className="paper-preview"
-                          aria-hidden="true"
-                          style={
-                            {
-                              "--paper-preview-url": `url("${paperPreviewUrls[p]}")`,
-                            } as PaperPreviewStyle
-                          }
-                        />
-                      )}
-                      {current?.paperStyle === p && (
-                        <span className="paper-check">
-                          <Check size={15} />
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-            {modal === "attachments" && (
-              <>
-                <h2>附件</h2>
-                <div className="attachment-browser">
-                  {ws.attachments.filter((a) => !a.internal && a.noteId === current?.id)
-                    .length ? (
-                    ws.attachments
-                      .filter((a) => !a.internal && a.noteId === current?.id)
-                      .map((a) => (
-                        <div key={a.id}>
-                          <FileText size={24} />
-                          <span>{a.displayName}</span>
-                          <small>{Math.ceil(a.size / 1024)} KB</small>
-                        </div>
-                      ))
-                  ) : (
-                    <p>无附件</p>
-                  )}
-                </div>
-                  <button
-                    className="modal-cancel"
-                    onClick={() => setModal(null)}
-                  >
-                  完成
-                </button>
-              </>
-            )}
+
           </div>
         </div>
       )}
       {draw && (
         <DrawingPanel
           initial={draw.strokes}
-          paperStyle={current?.paperStyle || "plain"}
-          onCancel={() => setDraw(null)}
-          onDone={(strokes) => {
-            if (draw.pos !== undefined)
-              editor
-                ?.chain()
-                .focus()
-                .setNodeSelection(draw.pos)
-                .updateAttributes("drawing", { strokes })
-                .run();
-            else
-              editor
-                ?.chain()
-                .focus()
-                .insertContent({ type: "drawing", attrs: { strokes } })
-                .run();
-            setDraw(null);
+          paperStyle={ws.notes.find(n => n.id === draw.noteId)?.paperStyle || "plain"}
+          onCancel={() => session.closeDrawing("cancel")}
+          onDone={(strokes, paperStyle) => {
+            const target = draw.editor;
+            if (target.isDestroyed || target !== editor || draw.noteId !== noteId || imageAuthority(draw.noteId) !== draw.authority || !accessGate.state?.notes[draw.noteId]?.authorized || accessGate.state?.operationId || synchronizingRef.current || target.state.doc !== draw.originalDocument || (draw.pos !== undefined && target.state.doc.nodeAt(draw.pos) !== draw.originalNode)) {
+              session.closeDrawing("access"); fail(Error("原备忘录已改变，请重新打开速绘")); return;
+            }
+            editorGate.activate(target, false);
+            restoreEditor(target, true);
+            if (!target.isEditable) { session.closeDrawing("cancel"); return; }
+            if (draw.pos !== undefined) target.view.dispatch(target.state.tr.setNodeMarkup(draw.pos, undefined, { ...draw.originalNode!.attrs, strokes }));
+            else {
+              const selection = draw.bookmark.resolve(target.state.doc);
+              target.commands.insertContentAt(selection instanceof NodeSelection ? selection.to : { from: selection.from, to: selection.to }, { type: "drawing", attrs: { strokes } });
+            }
+            session.closeDrawing("confirm");
+            if (paperStyle !== wsRef.current.notes.find(n => n.id === draw.noteId)?.paperStyle) void patch({ type: "patchNote", id: draw.noteId, paperStyle });
           }}
         />
       )}
@@ -6800,7 +5088,10 @@ function App() {
       )}
     </div>
     </AttachmentMenuProvider>
+    </AttachmentTransferContext.Provider>
     </ImagePreviewContext.Provider>
+    </AttachmentMetadataContext.Provider>
+    </NativeMenuContext.Provider>
   );
 }
 function SearchSuggestions({
@@ -6884,387 +5175,5 @@ function ResizeHandle({
     />
   );
 }
-function FormatControls({
-  editor,
-  mobile,
-  run,
-  onClose,
-}: {
-  editor: Editor | null;
-  mobile: boolean;
-  run: (command: (editor: Editor) => unknown) => void;
-  onClose: () => void;
-}) {
-  const [colors, setColors] = useState(false);
-  const marks = [
-    {
-      label: "粗体",
-      mark: "bold",
-      icon: <Bold />,
-      command: (e: Editor) => e.commands.toggleBold(),
-    },
-    {
-      label: "斜体",
-      mark: "italic",
-      icon: <Italic />,
-      command: (e: Editor) => e.commands.toggleItalic(),
-    },
-    {
-      label: "下划线",
-      mark: "underline",
-      icon: <Underline />,
-      command: (e: Editor) => e.commands.toggleUnderline(),
-    },
-    {
-      label: "删除线",
-      mark: "strike",
-      icon: <Strikethrough />,
-      command: (e: Editor) => e.commands.toggleStrike(),
-    },
-  ];
-  const markRow = (
-    <div className="format-mark-row">
-      <div className="format-control-group">
-        {marks.map((x) => (
-          <IconButton
-            key={x.mark}
-            label={x.label}
-            active={editor?.isActive(x.mark)}
-            onClick={() => run(x.command)}
-          >
-            {x.icon}
-          </IconButton>
-        ))}
-      </div>
-      <div className="format-control-group format-color-group">
-        <IconButton
-          label="高亮"
-          active={editor?.isActive("highlight")}
-          onClick={() =>
-            run((e) => e.commands.toggleHighlight({ color: "#e8c1f0" }))
-          }
-        >
-          <Highlighter />
-        </IconButton>
-        <button
-          className="format-color"
-          aria-label="选择高亮颜色"
-          aria-expanded={colors}
-          onClick={() => setColors(!colors)}
-        >
-          <span />
-        </button>
-      </div>
-    </div>
-  );
-  const styles = (
-    <div className="type-styles">
-      {[
-        { label: "标题", level: 1 },
-        { label: "小标题", level: 2 },
-        { label: "副标题", level: 3 },
-        { label: "正文", level: 0 },
-        { label: "等宽样式", level: -1 },
-      ].map(({ label, level }) => {
-        const active =
-          level > 0
-            ? editor?.isActive("heading", { level })
-            : editor?.isActive(level === 0 ? "paragraph" : "codeBlock");
-        return (
-          <button
-            key={label}
-            className={`format-style style-${level} ${active ? "selected" : ""}`}
-            aria-pressed={!!active}
-            onClick={() =>
-              run((e) =>
-                level > 0
-                  ? e.commands.setHeading({ level: level as 1 | 2 | 3 })
-                  : level === 0
-                    ? e.commands.setParagraph()
-                    : e.commands.toggleCodeBlock(),
-              )
-            }
-          >
-            {label}
-            {!mobile && active && <Check size={16} />}
-          </button>
-        );
-      })}
-    </div>
-  );
-  const lists = [
-    {
-      label: "项目符号列表",
-      icon: <List />,
-      active: editor?.isActive("bulletList", { listStyle: "bullet" }),
-      command: (e: Editor) => toggleListStyle(e, "bullet"),
-    },
-    {
-      label: "短划线列表",
-      icon: <ListMinus />,
-      active: editor?.isActive("bulletList", { listStyle: "dash" }),
-      command: (e: Editor) => toggleListStyle(e, "dash"),
-    },
-    {
-      label: "编号列表",
-      icon: <ListOrdered />,
-      active: editor?.isActive("orderedList"),
-      command: (e: Editor) => e.commands.toggleOrderedList(),
-    },
-  ];
-  const indent = (e: Editor, inward: boolean) =>
-    inward
-      ? e.commands.sinkListItem(
-          e.isActive("taskItem") ? "taskItem" : "listItem",
-        )
-      : e.commands.liftListItem(
-          e.isActive("taskItem") ? "taskItem" : "listItem",
-        );
-  return (
-    <div className="format-content">
-      {mobile && (
-        <div className="format-panel-header">
-          <strong>格式</strong>
-          <button aria-label="关闭格式" onClick={onClose}>
-            <X size={18} />
-          </button>
-        </div>
-      )}
-      {!mobile && markRow}
-      {styles}
-      {mobile && markRow}
-      {colors && (
-        <div className="highlight-colors">
-          {["#e8c1f0", "#f6bfd4", "#fac69c", "#fae780", "#b3dfbd"].map(
-            (color) => (
-              <button
-                key={color}
-                aria-label={`高亮 ${color}`}
-                style={{ background: color }}
-                onClick={() =>
-                  run((e) => e.commands.toggleHighlight({ color }))
-                }
-              />
-            ),
-          )}
-        </div>
-      )}
-      <div className="format-list-row">
-        <div className="format-control-group">
-          {lists.map((x) =>
-            mobile ? (
-              <IconButton
-                key={x.label}
-                label={x.label}
-                active={x.active}
-                onClick={() => run(x.command)}
-              >
-                {x.icon}
-              </IconButton>
-            ) : (
-              <MenuRow
-                key={x.label}
-                icon={x.icon}
-                checked={x.active}
-                onClick={() => run(x.command)}
-              >
-                {x.label}
-              </MenuRow>
-            ),
-          )}
-        </div>
-        <div className="format-control-group format-indent-group">
-          <IconButton
-            label="减少缩进"
-            onClick={() => run((e) => indent(e, false))}
-          >
-            <IndentDecrease />
-          </IconButton>
-          <IconButton
-            label="增加缩进"
-            onClick={() => run((e) => indent(e, true))}
-          >
-            <IndentIncrease />
-          </IconButton>
-        </div>
-        {mobile ? (
-          <IconButton
-            label="块引用"
-            active={editor?.isActive("blockquote")}
-            onClick={() => run((e) => e.commands.toggleBlockquote())}
-          >
-            <Quote />
-          </IconButton>
-        ) : (
-          <MenuRow
-            icon={<Quote />}
-            checked={editor?.isActive("blockquote")}
-            onClick={() => run((e) => e.commands.toggleBlockquote())}
-          >
-            块引用
-          </MenuRow>
-        )}
-      </div>
-    </div>
-  );
-}
-function DrawingPanel({
-  initial,
-  paperStyle,
-  onCancel,
-  onDone,
-}: {
-  initial: DrawingStroke[];
-  paperStyle: string;
-  onCancel: () => void;
-  onDone: (s: DrawingStroke[]) => void;
-}) {
-  const [strokes, setStrokes] = useState(initial);
-  const [undone, setUndone] = useState<DrawingStroke[]>([]);
-  const [color, setColor] = useState("#1c1c1e");
-  const [width, setWidth] = useState(4);
-  const [tool, setTool] = useState<"pen" | "marker" | "eraser">("pen");
-  const active = useRef<DrawingStroke | null>(null);
-  const svg = useRef<SVGSVGElement>(null);
-  const coords = (e: ReactPointerEvent<SVGSVGElement>): [number, number] => {
-    const r = svg.current!.getBoundingClientRect();
-    return [
-      ((e.clientX - r.left) * 600) / r.width,
-      ((e.clientY - r.top) * 300) / r.height,
-    ];
-  };
-  return (
-    <div className="drawing-overlay">
-      <header>
-        <button onClick={onCancel}>取消</button>
-        <div>
-          <IconButton
-            label="撤销笔画"
-            disabled={!strokes.length}
-            onClick={() => {
-              setUndone((v) => [...v, strokes[strokes.length - 1]]);
-              setStrokes((v) => v.slice(0, -1));
-            }}
-          >
-            <Undo2 />
-          </IconButton>
-          <IconButton
-            label="重做笔画"
-            disabled={!undone.length}
-            onClick={() => {
-              setStrokes((v) => [...v, undone[undone.length - 1]]);
-              setUndone((v) => v.slice(0, -1));
-            }}
-          >
-            <Redo2 />
-          </IconButton>
-        </div>
-        <button onClick={() => onDone(strokes)}>完成</button>
-      </header>
-      <div className={`drawing-surface paper-${paperStyle}`}>
-        <svg
-          ref={svg}
-          viewBox="0 0 600 300"
-          preserveAspectRatio="none"
-          aria-label="绘图画布"
-          onPointerDown={(e) => {
-            const stroke: DrawingStroke = {
-              tool,
-              color,
-              width:
-                tool === "marker"
-                  ? width * 4
-                  : tool === "eraser"
-                    ? width * 5
-                    : width,
-              points: [coords(e)],
-            };
-            active.current = stroke;
-            setStrokes((v) => [...v, stroke]);
-            setUndone([]);
-            e.currentTarget.setPointerCapture(e.pointerId);
-          }}
-          onPointerMove={(e) => {
-            if (!active.current) return;
-            active.current.points.push(coords(e));
-            setStrokes((v) => [...v]);
-          }}
-          onPointerUp={() => (active.current = null)}
-          onPointerCancel={() => (active.current = null)}
-        >
-          {strokes.map((s, i) => (
-            <polyline
-              key={i}
-              points={s.points.map((p) => p.join(",")).join(" ")}
-              fill="none"
-              stroke={s.tool === "eraser" ? "var(--paper)" : s.color}
-              strokeWidth={s.width}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              opacity={s.tool === "marker" ? 0.35 : 1}
-            />
-          ))}
-        </svg>
-      </div>
-      <footer>
-        <div className="drawing-instruments">
-          <IconButton
-            label="笔"
-            active={tool === "pen"}
-            onClick={() => setTool("pen")}
-          >
-            <PenTool />
-          </IconButton>
-          <IconButton
-            label="荧光笔"
-            active={tool === "marker"}
-            onClick={() => setTool("marker")}
-          >
-            <Highlighter />
-          </IconButton>
-          <IconButton
-            label="橡皮"
-            active={tool === "eraser"}
-            onClick={() => setTool("eraser")}
-          >
-            <Eraser />
-          </IconButton>
-          <input
-            type="range"
-            aria-label="笔画粗细"
-            min={1}
-            max={12}
-            value={width}
-            onChange={(e) => setWidth(+e.target.value)}
-          />
-        </div>
-        <div className="drawing-colors">
-          {[
-            "#1c1c1e",
-            "#636366",
-            "#007aff",
-            "#ff3b30",
-            "#ffcc00",
-            "#34c759",
-            "#af52de",
-          ].map((c) => (
-            <button
-              key={c}
-              aria-label={`颜色 ${c}`}
-              className={color === c ? "selected" : ""}
-              style={{ background: c }}
-              onClick={() => setColor(c)}
-            />
-          ))}
-          <input
-            aria-label="自定义颜色"
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          />
-        </div>
-      </footer>
-    </div>
-  );
-}
+
 export default App;

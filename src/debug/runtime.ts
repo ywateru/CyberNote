@@ -66,11 +66,20 @@ function validate(command: Command, value: unknown): DebugArgs {
       "sidebarWidth",
       "listWidth",
       "macSidebarVisible",
+      "interfaceFontSize",
+      "editorFontSize",
+      "interfaceDetails",
     ]);
     if (!Object.keys(patch).length) invalid("Empty settings patch");
     for (const [key, v] of Object.entries(patch)) {
+      if (key === "interfaceDetails") {
+        try { parseInterfaceDetails(v); } catch { invalid("Invalid interface details"); }
+        continue;
+      }
       const values: Record<string, readonly unknown[]> = {
         theme: ["system", "light", "dark"],
+        interfaceFontSize: ["tiny", "small", "medium", "large", "huge"],
+        editorFontSize: ["tiny", "small", "medium", "large", "huge"],
         view: ["list", "gallery"],
         sort: ["updated", "created", "title"],
       };
@@ -450,3 +459,4 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
     if (window.__NOTES_DEBUG__ === api) delete window.__NOTES_DEBUG__;
   };
 }
+import { parseInterfaceDetails } from "../interface-details";

@@ -1,0 +1,916 @@
+/* CyberNote desktop: geometry follows the supplied 1560 × 960 window.
+   Mobile keeps its own layout; persisted user column widths remain adjustable. */
+.desktop {
+  --sidebar: #f3f3f6;
+  --paper: #fff;
+  --ink: #19191c;
+  --secondary: #7d7e88;
+  --tertiary: #7d7e88;
+  --line: #e0e1e8;
+  --accent: #d99300;
+  --selection: #fff1cc;
+  --desktop-list: #f9f9fb;
+  --desktop-toolbar: #f3f3f6;
+  --desktop-selected-folder: #e8e8eb;
+  --desktop-tag: #e1e1e5;
+  font-size: calc(18px * var(--ui-font-scale, 1));
+}
+.dark .desktop {
+  --sidebar: #262629;
+  --paper: #1e1e20;
+  --ink: #f2f2f4;
+  --secondary: #a1a1aa;
+  --tertiary: #a1a1aa;
+  --line: #3c3c42;
+  --accent: #edac21;
+  --selection: #534422;
+  --desktop-list: #242426;
+  --desktop-toolbar: #2a2a2d;
+  --desktop-selected-folder: #3a3a3f;
+  --desktop-tag: #3c3c41;
+}
+.desktop .sidebar {
+  margin: 0;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--sidebar);
+}
+.desktop .sidebar-toolbar,
+.desktop .notes-header,
+.desktop .editor-header {
+  height: var(--toolbar-height, 68px);
+  min-height: var(--toolbar-height, 68px);
+  border-bottom: 1px solid var(--line);
+  background: var(--desktop-toolbar);
+  box-shadow: none;
+}
+.desktop.native-toolbar .sidebar {
+  padding-top: var(--native-top);
+}
+.desktop .sidebar-toolbar {
+  padding: 0 calc(20px * var(--ui-scale, 1)) 0 calc(100px * var(--ui-scale, 1));
+}
+.desktop .sidebar-actions {
+  gap: calc(16px * var(--ui-scale, 1));
+}
+.desktop .sidebar-toolbar .icon-button {
+  width: calc(44px * var(--ui-scale, 1));
+  height: calc(42px * var(--ui-scale, 1));
+}
+.desktop .sidebar-toolbar .icon-button svg {
+  width: calc(25px * var(--ui-scale, 1));
+  height: calc(25px * var(--ui-scale, 1));
+}
+.desktop .preview-lights {
+  left: calc(20px * var(--ui-scale, 1));
+  top: calc((var(--toolbar-height) - 14px) / 2);
+  gap: 6px;
+}
+.desktop .preview-lights i {
+  width: 14px;
+  height: 14px;
+  border: 0;
+}
+.desktop .preview-badge {
+  bottom: calc(6px * var(--ui-scale, 1));
+  left: calc(16px * var(--ui-scale, 1));
+  font-size: calc(10px * var(--ui-font-scale, 1));
+}
+.desktop .folder-scroll {
+  padding: calc(18px * var(--ui-scale, 1)) calc(12px * var(--ui-scale, 1))
+    calc(28px * var(--ui-scale, 1));
+}
+.desktop .folder-group {
+  padding: 0;
+}
+.desktop .folder-row {
+  height: calc(44px * var(--ui-scale, 1));
+  padding: 0 calc(12px * var(--ui-scale, 1)) 0 calc(14px * var(--ui-scale, 1));
+  gap: calc(12px * var(--ui-scale, 1));
+  border-radius: calc(11px * var(--ui-scale, 1));
+  font-size: calc(18px * var(--ui-font-scale, 1));
+  line-height: calc(24px * var(--ui-scale, 1));
+  font-weight: 500;
+}
+.desktop .folder-row > svg {
+  width: calc(23px * var(--ui-scale, 1));
+  height: calc(23px * var(--ui-scale, 1));
+  stroke-width: 1.65;
+}
+.desktop .folder-row > span:first-of-type,
+.desktop .folder-row .folder-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.desktop .folder-row .count {
+  font-size: calc(17px * var(--ui-font-scale, 1));
+  font-weight: 400;
+}
+.desktop .folder-row.selected {
+  color: var(--accent);
+  background: var(--desktop-selected-folder);
+  font-weight: 500;
+}
+.desktop .folder-row > .folder-disclosure {
+  position: absolute;
+  left: 1px;
+  width: calc(16px * var(--ui-scale, 1));
+  height: calc(28px * var(--ui-scale, 1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  flex: none;
+  color: var(--ink);
+}
+.desktop .folder-disclosure + svg {
+  margin-left: calc(5px * var(--ui-scale, 1));
+}
+.desktop .folder-disclosure svg {
+  transition: transform 0.15s;
+}
+.desktop .collapsed {
+  transform: rotate(-90deg);
+}
+.desktop .account-title {
+  font-size: calc(17px * var(--ui-font-scale, 1));
+  line-height: calc(24px * var(--ui-scale, 1));
+  font-weight: 400;
+  padding: calc(24px * var(--ui-scale, 1)) calc(10px * var(--ui-scale, 1))
+    calc(8px * var(--ui-scale, 1));
+  color: #62636e;
+}
+.dark .desktop .account-title {
+  color: var(--secondary);
+}
+.desktop .quick-group .folder-row {
+  height: calc(44px * var(--ui-scale, 1));
+}
+.desktop .tag-browser {
+  margin-top: calc(30px * var(--ui-scale, 1));
+}
+.desktop .tag-browser .account-title {
+  padding: calc(10px * var(--ui-scale, 1)) calc(6px * var(--ui-scale, 1))
+    calc(14px * var(--ui-scale, 1));
+  font-weight: 500;
+}
+.desktop .tag-chips {
+  padding: 0 calc(12px * var(--ui-scale, 1));
+  gap: calc(15px * var(--ui-scale, 1)) calc(18px * var(--ui-scale, 1));
+}
+.desktop .tag-chips button {
+  font-size: calc(17px * var(--ui-font-scale, 1));
+  line-height: calc(23px * var(--ui-scale, 1));
+  padding: calc(4px * var(--ui-scale, 1)) calc(11px * var(--ui-scale, 1));
+  border-radius: calc(10px * var(--ui-scale, 1));
+  background: var(--desktop-tag);
+}
+.desktop .tag-chips button.selected {
+  background: var(--selection);
+  color: var(--accent);
+}
+.desktop .folder-footer {
+  display: none;
+}
+.desktop .notes-pane {
+  background: var(--desktop-list);
+}
+.desktop .notes-header {
+  align-items: center;
+  padding: 0 calc(14px * var(--ui-scale, 1)) 0 calc(26px * var(--ui-scale, 1));
+  gap: calc(12px * var(--ui-scale, 1));
+}
+.desktop .folder-heading {
+  padding-top: 0;
+  line-height: 1.4;
+}
+.desktop .folder-heading strong {
+  font-size: calc(18px * var(--ui-font-scale, 1));
+  font-weight: 600;
+}
+.desktop .folder-heading span {
+  font-size: calc(15px * var(--ui-font-scale, 1));
+}
+.desktop .notes-header > .icon-button {
+  background: transparent;
+  box-shadow: none;
+  border-radius: calc(7px * var(--ui-scale, 1));
+  margin: 0;
+  width: calc(40px * var(--ui-scale, 1));
+  height: calc(40px * var(--ui-scale, 1));
+}
+.desktop .notes-header > .icon-button svg {
+  width: calc(24px * var(--ui-scale, 1));
+  height: calc(24px * var(--ui-scale, 1));
+}
+.desktop .toolbar-divider {
+  width: 1px;
+  height: calc(27px * var(--ui-scale, 1));
+  background: #d7d8e0;
+  flex-shrink: 0;
+}
+.desktop .notes-scroll:not(.gallery) {
+  padding: calc(14px * var(--ui-scale, 1)) calc(8px * var(--ui-scale, 1))
+    calc(32px * var(--ui-scale, 1));
+}
+.desktop .notes-scroll:not(.gallery) .date-section,
+.desktop.native-toolbar:not(.gallery-browse):not(.gallery-edit):not(.separate)
+  .notes-scroll:not(.gallery)
+  > .note-entry:first-child
+  > .date-section {
+  margin: 0 calc(18px * var(--ui-scale, 1));
+  padding: calc(16px * var(--ui-scale, 1)) 0 calc(14px * var(--ui-scale, 1));
+  height: calc(62px * var(--ui-scale, 1));
+  font-size: calc(20px * var(--ui-font-scale, 1));
+  line-height: calc(28px * var(--ui-scale, 1));
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+}
+.desktop .notes-scroll:not(.gallery) .note-entry:first-child .date-section {
+  height: calc(54px * var(--ui-scale, 1));
+  padding-top: calc(8px * var(--ui-scale, 1));
+}
+.desktop
+  .notes-scroll:not(.gallery)
+  .note-entry:has(.date-section):not(:first-child) {
+  margin-top: calc(24px * var(--ui-scale, 1));
+}
+.desktop .pinned-heading {
+  display: flex;
+  align-items: center;
+  gap: calc(10px * var(--ui-scale, 1));
+  width: 100%;
+  text-align: left;
+}
+.desktop .pinned-heading > svg:first-child {
+  color: var(--accent);
+}
+.desktop .pinned-heading > svg:last-child {
+  margin-left: auto;
+  color: var(--secondary);
+}
+.desktop .notes-scroll:not(.gallery) .note-row-wrap {
+  margin: 0 0 0 calc(4px * var(--ui-scale, 1));
+  border-radius: calc(12px * var(--ui-scale, 1));
+}
+.desktop .notes-scroll:not(.gallery) .note-row {
+  min-height: calc(90px * var(--ui-scale, 1));
+  padding: calc(17px * var(--ui-scale, 1)) calc(18px * var(--ui-scale, 1))
+    calc(17px * var(--ui-scale, 1)) calc(22px * var(--ui-scale, 1));
+  border-radius: calc(12px * var(--ui-scale, 1));
+  background: transparent;
+}
+.desktop .notes-scroll:not(.gallery) .note-row-wrap::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: calc(18px * var(--ui-scale, 1));
+  right: calc(10px * var(--ui-scale, 1));
+  height: 1px;
+  background: var(--line);
+}
+.desktop .notes-scroll:not(.gallery) .note-row-wrap:has(.selected)::after {
+  display: none;
+}
+.desktop .notes-scroll:not(.gallery) .note-row.selected {
+  background: var(--selection);
+}
+.desktop .notes-scroll:not(.gallery) .note-row.selected::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(5px * var(--ui-scale, 1));
+  background: var(--accent);
+}
+.desktop .notes-scroll:not(.gallery) .note-row strong {
+  font-size: calc(19px * var(--ui-font-scale, 1));
+  font-weight: 600;
+  line-height: calc(28px * var(--ui-scale, 1));
+}
+.desktop .notes-scroll:not(.gallery) .note-row-title {
+  gap: calc(10px * var(--ui-scale, 1));
+  align-items: baseline;
+}
+.desktop .note-list-time {
+  color: var(--secondary);
+  font-size: calc(15px * var(--ui-font-scale, 1));
+  font-weight: 400;
+  white-space: nowrap;
+}
+.desktop .note-snippet {
+  margin-top: calc(2px * var(--ui-scale, 1));
+  font-size: calc(17px * var(--ui-font-scale, 1));
+  line-height: calc(25px * var(--ui-scale, 1));
+  color: var(--secondary);
+}
+.desktop .note-snippet .note-time {
+  display: none;
+}
+.desktop .snippet-text {
+  color: var(--secondary);
+}
+.desktop .pin-marker {
+  display: none;
+}
+.desktop .note-folder {
+  font-size: calc(16px * var(--ui-font-scale, 1));
+  line-height: calc(23px * var(--ui-scale, 1));
+  gap: calc(9px * var(--ui-scale, 1));
+  margin-top: calc(9px * var(--ui-scale, 1));
+}
+.desktop .note-folder svg {
+  width: calc(19px * var(--ui-scale, 1));
+  height: calc(19px * var(--ui-scale, 1));
+}
+.desktop .note-list-metadata {
+  display: flex;
+  align-items: center;
+  gap: calc(12px * var(--ui-scale, 1));
+  color: var(--secondary);
+  font-size: calc(16px * var(--ui-font-scale, 1));
+  line-height: calc(24px * var(--ui-scale, 1));
+  margin-top: calc(9px * var(--ui-scale, 1));
+  overflow: hidden;
+  white-space: nowrap;
+}
+.desktop .note-list-metadata span {
+  display: flex;
+  align-items: center;
+  gap: calc(8px * var(--ui-scale, 1));
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.desktop .note-list-metadata i {
+  height: calc(17px * var(--ui-scale, 1));
+  width: 1px;
+  background: #d8d0b9;
+}
+.desktop .note-row:has(.note-list-metadata) .note-folder {
+  display: none;
+}
+.desktop .editor-header {
+  padding: 0 calc(14px * var(--ui-scale, 1)) 0 calc(16px * var(--ui-scale, 1));
+  gap: calc(12px * var(--ui-scale, 1));
+}
+.desktop .editor-header .glass-group,
+.desktop .editor-header .glass-button {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+}
+.desktop .editor-header .glass-group {
+  padding: 0;
+  height: calc(44px * var(--ui-scale, 1));
+}
+.desktop .editor-header .glass-group .icon-button {
+  width: calc(50px * var(--ui-scale, 1));
+  height: calc(42px * var(--ui-scale, 1));
+  border-radius: calc(7px * var(--ui-scale, 1));
+}
+.desktop .editor-header .icon-button svg {
+  width: calc(24px * var(--ui-scale, 1));
+  height: calc(24px * var(--ui-scale, 1));
+  stroke-width: 1.65;
+}
+.desktop .toolbar-duplicate-compose {
+  display: none;
+}
+.desktop .editor-header .format-button {
+  font-size: calc(18px * var(--ui-font-scale, 1));
+  height: calc(42px * var(--ui-scale, 1));
+  padding: 0 calc(10px * var(--ui-scale, 1));
+  margin-right: calc(4px * var(--ui-scale, 1));
+}
+.desktop .toolbar-labeled-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(8px * var(--ui-scale, 1));
+  height: calc(42px * var(--ui-scale, 1));
+  padding: 0 calc(12px * var(--ui-scale, 1));
+  white-space: nowrap;
+  border-radius: calc(7px * var(--ui-scale, 1));
+  font-size: calc(18px * var(--ui-font-scale, 1));
+}
+.desktop .toolbar-labeled-button svg {
+  width: calc(24px * var(--ui-scale, 1));
+  height: calc(24px * var(--ui-scale, 1));
+}
+.desktop .share-group {
+  border-left: 1px solid var(--line) !important;
+  padding-left: calc(10px * var(--ui-scale, 1)) !important;
+}
+.desktop .desktop-search {
+  min-width: calc(140px * var(--ui-scale, 1));
+  max-width: calc(300px * var(--ui-scale, 1));
+  margin-left: auto;
+}
+.desktop .desktop-search .search-box {
+  height: calc(40px * var(--ui-scale, 1));
+  border: 1px solid var(--line);
+  border-radius: calc(22px * var(--ui-scale, 1));
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  padding: 0 calc(14px * var(--ui-scale, 1));
+  box-shadow: none;
+  gap: calc(10px * var(--ui-scale, 1));
+}
+.desktop .desktop-search .search-box input {
+  font-size: calc(17px * var(--ui-font-scale, 1));
+}
+.desktop .desktop-search .search-box > svg {
+  width: calc(20px * var(--ui-scale, 1));
+  height: calc(20px * var(--ui-scale, 1));
+}
+.desktop .desktop-settings {
+  width: calc(42px * var(--ui-scale, 1));
+  height: calc(42px * var(--ui-scale, 1));
+}
+.desktop .editor-scroll {
+  padding: 0 calc(56px * var(--ui-scale, 1)) calc(60px * var(--ui-scale, 1));
+}
+.desktop .note-date {
+  font-size: calc(18px * var(--ui-font-scale, 1));
+  line-height: calc(26px * var(--ui-scale, 1));
+  margin: calc(22px * var(--ui-scale, 1)) auto calc(32px * var(--ui-scale, 1));
+  color: #898a96;
+}
+.desktop .note-document {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.desktop .note-document .tiptap {
+  line-height: 1.65;
+}
+.desktop .tiptap h1 {
+  font-size: calc(32px * var(--editor-font-scale, 1));
+  line-height: 1.4;
+  margin-bottom: calc(18px * var(--editor-scale, 1));
+  letter-spacing: 0;
+}
+.desktop .tiptap h2 {
+  font-size: calc(23px * var(--editor-font-scale, 1));
+  line-height: 1.5;
+  margin: calc(30px * var(--editor-scale, 1)) 0
+    calc(16px * var(--editor-scale, 1));
+}
+.desktop .tiptap h3 {
+  font-size: calc(20px * var(--editor-font-scale, 1));
+}
+.desktop .resize-handle {
+  top: var(--toolbar-height, 68px);
+}
+.desktop .search-zero-section {
+  margin: 0 calc(18px * var(--ui-scale, 1));
+  font-size: calc(18px * var(--ui-font-scale, 1));
+}
+.desktop .popover {
+  font-size: calc(14px * var(--ui-font-scale, 1));
+}
+/* Menus are attached to the new continuous toolbar geometry. */
+.desktop:not(.native-toolbar) .menu-format,
+.desktop:not(.native-toolbar) .menu-table,
+.desktop:not(.native-toolbar) .menu-media,
+.desktop:not(.native-toolbar) .menu-more,
+.desktop:not(.native-toolbar) .menu-view {
+  top: calc(var(--toolbar-height) + 4px);
+}
+@media (max-width: 1450px) {
+  .desktop .editor-header {
+    gap: calc(4px * var(--ui-scale, 1));
+    padding-left: calc(8px * var(--ui-scale, 1));
+    padding-right: calc(8px * var(--ui-scale, 1));
+  }
+  .desktop .editor-header .glass-group .icon-button {
+    width: calc(38px * var(--ui-scale, 1));
+  }
+  .desktop .toolbar-labeled-button {
+    padding: 0 calc(8px * var(--ui-scale, 1));
+  }
+  .desktop .toolbar-labeled-button span {
+    display: none;
+  }
+  .desktop .share-group {
+    padding-left: calc(4px * var(--ui-scale, 1)) !important;
+  }
+  .desktop .editor-scroll {
+    padding-left: calc(36px * var(--ui-scale, 1));
+    padding-right: calc(36px * var(--ui-scale, 1));
+  }
+  .desktop .editor-header .format-button {
+    padding: 0 calc(6px * var(--ui-scale, 1));
+  }
+}
+@media (min-width: 700px) and (max-width: 1100px) {
+  .desktop .sidebar-toolbar {
+    padding-right: calc(8px * var(--ui-scale, 1));
+  }
+  .desktop .sidebar-actions {
+    gap: 0;
+  }
+  .desktop .notes-header {
+    gap: calc(4px * var(--ui-scale, 1));
+    padding-left: calc(18px * var(--ui-scale, 1));
+    padding-right: calc(8px * var(--ui-scale, 1));
+  }
+  .desktop .folder-row {
+    gap: calc(8px * var(--ui-scale, 1));
+  }
+  .desktop .folder-row .count {
+  }
+  .desktop .notes-scroll:not(.gallery) .note-row {
+    padding-left: calc(18px * var(--ui-scale, 1));
+    padding-right: calc(12px * var(--ui-scale, 1));
+  }
+  .desktop .note-list-time {
+  }
+  .desktop .notes-scroll:not(.gallery) .note-row strong {
+  }
+  .desktop .note-snippet {
+  }
+  .desktop .editor-header .glass-group .icon-button {
+    width: calc(32px * var(--ui-scale, 1));
+  }
+  .desktop .editor-header .icon-button svg {
+    width: calc(21px * var(--ui-scale, 1));
+    height: calc(21px * var(--ui-scale, 1));
+  }
+  .desktop .toolbar-labeled-button {
+    padding: 0 calc(5px * var(--ui-scale, 1));
+  }
+  .desktop .editor-header .format-button {
+    margin: 0;
+  }
+  .desktop .desktop-search {
+    min-width: calc(100px * var(--ui-scale, 1));
+  }
+  .desktop .desktop-search .search-box {
+    padding: 0 calc(8px * var(--ui-scale, 1));
+  }
+  .desktop .desktop-search .search-box input {
+  }
+  .desktop .desktop-settings {
+    width: calc(32px * var(--ui-scale, 1));
+  }
+  .desktop .editor-scroll {
+    padding-left: calc(28px * var(--ui-scale, 1));
+    padding-right: calc(28px * var(--ui-scale, 1));
+  }
+}
+.desktop .note-row:not(.pinned-note) .note-folder,
+.desktop .pinned-note .note-list-time {
+  display: none;
+}
+.desktop .note-tag {
+  display: inline-block;
+  padding: calc(3px * var(--editor-scale, 1))
+    calc(12px * var(--editor-scale, 1));
+  border-radius: calc(12px * var(--editor-scale, 1));
+  background: #fff3d8;
+  color: var(--accent);
+  font-size: calc(17px * var(--editor-font-scale, 1));
+  line-height: calc(25px * var(--editor-scale, 1));
+}
+.dark .desktop .note-tag {
+  background: #4c3d21;
+}
+.desktop .note-document .tiptap {
+  font-size: calc(18px * var(--editor-font-scale, 1));
+}
+.desktop.native-toolbar:not(.separate) .note-document .tiptap > p,
+.desktop.native-toolbar:not(.separate)
+  .note-document
+  .tiptap:has(> p):not(:has(> :not(p)))
+  > p {
+  font-size: calc(18px * var(--editor-font-scale, 1));
+  line-height: 1.65;
+  min-height: 1.65em;
+}
+.desktop .tiptap ul[data-type="taskList"] li {
+  gap: calc(20px * var(--editor-scale, 1));
+  padding: calc(4px * var(--editor-scale, 1)) 0;
+  align-items: center;
+}
+.desktop .tiptap ul[data-type="taskList"] li > label {
+  margin: 0 0 0 calc(3px * var(--editor-scale, 1));
+}
+.desktop .tiptap ul[data-type="taskList"] li > label input {
+  width: calc(24px * var(--editor-scale, 1));
+  height: calc(24px * var(--editor-scale, 1));
+  border-radius: calc(5px * var(--editor-scale, 1));
+  border: 1.4px solid #898a93;
+}
+.desktop .tiptap ul[data-type="taskList"] li > label input:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.desktop .tiptap ul[data-type="taskList"] li > label input:checked::after {
+  width: calc(10px * var(--editor-scale, 1));
+  height: calc(6px * var(--editor-scale, 1));
+  left: calc(5px * var(--editor-scale, 1));
+  top: calc(5px * var(--editor-scale, 1));
+  border-width: 2px;
+}
+.audio-waveform-row {
+  display: none;
+}
+.desktop .audio-card {
+  max-width: none;
+  width: 100%;
+  min-height: calc(146px * var(--editor-scale, 1));
+  border: 1px solid var(--line);
+  border-radius: calc(14px * var(--editor-scale, 1));
+  background: var(--desktop-list);
+}
+.desktop .audio-summary {
+  padding: calc(12px * var(--editor-scale, 1))
+    calc(18px * var(--editor-scale, 1)) 0;
+  gap: calc(18px * var(--editor-scale, 1));
+}
+.desktop .audio-title-toggle {
+  order: 1;
+}
+.desktop .audio-summary .audio-title-toggle {
+  margin: 0;
+  padding: 0;
+  gap: 1px;
+}
+.desktop .audio-summary strong {
+  font-size: calc(20px * var(--editor-font-scale, 1));
+  line-height: calc(29px * var(--editor-scale, 1));
+}
+.desktop .audio-summary .audio-recorded-at {
+  display: block;
+  font-size: calc(17px * var(--editor-font-scale, 1));
+  line-height: calc(25px * var(--editor-scale, 1));
+}
+.desktop .audio-summary .audio-duration-desktop {
+  display: none;
+}
+.desktop .audio-summary > .audio-play-toggle {
+  order: 0;
+  width: calc(64px * var(--editor-scale, 1));
+  height: calc(64px * var(--editor-scale, 1));
+  border: calc(10px * var(--editor-scale, 1)) solid var(--paper);
+  border-radius: 50%;
+  padding: 0;
+  justify-content: center;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0;
+  gap: 0;
+  flex-shrink: 0;
+}
+.desktop .audio-play-toggle svg {
+  width: calc(21px * var(--editor-scale, 1));
+  height: calc(21px * var(--editor-scale, 1));
+}
+.desktop .audio-summary > .audio-expand {
+  order: 2;
+  align-self: flex-start;
+  margin-top: calc(3px * var(--editor-scale, 1));
+  font-size: 0;
+  width: calc(30px * var(--editor-scale, 1));
+  height: calc(30px * var(--editor-scale, 1));
+}
+.desktop .audio-summary > .audio-expand::after {
+  content: "•••";
+  letter-spacing: calc(3px * var(--editor-scale, 1));
+  font-size: calc(14px * var(--editor-font-scale, 1));
+}
+.desktop .audio-waveform-row {
+  display: flex;
+  padding: calc(4px * var(--editor-scale, 1))
+    calc(20px * var(--editor-scale, 1)) calc(12px * var(--editor-scale, 1));
+  gap: calc(40px * var(--editor-scale, 1));
+  align-items: center;
+  color: var(--secondary);
+  font-size: calc(17px * var(--editor-font-scale, 1));
+  line-height: calc(24px * var(--editor-scale, 1));
+}
+.desktop .audio-waveform-row > span {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.desktop .audio-waveform-track {
+  flex: 1;
+  min-width: 0;
+  height: calc(48px * var(--editor-scale, 1));
+  position: relative;
+}
+.desktop .audio-waveform-track svg {
+  width: 100%;
+  height: calc(48px * var(--editor-scale, 1));
+  display: block;
+}
+.desktop .audio-waveform-unplayed {
+  fill: #c9c9d0;
+}
+.desktop .audio-waveform-played {
+  fill: var(--accent);
+}
+.desktop .audio-waveform-track input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.desktop .audio-waveform-track:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: calc(2px * var(--editor-scale, 1));
+  border-radius: calc(4px * var(--editor-scale, 1));
+}
+.desktop .audio-detail {
+  font-size: calc(14px * var(--editor-font-scale, 1));
+  padding: 0 calc(22px * var(--editor-scale, 1))
+    calc(18px * var(--editor-scale, 1));
+  gap: calc(14px * var(--editor-scale, 1));
+}
+.desktop .tiptap pre,
+.desktop .tiptap .file-card strong {
+  font-size: 1em;
+}
+.desktop .tiptap .file-card small {
+  font-size: 0.8em;
+}
+/* One density unit drives type, icons, hit targets and whitespace. Hairlines stay 1px. */
+.desktop .icon-button {
+  width: calc(36px * var(--ui-scale));
+  height: calc(36px * var(--ui-scale));
+  border-radius: calc(8px * var(--ui-scale));
+}
+.desktop .icon-button svg {
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+}
+.desktop .pinned-heading svg {
+  width: calc(18px * var(--ui-scale));
+  height: calc(18px * var(--ui-scale));
+}
+.desktop .note-list-metadata svg {
+  width: calc(17px * var(--ui-scale));
+  height: calc(17px * var(--ui-scale));
+}
+.desktop .folder-disclosure svg {
+  width: calc(14px * var(--ui-scale));
+  height: calc(14px * var(--ui-scale));
+}
+.desktop .preview-lights {
+  top: calc((var(--toolbar-height) - 14px) / 2);
+}
+.desktop .editor-header {
+  gap: 0;
+  padding: 0 calc(14px * var(--ui-scale)) 0 calc(16px * var(--ui-scale));
+}
+.desktop-toolbar {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: calc(12px * var(--ui-scale));
+  height: 100%;
+}
+.desktop-toolbar-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.desktop .desktop-tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(8px * var(--ui-scale));
+  height: calc(42px * var(--ui-scale));
+  min-width: 0;
+  flex-shrink: 0;
+  border-radius: calc(7px * var(--ui-scale));
+  font-size: calc(18px * var(--ui-font-scale));
+  white-space: nowrap;
+}
+.desktop .desktop-tool svg,
+.desktop-tool-overflow summary svg {
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+}
+.desktop .desktop-tool.active {
+  color: var(--accent);
+}
+.desktop .desktop-tool.share-start {
+  position: relative;
+}
+.desktop .desktop-tool.share-start::before {
+  content: "";
+  position: absolute;
+  height: calc(27px * var(--ui-scale));
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  background: var(--line);
+}
+.desktop .desktop-toolbar .desktop-search {
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: none;
+  margin-left: auto;
+}
+.desktop .desktop-toolbar .desktop-settings {
+  width: calc(42px * var(--ui-scale));
+  height: calc(42px * var(--ui-scale));
+}
+.desktop .desktop-toolbar .desktop-settings svg {
+  width: calc(24px * var(--ui-scale));
+  height: calc(24px * var(--ui-scale));
+}
+.desktop .desktop-tool-overflow {
+  position: relative;
+  flex-shrink: 0;
+}
+.desktop-tool-overflow summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(42px * var(--ui-scale));
+  height: calc(42px * var(--ui-scale));
+  border-radius: calc(7px * var(--ui-scale));
+  cursor: pointer;
+  list-style: none;
+}
+.desktop-tool-overflow summary::-webkit-details-marker {
+  display: none;
+}
+.desktop-tool-overflow summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.desktop .search-box input:focus-visible {
+  outline: none;
+}
+.desktop .desktop-search .search-box {
+  height: calc(40px * var(--ui-scale));
+  border: 1px solid var(--search-border, var(--line));
+  border-radius: calc(20px * var(--ui-scale));
+  padding: 0 calc(14px * var(--ui-scale));
+  gap: calc(10px * var(--ui-scale));
+  box-shadow: none;
+  background: var(--desktop-search-fill);
+}
+.desktop {
+  --desktop-search-fill: #fafafd;
+  --desktop-search-hover: #b6b7c2;
+}
+.dark .desktop {
+  --desktop-search-fill: #222225;
+  --desktop-search-hover: #71717d;
+}
+.desktop .desktop-search .search-box:hover {
+  --search-border: var(--desktop-search-hover);
+}
+.desktop .desktop-search .search-box:focus-within {
+  --search-border: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.desktop .desktop-search .search-box input {
+  font-size: calc(17px * var(--ui-font-scale));
+  line-height: 1.3;
+}
+.desktop .desktop-search .search-box > svg {
+  width: calc(20px * var(--ui-scale));
+  height: calc(20px * var(--ui-scale));
+}
+.desktop .desktop-search .search-box button {
+  width: calc(18px * var(--ui-scale));
+  height: calc(18px * var(--ui-scale));
+}
+.desktop .desktop-search .search-box button svg {
+  width: calc(12px * var(--ui-scale));
+  height: calc(12px * var(--ui-scale));
+}
+.desktop .menu-row {
+  font-size: calc(18px * var(--ui-font-scale));
+  min-height: calc(36px * var(--ui-scale));
+  line-height: 1.4;
+  padding: calc(5px * var(--ui-scale)) calc(10px * var(--ui-scale));
+  gap: calc(8px * var(--ui-scale));
+}
+.desktop .menu-row svg {
+  width: calc(20px * var(--ui-scale));
+  height: calc(20px * var(--ui-scale));
+}
+
+/* Attachment thumbnails sit beside the complete text column, as in Notes. */
+.note-thumbnail { flex: none; display: block; width: calc(74px * var(--ui-scale, 1)); height: calc(74px * var(--ui-scale, 1)); border-radius: 5px; overflow: hidden; }
+.note-thumbnail img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.desktop .notes-scroll:not(.gallery) .note-row.has-thumbnail { display: flex; align-items: center; gap: calc(14px * var(--ui-scale, 1)); }
+.note-row.has-thumbnail .note-row-content { flex: 1; min-width: 0; }
+.gallery-entry .note-thumbnail { position: absolute; right: 12px; top: 12px; }

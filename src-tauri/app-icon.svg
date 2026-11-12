@@ -1,1 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024"><defs><linearGradient id="paper" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#f1f1f1"/></linearGradient><linearGradient id="yellow" x2="0" y2="1"><stop stop-color="#ffdc49"/><stop offset="1" stop-color="#f5c627"/></linearGradient></defs><rect x="72" y="60" width="880" height="904" rx="180" fill="#000" opacity=".08"/><rect x="72" y="52" width="880" height="904" rx="180" fill="url(#paper)"/><path d="M252 52h520c99 0 180 81 180 180v124H72V232c0-99 81-180 180-180Z" fill="url(#yellow)"/><g stroke="#c8c8c8" stroke-width="4"><path d="M72 356h880M72 486h880M72 616h880M72 746h880M89 876h846"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <title>CyberNote</title>
+  <defs>
+    <linearGradient id="body" x1="210" y1="100" x2="820" y2="940" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#303238"/>
+      <stop offset="0.5" stop-color="#26292f"/>
+      <stop offset="1" stop-color="#191c22"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="512" y1="80" x2="512" y2="944" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#64666b" stop-opacity="0.7"/>
+      <stop offset="0.42" stop-color="#34363c"/>
+      <stop offset="1" stop-color="#080a0d"/>
+    </linearGradient>
+    <linearGradient id="eye-rim" x1="512" y1="270" x2="512" y2="478" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#51535a"/>
+      <stop offset="0.5" stop-color="#16181c"/>
+      <stop offset="1" stop-color="#42444b"/>
+    </linearGradient>
+    <radialGradient id="left-pupil" cx="354" cy="352" r="83" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2d3037"/>
+      <stop offset="0.7" stop-color="#23262d"/>
+      <stop offset="1" stop-color="#101319"/>
+    </radialGradient>
+    <radialGradient id="right-pupil" cx="642" cy="352" r="83" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2d3037"/>
+      <stop offset="0.7" stop-color="#23262d"/>
+      <stop offset="1" stop-color="#101319"/>
+    </radialGradient>
+  </defs>
+  <path d="M319 80H705C731 80 750 91 764 114L981 454C995 476 996 496 984 518L784 895C765 929 744 944 709 944H315C282 944 258 931 241 900L44 532C28 505 28 485 42 460L258 120C276 91 291 80 319 80Z" fill="url(#body)" stroke="#101216" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M319 80H705C731 80 750 91 764 114L981 454C995 476 996 496 984 518L784 895C765 929 744 944 709 944H315C282 944 258 931 241 900L44 532C28 505 28 485 42 460L258 120C276 91 291 80 319 80Z" stroke="url(#edge)" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="268" y="274" width="202" height="202" fill="#111318" fill-opacity="0.65"/>
+  <rect x="556" y="274" width="202" height="202" fill="#111318" fill-opacity="0.65"/>
+  <rect x="268" y="272" width="202" height="202" fill="#111318" stroke="url(#eye-rim)" stroke-width="2"/>
+  <rect x="556" y="272" width="202" height="202" fill="#111318" stroke="url(#eye-rim)" stroke-width="2"/>
+  <rect x="276" y="280" width="186" height="186" fill="#ffffff"/>
+  <rect x="564" y="280" width="186" height="186" fill="#ffffff"/>
+  <rect x="310" y="314" width="118" height="118" fill="url(#left-pupil)" stroke="#17191e" stroke-width="2"/>
+  <rect x="598" y="314" width="118" height="118" fill="url(#right-pupil)" stroke="#17191e" stroke-width="2"/>
+  <rect x="314" y="318" width="110" height="110" stroke="#565961" stroke-opacity="0.35" stroke-width="1.5"/>
+  <rect x="602" y="318" width="110" height="110" stroke="#565961" stroke-opacity="0.35" stroke-width="1.5"/>
+</svg>

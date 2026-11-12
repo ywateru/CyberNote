@@ -1,11 +1,23 @@
 #import <AppKit/AppKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "format.h"
+#import "menu.h"
 
 typedef void (*NotesUIEvent)(void *, const char *);
 typedef void (*NotesUIRelease)(void *);
 static NSMutableDictionary<NSString *, id> *controllers;
 static NSString * const NotesUIActionKey = @"notes-ui-action";
+
+// Independent symbol and interaction geometry. System menus remain AppKit-owned.
+static CGFloat notesFontScale(NSDictionary *state) { return state[@"fontScale"]?[state[@"fontScale"] doubleValue]:1; }
+static CGFloat notesIconScale(NSDictionary *state) { return state[@"iconScale"]?[state[@"iconScale"] doubleValue]:1; }
+static CGFloat notesHitScale(NSDictionary *state) { return state[@"hitScale"]?[state[@"hitScale"] doubleValue]:1; }
+static CGFloat notesButtonSize(NSDictionary *state) {
+    CGFloat s=notesFontScale(state), hit=notesHitScale(state);
+    return MAX(MAX(42*s*hit,28*hit),21*s*notesIconScale(state)+8);
+}
+static CGFloat notesToolbarHeight(NSDictionary *state) { return ceil(MAX(68*notesFontScale(state),notesButtonSize(state)+12)); }
+static CGFloat notesSlot(NSDictionary *state, CGFloat base) { return MAX(base*notesFontScale(state)*notesHitScale(state),notesButtonSize(state)); }
 
 static char *encoded(NSDictionary *value) {
     NSData *data=[NSJSONSerialization dataWithJSONObject:value options:0 error:nil];
@@ -20,13 +32,13 @@ static NSDictionary *decode(const char *json) {
 static NSString *labelFor(NSString *action,BOOL tableFocused) {
     NSDictionary *labels=@{@"newFolder":@"新建文件夹",@"toggleSidebar":@"显示或隐藏文件夹",@"viewOptions":@"文件夹显示选项",
         @"backToGallery":@"返回画廊",@"newNote":@"新建备忘录",@"format":@"格式",@"checklist":@"核对清单",
-        @"table":tableFocused?@"将表格转换为文本":@"插入表格",@"attachment":@"添加附件",@"share":@"共享备忘录",@"more":@"更多备忘录操作"};
+        @"table":@"表格",@"attachment":@"添加附件",@"share":@"共享备忘录",@"more":@"更多备忘录操作",@"settings":@"设置",@"recordAudio":@"录音",@"insertTag":@"标签"};
     return labels[action];
 }
 static NSString *symbolFor(NSString *action,BOOL tableFocused) {
     NSDictionary *symbols=@{@"newFolder":@"folder.badge.plus",@"toggleSidebar":@"sidebar.left",@"viewOptions":@"ellipsis",
         @"backToGallery":@"chevron.left",@"newNote":@"square.and.pencil",@"checklist":@"checklist",
-        @"table":tableFocused?@"tablecells.badge.ellipsis":@"tablecells",@"attachment":@"paperclip",@"share":@"square.and.arrow.up",@"more":@"ellipsis"};
+        @"table":tableFocused?@"tablecells.badge.ellipsis":@"tablecells",@"attachment":@"paperclip",@"share":@"square.and.arrow.up",@"more":@"ellipsis",@"settings":@"gearshape",@"recordAudio":@"mic",@"insertTag":@"number"};
     return symbols[action];
 }
 static NSColor *sidebarTintColor(void) {
@@ -41,13 +53,29 @@ static NSColor *sidebarTintColor(void) {
 
 @interface NotesUIRoot : NSView
 @property BOOL reserveTrafficLights;
+@property BOOL toolbarSurface;
+@property CGFloat density;
+@property CGFloat trafficWidth;
+@property CGFloat sidebarBoundary;
+@property NSArray<NSNumber *> *separatorPositions;
 @end
 @implementation NotesUIRoot
 - (BOOL)isFlipped {return YES;}
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];if(!self.toolbarSurface)return;
+    BOOL dark=[[self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua,NSAppearanceNameDarkAqua]] isEqualToString:NSAppearanceNameDarkAqua];
+    [(dark?[NSColor colorWithWhite:0.165 alpha:1]:[NSColor colorWithSRGBRed:0.953 green:0.953 blue:0.965 alpha:1]) setFill];NSRectFill(self.bounds);
+    [(dark?[NSColor colorWithWhite:0.235 alpha:1]:[NSColor colorWithSRGBRed:0.878 green:0.882 blue:0.91 alpha:1]) setFill];
+    NSRectFill(NSMakeRect(0,NSHeight(self.bounds)-1,NSWidth(self.bounds),1));
+    if(self.sidebarBoundary>0)NSRectFill(NSMakeRect(self.sidebarBoundary-1,0,1,NSHeight(self.bounds)));
+    for(NSNumber *x in self.separatorPositions)NSRectFill(NSMakeRect(x.doubleValue,(NSHeight(self.bounds)-27*self.density)/2,1,27*self.density));
+}
+
+- (void)viewDidChangeEffectiveAppearance {[super viewDidChangeEffectiveAppearance];self.needsDisplay=YES;}
 - (BOOL)acceptsFirstResponder {return NO;}
 - (NSView *)hitTest:(NSPoint)point {
     NSPoint own=[self convertPoint:point fromView:self.superview];
-    if(self.reserveTrafficLights && own.x<88) return nil;
+    if(self.reserveTrafficLights && own.x<self.trafficWidth) return nil;
     return [super hitTest:point];
 }
 - (void)mouseDown:(NSEvent *)event { if(event.clickCount==2)[self.window zoom:self];else [self.window performWindowDragWithEvent:event]; }
@@ -55,17 +83,9 @@ static NSColor *sidebarTintColor(void) {
 // These offsets calibrate visible content only; the control frames and menu anchors stay put.
 // Values use the top-left coordinate convention of the retained 2x toolbar measurements.
 static NSPoint contentOffsetFor(NSString *action) {
-    if([action isEqual:@"newFolder"])return NSMakePoint(1.5,-1);
-    if([action isEqual:@"toggleSidebar"])return NSMakePoint(0.75,-0.25);
-    if([action isEqual:@"newNote"])return NSMakePoint(0,-1.5);
-    if([action isEqual:@"format"])return NSMakePoint(2.625,0);
-    if([action isEqual:@"checklist"] || [action isEqual:@"table"])return NSMakePoint(4.75,0);
-    if([action isEqual:@"attachment"])return NSMakePoint(2.25,0);
-    if([action isEqual:@"share"])return NSMakePoint(-2,-1.75);
-    if([action isEqual:@"more"])return NSMakePoint(2.25,-0.5);
-    return NSZeroPoint;
+    (void)action;return NSZeroPoint;
 }
-@interface NotesUIButtonCell : NSButtonCell
+@interface NotesUIButtonCell : NotesUIFeedbackButtonCell
 @property NSPoint notesContentOffset;
 @end
 @implementation NotesUIButtonCell
@@ -79,7 +99,7 @@ static NSPoint contentOffsetFor(NSString *action) {
     return [super drawTitle:title withFrame:[self contentFrame:frame inView:view] inView:view];
 }
 @end
-@interface NotesUIButton : NSButton
+@interface NotesUIButton : NotesUIFeedbackButton
 @property NSString *notesAction;
 @end
 @implementation NotesUIButton
@@ -107,23 +127,66 @@ static NSPoint contentOffsetFor(NSString *action) {
 }
 @end
 @interface NotesUISearchField : NSSearchField
+@property CGFloat density;
 @end
 @implementation NotesUISearchField
 + (Class)cellClass {return NotesUISearchCell.class;}
+- (BOOL)becomeFirstResponder {
+    BOOL accepted=[super becomeFirstResponder];self.superview.superview.needsDisplay=YES;return accepted;
+}
+- (BOOL)resignFirstResponder {
+    BOOL accepted=[super resignFirstResponder];self.superview.superview.needsDisplay=YES;return accepted;
+}
 - (NSRect)searchButtonBounds {
-    return NSOffsetRect([super searchButtonBounds],-6.5,0);
+    CGFloat size=20*self.density;
+    return NSMakeRect(4*self.density,(NSHeight(self.bounds)-size)/2,size,size);
+}
+- (NSRect)cancelButtonBounds {
+    CGFloat size=14*self.density;
+    return NSMakeRect(NSWidth(self.bounds)-size-4*self.density,(NSHeight(self.bounds)-size)/2,size,size);
 }
 - (NSRect)searchTextBounds {
-    // AppKit's standard cell also reads these public view metrics. One layout
-    // path serves inactive text, placeholder, and the retained field editor.
-    NSRect text=[super searchTextBounds];
-    text.origin.x-=5.75;text.size.width+=5.75;
     CGFloat lineHeight=ceil(self.font.ascender-self.font.descender+self.font.leading);
-    return NSInsetRect(text,0,MAX(0,(NSHeight(text)-lineHeight)/2));
+    CGFloat left=30*self.density,right=(self.stringValue.length?22:4)*self.density;
+    return NSMakeRect(left,MAX(0,(NSHeight(self.bounds)-lineHeight)/2),MAX(1,NSWidth(self.bounds)-left-right),lineHeight);
 }
-- (NSRect)focusRingMaskBounds {return NSInsetRect(self.bounds,-10,-4);}
-- (void)drawFocusRingMask {
-    [[NSBezierPath bezierPathWithRoundedRect:self.focusRingMaskBounds xRadius:18 yRadius:18] fill];
+@end
+
+// This view alone owns every search border. The field and its field editor
+// never draw an additional, differently-sized AppKit focus-ring capsule.
+@interface NotesUISearchSurface : NSView
+@property BOOL focused;
+@property BOOL hovered;
+@property (weak) NSSearchField *field;
+@property NSTrackingArea *hoverTracking;
+@end
+@implementation NotesUISearchSurface
+- (BOOL)isFlipped {return YES;}
+- (BOOL)focused {
+    NSResponder *responder=self.window.firstResponder;
+    return self.field && responder && (responder==self.field || responder==self.field.currentEditor);
+}
+- (void)updateTrackingAreas {
+    [super updateTrackingAreas];if(self.hoverTracking)[self removeTrackingArea:self.hoverTracking];
+    self.hoverTracking=[[NSTrackingArea alloc] initWithRect:NSZeroRect options:NSTrackingMouseEnteredAndExited|NSTrackingActiveInKeyWindow|NSTrackingInVisibleRect owner:self userInfo:nil];
+    [self addTrackingArea:self.hoverTracking];
+}
+- (void)setFocused:(BOOL)value {(void)value;self.needsDisplay=YES;}
+- (void)mouseEntered:(NSEvent *)event {(void)event;self.hovered=YES;self.needsDisplay=YES;}
+- (void)mouseExited:(NSEvent *)event {(void)event;self.hovered=NO;self.needsDisplay=YES;}
+- (void)mouseDown:(NSEvent *)event {(void)event;if(self.field.enabled)[self.window makeFirstResponder:self.field];}
+- (void)viewDidChangeEffectiveAppearance {[super viewDidChangeEffectiveAppearance];self.needsDisplay=YES;}
+- (void)drawRect:(NSRect)dirtyRect {
+    [super drawRect:dirtyRect];
+    BOOL dark=[[self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua,NSAppearanceNameDarkAqua]] isEqualToString:NSAppearanceNameDarkAqua];
+    CGFloat line=self.focused?2:1,inset=line/2;
+    NSRect rect=NSInsetRect(self.bounds,inset,inset);
+    NSBezierPath *path=[NSBezierPath bezierPathWithRoundedRect:rect xRadius:NSHeight(rect)/2 yRadius:NSHeight(rect)/2];
+    NSColor *fill=dark?[NSColor colorWithSRGBRed:0.133 green:0.133 blue:0.145 alpha:1]:[NSColor colorWithSRGBRed:0.980 green:0.980 blue:0.992 alpha:1];
+    NSColor *border=self.focused?(dark?[NSColor colorWithSRGBRed:0.929 green:0.675 blue:0.129 alpha:1]:[NSColor colorWithSRGBRed:0.851 green:0.576 blue:0 alpha:1]):
+        self.hovered?(dark?[NSColor colorWithSRGBRed:0.443 green:0.443 blue:0.490 alpha:1]:[NSColor colorWithSRGBRed:0.714 green:0.718 blue:0.761 alpha:1]):
+        dark?[NSColor colorWithSRGBRed:0.235 green:0.235 blue:0.259 alpha:1]:[NSColor colorWithSRGBRed:0.878 green:0.882 blue:0.910 alpha:1];
+    [fill setFill];[path fill];[border setStroke];path.lineWidth=line;[path stroke];
 }
 @end
 
@@ -141,7 +204,7 @@ static NSPoint contentOffsetFor(NSString *action) {
 }
 @end
 
-@interface NotesUIController : NSObject <NSSearchFieldDelegate>
+@interface NotesUIController : NSObject <NSSearchFieldDelegate, NSPopoverDelegate>
 @property (weak) NSWindow *window;
 @property NSString *windowLabel;
 @property NSString *bindingId;
@@ -149,6 +212,7 @@ static NSPoint contentOffsetFor(NSString *action) {
 @property NotesUIRoot *root;
 @property NSMutableDictionary<NSString *,NSView *> *groups;
 @property NSMutableSet<NSString *> *layoutGroups;
+@property NSMutableSet<NSString *> *layoutButtons;
 @property NSMutableDictionary<NSString *,NSView *> *contents;
 @property NSView *sidebarBackground;
 @property NSMutableDictionary<NSString *,NotesUIButton *> *buttons;
@@ -156,10 +220,11 @@ static NSPoint contentOffsetFor(NSString *action) {
 @property NSMutableDictionary<NSString *,NSMenu *> *menus;
 @property NSMenu *activeMenu;
 @property NSPopover *formatPopover;
+@property (weak) NotesUIFeedbackButton *formatAnchor;
 @property NSDictionary<NSString *,NSDictionary *> *formatEntries;
 @property NSTextField *title;
 @property NSTextField *count;
-@property NSSearchField *search;
+@property NotesUISearchField *search;
 @property NSArray<NSString *> *overflow;
 @property NSArray *symbolFallbacks;
 @property NSMutableArray *observers;
@@ -181,68 +246,49 @@ static NSPoint contentOffsetFor(NSString *action) {
 
 @implementation NotesUIController
 - (NSView *)makeGroup:(NSString *)name {
-    BOOL sidebar=[name isEqual:@"sidebar"];
     NSView *content=[[NotesUIRoot alloc] initWithFrame:NSZeroRect];
-    NSView *effect=nil;
-    if(@available(macOS 26.0,*)) {
-        Class cls=NSClassFromString(@"NSGlassEffectView");
-        if(cls && [cls instancesRespondToSelector:@selector(setContentView:)] && [cls instancesRespondToSelector:@selector(setStyle:)]
-            && [cls instancesRespondToSelector:@selector(setCornerRadius:)]) {
-            NSGlassEffectView *glass=[[cls alloc] initWithFrame:NSZeroRect];
-            if(!sidebar)glass.contentView=content; glass.cornerRadius=18;
-            glass.style=[self.state[@"glassStyle"] isEqual:@"clear"]?NSGlassEffectViewStyleClear:NSGlassEffectViewStyleRegular;
-            effect=glass;
-            self.material=[self.state[@"glassStyle"] isEqual:@"clear"]?@"glassClear":@"glassRegular";
-        }
-    }
-    if(!effect) {
-        NSVisualEffectView *legacy=[[NSVisualEffectView alloc] initWithFrame:NSZeroRect];
-        legacy.material=NSVisualEffectMaterialHeaderView;legacy.blendingMode=NSVisualEffectBlendingModeWithinWindow;
-        legacy.state=NSVisualEffectStateFollowsWindowActiveState;legacy.wantsLayer=YES;
-        legacy.layer.cornerRadius=18;legacy.layer.masksToBounds=YES;
-        if(!sidebar)[legacy addSubview:content];effect=legacy;self.material=@"legacyHeader";
-    }
+    NSView *host=[name isEqual:@"search"]?[[NotesUISearchSurface alloc] initWithFrame:NSZeroRect]:[[NotesUIRoot alloc] initWithFrame:NSZeroRect];
     content.autoresizingMask=NSViewWidthSizable|NSViewHeightSizable;
-    if(sidebar) {
-        // Keep controls above a separate retained background: hiding the visible
-        // column's glass must never hide/recreate its buttons or their AX targets.
-        NSView *host=[[NotesUIRoot alloc] initWithFrame:NSZeroRect];
-        effect.autoresizingMask=NSViewWidthSizable|NSViewHeightSizable;
-        [host addSubview:effect];[host addSubview:content];self.sidebarBackground=effect;
-        self.groups[name]=host;self.contents[name]=content;[self.root addSubview:host];return content;
-    }
-    self.groups[name]=effect;self.contents[name]=content;[self.root addSubview:effect];return content;
+    [host addSubview:content];
+    if([name isEqual:@"sidebar"])self.sidebarBackground=[[NSView alloc] initWithFrame:NSZeroRect];
+    self.material=@"legacyHeader";
+    self.groups[name]=host;self.contents[name]=content;[self.root addSubview:host];return content;
 }
 - (void)build {
     self.root=[[NotesUIRoot alloc] initWithFrame:NSZeroRect];self.root.autoresizingMask=NSViewWidthSizable|NSViewMinYMargin;
+    self.root.toolbarSurface=YES;
     self.root.reserveTrafficLights=(self.window.styleMask&NSWindowStyleMaskFullSizeContentView)!=0;
     self.groups=[NSMutableDictionary dictionary];self.contents=[NSMutableDictionary dictionary];self.buttons=[NSMutableDictionary dictionary];
     self.actionStates=[NSMutableDictionary dictionary];self.menus=[NSMutableDictionary dictionary];self.observers=[NSMutableArray array];
-    for(NSString *name in @[@"sidebar",@"back",@"view",@"new",@"edit",@"share",@"overflow",@"search",@"browse"]) [self makeGroup:name];
+    for(NSString *name in @[@"sidebar",@"back",@"view",@"new",@"edit",@"share",@"overflow",@"search",@"browse",@"settings"]) [self makeGroup:name];
     NSDictionary *membership=@{@"newFolder":@"sidebar",@"toggleSidebar":@"sidebar",@"backToGallery":@"back",@"viewOptions":@"view",
-        @"newNote":@"new",@"format":@"edit",@"checklist":@"edit",@"table":@"edit",@"attachment":@"edit",@"share":@"share",@"more":@"share",@"overflow":@"overflow"};
+        @"newNote":@"new",@"format":@"edit",@"checklist":@"edit",@"table":@"edit",@"attachment":@"edit",@"share":@"share",@"more":@"share",@"overflow":@"overflow",@"settings":@"settings",@"recordAudio":@"edit",@"insertTag":@"edit"};
     for(NSString *action in membership) {
         NotesUIButton *button=[[NotesUIButton alloc] initWithFrame:NSZeroRect];button.notesAction=action;
         [button setButtonType:NSButtonTypeMomentaryPushIn];button.bordered=NO;button.imagePosition=NSImageOnly;
+        button.imageScaling=NSImageScaleProportionallyDown;
         ((NotesUIButtonCell *)button.cell).notesContentOffset=contentOffsetFor(action);
         if([action isEqual:@"format"]) {
             button.title=@"格式";button.imagePosition=NSNoImage;
-            button.font=[NSFont systemFontOfSize:14 weight:NSFontWeightRegular];
+            button.font=[NSFont systemFontOfSize:18 weight:NSFontWeightRegular];
         }
         button.refusesFirstResponder=YES;button.focusRingType=NSFocusRingTypeNone;button.target=self;button.action=@selector(buttonClicked:);
         self.buttons[action]=button;[self.contents[membership[action]] addSubview:button];
     }
     self.buttons[@"overflow"].image=[NSImage imageWithSystemSymbolName:@"ellipsis" accessibilityDescription:@"其他工具"];
     self.buttons[@"overflow"].toolTip=@"其他工具";[self.buttons[@"overflow"] setAccessibilityLabel:@"其他工具"];
-    self.title=[NSTextField labelWithString:@""];self.title.font=[NSFont systemFontOfSize:13 weight:NSFontWeightSemibold];
+    self.title=[NSTextField labelWithString:@""];self.title.font=[NSFont systemFontOfSize:18 weight:NSFontWeightSemibold];
     self.title.lineBreakMode=NSLineBreakByTruncatingTail;self.title.maximumNumberOfLines=1;
-    self.count=[NSTextField labelWithString:@""];self.count.font=[NSFont systemFontOfSize:11];self.count.textColor=NSColor.secondaryLabelColor;
+    self.count=[NSTextField labelWithString:@""];self.count.font=[NSFont systemFontOfSize:15];self.count.textColor=NSColor.secondaryLabelColor;
     [self.root addSubview:self.title];[self.root addSubview:self.count];
     self.search=[[NotesUISearchField alloc] initWithFrame:NSZeroRect];self.search.delegate=self;
     self.search.formatter=[NotesUISearchFormatter new];
-    self.search.placeholderString=@"搜索";self.search.sendsSearchStringImmediately=YES;self.search.sendsWholeSearchString=NO;
+    self.search.font=[NSFont systemFontOfSize:17];
+    self.search.placeholderString=@"搜索备忘录";self.search.sendsSearchStringImmediately=YES;self.search.sendsWholeSearchString=NO;
     self.search.recentsAutosaveName=nil;self.search.maximumRecents=0;self.search.searchMenuTemplate=nil;
     self.search.bordered=NO;self.search.bezeled=NO;self.search.drawsBackground=NO;
+    self.search.focusRingType=NSFocusRingTypeNone;self.search.cell.focusRingType=NSFocusRingTypeNone;
+    ((NotesUISearchSurface *)self.groups[@"search"]).field=self.search;
     [(NSSearchFieldCell *)self.search.cell setScrollable:YES];
     [self.search setAccessibilityLabel:@"搜索备忘录"];self.search.target=self;self.search.action=@selector(searchCommitted:);
     [self.contents[@"search"] addSubview:self.search];
@@ -264,16 +310,14 @@ static NSPoint contentOffsetFor(NSString *action) {
         NotesUIController *strong=weak;if(strong){[strong dispose];[controllers removeObjectForKey:strong.bindingId];}}]];
 }
 - (NSMenu *)menuEntries:(NSArray *)entries owner:(NSString *)owner {
-    NSMenu *menu=[[NSMenu alloc] initWithTitle:@""];menu.autoenablesItems=NO;
+    NSMutableArray *owned=[NSMutableArray array];
     for(NSDictionary *entry in entries) {
-        if([entry[@"kind"] isEqual:@"separator"]) {[menu addItem:NSMenuItem.separatorItem];continue;}
-        NSMenuItem *item=[[NSMenuItem alloc] initWithTitle:entry[@"label"] action:nil keyEquivalent:@""];
-        if([entry[@"kind"] isEqual:@"submenu"]) {item.submenu=[self menuEntries:entry[@"items"] owner:owner];}
-        else {item.target=self;item.action=@selector(menuClicked:);item.enabled=[entry[@"enabled"] boolValue];
-            item.state=[entry[@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
-            item.representedObject=@{@"owner":owner,@"command":entry[@"command"]};}
-        [menu addItem:item];
+        NSMutableDictionary *value=[entry mutableCopy];value[@"owner"]=owner;
+        [owned addObject:value];
     }
+    NSMenu *menu=notesUIMenuEntries(owned,self,@selector(menuClicked:));
+    // Toolbar submenus also retain their owner when rebuilding recursively.
+    for(NSMenuItem *item in menu.itemArray)if(item.submenu)item.submenu=[self menuEntries:item.representedObject[@"items"] owner:owner];
     return menu;
 }
 - (NSDictionary *)apply:(NSDictionary *)state {
@@ -295,190 +339,219 @@ static NSPoint contentOffsetFor(NSString *action) {
         if([action isEqual:@"format"])continue; // This action is a localized text button, not an SF Symbol.
         NSString *symbol=symbolFor(action,[state[@"tableFocused"] boolValue]);
         NSString *label=labelFor(action,[state[@"tableFocused"] boolValue]);
+        // A new note/revision does not invalidate an unchanged symbol.
+        NotesUIButton *retained=self.buttons[action];
+        CGFloat nextScale=notesFontScale(state)*notesIconScale(state);
+        CGFloat previousScale=notesFontScale(self.state)*notesIconScale(self.state);
+        if(retained.image && self.actionStates[action] && nextScale==previousScale
+            && [symbol isEqual:symbolFor(action,[self.state[@"tableFocused"] boolValue])]) {
+            images[action]=retained.image;
+            for(NSDictionary *fallback in self.symbolFallbacks)if([fallback[@"action"] isEqual:action])[fallbacks addObject:fallback];
+            continue;
+        }
         NSImage *image=[NSImage imageWithSystemSymbolName:symbol accessibilityDescription:label];
         if(!image && [symbol isEqual:@"tablecells.badge.ellipsis"]) {image=[NSImage imageWithSystemSymbolName:@"tablecells" accessibilityDescription:label];
             [fallbacks addObject:@{@"action":action,@"requested":symbol,@"used":@"tablecells"}];}
         if(!image) return @{@"code":@"symbol_unavailable",@"message":[@"系统符号不可用：" stringByAppendingString:symbol]};
-        CGFloat point=([@[@"newNote",@"table",@"share"] containsObject:action])?16.5:17;
+        CGFloat point=21*notesFontScale(state)*notesIconScale(state);
         image=[image imageWithSymbolConfiguration:[NSImageSymbolConfiguration configurationWithPointSize:point weight:NSFontWeightRegular scale:NSImageSymbolScaleMedium]];
         if(!image) return @{@"code":@"symbol_unavailable",@"message":@"系统符号配置失败"};image.template=YES;images[action]=image;
     }
+    NSDictionary *previous=self.state;
+    BOOL initial=self.buttons[@"format"].symbolConfiguration==nil;
+    CGFloat fontScale=notesFontScale(state), iconScale=notesIconScale(state);
+    BOOL scaleChanged=initial || fontScale!=notesFontScale(previous) || iconScale!=notesIconScale(previous);
+    BOOL appearanceChanged=initial || ![state[@"appearance"] isEqual:previous[@"appearance"]];
+    NSArray *previousActions=[previous[@"actions"] valueForKey:@"action"],*nextActions=[state[@"actions"] valueForKey:@"action"];
+    BOOL previousSearch=previous[@"search"] && (id)previous[@"search"]!=NSNull.null;
+    BOOL layoutChanged=initial || scaleChanged || notesHitScale(state)!=notesHitScale(previous) || ![state[@"layout"] isEqual:previous[@"layout"]]
+        || ![state[@"columns"] isEqual:previous[@"columns"]] || ![previousActions isEqual:nextActions]
+        || previousSearch!=hasSearch || contentOverlay!=[previous[@"contentOverlay"] boolValue];
     self.suppress=YES;
+    // Revision changes invalidate old menu targets, but do not rebuild buttons.
     [self.formatPopover close];self.formatPopover=nil;
+    self.formatAnchor.notesMenuOpen=NO;self.formatAnchor=nil;
     [self.activeMenu cancelTracking];
-    for(NSMenu *menu in self.menus.allValues) [menu cancelTracking];
+    for(NSMenu *menu in self.menus.allValues)[menu cancelTracking];
     self.state=state;self.symbolFallbacks=fallbacks;
-    [self.actionStates removeAllObjects];[self.menus removeAllObjects];
-    self.formatEntries=@{};
-    for(NSDictionary *item in state[@"actions"]) self.actionStates[item[@"action"]]=item;
+    if(appearanceChanged) {
+        NSString *appearance=state[@"appearance"];
+        self.window.appearance=[appearance isEqual:@"dark"]?[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]:[appearance isEqual:@"light"]?[NSAppearance appearanceNamed:NSAppearanceNameAqua]:nil;
+    }
+    NSMutableDictionary *nextStates=[NSMutableDictionary dictionary],*nextMenus=[NSMutableDictionary dictionary];
+    for(NSDictionary *item in state[@"actions"])nextStates[item[@"action"]]=item;
+    NSDictionary *oldActionStates=self.actionStates;self.actionStates=nextStates;
     for(NSDictionary *menu in state[@"menus"]) {
-        if([menu[@"owner"] isEqual:@"format"])self.formatEntries=notesUIFormatEntries(menu[@"items"]);
-        else self.menus[menu[@"owner"]]=[self menuEntries:menu[@"items"] owner:menu[@"owner"]];
+        NSString *owner=menu[@"owner"];
+        if([owner isEqual:@"format"])continue;
+        NSDictionary *old=nil;
+        for(NSDictionary *candidate in previous[@"menus"])if([candidate[@"owner"] isEqual:owner]){old=candidate;break;}
+        nextMenus[owner]=[menu isEqual:old] && self.menus[owner]?self.menus[owner]:[self menuEntries:menu[@"items"] owner:owner];
     }
+    self.menus=nextMenus;self.formatEntries=@{};
+    for(NSDictionary *menu in state[@"menus"])if([menu[@"owner"] isEqual:@"format"])self.formatEntries=notesUIFormatEntries(menu[@"items"]);
     for(NSString *action in self.buttons) {
-        if([action isEqual:@"overflow"])continue;
-        NotesUIButton *button=self.buttons[action];NSDictionary *item=self.actionStates[action];button.hidden=item==nil;
-        button.enabled=[item[@"enabled"] boolValue];button.state=[item[@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
-        if(item) {button.image=images[action];NSString *label=labelFor(action,[state[@"tableFocused"] boolValue]);button.toolTip=label;[button setAccessibilityLabel:label];}
-        button.contentTintColor=([action isEqual:@"toggleSidebar"] || ([action isEqual:@"newFolder"] && ![item[@"selected"] boolValue]))?sidebarTintColor():
+        NotesUIButton *button=self.buttons[action];
+        if(scaleChanged) {
+            // The layer-backed control and its image must share symbol metrics.
+            button.font=[NSFont systemFontOfSize:18*fontScale];button.notesFeedbackScale=fontScale;
+            button.symbolConfiguration=[NSImageSymbolConfiguration configurationWithPointSize:21*fontScale*iconScale weight:NSFontWeightRegular scale:NSImageSymbolScaleMedium];
+        }
+        if([action isEqual:@"overflow"]){if(self.buttons[action].enabled==contentOverlay)self.buttons[action].enabled=!contentOverlay;continue;}
+        NSDictionary *item=self.actionStates[action];
+        BOOL enabled=!contentOverlay && [item[@"enabled"] boolValue];NSControlStateValue selected=[item[@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
+        if(button.enabled!=enabled)button.enabled=enabled;
+        if(button.state!=selected)button.state=selected;
+        if(button.notesSelected!=(selected==NSControlStateValueOn))button.notesSelected=selected==NSControlStateValueOn;
+        if(item) {
+            if(button.image!=images[action])button.image=images[action];
+            NSString *label=labelFor(action,[state[@"tableFocused"] boolValue]);
+            if(![button.toolTip isEqual:label]){button.toolTip=label;[button setAccessibilityLabel:label];}
+        }
+        NSColor *tint=([action isEqual:@"toggleSidebar"] || ([action isEqual:@"newFolder"] && ![item[@"selected"] boolValue]))?sidebarTintColor():
             ([item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor);
+        if(initial || appearanceChanged || [oldActionStates[action][@"selected"] boolValue]!=[item[@"selected"] boolValue])button.contentTintColor=tint;
     }
-    self.title.stringValue=state[@"folderTitle"];[self.title setAccessibilityLabel:state[@"folderTitle"]];
-    BOOL zeroSearch=[state[@"folderTitle"] isEqual:@"搜索"] && [state[@"folderCount"] unsignedLongLongValue]==0
-        && hasSearch && [searchState[@"value"] length]>0;
-    self.count.stringValue=zeroSearch?@"无结果":[NSString stringWithFormat:@"%@ 个备忘录",state[@"folderCount"]];
-    [self.count setAccessibilityLabel:self.count.stringValue];
-    if(hasSearch && !contentOverlay) {self.search.enabled=[searchState[@"enabled"] boolValue];
-        if(![self.search.stringValue isEqual:searchState[@"value"]]) self.search.stringValue=searchState[@"value"];}
-    else {self.search.enabled=NO;}
+    if(scaleChanged) {
+        self.buttons[@"overflow"].image=[[NSImage imageWithSystemSymbolName:@"ellipsis" accessibilityDescription:@"其他工具"] imageWithSymbolConfiguration:[NSImageSymbolConfiguration configurationWithPointSize:21*fontScale*iconScale weight:NSFontWeightRegular scale:NSImageSymbolScaleMedium]];
+        self.buttons[@"overflow"].contentTintColor=NSColor.labelColor;
+        self.title.font=[NSFont systemFontOfSize:18*fontScale weight:NSFontWeightSemibold];self.count.font=[NSFont systemFontOfSize:15*fontScale];
+        self.search.font=[NSFont systemFontOfSize:17*fontScale];self.search.density=fontScale*iconScale;
+        self.search.placeholderAttributedString=[[NSAttributedString alloc] initWithString:@"搜索备忘录" attributes:@{NSFontAttributeName:self.search.font,NSForegroundColorAttributeName:NSColor.secondaryLabelColor}];
+        if([self.search.currentEditor isKindOfClass:NSTextView.class])((NSTextView *)self.search.currentEditor).font=self.search.font;
+    }
+    if(![self.title.stringValue isEqual:state[@"folderTitle"]]){self.title.stringValue=state[@"folderTitle"];[self.title setAccessibilityLabel:state[@"folderTitle"]];}
+    BOOL zeroSearch=[state[@"folderTitle"] isEqual:@"搜索"] && [state[@"folderCount"] unsignedLongLongValue]==0 && hasSearch && [searchState[@"value"] length]>0;
+    NSString *count=zeroSearch?@"无结果":[NSString stringWithFormat:@"%@ 个备忘录",state[@"folderCount"]];
+    if(![self.count.stringValue isEqual:count]){self.count.stringValue=count;[self.count setAccessibilityLabel:count];}
+    BOOL searchEnabled=hasSearch && !contentOverlay && [searchState[@"enabled"] boolValue];
+    if(self.search.enabled!=searchEnabled)self.search.enabled=searchEnabled;
+    if(hasSearch && !contentOverlay && ![self.search.stringValue isEqual:searchState[@"value"]])self.search.stringValue=searchState[@"value"];
     if(@available(macOS 26.0,*)) {
-        for(NSView *view in [self.groups.allValues arrayByAddingObject:self.sidebarBackground]) if([view isKindOfClass:NSClassFromString(@"NSGlassEffectView")]) {
+        if(initial || ![state[@"glassStyle"] isEqual:previous[@"glassStyle"]])for(NSView *view in [self.groups.allValues arrayByAddingObject:self.sidebarBackground])if([view isKindOfClass:NSClassFromString(@"NSGlassEffectView")]) {
             ((NSGlassEffectView *)view).style=[state[@"glassStyle"] isEqual:@"clear"]?NSGlassEffectViewStyleClear:NSGlassEffectViewStyleRegular;
             self.material=[state[@"glassStyle"] isEqual:@"clear"]?@"glassClear":@"glassRegular";
         }
     }
-    [self layout];self.suppress=NO;return nil;
+    if(layoutChanged)[self layout];self.suppress=NO;return nil;
 }
 - (void)placeGroup:(NSString *)name x:(CGFloat)x width:(CGFloat)width actions:(NSArray<NSString *> *)actions {
     NSView *group=self.groups[name];
     if(width>0)[self.layoutGroups addObject:name];
-    group.frame=NSMakeRect(x,8,MAX(0,width),36);self.contents[name].frame=NSMakeRect(0,0,MAX(0,width),36);
+    CGFloat h=notesToolbarHeight(self.state),height=notesButtonSize(self.state);
+    group.frame=NSMakeRect(x,(h-height)/2,MAX(0,width),height);self.contents[name].frame=NSMakeRect(0,0,MAX(0,width),height);
     if([name isEqual:@"sidebar"])self.sidebarBackground.frame=self.contents[name].bounds;
     CGFloat itemWidth=actions.count?width/actions.count:0;
     for(NSUInteger i=0;i<actions.count;i++) {NotesUIButton *button=self.buttons[actions[i]];
         if(button.superview!=self.contents[name])[self.contents[name] addSubview:button];
-        button.hidden=NO;button.frame=NSMakeRect(i*itemWidth,0,itemWidth,36);}
+        [self.layoutButtons addObject:actions[i]];button.frame=NSMakeRect(i*itemWidth,0,itemWidth,height);}
 }
-- (CGFloat)widthFor:(NSArray *)visible search:(CGFloat)searchWidth overflow:(BOOL)overflow {
-    CGFloat width=0;BOOL any=NO;
-    for(NSArray *group in @[@[@"newNote"],@[@"format",@"checklist",@"table",@"attachment"],@[@"share",@"more"]]) {
-        NSUInteger count=0;for(NSString *action in group)if([visible containsObject:action])count++;
-        if(count){width+=(any?18:0)+(group.count==1?36:40*count+(group.count==4?1:0));any=YES;}
-    }
-    if(overflow){width+=(any?10:0)+36;any=YES;}
-    if(searchWidth>0)width+=(any?16:0)+searchWidth;
-    return width;
+- (CGFloat)actionWidth:(NSString *)action labels:(BOOL)labels {
+    if([action isEqual:@"format"])return notesSlot(self.state,labels?60:48);
+    return notesSlot(self.state,labels?54:42);
 }
 - (void)layout {
     if(self.disposed || !self.window.contentView)return;
     NSView *parent=self.window.contentView;NSRect bounds=parent.bounds;CGFloat w=NSWidth(bounds);
-    self.root.frame=NSMakeRect(NSMinX(bounds),parent.flipped?NSMinY(bounds):NSMaxY(bounds)-52,w,52);
-    self.layoutGroups=[NSMutableSet set];
-    for(NotesUIButton *button in self.buttons.allValues)button.hidden=YES;
+    CGFloat s=notesFontScale(self.state),h=notesToolbarHeight(self.state),buttonHeight=notesButtonSize(self.state),slot=notesSlot(self.state,42);
+    self.root.density=s;self.root.frame=NSMakeRect(NSMinX(bounds),parent.flipped?NSMinY(bounds):NSMaxY(bounds)-h,w,h);
+    self.layoutGroups=[NSMutableSet set];self.layoutButtons=[NSMutableSet set];
     BOOL full=(self.window.styleMask&NSWindowStyleMaskFullSizeContentView)!=0;self.root.reserveTrafficLights=full;
-    if([self.state[@"contentOverlay"] boolValue]) {
-        for(NSView *group in self.groups.allValues)group.hidden=YES;
-        self.sidebarBackground.hidden=YES;self.title.hidden=YES;self.count.hidden=YES;self.overflow=@[];
-        return;
+    CGFloat traffic=full?54+28*s:12*s;self.root.trafficWidth=traffic;
+    if(full && !(self.window.styleMask&NSWindowStyleMaskFullScreen)) {
+        NSUInteger index=0;
+        for(NSNumber *kind in @[@(NSWindowCloseButton),@(NSWindowMiniaturizeButton),@(NSWindowZoomButton)]) {
+            NSButton *button=[self.window standardWindowButton:kind.unsignedIntegerValue];
+            if(button && button.superview) {
+                NSPoint center=[button.superview convertPoint:NSMakePoint(20*s+index*20+NSWidth(button.frame)/2,h/2) fromView:self.root];
+                [button setFrameOrigin:NSMakePoint(center.x-NSWidth(button.frame)/2,center.y-NSHeight(button.frame)/2)];
+            }index++;
+        }
     }
-    CGFloat traffic=full?94:12;NSDictionary *columns=self.state[@"columns"];
-    BOOL sidebar=[columns[@"sidebarVisible"] boolValue];CGFloat side=sidebar?[columns[@"sidebarWidth"] doubleValue]:0;
-    self.sidebarBackground.hidden=sidebar;
-    NSString *layout=self.state[@"layout"];BOOL three=[layout isEqual:@"threeColumn"];
-    BOOL hiddenThree=three && full && !sidebar;
-    ((NotesUIButtonCell *)self.buttons[@"toggleSidebar"].cell).notesContentOffset=sidebar?contentOffsetFor(@"toggleSidebar"):
-        (hiddenThree?NSMakePoint(0.5,-0.25):NSZeroPoint);
-    BOOL browse=[layout isEqual:@"galleryBrowse"],gallery=[layout isEqual:@"galleryExpanded"];
-    CGFloat boundary=three?side+[columns[@"listWidth"] doubleValue]:traffic;
-    // 649c24e measures ink/surfaces, not internal AppKit frames. These are calibration starts.
-    CGFloat titleX=three?(side>0?side+19:traffic+8):MAX(side+11,traffic+8);
-    NSMutableArray *hidden=[NSMutableArray array];
-    CGFloat sidebarRight=traffic;
-    if(![layout isEqual:@"independentNote"]) {
+    NSDictionary *columns=self.state[@"columns"];
+    BOOL sidebar=[columns[@"sidebarVisible"] boolValue];CGFloat side=sidebar?[columns[@"sidebarWidth"] doubleValue]:0,list=[columns[@"listWidth"] doubleValue];
+    self.root.sidebarBoundary=side;self.root.needsDisplay=YES;
+    // Modal content blocks actions, while the main toolbar keeps its geometry
+    // and visible controls. Hiding the groups made opening Settings look broken.
+    NSString *layout=self.state[@"layout"];
+    BOOL three=[layout isEqual:@"threeColumn"],browse=[layout isEqual:@"galleryBrowse"],independent=[layout isEqual:@"independentNote"];
+    CGFloat boundary=three?side+list:side,titleX=MAX(side+26*s,traffic+8*s);
+    NSMutableArray *hidden=[NSMutableArray array];CGFloat reservedEnd=traffic;
+    if(!independent) {
         NSMutableArray *actions=[NSMutableArray array];
-        if(sidebar && self.actionStates[@"newFolder"])[actions addObject:@"newFolder"];
         if(self.actionStates[@"toggleSidebar"])[actions addObject:@"toggleSidebar"];
-        // The direct restore control survives a hidden or narrow folder column.
-        // Adding folders follows the visible column; only that action may overflow.
-        CGFloat itemWidth=sidebar?44:(hiddenThree?40:36);
-        if(sidebar && traffic+actions.count*itemWidth>side && [actions containsObject:@"newFolder"]) {
-            [actions removeObject:@"newFolder"];[hidden addObject:@"newFolder"];
+        if(sidebar && self.actionStates[@"newFolder"])[actions addObject:@"newFolder"];
+        CGFloat sidebarSlot=notesSlot(self.state,w<=1100?44:60),sidebarMargin=(w<=1100?8:12)*s;
+        CGFloat width=actions.count*sidebarSlot;
+        if(sidebar && side-width-sidebarMargin<traffic && [actions containsObject:@"newFolder"]) {
+            [actions removeObject:@"newFolder"];[hidden addObject:@"newFolder"];width=actions.count*notesSlot(self.state,44);
         }
-        if(actions.count) {
-            CGFloat width=actions.count*itemWidth;
-            CGFloat x=sidebar?MAX(traffic,side-width):traffic+(hiddenThree?2:0);
-            [self placeGroup:@"sidebar" x:x width:width actions:actions];sidebarRight=x+width;
-            // Hidden-list reference ink starts near156pt; its label frame is a154pt candidate.
-            titleX=MAX(titleX,sidebarRight+(three&&!sidebar?(hiddenThree?18:24):8));
+        CGFloat x=sidebar?MAX(traffic,side-width-sidebarMargin):traffic;
+        if(actions.count)[self placeGroup:@"sidebar" x:x width:width actions:actions];
+        if(!sidebar){reservedEnd=x+width;titleX=reservedEnd+14*s;}
+    }
+    CGFloat start=three?boundary+16*s:MAX(titleX+160*s,traffic+12*s);
+    if(independent)start=traffic+12*s;
+    NSMutableArray *separators=[NSMutableArray array];
+    if(three){[separators addObject:@(boundary-72*s)];[separators addObject:@(boundary+3*s)];}
+    if(three) {
+        if(self.actionStates[@"viewOptions"]) {
+            if(boundary-128*s>=reservedEnd)[self placeGroup:@"view" x:boundary-128*s width:notesSlot(self.state,44) actions:@[@"viewOptions"]];
+            else [hidden addObject:@"viewOptions"];
         }
+        if(self.actionStates[@"newNote"]) {
+            if(boundary-60*s>=reservedEnd)[self placeGroup:@"new" x:boundary-60*s width:notesSlot(self.state,48) actions:@[@"newNote"]];
+            else [hidden addObject:@"newNote"];
+        }
+    } else if(self.actionStates[@"backToGallery"]) {
+        [self placeGroup:@"back" x:start width:slot actions:@[@"backToGallery"]];start+=slot+6*s;
     }
-    if(gallery && self.actionStates[@"backToGallery"]) {
-        CGFloat backX=MAX(MAX(side+8,traffic+8),sidebarRight+8);
-        [self placeGroup:@"back" x:backX width:36 actions:@[@"backToGallery"]];titleX=backX+47;
-    }
+    CGFloat settingsX=w-slot-14*s;
+    if(self.actionStates[@"settings"])[self placeGroup:@"settings" x:settingsX width:slot actions:@[@"settings"]];
     BOOL hasSearch=self.state[@"search"] && (id)self.state[@"search"]!=NSNull.null;
-    CGFloat minimumStart=(browse||gallery)?titleX+140:boundary+9;
-    CGFloat start=MAX(traffic+8,MIN(minimumStart,MAX(traffic+8,w-160)));
-    CGFloat available=MAX(0,w-start-8),searchWidth=0;
-    if(browse) {
-        NSMutableArray *actions=[NSMutableArray array];for(NSString *action in @[@"viewOptions",@"newNote"])
-            if(self.actionStates[action])[actions addObject:action];
-        CGFloat width=actions.count*36;
-        if(hasSearch)searchWidth=MIN(MAX(90,(w-side)*0.378),MAX(0,available-width-(width?33:0)-(hidden.count?46:0)));
-        while(actions.count && width+(searchWidth>0?33+searchWidth:0)+(hidden.count?46:0)>available) {
-            [hidden addObject:actions.firstObject];[actions removeObjectAtIndex:0];width=actions.count*36;
-        }
-        CGFloat total=width+(searchWidth>0?(width?33:0)+searchWidth:0)+(hidden.count?46:0);
-        start=MAX(start,w-8-total);
-        if(width)[self placeGroup:@"browse" x:start width:width actions:actions];
-        CGFloat right=w-8;
-        if(hasSearch && searchWidth>0){right-=searchWidth;[self placeGroup:@"search" x:right width:searchWidth actions:@[]];
-            self.search.frame=NSMakeRect(10,4,MAX(1,searchWidth-20),28);right-=10;}
-        if(hidden.count)[self placeGroup:@"overflow" x:right-36 width:36 actions:@[@"overflow"]];
-    } else {
-        NSMutableArray *visible=[NSMutableArray array];for(NSString *action in @[@"newNote",@"format",@"checklist",@"table",@"attachment",@"share",@"more"])
-            if(self.actionStates[action])[visible addObject:action];
-        if(three && self.actionStates[@"viewOptions"]) {
-            CGFloat viewX=MIN(boundary-44,start-44);
-            if(viewX>titleX+30)[self placeGroup:@"view" x:viewX width:36 actions:@[@"viewOptions"]];else[hidden addObject:@"viewOptions"];
-        } else if(self.actionStates[@"viewOptions"])[hidden addObject:@"viewOptions"];
-        if(hasSearch)searchWidth=gallery?MIN(233,MAX(90,(w-side)*0.23)):MAX(90,available-[self widthFor:visible search:1 overflow:hidden.count>0]+1);
-        for(NSString *drop in @[@"share",@"attachment",@"table",@"checklist",@"format",@"newNote",@"more"]) {
-            if([self widthFor:visible search:searchWidth overflow:hidden.count>0]<=available)break;
-            if([visible containsObject:drop]){[visible removeObject:drop];[hidden addObject:drop];}
-        }
-        searchWidth=MIN(searchWidth,MAX(0,available-[self widthFor:visible search:hasSearch?1:0 overflow:hidden.count>0]+(hasSearch?1:0)));
-        CGFloat groupGap=18;
-        // Candidate wide three-column geometry; drop/overflow decisions above stay unchanged.
-        if(three && hasSearch && visible.count==7 && hidden.count==0) {
-            searchWidth=MIN(searchWidth,325);
-            groupGap+=MAX(0,available-[self widthFor:visible search:searchWidth overflow:NO])/2;
-        }
-        CGFloat total=[self widthFor:visible search:searchWidth overflow:hidden.count>0];
-        if(gallery)start=MAX(start,w-8-total);
-        CGFloat left=start;BOOL any=NO;
-        for(NSString *name in @[@"new",@"edit",@"share"]) {
-            NSArray *candidates=[name isEqual:@"new"]?@[@"newNote"]:([name isEqual:@"edit"]?@[@"format",@"checklist",@"table",@"attachment"]:@[@"share",@"more"]);
-            NSMutableArray *actions=[NSMutableArray array];for(NSString *action in candidates)if([visible containsObject:action])[actions addObject:action];
-            if(!actions.count)continue;
-            CGFloat width=[name isEqual:@"new"]?36:actions.count*40+([name isEqual:@"edit"]?1:0);
-            if(any)left+=groupGap;[self placeGroup:name x:left width:width actions:actions];left+=width;any=YES;
-        }
-        if(hidden.count){if(any)left+=10;[self placeGroup:@"overflow" x:left width:36 actions:@[@"overflow"]];left+=36;any=YES;}
-        if(hasSearch && searchWidth>0){if(any)left+=16;[self placeGroup:@"search" x:left width:searchWidth actions:@[]];
-            self.search.frame=NSMakeRect(10,4,MAX(1,searchWidth-20),28);}
+    NSArray *candidates=browse?@[@"viewOptions",@"newNote"]:(three?@[@"format",@"checklist",@"table",@"attachment",@"recordAudio",@"insertTag",@"share",@"more"]:@[@"newNote",@"format",@"checklist",@"table",@"attachment",@"recordAudio",@"insertTag",@"share",@"more"]);
+    NSMutableArray *visible=[NSMutableArray array];for(NSString *action in candidates)if(self.actionStates[action])[visible addObject:action];
+    CGFloat available=MAX(0,w-14*s-start),gap=12*s,searchMin=(available<420*s?110:140)*s;
+    CGFloat total=slot+gap+(hasSearch?searchMin+gap:0)+(hidden.count?slot:0);
+    for(NSString *action in visible)total+=[self actionWidth:action labels:YES];
+    BOOL labels=total<=available;
+    for(NSString *drop in @[@"insertTag",@"recordAudio",@"share",@"attachment",@"table",@"checklist",@"format",@"newNote",@"viewOptions"]) {
+        CGFloat required=slot+gap+(hasSearch?searchMin+gap:0)+(hidden.count?slot:0);
+        for(NSString *action in visible)required+=[self actionWidth:action labels:labels];
+        if(required<=available)break;
+        if([visible containsObject:drop]){[visible removeObject:drop];[hidden addObject:drop];}
     }
-    // Retained search ancestors must stay visible throughout updates/inspection, or AppKit
-    // abandons their field editor (including marked text and caret) even when shown again.
-    for(NSString *name in self.groups)self.groups[name].hidden=![self.layoutGroups containsObject:name];
-    self.layoutGroups=nil;
-    self.overflow=hidden;
-    CGFloat titleRight=three?MIN(boundary-50,start-12):start-18;
-    CGFloat titleWidth=MAX(0,titleRight-titleX);
-    self.title.hidden=self.count.hidden=(!three&&!gallery&&!browse)||titleWidth<24;
-    BOOL zeroSearchGeometry=three && sidebar && [self.state[@"folderTitle"] isEqual:@"搜索"]
-        && [self.state[@"folderCount"] unsignedLongLongValue]==0 && hasSearch && [self.state[@"search"][@"value"] length]>0;
-    // This root is flipped; three-column headings share the measured vertical baseline.
-    CGFloat textX=titleX-(zeroSearchGeometry?1:0);
-    self.title.frame=NSMakeRect(textX,three?11:9,titleWidth,18);
-    self.count.frame=NSMakeRect(textX,three?27:28,titleWidth,15);
+    CGFloat left=start;
+    for(NSString *action in visible) {
+        CGFloat width=[self actionWidth:action labels:labels];if([action isEqual:@"share"])[separators addObject:@(left)];
+        NotesUIButton *button=self.buttons[action];if(button.superview!=self.root)[self.root addSubview:button];
+        [self.layoutButtons addObject:action];button.frame=NSMakeRect(left,(h-buttonHeight)/2,width,buttonHeight);
+        left+=width;
+    }
+    if(hidden.count){[self placeGroup:@"overflow" x:left width:slot actions:@[@"overflow"]];left+=slot;}
+    if(hasSearch) {
+        CGFloat searchWidth=MIN(254*s,MAX(0,settingsX-left-gap*2));
+        if(searchWidth>0) {
+            [self placeGroup:@"search" x:settingsX-searchWidth-gap width:searchWidth actions:@[]];
+            NSView *surface=self.groups[@"search"];
+            surface.frame=NSMakeRect(settingsX-searchWidth-gap,(h-40*s)/2,searchWidth,40*s);
+            self.contents[@"search"].frame=surface.bounds;
+            self.search.frame=NSInsetRect(surface.bounds,10*s,4*s);
+        }
+    }
+    for(NSString *action in self.buttons){BOOL hidden=![self.layoutButtons containsObject:action];if(self.buttons[action].hidden!=hidden)self.buttons[action].hidden=hidden;}
+    for(NSString *name in self.groups){BOOL hidden=![self.layoutGroups containsObject:name];if(self.groups[name].hidden!=hidden)self.groups[name].hidden=hidden;}
+    self.layoutButtons=nil;self.layoutGroups=nil;self.overflow=hidden;self.root.separatorPositions=separators;
+    CGFloat titleRight=three?boundary-140*s:start-16*s;
+    self.title.hidden=self.count.hidden=independent||titleRight-titleX<24*s;
+    self.title.frame=NSMakeRect(titleX,10*s,MAX(0,titleRight-titleX),25*s);
+    self.count.frame=NSMakeRect(titleX,36*s,MAX(0,titleRight-titleX),22*s);
 }
 - (NSDictionary *)information {
-    [self layout];
-    return @{@"material":self.material,@"reservedTop":@52,@"contentWidth":@(NSWidth(self.window.contentView.bounds)),
+    return @{@"material":self.material,@"reservedTop":@(notesToolbarHeight(self.state)),@"contentWidth":@(NSWidth(self.window.contentView.bounds)),
         @"active":self.window.keyWindow?@YES:@NO,@"overflowActions":self.overflow?:@[],@"searchSequence":@(self.searchSequence),
         @"fullSizeContent":(self.window.styleMask&NSWindowStyleMaskFullSizeContentView)?@YES:@NO,@"symbolFallbacks":self.symbolFallbacks?:@[],
-        @"windowNumber":@(self.window.windowNumber),@"scaleFactor":@(self.window.backingScaleFactor)};
+        @"popupMenus":@YES,@"windowNumber":@(self.window.windowNumber),@"scaleFactor":@(self.window.backingScaleFactor)};
 }
 - (NSDictionary *)focusSearch {
     NSWindow *window=self.window;
@@ -510,10 +583,16 @@ static NSPoint contentOffsetFor(NSString *action) {
     if(self.disposed || self.root.window!=self.window || !anchor.window
         || ![self.actionStates[@"format"][@"enabled"] boolValue] || !self.formatEntries.count)return;
     [self.formatPopover close];
+    self.formatAnchor.notesMenuOpen=NO;
     self.formatPopover=notesUIFormatPopover(self.formatEntries,[self.state[@"revision"] unsignedLongLongValue],self,
         @selector(formatClicked:),@selector(formatColorsClicked:));
+    self.formatPopover.delegate=self;
+    self.formatAnchor=(NotesUIFeedbackButton *)anchor;self.formatAnchor.notesMenuOpen=YES;
     // No makeFirstResponder/selection setter: the host restores its revision-scoped bookmark.
     [self.formatPopover showRelativeToRect:anchor.bounds ofView:anchor preferredEdge:NSRectEdgeMinY];
+}
+- (void)popoverDidClose:(NSNotification *)notification {
+    if(notification.object==self.formatPopover){self.formatAnchor.notesMenuOpen=NO;self.formatAnchor=nil;}
 }
 - (BOOL)permitsFormatButton:(NotesUIFormatButton *)button {
     return !self.disposed && self.root.window==self.window && self.formatPopover.shown
@@ -528,38 +607,40 @@ static NSPoint contentOffsetFor(NSString *action) {
 }
 - (void)formatColorsClicked:(NotesUIFormatButton *)button {
     if(![self permitsFormatButton:button])return;
-    NSMenu *menu=[[NSMenu alloc] initWithTitle:@"颜色"];menu.autoenablesItems=NO;
+    NSMutableArray *entries=[NSMutableArray array];
     for(NSString *command in @[@"colorDefault",@"colorPurple",@"colorPink",@"colorOrange",@"colorMint",@"colorBlue"]) {
         NSDictionary *entry=self.formatEntries[command];if(!entry)continue;
-        NSMenuItem *item=[[NSMenuItem alloc] initWithTitle:entry[@"label"] action:@selector(menuClicked:) keyEquivalent:@""];
-        item.target=self;item.enabled=[entry[@"enabled"] boolValue];item.state=[entry[@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
-        item.image=notesUIFormatSwatch(command);item.representedObject=@{@"owner":@"format",@"command":command,@"revision":@(button.notesRevision)};
-        [menu addItem:item];
+        NSMutableDictionary *value=[entry mutableCopy];value[@"owner"]=@"format";value[@"revision"]=@(button.notesRevision);[entries addObject:value];
     }
-    self.activeMenu=menu;[menu popUpMenuPositioningItem:nil atLocation:NSZeroPoint inView:button];self.activeMenu=nil;
+    NSMenu *menu=notesUIMenuEntries(entries,self,@selector(menuClicked:));
+    for(NSMenuItem *item in menu.itemArray)item.image=notesUIFormatSwatch(item.representedObject[@"command"]);
+    self.activeMenu=menu;button.notesMenuOpen=YES;
+    @try {[menu popUpMenuPositioningItem:nil atLocation:NSZeroPoint inView:button];}
+    @finally {button.notesMenuOpen=NO;self.activeMenu=nil;}
 }
 - (void)buttonClicked:(NotesUIButton *)button {
     if([self.state[@"contentOverlay"] boolValue])return;
     NSString *action=button.notesAction;
     if([action isEqual:@"overflow"]) {
-        NSMenu *overflow=[[NSMenu alloc] initWithTitle:@"其他工具"];overflow.autoenablesItems=NO;
-        for(NSString *a in self.overflow) {
-            NSMenuItem *item=[[NSMenuItem alloc] initWithTitle:labelFor(a,[self.state[@"tableFocused"] boolValue]) action:@selector(overflowClicked:) keyEquivalent:@""];
-            item.target=self;item.representedObject=a;item.enabled=[self.actionStates[a][@"enabled"] boolValue];
-            item.state=[self.actionStates[a][@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
-            if(self.menus[a])item.submenu=self.menus[a];[overflow addItem:item];
-        }
+        NSMutableArray *entries=[NSMutableArray array];
+        for(NSString *a in self.overflow)[entries addObject:@{@"kind":@"item",@"label":labelFor(a,[self.state[@"tableFocused"] boolValue]),@"action":a,@"enabled":self.actionStates[a][@"enabled"]?:@NO,@"selected":self.actionStates[a][@"selected"]?:@NO}];
+        NSMenu *overflow=notesUIMenuEntries(entries,self,@selector(overflowClicked:));
+        for(NSMenuItem *item in overflow.itemArray){NSMenu *submenu=self.menus[item.representedObject[@"action"]];if(submenu)item.submenu=submenu;}
         NotesUIController *strong=self;strong.activeMenu=overflow;
-        [overflow popUpMenuPositioningItem:nil atLocation:NSMakePoint(0,34) inView:button];strong.activeMenu=nil;return;
+        button.notesMenuOpen=YES;
+        @try {[overflow popUpMenuPositioningItem:nil atLocation:NSMakePoint(0,34) inView:button];}
+        @finally {button.notesMenuOpen=NO;strong.activeMenu=nil;}return;
     }
     if(![self.actionStates[action][@"enabled"] boolValue])return;
     if([action isEqual:@"format"] && self.formatEntries.count){[self showFormatPopover:button];return;}
     NSMenu *menu=self.menus[action];
-    if(menu){NotesUIController *strong=self;strong.activeMenu=menu;[menu popUpMenuPositioningItem:nil atLocation:NSMakePoint(0,34) inView:button];strong.activeMenu=nil;}
+    if(menu){NotesUIController *strong=self;strong.activeMenu=menu;button.notesMenuOpen=YES;
+        @try {[menu popUpMenuPositioningItem:nil atLocation:NSMakePoint(0,34) inView:button];}
+        @finally {button.notesMenuOpen=NO;strong.activeMenu=nil;}}
     else[self send:@{@"kind":@"action",@"action":action}];
 }
 - (void)overflowClicked:(NSMenuItem *)item {
-    NSString *a=item.representedObject;if(![self.actionStates[a][@"enabled"] boolValue])return;
+    NSString *a=item.representedObject[@"action"];if(![self.actionStates[a][@"enabled"] boolValue])return;
     if([a isEqual:@"format"] && self.formatEntries.count) {
         uint64_t revision=[self.state[@"revision"] unsignedLongLongValue];__weak NotesUIController *weak=self;
         [NSOperationQueue.mainQueue addOperationWithBlock:^{NotesUIController *strong=weak;
@@ -575,7 +656,15 @@ static NSPoint contentOffsetFor(NSString *action) {
             || ![self.formatEntries[represented[@"command"]][@"enabled"] boolValue])return;
         [self.formatPopover close];self.formatPopover=nil;
     }
-    [self send:@{@"kind":@"menu",@"owner":represented[@"owner"],@"command":represented[@"command"]}];
+    NSMutableDictionary *intent=[@{@"kind":@"menu",@"owner":represented[@"owner"],@"command":represented[@"command"]} mutableCopy];
+    if(represented[@"folderId"])intent[@"folderId"]=represented[@"folderId"];
+    [self send:intent];
+}
+- (void)controlTextDidBeginEditing:(NSNotification *)notification {
+    if(notification.object==self.search)((NotesUISearchSurface *)self.groups[@"search"]).focused=YES;
+}
+- (void)controlTextDidEndEditing:(NSNotification *)notification {
+    if(notification.object==self.search)((NotesUISearchSurface *)self.groups[@"search"]).focused=NO;
 }
 - (void)controlTextDidChange:(NSNotification *)notification {
     if(notification.object!=self.search||!self.search.enabled)return;

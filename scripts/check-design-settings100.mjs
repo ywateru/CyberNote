@@ -1,0 +1,35 @@
+// Confirmed owner ordering with controlled persistence/read boundaries. This is
+// separate from the real App + SQLite failure/reload checks in debug/design100.
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import ts from "typescript";
+const module = source => `data:text/javascript;base64,${Buffer.from(ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText).toString("base64")}`;
+const details = module(await readFile("src/interface-details.ts", "utf8"));
+const { ConfirmedSettings } = await import(module((await readFile("src/confirmed-settings.ts", "utf8")).replace('"./interface-details"', JSON.stringify(details))));
+const defer = () => { let resolve, reject; const promise = new Promise((a,b) => { resolve=a;reject=b; });return {promise,resolve,reject}; };
+const tick = async () => { for(let i=0;i<12;i++)await Promise.resolve(); };
+const published=[], owner=new ConfirmedSettings(value=>published.push(structuredClone(value)));
+owner.observe({theme:"light"});
+const stale = owner.ticket(), first=defer(), second=defer(), calls=[];
+let db={theme:"light"};
+const persist=async patch=>{calls.push(patch);await (calls.length===1?first:second).promise;db={...db,...patch};};
+const old=owner.write({theme:"dark"},persist,async()=>db);
+const newer=owner.write({theme:"system"},persist,async()=>db);
+await tick();assert.equal(calls.length,1);assert.equal(owner.snapshot().theme,"light");
+assert.equal(owner.observe({theme:"dark"},stale),false);
+first.reject(Error("SQLite rejected"));await assert.rejects(old,/SQLite/);
+await tick();assert.equal(calls.length,2);assert.equal(owner.snapshot().theme,"light");
+second.resolve();await newer;assert.equal(owner.snapshot().theme,"system");
+assert.ok(!published.some(v=>v.theme==="dark"));
+console.log("PASS serialized writes: failed old request never publishes or replaces newer success");
+const oldRead=owner.ticket();owner.observe({theme:"light",sort:"title"});assert.equal(owner.observe({theme:"dark"},oldRead),false);
+assert.equal(owner.snapshot().sort,"title");
+let reads=0;const delayed=defer();
+const write=owner.write({theme:"dark"},async()=>{},async()=>{reads++;return reads===1?delayed.promise:{theme:"dark",sort:"created"};});
+await tick();owner.observe({theme:"system",sort:"created"});delayed.resolve({theme:"dark",sort:"title"});
+await write;assert.equal(reads,2);assert.deepEqual(owner.snapshot(),{theme:"dark",sort:"created"});
+console.log("PASS external updates adopt; stale reads retry rather than overwrite current authority");
+await assert.rejects(owner.write({theme:"light"},async()=>{},async()=>{throw Error("read unavailable");}),/read unavailable/);
+assert.equal(owner.snapshot().theme,"dark");
+assert.throws(()=>owner.write({interfaceDetails:{version:2}},async()=>{},async()=>({})),/未知|缺失|版本/);
+console.log("PASS missing confirmation and invalid details never apply globally");

@@ -6,6 +6,22 @@ fn sample() -> ToolbarState {
 fn contract_rejects_unknown_variants_fields_and_unbounded_state() {
     let state = sample();
     state.validate().unwrap();
+    assert_eq!(state.icon_scale, 1.0);
+    assert_eq!(state.hit_scale, 1.0);
+    for (icon, hit) in [(0.8, 1.0), (1.2, 1.3)] {
+        let mut scaled = state.clone();
+        scaled.icon_scale = icon;
+        scaled.hit_scale = hit;
+        scaled.validate().unwrap();
+    }
+    for invalid in [f64::NAN, f64::INFINITY, 0.79, 1.21] {
+        let mut bad = state.clone(); bad.icon_scale = invalid;
+        assert!(bad.validate().is_err());
+    }
+    for invalid in [f64::NAN, f64::INFINITY, 0.99, 1.31] {
+        let mut bad = state.clone(); bad.hit_scale = invalid;
+        assert!(bad.validate().is_err());
+    }
     let mut value = serde_json::to_value(&state).unwrap();
     value["body"] = serde_json::json!("must never be accepted");
     assert!(serde_json::from_value::<ToolbarState>(value).is_err());
@@ -18,6 +34,11 @@ fn contract_rejects_unknown_variants_fields_and_unbounded_state() {
     let mut bad = state.clone();
     bad.columns.sidebar_width = f64::NAN;
     assert!(bad.validate().is_err());
+    for scale in [f64::NAN, f64::INFINITY, 0.0, 2.0] {
+        let mut bad = state.clone();
+        bad.font_scale = scale;
+        assert!(bad.validate().is_err());
+    }
     let mut bad = state.clone();
     bad.folder_title = "字".repeat(257);
     assert!(bad.validate().is_err());
@@ -87,6 +108,7 @@ fn format_surface_accepts_only_format_commands_and_disabled_colors_cannot_dispat
         .unwrap();
     menu.items.push(MenuEntry::Item {
         command: MenuCommand::DeleteNote,
+        folder_id: None,
         label: "删除".into(),
         enabled: true,
         selected: false,
@@ -111,10 +133,12 @@ fn format_surface_accepts_only_format_commands_and_disabled_colors_cannot_dispat
     assert!(!state.permits(&Intent::Menu {
         owner: Action::Format,
         command: MenuCommand::ColorPurple,
+        folder_id: None,
     }));
     assert!(state.permits(&Intent::Menu {
         owner: Action::Format,
         command: MenuCommand::Bold,
+        folder_id: None,
     }));
 }
 #[test]
@@ -150,16 +174,19 @@ fn events_cannot_cross_windows_bindings_revisions_or_disabled_commands() {
     event.intent = Intent::Menu {
         owner: Action::Attachment,
         command: MenuCommand::ScanDocument,
+        folder_id: None,
     };
     assert!(!binding.permits_event("main", &event));
     event.intent = Intent::Menu {
         owner: Action::More,
         command: MenuCommand::Bold,
+        folder_id: None,
     };
     assert!(!binding.permits_event("main", &event));
     event.intent = Intent::Menu {
         owner: Action::Format,
         command: MenuCommand::Bold,
+        folder_id: None,
     };
     assert!(binding.permits_event("main", &event));
 }
@@ -291,4 +318,22 @@ fn content_overlay_is_optional_and_survives_strict_transport_serialization() {
     overlay.validate().unwrap();
     assert!(overlay.content_overlay);
     assert_eq!(serde_json::to_value(overlay).unwrap()["contentOverlay"], true);
+}
+
+#[test]
+fn move_submenu_permits_only_the_exact_enabled_folder_from_current_state() {
+    let mut state = sample();
+    let owner = state.menus.iter_mut().find(|m| m.owner == Action::More).unwrap();
+    owner.items.push(MenuEntry::Submenu { label: "移动到".into(), items: vec![
+        MenuEntry::Item { command: MenuCommand::MoveNote, folder_id: Some("folder-a".into()), label: "当前目录".into(), enabled: false, selected: true },
+        MenuEntry::Item { command: MenuCommand::MoveNote, folder_id: Some("folder-b".into()), label: "目标目录".into(), enabled: true, selected: false },
+    ] });
+    state.validate().unwrap();
+    let intent = |id: &str| Intent::Menu { owner: Action::More, command: MenuCommand::MoveNote, folder_id: Some(id.into()) };
+    assert!(!state.permits(&intent("folder-a")));
+    assert!(state.permits(&intent("folder-b")));
+    assert!(!state.permits(&intent("forged-folder")));
+    let menu = state.menus.iter_mut().find(|m| m.owner == Action::More).unwrap();
+    menu.items.push(MenuEntry::Item { command: MenuCommand::DeleteNote, folder_id: Some("folder-b".into()), label: "伪造目标".into(), enabled: true, selected: false });
+    assert!(state.validate().is_err());
 }

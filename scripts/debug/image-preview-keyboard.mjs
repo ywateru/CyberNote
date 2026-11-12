@@ -1,6 +1,43 @@
 import { resolve } from "node:path";
 import { idle, state, saveJSON } from "./runtime.mjs";
 
+/** Scrollable information areas can be sequentially focusable in Chromium.
+ * Follow ordinary document order and reject a real focus cycle inside preview. */
+export async function tabOutsidePreview(page, key = "Tab") {
+  const visited = [],
+    path = [];
+  try {
+    for (let attempt = 0; attempt < 12; attempt++) {
+      await page.keyboard.press(key);
+      const focus = await page.evaluate(() => ({
+        tag: document.activeElement?.tagName,
+        label: document.activeElement?.getAttribute("aria-label"),
+        inside:
+          document.hasFocus() &&
+          !!document
+            .querySelector(".image-preview")
+            ?.contains(document.activeElement),
+      }));
+      path.push(focus);
+      if (!focus.inside) return { ...focus, path };
+      const current = await page.evaluateHandle(() => document.activeElement);
+      if (
+        await current.evaluate(
+          (element, previous) => previous.includes(element),
+          visited,
+        )
+      ) {
+        await current.dispose();
+        return { ...focus, path, cycle: true };
+      }
+      visited.push(current);
+    }
+    return { inside: true, path, exhausted: true };
+  } finally {
+    for (const handle of visited) await handle.dispose();
+  }
+}
+
 /** Exercise real save button lifecycle with only picker/output boundaries mocked. */
 export async function runImageExportKeyboard(
   runtime,
@@ -61,13 +98,13 @@ export async function runImageExportKeyboard(
       .evaluate((node) => node === document.activeElement);
     if (!escaped) await command("image.close");
     const tabSave = await save(outcome);
-    // A picker may return focus to body. Preserve the observed focus in evidence,
-    // then explicitly exercise that boundary even on browsers which retain it.
-    await page.evaluate(() => document.activeElement?.blur());
-    await page.keyboard.press("Tab");
-    const tabFocus = await focus();
-    await page.keyboard.press("Shift+Tab");
-    const shiftTabFocus = await focus();
+    // Nonmodal controls use ordinary document order instead of a Tab trap.
+    await page.locator(".image-preview header button").last().focus();
+    const tabFocus = await tabOutsidePreview(page);
+    await page
+      .getByRole("button", { name: "关闭图片预览", exact: true })
+      .focus();
+    const shiftTabFocus = await tabOutsidePreview(page, "Shift+Tab");
     await command("image.close");
     rows.push({
       outcome,
@@ -91,12 +128,10 @@ export async function runImageExportKeyboard(
         row.documentUnchanged,
     );
     check(
-      `${row.outcome} export lets Tab recover body focus and Shift Tab wrap inside preview`,
+      `${row.outcome} export leaves Tab and Shift Tab free to return to the main interface`,
       row.tabSave.correctResult &&
-        row.tabFocus.inside &&
-        row.tabFocus.label === "图片信息" &&
-        row.shiftTabFocus.inside &&
-        row.shiftTabFocus.label === "关闭图片预览",
+        !row.tabFocus.inside &&
+        !row.shiftTabFocus.inside,
     );
   }
 }

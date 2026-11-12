@@ -1,0 +1,24 @@
+{
+  "baseline": "93e4ffd35f4c0f2c2a1d2b4007572090365d2825",
+  "coreHarness": {
+    "features": [
+      "native-provider-probe"
+    ],
+    "targets": {
+      "media": 16,
+      "platform": 7,
+      "provider": 3,
+      "review99a": 2,
+      "review99b": 1
+    },
+    "passed": 29,
+    "log": "/private/tmp/media99c-tests.log"
+  },
+  "productionRust": "cargo check --offline --locked --manifest-path src-tauri/Cargo.toml --lib; passed; existing dead-code/native UI warnings",
+  "android": "Actual Kotlin compiled against Android36/Tauri2.12.5 SDK classes; 7 shared API26/27/pixel-budget JVM policy checks passed; no APK/device validation",
+  "mac": "See mac-provider.json; exact production C; 2 large MP4 and 8 image/orientation inputs with FD/budget tests",
+  "newRendererCommands": 0,
+  "generatedCommandPermissionSources": 0,
+  "nativeBundlesBuilt": false,
+  "adbUsed": false
+}

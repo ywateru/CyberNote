@@ -216,7 +216,7 @@ export async function runStorageOverview(runtime, { command, check, output }) {
         (await page.locator(".storage-category").count()) === 7,
     );
     const expected = await page.evaluate(async (snapshot) => {
-      const { storageUsage } = await import("/src/storage-usage.ts");
+      const { storageUsage } = window.__DEBUG_STORAGE_MODULE__ || await import("/src/storage-usage.ts");
       return storageUsage(snapshot);
     }, lastInventory);
     const total = await page
@@ -447,8 +447,8 @@ export async function runStorageOverview(runtime, { command, check, output }) {
     // Helpers tested with values that cannot be inferred from the normal UI fixture.
     const edge = await page.evaluate(async () => {
       const { storageUsage, storageCategory, isStorageView } =
-        await import("/src/storage-usage.ts");
-      const { formatFileSize } = await import("/src/data-management.ts");
+        window.__DEBUG_STORAGE_MODULE__ || await import("/src/storage-usage.ts");
+      const { formatFileSize } = window.__DEBUG_DATA_MODULE__ || await import("/src/data-management.ts");
       const snapshot = {
         files: [
           {
@@ -674,6 +674,7 @@ export async function runStorageOverview(runtime, { command, check, output }) {
     );
     reorder = false;
     await open();
+    await command("settings.tab", {tab:"backup"});
     await configure({ dialog: { save: [null] } });
     await page
       .getByRole("button", { name: "导出完整备份…", exact: true })
@@ -718,6 +719,7 @@ export async function runStorageOverview(runtime, { command, check, output }) {
         access: backend.state().access,
       });
     };
+    await command("settings.tab", {tab:"data"});
     await category("image");
     await page
       .getByRole("textbox", { name: "搜索本地文件" })
@@ -751,8 +753,10 @@ export async function runStorageOverview(runtime, { command, check, output }) {
       }
       return nativeCall(c, a);
     };
+    await command("settings.tab", {tab:"backup"});
     await page.getByRole("button", { name: "导入备份…", exact: true }).click();
     await idle(page);
+    await command("settings.tab", {tab:"data"});
     await page.waitForSelector(".storage-summary");
     check(
       "Overview import retains actual App save barrier lifecycle and refreshes snapshot",
@@ -764,6 +768,7 @@ export async function runStorageOverview(runtime, { command, check, output }) {
     await command("recording.open");
     await command("recording.action", { action: "toggle" });
     await open();
+    await command("settings.tab", {tab:"backup"});
     check(
       "Active recording still blocks both overview backup actions with unsaved audio explanation",
       (await page
@@ -772,7 +777,7 @@ export async function runStorageOverview(runtime, { command, check, output }) {
         (await page
           .getByRole("button", { name: "导出完整备份…", exact: true })
           .isDisabled()) &&
-        (await page.locator(".data-warning").first().innerText()).includes(
+        (await page.locator(".data-backup-scroll .data-warning").innerText()).includes(
           "内存中的录音尚未备份",
         ),
     );
@@ -869,6 +874,8 @@ export async function runStorageBackupAvailability(
   };
   try {
     const opening = api(page, "data.open");
+    await page.waitForSelector(".data-loading");
+    await api(page,"settings.tab",{tab:"backup"});
     await page.waitForSelector(".data-backup-section");
     check(
       "First pending inventory exposes both actual enabled archive controls without snapshot",
@@ -881,7 +888,9 @@ export async function runStorageBackupAvailability(
     releaseInventory();
     await opening;
     await idle(page);
+    await command("settings.tab",{tab:"data"});
     await page.getByRole("button", { name: "重试读取", exact: true }).waitFor();
+    await command("settings.tab",{tab:"backup"});
     check(
       "First inventory failure retains import/export recovery and explicit retry without totals",
       (await available()) &&
@@ -989,7 +998,9 @@ export async function runStorageBackupAvailability(
     await capture("storage81-recovered-without-inventory");
     backend.call = originalCall;
     backend.configure({ fail: { inventory: 0 } });
-    await page.getByRole("button", { name: "重试读取", exact: true }).click();
+    await command("settings.tab",{tab:"data"});
+    await page.waitForSelector(".storage-summary");
+    await command("settings.tab",{tab:"backup"});
     await idle(page);
     check(
       "Inventory retry restores overview without duplicating or losing backup controls",

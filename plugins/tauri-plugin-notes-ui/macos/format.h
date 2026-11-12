@@ -1,8 +1,19 @@
 #import <AppKit/AppKit.h>
 #include <stdint.h>
 
+// Shared feedback for both toolbar icons/text and the formatting panel.
+@interface NotesUIFeedbackButtonCell : NSButtonCell
+@end
+@interface NotesUIFeedbackButton : NSButton
+@property BOOL notesHovered;
+@property BOOL notesMenuOpen;
+@property BOOL notesSelected;
+@property CGFloat notesFeedbackScale;
+- (NSString *)notesFeedbackState;
+@end
+
 // A fixed command and the state that produced this control. Never a host selector or script.
-@interface NotesUIFormatButton : NSButton
+@interface NotesUIFormatButton : NotesUIFeedbackButton
 @property NSString *notesCommand;
 @property uint64_t notesRevision;
 @end

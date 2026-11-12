@@ -248,10 +248,24 @@ fn validate_folders(folders: &[Folder]) -> Result<()> {
     }
     Ok(())
 }
-fn validate_settings(settings: &Value) -> Result<()> {
+pub(super) fn validate_interface_details(value: &Value) -> Result<()> {
+    let object = value.as_object().ok_or_else(|| invalid("界面细节必须是完整配置对象"))?;
+    const KEYS: [&str; 6] = ["version", "iconScale", "desktopHitScale", "mobileHitScale", "menuSpacing", "radiusScale"];
+    if object.len() != KEYS.len() || object.keys().any(|key| !KEYS.contains(&key.as_str())) || KEYS.iter().any(|key| !object.contains_key(*key)) {
+        return Err(invalid("界面细节包含未知或缺失字段"));
+    }
+    if object["version"].as_f64() != Some(1.0) { return Err(invalid("不支持此界面细节版本")); }
+    for (key, min, max) in [("iconScale", 80, 120), ("desktopHitScale", 100, 130), ("mobileHitScale", 100, 120), ("radiusScale", 0, 150)] {
+        if !object[key].as_f64().is_some_and(|n| n.is_finite() && n.fract() == 0.0 && n >= min as f64 && n <= max as f64) { return Err(invalid(format!("界面细节 {key} 必须是 {min}–{max} 的整数百分比"))); }
+    }
+    if !["compact", "standard", "comfortable"].contains(&object["menuSpacing"].as_str().unwrap_or("")) { return Err(invalid("菜单间距无效")); }
+    Ok(())
+}
+pub(super) fn validate_settings(settings: &Value) -> Result<()> {
     let object = settings
         .as_object()
         .ok_or_else(|| invalid("归档设置必须是对象"))?;
+    if let Some(details) = object.get("interfaceDetails") { validate_interface_details(details)?; }
     for (key, choices) in [
         ("theme", &["system", "light", "dark"][..]),
         ("view", &["list", "gallery"][..]),

@@ -707,3 +707,47 @@ fn crash_worker() {
     store.import_archive(&PathBuf::from(file)).unwrap();
     panic!("requested crash checkpoint was not reached");
 }
+
+#[test]
+fn interface_details_settings_and_archive_are_strict_and_atomic() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("details-store");
+    let mut store = Store::open(&root).unwrap();
+    let valid = json!({"version":1,"iconScale":120,"desktopHitScale":130,"mobileHitScale":120,"menuSpacing":"comfortable","radiusScale":150});
+    store.action(json!({"type":"settings","settings":{"theme":"dark","interfaceFontSize":"small","editorFontSize":"huge","customSetting":{"keep":true},"interfaceDetails":valid}})).unwrap();
+    drop(store);
+    let mut store = Store::open(&root).unwrap();
+    let good = store.workspace().unwrap();
+    assert_eq!(good["settings"]["interfaceDetails"], valid);
+    let archive = temp.path().join("details.notesbackup");
+    store.export_archive(&archive).unwrap();
+    let encoded = read_json(&archive);
+    assert_eq!(encoded["settings"]["interfaceDetails"], valid);
+    let target_root = temp.path().join("target");
+    let mut target = Store::open(&target_root).unwrap();
+    target.import_archive(&archive).unwrap();
+    assert_eq!(target.workspace().unwrap()["settings"], good["settings"]);
+    let mut bad_values = vec![Value::Null, json!([]), json!({})];
+    for (key, value) in [("version",json!(2)),("version",json!("1")),("iconScale",json!(79)),("iconScale",json!(121)),("iconScale",json!(100.5)),("desktopHitScale",json!(99)),("desktopHitScale",json!(131)),("mobileHitScale",json!(99)),("mobileHitScale",json!(121)),("radiusScale",json!(-1)),("radiusScale",json!(151)),("menuSpacing",json!("anything"))] {
+        let mut bad = valid.clone(); bad[key] = value; bad_values.push(bad);
+    }
+    let mut extra = valid.clone(); extra["css"] = json!("position:fixed"); bad_values.push(extra);
+    let mut missing = valid.clone(); missing.as_object_mut().unwrap().remove("radiusScale"); bad_values.push(missing);
+    for (i, bad) in bad_values.iter().enumerate() {
+        assert!(store.action(json!({"type":"settings","settings":{"theme":"light","interfaceDetails":bad}})).is_err(), "accepted update {i}");
+        assert_eq!(store.workspace().unwrap()["settings"], good["settings"], "partially saved update {i}");
+        let mut invalid = encoded.clone(); invalid["settings"]["interfaceDetails"] = bad.clone();
+        let bad_path = temp.path().join(format!("bad-{i}.notesbackup")); write_json(&bad_path, &invalid);
+        let before = target.workspace().unwrap();
+        assert!(target.import_archive(&bad_path).is_err(), "accepted import {i}");
+        assert_eq!(target.workspace().unwrap(), before, "partially imported {i}");
+    }
+    let defaults = json!({"version":1,"iconScale":100,"desktopHitScale":100,"mobileHitScale":100,"menuSpacing":"standard","radiusScale":100});
+    store.action(json!({"type":"settings","settings":{"interfaceDetails":defaults}})).unwrap();
+    let reset = store.workspace().unwrap();
+    for key in ["theme","interfaceFontSize","editorFontSize","customSetting"] { assert_eq!(reset["settings"][key], good["settings"][key]); }
+    let mut legacy = encoded; legacy["settings"].as_object_mut().unwrap().remove("interfaceDetails");
+    let legacy_path = temp.path().join("legacy.notesbackup"); write_json(&legacy_path, &legacy);
+    target.import_archive(&legacy_path).unwrap();
+    assert!(target.workspace().unwrap()["settings"].get("interfaceDetails").is_none());
+}

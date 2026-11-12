@@ -536,7 +536,16 @@ await test("inconsistent stale search cannot spin forever", async () => {
   assert.equal(h.errors.length, 1);
   h.controller.stop();
 });
-const stateSource = await readFile("src/native-toolbar-state.ts", "utf8");
+const detailsModule = `data:text/javascript;base64,${Buffer.from(ts.transpileModule(await readFile("src/interface-details.ts", "utf8"), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText).toString("base64")}`;
+const fontSource = (await readFile("src/font-size.ts", "utf8")).replace('"./interface-details"', JSON.stringify(detailsModule));
+const fontModule = `data:text/javascript;base64,${Buffer.from(ts.transpileModule(fontSource, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText).toString("base64")}`;
+const tagsSource = await readFile("src/note-tags.ts", "utf8");
+const tagsModule = `data:text/javascript;base64,${Buffer.from(ts.transpileModule(tagsSource, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText).toString("base64")}`;
+const foldersSource = (await readFile("src/smart-folders.ts", "utf8")).replace('"./note-tags"', JSON.stringify(tagsModule));
+const foldersModule = `data:text/javascript;base64,${Buffer.from(ts.transpileModule(foldersSource, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText).toString("base64")}`;
+const stateSource = (
+  await readFile("src/native-toolbar-state.ts", "utf8")
+).replace('"./font-size"', JSON.stringify(fontModule)).replace('"./smart-folders"', JSON.stringify(foldersModule)).replace('"./interface-details"', JSON.stringify(detailsModule));
 const { toolbarState } = await import(
   `data:text/javascript;base64,${Buffer.from(ts.transpileModule(stateSource, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText).toString("base64")}`
 );
@@ -555,7 +564,7 @@ await test("host projections distinguish browse, open, focused table, and indepe
   const browse = toolbarState({ ...input, layout: "galleryBrowse" });
   assert.deepEqual(
     browse.actions.map((a) => a.action),
-    ["newFolder", "toggleSidebar", "viewOptions", "newNote"],
+    ["newFolder", "toggleSidebar", "viewOptions", "newNote", "settings"],
   );
   const open = toolbarState({ ...input, layout: "galleryExpanded" });
   assert(open.actions.some((a) => a.action === "backToGallery"));
@@ -564,6 +573,31 @@ await test("host projections distinguish browse, open, focused table, and indepe
   assert.equal(open.tableFocused, true);
   assert.equal(open.columns.sidebarWidth, 245);
   assert.equal(open.columns.listWidth, 301);
+  assert.equal(open.fontScale, 14 / 18);
+  for (const [size, pixels] of [
+    ["tiny", 12],
+    ["small", 13],
+    ["medium", 14],
+    ["large", 16],
+    ["huge", 18],
+  ]) {
+    const scaled = toolbarState({
+      ...input,
+      layout: "threeColumn",
+      settings: { interfaceFontSize: size, editorFontSize: "huge" },
+    });
+    assert.equal(scaled.fontScale, pixels / 18);
+    assert(
+      scaled.actions.some(
+        (action) => action.action === "recordAudio" && action.enabled,
+      ),
+    );
+    assert(
+      scaled.actions.some(
+        (action) => action.action === "insertTag" && action.enabled,
+      ),
+    );
+  }
   const independent = toolbarState({ ...input, layout: "independentNote" });
   assert.equal(independent.search, null);
   assert.equal(independent.columns.sidebarVisible, false);
@@ -572,6 +606,23 @@ await test("host projections distinguish browse, open, focused table, and indepe
       (a) => a.action === "toggleSidebar" || a.action === "backToGallery",
     ),
   );
+});
+await test("confirmed interface details project independent native icon and desktop hit scales", async () => {
+  const input={layout:"threeColumn",sidebar:true,settings:{},folderTitle:"folder",folderCount:1,query:"",searchAck:0,available:true,editable:true,editor:null};
+  const baseline=toolbarState(input);assert.equal(baseline.iconScale,1);assert.equal(baseline.hitScale,1);
+  const details={version:1,iconScale:80,desktopHitScale:130,mobileHitScale:120,menuSpacing:"compact",radiusScale:0};
+  const projected=toolbarState({...input,settings:{interfaceFontSize:"huge",editorFontSize:"tiny",interfaceDetails:details}});
+  assert.equal(projected.fontScale,1);assert.equal(projected.iconScale,.8);assert.equal(projected.hitScale,1.3);
+  assert.equal(toolbarState({...input,settings:{interfaceDetails:{...details,iconScale:120,desktopHitScale:100}}}).hitScale,1);
+});
+await test("text selection projects conversion capability without pretending to focus a table", async () => {
+  const input = {layout:"threeColumn",sidebar:true,settings:{},folderTitle:"folder",folderCount:1,query:"",searchAck:0,available:true,editable:true,editor:{isActive:()=>false},hasTextSelection:true,textToTableAvailable:true};
+  const item = value => toolbarState(value).menus.find(menu => menu.owner === "table")?.items.find(item => item.command === "convertTextToTable");
+  assert.equal(item(input)?.enabled, true);
+  assert.equal(toolbarState(input).tableFocused, false);
+  assert.equal(item({...input,textToTableAvailable:false})?.enabled, false);
+  assert.equal(item({...input,editable:false})?.enabled, false);
+  assert.equal(item({...input,hasTextSelection:false}), undefined);
 });
 await test("local OCR has its own typed native command; Continuity stays disabled and unavailable targets cannot recognize", async () => {
   const input = {
@@ -599,7 +650,8 @@ await test("local OCR has its own typed native command; Continuity stays disable
     enabled.find((item) => item.command === "recognizeImageText").enabled,
     true,
   );
-  for (const command of ["takePhoto", "scanDocument", "addSketch"])
+  assert.equal(enabled.find((item) => item.command === "addSketch").enabled, true);
+  for (const command of ["takePhoto", "scanDocument"])
     assert.equal(
       enabled.find((item) => item.command === command).enabled,
       false,
@@ -621,5 +673,70 @@ await test("local OCR has its own typed native command; Continuity stays disable
   );
   assert.match(guest, /'recognizeImageText'/);
   assert.match(native, /RecognizeImageText,/);
+});
+await test("scheduled note switches coalesce without accepting the old note's actions", async () => {
+  let flush;
+  const h = harness({
+    scheduleUpdate: (callback) => {
+      flush = callback;
+      return () => {
+        flush = undefined;
+      };
+    },
+  });
+  h.controller.set(projection());
+  await settle();
+  const transient = projection("B");
+  transient.state.actions = [
+    { action: "format", enabled: false, selected: false },
+  ];
+  h.controller.set(transient);
+  const ready = projection("B", "", 0, { id: "B-ready" });
+  ready.state.actions = [{ action: "format", enabled: true, selected: false }];
+  h.controller.set(ready);
+  h.emit(1, { kind: "action", action: "newNote" });
+  assert.equal(h.events.length, 0);
+  assert.equal(h.calls.filter((c) => c[0] === "update").length, 0);
+  flush();
+  await settle();
+  const updates = h.calls.filter((c) => c[0] === "update");
+  assert.equal(updates.length, 1);
+  assert.equal(updates[0][1].actions[0].enabled, true);
+  h.emit(2, { kind: "action", action: "newNote" }, updates[0][1].revision);
+  assert.equal(h.events[0][1].id, "B-ready");
+  h.controller.stop();
+});
+await test("protective overlays bypass the frame scheduler and stop cancels queued work", async () => {
+  let flush,
+    canceled = 0;
+  const h = harness({
+    scheduleUpdate: (callback) => {
+      flush = callback;
+      return () => {
+        flush = undefined;
+        canceled++;
+      };
+    },
+  });
+  h.controller.set(projection());
+  await settle();
+  h.controller.set(projection("pending"));
+  const overlay = projection("protected");
+  overlay.state.contentOverlay = true;
+  h.controller.set(overlay);
+  await settle();
+  assert.equal(canceled, 1);
+  assert.equal(flush, undefined);
+  assert.equal(
+    h.calls.filter((c) => c[0] === "update").at(-1)[1].contentOverlay,
+    true,
+  );
+  h.controller.set(projection("restored"));
+  await settle();
+  h.controller.set(projection("queued"));
+  h.controller.stop();
+  await settle();
+  assert.equal(canceled, 2);
+  assert.equal(flush, undefined);
 });
 console.log(JSON.stringify({ tests: results.length, results }, null, 2));

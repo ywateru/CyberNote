@@ -1,101 +1,161 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { readAttachment } from "./bridge";
-import { MetadataStale } from "./metadata-client";
-import { AccessChanged } from "./access-client";
-import { attachmentRecordedAt } from "./recording-metadata";
 import {
-  createAttachmentMediaSource,
-  type AttachmentMediaSource,
-} from "./attachment-media";
-
-export function useAttachmentMedia(id: string, kind: string) {
-  const [version, setVersion] = useState(0);
-  const lifetime = useRef<object | null>(null);
+  createContext,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type RefObject,
+} from "react";
+import type { Attachment } from "./types";
+import { accessGate, type AttachmentSourcePurpose } from "./bridge";
+import {
+  attachmentSourceIdentity,
+  attachmentSourcePool,
+} from "./attachment-source-pool";
+import type { AttachmentMediaSource } from "./attachment-media";
+import { attachmentRecordedAt } from "./recording-metadata";
+export const AttachmentMetadataContext = createContext<readonly Attachment[]>(
+  [],
+);
+export function useAttachmentMetadata(id: string) {
+  return useContext(AttachmentMetadataContext).find(
+    (a) => a.id === id && !a.internal,
+  );
+}
+export function useMediaVisibility(
+  ref: RefObject<HTMLElement | null>,
+  margin = "0px",
+) {
+  const [visible, setVisible] = useState(false);
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) =>
+        setVisible(entry.isIntersecting && element.getClientRects().length > 0),
+      { rootMargin: margin },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [ref, margin]);
+  return visible;
+}
+export type LoadedAttachmentMedia = {
+  id: string;
+  kind: string;
+  source: AttachmentMediaSource;
+  name: string;
+  mime: string;
+  bytes: number;
+  recordedAt?: number;
+};
+export function useAttachmentMedia(
+  id: string,
+  kind: string,
+  enabled = true,
+  purpose: AttachmentSourcePurpose = "original",
+  pixels?: number,
+) {
+  const metadata = useAttachmentMetadata(id),
+    [version, setVersion] = useState(0);
+  const invalidation = useSyncExternalStore(
+    attachmentSourcePool.subscribe,
+    () => attachmentSourcePool.version(id, purpose),
+    () => 0,
+  );
+  const allowed =
+    enabled &&
+    !!metadata &&
+    !accessGate.state?.operationId &&
+    !accessGate.state?.suspended.includes(metadata.noteId) &&
+    !!accessGate.state?.notes[metadata.noteId]?.authorized;
+  const identity = metadata
+    ? attachmentSourceIdentity(
+        metadata.noteId,
+        JSON.stringify([
+          metadata.id,
+          metadata.relativePath,
+          metadata.size,
+          metadata.mime,
+          version,
+          invalidation,
+        ]),
+      )
+    : "";
   const [loaded, setLoaded] = useState<{
-    id: string;
-    kind: string;
-    version: number;
-    source: AttachmentMediaSource;
-    name: string;
-    mime: string;
-    bytes: number;
-    recordedAt?: number;
+    identity: string;
+    media: LoadedAttachmentMedia;
   } | null>(null);
   const [failure, setFailure] = useState<{
-    id: string;
-    kind: string;
-    version: number;
+    identity: string;
     message: string;
   } | null>(null);
-  // Invalidate before passive cleanup, including a committed identity change.
-  // A manual retry also seals the previous attempt before scheduling its render.
+  const attempt = useRef<object | null>(null);
   useLayoutEffect(() => {
     const token = {};
-    lifetime.current = token;
-    return () => {
-      if (lifetime.current === token) lifetime.current = null;
-    };
-  }, [id, kind, version]);
-  useEffect(() => {
-    let live = true;
-    const token = lifetime.current;
-    const current = () => live && token !== null && lifetime.current === token;
-    let source: AttachmentMediaSource | undefined;
+    attempt.current = token;
     setLoaded(null);
     setFailure(null);
-    void (async () => {
-      for (let attempt = 0; attempt < 3 && current(); attempt++) {
-        try {
-          // Every attempt captures a new access stamp and runs the unchanged
-          // bridge gates. A rejected response never supplies bytes or a URL.
-          const value = await readAttachment(id);
-          if (!current()) return;
-          const recordedAt = attachmentRecordedAt(value.recordedAt, kind);
-          source = createAttachmentMediaSource(value, kind);
-          setLoaded({
-            id,
-            kind,
-            version,
-            source,
-            name: value.name,
-            mime: value.mime,
-            bytes: atob(value.data).length,
-            recordedAt,
-          });
-          return;
-        } catch (error: unknown) {
-          if (!current()) return;
-          if (
-            (error instanceof MetadataStale ||
-              error instanceof AccessChanged) &&
-            attempt < 2
-          )
-            continue;
-          source?.dispose();
-          setLoaded(null);
-          setFailure({
-            id,
-            kind,
-            version,
-            message: error instanceof Error ? error.message : String(error),
-          });
+    if (!allowed || !metadata)
+      return () => {
+        attempt.current = null;
+      };
+    const cancel = attachmentSourcePool.request(
+      id,
+      metadata.noteId,
+      purpose,
+      pixels,
+      identity,
+      (source, grant) => {
+        if (attempt.current !== token) {
+          source.dispose();
           return;
         }
-      }
-    })();
+        setLoaded({
+          identity,
+          media: {
+            id,
+            kind,
+            source,
+            name: metadata.displayName,
+            mime: grant.mime,
+            bytes: metadata.size,
+            recordedAt: attachmentRecordedAt(metadata.recordedAt, kind),
+          },
+        });
+      },
+      (error) => {
+        if (attempt.current === token)
+          setFailure({
+            identity,
+            message:
+              (error as { code?: string })?.code === "unsupported_media"
+                ? "此格式暂不支持缩略图，可打开或导出原文件"
+                : error instanceof Error
+                  ? error.message
+                  : String(error),
+          });
+      },
+    );
     return () => {
-      live = false;
-      source?.dispose();
+      if (attempt.current === token) attempt.current = null;
+      cancel();
     };
-  }, [id, kind, version]);
-  const current = (value: { id: string; kind: string; version: number }) =>
-    value.id === id && value.kind === kind && value.version === version;
+  }, [id, kind, allowed, purpose, pixels, identity]);
   return {
-    media: loaded && current(loaded) ? loaded : null,
-    error: failure && current(failure) ? failure.message : "",
-    retry: () => {
-      lifetime.current = null;
-      setVersion((value) => value + 1);
-    },
+    allowed,
+    ownerIdentity: metadata ? attachmentSourceIdentity(metadata.noteId, JSON.stringify([id, metadata.relativePath, metadata.size, metadata.mime, invalidation])) : "",
+    media:
+      allowed && loaded?.identity === identity && !loaded.media.source.disposed
+        ? {
+            ...loaded.media,
+            name: metadata!.displayName,
+            recordedAt: attachmentRecordedAt(metadata!.recordedAt, kind),
+          }
+        : null,
+    error: failure?.identity === identity ? failure.message : "",
+    retry: () => setVersion((v) => v + 1),
+    metadata,
   };
 }

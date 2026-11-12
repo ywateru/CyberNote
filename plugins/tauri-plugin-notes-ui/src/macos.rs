@@ -1228,3 +1228,29 @@ mod tests {
             .unwrap();
     }
 }
+
+// UI-only menus: no filesystem paths or storage operations cross this boundary.
+pub(super) async fn popup_menu<R: Runtime>(app: &AppHandle<R>, window: Window<R>, request: PopupMenuRequest) -> Result<Option<u32>> {
+    on_main(app, move || {
+        extern "C" { fn notes_ui_popup_menu(window: *mut c_void, json: *const c_char) -> *mut c_char; }
+        let native = window.ns_window().map_err(|e| Error::new("window_closed", e.to_string()))?;
+        let input = cstr(&serde_json::to_string(&request).map_err(|e| Error::new("menu", e.to_string()))?)?;
+        let raw = unsafe { notes_ui_popup_menu(native, input.as_ptr()) };
+        if raw.is_null() { return Err(Error::new("menu", "菜单未返回结果")); }
+        let output = unsafe { CStr::from_ptr(raw).to_bytes().to_vec() };
+        unsafe { notes_ui_free(raw); }
+        let output: serde_json::Value = serde_json::from_slice(&output).map_err(|e| Error::new("menu", e.to_string()))?;
+        if let Some(message) = output["error"].as_str() { return Err(Error::new("menu", message)); }
+        let selected = output["index"].as_u64().and_then(|n| u32::try_from(n).ok());
+        Ok(selected.filter(|index| request.items.iter().any(|item| item.kind == "item" && item.enabled && item.index == *index)))
+    }).await
+}
+pub(super) async fn cancel_popup_menu<R: Runtime>(app: &AppHandle<R>, window: Window<R>, token: String) -> Result<()> {
+    on_main(app, move || {
+        extern "C" { fn notes_ui_cancel_popup_menu(window: *mut c_void, token: *const c_char); }
+        let native = window.ns_window().map_err(|e| Error::new("window_closed", e.to_string()))?;
+        let token = cstr(&token)?;
+        unsafe { notes_ui_cancel_popup_menu(native, token.as_ptr()); }
+        Ok(())
+    }).await
+}

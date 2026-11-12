@@ -445,7 +445,7 @@ try {
   backend.workspace.notes.find((n) => n.id === "note-b").locked = true;
   backend.sequence++;
   await page.evaluate(
-    (payload) => window.__DEBUG_PLATFORM__.emit("notes-metadata", payload),
+    (payload) => window.__DEBUG_PLATFORM__.emit("notes-metadata", {changes:[],...payload}),
     { metadata: backend.state().metadata },
   );
   await idle(page);
@@ -536,7 +536,7 @@ try {
   backend.workspace.notes.find((n) => n.id === "note-a").revision++;
   backend.sequence++;
   await page.evaluate(
-    (payload) => window.__DEBUG_PLATFORM__.emit("notes-metadata", payload),
+    (payload) => window.__DEBUG_PLATFORM__.emit("notes-metadata", {changes:[],...payload}),
     { metadata: backend.state().metadata },
   );
   await idle(page);
@@ -567,7 +567,7 @@ try {
   operations.get(refreshing).outcome = "commit";
   backend.configure({ delay: { load: 250 } });
   await page.evaluate(
-    (payload) => window.__DEBUG_PLATFORM__.emit("notes-metadata", payload),
+    (payload) => window.__DEBUG_PLATFORM__.emit("notes-metadata", {changes:[],...payload}),
     { metadata: backend.state().metadata },
   );
   await emit({
@@ -599,7 +599,7 @@ try {
   backend.workspace.notes.find((n) => n.id === "note-a").locked = true;
   backend.sequence++;
   await page.evaluate(
-    (payload) => window.__DEBUG_PLATFORM__.emit("notes-metadata", payload),
+    (payload) => window.__DEBUG_PLATFORM__.emit("notes-metadata", {changes:[],...payload}),
     { metadata: backend.state().metadata },
   );
   await release(revoked, "commit");

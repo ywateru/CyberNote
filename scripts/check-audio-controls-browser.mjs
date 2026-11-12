@@ -73,11 +73,11 @@ try {
   await page.goto(origin+"/__check");
   await page.waitForFunction(()=>!!window.mountNote);
   await page.evaluate((data)=>window.mountNote(data),bytes.toString("base64"));
-  await page.getByText("录音 · 1:06",{exact:true}).waitFor();
+  await page.getByText("音频 · 1:06",{exact:true}).waitFor();
   await page.waitForFunction(()=>!!window.__editor);
   const title=page.locator(".audio-title-toggle"), play=page.locator(".audio-play-toggle");
   const snapshot=()=>page.evaluate(()=>{
-    const a=document.querySelector("audio"),r=document.querySelector('input[type="range"]'),e=window.__editor;
+    const a=document.querySelector("audio"),r=document.querySelector('.audio-detail input[type="range"]'),e=window.__editor;
     return {doc:e.getJSON(),selection:e.state.selection.toJSON(),editorFocused:e.isFocused,activeElement:document.activeElement?.tagName,changes:window.__changes.length,focusEvents:[...window.__focus],time:a.currentTime,paused:a.paused,duration:String(a.duration),max:r?.max??null,expanded:document.querySelector('.audio-title-toggle').getAttribute('aria-expanded'),revision:window.__note.revision};
   });
   const initial=await snapshot();
@@ -93,7 +93,7 @@ try {
   assert.equal(await title.getAttribute('aria-controls'),await page.locator('.audio-detail').getAttribute('id'));
   await page.screenshot({path:resolve(output,'nodeview-mobile-expanded.png')});
   const geometry=await page.evaluate(()=>{
-    const card=document.querySelector('.audio-card'),title=document.querySelector('.audio-title-toggle'),play=document.querySelector('.audio-play-toggle'),range=document.querySelector('input[type="range"]'),back=document.querySelector('[aria-label="后退15秒"]'),forward=document.querySelector('[aria-label="前进15秒"]');
+    const card=document.querySelector('.audio-card'),title=document.querySelector('.audio-title-toggle'),play=document.querySelector('.audio-play-toggle'),range=document.querySelector('.audio-detail input[type="range"]'),back=document.querySelector('[aria-label="后退15秒"]'),forward=document.querySelector('[aria-label="前进15秒"]');
     const box=e=>{const b=e.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height,right:b.right};};
     return {card:box(card),title:box(title),play:box(play),range:box(range),back:box(back),forward:box(forward),arrowDisplay:getComputedStyle(document.querySelector('.audio-expand')).display,playTouchHeight:parseFloat(getComputedStyle(play,'::before').height),textPointerEvents:getComputedStyle(title.querySelector('strong')).pointerEvents,iconPointerEvents:getComputedStyle(play.querySelector('svg')).pointerEvents};
   });
@@ -125,11 +125,11 @@ try {
   await tap(page.getByRole('button',{name:'前进15秒',exact:true}));
   const upper=await snapshot();assert.ok(Math.abs(upper.time-Number(expanded.max))<.1);
   await title.focus();await page.keyboard.press('Enter');
-  await page.waitForFunction(()=>!document.querySelector('input[type="range"]'));
+  await page.waitForFunction(()=>!document.querySelector('.audio-detail input[type="range"]'));
   await page.keyboard.press('Space');
   await page.getByRole('slider',{name:'播放进度'}).waitFor();
   const keyboard=await snapshot();assert.equal(keyboard.time,upper.time);assert.equal(keyboard.paused,true);
-  await tap(title.locator('small'));
+  await tap(title.locator('small:visible'));
   assert.equal((await snapshot()).expanded,'false');
   // Narrow geometry; title text and existing play structure remain the compact UI.
   await page.setViewportSize({width:280,height:700});await tap(title);await page.getByRole('slider',{name:'播放进度'}).waitFor();

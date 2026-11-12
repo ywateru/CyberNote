@@ -1,0 +1,35 @@
+//Owned post-measure companion. No renderer command, new font or fixture copy.
+import assert from 'node:assert/strict';
+import {readFile,writeFile,mkdir,realpath,statfs,copyFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {spawn,execFileSync} from 'node:child_process';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {assertAfter105,after105} from './coverage105.mjs';
+import {sourceIdentity} from '../build-info.mjs';
+const sha=b=>createHash('sha256').update(b).digest('hex');
+async function child(command,args,options={}){const process=spawn(command,args,{...options,stdio:['ignore','pipe','pipe']});console.log(JSON.stringify({analysisPID:process.pid,command,output:options.cwd}));let stdout='',stderr='';const timer=setTimeout(()=>process.kill('SIGKILL'),60000);process.stdout.on('data',b=>{stdout+=b;if(stdout.length>4*1024*1024)process.kill('SIGKILL');});process.stderr.on('data',b=>stderr=(stderr+b).slice(-64000));const code=await new Promise((done,reject)=>{process.once('error',reject);process.once('close',done);}).finally(()=>clearTimeout(timer));return {code,stdout,stderr};}
+export async function buildRoi105(root,out){
+ assertAfter105(sourceIdentity(root));const disk=await statfs(root);assert(disk.bavail*disk.bsize>=2.5*1024**3,'105 disk floor');assert(process.env.CARGO_TARGET_DIR,'Use shared target');assert.equal(await realpath(process.env.CARGO_TARGET_DIR),await realpath(resolve(root,'src-tauri/target')));
+ await mkdir(out,{recursive:false});
+ const paths=['src-tauri/src/attachment_media/svg_text.rs','src-tauri/src/attachment_media/thumbnail.rs','src-tauri/fonts/NotoSansCJKsc-Regular.otf','src-tauri/fonts/OFL.txt','src-tauri/fonts/README.md','scripts/performance/roi105.rs','scripts/performance/roi105.mjs','src-tauri/src/attachment_media/harness/Cargo.toml','src-tauri/src/attachment_media/harness/Cargo.lock'];const sources={};for(const path of paths)sources[path]=sha(await readFile(resolve(root,path)));
+ assert.equal(sources['src-tauri/fonts/NotoSansCJKsc-Regular.otf'],'2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b');
+ const original=await readFile(resolve(root,'src-tauri/src/attachment_media/harness/Cargo.toml'),'utf8');const manifest=original.replace('name = "notes-media-core-tests"','name = "notes-svg-roi105"').replace(/\[lib\][\s\S]*?(?=\[profile.dev\])/,'[[bin]]\nname = "notes-svg-roi105"\npath = '+JSON.stringify(resolve(root,'scripts/performance/roi105.rs'))+'\n');assert.notEqual(manifest,original);await writeFile(resolve(out,'Cargo.toml'),manifest);await writeFile(resolve(out,'Cargo.lock'),(await readFile(resolve(root,'src-tauri/src/attachment_media/harness/Cargo.lock'),'utf8')).replace('name = "notes-media-core-tests"','name = "notes-svg-roi105"'));
+ const bindings=`mod store { pub struct AppError { pub message:String } pub type Result<T>=std::result::Result<T,AppError>; }\nmod render { fn error(_code:&str,message:&str)->crate::store::AppError { crate::store::AppError { message:message.into() } } #[path=${JSON.stringify(resolve(root,'src-tauri/src/attachment_media/svg_text.rs'))}] mod svg_text; pub fn render(bytes:&[u8],pixels:u32)->crate::store::Result<image::RgbaImage> {svg_text::render(bytes,pixels)} }\n`;
+ await writeFile(resolve(out,'bindings.rs'),bindings);
+ const result=await child('cargo',['build','--offline','--locked','--manifest-path',resolve(out,'Cargo.toml'),'--bin','notes-svg-roi105'],{cwd:root,env:{...process.env,CARGO_BUILD_JOBS:'2',CARGO_INCREMENTAL:'0',CARGO_PROFILE_DEV_DEBUG:'0',MEDIA105_BINDINGS:resolve(out,'bindings.rs')}});await writeFile(resolve(out,'build.log'),result.stdout+result.stderr);assert.equal(result.code,0,'105 reference companion build failed');
+ for(const[p,h]of Object.entries(sources))assert.equal(sha(await readFile(resolve(root,p))),h,'105 reference source changed');assertAfter105(sourceIdentity(root));
+ const binary=resolve(out,'svg-roi105');await copyFile(resolve(process.env.CARGO_TARGET_DIR,'debug/notes-svg-roi105'),binary);const metadata={source:sourceIdentity(root),sources,binary,sha256:sha(await readFile(binary)),bindingsSHA256:sha(bindings),sharedTarget:process.env.CARGO_TARGET_DIR,fontCopied:false,mainHostRebuilt:false};await writeFile(resolve(out,'build.json'),JSON.stringify(metadata,null,2)+'\n');return metadata;
+}
+export async function captureHttpPng105(cdp,requestId,row,attachment,out){
+ assert.equal(row.pixels,480,'105 actual SVG request must be480px');const body=await cdp.send('Network.getResponseBody',{requestId});assert.equal(body.base64Encoded,true,'Expected PNG binary CDP response');assert(body.body.length<=12*1024*1024,'105 response bound');const bytes=Buffer.from(body.body,'base64');assert(bytes.length<=8*1024*1024);assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(bytes.readUInt32BE(16),480);assert.equal(bytes.readUInt32BE(20),360);
+ const filename=`svg-http/${attachment.sampleIndex}-${row.capabilitySHA256}.png`;await mkdir(resolve(out,'svg-http'),{recursive:true});await writeFile(resolve(out,filename),bytes,{flag:'wx'});
+ return {attachmentId:attachment.id,sampleIndex:attachment.sampleIndex,sourceSHA256:attachment.sha256,sourcePath:attachment.samplePath,pngPath:resolve(out,filename),pngSHA256:sha(bytes),pngBytes:bytes.length,capabilitySHA256:row.capabilitySHA256,requestId,pixels:480,capture:'actual completed product HTTP response via CDP; no extra fetch'};
+}
+export async function analyzeCaptured105({root,fixture,buildDir,captures,output,expected}){
+ const build=JSON.parse(await readFile(resolve(buildDir,'build.json'),'utf8'));assertAfter105(sourceIdentity(root));assert.equal(build.source.sourceFingerprint,after105.fingerprint);for(const[p,h]of Object.entries(build.sources))assert.equal(sha(await readFile(resolve(root,p))),h,'105 stale analysis input');assert.equal(sha(await readFile(build.binary)),build.sha256);
+ const chosen=new Map();for(const c of captures)if(!chosen.has(c.attachmentId))chosen.set(c.attachmentId,c);assert.equal(chosen.size,expected,'105 actual decoded SVG HTTP coverage incomplete');assert(expected<=50);
+ const request={captures:[...chosen.values()].map(c=>({...c,sourcePath:resolve(fixture,c.sourcePath)}))};const input=output+'.input.json';await writeFile(input,JSON.stringify(request,null,2)+'\n');
+ const start=performance.now(),result=await child(build.binary,[input],{cwd:root});await writeFile(output+'.stderr',result.stderr);const value=JSON.parse(result.stdout.trim());value.analysisWallMs=performance.now()-start;value.actualCompletedResponseCount=chosen.size;value.companionSHA256=build.sha256;value.measuredProductCoverageAdded=0;await writeFile(output,JSON.stringify(value,null,2)+'\n');assert.equal(result.code,0,'105 SVG reference comparison failed');assert.equal(value.allPassed,true);return value;
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){assert.equal(process.argv[2],'build','Usage: roi105.mjs build FRESH_OUTPUT');console.log(JSON.stringify(await buildRoi105(process.cwd(),resolve(process.argv[3])),null,2));}

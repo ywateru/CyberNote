@@ -1,5 +1,74 @@
 #import "format.h"
 
+@implementation NotesUIFeedbackButtonCell
+- (void)setHighlighted:(BOOL)value {
+    [super setHighlighted:value];self.controlView.needsDisplay=YES;
+}
+@end
+
+@interface NotesUIFeedbackButton ()
+@property NSTrackingArea *notesTracking;
+@property NSTimeInterval notesActivatedUntil;
+@end
+@implementation NotesUIFeedbackButton
++ (Class)cellClass {return NotesUIFeedbackButtonCell.class;}
+- (void)updateTrackingAreas {
+    [super updateTrackingAreas];
+    if(self.notesTracking)[self removeTrackingArea:self.notesTracking];
+    self.notesTracking=[[NSTrackingArea alloc] initWithRect:NSZeroRect
+        options:NSTrackingMouseEnteredAndExited|NSTrackingActiveInKeyWindow|NSTrackingInVisibleRect
+        owner:self userInfo:nil];
+    [self addTrackingArea:self.notesTracking];
+    NSPoint point=[self convertPoint:self.window.mouseLocationOutsideOfEventStream fromView:nil];
+    self.notesHovered=self.window.isKeyWindow && NSPointInRect(point,self.bounds);
+}
+- (void)setNotesHovered:(BOOL)value {_notesHovered=value;self.needsDisplay=YES;}
+- (void)setNotesMenuOpen:(BOOL)value {_notesMenuOpen=value;self.needsDisplay=YES;}
+- (void)setNotesSelected:(BOOL)value {_notesSelected=value;self.needsDisplay=YES;}
+- (void)setState:(NSControlStateValue)value {[super setState:value];self.needsDisplay=YES;}
+- (void)setEnabled:(BOOL)value {
+    [super setEnabled:value];
+    if(!value){self.notesHovered=NO;self.notesActivatedUntil=0;self.notesMenuOpen=NO;}
+    self.needsDisplay=YES;[self.window invalidateCursorRectsForView:self];
+}
+- (void)mouseEntered:(NSEvent *)event {(void)event;self.notesHovered=YES;}
+- (void)mouseExited:(NSEvent *)event {(void)event;self.notesHovered=NO;}
+- (void)resetCursorRects {
+    [super resetCursorRects];if(self.enabled)[self addCursorRect:self.bounds cursor:NSCursor.pointingHandCursor];
+}
+- (NSString *)notesFeedbackState {
+    if(!self.enabled)return @"disabled";
+    if(self.notesMenuOpen)return @"open";
+    if(self.cell.highlighted)return @"pressed";
+    if(self.notesActivatedUntil>NSDate.timeIntervalSinceReferenceDate)return @"activated";
+    // Momentary NSButton tracking can temporarily change cell.state.
+    // Only the application's semantic selection owns persistent feedback.
+    if(self.notesSelected)return @"selected";
+    return self.notesHovered?@"hover":@"idle";
+}
+- (BOOL)sendAction:(SEL)action to:(id)target {
+    if(!self.enabled)return NO;
+    self.notesActivatedUntil=NSDate.timeIntervalSinceReferenceDate+.18;self.needsDisplay=YES;
+    __weak NotesUIFeedbackButton *weak=self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,(int64_t)(.19*NSEC_PER_SEC)),dispatch_get_main_queue(),^{weak.needsDisplay=YES;});
+    return [super sendAction:action to:target];
+}
+- (void)viewDidChangeEffectiveAppearance {[super viewDidChangeEffectiveAppearance];self.needsDisplay=YES;}
+- (void)drawRect:(NSRect)dirtyRect {
+    NSString *state=self.notesFeedbackState;
+    BOOL dark=[[self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua,NSAppearanceNameDarkAqua]] isEqualToString:NSAppearanceNameDarkAqua];
+    BOOL selected=[state isEqual:@"open"] || [state isEqual:@"selected"];
+    CGFloat alpha=[state isEqual:@"pressed"]?.18:[state isEqual:@"activated"]?.14:[state isEqual:@"hover"]?.08:0;
+    if(selected || alpha>0) {
+        NSColor *color=selected?[NSColor colorWithSRGBRed:1 green:.72 blue:.14 alpha:(dark?.24:.20)+(self.notesHovered?.08:0)]:[NSColor colorWithWhite:dark?1:0 alpha:dark?alpha*1.5:alpha];
+        [color setFill];CGFloat scale=self.notesFeedbackScale>0?self.notesFeedbackScale:1;
+        NSRect rect=NSInsetRect(self.bounds,2*scale,2*scale);
+        [[NSBezierPath bezierPathWithRoundedRect:rect xRadius:7*scale yRadius:7*scale] fill];
+    }
+    [super drawRect:dirtyRect];
+}
+@end
+
 @implementation NotesUIFormatButton
 - (BOOL)acceptsFirstResponder {return NO;}
 - (BOOL)acceptsFirstMouse:(NSEvent *)event {(void)event;return YES;}
@@ -45,6 +114,7 @@ static NotesUIFormatButton *formatButton(NSString *command,NSDictionary *entry,u
     button.refusesFirstResponder=YES;button.focusRingType=NSFocusRingTypeNone;
     [button setButtonType:NSButtonTypeMomentaryPushIn];
     button.enabled=[entry[@"enabled"] boolValue];button.state=[entry[@"selected"] boolValue]?NSControlStateValueOn:NSControlStateValueOff;
+    button.notesSelected=[entry[@"selected"] boolValue];
     [button setAccessibilityLabel:entry[@"label"]?:@""];return button;
 }
 static void separator(NSView *root,NSRect frame) {

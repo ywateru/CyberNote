@@ -1,3 +1,4 @@
+import { MenuSurface, MenuItem } from "./Menu";
 import {
   createContext,
   useContext,
@@ -12,7 +13,25 @@ import type { AttachmentMediaSource } from "./attachment-media";
 import { saveAttachmentOriginal } from "./attachment-export";
 import { formatFileSize } from "./data-management";
 import { recordingDate } from "./recording-metadata";
-import { Download, FileText, Play, Pause, Eye, Trash2 } from "lucide-react";
+import {
+  Download,
+  FileText,
+  Play,
+  Pause,
+  Eye,
+  Trash2,
+  Copy,
+  Scissors,
+  ClipboardPaste,
+  FolderOpen,
+  ExternalLink,
+  Share,
+} from "lucide-react";
+import { desktopAttachmentAction, native } from "./bridge";
+import {
+  copyAttachmentFile,
+  useAttachmentTransfer,
+} from "./attachment-clipboard";
 
 export type AttachmentMenuRequest = {
   editor: Editor;
@@ -28,6 +47,7 @@ export type AttachmentMenuRequest = {
   preview?: () => void;
   playback?: { playing: boolean; toggle: () => void | Promise<void> };
   remove?: () => void;
+  insertAfter?: () => number;
   temporary?: boolean;
   error?: string;
 };
@@ -46,7 +66,6 @@ export function AttachmentMenuProvider({
   scope,
   permission,
   onError,
-  onOverlay,
   topInset = 0,
 }: {
   children: ReactNode;
@@ -54,8 +73,9 @@ export function AttachmentMenuProvider({
   permission: (request: AttachmentMenuRequest) => AttachmentMenuPermission;
   topInset?: number;
   onError: (error: unknown) => void;
-  onOverlay: (active: boolean) => void;
 }) {
+  const transfer = useAttachmentTransfer();
+  const desktopFiles = native && /Mac/.test(navigator.platform);
   const [menu, setMenu] = useState<{
     request: AttachmentMenuRequest;
     scope: string;
@@ -103,62 +123,15 @@ export function AttachmentMenuProvider({
     if (!menu) return;
     const element = root.current;
     if (!element) return;
-    const bounds = menu.request.trigger.getBoundingClientRect();
-    const x = Number.isFinite(menu.request.point.x) ? menu.request.point.x : bounds.left + 12;
-    const y = Number.isFinite(menu.request.point.y) ? menu.request.point.y : bounds.top + 12;
-    element.style.left = `${Math.max(8, Math.min(x, innerWidth - element.offsetWidth - 8))}px`;
-    element.style.top = `${Math.max(topInset + 8, Math.min(y, innerHeight - element.offsetHeight - 8))}px`;
-    const buttons = () =>
-      Array.from(
-        element.querySelectorAll<HTMLButtonElement>("button:not(:disabled)"),
-      );
-    (buttons()[0] ?? element).focus({ preventScroll: true });
-    const outside = (event: Event) => {
-      if (!element.contains(event.target as Node)) close(false);
-    };
-    const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-        close(true);
-        return;
-      }
-      if (event.key === "Tab") {
-        close(false);
-        return;
-      }
-      if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
-      event.preventDefault();
-      event.stopPropagation();
-      const all = buttons();
-      if (!all.length) return;
-      const index = all.indexOf(document.activeElement as HTMLButtonElement);
-      const next =
-        event.key === "Home"
-          ? 0
-          : event.key === "End"
-            ? all.length - 1
-            : (index + (event.key === "ArrowDown" ? 1 : -1) + all.length) %
-              all.length;
-      all[next].focus();
-    };
-    document.addEventListener("pointerdown", outside, true);
-    document.addEventListener("keydown", key, true);
-    window.addEventListener("resize", outside);
-    window.addEventListener("blur", outside);
     let live = true;
-    const release = menu.request.source?.bindController(() => {
+    const release = menu.request.temporary ? menu.request.source?.bindController(() => {
       if (live) setMenu(null);
-    });
+    }) : undefined;
     const update = () => {
       if (!valid(menu)) setMenu(null);
     };
     menu.request.editor.on("transaction", update);
     return () => {
-      document.removeEventListener("pointerdown", outside, true);
-      document.removeEventListener("keydown", key, true);
-      window.removeEventListener("resize", outside);
-      window.removeEventListener("blur", outside);
       menu.request.editor.off("transaction", update);
       live = false;
       release?.();
@@ -180,9 +153,9 @@ export function AttachmentMenuProvider({
     };
     document.addEventListener("keydown", key, true);
     let live = true;
-    const release = info.request.source?.bindController(() => {
+    const release = info.request.temporary ? info.request.source?.bindController(() => {
       if (live) setInfo(null);
-    });
+    }) : undefined;
     const update = () => {
       if (!valid(info)) setInfo(null);
     };
@@ -219,23 +192,23 @@ export function AttachmentMenuProvider({
         if (valid(menu)) current.current.onError(cause);
       });
   };
-  useLayoutEffect(() => {
-    onOverlay(!!menu || !!info || saving !== null);
-  }, [menu, info, saving, onOverlay]);
   const access = menu ? permission(menu.request) : null;
-  const ready = !!menu?.request.source;
   const reason = menu?.request.temporary
     ? "请先完成并保存录音"
     : !access?.saved
       ? "附件尚未保存，或正在保存录音"
-      : menu?.request.error ||
-        (!ready ? "附件尚未读取，或当前无读取权限" : access?.reason);
+      : menu?.request.error || access?.reason;
   return (
     <Context.Provider value={{ open }}>
       {children}
       {menu &&
         createPortal(
-          <div
+          <MenuSurface
+            key={`${menu.scope}:${menu.request.id}`}
+            onClose={close}
+            point={menu.request.point}
+            returnFocus={menu.request.trigger}
+            topInset={topInset}
             ref={root}
             className="popover attachment-context-menu"
             role="menu"
@@ -244,23 +217,145 @@ export function AttachmentMenuProvider({
             onContextMenu={(e) => e.preventDefault()}
             onMouseDown={(e) => e.preventDefault()}
           >
-            {menu.request.kind === "image" && (
-              <button
+            <MenuItem
+              role="menuitem"
+              className="menu-row"
+              disabled={
+                !access?.writable ||
+                !access.saved ||
+                !menu.request.remove ||
+                !!menu.request.temporary
+              }
+              onClick={() =>
+                run(
+                  async (r) => {
+                    if (!r.id) return;
+                    await copyAttachmentFile(r.id);
+                    if (
+                      valid(menu) &&
+                      current.current.permission(r).writable &&
+                      current.current.permission(r).saved
+                    )
+                      r.remove?.();
+                  },
+                  true,
+                  true,
+                )
+              }
+            >
+              <Scissors size={17} />
+              <span>剪切</span>
+            </MenuItem>
+            <MenuItem
+              role="menuitem"
+              className="menu-row"
+              disabled={!access?.saved || !!menu.request.temporary}
+              onClick={() =>
+                run(
+                  (r) => (r.id ? copyAttachmentFile(r.id) : undefined),
+                  false,
+                  true,
+                )
+              }
+            >
+              <Copy size={17} />
+              <span>拷贝</span>
+            </MenuItem>
+            <MenuItem
+              role="menuitem"
+              className="menu-row"
+              disabled={!access?.writable || !!menu.request.temporary}
+              onClick={() =>
+                run(
+                  (r) => transfer.paste(r.editor, undefined, r.insertAfter),
+                  true,
+                )
+              }
+            >
+              <ClipboardPaste size={17} />
+              <span>粘贴</span>
+            </MenuItem>
+            <div className="menu-divider" />
+            {desktopFiles && (
+              <>
+                <MenuItem
+                  role="menuitem"
+                  className="menu-row"
+                  disabled={!access?.saved || !!menu.request.temporary}
+                  onClick={() =>
+                    run(
+                      (r) =>
+                        r.id
+                          ? desktopAttachmentAction(r.id, "share")
+                          : undefined,
+                      false,
+                      true,
+                    )
+                  }
+                >
+                  <Share size={17} />
+                  <span>共享…</span>
+                </MenuItem>
+                <div className="menu-divider" />
+              </>
+            )}
+            {menu.request.preview && (
+              <MenuItem
                 role="menuitem"
                 className="menu-row"
-                disabled={!ready || !menu.request.preview}
+                disabled={!menu.request.preview}
                 onClick={() => run((r) => r.preview?.())}
               >
-                <span>预览图片</span>
+                <span>快速查看附件</span>
                 <Eye size={17} />
-              </button>
+              </MenuItem>
+            )}
+            {desktopFiles && (
+              <>
+                <MenuItem
+                  role="menuitem"
+                  className="menu-row"
+                  disabled={!access?.saved || !!menu.request.temporary}
+                  onClick={() =>
+                    run(
+                      (r) =>
+                        r.id
+                          ? desktopAttachmentAction(r.id, "open")
+                          : undefined,
+                      false,
+                      true,
+                    )
+                  }
+                >
+                  <ExternalLink size={17} />
+                  <span>打开附件</span>
+                </MenuItem>
+                <MenuItem
+                  role="menuitem"
+                  className="menu-row"
+                  disabled={!access?.saved || !!menu.request.temporary}
+                  onClick={() =>
+                    run(
+                      (r) =>
+                        r.id
+                          ? desktopAttachmentAction(r.id, "reveal")
+                          : undefined,
+                      false,
+                      true,
+                    )
+                  }
+                >
+                  <FolderOpen size={17} />
+                  <span>在文件夹中显示</span>
+                </MenuItem>
+              </>
             )}
             {["audio", "video"].includes(menu.request.kind) && (
-              <button
+              <MenuItem
                 role="menuitem"
                 className="menu-row"
                 disabled={
-                  !ready || !menu.request.playback || !!menu.request.temporary
+                  !menu.request.playback || !!menu.request.temporary
                 }
                 onClick={() => run((r) => r.playback?.toggle())}
               >
@@ -270,19 +365,24 @@ export function AttachmentMenuProvider({
                 ) : (
                   <Play size={17} />
                 )}
-              </button>
+              </MenuItem>
             )}
-            <button
+            <MenuItem
               role="menuitem"
               className="menu-row"
-              disabled={!ready || !access?.saved || saving === menu.request.id}
+              disabled={!access?.saved || saving === menu.request.id}
               onClick={() =>
                 run(
                   async (r) => {
                     if (!r.id) return;
                     setSaving(r.id);
                     try {
-                      await saveAttachmentOriginal(r.id, r.name, () => valid(menu) && current.current.permission(r).saved);
+                      await saveAttachmentOriginal(
+                        r.id,
+                        r.name,
+                        () =>
+                          valid(menu) && current.current.permission(r).saved,
+                      );
                     } finally {
                       setSaving(null);
                     }
@@ -296,11 +396,11 @@ export function AttachmentMenuProvider({
                 {saving === menu.request.id ? "正在保存…" : "保存附件…"}
               </span>
               <Download size={17} />
-            </button>
-            <button
+            </MenuItem>
+            <MenuItem
               role="menuitem"
               className="menu-row"
-              disabled={!ready || !!menu.request.temporary}
+              disabled={!!menu.request.temporary}
               onClick={() =>
                 run((r) =>
                   setInfo({ request: r, scope: current.current.scope }),
@@ -309,9 +409,9 @@ export function AttachmentMenuProvider({
             >
               <span>显示信息</span>
               <FileText size={17} />
-            </button>
+            </MenuItem>
             <div className="menu-divider" />
-            <button
+            <MenuItem
               role="menuitem"
               className="menu-row danger"
               disabled={
@@ -324,10 +424,10 @@ export function AttachmentMenuProvider({
             >
               <span>从备忘录中移除</span>
               <Trash2 size={17} />
-            </button>
+            </MenuItem>
             {reason && <p className="attachment-menu-reason">{reason}</p>}
-          </div>,
-          document.body,
+          </MenuSurface>,
+          document.querySelector(".app") ?? document.body,
         )}
       {info &&
         valid(info) &&
@@ -370,7 +470,7 @@ export function AttachmentMenuProvider({
               )}
             </dl>
           </section>,
-          document.body,
+          document.querySelector(".app") ?? document.body,
         )}
     </Context.Provider>
   );

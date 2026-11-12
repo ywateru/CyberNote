@@ -1,4 +1,6 @@
 mod apple_notes_import;
+mod attachment_desktop;
+mod attachment_media;
 mod media_permission;
 mod recording_window;
 mod session;
@@ -14,7 +16,43 @@ use std::{
 };
 use store::{AppError, Result, Store};
 use tauri::{Emitter, Manager, State};
+struct NativeThumbnailProvider(tauri::AppHandle);
+impl attachment_media::provider::ThumbnailProvider for NativeThumbnailProvider {
+    fn render(
+        &self,
+        input: &store::attachment_media::VerifiedFile,
+        mime: &str,
+        pixels: u32,
+        input_pixels: u64,
+        authorize: &(dyn Fn() -> store::Result<()> + Sync),
+    ) -> store::Result<image::RgbaImage> {
+        let frame = self
+            .0
+            .state::<tauri_plugin_notes_media::Provider<tauri::Wry>>()
+            .thumbnail(
+                &input.file,
+                input.stamp.bytes,
+                mime,
+                pixels,
+                input_pixels,
+                || authorize().is_err(),
+            )
+            .map_err(|code| store::AppError {
+                code,
+                message: "平台无法生成该附件缩略图".into(),
+                commit: None,
+            })?;
+        image::RgbaImage::from_raw(frame.width, frame.height, frame.rgba).ok_or_else(|| {
+            store::AppError {
+                code: "invalid".into(),
+                message: "平台缩略图像素无效".into(),
+                commit: None,
+            }
+        })
+    }
+}
 struct AppState(Arc<(Mutex<Session>, Condvar)>);
+struct MediaState(Arc<attachment_media::runtime::MediaRuntime>);
 struct SyncState(Arc<sync::adapter::Runtime>);
 struct SyncWindows(tauri::AppHandle);
 impl sync::adapter::WindowHost for SyncWindows {
@@ -22,10 +60,54 @@ impl sync::adapter::WindowHost for SyncWindows {
         recording_window::document_participants(self.0.webview_windows().into_keys())
     }
     fn emit(&self, name: &str, payload: &Value) -> Result<()> {
-        self.0
-            .emit(name, payload)
-            .map_err(|_| failure("无法通知同步参与窗口"))
+        emit_document_event(&self.0, name, payload)
     }
+}
+// All document event producers, including synchronization, pass this boundary.
+// Call only after dropping Session so media workers can recheck authorization.
+fn emit_document_event(app: &tauri::AppHandle, name: &str, payload: &Value) -> Result<()> {
+    let media_result = app
+        .try_state::<MediaState>()
+        .map(|media| media.0.event(name, payload))
+        .transpose();
+    // Cache IO failure must not suppress the document/access event or its ACK.
+    app.emit(name, payload)
+        .map_err(|_| failure("无法通知文档参与窗口"))?;
+    media_result.map(|_| ())
+}
+#[tauri::command]
+async fn acquire_attachment_source(
+    id: String,
+    purpose: attachment_media::runtime::Purpose,
+    pixels: Option<u32>,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    media: State<'_, MediaState>,
+) -> Result<Value> {
+    let identity = media.0.window(window.label())?;
+    media
+        .0
+        .acquire(identity, id, expected, purpose, pixels)
+        .await
+}
+#[tauri::command]
+fn release_attachment_source(
+    lease_id: String,
+    window: tauri::WebviewWindow,
+    media: State<MediaState>,
+) -> Result<()> {
+    let identity = media.0.window(window.label())?;
+    media.0.release(&identity, &lease_id)
+}
+#[tauri::command]
+async fn clear_attachment_media_cache(
+    expected: Token,
+    media: State<'_, MediaState>,
+) -> Result<Value> {
+    let runtime = media.0.clone();
+    tauri::async_runtime::spawn_blocking(move || runtime.clear_cache(&expected))
+        .await
+        .map_err(|_| failure("清理缩略图缓存失败"))?
 }
 #[tauri::command]
 async fn sync_command(
@@ -171,10 +253,10 @@ async fn mutate_with_stage(
         let metadata = session.take_metadata_event();
         drop(session);
         if let Ok((_, Some(event))) = &result {
-            let _ = app.emit("notes-access", event);
+            let _ = emit_document_event(&app, "notes-access", event);
         }
         if let Some(event) = metadata {
-            let _ = app.emit("notes-metadata", event);
+            let _ = emit_document_event(&app, "notes-metadata", &event);
         }
         return result.map(|(value, _)| value);
     }
@@ -186,7 +268,7 @@ async fn mutate_with_stage(
         .map_err(|_| failure("数据锁错误"))?
         .begin(action, participants, &expected)?;
     let operation = event["operationId"].as_str().unwrap().to_string();
-    if app.emit("notes-access", &event).is_err() {
+    if emit_document_event(&app, "notes-access", &event).is_err() {
         if let Some(p) = state
             .0
              .0
@@ -212,9 +294,9 @@ async fn mutate_with_stage(
         let (result, event) = guard.finish(&operation, &live, wait.timed_out())?;
         let metadata = guard.take_metadata_event();
         drop(guard);
-        let _ = app.emit("notes-access", event);
+        let _ = emit_document_event(&app, "notes-access", &event);
         if let Some(event) = metadata {
-            let _ = app.emit("notes-metadata", event);
+            let _ = emit_document_event(&app, "notes-metadata", &event);
         }
         Ok(result)
     })
@@ -232,7 +314,7 @@ fn session_command(
     let event = session.take_metadata_event();
     drop(session);
     if let Some(event) = event {
-        let _ = app.emit("notes-metadata", event);
+        let _ = emit_document_event(&app, "notes-metadata", &event);
     }
     result
 }
@@ -358,13 +440,11 @@ fn read_note_text(id: String, expected: Token, state: State<AppState>) -> Result
     session.tagged(session.store.note_text(&id)?)
 }
 #[tauri::command]
-fn get_data_management(expected: Token, state: State<AppState>) -> Result<Value> {
-    state
-        .0
-         .0
-        .lock()
-        .map_err(|_| failure("数据锁错误"))?
-        .data_management(&expected)
+async fn get_data_management(expected: Token, media: State<'_, MediaState>) -> Result<Value> {
+    let runtime = media.0.clone();
+    tauri::async_runtime::spawn_blocking(move || runtime.data_management(&expected))
+        .await
+        .map_err(|_| failure("读取数据管理信息失败"))?
 }
 #[cfg(target_os = "android")]
 fn copy_document(
@@ -417,6 +497,28 @@ async fn export_attachment(
     })
     .await
     .map_err(|e| failure(e.to_string()))?
+}
+#[tauri::command]
+async fn export_drawing(
+    note_id: String, svg: String, path: String, expected: Token, app: tauri::AppHandle,
+) -> Result<()> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let state = app.state::<AppState>();
+        let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
+        session.sensitive(&note_id, &expected)?;
+        if svg.len() > 16 * 1024 * 1024 || !svg.starts_with("<svg xmlns=\"http://www.w3.org/2000/svg\"") || !svg.ends_with("</svg>") {
+            return Err(failure("速绘导出数据无效"));
+        }
+        #[cfg(target_os = "android")]
+        if path.starts_with("content://") {
+            let stage = session.store.document_stage()?;
+            std::fs::write(stage.path(), svg.as_bytes())?;
+            copy_document(&app, &path, &stage, "write", 16 * 1024 * 1024, Some(svg.len() as u64))?;
+            return Ok(());
+        }
+        if path.contains("://") { return Err(failure("此平台不支持该导出地址")); }
+        session.store.publish_export(&PathBuf::from(path), svg.as_bytes())
+    }).await.map_err(|e| failure(e.to_string()))?
 }
 #[tauri::command]
 async fn export_archive(path: String, expected: Token, app: tauri::AppHandle) -> Result<()> {
@@ -496,8 +598,18 @@ pub fn run() {
     let builder = tauri::Builder::default()
         .manage(recording_window::Recordings::default())
         .manage(apple_notes_import::Imports::default())
+        .on_page_load(|webview, _payload| {
+            if let Some(media) = webview.try_state::<MediaState>() {
+                // A trusted host page lifecycle creates identities; acquire IPC
+                // only looks up a captured identity and cannot resurrect one.
+                let _ = media.0.opened(webview.label());
+            }
+        })
         .on_window_event(|window, event| {
             if matches!(event, tauri::WindowEvent::Destroyed) {
+                if let Some(media) = window.try_state::<MediaState>() {
+                    media.0.closed(window.label());
+                }
                 recording_window::destroyed(window.app_handle(), window.label());
                 if let Some(imports) = window.try_state::<apple_notes_import::Imports>() {
                     apple_notes_import::destroyed(&imports, window.label());
@@ -513,6 +625,7 @@ pub fn run() {
         .plugin(media_permission::lifecycle())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notes_scan::init())
+        .plugin(tauri_plugin_notes_media::init())
         .setup(|app| {
             let root = app.path().app_data_dir()?;
             let shared = Arc::new((
@@ -522,6 +635,31 @@ pub fn run() {
                 Condvar::new(),
             ));
             app.manage(AppState(shared.clone()));
+            let mut origins = std::collections::HashSet::from([
+                "tauri://localhost".to_string(),
+                "http://tauri.localhost".to_string(),
+            ]);
+            #[cfg(debug_assertions)]
+            if let Some(dev) = &app.config().build.dev_url {
+                let origin = dev.origin().ascii_serialization();
+                if origin != "null" {
+                    origins.insert(origin);
+                }
+            }
+            let media =
+                tauri::async_runtime::block_on(attachment_media::runtime::MediaRuntime::start_with_provider(
+                    shared.clone(),
+                    app.path().app_cache_dir()?.join("attachment-thumbnails-v1"),
+                    origins,
+                    Some(Arc::new(NativeThumbnailProvider(app.handle().clone()))),
+                ))
+                .map_err(|e| std::io::Error::other(e.message))?;
+            for label in app.webview_windows().into_keys() {
+                media
+                    .opened(&label)
+                    .map_err(|e| std::io::Error::other(e.message))?;
+            }
+            app.manage(MediaState(media));
             let sync = sync::adapter::Runtime::new(
                 shared,
                 root,
@@ -534,7 +672,7 @@ pub fn run() {
                 use tauri::menu::{
                     MenuBuilder, MenuItemBuilder, PredefinedMenuItem, SubmenuBuilder,
                 };
-                let app_menu = SubmenuBuilder::new(app, "备忘录")
+                let app_menu = SubmenuBuilder::new(app, "CyberNote")
                     .about(None)
                     .separator()
                     .hide()
@@ -542,7 +680,7 @@ pub fn run() {
                     .show_all()
                     .separator()
                     .item(
-                        &MenuItemBuilder::with_id("quit", "退出备忘录")
+                        &MenuItemBuilder::with_id("quit", "退出 CyberNote")
                             .accelerator("CmdOrCtrl+Q")
                             .build(app)?,
                     )
@@ -650,8 +788,13 @@ pub fn run() {
         query_attachment_operation,
         cancel_attachment_operation,
         read_attachment,
+        acquire_attachment_source,
+        release_attachment_source,
+        clear_attachment_media_cache,
         get_data_management,
         export_attachment,
+        export_drawing,
+        attachment_desktop::attachment_desktop,
         export_archive,
         import_archive,
         apple_notes_import::apple_notes_scan,
@@ -681,8 +824,13 @@ pub fn run() {
         query_attachment_operation,
         cancel_attachment_operation,
         read_attachment,
+        acquire_attachment_source,
+        release_attachment_source,
+        clear_attachment_media_cache,
         get_data_management,
         export_attachment,
+        export_drawing,
+        attachment_desktop::attachment_desktop,
         export_archive,
         import_archive,
         apple_notes_import::apple_notes_scan,
@@ -703,6 +851,9 @@ pub fn run() {
         .expect("Notes failed to start")
         .run(|app, event| match event {
             tauri::RunEvent::Exit => {
+                if let Some(media) = app.try_state::<MediaState>() {
+                    media.0.stop();
+                }
                 if let Some(state) = app.try_state::<SyncState>() {
                     let _ = state.0.shutdown();
                 }

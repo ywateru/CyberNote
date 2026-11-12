@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Debug keeps the existing LAN Vite/ADB dev-server behavior. This
+         overlay is excluded from release, whose base config denies HTTP. -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

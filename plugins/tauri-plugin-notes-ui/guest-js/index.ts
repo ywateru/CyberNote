@@ -3,7 +3,7 @@ import { getCurrentWindow } from '@tauri-apps/api/window';
 import type { UnlistenFn } from '@tauri-apps/api/event';
 
 export type Action = 'newFolder' | 'toggleSidebar' | 'viewOptions' | 'backToGallery' | 'newNote'
-  | 'format' | 'checklist' | 'table' | 'attachment' | 'share' | 'more';
+  | 'settings' | 'recordAudio' | 'insertTag' | 'format' | 'checklist' | 'table' | 'attachment' | 'share' | 'more';
 export type MenuCommand = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'highlight'
   | 'colorDefault' | 'colorPurple' | 'colorPink' | 'colorOrange' | 'colorMint' | 'colorBlue'
   | 'styleTitle' | 'styleHeading' | 'styleSubheading' | 'styleBody' | 'styleMonospaced'
@@ -12,9 +12,9 @@ export type MenuCommand = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'h
   | 'pinNote' | 'lockNote' | 'findInNote' | 'moveNote' | 'recentNotes'
   | 'mathInsert' | 'mathSuggest' | 'mathOff' | 'attachmentsSmall' | 'attachmentsLarge' | 'deleteNote'
   | 'viewGallery' | 'viewList' | 'sortDefault' | 'sortModified' | 'sortCreated' | 'sortTitle'
-  | 'groupByDate' | 'viewAttachments' | 'convertTableToText';
+  | 'groupByDate' | 'viewAttachments' | 'convertTableToText' | 'convertTextToTable';
 export type MenuEntry =
-  | { kind: 'item'; command: MenuCommand; label: string; enabled: boolean; selected: boolean }
+  | { kind: 'item'; command: MenuCommand; folderId?: string; label: string; enabled: boolean; selected: boolean }
   | { kind: 'separator' }
   | { kind: 'submenu'; label: string; items: MenuEntry[] };
 export interface ToolbarState {
@@ -29,10 +29,15 @@ export interface ToolbarState {
   menus: { owner: Action; items: MenuEntry[] }[];
   search: { enabled: boolean; value: string; acknowledgedEvent: number } | null;
   glassStyle: 'regular' | 'clear';
+  fontScale?: number;
+  /** Host-projected bounded interface details, independent of text size. */
+  iconScale?: number;
+  hitScale?: number;
+  appearance?: "system" | "light" | "dark";
 }
 export type Intent =
   | { kind: 'action'; action: Action }
-  | { kind: 'menu'; owner: Action; command: MenuCommand }
+  | { kind: 'menu'; owner: Action; command: MenuCommand; folderId?: string }
   | { kind: 'search'; value: string; phase: 'change' | 'commit' | 'cancel' }
   | { kind: 'windowActivity'; active: boolean };
 export interface ToolbarEvent {
@@ -43,7 +48,7 @@ export interface NativeInfo {
   reservedTop: number; contentWidth: number; active: boolean; overflowActions: Action[];
   searchSequence: number; fullSizeContent: boolean;
   symbolFallbacks: { action: Action; requested: string; used: string }[];
-  windowNumber: number; scaleFactor: number;
+  windowNumber: number; scaleFactor: number; popupMenus?: boolean;
 }
 export interface BindingInfo { windowLabel: string; bindingId: string; stateRevision: number; native: NativeInfo }
 export interface NativeUiError { code: string; message: string; stage?: string; requestId?: string }

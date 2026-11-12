@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "at": "2026-11-09T09:03:06Z",
+  "host": "macOS-26.4-arm64-arm-64bit",
+  "sourceSHA256": "9ac8375f81515a76f2e8298f7d438f8b06b71360daab832850eab172f659b17c",
+  "directFDURL": [
+    "/private/tmp/cybernote-delivery/artifacts/media99-fixture/originals/video-faststart.mp4 fd=3 result=failed size=0x0 error=Error Domain=AVFoundationErrorDomain Code=-11828 \"Cannot Open\" UserInfo={NSLocalizedFailureReason=This media format is not supported., NSLocalizedDescription=Cannot Open, NSUnderlyingError=0x932c48e70 {Error Domain=NSOSStatusErrorDomain Code=-12847 \"(null)\"}}",
+    "/private/tmp/cybernote-delivery/artifacts/media99-fixture/originals/video-tail-metadata.mp4 fd=3 result=failed size=0x0 error=Error Domain=AVFoundationErrorDomain Code=-11828 \"Cannot Open\" UserInfo={NSLocalizedFailureReason=This media format is not supported., NSLocalizedDescription=Cannot Open, NSUnderlyingError=0x932c497d0 {Error Domain=NSOSStatusErrorDomain Code=-12847 \"(null)\"}}"
+  ],
+  "actualProvider": [
+    "/private/tmp/cybernote-delivery/artifacts/media99-fixture/originals/video-faststart.mp4 result=0 480x270 rgbaSum=82624285 offset=17 seconds=0.113",
+    "/private/tmp/cybernote-delivery/artifacts/media99-fixture/originals/video-tail-metadata.mp4 result=0 480x270 rgbaSum=82624285 offset=17 seconds=0.011",
+    "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/sample.png result=0 480x270 rgbaSum=73224000 offset=17 seconds=0.006",
+    "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/sample.jpeg result=0 480x270 rgbaSum=73224000 offset=17 seconds=0.002",
+    "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/sample.gif result=0 480x270 rgbaSum=73224000 offset=17 seconds=0.011",
+    "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/sample.webp result=0 480x270 rgbaSum=73094390 offset=17 seconds=0.007",
+    "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/sample.bmp result=0 480x270 rgbaSum=73224000 offset=17 seconds=0.005",
+    "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/sample.avif result=0 480x270 rgbaSum=72964800 offset=17 seconds=0.009",
+    "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/sample.heic result=0 480x270 rgbaSum=73224239 offset=17 seconds=0.014",
+    "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/oriented.jpeg result=0 270x480 rgbaSum=73224000 offset=17 seconds=0.003"
+  ],
+  "corruptInputRejected": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/notes-media-mac-c7qgklqj/corrupt.png result=2 0x0 rgbaSum=0 offset=17 seconds=0.002",
+  "additionalChecks": "Each valid input: source pixel budget=1 rejected; output target=1025 rejected; input offset stays17. Every image also decodes from an unlinked owned temporary FD. Closed FD rejected. No App/ADB build."
+}

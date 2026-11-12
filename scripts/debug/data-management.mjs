@@ -67,7 +67,7 @@ export async function runDataManagement(runtime, { command, check, output }) {
   await command('editor.insertText',{text:' IMAGE-UNDO79'});await command('editor.undo');
   check('Image export adds no document or Undo entry',!JSON.stringify((await state(page)).editorJSON).includes('IMAGE-UNDO79')&&JSON.stringify((await state(page)).editorJSON)===before);
 
-  if(runtime.mobile){await command('menu.open',{menu:'view'});await page.getByRole('button',{name:'数据管理',exact:true}).click();}else{await page.locator('.folder-footer [aria-label="设置"]').click();await page.getByRole('tab',{name:'数据',exact:true}).click();}await idle(page);
+  if(runtime.mobile){await command('menu.open',{menu:'view'});await page.getByRole('menuitem',{name:'数据管理',exact:true}).click();}else{await page.locator('.desktop-settings').click();await page.getByRole('tab',{name:'存储空间',exact:true}).click();}await idle(page);
   check('Actual unified settings data entry opens data management with real bridge DTO',await page.locator('.data-root').count()===1&&(await page.locator('.data-management').innerText()).includes('32.0 KB'));
   await command('data.navigate',{view:'all'});
   check('DB/WAL/SHM statuses and actual filesystem timestamp are rendered without payload reads',(await page.locator('.data-management').innerText()).includes('notes.sqlite3-shm')&&(await page.locator('.data-management').innerText()).includes('不存在')===false&&await page.locator('[data-file-path="notes.sqlite3-shm"]').getByText('缺失',{exact:false}).count()>0);
@@ -105,15 +105,15 @@ export async function runDataManagement(runtime, { command, check, output }) {
   check('Closed management page is not revived by late refresh',await page.locator('.data-management').count()===0);
   backend.call=originalCall;
 
-  await reset();await add('backup79.png');await open();
+  await reset();await add('backup79.png');await open();await command('settings.tab',{tab:'backup'});
   await page.getByRole('button',{name:'导出完整备份…',exact:true}).click();await idle(page);
   check('Actual management backup export shows completion after bridge finishes',(await page.locator('.data-management').innerText()).includes('完整备份已导出'));
-  await close();await command('editor.insertText',{text:' AFTER-BACKUP79'});await command('app.flush');await open();
+  await close();await command('editor.insertText',{text:' AFTER-BACKUP79'});await command('app.flush');await open();await command('settings.tab',{tab:'backup'});
   // Explicit protocol events reproduce the real import prepare/commit UI lifecycle.
   backend.call=async(c,a)=>{if(c==='import_archive'){await prepare();await page.waitForSelector('.access-cover');const result=await originalCall(c,a);await commit();return {...result,value:backend.state()};}return originalCall(c,a);};
-  await page.getByRole('button',{name:'导入备份…',exact:true}).click();await idle(page);await page.waitForSelector('.storage-summary');
+  await page.getByRole('button',{name:'导入备份…',exact:true}).click();await idle(page);await command('settings.tab',{tab:'data'});await page.waitForSelector('.storage-summary');
   check('Import prepare/commit keeps the open management page and refreshes statistics after sensitive state clears',await page.locator('.data-management').count()===1&&!(backend.workspace.notes.find(n=>n.id==='note-a').plainText).includes('AFTER-BACKUP79'));
-  backend.call=originalCall;await close();await command('recording.open');await command('recording.action',{action:'toggle'});await open();
+  backend.call=originalCall;await close();await command('recording.open');await command('recording.action',{action:'toggle'});await open();await command('settings.tab',{tab:'backup'});
   check('Active recording disables both backups with explicit unsaved-audio explanation',await page.getByRole('button',{name:'导入备份…',exact:true}).isDisabled()&&await page.getByRole('button',{name:'导出完整备份…',exact:true}).isDisabled()&&(await page.locator('.data-management').innerText()).includes('内存中的录音尚未备份'));
   await close();await command('recording.action',{action:'close'});
 
@@ -132,7 +132,7 @@ export async function runDataManagement(runtime, { command, check, output }) {
   await reset();backend.configure({delay:{load:250,store:80}});await startSurfaceTrace(page);
   const choosing=chooseFiles(page,[{name:'concurrent79.png',mimeType:'image/png',buffer:tinyPNG}]);
   await page.waitForFunction(()=>document.querySelector('.tiptap')?.getAttribute('contenteditable')==='false');
-  const currentMetadata=backend.state().metadata;await emit('notes-metadata',{metadata:{...currentMetadata,sessionId:'foreign-notification79'}});await choosing;await idle(page);
+  const currentMetadata=backend.state().metadata;await emit('notes-metadata',{metadata:{...currentMetadata,sessionId:'foreign-notification79'},changes:[]});await choosing;await idle(page);
   const concurrent=await stopSurfaceTrace(page);await saveJSON(resolve(output,'data79-strong-concurrent-timeline.json'),concurrent);
   check('Strong synchronization arriving during quiet validation upgrades and retains security cover',concurrent.coverFrames>0&&concurrent.hiddenFrames>0);
   await reset();backend.configure({delay:{load:160}});await startSurfaceTrace(page);

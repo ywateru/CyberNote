@@ -9,21 +9,53 @@ import android.webkit.WebView
 import android.view.inputmethod.InputMethodManager
 
 class MainActivity : TauriActivity() {
+  private var keyboardView: WebView? = null
+  private var keyboardRequest: Runnable? = null
+  private var keyboardGeneration = 0L
+
+  private fun cancelKeyboardShow(webView: WebView) {
+    keyboardGeneration++
+    keyboardRequest?.let { webView.removeCallbacks(it) }
+    keyboardRequest = null
+  }
+
+  override fun onPause() {
+    keyboardView?.let { cancelKeyboardShow(it) }
+    super.onPause()
+  }
+
+  override fun onDestroy() {
+    keyboardView?.let { cancelKeyboardShow(it) }
+    keyboardView = null
+    super.onDestroy()
+  }
+
   override fun onWebViewCreate(webView: WebView) {
     super.onWebViewCreate(webView)
+    keyboardView?.let { cancelKeyboardShow(it) }
+    keyboardView = webView
     // App-owned assets only. Format controls can change selection without
     // focusing contenteditable; X explicitly resumes the system keyboard.
     webView.addJavascriptInterface(object {
       @JavascriptInterface fun hide() = runOnUiThread {
+        cancelKeyboardShow(webView)
         (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
           .hideSoftInputFromWindow(webView.windowToken, 0)
       }
       @JavascriptInterface fun show() = runOnUiThread {
+        cancelKeyboardShow(webView)
+        val generation = keyboardGeneration
         webView.requestFocus()
-        webView.postDelayed({
-          (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
-            .showSoftInput(webView, InputMethodManager.SHOW_IMPLICIT)
-        }, 80)
+        val request = Runnable {
+          if (generation == keyboardGeneration && keyboardView === webView &&
+              !isFinishing && !isDestroyed && webView.isAttachedToWindow && webView.hasFocus()) {
+            keyboardRequest = null
+            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+              .showSoftInput(webView, InputMethodManager.SHOW_IMPLICIT)
+          }
+        }
+        keyboardRequest = request
+        webView.postDelayed(request, 80)
       }
     }, "NotesKeyboard")
   }

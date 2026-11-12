@@ -307,6 +307,18 @@
           "markdownDescription": "Denies the bind command without any pre-configured scope."
         },
         {
+          "description": "Enables the cancel_popup_menu command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-cancel-popup-menu",
+          "markdownDescription": "Enables the cancel_popup_menu command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the cancel_popup_menu command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-cancel-popup-menu",
+          "markdownDescription": "Denies the cancel_popup_menu command without any pre-configured scope."
+        },
+        {
           "description": "Enables the focus_search command without any pre-configured scope.",
           "type": "string",
           "const": "allow-focus-search",
@@ -341,6 +353,18 @@
           "type": "string",
           "const": "deny-keyboard-navigation",
           "markdownDescription": "Denies the keyboard_navigation command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the popup_menu command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-popup-menu",
+          "markdownDescription": "Enables the popup_menu command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the popup_menu command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-popup-menu",
+          "markdownDescription": "Denies the popup_menu command without any pre-configured scope."
         },
         {
           "description": "Enables the recording_access command without any pre-configured scope.",
@@ -379,10 +403,10 @@
           "markdownDescription": "Denies the update command without any pre-configured scope."
         },
         {
-          "description": "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`\n- `allow-keyboard-navigation`",
+          "description": "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy, UI-only context/dropdown menus and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`\n- `allow-keyboard-navigation`\n- `allow-popup-menu`\n- `allow-cancel-popup-menu`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`\n- `allow-keyboard-navigation`"
+          "markdownDescription": "Own-window toolbar binding, state updates, inspection, search focus, read-only main-window keyboard policy, UI-only context/dropdown menus and teardown. No note storage access.\n#### This default permission set includes:\n\n- `allow-bind`\n- `allow-update`\n- `allow-unbind`\n- `allow-inspect`\n- `allow-focus-search`\n- `allow-keyboard-navigation`\n- `allow-popup-menu`\n- `allow-cancel-popup-menu`"
         }
       ]
     }

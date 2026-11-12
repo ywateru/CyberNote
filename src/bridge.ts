@@ -10,6 +10,7 @@ import {
 import { AccessGate } from "./access-client";
 import { secureId } from "./secure-id";
 import { attachmentRecordedAt } from "./recording-metadata";
+import { attachmentMime } from "./attachment-mime";
 import { parseSyncWindowEvent, parseSyncWindowReceipt, type SyncWindowEvent, type SyncWindowReply } from "./network-sync";
 import type { AttachmentOperationResult } from "./attachment-submission";
 import type {
@@ -145,6 +146,21 @@ export async function exportAttachment(id: string, path: string): Promise<{ name
   if (stamp.generation !== now.generation || stamp.sessionId !== now.sessionId || stamp.epoch !== now.epoch || stamp.noteEpoch !== now.noteEpoch) throw new AccessChanged();
   if (!result || typeof result.name !== "string" || typeof result.mime !== "string" || !Number.isSafeInteger(result.bytes) || result.bytes < 0) throw Error("附件导出回执无效");
   return result;
+}
+export async function desktopAttachmentAction(id: string, action: "copy" | "open" | "reveal" | "share") {
+  const owner = attachmentOwners.get(id);
+  if (!native || !owner) throw Error("请在桌面应用中操作此附件");
+  const stamp = accessGate.stamp(owner);
+  await invoke("attachment_desktop", { id, action, expected: accessGate.expected(owner) });
+  if (JSON.stringify(stamp) !== JSON.stringify(accessGate.stamp(owner))) throw new AccessChanged();
+}
+export async function readClipboardAttachments(noteId: string): Promise<File[]> {
+  const stamp = accessGate.stamp(noteId);
+  const value = await invoke<{ files: { name: string; mime: string; data: string }[] }>("attachment_desktop", {
+    action: "readClipboard", noteId, expected: accessGate.expected(noteId),
+  });
+  if (JSON.stringify(stamp) !== JSON.stringify(accessGate.stamp(noteId))) throw new AccessChanged();
+  return value.files.map(f => new File([Uint8Array.from(atob(f.data), c => c.charCodeAt(0))], f.name, { type: attachmentMime(f.mime, f.data) }));
 }
 export async function exportArchive(path: string) {
   await invoke("export_archive", { path, expected: accessGate.expected() });
@@ -594,6 +610,63 @@ export const cancelAttachmentOperation = (
     operationId,
     noteId,
   );
+export type AttachmentSourcePurpose = "original" | "thumbnail";
+export type AttachmentSourceGrant = {
+  leaseId: string; url: string; mime: string; bytes: number; name: string;
+  width: number | null; height: number | null;
+  attachmentId: string; noteId: string; purpose: AttachmentSourcePurpose;
+};
+export async function releaseAttachmentSource(leaseId: string): Promise<void> {
+  if (!native) throw Object.assign(Error("媒体租约需要本机应用"), { code: "media_unavailable" });
+  await invoke("release_attachment_source", { leaseId });
+}
+export async function acquireAttachmentSource(
+  id: string, purpose: AttachmentSourcePurpose, pixels?: number,
+): Promise<AttachmentSourceGrant> {
+  if (!native) throw Object.assign(Error("本地媒体服务不可用"), { code: "media_unavailable" });
+  const owner = attachmentOwners.get(id);
+  if (!owner) throw Object.assign(Error("附件不存在"), { code: "not_found" });
+  if (purpose !== "original" && purpose !== "thumbnail" ||
+      purpose === "original" && pixels !== undefined ||
+      purpose === "thumbnail" && (!Number.isSafeInteger(pixels) || pixels! < 1 || pixels! > 1024))
+    throw Object.assign(Error("媒体用途或缩略图尺寸无效"), { code: "invalid" });
+  const stamp = accessGate.stamp(owner);
+  const result = await invoke<AttachmentSourceGrant>("acquire_attachment_source", {
+    id, purpose, pixels: pixels ?? null, expected: accessGate.expected(owner),
+  });
+  // Even malformed/stale responses may already own a native lease. Never
+  // publish them, and always ask the issuing real window to release them.
+  try {
+    const url = new URL(result.url);
+    const positive = (n: unknown) => Number.isSafeInteger(n) && (n as number) > 0;
+    if (!/^[a-f0-9]{32}$/.test(result.leaseId) || url.protocol !== "http:" ||
+        url.hostname !== "127.0.0.1" || !url.port || url.username || url.password ||
+        url.pathname !== `/media/${result.leaseId}` || url.search || url.hash ||
+        result.attachmentId !== id || result.noteId !== owner || result.purpose !== purpose ||
+        attachmentOwners.get(id) !== owner || typeof result.mime !== "string" || !result.mime ||
+        typeof result.name !== "string" || !Number.isSafeInteger(result.bytes) || result.bytes < 0 ||
+        (purpose === "thumbnail" ? result.mime !== "image/png" || !positive(result.width) || !positive(result.height) ||
+          result.width! > pixels! || result.height! > pixels! : result.width !== null || result.height !== null))
+      throw Object.assign(Error("媒体租约回执无效"), { code: "invalid" });
+    accept(result, stamp);
+    return result;
+  } catch (error) {
+    if (result && typeof result.leaseId === "string" && /^[a-f0-9]{32}$/.test(result.leaseId)) {
+      // A rejected grant stays rejected even if IPC cleanup itself fails.
+      // Native revocation/expiry remains the final cleanup backstop.
+      try { await releaseAttachmentSource(result.leaseId); } catch { /* no publication */ }
+    }
+    throw error;
+  }
+}
+export async function clearAttachmentMediaCache(): Promise<void> {
+  if (!native) throw Object.assign(Error("缩略图缓存需要本机应用"), { code: "media_unavailable" });
+  const stamp = accessGate.stamp();
+  const result = accept(await invoke<{ cleared: boolean }>("clear_attachment_media_cache", {
+    expected: accessGate.expected(),
+  }), stamp);
+  if (result.cleared !== true) throw Error("缩略图缓存清理回执无效");
+}
 export async function readAttachment(id: string): Promise<{
   data: string;
   mime: string;
@@ -619,20 +692,6 @@ export async function readAttachment(id: string): Promise<{
     name: a?.displayName || "",
     recordedAt: attachmentRecordedAt(a?.recordedAt, a?.kind || "file"),
   };
-}
-// Some Android document providers omit File.type. Only known byte signatures
-// supply a missing MIME; filenames never determine an executable/media type.
-function attachmentMime(declared: string, base64: string): string {
-  if (declared) return declared;
-  const head = atob(base64.slice(0, 24));
-  if (head.startsWith("\x89PNG\r\n\x1a\n")) return "image/png";
-  if (head.startsWith("\xff\xd8\xff")) return "image/jpeg";
-  if (head.startsWith("GIF87a") || head.startsWith("GIF89a"))
-    return "image/gif";
-  if (head.startsWith("RIFF") && head.slice(8, 12) === "WEBP")
-    return "image/webp";
-  if (head.startsWith("%PDF-")) return "application/pdf";
-  return "application/octet-stream";
 }
 export function fileBase64(file: Blob): Promise<string> {
   return new Promise((resolve, reject) => {

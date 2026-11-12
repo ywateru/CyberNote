@@ -27,7 +27,7 @@ export async function chooseFiles(
       .locator('.editor-tools:visible [aria-label="添加附件"]')
       .first()
       .click();
-    await page.getByRole("button", { name: "附加文件", exact: true }).click();
+    await page.getByRole("menuitem", { name: "附加文件", exact: true }).click();
   } else await api(page, "attachment.choose", { kind: "file" });
   const chooser = await waiting;
   if (beforeChange) await beforeChange();
@@ -229,7 +229,7 @@ export async function runMobileAttachments(
   );
   await capture("mobile-attachments-saved");
   await reset();
-  backend.configure({ delay: { read: 650 } });
+  backend.configure({ delay: { media: 650 } });
   await chooseFiles(page, [png("multi-a.png"), png("multi-b.png")]);
   check(
     "Two selected images save exactly one reference per original file",
@@ -243,9 +243,9 @@ export async function runMobileAttachments(
       ),
   );
   check(
-    "Delayed media read survives next-file synchronize via fresh fully gated read",
+    "Delayed thumbnail issuance survives next-file synchronize through fully gated grants",
     (await page.locator(".attachment-node .inline-error").count()) === 0 &&
-      backend.calls.filter((c) => c.command === "read_attachment").length >= 3,
+      backend.calls.filter((c) => c.command === "acquire_attachment_source").length >= 2 && !backend.calls.some(c=>c.command==="read_attachment"),
   );
   await capture("mobile-multi-image-recovered");
   await reset();
@@ -466,66 +466,35 @@ export async function runMobileAttachments(
   await reset();
   await chooseFiles(page, [file]);
   await idle(page);
-  await page.waitForFunction(() =>
-    document
-      .querySelector(".file-card")
-      ?.href.startsWith("data:text/plain;base64,"),
-  );
-  backend.configure({ delay: { read: 100 } });
-  let reads = 0;
-  const readCall = backend.call.bind(backend);
-  backend.call = async (command, args) => {
-    const result = await readCall(command, args);
-    if (command === "read_attachment") {
-      reads++;
-      await page.evaluate(async () => {
-        (await import("/src/bridge.ts")).invalidateAccessRequests();
-      });
-    }
-    return result;
-  };
-  await page.reload();
-  await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1);
-  await api(page, "note.select", { id: "note-a" });
-  await page.waitForSelector(
-    '.attachment-node .inline-error [aria-label="重试附件"]',
-  );
-  check(
-    "StrictMode canceled mount plus three live stale reads stop bounded with generic retry UI (reads=" +
-      reads +
-      ")",
-    reads === 4 &&
-      (await page.locator(".attachment-node .file-card").count()) === 0,
-  );
-  backend.call = readCall;
-  await page.getByRole("button", { name: "重试附件", exact: true }).click();
-  await page.waitForFunction(() =>
-    document
-      .querySelector(".file-card")
-      ?.href.startsWith("data:text/plain;base64,"),
-  );
-  check(
-    "Manual generic retry starts a new gated attempt and recovers correct stored content",
-    (await page.locator(".attachment-node .inline-error").count()) === 0,
-  );
+  await page.locator(".file-card").waitFor();
+  check("Generic file is metadata-only with zero source or legacy-byte prefetch",!backend.calls.some(c=>["read_attachment","acquire_attachment_source"].includes(c.command)));
+  await reset();await chooseFiles(page,[png("stale-source.png")]);await idle(page);
+  backend.configure({delay:{media:100}});let reads=0;const readCall=backend.call.bind(backend);
+  backend.call=async(command,args)=>{const result=await readCall(command,args);if(command==="acquire_attachment_source"){reads++;await page.evaluate(async()=>{(await import("/src/bridge.ts")).invalidateAccessRequests();});}return result;};
+  await page.reload();await page.waitForFunction(()=>window.__NOTES_DEBUG__?.version===1);await api(page,"note.select",{id:"note-a"});
+  await page.waitForSelector('.attachment-node .inline-error [aria-label="重试附件"]');
+  check("Stale lease response remains rejected without decoded media publication",reads>=1&&reads<=3&&(await page.locator('.attachment-node img[src]').count())===0);
+  backend.call=readCall;await page.getByRole("button",{name:"重试附件",exact:true}).click();
+  await page.waitForFunction(()=>{const image=document.querySelector('.attachment-node img');return image?.complete&&image.naturalWidth>0;});
+  check("Manual thumbnail retry gets a fresh gated grant and recovers",(await page.locator('.attachment-node .inline-error').count())===0);
   await reset();
   await chooseFiles(page, [png("revoked.png")]);
   await idle(page);
-  backend.configure({ delay: { read: 350 } });
+  backend.configure({ delay: { media: 350 } });
   await page.reload();
   await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1);
   await api(page, "note.select", { id: "note-a" });
   await waitForState(
     page,
     () =>
-      backend.calls.filter((c) => c.command === "read_attachment").length >= 2,
+      backend.calls.filter((c) => c.command === "acquire_attachment_source").length >= 2,
     { label: "delayed read admission" },
   );
   backend.workspace.notes.find((n) => n.id === "note-a").locked = true;
   await page.waitForSelector(".attachment-node .inline-error");
   check(
     "Real boundary authorization rejection never publishes delayed bytes or an image URL",
-    (await page.locator('.attachment-node img[src^="data:"]').count()) === 0,
+    (await page.locator('.attachment-node img[src]').count()) === 0,
   );
   await api(page, "note.select", { id: "note-b" });
   await idle(page);
@@ -544,10 +513,10 @@ export async function runMobileAttachments(
   check(
     "Unlocked locked-note attachment menu is disabled consistently with Rust store policy",
     (await page
-      .getByRole("button", { name: "附加文件", exact: true })
+      .getByRole("menuitem", { name: "附加文件", exact: true })
       .isDisabled()) &&
       (await page
-        .getByRole("button", { name: "录音", exact: true })
+        .getByRole("menuitem", { name: "录音", exact: true })
         .isDisabled()),
   );
   await reset();

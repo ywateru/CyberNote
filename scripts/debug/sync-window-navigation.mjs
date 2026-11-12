@@ -365,7 +365,7 @@ try {
   backend.sequence++;
   await page.evaluate(
     (metadata) =>
-      window.__DEBUG_PLATFORM__.emit("notes-metadata", { metadata }),
+      window.__DEBUG_PLATFORM__.emit("notes-metadata", { metadata, changes:[] }),
     backend.state().metadata,
   );
   await idle(page);
@@ -523,7 +523,7 @@ try {
   backend.sequence++;
   await page.evaluate(
     (metadata) =>
-      window.__DEBUG_PLATFORM__.emit("notes-metadata", { metadata }),
+      window.__DEBUG_PLATFORM__.emit("notes-metadata", { metadata, changes:[] }),
     backend.state().metadata,
   );
   await until(
@@ -545,7 +545,7 @@ try {
   backend.sequence++;
   await page.evaluate(
     (metadata) =>
-      window.__DEBUG_PLATFORM__.emit("notes-metadata", { metadata }),
+      window.__DEBUG_PLATFORM__.emit("notes-metadata", { metadata, changes:[] }),
     backend.state().metadata,
   );
   await until(

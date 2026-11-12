@@ -22,16 +22,29 @@ export function seededWorkspace() {
 }
 export class FakeBackend {
   kind = 'isolated-js-protocol-fixture';
-  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.sync = null; this.syncConflicts = []; }
-  reset() { Object.assign(this, new FakeBackend(this.directory)); }
+  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.sync = null; this.syncConflicts = []; this.mediaLeases=new Map();this.mediaReads=[];this.mediaOrigin=null; }
+  reset() { const mediaOrigin=this.mediaOrigin;Object.assign(this, new FakeBackend(this.directory));this.mediaOrigin=mediaOrigin; }
+  // Functional transport fixture only: a real HTTP URL and Range path exercise
+  // browser loading. This is not a native provider/Rust or performance proof.
+  serveMedia(request,response){
+    const id=new URL(request.url,this.mediaOrigin).pathname.slice('/media/'.length),lease=this.mediaLeases.get(id);
+    const a=lease&&this.workspace.attachments.find(a=>a.id===lease.id&&a.noteId===lease.owner);
+    if(!a||lease.session!==this.sessionId||lease.epoch!==(this.noteEpochs[a.noteId]||0)||this.suspended.includes(a.noteId)||this.operationId||(this.workspace.notes.find(n=>n.id===a.noteId)?.locked&&!this.unlocked.has(a.noteId))){response.writeHead(403);response.end();return;}
+    const bytes=lease.purpose==='thumbnail'?Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==','base64'):Buffer.from(this.files.get(a.id)||'','base64');
+    const range=request.headers.range?.match(/^bytes=(\d+)-(\d*)$/);let start=0,end=bytes.length-1;
+    if(range){start=Number(range[1]);end=range[2]?Math.min(Number(range[2]),end):end;if(start>end){response.writeHead(416);response.end();return;}}
+    response.setHeader('Content-Type',lease.purpose==='thumbnail'?'image/png':a.mime);response.setHeader('Cache-Control','no-store');response.setHeader('Accept-Ranges','bytes');response.setHeader('Access-Control-Allow-Origin','*');response.setHeader('Content-Length',end-start+1);
+    if(range){response.statusCode=206;response.setHeader('Content-Range',`bytes ${start}-${end}/${bytes.length}`);}
+    this.mediaReads.push({id:a.id,purpose:lease.purpose,bytes:request.method==='HEAD'?0:end-start+1});response.end(request.method==='HEAD'?undefined:bytes.subarray(start,end+1));
+  }
   state() { const value = clone(this.workspace); value.access = { sessionId: this.sessionId, epoch: this.accessEpoch, notes: Object.fromEntries(value.notes.map((note) => [note.id, { epoch: this.noteEpochs[note.id] || 0, authorized: !!(!note.locked || this.unlocked?.has(note.id)) }])), suspended: [...this.suspended], operationId: this.operationId }; value.metadata = { sessionId: this.sessionId, sequence: this.sequence }; return value; }
   tagged(value) { const state = this.state(); return { ...clone(value), access: state.access, metadata: state.metadata }; }
   configure(value) { if (!value || typeof value !== 'object' || Array.isArray(value)) throw failure('Platform configuration must be an object'); for (const key of Object.keys(value)) if (!['fail', 'delay'].includes(key)) throw failure('Unknown backend control ' + key); for (const key of ['fail', 'delay']) if (value[key]) for (const [name, number] of Object.entries(value[key])) { if (!Number.isInteger(number) || number < 0 || number > (key === 'delay' ? 10000 : 100)) throw failure('Invalid bounded platform control'); this.controls[key][name] = number; } return clone(this.controls); }
   async boundary(name) { const delay = this.controls.delay[name] || 0; if (delay) await new Promise((done) => setTimeout(done, delay)); if (this.controls.fail[name] > 0) { this.controls.fail[name]--; throw failure('Controlled ' + name + ' failure', 'controlled_' + name); } }
   assertNote(id) { const note = this.workspace.notes.find((item) => item.id === id); if (!note) throw failure('Note does not exist'); if (note.deletedAt) throw failure('Note is deleted', 'access_denied'); if (note.locked && !this.unlocked?.has(id)) throw failure('Note is locked', 'access_denied'); return note; }
   async call(command, args = {}) {
-    this.calls.push({ command, type: args.action?.type || args.command?.type, ...(args.operationId ? { operationId: args.operationId } : {}), ...(args.noteId ? { noteId: args.noteId } : {}) }); if (this.calls.length > 1000) this.calls.shift();
-    const before = this.sequence; const events = []; let value;
+    this.calls.push({ command, ...(args.purpose?{purpose:args.purpose,id:args.id,pixels:args.pixels}:{}), type: args.action?.type || args.command?.type, ...(args.operationId ? { operationId: args.operationId } : {}), ...(args.noteId ? { noteId: args.noteId } : {}) }); if (this.calls.length > 1000) this.calls.shift();
+    const before = this.sequence; const beforeAttachments=new Map(this.workspace.attachments.map(a=>[a.id,JSON.stringify(a)])); const events = []; let value;
     try {
       if (command === 'load_workspace') { await this.boundary('load'); value = this.state(); }
       else if (command === 'register_save_intent' || command === 'acknowledge_access') value = null;
@@ -44,7 +57,18 @@ export class FakeBackend {
         else { const attachment = { id: randomUUID(), noteId: args.noteId, kind: args.mime?.startsWith('audio/') ? 'audio' : args.mime?.startsWith('image/') ? 'image' : args.mime?.startsWith('video/') ? 'video' : 'file', displayName: args.name, mime: args.mime, size: Buffer.from(args.data, 'base64').length, relativePath: 'synthetic/' + randomUUID(), ...(args.recordedAt == null ? {} : { recordedAt: args.recordedAt }) }; this.files.set(attachment.id, args.data); this.workspace.attachments.push(attachment); this.sequence++; const result = { operationId: args.operationId, noteId: args.noteId, status: 'stored', attachment }; if (args.operationId) this.journal.set(args.operationId, result); value = this.tagged(command === 'store_attachment' ? attachment : result); await this.boundary('storeResponse'); }
       } else if (command === 'query_attachment_operation' || command === 'cancel_attachment_operation') {
         await this.boundary('query'); const operation = this.journal.get(args.operationId); if (operation && command === 'cancel_attachment_operation') operation.status = 'aborted'; if (operation && command === 'query_attachment_operation' && JSON.stringify(this.workspace.notes.find((n) => n.id === operation.noteId)?.document).includes(operation.attachment.id)) operation.status = 'committed'; value = this.tagged(operation || { operationId: args.operationId, noteId: args.noteId, status: 'notPersisted' });
-      } else if (command === 'read_attachment') { await this.boundary('read'); const attachment = this.workspace.attachments.find((item) => item.id === args.id); if (!attachment) throw failure('Attachment absent'); this.assertNote(attachment.noteId); value = this.tagged({ data: this.files.get(args.id), mime: attachment.mime, name: attachment.displayName, recordedAt: attachment.recordedAt }); }
+      } else if(command === 'acquire_attachment_source') {
+        await this.boundary('media');const a=this.workspace.attachments.find(a=>a.id===args.id);if(!a)throw failure('Attachment absent','not_found');this.assertNote(a.noteId);
+        if(this.suspended.includes(a.noteId)||this.operationId)throw failure('Preparing','access_changed');
+        if(args.expected?.sessionId!==this.sessionId||args.expected?.epoch!==this.accessEpoch||args.expected?.noteEpoch!==(this.noteEpochs[a.noteId]||0))throw failure('Stale media authority','access_changed');
+        if(args.purpose==='thumbnail'&&!['image','video'].includes(a.kind))throw failure('No thumbnail','unsupported_media');
+        if(args.purpose==='thumbnail'&&a.kind==='video')throw failure('Video poster provider pending99C','unsupported_media');
+        const leaseId=randomUUID().replaceAll('-','');const mime=args.purpose==='thumbnail'?'image/png':a.mime;
+        this.mediaLeases.set(leaseId,{id:a.id,owner:a.noteId,purpose:args.purpose,epoch:this.noteEpochs[a.noteId]||0,session:this.sessionId});
+        value=this.tagged({leaseId,url:this.mediaOrigin+'/media/'+leaseId,mime,bytes:args.purpose==='thumbnail'?68:a.size,name:a.displayName,width:args.purpose==='thumbnail'?1:null,height:args.purpose==='thumbnail'?1:null,attachmentId:a.id,noteId:a.noteId,purpose:args.purpose});
+      } else if(command==='release_attachment_source'){this.mediaLeases.delete(args.leaseId);value=null;}
+      else if(command==='clear_attachment_media_cache'){value=this.tagged({cleared:true});}
+      else if (command === 'read_attachment') { await this.boundary('read'); const attachment = this.workspace.attachments.find((item) => item.id === args.id); if (!attachment) throw failure('Attachment absent'); this.assertNote(attachment.noteId); value = this.tagged({ data: this.files.get(args.id), mime: attachment.mime, name: attachment.displayName, recordedAt: attachment.recordedAt }); }
       else if (command === 'get_data_management') {
         await this.boundary('inventory');
         const files = [
@@ -55,7 +79,7 @@ export class FakeBackend {
           ...clone(this.dataExtras),
         ];
         const bytes = category => files.filter(f => f.category === category && f.status === 'file').reduce((n,f) => n + (f.size || 0),0);
-        value = this.tagged({ version: 1, capturedAt: Date.now(), rootPath: '/synthetic-fixture/local-data', files, totals: { databaseBytes: bytes('database'), auxiliaryBytes: bytes('wal') + bytes('shm'), attachmentBytes: bytes('attachment'), otherBytes: bytes('other') + bytes('import'), totalBytes: files.filter(f=>f.status==='file').reduce((n,f)=>n+(f.size||0),0), declaredAttachmentBytes: this.workspace.attachments.reduce((n,a)=>n+a.size,0) }, counts: { notes: this.workspace.notes.length, folders: this.workspace.folders.length, attachments: this.workspace.attachments.length, physicalFiles: files.filter(f=>f.status==='file').length, missingAttachments: files.filter(f=>f.attachment && !f.exists).length }, warnings: [] });
+        value = this.tagged({ version: 1, mediaCache:{version:1,bytes:68,files:1,quota:268435456}, capturedAt: Date.now(), rootPath: '/synthetic-fixture/local-data', files, totals: { databaseBytes: bytes('database'), auxiliaryBytes: bytes('wal') + bytes('shm'), attachmentBytes: bytes('attachment'), otherBytes: bytes('other') + bytes('import'), totalBytes: files.filter(f=>f.status==='file').reduce((n,f)=>n+(f.size||0),0), declaredAttachmentBytes: this.workspace.attachments.reduce((n,a)=>n+a.size,0) }, counts: { notes: this.workspace.notes.length, folders: this.workspace.folders.length, attachments: this.workspace.attachments.length, physicalFiles: files.filter(f=>f.status==='file').length, missingAttachments: files.filter(f=>f.attachment && !f.exists).length }, warnings: [] });
       }
       else if (command === 'export_attachment') {
         await this.boundary('export');
@@ -74,7 +98,7 @@ export class FakeBackend {
       else if (command === 'export_archive') { await this.boundary('archive'); await writeFile(this.directory + '/fixture-export.json', JSON.stringify({workspace:this.workspace,files:[...this.files]})); value = null; }
       else if (command === 'import_archive') { await this.boundary('archive'); const saved = JSON.parse(await readFile(this.directory + '/fixture-export.json', 'utf8')); this.workspace = saved.workspace; this.files = new Map(saved.files); this.sequence++; value = this.state(); }
       else throw failure('Unsupported fixture IPC ' + command, 'fixture_unsupported');
-      if (before !== this.sequence) events.push({ name: 'notes-metadata', payload: { metadata: this.state().metadata } });
+      if (before !== this.sequence) events.push({ name: 'notes-metadata', payload: { metadata: this.state().metadata,changes:[...this.workspace.attachments.filter(a=>beforeAttachments.get(a.id)!==JSON.stringify(a)).map(a=>({kind:'attachment',id:a.id})),...Array.from(beforeAttachments.keys()).filter(id=>!this.workspace.attachments.some(a=>a.id===id)).map(id=>({kind:'attachment',id})),...(args.action?.id?[{kind:'note',id:args.action.id}]:[])] } });
       return { ok: true, value, events };
     } catch (error) { return { ok: false, error: { code: error.code || 'fixture_error', message: error.message }, events }; }
   }

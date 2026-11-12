@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-popup-menu"
+description = "Enables the popup_menu command without any pre-configured scope."
+commands.allow = ["popup_menu"]
+
+[[permission]]
+identifier = "deny-popup-menu"
+description = "Denies the popup_menu command without any pre-configured scope."
+commands.deny = ["popup_menu"]
