@@ -89,6 +89,38 @@ sync, or fabricates a callback. The sole phone operator runs it; do not run a
 second driver concurrently. It may open the real system browser during Login,
 then returns to this package and cancels without reading the browser page.
 
+### Hosted-login transfer boundary
+
+The first credential-transfer attempt was rejected before any credential Input
+or submit action. Its original fixed error is preserved in
+[hosted-ready/transfer01.json](hosted-ready/transfer01.json). That error grouped
+clipboard reading and JSON parsing, so it does not establish which operation
+failed. A subsequent read-only check found the trusted hosted form editable and
+native authorization still pending, without a profile or enabled sync. This is
+not evidence of authenticated callback success.
+
+`scripts/verification/account109-credential-transfer.mjs` now provides a one-shot
+`createCredentialTransfer({ captured, consume })` factory. Import has no effects;
+calling the returned function with the separately supplied marker reads the
+clipboard into memory, validates the synthetic owner, purpose, marker and short
+expiry, then acknowledges capture before invoking the private UI consumer.
+Read failures report `CLIPBOARD_READ_FAILED`; malformed JSON reports
+`CLIPBOARD_JSON_INVALID`. Validation failures never call either callback, and
+every attempted instance rejects a second capture. The raw Buffer is wiped and
+parsed credential references are cleared on success and failure; JavaScript
+strings cannot be guaranteed to be zeroized. No credentials enter command
+arguments, output or files. The private consumer must independently verify the
+current native authorization, trusted origin, foreground/unlocked device and
+expected form before real CDP Input, and must not log the supplied object.
+
+`node --test scripts/verification/account109-credential-transfer.test.mjs` passed
+18 offline tests using synthetic fixtures only. These cover acknowledgement
+ordering, rejection without submission, read/parse error separation, expiry,
+single-use behavior and reference cleanup when a page/transaction guard fails.
+They do not access the clipboard or device and do not prove live login. A fresh
+authorized transfer and a fresh private consumer instance remain necessary;
+the failed instance cannot be reused.
+
 ## Original build01 record
 
 Built successfully on 2026-11-13 from integrated source
