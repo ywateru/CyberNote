@@ -68,7 +68,11 @@ requires a nonexisting absolute destination plus matching `--target` and
 `--expected-target`, and `--apply`. `--init` creates a single new initial commit,
 with no remote, inherited refs, Git history, original author identity or tags.
 The checked-in manifest is an explicit file/hash inventory, not a directory-copy
-rule. Review additions and provenance before refreshing hashes.
+rule. Review additions and provenance before refreshing hashes. Project-authored
+crates use explicit first-party reserved-rights declarations. Foreign SDK sources
+retain pinned origins and licenses. Bundled runtime binaries require exact
+path/SHA/size/source/license entries matching their retained provider manifest;
+ordinary vendor binaries and generated JNI directories remain excluded.
 
 Actions produce macOS arm64 and Android arm64 build packages and checksums.
 An uploaded CI artifact proves the recorded build only; it does not assert device

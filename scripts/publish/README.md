@@ -54,10 +54,47 @@ node scripts/publish/manifest.mjs --ref HEAD --extension /absolute/reviewed-exte
 ```
 
 Commit the refreshed manifest, then run the exporter against that final commit.
-Do not use wildcards, recursive cache copies, downloaded binaries or a Cargo
-target directory as SDK inputs. Every crates/vendor file needs a matching pinned
-provenance entry and retained license. Review provider download version/hash and
-license metadata separately. Service notices, original font/OFL, Gradle wrapper,
+Do not use wildcards, recursive cache copies or a Cargo target directory as SDK
+inputs. Every crates/vendor file needs exactly one explicit ownership root.
+Foreign code uses a `thirdParty` entry with pinned origin/revision and retained
+licenses. Project-authored crates use `firstParty` instead of inventing an
+external origin or a third-party license:
+
+```json
+{
+  "firstParty": [{
+    "root": "crates/account-auth",
+    "provenance": "project-authored",
+    "rights": "reserved",
+    "rightsSource": "scripts/publish/LICENSE.project-reserved.txt"
+  }]
+}
+```
+
+This is an explicit reviewed authorship/rights assertion. Only exact crate roots
+are eligible; vendor roots cannot be classified as first party. Overlapping
+ownership roots, absent rights/license sources and empty roots are rejected.
+
+Binary providers additionally require `runtimeAssets` entries, supplied in the
+same reviewed extension as their exact `files` SHA inventory. Each entry names
+`path`, `sha256`, raw byte `size`, `licenses`, a `source` object with HTTPS `url`,
+commit `revision` and `version`, and a `provenance` object naming a retained
+provider `manifest` and `platform`. The current provider manifest schema must
+bind repository/commit/version and exact platform binary path/SHA/size, disable
+runtime downloads, and retain referenced patches/build information. All declared
+licenses must be retained under that vendor root. Package notice sidecars include
+every declared license path, even when its filename lacks the word LICENSE.
+
+The checker hashes actual committed binary bytes and compares both inventories.
+Only validated exact runtime entries receive a binary exception; the default
+50 MiB per-file cap remains. JNI exceptions are restricted to the single current
+`vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so`
+path. Application-generated JNI directories and adjacent unlisted binaries stay
+excluded. Manifest refresh never automatically updates a runtime pin when its
+binary changes: a new version/path or an explicitly reviewed pin change is needed.
+New provider metadata schemas require a reviewed validator change.
+
+Service notices, original font/OFL, Gradle wrapper,
 lockfiles, pnpm patch and handwritten platform sources are retained explicitly.
 
 ## Verification and build boundaries

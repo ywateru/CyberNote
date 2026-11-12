@@ -22,6 +22,22 @@ def sha(path):
     return h.hexdigest()
 
 
+def notice_paths(manifest):
+    paths = {'LICENSE', 'THIRD_PARTY_NOTICES.md', 'src-tauri/fonts/README.md'}
+    declared = []
+    for entry in manifest.get('thirdParty', []) + manifest.get('runtimeAssets', []):
+        declared.extend(entry['licenses'])
+    declared.extend(entry['rightsSource'] for entry in manifest.get('firstParty', []))
+    for name in declared:
+        if name not in manifest['files'] or Path(name).is_absolute() or '..' in Path(name).parts:
+            raise RuntimeError('Declared notice is not a retained source input')
+        paths.add(name)
+    for name in manifest['files']:
+        if any(word in Path(name).name.upper() for word in ['LICENSE', 'COPYING', 'NOTICE', 'OFL']) or name.startswith('services/coordinator/notices/'):
+            paths.add(name)
+    return paths
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--platform', required=True, choices=['macos', 'android'])
@@ -70,13 +86,9 @@ def main():
             native_sha = hashlib.sha256(archive.read(entry)).hexdigest()
         signing = 'Unsigned release APK; distributor signing is required before installation.'
     manifest = json.loads((root / 'scripts/publish/manifest.json').read_text())
-    license_paths = {'LICENSE', 'THIRD_PARTY_NOTICES.md', 'src-tauri/fonts/README.md'}
-    for name in manifest['files']:
-        if any(word in Path(name).name.upper() for word in ['LICENSE', 'COPYING', 'NOTICE', 'OFL']) or name.startswith('services/coordinator/notices/'):
-            license_paths.add(name)
     notices = output / f'{stem}-notices.zip'
     with zipfile.ZipFile(notices, 'w', zipfile.ZIP_DEFLATED) as archive:
-        for name in sorted(license_paths):
+        for name in sorted(notice_paths(manifest)):
             path = root / name
             if not path.is_file() or path.is_symlink():
                 raise RuntimeError('Missing regular license input')
