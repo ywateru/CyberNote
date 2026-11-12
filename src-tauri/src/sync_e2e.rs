@@ -193,7 +193,13 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
             "while (!window.__NOTES_DEBUG__) {{ if (Date.now() >= deadline) throw {{code:'TIMEOUT'}}; await new Promise(r=>setTimeout(r,25)); }}\n\
              if (window.__NOTES_DEBUG__.version !== 1) throw {{code:'UNAVAILABLE'}};\n\
              await window.__NOTES_DEBUG__.waitForIdle({{timeoutMs:Math.min(30000, Math.max(1,deadline-Date.now()))}});\n\
-             return {{version:1, native:!!window.__TAURI_INTERNALS__, window:windowLabel, location:location.origin}};"
+             while (true) {{\n\
+                 const root = document.getElementById('root');\n\
+                 if (root && !document.getElementById('startup') && !root.inert && !root.hasAttribute('inert') && !root.hasAttribute('aria-hidden') && !root.hasAttribute('aria-busy')) break;\n\
+                 if (Date.now() >= deadline) throw {{code:'TIMEOUT'}};\n\
+                 await new Promise(r=>setTimeout(r,25));\n\
+             }}\n\
+             return {{version:1, native:!!window.__TAURI_INTERNALS__, window:windowLabel, location:location.origin, interactive:true, startupDetached:true}};"
         ),
         Action::Execute { command, args } if command.len() <= 200 && args.is_object() => {
             format!("return (await debug.execute({}, {})).result;", json!(command), args)
