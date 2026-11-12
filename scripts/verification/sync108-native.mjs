@@ -137,24 +137,36 @@ async function freePort() {
   });
 }
 
-async function immutableEvidence(directory) {
-  // Owned apps must already have exited. Immutable SQLite reads cannot create
-  // journals or write business rows. Keep identities/counts/hashes only.
+async function readOnlyEvidence(directory, snapshotDirectory) {
+  // Owned apps must already have exited. A nonempty WAL is valid persisted
+  // state; immutable=1 would silently ignore it. Read an owned DB/WAL/SHM copy
+  // with SQLite mode=ro, and prove every original file remains byte-identical.
+  await mkdir(snapshotDirectory);
+  const originalFiles = {};
+  for (const name of ["notes.sqlite3", "notes.sqlite3-wal", "notes.sqlite3-shm"]) {
+    try {
+      originalFiles[name] = await fileHash(resolve(directory, name));
+      await copyFile(resolve(directory, name), resolve(snapshotDirectory, name));
+    } catch (error) { if (error.code !== "ENOENT" || name === "notes.sqlite3") throw error; }
+  }
   const script = `import sqlite3,hashlib,json,os,sys
+from pathlib import Path
 p=os.path.join(sys.argv[1],'notes.sqlite3')
 wal=p+'-wal'
-assert not os.path.exists(wal) or os.path.getsize(wal)==0, 'nonempty WAL'
 h=lambda:hashlib.sha256(open(p,'rb').read()).hexdigest()
 before=h()
-c=sqlite3.connect('file:'+p+'?mode=ro&immutable=1',uri=True)
+c=sqlite3.connect(Path(p).as_uri()+'?mode=ro',uri=True)
+c.execute('pragma query_only=on')
 tables=['notes','attachments','sync_heads','sync_inbox','sync_dirty','sync_projection']
 present={row[0] for row in c.execute("select name from sqlite_master where type='table'")}
-r={'integrity':c.execute('pragma integrity_check').fetchone()[0], 'counts':{t:c.execute('select count(*) from '+t).fetchone()[0] for t in tables if t in present}, 'absentSyncTables':[t for t in tables if t not in present], 'identity':c.execute('select workspace_id,device_id from sync_identity').fetchall() if 'sync_identity' in present else [], 'projection':c.execute('select kind,entity_id,digest from sync_projection order by kind,entity_id').fetchall() if 'sync_projection' in present else [], 'databaseSha256':before, 'immutableReadOnly':True}
+r={'integrity':c.execute('pragma integrity_check').fetchone()[0], 'counts':{t:c.execute('select count(*) from '+t).fetchone()[0] for t in tables if t in present}, 'absentSyncTables':[t for t in tables if t not in present], 'identity':c.execute('select workspace_id,device_id from sync_identity').fetchall() if 'sync_identity' in present else [], 'projection':c.execute('select kind,entity_id,digest from sync_projection order by kind,entity_id').fetchall() if 'sync_projection' in present else [], 'databaseSha256':before, 'readOnlySnapshot':True, 'walBytes':os.path.getsize(wal) if os.path.exists(wal) else 0}
 c.close()
-r['unchanged']=before==h()
-assert r['unchanged'] and r['integrity']=='ok'
+r['snapshotDatabaseUnchanged']=before==h()
+assert r['snapshotDatabaseUnchanged'] and r['integrity']=='ok'
 print(json.dumps(r))`;
-  return JSON.parse(execFileSync("python3", ["-c", script, directory], { encoding: "utf8", maxBuffer: 8_000_000 }));
+  const value = JSON.parse(execFileSync("python3", ["-c", script, snapshotDirectory], { encoding: "utf8", maxBuffer: 8_000_000, stdio: ["ignore", "pipe", "pipe"] }));
+  for (const [name, before] of Object.entries(originalFiles)) assert.equal(await fileHash(resolve(directory, name)), before, "Original SQLite evidence file remains unchanged");
+  return { ...value, originalFiles, originalFilesUnchanged: true, snapshotDirectory };
 }
 
 export async function run(argv = process.argv.slice(2)) {
@@ -412,8 +424,8 @@ export async function run(argv = process.argv.slice(2)) {
     report.processes = apps.map((app) => app.lifecycle);
     for (const directory of stores) {
       if (apps.filter((app) => app.directory === directory).every((app) => app.lifecycle.exit)) {
-        try { report.databaseEvidence.push({ directory, ...await immutableEvidence(directory) }); }
-        catch { report.failure ||= { code: "IMMUTABLE_EVIDENCE_FAILED" }; }
+        try { report.databaseEvidence.push({ directory, ...await readOnlyEvidence(directory, resolve(output, "sqlite-readonly-" + (directory === stores[0] ? "A" : "B"))) }); }
+        catch { report.failure ||= { code: "READONLY_EVIDENCE_FAILED" }; }
       }
     }
     try {
