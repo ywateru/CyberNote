@@ -1,0 +1,18 @@
+import {prepareCandidate} from '/private/tmp/cybernote-account109-native/scripts/verification/account109-android-build.mjs';
+import {spawn,execFileSync} from 'node:child_process';
+import {open,writeFile} from 'node:fs/promises';
+const root='/private/tmp/cybernote-account109-android-d69-debug';
+const candidate=await prepareCandidate({root,expectedSource:'d69ffbce2ad1284e6c7ce830f6840ba083148aab',gradleHome:'/private/tmp/cybernote-account109-d69-debug-gradle',targetDir:'/private/tmp/cybernote-account109-d69-debug-target'});
+const startedAt=new Date().toISOString();
+const log=await open(root+'/artifacts/account109/build04.log','wx',0o600);
+const child=spawn(candidate.manifest.command[0],candidate.manifest.command.slice(1),{cwd:root,env:candidate.env,detached:true,stdio:['ignore',log.fd,log.fd]});
+await writeFile(root+'/artifacts/account109/build04-owner.json',JSON.stringify({runnerPid:process.pid,buildGroupPid:child.pid,startedAt,timeoutMs:1200000,target:candidate.env.CARGO_TARGET_DIR},null,2)+'\n');
+let timedOut=false,escalation;
+const timer=setTimeout(()=>{timedOut=true;try{process.kill(-child.pid,'SIGTERM');}catch{}escalation=setTimeout(()=>{try{process.kill(-child.pid,'SIGKILL');}catch{}},15000);},1200000);
+const result=await new Promise(resolve=>{child.once('error',()=>resolve({code:null,signal:null,launchFailed:true}));child.once('exit',(code,signal)=>resolve({code,signal}));});
+clearTimeout(timer);clearTimeout(escalation);await log.close();
+const sourceStatus=execFileSync('git',['-C',root,'status','--porcelain','--untracked-files=normal'],{encoding:'utf8'});
+const receipt={...candidate.manifest,startedAt,finishedAt:new Date().toISOString(),...result,timedOut,sourceClean:sourceStatus.trim()==='',sourceStatus,buildGroupPid:child.pid};
+await writeFile(root+'/artifacts/account109/build04-exit.json',JSON.stringify(receipt,null,2)+'\n');
+console.log(JSON.stringify({phase:'android-build-finished',code:result.code,signal:result.signal,timedOut,sourceClean:receipt.sourceClean}));
+if(result.code!==0||result.signal||timedOut)process.exitCode=1;

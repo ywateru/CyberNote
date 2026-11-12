@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "d69ffbce2ad1284e6c7ce830f6840ba083148aab",
+  "sourceTree": "44e4970324a9a8c3fec5c2873dc5942490d2a8e5",
+  "toolCommit": "836e30dc631bfcc826b107dedec4798ff7fc68ea",
+  "toolSha256": "5086d9afaa1c43894662e0b2cbb2741b32813fd44042cc6c8919e6e37d6d3bff",
+  "initScriptSha256": "72532de9c987777f774349eb3e067f6951a7834977a0809e98030d4a9d5e8b01",
+  "packageId": "com.local.notesclone.account109",
+  "activity": "com.local.notesclone.MainActivity",
+  "displayName": "CyberNote Account Test",
+  "sdkSource": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+  "licenseFiles": 1139,
+  "gradleHome": "/private/tmp/cybernote-account109-d69-debug-gradle",
+  "target": "/private/tmp/cybernote-account109-d69-debug-target",
+  "removedEnvironmentFlags": [
+    "VITE_NOTES_ACCOUNT_NATIVE",
+    "VITE_NOTES_ACCOUNT_UI"
+  ],
+  "accountCapability": "default-native",
+  "lockfiles": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-d69-debug-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "command": [
+    "/Users/water/.local/node-v22.16.0-darwin-arm64/bin/node",
+    "scripts/android.mjs",
+    "build",
+    "--debug",
+    "--target",
+    "aarch64",
+    "--apk",
+    "--ci"
+  ],
+  "startedAt": "2026-11-12T21:28:24.076Z",
+  "finishedAt": "2026-11-12T21:29:58.649Z",
+  "code": 0,
+  "signal": null,
+  "timedOut": false,
+  "sourceClean": true,
+  "sourceStatus": "",
+  "buildGroupPid": 28751,
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/android-candidate-d69ffbce-debug.apk",
+    "bytes": 77148012,
+    "sha256": "a87cc372a4d84924e905e19abd12837dff36a4b86c23599fe0ce36ba6d7575f5"
+  },
+  "libraries": [
+    {
+      "path": "lib/arm64-v8a/libcloudflared.so",
+      "bytes": 28812032,
+      "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+      "elfClass": 64,
+      "machine": "AArch64"
+    },
+    {
+      "path": "lib/arm64-v8a/libimage_processing_util_jni.so",
+      "bytes": 32528,
+      "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+      "elfClass": 64,
+      "machine": "AArch64"
+    },
+    {
+      "path": "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+      "bytes": 11064544,
+      "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+      "elfClass": 64,
+      "machine": "AArch64"
+    },
+    {
+      "path": "lib/arm64-v8a/libnotes_clone_lib.so",
+      "bytes": 153724760,
+      "sha256": "5e484faeeb0fabc95080568b6b46fbec46b84169cdeda8ddf4795f2f50003628",
+      "elfClass": 64,
+      "machine": "AArch64"
+    },
+    {
+      "path": "lib/arm64-v8a/libsurface_util_jni.so",
+      "bytes": 4896,
+      "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+      "elfClass": 64,
+      "machine": "AArch64"
+    }
+  ],
+  "signatureCertificateSha256": "e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79",
+  "backup": false,
+  "debuggable": true,
+  "extractNativeLibs": true,
+  "authorities": [
+    "com.local.notesclone.account109.fileprovider",
+    "com.local.notesclone.account109.mlkitinitprovider",
+    "com.local.notesclone.account109.androidx-startup"
+  ],
+  "callback": "com.local.notesclone.auth://callback",
+  "callbackSchemeCount": 1,
+  "callbackHostCount": 1,
+  "frontendBuildInfo": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-12T21:28:27.382Z",
+    "target": "android",
+    "sourceRevision": "d69ffbce2ad1284e6c7ce830f6840ba083148aab",
+    "sourceFingerprint": "46e5ba2db1b5f535fcbed89abcdd4e5ebce7737834a3abf2ff79c5339d8d911a",
+    "sourceDirty": false,
+    "inputCount": 1652,
+    "releasePreparedAt": null
+  },
+  "defaultGate": {
+    "accountFlagsAbsent": true,
+    "sourcePath": "src/account-client.ts",
+    "sourceSha256": "36c66989ba1cc28c83c523ced8fd3050612f7b52fa7f59dc4dbff940ea23d279",
+    "envFilesPresent": []
+  },
+  "derivedDiff": {
+    "path": "derived.patch",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "empty": true
+  },
+  "tauriActivity": {
+    "generatedByNormalBuild": true,
+    "sha256": "f73e8b3a20af0c846f2a1bc944b7d03a7322096e520818f22d5c40071c2e1fe9",
+    "cacheInvalidation": "cargo clean -p tauri --target aarch64-linux-android restricted to owned cloned target"
+  },
+  "lifecycle": {
+    "naturalExit": true,
+    "exitCode": 0,
+    "signal": null,
+    "timedOut": false,
+    "buildProcessGroupEmpty": true
+  }
+}

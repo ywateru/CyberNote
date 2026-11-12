@@ -1,0 +1,22 @@
+{
+  "buildAttempts": 1,
+  "buildRestarts": 0,
+  "deviceOrProductFailure": false,
+  "toolPreparationStops": [
+    {
+      "code": "LOCKFILE_PATH_NOT_FOUND",
+      "phase": "prepareCandidate-before-build",
+      "correction": "fourth lock is services/coordinator/package-lock.json; helper 836e30dc; previous incorrect tool commit retained"
+    },
+    {
+      "code": "PYTHON_HASHLIB_API_UNAVAILABLE",
+      "phase": "post-build-artifact-hash-checker",
+      "correction": "chunked SHA256 compatible with system Python3.9"
+    },
+    {
+      "code": "MANIFEST_ATTRIBUTE_COUNT_CHECK",
+      "phase": "post-build-artifact-checker",
+      "correction": "count decoded attribute lines, not repeated Raw literal text; actual scheme and host each one"
+    }
+  ]
+}

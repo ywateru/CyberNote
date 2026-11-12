@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "d69ffbce2ad1284e6c7ce830f6840ba083148aab",
+  "sourceTree": "44e4970324a9a8c3fec5c2873dc5942490d2a8e5",
+  "toolCommit": "836e30dc631bfcc826b107dedec4798ff7fc68ea",
+  "toolSha256": "5086d9afaa1c43894662e0b2cbb2741b32813fd44042cc6c8919e6e37d6d3bff",
+  "initScriptSha256": "72532de9c987777f774349eb3e067f6951a7834977a0809e98030d4a9d5e8b01",
+  "packageId": "com.local.notesclone.account109",
+  "activity": "com.local.notesclone.MainActivity",
+  "displayName": "CyberNote Account Test",
+  "sdkSource": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+  "licenseFiles": 1139,
+  "gradleHome": "/private/tmp/cybernote-account109-d69-debug-gradle",
+  "target": "/private/tmp/cybernote-account109-d69-debug-target",
+  "removedEnvironmentFlags": [
+    "VITE_NOTES_ACCOUNT_NATIVE",
+    "VITE_NOTES_ACCOUNT_UI"
+  ],
+  "accountCapability": "default-native",
+  "lockfiles": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-d69-debug-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "command": [
+    "/Users/water/.local/node-v22.16.0-darwin-arm64/bin/node",
+    "scripts/android.mjs",
+    "build",
+    "--debug",
+    "--target",
+    "aarch64",
+    "--apk",
+    "--ci"
+  ],
+  "startedAt": "2026-11-12T21:28:24.076Z",
+  "finishedAt": "2026-11-12T21:29:58.649Z",
+  "code": 0,
+  "signal": null,
+  "timedOut": false,
+  "sourceClean": true,
+  "sourceStatus": "",
+  "buildGroupPid": 28751
+}
