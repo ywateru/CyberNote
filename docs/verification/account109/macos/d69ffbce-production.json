@@ -1,0 +1,179 @@
+{
+  "schema": 1,
+  "status": "passed-local-production-build-stage-and-static-verification",
+  "recordedAt": "2026-11-12T21:22:13.531029+00:00",
+  "exportSourceRevision": "d69ffbce2ad1284e6c7ce830f6840ba083148aab",
+  "sourceRevision": "d7f3e2a9431f80ae5711a6a8f3fb3c55b86e3cbd",
+  "sourceTree": "dd810c45833ffb999a292a1ffc8bbe9a9df9fd27",
+  "pristineRoot": "/private/tmp/account109-source-snapshotd69-prepared-20261113-01",
+  "sourceRoot": "/private/tmp/account109-sourced69-macos-source-20261113-01",
+  "buildInfo": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-12T21:18:07.723Z",
+    "target": "macos",
+    "sourceRevision": "d7f3e2a9431f80ae5711a6a8f3fb3c55b86e3cbd",
+    "sourceFingerprint": "3f3b76ebfe6c8a146cb35ffad5b4daeff2696c05612dc8846a55a2d450de2058",
+    "sourceDirty": false,
+    "inputCount": 1619,
+    "releasePreparedAt": null
+  },
+  "environment": {
+    "CYBERNOTE_BUILD_TARGET": "macos",
+    "CARGO_TARGET_DIR": "/private/tmp/account109-sourced69-macos-target-20261113-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "CI": "true"
+  },
+  "frontendEnvironment": {
+    "ACCOUNT_NATIVE": "absent",
+    "ACCOUNT_UI": "absent",
+    "DEBUG": "absent",
+    "NODE_ENV": "absent",
+    "inheritedViteTauriRustflags": "absent"
+  },
+  "packageSize": 51958444,
+  "packageSha256": "f92854f452d21a6772f7496b1d2f8196d56e0656f5774b26b9ea7074e5c2dd76",
+  "nativeBinarySha256": "f41c411d6a90b9960f108bb7f0321e75066c558bc60c36c9a51def73b56cb58a",
+  "noticesSha256": "8486d4e6b520452e00b0f3b7af46452c3e77f7425944d85a7af9e12875b6a244",
+  "noticeFilesVerified": 1200,
+  "newNineNoticeFilesVerified": 9,
+  "sdkNoticeDirectoryFilesVerified": 1138,
+  "compiledFeatures": {
+    "library": [],
+    "binary": [],
+    "tauri": [
+      "common-controls-v6",
+      "compression",
+      "custom-protocol",
+      "dbus",
+      "default",
+      "dynamic-acl",
+      "http-range",
+      "protocol-asset",
+      "tauri-runtime-wry",
+      "webkit2gtk",
+      "webview2-com",
+      "wry",
+      "x11"
+    ]
+  },
+  "embeddedIdentity": {
+    "encoding": "brotli",
+    "sha256": "95d6d176ea53780a4031aef353ac3feb185c4c6056be9c5c8a6e2f04043cb5d3"
+  },
+  "architecture": "arm64",
+  "signingBoundary": "No Developer ID signature or notarization acceptance is asserted.",
+  "locksUnchanged": true,
+  "sourceClean": true,
+  "pristineUnchanged": true,
+  "independentGit": true,
+  "priorArtifactsUnchanged": true,
+  "buildExitCode": 0,
+  "stageExitCode": 0,
+  "remainingOwnedProcesses": [],
+  "appLaunched": false,
+  "authExecuted": false,
+  "syncAccepted": false,
+  "published": false,
+  "boundary": "Local production build/staging and static byte verification only; no UI/auth/sync/Developer ID/notarization/remote Actions acceptance.",
+  "evidenceDirectory": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/macos-sourced69-production-candidate-01",
+  "preservedFiles": [
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/macos-sourced69-production-candidate-01/CyberNote-macos-arm64-notices.zip",
+      "sha256": "8486d4e6b520452e00b0f3b7af46452c3e77f7425944d85a7af9e12875b6a244",
+      "bytes": 2021726
+    },
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/macos-sourced69-production-candidate-01/CyberNote-macos-arm64.json",
+      "sha256": "9803ee469bd7f30f13880750b32e03baee56691cb5c36aea8fba7278a07b396f",
+      "bytes": 1801
+    },
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/macos-sourced69-production-candidate-01/CyberNote-macos-arm64.sha256",
+      "sha256": "3a9183efea9bc83cb0148a4700b0ebe95225648e1b03959d5ba946cb692f7659",
+      "bytes": 192
+    },
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/macos-sourced69-production-candidate-01/CyberNote-macos-arm64.zip",
+      "sha256": "f92854f452d21a6772f7496b1d2f8196d56e0656f5774b26b9ea7074e5c2dd76",
+      "bytes": 51958444
+    }
+  ],
+  "cargoTarget": "/private/tmp/account109-sourced69-macos-target-20261113-01",
+  "frontendEvidence": {
+    "asset": "assets/index-DgaLxa08.js",
+    "embedded": {
+      "encoding": "brotli",
+      "sha256": "70e64bffedd70f74c65d7cc59f215265f5d7f5de1c30d327ec450f90c9a34755",
+      "encodedSha256": "45c10bab6657b3c4373c70c43fc486a5771addd171ec92f888d9da102a1120f5"
+    },
+    "compiledGate": {
+      "expression": "bp()||!1",
+      "detectorBody": "!!(globalThis||window).isTauri",
+      "native": true,
+      "browser": false,
+      "fixture": false
+    },
+    "debugApiAbsentInAllJs": true,
+    "boundary": "Static verification of actual staged binary/frontend bytes; no IPC, App or UI execution"
+  },
+  "commands": [
+    {
+      "name": "verify-new-root",
+      "command": [
+        "node",
+        "scripts/publish/verify.mjs"
+      ],
+      "exitCode": 0,
+      "log": "verify-new-root.log",
+      "logSha256": "dbc2ceb885d577c5bc74f1750b4483fcbfca04491469124e28c7f053ec61034e"
+    },
+    {
+      "name": "tauri-build",
+      "command": [
+        "pnpm",
+        "exec",
+        "tauri",
+        "build",
+        "--verbose",
+        "--target",
+        "aarch64-apple-darwin",
+        "--features",
+        "tauri/custom-protocol",
+        "--bundles",
+        "app",
+        "--ci",
+        "--no-sign",
+        "--",
+        "--locked",
+        "--offline"
+      ],
+      "exitCode": 0,
+      "log": "tauri-build.log",
+      "logSha256": "579c9f8fa14b3f618f2858956f5435d753bc75c906abb320981b92e5dddf7fdc"
+    },
+    {
+      "name": "stage-candidate",
+      "command": [
+        "python3",
+        "scripts/publish/stage-packages.py",
+        "--platform",
+        "macos"
+      ],
+      "exitCode": 0,
+      "log": "stage-candidate.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "evidenceHashes": {
+    "build-state.json": "e4c5652f383608660d58ed23cd376fe07eaa9b5b35bedd3137855d148e25ea6a",
+    "candidate-evidence.json": "572faa1ae856b2c495f6bc4ba2dda517e4ca3624ae12157b13757a6d3eda0b57",
+    "frontend-postcheck-01.log": "e1039d18cb38e973050e44c4f2412e70ef3661ae46d95852636c0e46bd991011",
+    "postcheck-01.log": "572faa1ae856b2c495f6bc4ba2dda517e4ca3624ae12157b13757a6d3eda0b57",
+    "preflight-red01.json": "391047af40be66b2df1a1fc66bd786993f37db07177ec56434aa9a7292afa66f"
+  },
+  "preflightBoundary": "Initial global no-builder guard stopped before cloning; verified the active builders used the independent Android source, then scoped guard to old Mac source/target. No product build failed."
+}

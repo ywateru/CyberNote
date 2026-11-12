@@ -1,5 +1,27 @@
 # macOS 最新账户验收候选
 
+## 当前完整 production 包：d69ffbce 导出的同一新 root
+
+2026-11-13。Tesla 从 `d69ffbce2ad1284e6c7ce830f6840ba083148aab` 导出 pristine root，在任何安装或构建前交付其身份：root commit **`d7f3e2a9431f80ae5711a6a8f3fb3c55b86e3cbd`**、tree `dd810c45833ffb999a292a1ffc8bbe9a9df9fd27`，1,770 文件，clean、无 remote。Mac 以 APFS clone 创建 `/private/tmp/account109-sourced69-macos-source-20261113-01`，独立 `.git`、node_modules、dist；从旧 production cache 克隆到独立 `/private/tmp/account109-sourced69-macos-target-20261113-01`。pristine root 始终未安装依赖或产生构建输出，旧包未覆盖。
+
+完整 production Tauri build 和 staging 均退出 **0**。构建环境白名单排除 ACCOUNT_NATIVE、ACCOUNT_UI、DEBUG、NODE_ENV、继承的 VITE/TAURI/RUSTFLAGS 及签名覆盖；无 dotenv 输入，Cargo workers **2**。独立 target 不与 Android 共用。沿用既有完整 Mac production 流程：
+
+```sh
+pnpm install --frozen-lockfile --offline
+node scripts/publish/verify.mjs
+pnpm exec tauri build --verbose --target aarch64-apple-darwin \
+  --features tauri/custom-protocol --bundles app --ci --no-sign -- --locked --offline
+python3 scripts/publish/stage-packages.py --platform macos
+```
+
+精确环境和日志指纹见 [最小候选回执](d69ffbce-production.json)。**新 ZIP 为 51,958,444 bytes，SHA256 `f92854f452d21a6772f7496b1d2f8196d56e0656f5774b26b9ea7074e5c2dd76`**；包内 arm64 主程序 SHA256 `f41c411d6a90b9960f108bb7f0321e75066c558bc60c36c9a51def73b56cb58a`。实际包内 Brotli build-info 对应上述新 root、`sourceDirty=false`、1,619 个输入，fingerprint `3f3b76ebfe6c8a146cb35ffad5b4daeff2696c05612dc8846a55a2d450de2058`，没有复用旧 root 的身份。
+
+实际嵌入主 JS 字节的门控为 `isTauri() || false`，静态求值 native=true/browser=false；所有 JS 均无 debug API/账户 fixture 标志。产品 library/binary 的编译 feature 集合为空，Tauri 含 custom-protocol、无 devtools，未启用 sync-e2e/access-boundary-proof。新 notices ZIP 的 **1,200 项**均与当前根声明的 payload 逐字节一致，包含新增 9 项文件及 SDK licenses 目录下 1,138 项。四份锁文件、旧 production 包/receipt/主程序及 pristine root 均保持不变。
+
+新包、notices、staging receipt/sha256、完整 build/postcheck 日志与 helper 保存在 ignored `artifacts/account109/macos-sourced69-production-candidate-01/`。初始全局 no-builder 预检误拦 Android 独立构建，尚未克隆或编译即停止；核对 Android cwd 与旧 Mac source/target 无关后改为精确检查 Mac cache writer，再继续。该预检记录保留，正式 build/stage/postcheck 均通过。全部持有的构建子进程退出 0、已回收，进程组为空，未发终止信号。
+
+**边界：这是本地新 root 的 production 构建、staging 和静态字节验证，不是发布或真实产品验收。** 本轮未启动 App、auth、操作 UI/设备或修改 startup gate；未作 Developer ID 签名、公证或远程 Actions 验收。下面 ec4348c6 debug/e2e 候选供解锁后的既有驱动使用，其余旧 production 身份继续作为历史保留。
+
 ## 当前源码 debug/e2e 候选：ec4348c6
 
 2026-11-13。在独立 detached worktree `/private/tmp/cybernote-account109-mac-ec4348c6-01` 从精确主线 `ec4348c6df15c2b0dbd20af3c05f5a0cc7f75497` 构建，构建前后均干净；包含 `5d30f16c` 的默认原生账户入口。依赖通过 symlink 复用主目录 node_modules，未安装或更新依赖；Cargo 旧 mac 缓存经 APFS clone 复制到独立 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，构建并发固定为 2，不与 Android 共用 target。开始复制前未见其他 Cargo/rustc/tauri 构建进程。
