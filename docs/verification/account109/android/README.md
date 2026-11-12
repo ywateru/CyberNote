@@ -1,17 +1,44 @@
 # Account109 Android candidates and device verification
 
-## Current actual device checkpoint
+## Current actual device checkpoint: d69 default-native debug candidate
+
+The isolated `com.local.notesclone.account109` package was updated in place from
+the exact clean product source `d69ffbce2ad1284e6c7ce830f6840ba083148aab`.
+The [d69 device record](d69-debug/README.md) includes build, APK identity, install,
+full-document baseline and final cleanup receipts. The installed debug APK SHA-256
+is `a87cc372a4d84924e905e19abd12837dff36a4b86c23599fe0ce36ba6d7575f5`;
+it is distinct from the [unsigned production APK](sourced69-production01/README.md),
+which was not installed.
+
+With ACCOUNT_NATIVE and ACCOUNT_UI unset, all three local-only checks passed:
+
+1. Both existing synthetic notes retained their complete document and exact plainText.
+2. Real native Account settings opened and reported signedOut, no profile/error,
+   and synchronization disabled using the shipped default capability.
+3. Real visible UI Input created a new note whose complete document and plainText
+   matched the expected content exactly.
+
+No SignIn, callback injection or synchronization enablement was performed. This
+signed-out status follows the app update/restart; it is not recovery or success
+of the earlier failed hosted login. The original application and all synthetic
+notes were retained. The final receipt at `2026-11-12T21:35:20.261Z` verified the
+installed APK hash, sole owned callback handler, user0 foreground and absence of
+owned forwards/reverse/leases. PID `15212` is that receipt's historical observation,
+not an assumption about a later live process. Earlier auth/network failures and
+the six-check source6537 smoke remain below with their original identities.
+
+## Historical source6537 device checkpoint
 
 On 2026-11-13 the isolated Account109 package was installed, started, and updated
 in place on Samsung Android 9 arm64, serial `98895a3147304c3132`. The original
 `com.local.notesclone` application and Sync108 sandbox were not controlled or read.
-The installed candidate's exact integrated main source is
+That candidate's exact integrated main source is
 `6537b74bf2c957be2ada5511778f597400877029`, including bootstrap cancellation guard
-and fresh signed-out metrics repair. The current application PID observed at the
+and fresh signed-out metrics repair. The application PID observed at the
 end of verification was `21082`, with private root
 `/data/data/com.local.notesclone.account109`.
 
-| Identity field | Current verified value |
+| Identity field | Verified value at the source6537 checkpoint |
 | --- | --- |
 | Preserved APK | `/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/android-candidate-6537b74b.apk` |
 | APK SHA256, also verified on installed base.apk | `92fe135c7ea552bb7ccbfad27de86c7061813f8a82f99e5a725d4410958633ae` |
@@ -65,10 +92,10 @@ no reverse mappings, and no Account109 driver lock. The package is left running.
 | build03, main `6537b74b` | Build/static checks passed; in-place update preserved synthetic data; device02 six checks passed. |
 | [hosted-live01](hosted-live01/README.md) | One real guarded credential input and submit; returned to the owned app with native `error/account_network`, no profile and sync disabled. Login failed; no automatic retry. |
 
-## Latest hosted-login failure and network diagnosis
+## Hosted-login failure and network diagnosis
 
-The [single live attempt](hosted-live01/result.json) supersedes device02's
-signed-out checkpoint as the latest authentication observation. The following
+The [single live attempt](hosted-live01/result.json) followed device02's
+signed-out checkpoint and remains the most recent actual login attempt. The following
 [read-only native diagnosis](hosted-live01/native-diagnostic01.json) confirmed
 `state=error`, safe code `account_network`, and no regular grant/binding files
 under the unique account directory. No secret file bodies were read. This does
@@ -87,7 +114,11 @@ leases were cleaned up. The isolated app was restored to user0 foreground;
 original apps and synthetic data were retained. The next integration step is to
 confirm normal canonical coordinator reachability and then run a separately
 recorded login attempt. Successful same-account login and three-device data
-convergence remain outstanding.
+convergence remain outstanding. The later d69 local-only update described above
+did not retry this authentication flow. A separate
+[phone recheck](public-recheck04/README.md) reproduced the canonical-origin
+no-HTTP condition; the [host recheck](hosted-live01/host-public-recheck02.json)
+returned 200/200/401 for the fixed public endpoints.
 
 Bootstrap tests separately proved the prior async verification window could mint
 an invitation after gate close/owner cancellation. Guard repair is in main

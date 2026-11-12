@@ -11,17 +11,21 @@
 | 主线认证 crate | 空 RT 修复后的 `3bd36935` 上 18 fixture 通过，0 失败、1 项 discovery 默认忽略；此前另显式运行真实只读 Logto discovery 1 项通过。没有用测试 grant 替代产品授权。 |
 | 主线原生账户 | 前台恢复修复后主线账户 9/9 通过，作者手工 adapter 7/7 通过；反例在旧实现确实失败。 |
 | 主线同步 | 32/32 通过，含真实 Store/Session、加密流与附件回归。 |
-| 主线前端 | 类型检查通过；原生 opt-in 能力检查 10/10 通过。 |
-| 主线发布输入及打包策略 | 完成 notice、包内身份、stamp 及新历史验收修复后，publish 测试共 15/15 通过，0 跳过；这不是最终发布批准。 |
+| 主线前端 | 类型检查通过；默认原生账户入口 compiled capability 24/24 通过。 |
+| 主线发布输入及打包策略 | `d69ffbce` 收拢 Android ELF、unsigned、compiled manifest 及 Kotlin cache 修复后，publish 测试共 19/19 通过，0 跳过。原三项 P2 经[独立审阅](publish/android-stage-review/README.md)关闭；这不是最终发布批准。 |
 | 最终服务部署 | READY，health 200、固定四 scopes、公钥 JWKS 200、匿名 profile/enrollment 401。详见工作区检查点。 |
 | 真实 Rust owner | `b5df1e53` 的显式 live-smoke 进程退出 0，14 阶段全部成功；真实授权、强制 refresh、owner 重开、3 次部署 profile 连续性、logout 后 restore None。详见 [真实 Rust owner 验证](auth/RUST-LIVE-OWNER.md)，不替代产品 Runtime 或多端验收。 |
 | Android 产品冒烟 | `6537b74b` 隔离候选在真实手机通过 6 项检查，包含完整本地 document/plainText、更新保留及真实 UI 发起/取消授权；[真机记录](android/README.md)保留初始失败和修复后结果。后续真实登录失败另见下项，不能用冒烟通过替代认证验收。 |
+| Android 当前默认入口候选 | `d69ffbce` 隔离 debug APK 已原地更新，ACCOUNT_NATIVE/UI 均未设置，[3 项真机本地检查](android/d69-debug/README.md)通过：两条旧笔记完整 document/plainText 保留，真实账户页 signedOut/无 profile/error/同步关闭，真实 UI 新建笔记全文精确一致。未发 SignIn；此重启后的 signedOut 不代表先前登录成功或恢复。原应用和合成数据保留，owned forward/reverse/lease 清理已核对。 |
 | Android 真实托管登录 | [hosted-live01](android/hosted-live01/README.md) 已执行一次真实凭据输入和提交，返回原生应用后权威状态为 `error/account_network`，无 profile、同步未启用；未证明原生回跳验证成功。没有自动重试。 |
 | Android 公共端点诊断 | 同一次后续直接导航中，canonical Vercel `/healthz` 在 30 秒内无 HTTP 结果，Logto discovery 对照约 606 ms 返回 200。此前 opaque-origin fetch 均在 15 秒截止；直接导航排除了该方法的 CORS 歧义，但不能定位 DNS/TCP/TLS 或原生失败阶段。见 [原始诊断](android/hosted-live01/public-navigation03.json)。 |
-| 净化源码完整 macOS 构建 | 独立新历史 `59dea828` 完成 arm64 production Tauri release app bundle 和 staging，包内身份及 1,200 项 notices 字节经独立复核；账户入口显式启用、无 debug fixture/测试 feature。未运行 App，详见 [macOS 候选](macos/LATEST-CANDIDATE.md)。 |
-| 默认账户入口最新包 | `5d30f16c` 经独立新历史 `6906f10d` 构建完整 arm64 production 包，不设置 native/debug/fixture 标志；实际包内默认原生门控、身份与许可经 Pauli 独立复核。未运行 App；旧 opt-in 包保留为历史。 |
+| Android 路径复核 | [public-recheck04](android/public-recheck04/README.md) 再次重现 canonical health 30 秒无 HTTP、Logto discovery 约 708 ms 为 200；同时间段[主机独立检查](android/hosted-live01/host-public-recheck02.json)为 200/200/401。未发登录重试或修改网络配置。 |
+| 历史净化 macOS 包 | 独立新历史 `59dea828` 的 opt-in 包和 `6906f10d` 的默认账户入口包均完成本地构建及独立实物复核。旧包保留各自身份，未运行 App。详见 [macOS 候选](macos/LATEST-CANDIDATE.md)。 |
+| 当前同源双平台生产包 | `d69ffbce` 导出新 root `d7f3e2a9`，从两个独立副本完成 macOS arm64 production bundle 和 Android arm64 unsigned APK 的完整构建、正式 staging，构建后源码均 clean。两包对应相同 fingerprint，默认原生账户门控、无 debug fixture/测试 feature；各有 1,200 项 notices。见 [macOS](macos/LATEST-CANDIDATE.md)及 [Android](android/sourced69-production01/README.md)；[独立实物复核](publish/final-package-review/README.md)有限接受，无新增 P1/P2。这是本地构建与静态验证，未运行生产包或远程 Actions。 |
 
 ## macOS 候选与实际启动尝试
+
+已另从干净主线 `ec4348c6` 构建不设置 ACCOUNT_NATIVE/UI 的 debug/e2e 候选，默认账户入口、实际嵌入身份和 24 项能力检查通过，二进制保留供后续真实双桌面验收。该候选尚未启动；本轮两次原生工具检查仍返回 Mac 锁定，未绕过可见性或 startup gate。详见 [最新 macOS 候选](macos/LATEST-CANDIDATE.md)。
 
 后续已从干净主线 `ad18a872` 重新构建包含最新修复的 debug 候选，前端及原生构建均通过，二进制已保留。本次 Mac 仍锁定；新候选在一个独立根进行有界 ready 检查，页面为 hidden 且 startup=loading，45 秒后未进入可交互状态；只关闭本次持有进程，未继续第二端登录。身份、结果及边界见 [最新 macOS 候选](macos/LATEST-CANDIDATE.md)。下文保留旧候选的原始尝试记录。
 
@@ -54,11 +58,13 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 - `bda6b7de` 已更新至 source snapshot `ad18a872`：刷新 6 个既有哈希，显式增加 live_smoke 文件，未放宽路径或来源政策。独立新历史导出共 1,770 文件，publish 15/15、认证库 18 通过/1 忽略、示例 5 通过，及 notices 1,200 项字节检查通过；Pauli 独立复核源码、new-root 与许可边界后接受。后续完整 macOS 本地构建另行记录，不能覆盖初次 web 准备记录，也不代表已向 GitHub 发布。
 - `2860372d` 仅刷新默认原生入口对应的 src/account-client.ts 哈希；当前主线 export dry-run 1,770 文件通过，debug/verification 工具和过程记录继续排除。新的 `6906f10d` 净化 root、publish 15/15、默认 production 门控 14 项及完整 macOS 包构建经作者验证，并由 Pauli 定向复核实际包和源码后接受。
 - Android 内存传递测试 helper 修复了异常透传、确认后有效期复核及虚假 submitted 回执三项 P2；`a33e2e60` 仅报告 consumer-completed，真实提交及 Native 认证终态须独立观察。Plato 复核关闭，主线与共享 lifecycle 合计 24/24 离线测试通过。该结果不证明真实凭据输入或认证回跳通过。
+- Android source5d30 实际 production build 退出 0，但 deep-link 生成器追加重复 Manifest 声明，正式 staging 正确拒绝 dirty source；[原失败](android/source5d30-baseline01/README.md)保留。`287d7153` 改为唯一一份固定生成块，已验证[字节幂等](android/manifest-idempotence/README.md)；`e5344b68` 仅排除精确 Kotlin session 缓存目录，手写平台源码继续参与身份。`45b4560f`／`df7babfe` 补齐实际 ELF、unsigned 与 framework ID 绑定的 compiled manifest 验证，独立审阅关闭原三项 P2。`d69ffbce` 刷新 7 个现有清单 pin，无新增或放宽来源政策。
+- 新 root `d7f3e2a9` 的 Android 首轮构建因跨 source 复用 Tauri codegen 缓存而失败；仅在本轮独立 target 定向失效 tauri 包，正常生成后重试通过，未手工复制生成类或改产品源码。Mac 与 Android 新生产包身份均为 clean、1,619 个输入、fingerprint `3f3b76ebfe6c8a146cb35ffad5b4daeff2696c05612dc8846a55a2d450de2058`。历史包及失败尝试未被覆盖。
 
 ## 尚未执行或尚未完成
 
 - macOS 产品内真实托管登录、双桌面账户自动发现和完整 document/plainText/附件原字节比对。最近可见启动尝试受 Mac 锁定限制；继续前须重新确认解锁和候选身份。
 - Android 隔离账户测试包已尝试真实托管登录但失败；成功登录、原生回跳验收及三端同步尚未完成。继续前须确认手机可正常访问 canonical coordinator；当前证据未确定网络故障层级。原用户应用及旧 Sync108 合成测试包保持原地。
-- 当前精确源码清单、新历史本地导出、完整 macOS 包及 notices 复验已完成，见上文 `6906f10d`。远程 GitHub 发布和 Actions 实际包构建尚未执行；若后续产品源码调整，须刷新清单和重做对应验证。
+- 当前精确源码清单、新历史本地导出及双平台生产包均已完成，见上文 `d7f3e2a9`。远程 GitHub 发布和 Actions 实际包构建尚未执行；若后续产品源码调整，须刷新清单和重做对应验证。
 
 验收操作与通过标准继续使用 [ACCOUNT-TEST-CASES.md](ACCOUNT-TEST-CASES.md)。原开发仓库没有被直接推送，未执行最终发布。

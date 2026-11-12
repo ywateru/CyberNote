@@ -76,7 +76,9 @@ AUTH-02/03 完成后执行；两端均使用账户 A。首次登录默认暂停�
 
 | 用例或前置检查 | 已执行结果与剩余条件 |
 | --- | --- |
-| 桌面可交互启动前置 | `ad18a872` debug 候选在独立数据根等待 45 秒仍为 hidden/startup loading；当时 Mac 锁定。没有执行第二端登录，桌面 AUTH/SYNC 用例未通过验收。见 [macOS 记录](macos/LATEST-CANDIDATE.md)。 |
+| 双平台构建前置 | `d69ffbce` 经净化 root `d7f3e2a9` 完成 [macOS production bundle](macos/LATEST-CANDIDATE.md)和 [Android unsigned APK](android/sourced69-production01/README.md) 的实际本地构建及 staging，构建后源码 clean、包内身份匹配；这不是产品运行或远程 Actions 验收。 |
+| 桌面可交互启动前置 | `ad18a872` debug 候选在独立数据根等待 45 秒仍为 hidden/startup loading；当时 Mac 锁定。新的默认入口 `ec4348c6` debug/e2e 候选已构建并保留，尚未启动；本轮两次原生工具复查仍为 Mac 锁定。没有执行第二端登录，桌面 AUTH/SYNC 用例未通过验收。见 [macOS 记录](macos/LATEST-CANDIDATE.md)。 |
+| Android 最新候选本地回归 | `d69ffbce` debug 隔离包原地更新后，[3 项真机检查](android/d69-debug/README.md)通过：两条旧笔记完整 document/plainText 保留、默认原生账户页 signedOut、真实 UI 新建全文精确一致。未发 SignIn 或启用同步，不能将 AUTH-03、SYNC 或 ANDROID-01～04 判为通过。 |
 | Android 登录前置（AUTH-03 流程、ANDROID-01） | [hosted-live01](android/hosted-live01/README.md) 单次真实托管凭据输入、提交并返回应用，原生终态为 `error/account_network`，无 profile 且同步禁用。本次登录失败，未证明回跳验证成功，ANDROID-01 的自动发现未执行。 |
 | 手机端网络诊断 | [直接导航证据](android/hosted-live01/public-navigation03.json)：canonical `/healthz` 30 秒无 HTTP 结果，Logto discovery 对照约 606 ms 为 200。只证明该次手机 Chrome 的路径差异，不定位原生失败请求或 DNS/TCP/TLS 原因。没有修改网络配置或认证重试。 |
 | SYNC-01～07、ANDROID-02～04 | 账户产品链的双桌面及三端收敛尚未执行。须先完成可交互启动、成功登录及首次合并授权，再验证完整 document/plainText 和附件原字节。 |
