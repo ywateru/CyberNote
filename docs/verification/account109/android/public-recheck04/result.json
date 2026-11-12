@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "userReportedMain": "ec4348c6",
+  "probeSourceFreeze": "a5e67d8dbb27c00c6b3c317edf0396f9ecc182b6",
+  "probeSourceSha256": "f1ba343ceb9ed80711868e744b0340f3e96fda5f6913c9d5da25d8a640607fea",
+  "probeSourceManifest": "../hosted-live01/public-navigation-source.json",
+  "networkAttemptCount": 1,
+  "observation": {
+    "schemaVersion": 1,
+    "recordedAt": "2026-11-12T20:56:16.461Z",
+    "scope": "user0-Chrome-direct-navigation-public-metadata-only",
+    "method": "direct-Page.navigate",
+    "responseBodyRead": false,
+    "requestHeadersRead": false,
+    "appGrantAccessed": false,
+    "dnsTlsOverrides": false,
+    "otherPagesEnumerated": false,
+    "results": [
+      {
+        "endpoint": "health",
+        "limitMs": 30000,
+        "elapsedMs": 30013,
+        "stopLoadingSent": true,
+        "result": "diagnostic_deadline_no_http",
+        "navigationCommandFailed": true
+      },
+      {
+        "endpoint": "oidc-discovery-control",
+        "limitMs": 20000,
+        "elapsedMs": 708,
+        "stopLoadingSent": true,
+        "httpStatus": 200
+      }
+    ],
+    "ownedMapping": {
+      "serial": "98895a3147304c3132",
+      "pid": 12765,
+      "local": "tcp:61397",
+      "remote": "localabstract:chrome_devtools_remote"
+    },
+    "user0BrowserEndpointPidVerified": true,
+    "user0ChromeForeground": true,
+    "cleanup": {
+      "onlyCreatedTargetClosed": true,
+      "exactForwardAbsent": true,
+      "leaseReleased": true,
+      "ownedSandboxForeground": false
+    }
+  },
+  "finalCleanup": {
+    "recordedAt": "2026-11-12T20:57:13.840Z",
+    "ownedSandboxUser0Foreground": true,
+    "exactForwardAbsent": true,
+    "browserOrOwnedPidForwardsAbsent": true,
+    "reverseMappingsAbsent": true,
+    "browserLeaseAbsent": true,
+    "nativeLeaseAbsent": true,
+    "newLoginAttempted": false,
+    "secretBodyRead": false,
+    "originalAppOperated": false
+  },
+  "conclusion": {
+    "samePhoneCanonicalNoHttpConditionReproduced": true,
+    "authControlHttp200": true,
+    "loginNotRetried": true,
+    "underlyingNetworkCauseIdentified": false,
+    "nativeProfileRequestFailureStageProven": false
+  }
+}
