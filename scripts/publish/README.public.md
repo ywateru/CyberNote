@@ -67,6 +67,9 @@ revision. Rebuild metadata after changing any source, patch or vendored input.
 requires a nonexisting absolute destination plus matching `--target` and
 `--expected-target`, and `--apply`. `--init` creates a single new initial commit,
 with no remote, inherited refs, Git history, original author identity or tags.
+Before adding a remote, `node scripts/publish/verify.mjs --new-root` independently
+checks the complete initial refs/object/reflog boundary; ordinary CI verification
+checks the source tree and does not assert an initial-history boundary.
 The checked-in manifest is an explicit file/hash inventory, not a directory-copy
 rule. Review additions and provenance before refreshing hashes. Project-authored
 crates use explicit first-party reserved-rights declarations. Foreign SDK sources
@@ -79,6 +82,9 @@ An uploaded CI artifact proves the recorded build only; it does not assert devic
 acceptance, successful login/synchronization, signing, notarization or a deployment.
 Workflows do not publish releases or call account/deployment services. Retained
 CI files are narrowly staged packages, checksums, notices and build identity.
+Staging validates notice paths, SHA pins and symlink boundaries. It recomputes
+current source identity and checks build-info bytes inside the actual packaged
+executable, including the locked Tauri Brotli asset form, before writing a receipt.
 
 ## License
 

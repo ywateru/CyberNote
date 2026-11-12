@@ -84,6 +84,9 @@ bind repository/commit/version and exact platform binary path/SHA/size, disable
 runtime downloads, and retain referenced patches/build information. All declared
 licenses must be retained under that vendor root. Package notice sidecars include
 every declared license path, even when its filename lacks the word LICENSE.
+Staging validates all notice paths and SHA pins, opens each directory component
+and file without following symlinks, and writes verified bytes directly into the
+archive. Generated root notices must match their pinned public templates.
 
 The checker hashes actual committed binary bytes and compares both inventories.
 Only validated exact runtime entries receive a binary exception; the default
@@ -107,6 +110,13 @@ build, and the Rust archive/shared-corpus tests. Use a Cargo target outside the
 source tree. Tests cover absent-target guards, ignored/dirty-source exclusion,
 new history, credential/binary/symlink rejection and explicit build identity.
 
+Before adding a remote or publishing the initial import, separately run
+`node scripts/publish/verify.mjs --new-root`. This requires an independent Git
+directory, one parentless main commit, no other refs/remotes, no shallow history
+or alternates, and no retained reflog commits or unreachable historical objects.
+The exporter also runs this check after `--init`. Ordinary CI content checks do
+not make this history claim; later repository development may have more commits.
+
 For a true source archive without `.git`, create metadata with
 `deploy-metadata.mjs` from a clean trusted source checkout and transport it
 outside source inputs. Set `CYBERNOTE_DEPLOY_METADATA` explicitly. Missing or
@@ -117,6 +127,16 @@ The workflow requires a real arm64 macOS runner and an explicit Android arm64
 toolchain. No `--all-features` build is used. Package staging validates package
 architecture and writes only the named package, notices, identity receipt and
 checksums. Android output is unsigned; macOS signing/notarization is not asserted.
+Before writing a receipt, staging recomputes the clean current source identity
+and compares all revision/fingerprint/count/dirty fields with production build
+metadata. It extracts the executable from the actual app ZIP/APK and requires
+the current build-info payload in those native bytes. Compressed Tauri assets
+are located in the same Cargo release/build output, decoded with Brotli, matched
+to the current metadata, and matched as encoded bytes inside that executable.
+Missing/stale evidence fails closed; a new sidecar cannot relabel an old package.
+The helper supports the locked Tauri raw/Brotli asset format. Other asset formats
+need an explicit validator update. This is an identity/byte check, not execution
+of the native package. Release stamps compare dirty state and input count too.
 Actions package success is separate from installation, device, login, sync and
 deployment acceptance. No process logs, keys, whole build directories or user
 stores are artifact upload inputs.

@@ -4,6 +4,7 @@ import { resolve, dirname, isAbsolute, posix, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { transformPackage, transformSmartFixture } from './package-transform.mjs';
 import { digest, readInventory } from './policy.mjs';
+import { verifyNewRoot } from './history.mjs';
 export { digest, safePath, scanBytes } from './policy.mjs';
 
 export const manifestName = 'scripts/publish/manifest.json';
@@ -90,13 +91,14 @@ export function exportSnapshot({ root, ref = 'HEAD', target, expectedTarget, app
       execFileSync('git', ['-c', 'core.hooksPath=/dev/null', '-c', 'commit.gpgsign=false', 'commit', '-qm', 'Initial source import'], {
         cwd: target, env: { ...process.env, GIT_AUTHOR_NAME: 'CyberNote Source Export', GIT_AUTHOR_EMAIL: 'source-export@example.invalid', GIT_COMMITTER_NAME: 'CyberNote Source Export', GIT_COMMITTER_EMAIL: 'source-export@example.invalid' },
       });
+      verifyNewRoot(target);
       if (git(target, ['rev-list', '--count', 'HEAD']).toString().trim() !== '1' || git(target, ['remote']).length) throw Error('Export history isolation failed');
       if (git(target, ['ls-files', '-z']).toString().split('\0').filter(Boolean).length !== plan.files.size) throw Error('Export commit is missing files');
     }
   } else if (initialize) throw Error('--init requires --apply');
   return { dryRun: !apply, sourceCommit: plan.tree.commit, fileCount: plan.files.size, bytes: [...plan.files.values()].reduce((n, b) => n + b.length, 0), removedPackageScripts: plan.removedScripts, initializedNewHistory: apply && initialize };
 }
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const opts = { root: resolve(fileURLToPath(new URL('../..', import.meta.url))) };
   const args = process.argv.slice(2);
   for (let i = 0; i < args.length; i++) {
