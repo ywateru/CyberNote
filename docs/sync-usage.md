@@ -1,6 +1,25 @@
 # 设备同步使用说明
 
-2026-11-07。当前交付包为 [Mac29](../artifacts/sync91/备忘录-Mac29.zip) 与 [Android21](../artifacts/sync91/备忘录-Android21.apk)，相同322项产品输入和完整前端，已通过独立核包。Android21修复了原反向同步失败；同一数据和配对下，完整双向文档、原文件、冷启动、前台恢复和图片导出均有实际验证。[最终交付与验收范围](verification/sync91/DELIVERY.md)保留原始失败、媒体Blob读回限制和未验证的平台范围。Mac为本地ad-hoc签名、未公证；Android为arm64/API26+开发签名包。
+## 当前源码的双桌面隔离测试（2026-11-12）
+
+当前源码增加桌面启动参数 `--data-dir /绝对路径`，用于同时运行两个独立工作区。此参数需要使用包含本轮修改的新构建；下方历史 Mac29/Android21 安装包不含该启动功能。新测试用例与结果入口见[同步108](verification/sync108/TEST-CASES.md)。
+
+直接运行新构建的可执行文件，并给两个进程分别传不同目录，例如：
+
+```sh
+/path/to/CyberNote.app/Contents/MacOS/notes-clone --data-dir /absolute/test-data/desktop-a
+/path/to/CyberNote.app/Contents/MacOS/notes-clone --data-dir /absolute/test-data/desktop-b
+```
+
+每个目录各自保存数据库、附件和同步身份。媒体派生缓存按规范化工作区路径隔离，仍放在平台缓存目录中。未传参数时沿用平台默认数据目录。路径需为绝对路径；空路径、缺值、重复参数和未知参数会报错。同目录或其路径别名不能同时启动第二实例；关闭前一个实例后可用原目录重开，配对和数据保留。
+
+先在A开启服务，再让B通过A生成的配对串加入。A/B数据目录必须不同，不能复制 `.sync` 身份目录制造第二设备。同步后应核对完整正文、元数据及附件原文件；“已连接”仅表示传输连接，不等于待应用数据已完成落盘。
+
+少量三端测试使用独立 Android 测试应用ID `com.local.notesclone.sync108`，不会替换正常应用。测试工具通过明确的ADB serial访问本轮包；使用ADB reverse时，手机配对地址指向该映射的回环端口。此路线只证明该实际ADB拓扑，不外推手机局域网、VPN或后台常驻能力。
+
+## 历史交付包说明
+
+2026-11-07。该次交付包为 [Mac29](../artifacts/sync91/备忘录-Mac29.zip) 与 [Android21](../artifacts/sync91/备忘录-Android21.apk)，相同322项产品输入和完整前端，已通过独立核包。Android21修复了原反向同步失败；同一数据和配对下，完整双向文档、原文件、冷启动、前台恢复和图片导出均有实际验证。[最终交付与验收范围](verification/sync91/DELIVERY.md)保留原始失败、媒体Blob读回限制和未验证的平台范围。Mac为本地ad-hoc签名、未公证；Android为arm64/API26+开发签名包。
 
 ## 先连接同一局域网
 
