@@ -370,3 +370,5 @@ Mac WAV最新：[live09有限独核](plan/reviews/app-final106-mac-wav-live09-in
 
 55浮窗/展开源码已独审并整合，备忘录内部编辑、搜索、格式和新建的受控并行检查通过，真实双端包按[有限验收步骤](verification/recording-presentation55-runtime-plan.md)继续。Mac15[实际窗口记录](verification/recording-window54-mac-runtime/README.md)已确认真实录制中A/B编辑与正确保存归属；保存卡播放遇到[SecurityOrigin拒绝](verification/saved-audio-security-origin54/README.md)，单列[任务56](plan/tasks/app-recording-playback56.md)修复，不以代码通过代替实际保存后播放。
 2026-11-09 当前完整目标：[双端整理与交付状态](plan/cybernote-modernization-state.md)。覆盖统一编辑器会话、表格修复、版本交付、主组件拆分、附件性能和可配置共享样式。六项逐项验收，当前 active；[表格交互新契约](ui/table-editing.md)按一次点击省略号展开菜单、文本转表格实施。[媒体按需读取与缩略图](architecture/attachment-media.md)、[双端设计规则](ui/design-rules.md)为后续实施规格，不表示已完成。
+2026-11-13：正在执行[Logto＋CyberGrid账户同步与发布](plan/analysis/account109.md)。先冻结[账户架构](architecture/account-sync.md)与[UI设计](ui/account-sync.md)，再分别实现[服务](plan/tasks/app-account109-server.md)、[原生账户/自动同步](plan/tasks/app-account109-native.md)及[设置界面](plan/tasks/app-account109-ui.md)。Vercel部署、真实多端认证/数据同步、新private GitHub干净源码历史和Actions实际打包均为完成条件；密钥、个人数据、旧过程历史不发布。
+
