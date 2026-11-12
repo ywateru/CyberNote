@@ -1,4 +1,95 @@
-# Account109 Android candidate build01
+# Account109 Android candidates and device verification
+
+## Current actual device checkpoint
+
+On 2026-11-13 the isolated Account109 package was installed, started, and updated
+in place on Samsung Android 9 arm64, serial `98895a3147304c3132`. The original
+`com.local.notesclone` application and Sync108 sandbox were not controlled or read.
+The current exact integrated main source is
+`6537b74bf2c957be2ada5511778f597400877029`, including bootstrap cancellation guard
+and fresh signed-out metrics repair. The current application PID observed at the
+end of verification was `21082`, with private root
+`/data/data/com.local.notesclone.account109`.
+
+| Identity field | Current verified value |
+| --- | --- |
+| Preserved APK | `/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/android-candidate-6537b74b.apk` |
+| APK SHA256, also verified on installed base.apk | `92fe135c7ea552bb7ccbfad27de86c7061813f8a82f99e5a725d4410958633ae` |
+| APK bytes | 124,767,515 |
+| Package / Activity | `com.local.notesclone.account109` / `com.local.notesclone.MainActivity` |
+| Display name / ABI | `CyberNote Account Test` / arm64 only |
+| Native library SHA256 | `f857f2e299b55e179f877c780e0f1f1b856e9bfcacc99a22820f2d698884b462` |
+| Provider SHA256, exact pinned input bytes | `c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c` |
+| APK v2 signing certificate SHA256 | `e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79` |
+| Backup / native extraction | `allowBackup=false` / `extractNativeLibs=true` |
+| Callback | `com.local.notesclone.auth://callback`; exactly one handler, this package's MainActivity |
+
+Before initial installation, the isolated package was absent, the device was
+unlocked and on (`showing=false`, `inputRestricted=false`), and the callback had
+no handler. After installation and again after update it had exactly one owned
+handler. No callback was injected. [build03/identity.json](build03/identity.json),
+the actual aapt2/signature outputs, and [device02/final-state.json](device02/final-state.json)
+record the source/package/library identity and installed-package hash.
+
+The [actual device02 suite](device02/result.json) passed all six checks:
+
+1. Real native `account_command(status)` returns signedOut, disabled, no profile/error.
+2. The original synthetic note survives the APK update with identical complete document/plainText.
+3. CDP Input and visible product controls create/save the expected complete document and exact plainText.
+4. The real Login UI starts native authorization and opens an external activity.
+5. Returning through normal `am start` and clicking Cancel returns native signedOut without profile/error.
+6. Cancellation preserves the synthetic complete document/plainText.
+
+The final UI is the foreground Account settings panel: signedOut, Login enabled,
+no pending Cancel action. No credentials were entered, synchronization remains
+disabled, and no authenticated callback, owner binding, automatic peer discovery,
+or cross-device replication success is claimed. Hosted credential input is the
+next integration step. All synthetic notes are retained.
+
+Each CDP connection forwarded only
+`localabstract:webview_devtools_remote_<verified-owned-PID>` to an allocated local
+port. [device02/receipt.json](device02/receipt.json) hashes the original and final
+device results plus the frozen driver/runner. Final checks found no owned forward,
+no reverse mappings, and no Account109 driver lock. The package is left running.
+
+## Preserved attempts and product fixes
+
+| Attempt | Outcome |
+| --- | --- |
+| build01, main `efb10f8b` | Build and static identity passed; initial installation/start succeeded. |
+| [device01](device01/result.json) | Real local full-document edit passed, but native account status failed with `account_sync_failed`. This original failure is retained. |
+| Fresh-status unit red/green | Red reproduced `no such table: sync_inbox`; repair returns zero metrics only for an unactivated Store, without enabling sync or creating identity. Account suite 13/13 passed. See [native evidence](../native/fresh-status/checks.json). |
+| build02, derived `5c8e0ad4` | Build passed, not installed; superseded to use the canonical integrated main SHA directly. [Receipt](build02/receipt.json). |
+| build03, main `6537b74b` | Build/static checks passed; in-place update preserved synthetic data; device02 six checks passed. |
+
+Bootstrap tests separately proved the prior async verification window could mint
+an invitation after gate close/owner cancellation. Guard repair is in main
+`be930dfb`; old Noise authorization still fenced data, so the invitation red tests
+do not prove a post-close note disclosure. Real sync must use the repaired
+candidate. Both red tests and the account green results remain in
+[bootstrap-close](../native/bootstrap-close/checks.json).
+
+## Reusable bounded device API
+
+`scripts/verification/account109-android.mjs` fixes both serial and package. It
+exports `connectAndroid`, `launchAndroid`, `assertInteractive`, and bounded
+background lifecycle helpers. A connected client supports `accountStatus`,
+`openAccount`, `signIn`, `cancelLogin`, `createNote`, `openNote`, `readNote`,
+`readWorkspace`, `readAttachment`, `inspect`, and idempotent `close`.
+It exposes no generic JS/ADB API, grant access, manual pairing or SQL writer.
+Mutations use real visible UI controls and Input; IPC calls are reads only.
+Every Input phase verifies an unlocked device and this package in the foreground.
+The driver removes only the exact forward tuple it owns and uses the shared
+token-checked lifecycle lease with an Account109-specific lock.
+
+`scripts/verification/account109-android-smoke.mjs OUTPUT_DIR [PRIOR_SMOKE_JSON]`
+runs the six checks above; its prior-note option proves update continuity rather
+than assuming a globally empty note count. It never enters credentials, enables
+sync, or fabricates a callback. The sole phone operator runs it; do not run a
+second driver concurrently. It may open the real system browser during Login,
+then returns to this package and cancels without reading the browser page.
+
+## Original build01 record
 
 Built successfully on 2026-11-13 from integrated source
 `efb10f8b8b684234829c95c3f578ad6b3d86ffbb`. This includes the pinned CyberGrid Rust
@@ -50,7 +141,6 @@ Vite build mode; this candidate explicitly enables the debug UI capability.
 log is preserved separately in the main workspace's ignored artifacts directory;
 the readable archived log strips ANSI and trailing whitespace and records the
 original raw hash. [frontend-files.json](build01/frontend-files.json) hashes all
-embedded frontend inputs. Before any real authorization, confirm this exact
-candidate with the integration owner, recheck package absence/device unlock, and
-check callback handler ownership. No ADB forward, reverse, or device driver lock
-was created by this build.
+frontend build files. This original artifact has been superseded by the repaired
+main6537 candidate above. No device mappings were created by build01 itself;
+subsequent actual device attempts and their cleanup are recorded separately.

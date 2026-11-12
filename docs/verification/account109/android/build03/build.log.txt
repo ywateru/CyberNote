@@ -1,0 +1,603 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "6537b74bf2c957be2ada5511778f597400877029",
+  "sourceTree": "962701c0876f4f420183225281fc65683c01e41a",
+  "toolCommit": "c53f969b7264a800b5bbeeadb56fc0d16818d6ae",
+  "toolSha256": "862e7732b6f9b8ef0cad679bce6287331829854b25fd8368c72d7384f79d870c",
+  "initScriptSha256": "72532de9c987777f774349eb3e067f6951a7834977a0809e98030d4a9d5e8b01",
+  "packageId": "com.local.notesclone.account109",
+  "activity": "com.local.notesclone.MainActivity",
+  "displayName": "CyberNote Account Test",
+  "sdkSource": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+  "licenseFiles": 1139,
+  "gradleHome": "/private/tmp/cybernote-account109-gradle",
+  "target": "/private/tmp/cybernote-account109-target",
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "VITE_NOTES_ACCOUNT_NATIVE": "1",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "command": [
+    "/Users/water/.local/node-v22.16.0-darwin-arm64/bin/node",
+    "scripts/android.mjs",
+    "build",
+    "--debug",
+    "--target",
+    "aarch64",
+    "--apk",
+    "--ci"
+  ]
+}
+
+> cybernote@0.1.0 tauri /private/tmp/cybernote-account109-android
+> tauri android build --debug --target aarch64 --apk --ci
+
+        Info Using installed NDK: /Users/water/Library/Android/sdk/ndk/27.2.12479018
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `pnpm build`
+
+> cybernote@0.1.0 build /private/tmp/cybernote-account109-android
+> tsc -b && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 1975 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/build-info.json                                 0.36 kB │ gzip:   0.26 kB
+dist/index.html                                      1.92 kB │ gzip:   0.94 kB
+dist/assets/index-BgotpY8d.css                     169.62 kB │ gzip:  30.01 kB
+dist/assets/native-recording-access-DlheXjZR.js      1.02 kB │ gzip:   0.65 kB
+dist/assets/runtime-QrqI9y0h.js                     17.43 kB │ gzip:   6.68 kB
+dist/assets/index-DXDzAOSR.js                    1,645.66 kB │ gzip: 473.85 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.61s
+   Compiling notes-clone v0.1.0 (/private/tmp/cybernote-account109-android/src-tauri)
+warning: unused import: `AppState`
+ --> src/attachment_desktop.rs:3:22
+  |
+3 | use crate::{failure, AppState};
+  |                      ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `tauri::Manager`
+ --> src/attachment_desktop.rs:6:5
+  |
+6 | use tauri::Manager;
+  |     ^^^^^^^^^^^^^^
+
+warning: unused variable: `binding`
+   --> src/account/transport.rs:130:13
+    |
+130 |         let binding = binding.clone();
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_binding`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `REDIRECT` is never used
+ --> src/account/callback.rs:9:11
+  |
+9 | pub const REDIRECT: &str = "http://127.0.0.1:17897/callback";
+  |           ^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Lease` is never constructed
+  --> src/account/callback.rs:11:12
+   |
+11 | pub struct Lease(pub Arc<Callback>);
+   |            ^^^^^
+
+warning: fields `value` and `done` are never read
+  --> src/account/callback.rs:18:5
+   |
+17 | pub struct Callback {
+   |            -------- fields in this struct
+18 |     value: Mutex<Option<Result<String, &'static str>>>,
+   |     ^^^^^
+19 |     done: Notify,
+   |     ^^^^
+
+warning: associated items `start` and `wait` are never used
+  --> src/account/callback.rs:23:18
+   |
+22 | impl Callback {
+   | ------------- associated items in this implementation
+23 |     pub async fn start() -> Result<Arc<Self>, &'static str> {
+   |                  ^^^^^
+...
+40 |     pub async fn wait(&self) -> Result<String, &'static str> {
+   |                  ^^^^
+
+warning: function `receive` is never used
+  --> src/account/callback.rs:53:10
+   |
+53 | async fn receive(listener: TcpListener, authority: &str) -> Result<String, &'static str> {
+   |          ^^^^^^^
+
+warning: method `export_path` is never used
+  --> src/apple_notes_import/core.rs:36:19
+   |
+33 | impl OwnedStage {
+   | --------------- method in this implementation
+...
+36 |     pub(crate) fn export_path(&self, index: usize) -> Result<&std::path::Path> {
+   |                   ^^^^^^^^^^^
+
+warning: methods `read_export` and `check_budget` are never used
+   --> src/apple_notes_import/core.rs:784:19
+    |
+741 | impl OwnedStage {
+    | --------------- methods in this implementation
+...
+784 |     pub(crate) fn read_export(&self, index: usize) -> Result<Vec<u8>> {
+    |                   ^^^^^^^^^^^
+...
+807 |     fn check_budget(&self) -> Result<()> {
+    |        ^^^^^^^^^^^^
+
+warning: function `prepare` is never used
+  --> src/attachment_desktop.rs:18:4
+   |
+18 | fn prepare(
+   |    ^^^^^^^
+
+warning: method `shutdown` is never used
+   --> src/attachment_media/http.rs:110:25
+    |
+ 36 | impl MediaServer {
+    | ---------------- method in this implementation
+...
+110 |     pub(crate) async fn shutdown(mut self) {
+    |                         ^^^^^^^^
+
+warning: associated function `start` is never used
+  --> src/attachment_media/runtime.rs:31:25
+   |
+30 | impl MediaRuntime {
+   | ----------------- associated function in this implementation
+31 |     pub(crate) async fn start(
+   |                         ^^^^^
+
+warning: fields `started`, `revision`, and `checkpoint_revision` are never read
+  --> src/recording_window.rs:23:5
+   |
+20 | struct Entry {
+   |        ----- fields in this struct
+...
+23 |     started: bool,
+   |     ^^^^^^^
+24 |     terminal: bool,
+25 |     revision: Option<(u64, bool)>,
+   |     ^^^^^^^^
+26 |     checkpoint_revision: u64,
+   |     ^^^^^^^^^^^^^^^^^^^
+
+warning: function `reveal_owner` is never used
+  --> src/recording_window.rs:62:8
+   |
+62 | pub fn reveal_owner(app: &tauri::AppHandle, child: &str) {
+   |        ^^^^^^^^^^^^
+
+warning: function `entry` is never used
+  --> src/recording_window.rs:89:4
+   |
+89 | fn entry<'a>(
+   |    ^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `route_message` is never used
+   --> src/recording_window.rs:460:4
+    |
+460 | fn route_message(
+    |    ^^^^^^^^^^^^^
+
+warning: function `visibility_target` is never used
+   --> src/recording_window.rs:558:4
+    |
+558 | fn visibility_target(
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `smart_projection` is never used
+  --> src/session/metadata.rs:98:19
+   |
+ 4 | impl Session {
+   | ------------ method in this implementation
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: associated function `parse` is never used
+  --> src/startup.rs:18:19
+   |
+16 | impl Options {
+   | ------------ associated function in this implementation
+17 |     /// Arguments after argv[0]. Validate the entire input before any filesystem IO.
+18 |     pub(crate) fn parse(args: impl IntoIterator<Item = OsString>) -> io::Result<Self> {
+   |                   ^^^^^
+
+warning: function `validated_tags` is never used
+  --> src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> src/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `sync_apply_pending` is never used
+   --> src/store/synchronization.rs:810:12
+    |
+272 | impl Store {
+    | ---------- method in this implementation
+...
+810 |     pub fn sync_apply_pending(&mut self) -> Result<SyncApplyReport> {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: method `sync_enable` is never used
+   --> src/store/synchronization/schema.rs:127:12
+    |
+ 84 | impl Store {
+    | ---------- method in this implementation
+...
+127 |     pub fn sync_enable(&mut self, workspace: Option<&str>) -> Result<SyncIdentity> {
+    |            ^^^^^^^^^^^
+
+warning: `notes-clone` (lib) generated 30 warnings (run `cargo fix --lib -p notes-clone` to apply 3 suggestions)
+    Finished `dev` profile [unoptimized] target(s) in 11.55s
+        Info symlinking lib "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" in jniLibs dir "/private/tmp/cybernote-account109-android/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libandroid.so"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libdl.so"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "liblog.so"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libm.so"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libc.so"
+        Info symlink at "/private/tmp/cybernote-account109-android/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a/libnotes_clone_lib.so" points to "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so"
+WARNING: The option setting 'android.proguard.failOnMissingFiles=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: API 'applicationVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling applicationVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'testVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling testVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'unitTestVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling unitTestVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'libraryVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling libraryVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+        Info connection; remote_addr=127.0.0.1:49767 conn_id=0
+
+> cybernote@0.1.0 tauri /private/tmp/cybernote-account109-android
+> tauri android android-studio-script --target aarch64
+
+        Info Using installed NDK: /Users/water/Library/Android/sdk/ndk/27.2.12479018
+warning: unused import: `AppState`
+ --> src/attachment_desktop.rs:3:22
+  |
+3 | use crate::{failure, AppState};
+  |                      ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `tauri::Manager`
+ --> src/attachment_desktop.rs:6:5
+  |
+6 | use tauri::Manager;
+  |     ^^^^^^^^^^^^^^
+
+warning: unused variable: `binding`
+   --> src/account/transport.rs:130:13
+    |
+130 |         let binding = binding.clone();
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_binding`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `REDIRECT` is never used
+ --> src/account/callback.rs:9:11
+  |
+9 | pub const REDIRECT: &str = "http://127.0.0.1:17897/callback";
+  |           ^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Lease` is never constructed
+  --> src/account/callback.rs:11:12
+   |
+11 | pub struct Lease(pub Arc<Callback>);
+   |            ^^^^^
+
+warning: fields `value` and `done` are never read
+  --> src/account/callback.rs:18:5
+   |
+17 | pub struct Callback {
+   |            -------- fields in this struct
+18 |     value: Mutex<Option<Result<String, &'static str>>>,
+   |     ^^^^^
+19 |     done: Notify,
+   |     ^^^^
+
+warning: associated items `start` and `wait` are never used
+  --> src/account/callback.rs:23:18
+   |
+22 | impl Callback {
+   | ------------- associated items in this implementation
+23 |     pub async fn start() -> Result<Arc<Self>, &'static str> {
+   |                  ^^^^^
+...
+40 |     pub async fn wait(&self) -> Result<String, &'static str> {
+   |                  ^^^^
+
+warning: function `receive` is never used
+  --> src/account/callback.rs:53:10
+   |
+53 | async fn receive(listener: TcpListener, authority: &str) -> Result<String, &'static str> {
+   |          ^^^^^^^
+
+warning: method `export_path` is never used
+  --> src/apple_notes_import/core.rs:36:19
+   |
+33 | impl OwnedStage {
+   | --------------- method in this implementation
+...
+36 |     pub(crate) fn export_path(&self, index: usize) -> Result<&std::path::Path> {
+   |                   ^^^^^^^^^^^
+
+warning: methods `read_export` and `check_budget` are never used
+   --> src/apple_notes_import/core.rs:784:19
+    |
+741 | impl OwnedStage {
+    | --------------- methods in this implementation
+...
+784 |     pub(crate) fn read_export(&self, index: usize) -> Result<Vec<u8>> {
+    |                   ^^^^^^^^^^^
+...
+807 |     fn check_budget(&self) -> Result<()> {
+    |        ^^^^^^^^^^^^
+
+warning: function `prepare` is never used
+  --> src/attachment_desktop.rs:18:4
+   |
+18 | fn prepare(
+   |    ^^^^^^^
+
+warning: method `shutdown` is never used
+   --> src/attachment_media/http.rs:110:25
+    |
+ 36 | impl MediaServer {
+    | ---------------- method in this implementation
+...
+110 |     pub(crate) async fn shutdown(mut self) {
+    |                         ^^^^^^^^
+
+warning: associated function `start` is never used
+  --> src/attachment_media/runtime.rs:31:25
+   |
+30 | impl MediaRuntime {
+   | ----------------- associated function in this implementation
+31 |     pub(crate) async fn start(
+   |                         ^^^^^
+
+warning: fields `started`, `revision`, and `checkpoint_revision` are never read
+  --> src/recording_window.rs:23:5
+   |
+20 | struct Entry {
+   |        ----- fields in this struct
+...
+23 |     started: bool,
+   |     ^^^^^^^
+24 |     terminal: bool,
+25 |     revision: Option<(u64, bool)>,
+   |     ^^^^^^^^
+26 |     checkpoint_revision: u64,
+   |     ^^^^^^^^^^^^^^^^^^^
+
+warning: function `reveal_owner` is never used
+  --> src/recording_window.rs:62:8
+   |
+62 | pub fn reveal_owner(app: &tauri::AppHandle, child: &str) {
+   |        ^^^^^^^^^^^^
+
+warning: function `entry` is never used
+  --> src/recording_window.rs:89:4
+   |
+89 | fn entry<'a>(
+   |    ^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `route_message` is never used
+   --> src/recording_window.rs:460:4
+    |
+460 | fn route_message(
+    |    ^^^^^^^^^^^^^
+
+warning: function `visibility_target` is never used
+   --> src/recording_window.rs:558:4
+    |
+558 | fn visibility_target(
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `smart_projection` is never used
+  --> src/session/metadata.rs:98:19
+   |
+ 4 | impl Session {
+   | ------------ method in this implementation
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: associated function `parse` is never used
+  --> src/startup.rs:18:19
+   |
+16 | impl Options {
+   | ------------ associated function in this implementation
+17 |     /// Arguments after argv[0]. Validate the entire input before any filesystem IO.
+18 |     pub(crate) fn parse(args: impl IntoIterator<Item = OsString>) -> io::Result<Self> {
+   |                   ^^^^^
+
+warning: function `validated_tags` is never used
+  --> src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> src/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `sync_apply_pending` is never used
+   --> src/store/synchronization.rs:810:12
+    |
+272 | impl Store {
+    | ---------- method in this implementation
+...
+810 |     pub fn sync_apply_pending(&mut self) -> Result<SyncApplyReport> {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: method `sync_enable` is never used
+   --> src/store/synchronization/schema.rs:127:12
+    |
+ 84 | impl Store {
+    | ---------- method in this implementation
+...
+127 |     pub fn sync_enable(&mut self, workspace: Option<&str>) -> Result<SyncIdentity> {
+    |            ^^^^^^^^^^^
+
+warning: `notes-clone` (lib) generated 30 warnings (run `cargo fix --lib -p notes-clone` to apply 3 suggestions)
+    Finished `dev` profile [unoptimized] target(s) in 0.70s
+        Info symlinking lib "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" in jniLibs dir "/private/tmp/cybernote-account109-android/src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libandroid.so"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libdl.so"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "liblog.so"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libm.so"
+        Info "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so" requires shared lib "libc.so"
+    Finished 1 APK at:
+        /private/tmp/cybernote-account109-android/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk
+
+{"phase":"build-exit","code":0,"signal":null}

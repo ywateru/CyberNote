@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "6537b74bf2c957be2ada5511778f597400877029",
+  "sourceTree": "962701c0876f4f420183225281fc65683c01e41a",
+  "toolCommit": "c53f969b7264a800b5bbeeadb56fc0d16818d6ae",
+  "toolSha256": "862e7732b6f9b8ef0cad679bce6287331829854b25fd8368c72d7384f79d870c",
+  "initScriptSha256": "72532de9c987777f774349eb3e067f6951a7834977a0809e98030d4a9d5e8b01",
+  "packageId": "com.local.notesclone.account109",
+  "activity": "com.local.notesclone.MainActivity",
+  "displayName": "CyberNote Account Test",
+  "sdkSource": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+  "licenseFiles": 1139,
+  "gradleHome": "/private/tmp/cybernote-account109-gradle",
+  "target": "/private/tmp/cybernote-account109-target",
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "VITE_NOTES_ACCOUNT_NATIVE": "1",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "command": [
+    "/Users/water/.local/node-v22.16.0-darwin-arm64/bin/node",
+    "scripts/android.mjs",
+    "build",
+    "--debug",
+    "--target",
+    "aarch64",
+    "--apk",
+    "--ci"
+  ],
+  "buildExitCode": 0,
+  "sourceBase": "exact integrated main6537b74b",
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/android-candidate-6537b74b.apk",
+    "bytes": 124767515,
+    "sha256": "92fe135c7ea552bb7ccbfad27de86c7061813f8a82f99e5a725d4410958633ae"
+  },
+  "libraries": {
+    "lib/arm64-v8a/libcloudflared.so": {
+      "bytes": 28812032,
+      "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c"
+    },
+    "lib/arm64-v8a/libimage_processing_util_jni.so": {
+      "bytes": 32528,
+      "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2"
+    },
+    "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so": {
+      "bytes": 11064544,
+      "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646"
+    },
+    "lib/arm64-v8a/libsurface_util_jni.so": {
+      "bytes": 4896,
+      "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba"
+    },
+    "lib/arm64-v8a/libnotes_clone_lib.so": {
+      "bytes": 153739848,
+      "sha256": "f857f2e299b55e179f877c780e0f1f1b856e9bfcacc99a22820f2d698884b462"
+    }
+  },
+  "frontendBuildInfo": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-12T19:09:16.420Z",
+    "target": "android",
+    "sourceRevision": "6537b74bf2c957be2ada5511778f597400877029",
+    "sourceFingerprint": "5462eb4a0460f005ac6e45f3ec9d7c4f0d6b22486a448db759ab6462201565f4",
+    "sourceDirty": false,
+    "inputCount": 1651,
+    "releasePreparedAt": null
+  },
+  "derivedDiff": {
+    "file": "generated-manifest.patch",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "signatureCertificateSha256": "e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79",
+  "backup": false,
+  "extractNativeLibs": true,
+  "callback": "com.local.notesclone.auth://callback",
+  "installedAtReceipt": false
+}

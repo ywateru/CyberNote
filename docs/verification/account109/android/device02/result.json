@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "package": "com.local.notesclone.account109",
+  "serial": "98895a3147304c3132",
+  "checks": [
+    "real-native-signedOut",
+    "prior-synthetic-note-survived-update",
+    "real-input-full-document-and-plainText",
+    "real-ui-started-authorization",
+    "real-ui-cancel-returned-native-signedOut",
+    "cancel-preserved-local-document"
+  ],
+  "passed": true,
+  "owned": {
+    "serial": "98895a3147304c3132",
+    "package": "com.local.notesclone.account109",
+    "pid": 21082,
+    "local": "tcp:49924",
+    "remote": "localabstract:webview_devtools_remote_21082",
+    "pageId": "9E31CC75896964DB77C3656F2A1B099E",
+    "pageURL": "http://tauri.localhost/"
+  },
+  "appDataRoot": "/data/data/com.local.notesclone.account109",
+  "initial": {
+    "state": "signedOut",
+    "enabled": false,
+    "devices": [],
+    "pendingCount": 0,
+    "conflictCount": 0
+  },
+  "continuation": {
+    "noteId": "3cfe6fa1-8a3e-4c4c-94d3-4f377562dc3f",
+    "documentSha256": "e606487a9ecaf42fe1ab07b73ce2f67ae5e27ab6b2c471c2b23a22b62266dee8",
+    "plainTextSha256": "53acc126c949ccbb08098a51e2b5016f2ef64bc78c6c0f946d896fbccc500769"
+  },
+  "localNote": {
+    "id": "2113f89b-8183-458a-a97a-27d4b4be9b73",
+    "title": "Account109 e831d014",
+    "body": "Android 本地编辑验证\n第二行：保留合成数据。",
+    "note": {
+      "createdAt": 1794510683109,
+      "deletedAt": null,
+      "document": {
+        "content": [
+          {
+            "attrs": {
+              "level": 1
+            },
+            "content": [
+              {
+                "text": "Account109 e831d014",
+                "type": "text"
+              }
+            ],
+            "type": "heading"
+          },
+          {
+            "content": [
+              {
+                "text": "Android 本地编辑验证",
+                "type": "text"
+              }
+            ],
+            "type": "paragraph"
+          },
+          {
+            "content": [
+              {
+                "text": "第二行：保留合成数据。",
+                "type": "text"
+              }
+            ],
+            "type": "paragraph"
+          }
+        ],
+        "type": "doc"
+      },
+      "folderId": "default",
+      "id": "2113f89b-8183-458a-a97a-27d4b4be9b73",
+      "locked": false,
+      "originalFolderId": null,
+      "paperStyle": "plain",
+      "pinned": false,
+      "plainText": "Account109 e831d014\nAndroid 本地编辑验证\n第二行：保留合成数据。",
+      "revision": 5,
+      "sealed": null,
+      "title": "Account109 e831d014",
+      "updatedAt": 1794510687519
+    }
+  },
+  "documentSha256": "bd9ea5bbcbdd78be953502ec79b4672df2c76ef392382600d3ef98864f5f905f",
+  "plainTextSha256": "49f8f408a06e55ed4f1986a8198fbf5e90bb796dcc6c6e26a72ff5b7861f9189",
+  "browserLaunched": true,
+  "cancelled": {
+    "state": "signedOut",
+    "enabled": false,
+    "devices": [],
+    "pendingCount": 0,
+    "conflictCount": 0
+  },
+  "cleanup": {
+    "closed": true,
+    "ownedForwardPresent": false
+  }
+}
