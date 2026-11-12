@@ -418,12 +418,17 @@ export async function runSyncSettings(runtime, { command, check, output }) {
       await command("settings.open"); await command("settings.tab", { tab: "sync" });
       const geometry = await sync().evaluate((node) => {
         const container = node.closest(".preferences-sync");
+        // Product interface details use a 28px desktop floor and a 44px
+        // mobile floor. A narrow desktop viewport also uses mobile controls.
+        const mobileControls = !!node.closest(".preferences-mobile");
+        const minimumHit = mobileControls ? 44 : 28;
         return {
+          minimumHit,
           smallButtons: [...node.querySelectorAll("button")].filter(
             (x) =>
               x.getClientRects().length &&
-              (x.getBoundingClientRect().width < 44 ||
-                x.getBoundingClientRect().height < 44),
+              (x.getBoundingClientRect().width < minimumHit ||
+                x.getBoundingClientRect().height < minimumHit),
           ).length,
           scrollWidth: container.scrollWidth,
           clientWidth: container.clientWidth,
@@ -438,6 +443,7 @@ export async function runSyncSettings(runtime, { command, check, output }) {
         };
       });
       metrics.push({ width, theme, geometry });
+      await saveJSON(resolve(output, "sync86-layout.json"), metrics);
       check(
         `${width}px ${theme} has no horizontal overflow and shares reachable vertical scroll`,
         geometry.smallButtons === 0 &&

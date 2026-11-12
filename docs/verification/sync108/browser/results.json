@@ -1,0 +1,434 @@
+{
+  "date": "2026-11-12",
+  "boundary": "Real React/App and Chrome 157 with isolated JS IPC fixture; no Rust/network/native-device proof",
+  "runs": [
+    {
+      "name": "startup-fixed01",
+      "status": "pass",
+      "checks": {
+        "desktop": 17,
+        "mobile": 4
+      },
+      "scope": {
+        "platform": "desktop-browser",
+        "backend": "isolated-js-protocol-fixture",
+        "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+        "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+        "browser": "157.0.8103.51",
+        "frontendTransport": "isolated-static-debug-bundle",
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "observations": {
+        "screenshotCapture": "CDP Page.captureScreenshot",
+        "fontWait": "FontFaceSet.status with bounded rAF polling; no document.fonts.ready",
+        "gated": {
+          "readyState": "interactive",
+          "fontStatus": "loaded",
+          "applicationMounted": false
+        }
+      },
+      "receipts": [
+        {
+          "path": "/private/tmp/sync108-workspace-checks/startup-fixed01/desktop-result.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/startup-fixed01/desktop-result.json",
+          "sha256": "0ebb4dee50b6e63311743b9bce16206d7f03495c5973572f221eb33405123752"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/startup-fixed01/mobile-result.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/startup-fixed01/mobile-result.json",
+          "sha256": "3e17d2151ac3a071189530e32277bea3a99de8a4ed49fd528fa6efbde197961d"
+        }
+      ]
+    },
+    {
+      "name": "sync-settings-desktop",
+      "status": "fail",
+      "message": "sync-settings: Synchronization has its own scrolling settings category",
+      "scope": {
+        "platform": "desktop-browser",
+        "backend": "isolated-js-protocol-fixture",
+        "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+        "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+        "browser": "157.0.8103.51",
+        "frontendTransport": "vite-development",
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "checksBeforeFailure": 3,
+      "receipts": [
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-desktop/suite.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-desktop/suite.json",
+          "sha256": "ee02170596ee1cf7b0744effa24b5f76b4e25ee5d5093eb73d4b344adb70e0f7"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-desktop/failure.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-desktop/failure.json",
+          "sha256": "0d7d047f57570ebc31b2b2c55f1f1c36e55d976b008c837a8b858a5f8f642dc5"
+        }
+      ]
+    },
+    {
+      "name": "sync-settings-mobile",
+      "status": "fail",
+      "message": "sync-settings: Synchronization has its own scrolling settings category",
+      "scope": {
+        "platform": "mobile-browser",
+        "backend": "isolated-js-protocol-fixture",
+        "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+        "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+        "browser": "157.0.8103.51",
+        "frontendTransport": "vite-development",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      "checksBeforeFailure": 3,
+      "receipts": [
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile/suite.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-mobile/suite.json",
+          "sha256": "aad97069ca733c9c2b08ab404d489872e364504ea22fb3de84bdf30f30c6f7f5"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile/failure.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-mobile/failure.json",
+          "sha256": "652a92606fd3d57cd14dcdd552a66203db0f6cd45235ddfb8df0744fd2af9959"
+        }
+      ]
+    },
+    {
+      "name": "sync-settings-desktop-fixed01",
+      "status": "fail",
+      "message": "sync-settings: 1280px light has no horizontal overflow and shares reachable vertical scroll",
+      "scope": {
+        "platform": "desktop-browser",
+        "backend": "isolated-js-protocol-fixture",
+        "media": "fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation",
+        "native": "IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default",
+        "browser": "157.0.8103.51",
+        "frontendTransport": "vite-development",
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        }
+      },
+      "checksBeforeFailure": 38,
+      "receipts": [
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-desktop-fixed01/suite.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-desktop-fixed01/suite.json",
+          "sha256": "e4aa485adc7d6bb54f16ca1b1b4a3f7ab93f48a356fe4c780339a80299067266"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-desktop-fixed01/failure.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-desktop-fixed01/failure.json",
+          "sha256": "9caff514bca12cc33b50504d23b0fbd24f9fe428de62abb95530ed5cd0660869"
+        }
+      ]
+    },
+    {
+      "name": "sync-settings-mobile-fixed01",
+      "status": "pass",
+      "checks": 56,
+      "platform": "mobile-browser",
+      "backend": "isolated-js-protocol-fixture",
+      "sourceInputsUnchanged": true,
+      "sourceInputs": "5015c9f43b285d5d3a8a065b8a21b2255d6336feaa1e47d949fbca32440bb642",
+      "pageErrors": [],
+      "layout": [
+        {
+          "width": 320,
+          "theme": "light",
+          "geometry": {
+            "smallButtons": 0,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 320,
+          "theme": "dark",
+          "geometry": {
+            "smallButtons": 0,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 390,
+          "theme": "light",
+          "geometry": {
+            "smallButtons": 0,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 390,
+          "theme": "dark",
+          "geometry": {
+            "smallButtons": 0,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 1280,
+          "theme": "light",
+          "geometry": {
+            "smallButtons": 0,
+            "scrollWidth": 1280,
+            "clientWidth": 1280,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 1280,
+          "theme": "dark",
+          "geometry": {
+            "smallButtons": 0,
+            "scrollWidth": 1280,
+            "clientWidth": 1280,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile-fixed01/summary.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-mobile-fixed01/summary.json",
+          "sha256": "432c2308daccc66e4a19c0a3f93453a0489f4db5402d40a3bb614599c38ac288"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile-fixed01/sync86-layout.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-mobile-fixed01/sync86-layout.json",
+          "sha256": "426be860801713e3e5575b32c76973f8f0911469cad89ec7eaf45243b197d3f7"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile-fixed01/suite.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-mobile-fixed01/suite.json",
+          "sha256": "4efb426e7f756c9d12d81fa633a8d4870377584fe840d0e949d5dafcd5d5028e"
+        }
+      ]
+    },
+    {
+      "name": "sync-settings-desktop-fixed02",
+      "status": "pass",
+      "checks": 56,
+      "platform": "desktop-browser",
+      "backend": "isolated-js-protocol-fixture",
+      "sourceInputsUnchanged": true,
+      "sourceInputs": "b631507b78aa486e53d9669bbc6a1a9d6eb41ffbd50010530abea27ea38bb65b",
+      "pageErrors": [],
+      "layout": [
+        {
+          "width": 320,
+          "theme": "light",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 320,
+          "theme": "dark",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 390,
+          "theme": "light",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 390,
+          "theme": "dark",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 1280,
+          "theme": "light",
+          "geometry": {
+            "minimumHit": 28,
+            "smallButtons": 0,
+            "scrollWidth": 722,
+            "clientWidth": 722,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 1280,
+          "theme": "dark",
+          "geometry": {
+            "minimumHit": 28,
+            "smallButtons": 0,
+            "scrollWidth": 722,
+            "clientWidth": 722,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-desktop-fixed02/summary.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-desktop-fixed02/summary.json",
+          "sha256": "0b360d5f352154fad97e505b77a7c0919f351c3f6ce1e01d804a3f8e96b87fc9"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-desktop-fixed02/sync86-layout.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-desktop-fixed02/sync86-layout.json",
+          "sha256": "06aa65c690fd71fc289d7798e697186b9bdbae7acd7d85e662857aabaf0a84d5"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-desktop-fixed02/suite.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-desktop-fixed02/suite.json",
+          "sha256": "9fcd9ec085b92fb139ffb8fd6a4922d4a923d12ca842b4ccdbd051d1f0a9cf20"
+        }
+      ]
+    },
+    {
+      "name": "sync-settings-mobile-fixed02",
+      "status": "pass",
+      "checks": 56,
+      "platform": "mobile-browser",
+      "backend": "isolated-js-protocol-fixture",
+      "sourceInputsUnchanged": true,
+      "sourceInputs": "b631507b78aa486e53d9669bbc6a1a9d6eb41ffbd50010530abea27ea38bb65b",
+      "pageErrors": [],
+      "layout": [
+        {
+          "width": 320,
+          "theme": "light",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 320,
+          "theme": "dark",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 390,
+          "theme": "light",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 390,
+          "theme": "dark",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 1280,
+          "theme": "light",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 1280,
+            "clientWidth": 1280,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        },
+        {
+          "width": 1280,
+          "theme": "dark",
+          "geometry": {
+            "minimumHit": 44,
+            "smallButtons": 0,
+            "scrollWidth": 1280,
+            "clientWidth": 1280,
+            "overflowY": "auto",
+            "overflows": []
+          }
+        }
+      ],
+      "receipts": [
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile-fixed02/summary.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-mobile-fixed02/summary.json",
+          "sha256": "c3e6bfb195b73c47eaac6cb3b617f384b15adcebe4e46678565c8de84e5fc59c"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile-fixed02/sync86-layout.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-mobile-fixed02/sync86-layout.json",
+          "sha256": "1586ba10538588d7886aa16426796aab6a61e7768a5571a87f4d3122c6a1d32e"
+        },
+        {
+          "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile-fixed02/suite.json",
+          "localArchive": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/sync108/browser/sync-settings-mobile-fixed02/suite.json",
+          "sha256": "3f082d0f0128f0abbae9972c3c201b74e6278b6b321c77304a9cd7bb348328b0"
+        }
+      ]
+    }
+  ]
+}

@@ -31,3 +31,13 @@
 - `sync-settings` 桌面与手机组的首次本轮运行均在“同步设置独立滚动分类/唯一dialog”断言失败，各3项前置检查通过。已定位 `runtime.reset()` 只等待debug/idle，未等待启动动画解除root的inert/aria-hidden；无reset的同条件观察为inside=true/dialogs=1。原失败保留于各自fresh目录，修复后必须另目录正式复测。
 
 此次检查不是全部功能验收。静态发现的媒体HTTP请求头超时、Mac外部附件临时副本预算和主线程准备风险已记入独立审阅，未通过本轮整理提交被追认为已修复。正式日志保留于 `/private/tmp/sync108-workspace-checks` 和 `/private/tmp/sync108-network-tests.log`；后续诊断和复验单独追加。
+
+## 本轮定向复验
+
+主工作区随后整合启动隔离、原生测试驱动和工具修复。启动模块作者完整 Rust 回归为227通过、4项既有ignored；独立复核另执行启动9项通过。原生启动脚本修正了清理信号记录与最终通过计算，5项工具故障用例通过；Node原生驱动协议与进程生命周期11项通过。这些工具测试不冒充真实同步业务结果。
+
+2026-11-12 主工作区 fresh 浏览器复验：启动页17桌面＋4移动检查通过；同步设置桌面与移动组各56通过。使用真实 React/App、Chrome157和独立JS IPC fixture，不证明Rust网络或原生设备。证据摘要、源指纹、原始路径与SHA见 [browser/results.json](browser/results.json)。原失败仍保留。
+
+启动脚本原先在拦截模块加载时等待 `document.fonts.ready`，形成相互等待；现以有界字体状态、绘制帧和CDP截图检查。reset原先未等待启动层移除，现等待真实inert/aria-hidden解除。设置桌面的后续失败是旧测试统一要求44px按钮：现有全局界面规则明确桌面下限28px、手机44px，测试据实际 `.preferences-mobile` 分支检查，窄桌面进入手机布局仍要求44px。只修测试契约与失败诊断，没有调整产品按钮布局。
+
+双桌面和三端的实际业务结果分别记入本目录的执行报告；不得用以上浏览器/协议结果替代。

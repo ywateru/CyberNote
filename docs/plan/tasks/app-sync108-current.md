@@ -13,7 +13,7 @@ depends-on: []
 
 - `docs/architecture/sync.md`、`docs/architecture/sync-coordinator.md`：版本向量、持久 inbox、附件原字节和窗口 quiet 应用。
 - `docs/testing.md`、`docs/debugging.md`：真实实现链与模拟边界分别记账。
-- `src-tauri/src/lib.rs` 当前固定使用 app_data_dir；`store`、`session`、`sync::adapter` 为生产路径。
+- `src-tauri/src/lib.rs` 原来固定使用 app_data_dir，本轮已增加显式桌面数据目录；`store`、`session`、`sync::adapter` 为生产路径。
 - `scripts/debug/sync-rust-dom.mjs` 是真实 Rust + 两个 App DOM，不能称为两个原生桌面 App。
 
 本轮授权的常规完善：桌面支持显式 `--data-dir /absolute/path` 启动独立工作区；未指定则保留平台默认路径。参数错误应在打开库前明确失败，同路径并发必须拒绝（实际核实 Store 没有进程生命周期锁，需补充）；媒体缓存与目录权限应随独立实例隔离。Android 维持平台应用沙箱。以当前源码构建启动两个原生桌面进程并实际核对配置路径、独立 device/workspace 身份与数据落盘。测试通过真实应用处理器或明确标注的真实 Session 边界写入合成数据，不能直接 SQL 填充业务行冒充用户路径。

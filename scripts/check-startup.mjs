@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {mkdir, writeFile} from 'node:fs/promises';
 import {resolve, dirname} from 'node:path';
-import {openRuntime, api, idle, saveJSON} from './debug/runtime.mjs';
+import {openRuntime, api, idle} from './debug/runtime.mjs';
+import {finalizeBrowserResult} from './debug/finalize-browser-result.mjs';
 
 let outputArgument, captureAnimation = false;
 for (let i=2; i<process.argv.length; i++) {
@@ -35,6 +36,7 @@ const observations = {screenshotCapture:'CDP Page.captureScreenshot', fontWait:'
 const check = (name, value) => { assert.ok(value, name); checks.push(name); };
 const runtime = await openRuntime({bundleDebug:true, nativeToolbar:true});
 const {page, backend} = runtime;
+let desktopResult = {passed:false, checks, scope:runtime.metadata, observations};
 const ready = async () => {
   await page.waitForSelector('#startup', {state:'detached'});
   await page.waitForFunction(() => !!window.__NOTES_DEBUG__);
@@ -122,15 +124,16 @@ try {
   await page.reload({waitUntil:'domcontentloaded'}); await ready();
   check('An empty workspace completes startup without an editor', await page.locator('.editor-empty').isVisible());
   check('No uncaught browser errors', runtime.errors.length===0);
-  await saveJSON(resolve(output,'desktop-result.json'),{passed:true,checks,scope:runtime.metadata,observations});
-  console.log(JSON.stringify({passed:true,checks:checks.length,output},null,2));
+  desktopResult.passed = true;
 } catch (error) {
   await screenshot(page,resolve(output,'failure.png')).catch(()=>{});
-  await saveJSON(resolve(output,'desktop-result.json'),{passed:false,error:error.message,checks,pageErrors:runtime.errors,observations});
+  desktopResult = {...desktopResult, passed:false, error:error.message, pageErrors:runtime.errors};
   throw error;
-} finally { await runtime.cleanup(); }
+} finally { await finalizeBrowserResult(runtime,resolve(output,'desktop-result.json'),desktopResult); }
+console.log(JSON.stringify({passed:true,checks:checks.length,output},null,2));
 
 const mobile = await openRuntime({bundleDebug:true,mobile:true});
+const mobileResult = {passed:false, checks:[], scope:mobile.metadata};
 try {
   mobile.backend.configure({delay:{load:1000}});
   await mobile.page.emulateMedia({reducedMotion:'reduce'});
@@ -141,6 +144,10 @@ try {
   await mobile.page.waitForSelector('#startup',{state:'detached'});
   assert.ok(await mobile.page.locator('#root').evaluate(n=>!n.inert));
   assert.equal(mobile.errors.length,0);
-  await saveJSON(resolve(output,'mobile-result.json'),{passed:true,checks:['Mobile SVG sizing','Reduced-motion handoff','Interactive root','No uncaught browser errors'],scope:mobile.metadata});
-  console.log('Mobile startup: 4 checks passed');
-} finally { await mobile.cleanup(); }
+  mobileResult.passed = true;
+  mobileResult.checks = ['Mobile SVG sizing','Reduced-motion handoff','Interactive root','No uncaught browser errors'];
+} catch (error) {
+  mobileResult.error = error.message;
+  throw error;
+} finally { await finalizeBrowserResult(mobile,resolve(output,'mobile-result.json'),mobileResult); }
+console.log('Mobile startup: 4 checks passed');
