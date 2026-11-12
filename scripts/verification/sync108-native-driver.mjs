@@ -171,7 +171,27 @@ export class NativeApp extends EventEmitter {
       if (ready?.version !== 1 || ready.native !== true || ready.window !== "main" || ready.interactive !== true || ready.startupDetached !== true)
         throw failure("NOT_NATIVE_DEBUG_APP");
       return ready;
-    } catch (error) { this.#fail(error); throw error; }
+    } catch (error) {
+      // A JS TIMEOUT reply means that Ready's awaited operation has finished;
+      // this is distinct from NATIVE_TIMEOUT, whose JS cannot be cancelled.
+      // Capture only bounded, non-content diagnostics before failing closed.
+      if (error.code === "TIMEOUT" && !this.#fatal && !this.lifecycle.exit) {
+        try {
+          this.lifecycle.readinessFailure = await this.evaluate(`(async () => {
+            const root=document.getElementById('root'), surface=document.getElementById('startup');
+            const s=window.__NOTES_DEBUG__ ? (await window.__NOTES_DEBUG__.execute('app.state')).result : null;
+            return {readyState:document.readyState,visibility:document.visibilityState,debug:!!window.__NOTES_DEBUG__,
+              startup:surface?.dataset.state || (surface ? 'present' : 'detached'),
+              root:root ? {inert:root.inert,ariaHidden:root.getAttribute('aria-hidden'),ariaBusy:root.getAttribute('aria-busy')} : null,
+              app:s ? {busy:s.busy,save:s.save,hasError:!!s.error,failureSerial:s.failure?.serial,
+                frozen:s.quietWindow?.frozen,editorCount:s.quietWindow?.editors?.length,
+                preferencesOpen:s.preferences?.open,notes:s.workspace?.notes?.length} : null};
+          })()`, null, 3000);
+        } catch { this.lifecycle.readinessFailure = { code: "DIAGNOSTIC_UNAVAILABLE" }; }
+      }
+      this.#fail(error);
+      throw error;
+    }
   }
   request(action, timeoutMs = 30_000) {
     if (this.#closing) return Promise.reject(failure("APP_CLOSING"));
