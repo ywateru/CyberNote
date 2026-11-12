@@ -2,6 +2,8 @@
 
 本阶段实现原生账户 owner、持久单账户绑定、CyberGrid 发现与实际 TCP map、签名 enrollment 自动 Noise 配对和持续授权 gate。编译和本地契约测试通过；尚未进行产品 App 的真实 Logto 登录、两端 CyberGrid 连通和 Android 安装/回跳验收，不能据此称端到端完成。
 
+后续 `a9b62a3e` 修复账户 foreground 额外创建手工服务的入口，账户 9 项及手工 adapter 7 项通过；准确旧版反例、工具失败分类、Android 原生库链接与隔离构建准备见 [foreground 隔离记录](FOREGROUND-ISOLATION.md)及 `foreground-checks.json`。该修复后的 exact 主线候选 APK 尚未构建或安装。
+
 ## 实现与状态边界
 
 - `src-tauri/src/account/` 由 App 持有，设置页关闭不影响 owner。IPC 只接收严格 DTO，返回安全状态；token、grant、enrollment proof、邀请和 Noise 私钥不传到 JS。
@@ -14,7 +16,7 @@
 
 ## 检查
 
-源文件指纹、命令、原始日志路径和 SHA256 见 `checks.json`；本轮安全编译/测试日志的归档副本在 `logs/`。全部检查使用共享 target `/private/tmp/cybernote-account109-target`、jobs=2、dev/test debug=0、incremental=0。
+本表对应 `92c6ffb9` 阶段，源文件指纹、命令、原始日志路径和 SHA256 见 `checks.json` 的 `sourceCommit`；本轮安全编译/测试日志的归档副本在 `logs/`。归档仅移除末尾空白行，`originalSha256` 保留原日志指纹，`sha256` 对应归档字节；不更改 vendor notices、模块日志或 SDK pin。全部检查使用共享 target `/private/tmp/cybernote-account109-target`、jobs=2、dev/test debug=0、incremental=0。
 
 | 检查 | 结果与范围 |
 | --- | --- |

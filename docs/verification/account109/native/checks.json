@@ -27,7 +27,9 @@
       "testCount": null,
       "originalPath": "/private/tmp/account109-native-check-host-final.log",
       "archive": "logs/host-check.log",
-      "sha256": "77df6cb7c22980c3041e3af0fcc6153a7f9abc143ecfe5e93ec63195da59b483"
+      "sha256": "77df6cb7c22980c3041e3af0fcc6153a7f9abc143ecfe5e93ec63195da59b483",
+      "originalSha256": "77df6cb7c22980c3041e3af0fcc6153a7f9abc143ecfe5e93ec63195da59b483",
+      "archiveNormalization": "terminal blank lines removed; original path/hash preserved"
     },
     {
       "name": "android-check",
@@ -36,7 +38,9 @@
       "testCount": null,
       "originalPath": "/private/tmp/account109-native-check-android-final.log",
       "archive": "logs/android-check.log",
-      "sha256": "a743a775d1af060b3a27f4751fbfc450f75fe7efa0cbbd9b7b78b24b47b2a4e9"
+      "sha256": "a743a775d1af060b3a27f4751fbfc450f75fe7efa0cbbd9b7b78b24b47b2a4e9",
+      "originalSha256": "a743a775d1af060b3a27f4751fbfc450f75fe7efa0cbbd9b7b78b24b47b2a4e9",
+      "archiveNormalization": "terminal blank lines removed; original path/hash preserved"
     },
     {
       "name": "account-tests",
@@ -45,7 +49,9 @@
       "testCount": 8,
       "originalPath": "/private/tmp/account109-native-tests-account-final.log",
       "archive": "logs/account-tests.log",
-      "sha256": "e89eeda7d4ed4fac7cf99ff0df62c95af5a3cc2c6cd983c44df7e6891a1e30b6"
+      "sha256": "462ab66724b8b5d88ead2d8924cd731342332bc26b2355596edceda1afe8af8e",
+      "originalSha256": "e89eeda7d4ed4fac7cf99ff0df62c95af5a3cc2c6cd983c44df7e6891a1e30b6",
+      "archiveNormalization": "terminal blank lines removed; original path/hash preserved"
     },
     {
       "name": "sync-tests",
@@ -54,7 +60,9 @@
       "testCount": 32,
       "originalPath": "/private/tmp/account109-native-tests-sync-final.log",
       "archive": "logs/sync-tests.log",
-      "sha256": "4114f08ada0365bda25bc564b6e316d37243bbcdaec72f3ff9b239416cbdf3fb"
+      "sha256": "c98ac3873a8860ee16c2dddc4d6ab35ee5844a89a26c5d9e83dbc9780837ca08",
+      "originalSha256": "4114f08ada0365bda25bc564b6e316d37243bbcdaec72f3ff9b239416cbdf3fb",
+      "archiveNormalization": "terminal blank lines removed; original path/hash preserved"
     },
     {
       "name": "auth-fixtures",
@@ -63,7 +71,9 @@
       "testCount": 15,
       "originalPath": "/private/tmp/account109-auth-tests-final.log",
       "archive": "logs/auth-fixtures.log",
-      "sha256": "471c1029f5baaa5625e456ee0c816fce89a423a7631350ffad5b7a62e22ed7b7"
+      "sha256": "fb7af65557bcb70b7a58eace484c9a9139ab9b0855ab3ad65b157785e0b1bb24",
+      "originalSha256": "471c1029f5baaa5625e456ee0c816fce89a423a7631350ffad5b7a62e22ed7b7",
+      "archiveNormalization": "terminal blank lines removed; original path/hash preserved"
     }
   ],
   "previousChecks": [
@@ -229,5 +239,6 @@
     "Android browser/deep-link callback",
     "product native Logto login/restore",
     "real multi-peer CyberGrid discovery/replication"
-  ]
+  ],
+  "sourceCommit": "92c6ffb9614aa2a5bac579b7e5bfb37517782926"
 }
