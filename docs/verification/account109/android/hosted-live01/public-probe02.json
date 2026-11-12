@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-12T20:37:32.529Z",
+  "scope": "user0-Chrome-public-metadata-only",
+  "requestCredentials": "omit",
+  "responseBodyRead": false,
+  "requestHeadersRead": false,
+  "appGrantAccessed": false,
+  "dnsTlsOverrides": false,
+  "otherPagesEnumerated": false,
+  "results": [
+    {
+      "endpoint": "health",
+      "networkCategory": "probe_deadline"
+    },
+    {
+      "endpoint": "native-auth-config",
+      "networkCategory": "probe_deadline"
+    },
+    {
+      "endpoint": "anonymous-profile",
+      "networkCategory": "probe_deadline"
+    }
+  ],
+  "ownedMapping": {
+    "serial": "98895a3147304c3132",
+    "pid": 12765,
+    "local": "tcp:59947",
+    "remote": "localabstract:chrome_devtools_remote"
+  },
+  "user0BrowserEndpointPidVerified": true,
+  "user0ChromeForeground": true,
+  "onlyCreatedBlankPageVisible": true,
+  "cleanup": {
+    "onlyCreatedTargetClosed": true,
+    "exactForwardAbsent": true,
+    "leaseReleased": true,
+    "ownedSandboxForeground": true
+  },
+  "accountRootPreviouslyConfirmed": true,
+  "interpretation": "Three foreground user0 Chrome credential-omitting public fetches reached the probes own 15-second deadline without HTTP response metadata. No specific DNS/TLS/transport failure or server HTTP status is established."
+}

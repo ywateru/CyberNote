@@ -60,3 +60,44 @@ provider error, endpoint traffic, HTTP status, DNS/TLS detail or historical gran
 commit is proven by this receipt. Native paused/profile acceptance and the same
 synthetic user remain unverified. No login retry, logout, sync enablement,
 production modification or secret-body read was performed for diagnosis.
+
+## Fixed public endpoint reachability from the phone
+
+The previously verified unique account root exists. No grant/token was obtained
+for these probes. Source and its SHA-256 are recorded in `public-probe-source.json`.
+The canonical fixed public requests were `/healthz`,
+`/api/v1/auth/config?appId=il4abzwbu1ohjwv5mb667`, and
+`/api/v1/account/profile` (anonymous), all at the pinned canonical HTTPS origin.
+No alternate health route, IP, DNS override, TLS bypass or proxy change was used.
+
+`public-probe01.json` preserves the first two-request attempt from a dedicated
+blank page without verified foreground. Both requests were aborted by the
+probe's own 15-second deadline without an HTTP status. This does not establish
+a native browser connection-abort error or a failed server response.
+
+`public-probe02.json` preserves the foreground repeat plus anonymous profile.
+The global browser endpoint OS PID matched the unique user0 Chrome UID/PID before
+creating the sole new target. No existing page targets were enumerated. User0
+Chrome foreground and the created blank page's visibility were verified. Each
+fixed fetch used `credentials:omit`, `redirect:error`, no-store/cache-disabled,
+service-worker bypass, and a 15-second AbortController limit. The script inspected
+only Network response status/fixed loading-failure categories, not response
+bodies, request headers, cookies, profiles or App grants. All three results were
+`probe_deadline`, with no HTTP metadata. The blank page uses an opaque origin;
+these are fetch/network observations, not direct navigation or native reqwest
+traces. No claim about a particular DNS, TLS or transport cause is justified.
+
+The main agent separately reported contemporaneous normal-DNS/normal-TLS host
+results of 200/200/401 for those endpoints; these host results are user-reported
+context, not new tests executed by this branch. The contrast supports investigating
+the phone's canonical-origin network path before blaming a service-wide outage,
+but does not rule out transient behavior or differences between Chrome and Rust.
+The 15-second bound also matches the native enrollment client's timeout; a request
+that never produces a response in that interval can map to `account_network`.
+This is corroboration of a hypothesis, not proof of the failed native request.
+
+Each probe closed only its created target and exact owned CDP forward, released
+the browser lease, and the second restored the isolated account test app to u0
+foreground by normal start. There was no new SignIn, token copy or sync enablement.
+The initial query-string import reload failed locally before executing probe02;
+a separate module filename loaded the exact archived revised source instead.

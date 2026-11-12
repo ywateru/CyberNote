@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-12T20:35:47.903Z",
+  "scope": "user0-Chrome-public-metadata-only",
+  "requestCredentials": "omit",
+  "responseBodyRead": false,
+  "requestHeadersRead": false,
+  "appGrantAccessed": false,
+  "dnsTlsOverrides": false,
+  "otherPagesEnumerated": false,
+  "results": [
+    {
+      "endpoint": "health",
+      "networkCategory": "aborted"
+    },
+    {
+      "endpoint": "native-auth-config",
+      "networkCategory": "aborted"
+    }
+  ],
+  "ownedMapping": {
+    "serial": "98895a3147304c3132",
+    "pid": 12765,
+    "local": "tcp:59808",
+    "remote": "localabstract:chrome_devtools_remote"
+  },
+  "user0BrowserEndpointPidVerified": true,
+  "cleanup": {
+    "onlyCreatedTargetClosed": true,
+    "exactForwardAbsent": true,
+    "leaseReleased": true
+  },
+  "interpretation": "Both requests were aborted by the probes own 15-second deadline without HTTP metadata; not a demonstrated server or transport failure.",
+  "pageForegroundVerified": false
+}
