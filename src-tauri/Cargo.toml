@@ -5,6 +5,7 @@ description = "Local notes for Mac and Android"
 edition = "2021"
 [features]
 access-boundary-proof = []
+sync-e2e = []
 [lib]
 name = "notes_clone_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]

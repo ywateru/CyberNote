@@ -7,6 +7,8 @@ mod session;
 mod startup;
 mod store;
 mod sync;
+#[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+mod sync_e2e;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use serde_json::{json, Value};
 use session::{Session, Token};
@@ -794,6 +796,8 @@ pub fn run() {
                     }
                 });
             }
+            #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+            sync_e2e::start(app.handle())?;
             Ok(())
         });
     #[cfg(target_os = "macos")]
