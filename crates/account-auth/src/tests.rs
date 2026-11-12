@@ -459,6 +459,141 @@ async fn refresh_and_revocation_failures_preserve_the_only_owner_and_errors_are_
 }
 
 #[tokio::test]
+async fn healthy_grant_rejects_begin_without_replacing_its_owner() {
+    let f = Fixture::new();
+    let dir = private_temp();
+    let client = f.client(&dir).await;
+    let identity = f.login(&client).await;
+    let path = dir.path().join("grant.json");
+    let owner = fs::read(&path).unwrap();
+    assert!(matches!(
+        client
+            .begin_authorization(config().redirect_uris[0].clone(), false)
+            .await,
+        Err(AuthError::Busy)
+    ));
+    assert_eq!(fs::read(&path).unwrap(), owner);
+    assert_eq!(f.tokens.load(Ordering::SeqCst), 1);
+    assert_eq!(f.revokes.load(Ordering::SeqCst), 0);
+    assert!(!client.cleanup_required().await);
+    assert_eq!(
+        client
+            .access_token(Duration::ZERO, false)
+            .await
+            .unwrap()
+            .secret(),
+        "fixture-access-1"
+    );
+    assert_eq!(
+        client
+            .inner
+            .state
+            .lock()
+            .await
+            .grant
+            .as_ref()
+            .unwrap()
+            .identity,
+        Some(identity)
+    );
+}
+
+#[tokio::test]
+async fn expired_invalid_refresh_requires_successful_logout_before_reauthorization() {
+    for fail_first_revoke in [false, true] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let client = f.client(&dir).await;
+        let identity = f.login(&client).await;
+        let path = dir.path().join("grant.json");
+        let owner = fs::read(&path).unwrap();
+        client
+            .inner
+            .state
+            .lock()
+            .await
+            .grant
+            .as_mut()
+            .unwrap()
+            .expires_at = now().unwrap() - 1;
+        f.fail_refresh.store(true, Ordering::SeqCst);
+        assert_eq!(
+            client
+                .access_token(Duration::ZERO, false)
+                .await
+                .unwrap_err(),
+            AuthError::RefreshFailed
+        );
+        assert_eq!(fs::read(&path).unwrap(), owner);
+        assert!(matches!(
+            client
+                .begin_authorization(config().redirect_uris[0].clone(), false)
+                .await,
+            Err(AuthError::Busy)
+        ));
+
+        f.fail_revoke.store(fail_first_revoke, Ordering::SeqCst);
+        if fail_first_revoke {
+            assert_eq!(
+                client.logout().await.unwrap_err(),
+                AuthError::RevocationFailed
+            );
+            assert!(client.cleanup_required().await);
+            let quarantined = fs::read(&path).unwrap();
+            let saved: Value = serde_json::from_slice(&quarantined).unwrap();
+            assert_eq!(saved["refresh"], "fixture-refresh-1");
+            assert_eq!(saved["usable"], false);
+            assert!(matches!(
+                client
+                    .begin_authorization(config().redirect_uris[0].clone(), false)
+                    .await,
+                Err(AuthError::Busy)
+            ));
+            assert!(matches!(client.restore().await, Err(AuthError::NoSession)));
+            assert!(matches!(
+                client.access_token(Duration::ZERO, false).await,
+                Err(AuthError::NoSession)
+            ));
+            assert_eq!(fs::read(&path).unwrap(), quarantined);
+            assert_eq!(f.tokens.load(Ordering::SeqCst), 1);
+            assert_eq!(f.revokes.load(Ordering::SeqCst), 1);
+            f.fail_revoke.store(false, Ordering::SeqCst);
+        }
+        client.logout().await.unwrap();
+        assert_eq!(
+            f.revokes.load(Ordering::SeqCst),
+            if fail_first_revoke { 2 } else { 1 }
+        );
+        assert!(!path.exists());
+        assert!(!client.cleanup_required().await);
+        assert!(client.restore().await.unwrap().is_none());
+
+        // This is the host's serialized logout().await? -> begin_authorization sequence.
+        f.fail_refresh.store(false, Ordering::SeqCst);
+        let (transaction, callback) = f.begin(&client, false).await;
+        assert!(!path.exists());
+        assert_eq!(
+            client
+                .complete_callback(transaction, callback)
+                .await
+                .unwrap(),
+            identity
+        );
+        assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
+        assert_eq!(
+            client
+                .access_token(Duration::ZERO, false)
+                .await
+                .unwrap()
+                .secret(),
+            "fixture-access-2"
+        );
+        let saved: Value = serde_json::from_slice(&fs::read(path).unwrap()).unwrap();
+        assert_eq!(saved["refresh"], "fixture-refresh-2");
+    }
+}
+
+#[tokio::test]
 async fn cancellation_during_exchange_never_restores_a_late_grant_and_failed_revoke_keeps_quarantine(
 ) {
     for failed_revoke in [false, true] {
