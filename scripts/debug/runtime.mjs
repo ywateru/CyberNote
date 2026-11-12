@@ -199,7 +199,16 @@ export async function openRuntime(options = {}) {
       dispatchEvents();
       pump = pollRustEvents(backend);
     }
-    const reset = async () => { if (!backend.reset) throw Error('Scenario reset requires default isolated fixture; use separate CLI scripts with external transport.'); backend.reset(); await page.reload(); await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(page); };
+    const reset = async () => {
+      if (!backend.reset) throw Error('Scenario reset requires default isolated fixture; use separate CLI scripts with external transport.');
+      backend.reset();
+      await page.reload();
+      await page.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1);
+      await idle(page);
+      // Match openRuntime's real startup handoff. Debug idle can precede the
+      // splash transition; until it detaches, root is inert and aria-hidden.
+      await page.waitForSelector('#startup', { state: 'detached', timeout: 10000 });
+    };
     return { root, directory, origin, page, rustEvents: { history: eventHistory, resourceClosures, get pending() { return eventQueue.length; }, get polling() { return pump?.state; }, async settled() { await settleEvents(); } }, mobile: !!options.mobile, viewport, backend, errors, cleanup, reset, metadata: { platform: options.mobile ? 'mobile-browser' : 'desktop-browser', backend: backend.kind, media: 'fixed 440Hz PCM/WAV synthetic device; real AudioContext decode and production RecordingPcm accumulation', native: 'IPC/window/quit/OCR/dialog/clipboard simulated; no OS/TCC/real microphone or Rust Store proof by default', browser: await browser.version(), frontendTransport: options.bundleDebug ? 'isolated-static-debug-bundle' : production ? 'production-static' : 'vite-development', viewport } };
   } catch (error) { await cleanup({ keep: options.keep }); throw error; }
 }
