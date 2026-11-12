@@ -328,7 +328,7 @@ impl AuthClient {
         {
             return Err(AuthError::Cancelled);
         }
-        let code = validate_callback(&transaction, &callback)?;
+        let code = validate_callback(&transaction, &callback, self.inner.config.issuer.as_str())?;
         let mut state = self.inner.state.lock().await;
         if state.grant.is_some() {
             return Err(AuthError::Busy);
@@ -605,6 +605,7 @@ fn now() -> Result<u64, AuthError> {
 fn validate_callback(
     transaction: &AuthorizationTransaction,
     callback: &Url,
+    issuer: &str,
 ) -> Result<String, AuthError> {
     if transaction.started.elapsed() > Duration::from_secs(600) || callback.fragment().is_some() {
         return Err(AuthError::InvalidCallback);
@@ -616,13 +617,23 @@ fn validate_callback(
     }
     let mut state = None;
     let mut code = None;
+    let mut response_issuer = None;
     for (k, v) in callback.query_pairs() {
         match k.as_ref() {
             "state" if state.is_none() => state = Some(v.into_owned()),
             "code" if code.is_none() => code = Some(v.into_owned()),
+            "iss" if response_issuer.is_none() => response_issuer = Some(v.into_owned()),
             // Errors, duplicates and unknown parameters are rejected without reflection.
             _ => return Err(AuthError::InvalidCallback),
         }
+    }
+    // RFC 9207 authorization-response issuer: compare the decoded value exactly,
+    // without URL normalization. Legacy responses may omit it; ID issuer stays pinned.
+    if response_issuer
+        .as_deref()
+        .is_some_and(|value| value != issuer)
+    {
+        return Err(AuthError::InvalidCallback);
     }
     let state = state.ok_or(AuthError::InvalidCallback)?;
     if !bool::from(

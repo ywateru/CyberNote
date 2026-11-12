@@ -45,7 +45,10 @@ one owner, Tokio mutex, connection policy and process-lifetime file lock.
   Refresh omits `scope` to inherit the original grant, matching Logto's resource
   refresh request; returned scopes, when present, must still include `connect`.
 - `complete_callback(AuthorizationTransaction, Url) -> Identity` consumes the
-  transaction. `Identity { issuer, subject, display_name, username: Option<String> }`
+  transaction. RFC 9207 `iss` is optional; when present it must occur once and
+  exactly equal the pinned issuer. Duplicate/mismatched values fail before code
+  exchange; state, PKCE and ID-token issuer checks remain mandatory.
+  `Identity { issuer, subject, display_name, username: Option<String> }`
   is safe to serialize. `AccessToken` and authorization transactions are not
   serializable; token Debug redacts, and `AccessToken::secret() -> &str` is Rust-only.
 - `access_token(Duration, bool) -> AccessToken` serializes refresh and persists

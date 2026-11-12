@@ -278,6 +278,71 @@ async fn pkce_signup_scopes_and_exact_redirect_are_pinned() {
 }
 
 #[tokio::test]
+async fn logto_callback_issuer_is_optional_exact_and_unique_before_code_exchange() {
+    for response_issuer in [None, Some("https://fixture.example/oidc")] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let client = f.client(&dir).await;
+        let (transaction, mut callback) = f.begin(&client, false).await;
+        if let Some(issuer) = response_issuer {
+            // Actual Logto callback shape: code, state, iss (values are fixtures).
+            let state = callback
+                .query_pairs()
+                .find(|(k, _)| k == "state")
+                .unwrap()
+                .1
+                .into_owned();
+            callback.set_query(None);
+            callback
+                .query_pairs_mut()
+                .append_pair("code", "fixture-code")
+                .append_pair("state", &state)
+                .append_pair("iss", issuer);
+        }
+        assert_eq!(
+            client
+                .complete_callback(transaction, callback)
+                .await
+                .unwrap()
+                .subject,
+            "fixture-subject"
+        );
+        assert_eq!(f.tokens.load(Ordering::SeqCst), 1);
+    }
+    for issuers in [
+        vec!["https://attacker.example/oidc"],
+        vec!["https://fixture.example/oidc/"],
+        vec!["https://FIXTURE.example/oidc"],
+        vec![""],
+        vec![
+            "https://fixture.example/oidc",
+            "https://fixture.example/oidc",
+        ],
+        vec![
+            "https://fixture.example/oidc",
+            "https://attacker.example/oidc",
+        ],
+    ] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let client = f.client(&dir).await;
+        let (transaction, mut callback) = f.begin(&client, false).await;
+        for issuer in issuers {
+            callback.query_pairs_mut().append_pair("iss", issuer);
+        }
+        assert_eq!(
+            client
+                .complete_callback(transaction, callback)
+                .await
+                .unwrap_err(),
+            AuthError::InvalidCallback
+        );
+        assert_eq!(f.tokens.load(Ordering::SeqCst), 0);
+        assert!(!dir.path().join("grant.json").exists());
+    }
+}
+
+#[tokio::test]
 async fn callback_state_redirect_duplicates_nonce_issuer_audience_subject_and_expiry_are_verified()
 {
     for kind in [
@@ -301,6 +366,10 @@ async fn callback_state_redirect_duplicates_nonce_issuer_audience_subject_and_ex
         let dir = private_temp();
         let client = f.client(&dir).await;
         let (txn, mut callback) = f.begin(&client, false).await;
+        // A correct RFC 9207 iss must not weaken any state/PKCE/ID-token check.
+        callback
+            .query_pairs_mut()
+            .append_pair("iss", config().issuer.as_str());
         match kind {
             "state" => {
                 callback.set_query(Some("state=wrong&code=fixture"));
