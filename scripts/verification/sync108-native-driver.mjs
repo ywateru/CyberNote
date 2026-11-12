@@ -267,6 +267,8 @@ export class NativeApp extends EventEmitter {
       }
     }
     await bounded(this.closed, 3000, "PIPE_CLOSE_TIMEOUT");
+    // stdout.end may discover a malformed tail after shutdown already replied.
+    cleanupFailure ||= this.#fatal;
     if (this.lifecycle.exit?.code !== 0 || this.lifecycle.exit?.signal !== null || this.lifecycle.forcedSignals.length)
       cleanupFailure ||= failure("NON_NATURAL_EXIT");
     this.lifecycle.naturalExit = !cleanupFailure;

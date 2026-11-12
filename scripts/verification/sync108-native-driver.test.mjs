@@ -36,6 +36,8 @@ if (process.argv.includes("--stdio-fixture")) {
     if (action.op === "state") value = { completed, maximum };
     active--;
     send({ type: "response", id: action.op === "state" && mode === "wrongId" ? id + 1 : id, ok: true, value });
+    if (action.op === "shutdown" && mode === "truncatedShutdownTail")
+      process.stdout.write(PREFIX + '{"type":"response"');
     if (action.op === "shutdown" && mode !== "forcedExit") lines.close();
   });
   if (mode === "forcedExit") setInterval(() => {}, 1000);
@@ -93,6 +95,17 @@ if (process.argv.includes("--stdio-fixture")) {
     const app = fixture();
     try { await app.ready(); await app.close({ eof: true }); assert(app.lifecycle.naturalExit); }
     finally { await clean(app); }
+  });
+  test("successful shutdown followed by a truncated tail rejects close despite exit zero", async () => {
+    const app = fixture("truncatedShutdownTail");
+    try {
+      await app.ready();
+      await assert.rejects(app.close(), { code: "TRUNCATED_FRAME" });
+      assert.deepEqual(app.lifecycle.exit, { code: 0, signal: null });
+      assert.equal(app.lifecycle.failureCode, "TRUNCATED_FRAME");
+      assert.equal(app.lifecycle.naturalExit, false);
+      assert.deepEqual(app.lifecycle.forcedSignals, []);
+    } finally { await clean(app); }
   });
   for (const [mode, code] of [["invalidResponse", "INVALID_RESPONSE"], ["wrongId", "UNEXPECTED_RESPONSE"], ["nativeTimeout", "NATIVE_TIMEOUT"]]) {
     test(`${mode} fails promptly and prevents another request`, async () => {

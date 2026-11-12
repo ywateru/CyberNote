@@ -500,6 +500,8 @@ export async function run(argv = process.argv.slice(2)) {
       catch { report.failure ||= { code: "OWNED_PROCESS_CLEANUP_FAILED", name: app.name }; }
     }
     report.processes = apps.map((app) => app.lifecycle);
+    if (report.processes.some((p) => p.failureCode || !p.naturalExit))
+      report.failure ||= { code: "OWNED_PROCESS_CLEANUP_FAILED" };
     for (const directory of stores) {
       if (apps.filter((app) => app.directory === directory).every((app) => app.lifecycle.exit)) {
         try { report.databaseEvidence.push({ directory, ...await readOnlyEvidence(directory, resolve(output, "sqlite-readonly-" + (directory === stores[0] ? "A" : "B"))) }); }
