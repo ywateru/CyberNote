@@ -63,3 +63,15 @@ REQUIRE_REDIS=1 REDIS_TEST_SERVER=/private/tmp/cybergrid-redis-build/redis-7.4.3
 ```
 
 这些服务测试使用本机临时 Redis、临时签名密钥和合成 JWT，不是浏览器 JS IPC fixture，也没有访问实际部署或外部账户。主代理报告的 live PKCE/profile/enrollment 成功及负向 401/400 未由本作者执行，不替代双桌面自动同步验收。复核时主线尚未注册 `account_command`，继续保留生产 UI gate。
+
+## Native IPC 接线候选（基于 main 4183af8b）
+
+只读审查 Singer `92c6ffb9`（SDK `4c498298`）的 `account/types.rs`、`account/mod.rs`、`lib.rs` 注册及相关 adapter/transport。限定结论：IPC/安全 DTO/同步开关与 UI 兼容，未发现该范围新的 native P1/P2；不代表完整 native 安全审计或真实端到端验收。命令严格拒绝未知字段，可信主窗口来源由 native 核对；状态字段 camelCase、可选字段省略、最近成功时间毫秒值与 UI 校验一致；token/proof/私钥不进入状态 DTO，命令错误使用静态安全映射，UI 继续屏蔽原始 IPC 拒绝内容。
+
+新账户 bind 后 `paused/enabled=false`，UI 不自动开启；确认“开启并合并”后才发 setEnabled(true)。连接失败可返回 `enabled=true/state=error`，UI 保留权威开关值并展示错误，不将开启或 syncNow ACK 当作同步成功。setEnabled(false) 暂停且保留 profile；退出只有 signedOut/无 profile/无 error 才显示成功。补齐 `account_cleanup_required`：有无 profile 均提供显式退出确认，禁用同步动作，不推荐重新登录或重试连接，旧命令 retry 先查询状态。
+
+新增 **默认关闭** 的真实 native 构建能力 `VITE_NOTES_ACCOUNT_NATIVE=1`，且必须由 Tauri 承载才显示账户页。主代理合入上述 native 注册/runtime 和本 UI 补丁后，可为隔离候选执行 `VITE_NOTES_ACCOUNT_NATIVE=1 pnpm mac:build`；该变量会传入 Tauri 的前端构建。未设置时维持外观首项/五分类；普通浏览器即使设置变量也不开放真实入口。原 `--account-ui` 仍仅为开发 fixture，无生产 fallback。本作者只编译前端候选，没有构建、启动或认证真实 App；不要为缺少 account_command 的旧 native 构建设置变量。
+
+检查：typecheck、默认生产构建及显式 native 开关的前端构建通过（仅常规包体积提示）。`node scripts/debug/account-native-capability.mjs` 对真实 client 进行 Vite 编译并核对 10 个能力组合；只替换环境值和 Tauri 检测标记，不调用 IPC，不证明 native 可用。首轮因 Vite lib 输出为数组的测试驱动错误失败，已修正，失败保留 `native-capability-01.log`，通过见 `native-capability-02.log`。账户 desktop/mobile 与 Preferences/sync-settings 的定向结果见下方；这些组仍是显式 JS IPC fixture，真实两库 App 登录、暂停/恢复、撤销及自动收敛待主代理执行，不修改其维护的 ACCOUNT-TEST-CASES.md。
+
+本轮账户桌面 **126** / 手机浏览器 **127** 项、默认 Preferences **146** 项、sync-settings **56** 项通过，0 page error。新小用例覆盖 cleanup 有无 profile 的退出/确认/禁传输，以及 native 首次 paused 状态不自动开启和开关确认前不发送命令；既有字号和迟到矩阵一并通过。已查看 320px 深色极大字号截图。最小证据保留在 ignored `native-contract-desktop-01/`、`native-contract-mobile-01/`、`native-wire-preferences-01/`、`native-wire-sync-01/`，编译日志为 `typecheck-native-wire-01.log`、`build-native-wire-default-01.log`、`build-native-wire-optin-01.log`；复跑使用原定向命令和上文能力检查脚本。

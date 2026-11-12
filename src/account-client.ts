@@ -1,7 +1,10 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
 
-// Test-only capability until native account_command is integrated. Production is always off.
-export const accountUIAvailable = import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" && import.meta.env.VITE_NOTES_ACCOUNT_UI === "1";
+// Opt in only when building with the registered native account_command/runtime.
+// Browser fixtures keep their separate development-only capability.
+export const accountUIAvailable =
+  (import.meta.env.VITE_NOTES_ACCOUNT_NATIVE === "1" && isTauri()) ||
+  (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" && import.meta.env.VITE_NOTES_ACCOUNT_UI === "1");
 
 // Frozen account109 DTO. The native singleton owns authorization and networking.
 export type AccountStatus = {
@@ -49,7 +52,7 @@ export function validateAccountStatus(value: unknown): AccountStatus {
   };
 }
 export async function accountCommand(command: AccountCommand): Promise<AccountStatus> {
-  if (!accountUIAvailable) throw Error("账户界面尚未接入，仅供显式启用的开发测试");
+  if (!accountUIAvailable) throw Error("此构建尚未启用账户与同步。本地备忘录仍可继续编辑。");
   if (!isTauri()) throw Error("账户与同步需要在已安装的 CyberNote 应用中使用。本地备忘录仍可继续编辑。");
   // Construct an allowlisted request; tokens/URLs/debug objects never reach IPC.
   let request: AccountCommand;

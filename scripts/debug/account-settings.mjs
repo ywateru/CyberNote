@@ -103,6 +103,32 @@ export async function runAccountSettings(runtime, { command, check, output }) {
   check("Enable requires explicit merge confirmation", backend.account.enabled === false && await root.getByRole("group", { name: "确认账户操作" }).isVisible());
   await root.getByRole("button", { name: "开启并合并", exact: true }).click();
   await page.waitForSelector('[data-account-state="connecting"]');
+  // Native 92c6ffb9 contract: retained/quarantined grants require explicit
+  // sign-out, including failures before any profile has been accepted.
+  const connectedAccount = structuredClone(backend.account);
+  for (const withProfile of [true, false]) {
+    backend.account = { ...connectedAccount, state: "error", error: { code: "account_cleanup_required", message: "Safe native cleanup error" } };
+    if (!withProfile) delete backend.account.profile;
+    await command("account.status");
+    check(`Native cleanup ${withProfile ? "with" : "without"} profile offers exit instead of login/reconnect`,
+      await root.getByRole("button", { name: "退出账户", exact: true }).isVisible() &&
+      await root.getByRole("button", { name: /^(登录|创建账户|重新登录|重试连接)$/ }).count() === 0 &&
+      (await root.innerText()).includes("授权清理"));
+    if (withProfile) check("Native cleanup seals UI transfer controls", await root.getByRole("switch").isDisabled() && await root.getByRole("button", { name: "立即同步", exact: true }).isDisabled());
+    const exits = calls("signOut");
+    await root.getByRole("button", { name: "退出账户", exact: true }).click();
+    check("Native cleanup still requires explicit exit confirmation", calls("signOut") === exits && await root.getByRole("button", { name: "确认退出", exact: true }).isVisible());
+    await page.keyboard.press("Escape");
+  }
+  backend.account = { ...connectedAccount, state: "paused", enabled: false };
+  await command("account.status");
+  check("Native first login paused status does not auto-enable transfer", !(await root.getByRole("switch").isChecked()) && await root.getByRole("button", { name: "立即同步", exact: true }).isDisabled());
+  const enables = calls("setEnabled");
+  await root.getByRole("switch").click();
+  check("Native paused toggle waits for merge confirmation and authoritative DTO", calls("setEnabled") === enables && !(await root.getByRole("switch").isChecked()) && await root.getByRole("button", { name: "开启并合并", exact: true }).isVisible());
+  await page.keyboard.press("Escape");
+  backend.account = connectedAccount;
+  await command("account.status");
   const exitsBefore = calls("signOut");
   await command("account.signOut");
   check("Sign out has no IPC before confirmation", calls("signOut") === exitsBefore);

@@ -15,6 +15,7 @@ const states: Record<AccountStatus["state"], string> = {
 };
 function accountError(error: AccountStatus["error"]) {
   if (!error) return "账户连接未完成，请检查网络后重试。";
+  if (error.code === "account_cleanup_required") return "存在待撤销的登录授权，请先退出账户并完成授权清理，再重新登录。本机备忘录会保留。";
   if (/owner|workspace|bound/i.test(error.code)) return "此资料库已关联其他账户或手工同步空间，无法与当前账户合并。请退出后登录原账户；本机备忘录会保留。";
   if (/expired|auth|token|login|session|state_mismatch|nonce|pkce|callback/i.test(error.code)) return "登录已失效或未完成，请重新登录。本机备忘录会保留。";
   if (/cancel/i.test(error.code)) return "登录已取消，你可以继续使用本地备忘录。";
@@ -103,7 +104,9 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     const failed = retry.current;
     // The native status may have advanced since the failed operation. Retrying
     // an old login/exit in that new state must not start another transaction.
-    if ((failed.type === "signIn" || failed.type === "signUp") &&
+    if (status?.error?.code === "account_cleanup_required") {
+      request({ type: "status" });
+    } else if ((failed.type === "signIn" || failed.type === "signUp") &&
       (status?.state === "authorizing" || (status?.profile && !status.error))) {
       request({ type: "status" });
     } else if ((failed.type === "cancel" || failed.type === "signOut") && status?.state === "signedOut" && !status.profile) {
@@ -142,6 +145,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   });
   const authorizing = authorizationPending.current || status?.state === "authorizing" || (busy && (working.current === "signIn" || working.current === "signUp"));
   const signedIn = !!status?.profile && status.state !== "signedOut" && !authorizing;
+  const cleanupRequired = status?.error?.code === "account_cleanup_required";
   const ownership = /owner|workspace|bound/i.test(status?.error?.code || "");
   const needsLogin = /expired|auth|token|login|session|state_mismatch|nonce|pkce|callback/i.test(status?.error?.code || "");
   return <div ref={panel} className="account-settings" data-account-state={status?.state || "loading"} onFocusCapture={event => {
@@ -161,7 +165,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
           {signedIn ? <p className="account-identifier">{status?.profile?.username || status?.profile?.subject}</p> : <p>{authorizing ? "请在系统浏览器中完成授权。返回后会自动更新账户状态。" : "备忘录保存在此设备。登录同一账户后，可在你的设备间同步。"}</p>}
         </div></div>
         <div className="account-actions">
-          {authorizing ? <button type="button" disabled={working.current === "cancel"} onClick={() => request({ type: "cancel" })}>取消登录</button> : signedIn ? <button type="button" disabled={busy} onClick={() => request({ type: "signOut" })}>退出账户</button> : <>
+          {authorizing ? <button type="button" disabled={working.current === "cancel"} onClick={() => request({ type: "cancel" })}>取消登录</button> : signedIn || cleanupRequired ? <button type="button" disabled={busy} onClick={() => request({ type: "signOut" })}>退出账户</button> : <>
             <button type="button" className="account-primary" disabled={busy || !status} onClick={() => request({ type: "signIn" })}>登录</button>
             <button type="button" disabled={busy || !status} onClick={() => request({ type: "signUp" })}>创建账户</button>
           </>}
@@ -169,15 +173,15 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         {!signedIn && !authorizing && <p className="account-help">首次开启同步时，本地备忘录将与同一账户设备的备忘录合并。本机内容会保留。</p>}
       </section>
       {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{ownership ? "资料库归属不匹配" : "需要处理"}</h4><p>{accountError(status.error)}</p>
-        {!ownership && <button type="button" disabled={busy} onClick={() => request({ type: needsLogin ? "signIn" : signedIn && status.enabled ? "syncNow" : "status" })}>{needsLogin ? "重新登录" : "重试连接"}</button>}
+        {!ownership && !cleanupRequired && <button type="button" disabled={busy} onClick={() => request({ type: needsLogin ? "signIn" : signedIn && status.enabled ? "syncNow" : "status" })}>{needsLogin ? "重新登录" : "重试连接"}</button>}
       </section>}
       {signedIn && status && <>
         <section className="account-group" aria-label="账户同步">
-          <div className="account-toggle"><label htmlFor="account-enabled">同步此设备</label><input id="account-enabled" type="checkbox" role="switch" checked={status.enabled} disabled={busy || ownership || needsLogin} onChange={event => request({ type: "setEnabled", enabled: event.target.checked })} /></div>
+          <div className="account-toggle"><label htmlFor="account-enabled">同步此设备</label><input id="account-enabled" type="checkbox" role="switch" checked={status.enabled} disabled={busy || ownership || needsLogin || cleanupRequired} onChange={event => request({ type: "setEnabled", enabled: event.target.checked })} /></div>
           <p className="account-help">{status.enabled ? "本地备忘录将与同一账户的设备合并，离线时仍可编辑。" : "自动传输已暂停。你仍保持登录，本地更改会保存在此设备。"}</p>
           <p className="account-state">{states[status.state]}</p>
           <dl className="account-metrics"><div><dt>待处理</dt><dd>{status.pendingCount} 项</dd></div><div><dt>最近成功同步</dt><dd>{status.lastSyncAt === undefined ? "尚无成功同步记录" : formatFileTime(status.lastSyncAt)}</dd></div></dl>
-          <div className="account-actions"><button type="button" disabled={busy || !status.enabled || ownership || needsLogin} onClick={() => request({ type: "syncNow" })}>立即同步</button>
+          <div className="account-actions"><button type="button" disabled={busy || !status.enabled || ownership || needsLogin || cleanupRequired} onClick={() => request({ type: "syncNow" })}>立即同步</button>
             {status.conflictCount > 0 && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
           </div>
         </section>
