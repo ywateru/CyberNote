@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-12T21:16:15.385325+00:00",
+  "status": "accepted-static-review-original-three-p2-closed",
+  "baselineCommit": "ec4348c6df15c2b0dbd20af3c05f5a0cc7f75497",
+  "reviewedCommits": [
+    "45b4560f0a4f3ad93c9b8aaf41f99aaa0e0b42a6",
+    "df7babfec42cb5b5bdc1a56d38fb043e139df296",
+    "e5344b68ab36ba7e7e108102b193e41c0ad28dc5",
+    "287d7153671ebff7e43733ff5f59b1c572476434"
+  ],
+  "reviewedFileSha256": {
+    "45b4560f:scripts/publish/stage-packages.py": "586395f14882e186be62d216d54bac0d484df98cc7721f9b11592fa17ce89d5c",
+    "45b4560f:scripts/publish/stage-packages.test.mjs": "654601c78d97d246eb89cb8c98356be79999a36df707daef315d5b32fceb8949",
+    "df7babfe:scripts/publish/stage-packages.py": "77033b139d7449383262ea8b4180dc072263aa2f4994317d9c44d68d87385fc2",
+    "df7babfe:scripts/publish/stage-packages.test.mjs": "a386ffb06458b7e3bb88d4f45d030065c86f460aeb32cbc957a7d9432031a1d1",
+    "e5344b68:scripts/build-info.mjs": "30f986b0128714efad89b25db1e257667d94ec5db422b9975c94574e497b78b2",
+    "e5344b68:scripts/publish/build-info.test.mjs": "8e6f2ea5a577b3978d6409a6eb283d27bf2d49d5a8ba91b3ddee8aa6cada033c",
+    "e5344b68:.gitignore": "1390e622e3d8e2e0962247bc90c3ac9553f77349cb73693b9047c08ebc9f9b4f",
+    "e5344b68:scripts/publish/gitignore.public": "f9929299ea4c7eb4b819b940e6696b62b7753680d725b4b25b9f85fc073551bd",
+    "287d7153:src-tauri/gen/android/app/src/main/AndroidManifest.xml": "e7e9dfaaffe1d0a6430f0dccddd3faa262293e1eae789cc1c54021ab9b361d32"
+  },
+  "findings": {
+    "elfAbi": { "originalSeverity": "P2", "status": "closed", "fixedBy": "45b4560f" },
+    "unsignedFailOpen": { "originalSeverity": "P2", "status": "closed", "fixedBy": "45b4560f" },
+    "releaseManifest": { "originalSeverity": "P2", "status": "closed", "initialFix": "45b4560f", "completedBy": "df7babfe" },
+    "remainingP1": 0,
+    "remainingP2": 0
+  },
+  "independentTests": {
+    "command": "node --test scripts/publish/stage-packages.test.mjs scripts/publish/build-info.test.mjs",
+    "sourceBytesMatchedExactCommitsBeforeRun": true,
+    "stagePassed": 5,
+    "buildInfoPassed": 3,
+    "totalPassed": 8,
+    "failed": 0,
+    "exitCode": 0,
+    "node": "v22.16.0",
+    "scope": "Observed independent offline test run; counts transcribed from successful TAP output; full TAP not archived here"
+  },
+  "realAapt2Counterexample": {
+    "rerunDuringEvidencePreparation": true,
+    "buildTools": "36.0.0",
+    "toolVersion": "Android Asset Packaging Tool (aapt) 2.20-13193326",
+    "baseArtifact": "android-candidate-6537b74b.apk",
+    "baseCompiledManifestSha256": "562dddfb4558fb332fdb1f5280c8d0de6aa255e9205ac9808bb6b66ca9503445",
+    "mutatedCompiledManifestSha256": "98e1774660bfe7a9d173fcad7bfc0189aa3880b1392909b95b19c4ae7dbe2ff5",
+    "fixture": "Temporary manifest-only ZIP; string pool changed to production package and debuggablX; framework resource map, attribute ID/value and version preserved",
+    "aapt2ExitCode": 0,
+    "decodedAttribute": "http://schemas.android.com/apk/res/android:debuggablX(0x0101000f)=true",
+    "expectedPackage": "com.local.notesclone",
+    "expectedVersion": "0.1.0",
+    "45b4560fResult": "accepted",
+    "df7babfeResult": "rejected",
+    "df7babfeSafeError": "Inconsistent Android framework attribute name or ID",
+    "toolOutputMocked": false,
+    "stagingMainExecuted": false,
+    "temporaryFixtureRemoved": true
+  },
+  "manifestIdempotence": {
+    "commit": "287d7153671ebff7e43733ff5f59b1c572476434",
+    "deepLinkVersion": "2.6.3",
+    "tauriUtilsVersion": "2.10.2",
+    "rendererSourceSha256": "571df8724dbaa70b0d7fe03b00b18855b7d1d05b9c32961cd6b23aaa202c10c3",
+    "xmlUpdaterSourceSha256": "027893e0ed13a5479e2fbeaf585ce60a060f244a2701f76d7a71ec18814582d2",
+    "callbackFilters": 1,
+    "markers": 2,
+    "exactRendererBlockMatches": true,
+    "generatedWhitespaceLines": 4,
+    "independentAlgorithmPortFirstAndSecondRewriteIdentical": true,
+    "rustCompilationRepeatedByReviewer": false
+  },
+  "kotlinCache": {
+    "excludedDirectory": "src-tauri/gen/android/.kotlin",
+    "cacheKeepsCleanFingerprintAndInputCount": true,
+    "mainActivityStillChangesIdentity": true,
+    "otherKotlinDirectoriesStillChangeIdentity": true,
+    "mainAndPublicIgnoreRulesAreExactDirectoryOnly": true
+  },
+  "boundaries": {
+    "sourceOrRuntimeEdited": false,
+    "largePackageRebuilt": false,
+    "appExecutedOrInstalled": false,
+    "userLibraryAccessed": false,
+    "adbOrUiUsed": false,
+    "realAuthenticationPerformed": false,
+    "remoteOrPublicationOperated": false,
+    "finalNewRootPackageAudited": false,
+    "processEvidenceExcludedFromSourceExport": true
+  }
+}
