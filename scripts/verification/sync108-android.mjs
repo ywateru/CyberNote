@@ -226,13 +226,24 @@ export async function connectAndroid() {
       },
       async createNote({ title, body }) {
         if (typeof title !== 'string' || !title.trim() || title.includes('\n') || typeof body !== 'string' || !body) throw Error('title and body required');
+        diagnostics.createdNoteId = null;
         const before = new Set((await readWorkspace()).notes.map(n => n.id));
         await closeSettings();
         if (await has('[aria-label="返回笔记"]')) await click('[aria-label="返回笔记"]');
         await click('.mobile-add-note[aria-label="新建备忘录"]');
+        diagnostics.phase = 'create-note.new-id'; diagnostics.selector = null;
+        const created = await wait(async () => {
+          const added = (await readWorkspace()).notes.filter(n => !before.has(n.id));
+          if (added.length > 1) throw Object.assign(Error('ANDROID_CREATE_AMBIGUOUS'), { code: 'ANDROID_CREATE_AMBIGUOUS', phase: diagnostics.phase });
+          return added[0] || false;
+        }, 'new saved note identity');
+        diagnostics.createdNoteId = created.id;
+        const ownerSelector = `.tiptap[data-note-id=${quote(created.id)}][contenteditable="true"]`;
         diagnostics.phase = 'create-note.editor-ready';
-        await wait(() => has('.tiptap[contenteditable="true"]'), 'editor');
-        await click('.tiptap h1');
+        diagnostics.selector = ownerSelector;
+        await wait(() => has(ownerSelector), 'exact new editor owner');
+        await click(`${ownerSelector} h1`);
+        await wait(() => evaluate(`document.activeElement?.closest('[data-note-id]')?.getAttribute('data-note-id')===${quote(created.id)}`), 'exact new editor focus');
         await type(title);
         for (const line of body.split('\n')) { await key('Enter', 'Enter', 13); if (line) await type(line); }
         // Blur through the real navigation handler to flush the editor's save path.
@@ -241,7 +252,7 @@ export async function connectAndroid() {
         diagnostics.phase = 'create-note.persisted-full-body'; diagnostics.selector = null;
         return wait(async () => {
           const w = await readWorkspace();
-          const note = w.notes.find(n => !before.has(n.id) && n.title === title && body.split('\n').every(line => (n.plainText || '').includes(line)));
+          const note = w.notes.find(n => n.id === created.id && n.title === title && body.split('\n').every(line => (n.plainText || '').includes(line)));
           return note || false;
         }, 'persisted complete note');
       },

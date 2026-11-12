@@ -21,7 +21,7 @@ const canonical = value => Array.isArray(value) ? value.map(canonical) : value &
   ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => [k, canonical(v)])) : value;
 const digest = note => hash(JSON.stringify(canonical({ document: note.document, plainText: note.plainText })));
 const safeFailure = (error, diagnostics) => ({
-  code: /^[A-Z_]{1,80}$/.test(error.code || '') ? error.code : 'ASSERTION_OR_DRIVER_FAILURE',
+  code: /^[A-Z_]{1,80}$/.test(error.code || '') ? error.code : error.code?.startsWith('CONDITION_TIMEOUT:') ? 'CONDITION_TIMEOUT' : 'ASSERTION_OR_DRIVER_FAILURE',
   ...(typeof error.phase === 'string' ? { phase: error.phase } : diagnostics ? { phase: diagnostics.phase } : {}),
   ...((error.selector || diagnostics?.selector) ? { selector: error.selector || diagnostics.selector } : {}),
   ...(typeof error.operator === 'string' ? { assertionOperator: error.operator } : {}),
@@ -162,7 +162,16 @@ export async function run(argv = process.argv.slice(2)) {
   const runCase = async (id, name, work) => {
     const row = { id, name, status: 'running', startedAt: new Date().toISOString() }; report.cases.push(row); await saveReport();
     try { await work(); row.status = 'pass'; console.log(`PASS ${id}: ${name}`); }
-    catch (error) { row.status = 'fail'; row.failure = safeFailure(error, c?.diagnostics); throw error; }
+    catch (error) {
+      row.status = 'fail'; row.failure = safeFailure(error, c?.diagnostics);
+      if (id === '3P-02' && c?.diagnostics.createdNoteId) {
+        try {
+          const { note } = await c.readNote(c.diagnostics.createdNoteId);
+          row.createdNote = { id: note.id, fullDocumentAndPlainTextSHA256: digest(note) };
+        } catch { row.createdNoteReadCode = 'READBACK_UNAVAILABLE'; }
+      }
+      throw error;
+    }
     finally { row.finishedAt = new Date().toISOString(); await saveReport(); }
   };
   const cWorkspace = () => c.readWorkspace();
@@ -172,7 +181,7 @@ export async function run(argv = process.argv.slice(2)) {
     await until(label, async () => {
       for (const target of targets) { const actual = await target.read(id); if (!actual || digest(actual) !== digest(expected)) return false; }
       return true;
-    }, 60000);
+    }, 60000).catch(error => { error.phase = `convergence:${label}`; throw error; });
     for (const target of targets) { const actual = await target.read(id); assert.deepEqual(actual.document, expected.document); assert.equal(actual.plainText, expected.plainText); }
     report.observations.push({ name: label, noteId: id, targets: targets.map(t => t.name), fullDocumentAndPlainTextSHA256: digest(expected), plainTextChars: expected.plainText.length });
     return expected;
@@ -192,11 +201,18 @@ export async function run(argv = process.argv.slice(2)) {
     if (opts['continue-from']) {
       const previousFile = resolve(opts['continue-from'], 'result.json');
       previous = JSON.parse(await readFile(previousFile, 'utf8'));
-      assert.equal(previous.kind, report.kind); assert.equal(previous.binary.sha256, inputSHA);
+      assert.equal(previous.kind, report.kind);
+      const previousResultSHA256 = await fileHash(previousFile);
+      if (previous.binary.sha256 !== inputSHA) {
+        assert.equal(record.continuationBuild?.previousResultSHA256, previousResultSHA256, 'New frozen build explicitly names original continuation evidence');
+        assert.equal(record.continuationBuild?.previousBinarySHA256, previous.binary.sha256, 'New frozen build explicitly names previous binary');
+        assert.equal(record.continuationBuild?.reason, 'test-feature-ready-fix', 'Only explicit Ready test-hook build transition supported');
+      }
       assert.equal(previous.android.serial, SERIAL); assert.equal(previous.android.package, PACKAGE);
       assert(previous.identities?.A && previous.identities?.B && previous.identities?.C);
       for (const name of ['A', 'B']) assert(previous.cleanup.some(row => row.name === `${name}:natural-close` && row.status === 'pass' && row.lifecycle.naturalExit));
-      report.continuation = { previousOutput: opts['continue-from'], previousResultSHA256: await fileHash(previousFile), originalIdentities: previous.identities, originalTopology: previous.topology, originalFreshStores: true };
+      report.continuation = { previousOutput: opts['continue-from'], previousResultSHA256, originalIdentities: previous.identities, originalTopology: previous.topology, originalFreshStores: true,
+        buildTransition: { previousBinarySHA256: previous.binary.sha256, currentBinarySHA256: inputSHA, changed: previous.binary.sha256 !== inputSHA, reason: previous.binary.sha256 === inputSHA ? 'same-frozen-build' : record.continuationBuild.reason } };
     }
     if (opts['retained-forward']) {
       retained = JSON.parse(await readFile(opts['retained-forward'], 'utf8'));
@@ -206,12 +222,23 @@ export async function run(argv = process.argv.slice(2)) {
     for (const name of ['A', 'B']) {
       const directory = previous ? previous.processes.find(row => row.name === name).directory : resolve(output, `store-${name}`);
       if (!previous) await mkdir(directory);
-      const app = new NativeApp(binary, directory, { name }); apps.push(app);
+      report.phase = `${name}:native-ready`;
+      const app = new NativeApp(binary, directory, { name, env: { NOTES_SYNC_E2E_SLOT: name === 'A' ? 'left' : 'right' } }); apps.push(app);
       const ready = await app.ready(); assert(['tauri://localhost', 'http://tauri.localhost'].includes(ready.location));
       report.processes.push({ name, pid: app.child.pid, directory, ready });
       if (name === 'A') a = new Desktop(app); else b = new Desktop(app);
     }
     assert.notEqual(apps[0].child.pid, apps[1].child.pid);
+    for (const app of apps) {
+      const clock = await app.evaluate(`(async()=>{
+        let raf=0,timer=0,finished=false;const began=performance.now();
+        const tick=()=>{if(!finished){raf++;requestAnimationFrame(tick);}};requestAnimationFrame(tick);
+        const handle=setInterval(()=>timer++,25);await new Promise(done=>setTimeout(done,250));
+        finished=true;clearInterval(handle);return{raf,timer,elapsedMs:Math.round(performance.now()-began),visibility:document.visibilityState};
+      })()`);
+      report.observations.push({ name: `${app.name}:render-clock-with-both-windows`, ...clock });
+      assert(clock.raf > 0 && clock.timer > 0, 'Both owned native webviews advance actual render and timer clocks');
+    }
     report.phase = 'fresh-desktop-isolation';
     const [initialA, initialB] = await Promise.all([a.sync('sync.status'), b.sync('sync.status')]);
     if (!previous) { assert.equal(initialA.state, 'disabled'); assert.equal(initialB.state, 'disabled'); }
