@@ -17,7 +17,7 @@
 | 默认 sync-settings 桌面 | 56 项通过，无 page error | `sync-settings-02/` |
 | 生产 debug 隔离检查 | 通过 | `production-01/` |
 
-账户截图已查看 320/390/1280、浅深主题、极大字号：长账号折行、正文独立滚动、手机固定标题/返回/完成，未发现横向溢出，触达尺寸检查通过。完整账户五档字号、所有迟到回跳/生命周期组合、真实原生认证与跨端收敛均尚未验收。旧 Preferences 定向组覆盖自身五档字号。
+初始检查点截图已查看 320/390/1280、浅深主题、极大字号：长账号折行、正文独立滚动、手机固定标题/返回/完成，未发现横向溢出，触达尺寸检查通过。当时完整账户五档字号、迟到生命周期矩阵尚未执行，恢复阶段的补验结果见下文。真实原生认证与跨端收敛仍尚未验收。
 
 早期失败保留在本地：`preferences-01/` 是异步受控复选框被即时 uncheck 断言误判，改为等待真实保存后断言；`preferences-02/` 是旧焦点断言未包含已有“界面细节”末尾控件，截图确认焦点正确后更新断言；`sync-settings-01/` 是生成的 HTML 证据触发 Vite HMR，debug watcher 已排除 verification 目录；`account-p2-03/` 检出取消失败后等待界面消失，已随事务互斥修复。上述失败未删除，复跑结果如表。
 
@@ -37,3 +37,17 @@ pnpm debug check-production --production dist --out docs/verification/account109
 ```
 
 **Fixture 边界：**浏览器运行真实 React App、事件处理器、账户 IPC 包装和 DOM；`scripts/debug/account-fixture.mjs` 仅提供显式 JS IPC 状态/ACK。它不执行系统浏览器授权、Logto 换票、JWT 校验、Vercel/Redis/CyberGrid、Rust 常驻 Runtime、真实设备发现/传输或笔记合并。返回状态和设备均为测试数据，不能作为这些能力已交付的证据。
+
+## 恢复阶段：状态与生命周期补验
+
+合入 `main deafcfbd` 的提交为 `532ba1f7`，UI 写集保留；真实执行短用例已独立提交为 `75e0ed84`，见 [ACCOUNT-TEST-CASES.md](../ACCOUNT-TEST-CASES.md)。当前 DTO 与架构及 Native 的类型草稿字段一致，无字段变更；草稿不代表原生命令已经注册，生产能力门控仍关闭。
+
+新增修复：认证完成、取消和退出移除当前焦点按钮后回到有效账户控件；不会抢走设置页头或分类焦点；新增安全状态的 polite/atomic 播报；旧登录 retry 在权威状态已变为 authorizing 时改为查询状态；后台确认退出后清除旧错误/确认；认证回跳 `state_mismatch` 不再误分类为资料库归属错误；失效授权时禁用同步开关；登录前可见首次合并说明。
+
+补验结果：`pnpm typecheck` / `pnpm build` 通过；账户桌面 **119** 项、手机浏览器 **120** 项通过，0 page error；默认 Preferences 桌面 **146** 项、sync-settings **56** 项通过。运行命令仍为上方定向组，不运行旧全套。
+
+- 两端账户组各包含 20 个可控迟到 IPC 组合：signIn/signUp × 取消/切分类/关闭重开/renderer reload × 旧成功/旧失败，及 status/syncNow × 旧成功/旧失败的退出/重开边界。断言旧 profile、错误、成功提示不可覆盖新权威状态，关页不会发出 cancel。此处 renderer 生命周期是浏览器重载，不能代替 native 进程重启或 OAuth 回跳校验。
+- 两端各执行五档字号 × 320/390/1280 × 浅深 × signedOut/ready，共 **60** 个布局组合；检查水平溢出、28/44px 触达、页头可达和最后操作可滚动触达。查看了极小/极大字号截图及接触表，未发现溢出或被遮挡的登录操作。所有像素和设备状态来自合成库。
+- 本地证据：`matrix-desktop-02/`、`matrix-mobile-02/`、`preferences-resume-01/`、`sync-resume-01/` 和 `typecheck-resume-01.log`、`build-resume-01.log`。`matrix-desktop-01/` 保留了刻意挂起 IPC 时错误等待全局 idle 的驱动失败；矩阵已改为等待明确 DOM 状态后释放响应。
+
+待接线缺口：已提交并注册的 native `account_command`、Pauli 认证、server enrollment 和可追溯候选 App 就绪后，才切本分支真实能力并按短用例执行隔离双桌面验收。当前没有使用外部账户、操作 Android、启动用户已有资料库或将 fixture 结果描述为自动同步成功。

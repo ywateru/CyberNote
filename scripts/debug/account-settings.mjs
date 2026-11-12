@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 import { api, idle, saveJSON } from "./runtime.mjs";
+import { runAccountMatrix } from "./account-matrix.mjs";
 
 // Review checkpoint for existing account109 UI. Actual React handlers with an
 // explicit JS IPC fixture; this does not authenticate or contact any service.
@@ -18,7 +19,7 @@ export async function runAccountSettings(runtime, { command, check, output }) {
   check("Read-only status leaves the local library and identity untouched", before === JSON.stringify(backend.workspace) && calls("signIn") === 0);
   for (const type of ["signIn", "signUp"]) {
     await command(`account.${type}`);
-    check(`${type} uses the actual handler and displays browser waiting`, calls(type) === 1 && await root.getByText("正在等待登录", { exact: true }).isVisible());
+    check(`${type} uses the actual handler and displays browser waiting`, calls(type) === 1 && await root.getByRole("heading", { name: "正在等待登录", exact: true }).isVisible());
     await root.getByRole("button", { name: "取消登录", exact: true }).click();
     await page.waitForSelector('[data-account-state="signedOut"]');
   }
@@ -154,5 +155,6 @@ export async function runAccountSettings(runtime, { command, check, output }) {
     finally { window.isTauri = saved; }
   });
   check("Ordinary browser has no fake account fallback", browser.includes("已安装"));
-  await saveJSON(resolve(output, "account-boundary.json"), { real: "React App, account-command wrapper, actual UI handlers and DOM", fixture: "JS account_command status and ACK only; no Logto/Vercel/Redis/CyberGrid/native-runtime/device proof", scope: runtime.metadata, incomplete: "Full authorization late-callback matrix, all font sizes, native lifecycle and authentication chain remain unverified at this checkpoint." });
+  await runAccountMatrix(runtime, { command, check, output });
+  await saveJSON(resolve(output, "account-boundary.json"), { real: "React App, account-command wrapper, actual UI handlers and DOM", fixture: "JS account_command status and ACK only; no Logto/Vercel/Redis/CyberGrid/native-runtime/device proof", scope: runtime.metadata, incomplete: "Native callback validation, native lifetime/authentication and actual two-desktop automatic sync remain unverified; UI delayed-IPC and all-font matrices use explicit fixtures." });
 }
