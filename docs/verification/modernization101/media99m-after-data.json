@@ -1,0 +1,1894 @@
+{
+  "schema": 1,
+  "baselineDirectory": "/private/tmp/cybernote-delivery/artifacts/media99-baseline-run4",
+  "afterDirectory": "/private/tmp/cybernote-delivery/artifacts/media99m-after-run1",
+  "configuration": {
+    "before": {
+      "schema": 1,
+      "store": {
+        "directory": "/private/tmp/cybernote-delivery/artifacts/media99-baseline-run4/store",
+        "sqliteSha256": "67c89bf58a7fdff7ce1e64b601a2d344cfe8f1d869b9c717b560ac3e407a62bf",
+        "attachmentHardlinks": 503,
+        "logicalOriginalBytes": 715371216,
+        "newOriginalBytes": 0
+      },
+      "startupNote": "9a2f06ae-27db-46c7-8531-209f9b04c81f",
+      "source": {
+        "sourceRevision": "84f2c896a4bfb6a4e3d48a8d51aff7a2471dbfa3",
+        "sourceFingerprint": "2f77b076c00cc67416d7cdcbad08d85e2e4dded3cee056d987a9c001b3d687d2",
+        "sourceDirty": true,
+        "inputCount": 372
+      },
+      "toolSources": {
+        "generate-fixture.py": "84dd5926511c829ec1e95fa73781cabbc03d9f1ac64514c875994efb2fd392fa",
+        "media-seeder.rs": "ca016d2ebd54f0350fbb72a0ae6873cd82c26fa858559e40abdb54444e5cfbb4",
+        "build-harness.mjs": "d0b8e09aa6f59e886a238af8201ed1dd5ad834bf84f3fcb81055aba1c5235472",
+        "build-frontend.mjs": "55cb7823a606a4bf23e929efa05be8aa462a32cf926c259e0b5b7b1988c17e6a",
+        "run.mjs": "12f3488c0e09435fa7c0d3711b076926b33505f297e34f935cea31028ed71d49",
+        "trace-transport.mjs": "3b2e88cdb6a74d4df326eac79d0f4c8d027d5078d8251f1d43cf0aeb276b5871",
+        "line-transport.mjs": "589573dff58b839fc7fa367287c03b0cd718604e0d23283467c5b7edfa23b82a",
+        "browser-probes.mjs": "a6b86f94385d53a802da6fac1ae07c4c01bb9bfc6f43f04d1e69e0308d1fd589",
+        "check-tools.mjs": "40a014a1905465189c5757cb01a3521346b3c88ffdd2834620cf1ecc36dab4b3",
+        "prepare-store.mjs": "6d54a4d9db436564cc3f84ceffe7c807a232b4f845064008046503b71a360793"
+      },
+      "frontendMetadata": {
+        "source": {
+          "sourceRevision": "84f2c896a4bfb6a4e3d48a8d51aff7a2471dbfa3",
+          "sourceFingerprint": "2f77b076c00cc67416d7cdcbad08d85e2e4dded3cee056d987a9c001b3d687d2",
+          "sourceDirty": true,
+          "inputCount": 372
+        },
+        "mode": "isolated-static-debug-bundle",
+        "note": "Metadata recovered from original run configuration; exact existing frontend built from this source before any product changes."
+      },
+      "fixture": {
+        "id": "media99-large-v1",
+        "png": 100,
+        "jpeg": 350,
+        "svg": 50,
+        "audioSeconds": 5400,
+        "audioRate": 8000,
+        "videoSeconds": 96,
+        "originalLimitBytes": 943718400
+      },
+      "fixtureManifestSha256": "3ee2813ccb7de3f7b99cf84e6f1eea7d8658aa14addba6674ee53a75fe516351",
+      "originalBytes": 715371216,
+      "fixtureDirectory": "/private/tmp/cybernote-delivery/artifacts/media99-fixture",
+      "transport": {
+        "path": "/private/tmp/cybernote-delivery/artifacts/media99-baseline-harness/current-transport",
+        "sha256": "f2ccb77a82fbe3986f956b368d0a41fe5a09e9e9118c912c676367422a44a6cf"
+      },
+      "frontend": "/private/tmp/cybernote-delivery/artifacts/media99-baseline-run1/frontend",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "transportTimeoutMs": 120000,
+      "transportMaxLineBytes": 188743680,
+      "scrollStepMs": 100,
+      "rssIntervalMs": 500,
+      "lineReader": "measurement-only segmented reader, one concatenate per response; same real Rust binary/protocol, no existing runtime modifications",
+      "coldDefinition": "New owned Chrome process/profile and Rust process; fresh HTTP/browser caches. OS disk cache is NOT evicted; fixture verification/seeding may have warmed it.",
+      "hotDefinition": "Same Chrome/Rust processes; page reload, application Blob lifetimes recreated; HTTP/OS caches retained.",
+      "nativeScope": "Real production Rust Store/Session + real React/Tiptap App and Chrome media decoder. Tauri/OS window shell simulated; no Mac Tauri or Android App RSS/device claim.",
+      "observerScope": "Real JSON/Base64 stdin protocol (linear bounded line observer) and HTTP IPC bridge; hashing observer and bridge allocations are measured separately in Node, not native App RSS. No simulated attachment bytes or delays.",
+      "startedAt": "2026-11-09T05:26:09.135Z",
+      "platform": "darwin",
+      "arch": "arm64",
+      "host": "ProductName:\t\tmacOS\nProductVersion:\t\t26.4\nBuildVersion:\t\t25E246",
+      "memoryBytes": 34359738368,
+      "freeBytesAtStart": 19993608192,
+      "browser": {
+        "version": "156.0.8078.80",
+        "headless": true,
+        "executable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      }
+    },
+    "after": {
+      "schema": 3,
+      "acceptedCandidate": {
+        "revision": "1507d66a152ac2ac9838d2bcd37791449135a370",
+        "fingerprint": "4e143c3d8d459ce2f26a699c691ba58b188fc6b58a9e3838b1c8852422e8a904",
+        "inputCount": 434,
+        "chrome": "156.0.8078.80",
+        "fixtureManifestSHA256": "3ee2813ccb7de3f7b99cf84e6f1eea7d8658aa14addba6674ee53a75fe516351",
+        "fixtureMapSHA256": "7e2e17411a078e0d38b9819ec2c8f2efe41968303d89ed59963100ca5f61f27c",
+        "fixtureSQLiteSHA256": "67c89bf58a7fdff7ce1e64b601a2d344cfe8f1d869b9c717b560ac3e407a62bf",
+        "samples": 503,
+        "originalBytes": 715371216
+      },
+      "fixtureBefore": {
+        "manifestSHA256": "3ee2813ccb7de3f7b99cf84e6f1eea7d8658aa14addba6674ee53a75fe516351",
+        "mapSHA256": "7e2e17411a078e0d38b9819ec2c8f2efe41968303d89ed59963100ca5f61f27c",
+        "sqliteSHA256": "67c89bf58a7fdff7ce1e64b601a2d344cfe8f1d869b9c717b560ac3e407a62bf",
+        "samples": 503,
+        "bytes": 715371216,
+        "originalsStreamHashed": true
+      },
+      "mode": "formal",
+      "store": {
+        "directory": "/private/tmp/cybernote-delivery/artifacts/media99m-after-run1/store",
+        "sqliteSha256": "67c89bf58a7fdff7ce1e64b601a2d344cfe8f1d869b9c717b560ac3e407a62bf",
+        "attachmentHardlinks": 503,
+        "logicalOriginalBytes": 715371216,
+        "newOriginalBytes": 0
+      },
+      "startupNote": "9a2f06ae-27db-46c7-8531-209f9b04c81f",
+      "source": {
+        "sourceRevision": "1507d66a152ac2ac9838d2bcd37791449135a370",
+        "sourceFingerprint": "4e143c3d8d459ce2f26a699c691ba58b188fc6b58a9e3838b1c8852422e8a904",
+        "sourceDirty": true,
+        "inputCount": 434
+      },
+      "toolSources": {
+        "generate-fixture.py": "84dd5926511c829ec1e95fa73781cabbc03d9f1ac64514c875994efb2fd392fa",
+        "media-seeder.rs": "ca016d2ebd54f0350fbb72a0ae6873cd82c26fa858559e40abdb54444e5cfbb4",
+        "build-harness.mjs": "d0b8e09aa6f59e886a238af8201ed1dd5ad834bf84f3fcb81055aba1c5235472",
+        "build-frontend.mjs": "55cb7823a606a4bf23e929efa05be8aa462a32cf926c259e0b5b7b1988c17e6a",
+        "run.mjs": "fd2376ec04828d20212a62588785735d7a717d4aea686da364ae474efc9bd2af",
+        "trace-transport.mjs": "3b2e88cdb6a74d4df326eac79d0f4c8d027d5078d8251f1d43cf0aeb276b5871",
+        "line-transport.mjs": "589573dff58b839fc7fa367287c03b0cd718604e0d23283467c5b7edfa23b82a",
+        "browser-probes.mjs": "a6b86f94385d53a802da6fac1ae07c4c01bb9bfc6f43f04d1e69e0308d1fd589",
+        "check-tools.mjs": "40a014a1905465189c5757cb01a3521346b3c88ffdd2834620cf1ecc36dab4b3",
+        "prepare-store.mjs": "6d54a4d9db436564cc3f84ceffe7c807a232b4f845064008046503b71a360793",
+        "run-media.mjs": "1158e8c8cd93bbbf9ea2fbf8ff6f67f11a18012ea8685adceb4e36460638ac46",
+        "media-trace.mjs": "8f18d8a584483f511cbbf198295b6367000087d57c7a5804859a27e452a91ac9",
+        "media-transport.rs": "53d71c71fea9faf84c9e60233c94bb0ac445652d8d3e996fab231198cf851d7f",
+        "build-media-harness.mjs": "88e49e227a721a7595284458a9a904670bec17755ebc315383af88ab575a655c",
+        "media-summary.mjs": "9a3e8f9c1f00da7b5cab4271b44cc509acd8e51af561424626ea49f8b72a2040",
+        "check-media-tools.mjs": "46ec1fed7a42fa020f0caad83b83cd05dc67c68f000e86e0822b312e5f258fff",
+        "media-metrics.mjs": "8168d275b5f741e5e3758770d4e886fa8392d7fdfdda2f683a1b62b40ed16e7a",
+        "media-macos.rs": "9651d7db74171b2df2c61ab64a5d8242899c9ab1a7464af598a8c9f3f89f9463",
+        "media-native-build.rs": "4c4100e8ff9b4673565805b61c1b82aff9c6057aa7c3f170ffe8a51247d8e54a",
+        "media-observer.rs": "d0b979916ba9b254b03dad77f7d8aaa8ff479670c1f2464117066ab26cec9a4c",
+        "extract-media-provider.mjs": "3791f581f4509497b36d777df045317729af8e2a0e0b286e5ec291177f8ef69a",
+        "media-candidate.mjs": "6cc8b2d1b977f52bc69eca726835e5ba08769499faff864015718996b975b9d5"
+      },
+      "frontendMetadata": {
+        "source": {
+          "sourceRevision": "1507d66a152ac2ac9838d2bcd37791449135a370",
+          "sourceFingerprint": "4e143c3d8d459ce2f26a699c691ba58b188fc6b58a9e3838b1c8852422e8a904",
+          "sourceDirty": true,
+          "inputCount": 434
+        },
+        "mode": "isolated-static-debug-bundle",
+        "note": "Real App; development/debug branches enabled for semantic navigation. No Vite HMR, no simulated attachment bytes."
+      },
+      "fixture": {
+        "id": "media99-large-v1",
+        "png": 100,
+        "jpeg": 350,
+        "svg": 50,
+        "audioSeconds": 5400,
+        "audioRate": 8000,
+        "videoSeconds": 96,
+        "originalLimitBytes": 943718400
+      },
+      "fixtureManifestSha256": "3ee2813ccb7de3f7b99cf84e6f1eea7d8658aa14addba6674ee53a75fe516351",
+      "originalBytes": 715371216,
+      "fixtureDirectory": "/private/tmp/cybernote-delivery/artifacts/media99-fixture",
+      "transport": {
+        "path": "/private/tmp/cybernote-delivery/artifacts/media99m-after-harness1/media-transport",
+        "sha256": "9052e06fbf175d5e7f0863ae56d67d40567a778e09cde9ee8b2d6f1780752322"
+      },
+      "frontend": "/private/tmp/cybernote-delivery/artifacts/media99m-after-frontend1",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "transportTimeoutMs": 120000,
+      "transportMaxLineBytes": 188743680,
+      "scrollStepMs": 100,
+      "rssIntervalMs": 500,
+      "lineReader": "measurement-only segmented reader, one concatenate per response; same real Rust binary/protocol, no existing runtime modifications",
+      "coldDefinition": "New owned Chrome process/profile and Rust process; fresh HTTP/browser caches. OS disk cache is NOT evicted; fixture verification/seeding may have warmed it.",
+      "hotDefinition": "Same Chrome/Rust processes; page reload, resource lifetimes recreated; Rust derivative cache retained. Playwright routing disables browser HTTP cache; Rust responses no-store. OS cache retained.",
+      "provider": "production Mac Provider mechanically extracted + exact thumbnail.m; no Tauri shell",
+      "nativeScope": "Real production Rust Store/Session, production Mac thumbnail provider on Mac, real React/Tiptap App and Chrome playback decoder. No Tauri/OS window shell, ATS or Android App RSS/device claim.",
+      "observerScope": "Real JSON IPC only; original/thumbnail media delivered directly by production Rust HTTP. Legacy Base64 calls, if any, observed as product failures rather than translated. Node bridge and hashing overhead counted separately, not native App RSS.",
+      "startedAt": "2026-11-09T12:04:48.230Z",
+      "platform": "darwin",
+      "arch": "arm64",
+      "host": "ProductName:\t\tmacOS\nProductVersion:\t\t26.4\nBuildVersion:\t\t25E246",
+      "memoryBytes": 34359738368,
+      "freeBytesAtStart": 6262398976,
+      "browser": {
+        "version": "156.0.8078.80",
+        "headless": true,
+        "executable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      }
+    }
+  },
+  "before": {
+    "total": {
+      "readCalls": 1917,
+      "originalBytes": 2608262764,
+      "uniqueAttachments": 503,
+      "returnedSHA256Mismatches": 0,
+      "observerHashMs": 1397.694158000243
+    },
+    "failures": [
+      {
+        "phase": "audio-90min",
+        "kind": "long-media",
+        "error": "page.waitForFunction: Timeout 60000ms exceeded."
+      }
+    ],
+    "phases": [
+      {
+        "name": "startup-cold",
+        "wallMs": 1418,
+        "workspaceReadyMs": 611.5,
+        "firstVisibleImage": {
+          "at": 458.40000009536743,
+          "phase": "startup-cold",
+          "width": 2000,
+          "height": 1500
+        },
+        "frames": {
+          "count": 69,
+          "p50": 16.699999999999932,
+          "p95": 16.799999999999955,
+          "max": 183.3
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 199,
+          "maxMs": 199
+        },
+        "peakJSHeap": 20693008,
+        "peakChromeRendererRSS": 647168000,
+        "peakChromeTotalRSS": 1253048320,
+        "peakRustRSS": 24084480,
+        "peakNodeBridgeRSS": 170721280,
+        "images": {
+          "nodes": 17,
+          "loaded": 17,
+          "visibleLoaded": 13
+        },
+        "retention": [],
+        "memorySamples": 3,
+        "legacyOriginalIPCBytes": 3443151,
+        "legacyReads": 22
+      },
+      {
+        "name": "startup-hot",
+        "wallMs": 1512,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 593.5999999046326,
+          "phase": "startup-hot",
+          "width": 2000,
+          "height": 1500
+        },
+        "frames": {
+          "count": 65,
+          "p50": 16.699999999999818,
+          "p95": 16.799999999999955,
+          "max": 350
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 356,
+          "maxMs": 356
+        },
+        "peakJSHeap": 30226912,
+        "peakChromeRendererRSS": 730660864,
+        "peakChromeTotalRSS": 1371619328,
+        "peakRustRSS": 24100864,
+        "peakNodeBridgeRSS": 174194688,
+        "images": {
+          "nodes": 17,
+          "loaded": 17,
+          "visibleLoaded": 13
+        },
+        "retention": [],
+        "memorySamples": 4,
+        "legacyOriginalIPCBytes": 3443151,
+        "legacyReads": 22
+      },
+      {
+        "name": "gallery-open",
+        "wallMs": 1323,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 1818.7000002861023,
+          "phase": "gallery-open",
+          "width": 1600,
+          "height": 1200
+        },
+        "frames": {
+          "count": 53,
+          "p50": 16.699999999999818,
+          "p95": 33.30000000000018,
+          "max": 233.29999999999995
+        },
+        "longTasks": {
+          "count": 3,
+          "totalMs": 462,
+          "maxMs": 232
+        },
+        "peakJSHeap": 85631604,
+        "peakChromeRendererRSS": 856276992,
+        "peakChromeTotalRSS": 1461223424,
+        "peakRustRSS": 29818880,
+        "peakNodeBridgeRSS": 180404224,
+        "images": {
+          "nodes": 21,
+          "loaded": 21,
+          "visibleLoaded": 12
+        },
+        "retention": [],
+        "memorySamples": 4,
+        "legacyOriginalIPCBytes": 10382129,
+        "legacyReads": 16
+      },
+      {
+        "name": "gallery-scroll-1",
+        "wallMs": 13309,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 3134.5999999046326,
+          "phase": "gallery-scroll-1",
+          "width": 1600,
+          "height": 1248
+        },
+        "frames": {
+          "count": 789,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 150
+        },
+        "longTasks": {
+          "count": 0,
+          "totalMs": 0,
+          "maxMs": 0
+        },
+        "peakJSHeap": 163824388,
+        "peakChromeRendererRSS": 1573011456,
+        "peakChromeTotalRSS": 2155397120,
+        "peakRustRSS": 35471360,
+        "peakNodeBridgeRSS": 197312512,
+        "images": {
+          "nodes": 5,
+          "loaded": 5,
+          "visibleLoaded": 0
+        },
+        "retention": [
+          {
+            "label": "natural-retention",
+            "jsHeapUsed": 109942768,
+            "chromeRendererRSS": 1573011456,
+            "rustRSS": 35471360,
+            "nodeRSS": 181190656
+          },
+          {
+            "label": "forced-GC-retention",
+            "jsHeapUsed": 48958192,
+            "chromeRendererRSS": 1361281024,
+            "rustRSS": 35471360,
+            "nodeRSS": 181403648
+          }
+        ],
+        "memorySamples": 31,
+        "legacyOriginalIPCBytes": 1030010298,
+        "legacyReads": 974
+      },
+      {
+        "name": "gallery-scroll-2",
+        "wallMs": 13862,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": null,
+        "frames": {
+          "count": 826,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "max": 50.10000000000218
+        },
+        "longTasks": {
+          "count": 2,
+          "totalMs": 113,
+          "maxMs": 63
+        },
+        "peakJSHeap": 177379672,
+        "peakChromeRendererRSS": 1723662336,
+        "peakChromeTotalRSS": 2346516480,
+        "peakRustRSS": 390627328,
+        "peakNodeBridgeRSS": 1345028096,
+        "images": {
+          "nodes": 5,
+          "loaded": 5,
+          "visibleLoaded": 0
+        },
+        "retention": [
+          {
+            "label": "natural-retention",
+            "jsHeapUsed": 175280292,
+            "chromeRendererRSS": 1139425280,
+            "rustRSS": 390578176,
+            "nodeRSS": 1345028096
+          }
+        ],
+        "memorySamples": 30,
+        "legacyOriginalIPCBytes": 978594981,
+        "legacyReads": 860
+      },
+      {
+        "name": "gallery-leave",
+        "wallMs": 2253,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 31635.400000095367,
+          "phase": "gallery-leave",
+          "width": 2000,
+          "height": 1500
+        },
+        "frames": {
+          "count": 123,
+          "p50": 16.700000000000728,
+          "p95": 16.799999999995634,
+          "max": 116.70000000000073
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 134,
+          "maxMs": 134
+        },
+        "peakJSHeap": 261754300,
+        "peakChromeRendererRSS": 1413824512,
+        "peakChromeTotalRSS": 2035826688,
+        "peakRustRSS": 390578176,
+        "peakNodeBridgeRSS": 1459847168,
+        "images": {
+          "nodes": 5,
+          "loaded": 5,
+          "visibleLoaded": 2
+        },
+        "retention": [
+          {
+            "label": "forced-GC-after-leave",
+            "jsHeapUsed": 16612380,
+            "chromeRendererRSS": 930971648,
+            "rustRSS": 390578176,
+            "nodeRSS": 1440792576
+          }
+        ],
+        "memorySamples": 7,
+        "legacyOriginalIPCBytes": 2780044,
+        "legacyReads": 7
+      },
+      {
+        "name": "audio-90min",
+        "wallMs": 61224,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 92902,
+          "phase": "audio-90min",
+          "width": 2000,
+          "height": 1500
+        },
+        "frames": {
+          "count": 3641,
+          "p50": 16.69999999999709,
+          "p95": 16.70000000001164,
+          "max": 366.59999999999854
+        },
+        "longTasks": {
+          "count": 2,
+          "totalMs": 426,
+          "maxMs": 374
+        },
+        "peakJSHeap": 299327592,
+        "peakChromeRendererRSS": 1911652352,
+        "peakChromeTotalRSS": 2542223360,
+        "peakRustRSS": 391151616,
+        "peakNodeBridgeRSS": 1580728320,
+        "images": {
+          "nodes": 7,
+          "loaded": 7,
+          "visibleLoaded": 6
+        },
+        "retention": [],
+        "memorySamples": 123,
+        "legacyOriginalIPCBytes": 172800088,
+        "legacyReads": 2
+      },
+      {
+        "name": "video-faststart",
+        "wallMs": 15072,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 95231.80000019073,
+          "phase": "video-faststart",
+          "width": 2000,
+          "height": 1500
+        },
+        "frames": {
+          "count": 832,
+          "p50": 16.69999999999709,
+          "p95": 16.79999999998836,
+          "max": 350
+        },
+        "longTasks": {
+          "count": 8,
+          "totalMs": 1182,
+          "maxMs": 352
+        },
+        "peakJSHeap": 389918636,
+        "peakChromeRendererRSS": 1449197568,
+        "peakChromeTotalRSS": 1981612032,
+        "peakRustRSS": 390643712,
+        "peakNodeBridgeRSS": 1248313344,
+        "images": {
+          "nodes": 7,
+          "loaded": 7,
+          "visibleLoaded": 6
+        },
+        "retention": [],
+        "memorySamples": 30,
+        "legacyOriginalIPCBytes": 193508554,
+        "legacyReads": 2
+      },
+      {
+        "name": "video-tail",
+        "wallMs": 9589,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 110410.7000002861,
+          "phase": "video-tail",
+          "width": 2000,
+          "height": 1500
+        },
+        "frames": {
+          "count": 523,
+          "p50": 16.69999999999709,
+          "p95": 16.79999999998836,
+          "max": 350
+        },
+        "longTasks": {
+          "count": 4,
+          "totalMs": 814,
+          "maxMs": 353
+        },
+        "peakJSHeap": 537992316,
+        "peakChromeRendererRSS": 1811890176,
+        "peakChromeTotalRSS": 2545778688,
+        "peakRustRSS": 378241024,
+        "peakNodeBridgeRSS": 1292451840,
+        "images": {
+          "nodes": 7,
+          "loaded": 7,
+          "visibleLoaded": 6
+        },
+        "retention": [],
+        "memorySamples": 19,
+        "legacyOriginalIPCBytes": 193508554,
+        "legacyReads": 2
+      },
+      {
+        "name": "final-leave",
+        "wallMs": 2719,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 120146.80000019073,
+          "phase": "final-leave",
+          "width": 2000,
+          "height": 1500
+        },
+        "frames": {
+          "count": 139,
+          "p50": 16.69999999999709,
+          "p95": 16.80000000000291,
+          "max": 333.3000000000029
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 359,
+          "maxMs": 359
+        },
+        "peakJSHeap": 198592728,
+        "peakChromeRendererRSS": 1315848192,
+        "peakChromeTotalRSS": 2111029248,
+        "peakRustRSS": 383729664,
+        "peakNodeBridgeRSS": 1290371072,
+        "images": {
+          "nodes": 12,
+          "loaded": 12,
+          "visibleLoaded": 8
+        },
+        "retention": [
+          {
+            "label": "forced-GC-final",
+            "jsHeapUsed": 16936848,
+            "chromeRendererRSS": 841334784,
+            "rustRSS": 383729664,
+            "nodeRSS": 905232384
+          }
+        ],
+        "memorySamples": 8,
+        "legacyOriginalIPCBytes": 19791814,
+        "legacyReads": 10
+      }
+    ],
+    "minimumFreeBytes": 19584450560,
+    "maximumObserverMs": 276.41825000000244,
+    "rawSHA256": {
+      "audio-90min.json": "abcd3c31fd06e689e6c21d09770272bf40bacc0b2cdef4ee0076af35dd1baff6",
+      "configuration.json": "dc90013f470dd4e34c0b69d186ff93ee1a4e3381dea02c604ae7b2bae47c5aba",
+      "integrity-check.json": "5f352103e49a1fd35ce7b79456de7da5bea9fb6743ec6733b82c0e56c10cfc3c",
+      "measured-runner.mjs": "12f3488c0e09435fa7c0d3711b076926b33505f297e34f935cea31028ed71d49",
+      "memory.jsonl": "5916c0de80e692d30cfdc681d8d48289155a44fade51b73a10c5c522f70092a3",
+      "network.json": "b5597cc55a39b1166debd0a0cc711d5157e99d3cddcdfe8d980c7c2e2d79dabd",
+      "phases.json": "44ec49923242e01d24d35a05d49b3934c742371b28d5b5806df05aecb160a9d9",
+      "post-run-source-note.json": "592cd42ae07f5cf8f4105956756ff13fce4c6178d6fe14fd82f194ab9c40eed1",
+      "result.json": "4ac86ba29fa6d2ebb5aba4bf68e392a7022515b645f7a0ceaebca9024b8ab494",
+      "scroll-geometry.json": "629f295c6b4b4835bbafe03280262c186bebd856591871c8ed733e8ef30a1a70",
+      "transport.jsonl": "6588d56569a8db049cfb9db25d8307bc71d23c4fee7fa4ce33a51cd6b982e552",
+      "video-faststart.json": "db2d88a9557eb528bed75d87ebcde44135ecdad85fb869b3ec577a42fb8c1a39",
+      "video-tail.json": "81aa4715e724f87e7a14858db8ccef52bc12e10d0c55149989374df037657706"
+    }
+  },
+  "after": {
+    "totalCounters": {
+      "bytesRead": 135641462,
+      "readOperations": 2131,
+      "originalBytesRead": 68128559,
+      "originalReadOperations": 1041,
+      "thumbnailBytesRead": 67512903,
+      "thumbnailReadOperations": 1090,
+      "thumbnailGenerationAttempts": 391,
+      "thumbnailSourceLogicalBytes": 388726486,
+      "thumbnailOutputBytes": 116440314,
+      "thumbnailGenerations": 178,
+      "thumbnailHits": 175
+    },
+    "failures": [],
+    "phases": [
+      {
+        "name": "startup-cold",
+        "wallMs": 1491,
+        "workspaceReadyMs": 699.1999998092651,
+        "firstVisibleImage": {
+          "at": 544,
+          "phase": "startup-cold",
+          "width": 160,
+          "height": 120
+        },
+        "frames": {
+          "count": 69,
+          "p50": 16.69999999999999,
+          "p95": 16.700000000000045,
+          "max": 266.6
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 282,
+          "maxMs": 282
+        },
+        "peakJSHeap": 18815636,
+        "peakChromeRendererRSS": 557105152,
+        "peakChromeTotalRSS": 1130708992,
+        "peakRustRSS": 28540928,
+        "peakNodeBridgeRSS": 195018752,
+        "images": {
+          "nodes": 7,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "memorySamples": 4,
+        "runtime": {
+          "counters": {
+            "bytesRead": 107962,
+            "readOperations": 2,
+            "originalBytesRead": 0,
+            "originalReadOperations": 0,
+            "thumbnailBytesRead": 107962,
+            "thumbnailReadOperations": 2,
+            "thumbnailGenerationAttempts": 17,
+            "thumbnailSourceLogicalBytes": 3222064,
+            "thumbnailOutputBytes": 107962,
+            "thumbnailGenerations": 2,
+            "thumbnailHits": 0
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 0,
+              "activeStreams": 0,
+              "activeLeases": 0,
+              "cacheBytes": 0,
+              "cacheFiles": 0,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 63315,
+              "activeStreams": 0,
+              "activeLeases": 2,
+              "cacheBytes": 107962,
+              "cacheFiles": 2,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "startup-hot",
+        "wallMs": 1392,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 405.1000003814697,
+          "phase": "startup-hot",
+          "width": 160,
+          "height": 120
+        },
+        "frames": {
+          "count": 65,
+          "p50": 16.699999999999932,
+          "p95": 16.700000000000045,
+          "max": 249.89999999999998
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 269,
+          "maxMs": 269
+        },
+        "peakJSHeap": 20984860,
+        "peakChromeRendererRSS": 589594624,
+        "peakChromeTotalRSS": 1243021312,
+        "peakRustRSS": 28590080,
+        "peakNodeBridgeRSS": 167591936,
+        "images": {
+          "nodes": 7,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "memorySamples": 3,
+        "runtime": {
+          "counters": {
+            "bytesRead": 107962,
+            "readOperations": 2,
+            "originalBytesRead": 0,
+            "originalReadOperations": 0,
+            "thumbnailBytesRead": 107962,
+            "thumbnailReadOperations": 2,
+            "thumbnailGenerationAttempts": 15,
+            "thumbnailSourceLogicalBytes": 662931,
+            "thumbnailOutputBytes": 0,
+            "thumbnailGenerations": 0,
+            "thumbnailHits": 2
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 63315,
+              "activeStreams": 0,
+              "activeLeases": 2,
+              "cacheBytes": 107962,
+              "cacheFiles": 2,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 63315,
+              "activeStreams": 0,
+              "activeLeases": 4,
+              "cacheBytes": 107962,
+              "cacheFiles": 2,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "gallery-open",
+        "wallMs": 1458,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 1736.6000003814697,
+          "phase": "gallery-open",
+          "width": 160,
+          "height": 120
+        },
+        "frames": {
+          "count": 68,
+          "p50": 16.699999999999818,
+          "p95": 16.800000000000182,
+          "max": 233.29999999999995
+        },
+        "longTasks": {
+          "count": 2,
+          "totalMs": 366,
+          "maxMs": 233
+        },
+        "peakJSHeap": 45020412,
+        "peakChromeRendererRSS": 654721024,
+        "peakChromeTotalRSS": 1202569216,
+        "peakRustRSS": 31883264,
+        "peakNodeBridgeRSS": 171802624,
+        "images": {
+          "nodes": 10,
+          "loaded": 5,
+          "visibleLoaded": 5
+        },
+        "retention": [],
+        "memorySamples": 6,
+        "runtime": {
+          "counters": {
+            "bytesRead": 2696118,
+            "readOperations": 44,
+            "originalBytesRead": 0,
+            "originalReadOperations": 0,
+            "thumbnailBytesRead": 2696118,
+            "thumbnailReadOperations": 44,
+            "thumbnailGenerationAttempts": 16,
+            "thumbnailSourceLogicalBytes": 10382129,
+            "thumbnailOutputBytes": 2696118,
+            "thumbnailGenerations": 5,
+            "thumbnailHits": 0
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 63315,
+              "activeStreams": 0,
+              "activeLeases": 4,
+              "cacheBytes": 107962,
+              "cacheFiles": 2,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 7,
+              "cacheBytes": 2804080,
+              "cacheFiles": 7,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "gallery-scroll-1",
+        "wallMs": 13571,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 8425.5,
+          "phase": "gallery-scroll-1",
+          "width": 480,
+          "height": 360
+        },
+        "frames": {
+          "count": 812,
+          "p50": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "max": 33.29999999999973
+        },
+        "longTasks": {
+          "count": 0,
+          "totalMs": 0,
+          "maxMs": 0
+        },
+        "peakJSHeap": 74875168,
+        "peakChromeRendererRSS": 750272512,
+        "peakChromeTotalRSS": 1289682944,
+        "peakRustRSS": 57638912,
+        "peakNodeBridgeRSS": 186695680,
+        "images": {
+          "nodes": 10,
+          "loaded": 5,
+          "visibleLoaded": 5
+        },
+        "retention": [
+          {
+            "label": "natural-retention",
+            "jsHeapUsed": 62043252,
+            "chromeRendererRSS": 750272512,
+            "rustRSS": 33652736,
+            "nodeRSS": 186449920
+          },
+          {
+            "label": "forced-GC-retention",
+            "jsHeapUsed": 37496200,
+            "chromeRendererRSS": 679346176,
+            "rustRSS": 33652736,
+            "nodeRSS": 186695680
+          }
+        ],
+        "memorySamples": 31,
+        "runtime": {
+          "counters": {
+            "bytesRead": 12719138,
+            "readOperations": 207,
+            "originalBytesRead": 0,
+            "originalReadOperations": 0,
+            "thumbnailBytesRead": 12719138,
+            "thumbnailReadOperations": 207,
+            "thumbnailGenerationAttempts": 173,
+            "thumbnailSourceLogicalBytes": 97578533,
+            "thumbnailOutputBytes": 56235938,
+            "thumbnailGenerations": 94,
+            "thumbnailHits": 43
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 7,
+              "cacheBytes": 2804080,
+              "cacheFiles": 7,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 7,
+              "cacheBytes": 59040018,
+              "cacheFiles": 101,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "gallery-scroll-2",
+        "wallMs": 13516,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 17619.60000038147,
+          "phase": "gallery-scroll-2",
+          "width": 480,
+          "height": 360
+        },
+        "frames": {
+          "count": 811,
+          "p50": 16.700000000000728,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000291
+        },
+        "longTasks": {
+          "count": 0,
+          "totalMs": 0,
+          "maxMs": 0
+        },
+        "peakJSHeap": 63780596,
+        "peakChromeRendererRSS": 818937856,
+        "peakChromeTotalRSS": 1369587712,
+        "peakRustRSS": 59064320,
+        "peakNodeBridgeRSS": 203997184,
+        "images": {
+          "nodes": 10,
+          "loaded": 5,
+          "visibleLoaded": 5
+        },
+        "retention": [
+          {
+            "label": "natural-retention",
+            "jsHeapUsed": 57990768,
+            "chromeRendererRSS": 811204608,
+            "rustRSS": 35913728,
+            "nodeRSS": 203751424
+          },
+          {
+            "label": "forced-GC-retention",
+            "jsHeapUsed": 39076200,
+            "chromeRendererRSS": 740900864,
+            "rustRSS": 35913728,
+            "nodeRSS": 203997184
+          }
+        ],
+        "memorySamples": 30,
+        "runtime": {
+          "counters": {
+            "bytesRead": 42610216,
+            "readOperations": 692,
+            "originalBytesRead": 0,
+            "originalReadOperations": 0,
+            "thumbnailBytesRead": 42610216,
+            "thumbnailReadOperations": 692,
+            "thumbnailGenerationAttempts": 148,
+            "thumbnailSourceLogicalBytes": 72813437,
+            "thumbnailOutputBytes": 42359341,
+            "thumbnailGenerations": 70,
+            "thumbnailHits": 128
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 7,
+              "cacheBytes": 59040018,
+              "cacheFiles": 101,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 7,
+              "cacheBytes": 101399359,
+              "cacheFiles": 171,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "gallery-leave",
+        "wallMs": 2045,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 31231.10000038147,
+          "phase": "gallery-leave",
+          "width": 480,
+          "height": 360
+        },
+        "frames": {
+          "count": 117,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "max": 100.10000000000218
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 112,
+          "maxMs": 112
+        },
+        "peakJSHeap": 49891092,
+        "peakChromeRendererRSS": 784891904,
+        "peakChromeTotalRSS": 1324597248,
+        "peakRustRSS": 35979264,
+        "peakNodeBridgeRSS": 204996608,
+        "images": {
+          "nodes": 7,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [
+          {
+            "label": "forced-GC-after-leave",
+            "jsHeapUsed": 11829580,
+            "chromeRendererRSS": 714309632,
+            "rustRSS": 35831808,
+            "nodeRSS": 204865536
+          }
+        ],
+        "memorySamples": 7,
+        "runtime": {
+          "counters": {
+            "bytesRead": 107962,
+            "readOperations": 2,
+            "originalBytesRead": 0,
+            "originalReadOperations": 0,
+            "thumbnailBytesRead": 107962,
+            "thumbnailReadOperations": 2,
+            "thumbnailGenerationAttempts": 15,
+            "thumbnailSourceLogicalBytes": 662931,
+            "thumbnailOutputBytes": 0,
+            "thumbnailGenerations": 0,
+            "thumbnailHits": 2
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 7,
+              "cacheBytes": 101399359,
+              "cacheFiles": 171,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 4,
+              "cacheBytes": 101399359,
+              "cacheFiles": 171,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "audio-90min",
+        "wallMs": 1965,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 33502.300000190735,
+          "phase": "audio-90min",
+          "width": 160,
+          "height": 120
+        },
+        "frames": {
+          "count": 98,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999995634,
+          "max": 300
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 301,
+          "maxMs": 301
+        },
+        "peakJSHeap": 24407788,
+        "peakChromeRendererRSS": 771522560,
+        "peakChromeTotalRSS": 1399406592,
+        "peakRustRSS": 35831808,
+        "peakNodeBridgeRSS": 206946304,
+        "images": {
+          "nodes": 2,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "memorySamples": 6,
+        "runtime": {
+          "counters": {
+            "bytesRead": 9109504,
+            "readOperations": 139,
+            "originalBytesRead": 9109504,
+            "originalReadOperations": 139,
+            "thumbnailBytesRead": 0,
+            "thumbnailReadOperations": 0,
+            "thumbnailGenerationAttempts": 0,
+            "thumbnailSourceLogicalBytes": 0,
+            "thumbnailOutputBytes": 0,
+            "thumbnailGenerations": 0,
+            "thumbnailHits": 0
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 4,
+              "cacheBytes": 101399359,
+              "cacheFiles": 171,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 65536,
+              "activeStreams": 1,
+              "activeLeases": 5,
+              "cacheBytes": 101399359,
+              "cacheFiles": 171,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "video-faststart",
+        "wallMs": 1944,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 35557.7000002861,
+          "phase": "video-faststart",
+          "width": 160,
+          "height": 120
+        },
+        "frames": {
+          "count": 99,
+          "p50": 16.69999999999709,
+          "p95": 16.700000000004366,
+          "max": 266.70000000000437
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 288,
+          "maxMs": 288
+        },
+        "peakJSHeap": 27383568,
+        "peakChromeRendererRSS": 896925696,
+        "peakChromeTotalRSS": 1544208384,
+        "peakRustRSS": 53936128,
+        "peakNodeBridgeRSS": 208617472,
+        "images": {
+          "nodes": 2,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "memorySamples": 6,
+        "runtime": {
+          "counters": {
+            "bytesRead": 29383269,
+            "readOperations": 449,
+            "originalBytesRead": 29383269,
+            "originalReadOperations": 449,
+            "thumbnailBytesRead": 0,
+            "thumbnailReadOperations": 0,
+            "thumbnailGenerationAttempts": 1,
+            "thumbnailSourceLogicalBytes": 96754277,
+            "thumbnailOutputBytes": 121197,
+            "thumbnailGenerations": 1,
+            "thumbnailHits": 0
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 65536,
+              "activeStreams": 1,
+              "activeLeases": 5,
+              "cacheBytes": 101399359,
+              "cacheFiles": 171,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 6,
+              "cacheBytes": 101520556,
+              "cacheFiles": 172,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "video-tail",
+        "wallMs": 1982,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 37608,
+          "phase": "video-tail",
+          "width": 160,
+          "height": 120
+        },
+        "frames": {
+          "count": 102,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999995634,
+          "max": 283.40000000000146
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 293,
+          "maxMs": 293
+        },
+        "peakJSHeap": 43351956,
+        "peakChromeRendererRSS": 947568640,
+        "peakChromeTotalRSS": 1593344000,
+        "peakRustRSS": 55050240,
+        "peakNodeBridgeRSS": 183844864,
+        "images": {
+          "nodes": 2,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "memorySamples": 6,
+        "runtime": {
+          "counters": {
+            "bytesRead": 29635786,
+            "readOperations": 453,
+            "originalBytesRead": 29635786,
+            "originalReadOperations": 453,
+            "thumbnailBytesRead": 0,
+            "thumbnailReadOperations": 0,
+            "thumbnailGenerationAttempts": 1,
+            "thumbnailSourceLogicalBytes": 96754277,
+            "thumbnailOutputBytes": 121197,
+            "thumbnailGenerations": 1,
+            "thumbnailHits": 0
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 6,
+              "cacheBytes": 101520556,
+              "cacheFiles": 172,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 6,
+              "cacheBytes": 101641753,
+              "cacheFiles": 173,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      },
+      {
+        "name": "final-leave",
+        "wallMs": 2604,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 39679.800000190735,
+          "phase": "final-leave",
+          "width": 160,
+          "height": 120
+        },
+        "frames": {
+          "count": 137,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999995634,
+          "max": 283.3000000000029
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 289,
+          "maxMs": 289
+        },
+        "peakJSHeap": 39166388,
+        "peakChromeRendererRSS": 973357056,
+        "peakChromeTotalRSS": 1624834048,
+        "peakRustRSS": 71729152,
+        "peakNodeBridgeRSS": 173817856,
+        "images": {
+          "nodes": 7,
+          "loaded": 4,
+          "visibleLoaded": 3
+        },
+        "retention": [
+          {
+            "label": "forced-GC-final",
+            "jsHeapUsed": 16758888,
+            "chromeRendererRSS": 846954496,
+            "rustRSS": 69255168,
+            "nodeRSS": 168247296
+          }
+        ],
+        "memorySamples": 8,
+        "runtime": {
+          "counters": {
+            "bytesRead": 9163545,
+            "readOperations": 141,
+            "originalBytesRead": 0,
+            "originalReadOperations": 0,
+            "thumbnailBytesRead": 9163545,
+            "thumbnailReadOperations": 141,
+            "thumbnailGenerationAttempts": 5,
+            "thumbnailSourceLogicalBytes": 9895907,
+            "thumbnailOutputBytes": 14798561,
+            "thumbnailGenerations": 5,
+            "thumbnailHits": 0
+          },
+          "gauges": {
+            "start": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 6,
+              "cacheBytes": 101641753,
+              "cacheFiles": 173,
+              "cacheQuota": 268435456
+            },
+            "end": {
+              "peakReadBlock": 65536,
+              "activeStreams": 0,
+              "activeLeases": 6,
+              "cacheBytes": 116440314,
+              "cacheFiles": 178,
+              "cacheQuota": 268435456
+            }
+          }
+        }
+      }
+    ],
+    "minimumFreeBytes": 6145638400,
+    "maximumObserverMs": 76.86395900000025,
+    "rawSHA256": {
+      "audio-90min.json": "6ffb5b80ae8cbe49a8742818692bc96105c0782e40affb5904cda5732b3c1008",
+      "configuration.json": "dd47f96ca8440c985fb4b3128458369830e5160101ba83316cfc9100ed91be92",
+      "measured-runner.mjs": "1158e8c8cd93bbbf9ea2fbf8ff6f67f11a18012ea8685adceb4e36460638ac46",
+      "media.jsonl": "8930ea98112b512b25c0e47dc3b92e84cc02e7a24a7f5a3da0894f87cf67ef3c",
+      "memory.jsonl": "a483dedad1075ce076aa58c3cb7d7887d8be43a71ae16ce9919e481f7d5bb23d",
+      "network.json": "5067786d661fcb3e20e2fe020a98356876ea19775af63a23a86435fb2a3d6334",
+      "phases.json": "6fa703ee48df398f988c94270ea32579fe339d2348335fe60d4e63d1eacfb4e4",
+      "result.json": "3eb90f07164b777125010fa215548bfaf375570a95b70f83f471423b94a5474e",
+      "scroll-geometry.json": "1ef83aa9550a0071f324ac523cb6c433d6078ab852fcfe2a227065397052853a",
+      "video-faststart.json": "c6c52e1ce4131d000ae14a08ebf574066fed1b5730376a9b4bc953fae9e43602",
+      "video-tail.json": "f3e1469d17b5dbd99307608f0799931f4e3f541426506c0276431e89a650afcb"
+    },
+    "coverage": {
+      "raster": {
+        "registeredSamples": 450,
+        "acquireRequests": 351,
+        "successfulAcquires": 351,
+        "uniqueAttemptedAttachments": 169,
+        "uniqueSuccessfulAttachments": 169,
+        "uniqueFailedOnlyAttachments": 0,
+        "unattemptedSamples": 281,
+        "errors": {},
+        "httpRequests": 108,
+        "httpEncodedBytesIncludingHeaders": null,
+        "httpKnownEncodedBytesIncludingHeaders": 67015038,
+        "httpUnknownEncodedLengthRequests": 1,
+        "byPurpose": {
+          "original": {
+            "acquireRequests": 0,
+            "successfulAcquires": 0,
+            "uniqueAttemptedAttachments": 0,
+            "uniqueSuccessfulAttachments": 0,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 450,
+            "errors": {},
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          },
+          "thumbnail": {
+            "acquireRequests": 351,
+            "successfulAcquires": 351,
+            "uniqueAttemptedAttachments": 169,
+            "uniqueSuccessfulAttachments": 169,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 281,
+            "errors": {},
+            "httpRequests": 108,
+            "httpEncodedBytesIncludingHeaders": null,
+            "httpKnownEncodedBytesIncludingHeaders": 67015038,
+            "httpUnknownEncodedLengthRequests": 1
+          }
+        },
+        "originalHTTPRequests": 0,
+        "thumbnailHTTPRequests": 108,
+        "memoryScope": "Mixed-population run RSS; not an isolated raster memory measurement."
+      },
+      "svg": {
+        "registeredSamples": 50,
+        "acquireRequests": 213,
+        "successfulAcquires": 0,
+        "uniqueAttemptedAttachments": 50,
+        "uniqueSuccessfulAttachments": 0,
+        "uniqueFailedOnlyAttachments": 50,
+        "unattemptedSamples": 0,
+        "errors": {
+          "unsupported_media": 213
+        },
+        "httpRequests": 0,
+        "httpEncodedBytesIncludingHeaders": 0,
+        "httpKnownEncodedBytesIncludingHeaders": 0,
+        "httpUnknownEncodedLengthRequests": 0,
+        "byPurpose": {
+          "original": {
+            "acquireRequests": 0,
+            "successfulAcquires": 0,
+            "uniqueAttemptedAttachments": 0,
+            "uniqueSuccessfulAttachments": 0,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 50,
+            "errors": {},
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          },
+          "thumbnail": {
+            "acquireRequests": 213,
+            "successfulAcquires": 0,
+            "uniqueAttemptedAttachments": 50,
+            "uniqueSuccessfulAttachments": 0,
+            "uniqueFailedOnlyAttachments": 50,
+            "unattemptedSamples": 0,
+            "errors": {
+              "unsupported_media": 213
+            },
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          }
+        },
+        "originalHTTPRequests": 0,
+        "thumbnailHTTPRequests": 0,
+        "memoryScope": "Mixed-population run RSS; not an isolated svg memory measurement."
+      },
+      "audio": {
+        "registeredSamples": 1,
+        "acquireRequests": 1,
+        "successfulAcquires": 1,
+        "uniqueAttemptedAttachments": 1,
+        "uniqueSuccessfulAttachments": 1,
+        "uniqueFailedOnlyAttachments": 0,
+        "unattemptedSamples": 0,
+        "errors": {},
+        "httpRequests": 2,
+        "httpEncodedBytesIncludingHeaders": null,
+        "httpKnownEncodedBytesIncludingHeaders": 0,
+        "httpUnknownEncodedLengthRequests": 2,
+        "byPurpose": {
+          "original": {
+            "acquireRequests": 1,
+            "successfulAcquires": 1,
+            "uniqueAttemptedAttachments": 1,
+            "uniqueSuccessfulAttachments": 1,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 0,
+            "errors": {},
+            "httpRequests": 2,
+            "httpEncodedBytesIncludingHeaders": null,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 2
+          },
+          "thumbnail": {
+            "acquireRequests": 0,
+            "successfulAcquires": 0,
+            "uniqueAttemptedAttachments": 0,
+            "uniqueSuccessfulAttachments": 0,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 1,
+            "errors": {},
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          }
+        },
+        "originalHTTPRequests": 2,
+        "thumbnailHTTPRequests": 0,
+        "memoryScope": "Mixed-population run RSS; not an isolated audio memory measurement."
+      },
+      "video": {
+        "registeredSamples": 2,
+        "acquireRequests": 4,
+        "successfulAcquires": 4,
+        "uniqueAttemptedAttachments": 2,
+        "uniqueSuccessfulAttachments": 2,
+        "uniqueFailedOnlyAttachments": 0,
+        "unattemptedSamples": 0,
+        "errors": {},
+        "httpRequests": 6,
+        "httpEncodedBytesIncludingHeaders": null,
+        "httpKnownEncodedBytesIncludingHeaders": 25465586,
+        "httpUnknownEncodedLengthRequests": 3,
+        "byPurpose": {
+          "original": {
+            "acquireRequests": 2,
+            "successfulAcquires": 2,
+            "uniqueAttemptedAttachments": 2,
+            "uniqueSuccessfulAttachments": 2,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 0,
+            "errors": {},
+            "httpRequests": 6,
+            "httpEncodedBytesIncludingHeaders": null,
+            "httpKnownEncodedBytesIncludingHeaders": 25465586,
+            "httpUnknownEncodedLengthRequests": 3
+          },
+          "thumbnail": {
+            "acquireRequests": 2,
+            "successfulAcquires": 2,
+            "uniqueAttemptedAttachments": 2,
+            "uniqueSuccessfulAttachments": 2,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 0,
+            "errors": {},
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          }
+        },
+        "originalHTTPRequests": 6,
+        "thumbnailHTTPRequests": 0,
+        "memoryScope": "Mixed-population run RSS; not an isolated video memory measurement."
+      },
+      "file": {
+        "registeredSamples": 0,
+        "acquireRequests": 0,
+        "successfulAcquires": 0,
+        "uniqueAttemptedAttachments": 0,
+        "uniqueSuccessfulAttachments": 0,
+        "uniqueFailedOnlyAttachments": 0,
+        "unattemptedSamples": 0,
+        "errors": {},
+        "httpRequests": 0,
+        "httpEncodedBytesIncludingHeaders": 0,
+        "httpKnownEncodedBytesIncludingHeaders": 0,
+        "httpUnknownEncodedLengthRequests": 0,
+        "byPurpose": {
+          "original": {
+            "acquireRequests": 0,
+            "successfulAcquires": 0,
+            "uniqueAttemptedAttachments": 0,
+            "uniqueSuccessfulAttachments": 0,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 0,
+            "errors": {},
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          },
+          "thumbnail": {
+            "acquireRequests": 0,
+            "successfulAcquires": 0,
+            "uniqueAttemptedAttachments": 0,
+            "uniqueSuccessfulAttachments": 0,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 0,
+            "errors": {},
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          }
+        },
+        "originalHTTPRequests": 0,
+        "thumbnailHTTPRequests": 0,
+        "memoryScope": "Mixed-population run RSS; not an isolated file memory measurement."
+      },
+      "unmapped": {
+        "registeredSamples": 0,
+        "acquireRequests": 0,
+        "successfulAcquires": 0,
+        "uniqueAttemptedAttachments": 0,
+        "uniqueSuccessfulAttachments": 0,
+        "uniqueFailedOnlyAttachments": 0,
+        "unattemptedSamples": 0,
+        "errors": {},
+        "httpRequests": 7,
+        "httpEncodedBytesIncludingHeaders": 0,
+        "httpKnownEncodedBytesIncludingHeaders": 0,
+        "httpUnknownEncodedLengthRequests": 0,
+        "byPurpose": {
+          "original": {
+            "acquireRequests": 0,
+            "successfulAcquires": 0,
+            "uniqueAttemptedAttachments": 0,
+            "uniqueSuccessfulAttachments": 0,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 0,
+            "errors": {},
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          },
+          "thumbnail": {
+            "acquireRequests": 0,
+            "successfulAcquires": 0,
+            "uniqueAttemptedAttachments": 0,
+            "uniqueSuccessfulAttachments": 0,
+            "uniqueFailedOnlyAttachments": 0,
+            "unattemptedSamples": 0,
+            "errors": {},
+            "httpRequests": 0,
+            "httpEncodedBytesIncludingHeaders": 0,
+            "httpKnownEncodedBytesIncludingHeaders": 0,
+            "httpUnknownEncodedLengthRequests": 0
+          }
+        },
+        "originalHTTPRequests": 0,
+        "thumbnailHTTPRequests": 0,
+        "memoryScope": "Mixed-population run RSS; not an isolated unmapped memory measurement."
+      }
+    },
+    "media": {
+      "audio-90min": {
+        "before": {
+          "name": "audio-90min",
+          "sampleIndex": 500,
+          "noteId": "74cf2277-b885-42ad-96b7-5cb5646b1af4",
+          "attachmentId": "c1f8a8c8-06c0-4cdb-a0fb-c617a4bf6902",
+          "originalBytes": 86400044,
+          "ok": false,
+          "error": "page.waitForFunction: Timeout 60000ms exceeded.",
+          "elements": [
+            {
+              "tag": "AUDIO",
+              "connected": true,
+              "hasSrc": false,
+              "readyState": 0,
+              "networkState": 0,
+              "error": null
+            }
+          ],
+          "wallMs": 60414
+        },
+        "after": {
+          "name": "audio-90min",
+          "sampleIndex": 500,
+          "noteId": "74cf2277-b885-42ad-96b7-5cb5646b1af4",
+          "attachmentId": "c1f8a8c8-06c0-4cdb-a0fb-c617a4bf6902",
+          "originalBytes": 86400044,
+          "activation": {
+            "label": "\u64ad\u653e",
+            "beforeOriginalAcquires": 0,
+            "afterOriginalAcquires": 1
+          },
+          "metadataMs": 474,
+          "duration": 5400,
+          "firstPlayMs": 302,
+          "playing": true,
+          "seek": {
+            "target": 4860,
+            "at": 4860,
+            "error": null,
+            "readyState": 4,
+            "advanced": 4860.34306
+          },
+          "rearSeekMs": 416,
+          "ok": true,
+          "wallMs": 1201
+        }
+      },
+      "video-faststart": {
+        "before": {
+          "name": "video-faststart",
+          "sampleIndex": 501,
+          "noteId": "2eede356-760b-40e0-8bff-3df6f690c1d0",
+          "attachmentId": "48499677-3087-43c5-87ad-5eb52ef08a4e",
+          "originalBytes": 96754277,
+          "metadataMs": 13494,
+          "duration": 96,
+          "firstPlayMs": 317,
+          "playing": true,
+          "seek": {
+            "target": 86.4,
+            "at": 86.4,
+            "error": null,
+            "readyState": 4,
+            "advanced": 86.727563
+          },
+          "rearSeekMs": 424,
+          "ok": true,
+          "wallMs": 14244
+        },
+        "after": {
+          "name": "video-faststart",
+          "sampleIndex": 501,
+          "noteId": "2eede356-760b-40e0-8bff-3df6f690c1d0",
+          "attachmentId": "48499677-3087-43c5-87ad-5eb52ef08a4e",
+          "originalBytes": 96754277,
+          "activation": {
+            "label": "\u64ad\u653e\u89c6\u9891 video-faststart.mp4",
+            "beforeOriginalAcquires": 0,
+            "afterOriginalAcquires": 1
+          },
+          "metadataMs": 426,
+          "duration": 96,
+          "firstPlayMs": 301,
+          "playing": true,
+          "seek": {
+            "target": 86.4,
+            "at": 86.4,
+            "error": null,
+            "readyState": 4,
+            "advanced": 86.734117
+          },
+          "rearSeekMs": 436,
+          "ok": true,
+          "wallMs": 1180
+        }
+      },
+      "video-tail": {
+        "before": {
+          "name": "video-tail",
+          "sampleIndex": 502,
+          "noteId": "aa4307cd-6c26-4ac1-80e9-830e2dffa768",
+          "attachmentId": "4014e99e-e641-4819-8ee1-ac3cbf1c1b11",
+          "originalBytes": 96754277,
+          "metadataMs": 8031,
+          "duration": 96,
+          "firstPlayMs": 307,
+          "playing": true,
+          "seek": {
+            "target": 86.4,
+            "at": 86.4,
+            "error": null,
+            "readyState": 4,
+            "advanced": 86.718147
+          },
+          "rearSeekMs": 424,
+          "ok": true,
+          "wallMs": 8775
+        },
+        "after": {
+          "name": "video-tail",
+          "sampleIndex": 502,
+          "noteId": "aa4307cd-6c26-4ac1-80e9-830e2dffa768",
+          "attachmentId": "4014e99e-e641-4819-8ee1-ac3cbf1c1b11",
+          "originalBytes": 96754277,
+          "activation": {
+            "label": "\u64ad\u653e\u89c6\u9891 video-tail-metadata.mp4",
+            "beforeOriginalAcquires": 0,
+            "afterOriginalAcquires": 1
+          },
+          "metadataMs": 416,
+          "duration": 96,
+          "firstPlayMs": 301,
+          "playing": true,
+          "seek": {
+            "target": 86.4,
+            "at": 86.4,
+            "error": null,
+            "readyState": 4,
+            "advanced": 86.768145
+          },
+          "rearSeekMs": 484,
+          "ok": true,
+          "wallMs": 1217
+        }
+      }
+    },
+    "fixtureIntegrity": {
+      "manifestSHA256": "3ee2813ccb7de3f7b99cf84e6f1eea7d8658aa14addba6674ee53a75fe516351",
+      "mapSHA256": "7e2e17411a078e0d38b9819ec2c8f2efe41968303d89ed59963100ca5f61f27c",
+      "sqliteSHA256": "67c89bf58a7fdff7ce1e64b601a2d344cfe8f1d869b9c717b560ac3e407a62bf",
+      "samples": 503,
+      "bytes": 715371216,
+      "originalsStreamHashed": true
+    },
+    "final": {
+      "activeLeases": 6,
+      "activeStreams": 0,
+      "images": {
+        "nodes": 7,
+        "loaded": 4,
+        "visibleLoaded": 3
+      },
+      "newAcquires": [
+        {
+          "attachmentId": "7bd7435c-7676-45ae-8ef7-ce5ce70e2e8f",
+          "noteId": "a31fcd5e-6a8c-4c1b-8a61-a0ee2b3ec291",
+          "purpose": "thumbnail",
+          "pixels": 1024,
+          "ok": true,
+          "visibility": {
+            "domNodes": 1,
+            "visible": true,
+            "within120px": true
+          }
+        },
+        {
+          "attachmentId": "736c9730-14b4-4414-8875-77d8566eee8b",
+          "noteId": "a31fcd5e-6a8c-4c1b-8a61-a0ee2b3ec291",
+          "purpose": "thumbnail",
+          "pixels": 1024,
+          "ok": true,
+          "visibility": {
+            "domNodes": 1,
+            "visible": true,
+            "within120px": true
+          }
+        },
+        {
+          "attachmentId": "29bc5c3f-233e-4346-b351-35226c7b853f",
+          "noteId": "a31fcd5e-6a8c-4c1b-8a61-a0ee2b3ec291",
+          "purpose": "thumbnail",
+          "pixels": 1024,
+          "ok": true,
+          "visibility": {
+            "domNodes": 1,
+            "visible": true,
+            "within120px": true
+          }
+        },
+        {
+          "attachmentId": "2da63ba1-f20e-436d-8b2d-b66080cb0ff5",
+          "noteId": "a31fcd5e-6a8c-4c1b-8a61-a0ee2b3ec291",
+          "purpose": "thumbnail",
+          "pixels": 1024,
+          "ok": true,
+          "visibility": {
+            "domNodes": 1,
+            "visible": true,
+            "within120px": true
+          }
+        },
+        {
+          "attachmentId": "f45b2b3e-090b-47b3-a64c-ad1077937e0b",
+          "noteId": "a31fcd5e-6a8c-4c1b-8a61-a0ee2b3ec291",
+          "purpose": "thumbnail",
+          "pixels": 1024,
+          "ok": true,
+          "visibility": {
+            "domNodes": 1,
+            "visible": true,
+            "within120px": true
+          }
+        }
+      ],
+      "ownerInventory": "Not captured: release trace omits lease hash, so exact remaining owner/purpose inventory cannot be reconstructed. New final-note acquires are candidates, not a proven inventory."
+    }
+  },
+  "comparisonLimits": [
+    "Same503 frozen originals/SQLite and browser/viewport/scroll cadence; source product differs. Single mixed-population run, no statistical repeatability claim.",
+    "Baseline450raster+50SVG originals all acquired; after169raster unique acquired and50SVG unsupported. This is not an equal-function450raster-only memory comparison.281raster lack backend acquire; precise frontend dequeue causes were not logged.",
+    "Warm-scroll phase still creates previously missing derivatives; do not call full gallery warm or claim zero re-decode from aggregate attempts.",
+    "Actual HTTP source read bytes, registered generation logical input, published output and network encoded bytes are separate quantities; none prove physical disk IO.",
+    "Phase memory can retain earlier work; Node/Rust/renderer scopes are distinct. Chrome shell is not Tauri/Android App RSS.",
+    "Final phase keeps an open note;6 leases/0streams do not establish either a leak or full resource cleanup. Owner inventory not captured.",
+    "Snapshot images count loaded/visibleLoaded only; total visible cards/ready states were not captured.5 visible loaded images at settled gallery endpoints cannot prove every visible card ready.",
+    "Seven unmapped image/svg+xml events with0encoded bytes remain unattributed. They are excluded from known attachment traffic; failed HTTP encoded lengths remain unknown."
+  ]
+}

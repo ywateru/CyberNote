@@ -1,0 +1,13 @@
+# Final106 Android runtime — independent bounded review
+
+2026-11-10. **Accepted as a bounded stopped-at-installation record; Android106 runtime acceptance remains open.** This review used existing files only. No ADB, device interaction, build, retry, or additional native test was performed.
+
+All 11 manifest entries independently match their recorded byte counts and SHA256. The manifest SHA256 is `d3f96cbf7cf05fd82318684ea0308b522c3710247c28807c478ce36516c61b0f`; the author report SHA256 is `bba0fd1cf3bee1011cb6416479f055c26f256a16d8e56eab5486e3a16e0ad4f1`. Checks are saved in `artifacts/final106-android-runtime-independent/check.json`. Restricted screenshots were hashed, not published.
+
+The initial guard records the old installed APK SHA256 `42a561bbff4611738c214c7b924263e8de01f69d79af9211c1ea0053a3da8178`, version0.1.0/code1000. Initial system USB/MTP-dialog screenshots are byte-identical. Later saved window/input-method state identifies CyberNote foreground, `mServedInputConnectionWrapper=null`, no show request, and an invisible IME with no surface. Historic ended RECORD_AUDIO events and null projection support the stated system/UI idle guard; this is not direct evidence that every application save transaction was flushed.
+
+The action records contain exactly one `install -r` targeting the accepted106 APK and original Samsung serial, at `2026-11-10T09:14:27.200571+00:00`, exit1. Other recorded commands are read-only; there is no recorded dismissal tap, retry, launch, typing, navigation, rotation, IME change, reset, or data clear. The dialog disappearance before the proposed dismissal is consistent with the saved guards and absence of a tap command.
+
+Two evidence limits remain explicit. First, `device106.py` captures subprocess output but raises on failure after saving only argv/time/exit; failed-install stdout/stderr were not persisted. Second, the post-attempt empty `adb devices -l` inventory is retained as the author's `stopped-status.json` assertion, without a separate raw inventory output/action entry among the frozen files. The installed identity and transaction completion after the attempt are therefore **unknown**. Exit1 and the reported disconnection do not establish an application crash, defective package, or whether installation completed before transport loss.
+
+No106 native-runtime item passed in this attempt. Source/dual-package acceptance is unchanged; original102 format loss and native106 IME/rotation paths remain unverified. A later separately authorized continuation must first read the actual installed identity after connection returns, rather than assume another installation is needed. This review does not authorize continuation or device sampling.

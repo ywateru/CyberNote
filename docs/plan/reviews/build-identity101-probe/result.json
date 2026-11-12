@@ -1,0 +1,307 @@
+{
+  "ok": true,
+  "base": "e6421f3786d7e78896f41efab13f54a92d8c35ec",
+  "author": "24a9d4fef7f4e5ca99c9ab84d8a2afaeb46c92a4",
+  "reviewScript": "scripts/check-build-identity-review101.mjs",
+  "beforeScriptSHA256": "13d8f8ff8b0a9088c43f23731924955990259336c7ece490e39251e53c4c550f",
+  "afterScriptSHA256": "7e1f0b70b67e0e79375291b78def9fcc9782b540d5ab227a6e70d811afdb4362",
+  "checks": [
+    {
+      "kind": "causal-before-and-after",
+      "path": "plugins/never-built-plugin/android/.tauri/arbitrary/deep/SDK.kt",
+      "before": {
+        "listed": true,
+        "stampRejected": true
+      },
+      "after": {
+        "createStable": true,
+        "rewriteStable": true,
+        "deleteStable": true
+      }
+    },
+    {
+      "kind": "causal-before-and-after",
+      "path": "src-tauri/gen/android/.tauri/arbitrary/deep/config.json",
+      "before": {
+        "listed": true,
+        "stampRejected": true
+      },
+      "after": {
+        "createStable": true,
+        "rewriteStable": true,
+        "deleteStable": true
+      }
+    },
+    {
+      "kind": "causal-before-and-after",
+      "path": "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/arbitrary/deep/Class.kt",
+      "before": {
+        "listed": true,
+        "stampRejected": true
+      },
+      "after": {
+        "createStable": true,
+        "rewriteStable": true,
+        "deleteStable": true
+      }
+    },
+    {
+      "kind": "causal-before-and-after",
+      "path": "src-tauri/gen/android/app/proguard-tauri.pro",
+      "before": {
+        "listed": true,
+        "stampRejected": true
+      },
+      "after": {
+        "createStable": true,
+        "rewriteStable": true,
+        "deleteStable": true
+      }
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/tauri-plugin-notes-media/android/src/main/java/com/local/notesmedia/NotesMediaPlugin.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/tauri-plugin-notes-scan/android/src/main/java/com/local/notesscan/NotesScanPlugin.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/tauri-plugin-notes-media/android/src/main/AndroidManifest.xml",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/tauri-plugin-notes-media/android/build.gradle.kts",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/tauri-plugin-notes-media/macos/thumbnail.m",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/tauri-plugin-notes-ui/macos/native.c",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/tauri-plugin-notes-media/src/lib.rs",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/src/lib.rs",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/app/src/main/java/com/local/notesclone/MainActivity.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/app/build.gradle.kts",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/child/nested/android/.tauri/Handwritten.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/child/android/src/.tauri/Handwritten.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/child/android-backup/.tauri/Handwritten.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/child/android/.tauri-backup/Handwritten.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "plugins/child/android/.tauri.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/.tauri-backup/config.json",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated-backup/Handwritten.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/app/src/main/java/com/local/notesclone2/generated/Handwritten.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/app/src/main/java/com/other/generated/Handwritten.kt",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/proguard-tauri.pro",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "authored-or-near-name",
+      "path": "src-tauri/gen/android/app/proguard-tauri.pro.backup",
+      "listed": true,
+      "addedRejectsStamp": true,
+      "modifiedRejectsStamp": true,
+      "deleteRestores": true
+    },
+    {
+      "kind": "script-self-input",
+      "path": "scripts/build-info.mjs",
+      "modifiedRejectsStamp": true
+    },
+    {
+      "kind": "actual-tree",
+      "beforeInputs": 474,
+      "afterInputs": 433,
+      "removed": [
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/.gitignore",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/build.gradle.kts",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/consumer-rules.pro",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/androidTest/java/app/tauri/ExampleInstrumentedTest.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/AndroidManifest.xml",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/AppPlugin.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/FsUtils.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/JniMethod.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/Logger.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/PathPlugin.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/PermissionHelper.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/PermissionState.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/annotation/ActivityCallback.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/annotation/InvokeArg.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/annotation/Permission.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/annotation/PermissionCallback.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/annotation/PluginMethod.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/annotation/TauriPlugin.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/Channel.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/InvalidPluginMethodException.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/Invoke.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/JSArray.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/JSObject.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/Plugin.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/PluginHandle.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/PluginManager.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/PluginMethodData.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/main/java/app/tauri/plugin/PluginResult.kt",
+        "plugins/tauri-plugin-notes-scan/android/.tauri/tauri-api/src/test/java/app/tauri/ExampleUnitTest.kt",
+        "src-tauri/gen/android/.tauri/.gitignore",
+        "src-tauri/gen/android/app/proguard-tauri.pro",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Ipc.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Logger.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/PermissionHelper.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/Rust.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebChromeClient.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebView.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/RustWebViewClient.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/TauriActivity.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/WryActivity.kt",
+        "src-tauri/gen/android/app/src/main/java/com/local/notesclone/generated/proguard-wry.pro"
+      ],
+      "added": [],
+      "source": {
+        "sourceRevision": "24a9d4fef7f4e5ca99c9ab84d8a2afaeb46c92a4",
+        "sourceFingerprint": "6c545b4390038305d5ce2fa8e47e0dad2eca2bc3dee9c4d9039c60aa8cc82975",
+        "sourceDirty": true,
+        "inputCount": 433
+      }
+    }
+  ],
+  "scope": "Independent temporary git fixtures and actual-tree read-only inventory. No native generation, Cargo, packages, ADB, user data, or delivery-tree work."
+}

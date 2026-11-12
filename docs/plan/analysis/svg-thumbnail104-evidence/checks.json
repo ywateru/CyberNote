@@ -1,0 +1,92 @@
+{
+  "authorScope": "native-free exact production Rust modules; not Mac/Android packaged validation or benchmark",
+  "svg104Tests": {
+    "passed": 4,
+    "failed": 0,
+    "cases": [
+      "Chinese/Latin/Traditional/tspan/dxdy/anchor and old vector stylesheet/local paints",
+      "missing/partial span/external/DTD/char/span/position/outline budgets and no TCP request",
+      "actual Store/HTTP derivative/cache/source replacement/access revoke",
+      "50 frozen originals SHA before+after with per-image text-ROI no-text contrast"
+    ]
+  },
+  "regressionTests": {
+    "media": 16,
+    "platform": 7,
+    "review99a": 2,
+    "review99b": 1
+  },
+  "font": {
+    "path": "src-tauri/fonts/NotoSansCJKsc-Regular.otf",
+    "bytes": 16437364,
+    "sha256": "2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b"
+  },
+  "frozen50": {
+    "count": 50,
+    "width": 800,
+    "height": 600,
+    "minTextChangedPixels": 844,
+    "maxTextChangedPixels": 903
+  },
+  "productionLock": {
+    "removedPackages": [],
+    "addedPackages": [
+      {
+        "name": "core_maths",
+        "version": "0.1.1"
+      },
+      {
+        "name": "fontdb",
+        "version": "0.23.0"
+      },
+      {
+        "name": "libm",
+        "version": "0.2.16"
+      },
+      {
+        "name": "rustybuzz",
+        "version": "0.20.1"
+      },
+      {
+        "name": "slotmap",
+        "version": "1.1.1"
+      },
+      {
+        "name": "ttf-parser",
+        "version": "0.25.1"
+      },
+      {
+        "name": "unicode-bidi",
+        "version": "0.3.18"
+      },
+      {
+        "name": "unicode-bidi-mirroring",
+        "version": "0.4.0"
+      },
+      {
+        "name": "unicode-ccc",
+        "version": "0.4.0"
+      },
+      {
+        "name": "unicode-properties",
+        "version": "0.1.5"
+      },
+      {
+        "name": "unicode-script",
+        "version": "0.5.9"
+      },
+      {
+        "name": "unicode-vo",
+        "version": "0.1.0"
+      }
+    ]
+  },
+  "fontdbFeatures": "text only; no fs/fontconfig/memmap/system-fonts features",
+  "outlineBudget": {
+    "scalar": 1024,
+    "textAndTspanElements": 128,
+    "positionNumbers": 4096,
+    "nominalOutlineOperationsBeforeShape": 100000,
+    "convertedOutlineSegmentsAfterShape": 100000
+  }
+}

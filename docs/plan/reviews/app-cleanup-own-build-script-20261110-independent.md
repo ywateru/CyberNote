@@ -1,0 +1,11 @@
+# 18项自有build-script缓存清理独核
+
+2026-11-10。**接受此次精确清理记录及交付物保全结果。** 本审只读预检/执行JSON、作者报告、当前精确18路径与4份来源，并流式重算3个受保护交付物SHA；没有UI、设备、构建或额外删除。独核结果见`artifacts/modernization101/cleanup-own-build-script-independent-20261110.json`。
+
+预检SHA256为`ca96bbba42c98085448521945c00dae9c23c2d57ac6b258d95be25b0ab7bb9f3`，与执行记录引用完全一致；执行JSON SHA256为`fdbf9b6fb8a0e1fd25cc3719330f8c0647f84aaaed99aead9fd9acd3371229f5`。预检18项与removed18项逐序完全相同，含path/dev/inode/mtime_ns/size/nlink/SHA/allocated/source；18个独立inode均nlink=1，0 skipped。范围只含notes-clone及3个第一方插件的Cargo构建脚本可执行缓存，4份build.rs来源当前均存在。
+
+记录保存预检及删除前两次空活动构建检查，3次lsof均exit1且stdout/stderr为空；删除记录明确逐项元数据/hashguard后unlink。当前18文件全部不存在，其父目录全部保留，与“不递归、不删目录、不扩名单”的记录一致。删除已发生，原文件内容无法在此事后重新hash，历史进程/句柄状态也仅按冻结记录核对；本审不冒充亲见历史系统调用或全面文件系统差异审计。
+
+独立求和为275855008B逻辑长度、275865600B记录分配量，与两份JSON完全一致。执行前后可用空间差为13176557568−13090222080=86335488B；仅为该间隔的文件系统净变化，不能等同于此次精确物理释放量，也不能确定与逻辑量差额的原因。APFS共享块/并发写入仅是可能影响因素，不是本次已证实归因。
+
+当前106实际Mac入口、Mac ZIP、Android APK流式SHA分别为`92161da1222fc2e0095ec0dde20083023b57a512d96ea336e12429475663f71e`、`1cdae91c9dbb3937dbca58c62a018741ebfe6967e16f9a3e013ef84681883760`、`56d1c3246c3612cc1bc392de8b8493dac189be1e8c83e35c142ffb41d61f2a05`。三者均与执行前、执行后及此前独审核包基准一致。该核对不扩大为所有未列目录的逐字节保全或新的功能验收。停止，不追加清理。

@@ -1,5 +1,7 @@
 # 桌面录音右侧栏与基本交互
 
+2026-11-08 保存刷新修复：一次录音版本提交保留存储、插入及journal ACK周围的四次可信校验，改用已有的quiet同步路径，避免每次读取都开启全窗口遮挡。真正的会话、权限或挂起变化仍升级遮挡。列表缩略图key仅包含附件ID与实际授权身份，不随临时请求generation变化而卸载。`pnpm test:recording-refresh`在完整App录音保存路径中验证四次校验、唯一附件和journal提交，并观察遮挡从4次降为0、原编辑器及缩略图均保留；证据位于`artifacts/recording-refresh/`。
+
 更新：2026-11-06。用户要求完善录音基本交互，与原版一致；本轮明确排除听写、转写和云同步。原始截图已按原字节保存在 `references/desktop/recording-20261105/user-recording-sidebar.png`（SHA-256 `88357a65bd4a976345a80a37b74397df6ce2aafcb797a4c327f7a21de24209b6`）。手机参考继续使用已保全原视频与 `recording-mobile.md`。
 
 ## 暂停/关闭自动保存64（保存语义沿用，呈现以66为准）

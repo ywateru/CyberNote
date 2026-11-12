@@ -1,0 +1,41 @@
+{
+  "task": "MEDIA99C",
+  "reviewer": "/root/modules98_verify",
+  "baseline": "93e4ffd35f4c0f2c2a1d2b4007572090365d2825",
+  "author": "e55a17a730745bd78d9cab3d0d1b1d6948e8bf93",
+  "result": "accepted-source-stage",
+  "blockers": [],
+  "coreChecksPassed": 29,
+  "androidPolicyChecksPassed": 7,
+  "actualMacProviderAndPluginChecks": "passed including F1 last-byte and next-pump boundary",
+  "nativeBundlesBuilt": false,
+  "adbUsed": false,
+  "fix": "9a6d367c8f8b1c09c200a445992dda03ff1c359b",
+  "historicalBlockers": [
+    {
+      "id": "F1",
+      "priority": 2,
+      "file": "plugins/tauri-plugin-notes-media/macos/thumbnail.m",
+      "line": 46,
+      "reason": "per-read size does not clamp remaining cumulative32MiB budget",
+      "budget": 33554432,
+      "before": 33554431,
+      "after": 33619967,
+      "overrun": 65535,
+      "status": "resolved-by-author-fix-and-independent-recheck"
+    }
+  ],
+  "recheck": {
+    "providerTestsPassed": 3,
+    "macFaststartAndTailVideo": "both480x270; FD offset17 preserved",
+    "budget": 33554432,
+    "firstReadBytes": 1,
+    "firstFinished": false,
+    "finalTotal": 33554432,
+    "nextPumpError": 3,
+    "budgetProbeExit": 0,
+    "actualPluginAlphaBoundsCancellation": "passed",
+    "historicalFailureLogRetained": true,
+    "thumbnailSourceSHA256": "a2ae4ff11e51f7b0c4f742803bd5c70ada255f36a909765f14a2e115037dea23"
+  }
+}

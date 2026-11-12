@@ -1,0 +1,18 @@
+fontdb v0.23.0
+└── usvg v0.45.1
+    └── resvg v0.45.1
+        └── resvg feature "text"
+            └── notes-media-core-tests v0.1.0 (/private/tmp/cybernote-svg104/src-tauri/src/attachment_media/harness)
+                └── notes-media-core-tests feature "default" (command-line)
+    ├── usvg feature "fontdb"
+    │   └── usvg feature "text"
+    │       └── resvg feature "text" (*)
+    ├── usvg feature "rustybuzz"
+    │   └── usvg feature "text" (*)
+    ├── usvg feature "text" (*)
+    ├── usvg feature "unicode-bidi"
+    │   └── usvg feature "text" (*)
+    ├── usvg feature "unicode-script"
+    │   └── usvg feature "text" (*)
+    └── usvg feature "unicode-vo"
+        └── usvg feature "text" (*)

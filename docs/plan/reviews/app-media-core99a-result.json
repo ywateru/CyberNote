@@ -1,0 +1,46 @@
+{
+  "reviewedCommit": "f830c695680dd86103de134d05c053f41bed8eb5",
+  "conclusion": "pass",
+  "F1": "closed",
+  "lockedSourceTests": {
+    "review99a": {
+      "passed": 2,
+      "failed": 0
+    },
+    "media": {
+      "passed": 16,
+      "failed": 0
+    }
+  },
+  "warm": {
+    "generations": 2,
+    "hits": 0,
+    "bodyDecodes": true
+  },
+  "restart": {
+    "generations": 1,
+    "hits": 0,
+    "bodyDecodes": true
+  },
+  "nativeBuild": false,
+  "deviceOperations": false,
+  "productWiringVerified": false,
+  "prebuiltRuns": [
+    {
+      "name": "cache-corruption-recheck",
+      "binary": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/review99a-13b790a371102e53",
+      "sha256": "f4b5175c8215740fceb08e6e8edbd37fefe84952f0794f248300fc98fe80f4dd",
+      "exit": 0,
+      "elapsedSeconds": 0.09,
+      "tail": "\nrunning 2 tests\nINDEPENDENT_CACHE_RESULT {\"bodyDecodes\":true,\"generations\":2,\"hits\":0,\"restarted\":false,\"status\":\"HTTP/1.1 200 OK\"}\nINDEPENDENT_CACHE_RESULT {\"bodyDecodes\":true,\"generations\":1,\"hits\":0,\"restarted\":true,\"status\":\"HTTP/1.1 200 OK\"}\ntest corrupt_idat_cache_must_regenerate ... ok\ntest restarted_corrupt_idat_cache_must_regenerate ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s\n\n"
+    },
+    {
+      "name": "core-recheck",
+      "binary": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/media-0bc3e35b9b637cc8",
+      "sha256": "d45c6ae70e7512b8659c18359bf737db567b7b855ddeba5be09a42f9e215f842",
+      "exit": 0,
+      "elapsedSeconds": 4.29,
+      "tail": "\nrunning 16 tests\ntest media_actual_file_read_is_discarded_when_session_revokes_before_publish ... ok\ntest media_cache_rejects_late_symlink_swap_and_bounded_output_leaves_no_temp ... ok\ntest media_cached_png_truncation_recovers_without_bypassing_source_authority ... ok\ntest media_head_rejects_missing_cached_source_without_reading_payload ... ok\ntest media_http_parallel_ranges_do_not_share_seek_offsets ... ok\ntest media_http_ranges_head_and_exact_no_range ... ok\ntest media_http_rejects_host_origin_method_and_unknown_capability ... ok\ntest media_http_slow_consumers_backpressure_release_and_disconnect ... ok\ntest media_lease_idle_expiry_and_shutdown ... ok\ntest media_prepare_hook_interrupts_a_stalled_real_stream ... ok\ntest media_raster_formats_and_restricted_svg_have_explicit_results ... ok\ntest media_session_tokens_windows_prepare_delete_and_replacement ... ok\ntest media_store_rejects_symlinks_sizes_reserved_records_and_locked_owner ... ok\ntest media_thumbnail_revocation_during_generation_never_publishes ... ok\ntest media_cache_quota_source_invalidation_and_cleanup ... ok\ntest media_thumbnails_are_small_persistent_and_deduplicated ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.26s\n\n"
+    }
+  ]
+}

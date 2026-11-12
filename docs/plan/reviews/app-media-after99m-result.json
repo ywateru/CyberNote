@@ -1,0 +1,1453 @@
+{
+  "ok": true,
+  "reviewScope": "Independent read-only raw-data audit; not a performance rerun or whole product acceptance. No original sample rescan or old-baseline identity-on-new-source audit.",
+  "checks": [
+    "before: all10 phase walls/quantiles/longtasks/heap/separate RSS/retention/raw hashes verified",
+    "after: all10 phase walls/quantiles/longtasks/heap/separate RSS/retention/raw hashes verified",
+    "same frozen metadata/SQLite hashes,503/715371216B/103notes,Chrome156,1440x1000,StrictMode debug bundles and100ms cadence",
+    "949 source calls paired with1898 IPC events;21 required metric checkpoints and all phase counter sums match",
+    "independent grant cache-key and frozen-size reconstruction:391 attempts/178gen/175hit/388726486 logical input/116440314 output",
+    "coverage independently counted;baseline1917 reads/2608262764B/all503;7 unmapped zero-encoded SVG events remain unattributed",
+    "three saved real media outcomes,one activation original each,full durations and90% seek advancement;runner and source hashes match"
+  ],
+  "phases": {
+    "before": [
+      {
+        "name": "startup-cold",
+        "wallMs": 1418,
+        "frames": {
+          "count": 69,
+          "p50": 16.699999999999932,
+          "p95": 16.799999999999955,
+          "max": 183.3
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 199,
+          "maxMs": 199
+        },
+        "peakJSHeap": 20693008,
+        "peakChromeRendererRSS": 647168000,
+        "peakChromeTotalRSS": 1253048320,
+        "peakRustRSS": 24084480,
+        "peakNodeBridgeRSS": 170721280,
+        "workspaceReadyMs": 611.5,
+        "firstVisibleImage": {
+          "at": 458.40000009536743,
+          "phase": "startup-cold",
+          "width": 2000,
+          "height": 1500
+        },
+        "images": {
+          "nodes": 17,
+          "loaded": 17,
+          "visibleLoaded": 13
+        },
+        "retention": []
+      },
+      {
+        "name": "startup-hot",
+        "wallMs": 1512,
+        "frames": {
+          "count": 65,
+          "p50": 16.699999999999818,
+          "p95": 16.799999999999955,
+          "max": 350
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 356,
+          "maxMs": 356
+        },
+        "peakJSHeap": 30226912,
+        "peakChromeRendererRSS": 730660864,
+        "peakChromeTotalRSS": 1371619328,
+        "peakRustRSS": 24100864,
+        "peakNodeBridgeRSS": 174194688,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 593.5999999046326,
+          "phase": "startup-hot",
+          "width": 2000,
+          "height": 1500
+        },
+        "images": {
+          "nodes": 17,
+          "loaded": 17,
+          "visibleLoaded": 13
+        },
+        "retention": []
+      },
+      {
+        "name": "gallery-open",
+        "wallMs": 1323,
+        "frames": {
+          "count": 53,
+          "p50": 16.699999999999818,
+          "p95": 33.30000000000018,
+          "max": 233.29999999999995
+        },
+        "longTasks": {
+          "count": 3,
+          "totalMs": 462,
+          "maxMs": 232
+        },
+        "peakJSHeap": 85631604,
+        "peakChromeRendererRSS": 856276992,
+        "peakChromeTotalRSS": 1461223424,
+        "peakRustRSS": 29818880,
+        "peakNodeBridgeRSS": 180404224,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 1818.7000002861023,
+          "phase": "gallery-open",
+          "width": 1600,
+          "height": 1200
+        },
+        "images": {
+          "nodes": 21,
+          "loaded": 21,
+          "visibleLoaded": 12
+        },
+        "retention": []
+      },
+      {
+        "name": "gallery-scroll-1",
+        "wallMs": 13309,
+        "frames": {
+          "count": 789,
+          "p50": 16.69999999999891,
+          "p95": 16.799999999999272,
+          "max": 150
+        },
+        "longTasks": {
+          "count": 0,
+          "totalMs": 0,
+          "maxMs": 0
+        },
+        "peakJSHeap": 163824388,
+        "peakChromeRendererRSS": 1573011456,
+        "peakChromeTotalRSS": 2155397120,
+        "peakRustRSS": 35471360,
+        "peakNodeBridgeRSS": 197312512,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 3134.5999999046326,
+          "phase": "gallery-scroll-1",
+          "width": 1600,
+          "height": 1248
+        },
+        "images": {
+          "nodes": 5,
+          "loaded": 5,
+          "visibleLoaded": 0
+        },
+        "retention": [
+          {
+            "label": "natural-retention",
+            "jsHeapUsed": 109942768,
+            "chromeRendererRSS": 1573011456,
+            "rustRSS": 35471360,
+            "nodeRSS": 181190656
+          },
+          {
+            "label": "forced-GC-retention",
+            "jsHeapUsed": 48958192,
+            "chromeRendererRSS": 1361281024,
+            "rustRSS": 35471360,
+            "nodeRSS": 181403648
+          }
+        ]
+      },
+      {
+        "name": "gallery-scroll-2",
+        "wallMs": 13862,
+        "frames": {
+          "count": 826,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "max": 50.10000000000218
+        },
+        "longTasks": {
+          "count": 2,
+          "totalMs": 113,
+          "maxMs": 63
+        },
+        "peakJSHeap": 177379672,
+        "peakChromeRendererRSS": 1723662336,
+        "peakChromeTotalRSS": 2346516480,
+        "peakRustRSS": 390627328,
+        "peakNodeBridgeRSS": 1345028096,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": null,
+        "images": {
+          "nodes": 5,
+          "loaded": 5,
+          "visibleLoaded": 0
+        },
+        "retention": [
+          {
+            "label": "natural-retention",
+            "jsHeapUsed": 175280292,
+            "chromeRendererRSS": 1139425280,
+            "rustRSS": 390578176,
+            "nodeRSS": 1345028096
+          }
+        ]
+      },
+      {
+        "name": "gallery-leave",
+        "wallMs": 2253,
+        "frames": {
+          "count": 123,
+          "p50": 16.700000000000728,
+          "p95": 16.799999999995634,
+          "max": 116.70000000000073
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 134,
+          "maxMs": 134
+        },
+        "peakJSHeap": 261754300,
+        "peakChromeRendererRSS": 1413824512,
+        "peakChromeTotalRSS": 2035826688,
+        "peakRustRSS": 390578176,
+        "peakNodeBridgeRSS": 1459847168,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 31635.400000095367,
+          "phase": "gallery-leave",
+          "width": 2000,
+          "height": 1500
+        },
+        "images": {
+          "nodes": 5,
+          "loaded": 5,
+          "visibleLoaded": 2
+        },
+        "retention": [
+          {
+            "label": "forced-GC-after-leave",
+            "jsHeapUsed": 16612380,
+            "chromeRendererRSS": 930971648,
+            "rustRSS": 390578176,
+            "nodeRSS": 1440792576
+          }
+        ]
+      },
+      {
+        "name": "audio-90min",
+        "wallMs": 61224,
+        "frames": {
+          "count": 3641,
+          "p50": 16.69999999999709,
+          "p95": 16.70000000001164,
+          "max": 366.59999999999854
+        },
+        "longTasks": {
+          "count": 2,
+          "totalMs": 426,
+          "maxMs": 374
+        },
+        "peakJSHeap": 299327592,
+        "peakChromeRendererRSS": 1911652352,
+        "peakChromeTotalRSS": 2542223360,
+        "peakRustRSS": 391151616,
+        "peakNodeBridgeRSS": 1580728320,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 92902,
+          "phase": "audio-90min",
+          "width": 2000,
+          "height": 1500
+        },
+        "images": {
+          "nodes": 7,
+          "loaded": 7,
+          "visibleLoaded": 6
+        },
+        "retention": []
+      },
+      {
+        "name": "video-faststart",
+        "wallMs": 15072,
+        "frames": {
+          "count": 832,
+          "p50": 16.69999999999709,
+          "p95": 16.79999999998836,
+          "max": 350
+        },
+        "longTasks": {
+          "count": 8,
+          "totalMs": 1182,
+          "maxMs": 352
+        },
+        "peakJSHeap": 389918636,
+        "peakChromeRendererRSS": 1449197568,
+        "peakChromeTotalRSS": 1981612032,
+        "peakRustRSS": 390643712,
+        "peakNodeBridgeRSS": 1248313344,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 95231.80000019073,
+          "phase": "video-faststart",
+          "width": 2000,
+          "height": 1500
+        },
+        "images": {
+          "nodes": 7,
+          "loaded": 7,
+          "visibleLoaded": 6
+        },
+        "retention": []
+      },
+      {
+        "name": "video-tail",
+        "wallMs": 9589,
+        "frames": {
+          "count": 523,
+          "p50": 16.69999999999709,
+          "p95": 16.79999999998836,
+          "max": 350
+        },
+        "longTasks": {
+          "count": 4,
+          "totalMs": 814,
+          "maxMs": 353
+        },
+        "peakJSHeap": 537992316,
+        "peakChromeRendererRSS": 1811890176,
+        "peakChromeTotalRSS": 2545778688,
+        "peakRustRSS": 378241024,
+        "peakNodeBridgeRSS": 1292451840,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 110410.7000002861,
+          "phase": "video-tail",
+          "width": 2000,
+          "height": 1500
+        },
+        "images": {
+          "nodes": 7,
+          "loaded": 7,
+          "visibleLoaded": 6
+        },
+        "retention": []
+      },
+      {
+        "name": "final-leave",
+        "wallMs": 2719,
+        "frames": {
+          "count": 139,
+          "p50": 16.69999999999709,
+          "p95": 16.80000000000291,
+          "max": 333.3000000000029
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 359,
+          "maxMs": 359
+        },
+        "peakJSHeap": 198592728,
+        "peakChromeRendererRSS": 1315848192,
+        "peakChromeTotalRSS": 2111029248,
+        "peakRustRSS": 383729664,
+        "peakNodeBridgeRSS": 1290371072,
+        "workspaceReadyMs": 720.4000000953674,
+        "firstVisibleImage": {
+          "at": 120146.80000019073,
+          "phase": "final-leave",
+          "width": 2000,
+          "height": 1500
+        },
+        "images": {
+          "nodes": 12,
+          "loaded": 12,
+          "visibleLoaded": 8
+        },
+        "retention": [
+          {
+            "label": "forced-GC-final",
+            "jsHeapUsed": 16936848,
+            "chromeRendererRSS": 841334784,
+            "rustRSS": 383729664,
+            "nodeRSS": 905232384
+          }
+        ]
+      }
+    ],
+    "after": [
+      {
+        "name": "startup-cold",
+        "wallMs": 1491,
+        "frames": {
+          "count": 69,
+          "p50": 16.69999999999999,
+          "p95": 16.700000000000045,
+          "max": 266.6
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 282,
+          "maxMs": 282
+        },
+        "peakJSHeap": 18815636,
+        "peakChromeRendererRSS": 557105152,
+        "peakChromeTotalRSS": 1130708992,
+        "peakRustRSS": 28540928,
+        "peakNodeBridgeRSS": 195018752,
+        "workspaceReadyMs": 699.1999998092651,
+        "firstVisibleImage": {
+          "at": 544,
+          "phase": "startup-cold",
+          "width": 160,
+          "height": 120
+        },
+        "images": {
+          "nodes": 7,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "counters": {
+          "bytesRead": 107962,
+          "readOperations": 2,
+          "originalBytesRead": 0,
+          "originalReadOperations": 0,
+          "thumbnailBytesRead": 107962,
+          "thumbnailReadOperations": 2,
+          "thumbnailGenerationAttempts": 17,
+          "thumbnailSourceLogicalBytes": 3222064,
+          "thumbnailOutputBytes": 107962,
+          "thumbnailGenerations": 2,
+          "thumbnailHits": 0
+        }
+      },
+      {
+        "name": "startup-hot",
+        "wallMs": 1392,
+        "frames": {
+          "count": 65,
+          "p50": 16.699999999999932,
+          "p95": 16.700000000000045,
+          "max": 249.89999999999998
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 269,
+          "maxMs": 269
+        },
+        "peakJSHeap": 20984860,
+        "peakChromeRendererRSS": 589594624,
+        "peakChromeTotalRSS": 1243021312,
+        "peakRustRSS": 28590080,
+        "peakNodeBridgeRSS": 167591936,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 405.1000003814697,
+          "phase": "startup-hot",
+          "width": 160,
+          "height": 120
+        },
+        "images": {
+          "nodes": 7,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "counters": {
+          "bytesRead": 107962,
+          "readOperations": 2,
+          "originalBytesRead": 0,
+          "originalReadOperations": 0,
+          "thumbnailBytesRead": 107962,
+          "thumbnailReadOperations": 2,
+          "thumbnailGenerationAttempts": 15,
+          "thumbnailSourceLogicalBytes": 662931,
+          "thumbnailOutputBytes": 0,
+          "thumbnailGenerations": 0,
+          "thumbnailHits": 2
+        }
+      },
+      {
+        "name": "gallery-open",
+        "wallMs": 1458,
+        "frames": {
+          "count": 68,
+          "p50": 16.699999999999818,
+          "p95": 16.800000000000182,
+          "max": 233.29999999999995
+        },
+        "longTasks": {
+          "count": 2,
+          "totalMs": 366,
+          "maxMs": 233
+        },
+        "peakJSHeap": 45020412,
+        "peakChromeRendererRSS": 654721024,
+        "peakChromeTotalRSS": 1202569216,
+        "peakRustRSS": 31883264,
+        "peakNodeBridgeRSS": 171802624,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 1736.6000003814697,
+          "phase": "gallery-open",
+          "width": 160,
+          "height": 120
+        },
+        "images": {
+          "nodes": 10,
+          "loaded": 5,
+          "visibleLoaded": 5
+        },
+        "retention": [],
+        "counters": {
+          "bytesRead": 2696118,
+          "readOperations": 44,
+          "originalBytesRead": 0,
+          "originalReadOperations": 0,
+          "thumbnailBytesRead": 2696118,
+          "thumbnailReadOperations": 44,
+          "thumbnailGenerationAttempts": 16,
+          "thumbnailSourceLogicalBytes": 10382129,
+          "thumbnailOutputBytes": 2696118,
+          "thumbnailGenerations": 5,
+          "thumbnailHits": 0
+        }
+      },
+      {
+        "name": "gallery-scroll-1",
+        "wallMs": 13571,
+        "frames": {
+          "count": 812,
+          "p50": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "max": 33.29999999999973
+        },
+        "longTasks": {
+          "count": 0,
+          "totalMs": 0,
+          "maxMs": 0
+        },
+        "peakJSHeap": 74875168,
+        "peakChromeRendererRSS": 750272512,
+        "peakChromeTotalRSS": 1289682944,
+        "peakRustRSS": 57638912,
+        "peakNodeBridgeRSS": 186695680,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 8425.5,
+          "phase": "gallery-scroll-1",
+          "width": 480,
+          "height": 360
+        },
+        "images": {
+          "nodes": 10,
+          "loaded": 5,
+          "visibleLoaded": 5
+        },
+        "retention": [
+          {
+            "label": "natural-retention",
+            "jsHeapUsed": 62043252,
+            "chromeRendererRSS": 750272512,
+            "rustRSS": 33652736,
+            "nodeRSS": 186449920
+          },
+          {
+            "label": "forced-GC-retention",
+            "jsHeapUsed": 37496200,
+            "chromeRendererRSS": 679346176,
+            "rustRSS": 33652736,
+            "nodeRSS": 186695680
+          }
+        ],
+        "counters": {
+          "bytesRead": 12719138,
+          "readOperations": 207,
+          "originalBytesRead": 0,
+          "originalReadOperations": 0,
+          "thumbnailBytesRead": 12719138,
+          "thumbnailReadOperations": 207,
+          "thumbnailGenerationAttempts": 173,
+          "thumbnailSourceLogicalBytes": 97578533,
+          "thumbnailOutputBytes": 56235938,
+          "thumbnailGenerations": 94,
+          "thumbnailHits": 43
+        }
+      },
+      {
+        "name": "gallery-scroll-2",
+        "wallMs": 13516,
+        "frames": {
+          "count": 811,
+          "p50": 16.700000000000728,
+          "p95": 16.799999999999272,
+          "max": 16.80000000000291
+        },
+        "longTasks": {
+          "count": 0,
+          "totalMs": 0,
+          "maxMs": 0
+        },
+        "peakJSHeap": 63780596,
+        "peakChromeRendererRSS": 818937856,
+        "peakChromeTotalRSS": 1369587712,
+        "peakRustRSS": 59064320,
+        "peakNodeBridgeRSS": 203997184,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 17619.60000038147,
+          "phase": "gallery-scroll-2",
+          "width": 480,
+          "height": 360
+        },
+        "images": {
+          "nodes": 10,
+          "loaded": 5,
+          "visibleLoaded": 5
+        },
+        "retention": [
+          {
+            "label": "natural-retention",
+            "jsHeapUsed": 57990768,
+            "chromeRendererRSS": 811204608,
+            "rustRSS": 35913728,
+            "nodeRSS": 203751424
+          },
+          {
+            "label": "forced-GC-retention",
+            "jsHeapUsed": 39076200,
+            "chromeRendererRSS": 740900864,
+            "rustRSS": 35913728,
+            "nodeRSS": 203997184
+          }
+        ],
+        "counters": {
+          "bytesRead": 42610216,
+          "readOperations": 692,
+          "originalBytesRead": 0,
+          "originalReadOperations": 0,
+          "thumbnailBytesRead": 42610216,
+          "thumbnailReadOperations": 692,
+          "thumbnailGenerationAttempts": 148,
+          "thumbnailSourceLogicalBytes": 72813437,
+          "thumbnailOutputBytes": 42359341,
+          "thumbnailGenerations": 70,
+          "thumbnailHits": 128
+        }
+      },
+      {
+        "name": "gallery-leave",
+        "wallMs": 2045,
+        "frames": {
+          "count": 117,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "max": 100.10000000000218
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 112,
+          "maxMs": 112
+        },
+        "peakJSHeap": 49891092,
+        "peakChromeRendererRSS": 784891904,
+        "peakChromeTotalRSS": 1324597248,
+        "peakRustRSS": 35979264,
+        "peakNodeBridgeRSS": 204996608,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 31231.10000038147,
+          "phase": "gallery-leave",
+          "width": 480,
+          "height": 360
+        },
+        "images": {
+          "nodes": 7,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [
+          {
+            "label": "forced-GC-after-leave",
+            "jsHeapUsed": 11829580,
+            "chromeRendererRSS": 714309632,
+            "rustRSS": 35831808,
+            "nodeRSS": 204865536
+          }
+        ],
+        "counters": {
+          "bytesRead": 107962,
+          "readOperations": 2,
+          "originalBytesRead": 0,
+          "originalReadOperations": 0,
+          "thumbnailBytesRead": 107962,
+          "thumbnailReadOperations": 2,
+          "thumbnailGenerationAttempts": 15,
+          "thumbnailSourceLogicalBytes": 662931,
+          "thumbnailOutputBytes": 0,
+          "thumbnailGenerations": 0,
+          "thumbnailHits": 2
+        }
+      },
+      {
+        "name": "audio-90min",
+        "wallMs": 1965,
+        "frames": {
+          "count": 98,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999995634,
+          "max": 300
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 301,
+          "maxMs": 301
+        },
+        "peakJSHeap": 24407788,
+        "peakChromeRendererRSS": 771522560,
+        "peakChromeTotalRSS": 1399406592,
+        "peakRustRSS": 35831808,
+        "peakNodeBridgeRSS": 206946304,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 33502.300000190735,
+          "phase": "audio-90min",
+          "width": 160,
+          "height": 120
+        },
+        "images": {
+          "nodes": 2,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "counters": {
+          "bytesRead": 9109504,
+          "readOperations": 139,
+          "originalBytesRead": 9109504,
+          "originalReadOperations": 139,
+          "thumbnailBytesRead": 0,
+          "thumbnailReadOperations": 0,
+          "thumbnailGenerationAttempts": 0,
+          "thumbnailSourceLogicalBytes": 0,
+          "thumbnailOutputBytes": 0,
+          "thumbnailGenerations": 0,
+          "thumbnailHits": 0
+        }
+      },
+      {
+        "name": "video-faststart",
+        "wallMs": 1944,
+        "frames": {
+          "count": 99,
+          "p50": 16.69999999999709,
+          "p95": 16.700000000004366,
+          "max": 266.70000000000437
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 288,
+          "maxMs": 288
+        },
+        "peakJSHeap": 27383568,
+        "peakChromeRendererRSS": 896925696,
+        "peakChromeTotalRSS": 1544208384,
+        "peakRustRSS": 53936128,
+        "peakNodeBridgeRSS": 208617472,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 35557.7000002861,
+          "phase": "video-faststart",
+          "width": 160,
+          "height": 120
+        },
+        "images": {
+          "nodes": 2,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "counters": {
+          "bytesRead": 29383269,
+          "readOperations": 449,
+          "originalBytesRead": 29383269,
+          "originalReadOperations": 449,
+          "thumbnailBytesRead": 0,
+          "thumbnailReadOperations": 0,
+          "thumbnailGenerationAttempts": 1,
+          "thumbnailSourceLogicalBytes": 96754277,
+          "thumbnailOutputBytes": 121197,
+          "thumbnailGenerations": 1,
+          "thumbnailHits": 0
+        }
+      },
+      {
+        "name": "video-tail",
+        "wallMs": 1982,
+        "frames": {
+          "count": 102,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999995634,
+          "max": 283.40000000000146
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 293,
+          "maxMs": 293
+        },
+        "peakJSHeap": 43351956,
+        "peakChromeRendererRSS": 947568640,
+        "peakChromeTotalRSS": 1593344000,
+        "peakRustRSS": 55050240,
+        "peakNodeBridgeRSS": 183844864,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 37608,
+          "phase": "video-tail",
+          "width": 160,
+          "height": 120
+        },
+        "images": {
+          "nodes": 2,
+          "loaded": 2,
+          "visibleLoaded": 1
+        },
+        "retention": [],
+        "counters": {
+          "bytesRead": 29635786,
+          "readOperations": 453,
+          "originalBytesRead": 29635786,
+          "originalReadOperations": 453,
+          "thumbnailBytesRead": 0,
+          "thumbnailReadOperations": 0,
+          "thumbnailGenerationAttempts": 1,
+          "thumbnailSourceLogicalBytes": 96754277,
+          "thumbnailOutputBytes": 121197,
+          "thumbnailGenerations": 1,
+          "thumbnailHits": 0
+        }
+      },
+      {
+        "name": "final-leave",
+        "wallMs": 2604,
+        "frames": {
+          "count": 137,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999995634,
+          "max": 283.3000000000029
+        },
+        "longTasks": {
+          "count": 1,
+          "totalMs": 289,
+          "maxMs": 289
+        },
+        "peakJSHeap": 39166388,
+        "peakChromeRendererRSS": 973357056,
+        "peakChromeTotalRSS": 1624834048,
+        "peakRustRSS": 71729152,
+        "peakNodeBridgeRSS": 173817856,
+        "workspaceReadyMs": 603.3000001907349,
+        "firstVisibleImage": {
+          "at": 39679.800000190735,
+          "phase": "final-leave",
+          "width": 160,
+          "height": 120
+        },
+        "images": {
+          "nodes": 7,
+          "loaded": 4,
+          "visibleLoaded": 3
+        },
+        "retention": [
+          {
+            "label": "forced-GC-final",
+            "jsHeapUsed": 16758888,
+            "chromeRendererRSS": 846954496,
+            "rustRSS": 69255168,
+            "nodeRSS": 168247296
+          }
+        ],
+        "counters": {
+          "bytesRead": 9163545,
+          "readOperations": 141,
+          "originalBytesRead": 0,
+          "originalReadOperations": 0,
+          "thumbnailBytesRead": 9163545,
+          "thumbnailReadOperations": 141,
+          "thumbnailGenerationAttempts": 5,
+          "thumbnailSourceLogicalBytes": 9895907,
+          "thumbnailOutputBytes": 14798561,
+          "thumbnailGenerations": 5,
+          "thumbnailHits": 0
+        }
+      }
+    ]
+  },
+  "totalCounters": {
+    "bytesRead": 135641462,
+    "readOperations": 2131,
+    "originalBytesRead": 68128559,
+    "originalReadOperations": 1041,
+    "thumbnailBytesRead": 67512903,
+    "thumbnailReadOperations": 1090,
+    "thumbnailGenerationAttempts": 391,
+    "thumbnailSourceLogicalBytes": 388726486,
+    "thumbnailOutputBytes": 116440314,
+    "thumbnailGenerations": 178,
+    "thumbnailHits": 175
+  },
+  "grantReconstruction": {
+    "generations": 178,
+    "hits": 175,
+    "failedAttempts": 213,
+    "logicalInput": 388726486,
+    "output": 116440314
+  },
+  "tracePhaseReconstruction": {
+    "startup-cold": {
+      "attempts": 17,
+      "gen": 2,
+      "input": 3222064,
+      "output": 107962
+    },
+    "startup-hot": {
+      "attempts": 15,
+      "input": 662931,
+      "hits": 2
+    },
+    "gallery-open": {
+      "attempts": 16,
+      "gen": 5,
+      "input": 10382129,
+      "output": 2696118
+    },
+    "gallery-scroll-1": {
+      "attempts": 173,
+      "input": 97578533,
+      "gen": 94,
+      "output": 56235938,
+      "hits": 43
+    },
+    "gallery-scroll-2": {
+      "attempts": 148,
+      "input": 72813437,
+      "hits": 128,
+      "gen": 70,
+      "output": 42359341
+    },
+    "gallery-leave": {
+      "hits": 2,
+      "attempts": 15,
+      "input": 662931
+    },
+    "video-faststart": {
+      "attempts": 1,
+      "gen": 1,
+      "input": 96754277,
+      "output": 121197
+    },
+    "video-tail": {
+      "attempts": 1,
+      "gen": 1,
+      "input": 96754277,
+      "output": 121197
+    },
+    "final-leave": {
+      "attempts": 5,
+      "gen": 5,
+      "input": 9895907,
+      "output": 14798561
+    },
+    "audio-90min": {}
+  },
+  "coverage": {
+    "raster": {
+      "registeredSamples": 450,
+      "acquireRequests": 351,
+      "successfulAcquires": 351,
+      "uniqueAttemptedAttachments": 169,
+      "uniqueSuccessfulAttachments": 169,
+      "uniqueFailedOnlyAttachments": 0,
+      "unattemptedSamples": 281,
+      "errors": {},
+      "httpRequests": 108,
+      "httpEncodedBytesIncludingHeaders": null,
+      "httpKnownEncodedBytesIncludingHeaders": 67015038,
+      "httpUnknownEncodedLengthRequests": 1,
+      "byPurpose": {
+        "original": {
+          "acquireRequests": 0,
+          "successfulAcquires": 0,
+          "uniqueAttemptedAttachments": 0,
+          "uniqueSuccessfulAttachments": 0,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 450,
+          "errors": {},
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        },
+        "thumbnail": {
+          "acquireRequests": 351,
+          "successfulAcquires": 351,
+          "uniqueAttemptedAttachments": 169,
+          "uniqueSuccessfulAttachments": 169,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 281,
+          "errors": {},
+          "httpRequests": 108,
+          "httpEncodedBytesIncludingHeaders": null,
+          "httpKnownEncodedBytesIncludingHeaders": 67015038,
+          "httpUnknownEncodedLengthRequests": 1
+        }
+      }
+    },
+    "svg": {
+      "registeredSamples": 50,
+      "acquireRequests": 213,
+      "successfulAcquires": 0,
+      "uniqueAttemptedAttachments": 50,
+      "uniqueSuccessfulAttachments": 0,
+      "uniqueFailedOnlyAttachments": 50,
+      "unattemptedSamples": 0,
+      "errors": {
+        "unsupported_media": 213
+      },
+      "httpRequests": 0,
+      "httpEncodedBytesIncludingHeaders": 0,
+      "httpKnownEncodedBytesIncludingHeaders": 0,
+      "httpUnknownEncodedLengthRequests": 0,
+      "byPurpose": {
+        "original": {
+          "acquireRequests": 0,
+          "successfulAcquires": 0,
+          "uniqueAttemptedAttachments": 0,
+          "uniqueSuccessfulAttachments": 0,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 50,
+          "errors": {},
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        },
+        "thumbnail": {
+          "acquireRequests": 213,
+          "successfulAcquires": 0,
+          "uniqueAttemptedAttachments": 50,
+          "uniqueSuccessfulAttachments": 0,
+          "uniqueFailedOnlyAttachments": 50,
+          "unattemptedSamples": 0,
+          "errors": {
+            "unsupported_media": 213
+          },
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        }
+      }
+    },
+    "audio": {
+      "registeredSamples": 1,
+      "acquireRequests": 1,
+      "successfulAcquires": 1,
+      "uniqueAttemptedAttachments": 1,
+      "uniqueSuccessfulAttachments": 1,
+      "uniqueFailedOnlyAttachments": 0,
+      "unattemptedSamples": 0,
+      "errors": {},
+      "httpRequests": 2,
+      "httpEncodedBytesIncludingHeaders": null,
+      "httpKnownEncodedBytesIncludingHeaders": 0,
+      "httpUnknownEncodedLengthRequests": 2,
+      "byPurpose": {
+        "original": {
+          "acquireRequests": 1,
+          "successfulAcquires": 1,
+          "uniqueAttemptedAttachments": 1,
+          "uniqueSuccessfulAttachments": 1,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 0,
+          "errors": {},
+          "httpRequests": 2,
+          "httpEncodedBytesIncludingHeaders": null,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 2
+        },
+        "thumbnail": {
+          "acquireRequests": 0,
+          "successfulAcquires": 0,
+          "uniqueAttemptedAttachments": 0,
+          "uniqueSuccessfulAttachments": 0,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 1,
+          "errors": {},
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        }
+      }
+    },
+    "video": {
+      "registeredSamples": 2,
+      "acquireRequests": 4,
+      "successfulAcquires": 4,
+      "uniqueAttemptedAttachments": 2,
+      "uniqueSuccessfulAttachments": 2,
+      "uniqueFailedOnlyAttachments": 0,
+      "unattemptedSamples": 0,
+      "errors": {},
+      "httpRequests": 6,
+      "httpEncodedBytesIncludingHeaders": null,
+      "httpKnownEncodedBytesIncludingHeaders": 25465586,
+      "httpUnknownEncodedLengthRequests": 3,
+      "byPurpose": {
+        "original": {
+          "acquireRequests": 2,
+          "successfulAcquires": 2,
+          "uniqueAttemptedAttachments": 2,
+          "uniqueSuccessfulAttachments": 2,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 0,
+          "errors": {},
+          "httpRequests": 6,
+          "httpEncodedBytesIncludingHeaders": null,
+          "httpKnownEncodedBytesIncludingHeaders": 25465586,
+          "httpUnknownEncodedLengthRequests": 3
+        },
+        "thumbnail": {
+          "acquireRequests": 2,
+          "successfulAcquires": 2,
+          "uniqueAttemptedAttachments": 2,
+          "uniqueSuccessfulAttachments": 2,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 0,
+          "errors": {},
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        }
+      }
+    },
+    "file": {
+      "registeredSamples": 0,
+      "acquireRequests": 0,
+      "successfulAcquires": 0,
+      "uniqueAttemptedAttachments": 0,
+      "uniqueSuccessfulAttachments": 0,
+      "uniqueFailedOnlyAttachments": 0,
+      "unattemptedSamples": 0,
+      "errors": {},
+      "httpRequests": 0,
+      "httpEncodedBytesIncludingHeaders": 0,
+      "httpKnownEncodedBytesIncludingHeaders": 0,
+      "httpUnknownEncodedLengthRequests": 0,
+      "byPurpose": {
+        "original": {
+          "acquireRequests": 0,
+          "successfulAcquires": 0,
+          "uniqueAttemptedAttachments": 0,
+          "uniqueSuccessfulAttachments": 0,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 0,
+          "errors": {},
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        },
+        "thumbnail": {
+          "acquireRequests": 0,
+          "successfulAcquires": 0,
+          "uniqueAttemptedAttachments": 0,
+          "uniqueSuccessfulAttachments": 0,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 0,
+          "errors": {},
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        }
+      }
+    },
+    "unmapped": {
+      "registeredSamples": 0,
+      "acquireRequests": 0,
+      "successfulAcquires": 0,
+      "uniqueAttemptedAttachments": 0,
+      "uniqueSuccessfulAttachments": 0,
+      "uniqueFailedOnlyAttachments": 0,
+      "unattemptedSamples": 0,
+      "errors": {},
+      "httpRequests": 7,
+      "httpEncodedBytesIncludingHeaders": 0,
+      "httpKnownEncodedBytesIncludingHeaders": 0,
+      "httpUnknownEncodedLengthRequests": 0,
+      "byPurpose": {
+        "original": {
+          "acquireRequests": 0,
+          "successfulAcquires": 0,
+          "uniqueAttemptedAttachments": 0,
+          "uniqueSuccessfulAttachments": 0,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 0,
+          "errors": {},
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        },
+        "thumbnail": {
+          "acquireRequests": 0,
+          "successfulAcquires": 0,
+          "uniqueAttemptedAttachments": 0,
+          "uniqueSuccessfulAttachments": 0,
+          "uniqueFailedOnlyAttachments": 0,
+          "unattemptedSamples": 0,
+          "errors": {},
+          "httpRequests": 0,
+          "httpEncodedBytesIncludingHeaders": 0,
+          "httpKnownEncodedBytesIncludingHeaders": 0,
+          "httpUnknownEncodedLengthRequests": 0
+        }
+      }
+    }
+  },
+  "unmappedNetworkEvents": [
+    {
+      "id": "63106.1046",
+      "phase": "video-faststart",
+      "type": "Image",
+      "kind": "loopback-media",
+      "method": "GET",
+      "start": 2389479.973186,
+      "status": 200,
+      "mime": "image/svg+xml",
+      "fromDiskCache": false,
+      "end": 2389479.973206,
+      "encodedDataLength": 0
+    },
+    {
+      "id": "63106.1047",
+      "phase": "video-faststart",
+      "type": "Image",
+      "kind": "loopback-media",
+      "method": "GET",
+      "start": 2389479.973436,
+      "status": 200,
+      "mime": "image/svg+xml",
+      "fromDiskCache": false,
+      "end": 2389479.973448,
+      "encodedDataLength": 0
+    },
+    {
+      "id": "63106.1048",
+      "phase": "video-faststart",
+      "type": "Image",
+      "kind": "loopback-media",
+      "method": "GET",
+      "start": 2389479.974149,
+      "status": 200,
+      "mime": "image/svg+xml",
+      "fromDiskCache": false,
+      "end": 2389479.974168,
+      "encodedDataLength": 0
+    },
+    {
+      "id": "63106.1049",
+      "phase": "video-faststart",
+      "type": "Image",
+      "kind": "loopback-media",
+      "method": "GET",
+      "start": 2389480.030622,
+      "status": 200,
+      "mime": "image/svg+xml",
+      "fromDiskCache": false,
+      "end": 2389480.030645,
+      "encodedDataLength": 0
+    },
+    {
+      "id": "63106.1050",
+      "phase": "video-faststart",
+      "type": "Image",
+      "kind": "loopback-media",
+      "method": "GET",
+      "start": 2389480.030914,
+      "status": 200,
+      "mime": "image/svg+xml",
+      "fromDiskCache": false,
+      "end": 2389480.030925,
+      "encodedDataLength": 0
+    },
+    {
+      "id": "63106.1051",
+      "phase": "video-faststart",
+      "type": "Image",
+      "kind": "loopback-media",
+      "method": "GET",
+      "start": 2389480.031101,
+      "status": 200,
+      "mime": "image/svg+xml",
+      "fromDiskCache": false,
+      "end": 2389480.031114,
+      "encodedDataLength": 0
+    },
+    {
+      "id": "63106.1052",
+      "phase": "video-faststart",
+      "type": "Image",
+      "kind": "loopback-media",
+      "method": "GET",
+      "start": 2389480.034448,
+      "status": 200,
+      "mime": "image/svg+xml",
+      "fromDiskCache": false,
+      "end": 2389480.034465,
+      "encodedDataLength": 0
+    }
+  ],
+  "unknownEncodedLengthRequests": 6,
+  "media": {
+    "audio-90min": {
+      "name": "audio-90min",
+      "sampleIndex": 500,
+      "noteId": "74cf2277-b885-42ad-96b7-5cb5646b1af4",
+      "attachmentId": "c1f8a8c8-06c0-4cdb-a0fb-c617a4bf6902",
+      "originalBytes": 86400044,
+      "activation": {
+        "label": "播放",
+        "beforeOriginalAcquires": 0,
+        "afterOriginalAcquires": 1
+      },
+      "metadataMs": 474,
+      "duration": 5400,
+      "firstPlayMs": 302,
+      "playing": true,
+      "seek": {
+        "target": 4860,
+        "at": 4860,
+        "error": null,
+        "readyState": 4,
+        "advanced": 4860.34306
+      },
+      "rearSeekMs": 416,
+      "ok": true,
+      "wallMs": 1201
+    },
+    "video-faststart": {
+      "name": "video-faststart",
+      "sampleIndex": 501,
+      "noteId": "2eede356-760b-40e0-8bff-3df6f690c1d0",
+      "attachmentId": "48499677-3087-43c5-87ad-5eb52ef08a4e",
+      "originalBytes": 96754277,
+      "activation": {
+        "label": "播放视频 video-faststart.mp4",
+        "beforeOriginalAcquires": 0,
+        "afterOriginalAcquires": 1
+      },
+      "metadataMs": 426,
+      "duration": 96,
+      "firstPlayMs": 301,
+      "playing": true,
+      "seek": {
+        "target": 86.4,
+        "at": 86.4,
+        "error": null,
+        "readyState": 4,
+        "advanced": 86.734117
+      },
+      "rearSeekMs": 436,
+      "ok": true,
+      "wallMs": 1180
+    },
+    "video-tail": {
+      "name": "video-tail",
+      "sampleIndex": 502,
+      "noteId": "aa4307cd-6c26-4ac1-80e9-830e2dffa768",
+      "attachmentId": "4014e99e-e641-4819-8ee1-ac3cbf1c1b11",
+      "originalBytes": 96754277,
+      "activation": {
+        "label": "播放视频 video-tail-metadata.mp4",
+        "beforeOriginalAcquires": 0,
+        "afterOriginalAcquires": 1
+      },
+      "metadataMs": 416,
+      "duration": 96,
+      "firstPlayMs": 301,
+      "playing": true,
+      "seek": {
+        "target": 86.4,
+        "at": 86.4,
+        "error": null,
+        "readyState": 4,
+        "advanced": 86.768145
+      },
+      "rearSeekMs": 484,
+      "ok": true,
+      "wallMs": 1217
+    }
+  },
+  "fixtureMetadataSHA256": {
+    "manifest.json": "3ee2813ccb7de3f7b99cf84e6f1eea7d8658aa14addba6674ee53a75fe516351",
+    "store-map.json": "7e2e17411a078e0d38b9819ec2c8f2efe41968303d89ed59963100ca5f61f27c",
+    "store-baseline.sqlite3": "67c89bf58a7fdff7ce1e64b601a2d344cfe8f1d869b9c717b560ac3e407a62bf"
+  },
+  "rawSHA256": {
+    "before": {
+      "transport.jsonl": "6588d56569a8db049cfb9db25d8307bc71d23c4fee7fa4ce33a51cd6b982e552",
+      "gallery.png": "1c9ebaac804273a36bbb407c33ae3b6fa323b3f09be81575216097b9f6d851fd",
+      "result.json": "4ac86ba29fa6d2ebb5aba4bf68e392a7022515b645f7a0ceaebca9024b8ab494",
+      "memory.jsonl": "5916c0de80e692d30cfdc681d8d48289155a44fade51b73a10c5c522f70092a3",
+      "video-tail.png": "1ffc3872dc9e9473949790cce33dd48de05bbb4b94cca7fafb90bb97ddb9d841",
+      "configuration.json": "dc90013f470dd4e34c0b69d186ff93ee1a4e3381dea02c604ae7b2bae47c5aba",
+      "audio-90min.png": "711050cc171ac8a7f222354426bdaea72cc4ad9232460bfdefd8abbac94195a9",
+      "network.json": "b5597cc55a39b1166debd0a0cc711d5157e99d3cddcdfe8d980c7c2e2d79dabd",
+      "integrity-check.json": "5f352103e49a1fd35ce7b79456de7da5bea9fb6743ec6733b82c0e56c10cfc3c",
+      "startup.png": "7dacfd059ebdaaf0cefc6a27030791da903e6bfc0d02f8030b00e6aec1147b02",
+      "video-tail.json": "81aa4715e724f87e7a14858db8ccef52bc12e10d0c55149989374df037657706",
+      "post-run-source-note.json": "592cd42ae07f5cf8f4105956756ff13fce4c6178d6fe14fd82f194ab9c40eed1",
+      "scroll-geometry.json": "629f295c6b4b4835bbafe03280262c186bebd856591871c8ed733e8ef30a1a70",
+      "video-faststart.json": "db2d88a9557eb528bed75d87ebcde44135ecdad85fb869b3ec577a42fb8c1a39",
+      "measured-runner.mjs": "12f3488c0e09435fa7c0d3711b076926b33505f297e34f935cea31028ed71d49",
+      "video-faststart.png": "ce10b2949b972bc199a73228ee13c66d1bb882881baa308d257c8544bd3af4c9",
+      "phases.json": "44ec49923242e01d24d35a05d49b3934c742371b28d5b5806df05aecb160a9d9",
+      "audio-90min.json": "abcd3c31fd06e689e6c21d09770272bf40bacc0b2cdef4ee0076af35dd1baff6"
+    },
+    "after": {
+      "gallery.png": "2214967bcd48d3dae815733d3eb52c5db5a180ae9503c245693186c0936696a1",
+      "result.json": "3eb90f07164b777125010fa215548bfaf375570a95b70f83f471423b94a5474e",
+      "memory.jsonl": "a483dedad1075ce076aa58c3cb7d7887d8be43a71ae16ce9919e481f7d5bb23d",
+      "video-tail.png": "a8a8e6b3046ce63ac4b5d4e9054a751bdc9b99864bf67dee3b673719dd717bb8",
+      "media.jsonl": "8930ea98112b512b25c0e47dc3b92e84cc02e7a24a7f5a3da0894f87cf67ef3c",
+      "configuration.json": "dd47f96ca8440c985fb4b3128458369830e5160101ba83316cfc9100ed91be92",
+      "audio-90min.png": "95c6c301618871d8bca8a4bf15dfa03062f7bf22a9275924a56248c16aefed2a",
+      "network.json": "5067786d661fcb3e20e2fe020a98356876ea19775af63a23a86435fb2a3d6334",
+      "startup.png": "1b70609088d23df0dc9643466bf74ab0d1e156242c7578df64ebc831998970e6",
+      "video-tail.json": "f3e1469d17b5dbd99307608f0799931f4e3f541426506c0276431e89a650afcb",
+      "scroll-geometry.json": "1ef83aa9550a0071f324ac523cb6c433d6078ab852fcfe2a227065397052853a",
+      "video-faststart.json": "c6c52e1ce4131d000ae14a08ebf574066fed1b5730376a9b4bc953fae9e43602",
+      "measured-runner.mjs": "1158e8c8cd93bbbf9ea2fbf8ff6f67f11a18012ea8685adceb4e36460638ac46",
+      "video-faststart.png": "bfed27335a21f4dda8d09081a527013c26007de23d9c989510c9bc2456c95a7b",
+      "phases.json": "6fa703ee48df398f988c94270ea32579fe339d2348335fe60d4e63d1eacfb4e4",
+      "media.jsonl.ipc": "101d86f4e22c6776d90d0d5b1b884ef7b8a3be8ca6495899a05441ad2e1d08cf",
+      "audio-90min.json": "6ffb5b80ae8cbe49a8742818692bc96105c0782e40affb5904cda5732b3c1008"
+    }
+  },
+  "limitations": [
+    "281 raster lack backend acquire; no frontend queued-withdraw reason log.",
+    "50 SVG all unsupported; mixed RSS is not equal-function450-raster-only result.",
+    "scroll2 has70 new generations,not fully warm.",
+    "6 final leases/0streams;release rows lack lease identity,owner inventory unreconstructable.",
+    "7 unmapped SVG encoded0 remain unattributed; canceled HTTP unknown encoded lengths stay unknown.",
+    "Counter source reads/logical generation input/encoded output/network sizes are distinct;not physical IO.",
+    "StrictMode debug Chrome+Rust harness,not Mac Tauri/Android packages or device RSS."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "task": "app-media-measurement99m",
+  "phase": "tooling-only",
+  "reviewer": "/root/design100a_verify",
+  "baseline": "f11d6e8e151b541e96158830d81363e11cfa5fbb",
+  "author": "08b36d0adbc871c2ca247aba92961a9c62892a45",
+  "result": "tools-ready",
+  "sourceFingerprint": "09b4d755ba338ba75ca5ea8cd00e8cacbee98e7872d537d20a20757b3a8a8628",
+  "inputCount": 454,
+  "binarySha256": "b3194c61e245d8948d4e5f927a424b09bbbd119d1c21df532ce345a5f480f039",
+  "fixtureOriginals": 503,
+  "fixtureBytes": 715371216,
+  "fixtureManifestSha256": "3ee2813ccb7de3f7b99cf84e6f1eea7d8658aa14addba6674ee53a75fe516351",
+  "sqliteSha256": "67c89bf58a7fdff7ce1e64b601a2d344cfe8f1d869b9c717b560ac3e407a62bf",
+  "checks": {
+    "authorToolChecksIndependentlyRerun": 10,
+    "originalsBeforeAfterSha": "pass",
+    "independentWarmPayloadBytes": 789578,
+    "realOriginRangeAndPngDecode": "pass",
+    "realReleaseClearPrepareWindowClose": "pass",
+    "independentWindowTokenPurposeMetadataNegativeProbes": "pass",
+    "formalGateBeforeChrome": "expected exit1; null precise counters; zero completed phases"
+  },
+  "evidence": [
+    "artifacts/media99m-independent-tools/result.json",
+    "artifacts/media99m-independent-formal-gate/result.json",
+    "artifacts/media99m-independent-probe/result.json"
+  ],
+  "notAcceptedAsComplete": ["MEDIA99 UI", "formal before/after performance", "native video provider", "FINAL101 Mac/Android runtime or packages", "full six-requirement goal"]
+}

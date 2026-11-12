@@ -1,0 +1,166 @@
+{
+  "status": "author-fix-awaits-independent-review",
+  "formalMeasurement": false,
+  "toolFiles": [
+    {
+      "path": "scripts/performance/coverage105.mjs",
+      "beforeSHA256": "d5ef48fbb684732e51033e6070e06d24b3b1ffadb850fc3f246179341a55e4ed",
+      "afterSHA256": "134531c2c072407f521c20c4559fe15409d403c88e84c8e9b5970d1aa1ab563b"
+    },
+    {
+      "path": "scripts/performance/check-coverage105.mjs",
+      "beforeSHA256": "748ad89f844d8866b443eca2018c6fb79bb068510971bb28723e2a2dd9222939",
+      "afterSHA256": "238a994fd9243e9673d854cb96eff36fa1c84ff6c595cc8256d6a86a5d2852ea"
+    }
+  ],
+  "patchSHA256": "a66a3453ea009f0c958625f25a6eb59300d93bce6ce62ce51c54b5d004cabb0a",
+  "beforeThreeCases": [
+    {
+      "kind": "wall-limit",
+      "error": "105 wall limit",
+      "allCleanupAttempted": false
+    },
+    {
+      "kind": "record-write-failure",
+      "error": "ENOSPC simulated record",
+      "allCleanupAttempted": false
+    },
+    {
+      "kind": "last-viewport-write-failure",
+      "error": "ENOSPC simulated output",
+      "allCleanupAttempted": false
+    }
+  ],
+  "sameThreeAfter": [
+    {
+      "kind": "wall-limit",
+      "error": null,
+      "allCleanupAttempted": true
+    },
+    {
+      "kind": "record-write-failure",
+      "error": null,
+      "allCleanupAttempted": true
+    },
+    {
+      "kind": "last-viewport-write-failure",
+      "error": null,
+      "allCleanupAttempted": true
+    }
+  ],
+  "fullFinallyCases": [
+    {
+      "kind": "wall-limit",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "record-write-failure",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "last-viewport-write-failure",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "snapshot-failure",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 3,
+      "exitCode": 1
+    },
+    {
+      "kind": "context",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "browser",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "browserServer",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "socket",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "serverConnections",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "server",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "backend",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "all-evidence-writes",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 6,
+      "exitCode": 1
+    },
+    {
+      "kind": "configuration-write-failure",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    },
+    {
+      "kind": "result-write-failure",
+      "allCleanupAttempted": true,
+      "resultAttempted": true,
+      "originalFailurePreserved": true,
+      "stderrFailures": 1,
+      "exitCode": 1
+    }
+  ],
+  "noBuildBrowserOrDevice": true
+}

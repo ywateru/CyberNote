@@ -1,0 +1,101 @@
+{
+  "scope": "MEDIA99UI source independent review; not native/provider/99M performance",
+  "accepted": true,
+  "blockers": [],
+  "baseline": "4bacc5f7526d83735b042428090669b64221258a",
+  "authorHead": "6c9b965b3584b3c964b95f57162b2438abdb1a58",
+  "sourceFingerprint": "723dfb7a43d3044c22ae237e60ce90973f22888f1c936d31fdf796e58ee47e8a",
+  "historicalFailureSameFingerprint": true,
+  "sourceUnchangedDuringIndependentPicker": true,
+  "checks": {
+    "independentPoolGroups": [
+      "mismatched owner, attachment ID and purpose each reject publication and release exact lease once",
+      "prepare retires queued and in-flight requests; independent original does not queue; late grants release without errors/publication",
+      "invalidation inside first ready callback prevents subsequent shared consumer publication",
+      "retired gate-change failure cannot restart a withdrawn request",
+      "continuously stale metadata exhausts exactly three fresh attempts and reports failure",
+      "cache clear preserves detached retained original, owner revocation finds it, unrelated owner survives",
+      "throwing controller cannot bypass remaining synchronous stops, retained disposal, or exactly-once native release"
+    ],
+    "authorRealAppRerun": 17,
+    "originalMobilePrefix": 43,
+    "exactPickerAfterPrefix": 1,
+    "exactPickerFreshRounds": 3,
+    "storageSummary": 1,
+    "storageCategories": 7,
+    "storageFilesInitially": 0,
+    "build": true
+  },
+  "retainedLimitations": [
+    "Prior full attachments group captured-target failure was not reproduced under identical source fingerprint; cause remains unconfirmed. Not called a baseline bug or erased. Full expanded suite was not rerun to completion.",
+    "HTTP/IPC shell fixture is controlled and cannot prove Rust/provider/native correctness or real long-media performance.",
+    "99C/100A and final actual-device combination remain root integration/101 responsibilities."
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/media99ui-independent/pool/result.json",
+      "bytes": 871,
+      "sha256": "1595aab460bec31ca9e681b2fefefa77974e0af03709d1115edf94c4e1f9fe82"
+    },
+    {
+      "path": "artifacts/media99ui-independent/pool.log",
+      "bytes": 44,
+      "sha256": "1b0c3839b95dd03b3d1d5b8d74f1eb8ef2336081e9160204025ffaa15cce8363"
+    },
+    {
+      "path": "artifacts/media99ui-independent/app-rerun/result.json",
+      "bytes": 2742,
+      "sha256": "c5846806b176a3903e7c6388d5e6b4e8e5b806caa08dc9d08624650445841949"
+    },
+    {
+      "path": "artifacts/media99ui-independent/app-rerun/rerun-provenance.json",
+      "bytes": 272,
+      "sha256": "907158bb1666d5ba9ce0d5120ff217d8b6eb82462e19f25f74097971cc0820ac"
+    },
+    {
+      "path": "artifacts/media99ui-independent/app-rerun.log",
+      "bytes": 38,
+      "sha256": "691c8024130898667d131f8c2be1b0d03d81179cb60fc7a35e445ffbfc09c43e"
+    },
+    {
+      "path": "artifacts/media99ui-independent/picker-sequence/result.json",
+      "bytes": 45530,
+      "sha256": "79f38d602268887f0c83ba12f102b18cf24ab8f3be11c89f790dd8f58298d232"
+    },
+    {
+      "path": "artifacts/media99ui-independent/picker-sequence.log",
+      "bytes": 97,
+      "sha256": "395e6290686d6a5c4fd192e307f6c86cebd1874c567a4749f2536bc920117b24"
+    },
+    {
+      "path": "artifacts/media99ui-independent/picker-fresh/result.json",
+      "bytes": 122813,
+      "sha256": "a4c0098b30d6c00e8d7a65cdcc478793413ece1087181afc9cb1d988324542c5"
+    },
+    {
+      "path": "artifacts/media99ui-independent/picker-fresh.log",
+      "bytes": 82,
+      "sha256": "d61f6b4913421f81f3af41fc7a87c1b3d9f005ed8daeef30b920080548daeb49"
+    },
+    {
+      "path": "artifacts/media99ui-independent/target-narrow.json",
+      "bytes": 28511,
+      "sha256": "214445a29901009f61dc0944ab545010c4095ae80887322c79f13f8eed63b834"
+    },
+    {
+      "path": "artifacts/media99ui-independent/target-sequence.json",
+      "bytes": 11448,
+      "sha256": "68236611a5ea8603d455691393d0e83acbd1b2a293a6614a05a24f278d356393"
+    },
+    {
+      "path": "artifacts/media99ui-independent/target-exact.json",
+      "bytes": 112408,
+      "sha256": "d582ce3c5a5cd6b3c5606205d77798b98ebcce4438da58328fa6519b5f808c48"
+    },
+    {
+      "path": "artifacts/media99ui-independent/build.log",
+      "bytes": 970,
+      "sha256": "f094a8af3c134e1b1c4d259f6908e4d6f4c48970bc3245ee9f097356f5a45f42"
+    }
+  ]
+}

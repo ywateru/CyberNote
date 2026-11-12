@@ -1,12 +1,49 @@
-# Apple Notes Clone
+# CyberNote
 
 Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android。Tauri 2 提供原生窗口和安装包，React/Tiptap 提供编辑器，Rust/SQLite 保存笔记与附件元数据，图片、录音和其他附件独立存储为本地文件。不接入 iCloud。
 
 当前为可运行开发版，完整原版交互及逐像素一致目标仍在进行。功能是否完成以各次交付的准确版本和验证范围为准，见[文档索引](docs/INDEX.md)。
 
-## 当前交付
+## 最新安装包
 
-更新于 2026-11-07，已整合到本地主分支 `main`。安装包为本机生成的交付产物，不纳入 Git；克隆仓库后需自行构建。
+<!-- latest-installers:start -->
+
+| 平台 | 安装包 | 版本 / 构建时间（UTC） | 源码 |
+| --- | --- | --- | --- |
+| macOS | [CyberNote.app](<artifacts/releases/20261110-modernization106/CyberNote.app>) | 0.1.0 / 2026-11-10T08:05:59.823Z | bf26dae17f97 + 74c0a8bbe365664d |
+| Android | [APK](<artifacts/releases/20261110-modernization106/android/CyberNote-Android-arm64.apk>) | 0.1.0 / 2026-11-10T08:23:18.611Z | bf26dae17f97 + 74c0a8bbe365664d |
+
+双端源码指纹一致；功能与平台差异见[功能对应表](docs/platform-feature-matrix.md)。本机包不纳入 Git，验证范围见各平台交付 manifest。
+
+<!-- latest-installers:end -->
+
+[Mac ZIP（含字体许可与来源说明）](artifacts/releases/20261110-modernization106/CyberNote-Mac.zip)；Mac随附字体[OFL许可](artifacts/releases/20261110-modernization106/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261110-modernization106/notices/noto-cjk/README.md)。Android分发时请同时保留交付目录内的[OFL许可](artifacts/releases/20261110-modernization106/android/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261110-modernization106/android/notices/noto-cjk/README.md)；这些是APK旁随文件，裸APK不包含完整许可交付。
+
+Mac视频最新：[live10有限独核](docs/plan/reviews/app-final106-mac-videos-live10-independent.md)接受faststart视频激活、96秒时长、初段推进及86.8%后段定位。随后正常播放点击被Mac系统锁定拒绝；后段继续播放、明确暂停和tail-metadata视频均未验收。两端剩余原生检查需本人正常解锁后续接；详见[剩余验收前提](docs/verification/modernization101/remaining-native-prerequisites.md)。下方较早记录按各自时点读取。
+
+Mac最新续验：[WAV live09有限独核](docs/plan/reviews/app-final106-mac-wav-live09-independent.md)接受90分钟录音的激活、正确时长、起始推进、作者记录的一次约91%后段定位及最终结束状态。AX设置进度未成功；后段即时数值仅有作者动作记录，不能当连续推进采样。两MP4仍在分项验收，Android仍待本人正常解锁。下段live08锁定为此前时点，不覆盖这次新结果。
+
+106双包已完成[同源、实际入口及包内资源独立核验](docs/plan/reviews/app-final106-packages-independent.md)，源码指纹为`74c0a8bbe365664d3100f66165ac4bf28427c34cf1650170865d6d40ceb8d55a`（446输入），**尚未完成双端原生功能验收**。[Mac后续live08记录](docs/verification/modernization101/final106-mac-runtime-live08-author.md)重新确认了准确106设置身份，已显示中文SVG实际画廊缩略图并从附件返回、定位到自有备忘录。90分钟WAV已导入，首次播放操作被Mac系统锁定拒绝，播放/时长/seek尚未确认；两份MP4未导入。早先[选择器阻碍](docs/verification/modernization101/final106-mac-runtime-author.md)和[双进程观察限制](docs/verification/modernization101/final106-mac-parent-observation.md)保留为历史记录，不覆盖live08的新证据。Android此前安装尝试exit1、随后报告设备缺席；当时失败输出未保存，原因未知。[只读诊断03](artifacts/final106-android-package-readonly-03/report.md)曾发现包登记保留但代码目录缺失；随后于10:29 UTC执行一次保数据修复安装并返回Success，设备实际APK摘要与106完全一致，[安装证据已独核](docs/plan/reviews/app-final106-android-install0304-independent.md)。这仅确认安装身份；输入法、格式面板和媒体功能仍按真机分项验收，不计完整通过，也不证明此前代码目录缺失的原因。其他能力与历史证据见[Mac/Android功能对应表](docs/platform-feature-matrix.md)和[验收记录](docs/verification/modernization101/final-audit.md)。
+
+**原Android r2正文长按选字会关闭格式面板的FORMAT102失败仍未关闭；106的Android横屏布局修复不等于解决该历史故障。** Mac为本机ad-hoc签名，未公证；Android使用本地Debug证书，均非商店正式签名。此前Mac录音检查遇系统麦克风授权超时，完成录音后的刷新未核验，实体触摸板捏合也未实测。包为本机生成产物，不纳入Git。
+
+## CyberNote 桌面重构
+
+“显示选项 → 查看附件”提供图片/视频、音频、文稿和全部附件画廊，支持试听录音、图片浮动预览，以及从附件跳转到所属备忘录并选中、滚动定位。已在此前功能快照中包含附件画廊；本轮新增功能以顶部安装包范围为准。[使用与行为](docs/ui/attachment-gallery.md) / [验证记录](docs/verification/cybernote-desktop/ATTACHMENT-GALLERY.md)。
+
+设置页已分为外观与字号、备忘录、设备同步、存储空间、导入与备份五类。桌面采用左侧分类栏，移动端采用分组首页和子页；打开设置时保留顶部工具栏。详见[设置页规格](docs/ui/preferences.md)与[验证及本机产物](docs/verification/cybernote-desktop/SETTINGS-REDESIGN.md)。
+
+桌面端已按新设计稿重构侧边栏、连续顶部栏、笔记列表和录音卡，并采用方形眼睛的新图标。设置 → 外观与字号提供独立的“界面字体大小”和“编辑器字体大小”，均提供极小、小、中、大、极大五档；默认中档为界面 14px、正文 16px，选择会自动保存，界面文字、图标、行高、间距和原生顶部栏同步缩放，编辑器字号独立控制。搜索栏已统一普通、悬停及聚焦边框。
+
+本轮补齐表格的行列标记、整行整列选中和插入/删除菜单；修复小字号原生工具栏图标裁切，录音与标签改为仅显示图标。
+
+附件保持独立原文件存储，新增 SVG 等图片类型识别、图片直接粘贴为附件、附件剪切/拷贝/粘贴和 Mac 文件打开/Finder 入口，图片预览采用黑色背景与圆角窗口。
+
+历史设置交付：[设置样式验证](docs/verification/cybernote-desktop/SETTINGS-REFERENCE.md)；其他桌面历史记录见[统一菜单](docs/verification/cybernote-desktop/UNIFIED-MENUS.md)、[附件文件与剪贴板](docs/verification/cybernote-desktop/ATTACHMENT-FILES.md)、[表格与图标](docs/verification/cybernote-desktop/TABLES-AND-ICONS.md)。当前可用安装包统一见顶部“最新安装包”。
+
+## 历史交付（2026-11-07）
+
+以下记录保留原交付时点，供回溯；不作为当前最新安装入口。
 
 | 平台 | 本机安装包 | 本次状态与证据 |
 | --- | --- | --- |
@@ -33,7 +70,7 @@ pnpm mac:dev                # macOS 原生开发
 pnpm mac:build              # 构建 .app
 ```
 
-默认 Mac 输出为 `src-tauri/target/release/bundle/macos/备忘录.app`；使用 `CARGO_TARGET_DIR` 时，以该 target 下对应路径为准。应用标识为 `com.local.notesclone`，与系统 Notes 分开。
+默认 Mac 输出为 `src-tauri/target/release/bundle/macos/CyberNote.app`；使用 `CARGO_TARGET_DIR` 时，以该 target 下对应路径为准。应用标识为 `com.local.notesclone`，与系统 Notes 分开。
 
 Android 需要 Android SDK / 平台 36、Build Tools、NDK、JDK 17 及 Rust `aarch64-linux-android` target。可通过 `ANDROID_HOME`、`NDK_HOME`、`JAVA_HOME` 配置，具体构建规则见 `scripts/android.mjs`。
 
@@ -45,6 +82,20 @@ pnpm android:build           # release，正式分发需配置签名
 ```
 
 构建不要求安装或重启现有设备。浏览器预览使用独立预览存储；正式安装版通过 Rust 保存，浏览器结果不能替代原生平台验证。
+
+## 版本与同源交付
+
+应用版本以 `package.json` 为源；变更后运行 `pnpm version:sync` 同步 Tauri/Cargo，Android 直接读取该版本并生成 versionCode。`pnpm build` 会检查版本一致性，并把真实 UTC 构建时间、Git revision 与产品输入 SHA256 注入设置 → 外观与字号 → 版本信息。开发预览明确显示“开发预览”，不伪造安装包时间。
+
+```sh
+pnpm version:check
+pnpm release prepare --out artifacts/releases/current/source-stamp.json
+CYBERNOTE_RELEASE_STAMP=artifacts/releases/current/source-stamp.json pnpm mac:build
+# 保留该次 dist 与最终签名 Mac 包，再按同一 stamp 构建 Android
+CYBERNOTE_RELEASE_STAMP=artifacts/releases/current/source-stamp.json pnpm android:build
+```
+
+源文件变化后旧 stamp 会被拒绝；两端实际构建时间可不同，产品输入指纹必须一致。包内核验与 README 发布命令见[构建交付流程](docs/architecture/build-delivery.md)。顶部安装入口指向本批已独立核验的同源包，历史快照只在历史记录中保留。
 
 ## 测试
 

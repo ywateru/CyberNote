@@ -1,3 +1,29 @@
+2026-11-11 当前续验：测试机已解锁，不能再以历史锁屏概括当前阻碍。[Android live08/09独核](plan/reviews/app-final106-android-live0809-independent.md)接受新建空笔记时实际完整WeType按键与活动输入连接；设置原图已证明页面曾打开，原“设置无响应”结论及候选点击前“截图精确一致”声明均被RGB复算否定，作者已保留旧派生记录并更正，不能据此证明点击目标、场景切换原因或输入法修复；[Android live11独核](plan/reviews/app-final106-android-live11-independent.md)接受同PID31424/task1294新空笔记→Back隐藏键盘→正文单击→完整WeType键盘恢复；仅此空笔记链通过，非历史原因修复，格式保持尚未复验。旧102失败保留。[Mac live11独核](plan/reviews/app-final106-mac-videos-live11-independent.md)确认faststart定位83.333秒后持续Play/静止，本轮无锁屏错误，后段恢复播放尚未证明；不能沿用live10锁屏原因。[Mac tail live12独核](plan/reviews/app-final106-mac-tail-live12-independent.md)接受附件身份及96秒时长的有限记录，后段播放未通过；附件菜单操作后Pause/00:48与83.333秒帧不一致，原因未明。随后数字正文测试前，前台已变为Chrome/task1296；没有输入/切回，格式分支停止，不改变live11已完成结果。当前不构建、不重装、不改输入法设置；保留用户笔记和附件。下方按各报告历史时点读取。
+
+Mac视频最新：[live10有限独核](plan/reviews/app-final106-mac-videos-live10-independent.md)接受faststart激活、96秒时长、初段推进及86.8%后段定位；后续播放点击再次被Mac系统锁定拒绝，后段推进/明确暂停与tail-metadata视频未验。全部UI停止；Android同一系统认证前提持续，剩余原生验收须本人正常解锁后继续。没有新构建，整体目标未完成。下方为此前时点。
+
+Mac WAV最新：[live09有限独核](plan/reviews/app-final106-mac-wav-live09-independent.md)接受90分钟录音激活、时长、起始推进、作者记录的约91%后段定位及最终结束。AX设置进度无效，后段即时4912.1秒无单独持久AX；01至02相隔18分36秒，不作连续后段采样。以下live08锁定为此前时点；视频仍在分项验收，Android仍需本人正常解锁。
+
+当前设备验收更新：[Mac live08有限独核](plan/reviews/app-final106-mac-runtime-live08-independent.md)接受准确106设置身份、中文SVG列表非空/画廊完整中文缩略图与返回所属笔记定位选中。WAV仅导入，首次播放被系统锁定拒绝，两MP4未验；Android106安装身份已核，设置UI/IME/格式/媒体仍待本人正常解锁。以下chooser阻碍、双进程观察和“中文缩略图未测”为较早时点。完整目标仍未完成。
+
+2026-11-10 最新：106稳定Android移动布局已整合（446输入/74c0a8bb…），[同源双包已独核](plan/reviews/app-final106-packages-independent.md)，README唯一最新入口已更新106并通过[交付F1复审](plan/reviews/app-final106-readme-delivery-f1-independent.md)。原Samsung重连后曾见包记录保留但代码目录缺失；10:29 UTC一次保数据修复安装Success、设备实际APK SHA匹配106，[03/04证据已独核](plan/reviews/app-final106-android-install0304-independent.md)，原因未知、功能验收仍进行中。[Mac有限运行独核](plan/reviews/app-final106-mac-runtime-independent.md)仅确认设置AX身份及chooser阻碍，不冒充媒体通过，双进程限制见[父级观察](verification/modernization101/final106-mac-parent-observation.md)。追加精确清理18个第一方构建脚本缓存约263MiB，[独核接受](plan/reviews/app-cleanup-own-build-script-20261110-independent.md)，正式包SHA不变。[本次旧v2 IME现场](verification/modernization101/keyboard-recurrence-20261110.md)单tap正常、历史触发未知，不称永久修复；原102与双端完整原生验收仍开放。下方为历史阶段。
+
+2026-11-10 六项整理：[恢复状态](plan/cybernote-modernization-state.md)、[最终验收](verification/modernization101/final-audit.md)、[平台功能表](platform-feature-matrix.md)。含103/104的final105同源双包已[独立核包](plan/reviews/app-final105-packages-independent.md)，尚未安装/更新README，现入口仍r2。MEDIA105 run3的双方冷暖各500图、新版50文字SVG及三长媒体证据[独审接受](plan/reviews/app-media105-formal-run3-independent.md)；旧版录音推进失败保留，仅接受完整图像阶段有限比较，暖访问rAF亦变差，不称整协议或全面性能胜出。Android格式保持原失败继续交[102](plan/tasks/app-mobile-format102.md)，另已识别的横屏移动身份边界由[106](plan/tasks/app-android-mobile106.md)在隔离工作树修正，不能倒推为102原因。最新IME复发时原测试机缺席，另一台ADB设备未授权，尚无本次现场。表格、模块及设计变量已整合；Mac录音授权/实体触摸板和最终准确实包验证仍开放，完整目标未完成。下方记录保留各自历史交付时点。
+
+2026-11-08 速绘交互：[单击进入、长按菜单、双指缩放平移与面板背景](ui/drawing-editor.md)。移动顶部移除无效对勾，Mac 原生附件菜单启用添加速绘；源码与测试见该规格。
+
+2026-11-08 附件画廊：[浏览与定位规格](ui/attachment-gallery.md)，图片/视频、录音、文稿统一画廊，支持从附件跳转并定位所属备忘录。[验证记录](verification/cybernote-desktop/ATTACHMENT-GALLERY.md)：33 项浏览器/原生投影检查和 22 项工具栏回归通过；源码与前端构建已更新，安装包未重打。
+
+2026-11-07 启动加载：[SVG Logo 动画与首屏交接](ui/startup.md)，工作区、编辑器和工具栏就绪后淡出，提供加载失败恢复入口；前端构建与隔离浏览器验证通过。
+
+2026-11-07 最新设置样式：[桌面按图 2 校准](verification/cybernote-desktop/SETTINGS-REFERENCE.md)，主题卡片、五档字号分段控件、侧栏标题及 920×660 面板已实现。
+
+2026-11-07 设置页已按最新要求直接重构：[界面与行为规格](ui/preferences.md)，桌面五分类侧栏、移动分组首页和子页，顶部工具栏保留显示。[验证与本机产物](verification/cybernote-desktop/SETTINGS-REDESIGN.md)。旧图片设计稿保留为历史材料，本轮不再调用图片生成。
+
+2026-11-07 最新桌面交付：[统一菜单、浮动预览与列表缩略图](verification/cybernote-desktop/UNIFIED-MENUS.md)。图片单击选中，Mac 右键/展开菜单与顶部菜单共用 AppKit 构建器；可拖动非模态预览，列表图片缩略图及置顶标题普通状态。下文保留此前版本记录。
+
+2026-11-07 最新桌面交付：[附件文件与剪贴板](verification/cybernote-desktop/ATTACHMENT-FILES.md)，包含 SVG/图片类型识别、图片粘贴为附件、剪切/拷贝/粘贴、Finder 和系统打开、新预览窗口。原生剪贴板与真实桌面只读核对、217 项 Rust 回归、9 组浏览器附件流程及最终核包通过。[按钮反馈与切换重构](verification/cybernote-desktop/BUTTON-FEEDBACK.md)、[桌面重构索引](verification/cybernote-desktop/DELIVERY.md)。下文保留历史版本记录。
+
 2026-11-07 当前：[标签回车与正文 Tab94](verification/editor94/DELIVERY.md)已完成本轮修复交付，Mac32 准确构建并独立核包通过。标签 Enter 提交后正常换段，普通正文 Tab 插入制表符，保留表格/列表优先、组字与非文本选区保护。作者15项/既有27项、独审17+5项、schema96及生产入口排除通过；341动态产品输入与完整嵌入资源/实际签名独核通过。原失败、受控IME/设备/原生运行限制见[交付记录](verification/editor94/DELIVERY.md)，Mac31/Android21保留。
 
 2026-11-07：[导入记录内部化与附件右键菜单93](verification/attachments93/DELIVERY.md)完成本轮交付，Mac31 已构建并独立核包。正常图片/录音/PDF/文件继续导入，额外来源记录不再显示为正文卡片；普通同名 JSON 不误隐藏。统一菜单支持预览/播放、保存、信息和可撤销移除；作者43项实际 App/Store、独审4项Store/6项DOM及341动态产品输入/完整嵌入资源/最终签名均通过。[UI契约](ui/attachment-context-menu.md)、[恢复状态](plan/attachment-context93-state.md)及真实来源/设备/像素限制分别记账，Mac30/Android21保留。
@@ -341,3 +367,4 @@
 用户最新允许浮动录音窗与当前窗口右侧展开切换，按[任务55](plan/tasks/app-recording-presentation55.md)及[桌面双模式规格](ui/recording-desktop.md)继续；同一session不中断，不做听写，不能由早期只浮窗结论替代。
 
 55浮窗/展开源码已独审并整合，备忘录内部编辑、搜索、格式和新建的受控并行检查通过，真实双端包按[有限验收步骤](verification/recording-presentation55-runtime-plan.md)继续。Mac15[实际窗口记录](verification/recording-window54-mac-runtime/README.md)已确认真实录制中A/B编辑与正确保存归属；保存卡播放遇到[SecurityOrigin拒绝](verification/saved-audio-security-origin54/README.md)，单列[任务56](plan/tasks/app-recording-playback56.md)修复，不以代码通过代替实际保存后播放。
+2026-11-09 当前完整目标：[双端整理与交付状态](plan/cybernote-modernization-state.md)。覆盖统一编辑器会话、表格修复、版本交付、主组件拆分、附件性能和可配置共享样式。六项逐项验收，当前 active；[表格交互新契约](ui/table-editing.md)按一次点击省略号展开菜单、文本转表格实施。[媒体按需读取与缩略图](architecture/attachment-media.md)、[双端设计规则](ui/design-rules.md)为后续实施规格，不表示已完成。

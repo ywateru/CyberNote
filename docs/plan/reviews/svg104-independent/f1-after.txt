@@ -1,0 +1,27 @@
+   Compiling notes-media-core-tests v0.1.0 (/private/tmp/cybernote-svg104/src-tauri/src/attachment_media/harness)
+    Finished `test` profile [unoptimized] target(s) in 6.01s
+     Running tests/review104.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/review104-2d228f0908dd35f0)
+
+running 5 tests
+external presentation outcome: accepted=false files=0 source=<rect x='10' y='10' width='40' height='40' fill='url(http://127.0.0.1:9/private)'/>
+external presentation outcome: accepted=false files=0 source=<rect x='10' y='10' width='40' height='40' stroke='url(file:///private/secret)'/>
+external presentation outcome: accepted=false files=0 source=<rect x='10' y='10' width='40' height='40' fill='url(data:image/svg+xml;base64,AAAA)'/>
+test external_presentation_attributes ... ok
+test css_variants_and_budget ... ok
+test local_paint_and_css_comments ... ok
+test late_access_and_source_change ... ok
+test partial_span_and_visible_window ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.49s
+
+     Running tests/svg104.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/svg104-6ce8a78842b27bb4)
+
+running 4 tests
+test chinese_latin_tspan_and_vector_styles ... ok
+test missing_external_complexity ... ok
+test real_http_cache_replacement_revocation ... ok
+frozen SVGs: 50/50 original SHA matched before+after; real text-region differences passed
+test frozen_50_hash_and_text ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 26.29s
+

@@ -1,0 +1,25 @@
+   Compiling notes-media-core-tests v0.1.0 (/private/tmp/cybernote-svg104/src-tauri/src/attachment_media/harness)
+    Finished `test` profile [unoptimized] target(s) in 5.56s
+     Running tests/review104.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/review104-2d228f0908dd35f0)
+
+running 4 tests
+external presentation outcome: accepted=true files=1 source=<rect x='10' y='10' width='40' height='40' fill='url(http://127.0.0.1:9/private)'/>
+test css_variants_and_budget ... ok
+external presentation outcome: accepted=true files=1 source=<rect x='10' y='10' width='40' height='40' stroke='url(file:///private/secret)'/>
+external presentation outcome: accepted=true files=1 source=<rect x='10' y='10' width='40' height='40' fill='url(data:image/svg+xml;base64,AAAA)'/>
+
+thread 'external_presentation_attributes' (51978466) panicked at ../harness/review104.rs:59:5:
+external presentation resources silently accepted: ["<rect x='10' y='10' width='40' height='40' fill='url(http://127.0.0.1:9/private)'/>", "<rect x='10' y='10' width='40' height='40' stroke='url(file:///private/secret)'/>", "<rect x='10' y='10' width='40' height='40' fill='url(data:image/svg+xml;base64,AAAA)'/>"]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test external_presentation_attributes ... FAILED
+test late_access_and_source_change ... ok
+test partial_span_and_visible_window ... ok
+
+failures:
+
+failures:
+    external_presentation_attributes
+
+test result: FAILED. 3 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.58s
+
+error: test failed, to rerun pass `--test review104`

@@ -1,0 +1,11 @@
+[package]
+name = "media99c-independent-plugin-probe"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[dependencies]
+tauri = { version = "=2.12.5", default-features = false, features = ["test"] }
+tauri-plugin-notes-media = { path = "../../../../plugins/tauri-plugin-notes-media" }
+[profile.dev]
+debug = 0
+incremental = false

@@ -1,0 +1,20 @@
+{
+  "task": "app-design-settings100a",
+  "reviewer": "/root/design100a_verify",
+  "baseline": "c06d08e127f132dcf02a602154cf2f9ae02f92a5",
+  "initialAuthor": "b0f64d90cf213e28402126e747c8d6aab023c104",
+  "initialReview": "5e4a8522",
+  "fixedAuthor": "4a49a633f3527e6934d9118c2e51c2e9fb4ba056",
+  "result": "pass",
+  "findings": [{ "id": "F1", "status": "closed", "initialReceipts": { "ack": 101, "reject": 100 }, "externalExpected": 111, "fixedReceipts": { "ack": 111, "reject": 111 } }],
+  "checks": {
+    "realPreferencesStore": 15,
+    "realStoreArchiveComposite": "pass; 180 unrelated tests filtered; rerun initial review, unchanged Rust after fix",
+    "independentInvalidParserCases": 36,
+    "independentLifecycleResults": 7,
+    "authorOrderReceiptsIndependentlyRerun": 2,
+    "diffCheck": "pass"
+  },
+  "openScopes": ["DESIGN100 actual global control application", "App global settings concurrency and failure rollback", "FINAL101 Mac/Android native behavior"],
+  "evidence": "artifacts/design100a-independent/lifecycle.json; docs/plan/reviews/app-design-settings100a.md"
+}
