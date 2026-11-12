@@ -1,0 +1,372 @@
+{
+  "schema": 1,
+  "reviewDate": "2026-11-13",
+  "result": "accepted within static local candidate scope; no remaining P1/P2 found",
+  "source": {
+    "snapshot": "d69ffbce2ad1284e6c7ce830f6840ba083148aab",
+    "root": "d7f3e2a9431f80ae5711a6a8f3fb3c55b86e3cbd",
+    "tree": "dd810c45833ffb999a292a1ffc8bbe9a9df9fd27",
+    "fingerprint": "3f3b76ebfe6c8a146cb35ffad5b4daeff2696c05612dc8846a55a2d450de2058",
+    "sourceDirty": false,
+    "inputCount": 1619,
+    "retainedFiles": 1770,
+    "retainedBytes": 95104733,
+    "priorIndependentFinalRootReview": {
+      "sevenExistingPinsOnly": true,
+      "policySdkRuntimeNoticesUnchanged": true,
+      "buildSourceTrackedBytesEqualPristine": true,
+      "processDocsExcluded": true
+    }
+  },
+  "packages": {
+    "macos": {
+      "artifactDirectory": "artifacts/account109/macos-sourced69-production-candidate-01",
+      "sourceRoot": "/private/tmp/account109-sourced69-macos-source-20261113-01",
+      "cargoTarget": "/private/tmp/account109-sourced69-macos-target-20261113-01",
+      "formalFiles": {
+        "CyberNote-macos-arm64.zip": {
+          "bytes": 51958444,
+          "sha256": "f92854f452d21a6772f7496b1d2f8196d56e0656f5774b26b9ea7074e5c2dd76"
+        },
+        "CyberNote-macos-arm64-notices.zip": {
+          "bytes": 2021726,
+          "sha256": "8486d4e6b520452e00b0f3b7af46452c3e77f7425944d85a7af9e12875b6a244"
+        },
+        "CyberNote-macos-arm64.json": {
+          "bytes": 1801,
+          "sha256": "9803ee469bd7f30f13880750b32e03baee56691cb5c36aea8fba7278a07b396f"
+        },
+        "CyberNote-macos-arm64.sha256": {
+          "bytes": 192,
+          "sha256": "3a9183efea9bc83cb0148a4700b0ebe95225648e1b03959d5ba946cb692f7659"
+        }
+      },
+      "formalCopiesEqualStagedBytes": true,
+      "uniquePackageEntries": 18,
+      "nativeEntry": "CyberNote.app/Contents/MacOS/notes-clone",
+      "nativeSha256": "f41c411d6a90b9960f108bb7f0321e75066c558bc60c36c9a51def73b56cb58a",
+      "buildInfo": {
+        "schema": 1,
+        "version": "0.1.0",
+        "mode": "production",
+        "builtAt": "2026-11-12T21:18:07.723Z",
+        "target": "macos",
+        "sourceRevision": "d7f3e2a9431f80ae5711a6a8f3fb3c55b86e3cbd",
+        "sourceFingerprint": "3f3b76ebfe6c8a146cb35ffad5b4daeff2696c05612dc8846a55a2d450de2058",
+        "sourceDirty": false,
+        "inputCount": 1619,
+        "releasePreparedAt": null
+      },
+      "embeddedIdentity": {
+        "encoding": "brotli",
+        "sha256": "95d6d176ea53780a4031aef353ac3feb185c4c6056be9c5c8a6e2f04043cb5d3"
+      },
+      "independentlyVerifiedEmbeddedBytes": true,
+      "frontend": {
+        "asset": "assets/index-DgaLxa08.js",
+        "sha256": "70e64bffedd70f74c65d7cc59f215265f5d7f5de1c30d327ec450f90c9a34755",
+        "encodedSha256": "45c10bab6657b3c4373c70c43fc486a5771addd171ec92f888d9da102a1120f5",
+        "encoding": "brotli",
+        "embeddedEncodedBytesAndDistEqual": true,
+        "pureHelper": "function bp(){return!!(globalThis||window).isTauri}",
+        "binding": "hv=bp()||!1",
+        "commandGuard": "if(!hv)",
+        "helperCases": [
+          {
+            "isTauri": false,
+            "available": false
+          },
+          {
+            "isTauri": true,
+            "available": true
+          }
+        ],
+        "wholeBundleExecuted": false
+      },
+      "fingerprints": {
+        "aarch64-apple-darwin/release/.fingerprint/notes-clone-3cecca753b1ac10a/lib-notes_clone_lib.json": {
+          "sha256": "32a18417dde5f21ac3f51e32933bb3b1a8e7a34ccc01641e18ddad9df8d0f16e",
+          "features": []
+        },
+        "aarch64-apple-darwin/release/.fingerprint/tauri-fb4ae704c7fbbb7f/lib-tauri.json": {
+          "sha256": "7a73aa8d8c108eb9796fda3b09ffb2ee9c8391d5663401f2f9bf9417560ceff4",
+          "features": [
+            "common-controls-v6",
+            "compression",
+            "custom-protocol",
+            "dbus",
+            "default",
+            "dynamic-acl",
+            "http-range",
+            "protocol-asset",
+            "tauri-runtime-wry",
+            "webkit2gtk",
+            "webview2-com",
+            "wry",
+            "x11"
+          ]
+        },
+        "aarch64-apple-darwin/release/.fingerprint/notes-clone-8384eac27c18fb8c/bin-notes-clone.json": {
+          "sha256": "3909c5fd43f87ce0ea4ef8c99a92c930c2a900f24a0a955256b804be92a3df6b",
+          "features": []
+        }
+      },
+      "noticeVerification": {
+        "entries": 1200,
+        "allNamesAndBytesMatchFrozenManifestPayloads": true,
+        "rustDirectLicenses": 9,
+        "rustProvenanceFiles": 1,
+        "sdkLicenseBundleFiles": 1138
+      },
+      "allFourLocksMatchPristineHeadAndBeforeAfterBuild": true,
+      "sourceClean": true,
+      "oneParentlessRootNoRemotes": true,
+      "machO": {
+        "thin": true,
+        "cpu": "arm64",
+        "fileType": "MH_EXECUTE"
+      },
+      "bundle": {
+        "identifier": "com.local.notesclone",
+        "version": "0.1.0"
+      },
+      "buildBoundary": {
+        "releaseLockedOfflineLogVerified": true,
+        "packagedBinaryFingerprintBoundToActualNativeSha": true,
+        "developerIdOrNotarizationAccepted": false,
+        "actionsRun": false
+      }
+    },
+    "android": {
+      "artifactDirectory": "artifacts/account109/android-sourced69-production-candidate-01",
+      "sourceRoot": "/private/tmp/account109-sourced69-android-root-20261113-01",
+      "cargoTarget": "/private/tmp/account109-sourced69-android-target-20261113-01",
+      "formalFiles": {
+        "CyberNote-android-arm64-unsigned.apk": {
+          "bytes": 51613687,
+          "sha256": "82f79f7e306fd60f2148132eae1f727efb7876fdcfb0bc1b7b59087d1565145d"
+        },
+        "CyberNote-android-arm64-notices.zip": {
+          "bytes": 2021726,
+          "sha256": "e4a8dce92e437712e07a2e3fb0c27575da8131e61ca1cfea510444f5b9d4abcd"
+        },
+        "CyberNote-android-arm64.json": {
+          "bytes": 1829,
+          "sha256": "18c4da535ef97fd72b7f1ada4b74dd1503d9d549590a7e5550b3272109877e36"
+        },
+        "CyberNote-android-arm64.sha256": {
+          "bytes": 205,
+          "sha256": "94d9ed87d243234f88b935fb7ca7ddcc33455279c4d66b84a228e9a83374014c"
+        }
+      },
+      "formalCopiesEqualStagedBytes": true,
+      "uniquePackageEntries": 757,
+      "nativeEntry": "lib/arm64-v8a/libnotes_clone_lib.so",
+      "nativeSha256": "82982d160e8a66b170fb979ef4fba0b87d605e8411adc75aa7d829da07e6e1b2",
+      "buildInfo": {
+        "schema": 1,
+        "version": "0.1.0",
+        "mode": "production",
+        "builtAt": "2026-11-12T21:20:28.376Z",
+        "target": "android",
+        "sourceRevision": "d7f3e2a9431f80ae5711a6a8f3fb3c55b86e3cbd",
+        "sourceFingerprint": "3f3b76ebfe6c8a146cb35ffad5b4daeff2696c05612dc8846a55a2d450de2058",
+        "sourceDirty": false,
+        "inputCount": 1619,
+        "releasePreparedAt": null
+      },
+      "embeddedIdentity": {
+        "encoding": "brotli",
+        "sha256": "a4a663cc939d51c17b5b242bdd7e6a543e23938c90365621681d5a7300fe5948"
+      },
+      "independentlyVerifiedEmbeddedBytes": true,
+      "frontend": {
+        "asset": "assets/index-mICg1oVp.js",
+        "sha256": "0a975a97262c230d36c68a327d61a691e04ddb9d41343de4a1e7b852c5a28d4d",
+        "encodedSha256": "ee3b4677c0ed34dabb79fccca25cb61000308d2f6201047a05fb5121a3f40237",
+        "encoding": "brotli",
+        "embeddedEncodedBytesAndDistEqual": true,
+        "pureHelper": "function bp(){return!!(globalThis||window).isTauri}",
+        "binding": "hv=bp()||!1",
+        "commandGuard": "if(!hv)",
+        "helperCases": [
+          {
+            "isTauri": false,
+            "available": false
+          },
+          {
+            "isTauri": true,
+            "available": true
+          }
+        ],
+        "wholeBundleExecuted": false
+      },
+      "fingerprints": {
+        "aarch64-linux-android/release/.fingerprint/notes-clone-3cecca753b1ac10a/lib-notes_clone_lib.json": {
+          "sha256": "aa97abd07bd666c4fe214d5667238f562ce2e5d919eae818eaeed2746b6b2f90",
+          "features": []
+        },
+        "aarch64-linux-android/release/.fingerprint/tauri-30dfb5e4be294b5a/lib-tauri.json": {
+          "sha256": "55b249b125def6ab57b44a72d3c0a60acd30d76c7ee9051e42aa0d1069ebb635",
+          "features": [
+            "common-controls-v6",
+            "compression",
+            "custom-protocol",
+            "dbus",
+            "default",
+            "dynamic-acl",
+            "http-range",
+            "protocol-asset",
+            "tauri-runtime-wry",
+            "webkit2gtk",
+            "webview2-com",
+            "wry",
+            "x11"
+          ]
+        }
+      },
+      "noticeVerification": {
+        "entries": 1200,
+        "allNamesAndBytesMatchFrozenManifestPayloads": true,
+        "rustDirectLicenses": 9,
+        "rustProvenanceFiles": 1,
+        "sdkLicenseBundleFiles": 1138
+      },
+      "allFourLocksMatchPristineHeadAndBeforeAfterBuild": true,
+      "sourceClean": true,
+      "oneParentlessRootNoRemotes": true,
+      "elfLibraries": [
+        {
+          "entry": "lib/arm64-v8a/libcloudflared.so",
+          "bytes": 28812032,
+          "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+          "elfClass": 64,
+          "endianness": "little",
+          "type": 3,
+          "machine": 183,
+          "version": 1,
+          "headerBytes": 64
+        },
+        {
+          "entry": "lib/arm64-v8a/libimage_processing_util_jni.so",
+          "bytes": 32528,
+          "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+          "elfClass": 64,
+          "endianness": "little",
+          "type": 3,
+          "machine": 183,
+          "version": 1,
+          "headerBytes": 64
+        },
+        {
+          "entry": "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+          "bytes": 11064544,
+          "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+          "elfClass": 64,
+          "endianness": "little",
+          "type": 3,
+          "machine": 183,
+          "version": 1,
+          "headerBytes": 64
+        },
+        {
+          "entry": "lib/arm64-v8a/libnotes_clone_lib.so",
+          "bytes": 76519032,
+          "sha256": "82982d160e8a66b170fb979ef4fba0b87d605e8411adc75aa7d829da07e6e1b2",
+          "elfClass": 64,
+          "endianness": "little",
+          "type": 3,
+          "machine": 183,
+          "version": 1,
+          "headerBytes": 64
+        },
+        {
+          "entry": "lib/arm64-v8a/libsurface_util_jni.so",
+          "bytes": 4896,
+          "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+          "elfClass": 64,
+          "endianness": "little",
+          "type": 3,
+          "machine": 183,
+          "version": 1,
+          "headerBytes": 64
+        }
+      ],
+      "providerExactRetainedAssetBytes": true,
+      "unsigned": {
+        "jarAndApkSigningMaterialAbsent": true,
+        "apksignerBuildTools": "36.0.0",
+        "actualExitCode": 1,
+        "stdout": "",
+        "stderr": [
+          "DOES NOT VERIFY",
+          "ERROR: Missing META-INF/MANIFEST.MF"
+        ],
+        "productionUnsignedHelperAccepted": true
+      },
+      "compiledManifest": {
+        "aapt2BuildTools": "36.0.0",
+        "productionManifestHelperAccepted": true,
+        "decodedStdoutSha256": "54b4fc6b550eb533667c602d11da9627c0be6167166cd7a7378bc11696055369",
+        "package": "com.local.notesclone",
+        "versionName": "0.1.0",
+        "versionCode": 1000,
+        "minSdk": 26,
+        "targetSdk": 36,
+        "debuggable": "absent; Android default false",
+        "testOnly": "absent; Android default false",
+        "callbackFilterCount": 1,
+        "callbackScheme": "com.local.notesclone.auth",
+        "callbackHost": "callback"
+      },
+      "buildBoundary": {
+        "releaseRetrySucceeded": true,
+        "firstAttemptFailedFromOwnedClonedTauriKotlinCache": true,
+        "ownedTauriCacheInvalidated": true,
+        "metadataLockedOffline": true,
+        "buildCargoNetOffline": true,
+        "explicitCargoLockedBuildArgument": false,
+        "localJava": "Homebrew OpenJDK 17.0.19 on macOS",
+        "actionsRun": false
+      }
+    }
+  },
+  "lockfiles": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "stageRegressionReview": "../android-stage-review/README.md",
+  "stageTestsRepeated": false,
+  "packageRebuiltByReviewer": false,
+  "appExecutedByReviewer": false,
+  "adbOrDeviceUsedByReviewer": false,
+  "loginOrRemoteUsedByReviewer": false,
+  "previousArtifactsPreserved": [
+    {
+      "path": "/private/tmp/account109-source5d30-android-root-20261113-01/release-packages/CyberNote-android-arm64-unsigned.apk",
+      "sha256": "f4647da47f0384dfe85d09d2fa1b124282e335eef3885c20e5c6ed2b6d559f85"
+    },
+    {
+      "path": "/private/tmp/account109-source-snapshot5d30-prepared-20261113-01/release-packages/CyberNote-macos-arm64.zip",
+      "sha256": "a79a3fa077d9ed8b828c1c2309140ac16f8c31035c8af699ba9e9a2ea6d18895"
+    },
+    {
+      "path": "/private/tmp/account109-source-snapshot5d30-prepared-20261113-01/release-packages/CyberNote-macos-arm64-notices.zip",
+      "sha256": "f536b6cbda319cf8e5f0be92096f2db0004e15f959e592129e5484a9999142ed"
+    },
+    {
+      "path": "/private/tmp/account109-source-snapshot5d30-prepared-20261113-01/release-packages/CyberNote-macos-arm64.json",
+      "sha256": "5db0de0f85ea29680c9dd2bf797ccf6c3ba8e0c7f276fe3f58caa43b525ff0cd"
+    },
+    {
+      "path": "/private/tmp/account109-source5d30-macos-target-20261113-01/aarch64-apple-darwin/release/bundle/macos/CyberNote.app/Contents/MacOS/notes-clone",
+      "sha256": "2e3fdb3b364eb0fb3f209a7344cd15673742d62085eec33f1f35f11adc196f94"
+    },
+    {
+      "path": "/private/tmp/account109-source-snapshotad18-prepared-20261113-01/release-packages/CyberNote-macos-arm64.zip",
+      "sha256": "f618e3984af299febba5e8636807291ca98b2057d5e1ca962f997bd7b860abe6"
+    }
+  ]
+}
