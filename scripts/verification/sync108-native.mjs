@@ -394,6 +394,17 @@ export async function run(argv = process.argv.slice(2)) {
       await originals(a, mediaNote, fixtures);
       await originals(b, mediaNote, fixtures);
       check("PNG and TXT original SHA256 match on both native stores");
+
+      const reverseMedia = await b.create("乙端反向原始附件：完整正文与引用保留");
+      const reverseFixtures = [["sync108-reverse-original.txt", txt]];
+      await b.command("attachment.submit", { files: reverseFixtures.map(([name, bytes]) => ({ name, mime: "text/plain", base64: bytes.toString("base64") })) });
+      await b.command("app.flush");
+      await until("B original attachment reaches A", async () => (await a.workspace()).attachments.some((x) => x.noteId === reverseMedia));
+      await sameBody(b, a, reverseMedia, "DESK-06 B to A attachment full body and references converge");
+      await originals(b, reverseMedia, reverseFixtures);
+      await originals(a, reverseMedia, reverseFixtures);
+      check("DESK-06 B submitted TXT original SHA256 matches actual reads and files on both stores");
+
       await b.select(mediaNote);
       await until("native webview renders real PNG", () => b.app.evaluate(`Array.from(document.querySelectorAll('.attachment-node img')).some(img=>img.naturalWidth>0)`));
       check("peer native webview decodes replicated image");
