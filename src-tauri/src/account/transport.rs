@@ -8,7 +8,7 @@ use super::{
 use crate::sync::{
     adapter,
     identity::{now, IdentityStore, PairingInvite},
-    network::SyncService,
+    network::{ReplicationPolicy, SyncService},
 };
 use cybergrid_sdk::{Client, Mapping, Port};
 use serde::{Deserialize, Serialize};
@@ -73,6 +73,10 @@ impl Bootstrap {
             return Err(Error::InvalidProof);
         }
         self.gate.admit(&claims);
+        // Verification awaits network IO. The owner, SDK or signed local lease
+        // may have closed meanwhile; fence invitation creation as well as Noise.
+        self.gate
+            .authorize(&claims.device_id, &claims.noise_public_key)?;
         let proof = self.proof.lock().map_err(|_| Error::Storage)?.clone();
         // A loopback connection is not authentication; only a signed enrollment
         // plus the expected static Noise key/device grants access to the PSK.
@@ -399,4 +403,176 @@ async fn run_service(
         sync.close().await;
     }
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use base64::{engine::general_purpose::URL_SAFE_NO_PAD as B64, Engine};
+    use p384::{
+        elliptic_curve::sec1::ToEncodedPoint,
+        pkcs8::{EncodePrivateKey, LineEnding},
+        SecretKey,
+    };
+    use std::sync::atomic::{AtomicBool, Ordering};
+
+    async fn bootstrap_during_verification(revoke: &str) {
+        let directory = tempfile::tempdir().unwrap();
+        let device = uuid::Uuid::new_v4().to_string();
+        let identity = Arc::new(IdentityStore::open(directory.path(), &device).unwrap());
+        let before = std::fs::read(directory.path().join("identity-v1.json")).unwrap();
+        let binding = Binding {
+            issuer: config::ISSUER.into(),
+            subject: "synthetic-bootstrap-owner".into(),
+            product_id: "cybernote".into(),
+            workspace_id: uuid::Uuid::new_v4().to_string(),
+            device_id: device,
+            noise_public_key: identity.public_key().unwrap(),
+            enabled: true,
+        };
+        let secret = SecretKey::random(&mut rand::rngs::OsRng);
+        let point = secret.public_key().to_encoded_point(false);
+        let jwks = serde_json::json!({"keys":[{"kty":"EC","crv":"P-384","kid":"synthetic-bootstrap","alg":"ES384","use":"sig","x":B64.encode(point.x().unwrap()),"y":B64.encode(point.y().unwrap())}]}).to_string();
+        let key = jsonwebtoken::EncodingKey::from_ec_pem(
+            secret.to_pkcs8_pem(LineEnding::LF).unwrap().as_bytes(),
+        )
+        .unwrap();
+        let http = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let origin = format!("http://{}", http.local_addr().unwrap());
+        let claims = Claims {
+            iss: origin.clone(),
+            aud: "cybernote-enrollment-v1".into(),
+            sub: binding.subject.clone(),
+            account_issuer: binding.issuer.clone(),
+            product_id: binding.product_id.clone(),
+            workspace_id: binding.workspace_id.clone(),
+            device_id: uuid::Uuid::new_v4().to_string(),
+            noise_public_key: B64.encode([7; 32]),
+            purpose: "pair".into(),
+            iat: now(),
+            exp: now() + 200,
+            jti: uuid::Uuid::new_v4().to_string(),
+        };
+        let mut header = jsonwebtoken::Header::new(jsonwebtoken::Algorithm::ES384);
+        header.kid = Some("synthetic-bootstrap".into());
+        let proof = jsonwebtoken::encode(&header, &claims, &key).unwrap();
+        let local_proof = jsonwebtoken::encode(
+            &header,
+            &Claims {
+                device_id: binding.device_id.clone(),
+                noise_public_key: binding.noise_public_key.clone(),
+                ..claims.clone()
+            },
+            &key,
+        )
+        .unwrap();
+        let (seen, verification_started) = tokio::sync::oneshot::channel();
+        let (release, proceed) = tokio::sync::oneshot::channel();
+        let jwks_server = tokio::spawn(async move {
+            let (mut stream, _) = http.accept().await.unwrap();
+            let mut request = Vec::new();
+            while !request.windows(4).any(|w| w == b"\r\n\r\n") {
+                let mut chunk = [0; 1024];
+                let n = stream.read(&mut chunk).await.unwrap();
+                assert!(n > 0 && request.len() + n <= 4096);
+                request.extend_from_slice(&chunk[..n]);
+            }
+            assert!(request.starts_with(b"GET /api/v1/account/jwks HTTP/1.1\r\n"));
+            seen.send(()).unwrap();
+            proceed.await.unwrap();
+            stream.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}",jwks.len(),jwks).as_bytes()).await.unwrap();
+        });
+        let gate = Arc::new(Gate::default());
+        gate.renew_local(now() + 200);
+        let active = Arc::new(AtomicBool::new(true));
+        let owner = active.clone();
+        gate.bind_lifecycle(Arc::new(move || owner.load(Ordering::Acquire)));
+        let bootstrap = Bootstrap {
+            enrollment: Arc::new(Enrollment::new(origin).unwrap()),
+            binding: binding.clone(),
+            identity: identity.clone(),
+            gate: gate.clone(),
+            proof: Mutex::new(local_proof.clone()),
+        };
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let mut client = TcpStream::connect(listener.local_addr().unwrap())
+            .await
+            .unwrap();
+        let (stream, _) = listener.accept().await.unwrap();
+        let host = tokio::spawn(async move { bootstrap.serve(stream).await });
+        let nonce = uuid::Uuid::new_v4().to_string();
+        write(
+            &mut client,
+            &Request {
+                proof,
+                nonce: nonce.clone(),
+            },
+        )
+        .await
+        .unwrap();
+        tokio::time::timeout(Duration::from_secs(5), verification_started)
+            .await
+            .unwrap()
+            .unwrap();
+        match revoke {
+            "close" => gate.close(),
+            "cancel-owner" => active.store(false, Ordering::Release),
+            "active" => (),
+            _ => unreachable!(),
+        }
+        release.send(()).unwrap();
+        let result = tokio::time::timeout(Duration::from_secs(5), host)
+            .await
+            .unwrap()
+            .unwrap();
+        jwks_server.await.unwrap();
+        if revoke == "active" {
+            result.unwrap();
+            let response: Response = read(&mut client).await.unwrap();
+            assert_eq!(response.nonce, nonce);
+            assert_eq!(response.proof, local_proof);
+            let invite = PairingInvite::decode(&response.invitation).unwrap();
+            assert_eq!(invite.workspace_id, binding.workspace_id);
+            assert_eq!(invite.host_key, binding.noise_public_key);
+            assert!(identity
+                .authorize(
+                    &invite.invitation_id,
+                    &binding.workspace_id,
+                    &B64.encode([8; 32]),
+                    &claims.device_id
+                )
+                .is_err());
+            identity
+                .authorize(
+                    &invite.invitation_id,
+                    &binding.workspace_id,
+                    &claims.noise_public_key,
+                    &claims.device_id,
+                )
+                .unwrap();
+        } else {
+            assert!(
+                result.is_err(),
+                "bootstrap returned an invitation after {revoke}"
+            );
+            assert_eq!(
+                std::fs::read(directory.path().join("identity-v1.json")).unwrap(),
+                before,
+                "closed bootstrap persisted an invitation"
+            );
+        }
+    }
+
+    #[tokio::test]
+    async fn bootstrap_rechecks_closed_gate_after_proof_verification() {
+        bootstrap_during_verification("close").await;
+    }
+    #[tokio::test]
+    async fn bootstrap_rechecks_cancelled_owner_after_proof_verification() {
+        bootstrap_during_verification("cancel-owner").await;
+    }
+    #[tokio::test]
+    async fn active_bootstrap_returns_nonce_bound_noise_key_pinned_invitation() {
+        bootstrap_during_verification("active").await;
+    }
 }

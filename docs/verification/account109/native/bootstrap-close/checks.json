@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "b0acbb1e",
+  "scope": "Loopback-only signed synthetic bootstrap requests; no device, account grant, or external service",
+  "attempts": [
+    {
+      "name": "red01",
+      "result": "failed-as-expected",
+      "tests": 2,
+      "rawPath": "/private/tmp/account109-bootstrap-red01.log",
+      "rawSha256": "c7d7db032cc1caa59bdf47337d718604b688242ee8988d609d1891f9e9bcbaad",
+      "archive": "red01.txt",
+      "archiveSha256": "c7d7db032cc1caa59bdf47337d718604b688242ee8988d609d1891f9e9bcbaad"
+    },
+    {
+      "name": "green01",
+      "result": "passed",
+      "tests": 12,
+      "rawPath": "/private/tmp/account109-bootstrap-green01.log",
+      "rawSha256": "ce3a9541a5d8eb015e88fc110e025cb2fe57681b528300a4ad031cf41a5cf7eb",
+      "archive": "green01.txt",
+      "archiveSha256": "ea59a96b3175985b8a415eb4653b4da4b39664eaa9315b825e40fc13cc6292d6"
+    }
+  ],
+  "sourceSha256": "162dccd9c1ff0c1f1a3e8286f58ba3527e5dfdd70f8bfa98db8627171cd22c59"
+}
