@@ -69,7 +69,7 @@ export async function prepareCandidate({ root = toolRoot, expectedSource, gradle
     removedEnvironmentFlags: ['VITE_NOTES_ACCOUNT_NATIVE', 'VITE_NOTES_ACCOUNT_UI'],
     accountCapability: 'default-native',
     lockfiles: Object.fromEntries(['pnpm-lock.yaml', 'src-tauri/Cargo.lock',
-      'crates/account-auth/Cargo.lock', 'vendor/cybergrid-sdk/Cargo.lock'].map(name =>
+      'crates/account-auth/Cargo.lock', 'services/coordinator/package-lock.json'].map(name =>
         [name, sha256(readFileSync(path.join(root, name)))])),
     buildFlags: Object.fromEntries(['NODE_ENV', 'VITE_NOTES_DEBUG',
       'CARGO_TARGET_DIR', 'CARGO_BUILD_JOBS', 'CARGO_PROFILE_DEV_DEBUG', 'CARGO_PROFILE_TEST_DEBUG',
