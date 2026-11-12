@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "kind": "three-peer-attempt-archive",
-  "archivedAt": "2026-11-12T11:39:22.768266+00:00",
+  "archivedAt": "2026-11-12T11:51:14.880890+00:00",
   "attempts": [
     {
       "run": "run01",
@@ -212,11 +212,249 @@
           }
         }
       ]
+    },
+    {
+      "originalPath": "/private/tmp/sync108-three-20261112-04/result.json",
+      "archive": "run04.result.json",
+      "sha256": "7dab4612a93db86a51bc245723194837dadfeac26e778841764838c9cfe1bed0",
+      "bytes": 73406,
+      "run": "run04",
+      "status": "pass",
+      "cases": [
+        {
+          "id": "3P-01",
+          "name": "A to B and C: formatted full document plus PNG original",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:46:50.285Z",
+          "finishedAt": "2026-11-12T11:47:23.459Z"
+        },
+        {
+          "id": "3P-02",
+          "name": "C real UI create to A then B: complete document and plaintext",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:47:23.460Z",
+          "finishedAt": "2026-11-12T11:47:30.539Z"
+        },
+        {
+          "id": "3P-03",
+          "name": "B through A to C: text and generic original file",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:47:30.540Z",
+          "finishedAt": "2026-11-12T11:47:35.984Z"
+        },
+        {
+          "id": "3P-04",
+          "name": "C background process reclaim and relaunch automatically catches up",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:47:35.985Z",
+          "finishedAt": "2026-11-12T11:47:57.981Z"
+        }
+      ],
+      "cleanup": [
+        {
+          "name": "active-CDP",
+          "owned": {
+            "serial": "98895a3147304c3132",
+            "package": "com.local.notesclone.sync108",
+            "pid": 29187,
+            "local": "tcp:50055",
+            "remote": "localabstract:webview_devtools_remote_29187",
+            "pageId": "E3493F3680DFC55B4CA5593E882EFAE9",
+            "pageURL": "http://tauri.localhost/"
+          },
+          "status": "pass"
+        },
+        {
+          "name": "B:natural-close",
+          "status": "pass",
+          "lifecycle": {
+            "name": "B",
+            "directory": "/private/tmp/sync108-three-20261112-02/store-B",
+            "stderrBytes": 58,
+            "commands": 196,
+            "forcedSignals": [],
+            "pid": 14490,
+            "lastAction": "shutdown",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": true
+          }
+        },
+        {
+          "name": "A:natural-close",
+          "status": "pass",
+          "lifecycle": {
+            "name": "A",
+            "directory": "/private/tmp/sync108-three-20261112-02/store-A",
+            "stderrBytes": 58,
+            "commands": 115,
+            "forcedSignals": [],
+            "pid": 14481,
+            "lastAction": "shutdown",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": true
+          }
+        },
+        {
+          "name": "owned-reverse",
+          "status": "pass",
+          "owned": {
+            "serial": "98895a3147304c3132",
+            "package": "com.local.notesclone.sync108",
+            "device": "tcp:37529",
+            "host": "tcp:61778"
+          }
+        }
+      ],
+      "terminalAudit": "run04.terminal-audit.json"
+    },
+    {
+      "originalPath": "/private/tmp/sync108-three-20261112-05/result.json",
+      "archive": "run05.result.json",
+      "sha256": "69db7999d25fc137b4c8c8c465d343ab5c1885af11ba8b83074493e7ac2ca152",
+      "bytes": 73407,
+      "run": "run05",
+      "status": "pass",
+      "cases": [
+        {
+          "id": "3P-01",
+          "name": "A to B and C: formatted full document plus PNG original",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:48:48.324Z",
+          "finishedAt": "2026-11-12T11:49:06.256Z"
+        },
+        {
+          "id": "3P-02",
+          "name": "C real UI create to A then B: complete document and plaintext",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:49:06.257Z",
+          "finishedAt": "2026-11-12T11:49:14.373Z"
+        },
+        {
+          "id": "3P-03",
+          "name": "B through A to C: text and generic original file",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:49:14.374Z",
+          "finishedAt": "2026-11-12T11:49:20.464Z"
+        },
+        {
+          "id": "3P-04",
+          "name": "C background process reclaim and relaunch automatically catches up",
+          "status": "pass",
+          "startedAt": "2026-11-12T11:49:20.465Z",
+          "finishedAt": "2026-11-12T11:49:43.101Z"
+        }
+      ],
+      "cleanup": [
+        {
+          "name": "active-CDP",
+          "owned": {
+            "serial": "98895a3147304c3132",
+            "package": "com.local.notesclone.sync108",
+            "pid": 31384,
+            "local": "tcp:51318",
+            "remote": "localabstract:webview_devtools_remote_31384",
+            "pageId": "90BC2874C59E7D779A2322B48C74D739",
+            "pageURL": "http://tauri.localhost/"
+          },
+          "status": "pass"
+        },
+        {
+          "name": "B:natural-close",
+          "status": "pass",
+          "lifecycle": {
+            "name": "B",
+            "directory": "/private/tmp/sync108-three-20261112-02/store-B",
+            "stderrBytes": 58,
+            "commands": 144,
+            "forcedSignals": [],
+            "pid": 15428,
+            "lastAction": "shutdown",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": true
+          }
+        },
+        {
+          "name": "A:natural-close",
+          "status": "pass",
+          "lifecycle": {
+            "name": "A",
+            "directory": "/private/tmp/sync108-three-20261112-02/store-A",
+            "stderrBytes": 58,
+            "commands": 126,
+            "forcedSignals": [],
+            "pid": 15421,
+            "lastAction": "shutdown",
+            "exit": {
+              "code": 0,
+              "signal": null
+            },
+            "close": {
+              "code": 0,
+              "signal": null
+            },
+            "stdoutNoiseBytes": 0,
+            "naturalExit": true
+          }
+        },
+        {
+          "name": "owned-reverse",
+          "status": "pass",
+          "owned": {
+            "serial": "98895a3147304c3132",
+            "package": "com.local.notesclone.sync108",
+            "device": "tcp:37529",
+            "host": "tcp:61778"
+          }
+        }
+      ],
+      "terminalAudit": "run05.terminal-audit.json"
     }
   ],
   "formalFourCasePass": {
-    "available": false,
-    "reason": "Only run01–03 results are present; no all-four-case passing result located. Latest PageLoad Ready binary handoff and continuation execution are outstanding."
+    "available": true,
+    "primaryRun": "run05",
+    "primaryResult": "run05.result.json",
+    "primaryResultSHA256": "69db7999d25fc137b4c8c8c465d343ab5c1885af11ba8b83074493e7ac2ca152",
+    "additionalPassRun": "run04",
+    "additionalResultSHA256": "7dab4612a93db86a51bc245723194837dadfeac26e778841764838c9cfe1bed0",
+    "binarySHA256": "771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723",
+    "sourceCommit": "e3225038cd47f00774e08a8cf10e32ab2335668f",
+    "nativeHelperUpstream": "50a2ac9f5bb924290ca7da8fc7b0330d3bfe8ee4",
+    "driverCommit": "d18e90b1b52550eb80180eb0caa55af83ea420e7",
+    "cases": [
+      "3P-01",
+      "3P-02",
+      "3P-03",
+      "3P-04"
+    ],
+    "terminalAudits": [
+      "run04.terminal-audit.json",
+      "run05.terminal-audit.json"
+    ]
   },
   "verifiedPartialPass": {
     "run": "run02",
@@ -262,5 +500,13 @@
     ]
   },
   "continuationProof": "continuation-proof.json",
-  "apkPreservation": "android-apk-preservation.json"
+  "apkPreservation": "android-apk-preservation.json",
+  "status": "pass",
+  "finalCleanup": "final-cleanup.json",
+  "toolRegression": {
+    "nativeProtocolChecks": 12,
+    "androidTempLockChecks": 2,
+    "status": "pass",
+    "deviceInteraction": false
+  }
 }
