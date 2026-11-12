@@ -10,6 +10,7 @@ import { resolve, relative, sep, isAbsolute } from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { NativeApp, until, delay } from "./sync108-native-driver.mjs";
+import { productFiles, sourceIdentity } from "../build-info.mjs";
 
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 async function fileHash(path) {
@@ -34,13 +35,10 @@ function options(argv) {
   return result;
 }
 async function fingerprint(root) {
-  const paths = execFileSync("git", ["ls-files", "-z", "--cached", "--others", "--exclude-standard", "--",
-    "src", "src-tauri/src", "src-tauri/Cargo.toml", "src-tauri/Cargo.lock", "src-tauri/tauri.conf.json",
-    "src-tauri/capabilities", "plugins", "scripts/verification/sync108-native*", "scripts/build-info.mjs",
-    "package.json", "pnpm-lock.yaml", "vite.config.ts", "index.html"], { cwd: root }).toString().split("\0").filter(Boolean);
+  const paths = productFiles(root);
   const sources = {};
   for (const path of [...new Set(paths)].sort()) sources[path] = await fileHash(resolve(root, path));
-  return { sha256: hash(JSON.stringify(sources)), files: sources };
+  return { sha256: sourceIdentity(root).sourceFingerprint, algorithm: "build-info.sourceIdentity/productFiles", files: sources };
 }
 async function distFingerprint(root) {
   const base = resolve(root, "dist");
@@ -150,7 +148,8 @@ h=lambda:hashlib.sha256(open(p,'rb').read()).hexdigest()
 before=h()
 c=sqlite3.connect('file:'+p+'?mode=ro&immutable=1',uri=True)
 tables=['notes','attachments','sync_heads','sync_inbox','sync_dirty','sync_projection']
-r={'integrity':c.execute('pragma integrity_check').fetchone()[0], 'counts':{t:c.execute('select count(*) from '+t).fetchone()[0] for t in tables}, 'identity':c.execute('select workspace_id,device_id from sync_identity').fetchall(), 'projection':c.execute('select kind,entity_id,digest from sync_projection order by kind,entity_id').fetchall(), 'databaseSha256':before, 'immutableReadOnly':True}
+present={row[0] for row in c.execute("select name from sqlite_master where type='table'")}
+r={'integrity':c.execute('pragma integrity_check').fetchone()[0], 'counts':{t:c.execute('select count(*) from '+t).fetchone()[0] for t in tables if t in present}, 'absentSyncTables':[t for t in tables if t not in present], 'identity':c.execute('select workspace_id,device_id from sync_identity').fetchall() if 'sync_identity' in present else [], 'projection':c.execute('select kind,entity_id,digest from sync_projection order by kind,entity_id').fetchall() if 'sync_projection' in present else [], 'databaseSha256':before, 'immutableReadOnly':True}
 c.close()
 r['unchanged']=before==h()
 assert r['unchanged'] and r['integrity']=='ok'
@@ -173,6 +172,7 @@ export async function run(argv = process.argv.slice(2)) {
     schema: 1, kind: "two-native-tauri-apps", startedAt: new Date().toISOString(),
     sourceHead: execFileSync("git", ["rev-parse", "HEAD"], { cwd: root, encoding: "utf8" }).trim(),
     sourceBefore, staticFrontendBefore: distBefore,
+    tools: Object.fromEntries(await Promise.all(["sync108-native.mjs", "sync108-native-driver.mjs"].map(async (name) => [name, await fileHash(fileURLToPath(new URL(name, import.meta.url)))]))),
     binary: { path: binary, sha256: binarySha256 },
     frontend: { buildCommand: "NODE_ENV=development VITE_NOTES_DEBUG=1 pnpm build", staticDebug: true,
       differencesFromProduction: ["import.meta.env.DEV=true", "VITE_NOTES_DEBUG=1", "NODE_ENV=development", "Rust sync-e2e feature and debug_assertions", "NOTES_SYNC_E2E=1 owned child environment"] },
@@ -234,9 +234,7 @@ export async function run(argv = process.argv.slice(2)) {
     b = await open("B", stores[1]);
     check("two independently owned native processes", a.app.child.pid !== b.app.child.pid);
     const statusA = await a.sync("sync.status"), statusB = await b.sync("sync.status");
-    check("fresh stores have distinct device and workspace identities", !!statusA.deviceId && !!statusB.deviceId && statusA.deviceId !== statusB.deviceId &&
-      !!statusA.workspaceId && !!statusB.workspaceId && statusA.workspaceId !== statusB.workspaceId);
-    identityA = statusA.deviceId;
+    check("fresh disabled stores do not create synchronization identity", [statusA, statusB].every((s) => s.state === "disabled" && !s.deviceId && !s.workspaceId));
     if (!opts.smoke) {
       localA = await a.create("甲端配对前已有中文笔记");
       localB = await b.create("乙端配对前已有中文笔记");
@@ -244,6 +242,8 @@ export async function run(argv = process.argv.slice(2)) {
       await a.enterSync();
       await a.command("sync.status");
       const host = (await a.state()).synchronization.status;
+      identityA = host.deviceId;
+      assert(identityA && host.workspaceId, "Explicit host opt-in creates actual identity");
       const endpoint = host.listenAddress?.replace("0.0.0.0", "127.0.0.1");
       assert(endpoint, "Actual host returns listen address");
       report.observations.push({ name: "actual-sync-endpoint", endpoint });
@@ -255,6 +255,10 @@ export async function run(argv = process.argv.slice(2)) {
       try { await b.sync("sync.pair", { invitation, deviceName: "Sync108 Native B" }); }
       finally { invitation = undefined; }
       await a.leaveSync();
+      const pairedA = await a.sync("sync.status"), pairedB = await b.sync("sync.status");
+      check("pair shares workspace with distinct device identities and preserves host identity", pairedA.deviceId === identityA &&
+        !!pairedB.deviceId && pairedA.deviceId !== pairedB.deviceId && pairedA.workspaceId === host.workspaceId && pairedA.workspaceId === pairedB.workspaceId);
+      report.observations.push({ name: "paired-identities", a: { deviceId: pairedA.deviceId, workspaceId: pairedA.workspaceId }, b: { deviceId: pairedB.deviceId, workspaceId: pairedB.workspaceId } });
       await sameBody(a, b, localA, "pair merges existing A note into B");
       await sameBody(b, a, localB, "pair merges existing B note into A");
 
@@ -397,7 +401,8 @@ export async function run(argv = process.argv.slice(2)) {
     }
   } catch (error) {
     // Assertion and application exception messages can contain arguments.
-    report.failure = { code: /^[A-Z_:a-z0-9 -]{1,160}$/.test(error.code || "") ? error.code : "SUITE_FAILED", completedChecks: report.checks.length };
+    report.failure = { code: /^[A-Z_:a-z0-9 -]{1,160}$/.test(error.code || "") ? error.code : "SUITE_FAILED", completedChecks: report.checks.length,
+      operations: apps.map((app) => ({ name: app.name, lastAction: app.lifecycle.lastAction })) };
     console.error("FAIL native suite; see result.json completed checks");
   } finally {
     for (const app of apps) {
