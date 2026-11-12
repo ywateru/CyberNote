@@ -620,6 +620,8 @@ pub fn run() {
         .manage(recording_window::Recordings::default())
         .manage(apple_notes_import::Imports::default())
         .on_page_load(|webview, _payload| {
+            #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+            sync_e2e::page_load(webview.label(), _payload);
             if let Some(media) = webview.try_state::<MediaState>() {
                 // A trusted host page lifecycle creates identities; acquire IPC
                 // only looks up a captured identity and cannot resurrect one.
