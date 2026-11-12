@@ -27,7 +27,7 @@ test('validated acknowledgement precedes consume, raw buffer is wiped, reference
       observed = data;
     },
   });
-  assert.deepEqual(await transfer(marker), { phase: 'submitted-via-hosted-ui', submitted: true, valuesRecorded: false });
+  assert.deepEqual(await transfer(marker), { phase: 'consumer-completed', consumerCompleted: true, valuesRecorded: false });
   assert.deepEqual(phases, ['captured', 'consume']);
   assert.equal(observed.username, null);
   assert.equal(observed.passphrase, null);
@@ -91,7 +91,7 @@ test('failed trusted-page or native-transaction check clears parsed fields witho
       throw Object.assign(Error('NATIVE_TRANSACTION_NOT_WAITING'), { code: 'NATIVE_TRANSACTION_NOT_WAITING' });
     },
   });
-  await assert.rejects(transfer(marker), { code: 'NATIVE_TRANSACTION_NOT_WAITING' });
+  await assert.rejects(transfer(marker), { code: 'CREDENTIAL_CONSUMER_FAILED' });
   assert.equal(data.username, null);
   assert.equal(data.passphrase, null);
   await assert.rejects(transfer(marker), { code: 'CAPTURE_ALREADY_ATTEMPTED' });
@@ -103,7 +103,7 @@ test('epoch seconds and ISO expiry are accepted; invalid marker never reads', as
       read: () => Buffer.from(JSON.stringify(fixture({ expiresAt }))), now: () => time,
       captured: () => {}, consume: () => {},
     });
-    assert.equal((await transfer(marker)).submitted, true);
+    assert.equal((await transfer(marker)).consumerCompleted, true);
   }
   let read = false;
   const transfer = createCredentialTransfer({
@@ -111,4 +111,46 @@ test('epoch seconds and ISO expiry are accepted; invalid marker never reads', as
   });
   await assert.rejects(transfer('short'), { code: 'MARKER_REQUIRED' });
   assert.equal(read, false);
+});
+
+test('external callback errors cannot leak their message, code, custom fields or cause', async t => {
+  for (const boundary of ['captured', 'consume']) await t.test(boundary, async () => {
+    let consumed = false;
+    let observed;
+    const external = Object.assign(Error('offline-private-error-message'), {
+      code: 'offline-private-error-code', privateField: 'offline-private-field',
+      cause: Error('offline-private-cause'),
+    });
+    const transfer = createCredentialTransfer({
+      read: () => Buffer.from(JSON.stringify(fixture())), now: () => time,
+      captured: () => { if (boundary === 'captured') throw external; },
+      consume: value => { consumed = true; observed = value; throw external; },
+    });
+    await assert.rejects(transfer(marker), error => {
+      const expected = boundary === 'captured' ? 'CAPTURE_ACKNOWLEDGEMENT_FAILED' : 'CREDENTIAL_CONSUMER_FAILED';
+      assert.equal(error.code, expected);
+      assert.equal(error.message, expected);
+      assert.equal(error.cause, undefined);
+      assert.equal(error.privateField, undefined);
+      assert.equal(error.stack.includes('offline-private'), false);
+      return true;
+    });
+    assert.equal(consumed, boundary === 'consume');
+    if (observed) {
+      assert.equal(observed.username, null);
+      assert.equal(observed.passphrase, null);
+    }
+  });
+});
+
+test('waiting for capture acknowledgement cannot extend the original expiry', async () => {
+  let clock = time;
+  let consumed = false;
+  const transfer = createCredentialTransfer({
+    read: () => Buffer.from(JSON.stringify(fixture())), now: () => clock,
+    captured: async () => { await Promise.resolve(); clock = time + 180000; },
+    consume: () => { consumed = true; },
+  });
+  await assert.rejects(transfer(marker), { code: 'TRANSFER_EXPIRED_AFTER_ACKNOWLEDGEMENT' });
+  assert.equal(consumed, false);
 });

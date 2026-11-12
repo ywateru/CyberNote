@@ -48,11 +48,21 @@ export function createCredentialTransfer({
         throw safeError('TRANSFER_VALIDATION_FAILED');
       }
       // The caller can immediately notify the clipboard owner before any UI work.
-      await captured(Object.freeze({
-        phase: 'captured', captured: true, markerMatched: true, valuesRecorded: false,
-      }));
-      await consume(data);
-      return { phase: 'submitted-via-hosted-ui', submitted: true, valuesRecorded: false };
+      try {
+        await captured(Object.freeze({
+          phase: 'captured', captured: true, markerMatched: true, valuesRecorded: false,
+        }));
+      } catch { throw safeError('CAPTURE_ACKNOWLEDGEMENT_FAILED'); }
+      // The acknowledgement may have waited for a human or another process.
+      // Its completion does not extend the original transfer's validity.
+      const afterAcknowledgement = now();
+      if (!Number.isFinite(afterAcknowledgement) || expiry <= afterAcknowledgement) {
+        throw safeError('TRANSFER_EXPIRED_AFTER_ACKNOWLEDGEMENT');
+      }
+      try { await consume(data); }
+      catch { throw safeError('CREDENTIAL_CONSUMER_FAILED'); }
+      // Only the UI consumer can establish a real submit or native callback.
+      return { phase: 'consumer-completed', consumerCompleted: true, valuesRecorded: false };
     } finally {
       if (Buffer.isBuffer(raw)) raw.fill(0);
       if (data && typeof data === 'object') {

@@ -113,10 +113,21 @@ arguments, output or files. The private consumer must independently verify the
 current native authorization, trusted origin, foreground/unlocked device and
 expected form before real CDP Input, and must not log the supplied object.
 
+The `captured` and `consume` callbacks are external error boundaries: their
+exceptions are replaced by `CAPTURE_ACKNOWLEDGEMENT_FAILED` and
+`CREDENTIAL_CONSUMER_FAILED`, respectively, without the original message, code,
+custom fields or cause. After awaiting capture acknowledgement the original
+expiry is checked again, before any consumer call. Successful helper completion
+returns only `{ phase: "consumer-completed", consumerCompleted: true,
+valuesRecorded: false }`. It does not establish that any login was submitted;
+real submission and callback observations belong to the UI consumer's separate
+authoritative evidence.
+
 `node --test scripts/verification/account109-credential-transfer.test.mjs` passed
-18 offline tests using synthetic fixtures only. These cover acknowledgement
+22 offline tests using synthetic fixtures only. These cover acknowledgement
 ordering, rejection without submission, read/parse error separation, expiry,
-single-use behavior and reference cleanup when a page/transaction guard fails.
+single-use behavior, external error sanitization, expiry after acknowledgement,
+and reference cleanup when a page/transaction guard fails.
 They do not access the clipboard or device and do not prove live login. A fresh
 authorized transfer and a fresh private consumer instance remain necessary;
 the failed instance cannot be reused.
