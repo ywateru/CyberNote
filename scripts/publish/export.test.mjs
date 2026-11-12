@@ -8,7 +8,7 @@ import { exportSnapshot, digest, manifestName, safePath, scanBytes } from './exp
 import { publicScripts } from './package-transform.mjs';
 import { transformSmartFixture } from './package-transform.mjs';
 
-function fixture(t) {
+function fixture(t, extraFiles = {}, declarations = {}) {
   const parent = realpathSync(mkdtempSync(join(tmpdir(), 'publish-boundary-'))), root = join(parent, 'source');
   mkdirSync(root); t.after(() => rmSync(parent, { recursive: true, force: true }));
   const files = {
@@ -18,8 +18,9 @@ function fixture(t) {
     'scripts/publish/LICENSE.project-reserved.txt': 'Project rights reserved.', 'scripts/publish/THIRD_PARTY_NOTICES.md': 'Third-party rights retained.',
     'src-tauri/fonts/OFL.txt': 'Fixture license', 'src-tauri/fonts/NotoSansCJKsc-Regular.otf': 'Fixture font',
     'services/coordinator/LICENSE': 'Fixture license', 'pnpm-workspace.yaml': '', 'patches/prosemirror-view@1.42.9.patch': '',
+    ...extraFiles,
   };
-  const manifest = { schema: 1, files: Object.fromEntries(Object.entries(files).map(([n, text]) => [n, digest(Buffer.from(text))])), thirdParty: [] };
+  const manifest = { schema: 1, files: Object.fromEntries(Object.entries(files).map(([n, text]) => [n, digest(Buffer.from(text))])), thirdParty: [], ...declarations };
   manifest.files[manifestName] = 'SELF'; files[manifestName] = JSON.stringify(manifest);
   files['docs/private.md'] = 'PRIVATE DOCUMENT MUST NOT BE EXPORTED';
   files['README.md'] = 'PRIVATE DELIVERY README MUST NOT BE READ';
@@ -56,6 +57,10 @@ test('hash tampering, process paths, credentials and symlink tree entries fail c
   assert.throws(() => scanBytes('src/config.ts', Buffer.from(['ghp', 'a'.repeat(36)].join('_'))), /Credential pattern/);
   const syntheticURL = ['https:', '', 'u:p@fixture.invalid'].join('/');
   assert.doesNotThrow(() => scanBytes('service/test/url.test.ts', Buffer.from(syntheticURL)));
+  const reservedURL = syntheticURL.replace('fixture.invalid', 'example.com');
+  assert.doesNotThrow(() => scanBytes('vendor/cybergrid-sdk/src/tests.rs', Buffer.from(reservedURL)));
+  assert.throws(() => scanBytes('vendor/cybergrid-sdk/src/config.rs', Buffer.from(reservedURL)), /Credential URL/);
+  assert.throws(() => scanBytes('vendor/cybergrid-sdk/src/tests.rs', Buffer.from(reservedURL.replace('u:p@', 'u:' + 'a'.repeat(30) + '@'))), /Credential URL/);
   assert.throws(() => scanBytes('src/config.ts', Buffer.from(syntheticURL)), /Credential URL/);
   assert.throws(() => scanBytes('service/test/url.test.ts', Buffer.from(syntheticURL.replace('fixture.invalid', 'real.example.com'))), /Credential URL/);
   assert.throws(() => scanBytes('vendor/tool', Buffer.from([1, 0, 2])), /Unreviewed binary/);
@@ -73,4 +78,29 @@ test('public smart corpus redirect is exact and idempotent, without changing dev
   assert.deepEqual(transformSmartFixture(output), output);
   assert(original.toString().includes('../../../docs/'));
   assert.throws(() => transformSmartFixture(Buffer.from('unreviewed fixture')), /Unexpected/);
+});
+
+
+test('committed SDK runtime extension exports exact binary bytes while project auth retains first-party rights', t => {
+  const vendor = 'vendor/cybergrid-sdk', base = vendor + '/provider-assets';
+  const path = base + '/android-arm64/jniLibs/arm64-v8a/libcloudflared.so';
+  const bytes = Buffer.from([127, 69, 76, 70, 0, 1, 2]);
+  const license = base + '/LICENSE', source = base + '/manifest.json';
+  const pin = '1'.repeat(40), origin = 'https://fixture.example/provider';
+  const declarations = {
+    firstParty: [{ root: 'crates/account-auth', provenance: 'project-authored', rights: 'reserved', rightsSource: 'scripts/publish/LICENSE.project-reserved.txt' }],
+    thirdParty: [{ root: vendor, origin, revision: pin, licenses: [license] }],
+    runtimeAssets: [{ path, sha256: digest(bytes), size: bytes.length, licenses: [license],
+      source: { url: origin, revision: pin, version: '1.0' }, provenance: { manifest: source, platform: 'android-arm64' } }],
+  };
+  const { root, parent } = fixture(t, {
+    'crates/account-auth/src/lib.rs': '// original project source',
+    [path]: bytes, [license]: 'Fixture provider license',
+    [source]: JSON.stringify({ schema: 1, repository: origin, commit: pin, version: '1.0', runtimeDownload: false,
+      platforms: { 'android-arm64': { binary: 'android-arm64/jniLibs/arm64-v8a/libcloudflared.so', bytes: bytes.length, sha256: digest(bytes) } } }),
+  }, declarations);
+  const target = join(parent, 'runtime-export');
+  exportSnapshot({ root, target, expectedTarget: target, apply: true, initialize: true });
+  assert.deepEqual(readFileSync(join(target, path)), bytes);
+  assert.doesNotThrow(() => exportSnapshot({ root: target }));
 });

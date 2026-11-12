@@ -1,45 +1,13 @@
-import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync, chmodSync, realpathSync } from 'node:fs';
 import { resolve, dirname, isAbsolute, posix, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { transformPackage, transformSmartFixture } from './package-transform.mjs';
+import { digest, readInventory } from './policy.mjs';
+export { digest, safePath, scanBytes } from './policy.mjs';
 
 export const manifestName = 'scripts/publish/manifest.json';
-export const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 const git = (root, args) => execFileSync('git', args, { cwd: root, maxBuffer: 128 * 1024 * 1024 });
-export function safePath(name) {
-  if (typeof name !== 'string' || !name || name !== posix.normalize(name) || name.startsWith('/') || /[\\\x00-\x20\x7f]/.test(name) || name.split('/').some(p => p === '..' || p.startsWith('.') && !['.github', '.gitignore', '.editorconfig'].includes(p))) throw Error('Unsafe export path');
-  if (/^(?:docs|references|output|labs|artifacts|dist|target|node_modules)\//.test(name) ||
-      /(?:^|\/)(?:target|build|node_modules|evidence|verification|local\.properties|tauri\.properties|key\.properties|keystore\.properties)(?:\/|$)/.test(name) ||
-      /\.(?:log|jsonl|sqlite\w*|db|key|pem|p12|pfx|jks|keystore|apk|aab|dmg|zip|mp4|wav|webm|tsbuildinfo)$/.test(name) ||
-      /(?:tauri\.settings\.gradle|tauri\.build\.gradle\.kts|proguard-tauri\.pro)$/.test(name) ||
-      /\/jniLibs\/|\/app\/src\/main\/assets\//.test(name)) throw Error(`Excluded export path: ${name}`);
-  if (name.endsWith('.notesbackup') && !/^src-tauri\/tests\/fixtures\/archive\/[a-z-]+\.notesbackup$/.test(name)) throw Error('Only reviewed synthetic archive fixtures may be exported');
-  return name;
-}
-export function scanBytes(name, bytes) {
-  if (bytes.length > 50 * 1024 * 1024) throw Error(`File exceeds source export size limit: ${name}`);
-  if (bytes.includes(0)) {
-    if (!/\.(?:png|icns|ico)$/.test(name) && name !== 'src-tauri/fonts/NotoSansCJKsc-Regular.otf' && name !== 'src-tauri/gen/android/gradle/wrapper/gradle-wrapper.jar') throw Error(`Unreviewed binary: ${name}`);
-    return;
-  }
-  const text = bytes.toString();
-  // Never echo values, snippets or hashes of a matched credential.
-  if (/-----BEGIN (?:RSA |EC |OPENSSH |DSA |ENCRYPTED )?PRIVATE KEY-----|\b(?:gh[pousr]_[A-Za-z0-9]{30,255}|github_pat_[A-Za-z0-9_]{40,255})|\b(?:sk-(?:proj-)?[A-Za-z0-9_-]{32,255}|xox[baprs]-[A-Za-z0-9-]{20,255}|AIza[A-Za-z0-9_-]{30,255})|\b(?:AKIA|ASIA)[A-Z0-9]{16}|\beyJ[A-Za-z0-9_-]{15,2000}\.[A-Za-z0-9_-]{15,2000}\.[A-Za-z0-9_-]{15,2000}|notes-sync-v1:[A-Za-z0-9_-]{32,2000}/.test(text)) throw Error(`Credential pattern in export input: ${name}`);
-  for (const m of text.matchAll(/(?:https?|rediss?):\/\/[^\s/'"]{1,200}:[^\s/'"]{1,200}@[^\s'"<>]+/g)) {
-    let synthetic = false;
-    try {
-      const url = new URL(m[0]);
-      synthetic = /(?:^|\.)(?:test|invalid|example)$/.test(url.hostname) &&
-        ['u', 'user', 'test', 'fixture'].includes(url.username) &&
-        ['p', 'pass', 'pass' + 'word', 'test', 'fixture'].includes(url['pass' + 'word']) &&
-        /(?:^|\/)test\//.test(name);
-    } catch { /* Malformed credential-shaped inputs fail closed too. */ }
-    if (!synthetic) throw Error(`Credential URL in export input: ${name}`);
-  }
-  if (/\/Users\/[A-Za-z0-9_.-]+\/|\/home\/[A-Za-z0-9_.-]+\//.test(text)) throw Error(`Local user path in export input: ${name}`);
-}
 export function trackedTree(root, ref) {
   const commit = git(root, ['rev-parse', '--verify', `${ref}^{commit}`]).toString().trim();
   const entries = new Map(git(root, ['ls-tree', '-rz', commit]).toString().split('\0').filter(Boolean).map(row => {
@@ -81,19 +49,8 @@ function closure(files) {
 }
 export function planExport(root, ref = 'HEAD') {
   const tree = trackedTree(root, ref), manifest = JSON.parse(tree.read(manifestName));
-  if (manifest.schema !== 1 || !manifest.files || !Array.isArray(manifest.thirdParty)) throw Error('Invalid export manifest');
-  const files = new Map(), modes = new Map();
-  for (const [name, expected] of Object.entries(manifest.files)) {
-    safePath(name); const bytes = tree.read(name);
-    if (name === manifestName ? expected !== 'SELF' : !/^[a-f0-9]{64}$/.test(expected) || digest(bytes) !== expected) throw Error(`Export hash mismatch: ${name}`);
-    scanBytes(name, bytes); files.set(name, bytes); modes.set(name, tree.entries.get(name).mode);
-  }
-  for (const item of manifest.thirdParty) {
-    safePath(item.root);
-    const origin = new URL(item.origin);
-    if (origin.protocol !== 'https:' || origin.username || origin['pass' + 'word'] || !/^[a-f0-9]{40,64}$/.test(item.revision) || !item.licenses?.length || item.licenses.some(f => !files.has(f))) throw Error('Incomplete third-party provenance/license closure');
-  }
-  for (const name of files.keys()) if (/^(?:crates|vendor)\//.test(name) && !manifest.thirdParty.some(p => name.startsWith(p.root + '/'))) throw Error(`SDK/vendor requires explicit provenance and license: ${name}`);
+  const files = readInventory(manifest, tree.read), modes = new Map();
+  for (const name of files.keys()) modes.set(name, tree.entries.get(name).mode);
   for (const required of ['src-tauri/fonts/OFL.txt', 'src-tauri/fonts/NotoSansCJKsc-Regular.otf', 'services/coordinator/LICENSE', 'pnpm-workspace.yaml', 'patches/prosemirror-view@1.42.9.patch']) if (!files.has(required)) throw Error(`Required license/build input missing: ${required}`);
   const transformed = transformPackage(files.get('package.json'));
   files.set('package.json', transformed.bytes);

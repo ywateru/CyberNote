@@ -1,39 +1,49 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
-import { trackedTree, digest, safePath, scanBytes, manifestName } from './export.mjs';
+import { trackedTree, manifestName } from './export.mjs';
+import { digest, safePath, readInventory } from './policy.mjs';
 
-// Refresh only the existing exact inventory. A reviewed extension is an explicit
-// JSON {files:{path:sha256}, thirdParty:[{root,origin,revision,licenses:[path]}]}.
-// Every added hash must already match the requested committed Git snapshot.
-const root = resolve(fileURLToPath(new URL('../..', import.meta.url)));
-let ref = 'HEAD', extension, write = false;
-const args = process.argv.slice(2);
-for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--write') write = true;
-  else if (args[i] === '--ref' && args[i + 1]) ref = args[++i];
-  else if (args[i] === '--extension' && args[i + 1]) extension = args[++i];
-  else throw Error('Usage: manifest.mjs [--ref COMMIT] [--extension REVIEWED_JSON] [--write]');
-}
-const tree = trackedTree(root, ref);
-const manifest = JSON.parse(tree.read(manifestName));
-const changes = [];
-if (extension) {
-  const add = JSON.parse(readFileSync(extension));
-  for (const [name, expected] of Object.entries(add.files ?? {})) {
-    safePath(name); const bytes = tree.read(name); scanBytes(name, bytes);
-    if (!/^[a-f0-9]{64}$/.test(expected) || digest(bytes) !== expected || name === manifestName) throw Error(`Unverified extension input: ${name}`);
-    if (manifest.files[name]) throw Error(`Extension must add a new path: ${name}`);
-    manifest.files[name] = expected; changes.push({ path: name, added: true });
+// Every addition is explicit and must match the requested committed blob. Runtime
+// pins are never auto-refreshed when a binary changes; they require fresh review.
+export function refreshManifest(tree, extension) {
+  const manifest = JSON.parse(tree.read(manifestName)), changes = [];
+  const before = { ...manifest.files };
+  if (extension) {
+    if (typeof extension !== 'object' || Array.isArray(extension) || Object.keys(extension).some(k => !['files', 'thirdParty', 'firstParty', 'runtimeAssets'].includes(k))) throw Error('Unknown manifest extension field');
+    for (const key of ['thirdParty', 'firstParty', 'runtimeAssets']) {
+      if (extension[key] !== undefined && !Array.isArray(extension[key])) throw Error('Invalid manifest extension list');
+      manifest[key] = [...(manifest[key] ?? []), ...(extension[key] ?? [])];
+    }
+    if (extension.files !== undefined && (!extension.files || typeof extension.files !== 'object' || Array.isArray(extension.files))) throw Error('Invalid extension file inventory');
+    const assets = new Set((manifest.runtimeAssets ?? []).map(a => a?.path));
+    for (const [path, expected] of Object.entries(extension.files ?? {})) {
+      safePath(path, assets.has(path));
+      if (path === manifestName || Object.hasOwn(manifest.files, path) || !/^[a-f0-9]{64}$/.test(expected) || digest(tree.read(path)) !== expected) throw Error(`Unverified extension input: ${path}`);
+      manifest.files[path] = expected;
+    }
   }
-  manifest.thirdParty.push(...(add.thirdParty ?? []));
+  readInventory(manifest, tree.read, { refresh: true });
+  for (const [path, hash] of Object.entries(manifest.files)) {
+    if (!Object.hasOwn(before, path)) changes.push({ path, added: true });
+    else if (before[path] !== hash) changes.push({ path, changed: true });
+  }
+  manifest.files = Object.fromEntries(Object.entries(manifest.files).sort(([a], [b]) => a.localeCompare(b, 'en')));
+  return { manifest, changes };
 }
-for (const name of Object.keys(manifest.files)) {
-  safePath(name); const bytes = tree.read(name); scanBytes(name, bytes);
-  const actual = name === manifestName ? 'SELF' : digest(bytes);
-  if (manifest.files[name] !== actual) changes.push({ path: name, changed: true });
-  manifest.files[name] = actual;
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const root = resolve(fileURLToPath(new URL('../..', import.meta.url)));
+  let ref = 'HEAD', extension, write = false;
+  const args = process.argv.slice(2);
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--write') write = true;
+    else if (args[i] === '--ref' && args[i + 1]) ref = args[++i];
+    else if (args[i] === '--extension' && args[i + 1]) extension = args[++i];
+    else throw Error('Usage: manifest.mjs [--ref COMMIT] [--extension REVIEWED_JSON] [--write]');
+  }
+  const tree = trackedTree(root, ref);
+  const result = refreshManifest(tree, extension ? JSON.parse(readFileSync(extension)) : undefined);
+  if (write) writeFileSync(resolve(root, manifestName), JSON.stringify(result.manifest, null, 2) + '\n');
+  console.log(JSON.stringify({ dryRun: !write, sourceCommit: tree.commit, changes: result.changes }, null, 2));
 }
-manifest.files = Object.fromEntries(Object.entries(manifest.files).sort(([a], [b]) => a.localeCompare(b, 'en')));
-if (write) writeFileSync(resolve(root, manifestName), JSON.stringify(manifest, null, 2) + '\n');
-console.log(JSON.stringify({ dryRun: !write, sourceCommit: tree.commit, changes }, null, 2));
