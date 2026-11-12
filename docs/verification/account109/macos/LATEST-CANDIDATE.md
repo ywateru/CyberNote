@@ -18,6 +18,10 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 
 ## 验收边界
 
-本次桌面交互前置检查仍明确返回 Mac 锁定且自动解锁失败，因此没有再次启动两个桌面进程、输入凭据或报告同步通过。该候选是显式启用原生账户与 sync-e2e 驱动的 debug 可执行文件，不是正式发布包。
+本次桌面交互前置检查仍明确返回 Mac 锁定且自动解锁失败。随后针对新候选只启动一个全新独立数据根，进行一次有界 ready 检查，确认最新修复版本能否进入可交互状态；未启动第二端或发起授权。
+
+实际 45 秒检查返回 TIMEOUT，phase=documentProbe。原生探测已加载 debug API 且 document.readyState=complete，但 visibility=hidden、root inert/aria-hidden=true、startup=loading，未满足可交互门槛。驱动没有解除门槛或强制修改页面状态。自然关闭未成功，随后只对本次持有的 PID 40847 发送 SIGTERM，并观察到该进程与管道关闭；不能记为自然退出通过。脱敏结果保留在同目录的 ready-attempt.json，数据根原地保留。
+
+没有输入凭据或报告同步通过。该候选是显式启用原生账户与 sync-e2e 驱动的 debug 可执行文件，不是正式发布包。
 
 解锁后按 [账户与多端测试用例](../ACCOUNT-TEST-CASES.md) 使用两个独立数据根验收。不得用旧 `c7b18541` 二进制代替当前修复版本，也不得用此前独立 Rust owner 的成功结果替代产品 Runtime/UI 与数据收敛结果。

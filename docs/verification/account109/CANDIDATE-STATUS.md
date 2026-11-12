@@ -13,10 +13,11 @@
 | 主线发布输入及打包策略 | 完成 notice、包内身份、stamp 及新历史验收修复后，publish 测试共 15/15 通过，0 跳过；这不是最终发布批准。 |
 | 最终服务部署 | READY，health 200、固定四 scopes、公钥 JWKS 200、匿名 profile/enrollment 401。详见工作区检查点。 |
 | 真实 Rust owner | `b5df1e53` 的显式 live-smoke 进程退出 0，14 阶段全部成功；真实授权、强制 refresh、owner 重开、3 次部署 profile 连续性、logout 后 restore None。详见 [真实 Rust owner 验证](auth/RUST-LIVE-OWNER.md)，不替代产品 Runtime 或多端验收。 |
+| Android 产品冒烟 | `6537b74b` 隔离候选在真实手机通过 6 项检查，包含完整本地 document/plainText、更新保留及真实 UI 发起/取消授权；[真机记录](android/README.md)保留初始失败和修复后结果。没有完成凭据输入、认证回跳或多端同步。 |
 
 ## macOS 候选与实际启动尝试
 
-后续已从干净主线 `ad18a872` 重新构建包含最新修复的 debug 候选，前端及原生构建均通过，二进制已保留；本次 Mac 仍锁定，未重复启动验收。身份、命令及边界见 [最新 macOS 候选](macos/LATEST-CANDIDATE.md)。下文保留旧候选的原始尝试记录。
+后续已从干净主线 `ad18a872` 重新构建包含最新修复的 debug 候选，前端及原生构建均通过，二进制已保留。本次 Mac 仍锁定；新候选在一个独立根进行有界 ready 检查，页面为 hidden 且 startup=loading，45 秒后未进入可交互状态；只关闭本次持有进程，未继续第二端登录。身份、结果及边界见 [最新 macOS 候选](macos/LATEST-CANDIDATE.md)。下文保留旧候选的原始尝试记录。
 
 候选源码 `c7b18541a6d86adcb6b7c755c6a4a96aaa5f8fc8`，静态前端源码 fingerprint `90e542d5a1dd28efbacfab85b84a160e181dd01fce7e5f6f5f83f9d12b212f1b`，512 个产品输入，构建时 Git 工作区干净。
 

@@ -72,4 +72,4 @@ Singer 为唯一 ADB 操作者；使用独立测试 applicationId 和空数据�
 
 ## 当前执行边界
 
-已执行的浏览器 fixture 及命令见 [UI 检查点](ui/README.md)。以上产品内 AUTH/SYNC/ANDROID 用例目前全部为“未执行”，待 native/auth/server/build 接线满足前置条件后逐项填写实际结果。原生命令注册且冻结 DTO 兼容后，才可在隔离候选构建启用真实能力并执行本清单；正式交付必须具备上述真实链证据，不能用 fixture green 代替。
+已执行的浏览器 fixture 及命令见 [UI 检查点](ui/README.md)。Android 隔离候选已完成本地编辑、更新保留与登录发起/取消的 6 项真实冒烟检查，见 [真机记录](android/README.md)；该覆盖不包含 AUTH-04 的迟到回跳等完整场景，不能将对应整项验收判为通过。上述 AUTH/SYNC/ANDROID 完整用例仍未完成，须逐项填写实际结果。正式交付必须具备产品内真实链证据，不能用 fixture 或局部冒烟结果替代。
