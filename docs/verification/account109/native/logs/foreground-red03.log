@@ -1,0 +1,52 @@
+warning: tauri-plugin-notes-ui@0.1.0: macos/toolbar.m:32:49: warning: unused parameter 'tableFocused' [-Wunused-parameter]
+warning: tauri-plugin-notes-ui@0.1.0:    32 | static NSString *labelFor(NSString *action,BOOL tableFocused) {
+warning: tauri-plugin-notes-ui@0.1.0:       |                                                 ^
+warning: tauri-plugin-notes-ui@0.1.0: 1 warning generated.
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:25:1: warning: writable atomic property 'notesHovered' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    25 | - (void)setNotesHovered:(BOOL)value {_notesHovered=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     8 | @property BOOL notesHovered;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:26:1: warning: writable atomic property 'notesMenuOpen' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    26 | - (void)setNotesMenuOpen:(BOOL)value {_notesMenuOpen=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     9 | @property BOOL notesMenuOpen;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:27:1: warning: writable atomic property 'notesSelected' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    27 | - (void)setNotesSelected:(BOOL)value {_notesSelected=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:    10 | @property BOOL notesSelected;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: 3 warnings generated.
+   Compiling notes-clone v0.1.0 (/private/tmp/cybernote-account109-native/src-tauri)
+error[E0433]: cannot find type `IdentityStore` in this scope
+   --> src/account/enrollment.rs:366:16
+    |
+366 |             || IdentityStore::existing_device_id(&dir.path().join(".sync")).unwrap();
+    |                ^^^^^^^^^^^^^ use of undeclared type `IdentityStore`
+    |
+help: consider importing this struct
+    |
+298 +     use crate::sync::identity::IdentityStore;
+    |
+
+warning: unused variable: `binding`
+   --> src/account/transport.rs:126:13
+    |
+126 |         let binding = binding.clone();
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_binding`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+For more information about this error, try `rustc --explain E0433`.
+warning: `notes-clone` (lib test) generated 1 warning
+error: could not compile `notes-clone` (lib test) due to 1 previous error; 1 warning emitted

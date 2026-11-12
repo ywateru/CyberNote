@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "parentNativeCommit": "92c6ffb9614aa2a5bac579b7e5bfb37517782926",
+  "change": "Account-bound foreground never constructs manual service; retained binding denies manual start after pause/logout",
+  "source": [
+    {
+      "path": "src-tauri/src/account/enrollment.rs",
+      "sha256": "7619790f5f2d979a47697ae7ffbbab56404ccde34838bd67875b7eabc1cb5d86"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter.rs",
+      "sha256": "5e1a193678bbce1aa27f94c8b78774c93491086dc9ab39b302166def7fd7ff8c"
+    }
+  ],
+  "checks": [
+    {
+      "name": "foreground-red01",
+      "outcome": "failed-tool-assertion-shared-blob-directory",
+      "originalPath": "/private/tmp/account109-native-foreground-red01.log",
+      "originalSha256": "d8e95dd8052abb32cbba18a9f0b881583ea199c14d4ca3b63c176727785fa73b",
+      "archive": "logs/foreground-red01.log",
+      "sha256": "d8e95dd8052abb32cbba18a9f0b881583ea199c14d4ca3b63c176727785fa73b",
+      "archiveNormalization": "terminal blank lines removed"
+    },
+    {
+      "name": "foreground-red02",
+      "outcome": "failed-tool-assertion-shared-blob-directory",
+      "originalPath": "/private/tmp/account109-native-foreground-red02.log",
+      "originalSha256": "220022cecff0f92a8b27f60841e88e2b4913606db09d4db7617df062b1a3075b",
+      "archive": "logs/foreground-red02.log",
+      "sha256": "220022cecff0f92a8b27f60841e88e2b4913606db09d4db7617df062b1a3075b",
+      "archiveNormalization": "terminal blank lines removed"
+    },
+    {
+      "name": "foreground-green01",
+      "outcome": "failed-tool-assertion-shared-blob-directory",
+      "originalPath": "/private/tmp/account109-native-foreground-green01.log",
+      "originalSha256": "9fce2b2b81d4e1a14246bfc9c6e4b228e0c88af7a79528b5f4c6a3d9abeb6caf",
+      "archive": "logs/foreground-green01.log",
+      "sha256": "9fce2b2b81d4e1a14246bfc9c6e4b228e0c88af7a79528b5f4c6a3d9abeb6caf",
+      "archiveNormalization": "terminal blank lines removed"
+    },
+    {
+      "name": "foreground-red03",
+      "outcome": "failed-test-compilation-missing-import",
+      "originalPath": "/private/tmp/account109-native-foreground-red03.log",
+      "originalSha256": "51e0d6a55b07e86ae9fabb9823e2c86c1629df0d2841d3438e95365c033799ae",
+      "archive": "logs/foreground-red03.log",
+      "sha256": "51e0d6a55b07e86ae9fabb9823e2c86c1629df0d2841d3438e95365c033799ae",
+      "archiveNormalization": "terminal blank lines removed"
+    },
+    {
+      "name": "foreground-red04",
+      "outcome": "confirmed-product-failure-manual-noise-identity-created",
+      "originalPath": "/private/tmp/account109-native-foreground-red04.log",
+      "originalSha256": "23df19133121ff023037f520337f4fc9ae2728f92d2c7fea41629b6770e6d573",
+      "archive": "logs/foreground-red04.log",
+      "sha256": "23df19133121ff023037f520337f4fc9ae2728f92d2c7fea41629b6770e6d573",
+      "archiveNormalization": "terminal blank lines removed"
+    },
+    {
+      "name": "foreground-green02",
+      "outcome": "passed-9-account-tests",
+      "originalPath": "/private/tmp/account109-native-foreground-green02.log",
+      "originalSha256": "65305673112ce405d28e4c8726ab11b10831349a32f2683b7a416fd41f99850b",
+      "archive": "logs/foreground-green02.log",
+      "sha256": "3855d9669bd05af58a12a663e499db74e76e366bc42d46603f838e0ca8866eeb",
+      "archiveNormalization": "terminal blank lines removed"
+    },
+    {
+      "name": "foreground-manual-green01",
+      "outcome": "passed-7-manual-adapter-tests",
+      "originalPath": "/private/tmp/account109-native-foreground-manual-green01.log",
+      "originalSha256": "121c65cab2d81fe658880a428e1e20dec4b0b23693c72067d4053aa56f2c524a",
+      "archive": "logs/foreground-manual-green01.log",
+      "sha256": "17aca76c8c24389730b4213cc87d5fa0b304dd6f81d1d93db2a8e400b7d54afa",
+      "archiveNormalization": "terminal blank lines removed"
+    },
+    {
+      "name": "android-link01",
+      "outcome": "passed-library-link-before-foreground-fix",
+      "originalPath": "/private/tmp/account109-native-link-android01.log",
+      "originalSha256": "df83d31c1776c778f9eb0483fed4deacb0357be673fc6cb46b379e0707cc2c84",
+      "archive": "logs/android-link01.log",
+      "sha256": "df83d31c1776c778f9eb0483fed4deacb0357be673fc6cb46b379e0707cc2c84",
+      "archiveNormalization": "terminal blank lines removed"
+    }
+  ],
+  "androidLibraryBeforeFix": {
+    "sourceCommit": "92c6ffb9614aa2a5bac579b7e5bfb37517782926",
+    "path": "/private/tmp/cybernote-account109-target/aarch64-linux-android/debug/libnotes_clone_lib.so",
+    "sha256": "e24b58c067e0a77a154c39910db076a1b0340bdf638a17296a6f3886b9493733",
+    "bytes": 153197392,
+    "elfMachine": "AArch64",
+    "notCandidateAPK": true
+  },
+  "deviceOperations": false,
+  "postMergeCandidateBuild": "pending exact main source"
+}

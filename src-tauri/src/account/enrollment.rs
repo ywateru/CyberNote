@@ -328,6 +328,81 @@ mod tests {
         }
     }
     #[test]
+    fn account_foreground_does_not_construct_manual_identity_or_policy_free_service() {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        let dir = tempfile::tempdir().unwrap();
+        super::super::private::directory(&dir.path().join(".account")).unwrap();
+        let shared = Arc::new((
+            Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
+            Condvar::new(),
+        ));
+        let runtime = Runtime::new(shared.clone(), dir.path().into(), Arc::new(Windows)).unwrap();
+        let identity = runtime.account_identity().unwrap();
+        let device = identity.device_id().unwrap();
+        let key = identity.public_key().unwrap();
+        let verified = VerifiedWorkspace {
+            workspace: uuid::Uuid::new_v4().to_string(),
+            device: device.clone(),
+            noise_key: key.clone(),
+        };
+        super::super::private::write(
+            &dir.path().join(".account/binding.json"),
+            &Binding {
+                issuer: config::ISSUER.into(),
+                subject: "synthetic-owner".into(),
+                product_id: "cybernote".into(),
+                workspace_id: verified.workspace.clone(),
+                device_id: device.clone(),
+                noise_public_key: key.clone(),
+                enabled: true,
+            },
+        )
+        .unwrap();
+        let mut service = runtime
+            .activate_account(&verified, identity, Arc::new(Gate::default()))
+            .unwrap();
+        let manual_identity = || {
+            crate::sync::identity::IdentityStore::existing_device_id(&dir.path().join(".sync"))
+                .unwrap()
+        };
+        // Store owns shared .sync/blob directories independently of a manual
+        // Noise service. Check the actual identity, not directory existence.
+        assert_eq!(manual_identity(), None);
+        runtime.foreground();
+        assert_eq!(
+            manual_identity(),
+            None,
+            "account foreground created a manual Noise identity"
+        );
+        runtime.pause_account();
+        runtime.foreground();
+        assert_eq!(manual_identity(), None);
+        // Logout/pause preserves the account binding. An explicit manual start
+        // cannot open a policy-free service over the account credentials.
+        let token = serde_json::from_value(serde_json::json!({
+            "sessionId": shared.0.lock().unwrap().sync_session_id(), "epoch": 1
+        }))
+        .unwrap();
+        let denied = runtime
+            .command(
+                crate::sync::adapter::Command::StartHost {
+                    device_name: "Synthetic manual".into(),
+                    port: 0,
+                },
+                "main",
+                &token,
+            )
+            .unwrap_err();
+        assert_eq!(denied.code, "sync_workspace_mismatch");
+        assert_eq!(manual_identity(), None);
+        let restored = runtime.account_identity().unwrap();
+        assert_eq!(restored.device_id().unwrap(), device);
+        assert_eq!(restored.public_key().unwrap(), key);
+        service.shutdown().unwrap();
+        runtime.shutdown().unwrap();
+    }
+    #[test]
     fn real_store_activation_preserves_documents_and_restart_identity_and_rejects_legacy_workspace()
     {
         use crate::{session::Session, store::Store, sync::adapter::Runtime};

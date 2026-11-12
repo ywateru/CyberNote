@@ -1,0 +1,719 @@
+   Compiling libc v0.2.191
+   Compiling cfg-if v1.0.5
+   Compiling zeroize v1.9.1
+   Compiling serde_core v1.0.229
+   Compiling subtle v2.6.1
+   Compiling typenum v1.20.1
+   Compiling getrandom v0.2.17
+   Compiling smallvec v1.16.4
+   Compiling memchr v2.8.3
+   Compiling serde v1.0.229
+   Compiling log v0.4.35
+   Compiling rand_core v0.6.4
+   Compiling generic-array v0.14.7
+   Compiling bytes v1.12.1
+   Compiling pin-project-lite v0.2.17
+   Compiling scopeguard v1.2.0
+   Compiling parking_lot_core v0.9.12
+   Compiling lock_api v0.4.14
+   Compiling crypto-common v0.1.7
+   Compiling parking_lot v0.12.5
+   Compiling errno v0.3.14
+   Compiling socket2 v0.6.5
+   Compiling rand_core v0.10.1
+   Compiling signal-hook-registry v1.4.8
+   Compiling mio v1.2.4
+   Compiling stable_deref_trait v1.2.1
+   Compiling getrandom v0.4.3
+   Compiling tokio v1.54.1
+   Compiling const-oid v0.9.6
+   Compiling once_cell v1.21.4
+   Compiling futures-core v0.3.34
+   Compiling itoa v1.0.18
+   Compiling libm v0.2.16
+   Compiling zerofrom v0.1.8
+   Compiling yoke v0.8.4
+   Compiling thiserror v1.0.69
+   Compiling zerovec v0.11.9
+   Compiling block-buffer v0.10.4
+   Compiling futures-io v0.3.34
+   Compiling futures-sink v0.3.34
+   Compiling slab v0.4.12
+   Compiling futures-channel v0.3.34
+   Compiling digest v0.10.7
+   Compiling futures-task v0.3.34
+   Compiling futures-util v0.3.34
+   Compiling bitflags v2.13.2
+   Compiling untrusted v0.9.0
+   Compiling ring v0.17.14
+   Compiling zerocopy v0.8.63
+   Compiling num-traits v0.2.19
+   Compiling tinystr v0.8.5
+   Compiling utf_types v1.0.0
+   Compiling litemap v0.8.3
+   Compiling writeable v0.6.4
+   Compiling icu_locale_core v2.4.0
+   Compiling utf8_iter v1.1.0
+   Compiling potential_utf v0.1.6
+   Compiling zerotrie v0.2.5
+   Compiling base64ct v1.8.3
+   Compiling ipnet v2.12.2
+   Compiling icu_provider v2.4.0
+   Compiling thiserror v2.0.21
+   Compiling icu_collections v2.4.0
+   Compiling percent-encoding v2.3.2
+   Compiling icu_properties_data v2.4.0
+   Compiling icu_normalizer_data v2.4.0
+   Compiling rustls-pki-types v1.15.1
+   Compiling powerfmt v0.2.1
+   Compiling time-core v0.1.9
+   Compiling num-conv v0.2.2
+   Compiling deranged v0.5.9
+   Compiling icu_normalizer v2.4.0
+   Compiling icu_properties v2.4.0
+   Compiling time v0.3.55
+   Compiling cpufeatures v0.2.17
+   Compiling idna_adapter v1.2.2
+   Compiling form_urlencoded v1.2.2
+   Compiling idna v1.1.0
+   Compiling http v1.5.0
+   Compiling url v2.5.8
+   Compiling getrandom v0.3.4
+   Compiling rustls-webpki v0.103.16
+   Compiling zmij v1.0.23
+   Compiling ppv-lite86 v0.2.21
+   Compiling rustls v0.23.46
+   Compiling serde_json v1.0.154
+   Compiling hybrid-array v0.4.15
+   Compiling jni-sys v0.4.1
+   Compiling tracing-core v0.1.36
+   Compiling atomic-waker v1.1.2
+   Compiling cmov v0.5.4
+   Compiling ctutils v0.4.8
+   Compiling tracing v0.1.44
+   Compiling base64 v0.23.1
+   Compiling const-oid v0.10.3
+   Compiling httparse v1.10.1
+   Compiling spin v0.9.9
+   Compiling siphasher v1.0.4
+   Compiling lazy_static v1.5.1
+   Compiling crypto-common v0.2.2
+   Compiling http-body v1.1.0
+   Compiling tokio-util v0.7.20
+   Compiling derive_more v2.1.1
+   Compiling combine v4.6.9
+   Compiling try-lock v0.2.5
+   Compiling tower-service v0.3.3
+   Compiling foldhash v0.2.0
+   Compiling want v0.3.2
+   Compiling tokio-rustls v0.26.6
+   Compiling block-buffer v0.12.1
+   Compiling rand_core v0.9.5
+   Compiling webpki-roots v1.0.9
+   Compiling base64 v0.22.1
+   Compiling httpdate v1.0.3
+   Compiling hyper v1.12.0
+   Compiling rand_chacha v0.9.0
+   Compiling digest v0.11.3
+   Compiling portable-atomic v1.15.0
+   Compiling phf_shared v0.13.1
+   Compiling sync_wrapper v1.0.2
+   Compiling block-padding v0.3.3
+   Compiling bitflags v1.3.2
+   Compiling tower-layer v0.3.3
+   Compiling inout v0.1.4
+   Compiling tower v0.5.3
+   Compiling rand v0.9.5
+   Compiling jni-sys v0.3.1
+   Compiling hyper-util v0.1.21
+   Compiling hashbrown v0.17.1
+   Compiling sha2 v0.10.9
+   Compiling pem-rfc7468 v1.0.0
+   Compiling rustc-hash v2.1.3
+   Compiling hyper-rustls v0.27.10
+   Compiling der v0.8.3
+   Compiling tower-http v0.6.11
+   Compiling cipher v0.4.4
+   Compiling phf v0.13.1
+   Compiling http-body-util v0.1.5
+   Compiling simdutf8 v0.1.5
+   Compiling memoffset v0.7.1
+   Compiling pem-rfc7468 v0.7.0
+   Compiling num-integer v0.1.47
+   Compiling ndk-context v0.1.1
+   Compiling new_debug_unreachable v1.0.6
+   Compiling pin-utils v0.1.1
+   Compiling cesu8 v1.1.0
+   Compiling base16ct v1.0.0
+   Compiling jni v0.21.1
+   Compiling nix v0.26.4
+   Compiling der v0.7.10
+   Compiling simd_cesu8 v1.2.0
+   Compiling spki v0.8.1
+   Compiling uuid v1.29.0
+   Compiling universal-hash v0.5.1
+   Compiling aho-corasick v1.1.5
+   Compiling opaque-debug v0.3.1
+   Compiling equivalent v1.0.3
+   Compiling regex-syntax v0.8.11
+   Compiling precomputed-hash v0.1.1
+   Compiling webrtc-util v0.12.0
+   Compiling regex-automata v0.4.18
+   Compiling spki v0.7.3
+   Compiling pkcs8 v0.11.0
+   Compiling jni v0.22.4
+   Compiling num_enum v0.7.6
+   Compiling hmac v0.12.1
+   Compiling minimal-lexical v0.2.1
+   Compiling rustls-platform-verifier-android v0.2.0
+   Compiling nom v7.1.3
+   Compiling rustls-platform-verifier v0.7.1
+   Compiling regex v1.13.1
+   Compiling pkcs8 v0.10.2
+   Compiling string_cache v0.9.0
+   Compiling aead v0.5.2
+   Compiling dtoa v1.0.11
+   Compiling data-encoding v2.11.1
+   Compiling alloc-no-stdlib v3.0.0
+   Compiling alloc-stdlib v0.3.0
+   Compiling dtoa-short v0.3.5
+   Compiling web_atoms v0.2.6
+   Compiling typeid v1.0.3
+   Compiling reqwest v0.13.5
+   Compiling rusticata-macros v4.1.0
+   Compiling polyval v0.6.2
+   Compiling tendril v0.5.1
+   Compiling ctr v0.9.2
+   Compiling signature v3.0.0
+   Compiling serde_with v3.24.0
+   Compiling winnow v1.0.4
+   Compiling raw-window-handle v0.6.2
+   Compiling fnv v1.0.7
+   Compiling web-time v1.1.0
+   Compiling cfb v0.14.0
+   Compiling toml_parser v1.1.5+spec-1.1.0
+   Compiling erased-serde v0.4.11
+   Compiling markup5ever v0.39.0
+   Compiling ghash v0.5.1
+   Compiling cssparser v0.37.0
+   Compiling brotli-decompressor v6.2.0
+   Compiling crossbeam-utils v0.8.23
+   Compiling indexmap v2.14.2
+   Compiling aes v0.8.4
+   Compiling ndk-sys v0.6.0+11769913
+   Compiling jsonptr v0.7.1
+   Compiling servo_arc v0.4.3
+   Compiling dpi v0.1.2
+   Compiling quick-xml v0.42.0
+   Compiling serde_spanned v1.1.2
+   Compiling toml_datetime v1.1.2+spec-1.1.0
+   Compiling cpufeatures v0.3.1
+   Compiling fastrand v2.5.0
+   Compiling cpubits v0.1.1
+   Compiling same-file v1.0.6
+   Compiling bit-vec v0.8.0
+   Compiling toml_writer v1.1.3+spec-1.1.0
+   Compiling bit-set v0.8.0
+   Compiling toml v1.1.8+spec-1.1.0
+   Compiling walkdir v2.5.0
+   Compiling crypto-bigint v0.7.11
+   Compiling sha2 v0.11.1
+   Compiling plist v1.10.3
+   Compiling selectors v0.38.0
+   Compiling anyhow v1.0.104
+   Compiling ndk v0.9.0
+   Compiling json-patch v4.2.0
+   Compiling aes-gcm v0.10.3
+   Compiling crossbeam-channel v0.5.17
+   Compiling brotli v9.1.1
+   Compiling serde-untagged v0.1.9
+   Compiling html5ever v0.39.0
+   Compiling cookie v0.18.2
+   Compiling infer v0.22.0
+   Compiling urlpattern v0.6.0
+   Compiling num-bigint v0.4.8
+   Compiling ff v0.14.0
+   Compiling chacha20 v0.10.2
+   Compiling dunce v1.0.5
+   Compiling ctor v1.0.13
+   Compiling glob v0.3.4
+   Compiling semver v1.0.28
+   Compiling simd-adler32 v0.3.10
+   Compiling tauri-utils v2.10.2
+   Compiling n0-error v1.0.3
+   Compiling rand v0.10.3
+   Compiling dom_query v0.28.0
+   Compiling serdect v0.4.3
+   Compiling signature v2.2.0
+   Compiling ff v0.13.1
+   Compiling ryu v1.0.23
+   Compiling option-ext v0.2.0
+   Compiling spin v0.10.1
+   Compiling cordyceps v0.3.5
+   Compiling fixedbitset v0.5.9
+   Compiling base16ct v0.2.0
+   Compiling diatomic-waker v0.2.3
+   Compiling parking v2.2.1
+   Compiling adler2 v2.0.1
+   Compiling arrayvec v0.7.8
+   Compiling tauri-runtime v2.12.2
+   Compiling futures-lite v2.6.1
+   Compiling futures-buffered v0.2.14
+   Compiling sec1 v0.7.3
+   Compiling dirs-sys v0.5.0
+   Compiling pin-project v1.1.13
+   Compiling group v0.13.0
+   Compiling ed25519 v3.0.0
+   Compiling wry v0.57.1
+   Compiling curve25519-dalek v5.0.0
+   Compiling tao v0.37.2
+   Compiling group v0.14.0
+   Compiling hkdf v0.12.4
+   Compiling arc-swap v1.9.5
+   Compiling crypto-bigint v0.5.5
+   Compiling crc-catalog v2.5.0
+   Compiling tinyvec v1.13.3
+   Compiling elliptic-curve v0.13.8
+   Compiling crc v3.4.0
+   Compiling serialize-to-javascript v0.1.2
+   Compiling tauri-runtime-wry v2.12.3
+   Compiling crc32fast v1.5.4
+   Compiling asn1-rs v0.6.2
+   Compiling ed25519-dalek v3.0.0
+   Compiling n0-future v0.3.2
+   Compiling slotmap v1.1.1
+   Compiling dirs v7.0.0
+   Compiling miniz_oxide v0.9.1
+   Compiling sec1 v0.8.1
+   Compiling sha1 v0.10.7
+   Compiling mime v0.3.17
+   Compiling http-range v0.1.6
+   Compiling bytemuck v1.25.2
+   Compiling heck v0.5.0
+   Compiling tauri v2.12.5
+   Compiling flate2 v1.1.10
+   Compiling elliptic-curve v0.14.3
+   Compiling primefield v0.14.0
+   Compiling rfc6979 v0.4.0
+   Compiling hmac v0.13.0
+   Compiling rand_chacha v0.3.1
+   Compiling futures-executor v0.3.34
+   Compiling android_system_properties v0.1.6
+   Compiling byteorder v1.5.0
+   Compiling iana-time-zone v0.1.65
+   Compiling futures v0.3.34
+   Compiling rand v0.8.8
+   Compiling rfc6979 v0.6.0
+   Compiling ecdsa v0.16.9
+   Compiling wnaf v0.14.1
+   Compiling netlink-packet-core v0.8.2
+   Compiling noq-udp v1.4.0
+   Compiling curve25519-dalek v4.1.3
+   Compiling data-encoding-macro v0.1.21
+   Compiling oid-registry v0.7.1
+   Compiling der-parser v9.0.0
+   Compiling primeorder v0.13.6
+   Compiling miniz_oxide v0.8.9
+   Compiling serde_urlencoded v0.7.1
+   Compiling fdeflate v0.3.7
+   Compiling rtp v0.14.0
+   Compiling poly1305 v0.8.0
+   Compiling chacha20 v0.9.1
+   Compiling lru v0.18.5
+   Compiling pem v3.0.6
+   Compiling simple-dns v0.12.0
+   Compiling md-5 v0.10.6
+   Compiling core_maths v0.1.1
+   Compiling rand_pcg v0.10.2
+   Compiling float-cmp v0.9.0
+   Compiling netlink-packet-core v0.9.0
+   Compiling lru-slab v0.1.3
+   Compiling sorted-index-buffer v0.2.1
+   Compiling identity-hash v0.1.0
+   Compiling netlink-packet-route v0.33.0
+   Compiling noq-proto v1.4.0
+   Compiling n0-dns-resolver v0.1.0
+   Compiling strict-num v0.1.1
+   Compiling ttf-parser v0.25.1
+   Compiling stun v0.9.0
+   Compiling strum v0.28.0
+   Compiling chacha20poly1305 v0.10.1
+   Compiling asn1-rs v0.7.2
+   Compiling reqwest v0.12.28
+   Compiling x509-parser v0.16.0
+   Compiling iroh-base v1.4.1
+   Compiling primeorder v0.14.0
+   Compiling ecdsa v0.17.0
+   Compiling chrono v0.4.45
+   Compiling rtcp v0.14.0
+   Compiling num-iter v0.1.46
+   Compiling tokio-stream v0.1.19
+   Compiling waitgroup v0.1.2
+   Compiling yasna v0.5.2
+   Compiling cobs v0.3.0
+   Compiling netlink-sys v0.8.8
+   Compiling dlopen2 v0.8.2
+   Compiling netlink-sys v0.9.0
+   Compiling socket2 v0.5.10
+   Compiling mac-addr v0.3.0
+   Compiling arrayref v0.3.9
+   Compiling constant_time_eq v0.4.2
+   Compiling sha1_smol v1.0.1
+   Compiling blake3 v1.8.7
+   Compiling tokio-websockets v0.13.3
+   Compiling webrtc-mdns v0.10.0
+   Compiling tiny-skia-path v0.11.4
+   Compiling netdev v0.46.3
+   Compiling postcard v1.1.3
+   Compiling netlink-proto v0.12.2
+   Compiling rcgen v0.13.2
+   Compiling noq v1.4.0
+   Compiling iroh-metrics v1.0.2
+   Compiling num-bigint-dig v0.8.6
+   Compiling webrtc-srtp v0.16.0
+   Compiling iroh-dns v1.4.1
+   Compiling turn v0.11.0
+   Compiling substring v1.4.5
+   Compiling ahash v0.8.12
+   Compiling p256 v0.13.2
+   Compiling p384 v0.13.1
+   Compiling x25519-dalek v2.0.1
+   Compiling netlink-packet-route v0.31.0
+   Compiling n0-watcher v1.0.1
+   Compiling webrtc-sctp v0.13.0
+   Compiling kurbo v0.11.3
+   Compiling ccm v0.5.0
+   Compiling pkcs1 v0.7.5
+   Compiling cbc v0.1.2
+   Compiling ordered-float v2.10.1
+   Compiling serde_path_to_error v0.1.20
+   Compiling is-docker v0.2.0
+   Compiling bincode v1.3.3
+   Compiling serde_bytes v0.11.19
+   Compiling unicode-ccc v0.4.0
+   Compiling seize v0.5.1
+   Compiling unicode-script v0.5.9
+   Compiling unicode-bidi-mirroring v0.4.0
+   Compiling linux-raw-sys v0.12.1
+   Compiling unicode-properties v0.1.5
+   Compiling either v1.19.0
+   Compiling rustix v1.1.6
+   Compiling itertools v0.14.0
+   Compiling rustybuzz v0.20.1
+   Compiling papaya v0.2.5
+   Compiling dtls v0.13.0
+   Compiling iroh-relay v1.4.1
+   Compiling is-wsl v0.4.0
+   Compiling oauth2 v5.0.0
+   Compiling serde-value v0.7.0
+   Compiling rsa v0.9.10
+   Compiling netwatch v0.19.3
+   Compiling svgtypes v0.15.3
+   Compiling webrtc-data v0.12.0
+   Compiling hashbrown v0.14.5
+   Compiling webrtc-ice v0.14.0
+   Compiling sdp v0.10.0
+   Compiling interceptor v0.15.0
+   Compiling oid-registry v0.8.1
+   Compiling p256 v0.14.0
+   Compiling p384 v0.14.0
+   Compiling der-parser v10.0.0
+   Compiling fontdb v0.23.0
+   Compiling webrtc-media v0.11.0
+   Compiling png v0.17.16
+   Compiling tungstenite v0.29.0
+   Compiling backon v1.6.0
+   Compiling webpki-roots v0.26.11
+   Compiling yasna v0.6.0
+   Compiling blake2 v0.10.6
+   Compiling smol_str v0.2.2
+   Compiling serde_plain v1.0.2
+   Compiling simplecss v0.2.2
+   Compiling fs2 v0.4.3
+   Compiling unicode-vo v0.1.0
+   Compiling hex v0.4.3
+   Compiling roxmltree v0.20.0
+   Compiling unicase v2.10.0
+   Compiling color_quant v1.1.0
+   Compiling xmlwriter v0.1.0
+   Compiling byteorder-lite v0.1.0
+   Compiling pxfm v0.1.30
+   Compiling imagesize v0.13.0
+   Compiling dyn-clone v1.0.20
+   Compiling data-url v0.3.2
+   Compiling weezl v0.1.12
+   Compiling unicode-bidi v0.3.18
+   Compiling quick-error v2.0.1
+   Compiling pico-args v0.5.0
+   Compiling zune-core v0.5.3
+   Compiling zune-jpeg v0.5.15
+   Compiling usvg v0.45.1
+   Compiling moxcms v0.8.1
+   Compiling image-webp v0.2.4
+   Compiling gif v0.14.2
+   Compiling openidconnect v4.1.0
+   Compiling webrtc v0.14.0
+   Compiling rcgen v0.14.10
+   Compiling tokio-tungstenite v0.29.0
+   Compiling iroh v1.4.1
+   Compiling tiny-skia v0.11.4
+   Compiling x509-parser v0.18.1
+   Compiling libsqlite3-sys v0.30.1
+   Compiling hashlink v0.9.1
+   Compiling open v5.4.5
+   Compiling tempfile v3.27.0
+   Compiling tauri-plugin-fs v2.7.1
+   Compiling png v0.18.1
+   Compiling rgb v0.8.53
+   Compiling simple_asn1 v0.6.4
+   Compiling password-hash v0.5.0
+   Compiling fallible-iterator v0.3.0
+   Compiling fallible-streaming-iterator v0.1.9
+   Compiling argon2 v0.5.3
+   Compiling rusqlite v0.32.1
+   Compiling jsonwebtoken v9.3.1
+   Compiling image v0.25.10
+   Compiling resvg v0.45.1
+   Compiling tauri-plugin-dialog v2.8.4
+   Compiling cybergrid-sdk v0.3.0 (/private/tmp/cybernote-account109-native/vendor/cybergrid-sdk)
+   Compiling tauri-plugin-opener v2.7.3
+   Compiling snow v0.9.6
+   Compiling account-auth v0.1.0 (/private/tmp/cybernote-account109-native/crates/account-auth)
+   Compiling tauri-plugin-deep-link v2.6.3
+   Compiling tauri-plugin-notes-scan v0.1.0 (/private/tmp/cybernote-account109-native/plugins/tauri-plugin-notes-scan)
+   Compiling tauri-plugin-notes-media v0.1.0 (/private/tmp/cybernote-account109-native/plugins/tauri-plugin-notes-media)
+   Compiling notes-clone v0.1.0 (/private/tmp/cybernote-account109-native/src-tauri)
+warning: unused import: `AppState`
+ --> src/attachment_desktop.rs:3:22
+  |
+3 | use crate::{failure, AppState};
+  |                      ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `tauri::Manager`
+ --> src/attachment_desktop.rs:6:5
+  |
+6 | use tauri::Manager;
+  |     ^^^^^^^^^^^^^^
+
+warning: unused variable: `binding`
+   --> src/account/transport.rs:126:13
+    |
+126 |         let binding = binding.clone();
+    |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_binding`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `REDIRECT` is never used
+ --> src/account/callback.rs:9:11
+  |
+9 | pub const REDIRECT: &str = "http://127.0.0.1:17897/callback";
+  |           ^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Lease` is never constructed
+  --> src/account/callback.rs:11:12
+   |
+11 | pub struct Lease(pub Arc<Callback>);
+   |            ^^^^^
+
+warning: fields `value` and `done` are never read
+  --> src/account/callback.rs:18:5
+   |
+17 | pub struct Callback {
+   |            -------- fields in this struct
+18 |     value: Mutex<Option<Result<String, &'static str>>>,
+   |     ^^^^^
+19 |     done: Notify,
+   |     ^^^^
+
+warning: associated items `start` and `wait` are never used
+  --> src/account/callback.rs:23:18
+   |
+22 | impl Callback {
+   | ------------- associated items in this implementation
+23 |     pub async fn start() -> Result<Arc<Self>, &'static str> {
+   |                  ^^^^^
+...
+40 |     pub async fn wait(&self) -> Result<String, &'static str> {
+   |                  ^^^^
+
+warning: function `receive` is never used
+  --> src/account/callback.rs:53:10
+   |
+53 | async fn receive(listener: TcpListener, authority: &str) -> Result<String, &'static str> {
+   |          ^^^^^^^
+
+warning: method `export_path` is never used
+  --> src/apple_notes_import/core.rs:36:19
+   |
+33 | impl OwnedStage {
+   | --------------- method in this implementation
+...
+36 |     pub(crate) fn export_path(&self, index: usize) -> Result<&std::path::Path> {
+   |                   ^^^^^^^^^^^
+
+warning: methods `read_export` and `check_budget` are never used
+   --> src/apple_notes_import/core.rs:784:19
+    |
+741 | impl OwnedStage {
+    | --------------- methods in this implementation
+...
+784 |     pub(crate) fn read_export(&self, index: usize) -> Result<Vec<u8>> {
+    |                   ^^^^^^^^^^^
+...
+807 |     fn check_budget(&self) -> Result<()> {
+    |        ^^^^^^^^^^^^
+
+warning: function `prepare` is never used
+  --> src/attachment_desktop.rs:18:4
+   |
+18 | fn prepare(
+   |    ^^^^^^^
+
+warning: method `shutdown` is never used
+   --> src/attachment_media/http.rs:110:25
+    |
+ 36 | impl MediaServer {
+    | ---------------- method in this implementation
+...
+110 |     pub(crate) async fn shutdown(mut self) {
+    |                         ^^^^^^^^
+
+warning: associated function `start` is never used
+  --> src/attachment_media/runtime.rs:31:25
+   |
+30 | impl MediaRuntime {
+   | ----------------- associated function in this implementation
+31 |     pub(crate) async fn start(
+   |                         ^^^^^
+
+warning: fields `started`, `revision`, and `checkpoint_revision` are never read
+  --> src/recording_window.rs:23:5
+   |
+20 | struct Entry {
+   |        ----- fields in this struct
+...
+23 |     started: bool,
+   |     ^^^^^^^
+24 |     terminal: bool,
+25 |     revision: Option<(u64, bool)>,
+   |     ^^^^^^^^
+26 |     checkpoint_revision: u64,
+   |     ^^^^^^^^^^^^^^^^^^^
+
+warning: function `reveal_owner` is never used
+  --> src/recording_window.rs:62:8
+   |
+62 | pub fn reveal_owner(app: &tauri::AppHandle, child: &str) {
+   |        ^^^^^^^^^^^^
+
+warning: function `entry` is never used
+  --> src/recording_window.rs:89:4
+   |
+89 | fn entry<'a>(
+   |    ^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `route_message` is never used
+   --> src/recording_window.rs:460:4
+    |
+460 | fn route_message(
+    |    ^^^^^^^^^^^^^
+
+warning: function `visibility_target` is never used
+   --> src/recording_window.rs:558:4
+    |
+558 | fn visibility_target(
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `smart_projection` is never used
+  --> src/session/metadata.rs:98:19
+   |
+ 4 | impl Session {
+   | ------------ method in this implementation
+...
+98 |     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
+   |                   ^^^^^^^^^^^^^^^^
+
+warning: associated function `parse` is never used
+  --> src/startup.rs:18:19
+   |
+16 | impl Options {
+   | ------------ associated function in this implementation
+17 |     /// Arguments after argv[0]. Validate the entire input before any filesystem IO.
+18 |     pub(crate) fn parse(args: impl IntoIterator<Item = OsString>) -> io::Result<Self> {
+   |                   ^^^^^
+
+warning: function `validated_tags` is never used
+  --> src/store/archive.rs:19:15
+   |
+19 | pub(super) fn validated_tags(note: &Note, attachments: &[Attachment]) -> Result<HashSet<String>> {
+   |               ^^^^^^^^^^^^^^
+
+warning: struct `SmartMembership` is never constructed
+   --> src/store/smart.rs:245:19
+    |
+245 | pub(crate) struct SmartMembership {
+    |                   ^^^^^^^^^^^^^^^
+
+warning: method `evaluate_smart_folder` is never used
+   --> src/store/smart.rs:314:19
+    |
+250 | impl Store {
+    | ---------- method in this implementation
+...
+314 |     pub(crate) fn evaluate_smart_folder(
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `sync_apply_pending` is never used
+   --> src/store/synchronization.rs:810:12
+    |
+272 | impl Store {
+    | ---------- method in this implementation
+...
+810 |     pub fn sync_apply_pending(&mut self) -> Result<SyncApplyReport> {
+    |            ^^^^^^^^^^^^^^^^^^
+
+warning: method `sync_enable` is never used
+   --> src/store/synchronization/schema.rs:127:12
+    |
+ 84 | impl Store {
+    | ---------- method in this implementation
+...
+127 |     pub fn sync_enable(&mut self, workspace: Option<&str>) -> Result<SyncIdentity> {
+    |            ^^^^^^^^^^^
+
+warning: `notes-clone` (lib) generated 30 warnings (run `cargo fix --lib -p notes-clone` to apply 3 suggestions)
+    Finished `dev` profile [unoptimized] target(s) in 1m 10s

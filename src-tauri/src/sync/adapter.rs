@@ -1015,6 +1015,12 @@ impl Runtime {
         if !self.active.load(Ordering::Acquire) {
             return;
         }
+        // Account mode shares the apply coordinator, but its Runtime alone
+        // owns its policy-gated service. Never construct the manual service
+        // here (including after an account logout with a retained binding).
+        if self.root.join(".account/binding.json").exists() {
+            return;
+        }
         if let Ok(mut inner) = self.inner.lock() {
             if let Err(e) = self.activate(&mut inner) {
                 inner.error = Some(e.code);
