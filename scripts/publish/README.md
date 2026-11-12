@@ -87,6 +87,9 @@ every declared license path, even when its filename lacks the word LICENSE.
 Staging validates all notice paths and SHA pins, opens each directory component
 and file without following symlinks, and writes verified bytes directly into the
 archive. Generated root notices must match their pinned public templates.
+Exact upstream license inventories may contain `.github` provenance workflows;
+that named directory is allowed with the same SHA and no-follow checks. Other
+hidden components, including `.git` and `.env`, remain rejected by notice staging.
 
 The checker hashes actual committed binary bytes and compares both inventories.
 Only validated exact runtime entries receive a binary exception; the default

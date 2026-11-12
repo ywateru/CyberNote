@@ -41,7 +41,8 @@ with tempfile.TemporaryDirectory() as tmp:
     texts = {'LICENSE': b'reserved', 'THIRD_PARTY_NOTICES.md': b'notices',
              'scripts/publish/LICENSE.project-reserved.txt': b'reserved',
              'scripts/publish/THIRD_PARTY_NOTICES.md': b'notices',
-             'src-tauri/fonts/README.md': b'font', 'vendor/sdk/licenses/dependency.txt': b'public license'}
+             'src-tauri/fonts/README.md': b'font', 'vendor/sdk/licenses/dependency.txt': b'public license',
+             'vendor/sdk/licenses/dependency/.github/workflows/license.yml': b'name: upstream license provenance'}
     for name, data in texts.items():
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -51,7 +52,11 @@ with tempfile.TemporaryDirectory() as tmp:
     manifest = {'files': files, 'thirdParty': [{'licenses': [notice]}]}
     good = module.notice_payloads(root, manifest)
     assert good[notice] == b'public license'
-    for bad in ['../LICENSE', str(root / 'LICENSE'), 'vendor/sdk/../LICENSE']:
+    provenance = 'vendor/sdk/licenses/dependency/.github/workflows/license.yml'
+    assert good[provenance] == texts[provenance]
+    for bad in ['../LICENSE', str(root / 'LICENSE'), 'vendor/sdk/../LICENSE',
+                'vendor/sdk/.git/config', 'vendor/sdk/.env',
+                'vendor/sdk/.github/../LICENSE', 'vendor/sdk/.github/.env']:
         altered = {'files': {**files, bad: '0'*64}, 'thirdParty': [{'licenses': [bad]}]}
         try: module.notice_payloads(root, altered)
         except (RuntimeError, OSError): pass
@@ -60,6 +65,15 @@ with tempfile.TemporaryDirectory() as tmp:
     try: module.notice_payloads(root, altered)
     except RuntimeError: pass
     else: raise AssertionError('Wrong notice hash accepted')
+    github = root / 'vendor/sdk/licenses/dependency/.github'
+    moved_github = root / 'outside-github'
+    github.rename(moved_github)
+    github.symlink_to(moved_github, target_is_directory=True)
+    try: module.notice_payloads(root, manifest)
+    except (RuntimeError, OSError): pass
+    else: raise AssertionError('Named .github exception followed a symlink')
+    github.unlink()
+    moved_github.rename(github)
     # Keep exact bytes and declared hash: only the parent-directory symlink changes.
     folder = root / 'vendor/sdk/licenses'
     moved = root / 'outside-licenses'

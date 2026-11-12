@@ -39,7 +39,10 @@ def notice_paths(manifest):
         if any(word in Path(name).name.upper() for word in ['LICENSE', 'COPYING', 'NOTICE', 'OFL']) or name.startswith('services/coordinator/notices/'):
             paths.add(name)
     for name in paths:
-        if not isinstance(name, str) or not name or name != Path(name).as_posix() or Path(name).is_absolute() or any(p in ('.', '..', '') or p.startswith('.') for p in name.split('/')) or chr(92) in name:
+        # Export policy permits this named directory in exact retained inputs.
+        # Upstream license bundles may include its provenance workflows; SHA and
+        # no-follow checks still apply, and other hidden components stay denied.
+        if not isinstance(name, str) or not name or name != Path(name).as_posix() or Path(name).is_absolute() or any(p in ('.', '..', '') or (p.startswith('.') and p != '.github') for p in name.split('/')) or chr(92) in name:
             raise RuntimeError('Unsafe notice path')
     return paths
 
