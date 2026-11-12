@@ -6,8 +6,8 @@ use serde::Deserialize;
 use serde_json::{json, Value};
 use std::{
     io::{self, BufRead, Write},
-    sync::mpsc,
-    time::Duration,
+    sync::{mpsc, Arc, Mutex},
+    time::{Duration, Instant},
 };
 use tauri::{Listener, Manager};
 
@@ -62,6 +62,34 @@ pub fn start(app: &tauri::AppHandle) -> io::Result<()> {
     }
     if app.get_webview_window("main").is_none() {
         return Err(io::Error::other("sync-e2e requires the main webview"));
+    }
+    // Test-only placement keeps BOTH owned windows partially visible without
+    // changing editor/save/quiet behavior or depending on a fixed startup delay.
+    if let Ok(slot) = std::env::var("NOTES_SYNC_E2E_SLOT") {
+        if slot != "left" && slot != "right" {
+            return Err(io::Error::other("invalid sync-e2e window slot"));
+        }
+        let window = app.get_webview_window("main").unwrap();
+        window
+            .set_size(tauri::LogicalSize::new(1000.0, 700.0))
+            .map_err(io::Error::other)?;
+        if let Some(monitor) = window.current_monitor().map_err(io::Error::other)? {
+            let area = monitor.work_area();
+            let width = window.outer_size().map_err(io::Error::other)?.width;
+            let offset = if slot == "right" {
+                area.size.width.saturating_sub(width)
+            } else {
+                0
+            };
+            window
+                .set_position(tauri::PhysicalPosition::new(
+                    area.position.x + offset as i32,
+                    area.position.y,
+                ))
+                .map_err(io::Error::other)?;
+        }
+        window.show().map_err(io::Error::other)?;
+        window.unminimize().map_err(io::Error::other)?;
     }
     let app = app.clone();
     std::thread::Builder::new()
@@ -187,19 +215,90 @@ fn serve(app: &tauri::AppHandle) -> io::Result<()> {
 }
 
 fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
+    if matches!(request.action, Action::Ready) {
+        let deadline = Instant::now() + Duration::from_millis(request.timeout_ms);
+        let mut probes = 0;
+        let mut last = Value::Null;
+        while Instant::now() < deadline {
+            let remaining = deadline
+                .saturating_duration_since(Instant::now())
+                .as_millis() as u64;
+            if remaining == 0 {
+                break;
+            }
+            let probe = Request {
+                id: request.id,
+                timeout_ms: remaining.min(1000),
+                action: Action::Ready,
+            };
+            // A synchronous, read-only probe can safely be retried if an early
+            // about:blank/navigation context disappears. Never retry mutations.
+            let result = dispatch_once(
+                app,
+                &probe,
+                Some("await report('documentProbe'); return domState();".into()),
+            );
+            probes += 1;
+            last = result.get("value").cloned().unwrap_or(Value::Null);
+            if last.get("interactive") == Some(&json!(true)) {
+                let remaining = deadline
+                    .saturating_duration_since(Instant::now())
+                    .as_millis() as u64;
+                if remaining == 0 {
+                    break;
+                }
+                let ready = Request {
+                    id: request.id,
+                    timeout_ms: remaining,
+                    action: Action::Ready,
+                };
+                let mut result = dispatch_once(app, &ready, None);
+                if result.get("ok") == Some(&json!(true)) {
+                    result["value"]["documentProbes"] = json!(probes);
+                    if let Some(window) = app.get_webview_window("main") {
+                        result["value"]["nativeWindow"] = json!({
+                            "visible":window.is_visible().ok(), "minimized":window.is_minimized().ok(),
+                            "focused":window.is_focused().ok(), "position":window.outer_position().ok(),
+                            "size":window.outer_size().ok()
+                        });
+                    }
+                }
+                return result;
+            }
+            // Poll interval only: every release still requires actual DOM state.
+            std::thread::sleep(
+                Duration::from_millis(25).min(deadline.saturating_duration_since(Instant::now())),
+            );
+        }
+        let mut result = error(json!(request.id), "TIMEOUT");
+        result["error"]["phase"] = json!("documentProbe");
+        result["error"]["diagnostic"] = json!({"documentProbes":probes,"lastDocument":last});
+        return result;
+    }
+    dispatch_once(app, request, None)
+}
+
+fn dispatch_once(
+    app: &tauri::AppHandle,
+    request: &Request,
+    override_body: Option<String>,
+) -> Value {
     let id = json!(request.id);
     let body = match &request.action {
         Action::Ready => format!(
-            "while (!window.__NOTES_DEBUG__) {{ if (Date.now() >= deadline) throw {{code:'TIMEOUT'}}; await new Promise(r=>setTimeout(r,25)); }}\n\
+            "await report('debugRegistration');\n\
+             while (!window.__NOTES_DEBUG__) {{ if (Date.now() >= deadline) throw {{code:'TIMEOUT'}}; await new Promise(r=>setTimeout(r,25)); }}\n\
              if (window.__NOTES_DEBUG__.version !== 1) throw {{code:'UNAVAILABLE'}};\n\
+             await report('appIdle');\n\
              await window.__NOTES_DEBUG__.waitForIdle({{timeoutMs:Math.min(30000, Math.max(1,deadline-Date.now()))}});\n\
+             await report('startupHandoff');\n\
              while (true) {{\n\
                  const root = document.getElementById('root');\n\
                  if (root && !document.getElementById('startup') && !root.inert && !root.hasAttribute('inert') && !root.hasAttribute('aria-hidden') && !root.hasAttribute('aria-busy')) break;\n\
                  if (Date.now() >= deadline) throw {{code:'TIMEOUT'}};\n\
                  await new Promise(r=>setTimeout(r,25));\n\
              }}\n\
-             return {{version:1, native:!!window.__TAURI_INTERNALS__, window:windowLabel, location:location.origin, interactive:true, startupDetached:true}};"
+             return {{version:1, native:!!window.__TAURI_INTERNALS__, window:windowLabel, location:location.origin, interactive:true, startupDetached:true, document:domState()}};"
         ),
         Action::Execute { command, args } if command.len() <= 200 && args.is_object() => {
             format!("return (await debug.execute({}, {})).result;", json!(command), args)
@@ -218,6 +317,7 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
         Action::Shutdown => "await debug.execute('app.flush'); await debug.waitForIdle({timeoutMs:Math.min(30000, Math.max(1,deadline-Date.now()))}); return {flushed:true};".into(),
         _ => return error(id, "INVALID_REQUEST"),
     };
+    let body = override_body.unwrap_or(body);
     let Some(window) = app.get_webview_window("main") else {
         return error(id, "WINDOW_UNAVAILABLE");
     };
@@ -229,6 +329,8 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
     let expected_nonce = nonce.clone();
     let expected_id = request.id;
     let (send, receive) = mpsc::sync_channel(1);
+    let progress = Arc::new(Mutex::new(Value::Null));
+    let observed = progress.clone();
     let listener = app.listen(event.clone(), move |event| {
         if event.payload().len() > MAX_REPLY + 4096 {
             return;
@@ -239,8 +341,25 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
         if value.get("nonce").and_then(Value::as_str) != Some(expected_nonce.as_str())
             || value.get("window").and_then(Value::as_str) != Some("main")
             || value.get("id").and_then(Value::as_u64) != Some(expected_id)
-            || !value.get("ok").is_some_and(Value::is_boolean)
         {
+            return;
+        }
+        if let Some(phase) = value.get("progress").and_then(Value::as_str) {
+            if [
+                "documentProbe",
+                "debugRegistration",
+                "appIdle",
+                "startupHandoff",
+            ]
+            .contains(&phase)
+            {
+                if let Ok(mut current) = observed.lock() {
+                    *current = json!({"phase":phase,"document":value.get("document")});
+                }
+            }
+            return;
+        }
+        if !value.get("ok").is_some_and(Value::is_boolean) {
             return;
         }
         value.as_object_mut().unwrap().remove("nonce");
@@ -253,6 +372,18 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
         const event = {event}, nonce = {nonce}, id = {id};
         const windowLabel = window.__TAURI_INTERNALS__?.metadata?.currentWindow?.label;
         const deadline = Date.now() + {timeout};
+        let phase = 'evalEntered';
+        const domState = () => {{
+            const root=document.getElementById('root'), startup=document.getElementById('startup');
+            const interactive=document.readyState==='complete' && !!window.__NOTES_DEBUG__ && !!root && !startup && !root.inert && !root.hasAttribute('inert') && !root.hasAttribute('aria-hidden') && !root.hasAttribute('aria-busy');
+            return {{readyState:document.readyState,visibility:document.visibilityState,timeOrigin:performance.timeOrigin,
+                debug:!!window.__NOTES_DEBUG__,startup:startup?.dataset.state || (startup ? 'present' : 'detached'),
+                rootInert:root?.inert ?? null,rootHidden:root?.getAttribute('aria-hidden') ?? null,interactive}};
+        }};
+        const report = async (next) => {{
+            phase=next;
+            await window.__TAURI_INTERNALS__.invoke('plugin:event|emit', {{event,payload:{{id,nonce,window:windowLabel,progress:phase,document:domState()}}}});
+        }};
         const run = async () => {{
             if(windowLabel !== 'main') throw {{code:'WRONG_WINDOW'}};
             const debug = window.__NOTES_DEBUG__;
@@ -267,7 +398,7 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
                     throw {{code:'OUTPUT_TOO_LARGE'}};
             }} catch (error) {{
                 const allowed = ['INVALID_ARGUMENT','UNKNOWN_COMMAND','UNAVAILABLE','UNSUPPORTED','TIMEOUT','APP_ERROR','WRONG_WINDOW','OUTPUT_TOO_LARGE','SENSITIVE_DOM'];
-                result = {{ok:false,error:{{code:allowed.includes(error?.code) ? error.code : 'JS_ERROR'}}}};
+                result = {{ok:false,error:{{code:allowed.includes(error?.code) ? error.code : 'JS_ERROR',phase,diagnostic:domState()}}}};
             }}
             try {{ await window.__TAURI_INTERNALS__.invoke('plugin:event|emit', {{
                 event, payload:{{id,nonce,window:windowLabel,...result}}
@@ -285,7 +416,16 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
     } else {
         receive
             .recv_timeout(Duration::from_millis(request.timeout_ms))
-            .unwrap_or_else(|_| error(id, "NATIVE_TIMEOUT"))
+            .unwrap_or_else(|_| {
+                let mut result = error(id, "NATIVE_TIMEOUT");
+                let last = progress.lock().map(|p| p.clone()).unwrap_or(Value::Null);
+                result["error"]["phase"] = last
+                    .get("phase")
+                    .cloned()
+                    .unwrap_or(json!("evalNotObserved"));
+                result["error"]["diagnostic"] = last;
+                result
+            })
     };
     app.unlisten(listener);
     result
