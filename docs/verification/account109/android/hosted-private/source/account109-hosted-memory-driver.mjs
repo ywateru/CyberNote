@@ -46,16 +46,33 @@ export function createGuardedSender(guard,send){
  };
 }
 
+// Android can report the same package name from another user/profile.
+// Never select by position: require exactly one cmdline + user-0 package UID.
+export function selectBrowserPid(pids,expectedUid,inspect){
+ if(!/^\d+$/.test(expectedUid||''))throw fail('BROWSER_USER0_UID_UNAVAILABLE');
+ const matches=[];
+ for(const pid of pids){
+  if(!/^\d+$/.test(pid))throw fail('BROWSER_PID_INVALID');
+  const process=inspect(pid);
+  if(process.name==='com.android.chrome'&&process.uid===expectedUid)matches.push(Number(pid));
+ }
+ if(matches.length!==1)throw fail('BROWSER_PID_NOT_UNIQUE_FOR_USER0');
+ return matches[0];
+}
+
 export async function prepareHostedDriver({WebSocketImpl=globalThis.WebSocket}={}){
  if(typeof WebSocketImpl!=='function')throw fail('BROWSER_WEBSOCKET_UNAVAILABLE');
  const lease=await acquireDriverLease(path.join(os.tmpdir(),`cybernote-account109-browser-${SERIAL}.lock`));
  let owned,ws,native,seq=0,inputGuard;
  const pending=new Map();
+ let expectedBrowserUid;
  const browserPid=()=>{
-  const pid=run('shell','pidof','com.android.chrome').trim();
-  if(!/^\d+$/.test(pid))throw fail('BROWSER_PID_NOT_UNIQUE');
-  if(run('shell','cat',`/proc/${pid}/cmdline`).split('\0')[0]!=='com.android.chrome')throw fail('BROWSER_PID_OWNER_MISMATCH');
-  return Number(pid);
+  if(!expectedBrowserUid){
+   const packageLine=run('shell','cmd','package','list','packages','-U','--user','0','com.android.chrome').split('\n').find(l=>/^package:com\.android\.chrome\s+uid:\d+\s*$/.test(l));
+   expectedBrowserUid=packageLine?.match(/uid:(\d+)/)?.[1];
+  }
+  const pids=run('shell','pidof','com.android.chrome').trim().split(/\s+/);
+  return selectBrowserPid(pids,expectedBrowserUid,pid=>({name:run('shell','cat',`/proc/${pid}/cmdline`).split('\0')[0],uid:run('shell','cat',`/proc/${pid}/status`).match(/^Uid:\s+(\d+)/m)?.[1]}));
  };
  const assertBrowser=()=>{
   lease.assertOpen();

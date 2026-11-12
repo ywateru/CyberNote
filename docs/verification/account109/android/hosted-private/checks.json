@@ -5,7 +5,7 @@
     {
       "runtimePath": "/private/tmp/account109-hosted-memory-driver.mjs",
       "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-memory-driver.mjs",
-      "sha256": "4126af957497d4cf2b018d1d25ee990687fd02cb1c6b26ce70bd823f0ee32c4d"
+      "sha256": "000e763e7bb9fafd066d13cee305845660116665eb8a851aae2dc1eafc81f6ba"
     },
     {
       "runtimePath": "/private/tmp/account109-hosted-memory-consumer.mjs",
@@ -25,13 +25,13 @@
   ],
   "offlineTests": {
     "command": "node --test docs/verification/account109/android/hosted-private/source/account109-hosted-private.test.mjs",
-    "passed": 23,
+    "passed": 24,
     "failed": 0,
     "skipped": 0,
     "externalCommands": 0,
     "liveAuthEvidence": false,
-    "log": "observer-green01.txt",
-    "logSha256": "8aaebba7e21439d5f8f000bf72321c4e30b7ac849f1409e93afedec1aa2cb27c"
+    "log": "user0-green01.txt",
+    "logSha256": "cdda594ec3fa49f7b197006036f02cc0fc3e5099b034cb79be1cce17e5e51af8"
   },
   "preservedInitialFailure": "red01.json",
   "productionSourceChanged": false,
@@ -48,5 +48,6 @@
     "redRawSha256": "0f88e75e49e598174e8564c1845545f34418af273657c53c47866db6ba5fde40",
     "redArchiveSha256": "c5d9000fa718affa5bce07e1ba1a63527d7f068865040fbed5978ec4169e259e",
     "redArchiveNormalization": "strip trailing whitespace; preserve assertion content"
-  }
+  },
+  "browserSelectionRepair": "Require exact Chrome cmdline and user-0 package UID; multiple same-name users no longer treated as ambiguous, multiple same-user owners still reject."
 }

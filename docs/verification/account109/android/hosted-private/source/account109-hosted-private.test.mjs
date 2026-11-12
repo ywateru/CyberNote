@@ -9,7 +9,7 @@ let externalCommands=0;
 childProcess.execFileSync=()=>{externalCommands++;throw Error('OFFLINE_FORBIDS_DEVICE_COMMANDS');};
 syncBuiltinESMExports();
 test.after(()=>{childProcess.execFileSync=originalExec;syncBuiltinESMExports();assert.equal(externalCommands,0);});
-const {createInputGuard,createGuardedSender}=await import('./account109-hosted-memory-driver.mjs');
+const {createInputGuard,createGuardedSender,selectBrowserPid}=await import('./account109-hosted-memory-driver.mjs');
 const {prepareConsumer}=await import('./account109-hosted-memory-consumer.mjs');
 const {prepareEnvelope}=await import('./account109-hosted-rsa-envelope.mjs');
 const {classifyTerminal,observeTerminal}=await import('./account109-hosted-terminal-observer.mjs');
@@ -137,4 +137,16 @@ test('observer device recheck crossing deadline cannot report success',async()=>
   probe:()=>{if(++probes===2)clock=1050;return{unlocked:true,ownedAppForeground:true};},sleep:async()=>{throw Error('OFFLINE_UNEXPECTED_SLEEP');},
  });
  assert.equal(result.code,'NATIVE_PAUSED_PROFILE_NOT_OBSERVED');assert.equal(probes,2);assert.equal(closed,1);
+});
+
+
+test('browser PID selection requires exact user-0 Chrome UID and cmdline',()=>{
+ const records={'101':{name:'com.android.chrome',uid:'10001'},'202':{name:'com.android.chrome',uid:'1010001'}};
+ assert.equal(selectBrowserPid(['202','101'],'10001',pid=>records[pid]),101);
+ assert.throws(()=>selectBrowserPid(['202'],'10001',pid=>records[pid]),{code:'BROWSER_PID_NOT_UNIQUE_FOR_USER0'});
+ records['303']={name:'com.android.chrome',uid:'10001'};
+ assert.throws(()=>selectBrowserPid(['101','303'],'10001',pid=>records[pid]),{code:'BROWSER_PID_NOT_UNIQUE_FOR_USER0'});
+ records['101'].name='other-offline-process';
+ assert.throws(()=>selectBrowserPid(['101'],'10001',pid=>records[pid]),{code:'BROWSER_PID_NOT_UNIQUE_FOR_USER0'});
+ assert.throws(()=>selectBrowserPid(['101'],undefined,pid=>records[pid]),{code:'BROWSER_USER0_UID_UNAVAILABLE'});
 });

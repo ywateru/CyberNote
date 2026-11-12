@@ -79,3 +79,18 @@ crossings also reject. The full offline suite is now 23/23 with no external
 commands. The final log is `observer-green01.txt`; `checks9127758f.json` preserves
 the earlier frozen manifest. These probes do not establish live callback success
 or an atomic OS snapshot. No production source, IPC or real credential is involved.
+
+## User-0 browser process ownership
+
+A later live preparation stopped before SignIn because `pidof com.android.chrome`
+returned two processes. Read-only UID checks found exactly one matching Chrome's
+user-0 package UID. The driver now requires a unique exact Chrome cmdline plus
+that explicit package UID; it does not choose the first PID. Missing UID, no
+matching owner, or multiple matching same-user owners still reject. The private
+socket target must still be a newly changed trusted page after this sandbox's
+SignIn; guards continue checking the selected PID/cmdline/UID. The tool does not
+operate another user's browser. This is test tooling, not a product auth change.
+
+The final `user0-green01.txt` suite is **24/24**, zero skips/device commands. The
+browser selector test covers cross-user ordering, no owner, same-user ambiguity,
+wrong cmdline and missing package UID. Earlier red and green evidence is retained.
