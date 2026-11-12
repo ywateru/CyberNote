@@ -12,7 +12,8 @@ import { acquireDriverLease, guardDriverMethods } from './sync108-android-lifecy
 export const SERIAL = '98895a3147304c3132';
 export const PACKAGE = 'com.local.notesclone.account109';
 export const ACTIVITY = `${PACKAGE}/com.local.notesclone.MainActivity`;
-const adb = path.join(process.env.ANDROID_HOME || `${os.homedir()}/Library/Android/sdk`, 'platform-tools/adb');
+const sdkOverride = typeof process === 'object' ? process.env?.ANDROID_HOME : undefined;
+const adb = path.join(sdkOverride || `${os.homedir()}/Library/Android/sdk`, 'platform-tools/adb');
 const run = (...args) => execFileSync(adb, ['-s', SERIAL, ...args], { encoding: 'utf8', timeout: 20000 });
 const pause = (ms = 250) => new Promise(resolve => setTimeout(resolve, ms));
 const hash = data => createHash('sha256').update(data).digest('hex');
