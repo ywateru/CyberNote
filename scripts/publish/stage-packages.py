@@ -11,6 +11,7 @@ import platform
 import shutil
 import stat
 import re
+import struct
 import tempfile
 import subprocess
 import zipfile
@@ -86,6 +87,103 @@ def package_identity(root, native, build):
     return json.loads(subprocess.check_output(['node', str(root / 'scripts/publish/package-identity.mjs'), str(native), str(build)], cwd=root, text=True))
 
 
+def android_native_bytes(archive):
+    names = archive.namelist()
+    libs = [name for name in names if name.startswith('lib/') and name.endswith('.so')]
+    entry = 'lib/arm64-v8a/libnotes_clone_lib.so'
+    if (not libs or len(libs) != len(set(libs)) or entry not in libs
+            or any(len(name.split('/')) != 3 or name.split('/')[1] != 'arm64-v8a' for name in libs)):
+        raise RuntimeError('Expected unique arm64-v8a-only APK libraries')
+    for name in libs:
+        with archive.open(name) as source:
+            header = source.read(64)
+        # Directory names do not establish an executable's actual architecture.
+        if (len(header) != 64 or header[:7] != b'\x7fELF\x02\x01\x01'
+                or struct.unpack_from('<HHI', header, 16) not in ((2, 183, 1), (3, 183, 1))
+                or struct.unpack_from('<H', header, 52)[0] != 64):
+            raise RuntimeError('Expected ELF64 little-endian AArch64 APK libraries')
+    return archive.read(entry)
+
+
+def require_unsigned_apk(package, tools):
+    with zipfile.ZipFile(package) as archive:
+        for name in archive.namelist():
+            upper = name.upper()
+            if upper.startswith('META-INF/') and (upper == 'META-INF/MANIFEST.MF'
+                    or upper.endswith(('.SF', '.RSA', '.DSA', '.EC'))):
+                raise RuntimeError('APK contains JAR signing material')
+        # v2/v3 signing blocks live outside ZIP entries, immediately before the
+        # central directory. Reject their footer even when signatures are broken.
+        with package.open('rb') as source:
+            source.seek(0, os.SEEK_END)
+            size = source.tell()
+            source.seek(max(0, size - 65557))
+            tail = source.read()
+            eocd = tail.rfind(b'PK\x05\x06')
+            if eocd < 0 or eocd + 22 > len(tail):
+                raise RuntimeError('APK has no supported ZIP end record')
+            comment_length = struct.unpack_from('<H', tail, eocd + 20)[0]
+            central = struct.unpack_from('<I', tail, eocd + 16)[0]
+            if eocd + 22 + comment_length != len(tail) or central == 0xffffffff:
+                raise RuntimeError('APK has an unsupported ZIP end record')
+            if central >= 16:
+                source.seek(central - 16)
+                if source.read(16) == b'APK Sig Block 42':
+                    raise RuntimeError('APK contains a signing block')
+    result = subprocess.run([str(tools / 'apksigner'), 'verify', str(package)],
+                            capture_output=True, text=True, timeout=60)
+    # Pinned build-tools 36.0.0 reports this exact failure for an unsigned APK.
+    # Tool crashes, malformed packages and invalid signatures are not unsigned.
+    if (result.returncode != 1 or result.stdout.strip()
+            or result.stderr.strip() != 'DOES NOT VERIFY\nERROR: Missing META-INF/MANIFEST.MF'):
+        raise RuntimeError('APK is signed or unsigned status could not be established')
+
+
+def require_android_release_manifest(package, tools, expected_package, expected_version):
+    with zipfile.ZipFile(package) as archive:
+        if archive.namelist().count('AndroidManifest.xml') != 1:
+            raise RuntimeError('Expected one compiled AndroidManifest.xml')
+    result = subprocess.run([str(tools / 'aapt2'), 'dump', 'xmltree', '--file',
+                             'AndroidManifest.xml', str(package)],
+                            capture_output=True, text=True, timeout=60, check=True)
+    elements = []
+    current = None
+    for line in result.stdout.splitlines():
+        element = re.fullmatch(r'(\s*)E: ([\w-]+)(?: \(line=\d+\))?', line)
+        if element:
+            current = {'name': element[2], 'indent': len(element[1]), 'attributes': []}
+            elements.append(current)
+        elif current is not None:
+            attribute = re.fullmatch(r'(\s*)A: (.+)', line)
+            if attribute and len(attribute[1]) == current['indent'] + 2:
+                current['attributes'].append(attribute[2])
+    manifests = [e for e in elements if e['name'] == 'manifest']
+    apps = [e for e in elements if e['name'] == 'application']
+    if len(manifests) != 1 or len(apps) != 1 or apps[0]['indent'] != manifests[0]['indent'] + 4:
+        raise RuntimeError('Unsupported compiled Android manifest structure')
+    packages = [a for a in manifests[0]['attributes'] if a.startswith('package=')]
+    if len(packages) != 1 or not re.fullmatch(r'package="' + re.escape(expected_package) + r'"(?: \(Raw: "' + re.escape(expected_package) + r'"\))?', packages[0]):
+        raise RuntimeError('Android package differs from production identifier')
+    android = 'http://schemas.android.com/apk/res/android:'
+    versions = [a for a in manifests[0]['attributes'] if a.startswith(android + 'versionName(')]
+    if len(versions) != 1 or not re.fullmatch(re.escape(android) + r'versionName\(0x[0-9a-fA-F]+\)="' + re.escape(expected_version) + r'"(?: \(Raw: "' + re.escape(expected_version) + r'"\))?', versions[0]):
+        raise RuntimeError('Android version differs from package.json')
+    if not re.fullmatch(r'\d+\.\d+\.\d+', expected_version):
+        raise RuntimeError('Unsupported Android release version')
+    major, minor, patch = map(int, expected_version.split('.'))
+    expected_code = major * 1000000 + minor * 1000 + patch
+    codes = [a for a in manifests[0]['attributes'] if a.startswith(android + 'versionCode(')]
+    code = re.fullmatch(re.escape(android) + r'versionCode\(0x[0-9a-fA-F]+\)=(0x[0-9a-fA-F]+|\d+)', codes[0]) if len(codes) == 1 else None
+    if (minor >= 1000 or patch >= 1000 or expected_code <= 0 or code is None
+            or int(code[1], 16 if code[1].startswith('0x') else 10) != expected_code):
+        raise RuntimeError('Android versionCode differs from package.json')
+    for flag in ('debuggable', 'testOnly'):
+        prefix = android + flag + '('
+        values = [a for a in apps[0]['attributes'] if a.startswith(prefix)]
+        if len(values) > 1 or any(not re.fullmatch(re.escape(prefix) + r'0x[0-9a-fA-F]+\)=(?:false|0x00000000)', a) for a in values):
+            raise RuntimeError('Expected a non-debuggable, non-test-only Android release')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--platform', required=True, choices=['macos', 'android'])
@@ -131,16 +229,14 @@ def main():
         package = output / f'{stem}-unsigned.apk'
         # Current workflow supplies no signing material. Refuse to mislabel a
         # signed package instead of silently changing the signing claim.
-        tools = Path(os.environ['ANDROID_HOME']) / 'build-tools/36.0.0/apksigner'
-        if subprocess.run([str(tools), 'verify', str(apks[0])], capture_output=True).returncode == 0:
-            raise RuntimeError('Signing policy changed: review staging before publishing a signed APK')
+        tools = Path(os.environ['ANDROID_HOME']) / 'build-tools/36.0.0'
         shutil.copyfile(apks[0], package)
+        require_unsigned_apk(package, tools)
+        expected_package = json.loads((root / 'src-tauri/tauri.conf.json').read_text())['identifier']
+        expected_version = json.loads((root / 'package.json').read_text())['version']
+        require_android_release_manifest(package, tools, expected_package, expected_version)
         with zipfile.ZipFile(package) as archive:
-            libs = [n for n in archive.namelist() if n.startswith('lib/') and n.endswith('.so')]
-            if not libs or {n.split('/')[1] for n in libs} != {'arm64-v8a'}:
-                raise RuntimeError('Expected arm64-v8a-only APK libraries')
-            entry = 'lib/arm64-v8a/libnotes_clone_lib.so'
-            native_bytes = archive.read(entry)
+            native_bytes = android_native_bytes(archive)
             native_sha = hashlib.sha256(native_bytes).hexdigest()
         with tempfile.NamedTemporaryFile(prefix='cybernote-package-native-') as native:
             native.write(native_bytes)

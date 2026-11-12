@@ -130,6 +130,14 @@ The workflow requires a real arm64 macOS runner and an explicit Android arm64
 toolchain. No `--all-features` build is used. Package staging validates package
 architecture and writes only the named package, notices, identity receipt and
 checksums. Android output is unsigned; macOS signing/notarization is not asserted.
+Android staging checks every packaged native library's ELF64/AArch64 header,
+rejects duplicate library entries and signing material (including APK signing
+blocks outside ZIP entries), and requires the pinned apksigner's specific
+unsigned diagnostic. Other tool failures fail closed. The compiled manifest must
+decode with aapt2, match the production application ID and package.json version,
+and have no enabled debuggable/testOnly flag; an output directory named release
+alone does not establish these properties. These checks do not prove installation
+or runtime behavior.
 Before writing a receipt, staging recomputes the clean current source identity
 and compares all revision/fingerprint/count/dirty fields with production build
 metadata. It extracts the executable from the actual app ZIP/APK and requires
