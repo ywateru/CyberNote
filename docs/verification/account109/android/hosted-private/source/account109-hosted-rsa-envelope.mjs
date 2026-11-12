@@ -19,7 +19,7 @@ export async function prepareEnvelope({driver,WebSocketImpl,record,consumeUi:inj
  let attempted=false;
  const dispose=()=>{privateKey=undefined;attempted=true;clearTimeout(timer);};
  const timer=setTimeout(()=>{privateKey=undefined;attempted=true;},240000);timer.unref?.();
- return{publicKeyBase64,dispose,accept:async(ciphertextBase64,marker)=>{
+ return{publicKeyBase64,expiresAt,dispose,accept:async(ciphertextBase64,marker)=>{
   if(attempted||!privateKey||Date.now()>=expiresAt)return{phase:'encrypted-transfer-rejected',code:'ENVELOPE_EXPIRED_OR_CONSUMED'};
   attempted=true;let plaintext,ciphertext;let stage='envelope';
   try{

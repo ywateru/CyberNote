@@ -20,7 +20,7 @@
     {
       "runtimePath": "/private/tmp/account109-hosted-rsa-envelope.mjs",
       "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-rsa-envelope.mjs",
-      "sha256": "4e12c0539391ea9df5f786920fb44de36a0d7be68f837359afa87bdf619002ab"
+      "sha256": "6993a5bd919408ce0609b9e9481a7b36707707b424b5ebf9e9609d260818bf47"
     }
   ],
   "offlineTests": {
@@ -49,5 +49,6 @@
     "redArchiveSha256": "c5d9000fa718affa5bce07e1ba1a63527d7f068865040fbed5978ec4169e259e",
     "redArchiveNormalization": "strip trailing whitespace; preserve assertion content"
   },
-  "browserSelectionRepair": "Require exact Chrome cmdline and user-0 package UID; multiple same-name users no longer treated as ambiguous, multiple same-user owners still reject."
+  "browserSelectionRepair": "Require exact Chrome cmdline and user-0 package UID; multiple same-name users no longer treated as ambiguous, multiple same-user owners still reject.",
+  "publicEnvelopeMetadata": "SPKI publicKeyBase64 and fixed expiresAt only; never private key."
 }
