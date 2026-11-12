@@ -53,6 +53,9 @@ test('hash tampering, process paths, credentials and symlink tree entries fail c
   assert.throws(() => exportSnapshot({ root }), /hash mismatch/);
   for (const name of ['docs/private.md', 'vendor/sdk/target/release/tool', 'src/.env', '../outside', 'src/link.pem']) assert.throws(() => safePath(name));
   assert.throws(() => scanBytes('src/config.ts', Buffer.from(['ghp', 'a'.repeat(36)].join('_'))), /Credential pattern/);
+  assert.doesNotThrow(() => scanBytes('service/test/url.test.ts', Buffer.from('https://u:p@fixture.invalid')));
+  assert.throws(() => scanBytes('src/config.ts', Buffer.from('https://u:p@fixture.invalid')), /Credential URL/);
+  assert.throws(() => scanBytes('service/test/url.test.ts', Buffer.from('https://u:p@real.example.com')), /Credential URL/);
   assert.throws(() => scanBytes('vendor/tool', Buffer.from([1, 0, 2])), /Unreviewed binary/);
   manifest.files['services/coordinator/LICENSE'] = digest(Buffer.from('Fixture license'));
   manifest.files['src/link.ts'] = digest(Buffer.from('../.env'));

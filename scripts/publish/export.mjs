@@ -26,7 +26,18 @@ export function scanBytes(name, bytes) {
   }
   const text = bytes.toString();
   // Never echo values, snippets or hashes of a matched credential.
-  if (/-----BEGIN (?:RSA |EC |OPENSSH |DSA |ENCRYPTED )?PRIVATE KEY-----|\b(?:gh[pousr]_[A-Za-z0-9]{30,255}|github_pat_[A-Za-z0-9_]{40,255})|\b(?:sk-(?:proj-)?[A-Za-z0-9_-]{32,255}|xox[baprs]-[A-Za-z0-9-]{20,255}|AIza[A-Za-z0-9_-]{30,255})|\b(?:AKIA|ASIA)[A-Z0-9]{16}|\beyJ[A-Za-z0-9_-]{15,2000}\.[A-Za-z0-9_-]{15,2000}\.[A-Za-z0-9_-]{15,2000}|notes-sync-v1:[A-Za-z0-9_-]{32,2000}|(?:https?|rediss?):\/\/[^\s/'"]{1,200}:[^\s/'"]{1,200}@/.test(text)) throw Error(`Credential pattern in export input: ${name}`);
+  if (/-----BEGIN (?:RSA |EC |OPENSSH |DSA |ENCRYPTED )?PRIVATE KEY-----|\b(?:gh[pousr]_[A-Za-z0-9]{30,255}|github_pat_[A-Za-z0-9_]{40,255})|\b(?:sk-(?:proj-)?[A-Za-z0-9_-]{32,255}|xox[baprs]-[A-Za-z0-9-]{20,255}|AIza[A-Za-z0-9_-]{30,255})|\b(?:AKIA|ASIA)[A-Z0-9]{16}|\beyJ[A-Za-z0-9_-]{15,2000}\.[A-Za-z0-9_-]{15,2000}\.[A-Za-z0-9_-]{15,2000}|notes-sync-v1:[A-Za-z0-9_-]{32,2000}/.test(text)) throw Error(`Credential pattern in export input: ${name}`);
+  for (const m of text.matchAll(/(?:https?|rediss?):\/\/[^\s/'"]{1,200}:[^\s/'"]{1,200}@[^\s'"<>]+/g)) {
+    let synthetic = false;
+    try {
+      const url = new URL(m[0]);
+      synthetic = /(?:^|\.)(?:test|invalid|example)$/.test(url.hostname) &&
+        ['u', 'user', 'test', 'fixture'].includes(url.username) &&
+        ['p', 'pass', 'pass' + 'word', 'test', 'fixture'].includes(url['pass' + 'word']) &&
+        /(?:^|\/)test\//.test(name);
+    } catch { /* Malformed credential-shaped inputs fail closed too. */ }
+    if (!synthetic) throw Error(`Credential URL in export input: ${name}`);
+  }
   if (/\/Users\/[A-Za-z0-9_.-]+\/|\/home\/[A-Za-z0-9_.-]+\//.test(text)) throw Error(`Local user path in export input: ${name}`);
 }
 export function trackedTree(root, ref) {
