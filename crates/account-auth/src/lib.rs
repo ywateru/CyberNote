@@ -407,8 +407,14 @@ impl AuthClient {
             access: response.access_token().secret().to_owned(),
             refresh: response
                 .refresh_token()
+                .filter(|token| !token.secret().is_empty())
                 .map(|t| t.secret().to_owned())
-                .or_else(|| previous.and_then(|g| g.refresh.clone())),
+                .or_else(|| {
+                    previous
+                        .and_then(|g| g.refresh.as_ref())
+                        .filter(|token| !token.is_empty())
+                        .cloned()
+                }),
             nonce: nonce.to_owned(),
             expires_at,
             usable: false,
@@ -525,7 +531,13 @@ impl AuthClient {
         if !g.usable {
             return Err(AuthError::NoSession);
         }
-        let refresh = RefreshToken::new(g.refresh.clone().ok_or(AuthError::RefreshFailed)?);
+        let refresh = RefreshToken::new(
+            g.refresh
+                .as_ref()
+                .filter(|token| !token.is_empty())
+                .cloned()
+                .ok_or(AuthError::RefreshFailed)?,
+        );
         let nonce = Zeroizing::new(g.nonce.clone());
         let old_identity = g.identity.clone().ok_or(AuthError::InvalidIdentity)?;
         let client = self.client(state).await?;
@@ -537,7 +549,14 @@ impl AuthClient {
             .request_async(&self.inner.http)
             .await
             .map_err(|_| AuthError::RefreshFailed)?;
-        let verified = if response.id_token().is_some() {
+        let verified = if response
+            .refresh_token()
+            .is_some_and(|token| token.secret().is_empty())
+        {
+            // An explicit empty rotation is malformed, unlike an omitted refresh token.
+            // Keep the previous nonempty owner for cleanup; never deliver the new access.
+            Err(AuthError::InvalidIdentity)
+        } else if response.id_token().is_some() {
             self.verify_response(&client, &response, &nonce, false)
         } else if response.token_type() != &CoreTokenType::Bearer
             || response.expires_in().is_none_or(|d| d.is_zero())
@@ -568,10 +587,13 @@ impl AuthClient {
         result
     }
     async fn revoke(&self, client: &OidcClient, grant: &Grant) -> Result<(), AuthError> {
-        let token = if let Some(refresh) = &grant.refresh {
+        let token = if let Some(refresh) = grant.refresh.as_ref().filter(|token| !token.is_empty())
+        {
             CoreRevocableToken::RefreshToken(RefreshToken::new(refresh.clone()))
-        } else {
+        } else if !grant.access.is_empty() {
             CoreRevocableToken::AccessToken(oauth2::AccessToken::new(grant.access.clone()))
+        } else {
+            return Err(AuthError::RevocationFailed);
         };
         client
             .revoke_token(token)

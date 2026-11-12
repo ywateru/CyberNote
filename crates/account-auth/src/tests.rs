@@ -41,6 +41,8 @@ struct Fixture {
     challenge: SyncMutex<String>,
     changes: SyncMutex<Value>,
     refresh_scope: SyncMutex<String>,
+    refresh_handle: SyncMutex<String>,
+    revoked_tokens: SyncMutex<Vec<(String, String)>>,
     omit_refresh_id: AtomicBool,
     tokens: AtomicUsize,
     revokes: AtomicUsize,
@@ -50,6 +52,7 @@ struct Fixture {
     wrong_signature: AtomicBool,
     wrong_alg: AtomicBool,
     omit_refresh: AtomicBool,
+    empty_refresh: AtomicBool,
     pause_token: AtomicBool,
     entered: tokio::sync::Notify,
     release: tokio::sync::Notify,
@@ -78,6 +81,8 @@ impl Fixture {
             challenge: SyncMutex::new(String::new()),
             changes: SyncMutex::new(json!({})),
             refresh_scope: SyncMutex::new("connect".into()),
+            refresh_handle: SyncMutex::new(String::new()),
+            revoked_tokens: SyncMutex::new(Vec::new()),
             omit_refresh_id: AtomicBool::new(false),
             tokens: AtomicUsize::new(0),
             revokes: AtomicUsize::new(0),
@@ -87,6 +92,7 @@ impl Fixture {
             wrong_signature: AtomicBool::new(false),
             wrong_alg: AtomicBool::new(false),
             omit_refresh: AtomicBool::new(false),
+            empty_refresh: AtomicBool::new(false),
             pause_token: AtomicBool::new(false),
             entered: tokio::sync::Notify::new(),
             release: tokio::sync::Notify::new(),
@@ -125,7 +131,11 @@ impl Fixture {
         );
         if uri.ends_with("/token/revocation") {
             self.revokes.fetch_add(1, Ordering::SeqCst);
-            assert!(form.contains_key("token"));
+            assert!(!form["token"].is_empty());
+            self.revoked_tokens
+                .lock()
+                .unwrap()
+                .push((form["token"].clone(), form["token_type_hint"].clone()));
             return Ok(response(
                 if self.fail_revoke.load(Ordering::SeqCst) {
                     503
@@ -144,7 +154,7 @@ impl Fixture {
         if is_refresh {
             assert_eq!(
                 form.get("refresh_token").unwrap(),
-                &format!("fixture-refresh-{}", self.tokens.load(Ordering::SeqCst))
+                self.refresh_handle.lock().unwrap().as_str()
             );
             // Resource access-token scopes differ from the original OIDC scopes.
             // Refresh must inherit its grant rather than resubmit authorization scopes.
@@ -203,6 +213,15 @@ impl Fixture {
             "expires_in":3600,"scope":"openid profile offline_access connect","id_token":id});
         if self.omit_refresh.load(Ordering::SeqCst) {
             body.as_object_mut().unwrap().remove("refresh_token");
+        } else if self.empty_refresh.load(Ordering::SeqCst) {
+            body["refresh_token"] = json!("");
+        }
+        if let Some(token) = body
+            .get("refresh_token")
+            .and_then(Value::as_str)
+            .filter(|token| !token.is_empty())
+        {
+            *self.refresh_handle.lock().unwrap() = token.to_owned();
         }
         if is_refresh {
             body["scope"] = json!(self.refresh_scope.lock().unwrap().clone());
@@ -904,6 +923,166 @@ async fn live_public_logto_discovery_is_compatible() {
         .any(|(k, v)| k == "first_screen" && v == "register"));
     drop(transaction);
     assert!(!dir.path().join("grant.json").exists());
+}
+
+#[tokio::test]
+async fn initial_empty_refresh_revokes_issued_access_and_failed_cleanup_survives_restart() {
+    for fail_revoke in [false, true] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let client = f.client(&dir).await;
+        let path = dir.path().join("grant.json");
+        f.empty_refresh.store(true, Ordering::SeqCst);
+        f.fail_revoke.store(fail_revoke, Ordering::SeqCst);
+        let (transaction, callback) = f.begin(&client, false).await;
+        assert_eq!(
+            client
+                .complete_callback(transaction, callback)
+                .await
+                .unwrap_err(),
+            AuthError::InvalidIdentity
+        );
+        assert_eq!(
+            *f.revoked_tokens.lock().unwrap(),
+            vec![("fixture-access-1".into(), "access_token".into())]
+        );
+        assert!(matches!(
+            client.access_token(Duration::ZERO, false).await,
+            Err(AuthError::NoSession)
+        ));
+        assert_eq!(path.exists(), fail_revoke);
+        assert_eq!(client.cleanup_required().await, fail_revoke);
+        if fail_revoke {
+            let saved: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+            assert!(saved["refresh"].is_null());
+            assert_eq!(saved["access"], "fixture-access-1");
+            assert_eq!(saved["usable"], false);
+        }
+        drop(client);
+        let restored = f.client(&dir).await;
+        if fail_revoke {
+            assert!(restored.cleanup_required().await);
+            assert!(matches!(
+                restored.restore().await,
+                Err(AuthError::NoSession)
+            ));
+            f.fail_revoke.store(false, Ordering::SeqCst);
+            restored.logout().await.unwrap();
+            assert_eq!(
+                *f.revoked_tokens.lock().unwrap(),
+                vec![
+                    ("fixture-access-1".into(), "access_token".into()),
+                    ("fixture-access-1".into(), "access_token".into()),
+                ]
+            );
+        }
+        assert!(!restored.cleanup_required().await);
+        assert!(restored.restore().await.unwrap().is_none());
+        assert!(!path.exists());
+    }
+}
+
+#[tokio::test]
+async fn empty_refresh_rotation_quarantines_prior_handle_and_logout_retries_after_restart() {
+    for omit_id in [false, true] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let client = f.client(&dir).await;
+        f.login(&client).await;
+        f.empty_refresh.store(true, Ordering::SeqCst);
+        f.omit_refresh_id.store(omit_id, Ordering::SeqCst);
+        assert_eq!(
+            client.access_token(Duration::ZERO, true).await.unwrap_err(),
+            AuthError::InvalidIdentity
+        );
+        assert!(client.cleanup_required().await);
+        assert!(matches!(
+            client.access_token(Duration::ZERO, false).await,
+            Err(AuthError::NoSession)
+        ));
+        let path = dir.path().join("grant.json");
+        let saved: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        assert_eq!(saved["refresh"], "fixture-refresh-1");
+        assert_eq!(saved["usable"], false);
+        f.fail_revoke.store(true, Ordering::SeqCst);
+        assert_eq!(
+            client.logout().await.unwrap_err(),
+            AuthError::RevocationFailed
+        );
+        assert_eq!(
+            *f.revoked_tokens.lock().unwrap(),
+            vec![("fixture-refresh-1".into(), "refresh_token".into())]
+        );
+        assert!(client.cleanup_required().await);
+        drop(client);
+
+        let restored = f.client(&dir).await;
+        assert!(restored.cleanup_required().await);
+        assert!(matches!(
+            restored.restore().await,
+            Err(AuthError::NoSession)
+        ));
+        assert!(matches!(
+            restored
+                .begin_authorization(config().redirect_uris[0].clone(), false)
+                .await,
+            Err(AuthError::Busy)
+        ));
+        assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
+        f.fail_revoke.store(false, Ordering::SeqCst);
+        restored.logout().await.unwrap();
+        assert_eq!(
+            *f.revoked_tokens.lock().unwrap(),
+            vec![
+                ("fixture-refresh-1".into(), "refresh_token".into()),
+                ("fixture-refresh-1".into(), "refresh_token".into()),
+            ]
+        );
+        assert!(!path.exists());
+        assert!(!restored.cleanup_required().await);
+        assert!(restored.restore().await.unwrap().is_none());
+    }
+}
+
+#[tokio::test]
+async fn omitted_refresh_rotation_inherits_prior_handle_across_restart_and_revocation() {
+    for omit_id in [false, true] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let client = f.client(&dir).await;
+        let identity = f.login(&client).await;
+        f.omit_refresh.store(true, Ordering::SeqCst);
+        f.omit_refresh_id.store(omit_id, Ordering::SeqCst);
+        assert_eq!(
+            client
+                .access_token(Duration::ZERO, true)
+                .await
+                .unwrap()
+                .secret(),
+            "fixture-access-2"
+        );
+        let path = dir.path().join("grant.json");
+        let saved: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        assert_eq!(saved["refresh"], "fixture-refresh-1");
+        assert_eq!(saved["usable"], true);
+        drop(client);
+        let restored = f.client(&dir).await;
+        assert_eq!(restored.restore().await.unwrap(), Some(identity));
+        assert_eq!(
+            restored
+                .access_token(Duration::ZERO, false)
+                .await
+                .unwrap()
+                .secret(),
+            "fixture-access-3"
+        );
+        restored.logout().await.unwrap();
+        assert_eq!(
+            *f.revoked_tokens.lock().unwrap(),
+            vec![("fixture-refresh-1".into(), "refresh_token".into())]
+        );
+        assert!(!path.exists());
+    }
 }
 
 #[tokio::test]

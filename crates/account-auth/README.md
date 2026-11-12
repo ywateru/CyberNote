@@ -54,6 +54,11 @@ one owner, Tokio mutex, connection policy and process-lifetime file lock.
 - `access_token(Duration, bool) -> AccessToken` serializes refresh and persists
   every returned rotation before exposing the access token. `force_refresh` is
   passed through as an explicit refresh request, rather than coalesced away.
+  An explicitly empty refresh token is malformed: the new access token is never
+  delivered, and the previous nonempty refresh handle is quarantined for cleanup.
+  An omitted refresh token inherits the previous handle normally. Initial grants
+  without a nonempty refresh token are rejected and revoke the issued access token;
+  failed cleanup keeps that owner for explicit logout retry, including after restart.
 - `restore() -> Option<Identity>` refreshes a persisted active grant, checking
   the original issuer/client/resource/subject binding. If no grant exists it
   does no network work. Refresh ID tokens are verified when supplied; OIDC
