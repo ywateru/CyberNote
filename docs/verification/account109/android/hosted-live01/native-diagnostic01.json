@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-12T20:31:36.635Z",
+  "phase": "read-only-current-native-diagnostic",
+  "safeCode": "account_network",
+  "state": "error",
+  "ownedForeground": true,
+  "unlocked": true,
+  "accountDirectoryUnique": true,
+  "grantPresent": false,
+  "bindingPresent": false,
+  "cleanupRequired": false,
+  "cleanupRequiredIsDtoCodeProjection": true,
+  "grantBodyRead": false,
+  "profileReadOut": false,
+  "messageReadOut": false,
+  "newLoginAttempted": false,
+  "ownedMapping": {
+    "serial": "98895a3147304c3132",
+    "package": "com.local.notesclone.account109",
+    "pid": 21082,
+    "local": "tcp:59503",
+    "remote": "localabstract:webview_devtools_remote_21082"
+  },
+  "cleanup": {
+    "exactForwardAbsent": true,
+    "driverClosed": true
+  },
+  "metadataBoundary": "Only directory/file existence tests under unique owned .account path; no file bodies. cleanupRequired is projection of native cleanup_status result, not direct private auth state IPC.",
+  "preservedProbeStops": [
+    {
+      "phase": "read-only-diagnostic-stopped",
+      "code": "SAFE_NATIVE_DIAGNOSTIC_FAILED",
+      "reason": "missing runtime module reference before connection",
+      "deviceRead": false
+    },
+    {
+      "phase": "read-only-diagnostic-stopped",
+      "code": "SAFE_NATIVE_DIAGNOSTIC_FAILED",
+      "reason": "assumed metadata root not verified; exact mapping closed; subsequently located unique account directory without file-body reads"
+    }
+  ]
+}
