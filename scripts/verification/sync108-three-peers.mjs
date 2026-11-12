@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { createServer } from 'node:net';
 import { createReadStream } from 'node:fs';
-import { mkdir, readFile, writeFile, copyFile, chmod, readdir } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, copyFile, chmod, readdir, stat, realpath } from 'node:fs/promises';
 import { resolve, relative, sep, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -20,6 +20,12 @@ const refs = node => [...(node?.type === 'attachment' ? [node.attrs.id] : []), .
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
   ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => [k, canonical(v)])) : value;
 const digest = note => hash(JSON.stringify(canonical({ document: note.document, plainText: note.plainText })));
+const safeFailure = (error, diagnostics) => ({
+  code: /^[A-Z_]{1,80}$/.test(error.code || '') ? error.code : 'ASSERTION_OR_DRIVER_FAILURE',
+  ...(typeof error.phase === 'string' ? { phase: error.phase } : diagnostics ? { phase: diagnostics.phase } : {}),
+  ...((error.selector || diagnostics?.selector) ? { selector: error.selector || diagnostics.selector } : {}),
+  ...(typeof error.operator === 'string' ? { assertionOperator: error.operator } : {}),
+});
 async function fileHash(file) {
   const h = createHash('sha256'); for await (const chunk of createReadStream(file)) h.update(chunk); return h.digest('hex');
 }
@@ -45,7 +51,7 @@ function options(argv) {
   const opts = {};
   for (let i = 0; i < argv.length; i++) {
     const key = argv[i].slice(2);
-    assert(['binary', 'root', 'output', 'build-record', 'retained-forward'].includes(key) && argv[i].startsWith('--'), 'Unknown option');
+    assert(['binary', 'root', 'output', 'build-record', 'retained-forward', 'continue-from'].includes(key) && argv[i].startsWith('--'), 'Unknown option');
     assert(!opts[key] && argv[i + 1] && !argv[i + 1].startsWith('--'), 'Missing or duplicate option');
     opts[key] = argv[++i];
     assert(isAbsolute(opts[key]), 'All input paths must be absolute');
@@ -156,7 +162,7 @@ export async function run(argv = process.argv.slice(2)) {
   const runCase = async (id, name, work) => {
     const row = { id, name, status: 'running', startedAt: new Date().toISOString() }; report.cases.push(row); await saveReport();
     try { await work(); row.status = 'pass'; console.log(`PASS ${id}: ${name}`); }
-    catch (error) { row.status = 'fail'; row.failureCode = /^[A-Z_]+$/.test(error.code || '') ? error.code : 'ASSERTION_OR_DRIVER_FAILURE'; throw error; }
+    catch (error) { row.status = 'fail'; row.failure = safeFailure(error, c?.diagnostics); throw error; }
     finally { row.finishedAt = new Date().toISOString(); await saveReport(); }
   };
   const cWorkspace = () => c.readWorkspace();
@@ -182,13 +188,24 @@ export async function run(argv = process.argv.slice(2)) {
     }
   };
   try {
+    let previous;
+    if (opts['continue-from']) {
+      const previousFile = resolve(opts['continue-from'], 'result.json');
+      previous = JSON.parse(await readFile(previousFile, 'utf8'));
+      assert.equal(previous.kind, report.kind); assert.equal(previous.binary.sha256, inputSHA);
+      assert.equal(previous.android.serial, SERIAL); assert.equal(previous.android.package, PACKAGE);
+      assert(previous.identities?.A && previous.identities?.B && previous.identities?.C);
+      for (const name of ['A', 'B']) assert(previous.cleanup.some(row => row.name === `${name}:natural-close` && row.status === 'pass' && row.lifecycle.naturalExit));
+      report.continuation = { previousOutput: opts['continue-from'], previousResultSHA256: await fileHash(previousFile), originalIdentities: previous.identities, originalTopology: previous.topology, originalFreshStores: true };
+    }
     if (opts['retained-forward']) {
       retained = JSON.parse(await readFile(opts['retained-forward'], 'utf8'));
       assert.equal(retained.serial, SERIAL); assert.equal(retained.package, PACKAGE);
       assert.equal(retained.pid, ownPid(), 'Retained CDP mapping must still belong to original isolated PID');
     }
     for (const name of ['A', 'B']) {
-      const directory = resolve(output, `store-${name}`); await mkdir(directory);
+      const directory = previous ? previous.processes.find(row => row.name === name).directory : resolve(output, `store-${name}`);
+      if (!previous) await mkdir(directory);
       const app = new NativeApp(binary, directory, { name }); apps.push(app);
       const ready = await app.ready(); assert(['tauri://localhost', 'http://tauri.localhost'].includes(ready.location));
       report.processes.push({ name, pid: app.child.pid, directory, ready });
@@ -197,33 +214,40 @@ export async function run(argv = process.argv.slice(2)) {
     assert.notEqual(apps[0].child.pid, apps[1].child.pid);
     report.phase = 'fresh-desktop-isolation';
     const [initialA, initialB] = await Promise.all([a.sync('sync.status'), b.sync('sync.status')]);
-    assert.equal(initialA.state, 'disabled'); assert.equal(initialB.state, 'disabled');
+    if (!previous) { assert.equal(initialA.state, 'disabled'); assert.equal(initialB.state, 'disabled'); }
     const [workspaceA, workspaceB] = await Promise.all([a.workspace(), b.workspace()]);
-    assert.equal(workspaceA.notes.length, 0); assert.equal(workspaceB.notes.length, 0);
     assert.notEqual(workspaceA.access.sessionId, workspaceB.access.sessionId, 'Fresh native sessions are independent');
+    const roots = [];
+    for (const app of apps) { const database = resolve(app.directory, 'notes.sqlite3'), info = await stat(database); roots.push({ name: app.name, root: await realpath(app.directory), database, inode: info.ino, device: info.dev }); }
+    assert.notEqual(roots[0].root, roots[1].root); assert.notEqual(`${roots[0].device}:${roots[0].inode}`, `${roots[1].device}:${roots[1].inode}`);
+    report.isolation = { roots, initialNoteCounts: { A: workspaceA.notes.length, B: workspaceB.notes.length }, sessionIdsDistinct: true, fixedNoteCountRequired: false };
     // Device/workspace identities deliberately do not exist before opt-in.
     report.phase = 'desktop-pairing';
-    await a.sync('sync.host.start', { deviceName: 'Sync108 Three A', port: await freePort() });
+    if (!previous) await a.sync('sync.host.start', { deviceName: 'Sync108 Three A', port: await freePort() });
     const status = await a.sync('sync.status'); const endpoint = status.listenAddress?.replace('0.0.0.0', '127.0.0.1');
     assert(endpoint && new URL(endpoint).hostname === '127.0.0.1', 'A is the owned loopback rendezvous');
-    let invitation = await a.invite(endpoint);
-    try { await b.sync('sync.pair', { invitation, deviceName: 'Sync108 Three B' }); } finally { invitation = undefined; }
+    let invitation;
+    if (!previous) { invitation = await a.invite(endpoint); try { await b.sync('sync.pair', { invitation, deviceName: 'Sync108 Three B' }); } finally { invitation = undefined; } }
     const [identityA, identityB] = await Promise.all([a.sync('sync.status'), b.sync('sync.status')]);
     assert(identityA.deviceId && identityB.deviceId && identityA.workspaceId && identityB.workspaceId);
     assert.notEqual(identityA.deviceId, identityB.deviceId); assert.equal(identityA.workspaceId, identityB.workspaceId);
+    if (previous) {
+      for (const [name, identity] of [['A', identityA], ['B', identityB]]) { assert.equal(identity.deviceId, previous.identities[name].deviceId); assert.equal(identity.workspaceId, previous.identities[name].workspaceId); }
+      assert.equal(endpoint, previous.topology.A);
+    }
     report.identities = { A: { deviceId: identityA.deviceId, workspaceId: identityA.workspaceId }, B: { deviceId: identityB.deviceId, workspaceId: identityB.workspaceId } };
     report.phase = 'android-pairing';
-    reverse = createOwnedReverse(Number(new URL(endpoint).port));
+    reverse = createOwnedReverse(Number(new URL(endpoint).port), previous ? { devicePort: Number(new URL(previous.topology.C).port) } : {});
     report.topology = { A: endpoint, B: 'desktop loopback to A', C: `ws://127.0.0.1:${reverse.device.slice(4)}`, reverse };
     launchAndroid(); c = await connectAndroid(); report.android.initialPid = c.owned.pid;
     const androidBefore = await c.syncStatus();
     report.android.preexistingSyntheticNoteCount = (await cWorkspace()).notes.length;
-    invitation = await a.invite(report.topology.C);
-    try { await c.pair({ invitation, deviceName: 'Sync108 Three Android9' }); } finally { invitation = undefined; }
+    if (!previous) { invitation = await a.invite(report.topology.C); try { await c.pair({ invitation, deviceName: 'Sync108 Three Android9' }); } finally { invitation = undefined; } }
     await c.closeSettings();
     const identityC = (await c.syncStatus()).status;
     assert(identityC.deviceId && identityC.deviceId !== identityA.deviceId && identityC.deviceId !== identityB.deviceId);
     assert.equal(identityC.workspaceId, identityA.workspaceId);
+    if (previous) { assert.equal(identityC.deviceId, previous.identities.C.deviceId); assert.equal(identityC.workspaceId, previous.identities.C.workspaceId); report.continuation.identitiesPreserved = true; }
     report.identities.C = { deviceId: identityC.deviceId, workspaceId: identityC.workspaceId, initialState: androidBefore.status.state };
     report.phase = 'three-peer-cases';
 
@@ -281,7 +305,7 @@ export async function run(argv = process.argv.slice(2)) {
     report.sourceAfterSHA256 = sourceAfter.sha256; report.staticFrontendAfterSHA256 = distAfter.sha256;
     report.status = 'pass';
   } catch (error) {
-    report.status = 'fail'; report.failureCode = /^[A-Z_]+$/.test(error.code || '') ? error.code : 'ASSERTION_OR_DRIVER_FAILURE';
+    report.status = 'fail'; report.failure = safeFailure(error, c?.diagnostics);
     // No raw error messages, stacks, App state or invitation-bearing values.
   } finally {
     if (c) {
@@ -308,6 +332,6 @@ export async function run(argv = process.argv.slice(2)) {
   return report;
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  if (process.argv.includes('--help')) console.log('Usage: sync108-three-peers.mjs --binary ABS_BINARY --root FROZEN_SOURCE_ROOT --output FRESH_ABS_DIR --build-record ABS_JSON [--retained-forward ABS_OWNED_JSON]\nWait for coordinator binary-ready/source-freeze authorization. Never pass invitations in argv.');
+  if (process.argv.includes('--help')) console.log('Usage: sync108-three-peers.mjs --binary ABS_BINARY --root FROZEN_SOURCE_ROOT --output FRESH_ABS_DIR --build-record ABS_JSON [--retained-forward ABS_OWNED_JSON] [--continue-from OWNED_PRIOR_OUTPUT]\nContinuation preserves original paired stores, identities and endpoints. Never pass invitations in argv.');
   else run().catch(() => { console.error('THREE_PEER_PRECONDITION_FAILED'); process.exitCode = 1; });
 }

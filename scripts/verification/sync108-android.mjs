@@ -60,10 +60,12 @@ export async function reclaimBackgroundAndroid() {
   throw Error('Android did not reclaim isolated background process');
 }
 
-export function createOwnedReverse(hostPort) {
+export function createOwnedReverse(hostPort, { devicePort = 0 } = {}) {
   if (!Number.isInteger(hostPort) || hostPort < 1024 || hostPort > 65535) throw Error('Invalid owned host port');
+  if (!Number.isInteger(devicePort) || (devicePort !== 0 && (devicePort < 1024 || devicePort > 65535))) throw Error('Invalid owned device port');
   const host = `tcp:${hostPort}`;
-  const port = Number(run('reverse', '--no-rebind', 'tcp:0', host).trim());
+  const reply = run('reverse', '--no-rebind', `tcp:${devicePort}`, host).trim();
+  const port = devicePort || Number(reply);
   if (!Number.isInteger(port) || port < 1024 || port > 65535) throw Error('Invalid allocated reverse port');
   return { serial: SERIAL, package: PACKAGE, device: `tcp:${port}`, host };
 }
@@ -98,6 +100,7 @@ export async function connectAndroid() {
   let ws, owned;
   let id = 0;
   const pending = new Map();
+  const diagnostics = { phase: 'connect', selector: null };
   const assertPid = () => { if (ownPid() !== owned.pid) throw Error('App PID changed; reconnect'); };
   const send = (method, params = {}) => new Promise((resolve, reject) => {
     const call = ++id;
@@ -158,11 +161,12 @@ export async function connectAndroid() {
     const wait = async (check, label, timeout = 15000) => {
       const end = Date.now() + timeout;
       while (Date.now() < end) { const result = await check(); if (result) return result; await pause(); }
-      throw Error(`Timed out: ${label}`);
+      throw Object.assign(Error('ANDROID_UI_TIMEOUT'), { code: 'ANDROID_UI_TIMEOUT', phase: label, selector: diagnostics.selector });
     };
     const find = (selector, text) => `Array.from(document.querySelectorAll(${quote(selector)})).filter(${visible}).find(e=>${text === undefined ? 'true' : `e.textContent.trim()===${quote(text)}`})`;
     const has = (selector, text) => evaluate(`!!(${find(selector, text)})`);
     const click = async (selector, text) => {
+      diagnostics.phase = 'visible-control'; diagnostics.selector = selector;
       await wait(() => has(selector, text), 'visible control');
       const point = await evaluate(`(()=>{const e=${find(selector, text)};if(e.disabled)throw Error('disabled');e.scrollIntoView({block:'center'});const r=e.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2}})()`);
       await send('Input.dispatchMouseEvent', { type: 'mousePressed', ...point, button: 'left', clickCount: 1 });
@@ -175,7 +179,7 @@ export async function connectAndroid() {
         ...(key === 'Enter' ? { text: '\r', unmodifiedText: '\r' } : {}) });
       await send('Input.dispatchKeyEvent', { type: 'keyUp', key, code, windowsVirtualKeyCode, modifiers });
     };
-    const type = async text => { assertPid(); await send('Input.insertText', { text }); };
+    const type = async text => { diagnostics.phase = 'Input.insertText'; assertPid(); await send('Input.insertText', { text }); };
     const fill = async (selector, text) => {
       await click(selector); await key('a', 'KeyA', 65, 2); await type(text); await pause();
     };
@@ -207,7 +211,7 @@ export async function connectAndroid() {
       return { enabled, deviceName: await evaluate(`document.querySelector('[aria-label="同步设备名称"]').value`) };
     };
     const api = {
-      owned, close, readWorkspace, readNote, syncStatus, openSync, closeSettings, preparePairing,
+      owned, diagnostics, close, readWorkspace, readNote, syncStatus, openSync, closeSettings, preparePairing,
       readEditor: () => evaluate(`(()=>{const e=document.querySelector('.tiptap');return e?{text:e.innerText,document:e.editor.getJSON()}:null})()`),
       async screenshot() {
         if (await evaluate(`Array.from(document.querySelectorAll('[data-sensitive]')).some(e=>e.value)`)) throw Error('Close sensitive pairing fields before screenshot');
@@ -224,7 +228,9 @@ export async function connectAndroid() {
         if (typeof title !== 'string' || !title.trim() || title.includes('\n') || typeof body !== 'string' || !body) throw Error('title and body required');
         const before = new Set((await readWorkspace()).notes.map(n => n.id));
         await closeSettings();
-        await click('[aria-label="新建备忘录"]');
+        if (await has('[aria-label="返回笔记"]')) await click('[aria-label="返回笔记"]');
+        await click('.mobile-add-note[aria-label="新建备忘录"]');
+        diagnostics.phase = 'create-note.editor-ready';
         await wait(() => has('.tiptap[contenteditable="true"]'), 'editor');
         await click('.tiptap h1');
         await type(title);
@@ -232,6 +238,7 @@ export async function connectAndroid() {
         // Blur through the real navigation handler to flush the editor's save path.
         await pause(900);
         await click('[aria-label="返回笔记"]');
+        diagnostics.phase = 'create-note.persisted-full-body'; diagnostics.selector = null;
         return wait(async () => {
           const w = await readWorkspace();
           const note = w.notes.find(n => !before.has(n.id) && n.title === title && body.split('\n').every(line => (n.plainText || '').includes(line)));
