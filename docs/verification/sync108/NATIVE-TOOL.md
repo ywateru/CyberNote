@@ -168,3 +168,15 @@ pending/failed saves. The listener never sends a quiet reply. This does not prov
 a deterministic in-flight local save/IME overlap, and must not be reported as the
 whole DESK-11 case passing. No new native module or rebuild is needed for these
 Node-only scenarios.
+
+The final DESK-06 scenario also submits a TXT attachment on B via the real
+`attachment.submit` handler, waits for A's complete body and references, then
+compares original bytes through actual `read_attachment` and physical files on
+both stores. The Node-only suite change is frozen as `17ad7372`.
+
+NativeApp closing was tightened in `50a2ac9f`: after full pipe closure it merges
+any newly discovered protocol fatal; the suite rejects any lifecycle failureCode
+or non-natural exit. A real Node child fixture emits a valid shutdown reply, a
+truncated prefixed tail and exit zero; the old helper incorrectly accepted it,
+while the fixed helper rejects TRUNCATED_FRAME and records naturalExit=false.
+The 12 protocol fixtures are separate from actual native business evidence.

@@ -1315,6 +1315,566 @@
         "No Android results are implied by the desktop suite."
       ],
       "helperCommit": "50a2ac9f"
+    },
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run07",
+      "status": "passed",
+      "originalResultPath": "/private/tmp/sync108-native-desktop-run07/result.json",
+      "resultSha256": "e37d585a5009f70f6efac553ae1fe93ced109e7d4ee59b01b0eaec66beeb85ae",
+      "startedAt": "2026-11-12T11:47:49.423Z",
+      "finishedAt": "2026-11-12T11:48:31.992Z",
+      "binarySha256": "771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723",
+      "productFingerprint": "e0718b71cde5440dce56d62ca43416891da77fe8db4f696fe5bf770455381b00",
+      "inputsUnchanged": true,
+      "completedChecks": 35,
+      "checks": [
+        {
+          "name": "two independently owned native processes",
+          "status": "pass"
+        },
+        {
+          "name": "A owned webview advances real rAF and timers",
+          "status": "pass"
+        },
+        {
+          "name": "B owned webview advances real rAF and timers",
+          "status": "pass"
+        },
+        {
+          "name": "fresh disabled stores do not create synchronization identity",
+          "status": "pass"
+        },
+        {
+          "name": "pair shares workspace with distinct device identities and preserves host identity",
+          "status": "pass"
+        },
+        {
+          "name": "pair merges existing A note into B",
+          "status": "pass"
+        },
+        {
+          "name": "pair merges existing B note into A",
+          "status": "pass"
+        },
+        {
+          "name": "actual editor retains Chinese heading bold and list",
+          "status": "pass"
+        },
+        {
+          "name": "A to B full Chinese document and formatting",
+          "status": "pass"
+        },
+        {
+          "name": "real quiet commits open target and restores editable editor without pending saves",
+          "status": "pass"
+        },
+        {
+          "name": "B applies real editor italic format",
+          "status": "pass"
+        },
+        {
+          "name": "B to A full Chinese document and formatting",
+          "status": "pass"
+        },
+        {
+          "name": "folder move pin paper and tag projection reach peer",
+          "status": "pass"
+        },
+        {
+          "name": "DESK-04 smart folder definition and tag plus pin filtering reach peer",
+          "status": "pass"
+        },
+        {
+          "name": "attachment references and full body converge",
+          "status": "pass"
+        },
+        {
+          "name": "PNG and TXT original SHA256 match on both native stores",
+          "status": "pass"
+        },
+        {
+          "name": "DESK-06 B to A attachment full body and references converge",
+          "status": "pass"
+        },
+        {
+          "name": "DESK-06 B submitted TXT original SHA256 matches actual reads and files on both stores",
+          "status": "pass"
+        },
+        {
+          "name": "peer native webview decodes replicated image",
+          "status": "pass"
+        },
+        {
+          "name": "B deletion reaches A",
+          "status": "pass"
+        },
+        {
+          "name": "restore retains full body and attachment references",
+          "status": "pass"
+        },
+        {
+          "name": "restored attachment original bytes remain intact",
+          "status": "pass"
+        },
+        {
+          "name": "offline B process exits naturally",
+          "status": "pass"
+        },
+        {
+          "name": "B restarts as a new owned process",
+          "status": "pass"
+        },
+        {
+          "name": "offline native restart reconnect catches up",
+          "status": "pass"
+        },
+        {
+          "name": "concurrent base reaches both native apps",
+          "status": "pass"
+        },
+        {
+          "name": "actual conflict UI retains concurrent Chinese heads",
+          "status": "pass"
+        },
+        {
+          "name": "confirmed keepAll preserves both full Chinese documents on A and B",
+          "status": "pass"
+        },
+        {
+          "name": "stdin EOF flushes and exits native A naturally",
+          "status": "pass"
+        },
+        {
+          "name": "same-directory restart preserves paused state and device identity",
+          "status": "pass"
+        },
+        {
+          "name": "restarted native store retains full pending local document",
+          "status": "pass"
+        },
+        {
+          "name": "restarted store retains existing note IDs",
+          "status": "pass"
+        },
+        {
+          "name": "persisted offline dirty resumes across native restart",
+          "status": "pass"
+        },
+        {
+          "name": "three repeated real sync requests are idempotent on both projections",
+          "status": "pass"
+        },
+        {
+          "name": "repeated sync has no pending inbox or conflicts",
+          "status": "pass"
+        }
+      ],
+      "sourceHead": "9d72db2fb060b36ef36b595eda097333cfc3ff72",
+      "staticFrontendSha256": "ac755157f95eebd047f0f2830c0877abcecb72780f5f1ec5036d77be4fa82dc6",
+      "tools": {
+        "sync108-native.mjs": "78b17a3d9165e1f3b85a58dd7375a2cfaa430a55bb26876479ec0e7b9ebbe0d0",
+        "sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2"
+      },
+      "buildRecord": {
+        "sha256": "1ddd4c04da7d9cad525762cba3d169016e4024798e74b5ec79645fd160a8eb07",
+        "matched": true,
+        "productBinaryAndFrontendMatch": true,
+        "executedToolsComparedSeparately": {
+          "sync108-native.mjs": {
+            "currentSha256": "78b17a3d9165e1f3b85a58dd7375a2cfaa430a55bb26876479ec0e7b9ebbe0d0",
+            "recordedSha256": "d1aa018af427828c8fcd70c8d99bf39e794266701963b53ff9e703b108cbe505",
+            "matchesRecorded": false
+          },
+          "sync108-native-driver.mjs": {
+            "currentSha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+            "recordedSha256": "13338173a212592c45a3cf8d1c12968c56791317aa609140b7438d800cd113a0",
+            "matchesRecorded": false
+          }
+        }
+      },
+      "processes": [
+        {
+          "name": "A",
+          "pid": 15061,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": [],
+          "failureCode": null,
+          "stderrBytes": 58,
+          "stdoutNoiseBytes": 0
+        },
+        {
+          "name": "B",
+          "pid": 15086,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": [],
+          "failureCode": null,
+          "stderrBytes": 58,
+          "stdoutNoiseBytes": 0
+        },
+        {
+          "name": "B-reconnect",
+          "pid": 15272,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": [],
+          "failureCode": null,
+          "stderrBytes": 58,
+          "stdoutNoiseBytes": 0
+        },
+        {
+          "name": "A-restart",
+          "pid": 15316,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": [],
+          "failureCode": null,
+          "stderrBytes": 58,
+          "stdoutNoiseBytes": 0
+        }
+      ],
+      "databaseEvidence": [
+        {
+          "directory": "/private/tmp/sync108-native-desktop-run07/store-A",
+          "integrity": "ok",
+          "counts": {
+            "notes": 6,
+            "attachments": 3,
+            "sync_heads": 8,
+            "sync_inbox": 0,
+            "sync_dirty": 0,
+            "sync_projection": 8
+          },
+          "identity": [
+            [
+              "f450de1f-4f6b-42e2-af13-d3328504d908",
+              "618c13b7-8f63-42e2-bb11-740bf87a9c20"
+            ]
+          ],
+          "walBytes": 1450272,
+          "originalFiles": {
+            "notes.sqlite3": "8205a7151eeac47c9674c769fbc0562366bdea473d8987015c2fe606d1407aa9",
+            "notes.sqlite3-wal": "28bda4fd4f8d763fad38800c9eba0b59c5cb11ea784a5055d8fda88f67a787b0",
+            "notes.sqlite3-shm": "a3a8d405e1db1dd985e0eda44a8585facd5db2ebae8a703d8aedebec9b003adb"
+          },
+          "originalFilesUnchanged": true,
+          "readOnlySnapshot": true,
+          "snapshotDatabaseUnchanged": true,
+          "snapshotDirectory": "/private/tmp/sync108-native-desktop-run07/sqlite-readonly-A"
+        },
+        {
+          "directory": "/private/tmp/sync108-native-desktop-run07/store-B",
+          "integrity": "ok",
+          "counts": {
+            "notes": 6,
+            "attachments": 3,
+            "sync_heads": 8,
+            "sync_inbox": 0,
+            "sync_dirty": 0,
+            "sync_projection": 8
+          },
+          "identity": [
+            [
+              "f450de1f-4f6b-42e2-af13-d3328504d908",
+              "5228a5ad-8d34-4b42-9713-857e1f18ec4c"
+            ]
+          ],
+          "walBytes": 1367872,
+          "originalFiles": {
+            "notes.sqlite3": "52d6c8b40d78d3aaeef8f07569d6983928c7170559f3c6295f328ec8f183bf32",
+            "notes.sqlite3-wal": "8c4b23d94fdd76dd9413eff5480d3f094ed3d2cd0ccb599aaaf6fa687b1d1d80",
+            "notes.sqlite3-shm": "8f214c3701283d6bec5c1211e247c5c456a76f74f7982f22db7a00ef110d8187"
+          },
+          "originalFilesUnchanged": true,
+          "readOnlySnapshot": true,
+          "snapshotDatabaseUnchanged": true,
+          "snapshotDirectory": "/private/tmp/sync108-native-desktop-run07/sqlite-readonly-B"
+        }
+      ],
+      "databaseComparison": {
+        "projectionEqual": true,
+        "projectionEntries": 8,
+        "projectionSha256": "d6c47cdd66bb7f8d7737259543949c7d8de234f89f4bf6d444a0741efcc72aa6",
+        "sameWorkspaceDistinctDevices": true
+      },
+      "runtimeObservations": [
+        {
+          "name": "A:native-ready",
+          "pid": 15061,
+          "document": {
+            "debug": true,
+            "interactive": true,
+            "readyState": "complete",
+            "rootHidden": null,
+            "rootInert": false,
+            "startup": "detached",
+            "timeOrigin": 1794484070592,
+            "visibility": "visible"
+          },
+          "documentProbes": 9,
+          "interactive": true,
+          "location": "tauri://localhost",
+          "native": true,
+          "nativePage": {
+            "finished": true,
+            "finishes": 1,
+            "starts": 1,
+            "url": "tauri://localhost"
+          },
+          "nativeWindow": {
+            "focused": true,
+            "minimized": false,
+            "position": {
+              "x": 110,
+              "y": 58
+            },
+            "size": {
+              "height": 1400,
+              "width": 2000
+            },
+            "visible": true
+          },
+          "startupDetached": true,
+          "version": 1,
+          "window": "main"
+        },
+        {
+          "name": "B:native-ready",
+          "pid": 15086,
+          "document": {
+            "debug": true,
+            "interactive": true,
+            "readyState": "complete",
+            "rootHidden": null,
+            "rootInert": false,
+            "startup": "detached",
+            "timeOrigin": 1794484071386.0002,
+            "visibility": "visible"
+          },
+          "documentProbes": 10,
+          "interactive": true,
+          "location": "tauri://localhost",
+          "native": true,
+          "nativePage": {
+            "finished": true,
+            "finishes": 1,
+            "starts": 1,
+            "url": "tauri://localhost"
+          },
+          "nativeWindow": {
+            "focused": true,
+            "minimized": false,
+            "position": {
+              "x": 108,
+              "y": 58
+            },
+            "size": {
+              "height": 1400,
+              "width": 2000
+            },
+            "visible": true
+          },
+          "startupDetached": true,
+          "version": 1,
+          "window": "main"
+        },
+        {
+          "name": "A:render-clock-with-both-windows",
+          "elapsedMs": 250,
+          "raf": 16,
+          "timer": 9,
+          "visibility": "visible"
+        },
+        {
+          "name": "B:render-clock-with-both-windows",
+          "elapsedMs": 252,
+          "raf": 16,
+          "timer": 9,
+          "visibility": "visible"
+        },
+        {
+          "name": "DESK-11-partial-real-quiet",
+          "abort": 0,
+          "commit": 1,
+          "prepare": 1,
+          "localSaveOverlap": false
+        },
+        {
+          "name": "A:original",
+          "noteId": "2dc48f9a-f9ae-42c1-91c1-f66117bf2092",
+          "attachmentId": "1fa59dc3-0347-4bb3-b91f-7f257740214d",
+          "bytes": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "name": "A:original",
+          "noteId": "2dc48f9a-f9ae-42c1-91c1-f66117bf2092",
+          "attachmentId": "b1cd633f-8212-412b-b542-c3692ee7fdaa",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        },
+        {
+          "name": "B:original",
+          "noteId": "2dc48f9a-f9ae-42c1-91c1-f66117bf2092",
+          "attachmentId": "1fa59dc3-0347-4bb3-b91f-7f257740214d",
+          "bytes": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "name": "B:original",
+          "noteId": "2dc48f9a-f9ae-42c1-91c1-f66117bf2092",
+          "attachmentId": "b1cd633f-8212-412b-b542-c3692ee7fdaa",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        },
+        {
+          "name": "B:original",
+          "noteId": "b6c89a58-f805-4b6f-9cd4-872f5cd4d73f",
+          "attachmentId": "ea2ca306-a641-4aac-b6ac-84691848a88f",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        },
+        {
+          "name": "A:original",
+          "noteId": "b6c89a58-f805-4b6f-9cd4-872f5cd4d73f",
+          "attachmentId": "ea2ca306-a641-4aac-b6ac-84691848a88f",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        },
+        {
+          "name": "B:original",
+          "noteId": "2dc48f9a-f9ae-42c1-91c1-f66117bf2092",
+          "attachmentId": "1fa59dc3-0347-4bb3-b91f-7f257740214d",
+          "bytes": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "name": "B:original",
+          "noteId": "2dc48f9a-f9ae-42c1-91c1-f66117bf2092",
+          "attachmentId": "b1cd633f-8212-412b-b542-c3692ee7fdaa",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        },
+        {
+          "name": "B-reconnect:native-ready",
+          "pid": 15272,
+          "document": {
+            "debug": true,
+            "interactive": true,
+            "readyState": "complete",
+            "rootHidden": null,
+            "rootInert": false,
+            "startup": "detached",
+            "timeOrigin": 1794484094683,
+            "visibility": "visible"
+          },
+          "documentProbes": 11,
+          "interactive": true,
+          "location": "tauri://localhost",
+          "native": true,
+          "nativePage": {
+            "finished": true,
+            "finishes": 1,
+            "starts": 1,
+            "url": "tauri://localhost"
+          },
+          "nativeWindow": {
+            "focused": true,
+            "minimized": false,
+            "position": {
+              "x": 110,
+              "y": 58
+            },
+            "size": {
+              "height": 1400,
+              "width": 2000
+            },
+            "visible": true
+          },
+          "startupDetached": true,
+          "version": 1,
+          "window": "main"
+        },
+        {
+          "name": "A-restart:native-ready",
+          "pid": 15316,
+          "document": {
+            "debug": true,
+            "interactive": true,
+            "readyState": "complete",
+            "rootHidden": null,
+            "rootInert": false,
+            "startup": "detached",
+            "timeOrigin": 1794484104313,
+            "visibility": "visible"
+          },
+          "documentProbes": 11,
+          "interactive": true,
+          "location": "tauri://localhost",
+          "native": true,
+          "nativePage": {
+            "finished": true,
+            "finishes": 1,
+            "starts": 1,
+            "url": "tauri://localhost"
+          },
+          "nativeWindow": {
+            "focused": true,
+            "minimized": false,
+            "position": {
+              "x": 110,
+              "y": 58
+            },
+            "size": {
+              "height": 1400,
+              "width": 2000
+            },
+            "visible": true
+          },
+          "startupDetached": true,
+          "version": 1,
+          "window": "main"
+        },
+        {
+          "name": "A-restart:original",
+          "noteId": "2dc48f9a-f9ae-42c1-91c1-f66117bf2092",
+          "attachmentId": "1fa59dc3-0347-4bb3-b91f-7f257740214d",
+          "bytes": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "name": "A-restart:original",
+          "noteId": "2dc48f9a-f9ae-42c1-91c1-f66117bf2092",
+          "attachmentId": "b1cd633f-8212-412b-b542-c3692ee7fdaa",
+          "bytes": 54,
+          "sha256": "905e25948b0a1e34a506808226acce419a07eadd9c8832cd6da431a54bee8954"
+        },
+        {
+          "name": "converged-projection",
+          "sha256": "1edeeaa383466376f5169863bcef0359d4e6e2bc1a178f79babbb720e2025975"
+        }
+      ],
+      "limitations": [
+        "Synthetic test notes and File[] from the existing attachment.submit handler; no OS file-picker or physical keyboard claim.",
+        "Raw expressions execute only in the explicitly enabled test feature; read_attachment uses the actual App access snapshot.",
+        "DESK-11 partial: real quiet prepare/commit while the target editor is open; deterministic overlap with an in-flight local save or IME composition is not covered.",
+        "No Android results are implied by the desktop suite."
+      ],
+      "helperCommit": "50a2ac9f",
+      "suiteCommit": "17ad7372"
     }
   ],
   "toolRegression": {
@@ -1345,18 +1905,20 @@
   },
   "limitations": [
     "run01–04 and native-ready02 stay failed.",
-    "Final helper 50a2ac9f complete native business + DB/WAL + natural cleanup pass is run06; run05 retains its earlier helper version boundary.",
+    "Final suite 17ad7372/helper50a2ac9f complete native business + DB/WAL + natural cleanup pass is run07; run05/run06 retain their original scope/helper boundaries.",
     "DESK-11 is partial, not full case acceptance.",
     "No definitive attribution of the old timeout; new PageLoad gating and placement changed together.",
     "No invitations, raw stdout/stderr or private keys archived.",
     "Historical browser geometry failure was against the old 44px desktop assertion; main reports corrected desktop28/mobile44 assertion and separately completed revalidation."
   ],
-  "acceptedRun": "run06",
+  "acceptedRun": "run07",
   "caseBoundaries": {
     "DESK-04": "ordinary/smart folder creation, query replication, tag+pin inclusion/exclusion tested on actual peer",
     "DESK-11": "partial: actual target quiet prepare+commit, mounted editor trusted version/restore and no pending save; deterministic in-flight save or IME overlap not covered",
-    "Android": "no Android acceptance implied"
+    "Android": "no Android acceptance implied",
+    "DESK-06": "A to B PNG/TXT and B to A TXT through actual attachment.submit; full document and references plus production attachment reads and physical original SHA256 on both stores"
   },
   "otherHistoricalFailures": "historical-failures.json",
-  "finalHelperCommit": "50a2ac9f"
+  "finalHelperCommit": "50a2ac9f",
+  "finalSuiteCommit": "17ad7372"
 }

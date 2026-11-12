@@ -1,25 +1,27 @@
 # sync108 实际双原生桌面验证
 
-最终 helper 关闭修复 `50a2ac9f` 的完整 fresh 验证记录见下方 run06。
+最终 suite `17ad7372`、helper `50a2ac9f` 的完整 fresh 验证记录见下方 run07。
 run05 是同一新原生 binary 的首轮完整通过，但早于最后的 Node 关闭修复；
 不将其冒充最终 helper 的结果。run01–04、Mendel ready02 和原浏览器失败均保留。
 本目录 JSON 记录每份原始结果的绝对路径和 SHA256，原输出不改写。
 
 ## 最终完整轮次
 
-`/private/tmp/sync108-native-desktop-run06`：**整体 passed，33 条断言通过**。
-时间 `2026-11-12T11:44:59.405Z` 至 `2026-11-12T11:45:44.014Z`。原 result SHA256：
-`8e78de8131b807aca5d8bfd189a45103f7c4f45b98b164ab0d102e2c12b541b8`。最终执行的 runner/helper 来自 `50a2ac9f`，
-两文件哈希记录在 run06.json，均与提交文件逐字节匹配。
+`/private/tmp/sync108-native-desktop-run07`：**整体 passed，35 条断言通过**，
+包含新增 DESK-06 B→A 反向附件，最终 suite `17ad7372`、helper `50a2ac9f`。
+时间 `2026-11-12T11:47:49.423Z` 至 `2026-11-12T11:48:31.992Z`。原 result SHA256：
+`e37d585a5009f70f6efac553ae1fe93ced109e7d4ee59b01b0eaec66beeb85ae`。运行工具文件与冻结哈希逐字节匹配，
+product source/dist/binary 在本轮前后不变，见 source-tools-freeze.json。
 
 四个 owned 进程 A、B、B-reconnect、A-restart 均自然 exit0/signal=null，
 forcedSignals=[]、failureCode=null。两个 DB/WAL 只读副本 integrity=ok，
-各 notes=5、attachments=2、sync_heads/projection=7、inbox/dirty=0；
+各 notes=6、attachments=3、sync_heads/projection=8、inbox/dirty=0；
 持久 projection 完全一致，同 workspace、不同 device。WAL 字节数分别为
-1380232 / 1231912，原 DB/WAL/SHM 哈希和产品输入未变。
+1450272 / 1367872，原 DB/WAL/SHM 哈希不变。
 
-run05 同样实际整体通过 33 条，但其 helper 尚无 `50a2ac9f` 的最后关闭修复；
-因此最终验收选择新的 run06，不改写 run05 或历史失败。
+run05 实际整体通过33条，但其 helper 尚无最后关闭修复；run06 使用最终
+关闭修复后也整体通过33条，但尚无反向附件新增项。最终选择新的 run07，
+不改写 run05/run06 或历史失败。
 
 ## 输入与执行方式
 
@@ -41,7 +43,9 @@ run05 同样实际整体通过 33 条，但其 helper 尚无 `50a2ac9f` 的最�
 
 真实配对合并两端已有笔记；双向中文完整 document/plainText、标题/粗体/列表/
 斜体；普通文件夹、标签、置顶、移动、纸张；PNG/TXT 原字节和物理原文件
-SHA256、原生 webview 图片解码；删除恢复；进程离线重连；同基线并发、真实
+SHA256、原生 webview 图片解码；另有 B 真正 submit TXT → A 完整正文/引用，
+两端真实 read_attachment 与物理原文件 SHA256 对照（DESK-06 反向子项）；
+删除恢复；进程离线重连；同基线并发、真实
 keepAll 两次确认、两分支完整保留；EOF 自然退出、暂停/身份/脏数据重启持久化；
 重复同步幂等及 pending/conflict 清零。
 

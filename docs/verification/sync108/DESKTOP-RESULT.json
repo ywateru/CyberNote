@@ -1,16 +1,18 @@
 {
   "schema": 1,
   "status": "passed-with-explicit-case-boundaries",
-  "acceptedRun": "run06",
+  "acceptedRun": "run07",
+  "finalSuiteCommit": "17ad7372",
   "finalHelperCommit": "50a2ac9f",
   "archive": "desktop/DESKTOP-RESULT.json",
   "originalResult": {
-    "path": "/private/tmp/sync108-native-desktop-run06/result.json",
-    "sha256": "8e78de8131b807aca5d8bfd189a45103f7c4f45b98b164ab0d102e2c12b541b8"
+    "path": "/private/tmp/sync108-native-desktop-run07/result.json",
+    "sha256": "e37d585a5009f70f6efac553ae1fe93ced109e7d4ee59b01b0eaec66beeb85ae"
   },
   "caseBoundaries": {
     "DESK-04": "ordinary/smart folder creation, query replication, tag+pin inclusion/exclusion tested on actual peer",
     "DESK-11": "partial: actual target quiet prepare+commit, mounted editor trusted version/restore and no pending save; deterministic in-flight save or IME overlap not covered",
-    "Android": "no Android acceptance implied"
+    "Android": "no Android acceptance implied",
+    "DESK-06": "A to B PNG/TXT and B to A TXT through actual attachment.submit; full document and references plus production attachment reads and physical original SHA256 on both stores"
   }
 }
