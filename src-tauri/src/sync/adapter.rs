@@ -481,9 +481,26 @@ impl Runtime {
             IdentityStore::open(&dir, &device).map_err(network_error)?,
         ))
     }
-    pub(crate) fn activate_account(
+    pub(crate) fn check_account_workspace(
         &self,
         workspace: &str,
+        previously_bound: bool,
+    ) -> Result<()> {
+        let inner = self.inner.lock().map_err(|_| error("sync_internal"))?;
+        if inner.config.is_some() {
+            return Err(error("sync_workspace_mismatch"));
+        }
+        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+        if let Some(identity) = s.store.sync_identity()? {
+            if !previously_bound || identity.workspace_id != workspace {
+                return Err(error("sync_workspace_mismatch"));
+            }
+        }
+        Ok(())
+    }
+    pub(crate) fn activate_account(
+        &self,
+        verified: &crate::account::enrollment::VerifiedWorkspace,
         identity: Arc<IdentityStore>,
         policy: Arc<dyn network::ReplicationPolicy>,
     ) -> Result<SyncService> {
@@ -491,6 +508,10 @@ impl Runtime {
         if inner.config.is_some() {
             return Err(error("sync_workspace_mismatch"));
         }
+        if !verified.matches(&identity) {
+            return Err(error("sync_device_mismatch"));
+        }
+        let workspace = verified.workspace();
         let device = identity.device_id().map_err(network_error)?;
         prepared_store(&self.shared, &[], true, |store| {
             store
@@ -512,6 +533,12 @@ impl Runtime {
         Ok(service)
     }
     pub(crate) fn pause_account(&self) {
+        // Account setup/cancellation can run before the legacy-workspace check.
+        // Never pause the apply coordinator owned by an existing manual config.
+        let Ok(inner) = self.inner.lock() else { return };
+        if inner.config.is_some() {
+            return;
+        }
         self.active.store(false, Ordering::Release);
         if let Ok(mut s) = self.shared.0.lock() {
             s.sync_abort();
@@ -1062,6 +1089,64 @@ mod tests {
     fn token(s: &SharedSession) -> Token {
         serde_json::from_value(json!({"sessionId":s.0.lock().unwrap().sync_session_id(),"epoch":1}))
             .unwrap()
+    }
+    #[test]
+    fn rejected_account_setup_does_not_pause_existing_manual_sync() {
+        let d = tempfile::tempdir().unwrap();
+        let shared = shared(d.path());
+        let runtime = Runtime::new(shared.clone(), d.path().into(), Arc::new(Windows)).unwrap();
+        runtime
+            .command(
+                Command::StartHost {
+                    device_name: "Synthetic manual".into(),
+                    port: 0,
+                },
+                "main",
+                &token(&shared),
+            )
+            .unwrap();
+        let identity = shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_identity()
+            .unwrap()
+            .unwrap();
+        let config = fs::read(d.path().join(".sync/runtime-v1.json")).unwrap();
+        assert!(runtime
+            .check_account_workspace(&uuid::Uuid::new_v4().to_string(), false)
+            .is_err());
+        runtime.pause_account();
+        assert!(runtime.active.load(Ordering::Acquire));
+        let inner = runtime.inner.lock().unwrap();
+        assert!(!inner.config.as_ref().unwrap().paused);
+        assert!(inner
+            .service
+            .as_ref()
+            .unwrap()
+            .status()
+            .unwrap()
+            .listening
+            .is_some());
+        drop(inner);
+        assert_eq!(
+            fs::read(d.path().join(".sync/runtime-v1.json")).unwrap(),
+            config
+        );
+        assert_eq!(
+            shared
+                .0
+                .lock()
+                .unwrap()
+                .store
+                .sync_identity()
+                .unwrap()
+                .unwrap()
+                .workspace_id,
+            identity.workspace_id
+        );
+        runtime.shutdown().unwrap();
     }
     #[test]
     fn trusted_diagnostics_read_requires_window_token_and_has_no_opt_in_or_mutation() {

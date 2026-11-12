@@ -33,6 +33,9 @@ android {
         versionCode = cyberNoteVersionCode
         versionName = cyberNoteVersion
     }
+    sourceSets.getByName("main").jniLibs.srcDir("../../../../vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs")
+    packaging.jniLibs.useLegacyPackaging = true
+    packaging.jniLibs.keepDebugSymbols.add("**/libcloudflared.so")
     buildTypes {
         getByName("debug") {
             manifestPlaceholders["usesCleartextTraffic"] = "true"

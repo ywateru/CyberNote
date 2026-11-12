@@ -21,6 +21,10 @@ depends-on: []
 
 结论：TCP Mapping可接入原WebSocket/Noise管线；同账号自动同步仍需可信owner/workspace enrollment、动态route resolver和持续业务授权；Mac优先系统浏览器loopback回调，Android优先官方SDK Custom Tabs与专属scheme；刷新grant须由单一owner负责。原始SDK/helper许可及API28/provider支持边界见报告，须在集成发布方案中落实。调查未编译、运行测试、读取密钥或操作设备/外部服务。
 
+## native implementation checkpoint
+
+2026-11-13：用户已恢复完整实现授权。SDK/provider 冻结、原 Noise 持续 gate、原生 Rust 账户 Runtime、持久绑定、真实发现/map/enrollment bootstrap、Mac/Android 平台接线已实现，阶段本地验证见[原生验证记录](../../verification/account109/native/README.md)。本地编译/fixture 通过不代替真实 Logto/CyberGrid/Android 端到端验收；该任务仍进行中。先前 research checkpoint 的暂停描述保留为历史时点。
+
 ## path
 
 拟独占`src-tauri/src/account/**`、必要`src-tauri/src/lib.rs`和`sync/adapter.rs`、`src-tauri/Cargo.toml`/Cargo.lock、`vendor/cybergrid-sdk/**`、必要新auth平台插件与Android接线。不得改前端React、服务或CI。配置只读取公开发行参数；secret不放入客户端。测试隔离data-dir/Android测试包，不碰原用户库。

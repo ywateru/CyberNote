@@ -1,3 +1,4 @@
+mod account;
 mod apple_notes_import;
 mod attachment_desktop;
 mod attachment_media;
@@ -57,6 +58,7 @@ impl attachment_media::provider::ThumbnailProvider for NativeThumbnailProvider {
 struct AppState(Arc<(Mutex<Session>, Condvar)>);
 struct MediaState(Arc<attachment_media::runtime::MediaRuntime>);
 struct SyncState(Arc<sync::adapter::Runtime>);
+struct AccountState(Arc<account::Runtime>);
 struct SyncWindows(tauri::AppHandle);
 impl sync::adapter::WindowHost for SyncWindows {
     fn participants(&self) -> std::collections::HashSet<String> {
@@ -646,6 +648,8 @@ pub fn run() {
         })
         .on_permission_request(media_permission::response)
         .plugin(media_permission::lifecycle())
+        .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notes_scan::init())
         .plugin(tauri_plugin_notes_media::init())
@@ -675,14 +679,15 @@ pub fn run() {
                     origins.insert(origin);
                 }
             }
-            let media =
-                tauri::async_runtime::block_on(attachment_media::runtime::MediaRuntime::start_with_provider(
+            let media = tauri::async_runtime::block_on(
+                attachment_media::runtime::MediaRuntime::start_with_provider(
                     shared.clone(),
                     media_cache,
                     origins,
                     Some(Arc::new(NativeThumbnailProvider(app.handle().clone()))),
-                ))
-                .map_err(|e| std::io::Error::other(e.message))?;
+                ),
+            )
+            .map_err(|e| std::io::Error::other(e.message))?;
             for label in app.webview_windows().into_keys() {
                 media
                     .opened(&label)
@@ -691,11 +696,30 @@ pub fn run() {
             app.manage(MediaState(media));
             let sync = sync::adapter::Runtime::new(
                 shared,
-                root,
+                root.clone(),
                 Arc::new(SyncWindows(app.handle().clone())),
             )
             .map_err(|e| std::io::Error::other(e.message))?;
-            app.manage(SyncState(sync));
+            app.manage(SyncState(sync.clone()));
+            let account =
+                account::Runtime::new(app.handle().clone(), sync, &root, &selected.media_cache)
+                    .map_err(|_| std::io::Error::other("account private state invalid"))?;
+            app.manage(AccountState(account.clone()));
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+                let weak = Arc::downgrade(&account);
+                app.deep_link().on_open_url(move |event| {
+                    if let Some(runtime) = weak.upgrade() {
+                        for url in event.urls() {
+                            let runtime = runtime.clone();
+                            tauri::async_runtime::spawn(async move {
+                                runtime.deep_link(url).await;
+                            });
+                        }
+                    }
+                });
+            }
+            account.restore();
             #[cfg(desktop)]
             {
                 use tauri::menu::{
@@ -806,6 +830,7 @@ pub fn run() {
     let builder = builder.plugin(tauri_plugin_notes_ui::init());
     #[cfg(not(feature = "access-boundary-proof"))]
     let builder = builder.invoke_handler(tauri::generate_handler![
+        account::account_command,
         load_workspace,
         sync_command,
         sync_diagnostics,
@@ -842,6 +867,7 @@ pub fn run() {
     ]);
     #[cfg(feature = "access-boundary-proof")]
     let builder = builder.invoke_handler(tauri::generate_handler![
+        account::account_command,
         load_workspace,
         sync_command,
         sync_diagnostics,
@@ -877,12 +903,10 @@ pub fn run() {
         recording_window::recording_quit_sealed,
         recording_window::recording_quit_ack
     ]);
-    let app = builder
-        .build(context)
-        .unwrap_or_else(|error| {
-            eprintln!("CyberNote startup rejected: {error}");
-            std::process::exit(1);
-        });
+    let app = builder.build(context).unwrap_or_else(|error| {
+        eprintln!("CyberNote startup rejected: {error}");
+        std::process::exit(1);
+    });
     // Tauri runs setup inside its event-loop callback and panics on an error.
     // Resolve and lease the directory before entering it, so invalid paths and
     // duplicate instances fail clearly before windows or SQLite are opened.
@@ -899,33 +923,40 @@ pub fn run() {
         });
     workspace.set(selected).expect("workspace initialized once");
     app.run(|app, event| match event {
-            tauri::RunEvent::Exit => {
-                if let Some(media) = app.try_state::<MediaState>() {
-                    media.0.stop();
-                }
-                if let Some(state) = app.try_state::<SyncState>() {
-                    let _ = state.0.shutdown();
-                }
+        tauri::RunEvent::Exit => {
+            if let Some(media) = app.try_state::<MediaState>() {
+                media.0.stop();
             }
-            tauri::RunEvent::Resumed => {
-                if let Some(state) = app.try_state::<SyncState>() {
-                    let runtime = state.0.clone();
-                    tauri::async_runtime::spawn_blocking(move || runtime.foreground());
-                }
+            if let Some(state) = app.try_state::<SyncState>() {
+                let _ = state.0.shutdown();
             }
-            tauri::RunEvent::ExitRequested { api, .. } => {
-                recording_window::exit_requested(app, &api)
+        }
+        tauri::RunEvent::Resumed => {
+            if let Some(state) = app.try_state::<AccountState>() {
+                state.0.foreground();
             }
-            #[cfg(target_os = "macos")]
-            tauri::RunEvent::Reopen { .. } => {
-                if let Some(main) = app.get_webview_window("main") {
-                    let _ = main.show();
-                    let _ = main.unminimize();
-                    let _ = main.set_focus();
+            if let Some(state) = app.try_state::<SyncState>() {
+                let runtime = state.0.clone();
+                tauri::async_runtime::spawn_blocking(move || runtime.foreground());
+            }
+        }
+        tauri::RunEvent::ExitRequested { api, .. } => {
+            if recording_window::exit_requested(app, &api) {
+                if let Some(state) = app.try_state::<AccountState>() {
+                    state.0.exit_requested(app, &api);
                 }
             }
-            _ => {}
-        });
+        }
+        #[cfg(target_os = "macos")]
+        tauri::RunEvent::Reopen { .. } => {
+            if let Some(main) = app.get_webview_window("main") {
+                let _ = main.show();
+                let _ = main.unminimize();
+                let _ = main.set_focus();
+            }
+        }
+        _ => {}
+    });
     drop(workspace);
 }
 

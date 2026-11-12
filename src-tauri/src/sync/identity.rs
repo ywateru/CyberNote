@@ -390,6 +390,26 @@ impl IdentityStore {
     ) -> Result<PairingInvite> {
         uuid(device)?;
         key(public_key)?;
+        {
+            let d = self.data.lock().map_err(|_| SyncError::Io)?;
+            if let Some((id, grant)) = d.grants.iter().find(|(_, g)| {
+                !g.revoked
+                    && g.workspace_id == workspace
+                    && g.expected_key.as_deref() == Some(public_key)
+                    && g.expected_device.as_deref() == Some(device)
+                    && (g.client_key.is_some() || g.expires_at > now())
+            }) {
+                return Ok(PairingInvite {
+                    version: 1,
+                    workspace_id: workspace.into(),
+                    invitation_id: id.clone(),
+                    endpoint: address.into(),
+                    host_key: d.public_key.clone(),
+                    psk: grant.psk.clone(),
+                    expires_at: now() + INVITE_LIFETIME,
+                });
+            }
+        }
         let invite = self.invite(workspace, address)?;
         self.update(|d| {
             let grant = d
@@ -660,6 +680,28 @@ mod tests {
             .check_authorized(&invite.invitation_id, &workspace, &public, &expected)
             .unwrap();
         assert!(store.server_psk(&invite.invitation_id, &workspace).is_ok());
+        drop(store);
+        let store = IdentityStore::open(dir.path(), &device).unwrap();
+        // Directory/proof renewals and app restarts must reuse the consumed
+        // enrolled pin instead of exhausting the invitation cap over time.
+        for _ in 0..70 {
+            let renewed = store
+                .invite_enrolled(&workspace, "ws://127.0.0.1:5678/", &expected, &public)
+                .unwrap();
+            assert_eq!(renewed.invitation_id, invite.invitation_id);
+            assert_eq!(renewed.psk, invite.psk);
+            assert!(renewed.expires_at > now());
+        }
+        assert_eq!(store.data.lock().unwrap().grants.len(), 1);
+        assert_eq!(
+            store.authorize(
+                &invite.invitation_id,
+                &workspace,
+                &encode(&[8; 32]),
+                &expected
+            ),
+            Err(SyncError::Authentication)
+        );
     }
     #[test]
     fn invitation_expiration_and_revocation_are_durable() {

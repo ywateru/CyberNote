@@ -892,20 +892,20 @@ pub fn destroyed(app: &tauri::AppHandle, label: &str) {
     }
 }
 
-pub fn exit_requested(app: &tauri::AppHandle, api: &tauri::ExitRequestApi) {
+pub fn exit_requested(app: &tauri::AppHandle, api: &tauri::ExitRequestApi) -> bool {
     let state = app.state::<Recordings>();
     let Ok(mut registry) = state.0.lock() else {
         api.prevent_exit();
-        return;
+        return false;
     };
     if registry.exit_allowed
         || (registry.entries.is_empty() && registry.local.is_empty() && registry.quit.is_none())
     {
-        return;
+        return true;
     }
     api.prevent_exit();
     if registry.quit.is_some() {
-        return;
+        return false;
     }
     let id = uuid::Uuid::new_v4().to_string();
     let waiting = document_windows(app);
@@ -935,6 +935,7 @@ pub fn exit_requested(app: &tauri::AppHandle, api: &tauri::ExitRequestApi) {
             notify_quit_cancelled(&app, &id);
         }
     });
+    false
 }
 
 #[cfg(test)]

@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-12T18:24:33.167088+00:00",
+  "scope": "native implementation and local validation; no product platform login or device execution",
+  "sdkRevision": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+  "publicOriginsOnly": true,
+  "routingOverrides": false,
+  "env": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "androidToolchain": {
+    "ndk": "27.2.12479018",
+    "target": "aarch64-linux-android",
+    "api": 28,
+    "compiler": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android28-clang",
+    "ar": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar"
+  },
+  "checks": [
+    {
+      "name": "host-check",
+      "command": "cargo check --manifest-path src-tauri/Cargo.toml --locked --lib",
+      "outcome": "passed",
+      "testCount": null,
+      "originalPath": "/private/tmp/account109-native-check-host-final.log",
+      "archive": "logs/host-check.log",
+      "sha256": "77df6cb7c22980c3041e3af0fcc6153a7f9abc143ecfe5e93ec63195da59b483"
+    },
+    {
+      "name": "android-check",
+      "command": "cargo check --manifest-path src-tauri/Cargo.toml --locked --lib --target aarch64-linux-android",
+      "outcome": "passed",
+      "testCount": null,
+      "originalPath": "/private/tmp/account109-native-check-android-final.log",
+      "archive": "logs/android-check.log",
+      "sha256": "a743a775d1af060b3a27f4751fbfc450f75fe7efa0cbbd9b7b78b24b47b2a4e9"
+    },
+    {
+      "name": "account-tests",
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml --locked --lib account:: -- --nocapture",
+      "outcome": "passed",
+      "testCount": 8,
+      "originalPath": "/private/tmp/account109-native-tests-account-final.log",
+      "archive": "logs/account-tests.log",
+      "sha256": "e89eeda7d4ed4fac7cf99ff0df62c95af5a3cc2c6cd983c44df7e6891a1e30b6"
+    },
+    {
+      "name": "sync-tests",
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml --locked --lib sync:: -- --nocapture",
+      "outcome": "passed",
+      "testCount": 32,
+      "originalPath": "/private/tmp/account109-native-tests-sync-final.log",
+      "archive": "logs/sync-tests.log",
+      "sha256": "4114f08ada0365bda25bc564b6e316d37243bbcdaec72f3ff9b239416cbdf3fb"
+    },
+    {
+      "name": "auth-fixtures",
+      "command": "cargo test --manifest-path crates/account-auth/Cargo.toml --locked --offline",
+      "outcome": "passed",
+      "testCount": 15,
+      "originalPath": "/private/tmp/account109-auth-tests-final.log",
+      "archive": "logs/auth-fixtures.log",
+      "sha256": "471c1029f5baaa5625e456ee0c816fce89a423a7631350ffad5b7a62e22ed7b7"
+    }
+  ],
+  "previousChecks": [
+    {
+      "path": "/private/tmp/account109-native-tests-account-final02.log",
+      "sha256": "c1f15cc5462fb3cedf8c76510b8346b4df5290caaa4a0e3a0b1b46afcfb70a8e",
+      "outcome": "passed",
+      "results": [
+        "test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 233 filtered out; finished in 0.84s"
+      ]
+    },
+    {
+      "path": "/private/tmp/account109-native-tests-account-final03.log",
+      "sha256": "2079c557e5d8eb71c36bdcb699baee0c69ac62945773c5c044f541e147440993",
+      "outcome": "failed",
+      "results": [
+        "test result: FAILED. 6 passed; 1 failed; 0 ignored; 0 measured; 233 filtered out; finished in 0.85s"
+      ]
+    },
+    {
+      "path": "/private/tmp/account109-native-tests-account-final04.log",
+      "sha256": "3fe6f5334a81a74deebbbd2b5a5bbfe651c71b0df4fefea240278efd0a6bad13",
+      "outcome": "passed",
+      "results": [
+        "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 233 filtered out; finished in 0.86s"
+      ]
+    },
+    {
+      "path": "/private/tmp/account109-native-tests-sync.log",
+      "sha256": "47ee7ca08818c7c3835132b12117263dc3d98db3135eb4fddbf5051c922c31fc",
+      "outcome": "passed",
+      "results": [
+        "test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 205 filtered out; finished in 57.78s"
+      ]
+    },
+    {
+      "path": "/private/tmp/account109-auth-reauthorization-integration.log",
+      "sha256": "74cbd6ef2835570e61404259c97d32f29e869641ca292025b5ac7b4f20900255",
+      "outcome": "passed",
+      "results": [
+        "test result: ok. 13 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.26s",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    }
+  ],
+  "source": [
+    {
+      "path": "crates/account-auth/src/http.rs",
+      "sha256": "01186768e9bdec16db77254a259c9be7bfcb9bd1751e9c1860899cb5fc3eb780"
+    },
+    {
+      "path": "crates/account-auth/src/lib.rs",
+      "sha256": "516925e8798bc9f0f9ecc74a913c2d2d391b67461a8e9f811afe0e40a342d790"
+    },
+    {
+      "path": "crates/account-auth/src/storage.rs",
+      "sha256": "20e903f2229bcad6973e5bc01ee1dac72717672c812a36a49eb50b4c7f7d1369"
+    },
+    {
+      "path": "crates/account-auth/src/tests.rs",
+      "sha256": "b8e789eb3a71eb8f56e7d84f2255a4e1f8b3527d30e3432c148163b5073edfef"
+    },
+    {
+      "path": "crates/account-auth/src/types.rs",
+      "sha256": "577300ce463b0c2c06eac10da8d6eaa74f371be2b847291e5f14ab3676f430ec"
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "sha256": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307"
+    },
+    {
+      "path": "src-tauri/Cargo.toml",
+      "sha256": "11455c14d1f5b68f417466bba8e745d99c0526fd3cbaac3c8403eba710a9f7d8"
+    },
+    {
+      "path": "src-tauri/gen/android/app/build.gradle.kts",
+      "sha256": "6d30335e50a0f1f13f66c246cfbabc7991f72f38471103ba93cfb2de1b8813d8"
+    },
+    {
+      "path": "src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+      "sha256": "48ff670ab8f984d9491ccc7ada6bbda30439c39f6a5cd60799b6314517102457"
+    },
+    {
+      "path": "src-tauri/src/account/callback.rs",
+      "sha256": "e69973cbcfaf4ad23788d61322c2b902809d11bbfcf1344b7d2fc218327881e7"
+    },
+    {
+      "path": "src-tauri/src/account/config.rs",
+      "sha256": "2a2dc19fc5f666f99ba2e0d5f19022f8607efa9c787b3d47d2a05b288dc122dd"
+    },
+    {
+      "path": "src-tauri/src/account/enrollment.rs",
+      "sha256": "edc950f419cf5097ffd56f886c4cfecc0a4503acb84f051f20fb00fff49f3805"
+    },
+    {
+      "path": "src-tauri/src/account/mod.rs",
+      "sha256": "19246c779e479bce9053fe917492e0940e02df807ec76f45f4e6a9b79e57f92e"
+    },
+    {
+      "path": "src-tauri/src/account/private.rs",
+      "sha256": "292fff22df918f76e9ec65d025bd58d0c476788186074cab85aae3278e59c717"
+    },
+    {
+      "path": "src-tauri/src/account/provider.rs",
+      "sha256": "f4d8dba42b1551e2f5aaf6987ef47e4efd23a0e529ef9a8e421306cf0af3b334"
+    },
+    {
+      "path": "src-tauri/src/account/transport.rs",
+      "sha256": "a9de89fffaf988dd144201ecc8a4f5345bd95b661dae79e635f4b9dd1169d9b9"
+    },
+    {
+      "path": "src-tauri/src/account/types.rs",
+      "sha256": "2d75c1a105faac1a32bd770d90c4449450182ec325f8a168980c2c38e508a135"
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "sha256": "0a46bcbede2f9b02992cd3e0f4f89df6a1820c37e9bac09af7c08a8961e5b2e9"
+    },
+    {
+      "path": "src-tauri/src/recording_window.rs",
+      "sha256": "5e41de84ba37d064f1f1807282dc9fbaadfdd50bdc2700afefa1c5d29fd58076"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter.rs",
+      "sha256": "8df5f9c6a044c9aa2201d13343960a04000d5a4938b8a10872582ace6bddd5a7"
+    },
+    {
+      "path": "src-tauri/src/sync/identity.rs",
+      "sha256": "7f1028389046c398d79652d9e8ba46372fba835a83a07647d393ee3907020f8b"
+    },
+    {
+      "path": "src-tauri/src/sync/network/service.rs",
+      "sha256": "e254c857edf478f585e8a0182ffa0eb64df39c3b96dfc7ea0df73621bbd8171b"
+    },
+    {
+      "path": "src-tauri/src/sync/network/staging.rs",
+      "sha256": "e530fe4b3ac5cb626d42b50f6bff8bc3272affb731cc39ddb1d43341e2f0ebc9"
+    },
+    {
+      "path": "src-tauri/src/sync/network/transport.rs",
+      "sha256": "38b666136ff1117d9e5e57319391cb0022e2450df56e1224ff14d65f0189ab0e"
+    },
+    {
+      "path": "src-tauri/src/sync/network/wire.rs",
+      "sha256": "c58e2ebfd3bb9e41c144709d871e1a74d3414ea4a2c47d7799fb629f2865eb00"
+    },
+    {
+      "path": "src-tauri/src/sync/network.rs",
+      "sha256": "d3b070c0d0f88f562baf8760dfe4798314b18a75ce12e9a495cee86194118540"
+    },
+    {
+      "path": "src-tauri/tauri.conf.json",
+      "sha256": "3df6d75b2425945d5351540dd0af6a748de29d28f2b8f6a4803d5caeacdb2bad"
+    },
+    {
+      "path": "vendor/cybergrid-sdk/SOURCE.json",
+      "sha256": "f65a3a444df6efde2581a3f2b760abcafe18d681845b6cc945196641ca3a4125"
+    }
+  ],
+  "sourceManifestSha256": "ac9e7a6afe5f7bb08e240923c867da0d2525955f449b836423ebc99e5d314c4a",
+  "notExecuted": [
+    "APK build/install",
+    "Android browser/deep-link callback",
+    "product native Logto login/restore",
+    "real multi-peer CyberGrid discovery/replication"
+  ]
+}
