@@ -1,0 +1,225 @@
+{
+  "schema": 1,
+  "status": "build-passed-staging-blocked",
+  "scope": "Local Android production unsigned baseline only; no install/device/UI/account/sync/deployment acceptance",
+  "sourceSnapshot": "5d30f16cd41dfd0e6b1ddf37e0c71b5628dc5d07",
+  "sanitizedHead": "6906f10d842b011d7476d26e4af6570722ce8793",
+  "sanitizedTree": "d55bf4c9a89188e83a6c47054dcb008f205510c5",
+  "sourceIdentityBeforeBuild": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-12T21:01:33.887Z",
+    "target": "android",
+    "sourceRevision": "6906f10d842b011d7476d26e4af6570722ce8793",
+    "sourceFingerprint": "bedc35bf7875de54a9e1183a48a92858d00591acfbaa9af462d660a1c369c61a",
+    "sourceDirty": false,
+    "inputCount": 1619,
+    "releasePreparedAt": null
+  },
+  "sourceIdentityAfterBuild": {
+    "sourceRevision": "6906f10d842b011d7476d26e4af6570722ce8793",
+    "sourceFingerprint": "3b75e5c3e3873066fdb9373adf8ef4e6334563d33ce52b5bcfbfcbd2d03f1f28",
+    "sourceDirty": true,
+    "inputCount": 1619
+  },
+  "build": {
+    "command": [
+      "pnpm",
+      "exec",
+      "tauri",
+      "android",
+      "build",
+      "--target",
+      "aarch64",
+      "--apk",
+      "--ci",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 446.416,
+    "cargoJobs": 2,
+    "gradleWorkers": 2,
+    "gradleSingleUseDaemon": true,
+    "node": "22.16.0",
+    "pnpm": "10.15.0",
+    "rust": "1.97.1",
+    "java": "Homebrew OpenJDK 17.0.19 (workflow uses Temurin17 on Ubuntu)",
+    "androidSdk": 36,
+    "buildTools": "36.0.0",
+    "ndk": "27.2.12479018",
+    "frontendFlags": {
+      "VITE_NOTES_ACCOUNT_NATIVE": "absent",
+      "VITE_NOTES_DEBUG": "absent",
+      "VITE_NOTES_ACCOUNT_UI": "absent",
+      "otherInheritedViteOrTauriOverrides": "absent"
+    },
+    "actualProductFeatures": [],
+    "tauriCustomProtocol": true,
+    "tauriDevtools": false,
+    "cargoBuildOffline": true,
+    "cargoLockedMetadataCheck": true,
+    "cargoBuildLockedFlagAsserted": false,
+    "lockfilesUnchanged": {
+      "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+      "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+      "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+      "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+    }
+  },
+  "package": {
+    "filename": "app-universal-release-unsigned.apk",
+    "size": 51618299,
+    "sha256": "f4647da47f0384dfe85d09d2fa1b124282e335eef3885c20e5c6ed2b6d559f85",
+    "nativeBinarySha256": "1bc9d14feba5eec91e2db337655c1165532c111f60c47a720a1d1a368a426ff7",
+    "duplicateZipEntries": false,
+    "libraries": [
+      {
+        "entry": "lib/arm64-v8a/libcloudflared.so",
+        "size": 28812032,
+        "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      },
+      {
+        "entry": "lib/arm64-v8a/libimage_processing_util_jni.so",
+        "size": 32528,
+        "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      },
+      {
+        "entry": "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+        "size": 11064544,
+        "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      },
+      {
+        "entry": "lib/arm64-v8a/libnotes_clone_lib.so",
+        "size": 76521472,
+        "sha256": "1bc9d14feba5eec91e2db337655c1165532c111f60c47a720a1d1a368a426ff7",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      },
+      {
+        "entry": "lib/arm64-v8a/libsurface_util_jni.so",
+        "size": 4896,
+        "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+        "class": 64,
+        "endianness": "little",
+        "type": 3,
+        "machine": 183
+      }
+    ],
+    "apksigner": {
+      "exitCode": 1,
+      "stderr": [
+        "DOES NOT VERIFY",
+        "ERROR: Missing META-INF/MANIFEST.MF"
+      ],
+      "unsignedConfirmed": true
+    },
+    "manifest": {
+      "package": "com.local.notesclone",
+      "versionName": "0.1.0",
+      "versionCode": 1000,
+      "minSdk": 26,
+      "targetSdk": 36,
+      "debuggable": false,
+      "testOnly": false,
+      "method": "SDK36 aapt2 decode actual binary manifest; absent flags use Android false defaults"
+    },
+    "providerPin": {
+      "path": "vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so",
+      "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+      "size": 28812032,
+      "source": {
+        "url": "https://github.com/cloudflare/cloudflared",
+        "revision": "b749dfd998f4bced81f48727b9c971cfc3056865",
+        "version": "2026.9.0"
+      },
+      "licenses": [
+        "vendor/cybergrid-sdk/provider-assets/LICENSE",
+        "vendor/cybergrid-sdk/provider-assets/THIRD_PARTY_NOTICES.md"
+      ],
+      "provenance": {
+        "manifest": "vendor/cybergrid-sdk/provider-assets/manifest.json",
+        "platform": "android-arm64"
+      }
+    }
+  },
+  "frontendGate": {
+    "schema": 1,
+    "status": "passed",
+    "scope": "actual production frontend asset pure isTauri helper/gate evaluation and byte-for-byte embedding check; no whole bundle/app/API execution",
+    "asset": "dist/assets/index-BY81isnk.js",
+    "assetSha256": "78d169686565cf8801536ee72ec9510bf6e167a1df1cd1748538f012b4cf440c",
+    "compiledBinding": "bp()||!1",
+    "helper": "function bp(){return!!(globalThis||window).isTauri}",
+    "cases": [
+      {
+        "isTauri": false,
+        "available": false
+      },
+      {
+        "isTauri": true,
+        "available": true
+      }
+    ],
+    "packageNativeSha256": "1bc9d14feba5eec91e2db337655c1165532c111f60c47a720a1d1a368a426ff7",
+    "flags": "ACCOUNT_NATIVE/debug/UI absent"
+  },
+  "frontendGateEmbedding": {
+    "encoding": "brotli",
+    "sha256": "78d169686565cf8801536ee72ec9510bf6e167a1df1cd1748538f012b4cf440c",
+    "encodedSha256": "797e34f5765a7511ba5fb95d80bf965ad7b7b9cec1f44a33cf933ecb164443da"
+  },
+  "embeddedIdentityProof": {
+    "encoding": "brotli",
+    "sha256": "a45ac7c7b9d0c5aabc3bf6e0a6873ba6aeff213be2bb924a46d2980462597c5b"
+  },
+  "notices": {
+    "kind": "supplemental verification archive, not official staged receipt",
+    "sha256": "c936d90fe5abe7cfc44bc6d88d1d26dab8e58e63c9d0b46d31723a2a7cb6c9ec",
+    "rustLicenseFiles": 9,
+    "rustProvenanceFiles": 1,
+    "sdkLicenseBundleFiles": 1138,
+    "totalZipEntries": 1200,
+    "allRustAndSdkDeclaredHashesMatch": true
+  },
+  "staging": {
+    "exitCode": 1,
+    "error": "Expected production identity from current clean source",
+    "officialReceiptProduced": false,
+    "partialCopiedApkPresent": true,
+    "sourceMutationRetained": true,
+    "generatedManifestBeforeSha256": "48ff670ab8f984d9491ccc7ada6bbda30439c39f6a5cd60799b6314517102457",
+    "generatedManifestAfterSha256": "6beb4e9feff0afea530a6d11b2895e5d422c1fdc7f80d0aa130974ef84ff43d0",
+    "generatedCallbackBlockMatchesBuild01": true,
+    "generatedCallbackBlockSha256": "bad4d2efc853d430bd882e1ca47523bf2b440499169e794eddd624d9fd27dff0",
+    "generatedCallbackBlockBytes": 763
+  },
+  "cleanup": {
+    "ownedBuildProcessGroupsRemaining": [],
+    "ownedGradleDaemonRemaining": false,
+    "termination": "normal process exits; no process kill/global daemon stop",
+    "kotlinTemporaryFiles": "observed during build, naturally absent after normal exit; not manually removed"
+  },
+  "preservation": {
+    "canonicalRootClean": true,
+    "priorMacPackageUnchanged": true,
+    "sourceManifestDifferencePreserved": true,
+    "sourceRestored": false,
+    "originalMacPackageSha256": "a79a3fa077d9ed8b828c1c2309140ac16f8c31035c8af699ba9e9a2ea6d18895"
+  },
+  "remaining": "main fixes staging validation and normalizes the generated callback manifest; a new precise source export/build is required for clean staging acceptance"
+}
