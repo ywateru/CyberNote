@@ -6,6 +6,14 @@ Third-party rights are preserved independently of the private project's license.
   SIL OFL 1.1, original font metadata, source pin and attribution.
 - CyberGrid coordinator: `services/coordinator/LICENSE` and
   `services/coordinator/notices/` preserve upstream and npm dependency notices.
+- CyberGrid Rust SDK and providers: `vendor/cybergrid-sdk/LICENSE`, its root
+  `THIRD_PARTY_NOTICES.md` and `licenses/`, plus `provider-assets/` notices retain
+  the fixed upstream SDK and provider terms independently.
+- Native account integration: `scripts/publish/notices/rust/` retains the
+  original notices for oauth2 5.0.0 (MIT OR Apache-2.0), openidconnect 4.1.0
+  (MIT), tauri-plugin-opener 2.7.3 and tauri-plugin-deep-link 2.6.3
+  (Apache-2.0 OR MIT). `NOTICE.provenance.json` records crates.io archive
+  checksums matched to Cargo.lock, original archive paths and retained hashes.
 - Local Tauri plugins retain their declared component licenses in Cargo manifests.
 - Rust and frontend dependencies retain their upstream licenses; the lockfiles
   identify exact dependency versions. Further binary distribution must include
