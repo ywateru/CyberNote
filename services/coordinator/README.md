@@ -98,6 +98,8 @@ provide its executable in `REDIS_TEST_SERVER`.
   corrected the Function public asset location.
 - Tightened token expiry tolerance to zero, checked issued-at/lifetime, and
   rejected malformed explicit grant claims in the shared Logto verifier.
+- Advertised OAuth scopes match the native owner exactly: `openid`, `profile`,
+  `offline_access`, `connect`. No email scope is needed for username-based use.
 - Added profile tests, adapted standalone test environment fixtures to the
   mandatory seed/static policy/resource, and limited upstream deploy-link
   assertions to the vendored website (upstream root README is not vendored).

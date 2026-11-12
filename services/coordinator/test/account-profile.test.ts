@@ -18,6 +18,7 @@ async function fixture(){
  const keys=await generateKeyPair('ES384');
  const jwk={...await exportJWK(keys.publicKey),kid:'profile-fixture',alg:'ES384'};
  const auth=coordinatorAuthConfiguration({LOGTO_ISSUER:issuer,LOGTO_RESOURCE:resource,LOGTO_BROWSER_CLIENT_ID:'ConsoleA'});
+ assert.deepEqual(auth.scope.split(' ').sort(),['connect','offline_access','openid','profile']);
  const identity=new LogtoIdentity(auth,['ES384'],createLocalJWKSet({keys:[jwk]}));
  const handle=createAccountProfile({identity,issuer,seed,products:new ProductPolicy(rawProducts)});
  const now=Math.floor(Date.now()/1000);

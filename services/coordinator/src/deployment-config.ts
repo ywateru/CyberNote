@@ -28,7 +28,7 @@ export function coordinatorAuthConfiguration(env:NodeJS.ProcessEnv):AuthConfigur
  const redirectUri=env.CYBERGRID_CONSOLE_REDIRECT_URI??(origin?origin+DEFAULT_CALLBACK:DEFAULT_CALLBACK);
  if(env.CYBERGRID_CONSOLE_REDIRECT_URI!==undefined&&new URL(env.CYBERGRID_CONSOLE_REDIRECT_URI).protocol!=='https:')throw new DeploymentConfigurationError('Explicit console callback must be HTTPS');
  consoleCallback(redirectUri,origin);
- return {provider:'logto',issuer,clientId,resource,scope:'openid offline_access profile email connect',deviceAuthorizationEndpoint:issuer+'/device/auth',authorizationEndpoint:issuer+'/auth',tokenEndpoint:issuer+'/token',revocationEndpoint:issuer+'/token/revocation',redirectUri,jwksUri:issuer+'/jwks'};
+ return {provider:'logto',issuer,clientId,resource,scope:'openid offline_access profile connect',deviceAuthorizationEndpoint:issuer+'/device/auth',authorizationEndpoint:issuer+'/auth',tokenEndpoint:issuer+'/token',revocationEndpoint:issuer+'/token/revocation',redirectUri,jwksUri:issuer+'/jwks'};
 }
 /** Projection only; never mutate the identity's fixed configuration or cache a host. */
 export function requestAuthConfiguration(config:AuthConfiguration,origin:string):AuthConfiguration {
