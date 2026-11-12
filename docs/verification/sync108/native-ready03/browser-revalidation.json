@@ -1,0 +1,60 @@
+{
+  "confirmedWith": "Dewey, frozen module736469ee and browser result cbbaa526",
+  "boundary": "Browser/IPC fixture revalidation; not native sync acceptance",
+  "startup": {
+    "desktop": {
+      "path": "/private/tmp/sync108-startup-fixed-20261112-03/desktop-result.json",
+      "sha256": "0ebb4dee50b6e63311743b9bce16206d7f03495c5973572f221eb33405123752",
+      "passed": true,
+      "checks": 17
+    },
+    "mobile": {
+      "path": "/private/tmp/sync108-startup-fixed-20261112-03/mobile-result.json",
+      "sha256": "3e17d2151ac3a071189530e32277bea3a99de8a4ed49fd528fa6efbde197961d",
+      "passed": true,
+      "checks": 4
+    }
+  },
+  "syncSettings": {
+    "mobile": {
+      "path": "/private/tmp/sync108-sync-settings-reset-fixed-mobile-20261112-01/summary.json",
+      "sha256": "767012bf199edd5e9c66f5baf84937ba1a56875dc23845b96e91f9ded578a079",
+      "passed": true,
+      "checks": 56
+    },
+    "desktop": {
+      "path": "/private/tmp/sync108-sync-settings-reset-fixed-desktop-20261112-01/suite.json",
+      "sha256": "a5be2f7471c5fb2b384cc980041a8f8a8267643b5a781936870b4d03ae2f7bcd",
+      "passed": false,
+      "checksBeforeFailure": 38,
+      "failure": "1280px button height 28–42px fails existing 44px assertion",
+      "geometry": {
+        "path": "/private/tmp/sync108-sync-settings-desktop-layout-diag-20261112-01/geometry.json",
+        "sha256": "d3cbdb9745f9fb8db4628069170e1f063e93393e1489428c9cc79b8bfa7ffd0b"
+      }
+    }
+  },
+  "priorGateHang": {
+    "path": "/private/tmp/sync108-startup-diag-20261112/gate-diagnosis.jsonl",
+    "sha256": "e717a079909b5cd288062785211e6de8592bb1ec892ffe5cdfcff0e71b3338d4"
+  },
+  "coordinatorFixed02": {
+    "scope": "Read-only confirmation of existing records; browser/IPC fixtures, no browser rerun here",
+    "reason": "Existing interface contract uses desktop 28px/mobile 44px; coordinator corrected the old blanket 44px tool assertion without product changes",
+    "independentReview": "Tesla pending at handoff",
+    "syncSettings": {
+      "desktop": {
+        "path": "/private/tmp/sync108-workspace-checks/sync-settings-desktop-fixed02/summary.json",
+        "sha256": "0b360d5f352154fad97e505b77a7c0919f351c3f6ce1e01d804a3f8e96b87fc9",
+        "passed": true,
+        "checks": 56
+      },
+      "mobile": {
+        "path": "/private/tmp/sync108-workspace-checks/sync-settings-mobile-fixed02/summary.json",
+        "sha256": "c3e6bfb195b73c47eaac6cb3b617f384b15adcebe4e46678565c8de84e5fc59c",
+        "passed": true,
+        "checks": 56
+      }
+    }
+  }
+}

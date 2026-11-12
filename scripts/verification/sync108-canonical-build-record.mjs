@@ -57,17 +57,21 @@ async function matchProductToCommit(root, commit, paths) {
   return { commit, allCurrentProductFilesMatch: true, inputCount: paths.length };
 }
 
-export async function generate({ root, binary, historicalRecord, out }) {
+export async function generate({ root, binary, historicalRecord, buildRecord, out }) {
   root = resolve(root);
   assert(isAbsolute(binary) && isAbsolute(out), "Binary and output paths must be absolute");
   assert.notEqual(resolve(historicalRecord), resolve(out), "Preserve the historical manifest");
   const historicalBytes = await readFile(historicalRecord);
-  const previous = JSON.parse(historicalBytes);
+  const historical = JSON.parse(historicalBytes);
+  const buildBytes = buildRecord ? await readFile(buildRecord) : historicalBytes;
+  const previous = JSON.parse(buildBytes);
+  if (buildRecord) assert.notEqual(resolve(buildRecord), resolve(out), "Preserve the build evidence");
   const binaryBytes = await readFile(binary), binaryHash = hash(binaryBytes);
-  assert.equal(binaryHash, previous.binary.sha256, "Binary changed since the historical build record");
+  assert.equal(binaryHash, previous.binary.sha256, "Binary differs from the selected build evidence");
   const product = await productFingerprint(root);
   const frontend = await staticFrontend(root);
   assert.equal(frontend.sha256, previous.staticFrontendSha256, "Existing static frontend differs from the recorded embedded dist");
+  assert.equal(frontend.sha256, historical.staticFrontendSha256, "Static frontend changed since the preserved baseline");
   const buildCommitCheck = await matchProductToCommit(root, previous.sourceCommit, Object.keys(product.files));
   const tools = {};
   for (const path of [...inputTools].sort()) tools[path] = hash(await readFile(resolve(root, path)));
@@ -76,7 +80,7 @@ export async function generate({ root, binary, historicalRecord, out }) {
   const ordinaryBytes = await readFile(ordinaryApp);
   const record = {
     schema: 2, kind: "canonical-native-build-identity", generatedAt: new Date().toISOString(),
-    binary: { path: binary, sha256: binaryHash, unchangedFromHistoricalRecord: true },
+    binary: { path: binary, sha256: binaryHash, unchangedFromHistoricalRecord: binaryHash === historical.binary.sha256, matchesBuildRecord: true },
     sourceSha256: product.identity.sourceFingerprint,
     sourceEnumeration: {
       module: "scripts/build-info.mjs", paths: "productFiles(root)", identity: "sourceIdentity(root)",
@@ -95,6 +99,7 @@ export async function generate({ root, binary, historicalRecord, out }) {
       nativeCommand: previous.nativeCommand, compileGates: previous.compileGates, runtimeGate: previous.runtimeGate,
       noBuildPerformedForThisManifest: true,
     },
+    ...(buildRecord ? { buildRecord: { path: relative(root, buildRecord), sha256: hash(buildBytes), retainedUnmodified: true } } : {}),
     readOnlyBinaryEvidence: {
       featureBinary: { stdioPrefixPresent: binaryBytes.includes(marker), stdinThreadPresent: binaryBytes.includes(thread) },
       ordinaryDebugApp: { path: ordinaryApp, sha256: hash(ordinaryBytes), stdioPrefixPresent: ordinaryBytes.includes(marker), stdinThreadPresent: ordinaryBytes.includes(thread) },
@@ -115,6 +120,7 @@ export async function generate({ root, binary, historicalRecord, out }) {
   assert(!record.readOnlyBinaryEvidence.ordinaryDebugApp.stdioPrefixPresent);
   assert.equal(hash(await readFile(binary)), binaryHash);
   assert.equal(hash(await readFile(historicalRecord)), record.historicalRecord.sha256);
+  if (buildRecord) assert.equal(hash(await readFile(buildRecord)), record.buildRecord.sha256);
   await writeFile(out, JSON.stringify(record, null, 2) + "\n", { flag: "wx" });
   return record;
 }
@@ -122,10 +128,10 @@ export async function generate({ root, binary, historicalRecord, out }) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2), options = {};
   for (let i = 0; i < args.length; i += 2) {
-    assert(["--root", "--binary", "--historical-record", "--out"].includes(args[i]) && args[i + 1] && !options[args[i]], "Unknown, duplicate or incomplete option");
+    assert(["--root", "--binary", "--historical-record", "--build-record", "--out"].includes(args[i]) && args[i + 1] && !options[args[i]], "Unknown, duplicate or incomplete option");
     options[args[i]] = args[i + 1];
   }
   assert(options["--root"] && options["--binary"] && options["--historical-record"] && options["--out"], "Supply --root --binary --historical-record --out");
-  const record = await generate({ root: options["--root"], binary: options["--binary"], historicalRecord: resolve(options["--historical-record"]), out: options["--out"] });
+  const record = await generate({ root: options["--root"], binary: options["--binary"], historicalRecord: resolve(options["--historical-record"]), buildRecord: options["--build-record"] ? resolve(options["--build-record"]) : undefined, out: options["--out"] });
   console.log(JSON.stringify({ binarySha256: record.binary.sha256, productFingerprint: record.sourceSha256, inputCount: record.product.identity.inputCount, staticFrontendSha256: record.staticFrontendSha256, out: options["--out"] }));
 }

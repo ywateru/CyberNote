@@ -1,0 +1,49 @@
+{
+  "boundary": "two actual native Apps; Ready/navigation probes, owned left/right placement, read-only workspace and natural shutdown only; no business sync acceptance",
+  "binary": "/private/tmp/cybernote-sync108-target/debug/notes-clone",
+  "binarySha256": "b85972f5ead438ad53403749d4603cfef0f5e11734c8752e62fe9526a5a2552e",
+  "observations": [],
+  "cleanupErrors": [
+    "NATIVE_TIMEOUT",
+    "NATIVE_TIMEOUT"
+  ],
+  "lifecycles": [
+    {
+      "name": "ready02-left",
+      "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready02-mI3jVX/left",
+      "stderrBytes": 58,
+      "commands": 2,
+      "forcedSignals": [],
+      "pid": 10936,
+      "exit": {
+        "code": 70,
+        "signal": null
+      },
+      "close": {
+        "code": 70,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": false
+    },
+    {
+      "name": "ready02-right",
+      "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready02-mI3jVX/right",
+      "stderrBytes": 58,
+      "commands": 2,
+      "forcedSignals": [],
+      "pid": 10937,
+      "exit": {
+        "code": 70,
+        "signal": null
+      },
+      "close": {
+        "code": 70,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": false
+    }
+  ],
+  "ownedDataAndCacheRemoved": true
+}

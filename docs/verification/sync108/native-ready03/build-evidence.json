@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "kind": "fresh-native-feature-build-evidence",
+  "binary": {
+    "path": "/private/tmp/cybernote-sync108-target/debug/notes-clone",
+    "sha256": "771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723"
+  },
+  "sourceCommit": "e3225038cd47f00774e08a8cf10e32ab2335668f",
+  "frontendCommand": "NODE_ENV=development VITE_NOTES_DEBUG=1 pnpm build",
+  "nativeCommand": "CARGO_TARGET_DIR=/private/tmp/cybernote-sync108-target cargo build --manifest-path src-tauri/Cargo.toml --features sync-e2e,tauri/custom-protocol --locked --offline",
+  "compileGates": [
+    "feature=sync-e2e",
+    "debug_assertions",
+    "desktop"
+  ],
+  "runtimeGate": "NOTES_SYNC_E2E=1",
+  "staticFrontendSha256": "ac755157f95eebd047f0f2830c0877abcecb72780f5f1ec5036d77be4fa82dc6",
+  "staticFrontendReused": true,
+  "sourcePatch": "736469ee + e3225038",
+  "preservedPriorBinary": {
+    "path": "/private/tmp/sync108-native-binaries/b85972f5ead438ad53403749d4603cfef0f5e11734c8752e62fe9526a5a2552e/notes-clone",
+    "sha256": "b85972f5ead438ad53403749d4603cfef0f5e11734c8752e62fe9526a5a2552e"
+  },
+  "buildLog": {
+    "path": "/private/tmp/sync108-ready03-native-build.log",
+    "sha256": "50050fc805b6c5be680abe0e685429e160d6445f5e8930db1c4485e274ede7f7"
+  }
+}

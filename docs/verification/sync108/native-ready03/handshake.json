@@ -1,0 +1,162 @@
+{
+  "boundary": "two actual native Apps; read-only Ready, static origin, interactive DOM, workspace access and natural shutdown; no sync business acceptance",
+  "binary": {
+    "path": "/private/tmp/cybernote-sync108-target/debug/notes-clone",
+    "sha256": "771bed664a3793938b7dc18d6dd07a4cbb63cb088808174c44062d2fb49fd723"
+  },
+  "checks": [
+    {
+      "name": "ready03-left",
+      "ready": {
+        "document": {
+          "debug": true,
+          "interactive": true,
+          "readyState": "complete",
+          "rootHidden": null,
+          "rootInert": false,
+          "startup": "detached",
+          "timeOrigin": 1794483603275,
+          "visibility": "visible"
+        },
+        "documentProbes": 11,
+        "interactive": true,
+        "location": "tauri://localhost",
+        "native": true,
+        "nativePage": {
+          "finished": true,
+          "finishes": 1,
+          "starts": 1,
+          "url": "tauri://localhost"
+        },
+        "nativeWindow": {
+          "focused": true,
+          "minimized": false,
+          "position": {
+            "x": 112,
+            "y": 58
+          },
+          "size": {
+            "height": 1400,
+            "width": 2000
+          },
+          "visible": true
+        },
+        "startupDetached": true,
+        "version": 1,
+        "window": "main"
+      },
+      "dom": {
+        "debug": true,
+        "origin": "tauri://localhost",
+        "readyState": "complete",
+        "rootInert": false,
+        "splash": false
+      },
+      "fullWorkspaceReadable": true
+    },
+    {
+      "name": "ready03-right",
+      "ready": {
+        "document": {
+          "debug": true,
+          "interactive": true,
+          "readyState": "complete",
+          "rootHidden": null,
+          "rootInert": false,
+          "startup": "detached",
+          "timeOrigin": 1794483603324,
+          "visibility": "visible"
+        },
+        "documentProbes": 12,
+        "interactive": true,
+        "location": "tauri://localhost",
+        "native": true,
+        "nativePage": {
+          "finished": true,
+          "finishes": 1,
+          "starts": 1,
+          "url": "tauri://localhost"
+        },
+        "nativeWindow": {
+          "focused": false,
+          "minimized": false,
+          "position": {
+            "x": 112,
+            "y": 58
+          },
+          "size": {
+            "height": 1400,
+            "width": 2000
+          },
+          "visible": true
+        },
+        "startupDetached": true,
+        "version": 1,
+        "window": "main"
+      },
+      "dom": {
+        "debug": true,
+        "origin": "tauri://localhost",
+        "readyState": "complete",
+        "rootInert": false,
+        "splash": false
+      },
+      "fullWorkspaceReadable": true
+    }
+  ],
+  "cleanupErrors": [],
+  "lifecycles": [
+    {
+      "name": "ready03-left",
+      "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready03-3tqNph/left",
+      "stderrBytes": 58,
+      "commands": 4,
+      "forcedSignals": [],
+      "pid": 12543,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "ready03-right",
+      "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready03-3tqNph/right",
+      "stderrBytes": 58,
+      "commands": 4,
+      "forcedSignals": [],
+      "pid": 12544,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "ownedDataAndCacheRemoved": true,
+  "passed": true,
+  "canonicalCacheCleanup": [
+    {
+      "ownedCanonicalRoot": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready03-3tqNph/left",
+      "cache": "/Users/water/Library/Caches/com.local.notesclone/workspaces/5bb565045f7b320ea3453dd9df52131868c371f73aaa4e2265ac06c3355043d9",
+      "existedAfterInitialCleanup": true,
+      "removed": true
+    },
+    {
+      "ownedCanonicalRoot": "/private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready03-3tqNph/right",
+      "cache": "/Users/water/Library/Caches/com.local.notesclone/workspaces/b78869ec9da0de6a4efe24f8bc5f96819b3447c3f7bdb6c153ca77a3e5e7720b",
+      "existedAfterInitialCleanup": true,
+      "removed": true
+    }
+  ]
+}

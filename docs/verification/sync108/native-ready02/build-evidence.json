@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "kind": "fresh-native-feature-build-evidence",
+  "binary": {
+    "path": "/private/tmp/cybernote-sync108-target/debug/notes-clone",
+    "sha256": "b85972f5ead438ad53403749d4603cfef0f5e11734c8752e62fe9526a5a2552e"
+  },
+  "sourceCommit": "aa8ced62d49e378eac4da5ba1f32288cfb8bf4ab",
+  "frontendCommand": "NODE_ENV=development VITE_NOTES_DEBUG=1 pnpm build",
+  "nativeCommand": "CARGO_TARGET_DIR=/private/tmp/cybernote-sync108-target cargo build --manifest-path src-tauri/Cargo.toml --features sync-e2e,tauri/custom-protocol --locked --offline",
+  "compileGates": [
+    "feature=sync-e2e",
+    "debug_assertions",
+    "desktop"
+  ],
+  "runtimeGate": "NOTES_SYNC_E2E=1",
+  "staticFrontendSha256": "ac755157f95eebd047f0f2830c0877abcecb72780f5f1ec5036d77be4fa82dc6",
+  "staticFrontendReused": true,
+  "sourcePatch": "4d5df08b8770575ecd8e3f9b7a47b790fad6f35a",
+  "preservedPriorBinary": {
+    "path": "/private/tmp/sync108-native-binaries/11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4/notes-clone",
+    "sha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4"
+  },
+  "handshake": {
+    "boundary": "two actual native Apps; Ready/navigation probes, owned left/right placement, read-only workspace and natural shutdown only; no business sync acceptance",
+    "binary": "/private/tmp/cybernote-sync108-target/debug/notes-clone",
+    "binarySha256": "b85972f5ead438ad53403749d4603cfef0f5e11734c8752e62fe9526a5a2552e",
+    "observations": [],
+    "cleanupErrors": [
+      "NATIVE_TIMEOUT",
+      "NATIVE_TIMEOUT"
+    ],
+    "lifecycles": [
+      {
+        "name": "ready02-left",
+        "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready02-mI3jVX/left",
+        "stderrBytes": 58,
+        "commands": 2,
+        "forcedSignals": [],
+        "pid": 10936,
+        "exit": {
+          "code": 70,
+          "signal": null
+        },
+        "close": {
+          "code": 70,
+          "signal": null
+        },
+        "stdoutNoiseBytes": 0,
+        "naturalExit": false
+      },
+      {
+        "name": "ready02-right",
+        "directory": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/sync108-ready02-mI3jVX/right",
+        "stderrBytes": 58,
+        "commands": 2,
+        "forcedSignals": [],
+        "pid": 10937,
+        "exit": {
+          "code": 70,
+          "signal": null
+        },
+        "close": {
+          "code": 70,
+          "signal": null
+        },
+        "stdoutNoiseBytes": 0,
+        "naturalExit": false
+      }
+    ],
+    "ownedDataAndCacheRemoved": true
+  }
+}
