@@ -35,3 +35,11 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 实际 ZIP 为 51,958,488 bytes，SHA256 `f618e3984af299febba5e8636807291ca98b2057d5e1ca962f997bd7b860abe6`，包内主程序 SHA256 `728c942f12b2491d378c86b944659090e0a19efcbf546398fc37ad0533ac8e23`。从实际包内 arm64 Mach-O 验证 Brotli build-info，其 revision 与上述 root commit 一致，fingerprint=`de40a8b8256288c4d4f900fbb52bd47f7f38345c843f4ee074333637159ac26d`，1,619 个输入，sourceDirty=false。四份锁文件构建前后字节保持一致。
 
 独立审阅者逐项复核了实际 ZIP、编译 feature、包内身份及全部 1,200 项 notices 字节，接受范围限于本地构建和静态核验。包、notices、receipt 与完整构建记录已复制到被忽略的 `artifacts/account109/macos-sourcead18-release-candidate/`。这不是 GitHub Actions 产物，也不证明启动、登录、同步、签名、公证或发布验收通过。
+
+## 当前默认入口候选（替代上述 opt-in 候选）
+
+`5d30f16c` 将原生账户入口改为默认可用，普通浏览器默认关闭，并保留显式 native opt-out。清单维护 `7b97f721` 仅更新该源码文件哈希；独立净化 root 为 `6906f10d842b011d7476d26e4af6570722ce8793`，共 1,770 文件。默认 production 前端、完整 arm64 release app bundle 和 staging 均通过，构建环境未设置 ACCOUNT_NATIVE、DEBUG、ACCOUNT_UI，也没有 dotenv 输入。产品测试 feature 未启用。
+
+当前 ZIP 大小 51,959,083 bytes，SHA256 `a79a3fa077d9ed8b828c1c2309140ac16f8c31035c8af699ba9e9a2ea6d18895`；主程序 SHA256 `2e3fdb3b364eb0fb3f209a7344cd15673742d62085eec33f1f35f11adc196f94`。包内 clean build-info 的 fingerprint 为 `bedc35bf7875de54a9e1183a48a92858d00591acfbaa9af462d660a1c369c61a`，1,619 个输入。实际包内 Brotli 主 JS 的账户门控为 isTauri() 判断，未依赖测试环境标志。
+
+Pauli 独立核对新 root、精确源码、实际包内门控、身份、feature、四份锁文件及 1,200 项 notices 后有限接受；未运行 App。旧 ad18 包和主程序字节保持不变。新包及全部记录单独保留于被忽略的 `artifacts/account109/macos-source5d30-default-candidate/`。它是当前本地构建候选，仍需完成真实产品登录和多端数据验收，不能将静态门控检查写成可见 UI 或同步成功。
