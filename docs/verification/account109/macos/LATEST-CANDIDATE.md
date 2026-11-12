@@ -1,5 +1,29 @@
 # macOS 最新账户验收候选
 
+## 当前源码 debug/e2e 候选：ec4348c6
+
+2026-11-13。在独立 detached worktree `/private/tmp/cybernote-account109-mac-ec4348c6-01` 从精确主线 `ec4348c6df15c2b0dbd20af3c05f5a0cc7f75497` 构建，构建前后均干净；包含 `5d30f16c` 的默认原生账户入口。依赖通过 symlink 复用主目录 node_modules，未安装或更新依赖；Cargo 旧 mac 缓存经 APFS clone 复制到独立 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，构建并发固定为 2，不与 Android 共用 target。开始复制前未见其他 Cargo/rustc/tauri 构建进程。
+
+沿用既有 debug/e2e 路径的两条构建命令，均退出 **0**；环境采用白名单，不继承 VITE/TAURI/RUSTFLAGS 或账户覆盖，且快照没有 dotenv 文件。前端 **未设置** `VITE_NOTES_ACCOUNT_NATIVE`、`VITE_NOTES_ACCOUNT_UI`；只按既有 e2e 路径设置 development/debug。完整 flags、命令、日志 SHA、锁文件 SHA 和身份见 [最小回执](ec4348c6-debug-e2e.json)。
+
+```sh
+NODE_ENV=development VITE_NOTES_DEBUG=1 CYBERNOTE_BUILD_TARGET=macos pnpm build
+CARGO_TARGET_DIR=/private/tmp/cybernote-account109-mac-ec4348c6-target-01 CARGO_BUILD_JOBS=2 \
+  CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_NET_OFFLINE=true \
+  cargo build --manifest-path src-tauri/Cargo.toml \
+  --features sync-e2e,tauri/custom-protocol --locked --offline
+```
+
+候选是 arm64 Mach-O debug/e2e 可执行文件，保存在被忽略的 `artifacts/account109/mac-ec4348c6-debug-e2e-01/notes-clone`：**203,019,104 bytes**，SHA256 **`a55fe20c462ee372183e4dc5d66b4feaeaca66e483213c121a63d3021ebaa3e8`**。内嵌 Brotli build-info 与当前干净源码一致，fingerprint 为 `a08d37caaac205f689ed0f2b2707dc93f122d72557ba4dd0b8f554e3d0e6fb19`，1,652 个输入。
+
+同一二进制内的实际主 JS 与 dist 字节一致，账户门控缩减为 `isTauri() || false`；静态表达式核对为 native=true/browser=false，fixture 未启用。compiled capability **24/24** 通过；既有 e2e debug API 所在懒加载 chunk 亦验证实际嵌入，产品 library/binary 的编译 feature 为 `sync-e2e`。build-info 的 `mode=production` 是 Vite build 标签，不能据此声称 debug API 已排除。
+
+四份锁文件未变，旧 ad18 候选、receipt、ready 失败记录及缓存原二进制字节均未覆盖。所有持有的构建/检查子进程均退出 0、已 wait 回收，进程组为空；没有发终止信号。完整日志和 helper 留在 ignored 同目录。静态后验脚本首轮错误地要求 debug API 位于主 JS，实际是懒加载 chunk；已修正检查，失败 `static-postcheck-01.log` 与通过 `static-postcheck-02.log` 均保留，未改产品代码。
+
+**验收边界：本轮未启动 App、未操作 UI、未 auth、未修改 startup gate，也未发布/部署。** Mac 锁屏是尚未解除的交互验收前置条件；上述静态门控和构建结果不能写成可见账户页、真实登录或双桌面同步通过。这是解锁后按既有驱动验收的当前源码 debug/e2e 候选；下文 production 包和旧 debug 失败属于各自历史基线，继续保留。
+
+## 历史 ad18 debug/e2e 候选
+
 2026-11-13。候选来自干净主线 `ad18a872356e7140f73d1e0a936f8bd579cd74c3`，包含 bootstrap 取消代际检查、首次 signedOut 状态读取及最新 Rust 授权修复。
 
 ## 实际构建

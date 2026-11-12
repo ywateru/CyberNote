@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "builtAt": "2026-11-12T21:00:34.962767+00:00",
+  "status": "passed-build-and-static-identity-only",
+  "sourceRevision": "ec4348c6df15c2b0dbd20af3c05f5a0cc7f75497",
+  "sourceDirty": false,
+  "sourceSha256": "a08d37caaac205f689ed0f2b2707dc93f122d72557ba4dd0b8f554e3d0e6fb19",
+  "inputCount": 1652,
+  "sourceRoot": "/private/tmp/cybernote-account109-mac-ec4348c6-01",
+  "cargoTarget": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "CYBERNOTE_BUILD_TARGET": "macos",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "unsetFlags": [
+    "VITE_NOTES_ACCOUNT_NATIVE",
+    "VITE_NOTES_ACCOUNT_UI"
+  ],
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-ec4348c6-debug-e2e-01/notes-clone",
+    "sha256": "a55fe20c462ee372183e4dc5d66b4feaeaca66e483213c121a63d3021ebaa3e8",
+    "bytes": 203019104
+  },
+  "architecture": "Mach-O 64-bit executable arm64",
+  "staticFrontendSha256": "43bc1bb30499ba7eb4ed7eb761d0fb3dd0dbeb11d32503256528af7ab89fddc3",
+  "actualBundleGate": {
+    "expression": "zg()||!1",
+    "detectorBody": "!!(globalThis||window).isTauri",
+    "nativeAvailable": true,
+    "browserAvailable": false,
+    "fixtureEnabled": false,
+    "scope": "Static expression evaluation only; no native invocation or UI"
+  },
+  "embeddedIdentity": {
+    "encoding": "brotli",
+    "sha256": "99b213547c1807c28aba3f5d75f660670e6f5443057112edafd26e5cc05eb5ce"
+  },
+  "locksUnchanged": true,
+  "sourceSnapshotCleanAfter": true,
+  "priorArtifactsUnchanged": true,
+  "remainingOwnedProcesses": [],
+  "appLaunched": false,
+  "uiOperated": false,
+  "authExecuted": false,
+  "productSyncAccepted": false,
+  "published": false,
+  "boundary": "Debug/e2e native executable from exact clean main snapshot; Vite build mode label production does not exclude the deliberately enabled development/debug API. Not a production/release bundle or a real UI/auth/sync acceptance result.",
+  "compiledProductFeatures": {
+    "library": [
+      "sync-e2e"
+    ],
+    "binary": [
+      "sync-e2e"
+    ]
+  },
+  "embeddedMain": {
+    "sha256": "cd2d63df146eb119f7b0ec7f967089aa150c39c92c120f77691908f3299c5413",
+    "bytes": 1656778,
+    "encoding": "brotli",
+    "encodedSha256": "ad682e0c28377b57c7a2b3f3d219cdf56b5c109022dfe6a12fef1556cbd8b647"
+  },
+  "debugApiEmbedded": true,
+  "buildCommands": [
+    {
+      "name": "frontend-build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "frontend-build.log",
+      "logSha256": "50742ebcd32dae671ed0add68f9b8ff1c8dc4bc14062e581e6b0ce96b357efac"
+    },
+    {
+      "name": "compiled-capability",
+      "command": [
+        "node",
+        "scripts/debug/account-native-capability.mjs"
+      ],
+      "exitCode": 0,
+      "log": "compiled-capability.log",
+      "logSha256": "640aed259c00b33683b07d603fc04ddf54e711e9883ed576bf0c81f3d6887079"
+    },
+    {
+      "name": "native-build",
+      "command": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--features",
+        "sync-e2e,tauri/custom-protocol",
+        "--locked",
+        "--offline"
+      ],
+      "exitCode": 0,
+      "log": "native-build.log",
+      "logSha256": "7a53cbba13dddffe1032847dea6dbbfabd83cc6f197764ffb85cc840ea685891"
+    },
+    {
+      "name": "embedded-identity",
+      "command": [
+        "node",
+        "scripts/publish/package-identity.mjs",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-ec4348c6-debug-e2e-01/notes-clone",
+        "/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/build"
+      ],
+      "exitCode": 0,
+      "log": "embedded-identity.log",
+      "logSha256": "79c546e97de61fcfabdb5a311be8046b546acc23fc55ae310dce1789e780324e"
+    }
+  ],
+  "compiledCapabilityChecks": 24,
+  "evidenceDirectory": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-ec4348c6-debug-e2e-01",
+  "fullReceiptSha256": "99f203f0fab18eadbd109fd160ddad60b3d5e74a78dcc91c3642b2897f232a84",
+  "staticPostcheck": {
+    "exitCode": 0,
+    "log": "static-postcheck-02.log",
+    "logSha256": "55573b8c0db125ee9bddf308afd647858bfd188b8d8b975a3e069366a5451886",
+    "preservedHarnessFailure": "static-postcheck-01.log",
+    "failureLogSha256": "7c5909dc9760b080d74050dca5af635b0492a89e9329224f7f32a71767f647fc"
+  },
+  "ownedBuildProcessGroups": [
+    39692,
+    39697,
+    39782,
+    39786,
+    40220,
+    40224,
+    40247
+  ],
+  "termination": "All owned build subprocesses reaped with exit 0; process groups empty; no signals sent",
+  "inputLockHashes": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  }
+}
