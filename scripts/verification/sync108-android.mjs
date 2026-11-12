@@ -38,6 +38,46 @@ export function launchAndroid({ restart = false } = {}) {
   return run('shell', 'am', 'start', '-W', '-n', ACTIVITY);
 }
 
+export function backgroundAndroid() {
+  const pid = ownPid();
+  const resumed = run('shell', 'dumpsys', 'activity', 'activities').split('\n').find(line => line.includes('mResumedActivity:')) || '';
+  if (!resumed.includes(`${PACKAGE}/`)) throw Error('Isolated app must own foreground before Home');
+  run('shell', 'input', 'keyevent', 'KEYCODE_HOME');
+  return { pid, action: 'Home', package: PACKAGE };
+}
+
+export async function reclaimBackgroundAndroid() {
+  // Standard Android background-process reclaim; no force-stop or data clear.
+  const pid = ownPid();
+  const resumed = run('shell', 'dumpsys', 'activity', 'activities').split('\n').find(line => line.includes('mResumedActivity:')) || '';
+  if (resumed.includes(`${PACKAGE}/`)) throw Error('Background isolated app before reclaim');
+  run('shell', 'am', 'kill', PACKAGE);
+  for (let i = 0; i < 30; i++) {
+    try { if (!run('shell', 'pidof', PACKAGE).trim()) return { oldPid: pid, action: 'am kill background package' }; }
+    catch (error) { if (error.status === 1) return { oldPid: pid, action: 'am kill background package' }; throw error; }
+    await pause(100);
+  }
+  throw Error('Android did not reclaim isolated background process');
+}
+
+export function createOwnedReverse(hostPort) {
+  if (!Number.isInteger(hostPort) || hostPort < 1024 || hostPort > 65535) throw Error('Invalid owned host port');
+  const host = `tcp:${hostPort}`;
+  const port = Number(run('reverse', '--no-rebind', 'tcp:0', host).trim());
+  if (!Number.isInteger(port) || port < 1024 || port > 65535) throw Error('Invalid allocated reverse port');
+  return { serial: SERIAL, package: PACKAGE, device: `tcp:${port}`, host };
+}
+
+export function removeOwnedReverse(owned) {
+  if (owned.serial !== SERIAL || owned.package !== PACKAGE ||
+      !/^tcp:\d+$/.test(owned.device) || !/^tcp:\d+$/.test(owned.host)) throw Error('Invalid owned reverse');
+  const matches = run('reverse', '--list').trim().split('\n').some(line => {
+    const fields = line.trim().split(/\s+/); return fields.at(-2) === owned.device && fields.at(-1) === owned.host;
+  });
+  if (matches) run('reverse', '--remove', owned.device);
+  return matches;
+}
+
 export async function removeOwnedForward(owned) {
   if (owned.serial !== SERIAL || owned.package !== PACKAGE ||
       !Number.isInteger(owned.pid) || !/^tcp:\d+$/.test(owned.local) ||
