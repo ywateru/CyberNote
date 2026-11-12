@@ -546,6 +546,11 @@ impl Runtime {
     }
     pub(crate) fn account_metrics(&self) -> Result<(u64, u64)> {
         let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+        // A fresh local library has no sync schema until explicit activation.
+        // Reading signed-out account status must neither require nor create it.
+        if s.store.sync_identity()?.is_none() {
+            return Ok((0, 0));
+        }
         Ok((
             s.store.sync_pending_count()? as u64,
             s.store.sync_conflict_count()? as u64,

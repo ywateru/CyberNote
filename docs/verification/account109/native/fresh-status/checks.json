@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "2b7d9b12",
+  "deviceFailure": {
+    "phase": "account.status",
+    "code": "account_sync_failed",
+    "apkSource": "efb10f8b8b684234829c95c3f578ad6b3d86ffbb"
+  },
+  "cause": "Fresh local Store has no sync schema; account metrics queried sync_inbox before explicit activation.",
+  "attempts": [
+    {
+      "name": "red01",
+      "result": "failed-as-expected",
+      "testCount": 1,
+      "rawPath": "/private/tmp/account109-fresh-status-red01.log",
+      "rawSha256": "09bb49775ab313e6d3028d81016c65bc7927617cce82e0d72e4f203ef8d66c63",
+      "archive": "red01.txt",
+      "sha256": "09bb49775ab313e6d3028d81016c65bc7927617cce82e0d72e4f203ef8d66c63"
+    },
+    {
+      "name": "green01",
+      "result": "passed",
+      "testCount": 13,
+      "rawPath": "/private/tmp/account109-fresh-status-green01.log",
+      "rawSha256": "21bde51d917234eab6b17dd92b38978d0217e002bc934a4a90fdf2d37889d263",
+      "archive": "green01.txt",
+      "sha256": "cf3daa3980dfa04df49a3b331e2f540324070827575b40dcd164924b6958caaf"
+    }
+  ],
+  "sourceFiles": [
+    {
+      "path": "src-tauri/src/account/enrollment.rs",
+      "sha256": "69f6ec570dc497082b145232830daafb43d83ee8a9e0d29a17ac53337ebe339a"
+    },
+    {
+      "path": "src-tauri/src/sync/adapter.rs",
+      "sha256": "4a427cdd73137a4776472fbdfed7cc3f0d7d9c2c35349fdbdd0a636621019732"
+    }
+  ]
+}

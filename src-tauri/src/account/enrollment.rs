@@ -328,6 +328,37 @@ mod tests {
         }
     }
     #[test]
+    fn fresh_account_status_metrics_do_not_require_or_enable_sync() {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        let directory = tempfile::tempdir().unwrap();
+        let mut store = Store::open(directory.path()).unwrap();
+        store
+            .action(serde_json::json!({"type":"createNote"}))
+            .unwrap();
+        let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
+        let before = shared.0.lock().unwrap().workspace().unwrap();
+        let runtime =
+            Runtime::new(shared.clone(), directory.path().into(), Arc::new(Windows)).unwrap();
+        assert_eq!(runtime.account_metrics().unwrap(), (0, 0));
+        assert_eq!(runtime.account_metrics().unwrap(), (0, 0));
+        assert!(shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_identity()
+            .unwrap()
+            .is_none());
+        assert_eq!(
+            shared.0.lock().unwrap().workspace().unwrap()["notes"],
+            before["notes"]
+        );
+        assert!(!directory.path().join(".account/noise").exists());
+        assert!(!directory.path().join(".sync/identity-v1.json").exists());
+        runtime.shutdown().unwrap();
+    }
+    #[test]
     fn account_foreground_does_not_construct_manual_identity_or_policy_free_service() {
         use crate::{session::Session, store::Store, sync::adapter::Runtime};
         use std::sync::{Arc, Condvar, Mutex};
