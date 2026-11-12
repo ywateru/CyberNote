@@ -34,3 +34,19 @@ UI 作者原提交为 `4cc18c1c`，经 cherry-pick 收入 main，细节与复跑
 原生授权、账号 enrollment、自动发现和动态映射接入仍待实现；本轮没有重做双桌面/Android 设备验收。既有 sync108 手工同步结果仍按其原记录读取，不能作为账户同步证明。
 
 当前仓库没有 remote，本轮提交只留在本地 main。旧开发历史包含过程材料，后续 GitHub 发布仍必须使用经审计的源码白名单与全新历史，不直接推送本仓库。Vercel 真实部署、真实 Logto 登录及 GitHub Actions 编译打包尚未完成。
+
+## 后续整理检查点（2026-11-13）
+
+本节更新上方早期检查点的状态。主线已继续收拢以下工作，提交仍留在原开发仓库；远程发布继续使用独立的源码白名单和全新历史。
+
+- `73e1c598` 至 `19740840`：独立 Rust 授权 owner 及其 consent、refresh、撤销、持久化和 RFC 9207 issuer 修正。主线认证测试 15 项通过；另显式运行只读真实 Logto discovery 测试，1 项通过。真实 discovery 不等于产品内登录验收。
+- `8f968bef`：签名 enrollment、共享 Redis 限流和账户测试用例修正。服务全量回归 155/155 通过，0 跳过；独立限流复核 8/8 通过。`4183af8b` 收敛 advertised scopes 后，相关定向回归 20/20 通过，类型检查与服务构建通过。
+- `c1741e80`：固定来源的 CyberGrid SDK、双平台 provider、许可材料和 Noise 持续授权 gate。provider 的上游 notice/module 清单保留原始字节，未为消除空白提示而改变来源指纹。
+- `61c3f934`：原生账户 owner、独立 `.account/noise` 凭据、设备发现、签名 enrollment、动态 TCP mapping、生命周期和平台回跳接线。主线原生账户测试 8/8、同步测试 32/32 通过。该提交中的编译与契约检查不替代实际 App 和设备测试。
+- UI、发布工具和测试用例的其他已审阅提交已在主线保留；具体测试边界见各自验证文档。生产账户入口仍待原生整合后的候选构建验证。
+
+服务已部署到 `https://cybernote-sync.vercel.app`。本次部署 ID 为 `dpl_7NemtV61Qu94ACyn97jGvxjgSHYo`，状态 READY；部署源码来自 `4183af8b39efb1096d77a254a4a78aa164a89b24`，显式 staging 的 116 个文件摘要为 `8ee35edee965bbfc50e0ecb49b1cd50a7537c28fe277ef518fce47fbecbbcaad`。最终部署复验 health 200、四个 scopes 正确、仅公钥 JWKS 200、匿名 profile/enrollment 401。因本机 fake-IP 路由问题，这组独立 curl 检查仅在测试进程中解析到当前公共 IP，仍使用 canonical hostname 和正常 TLS 校验；产品未添加该绕行。
+
+真实浏览器与独立服务 harness 已验证托管注册、PKCE、profile/enrollment、刷新轮换及撤销；它们没有注入产品 grant，也不构成双桌面/Android 账户同步通过证据。产品内真实用例继续按 [ACCOUNT-TEST-CASES.md](ACCOUNT-TEST-CASES.md) 记录。
+
+主工作区唯一未跟踪项原为 `services/coordinator/node_modules` 临时软链接，已精确移除该链接，依赖源目录保留。私密配置和过程产物仍位于被忽略的目录，不纳入本次提交；没有推送旧历史。当前 Mac 的原生 UI 工具明确返回锁屏且自动解锁失败，真实可见桌面交互验收需要恢复解锁状态。
