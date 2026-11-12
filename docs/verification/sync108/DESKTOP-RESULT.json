@@ -1,0 +1,279 @@
+{
+  "schema": 1,
+  "status": "pending-complete-pass",
+  "environment": {
+    "os": "macOS",
+    "version": "26.4",
+    "build": "25E246"
+  },
+  "binary": {
+    "sha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4"
+  },
+  "runs": [
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run01",
+      "status": "failed",
+      "resultSha256": "7bcc5232b859633c739116fcc7b05ef1940f66a5b7795ace8f0ee41bc8e3528e",
+      "startedAt": "2026-11-12T11:19:27.603Z",
+      "finishedAt": "2026-11-12T11:19:31.656Z",
+      "binarySha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4",
+      "productFingerprint": "46e835519c8227c0c6344f5477b97da59412738dc68b40f14a3c29f69e7bbc9a",
+      "inputsUnchanged": true,
+      "completedChecks": 1,
+      "failure": {
+        "code": "ERR_ASSERTION",
+        "completedChecks": 1
+      },
+      "processes": [
+        {
+          "name": "A",
+          "pid": 8040,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": []
+        },
+        {
+          "name": "B",
+          "pid": 8054,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": []
+        }
+      ],
+      "databaseEvidence": []
+    },
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run02",
+      "status": "failed",
+      "resultSha256": "85f7fe57af498ebe962b0212580877f6bdfc45d544d4d95cc659fe17a98ba27c",
+      "startedAt": "2026-11-12T11:20:46.375Z",
+      "finishedAt": "2026-11-12T11:21:22.115Z",
+      "binarySha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4",
+      "productFingerprint": "310f285a758fe5d0e79a030776c02657599b55f35e9b51db873ebcaa38784024",
+      "inputsUnchanged": true,
+      "completedChecks": 29,
+      "failure": {
+        "code": "IMMUTABLE_EVIDENCE_FAILED"
+      },
+      "processes": [
+        {
+          "name": "A",
+          "pid": 8364,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": []
+        },
+        {
+          "name": "B",
+          "pid": 8379,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": []
+        },
+        {
+          "name": "B-reconnect",
+          "pid": 8466,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": []
+        },
+        {
+          "name": "A-restart",
+          "pid": 8485,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": []
+        }
+      ],
+      "databaseEvidence": []
+    },
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run03",
+      "status": "failed",
+      "resultSha256": "ec28e592d100e8d1155cfed124ee34cf8ecea512007aa63b7a9c9b8f006541fb",
+      "startedAt": "2026-11-12T11:22:41.007Z",
+      "finishedAt": "2026-11-12T11:24:24.854Z",
+      "binarySha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4",
+      "productFingerprint": "310f285a758fe5d0e79a030776c02657599b55f35e9b51db873ebcaa38784024",
+      "inputsUnchanged": true,
+      "completedChecks": 17,
+      "failure": {
+        "code": "TIMEOUT",
+        "completedChecks": 17,
+        "operations": [
+          {
+            "name": "A",
+            "lastAction": "idle"
+          },
+          {
+            "name": "B",
+            "lastAction": "shutdown"
+          },
+          {
+            "name": "B-reconnect",
+            "lastAction": "ready"
+          }
+        ]
+      },
+      "processes": [
+        {
+          "name": "A",
+          "pid": 8930,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": []
+        },
+        {
+          "name": "B",
+          "pid": 8986,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": true,
+          "forcedSignals": []
+        },
+        {
+          "name": "B-reconnect",
+          "pid": 9100,
+          "exit": {
+            "code": 0,
+            "signal": null
+          },
+          "naturalExit": false,
+          "forcedSignals": [],
+          "failureCode": "TIMEOUT"
+        }
+      ],
+      "databaseEvidence": [
+        {
+          "directory": "/private/tmp/sync108-native-desktop-run03/store-A",
+          "integrity": "ok",
+          "counts": {
+            "notes": 3,
+            "attachments": 2,
+            "sync_heads": 4,
+            "sync_inbox": 0,
+            "sync_dirty": 0,
+            "sync_projection": 4
+          },
+          "walBytes": 836392,
+          "originalFilesUnchanged": true
+        },
+        {
+          "directory": "/private/tmp/sync108-native-desktop-run03/store-B",
+          "integrity": "ok",
+          "counts": {
+            "notes": 3,
+            "attachments": 2,
+            "sync_heads": 4,
+            "sync_inbox": 0,
+            "sync_dirty": 0,
+            "sync_projection": 4
+          },
+          "walBytes": 721032,
+          "originalFilesUnchanged": true
+        }
+      ]
+    },
+    {
+      "directory": "/private/tmp/sync108-native-desktop-run04",
+      "status": "failed",
+      "resultSha256": "7fff0ce946d638dfe0981448fb73e4dd8169ede61a4d6177aabc4b52cf077a57",
+      "startedAt": "2026-11-12T11:25:56.688Z",
+      "finishedAt": "2026-11-12T11:26:58.539Z",
+      "binarySha256": "11b2f4041b77cce3c83a81ac7f03f28ebc7e3e6dcf8feccda077f8fe29f147d4",
+      "productFingerprint": "310f285a758fe5d0e79a030776c02657599b55f35e9b51db873ebcaa38784024",
+      "inputsUnchanged": true,
+      "completedChecks": 0,
+      "failure": {
+        "code": "NATIVE_TIMEOUT",
+        "completedChecks": 0,
+        "operations": [
+          {
+            "name": "A",
+            "lastAction": "ready"
+          }
+        ]
+      },
+      "processes": [
+        {
+          "name": "A",
+          "pid": 9554,
+          "exit": {
+            "code": 70,
+            "signal": null
+          },
+          "naturalExit": false,
+          "forcedSignals": [],
+          "failureCode": "NATIVE_TIMEOUT"
+        }
+      ],
+      "databaseEvidence": [
+        {
+          "directory": "/private/tmp/sync108-native-desktop-run04/store-A",
+          "integrity": "ok",
+          "counts": {
+            "notes": 0,
+            "attachments": 0
+          },
+          "walBytes": 0,
+          "originalFilesUnchanged": true
+        }
+      ]
+    }
+  ],
+  "toolRegression": {
+    "startup": {
+      "commit": "845f2181",
+      "resetCommit": "af360bc7",
+      "directory": "/private/tmp/sync108-startup-fixed-20261112-03",
+      "desktopChecks": 17,
+      "mobileChecks": 4,
+      "scope": "browser and IPC fixture"
+    },
+    "resetPositiveControl": "/private/tmp/sync108-reset-positive-20261112-01/result.json",
+    "syncSettings": {
+      "mobile": {
+        "directory": "/private/tmp/sync108-sync-settings-reset-fixed-mobile-20261112-01",
+        "status": "passed",
+        "checks": 56
+      },
+      "desktop": {
+        "directory": "/private/tmp/sync108-sync-settings-reset-fixed-desktop-20261112-01",
+        "status": "failed",
+        "completedChecks": 38,
+        "failure": "1280px control size assertion",
+        "geometry": "/private/tmp/sync108-sync-settings-desktop-layout-diag-20261112-01/geometry.json"
+      }
+    }
+  },
+  "limitations": [
+    "All failed runs remain failed.",
+    "run02 business steps alone are not a complete pass.",
+    "No definitive timeout root cause yet.",
+    "No Android result implied.",
+    "No invitations, raw stdout, stderr or private keys in this summary."
+  ]
+}

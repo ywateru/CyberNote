@@ -1,9 +1,9 @@
 # Native stdio tool handoff
 
-Status: initial implementation frozen for Mendel wiring. Node syntax checks and
-rustfmt pass. No Rust compilation or native suite run has been performed by this
-worktree; the shared `/private/tmp/cybernote-sync108-target` was not used. The
-runner suite is an initial draft pending execution and review, not test evidence.
+Status: native runs have been executed; retained failures and the current
+acceptance status are recorded in `DESKTOP-RESULT.md`. Compilation remains owned
+by Mendel; this worktree never compiles into the shared target. Node framing and
+lifecycle fixtures are protocol tests, not native synchronization evidence.
 
 Files:
 
@@ -39,6 +39,23 @@ In `src-tauri/Cargo.toml`:
 +sync-e2e = []
 ```
 
+The current module also requires the existing `on_page_load` callback to pass
+main native lifecycle events under the same cfg (preserve its media logic):
+
+```rust
+.on_page_load(|webview, payload| {
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+    sync_e2e::page_load(webview.label(), payload);
+    // Existing media opened handling follows unchanged.
+})
+```
+
+Ready waits on the actual native Finished event within its deadline, then probes
+the loaded document and awaits real App idle. Started clears accepted Ready;
+ordinary actions are refused until Ready succeeds again. Failure envelopes can
+include bounded native/document phase diagnostics. No document text, query,
+fragment, invitation or private-key value is included.
+
 The module additionally has the same crate-level cfg guard. Release builds
 exclude it even if the feature is accidentally selected; ordinary debug builds
 exclude it without the explicit feature. With both compile gates satisfied,
@@ -72,14 +89,28 @@ node scripts/verification/sync108-native.mjs \
 `--smoke` runs two-native startup/identity/cleanup only. It is not full-suite
 evidence. Output must be fresh and outside the source tree. The runner copies
 one binary and starts it twice with `--data-dir` and independent new roots.
-`result.json` contains hashes/check names/lifecycle and immutable read-only
-post-exit SQLite evidence. Raw stdout noise, stderr, request arguments,
+`result.json` contains hashes/check names/lifecycle and read-only post-exit SQLite
+evidence. A nonempty WAL is valid: DB/WAL/SHM are copied after every owned process
+has exited, then queried with `mode=ro` and `query_only` on the copy. Original
+file hashes must remain unchanged; immutable mode is not used to ignore WAL.
+Raw stdout noise, stderr, request arguments,
 invitations and exception messages are not recorded. Pairing strings remain
 in memory only. Snapshot is blocked while the invitation DOM is present.
 
-Optional `--build-record JSON` verifies `binary.sha256`, `sourceSha256` and
-`staticFrontendSha256` against the runner's corresponding fingerprints. Without
-it the report explicitly does not assert matching embedded build provenance.
+Optional `--build-record JSON` verifies `binary.sha256`, canonical `sourceSha256`
+from `build-info.productFiles/sourceIdentity`, and `staticFrontendSha256`.
+Native module identity is verified against the record, while executed Node tool
+hashes are compared separately: later test-tool revisions do not imply a changed
+embedded product. Without a record the report explicitly does not assert matching
+embedded build provenance. Gradle build/.tauri output is not a product input.
+
+The runner sets `NOTES_SYNC_E2E_SLOT=left|right` on its owned children. Under the
+test feature only, normal native window APIs place 1000×700 logical windows at
+opposite monitor-work-area edges, leaving both partly visible. Ready records
+actual visibility/minimized/focus/position/size. After both processes start, the
+suite measures actual rAF and timer advancement on each webview; this diagnostic
+sampling window is not a readiness bypass. Absence of an OS occlusion flag is
+not proof that a window was not occluded.
 
 ## Protocol
 
@@ -117,10 +148,11 @@ shutdown and records any SIGTERM/SIGKILL fallback as failure. Shutdown and clean
 EOF await the real `app.flush` and `waitForIdle` before requesting normal native
 exit. No synthetic Session, quiet reply or business SQL writes are involved.
 
-The draft suite covers pairing existing notes, bidirectional full Chinese body
+The suite covers pairing existing notes, bidirectional full Chinese body
 and formatting, folder/pin/paper/tag projections, original PNG/TXT hashes,
 delete/restore, actual offline process restart, concurrent keep-all through
 real confirmation buttons, paused persistence/restart, and repeated sync.
 Attachments currently use the existing synthetic File[] debug handler and the
 real attachment/save pipeline; it does not claim OS picker interaction. This
-suite still needs native execution and corrections before acceptance.
+acceptance status is determined by a complete business + persisted evidence +
+natural cleanup run, never by partial business checks or Node fixtures alone.
