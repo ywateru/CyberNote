@@ -22,3 +22,16 @@ src-tauri/gen/android/.tauri/
 
 # Image generation scratch requests; reviewed design outputs live in output/.
 /tmp/
+
+# Local service credentials, deployment state and signing material.
+.env
+.env.*
+!.env.example
+!.env.*.example
+.vercel/
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.key
+*.pem
