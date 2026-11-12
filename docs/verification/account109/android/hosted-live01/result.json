@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-12T20:28:55.423Z",
+  "attempt": "hosted-live01",
+  "result": "failed-native-network",
+  "sourceFreeze": "eba81d0a950fe03f7b3c8b3961c02f9776d62468",
+  "apkSource": "6537b74bf2c957be2ada5511778f597400877029",
+  "apkSha256": "92fe135c7ea552bb7ccbfad27de86c7061813f8a82f99e5a725d4410958633ae",
+  "package": "com.local.notesclone.account109",
+  "preparation": {
+    "previousTransactionRealUiCancelled": true,
+    "newNativeSignIn": true,
+    "temporalAssociationOnly": true,
+    "user0ChromeForeground": true,
+    "unlocked": true,
+    "trustedEditableForm": true,
+    "browserEndpointPidMatchesUser0": true
+  },
+  "transfer": {
+    "acceptCalls": 1,
+    "automaticRetry": false,
+    "credentialValuesRecorded": false,
+    "receipts": [
+      {
+        "phase": "captured",
+        "captured": true,
+        "markerMatched": true,
+        "valuesRecorded": false
+      },
+      {
+        "phase": "hosted-submit-input-dispatched",
+        "inputCompleted": true,
+        "valuesRecorded": false
+      }
+    ]
+  },
+  "observation": {
+    "helper": {
+      "phase": "consumer-completed",
+      "consumerCompleted": true,
+      "valuesRecorded": false
+    },
+    "terminal": {
+      "phase": "callback-native-error",
+      "ownedAppForeground": true,
+      "nativeErrorPresent": true,
+      "profilePresent": false,
+      "syncEnabled": false
+    }
+  },
+  "safeNativeDetail": {
+    "phase": "read-only-native-terminal-detail",
+    "nativeErrorState": true,
+    "safeNativeErrorCode": "account_network",
+    "profilePresent": false,
+    "usernamePresent": false,
+    "sameSyntheticUser": false,
+    "syncEnabled": false
+  },
+  "cleanup": {
+    "browserDriverClosed": true,
+    "nativeReadDriverClosed": true,
+    "keyUsable": false,
+    "automaticRetry": false,
+    "browserLeaseAbsent": true,
+    "nativeLeaseAbsent": true
+  },
+  "sources": [
+    {
+      "path": "/private/tmp/account109-hosted-memory-driver.mjs",
+      "sha256": "ba09e571e091fecf62148aad30faa9f722268c164b76055db3c89f853edc3c4c"
+    },
+    {
+      "path": "/private/tmp/account109-hosted-memory-consumer.mjs",
+      "sha256": "f4988c1ab20ac541b207275e5f292a21316e5f33fcb2918bcf47e92d9e6f4423"
+    },
+    {
+      "path": "/private/tmp/account109-hosted-terminal-observer.mjs",
+      "sha256": "5d3705f7b9c526a330bffaedcbf1bc4977e0431bb4cdc6d2b9d5d953d90334c1"
+    },
+    {
+      "path": "/private/tmp/account109-hosted-rsa-envelope.mjs",
+      "sha256": "6993a5bd919408ce0609b9e9481a7b36707707b424b5ebf9e9609d260818bf47"
+    }
+  ],
+  "limits": [
+    "Native account_network identifies a network-class failure, not its endpoint or raw provider cause.",
+    "Input completion and returned app foreground do not establish callback acceptance.",
+    "No paused/profile terminal and no same-synthetic-user verification.",
+    "No synchronization enablement, grant copy, callback injection or other-profile page inspection."
+  ]
+}
