@@ -94,3 +94,29 @@ operate another user's browser. This is test tooling, not a product auth change.
 The final `user0-green01.txt` suite is **24/24**, zero skips/device commands. The
 browser selector test covers cross-user ordering, no owner, same-user ambiguity,
 wrong cmdline and missing package UID. Earlier red and green evidence is retained.
+
+## Dual-UID socket and resumed-user closure
+
+The device actually has two Chrome processes belonging to different Android
+users. Before any `/json/list` page enumeration, the driver now requests only
+`/json/version`, validates the loopback browser-socket authority, and requests
+`SystemInfo.getProcessInfo` on that browser endpoint. It requires exactly one
+browser OS PID equal to the selected exact-cmdline/user0-UID Chrome PID. Unsupported,
+malformed, ambiguous or mismatched ownership fails closed. The audit socket is
+closed. No other-profile pages or credentials, root, or fd permission workarounds
+are used. A read-only live audit found a unique browser PID matching user0 PID
+12765; no credential was received or submitted, and the previous key was revoked.
+
+Every Input still verifies the selected process UID/PID, and additionally parses
+`mResumedActivity` for the exact **u0** Chrome component. The native terminal
+observer likewise requires the exact **u0** sandbox app component. Same-package
+u10/u999 activities, suffix packages and ambiguous resumed records fail. Socket
+ownership is a point-in-time check before enumeration; the selected page WebSocket
+remains attached while per-Input ownership/document checks continue. This does
+not change temporal association or Native callback verification boundaries.
+
+`user0-socket-green01.txt` supersedes the previous test count: **33 passed, zero
+failures/skips, zero device commands**. Offline cases cover cross-user foreground,
+matching/mismatched/ambiguous browser OS PID, unsupported/malformed responses,
+authority mismatch, sanitized fetch failure and audit socket closure. Historical
+logs remain unchanged. No product source or auth acceptance rule changed.

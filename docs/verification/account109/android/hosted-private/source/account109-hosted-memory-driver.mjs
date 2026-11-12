@@ -60,6 +60,46 @@ export function selectBrowserPid(pids,expectedUid,inspect){
  return matches[0];
 }
 
+// Require the resumed ActivityRecord's user token and exact component package.
+export function isUser0Foreground(activities,packageName){
+ const lines=activities.split('\n').filter(line=>line.includes('mResumedActivity:'));
+ if(lines.length!==1)return false;
+ const match=lines[0].match(/mResumedActivity:\s+ActivityRecord\{[^}]*?\su(\d+)\s+([^\s/]+)\/[^\s}]+(?:\s|})/);
+ return match?.[1]==='0'&&match[2]===packageName;
+}
+
+// Prove the global socket's browser OS PID before enumerating any page targets.
+// Unsupported, ambiguous or mismatched endpoints fail closed on this device.
+export async function verifyBrowserEndpoint({port,pid,WebSocketImpl,fetchImpl=fetch}){
+ let socket,timer;
+ try{
+  const version=await(await fetchImpl(`http://127.0.0.1:${port}/json/version`,{signal:AbortSignal.timeout(3000)})).json();
+  const url=new URL(version.webSocketDebuggerUrl);
+  if(url.protocol!=='ws:'||!['localhost','127.0.0.1'].includes(url.hostname)||Number(url.port)!==port||url.username||url['pass'+'word']||!url.pathname.startsWith('/devtools/browser/'))throw fail('BROWSER_ENDPOINT_AUTHORITY_MISMATCH');
+  const result=await new Promise((resolve,reject)=>{
+   timer=setTimeout(()=>reject(fail('BROWSER_ENDPOINT_OWNER_TIMEOUT')),5000);
+   socket=new WebSocketImpl(url);
+   socket.onopen=()=>socket.send(JSON.stringify({id:1,method:'SystemInfo.getProcessInfo'}));
+   socket.onerror=()=>reject(fail('BROWSER_ENDPOINT_OWNER_UNAVAILABLE'));
+   socket.onclose=()=>reject(fail('BROWSER_ENDPOINT_OWNER_UNAVAILABLE'));
+   socket.onmessage=event=>{
+    try{
+     const message=JSON.parse(event.data);
+     if(message.id!==1)return;
+     if(message.error)return reject(fail('BROWSER_ENDPOINT_OWNER_UNAVAILABLE'));
+     const browsers=message.result?.processInfo?.filter(entry=>entry.type==='browser');
+     if(!browsers||browsers.length!==1||!Number.isSafeInteger(Number(browsers[0].id))||Number(browsers[0].id)!==pid)return reject(fail('BROWSER_ENDPOINT_OWNER_MISMATCH'));
+     resolve({browserEndpointPidVerified:true});
+    }catch{reject(fail('BROWSER_ENDPOINT_OWNER_UNAVAILABLE'));}
+   };
+  });
+  return result;
+ }catch(error){
+  const allowed=['BROWSER_ENDPOINT_AUTHORITY_MISMATCH','BROWSER_ENDPOINT_OWNER_TIMEOUT','BROWSER_ENDPOINT_OWNER_UNAVAILABLE','BROWSER_ENDPOINT_OWNER_MISMATCH'];
+  throw fail(allowed.includes(error?.code)?error.code:'BROWSER_ENDPOINT_OWNER_UNAVAILABLE');
+ }finally{clearTimeout(timer);if(socket){socket.onopen=null;socket.onmessage=null;socket.onclose=null;socket.onerror=()=>{};socket.close();}}
+}
+
 export async function prepareHostedDriver({WebSocketImpl=globalThis.WebSocket}={}){
  if(typeof WebSocketImpl!=='function')throw fail('BROWSER_WEBSOCKET_UNAVAILABLE');
  const lease=await acquireDriverLease(path.join(os.tmpdir(),`cybernote-account109-browser-${SERIAL}.lock`));
@@ -79,8 +119,8 @@ export async function prepareHostedDriver({WebSocketImpl=globalThis.WebSocket}={
   if(browserPid()!==owned.pid)throw fail('BROWSER_PID_CHANGED');
   const policy=run('shell','dumpsys','window','policy');
   if(!/\bshowing=false\b/.test(policy)||!/\binputRestricted=false\b/.test(policy))throw fail('DEVICE_AUTH_REQUIRED');
-  const resumed=run('shell','dumpsys','activity','activities').split('\n').find(l=>l.includes('mResumedActivity:'))||'';
-  if(!resumed.includes('com.android.chrome/'))throw fail('BROWSER_NOT_FOREGROUND');
+  if(!isUser0Foreground(run('shell','dumpsys','activity','activities'),'com.android.chrome'))throw fail('BROWSER_USER0_NOT_FOREGROUND');
+  if(!owned.browserEndpointPidVerified)throw fail('BROWSER_ENDPOINT_NOT_VERIFIED');
  };
  const close=()=>lease.close(async()=>{
   inputGuard?.invalidate();ws?.close();
@@ -124,6 +164,9 @@ export async function prepareHostedDriver({WebSocketImpl=globalThis.WebSocket}={
   const port=Number(run('forward','--no-rebind','tcp:0',remote).trim());
   if(!Number.isInteger(port)||port<1024)throw fail('INVALID_BROWSER_FORWARD');
   owned={serial:SERIAL,package:'com.android.chrome',pid,local:`tcp:${port}`,remote};
+  stage='browser-endpoint-owner';
+  Object.assign(owned,await verifyBrowserEndpoint({port,pid,WebSocketImpl}));
+  if(browserPid()!==pid)throw fail('BROWSER_PID_CHANGED');
   const pages=async()=>await(await fetch(`http://127.0.0.1:${port}/json/list`,{signal:AbortSignal.timeout(2000)})).json();
   const baseline=new Map((await pages()).filter(t=>t.type==='page').map(t=>[t.id,t.url]));
   stage='native-state';native=await connectAndroid({WebSocketImpl});

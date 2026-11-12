@@ -4,13 +4,14 @@
  */
 import { execFileSync } from 'node:child_process';
 import { connectAndroid, SERIAL, PACKAGE } from '/private/tmp/cybernote-account109-native/scripts/verification/account109-android.mjs';
+import { isUser0Foreground } from './account109-hosted-memory-driver.mjs';
 const adb='/Users/water/Library/Android/sdk/platform-tools/adb';
 const run=(...args)=>execFileSync(adb,['-s',SERIAL,...args],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','ignore']});
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function readDevice(){
  const policy=run('shell','dumpsys','window','policy');
- const resumed=run('shell','dumpsys','activity','activities').split('\n').find(l=>l.includes('mResumedActivity:'))||'';
- return{unlocked:/\bshowing=false\b/.test(policy)&&/\binputRestricted=false\b/.test(policy),ownedAppForeground:resumed.includes(`${PACKAGE}/`)};
+ const activities=run('shell','dumpsys','activity','activities');
+ return{unlocked:/\bshowing=false\b/.test(policy)&&/\binputRestricted=false\b/.test(policy),ownedAppForeground:isUser0Foreground(activities,PACKAGE)};
 }
 // Pure classification for offline checks; real observer supplies native DTO.
 export function classifyTerminal(s,ownedAppForeground){

@@ -9,7 +9,7 @@ let externalCommands=0;
 childProcess.execFileSync=()=>{externalCommands++;throw Error('OFFLINE_FORBIDS_DEVICE_COMMANDS');};
 syncBuiltinESMExports();
 test.after(()=>{childProcess.execFileSync=originalExec;syncBuiltinESMExports();assert.equal(externalCommands,0);});
-const {createInputGuard,createGuardedSender,selectBrowserPid}=await import('./account109-hosted-memory-driver.mjs');
+const {createInputGuard,createGuardedSender,selectBrowserPid,isUser0Foreground,verifyBrowserEndpoint}=await import('./account109-hosted-memory-driver.mjs');
 const {prepareConsumer}=await import('./account109-hosted-memory-consumer.mjs');
 const {prepareEnvelope}=await import('./account109-hosted-rsa-envelope.mjs');
 const {classifyTerminal,observeTerminal}=await import('./account109-hosted-terminal-observer.mjs');
@@ -149,4 +149,37 @@ test('browser PID selection requires exact user-0 Chrome UID and cmdline',()=>{
  records['101'].name='other-offline-process';
  assert.throws(()=>selectBrowserPid(['101'],'10001',pid=>records[pid]),{code:'BROWSER_PID_NOT_UNIQUE_FOR_USER0'});
  assert.throws(()=>selectBrowserPid(['101'],undefined,pid=>records[pid]),{code:'BROWSER_USER0_UID_UNAVAILABLE'});
+});
+
+
+test('foreground ActivityRecord must name user0 and the exact package',()=>{
+ const line=(user,pkg)=>`  mResumedActivity: ActivityRecord{abc u${user} ${pkg}/.Main t12}`;
+ assert.equal(isUser0Foreground(line(0,'com.android.chrome'),'com.android.chrome'),true);
+ assert.equal(isUser0Foreground(line(10,'com.android.chrome'),'com.android.chrome'),false);
+ assert.equal(isUser0Foreground(line(999,'com.android.chrome'),'com.android.chrome'),false);
+ assert.equal(isUser0Foreground(line(0,'com.android.chrome.other'),'com.android.chrome'),false);
+ assert.equal(isUser0Foreground(line(0,'other.app')+' com.android.chrome/','com.android.chrome'),false);
+ assert.equal(isUser0Foreground(line(0,'com.android.chrome')+'\n'+line(10,'com.android.chrome'),'com.android.chrome'),false);
+ assert.equal(isUser0Foreground(line(0,'com.local.notesclone.account109'),'com.local.notesclone.account109'),true);
+ assert.equal(isUser0Foreground(line(10,'com.local.notesclone.account109'),'com.local.notesclone.account109'),false);
+});
+
+test('global browser endpoint must prove selected OS PID before page access',async t=>{
+ for(const scenario of ['match','other-user','ambiguous','unsupported','malformed','wrong-authority','fetch-error'])await t.test(scenario,async()=>{
+  let closed=0,sent=[];
+  class FakeSocket{
+   constructor(){queueMicrotask(()=>this.onopen());}
+   send(raw){sent.push(JSON.parse(raw));queueMicrotask(()=>{
+    const processInfo=scenario==='ambiguous'?[{type:'browser',id:101},{type:'browser',id:202}]:[{type:'browser',id:scenario==='other-user'?202:101},{type:'renderer',id:303}];
+    this.onmessage({data:scenario==='malformed'?'invalid':JSON.stringify(scenario==='unsupported'?{id:1,error:{message:'offline-private-detail'}}:{id:1,result:{processInfo}})});
+   });}
+   close(){closed++;}
+  }
+  const fetchImpl=async()=>{if(scenario==='fetch-error')throw Error('offline-private-detail');return{json:async()=>({webSocketDebuggerUrl:`ws://127.0.0.1:${scenario==='wrong-authority'?9999:4567}/devtools/browser/offline-marker`})};};
+  const operation=verifyBrowserEndpoint({port:4567,pid:101,WebSocketImpl:FakeSocket,fetchImpl});
+  if(scenario==='match')assert.deepEqual(await operation,{browserEndpointPidVerified:true});
+  else await assert.rejects(operation,error=>{assert.equal(error.message.includes('offline-private-detail'),false);assert.equal(error.cause,undefined);return error.code===({'other-user':'BROWSER_ENDPOINT_OWNER_MISMATCH',ambiguous:'BROWSER_ENDPOINT_OWNER_MISMATCH','wrong-authority':'BROWSER_ENDPOINT_AUTHORITY_MISMATCH'}[scenario]||'BROWSER_ENDPOINT_OWNER_UNAVAILABLE');});
+  assert.equal(closed,['wrong-authority','fetch-error'].includes(scenario)?0:1);
+  assert.deepEqual(sent,['wrong-authority','fetch-error'].includes(scenario)?[]:[{id:1,method:'SystemInfo.getProcessInfo'}]);
+ });
 });

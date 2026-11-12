@@ -5,7 +5,7 @@
     {
       "runtimePath": "/private/tmp/account109-hosted-memory-driver.mjs",
       "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-memory-driver.mjs",
-      "sha256": "000e763e7bb9fafd066d13cee305845660116665eb8a851aae2dc1eafc81f6ba"
+      "sha256": "0816ec5f38f0de8a4cd2282c7db4a3a8be563ba340159ae9574c9d7ab69551da"
     },
     {
       "runtimePath": "/private/tmp/account109-hosted-memory-consumer.mjs",
@@ -15,7 +15,7 @@
     {
       "runtimePath": "/private/tmp/account109-hosted-terminal-observer.mjs",
       "archivePath": "docs/verification/account109/android/hosted-private/source/account109-hosted-terminal-observer.mjs",
-      "sha256": "836758296c2eec82a74a1944228279ef1fd0a95f5bacdcf08c675f101442657d"
+      "sha256": "5d3705f7b9c526a330bffaedcbf1bc4977e0431bb4cdc6d2b9d5d953d90334c1"
     },
     {
       "runtimePath": "/private/tmp/account109-hosted-rsa-envelope.mjs",
@@ -25,13 +25,13 @@
   ],
   "offlineTests": {
     "command": "node --test docs/verification/account109/android/hosted-private/source/account109-hosted-private.test.mjs",
-    "passed": 24,
+    "passed": 33,
     "failed": 0,
     "skipped": 0,
     "externalCommands": 0,
     "liveAuthEvidence": false,
-    "log": "user0-green01.txt",
-    "logSha256": "cdda594ec3fa49f7b197006036f02cc0fc3e5099b034cb79be1cce17e5e51af8"
+    "log": "user0-socket-green01.txt",
+    "logSha256": "42e20933b2776e48f1a7ad6168e744d64ddc543cb9299530880c99c58cf35084"
   },
   "preservedInitialFailure": "red01.json",
   "productionSourceChanged": false,
@@ -50,5 +50,19 @@
     "redArchiveNormalization": "strip trailing whitespace; preserve assertion content"
   },
   "browserSelectionRepair": "Require exact Chrome cmdline and user-0 package UID; multiple same-name users no longer treated as ambiguous, multiple same-user owners still reject.",
-  "publicEnvelopeMetadata": "SPKI publicKeyBase64 and fixed expiresAt only; never private key."
+  "publicEnvelopeMetadata": "SPKI publicKeyBase64 and fixed expiresAt only; never private key.",
+  "browserSocketOwnershipRepair": {
+    "foreground": "exact mResumedActivity user0 + component package for browser and terminal app",
+    "endpoint": "SystemInfo.getProcessInfo unique browser OS PID equals selected user0 Chrome PID before any page enumeration",
+    "unsupportedPolicy": "fail closed; no cross-profile page enumeration or root/fd workaround",
+    "liveReadOnlyAudit": {
+      "browserEndpointAvailable": true,
+      "uniqueBrowser": true,
+      "browserPidMatchesSelectedUser0": true,
+      "selectedPid": 12765,
+      "credentialSubmissionAttempted": false,
+      "oldEnvelopeRevoked": true
+    },
+    "proofBoundary": "point-in-time browser endpoint proof; page socket remains bound, every Input rechecks selected user0 PID/UID and u0 foreground; Native callback authority unchanged"
+  }
 }
