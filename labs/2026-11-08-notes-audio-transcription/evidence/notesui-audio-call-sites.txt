@@ -1,0 +1,398 @@
+341995: 0x1D95635A4   bl       _objc_retain         
+341996: 0x1D95635A8   stur     x0, [x29, #-0xd0]    
+341997: 0x1D95635AC   mov      x0, x24              
+341998: 0x1D95635B0   bl       _objc_retain         
+341999: 0x1D95635B4   mov      x25, x0              
+342000: 0x1D95635B8   mov      x27, x28             
+342001: 0x1D95635BC   mov      x0, x28              
+342002: 0x1D95635C0   bl       _objc_retain         
+342003: 0x1D95635C4   mov      x22, x0              
+342004: 0x1D95635C8   mov      x28, x26             
+342005: 0x1D95635CC   mov      x0, x26              
+342006: 0x1D95635D0   bl       _objc_retain         
+342007: 0x1D95635D4   mov      x26, x0              
+342008: 0x1D95635D8   mov      x0, x20              
+342009: 0x1D95635DC   bl       _swift_release       
+342010: 0x1D95635E0   stur     xzr, [x29, #-0xa0]   
+342011: 0x1D95635E4   sub      x3, x29, #0xa0       
+342012: 0x1D95635E8   mov      x0, x25              
+342013: 0x1D95635EC   mov      x2, x22              
+342014: 0x1D95635F0   mov      x4, x19              
+342015: 0x1D95635F4   bl       "_objc_msgSend$convertToBuffer:error:withInputFromBlock:" 
+342016: 0x1D95635F8   mov      x20, x0              
+342017: 0x1D95635FC   mov      x0, x19              
+342018: 0x1D9563600   bl       __Block_release      
+342019: 0x1D9563604   ldur     x0, [x29, #-0xa0]    
+342020: 0x1D9563608   bl       _objc_retain         
+342021: 0x1D956360C   mov      x19, x0              
+342022: 0x1D9563610   mov      x0, x22              
+342023: 0x1D9563614   bl       _objc_release        
+342024: 0x1D9563618   mov      x0, x25              
+342025: 0x1D956361C   bl       _objc_release        
+342026: 0x1D9563620   cmp      x20, #0x3            
+342027: 0x1D9563624   b.eq     0x1d95638a8          
+342028: 0x1D9563628   mov      x0, x19              
+342029: 0x1D956362C   bl       _objc_release        
+342030: 0x1D9563630   ldur     w20, [x29, #-0xa8]   
+342031: 0x1D9563634   mov      x26, x28             
+342032: 0x1D9563638   mov      x28, x27             
+342033: 0x1D956363C   mov      x27, x23             
+342034: 0x1D9563640   b        0x1d9563658          
+342035: 0x1D9563644   mov      x0, x26              
+346104: 0x1D9567594   bl       "_objc_msgSend$setCategory:mode:options:error:" 
+346105: 0x1D9567598   mov      x8, x0               
+346106: 0x1D956759C   ldur     x0, [x29, #-0x88]    
+346107: 0x1D95675A0   cbz      w8, 0x1d9567844      
+346108: 0x1D95675A4   stur     xzr, [x29, #-0x88]   
+346109: 0x1D95675A8   bl       _objc_retain         
+346110: 0x1D95675AC   sub      x4, x29, #0x88       
+346111: 0x1D95675B0   mov      x0, x22              
+346112: 0x1D95675B4   mov      w2, #0x1             
+346113: 0x1D95675B8   mov      w3, #0x1             
+346114: 0x1D95675BC   bl       "_objc_msgSend$setActive:withOptions:error:" 
+346115: 0x1D95675C0   mov      x8, x0               
+346116: 0x1D95675C4   ldur     x0, [x29, #-0x88]    
+346117: 0x1D95675C8   cbz      w8, 0x1d9567844      
+346118: 0x1D95675CC   stp      x27, x24, [x29, #-0xb0] 
+346119: 0x1D95675D0   adrp     x8, 74813            ; 0x1eb9a4000
+346120: 0x1D95675D4   ldr      x8, [x8, #0x418]     
+346121: 0x1D95675D8   ldr      x27, [x20, x8]       
+346122: 0x1D95675DC   bl       _objc_retain         
+346123: 0x1D95675E0   mov      x0, x27              
+346124: 0x1D95675E4   bl       _objc_msgSend$inputNode 
+346125: 0x1D95675E8   mov      x29, x29             
+346126: 0x1D95675EC   bl       _objc_retainAutoreleasedReturnValue 
+346127: 0x1D95675F0   mov      x24, x0              
+346128: 0x1D95675F4   mov      x2, #0x0             
+346129: 0x1D95675F8   bl       "_objc_msgSend$removeTapOnBus:" 
+346130: 0x1D95675FC   mov      x0, x24              
+346131: 0x1D9567600   bl       _objc_release        
+346132: 0x1D9567604   stur     x27, [x29, #-0xa0]   
+346133: 0x1D9567608   mov      x0, x27              
+346134: 0x1D956760C   bl       _objc_msgSend$inputNode 
+346135: 0x1D9567610   mov      x29, x29             
+346136: 0x1D9567614   bl       _objc_retainAutoreleasedReturnValue 
+346137: 0x1D9567618   mov      x27, x0              
+346138: 0x1D956761C   mov      x2, #0x0             
+346139: 0x1D9567620   bl       "_objc_msgSend$inputFormatForBus:" 
+346140: 0x1D9567624   mov      x29, x29             
+346141: 0x1D9567628   bl       _objc_retainAutoreleasedReturnValue 
+346142: 0x1D956762C   mov      x24, x0              
+346143: 0x1D9567630   mov      x0, x27              
+346144: 0x1D9567634   bl       _objc_release        
+346145: 0x1D9567638   mov      x0, x24              
+346146: 0x1D956763C   bl       _objc_msgSend$sampleRate 
+346147: 0x1D9567640   fcmp     d0, #0.0             
+346148: 0x1D9567644   b.le     0x1d95678b0          
+346149: 0x1D9567648   mov      x0, x24              
+346150: 0x1D956764C   bl       _objc_msgSend$channelCount 
+346151: 0x1D9567650   cbz      w0, 0x1d95678b0      
+346152: 0x1D9567654   ldur     x0, [x29, #-0xa0]    
+346153: 0x1D9567658   bl       _objc_msgSend$inputNode 
+346154: 0x1D956765C   mov      x29, x29             
+346155: 0x1D9567660   bl       _objc_retainAutoreleasedReturnValue 
+346156: 0x1D9567664   stur     x0, [x29, #-0xc0]    
+346157: 0x1D9567668   mov      x0, #0x0             
+346158: 0x1D956766C   bl       0x1d9688334          
+346159: 0x1D9567670   mov      x27, x20             
+346160: 0x1D9567674   stur     x20, [x29, #-0xb8]   
+346161: 0x1D9567678   mov      x20, x0              
+346162: 0x1D956767C   bl       0x1d9688324          
+346163: 0x1D9567680   stur     w0, [x29, #-0xc4]    
+346164: 0x1D9567684   adrp     x16, 5               ; 0x1d956c000
+346165: 0x1D9567688   add      x16, x16, #0x1cc     
+346166: 0x1D956768C   mov      x17, #0xebca         
+346167: 0x1D9567690   pacia    x16, x17             
+346168: 0x1D9567694   stp      x16, x27, [x29, #-0x68] 
+346169: 0x1D9567698   sub      x8, x29, #0x88       
+346170: 0x1D956769C   adrp     x16, 49239           ; 0x1e55be000
+346171: 0x1D95676A0   ldr      x16, [x16, #0x420]   
+346172: 0x1D95676A4   mov      x17, x8              
+346173: 0x1D95676A8   movk     x17, #0x6ae1, lsl #48 
+346183: 0x1D95676D0   adrp     x8, 110737           ; 0x1f45f8000
+346184: 0x1D95676D4   add      x8, x8, #0x5d8       ; _block_descriptor.55
+346185: 0x1D95676D8   stp      x16, x8, [x29, #-0x78] 
+346186: 0x1D95676DC   sub      x0, x29, #0x88       
+346187: 0x1D95676E0   bl       __Block_copy         
+346188: 0x1D95676E4   mov      x27, x0              
+346189: 0x1D95676E8   ldur     x20, [x29, #-0x60]   
+346190: 0x1D95676EC   mov      x0, x24              
+346191: 0x1D95676F0   bl       _objc_retain         
+346192: 0x1D95676F4   mov      x24, x0              
+346193: 0x1D95676F8   ldur     x0, [x29, #-0xb8]    
+346194: 0x1D95676FC   bl       _swift_retain        
+346195: 0x1D9567700   mov      x0, x20              
+346196: 0x1D9567704   bl       _swift_release       
+346197: 0x1D9567708   ldur     x20, [x29, #-0xc0]   
+346198: 0x1D956770C   mov      x0, x20              
+346199: 0x1D9567710   mov      x2, #0x0             
+346200: 0x1D9567714   ldur     w3, [x29, #-0xc4]    
+346201: 0x1D9567718   mov      x4, x24              
+346202: 0x1D956771C   mov      x5, x27              
+346203: 0x1D9567720   bl       "_objc_msgSend$installTapOnBus:bufferSize:format:block:" 
+346204: 0x1D9567724   mov      x0, x27              
+346205: 0x1D9567728   ldur     x27, [x29, #-0xa0]   
+346206: 0x1D956772C   bl       __Block_release      
+346207: 0x1D9567730   mov      x0, x20              
+346208: 0x1D9567734   bl       _objc_release        
+346209: 0x1D9567738   mov      x0, x24              
+346210: 0x1D956773C   bl       _objc_release        
+346211: 0x1D9567740   mov      x0, x27              
+346212: 0x1D9567744   bl       _objc_msgSend$prepare 
+346213: 0x1D9567748   mov      x0, #0x0             
+346214: 0x1D956774C   bl       0x1d96884d4          
+346215: 0x1D9567750   mov      x20, x0              
+346216: 0x1D9567754   adrp     x8, 49238            ; 0x1e55bd000
+346217: 0x1D9567758   ldr      x8, [x8, #0xbc0]     
+346218: 0x1D956775C   ldr      w1, [x8]             
+346219: 0x1D9567760   ldr      x8, [x19, #0x68]!    
+346220: 0x1D9567764   mov      x0, x23              
+346221: 0x1D9567768   mov      x2, x28              
+346222: 0x1D956776C   mov      x28, x24             
+346223: 0x1D9567770   mov      x17, x19             
+346303: 0x1D95678B0   bl       0x1d956c178          
+346304: 0x1D95678B4   mov      x1, x0               
+346305: 0x1D95678B8   adrp     x0, 110737           ; 0x1f45f8000
+346306: 0x1D95678BC   add      x0, x0, #0x6f8       
+346307: 0x1D95678C0   mov      x2, #0x0             
+346308: 0x1D95678C4   mov      w3, #0x0             
+346309: 0x1D95678C8   bl       _swift_allocError    
+346310: 0x1D95678CC   mov      x19, x0              
+346311: 0x1D95678D0   str      x24, [x1]            
+346312: 0x1D95678D4   mov      x21, x0              
+346313: 0x1D95678D8   b        0x1d9567868          
+346314: 0x1D95678DC   adrp     x8, 74813            ; 0x1eb9a4000
+346315: 0x1D95678E0   ldr      x9, [x8, #0x420]     
+346316: 0x1D95678E4   ldr      x8, [x23, x9]        
+346317: 0x1D95678E8   str      x0, [x23, x9]        
+346318: 0x1D95678EC   mov      x0, x8               
+346319: 0x1D95678F0   bl       _swift_release       
+346320: 0x1D95678F4   stur     xzr, [x29, #-0x88]   
+346321: 0x1D95678F8   sub      x2, x29, #0x88       
+346322: 0x1D95678FC   mov      x0, x27              
+346323: 0x1D9567900   bl       "_objc_msgSend$startAndReturnError:" 
+346324: 0x1D9567904   mov      x8, x0               
+346325: 0x1D9567908   ldur     x0, [x29, #-0x88]    
+346326: 0x1D956790C   tbz      w8, #0x0, 0x1d9567924 
+346327: 0x1D9567910   bl       _objc_retain         
+346328: 0x1D9567914   mov      x0, x22              
+346329: 0x1D9567918   bl       _objc_release        
+346330: 0x1D956791C   mov      x0, x28              
+346331: 0x1D9567920   b        0x1d9567870          
+346332: 0x1D9567924   mov      x19, x0              
+346333: 0x1D9567928   bl       _objc_retain         
+346334: 0x1D956792C   mov      x20, x0              
+346335: 0x1D9567930   mov      x0, x19              
+346336: 0x1D9567934   bl       0x1d9687924          
+346337: 0x1D9567938   mov      x19, x0              
+346338: 0x1D956793C   mov      x0, x20              
+346339: 0x1D9567940   bl       _objc_release        
+346340: 0x1D9567944   mov      x21, x19             
+346341: 0x1D9567948   bl       _swift_willThrow     
+346342: 0x1D956794C   mov      x0, x28              
+346343: 0x1D9567950   bl       _objc_release        
+347223: 0x1D9568710   mov      x16, x8              
+347224: 0x1D9568714   mov      x17, x9              
+347225: 0x1D9568718   movk     x17, #0x2e3f, lsl #48 
+347226: 0x1D956871C   autda    x16, x17             
+347227: 0x1D9568720   ldr      x9, [x16, #0x40]     
+347228: 0x1D9568724   add      x8, x9, #0xf         
+347229: 0x1D9568728   and      x8, x8, #0xfffffffffffffff0 
+347230: 0x1D956872C   adrp     x17, 82920           ; 0x1ed950000
+347231: 0x1D9568730   add      x17, x17, #0x90      
+347232: 0x1D9568734   ldr      x16, [x17]           
+347233: 0x1D9568738   blraa    x16, x17             
+347234: 0x1D956873C   mov      x9, sp               
+347235: 0x1D9568740   sub      x20, x9, x8          
+347236: 0x1D9568744   mov      sp, x20              
+347237: 0x1D9568748   adrp     x8, 74812            ; 0x1eb9a4000
+347238: 0x1D956874C   ldr      x8, [x8, #0x418]     
+347239: 0x1D9568750   ldr      x25, [x19, x8]       
+347240: 0x1D9568754   mov      x0, x25              
+347241: 0x1D9568758   bl       _objc_msgSend$stop   
+347242: 0x1D956875C   mov      x0, x25              
+347243: 0x1D9568760   bl       _objc_msgSend$inputNode 
+347244: 0x1D9568764   mov      x29, x29             
+347245: 0x1D9568768   bl       _objc_retainAutoreleasedReturnValue 
+347246: 0x1D956876C   mov      x25, x0              
+347247: 0x1D9568770   mov      x2, #0x0             
+347248: 0x1D9568774   bl       "_objc_msgSend$removeTapOnBus:" 
+347249: 0x1D9568778   mov      x0, x25              
+347250: 0x1D956877C   bl       _objc_release        
+347251: 0x1D9568780   adrp     x8, 74812            ; 0x1eb9a4000
+347252: 0x1D9568784   ldr      x25, [x8, #0x410]    
+347253: 0x1D9568788   add      x0, x19, x25         
+347254: 0x1D956878C   sub      x1, x29, #0x58       
+347255: 0x1D9568790   mov      x2, #0x0             
+347256: 0x1D9568794   mov      x3, #0x0             
+347257: 0x1D9568798   bl       _swift_beginAccess   
+347258: 0x1D956879C   mov      x8, x24              
+347259: 0x1D95687A0   ldr      x9, [x8, #0x30]!     
+347260: 0x1D95687A4   add      x0, x19, x25         
+347261: 0x1D95687A8   mov      w1, #0x1             
+347262: 0x1D95687AC   mov      x2, x23              
+347263: 0x1D95687B0   mov      x17, x8              
+656140: 0x1D9746CB8   brk      #0x1                 
+656141: 0x1D9746CBC   brk      #0x1                 
+656142: _objc_msgSend$convertSketch::
+656143: 0x1D9746CC0   adrp     x1, 56985            ; 0x1e75df000
+656144: 0x1D9746CC4   ldr      x1, [x1, #0xa70]     
+656145: 0x1D9746CC8   adrp     x17, 82400           ; 0x1ed926000
+656146: 0x1D9746CCC   add      x17, x17, #0x730     
+656147: 0x1D9746CD0   ldr      x16, [x17]           
+656148: 0x1D9746CD4   braa     x16, x17             
+656149: 0x1D9746CD8   brk      #0x1                 
+656150: 0x1D9746CDC   brk      #0x1                 
+656151: _objc_msgSend$convertSketchAttachment:toInlineDrawingAtRange:inNote::
+656152: 0x1D9746CE0   adrp     x1, 56985            ; 0x1e75df000
+656153: 0x1D9746CE4   ldr      x1, [x1, #0xa78]     
+656154: 0x1D9746CE8   adrp     x17, 82400           ; 0x1ed926000
+656155: 0x1D9746CEC   add      x17, x17, #0x730     
+656156: 0x1D9746CF0   ldr      x16, [x17]           
+656157: 0x1D9746CF4   braa     x16, x17             
+656158: 0x1D9746CF8   brk      #0x1                 
+656159: 0x1D9746CFC   brk      #0x1                 
+656160: _objc_msgSend$convertToBuffer:error:withInputFromBlock::
+656161: 0x1D9746D00   adrp     x1, 56985            ; 0x1e75df000
+656162: 0x1D9746D04   ldr      x1, [x1, #0xa80]     
+656163: 0x1D9746D08   adrp     x17, 82400           ; 0x1ed926000
+656164: 0x1D9746D0C   add      x17, x17, #0x730     
+656165: 0x1D9746D10   ldr      x16, [x17]           
+656166: 0x1D9746D14   braa     x16, x17             
+656167: 0x1D9746D18   brk      #0x1                 
+656168: 0x1D9746D1C   brk      #0x1                 
+656169: _objc_msgSend$converterQueue:
+656170: 0x1D9746D20   adrp     x1, 56985            ; 0x1e75df000
+656171: 0x1D9746D24   ldr      x1, [x1, #0xa88]     
+656172: 0x1D9746D28   adrp     x17, 82400           ; 0x1ed926000
+656173: 0x1D9746D2C   add      x17, x17, #0x730     
+656174: 0x1D9746D30   ldr      x16, [x17]           
+656175: 0x1D9746D34   braa     x16, x17             
+656176: 0x1D9746D38   brk      #0x1                 
+656177: 0x1D9746D3C   brk      #0x1                 
+656178: _objc_msgSend$copy:
+656179: 0x1D9746D40   adrp     x1, 56985            ; 0x1e75df000
+656180: 0x1D9746D44   ldr      x1, [x1, #0xa90]     
+668704: 0x1D9751B38   brk      #0x1                 
+668705: 0x1D9751B3C   brk      #0x1                 
+668706: _objc_msgSend$inlineDrawingViews:
+668707: 0x1D9751B40   adrp     x1, 56977            ; 0x1e75e2000
+668708: 0x1D9751B44   ldr      x1, [x1, #0x610]     
+668709: 0x1D9751B48   adrp     x17, 82389           ; 0x1ed926000
+668710: 0x1D9751B4C   add      x17, x17, #0x730     
+668711: 0x1D9751B50   ldr      x16, [x17]           
+668712: 0x1D9751B54   braa     x16, x17             
+668713: 0x1D9751B58   brk      #0x1                 
+668714: 0x1D9751B5C   brk      #0x1                 
+668715: _objc_msgSend$inputFormatForBus::
+668716: 0x1D9751B60   adrp     x1, 56977            ; 0x1e75e2000
+668717: 0x1D9751B64   ldr      x1, [x1, #0x618]     
+668718: 0x1D9751B68   adrp     x17, 82389           ; 0x1ed926000
+668719: 0x1D9751B6C   add      x17, x17, #0x730     
+668720: 0x1D9751B70   ldr      x16, [x17]           
+668721: 0x1D9751B74   braa     x16, x17             
+668722: 0x1D9751B78   brk      #0x1                 
+668723: 0x1D9751B7C   brk      #0x1                 
+668724: _objc_msgSend$inputNode:
+668725: 0x1D9751B80   adrp     x1, 56977            ; 0x1e75e2000
+668726: 0x1D9751B84   ldr      x1, [x1, #0x620]     
+668727: 0x1D9751B88   adrp     x17, 82389           ; 0x1ed926000
+668728: 0x1D9751B8C   add      x17, x17, #0x730     
+668729: 0x1D9751B90   ldr      x16, [x17]           
+668730: 0x1D9751B94   braa     x16, x17             
+668731: 0x1D9751B98   brk      #0x1                 
+668732: 0x1D9751B9C   brk      #0x1                 
+668733: _objc_msgSend$insertAttributedString:atIndex::
+668734: 0x1D9751BA0   adrp     x1, 56977            ; 0x1e75e2000
+668735: 0x1D9751BA4   ldr      x1, [x1, #0x628]     
+668736: 0x1D9751BA8   adrp     x17, 82389           ; 0x1ed926000
+668737: 0x1D9751BAC   add      x17, x17, #0x730     
+668738: 0x1D9751BB0   ldr      x16, [x17]           
+668739: 0x1D9751BB4   braa     x16, x17             
+668740: 0x1D9751BB8   brk      #0x1                 
+668741: 0x1D9751BBC   brk      #0x1                 
+668742: _objc_msgSend$insertImageInNoteHTMLEditorView::
+668743: 0x1D9751BC0   adrp     x1, 56977            ; 0x1e75e2000
+668744: 0x1D9751BC4   ldr      x1, [x1, #0x630]     
+668884: 0x1D9751DB8   brk      #0x1                 
+668885: 0x1D9751DBC   brk      #0x1                 
+668886: _objc_msgSend$insertsResults:
+668887: 0x1D9751DC0   adrp     x1, 56977            ; 0x1e75e2000
+668888: 0x1D9751DC4   ldr      x1, [x1, #0x6b0]     
+668889: 0x1D9751DC8   adrp     x17, 82389           ; 0x1ed926000
+668890: 0x1D9751DCC   add      x17, x17, #0x730     
+668891: 0x1D9751DD0   ldr      x16, [x17]           
+668892: 0x1D9751DD4   braa     x16, x17             
+668893: 0x1D9751DD8   brk      #0x1                 
+668894: 0x1D9751DDC   brk      #0x1                 
+668895: _objc_msgSend$insideSystemPaper:
+668896: 0x1D9751DE0   adrp     x1, 56977            ; 0x1e75e2000
+668897: 0x1D9751DE4   ldr      x1, [x1, #0x6b8]     
+668898: 0x1D9751DE8   adrp     x17, 82389           ; 0x1ed926000
+668899: 0x1D9751DEC   add      x17, x17, #0x730     
+668900: 0x1D9751DF0   ldr      x16, [x17]           
+668901: 0x1D9751DF4   braa     x16, x17             
+668902: 0x1D9751DF8   brk      #0x1                 
+668903: 0x1D9751DFC   brk      #0x1                 
+668904: _objc_msgSend$installTapOnBus:bufferSize:format:block::
+668905: 0x1D9751E00   adrp     x1, 56977            ; 0x1e75e2000
+668906: 0x1D9751E04   ldr      x1, [x1, #0x6c0]     
+668907: 0x1D9751E08   adrp     x17, 82389           ; 0x1ed926000
+668908: 0x1D9751E0C   add      x17, x17, #0x730     
+668909: 0x1D9751E10   ldr      x16, [x17]           
+668910: 0x1D9751E14   braa     x16, x17             
+668911: 0x1D9751E18   brk      #0x1                 
+668912: 0x1D9751E1C   brk      #0x1                 
+668913: _objc_msgSend$instantiateWithOwner:topLevelObjects::
+668914: 0x1D9751E20   adrp     x1, 56977            ; 0x1e75e2000
+668915: 0x1D9751E24   ldr      x1, [x1, #0x6c8]     
+668916: 0x1D9751E28   adrp     x17, 82389           ; 0x1ed926000
+668917: 0x1D9751E2C   add      x17, x17, #0x730     
+668918: 0x1D9751E30   ldr      x16, [x17]           
+668919: 0x1D9751E34   braa     x16, x17             
+668920: 0x1D9751E38   brk      #0x1                 
+668921: 0x1D9751E3C   brk      #0x1                 
+668922: _objc_msgSend$intValue:
+668923: 0x1D9751E40   adrp     x1, 56977            ; 0x1e75e2000
+668924: 0x1D9751E44   ldr      x1, [x1, #0x6d0]     
+689548: 0x1D9763CB8   brk      #0x1                 
+689549: 0x1D9763CBC   brk      #0x1                 
+689550: _objc_msgSend$standardizedContent:
+689551: 0x1D9763CC0   adrp     x1, 56963            ; 0x1e75e6000
+689552: 0x1D9763CC4   ldr      x1, [x1, #0xe70]     
+689553: 0x1D9763CC8   adrp     x17, 82371           ; 0x1ed926000
+689554: 0x1D9763CCC   add      x17, x17, #0x730     
+689555: 0x1D9763CD0   ldr      x16, [x17]           
+689556: 0x1D9763CD4   braa     x16, x17             
+689557: 0x1D9763CD8   brk      #0x1                 
+689558: 0x1D9763CDC   brk      #0x1                 
+689559: _objc_msgSend$start:
+689560: 0x1D9763CE0   adrp     x1, 56963            ; 0x1e75e6000
+689561: 0x1D9763CE4   ldr      x1, [x1, #0xe78]     
+689562: 0x1D9763CE8   adrp     x17, 82371           ; 0x1ed926000
+689563: 0x1D9763CEC   add      x17, x17, #0x730     
+689564: 0x1D9763CF0   ldr      x16, [x17]           
+689565: 0x1D9763CF4   braa     x16, x17             
+689566: 0x1D9763CF8   brk      #0x1                 
+689567: 0x1D9763CFC   brk      #0x1                 
+689568: _objc_msgSend$startAndReturnError::
+689569: 0x1D9763D00   adrp     x1, 56963            ; 0x1e75e6000
+689570: 0x1D9763D04   ldr      x1, [x1, #0xe80]     
+689571: 0x1D9763D08   adrp     x17, 82371           ; 0x1ed926000
+689572: 0x1D9763D0C   add      x17, x17, #0x730     
+689573: 0x1D9763D10   ldr      x16, [x17]           
+689574: 0x1D9763D14   braa     x16, x17             
+689575: 0x1D9763D18   brk      #0x1                 
+689576: 0x1D9763D1C   brk      #0x1                 
+689577: _objc_msgSend$startAngle:
+689578: 0x1D9763D20   adrp     x1, 56963            ; 0x1e75e6000
+689579: 0x1D9763D24   ldr      x1, [x1, #0xe88]     
+689580: 0x1D9763D28   adrp     x17, 82371           ; 0x1ed926000
+689581: 0x1D9763D2C   add      x17, x17, #0x730     
+689582: 0x1D9763D30   ldr      x16, [x17]           
+689583: 0x1D9763D34   braa     x16, x17             
+689584: 0x1D9763D38   brk      #0x1                 
+689585: 0x1D9763D3C   brk      #0x1                 
+689586: _objc_msgSend$startAnimation::
+689587: 0x1D9763D40   adrp     x1, 56963            ; 0x1e75e6000
+689588: 0x1D9763D44   ldr      x1, [x1, #0xe90]     

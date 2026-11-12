@@ -1,0 +1,300 @@
+[
+  {
+    "name": "notes-dependencies",
+    "argv": [
+      "otool",
+      "-arch",
+      "arm64e",
+      "-L",
+      "/System/Applications/Notes.app/Contents/MacOS/Notes"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "a49ad0f5038acda8902f308ad7d7e761d7175e9142a7e27f2b143a5053d15864"
+  },
+  {
+    "name": "notes-symbols",
+    "argv": [
+      "nm",
+      "-arch",
+      "arm64e",
+      "-m",
+      "/System/Applications/Notes.app/Contents/MacOS/Notes"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "0a032431359d0955f103a1a0a9f3240b3a74e943b5b21cbe892bcaab52a9cb69"
+  },
+  {
+    "name": "notes-strings",
+    "argv": [
+      "strings",
+      "-a",
+      "/System/Applications/Notes.app/Contents/MacOS/Notes"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "0a537b01beb90259d72ebf6ed823e7fccbc12e71875aa1df500a98372243a784"
+  },
+  {
+    "name": "notes-objc-metadata",
+    "argv": [
+      "otool",
+      "-arch",
+      "arm64e",
+      "-ov",
+      "/System/Applications/Notes.app/Contents/MacOS/Notes"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "7cb2b21e01382d72e8522a9c65fde98631f20645c7b0dfa1787eb69ec992c216"
+  },
+  {
+    "name": "notesshared-cache-inspection",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-uuid",
+      "-linked_dylibs",
+      "-imports",
+      "-exports",
+      "-objc",
+      "/System/Library/PrivateFrameworks/NotesShared.framework/Versions/A/NotesShared"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "ffa0a9232b56042d03191ae6fe3314afa956ee52cc72632528973e006928c133",
+    "bytes": 439653
+  },
+  {
+    "name": "notesui-cache-inspection",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-uuid",
+      "-linked_dylibs",
+      "-imports",
+      "-exports",
+      "-objc",
+      "/System/Library/PrivateFrameworks/NotesUI.framework/Versions/A/NotesUI"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "77195c1463c3f750a29fb322048f620e477c676c6967675f3ef864c65bb8c773",
+    "bytes": 280823
+  },
+  {
+    "name": "noteseditor-cache-inspection",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-uuid",
+      "-linked_dylibs",
+      "-imports",
+      "-exports",
+      "-objc",
+      "/System/Library/PrivateFrameworks/NotesEditor.framework/Versions/A/NotesEditor"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "785acc3b030a906c4d748ab34106c5bcb5f0ce809166d5d9d0724178086269d2",
+    "bytes": 222128
+  },
+  {
+    "name": "notessupport-cache-inspection",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-uuid",
+      "-linked_dylibs",
+      "-imports",
+      "-exports",
+      "-objc",
+      "/System/Library/PrivateFrameworks/NotesSupport.framework/Versions/A/NotesSupport"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "a97d8103503291bac24438d5f4f8fc972d218691a6341ac2fa8ca6de4fbea4ac",
+    "bytes": 79404
+  },
+  {
+    "name": "notes-objc",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-objc",
+      "/System/Applications/Notes.app/Contents/MacOS/Notes"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "sha256": "b565c0ae71c7bfd70ea921e87283964c070f9fbb7eee1426a7b66f2f2bfa16e3",
+    "bytes": 779458
+  },
+  {
+    "name": "notesui-audio-disassembly",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-disassemble",
+      "/System/Library/PrivateFrameworks/NotesUI.framework/Versions/A/NotesUI"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "full_output_sha256": "09b361abec9100c52b60b0380792019219f9e40bc51d4184387efd9685c184b7",
+    "full_output_bytes": 33115360,
+    "selection_patterns": [
+      "AudioRecordingManager",
+      "LiveTranscriptionCoordinator",
+      "SiriSpeechRecognitionManager",
+      "SpeechAnalyzer",
+      "Transcriber",
+      "ICBackgroundTranscriptionHelper",
+      "checkpointTranscription",
+      "TranscriptViewModelSegment"
+    ],
+    "selection_scope": "label contains any literal pattern; retain the label-delimited block, which may include unlabeled code and does not prove complete function boundaries",
+    "selected_blocks": 51,
+    "sha256": "4485ebc47ed6ccde6f982a525d4701edf01f2b29d218690fe2f6e6134025852b",
+    "bytes": 138483,
+    "head": "/System/Library/PrivateFrameworks/NotesUI.framework/Versions/A/NotesUI [arm64e]:\n(__TEXT,__text) section:\n+[NSColor(IC) ICTintColor]:\n0x1D941B918   pacibsp                       \n0x1D941B91C   sub      sp, sp, #0x30        \n0x1D941B920   stp      x20, x19, [sp, #0x10] \n0x1D941B924   stp      x29, x30, [sp, #0x20] \n0x1D941B928   add      x29, sp, #0x20       \n0x1D941B92C   adrp     x8, 79814            ; 0x1ecbe1000\n0x1D941B930   ldr      x8, [x8,"
+  },
+  {
+    "name": "notesshared-audio-disassembly",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-disassemble",
+      "/System/Library/PrivateFrameworks/NotesShared.framework/Versions/A/NotesShared"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "full_output_sha256": "461188cec9e52638ca27a681225c6580d51c3f7346cf46aab0423c68878b2e08",
+    "full_output_bytes": 47326751,
+    "selection_patterns": [
+      "AudioRecordingManager",
+      "LiveTranscriptionCoordinator",
+      "SiriSpeechRecognitionManager",
+      "SpeechAnalyzer",
+      "Transcriber",
+      "ICBackgroundTranscriptionHelper",
+      "checkpointTranscription",
+      "TranscriptViewModelSegment"
+    ],
+    "selection_scope": "label contains any literal pattern; retain the label-delimited block, which may include unlabeled code and does not prove complete function boundaries",
+    "selected_blocks": 85,
+    "sha256": "935a2bebac3be56422433aa871a2d3a4901aa4144f2ea1554be296ec090434f5",
+    "bytes": 735671,
+    "head": "/System/Library/PrivateFrameworks/NotesShared.framework/Versions/A/NotesShared [arm64e]:\n(__TEXT,__text) section:\n+[ICNoteContext startSharedContextWithOptions:]:\n0x1D8F92A40   pacibsp                       \n0x1D8F92A44   sub      sp, sp, #0x80        \n0x1D8F92A48   stp      x26, x25, [sp, #0x30] \n0x1D8F92A4C   stp      x24, x23, [sp, #0x40] \n0x1D8F92A50   stp      x22, x21, [sp, #0x50] \n0x1D8F92A54   stp      x20, x19, [sp, #0x60] \n0x1D8F92A58  "
+  },
+  {
+    "name": "notesui-audio-call-sites",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-disassemble",
+      "/System/Library/PrivateFrameworks/NotesUI.framework/Versions/A/NotesUI"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "full_output_sha256": "09b361abec9100c52b60b0380792019219f9e40bc51d4184387efd9685c184b7",
+    "full_output_bytes": 33115360,
+    "selection_patterns": [
+      "installTapOnBus",
+      "inputNode",
+      "writeFromBuffer",
+      "initForWriting",
+      "startAndReturnError",
+      "convertToBuffer",
+      "fetchAssetWithConfig",
+      "Transcriber",
+      "SpeechAnalyzer",
+      "SpeechTranscriber",
+      "setUpAudioTask",
+      "saveAudioDataToSubattachment"
+    ],
+    "selection_scope": "matching lines plus 20 lines before/after; prefixes are full-output line numbers; gaps omitted",
+    "hits": 11,
+    "sha256": "a5695e932248463bc050acbafb39d439866b408bbca1bb67096dde4ca89032b6",
+    "bytes": 21846
+  },
+  {
+    "name": "notesshared-audio-call-sites",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-disassemble",
+      "/System/Library/PrivateFrameworks/NotesShared.framework/Versions/A/NotesShared"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "full_output_sha256": "461188cec9e52638ca27a681225c6580d51c3f7346cf46aab0423c68878b2e08",
+    "full_output_bytes": 47326751,
+    "selection_patterns": [
+      "installTapOnBus",
+      "inputNode",
+      "writeFromBuffer",
+      "initForWriting",
+      "startAndReturnError",
+      "convertToBuffer",
+      "fetchAssetWithConfig",
+      "Transcriber",
+      "SpeechAnalyzer",
+      "SpeechTranscriber",
+      "setUpAudioTask",
+      "saveAudioDataToSubattachment"
+    ],
+    "selection_scope": "matching lines plus 20 lines before/after; prefixes are full-output line numbers; gaps omitted",
+    "hits": 6,
+    "sha256": "4d8adb8c0608c211d6bb06d04baca78f3ff1f5e4b43ab4fa34afc8e5e9f82439",
+    "bytes": 13967
+  },
+  {
+    "name": "notes-symbols-audio-excerpt",
+    "derived_from": "notes-symbols.txt",
+    "original_sha256": "0a032431359d0955f103a1a0a9f3240b3a74e943b5b21cbe892bcaab52a9cb69",
+    "original_bytes": 413892,
+    "selection_regex": "[Aa]udio|[Tt]ranscri|[Ss]peech|[Rr]ecording|[Dd]ictation|NGASR|ASRModel|needsTranscription|SFSpeech|AVAudio",
+    "selection_scope": "matching lines plus 2 lines before/after; prefixes are original output line numbers; gaps omitted",
+    "sha256": "c59c097a85afbba72f9bd7252cc8a5b9b299ff49f9e0806dbb419b3314562b6f",
+    "bytes": 15828
+  },
+  {
+    "name": "notes-strings-audio-excerpt",
+    "derived_from": "notes-strings.txt",
+    "original_sha256": "0a537b01beb90259d72ebf6ed823e7fccbc12e71875aa1df500a98372243a784",
+    "original_bytes": 607173,
+    "selection_regex": "[Aa]udio|[Tt]ranscri|[Ss]peech|[Rr]ecording|[Dd]ictation|NGASR|ASRModel|needsTranscription|SFSpeech|AVAudio",
+    "selection_scope": "matching lines plus 2 lines before/after; prefixes are original output line numbers; gaps omitted",
+    "sha256": "bf2d1321b4d269debb511ea9fd9b76368423658148cad9925d6a5c002bcf0cab",
+    "bytes": 21293
+  },
+  {
+    "name": "notes-objc-metadata-audio-excerpt",
+    "derived_from": "notes-objc-metadata.txt",
+    "original_sha256": "7cb2b21e01382d72e8522a9c65fde98631f20645c7b0dfa1787eb69ec992c216",
+    "original_bytes": 5921635,
+    "selection_regex": "[Aa]udio|[Tt]ranscri|[Ss]peech|[Rr]ecording|[Dd]ictation|NGASR|ASRModel|needsTranscription|SFSpeech|AVAudio",
+    "selection_scope": "matching lines plus 2 lines before/after; prefixes are original output line numbers; gaps omitted",
+    "sha256": "dd58cf6be825142fd5389dc827b6a4a21143f0a9d07d8c391b16868fd17a2c89",
+    "bytes": 18908
+  },
+  {
+    "name": "notes-objc-audio-excerpt",
+    "derived_from": "notes-objc.txt",
+    "original_sha256": "b565c0ae71c7bfd70ea921e87283964c070f9fbb7eee1426a7b66f2f2bfa16e3",
+    "original_bytes": 779458,
+    "selection_regex": "[Aa]udio|[Tt]ranscri|[Ss]peech|[Rr]ecording|[Dd]ictation|NGASR|ASRModel|needsTranscription|SFSpeech|AVAudio",
+    "selection_scope": "matching lines plus 2 lines before/after; prefixes are original output line numbers; gaps omitted",
+    "sha256": "f0b8c2a320d36d3f16348dc209f0111261c3fd44c4fc119fd30c4911e586f94f",
+    "bytes": 15791
+  }
+]

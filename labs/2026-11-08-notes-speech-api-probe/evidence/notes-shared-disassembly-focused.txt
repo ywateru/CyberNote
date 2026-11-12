@@ -1,0 +1,2105 @@
+657043: 0x1D9209E5C   pacibsp                       
+657044: 0x1D9209E60   orr      x29, x29, #0x1000000000000000 
+657045: 0x1D9209E64   sub      sp, sp, #0x20        
+657046: 0x1D9209E68   stp      x29, x30, [sp, #0x10] 
+657047: 0x1D9209E6C   add      x16, sp, #0x8        
+657048: 0x1D9209E70   movk     x16, #0xc31a, lsl #48 
+657049: 0x1D9209E74   mov      x17, x22             
+657050: 0x1D9209E78   pacdb    x17, x16             
+657051: 0x1D9209E7C   str      x17, [sp, #0x8]      
+657052: 0x1D9209E80   add      x29, sp, #0x10       
+657053: 0x1D9209E84   stp      x0, x20, [x22, #0x40] 
+657054: 0x1D9209E88   adrp     x0, 75652            ; 0x1eb98d000
+657055: 0x1D9209E8C   add      x0, x0, #0xc60       
+657056: 0x1D9209E90   adrp     x1, 303              ; 0x1d9338000
+657057: 0x1D9209E94   add      x1, x1, #0x640       
+657058: 0x1D9209E98   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657059: 0x1D9209E9C   ldr      x16, [x0, #-0x8]!    
+657060: 0x1D9209EA0   mov      x17, x0              
+657061: 0x1D9209EA4   movk     x17, #0x2e3f, lsl #48 
+657062: 0x1D9209EA8   autda    x16, x17             
+657063: 0x1D9209EAC   ldr      x8, [x16, #0x40]     
+657064: 0x1D9209EB0   add      x8, x8, #0xf         
+657065: 0x1D9209EB4   and      x0, x8, #0xfffffffffffffff0 
+657066: 0x1D9209EB8   bl       _swift_task_alloc    
+657067: 0x1D9209EBC   str      x0, [x22, #0x50]     
+657068: 0x1D9209EC0   mov      x0, #0x0             
+657069: 0x1D9209EC4   bl       0x1d93190e0          
+657070: 0x1D9209EC8   ldr      x16, [x0, #-0x8]!    
+657071: 0x1D9209ECC   mov      x17, x0              
+657072: 0x1D9209ED0   movk     x17, #0x2e3f, lsl #48 
+657073: 0x1D9209ED4   autda    x16, x17             
+657074: 0x1D9209ED8   ldr      x8, [x16, #0x40]     
+657075: 0x1D9209EDC   add      x8, x8, #0xf         
+657076: 0x1D9209EE0   and      x0, x8, #0xfffffffffffffff0 
+657077: 0x1D9209EE4   bl       _swift_task_alloc    
+657078: 0x1D9209EE8   str      x0, [x22, #0x58]     
+657079: 0x1D9209EEC   adrp     x0, 75652            ; 0x1eb98d000
+657080: 0x1D9209EF0   add      x0, x0, #0xc70       
+657081: 0x1D9209EF4   adrp     x1, 303              ; 0x1d9338000
+657082: 0x1D9209EF8   add      x1, x1, #0x650       
+657083: 0x1D9209EFC   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657084: 0x1D9209F00   ldr      x16, [x0, #-0x8]!    
+657085: 0x1D9209F04   mov      x17, x0              
+657086: 0x1D9209F08   movk     x17, #0x2e3f, lsl #48 
+657087: 0x1D9209F0C   autda    x16, x17             
+657088: 0x1D9209F10   ldr      x8, [x16, #0x40]     
+657089: 0x1D9209F14   add      x8, x8, #0xf         
+657090: 0x1D9209F18   and      x0, x8, #0xfffffffffffffff0 
+657091: 0x1D9209F1C   bl       _swift_task_alloc    
+657092: 0x1D9209F20   str      x0, [x22, #0x60]     
+657093: 0x1D9209F24   adrp     x0, 75653            ; 0x1eb98e000
+657094: 0x1D9209F28   add      x0, x0, #0x508       
+657095: 0x1D9209F2C   adrp     x1, 306              ; 0x1d933b000
+657096: 0x1D9209F30   add      x1, x1, #0xbe0       
+657097: 0x1D9209F34   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657098: 0x1D9209F38   ldr      x16, [x0, #-0x8]!    
+657099: 0x1D9209F3C   mov      x17, x0              
+657100: 0x1D9209F40   movk     x17, #0x2e3f, lsl #48 
+657101: 0x1D9209F44   autda    x16, x17             
+657102: 0x1D9209F48   ldr      x8, [x16, #0x40]     
+657103: 0x1D9209F4C   add      x8, x8, #0xf         
+657104: 0x1D9209F50   and      x0, x8, #0xfffffffffffffff0 
+657105: 0x1D9209F54   bl       _swift_task_alloc    
+657106: 0x1D9209F58   str      x0, [x22, #0x68]     
+657107: 0x1D9209F5C   mov      x0, #0x0             
+657108: 0x1D9209F60   bl       0x1d9318a90          
+657109: 0x1D9209F64   str      x0, [x22, #0x70]     
+657110: 0x1D9209F68   ldr      x8, [x0, #-0x8]!     
+657111: 0x1D9209F6C   mov      x16, x8              
+657112: 0x1D9209F70   mov      x17, x0              
+657113: 0x1D9209F74   movk     x17, #0x2e3f, lsl #48 
+657114: 0x1D9209F78   autda    x16, x17             
+657115: 0x1D9209F7C   mov      x17, x16             
+657116: 0x1D9209F80   xpacd    x17                  
+657117: 0x1D9209F84   cmp      x16, x17             
+657118: 0x1D9209F88   b.eq     0x1d9209f90          
+657119: 0x1D9209F8C   brk      #0xc472              
+657120: 0x1D9209F90   str      x16, [x22, #0x78]    
+657121: 0x1D9209F94   mov      x16, x8              
+657122: 0x1D9209F98   mov      x17, x0              
+657123: 0x1D9209F9C   movk     x17, #0x2e3f, lsl #48 
+657124: 0x1D9209FA0   autda    x16, x17             
+657125: 0x1D9209FA4   ldr      x8, [x16, #0x40]     
+657126: 0x1D9209FA8   add      x20, x8, #0xf        
+657127: 0x1D9209FAC   and      x0, x20, #0xfffffffffffffff0 
+657128: 0x1D9209FB0   bl       _swift_task_alloc    
+657129: 0x1D9209FB4   str      x0, [x22, #0x80]     
+657130: 0x1D9209FB8   and      x0, x20, #0xfffffffffffffff0 
+657131: 0x1D9209FBC   bl       _swift_task_alloc    
+657132: 0x1D9209FC0   str      x0, [x22, #0x88]     
+657133: 0x1D9209FC4   adrp     x0, 75653            ; 0x1eb98e000
+657134: 0x1D9209FC8   add      x0, x0, #0x510       
+657135: 0x1D9209FCC   adrp     x1, 306              ; 0x1d933b000
+657136: 0x1D9209FD0   add      x1, x1, #0x300       
+657137: 0x1D9209FD4   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657138: 0x1D9209FD8   ldr      x16, [x0, #-0x8]!    
+657139: 0x1D9209FDC   mov      x17, x0              
+657140: 0x1D9209FE0   movk     x17, #0x2e3f, lsl #48 
+657141: 0x1D9209FE4   autda    x16, x17             
+657142: 0x1D9209FE8   ldr      x8, [x16, #0x40]     
+657143: 0x1D9209FEC   add      x20, x8, #0xf        
+657144: 0x1D9209FF0   and      x0, x20, #0xfffffffffffffff0 
+657145: 0x1D9209FF4   bl       _swift_task_alloc    
+657146: 0x1D9209FF8   str      x0, [x22, #0x90]     
+657147: 0x1D9209FFC   and      x0, x20, #0xfffffffffffffff0 
+657148: 0x1D920A000   bl       _swift_task_alloc    
+657149: 0x1D920A004   str      x0, [x22, #0x98]     
+657150: 0x1D920A008   adrp     x0, 75652            ; 0x1eb98e000
+657151: 0x1D920A00C   add      x0, x0, #0x518       
+657152: 0x1D920A010   adrp     x1, 305              ; 0x1d933b000
+657153: 0x1D920A014   add      x1, x1, #0x308       
+657154: 0x1D920A018   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657155: 0x1D920A01C   ldr      x16, [x0, #-0x8]!    
+657156: 0x1D920A020   mov      x17, x0              
+657157: 0x1D920A024   movk     x17, #0x2e3f, lsl #48 
+657158: 0x1D920A028   autda    x16, x17             
+657159: 0x1D920A02C   ldr      x8, [x16, #0x40]     
+657160: 0x1D920A030   add      x20, x8, #0xf        
+657161: 0x1D920A034   and      x0, x20, #0xfffffffffffffff0 
+657162: 0x1D920A038   bl       _swift_task_alloc    
+657163: 0x1D920A03C   str      x0, [x22, #0xa0]     
+657164: 0x1D920A040   and      x0, x20, #0xfffffffffffffff0 
+657165: 0x1D920A044   bl       _swift_task_alloc    
+657166: 0x1D920A048   str      x0, [x22, #0xa8]     
+657167: 0x1D920A04C   adrp     x0, 75652            ; 0x1eb98e000
+657168: 0x1D920A050   add      x0, x0, #0x520       
+657169: 0x1D920A054   adrp     x1, 305              ; 0x1d933b000
+657170: 0x1D920A058   add      x1, x1, #0x310       
+657171: 0x1D920A05C   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657172: 0x1D920A060   str      x0, [x22, #0xb0]     
+657173: 0x1D920A064   ldr      x8, [x0, #-0x8]!     
+657174: 0x1D920A068   mov      x16, x8              
+657175: 0x1D920A06C   mov      x17, x0              
+657176: 0x1D920A070   movk     x17, #0x2e3f, lsl #48 
+657177: 0x1D920A074   autda    x16, x17             
+657178: 0x1D920A078   mov      x17, x16             
+657179: 0x1D920A07C   xpacd    x17                  
+657180: 0x1D920A080   cmp      x16, x17             
+657181: 0x1D920A084   b.eq     0x1d920a08c          
+657182: 0x1D920A088   brk      #0xc472              
+657183: 0x1D920A08C   str      x16, [x22, #0xb8]    
+657184: 0x1D920A090   mov      x16, x8              
+657185: 0x1D920A094   mov      x17, x0              
+657186: 0x1D920A098   movk     x17, #0x2e3f, lsl #48 
+657187: 0x1D920A09C   autda    x16, x17             
+657188: 0x1D920A0A0   ldr      x8, [x16, #0x40]     
+657189: 0x1D920A0A4   add      x8, x8, #0xf         
+657190: 0x1D920A0A8   and      x0, x8, #0xfffffffffffffff0 
+657191: 0x1D920A0AC   bl       _swift_task_alloc    
+657192: 0x1D920A0B0   str      x0, [x22, #0xc0]     
+657193: 0x1D920A0B4   adrp     x0, 75652            ; 0x1eb98e000
+657194: 0x1D920A0B8   add      x0, x0, #0x528       
+657195: 0x1D920A0BC   adrp     x1, 305              ; 0x1d933b000
+657196: 0x1D920A0C0   add      x1, x1, #0x318       
+657197: 0x1D920A0C4   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657198: 0x1D920A0C8   str      x0, [x22, #0xc8]     
+657199: 0x1D920A0CC   ldr      x8, [x0, #-0x8]!     
+657200: 0x1D920A0D0   mov      x16, x8              
+657201: 0x1D920A0D4   mov      x17, x0              
+657202: 0x1D920A0D8   movk     x17, #0x2e3f, lsl #48 
+657203: 0x1D920A0DC   autda    x16, x17             
+657204: 0x1D920A0E0   mov      x17, x16             
+657205: 0x1D920A0E4   xpacd    x17                  
+657206: 0x1D920A0E8   cmp      x16, x17             
+657207: 0x1D920A0EC   b.eq     0x1d920a0f4          
+657208: 0x1D920A0F0   brk      #0xc472              
+657209: 0x1D920A0F4   str      x16, [x22, #0xd0]    
+657210: 0x1D920A0F8   mov      x16, x8              
+657211: 0x1D920A0FC   mov      x17, x0              
+657212: 0x1D920A100   movk     x17, #0x2e3f, lsl #48 
+657213: 0x1D920A104   autda    x16, x17             
+657214: 0x1D920A108   ldr      x8, [x16, #0x40]     
+657215: 0x1D920A10C   add      x8, x8, #0xf         
+657216: 0x1D920A110   and      x0, x8, #0xfffffffffffffff0 
+657217: 0x1D920A114   bl       _swift_task_alloc    
+657218: 0x1D920A118   str      x0, [x22, #0xd8]     
+657219: 0x1D920A11C   adrp     x0, 75652            ; 0x1eb98e000
+657220: 0x1D920A120   add      x0, x0, #0x530       
+657221: 0x1D920A124   adrp     x1, 305              ; 0x1d933b000
+657222: 0x1D920A128   add      x1, x1, #0x320       
+657223: 0x1D920A12C   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657224: 0x1D920A130   str      x0, [x22, #0xe0]     
+657225: 0x1D920A134   ldr      x8, [x0, #-0x8]!     
+657226: 0x1D920A138   mov      x16, x8              
+657227: 0x1D920A13C   mov      x17, x0              
+657228: 0x1D920A140   movk     x17, #0x2e3f, lsl #48 
+657229: 0x1D920A144   autda    x16, x17             
+657230: 0x1D920A148   mov      x17, x16             
+657231: 0x1D920A14C   xpacd    x17                  
+657232: 0x1D920A150   cmp      x16, x17             
+657233: 0x1D920A154   b.eq     0x1d920a15c          
+657234: 0x1D920A158   brk      #0xc472              
+657235: 0x1D920A15C   str      x16, [x22, #0xe8]    
+657236: 0x1D920A160   mov      x16, x8              
+657237: 0x1D920A164   mov      x17, x0              
+657238: 0x1D920A168   movk     x17, #0x2e3f, lsl #48 
+657239: 0x1D920A16C   autda    x16, x17             
+657240: 0x1D920A170   ldr      x8, [x16, #0x40]     
+657241: 0x1D920A174   add      x20, x8, #0xf        
+657242: 0x1D920A178   and      x0, x20, #0xfffffffffffffff0 
+657243: 0x1D920A17C   bl       _swift_task_alloc    
+657244: 0x1D920A180   str      x0, [x22, #0xf0]     
+657245: 0x1D920A184   and      x0, x20, #0xfffffffffffffff0 
+657246: 0x1D920A188   bl       _swift_task_alloc    
+657247: 0x1D920A18C   str      x0, [x22, #0xf8]     
+657248: 0x1D920A190   adrp     x16, 0               ; 0x1d920a000
+657249: 0x1D920A194   add      x16, x16, #0x1c8     
+657250: 0x1D920A198   paciza   x16                  
+657251: 0x1D920A19C   mov      x0, x16              
+657252: 0x1D920A1A0   mov      x1, #0x0             
+657253: 0x1D920A1A4   mov      x2, #0x0             
+657254: 0x1D920A1A8   ldp      x29, x30, [sp, #0x10] 
+657255: 0x1D920A1AC   and      x29, x29, #0xefffffffffffffff 
+657256: 0x1D920A1B0   add      sp, sp, #0x20        
+657257: 0x1D920A1B4   autibsp                       
+657258: 0x1D920A1B8   eor      x16, x30, x30, lsl #1 
+657259: 0x1D920A1BC   tbz      x16, #0x3e, 0x1d920a1c4 
+657260: 0x1D920A1C0   brk      #0xc471              
+657261: 0x1D920A1C4   b        _swift_task_switch   
+657262: 0x1D920A1C8   pacibsp                       
+657263: 0x1D920A1CC   orr      x29, x29, #0x1000000000000000 
+657264: 0x1D920A1D0   sub      sp, sp, #0xa0        
+657265: 0x1D920A1D4   stp      x28, x27, [sp, #0x48] 
+657266: 0x1D920A1D8   stp      x26, x25, [sp, #0x58] 
+657267: 0x1D920A1DC   stp      x24, x23, [sp, #0x68] 
+657268: 0x1D920A1E0   stp      x21, x19, [sp, #0x78] 
+657269: 0x1D920A1E4   stp      x29, x30, [sp, #0x90] 
+657270: 0x1D920A1E8   add      x16, sp, #0x88       
+657271: 0x1D920A1EC   movk     x16, #0xc31a, lsl #48 
+657272: 0x1D920A1F0   mov      x17, x22             
+657273: 0x1D920A1F4   pacdb    x17, x16             
+657274: 0x1D920A1F8   str      x17, [sp, #0x88]     
+657275: 0x1D920A1FC   add      x29, sp, #0x90       
+657276: 0x1D920A200   ldr      x26, [x22, #0xf8]    
+657277: 0x1D920A204   ldp      x9, x21, [x22, #0xe0] 
+657278: 0x1D920A208   ldp      x24, x23, [x22, #0xd0] 
+657279: 0x1D920A20C   ldp      x27, x10, [x22, #0xc0] 
+657280: 0x1D920A210   ldp      x28, x25, [x22, #0xb0] 
+657281: 0x1D920A214   ldp      x8, x11, [x22, #0xa0] 
+657282: 0x1D920A218   str      x11, [sp, #0x10]     
+657283: 0x1D920A21C   stp      x8, x9, [sp, #0x30]  
+657284: 0x1D920A220   ldr      x8, [x22, #0x98]     
+657285: 0x1D920A224   stp      x8, x10, [sp, #0x20] 
+657286: 0x1D920A228   ldr      x20, [x22, #0x48]    
+657287: 0x1D920A22C   mov      x0, #0x0             
+657288: 0x1D920A230   bl       0x1d93191c0          
+657289: 0x1D920A234   mov      x19, x0              
+657290: 0x1D920A238   adrp     x8, 50099            ; 0x1e55bd000
+657291: 0x1D920A23C   ldr      x8, [x8, #0xbc0]     
+657292: 0x1D920A240   ldr      w1, [x8]             
+657293: 0x1D920A244   mov      x8, x25              
+657294: 0x1D920A248   ldr      x9, [x8, #0x68]!     
+657295: 0x1D920A24C   mov      x0, x27              
+657296: 0x1D920A250   mov      x2, x28              
+657297: 0x1D920A254   mov      x17, x8              
+657298: 0x1D920A258   movk     x17, #0xb2e4, lsl #48 
+657299: 0x1D920A25C   blraa    x9, x17              
+657300: 0x1D920A260   mov      x0, x26              
+657301: 0x1D920A264   mov      x1, x23              
+657302: 0x1D920A268   mov      x2, x19              
+657303: 0x1D920A26C   mov      x3, x27              
+657304: 0x1D920A270   mov      x4, x19              
+657305: 0x1D920A274   bl       0x1d931a100          
+657306: 0x1D920A278   ldr      x8, [x25, #0x8]!     
+657307: 0x1D920A27C   mov      x0, x27              
+657308: 0x1D920A280   mov      x1, x28              
+657309: 0x1D920A284   mov      x17, x25             
+657310: 0x1D920A288   movk     x17, #0x4f8, lsl #48 
+657311: 0x1D920A28C   blraa    x8, x17              
+657312: 0x1D920A290   mov      x27, x21             
+657313: 0x1D920A294   ldr      x8, [x27, #0x20]!    
+657314: 0x1D920A298   ldr      x28, [sp, #0x10]     
+657315: 0x1D920A29C   mov      x0, x28              
+657316: 0x1D920A2A0   mov      x1, x26              
+657317: 0x1D920A2A4   ldr      x25, [sp, #0x38]     
+657318: 0x1D920A2A8   mov      x2, x25              
+657319: 0x1D920A2AC   str      x8, [sp, #0x8]       
+657320: 0x1D920A2B0   mov      x17, x27             
+657321: 0x1D920A2B4   movk     x17, #0x48d8, lsl #48 
+657322: 0x1D920A2B8   blraa    x8, x17              
+657323: 0x1D920A2BC   mov      x8, x21              
+657324: 0x1D920A2C0   ldr      x9, [x8, #0x38]!     
+657325: 0x1D920A2C4   mov      x0, x28              
+657326: 0x1D920A2C8   mov      w1, #0x0             
+657327: 0x1D920A2CC   mov      w2, #0x1             
+657328: 0x1D920A2D0   mov      x3, x25              
+657329: 0x1D920A2D4   mov      x17, x8              
+657330: 0x1D920A2D8   movk     x17, #0xa0d1, lsl #48 
+657331: 0x1D920A2DC   blraa    x9, x17              
+657332: 0x1D920A2E0   mov      x8, x24              
+657333: 0x1D920A2E4   ldr      x9, [x8, #0x20]!     
+657334: 0x1D920A2E8   ldp      x19, x25, [sp, #0x20] 
+657335: 0x1D920A2EC   mov      x0, x19              
+657336: 0x1D920A2F0   mov      x1, x23              
+657337: 0x1D920A2F4   mov      x2, x25              
+657338: 0x1D920A2F8   mov      x17, x8              
+657339: 0x1D920A2FC   movk     x17, #0x48d8, lsl #48 
+657340: 0x1D920A300   blraa    x9, x17              
+657341: 0x1D920A304   ldr      x8, [x24, #0x38]!    
+657342: 0x1D920A308   mov      x0, x19              
+657343: 0x1D920A30C   mov      w1, #0x0             
+657344: 0x1D920A310   mov      w2, #0x1             
+657345: 0x1D920A314   mov      x3, x25              
+657346: 0x1D920A318   mov      x17, x24             
+657347: 0x1D920A31C   movk     x17, #0xa0d1, lsl #48 
+657348: 0x1D920A320   blraa    x8, x17              
+657349: 0x1D920A324   adrp     x8, 75652            ; 0x1eb98e000
+657350: 0x1D920A328   ldr      x25, [x8, #0x538]    
+657351: 0x1D920A32C   add      x0, x20, x25         
+657352: 0x1D920A330   add      x1, x22, #0x10       
+657353: 0x1D920A334   mov      w2, #0x21            
+657354: 0x1D920A338   mov      x3, #0x0             
+657355: 0x1D920A33C   bl       _swift_beginAccess   
+657356: 0x1D920A340   adrp     x26, 75652           ; 0x1eb98e000
+657357: 0x1D920A344   add      x26, x26, #0x518     
+657358: 0x1D920A348   adrp     x24, 305             ; 0x1d933b000
+657359: 0x1D920A34C   add      x24, x24, #0x308     
+657360: 0x1D920A350   add      x1, x20, x25         
+657361: 0x1D920A354   mov      x0, x28              
+657362: 0x1D920A358   mov      x2, x26              
+657363: 0x1D920A35C   mov      x3, x24              
+657364: 0x1D920A360   bl       0x1d91c21f0          
+657365: 0x1D920A364   add      x0, x22, #0x10       
+657366: 0x1D920A368   bl       _swift_endAccess     
+657367: 0x1D920A36C   adrp     x8, 75652            ; 0x1eb98e000
+657368: 0x1D920A370   ldr      x23, [x8, #0x540]    
+657369: 0x1D920A374   add      x0, x20, x23         
+657370: 0x1D920A378   add      x1, x22, #0x28       
+657371: 0x1D920A37C   mov      w2, #0x21            
+657372: 0x1D920A380   mov      x3, #0x0             
+657373: 0x1D920A384   bl       _swift_beginAccess   
+657374: 0x1D920A388   adrp     x2, 75652            ; 0x1eb98e000
+657375: 0x1D920A38C   add      x2, x2, #0x510       
+657376: 0x1D920A390   adrp     x3, 305              ; 0x1d933b000
+657377: 0x1D920A394   add      x3, x3, #0x300       
+657378: 0x1D920A398   add      x1, x20, x23         
+657379: 0x1D920A39C   mov      x0, x19              
+657380: 0x1D920A3A0   bl       0x1d91c21f0          
+657381: 0x1D920A3A4   add      x0, x22, #0x28       
+657382: 0x1D920A3A8   bl       _swift_endAccess     
+657383: 0x1D920A3AC   add      x0, x20, x25         
+657384: 0x1D920A3B0   ldr      x25, [sp, #0x30]     
+657385: 0x1D920A3B4   mov      x1, x25              
+657386: 0x1D920A3B8   mov      x2, x26              
+657387: 0x1D920A3BC   mov      x3, x24              
+657388: 0x1D920A3C0   bl       0x1d919aeec          
+657389: 0x1D920A3C4   ldr      x8, [x21, #0x30]!    
+657390: 0x1D920A3C8   mov      x0, x25              
+657391: 0x1D920A3CC   mov      w1, #0x1             
+657392: 0x1D920A3D0   ldr      x2, [sp, #0x38]      
+657393: 0x1D920A3D4   mov      x17, x21             
+657394: 0x1D920A3D8   movk     x17, #0x60f0, lsl #48 
+657395: 0x1D920A3DC   blraa    x8, x17              
+657396: 0x1D920A3E0   cmp      w0, #0x1             
+657397: 0x1D920A3E4   b.ne     0x1d920a400          
+657398: 0x1D920A3E8   ldr      x0, [x22, #0xa0]     
+657399: 0x1D920A3EC   adrp     x1, 75652            ; 0x1eb98e000
+657400: 0x1D920A3F0   add      x1, x1, #0x518       
+657401: 0x1D920A3F4   adrp     x2, 305              ; 0x1d933b000
+657402: 0x1D920A3F8   add      x2, x2, #0x308       
+657403: 0x1D920A3FC   b        0x1d920a490          
+657404: 0x1D920A400   movk     x27, #0x48d8, lsl #48 
+657405: 0x1D920A404   ldr      x0, [x22, #0xf0]     
+657406: 0x1D920A408   ldr      x2, [x22, #0xe0]     
+657407: 0x1D920A40C   ldp      x21, x24, [x22, #0xc8] 
+657408: 0x1D920A410   ldr      x1, [x22, #0xa0]     
+657409: 0x1D920A414   ldr      x19, [x22, #0x90]    
+657410: 0x1D920A418   ldr      x8, [sp, #0x8]       
+657411: 0x1D920A41C   blraa    x8, x27              
+657412: 0x1D920A420   adrp     x2, 75652            ; 0x1eb98e000
+657413: 0x1D920A424   add      x2, x2, #0x510       
+657414: 0x1D920A428   adrp     x3, 305              ; 0x1d933b000
+657415: 0x1D920A42C   add      x3, x3, #0x300       
+657416: 0x1D920A430   add      x0, x20, x23         
+657417: 0x1D920A434   mov      x1, x19              
+657418: 0x1D920A438   bl       0x1d919aeec          
+657419: 0x1D920A43C   ldr      x8, [x24, #0x30]!    
+657420: 0x1D920A440   mov      x0, x19              
+657421: 0x1D920A444   mov      w1, #0x1             
+657422: 0x1D920A448   mov      x2, x21              
+657423: 0x1D920A44C   mov      x17, x24             
+657424: 0x1D920A450   movk     x17, #0x60f0, lsl #48 
+657425: 0x1D920A454   blraa    x8, x17              
+657426: 0x1D920A458   cmp      w0, #0x1             
+657427: 0x1D920A45C   b.ne     0x1d920a5a0          
+657428: 0x1D920A460   ldp      x8, x0, [x22, #0xe8] 
+657429: 0x1D920A464   ldr      x1, [x22, #0xe0]     
+657430: 0x1D920A468   ldr      x20, [x22, #0x90]    
+657431: 0x1D920A46C   ldr      x9, [x8, #0x8]!      
+657432: 0x1D920A470   mov      x17, x8              
+657433: 0x1D920A474   movk     x17, #0x4f8, lsl #48 
+657434: 0x1D920A478   blraa    x9, x17              
+657435: 0x1D920A47C   adrp     x1, 75652            ; 0x1eb98e000
+657436: 0x1D920A480   add      x1, x1, #0x510       
+657437: 0x1D920A484   adrp     x2, 305              ; 0x1d933b000
+657438: 0x1D920A488   add      x2, x2, #0x300       
+657439: 0x1D920A48C   mov      x0, x20              
+657440: 0x1D920A490   bl       0x1d919ae04          
+657441: 0x1D920A494   bl       0x1d91cfe30          
+657442: 0x1D920A498   mov      x1, x0               
+657443: 0x1D920A49C   adrp     x0, 111531           ; 0x1f45b5000
+657444: 0x1D920A4A0   add      x0, x0, #0x490       ; _$s11NotesShared18TranscriptionErrorON
+657445: 0x1D920A4A4   mov      x2, #0x0             
+657446: 0x1D920A4A8   mov      w3, #0x0             
+657447: 0x1D920A4AC   bl       _swift_allocError    
+657448: 0x1D920A4B0   str      x0, [sp, #0x38]      
+657449: 0x1D920A4B4   mov      w8, #0xf             
+657450: 0x1D920A4B8   strb     w8, [x1]             
+657451: 0x1D920A4BC   mov      x21, x0              
+657452: 0x1D920A4C0   bl       _swift_willThrow     
+657453: 0x1D920A4C4   ldp      x19, x0, [x22, #0xf0] 
+657454: 0x1D920A4C8   ldr      x21, [x22, #0xd8]    
+657455: 0x1D920A4CC   ldr      x23, [x22, #0xc0]    
+657456: 0x1D920A4D0   ldp      x25, x24, [x22, #0xa0] 
+657457: 0x1D920A4D4   ldp      x27, x26, [x22, #0x90] 
+657458: 0x1D920A4D8   ldp      x20, x28, [x22, #0x80] 
+657459: 0x1D920A4DC   ldp      x10, x9, [x22, #0x60] 
+657460: 0x1D920A4E0   str      x9, [sp, #0x10]      
+657461: 0x1D920A4E4   ldp      x8, x9, [x22, #0x50] 
+657462: 0x1D920A4E8   stp      x10, x9, [sp, #0x20] 
+657463: 0x1D920A4EC   str      x8, [sp, #0x30]      
+657464: 0x1D920A4F0   bl       _swift_task_dealloc  
+657465: 0x1D920A4F4   mov      x0, x19              
+657466: 0x1D920A4F8   bl       _swift_task_dealloc  
+657467: 0x1D920A4FC   mov      x0, x21              
+657468: 0x1D920A500   bl       _swift_task_dealloc  
+657469: 0x1D920A504   mov      x0, x23              
+657470: 0x1D920A508   bl       _swift_task_dealloc  
+657471: 0x1D920A50C   mov      x0, x24              
+657472: 0x1D920A510   bl       _swift_task_dealloc  
+657473: 0x1D920A514   mov      x0, x25              
+657474: 0x1D920A518   bl       _swift_task_dealloc  
+657475: 0x1D920A51C   mov      x0, x26              
+657476: 0x1D920A520   bl       _swift_task_dealloc  
+657477: 0x1D920A524   mov      x0, x27              
+657478: 0x1D920A528   bl       _swift_task_dealloc  
+657479: 0x1D920A52C   mov      x0, x28              
+657480: 0x1D920A530   bl       _swift_task_dealloc  
+657481: 0x1D920A534   mov      x0, x20              
+657482: 0x1D920A538   bl       _swift_task_dealloc  
+657483: 0x1D920A53C   ldr      x0, [sp, #0x10]      
+657484: 0x1D920A540   bl       _swift_task_dealloc  
+657485: 0x1D920A544   ldr      x0, [sp, #0x20]      
+657486: 0x1D920A548   bl       _swift_task_dealloc  
+657487: 0x1D920A54C   ldr      x0, [sp, #0x28]      
+657488: 0x1D920A550   bl       _swift_task_dealloc  
+657489: 0x1D920A554   ldr      x0, [sp, #0x30]      
+657490: 0x1D920A558   bl       _swift_task_dealloc  
+657491: 0x1D920A55C   mov      x0, x22              
+657492: 0x1D920A560   ldr      x1, [x0, #0x8]!      
+657493: 0x1D920A564   ldr      x20, [sp, #0x38]     
+657494: 0x1D920A568   ldp      x29, x30, [sp, #0x90] 
+657495: 0x1D920A56C   ldp      x21, x19, [sp, #0x78] 
+657496: 0x1D920A570   ldp      x24, x23, [sp, #0x68] 
+657497: 0x1D920A574   ldp      x26, x25, [sp, #0x58] 
+657498: 0x1D920A578   ldp      x28, x27, [sp, #0x48] 
+657499: 0x1D920A57C   and      x29, x29, #0xefffffffffffffff 
+657500: 0x1D920A580   add      sp, sp, #0xa0        
+657501: 0x1D920A584   autibsp                       
+657502: 0x1D920A588   eor      x16, x30, x30, lsl #1 
+657503: 0x1D920A58C   tbz      x16, #0x3e, 0x1d920a594 
+657504: 0x1D920A590   brk      #0xc471              
+657505: 0x1D920A594   mov      x16, x0              
+657506: 0x1D920A598   movk     x16, #0xd707, lsl #48 
+657507: 0x1D920A59C   braa     x1, x16              
+657508: 0x1D920A5A0   ldr      x0, [x22, #0x90]     
+657509: 0x1D920A5A4   adrp     x1, 75652            ; 0x1eb98e000
+657510: 0x1D920A5A8   add      x1, x1, #0x510       
+657511: 0x1D920A5AC   adrp     x2, 305              ; 0x1d933b000
+657512: 0x1D920A5B0   add      x2, x2, #0x300       
+657513: 0x1D920A5B4   bl       0x1d919ae04          
+657514: 0x1D920A5B8   bl       _ICInternalSettingsDisableGASRAvailabilityCheck 
+657515: 0x1D920A5BC   ldr      x8, [x22, #0x88]     
+657516: 0x1D920A5C0   cbz      w0, 0x1d920a5d4      
+657517: 0x1D920A5C4   mov      w0, #0x6e65          
+657518: 0x1D920A5C8   mov      x1, #-0x1e00000000000000 
+657519: 0x1D920A5CC   bl       0x1d93189e0          
+657520: 0x1D920A5D0   b        0x1d920a5d8          
+657521: 0x1D920A5D4   bl       0x1d9318a40          
+657522: 0x1D920A5D8   ldp      x0, x1, [x22, #0x80] 
+657523: 0x1D920A5DC   ldp      x2, x8, [x22, #0x70] 
+657524: 0x1D920A5E0   ldp      x20, x19, [x22, #0x60] 
+657525: 0x1D920A5E4   stp      x20, x0, [sp, #0x28] 
+657526: 0x1D920A5E8   ldr      x9, [x22, #0x48]     
+657527: 0x1D920A5EC   str      x9, [sp, #0x38]      
+657528: 0x1D920A5F0   ldr      x9, [x8, #0x10]!     
+657529: 0x1D920A5F4   mov      x17, x8              
+657530: 0x1D920A5F8   movk     x17, #0xe3ba, lsl #48 
+657531: 0x1D920A5FC   blraa    x9, x17              
+657532: 0x1D920A600   adrp     x8, 49998            ; 0x1e5558000
+657533: 0x1D920A604   ldr      x8, [x8, #0xa20]     
+657534: 0x1D920A608   ldr      w23, [x8]            
+657535: 0x1D920A60C   mov      x0, #0x0             
+657536: 0x1D920A610   bl       0x1d9319260          
+657537: 0x1D920A614   mov      x24, x0              
+657538: 0x1D920A618   mov      x17, x0              
+657539: 0x1D920A61C   ldr      x16, [x17, #-0x8]!   
+657540: 0x1D920A620   movk     x17, #0x2e3f, lsl #48 
+657541: 0x1D920A624   autda    x16, x17             
+657542: 0x1D920A628   mov      x17, x16             
+657543: 0x1D920A62C   xpacd    x17                  
+657544: 0x1D920A630   cmp      x16, x17             
+657545: 0x1D920A634   b.eq     0x1d920a63c          
+657546: 0x1D920A638   brk      #0xc472              
+657547: 0x1D920A63C   mov      x25, x16             
+657548: 0x1D920A640   mov      x8, x16              
+657549: 0x1D920A644   ldr      x9, [x8, #0x68]!     
+657550: 0x1D920A648   mov      x0, x19              
+657551: 0x1D920A64C   mov      x1, x23              
+657552: 0x1D920A650   mov      x2, x24              
+657553: 0x1D920A654   mov      x17, x8              
+657554: 0x1D920A658   movk     x17, #0xb2e4, lsl #48 
+657555: 0x1D920A65C   blraa    x9, x17              
+657556: 0x1D920A660   ldr      x8, [x25, #0x38]!    
+657557: 0x1D920A664   mov      x0, x19              
+657558: 0x1D920A668   mov      w1, #0x0             
+657559: 0x1D920A66C   mov      w2, #0x1             
+657560: 0x1D920A670   mov      x3, x24              
+657561: 0x1D920A674   mov      x17, x25             
+657562: 0x1D920A678   movk     x17, #0xa0d1, lsl #48 
+657563: 0x1D920A67C   blraa    x8, x17              
+657564: 0x1D920A680   mov      x0, #0x0             
+657565: 0x1D920A684   bl       0x1d93190f0          
+657566: 0x1D920A688   mov      x3, x0               
+657567: 0x1D920A68C   mov      x8, x0               
+657568: 0x1D920A690   ldr      x16, [x8, #-0x8]!    
+657569: 0x1D920A694   mov      x17, x8              
+657570: 0x1D920A698   movk     x17, #0x2e3f, lsl #48 
+657571: 0x1D920A69C   autda    x16, x17             
+657572: 0x1D920A6A0   ldr      x8, [x16, #0x38]!    
+657573: 0x1D920A6A4   mov      x0, x20              
+657574: 0x1D920A6A8   mov      w1, #0x1             
+657575: 0x1D920A6AC   mov      w2, #0x1             
+657576: 0x1D920A6B0   movk     x16, #0xa0d1, lsl #48 
+657577: 0x1D920A6B4   blraa    x8, x16              
+657578: 0x1D920A6B8   adrp     x0, 75651            ; 0x1eb98d000
+657579: 0x1D920A6BC   add      x0, x0, #0xc78       
+657580: 0x1D920A6C0   adrp     x1, 302              ; 0x1d9338000
+657581: 0x1D920A6C4   add      x1, x1, #0x658       
+657582: 0x1D920A6C8   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657583: 0x1D920A6CC   mov      x23, x0              
+657584: 0x1D920A6D0   mov      x0, #0x0             
+657585: 0x1D920A6D4   bl       0x1d9319100          
+657586: 0x1D920A6D8   mov      x24, x0              
+657587: 0x1D920A6DC   mov      x9, x0               
+657588: 0x1D920A6E0   ldr      x8, [x9, #-0x8]!     
+657589: 0x1D920A6E4   mov      x16, x8              
+657590: 0x1D920A6E8   mov      x17, x9              
+657591: 0x1D920A6EC   movk     x17, #0x2e3f, lsl #48 
+657592: 0x1D920A6F0   autda    x16, x17             
+657593: 0x1D920A6F4   mov      x17, x16             
+657594: 0x1D920A6F8   xpacd    x17                  
+657595: 0x1D920A6FC   cmp      x16, x17             
+657596: 0x1D920A700   b.eq     0x1d920a708          
+657597: 0x1D920A704   brk      #0xc472              
+657598: 0x1D920A708   mov      x25, x16             
+657599: 0x1D920A70C   mov      x16, x8              
+657600: 0x1D920A710   mov      x17, x9              
+657601: 0x1D920A714   movk     x17, #0x2e3f, lsl #48 
+657602: 0x1D920A718   autda    x16, x17             
+657603: 0x1D920A71C   ldr      x28, [x16, #0x48]    
+657604: 0x1D920A720   ldrb     w8, [x25, #0x50]     
+657605: 0x1D920A724   add      x9, x8, #0x20        
+657606: 0x1D920A728   bic      x27, x9, x8          
+657607: 0x1D920A72C   add      x1, x27, x28, lsl #1 
+657608: 0x1D920A730   orr      x2, x8, #0x7         
+657609: 0x1D920A734   mov      x0, x23              
+657610: 0x1D920A738   bl       _swift_allocObject   
+657611: 0x1D920A73C   mov      x26, x0              
+657612: 0x1D920A740   adrp     x8, 300              ; 0x1d9336000
+657613: 0x1D920A744   ldr      q0, [x8, #0x450]     
+657614: 0x1D920A748   str      q0, [x0, #0x10]      
+657615: 0x1D920A74C   add      x27, x0, x27         
+657616: 0x1D920A750   adrp     x8, 49998            ; 0x1e5558000
+657617: 0x1D920A754   ldr      x8, [x8, #0x868]     
+657618: 0x1D920A758   ldr      w1, [x8]             
+657619: 0x1D920A75C   ldr      x23, [x25, #0x68]!   
+657620: 0x1D920A760   mov      x0, x27              
+657621: 0x1D920A764   mov      x2, x24              
+657622: 0x1D920A768   mov      x17, x25             
+657623: 0x1D920A76C   movk     x17, #0xb2e4, lsl #48 
+657624: 0x1D920A770   blraa    x23, x17             
+657625: 0x1D920A774   adrp     x8, 49998            ; 0x1e5558000
+657626: 0x1D920A778   ldr      x8, [x8, #0x860]     
+657627: 0x1D920A77C   ldr      w1, [x8]             
+657628: 0x1D920A780   add      x0, x27, x28         
+657629: 0x1D920A784   mov      x2, x24              
+657630: 0x1D920A788   mov      x17, x25             
+657631: 0x1D920A78C   movk     x17, #0xb2e4, lsl #48 
+657632: 0x1D920A790   blraa    x23, x17             
+657633: 0x1D920A794   mov      x0, x26              
+657634: 0x1D920A798   bl       0x1d91e9c34          
+657635: 0x1D920A79C   str      x0, [sp, #0x20]      
+657636: 0x1D920A7A0   mov      x0, x26              
+657637: 0x1D920A7A4   bl       _swift_setDeallocating 
+657638: 0x1D920A7A8   mov      x0, x27              
+657639: 0x1D920A7AC   mov      w1, #0x2             
+657640: 0x1D920A7B0   mov      x2, x24              
+657641: 0x1D920A7B4   bl       _swift_arrayDestroy  
+657642: 0x1D920A7B8   mov      x0, x26              
+657643: 0x1D920A7BC   mov      w1, #0x20            
+657644: 0x1D920A7C0   mov      w2, #0x7             
+657645: 0x1D920A7C4   bl       _swift_deallocClassInstance 
+657646: 0x1D920A7C8   adrp     x0, 75651            ; 0x1eb98d000
+657647: 0x1D920A7CC   add      x0, x0, #0xc80       
+657648: 0x1D920A7D0   adrp     x1, 302              ; 0x1d9338000
+657649: 0x1D920A7D4   add      x1, x1, #0x660       
+657650: 0x1D920A7D8   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657651: 0x1D920A7DC   mov      x24, x0              
+657652: 0x1D920A7E0   mov      x0, #0x0             
+657653: 0x1D920A7E4   bl       0x1d9319250          
+657654: 0x1D920A7E8   mov      x25, x0              
+657655: 0x1D920A7EC   mov      x9, x0               
+657656: 0x1D920A7F0   ldr      x8, [x9, #-0x8]!     
+657657: 0x1D920A7F4   mov      x16, x8              
+657658: 0x1D920A7F8   mov      x17, x9              
+657659: 0x1D920A7FC   movk     x17, #0x2e3f, lsl #48 
+657660: 0x1D920A800   autda    x16, x17             
+657661: 0x1D920A804   mov      x17, x16             
+657662: 0x1D920A808   xpacd    x17                  
+657663: 0x1D920A80C   cmp      x16, x17             
+657664: 0x1D920A810   b.eq     0x1d920a818          
+657665: 0x1D920A814   brk      #0xc472              
+657666: 0x1D920A818   mov      x26, x16             
+657667: 0x1D920A81C   mov      x16, x8              
+657668: 0x1D920A820   mov      x17, x9              
+657669: 0x1D920A824   movk     x17, #0x2e3f, lsl #48 
+657670: 0x1D920A828   autda    x16, x17             
+657671: 0x1D920A82C   ldr      x8, [x16, #0x48]     
+657672: 0x1D920A830   ldrb     w9, [x26, #0x50]     
+657673: 0x1D920A834   add      x10, x9, #0x20       
+657674: 0x1D920A838   bic      x28, x10, x9         
+657675: 0x1D920A83C   add      x1, x28, x8          
+657676: 0x1D920A840   orr      x2, x9, #0x7         
+657677: 0x1D920A844   mov      x0, x24              
+657678: 0x1D920A848   bl       _swift_allocObject   
+657679: 0x1D920A84C   mov      x27, x0              
+657680: 0x1D920A850   adrp     x8, 301              ; 0x1d9337000
+657681: 0x1D920A854   ldr      q0, [x8, #0xbf0]     
+657682: 0x1D920A858   str      q0, [sp, #0x10]      
+657683: 0x1D920A85C   str      q0, [x0, #0x10]      
+657684: 0x1D920A860   adrp     x8, 49998            ; 0x1e5558000
+657685: 0x1D920A864   ldr      x8, [x8, #0xa00]     
+657686: 0x1D920A868   ldr      w1, [x8]             
+657687: 0x1D920A86C   mov      x8, x26              
+657688: 0x1D920A870   ldr      x9, [x8, #0x68]!     
+657689: 0x1D920A874   add      x0, x0, x28          
+657690: 0x1D920A878   mov      x2, x25              
+657691: 0x1D920A87C   mov      x17, x8              
+657692: 0x1D920A880   movk     x17, #0xb2e4, lsl #48 
+657693: 0x1D920A884   blraa    x9, x17              
+657694: 0x1D920A888   mov      x0, x27              
+657695: 0x1D920A88C   bl       0x1d91e9f8c          
+657696: 0x1D920A890   mov      x24, x0              
+657697: 0x1D920A894   mov      x0, x27              
+657698: 0x1D920A898   bl       _swift_setDeallocating 
+657699: 0x1D920A89C   ldr      x8, [x26, #0x8]!     
+657700: 0x1D920A8A0   add      x0, x27, x28         
+657701: 0x1D920A8A4   mov      x1, x25              
+657702: 0x1D920A8A8   mov      x17, x26             
+657703: 0x1D920A8AC   movk     x17, #0x4f8, lsl #48 
+657704: 0x1D920A8B0   blraa    x8, x17              
+657705: 0x1D920A8B4   mov      x0, x27              
+657706: 0x1D920A8B8   mov      w1, #0x20            
+657707: 0x1D920A8BC   mov      w2, #0x7             
+657708: 0x1D920A8C0   bl       _swift_deallocClassInstance 
+657709: 0x1D920A8C4   adrp     x0, 75651            ; 0x1eb98d000
+657710: 0x1D920A8C8   add      x0, x0, #0xc88       
+657711: 0x1D920A8CC   adrp     x1, 302              ; 0x1d9338000
+657712: 0x1D920A8D0   add      x1, x1, #0x668       
+657713: 0x1D920A8D4   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657714: 0x1D920A8D8   mov      x26, x0              
+657715: 0x1D920A8DC   mov      x0, #0x0             
+657716: 0x1D920A8E0   bl       0x1d9319160          
+657717: 0x1D920A8E4   mov      x25, x0              
+657718: 0x1D920A8E8   mov      x9, x0               
+657719: 0x1D920A8EC   ldr      x8, [x9, #-0x8]!     
+657720: 0x1D920A8F0   mov      x16, x8              
+657721: 0x1D920A8F4   mov      x17, x9              
+657722: 0x1D920A8F8   movk     x17, #0x2e3f, lsl #48 
+657723: 0x1D920A8FC   autda    x16, x17             
+657724: 0x1D920A900   mov      x17, x16             
+657725: 0x1D920A904   xpacd    x17                  
+657726: 0x1D920A908   cmp      x16, x17             
+657727: 0x1D920A90C   b.eq     0x1d920a914          
+657728: 0x1D920A910   brk      #0xc472              
+657729: 0x1D920A914   mov      x27, x16             
+657730: 0x1D920A918   mov      x16, x8              
+657731: 0x1D920A91C   mov      x17, x9              
+657732: 0x1D920A920   movk     x17, #0x2e3f, lsl #48 
+657733: 0x1D920A924   autda    x16, x17             
+657734: 0x1D920A928   ldr      x20, [x16, #0x48]    
+657735: 0x1D920A92C   ldrb     w8, [x27, #0x50]     
+657736: 0x1D920A930   add      x9, x8, #0x20        
+657737: 0x1D920A934   bic      x28, x9, x8          
+657738: 0x1D920A938   lsl      x21, x20, #1         
+657739: 0x1D920A93C   add      x9, x21, x20         
+657740: 0x1D920A940   add      x1, x28, x9          
+657741: 0x1D920A944   orr      x2, x8, #0x7         
+657742: 0x1D920A948   mov      x0, x26              
+657743: 0x1D920A94C   bl       _swift_allocObject   
+657744: 0x1D920A950   mov      x26, x0              
+657745: 0x1D920A954   adrp     x8, 302              ; 0x1d9338000
+657746: 0x1D920A958   ldr      q0, [x8, #0x510]     
+657747: 0x1D920A95C   str      q0, [x0, #0x10]      
+657748: 0x1D920A960   add      x28, x0, x28         
+657749: 0x1D920A964   adrp     x8, 49998            ; 0x1e5558000
+657750: 0x1D920A968   ldr      x8, [x8, #0x888]     
+657751: 0x1D920A96C   ldr      w1, [x8]             
+657752: 0x1D920A970   ldr      x23, [x27, #0x68]!   
+657753: 0x1D920A974   mov      x0, x28              
+657754: 0x1D920A978   mov      x2, x25              
+657755: 0x1D920A97C   mov      x17, x27             
+657756: 0x1D920A980   movk     x17, #0xb2e4, lsl #48 
+657757: 0x1D920A984   blraa    x23, x17             
+657758: 0x1D920A988   adrp     x8, 49998            ; 0x1e5558000
+657759: 0x1D920A98C   ldr      x8, [x8, #0x890]     
+657760: 0x1D920A990   ldr      w1, [x8]             
+657761: 0x1D920A994   add      x0, x28, x20         
+657762: 0x1D920A998   mov      x2, x25              
+657763: 0x1D920A99C   mov      x17, x27             
+657764: 0x1D920A9A0   movk     x17, #0xb2e4, lsl #48 
+657765: 0x1D920A9A4   blraa    x23, x17             
+657766: 0x1D920A9A8   adrp     x8, 49998            ; 0x1e5558000
+657767: 0x1D920A9AC   ldr      x8, [x8, #0x898]     
+657768: 0x1D920A9B0   ldr      w1, [x8]             
+657769: 0x1D920A9B4   add      x0, x28, x21         
+657770: 0x1D920A9B8   mov      x2, x25              
+657771: 0x1D920A9BC   mov      x17, x27             
+657772: 0x1D920A9C0   movk     x17, #0xb2e4, lsl #48 
+657773: 0x1D920A9C4   blraa    x23, x17             
+657774: 0x1D920A9C8   mov      x0, x26              
+657775: 0x1D920A9CC   bl       0x1d920d9f8          
+657776: 0x1D920A9D0   mov      x27, x0              
+657777: 0x1D920A9D4   mov      x0, x26              
+657778: 0x1D920A9D8   bl       _swift_setDeallocating 
+657779: 0x1D920A9DC   mov      x0, x28              
+657780: 0x1D920A9E0   mov      w1, #0x3             
+657781: 0x1D920A9E4   mov      x2, x25              
+657782: 0x1D920A9E8   bl       _swift_arrayDestroy  
+657783: 0x1D920A9EC   mov      x0, x26              
+657784: 0x1D920A9F0   mov      w1, #0x20            
+657785: 0x1D920A9F4   mov      w2, #0x7             
+657786: 0x1D920A9F8   bl       _swift_deallocClassInstance 
+657787: 0x1D920A9FC   mov      x0, #0x0             
+657788: 0x1D920AA00   bl       0x1d93191a0          
+657789: 0x1D920AA04   ldr      w1, [x0, #0x30]      
+657790: 0x1D920AA08   ldrh     w2, [x0, #0x34]      
+657791: 0x1D920AA0C   bl       _swift_allocObject   
+657792: 0x1D920AA10   mov      x6, x0               
+657793: 0x1D920AA14   ldp      x2, x0, [sp, #0x28]  
+657794: 0x1D920AA18   mov      x1, x19              
+657795: 0x1D920AA1C   mov      x3, x27              
+657796: 0x1D920AA20   ldr      x4, [sp, #0x20]      
+657797: 0x1D920AA24   mov      x5, x24              
+657798: 0x1D920AA28   mov      x20, x6              
+657799: 0x1D920AA2C   bl       0x1d9319180          
+657800: 0x1D920AA30   mov      x19, x0              
+657801: 0x1D920AA34   str      x0, [x22, #0x100]    
+657802: 0x1D920AA38   adrp     x8, 75652            ; 0x1eb98e000
+657803: 0x1D920AA3C   ldr      x8, [x8, #0x548]     
+657804: 0x1D920AA40   ldr      x9, [sp, #0x38]      
+657805: 0x1D920AA44   ldr      x20, [x9, x8]        
+657806: 0x1D920AA48   str      x0, [x9, x8]         
+657807: 0x1D920AA4C   bl       _swift_retain        
+657808: 0x1D920AA50   mov      x0, x20              
+657809: 0x1D920AA54   bl       _swift_release       
+657810: 0x1D920AA58   mov      x0, #0x0             
+657811: 0x1D920AA5C   bl       0x1d93190a0          
+657812: 0x1D920AA60   mov      x20, x0              
+657813: 0x1D920AA64   str      x0, [x22, #0x108]    
+657814: 0x1D920AA68   adrp     x0, 75651            ; 0x1eb98d000
+657815: 0x1D920AA6C   add      x0, x0, #0xc90       
+657816: 0x1D920AA70   adrp     x1, 302              ; 0x1d9338000
+657817: 0x1D920AA74   add      x1, x1, #0x670       
+657818: 0x1D920AA78   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+657819: 0x1D920AA7C   str      x0, [x22, #0x110]    
+657820: 0x1D920AA80   mov      w1, #0x30            
+657821: 0x1D920AA84   mov      w2, #0x7             
+657822: 0x1D920AA88   bl       _swift_allocObject   
+657823: 0x1D920AA8C   mov      x21, x0              
+657824: 0x1D920AA90   str      x0, [x22, #0x118]    
+657825: 0x1D920AA94   ldr      q0, [sp, #0x10]      
+657826: 0x1D920AA98   str      q0, [x0, #0x10]      
+657827: 0x1D920AA9C   adrp     x0, 75651            ; 0x1eb98d000
+657828: 0x1D920AAA0   add      x0, x0, #0xc98       
+657829: 0x1D920AAA4   adrp     x16, 49998           ; 0x1e5558000
+657830: 0x1D920AAA8   ldr      x16, [x16, #0x8d0]   
+657831: 0x1D920AAAC   mov      x17, #0xbd60         
+657832: 0x1D920AAB0   pacia    x16, x17             
+657833: 0x1D920AAB4   mov      x1, x16              
+657834: 0x1D920AAB8   adrp     x16, 49998           ; 0x1e5558000
+657835: 0x1D920AABC   ldr      x16, [x16, #0x8c0]   
+657836: 0x1D920AAC0   mov      x17, #0xc6eb         
+657837: 0x1D920AAC4   pacda    x16, x17             
+657838: 0x1D920AAC8   mov      x2, x16              
+657839: 0x1D920AACC   bl       0x1d92104dc          
+657840: 0x1D920AAD0   str      x0, [x22, #0x120]    
+657841: 0x1D920AAD4   stp      x19, x0, [x21, #0x20] 
+657842: 0x1D920AAD8   adrp     x8, 49998            ; 0x1e5558000
+657843: 0x1D920AADC   ldr      x8, [x8, #0x810]     
+657844: 0x1D920AAE0   ldr      w23, [x8, #0x4]      
+657845: 0x1D920AAE4   mov      x0, x19              
+657846: 0x1D920AAE8   bl       _swift_retain        
+657847: 0x1D920AAEC   mov      x0, x23              
+657848: 0x1D920AAF0   bl       _swift_task_alloc    
+657849: 0x1D920AAF4   mov      x17, x22             
+657850: 0x1D920AAF8   str      x0, [x22, #0x128]    
+657851: 0x1D920AAFC   mov      x16, x0              
+657852: 0x1D920AB00   movk     x16, #0xbda2, lsl #48 
+657853: 0x1D920AB04   pacda    x17, x16             
+657854: 0x1D920AB08   str      x17, [x0]            
+657855: 0x1D920AB0C   add      x8, x0, #0x8         
+657856: 0x1D920AB10   adrp     x16, 0               ; 0x1d920a000
+657857: 0x1D920AB14   add      x16, x16, #0xb60     
+657858: 0x1D920AB18   mov      x17, x8              
+657859: 0x1D920AB1C   movk     x17, #0xd707, lsl #48 
+657860: 0x1D920AB20   pacia    x16, x17             
+657861: 0x1D920AB24   str      x16, [x0, #0x8]      
+657862: 0x1D920AB28   mov      x22, x0              
+657863: 0x1D920AB2C   mov      x0, x21              
+657864: 0x1D920AB30   ldp      x29, x30, [sp, #0x90] 
+657865: 0x1D920AB34   ldp      x21, x19, [sp, #0x78] 
+657866: 0x1D920AB38   ldp      x24, x23, [sp, #0x68] 
+657867: 0x1D920AB3C   ldp      x26, x25, [sp, #0x58] 
+657868: 0x1D920AB40   ldp      x28, x27, [sp, #0x48] 
+657869: 0x1D920AB44   and      x29, x29, #0xefffffffffffffff 
+657870: 0x1D920AB48   add      sp, sp, #0xa0        
+657871: 0x1D920AB4C   autibsp                       
+657872: 0x1D920AB50   eor      x16, x30, x30, lsl #1 
+657873: 0x1D920AB54   tbz      x16, #0x3e, 0x1d920ab5c 
+657874: 0x1D920AB58   brk      #0xc471              
+657875: 0x1D920AB5C   b        0x1d9319060          
+657876: 0x1D920AB60   pacibsp                       
+657877: 0x1D920AB64   orr      x29, x29, #0x1000000000000000 
+657878: 0x1D920AB68   sub      sp, sp, #0x20        
+657879: 0x1D920AB6C   stp      x29, x30, [sp, #0x10] 
+657880: 0x1D920AB70   add      x16, sp, #0x8        
+657881: 0x1D920AB74   movk     x16, #0xc31a, lsl #48 
+657882: 0x1D920AB78   mov      x17, x22             
+657883: 0x1D920AB7C   pacdb    x17, x16             
+657884: 0x1D920AB80   str      x17, [sp, #0x8]      
+657885: 0x1D920AB84   add      x29, sp, #0x10       
+657886: 0x1D920AB88   mov      x17, x22             
+657887: 0x1D920AB8C   ldr      x8, [x22]            
+657888: 0x1D920AB90   mov      x16, x8              
+657889: 0x1D920AB94   movk     x17, #0xbda2, lsl #48 
+657890: 0x1D920AB98   autda    x16, x17             
+657891: 0x1D920AB9C   mov      x17, x16             
+657892: 0x1D920ABA0   xpacd    x17                  
+657893: 0x1D920ABA4   cmp      x16, x17             
+657894: 0x1D920ABA8   b.eq     0x1d920abb0          
+657895: 0x1D920ABAC   brk      #0xc472              
+657896: 0x1D920ABB0   mov      x9, x16              
+657897: 0x1D920ABB4   sub      x10, x29, #0x8       
+657898: 0x1D920ABB8   sub      x16, x29, #0x8       
+657899: 0x1D920ABBC   movk     x16, #0xc31a, lsl #48 
+657900: 0x1D920ABC0   mov      x17, x9              
+657901: 0x1D920ABC4   pacda    x17, x16             
+657902: 0x1D920ABC8   str      x17, [x10]           
+657903: 0x1D920ABCC   mov      x16, x8              
+657904: 0x1D920ABD0   mov      x17, x22             
+657905: 0x1D920ABD4   movk     x17, #0xbda2, lsl #48 
+657906: 0x1D920ABD8   autda    x16, x17             
+657907: 0x1D920ABDC   ldr      x10, [x16, #0x128]   
+657908: 0x1D920ABE0   mov      x16, x8              
+657909: 0x1D920ABE4   mov      x17, x22             
+657910: 0x1D920ABE8   movk     x17, #0xbda2, lsl #48 
+657911: 0x1D920ABEC   autda    x16, x17             
+657912: 0x1D920ABF0   ldr      x20, [x16, #0x118]   
+657913: 0x1D920ABF4   ldr      x16, [x22]           
+657914: 0x1D920ABF8   mov      x17, x22             
+657915: 0x1D920ABFC   movk     x17, #0xbda2, lsl #48 
+657916: 0x1D920AC00   autda    x16, x17             
+657917: 0x1D920AC04   mov      x17, x16             
+657918: 0x1D920AC08   xpacd    x17                  
+657919: 0x1D920AC0C   cmp      x16, x17             
+657920: 0x1D920AC10   b.eq     0x1d920ac18          
+657921: 0x1D920AC14   brk      #0xc472              
+657922: 0x1D920AC18   mov      x22, x16             
+657923: 0x1D920AC1C   str      x0, [x9, #0x130]     
+657924: 0x1D920AC20   mov      x0, x10              
+657925: 0x1D920AC24   bl       _swift_task_dealloc  
+657926: 0x1D920AC28   mov      x0, x20              
+657927: 0x1D920AC2C   bl       _swift_release       
+657928: 0x1D920AC30   adrp     x16, 0               ; 0x1d920a000
+657929: 0x1D920AC34   add      x16, x16, #0xc68     
+657930: 0x1D920AC38   paciza   x16                  
+657931: 0x1D920AC3C   mov      x0, x16              
+657932: 0x1D920AC40   mov      x1, #0x0             
+657933: 0x1D920AC44   mov      x2, #0x0             
+657934: 0x1D920AC48   ldp      x29, x30, [sp, #0x10] 
+657935: 0x1D920AC4C   and      x29, x29, #0xefffffffffffffff 
+657936: 0x1D920AC50   add      sp, sp, #0x20        
+657937: 0x1D920AC54   autibsp                       
+657938: 0x1D920AC58   eor      x16, x30, x30, lsl #1 
+657939: 0x1D920AC5C   tbz      x16, #0x3e, 0x1d920ac64 
+657940: 0x1D920AC60   brk      #0xc471              
+657941: 0x1D920AC64   b        _swift_task_switch   
+657942: 0x1D920AC68   pacibsp                       
+657943: 0x1D920AC6C   orr      x29, x29, #0x1000000000000000 
+657944: 0x1D920AC70   sub      sp, sp, #0xa0        
+657945: 0x1D920AC74   stp      x28, x27, [sp, #0x48] 
+657946: 0x1D920AC78   stp      x26, x25, [sp, #0x58] 
+657947: 0x1D920AC7C   stp      x24, x23, [sp, #0x68] 
+657948: 0x1D920AC80   stp      x21, x19, [sp, #0x78] 
+657949: 0x1D920AC84   stp      x29, x30, [sp, #0x90] 
+657950: 0x1D920AC88   add      x16, sp, #0x88       
+657951: 0x1D920AC8C   movk     x16, #0xc31a, lsl #48 
+657952: 0x1D920AC90   mov      x17, x22             
+657953: 0x1D920AC94   pacdb    x17, x16             
+657954: 0x1D920AC98   str      x17, [sp, #0x88]     
+657955: 0x1D920AC9C   add      x29, sp, #0x90       
+657956: 0x1D920ACA0   ldr      x19, [x22, #0x130]   
+657957: 0x1D920ACA4   ldr      x8, [x22, #0x48]     
+657958: 0x1D920ACA8   adrp     x9, 75671            ; 0x1eb9a1000
+657959: 0x1D920ACAC   ldr      x9, [x9, #0x208]     
+657960: 0x1D920ACB0   ldr      x21, [x8, x9]        
+657961: 0x1D920ACB4   str      x19, [x8, x9]        
+657962: 0x1D920ACB8   mov      x0, x19              
+657963: 0x1D920ACBC   bl       _objc_retain         
+657964: 0x1D920ACC0   mov      x20, x0              
+657965: 0x1D920ACC4   mov      x0, x21              
+657966: 0x1D920ACC8   bl       _objc_release        
+657967: 0x1D920ACCC   cbz      x19, 0x1d920ae90     
+657968: 0x1D920ACD0   str      x20, [sp, #0x28]     
+657969: 0x1D920ACD4   ldr      x20, [x22, #0x120]   
+657970: 0x1D920ACD8   ldp      x10, x27, [x22, #0x108] 
+657971: 0x1D920ACDC   ldp      x21, x26, [x22, #0xf8] 
+657972: 0x1D920ACE0   ldp      x19, x28, [x22, #0xe8] 
+657973: 0x1D920ACE4   ldr      x24, [x22, #0xe0]    
+657974: 0x1D920ACE8   ldp      x25, x23, [x22, #0x50] 
+657975: 0x1D920ACEC   adrp     x8, 335              ; 0x1d9359000
+657976: 0x1D920ACF0   add      x8, x8, #0x110       
+657977: 0x1D920ACF4   sub      x8, x8, #0x20        
+657978: 0x1D920ACF8   ldr      x9, [x22, #0x48]     
+657979: 0x1D920ACFC   stp      x9, x10, [sp, #0x30] 
+657980: 0x1D920AD00   orr      x1, x8, #0x8000000000000000 
+657981: 0x1D920AD04   mov      x8, x23              
+657982: 0x1D920AD08   mov      x0, #0x21            
+657983: 0x1D920AD0C   movk     x0, #0xd000, lsl #48 
+657984: 0x1D920AD10   bl       0x1d93190d0          
+657985: 0x1D920AD14   ldr      x8, [x19, #0x10]!    
+657986: 0x1D920AD18   mov      x0, x21              
+657987: 0x1D920AD1C   mov      x1, x28              
+657988: 0x1D920AD20   mov      x2, x24              
+657989: 0x1D920AD24   mov      x17, x19             
+657990: 0x1D920AD28   movk     x17, #0xe3ba, lsl #48 
+657991: 0x1D920AD2C   blraa    x8, x17              
+657992: 0x1D920AD30   mov      x0, x27              
+657993: 0x1D920AD34   mov      w1, #0x30            
+657994: 0x1D920AD38   mov      w2, #0x7             
+657995: 0x1D920AD3C   bl       _swift_allocObject   
+657996: 0x1D920AD40   mov      x27, x0              
+657997: 0x1D920AD44   adrp     x8, 301              ; 0x1d9337000
+657998: 0x1D920AD48   ldr      q0, [x8, #0xbf0]     
+657999: 0x1D920AD4C   str      q0, [x0, #0x10]      
+658000: 0x1D920AD50   stp      x26, x20, [x0, #0x20] 
+658001: 0x1D920AD54   mov      x0, #0x0             
+658002: 0x1D920AD58   bl       0x1d9319210          
+658003: 0x1D920AD5C   mov      x3, x0               
+658004: 0x1D920AD60   mov      x8, x0               
+658005: 0x1D920AD64   ldr      x16, [x8, #-0x8]!    
+658006: 0x1D920AD68   mov      x17, x8              
+658007: 0x1D920AD6C   movk     x17, #0x2e3f, lsl #48 
+658008: 0x1D920AD70   autda    x16, x17             
+658009: 0x1D920AD74   ldr      x8, [x16, #0x38]!    
+658010: 0x1D920AD78   mov      x0, x25              
+658011: 0x1D920AD7C   mov      w1, #0x1             
+658012: 0x1D920AD80   mov      w2, #0x1             
+658013: 0x1D920AD84   movk     x16, #0xa0d1, lsl #48 
+658014: 0x1D920AD88   blraa    x8, x16              
+658015: 0x1D920AD8C   mov      x0, #0x0             
+658016: 0x1D920AD90   bl       0x1d9319200          
+658017: 0x1D920AD94   ldr      w1, [x0, #0x30]      
+658018: 0x1D920AD98   ldrh     w2, [x0, #0x34]      
+658019: 0x1D920AD9C   bl       _swift_allocObject   
+658020: 0x1D920ADA0   mov      x28, x0              
+658021: 0x1D920ADA4   mov      x0, x26              
+658022: 0x1D920ADA8   bl       _swift_retain        
+658023: 0x1D920ADAC   ldr      x0, [sp, #0x28]      
+658024: 0x1D920ADB0   bl       _objc_retain         
+658025: 0x1D920ADB4   mov      x26, x0              
+658026: 0x1D920ADB8   mov      x20, x28             
+658027: 0x1D920ADBC   bl       0x1d93191f0          
+658028: 0x1D920ADC0   mov      x20, x0              
+658029: 0x1D920ADC4   bl       0x1d920dd50          
+658030: 0x1D920ADC8   stp      x24, x0, [sp, #0x8]  
+658031: 0x1D920ADCC   str      xzr, [sp]            
+658032: 0x1D920ADD0   mov      x0, x23              
+658033: 0x1D920ADD4   mov      x1, x21              
+658034: 0x1D920ADD8   mov      x2, x26              
+658035: 0x1D920ADDC   mov      x3, x27              
+658036: 0x1D920ADE0   mov      x4, x25              
+658037: 0x1D920ADE4   mov      w5, #0x1             
+658038: 0x1D920ADE8   mov      x6, x20              
+658039: 0x1D920ADEC   mov      x7, #0x0             
+658040: 0x1D920ADF0   ldr      x20, [sp, #0x38]     
+658041: 0x1D920ADF4   bl       0x1d9319080          
+658042: 0x1D920ADF8   adrp     x8, 75652            ; 0x1eb98e000
+658043: 0x1D920ADFC   ldr      x9, [x8, #0x558]     
+658044: 0x1D920AE00   ldr      x10, [sp, #0x30]     
+658045: 0x1D920AE04   ldr      x8, [x10, x9]        
+658046: 0x1D920AE08   str      x0, [x10, x9]        
+658047: 0x1D920AE0C   mov      x0, x8               
+658048: 0x1D920AE10   bl       _swift_release       
+658049: 0x1D920AE14   adrp     x8, 305              ; 0x1d933b000
+658050: 0x1D920AE18   ldr      w0, [x8, #0x32c]     
+658051: 0x1D920AE1C   bl       _swift_task_alloc    
+658052: 0x1D920AE20   mov      x8, x0               
+658053: 0x1D920AE24   mov      x17, x22             
+658054: 0x1D920AE28   str      x0, [x22, #0x138]    
+658055: 0x1D920AE2C   mov      x16, x0              
+658056: 0x1D920AE30   movk     x16, #0xbda2, lsl #48 
+658057: 0x1D920AE34   pacda    x17, x16             
+658058: 0x1D920AE38   str      x17, [x0]            
+658059: 0x1D920AE3C   add      x9, x0, #0x8         
+658060: 0x1D920AE40   adrp     x16, 0               ; 0x1d920a000
+658061: 0x1D920AE44   add      x16, x16, #0xfe4     
+658062: 0x1D920AE48   mov      x17, x9              
+658063: 0x1D920AE4C   movk     x17, #0xd707, lsl #48 
+658064: 0x1D920AE50   pacia    x16, x17             
+658065: 0x1D920AE54   str      x16, [x0, #0x8]      
+658066: 0x1D920AE58   ldp      x0, x20, [x22, #0x40] 
+658067: 0x1D920AE5C   mov      x22, x8              
+658068: 0x1D920AE60   ldp      x29, x30, [sp, #0x90] 
+658069: 0x1D920AE64   ldp      x21, x19, [sp, #0x78] 
+658070: 0x1D920AE68   ldp      x24, x23, [sp, #0x68] 
+658071: 0x1D920AE6C   ldp      x26, x25, [sp, #0x58] 
+658072: 0x1D920AE70   ldp      x28, x27, [sp, #0x48] 
+658073: 0x1D920AE74   and      x29, x29, #0xefffffffffffffff 
+658074: 0x1D920AE78   add      sp, sp, #0xa0        
+658075: 0x1D920AE7C   autibsp                       
+658076: 0x1D920AE80   eor      x16, x30, x30, lsl #1 
+658077: 0x1D920AE84   tbz      x16, #0x3e, 0x1d920ae8c 
+658078: 0x1D920AE88   brk      #0xc471              
+658079: 0x1D920AE8C   b        0x1d920c158          
+658080: 0x1D920AE90   ldr      x19, [x22, #0x100]   
+658081: 0x1D920AE94   ldp      x20, x23, [x22, #0xe8] 
+658082: 0x1D920AE98   ldr      x24, [x22, #0xe0]    
+658083: 0x1D920AE9C   ldr      x25, [x22, #0x88]    
+658084: 0x1D920AEA0   ldp      x26, x27, [x22, #0x70] 
+658085: 0x1D920AEA4   bl       0x1d91cfe30          
+658086: 0x1D920AEA8   mov      x1, x0               
+658087: 0x1D920AEAC   adrp     x0, 111531           ; 0x1f45b5000
+658088: 0x1D920AEB0   add      x0, x0, #0x490       ; _$s11NotesShared18TranscriptionErrorON
+658089: 0x1D920AEB4   mov      x2, #0x0             
+658090: 0x1D920AEB8   mov      w3, #0x0             
+658091: 0x1D920AEBC   bl       _swift_allocError    
+658092: 0x1D920AEC0   str      x0, [sp, #0x38]      
+658093: 0x1D920AEC4   mov      w8, #0xf             
+658094: 0x1D920AEC8   strb     w8, [x1]             
+658095: 0x1D920AECC   mov      x21, x0              
+658096: 0x1D920AED0   bl       _swift_willThrow     
+658097: 0x1D920AED4   mov      x0, x19              
+658098: 0x1D920AED8   bl       _swift_release       
+658099: 0x1D920AEDC   ldr      x8, [x27, #0x8]!     
+658100: 0x1D920AEE0   mov      x0, x25              
+658101: 0x1D920AEE4   mov      x1, x26              
+658102: 0x1D920AEE8   mov      x17, x27             
+658103: 0x1D920AEEC   movk     x17, #0x4f8, lsl #48 
+658104: 0x1D920AEF0   blraa    x8, x17              
+658105: 0x1D920AEF4   ldr      x8, [x20, #0x8]!     
+658106: 0x1D920AEF8   mov      x0, x23              
+658107: 0x1D920AEFC   mov      x1, x24              
+658108: 0x1D920AF00   mov      x17, x20             
+658109: 0x1D920AF04   movk     x17, #0x4f8, lsl #48 
+658110: 0x1D920AF08   blraa    x8, x17              
+658111: 0x1D920AF0C   ldp      x19, x0, [x22, #0xf0] 
+658112: 0x1D920AF10   ldr      x21, [x22, #0xd8]    
+658113: 0x1D920AF14   ldr      x23, [x22, #0xc0]    
+658114: 0x1D920AF18   ldp      x25, x24, [x22, #0xa0] 
+658115: 0x1D920AF1C   ldp      x27, x26, [x22, #0x90] 
+658116: 0x1D920AF20   ldp      x20, x28, [x22, #0x80] 
+658117: 0x1D920AF24   ldp      x8, x9, [x22, #0x60] 
+658118: 0x1D920AF28   stp      x9, x8, [sp, #0x18]  
+658119: 0x1D920AF2C   ldp      x8, x9, [x22, #0x50] 
+658120: 0x1D920AF30   stp      x9, x8, [sp, #0x28]  
+658121: 0x1D920AF34   bl       _swift_task_dealloc  
+658122: 0x1D920AF38   mov      x0, x19              
+658123: 0x1D920AF3C   bl       _swift_task_dealloc  
+658124: 0x1D920AF40   mov      x0, x21              
+658125: 0x1D920AF44   bl       _swift_task_dealloc  
+658126: 0x1D920AF48   mov      x0, x23              
+658127: 0x1D920AF4C   bl       _swift_task_dealloc  
+658128: 0x1D920AF50   mov      x0, x24              
+658129: 0x1D920AF54   bl       _swift_task_dealloc  
+658130: 0x1D920AF58   mov      x0, x25              
+658131: 0x1D920AF5C   bl       _swift_task_dealloc  
+658132: 0x1D920AF60   mov      x0, x26              
+658133: 0x1D920AF64   bl       _swift_task_dealloc  
+658134: 0x1D920AF68   mov      x0, x27              
+658135: 0x1D920AF6C   bl       _swift_task_dealloc  
+658136: 0x1D920AF70   mov      x0, x28              
+658137: 0x1D920AF74   bl       _swift_task_dealloc  
+658138: 0x1D920AF78   mov      x0, x20              
+658139: 0x1D920AF7C   bl       _swift_task_dealloc  
+658140: 0x1D920AF80   ldr      x0, [sp, #0x18]      
+658141: 0x1D920AF84   bl       _swift_task_dealloc  
+658142: 0x1D920AF88   ldr      x0, [sp, #0x20]      
+658143: 0x1D920AF8C   bl       _swift_task_dealloc  
+658144: 0x1D920AF90   ldr      x0, [sp, #0x28]      
+658145: 0x1D920AF94   bl       _swift_task_dealloc  
+658146: 0x1D920AF98   ldr      x0, [sp, #0x30]      
+658147: 0x1D920AF9C   bl       _swift_task_dealloc  
+658148: 0x1D920AFA0   mov      x0, x22              
+658149: 0x1D920AFA4   ldr      x1, [x0, #0x8]!      
+658150: 0x1D920AFA8   ldr      x20, [sp, #0x38]     
+658151: 0x1D920AFAC   ldp      x29, x30, [sp, #0x90] 
+658152: 0x1D920AFB0   ldp      x21, x19, [sp, #0x78] 
+658153: 0x1D920AFB4   ldp      x24, x23, [sp, #0x68] 
+658154: 0x1D920AFB8   ldp      x26, x25, [sp, #0x58] 
+658155: 0x1D920AFBC   ldp      x28, x27, [sp, #0x48] 
+658156: 0x1D920AFC0   and      x29, x29, #0xefffffffffffffff 
+658157: 0x1D920AFC4   add      sp, sp, #0xa0        
+658158: 0x1D920AFC8   autibsp                       
+658159: 0x1D920AFCC   eor      x16, x30, x30, lsl #1 
+658160: 0x1D920AFD0   tbz      x16, #0x3e, 0x1d920afd8 
+658161: 0x1D920AFD4   brk      #0xc471              
+658162: 0x1D920AFD8   mov      x16, x0              
+658163: 0x1D920AFDC   movk     x16, #0xd707, lsl #48 
+658164: 0x1D920AFE0   braa     x1, x16              
+658165: 0x1D920AFE4   pacibsp                       
+658166: 0x1D920AFE8   orr      x29, x29, #0x1000000000000000 
+658167: 0x1D920AFEC   sub      sp, sp, #0x20        
+658168: 0x1D920AFF0   stp      x29, x30, [sp, #0x10] 
+658169: 0x1D920AFF4   add      x16, sp, #0x8        
+658170: 0x1D920AFF8   movk     x16, #0xc31a, lsl #48 
+658171: 0x1D920AFFC   mov      x17, x22             
+658172: 0x1D920B000   pacdb    x17, x16             
+658173: 0x1D920B004   str      x17, [sp, #0x8]      
+658174: 0x1D920B008   add      x29, sp, #0x10       
+658175: 0x1D920B00C   mov      x17, x22             
+658176: 0x1D920B010   ldr      x8, [x22]            
+658177: 0x1D920B014   mov      x16, x8              
+658178: 0x1D920B018   movk     x17, #0xbda2, lsl #48 
+658179: 0x1D920B01C   autda    x16, x17             
+658180: 0x1D920B020   mov      x17, x16             
+658181: 0x1D920B024   xpacd    x17                  
+658182: 0x1D920B028   cmp      x16, x17             
+658183: 0x1D920B02C   b.eq     0x1d920b034          
+658184: 0x1D920B030   brk      #0xc472              
+658185: 0x1D920B034   mov      x9, x16              
+658186: 0x1D920B038   sub      x10, x29, #0x8       
+658187: 0x1D920B03C   sub      x16, x29, #0x8       
+658188: 0x1D920B040   movk     x16, #0xc31a, lsl #48 
+658189: 0x1D920B044   mov      x17, x9              
+658190: 0x1D920B048   pacda    x17, x16             
+658191: 0x1D920B04C   str      x17, [x10]           
+658192: 0x1D920B050   mov      x16, x8              
+658193: 0x1D920B054   mov      x17, x22             
+658194: 0x1D920B058   movk     x17, #0xbda2, lsl #48 
+658195: 0x1D920B05C   autda    x16, x17             
+658196: 0x1D920B060   ldr      x0, [x16, #0x138]    
+658197: 0x1D920B064   ldr      x16, [x22]           
+658198: 0x1D920B068   mov      x17, x22             
+658199: 0x1D920B06C   movk     x17, #0xbda2, lsl #48 
+658200: 0x1D920B070   autda    x16, x17             
+658201: 0x1D920B074   mov      x17, x16             
+658202: 0x1D920B078   xpacd    x17                  
+658203: 0x1D920B07C   cmp      x16, x17             
+658204: 0x1D920B080   b.eq     0x1d920b088          
+658205: 0x1D920B084   brk      #0xc472              
+658206: 0x1D920B088   mov      x22, x16             
+658207: 0x1D920B08C   str      x20, [x9, #0x140]    
+658208: 0x1D920B090   bl       _swift_task_dealloc  
+658209: 0x1D920B094   cbz      x20, 0x1d920b0a8     
+658210: 0x1D920B098   adrp     x16, 0               ; 0x1d920b000
+658211: 0x1D920B09C   add      x16, x16, #0x248     
+658212: 0x1D920B0A0   paciza   x16                  
+658213: 0x1D920B0A4   b        0x1d920b0b4          
+658214: 0x1D920B0A8   adrp     x16, 0               ; 0x1d920b000
+658215: 0x1D920B0AC   add      x16, x16, #0xe0      
+658216: 0x1D920B0B0   paciza   x16                  
+658217: 0x1D920B0B4   mov      x0, x16              
+658218: 0x1D920B0B8   mov      x1, #0x0             
+658219: 0x1D920B0BC   mov      x2, #0x0             
+658220: 0x1D920B0C0   ldp      x29, x30, [sp, #0x10] 
+658221: 0x1D920B0C4   and      x29, x29, #0xefffffffffffffff 
+658222: 0x1D920B0C8   add      sp, sp, #0x20        
+658223: 0x1D920B0CC   autibsp                       
+658224: 0x1D920B0D0   eor      x16, x30, x30, lsl #1 
+658225: 0x1D920B0D4   tbz      x16, #0x3e, 0x1d920b0dc 
+658226: 0x1D920B0D8   brk      #0xc471              
+658227: 0x1D920B0DC   b        _swift_task_switch   
+658228: 0x1D920B0E0   pacibsp                       
+658229: 0x1D920B0E4   orr      x29, x29, #0x1000000000000000 
+658230: 0x1D920B0E8   sub      sp, sp, #0xb0        
+658231: 0x1D920B0EC   stp      x28, x27, [sp, #0x58] 
+658232: 0x1D920B0F0   stp      x26, x25, [sp, #0x68] 
+658233: 0x1D920B0F4   stp      x24, x23, [sp, #0x78] 
+658234: 0x1D920B0F8   stp      x21, x19, [sp, #0x88] 
+658235: 0x1D920B0FC   stp      x29, x30, [sp, #0xa0] 
+658236: 0x1D920B100   add      x16, sp, #0x98       
+658237: 0x1D920B104   movk     x16, #0xc31a, lsl #48 
+658238: 0x1D920B108   mov      x17, x22             
+658239: 0x1D920B10C   pacdb    x17, x16             
+658240: 0x1D920B110   str      x17, [sp, #0x98]     
+658241: 0x1D920B114   add      x29, sp, #0xa0       
+658242: 0x1D920B118   ldr      x27, [x22, #0x130]   
+658243: 0x1D920B11C   ldp      x28, x0, [x22, #0xf8] 
+658244: 0x1D920B120   ldp      x24, x20, [x22, #0xe8] 
+658245: 0x1D920B124   ldp      x21, x19, [x22, #0xd8] 
+658246: 0x1D920B128   ldr      x9, [x22, #0xc0]     
+658247: 0x1D920B12C   ldp      x11, x10, [x22, #0xa0] 
+658248: 0x1D920B130   stp      x9, x10, [sp, #0x8]  
+658249: 0x1D920B134   ldp      x10, x9, [x22, #0x90] 
+658250: 0x1D920B138   stp      x11, x9, [sp, #0x18] 
+658251: 0x1D920B13C   ldp      x8, x25, [x22, #0x80] 
+658252: 0x1D920B140   stp      x10, x8, [sp, #0x28] 
+658253: 0x1D920B144   ldp      x26, x23, [x22, #0x70] 
+658254: 0x1D920B148   ldp      x8, x9, [x22, #0x60] 
+658255: 0x1D920B14C   stp      x9, x8, [sp, #0x38]  
+658256: 0x1D920B150   ldp      x8, x9, [x22, #0x50] 
+658257: 0x1D920B154   stp      x9, x8, [sp, #0x48]  
+658258: 0x1D920B158   bl       _swift_release       
+658259: 0x1D920B15C   mov      x0, x27              
+658260: 0x1D920B160   bl       _objc_release        
+658261: 0x1D920B164   ldr      x8, [x23, #0x8]!     
+658262: 0x1D920B168   mov      x0, x25              
+658263: 0x1D920B16C   mov      x1, x26              
+658264: 0x1D920B170   mov      x17, x23             
+658265: 0x1D920B174   movk     x17, #0x4f8, lsl #48 
+658266: 0x1D920B178   blraa    x8, x17              
+658267: 0x1D920B17C   ldr      x8, [x24, #0x8]!     
+658268: 0x1D920B180   mov      x0, x20              
+658269: 0x1D920B184   mov      x1, x19              
+658270: 0x1D920B188   mov      x17, x24             
+658271: 0x1D920B18C   movk     x17, #0x4f8, lsl #48 
+658272: 0x1D920B190   blraa    x8, x17              
+658273: 0x1D920B194   mov      x0, x28              
+658274: 0x1D920B198   bl       _swift_task_dealloc  
+658275: 0x1D920B19C   mov      x0, x20              
+658276: 0x1D920B1A0   bl       _swift_task_dealloc  
+658277: 0x1D920B1A4   mov      x0, x21              
+658278: 0x1D920B1A8   bl       _swift_task_dealloc  
+658279: 0x1D920B1AC   ldr      x0, [sp, #0x8]       
+658280: 0x1D920B1B0   bl       _swift_task_dealloc  
+658281: 0x1D920B1B4   ldr      x0, [sp, #0x10]      
+658282: 0x1D920B1B8   bl       _swift_task_dealloc  
+658283: 0x1D920B1BC   ldr      x0, [sp, #0x18]      
+658284: 0x1D920B1C0   bl       _swift_task_dealloc  
+658285: 0x1D920B1C4   ldr      x0, [sp, #0x20]      
+658286: 0x1D920B1C8   bl       _swift_task_dealloc  
+658287: 0x1D920B1CC   ldr      x0, [sp, #0x28]      
+658288: 0x1D920B1D0   bl       _swift_task_dealloc  
+658289: 0x1D920B1D4   mov      x0, x25              
+658290: 0x1D920B1D8   bl       _swift_task_dealloc  
+658291: 0x1D920B1DC   ldr      x0, [sp, #0x30]      
+658292: 0x1D920B1E0   bl       _swift_task_dealloc  
+658293: 0x1D920B1E4   ldr      x0, [sp, #0x38]      
+658294: 0x1D920B1E8   bl       _swift_task_dealloc  
+658295: 0x1D920B1EC   ldr      x0, [sp, #0x40]      
+658296: 0x1D920B1F0   bl       _swift_task_dealloc  
+658297: 0x1D920B1F4   ldr      x0, [sp, #0x48]      
+658298: 0x1D920B1F8   bl       _swift_task_dealloc  
+658299: 0x1D920B1FC   ldr      x0, [sp, #0x50]      
+658300: 0x1D920B200   bl       _swift_task_dealloc  
+658301: 0x1D920B204   mov      x0, x22              
+658302: 0x1D920B208   ldr      x1, [x0, #0x8]!      
+658303: 0x1D920B20C   mov      x20, #0x0            
+658304: 0x1D920B210   ldp      x29, x30, [sp, #0xa0] 
+658305: 0x1D920B214   ldp      x21, x19, [sp, #0x88] 
+658306: 0x1D920B218   ldp      x24, x23, [sp, #0x78] 
+658307: 0x1D920B21C   ldp      x26, x25, [sp, #0x68] 
+658308: 0x1D920B220   ldp      x28, x27, [sp, #0x58] 
+658309: 0x1D920B224   and      x29, x29, #0xefffffffffffffff 
+658310: 0x1D920B228   add      sp, sp, #0xb0        
+658311: 0x1D920B22C   autibsp                       
+658312: 0x1D920B230   eor      x16, x30, x30, lsl #1 
+658313: 0x1D920B234   tbz      x16, #0x3e, 0x1d920b23c 
+658314: 0x1D920B238   brk      #0xc471              
+658315: 0x1D920B23C   mov      x16, x0              
+658316: 0x1D920B240   movk     x16, #0xd707, lsl #48 
+658317: 0x1D920B244   braa     x1, x16              
+658318: 0x1D920B248   pacibsp                       
+658319: 0x1D920B24C   orr      x29, x29, #0x1000000000000000 
+658320: 0x1D920B250   sub      sp, sp, #0x80        
+658321: 0x1D920B254   stp      x28, x27, [sp, #0x28] 
+658322: 0x1D920B258   stp      x26, x25, [sp, #0x38] 
+658323: 0x1D920B25C   stp      x24, x23, [sp, #0x48] 
+658324: 0x1D920B260   stp      x21, x19, [sp, #0x58] 
+658325: 0x1D920B264   stp      x29, x30, [sp, #0x70] 
+658326: 0x1D920B268   add      x16, sp, #0x68       
+658327: 0x1D920B26C   movk     x16, #0xc31a, lsl #48 
+658328: 0x1D920B270   mov      x17, x22             
+658329: 0x1D920B274   pacdb    x17, x16             
+658330: 0x1D920B278   str      x17, [sp, #0x68]     
+658331: 0x1D920B27C   add      x29, sp, #0x70       
+658332: 0x1D920B280   ldr      x20, [x22, #0x130]   
+658333: 0x1D920B284   ldr      x0, [x22, #0x100]    
+658334: 0x1D920B288   ldp      x25, x19, [x22, #0xe8] 
+658335: 0x1D920B28C   ldr      x21, [x22, #0xe0]    
+658336: 0x1D920B290   ldr      x23, [x22, #0x88]    
+658337: 0x1D920B294   ldp      x24, x26, [x22, #0x70] 
+658338: 0x1D920B298   bl       _swift_release       
+658339: 0x1D920B29C   mov      x0, x20              
+658340: 0x1D920B2A0   bl       _objc_release        
+658341: 0x1D920B2A4   ldr      x8, [x26, #0x8]!     
+658342: 0x1D920B2A8   mov      x0, x23              
+658343: 0x1D920B2AC   mov      x1, x24              
+658344: 0x1D920B2B0   mov      x17, x26             
+658345: 0x1D920B2B4   movk     x17, #0x4f8, lsl #48 
+658346: 0x1D920B2B8   blraa    x8, x17              
+658347: 0x1D920B2BC   ldr      x8, [x25, #0x8]!     
+658348: 0x1D920B2C0   mov      x0, x19              
+658349: 0x1D920B2C4   mov      x1, x21              
+658350: 0x1D920B2C8   mov      x17, x25             
+658351: 0x1D920B2CC   movk     x17, #0x4f8, lsl #48 
+658352: 0x1D920B2D0   blraa    x8, x17              
+658353: 0x1D920B2D4   ldr      x9, [x22, #0x140]    
+658354: 0x1D920B2D8   ldp      x19, x0, [x22, #0xf0] 
+658355: 0x1D920B2DC   ldr      x21, [x22, #0xd8]    
+658356: 0x1D920B2E0   ldr      x23, [x22, #0xc0]    
+658357: 0x1D920B2E4   ldp      x25, x24, [x22, #0xa0] 
+658358: 0x1D920B2E8   ldp      x27, x26, [x22, #0x90] 
+658359: 0x1D920B2EC   ldp      x20, x28, [x22, #0x80] 
+658360: 0x1D920B2F0   ldp      x8, x10, [x22, #0x60] 
+658361: 0x1D920B2F4   stp      x10, x8, [sp]        
+658362: 0x1D920B2F8   ldp      x8, x10, [x22, #0x50] 
+658363: 0x1D920B2FC   str      x10, [sp, #0x10]     
+658364: 0x1D920B300   stp      x8, x9, [sp, #0x18]  
+658365: 0x1D920B304   bl       _swift_task_dealloc  
+658366: 0x1D920B308   mov      x0, x19              
+658367: 0x1D920B30C   bl       _swift_task_dealloc  
+658368: 0x1D920B310   mov      x0, x21              
+658369: 0x1D920B314   bl       _swift_task_dealloc  
+658370: 0x1D920B318   mov      x0, x23              
+658371: 0x1D920B31C   bl       _swift_task_dealloc  
+658372: 0x1D920B320   mov      x0, x24              
+658373: 0x1D920B324   bl       _swift_task_dealloc  
+658374: 0x1D920B328   mov      x0, x25              
+658375: 0x1D920B32C   bl       _swift_task_dealloc  
+658376: 0x1D920B330   mov      x0, x26              
+658377: 0x1D920B334   bl       _swift_task_dealloc  
+658378: 0x1D920B338   mov      x0, x27              
+658379: 0x1D920B33C   bl       _swift_task_dealloc  
+658380: 0x1D920B340   mov      x0, x28              
+658381: 0x1D920B344   bl       _swift_task_dealloc  
+658382: 0x1D920B348   mov      x0, x20              
+658383: 0x1D920B34C   bl       _swift_task_dealloc  
+658384: 0x1D920B350   ldr      x0, [sp]             
+658385: 0x1D920B354   bl       _swift_task_dealloc  
+658386: 0x1D920B358   ldr      x0, [sp, #0x8]       
+658387: 0x1D920B35C   bl       _swift_task_dealloc  
+658388: 0x1D920B360   ldr      x0, [sp, #0x10]      
+658389: 0x1D920B364   bl       _swift_task_dealloc  
+658390: 0x1D920B368   ldr      x0, [sp, #0x18]      
+658391: 0x1D920B36C   bl       _swift_task_dealloc  
+658392: 0x1D920B370   mov      x0, x22              
+658393: 0x1D920B374   ldr      x1, [x0, #0x8]!      
+658394: 0x1D920B378   ldr      x20, [sp, #0x20]     
+658395: 0x1D920B37C   ldp      x29, x30, [sp, #0x70] 
+658396: 0x1D920B380   ldp      x21, x19, [sp, #0x58] 
+658397: 0x1D920B384   ldp      x24, x23, [sp, #0x48] 
+658398: 0x1D920B388   ldp      x26, x25, [sp, #0x38] 
+658399: 0x1D920B38C   ldp      x28, x27, [sp, #0x28] 
+658400: 0x1D920B390   and      x29, x29, #0xefffffffffffffff 
+658401: 0x1D920B394   add      sp, sp, #0x80        
+658402: 0x1D920B398   autibsp                       
+658403: 0x1D920B39C   eor      x16, x30, x30, lsl #1 
+658404: 0x1D920B3A0   tbz      x16, #0x3e, 0x1d920b3a8 
+658405: 0x1D920B3A4   brk      #0xc471              
+658406: 0x1D920B3A8   mov      x16, x0              
+658407: 0x1D920B3AC   movk     x16, #0xd707, lsl #48 
+658408: 0x1D920B3B0   braa     x1, x16              
+672702: 0x1D9219294   pacibsp                       
+672703: 0x1D9219298   stp      x26, x25, [sp, #-0x50]! 
+672704: 0x1D921929C   stp      x24, x23, [sp, #0x10] 
+672705: 0x1D92192A0   stp      x22, x21, [sp, #0x20] 
+672706: 0x1D92192A4   stp      x20, x19, [sp, #0x30] 
+672707: 0x1D92192A8   stp      x29, x30, [sp, #0x40] 
+672708: 0x1D92192AC   add      x29, sp, #0x40       
+672709: 0x1D92192B0   mov      x19, x20             
+672710: 0x1D92192B4   mov      x21, x0              
+672711: 0x1D92192B8   mov      x0, #0x0             
+672712: 0x1D92192BC   bl       0x1d93183d0          
+672713: 0x1D92192C0   mov      x22, x0              
+672714: 0x1D92192C4   mov      x9, x0               
+672715: 0x1D92192C8   ldr      x8, [x9, #-0x8]!     
+672716: 0x1D92192CC   mov      x16, x8              
+672717: 0x1D92192D0   mov      x17, x9              
+672718: 0x1D92192D4   movk     x17, #0x2e3f, lsl #48 
+672719: 0x1D92192D8   autda    x16, x17             
+672720: 0x1D92192DC   mov      x17, x16             
+672721: 0x1D92192E0   xpacd    x17                  
+672722: 0x1D92192E4   cmp      x16, x17             
+672723: 0x1D92192E8   b.eq     0x1d92192f0          
+672724: 0x1D92192EC   brk      #0xc472              
+672725: 0x1D92192F0   mov      x23, x16             
+672726: 0x1D92192F4   mov      x16, x8              
+672727: 0x1D92192F8   mov      x17, x9              
+672728: 0x1D92192FC   movk     x17, #0x2e3f, lsl #48 
+672729: 0x1D9219300   autda    x16, x17             
+672730: 0x1D9219304   ldr      x8, [x16, #0x40]     
+672731: 0x1D9219308   mov      x9, x8               
+672732: 0x1D921930C   adrp     x17, 83767           ; 0x1ed950000
+672733: 0x1D9219310   add      x17, x17, #0x90      
+672734: 0x1D9219314   ldr      x16, [x17]           
+672735: 0x1D9219318   blraa    x16, x17             
+672736: 0x1D921931C   mov      x9, sp               
+672737: 0x1D9219320   add      x8, x8, #0xf         
+672738: 0x1D9219324   and      x8, x8, #0xfffffffffffffff0 
+672739: 0x1D9219328   sub      x24, x9, x8          
+672740: 0x1D921932C   mov      sp, x24              
+672741: 0x1D9219330   adrp     x8, 50084            ; 0x1e55bd000
+672742: 0x1D9219334   ldr      x8, [x8, #0x410]     
+672743: 0x1D9219338   stp      x8, x8, [x20, #0x10] 
+672744: 0x1D921933C   str      x8, [x20, #0x20]     
+672745: 0x1D9219340   strb     wzr, [x20, #0x38]    
+672746: 0x1D9219344   adrp     x8, 320              ; 0x1d9359000
+672747: 0x1D9219348   add      x8, x8, #0x140       
+672748: 0x1D921934C   sub      x26, x8, #0x20       
+672749: 0x1D9219350   mov      x0, #0x0             
+672750: 0x1D9219354   bl       0x1d92bc7a0          
+672751: 0x1D9219358   mov      x25, x0              
+672752: 0x1D921935C   movi.2d  v0, #0000000000000000 
+672753: 0x1D9219360   stp      q0, q0, [x20, #0x40] 
+672754: 0x1D9219364   str      q0, [x20, #0x60]     
+672755: 0x1D9219368   mov      w1, #0x30            
+672756: 0x1D921936C   mov      w2, #0x7             
+672757: 0x1D9219370   bl       _swift_allocObject   
+672758: 0x1D9219374   mov      x20, x0              
+672759: 0x1D9219378   mov      x8, #0x25            
+672760: 0x1D921937C   movk     x8, #0xd000, lsl #48 
+672761: 0x1D9219380   add      x0, x8, #0x5         
+672762: 0x1D9219384   orr      x1, x26, #0x8000000000000000 
+672763: 0x1D9219388   bl       0x1d92bbabc          
+672764: 0x1D921938C   str      x0, [x19, #0x70]     
+672765: 0x1D9219390   adrp     x8, 320              ; 0x1d9359000
+672766: 0x1D9219394   add      x8, x8, #0x170       
+672767: 0x1D9219398   sub      x26, x8, #0x20       
+672768: 0x1D921939C   mov      x0, x25              
+672769: 0x1D92193A0   mov      w1, #0x30            
+672770: 0x1D92193A4   mov      w2, #0x7             
+672771: 0x1D92193A8   bl       _swift_allocObject   
+672772: 0x1D92193AC   mov      x20, x0              
+672773: 0x1D92193B0   orr      x1, x26, #0x8000000000000000 
+672774: 0x1D92193B4   mov      x0, #0x25            
+672775: 0x1D92193B8   movk     x0, #0xd000, lsl #48 
+672776: 0x1D92193BC   bl       0x1d92bbabc          
+672777: 0x1D92193C0   str      x0, [x19, #0x78]     
+672778: 0x1D92193C4   mov      x8, x24              
+672779: 0x1D92193C8   bl       0x1d93183c0          
+672780: 0x1D92193CC   adrp     x8, 75637            ; 0x1eb98e000
+672781: 0x1D92193D0   ldr      x8, [x8, #0x658]     
+672782: 0x1D92193D4   ldr      x9, [x23, #0x20]!    
+672783: 0x1D92193D8   add      x0, x19, x8          
+672784: 0x1D92193DC   mov      x1, x24              
+672785: 0x1D92193E0   mov      x2, x22              
+672786: 0x1D92193E4   mov      x17, x23             
+672787: 0x1D92193E8   movk     x17, #0x48d8, lsl #48 
+672788: 0x1D92193EC   blraa    x9, x17              
+672789: 0x1D92193F0   adrp     x8, 75637            ; 0x1eb98e000
+672790: 0x1D92193F4   ldr      x8, [x8, #0x638]     
+672791: 0x1D92193F8   add      x8, x19, x8          
+672792: 0x1D92193FC   bl       0x1d9318b40          
+672793: 0x1D9219400   str      x21, [x19, #0x30]    
+672794: 0x1D9219404   mov      x0, #0x0             
+672795: 0x1D9219408   bl       _$s11NotesShared23SiriTranscriptionMethodCMa 
+672796: 0x1D921940C   ldr      w1, [x0, #0x30]      
+672797: 0x1D9219410   ldrh     w2, [x0, #0x34]      
+672798: 0x1D9219414   bl       _swift_allocObject   
+672799: 0x1D9219418   mov      x20, x0              
+672800: 0x1D921941C   str      xzr, [x0, #0x10]     
+672801: 0x1D9219420   adrp     x8, 75637            ; 0x1eb98e000
+672802: 0x1D9219424   ldr      x22, [x8, #0x7e8]    
+672803: 0x1D9219428   adrp     x0, 75637            ; 0x1eb98e000
+672804: 0x1D921942C   add      x0, x0, #0x6d0       
+672805: 0x1D9219430   adrp     x1, 290              ; 0x1d933b000
+672806: 0x1D9219434   add      x1, x1, #0x8a0       
+672807: 0x1D9219438   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+672808: 0x1D921943C   mov      x3, x0               
+672809: 0x1D9219440   mov      x8, x0               
+672810: 0x1D9219444   ldr      x16, [x8, #-0x8]!    
+672811: 0x1D9219448   mov      x17, x8              
+672812: 0x1D921944C   movk     x17, #0x2e3f, lsl #48 
+672813: 0x1D9219450   autda    x16, x17             
+672814: 0x1D9219454   ldr      x8, [x16, #0x38]!    
+672815: 0x1D9219458   add      x0, x20, x22         
+672816: 0x1D921945C   mov      w1, #0x1             
+672817: 0x1D9219460   mov      w2, #0x1             
+672818: 0x1D9219464   movk     x16, #0xa0d1, lsl #48 
+672819: 0x1D9219468   blraa    x8, x16              
+672820: 0x1D921946C   str      x20, [x19, #0x28]    
+672821: 0x1D9219470   mov      x0, x21              
+672822: 0x1D9219474   bl       _objc_retain         
+672823: 0x1D9219478   bl       _objc_msgSend$audioDocument 
+672824: 0x1D921947C   mov      x29, x29             
+672825: 0x1D9219480   bl       _objc_retainAutoreleasedReturnValue 
+672826: 0x1D9219484   cbz      x0, 0x1d921951c      
+672827: 0x1D9219488   mov      x20, x0              
+672828: 0x1D921948C   bl       _$sSo17ICTTAudioDocumentC11NotesSharedE27transcriptViewModelSegmentsSayAC010TranscriptfG7SegmentVGvg 
+672829: 0x1D9219490   mov      x21, x0              
+672830: 0x1D9219494   mov      x0, x20              
+672831: 0x1D9219498   bl       _objc_release        
+672832: 0x1D921949C   mov      x0, x21              
+672833: 0x1D92194A0   mov      x20, x19             
+672834: 0x1D92194A4   bl       0x1d9211284          
+672835: 0x1D92194A8   bl       0x1d92127c8          
+672836: 0x1D92194AC   mov      x21, x0              
+672837: 0x1D92194B0   ldr      x20, [x19, #0x78]    
+672838: 0x1D92194B4   adrp     x0, 111517           ; 0x1f45b6000
+672839: 0x1D92194B8   add      x0, x0, #0x40        
+672840: 0x1D92194BC   mov      w1, #0x20            
+672841: 0x1D92194C0   mov      w2, #0x7             
+672842: 0x1D92194C4   bl       _swift_allocObject   
+672843: 0x1D92194C8   mov      x22, x0              
+672844: 0x1D92194CC   stp      x21, x19, [x0, #0x10] 
+672845: 0x1D92194D0   mov      x0, x19              
+672846: 0x1D92194D4   bl       _swift_retain        
+672847: 0x1D92194D8   adrp     x16, 290             ; 0x1d933b000
+672848: 0x1D92194DC   add      x16, x16, #0x8a8     
+672849: 0x1D92194E0   mov      x17, #0xf08          
+672850: 0x1D92194E4   pacda    x16, x17             
+672851: 0x1D92194E8   mov      x0, x16              
+672852: 0x1D92194EC   mov      x1, x22              
+672853: 0x1D92194F0   bl       0x1d92bbd08          
+672854: 0x1D92194F4   mov      x0, x22              
+672855: 0x1D92194F8   bl       _swift_release       
+672856: 0x1D92194FC   mov      x0, x19              
+672857: 0x1D9219500   sub      sp, x29, #0x40       
+672858: 0x1D9219504   ldp      x29, x30, [sp, #0x40] 
+672859: 0x1D9219508   ldp      x20, x19, [sp, #0x30] 
+672860: 0x1D921950C   ldp      x22, x21, [sp, #0x20] 
+683309: 0x1D9223700   add      x8, x8, #0xf         
+683310: 0x1D9223704   and      x0, x8, #0xfffffffffffffff0 
+683311: 0x1D9223708   bl       _swift_task_alloc    
+683312: 0x1D922370C   str      x0, [x22, #0x48]     
+683313: 0x1D9223710   mov      x0, #0x0             
+683314: 0x1D9223714   bl       0x1d9318720          
+683315: 0x1D9223718   str      x0, [x22, #0x50]     
+683316: 0x1D922371C   ldr      x8, [x0, #-0x8]!     
+683317: 0x1D9223720   mov      x16, x8              
+683318: 0x1D9223724   mov      x17, x0              
+683319: 0x1D9223728   movk     x17, #0x2e3f, lsl #48 
+683320: 0x1D922372C   autda    x16, x17             
+683321: 0x1D9223730   mov      x17, x16             
+683322: 0x1D9223734   xpacd    x17                  
+683323: 0x1D9223738   cmp      x16, x17             
+683324: 0x1D922373C   b.eq     0x1d9223744          
+683325: 0x1D9223740   brk      #0xc472              
+683326: 0x1D9223744   str      x16, [x22, #0x58]    
+683327: 0x1D9223748   mov      x16, x8              
+683328: 0x1D922374C   mov      x17, x0              
+683329: 0x1D9223750   movk     x17, #0x2e3f, lsl #48 
+683330: 0x1D9223754   autda    x16, x17             
+683331: 0x1D9223758   ldr      x8, [x16, #0x40]     
+683332: 0x1D922375C   add      x8, x8, #0xf         
+683333: 0x1D9223760   and      x0, x8, #0xfffffffffffffff0 
+683334: 0x1D9223764   bl       _swift_task_alloc    
+683335: 0x1D9223768   str      x0, [x22, #0x60]     
+683336: 0x1D922376C   mov      x0, #0x0             
+683337: 0x1D9223770   bl       0x1d93190e0          
+683338: 0x1D9223774   ldr      x16, [x0, #-0x8]!    
+683339: 0x1D9223778   mov      x17, x0              
+683340: 0x1D922377C   movk     x17, #0x2e3f, lsl #48 
+683341: 0x1D9223780   autda    x16, x17             
+683342: 0x1D9223784   ldr      x8, [x16, #0x40]     
+683343: 0x1D9223788   add      x8, x8, #0xf         
+683344: 0x1D922378C   and      x0, x8, #0xfffffffffffffff0 
+683345: 0x1D9223790   bl       _swift_task_alloc    
+683346: 0x1D9223794   str      x0, [x22, #0x68]     
+683347: 0x1D9223798   adrp     x0, 75626            ; 0x1eb98d000
+683348: 0x1D922379C   add      x0, x0, #0xc70       
+683349: 0x1D92237A0   adrp     x1, 277              ; 0x1d9338000
+683350: 0x1D92237A4   add      x1, x1, #0x650       
+683351: 0x1D92237A8   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+683352: 0x1D92237AC   ldr      x16, [x0, #-0x8]!    
+683353: 0x1D92237B0   mov      x17, x0              
+683354: 0x1D92237B4   movk     x17, #0x2e3f, lsl #48 
+683355: 0x1D92237B8   autda    x16, x17             
+683356: 0x1D92237BC   ldr      x8, [x16, #0x40]     
+683357: 0x1D92237C0   add      x8, x8, #0xf         
+683358: 0x1D92237C4   and      x0, x8, #0xfffffffffffffff0 
+683359: 0x1D92237C8   bl       _swift_task_alloc    
+683360: 0x1D92237CC   str      x0, [x22, #0x70]     
+683361: 0x1D92237D0   adrp     x0, 75627            ; 0x1eb98e000
+683362: 0x1D92237D4   add      x0, x0, #0x508       
+683363: 0x1D92237D8   adrp     x1, 280              ; 0x1d933b000
+683364: 0x1D92237DC   add      x1, x1, #0xbe0       
+683365: 0x1D92237E0   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+683366: 0x1D92237E4   ldr      x16, [x0, #-0x8]!    
+683367: 0x1D92237E8   mov      x17, x0              
+683368: 0x1D92237EC   movk     x17, #0x2e3f, lsl #48 
+683369: 0x1D92237F0   autda    x16, x17             
+683370: 0x1D92237F4   ldr      x8, [x16, #0x40]     
+683371: 0x1D92237F8   add      x8, x8, #0xf         
+683372: 0x1D92237FC   and      x0, x8, #0xfffffffffffffff0 
+683373: 0x1D9223800   bl       _swift_task_alloc    
+683374: 0x1D9223804   str      x0, [x22, #0x78]     
+683375: 0x1D9223808   mov      x0, #0x0             
+683376: 0x1D922380C   bl       0x1d9318a90          
+683377: 0x1D9223810   str      x0, [x22, #0x80]     
+683378: 0x1D9223814   ldr      x8, [x0, #-0x8]!     
+683379: 0x1D9223818   mov      x16, x8              
+683380: 0x1D922381C   mov      x17, x0              
+683381: 0x1D9223820   movk     x17, #0x2e3f, lsl #48 
+683382: 0x1D9223824   autda    x16, x17             
+683383: 0x1D9223828   mov      x17, x16             
+683384: 0x1D922382C   xpacd    x17                  
+683385: 0x1D9223830   cmp      x16, x17             
+683386: 0x1D9223834   b.eq     0x1d922383c          
+683387: 0x1D9223838   brk      #0xc472              
+683388: 0x1D922383C   str      x16, [x22, #0x88]    
+683389: 0x1D9223840   mov      x16, x8              
+683390: 0x1D9223844   mov      x17, x0              
+683391: 0x1D9223848   movk     x17, #0x2e3f, lsl #48 
+683392: 0x1D922384C   autda    x16, x17             
+683393: 0x1D9223850   ldr      x8, [x16, #0x40]     
+683394: 0x1D9223854   add      x20, x8, #0xf        
+683395: 0x1D9223858   and      x0, x20, #0xfffffffffffffff0 
+683396: 0x1D922385C   bl       _swift_task_alloc    
+683397: 0x1D9223860   str      x0, [x22, #0x90]     
+683398: 0x1D9223864   and      x0, x20, #0xfffffffffffffff0 
+683399: 0x1D9223868   bl       _swift_task_alloc    
+683400: 0x1D922386C   str      x0, [x22, #0x98]     
+683401: 0x1D9223870   adrp     x16, 0               ; 0x1d9223000
+683402: 0x1D9223874   add      x16, x16, #0x8a8     
+683403: 0x1D9223878   paciza   x16                  
+683404: 0x1D922387C   mov      x0, x16              
+683405: 0x1D9223880   mov      x1, #0x0             
+683406: 0x1D9223884   mov      x2, #0x0             
+683407: 0x1D9223888   ldp      x29, x30, [sp, #0x10] 
+683408: 0x1D922388C   and      x29, x29, #0xefffffffffffffff 
+683409: 0x1D9223890   add      sp, sp, #0x20        
+683410: 0x1D9223894   autibsp                       
+683411: 0x1D9223898   eor      x16, x30, x30, lsl #1 
+683412: 0x1D922389C   tbz      x16, #0x3e, 0x1d92238a4 
+683413: 0x1D92238A0   brk      #0xc471              
+683414: 0x1D92238A4   b        _swift_task_switch   
+683415: 0x1D92238A8   pacibsp                       
+683416: 0x1D92238AC   orr      x29, x29, #0x1000000000000000 
+683417: 0x1D92238B0   sub      sp, sp, #0xc0        
+683418: 0x1D92238B4   stp      x28, x27, [sp, #0x68] 
+683419: 0x1D92238B8   stp      x26, x25, [sp, #0x78] 
+683420: 0x1D92238BC   stp      x24, x23, [sp, #0x88] 
+683421: 0x1D92238C0   stp      x21, x19, [sp, #0x98] 
+683422: 0x1D92238C4   stp      x29, x30, [sp, #0xb0] 
+683423: 0x1D92238C8   add      x16, sp, #0xa8       
+683424: 0x1D92238CC   movk     x16, #0xc31a, lsl #48 
+683425: 0x1D92238D0   mov      x17, x22             
+683426: 0x1D92238D4   pacdb    x17, x16             
+683427: 0x1D92238D8   str      x17, [sp, #0xa8]     
+683428: 0x1D92238DC   add      x29, sp, #0xb0       
+683429: 0x1D92238E0   bl       _ICInternalSettingsDisableGASRAvailabilityCheck 
+683430: 0x1D92238E4   ldr      x8, [x22, #0x98]     
+683431: 0x1D92238E8   cbz      w0, 0x1d92238fc      
+683432: 0x1D92238EC   mov      w0, #0x6e65          
+683433: 0x1D92238F0   mov      x1, #-0x1e00000000000000 
+683434: 0x1D92238F4   bl       0x1d93189e0          
+683435: 0x1D92238F8   b        0x1d9223900          
+683436: 0x1D92238FC   bl       0x1d9318a40          
+683437: 0x1D9223900   ldp      x0, x1, [x22, #0x90] 
+683438: 0x1D9223904   ldp      x2, x8, [x22, #0x80] 
+683439: 0x1D9223908   ldp      x20, x26, [x22, #0x70] 
+683440: 0x1D922390C   stp      x20, x0, [sp, #0x10] 
+683441: 0x1D9223910   ldp      x11, x10, [x22, #0x60] 
+683442: 0x1D9223914   ldr      x9, [x22, #0x58]     
+683443: 0x1D9223918   stp      x10, x9, [sp, #0x20] 
+683444: 0x1D922391C   ldp      x9, x10, [x22, #0x48] 
+683445: 0x1D9223920   stp      x10, x11, [sp, #0x38] 
+683446: 0x1D9223924   str      x9, [sp, #0x48]      
+683447: 0x1D9223928   ldr      x9, [x22, #0x18]     
+683448: 0x1D922392C   str      x9, [sp, #0x30]      
+683449: 0x1D9223930   ldr      x9, [x8, #0x10]!     
+683450: 0x1D9223934   mov      x17, x8              
+683451: 0x1D9223938   movk     x17, #0xe3ba, lsl #48 
+683452: 0x1D922393C   blraa    x9, x17              
+683453: 0x1D9223940   adrp     x8, 49973            ; 0x1e5558000
+683454: 0x1D9223944   ldr      x8, [x8, #0xa20]     
+683455: 0x1D9223948   ldr      w19, [x8]            
+683456: 0x1D922394C   mov      x0, #0x0             
+683457: 0x1D9223950   bl       0x1d9319260          
+683458: 0x1D9223954   mov      x21, x0              
+683459: 0x1D9223958   mov      x17, x0              
+683460: 0x1D922395C   ldr      x16, [x17, #-0x8]!   
+683461: 0x1D9223960   movk     x17, #0x2e3f, lsl #48 
+683462: 0x1D9223964   autda    x16, x17             
+683463: 0x1D9223968   mov      x17, x16             
+683464: 0x1D922396C   xpacd    x17                  
+683465: 0x1D9223970   cmp      x16, x17             
+683466: 0x1D9223974   b.eq     0x1d922397c          
+683467: 0x1D9223978   brk      #0xc472              
+683468: 0x1D922397C   mov      x28, x16             
+683469: 0x1D9223980   mov      x8, x16              
+683470: 0x1D9223984   ldr      x9, [x8, #0x68]!     
+683471: 0x1D9223988   mov      x0, x26              
+683472: 0x1D922398C   mov      x1, x19              
+683473: 0x1D9223990   mov      x2, x21              
+683474: 0x1D9223994   mov      x17, x8              
+683475: 0x1D9223998   movk     x17, #0xb2e4, lsl #48 
+683476: 0x1D922399C   blraa    x9, x17              
+683477: 0x1D92239A0   ldr      x8, [x28, #0x38]!    
+683478: 0x1D92239A4   mov      x0, x26              
+683479: 0x1D92239A8   mov      w1, #0x0             
+683480: 0x1D92239AC   mov      w2, #0x1             
+683481: 0x1D92239B0   mov      x3, x21              
+683482: 0x1D92239B4   mov      x17, x28             
+683483: 0x1D92239B8   movk     x17, #0xa0d1, lsl #48 
+683484: 0x1D92239BC   blraa    x8, x17              
+683485: 0x1D92239C0   mov      x0, #0x0             
+683486: 0x1D92239C4   bl       0x1d93190f0          
+683487: 0x1D92239C8   mov      x3, x0               
+683488: 0x1D92239CC   mov      x8, x0               
+683489: 0x1D92239D0   ldr      x16, [x8, #-0x8]!    
+683490: 0x1D92239D4   mov      x17, x8              
+683491: 0x1D92239D8   movk     x17, #0x2e3f, lsl #48 
+683492: 0x1D92239DC   autda    x16, x17             
+683493: 0x1D92239E0   ldr      x8, [x16, #0x38]!    
+683494: 0x1D92239E4   mov      x0, x20              
+683495: 0x1D92239E8   mov      w1, #0x1             
+683496: 0x1D92239EC   mov      w2, #0x1             
+683497: 0x1D92239F0   movk     x16, #0xa0d1, lsl #48 
+683498: 0x1D92239F4   blraa    x8, x16              
+683499: 0x1D92239F8   adrp     x0, 75626            ; 0x1eb98d000
+683500: 0x1D92239FC   add      x0, x0, #0xc78       
+683501: 0x1D9223A00   adrp     x1, 277              ; 0x1d9338000
+683502: 0x1D9223A04   add      x1, x1, #0x658       
+683503: 0x1D9223A08   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+683504: 0x1D9223A0C   mov      x19, x0              
+683505: 0x1D9223A10   mov      x0, #0x0             
+683506: 0x1D9223A14   bl       0x1d9319100          
+683507: 0x1D9223A18   mov      x21, x0              
+683508: 0x1D9223A1C   mov      x9, x0               
+683509: 0x1D9223A20   ldr      x8, [x9, #-0x8]!     
+683510: 0x1D9223A24   mov      x16, x8              
+683511: 0x1D9223A28   mov      x17, x9              
+683512: 0x1D9223A2C   movk     x17, #0x2e3f, lsl #48 
+683513: 0x1D9223A30   autda    x16, x17             
+683514: 0x1D9223A34   mov      x17, x16             
+683515: 0x1D9223A38   xpacd    x17                  
+683516: 0x1D9223A3C   cmp      x16, x17             
+683517: 0x1D9223A40   b.eq     0x1d9223a48          
+683518: 0x1D9223A44   brk      #0xc472              
+683519: 0x1D9223A48   mov      x23, x16             
+683520: 0x1D9223A4C   mov      x16, x8              
+683521: 0x1D9223A50   mov      x17, x9              
+683522: 0x1D9223A54   movk     x17, #0x2e3f, lsl #48 
+683523: 0x1D9223A58   autda    x16, x17             
+683524: 0x1D9223A5C   ldr      x8, [x16, #0x48]     
+683525: 0x1D9223A60   ldrb     w9, [x23, #0x50]     
+683526: 0x1D9223A64   add      x10, x9, #0x20       
+683527: 0x1D9223A68   bic      x24, x10, x9         
+683528: 0x1D9223A6C   add      x1, x24, x8          
+683529: 0x1D9223A70   orr      x2, x9, #0x7         
+683530: 0x1D9223A74   mov      x0, x19              
+683531: 0x1D9223A78   bl       _swift_allocObject   
+683532: 0x1D9223A7C   mov      x19, x0              
+683533: 0x1D9223A80   adrp     x8, 276              ; 0x1d9337000
+683534: 0x1D9223A84   ldr      q0, [x8, #0xbf0]     
+683535: 0x1D9223A88   str      q0, [sp, #0x50]      
+683536: 0x1D9223A8C   str      q0, [x0, #0x10]      
+683537: 0x1D9223A90   adrp     x8, 49973            ; 0x1e5558000
+683538: 0x1D9223A94   ldr      x8, [x8, #0x868]     
+683539: 0x1D9223A98   ldr      w1, [x8]             
+683540: 0x1D9223A9C   mov      x8, x23              
+683541: 0x1D9223AA0   ldr      x9, [x8, #0x68]!     
+683542: 0x1D9223AA4   add      x0, x0, x24          
+683543: 0x1D9223AA8   mov      x2, x21              
+683544: 0x1D9223AAC   mov      x17, x8              
+683545: 0x1D9223AB0   movk     x17, #0xb2e4, lsl #48 
+683546: 0x1D9223AB4   blraa    x9, x17              
+683547: 0x1D9223AB8   mov      x0, x19              
+683548: 0x1D9223ABC   bl       0x1d91e9c34          
+683549: 0x1D9223AC0   str      x0, [sp, #0x8]       
+683550: 0x1D9223AC4   mov      x0, x19              
+683551: 0x1D9223AC8   bl       _swift_setDeallocating 
+683552: 0x1D9223ACC   ldr      x8, [x23, #0x8]!     
+683553: 0x1D9223AD0   add      x0, x19, x24         
+683554: 0x1D9223AD4   mov      x1, x21              
+683555: 0x1D9223AD8   mov      x17, x23             
+683556: 0x1D9223ADC   movk     x17, #0x4f8, lsl #48 
+683557: 0x1D9223AE0   blraa    x8, x17              
+683558: 0x1D9223AE4   mov      x0, x19              
+683559: 0x1D9223AE8   mov      w1, #0x20            
+683560: 0x1D9223AEC   mov      w2, #0x7             
+683561: 0x1D9223AF0   bl       _swift_deallocClassInstance 
+683562: 0x1D9223AF4   adrp     x0, 75626            ; 0x1eb98d000
+683563: 0x1D9223AF8   add      x0, x0, #0xc80       
+683564: 0x1D9223AFC   adrp     x1, 277              ; 0x1d9338000
+683565: 0x1D9223B00   add      x1, x1, #0x660       
+683566: 0x1D9223B04   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+683567: 0x1D9223B08   mov      x19, x0              
+683568: 0x1D9223B0C   mov      x0, #0x0             
+683569: 0x1D9223B10   bl       0x1d9319250          
+683570: 0x1D9223B14   mov      x21, x0              
+683571: 0x1D9223B18   mov      x9, x0               
+683572: 0x1D9223B1C   ldr      x8, [x9, #-0x8]!     
+683573: 0x1D9223B20   mov      x16, x8              
+683574: 0x1D9223B24   mov      x17, x9              
+683575: 0x1D9223B28   movk     x17, #0x2e3f, lsl #48 
+683576: 0x1D9223B2C   autda    x16, x17             
+683577: 0x1D9223B30   mov      x17, x16             
+683578: 0x1D9223B34   xpacd    x17                  
+683579: 0x1D9223B38   cmp      x16, x17             
+683580: 0x1D9223B3C   b.eq     0x1d9223b44          
+683581: 0x1D9223B40   brk      #0xc472              
+683582: 0x1D9223B44   mov      x23, x16             
+683583: 0x1D9223B48   mov      x16, x8              
+683584: 0x1D9223B4C   mov      x17, x9              
+683585: 0x1D9223B50   movk     x17, #0x2e3f, lsl #48 
+683586: 0x1D9223B54   autda    x16, x17             
+683587: 0x1D9223B58   ldr      x8, [x16, #0x48]     
+683588: 0x1D9223B5C   ldrb     w9, [x23, #0x50]     
+683589: 0x1D9223B60   add      x10, x9, #0x20       
+683590: 0x1D9223B64   bic      x25, x10, x9         
+683591: 0x1D9223B68   add      x1, x25, x8          
+683592: 0x1D9223B6C   orr      x2, x9, #0x7         
+683593: 0x1D9223B70   mov      x0, x19              
+683594: 0x1D9223B74   bl       _swift_allocObject   
+683595: 0x1D9223B78   mov      x24, x0              
+683596: 0x1D9223B7C   ldr      q0, [sp, #0x50]      
+683597: 0x1D9223B80   str      q0, [x0, #0x10]      
+683598: 0x1D9223B84   adrp     x8, 49973            ; 0x1e5558000
+683599: 0x1D9223B88   ldr      x8, [x8, #0xa00]     
+683600: 0x1D9223B8C   ldr      w1, [x8]             
+683601: 0x1D9223B90   mov      x8, x23              
+683602: 0x1D9223B94   ldr      x9, [x8, #0x68]!     
+683603: 0x1D9223B98   add      x0, x0, x25          
+683604: 0x1D9223B9C   mov      x2, x21              
+683605: 0x1D9223BA0   mov      x17, x8              
+683606: 0x1D9223BA4   movk     x17, #0xb2e4, lsl #48 
+683607: 0x1D9223BA8   blraa    x9, x17              
+683608: 0x1D9223BAC   mov      x0, x24              
+683609: 0x1D9223BB0   bl       0x1d91e9f8c          
+683610: 0x1D9223BB4   mov      x19, x0              
+683611: 0x1D9223BB8   mov      x0, x24              
+683612: 0x1D9223BBC   bl       _swift_setDeallocating 
+683613: 0x1D9223BC0   ldr      x8, [x23, #0x8]!     
+683614: 0x1D9223BC4   add      x0, x24, x25         
+683615: 0x1D9223BC8   mov      x1, x21              
+683616: 0x1D9223BCC   mov      x17, x23             
+683617: 0x1D9223BD0   movk     x17, #0x4f8, lsl #48 
+683618: 0x1D9223BD4   blraa    x8, x17              
+683619: 0x1D9223BD8   mov      x0, x24              
+683620: 0x1D9223BDC   mov      w1, #0x20            
+683621: 0x1D9223BE0   mov      w2, #0x7             
+683622: 0x1D9223BE4   bl       _swift_deallocClassInstance 
+683623: 0x1D9223BE8   adrp     x0, 75626            ; 0x1eb98d000
+683624: 0x1D9223BEC   add      x0, x0, #0xc88       
+683625: 0x1D9223BF0   adrp     x1, 277              ; 0x1d9338000
+683626: 0x1D9223BF4   add      x1, x1, #0x668       
+683627: 0x1D9223BF8   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+683628: 0x1D9223BFC   mov      x23, x0              
+683629: 0x1D9223C00   mov      x0, #0x0             
+683630: 0x1D9223C04   bl       0x1d9319160          
+683631: 0x1D9223C08   mov      x21, x0              
+683632: 0x1D9223C0C   mov      x9, x0               
+683633: 0x1D9223C10   ldr      x8, [x9, #-0x8]!     
+683634: 0x1D9223C14   mov      x16, x8              
+683635: 0x1D9223C18   mov      x17, x9              
+683636: 0x1D9223C1C   movk     x17, #0x2e3f, lsl #48 
+683637: 0x1D9223C20   autda    x16, x17             
+683638: 0x1D9223C24   mov      x17, x16             
+683639: 0x1D9223C28   xpacd    x17                  
+683640: 0x1D9223C2C   cmp      x16, x17             
+683641: 0x1D9223C30   b.eq     0x1d9223c38          
+683642: 0x1D9223C34   brk      #0xc472              
+683643: 0x1D9223C38   mov      x24, x16             
+683644: 0x1D9223C3C   mov      x16, x8              
+683645: 0x1D9223C40   mov      x17, x9              
+683646: 0x1D9223C44   movk     x17, #0x2e3f, lsl #48 
+683647: 0x1D9223C48   autda    x16, x17             
+683648: 0x1D9223C4C   ldr      x20, [x16, #0x48]    
+683649: 0x1D9223C50   ldrb     w8, [x24, #0x50]     
+683650: 0x1D9223C54   add      x9, x8, #0x20        
+683651: 0x1D9223C58   bic      x25, x9, x8          
+683652: 0x1D9223C5C   lsl      x28, x20, #1         
+683653: 0x1D9223C60   add      x9, x28, x20         
+683654: 0x1D9223C64   add      x1, x25, x9          
+683655: 0x1D9223C68   orr      x2, x8, #0x7         
+683656: 0x1D9223C6C   mov      x0, x23              
+683657: 0x1D9223C70   bl       _swift_allocObject   
+683658: 0x1D9223C74   mov      x23, x0              
+683659: 0x1D9223C78   adrp     x8, 277              ; 0x1d9338000
+683660: 0x1D9223C7C   ldr      q0, [x8, #0x510]     
+683661: 0x1D9223C80   str      q0, [x0, #0x10]      
+683662: 0x1D9223C84   add      x25, x0, x25         
+683663: 0x1D9223C88   adrp     x8, 49973            ; 0x1e5558000
+683664: 0x1D9223C8C   ldr      x8, [x8, #0x888]     
+683665: 0x1D9223C90   ldr      w1, [x8]             
+683666: 0x1D9223C94   ldr      x27, [x24, #0x68]!   
+683667: 0x1D9223C98   mov      x0, x25              
+683668: 0x1D9223C9C   mov      x2, x21              
+683669: 0x1D9223CA0   mov      x17, x24             
+683670: 0x1D9223CA4   movk     x17, #0xb2e4, lsl #48 
+683671: 0x1D9223CA8   blraa    x27, x17             
+683672: 0x1D9223CAC   adrp     x8, 49973            ; 0x1e5558000
+683673: 0x1D9223CB0   ldr      x8, [x8, #0x890]     
+683674: 0x1D9223CB4   ldr      w1, [x8]             
+683675: 0x1D9223CB8   add      x0, x25, x20         
+683676: 0x1D9223CBC   mov      x2, x21              
+683677: 0x1D9223CC0   mov      x17, x24             
+683678: 0x1D9223CC4   movk     x17, #0xb2e4, lsl #48 
+683679: 0x1D9223CC8   blraa    x27, x17             
+683680: 0x1D9223CCC   adrp     x8, 49973            ; 0x1e5558000
+683681: 0x1D9223CD0   ldr      x8, [x8, #0x898]     
+683682: 0x1D9223CD4   ldr      w1, [x8]             
+683683: 0x1D9223CD8   add      x0, x25, x28         
+683684: 0x1D9223CDC   mov      x2, x21              
+683685: 0x1D9223CE0   mov      x17, x24             
+683686: 0x1D9223CE4   movk     x17, #0xb2e4, lsl #48 
+683687: 0x1D9223CE8   blraa    x27, x17             
+683688: 0x1D9223CEC   mov      x0, x23              
+683689: 0x1D9223CF0   bl       0x1d920d9f8          
+683690: 0x1D9223CF4   mov      x24, x0              
+683691: 0x1D9223CF8   mov      x0, x23              
+683692: 0x1D9223CFC   bl       _swift_setDeallocating 
+683693: 0x1D9223D00   mov      x0, x25              
+683694: 0x1D9223D04   mov      w1, #0x3             
+683695: 0x1D9223D08   mov      x2, x21              
+683696: 0x1D9223D0C   bl       _swift_arrayDestroy  
+683697: 0x1D9223D10   mov      x0, x23              
+683698: 0x1D9223D14   mov      w1, #0x20            
+683699: 0x1D9223D18   mov      w2, #0x7             
+683700: 0x1D9223D1C   bl       _swift_deallocClassInstance 
+683701: 0x1D9223D20   mov      x0, #0x0             
+683702: 0x1D9223D24   bl       0x1d93191a0          
+683703: 0x1D9223D28   ldr      w1, [x0, #0x30]      
+683704: 0x1D9223D2C   ldrh     w2, [x0, #0x34]      
+683705: 0x1D9223D30   bl       _swift_allocObject   
+683706: 0x1D9223D34   mov      x6, x0               
+683707: 0x1D9223D38   ldp      x2, x0, [sp, #0x10]  
+683708: 0x1D9223D3C   mov      x1, x26              
+683709: 0x1D9223D40   mov      x3, x24              
+683710: 0x1D9223D44   ldr      x4, [sp, #0x8]       
+683711: 0x1D9223D48   mov      x5, x19              
+683712: 0x1D9223D4C   mov      x20, x6              
+683713: 0x1D9223D50   bl       0x1d9319180          
+683714: 0x1D9223D54   mov      x20, x0              
+683715: 0x1D9223D58   str      x0, [x22, #0xa0]     
+683716: 0x1D9223D5C   mov      x0, #0x0             
+683717: 0x1D9223D60   bl       0x1d93190a0          
+683718: 0x1D9223D64   mov      x19, x0              
+683719: 0x1D9223D68   adrp     x8, 310              ; 0x1d9359000
+683720: 0x1D9223D6C   add      x8, x8, #0x110       
+683721: 0x1D9223D70   sub      x8, x8, #0x20        
+683722: 0x1D9223D74   orr      x1, x8, #0x8000000000000000 
+683723: 0x1D9223D78   ldr      x8, [sp, #0x20]      
+683724: 0x1D9223D7C   mov      x0, #0x21            
+683725: 0x1D9223D80   movk     x0, #0xd000, lsl #48 
+683726: 0x1D9223D84   bl       0x1d93190d0          
+683727: 0x1D9223D88   ldp      x9, x1, [sp, #0x28]  
+683728: 0x1D9223D8C   ldr      x8, [x9, #0x10]!     
+683729: 0x1D9223D90   ldp      x2, x0, [sp, #0x38]  
+683730: 0x1D9223D94   mov      x17, x9              
+683731: 0x1D9223D98   movk     x17, #0xe3ba, lsl #48 
+683732: 0x1D9223D9C   blraa    x8, x17              
+683733: 0x1D9223DA0   adrp     x0, 75627            ; 0x1eb98e000
+683734: 0x1D9223DA4   add      x0, x0, #0x858       
+683735: 0x1D9223DA8   adrp     x1, 280              ; 0x1d933b000
+683736: 0x1D9223DAC   add      x1, x1, #0xbf0       
+683737: 0x1D9223DB0   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+683738: 0x1D9223DB4   mov      w1, #0x30            
+683739: 0x1D9223DB8   mov      w2, #0x7             
+683740: 0x1D9223DBC   bl       _swift_allocObject   
+683741: 0x1D9223DC0   mov      x21, x0              
+683742: 0x1D9223DC4   ldr      q0, [sp, #0x50]      
+683743: 0x1D9223DC8   str      q0, [x0, #0x10]      
+683744: 0x1D9223DCC   bl       0x1d9227038          
+683745: 0x1D9223DD0   stp      x20, x0, [x21, #0x20] 
+683746: 0x1D9223DD4   mov      x0, #0x0             
+683747: 0x1D9223DD8   bl       0x1d9319210          
+683748: 0x1D9223DDC   mov      x3, x0               
+683749: 0x1D9223DE0   mov      x8, x0               
+683750: 0x1D9223DE4   ldr      x16, [x8, #-0x8]!    
+683751: 0x1D9223DE8   mov      x17, x8              
+683752: 0x1D9223DEC   movk     x17, #0x2e3f, lsl #48 
+683753: 0x1D9223DF0   autda    x16, x17             
+683754: 0x1D9223DF4   ldr      x8, [x16, #0x38]!    
+683755: 0x1D9223DF8   ldr      x0, [sp, #0x48]      
+683756: 0x1D9223DFC   mov      w1, #0x1             
+683757: 0x1D9223E00   mov      w2, #0x1             
+683758: 0x1D9223E04   movk     x16, #0xa0d1, lsl #48 
+683759: 0x1D9223E08   blraa    x8, x16              
+683760: 0x1D9223E0C   mov      x0, #0x0             
+683761: 0x1D9223E10   bl       0x1d9319200          
+683762: 0x1D9223E14   ldr      w1, [x0, #0x30]      
+683763: 0x1D9223E18   ldrh     w2, [x0, #0x34]      
+683764: 0x1D9223E1C   bl       _swift_allocObject   
+683765: 0x1D9223E20   mov      x23, x0              
+683766: 0x1D9223E24   mov      x0, x20              
+683767: 0x1D9223E28   bl       _swift_retain        
+683768: 0x1D9223E2C   mov      x20, x23             
+683769: 0x1D9223E30   bl       0x1d93191f0          
+683770: 0x1D9223E34   mov      x20, x0              
+683771: 0x1D9223E38   adrp     x8, 49973            ; 0x1e5558000
+683772: 0x1D9223E3C   ldr      x8, [x8, #0x830]     
+683773: 0x1D9223E40   ldr      w0, [x8, #0x4]       
+683774: 0x1D9223E44   bl       _swift_task_alloc    
+683775: 0x1D9223E48   mov      x17, x22             
+683776: 0x1D9223E4C   str      x0, [x22, #0xa8]     
+683777: 0x1D9223E50   mov      x16, x0              
+683778: 0x1D9223E54   movk     x16, #0xbda2, lsl #48 
+683779: 0x1D9223E58   pacda    x17, x16             
+683780: 0x1D9223E5C   str      x17, [x0]            
+683781: 0x1D9223E60   add      x8, x0, #0x8         
+683782: 0x1D9223E64   adrp     x16, 0               ; 0x1d9223000
+683783: 0x1D9223E68   add      x16, x16, #0xed4     
+683784: 0x1D9223E6C   mov      x17, x8              
+683785: 0x1D9223E70   movk     x17, #0xd707, lsl #48 
+683786: 0x1D9223E74   pacia    x16, x17             
+683787: 0x1D9223E78   str      x16, [x0, #0x8]      
+683788: 0x1D9223E7C   ldp      x1, x8, [x22, #0x60] 
+683789: 0x1D9223E80   ldr      x3, [x22, #0x48]     
+683790: 0x1D9223E84   mov      x22, x0              
+683791: 0x1D9223E88   mov      x0, x8               
+683792: 0x1D9223E8C   mov      x2, x21              
+683793: 0x1D9223E90   mov      w4, #0x0             
+683794: 0x1D9223E94   mov      x5, x20              
+683795: 0x1D9223E98   mov      x6, #0x0             
+683796: 0x1D9223E9C   mov      x7, #0x0             
+683797: 0x1D9223EA0   mov      x20, x19             
+683798: 0x1D9223EA4   ldp      x29, x30, [sp, #0xb0] 
+683799: 0x1D9223EA8   ldp      x21, x19, [sp, #0x98] 
+683800: 0x1D9223EAC   ldp      x24, x23, [sp, #0x88] 
+683801: 0x1D9223EB0   ldp      x26, x25, [sp, #0x78] 
+683802: 0x1D9223EB4   ldp      x28, x27, [sp, #0x68] 
+683803: 0x1D9223EB8   and      x29, x29, #0xefffffffffffffff 
+683804: 0x1D9223EBC   add      sp, sp, #0xc0        
+683805: 0x1D9223EC0   autibsp                       
+683806: 0x1D9223EC4   eor      x16, x30, x30, lsl #1 
+683807: 0x1D9223EC8   tbz      x16, #0x3e, 0x1d9223ed0 
+683808: 0x1D9223ECC   brk      #0xc471              
+683809: 0x1D9223ED0   b        0x1d9319090          
+683810: 0x1D9223ED4   pacibsp                       
+683811: 0x1D9223ED8   orr      x29, x29, #0x1000000000000000 
+683812: 0x1D9223EDC   str      x23, [sp, #-0x30]!   
+683813: 0x1D9223EE0   stp      x21, x19, [sp, #0x8] 
+683814: 0x1D9223EE4   stp      x29, x30, [sp, #0x20] 
+683815: 0x1D9223EE8   add      x16, sp, #0x18       
+683816: 0x1D9223EEC   movk     x16, #0xc31a, lsl #48 
+683817: 0x1D9223EF0   mov      x17, x22             
+683818: 0x1D9223EF4   pacdb    x17, x16             
+683819: 0x1D9223EF8   str      x17, [sp, #0x18]     
+683820: 0x1D9223EFC   add      x29, sp, #0x20       
+683821: 0x1D9223F00   mov      x21, x0              
+683822: 0x1D9223F04   mov      x17, x22             
+683823: 0x1D9223F08   ldr      x8, [x22]            
+683824: 0x1D9223F0C   mov      x16, x8              
+683825: 0x1D9223F10   movk     x17, #0xbda2, lsl #48 
+683826: 0x1D9223F14   autda    x16, x17             
+683827: 0x1D9223F18   mov      x17, x16             
+683828: 0x1D9223F1C   xpacd    x17                  
+683829: 0x1D9223F20   cmp      x16, x17             
+683830: 0x1D9223F24   b.eq     0x1d9223f2c          
+683831: 0x1D9223F28   brk      #0xc472              
+683832: 0x1D9223F2C   mov      x23, x16             
+683833: 0x1D9223F30   sub      x9, x29, #0x8        
+683834: 0x1D9223F34   sub      x16, x29, #0x8       
+683835: 0x1D9223F38   movk     x16, #0xc31a, lsl #48 
+683836: 0x1D9223F3C   mov      x17, x23             
+683837: 0x1D9223F40   pacda    x17, x16             
+683838: 0x1D9223F44   str      x17, [x9]            
+683839: 0x1D9223F48   mov      x16, x8              
+683840: 0x1D9223F4C   mov      x17, x22             
+683841: 0x1D9223F50   movk     x17, #0xbda2, lsl #48 
+683842: 0x1D9223F54   autda    x16, x17             
+683843: 0x1D9223F58   ldr      x0, [x16, #0xa8]     
+683844: 0x1D9223F5C   ldr      x16, [x22]           
+683845: 0x1D9223F60   mov      x17, x22             
+683846: 0x1D9223F64   movk     x17, #0xbda2, lsl #48 
+683847: 0x1D9223F68   autda    x16, x17             
+683848: 0x1D9223F6C   mov      x17, x16             
+683849: 0x1D9223F70   xpacd    x17                  
+683850: 0x1D9223F74   cmp      x16, x17             
+683851: 0x1D9223F78   b.eq     0x1d9223f80          
+683852: 0x1D9223F7C   brk      #0xc472              
+683853: 0x1D9223F80   mov      x19, x16             
+683854: 0x1D9223F84   stp      x21, x20, [x23, #0xb0] 
+683855: 0x1D9223F88   bl       _swift_task_dealloc  
+683856: 0x1D9223F8C   cbz      x20, 0x1d9223fd0     
+683857: 0x1D9223F90   adrp     x16, 1               ; 0x1d9224000
+683858: 0x1D9223F94   add      x16, x16, #0x35c     
+683859: 0x1D9223F98   paciza   x16                  
+683860: 0x1D9223F9C   mov      x0, x16              
+683861: 0x1D9223FA0   mov      x22, x19             
+683862: 0x1D9223FA4   mov      x1, #0x0             
+683863: 0x1D9223FA8   mov      x2, #0x0             
+683864: 0x1D9223FAC   ldp      x29, x30, [sp, #0x20] 
+683865: 0x1D9223FB0   ldp      x21, x19, [sp, #0x8] 
+683866: 0x1D9223FB4   ldr      x23, [sp], #0x30     
+683867: 0x1D9223FB8   and      x29, x29, #0xefffffffffffffff 
+683868: 0x1D9223FBC   autibsp                       
+683869: 0x1D9223FC0   eor      x16, x30, x30, lsl #1 
+683870: 0x1D9223FC4   tbz      x16, #0x3e, 0x1d9223fcc 
+683871: 0x1D9223FC8   brk      #0xc471              
+683872: 0x1D9223FCC   b        _swift_task_switch   
+683873: 0x1D9223FD0   adrp     x8, 49973            ; 0x1e5558000
+683874: 0x1D9223FD4   ldr      x8, [x8, #0x818]     
+683875: 0x1D9223FD8   ldr      w0, [x8, #0x4]       
+683876: 0x1D9223FDC   bl       _swift_task_alloc    
+683877: 0x1D9223FE0   mov      x17, x19             
+683878: 0x1D9223FE4   str      x0, [x23, #0xc0]     
+683879: 0x1D9223FE8   mov      x16, x0              
+683880: 0x1D9223FEC   movk     x16, #0xbda2, lsl #48 
+683881: 0x1D9223FF0   pacda    x17, x16             
+683882: 0x1D9223FF4   str      x17, [x0]            
+683883: 0x1D9223FF8   add      x8, x0, #0x8         
+683884: 0x1D9223FFC   adrp     x16, 1               ; 0x1d9224000
+683885: 0x1D9224000   add      x16, x16, #0x40      
+683886: 0x1D9224004   mov      x17, x8              
+683887: 0x1D9224008   movk     x17, #0xd707, lsl #48 
+683888: 0x1D922400C   pacia    x16, x17             

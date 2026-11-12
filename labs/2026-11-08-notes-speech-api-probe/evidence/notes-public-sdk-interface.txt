@@ -1,0 +1,132 @@
+207: final public actor SpeechAnalyzer : Swift.Sendable {
+208:   public convenience init(modules: [any Speech.SpeechModule], options: Speech.SpeechAnalyzer.Options? = nil)
+209:   public convenience init<InputSequence>(inputSequence: InputSequence, modules: [any Speech.SpeechModule], options: Speech.SpeechAnalyzer.Options? = nil, analysisContext: Speech.AnalysisContext = .init(), volatileRangeChangedHandler: sending ((_ range: CoreMedia.CMTimeRange, _ changedStart: Swift.Bool, _ changedEnd: Swift.Bool) -> Swift.Void)? = nil) where InputSequence : Swift.Sendable, InputSequence : _Concurrency.AsyncSequence, InputSequence.Element == Speech.AnalyzerInput
+210:   final public func prepareToAnalyze(in audioFormat: AVFAudio.AVAudioFormat?) async throws
+211:   final public func prepareToAnalyze(in audioFormat: AVFAudio.AVAudioFormat?, withProgressReadyHandler progressReadyHandler: sending ((Foundation.Progress) -> Swift.Void)?) async throws
+212:   @objc deinit
+213:   final public var modules: [any Speech.SpeechModule] {
+214:     get
+215:   }
+216:   final public func setModules(_ newModules: [any Speech.SpeechModule]) async throws
+217:   final public func start<InputSequence>(inputSequence: InputSequence) async throws where InputSequence : Swift.Sendable, InputSequence : _Concurrency.AsyncSequence, InputSequence.Element == Speech.AnalyzerInput
+218:   final public func analyzeSequence<InputSequence>(_ inputSequence: InputSequence) async throws -> CoreMedia.CMTime? where InputSequence : Swift.Sendable, InputSequence : _Concurrency.AsyncSequence, InputSequence.Element == Speech.AnalyzerInput
+219:   final public func finalize(through: CoreMedia.CMTime?) async throws
+220:   final public func finalizeAndFinishThroughEndOfInput() async throws
+221:   final public func finalizeAndFinish(through: CoreMedia.CMTime) async throws
+222:   final public func finish(after: CoreMedia.CMTime) async throws
+223:   final public func cancelAnalysis(before: CoreMedia.CMTime)
+224:   final public func cancelAndFinishNow() async
+225:   final public var volatileRange: CoreMedia.CMTimeRange? {
+226:     get
+227:   }
+228:   final public func setVolatileRangeChangedHandler(_ handler: sending ((_ range: CoreMedia.CMTimeRange, _ changedStart: Swift.Bool, _ changedEnd: Swift.Bool) -> Swift.Void)?)
+229:   final public var context: Speech.AnalysisContext {
+230:     get async
+231:   }
+232:   final public func setContext(_ newContext: Speech.AnalysisContext) async throws
+233:   public static func bestAvailableAudioFormat(compatibleWith modules: [any Speech.SpeechModule]) async -> AVFAudio.AVAudioFormat?
+234:   public static func bestAvailableAudioFormat(compatibleWith modules: [any Speech.SpeechModule], considering naturalFormat: AVFAudio.AVAudioFormat?) async -> AVFAudio.AVAudioFormat?
+235:   @available(iOS 26.0, tvOS 26.0, visionOS 26.0, macOS 26.0, *)
+236:   @available(watchOS, unavailable)
+237:   @_semantics("defaultActor") nonisolated final public var unownedExecutor: _Concurrency.UnownedSerialExecutor {
+238:     get
+239:   }
+240: }
+241: @available(macOS 26.0, iOS 26.0, visionOS 26.0, tvOS 26.0, *)
+242: @available(watchOS, unavailable)
+335: final public class SpeechTranscriber : Speech.SpeechModule, Speech.LocaleDependentSpeechModule {
+336:   convenience public init(locale: Foundation.Locale, preset: Speech.SpeechTranscriber.Preset)
+337:   convenience public init(locale: Foundation.Locale, transcriptionOptions: Swift.Set<Speech.SpeechTranscriber.TranscriptionOption>, reportingOptions: Swift.Set<Speech.SpeechTranscriber.ReportingOption>, attributeOptions: Swift.Set<Speech.SpeechTranscriber.ResultAttributeOption>)
+338:   public struct Preset : Swift.Sendable, Swift.Equatable, Swift.Hashable {
+339:     public static let transcription: Speech.SpeechTranscriber.Preset
+340:     public static let transcriptionWithAlternatives: Speech.SpeechTranscriber.Preset
+341:     public static let timeIndexedTranscriptionWithAlternatives: Speech.SpeechTranscriber.Preset
+342:     public static let progressiveTranscription: Speech.SpeechTranscriber.Preset
+343:     public static let timeIndexedProgressiveTranscription: Speech.SpeechTranscriber.Preset
+344:     public init(transcriptionOptions: Swift.Set<Speech.SpeechTranscriber.TranscriptionOption>, reportingOptions: Swift.Set<Speech.SpeechTranscriber.ReportingOption>, attributeOptions: Swift.Set<Speech.SpeechTranscriber.ResultAttributeOption>)
+345:     public var transcriptionOptions: Swift.Set<Speech.SpeechTranscriber.TranscriptionOption>
+346:     public var reportingOptions: Swift.Set<Speech.SpeechTranscriber.ReportingOption>
+347:     public var attributeOptions: Swift.Set<Speech.SpeechTranscriber.ResultAttributeOption>
+348:     public static func == (a: Speech.SpeechTranscriber.Preset, b: Speech.SpeechTranscriber.Preset) -> Swift.Bool
+349:     public func hash(into hasher: inout Swift.Hasher)
+350:     public var hashValue: Swift.Int {
+351:       get
+352:     }
+353:   }
+354:   public enum TranscriptionOption : Swift.CaseIterable, Swift.Sendable, Swift.Equatable, Swift.Hashable {
+355:     case etiquetteReplacements
+356:     public static func == (a: Speech.SpeechTranscriber.TranscriptionOption, b: Speech.SpeechTranscriber.TranscriptionOption) -> Swift.Bool
+357:     @available(iOS 26.0, tvOS 26.0, visionOS 26.0, macOS 26.0, *)
+358:     @available(watchOS, unavailable)
+359:     public typealias AllCases = [Speech.SpeechTranscriber.TranscriptionOption]
+360:     nonisolated public static var allCases: [Speech.SpeechTranscriber.TranscriptionOption] {
+361:       get
+362:     }
+363:     public func hash(into hasher: inout Swift.Hasher)
+364:     public var hashValue: Swift.Int {
+365:       get
+366:     }
+367:   }
+368:   public enum ReportingOption : Swift.CaseIterable, Swift.Sendable, Swift.Equatable, Swift.Hashable {
+369:     case volatileResults
+370:     case alternativeTranscriptions
+371:     case fastResults
+372:     public static func == (a: Speech.SpeechTranscriber.ReportingOption, b: Speech.SpeechTranscriber.ReportingOption) -> Swift.Bool
+373:     @available(iOS 26.0, tvOS 26.0, visionOS 26.0, macOS 26.0, *)
+374:     @available(watchOS, unavailable)
+375:     public typealias AllCases = [Speech.SpeechTranscriber.ReportingOption]
+376:     nonisolated public static var allCases: [Speech.SpeechTranscriber.ReportingOption] {
+377:       get
+378:     }
+379:     public func hash(into hasher: inout Swift.Hasher)
+380:     public var hashValue: Swift.Int {
+381:       get
+382:     }
+383:   }
+384:   public enum ResultAttributeOption : Swift.CaseIterable, Swift.Sendable, Swift.Equatable, Swift.Hashable {
+385:     case audioTimeRange
+386:     case transcriptionConfidence
+387:     public static func == (a: Speech.SpeechTranscriber.ResultAttributeOption, b: Speech.SpeechTranscriber.ResultAttributeOption) -> Swift.Bool
+388:     @available(iOS 26.0, tvOS 26.0, visionOS 26.0, macOS 26.0, *)
+389:     @available(watchOS, unavailable)
+390:     public typealias AllCases = [Speech.SpeechTranscriber.ResultAttributeOption]
+391:     nonisolated public static var allCases: [Speech.SpeechTranscriber.ResultAttributeOption] {
+392:       get
+393:     }
+394:     public func hash(into hasher: inout Swift.Hasher)
+395:     public var hashValue: Swift.Int {
+396:       get
+397:     }
+398:   }
+399:   public static var isAvailable: Swift.Bool {
+400:     get
+401:   }
+402:   public static var supportedLocales: [Foundation.Locale] {
+403:     get async
+404:   }
+405:   public static func supportedLocale(equivalentTo locale: Foundation.Locale) async -> Foundation.Locale?
+406:   public static var installedLocales: [Foundation.Locale] {
+407:     get async
+408:   }
+409:   final public var selectedLocales: [Foundation.Locale] {
+410:     get
+411:   }
+412:   final public var availableCompatibleAudioFormats: [AVFAudio.AVAudioFormat] {
+413:     get async
+414:   }
+415:   final public var results: some Swift.Sendable & _Concurrency.AsyncSequence<Speech.SpeechTranscriber.Result, any Swift.Error> {
+416:     get
+417:   }
+418:   public struct Result : Speech.SpeechModuleResult, Swift.Sendable, Swift.CustomStringConvertible, Swift.Equatable, Swift.Hashable {
+419:     public let range: CoreMedia.CMTimeRange
+420:     public let resultsFinalizationTime: CoreMedia.CMTime
+421:     public var text: Foundation.AttributedString {
+422:       get
+423:     }
+424:     public let alternatives: [Foundation.AttributedString]
+425:     public var description: Swift.String {
+426:       get
+427:     }
+428:     public static func == (a: Speech.SpeechTranscriber.Result, b: Speech.SpeechTranscriber.Result) -> Swift.Bool
+429:     public func hash(into hasher: inout Swift.Hasher)
+430:     public var hashValue: Swift.Int {

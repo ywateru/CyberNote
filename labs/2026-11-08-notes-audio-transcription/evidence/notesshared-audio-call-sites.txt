@@ -1,0 +1,246 @@
+645881: 0x1D91FF1A8   cbz      x0, 0x1d91ff1b0      
+645882: 0x1D91FF1AC   ret                           
+645883: 0x1D91FF1B0   pacibsp                       
+645884: 0x1D91FF1B4   stp      x29, x30, [sp, #-0x10]! 
+645885: 0x1D91FF1B8   mov      x29, sp              
+645886: 0x1D91FF1BC   mov      w0, #0xff            
+645887: 0x1D91FF1C0   bl       0x1d919a2a4          
+645888: 0x1D91FF1C4   mov      x1, x0               
+645889: 0x1D91FF1C8   adrp     x16, 311             ; 0x1d9336000
+645890: 0x1D91FF1CC   add      x16, x16, #0xe58     
+645891: 0x1D91FF1D0   mov      x17, #0xc6eb         
+645892: 0x1D91FF1D4   pacda    x16, x17             
+645893: 0x1D91FF1D8   mov      x0, x16              
+645894: 0x1D91FF1DC   bl       _swift_getWitnessTable 
+645895: 0x1D91FF1E0   adrp     x8, 75662            ; 0x1eb98d000
+645896: 0x1D91FF1E4   add      x8, x8, #0x490       
+645897: 0x1D91FF1E8   stlr     x0, [x8]             
+645898: 0x1D91FF1EC   ldp      x29, x30, [sp], #0x10 
+645899: 0x1D91FF1F0   autibsp                       
+645900: 0x1D91FF1F4   ret                           
+645901: _$s11NotesShared26TranscriptViewModelSegmentV4from6result9temporary11speakerName17overlapMitigation13adjustedStartSayACG6Speech11TranscriberC18MultisegmentResultV_SbSSSgSbSdtFZ:
+645902: 0x1D91FF1F8   pacibsp                       
+645903: 0x1D91FF1FC   stp      d11, d10, [sp, #-0x80]! 
+645904: 0x1D91FF200   stp      d9, d8, [sp, #0x10]  
+645905: 0x1D91FF204   stp      x28, x27, [sp, #0x20] 
+645906: 0x1D91FF208   stp      x26, x25, [sp, #0x30] 
+645907: 0x1D91FF20C   stp      x24, x23, [sp, #0x40] 
+645908: 0x1D91FF210   stp      x22, x21, [sp, #0x50] 
+645909: 0x1D91FF214   stp      x20, x19, [sp, #0x60] 
+645910: 0x1D91FF218   stp      x29, x30, [sp, #0x70] 
+645911: 0x1D91FF21C   add      x29, sp, #0x70       
+645912: 0x1D91FF220   sub      sp, sp, #0x180       
+645913: 0x1D91FF224   mov.16b  v8, v0               
+645914: 0x1D91FF228   sub      x8, x29, #0x60       
+645915: 0x1D91FF22C   stur     w4, [x8, #-0x100]    
+645916: 0x1D91FF230   sub      x8, x29, #0x70       
+645917: 0x1D91FF234   stur     x3, [x8, #-0x100]    
+645918: 0x1D91FF238   sub      x8, x29, #0x78       
+645919: 0x1D91FF23C   stur     x2, [x8, #-0x100]    
+645920: 0x1D91FF240   sub      x8, x29, #0x98       
+645921: 0x1D91FF244   stur     w1, [x8, #-0x100]    
+662136: 0x1D920EDCC   adrp     x16, 50096           ; 0x1e55be000
+662137: 0x1D920EDD0   ldr      x16, [x16, #0x420]   
+662138: 0x1D920EDD4   mov      x17, x23             
+662139: 0x1D920EDD8   movk     x17, #0x6ae1, lsl #48 
+662140: 0x1D920EDDC   pacda    x16, x17             
+662141: 0x1D920EDE0   str      x16, [x22, #0x50]    
+662142: 0x1D920EDE4   str      d8, [x22, #0x58]     
+662143: 0x1D920EDE8   add      x8, x22, #0x60       
+662144: 0x1D920EDEC   adrp     x16, -1              ; 0x1d920d000
+662145: 0x1D920EDF0   add      x16, x16, #0x300     
+662146: 0x1D920EDF4   pacia    x16, x8              
+662147: 0x1D920EDF8   adrp     x8, 111527           ; 0x1f45b5000
+662148: 0x1D920EDFC   add      x8, x8, #0xcb8       ; _block_descriptor.43
+662149: 0x1D920EE00   str      x16, [x22, #0x60]    
+662150: 0x1D920EE04   stp      x8, x26, [x22, #0x68] 
+662151: 0x1D920EE08   mov      x0, x24              
+662152: 0x1D920EE0C   mov      x2, x20              
+662153: 0x1D920EE10   mov      x3, x19              
+662154: 0x1D920EE14   mov      x4, x25              
+662155: 0x1D920EE18   mov      x5, x23              
+662156: 0x1D920EE1C   bl       "_objc_msgSend$fetchAssetWithConfig:clientIdentifier:progress:completion:" 
+662157: 0x1D920EE20   mov      x0, x21              
+662158: 0x1D920EE24   ldp      x29, x30, [sp, #0x70] 
+662159: 0x1D920EE28   ldp      x21, x19, [sp, #0x58] 
+662160: 0x1D920EE2C   ldp      x24, x23, [sp, #0x48] 
+662161: 0x1D920EE30   ldp      x26, x25, [sp, #0x38] 
+662162: 0x1D920EE34   ldp      x28, x27, [sp, #0x28] 
+662163: 0x1D920EE38   ldr      d8, [sp, #0x20]      
+662164: 0x1D920EE3C   and      x29, x29, #0xefffffffffffffff 
+662165: 0x1D920EE40   add      sp, sp, #0x80        
+662166: 0x1D920EE44   autibsp                       
+662167: 0x1D920EE48   eor      x16, x30, x30, lsl #1 
+662168: 0x1D920EE4C   tbz      x16, #0x3e, 0x1d920ee54 
+662169: 0x1D920EE50   brk      #0xc471              
+662170: 0x1D920EE54   b        _swift_continuation_await 
+662171: 0x1D920EE58   mov      x20, x0              
+662172: 0x1D920EE5C   bl       _objc_msgSend$supportsGeneralASR 
+662173: 0x1D920EE60   mov      x19, x0              
+662174: 0x1D920EE64   mov      x0, x20              
+662175: 0x1D920EE68   bl       _objc_release        
+662176: 0x1D920EE6C   tbz      w19, #0x0, 0x1d920ef3c 
+663339: 0x1D9210094   add      x4, x19, #0x50       
+663340: 0x1D9210098   mov      x0, x19              
+663341: 0x1D921009C   mov      w1, #0x100           
+663342: 0x1D92100A0   mov      w2, #0x8             
+663343: 0x1D92100A4   bl       _swift_updateClassMetadata2 
+663344: 0x1D92100A8   cbnz     x0, 0x1d92100b8      
+663345: 0x1D92100AC   mov      x1, #0x0             
+663346: 0x1D92100B0   b        0x1d92100b8          
+663347: 0x1D92100B4   mov      w1, #0x3f            
+663348: 0x1D92100B8   ldp      x29, x30, [sp, #0x50] 
+663349: 0x1D92100BC   ldp      x20, x19, [sp, #0x40] 
+663350: 0x1D92100C0   add      sp, sp, #0x60        
+663351: 0x1D92100C4   retab                         
+663352: _$s11NotesShared28SiriSpeechRecognitionManagerCMu:
+663353: 0x1D92100C8   adrp     x16, 376             ; 0x1d9388000
+663354: 0x1D92100CC   add      x16, x16, #0xa58     ; _$s11NotesShared28SiriSpeechRecognitionManagerCMn
+663355: 0x1D92100D0   mov      x17, #0xae86         
+663356: 0x1D92100D4   pacda    x16, x17             
+663357: 0x1D92100D8   mov      x2, x16              
+663358: 0x1D92100DC   b        _swift_lookUpClassMethod 
+663359: _$s11NotesShared28SiriSpeechRecognitionManagerC14setUpAudioTaskScSy0D011TranscriberC18MultisegmentResultVGyYaKFTj:
+663360: 0x1D92100E0   pacibsp                       
+663361: 0x1D92100E4   orr      x29, x29, #0x1000000000000000 
+663362: 0x1D92100E8   sub      sp, sp, #0x30        
+663363: 0x1D92100EC   str      x19, [sp, #0x10]     
+663364: 0x1D92100F0   stp      x29, x30, [sp, #0x20] 
+663365: 0x1D92100F4   add      x16, sp, #0x18       
+663366: 0x1D92100F8   movk     x16, #0xc31a, lsl #48 
+663367: 0x1D92100FC   mov      x17, x22             
+663368: 0x1D9210100   pacdb    x17, x16             
+663369: 0x1D9210104   str      x17, [sp, #0x18]     
+663370: 0x1D9210108   add      x29, sp, #0x20       
+663371: 0x1D921010C   mov      x19, x0              
+663372: 0x1D9210110   ldr      x8, [x20]            
+663373: 0x1D9210114   adrp     x9, 50093            ; 0x1e55bd000
+663374: 0x1D9210118   ldr      x9, [x9, #0x478]     
+663375: 0x1D921011C   ldr      x9, [x9]             
+663376: 0x1D9210120   and      x16, x9, x8          
+663377: 0x1D9210124   mov      x17, x20             
+663378: 0x1D9210128   movk     x17, #0x6ae1, lsl #48 
+663379: 0x1D921012C   autda    x16, x17             
+872020: 0x1D92DAA18   add      x16, x16, #0xc48     
+872021: 0x1D92DAA1C   pacia    x16, x8              
+872022: 0x1D92DAA20   adrp     x8, 111328           ; 0x1f45ba000
+872023: 0x1D92DAA24   add      x8, x8, #0xc08       ; _block_descriptor
+872024: 0x1D92DAA28   stp      x16, x8, [sp, #0x18] 
+872025: 0x1D92DAA2C   add      x0, sp, #0x8         
+872026: 0x1D92DAA30   bl       __Block_copy         
+872027: 0x1D92DAA34   mov      x26, x0              
+872028: 0x1D92DAA38   ldr      x27, [sp, #0x30]     
+872029: 0x1D92DAA3C   mov      x0, x25              
+872030: 0x1D92DAA40   bl       _swift_retain        
+872031: 0x1D92DAA44   mov      x0, x23              
+872032: 0x1D92DAA48   bl       _objc_retain         
+872033: 0x1D92DAA4C   mov      x0, x27              
+872034: 0x1D92DAA50   bl       _swift_release       
+872035: 0x1D92DAA54   str      xzr, [sp, #0x8]      
+872036: 0x1D92DAA58   add      x3, sp, #0x8         
+872037: 0x1D92DAA5C   mov      x0, x20              
+872038: 0x1D92DAA60   mov      x2, x24              
+872039: 0x1D92DAA64   mov      x4, x26              
+872040: 0x1D92DAA68   bl       "_objc_msgSend$convertToBuffer:error:withInputFromBlock:" 
+872041: 0x1D92DAA6C   mov      x23, x0              
+872042: 0x1D92DAA70   mov      x0, x26              
+872043: 0x1D92DAA74   bl       __Block_release      
+872044: 0x1D92DAA78   cmp      x23, #0x3            
+872045: 0x1D92DAA7C   b.ne     0x1d92dab8c          
+872046: 0x1D92DAA80   ldr      x23, [sp, #0x8]      
+872047: 0x1D92DAA84   bl       0x1d92dad5c          
+872048: 0x1D92DAA88   mov      x1, x0               
+872049: 0x1D92DAA8C   adrp     x0, 111328           ; 0x1f45ba000
+872050: 0x1D92DAA90   add      x0, x0, #0xcb0       
+872051: 0x1D92DAA94   mov      x2, #0x0             
+872052: 0x1D92DAA98   mov      w3, #0x0             
+872053: 0x1D92DAA9C   bl       _swift_allocError    
+872054: 0x1D92DAAA0   mov      x19, x0              
+872055: 0x1D92DAAA4   str      x23, [x1]            
+872056: 0x1D92DAAA8   mov      x21, x0              
+872057: 0x1D92DAAAC   bl       _swift_willThrow     
+872058: 0x1D92DAAB0   mov      x0, x23              
+872059: 0x1D92DAAB4   bl       _objc_retain         
+872060: 0x1D92DAAB8   mov      x0, x25              
+948598: 0x1D93F4278   brk      #0x1                 
+948599: 0x1D93F427C   brk      #0x1                 
+948600: _objc_msgSend$convergeAttachmentsInNoteWithID:configuration::
+948601: 0x1D93F4280   adrp     x1, 57817            ; 0x1e75cd000
+948602: 0x1D93F4284   ldr      x1, [x1, #0x980]     
+948603: 0x1D93F4288   adrp     x17, 83250           ; 0x1ed926000
+948604: 0x1D93F428C   add      x17, x17, #0x730     
+948605: 0x1D93F4290   ldr      x16, [x17]           
+948606: 0x1D93F4294   braa     x16, x17             
+948607: 0x1D93F4298   brk      #0x1                 
+948608: 0x1D93F429C   brk      #0x1                 
+948609: _objc_msgSend$convergeNotesInAccountWithID:configuration:progress::
+948610: 0x1D93F42A0   adrp     x1, 57817            ; 0x1e75cd000
+948611: 0x1D93F42A4   ldr      x1, [x1, #0x988]     
+948612: 0x1D93F42A8   adrp     x17, 83250           ; 0x1ed926000
+948613: 0x1D93F42AC   add      x17, x17, #0x730     
+948614: 0x1D93F42B0   ldr      x16, [x17]           
+948615: 0x1D93F42B4   braa     x16, x17             
+948616: 0x1D93F42B8   brk      #0x1                 
+948617: 0x1D93F42BC   brk      #0x1                 
+948618: _objc_msgSend$convertToBuffer:error:withInputFromBlock::
+948619: 0x1D93F42C0   adrp     x1, 57817            ; 0x1e75cd000
+948620: 0x1D93F42C4   ldr      x1, [x1, #0x990]     
+948621: 0x1D93F42C8   adrp     x17, 83250           ; 0x1ed926000
+948622: 0x1D93F42CC   add      x17, x17, #0x730     
+948623: 0x1D93F42D0   ldr      x16, [x17]           
+948624: 0x1D93F42D4   braa     x16, x17             
+948625: 0x1D93F42D8   brk      #0x1                 
+948626: 0x1D93F42DC   brk      #0x1                 
+948627: _objc_msgSend$coordinate:
+948628: 0x1D93F42E0   adrp     x1, 57817            ; 0x1e75cd000
+948629: 0x1D93F42E4   ldr      x1, [x1, #0x998]     
+948630: 0x1D93F42E8   adrp     x17, 83250           ; 0x1ed926000
+948631: 0x1D93F42EC   add      x17, x17, #0x730     
+948632: 0x1D93F42F0   ldr      x16, [x17]           
+948633: 0x1D93F42F4   braa     x16, x17             
+948634: 0x1D93F42F8   brk      #0x1                 
+948635: 0x1D93F42FC   brk      #0x1                 
+948636: _objc_msgSend$coordinateAccessWithIntents:queue:byAccessor::
+948637: 0x1D93F4300   adrp     x1, 57817            ; 0x1e75cd000
+948638: 0x1D93F4304   ldr      x1, [x1, #0x9a0]     
+953899: 0x1D93F8C18   brk      #0x1                 
+953900: 0x1D93F8C1C   brk      #0x1                 
+953901: _objc_msgSend$fetchAllLongLivedOperationIDsWithCompletionHandler::
+953902: 0x1D93F8C20   adrp     x1, 57814            ; 0x1e75ce000
+953903: 0x1D93F8C24   ldr      x1, [x1, #0xbe8]     
+953904: 0x1D93F8C28   adrp     x17, 83246           ; 0x1ed926000
+953905: 0x1D93F8C2C   add      x17, x17, #0x730     
+953906: 0x1D93F8C30   ldr      x16, [x17]           
+953907: 0x1D93F8C34   braa     x16, x17             
+953908: 0x1D93F8C38   brk      #0x1                 
+953909: 0x1D93F8C3C   brk      #0x1                 
+953910: _objc_msgSend$fetchAllSubscriptionsOperation:
+953911: 0x1D93F8C40   adrp     x1, 57814            ; 0x1e75ce000
+953912: 0x1D93F8C44   ldr      x1, [x1, #0xbf0]     
+953913: 0x1D93F8C48   adrp     x17, 83246           ; 0x1ed926000
+953914: 0x1D93F8C4C   add      x17, x17, #0x730     
+953915: 0x1D93F8C50   ldr      x16, [x17]           
+953916: 0x1D93F8C54   braa     x16, x17             
+953917: 0x1D93F8C58   brk      #0x1                 
+953918: 0x1D93F8C5C   brk      #0x1                 
+953919: _objc_msgSend$fetchAssetWithConfig:clientIdentifier:progress:completion::
+953920: 0x1D93F8C60   adrp     x1, 57814            ; 0x1e75ce000
+953921: 0x1D93F8C64   ldr      x1, [x1, #0xbf8]     
+953922: 0x1D93F8C68   adrp     x17, 83246           ; 0x1ed926000
+953923: 0x1D93F8C6C   add      x17, x17, #0x730     
+953924: 0x1D93F8C70   ldr      x16, [x17]           
+953925: 0x1D93F8C74   braa     x16, x17             
+953926: 0x1D93F8C78   brk      #0x1                 
+953927: 0x1D93F8C7C   brk      #0x1                 
+953928: _objc_msgSend$fetchCliqueStatus:error::
+953929: 0x1D93F8C80   adrp     x1, 57814            ; 0x1e75ce000
+953930: 0x1D93F8C84   ldr      x1, [x1, #0xc00]     
+953931: 0x1D93F8C88   adrp     x17, 83246           ; 0x1ed926000
+953932: 0x1D93F8C8C   add      x17, x17, #0x730     
+953933: 0x1D93F8C90   ldr      x16, [x17]           
+953934: 0x1D93F8C94   braa     x16, x17             
+953935: 0x1D93F8C98   brk      #0x1                 
+953936: 0x1D93F8C9C   brk      #0x1                 
+953937: _objc_msgSend$fetchCloudKitDevicesWithCompletionBlock::
+953938: 0x1D93F8CA0   adrp     x1, 57814            ; 0x1e75ce000
+953939: 0x1D93F8CA4   ldr      x1, [x1, #0xc08]     

@@ -1,0 +1,52 @@
+{
+  "sdkInterfacePath": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/Speech.framework/Modules/Speech.swiftmodule/arm64e-apple-macos.swiftinterface",
+  "sha256": "9de012f407197106cef4b95f0e5d0d3c487a1a46f733db2aa488c6b77ecfbce6",
+  "apiLines": [
+    {
+      "line": 36,
+      "text": "  public static func assetInstallationRequest(supporting modules: [any Speech.SpeechModule]) async throws -> Speech.AssetInstallationRequest?"
+    },
+    {
+      "line": 207,
+      "text": "final public actor SpeechAnalyzer : Swift.Sendable {"
+    },
+    {
+      "line": 218,
+      "text": "  final public func analyzeSequence<InputSequence>(_ inputSequence: InputSequence) async throws -> CoreMedia.CMTime? where InputSequence : Swift.Sendable, InputSequence : _Concurrency.AsyncSequence, InputSequence.Element == Speech.AnalyzerInput"
+    },
+    {
+      "line": 233,
+      "text": "  public static func bestAvailableAudioFormat(compatibleWith modules: [any Speech.SpeechModule]) async -> AVFAudio.AVAudioFormat?"
+    },
+    {
+      "line": 234,
+      "text": "  public static func bestAvailableAudioFormat(compatibleWith modules: [any Speech.SpeechModule], considering naturalFormat: AVFAudio.AVAudioFormat?) async -> AVFAudio.AVAudioFormat?"
+    },
+    {
+      "line": 244,
+      "text": "  public init(buffer: AVFAudio.AVAudioPCMBuffer)"
+    },
+    {
+      "line": 245,
+      "text": "  public init(buffer: AVFAudio.AVAudioPCMBuffer, bufferStartTime: CoreMedia.CMTime?)"
+    },
+    {
+      "line": 331,
+      "text": "  final public func analyzeSequence(from audioFile: AVFAudio.AVAudioFile) async throws -> CoreMedia.CMTime?"
+    },
+    {
+      "line": 335,
+      "text": "final public class SpeechTranscriber : Speech.SpeechModule, Speech.LocaleDependentSpeechModule {"
+    },
+    {
+      "line": 343,
+      "text": "    public static let timeIndexedProgressiveTranscription: Speech.SpeechTranscriber.Preset"
+    },
+    {
+      "line": 399,
+      "text": "  public static var isAvailable: Swift.Bool {"
+    }
+  ],
+  "internalTranscriberClassDeclaredInPublicInterface": false,
+  "runtime": "macOS 26.4; SDK 26.5 with deployment target 26.0"
+}

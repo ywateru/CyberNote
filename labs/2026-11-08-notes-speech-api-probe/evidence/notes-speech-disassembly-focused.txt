@@ -1,0 +1,752 @@
+271255: 0x1C26CD08C   pacibsp                       
+271256: 0x1C26CD090   stp      x28, x27, [sp, #-0x60]! 
+271257: 0x1C26CD094   stp      x26, x25, [sp, #0x10] 
+271258: 0x1C26CD098   stp      x24, x23, [sp, #0x20] 
+271259: 0x1C26CD09C   stp      x22, x21, [sp, #0x30] 
+271260: 0x1C26CD0A0   stp      x20, x19, [sp, #0x40] 
+271261: 0x1C26CD0A4   stp      x29, x30, [sp, #0x50] 
+271262: 0x1C26CD0A8   add      x29, sp, #0x50       
+271263: 0x1C26CD0AC   sub      sp, sp, #0x80        
+271264: 0x1C26CD0B0   mov      x26, x20             
+271265: 0x1C26CD0B4   stp      x4, x2, [x29, #-0x78] 
+271266: 0x1C26CD0B8   mov      x27, x3              
+271267: 0x1C26CD0BC   mov      x17, x20             
+271268: 0x1C26CD0C0   mov      x20, x1              
+271269: 0x1C26CD0C4   stur     x0, [x29, #-0x88]    
+271270: 0x1C26CD0C8   ldr      x16, [x26]           
+271271: 0x1C26CD0CC   movk     x17, #0x6ae1, lsl #48 
+271272: 0x1C26CD0D0   autda    x16, x17             
+271273: 0x1C26CD0D4   mov      x17, x16             
+271274: 0x1C26CD0D8   xpacd    x17                  
+271275: 0x1C26CD0DC   cmp      x16, x17             
+271276: 0x1C26CD0E0   b.eq     0x1c26cd0e8          
+271277: 0x1C26CD0E4   brk      #0xc472              
+271278: 0x1C26CD0E8   stur     x16, [x29, #-0xc0]   
+271279: 0x1C26CD0EC   adrp     x0, 165670           ; 0x1eadf3000
+271280: 0x1C26CD0F0   add      x0, x0, #0xda0       ; _$s6Speech17TranscriberCommonC12ModelOptionsVSgMd
+271281: 0x1C26CD0F4   adrp     x1, 263              ; 0x1c27d4000
+271282: 0x1C26CD0F8   add      x1, x1, #0x310       ; _$s6Speech17TranscriberCommonC12ModelOptionsVSgMR
+271283: 0x1C26CD0FC   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+271284: 0x1C26CD100   ldr      x16, [x0, #-0x8]!    
+271285: 0x1C26CD104   mov      x17, x0              
+271286: 0x1C26CD108   movk     x17, #0x2e3f, lsl #48 
+271287: 0x1C26CD10C   autda    x16, x17             
+271288: 0x1C26CD110   ldr      x9, [x16, #0x40]     
+271289: 0x1C26CD114   bl       _OUTLINED_FUNCTION_197 
+271290: 0x1C26CD118   adrp     x17, 176771          ; 0x1ed950000
+271291: 0x1C26CD11C   add      x17, x17, #0x90      
+271292: 0x1C26CD120   ldr      x16, [x17]           
+271293: 0x1C26CD124   blraa    x16, x17             
+271294: 0x1C26CD128   mov      x9, sp               
+271295: 0x1C26CD12C   sub      x8, x9, x8           
+271296: 0x1C26CD130   stur     x8, [x29, #-0xa0]    
+271297: 0x1C26CD134   mov      sp, x8               
+271298: 0x1C26CD138   mov      x0, #0x0             
+271299: 0x1C26CD13C   bl       _$s10Foundation6LocaleVMa 
+271300: 0x1C26CD140   bl       _OUTLINED_FUNCTION_46 
+271301: 0x1C26CD144   movk     x17, #0x2e3f, lsl #48 
+271302: 0x1C26CD148   autda    x16, x17             
+271303: 0x1C26CD14C   mov      x17, x16             
+271304: 0x1C26CD150   xpacd    x17                  
+271305: 0x1C26CD154   cmp      x16, x17             
+271306: 0x1C26CD158   b.eq     0x1c26cd160          
+271307: 0x1C26CD15C   brk      #0xc472              
+271308: 0x1C26CD160   stp      x16, x0, [x29, #-0x98] 
+271309: 0x1C26CD164   mov      x16, x8              
+271310: 0x1C26CD168   mov      x17, x9              
+271311: 0x1C26CD16C   movk     x17, #0x2e3f, lsl #48 
+271312: 0x1C26CD170   autda    x16, x17             
+271313: 0x1C26CD174   ldr      x8, [x16, #0x40]     
+271314: 0x1C26CD178   mov      x9, x8               
+271315: 0x1C26CD17C   adrp     x17, 176771          ; 0x1ed950000
+271316: 0x1C26CD180   add      x17, x17, #0x90      
+271317: 0x1C26CD184   ldr      x16, [x17]           
+271318: 0x1C26CD188   blraa    x16, x17             
+271319: 0x1C26CD18C   bl       _OUTLINED_FUNCTION_42 
+271320: 0x1C26CD190   sub      x8, x9, x8           
+271321: 0x1C26CD194   stur     x8, [x29, #-0xa8]    
+271322: 0x1C26CD198   mov      sp, x8               
+271323: 0x1C26CD19C   ldr      x8, [x20]            
+271324: 0x1C26CD1A0   stur     x8, [x29, #-0x68]    
+271325: 0x1C26CD1A4   ldr      x21, [x8, #0x10]     
+271326: 0x1C26CD1A8   adrp     x20, 143088          ; 0x1e55bd000
+271327: 0x1C26CD1AC   ldr      x20, [x20, #0x410]   
+271328: 0x1C26CD1B0   stur     x27, [x29, #-0x80]   
+271329: 0x1C26CD1B4   cbz      x21, 0x1c26cd2b8     
+271330: 0x1C26CD1B8   stur     x26, [x29, #-0xb0]   
+271331: 0x1C26CD1BC   stur     x20, [x29, #-0x58]   
+271332: 0x1C26CD1C0   ldur     x0, [x29, #-0x68]    
+271333: 0x1C26CD1C4   bl       _swift_bridgeObjectRetain 
+271334: 0x1C26CD1C8   sub      x20, x29, #0x58      
+271335: 0x1C26CD1CC   mov      w0, #0x0             
+271336: 0x1C26CD1D0   mov      x1, x21              
+271337: 0x1C26CD1D4   mov      w2, #0x0             
+271338: 0x1C26CD1D8   bl       _$ss15ContiguousArrayV16_createNewBuffer14bufferIsUnique15minimumCapacity13growForAppendySb_SiSbtFSS_Tg5 
+271339: 0x1C26CD1DC   ldur     x0, [x29, #-0x68]    
+271340: 0x1C26CD1E0   ldur     x20, [x29, #-0x58]   
+271341: 0x1C26CD1E4   adrp     x8, 295              ; 0x1c27f4000
+271342: 0x1C26CD1E8   add      x8, x8, #0x10        
+271343: 0x1C26CD1EC   sub      x8, x8, #0x20        
+271344: 0x1C26CD1F0   adrp     x9, 295              ; 0x1c27f4000
+271345: 0x1C26CD1F4   add      x9, x9, #0x30        
+271346: 0x1C26CD1F8   orr      x19, x8, #0x8000000000000000 
+271347: 0x1C26CD1FC   sub      x8, x9, #0x20        
+271348: 0x1C26CD200   orr      x24, x8, #0x8000000000000000 
+271349: 0x1C26CD204   mov      w25, #0x20           
+271350: 0x1C26CD208   mov      x12, #0x4165         
+271351: 0x1C26CD20C   movk     x12, #0x7070, lsl #16 
+271352: 0x1C26CD210   movk     x12, #0xec00, lsl #48 
+271353: 0x1C26CD214   mov      x22, #0x7254         
+271354: 0x1C26CD218   movk     x22, #0x6e61, lsl #16 
+271355: 0x1C26CD21C   movk     x22, #0x6c73, lsl #32 
+271356: 0x1C26CD220   movk     x22, #0x7461, lsl #48 
+271357: 0x1C26CD224   mov      x11, #0x11           
+271358: 0x1C26CD228   movk     x11, #0xd000, lsl #48 
+271359: 0x1C26CD22C   ldrb     w8, [x0, x25]        
+271360: 0x1C26CD230   cmp      w8, #0x1             
+271361: 0x1C26CD234   add      x9, x11, #0x3        
+271362: 0x1C26CD238   csel     x9, x9, x22, eq      
+271363: 0x1C26CD23C   csel     x10, x19, x12, eq    
+271364: 0x1C26CD240   cmp      w8, #0x0             
+271365: 0x1C26CD244   csel     x26, x11, x9, eq     
+271366: 0x1C26CD248   csel     x27, x24, x10, eq    
+271367: 0x1C26CD24C   stur     x20, [x29, #-0x58]   
+271368: 0x1C26CD250   ldp      x28, x8, [x20, #0x10] 
+271369: 0x1C26CD254   add      x23, x28, #0x1       
+271370: 0x1C26CD258   cmp      x28, x8, lsr #1      
+271371: 0x1C26CD25C   b.lo     0x1c26cd294          
+271372: 0x1C26CD260   cmp      x8, #0x1             
+271373: 0x1C26CD264   cset     w0, hi               
+271374: 0x1C26CD268   sub      x20, x29, #0x58      
+271375: 0x1C26CD26C   mov      x1, x23              
+271376: 0x1C26CD270   mov      w2, #0x1             
+271377: 0x1C26CD274   bl       _$ss15ContiguousArrayV16_createNewBuffer14bufferIsUnique15minimumCapacity13growForAppendySb_SiSbtFSS_Tg5 
+271378: 0x1C26CD278   mov      x12, #0x4165         
+271379: 0x1C26CD27C   movk     x12, #0x7070, lsl #16 
+271380: 0x1C26CD280   movk     x12, #0xec00, lsl #48 
+271381: 0x1C26CD284   mov      x11, #0x11           
+271382: 0x1C26CD288   movk     x11, #0xd000, lsl #48 
+271383: 0x1C26CD28C   ldur     x0, [x29, #-0x68]    
+271384: 0x1C26CD290   ldur     x20, [x29, #-0x58]   
+271385: 0x1C26CD294   str      x23, [x20, #0x10]    
+271386: 0x1C26CD298   add      x8, x20, x28, lsl #4 
+271387: 0x1C26CD29C   stp      x26, x27, [x8, #0x20] 
+271388: 0x1C26CD2A0   add      x25, x25, #0x1       
+271389: 0x1C26CD2A4   subs     x21, x21, #0x1       
+271390: 0x1C26CD2A8   b.ne     0x1c26cd22c          
+271391: 0x1C26CD2AC   bl       _swift_bridgeObjectRelease 
+271392: 0x1C26CD2B0   ldur     x26, [x29, #-0xb0]   
+271393: 0x1C26CD2B4   ldur     x27, [x29, #-0x80]   
+271394: 0x1C26CD2B8   mov      x8, x26              
+271395: 0x1C26CD2BC   movk     x8, #0x6ae1, lsl #48 
+271396: 0x1C26CD2C0   stur     x8, [x29, #-0xc8]    
+271397: 0x1C26CD2C4   ldr      x8, [x20, #0x10]     
+271398: 0x1C26CD2C8   cbnz     x8, 0x1c26cd2fc      
+271399: 0x1C26CD2CC   mov      w0, #0x2             
+271400: 0x1C26CD2D0   mov      x1, x27              
+271401: 0x1C26CD2D4   bl       _$sSh8containsySbxF6Speech17TranscriberCommonC15ReportingOptionO_Tg5 
+271402: 0x1C26CD2D8   mov      x21, x0              
+271403: 0x1C26CD2DC   mov      x0, x20              
+271404: 0x1C26CD2E0   bl       _swift_bridgeObjectRelease 
+271405: 0x1C26CD2E4   adrp     x8, 198488           ; 0x1f2e25000
+271406: 0x1C26CD2E8   add      x8, x8, #0x3b8       ; _$s6Speech0A11TranscriberC6locale12modelOptions013transcriptionE009reportingE009attributeE0AC10Foundation6LocaleV_AC05ModelE0VShyAC19TranscriptionOptionOGShyAC09ReportingM0OGShyAC015ResultAttributeM0OGtcf
+271407: 0x1C26CD2EC   adrp     x9, 198488           ; 0x1f2e25000
+271408: 0x1C26CD2F0   add      x9, x9, #0x3e8       ; _$s6Speech0A11TranscriberC6locale12modelOptions013transcriptionE009reportingE009attributeE0AC10Foundation6LocaleV_AC05ModelE0VShyAC19TranscriptionOptionOGShyAC09ReportingM0OGShyAC015ResultAttributeM0OGtcf
+271409: 0x1C26CD2F4   tst      w21, #0x1            
+271410: 0x1C26CD2F8   csel     x20, x9, x8, ne      
+271411: 0x1C26CD2FC   ldur     x0, [x29, #-0x70]    
+271412: 0x1C26CD300   mov      x21, #0x0            
+271413: 0x1C26CD304   bl       _$sSlsE3mapySayqd__Gqd__7ElementQzqd_0_YKXEqd_0_YKs5ErrorRd_0_r0_lFShy6Speech22NormalizingTranscriberC19TranscriptionOptionOG_AF0F6CommonCAIOs5NeverOTg5011$s6Speech22ef132C6locale12contentHints12modelOptions013transcriptionH009reportingH009attributeH0 
+271414: 0x1C26CD308   cbnz     x21, 0x1c26cd6bc     
+271415: 0x1C26CD30C   bl       _$sShyShyxGqd__nc7ElementQyd__RszSTRd__lufC6Speech17TranscriberCommonC19TranscriptionOptionO_SayAHGTt0g5 
+271416: 0x1C26CD310   mov      x1, x0               
+271417: 0x1C26CD314   adrp     x0, 198488           ; 0x1f2e25000
+271418: 0x1C26CD318   add      x0, x0, #0x390       ; _$s6Speech0A11TranscriberC6locale12modelOptions013transcriptionE009reportingE009attributeE0AC10Foundation6LocaleV_AC05ModelE0VShyAC19TranscriptionOptionOGShyAC09ReportingM0OGShyAC015ResultAttributeM0OGtcf
+271419: 0x1C26CD31C   bl       _$sSh5unionyShyxGqd__n7ElementQyd__RszSTRd__lF6Speech17TranscriberCommonC19TranscriptionOptionO_SayAIGTg5 
+271420: 0x1C26CD320   stur     x0, [x29, #-0xb0]    
+271421: 0x1C26CD324   mov      x28, x27             
+271422: 0x1C26CD328   ldr      x8, [x28, #0x38]!    
+271423: 0x1C26CD32C   ldrb     w9, [x27, #0x20]     
+271424: 0x1C26CD330   bl       _OUTLINED_FUNCTION_60 
+271425: 0x1C26CD334   lsl      x12, x11, x9         
+271426: 0x1C26CD338   cmp      w10, #0x6            
+271427: 0x1C26CD33C   csinv    x10, x11, x12, hs    
+271428: 0x1C26CD340   and      x24, x10, x8         
+271429: 0x1C26CD344   add      x8, x9, #0x3f        
+271430: 0x1C26CD348   lsr      x25, x8, #6          
+271431: 0x1C26CD34C   mov      x0, x27              
+271432: 0x1C26CD350   bl       _swift_bridgeObjectRetain 
+271433: 0x1C26CD354   mov      x19, #0x0            
+271434: 0x1C26CD358   adrp     x23, 143088          ; 0x1e55bd000
+271435: 0x1C26CD35C   ldr      x23, [x23, #0x410]   
+271436: 0x1C26CD360   mov      x8, x19              
+271437: 0x1C26CD364   cbnz     x24, 0x1c26cd384     
+271438: 0x1C26CD368   adds     x19, x8, #0x1        
+271439: 0x1C26CD36C   b.vs     0x1c26cd6b8          
+271440: 0x1C26CD370   cmp      x19, x25             
+271441: 0x1C26CD374   b.ge     0x1c26cd424          
+271442: 0x1C26CD378   ldr      x24, [x28, x19, lsl #3] 
+271443: 0x1C26CD37C   add      x8, x8, #0x1         
+271444: 0x1C26CD380   cbz      x24, 0x1c26cd368     
+271445: 0x1C26CD384   rbit     x8, x24              
+271446: 0x1C26CD388   clz      x8, x8               
+271447: 0x1C26CD38C   sub      x9, x24, #0x1        
+271448: 0x1C26CD390   and      x24, x9, x24         
+271449: 0x1C26CD394   lsl      x9, x19, #6          
+271450: 0x1C26CD398   ldr      x10, [x27, #0x30]    
+271451: 0x1C26CD39C   add      x8, x10, x8          
+271452: 0x1C26CD3A0   ldrb     w22, [x8, x9]        
+271453: 0x1C26CD3A4   cmp      w22, #0x2            
+271454: 0x1C26CD3A8   b.eq     0x1c26cd360          
+271455: 0x1C26CD3AC   mov      x0, x23              
+271456: 0x1C26CD3B0   bl       _swift_isUniquelyReferenced_nonNull_native 
+271457: 0x1C26CD3B4   mov      x27, x26             
+271458: 0x1C26CD3B8   tbnz     w0, #0x0, 0x1c26cd3d8 
+271459: 0x1C26CD3BC   ldr      x8, [x23, #0x10]     
+271460: 0x1C26CD3C0   add      x1, x8, #0x1         
+271461: 0x1C26CD3C4   mov      w0, #0x0             
+271462: 0x1C26CD3C8   mov      w2, #0x1             
+271463: 0x1C26CD3CC   mov      x3, x23              
+271464: 0x1C26CD3D0   bl       _$ss12_ArrayBufferV20_consumeAndCreateNew14bufferIsUnique15minimumCapacity13growForAppendAByxGSb_SiSbtF6Speech17TranscriberCommonC15ReportingOptionO_Tg5 
+271465: 0x1C26CD3D4   mov      x23, x0              
+271466: 0x1C26CD3D8   ldp      x26, x8, [x23, #0x10] 
+271467: 0x1C26CD3DC   add      x9, x26, #0x1        
+271468: 0x1C26CD3E0   cmp      x26, x8, lsr #1      
+271469: 0x1C26CD3E4   b.lo     0x1c26cd40c          
+271470: 0x1C26CD3E8   cmp      x8, #0x1             
+271471: 0x1C26CD3EC   cset     w0, hi               
+271472: 0x1C26CD3F0   stur     x9, [x29, #-0xb8]    
+271473: 0x1C26CD3F4   mov      x1, x9               
+271474: 0x1C26CD3F8   mov      w2, #0x1             
+271475: 0x1C26CD3FC   mov      x3, x23              
+271476: 0x1C26CD400   bl       _$ss12_ArrayBufferV20_consumeAndCreateNew14bufferIsUnique15minimumCapacity13growForAppendAByxGSb_SiSbtF6Speech17TranscriberCommonC15ReportingOptionO_Tg5 
+271477: 0x1C26CD404   ldur     x9, [x29, #-0xb8]    
+271478: 0x1C26CD408   mov      x23, x0              
+271479: 0x1C26CD40C   str      x9, [x23, #0x10]     
+271480: 0x1C26CD410   add      x8, x23, x26         
+271481: 0x1C26CD414   strb     w22, [x8, #0x20]     
+271482: 0x1C26CD418   mov      x26, x27             
+271483: 0x1C26CD41C   ldur     x27, [x29, #-0x80]   
+271484: 0x1C26CD420   b        0x1c26cd360          
+271485: 0x1C26CD424   mov      x0, x27              
+271486: 0x1C26CD428   bl       _swift_release       
+271487: 0x1C26CD42C   mov      x0, x23              
+271488: 0x1C26CD430   bl       _$sShyShyxGqd__nc7ElementQyd__RszSTRd__lufC6Speech17TranscriberCommonC15ReportingOptionO_SayAHGTt0g5 
+271489: 0x1C26CD434   stur     x0, [x29, #-0xb8]    
+271490: 0x1C26CD438   ldur     x0, [x29, #-0x78]    
+271491: 0x1C26CD43C   bl       _$sSlsE3mapySayqd__Gqd__7ElementQzqd_0_YKXEqd_0_YKs5ErrorRd_0_r0_lFShy6Speech22NormalizingTranscriberC21ResultAttributeOptionOG_AF013TranscriptionghI0Os5NeverOTg5011$s6Speech22ef132C6locale12contentHints12modelOptions013transcriptionH009reportingH009a 
+271492: 0x1C26CD440   cbnz     x21, 0x1c26cd6dc     
+271493: 0x1C26CD444   bl       _$sShyShyxGqd__nc7ElementQyd__RszSTRd__lufC6Speech34TranscriptionResultAttributeOptionO_SayAFGTt0g5 
+271494: 0x1C26CD448   stur     x0, [x29, #-0xc0]    
+271495: 0x1C26CD44C   adrp     x8, 142963           ; 0x1e5540000
+271496: 0x1C26CD450   ldr      x0, [x8, #0x8a8]     
+271497: 0x1C26CD454   bl       _objc_opt_self       
+271498: 0x1C26CD458   bl       _objc_msgSend$standardUserDefaults 
+271499: 0x1C26CD45C   mov      x29, x29             
+271500: 0x1C26CD460   bl       _objc_retainAutoreleasedReturnValue 
+271501: 0x1C26CD464   mov      x25, x0              
+271502: 0x1C26CD468   adrp     x8, 295              ; 0x1c27f4000
+271503: 0x1C26CD46C   add      x8, x8, #0xb50       
+271504: 0x1C26CD470   sub      x8, x8, #0x20        
+271505: 0x1C26CD474   mov      x9, #0x11            
+271506: 0x1C26CD478   movk     x9, #0xd000, lsl #48 
+271507: 0x1C26CD47C   add      x0, x9, #0x11        
+271508: 0x1C26CD480   orr      x1, x8, #0x8000000000000000 
+271509: 0x1C26CD484   bl       _$sSS10FoundationE19_bridgeToObjectiveCSo8NSStringCyF 
+271510: 0x1C26CD488   mov      x27, x0              
+271511: 0x1C26CD48C   mov      x0, x25              
+271512: 0x1C26CD490   mov      x2, x27              
+271513: 0x1C26CD494   bl       "_objc_msgSend$boolForKey:" 
+271514: 0x1C26CD498   mov      x28, x0              
+271515: 0x1C26CD49C   mov      x0, x25              
+271516: 0x1C26CD4A0   bl       _objc_release        
+271517: 0x1C26CD4A4   mov      x0, x27              
+271518: 0x1C26CD4A8   bl       _objc_release        
+271519: 0x1C26CD4AC   eor      w8, w28, #0x1        
+271520: 0x1C26CD4B0   stur     w8, [x29, #-0xcc]    
+271521: 0x1C26CD4B4   ldp      x28, x22, [x29, #-0x98] 
+271522: 0x1C26CD4B8   mov      x21, x28             
+271523: 0x1C26CD4BC   ldr      x8, [x21, #0x10]!    
+271524: 0x1C26CD4C0   stur     x8, [x29, #-0xc8]    
+271525: 0x1C26CD4C4   ldur     x23, [x29, #-0xa8]   
+271526: 0x1C26CD4C8   mov      x0, x23              
+271527: 0x1C26CD4CC   ldur     x24, [x29, #-0x88]   
+271528: 0x1C26CD4D0   mov      x1, x24              
+271529: 0x1C26CD4D4   mov      x2, x22              
+271530: 0x1C26CD4D8   mov      x17, x21             
+271531: 0x1C26CD4DC   movk     x17, #0xe3ba, lsl #48 
+271532: 0x1C26CD4E0   blraa    x8, x17              
+271533: 0x1C26CD4E4   mov      x0, #0x0             
+271534: 0x1C26CD4E8   bl       _$s10Foundation3URLVMa 
+271535: 0x1C26CD4EC   mov      x25, x0              
+271536: 0x1C26CD4F0   ldur     x19, [x29, #-0xa0]   
+271537: 0x1C26CD4F4   mov      x0, x19              
+271538: 0x1C26CD4F8   mov      w1, #0x1             
+271539: 0x1C26CD4FC   mov      w2, #0x1             
+271540: 0x1C26CD500   mov      x3, x25              
+271541: 0x1C26CD504   bl       ___swift_storeEnumTagSinglePayload 
+271542: 0x1C26CD508   mov      x0, #0x0             
+271543: 0x1C26CD50C   bl       _$s6Speech17TranscriberCommonC12ModelOptionsVMa 
+271544: 0x1C26CD510   mov      x27, x0              
+271545: 0x1C26CD514   ldrsw    x8, [x0, #0x1c]      
+271546: 0x1C26CD518   add      x0, x19, x8          
+271547: 0x1C26CD51C   mov      w1, #0x1             
+271548: 0x1C26CD520   mov      w2, #0x1             
+271549: 0x1C26CD524   mov      x3, x25              
+271550: 0x1C26CD528   bl       ___swift_storeEnumTagSinglePayload 
+271551: 0x1C26CD52C   ldrsw    x8, [x27, #0x14]     
+271552: 0x1C26CD530   strb     wzr, [x19, x8]       
+271553: 0x1C26CD534   ldrsw    x8, [x27, #0x18]     
+271554: 0x1C26CD538   add      x8, x19, x8          
+271555: 0x1C26CD53C   stp      xzr, xzr, [x8]       
+271556: 0x1C26CD540   ldrsw    x8, [x27, #0x24]     
+271557: 0x1C26CD544   adrp     x9, 143088           ; 0x1e55bd000
+271558: 0x1C26CD548   ldr      x9, [x9, #0x410]     
+271559: 0x1C26CD54C   str      x9, [x19, x8]        
+271560: 0x1C26CD550   ldrsw    x8, [x27, #0x20]     
+271561: 0x1C26CD554   add      x8, x19, x8          
+271562: 0x1C26CD558   stp      xzr, xzr, [x8]       
+271563: 0x1C26CD55C   ldrsw    x8, [x27, #0x28]     
+271564: 0x1C26CD560   strb     wzr, [x19, x8]       
+271565: 0x1C26CD564   ldrsw    x8, [x27, #0x2c]     
+271566: 0x1C26CD568   strb     wzr, [x19, x8]       
+271567: 0x1C26CD56C   ldrsw    x8, [x27, #0x30]     
+271568: 0x1C26CD570   strb     wzr, [x19, x8]       
+271569: 0x1C26CD574   ldrsw    x8, [x27, #0x34]     
+271570: 0x1C26CD578   str      xzr, [x19, x8]       
+271571: 0x1C26CD57C   ldrsw    x8, [x27, #0x44]     
+271572: 0x1C26CD580   str      xzr, [x19, x8]       
+271573: 0x1C26CD584   ldrsw    x8, [x27, #0x38]     
+271574: 0x1C26CD588   strb     wzr, [x19, x8]       
+271575: 0x1C26CD58C   ldrsw    x8, [x27, #0x3c]     
+271576: 0x1C26CD590   str      xzr, [x19, x8]       
+271577: 0x1C26CD594   ldrsw    x8, [x27, #0x40]     
+271578: 0x1C26CD598   str      xzr, [x19, x8]       
+271579: 0x1C26CD59C   mov      x0, x19              
+271580: 0x1C26CD5A0   mov      w1, #0x0             
+271581: 0x1C26CD5A4   mov      w2, #0x1             
+271582: 0x1C26CD5A8   mov      x3, x27              
+271583: 0x1C26CD5AC   bl       ___swift_storeEnumTagSinglePayload 
+271584: 0x1C26CD5B0   mov      x0, #0x0             
+271585: 0x1C26CD5B4   bl       _$s6Speech17TranscriberCommonCMa 
+271586: 0x1C26CD5B8   ldr      w1, [x0, #0x30]      
+271587: 0x1C26CD5BC   ldrh     w2, [x0, #0x34]      
+271588: 0x1C26CD5C0   bl       _swift_allocObject   
+271589: 0x1C26CD5C4   mov      x8, x0               
+271590: 0x1C26CD5C8   sub      sp, sp, #0x10        
+271591: 0x1C26CD5CC   ldur     w9, [x29, #-0xcc]    
+271592: 0x1C26CD5D0   strb     w9, [sp, #0x8]       
+271593: 0x1C26CD5D4   ldur     x9, [x29, #-0xc0]    
+271594: 0x1C26CD5D8   str      x9, [sp]             
+271595: 0x1C26CD5DC   mov      x0, x23              
+271596: 0x1C26CD5E0   mov      x1, x19              
+271597: 0x1C26CD5E4   mov      x2, x20              
+271598: 0x1C26CD5E8   mov      w3, #0x7             
+271599: 0x1C26CD5EC   mov      w4, #0x0             
+271600: 0x1C26CD5F0   mov      w5, #0x0             
+271601: 0x1C26CD5F4   ldp      x7, x6, [x29, #-0xb8] 
+271602: 0x1C26CD5F8   mov      x20, x8              
+271603: 0x1C26CD5FC   bl       _$s6Speech17TranscriberCommonC6locale12modelOptions23preferredModelTaskNames9assetType15singleUtterance21concatenateUtterances013transcriptionF009reportingF009attributeF010redactLogsAC10Foundation6LocaleV_AC0hF0VSgSaySSGSo015SFEntitledAssetL0VS2bShyAC 
+271604: 0x1C26CD600   add      sp, sp, #0x10        
+271605: 0x1C26CD604   mov      x20, x0              
+271606: 0x1C26CD608   ldr      x8, [x28, #0x8]!     
+271607: 0x1C26CD60C   mov      x0, x24              
+271608: 0x1C26CD610   mov      x1, x22              
+271609: 0x1C26CD614   mov      x17, x28             
+271610: 0x1C26CD618   movk     x17, #0x4f8, lsl #48 
+271611: 0x1C26CD61C   blraa    x8, x17              
+271612: 0x1C26CD620   adrp     x8, 172704           ; 0x1ec96d000
+271613: 0x1C26CD624   ldr      x8, [x8, #0xc20]     ; _$s6Speech0A11TranscriberC6common33_2DB566D179A5A8C6BE9BD642D1FCF687LLAA0B6CommonCvpWvd
+271614: 0x1C26CD628   str      x20, [x26, x8]       
+271615: 0x1C26CD62C   adrp     x8, 172707           ; 0x1ec970000
+271616: 0x1C26CD630   add      x8, x8, #0x578       ; _$s6Speech17TranscriberCommonC6locale10Foundation6LocaleVvpWvd
+271617: 0x1C26CD634   ldr      x8, [x8]             
+271618: 0x1C26CD638   adrp     x9, 172707           ; 0x1ec970000
+271619: 0x1C26CD63C   ldr      x9, [x9, #0x600]     ; _$s6Speech0A11TranscriberC6locale10Foundation6LocaleVvpWvd
+271620: 0x1C26CD640   add      x0, x26, x9          
+271621: 0x1C26CD644   add      x1, x20, x8          
+271622: 0x1C26CD648   mov      x2, x22              
+271623: 0x1C26CD64C   ldur     x8, [x29, #-0xc8]    
+271624: 0x1C26CD650   mov      x17, x21             
+271625: 0x1C26CD654   movk     x17, #0xe3ba, lsl #48 
+271626: 0x1C26CD658   blraa    x8, x17              
+271627: 0x1C26CD65C   adrp     x8, 172707           ; 0x1ec970000
+271628: 0x1C26CD660   ldr      x8, [x8, #0x620]     ; _$s6Speech0A11TranscriberC12modelOptionsAC05ModelD0VvpWvd
+271629: 0x1C26CD664   ldp      x9, x10, [x29, #-0x70] 
+271630: 0x1C26CD668   str      x10, [x26, x8]       
+271631: 0x1C26CD66C   adrp     x8, 172707           ; 0x1ec970000
+271632: 0x1C26CD670   ldr      x8, [x8, #0x610]     ; _$s6Speech0A11TranscriberC20transcriptionOptionsShyAC19TranscriptionOptionOGvpWvd
+271633: 0x1C26CD674   str      x9, [x26, x8]        
+271634: 0x1C26CD678   adrp     x8, 172707           ; 0x1ec970000
+271635: 0x1C26CD67C   ldr      x8, [x8, #0x618]     ; _$s6Speech0A11TranscriberC16reportingOptionsShyAC15ReportingOptionOGvpWvd
+271636: 0x1C26CD680   ldp      x10, x9, [x29, #-0x80] 
+271637: 0x1C26CD684   str      x10, [x26, x8]       
+271638: 0x1C26CD688   adrp     x8, 172707           ; 0x1ec970000
+271639: 0x1C26CD68C   ldr      x8, [x8, #0x608]     ; _$s6Speech0A11TranscriberC22resultAttributeOptionsShyAC06ResultD6OptionOGvpWvd
+271640: 0x1C26CD690   str      x9, [x26, x8]        
+271641: 0x1C26CD694   mov      x0, x26              
+271642: 0x1C26CD698   sub      sp, x29, #0x50       
+271643: 0x1C26CD69C   ldp      x29, x30, [sp, #0x50] 
+271644: 0x1C26CD6A0   ldp      x20, x19, [sp, #0x40] 
+271645: 0x1C26CD6A4   ldp      x22, x21, [sp, #0x30] 
+271646: 0x1C26CD6A8   ldp      x24, x23, [sp, #0x20] 
+271647: 0x1C26CD6AC   ldp      x26, x25, [sp, #0x10] 
+271648: 0x1C26CD6B0   ldp      x28, x27, [sp], #0x60 
+271649: 0x1C26CD6B4   retab                         
+271650: 0x1C26CD6B8   brk      #0x1                 
+271651: 0x1C26CD6BC   mov      x0, x27              
+271652: 0x1C26CD6C0   bl       _swift_bridgeObjectRelease 
+271653: 0x1C26CD6C4   ldur     x0, [x29, #-0x78]    
+271654: 0x1C26CD6C8   bl       _swift_bridgeObjectRelease 
+271655: 0x1C26CD6CC   ldur     x0, [x29, #-0x68]    
+271656: 0x1C26CD6D0   bl       _swift_bridgeObjectRelease 
+271657: 0x1C26CD6D4   ldur     x0, [x29, #-0x70]    
+271658: 0x1C26CD6D8   b        0x1c26cd708          
+271659: 0x1C26CD6DC   ldur     x0, [x29, #-0x70]    
+271660: 0x1C26CD6E0   bl       _swift_bridgeObjectRelease 
+271661: 0x1C26CD6E4   ldur     x0, [x29, #-0x80]    
+271662: 0x1C26CD6E8   bl       _swift_bridgeObjectRelease 
+271663: 0x1C26CD6EC   ldur     x0, [x29, #-0x68]    
+271664: 0x1C26CD6F0   bl       _swift_bridgeObjectRelease 
+271665: 0x1C26CD6F4   ldur     x0, [x29, #-0xb0]    
+271666: 0x1C26CD6F8   bl       _swift_bridgeObjectRelease 
+271667: 0x1C26CD6FC   ldur     x0, [x29, #-0xb8]    
+271668: 0x1C26CD700   bl       _swift_bridgeObjectRelease 
+271669: 0x1C26CD704   ldur     x0, [x29, #-0x78]    
+271670: 0x1C26CD708   bl       _swift_bridgeObjectRelease 
+271671: 0x1C26CD70C   ldp      x17, x1, [x29, #-0xc8] 
+271672: 0x1C26CD710   ldr      x16, [x26]           
+271673: 0x1C26CD714   autda    x16, x17             
+271674: 0x1C26CD718   mov      x17, x16             
+271675: 0x1C26CD71C   xpacd    x17                  
+271676: 0x1C26CD720   cmp      x16, x17             
+271677: 0x1C26CD724   b.eq     0x1c26cd72c          
+271678: 0x1C26CD728   brk      #0xc472              
+271679: 0x1C26CD72C   ldr      w2, [x16, #0x30]     
+271680: 0x1C26CD730   ldrh     w3, [x16, #0x34]     
+271681: 0x1C26CD734   mov      x0, x26              
+271682: 0x1C26CD738   bl       _swift_deallocPartialClassInstance 
+271683: 0x1C26CD73C   brk      #0x1                 
+271685: 0x1C26CD740   ands     w8, w0, #0xff        
+271686: 0x1C26CD744   b.eq     0x1c26cd790          
+271687: 0x1C26CD748   mov      x9, #0x4165          
+271688: 0x1C26CD74C   movk     x9, #0x7070, lsl #16 
+276643: 0x1C26D2138   pacibsp                       
+276644: 0x1C26D213C   mov      x6, x30              
+276645: 0x1C26D2140   bl       _OUTLINED_FUNCTION_35 
+276646: 0x1C26D2144   mov      x30, x6              
+276647: 0x1C26D2148   stp      x29, x30, [sp, #0x50] 
+276648: 0x1C26D214C   add      x29, sp, #0x50       
+276649: 0x1C26D2150   sub      sp, sp, #0xb0        
+276650: 0x1C26D2154   mov      x17, x20             
+276651: 0x1C26D2158   stp      x5, x0, [x29, #-0x80] 
+276652: 0x1C26D215C   mov      x25, x4              
+276653: 0x1C26D2160   mov      x27, x3              
+276654: 0x1C26D2164   mov      x20, x2              
+276655: 0x1C26D2168   mov      x26, x1              
+276656: 0x1C26D216C   stur     x17, [x29, #-0x70]   
+276657: 0x1C26D2170   ldr      x16, [x17]           
+276658: 0x1C26D2174   movk     x17, #0x6ae1, lsl #48 
+276659: 0x1C26D2178   autda    x16, x17             
+276660: 0x1C26D217C   mov      x17, x16             
+276661: 0x1C26D2180   xpacd    x17                  
+276662: 0x1C26D2184   cmp      x16, x17             
+276663: 0x1C26D2188   b.eq     0x1c26d2190          
+276664: 0x1C26D218C   brk      #0xc472              
+276665: 0x1C26D2190   stur     x16, [x29, #-0xc0]   
+276666: 0x1C26D2194   mov      x0, #0x0             
+276667: 0x1C26D2198   bl       _$s10Foundation6LocaleVMa 
+276668: 0x1C26D219C   bl       _OUTLINED_FUNCTION_46 
+276669: 0x1C26D21A0   movk     x17, #0x2e3f, lsl #48 
+276670: 0x1C26D21A4   autda    x16, x17             
+276671: 0x1C26D21A8   mov      x17, x16             
+276672: 0x1C26D21AC   xpacd    x17                  
+276673: 0x1C26D21B0   cmp      x16, x17             
+276674: 0x1C26D21B4   b.eq     0x1c26d21bc          
+276675: 0x1C26D21B8   brk      #0xc472              
+276676: 0x1C26D21BC   stp      x16, x0, [x29, #-0x98] 
+276677: 0x1C26D21C0   mov      x16, x8              
+276678: 0x1C26D21C4   mov      x17, x9              
+276679: 0x1C26D21C8   movk     x17, #0x2e3f, lsl #48 
+276680: 0x1C26D21CC   autda    x16, x17             
+276681: 0x1C26D21D0   ldr      x8, [x16, #0x40]     
+276682: 0x1C26D21D4   mov      x9, x8               
+276683: 0x1C26D21D8   adrp     x17, 176766          ; 0x1ed950000
+276684: 0x1C26D21DC   add      x17, x17, #0x90      
+276685: 0x1C26D21E0   ldr      x16, [x17]           
+276686: 0x1C26D21E4   blraa    x16, x17             
+276687: 0x1C26D21E8   bl       _OUTLINED_FUNCTION_42 
+276688: 0x1C26D21EC   sub      x8, x9, x8           
+276689: 0x1C26D21F0   stur     x8, [x29, #-0xa0]    
+276690: 0x1C26D21F4   mov      sp, x8               
+276691: 0x1C26D21F8   adrp     x19, 165666          ; 0x1eadf4000
+276692: 0x1C26D21FC   add      x19, x19, #0xfd8     ; _$s6Speech11TranscriberC12ModelOptionsVSgMd
+276693: 0x1C26D2200   adrp     x28, 263             ; 0x1c27d9000
+276694: 0x1C26D2204   add      x28, x28, #0x428     ; _$s6Speech11TranscriberC12ModelOptionsVSgMR
+276695: 0x1C26D2208   mov      x0, x19              
+276696: 0x1C26D220C   mov      x1, x28              
+276697: 0x1C26D2210   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+276698: 0x1C26D2214   bl       _OUTLINED_FUNCTION_213 
+276699: 0x1C26D2218   movk     x17, #0x2e3f, lsl #48 
+276700: 0x1C26D221C   autda    x16, x17             
+276701: 0x1C26D2220   ldr      x9, [x16, #0x40]     
+276702: 0x1C26D2224   bl       _OUTLINED_FUNCTION_197 
+276703: 0x1C26D2228   adrp     x17, 176766          ; 0x1ed950000
+276704: 0x1C26D222C   add      x17, x17, #0x90      
+276705: 0x1C26D2230   ldr      x16, [x17]           
+276706: 0x1C26D2234   blraa    x16, x17             
+276707: 0x1C26D2238   bl       _OUTLINED_FUNCTION_28 
+276708: 0x1C26D223C   mov      x0, #0x0             
+276709: 0x1C26D2240   bl       _$s6Speech11TranscriberC12ModelOptionsVMa 
+276710: 0x1C26D2244   mov      x23, x0              
+276711: 0x1C26D2248   bl       _OUTLINED_FUNCTION_70 
+276712: 0x1C26D224C   movk     x17, #0x2e3f, lsl #48 
+276713: 0x1C26D2250   autda    x16, x17             
+276714: 0x1C26D2254   ldr      x8, [x16, #0x40]     
+276715: 0x1C26D2258   mov      x9, x8               
+276716: 0x1C26D225C   adrp     x17, 176766          ; 0x1ed950000
+276717: 0x1C26D2260   add      x17, x17, #0x90      
+276718: 0x1C26D2264   ldr      x16, [x17]           
+276719: 0x1C26D2268   blraa    x16, x17             
+276720: 0x1C26D226C   bl       _OUTLINED_FUNCTION_42 
+276721: 0x1C26D2270   sub      x21, x9, x8          
+276722: 0x1C26D2274   mov      sp, x21              
+276723: 0x1C26D2278   adrp     x0, 165665           ; 0x1eadf3000
+276724: 0x1C26D227C   add      x0, x0, #0xda0       ; _$s6Speech17TranscriberCommonC12ModelOptionsVSgMd
+276725: 0x1C26D2280   adrp     x1, 258              ; 0x1c27d4000
+276726: 0x1C26D2284   add      x1, x1, #0x310       ; _$s6Speech17TranscriberCommonC12ModelOptionsVSgMR
+276727: 0x1C26D2288   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+276728: 0x1C26D228C   bl       _OUTLINED_FUNCTION_213 
+276729: 0x1C26D2290   movk     x17, #0x2e3f, lsl #48 
+276730: 0x1C26D2294   autda    x16, x17             
+276731: 0x1C26D2298   ldr      x8, [x16, #0x40]     
+276732: 0x1C26D229C   mov      x9, x8               
+276733: 0x1C26D22A0   adrp     x17, 176766          ; 0x1ed950000
+276734: 0x1C26D22A4   add      x17, x17, #0x90      
+276735: 0x1C26D22A8   ldr      x16, [x17]           
+276736: 0x1C26D22AC   blraa    x16, x17             
+276737: 0x1C26D22B0   bl       _OUTLINED_FUNCTION_27 
+276738: 0x1C26D22B4   sub      x9, x9, x12          
+276739: 0x1C26D22B8   stur     x9, [x29, #-0xa8]    
+276740: 0x1C26D22BC   mov      sp, x9               
+276741: 0x1C26D22C0   mov      x9, x8               
+276742: 0x1C26D22C4   adrp     x17, 176766          ; 0x1ed950000
+276743: 0x1C26D22C8   add      x17, x17, #0x90      
+276744: 0x1C26D22CC   ldr      x16, [x17]           
+276745: 0x1C26D22D0   blraa    x16, x17             
+276746: 0x1C26D22D4   mov      x8, sp               
+276747: 0x1C26D22D8   sub      x22, x8, x12         
+276748: 0x1C26D22DC   mov      sp, x22              
+276749: 0x1C26D22E0   ldrb     w8, [x26]            
+276750: 0x1C26D22E4   stur     w8, [x29, #-0xac]    
+276751: 0x1C26D22E8   stur     x20, [x29, #-0x88]   
+276752: 0x1C26D22EC   mov      x0, x20              
+276753: 0x1C26D22F0   mov      x1, x24              
+276754: 0x1C26D22F4   mov      x2, x19              
+276755: 0x1C26D22F8   mov      x3, x28              
+276756: 0x1C26D22FC   bl       _$s6Speech11TranscriberC12ModelOptionsVSgWOcTm 
+276757: 0x1C26D2300   mov      x0, x24              
+276758: 0x1C26D2304   bl       _OUTLINED_FUNCTION_67 
+276759: 0x1C26D2308   b.ne     0x1c26d2334          
+276760: 0x1C26D230C   bl       _OUTLINED_FUNCTION_55 
+276761: 0x1C26D2310   mov      x0, x24              
+276762: 0x1C26D2314   bl       _$s6Speech18TranscriptionTokenV_ACtWOhTm 
+276763: 0x1C26D2318   mov      x0, #0x0             
+276764: 0x1C26D231C   bl       _$s6Speech17TranscriberCommonC12ModelOptionsVMa 
+276765: 0x1C26D2320   mov      x3, x0               
+276766: 0x1C26D2324   mov      x0, x22              
+276767: 0x1C26D2328   mov      w1, #0x1             
+276768: 0x1C26D232C   mov      w2, #0x1             
+276769: 0x1C26D2330   b        0x1c26d24f0          
+276770: 0x1C26D2334   adrp     x16, 0               ; 0x1c26d2000
+276771: 0x1C26D2338   add      x16, x16, #0x6c0     ; _$s6Speech11TranscriberC12ModelOptionsVMa
+276772: 0x1C26D233C   mov      x17, #0xaf65         
+276773: 0x1C26D2340   pacia    x16, x17             
+276774: 0x1C26D2344   mov      x2, x16              
+276775: 0x1C26D2348   stur     x16, [x29, #-0xd0]   
+276776: 0x1C26D234C   mov      x0, x24              
+276777: 0x1C26D2350   mov      x1, x21              
+276778: 0x1C26D2354   bl       _$s6Speech11TranscriberC12ModelOptionsVWObTm 
+276779: 0x1C26D2358   adrp     x19, 165665          ; 0x1eadf3000
+276780: 0x1C26D235C   add      x19, x19, #0xd50     ; _$s10Foundation3URLVSgMd
+276781: 0x1C26D2360   adrp     x20, 258             ; 0x1c27d4000
+276782: 0x1C26D2364   add      x20, x20, #0x10      ; _$s10Foundation3URLVSgMR
+276783: 0x1C26D2368   mov      x0, x21              
+276784: 0x1C26D236C   mov      x1, x22              
+276785: 0x1C26D2370   mov      x2, x19              
+276786: 0x1C26D2374   mov      x3, x20              
+276787: 0x1C26D2378   bl       _$s6Speech11TranscriberC12ModelOptionsVSgWOcTm 
+276788: 0x1C26D237C   ldpsw    x8, x9, [x23, #0x14] 
+276789: 0x1C26D2380   ldrb     w8, [x21, x8]        
+276790: 0x1C26D2384   stur     w8, [x29, #-0xdc]    
+276791: 0x1C26D2388   add      x8, x21, x9          
+276792: 0x1C26D238C   ldp      x9, x24, [x8]        
+276793: 0x1C26D2390   stur     x9, [x29, #-0xd8]    
+276794: 0x1C26D2394   stur     x25, [x29, #-0xb8]   
+276795: 0x1C26D2398   ldrsw    x25, [x23, #0x1c]    
+276796: 0x1C26D239C   mov      x0, #0x0             
+276797: 0x1C26D23A0   bl       _$s6Speech17TranscriberCommonC12ModelOptionsVMa 
+276798: 0x1C26D23A4   mov      x28, x0              
+276799: 0x1C26D23A8   ldrsw    x8, [x0, #0x1c]      
+276800: 0x1C26D23AC   add      x0, x21, x25         
+276801: 0x1C26D23B0   add      x1, x22, x8          
+276802: 0x1C26D23B4   mov      x2, x19              
+276803: 0x1C26D23B8   mov      x3, x20              
+276804: 0x1C26D23BC   bl       _$s6Speech11TranscriberC12ModelOptionsVSgWOcTm 
+276805: 0x1C26D23C0   ldpsw    x9, x8, [x23, #0x20] 
+276806: 0x1C26D23C4   stur     x27, [x29, #-0xc8]   
+276807: 0x1C26D23C8   ldr      x27, [x21, x8]       
+276808: 0x1C26D23CC   ldpsw    x10, x8, [x23, #0x30] 
+276809: 0x1C26D23D0   ldr      x19, [x21, x8]       
+276810: 0x1C26D23D4   add      x8, x21, x9          
+276811: 0x1C26D23D8   ldp      x9, x26, [x8]        
+276812: 0x1C26D23DC   stur     x9, [x29, #-0xe8]    
+276813: 0x1C26D23E0   ldpsw    x8, x9, [x23, #0x28] 
+276814: 0x1C26D23E4   ldrb     w11, [x21, x8]       
+276815: 0x1C26D23E8   ldrb     w8, [x21, x9]        
+276816: 0x1C26D23EC   stp      w11, w8, [x29, #-0xf0] 
+276817: 0x1C26D23F0   ldrb     w8, [x21, x10]       
+276818: 0x1C26D23F4   stur     w8, [x29, #-0xe0]    
+276819: 0x1C26D23F8   ldpsw    x9, x8, [x23, #0x40] 
+276820: 0x1C26D23FC   ldr      x25, [x21, x8]       
+276821: 0x1C26D2400   ldpsw    x8, x10, [x23, #0x38] 
+276822: 0x1C26D2404   ldrb     w8, [x21, x8]        
+276823: 0x1C26D2408   stur     w8, [x29, #-0xf4]    
+276824: 0x1C26D240C   ldr      x20, [x21, x10]      
+276825: 0x1C26D2410   ldr      x23, [x21, x9]       
+276826: 0x1C26D2414   mov      x0, x23              
+276827: 0x1C26D2418   bl       _objc_retain         
+276828: 0x1C26D241C   mov      x0, x24              
+276829: 0x1C26D2420   bl       _swift_bridgeObjectRetain 
+276830: 0x1C26D2424   mov      x0, x27              
+276831: 0x1C26D2428   bl       _swift_bridgeObjectRetain 
+276832: 0x1C26D242C   mov      x0, x19              
+276833: 0x1C26D2430   bl       _swift_bridgeObjectRetain 
+276834: 0x1C26D2434   mov      x0, x26              
+276835: 0x1C26D2438   bl       _swift_bridgeObjectRetain 
+276836: 0x1C26D243C   mov      x0, x25              
+276837: 0x1C26D2440   bl       _swift_bridgeObjectRetain 
+276838: 0x1C26D2444   mov      x0, x20              
+276839: 0x1C26D2448   bl       _objc_retain         
+276840: 0x1C26D244C   mov      x0, x21              
+276841: 0x1C26D2450   ldur     x1, [x29, #-0xd0]    
+276842: 0x1C26D2454   bl       _$s6Speech11TranscriberC12ModelOptionsVWOhTm 
+276843: 0x1C26D2458   ldrsw    x8, [x28, #0x14]     
+276844: 0x1C26D245C   ldur     w9, [x29, #-0xdc]    
+276845: 0x1C26D2460   strb     w9, [x22, x8]        
+276846: 0x1C26D2464   ldrsw    x8, [x28, #0x18]     
+276847: 0x1C26D2468   add      x8, x22, x8          
+276848: 0x1C26D246C   ldur     x9, [x29, #-0xd8]    
+276849: 0x1C26D2470   stp      x9, x24, [x8]        
+276850: 0x1C26D2474   ldrsw    x8, [x28, #0x24]     
+276851: 0x1C26D2478   str      x27, [x22, x8]       
+276852: 0x1C26D247C   ldur     x27, [x29, #-0xc8]   
+276853: 0x1C26D2480   ldrsw    x8, [x28, #0x20]     
+276854: 0x1C26D2484   add      x8, x22, x8          
+276855: 0x1C26D2488   ldur     x9, [x29, #-0xe8]    
+276856: 0x1C26D248C   stp      x9, x26, [x8]        
+276857: 0x1C26D2490   ldrsw    x8, [x28, #0x28]     
+276858: 0x1C26D2494   ldp      w10, w9, [x29, #-0xf0] 
+276859: 0x1C26D2498   strb     w10, [x22, x8]       
+276860: 0x1C26D249C   ldrsw    x8, [x28, #0x2c]     
+276861: 0x1C26D24A0   strb     w9, [x22, x8]        
+276862: 0x1C26D24A4   ldrsw    x8, [x28, #0x30]     
+276863: 0x1C26D24A8   ldur     w9, [x29, #-0xe0]    
+276864: 0x1C26D24AC   strb     w9, [x22, x8]        
+276865: 0x1C26D24B0   ldrsw    x8, [x28, #0x34]     
+276866: 0x1C26D24B4   str      x19, [x22, x8]       
+276867: 0x1C26D24B8   ldrsw    x8, [x28, #0x44]     
+276868: 0x1C26D24BC   str      x25, [x22, x8]       
+276869: 0x1C26D24C0   ldur     x25, [x29, #-0xb8]   
+276870: 0x1C26D24C4   ldrsw    x8, [x28, #0x38]     
+276871: 0x1C26D24C8   ldur     w9, [x29, #-0xf4]    
+276872: 0x1C26D24CC   strb     w9, [x22, x8]        
+276873: 0x1C26D24D0   ldrsw    x8, [x28, #0x3c]     
+276874: 0x1C26D24D4   str      x20, [x22, x8]       
+276875: 0x1C26D24D8   ldrsw    x8, [x28, #0x40]     
+276876: 0x1C26D24DC   str      x23, [x22, x8]       
+276877: 0x1C26D24E0   mov      x0, x22              
+276878: 0x1C26D24E4   mov      w1, #0x0             
+276879: 0x1C26D24E8   mov      w2, #0x1             
+276880: 0x1C26D24EC   mov      x3, x28              
+276881: 0x1C26D24F0   bl       ___swift_storeEnumTagSinglePayload 
+276882: 0x1C26D24F4   adrp     x16, -194            ; 0x1c2610000
+276883: 0x1C26D24F8   add      x16, x16, #0xea4     ; _$ss15ContiguousArrayV16_createNewBuffer14bufferIsUnique15minimumCapacity13growForAppendySb_SiSbtF6Speech17TranscriberCommonC19TranscriptionOptionO_Tg5
+276884: 0x1C26D24FC   mov      x17, #0x1da9         
+276885: 0x1C26D2500   pacia    x16, x17             
+276886: 0x1C26D2504   mov      x1, x16              
+276887: 0x1C26D2508   adrp     x16, -181            ; 0x1c261d000
+276888: 0x1C26D250C   add      x16, x16, #0x85c     ; _$sSh10startIndexSh0B0Vyx_Gvg6Speech20DictationTranscriberC21ResultAttributeOptionO_Tg5
+276889: 0x1C26D2510   mov      x17, #0x878e         
+276890: 0x1C26D2514   pacia    x16, x17             
+276891: 0x1C26D2518   mov      x2, x16              
+276892: 0x1C26D251C   mov      x0, x27              
+276893: 0x1C26D2520   mov      x21, #0x0            
+276894: 0x1C26D2524   bl       _$sSlsE3mapySayqd__Gqd__7ElementQzqd_0_YKXEqd_0_YKs5ErrorRd_0_r0_lFShy6Speech11TranscriberC19TranscriptionOptionOG_AF0E6CommonCAIOs5NeverOTg5011$s6Speech11e120C6locale8taskHint12modelOptions013transcriptionG009reportingG009attributeG0AC10Foundation6Lo 
+276895: 0x1C26D2528   cbnz     x21, 0x1c26d2678     
+276896: 0x1C26D252C   mov      x19, x0              
+276897: 0x1C26D2530   mov      x0, x27              
+276898: 0x1C26D2534   bl       _swift_bridgeObjectRelease 
+276899: 0x1C26D2538   mov      x0, x19              
+276900: 0x1C26D253C   bl       _$sShyShyxGqd__nc7ElementQyd__RszSTRd__lufC6Speech17TranscriberCommonC19TranscriptionOptionO_SayAHGTt0g5 
+276901: 0x1C26D2540   stur     x0, [x29, #-0xb8]    
+276902: 0x1C26D2544   adrp     x16, -193            ; 0x1c2611000
+276903: 0x1C26D2548   add      x16, x16, #0x384     ; _$ss15ContiguousArrayV16_createNewBuffer14bufferIsUnique15minimumCapacity13growForAppendySb_SiSbtF6Speech17TranscriberCommonC15ReportingOptionO_Tg5
+276904: 0x1C26D254C   mov      x17, #0x1da9         
+276905: 0x1C26D2550   pacia    x16, x17             
+276906: 0x1C26D2554   mov      x1, x16              
+276907: 0x1C26D2558   adrp     x16, -181            ; 0x1c261d000
+276908: 0x1C26D255C   add      x16, x16, #0x85c     ; _$sSh10startIndexSh0B0Vyx_Gvg6Speech20DictationTranscriberC21ResultAttributeOptionO_Tg5
+276909: 0x1C26D2560   mov      x17, #0x878e         
+276910: 0x1C26D2564   pacia    x16, x17             
+276911: 0x1C26D2568   mov      x2, x16              
+276912: 0x1C26D256C   mov      x0, x25              
+276913: 0x1C26D2570   bl       _$sSlsE3mapySayqd__Gqd__7ElementQzqd_0_YKXEqd_0_YKs5ErrorRd_0_r0_lFShy6Speech11TranscriberC19TranscriptionOptionOG_AF0E6CommonCAIOs5NeverOTg5011$s6Speech11e120C6locale8taskHint12modelOptions013transcriptionG009reportingG009attributeG0AC10Foundation6Lo 
+276914: 0x1C26D2574   cbnz     x21, 0x1c26d2690     
+276915: 0x1C26D2578   mov      x19, x0              
+276916: 0x1C26D257C   mov      x0, x25              
+276917: 0x1C26D2580   bl       _swift_bridgeObjectRelease 
+276918: 0x1C26D2584   mov      x0, x19              
+276919: 0x1C26D2588   bl       _$sShyShyxGqd__nc7ElementQyd__RszSTRd__lufC6Speech17TranscriberCommonC15ReportingOptionO_SayAHGTt0g5 
+276920: 0x1C26D258C   mov      x19, x0              
+276921: 0x1C26D2590   ldp      x27, x28, [x29, #-0xa0] 
+276922: 0x1C26D2594   mov      x8, x28              
+276923: 0x1C26D2598   ldr      x9, [x8, #0x10]!     
+276924: 0x1C26D259C   mov      x0, x27              
+276925: 0x1C26D25A0   ldur     x25, [x29, #-0x78]   
+276926: 0x1C26D25A4   mov      x1, x25              
+276927: 0x1C26D25A8   ldur     x26, [x29, #-0x90]   
+276928: 0x1C26D25AC   mov      x2, x26              
+276929: 0x1C26D25B0   mov      x17, x8              
+276930: 0x1C26D25B4   movk     x17, #0xe3ba, lsl #48 
+276931: 0x1C26D25B8   blraa    x9, x17              
+276932: 0x1C26D25BC   ldur     w8, [x29, #-0xac]    
+276933: 0x1C26D25C0   sturb    w8, [x29, #-0x61]    
+276934: 0x1C26D25C4   adrp     x21, 165665          ; 0x1eadf3000
+276935: 0x1C26D25C8   add      x21, x21, #0xda0     ; _$s6Speech17TranscriberCommonC12ModelOptionsVSgMd
+276936: 0x1C26D25CC   adrp     x24, 258             ; 0x1c27d4000
+276937: 0x1C26D25D0   add      x24, x24, #0x310     ; _$s6Speech17TranscriberCommonC12ModelOptionsVSgMR
+276938: 0x1C26D25D4   mov      x0, x22              
+276939: 0x1C26D25D8   ldur     x23, [x29, #-0xa8]   
+276940: 0x1C26D25DC   mov      x1, x23              
+276941: 0x1C26D25E0   mov      x2, x21              
+276942: 0x1C26D25E4   mov      x3, x24              
+276943: 0x1C26D25E8   bl       _$s6Speech11TranscriberC12ModelOptionsVSgWOcTm 
+276944: 0x1C26D25EC   mov      x0, #0x0             
+276945: 0x1C26D25F0   bl       _$s6Speech17TranscriberCommonCMa 
+276946: 0x1C26D25F4   ldr      w1, [x0, #0x30]      
+276947: 0x1C26D25F8   ldrh     w2, [x0, #0x34]      
+276948: 0x1C26D25FC   bl       _swift_allocObject   
+276949: 0x1C26D2600   mov      x20, x0              
+276950: 0x1C26D2604   sub      x1, x29, #0x61       
+276951: 0x1C26D2608   mov      x0, x27              
+276952: 0x1C26D260C   mov      x2, x23              
+276953: 0x1C26D2610   ldur     x3, [x29, #-0xb8]    
+276954: 0x1C26D2614   mov      x4, x19              
+276955: 0x1C26D2618   ldur     x5, [x29, #-0x80]    
+276956: 0x1C26D261C   bl       _$s6Speech17TranscriberCommonC6locale8taskHint12modelOptions013transcriptionH009reportingH009attributeH0AC10Foundation6LocaleV_AA04TaskF0OSgAC05ModelH0VSgShyAC19TranscriptionOptionOGShyAC09ReportingQ0OGShyAA0p15ResultAttributeQ0OGtcfc 
+276957: 0x1C26D2620   mov      x19, x0              
+276958: 0x1C26D2624   bl       _OUTLINED_FUNCTION_55 
+276959: 0x1C26D2628   ldur     x0, [x29, #-0x88]    
+276960: 0x1C26D262C   bl       _$s6Speech18TranscriptionTokenV_ACtWOhTm 
+276961: 0x1C26D2630   ldr      x8, [x28, #0x8]!     

@@ -1,0 +1,108 @@
+{
+  "investigationDate": "2026-11-08",
+  "cases": {
+    "inspect": {
+      "passed": true
+    },
+    "own-app-file": {
+      "passed": true,
+      "checks": {
+        "exitZero": true,
+        "finalTextReturned": true,
+        "syntheticFixtureKeywords": true,
+        "timeSpansReturned": true,
+        "timeSpansInsideAudio": true,
+        "oldSpeechAuthorizationNotRequested": true,
+        "ownBundleIdentity": true
+      },
+      "matchedKeywords": [
+        "苹果笔记",
+        "私人录音",
+        "星期五",
+        "整理资料",
+        "编写程序",
+        "检查结果"
+      ],
+      "finalText": "今天我们测试苹果笔记的录音拽文字功能这段声音来自电脑合成没有使用私人录音会议计划在星期五下午 3点开始请记录三个任务整理资料编写程序检查结果。",
+      "partialCount": 71,
+      "finalCount": 1,
+      "timeSpanCount": 70,
+      "firstPartialSeconds": 0.24221599102020264,
+      "recognitionElapsedSeconds": 0.8254529237747192,
+      "processElapsedSeconds": 1.8318265839999999
+    },
+    "pcm-paced": {
+      "passed": true,
+      "checks": {
+        "exitZero": true,
+        "finalTextReturned": true,
+        "syntheticFixtureKeywords": true,
+        "timeSpansReturned": true,
+        "timeSpansInsideAudio": true,
+        "oldSpeechAuthorizationNotRequested": true,
+        "partialBeforeEndOfInput": true
+      },
+      "matchedKeywords": [
+        "苹果笔记",
+        "私人录音",
+        "星期五",
+        "整理资料",
+        "编写程序",
+        "检查结果"
+      ],
+      "finalText": "今天我们测试苹果笔记的录音拽文字功能这段声音来自电脑合成没有使用私人录音会议计划在星期五下午 3点开始请记录三个任务整理资料编写程序检查结果。",
+      "partialCount": 71,
+      "finalCount": 1,
+      "timeSpanCount": 70,
+      "firstPartialSeconds": 1.0771509408950806,
+      "recognitionElapsedSeconds": 17.637386918067932,
+      "processElapsedSeconds": 17.824905792
+    },
+    "sandbox-app-file": {
+      "passed": true,
+      "checks": {
+        "exitZero": true,
+        "finalTextReturned": true,
+        "syntheticFixtureKeywords": true,
+        "timeSpansReturned": true,
+        "timeSpansInsideAudio": true,
+        "oldSpeechAuthorizationNotRequested": true,
+        "ownBundleIdentity": true
+      },
+      "matchedKeywords": [
+        "苹果笔记",
+        "私人录音",
+        "星期五",
+        "整理资料",
+        "编写程序",
+        "检查结果"
+      ],
+      "finalText": "今天我们测试苹果笔记的录音拽文字功能这段声音来自电脑合成没有使用私人录音会议计划在星期五下午 3点开始请记录三个任务整理资料编写程序检查结果。",
+      "partialCount": 71,
+      "finalCount": 1,
+      "timeSpanCount": 70,
+      "firstPartialSeconds": 0.044219970703125,
+      "recognitionElapsedSeconds": 0.2524080276489258,
+      "processElapsedSeconds": 1.1543450839999991
+    },
+    "unsupported-locale": {
+      "passed": true
+    },
+    "missing-file": {
+      "passed": true
+    },
+    "sandbox-no-network-entitlement": {
+      "passed": true
+    }
+  },
+  "sourceSHA256": "7dafc6b4f48748eed39a224852c62480b04448a4c7992a83887edc7c3aec110e",
+  "binarySHA256": "06726449664180eeaa5e05976b8124794bae94b8cd5d3a6d5c8efa833fb61741",
+  "fixtureSHA256": "8b631ed4a85f4992d2530799dd6eaabb7b4995fde124e8c1f5c2baedfc1e0d43",
+  "fixtureTextSHA256": "667d7bf720483544a38003e4267f06591d193cf655117cc41539f4bfeb6aa548",
+  "modelInstallationAllowed": true,
+  "limits": "App Sandbox constrains this application, not all system speech services. No system-wide offline test or network capture was performed. This is synthetic file/PCM input, not microphone or Notes runtime observation.",
+  "sandboxEntitlements": {
+    "com.apple.security.app-sandbox": true
+  },
+  "passed": true
+}

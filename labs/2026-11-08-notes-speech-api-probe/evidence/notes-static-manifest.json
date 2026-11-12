@@ -1,0 +1,59 @@
+[
+  {
+    "name": "notes-shared-disassembly",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-disassemble",
+      "/System/Library/PrivateFrameworks/NotesShared.framework/Versions/A/NotesShared"
+    ],
+    "exit_code": 0,
+    "sha256": "461188cec9e52638ca27a681225c6580d51c3f7346cf46aab0423c68878b2e08",
+    "bytes": 47326751,
+    "stderr": ""
+  },
+  {
+    "name": "notes-shared-fixups",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-symbolic_fixups",
+      "/System/Library/PrivateFrameworks/NotesShared.framework/Versions/A/NotesShared"
+    ],
+    "exit_code": 0,
+    "sha256": "bda358d63f88dcad42e6e2ebc616f0a83c362b418eb00cdaea69bd9b4635163f",
+    "bytes": 111,
+    "stderr": ""
+  },
+  {
+    "name": "notes-speech-exports",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-uuid",
+      "-exports",
+      "/System/Library/Frameworks/Speech.framework/Versions/A/Speech"
+    ],
+    "exit_code": 0,
+    "sha256": "f727e93b40190be1f739486185e1cb1056b9d992e723a9a6ececd7dd205e1656",
+    "bytes": 286743,
+    "stderr": ""
+  },
+  {
+    "name": "notes-speech-disassembly",
+    "argv": [
+      "/usr/bin/dyld_info",
+      "-arch",
+      "arm64e",
+      "-disassemble",
+      "/System/Library/Frameworks/Speech.framework/Versions/A/Speech"
+    ],
+    "exit_code": 0,
+    "sha256": "8f8614fe00ee8e79b07edbc3c1aef3523372e69802189293d3c044257ead6aad",
+    "bytes": 27776715,
+    "stderr": ""
+  }
+]

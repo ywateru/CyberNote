@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-08",
+  "checks": {
+    "retained_shell_hashes": "passed",
+    "rea_target_identity": "passed",
+    "replay_of_static_commands": "passed",
+    "all_13_replay_outputs_match_retained": true,
+    "local_markdown_links": 12,
+    "swift_symbol_spelling": "passed"
+  },
+  "replay": [
+    {
+      "name": "notes-dependencies.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notesshared-cache-inspection.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notesui-cache-inspection.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "noteseditor-cache-inspection.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notessupport-cache-inspection.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notesui-audio-disassembly.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notesshared-audio-disassembly.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notesui-audio-call-sites.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notesshared-audio-call-sites.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notes-symbols-audio-excerpt.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notes-strings-audio-excerpt.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notes-objc-metadata-audio-excerpt.txt",
+      "matches_retained": true
+    },
+    {
+      "name": "notes-objc-audio-excerpt.txt",
+      "matches_retained": true
+    }
+  ],
+  "limits": "No Notes execution, microphone, network capture, model inference, or Android/Windows runtime verification."
+}

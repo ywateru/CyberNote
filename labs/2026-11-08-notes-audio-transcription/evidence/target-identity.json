@@ -1,0 +1,33 @@
+{
+  "investigation_date": "2026-11-08",
+  "timezone": "Asia/Shanghai",
+  "os": "ProductName:\t\tmacOS\nProductVersion:\t\t26.4\nBuildVersion:\t\t25E246\n",
+  "target": "/System/Applications/Notes.app/Contents/MacOS/Notes",
+  "sha256": "9e20c23a979367362c50edf8fb28bb1988be7e7384254cc3dce38a4a8373df02",
+  "notes_version": "4.13",
+  "notes_build": "3146.101.28",
+  "selected_slice": "arm64e",
+  "main_uuid": "A70FB33C-2D3D-3E23-B778-E3B55E41581A",
+  "rea_version": "6.7.0",
+  "rea_native_decompiler_available": false,
+  "rea_native_decompiler_limitations": [
+    "Hopper executable missing",
+    "Ghidra not configured (and universal slice unsupported in configured route)",
+    "IDA and Kuna not configured"
+  ],
+  "supplement": "Apple dyld_info static cache inspection and disassembly; no native app launch, recording or personal database access",
+  "tools": {
+    "/usr/bin/dyld_info": {
+      "sha256": "12bed4523661307059b879b9b54e77a73176e9d27d27a0e40363271d8f0668ba"
+    },
+    "/usr/bin/otool": {
+      "sha256": "12bed4523661307059b879b9b54e77a73176e9d27d27a0e40363271d8f0668ba"
+    },
+    "/usr/bin/nm": {
+      "sha256": "12bed4523661307059b879b9b54e77a73176e9d27d27a0e40363271d8f0668ba"
+    },
+    "/usr/bin/strings": {
+      "sha256": "12bed4523661307059b879b9b54e77a73176e9d27d27a0e40363271d8f0668ba"
+    }
+  }
+}

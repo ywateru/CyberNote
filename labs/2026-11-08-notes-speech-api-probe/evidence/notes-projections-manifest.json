@@ -1,0 +1,52 @@
+[
+  {
+    "source": "notes-shared-disassembly.txt",
+    "complete_output_sha256": "461188cec9e52638ca27a681225c6580d51c3f7346cf46aab0423c68878b2e08",
+    "selection": "Instruction virtual addresses in explicitly listed half-open ranges, prefixed with full output line number; no claim of complete function boundaries",
+    "ranges": [
+      [
+        "0x1d9209e5c",
+        "0x1d920b3b4"
+      ],
+      [
+        "0x1d9219294",
+        "0x1d9219510"
+      ],
+      [
+        "0x1d9223700",
+        "0x1d9224010"
+      ],
+      [
+        "0x1d9388b58",
+        "0x1d9388b60"
+      ]
+    ],
+    "retained": "notes-shared-disassembly-focused.txt",
+    "sha256": "f60c5d54573aff5b7bd12c31ee530ec28c07013ed3341e9007aadce0ab4d6b11"
+  },
+  {
+    "source": "notes-speech-disassembly.txt",
+    "complete_output_sha256": "8f8614fe00ee8e79b07edbc3c1aef3523372e69802189293d3c044257ead6aad",
+    "selection": "Instruction virtual addresses in explicitly listed half-open ranges, prefixed with full output line number; no claim of complete function boundaries",
+    "ranges": [
+      [
+        "0x1c26cd08c",
+        "0x1c26cd750"
+      ],
+      [
+        "0x1c26d2138",
+        "0x1c26d2634"
+      ]
+    ],
+    "retained": "notes-speech-disassembly-focused.txt",
+    "sha256": "549ac4713c0d045b23e343e634fc063570b46d52b091eec95e119cfbe03811b8"
+  },
+  {
+    "source": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/Speech.framework/Modules/Speech.swiftmodule/arm64e-apple-macos.swiftinterface",
+    "complete_output_sha256": "9de012f407197106cef4b95f0e5d0d3c487a1a46f733db2aa488c6b77ecfbce6",
+    "selection": "1-based lines 207..242 and 335..430",
+    "retained": "notes-public-sdk-interface.txt",
+    "sha256": "165ecb25e4a5642eb6cfb9c6fcc2bef5a74dc93fd3369a7a2e6709f997d4b70e",
+    "bounded_negative": "No declaration matching class Transcriber in this public Swift interface"
+  }
+]

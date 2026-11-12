@@ -1,0 +1,2924 @@
+_$s7NotesUI21AudioRecordingManagerC10identifierSSvg:
+0x1D956E540   pacibsp                       
+0x1D956E544   stp      x20, x19, [sp, #-0x20]! 
+0x1D956E548   stp      x29, x30, [sp, #0x10] 
+0x1D956E54C   add      x29, sp, #0x10       
+0x1D956E550   adrp     x8, 79478            ; 0x1ecbe4000
+0x1D956E554   ldr      x8, [x8, #0x728]     
+0x1D956E558   add      x8, x20, x8          
+0x1D956E55C   ldp      x19, x20, [x8]       
+0x1D956E560   mov      x0, x20              
+0x1D956E564   bl       _swift_bridgeObjectRetain 
+0x1D956E568   mov      x0, x19              
+0x1D956E56C   mov      x1, x20              
+0x1D956E570   ldp      x29, x30, [sp, #0x10] 
+0x1D956E574   ldp      x20, x19, [sp], #0x20 
+0x1D956E578   retab                         
+_$s7NotesUI21AudioRecordingManagerC28liveTranscriptionCoordinator15attachmentModelAC0A6Shared04LivegH0C_So012ICAttachmentcJ0CtcfC:
+0x1D956E57C   pacibsp                       
+0x1D956E580   stp      x22, x21, [sp, #-0x30]! 
+0x1D956E584   stp      x20, x19, [sp, #0x10] 
+0x1D956E588   stp      x29, x30, [sp, #0x20] 
+0x1D956E58C   add      x29, sp, #0x20       
+0x1D956E590   mov      x19, x1              
+0x1D956E594   mov      x21, x0              
+0x1D956E598   mov      x0, x20              
+0x1D956E59C   bl       _objc_allocWithZone  
+0x1D956E5A0   mov      x20, x0              
+0x1D956E5A4   mov      x0, x21              
+0x1D956E5A8   mov      x1, x19              
+0x1D956E5AC   bl       _$s7NotesUI21AudioRecordingManagerC28liveTranscriptionCoordinator15attachmentModelAC0A6Shared04LivegH0C_So012ICAttachmentcJ0Ctcfc 
+0x1D956E5B0   ldp      x29, x30, [sp, #0x20] 
+0x1D956E5B4   ldp      x20, x19, [sp, #0x10] 
+0x1D956E5B8   ldp      x22, x21, [sp], #0x30 
+0x1D956E5BC   retab                         
+_$s7NotesUI21AudioRecordingManagerC28liveTranscriptionCoordinator15attachmentModelAC0A6Shared04LivegH0C_So012ICAttachmentcJ0Ctcfc:
+0x1D956E5C0   pacibsp                       
+0x1D956E5C4   stp      x28, x27, [sp, #-0x60]! 
+0x1D956E5C8   stp      x26, x25, [sp, #0x10] 
+0x1D956E5CC   stp      x24, x23, [sp, #0x20] 
+0x1D956E5D0   stp      x22, x21, [sp, #0x30] 
+0x1D956E5D4   stp      x20, x19, [sp, #0x40] 
+0x1D956E5D8   stp      x29, x30, [sp, #0x50] 
+0x1D956E5DC   add      x29, sp, #0x50       
+0x1D956E5E0   sub      sp, sp, #0x90        
+0x1D956E5E4   stur     x1, [x29, #-0x98]    
+0x1D956E5E8   stur     x0, [x29, #-0xb8]    
+0x1D956E5EC   adrp     x0, 74806            ; 0x1eb9a4000
+0x1D956E5F0   add      x0, x0, #0x4c8       
+0x1D956E5F4   adrp     x1, 307              ; 0x1d96a1000
+0x1D956E5F8   add      x1, x1, #0x258       
+0x1D956E5FC   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D956E600   mov      x9, x0               
+0x1D956E604   ldr      x8, [x9, #-0x8]!     
+0x1D956E608   mov      x16, x8              
+0x1D956E60C   mov      x17, x9              
+0x1D956E610   movk     x17, #0x2e3f, lsl #48 
+0x1D956E614   autda    x16, x17             
+0x1D956E618   mov      x17, x16             
+0x1D956E61C   xpacd    x17                  
+0x1D956E620   cmp      x16, x17             
+0x1D956E624   b.eq     0x1d956e62c          
+0x1D956E628   brk      #0xc472              
+0x1D956E62C   stp      x16, x0, [x29, #-0xa8] 
+0x1D956E630   mov      x16, x8              
+0x1D956E634   mov      x17, x9              
+0x1D956E638   movk     x17, #0x2e3f, lsl #48 
+0x1D956E63C   autda    x16, x17             
+0x1D956E640   ldr      x9, [x16, #0x40]     
+0x1D956E644   add      x8, x9, #0xf         
+0x1D956E648   and      x8, x8, #0xfffffffffffffff0 
+0x1D956E64C   adrp     x17, 82914           ; 0x1ed950000
+0x1D956E650   add      x17, x17, #0x90      
+0x1D956E654   ldr      x16, [x17]           
+0x1D956E658   blraa    x16, x17             
+0x1D956E65C   mov      x9, sp               
+0x1D956E660   sub      x8, x9, x8           
+0x1D956E664   stur     x8, [x29, #-0xb0]    
+0x1D956E668   mov      sp, x8               
+0x1D956E66C   adrp     x0, 74806            ; 0x1eb9a4000
+0x1D956E670   add      x0, x0, #0x4b8       
+0x1D956E674   adrp     x1, 307              ; 0x1d96a1000
+0x1D956E678   add      x1, x1, #0x200       
+0x1D956E67C   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D956E680   mov      x9, x0               
+0x1D956E684   ldr      x8, [x9, #-0x8]!     
+0x1D956E688   mov      x16, x8              
+0x1D956E68C   mov      x17, x9              
+0x1D956E690   movk     x17, #0x2e3f, lsl #48 
+0x1D956E694   autda    x16, x17             
+0x1D956E698   mov      x17, x16             
+0x1D956E69C   xpacd    x17                  
+0x1D956E6A0   cmp      x16, x17             
+0x1D956E6A4   b.eq     0x1d956e6ac          
+0x1D956E6A8   brk      #0xc472              
+0x1D956E6AC   stp      x16, x0, [x29, #-0xc8] 
+0x1D956E6B0   mov      x16, x8              
+0x1D956E6B4   mov      x17, x9              
+0x1D956E6B8   movk     x17, #0x2e3f, lsl #48 
+0x1D956E6BC   autda    x16, x17             
+0x1D956E6C0   ldr      x9, [x16, #0x40]     
+0x1D956E6C4   add      x8, x9, #0xf         
+0x1D956E6C8   and      x8, x8, #0xfffffffffffffff0 
+0x1D956E6CC   adrp     x17, 82914           ; 0x1ed950000
+0x1D956E6D0   add      x17, x17, #0x90      
+0x1D956E6D4   ldr      x16, [x17]           
+0x1D956E6D8   blraa    x16, x17             
+0x1D956E6DC   mov      x9, sp               
+0x1D956E6E0   sub      x8, x9, x8           
+0x1D956E6E4   stur     x8, [x29, #-0xd0]    
+0x1D956E6E8   mov      sp, x8               
+0x1D956E6EC   adrp     x0, 74806            ; 0x1eb9a4000
+0x1D956E6F0   add      x0, x0, #0x4a8       
+0x1D956E6F4   adrp     x1, 307              ; 0x1d96a1000
+0x1D956E6F8   add      x1, x1, #0x160       
+0x1D956E6FC   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D956E700   stur     x0, [x29, #-0xd8]    
+0x1D956E704   mov      x9, x0               
+0x1D956E708   ldr      x8, [x9, #-0x8]!     
+0x1D956E70C   mov      x16, x8              
+0x1D956E710   mov      x17, x9              
+0x1D956E714   movk     x17, #0x2e3f, lsl #48 
+0x1D956E718   autda    x16, x17             
+0x1D956E71C   mov      x17, x16             
+0x1D956E720   xpacd    x17                  
+0x1D956E724   cmp      x16, x17             
+0x1D956E728   b.eq     0x1d956e730          
+0x1D956E72C   brk      #0xc472              
+0x1D956E730   mov      x19, x16             
+0x1D956E734   mov      x16, x8              
+0x1D956E738   mov      x17, x9              
+0x1D956E73C   movk     x17, #0x2e3f, lsl #48 
+0x1D956E740   autda    x16, x17             
+0x1D956E744   ldr      x9, [x16, #0x40]     
+0x1D956E748   add      x8, x9, #0xf         
+0x1D956E74C   and      x8, x8, #0xfffffffffffffff0 
+0x1D956E750   adrp     x17, 82914           ; 0x1ed950000
+0x1D956E754   add      x17, x17, #0x90      
+0x1D956E758   ldr      x16, [x17]           
+0x1D956E75C   blraa    x16, x17             
+0x1D956E760   mov      x9, sp               
+0x1D956E764   sub      x21, x9, x8          
+0x1D956E768   mov      sp, x21              
+0x1D956E76C   adrp     x0, 74806            ; 0x1eb9a4000
+0x1D956E770   add      x0, x0, #0x498       
+0x1D956E774   adrp     x1, 307              ; 0x1d96a1000
+0x1D956E778   add      x1, x1, #0x108       
+0x1D956E77C   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D956E780   stur     x0, [x29, #-0xe0]    
+0x1D956E784   mov      x9, x0               
+0x1D956E788   ldr      x8, [x9, #-0x8]!     
+0x1D956E78C   mov      x16, x8              
+0x1D956E790   mov      x17, x9              
+0x1D956E794   movk     x17, #0x2e3f, lsl #48 
+0x1D956E798   autda    x16, x17             
+0x1D956E79C   mov      x17, x16             
+0x1D956E7A0   xpacd    x17                  
+0x1D956E7A4   cmp      x16, x17             
+0x1D956E7A8   b.eq     0x1d956e7b0          
+0x1D956E7AC   brk      #0xc472              
+0x1D956E7B0   mov      x25, x16             
+0x1D956E7B4   mov      x16, x8              
+0x1D956E7B8   mov      x17, x9              
+0x1D956E7BC   movk     x17, #0x2e3f, lsl #48 
+0x1D956E7C0   autda    x16, x17             
+0x1D956E7C4   ldr      x9, [x16, #0x40]     
+0x1D956E7C8   add      x8, x9, #0xf         
+0x1D956E7CC   and      x8, x8, #0xfffffffffffffff0 
+0x1D956E7D0   adrp     x17, 82914           ; 0x1ed950000
+0x1D956E7D4   add      x17, x17, #0x90      
+0x1D956E7D8   ldr      x16, [x17]           
+0x1D956E7DC   blraa    x16, x17             
+0x1D956E7E0   mov      x9, sp               
+0x1D956E7E4   sub      x23, x9, x8          
+0x1D956E7E8   mov      sp, x23              
+0x1D956E7EC   mov      x0, #0x0             
+0x1D956E7F0   bl       0x1d9687fe4          
+0x1D956E7F4   mov      x24, x0              
+0x1D956E7F8   mov      x9, x0               
+0x1D956E7FC   ldr      x8, [x9, #-0x8]!     
+0x1D956E800   mov      x16, x8              
+0x1D956E804   mov      x17, x9              
+0x1D956E808   movk     x17, #0x2e3f, lsl #48 
+0x1D956E80C   autda    x16, x17             
+0x1D956E810   mov      x17, x16             
+0x1D956E814   xpacd    x17                  
+0x1D956E818   cmp      x16, x17             
+0x1D956E81C   b.eq     0x1d956e824          
+0x1D956E820   brk      #0xc472              
+0x1D956E824   mov      x26, x16             
+0x1D956E828   mov      x16, x8              
+0x1D956E82C   mov      x17, x9              
+0x1D956E830   movk     x17, #0x2e3f, lsl #48 
+0x1D956E834   autda    x16, x17             
+0x1D956E838   ldr      x8, [x16, #0x40]     
+0x1D956E83C   mov      x9, x8               
+0x1D956E840   adrp     x17, 82914           ; 0x1ed950000
+0x1D956E844   add      x17, x17, #0x90      
+0x1D956E848   ldr      x16, [x17]           
+0x1D956E84C   blraa    x16, x17             
+0x1D956E850   mov      x9, sp               
+0x1D956E854   add      x10, x8, #0xf        
+0x1D956E858   and      x12, x10, #0xfffffffffffffff0 
+0x1D956E85C   sub      x27, x9, x12         
+0x1D956E860   mov      sp, x27              
+0x1D956E864   mov      x9, x8               
+0x1D956E868   adrp     x17, 82914           ; 0x1ed950000
+0x1D956E86C   add      x17, x17, #0x90      
+0x1D956E870   ldr      x16, [x17]           
+0x1D956E874   blraa    x16, x17             
+0x1D956E878   mov      x8, sp               
+0x1D956E87C   sub      x28, x8, x12         
+0x1D956E880   mov      sp, x28              
+0x1D956E884   adrp     x8, 79473            ; 0x1ecbdf000
+0x1D956E888   ldr      x22, [x8, #0x638]    
+0x1D956E88C   adrp     x8, 49182            ; 0x1e558c000
+0x1D956E890   ldr      x8, [x8, #0x30]      
+0x1D956E894   ldr      w1, [x8]             
+0x1D956E898   mov      x8, x26              
+0x1D956E89C   ldr      x9, [x8, #0x68]!     
+0x1D956E8A0   mov      x0, x28              
+0x1D956E8A4   mov      x2, x24              
+0x1D956E8A8   mov      x17, x8              
+0x1D956E8AC   movk     x17, #0xb2e4, lsl #48 
+0x1D956E8B0   blraa    x9, x17              
+0x1D956E8B4   mov      x8, x26              
+0x1D956E8B8   ldr      x9, [x8, #0x10]!     
+0x1D956E8BC   mov      x0, x27              
+0x1D956E8C0   mov      x1, x28              
+0x1D956E8C4   mov      x2, x24              
+0x1D956E8C8   mov      x17, x8              
+0x1D956E8CC   movk     x17, #0xe3ba, lsl #48 
+0x1D956E8D0   blraa    x9, x17              
+0x1D956E8D4   mov      x8, x23              
+0x1D956E8D8   mov      x0, x27              
+0x1D956E8DC   mov      x1, x24              
+0x1D956E8E0   bl       0x1d9688964          
+0x1D956E8E4   ldr      x8, [x26, #0x8]!     
+0x1D956E8E8   mov      x0, x28              
+0x1D956E8EC   mov      x1, x24              
+0x1D956E8F0   mov      x17, x26             
+0x1D956E8F4   movk     x17, #0x4f8, lsl #48 
+0x1D956E8F8   blraa    x8, x17              
+0x1D956E8FC   ldr      x8, [x25, #0x20]!    
+0x1D956E900   add      x0, x20, x22         
+0x1D956E904   mov      x1, x23              
+0x1D956E908   ldur     x2, [x29, #-0xe0]    
+0x1D956E90C   mov      x17, x25             
+0x1D956E910   movk     x17, #0x48d8, lsl #48 
+0x1D956E914   blraa    x8, x17              
+0x1D956E918   adrp     x8, 79473            ; 0x1ecbdf000
+0x1D956E91C   ldr      x23, [x8, #0x640]    
+0x1D956E920   stur     xzr, [x29, #-0x90]   
+0x1D956E924   adrp     x22, 49230           ; 0x1e55bc000
+0x1D956E928   ldr      x22, [x22, #0xf0]    
+0x1D956E92C   sub      x0, x29, #0x90       
+0x1D956E930   mov      x8, x21              
+0x1D956E934   mov      x1, x22              
+0x1D956E938   bl       0x1d9688964          
+0x1D956E93C   ldr      x24, [x19, #0x20]!   
+0x1D956E940   add      x0, x20, x23         
+0x1D956E944   mov      x1, x21              
+0x1D956E948   ldur     x25, [x29, #-0xd8]   
+0x1D956E94C   mov      x2, x25              
+0x1D956E950   mov      x17, x19             
+0x1D956E954   movk     x17, #0x48d8, lsl #48 
+0x1D956E958   blraa    x24, x17             
+0x1D956E95C   adrp     x8, 79473            ; 0x1ecbdf000
+0x1D956E960   ldr      x23, [x8, #0x648]    
+0x1D956E964   stur     xzr, [x29, #-0x90]   
+0x1D956E968   sub      x0, x29, #0x90       
+0x1D956E96C   mov      x8, x21              
+0x1D956E970   mov      x1, x22              
+0x1D956E974   bl       0x1d9688964          
+0x1D956E978   add      x0, x20, x23         
+0x1D956E97C   mov      x1, x21              
+0x1D956E980   mov      x2, x25              
+0x1D956E984   mov      x17, x19             
+0x1D956E988   movk     x17, #0x48d8, lsl #48 
+0x1D956E98C   blraa    x24, x17             
+0x1D956E990   ldur     x24, [x29, #-0xb8]   
+0x1D956E994   adrp     x8, 79473            ; 0x1ecbdf000
+0x1D956E998   ldr      x19, [x8, #0x628]    
+0x1D956E99C   adrp     x8, 49231            ; 0x1e55bd000
+0x1D956E9A0   ldr      x8, [x8, #0x410]     
+0x1D956E9A4   stur     x8, [x29, #-0x90]    
+0x1D956E9A8   adrp     x0, 79474            ; 0x1ecbe0000
+0x1D956E9AC   add      x0, x0, #0x210       
+0x1D956E9B0   adrp     x1, 306              ; 0x1d96a0000
+0x1D956E9B4   add      x1, x1, #0xb48       
+0x1D956E9B8   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D956E9BC   mov      x1, x0               
+0x1D956E9C0   sub      x0, x29, #0x90       
+0x1D956E9C4   ldur     x21, [x29, #-0xd0]   
+0x1D956E9C8   mov      x8, x21              
+0x1D956E9CC   bl       0x1d9688964          
+0x1D956E9D0   ldp      x9, x2, [x29, #-0xc8] 
+0x1D956E9D4   ldr      x8, [x9, #0x20]!     
+0x1D956E9D8   add      x0, x20, x19         
+0x1D956E9DC   mov      x1, x21              
+0x1D956E9E0   mov      x17, x9              
+0x1D956E9E4   movk     x17, #0x48d8, lsl #48 
+0x1D956E9E8   blraa    x8, x17              
+0x1D956E9EC   adrp     x8, 79473            ; 0x1ecbdf000
+0x1D956E9F0   ldr      x19, [x8, #0x630]    
+0x1D956E9F4   stur     xzr, [x29, #-0x90]   
+0x1D956E9F8   adrp     x0, 79474            ; 0x1ecbe0000
+0x1D956E9FC   add      x0, x0, #0x248       
+0x1D956EA00   adrp     x1, 307              ; 0x1d96a1000
+0x1D956EA04   add      x1, x1, #0x270       
+0x1D956EA08   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D956EA0C   mov      x1, x0               
+0x1D956EA10   sub      x0, x29, #0x90       
+0x1D956EA14   ldur     x21, [x29, #-0xb0]   
+0x1D956EA18   mov      x8, x21              
+0x1D956EA1C   bl       0x1d9688964          
+0x1D956EA20   ldp      x9, x2, [x29, #-0xa8] 
+0x1D956EA24   ldr      x8, [x9, #0x20]!     
+0x1D956EA28   add      x0, x20, x19         
+0x1D956EA2C   mov      x1, x21              
+0x1D956EA30   mov      x17, x9              
+0x1D956EA34   movk     x17, #0x48d8, lsl #48 
+0x1D956EA38   blraa    x8, x17              
+0x1D956EA3C   adrp     x8, 79478            ; 0x1ecbe4000
+0x1D956EA40   ldr      x8, [x8, #0x720]     
+0x1D956EA44   str      xzr, [x20, x8]       
+0x1D956EA48   adrp     x8, 79478            ; 0x1ecbe4000
+0x1D956EA4C   ldr      x8, [x8, #0x718]     
+0x1D956EA50   str      xzr, [x20, x8]       
+0x1D956EA54   adrp     x8, 79478            ; 0x1ecbe4000
+0x1D956EA58   ldr      x8, [x8, #0x708]     
+0x1D956EA5C   strb     wzr, [x20, x8]       
+0x1D956EA60   adrp     x8, 79478            ; 0x1ecbe4000
+0x1D956EA64   ldr      x8, [x8, #0x700]     
+0x1D956EA68   strb     wzr, [x20, x8]       
+0x1D956EA6C   adrp     x8, 79478            ; 0x1ecbe4000
+0x1D956EA70   ldr      x8, [x8, #0x6f8]     
+0x1D956EA74   str      x24, [x20, x8]       
+0x1D956EA78   adrp     x8, 79478            ; 0x1ecbe4000
+0x1D956EA7C   ldr      x8, [x8, #0x710]     
+0x1D956EA80   ldur     x23, [x29, #-0x98]   
+0x1D956EA84   str      x23, [x20, x8]       
+0x1D956EA88   mov      x0, #0x0             
+0x1D956EA8C   bl       0x1d9569054          
+0x1D956EA90   ldr      w1, [x0, #0x30]      
+0x1D956EA94   ldrh     w2, [x0, #0x34]      
+0x1D956EA98   bl       _swift_allocObject   
+0x1D956EA9C   mov      x19, x0              
+0x1D956EAA0   adrp     x8, 74806            ; 0x1eb9a4000
+0x1D956EAA4   ldr      x21, [x8, #0x410]    
+0x1D956EAA8   adrp     x0, 74806            ; 0x1eb9a4000
+0x1D956EAAC   add      x0, x0, #0x440       
+0x1D956EAB0   adrp     x1, 306              ; 0x1d96a0000
+0x1D956EAB4   add      x1, x1, #0xe40       
+0x1D956EAB8   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D956EABC   mov      x3, x0               
+0x1D956EAC0   mov      x8, x0               
+0x1D956EAC4   ldr      x16, [x8, #-0x8]!    
+0x1D956EAC8   mov      x17, x8              
+0x1D956EACC   movk     x17, #0x2e3f, lsl #48 
+0x1D956EAD0   autda    x16, x17             
+0x1D956EAD4   ldr      x8, [x16, #0x38]!    
+0x1D956EAD8   add      x0, x19, x21         
+0x1D956EADC   mov      w1, #0x1             
+0x1D956EAE0   mov      w2, #0x1             
+0x1D956EAE4   movk     x16, #0xa0d1, lsl #48 
+0x1D956EAE8   blraa    x8, x16              
+0x1D956EAEC   adrp     x8, 74806            ; 0x1eb9a4000
+0x1D956EAF0   ldr      x8, [x8, #0x420]     
+0x1D956EAF4   str      xzr, [x19, x8]       
+0x1D956EAF8   adrp     x8, 49098            ; 0x1e5538000
+0x1D956EAFC   ldr      x0, [x8, #0x2a8]     
+0x1D956EB00   bl       _objc_allocWithZone  
+0x1D956EB04   mov      x22, x0              
+0x1D956EB08   mov      x0, x24              
+0x1D956EB0C   bl       _swift_retain        
+0x1D956EB10   mov      x0, x23              
+0x1D956EB14   bl       _objc_retain         
+0x1D956EB18   mov      x21, x0              
+0x1D956EB1C   mov      x0, x22              
+0x1D956EB20   bl       _objc_msgSend$init   
+0x1D956EB24   adrp     x8, 74806            ; 0x1eb9a4000
+0x1D956EB28   ldr      x8, [x8, #0x418]     
+0x1D956EB2C   str      x0, [x19, x8]        
+0x1D956EB30   adrp     x8, 74806            ; 0x1eb9a4000
+0x1D956EB34   ldr      x8, [x8, #0x4d8]     
+0x1D956EB38   str      x19, [x20, x8]       
+0x1D956EB3C   mov      x0, x21              
+0x1D956EB40   bl       _objc_msgSend$attachment 
+0x1D956EB44   mov      x29, x29             
+0x1D956EB48   bl       _objc_retainAutoreleasedReturnValue 
+0x1D956EB4C   cbz      x0, 0x1d956ed24      
+0x1D956EB50   mov      x19, x0              
+0x1D956EB54   bl       _objc_msgSend$identifier 
+0x1D956EB58   mov      x29, x29             
+0x1D956EB5C   bl       _objc_retainAutoreleasedReturnValue 
+0x1D956EB60   mov      x23, x0              
+0x1D956EB64   mov      x0, x19              
+0x1D956EB68   bl       _objc_release        
+0x1D956EB6C   cbz      x23, 0x1d956eb8c     
+0x1D956EB70   mov      x0, x23              
+0x1D956EB74   bl       0x1d968a0f4          
+0x1D956EB78   mov      x19, x0              
+0x1D956EB7C   mov      x22, x1              
+0x1D956EB80   mov      x0, x23              
+0x1D956EB84   bl       _objc_release        
+0x1D956EB88   b        0x1d956eb94          
+0x1D956EB8C   mov      x19, #0x0            
+0x1D956EB90   mov      x22, #-0x2000000000000000 
+0x1D956EB94   adrp     x8, 79478            ; 0x1ecbe4000
+0x1D956EB98   ldr      x8, [x8, #0x728]     
+0x1D956EB9C   add      x8, x20, x8          
+0x1D956EBA0   stp      x19, x22, [x8]       
+0x1D956EBA4   mov      x0, #0x0             
+0x1D956EBA8   bl       _$s7NotesUI21AudioRecordingManagerCMa 
+0x1D956EBAC   stp      x20, x0, [x29, #-0x60] 
+0x1D956EBB0   adrp     x8, 135887           ; 0x1fa83d000
+0x1D956EBB4   add      x1, x8, #0x860       
+0x1D956EBB8   sub      x0, x29, #0x60       
+0x1D956EBBC   bl       _objc_msgSendSuper2  
+0x1D956EBC0   mov      x19, x0              
+0x1D956EBC4   adrp     x0, 110730           ; 0x1f45f8000
+0x1D956EBC8   add      x0, x0, #0x7a8       
+0x1D956EBCC   mov      w1, #0x18            
+0x1D956EBD0   mov      w2, #0x7             
+0x1D956EBD4   bl       _swift_allocObject   
+0x1D956EBD8   str      x19, [x0, #0x10]     
+0x1D956EBDC   adrp     x16, 1               ; 0x1d956f000
+0x1D956EBE0   add      x16, x16, #0x40      
+0x1D956EBE4   mov      x17, #0x8438         
+0x1D956EBE8   pacia    x16, x17             
+0x1D956EBEC   stp      x16, x0, [x29, #-0x70] 
+0x1D956EBF0   sub      x8, x29, #0x90       
+0x1D956EBF4   adrp     x16, 49232           ; 0x1e55be000
+0x1D956EBF8   ldr      x16, [x16, #0x420]   
+0x1D956EBFC   mov      x17, x8              
+0x1D956EC00   movk     x17, #0x6ae1, lsl #48 
+0x1D956EC04   pacda    x16, x17             
+0x1D956EC08   stur     x16, [x29, #-0x90]   
+0x1D956EC0C   adrp     x9, 304              ; 0x1d969e000
+0x1D956EC10   ldr      d0, [x9, #0xd20]     
+0x1D956EC14   stur     d0, [x29, #-0x88]    
+0x1D956EC18   add      x8, x8, #0x10        
+0x1D956EC1C   adrp     x16, 1               ; 0x1d956f000
+0x1D956EC20   add      x16, x16, #0xdc      
+0x1D956EC24   pacia    x16, x8              
+0x1D956EC28   adrp     x8, 110730           ; 0x1f45f8000
+0x1D956EC2C   add      x8, x8, #0x7c0       ; _block_descriptor
+0x1D956EC30   stp      x16, x8, [x29, #-0x80] 
+0x1D956EC34   sub      x0, x29, #0x90       
+0x1D956EC38   bl       __Block_copy         
+0x1D956EC3C   mov      x20, x0              
+0x1D956EC40   ldur     x22, [x29, #-0x68]   
+0x1D956EC44   mov      x0, x19              
+0x1D956EC48   bl       _objc_retain         
+0x1D956EC4C   bl       _objc_retain         
+0x1D956EC50   bl       _objc_retain         
+0x1D956EC54   mov      x19, x0              
+0x1D956EC58   mov      x0, x22              
+0x1D956EC5C   bl       _swift_release       
+0x1D956EC60   mov      x0, x21              
+0x1D956EC64   mov      x2, x20              
+0x1D956EC68   bl       "_objc_msgSend$assetWithCompletion:" 
+0x1D956EC6C   mov      x0, x20              
+0x1D956EC70   bl       __Block_release      
+0x1D956EC74   adrp     x8, 49119            ; 0x1e554d000
+0x1D956EC78   ldr      x0, [x8, #0xbe0]     
+0x1D956EC7C   bl       _objc_opt_self       
+0x1D956EC80   bl       _objc_msgSend$defaultCenter 
+0x1D956EC84   mov      x29, x29             
+0x1D956EC88   bl       _objc_retainAutoreleasedReturnValue 
+0x1D956EC8C   mov      x20, x0              
+0x1D956EC90   adrp     x8, 142307           ; 0x1fc151000
+0x1D956EC94   add      x22, x8, #0x90c      
+0x1D956EC98   adrp     x8, 330              ; 0x1d96b8000
+0x1D956EC9C   add      x8, x8, #0xd40       
+0x1D956ECA0   sub      x8, x8, #0x20        
+0x1D956ECA4   orr      x1, x8, #0x8000000000000000 
+0x1D956ECA8   mov      x0, #0x1e            
+0x1D956ECAC   movk     x0, #0xd000, lsl #48 
+0x1D956ECB0   bl       0x1d968a0b4          
+0x1D956ECB4   mov      x23, x0              
+0x1D956ECB8   mov      x0, x20              
+0x1D956ECBC   mov      x2, x19              
+0x1D956ECC0   mov      x3, x22              
+0x1D956ECC4   mov      x4, x23              
+0x1D956ECC8   mov      x5, #0x0             
+0x1D956ECCC   bl       "_objc_msgSend$addObserver:selector:name:object:" 
+0x1D956ECD0   mov      x0, x24              
+0x1D956ECD4   bl       _swift_release       
+0x1D956ECD8   mov      x0, x21              
+0x1D956ECDC   bl       _objc_release        
+0x1D956ECE0   mov      x0, x20              
+0x1D956ECE4   bl       _objc_release        
+0x1D956ECE8   mov      x0, x19              
+0x1D956ECEC   bl       _objc_release        
+0x1D956ECF0   mov      x0, x19              
+0x1D956ECF4   bl       _objc_release        
+0x1D956ECF8   mov      x0, x23              
+0x1D956ECFC   bl       _objc_release        
+0x1D956ED00   mov      x0, x19              
+0x1D956ED04   sub      sp, x29, #0x50       
+0x1D956ED08   ldp      x29, x30, [sp, #0x50] 
+0x1D956ED0C   ldp      x20, x19, [sp, #0x40] 
+0x1D956ED10   ldp      x22, x21, [sp, #0x30] 
+0x1D956ED14   ldp      x24, x23, [sp, #0x20] 
+0x1D956ED18   ldp      x26, x25, [sp, #0x10] 
+0x1D956ED1C   ldp      x28, x27, [sp], #0x60 
+0x1D956ED20   retab                         
+0x1D956ED24   brk      #0x1                 
+_$s7NotesUI21AudioRecordingManagerCMa:
+0x1D956ED28   adrp     x1, 79473            ; 0x1ecbdf000
+0x1D956ED2C   add      x1, x1, #0x618       
+0x1D956ED30   adrp     x16, 376             ; 0x1d96e6000
+0x1D956ED34   add      x16, x16, #0x8e0     ; _$s7NotesUI21AudioRecordingManagerCMn
+0x1D956ED38   mov      x17, #0xae86         
+0x1D956ED3C   pacda    x16, x17             
+0x1D956ED40   mov      x2, x16              
+0x1D956ED44   b        0x1d9565334          
+0x1D956ED48   pacibsp                       
+0x1D956ED4C   stp      x28, x27, [sp, #-0x60]! 
+0x1D956ED50   stp      x26, x25, [sp, #0x10] 
+0x1D956ED54   stp      x24, x23, [sp, #0x20] 
+0x1D956ED58   stp      x22, x21, [sp, #0x30] 
+0x1D956ED5C   stp      x20, x19, [sp, #0x40] 
+0x1D956ED60   stp      x29, x30, [sp, #0x50] 
+0x1D956ED64   add      x29, sp, #0x50       
+0x1D956ED68   sub      sp, sp, #0x40        
+0x1D956ED6C   mov      x26, x1              
+0x1D956ED70   mov      x20, x0              
+0x1D956ED74   mov      x0, #0x0             
+0x1D956ED78   bl       0x1d9689a04          
+0x1D956ED7C   mov      x19, x0              
+0x1D956ED80   mov      x9, x0               
+0x1D956ED84   ldr      x8, [x9, #-0x8]!     
+0x1D956ED88   mov      x16, x8              
+0x1D956ED8C   mov      x17, x9              
+0x1D956ED90   movk     x17, #0x2e3f, lsl #48 
+0x1D956ED94   autda    x16, x17             
+0x1D956ED98   mov      x17, x16             
+0x1D956ED9C   xpacd    x17                  
+0x1D956EDA0   cmp      x16, x17             
+0x1D956EDA4   b.eq     0x1d956edac          
+0x1D956EDA8   brk      #0xc472              
+0x1D956EDAC   mov      x21, x16             
+0x1D956EDB0   mov      x16, x8              
+0x1D956EDB4   mov      x17, x9              
+0x1D956EDB8   movk     x17, #0x2e3f, lsl #48 
+0x1D956EDBC   autda    x16, x17             
+0x1D956EDC0   ldr      x8, [x16, #0x40]     
+0x1D956EDC4   mov      x9, x8               
+0x1D956EDC8   adrp     x17, 82914           ; 0x1ed950000
+0x1D956EDCC   add      x17, x17, #0x90      
+0x1D956EDD0   ldr      x16, [x17]           
+0x1D956EDD4   blraa    x16, x17             
+0x1D956EDD8   mov      x9, sp               
+0x1D956EDDC   add      x8, x8, #0xf         
+0x1D956EDE0   and      x8, x8, #0xfffffffffffffff0 
+0x1D956EDE4   sub      x23, x9, x8          
+0x1D956EDE8   mov      sp, x23              
+0x1D956EDEC   mov      x0, #0x0             
+0x1D956EDF0   bl       0x1d9689a44          
+0x1D956EDF4   mov      x9, x0               
+0x1D956EDF8   ldr      x8, [x9, #-0x8]!     
+0x1D956EDFC   mov      x16, x8              
+0x1D956EE00   mov      x17, x9              
+0x1D956EE04   movk     x17, #0x2e3f, lsl #48 
+0x1D956EE08   autda    x16, x17             
+0x1D956EE0C   mov      x17, x16             
+0x1D956EE10   xpacd    x17                  
+0x1D956EE14   cmp      x16, x17             
+0x1D956EE18   b.eq     0x1d956ee20          
+0x1D956EE1C   brk      #0xc472              
+0x1D956EE20   mov      x24, x16             
+0x1D956EE24   mov      x16, x8              
+0x1D956EE28   mov      x17, x9              
+0x1D956EE2C   movk     x17, #0x2e3f, lsl #48 
+0x1D956EE30   autda    x16, x17             
+0x1D956EE34   ldr      x8, [x16, #0x40]     
+0x1D956EE38   mov      x9, x8               
+0x1D956EE3C   adrp     x17, 82914           ; 0x1ed950000
+0x1D956EE40   add      x17, x17, #0x90      
+0x1D956EE44   ldr      x16, [x17]           
+0x1D956EE48   blraa    x16, x17             
+0x1D956EE4C   mov      x9, sp               
+0x1D956EE50   add      x8, x8, #0xf         
+0x1D956EE54   and      x8, x8, #0xfffffffffffffff0 
+0x1D956EE58   sub      x25, x9, x8          
+0x1D956EE5C   mov      sp, x25              
+0x1D956EE60   cbz      x20, 0x1d956f020     
+0x1D956EE64   adrp     x1, 79472            ; 0x1ecbde000
+0x1D956EE68   add      x1, x1, #0xe00       
+0x1D956EE6C   adrp     x2, 49232            ; 0x1e55be000
+0x1D956EE70   add      x2, x2, #0x208       
+0x1D956EE74   stur     x0, [x29, #-0x88]    
+0x1D956EE78   mov      x0, #0x0             
+0x1D956EE7C   bl       0x1d95548e4          
+0x1D956EE80   mov      x22, x0              
+0x1D956EE84   mov      x0, x20              
+0x1D956EE88   bl       _objc_retain         
+0x1D956EE8C   mov      x27, x0              
+0x1D956EE90   mov      x20, x22             
+0x1D956EE94   bl       0x1d968a694          
+0x1D956EE98   stur     x0, [x29, #-0x90]    
+0x1D956EE9C   adrp     x0, 110730           ; 0x1f45f8000
+0x1D956EEA0   add      x0, x0, #0x940       
+0x1D956EEA4   mov      w1, #0x20            
+0x1D956EEA8   mov      w2, #0x7             
+0x1D956EEAC   bl       _swift_allocObject   
+0x1D956EEB0   stp      x26, x27, [x0, #0x10] 
+0x1D956EEB4   adrp     x16, 10              ; 0x1d9578000
+0x1D956EEB8   add      x16, x16, #0xda8     
+0x1D956EEBC   mov      x17, #0xf08          
+0x1D956EEC0   pacia    x16, x17             
+0x1D956EEC4   stp      x16, x0, [x29, #-0x60] 
+0x1D956EEC8   sub      x8, x29, #0x80       
+0x1D956EECC   adrp     x16, 49232           ; 0x1e55be000
+0x1D956EED0   ldr      x16, [x16, #0x420]   
+0x1D956EED4   mov      x17, x8              
+0x1D956EED8   movk     x17, #0x6ae1, lsl #48 
+0x1D956EEDC   pacda    x16, x17             
+0x1D956EEE0   stur     x16, [x29, #-0x80]   
+0x1D956EEE4   adrp     x9, 304              ; 0x1d969e000
+0x1D956EEE8   ldr      d0, [x9, #0xd20]     
+0x1D956EEEC   stur     d0, [x29, #-0x78]    
+0x1D956EEF0   add      x8, x8, #0x10        
+0x1D956EEF4   adrp     x16, 76              ; 0x1d95ba000
+0x1D956EEF8   add      x16, x16, #0x198     
+0x1D956EEFC   pacia    x16, x8              
+0x1D956EF00   adrp     x8, 110730           ; 0x1f45f8000
+0x1D956EF04   add      x8, x8, #0x958       ; _block_descriptor.135
+0x1D956EF08   stp      x16, x8, [x29, #-0x70] 
+0x1D956EF0C   sub      x0, x29, #0x80       
+0x1D956EF10   bl       __Block_copy         
+0x1D956EF14   mov      x28, x0              
+0x1D956EF18   ldur     x20, [x29, #-0x58]   
+0x1D956EF1C   mov      x0, x27              
+0x1D956EF20   bl       _objc_retain         
+0x1D956EF24   mov      x22, x0              
+0x1D956EF28   mov      x0, x26              
+0x1D956EF2C   bl       _objc_retain         
+0x1D956EF30   mov      x0, x20              
+0x1D956EF34   bl       _swift_release       
+0x1D956EF38   mov      x8, x25              
+0x1D956EF3C   bl       0x1d9689a24          
+0x1D956EF40   adrp     x8, 49231            ; 0x1e55bd000
+0x1D956EF44   ldr      x8, [x8, #0x410]     
+0x1D956EF48   stur     x8, [x29, #-0x80]    
+0x1D956EF4C   adrp     x0, 79473            ; 0x1ecbdf000
+0x1D956EF50   add      x0, x0, #0x110       
+0x1D956EF54   adrp     x16, 49231           ; 0x1e55bd000
+0x1D956EF58   ldr      x16, [x16, #0x638]   
+0x1D956EF5C   mov      x17, #0xafb8         
+0x1D956EF60   pacia    x16, x17             
+0x1D956EF64   mov      x1, x16              
+0x1D956EF68   adrp     x16, 49231           ; 0x1e55bd000
+0x1D956EF6C   ldr      x16, [x16, #0x648]   
+0x1D956EF70   mov      x17, #0xc6eb         
+0x1D956EF74   pacda    x16, x17             
+0x1D956EF78   mov      x2, x16              
+0x1D956EF7C   bl       0x1d95775c4          
+0x1D956EF80   mov      x26, x0              
+0x1D956EF84   adrp     x0, 79474            ; 0x1ecbe0000
+0x1D956EF88   add      x0, x0, #0xa90       
+0x1D956EF8C   adrp     x1, 307              ; 0x1d96a1000
+0x1D956EF90   add      x1, x1, #0x6e0       
+0x1D956EF94   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D956EF98   mov      x20, x0              
+0x1D956EF9C   bl       0x1d9578db0          
+0x1D956EFA0   mov      x2, x0               
+0x1D956EFA4   sub      x0, x29, #0x80       
+0x1D956EFA8   mov      x8, x23              
+0x1D956EFAC   mov      x1, x20              
+0x1D956EFB0   mov      x20, x19             
+0x1D956EFB4   mov      x3, x19              
+0x1D956EFB8   mov      x4, x26              
+0x1D956EFBC   bl       0x1d968aac4          
+0x1D956EFC0   mov      x0, #0x0             
+0x1D956EFC4   mov      x1, x25              
+0x1D956EFC8   mov      x2, x23              
+0x1D956EFCC   mov      x3, x28              
+0x1D956EFD0   ldur     x20, [x29, #-0x90]   
+0x1D956EFD4   bl       0x1d968a6c4          
+0x1D956EFD8   mov      x0, x28              
+0x1D956EFDC   bl       __Block_release      
+0x1D956EFE0   mov      x0, x22              
+0x1D956EFE4   bl       _objc_release        
+0x1D956EFE8   mov      x0, x20              
+0x1D956EFEC   bl       _objc_release        
+0x1D956EFF0   ldr      x8, [x21, #0x8]!     
+0x1D956EFF4   mov      x0, x23              
+0x1D956EFF8   mov      x1, x19              
+0x1D956EFFC   mov      x17, x21             
+0x1D956F000   movk     x17, #0x4f8, lsl #48 
+0x1D956F004   blraa    x8, x17              
+0x1D956F008   ldr      x8, [x24, #0x8]!     
+0x1D956F00C   mov      x0, x25              
+0x1D956F010   ldur     x1, [x29, #-0x88]    
+0x1D956F014   mov      x17, x24             
+0x1D956F018   movk     x17, #0x4f8, lsl #48 
+0x1D956F01C   blraa    x8, x17              
+0x1D956F020   sub      sp, x29, #0x50       
+0x1D956F024   ldp      x29, x30, [sp, #0x50] 
+0x1D956F028   ldp      x20, x19, [sp, #0x40] 
+0x1D956F02C   ldp      x22, x21, [sp, #0x30] 
+0x1D956F030   ldp      x24, x23, [sp, #0x20] 
+0x1D956F034   ldp      x26, x25, [sp, #0x10] 
+0x1D956F038   ldp      x28, x27, [sp], #0x60 
+0x1D956F03C   retab                         
+0x1D956F040   ldr      x1, [x20, #0x10]     
+0x1D956F044   b        0x1d956ed48          
+0x1D956F048   pacibsp                       
+0x1D956F04C   sub      sp, sp, #0x60        
+0x1D956F050   stp      d9, d8, [sp, #0x20]  
+0x1D956F054   stp      x22, x21, [sp, #0x30] 
+0x1D956F058   stp      x20, x19, [sp, #0x40] 
+0x1D956F05C   stp      x29, x30, [sp, #0x50] 
+0x1D956F060   add      x29, sp, #0x50       
+0x1D956F064   mov      x19, x0              
+0x1D956F068   add      x8, sp, #0x8         
+0x1D956F06C   mov      x0, x1               
+0x1D956F070   bl       _objc_msgSend$duration 
+0x1D956F074   ldp      x0, x1, [sp, #0x8]   
+0x1D956F078   ldr      x2, [sp, #0x18]      
+0x1D956F07C   bl       0x1d968a934          
+0x1D956F080   mov.16b  v8, v0               
+0x1D956F084   adrp     x0, 306              ; 0x1d96a1000
+0x1D956F088   add      x0, x0, #0x170       
+0x1D956F08C   bl       _swift_getKeyPath    
+0x1D956F090   mov      x20, x0              
+0x1D956F094   adrp     x0, 306              ; 0x1d96a1000
+0x1D956F098   add      x0, x0, #0x198       
+0x1D956F09C   bl       _swift_getKeyPath    
+0x1D956F0A0   mov      x21, x0              
+0x1D956F0A4   str      d8, [sp, #0x8]       
+0x1D956F0A8   mov      x0, x19              
+0x1D956F0AC   bl       _objc_retain         
+0x1D956F0B0   mov      x1, x0               
+0x1D956F0B4   add      x0, sp, #0x8         
+0x1D956F0B8   mov      x2, x20              
+0x1D956F0BC   mov      x3, x21              
+0x1D956F0C0   bl       0x1d96889b4          
+0x1D956F0C4   ldp      x29, x30, [sp, #0x50] 
+0x1D956F0C8   ldp      x20, x19, [sp, #0x40] 
+0x1D956F0CC   ldp      x22, x21, [sp, #0x30] 
+0x1D956F0D0   ldp      d9, d8, [sp, #0x20]  
+0x1D956F0D4   add      sp, sp, #0x60        
+0x1D956F0D8   retab                         
+0x1D956F0DC   pacibsp                       
+0x1D956F0E0   stp      x22, x21, [sp, #-0x30]! 
+0x1D956F0E4   stp      x20, x19, [sp, #0x10] 
+0x1D956F0E8   stp      x29, x30, [sp, #0x20] 
+0x1D956F0EC   add      x29, sp, #0x20       
+0x1D956F0F0   mov      x19, x1              
+0x1D956F0F4   ldp      x22, x20, [x0, #0x20] 
+0x1D956F0F8   mov      x0, x20              
+0x1D956F0FC   bl       _swift_retain        
+0x1D956F100   mov      x0, x19              
+0x1D956F104   bl       _objc_retain         
+0x1D956F108   mov      x21, x0              
+0x1D956F10C   mov      x0, x19              
+0x1D956F110   mov      x17, #0x8438         
+0x1D956F114   blraa    x22, x17             
+0x1D956F118   mov      x0, x20              
+0x1D956F11C   bl       _swift_release       
+0x1D956F120   mov      x0, x21              
+0x1D956F124   ldp      x29, x30, [sp, #0x20] 
+0x1D956F128   ldp      x20, x19, [sp, #0x10] 
+0x1D956F12C   ldp      x22, x21, [sp], #0x30 
+0x1D956F130   autibsp                       
+0x1D956F134   eor      x16, x30, x30, lsl #1 
+0x1D956F138   tbz      x16, #0x3e, 0x1d956f140 
+0x1D956F13C   brk      #0xc471              
+0x1D956F140   b        _objc_release        
+_$s7NotesUI21AudioRecordingManagerCACycfC:
+0x1D95757D4   pacibsp                       
+0x1D95757D8   stp      x29, x30, [sp, #-0x10]! 
+0x1D95757DC   mov      x29, sp              
+0x1D95757E0   mov      x0, x20              
+0x1D95757E4   bl       _objc_allocWithZone  
+0x1D95757E8   ldp      x29, x30, [sp], #0x10 
+0x1D95757EC   autibsp                       
+0x1D95757F0   eor      x16, x30, x30, lsl #1 
+0x1D95757F4   tbz      x16, #0x3e, 0x1d95757fc 
+0x1D95757F8   brk      #0xc471              
+0x1D95757FC   b        _objc_msgSend$init   
+0x1D9575800   pacibsp                       
+0x1D9575804   stp      x29, x30, [sp, #-0x10]! 
+0x1D9575808   mov      x29, sp              
+0x1D957580C   adrp     x0, 323              ; 0x1d96b8000
+0x1D9575810   add      x0, x0, #0xd60       
+0x1D9575814   adrp     x2, 325              ; 0x1d96ba000
+0x1D9575818   add      x2, x2, #0x3d0       
+0x1D957581C   mov      w1, #0x1d            
+0x1D9575820   mov      w3, #0x6             
+0x1D9575824   mov      w4, #0x0             
+0x1D9575828   bl       __swift_stdlib_reportUnimplementedInitializer 
+0x1D957582C   brk      #0x1                 
+_$s7NotesUI21AudioRecordingManagerCfD:
+0x1D9575830   pacibsp                       
+0x1D9575834   sub      sp, sp, #0x20        
+0x1D9575838   stp      x29, x30, [sp, #0x10] 
+0x1D957583C   add      x29, sp, #0x10       
+0x1D9575840   mov      x0, #0x0             
+0x1D9575844   bl       _$s7NotesUI21AudioRecordingManagerCMa 
+0x1D9575848   stp      x20, x0, [sp]        
+0x1D957584C   adrp     x8, 136914           ; 0x1fac47000
+0x1D9575850   add      x1, x8, #0xe0        
+0x1D9575854   mov      x0, sp               
+0x1D9575858   bl       _objc_msgSendSuper2  
+0x1D957585C   ldp      x29, x30, [sp, #0x10] 
+0x1D9575860   add      sp, sp, #0x20        
+0x1D9575864   retab                         
+0x1D9575868   pacibsp                       
+0x1D957586C   stp      x24, x23, [sp, #-0x40]! 
+0x1D9575870   stp      x22, x21, [sp, #0x10] 
+0x1D9575874   stp      x20, x19, [sp, #0x20] 
+0x1D9575878   stp      x29, x30, [sp, #0x30] 
+0x1D957587C   add      x29, sp, #0x30       
+0x1D9575880   mov      x19, x0              
+0x1D9575884   adrp     x8, 74799            ; 0x1eb9a4000
+0x1D9575888   ldr      x8, [x8, #0x4d8]     
+0x1D957588C   ldr      x0, [x0, x8]         
+0x1D9575890   bl       _swift_release       
+0x1D9575894   adrp     x8, 79466            ; 0x1ecbdf000
+0x1D9575898   ldr      x20, [x8, #0x638]    
+0x1D957589C   adrp     x0, 74799            ; 0x1eb9a4000
+0x1D95758A0   add      x0, x0, #0x498       
+0x1D95758A4   adrp     x1, 300              ; 0x1d96a1000
+0x1D95758A8   add      x1, x1, #0x108       
+0x1D95758AC   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D95758B0   mov      x1, x0               
+0x1D95758B4   mov      x8, x0               
+0x1D95758B8   ldr      x16, [x8, #-0x8]!    
+0x1D95758BC   mov      x17, x8              
+0x1D95758C0   movk     x17, #0x2e3f, lsl #48 
+0x1D95758C4   autda    x16, x17             
+0x1D95758C8   ldr      x8, [x16, #0x8]!     
+0x1D95758CC   add      x0, x19, x20         
+0x1D95758D0   movk     x16, #0x4f8, lsl #48 
+0x1D95758D4   blraa    x8, x16              
+0x1D95758D8   adrp     x8, 79466            ; 0x1ecbdf000
+0x1D95758DC   ldr      x22, [x8, #0x640]    
+0x1D95758E0   adrp     x0, 74799            ; 0x1eb9a4000
+0x1D95758E4   add      x0, x0, #0x4a8       
+0x1D95758E8   adrp     x1, 300              ; 0x1d96a1000
+0x1D95758EC   add      x1, x1, #0x160       
+0x1D95758F0   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D95758F4   mov      x20, x0              
+0x1D95758F8   mov      x8, x0               
+0x1D95758FC   ldr      x16, [x8, #-0x8]!    
+0x1D9575900   mov      x17, x8              
+0x1D9575904   movk     x17, #0x2e3f, lsl #48 
+0x1D9575908   autda    x16, x17             
+0x1D957590C   ldr      x23, [x16, #0x8]!    
+0x1D9575910   mov      x21, x16             
+0x1D9575914   add      x0, x19, x22         
+0x1D9575918   mov      x1, x20              
+0x1D957591C   movk     x16, #0x4f8, lsl #48 
+0x1D9575920   blraa    x23, x16             
+0x1D9575924   adrp     x8, 79466            ; 0x1ecbdf000
+0x1D9575928   ldr      x8, [x8, #0x648]     
+0x1D957592C   add      x0, x19, x8          
+0x1D9575930   mov      x1, x20              
+0x1D9575934   mov      x17, x21             
+0x1D9575938   movk     x17, #0x4f8, lsl #48 
+0x1D957593C   blraa    x23, x17             
+0x1D9575940   adrp     x8, 79466            ; 0x1ecbdf000
+0x1D9575944   ldr      x20, [x8, #0x628]    
+0x1D9575948   adrp     x0, 74799            ; 0x1eb9a4000
+0x1D957594C   add      x0, x0, #0x4b8       
+0x1D9575950   adrp     x1, 300              ; 0x1d96a1000
+0x1D9575954   add      x1, x1, #0x200       
+0x1D9575958   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D957595C   mov      x1, x0               
+0x1D9575960   mov      x8, x0               
+0x1D9575964   ldr      x16, [x8, #-0x8]!    
+0x1D9575968   mov      x17, x8              
+0x1D957596C   movk     x17, #0x2e3f, lsl #48 
+0x1D9575970   autda    x16, x17             
+0x1D9575974   ldr      x8, [x16, #0x8]!     
+0x1D9575978   add      x0, x19, x20         
+0x1D957597C   movk     x16, #0x4f8, lsl #48 
+0x1D9575980   blraa    x8, x16              
+0x1D9575984   adrp     x8, 79466            ; 0x1ecbdf000
+0x1D9575988   ldr      x20, [x8, #0x630]    
+0x1D957598C   adrp     x0, 74799            ; 0x1eb9a4000
+0x1D9575990   add      x0, x0, #0x4c8       
+0x1D9575994   adrp     x1, 300              ; 0x1d96a1000
+0x1D9575998   add      x1, x1, #0x258       
+0x1D957599C   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D95759A0   mov      x1, x0               
+0x1D95759A4   mov      x8, x0               
+0x1D95759A8   ldr      x16, [x8, #-0x8]!    
+0x1D95759AC   mov      x17, x8              
+0x1D95759B0   movk     x17, #0x2e3f, lsl #48 
+0x1D95759B4   autda    x16, x17             
+0x1D95759B8   ldr      x8, [x16, #0x8]!     
+0x1D95759BC   add      x0, x19, x20         
+0x1D95759C0   movk     x16, #0x4f8, lsl #48 
+0x1D95759C4   blraa    x8, x16              
+0x1D95759C8   adrp     x8, 79471            ; 0x1ecbe4000
+0x1D95759CC   ldr      x8, [x8, #0x720]     
+0x1D95759D0   ldr      x0, [x19, x8]        
+0x1D95759D4   bl       _swift_release       
+0x1D95759D8   adrp     x8, 79471            ; 0x1ecbe4000
+0x1D95759DC   ldr      x8, [x8, #0x718]     
+0x1D95759E0   ldr      x0, [x19, x8]        
+0x1D95759E4   bl       _objc_release        
+0x1D95759E8   adrp     x8, 79471            ; 0x1ecbe4000
+0x1D95759EC   ldr      x8, [x8, #0x728]     
+0x1D95759F0   add      x8, x19, x8          
+0x1D95759F4   ldr      x0, [x8, #0x8]       
+0x1D95759F8   bl       _swift_bridgeObjectRelease 
+0x1D95759FC   adrp     x8, 79471            ; 0x1ecbe4000
+0x1D9575A00   ldr      x8, [x8, #0x6f8]     
+0x1D9575A04   ldr      x0, [x19, x8]        
+0x1D9575A08   bl       _swift_release       
+0x1D9575A0C   adrp     x8, 79471            ; 0x1ecbe4000
+0x1D9575A10   ldr      x8, [x8, #0x710]     
+0x1D9575A14   ldr      x0, [x19, x8]        
+0x1D9575A18   ldp      x29, x30, [sp, #0x30] 
+0x1D9575A1C   ldp      x20, x19, [sp, #0x20] 
+0x1D9575A20   ldp      x22, x21, [sp, #0x10] 
+0x1D9575A24   ldp      x24, x23, [sp], #0x40 
+0x1D9575A28   autibsp                       
+0x1D9575A2C   eor      x16, x30, x30, lsl #1 
+0x1D9575A30   tbz      x16, #0x3e, 0x1d9575a38 
+0x1D9575A34   brk      #0xc471              
+0x1D9575A38   b        _objc_release        
+0x1D9575A3C   pacibsp                       
+0x1D9575A40   orr      x29, x29, #0x1000000000000000 
+0x1D9575A44   str      x19, [sp, #-0x20]!   
+0x1D9575A48   stp      x29, x30, [sp, #0x10] 
+0x1D9575A4C   add      x16, sp, #0x8        
+0x1D9575A50   movk     x16, #0xc31a, lsl #48 
+0x1D9575A54   mov      x17, x22             
+0x1D9575A58   pacdb    x17, x16             
+0x1D9575A5C   str      x17, [sp, #0x8]      
+0x1D9575A60   add      x29, sp, #0x10       
+0x1D9575A64   mov      x19, x20             
+0x1D9575A68   mov      x0, #0x0             
+0x1D9575A6C   bl       0x1d968a3a4          
+0x1D9575A70   str      x0, [x22, #0x10]     
+0x1D9575A74   mov      x20, x0              
+0x1D9575A78   bl       0x1d968a394          
+0x1D9575A7C   str      x0, [x22, #0x18]     
+0x1D9575A80   adrp     x8, 300              ; 0x1d96a1000
+0x1D9575A84   ldr      w0, [x8, #0x2ac]     
+0x1D9575A88   bl       _swift_task_alloc    
+0x1D9575A8C   mov      x17, x22             
+0x1D9575A90   str      x0, [x22, #0x20]     
+0x1D9575A94   mov      x16, x0              
+0x1D9575A98   movk     x16, #0xbda2, lsl #48 
+0x1D9575A9C   pacda    x17, x16             
+0x1D9575AA0   str      x17, [x0]            
+0x1D9575AA4   add      x8, x0, #0x8         
+0x1D9575AA8   adrp     x16, -3              ; 0x1d9572000
+0x1D9575AAC   add      x16, x16, #0xc0      
+0x1D9575AB0   mov      x17, x8              
+0x1D9575AB4   movk     x17, #0xd707, lsl #48 
+0x1D9575AB8   pacia    x16, x17             
+0x1D9575ABC   str      x16, [x0, #0x8]      
+0x1D9575AC0   mov      x22, x0              
+0x1D9575AC4   mov      w0, #0x1             
+0x1D9575AC8   mov      x20, x19             
+0x1D9575ACC   ldp      x29, x30, [sp, #0x10] 
+0x1D9575AD0   ldr      x19, [sp], #0x20     
+0x1D9575AD4   and      x29, x29, #0xefffffffffffffff 
+0x1D9575AD8   autibsp                       
+0x1D9575ADC   eor      x16, x30, x30, lsl #1 
+0x1D9575AE0   tbz      x16, #0x3e, 0x1d9575ae8 
+0x1D9575AE4   brk      #0xc471              
+0x1D9575AE8   b        0x1d95703dc          
+0x1D9575AEC   pacibsp                       
+0x1D9575AF0   orr      x29, x29, #0x1000000000000000 
+0x1D9575AF4   sub      sp, sp, #0x20        
+0x1D9575AF8   stp      x29, x30, [sp, #0x10] 
+0x1D9575AFC   add      x16, sp, #0x8        
+0x1D9575B00   movk     x16, #0xc31a, lsl #48 
+0x1D9575B04   mov      x17, x22             
+0x1D9575B08   pacdb    x17, x16             
+0x1D9575B0C   str      x17, [sp, #0x8]      
+0x1D9575B10   add      x29, sp, #0x10       
+0x1D9575B14   adrp     x8, 300              ; 0x1d96a1000
+0x1D9575B18   ldr      w0, [x8, #0x284]     
+0x1D9575B1C   bl       _swift_task_alloc    
+0x1D9575B20   mov      x17, x22             
+0x1D9575B24   str      x0, [x22, #0x10]     
+0x1D9575B28   mov      x16, x0              
+0x1D9575B2C   movk     x16, #0xbda2, lsl #48 
+0x1D9575B30   pacda    x17, x16             
+0x1D9575B34   str      x17, [x0]            
+0x1D9575B38   add      x8, x0, #0x8         
+0x1D9575B3C   adrp     x16, 0               ; 0x1d9575000
+0x1D9575B40   add      x16, x16, #0xb78     
+0x1D9575B44   mov      x17, x8              
+0x1D9575B48   movk     x17, #0xd707, lsl #48 
+0x1D9575B4C   pacia    x16, x17             
+0x1D9575B50   str      x16, [x0, #0x8]      
+0x1D9575B54   mov      x22, x0              
+0x1D9575B58   ldp      x29, x30, [sp, #0x10] 
+0x1D9575B5C   and      x29, x29, #0xefffffffffffffff 
+0x1D9575B60   add      sp, sp, #0x20        
+0x1D9575B64   autibsp                       
+0x1D9575B68   eor      x16, x30, x30, lsl #1 
+0x1D9575B6C   tbz      x16, #0x3e, 0x1d9575b74 
+0x1D9575B70   brk      #0xc471              
+0x1D9575B74   b        0x1d956f160          
+0x1D9575B78   pacibsp                       
+0x1D9575B7C   orr      x29, x29, #0x1000000000000000 
+0x1D9575B80   sub      sp, sp, #0x30        
+0x1D9575B84   stp      x21, x19, [sp, #0x8] 
+0x1D9575B88   stp      x29, x30, [sp, #0x20] 
+0x1D9575B8C   add      x16, sp, #0x18       
+0x1D9575B90   movk     x16, #0xc31a, lsl #48 
+0x1D9575B94   mov      x17, x22             
+0x1D9575B98   pacdb    x17, x16             
+0x1D9575B9C   str      x17, [sp, #0x18]     
+0x1D9575BA0   add      x29, sp, #0x20       
+0x1D9575BA4   mov      x17, x22             
+0x1D9575BA8   ldr      x8, [x22]            
+0x1D9575BAC   mov      x16, x8              
+0x1D9575BB0   movk     x17, #0xbda2, lsl #48 
+0x1D9575BB4   autda    x16, x17             
+0x1D9575BB8   mov      x17, x16             
+0x1D9575BBC   xpacd    x17                  
+0x1D9575BC0   cmp      x16, x17             
+0x1D9575BC4   b.eq     0x1d9575bcc          
+0x1D9575BC8   brk      #0xc472              
+0x1D9575BCC   sub      x10, x29, #0x8       
+0x1D9575BD0   sub      x9, x29, #0x8        
+0x1D9575BD4   movk     x9, #0xc31a, lsl #48 
+0x1D9575BD8   mov      x17, x16             
+0x1D9575BDC   mov      x16, x9              
+0x1D9575BE0   pacda    x17, x16             
+0x1D9575BE4   str      x17, [x10]           
+0x1D9575BE8   mov      x16, x8              
+0x1D9575BEC   mov      x17, x22             
+0x1D9575BF0   movk     x17, #0xbda2, lsl #48 
+0x1D9575BF4   autda    x16, x17             
+0x1D9575BF8   ldr      x0, [x16, #0x10]     
+0x1D9575BFC   ldr      x21, [x22]           
+0x1D9575C00   mov      x16, x21             
+0x1D9575C04   mov      x17, x22             
+0x1D9575C08   movk     x17, #0xbda2, lsl #48 
+0x1D9575C0C   autda    x16, x17             
+0x1D9575C10   mov      x17, x16             
+0x1D9575C14   xpacd    x17                  
+0x1D9575C18   cmp      x16, x17             
+0x1D9575C1C   b.eq     0x1d9575c24          
+0x1D9575C20   brk      #0xc472              
+0x1D9575C24   mov      x19, x16             
+0x1D9575C28   bl       _swift_task_dealloc  
+0x1D9575C2C   mov      x16, x21             
+0x1D9575C30   mov      x17, x22             
+0x1D9575C34   movk     x17, #0xbda2, lsl #48 
+0x1D9575C38   autda    x16, x17             
+0x1D9575C3C   ldr      x0, [x16, #0x8]!     
+0x1D9575C40   movk     x16, #0xd707, lsl #48 
+0x1D9575C44   mov      x22, x19             
+0x1D9575C48   ldp      x29, x30, [sp, #0x20] 
+0x1D9575C4C   ldp      x21, x19, [sp, #0x8] 
+0x1D9575C50   and      x29, x29, #0xefffffffffffffff 
+0x1D9575C54   add      sp, sp, #0x30        
+0x1D9575C58   autibsp                       
+0x1D9575C5C   eor      x17, x30, x30, lsl #1 
+0x1D9575C60   tbz      x17, #0x3e, 0x1d9575c68 
+0x1D9575C64   brk      #0xc471              
+0x1D9575C68   braa     x0, x16              
+0x1D9575C6C   pacibsp                       
+0x1D9575C70   orr      x29, x29, #0x1000000000000000 
+0x1D9575C74   str      x19, [sp, #-0x20]!   
+0x1D9575C78   stp      x29, x30, [sp, #0x10] 
+0x1D9575C7C   add      x16, sp, #0x8        
+0x1D9575C80   movk     x16, #0xc31a, lsl #48 
+0x1D9575C84   mov      x17, x22             
+0x1D9575C88   pacdb    x17, x16             
+0x1D9575C8C   str      x17, [sp, #0x8]      
+0x1D9575C90   add      x29, sp, #0x10       
+0x1D9575C94   mov      x19, x0              
+0x1D9575C98   adrp     x8, 300              ; 0x1d96a1000
+0x1D9575C9C   ldr      w0, [x8, #0x2ac]     
+0x1D9575CA0   bl       _swift_task_alloc    
+0x1D9575CA4   mov      x17, x22             
+0x1D9575CA8   str      x0, [x22, #0x10]     
+0x1D9575CAC   mov      x16, x0              
+0x1D9575CB0   movk     x16, #0xbda2, lsl #48 
+0x1D9575CB4   pacda    x17, x16             
+0x1D9575CB8   str      x17, [x0]            
+0x1D9575CBC   add      x8, x0, #0x8         
+0x1D9575CC0   adrp     x16, 3               ; 0x1d9578000
+0x1D9575CC4   add      x16, x16, #0xe14     
+0x1D9575CC8   mov      x17, x8              
+0x1D9575CCC   movk     x17, #0xd707, lsl #48 
+0x1D9575CD0   pacia    x16, x17             
+0x1D9575CD4   str      x16, [x0, #0x8]      
+0x1D9575CD8   mov      x22, x0              
+0x1D9575CDC   mov      x0, x19              
+0x1D9575CE0   ldp      x29, x30, [sp, #0x10] 
+0x1D9575CE4   ldr      x19, [sp], #0x20     
+0x1D9575CE8   and      x29, x29, #0xefffffffffffffff 
+0x1D9575CEC   autibsp                       
+0x1D9575CF0   eor      x16, x30, x30, lsl #1 
+0x1D9575CF4   tbz      x16, #0x3e, 0x1d9575cfc 
+0x1D9575CF8   brk      #0xc471              
+0x1D9575CFC   b        0x1d95703dc          
+0x1D9575D00   pacibsp                       
+0x1D9575D04   stp      x22, x21, [sp, #-0x30]! 
+0x1D9575D08   stp      x20, x19, [sp, #0x10] 
+0x1D9575D0C   stp      x29, x30, [sp, #0x20] 
+0x1D9575D10   add      x29, sp, #0x20       
+0x1D9575D14   mov      x19, x1              
+0x1D9575D18   mov      x21, x8              
+0x1D9575D1C   mov      x0, #0x0             
+0x1D9575D20   bl       _$s7NotesUI21AudioRecordingManagerCMa 
+0x1D9575D24   mov      x1, x19              
+0x1D9575D28   bl       0x1d9688924          
+0x1D9575D2C   str      x0, [x21]            
+0x1D9575D30   ldp      x29, x30, [sp, #0x20] 
+0x1D9575D34   ldp      x20, x19, [sp, #0x10] 
+0x1D9575D38   ldp      x22, x21, [sp], #0x30 
+0x1D9575D3C   retab                         
+0x1D9575D40   pacibsp                       
+0x1D9575D44   sub      sp, sp, #0x40        
+0x1D9575D48   stp      x22, x21, [sp, #0x10] 
+0x1D9575D4C   stp      x20, x19, [sp, #0x20] 
+0x1D9575D50   stp      x29, x30, [sp, #0x30] 
+0x1D9575D54   add      x29, sp, #0x30       
+0x1D9575D58   ldr      x19, [x20]           
+0x1D9575D5C   adrp     x0, 300              ; 0x1d96a1000
+0x1D9575D60   add      x0, x0, #0x1b8       
+0x1D9575D64   bl       _swift_getKeyPath    
+0x1D9575D68   mov      x20, x0              
+0x1D9575D6C   adrp     x0, 300              ; 0x1d96a1000
+0x1D9575D70   add      x0, x0, #0x1e0       
+0x1D9575D74   bl       _swift_getKeyPath    
+0x1D9575D78   mov      x21, x0              
+0x1D9575D7C   add      x8, sp, #0x8         
+0x1D9575D80   mov      x0, x19              
+0x1D9575D84   mov      x1, x20              
+0x1D9575D88   mov      x2, x21              
+0x1D9575D8C   bl       0x1d96889a4          
+0x1D9575D90   mov      x0, x20              
+0x1D9575D94   bl       _swift_release       
+0x1D9575D98   mov      x0, x21              
+0x1D9575D9C   bl       _swift_release       
+0x1D9575DA0   ldr      x0, [sp, #0x8]       
+0x1D9575DA4   ldp      x29, x30, [sp, #0x30] 
+0x1D9575DA8   ldp      x20, x19, [sp, #0x20] 
+0x1D9575DAC   ldp      x22, x21, [sp, #0x10] 
+0x1D9575DB0   add      sp, sp, #0x40        
+0x1D9575DB4   retab                         
+0x1D9575DB8   pacibsp                       
+0x1D9575DBC   sub      sp, sp, #0x40        
+0x1D9575DC0   stp      x22, x21, [sp, #0x10] 
+0x1D9575DC4   stp      x20, x19, [sp, #0x20] 
+0x1D9575DC8   stp      x29, x30, [sp, #0x30] 
+0x1D9575DCC   add      x29, sp, #0x30       
+0x1D9575DD0   ldr      x19, [x20]           
+0x1D9575DD4   adrp     x0, 300              ; 0x1d96a1000
+0x1D9575DD8   add      x0, x0, #0x118       
+0x1D9575DDC   bl       _swift_getKeyPath    
+0x1D9575DE0   mov      x20, x0              
+0x1D9575DE4   adrp     x0, 300              ; 0x1d96a1000
+0x1D9575DE8   add      x0, x0, #0x140       
+0x1D9575DEC   bl       _swift_getKeyPath    
+0x1D9575DF0   mov      x21, x0              
+0x1D9575DF4   add      x8, sp, #0x8         
+0x1D9575DF8   mov      x0, x19              
+0x1D9575DFC   mov      x1, x20              
+0x1D9575E00   mov      x2, x21              
+0x1D9575E04   bl       0x1d96889a4          
+0x1D9575E08   mov      x0, x20              
+0x1D9575E0C   bl       _swift_release       
+0x1D9575E10   mov      x0, x21              
+0x1D9575E14   bl       _swift_release       
+0x1D9575E18   ldr      d0, [sp, #0x8]       
+0x1D9575E1C   ldp      x29, x30, [sp, #0x30] 
+0x1D9575E20   ldp      x20, x19, [sp, #0x20] 
+0x1D9575E24   ldp      x22, x21, [sp, #0x10] 
+0x1D9575E28   add      sp, sp, #0x40        
+0x1D9575E2C   retab                         
+0x1D9575E30   adrp     x3, 300              ; 0x1d96a1000
+0x1D9575E34   add      x3, x3, #0x2c0       
+0x1D9575E38   adrp     x4, 300              ; 0x1d96a1000
+0x1D9575E3C   add      x4, x4, #0x2e8       
+0x1D9575E40   b        0x1d956d268          
+0x1D9575E44   pacibsp                       
+0x1D9575E48   sub      sp, sp, #0x40        
+0x1D9575E4C   stp      x22, x21, [sp, #0x10] 
+0x1D9575E50   stp      x20, x19, [sp, #0x20] 
+0x1D9575E54   stp      x29, x30, [sp, #0x30] 
+0x1D9575E58   add      x29, sp, #0x30       
+0x1D9575E5C   ldr      x19, [x0]            
+0x1D9575E60   ldr      x20, [x1]            
+0x1D9575E64   adrp     x0, 300              ; 0x1d96a1000
+0x1D9575E68   add      x0, x0, #0x2c0       
+0x1D9575E6C   bl       _swift_getKeyPath    
+0x1D9575E70   mov      x21, x0              
+0x1D9575E74   adrp     x0, 300              ; 0x1d96a1000
+0x1D9575E78   add      x0, x0, #0x2e8       
+0x1D9575E7C   bl       _swift_getKeyPath    
+0x1D9575E80   mov      x22, x0              
+0x1D9575E84   str      x19, [sp, #0x8]      
+0x1D9575E88   mov      x0, x19              
+0x1D9575E8C   bl       _objc_retain         
+0x1D9575E90   mov      x0, x20              
+0x1D9575E94   bl       _swift_retain        
+0x1D9575E98   add      x0, sp, #0x8         
+0x1D9575E9C   mov      x1, x20              
+0x1D9575EA0   mov      x2, x21              
+0x1D9575EA4   mov      x3, x22              
+0x1D9575EA8   bl       0x1d96889b4          
+0x1D9575EAC   ldp      x29, x30, [sp, #0x30] 
+0x1D9575EB0   ldp      x20, x19, [sp, #0x20] 
+0x1D9575EB4   ldp      x22, x21, [sp, #0x10] 
+0x1D9575EB8   add      sp, sp, #0x40        
+0x1D9575EBC   retab                         
+_$sSo23ICAudioRecordingManagerC7NotesUIE17currentAttachmentSo12ICAttachmentCSgvgZ:
+0x1D95769B0   pacibsp                       
+0x1D95769B4   stp      x20, x19, [sp, #-0x20]! 
+0x1D95769B8   stp      x29, x30, [sp, #0x10] 
+0x1D95769BC   add      x29, sp, #0x10       
+0x1D95769C0   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D95769C4   ldr      x8, [x8, #0x378]     
+0x1D95769C8   cmn      x8, #0x1             
+0x1D95769CC   b.ne     0x1d95769e8          
+0x1D95769D0   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D95769D4   ldr      x20, [x8, #0x380]    
+0x1D95769D8   bl       _$s7NotesUI25AudioRecordingCoordinatorC17currentAttachmentSo12ICAttachmentCSgvg 
+0x1D95769DC   ldp      x29, x30, [sp, #0x10] 
+0x1D95769E0   ldp      x20, x19, [sp], #0x20 
+0x1D95769E4   retab                         
+0x1D95769E8   adrp     x0, 79465            ; 0x1ecbdf000
+0x1D95769EC   add      x0, x0, #0x378       
+0x1D95769F0   adrp     x16, 0               ; 0x1d9576000
+0x1D95769F4   add      x16, x16, #0x524     
+0x1D95769F8   paciza   x16                  
+0x1D95769FC   mov      x1, x16              
+0x1D9576A00   bl       _swift_once          
+0x1D9576A04   b        0x1d95769d0          
+0x1D9576A08   adrp     x16, -3              ; 0x1d9573000
+0x1D9576A0C   add      x16, x16, #0x58      ; _$s7NotesUI25AudioRecordingCoordinatorC02isD0Sbvg
+0x1D9576A10   mov      x17, #0xbb32         
+0x1D9576A14   pacia    x16, x17             
+0x1D9576A18   mov      x2, x16              
+0x1D9576A1C   b        0x1d9576a94          
+_$sSo23ICAudioRecordingManagerC7NotesUIE02isB0SbvgZ:
+0x1D9576A20   pacibsp                       
+0x1D9576A24   stp      x20, x19, [sp, #-0x20]! 
+0x1D9576A28   stp      x29, x30, [sp, #0x10] 
+0x1D9576A2C   add      x29, sp, #0x10       
+0x1D9576A30   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D9576A34   ldr      x8, [x8, #0x378]     
+0x1D9576A38   cmn      x8, #0x1             
+0x1D9576A3C   b.ne     0x1d9576a5c          
+0x1D9576A40   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D9576A44   ldr      x20, [x8, #0x380]    
+0x1D9576A48   bl       _$s7NotesUI25AudioRecordingCoordinatorC02isD0Sbvg 
+0x1D9576A4C   and      w0, w0, #0x1         
+0x1D9576A50   ldp      x29, x30, [sp, #0x10] 
+0x1D9576A54   ldp      x20, x19, [sp], #0x20 
+0x1D9576A58   retab                         
+0x1D9576A5C   adrp     x0, 79465            ; 0x1ecbdf000
+0x1D9576A60   add      x0, x0, #0x378       
+0x1D9576A64   adrp     x16, 0               ; 0x1d9576000
+0x1D9576A68   add      x16, x16, #0x524     
+0x1D9576A6C   paciza   x16                  
+0x1D9576A70   mov      x1, x16              
+0x1D9576A74   bl       _swift_once          
+0x1D9576A78   b        0x1d9576a40          
+0x1D9576A7C   adrp     x16, 0               ; 0x1d9576000
+0x1D9576A80   add      x16, x16, #0x5f4     ; _$s7NotesUI25AudioRecordingCoordinatorC8isPausedSbvg
+0x1D9576A84   mov      x17, #0xbb32         
+0x1D9576A88   pacia    x16, x17             
+0x1D9576A8C   mov      x2, x16              
+0x1D9576A90   b        0x1d9576a94          
+0x1D9576A94   pacibsp                       
+0x1D9576A98   stp      x20, x19, [sp, #-0x20]! 
+0x1D9576A9C   stp      x29, x30, [sp, #0x10] 
+0x1D9576AA0   add      x29, sp, #0x10       
+0x1D9576AA4   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D9576AA8   ldr      x8, [x8, #0x378]     
+0x1D9576AAC   cmn      x8, #0x1             
+0x1D9576AB0   b.ne     0x1d9576ad4          
+0x1D9576AB4   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D9576AB8   ldr      x20, [x8, #0x380]    
+0x1D9576ABC   mov      x17, #0xbb32         
+0x1D9576AC0   blraa    x2, x17              
+0x1D9576AC4   and      w0, w0, #0x1         
+0x1D9576AC8   ldp      x29, x30, [sp, #0x10] 
+0x1D9576ACC   ldp      x20, x19, [sp], #0x20 
+0x1D9576AD0   retab                         
+0x1D9576AD4   adrp     x0, 79465            ; 0x1ecbdf000
+0x1D9576AD8   add      x0, x0, #0x378       
+0x1D9576ADC   adrp     x16, 0               ; 0x1d9576000
+0x1D9576AE0   add      x16, x16, #0x524     
+0x1D9576AE4   paciza   x16                  
+0x1D9576AE8   mov      x1, x16              
+0x1D9576AEC   mov      x19, x2              
+0x1D9576AF0   bl       _swift_once          
+0x1D9576AF4   mov      x2, x19              
+0x1D9576AF8   b        0x1d9576ab4          
+_$sSo23ICAudioRecordingManagerC7NotesUIE8isPausedSbvgZ:
+0x1D9576AFC   pacibsp                       
+0x1D9576B00   stp      x20, x19, [sp, #-0x20]! 
+0x1D9576B04   stp      x29, x30, [sp, #0x10] 
+0x1D9576B08   add      x29, sp, #0x10       
+0x1D9576B0C   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D9576B10   ldr      x8, [x8, #0x378]     
+0x1D9576B14   cmn      x8, #0x1             
+0x1D9576B18   b.ne     0x1d9576b38          
+0x1D9576B1C   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D9576B20   ldr      x20, [x8, #0x380]    
+0x1D9576B24   bl       _$s7NotesUI25AudioRecordingCoordinatorC8isPausedSbvg 
+0x1D9576B28   and      w0, w0, #0x1         
+0x1D9576B2C   ldp      x29, x30, [sp, #0x10] 
+0x1D9576B30   ldp      x20, x19, [sp], #0x20 
+0x1D9576B34   retab                         
+0x1D9576B38   adrp     x0, 79465            ; 0x1ecbdf000
+0x1D9576B3C   add      x0, x0, #0x378       
+0x1D9576B40   adrp     x16, 0               ; 0x1d9576000
+0x1D9576B44   add      x16, x16, #0x524     
+0x1D9576B48   paciza   x16                  
+0x1D9576B4C   mov      x1, x16              
+0x1D9576B50   bl       _swift_once          
+0x1D9576B54   b        0x1d9576b1c          
+_$sSo23ICAudioRecordingManagerC7NotesUIE018cancelCurrentAudioB7SessionyyYaKFZ:
+0x1D9576B58   pacibsp                       
+0x1D9576B5C   orr      x29, x29, #0x1000000000000000 
+0x1D9576B60   str      x19, [sp, #-0x20]!   
+0x1D9576B64   stp      x29, x30, [sp, #0x10] 
+0x1D9576B68   add      x16, sp, #0x8        
+0x1D9576B6C   movk     x16, #0xc31a, lsl #48 
+0x1D9576B70   mov      x17, x22             
+0x1D9576B74   pacdb    x17, x16             
+0x1D9576B78   str      x17, [sp, #0x8]      
+0x1D9576B7C   add      x29, sp, #0x10       
+0x1D9576B80   mov      x0, #0x0             
+0x1D9576B84   bl       0x1d968a3a4          
+0x1D9576B88   mov      x19, x0              
+0x1D9576B8C   mov      x20, x0              
+0x1D9576B90   bl       0x1d968a394          
+0x1D9576B94   str      x0, [x22, #0x10]     
+0x1D9576B98   adrp     x1, 49223            ; 0x1e55bd000
+0x1D9576B9C   ldr      x1, [x1, #0xb60]     
+0x1D9576BA0   mov      x20, x0              
+0x1D9576BA4   mov      x0, x19              
+0x1D9576BA8   bl       0x1d968a354          
+0x1D9576BAC   mov      x8, x0               
+0x1D9576BB0   mov      x2, x1               
+0x1D9576BB4   stp      x0, x1, [x22, #0x18] 
+0x1D9576BB8   adrp     x16, 0               ; 0x1d9576000
+0x1D9576BBC   add      x16, x16, #0xbec     
+0x1D9576BC0   paciza   x16                  
+0x1D9576BC4   mov      x0, x16              
+0x1D9576BC8   mov      x1, x8               
+0x1D9576BCC   ldp      x29, x30, [sp, #0x10] 
+0x1D9576BD0   ldr      x19, [sp], #0x20     
+0x1D9576BD4   and      x29, x29, #0xefffffffffffffff 
+0x1D9576BD8   autibsp                       
+0x1D9576BDC   eor      x16, x30, x30, lsl #1 
+0x1D9576BE0   tbz      x16, #0x3e, 0x1d9576be8 
+0x1D9576BE4   brk      #0xc471              
+0x1D9576BE8   b        _swift_task_switch   
+0x1D9576BEC   pacibsp                       
+0x1D9576BF0   orr      x29, x29, #0x1000000000000000 
+0x1D9576BF4   sub      sp, sp, #0x20        
+0x1D9576BF8   stp      x29, x30, [sp, #0x10] 
+0x1D9576BFC   add      x16, sp, #0x8        
+0x1D9576C00   movk     x16, #0xc31a, lsl #48 
+0x1D9576C04   mov      x17, x22             
+0x1D9576C08   pacdb    x17, x16             
+0x1D9576C0C   str      x17, [sp, #0x8]      
+0x1D9576C10   add      x29, sp, #0x10       
+0x1D9576C14   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D9576C18   ldr      x8, [x8, #0x378]     
+0x1D9576C1C   cmn      x8, #0x1             
+0x1D9576C20   b.ne     0x1d9576c90          
+0x1D9576C24   adrp     x8, 79465            ; 0x1ecbdf000
+0x1D9576C28   ldr      x20, [x8, #0x380]    
+0x1D9576C2C   adrp     x8, 299              ; 0x1d96a1000
+0x1D9576C30   ldr      w0, [x8, #0x324]     
+0x1D9576C34   bl       _swift_task_alloc    
+0x1D9576C38   mov      x17, x22             
+0x1D9576C3C   str      x0, [x22, #0x28]     
+0x1D9576C40   mov      x16, x0              
+0x1D9576C44   movk     x16, #0xbda2, lsl #48 
+0x1D9576C48   pacda    x17, x16             
+0x1D9576C4C   str      x17, [x0]            
+0x1D9576C50   add      x8, x0, #0x8         
+0x1D9576C54   adrp     x16, 0               ; 0x1d9576000
+0x1D9576C58   add      x16, x16, #0xcb0     
+0x1D9576C5C   mov      x17, x8              
+0x1D9576C60   movk     x17, #0xd707, lsl #48 
+0x1D9576C64   pacia    x16, x17             
+0x1D9576C68   str      x16, [x0, #0x8]      
+0x1D9576C6C   mov      x22, x0              
+0x1D9576C70   ldp      x29, x30, [sp, #0x10] 
+0x1D9576C74   and      x29, x29, #0xefffffffffffffff 
+0x1D9576C78   add      sp, sp, #0x20        
+0x1D9576C7C   autibsp                       
+0x1D9576C80   eor      x16, x30, x30, lsl #1 
+0x1D9576C84   tbz      x16, #0x3e, 0x1d9576c8c 
+0x1D9576C88   brk      #0xc471              
+0x1D9576C8C   b        _$s7NotesUI25AudioRecordingCoordinatorC013cancelCurrentcD7SessionyyYaKF 
+0x1D9576C90   adrp     x0, 79465            ; 0x1ecbdf000
+0x1D9576C94   add      x0, x0, #0x378       
+0x1D9576C98   adrp     x16, 0               ; 0x1d9576000
+0x1D9576C9C   add      x16, x16, #0x524     
+0x1D9576CA0   paciza   x16                  
+0x1D9576CA4   mov      x1, x16              
+0x1D9576CA8   bl       _swift_once          
+0x1D9576CAC   b        0x1d9576c24          
+0x1D9576CB0   pacibsp                       
+0x1D9576CB4   orr      x29, x29, #0x1000000000000000 
+0x1D9576CB8   sub      sp, sp, #0x30        
+0x1D9576CBC   stp      x21, x19, [sp, #0x8] 
+0x1D9576CC0   stp      x29, x30, [sp, #0x20] 
+0x1D9576CC4   add      x16, sp, #0x18       
+0x1D9576CC8   movk     x16, #0xc31a, lsl #48 
+0x1D9576CCC   mov      x17, x22             
+0x1D9576CD0   pacdb    x17, x16             
+0x1D9576CD4   str      x17, [sp, #0x18]     
+0x1D9576CD8   add      x29, sp, #0x20       
+0x1D9576CDC   mov      x17, x22             
+0x1D9576CE0   ldr      x21, [x22]           
+0x1D9576CE4   mov      x16, x21             
+0x1D9576CE8   movk     x17, #0xbda2, lsl #48 
+0x1D9576CEC   autda    x16, x17             
+0x1D9576CF0   mov      x17, x16             
+0x1D9576CF4   xpacd    x17                  
+0x1D9576CF8   cmp      x16, x17             
+0x1D9576CFC   b.eq     0x1d9576d04          
+0x1D9576D00   brk      #0xc472              
+0x1D9576D04   mov      x8, x16              
+0x1D9576D08   sub      x9, x29, #0x8        
+0x1D9576D0C   sub      x16, x29, #0x8       
+0x1D9576D10   movk     x16, #0xc31a, lsl #48 
+0x1D9576D14   mov      x17, x8              
+0x1D9576D18   pacda    x17, x16             
+0x1D9576D1C   str      x17, [x9]            
+0x1D9576D20   mov      x16, x21             
+0x1D9576D24   mov      x17, x22             
+0x1D9576D28   movk     x17, #0xbda2, lsl #48 
+0x1D9576D2C   autda    x16, x17             
+0x1D9576D30   ldr      x0, [x16, #0x28]     
+0x1D9576D34   ldr      x16, [x22]           
+0x1D9576D38   mov      x17, x22             
+0x1D9576D3C   movk     x17, #0xbda2, lsl #48 
+0x1D9576D40   autda    x16, x17             
+0x1D9576D44   mov      x17, x16             
+0x1D9576D48   xpacd    x17                  
+0x1D9576D4C   cmp      x16, x17             
+0x1D9576D50   b.eq     0x1d9576d58          
+0x1D9576D54   brk      #0xc472              
+0x1D9576D58   mov      x19, x16             
+0x1D9576D5C   str      x20, [x8, #0x30]     
+0x1D9576D60   bl       _swift_task_dealloc  
+0x1D9576D64   mov      x16, x21             
+0x1D9576D68   mov      x17, x22             
+0x1D9576D6C   movk     x17, #0xbda2, lsl #48 
+0x1D9576D70   autda    x16, x17             
+0x1D9576D74   ldr      x2, [x16, #0x20]     
+0x1D9576D78   mov      x16, x21             
+0x1D9576D7C   mov      x17, x22             
+0x1D9576D80   movk     x17, #0xbda2, lsl #48 
+0x1D9576D84   autda    x16, x17             
+0x1D9576D88   ldr      x1, [x16, #0x18]     
+0x1D9576D8C   cbz      x20, 0x1d9576da0     
+0x1D9576D90   adrp     x16, 0               ; 0x1d9576000
+0x1D9576D94   add      x16, x16, #0xe3c     
+0x1D9576D98   paciza   x16                  
+0x1D9576D9C   b        0x1d9576dac          
+0x1D9576DA0   adrp     x16, 0               ; 0x1d9576000
+0x1D9576DA4   add      x16, x16, #0xdd8     
+0x1D9576DA8   paciza   x16                  
+0x1D9576DAC   mov      x0, x16              
+0x1D9576DB0   mov      x22, x19             
+0x1D9576DB4   ldp      x29, x30, [sp, #0x20] 
+0x1D9576DB8   ldp      x21, x19, [sp, #0x8] 
+0x1D9576DBC   and      x29, x29, #0xefffffffffffffff 
+0x1D9576DC0   add      sp, sp, #0x30        
+0x1D9576DC4   autibsp                       
+0x1D9576DC8   eor      x16, x30, x30, lsl #1 
+0x1D9576DCC   tbz      x16, #0x3e, 0x1d9576dd4 
+0x1D9576DD0   brk      #0xc471              
+0x1D9576DD4   b        _swift_task_switch   
+0x1D9576DD8   pacibsp                       
+0x1D9576DDC   orr      x29, x29, #0x1000000000000000 
+0x1D9576DE0   sub      sp, sp, #0x20        
+0x1D9576DE4   stp      x29, x30, [sp, #0x10] 
+0x1D9576DE8   add      x16, sp, #0x8        
+0x1D9576DEC   movk     x16, #0xc31a, lsl #48 
+0x1D9576DF0   mov      x17, x22             
+0x1D9576DF4   pacdb    x17, x16             
+0x1D9576DF8   str      x17, [sp, #0x8]      
+0x1D9576DFC   add      x29, sp, #0x10       
+0x1D9576E00   ldr      x0, [x22, #0x10]     
+0x1D9576E04   bl       _swift_release       
+0x1D9576E08   mov      x0, x22              
+0x1D9576E0C   ldr      x1, [x0, #0x8]!      
+0x1D9576E10   mov      x20, #0x0            
+0x1D9576E14   ldp      x29, x30, [sp, #0x10] 
+0x1D9576E18   and      x29, x29, #0xefffffffffffffff 
+0x1D9576E1C   add      sp, sp, #0x20        
+0x1D9576E20   autibsp                       
+0x1D9576E24   eor      x16, x30, x30, lsl #1 
+0x1D9576E28   tbz      x16, #0x3e, 0x1d9576e30 
+0x1D9576E2C   brk      #0xc471              
+0x1D9576E30   mov      x16, x0              
+0x1D9576E34   movk     x16, #0xd707, lsl #48 
+0x1D9576E38   braa     x1, x16              
+0x1D9576E3C   pacibsp                       
+0x1D9576E40   orr      x29, x29, #0x1000000000000000 
+0x1D9576E44   sub      sp, sp, #0x20        
+0x1D9576E48   stp      x29, x30, [sp, #0x10] 
+0x1D9576E4C   add      x16, sp, #0x8        
+0x1D9576E50   movk     x16, #0xc31a, lsl #48 
+0x1D9576E54   mov      x17, x22             
+0x1D9576E58   pacdb    x17, x16             
+0x1D9576E5C   str      x17, [sp, #0x8]      
+0x1D9576E60   add      x29, sp, #0x10       
+0x1D9576E64   ldr      x0, [x22, #0x10]     
+0x1D9576E68   bl       _swift_release       
+0x1D9576E6C   mov      x0, x22              
+0x1D9576E70   ldr      x1, [x0, #0x8]!      
+0x1D9576E74   ldr      x20, [x22, #0x30]    
+0x1D9576E78   ldp      x29, x30, [sp, #0x10] 
+0x1D9576E7C   and      x29, x29, #0xefffffffffffffff 
+0x1D9576E80   add      sp, sp, #0x20        
+0x1D9576E84   autibsp                       
+0x1D9576E88   eor      x16, x30, x30, lsl #1 
+0x1D9576E8C   tbz      x16, #0x3e, 0x1d9576e94 
+0x1D9576E90   brk      #0xc471              
+0x1D9576E94   mov      x16, x0              
+0x1D9576E98   movk     x16, #0xd707, lsl #48 
+0x1D9576E9C   braa     x1, x16              
+0x1D9576EA0   pacibsp                       
+0x1D9576EA4   stp      x22, x21, [sp, #-0x30]! 
+0x1D9576EA8   stp      x20, x19, [sp, #0x10] 
+0x1D9576EAC   stp      x29, x30, [sp, #0x20] 
+0x1D9576EB0   add      x29, sp, #0x20       
+0x1D9576EB4   mov      x20, x2              
+0x1D9576EB8   mov      x21, x0              
+0x1D9576EBC   adrp     x0, 79466            ; 0x1ecbe0000
+0x1D9576EC0   add      x0, x0, #0x340       
+0x1D9576EC4   adrp     x1, 298              ; 0x1d96a0000
+0x1D9576EC8   add      x1, x1, #0xb00       
+0x1D9576ECC   bl       ___swift_instantiateConcreteTypeFromMangledNameV2 
+0x1D9576ED0   ldr      x16, [x0, #-0x8]!    
+0x1D9576ED4   mov      x17, x0              
+0x1D9576ED8   movk     x17, #0x2e3f, lsl #48 
+0x1D9576EDC   autda    x16, x17             
+0x1D9576EE0   ldr      x9, [x16, #0x40]     
+0x1D9576EE4   add      x8, x9, #0xf         
+0x1D9576EE8   and      x8, x8, #0xfffffffffffffff0 
+0x1D9576EEC   adrp     x17, 82906           ; 0x1ed950000
+0x1D9576EF0   add      x17, x17, #0x90      
+0x1D9576EF4   ldr      x16, [x17]           
+0x1D9576EF8   blraa    x16, x17             
+0x1D9576EFC   mov      x9, sp               
+0x1D9576F00   sub      x19, x9, x8          
+0x1D9576F04   mov      sp, x19              
+0x1D9576F08   mov      x0, x20              
+0x1D9576F0C   bl       __Block_copy         
+0x1D9576F10   mov      x20, x0              
+0x1D9576F14   adrp     x0, 110722           ; 0x1f45f8000
+0x1D9576F18   add      x0, x0, #0x8a0       
+0x1D9576F1C   mov      w1, #0x20            
+0x1D9576F20   mov      w2, #0x7             
+0x1D9576F24   bl       _swift_allocObject   
+0x1D9576F28   mov      x22, x0              
+0x1D9576F2C   stp      x20, x21, [x0, #0x10] 
+0x1D9576F30   mov      x0, #0x0             
+0x1D9576F34   bl       0x1d968a3e4          
+0x1D9576F38   mov      x3, x0               
+0x1D9576F3C   mov      x8, x0               
+0x1D9576F40   ldr      x16, [x8, #-0x8]!    
+0x1D9576F44   mov      x17, x8              
+0x1D9576F48   movk     x17, #0x2e3f, lsl #48 
+0x1D9576F4C   autda    x16, x17             
+0x1D9576F50   ldr      x8, [x16, #0x38]!    
+0x1D9576F54   mov      x0, x19              
+0x1D9576F58   mov      w1, #0x1             
+0x1D9576F5C   mov      w2, #0x1             
+0x1D9576F60   movk     x16, #0xa0d1, lsl #48 
+0x1D9576F64   blraa    x8, x16              
+0x1D9576F68   adrp     x0, 110722           ; 0x1f45f8000
+0x1D9576F6C   add      x0, x0, #0x8c8       
+0x1D9576F70   mov      w1, #0x30            
+0x1D9576F74   mov      w2, #0x7             
+0x1D9576F78   bl       _swift_allocObject   
+0x1D9576F7C   mov      x20, x0              
+0x1D9576F80   stp      xzr, xzr, [x0, #0x10] 
+0x1D9576F84   adrp     x16, 299             ; 0x1d96a1000
+0x1D9576F88   add      x16, x16, #0x560     
+0x1D9576F8C   mov      x17, #0xf08          
+0x1D9576F90   pacda    x16, x17             
+0x1D9576F94   stp      x16, x22, [x0, #0x20] 
+0x1D9576F98   adrp     x0, 110722           ; 0x1f45f8000
+0x1D9576F9C   add      x0, x0, #0x8f0       
+0x1D9576FA0   mov      w1, #0x30            
+0x1D9576FA4   mov      w2, #0x7             
+0x1D9576FA8   bl       _swift_allocObject   
+0x1D9576FAC   mov      x4, x0               
+0x1D9576FB0   stp      xzr, xzr, [x0, #0x10] 
+0x1D9576FB4   adrp     x16, 299             ; 0x1d96a1000
+0x1D9576FB8   add      x16, x16, #0x568     
+0x1D9576FBC   mov      x17, #0xf08          
+0x1D9576FC0   pacda    x16, x17             
+0x1D9576FC4   stp      x16, x20, [x0, #0x20] 
+0x1D9576FC8   adrp     x16, 299             ; 0x1d96a1000
+0x1D9576FCC   add      x16, x16, #0x570     
+0x1D9576FD0   mov      x17, #0x720f         
+0x1D9576FD4   pacda    x16, x17             
+0x1D9576FD8   mov      x3, x16              
+0x1D9576FDC   mov      x0, #0x0             
+0x1D9576FE0   mov      x1, #0x0             
+0x1D9576FE4   mov      x2, x19              
+0x1D9576FE8   bl       0x1d95948a4          
+0x1D9576FEC   bl       _swift_release       
+0x1D9576FF0   sub      sp, x29, #0x20       
+0x1D9576FF4   ldp      x29, x30, [sp, #0x20] 
+0x1D9576FF8   ldp      x20, x19, [sp, #0x10] 
+0x1D9576FFC   ldp      x22, x21, [sp], #0x30 
+0x1D9577000   retab                         
+0x1D9577004   pacibsp                       
+0x1D9577008   orr      x29, x29, #0x1000000000000000 
+0x1D957700C   str      x19, [sp, #-0x20]!   
+0x1D9577010   stp      x29, x30, [sp, #0x10] 
+0x1D9577014   add      x16, sp, #0x8        
+0x1D9577018   movk     x16, #0xc31a, lsl #48 
+0x1D957701C   mov      x17, x22             
+0x1D9577020   pacdb    x17, x16             
+0x1D9577024   str      x17, [sp, #0x8]      
+0x1D9577028   add      x29, sp, #0x10       
+0x1D957702C   str      x0, [x22, #0x10]     
+0x1D9577030   mov      x0, #0x0             
+0x1D9577034   bl       0x1d968a3a4          
+0x1D9577038   mov      x19, x0              
+0x1D957703C   str      x0, [x22, #0x18]     
+0x1D9577040   mov      x20, x0              
+0x1D9577044   bl       0x1d968a394          
+0x1D9577048   str      x0, [x22, #0x20]     
+0x1D957704C   adrp     x1, 49222            ; 0x1e55bd000
+0x1D9577050   ldr      x1, [x1, #0xb60]     
+0x1D9577054   mov      x20, x0              
+0x1D9577058   mov      x0, x19              
+0x1D957705C   bl       0x1d968a354          
+0x1D9577060   mov      x2, x0               
+0x1D9577064   mov      x3, x1               
+0x1D9577068   adrp     x16, 0               ; 0x1d9577000
+0x1D957706C   add      x16, x16, #0xa0      
+0x1D9577070   paciza   x16                  
+0x1D9577074   mov      x0, x16              
+0x1D9577078   mov      x1, x2               
+0x1D957707C   mov      x2, x3               
+0x1D9577080   ldp      x29, x30, [sp, #0x10] 
+0x1D9577084   ldr      x19, [sp], #0x20     
+0x1D9577088   and      x29, x29, #0xefffffffffffffff 
+0x1D957708C   autibsp                       
+0x1D9577090   eor      x16, x30, x30, lsl #1 
+0x1D9577094   tbz      x16, #0x3e, 0x1d957709c 
+0x1D9577098   brk      #0xc471              
+0x1D957709C   b        _swift_task_switch   
+0x1D95770A0   pacibsp                       
+0x1D95770A4   orr      x29, x29, #0x1000000000000000 
+0x1D95770A8   str      x19, [sp, #-0x20]!   
+0x1D95770AC   stp      x29, x30, [sp, #0x10] 
+0x1D95770B0   add      x16, sp, #0x8        
+0x1D95770B4   movk     x16, #0xc31a, lsl #48 
+0x1D95770B8   mov      x17, x22             
+0x1D95770BC   pacdb    x17, x16             
+0x1D95770C0   str      x17, [sp, #0x8]      
+0x1D95770C4   add      x29, sp, #0x10       
+0x1D95770C8   ldp      x19, x0, [x22, #0x18] 
+0x1D95770CC   ldr      x20, [x22, #0x10]    
+0x1D95770D0   bl       _swift_release       
+0x1D95770D4   mov      x0, x20              
+0x1D95770D8   bl       __Block_copy         
+0x1D95770DC   str      x0, [x22, #0x28]     
+0x1D95770E0   mov      x20, x19             
+0x1D95770E4   bl       0x1d968a394          
+0x1D95770E8   str      x0, [x22, #0x30]     
+0x1D95770EC   adrp     x1, 49222            ; 0x1e55bd000
+0x1D95770F0   ldr      x1, [x1, #0xb60]     
+0x1D95770F4   mov      x20, x0              
+0x1D95770F8   mov      x0, x19              
+0x1D95770FC   bl       0x1d968a354          
+0x1D9577100   mov      x8, x0               
+0x1D9577104   mov      x2, x1               
+0x1D9577108   stp      x0, x1, [x22, #0x38] 
+0x1D957710C   adrp     x16, 0               ; 0x1d9577000
+0x1D9577110   add      x16, x16, #0x140     
+0x1D9577114   paciza   x16                  
+0x1D9577118   mov      x0, x16              
+0x1D957711C   mov      x1, x8               
+0x1D9577120   ldp      x29, x30, [sp, #0x10] 
+0x1D9577124   ldr      x19, [sp], #0x20     
+0x1D9577128   and      x29, x29, #0xefffffffffffffff 
+0x1D957712C   autibsp                       
+0x1D9577130   eor      x16, x30, x30, lsl #1 
+0x1D9577134   tbz      x16, #0x3e, 0x1d957713c 
+0x1D9577138   brk      #0xc471              
+0x1D957713C   b        _swift_task_switch   
+0x1D9577140   pacibsp                       
+0x1D9577144   orr      x29, x29, #0x1000000000000000 
+0x1D9577148   sub      sp, sp, #0x20        
+0x1D957714C   stp      x29, x30, [sp, #0x10] 
+0x1D9577150   add      x16, sp, #0x8        
+0x1D9577154   movk     x16, #0xc31a, lsl #48 
+0x1D9577158   mov      x17, x22             
+0x1D957715C   pacdb    x17, x16             
+0x1D9577160   str      x17, [sp, #0x8]      
+0x1D9577164   add      x29, sp, #0x10       
+0x1D9577168   adrp     x8, 79464            ; 0x1ecbdf000
+0x1D957716C   ldr      x8, [x8, #0x378]     
+0x1D9577170   cmn      x8, #0x1             
+0x1D9577174   b.ne     0x1d95771e4          
+0x1D9577178   adrp     x8, 79464            ; 0x1ecbdf000
+0x1D957717C   ldr      x20, [x8, #0x380]    
+0x1D9577180   adrp     x8, 298              ; 0x1d96a1000
+0x1D9577184   ldr      w0, [x8, #0x324]     
+0x1D9577188   bl       _swift_task_alloc    
+0x1D957718C   mov      x17, x22             
+0x1D9577190   str      x0, [x22, #0x48]     
+0x1D9577194   mov      x16, x0              
+0x1D9577198   movk     x16, #0xbda2, lsl #48 
+0x1D957719C   pacda    x17, x16             
+0x1D95771A0   str      x17, [x0]            
+0x1D95771A4   add      x8, x0, #0x8         
+0x1D95771A8   adrp     x16, 0               ; 0x1d9577000
+0x1D95771AC   add      x16, x16, #0x204     
+0x1D95771B0   mov      x17, x8              
+0x1D95771B4   movk     x17, #0xd707, lsl #48 
+0x1D95771B8   pacia    x16, x17             
+0x1D95771BC   str      x16, [x0, #0x8]      
+0x1D95771C0   mov      x22, x0              
+0x1D95771C4   ldp      x29, x30, [sp, #0x10] 
+0x1D95771C8   and      x29, x29, #0xefffffffffffffff 
+0x1D95771CC   add      sp, sp, #0x20        
+0x1D95771D0   autibsp                       
+0x1D95771D4   eor      x16, x30, x30, lsl #1 
+0x1D95771D8   tbz      x16, #0x3e, 0x1d95771e0 
+0x1D95771DC   brk      #0xc471              
+0x1D95771E0   b        _$s7NotesUI25AudioRecordingCoordinatorC013cancelCurrentcD7SessionyyYaKF 
+0x1D95771E4   adrp     x0, 79464            ; 0x1ecbdf000
+0x1D95771E8   add      x0, x0, #0x378       
+0x1D95771EC   adrp     x16, -1              ; 0x1d9576000
+0x1D95771F0   add      x16, x16, #0x524     
+0x1D95771F4   paciza   x16                  
+0x1D95771F8   mov      x1, x16              
+0x1D95771FC   bl       _swift_once          
+0x1D9577200   b        0x1d9577178          
+0x1D9577204   pacibsp                       
+0x1D9577208   orr      x29, x29, #0x1000000000000000 
+0x1D957720C   sub      sp, sp, #0x30        
+0x1D9577210   stp      x21, x19, [sp, #0x8] 
+0x1D9577214   stp      x29, x30, [sp, #0x20] 
+0x1D9577218   add      x16, sp, #0x18       
+0x1D957721C   movk     x16, #0xc31a, lsl #48 
+0x1D9577220   mov      x17, x22             
+0x1D9577224   pacdb    x17, x16             
+0x1D9577228   str      x17, [sp, #0x18]     
+0x1D957722C   add      x29, sp, #0x20       
+0x1D9577230   mov      x17, x22             
+0x1D9577234   ldr      x21, [x22]           
+0x1D9577238   mov      x16, x21             
+0x1D957723C   movk     x17, #0xbda2, lsl #48 
+0x1D9577240   autda    x16, x17             
+0x1D9577244   mov      x17, x16             
+0x1D9577248   xpacd    x17                  
+0x1D957724C   cmp      x16, x17             
+0x1D9577250   b.eq     0x1d9577258          
+0x1D9577254   brk      #0xc472              
+0x1D9577258   mov      x8, x16              
+0x1D957725C   sub      x9, x29, #0x8        
+0x1D9577260   sub      x16, x29, #0x8       
+0x1D9577264   movk     x16, #0xc31a, lsl #48 
+0x1D9577268   mov      x17, x8              
+0x1D957726C   pacda    x17, x16             
+0x1D9577270   str      x17, [x9]            
+0x1D9577274   mov      x16, x21             
+0x1D9577278   mov      x17, x22             
+0x1D957727C   movk     x17, #0xbda2, lsl #48 
+0x1D9577280   autda    x16, x17             
+0x1D9577284   ldr      x0, [x16, #0x48]     
+0x1D9577288   ldr      x16, [x22]           
+0x1D957728C   mov      x17, x22             
+0x1D9577290   movk     x17, #0xbda2, lsl #48 
+0x1D9577294   autda    x16, x17             
+0x1D9577298   mov      x17, x16             
+0x1D957729C   xpacd    x17                  
+0x1D95772A0   cmp      x16, x17             
+0x1D95772A4   b.eq     0x1d95772ac          
+0x1D95772A8   brk      #0xc472              
+0x1D95772AC   mov      x19, x16             
+0x1D95772B0   str      x20, [x8, #0x50]     
+0x1D95772B4   bl       _swift_task_dealloc  
+0x1D95772B8   mov      x16, x21             
+0x1D95772BC   mov      x17, x22             
+0x1D95772C0   movk     x17, #0xbda2, lsl #48 
+0x1D95772C4   autda    x16, x17             
+0x1D95772C8   ldr      x2, [x16, #0x40]     
+0x1D95772CC   mov      x16, x21             
+0x1D95772D0   mov      x17, x22             
+0x1D95772D4   movk     x17, #0xbda2, lsl #48 
+0x1D95772D8   autda    x16, x17             
+0x1D95772DC   ldr      x1, [x16, #0x38]     
+0x1D95772E0   cbz      x20, 0x1d95772f4     
+0x1D95772E4   adrp     x16, 0               ; 0x1d9577000
+0x1D95772E8   add      x16, x16, #0x3b0     
+0x1D95772EC   paciza   x16                  
+0x1D95772F0   b        0x1d9577300          
+0x1D95772F4   adrp     x16, 0               ; 0x1d9577000
+0x1D95772F8   add      x16, x16, #0x32c     
+0x1D95772FC   paciza   x16                  
+0x1D9577300   mov      x0, x16              
+0x1D9577304   mov      x22, x19             
+0x1D9577308   ldp      x29, x30, [sp, #0x20] 
+0x1D957730C   ldp      x21, x19, [sp, #0x8] 
+0x1D9577310   and      x29, x29, #0xefffffffffffffff 
+0x1D9577314   add      sp, sp, #0x30        
+0x1D9577318   autibsp                       
+0x1D957731C   eor      x16, x30, x30, lsl #1 
+0x1D9577320   tbz      x16, #0x3e, 0x1d9577328 
+0x1D9577324   brk      #0xc471              
+0x1D9577328   b        _swift_task_switch   
+0x1D957732C   pacibsp                       
+0x1D9577330   orr      x29, x29, #0x1000000000000000 
+0x1D9577334   sub      sp, sp, #0x20        
+0x1D9577338   stp      x29, x30, [sp, #0x10] 
+0x1D957733C   add      x16, sp, #0x8        
+0x1D9577340   movk     x16, #0xc31a, lsl #48 
+0x1D9577344   mov      x17, x22             
+0x1D9577348   pacdb    x17, x16             
+0x1D957734C   str      x17, [sp, #0x8]      
+0x1D9577350   add      x29, sp, #0x10       
+0x1D9577354   ldp      x20, x0, [x22, #0x28] 
+0x1D9577358   bl       _swift_release       
+0x1D957735C   cbz      x20, 0x1d9577380     
+0x1D9577360   ldr      x20, [x22, #0x28]    
+0x1D9577364   mov      x8, x20              
+0x1D9577368   ldr      x9, [x8, #0x10]!     
+0x1D957736C   mov      x0, x20              
+0x1D9577370   mov      x1, #0x0             
+0x1D9577374   blraa    x9, x8               
+0x1D9577378   mov      x0, x20              
+0x1D957737C   bl       __Block_release      
+0x1D9577380   mov      x0, x22              
+0x1D9577384   ldr      x1, [x0, #0x8]!      
+0x1D9577388   ldp      x29, x30, [sp, #0x10] 
+0x1D957738C   and      x29, x29, #0xefffffffffffffff 
+0x1D9577390   add      sp, sp, #0x20        
+0x1D9577394   autibsp                       
+0x1D9577398   eor      x16, x30, x30, lsl #1 
+0x1D957739C   tbz      x16, #0x3e, 0x1d95773a4 
+0x1D95773A0   brk      #0xc471              
+0x1D95773A4   mov      x16, x0              
+0x1D95773A8   movk     x16, #0xd707, lsl #48 
+0x1D95773AC   braa     x1, x16              
+0x1D95773B0   pacibsp                       
+0x1D95773B4   orr      x29, x29, #0x1000000000000000 
+0x1D95773B8   sub      sp, sp, #0x30        
+0x1D95773BC   stp      x21, x19, [sp, #0x8] 
+0x1D95773C0   stp      x29, x30, [sp, #0x20] 
+0x1D95773C4   add      x16, sp, #0x18       
+0x1D95773C8   movk     x16, #0xc31a, lsl #48 
+0x1D95773CC   mov      x17, x22             
+0x1D95773D0   pacdb    x17, x16             
+0x1D95773D4   str      x17, [sp, #0x18]     
+0x1D95773D8   add      x29, sp, #0x20       
+0x1D95773DC   ldp      x20, x0, [x22, #0x28] 
+0x1D95773E0   bl       _swift_release       
+0x1D95773E4   ldr      x19, [x22, #0x50]    
+0x1D95773E8   cbz      x20, 0x1d957742c     
+0x1D95773EC   ldr      x20, [x22, #0x28]    
+0x1D95773F0   mov      x0, x19              
+0x1D95773F4   bl       0x1d9687914          
+0x1D95773F8   mov      x21, x0              
+0x1D95773FC   mov      x0, x19              
+0x1D9577400   bl       _swift_errorRelease  
+0x1D9577404   mov      x8, x20              
+0x1D9577408   ldr      x9, [x8, #0x10]!     
+0x1D957740C   mov      x0, x20              
+0x1D9577410   mov      x1, x21              
+0x1D9577414   blraa    x9, x8               
+0x1D9577418   mov      x0, x20              
+0x1D957741C   bl       __Block_release      
+0x1D9577420   mov      x0, x21              
+0x1D9577424   bl       _objc_release        
+0x1D9577428   b        0x1d9577434          
+0x1D957742C   mov      x0, x19              
+0x1D9577430   bl       _swift_errorRelease  
+0x1D9577434   mov      x0, x22              
+0x1D9577438   ldr      x1, [x0, #0x8]!      
+0x1D957743C   ldp      x29, x30, [sp, #0x20] 
+0x1D9577440   ldp      x21, x19, [sp, #0x8] 
+0x1D9577444   and      x29, x29, #0xefffffffffffffff 
+0x1D9577448   add      sp, sp, #0x30        
+0x1D957744C   autibsp                       
+0x1D9577450   eor      x16, x30, x30, lsl #1 
+0x1D9577454   tbz      x16, #0x3e, 0x1d957745c 
+0x1D9577458   brk      #0xc471              
+0x1D957745C   mov      x16, x0              
+0x1D9577460   movk     x16, #0xd707, lsl #48 
+0x1D9577464   braa     x1, x16              
+_$sSo23ICAudioRecordingManagerC7NotesUIEABycfC:
+0x1D9577468   pacibsp                       
+0x1D957746C   stp      x29, x30, [sp, #-0x10]! 
+0x1D9577470   mov      x29, sp              
+0x1D9577474   mov      x0, x20              
+0x1D9577478   bl       _swift_getObjCClassFromMetadata 
+0x1D957747C   bl       _objc_allocWithZone  
+0x1D9577480   ldp      x29, x30, [sp], #0x10 
+0x1D9577484   autibsp                       
+0x1D9577488   eor      x16, x30, x30, lsl #1 
+0x1D957748C   tbz      x16, #0x3e, 0x1d9577494 
+0x1D9577490   brk      #0xc471              
+0x1D9577494   b        _objc_msgSend$init   
+_$sSo23ICAudioRecordingManagerC7NotesUIEABycfc:
+0x1D9577498   pacibsp                       
+0x1D957749C   sub      sp, sp, #0x20        
+0x1D95774A0   stp      x29, x30, [sp, #0x10] 
+0x1D95774A4   add      x29, sp, #0x10       
+0x1D95774A8   adrp     x8, 57442            ; 0x1e75d9000
+0x1D95774AC   ldr      x8, [x8, #0x4b8]     ; _OBJC_CLASS_$_ICAudioRecordingManager@got
+0x1D95774B0   stp      x20, x8, [sp]        
+0x1D95774B4   adrp     x8, 135878           ; 0x1fa83d000
+0x1D95774B8   add      x1, x8, #0x860       
+0x1D95774BC   mov      x0, sp               
+0x1D95774C0   bl       _objc_msgSendSuper2  
+0x1D95774C4   ldp      x29, x30, [sp, #0x10] 
+0x1D95774C8   add      sp, sp, #0x20        
+0x1D95774CC   retab                         
+0x1D95774D0   pacibsp                       
+0x1D95774D4   sub      sp, sp, #0x20        
+0x1D95774D8   stp      x29, x30, [sp, #0x10] 
+0x1D95774DC   add      x29, sp, #0x10       
+0x1D95774E0   adrp     x8, 57442            ; 0x1e75d9000
+0x1D95774E4   ldr      x8, [x8, #0x4b8]     ; _OBJC_CLASS_$_ICAudioRecordingManager@got
+0x1D95774E8   stp      x0, x8, [sp]         
+0x1D95774EC   adrp     x8, 135878           ; 0x1fa83d000
+0x1D95774F0   add      x1, x8, #0x860       
+0x1D95774F4   mov      x0, sp               
+0x1D95774F8   bl       _objc_msgSendSuper2  
+0x1D95774FC   ldp      x29, x30, [sp, #0x10] 
+0x1D9577500   add      sp, sp, #0x20        
+0x1D9577504   retab                         
+0x1D9577508   pacibsp                       
+0x1D957750C   sub      sp, sp, #0x20        
+0x1D9577510   stp      x29, x30, [sp, #0x10] 
+0x1D9577514   add      x29, sp, #0x10       
+0x1D9577518   adrp     x8, 49223            ; 0x1e55be000
+0x1D957751C   ldr      x8, [x8, #0x440]     
+0x1D9577520   ldr      x8, [x8]             
+0x1D9577524   str      x8, [sp, #0x8]       
+0x1D9577528   str      xzr, [sp]            
+0x1D957752C   mov      x0, sp               
+0x1D9577530   bl       _mach_timebase_info  
+0x1D9577534   ldr      d0, [sp]             
+0x1D9577538   adrp     x8, 74797            ; 0x1eb9a4000
+0x1D957753C   add      x8, x8, #0x550       
+0x1D9577540   str      d0, [x8]             
+0x1D9577544   ldr      x8, [sp, #0x8]       
+0x1D9577548   adrp     x9, 49223            ; 0x1e55be000
+0x1D957754C   ldr      x9, [x9, #0x440]     
+0x1D9577550   ldr      x9, [x9]             
+0x1D9577554   cmp      x9, x8               
+0x1D9577558   b.ne     0x1d9577568          
+0x1D957755C   ldp      x29, x30, [sp, #0x10] 
+0x1D9577560   add      sp, sp, #0x20        
+0x1D9577564   retab                         
+0x1D9577568   bl       ___stack_chk_fail    
+0x1D957756C   pacibsp                       
+0x1D9577570   stp      x20, x19, [sp, #-0x20]! 
+0x1D9577574   stp      x29, x30, [sp, #0x10] 
+0x1D9577578   add      x29, sp, #0x10       
+0x1D957757C   mov      x19, x0              
+0x1D9577580   adrp     x0, 74797            ; 0x1eb9a4000
+0x1D9577584   add      x0, x0, #0x520       
+0x1D9577588   adrp     x16, -9              ; 0x1d956e000
+0x1D957758C   add      x16, x16, #0xd28     ; _$s7NotesUI21AudioRecordingManagerCMa
+0x1D9577590   mov      x17, #0xafb8         
+0x1D9577594   pacia    x16, x17             
+0x1D9577598   mov      x1, x16              
+0x1D957759C   adrp     x16, 298             ; 0x1d96a1000
+0x1D95775A0   add      x16, x16, #0x3d0     ; _$s7NotesUI21AudioRecordingManagerCAA17WaveformProvidingAAMc
+0x1D95775A4   mov      x17, #0xc6eb         
+0x1D95775A8   pacda    x16, x17             
+0x1D95775AC   mov      x2, x16              
+0x1D95775B0   bl       0x1d95775c4          
+0x1D95775B4   str      x0, [x19, #0x8]      
+0x1D95775B8   ldp      x29, x30, [sp, #0x10] 
+0x1D95775BC   ldp      x20, x19, [sp], #0x20 
+0x1D95775C0   retab                         
+0x1D95775C4   pacibsp                       
+0x1D95775C8   stp      x20, x19, [sp, #-0x20]! 
+0x1D95775CC   stp      x29, x30, [sp, #0x10] 
+0x1D95775D0   add      x29, sp, #0x10       
+0x1D95775D4   mov      x19, x0              
+0x1D95775D8   ldr      x0, [x0]             
+0x1D95775DC   cbnz     x0, 0x1d9577600      
+0x1D95775E0   mov      x20, x2              
+0x1D95775E4   mov      w0, #0xff            
+0x1D95775E8   mov      x17, #0xafb8         
+0x1D95775EC   blraa    x1, x17              
+0x1D95775F0   mov      x1, x0               
+0x1D95775F4   mov      x0, x20              
+0x1D95775F8   bl       _swift_getWitnessTable 
+0x1D95775FC   stlr     x0, [x19]            
+0x1D9577600   ldp      x29, x30, [sp, #0x10] 
+0x1D9577604   ldp      x20, x19, [sp], #0x20 
+0x1D9577608   retab                         
+0x1D957760C   pacibsp                       
+0x1D9577610   stp      x20, x19, [sp, #-0x20]! 
+0x1D9577614   stp      x29, x30, [sp, #0x10] 
+0x1D9577618   add      x29, sp, #0x10       
+0x1D957761C   mov      x19, x0              
+0x1D9577620   adrp     x0, 74797            ; 0x1eb9a4000
+0x1D9577624   add      x0, x0, #0x528       
+0x1D9577628   adrp     x16, -9              ; 0x1d956e000
+0x1D957762C   add      x16, x16, #0xd28     ; _$s7NotesUI21AudioRecordingManagerCMa
+0x1D9577630   mov      x17, #0xafb8         
+0x1D9577634   pacia    x16, x17             
+0x1D9577638   mov      x1, x16              
+0x1D957763C   adrp     x16, 298             ; 0x1d96a1000
+0x1D9577640   add      x16, x16, #0x3b4     ; _$s7NotesUI21AudioRecordingManagerC11Observation10ObservableAAMc
+0x1D9577644   mov      x17, #0xc6eb         
+0x1D9577648   pacda    x16, x17             
+0x1D957764C   mov      x2, x16              
+0x1D9577650   bl       0x1d95775c4          
+0x1D9577654   str      x0, [x19, #0x8]      
+0x1D9577658   ldp      x29, x30, [sp, #0x10] 
+0x1D957765C   ldp      x20, x19, [sp], #0x20 
+0x1D9577660   retab                         
+_$s7NotesUI21AudioRecordingManagerCMu:
+0x1D9577CCC   adrp     x16, 367             ; 0x1d96e6000
+0x1D9577CD0   add      x16, x16, #0x8e0     ; _$s7NotesUI21AudioRecordingManagerCMn
+0x1D9577CD4   mov      x17, #0xae86         
+0x1D9577CD8   pacda    x16, x17             
+0x1D9577CDC   mov      x2, x16              
+0x1D9577CE0   b        _swift_lookUpClassMethod 
+_$s7NotesUI21AudioRecordingManagerC14recordingState0A6Shared0dG0OvgTj:
+0x1D9577CE4   ldr      x9, [x20]            
+0x1D9577CE8   adrp     x10, 49222           ; 0x1e55bd000
+0x1D9577CEC   ldr      x10, [x10, #0x478]   
+0x1D9577CF0   ldr      x10, [x10]           
+0x1D9577CF4   and      x16, x10, x9         
+0x1D9577CF8   mov      x17, x20             
+0x1D9577CFC   movk     x17, #0x6ae1, lsl #48 
+0x1D9577D00   autda    x16, x17             
+0x1D9577D04   ldr      x0, [x16, #0xb8]!    
+0x1D9577D08   movk     x16, #0x75f2, lsl #48 
+0x1D9577D0C   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC14recordingState0A6Shared0dG0OvsTj:
+0x1D9577D10   ldr      x8, [x20]            
+0x1D9577D14   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577D18   ldr      x9, [x9, #0x478]     
+0x1D9577D1C   ldr      x9, [x9]             
+0x1D9577D20   and      x16, x9, x8          
+0x1D9577D24   mov      x17, x20             
+0x1D9577D28   movk     x17, #0x6ae1, lsl #48 
+0x1D9577D2C   autda    x16, x17             
+0x1D9577D30   ldr      x1, [x16, #0xc0]!    
+0x1D9577D34   movk     x16, #0xabb7, lsl #48 
+0x1D9577D38   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC14recordingState0A6Shared0dG0OvMTj:
+0x1D9577D3C   ldr      x8, [x20]            
+0x1D9577D40   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577D44   ldr      x9, [x9, #0x478]     
+0x1D9577D48   ldr      x9, [x9]             
+0x1D9577D4C   and      x16, x9, x8          
+0x1D9577D50   mov      x17, x20             
+0x1D9577D54   movk     x17, #0x6ae1, lsl #48 
+0x1D9577D58   autda    x16, x17             
+0x1D9577D5C   ldr      x1, [x16, #0xc8]!    
+0x1D9577D60   movk     x16, #0xe938, lsl #48 
+0x1D9577D64   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC15$recordingState7Combine9PublishedV9PublisherVy0A6Shared0dG0O_GvgTj:
+0x1D9577D68   ldr      x9, [x20]            
+0x1D9577D6C   adrp     x10, 49222           ; 0x1e55bd000
+0x1D9577D70   ldr      x10, [x10, #0x478]   
+0x1D9577D74   ldr      x10, [x10]           
+0x1D9577D78   and      x16, x10, x9         
+0x1D9577D7C   mov      x17, x20             
+0x1D9577D80   movk     x17, #0x6ae1, lsl #48 
+0x1D9577D84   autda    x16, x17             
+0x1D9577D88   ldr      x0, [x16, #0xd0]!    
+0x1D9577D8C   movk     x16, #0x6af6, lsl #48 
+0x1D9577D90   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC15$recordingState7Combine9PublishedV9PublisherVy0A6Shared0dG0O_GvsTj:
+0x1D9577D94   ldr      x8, [x20]            
+0x1D9577D98   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577D9C   ldr      x9, [x9, #0x478]     
+0x1D9577DA0   ldr      x9, [x9]             
+0x1D9577DA4   and      x16, x9, x8          
+0x1D9577DA8   mov      x17, x20             
+0x1D9577DAC   movk     x17, #0x6ae1, lsl #48 
+0x1D9577DB0   autda    x16, x17             
+0x1D9577DB4   ldr      x1, [x16, #0xd8]!    
+0x1D9577DB8   movk     x16, #0x3822, lsl #48 
+0x1D9577DBC   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC15$recordingState7Combine9PublishedV9PublisherVy0A6Shared0dG0O_GvMTj:
+0x1D9577DC0   ldr      x8, [x20]            
+0x1D9577DC4   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577DC8   ldr      x9, [x9, #0x478]     
+0x1D9577DCC   ldr      x9, [x9]             
+0x1D9577DD0   and      x16, x9, x8          
+0x1D9577DD4   mov      x17, x20             
+0x1D9577DD8   movk     x17, #0x6ae1, lsl #48 
+0x1D9577DDC   autda    x16, x17             
+0x1D9577DE0   ldr      x1, [x16, #0xe0]!    
+0x1D9577DE4   movk     x16, #0xb52d, lsl #48 
+0x1D9577DE8   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC07currentD8DurationSdvgTj:
+0x1D9577DEC   adrp     x8, 49222            ; 0x1e55bd000
+0x1D9577DF0   ldr      x8, [x8, #0x478]     
+0x1D9577DF4   ldr      x9, [x20]            
+0x1D9577DF8   ldr      x8, [x8]             
+0x1D9577DFC   and      x16, x8, x9          
+0x1D9577E00   mov      x17, x20             
+0x1D9577E04   movk     x17, #0x6ae1, lsl #48 
+0x1D9577E08   autda    x16, x17             
+0x1D9577E0C   ldr      x0, [x16, #0xe8]!    
+0x1D9577E10   movk     x16, #0xe35d, lsl #48 
+0x1D9577E14   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC07currentD8DurationSdvsTj:
+0x1D9577E18   ldr      x8, [x20]            
+0x1D9577E1C   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577E20   ldr      x9, [x9, #0x478]     
+0x1D9577E24   ldr      x9, [x9]             
+0x1D9577E28   and      x16, x9, x8          
+0x1D9577E2C   mov      x17, x20             
+0x1D9577E30   movk     x17, #0x6ae1, lsl #48 
+0x1D9577E34   autda    x16, x17             
+0x1D9577E38   ldr      x0, [x16, #0xf0]!    
+0x1D9577E3C   movk     x16, #0x11c3, lsl #48 
+0x1D9577E40   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC07currentD8DurationSdvMTj:
+0x1D9577E44   ldr      x8, [x20]            
+0x1D9577E48   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577E4C   ldr      x9, [x9, #0x478]     
+0x1D9577E50   ldr      x9, [x9]             
+0x1D9577E54   and      x16, x9, x8          
+0x1D9577E58   mov      x17, x20             
+0x1D9577E5C   movk     x17, #0x6ae1, lsl #48 
+0x1D9577E60   autda    x16, x17             
+0x1D9577E64   ldr      x1, [x16, #0xf8]!    
+0x1D9577E68   movk     x16, #0xc258, lsl #48 
+0x1D9577E6C   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC08$currentD8Duration7Combine9PublishedV9PublisherVySd_GvgTj:
+0x1D9577E70   ldr      x9, [x20]            
+0x1D9577E74   adrp     x10, 49222           ; 0x1e55bd000
+0x1D9577E78   ldr      x10, [x10, #0x478]   
+0x1D9577E7C   ldr      x10, [x10]           
+0x1D9577E80   and      x16, x10, x9         
+0x1D9577E84   mov      x17, x20             
+0x1D9577E88   movk     x17, #0x6ae1, lsl #48 
+0x1D9577E8C   autda    x16, x17             
+0x1D9577E90   mov      x17, #0x100          
+0x1D9577E94   add      x16, x16, x17        
+0x1D9577E98   ldr      x0, [x16]            
+0x1D9577E9C   movk     x16, #0x5291, lsl #48 
+0x1D9577EA0   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC08$currentD8Duration7Combine9PublishedV9PublisherVySd_GvsTj:
+0x1D9577EA4   ldr      x8, [x20]            
+0x1D9577EA8   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577EAC   ldr      x9, [x9, #0x478]     
+0x1D9577EB0   ldr      x9, [x9]             
+0x1D9577EB4   and      x16, x9, x8          
+0x1D9577EB8   mov      x17, x20             
+0x1D9577EBC   movk     x17, #0x6ae1, lsl #48 
+0x1D9577EC0   autda    x16, x17             
+0x1D9577EC4   mov      x17, #0x108          
+0x1D9577EC8   add      x16, x16, x17        
+0x1D9577ECC   ldr      x1, [x16]            
+0x1D9577ED0   movk     x16, #0x5a3b, lsl #48 
+0x1D9577ED4   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC08$currentD8Duration7Combine9PublishedV9PublisherVySd_GvMTj:
+0x1D9577ED8   ldr      x8, [x20]            
+0x1D9577EDC   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577EE0   ldr      x9, [x9, #0x478]     
+0x1D9577EE4   ldr      x9, [x9]             
+0x1D9577EE8   and      x16, x9, x8          
+0x1D9577EEC   mov      x17, x20             
+0x1D9577EF0   movk     x17, #0x6ae1, lsl #48 
+0x1D9577EF4   autda    x16, x17             
+0x1D9577EF8   mov      x17, #0x110          
+0x1D9577EFC   add      x16, x16, x17        
+0x1D9577F00   ldr      x1, [x16]            
+0x1D9577F04   movk     x16, #0x908e, lsl #48 
+0x1D9577F08   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC05totalD8DurationSdvgTj:
+0x1D9577F0C   adrp     x8, 49222            ; 0x1e55bd000
+0x1D9577F10   ldr      x8, [x8, #0x478]     
+0x1D9577F14   ldr      x9, [x20]            
+0x1D9577F18   ldr      x8, [x8]             
+0x1D9577F1C   and      x16, x8, x9          
+0x1D9577F20   mov      x17, x20             
+0x1D9577F24   movk     x17, #0x6ae1, lsl #48 
+0x1D9577F28   autda    x16, x17             
+0x1D9577F2C   mov      x17, #0x118          
+0x1D9577F30   add      x16, x16, x17        
+0x1D9577F34   ldr      x0, [x16]            
+0x1D9577F38   movk     x16, #0x2eb8, lsl #48 
+0x1D9577F3C   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC05totalD8DurationSdvsTj:
+0x1D9577F40   ldr      x8, [x20]            
+0x1D9577F44   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577F48   ldr      x9, [x9, #0x478]     
+0x1D9577F4C   ldr      x9, [x9]             
+0x1D9577F50   and      x16, x9, x8          
+0x1D9577F54   mov      x17, x20             
+0x1D9577F58   movk     x17, #0x6ae1, lsl #48 
+0x1D9577F5C   autda    x16, x17             
+0x1D9577F60   mov      x17, #0x120          
+0x1D9577F64   add      x16, x16, x17        
+0x1D9577F68   ldr      x0, [x16]            
+0x1D9577F6C   movk     x16, #0x843a, lsl #48 
+0x1D9577F70   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC05totalD8DurationSdvMTj:
+0x1D9577F74   ldr      x8, [x20]            
+0x1D9577F78   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577F7C   ldr      x9, [x9, #0x478]     
+0x1D9577F80   ldr      x9, [x9]             
+0x1D9577F84   and      x16, x9, x8          
+0x1D9577F88   mov      x17, x20             
+0x1D9577F8C   movk     x17, #0x6ae1, lsl #48 
+0x1D9577F90   autda    x16, x17             
+0x1D9577F94   mov      x17, #0x128          
+0x1D9577F98   add      x16, x16, x17        
+0x1D9577F9C   ldr      x1, [x16]            
+0x1D9577FA0   movk     x16, #0x463f, lsl #48 
+0x1D9577FA4   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC06$totalD8Duration7Combine9PublishedV9PublisherVySd_GvgTj:
+0x1D9577FA8   ldr      x9, [x20]            
+0x1D9577FAC   adrp     x10, 49222           ; 0x1e55bd000
+0x1D9577FB0   ldr      x10, [x10, #0x478]   
+0x1D9577FB4   ldr      x10, [x10]           
+0x1D9577FB8   and      x16, x10, x9         
+0x1D9577FBC   mov      x17, x20             
+0x1D9577FC0   movk     x17, #0x6ae1, lsl #48 
+0x1D9577FC4   autda    x16, x17             
+0x1D9577FC8   mov      x17, #0x130          
+0x1D9577FCC   add      x16, x16, x17        
+0x1D9577FD0   ldr      x0, [x16]            
+0x1D9577FD4   movk     x16, #0x3a4, lsl #48 
+0x1D9577FD8   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC06$totalD8Duration7Combine9PublishedV9PublisherVySd_GvsTj:
+0x1D9577FDC   ldr      x8, [x20]            
+0x1D9577FE0   adrp     x9, 49222            ; 0x1e55bd000
+0x1D9577FE4   ldr      x9, [x9, #0x478]     
+0x1D9577FE8   ldr      x9, [x9]             
+0x1D9577FEC   and      x16, x9, x8          
+0x1D9577FF0   mov      x17, x20             
+0x1D9577FF4   movk     x17, #0x6ae1, lsl #48 
+0x1D9577FF8   autda    x16, x17             
+0x1D9577FFC   mov      x17, #0x138          
+0x1D9578000   add      x16, x16, x17        
+0x1D9578004   ldr      x1, [x16]            
+0x1D9578008   movk     x16, #0xdfe7, lsl #48 
+0x1D957800C   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC06$totalD8Duration7Combine9PublishedV9PublisherVySd_GvMTj:
+0x1D9578010   ldr      x8, [x20]            
+0x1D9578014   adrp     x9, 49221            ; 0x1e55bd000
+0x1D9578018   ldr      x9, [x9, #0x478]     
+0x1D957801C   ldr      x9, [x9]             
+0x1D9578020   and      x16, x9, x8          
+0x1D9578024   mov      x17, x20             
+0x1D9578028   movk     x17, #0x6ae1, lsl #48 
+0x1D957802C   autda    x16, x17             
+0x1D9578030   mov      x17, #0x140          
+0x1D9578034   add      x16, x16, x17        
+0x1D9578038   ldr      x1, [x16]            
+0x1D957803C   movk     x16, #0x528, lsl #48 
+0x1D9578040   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC7samplesSaySfGvgTj:
+0x1D9578044   adrp     x8, 49221            ; 0x1e55bd000
+0x1D9578048   ldr      x8, [x8, #0x478]     
+0x1D957804C   ldr      x9, [x20]            
+0x1D9578050   ldr      x8, [x8]             
+0x1D9578054   and      x16, x8, x9          
+0x1D9578058   mov      x17, x20             
+0x1D957805C   movk     x17, #0x6ae1, lsl #48 
+0x1D9578060   autda    x16, x17             
+0x1D9578064   mov      x17, #0x148          
+0x1D9578068   add      x16, x16, x17        
+0x1D957806C   ldr      x0, [x16]            
+0x1D9578070   movk     x16, #0x8ed5, lsl #48 
+0x1D9578074   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC7samplesSaySfGvsTj:
+0x1D9578078   ldr      x8, [x20]            
+0x1D957807C   adrp     x9, 49221            ; 0x1e55bd000
+0x1D9578080   ldr      x9, [x9, #0x478]     
+0x1D9578084   ldr      x9, [x9]             
+0x1D9578088   and      x16, x9, x8          
+0x1D957808C   mov      x17, x20             
+0x1D9578090   movk     x17, #0x6ae1, lsl #48 
+0x1D9578094   autda    x16, x17             
+0x1D9578098   mov      x17, #0x150          
+0x1D957809C   add      x16, x16, x17        
+0x1D95780A0   ldr      x1, [x16]            
+0x1D95780A4   movk     x16, #0xf299, lsl #48 
+0x1D95780A8   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC7samplesSaySfGvMTj:
+0x1D95780AC   ldr      x8, [x20]            
+0x1D95780B0   adrp     x9, 49221            ; 0x1e55bd000
+0x1D95780B4   ldr      x9, [x9, #0x478]     
+0x1D95780B8   ldr      x9, [x9]             
+0x1D95780BC   and      x16, x9, x8          
+0x1D95780C0   mov      x17, x20             
+0x1D95780C4   movk     x17, #0x6ae1, lsl #48 
+0x1D95780C8   autda    x16, x17             
+0x1D95780CC   mov      x17, #0x158          
+0x1D95780D0   add      x16, x16, x17        
+0x1D95780D4   ldr      x1, [x16]            
+0x1D95780D8   movk     x16, #0xc60, lsl #48 
+0x1D95780DC   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC8$samples7Combine9PublishedV9PublisherVySaySfG_GvgTj:
+0x1D95780E0   ldr      x9, [x20]            
+0x1D95780E4   adrp     x10, 49221           ; 0x1e55bd000
+0x1D95780E8   ldr      x10, [x10, #0x478]   
+0x1D95780EC   ldr      x10, [x10]           
+0x1D95780F0   and      x16, x10, x9         
+0x1D95780F4   mov      x17, x20             
+0x1D95780F8   movk     x17, #0x6ae1, lsl #48 
+0x1D95780FC   autda    x16, x17             
+0x1D9578100   mov      x17, #0x160          
+0x1D9578104   add      x16, x16, x17        
+0x1D9578108   ldr      x0, [x16]            
+0x1D957810C   movk     x16, #0x6169, lsl #48 
+0x1D9578110   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC8$samples7Combine9PublishedV9PublisherVySaySfG_GvsTj:
+0x1D9578114   ldr      x8, [x20]            
+0x1D9578118   adrp     x9, 49221            ; 0x1e55bd000
+0x1D957811C   ldr      x9, [x9, #0x478]     
+0x1D9578120   ldr      x9, [x9]             
+0x1D9578124   and      x16, x9, x8          
+0x1D9578128   mov      x17, x20             
+0x1D957812C   movk     x17, #0x6ae1, lsl #48 
+0x1D9578130   autda    x16, x17             
+0x1D9578134   mov      x17, #0x168          
+0x1D9578138   add      x16, x16, x17        
+0x1D957813C   ldr      x1, [x16]            
+0x1D9578140   movk     x16, #0xd147, lsl #48 
+0x1D9578144   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC8$samples7Combine9PublishedV9PublisherVySaySfG_GvMTj:
+0x1D9578148   ldr      x8, [x20]            
+0x1D957814C   adrp     x9, 49221            ; 0x1e55bd000
+0x1D9578150   ldr      x9, [x9, #0x478]     
+0x1D9578154   ldr      x9, [x9]             
+0x1D9578158   and      x16, x9, x8          
+0x1D957815C   mov      x17, x20             
+0x1D9578160   movk     x17, #0x6ae1, lsl #48 
+0x1D9578164   autda    x16, x17             
+0x1D9578168   mov      x17, #0x170          
+0x1D957816C   add      x16, x16, x17        
+0x1D9578170   ldr      x1, [x16]            
+0x1D9578174   movk     x16, #0xf717, lsl #48 
+0x1D9578178   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC18recordingStartTimeSo07AVAudioH0CSgvgTj:
+0x1D957817C   adrp     x8, 49221            ; 0x1e55bd000
+0x1D9578180   ldr      x8, [x8, #0x478]     
+0x1D9578184   ldr      x9, [x20]            
+0x1D9578188   ldr      x8, [x8]             
+0x1D957818C   and      x16, x8, x9          
+0x1D9578190   mov      x17, x20             
+0x1D9578194   movk     x17, #0x6ae1, lsl #48 
+0x1D9578198   autda    x16, x17             
+0x1D957819C   mov      x17, #0x178          
+0x1D95781A0   add      x16, x16, x17        
+0x1D95781A4   ldr      x0, [x16]            
+0x1D95781A8   movk     x16, #0xfd73, lsl #48 
+0x1D95781AC   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC18recordingStartTimeSo07AVAudioH0CSgvsTj:
+0x1D95781B0   ldr      x8, [x20]            
+0x1D95781B4   adrp     x9, 49221            ; 0x1e55bd000
+0x1D95781B8   ldr      x9, [x9, #0x478]     
+0x1D95781BC   ldr      x9, [x9]             
+0x1D95781C0   and      x16, x9, x8          
+0x1D95781C4   mov      x17, x20             
+0x1D95781C8   movk     x17, #0x6ae1, lsl #48 
+0x1D95781CC   autda    x16, x17             
+0x1D95781D0   mov      x17, #0x180          
+0x1D95781D4   add      x16, x16, x17        
+0x1D95781D8   ldr      x1, [x16]            
+0x1D95781DC   movk     x16, #0x8e8a, lsl #48 
+0x1D95781E0   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC18recordingStartTimeSo07AVAudioH0CSgvMTj:
+0x1D95781E4   ldr      x8, [x20]            
+0x1D95781E8   adrp     x9, 49221            ; 0x1e55bd000
+0x1D95781EC   ldr      x9, [x9, #0x478]     
+0x1D95781F0   ldr      x9, [x9]             
+0x1D95781F4   and      x16, x9, x8          
+0x1D95781F8   mov      x17, x20             
+0x1D95781FC   movk     x17, #0x6ae1, lsl #48 
+0x1D9578200   autda    x16, x17             
+0x1D9578204   mov      x17, #0x188          
+0x1D9578208   add      x16, x16, x17        
+0x1D957820C   ldr      x1, [x16]            
+0x1D9578210   movk     x16, #0xbd6c, lsl #48 
+0x1D9578214   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC19$recordingStartTime7Combine9PublishedV9PublisherVySo07AVAudioH0CSg_GvgTj:
+0x1D9578218   ldr      x9, [x20]            
+0x1D957821C   adrp     x10, 49221           ; 0x1e55bd000
+0x1D9578220   ldr      x10, [x10, #0x478]   
+0x1D9578224   ldr      x10, [x10]           
+0x1D9578228   and      x16, x10, x9         
+0x1D957822C   mov      x17, x20             
+0x1D9578230   movk     x17, #0x6ae1, lsl #48 
+0x1D9578234   autda    x16, x17             
+0x1D9578238   mov      x17, #0x190          
+0x1D957823C   add      x16, x16, x17        
+0x1D9578240   ldr      x0, [x16]            
+0x1D9578244   movk     x16, #0xe93, lsl #48 
+0x1D9578248   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC19$recordingStartTime7Combine9PublishedV9PublisherVySo07AVAudioH0CSg_GvsTj:
+0x1D957824C   ldr      x8, [x20]            
+0x1D9578250   adrp     x9, 49221            ; 0x1e55bd000
+0x1D9578254   ldr      x9, [x9, #0x478]     
+0x1D9578258   ldr      x9, [x9]             
+0x1D957825C   and      x16, x9, x8          
+0x1D9578260   mov      x17, x20             
+0x1D9578264   movk     x17, #0x6ae1, lsl #48 
+0x1D9578268   autda    x16, x17             
+0x1D957826C   mov      x17, #0x198          
+0x1D9578270   add      x16, x16, x17        
+0x1D9578274   ldr      x1, [x16]            
+0x1D9578278   movk     x16, #0x39ee, lsl #48 
+0x1D957827C   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC19$recordingStartTime7Combine9PublishedV9PublisherVySo07AVAudioH0CSg_GvMTj:
+0x1D9578280   ldr      x8, [x20]            
+0x1D9578284   adrp     x9, 49221            ; 0x1e55bd000
+0x1D9578288   ldr      x9, [x9, #0x478]     
+0x1D957828C   ldr      x9, [x9]             
+0x1D9578290   and      x16, x9, x8          
+0x1D9578294   mov      x17, x20             
+0x1D9578298   movk     x17, #0x6ae1, lsl #48 
+0x1D957829C   autda    x16, x17             
+0x1D95782A0   mov      x17, #0x1a0          
+0x1D95782A4   add      x16, x16, x17        
+0x1D95782A8   ldr      x1, [x16]            
+0x1D95782AC   movk     x16, #0x3453, lsl #48 
+0x1D95782B0   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC019elapsedSecondsSinceD5StartSdyFTj:
+0x1D95782B4   adrp     x8, 49221            ; 0x1e55bd000
+0x1D95782B8   ldr      x8, [x8, #0x478]     
+0x1D95782BC   ldr      x9, [x20]            
+0x1D95782C0   ldr      x8, [x8]             
+0x1D95782C4   and      x16, x8, x9          
+0x1D95782C8   mov      x17, x20             
+0x1D95782CC   movk     x17, #0x6ae1, lsl #48 
+0x1D95782D0   autda    x16, x17             
+0x1D95782D4   mov      x17, #0x1a8          
+0x1D95782D8   add      x16, x16, x17        
+0x1D95782DC   ldr      x0, [x16]            
+0x1D95782E0   movk     x16, #0x8e77, lsl #48 
+0x1D95782E4   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC28liveTranscriptionCoordinator15attachmentModelAC0A6Shared04LivegH0C_So012ICAttachmentcJ0CtcfCTj:
+0x1D95782E8   add      x2, x20, #0x210      
+0x1D95782EC   ldr      x3, [x20, #0x210]    
+0x1D95782F0   mov      x16, x2              
+0x1D95782F4   movk     x16, #0x3f37, lsl #48 
+0x1D95782F8   braa     x3, x16              
+_$s7NotesUI21AudioRecordingManagerC05startD0yyYaKFTj:
+0x1D95782FC   pacibsp                       
+0x1D9578300   orr      x29, x29, #0x1000000000000000 
+0x1D9578304   sub      sp, sp, #0x30        
+0x1D9578308   stp      x29, x30, [sp, #0x20] 
+0x1D957830C   add      x16, sp, #0x18       
+0x1D9578310   movk     x16, #0xc31a, lsl #48 
+0x1D9578314   mov      x17, x22             
+0x1D9578318   pacdb    x17, x16             
+0x1D957831C   str      x17, [sp, #0x18]     
+0x1D9578320   add      x29, sp, #0x20       
+0x1D9578324   ldr      x8, [x20]            
+0x1D9578328   adrp     x9, 49221            ; 0x1e55bd000
+0x1D957832C   ldr      x9, [x9, #0x478]     
+0x1D9578330   ldr      x9, [x9]             
+0x1D9578334   and      x16, x9, x8          
+0x1D9578338   mov      x17, x20             
+0x1D957833C   movk     x17, #0x6ae1, lsl #48 
+0x1D9578340   autda    x16, x17             
+0x1D9578344   mov      x17, #0x218          
+0x1D9578348   add      x16, x16, x17        
+0x1D957834C   ldr      x8, [x16]            
+0x1D9578350   mov      x0, x16              
+0x1D9578354   str      x16, [sp, #0x8]      
+0x1D9578358   mov      x16, x8              
+0x1D957835C   mov      x17, x0              
+0x1D9578360   movk     x17, #0x56da, lsl #48 
+0x1D9578364   autda    x16, x17             
+0x1D9578368   mov      x17, x16             
+0x1D957836C   xpacd    x17                  
+0x1D9578370   cmp      x16, x17             
+0x1D9578374   b.eq     0x1d957837c          
+0x1D9578378   brk      #0xc472              
+0x1D957837C   ldrsw    x17, [x16, #0x0]!    
+0x1D9578380   add      x16, x16, x17        
+0x1D9578384   mov      x17, x0              
+0x1D9578388   movk     x17, #0x56da, lsl #48 
+0x1D957838C   pacia    x16, x17             
+0x1D9578390   str      x16, [sp, #0x10]     
+0x1D9578394   mov      x16, x8              
+0x1D9578398   mov      x17, x0              
+0x1D957839C   movk     x17, #0x56da, lsl #48 
+0x1D95783A0   autda    x16, x17             
+0x1D95783A4   mov      x17, x16             
+0x1D95783A8   xpacd    x17                  
+0x1D95783AC   cmp      x16, x17             
+0x1D95783B0   b.eq     0x1d95783b8          
+0x1D95783B4   brk      #0xc472              
+0x1D95783B8   ldr      w0, [x16, #0x4]      
+0x1D95783BC   bl       _swift_task_alloc    
+0x1D95783C0   mov      x17, x22             
+0x1D95783C4   str      x0, [x22, #0x10]     
+0x1D95783C8   mov      x16, x0              
+0x1D95783CC   movk     x16, #0xbda2, lsl #48 
+0x1D95783D0   pacda    x17, x16             
+0x1D95783D4   str      x17, [x0]            
+0x1D95783D8   add      x8, x0, #0x8         
+0x1D95783DC   adrp     x16, -17             ; 0x1d9567000
+0x1D95783E0   add      x16, x16, #0x3f8     
+0x1D95783E4   mov      x17, x8              
+0x1D95783E8   movk     x17, #0xd707, lsl #48 
+0x1D95783EC   pacia    x16, x17             
+0x1D95783F0   str      x16, [x0, #0x8]      
+0x1D95783F4   mov      x22, x0              
+0x1D95783F8   ldp      x1, x0, [sp, #0x8]   
+0x1D95783FC   ldp      x29, x30, [sp, #0x20] 
+0x1D9578400   and      x29, x29, #0xefffffffffffffff 
+0x1D9578404   add      sp, sp, #0x30        
+0x1D9578408   autibsp                       
+0x1D957840C   eor      x16, x30, x30, lsl #1 
+0x1D9578410   tbz      x16, #0x3e, 0x1d9578418 
+0x1D9578414   brk      #0xc471              
+0x1D9578418   mov      x16, x1              
+0x1D957841C   movk     x16, #0x56da, lsl #48 
+0x1D9578420   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC14stopEverything5pauseySb_tYaKFTj:
+0x1D9578424   pacibsp                       
+0x1D9578428   orr      x29, x29, #0x1000000000000000 
+0x1D957842C   sub      sp, sp, #0x30        
+0x1D9578430   str      x19, [sp, #0x10]     
+0x1D9578434   stp      x29, x30, [sp, #0x20] 
+0x1D9578438   add      x16, sp, #0x18       
+0x1D957843C   movk     x16, #0xc31a, lsl #48 
+0x1D9578440   mov      x17, x22             
+0x1D9578444   pacdb    x17, x16             
+0x1D9578448   str      x17, [sp, #0x18]     
+0x1D957844C   add      x29, sp, #0x20       
+0x1D9578450   mov      x19, x0              
+0x1D9578454   ldr      x8, [x20]            
+0x1D9578458   adrp     x9, 49221            ; 0x1e55bd000
+0x1D957845C   ldr      x9, [x9, #0x478]     
+0x1D9578460   ldr      x9, [x9]             
+0x1D9578464   and      x16, x9, x8          
+0x1D9578468   mov      x17, x20             
+0x1D957846C   movk     x17, #0x6ae1, lsl #48 
+0x1D9578470   autda    x16, x17             
+0x1D9578474   mov      x17, #0x228          
+0x1D9578478   add      x16, x16, x17        
+0x1D957847C   ldr      x8, [x16]            
+0x1D9578480   mov      x0, x16              
+0x1D9578484   str      x16, [sp]            
+0x1D9578488   mov      x16, x8              
+0x1D957848C   mov      x17, x0              
+0x1D9578490   movk     x17, #0xb42, lsl #48 
+0x1D9578494   autda    x16, x17             
+0x1D9578498   mov      x17, x16             
+0x1D957849C   xpacd    x17                  
+0x1D95784A0   cmp      x16, x17             
+0x1D95784A4   b.eq     0x1d95784ac          
+0x1D95784A8   brk      #0xc472              
+0x1D95784AC   ldrsw    x17, [x16, #0x0]!    
+0x1D95784B0   add      x16, x16, x17        
+0x1D95784B4   mov      x17, x0              
+0x1D95784B8   movk     x17, #0xb42, lsl #48 
+0x1D95784BC   pacia    x16, x17             
+0x1D95784C0   str      x16, [sp, #0x8]      
+0x1D95784C4   mov      x16, x8              
+0x1D95784C8   mov      x17, x0              
+0x1D95784CC   movk     x17, #0xb42, lsl #48 
+0x1D95784D0   autda    x16, x17             
+0x1D95784D4   mov      x17, x16             
+0x1D95784D8   xpacd    x17                  
+0x1D95784DC   cmp      x16, x17             
+0x1D95784E0   b.eq     0x1d95784e8          
+0x1D95784E4   brk      #0xc472              
+0x1D95784E8   ldr      w0, [x16, #0x4]      
+0x1D95784EC   bl       _swift_task_alloc    
+0x1D95784F0   mov      x17, x22             
+0x1D95784F4   str      x0, [x22, #0x10]     
+0x1D95784F8   mov      x16, x0              
+0x1D95784FC   movk     x16, #0xbda2, lsl #48 
+0x1D9578500   pacda    x17, x16             
+0x1D9578504   str      x17, [x0]            
+0x1D9578508   add      x8, x0, #0x8         
+0x1D957850C   adrp     x16, -17             ; 0x1d9567000
+0x1D9578510   add      x16, x16, #0x3f8     
+0x1D9578514   mov      x17, x8              
+0x1D9578518   movk     x17, #0xd707, lsl #48 
+0x1D957851C   pacia    x16, x17             
+0x1D9578520   str      x16, [x0, #0x8]      
+0x1D9578524   mov      x22, x0              
+0x1D9578528   mov      x0, x19              
+0x1D957852C   ldp      x2, x1, [sp]         
+0x1D9578530   ldp      x29, x30, [sp, #0x20] 
+0x1D9578534   ldr      x19, [sp, #0x10]     
+0x1D9578538   and      x29, x29, #0xefffffffffffffff 
+0x1D957853C   add      sp, sp, #0x30        
+0x1D9578540   autibsp                       
+0x1D9578544   eor      x16, x30, x30, lsl #1 
+0x1D9578548   tbz      x16, #0x3e, 0x1d9578550 
+0x1D957854C   brk      #0xc471              
+0x1D9578550   mov      x16, x2              
+0x1D9578554   movk     x16, #0xb42, lsl #48 
+0x1D9578558   braa     x1, x16              
+_$s7NotesUI21AudioRecordingManagerC05pauseD0yyYaKFTj:
+0x1D957855C   pacibsp                       
+0x1D9578560   orr      x29, x29, #0x1000000000000000 
+0x1D9578564   sub      sp, sp, #0x30        
+0x1D9578568   stp      x29, x30, [sp, #0x20] 
+0x1D957856C   add      x16, sp, #0x18       
+0x1D9578570   movk     x16, #0xc31a, lsl #48 
+0x1D9578574   mov      x17, x22             
+0x1D9578578   pacdb    x17, x16             
+0x1D957857C   str      x17, [sp, #0x18]     
+0x1D9578580   add      x29, sp, #0x20       
+0x1D9578584   ldr      x8, [x20]            
+0x1D9578588   adrp     x9, 49221            ; 0x1e55bd000
+0x1D957858C   ldr      x9, [x9, #0x478]     
+0x1D9578590   ldr      x9, [x9]             
+0x1D9578594   and      x16, x9, x8          
+0x1D9578598   mov      x17, x20             
+0x1D957859C   movk     x17, #0x6ae1, lsl #48 
+0x1D95785A0   autda    x16, x17             
+0x1D95785A4   mov      x17, #0x230          
+0x1D95785A8   add      x16, x16, x17        
+0x1D95785AC   ldr      x8, [x16]            
+0x1D95785B0   mov      x0, x16              
+0x1D95785B4   str      x16, [sp, #0x8]      
+0x1D95785B8   mov      x16, x8              
+0x1D95785BC   mov      x17, x0              
+0x1D95785C0   movk     x17, #0x26ca, lsl #48 
+0x1D95785C4   autda    x16, x17             
+0x1D95785C8   mov      x17, x16             
+0x1D95785CC   xpacd    x17                  
+0x1D95785D0   cmp      x16, x17             
+0x1D95785D4   b.eq     0x1d95785dc          
+0x1D95785D8   brk      #0xc472              
+0x1D95785DC   ldrsw    x17, [x16, #0x0]!    
+0x1D95785E0   add      x16, x16, x17        
+0x1D95785E4   mov      x17, x0              
+0x1D95785E8   movk     x17, #0x26ca, lsl #48 
+0x1D95785EC   pacia    x16, x17             
+0x1D95785F0   str      x16, [sp, #0x10]     
+0x1D95785F4   mov      x16, x8              
+0x1D95785F8   mov      x17, x0              
+0x1D95785FC   movk     x17, #0x26ca, lsl #48 
+0x1D9578600   autda    x16, x17             
+0x1D9578604   mov      x17, x16             
+0x1D9578608   xpacd    x17                  
+0x1D957860C   cmp      x16, x17             
+0x1D9578610   b.eq     0x1d9578618          
+0x1D9578614   brk      #0xc472              
+0x1D9578618   ldr      w0, [x16, #0x4]      
+0x1D957861C   bl       _swift_task_alloc    
+0x1D9578620   mov      x17, x22             
+0x1D9578624   str      x0, [x22, #0x10]     
+0x1D9578628   mov      x16, x0              
+0x1D957862C   movk     x16, #0xbda2, lsl #48 
+0x1D9578630   pacda    x17, x16             
+0x1D9578634   str      x17, [x0]            
+0x1D9578638   add      x8, x0, #0x8         
+0x1D957863C   adrp     x16, -24             ; 0x1d9560000
+0x1D9578640   add      x16, x16, #0xd64     
+0x1D9578644   mov      x17, x8              
+0x1D9578648   movk     x17, #0xd707, lsl #48 
+0x1D957864C   pacia    x16, x17             
+0x1D9578650   str      x16, [x0, #0x8]      
+0x1D9578654   mov      x22, x0              
+0x1D9578658   ldp      x1, x0, [sp, #0x8]   
+0x1D957865C   ldp      x29, x30, [sp, #0x20] 
+0x1D9578660   and      x29, x29, #0xefffffffffffffff 
+0x1D9578664   add      sp, sp, #0x30        
+0x1D9578668   autibsp                       
+0x1D957866C   eor      x16, x30, x30, lsl #1 
+0x1D9578670   tbz      x16, #0x3e, 0x1d9578678 
+0x1D9578674   brk      #0xc471              
+0x1D9578678   mov      x16, x1              
+0x1D957867C   movk     x16, #0x26ca, lsl #48 
+0x1D9578680   braa     x0, x16              
+_$s7NotesUI21AudioRecordingManagerC06resumeD0yyYaKFTj:
+0x1D9578684   pacibsp                       
+0x1D9578688   orr      x29, x29, #0x1000000000000000 
+0x1D957868C   sub      sp, sp, #0x30        
+0x1D9578690   stp      x29, x30, [sp, #0x20] 
+0x1D9578694   add      x16, sp, #0x18       
+0x1D9578698   movk     x16, #0xc31a, lsl #48 
+0x1D957869C   mov      x17, x22             
+0x1D95786A0   pacdb    x17, x16             
+0x1D95786A4   str      x17, [sp, #0x18]     
+0x1D95786A8   add      x29, sp, #0x20       
+0x1D95786AC   ldr      x8, [x20]            
+0x1D95786B0   adrp     x9, 49221            ; 0x1e55bd000
+0x1D95786B4   ldr      x9, [x9, #0x478]     
+0x1D95786B8   ldr      x9, [x9]             
+0x1D95786BC   and      x16, x9, x8          
+0x1D95786C0   mov      x17, x20             
+0x1D95786C4   movk     x17, #0x6ae1, lsl #48 
+0x1D95786C8   autda    x16, x17             
+0x1D95786CC   mov      x17, #0x238          
+0x1D95786D0   add      x16, x16, x17        
+0x1D95786D4   ldr      x8, [x16]            
+0x1D95786D8   mov      x0, x16              
+0x1D95786DC   str      x16, [sp, #0x8]      
+0x1D95786E0   mov      x16, x8              
+0x1D95786E4   mov      x17, x0              
+0x1D95786E8   movk     x17, #0x2159, lsl #48 
+0x1D95786EC   autda    x16, x17             
+0x1D95786F0   mov      x17, x16             
+0x1D95786F4   xpacd    x17                  
+0x1D95786F8   cmp      x16, x17             
+0x1D95786FC   b.eq     0x1d9578704          
+0x1D9578700   brk      #0xc472              
+0x1D9578704   ldrsw    x17, [x16, #0x0]!    
+0x1D9578708   add      x16, x16, x17        
+0x1D957870C   mov      x17, x0              
+0x1D9578710   movk     x17, #0x2159, lsl #48 
+0x1D9578714   pacia    x16, x17             
+0x1D9578718   str      x16, [sp, #0x10]     
+0x1D957871C   mov      x16, x8              
+0x1D9578720   mov      x17, x0              
+0x1D9578724   movk     x17, #0x2159, lsl #48 
+0x1D9578728   autda    x16, x17             
+0x1D957872C   mov      x17, x16             
+0x1D9578730   xpacd    x17                  
+0x1D9578734   cmp      x16, x17             
+0x1D9578738   b.eq     0x1d9578740          
+0x1D957873C   brk      #0xc472              
+0x1D9578740   ldr      w0, [x16, #0x4]      
+0x1D9578744   bl       _swift_task_alloc    
+0x1D9578748   mov      x17, x22             
+0x1D957874C   str      x0, [x22, #0x10]     
+0x1D9578750   mov      x16, x0              
+0x1D9578754   movk     x16, #0xbda2, lsl #48 
+0x1D9578758   pacda    x17, x16             
+0x1D957875C   str      x17, [x0]            
+0x1D9578760   add      x8, x0, #0x8         
+0x1D9578764   adrp     x16, -17             ; 0x1d9567000
+0x1D9578768   add      x16, x16, #0x3f8     
+0x1D957876C   mov      x17, x8              
+0x1D9578770   movk     x17, #0xd707, lsl #48 
+0x1D9578774   pacia    x16, x17             
+0x1D9578778   str      x16, [x0, #0x8]      
+0x1D957877C   mov      x22, x0              
+0x1D9578780   ldp      x1, x0, [sp, #0x8]   
+0x1D9578784   ldp      x29, x30, [sp, #0x20] 
+0x1D9578788   and      x29, x29, #0xefffffffffffffff 
+0x1D957878C   add      sp, sp, #0x30        
+0x1D9578790   autibsp                       
+0x1D9578794   eor      x16, x30, x30, lsl #1 
+0x1D9578798   tbz      x16, #0x3e, 0x1d95787a0 
+0x1D957879C   brk      #0xc471              
+0x1D95787A0   mov      x16, x1              
+0x1D95787A4   movk     x16, #0x2159, lsl #48 
+0x1D95787A8   braa     x0, x16              
+0x1D95787AC   pacibsp                       
+0x1D95787B0   stp      x20, x19, [sp, #-0x20]! 
+0x1D95787B4   stp      x29, x30, [sp, #0x10] 
+0x1D95787B8   add      x29, sp, #0x10       
+0x1D95787BC   mov      x19, x0              
+0x1D95787C0   adrp     x8, 79463            ; 0x1ecbdf000
+0x1D95787C4   ldr      x0, [x8, #0xb98]     
+0x1D95787C8   cbz      x0, 0x1d95787d4      
+0x1D95787CC   mov      x1, #0x0             
+0x1D95787D0   b        0x1d95787f8          
+0x1D95787D4   mov      w0, #0xff            
+0x1D95787D8   bl       0x1d9687fe4          
+0x1D95787DC   mov      x1, x0               
+0x1D95787E0   mov      x0, x19              
+0x1D95787E4   bl       0x1d96889c4          
+0x1D95787E8   cbnz     x1, 0x1d95787f8      
+0x1D95787EC   adrp     x8, 79463            ; 0x1ecbdf000
+0x1D95787F0   add      x8, x8, #0xb98       
+0x1D95787F4   stlr     x0, [x8]             
+0x1D95787F8   ldp      x29, x30, [sp, #0x10] 
+0x1D95787FC   ldp      x20, x19, [sp], #0x20 
+0x1D9578800   retab                         
+0x1D9578804   mov      x8, x0               
+0x1D9578808   adrp     x9, 79463            ; 0x1ecbdf000
+0x1D957880C   ldr      x0, [x9, #0xb80]     
+0x1D9578810   cbz      x0, 0x1d957881c      
+0x1D9578814   mov      x1, #0x0             
+0x1D9578818   ret                           
+0x1D957881C   pacibsp                       
+0x1D9578820   stp      x29, x30, [sp, #-0x10]! 
+0x1D9578824   mov      x29, sp              
+0x1D9578828   adrp     x1, 49220            ; 0x1e55bc000
+0x1D957882C   ldr      x1, [x1, #0xf0]      
+0x1D9578830   mov      x0, x8               
+0x1D9578834   bl       0x1d96889c4          
+0x1D9578838   cbnz     x1, 0x1d9578848      
+0x1D957883C   adrp     x8, 79463            ; 0x1ecbdf000
+0x1D9578840   add      x8, x8, #0xb80       
+0x1D9578844   stlr     x0, [x8]             
+0x1D9578848   ldp      x29, x30, [sp], #0x10 
+0x1D957884C   autibsp                       
+0x1D9578850   ret                           
+0x1D9578854   mov      x0, #0x0             
+0x1D9578858   b        _$s7NotesUI25AudioRecordingCoordinatorCMa 
+_$sSo23ICAudioRecordingManagerCMa:
+0x1D9578990   adrp     x1, 74796            ; 0x1eb9a4000
+0x1D9578994   add      x1, x1, #0x530       
+0x1D9578998   adrp     x2, 57441            ; 0x1e75d9000
+0x1D957899C   add      x2, x2, #0x4b8       ; _OBJC_CLASS_$_ICAudioRecordingManager@got
+0x1D95789A0   b        0x1d95548e4          
+0x1D95789A4   pacibsp                       
+0x1D95789A8   orr      x29, x29, #0x1000000000000000 
+0x1D95789AC   sub      sp, sp, #0x30        
+0x1D95789B0   stp      x21, x19, [sp, #0x8] 
+0x1D95789B4   stp      x29, x30, [sp, #0x20] 
+0x1D95789B8   add      x16, sp, #0x18       
+0x1D95789BC   movk     x16, #0xc31a, lsl #48 
+0x1D95789C0   mov      x17, x22             
+0x1D95789C4   pacdb    x17, x16             
+0x1D95789C8   str      x17, [sp, #0x18]     
+0x1D95789CC   add      x29, sp, #0x20       
+0x1D95789D0   ldp      x19, x20, [x20, #0x10] 
+0x1D95789D4   adrp     x21, 297             ; 0x1d96a1000
+0x1D95789D8   add      x21, x21, #0x558     
+0x1D95789DC   ldr      w0, [x21, #0x4]      
+0x1D95789E0   bl       _swift_task_alloc    
+0x1D95789E4   mov      x17, x22             
+0x1D95789E8   str      x0, [x22, #0x10]     
+0x1D95789EC   mov      x16, x0              
+0x1D95789F0   movk     x16, #0xbda2, lsl #48 
+0x1D95789F4   pacda    x17, x16             
+0x1D95789F8   str      x17, [x0]            
+0x1D95789FC   add      x8, x0, #0x8         
+0x1D9578A00   adrp     x16, -17             ; 0x1d9567000
+0x1D9578A04   add      x16, x16, #0x3f8     
+0x1D9578A08   mov      x17, x8              
+0x1D9578A0C   movk     x17, #0xd707, lsl #48 
+0x1D9578A10   pacia    x16, x17             
+0x1D9578A14   str      x16, [x0, #0x8]      
+0x1D9578A18   ldrsw    x8, [x21]            
+0x1D9578A1C   add      x2, x8, x21          
+0x1D9578A20   mov      x22, x0              
+0x1D9578A24   mov      x0, x19              
+0x1D9578A28   mov      x1, x20              
+0x1D9578A2C   ldp      x29, x30, [sp, #0x20] 
+0x1D9578A30   ldp      x21, x19, [sp, #0x8] 
+0x1D9578A34   and      x29, x29, #0xefffffffffffffff 
+0x1D9578A38   add      sp, sp, #0x30        
+0x1D9578A3C   autibsp                       
+0x1D9578A40   eor      x16, x30, x30, lsl #1 
+0x1D9578A44   tbz      x16, #0x3e, 0x1d9578a4c 
+0x1D9578A48   brk      #0xc471              
+0x1D9578A4C   br       x2                   
+0x1D9578A50   pacibsp                       
+0x1D9578A54   orr      x29, x29, #0x1000000000000000 
+0x1D9578A58   sub      sp, sp, #0x40        
+0x1D9578A5C   stp      x24, x23, [sp, #0x8] 
+0x1D9578A60   stp      x21, x19, [sp, #0x18] 
+0x1D9578A64   stp      x29, x30, [sp, #0x30] 
+0x1D9578A68   add      x16, sp, #0x28       
+0x1D9578A6C   movk     x16, #0xc31a, lsl #48 
+0x1D9578A70   mov      x17, x22             
+0x1D9578A74   pacdb    x17, x16             
+0x1D9578A78   str      x17, [sp, #0x28]     
+0x1D9578A7C   add      x29, sp, #0x30       
+0x1D9578A80   ldp      x19, x21, [x20, #0x10] 
+0x1D9578A84   ldp      x23, x20, [x20, #0x20] 
+0x1D9578A88   adrp     x24, 297             ; 0x1d96a1000
+0x1D9578A8C   add      x24, x24, #0x8d8     
+0x1D9578A90   ldr      w0, [x24, #0x4]      
+0x1D9578A94   bl       _swift_task_alloc    
+0x1D9578A98   mov      x17, x22             
+0x1D9578A9C   str      x0, [x22, #0x10]     
+0x1D9578AA0   mov      x16, x0              
+0x1D9578AA4   movk     x16, #0xbda2, lsl #48 
+0x1D9578AA8   pacda    x17, x16             
+0x1D9578AAC   str      x17, [x0]            
+0x1D9578AB0   add      x8, x0, #0x8         
+0x1D9578AB4   adrp     x16, -17             ; 0x1d9567000
+0x1D9578AB8   add      x16, x16, #0x3f8     
+0x1D9578ABC   mov      x17, x8              
+0x1D9578AC0   movk     x17, #0xd707, lsl #48 
+0x1D9578AC4   pacia    x16, x17             
+0x1D9578AC8   str      x16, [x0, #0x8]      
+0x1D9578ACC   ldrsw    x8, [x24]            
+0x1D9578AD0   add      x4, x8, x24          
+0x1D9578AD4   mov      x22, x0              
+0x1D9578AD8   mov      x0, x19              
+0x1D9578ADC   mov      x1, x21              
+0x1D9578AE0   mov      x2, x23              
+0x1D9578AE4   mov      x3, x20              
+0x1D9578AE8   ldp      x29, x30, [sp, #0x30] 
+0x1D9578AEC   ldp      x21, x19, [sp, #0x18] 
+0x1D9578AF0   ldp      x24, x23, [sp, #0x8] 
+0x1D9578AF4   and      x29, x29, #0xefffffffffffffff 
+0x1D9578AF8   add      sp, sp, #0x40        
+0x1D9578AFC   autibsp                       
+0x1D9578B00   eor      x16, x30, x30, lsl #1 
+0x1D9578B04   tbz      x16, #0x3e, 0x1d9578b0c 
+0x1D9578B08   brk      #0xc471              
+0x1D9578B0C   br       x4                   
+_$s7NotesUI21AudioRecordingManagerCACycfc:
+0x1D9687254   pacibsp                       
+0x1D9687258   stp      x29, x30, [sp, #-0x10]! 
+0x1D968725C   mov      x29, sp              
+0x1D9687260   adrp     x0, 49               ; 0x1d96b8000
+0x1D9687264   add      x0, x0, #0xd60       
+0x1D9687268   adrp     x2, 51               ; 0x1d96ba000
+0x1D968726C   add      x2, x2, #0x3d0       
+0x1D9687270   mov      w1, #0x1d            
+0x1D9687274   mov      w3, #0x6             
+0x1D9687278   mov      w4, #0x0             
+0x1D968727C   bl       __swift_stdlib_reportUnimplementedInitializer 
+0x1D9687280   brk      #0x1                 

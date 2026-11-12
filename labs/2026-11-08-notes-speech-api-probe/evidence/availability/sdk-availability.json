@@ -1,0 +1,20 @@
+{
+  "source": "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Speech.framework/Modules/Speech.swiftmodule/arm64e-apple-macos.swiftinterface",
+  "retrievedDate": "2026-11-08",
+  "sha256": "9de012f407197106cef4b95f0e5d0d3c487a1a46f733db2aa488c6b77ecfbce6",
+  "selection": "Class declarations plus preceding five lines containing availability attributes",
+  "excerpts": [
+    {
+      "line": 49,
+      "text": "  var selectedLocales: [Foundation.Locale] { get }\n}\n@available(macOS 26.0, iOS 26.0, visionOS 26.0, *)\n@available(tvOS, unavailable)\n@available(watchOS, unavailable)\nfinal public class DictationTranscriber : Speech.SpeechModule, Speech.LocaleDependentSpeechModule {\n  convenience public init(locale: Foundation.Locale, preset: Speech.DictationTranscriber.Preset)"
+    },
+    {
+      "line": 207,
+      "text": "  @available(watchOS, unavailable)\n  public func rangeOfAudioTimeRangeAttributes(intersecting timeRange: CoreMedia.CMTimeRange) -> Swift.Range<Foundation.AttributedString.Index>?\n}\n@available(macOS 26.0, iOS 26.0, visionOS 26.0, tvOS 26.0, *)\n@available(watchOS, unavailable)\nfinal public actor SpeechAnalyzer : Swift.Sendable {\n  public convenience init(modules: [any Speech.SpeechModule], options: Speech.SpeechAnalyzer.Options? = nil)"
+    },
+    {
+      "line": 335,
+      "text": "  final public func start(inputAudioFile audioFile: AVFAudio.AVAudioFile, finishAfterFile: Swift.Bool = false) async throws\n  final public func analyzeSequence(from audioFile: AVFAudio.AVAudioFile) async throws -> CoreMedia.CMTime?\n}\n@available(macOS 26.0, iOS 26.0, visionOS 26.0, tvOS 26.0, *)\n@available(watchOS, unavailable)\nfinal public class SpeechTranscriber : Speech.SpeechModule, Speech.LocaleDependentSpeechModule {\n  convenience public init(locale: Foundation.Locale, preset: Speech.SpeechTranscriber.Preset)"
+    }
+  ]
+}

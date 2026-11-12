@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "codesign",
+    "-d",
+    "--entitlements",
+    ":-",
+    "/Users/water/work/2026/Apple-Notes-Clone/labs/2026-11-08-notes-speech-api-probe/.build/SpeechProbeSandbox.app"
+  ],
+  "exitCode": 0,
+  "timedOut": false,
+  "stdout": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>com.apple.security.app-sandbox</key><true/></dict></plist>\n",
+  "stderr": "Executable=/Users/water/work/2026/Apple-Notes-Clone/labs/2026-11-08-notes-speech-api-probe/.build/SpeechProbeSandbox.app/Contents/MacOS/SpeechProbe\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\n",
+  "elapsedSeconds": 0.010441334000002911
+}

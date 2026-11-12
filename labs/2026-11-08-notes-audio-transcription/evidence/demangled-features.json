@@ -1,0 +1,23 @@
+{
+  "operation": "Swift symbol spelling verification",
+  "argv": [
+    "xcrun",
+    "swift-demangle",
+    "--compact",
+    "_$s11NotesShared13TranscriptionC08addAudioC11TaskToQueue20attachmentIdentifierySo17NSManagedObjectIDC_tFTj",
+    "_$s11NotesShared23SiriTranscriptionMethodC06finishD0yyYaKF",
+    "_$s11NotesShared23SiriTranscriptionMethodC12receiveAudioyyAA0G4DataVYaKF",
+    "_$s11NotesShared28LiveTranscriptionCoordinatorC06finishD0yyYaKFTj",
+    "_$s11NotesShared28LiveTranscriptionCoordinatorC10transcribe4filey10Foundation3URLVSg_tYaKFTj",
+    "_$s11NotesShared28LiveTranscriptionCoordinatorC12receiveAudioyyAA0G4DataVYaKFTj",
+    "_$s11NotesShared28SiriSpeechRecognitionManagerC14setUpAudioTaskScSy0D011TranscriberC18MultisegmentResultVGyYaKFTj",
+    "_$s11NotesShared28SiriSpeechRecognitionManagerC16downloadASRModel5NGASR8progressySb_ySictYaKFZ",
+    "_$s11NotesShared28SiriSpeechRecognitionManagerC17appendAudioBuffer6bufferySo16AVAudioPCMBufferC_tKFTj",
+    "_$sSo22ICAttachmentAudioModelC11NotesSharedE04saveC19DataToSubattachment18transcriptSegments12fragmentUUID15retranscriptionySayAC014TranscriptViewC7SegmentVG_SSSbtKF"
+  ],
+  "exit_code": 0,
+  "stdout": "dispatch thunk of NotesShared.Transcription.addAudioTranscriptionTaskToQueue(attachmentIdentifier: __C.NSManagedObjectID) -> ()\nNotesShared.SiriTranscriptionMethod.finishTranscription() async throws -> ()\nNotesShared.SiriTranscriptionMethod.receiveAudio(NotesShared.AudioData) async throws -> ()\ndispatch thunk of NotesShared.LiveTranscriptionCoordinator.finishTranscription() async throws -> ()\ndispatch thunk of NotesShared.LiveTranscriptionCoordinator.transcribe(file: Foundation.URL?) async throws -> ()\ndispatch thunk of NotesShared.LiveTranscriptionCoordinator.receiveAudio(NotesShared.AudioData) async throws -> ()\ndispatch thunk of NotesShared.SiriSpeechRecognitionManager.setUpAudioTask() async throws -> Swift.AsyncStream<Speech.Transcriber.MultisegmentResult>\nstatic NotesShared.SiriSpeechRecognitionManager.downloadASRModel(NGASR: Swift.Bool, progress: (Swift.Int) -> ()) async throws -> ()\ndispatch thunk of NotesShared.SiriSpeechRecognitionManager.appendAudioBuffer(buffer: __C.AVAudioPCMBuffer) throws -> ()\n(extension in NotesShared):__C.ICAttachmentAudioModel.saveModelDataToSubattachment(transcriptSegments: [NotesShared.TranscriptViewModelSegment], fragmentUUID: Swift.String, retranscription: Swift.Bool) throws -> ()\n",
+  "stdout_sha256": "5b3d87afca2e24e8b8b3bcd92d7ee89eaf89064140e7727439906b2a6c545de0",
+  "source": "notesshared-cache-inspection.txt",
+  "scope": "Symbol demangling only; does not establish execution or complete method bodies."
+}

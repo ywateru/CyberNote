@@ -1,0 +1,16 @@
+{
+  "purpose": "Confirm Notes internal Transcriber is not declared by the ordinary public SDK import; this does not rule out unsupported dynamic invocation.",
+  "source": "import Speech\nlet internalType = Transcriber.self\n",
+  "argv": [
+    "xcrun",
+    "swiftc",
+    "-typecheck",
+    "-target",
+    "arm64-apple-macos26.0",
+    "labs/2026-11-08-notes-speech-api-probe/.build/PrivateSurfaceCheck.swift"
+  ],
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "labs/2026-11-08-notes-speech-api-probe/.build/PrivateSurfaceCheck.swift:2:20: error: cannot find 'Transcriber' in scope\n1 | import Speech\n2 | let internalType = Transcriber.self\n  |                    `- error: cannot find 'Transcriber' in scope\n3 | \n",
+  "expectedFailure": true
+}
