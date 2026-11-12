@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-12T21:55:42.320782+00:00",
+  "scope": "readonly-production-runtime-metadata",
+  "runtimeDocs": "https://github.com/vercel/sdk/blob/main/docs/sdks/logs/README.md",
+  "rawMessagesRecorded": false,
+  "requestHeadersRecorded": false,
+  "responseBodiesRecorded": false,
+  "appGrantAccessed": false,
+  "loginRetried": false,
+  "requestPathAllowlist": [
+    "/healthz",
+    "/api/v1/account/profile",
+    "/api/index",
+    "/api/v1/auth/config"
+  ],
+  "deployment": {
+    "httpStatus": 200,
+    "idMatches": true,
+    "projectMatches": true,
+    "ready": true,
+    "production": true
+  },
+  "hostHealth": {
+    "httpStatus": 200,
+    "elapsedMs": 2848,
+    "bodyRead": false
+  },
+  "runtimeLogs": {
+    "documentedQueryHasHistoricalTimeFilter": false,
+    "observationLimitMs": 18000,
+    "metadataRows": [],
+    "rawMessageFieldIgnored": true,
+    "stop": "bounded-stream-read-timeout",
+    "elapsedMs": 5270
+  },
+  "limits": [
+    "Public SDK documents a deployment stream without a historical timestamp filter; absence of rows does not prove absence of the prior native request",
+    "No raw log text, cookie, authorization header, token, profile field or provider error copied out; only allowlisted path/status/time projection",
+    "No deployment, domain, DNS, TLS, network, secret or app state changed"
+  ]
+}

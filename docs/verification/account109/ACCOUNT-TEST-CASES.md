@@ -80,7 +80,9 @@ AUTH-02/03 完成后执行；两端均使用账户 A。首次登录默认暂停�
 | 桌面可交互启动前置 | `ad18a872` debug 候选在独立数据根等待 45 秒仍为 hidden/startup loading；当时 Mac 锁定。新的默认入口 `ec4348c6` debug/e2e 候选已构建并保留，尚未启动；本轮两次原生工具复查仍为 Mac 锁定。没有执行第二端登录，桌面 AUTH/SYNC 用例未通过验收。见 [macOS 记录](macos/LATEST-CANDIDATE.md)。 |
 | Android 最新候选本地回归 | `d69ffbce` debug 隔离包原地更新后，[3 项真机检查](android/d69-debug/README.md)通过：两条旧笔记完整 document/plainText 保留、默认原生账户页 signedOut、真实 UI 新建全文精确一致。未发 SignIn 或启用同步，不能将 AUTH-03、SYNC 或 ANDROID-01～04 判为通过。 |
 | Android 登录前置（AUTH-03 流程、ANDROID-01） | [hosted-live01](android/hosted-live01/README.md) 单次真实托管凭据输入、提交并返回应用，原生终态为 `error/account_network`，无 profile 且同步禁用。本次登录失败，未证明回跳验证成功，ANDROID-01 的自动发现未执行。 |
+| Android 最新原生复核 | [sso06](android/sso06/README.md) 已在 d69 包恰好发起一次真实 UI SignIn，未输入凭据；原生再次返回 `error/account_network`、无 profile、同步禁用。它独立证明最新包的原生失败仍存在，不以 Chrome 超时代替。未自动重试、未启用同步，AUTH-03/ANDROID-01 仍未通过。 |
 | 手机端网络诊断 | [直接导航证据](android/hosted-live01/public-navigation03.json)：canonical `/healthz` 30 秒无 HTTP 结果，Logto discovery 对照约 606 ms 为 200。只证明该次手机 Chrome 的路径差异，不定位原生失败请求或 DNS/TCP/TLS 原因。没有修改网络配置或认证重试。 |
+| 最新服务侧诊断 | [只读部署/API/Dashboard 核对](server/sso06-readonly/README.md)记录 READY、主机 health 200，失败时段请求/CDN 列表未见可关联 profile 行；未取得完整日志覆盖保证，不据此推断精确失败阶段。无配置或密钥变更。 |
 | SYNC-01～07、ANDROID-02～04 | 账户产品链的双桌面及三端收敛尚未执行。须先完成可交互启动、成功登录及首次合并授权，再验证完整 document/plainText 和附件原字节。 |
 
 后续恢复测试需先确认 Mac 已解锁、手机可正常访问 canonical coordinator，并核对实际候选源码身份。继续保留现有失败证据及合成数据；新尝试单独记录，不覆盖上述结果。

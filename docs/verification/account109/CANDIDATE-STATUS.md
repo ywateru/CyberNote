@@ -18,8 +18,10 @@
 | Android 产品冒烟 | `6537b74b` 隔离候选在真实手机通过 6 项检查，包含完整本地 document/plainText、更新保留及真实 UI 发起/取消授权；[真机记录](android/README.md)保留初始失败和修复后结果。后续真实登录失败另见下项，不能用冒烟通过替代认证验收。 |
 | Android 当前默认入口候选 | `d69ffbce` 隔离 debug APK 已原地更新，ACCOUNT_NATIVE/UI 均未设置，[3 项真机本地检查](android/d69-debug/README.md)通过：两条旧笔记完整 document/plainText 保留，真实账户页 signedOut/无 profile/error/同步关闭，真实 UI 新建笔记全文精确一致。未发 SignIn；此重启后的 signedOut 不代表先前登录成功或恢复。原应用和合成数据保留，owned forward/reverse/lease 清理已核对。 |
 | Android 真实托管登录 | [hosted-live01](android/hosted-live01/README.md) 已执行一次真实凭据输入和提交，返回原生应用后权威状态为 `error/account_network`，无 profile、同步未启用；未证明原生回跳验证成功。没有自动重试。 |
+| Android 最新原生登录复核 | [sso06](android/sso06/README.md) 在已验证的 d69 隔离包执行恰好一次真实 UI SignIn，尝试已有 Logto SSO、未输入凭据；回到 App 后原生权威终态仍为 `error/account_network`、无 profile、同步关闭。该结果独立于 Chrome 路径推断；未证明回跳成功或同用户身份。owned forward/lease 清理完成，失败原地保留。 |
 | Android 公共端点诊断 | 同一次后续直接导航中，canonical Vercel `/healthz` 在 30 秒内无 HTTP 结果，Logto discovery 对照约 606 ms 返回 200。此前 opaque-origin fetch 均在 15 秒截止；直接导航排除了该方法的 CORS 歧义，但不能定位 DNS/TCP/TLS 或原生失败阶段。见 [原始诊断](android/hosted-live01/public-navigation03.json)。 |
 | Android 路径复核 | [public-recheck04](android/public-recheck04/README.md) 再次重现 canonical health 30 秒无 HTTP、Logto discovery 约 708 ms 为 200；同时间段[主机独立检查](android/hosted-live01/host-public-recheck02.json)为 200/200/401。未发登录重试或修改网络配置。 |
+| 最新路径及服务侧核对 | [public-recheck05](android/public-recheck05/result.json) 仍为手机 canonical health 30 秒无 HTTP、Logto discovery 约 909 ms 为 200。[服务侧核对](server/sso06-readonly/README.md)确认部署 READY、主机 health 200；Dashboard 请求/CDN 视图覆盖本次原生失败时段，仅观察到主机 health 控制请求，没有可关联的 profile 行。受日志覆盖边界限制，未确定原生请求是否送出及具体网络故障层级。 |
 | 历史净化 macOS 包 | 独立新历史 `59dea828` 的 opt-in 包和 `6906f10d` 的默认账户入口包均完成本地构建及独立实物复核。旧包保留各自身份，未运行 App。详见 [macOS 候选](macos/LATEST-CANDIDATE.md)。 |
 | 当前同源双平台生产包 | `d69ffbce` 导出新 root `d7f3e2a9`，从两个独立副本完成 macOS arm64 production bundle 和 Android arm64 unsigned APK 的完整构建、正式 staging，构建后源码均 clean。两包对应相同 fingerprint，默认原生账户门控、无 debug fixture/测试 feature；各有 1,200 项 notices。见 [macOS](macos/LATEST-CANDIDATE.md)及 [Android](android/sourced69-production01/README.md)；[独立实物复核](publish/final-package-review/README.md)有限接受，无新增 P1/P2。这是本地构建与静态验证，未运行生产包或远程 Actions。 |
 
@@ -64,7 +66,7 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 ## 尚未执行或尚未完成
 
 - macOS 产品内真实托管登录、双桌面账户自动发现和完整 document/plainText/附件原字节比对。最近可见启动尝试受 Mac 锁定限制；继续前须重新确认解锁和候选身份。
-- Android 隔离账户测试包已尝试真实托管登录但失败；成功登录、原生回跳验收及三端同步尚未完成。继续前须确认手机可正常访问 canonical coordinator；当前证据未确定网络故障层级。原用户应用及旧 Sync108 合成测试包保持原地。
+- Android 最新 d69 隔离账户测试包已通过一次真实 UI SignIn 独立重现 `account_network`；成功登录、原生回跳验收及三端同步尚未完成。继续前需恢复手机对正式 coordinator 的正常可达性或提供可达的正式服务域名；当前证据未确定原生故障层级，未进行 DNS/TLS 或部署防护绕过。原用户应用及旧 Sync108 合成测试包保持原地。
 - 当前精确源码清单、新历史本地导出及双平台生产包均已完成，见上文 `d7f3e2a9`。远程 GitHub 发布和 Actions 实际包构建尚未执行；若后续产品源码调整，须刷新清单和重做对应验证。
 
 验收操作与通过标准继续使用 [ACCOUNT-TEST-CASES.md](ACCOUNT-TEST-CASES.md)。原开发仓库没有被直接推送，未执行最终发布。

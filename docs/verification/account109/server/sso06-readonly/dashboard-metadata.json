@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "scope": "readonly-own-project-dashboard-observation",
+  "project": "cybernote-sync",
+  "source": "https://vercel.com/yywater68-1778s-projects/cybernote-sync/logs",
+  "method": "existing-Chrome-DOM-session; visible Runtime Logs, Request Logs and CDN Requests views only",
+  "nativeAttemptWindowUtc": {
+    "start": "2026-11-12T21:48:10.070Z",
+    "terminal": "2026-11-12T21:49:15.256Z"
+  },
+  "runtimeLogs": {
+    "selectedTimeline": "Last 30 minutes",
+    "visibleResult": "No Runtime Logs in the Last 30 Minutes"
+  },
+  "requestLogs": {
+    "selectedTimelineLocal": "Nov 13 05:28–05:58 Asia/Shanghai",
+    "rows": [
+      {
+        "timestampUtc": "2026-11-12T21:55:43.425Z",
+        "method": "GET",
+        "status": 200,
+        "host": "cybernote-sync.vercel.app",
+        "path": "/healthz"
+      }
+    ],
+    "endOfResultsText": "No more logs to show within selected timeline"
+  },
+  "cdnRequests": {
+    "selectedTimelineLocal": "Nov 13 05:29–05:59 Asia/Shanghai",
+    "visibleRowCount": 1,
+    "visibleOnlyRow": "same GET 200 canonical /healthz control",
+    "endOfResultsText": "No more logs to show within selected timeline"
+  },
+  "profileRowObserved": false,
+  "rowDetailsExpanded": false,
+  "headersCookiesIpOrProfileRead": false,
+  "rawLogMessagesRecorded": false,
+  "deploymentDomainNetworkOrSecretChanged": false,
+  "limits": [
+    "Visible rows and end-of-results text were observed; no export or complete logging-coverage guarantee was obtained",
+    "No matching profile row in these views does not prove that no native request was sent or identify DNS/TCP/TLS/client/server failure stage",
+    "The observed health row correlates with this host probe, not a phone or successful login request",
+    "Console runtime logs and request/CDN logs are distinct; empty console output does not mean no requests"
+  ]
+}

@@ -1,6 +1,25 @@
 # Account109 Android candidates and device verification
 
-## Current actual device checkpoint: d69 default-native debug candidate
+## Latest native login checkpoint: d69 SSO attempt failed
+
+The [single sso06 attempt](sso06/README.md) started from the verified d69
+signed-out state and invoked real UI SignIn exactly once. No credential consumer
+or credential input was used. After the external page returned to the owned app,
+the guarded observer and read-only native DTO reported `error/account_network`,
+no profile and synchronization disabled. This independently reproduces the
+native failure on the latest installed candidate; it is not an inference from
+Chrome health probes. Native callback acceptance and the expected synthetic
+user remain unverified. No automatic retry or sync enablement followed.
+
+The separate [public-recheck05](public-recheck05/result.json) again observed
+canonical health with no HTTP result within 30 seconds and Logto discovery 200
+in about 909 ms. The [service-side read-only check](../server/sso06-readonly/README.md)
+confirmed production READY and host health 200, but did not locate the original
+native failing request stage. Final sso06 cleanup confirmed owned forwards and
+leases absent and the test app restored to user0 foreground. Its error state was
+left intact; the earlier local-only passed checks below remain valid history.
+
+## Installed d69 candidate and local-only checkpoint
 
 The isolated `com.local.notesclone.account109` package was updated in place from
 the exact clean product source `d69ffbce2ad1284e6c7ce830f6840ba083148aab`.
@@ -95,7 +114,8 @@ no reverse mappings, and no Account109 driver lock. The package is left running.
 ## Hosted-login failure and network diagnosis
 
 The [single live attempt](hosted-live01/result.json) followed device02's
-signed-out checkpoint and remains the most recent actual login attempt. The following
+signed-out checkpoint. The later d69 attempt is recorded above; this section
+retains the source6537 failure and its original diagnosis. The following
 [read-only native diagnosis](hosted-live01/native-diagnostic01.json) confirmed
 `state=error`, safe code `account_network`, and no regular grant/binding files
 under the unique account directory. No secret file bodies were read. This does
