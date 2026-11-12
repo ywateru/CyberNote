@@ -14,6 +14,7 @@
 | 最终服务部署 | READY，health 200、固定四 scopes、公钥 JWKS 200、匿名 profile/enrollment 401。详见工作区检查点。 |
 | 真实 Rust owner | `b5df1e53` 的显式 live-smoke 进程退出 0，14 阶段全部成功；真实授权、强制 refresh、owner 重开、3 次部署 profile 连续性、logout 后 restore None。详见 [真实 Rust owner 验证](auth/RUST-LIVE-OWNER.md)，不替代产品 Runtime 或多端验收。 |
 | Android 产品冒烟 | `6537b74b` 隔离候选在真实手机通过 6 项检查，包含完整本地 document/plainText、更新保留及真实 UI 发起/取消授权；[真机记录](android/README.md)保留初始失败和修复后结果。没有完成凭据输入、认证回跳或多端同步。 |
+| 净化源码完整 macOS 构建 | 独立新历史 `59dea828` 完成 arm64 production Tauri release app bundle 和 staging，包内身份及 1,200 项 notices 字节经独立复核；账户入口显式启用、无 debug fixture/测试 feature。未运行 App，详见 [macOS 候选](macos/LATEST-CANDIDATE.md)。 |
 
 ## macOS 候选与实际启动尝试
 
@@ -45,6 +46,8 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 - 新增集成依赖许可：另从 Cargo.lock checksum 验证通过的 crates.io `.crate` 归档提取 oauth2 5.0.0、openidconnect 4.1.0、opener 2.7.3 和 deep-link 2.6.3 的 9 个原始许可文件。它们保留在独立的 `scripts/publish/notices/rust/`，来源和哈希见该目录 `NOTICE.provenance.json`；没有修改 SDK pin 或把外部依赖称为项目自有代码。该补充只覆盖明确列出的新增直接依赖，不宣称整个项目传递依赖法律审阅已完成。
 - 后续真实准备发现并修复两项原生问题：`be930dfb` 在 bootstrap 的远端 proof 验证等待结束后，重新检查 gate/owner 代际再创建邀请，主线 3 项定向测试通过；`6537b74b` 对未启用同步的新资料库只返回零指标，避免首次读取账户状态访问不存在的同步表，主线 fresh-status 反例修复测试通过。两项均保留作者 red/green 证据，不能用旧候选二进制代替修复版本。
 - `c74bfdf4`／`a717a58a` 收拢了 source snapshot `57d1d91f` 的显式清单及上游许可目录 `.github` 路径兼容修复。作者在独立新历史的本地准备导出中验证 1,769 文件、publish 15/15、1200 项 notices ZIP 逐字节匹配；独立审阅者 Plato 检查清单、Git blob、许可与路径负例，有限接受且无新增 P1/P2。这是该 snapshot 的源码准备，不包含后续两个原生修复与 live_smoke 文件；正式导出前仍须 refresh 并复验。
+- `bda6b7de` 已更新至 source snapshot `ad18a872`：刷新 6 个既有哈希，显式增加 live_smoke 文件，未放宽路径或来源政策。独立新历史导出共 1,770 文件，publish 15/15、认证库 18 通过/1 忽略、示例 5 通过，及 notices 1,200 项字节检查通过；Pauli 独立复核源码、new-root 与许可边界后接受。后续完整 macOS 本地构建另行记录，不能覆盖初次 web 准备记录，也不代表已向 GitHub 发布。
+- Android 内存传递测试 helper 修复了异常透传、确认后有效期复核及虚假 submitted 回执三项 P2；`a33e2e60` 仅报告 consumer-completed，真实提交及 Native 认证终态须独立观察。Plato 复核关闭，主线与共享 lifecycle 合计 24/24 离线测试通过。该结果不证明真实凭据输入或认证回跳通过。
 
 ## 尚未执行或尚未完成
 

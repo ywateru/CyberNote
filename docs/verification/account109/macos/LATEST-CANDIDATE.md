@@ -25,3 +25,13 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 没有输入凭据或报告同步通过。该候选是显式启用原生账户与 sync-e2e 驱动的 debug 可执行文件，不是正式发布包。
 
 解锁后按 [账户与多端测试用例](../ACCOUNT-TEST-CASES.md) 使用两个独立数据根验收。不得用旧 `c7b18541` 二进制代替当前修复版本，也不得用此前独立 Rust owner 的成功结果替代产品 Runtime/UI 与数据收敛结果。
+
+## 净化源码的完整 production 候选
+
+另从 `ad18a872` 加清单维护 `6d7cf4aa` 导出独立新历史，root commit 为 `59dea8281711e40142de84784d24fb093deba8ee`。在该干净源码树完成完整 arm64 Tauri release app bundle 构建及候选包 staging，两者退出 0；没有运行应用。
+
+前端使用 production 与 `VITE_NOTES_ACCOUNT_NATIVE=1`，没有 debug/UI fixture、dotenv 或继承的构建覆盖。实际原生编译使用 `--locked --offline --release --target aarch64-apple-darwin` 与 `tauri/custom-protocol`；独立 target 的产品 library/binary feature 集合均为空，Tauri 没有 devtools，未启用 sync-e2e 或 access-boundary-proof。
+
+实际 ZIP 为 51,958,488 bytes，SHA256 `f618e3984af299febba5e8636807291ca98b2057d5e1ca962f997bd7b860abe6`，包内主程序 SHA256 `728c942f12b2491d378c86b944659090e0a19efcbf546398fc37ad0533ac8e23`。从实际包内 arm64 Mach-O 验证 Brotli build-info，其 revision 与上述 root commit 一致，fingerprint=`de40a8b8256288c4d4f900fbb52bd47f7f38345c843f4ee074333637159ac26d`，1,619 个输入，sourceDirty=false。四份锁文件构建前后字节保持一致。
+
+独立审阅者逐项复核了实际 ZIP、编译 feature、包内身份及全部 1,200 项 notices 字节，接受范围限于本地构建和静态核验。包、notices、receipt 与完整构建记录已复制到被忽略的 `artifacts/account109/macos-sourcead18-release-candidate/`。这不是 GitHub Actions 产物，也不证明启动、登录、同步、签名、公证或发布验收通过。
