@@ -1,0 +1,103 @@
+/** Offline fixtures only. These tests are not native authentication evidence. */
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import childProcess from 'node:child_process';
+import {syncBuiltinESMExports} from 'node:module';
+import {publicEncrypt,createPublicKey,constants} from 'node:crypto';
+const originalExec=childProcess.execFileSync;
+let externalCommands=0;
+childProcess.execFileSync=()=>{externalCommands++;throw Error('OFFLINE_FORBIDS_DEVICE_COMMANDS');};
+syncBuiltinESMExports();
+test.after(()=>{childProcess.execFileSync=originalExec;syncBuiltinESMExports();assert.equal(externalCommands,0);});
+const {createInputGuard,createGuardedSender}=await import('./account109-hosted-memory-driver.mjs');
+const {prepareConsumer}=await import('./account109-hosted-memory-consumer.mjs');
+const {prepareEnvelope}=await import('./account109-hosted-rsa-envelope.mjs');
+const {classifyTerminal}=await import('./account109-hosted-terminal-observer.mjs');
+const preparedAt=1800000000000;
+const binding={href:'https://auth.x.aixgg.com/offline-marker',frameId:'offline-frame',loaderId:'offline-loader'};
+const page=()=>({...binding,origin:'https://auth.x.aixgg.com',visible:true,focused:true,fieldFocused:true});
+function setup(overrides={}){
+ let sends=0;
+ const guard=createInputGuard({preparedAt,binding,assertOwner:()=>{},probe:async()=>page(),nativeWaiting:async()=>true,now:()=>preparedAt+1,...overrides});
+ const send=createGuardedSender((...args)=>guard.guard(...args),()=>{sends++;});
+ return{guard,send,sends:()=>sends};
+}
+test('each supported Input event passes its own guard before dispatch',async()=>{
+ const events=[];
+ const send=createGuardedSender(async()=>{events.push('guard');},method=>{events.push(method);});
+ for(const method of ['Input.dispatchMouseEvent','Input.dispatchKeyEvent','Input.insertText'])await send(method,{},preparedAt+1000);
+ assert.deepEqual(events,['guard','Input.dispatchMouseEvent','guard','Input.dispatchKeyEvent','guard','Input.insertText']);
+ await assert.rejects(send('Runtime.evaluate',{},preparedAt+1000),{code:'INPUT_METHOD_NOT_ALLOWED'});
+ assert.equal(events.length,6);
+});
+test('hidden, unfocused, wrong-origin and changed-document targets receive no Input',async t=>{
+ for(const change of [{visible:false},{focused:false},{fieldFocused:false},{origin:'https://invalid.example'},{href:'https://auth.x.aixgg.com/another-offline-marker'},{frameId:'other-frame'},{loaderId:'other-loader'}])await t.test(Object.keys(change)[0],async()=>{
+  const fixture=setup({probe:async()=>({...page(),...change})});
+  await assert.rejects(fixture.send('Input.insertText',{},preparedAt+1000));assert.equal(fixture.sends(),0);
+ });
+});
+test('lease, foreground and lock failures prevent dispatch',async()=>{
+ for(const code of ['OFFLINE_LEASE_CLOSED','OFFLINE_NOT_FOREGROUND','OFFLINE_LOCKED']){
+  const fixture=setup({assertOwner:()=>{throw Object.assign(Error(code),{code});}});
+  await assert.rejects(fixture.send('Input.dispatchMouseEvent',{},preparedAt+1000),{code});assert.equal(fixture.sends(),0);
+ }
+});
+test('expiry after awaited native check prevents Input and cannot extend preparedAt',async()=>{
+ let clock=preparedAt+1;
+ const fixture=setup({now:()=>clock,nativeWaiting:async()=>{await Promise.resolve();clock=preparedAt+1000;return true;}});
+ await assert.rejects(fixture.send('Input.insertText',{},preparedAt+1000),{code:'INPUT_EXPIRED'});assert.equal(fixture.sends(),0);
+ const old=setup({now:()=>preparedAt+240000});
+ await assert.rejects(old.send('Input.insertText',{},preparedAt+999999),{code:'INPUT_EXPIRED'});assert.equal(old.sends(),0);
+});
+test('page changes during native IPC and final ownership changes prevent Input',async()=>{
+ let foreground=true,visible=true;
+ const pageFixture=setup({probe:async()=>({...page(),visible}),nativeWaiting:async()=>{visible=false;return true;}});
+ await assert.rejects(pageFixture.send('Input.insertText',{},preparedAt+1000),{code:'INPUT_PAGE_NOT_INTERACTIVE'});assert.equal(pageFixture.sends(),0);
+ const ownerFixture=setup({assertOwner:()=>{if(!foreground)throw Object.assign(Error('OFFLINE_OWNER_CHANGED'),{code:'OFFLINE_OWNER_CHANGED'});},nativeWaiting:async()=>{foreground=false;return true;}});
+ await assert.rejects(ownerFixture.send('Input.insertText',{},preparedAt+1000),{code:'OFFLINE_OWNER_CHANGED'});assert.equal(ownerFixture.sends(),0);
+});
+test('navigation invalidation and no longer authorizing prevent every later Input',async()=>{
+ const fixture=setup();fixture.guard.invalidate();
+ await assert.rejects(fixture.send('Input.insertText',{},preparedAt+1000),{code:'INPUT_DOCUMENT_INVALIDATED'});assert.equal(fixture.sends(),0);
+ const stopped=setup({nativeWaiting:async()=>false});
+ await assert.rejects(stopped.send('Input.insertText',{},preparedAt+1000),{code:'NATIVE_AUTHORIZATION_NOT_WAITING'});
+ await assert.rejects(stopped.send('Input.insertText',{},preparedAt+1000),{code:'INPUT_DOCUMENT_INVALIDATED'});assert.equal(stopped.sends(),0);
+});
+test('consumer routes all twelve mouse/key/text events through sendInput with the minimum expiry',async()=>{
+ const methods=[];
+ const fixture={preparedAt,guardInput:async d=>assert.equal(d,preparedAt+1000),controls:async()=>({trusted:true,iframeCount:0,inputs:[{name:'identifier',type:'text'},{name:'pass'+'word',type:'pass'+'word'}],buttons:[{disabled:false}]}),evaluate:async()=>({x:10,y:10}),sendInput:async(method,params,deadline,options)=>{assert.equal(deadline,preparedAt+1000);if(method!=='Input.dispatchMouseEvent')assert.equal(typeof options.focusSelector,'string');methods.push(method);}};
+ const consume=prepareConsumer(fixture);
+ const data={username:'cybernoteqa20261113a',passphrase:'offline-fixture-only',expiresAt:preparedAt+1000};
+ await consume(data,{deadline:preparedAt+2000});
+ assert.equal(methods.length,12);assert.equal(methods.filter(m=>m==='Input.insertText').length,2);
+ assert.equal(data.username,null);assert.equal(data.passphrase,null);
+ await assert.rejects(consume(data,{deadline:preparedAt+2000}),{code:'CONSUMER_ALREADY_USED'});
+});
+test('async post-Input recorder rejection is awaited, sanitized and cannot return success',async()=>{
+ let consumed=0,observed=0;
+ const env=await prepareEnvelope({driver:{},record:async receipt=>{await Promise.resolve();if(receipt.phase==='hosted-submit-input-dispatched')throw Object.assign(Error('offline-private-recorder-message'),{code:'offline-private-code',cause:Error('offline-private-cause')});},consumeUi:async()=>{consumed++;},observe:async()=>{observed++;return{phase:'offline-observer-not-auth-evidence'};}});
+ try{
+  const marker='account109-offline-envelope-marker';
+  const raw=Buffer.from(JSON.stringify({marker,purpose:'account109-synthetic-login',expiresAt:Date.now()+30000,username:'cybernoteqa20261113a',passphrase:'offline-fixture-only'}));
+  const publicKey=createPublicKey({key:Buffer.from(env.publicKeyBase64,'base64'),format:'der',type:'spki'});
+  const cipher=publicEncrypt({key:publicKey,padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},raw);raw.fill(0);
+  const result=await env.accept(cipher.toString('base64'),marker);cipher.fill(0);
+  assert.deepEqual(result,{phase:'encrypted-transfer-rejected',code:'TRANSFER_OR_CONSUMER_REJECTED'});
+  assert.equal(consumed,1);assert.equal(observed,0);
+  assert.equal(JSON.stringify(result).includes('offline-private'),false);
+  assert.equal((await env.accept('',marker)).code,'ENVELOPE_EXPIRED_OR_CONSUMED');
+ }finally{env.dispose();}
+});
+
+test('native terminal requires exact synthetic user, paused, disabled and owned foreground',()=>{
+ const synthetic={state:'paused',profile:{username:'cybernoteqa20261113a'},enabled:false};
+ const accepted=classifyTerminal(synthetic,true);
+ assert.equal(accepted.sameSyntheticUser,true);assert.equal(accepted.nativeCallbackAccepted,true);
+ assert.equal(accepted.pageAssociation,'temporal-only');assert.equal(accepted.rawSchemeEventInspected,false);
+ assert.equal('username' in accepted,false);assert.equal('profile' in accepted,false);
+ assert.deepEqual(classifyTerminal({...synthetic,profile:{username:'other-offline-user'}},true),{phase:'callback-identity-mismatch',sameSyntheticUser:false});
+ assert.equal(classifyTerminal(synthetic,false),null);
+ assert.equal(classifyTerminal({...synthetic,state:'authorizing'},true),null);
+ assert.equal(classifyTerminal({...synthetic,enabled:true},true).code,'UNEXPECTED_SYNC_ENABLED');
+ assert.equal(classifyTerminal({...synthetic,state:'error'},true).phase,'callback-native-error');
+});

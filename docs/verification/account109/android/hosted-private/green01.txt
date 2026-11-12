@@ -1,0 +1,107 @@
+TAP version 13
+# Subtest: each supported Input event passes its own guard before dispatch
+ok 1 - each supported Input event passes its own guard before dispatch
+  ---
+  duration_ms: 0.655042
+  type: 'test'
+  ...
+# Subtest: hidden, unfocused, wrong-origin and changed-document targets receive no Input
+    # Subtest: visible
+    ok 1 - visible
+      ---
+      duration_ms: 0.128291
+      type: 'test'
+      ...
+    # Subtest: focused
+    ok 2 - focused
+      ---
+      duration_ms: 0.038208
+      type: 'test'
+      ...
+    # Subtest: fieldFocused
+    ok 3 - fieldFocused
+      ---
+      duration_ms: 0.0705
+      type: 'test'
+      ...
+    # Subtest: origin
+    ok 4 - origin
+      ---
+      duration_ms: 0.032667
+      type: 'test'
+      ...
+    # Subtest: href
+    ok 5 - href
+      ---
+      duration_ms: 0.068583
+      type: 'test'
+      ...
+    # Subtest: frameId
+    ok 6 - frameId
+      ---
+      duration_ms: 0.031958
+      type: 'test'
+      ...
+    # Subtest: loaderId
+    ok 7 - loaderId
+      ---
+      duration_ms: 0.1035
+      type: 'test'
+      ...
+    1..7
+ok 2 - hidden, unfocused, wrong-origin and changed-document targets receive no Input
+  ---
+  duration_ms: 0.76975
+  type: 'test'
+  ...
+# Subtest: lease, foreground and lock failures prevent dispatch
+ok 3 - lease, foreground and lock failures prevent dispatch
+  ---
+  duration_ms: 0.228833
+  type: 'test'
+  ...
+# Subtest: expiry after awaited native check prevents Input and cannot extend preparedAt
+ok 4 - expiry after awaited native check prevents Input and cannot extend preparedAt
+  ---
+  duration_ms: 0.133417
+  type: 'test'
+  ...
+# Subtest: page changes during native IPC and final ownership changes prevent Input
+ok 5 - page changes during native IPC and final ownership changes prevent Input
+  ---
+  duration_ms: 0.083667
+  type: 'test'
+  ...
+# Subtest: navigation invalidation and no longer authorizing prevent every later Input
+ok 6 - navigation invalidation and no longer authorizing prevent every later Input
+  ---
+  duration_ms: 0.3075
+  type: 'test'
+  ...
+# Subtest: consumer routes all twelve mouse/key/text events through sendInput with the minimum expiry
+ok 7 - consumer routes all twelve mouse/key/text events through sendInput with the minimum expiry
+  ---
+  duration_ms: 0.249458
+  type: 'test'
+  ...
+# Subtest: async post-Input recorder rejection is awaited, sanitized and cannot return success
+ok 8 - async post-Input recorder rejection is awaited, sanitized and cannot return success
+  ---
+  duration_ms: 1144.251667
+  type: 'test'
+  ...
+# Subtest: native terminal requires exact synthetic user, paused, disabled and owned foreground
+ok 9 - native terminal requires exact synthetic user, paused, disabled and owned foreground
+  ---
+  duration_ms: 0.099125
+  type: 'test'
+  ...
+1..9
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1179.556083
