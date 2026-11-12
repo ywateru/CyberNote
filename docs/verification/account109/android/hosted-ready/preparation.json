@@ -1,0 +1,62 @@
+{
+  "phase": "hosted-form-ready",
+  "source": "6537b74bf2c957be2ada5511778f597400877029",
+  "owned": {
+    "serial": "98895a3147304c3132",
+    "package": "com.android.chrome",
+    "pid": 12765,
+    "local": "tcp:51295",
+    "remote": "localabstract:chrome_devtools_remote",
+    "pageId": "3332"
+  },
+  "form": {
+    "origin": "https://auth.x.aixgg.com",
+    "ready": "complete",
+    "inputs": [
+      {
+        "type": "text",
+        "name": "identifier",
+        "id": "",
+        "autocomplete": "username",
+        "disabled": false,
+        "readOnly": false
+      },
+      {
+        "type": "password",
+        "name": "password",
+        "id": "",
+        "autocomplete": "current-password",
+        "disabled": false,
+        "readOnly": false
+      }
+    ],
+    "buttons": [
+      {
+        "type": "submit",
+        "label": "\u767b\u5f55",
+        "disabled": false
+      }
+    ],
+    "iframeCount": 0,
+    "securityState": "not-reported"
+  },
+  "clipboardRead": false,
+  "credentialsEntered": false,
+  "attempts": [
+    {
+      "attempt": 1,
+      "phase": "hosted-preparation-failed",
+      "code": "HOSTED_ORIGIN_MISMATCH",
+      "observedOrigin": "not-recorded",
+      "settlement": "real App Cancel returned native signedOut; no credential input"
+    },
+    {
+      "attempt": 2,
+      "phase": "hosted-form-ready",
+      "origin": "https://auth.x.aixgg.com"
+    }
+  ],
+  "privateDriverSha256": "dc3d866b45c8045131ce36eaa428c2a6959e8280ec828c8ffec42b40c6e0e143",
+  "state": "waiting-for-user-marker",
+  "urlOrInputValuesRecorded": false
+}
