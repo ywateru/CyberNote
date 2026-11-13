@@ -1,4 +1,4 @@
-当前补充：Android独立[error态正常重开](android/error-reopen-live01/README.md)通过并独核，仅限当前完整数据保全和clean signedOut恢复；新[双入口取消live02](android/current-login-smoke-live02/README.md)FAIL于嵌套WebView表单识别等待，尚未验收Android取消。此前失败不改，完整执行器整合315/315通过；AUTH-08～11的Android分支仍开放。
+当前补充：Android[三条双入口取消live03](android/current-login-smoke-live03/README.md)实际PASS：AUTH-08浏览器选择/取消、AUTH-09原生表单投影/Back、AUTH-10内置转浏览器activity/取消，各自登录前/取消后/正常重开后完整数据与附件原字节至少3次/3秒核对；结果已独核通过。不验收成功登录/注册、全部AUTH-11排列、可信origin独立观测或账户三端。此前独立[error态正常重开](android/error-reopen-live01/README.md)通过并独核；原FAIL保持。完整执行器319/319、零跳过。
 
 最新Android当前数据保全：[preserving-upgrade-live01](android/preserving-upgrade-live01/README.md)实际安装精确88b2dabe包，当前四篇全字段/正文与唯一附件引用/descriptor/授权字节两次完全一致，独核通过。正常重启后signedOut；不代表成功登录/三端或接受历史未知附件来源。原桌面relogin05完整600秒人工授权超时，旧scope问题未验证。
 

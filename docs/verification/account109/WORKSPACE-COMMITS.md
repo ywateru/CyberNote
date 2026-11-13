@@ -135,3 +135,15 @@ UI 作者原提交为 `4cc18c1c`，经 cherry-pick 收入 main，细节与复跑
 - `10428afb`：相同已核binary的隔离debug.app包装，未启动/重签，签名限制明确，待独核与真实窗口验证。
 
 以上均为本地main提交。DNS管理员登录前提已解决；有效QA表单授权、Android原库保全门槛和真实账户三端仍需续验。未创建GitHub仓库、push开发历史或运行Actions，正式净化交付保持原顺序。
+
+### 2026-11-13 Android双入口取消实测与清理续验
+
+- `4b6d65d8`、`f50c70f9`：正常error态重开结果原样归档并独核，完整当前数据3次/3649ms一致，clean signedOut；此前失败不改。
+- `6bbc49c8`、`63218a29`：第二轮取消的CONDITION_TIMEOUT及后续嵌套WebView有限结构归档、独核，仍为FAIL。
+- `a0f01db4`、`e7f398fb`：执行器识别唯一owned根内同包嵌套WebView，跨包/隐藏/独立root反例通过并独审，产品不变。
+- `a7ccc703`、`70838892`：原pending授权的native Back续验整体CHECK_FAILED，表单投影/Back signedOut局部通过；后续独立只读三次数据一致，原失败保留并独核。
+- `b9da3d6c`、`eddab872`：完整本地观察同时满足至少3样本/3秒，固定30秒接受上限；慢status/capture和错误反例独审通过。父级完整整合319/319，零跳过。
+- [current-login-smoke-live03](android/current-login-smoke-live03/README.md)：准确已安装88b2dabe APK上三条完整流程实际PASS，内置Back、内置转浏览器取消、浏览器取消，逐次完整正文/descriptor/引用/授权原字节及正常重开保全；不是成功认证或账户三端验收。
+- `66177e90`、`e6c81c1c`：指定生成目录与重复检出文档清理及独核。du减少973.92MiB、同期df增加937.68MiB，保留全部候选、唯一shared target、原库、失败、私有快照和两份dist/log。
+
+本轮新增产品以外执行器/证据均按独审范围收拢至本地main。原QA有效登录仍是成功身份校验和账户三端的必要前提，未读取或复制grant、重置账号或创建替代身份。尚未发布GitHub或启动Actions，不改写旧净化草案。

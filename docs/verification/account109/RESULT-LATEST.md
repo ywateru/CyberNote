@@ -1,4 +1,4 @@
-最新续验：手机[error态正常重开](android/error-reopen-live01/README.md)独立PASS并独核，完整当前数据3次/3649ms一致，APK保持、新PID、clean signedOut；不是旧smoke通过或错误根因结论。[完整整合](android/pty-integration02.md)315/315、零跳过。新[取消live02](android/current-login-smoke-live02/README.md)在进入embedded后表单识别超时FAIL；只读结构发现内层WebView控件未满足现有最近owner与顶层owner相等的判断。正在窄修，未执行取消/重启及另两case，实际认证与账户三端仍待验收。
+最新续验：Android[三条完整双入口取消与重开](android/current-login-smoke-live03/README.md)均PASS，准确88b2dabe APK配合eddab872执行器：内置原生Back、内置转浏览器取消、浏览器取消；登录前/取消后/重开后完整四篇数据、附件引用/descriptor/授权原字节各至少3次/3秒一致，owned forward/lease释放。完整组319/319零跳过，实际结果已独核通过。此前[error态正常重开](android/error-reopen-live01/README.md)独立PASS并独核；live01/live02/Back续验失败仍保持。修正仅限执行器嵌套WebView与有界完整采样，不追认旧失败原因。成功登录、账户三端与4G/WiFi匿名中转仍未验收。
 
 # 账户同步实际验证结果
 

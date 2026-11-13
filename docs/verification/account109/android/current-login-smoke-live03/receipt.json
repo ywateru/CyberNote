@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "runnerRevision": "eddab872",
+  "recordedAt": "2026-11-13T15:15:50.449Z",
+  "results": [
+    {
+      "case": "embedded-back",
+      "source": "/private/tmp/account109-android-current-login-smoke-embedded-back03/result.json",
+      "sha256": "758b53ea85abbc50f0ec33166437c15b47f584762cbdcb1aff534b8921d4f569",
+      "startedAt": "2026-11-13T15:13:24.232Z",
+      "finishedAt": "2026-11-13T15:13:57.208Z",
+      "checks": [
+        "baseline-preserved",
+        "native-form",
+        "cancelled-preserved",
+        "background-reclaimed",
+        "restarted-preserved"
+      ],
+      "observations": [
+        {
+          "kind": "baseline-preserved",
+          "samples": 3,
+          "durationMs": 3787
+        },
+        {
+          "kind": "native-form",
+          "dialog": true,
+          "webView": true,
+          "hostedForm": true,
+          "originProof": "production-native-host-policy; not independently established by accessibility"
+        },
+        {
+          "kind": "cancelled-preserved",
+          "samples": 3,
+          "durationMs": 3564
+        },
+        {
+          "kind": "background-reclaimed",
+          "oldPid": 28586,
+          "action": "am kill background package",
+          "forceStop": false
+        },
+        {
+          "kind": "restarted-preserved",
+          "samples": 3,
+          "durationMs": 3618
+        }
+      ]
+    },
+    {
+      "case": "embedded-browser",
+      "source": "/private/tmp/account109-android-current-login-smoke-embedded-browser03/result.json",
+      "sha256": "340e90af2babe0e2e2dcc00fc56508679714047587465c2a574dd8d6c9124f0a",
+      "startedAt": "2026-11-13T15:14:04.161Z",
+      "finishedAt": "2026-11-13T15:14:41.361Z",
+      "checks": [
+        "baseline-preserved",
+        "native-form",
+        "external-browser",
+        "cancelled-preserved",
+        "background-reclaimed",
+        "restarted-preserved"
+      ],
+      "observations": [
+        {
+          "kind": "baseline-preserved",
+          "samples": 3,
+          "durationMs": 3855
+        },
+        {
+          "kind": "native-form",
+          "dialog": true,
+          "webView": true,
+          "hostedForm": true,
+          "originProof": "production-native-host-policy; not independently established by accessibility"
+        },
+        {
+          "kind": "external-browser",
+          "observed": true
+        },
+        {
+          "kind": "cancelled-preserved",
+          "samples": 3,
+          "durationMs": 3006
+        },
+        {
+          "kind": "background-reclaimed",
+          "oldPid": 3341,
+          "action": "am kill background package",
+          "forceStop": false
+        },
+        {
+          "kind": "restarted-preserved",
+          "samples": 3,
+          "durationMs": 3581
+        }
+      ]
+    },
+    {
+      "case": "browser",
+      "source": "/private/tmp/account109-android-current-login-smoke-browser03/result.json",
+      "sha256": "761cb36a41fa73b426aa7459961485cfbbe3291a7b5da65c53742f4ab725dad4",
+      "startedAt": "2026-11-13T15:14:51.784Z",
+      "finishedAt": "2026-11-13T15:15:21.847Z",
+      "checks": [
+        "baseline-preserved",
+        "external-browser",
+        "cancelled-preserved",
+        "background-reclaimed",
+        "restarted-preserved"
+      ],
+      "observations": [
+        {
+          "kind": "baseline-preserved",
+          "samples": 3,
+          "durationMs": 3775
+        },
+        {
+          "kind": "external-browser",
+          "observed": true
+        },
+        {
+          "kind": "cancelled-preserved",
+          "samples": 3,
+          "durationMs": 3251
+        },
+        {
+          "kind": "background-reclaimed",
+          "oldPid": 4505,
+          "action": "am kill background package",
+          "forceStop": false
+        },
+        {
+          "kind": "restarted-preserved",
+          "samples": 3,
+          "durationMs": 3725
+        }
+      ]
+    }
+  ],
+  "moduleSha256": {
+    "account109-android.mjs": "4cce4edeb49e6327f7cbba43465cc0519eeeaf7eb202377214451045bb6056b2",
+    "account109-android-current-login-smoke.mjs": "661db2f29d42aceeb14c1bcfc8a28edd0957f093a6e42f196e5ef76df75dfb38",
+    "account109-android-preserving-upgrade.mjs": "3308b5c5ab54895ca06e4ed4ef487382fd36934326bd239c5e65a9cdfb813bdf",
+    "account109-android-login-surfaces.mjs": "b7505221dbb6af69471249bb2f122f38c23de72f65e623fbf823af56596b19ea",
+    "account109-desktop-helpers.mjs": "8c9e21dcb13f72a6d5f5095754e577e068331557af032c565e7a6cf1438e31f4"
+  },
+  "integration": {
+    "tests": 319,
+    "pass": 319,
+    "fail": 0,
+    "skipped": 0,
+    "durationMs": 5362.743458,
+    "tap": "/private/tmp/account109-local-sampling-integration01.tap",
+    "sha256": "e481f8cb719ac7739a58112432e6f15583e6aea94b15b73047946dfdcf0d9afc"
+  }
+}
