@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "status": "approve-local-wrapper-only",
+  "authorCommit": "abd5f539045f9fe2dc3d523ce8873cb20fc14650",
+  "sourceRevision": "72513d1296df4526a08834db65a3427957d3fb50",
+  "original": {
+    "sha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459",
+    "bytes": 204326848,
+    "inode": 46263817,
+    "mode": "0o755",
+    "mtimeNs": 1794569173778836127,
+    "nlink": 1
+  },
+  "wrapped": {
+    "sha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459",
+    "bytes": 204326848,
+    "inode": 46313872,
+    "mode": "0o755",
+    "mtimeNs": 1794569173778836127,
+    "nlink": 1
+  },
+  "originalUnchangedDuringReview": true,
+  "exactFourFileInventoryMatchesAuthor": true,
+  "sourceIconAndUsageStringsMatch": true,
+  "compiledTauriIdentifier": "com.local.notesclone",
+  "wrapperBundleIdentifier": "com.local.notesclone.account109.debug72513d12",
+  "externalBundleResourcesConfigured": false,
+  "darwinProviderEmbeddedBySource": true,
+  "authorArchiveChecksumCount": 12,
+  "checks": [
+    {
+      "name": "original-strict",
+      "exitCode": 0,
+      "outputSha256": "3363df4378e728d42e50d45c920eccb9ce161e213fef6893a0a21497efb901f1"
+    },
+    {
+      "name": "wrapper-strict",
+      "exitCode": 1,
+      "outputSha256": "2c4964d489dff7f4b23fceba230ee17e9018d0c1861946fc35c04b001eb6e623"
+    },
+    {
+      "name": "plist-lint",
+      "exitCode": 0,
+      "outputSha256": "b34d9831dcab80a606d3d8b3a24e53c165f15d1a7beaf30fa9fe4a0474e07aa0"
+    },
+    {
+      "name": "linked-libraries",
+      "exitCode": 0,
+      "outputSha256": "db457e595bb58c923630dbe6cda4b0272b2b1f28695434418ca19a303b32c430",
+      "systemLibraryCount": 22
+    }
+  ],
+  "runtimeLaunchOrRecognitionTested": false,
+  "storageIsolationProvidedByBundleIdentifier": false,
+  "signatureBoundary": "Standalone strict pass; bundle strict fails as recorded; not signed/sealed/notarized or launch-approved."
+}
