@@ -1,0 +1,512 @@
+{
+  "schema": 1,
+  "scope": "Authorized UI sparse narrowing and 12 generated-directory removals only; dist/logs/candidates/shared target/stores not mutated; no credential, DB, or grant reads",
+  "started_at": "2026-11-13T15:04:29.227450+00:00",
+  "main_observed": "63218a29c2c23d3f71c924d6199df47840dd4556",
+  "baseline_reference": "08a3421a8352b464a35924aed5931e26ba4f6b7d",
+  "roots_before": [
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces-ui",
+      "head": "560106a759d5eab5ec7b9f8be873662dbbdc3424",
+      "status": "clean",
+      "du_KiB": 1109660
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01",
+      "head": "72513d1296df4526a08834db65a3427957d3fb50",
+      "status": "clean",
+      "du_KiB": 200260
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces",
+      "head": "76fe3dfd650814a5e9c42e6c1cf9b96231a55820",
+      "status": "clean",
+      "du_KiB": 201112
+    }
+  ],
+  "ui_docs_before_KiB": 956364,
+  "ui_six_files_match_main": [
+    {
+      "path": "docs/verification/account109/native/relogin-pin-72513d12-01/README.md",
+      "head_blob": "c5ff3aae751b379d72d24aecf8103d9d72e9ebc4",
+      "main_blob": "c5ff3aae751b379d72d24aecf8103d9d72e9ebc4",
+      "equal": true
+    },
+    {
+      "path": "docs/verification/account109/native/relogin-pin-72513d12-01/SHA256SUMS",
+      "head_blob": "a5c79ca7f45d8f763b79464f91a806aca3368098",
+      "main_blob": "a5c79ca7f45d8f763b79464f91a806aca3368098",
+      "equal": true
+    },
+    {
+      "path": "docs/verification/account109/native/relogin-pin-72513d12-01/receipt.json",
+      "head_blob": "bd8abd42c56334f448e85232378e9cf1d460a61e",
+      "main_blob": "bd8abd42c56334f448e85232378e9cf1d460a61e",
+      "equal": true
+    },
+    {
+      "path": "docs/verification/account109/native/relogin-pin-72513d12-01/tests.txt",
+      "head_blob": "8cc70f852187df21a3aad47e2f8d922b3827e2bc",
+      "main_blob": "8cc70f852187df21a3aad47e2f8d922b3827e2bc",
+      "equal": true
+    },
+    {
+      "path": "scripts/verification/account109-desktop-relogin.mjs",
+      "head_blob": "60b36ae04e32f8b07e7e03dc3eb9a0f4c7a8ade9",
+      "main_blob": "60b36ae04e32f8b07e7e03dc3eb9a0f4c7a8ade9",
+      "equal": true
+    },
+    {
+      "path": "scripts/verification/account109-desktop-relogin.test.mjs",
+      "head_blob": "22dc27f3dd52a90bb694e72d23f688977f68a099",
+      "main_blob": "22dc27f3dd52a90bb694e72d23f688977f68a099",
+      "equal": true
+    }
+  ],
+  "sparse_scopes": [
+    ".github",
+    "api",
+    "assets",
+    "crates",
+    "labs",
+    "output",
+    "patches",
+    "plugins",
+    "public",
+    "references",
+    "scripts",
+    "services",
+    "src-tauri",
+    "src",
+    "vendor",
+    "docs/plan",
+    "docs/architecture",
+    "docs/ui",
+    "docs/verification/account109"
+  ],
+  "preserved_top_scopes": [
+    "/private/tmp/cybernote-account109-login-surfaces-ui/.github",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/api",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/assets",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/crates",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/labs",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/output",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/patches",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/plugins",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/public",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/references",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/scripts",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/services",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/src-tauri",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/src",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/vendor",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/docs/plan",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/docs/architecture",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/docs/ui",
+    "/private/tmp/cybernote-account109-login-surfaces-ui/docs/verification/account109"
+  ],
+  "generated_preflight": [
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01/plugins/tauri-plugin-notes-auth/android/.tauri",
+      "allocated_KiB": 8048,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 1083
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01/plugins/tauri-plugin-notes-media/android/.tauri",
+      "allocated_KiB": 8048,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 1083
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01/plugins/tauri-plugin-notes-scan/android/.tauri",
+      "allocated_KiB": 8048,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 1083
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01/src-tauri/gen/android/.gradle",
+      "allocated_KiB": 2068,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 24
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01/src-tauri/gen/android/app/build/kotlin",
+      "allocated_KiB": 940,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 103
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01/src-tauri/gen/android/app/build/tmp",
+      "allocated_KiB": 160,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 27
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces/plugins/tauri-plugin-notes-auth/android/.tauri",
+      "allocated_KiB": 8048,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 1083
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces/plugins/tauri-plugin-notes-media/android/.tauri",
+      "allocated_KiB": 8048,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 1083
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces/plugins/tauri-plugin-notes-scan/android/.tauri",
+      "allocated_KiB": 8048,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 1083
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces/src-tauri/gen/android/.gradle",
+      "allocated_KiB": 2044,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 24
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces/src-tauri/gen/android/app/build/kotlin",
+      "allocated_KiB": 940,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 103
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces/src-tauri/gen/android/app/build/tmp",
+      "allocated_KiB": 160,
+      "canonical": true,
+      "symlinks": 0,
+      "special_files": 0,
+      "tracked_files": 0,
+      "gitignored": true,
+      "lsof_returncode": 1,
+      "lsof_stdout_empty": true,
+      "lsof_stderr_empty": true,
+      "entry_count": 27
+    }
+  ],
+  "preserved_preflight": {
+    "/private/tmp/cybernote-account109-android-72513d12-01/dist": {
+      "allocated_KiB": 1848,
+      "files_sha256": {
+        "build-info.json": "12e96eddbaf7eed026b3b0df9c9014647afcf4c44c1f5236177ecbea1f562ce6",
+        "index.html": "56f81e3c0f58508ecd6138d96b3a4ca8bc62773c2fe17c6486e97e39013c092d",
+        "startup.js": "ed5c34bf3f142f9619e680059c4c5fa95c07a4b41eaf9871a757e784e0881ff9",
+        "cybernote.svg": "64ced2fa3d9f18adcc1bb20b2f53c371f0791facf08c3acfaebc6e89bba0ff8f",
+        "startup.css": "12a5b4b8b693f3eb219f0dc02b725d226b2fa81220b2ba7dce3d46fbe4404327",
+        "assets/index-DO2ow_-x.js": "4fdd1391b91c72a17a9228304a1aaf36cbd198b8b9047fe681f81020b954c07a",
+        "assets/index-DVMem87I.css": "3f0a82c681f95d3ba22c57d3f661cb9a0f309abd084c9a0c5487d71b04878037",
+        "assets/runtime-S_0ti0__.js": "f243c3beadb0585b819312a8e579746f883ffc7e48db0d443ad616e8376cd1a4",
+        "assets/native-recording-access-atpzZx1B.js": "52ef2908c7f482ee1fe274461e866fa84d45fd2f830e20b310d22e0247044418"
+      }
+    },
+    "/private/tmp/cybernote-account109-android-72513d12-01/src-tauri/gen/android/app/build/outputs/logs": {
+      "allocated_KiB": 104,
+      "files_sha256": {
+        "manifest-merger-universal-debug-report.txt": "20bf8139779d6a321da5005c3b498dcfed1ffa94e82a8e4ce5d28d95f49bd451"
+      }
+    },
+    "/private/tmp/cybernote-account109-login-surfaces/dist": {
+      "allocated_KiB": 1840,
+      "files_sha256": {
+        "build-info.json": "c8e401a208d10993107d1768a37a9b3865dea5e9772eac1376b7beeb8e92065f",
+        "index.html": "3cc9723794e3f7d144f7279d0f52096267f71ad5670d266a82bae9dc6c85e4d4",
+        "startup.js": "ed5c34bf3f142f9619e680059c4c5fa95c07a4b41eaf9871a757e784e0881ff9",
+        "cybernote.svg": "64ced2fa3d9f18adcc1bb20b2f53c371f0791facf08c3acfaebc6e89bba0ff8f",
+        "startup.css": "12a5b4b8b693f3eb219f0dc02b725d226b2fa81220b2ba7dce3d46fbe4404327",
+        "assets/native-recording-access-CIVmz3vZ.js": "74e576b8ca164d5760bbc15754a0765c855682cf3f212b17074f865897eb511c",
+        "assets/index-2m03fAcs.js": "d39d5e08a2b1fad9da327343ad78a0d41acfbd598120dee51ca8d006b85c0862",
+        "assets/index-DVMem87I.css": "3f0a82c681f95d3ba22c57d3f661cb9a0f309abd084c9a0c5487d71b04878037",
+        "assets/runtime-D2mpr8JX.js": "136e8569b19770f004fb50ecd622970479892f79bea9fb5c914b5cd538867e13"
+      }
+    },
+    "/private/tmp/cybernote-account109-login-surfaces/src-tauri/gen/android/app/build/outputs/logs": {
+      "allocated_KiB": 104,
+      "files_sha256": {
+        "manifest-merger-universal-debug-report.txt": "01a9149010975b9a4e969f05d33eff3a4190589be6f1a8c9c8e409deaa8c4422"
+      }
+    }
+  },
+  "activity_preflight": {
+    "matching_processes": [],
+    "criteria": "ps comm exact basename: cargo/rustc/java/gradle/gradlew/notes-clone/kotlinc/kotlin-daemon/xcodebuild/tauri/ninja"
+  },
+  "df_before": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   482746452 424437432  21842720    96% 5553447 218427200    2%   /System/Volumes/Data\n",
+  "sparse_preflight": {
+    "excluded_regular_file_count": 19360,
+    "excluded_logical_bytes": 920970026,
+    "excluded_allocated_bytes": 965320704,
+    "excluded_path_list_sha256": "788a3d21b438d7edc0a4910a28e92b56ac5e156b0aaf4633333d78c91b1b8605",
+    "kept_tracked_docs_count": 1400,
+    "kept_tracked_docs_paths_sha256": "c2df7ffe9ba505bd3e41cf84753d03edc5ab0137b8fd3a2a8187a3dc56bf2418",
+    "all_product_top_level_trees_included": true,
+    "root_and_docs_ancestor_files_retained_by_cone": true
+  },
+  "sparse_result": {
+    "completed_at": "2026-11-13T15:05:06.384492+00:00",
+    "command": [
+      "git",
+      "-C",
+      "/private/tmp/cybernote-account109-login-surfaces-ui",
+      "sparse-checkout",
+      "set",
+      "--cone",
+      "--stdin"
+    ],
+    "stdout": "",
+    "stderr": "",
+    "status_after": "clean",
+    "head_unchanged": true,
+    "all_six_files_unchanged": true,
+    "ui_after_KiB": 166964,
+    "ui_docs_after_KiB": 13668,
+    "sparse_list": [
+      ".github",
+      "api",
+      "assets",
+      "crates",
+      "docs/architecture",
+      "docs/plan",
+      "docs/ui",
+      "docs/verification/account109",
+      "labs",
+      "output",
+      "patches",
+      "plugins",
+      "public",
+      "references",
+      "scripts",
+      "services",
+      "src",
+      "src-tauri",
+      "vendor"
+    ],
+    "df_after": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   482746452 423487820  22792332    95% 5531695 227923320    2%   /System/Volumes/Data\n"
+  },
+  "generated_cleanup": {
+    "df_before": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   482746452 423487920  22792232    95% 5531701 227922320    2%   /System/Volumes/Data\n",
+    "removed": [
+      {
+        "path": "/private/tmp/cybernote-account109-android-72513d12-01/plugins/tauri-plugin-notes-auth/android/.tauri",
+        "allocated_before_KiB": 8048,
+        "logical_file_bytes_before": 6696785,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:53.790705+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-android-72513d12-01/plugins/tauri-plugin-notes-media/android/.tauri",
+        "allocated_before_KiB": 8048,
+        "logical_file_bytes_before": 6696785,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:54.283466+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-android-72513d12-01/plugins/tauri-plugin-notes-scan/android/.tauri",
+        "allocated_before_KiB": 8048,
+        "logical_file_bytes_before": 6696785,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:54.790849+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-android-72513d12-01/src-tauri/gen/android/.gradle",
+        "allocated_before_KiB": 2068,
+        "logical_file_bytes_before": 2075748,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:55.155356+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-android-72513d12-01/src-tauri/gen/android/app/build/kotlin",
+        "allocated_before_KiB": 940,
+        "logical_file_bytes_before": 752154,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:55.546840+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-android-72513d12-01/src-tauri/gen/android/app/build/tmp",
+        "allocated_before_KiB": 160,
+        "logical_file_bytes_before": 121585,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:55.904527+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-login-surfaces/plugins/tauri-plugin-notes-auth/android/.tauri",
+        "allocated_before_KiB": 8048,
+        "logical_file_bytes_before": 6696785,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:56.391492+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-login-surfaces/plugins/tauri-plugin-notes-media/android/.tauri",
+        "allocated_before_KiB": 8048,
+        "logical_file_bytes_before": 6696785,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:57.056938+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-login-surfaces/plugins/tauri-plugin-notes-scan/android/.tauri",
+        "allocated_before_KiB": 8048,
+        "logical_file_bytes_before": 6696785,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:57.726836+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-login-surfaces/src-tauri/gen/android/.gradle",
+        "allocated_before_KiB": 2044,
+        "logical_file_bytes_before": 2048975,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:58.222582+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-login-surfaces/src-tauri/gen/android/app/build/kotlin",
+        "allocated_before_KiB": 940,
+        "logical_file_bytes_before": 752154,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:58.637770+00:00"
+      },
+      {
+        "path": "/private/tmp/cybernote-account109-login-surfaces/src-tauri/gen/android/app/build/tmp",
+        "allocated_before_KiB": 160,
+        "logical_file_bytes_before": 121585,
+        "exists_after": false,
+        "pre_delete_guards_rechecked": true,
+        "completed_at": "2026-11-13T15:05:58.986539+00:00"
+      }
+    ],
+    "df_after": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   482746452 423477272  22802880    95% 5524884 228028800    2%   /System/Volumes/Data\n"
+  },
+  "preserved_postflight": {
+    "all_dist_and_outputs_logs_paths_and_sha256_unchanged": true,
+    "prior_intermediates_and_apk_outputs_still_absent": true,
+    "shared_target_exists": true,
+    "no_candidate_or_shared_target_mutation_performed": true
+  },
+  "roots_after_cleanup": [
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces-ui",
+      "head": "560106a759d5eab5ec7b9f8be873662dbbdc3424",
+      "status": "clean",
+      "du_KiB": 166964
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01",
+      "head": "72513d1296df4526a08834db65a3427957d3fb50",
+      "status": "clean",
+      "du_KiB": 172948
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces",
+      "head": "76fe3dfd650814a5e9c42e6c1cf9b96231a55820",
+      "status": "clean",
+      "du_KiB": 173824
+    }
+  ],
+  "completed_at": "2026-11-13T15:05:59.270295+00:00",
+  "df_final": "Filesystem   1024-blocks      Used Available Capacity iused     ifree %iused  Mounted on\n/dev/disk3s5   482746452 423477252  22802900    95% 5524884 228029000    2%   /System/Volumes/Data\n",
+  "main_postflight": {
+    "observed": "e7f398fb92c96d04a5e568811bec5e8c9af63652",
+    "all_six_paths_still_equal": true,
+    "main_not_checked_out_or_committed_by_this_operation": true,
+    "concurrent_parent_main_updates_possible": true
+  },
+  "summary": {
+    "sparse_du_reduction_KiB": 942696,
+    "generated_du_reduction_KiB": 54600,
+    "total_root_du_reduction_KiB": 997296,
+    "removed_regular_file_logical_bytes": 967022937,
+    "df_available_before_KiB": 21842720,
+    "df_available_after_KiB": 22802900,
+    "df_available_observed_increase_KiB": 960180,
+    "df_is_filesystem_wide_observation_not_exclusive_reclaimed_extent_proof": true,
+    "measurement_before_receipt_creation": true
+  },
+  "archive_prepared_at": "2026-11-13T15:07:12.202762+00:00"
+}
