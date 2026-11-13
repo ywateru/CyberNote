@@ -8,6 +8,7 @@
 - Vercel Node22服务采用固定CyberGrid源码版本`f2a3961536e5c69b13c7dbc661953d9243becbae`，Redis通过验证证书的TLS TCP连接。每个环境使用独立namespace；Redis存协调状态而非笔记/附件。
 - CyberNote专用API resource提供connect用户scope；专用SPA仅用于服务控制台。Native与SPA静态产品策略限定同一产品，其他Logto应用的token不可加入。
 - `/api/v1/account/profile`接受Bearer资源access token，验证issuer/audience/ES384/expiry/client_id/connect和产品允许策略后返回`{schemaVersion:1,subject,issuer,productId,workspaceId}`。workspace UUID由固定服务端随机seed对issuer＋subject＋canonical product的分域HMAC派生；seed必须显式配置，部署后不能随意轮换，不能用请求Host/未验证JWT字段生成账号归属。
+- Logto身份校验仅在固定issuer的远程JWKS获取发生网络/超时、响应体传输失败或非200响应时返回`503 IDENTITY_UNAVAILABLE`及固定安全提示；签名、claims、未知/无效密钥和JWT错误仍返回`401 INVALID_IDENTITY`，不透传上游异常或响应内容。此区分不代表已证明某次原生运行失败的原因。
 - 管理凭据仅供本地配置Logto；运行服务只持Redis和workspace派生seed等必需服务端配置。登录密码只进入Logto页面，不交给CyberNote协调服务。
 
 ## 原生认证与设备授权契约

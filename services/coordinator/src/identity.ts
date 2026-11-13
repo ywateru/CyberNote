@@ -1,12 +1,23 @@
-import {createRemoteJWKSet,jwtVerify,type JWTVerifyGetKey} from 'jose';
+import {createRemoteJWKSet,customFetch,errors,jwtVerify,type FetchImplementation,type JWTVerifyGetKey} from 'jose';
 import {ApiError,type AuthConfiguration,type Identity,type VerifiedIdentity} from './types.js';
+// Only our remote fetch boundary can produce this error. Resolver/validation errors stay 401.
+class JWKSRetrievalError extends errors.JOSEError {}
+const fetchIdentityKeys:FetchImplementation=async(url,options)=>{
+ let response:Response;
+ try{response=await fetch(url,options);}catch{throw new JWKSRetrievalError();}
+ if(response.status!==200)throw new JWKSRetrievalError();
+ let body:string;
+ try{body=await response.text();}catch{throw new JWKSRetrievalError();}
+ // Separate body transport failures from malformed JSON/JWKS, which jose still validates.
+ return new Response(body);
+};
 export class LogtoIdentity implements Identity {
  private readonly keys:JWTVerifyGetKey;
  constructor(private readonly config:AuthConfiguration,private readonly algorithms:string[]=['ES384'],keys?:JWTVerifyGetKey){
   const issuer=new URL(config.issuer);
   if(issuer.protocol!=='https:'||issuer.username||issuer.password||issuer.search||issuer.hash||!issuer.pathname.endsWith('/oidc'))throw new Error('Pinned HTTPS Logto issuer required');
   const resource=new URL(config.resource);if(resource.protocol!=='https:'||resource.username||resource.password||resource.search||resource.hash||algorithms.length!==1||algorithms[0]!=='ES384')throw new Error('Pinned HTTPS API resource and ES384 required');
-  this.keys=keys??createRemoteJWKSet(new URL(config.issuer+'/jwks'),{timeoutDuration:5000,cooldownDuration:30_000,cacheMaxAge:600_000});
+  this.keys=keys??createRemoteJWKSet(new URL(config.issuer+'/jwks'),{timeoutDuration:5000,cooldownDuration:30_000,cacheMaxAge:600_000,[customFetch]:fetchIdentityKeys});
  }
  configuration(clientId:string){return {...this.config,clientId};}
  async verify(token:string):Promise<VerifiedIdentity>{
@@ -19,6 +30,9 @@ export class LogtoIdentity implements Identity {
    if(typeof payload.scope!=='string'||!payload.scope.split(/\s+/).includes('connect'))throw Error('Missing permission');
    if(protectedHeader.typ!==undefined&&!['JWT','at+jwt'].includes(protectedHeader.typ))throw Error('Token type');
    return {id:payload.sub,clientId:payload.client_id,...(typeof payload.email==='string'?{email:payload.email}:{})};
-  }catch{throw new ApiError(401,'INVALID_IDENTITY','Logto 授权无效或已过期，请重新授权');}
+  }catch(error){
+   if(error instanceof JWKSRetrievalError)throw new ApiError(503,'IDENTITY_UNAVAILABLE','Logto 身份验证暂时不可用，请稍后重试');
+   throw new ApiError(401,'INVALID_IDENTITY','Logto 授权无效或已过期，请重新授权');
+  }
  }
 }
