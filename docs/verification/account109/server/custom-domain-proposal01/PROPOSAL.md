@@ -1,5 +1,7 @@
 # `cybernote-sync.aixgg.com` 正式传输别名提案（未应用）
 
+后续更新（2026-11-13）：用户已回复“继续 允许使用”，精确域名使用已授权；Vercel现有项目绑定已执行，但DNS权限不足，域名仍未验证。当前实施与门槛见[已授权任务](../../../../plan/tasks/app-account109-approved-domain.md)。下文保留授权前的原始提案与当时状态，不作为当前仍待域名使用许可的依据。
+
 本提案准备一次受控的 coordinator transport 增补。目标是让未来指定 Android candidate 通过正式域名访问现有 coordinator，让现有桌面继续访问旧域并验证相同 enrollment issuer。它不迁移 Logto、不替换服务器、不引入转发服务，也不把匿名 peer Quick Tunnel 当作 bootstrap 修复。4G 能否通过新域名成功连接仍待实际验证。
 
 ## 精确绑定
