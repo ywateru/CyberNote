@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "receiptCreatedAt": "2026-11-13T08:13:56+00:00",
+  "observedDate": "2026-11-13",
+  "observationTimestampPrecision": "date; exact query timestamps were not retained",
+  "evidenceSource": "completed bounded read-only Management queries in this investigation; no re-requests for this receipt",
+  "publicInputs": {
+    "issuer": "https://auth.x.aixgg.com/oidc",
+    "managementAudience": "https://default.logto.app/api",
+    "resourceIndicator": "https://cybernote.app/api",
+    "requiredResourceScope": "connect",
+    "nativeRedirectUris": [
+      "http://127.0.0.1:17897/callback",
+      "com.local.notesclone.auth://callback"
+    ]
+  },
+  "requests": [
+    {
+      "batch": 1,
+      "operation": "managementClientCredentials",
+      "httpStatus": 200
+    },
+    {
+      "batch": 1,
+      "operation": "exactNativeApplication",
+      "httpStatus": 200
+    },
+    {
+      "batch": 1,
+      "operation": "exactOwnedResource",
+      "httpStatus": 200
+    },
+    {
+      "batch": 1,
+      "operation": "exactOwnedResourceScopes",
+      "httpStatus": 200
+    },
+    {
+      "batch": 1,
+      "operation": "exactOwnedDefaultRole",
+      "httpStatus": 200
+    },
+    {
+      "batch": 1,
+      "operation": "exactOwnedDefaultRoleScopes",
+      "httpStatus": 200
+    },
+    {
+      "batch": 2,
+      "operation": "managementClientCredentials",
+      "httpStatus": 200
+    },
+    {
+      "batch": 2,
+      "operation": "exactQaUsername",
+      "httpStatus": 200
+    },
+    {
+      "batch": 2,
+      "operation": "exactQaOwnedRole",
+      "httpStatus": 200
+    },
+    {
+      "batch": 2,
+      "operation": "exactOwnedDefaultRoleScopes",
+      "httpStatus": 200
+    }
+  ],
+  "facts": {
+    "native": {
+      "exactPinnedApplication": true,
+      "typeNative": true,
+      "firstParty": true,
+      "applicationAccessControlDisabled": true,
+      "macRedirectPresent": true,
+      "androidRedirectPresent": true
+    },
+    "resource": {
+      "exactOwnedResource": true,
+      "indicatorMatchesPinned": true,
+      "isTenantDefault": false,
+      "exactOwnedConnectPresent": true
+    },
+    "defaultRole": {
+      "exactOwnedRole": true,
+      "typeUser": true,
+      "isDefault": true,
+      "grantsExactOwnedResourceConnect": true
+    },
+    "qa": {
+      "exactUsernameUniquelyResolved": true,
+      "isSuspendedExplicitlyFalse": true,
+      "hasOwnedDefaultUserRole": true,
+      "ownedDefaultRoleCurrentlyGrantsExactConnect": true
+    }
+  },
+  "boundaries": {
+    "managementAccessBlocked": false,
+    "managementConfigurationWritten": false,
+    "existingUserGrantOrTokenRead": false,
+    "userInventoryEnumerated": false,
+    "live03ReturnedIdentityEstablished": false,
+    "hostedProviderVersionEstablished": false,
+    "rawManagementResponsesRetained": false,
+    "credentialsOrObjectIdsIncluded": false
+  }
+}
