@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "72513d1296df4526a08834db65a3427957d3fb50",
+  "sourceTree": "b84a306069b439f4c364405e0a1a6d21f189881b",
+  "toolCommit": "72513d1296df4526a08834db65a3427957d3fb50",
+  "toolSha256": "5086d9afaa1c43894662e0b2cbb2741b32813fd44042cc6c8919e6e37d6d3bff",
+  "initScriptSha256": "72532de9c987777f774349eb3e067f6951a7834977a0809e98030d4a9d5e8b01",
+  "packageId": "com.local.notesclone.account109",
+  "activity": "com.local.notesclone.MainActivity",
+  "displayName": "CyberNote Account Test",
+  "sdkSource": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+  "licenseFiles": 1139,
+  "gradleHome": "/private/tmp/cybernote-account109-gradle",
+  "target": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+  "removedEnvironmentFlags": [
+    "VITE_NOTES_ACCOUNT_NATIVE",
+    "VITE_NOTES_ACCOUNT_UI"
+  ],
+  "accountCapability": "default-native",
+  "lockfiles": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "command": [
+    "/Users/water/.local/node-v22.16.0-darwin-arm64/bin/node",
+    "scripts/android.mjs",
+    "build",
+    "--debug",
+    "--target",
+    "aarch64",
+    "--apk",
+    "--ci"
+  ],
+  "startedAt": "2026-11-13T11:24:01.054Z",
+  "status": "build-only-passed",
+  "gradleOffline": true,
+  "cargoOffline": true,
+  "javaHome": "/opt/zerobrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home",
+  "ndkHome": "/Users/water/Library/Android/sdk/ndk/27.2.12479018",
+  "appLaunched": false,
+  "adbUsed": false,
+  "exitCode": 0,
+  "signal": null,
+  "timedOut": false,
+  "finishedAt": "2026-11-13T11:24:41.222Z",
+  "sourceClean": true,
+  "sourceStatus": "",
+  "logSha256": "920f0b7710a439106da4bfbba70acb2d37af47a1467da422f057d158e25de5fd"
+}
