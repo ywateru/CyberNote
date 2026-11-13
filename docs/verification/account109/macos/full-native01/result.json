@@ -1,0 +1,492 @@
+{
+  "schema": 1,
+  "kind": "real-account-two-native-desktops",
+  "startedAt": "2026-11-13T02:55:20.573Z",
+  "tools": {
+    "runnerSha256": "86dea0e706c34df3ebcc265ada9095a4461b1f5599065083bab9f49b35a1aa09",
+    "driverSha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+    "helpersSha256": "559c3c7fe19b97ad7ee388c374825bc829172f09f3b75833a17b1d9e69cb657a"
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-39c1420d-finite-diagnostics/notes-clone",
+    "sha256": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2"
+  },
+  "checks": [
+    {
+      "name": "two isolated native stores become interactive",
+      "status": "pass"
+    },
+    {
+      "name": "same real account grants restore without a new authorization",
+      "status": "pass"
+    },
+    {
+      "name": "account automatic discovery without manual pairing",
+      "status": "pass"
+    },
+    {
+      "name": "A to B full document/plainText and raw attachment bytes",
+      "status": "pass"
+    },
+    {
+      "name": "B to A full document/plainText and raw attachment bytes",
+      "status": "pass"
+    },
+    {
+      "name": "paused device retains account and does not apply remote new note",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "device": "a",
+      "kind": "ready",
+      "pid": 88209,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "b",
+      "kind": "ready",
+      "pid": 88215,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "b",
+      "kind": "original-attachment",
+      "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+      "name": "account109.png",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "b",
+      "kind": "original-attachment",
+      "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+      "name": "account109.bin",
+      "bytes": 4096,
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "kind": "convergence",
+      "label": "A to B",
+      "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+      "documentAndPlainTextSha256": "32ca63fd76993be8e8057623bbbf8ece853190f95934a461d606d84129bf119c"
+    },
+    {
+      "device": "a",
+      "kind": "original-attachment",
+      "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+      "name": "account109.png",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "a",
+      "kind": "original-attachment",
+      "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+      "name": "account109.bin",
+      "bytes": 4096,
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "kind": "convergence",
+      "label": "B to A",
+      "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+      "documentAndPlainTextSha256": "e703f1c0de0216fa2ff35008c83b24130d70d58e8d462a94cb32e1176d78b986"
+    },
+    {
+      "kind": "enabled",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "kind": "failure-status",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "kind": "failure-status",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 1,
+      "conflictCount": 0
+    }
+  ],
+  "limitations": [
+    "Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.",
+    "Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.",
+    "Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change.",
+    "Logout exclusion is sampled for 3 seconds before and after restart, not an unbounded guarantee. Concurrent edits are made with both account runtimes paused; this does not simulate OS network loss.",
+    "Hosted registration/cancellation, callback rejection, token rotation, cross-account rejection and physical Android coverage are outside this runner.",
+    "Account mutations invoke the existing production account_command through debug eval; this path does not test account UI confirmations. Hosted sign-in still uses the system browser and native PKCE owner."
+  ],
+  "resume": {
+    "from": "/private/tmp/account109-desktop-real-90b8b28b-01",
+    "priorReportSha256": "4871688c43f69dae19a84fc6f119db865856676867626a4c02d929ff68b1fd95",
+    "mode": "existing-real-grants-restored-by-native-runtime",
+    "newAuthorizationRequested": false
+  },
+  "status": "fail",
+  "accountPath": "native",
+  "scenarios": {
+    "concurrentOffline": "not-run",
+    "logout": "not-run"
+  },
+  "statusTransitions": [
+    {
+      "device": "a",
+      "phase": "restore-existing-grants",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "restore-existing-grants",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "phase": "restore-existing-grants",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "restore-existing-grants",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "automatic-discovery",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "phase": "automatic-discovery",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "phase": "automatic-discovery",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": false,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "automatic-discovery",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "phase": "automatic-discovery",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        },
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "automatic-discovery",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "bidirectional-data",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "phase": "bidirectional-data",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        },
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "pause",
+      "state": "paused",
+      "enabled": false,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "pause",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "phase": "pause",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "phase": "pause",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "pause",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 1,
+      "conflictCount": 0
+    }
+  ],
+  "failure": {
+    "phase": "pause",
+    "code": "CONDITION_TIMEOUT"
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a",
+      "stderrBytes": 58,
+      "commands": 1159,
+      "forcedSignals": [],
+      "pid": 88209,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-b",
+      "stderrBytes": 58,
+      "commands": 1631,
+      "forcedSignals": [],
+      "pid": 88215,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "finishedAt": "2026-11-13T02:57:40.601Z"
+}
