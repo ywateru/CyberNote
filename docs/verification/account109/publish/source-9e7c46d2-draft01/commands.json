@@ -1,0 +1,115 @@
+[
+  {
+    "argv": [
+      "node",
+      "scripts/publish/manifest.mjs",
+      "--ref",
+      "9e7c46d2fcc8ed31bf1210ce4272f73edffe9143"
+    ],
+    "cwd": "/private/tmp/cybernote-account109-gui-startup-9e7c46d2-01",
+    "exitCode": 0,
+    "label": "manifest-dryrun",
+    "seconds": 29.5,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutBytes": 100,
+    "stdoutSha256": "c3eaa82469eda168eb0139ed4606e080a5dac3ef8a850bf6662c81e99ae6d0e2"
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/publish/export.mjs",
+      "--ref",
+      "9e7c46d2fcc8ed31bf1210ce4272f73edffe9143",
+      "--target",
+      "/private/tmp/account109-source-9e7c46d2-DRAFT-20261113-01",
+      "--expected-target",
+      "/private/tmp/account109-source-9e7c46d2-DRAFT-20261113-01"
+    ],
+    "cwd": "/private/tmp/cybernote-account109-gui-startup-9e7c46d2-01",
+    "exitCode": 0,
+    "label": "export-dryrun",
+    "seconds": 21.04,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutBytes": 817,
+    "stdoutSha256": "dc9daf38e3a4874a3cb15ff55114b70d0f4ba25b43cafa77ea81f7b97fa5ea99"
+  },
+  {
+    "argv": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "\nimport {planExport,digest} from './scripts/publish/export.mjs';\nconst p=planExport(process.cwd(),'9e7c46d2fcc8ed31bf1210ce4272f73edffe9143');\nconsole.log(JSON.stringify(Object.fromEntries([...p.files].map(([name,b])=>\n [name,{type:'file',mode:p.modes.get(name)==='100755'?'0755':'0644',bytes:b.length,sha256:digest(b)}]))));\n"
+    ],
+    "cwd": "/private/tmp/cybernote-account109-gui-startup-9e7c46d2-01",
+    "exitCode": 0,
+    "label": "planned-inventory-in-memory",
+    "seconds": 20.337,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutBytes": 311211,
+    "stdoutSha256": "d60fd89ba1cb4196fe5b60278c089f3fb2c4792ed7426fbaf77c9c0d703bfdef"
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/publish/export.mjs",
+      "--ref",
+      "9e7c46d2fcc8ed31bf1210ce4272f73edffe9143",
+      "--target",
+      "/private/tmp/account109-source-9e7c46d2-DRAFT-20261113-01",
+      "--expected-target",
+      "/private/tmp/account109-source-9e7c46d2-DRAFT-20261113-01",
+      "--apply",
+      "--init"
+    ],
+    "cwd": "/private/tmp/cybernote-account109-gui-startup-9e7c46d2-01",
+    "exitCode": 0,
+    "label": "export-apply-init",
+    "seconds": 24.337,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutBytes": 817,
+    "stdoutSha256": "8b7cc6bdf3694fce9d04c24ac2b18b5c46fccf4c2fdfb86810589c76d106a1d0"
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/publish/verify.mjs",
+      "--new-root"
+    ],
+    "cwd": "/private/tmp/account109-source-9e7c46d2-DRAFT-20261113-01",
+    "exitCode": 0,
+    "label": "verify-new-root",
+    "seconds": 20.857,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutBytes": 251,
+    "stdoutSha256": "956251984c1f5329f16842861ab942a533b411c1c939ffbc0aaebb03deaa6ae6"
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/versions.mjs",
+      "--check"
+    ],
+    "cwd": "/private/tmp/account109-source-9e7c46d2-DRAFT-20261113-01",
+    "exitCode": 0,
+    "label": "version-check",
+    "seconds": 0.028,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutBytes": 74,
+    "stdoutSha256": "8d7e9322c3168b93e7e548552cd30950f6ae1bd67b5e64a0ee2f8d21afb458a9"
+  },
+  {
+    "argv": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import {sourceIdentity} from './scripts/build-info.mjs'; console.log(JSON.stringify(sourceIdentity(process.cwd(),{metadataPath:null})));"
+    ],
+    "cwd": "/private/tmp/account109-source-9e7c46d2-DRAFT-20261113-01",
+    "exitCode": 0,
+    "label": "source-identity",
+    "seconds": 0.169,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutBytes": 187,
+    "stdoutSha256": "b0fcd6d8e5e1af6be5ad06bf34d0ae8819d904dd2242861f9a9583ce554a5d66"
+  }
+]
