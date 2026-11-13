@@ -1,0 +1,21 @@
+# Cancel/local live02: independent bounded result review
+
+**APPROVE the five-check live02 result and exact archive; no blocking finding.** This approval is limited to the fresh synthetic GUI cancel/local-edit/restart scenario. It does not establish successful login, QA re-login, account switching, valid late-callback rejection, three-peer synchronization or relay acceptance, and does not reclassify live01's failure.
+
+Reviewed exact main source ref `2f10dd1352950513a21616f66dd0464dda04307d`. All four reported tool SHA256 values match committed runner/driver/helper/recovery bytes; archive module Git blob IDs match too. The actual immutable binary was rehashed and matches `3fa9a3851e610348352f5594f976f145e2d344fd97a9f0d27124566f458ce65c`, source pin `9e7c46d2fcc8ed31bf1210ce4272f73edffe9143`, debug E2E. Parent reports the shell command exited 0; the author receipt agrees. This reviewer did not rerun it.
+
+## Full body evidence and limits
+
+All five recorded checks pass: localSave, authorizing, cancelledWindow, localEdit, restartWindow. The exact runner checks the observed GUI workspace contains exactly one fresh note, the same note ID and zero attachments, then deep-compares the entire document JSON and exact plainText. This includes heading attributes, bold/italic marks, every paragraph, Chinese text and emoji. Initial and edited synthetic fixture hashes were independently recomputed from the fixed fixture and match all four corresponding report observations.
+
+After one production UI SignIn handler reaches authorizing, one existing cancel handler returns to strict signedOut/disabled/no profile/no connected devices/no conflicts. Cancellation has **7 samples over 3013 ms**; same-store restart has **7 samples over 3018 ms**, including boundary samples. The first window retains the initial full body; local edit and the second window retain the edited full body. The restarted GUI also checks settings closed. Both readiness reports are interactive/startupDetached and the driver validates actual native GUI framing/readiness.
+
+The result hashes describe the expected fixture after observed-body assertions pass. They are not separately computed hashes of raw DB bytes, nor independent review reads of persisted DB contents. Persistence evidence is the natural-close/same-store-reopen path and full GUI workspace equality. Editor/account actions use existing debug/e2e UI handlers, not physical typing. Authorizing is not proof of browser visibility or verified identity. No valid old callback was submitted. No body, DB, grant or binding was read/copied by this review.
+
+## Lifecycle and exact archive
+
+Both owned processes, **17477 and 17528**, record natural exit and close code 0/signal null, no forced signals and pidAbsent=true. Independently, this reviewer checked both with ps and signal-0; both were absent (ps exit 1/empty PID output and ESRCH). Check timestamps are in result.json. Driver source uses serial shutdown/pipe close, and records any TERM/KILL escalation before natural-exit assertions. Each process reports **58 stderr bytes**, with zero stdout noise; raw stderr was not read and no zero-stderr claim is made.
+
+Original `/private/tmp/account109-cancel-local-live02-output/result.json` is byte-identical to the author's committed archive, SHA256 **6f989d4317c94ec5455bbeb8f19db559f8c45b82a8d8c54c098604b1632fe56b**. Archive commit `1b13eb34157b7cecdcf5bb20412aaeb2bd06db40`, under the author's cancel-pin-9e7c46d2 worktree, binds README/receipt/result/checksums exactly; **3/3 author archive checksums verified**. The receipt's source-before/source-after/archive hashes all agree. Original result was re-read unchanged at review close. Only existence metadata was checked for the dedicated store/output; both remain present, with no cleanup.
+
+Only this compact independent review directory was written, in the existing isolated codex/account109-test-audit worktree for a docs-only commit. No live test, App/UI, ADB, network, product build, DB/grant access, store/output deletion or original archive modification. Parent retains cleanup ownership. No tool/body source copies or raw App/browser/AX output are duplicated. SHA256SUMS covers every independent review file except itself.
