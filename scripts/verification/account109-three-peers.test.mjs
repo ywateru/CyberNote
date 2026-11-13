@@ -6,11 +6,13 @@ import {mkdtemp,mkdir,writeFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {accountSyncControls,installedApkPath,phoneFileControls,PACKAGE} from './account109-android.mjs';
+import {captureOriginalLibrary,unionOriginalLibraries,originalSummary,preparationSummary} from './account109-three-peer-preflight.mjs';
 import {options,STORES,USERNAME,PHONE_ORIGINAL_IDS,expectedAccount,sameAccount,meshReady,relay02Samples,fixtures,phoneFixtures,assertPhoneBodyRetained,verifyOriginals,phoneSnapshot,capturePhoneBaseline,verifyPhoneBaseline,samplePhonePause,runCases,finishThreePeers} from './account109-three-peers.mjs';
 
-test('CLI accepts only original stores, absolute paths and explicit A sign-in opt-in',()=>{
+test('CLI accepts only original stores and rejects sign-in or trust-pin overrides',()=>{
   const argv=['--binary','/unit/native','--stores',STORES,'--output','/unit/fresh'];
-  assert.equal(options(argv).allowDesktopSignIn,false);assert.equal(options([...argv,'--allow-desktop-sign-in']).allowDesktopSignIn,true);
+  assert.equal(options(argv).stores,STORES);assert.throws(()=>options([...argv,'--allow-desktop-sign-in']));
+  for(const flag of ['--subject-hash','--snapshot','--apk','--source','--binary-sha'])assert.throws(()=>options([...argv,flag,'override']));
   for(const bad of [argv.slice(0,-2),['--binary','relative','--stores',STORES,'--output','/unit/fresh'],[...argv,'--token','secret'],[...argv,'--binary','/duplicate'],[...argv,'--allow-desktop-sign-in','--allow-desktop-sign-in'],['--binary','/unit/native','--stores','/private/tmp/other','--output','/unit/fresh'],['--binary','/unit/native','--stores',STORES,'--output',STORES+'/result-new']])assert.throws(()=>options(bad));
 });
 test('RELAY-02 requires separate explicit opt-in and declared network topology',()=>{
@@ -33,8 +35,15 @@ test('installed APK lookup accepts only one safe base APK path',()=>{
   for(const value of ['package:/other/base.apk','package:/data/app/a/../base.apk',`package:${apk}\npackage:/data/app/split/base.apk`,'package:/data/app/a;echo-secret/base.apk','package:/data/app/$(secret)/base.apk','package:/data/app/a space/base.apk'])assert.throws(()=>installedApkPath(value),{code:'ANDROID_APK_PATH_INVALID'});
 });
 
+const fullNote=(id,document,plainText)=>({id,folderId:'default',title:'synthetic',document,plainText,createdAt:1,updatedAt:1,pinned:false,deletedAt:null,originalFolderId:null,locked:false,paperStyle:'plain',revision:1});
+async function prepareCaseOriginals(peers,report){
+  for(const peer of peers)peer.enabled=false; // In-memory initial condition, no product command.
+  const sourceOriginals=await Promise.all(peers.map(async peer=>({peer,baseline:await captureOriginalLibrary(peer)})));
+  const originalBaseline=unionOriginalLibraries(sourceOriginals.map(s=>s.baseline));
+  report.originalBaseline={capturedBeforeEnable:true,...originalSummary(originalBaseline)};report.preparation=preparationSummary();return {originalBaseline,sourceOriginals};
+}
 function memoryPeers(){
-  const baseline=PHONE_ORIGINAL_IDS.map((id,i)=>({id,document:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'保留已有中文 😀 '+i}]}]},plainText:'保留已有中文 😀 '+i}));
+  const baseline=PHONE_ORIGINAL_IDS.map((id,i)=>fullNote(id,{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'保留已有中文 😀 '+i}]}]},'保留已有中文 😀 '+i));
   const events=[],blobs=new Map();
   const peers=['A','B','C'].map(name=>({name,enabled:true,ws:{notes:structuredClone(baseline),attachments:[]}}));
   const publish=(source,note,rows)=>{for(const p of peers.filter(p=>p.enabled||p===source)){p.ws.notes=p.ws.notes.filter(n=>n.id!==note.id);p.ws.notes.push(structuredClone(note));p.ws.attachments=p.ws.attachments.filter(a=>a.noteId!==note.id);p.ws.attachments.push(...structuredClone(rows));}};
@@ -44,14 +53,14 @@ function memoryPeers(){
     peer.setEnabled=async enabled=>{events.push(peer.name+':enabled:'+enabled);peer.enabled=enabled;if(enabled){for(const source of peers.filter(p=>p!==peer&&p.enabled))for(const note of [...source.ws.notes])publish(source,note,source.ws.attachments.filter(a=>a.noteId===note.id));}return peer.status();};
     peer.syncNow=async()=>{events.push(peer.name+':syncNow');return peer.status();};
     peer.create=async(document,files)=>{
-      const id=randomUUID(),copy=structuredClone(document),rows=files.map((f,i)=>({id:id+'-attachment-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file'}));
+      const id=randomUUID(),copy=structuredClone(document),rows=files.map((f,i)=>({id:id+'-attachment-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file',relativePath:'unit-'+id+'-'+i}));
       for(const [i,f] of files.entries()){blobs.set(rows[i].id,Buffer.from(f.bytes));copy.content.push({type:'attachment',attrs:{id:rows[i].id,name:f.name,kind:rows[i].kind}});}
       const texts=node=>[...(node.text?[node.text]:[]),...(node.content||[]).flatMap(texts)];
-      publish(peer,{id,document:copy,plainText:texts(copy).join('\n')},rows);events.push(peer.name+':create');return id;
+      publish(peer,fullNote(id,copy,texts(copy).join('\n')),rows);events.push(peer.name+':create');return id;
     };
     const files=phoneFileControls({readWorkspace:peer.workspace,openNote:async id=>{events.push(peer.name+':open:'+id);},submit:async id=>{
       events.push(peer.name+':fixed-files:'+id);
-      const note=structuredClone(peer.ws.notes.find(n=>n.id===id)),rows=phoneFixtures.map((f,i)=>({id:id+'-phone-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file'}));
+      const note=structuredClone(peer.ws.notes.find(n=>n.id===id)),rows=phoneFixtures.map((f,i)=>({id:id+'-phone-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file',relativePath:'unit-'+id+'-'+i}));
       for(const [i,f] of phoneFixtures.entries()){blobs.set(rows[i].id,Buffer.from(f.bytes));note.document.content.push({type:'attachment',attrs:{id:rows[i].id,name:f.name,kind:rows[i].kind}});}
       publish(peer,note,rows);return {submitted:true};
     }});
@@ -84,8 +93,8 @@ test('RELAY-02 refuses connected direct/unknown/missing/stale paths and requires
 test('opt-in relay proof brackets both transfer cases while ordinary data success never implies relay success',async()=>{
  for(const relay of [false,true]){
   const {peers}=memoryPeers(),report={status:'running',runId:'unit',observations:[]};let sequence=0,clock=0;
-  const phoneBaseline=await capturePhoneBaseline(peers[2],report);
-  await runCases({peers,report,phoneBaseline,save:async()=>{},record:async()=>{},readStatuses:()=>relay?relayStatuses(peers,++sequence):Promise.all(peers.map(p=>p.status())),requireRelay02:relay,declarePhone4gDesktopWifi:relay,pauseWindowMs:20,clock:{now:()=>clock,sleep:async ms=>{clock+=ms;}}});
+  const phoneBaseline=await capturePhoneBaseline(peers[2],report);const {originalBaseline,sourceOriginals}=await prepareCaseOriginals(peers,report);
+  await runCases({peers,report,phoneBaseline,originalBaseline,sourceOriginals,save:async()=>{},record:async()=>{},readStatuses:()=>relay?relayStatuses(peers,++sequence):Promise.all(peers.map(p=>p.status())),requireRelay02:relay,declarePhone4gDesktopWifi:relay,pauseWindowMs:20,clock:{now:()=>clock,sleep:async ms=>{clock+=ms;}}});
   assert(report.cases.every(c=>c.status==='pass'));
   if(relay){assert.equal(report.relay02.status,'pass');assert.equal(report.relay02.scenarios.length,2);for(const s of report.relay02.scenarios)assert(s.after.every((p,i)=>p.sample>s.before[i].sample));}
   else assert.equal(report.relay02,undefined);
@@ -93,8 +102,8 @@ test('opt-in relay proof brackets both transfer cases while ordinary data succes
 });
 test('connected direct paths cannot start relay transfer or pass finalization after clean teardown',async()=>{
  const {peers,events}=memoryPeers(),report={status:'running',runId:'unit',observations:[]};
- const phoneBaseline=await capturePhoneBaseline(peers[2],report);
- await assert.rejects(runCases({peers,report,phoneBaseline,save:async()=>{},record:async()=>{},requireRelay02:true,declarePhone4gDesktopWifi:true,relayTimeoutMs:1,readStatuses:async()=>{
+ const phoneBaseline=await capturePhoneBaseline(peers[2],report);const {originalBaseline,sourceOriginals}=await prepareCaseOriginals(peers,report);
+ await assert.rejects(runCases({peers,report,phoneBaseline,originalBaseline,sourceOriginals,save:async()=>{},record:async()=>{},requireRelay02:true,declarePhone4gDesktopWifi:true,relayTimeoutMs:1,readStatuses:async()=>{
   const statuses=await relayStatuses(peers);for(const s of statuses)for(const d of s.devices)if(d.transport)d.transport.sync='iroh-direct';return statuses;
  }}));
  assert.equal(report.cases[0].status,'pass');assert.equal(report.cases[1].status,'fail');
@@ -134,8 +143,8 @@ test('paused phone snapshots repeatedly exclude remote notes and preserve all pr
 });
 test('all five cases exercise both directions, media, phone pause and catch-up without assigning overall pass',async()=>{
   const {peers,events}=memoryPeers(),report={status:'running',runId:'unit',observations:[]},saved=[];let clock=0;
-  const phoneBaseline=await capturePhoneBaseline(peers[2],report);assert.equal(events.length,0,'Capture precedes all mutation operations');
-  await runCases({peers,report,phoneBaseline,save:async()=>{saved.push(structuredClone(report));},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000,pauseWindowMs:300,clock:{now:()=>clock,sleep:async ms=>{clock+=ms;}}});
+  const phoneBaseline=await capturePhoneBaseline(peers[2],report);const {originalBaseline,sourceOriginals}=await prepareCaseOriginals(peers,report);assert.equal(events.length,0,'Capture precedes all mutation operations');
+  await runCases({peers,report,phoneBaseline,originalBaseline,sourceOriginals,save:async()=>{saved.push(structuredClone(report));},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000,pauseWindowMs:300,clock:{now:()=>clock,sleep:async ms=>{clock+=ms;}}});
   assert.equal(report.cases.length,5);assert(report.cases.every(row=>row.status==='pass'));assert.equal(report.status,'running');assert(saved.every(s=>s.status==='running'));
   assert(events.includes('C:real-ui-fixture'));assert(events.includes('C:enabled:false'));assert(events.includes('C:enabled:true'));assert(events.includes('C:syncNow'));
   assert(report.observations.some(o=>o.kind==='phone-pause-no-apply'&&o.samples===4));
@@ -152,7 +161,7 @@ test('all five cases exercise both directions, media, phone pause and catch-up w
 test('phone-origin failures leave later scenarios unexecuted and cleanup cannot manufacture success',async()=>{
   for(const mode of ['capability','old-note-id','wrong-owner','lost-reference','changed-body','corrupt-phone-read','corrupt-desktop-read','wrong-length']){
     const {peers,events}=memoryPeers(),[a,b,c]=peers,report={status:'running',runId:'unit',observations:[]};
-    const phoneBaseline=await capturePhoneBaseline(c,report),submit=c.submitNoteFiles;
+    const phoneBaseline=await capturePhoneBaseline(c,report),{originalBaseline,sourceOriginals}=await prepareCaseOriginals(peers,report),submit=c.submitNoteFiles;
     c.submitNoteFiles=async id=>{
       if(mode==='capability')throw Object.assign(Error('fixed capability failure'),{code:'ANDROID_FILE_CAPABILITY_REQUIRED'});
       if(mode==='old-note-id')return submit(PHONE_ORIGINAL_IDS[0]);
@@ -161,7 +170,7 @@ test('phone-origin failures leave later scenarios unexecuted and cleanup cannot 
       for(const p of peers){const n=p.ws.notes.find(n=>n.id===id);if(mode==='wrong-owner')p.ws.attachments.find(a=>a.noteId===id).noteId=PHONE_ORIGINAL_IDS[0];if(mode==='lost-reference')n.document.content=n.document.content.filter(n=>n.type!=='attachment');if(mode==='changed-body')n.document.content[1].content[0].text='lost full body';if(mode==='wrong-length')p.ws.attachments.find(a=>a.noteId===id).size++;}
       return structuredClone(c.ws.notes.find(n=>n.id===id));
     };
-    await assert.rejects(runCases({peers,report,phoneBaseline,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000}));
+    await assert.rejects(runCases({peers,report,phoneBaseline,originalBaseline,sourceOriginals,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000}));
     assert.equal(report.cases[2].status,'fail',mode);assert(report.cases.slice(3).every(r=>r.status==='not-run'));assert(!events.includes('C:enabled:false'));assert(!report.observations.some(o=>o.kind==='phone-origin-file-submission'));
     for(const p of [a,b,c])for(const original of phoneBaseline.notes)assert.equal(JSON.stringify({document:p.ws.notes.find(n=>n.id===original.id).document,plainText:p.ws.notes.find(n=>n.id===original.id).plainText}),original.body);
     await finishThreePeers(report,{desktops:[{lifecycle:{naturalExit:true},close:async()=>{}}],phone:{owned:{},close:async()=>{}},forwardPresent:async()=>false},async()=>{});assert.equal(report.status,'fail');
@@ -184,13 +193,13 @@ test('phone-origin bytes are checked against both desktop managed files as well 
 test('failed original-byte proof leaves later cases unrun and cannot pass cleanup finalization',async()=>{
   const {peers}=memoryPeers();peers[2].corrupt=true;
   const report={status:'running',runId:'unit',observations:[]};
-  const phoneBaseline=await capturePhoneBaseline(peers[2],report);
-  await assert.rejects(runCases({peers,report,phoneBaseline,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000}));
+  const phoneBaseline=await capturePhoneBaseline(peers[2],report);const {originalBaseline,sourceOriginals}=await prepareCaseOriginals(peers,report);
+  await assert.rejects(runCases({peers,report,phoneBaseline,originalBaseline,sourceOriginals,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000}));
   assert.equal(report.cases[1].status,'fail');assert(report.cases.slice(2).every(row=>row.status==='not-run'));
   await finishThreePeers(report,{desktops:[{lifecycle:{naturalExit:true},close:async()=>{}}],phone:{owned:{},close:async()=>{}},forwardPresent:async()=>false},async()=>{});assert.equal(report.status,'fail');
 });
 
-const completeReport=()=>({status:'running',phoneBaseline:{capturedBeforeDesktops:true},preservation:{afterMerge:true,afterCatchUp:true,final:true},cases:['auto-discovery','a-rich-media','c-ui-note','b-file','phone-pause-resume'].map(id=>({id,status:'pass'}))});
+const completeReport=()=>({status:'running',phoneBaseline:{capturedBeforeDesktops:true},preparation:preparationSummary(),originalBaseline:{capturedBeforeEnable:true},preservation:{afterMerge:true,afterCatchUp:true,final:true,beforeCleanup:true},cases:['auto-discovery','a-rich-media','c-ui-note','b-file','phone-pause-resume'].map(id=>({id,status:'pass'}))});
 test('overall pass waits for every owned desktop and exact phone forward cleanup',async()=>{
   const report=completeReport();let releaseA,releaseB,saved=false,phoneClosed=false;
   const desktop=name=>({lifecycle:{name},close(){return new Promise(done=>{const release=()=>{this.lifecycle.naturalExit=true;done();};if(name==='A')releaseA=release;else releaseB=release;});}});
@@ -213,12 +222,20 @@ test('missing expected original is rejected before any sync mutations; a late ba
   await assert.rejects(capturePhoneBaseline(peers[2],report),/four expected/);assert.equal(events.length,0);
   await assert.rejects(runCases({peers,report,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{}}),/Pre-desktop/);
 });
+test('green preparation report cannot bypass enabled/error/unsupported or changed original-source gates',async()=>{
+  for(const change of [p=>p.enabled=true,p=>{p.status=async()=>({state:'error',enabled:false,error:{code:'account_network'},devices:[]});},p=>p.ws.notes[0].locked=true,p=>p.ws.notes[0].title='changed original title',p=>p.ws.notes[0].document.content=[]]){
+    const {peers,events}=memoryPeers(),report={status:'running',runId:'unit',observations:[]};
+    const phoneBaseline=await capturePhoneBaseline(peers[2],report),{originalBaseline,sourceOriginals}=await prepareCaseOriginals(peers,report);
+    change(peers[0]);await assert.rejects(runCases({peers,report,phoneBaseline,originalBaseline,sourceOriginals,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{}}));
+    assert.equal(events.length,0,'No setEnabled, syncNow, create or attachment submission before failed gates');assert(report.cases.every(row=>row.status==='not-run'));
+  }
+});
 test('loss or changed complete original body before the pause snapshot fails even when every new transfer succeeds',async()=>{
   for(const mode of ['lost-all','changed-document','changed-plainText']){
-    const {peers}=memoryPeers(),report={status:'running',runId:'unit',observations:[]};const phoneBaseline=await capturePhoneBaseline(peers[2],report);
+    const {peers}=memoryPeers(),report={status:'running',runId:'unit',observations:[]};const phoneBaseline=await capturePhoneBaseline(peers[2],report);const {originalBaseline,sourceOriginals}=await prepareCaseOriginals(peers,report);
     const create=peers[0].create;
     peers[0].create=async(...args)=>{const id=await create(...args);for(const p of peers){if(mode==='lost-all')p.ws.notes=p.ws.notes.filter(n=>!PHONE_ORIGINAL_IDS.includes(n.id));else{const n=p.ws.notes.find(n=>n.id===PHONE_ORIGINAL_IDS[0]);if(mode==='changed-document')n.document.content[0].content[0].text='corrupted formatting/body';else n.plainText='corrupted plain text';}}return id;};
-    await assert.rejects(runCases({peers,report,phoneBaseline,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000}));
+    await assert.rejects(runCases({peers,report,phoneBaseline,originalBaseline,sourceOriginals,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000}));
     assert(report.observations.some(o=>o.kind==='full-body-convergence'&&o.label==='A to B/C formatted PNG+bin'),'New transfer passed before preservation failure');assert.equal(report.cases[1].status,'fail');assert(report.cases.slice(2).every(r=>r.status==='not-run'));
     await finishThreePeers(report,{desktops:[{lifecycle:{naturalExit:true},close:async()=>{}}],phone:{owned:{},close:async()=>{}},forwardPresent:async()=>false},async()=>{});assert.equal(report.status,'fail');
   }
@@ -226,6 +243,7 @@ test('loss or changed complete original body before the pause snapshot fails eve
 test('baseline attachment ownership, metadata, references and actual bytes survive with additional notes allowed',async()=>{
   const {peers}=memoryPeers(),report={observations:[]};const c=peers[2];await c.create({type:'doc',content:[]},fixtures);const phoneBaseline=await capturePhoneBaseline(c,report);
   assert.equal(phoneBaseline.attachments.length,2);assert(report.phoneBaseline.attachments.every(a=>a.sha256));
+  for(const row of report.phoneBaseline.attachments)assert.deepEqual(Object.keys(row).sort(),['bytes','idSha256','ownerNoteIdSha256','sha256']);
   await c.create({type:'doc',content:[]},[]);await verifyPhoneBaseline(c,phoneBaseline);
   for(const mode of ['lost-row','wrong-owner','wrong-mime','wrong-bytes','lost-reference']){
     const saved=structuredClone(c.ws);c.corrupt=mode==='wrong-bytes';const a=c.ws.attachments[0];
