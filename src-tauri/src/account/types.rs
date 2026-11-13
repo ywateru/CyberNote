@@ -64,6 +64,39 @@ pub(crate) struct SafeError {
     #[serde(rename = "providerReason", skip_serializing_if = "Option::is_none")]
     pub provider_reason: Option<cybergrid_sdk::AuthProviderFailure>,
 }
+impl SafeError {
+    pub(super) fn refresh_rejected(&self) -> bool {
+        self.code == "account_authentication"
+            && ((self.stage == Some(NetworkStage::IdentityRefresh)
+                && self.provider_reason.is_none())
+                || (self.stage == Some(NetworkStage::AuthorizationProvider)
+                    && self.provider_reason
+                        == Some(cybergrid_sdk::AuthProviderFailure::RefreshFailed)))
+    }
+    pub(super) fn initial_authorization_retry(&self) -> bool {
+        // This permits begin_authorization only, never replacement logout. A retained
+        // grant will still be rejected as Busy by the sole auth owner.
+        self.provider_reason.is_none()
+            && match self.code.as_str() {
+                "account_auth_callback_invalid"
+                | "account_auth_code_rejected"
+                | "account_auth_token_response_invalid"
+                | "account_auth_identity_invalid"
+                | "account_cancelled" => true,
+                "account_network" => matches!(
+                    self.stage,
+                    Some(
+                        NetworkStage::CallbackListen
+                            | NetworkStage::BrowserOpen
+                            | NetworkStage::CallbackReceive
+                            | NetworkStage::IdentityProvider
+                    )
+                ),
+                "account_authentication" => self.stage == Some(NetworkStage::IdentitySession),
+                _ => false,
+            }
+    }
+}
 /// Fixed operation labels for network and authentication failures only;
 /// never serialize upstream errors, URLs or credentials.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]

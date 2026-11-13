@@ -60,6 +60,7 @@ fn provider_error(error: account_auth::AuthError) -> cybergrid_sdk::Error {
         A::NoSession => P::NoSession,
         A::OwnershipMismatch => P::OwnershipMismatch,
         A::Storage => P::Storage,
+        // AuthClient reserves this finite category for issuer invalid_grant.
         A::RefreshFailed => P::RefreshFailed,
         A::RevocationFailed => P::RevocationFailed,
         A::Busy => P::Busy,

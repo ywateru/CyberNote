@@ -4,8 +4,52 @@ import {build} from 'vite';
 import {resolve} from 'node:path';
 const built = await build({configFile:false,logLevel:'silent',build:{write:false,minify:false,lib:{entry:resolve('src/account-client.ts'),formats:['es']}},define:{'import.meta.env':'{VITE_NOTES_ACCOUNT_NATIVE:"0",DEV:false}'}});
 const output = (Array.isArray(built) ? built[0] : built).output;
-const {validateAccountStatus} = await import('data:text/javascript;base64,'+Buffer.from(output[0].code).toString('base64'));
+const {validateAccountStatus,accountConnectionRetry,accountNeedsLogin} = await import('data:text/javascript;base64,'+Buffer.from(output[0].code).toString('base64'));
 const status = error => ({state:'error',enabled:false,devices:[],pendingCount:0,conflictCount:0,error});
+test('explicit network retry restores a retained owner without authorizing or enabling',()=>{
+ for(const enabled of [false,true]) for(const error of [
+  {code:'account_network',message:'safe',stage:'identityProvider'},
+  {code:'account_authentication',message:'safe',stage:'authorizationProvider',providerReason:'network'},
+ ]) {
+  const s=validateAccountStatus({...status(error),enabled,profile:{subject:'fixture-owner',displayName:'Fixture'}});
+  const before=structuredClone(s);
+  assert.equal(accountNeedsLogin(s.error),false);
+  assert.deepEqual(accountConnectionRetry(s),{type:'syncNow'});
+  assert.deepEqual(s,before);
+  assert.deepEqual(accountConnectionRetry({...s,profile:undefined}),{type:error.code==='account_network'?'signIn':'status'});
+  for(const state of ['paused','ready','authorizing','signedOut','connecting'])
+   assert.deepEqual(accountConnectionRetry({...s,state}),{type:'status'});
+ }
+});
+test('retry respects authentication, cleanup, ownership and unknown-error fences',()=>{
+ for(const code of ['account_configuration','account_storage','account_cleanup_required','account_owner_workspace_mismatch','account_sync_protocol','account_auth_token_response_invalid','unknown_auth_error']) {
+  const s={...status({code,message:'safe'}),enabled:true,profile:{subject:'fixture-owner',displayName:'Fixture'}};
+  assert.equal(accountNeedsLogin(s.error),false);
+  assert.deepEqual(accountConnectionRetry(s),{type:'status'});
+ }
+ for(const error of [{code:'account_authentication',message:'safe',stage:'identityRefresh'},
+  {code:'account_authentication',message:'safe',stage:'authorizationProvider',providerReason:'refreshFailed'}]) {
+  assert.equal(accountNeedsLogin(error),true);
+  assert.deepEqual(accountConnectionRetry(status(error)),{type:'signIn'});
+ }
+ for(const error of [{code:'account_auth_code_rejected',message:'safe'},
+  {code:'account_auth_token_response_invalid',message:'safe'},
+  {code:'account_auth_identity_invalid',message:'safe'}]) {
+  assert.equal(accountNeedsLogin(error),false);
+  assert.deepEqual(accountConnectionRetry(status(error)),{type:'signIn'}); // initial begin only, never replacement
+  assert.deepEqual(accountConnectionRetry({...status(error),profile:{subject:'fixture-owner',displayName:'Fixture'}}),{type:'status'});
+ }
+ for(const stage of [undefined,'coordinator','identitySession','coordinatorProfile']) {
+  const s={...status({code:'account_authentication',message:'safe',...(stage?{stage}:{})}),profile:{subject:'fixture-owner',displayName:'Fixture'}};
+  assert.equal(accountNeedsLogin(s.error),false);
+  assert.deepEqual(accountConnectionRetry(s),{type:'status'});
+ }
+ for(const providerReason of ['configuration','storage','cancelled','busy','tokenResponseInvalid','ownershipMismatch']) {
+  const s=status({code:'account_authentication',message:'safe',stage:'authorizationProvider',providerReason});
+  assert.equal(accountNeedsLogin(s.error),false);
+  assert.deepEqual(accountConnectionRetry(s),{type:'status'});
+ }
+});
 test('legacy errors and fixed native network stages remain valid DTOs',()=>{
  assert.deepEqual(validateAccountStatus(status({code:'account_network',message:'safe'})).error,{code:'account_network',message:'safe'});
  for(const stage of ['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration'])

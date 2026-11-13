@@ -28,6 +28,31 @@ export type AccountCommand =
   | { type: "status" | "signIn" | "signUp" | "cancel" | "signOut" | "syncNow" }
   | { type: "setEnabled"; enabled: boolean };
 
+export function accountNetworkError(error: AccountStatus["error"]): boolean {
+  return error?.code === "account_network" ||
+    (error?.code === "account_authentication" && error.stage === "authorizationProvider" && error.providerReason === "network");
+}
+export function accountNeedsLogin(error: AccountStatus["error"]): boolean {
+  return error?.code === "account_authentication" && (
+    (error.stage === "identityRefresh" && error.providerReason === undefined) ||
+    (error.stage === "authorizationProvider" && error.providerReason === "refreshFailed"));
+}
+function initialAuthorizationRetry(error: AccountStatus["error"]): boolean {
+  if (!error || error.providerReason !== undefined) return false;
+  return ["account_auth_callback_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_identity_invalid", "account_cancelled"].includes(error.code) ||
+    (error.code === "account_network" && ["callbackListen", "browserOpen", "callbackReceive", "identityProvider"].includes(error.stage || "")) ||
+    (error.code === "account_authentication" && error.stage === "identitySession");
+}
+// Polling remains status-only. This chooses an action solely for an explicit retry.
+export function accountConnectionRetry(status: AccountStatus): AccountCommand {
+  if (status.state !== "error") return { type: "status" };
+  if (accountNeedsLogin(status.error)) return { type: "signIn" };
+  if (!status.profile && initialAuthorizationRetry(status.error)) return { type: "signIn" };
+  if (status.profile && (accountNetworkError(status.error) ||
+    (status.enabled && status.error?.code === "account_sync_failed"))) return { type: "syncNow" };
+  return { type: "status" };
+}
+
 const invalidMessage = "账户服务返回了无效数据，请更新应用后重试";
 function invalid(): never { throw Error(invalidMessage); }
 function record(value: unknown, keys: string[]): Record<string, unknown> {

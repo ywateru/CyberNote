@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { UserRound, Laptop, Smartphone } from "lucide-react";
-import { accountCommand, type AccountCommand, type AccountStatus } from "./account-client";
+import { accountCommand, accountConnectionRetry, accountNeedsLogin, type AccountCommand, type AccountStatus } from "./account-client";
 import { formatFileTime } from "./data-management";
 import "./AccountSettings.css";
 
@@ -16,8 +16,12 @@ const states: Record<AccountStatus["state"], string> = {
 function accountError(error: AccountStatus["error"]) {
   if (!error) return "账户连接未完成，请检查网络后重试。";
   if (error.code === "account_cleanup_required") return "存在待撤销的登录授权，请先退出账户并完成授权清理，再重新登录。本机备忘录会保留。";
+  if (error.code === "account_authentication" && error.stage === "identitySession") return "尚未恢复可用的登录授权。请先退出账户并确认清理，再登录原账户。本机备忘录会保留。";
   if (/owner|workspace|bound/i.test(error.code)) return "此资料库已关联其他账户或手工同步空间，无法与当前账户合并。请退出后登录原账户；本机备忘录会保留。";
-  if (/expired|auth|token|login|session|state_mismatch|nonce|pkce|callback/i.test(error.code)) return "登录已失效或未完成，请重新登录。本机备忘录会保留。";
+  if (error.code === "account_configuration" || error.providerReason === "configuration") return "账户配置无效，请检查服务配置或更新应用。本机备忘录会保留。";
+  if (error.code === "account_storage" || error.providerReason === "storage") return "无法安全读取或保存账户授权，请检查本机存储。本机备忘录会保留。";
+  if (["account_auth_token_response_invalid", "account_auth_identity_invalid"].includes(error.code) || ["tokenResponseInvalid", "identityRejected", "invalidIdentity"].includes(error.providerReason || "")) return "认证服务返回的数据未通过校验，未自动替换登录授权。请检查服务或更新应用。本机备忘录会保留。";
+  if (accountNeedsLogin(error)) return "登录已失效或未完成，请重新登录。本机备忘录会保留。";
   if (/cancel/i.test(error.code)) return "登录已取消，你可以继续使用本地备忘录。";
   if (/sync/i.test(error.code)) return "同步未完成，请检查网络后重试。本地更改仍保存在此设备。";
   return "账户连接暂不可用，请检查网络后重试。本地备忘录仍可继续编辑。";
@@ -79,7 +83,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         throw Error(command.type === "cancel" ? "取消登录尚未确认，请等待账户状态更新后重试。" : "退出账户尚未完成，请检查账户状态后重试。");
       }
       if (!query) setConfirmation(null);
-      if (command.type === "syncNow") setNotice("同步请求已发送，实际进度请查看待处理数和最近成功时间。");
+      if (command.type === "syncNow" && !next.error) setNotice(next.state === "paused" ? "账户连接已恢复，自动传输仍已暂停。" : "同步请求已发送，实际进度请查看待处理数和最近成功时间。");
       if (command.type === "cancel") setNotice("登录已取消。本地备忘录仍可继续编辑。");
       if (command.type === "signOut") setNotice("已退出账户，本机备忘录已保留。");
     } catch (cause) {
@@ -147,7 +151,8 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const signedIn = !!status?.profile && status.state !== "signedOut" && !authorizing;
   const cleanupRequired = status?.error?.code === "account_cleanup_required";
   const ownership = /owner|workspace|bound/i.test(status?.error?.code || "");
-  const needsLogin = /expired|auth|token|login|session|state_mismatch|nonce|pkce|callback/i.test(status?.error?.code || "");
+  const needsLogin = accountNeedsLogin(status?.error);
+  const connectionRetry = status ? accountConnectionRetry(status) : { type: "status" } as const;
   return <div ref={panel} className="account-settings" data-account-state={status?.state || "loading"} onFocusCapture={event => {
     if (event.target instanceof HTMLElement) focused.current = event.target;
   }} onKeyDown={event => {
@@ -173,7 +178,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         {!signedIn && !authorizing && <p className="account-help">首次开启同步时，本地备忘录将与同一账户设备的备忘录合并。本机内容会保留。</p>}
       </section>
       {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{ownership ? "资料库归属不匹配" : "需要处理"}</h4><p>{accountError(status.error)}</p>
-        {!ownership && !cleanupRequired && <button type="button" disabled={busy} onClick={() => request({ type: needsLogin ? "signIn" : signedIn && status.enabled ? "syncNow" : "status" })}>{needsLogin ? "重新登录" : "重试连接"}</button>}
+        {!ownership && !cleanupRequired && connectionRetry.type !== "status" && <button type="button" disabled={busy} onClick={() => request(connectionRetry)}>{connectionRetry.type === "signIn" ? needsLogin ? "重新登录" : "重试登录" : "重试连接"}</button>}
       </section>}
       {signedIn && status && <>
         <section className="account-group" aria-label="账户同步">

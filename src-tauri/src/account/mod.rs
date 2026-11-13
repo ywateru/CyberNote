@@ -5,6 +5,7 @@ mod config;
 pub(crate) mod enrollment;
 mod private;
 mod provider;
+mod recovery;
 mod transport;
 pub(crate) mod types;
 use crate::sync::adapter;
@@ -151,7 +152,7 @@ impl Runtime {
             let result = async {
                 let auth = this.auth().await?;
                 if let Some(identity) = auth.restore().await? {
-                    if let Err(error) = this.bind(&identity).await {
+                    if let Err(error) = this.bind(&identity, generation).await {
                         // A crash between grant commit and first binding must
                         // not leave a hidden usable grant blocking SignIn. An
                         // already bound account keeps its grant when offline.
@@ -181,7 +182,7 @@ impl Runtime {
             }
         });
     }
-    async fn bind(&self, identity: &account_auth::Identity) -> Result<()> {
+    async fn bind(&self, identity: &account_auth::Identity, generation: u64) -> Result<()> {
         if identity.issuer != config::ISSUER {
             return Err(Error::OwnershipMismatch);
         }
@@ -203,6 +204,9 @@ impl Runtime {
         let profile = enrollment.profile(token.secret()).await?;
         if profile.subject != identity.subject || profile.issuer != identity.issuer {
             return Err(Error::OwnershipMismatch);
+        }
+        if !self.current(generation) {
+            return Err(Error::Cancelled);
         }
         self.sync
             .check_account_workspace(&profile.workspace_id, old.is_some())?;
@@ -281,7 +285,9 @@ impl Runtime {
                 client.auth_config().await
             },
             transport::transient_sdk,
-        ).await.map_err(|error| Error::sdk_at(error, types::NetworkStage::CoordinatorConfiguration))?;
+        )
+        .await
+        .map_err(|error| Error::sdk_at(error, types::NetworkStage::CoordinatorConfiguration))?;
         if advertised.issuer != config::ISSUER
             || advertised.client_id != config::CLIENT_ID
             || advertised.resource != config::RESOURCE
@@ -492,10 +498,25 @@ impl Runtime {
             }
             Command::SyncNow {} => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
-                if !self.data.lock().map_err(|_| Error::Storage)?.status.enabled {
-                    return Err(Error::Authentication);
+                let restore = {
+                    let data = self.data.lock().map_err(|_| Error::Storage)?;
+                    network_recovery(&data.status, data.binding.is_some())
+                };
+                if restore {
+                    let generation = self.generation.fetch_add(1, Ordering::AcqRel) + 1;
+                    self.stop_network().await;
+                    let result = recovery::run(self, generation).await;
+                    if self.current(generation) {
+                        if let Err(error) = result {
+                            self.fail(error);
+                        }
+                    }
+                } else {
+                    if !self.data.lock().map_err(|_| Error::Storage)?.status.enabled {
+                        return Err(Error::Authentication);
+                    }
+                    self.start_network().await?;
                 }
-                self.start_network().await?;
             }
         }
         self.cleanup_status().await;
@@ -593,7 +614,7 @@ impl Runtime {
             if !self.current(generation) || stop.is_cancelled() {
                 return Err(Error::Cancelled);
             }
-            if let Err(error) = self.bind(&identity).await {
+            if let Err(error) = self.bind(&identity, generation).await {
                 // Complete_callback committed a grant, but no account was
                 // accepted. Settle revocation before returning the bind error;
                 // failed revocation is surfaced by cleanup_status below.
@@ -692,9 +713,63 @@ impl Runtime {
         });
     }
 }
+impl recovery::Host for Arc<Runtime> {
+    fn current(&self, generation: u64) -> bool {
+        Runtime::current(self, generation)
+    }
+    async fn restore(&self) -> Result<account_auth::Identity> {
+        self.auth()
+            .await?
+            .restore()
+            .await?
+            .ok_or(Error::AuthenticationAt(
+                types::NetworkStage::IdentitySession,
+            ))
+    }
+    async fn bind(&self, identity: account_auth::Identity, generation: u64) -> Result<bool> {
+        Runtime::bind(self, &identity, generation).await?;
+        Ok(self
+            .data
+            .lock()
+            .map_err(|_| Error::Storage)?
+            .binding
+            .as_ref()
+            .ok_or(Error::Authentication)?
+            .enabled)
+    }
+    async fn start(&self) -> Result<()> {
+        self.start_network().await
+    }
+}
+fn network_recovery(status: &Status, bound: bool) -> bool {
+    bound
+        && status.state == Phase::Error
+        && status.error.as_ref().is_some_and(|error| {
+            error.code == "account_network"
+                || (error.code == "account_authentication"
+                    && error.stage == Some(types::NetworkStage::AuthorizationProvider)
+                    && error.provider_reason == Some(cybergrid_sdk::AuthProviderFailure::Network))
+        })
+}
 fn authorization_mode(status: &Status) -> Result<bool> {
     match status.state {
-        Phase::Error => Ok(true),
+        Phase::Error
+            if status
+                .error
+                .as_ref()
+                .is_some_and(types::SafeError::refresh_rejected) =>
+        {
+            Ok(true)
+        }
+        Phase::Error
+            if status.profile.is_none()
+                && status
+                    .error
+                    .as_ref()
+                    .is_some_and(types::SafeError::initial_authorization_retry) =>
+        {
+            Ok(false)
+        }
         Phase::SignedOut if status.profile.is_none() => Ok(false),
         _ => Err(Error::Busy),
     }
@@ -718,11 +793,59 @@ fn trusted_application_origin(source: &url::Url) -> bool {
 mod tests {
     use super::*;
     #[test]
+    fn explicit_network_recovery_requires_bound_error_and_does_not_select_enable() {
+        for enabled in [false, true] {
+            for error in [
+                Error::NetworkAt(types::NetworkStage::IdentityProvider),
+                Error::ProviderAuthentication(cybergrid_sdk::AuthProviderFailure::Network),
+            ] {
+                let mut status = Status {
+                    state: Phase::Error,
+                    enabled,
+                    error: Some(error.safe()),
+                    ..Status::default()
+                };
+                assert!(network_recovery(&status, true));
+                assert_eq!(status.enabled, enabled);
+                assert!(!network_recovery(&status, false));
+                for phase in [
+                    Phase::Paused,
+                    Phase::Ready,
+                    Phase::SignedOut,
+                    Phase::Authorizing,
+                    Phase::Connecting,
+                ] {
+                    status.state = phase;
+                    assert!(!network_recovery(&status, true));
+                }
+            }
+            for error in [
+                Error::Configuration,
+                Error::Storage,
+                Error::OwnershipMismatch,
+                Error::CleanupRequired,
+                Error::TokenResponseInvalid,
+                Error::CoordinationProtocol,
+                Error::AuthenticationAt(types::NetworkStage::IdentityRefresh),
+            ] {
+                let status = Status {
+                    state: Phase::Error,
+                    enabled,
+                    error: Some(error.safe()),
+                    ..Status::default()
+                };
+                assert!(!network_recovery(&status, true));
+            }
+        }
+    }
+
+    #[test]
     fn explicit_error_reauthentication_can_cleanup_but_healthy_owner_is_preserved() {
         assert_eq!(authorization_mode(&Status::default()), Ok(false));
         for with_profile in [false, true] {
             let mut status = Status {
                 state: Phase::Error,
+                error: Some(Error::AuthenticationAt(types::NetworkStage::IdentityRefresh).safe()),
                 ..Status::default()
             };
             if with_profile {
@@ -743,6 +866,77 @@ mod tests {
                 assert_eq!(authorization_mode(&status), Err(Error::Busy));
             }
         }
+    }
+    #[test]
+    fn replacement_authorization_rejects_network_unknown_and_local_failures() {
+        for with_profile in [false, true] {
+            for error in [
+                Error::Network,
+                Error::Configuration,
+                Error::Storage,
+                Error::OwnershipMismatch,
+                Error::CleanupRequired,
+                Error::CoordinationProtocol,
+                Error::Authentication,
+                Error::AuthenticationAt(types::NetworkStage::Coordinator),
+                Error::ProviderAuthentication(cybergrid_sdk::AuthProviderFailure::Network),
+                Error::ProviderAuthentication(cybergrid_sdk::AuthProviderFailure::IdentityRejected),
+                Error::ProviderAuthentication(
+                    cybergrid_sdk::AuthProviderFailure::TokenResponseInvalid,
+                ),
+            ] {
+                let mut status = Status {
+                    state: Phase::Error,
+                    error: Some(error.safe()),
+                    ..Status::default()
+                };
+                if with_profile {
+                    status.profile = Some(Profile {
+                        subject: "fixture-owner".into(),
+                        display_name: "Fixture".into(),
+                        username: None,
+                    });
+                }
+                assert_eq!(authorization_mode(&status), Err(Error::Busy));
+            }
+        }
+        for error in [
+            Error::NetworkAt(types::NetworkStage::IdentityProvider),
+            Error::InvalidCallback,
+            Error::CodeExchangeRejected,
+            Error::TokenResponseInvalid,
+            Error::InvalidIdentity,
+            Error::Cancelled,
+        ] {
+            let mut status = Status {
+                state: Phase::Error,
+                error: Some(error.safe()),
+                ..Status::default()
+            };
+            assert_eq!(authorization_mode(&status), Ok(false)); // begin only; no logout
+            status.profile = Some(Profile {
+                subject: "fixture-owner".into(),
+                display_name: "Fixture".into(),
+                username: None,
+            });
+            assert_eq!(authorization_mode(&status), Err(Error::Busy));
+        }
+        let status = Status {
+            state: Phase::Error,
+            error: Some(
+                Error::ProviderAuthentication(cybergrid_sdk::AuthProviderFailure::RefreshFailed)
+                    .safe(),
+            ),
+            ..Status::default()
+        };
+        assert_eq!(authorization_mode(&status), Ok(true));
+        assert_eq!(
+            authorization_mode(&Status {
+                state: Phase::Error,
+                ..Status::default()
+            }),
+            Err(Error::Busy)
+        );
     }
     #[test]
     fn native_ipc_trusts_exact_app_origins_and_strict_command_types() {
