@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "kind": "account109-cancel-local-live02-archive",
+  "sourceResultSha256Before": "6f989d4317c94ec5455bbeb8f19db559f8c45b82a8d8c54c098604b1632fe56b",
+  "sourceResultSha256After": "6f989d4317c94ec5455bbeb8f19db559f8c45b82a8d8c54c098604b1632fe56b",
+  "archivedResultSha256": "6f989d4317c94ec5455bbeb8f19db559f8c45b82a8d8c54c098604b1632fe56b",
+  "resultByteExact": true,
+  "sanitization": "None: finite review accepted safe raw result, including dedicated synthetic store path.",
+  "runnerMainCommit": "2f10dd1352950513a21616f66dd0464dda04307d",
+  "pinAuthorCommit": "213e7b77c6134ea5ce7add0e656b71ffe37a7fc5",
+  "candidate": {
+    "sha256": "3fa9a3851e610348352f5594f976f145e2d344fd97a9f0d27124566f458ce65c",
+    "sourceRevision": "9e7c46d2fcc8ed31bf1210ce4272f73edffe9143",
+    "candidateKind": "debug-e2e"
+  },
+  "parentReportedExecExitCode": 0,
+  "modules": [
+    {
+      "path": "scripts/verification/account109-cancel-local.mjs",
+      "commit": "2f10dd1352950513a21616f66dd0464dda04307d",
+      "gitBlob": "bc674bfa247ce286d5475f8dd31d697ac5fad061",
+      "sha256": "57b6b384c7f4a8662f8df7ad61043d010017b5968386dee1a8f9a314f58ba498"
+    },
+    {
+      "path": "scripts/verification/sync108-native-driver.mjs",
+      "commit": "2f10dd1352950513a21616f66dd0464dda04307d",
+      "gitBlob": "431d506d30c3f891d35f691c21cae56973c6ffaf",
+      "sha256": "d521530738daf0586846445de14e6ecf57799c2c441e78cb0d25312b640a2c23"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-helpers.mjs",
+      "commit": "2f10dd1352950513a21616f66dd0464dda04307d",
+      "gitBlob": "2fc204e637d3be8a410ea989aea98fe2fa834e9d",
+      "sha256": "e5278d612598946624209c3aae8be8bf7243b806ce9de3dd2e406ed87a505ab0"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-recovery.mjs",
+      "commit": "2f10dd1352950513a21616f66dd0464dda04307d",
+      "gitBlob": "215b042877ef19191c519c742811720f176e1ccd",
+      "sha256": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672"
+    }
+  ],
+  "lifecycle": {
+    "bothNaturalExitCode0": true,
+    "forcedSignals": [],
+    "originalPidAbsentFlags": [
+      true,
+      true
+    ],
+    "independentPidCheck": {
+      "checkedAt": "2026-11-13T10:13:53.571935+00:00",
+      "checks": [
+        {
+          "device": "local-1",
+          "pid": 17477,
+          "method": "ps -p PID -o pid=,ppid=,comm=",
+          "exitCode": 1,
+          "stdoutEmpty": true,
+          "stderrEmpty": true,
+          "present": false
+        },
+        {
+          "device": "local-2",
+          "pid": 17528,
+          "method": "ps -p PID -o pid=,ppid=,comm=",
+          "exitCode": 1,
+          "stdoutEmpty": true,
+          "stderrEmpty": true,
+          "present": false
+        }
+      ]
+    }
+  },
+  "oldLive01ResultSha256Unchanged": "9cddb1b46077345efb51f8e138fcb35109f1f811bf0f475a8cf83c177cd5b3a0",
+  "originalStoreAndOutputRetained": true,
+  "boundary": "Actual five-check GUI cancellation/local-edit/restart result only; no valid late callback test, successful login, QA re-login, three-peer or relay acceptance."
+}
