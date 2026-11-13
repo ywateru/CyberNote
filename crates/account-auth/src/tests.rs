@@ -280,12 +280,66 @@ async fn code_exchange_transport_failure_stays_network_and_never_replays_code() 
     }));
     let client = AuthClient::initialize(cfg, &dir.path().join("grant.json"), http).unwrap();
     let (transaction, callback) = f.begin(&client, false).await;
-    assert_eq!(client.complete_callback(transaction, callback).await.unwrap_err(), AuthError::Network);
+    assert_eq!(
+        client
+            .complete_callback(transaction, callback)
+            .await
+            .unwrap_err(),
+        AuthError::Network
+    );
     assert_eq!(calls.load(Ordering::SeqCst), 1);
     assert!(!client.cleanup_required().await);
     assert!(client.restore().await.unwrap().is_none());
     assert!(!dir.path().join("grant.json").exists());
     assert_eq!(f.revokes.load(Ordering::SeqCst), 0);
+}
+
+#[tokio::test]
+async fn code_exchange_rejection_and_malformed_response_have_fixed_safe_categories() {
+    for (malformed, expected) in [
+        (false, AuthError::CodeExchangeRejected),
+        (true, AuthError::TokenResponseInvalid),
+    ] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let cfg = config();
+        let mut http = f.http(&cfg);
+        let responder = http.responder.take().unwrap();
+        let calls = Arc::new(AtomicUsize::new(0));
+        let observed = calls.clone();
+        http.responder = Some(Arc::new(move |request| {
+            if request.uri().path() == "/oidc/token" {
+                observed.fetch_add(1, Ordering::SeqCst);
+                Box::pin(async move {
+                    if malformed {
+                        Ok(oauth2::http::Response::builder()
+                            .status(200)
+                            .header("content-type", "application/json")
+                            .body(b"fixture-sensitive-not-json".to_vec())
+                            .unwrap())
+                    } else {
+                        Ok(response(
+                            400,
+                            json!({"error":"invalid_grant","error_description":"fixture-sensitive-response"}),
+                        ))
+                    }
+                })
+            } else {
+                responder(request)
+            }
+        }));
+        let client = AuthClient::initialize(cfg, &dir.path().join("grant.json"), http).unwrap();
+        let (transaction, callback) = f.begin(&client, false).await;
+        let error = client
+            .complete_callback(transaction, callback)
+            .await
+            .unwrap_err();
+        assert_eq!(error, expected);
+        assert!(!error.to_string().contains("fixture-sensitive"));
+        assert_eq!(calls.load(Ordering::SeqCst), 1);
+        assert!(client.restore().await.unwrap().is_none());
+        assert!(!client.cleanup_required().await);
+    }
 }
 
 #[tokio::test]
@@ -967,7 +1021,7 @@ async fn initial_empty_refresh_revokes_issued_access_and_failed_cleanup_survives
                 .complete_callback(transaction, callback)
                 .await
                 .unwrap_err(),
-            AuthError::InvalidIdentity
+            AuthError::MissingRefreshToken
         );
         assert_eq!(
             *f.revoked_tokens.lock().unwrap(),
@@ -1126,7 +1180,7 @@ async fn missing_refresh_and_failed_revocation_offer_safe_explicit_cleanup_witho
             .complete_callback(transaction, callback)
             .await
             .unwrap_err(),
-        AuthError::InvalidIdentity
+        AuthError::MissingRefreshToken
     );
     let network_before = (
         f.tokens.load(Ordering::SeqCst),

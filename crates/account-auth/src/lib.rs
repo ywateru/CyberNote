@@ -351,7 +351,8 @@ impl AuthClient {
                 // identity. Preserve only our fixed safe HTTP error category;
                 // never replay an authorization code after an uncertain send.
                 oauth2::RequestTokenError::Request(error) => error,
-                _ => AuthError::InvalidIdentity,
+                oauth2::RequestTokenError::ServerResponse(_) => AuthError::CodeExchangeRejected,
+                _ => AuthError::TokenResponseInvalid,
             })?;
         let identity = self.verify_response(&client, &response, transaction.nonce.secret(), true);
         let mut grant = self.grant(&response, None, transaction.nonce.secret())?;
@@ -359,7 +360,7 @@ impl AuthClient {
         let outcome = if !transaction.cancellation.active() {
             Err(AuthError::Cancelled)
         } else if grant.refresh.as_ref().is_none_or(|token| token.is_empty()) {
-            Err(AuthError::InvalidIdentity)
+            Err(AuthError::MissingRefreshToken)
         } else {
             identity
         };
