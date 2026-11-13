@@ -10,6 +10,12 @@ const reasons=['responseMetadata','missingIdToken','issuer','audience','expired'
 const providerReasons=['configuration','network','invalidCallback','invalidIdentity','identityRejected','codeExchangeRejected','tokenResponseInvalid','missingRefreshToken','cancelled','noSession','ownershipMismatch','storage','refreshFailed','revocationFailed','busy'];
 const tokenOperations=['codeExchange','refresh'];
 const tokenFields=['tokenType','accessToken','expiresIn','scope'];
+const transportKinds=['webrtc-direct','iroh-direct','cloudflare-tunnel','unavailable','unknown'];
+const positive=value=>Number.isSafeInteger(value)&&value>0;
+export function safeMappingObservation(t,generation){
+  if(!t||!positive(generation)||t.generation!==generation||!positive(t.sample)||count(t.ageMs)===undefined||t.ageMs>3000||!transportKinds.includes(t.enrollment)||!transportKinds.includes(t.sync))return undefined;
+  return {generation,sample:t.sample,ageMs:t.ageMs,enrollment:t.enrollment,sync:t.sync};
+}
 const label=(value,allowed)=>allowed.includes(value)?value:'unknown';
 const count=value=>Number.isSafeInteger(value)&&value>=0?value:undefined;
 export const fail=code=>Object.assign(new Error(code),{code});
@@ -17,10 +23,15 @@ export function safeStatus(s){
   const e=s?.error;
   const tokenDiagnostic=e?.code==='account_auth_identity_invalid'&&e.reason==='responseMetadata'&&e.stage===undefined&&e.providerReason===undefined&&tokenOperations.includes(e.tokenOperation)&&tokenFields.includes(e.tokenField)
     ?{tokenOperation:e.tokenOperation,tokenField:e.tokenField}:{};
+  const generation=s?.state==='ready'&&s.enabled===true&&!s.error&&positive(s.transportGeneration)?s.transportGeneration:undefined;
   return {state:label(s?.state,states),enabled:s?.enabled===true,hasProfile:!!s?.profile,
     identityCheck:s?.profile?.username===undefined?'unverified':s.profile.username==='cybernoteqa20261113a'?'expectedSyntheticUser':'differentUser',
     error:s?.error?{code:label(s.error.code,codes),...(s.error.stage===undefined?{}:{stage:label(s.error.stage,stages)}),...(s.error.reason===undefined?{}:{reason:label(s.error.reason,reasons)}),...(s.error.providerReason===undefined?{}:{providerReason:label(s.error.providerReason,providerReasons)}),...tokenDiagnostic}:undefined,
-    devices:Array.isArray(s?.devices)?s.devices.slice(0,256).map(d=>({online:d?.online===true,current:d?.current===true,connected:d?.connected===true})):[],
+    ...(generation===undefined?{}:{transportGeneration:generation}),
+    devices:Array.isArray(s?.devices)?s.devices.slice(0,256).map(d=>{
+      const transport=d?.online===true&&d.current===false?safeMappingObservation(d.transport,generation):undefined;
+      return {online:d?.online===true,current:d?.current===true,connected:d?.connected===true,...(transport===undefined?{}:{transport})};
+    }):[],
     pendingCount:count(s?.pendingCount),conflictCount:count(s?.conflictCount)};
 }
 export function requireHealthy(s,{pendingNetwork=false}={}){

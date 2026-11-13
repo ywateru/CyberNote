@@ -33,6 +33,16 @@ test('safe status never guesses partial or cross-branch token diagnostics',()=>{
  }
 });
 
+test('safe status preserves live per-path samples and drops stale or inactive evidence without raw provider text',()=>{
+ const transport={generation:3,sample:8,ageMs:20,enrollment:'webrtc-direct',sync:'cloudflare-tunnel',address:'private-provider-sentinel'};
+ const s=status({transportGeneration:3,devices:[{id:'private-id',name:'private-name',online:true,current:false,connected:true,transport}]});
+ const safe=safeStatus(s);assert.deepEqual(safe.devices[0].transport,{generation:3,sample:8,ageMs:20,enrollment:'webrtc-direct',sync:'cloudflare-tunnel'});
+ assert.equal(safe.transportGeneration,3);assert(!JSON.stringify(safe).includes('private-'));
+ for(const change of [x=>{x.state='paused';},x=>{x.enabled=false;},x=>{x.error={code:'account_network'};},x=>{x.transportGeneration=4;},x=>{x.devices[0].current=true;},x=>{x.devices[0].transport.ageMs=3001;},x=>{x.devices[0].transport.sync='private-provider-sentinel';},x=>{delete x.devices[0].transport.sample;}]){
+  const copy=structuredClone(s);change(copy);const value=safeStatus(copy);assert.equal(value.devices[0].transport,undefined);assert(!JSON.stringify(value).includes('private-'));
+ }
+});
+
 test('recorded recovery authentication failure terminates discovery on the first poll',async()=>{
   // Same safe DTO shape as recovery01: one ready device and one auth error.
   const report={};const observe=statusObserver(report,()=> 'automatic-discovery');let polls=0;

@@ -24,6 +24,8 @@ pub(crate) struct Status {
     pub conflict_count: u64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<SafeError>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transport_generation: Option<u64>,
 }
 #[derive(Clone, Serialize, Default, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
@@ -52,6 +54,32 @@ pub(crate) struct Device {
     pub online: bool,
     pub current: bool,
     pub connected: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transport: Option<MappingObservation>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+pub(crate) enum TransportKind {
+    #[serde(rename = "webrtc-direct")]
+    WebrtcDirect,
+    #[serde(rename = "iroh-direct")]
+    IrohDirect,
+    #[serde(rename = "cloudflare-tunnel")]
+    CloudflareTunnel,
+    #[serde(rename = "unavailable")]
+    Unavailable,
+    #[serde(rename = "unknown")]
+    Unknown,
+}
+
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct MappingObservation {
+    pub generation: u64,
+    pub sample: u64,
+    pub age_ms: u64,
+    pub enrollment: TransportKind,
+    pub sync: TransportKind,
 }
 #[derive(Clone, Serialize)]
 pub(crate) struct SafeError {
@@ -290,6 +318,31 @@ impl Error {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn mapping_observation_serializes_finite_paths_and_legacy_status_omits_extension() {
+        let legacy = serde_json::to_value(Status::default()).unwrap();
+        assert!(legacy.get("transportGeneration").is_none());
+        for (kind, label) in [
+            (TransportKind::WebrtcDirect, "webrtc-direct"),
+            (TransportKind::IrohDirect, "iroh-direct"),
+            (TransportKind::CloudflareTunnel, "cloudflare-tunnel"),
+            (TransportKind::Unavailable, "unavailable"),
+            (TransportKind::Unknown, "unknown"),
+        ] {
+            let sample = MappingObservation {
+                generation: 2,
+                sample: 9,
+                age_ms: 10,
+                enrollment: kind,
+                sync: kind,
+            };
+            assert_eq!(serde_json::to_value(sample).unwrap(), serde_json::json!({
+                "generation": 2, "sample": 9, "ageMs": 10,
+                "enrollment": label, "sync": label,
+            }));
+        }
+    }
 
     #[test]
     fn token_response_diagnostics_preserve_generic_reason_and_exact_finite_details() {

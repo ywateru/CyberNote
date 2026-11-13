@@ -24,6 +24,488 @@ use tokio::{
 };
 use tokio_util::sync::CancellationToken;
 
+// Cache and sampler contain no transport selection, authentication or network IO.
+// Kept inline so the existing exact export inventory needs no new source path.
+pub(super) mod observation {
+    use super::super::types::{MappingObservation, Phase, Status, TransportKind};
+    use std::{
+        collections::HashMap,
+        future::Future,
+        sync::{Arc, Mutex},
+        time::{Duration, Instant},
+    };
+    use tokio::task::JoinHandle;
+    use tokio_util::sync::CancellationToken;
+
+    pub const MAX_AGE_MS: u64 = 3000;
+    const READ_LIMIT: Duration = Duration::from_millis(250);
+    #[derive(Default)]
+    struct State {
+        serial: u64,
+        active: Option<(u64, u64)>, // observation generation, account generation
+        ready: bool,
+        ready_since: Option<Instant>,
+        sample: u64,
+        samples: HashMap<String, (Instant, MappingObservation)>,
+    }
+    #[derive(Default)]
+    pub struct Cache(Mutex<State>);
+    #[derive(Clone)]
+    pub struct Lease {
+        cache: Arc<Cache>,
+        generation: u64,
+    }
+    impl Cache {
+        pub fn begin(self: &Arc<Self>, owner_generation: u64) -> Option<Lease> {
+            let mut state = self.0.lock().ok()?;
+            state.active = None;
+            state.ready = false;
+            state.ready_since = None;
+            state.samples.clear();
+            state.serial = state.serial.checked_add(1)?;
+            state.sample = 0;
+            state.active = Some((state.serial, owner_generation));
+            Some(Lease {
+                cache: self.clone(),
+                generation: state.serial,
+            })
+        }
+        pub fn close(&self) {
+            if let Ok(mut state) = self.0.lock() {
+                state.active = None;
+                state.ready = false;
+                state.ready_since = None;
+                state.samples.clear();
+            }
+        }
+        pub fn suspend(&self) {
+            if let Ok(mut state) = self.0.lock() {
+                state.ready = false;
+                state.ready_since = None;
+                state.samples.clear();
+            }
+        }
+        pub fn overlay(&self, status: &mut Status, owner_generation: u64) {
+            status.transport_generation = None;
+            for device in &mut status.devices {
+                device.transport = None;
+            }
+            if status.state != Phase::Ready || !status.enabled || status.error.is_some() {
+                return;
+            }
+            let Ok(state) = self.0.lock() else {
+                return;
+            };
+            let Some((generation, owner)) = state.active else {
+                return;
+            };
+            if !state.ready || owner != owner_generation {
+                return;
+            }
+            status.transport_generation = Some(generation);
+            for device in &mut status.devices {
+                if device.current || !device.online {
+                    continue;
+                }
+                if let Some((at, sample)) = state.samples.get(&device.id) {
+                    let age = at.elapsed().as_millis();
+                    if age <= u128::from(MAX_AGE_MS) {
+                        let mut sample = sample.clone();
+                        sample.age_ms = age as u64;
+                        device.transport = Some(sample);
+                    }
+                }
+            }
+        }
+    }
+    impl Lease {
+        pub fn resume(&self) {
+            if let Ok(mut state) = self.cache.0.lock() {
+                if state
+                    .active
+                    .is_some_and(|(generation, _)| generation == self.generation)
+                    && !state.ready
+                {
+                    state.samples.clear();
+                    state.ready = true;
+                    state.ready_since = Some(Instant::now());
+                }
+            }
+        }
+        fn remove(&self, peer: &str) {
+            if let Ok(mut state) = self.cache.0.lock() {
+                if state
+                    .active
+                    .is_some_and(|(generation, _)| generation == self.generation)
+                {
+                    state.samples.remove(peer);
+                }
+            }
+        }
+        fn record(
+            &self,
+            peer: &str,
+            enrollment: TransportKind,
+            sync: TransportKind,
+            started: Instant,
+        ) {
+            if let Ok(mut state) = self.cache.0.lock() {
+                if !state.ready
+                    || !state.ready_since.is_some_and(|since| started >= since)
+                    || !state
+                        .active
+                        .is_some_and(|(generation, _)| generation == self.generation)
+                {
+                    return;
+                }
+                let Some(sample) = state.sample.checked_add(1) else {
+                    state.samples.remove(peer);
+                    return;
+                };
+                state.sample = sample;
+                state.samples.insert(
+                    peer.into(),
+                    (
+                        started,
+                        MappingObservation {
+                            generation: self.generation,
+                            sample,
+                            age_ms: 0,
+                            enrollment,
+                            sync,
+                        },
+                    ),
+                );
+            }
+        }
+        pub fn spawn<F, Fut>(&self, peer: String, read: F) -> Sampler
+        where
+            F: Fn() -> Fut + Send + 'static,
+            Fut: Future<Output = (TransportKind, TransportKind)> + Send + 'static,
+        {
+            let lease = self.clone();
+            let task_peer = peer.clone();
+            let stop = CancellationToken::new();
+            let task_stop = stop.clone();
+            let task = tokio::spawn(async move {
+                loop {
+                    // A pending/failed sample never reuses the previous success.
+                    lease.remove(&task_peer);
+                    let started = Instant::now();
+                    let result = tokio::select! {
+                        biased;
+                        _ = task_stop.cancelled() => break,
+                        result = tokio::time::timeout(READ_LIMIT * 2, read()) => result,
+                    };
+                    let (enrollment, sync) =
+                        result.unwrap_or((TransportKind::Unavailable, TransportKind::Unavailable));
+                    lease.record(&task_peer, enrollment, sync, started);
+                    tokio::select! { biased; _ = task_stop.cancelled() => break, _ = tokio::time::sleep(Duration::from_secs(1)) => {} }
+                }
+            });
+            Sampler {
+                lease: self.clone(),
+                peer,
+                stop,
+                task,
+            }
+        }
+    }
+    pub struct Sampler {
+        lease: Lease,
+        peer: String,
+        stop: CancellationToken,
+        task: JoinHandle<()>,
+    }
+    impl Drop for Sampler {
+        fn drop(&mut self) {
+            self.stop.cancel();
+            self.task.abort();
+            self.lease.remove(&self.peer);
+        }
+    }
+    pub async fn read_path(
+        read: impl Future<Output = std::result::Result<Option<String>, ()>>,
+    ) -> TransportKind {
+        match tokio::time::timeout(READ_LIMIT, read).await {
+            Ok(Ok(Some(value))) => match value.as_str() {
+                "webrtc-direct" => TransportKind::WebrtcDirect,
+                "iroh-direct" => TransportKind::IrohDirect,
+                "cloudflare-tunnel" => TransportKind::CloudflareTunnel,
+                _ => TransportKind::Unknown,
+            },
+            _ => TransportKind::Unavailable,
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::super::super::types::{Device, Error};
+        use super::*;
+        fn ready() -> Status {
+            Status {
+                state: Phase::Ready,
+                enabled: true,
+                devices: vec![Device {
+                    id: "fixture-peer".into(),
+                    name: "Fixture".into(),
+                    online: true,
+                    current: false,
+                    connected: true,
+                    transport: None,
+                }],
+                ..Status::default()
+            }
+        }
+        fn sample(cache: &Cache, owner: u64) -> Option<MappingObservation> {
+            let mut status = ready();
+            cache.overlay(&mut status, owner);
+            status.devices[0].transport.clone()
+        }
+        #[tokio::test]
+        async fn only_current_finite_paths_survive_closed_unknown_error_and_lock_timeout() {
+            for (value, expected) in [
+                (Some("webrtc-direct"), TransportKind::WebrtcDirect),
+                (Some("iroh-direct"), TransportKind::IrohDirect),
+                (Some("cloudflare-tunnel"), TransportKind::CloudflareTunnel),
+                (Some("private-provider-sentinel"), TransportKind::Unknown),
+                (None, TransportKind::Unavailable),
+            ] {
+                assert_eq!(
+                    read_path(async { Ok(value.map(str::to_owned)) }).await,
+                    expected
+                );
+            }
+            assert_eq!(
+                read_path(async { Err(()) }).await,
+                TransportKind::Unavailable
+            );
+            let locked = tokio::sync::Mutex::new(());
+            let _held = locked.lock().await;
+            assert_eq!(
+                read_path(async {
+                    let _guard = locked.lock().await;
+                    Ok(Some("cloudflare-tunnel".into()))
+                })
+                .await,
+                TransportKind::Unavailable
+            );
+        }
+        #[test]
+        fn stale_failure_pause_logout_and_account_or_network_generation_cannot_reuse_success() {
+            let cache = Arc::new(Cache::default());
+            let lease = cache.begin(7).unwrap();
+            lease.resume();
+            lease.record(
+                "fixture-peer",
+                TransportKind::WebrtcDirect,
+                TransportKind::CloudflareTunnel,
+                Instant::now(),
+            );
+            let initial = sample(&cache, 7).unwrap();
+            assert_eq!(initial.sync, TransportKind::CloudflareTunnel);
+            assert!(sample(&cache, 8).is_none());
+            for phase in [
+                Phase::Paused,
+                Phase::SignedOut,
+                Phase::Authorizing,
+                Phase::Error,
+                Phase::Connecting,
+            ] {
+                let mut status = ready();
+                status.state = phase;
+                cache.overlay(&mut status, 7);
+                assert!(
+                    status.transport_generation.is_none() && status.devices[0].transport.is_none()
+                );
+            }
+            for inactive in [0, 1, 2] {
+                let mut status = ready();
+                if inactive == 0 {
+                    status.enabled = false;
+                }
+                if inactive == 1 {
+                    status.error = Some(Error::Network.safe());
+                }
+                if inactive == 2 {
+                    status.devices[0].current = true;
+                }
+                cache.overlay(&mut status, 7);
+                assert!(status.devices[0].transport.is_none());
+            }
+            let before_failure = Instant::now();
+            cache.suspend();
+            lease.resume();
+            lease.record(
+                "fixture-peer",
+                TransportKind::CloudflareTunnel,
+                TransportKind::CloudflareTunnel,
+                before_failure,
+            );
+            assert!(
+                sample(&cache, 7).is_none(),
+                "in-flight pre-failure sample cannot return after resume"
+            );
+            lease.record(
+                "fixture-peer",
+                TransportKind::Unknown,
+                TransportKind::IrohDirect,
+                Instant::now(),
+            );
+            assert!(sample(&cache, 7).unwrap().sample > initial.sample);
+            cache
+                .0
+                .lock()
+                .unwrap()
+                .samples
+                .get_mut("fixture-peer")
+                .unwrap()
+                .0 = Instant::now() - Duration::from_millis(MAX_AGE_MS + 1);
+            assert!(sample(&cache, 7).is_none());
+            let next = cache.begin(7).unwrap();
+            next.resume();
+            lease.record(
+                "fixture-peer",
+                TransportKind::CloudflareTunnel,
+                TransportKind::CloudflareTunnel,
+                Instant::now(),
+            );
+            assert!(sample(&cache, 7).is_none());
+            next.record(
+                "fixture-peer",
+                TransportKind::Unavailable,
+                TransportKind::Unavailable,
+                Instant::now(),
+            );
+            assert_ne!(sample(&cache, 7).unwrap().generation, initial.generation);
+            cache.close();
+            next.resume();
+            next.record(
+                "fixture-peer",
+                TransportKind::CloudflareTunnel,
+                TransportKind::CloudflareTunnel,
+                Instant::now(),
+            );
+            assert!(sample(&cache, 7).is_none());
+        }
+        #[tokio::test]
+        async fn pending_sample_revokes_previous_success_and_timeout_records_unavailable() {
+            use std::sync::atomic::{AtomicUsize, Ordering};
+            let cache = Arc::new(Cache::default());
+            let lease = cache.begin(1).unwrap();
+            lease.resume();
+            let calls = Arc::new(AtomicUsize::new(0));
+            let source = calls.clone();
+            let sampler = lease.spawn("fixture-peer".into(), move || {
+                let call = source.fetch_add(1, Ordering::SeqCst);
+                async move {
+                    if call > 0 {
+                        return std::future::pending().await;
+                    }
+                    (TransportKind::WebrtcDirect, TransportKind::CloudflareTunnel)
+                }
+            });
+            tokio::time::timeout(Duration::from_secs(2), async {
+                while sample(&cache, 1).is_none() {
+                    tokio::task::yield_now().await;
+                }
+            })
+            .await
+            .unwrap();
+            let first = sample(&cache, 1).unwrap();
+            tokio::time::timeout(Duration::from_secs(2), async {
+                while calls.load(Ordering::SeqCst) < 2 {
+                    tokio::task::yield_now().await;
+                }
+            })
+            .await
+            .unwrap();
+            assert!(
+                sample(&cache, 1).is_none(),
+                "pending read must revoke old relay success"
+            );
+            tokio::time::timeout(Duration::from_secs(1), async {
+                loop {
+                    if let Some(sample) = sample(&cache, 1) {
+                        assert!(sample.sample > first.sample);
+                        assert_eq!(sample.enrollment, TransportKind::Unavailable);
+                        assert_eq!(sample.sync, TransportKind::Unavailable);
+                        break;
+                    }
+                    tokio::task::yield_now().await;
+                }
+            })
+            .await
+            .unwrap();
+            drop(sampler);
+            assert!(sample(&cache, 1).is_none());
+        }
+
+        #[tokio::test]
+        async fn switching_live_samples_and_cancelling_pending_sampler_clear_evidence() {
+            use std::sync::atomic::{AtomicBool, Ordering};
+            let cache = Arc::new(Cache::default());
+            let lease = cache.begin(1).unwrap();
+            lease.resume();
+            let direct = Arc::new(AtomicBool::new(false));
+            let source = direct.clone();
+            let sampler = lease.spawn("fixture-peer".into(), move || {
+                let kind = if source.load(Ordering::Acquire) {
+                    TransportKind::IrohDirect
+                } else {
+                    TransportKind::CloudflareTunnel
+                };
+                async move { (TransportKind::WebrtcDirect, kind) }
+            });
+            tokio::time::timeout(Duration::from_secs(2), async {
+                loop {
+                    if sample(&cache, 1).is_some() {
+                        break;
+                    }
+                    tokio::task::yield_now().await;
+                }
+            })
+            .await
+            .unwrap();
+            let first = sample(&cache, 1).unwrap();
+            assert_eq!(first.sync, TransportKind::CloudflareTunnel);
+            direct.store(true, Ordering::Release);
+            tokio::time::timeout(Duration::from_secs(2), async {
+                loop {
+                    if sample(&cache, 1).is_some_and(|s| {
+                        s.sync == TransportKind::IrohDirect && s.sample > first.sample
+                    }) {
+                        break;
+                    }
+                    tokio::task::yield_now().await;
+                }
+            })
+            .await
+            .unwrap();
+            drop(sampler);
+            assert!(sample(&cache, 1).is_none());
+            let pending = lease.spawn("fixture-peer".into(), || std::future::pending());
+            tokio::task::yield_now().await;
+            drop(pending);
+            tokio::task::yield_now().await;
+            assert!(sample(&cache, 1).is_none());
+        }
+    }
+}
+
+struct MappedPeer {
+    enroll: Arc<Mapping>,
+    sync: Arc<Mapping>,
+    observation: Option<observation::Sampler>,
+}
+impl MappedPeer {
+    async fn close(self) {
+        drop(self.observation);
+        self.enroll.close().await;
+        self.sync.close().await;
+    }
+}
+
 pub(crate) fn transient_sdk(error: &cybergrid_sdk::Error) -> bool {
     matches!(
         error,
@@ -157,6 +639,7 @@ pub(crate) async fn run(
     enrollment: Arc<Enrollment>,
     gate: Arc<Gate>,
     stop: CancellationToken,
+    observation: Option<observation::Lease>,
     publish: Arc<dyn Fn(std::result::Result<Snapshot, Error>) + Send + Sync>,
 ) -> Result<()> {
     let session = retry_sdk(
@@ -196,6 +679,7 @@ pub(crate) async fn run(
         enrollment,
         gate.clone(),
         stop,
+        observation,
         publish,
         proof,
         claims,
@@ -222,6 +706,7 @@ async fn run_service(
     enrollment: Arc<Enrollment>,
     gate: Arc<Gate>,
     stop: CancellationToken,
+    observation: Option<observation::Lease>,
     publish: Arc<dyn Fn(std::result::Result<Snapshot, Error>) + Send + Sync>,
     proof: String,
     mut claims: Claims,
@@ -263,7 +748,7 @@ async fn run_service(
         tasks.abort_all();
         while tasks.join_next().await.is_some() {}
     });
-    let mut mappings: HashMap<String, (Mapping, Mapping)> = HashMap::new();
+    let mut mappings: HashMap<String, MappedPeer> = HashMap::new();
     let mut backoff = Duration::from_secs(2);
     let result = loop {
         let cycle = async {
@@ -290,9 +775,8 @@ async fn run_service(
                 .cloned()
                 .collect::<Vec<_>>();
             for id in retired {
-                if let Some((enroll, sync)) = mappings.remove(&id) {
-                    enroll.close().await;
-                    sync.close().await;
+                if let Some(mapping) = mappings.remove(&id) {
+                    mapping.close().await;
                 }
             }
             let mut snapshot = Vec::new();
@@ -315,6 +799,7 @@ async fn run_service(
                         online: true,
                         current: true,
                         connected: false,
+                        transport: None,
                     });
                     continue;
                 }
@@ -344,9 +829,26 @@ async fn run_service(
                             return Err(Error::from(e));
                         }
                     };
-                    mappings.insert(device.id.clone(), (enroll, sync));
+                    let enroll = Arc::new(enroll);
+                    let sync = Arc::new(sync);
+                    let sampler = observation.as_ref().map(|lease| {
+                        let enroll = enroll.clone();
+                        let sync = sync.clone();
+                        lease.spawn(device.id.clone(), move || {
+                            let enroll = enroll.clone();
+                            let sync = sync.clone();
+                            async move {
+                                tokio::join!(
+                                    observation::read_path(async { Ok(enroll.current_transport().await) }),
+                                    observation::read_path(async { Ok(sync.current_transport().await) }),
+                                )
+                            }
+                        })
+                    });
+                    mappings.insert(device.id.clone(), MappedPeer { enroll, sync, observation: sampler });
                 }
-                let (enroll, sync) = mappings.get(&device.id).ok_or(Error::Network)?;
+                let mapping = mappings.get(&device.id).ok_or(Error::Network)?;
+                let (enroll, sync) = (&mapping.enroll, &mapping.sync);
                 let mut stream = TcpStream::connect(enroll.addr).await?;
                 let nonce = uuid::Uuid::new_v4().to_string();
                 let proof = bootstrap.proof.lock().map_err(|_| Error::Storage)?.clone();
@@ -414,6 +916,7 @@ async fn run_service(
                     online: true,
                     current: false,
                     connected,
+                    transport: None,
                 });
             }
             let live = service.status()?;
@@ -458,9 +961,8 @@ async fn run_service(
     gate.close();
     child.cancel();
     let _ = server.await;
-    for (_, (enroll, sync)) in mappings {
-        enroll.close().await;
-        sync.close().await;
+    for (_, mapping) in mappings {
+        mapping.close().await;
     }
     result
 }

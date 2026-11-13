@@ -8,7 +8,7 @@ import {resolve,isAbsolute,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {NativeApp,delay} from './sync108-native-driver.mjs';
 import {connectAndroid,ownedForwardPresent,PHONE_FILES,PACKAGE,SERIAL} from './account109-android.mjs';
-import {safeStatus,statusObserver,requireHealthy,waitForAccountStatuses,accountEnabled,nativeAccount,signedOut,noteBody,attachmentRefs,canonicalBody,snapshotNotes,assertPreserved,failureCode,fail} from './account109-desktop-helpers.mjs';
+import {safeStatus,safeMappingObservation,statusObserver,requireHealthy,waitForAccountStatuses,accountEnabled,nativeAccount,signedOut,noteBody,attachmentRefs,canonicalBody,snapshotNotes,assertPreserved,failureCode,fail} from './account109-desktop-helpers.mjs';
 
 export const STORES='/private/tmp/account109-desktop-real-90b8b28b-01';
 export const USERNAME='cybernoteqa20261113a';
@@ -18,17 +18,20 @@ const CASES=['auto-discovery','a-rich-media','c-ui-note','b-file','phone-pause-r
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const assertThat=(condition,code)=>{if(!condition)throw fail(code);};
 export function options(argv){
-  const opts={allowDesktopSignIn:false};
+  const opts={allowDesktopSignIn:false,requireRelay02:false,declarePhone4gDesktopWifi:false};
   for(let i=0;i<argv.length;i++){
     const key=argv[i];
     if(key==='--allow-desktop-sign-in'){assert(!opts.allowDesktopSignIn,'Duplicate sign-in flag');opts.allowDesktopSignIn=true;continue;}
+    if(key==='--require-relay-02'){assert(!opts.requireRelay02,'Duplicate relay flag');opts.requireRelay02=true;continue;}
+    if(key==='--declare-phone-4g-desktop-wifi'){assert(!opts.declarePhone4gDesktopWifi,'Duplicate network declaration');opts.declarePhone4gDesktopWifi=true;continue;}
     assert(['--binary','--stores','--output'].includes(key)&&!opts[key],'Unknown or duplicate option');
     const value=argv[++i];assert(value&&isAbsolute(value),'Absolute path required');opts[key]=value;
   }
   assert(opts['--binary']&&opts['--stores']&&opts['--output'],'--binary, --stores and fresh --output required');
   assert.equal(opts['--stores'],STORES,'Only the original owned 90b stores are supported');
+  assert.equal(opts.requireRelay02,opts.declarePhone4gDesktopWifi,'RELAY-02 requires the explicit network declaration and opt-in together');
   const output=resolve(opts['--output']);assert(output!==STORES&&!output.startsWith(STORES+sep),'Output must be outside original stores');
-  return {binary:opts['--binary'],stores:STORES,output,allowDesktopSignIn:opts.allowDesktopSignIn};
+  return {binary:opts['--binary'],stores:STORES,output,allowDesktopSignIn:opts.allowDesktopSignIn,requireRelay02:opts.requireRelay02,declarePhone4gDesktopWifi:opts.declarePhone4gDesktopWifi};
 }
 export function expectedAccount(s){
   assertThat(s.profile?.username===USERNAME&&typeof s.profile.subject==='string'&&!!s.profile.subject,'EXPECTED_ACCOUNT_REQUIRED');
@@ -41,6 +44,21 @@ function linkedStatuses(statuses){
   return statuses.every((s,i)=>current.every((ds,j)=>j===i||s.devices.some(d=>d.id===ds[0].id&&!d.current&&d.online&&d.connected)));
 }
 export const meshReady=statuses=>statuses.length===3&&linkedStatuses(statuses);
+// This proves endpoint samples only; the operator's network declaration is
+// separate from evidence of each live Mapping. connected alone is insufficient.
+export function relay02Samples(statuses,previous){
+  sameAccount(statuses);
+  assertThat(meshReady(statuses),'RELAY02_NOT_PROVEN');
+  const current=statuses.map(s=>s.devices.filter(d=>d.current)[0].id);
+  return [[0,2],[2,0],[1,2],[2,1]].map(([from,to],index)=>{
+    const s=statuses[from],matches=s.devices.filter(d=>!d.current&&d.id===current[to]&&d.online&&d.connected);
+    const sample=matches.length===1?safeMappingObservation(matches[0].transport,s.transportGeneration):undefined;
+    const edge=['A->C','C->A','B->C','C->B'][index];
+    assertThat(!!sample&&sample.sync==='cloudflare-tunnel','RELAY02_NOT_PROVEN');
+    if(previous)assertThat(previous.length===4&&previous[index].edge===edge&&sample.generation===previous[index].generation&&sample.sample>previous[index].sample,'RELAY02_NOT_PROVEN');
+    return {edge,...sample};
+  });
+}
 const rich=text=>({type:'doc',content:[
   {type:'heading',attrs:{level:1},content:[{type:'text',text}]},
   {type:'paragraph',content:[{type:'text',text:'完整中文 / UTF-8 / 😀',marks:[{type:'bold'}]}]},
@@ -128,10 +146,14 @@ export async function samplePhonePause({readStatus,readWorkspace,before,remoteId
 }
 
 // Device-free orchestration seam: tests supply in-memory peers, never native evidence.
-export async function runCases({peers,report,save,readStatuses,record,phoneBaseline,timeoutMs=60000,connectionTimeoutMs=120000,pauseWindowMs=3000,clock={}}){
+export async function runCases({peers,report,save,readStatuses,record,phoneBaseline,timeoutMs=60000,connectionTimeoutMs=120000,pauseWindowMs=3000,clock={},requireRelay02=false,declarePhone4gDesktopWifi=false,relayTimeoutMs=10000}){
   const [a,b,c]=peers;
   report.cases=CASES.map(id=>({id,status:'not-run'}));
   assert(phoneBaseline&&report.phoneBaseline?.capturedBeforeDesktops,'Pre-desktop phone baseline required');
+  if(requireRelay02){
+    assertThat(declarePhone4gDesktopWifi,'RELAY02_DECLARATION_REQUIRED');
+    report.relay02={requested:true,status:'running',networkDeclaration:'phone-4g-desktop-wifi',networkSettingsIndependentlyVerified:false,scenarios:[],boundary:'Fresh sync Mapping samples before/after transfer, not per-byte path tracing'};
+  }
   const preservation=async stage=>{for(const peer of peers)await verifyPhoneBaseline(peer,phoneBaseline);report.preservation[stage]=true;report.observations.push({kind:'original-phone-preservation',stage,peers:peers.map(p=>p.name),requiredOriginalNotes:4,allBaselineBodiesAndRawAttachments:true});await save();};
   const wait=(label,ready,begin,budget=timeoutMs)=>waitForAccountStatuses(label,readStatuses,async statuses=>{sameAccount(statuses);return ready(statuses);},budget,begin);
   const operation=async(peer,type,...args)=>{const s=await peer[type](...args);await record(peer,s);requireHealthy(s,{pendingNetwork:true});};
@@ -150,7 +172,20 @@ export async function runCases({peers,report,save,readStatuses,record,phoneBasel
   };
   const caseRun=async(id,work)=>{
     report.phase=id;const row=report.cases.find(c=>c.id===id);row.status='running';await save();
-    try{await work();assertPreserved((await c.workspace()).notes,phoneBaseline.notes);row.status='pass';}catch(error){row.status='fail';throw error;}finally{await save();}
+    const relay=requireRelay02&&['a-rich-media','c-ui-note'].includes(id);
+    const observation=async previous=>{
+      let proof;
+      await wait('RELAY-02 '+id+(previous?' after':' before'),statuses=>{
+        try{proof=relay02Samples(statuses,previous);return true;}catch(error){if(error.code==='RELAY02_NOT_PROVEN')return false;throw error;}
+      },undefined,relayTimeoutMs);
+      return proof;
+    };
+    try{
+      const before=relay?await observation():undefined;
+      await work();assertPreserved((await c.workspace()).notes,phoneBaseline.notes);
+      if(relay){const after=await observation(before);report.relay02.scenarios.push({id,before,after});}
+      row.status='pass';
+    }catch(error){row.status='fail';if(requireRelay02)report.relay02.status='fail';throw error;}finally{await save();}
   };
   await caseRun('auto-discovery',async()=>{
     const initial=await wait('initial three account statuses',()=>true);
@@ -191,6 +226,7 @@ export async function runCases({peers,report,save,readStatuses,record,phoneBasel
     await preservation('afterCatchUp');
   });
   await preservation('final');
+  if(requireRelay02)report.relay02.status=report.relay02.scenarios.length===2?'pass':'fail';
 }
 
 export async function finishThreePeers(report,{desktops,phone,forwardPresent=ownedForwardPresent},save){
@@ -201,7 +237,8 @@ export async function finishThreePeers(report,{desktops,phone,forwardPresent=own
   const clean=results.every(r=>r.status==='fulfilled')&&report.cleanup.desktopNaturalExits&&report.cleanup.androidDriverClosed&&forwardAbsent;
   if(!clean){report.status='fail';report.cleanup.failureCode='CLEANUP_FAILED';report.failure??={phase:'cleanup',code:'CLEANUP_FAILED'};}
   if(report.status!=='fail'){
-    report.status=CASES.every(id=>report.cases?.some(row=>row.id===id&&row.status==='pass'))&&report.phoneBaseline?.capturedBeforeDesktops===true&&['afterMerge','afterCatchUp','final'].every(stage=>report.preservation?.[stage]===true)?'pass':'fail';
+    const relay=!report.relay02?.requested||(report.relay02.status==='pass'&&['a-rich-media','c-ui-note'].every(id=>report.relay02.scenarios?.some(s=>s.id===id)));
+    report.status=relay&&CASES.every(id=>report.cases?.some(row=>row.id===id&&row.status==='pass'))&&report.phoneBaseline?.capturedBeforeDesktops===true&&['afterMerge','afterCatchUp','final'].every(stage=>report.preservation?.[stage]===true)?'pass':'fail';
     if(report.status==='fail')report.failure={phase:'completion',code:'CHECK_FAILED'};
   }
   report.finishedAt=new Date().toISOString();await save();
@@ -222,6 +259,7 @@ export async function run(argv=process.argv.slice(2)){
     'Runner commit/tool hashes identify the harness only. Desktop binary and installed APK are independently fingerprinted; matching product source revisions are not claimed.',
     'Phone pause exclusion is sampled for 3 seconds; pause is not OS network loss. Android foreground/process restart, background reclaim, logout and conflict coverage are outside this runner.',
     'Only owned desktop processes and the exact Android CDP forward/lease are cleaned up. The fixed phone package remains running; no ADB settings or other app data are changed.',
+    'RELAY-02 is independent opt-in with an operator phone-4G/desktop-WiFi declaration, not automatic network detection. Fresh before/after sync Mapping samples do not trace individual transferred bytes; ordinary three-peer PASS is not relay PASS.',
   ]};
   const root=fileURLToPath(new URL('../..',import.meta.url));report.runnerCommit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
   for(const name of ['account109-three-peers.mjs','account109-android.mjs','account109-desktop-helpers.mjs','sync108-native-driver.mjs','sync108-android-lifecycle.mjs'])report.tools[name]=hash(await readFile(new URL(name,import.meta.url)));
@@ -247,8 +285,8 @@ export async function run(argv=process.argv.slice(2)){
       await waitForAccountStatuses('A official native PKCE sign-in',()=>read([a]),([s])=>{if(signedOut(s))throw fail('LOGIN_ENDED_SIGNED_OUT');if(!s.profile||s.state==='authorizing')return false;expectedAccount(s);return true;},120000,async()=>{report.authorization.desktopASignInRequested=true;await save();const s=await nativeAccount(a.app,'signIn');await record(a,s);requireHealthy(s,{pendingNetwork:true});});
     }
     const all=[a,b,c],readStatuses=()=>read(all);sameAccount(await readStatuses());
-    await runCases({peers:all,report,save,readStatuses,record,phoneBaseline});
-  }catch(error){report.status='fail';report.failure={phase:report.phase,code:['ANDROID_SIGN_IN_REQUIRED','DESKTOP_A_SIGN_IN_REQUIRED','EXPECTED_ACCOUNT_REQUIRED','ACCOUNT_OWNER_MISMATCH','ANDROID_DRIVER_LOCK_BUSY','ANDROID_DEVICE_AUTH_REQUIRED','ANDROID_OWNED_APP_NOT_FOREGROUND','ANDROID_PID_CHANGED','ANDROID_CDP_TIMEOUT','ANDROID_PAGE_EVALUATION_FAILED','ANDROID_UI_TIMEOUT','ANDROID_APK_PATH_INVALID','ANDROID_APK_HASH_INVALID','ANDROID_FILE_NOTE_INVALID','ANDROID_FILE_NEW_NOTE_REQUIRED','ANDROID_FILE_CAPABILITY_REQUIRED','ANDROID_FILE_OWNER_REQUIRED','ANDROID_FILE_SUBMIT_REJECTED'].includes(error.code)?error.code:failureCode(error)};
+    await runCases({peers:all,report,save,readStatuses,record,phoneBaseline,requireRelay02:opts.requireRelay02,declarePhone4gDesktopWifi:opts.declarePhone4gDesktopWifi});
+  }catch(error){report.status='fail';report.failure={phase:report.phase,code:['RELAY02_DECLARATION_REQUIRED','ANDROID_SIGN_IN_REQUIRED','DESKTOP_A_SIGN_IN_REQUIRED','EXPECTED_ACCOUNT_REQUIRED','ACCOUNT_OWNER_MISMATCH','ANDROID_DRIVER_LOCK_BUSY','ANDROID_DEVICE_AUTH_REQUIRED','ANDROID_OWNED_APP_NOT_FOREGROUND','ANDROID_PID_CHANGED','ANDROID_CDP_TIMEOUT','ANDROID_PAGE_EVALUATION_FAILED','ANDROID_UI_TIMEOUT','ANDROID_APK_PATH_INVALID','ANDROID_APK_HASH_INVALID','ANDROID_FILE_NOTE_INVALID','ANDROID_FILE_NEW_NOTE_REQUIRED','ANDROID_FILE_CAPABILITY_REQUIRED','ANDROID_FILE_OWNER_REQUIRED','ANDROID_FILE_SUBMIT_REJECTED'].includes(error.code)?error.code:failureCode(error)};
   }finally{await finishThreePeers(report,{desktops,phone},save);}
   return report;
 }

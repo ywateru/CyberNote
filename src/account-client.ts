@@ -16,13 +16,17 @@ const tokenOperations = ["codeExchange", "refresh"] as const;
 type TokenOperation = typeof tokenOperations[number];
 const tokenFields = ["tokenType", "accessToken", "expiresIn", "scope"] as const;
 type TokenField = typeof tokenFields[number];
+const transportKinds = ["webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
+type TransportKind = typeof transportKinds[number];
+type MappingObservation = { generation: number; sample: number; ageMs: number; enrollment: TransportKind; sync: TransportKind };
 
 // Frozen account109 DTO. The native singleton owns authorization and networking.
 export type AccountStatus = {
   state: "signedOut" | "authorizing" | "connecting" | "ready" | "paused" | "error";
   enabled: boolean;
   profile?: { subject: string; displayName: string; username?: string };
-  devices: { id: string; name: string; online: boolean; current: boolean; connected: boolean }[];
+  devices: { id: string; name: string; online: boolean; current: boolean; connected: boolean; transport?: MappingObservation }[];
+  transportGeneration?: number;
   lastSyncAt?: number;
   pendingCount: number;
   conflictCount: number;
@@ -79,7 +83,7 @@ function text(value: unknown, max = 256): string {
 function bool(value: unknown): boolean { if (typeof value !== "boolean") return invalid(); return value; }
 function count(value: unknown): number { if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) return invalid(); return value; }
 export function validateAccountStatus(value: unknown): AccountStatus {
-  const s = record(value, ["state", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "error"]);
+  const s = record(value, ["state", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "error", "transportGeneration"]);
   if (!["signedOut", "authorizing", "connecting", "ready", "paused", "error"].includes(s.state as string)) return invalid();
   if (!Array.isArray(s.devices) || s.devices.length > 256) return invalid();
   const profile = s.profile === undefined ? undefined : record(s.profile, ["subject", "displayName", "username"]);
@@ -93,14 +97,25 @@ export function validateAccountStatus(value: unknown): AccountStatus {
     (error.code !== "account_auth_identity_invalid" || error.reason !== "responseMetadata" ||
       error.stage !== undefined || error.providerReason !== undefined ||
       !tokenOperations.includes(error.tokenOperation as TokenOperation) || !tokenFields.includes(error.tokenField as TokenField))) return invalid();
+  const generation = s.transportGeneration === undefined ? undefined : count(s.transportGeneration);
+  if (generation !== undefined && (generation === 0 || s.state !== "ready" || s.enabled !== true || error !== undefined)) return invalid();
   return {
     state: s.state as AccountStatus["state"], enabled: bool(s.enabled),
     profile: profile ? { subject: text(profile.subject, 1024), displayName: text(profile.displayName, 512), username: profile.username === undefined ? undefined : text(profile.username, 1024) } : undefined,
     devices: s.devices.map(value => {
-      const d = record(value, ["id", "name", "online", "current", "connected"]);
-      return { id: text(d.id), name: text(d.name, 512), online: bool(d.online), current: bool(d.current), connected: bool(d.connected) };
+      const d = record(value, ["id", "name", "online", "current", "connected", "transport"]);
+      let transport: MappingObservation | undefined;
+      if (d.transport !== undefined) {
+        const t = record(d.transport, ["generation", "sample", "ageMs", "enrollment", "sync"]);
+        if (generation === undefined || t.generation !== generation || d.current !== false || d.online !== true ||
+          count(t.generation) === 0 || count(t.sample) === 0 || count(t.ageMs) > 3000 ||
+          !transportKinds.includes(t.enrollment as TransportKind) || !transportKinds.includes(t.sync as TransportKind)) return invalid();
+        transport = {generation, sample: t.sample as number, ageMs: t.ageMs as number, enrollment: t.enrollment as TransportKind, sync: t.sync as TransportKind};
+      }
+      return { id: text(d.id), name: text(d.name, 512), online: bool(d.online), current: bool(d.current), connected: bool(d.connected), ...(transport === undefined ? {} : {transport}) };
     }),
     lastSyncAt: s.lastSyncAt === undefined ? undefined : count(s.lastSyncAt),
+    ...(generation === undefined ? {} : {transportGeneration: generation}),
     pendingCount: count(s.pendingCount), conflictCount: count(s.conflictCount),
     error: error ? { code: text(error.code), message: text(error.message, 1000), ...(error.stage === undefined ? {} : { stage: error.stage as NetworkStage }), ...(error.reason === undefined ? {} : { reason: error.reason as IdentityReason }), ...(error.providerReason === undefined ? {} : { providerReason: error.providerReason as ProviderReason }), ...(error.tokenOperation === undefined ? {} : { tokenOperation: error.tokenOperation as TokenOperation, tokenField: error.tokenField as TokenField }) } : undefined,
   };

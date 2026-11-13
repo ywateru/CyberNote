@@ -6,12 +6,18 @@ import {mkdtemp,mkdir,writeFile,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {accountSyncControls,installedApkPath,phoneFileControls,PACKAGE} from './account109-android.mjs';
-import {options,STORES,USERNAME,PHONE_ORIGINAL_IDS,expectedAccount,sameAccount,meshReady,fixtures,phoneFixtures,assertPhoneBodyRetained,verifyOriginals,phoneSnapshot,capturePhoneBaseline,verifyPhoneBaseline,samplePhonePause,runCases,finishThreePeers} from './account109-three-peers.mjs';
+import {options,STORES,USERNAME,PHONE_ORIGINAL_IDS,expectedAccount,sameAccount,meshReady,relay02Samples,fixtures,phoneFixtures,assertPhoneBodyRetained,verifyOriginals,phoneSnapshot,capturePhoneBaseline,verifyPhoneBaseline,samplePhonePause,runCases,finishThreePeers} from './account109-three-peers.mjs';
 
 test('CLI accepts only original stores, absolute paths and explicit A sign-in opt-in',()=>{
   const argv=['--binary','/unit/native','--stores',STORES,'--output','/unit/fresh'];
   assert.equal(options(argv).allowDesktopSignIn,false);assert.equal(options([...argv,'--allow-desktop-sign-in']).allowDesktopSignIn,true);
   for(const bad of [argv.slice(0,-2),['--binary','relative','--stores',STORES,'--output','/unit/fresh'],[...argv,'--token','secret'],[...argv,'--binary','/duplicate'],[...argv,'--allow-desktop-sign-in','--allow-desktop-sign-in'],['--binary','/unit/native','--stores','/private/tmp/other','--output','/unit/fresh'],['--binary','/unit/native','--stores',STORES,'--output',STORES+'/result-new']])assert.throws(()=>options(bad));
+});
+test('RELAY-02 requires separate explicit opt-in and declared network topology',()=>{
+ const argv=['--binary','/unit/native','--stores',STORES,'--output','/unit/fresh'];
+ assert.equal(options(argv).requireRelay02,false);
+ assert.equal(options([...argv,'--require-relay-02','--declare-phone-4g-desktop-wifi']).requireRelay02,true);
+ for(const flags of [['--require-relay-02'],['--declare-phone-4g-desktop-wifi'],['--require-relay-02','--require-relay-02','--declare-phone-4g-desktop-wifi']])assert.throws(()=>options([...argv,...flags]));
 });
 test('fixed Android account methods reject extra arguments and injection',async()=>{
   const calls=[],controls=accountSyncControls(async command=>{calls.push(command);return {state:'paused'};});
@@ -55,6 +61,52 @@ function memoryPeers(){
   }
   return {peers,events,baseline};
 }
+async function relayStatuses(peers,sample=1){
+ return Promise.all(peers.map(async peer=>{
+  const s=await peer.status();s.transportGeneration=5;
+  for(const d of s.devices)if(!d.current)d.transport={generation:5,sample,ageMs:0,enrollment:'iroh-direct',sync:'cloudflare-tunnel'};
+  return s;
+ }));
+}
+test('RELAY-02 refuses connected direct/unknown/missing/stale paths and requires new same-generation after samples',async()=>{
+ const {peers}=memoryPeers(),before=await relayStatuses(peers,1),proof=relay02Samples(before);
+ assert.equal(proof.length,4);assert(!JSON.stringify(proof).includes('unit-owner'));
+ assert.doesNotThrow(()=>relay02Samples(awaitableClone(before,2),proof));
+ function awaitableClone(s,sample){const c=structuredClone(s);for(const row of c)for(const d of row.devices)if(d.transport)d.transport.sample=sample;return c;}
+ for(const change of [s=>{delete s[0].devices[2].transport;},s=>{s[0].devices[2].transport.sync='webrtc-direct';},s=>{s[0].devices[2].transport.sync='iroh-direct';},s=>{s[0].devices[2].transport.sync='unknown';},s=>{s[0].devices[2].transport.sync='unavailable';},s=>{s[0].devices[2].transport.ageMs=3001;},s=>{s[0].devices[2].transport.generation=4;},s=>{s[0].state='error';},s=>{s[0].devices[2].connected=false;}]){
+  const s=structuredClone(before);change(s);assert.throws(()=>relay02Samples(s),{code:'RELAY02_NOT_PROVEN'});
+ }
+ assert.throws(()=>relay02Samples(before,proof),{code:'RELAY02_NOT_PROVEN'});
+ const next=await relayStatuses(peers,2);next[2].transportGeneration=6;for(const d of next[2].devices)if(d.transport)d.transport.generation=6;
+ assert.throws(()=>relay02Samples(next,proof),{code:'RELAY02_NOT_PROVEN'});
+});
+
+test('opt-in relay proof brackets both transfer cases while ordinary data success never implies relay success',async()=>{
+ for(const relay of [false,true]){
+  const {peers}=memoryPeers(),report={status:'running',runId:'unit',observations:[]};let sequence=0,clock=0;
+  const phoneBaseline=await capturePhoneBaseline(peers[2],report);
+  await runCases({peers,report,phoneBaseline,save:async()=>{},record:async()=>{},readStatuses:()=>relay?relayStatuses(peers,++sequence):Promise.all(peers.map(p=>p.status())),requireRelay02:relay,declarePhone4gDesktopWifi:relay,pauseWindowMs:20,clock:{now:()=>clock,sleep:async ms=>{clock+=ms;}}});
+  assert(report.cases.every(c=>c.status==='pass'));
+  if(relay){assert.equal(report.relay02.status,'pass');assert.equal(report.relay02.scenarios.length,2);for(const s of report.relay02.scenarios)assert(s.after.every((p,i)=>p.sample>s.before[i].sample));}
+  else assert.equal(report.relay02,undefined);
+ }
+});
+test('connected direct paths cannot start relay transfer or pass finalization after clean teardown',async()=>{
+ const {peers,events}=memoryPeers(),report={status:'running',runId:'unit',observations:[]};
+ const phoneBaseline=await capturePhoneBaseline(peers[2],report);
+ await assert.rejects(runCases({peers,report,phoneBaseline,save:async()=>{},record:async()=>{},requireRelay02:true,declarePhone4gDesktopWifi:true,relayTimeoutMs:1,readStatuses:async()=>{
+  const statuses=await relayStatuses(peers);for(const s of statuses)for(const d of s.devices)if(d.transport)d.transport.sync='iroh-direct';return statuses;
+ }}));
+ assert.equal(report.cases[0].status,'pass');assert.equal(report.cases[1].status,'fail');
+ assert.equal(report.relay02.status,'fail');assert.equal(report.relay02.scenarios.length,0);assert(!events.includes('A:create'));
+ await finishThreePeers(report,{desktops:[{lifecycle:{naturalExit:true},close:async()=>{}}],phone:{owned:{},close:async()=>{}},forwardPresent:async()=>false},async()=>{});assert.equal(report.status,'fail');
+});
+test('relay success remains separate from data and cleanup completion',async()=>{
+ for(const relay02 of [{requested:true,status:'running',scenarios:[]},{requested:true,status:'pass',scenarios:[{id:'a-rich-media'}]}]){
+  const report={...completeReport(),relay02};
+  await finishThreePeers(report,{desktops:[{lifecycle:{naturalExit:true},close:async()=>{}}],phone:{owned:{},close:async()=>{}},forwardPresent:async()=>false},async()=>{});assert.equal(report.status,'fail');
+ }
+});
 test('discovery needs all three actual peer connections and one common expected account',async()=>{
   const {peers}=memoryPeers(),statuses=await Promise.all(peers.map(p=>p.status()));assert(meshReady(statuses));sameAccount(statuses);
   const disconnected=structuredClone(statuses);disconnected[2].devices[0].connected=false;assert(!meshReady(disconnected));

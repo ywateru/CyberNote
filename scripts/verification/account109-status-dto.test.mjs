@@ -125,3 +125,23 @@ test('partial, unknown and cross-branch token diagnostics fail closed without in
  }
  assert.equal(accountTokenResponseMessage(undefined),undefined);
 });
+
+const mappingStatus=()=>({state:'ready',enabled:true,devices:[{id:'peer',name:'Fixture',online:true,current:false,connected:true,transport:{generation:2,sample:7,ageMs:10,enrollment:'webrtc-direct',sync:'cloudflare-tunnel'}}],transportGeneration:2,pendingCount:0,conflictCount:0});
+test('live Mapping DTO retains only finite per-path labels and explicit generation/sample age',()=>{
+ for(const kind of ['webrtc-direct','iroh-direct','cloudflare-tunnel','unavailable','unknown']) {
+  const s=mappingStatus();s.devices[0].transport.enrollment=kind;s.devices[0].transport.sync=kind;
+  const parsed=validateAccountStatus(s);assert.deepEqual(parsed.devices,s.devices);assert.equal(parsed.transportGeneration,s.transportGeneration);
+ }
+ const legacy=mappingStatus();delete legacy.transportGeneration;delete legacy.devices[0].transport;
+ assert.equal(validateAccountStatus(legacy).devices[0].transport,undefined);
+ assert.equal(validateAccountStatus(legacy).transportGeneration,undefined);
+});
+test('Mapping DTO rejects stale, wrong-generation, invalid-label and inactive evidence',()=>{
+ const corrupt=[
+  s=>{delete s.transportGeneration;},s=>{s.transportGeneration=0;},s=>{s.state='paused';},s=>{s.enabled=false;},s=>{s.error={code:'account_network',message:'safe'};},
+  s=>{s.devices[0].current=true;},s=>{s.devices[0].online=false;},
+  ...['generation','sample','ageMs','enrollment','sync'].map(key=>s=>{delete s.devices[0].transport[key];}),
+  ...[{generation:3},{sample:0},{sample:Number.MAX_SAFE_INTEGER+1},{sample:1.5},{ageMs:3001},{ageMs:-1},{enrollment:'private-address-sentinel'},{sync:null},{url:'private-address-sentinel'}].map(value=>s=>{Object.assign(s.devices[0].transport,value);}),
+ ];
+ for(const change of corrupt){const s=mappingStatus();change(s);assert.throws(()=>validateAccountStatus(s),/无效数据/);}
+});

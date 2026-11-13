@@ -51,6 +51,7 @@ pub(crate) struct Runtime {
     generation: AtomicU64,
     closing: AtomicBool,
     closed: AtomicBool,
+    observations: Arc<transport::observation::Cache>,
 }
 impl Runtime {
     pub fn new(
@@ -86,6 +87,7 @@ impl Runtime {
             generation: AtomicU64::new(0),
             closing: AtomicBool::new(false),
             closed: AtomicBool::new(false),
+            observations: Arc::new(transport::observation::Cache::default()),
         }))
     }
     async fn auth(&self) -> Result<Arc<account_auth::AuthClient>> {
@@ -116,6 +118,7 @@ impl Runtime {
         }
     }
     fn fail(&self, error: Error) {
+        self.observations.suspend();
         self.mutate(|d| {
             d.status.state = Phase::Error;
             if d.status.profile.is_none() {
@@ -135,6 +138,8 @@ impl Runtime {
         let (pending, conflicts) = self.sync.account_metrics()?;
         status.pending_count = pending;
         status.conflict_count = conflicts;
+        self.observations
+            .overlay(&mut status, self.generation.load(Ordering::Acquire));
         Ok(status)
     }
     fn current(&self, generation: u64) -> bool {
@@ -321,6 +326,8 @@ impl Runtime {
         let runtime = self.sync.clone();
         let weak = Arc::downgrade(self);
         let generation = self.generation.load(Ordering::Acquire);
+        let observation = self.observations.begin(generation);
+        let published_observation = observation.clone();
         let publish = Arc::new(
             move |result: std::result::Result<transport::Snapshot, Error>| {
                 if let Some(this) = weak.upgrade() {
@@ -328,12 +335,17 @@ impl Runtime {
                         return;
                     }
                     match result {
-                        Ok(snapshot) => this.mutate(|d| {
-                            d.status.state = Phase::Ready;
-                            d.status.error = None;
-                            d.status.devices = snapshot.devices;
-                            d.status.last_sync_at = snapshot.last_sync_at;
-                        }),
+                        Ok(snapshot) => {
+                            if let Some(observation) = &published_observation {
+                                observation.resume();
+                            }
+                            this.mutate(|d| {
+                                d.status.state = Phase::Ready;
+                                d.status.error = None;
+                                d.status.devices = snapshot.devices;
+                                d.status.last_sync_at = snapshot.last_sync_at;
+                            });
+                        }
                         Err(error) => this.fail(error),
                     }
                 }
@@ -357,6 +369,7 @@ impl Runtime {
                 enrollment,
                 task_gate.clone(),
                 task_stop,
+                observation,
                 publish,
             )
             .await;
@@ -374,6 +387,7 @@ impl Runtime {
         Ok(())
     }
     async fn stop_network(&self) {
+        self.observations.close();
         if let Some(network) = self.network.lock().await.take() {
             network.gate.close();
             network.stop.cancel();
