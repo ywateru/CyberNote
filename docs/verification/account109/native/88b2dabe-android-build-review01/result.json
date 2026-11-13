@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "status": "APPROVE-static-package-identity-only",
+  "checkedAt": "2026-11-13T13:11:33.185296+00:00",
+  "reviewBase": "5e706346c7dfe9e778979f587df0e4817f77958b",
+  "authorReceiptCommit": "0fa7f1afd36976dbe9b12e3341942afad67da7b9",
+  "parentIntegratedCommit": "f4322b4161b38bf8110112383df8162ab42e8633",
+  "sourceRevision": "88b2dabe4bb898b0bf225e913883b43ed2cac865",
+  "sourceTree": "c8e737ac47d0f4e33fc948177492c767314b47e0",
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/android-88b2dabe-debug-01/CyberNote-account109-debug.apk",
+    "bytes": 77335388,
+    "sha256": "2fee1cfbe27dd3b4c537c7051206831daa5c22bb9d08db50cf25f28d6e381870"
+  },
+  "sourceInputs": {
+    "count": 1664,
+    "sourceFingerprint": "b172d53803ba368346e717920bc05f0d1730dd64a309eb0291a17e01f64eaf0d",
+    "allGitBlobBytesMatchExactSource": true,
+    "productFilesInventoryEqualsGitInputSet": true,
+    "fourLocks": {
+      "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+      "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+      "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+      "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+    },
+    "beforeAfterReceiptBytesEqual": true,
+    "currentAuthorCheckoutHead": "0fa7f1afd36976dbe9b12e3341942afad67da7b9",
+    "currentAuthorCheckoutClean": true,
+    "postSourceChangesOnlyDocs": true
+  },
+  "nativeLibraries": {
+    "lib/arm64-v8a/libcloudflared.so": {
+      "bytes": 28812032,
+      "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c"
+    },
+    "lib/arm64-v8a/libimage_processing_util_jni.so": {
+      "bytes": 32528,
+      "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2"
+    },
+    "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so": {
+      "bytes": 11064544,
+      "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646"
+    },
+    "lib/arm64-v8a/libnotes_clone_lib.so": {
+      "bytes": 154668536,
+      "sha256": "46f43b3cbdaa700cad675cd26d555ba772851f529b2f49e0f27dec79553925b6"
+    },
+    "lib/arm64-v8a/libsurface_util_jni.so": {
+      "bytes": 4896,
+      "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba"
+    }
+  },
+  "zipCrcPass": true,
+  "noDuplicateZipMembers": true,
+  "allLibrariesElf64LittleEndianAarch64": true,
+  "packagedAppLibraryEqualsCurrentCargoOutput": true,
+  "cloudflaredEqualsPinnedVendorBytes": true,
+  "nativeAuthPluginInDex": true,
+  "embeddedIdentity": {
+    "location": "actual APK member ending /libnotes_clone_lib.so",
+    "encoding": "brotli",
+    "encodedBytes": 267,
+    "nativeFileOffset": 22767374,
+    "encodedSha256": "10d984ed62c60d286b38ca6fa1c14fa37effac010f07f34748471b3af8f8b4c2",
+    "decodedSha256": "c8e401a208d10993107d1768a37a9b3865dea5e9772eac1376b7beeb8e92065f",
+    "info": {
+      "schema": 1,
+      "version": "0.1.0",
+      "mode": "production",
+      "builtAt": "2026-11-13T13:01:03.304Z",
+      "target": "android",
+      "sourceRevision": "88b2dabe4bb898b0bf225e913883b43ed2cac865",
+      "sourceFingerprint": "b172d53803ba368346e717920bc05f0d1730dd64a309eb0291a17e01f64eaf0d",
+      "sourceDirty": false,
+      "inputCount": 1664,
+      "releasePreparedAt": null
+    },
+    "nativeBinarySha256": "46f43b3cbdaa700cad675cd26d555ba772851f529b2f49e0f27dec79553925b6"
+  },
+  "fixedTransport": {
+    "androidTransport": "https://cybernote-sync.aixgg.com",
+    "enrollmentIssuer": "https://cybernote-sync.vercel.app",
+    "bothLiteralsInPackagedAppLibrary": true,
+    "sourceCfgAndOriginConsumersReviewed": true,
+    "runtimeRouteObserved": false
+  },
+  "package": {
+    "id": "com.local.notesclone.account109",
+    "activity": "com.local.notesclone.MainActivity",
+    "versionName": "0.1.0",
+    "versionCode": 1000,
+    "debuggable": true,
+    "signatureSchemeV2Verified": true,
+    "signerCount": 1,
+    "signer": "C=US, O=Android, CN=Android Debug",
+    "certificateSha256": "e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79",
+    "aapt2ExitCode": 0,
+    "apksignerExitCode": 0,
+    "badgingSha256": "95d7e1d8f0b9839f371b63cf8881ccb8d7b8bcc9568bc6e1e5836dc5d82e8ee6",
+    "signatureSha256": "ad5dcc6a8094668d0804d0a1b19dc2bf6fcae21dbf76ff6a876d31e27e05c5ac",
+    "bothOutputsExactlyMatchAuthorArchive": true
+  },
+  "authorArchive": {
+    "allSha256SumsPassed": true,
+    "sha256SumsFileSha256": "99a548105b77bc6a5c8466c4266a01011d1fd27fcff02084cff62da2758e3446",
+    "receiptSha256": "7cc1fbee5dcaadb481a8a7193be4b33a3bd6eeac2a836bb0b7b3113d2aeb17ab",
+    "smallArtifactReceiptsMatchArchive": true
+  },
+  "boundaries": {
+    "buildExecuted": false,
+    "appExecuted": false,
+    "adbUsed": false,
+    "installed": false,
+    "networkUsed": false,
+    "databaseOrGrantRead": false,
+    "sharedTargetWritten": false,
+    "mainModified": false,
+    "dnsTlsLoginOrSyncAccepted": false,
+    "productionRelease": false
+  },
+  "reaArchiveIdentity": {
+    "format": "apk",
+    "kind": "archive",
+    "sha256": "2fee1cfbe27dd3b4c537c7051206831daa5c22bb9d08db50cf25f28d6e381870",
+    "sessionClosed": true
+  }
+}
