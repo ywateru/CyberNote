@@ -77,18 +77,19 @@ impl Enrollment {
         &self,
         request: reqwest::RequestBuilder,
     ) -> Result<T> {
-        let mut response = request.send().await?;
+        let network = |_| Error::NetworkAt(super::types::NetworkStage::Coordinator);
+        let mut response = request.send().await.map_err(network)?;
         if !response.status().is_success() {
             return Err(
                 if response.status().as_u16() == 401 || response.status().as_u16() == 403 {
                     Error::Authentication
                 } else {
-                    Error::Network
+                    Error::NetworkAt(super::types::NetworkStage::Coordinator)
                 },
             );
         }
         let mut bytes = Vec::new();
-        while let Some(chunk) = response.chunk().await? {
+        while let Some(chunk) = response.chunk().await.map_err(network)? {
             if bytes.len() + chunk.len() > 65536 {
                 return Err(Error::InvalidProof);
             }

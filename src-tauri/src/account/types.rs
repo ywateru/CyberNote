@@ -57,6 +57,18 @@ pub(crate) struct Device {
 pub(crate) struct SafeError {
     pub code: String,
     pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage: Option<NetworkStage>,
+}
+/// Fixed labels only; never serialize upstream errors, URLs or credentials.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum NetworkStage {
+    CallbackListen,
+    BrowserOpen,
+    CallbackReceive,
+    IdentityProvider,
+    Coordinator,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Error {
@@ -64,6 +76,7 @@ pub(crate) enum Error {
     Authentication,
     OwnershipMismatch,
     Network,
+    NetworkAt(NetworkStage),
     InvalidProof,
     Storage,
     Cancelled,
@@ -78,7 +91,7 @@ impl Error {
             Self::Configuration => "account_configuration",
             Self::Authentication => "account_authentication",
             Self::OwnershipMismatch => "account_owner_workspace_mismatch",
-            Self::Network => "account_network",
+            Self::Network | Self::NetworkAt(_) => "account_network",
             Self::InvalidProof => "account_enrollment_invalid",
             Self::Storage => "account_storage",
             Self::Cancelled => "account_cancelled",
@@ -97,6 +110,10 @@ impl Error {
                 "账户操作未完成，本机备忘录仍会保留。请检查账户状态后重试。"
             }
             .into(),
+            stage: match self {
+                Self::NetworkAt(stage) => Some(stage),
+                _ => None,
+            },
         }
     }
 }
@@ -116,7 +133,7 @@ impl From<account_auth::AuthError> for Error {
         use account_auth::AuthError as A;
         match value {
             A::Configuration => Self::Configuration,
-            A::Network => Self::Network,
+            A::Network => Self::NetworkAt(NetworkStage::IdentityProvider),
             A::Cancelled => Self::Cancelled,
             A::OwnershipMismatch => Self::OwnershipMismatch,
             A::Busy => Self::Busy,
@@ -142,5 +159,34 @@ impl From<crate::sync::identity::SyncError> for Error {
 impl From<cybergrid_sdk::Error> for Error {
     fn from(_: cybergrid_sdk::Error) -> Self {
         Self::Network
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn network_diagnostics_keep_safe_code_and_only_fixed_stage_labels() {
+        for (stage, label) in [
+            (NetworkStage::CallbackListen, "callbackListen"),
+            (NetworkStage::BrowserOpen, "browserOpen"),
+            (NetworkStage::CallbackReceive, "callbackReceive"),
+            (NetworkStage::IdentityProvider, "identityProvider"),
+            (NetworkStage::Coordinator, "coordinator"),
+        ] {
+            let value = serde_json::to_value(Error::NetworkAt(stage).safe()).unwrap();
+            assert_eq!(value["code"], "account_network");
+            assert_eq!(value["stage"], label);
+            assert_eq!(value.as_object().unwrap().len(), 3);
+        }
+        assert!(serde_json::to_value(Error::Network.safe())
+            .unwrap()
+            .get("stage")
+            .is_none());
+        assert_eq!(
+            Error::from(account_auth::AuthError::Network),
+            Error::NetworkAt(NetworkStage::IdentityProvider)
+        );
     }
 }

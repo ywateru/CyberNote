@@ -512,7 +512,7 @@ impl Runtime {
         #[cfg(not(target_os = "android"))]
         let mac = callback::Callback::start()
             .await
-            .map_err(|_| Error::Network)?;
+            .map_err(|_| Error::NetworkAt(types::NetworkStage::CallbackListen))?;
         #[cfg(not(target_os = "android"))]
         let _callback_lease = callback::Lease(mac.clone());
         if reauthorize {
@@ -557,13 +557,13 @@ impl Runtime {
         self.app
             .opener()
             .open_url(url.as_str(), None::<&str>)
-            .map_err(|_| Error::Network)?;
+            .map_err(|_| Error::NetworkAt(types::NetworkStage::BrowserOpen))?;
         let callback = async {
             #[cfg(not(target_os = "android"))]
             {
                 mac.wait()
                     .await
-                    .map_err(|_| Error::Network)?
+                    .map_err(|_| Error::NetworkAt(types::NetworkStage::CallbackReceive))?
                     .parse()
                     .map_err(|_| Error::Authentication)
             }
