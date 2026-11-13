@@ -6,6 +6,7 @@ pub(crate) mod enrollment;
 mod private;
 mod provider;
 mod recovery;
+mod surface;
 mod transport;
 pub(crate) mod types;
 use crate::sync::adapter;
@@ -27,6 +28,24 @@ struct Attempt {
     stop: CancellationToken,
     mac: Option<Arc<callback::Callback>>,
 }
+struct AndroidCallback {
+    generation: u64,
+    instance: String,
+    sender: oneshot::Sender<url::Url>,
+}
+fn take_android_callback(
+    slot: &mut Option<AndroidCallback>,
+    generation: u64,
+    instance: &str,
+) -> Option<oneshot::Sender<url::Url>> {
+    if !slot
+        .as_ref()
+        .is_some_and(|slot| slot.generation == generation && slot.instance == instance)
+    {
+        return None;
+    }
+    slot.take().map(|slot| slot.sender)
+}
 struct Network {
     stop: CancellationToken,
     task: tokio::task::JoinHandle<()>,
@@ -46,7 +65,8 @@ pub(crate) struct Runtime {
     auth: OnceCell<Arc<account_auth::AuthClient>>,
     lifecycle: AsyncMutex<()>,
     attempt: AsyncMutex<Option<Attempt>>,
-    android: AsyncMutex<Option<oneshot::Sender<url::Url>>>,
+    presentation: Mutex<Option<Arc<surface::Presentation>>>,
+    android: AsyncMutex<Option<AndroidCallback>>,
     network: AsyncMutex<Option<Network>>,
     generation: AtomicU64,
     closing: AtomicBool,
@@ -82,6 +102,7 @@ impl Runtime {
             auth: OnceCell::new(),
             lifecycle: AsyncMutex::new(()),
             attempt: AsyncMutex::new(None),
+            presentation: Mutex::new(None),
             android: AsyncMutex::new(None),
             network: AsyncMutex::new(None),
             generation: AtomicU64::new(0),
@@ -136,6 +157,15 @@ impl Runtime {
     pub fn snapshot(&self) -> Result<Status> {
         let mut status = self.data.lock().map_err(|_| Error::Storage)?.status.clone();
         let (pending, conflicts) = self.sync.account_metrics()?;
+        status.authorization_surface = if status.state == Phase::Authorizing {
+            self.presentation.lock().ok().and_then(|p| {
+                p.as_ref()
+                    .filter(|p| self.current(p.generation))
+                    .and_then(|p| p.surface())
+            })
+        } else {
+            None
+        };
         status.pending_count = pending;
         status.conflict_count = conflicts;
         self.observations
@@ -409,7 +439,7 @@ impl Runtime {
         }
         match command {
             Command::Status {} => {}
-            Command::SignIn {} | Command::SignUp {} => {
+            Command::SignIn { surface } | Command::SignUp { surface } => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
                 if self.attempt.lock().await.is_some() {
                     return Err(Error::Busy);
@@ -428,20 +458,34 @@ impl Runtime {
                     d.status.state = Phase::Authorizing;
                     d.status.error = None;
                 });
-                let signup = matches!(command, Command::SignUp {});
+                let signup = matches!(command, Command::SignUp { .. });
                 let this = self.clone();
                 tauri::async_runtime::spawn(async move {
                     let _owner = this.lifecycle.lock().await;
-                    let result = this.login(signup, reauthorize, generation, stop).await;
+                    let result = this
+                        .login(signup, reauthorize, surface, generation, stop)
+                        .await;
                     this.attempt.lock().await.take();
                     this.android.lock().await.take();
+                    if let Ok(mut p) = this.presentation.lock() {
+                        if p.as_ref().is_some_and(|p| p.generation == generation) {
+                            p.take();
+                        }
+                    }
                     if let Err(error) = result {
                         if this.current(generation) {
-                            this.fail(error);
+                            if error == Error::Cancelled {
+                                this.mutate(|d| d.status = Status::default());
+                            } else {
+                                this.fail(error);
+                            }
                             this.cleanup_status().await;
                         }
                     }
                 });
+            }
+            Command::OpenLoginInBrowser {} => {
+                return self.open_login_in_browser(None).await;
             }
             Command::Cancel {} => {
                 self.generation.fetch_add(1, Ordering::AcqRel);
@@ -549,10 +593,44 @@ impl Runtime {
         data.status.enabled = enabled;
         Ok(())
     }
+    async fn open_login_in_browser(&self, instance: Option<&str>) -> Result<Status> {
+        let presentation = self
+            .presentation
+            .lock()
+            .map_err(|_| Error::Storage)?
+            .as_ref()
+            .cloned()
+            .ok_or(Error::Busy)?;
+        if !self.current(presentation.generation)
+            || instance.is_some_and(|id| id != presentation.instance)
+        {
+            return Err(Error::Cancelled);
+        }
+        let url = presentation.begin_switch()?;
+        let opened = self
+            .app
+            .opener()
+            .open_url(url.as_str(), None::<&str>)
+            .is_ok();
+        if !presentation.end_switch(opened) || !self.current(presentation.generation) {
+            return self.snapshot();
+        }
+        self.mutate(|d| {
+            if d.status.state == Phase::Authorizing {
+                d.status.error = if opened {
+                    None
+                } else {
+                    Some(Error::NetworkAt(types::NetworkStage::BrowserOpen).safe())
+                };
+            }
+        });
+        self.snapshot()
+    }
     async fn login(
         self: &Arc<Self>,
         signup: bool,
         reauthorize: bool,
+        requested_surface: types::AuthorizationSurface,
         generation: u64,
         stop: CancellationToken,
     ) -> Result<()> {
@@ -598,16 +676,32 @@ impl Runtime {
                 }
             }
         }
+        let presentation = surface::Presentation::new(
+            self,
+            requested_surface,
+            generation,
+            url,
+            stop.clone(),
+            cancel.clone(),
+        )?;
+        let _presentation_lease = surface::Lease(presentation.clone());
+        *self.presentation.lock().map_err(|_| Error::Storage)? = Some(presentation.clone());
         #[cfg(target_os = "android")]
         let receiver = {
             let (tx, rx) = oneshot::channel();
-            *self.android.lock().await = Some(tx);
+            *self.android.lock().await = Some(AndroidCallback {
+                generation,
+                instance: presentation.instance.clone(),
+                sender: tx,
+            });
             rx
         };
-        self.app
-            .opener()
-            .open_url(url.as_str(), None::<&str>)
-            .map_err(|_| Error::NetworkAt(types::NetworkStage::BrowserOpen))?;
+        let deadline = tokio::time::Instant::now() + Duration::from_secs(600);
+        tokio::select! {
+            biased;
+            _ = stop.cancelled() => return Err(presentation.stopped_error()),
+            result = tokio::time::timeout_at(deadline, presentation.open(self)) => result.map_err(|_| Error::Authentication)??,
+        };
         let callback = async {
             #[cfg(not(target_os = "android"))]
             {
@@ -622,7 +716,8 @@ impl Runtime {
                 receiver.await.map_err(|_| Error::Cancelled)
             }
         };
-        let value = tokio::select! {_=stop.cancelled()=>{cancel.cancel();#[cfg(not(target_os="android"))]mac.cancel();return Err(Error::Cancelled)},result=tokio::time::timeout(Duration::from_secs(600),callback)=>result.map_err(|_|Error::Authentication)??};
+        let value = tokio::select! {_=stop.cancelled()=>{cancel.cancel();#[cfg(not(target_os="android"))]mac.cancel();return Err(presentation.stopped_error())},result=tokio::time::timeout_at(deadline,callback)=>result.map_err(|_|Error::Authentication)??};
+        presentation.completing();
         let identity = auth.complete_callback(transaction, value).await?;
         let outcome = async {
             if !self.current(generation) || stop.is_cancelled() {
@@ -671,7 +766,19 @@ impl Runtime {
             return;
         }
         if let Some(sender) = self.android.lock().await.take() {
-            let _ = sender.send(url);
+            let _ = sender.sender.send(url);
+        }
+    }
+    #[cfg(target_os = "android")]
+    async fn embedded_callback(&self, p: &surface::Presentation, url: url::Url) {
+        let mut slot = self.android.lock().await;
+        // Recheck AFTER acquiring the receiver guard, then compare and consume
+        // under that same guard. An old queued task cannot take a new sender.
+        if !self.current(p.generation) || !p.native_active() {
+            return;
+        }
+        if let Some(sender) = take_android_callback(&mut slot, p.generation, &p.instance) {
+            let _ = sender.send(url); // full validate_callback remains in AuthClient.
         }
     }
     pub fn foreground(self: &Arc<Self>) {
@@ -971,10 +1078,75 @@ mod tests {
             serde_json::json!({"type":"status","url":"https://evil.test"}),
             serde_json::json!({"type":"setEnabled","enabled":"true"}),
             serde_json::json!({"type":"refreshToken","token":"synthetic"}),
+            serde_json::json!({"type":"signIn","surface":null}),
+            serde_json::json!({"type":"signUp","surface":"customTabs"}),
+            serde_json::json!({"type":"signIn","surface":"embedded","url":"https://evil.test"}),
+            serde_json::json!({"type":"openLoginInBrowser","surface":"browser"}),
+            serde_json::json!({"type":"openLoginInBrowser","url":null}),
+            serde_json::json!({"type":"openLoginInBrowser","generation":1}),
         ] {
             assert!(serde_json::from_value::<Command>(value).is_err());
         }
         assert!(serde_json::from_value::<Command>(serde_json::json!({"type":"status"})).is_ok());
+        for kind in ["signIn", "signUp"] {
+            let legacy =
+                serde_json::from_value::<Command>(serde_json::json!({"type":kind})).unwrap();
+            assert!(matches!(
+                legacy,
+                Command::SignIn {
+                    surface: types::AuthorizationSurface::Browser
+                } | Command::SignUp {
+                    surface: types::AuthorizationSurface::Browser
+                }
+            ));
+            for surface in ["embedded", "browser"] {
+                assert!(serde_json::from_value::<Command>(
+                    serde_json::json!({"type":kind,"surface":surface})
+                )
+                .is_ok());
+            }
+        }
+        assert!(serde_json::from_value::<Command>(
+            serde_json::json!({"type":"openLoginInBrowser"})
+        )
+        .is_ok());
+    }
+    #[tokio::test]
+    async fn late_embedded_callback_cannot_consume_replacement_receiver() {
+        let (tx, mut receiver) = oneshot::channel();
+        let slot = Arc::new(AsyncMutex::new(Some(AndroidCallback {
+            generation: 2,
+            instance: "new-instance".into(),
+            sender: tx,
+        })));
+        // An old scheduled callback waits on the guard while the next owner
+        // has already installed its receiver. Consumption must recheck identity.
+        let guard = slot.lock().await;
+        let queued = slot.clone();
+        let old = tokio::spawn(async move {
+            let mut guard = queued.lock().await;
+            take_android_callback(&mut guard, 1, "old-instance").is_none()
+        });
+        drop(guard);
+        assert!(old.await.unwrap());
+        assert!(matches!(
+            receiver.try_recv(),
+            Err(oneshot::error::TryRecvError::Empty)
+        ));
+        let mut guard = slot.lock().await;
+        // Generation alone is insufficient: a distinct instance cannot alias it.
+        assert!(take_android_callback(&mut guard, 2, "old-instance").is_none());
+        assert!(matches!(
+            receiver.try_recv(),
+            Err(oneshot::error::TryRecvError::Empty)
+        ));
+        let current = take_android_callback(&mut guard, 2, "new-instance").unwrap();
+        let callback: url::Url = "com.local.notesclone.auth://callback?code=fixture&state=fixture"
+            .parse()
+            .unwrap();
+        current.send(callback.clone()).unwrap();
+        assert_eq!(receiver.await.unwrap(), callback);
+        assert!(guard.is_none());
     }
 }
 #[tauri::command]

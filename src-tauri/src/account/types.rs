@@ -3,17 +3,28 @@ use serde::{Deserialize, Serialize};
 #[serde(tag = "type", rename_all = "camelCase", deny_unknown_fields)]
 pub(crate) enum Command {
     Status {},
-    SignIn {},
-    SignUp {},
+    SignIn {
+        #[serde(default)]
+        surface: AuthorizationSurface,
+    },
+    SignUp {
+        #[serde(default)]
+        surface: AuthorizationSurface,
+    },
+    OpenLoginInBrowser {},
     Cancel {},
     SignOut {},
     SyncNow {},
-    SetEnabled { enabled: bool },
+    SetEnabled {
+        enabled: bool,
+    },
 }
 #[derive(Clone, Serialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct Status {
     pub state: Phase,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_surface: Option<AuthorizationSurface>,
     pub enabled: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub profile: Option<Profile>,
@@ -26,6 +37,13 @@ pub(crate) struct Status {
     pub error: Option<SafeError>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport_generation: Option<u64>,
+}
+#[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum AuthorizationSurface {
+    Embedded,
+    #[default]
+    Browser,
 }
 #[derive(Clone, Serialize, Default, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
@@ -159,7 +177,10 @@ pub(crate) enum Error {
     InvalidCallback,
     InvalidIdentity,
     IdentityRejected(account_auth::IdentityRejection),
-    ResponseMetadata(account_auth::TokenOperation, account_auth::TokenResponseField),
+    ResponseMetadata(
+        account_auth::TokenOperation,
+        account_auth::TokenResponseField,
+    ),
     CodeExchangeRejected,
     TokenResponseInvalid,
     MissingRefreshToken,
@@ -337,10 +358,13 @@ mod tests {
                 enrollment: kind,
                 sync: kind,
             };
-            assert_eq!(serde_json::to_value(sample).unwrap(), serde_json::json!({
-                "generation": 2, "sample": 9, "ageMs": 10,
-                "enrollment": label, "sync": label,
-            }));
+            assert_eq!(
+                serde_json::to_value(sample).unwrap(),
+                serde_json::json!({
+                    "generation": 2, "sample": 9, "ageMs": 10,
+                    "enrollment": label, "sync": label,
+                })
+            );
         }
     }
 

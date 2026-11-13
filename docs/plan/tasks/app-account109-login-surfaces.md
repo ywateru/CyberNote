@@ -29,3 +29,12 @@ Feynman 实施 native host/平台容器；Huygens 实施账户页、DTO/命令 a
 需覆盖：两种方式的登录/注册选项和等待文案、严格 enum/无 endpoint 参数、旧调用兼容、内置关闭/取消、转浏览器只用同一事务、浏览器失败保留内置、取消/回跳/清理竞态、旧事务不得改变新事务，以及 normal local editing/body preservation。Native/JS/Android 平台检查按真实实现执行；无变化且已通过的旧矩阵不无故重跑。
 
 先在干净源码和独审后构建精确候选，再以全新隔离库测试两种入口、内置页实际呈现、转浏览器和关闭/取消后的完整正文与自然重启。成功账户登录和三端中转仍须真实身份与网络证据；不以窗口打开或 authorizing 判登录成功。继续保全旧库和失败证据，只清理本轮已归档且复核的无用临时产物。
+
+
+## Native 作者源码回执
+
+基于 `f048fd15` 的独立树，补充按 `2c007938` 代际/期限/cookie契约及父级主框架origin裁定执行。`openLoginInBrowser` 不等lifecycle，成功才改surface并先disarm再关闭；原事务和600秒deadline不重建。内置callback接收槽在同一guard内核对generation+instance再消费。平台已接收/已退休generation水位避免旧open/close影响新owner；Android宿主销毁单独发destroyed并终止该内置owner，不冒充用户closed，onPause/onStop不取消。
+
+macOS使用host-only NSWindow+raw WKWebView（account-auth唯一identifier），避开Tauri全局local-only导航policy和自动本地协议注入；每次nonPersistentDataStore、无脚本/IPC/asset handler。Android为host-only raw WebView Dialog，不走MainActivity/NotesKeyboard/Tauri bootstrap；使用普通进程WebView cookie store、禁第三方cookie，不声称incognito、不清全局cookie。固定origin约束原生打开及主框架导航；原始resource过滤不构成完整网络防火墙，尤其Android不保证所有HTTPS子资源redirect或WebSocket均可拦截，不新增代理/MITM。
+
+源码阶段已通过rustfmt与diff check；精确mac固定规则JSON的device-free Node检查3/3通过，仅验证规则编码及URL分类，不证明WebKit运行效果。Rust surface/command/旧callback替换负例已写入，编译与执行待指定target lease阶段记录。没有live App/认证/凭据/原库操作；前端、manifest pins与既有capabilities未改。新增本地host-only plugin复用已锁定tauri/serde/cc依赖；父级需另审新增路径并从最终源码刷新发布inventory/pins。

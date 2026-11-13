@@ -660,6 +660,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notes_scan::init())
         .plugin(tauri_plugin_notes_media::init())
+        .plugin(tauri_plugin_notes_auth::init())
         .setup(move |app| {
             let selected = startup_workspace
                 .get()
