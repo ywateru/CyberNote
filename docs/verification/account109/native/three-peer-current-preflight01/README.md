@@ -1,5 +1,11 @@
 # Current-original three-peer preparation
 
+Parent integration update: the implementation and correction are now in main as
+`9273c403` and `ca504f78`; docs `b384c77c` and final independent static approval
+`14a6ea1e` are also integrated. The correction's new fixture remains unexecuted.
+See [manual handoff](../../CONSOLIDATION.md). The author receipt below retains its
+original preparation-time wording.
+
 Date: 2026-11-13 (Asia/Shanghai).
 
 Implementation: `6d53c58c025b09be294d8ca757721e569828ee30`.

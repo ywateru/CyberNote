@@ -29,7 +29,7 @@ CyberGrid 将 peer stream 接入本机 TCP 后，业务 listener 不能从 `127.
 
 ```text
 账户页 → account_command → 原生账户Runtime
-  → 系统浏览器Logto授权/注册 → 原生回跳/PKCE换票 → 验证身份
+  → 内置托管页或系统浏览器Logto授权/注册 → 原生回跳/PKCE换票 → 验证身份
   → Vercel account/profile → 确定账号workspace
   → CyberGrid Rust Client（官方token provider）
   → 申报本机loopback同步入口、发现同owner/product设备
@@ -47,11 +47,12 @@ CyberGrid 将 peer stream 接入本机 TCP 后，业务 listener 不能从 `127.
 
 ## 原生IPC与前端契约
 
-单一`account_command`，请求deny_unknown_fields，操作为`status`、`signIn`、`signUp`、`cancel`、`signOut`、`syncNow`、`setEnabled`。不得提供任意URL/token注入的生产IPC。响应只含安全状态：
+单一`account_command`，请求deny_unknown_fields，操作为`status`、`signIn`、`signUp`、`openLoginInBrowser`、`cancel`、`signOut`、`syncNow`、`setEnabled`。`signIn/signUp` 可传 `surface: 'embedded'|'browser'`；`openLoginInBrowser` 只接续当前内置授权。不得提供任意URL/token注入的生产IPC。下列为状态摘要，完整字段及严格验证以 `src/account-client.ts` 为准：
 
 ```typescript
 type AccountStatus = {
   state: 'signedOut'|'authorizing'|'connecting'|'ready'|'paused'|'error';
+  authorizationSurface?: 'embedded'|'browser'; // 仅 authorizing 时
   enabled: boolean;
   profile?: { subject: string; displayName: string; username?: string };
   devices: { id: string; name: string; online: boolean; current: boolean; connected: boolean }[];
@@ -63,6 +64,8 @@ type AccountStatus = {
 ```
 
 状态不返回access/refresh token、Noise密钥、邀请、管理secret、Redis配置。可选择的错误分类包括登录取消/过期、认证失败、协调不可用、资料库归属冲突和同步失败。返回安全中文操作说明，不能将原始第三方异常/响应串直接显示。命令完成不是网络收敛证明，UI只按实际运行状态展示。
+
+完整DTO另含有限的错误 `stage/reason/providerReason/tokenOperation/tokenField` 和可选实时 `transportGeneration/devices[].transport`。传输观测只在匹配代际、远端在线、样本年龄不超过3000ms时接受；`sync='cloudflare-tunnel'` 才能作为该样本时点的业务中转证据，目录 online 不足以证明中转。观测不追踪每个数据字节。实际手动步骤见[手动测试指南](../verification/account109/MANUAL-TESTING.md)。
 
 ## 验收
 

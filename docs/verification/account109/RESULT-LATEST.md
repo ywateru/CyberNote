@@ -1,6 +1,20 @@
-最新续验：Android[三条完整双入口取消与重开](android/current-login-smoke-live03/README.md)均PASS，准确88b2dabe APK配合eddab872执行器：内置原生Back、内置转浏览器取消、浏览器取消；登录前/取消后/重开后完整四篇数据、附件引用/descriptor/授权原字节各至少3次/3秒一致，owned forward/lease释放。完整组319/319零跳过，实际结果已独核通过。此前[error态正常重开](android/error-reopen-live01/README.md)独立PASS并独核；live01/live02/Back续验失败仍保持。修正仅限执行器嵌套WebView与有界完整采样，不追认旧失败原因。成功登录、账户三端与4G/WiFi匿名中转仍未验收。
-
 # 账户同步实际验证结果
+
+2026-11-13 当前交接：**自动测试已按用户要求暂停，由测试者手动验收。** 从[手动测试指南](MANUAL-TESTING.md)开始；本次代码与文档整理见[收尾记录](CONSOLIDATION.md)。本文件保留各精确候选的既有结果，后续源码合并不会扩大这些结果的覆盖范围。
+
+| 范围 | 当前结论 |
+| --- | --- |
+| 双桌面核心数据 | 分轮验证过双向完整正文/原附件、暂停/离线补齐、冲突 keep-all 与退出后本地保存；完整 UI 验收未完成 |
+| 双入口取消 | Mac 三条命令取消及真实内置关窗已有局部通过；Android 三条取消与正常重开实际通过并独核 |
+| 成功登录 / 重新登录 | 最新双入口完整成功认证待测；relogin05 人工认证等待超时，历史 codeExchange/scope 问题未证明修复 |
+| 手机账户三端 / 4G 中转 | 尚未验收；公网合成传输与匿名 health 结果不替代产品链验证 |
+| 三端执行器新增保护 | 最新合并与静态审查状态见收尾记录；未运行新增保护的整合或设备验证 |
+| 发布 | 仅本地提交；未配置远程、未 push、未运行 Actions |
+
+<details>
+<summary>此前按轮次追加的状态记录（保留原时点）</summary>
+
+最新续验：Android[三条完整双入口取消与重开](android/current-login-smoke-live03/README.md)均PASS，准确88b2dabe APK配合eddab872执行器：内置原生Back、内置转浏览器取消、浏览器取消；登录前/取消后/重开后完整四篇数据、附件引用/descriptor/授权原字节各至少3次/3秒一致，owned forward/lease释放。完整组319/319零跳过，实际结果已独核通过。此前[error态正常重开](android/error-reopen-live01/README.md)独立PASS并独核；live01/live02/Back续验失败仍保持。修正仅限执行器嵌套WebView与有界完整采样，不追认旧失败原因。成功登录、账户三端与4G/WiFi匿名中转仍未验收。
 
 2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；此前 `9e7c46d2` GUI 的 [fresh cancel-local-live02](native/cancel-local-live02/README.md) 五项通过，涵盖本地完整正文保存、发起/取消登录、继续编辑及自然重启保持，两进程自然退出 0。旧 `920fa9cf` 的原库 relogin04 浏览器授权未完成、fresh live01 ready 超时仍保留。Android 已完成新域包保数据升级，账户三端待有效QA授权及产品链实测。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
 
@@ -13,6 +27,8 @@
 最新补足：[window05](native/login-window-live05/README.md)通过隔离wrapper真实显示托管登录表单，父级CUA点击原生close后回到账户未登录；五项完整正文/编辑/自然重启检查PASS并独核，两进程自然退出0。window04绑定失败仍保留。手机[新域CELLULAR匿名health](android/approved-domain-phone-health01/README.md)单次HTTP200、可信TLS通过，仅限shell匿名路径。新Android包已独核，未安装；[重复产物清理](native/88b2dabe-derived-cleanup01/README.md)约724MiB已独核。独立[Node续验](server/custom-domain-public-followup02/README.md)新域200且与父级新域hash匹配，canonical请求仍失败，不能将父级两域比较写为独立实时通过；未据此改写原失败。
 
 当前手机最新：[88b2dabe保数据升级](android/preserving-upgrade-live01/README.md)实际PASS且独核通过，已安装准确新包；四篇当前完整笔记、未知附件引用/descriptor及授权原字节两次一致，当前clean signedOut。历史baseline未变，未知来源未解释。完整组305/305、零跳过。桌面原库[relogin05](native/relogin-live05/README.md)完整600秒等待人工认证后超时，两进程自然退出0，未编辑/enable，scope问题未进入验证路径。后续需有效原QA授权；手机新入口取消测试将单独保护当前完整状态。
+
+</details>
 
 ## 分析与完善
 

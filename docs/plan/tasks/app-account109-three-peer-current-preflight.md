@@ -1,5 +1,7 @@
 # 真实三端执行前的当前数据与候选门槛
 
+2026-11-13 收尾：用户已要求停止测试、改为手动验收。第1项已在 `7bb83259` / `c00c4b8f` 收拢；第2项实现 `9273c403`、失败逐端保全修正 `ca504f78` 及[静态独审](../../verification/account109/native/three-peer-preflight-static-review01.md) `14a6ea1e` 已合入 main。最终修正及新增 fixture 未运行，完整整合及实际三端验证仍未完成；不要按下文原计划自动执行。当前交接见[收尾记录](../../verification/account109/CONSOLIDATION.md)和[手动指南](../../verification/account109/MANUAL-TESTING.md)。
+
 2026-11-13，main `2fbe55df` 源码准备审计发现 three-peers runner 的暂停观察在慢读取时仍会过早断言；候选仅记录hash、手机仅捕获当次内容，未绑定已独核的完整当前快照/历史owner；两个原桌面的完整既有数据也未被独立保护。手机最新只读状态仍signedOut，暂不发起授权或三端实跑。
 
 分为两个独立修改/审阅：

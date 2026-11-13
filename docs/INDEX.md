@@ -1,3 +1,20 @@
+# 文档导航
+
+2026-11-13：按最新要求暂停自动测试，先合并整理代码与说明，由测试者手动验收。当前入口如下；历史阶段记录保留在折叠区中，不能作为当前执行指令。
+
+| 阅读目的 | 入口 |
+| --- | --- |
+| 启动两个桌面、两种登录方式、Android 三端与 4G 中转 | [手动测试指南](verification/account109/MANUAL-TESTING.md) |
+| 本次代码合并、未提交工作整理与验证边界 | [收尾记录](verification/account109/CONSOLIDATION.md) |
+| 已有实际结果与未验收项 | [账户同步结果](verification/account109/RESULT-LATEST.md) |
+| 完整测试场景 | [账户同步用例](verification/account109/ACCOUNT-TEST-CASES.md) |
+| 同步原理与界面契约 | [账户架构](architecture/account-sync.md) · [账户界面](ui/account-sync.md) |
+| 账户与历史手工同步的使用方式 | [设备同步说明](sync-usage.md) |
+| 先前双桌面独立路径 / 手工同步结果 | [sync108](verification/sync108/RESULT.md) |
+
+<details>
+<summary>历史阶段更新（按各自时点阅读）</summary>
+
 2026-11-13最新：Android[三条双入口取消与重开](verification/account109/android/current-login-smoke-live03/README.md)均实跑PASS：内置原生Back、内置转浏览器取消、直接浏览器取消；登录前/取消后/正常重开后完整四篇笔记及附件原字节各至少3次/3秒一致，owned forward/lease均释放。准确88b2dabe已安装包，执行器eddab872，完整组319/319零跳过；实际结果已独核通过。此前[正常重开](verification/account109/android/error-reopen-live01/README.md)已PASS并独核；旧smoke/续验FAIL保留。独审修正嵌套WebView归属与慢采样时序，不改产品身份门槛。成功登录、账户三端及发布仍待原QA有效授权。重复历史docs/生成缓存清理使du减少973.92MiB，df同期增加937.68MiB，保留候选/唯一target/原库/失败/私有快照。以下为历史阶段。
 
 2026-11-13当前手机状态：[新域88b2dabe包已保数据升级并独核](verification/account109/android/preserving-upgrade-live01/README.md)，四篇完整笔记和唯一附件/原字节两次逐字段一致，当前clean signedOut。历史未知附件来源不变；即将以固定当前私有快照单独保护登录取消测试，不改旧基线。完整执行器整合305/305、零跳过。原桌面[relogin05](verification/account109/native/relogin-live05/README.md)在600秒人工认证等待超时，未编辑/enable，两进程正常退出；缺有效QA密码，实际认证与账户三端仍未完成。
@@ -53,6 +70,9 @@ Mac WAV最新：[live09有限独核](plan/reviews/app-final106-mac-wav-live09-in
 2026-11-07：[Mac29 / Android21 同步交付](verification/sync91/DELIVERY.md)完成本轮要求级验收和独立复核。相同322项产品输入；原Android反向失败在同数据/配对上修复，双向完整文档及原文件、冷启、前台恢复、系统图片导出通过。当前源码实际双App39项、LAN和匿名wss定向39项已验证；原公网超时、音频Blob调试读回限制及未测VPN/硬件范围逐项保留。所有owned测试运行已关闭，[使用说明](sync-usage.md)与[恢复状态](plan/sync-delivery-state.md)已更新。下方是历史阶段记录。
 
 2026-11-06 最新同步进展：[SYNC91](plan/tasks/app-sync91-portable-media-publication.md)附件原子发布修复已源码独审并合入，Android21准确构建中。Android20实际诊断为 `syncMediaPublish`；真实系统连续添加TXT/PNG/WAV和三个原文件核对通过，反向同步须在同一配对Store上复验，目标仍active。恢复入口：[双端同步当前状态](plan/sync-delivery-state.md)。
+
+
+</details>
 
 # Apple Notes Clone
 

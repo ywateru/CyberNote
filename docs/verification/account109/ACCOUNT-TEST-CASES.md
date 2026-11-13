@@ -1,3 +1,10 @@
+# account109 登录与双桌面验收用例
+
+2026-11-13 当前交接：用户要求停止自动测试，由测试者手动执行。先读[手动测试指南](MANUAL-TESTING.md)，再按本页逐项记录；最新合并及未验证变更见[收尾记录](CONSOLIDATION.md)。暂停前主线整合 323/323 通过仅覆盖当时 `88c18371`，不覆盖后续三端前置保护。成功认证、账户三端及手机 4G/WiFi 中转仍未验收。
+
+<details>
+<summary>此前状态与分轮证据（不作为新的执行结果）</summary>
+
 当前补充：Android[三条双入口取消live03](android/current-login-smoke-live03/README.md)实际PASS：AUTH-08浏览器选择/取消、AUTH-09原生表单投影/Back、AUTH-10内置转浏览器activity/取消，各自登录前/取消后/正常重开后完整数据与附件原字节至少3次/3秒核对；结果已独核通过。不验收成功登录/注册、全部AUTH-11排列、可信origin独立观测或账户三端。此前独立[error态正常重开](android/error-reopen-live01/README.md)通过并独核；原FAIL保持。完整执行器319/319、零跳过。
 
 最新Android当前数据保全：[preserving-upgrade-live01](android/preserving-upgrade-live01/README.md)实际安装精确88b2dabe包，当前四篇全字段/正文与唯一附件引用/descriptor/授权字节两次完全一致，独核通过。正常重启后signedOut；不代表成功登录/三端或接受历史未知附件来源。原桌面relogin05完整600秒人工授权超时，旧scope问题未验证。
@@ -5,8 +12,6 @@
 最新AUTH-09补足：[window05](native/login-window-live05/README.md)在已独核隔离Mac wrapper真实显示固定托管登录表单，CUA原生close后signedOut，五项全文/自然重启检查PASS并独核。未使用account.cancel；不证明人手输入、成功认证或Android分支。此前window04失败保留。新域手机CELLULAR匿名health已通过，仅证明shell路径，尚未安装新包或完成三端。
 
 最新局部实际结果：[login-surfaces-live03](native/login-surfaces-live03/README.md)在 `72513d12` Mac 真实候选通过 browser、embedded、embedded→browser 三条命令调用流程，各5/5，完整正文与自然重启保全、六进程自然退出0均已独核。覆盖 AUTH-08 的命令分支、AUTH-09 的自动取消分支及 AUTH-10 的 surface 转移/取消；不包含 radio物理点击、表单可见性、用户关窗或成功认证，完整用例仍按下表边界验收。
-
-# account109 登录与双桌面验收用例
 
 新增双入口状态（2026-11-13）：源码和 `72513d12` 两端构建/包身份已通过审查；[最终集成检查](native/login-surfaces-integration02.md)274项通过。AUTH-08～11见下，均尚无新候选真实窗口/认证验收结果。此前桌面观察为锁屏；安卓[升级前检查](android/login-surfaces-preflight01/README.md)保留账户error和旧基线差异，[结构诊断](android/login-surfaces-structure01/README.md)仅证明原文档前缀保持、末尾新增附件节点与空段，不作为接受新基线的依据。原APK、数据和失败均保留。
 
@@ -37,6 +42,8 @@ Android [同源 Rust 公共探测](android/public-native01/README.md) 的六次 
 最新续验：[真实双桌面五轮记录](macos/real-account-runs01/README.md)。`90b8b28b` 两端真实登录与首次合并确认已成功；`9263ea87` 在同一对数据根恢复两个真实授权，无新授权请求。两轮均未建立自动连接，后一轮 B 返回 `account_authentication`，SYNC-01 失败，后续账户数据和三端场景仍未完成。用户已允许命令行调用真实功能进行测试；后续采用原生功能调用与必要 UI 冒烟组合，仍核对完整文档和附件原字节。下文较早的锁屏/单端登录记录保留其历史时点。
 
 2026-11-13。状态：**产品内真实托管登录/注册、双桌面及 Android 账户自动同步尚未完成验收**。独立浏览器测试已验证托管注册/PKCE→真实服务 profile/enrollment，但不能替代产品内下述验收。`5d30f16c` 起原生应用默认开放账户入口，可显式设置 `VITE_NOTES_ACCOUNT_NATIVE=0` 关闭；普通浏览器默认隐藏。开发浏览器 fixture 仍须 DEV、DEBUG、ACCOUNT_UI 三项同时满足，其结果只验证 React、命令包装、状态恢复、布局和生命周期。
+
+</details>
 
 ## 前置条件与隔离
 
@@ -123,13 +130,13 @@ AUTH-02/03 完成后执行；两端均使用账户 A。首次登录默认暂停�
 | RELAY-03 切网恢复 | 保留同一库和授权，在手机移动网络与 WiFi 间切换，再双向修改合成笔记。 | 记录默认网络变化、通道延续或重建及实时传输；有界恢复并补齐，身份与原数据保留。自动恢复与点“立即同步”后的手动恢复分开判定，不能混为通过。 |
 | RELAY-04 中转不可用 | 受控测试中模拟 provider 启动/注册失败或远端 tunnel 未发布，保持本地编辑。 | 有界错误/重试、无假成功、无未认证降级；本地正文与附件保存正常。恢复中转后补齐并核对完整数据。受控模拟结果不替代真实公网故障结果。 |
 
-## 解锁后新增执行记录
+## 历史解锁后执行记录
 
 见 [2026-11-13 桌面实际检查点](macos/unlocked01/README.md)：两个独立桌面在 ec4348 与 11cb 两轮均曾 ready；11cb 的 A 已完成真实产品登录并保留首次暂停，B 在原生 coordinator 请求阶段失败。A 确认开启并合并后未建立连接。诊断 stage/DTO 已修正，并新增可复用真实双桌面执行器；最新 7841 候选再次受 Mac 锁定影响，停在 startup 前置，没有执行数据步骤。
 
 AUTH-03 只有桌面 A 的局部成功，不能判定双端整项通过；SYNC-01～07 和 Android 三端仍未通过。下表旧启动/构建结果描述对应历史尝试，以本节和精确候选回执为当前状态。
 
-## 当前执行边界
+## 早期执行边界（历史）
 
 已执行的浏览器 fixture 及命令见 [UI 检查点](ui/README.md)。Android 隔离候选已完成本地编辑、更新保留与登录发起/取消的 6 项真实冒烟检查，见 [真机记录](android/README.md)；该覆盖不包含 AUTH-04 的迟到回跳等完整场景，不能将对应整项验收判为通过。上述 AUTH/SYNC/ANDROID 完整用例仍未完成，须逐项填写实际结果。正式交付必须具备产品内真实链证据，不能用 fixture 或局部冒烟结果替代。
 
