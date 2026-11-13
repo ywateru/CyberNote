@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "kind": "account109-fresh-gui-cancel-local",
+  "status": "fail",
+  "phase": "cleanup",
+  "startedAt": "2026-11-13T09:21:37.412Z",
+  "binary": {
+    "sha256": "bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd",
+    "sourceRevision": "920fa9cf3af6e3b3cc3b99fb1a78d960ab0c7d11",
+    "candidateKind": "debug-e2e"
+  },
+  "checks": [],
+  "observations": [],
+  "tools": {
+    "account109-cancel-local.mjs": "6cbda0272947fa8a1c823772e4fd11a7a44b2e96e010e13d6da55be7411c07bd",
+    "sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+    "account109-desktop-helpers.mjs": "e5278d612598946624209c3aae8be8bf7243b806ce9de3dd2e406ed87a505ab0",
+    "account109-desktop-recovery.mjs": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672"
+  },
+  "limitations": [
+    "Fresh synthetic store only; no original/default store, DB, grant or binding is read by the runner. Product functions use normal GUI Store/Session and the pinned native account Runtime.",
+    "SignIn and cancel use existing account UI handlers after checking visible enabled buttons. Editor commands use debug/e2e UI handlers, not physical input. No form credentials, URLs, callbacks, port changes, process-name kills, authorization retries or headless mode.",
+    "No browser content is inspected or saved. Authorizing alone does not prove a browser page opened or identity was validated. Bind/SignIn errors fail without changing fixed callback port 17897 or interfering with other Apps.",
+    "Cancellation is sampled with full document preservation before and after natural restart. No valid old callback is submitted: late-callback rejection, QA re-login, account switching and three-peer/relay acceptance are not proved.",
+    "Fresh store/output are retained on success and failure. Only parent may clean this run after finite evidence is archived and checked."
+  ],
+  "lastOperation": {
+    "sequence": 2,
+    "phase": "cleanup",
+    "device": "local-1",
+    "operation": "close",
+    "event": "failed",
+    "code": "TIMEOUT"
+  },
+  "failure": {
+    "phase": "prepare",
+    "code": "TIMEOUT",
+    "lastOperation": {
+      "sequence": 1,
+      "phase": "prepare",
+      "device": "local-1",
+      "operation": "ready",
+      "event": "failed",
+      "code": "TIMEOUT"
+    }
+  },
+  "lifecycle": [
+    {
+      "name": "local-1",
+      "directory": "[redacted: fresh synthetic run store path]",
+      "stderrBytes": 58,
+      "commands": 2,
+      "forcedSignals": [
+        "SIGTERM"
+      ],
+      "pid": 27714,
+      "lastAction": "eval",
+      "failurePhase": "documentProbe",
+      "nativeDiagnostic": {
+        "documentProbes": 1332,
+        "lastDocument": {
+          "debug": true,
+          "interactive": false,
+          "readyState": "complete",
+          "rootHidden": "true",
+          "rootInert": true,
+          "startup": "loading",
+          "timeOrigin": 1794561698992,
+          "visibility": "hidden"
+        }
+      },
+      "readinessFailure": {
+        "code": "DIAGNOSTIC_UNAVAILABLE"
+      },
+      "failureCode": "TIMEOUT",
+      "exit": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "close": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": false,
+      "pidAbsent": false
+    }
+  ],
+  "cleanupFailure": {
+    "code": "CLEANUP_FAILED"
+  },
+  "finishedAt": "2026-11-13T09:22:37.654Z"
+}

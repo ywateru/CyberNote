@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "kind": "account109-cancel-local-live01-archive",
+  "sourceResultSha256Before": "81e608bcbce43122aa6628f552b574e1ee946a29770075daa6aaa6182c142c97",
+  "sourceResultSha256After": "81e608bcbce43122aa6628f552b574e1ee946a29770075daa6aaa6182c142c97",
+  "sourceResultUnchanged": true,
+  "sanitizedResultSha256": "9cddb1b46077345efb51f8e138fcb35109f1f811bf0f475a8cf83c177cd5b3a0",
+  "runToolsCommit": "44a9f43f5600174682b1ef7e71eb2649205dcc0e",
+  "modules": [
+    {
+      "path": "scripts/verification/account109-cancel-local.mjs",
+      "commit": "44a9f43f5600174682b1ef7e71eb2649205dcc0e",
+      "gitBlob": "9293a670276b66bf2fa3e6c176ffdc7e6ec321c5",
+      "sha256": "6cbda0272947fa8a1c823772e4fd11a7a44b2e96e010e13d6da55be7411c07bd"
+    },
+    {
+      "path": "scripts/verification/sync108-native-driver.mjs",
+      "commit": "44a9f43f5600174682b1ef7e71eb2649205dcc0e",
+      "gitBlob": "401a8b196c64dbbae3a6da7c9923ea6231f5f915",
+      "sha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-helpers.mjs",
+      "commit": "44a9f43f5600174682b1ef7e71eb2649205dcc0e",
+      "gitBlob": "2fc204e637d3be8a410ea989aea98fe2fa834e9d",
+      "sha256": "e5278d612598946624209c3aae8be8bf7243b806ce9de3dd2e406ed87a505ab0"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-recovery.mjs",
+      "commit": "44a9f43f5600174682b1ef7e71eb2649205dcc0e",
+      "gitBlob": "215b042877ef19191c519c742811720f176e1ccd",
+      "sha256": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672"
+    }
+  ],
+  "pidCheck": {
+    "checkedAt": "2026-11-13T09:27:05.341550+00:00",
+    "pid": 27714,
+    "method": "ps -p PID -o pid=,ppid=,comm=",
+    "exitCode": 1,
+    "stdoutEmpty": true,
+    "stderrEmpty": true,
+    "present": false,
+    "originalResultPidAbsent": false,
+    "originalFieldDoesNotEstablishPresence": true
+  },
+  "freshStoreSize": {
+    "checkedAt": "2026-11-13T09:27:05.344121+00:00",
+    "method": "du -sk fresh-run-store",
+    "allocatedKiB": 72,
+    "allocatedBytes": 73728,
+    "contentNotQueried": true
+  },
+  "sourceStoreAndOutputRetained": true,
+  "sanitization": [
+    "lifecycle[*].directory"
+  ]
+}
