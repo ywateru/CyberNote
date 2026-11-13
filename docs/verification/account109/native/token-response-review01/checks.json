@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-13",
+  "reviewHead": "18d0ae2871e4b92f333ce06410e1e4023e2ca346",
+  "runtimeCommit": "f59174b26270928cb9dda721ee09358f35e3fc3c",
+  "baseCommit": "20d62c11fcfead606680928ec5f4f83297a72969",
+  "manifestOnlyCommit": "18d0ae2871e4b92f333ce06410e1e4023e2ca346",
+  "manifestChangedPins": {
+    "crates/account-auth/examples/live_smoke.rs": "cc1861a7898d5e6a751c085d367390b6b30e200afe7c69ced1ddc31367ea3bd2",
+    "crates/account-auth/README.md": "fb689b694a0e38a9403516aa6aeb1c8733a4b7fec201ad73fdb1f8f33ecd79e1",
+    "crates/account-auth/src/lib.rs": "47594148f9a1a8ffb9a45b87f1067884b6d5af27d485be1bf0feb73f1b2bef7f",
+    "crates/account-auth/src/tests.rs": "fbb02a6a460b67f452b064dcaaf506238dcbc5098cf1893b7da286b846bbd4e4",
+    "crates/account-auth/src/types.rs": "1743ca5c87c416ec966354ac60e0939dd5eef2edeaadea0bda566c546cde3b0f",
+    "src-tauri/src/account/provider.rs": "42db52fee620f24ebdef3bfeb91219c329aa6ba48c0baedc672018cfdadb054c",
+    "src-tauri/src/account/types.rs": "795f8ede8ef968cf9a7a8812d2a33987e72537cd9cc54d3d5e7a894475c032f7",
+    "src/account-client.ts": "5f31bb42a797b735e4b4291c975b88bf25d886d780c23d089d0e0b94dac9e8ca",
+    "src/AccountSettings.tsx": "f525d1cf5cc22e80463822b5d89dbc83b9663006b9cfaab59345563307c8f626"
+  },
+  "inventoryUnchanged": true,
+  "independentCheckout": "/private/tmp/cybernote-account109-token-diagnostics-review-01",
+  "sharedTargetReleased": true,
+  "checks": {
+    "nativeAccount": {
+      "passed": 26,
+      "failed": 0,
+      "filtered": 234
+    },
+    "auth": {
+      "passed": 26,
+      "failed": 0,
+      "ignored": 1
+    },
+    "nodeFocused": {
+      "passed": 31,
+      "failed": 0
+    },
+    "typecheck": {
+      "exit": 0
+    }
+  },
+  "scope": "offline fixture/unit/source only; no App/device/public network/live provider",
+  "blockingFindings": [],
+  "manifestDryRunChanges": 0,
+  "reviewCheckoutCleanAfterSymlinkRemoval": true,
+  "commands": {
+    "native": "cargo test --offline --locked --manifest-path src-tauri/Cargo.toml --lib account:: -- --test-threads=2",
+    "auth": "cargo test --offline --locked --manifest-path crates/account-auth/Cargo.toml --lib -- --test-threads=2",
+    "node": "node --test scripts/verification/account109-status-dto.test.mjs scripts/verification/account109-desktop-helpers.test.mjs",
+    "typecheck": "node_modules/.bin/tsc --noEmit",
+    "manifest": "node scripts/publish/manifest.mjs --ref 18d0ae2871e4b92f333ce06410e1e4023e2ca346"
+  },
+  "artifactSha256": {
+    "manifest-check.json": "619f5decb438d40957cea24fdcbd672780892a36bb1e821faca3fc8bd15ff39c",
+    "native-account.txt": "136850f4e65fc5760c94a5d19955e17fb66c110f2becdc4023db6c4d65183263",
+    "auth.txt": "137ad361cb27cdd5fbd77b5d0e6f20169441bb9596d051d470a2174d168c5ee5",
+    "node-focused.txt": "b1dea2a2365097755fb3bdc8de092fbe9ab725fa56ee8a6e96e9b7233505ced4",
+    "typecheck.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

@@ -14,6 +14,7 @@
 - 三端执行器在启动桌面或同步前保存手机原有四篇全文及附件证据，并在合并、补齐和结束检查保全；设备外 37 项及独审通过，但尚无三端实际运行结果。手机起源附件明确列为未执行，见 [复审](macos/three-peer-runner-review02.md)。
 - `20d62c11` 已补齐手机起源固定 PNG/bin 用例：通过既有产品附件提交路径写入本轮新笔记，比较 C/A/B 完整正文、引用、授权读取原字节及 A/B 受管磁盘文件；[独立检查](native/phone-files-review01/README.md) 21 项通过。此为执行器准备，尚未在手机实际执行。
 - 本轮登录恢复修正已合入 `99198fd`、`35ebf385`、`0fe41dca`：只有 HTTP 400 的 typed `invalid_grant` 才归为刷新拒绝；网络/429/5xx、配置与无效响应保持各自有限类别。网络“重试连接”复用保留授权和严格 bind，尊重已暂停状态，状态轮询仍只读；未知错误不能触发 replacement logout。独立 native 25 项、Node policy 6 项、auth crate 与增量反例，以及父级旧 [124 项](native/recovery-integration01.md)、新增手机附件后的 [138 项 Node 整合](native/recovery-integration02.md)均通过。此为源码/fixture 验证，新 GUI 实际恢复结果另列下方。
+- `370ee4f4` 已补齐 `responseMetadata` 的固定 tokenOperation/tokenField 诊断，三个 token 校验路径保持原有认证要求；`278bbe28` 只在显式允许、完整启动预算持续 clean signedOut 和历史 owner 摘要匹配时续验 B。前者[独审](native/token-response-review01.md) native 26、auth 26（1 公网默认 ignored）、DTO/helper 31 项通过；后者[独审](native/relogin-signedout-review01/README.md) 29 项通过。父级新整合组 148 项通过、零跳过。它们不解决既有 relogin02 失败，正在构建 `d1a6eadf` 诊断候选进行新的有限实测。
 
 ## 实际桌面证据
 

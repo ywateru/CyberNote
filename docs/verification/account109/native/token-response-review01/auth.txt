@@ -1,0 +1,44 @@
+   Compiling ring v0.17.14
+   Compiling rustls v0.23.46
+   Compiling rustls-webpki v0.103.16
+   Compiling jsonwebtoken v9.3.1
+   Compiling tokio-rustls v0.26.6
+   Compiling hyper-rustls v0.27.10
+   Compiling reqwest v0.12.28
+   Compiling oauth2 v5.0.0
+   Compiling openidconnect v4.1.0
+   Compiling account-auth v0.1.0 (/private/tmp/cybernote-account109-token-diagnostics-review-01/crates/account-auth)
+    Finished `test` profile [unoptimized] target(s) in 7.78s
+     Running unittests src/lib.rs (/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/deps/account_auth-b4ca485a30fce174)
+
+running 27 tests
+test tests::cancellation_during_exchange_never_restores_a_late_grant_and_failed_revoke_keeps_quarantine ... ok
+test tests::code_exchange_rejection_and_malformed_response_have_fixed_safe_categories ... ok
+test tests::code_exchange_transport_failure_stays_network_and_never_replays_code ... ok
+test tests::discovery_and_config_cannot_select_other_hosts_or_plaintext_endpoints ... ok
+test tests::dropping_refresh_waiter_does_not_cancel_rotation_owner ... ok
+test tests::callback_state_redirect_duplicates_nonce_issuer_audience_subject_and_expiry_are_verified ... ok
+test tests::empty_refresh_rotation_quarantines_prior_handle_and_logout_retries_after_restart ... ok
+test tests::healthy_grant_rejects_begin_without_replacing_its_owner ... ok
+test tests::expired_invalid_refresh_requires_successful_logout_before_reauthorization ... ok
+test tests::live_public_logto_discovery_is_compatible ... ignored, read-only public Logto discovery/JWKS compatibility; no user or token grant
+test tests::initial_empty_refresh_revokes_issued_access_and_failed_cleanup_survives_restart ... ok
+test tests::local_refresh_prerequisites_and_freshness_do_not_claim_server_rejection ... ok
+test tests::logto_callback_issuer_is_optional_exact_and_unique_before_code_exchange ... ok
+test tests::missing_refresh_and_failed_revocation_offer_safe_explicit_cleanup_without_profile ... ok
+test tests::pkce_signup_scopes_and_exact_redirect_are_pinned ... ok
+test tests::refresh_and_revocation_failures_preserve_the_only_owner_and_errors_are_redacted ... ok
+test tests::refresh_cannot_change_verified_subject_and_rotation_remains_revocable ... ok
+test tests::omitted_refresh_rotation_inherits_prior_handle_across_restart_and_revocation ... ok
+test tests::refresh_inherits_scope_and_requires_connect_with_or_without_an_id_token ... ok
+test tests::rejected_owner_then_interrupted_reauthorization_can_explicitly_exit_and_sign_in_again ... ok
+test tests::relogin02_replacement_begin_does_not_restore_and_requires_settled_logout ... ok
+test tests::refresh_request_errors_keep_categories_and_owner_until_explicit_retry ... ok
+test tests::relogin02_scope_omission_and_connect_subsets_are_accepted_on_all_token_paths ... ok
+test tests::rotation_persistence_failure_retains_new_owner_in_memory_until_durable_retry ... ok
+test tests::relogin02_response_metadata_rejects_each_envelope_condition_on_all_token_paths ... ok
+test tests::unsafe_files_symlinks_hardlinks_and_configuration_mismatch_are_rejected_without_deletion ... ok
+test tests::successful_identity_and_rotation_are_private_persistent_serial_and_restorable ... ok
+
+test result: ok. 26 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 1.70s
+

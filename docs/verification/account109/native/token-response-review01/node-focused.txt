@@ -1,0 +1,198 @@
+TAP version 13
+# (node:91347) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: token response diagnostics survive safe status recording before terminal failure
+ok 1 - token response diagnostics survive safe status recording before terminal failure
+  ---
+  duration_ms: 1.056541
+  type: 'test'
+  ...
+# Subtest: safe status never guesses partial or cross-branch token diagnostics
+ok 2 - safe status never guesses partial or cross-branch token diagnostics
+  ---
+  duration_ms: 0.210375
+  type: 'test'
+  ...
+# Subtest: recorded recovery authentication failure terminates discovery on the first poll
+ok 3 - recorded recovery authentication failure terminates discovery on the first poll
+  ---
+  duration_ms: 0.4815
+  type: 'test'
+  ...
+# Subtest: authorization, restore and enable errors fail immediately, including errors with profiles
+ok 4 - authorization, restore and enable errors fail immediately, including errors with profiles
+  ---
+  duration_ms: 0.263417
+  type: 'test'
+  ...
+# Subtest: slow connection then data keeps connection and data deadlines separate
+ok 5 - slow connection then data keeps connection and data deadlines separate
+  ---
+  duration_ms: 6.091792
+  type: 'test'
+  ...
+# Subtest: connection timeout keeps connection and data deadlines separate
+ok 6 - connection timeout keeps connection and data deadlines separate
+  ---
+  duration_ms: 3.411459
+  type: 'test'
+  ...
+# Subtest: data timeout keeps connection and data deadlines separate
+ok 7 - data timeout keeps connection and data deadlines separate
+  ---
+  duration_ms: 3.471125
+  type: 'test'
+  ...
+# Subtest: bounded polling retains network transitions and waits for ready before evaluating success
+ok 8 - bounded polling retains network transitions and waits for ready before evaluating success
+  ---
+  duration_ms: 102.663458
+  type: 'test'
+  ...
+# Subtest: persistent network status reaches the bounded timeout even if data already matches
+ok 9 - persistent network status reaches the bounded timeout even if data already matches
+  ---
+  duration_ms: 201.941833
+  type: 'test'
+  ...
+# Subtest: authentication and permanent failures still fail immediately inside bounded waits
+ok 10 - authentication and permanent failures still fail immediately inside bounded waits
+  ---
+  duration_ms: 0.938792
+  type: 'test'
+  ...
+# Subtest: enable stays pending through a transient command result and enabled error sample
+ok 11 - enable stays pending through a transient command result and enabled error sample
+  ---
+  duration_ms: 100.95825
+  type: 'test'
+  ...
+# Subtest: transitions are deduplicated per device/phase, record recovery, and bound oscillation
+ok 12 - transitions are deduplicated per device/phase, record recovery, and bound oscillation
+  ---
+  duration_ms: 0.751708
+  type: 'test'
+  ...
+# Subtest: safe projection retains only fixed labels, booleans and bounded numeric metrics
+ok 13 - safe projection retains only fixed labels, booleans and bounded numeric metrics
+  ---
+  duration_ms: 0.317916
+  type: 'test'
+  ...
+# Subtest: new fixed endpoint stages and finite provider failure categories survive transitions and failure snapshots
+ok 14 - new fixed endpoint stages and finite provider failure categories survive transitions and failure snapshots
+  ---
+  duration_ms: 0.575875
+  type: 'test'
+  ...
+# Subtest: branch edits preserve attachment nodes while replacing complete rich text
+ok 15 - branch edits preserve attachment nodes while replacing complete rich text
+  ---
+  duration_ms: 0.4135
+  type: 'test'
+  ...
+# Subtest: keepAll comparisons resolve remapped IDs to owned metadata and retain full content/reference checks
+ok 16 - keepAll comparisons resolve remapped IDs to owned metadata and retain full content/reference checks
+  ---
+  duration_ms: 1.147708
+  type: 'test'
+  ...
+# Subtest: failure reporting never copies arbitrary upstream error strings
+ok 17 - failure reporting never copies arbitrary upstream error strings
+  ---
+  duration_ms: 0.060875
+  type: 'test'
+  ...
+# Subtest: native account path constructs only existing command payloads and rejects injection
+ok 18 - native account path constructs only existing command payloads and rejects injection
+  ---
+  duration_ms: 0.515833
+  type: 'test'
+  ...
+# Subtest: logout samples full windows before/after restart and preserves complete local bodies
+ok 19 - logout samples full windows before/after restart and preserves complete local bodies
+  ---
+  duration_ms: 0.390541
+  type: 'test'
+  ...
+# Subtest: logout detects delayed remote application, lost notes, changed rich document and reauthentication
+ok 20 - logout detects delayed remote application, lost notes, changed rich document and reauthentication
+  ---
+  duration_ms: 0.868875
+  type: 'test'
+  ...
+# Subtest: one slow read cannot substitute for repeated logout observations
+ok 21 - one slow read cannot substitute for repeated logout observations
+  ---
+  duration_ms: 0.074334
+  type: 'test'
+  ...
+# Subtest: overall pass is deferred until all owned processes close naturally
+ok 22 - overall pass is deferred until all owned processes close naturally
+  ---
+  duration_ms: 0.868709
+  type: 'test'
+  ...
+# Subtest: cleanup rejection, nonnatural exit, prior failure and unfinished coverage cannot pass
+ok 23 - cleanup rejection, nonnatural exit, prior failure and unfinished coverage cannot pass
+  ---
+  duration_ms: 0.0955
+  type: 'test'
+  ...
+# Subtest: explicit network retry restores a retained owner without authorizing or enabling
+ok 24 - explicit network retry restores a retained owner without authorizing or enabling
+  ---
+  duration_ms: 0.834541
+  type: 'test'
+  ...
+# Subtest: retry respects authentication, cleanup, ownership and unknown-error fences
+ok 25 - retry respects authentication, cleanup, ownership and unknown-error fences
+  ---
+  duration_ms: 0.152125
+  type: 'test'
+  ...
+# Subtest: legacy errors and fixed native network stages remain valid DTOs
+ok 26 - legacy errors and fixed native network stages remain valid DTOs
+  ---
+  duration_ms: 0.130291
+  type: 'test'
+  ...
+# Subtest: untrusted diagnostic fields and upstream values fail closed
+ok 27 - untrusted diagnostic fields and upstream values fail closed
+  ---
+  duration_ms: 0.238042
+  type: 'test'
+  ...
+# Subtest: provider diagnostics preserve finite auth categories in their strict context
+ok 28 - provider diagnostics preserve finite auth categories in their strict context
+  ---
+  duration_ms: 0.071417
+  type: 'test'
+  ...
+# Subtest: authentication diagnostics preserve only the finite native operation stages
+ok 29 - authentication diagnostics preserve only the finite native operation stages
+  ---
+  duration_ms: 0.062667
+  type: 'test'
+  ...
+# Subtest: token envelope details preserve exact finite operation/field and safe UI explanation
+ok 30 - token envelope details preserve exact finite operation/field and safe UI explanation
+  ---
+  duration_ms: 0.099959
+  type: 'test'
+  ...
+# Subtest: partial, unknown and cross-branch token diagnostics fail closed without inferred cause
+ok 31 - partial, unknown and cross-branch token diagnostics fail closed without inferred cause
+  ---
+  duration_ms: 0.148417
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 463.321417
