@@ -1,4 +1,6 @@
-2026-11-13：本轮整理账户同步开发检查点，见[工作区提交记录](verification/account109/WORKSPACE-COMMITS.md)。已保留[架构](architecture/account-sync.md)、[界面设计](ui/account-sync.md)和[原生 SDK 调查](plan/analysis/account109-native-research.md)；账户界面仅在显式开发测试中启用，默认设置与手工同步仍可用。登录、原生自动同步、真实部署及新 GitHub/Actions 交付仍未完成，不能以本轮局部检查替代端到端验收。
+2026-11-13最新：账户默认原生入口已接线、协调服务已部署；[真实双桌面续验](verification/account109/macos/real-account-runs01/README.md)已证明两端独立库全文/附件与重启保留、同账号真实登录、持久授权恢复。账户自动发现尚失败：最新 `9263ea87` B 为认证错误，后续双向/三端账户数据验收未完成。用户允许命令行调用真实功能测试，继续定位并复验；新 GitHub/Actions 尚未交付。下方文档按各历史时点阅读，不把早期锁屏或入口门控结论当作当前状态。
+
+2026-11-13早期：本轮整理账户同步开发检查点，见[工作区提交记录](verification/account109/WORKSPACE-COMMITS.md)。已保留[架构](architecture/account-sync.md)、[界面设计](ui/account-sync.md)和[原生 SDK 调查](plan/analysis/account109-native-research.md)；当时账户界面仅在显式开发测试中启用，默认设置与手工同步仍可用。不能以局部检查替代端到端验收。
 
 2026-11-12：已完成当前源码的[双桌面独立数据目录与Android三端同步验收](verification/sync108/RESULT.md)：新增桌面 `--data-dir`、进程lease与缓存隔离；最终两个原生桌面App35项、Android三端4场景通过，保留原失败和IME/save重叠未测边界。[实现链分析](plan/analysis/sync108-current.md)、[逐项用例](verification/sync108/TEST-CASES.md)与[工作区分组提交/检查记录](verification/sync108/WORKSPACE-COMMITS.md)齐备；仓库无remote，本轮为本地main提交。
 

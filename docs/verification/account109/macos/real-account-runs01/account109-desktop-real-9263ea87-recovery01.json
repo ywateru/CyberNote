@@ -1,0 +1,127 @@
+{
+  "schema": 1,
+  "kind": "real-account-two-native-desktops",
+  "startedAt": "2026-11-13T02:16:19.349Z",
+  "tools": {
+    "runnerSha256": "9034498b25e97363575b9b845f1f577d3428bbb20350d4a6c727d609786a7489",
+    "driverSha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2"
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-9263ea87-initial-recovery/notes-clone",
+    "sha256": "2d878d7dedf23f039889c97fc6651a54f4407f3dfeb96d001d998605519f9449"
+  },
+  "checks": [
+    {
+      "name": "two isolated native stores become interactive",
+      "status": "pass"
+    },
+    {
+      "name": "same real account grants restore without a new authorization",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "device": "a",
+      "kind": "ready",
+      "pid": 61869,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "b",
+      "kind": "ready",
+      "pid": 61877,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "a",
+      "kind": "failure-status",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "kind": "failure-status",
+      "state": "error",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "error": {
+        "code": "account_authentication"
+      },
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    }
+  ],
+  "limitations": [
+    "Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.",
+    "Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.",
+    "Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change."
+  ],
+  "resume": {
+    "from": "/private/tmp/account109-desktop-real-90b8b28b-01",
+    "priorReportSha256": "4871688c43f69dae19a84fc6f119db865856676867626a4c02d929ff68b1fd95",
+    "mode": "existing-real-grants-restored-by-native-runtime",
+    "newAuthorizationRequested": false
+  },
+  "status": "fail",
+  "failure": {
+    "phase": "automatic-discovery",
+    "code": "CONDITION_TIMEOUT:trusted automatic peer connection"
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a",
+      "stderrBytes": 58,
+      "commands": 1175,
+      "forcedSignals": [],
+      "pid": 61869,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-b",
+      "stderrBytes": 58,
+      "commands": 1175,
+      "forcedSignals": [],
+      "pid": 61877,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "finishedAt": "2026-11-13T02:18:27.087Z"
+}

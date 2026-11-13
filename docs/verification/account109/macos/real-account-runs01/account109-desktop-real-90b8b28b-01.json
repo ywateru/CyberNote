@@ -1,0 +1,319 @@
+{
+  "schema": 1,
+  "kind": "real-account-two-native-desktops",
+  "startedAt": "2026-11-13T02:00:36.663Z",
+  "tools": {
+    "runnerSha256": "5c35b22c34cdad6281ae160f32c56e73255b8b1d61520ae9c1a43c654daae84b",
+    "driverSha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2"
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-90b8b28b-identity-reasons/notes-clone",
+    "sha256": "961c7e7ff5cdea31d3db76a1d2a0b445e730f2eca4b10abea75d574723ada490"
+  },
+  "checks": [
+    {
+      "name": "two isolated native stores become interactive",
+      "status": "pass"
+    },
+    {
+      "name": "local rich documents and PNG/bin raw bytes, isolated before login",
+      "status": "pass"
+    },
+    {
+      "name": "both local documents and attachments survive real process restarts",
+      "status": "pass"
+    },
+    {
+      "name": "a real same-account login, initially paused",
+      "status": "pass"
+    },
+    {
+      "name": "b real same-account login, initially paused",
+      "status": "pass"
+    },
+    {
+      "name": "both native grants resolve to the same account",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "device": "a",
+      "kind": "ready",
+      "pid": 45962,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "b",
+      "kind": "ready",
+      "pid": 45971,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "a",
+      "kind": "original-attachment",
+      "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+      "name": "account109.png",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "a",
+      "kind": "original-attachment",
+      "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+      "name": "account109.bin",
+      "bytes": 4096,
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "b",
+      "kind": "original-attachment",
+      "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+      "name": "account109.png",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "b",
+      "kind": "original-attachment",
+      "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+      "name": "account109.bin",
+      "bytes": 4096,
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "a",
+      "kind": "ready",
+      "pid": 45980,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "b",
+      "kind": "ready",
+      "pid": 45986,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "a",
+      "kind": "original-attachment",
+      "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+      "name": "account109.png",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "a",
+      "kind": "original-attachment",
+      "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+      "name": "account109.bin",
+      "bytes": 4096,
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "b",
+      "kind": "original-attachment",
+      "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+      "name": "account109.png",
+      "bytes": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "b",
+      "kind": "original-attachment",
+      "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+      "name": "account109.bin",
+      "bytes": 4096,
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "documentReference": true,
+      "productionReadMatches": true,
+      "storedFileMatches": true
+    },
+    {
+      "device": "a",
+      "kind": "login",
+      "state": "paused",
+      "enabled": false,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "kind": "login",
+      "state": "paused",
+      "enabled": false,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "kind": "enabled",
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "kind": "enabled",
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "kind": "failure-status",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "kind": "failure-status",
+      "state": "error",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "error": {
+        "code": "account_network"
+      },
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    }
+  ],
+  "limitations": [
+    "Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.",
+    "Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.",
+    "Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change."
+  ],
+  "status": "fail",
+  "failure": {
+    "phase": "automatic-discovery",
+    "code": "CONDITION_TIMEOUT:trusted automatic peer connection"
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a",
+      "stderrBytes": 58,
+      "commands": 19,
+      "forcedSignals": [],
+      "pid": 45962,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-b",
+      "stderrBytes": 58,
+      "commands": 19,
+      "forcedSignals": [],
+      "pid": 45971,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a",
+      "stderrBytes": 58,
+      "commands": 1212,
+      "forcedSignals": [],
+      "pid": 45980,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-b",
+      "stderrBytes": 58,
+      "commands": 1196,
+      "forcedSignals": [],
+      "pid": 45986,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "finishedAt": "2026-11-13T02:02:52.394Z"
+}

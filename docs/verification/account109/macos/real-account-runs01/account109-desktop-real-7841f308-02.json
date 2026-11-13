@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "kind": "real-account-two-native-desktops",
+  "startedAt": "2026-11-13T01:39:45.185Z",
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-7841f308-network-stage/notes-clone",
+    "sha256": "d36c5e23b6406ea31235220c8384750667038380fcc4ccb7c19be7d5f0078a70"
+  },
+  "checks": [
+    {
+      "name": "two isolated native stores become interactive",
+      "status": "pass"
+    },
+    {
+      "name": "local rich documents and PNG/bin raw bytes, isolated before login",
+      "status": "pass"
+    },
+    {
+      "name": "both local documents and attachments survive real process restarts",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "device": "a",
+      "kind": "ready",
+      "pid": 3790,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "b",
+      "kind": "ready",
+      "pid": 3808,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "a",
+      "kind": "ready",
+      "pid": 3821,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "b",
+      "kind": "ready",
+      "pid": 3826,
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "a",
+      "kind": "login",
+      "state": "error",
+      "enabled": false,
+      "hasProfile": false,
+      "expectedSyntheticUser": false,
+      "error": {
+        "code": "account_authentication"
+      },
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "kind": "failure-status",
+      "state": "error",
+      "enabled": false,
+      "hasProfile": false,
+      "expectedSyntheticUser": false,
+      "error": {
+        "code": "account_authentication"
+      },
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "kind": "failure-status",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "expectedSyntheticUser": false,
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    }
+  ],
+  "limitations": [
+    "Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.",
+    "Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.",
+    "Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change."
+  ],
+  "status": "fail",
+  "failure": {
+    "phase": "login-a",
+    "code": "LOGIN_NOT_ACCEPTED"
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-7841f308-02/desktop-a",
+      "stderrBytes": 58,
+      "commands": 19,
+      "forcedSignals": [],
+      "pid": 3790,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "/private/tmp/account109-desktop-real-7841f308-02/desktop-b",
+      "stderrBytes": 58,
+      "commands": 19,
+      "forcedSignals": [],
+      "pid": 3808,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-7841f308-02/desktop-a",
+      "stderrBytes": 58,
+      "commands": 25,
+      "forcedSignals": [],
+      "pid": 3821,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "/private/tmp/account109-desktop-real-7841f308-02/desktop-b",
+      "stderrBytes": 58,
+      "commands": 9,
+      "forcedSignals": [],
+      "pid": 3826,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "finishedAt": "2026-11-13T01:39:53.157Z"
+}
