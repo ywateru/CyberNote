@@ -19,6 +19,48 @@ const MAX_REQUEST: usize = 2_100_000;
 const MAX_REPLY: usize = 8_000_000;
 const MAX_EXPRESSION: usize = 128_000;
 const MAX_ID: u64 = 9_007_199_254_740_991;
+// Fixed read-only body: no caller expression, commands, content, account or URL.
+const STARTUP_DIAGNOSTIC: &str = r#"
+return await (async () => {
+    const began = performance.now();
+    let raf = 0, timer = 0, cancelled = false;
+    await new Promise(done => {
+        let finished = false, frame, clock, end;
+        const finish = () => {
+            if (finished) return;
+            finished = true;
+            cancelAnimationFrame(frame); clearInterval(clock); clearTimeout(end);
+            window.removeEventListener('pagehide', cancel);
+            done();
+        };
+        const cancel = () => { cancelled = true; finish(); };
+        const tick = () => { if (!finished) { raf = Math.min(10000, raf + 1); frame = requestAnimationFrame(tick); } };
+        window.addEventListener('pagehide', cancel, {once:true});
+        frame = requestAnimationFrame(tick);
+        clock = setInterval(() => { if (!finished) timer = Math.min(10000, timer + 1); }, 25);
+        end = setTimeout(finish, Math.min(350, Math.max(0, deadline - Date.now() - 25)));
+    });
+    const root = document.getElementById('root'), startup = document.getElementById('startup');
+    let startupSnapshot = null;
+    try {
+        const snapshot = window.__CYBERNOTE_STARTUP_DIAGNOSTIC__;
+        const keys = ['loading','workspaceLoaded','syncCover','synchronizing','editorSatisfied','nativeRequired','nativeInfoPresent','errorPresent','startupReady'];
+        const object = (value, fields) => value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === fields.length && Object.keys(value).every(key => fields.includes(key));
+        if (!cancelled && object(snapshot, ['schema','gates','phase']) && snapshot.schema === 1 &&
+            object(snapshot.gates, keys) && keys.every(key => typeof snapshot.gates[key] === 'boolean') &&
+            ['notScheduled','frame1','frame2','fallback','ready','cancelled'].includes(snapshot.phase)) {
+            startupSnapshot = {schema:1,gates:Object.fromEntries(keys.map(key => [key,snapshot.gates[key]])),phase:snapshot.phase};
+        }
+    } catch (_) {}
+    return {version:1, cancelled,
+        readyState:['loading','interactive','complete'].includes(document.readyState) ? document.readyState : 'unknown',
+        visibility:['visible','hidden'].includes(document.visibilityState) ? document.visibilityState : 'unknown',
+        debug:!!window.__NOTES_DEBUG__,
+        startup:!startup ? 'detached' : ['loading','ready','error'].includes(startup.dataset.state) ? startup.dataset.state : 'present',
+        root:root ? {inert:!!root.inert,inertAttribute:root.hasAttribute('inert'),ariaHidden:root.hasAttribute('aria-hidden'),ariaBusy:root.hasAttribute('aria-busy')} : null,
+        renderClock:{raf,timer,elapsedMs:Math.min(60000,Math.max(0,Math.round(performance.now()-began)))}, startupSnapshot};
+})();
+"#;
 struct PageState {
     ready: bool,
     starts: u64,
@@ -84,6 +126,7 @@ fn default_timeout() -> u64 {
 #[serde(tag = "op", rename_all = "camelCase", deny_unknown_fields)]
 enum Action {
     Ready,
+    StartupDiagnostic,
     Execute {
         command: String,
         #[serde(default = "empty_object")]
@@ -104,6 +147,23 @@ enum Action {
 }
 fn empty_object() -> Value {
     json!({})
+}
+fn allowed_before_ready(action: &Action) -> bool {
+    matches!(
+        action,
+        Action::Ready | Action::StartupDiagnostic | Action::Shutdown
+    )
+}
+// Called only in the validated, explicit left/right slot branch below. Each
+// closure captures the same owned main window; failure stops the sequence.
+fn present_owned_slot_window(
+    show: impl FnOnce() -> io::Result<()>,
+    unminimize: impl FnOnce() -> io::Result<()>,
+    focus: impl FnOnce() -> io::Result<()>,
+) -> io::Result<()> {
+    show()?;
+    unminimize()?;
+    focus()
 }
 
 /// Called late in setup, after the normal Session, sync and main window exist.
@@ -140,8 +200,11 @@ pub fn start(app: &tauri::AppHandle) -> io::Result<()> {
                 ))
                 .map_err(io::Error::other)?;
         }
-        window.show().map_err(io::Error::other)?;
-        window.unminimize().map_err(io::Error::other)?;
+        present_owned_slot_window(
+            || window.show().map_err(io::Error::other),
+            || window.unminimize().map_err(io::Error::other),
+            || window.set_focus().map_err(io::Error::other),
+        )?;
     }
     let app = app.clone();
     std::thread::Builder::new()
@@ -350,7 +413,7 @@ fn dispatch(app: &tauri::AppHandle, request: &Request) -> Value {
         result["error"]["diagnostic"] = json!({"documentProbes":probes,"lastDocument":last});
         return result;
     }
-    if !matches!(request.action, Action::Shutdown) && !READY_ACCEPTED.load(Ordering::SeqCst) {
+    if !allowed_before_ready(&request.action) && !READY_ACCEPTED.load(Ordering::SeqCst) {
         return error(json!(request.id), "NOT_READY");
     }
     dispatch_once(app, request, None)
@@ -363,6 +426,7 @@ fn dispatch_once(
 ) -> Value {
     let id = json!(request.id);
     let body = match &request.action {
+        Action::StartupDiagnostic => STARTUP_DIAGNOSTIC.into(),
         Action::Ready => format!(
             "await report('debugRegistration');\n\
              while (!window.__NOTES_DEBUG__) {{ if (Date.now() >= deadline) throw {{code:'TIMEOUT'}}; await new Promise(r=>setTimeout(r,25)); }}\n\
@@ -489,7 +553,7 @@ fn dispatch_once(
         timeout = request.timeout_ms,
         max_reply = MAX_REPLY,
     );
-    let result = if window.eval(script).is_err() {
+    let mut result = if window.eval(script).is_err() {
         error(id, "EVAL_FAILED")
     } else {
         receive
@@ -506,5 +570,89 @@ fn dispatch_once(
             })
     };
     app.unlisten(listener);
+    if matches!(request.action, Action::StartupDiagnostic) && result.get("ok") == Some(&json!(true)) {
+        result["value"]["nativeWindow"] = json!({
+            "visible":window.is_visible().ok(), "minimized":window.is_minimized().ok(),
+            "focused":window.is_focused().ok()
+        });
+    }
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn owned_slot_focus_follows_presentation_once_and_never_hides_failure() {
+        use std::cell::RefCell;
+        for failure in [None, Some("show"), Some("unminimize"), Some("focus")] {
+            let calls = RefCell::new(Vec::new());
+            let operation = |name| {
+                calls.borrow_mut().push(("owned-main", name));
+                if failure == Some(name) {
+                    Err(io::Error::other("fixture"))
+                } else {
+                    Ok(())
+                }
+            };
+            let result = present_owned_slot_window(
+                || operation("show"),
+                || operation("unminimize"),
+                || operation("focus"),
+            );
+            assert_eq!(result.is_err(), failure.is_some());
+            let expected = match failure {
+                Some("show") => vec![("owned-main", "show")],
+                Some("unminimize") => vec![("owned-main", "show"), ("owned-main", "unminimize")],
+                _ => vec![
+                    ("owned-main", "show"),
+                    ("owned-main", "unminimize"),
+                    ("owned-main", "focus"),
+                ],
+            };
+            assert_eq!(*calls.borrow(), expected);
+        }
+    }
+
+    #[test]
+    fn fixed_startup_diagnostic_is_parameterless_and_preserves_ready_gate() {
+        let request: Request = serde_json::from_value(json!({
+            "id":1,"action":{"op":"startupDiagnostic"}
+        }))
+        .unwrap();
+        assert!(allowed_before_ready(&request.action));
+        for extra in [
+            json!({"expression":"arbitrary"}),
+            json!({"args":{}}),
+            json!({"command":"app.state"}),
+            json!({"options":{}}),
+        ] {
+            let mut value = json!({"id":1,"action":{"op":"startupDiagnostic"}});
+            value["action"]
+                .as_object_mut()
+                .unwrap()
+                .extend(extra.as_object().unwrap().clone());
+            assert!(serde_json::from_value::<Request>(value).is_err());
+        }
+        for action in [
+            Action::Eval {
+                expression: "true".into(),
+                arg: Value::Null,
+            },
+            Action::Execute {
+                command: "app.state".into(),
+                args: empty_object(),
+            },
+            Action::State,
+            Action::Idle,
+            Action::Snapshot {
+                options: empty_object(),
+            },
+        ] {
+            assert!(!allowed_before_ready(&action));
+        }
+        assert!(allowed_before_ready(&Action::Ready));
+        assert!(allowed_before_ready(&Action::Shutdown));
+    }
 }

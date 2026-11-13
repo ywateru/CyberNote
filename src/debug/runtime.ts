@@ -214,6 +214,25 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
     return () => {};
   let disposed = false,
     active = 0;
+  const idleWaiters = new Set<() => void>();
+  const sampleOpportunity = (remainingMs: number) => new Promise<void>((resolve, reject) => {
+    let settled = false;
+    let raf: number | undefined, timer: ReturnType<typeof setTimeout> | undefined;
+    const finish = (cancelled = false) => {
+      if (settled) return;
+      settled = true;
+      if (raf !== undefined) cancelAnimationFrame(raf);
+      if (timer !== undefined) clearTimeout(timer);
+      idleWaiters.delete(cancel);
+      if (cancelled) reject(Object.assign(new Error("Debug application is unmounted"), { code: "UNAVAILABLE" }));
+      else resolve();
+    };
+    const cancel = () => finish(true);
+    idleWaiters.add(cancel);
+    raf = requestAnimationFrame(() => finish());
+    // A timer is a sampling opportunity, never evidence of idle or paint.
+    timer = setTimeout(() => finish(), Math.min(50, remainingMs));
+  });
   const live = () => {
     if (disposed) fail("UNAVAILABLE", "Debug application is unmounted");
     return getAdapter();
@@ -418,15 +437,16 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
       const timeout = options.timeoutMs ?? 8000;
       if (!Number.isFinite(timeout) || timeout < 1 || timeout > 30000)
         fail("INVALID_ARGUMENT", "Invalid timeoutMs");
-      const start = performance.now();
+      const start = performance.now(), deadline = start + timeout;
       let stable = 0;
-      while (performance.now() - start < timeout) {
+      while (performance.now() < deadline) {
         const state = live().state();
+        if (performance.now() >= deadline) break;
         // A retained failure is terminal only after actual retry work settles.
         // pendingDocs alone is not work: a failed, un-retried save still fails.
         if (active || state.busy || state.save.saving) {
           stable = 0;
-          await frame();
+          await sampleOpportunity(deadline - performance.now());
           continue;
         }
         if (state.save.failed)
@@ -445,7 +465,7 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
             elapsedMs: Math.round(performance.now() - start),
             save: state.save,
           };
-        await frame();
+        await sampleOpportunity(deadline - performance.now());
       }
       fail("TIMEOUT", `Application did not become idle in ${timeout}ms`);
     },
@@ -456,6 +476,7 @@ export function registerDebug(getAdapter: () => DebugAdapter): () => void {
   });
   return () => {
     disposed = true;
+    for (const cancel of idleWaiters) cancel();
     if (window.__NOTES_DEBUG__ === api) delete window.__NOTES_DEBUG__;
   };
 }

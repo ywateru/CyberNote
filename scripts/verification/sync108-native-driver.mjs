@@ -30,7 +30,7 @@ export function encodeRequest(id, action, timeoutMs = 30_000) {
     throw failure("INVALID_REQUEST");
   if (!action || Object.getPrototypeOf(action) !== Object.prototype) throw failure("INVALID_REQUEST");
   const keys = {
-    ready: [], state: [], idle: [], shutdown: [],
+    ready: [], startupDiagnostic: [], state: [], idle: [], shutdown: [],
     execute: ["command", "args"], snapshot: ["options"], eval: ["expression", "arg"],
   };
   if (!Object.hasOwn(keys, action.op) || Object.keys(action).some((k) => k !== "op" && !keys[action.op].includes(k)))
@@ -44,6 +44,41 @@ export function encodeRequest(id, action, timeoutMs = 30_000) {
   const serialized = JSON.stringify({ id, timeoutMs, action }) + "\n";
   if (Buffer.byteLength(serialized) > MAX_REQUEST) throw failure("INPUT_TOO_LARGE");
   return serialized;
+}
+
+// Exact finite projection only: malformed or old candidates remain diagnostic-unavailable.
+export function safeStartupDiagnostic(value) {
+  const record = (v, keys) => {
+    if (!v || Object.getPrototypeOf(v) !== Object.prototype || Object.keys(v).length !== keys.length || Object.keys(v).some(k => !keys.includes(k))) throw failure("INVALID_DIAGNOSTIC");
+    return v;
+  };
+  const bool = v => { if (typeof v !== "boolean") throw failure("INVALID_DIAGNOSTIC"); return v; };
+  const count = (v, max) => {
+    if (!Number.isSafeInteger(v) || v < 0 || v > max) throw failure("INVALID_DIAGNOSTIC");
+    return v;
+  };
+  const label = (v, choices) => { if (!choices.includes(v)) throw failure("INVALID_DIAGNOSTIC"); return v; };
+  const v = record(value, ["version", "cancelled", "readyState", "visibility", "debug", "startup", "root", "renderClock", "startupSnapshot", "nativeWindow"]);
+  if (v.version !== 1) throw failure("INVALID_DIAGNOSTIC");
+  const clock = record(v.renderClock, ["raf", "timer", "elapsedMs"]);
+  const root = v.root === null ? null : record(v.root, ["inert", "inertAttribute", "ariaHidden", "ariaBusy"]);
+  const nativeWindow = record(v.nativeWindow, ["visible", "minimized", "focused"]);
+  const gateKeys = ["loading", "workspaceLoaded", "syncCover", "synchronizing", "editorSatisfied", "nativeRequired", "nativeInfoPresent", "errorPresent", "startupReady"];
+  let startupSnapshot = null;
+  if (v.startupSnapshot !== null) {
+    const snapshot = record(v.startupSnapshot, ["schema", "gates", "phase"]);
+    if (snapshot.schema !== 1) throw failure("INVALID_DIAGNOSTIC");
+    const gates = record(snapshot.gates, gateKeys);
+    startupSnapshot = {schema: 1, gates: Object.fromEntries(gateKeys.map(k => [k, bool(gates[k])])), phase: label(snapshot.phase, ["notScheduled", "frame1", "frame2", "fallback", "ready", "cancelled"])};
+  }
+  return {
+    version: 1, cancelled: bool(v.cancelled), readyState: label(v.readyState, ["loading", "interactive", "complete", "unknown"]),
+    visibility: label(v.visibility, ["visible", "hidden", "unknown"]), debug: bool(v.debug), startup: label(v.startup, ["loading", "ready", "error", "present", "detached"]),
+    root: root && Object.fromEntries(Object.entries(root).map(([k, value]) => [k, bool(value)])),
+    renderClock: {raf: count(clock.raf, 10000), timer: count(clock.timer, 10000), elapsedMs: count(clock.elapsedMs, 60000)},
+    startupSnapshot,
+    nativeWindow: Object.fromEntries(Object.entries(nativeWindow).map(([k, value]) => [k, value === null ? null : bool(value)])),
+  };
 }
 
 // Native stdout may include third-party diagnostics. Never retain those lines.
@@ -178,30 +213,18 @@ export class NativeApp extends EventEmitter {
         throw failure("NOT_NATIVE_DEBUG_APP");
       return ready;
     } catch (error) {
+      // A legacy candidate can answer an unknown fixed action with id:null.
+      // Keep strict framing failures fatal while retaining Ready's first error.
+      this.lifecycle.readinessError = {
+        code: /^[A-Z_]{1,80}$/.test(error.code || "") ? error.code : "DRIVER_ERROR",
+        ...(error.phase ? { phase: error.phase } : {}),
+      };
       // A JS TIMEOUT reply means that Ready's awaited operation has finished;
       // this is distinct from NATIVE_TIMEOUT, whose JS cannot be cancelled.
       // Capture only bounded, non-content diagnostics before failing closed.
       if (error.code === "TIMEOUT" && !this.#fatal && !this.lifecycle.exit) {
         try {
-          this.lifecycle.readinessFailure = await this.evaluate(`(async () => {
-            const root=document.getElementById('root'), surface=document.getElementById('startup');
-            let s=null,raf=0,timer=0,finished=false;
-            const began=performance.now();
-            const tick=()=>{if(!finished){raf++;requestAnimationFrame(tick);}};
-            requestAnimationFrame(tick);
-            const clock=setInterval(()=>timer++,25);
-            let stateCompleted=false;
-            if(window.__NOTES_DEBUG__) void window.__NOTES_DEBUG__.execute('app.state').then(v=>{s=v.result;stateCompleted=true;}).catch(()=>{});
-            await new Promise(done=>setTimeout(done,350));
-            finished=true;clearInterval(clock);
-            return {readyState:document.readyState,visibility:document.visibilityState,debug:!!window.__NOTES_DEBUG__,
-              renderClock:{raf,timer,elapsedMs:Math.round(performance.now()-began),stateCompleted},
-              startup:surface?.dataset.state || (surface ? 'present' : 'detached'),
-              root:root ? {inert:root.inert,ariaHidden:root.getAttribute('aria-hidden'),ariaBusy:root.getAttribute('aria-busy')} : null,
-              app:s ? {busy:s.busy,save:s.save,hasError:!!s.error,failureSerial:s.failure?.serial,
-                frozen:s.quietWindow?.frozen,editorCount:s.quietWindow?.editors?.length,
-                preferencesOpen:s.preferences?.open,notes:s.workspace?.notes?.length} : null};
-          })()`, null, 3000);
+          this.lifecycle.readinessFailure = safeStartupDiagnostic(await this.request({ op: "startupDiagnostic" }, 3000));
         } catch { this.lifecycle.readinessFailure = { code: "DIAGNOSTIC_UNAVAILABLE" }; }
       }
       this.#fail(error);

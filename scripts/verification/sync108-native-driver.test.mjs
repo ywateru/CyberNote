@@ -19,6 +19,19 @@ if (process.argv.includes("--stdio-fixture")) {
     const { id, action } = request;
     active++;
     maximum = Math.max(maximum, active);
+    if (action.op === "ready" && mode?.startsWith("readyTimeout")) {
+      active--;
+      send({type:"response",id,ok:false,error:{code:"TIMEOUT",phase:"documentProbe",diagnostic:{documentProbes:3}}});
+      return;
+    }
+    if (action.op === "startupDiagnostic") {
+      active--;
+      if (mode === "readyTimeoutOldCandidate") send({type:"response",id:null,ok:false,error:{code:"INVALID_REQUEST"}});
+      else send({type:"response",id,ok:true,value:{version:1,cancelled:false,readyState:"complete",visibility:"hidden",debug:true,startup:"loading",
+        root:{inert:true,inertAttribute:true,ariaHidden:true,ariaBusy:true},renderClock:{raf:0,timer:14,elapsedMs:350},startupSnapshot:null,
+        nativeWindow:{visible:true,minimized:false,focused:false},...(mode === "readyTimeoutUnsafe" ? {body:"private-sentinel"} : {})}});
+      return;
+    }
     if (action.op === "state" && mode === "invalidResponse") {
       send({ type: "response", id, ok: true });
       active--;
@@ -51,9 +64,11 @@ if (process.argv.includes("--stdio-fixture")) {
 
   test("request schema rejects unknown keys, unsafe IDs, unbounded values and invalid action types", () => {
     assert.equal(JSON.parse(encodeRequest(1, { op: "execute", command: "note.create", args: {} })).id, 1);
+    assert.deepEqual(JSON.parse(encodeRequest(1, {op:"startupDiagnostic"})).action,{op:"startupDiagnostic"});
     for (const [id, action, timeout] of [
       [0, { op: "state" }], [Number.MAX_SAFE_INTEGER + 1, { op: "state" }],
-      [1, { op: "unknown" }], [1, { op: "state", extra: true }], [1, { op: "state" }, 60_001],
+      [1, { op: "startupDiagnostic", expression: "true" }], [1, { op: "startupDiagnostic", args: {} }],
+      [1, { op: "startupDiagnostic", command: "app.state" }], [1, { op: "unknown" }], [1, { op: "state", extra: true }], [1, { op: "state" }, 60_001],
       [1, { op: "execute", command: "x", args: [] }], [1, { op: "snapshot", options: [] }],
       [1, { op: "eval", expression: "" }], [1, { op: "eval", expression: "中".repeat(128_000) }],
       [1, { op: "eval", expression: "arg", arg: "x".repeat(MAX_REQUEST) }],
@@ -76,6 +91,22 @@ if (process.argv.includes("--stdio-fixture")) {
     decoder.push(Buffer.from(PREFIX + '{"type":"response"}'));
     assert.throws(() => decoder.end(), { code: "TRUNCATED_FRAME" });
   });
+  for (const mode of ["readyTimeout", "readyTimeoutOldCandidate", "readyTimeoutUnsafe"]) {
+    test(`${mode} attempts only fixed diagnostic and preserves original ready failure`, async () => {
+      const app=fixture(mode);
+      try {
+        await assert.rejects(app.ready(1000),{code:"TIMEOUT",phase:"documentProbe"});
+        assert.equal(app.lifecycle.failureCode,mode === "readyTimeoutOldCandidate" ? "UNEXPECTED_RESPONSE" : "TIMEOUT");assert.equal(app.lifecycle.failurePhase,"documentProbe");
+        assert.deepEqual(app.lifecycle.readinessError,{code:"TIMEOUT",phase:"documentProbe"});
+        assert.deepEqual(app.lifecycle.nativeDiagnostic,{documentProbes:3});
+        assert.equal(app.lifecycle.commands,2);assert.equal(app.lifecycle.lastAction,"startupDiagnostic");
+        if(mode === "readyTimeout") assert.equal(app.lifecycle.readinessFailure.renderClock.timer,14);
+        else assert.deepEqual(app.lifecycle.readinessFailure,{code:"DIAGNOSTIC_UNAVAILABLE"});
+        assert(!JSON.stringify(app.lifecycle).includes("private-sentinel"));
+        await assert.rejects(app.state(),{code:mode === "readyTimeoutOldCandidate" ? "UNEXPECTED_RESPONSE" : "TIMEOUT"});assert.equal(app.lifecycle.commands,2);
+      } finally {await clean(app);}
+    });
+  }
   test("concurrent callers are serialized and explicit shutdown reaches owned natural exit", async () => {
     const app = fixture();
     try {
