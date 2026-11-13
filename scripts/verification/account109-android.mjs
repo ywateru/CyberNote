@@ -1,6 +1,8 @@
 /** Fixed Account109 Samsung driver derived from the committed Sync108 helper.
  * Note writes use visible product controls and CDP Input. Two fixed account
  * sync controls also use production IPC, explicitly bypassing UI confirmation.
+ * Fixed synthetic attachments use the existing debug File[] submission path,
+ * only for a note successfully created by this driver. No system picker claim.
  * No token/grant access, arbitrary evaluation API, SQL, manual pairing or ADB shell API.
  * Node >=22. close() is idempotent and removes only its exact PID-owned forward.
  */
@@ -101,6 +103,62 @@ export function installedApkPath(output) {
   const lines=output.trim().split('\n');
   if(lines.length!==1||!/^package:\/data\/app\/[A-Za-z0-9_.+=/-]+\/base\.apk$/.test(lines[0])||lines[0].split('/').includes('..'))throw Object.assign(Error('ANDROID_APK_PATH_INVALID'),{code:'ANDROID_APK_PATH_INVALID'});
   return lines[0].slice('package:'.length);
+}
+
+// Immutable, credential-free, bounded fixtures. Callers cannot supply file bytes,
+// names, paths, command IDs or expressions to the live driver method.
+export const PHONE_FILES = Object.freeze([
+  Object.freeze({name:'account109-phone.png',mime:'image/png',base64:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jGZkAAAAASUVORK5CYII='}),
+  Object.freeze({name:'account109-phone.bin',mime:'application/octet-stream',base64:Buffer.from(Array.from({length:4096},(_,i)=>(i*17+3)%256)).toString('base64')}),
+]);
+const noteId = id => typeof id === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(id);
+const fileFailure = code => Object.assign(Error(code), {code,phase:'phone-origin-files'});
+
+// Fixed browser program, also exercised in a device-free VM fixture. Capability
+// and live selected/authorized editor owner are checked before any mutation.
+export function phoneFileSubmission(id) {
+  if (!noteId(id)) throw fileFailure('ANDROID_FILE_NOTE_INVALID');
+  return `(async()=>{
+    const debug=window.__NOTES_DEBUG__,id=${quote(id)};
+    if(debug?.version!==1||typeof debug.execute!=='function'||typeof debug.list!=='function'||typeof debug.waitForIdle!=='function')return {code:'ANDROID_FILE_CAPABILITY_REQUIRED'};
+    try {
+      const commands=debug.list();
+      if(!['app.state','attachment.submit','app.flush'].every(id=>commands.some(c=>c.id===id&&c.available===true)))return {code:'ANDROID_FILE_CAPABILITY_REQUIRED'};
+      const state=(await debug.execute('app.state')).result;
+      const editor=document.querySelector('.tiptap[data-note-id="'+id+'"][contenteditable="true"]');
+      if(state.selection?.noteId!==id||!state.workspace?.access?.notes?.[id]?.authorized||!editor||!editor.getClientRects().length)return {code:'ANDROID_FILE_OWNER_REQUIRED'};
+      await debug.execute('attachment.submit',${quote({files:PHONE_FILES})});
+      await debug.execute('app.flush');await debug.waitForIdle({timeoutMs:10000});
+      return {submitted:true};
+    } catch {return {code:'ANDROID_FILE_SUBMIT_REJECTED'};}
+  })()`;
+}
+
+// Private new-note receipts are recorded only after createNote's real UI/save
+// succeeds. Test callbacks stand in for effects; they are not live driver APIs.
+export function phoneFileControls({readWorkspace,openNote,submit}) {
+  const created = new Map();
+  return {
+    created(note) {
+      if (!noteId(note?.id) || created.has(note.id)) throw fileFailure('ANDROID_FILE_NOTE_INVALID');
+      created.set(note.id, JSON.stringify({document:note.document,plainText:note.plainText}));
+    },
+    async submitNoteFiles(...args) {
+      const [id]=args;
+      if(args.length!==1||!noteId(id)||!created.has(id))throw fileFailure('ANDROID_FILE_NEW_NOTE_REQUIRED');
+      const before=created.get(id);created.delete(id); // One attempt, including failure.
+      const check=async()=>{
+        const ws=await readWorkspace(),notes=ws.notes.filter(n=>n.id===id&&!n.deletedAt);
+        if(notes.length!==1||JSON.stringify({document:notes[0].document,plainText:notes[0].plainText})!==before||ws.attachments.some(a=>a.noteId===id)||!ws.access?.notes?.[id]?.authorized)throw fileFailure('ANDROID_FILE_OWNER_REQUIRED');
+      };
+      await check();await openNote(id);await check();
+      const result=await submit(id);
+      if(result?.submitted!==true)throw fileFailure(['ANDROID_FILE_CAPABILITY_REQUIRED','ANDROID_FILE_OWNER_REQUIRED','ANDROID_FILE_SUBMIT_REJECTED'].includes(result?.code)?result.code:'ANDROID_FILE_SUBMIT_REJECTED');
+      const ws=await readWorkspace(),note=ws.notes.find(n=>n.id===id&&!n.deletedAt);
+      if(!note)throw fileFailure('ANDROID_FILE_OWNER_REQUIRED');
+      return note;
+    },
+  };
 }
 
 export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, launch = false } = {}) {
@@ -227,8 +285,18 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
       await wait(() => has('.account-settings'), 'account settings');
       await wait(async () => (await accountStatus()).state === await evaluate(`document.querySelector('.account-settings')?.dataset.accountState`), 'native account state rendered');
     };
+    const phoneFiles=phoneFileControls({readWorkspace,openNote:async id=>{
+      await api.openNote(id);
+      const selector=`.tiptap[data-note-id=${quote(id)}][contenteditable="true"]`;
+      await wait(()=>has(selector),'phone file exact editor owner');
+      await click(selector);await key('End','End',35,2);
+    },submit:async id=>{
+      assertInteractive();diagnostics.phase='phone-origin-files';diagnostics.selector=null;
+      return evaluate(phoneFileSubmission(id));
+    }});
     const api = {
       owned, diagnostics, close, readWorkspace, readNote, accountStatus, openAccount, closeSettings,
+      submitNoteFiles:phoneFiles.submitNoteFiles,
       ...accountSyncControls(async command => {
         assertInteractive();
         diagnostics.phase = `account.${command.type}`; diagnostics.selector = null;
@@ -280,11 +348,13 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
         await pause(900);
         await click('[aria-label="返回笔记"]');
         diagnostics.phase = 'create-note.persisted-full-body'; diagnostics.selector = null;
-        return wait(async () => {
+        const saved=await wait(async () => {
           const w = await readWorkspace();
           const note = w.notes.find(n => n.id === created.id && n.title === title && body.split('\n').every(line => (n.plainText || '').includes(line)));
           return note || false;
         }, 'persisted complete note');
+        phoneFiles.created(saved);
+        return saved;
       },
       async openNote(id) {
         await closeSettings();
@@ -296,6 +366,7 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
         const w = await readWorkspace();
         const attachment = w.attachments.find(a => a.id === id);
         if (!attachment) throw Error('Attachment missing');
+        if (!w.access?.notes?.[attachment.noteId]?.authorized) throw fileFailure('ANDROID_FILE_OWNER_REQUIRED');
         const expected = { sessionId: w.access.sessionId, epoch: w.access.epoch, noteEpoch: w.access.notes[attachment.noteId].epoch };
         const result = await evaluate(`window.__TAURI_INTERNALS__.invoke('read_attachment',${quote({ id, expected })})`);
         const bytes = Buffer.from(result.data, 'base64');

@@ -1,9 +1,12 @@
 // In-memory policy/orchestration fixtures only. Never native synchronization evidence.
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {createHash} from 'node:crypto';
-import {accountSyncControls,installedApkPath,PACKAGE} from './account109-android.mjs';
-import {options,STORES,USERNAME,PHONE_ORIGINAL_IDS,expectedAccount,sameAccount,meshReady,fixtures,verifyOriginals,phoneSnapshot,capturePhoneBaseline,verifyPhoneBaseline,samplePhonePause,runCases,finishThreePeers} from './account109-three-peers.mjs';
+import {createHash,randomUUID} from 'node:crypto';
+import {mkdtemp,mkdir,writeFile,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {accountSyncControls,installedApkPath,phoneFileControls,PACKAGE} from './account109-android.mjs';
+import {options,STORES,USERNAME,PHONE_ORIGINAL_IDS,expectedAccount,sameAccount,meshReady,fixtures,phoneFixtures,assertPhoneBodyRetained,verifyOriginals,phoneSnapshot,capturePhoneBaseline,verifyPhoneBaseline,samplePhonePause,runCases,finishThreePeers} from './account109-three-peers.mjs';
 
 test('CLI accepts only original stores, absolute paths and explicit A sign-in opt-in',()=>{
   const argv=['--binary','/unit/native','--stores',STORES,'--output','/unit/fresh'];
@@ -26,21 +29,28 @@ test('installed APK lookup accepts only one safe base APK path',()=>{
 
 function memoryPeers(){
   const baseline=PHONE_ORIGINAL_IDS.map((id,i)=>({id,document:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'保留已有中文 😀 '+i}]}]},plainText:'保留已有中文 😀 '+i}));
-  const events=[],blobs=new Map();let serial=0;
+  const events=[],blobs=new Map();
   const peers=['A','B','C'].map(name=>({name,enabled:true,ws:{notes:structuredClone(baseline),attachments:[]}}));
   const publish=(source,note,rows)=>{for(const p of peers.filter(p=>p.enabled||p===source)){p.ws.notes=p.ws.notes.filter(n=>n.id!==note.id);p.ws.notes.push(structuredClone(note));p.ws.attachments=p.ws.attachments.filter(a=>a.noteId!==note.id);p.ws.attachments.push(...structuredClone(rows));}};
   for(const peer of peers){
     peer.status=async()=>({state:peer.enabled?'ready':'paused',enabled:peer.enabled,profile:{subject:'unit-owner',username:USERNAME},devices:peers.map(p=>({id:p.name,current:p===peer,online:true,connected:p!==peer&&p.enabled&&peer.enabled})),pendingCount:0,conflictCount:0});
-    peer.workspace=async()=>structuredClone(peer.ws);
+    peer.workspace=async()=>({...structuredClone(peer.ws),access:{notes:Object.fromEntries(peer.ws.notes.map(n=>[n.id,{authorized:true}]))}});
     peer.setEnabled=async enabled=>{events.push(peer.name+':enabled:'+enabled);peer.enabled=enabled;if(enabled){for(const source of peers.filter(p=>p!==peer&&p.enabled))for(const note of [...source.ws.notes])publish(source,note,source.ws.attachments.filter(a=>a.noteId===note.id));}return peer.status();};
     peer.syncNow=async()=>{events.push(peer.name+':syncNow');return peer.status();};
     peer.create=async(document,files)=>{
-      const id=peer.name+'-note-'+(++serial),copy=structuredClone(document),rows=files.map((f,i)=>({id:id+'-attachment-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file'}));
+      const id=randomUUID(),copy=structuredClone(document),rows=files.map((f,i)=>({id:id+'-attachment-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file'}));
       for(const [i,f] of files.entries()){blobs.set(rows[i].id,Buffer.from(f.bytes));copy.content.push({type:'attachment',attrs:{id:rows[i].id,name:f.name,kind:rows[i].kind}});}
       const texts=node=>[...(node.text?[node.text]:[]),...(node.content||[]).flatMap(texts)];
       publish(peer,{id,document:copy,plainText:texts(copy).join('\n')},rows);events.push(peer.name+':create');return id;
     };
-    peer.createNote=async({title,body})=>{events.push(peer.name+':real-ui-fixture');const document={type:'doc',content:[{type:'heading',attrs:{level:1},content:[{type:'text',text:title}]},...body.split('\n').map(text=>({type:'paragraph',content:[{type:'text',text}]}))]};const id=await peer.create(document,[]);return structuredClone(peer.ws.notes.find(n=>n.id===id));};
+    const files=phoneFileControls({readWorkspace:peer.workspace,openNote:async id=>{events.push(peer.name+':open:'+id);},submit:async id=>{
+      events.push(peer.name+':fixed-files:'+id);
+      const note=structuredClone(peer.ws.notes.find(n=>n.id===id)),rows=phoneFixtures.map((f,i)=>({id:id+'-phone-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file'}));
+      for(const [i,f] of phoneFixtures.entries()){blobs.set(rows[i].id,Buffer.from(f.bytes));note.document.content.push({type:'attachment',attrs:{id:rows[i].id,name:f.name,kind:rows[i].kind}});}
+      publish(peer,note,rows);return {submitted:true};
+    }});
+    peer.submitNoteFiles=files.submitNoteFiles;
+    peer.createNote=async({title,body})=>{events.push(peer.name+':real-ui-fixture');const document={type:'doc',content:[{type:'heading',attrs:{level:1},content:[{type:'text',text:title}]},...body.split('\n').map(text=>({type:'paragraph',content:[{type:'text',text}]}))]};const id=await peer.create(document,[]),note=structuredClone(peer.ws.notes.find(n=>n.id===id));files.created(note);return note;};
     peer.readAttachment=async id=>({data:(peer.corrupt?Buffer.from('wrong original'):blobs.get(id)).toString('base64')});
   }
   return {peers,events,baseline};
@@ -82,6 +92,42 @@ test('all five cases exercise both directions, media, phone pause and catch-up w
   for(const peer of peers)assert.deepEqual(peer.ws.notes.map(n=>n.id).sort(),phoneNotes.map(n=>n.id).sort());
   const originals=report.observations.filter(o=>o.kind==='original-attachment');assert(originals.some(o=>o.device==='C'&&o.name.endsWith('.png')));assert(originals.some(o=>o.device==='A'&&o.name.endsWith('.bin')));
   assert.equal(originals.find(o=>o.name===fixtures[1].name).sha256,createHash('sha256').update(fixtures[1].bytes).digest('hex'));
+  for(const name of ['C','A','B'])for(const file of phoneFixtures)assert(originals.some(o=>o.device===name&&o.name===file.name&&o.bytes===file.bytes.length&&o.sha256===createHash('sha256').update(file.bytes).digest('hex')));
+  const submission=report.observations.find(o=>o.kind==='phone-origin-file-submission');assert(submission&&submission.bodyViaVisibleUI&&submission.filesViaFixedDebugCommand&&!submission.systemPicker);
+  assert(events.some(e=>e.startsWith('C:fixed-files:')));
+});
+
+test('phone-origin failures leave later scenarios unexecuted and cleanup cannot manufacture success',async()=>{
+  for(const mode of ['capability','old-note-id','wrong-owner','lost-reference','changed-body','corrupt-phone-read','corrupt-desktop-read','wrong-length']){
+    const {peers,events}=memoryPeers(),[a,b,c]=peers,report={status:'running',runId:'unit',observations:[]};
+    const phoneBaseline=await capturePhoneBaseline(c,report),submit=c.submitNoteFiles;
+    c.submitNoteFiles=async id=>{
+      if(mode==='capability')throw Object.assign(Error('fixed capability failure'),{code:'ANDROID_FILE_CAPABILITY_REQUIRED'});
+      if(mode==='old-note-id')return submit(PHONE_ORIGINAL_IDS[0]);
+      const note=await submit(id);
+      if(mode==='corrupt-phone-read')c.corrupt=true;if(mode==='corrupt-desktop-read')b.corrupt=true;
+      for(const p of peers){const n=p.ws.notes.find(n=>n.id===id);if(mode==='wrong-owner')p.ws.attachments.find(a=>a.noteId===id).noteId=PHONE_ORIGINAL_IDS[0];if(mode==='lost-reference')n.document.content=n.document.content.filter(n=>n.type!=='attachment');if(mode==='changed-body')n.document.content[1].content[0].text='lost full body';if(mode==='wrong-length')p.ws.attachments.find(a=>a.noteId===id).size++;}
+      return structuredClone(c.ws.notes.find(n=>n.id===id));
+    };
+    await assert.rejects(runCases({peers,report,phoneBaseline,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000}));
+    assert.equal(report.cases[2].status,'fail',mode);assert(report.cases.slice(3).every(r=>r.status==='not-run'));assert(!events.includes('C:enabled:false'));assert(!report.observations.some(o=>o.kind==='phone-origin-file-submission'));
+    for(const p of [a,b,c])for(const original of phoneBaseline.notes)assert.equal(JSON.stringify({document:p.ws.notes.find(n=>n.id===original.id).document,plainText:p.ws.notes.find(n=>n.id===original.id).plainText}),original.body);
+    await finishThreePeers(report,{desktops:[{lifecycle:{naturalExit:true},close:async()=>{}}],phone:{owned:{},close:async()=>{}},forwardPresent:async()=>false},async()=>{});assert.equal(report.status,'fail');
+  }
+});
+
+test('phone-origin bytes are checked against both desktop managed files as well as production-read fixtures',async()=>{
+  const root=await mkdtemp(join(tmpdir(),'account109-phone-files-fixture-'));
+  try{
+    const {peers:[a,b,c]}=memoryPeers(),note=await c.createNote({title:'固定新笔记',body:'完整正文 😀'}),attached=await c.submitNoteFiles(note.id);assertPhoneBodyRetained(note,attached);
+    for(const peer of [a,b]){
+      peer.directory=join(root,peer.name);await mkdir(join(peer.directory,'attachments'),{recursive:true});
+      for(const [i,file] of phoneFixtures.entries()){const row=peer.ws.attachments.find(a=>a.noteId===note.id&&a.displayName===file.name);row.relativePath='phone-'+i;await writeFile(join(peer.directory,'attachments',row.relativePath),file.bytes);}
+      const report={observations:[]};await verifyOriginals(peer,note.id,phoneFixtures,report);assert.equal(report.observations.length,2);assert(report.observations.every(o=>o.storedFileMatches&&o.productionReadMatches&&o.ownedDocumentReference));
+      const row=peer.ws.attachments.find(a=>a.noteId===note.id),sameLength=Buffer.alloc(row.size,77);await writeFile(join(peer.directory,'attachments',row.relativePath),sameLength);
+      await assert.rejects(verifyOriginals(peer,note.id,phoneFixtures,{observations:[]}),'Same-length managed-file corruption must fail SHA proof');
+    }
+  }finally{await rm(root,{recursive:true,force:true});}
 });
 test('failed original-byte proof leaves later cases unrun and cannot pass cleanup finalization',async()=>{
   const {peers}=memoryPeers();peers[2].corrupt=true;

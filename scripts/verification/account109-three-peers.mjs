@@ -7,7 +7,7 @@ import {mkdir,readFile,writeFile,lstat,realpath} from 'node:fs/promises';
 import {resolve,isAbsolute,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {NativeApp,delay} from './sync108-native-driver.mjs';
-import {connectAndroid,ownedForwardPresent,PACKAGE,SERIAL} from './account109-android.mjs';
+import {connectAndroid,ownedForwardPresent,PHONE_FILES,PACKAGE,SERIAL} from './account109-android.mjs';
 import {safeStatus,statusObserver,requireHealthy,waitForAccountStatuses,accountEnabled,nativeAccount,signedOut,noteBody,attachmentRefs,canonicalBody,snapshotNotes,assertPreserved,failureCode,fail} from './account109-desktop-helpers.mjs';
 
 export const STORES='/private/tmp/account109-desktop-real-90b8b28b-01';
@@ -48,6 +48,20 @@ const rich=text=>({type:'doc',content:[
 ]});
 const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jGZkAAAAASUVORK5CYII=','base64');
 export const fixtures=[{name:'account109-three.png',mime:'image/png',bytes:png},{name:'account109-three.bin',mime:'application/octet-stream',bytes:Buffer.from(Array.from({length:4096},(_,i)=>i%256))}];
+export const phoneFixtures=PHONE_FILES.map(({name,mime,base64})=>({name,mime,bytes:Buffer.from(base64,'base64')}));
+
+// Attachment insertion may leave an empty trailing editor paragraph. Compare
+// every original text block/mark and exact plainText, not an includes() check.
+export function assertPhoneBodyRetained(before,after) {
+  const textDocument=note=>{
+    const doc=structuredClone(note.document);doc.content=doc.content.filter(n=>n.type!=='attachment');
+    while(doc.content.at(-1)?.type==='paragraph'&&!(doc.content.at(-1).content||[]).length)doc.content.pop();
+    return doc;
+  };
+  assert.equal(after.id,before.id,'Exact new phone note identity');
+  assert.deepEqual(textDocument(after),textDocument(before),'Complete phone text document retained after attachment insertion');
+  assert.equal(after.plainText,before.plainText,'Complete phone plainText retained after attachment insertion');
+}
 
 class Desktop {
   constructor(app,name){this.app=app;this.name=name;this.directory=app.directory;}
@@ -152,10 +166,15 @@ export async function runCases({peers,report,save,readStatuses,record,phoneBasel
   await caseRun('a-rich-media',async()=>{const id=await a.create(rich('Account109 三端 A '+report.runId),fixtures);await same(a,[b,c],id,'A to B/C formatted PNG+bin',fixtures);});
   await caseRun('c-ui-note',async()=>{
     const title='Account109 三端 C '+report.runId,lines=['手机真实界面创建完整正文','C → A/B 中文与 emoji 🌏'];
+    const previous=new Set((await c.workspace()).notes.map(n=>n.id));
     const created=await c.createNote({title,body:lines.join('\n')});
     const expected={type:'doc',content:[{type:'heading',attrs:{level:1},content:[{type:'text',text:title}]},...lines.map(text=>({type:'paragraph',content:[{type:'text',text}]}))]};
     assert.deepEqual(created.document,expected);assert.equal(created.plainText,[title,...lines].join('\n'));
-    await same(c,[a,b],created.id,'C real UI note to A/B',[]);
+    assert(!previous.has(created.id),'Phone file owner must be newly created in this case');
+    const attached=await c.submitNoteFiles(created.id);assertPhoneBodyRetained(created,attached);
+    assert.equal(attachmentRefs(attached.document).length,phoneFixtures.length,'Exactly the fixed phone fixture references required');
+    await same(c,[a,b],created.id,'C real UI body plus fixed File[] PNG+bin to A/B',phoneFixtures);
+    report.observations.push({kind:'phone-origin-file-submission',noteId:created.id,bodyViaVisibleUI:true,filesViaFixedDebugCommand:true,systemPicker:false,verifiedPeers:['C','A','B']});
   });
   await caseRun('b-file',async()=>{const files=[fixtures[1]],id=await b.create(rich('Account109 三端 B '+report.runId),files);await same(b,[a,c],id,'B new file to A/C',files);});
   await caseRun('phone-pause-resume',async()=>{
@@ -197,7 +216,7 @@ export async function run(argv=process.argv.slice(2)){
   const report={schema:1,kind:'account109-two-native-desktops-plus-fixed-android',status:'running',runId:randomUUID().slice(0,8),startedAt:new Date().toISOString(),phase:'phone-prerequisite',stores:{root:opts.stores,priorReportSha256:hash(priorBytes)},binary:{path:opts.binary,sha256:binarySha256,sourceRevision:'unverified'},android:{package:PACKAGE,serial:SERIAL},tools:{},observations:[],cases:CASES.map(id=>({id,status:'not-run'})),authorization:{allowDesktopSignIn:opts.allowDesktopSignIn,desktopASignInRequested:false,phoneSignInRequested:false},limitations:[
     'Actual runtime account discovery/Noise/data paths only; no manual pairing, reverse mapping, grants, callbacks, tokens, workspace IDs or URL injection.',
     'Desktop note creation uses existing debug commands and synthetic File[] attachment.submit, not physical typing or an OS picker. Phone note creation uses existing visible UI and CDP Input.',
-    'C to A/B is text-only. Phone-origin attachments are unexecuted; this runner does not complete the attachment part of ANDROID-03.',
+    'C to A/B checks a phone UI-created complete body plus fixed synthetic File[] through existing attachment.submit, including phone authorized reads and desktop managed raw bytes. It does not exercise the Android system picker; prepared cases are not evidence of an executed ANDROID-03.',
     'Desktop and phone setEnabled/syncNow use fixed production IPC and bypass UI confirmations. Phone must already be signed in as the expected synthetic username; this runner never signs the phone in.',
     'Desktop A signIn is opt-in native PKCE plus system-browser SSO; no credentials are supplied. Desktop B must restore its existing grant.',
     'Runner commit/tool hashes identify the harness only. Desktop binary and installed APK are independently fingerprinted; matching product source revisions are not claimed.',
@@ -213,7 +232,7 @@ export async function run(argv=process.argv.slice(2)){
     await save();phone=await connectAndroid({launch:true});
     const {serial,package:packageId,pid,local,remote}=phone.owned;
     report.android={...report.android,...await phone.artifactIdentity(),owned:{serial,package:packageId,pid,local,remote}};
-    const c={name:'C',status:()=>phone.accountStatus(),workspace:()=>phone.readWorkspace(),setEnabled:v=>phone.setEnabled(v),syncNow:()=>phone.syncNow(),createNote:v=>phone.createNote(v),readAttachment:id=>phone.readAttachment(id)};
+    const c={name:'C',status:()=>phone.accountStatus(),workspace:()=>phone.readWorkspace(),setEnabled:v=>phone.setEnabled(v),syncNow:()=>phone.syncNow(),createNote:v=>phone.createNote(v),submitNoteFiles:id=>phone.submitNoteFiles(id),readAttachment:id=>phone.readAttachment(id)};
     const phoneInitial=await c.status();await record(c,phoneInitial);requireHealthy(phoneInitial);assertThat(!!phoneInitial.profile&&!['authorizing','signedOut'].includes(phoneInitial.state),'ANDROID_SIGN_IN_REQUIRED');expectedAccount(phoneInitial);
     const phoneBaseline=await capturePhoneBaseline(c,report);await save();
     report.phase='restore-desktops';const peers=[];
@@ -229,7 +248,7 @@ export async function run(argv=process.argv.slice(2)){
     }
     const all=[a,b,c],readStatuses=()=>read(all);sameAccount(await readStatuses());
     await runCases({peers:all,report,save,readStatuses,record,phoneBaseline});
-  }catch(error){report.status='fail';report.failure={phase:report.phase,code:['ANDROID_SIGN_IN_REQUIRED','DESKTOP_A_SIGN_IN_REQUIRED','EXPECTED_ACCOUNT_REQUIRED','ACCOUNT_OWNER_MISMATCH','ANDROID_DRIVER_LOCK_BUSY','ANDROID_DEVICE_AUTH_REQUIRED','ANDROID_OWNED_APP_NOT_FOREGROUND','ANDROID_PID_CHANGED','ANDROID_CDP_TIMEOUT','ANDROID_PAGE_EVALUATION_FAILED','ANDROID_UI_TIMEOUT','ANDROID_APK_PATH_INVALID','ANDROID_APK_HASH_INVALID'].includes(error.code)?error.code:failureCode(error)};
+  }catch(error){report.status='fail';report.failure={phase:report.phase,code:['ANDROID_SIGN_IN_REQUIRED','DESKTOP_A_SIGN_IN_REQUIRED','EXPECTED_ACCOUNT_REQUIRED','ACCOUNT_OWNER_MISMATCH','ANDROID_DRIVER_LOCK_BUSY','ANDROID_DEVICE_AUTH_REQUIRED','ANDROID_OWNED_APP_NOT_FOREGROUND','ANDROID_PID_CHANGED','ANDROID_CDP_TIMEOUT','ANDROID_PAGE_EVALUATION_FAILED','ANDROID_UI_TIMEOUT','ANDROID_APK_PATH_INVALID','ANDROID_APK_HASH_INVALID','ANDROID_FILE_NOTE_INVALID','ANDROID_FILE_NEW_NOTE_REQUIRED','ANDROID_FILE_CAPABILITY_REQUIRED','ANDROID_FILE_OWNER_REQUIRED','ANDROID_FILE_SUBMIT_REJECTED'].includes(error.code)?error.code:failureCode(error)};
   }finally{await finishThreePeers(report,{desktops,phone},save);}
   return report;
 }
