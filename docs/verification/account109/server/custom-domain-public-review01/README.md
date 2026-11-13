@@ -1,0 +1,18 @@
+# Approved domain: independent public check
+
+2026-11-13, Asia/Shanghai. **FAIL: same-round cross-domain comparison incomplete.** Single bounded read-only round after parent reported the authorized Cloudflare UI additions. New-domain DNS/TLS/anonymous endpoints pass; all three canonical requests fail during TLS with `ConnectionResetError` after TCP connection, before any HTTP status. This is a host-path observation, not proof that the canonical deployment or its DNS is globally down. No retry or polling was performed.
+
+| Check | Observed result |
+| --- | --- |
+| Public Cloudflare DoH CNAME | Exact `cybernote-sync.aixgg.com` → `673bb9aa89cda1fe.vercel-dns-017.com`, NOERROR |
+| Public `_vercel.aixgg.com` TXT | Four answers; exact supplied challenge present. Old three values were not independently compared; count alone does not prove their preservation. |
+| New-domain `/healthz` | Hostname-valid trusted TLS, HTTP200, exact `ok\n` |
+| New-domain `/api/v1/auth/config?appId=<source-fixed-native-id>` | Trusted TLS, HTTP200; fixed Logto issuer/client/resource/scope/provider/loginFlow and issuer-bound OAuth endpoint checks pass. Returned product equals fixed Native client, recorded as hashes/boolean. |
+| New-domain `/api/v1/account/jwks` | Trusted TLS, HTTP200; one public-only EC P-384/ES384 signature key; kid equals its RFC7638 thumbprint encoding. |
+| Canonical same three paths | TLS connection reset on every request, approximately five seconds each; no HTTP or redirect observed. Config/key equality with the new domain remains **unknown**, not true. |
+
+New-domain public key kid: `jk-zsMycZyki9XC7nMh64-ZkvGbRjzrxNjIAIPFVYKM`; RFC7638 SHA256 hex `8e4fb3b0cc9c672922f570bb9cc87ae3e664bc66d18f3af136320020f15560a3`. Public key coordinates are not archived. Anonymous JWKS/config do not expose a signed enrollment `iss`. Reviewed source `c39458d4c33baffc2218a439170cdfd214807ab7` still pins `https://cybernote-sync.vercel.app`; the server signer uses configured PUBLIC_ORIGIN rather than request Host. This is source/provenance evidence only: live signed enrollment issuer was **not** tested because no authenticated issuance was requested. Public key continuity across both hosts is likewise unproven in this round.
+
+Method: Python stdlib direct connections using default certificate chain/hostname verification, no proxy/custom CA/TLS bypass, GET only. Each of the six service endpoints and two fixed public DNS queries was requested once, concurrently; HTTP redirects are never followed and 3xx is a failure. Connect/per-read timeout 6 seconds, checked request budget 18 seconds, response cap 64KiB. Only allowlisted diagnostics, hashes, public identity projections and TLS certificate metadata were saved in `result.json`; no raw response/error text, account material, cookies, authorization headers or full config was archived. Product equality was derived from saved product/client SHA256 equality. No account/profile/enrollment/exchange/register request, DNS write, Vercel management credential, App/device/ADB, store, build, target or sealed-root operation occurred.
+
+**Next gate:** parent must separately establish Vercel management verification and complete the missing canonical config/key comparison through an authorized reachable path. This receipt does not clear the gate for account-token use on the new host or claim Android cellular reachability, a new candidate build, successful login or live sync. Original phone error/data/baseline remain protected. No repeat network run was initiated by this reviewer. Prior [binding/DNS-pending receipt](../custom-domain-live01/README.md) is historical, not overwritten.

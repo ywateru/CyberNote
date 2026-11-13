@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-13T21:06:25.583718+08:00",
+  "status": "fail",
+  "singleRound": true,
+  "sourceRef": "c39458d4c33baffc2218a439170cdfd214807ab7",
+  "credentialsSent": false,
+  "requests": [
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "endpoint": "health",
+      "attempts": 1,
+      "redirectsFollowed": 0,
+      "tls": {
+        "verifiedHostname": true,
+        "version": "TLSv1.2",
+        "leafSha256": "fa3ec553221f8390c356854818e392d3ea0b050489379f8d57bd9a6e63e452a3",
+        "notAfter": "Feb 11 12:06:18 2027 GMT"
+      },
+      "httpStatus": 200,
+      "locationPresent": false,
+      "bodyBytes": 3,
+      "bodySha256": "dc51b8c96c2d745df3bd5590d990230a482fd247123599548e0632fdbf97fc22",
+      "healthBodyMatches": true,
+      "status": "pass",
+      "durationMs": 2296
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "endpoint": "config",
+      "attempts": 1,
+      "redirectsFollowed": 0,
+      "tls": {
+        "verifiedHostname": true,
+        "version": "TLSv1.2",
+        "leafSha256": "fa3ec553221f8390c356854818e392d3ea0b050489379f8d57bd9a6e63e452a3",
+        "notAfter": "Feb 11 12:06:18 2027 GMT"
+      },
+      "httpStatus": 200,
+      "locationPresent": false,
+      "bodyBytes": 1077,
+      "bodySha256": "87c9070f5f0f85596c7dcd3078c779f9ec8604158e3a96113469de73370cb419",
+      "fixedMatches": {
+        "issuer": true,
+        "clientId": true,
+        "resource": true,
+        "scope": true,
+        "loginFlow": true,
+        "provider": true,
+        "productPresent": true,
+        "authorizationEndpoint": true,
+        "tokenEndpoint": true,
+        "jwksUri": true,
+        "revocationEndpoint": true
+      },
+      "productIdSha256": "891f73ceeb90b32fd8e8320812c03fb0eb5cdd3120d58385d6337e67aa1c6c1a",
+      "clientIdSha256": "891f73ceeb90b32fd8e8320812c03fb0eb5cdd3120d58385d6337e67aa1c6c1a",
+      "issuer": "https://auth.x.aixgg.com/oidc",
+      "resource": "https://cybernote.app/api",
+      "status": "pass",
+      "durationMs": 2588,
+      "productMatchesFixedNativeClient": true
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "endpoint": "jwks",
+      "attempts": 1,
+      "redirectsFollowed": 0,
+      "tls": {
+        "verifiedHostname": true,
+        "version": "TLSv1.2",
+        "leafSha256": "fa3ec553221f8390c356854818e392d3ea0b050489379f8d57bd9a6e63e452a3",
+        "notAfter": "Feb 11 12:06:18 2027 GMT"
+      },
+      "httpStatus": 200,
+      "locationPresent": false,
+      "bodyBytes": 257,
+      "bodySha256": "139478b460a04e2453bff73323e497e40193aa6892f776868237648f96d04c88",
+      "publicSigningKeys": [
+        {
+          "kty": "EC",
+          "crv": "P-384",
+          "alg": "ES384",
+          "use": "sig",
+          "kid": "jk-zsMycZyki9XC7nMh64-ZkvGbRjzrxNjIAIPFVYKM",
+          "rfc7638Sha256Hex": "8e4fb3b0cc9c672922f570bb9cc87ae3e664bc66d18f3af136320020f15560a3"
+        }
+      ],
+      "status": "pass",
+      "durationMs": 1122
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "endpoint": "health",
+      "attempts": 1,
+      "redirectsFollowed": 0,
+      "status": "fail",
+      "errorStage": "tls",
+      "errorClass": "ConnectionResetError",
+      "durationMs": 5011
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "endpoint": "config",
+      "attempts": 1,
+      "redirectsFollowed": 0,
+      "status": "fail",
+      "errorStage": "tls",
+      "errorClass": "ConnectionResetError",
+      "durationMs": 5011
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "endpoint": "jwks",
+      "attempts": 1,
+      "redirectsFollowed": 0,
+      "status": "fail",
+      "errorStage": "tls",
+      "errorClass": "ConnectionResetError",
+      "durationMs": 5010
+    },
+    {
+      "host": "cloudflare-dns.com",
+      "endpoint": "dns-cname",
+      "attempts": 1,
+      "redirectsFollowed": 0,
+      "tls": {
+        "verifiedHostname": true,
+        "version": "TLSv1.2",
+        "leafSha256": "e3b02826789d653d224d3edacbe4e877cb7286fc4c922672f6226741ca57ad65",
+        "notAfter": "Dec 21 19:20:01 2026 GMT"
+      },
+      "httpStatus": 200,
+      "locationPresent": false,
+      "bodyBytes": 235,
+      "bodySha256": "51b2b3323fbe5b2d15f13159f2f28f7c5a37cb6c5a400762f8b43f41be347768",
+      "dnsStatus": 0,
+      "expectedCnamePresent": true,
+      "status": "pass",
+      "durationMs": 1015
+    },
+    {
+      "host": "cloudflare-dns.com",
+      "endpoint": "dns-txt",
+      "attempts": 1,
+      "redirectsFollowed": 0,
+      "tls": {
+        "verifiedHostname": true,
+        "version": "TLSv1.2",
+        "leafSha256": "e3b02826789d653d224d3edacbe4e877cb7286fc4c922672f6226741ca57ad65",
+        "notAfter": "Dec 21 19:20:01 2026 GMT"
+      },
+      "httpStatus": 200,
+      "locationPresent": false,
+      "bodyBytes": 605,
+      "bodySha256": "9064918707125587ed3b6c9427bffc1d7a1afbf854672dee2fa0a47a224816a6",
+      "dnsStatus": 0,
+      "txtCount": 4,
+      "expectedChallengePresent": true,
+      "status": "pass",
+      "durationMs": 1308
+    }
+  ],
+  "comparison": {
+    "fixedAuthConfigurationEqual": null,
+    "publicSigningKeyIdentityEqual": null
+  },
+  "failures": [
+    {
+      "host": "cybernote-sync.vercel.app",
+      "endpoint": "health",
+      "stage": "tls",
+      "httpStatus": null,
+      "errorCode": null
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "endpoint": "config",
+      "stage": "tls",
+      "httpStatus": null,
+      "errorCode": null
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "endpoint": "jwks",
+      "stage": "tls",
+      "httpStatus": null,
+      "errorCode": null
+    }
+  ],
+  "enrollmentIssuer": {
+    "expected": "https://cybernote-sync.vercel.app",
+    "sourcePinned": true,
+    "liveSignedClaimVerified": false,
+    "reason": "Anonymous endpoints do not expose signed enrollment iss; no authenticated issuance requested."
+  },
+  "vercelManagementVerified": null,
+  "limits": {
+    "connectTimeoutSeconds": 6,
+    "perReadTimeoutSeconds": 6,
+    "perRequestDeadlineSeconds": 18,
+    "maxBodyBytes": 65536,
+    "redirectsFollowed": 0,
+    "retries": 0
+  },
+  "dnsLimit": "Public recursive Cloudflare DoH view only; four TXT records and exact challenge observed. Prior three TXT values were not independently compared by this checker.",
+  "networkMode": "Direct system DNS/TCP with Python default TLS trust and hostname checking; no proxy, TLS bypass, custom CA, authorization header or cookies. Canonical failures describe only this host path."
+}
