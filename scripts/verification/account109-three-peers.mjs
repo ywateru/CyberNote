@@ -135,13 +135,16 @@ export async function verifyPhoneBaseline(peer,baseline){
   }
 }
 export async function samplePhonePause({readStatus,readWorkspace,before,remoteId,durationMs=3000,now=()=>performance.now(),sleep=delay}){
-  const start=now();let samples=0;
+  const start=now(),deadline=start+30000;let samples=0;
+  const withinDeadline=()=>{const time=now();if(time>=deadline)throw fail('CONDITION_TIMEOUT:phone pause');return time;};
   for(;;){
+    withinDeadline();
     const s=await readStatus();requireHealthy(s);expectedAccount(s);
     assert(s.state==='paused'&&!s.enabled&&!s.devices.some(d=>!d.current&&d.connected),'Phone remains paused without connected account streams');
+    withinDeadline();
     const ws=await readWorkspace();assert(!ws.notes.some(n=>n.id===remoteId),'Paused phone applied remote note');assert.deepEqual(phoneSnapshot(ws),before,'Paused phone retains exact local bodies and attachment rows');
-    samples++;if(now()-start>=durationMs){assert(samples>=2,'Pause proof requires repeated samples');return {samples,observedMs:now()-start};}
-    await sleep(Math.min(100,durationMs-(now()-start)));
+    samples++;const elapsed=withinDeadline()-start;if(samples>=2&&elapsed>=durationMs)return {samples,observedMs:elapsed};
+    if(elapsed<durationMs)await sleep(Math.max(0,Math.min(100,durationMs-elapsed,deadline-now())));
   }
 }
 

@@ -129,7 +129,7 @@ test('paused phone snapshots repeatedly exclude remote notes and preserve all pr
       const ws=await c.workspace();if(clock>=200&&failure==='delayed-note')ws.notes.push({id:'remote',document:{},plainText:''});
       if(failure==='changed-body')ws.notes[0].plainText='lost Chinese';if(failure==='lost-row')ws.attachments=[];if(failure==='single-slow-read')clock=400;return ws;
     }});
-    if(failure)await assert.rejects(work);else{const proof=await work;assert.equal(proof.samples,4);assert.equal(proof.observedMs,300);}
+    if(failure==='single-slow-read')assert.deepEqual(await work,{samples:2,observedMs:400});else if(failure)await assert.rejects(work);else{const proof=await work;assert.equal(proof.samples,4);assert.equal(proof.observedMs,300);}
   }
 });
 test('all five cases exercise both directions, media, phone pause and catch-up without assigning overall pass',async()=>{
