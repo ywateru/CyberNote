@@ -1,0 +1,53 @@
+{
+  "checkedAt": "2026-11-13T03:43:10.335375+00:00",
+  "mainHeadAtLaunch": "dedc6964b5258bf6876b45e0918f2bf5657109d0",
+  "ownedPid": 61769,
+  "ownedPidAbsent": true,
+  "notesCloneProcessCount": 0,
+  "processCheck": {
+    "command": "pgrep -x notes-clone",
+    "exitCode": 1
+  },
+  "naturalExit": false,
+  "forcedSignals": [
+    "SIGTERM"
+  ],
+  "exit": {
+    "code": null,
+    "signal": "SIGTERM"
+  },
+  "close": {
+    "code": null,
+    "signal": "SIGTERM"
+  },
+  "cleanupFailure": {
+    "code": "CLEANUP_FAILED"
+  },
+  "protectedFilesUnchanged": 24,
+  "exactResultSha256": "6e94e8693dfdcc0ae90e55292266b6449f2b0de647b8acf449c51ea6c1ce5502",
+  "binarySha256Rechecked": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2",
+  "postFailureStoreOperations": false,
+  "finalCheckedAt": "2026-11-13T03:44:44.732953+00:00",
+  "baselinePayloadHashVerified": true,
+  "baselineSha256": "54e840685c1d57b6e5636c60a06bd874b6bd9c60a6c237770300afcf5d26e15b",
+  "ownedProcessStates": [
+    {
+      "name": "a",
+      "pid": 61769,
+      "exists": false,
+      "exit": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "close": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "forcedSignals": [
+        "SIGTERM"
+      ],
+      "naturalExit": false
+    }
+  ],
+  "priorResultHashVerifiedUnchanged": "d8e092bff3e1b82781594f03bb53eca4ae575a802be88c17ea23f9bd6ca067f2"
+}

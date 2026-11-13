@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "kind": "account109-preserved-full02-recovery",
+  "startedAt": "2026-11-13T03:41:24.845Z",
+  "status": "fail",
+  "phase": "existing-conflict",
+  "scenarios": {
+    "conflict": "running",
+    "logout": "not-run"
+  },
+  "checks": [
+    {
+      "name": "exact full two-branch baseline sealed before app launch",
+      "status": "pass"
+    }
+  ],
+  "observations": [],
+  "limitations": [
+    "Continuation only: the prior ten checks are archived, not rerun or reclassified. Original NATIVE_TIMEOUT/evalNotObserved root cause remains unproven.",
+    "Fixed production sync resolve keepAll and account signOut calls bypass GUI confirmations as explicitly permitted. No account authorization or manual pairing is supplied.",
+    "Logout exclusion covers repeated 3-second windows before and after restart. No performance, physical input or unbounded exclusion claim.",
+    "No retry/reset: a failed or already resolved baseline requires review; this script does not create another conflict."
+  ],
+  "prior": {
+    "path": "/private/tmp/account109-desktop-real-39c1420d-full02",
+    "resultSha256": "d8e092bff3e1b82781594f03bb53eca4ae575a802be88c17ea23f9bd6ca067f2",
+    "failure": {
+      "phase": "concurrent-offline",
+      "code": "NATIVE_TIMEOUT"
+    },
+    "checksPassed": 10
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-39c1420d-finite-diagnostics/notes-clone",
+    "sha256": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2",
+    "sameAsPrior": true
+  },
+  "tools": {
+    "runnerSha256": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672",
+    "driverSha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+    "helpersSha256": "67a2651b92d5311c6a0382a752b9e13aa408c599870ceea9ddb57fb3ff3bb943"
+  },
+  "baseline": {
+    "entityId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+    "sha256": "54e840685c1d57b6e5636c60a06bd874b6bd9c60a6c237770300afcf5d26e15b",
+    "heads": [
+      {
+        "digest": "817fdfea5592daf15d3d5c684deb631f990e3a7fb89f2281948da73103c14a21",
+        "fullPayloadSha256": "0eab1059eeae3d4ecac891ee7d3bc3f4773ec4f34535e985d0ef874990e4e991"
+      },
+      {
+        "digest": "e4af4b91b084c41b726250a0d8bdfda969a640beecbd0f8d40740b4ef63f67cd",
+        "fullPayloadSha256": "5e5ee2b492f04d170468fec70edc1031a70a0e3c0da4bafd9516d29fdcf87c21"
+      }
+    ],
+    "originalFiles": [
+      {
+        "notes.sqlite3": "0b9a578d127bd6a9d4638f58bbef86a7780529ef617e218bc35e74bdfc7ed796",
+        "notes.sqlite3-wal": "35ddf306b9e921341c8b32e007ae5d2e8331f96349c749c4ca3bac41a53028bd",
+        "notes.sqlite3-shm": "70028fdde0700b4e875175152d803e24f115a881f11ddabcdab9539912c5572c"
+      },
+      {
+        "notes.sqlite3": "cdbe34545483db7e05da35acd2fdaec2ea14663e8dadc152487b594cbd6875f4",
+        "notes.sqlite3-wal": "c6933fe5fa85260361605dc8e18c409a67516da3d3bb0044d74890e210eca1df",
+        "notes.sqlite3-shm": "8d0cf42d1977ad38417f9ead57b60624ad1497b7e87ab753a760e227443e1fcc"
+      }
+    ],
+    "readOnlyCopies": true,
+    "originalFilesUnchanged": true
+  },
+  "lastOperation": {
+    "sequence": 2,
+    "stage": "existing-conflict",
+    "device": "a",
+    "operation": "close",
+    "event": "failed",
+    "at": "2026-11-13T03:42:25.408Z",
+    "code": "TIMEOUT"
+  },
+  "failure": {
+    "phase": "existing-conflict",
+    "code": "TIMEOUT",
+    "lastOperation": {
+      "sequence": 1,
+      "stage": "existing-conflict",
+      "device": "a",
+      "operation": "ready",
+      "event": "failed",
+      "at": "2026-11-13T03:42:10.394Z",
+      "code": "TIMEOUT"
+    }
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a",
+      "stderrBytes": 58,
+      "commands": 2,
+      "forcedSignals": [
+        "SIGTERM"
+      ],
+      "pid": 61769,
+      "lastAction": "eval",
+      "failurePhase": "documentProbe",
+      "nativeDiagnostic": {
+        "documentProbes": 1313,
+        "lastDocument": {
+          "debug": true,
+          "interactive": false,
+          "readyState": "complete",
+          "rootHidden": "true",
+          "rootInert": true,
+          "startup": "loading",
+          "timeOrigin": 1794541286802,
+          "visibility": "hidden"
+        }
+      },
+      "readinessFailure": {
+        "code": "DIAGNOSTIC_UNAVAILABLE"
+      },
+      "failureCode": "TIMEOUT",
+      "exit": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "close": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": false
+    }
+  ],
+  "cleanupFailure": {
+    "code": "CLEANUP_FAILED"
+  },
+  "finishedAt": "2026-11-13T03:42:25.409Z"
+}
