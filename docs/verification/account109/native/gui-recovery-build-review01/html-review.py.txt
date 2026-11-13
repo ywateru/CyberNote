@@ -1,0 +1,66 @@
+"""Static comparison of Tauri-serialized HTML; no browser/app execution."""
+from html.parser import HTMLParser
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+out = Path(__file__).resolve().parent
+root = Path('/private/tmp/cybernote-account109-gui-reauth-01')
+target = Path('/private/tmp/cybernote-account109-mac-ec4348c6-target-01')
+candidate = target / 'debug/build/notes-clone-ca655baf6ad3b6be/out/tauri-codegen-assets/a3e759221b999ad409951a665a91bcf77d3fefa5e411569266fc4fbc3d4837a3.html'
+binary = Path('/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-10814415-debug-e2e-02/notes-clone')
+sha = lambda b: hashlib.sha256(b).hexdigest()
+encoded = candidate.read_bytes()
+decoder = "import{readFileSync}from'node:fs';import{brotliDecompressSync}from'node:zlib';process.stdout.write(brotliDecompressSync(readFileSync(process.argv[1])));"
+decoded = subprocess.check_output(['node', '--input-type=module', '-e', decoder, str(candidate)])
+dist = (root / 'dist/index.html').read_bytes()
+native = binary.read_bytes()
+assert sha(native) == 'b981400529f36cb698616d3871cc83b9a5d7cc4c10fb75009276697daba9ee6f'
+offset = native.find(encoded)
+assert offset >= 0
+
+class Canonical(HTMLParser):
+    void = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.events = []
+        self.refs = []
+    def handle_decl(self, data):
+        self.events.append(('declaration', data.lower()))
+    def handle_starttag(self, tag, attrs):
+        normalized = sorted((k, '' if v is None else v) for k, v in attrs)
+        self.events.append(('start', tag, normalized))
+        if tag in {'script', 'link'}:
+            self.refs.extend(v for k, v in attrs if k in {'src', 'href'})
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in self.void:
+            self.handle_endtag(tag)
+    def handle_endtag(self, tag):
+        if tag not in self.void:
+            self.events.append(('end', tag))
+    def handle_data(self, data):
+        if data.strip():
+            self.events.append(('data', data))
+    def handle_comment(self, data):
+        self.events.append(('comment', data))
+
+a, b = Canonical(), Canonical()
+a.feed(dist.decode()); a.close()
+b.feed(decoded.decode()); b.close()
+assert a.events == b.events, 'HTML structural comparison failed'
+assert a.refs == b.refs
+report = json.loads((out / 'review-result.json').read_text())
+segment = next(s for s in report['binary']['segments'] if s['fileoff'] <= offset and offset + len(encoded) <= s['fileoff'] + s['filesize'])
+assert segment['initprot'] & 1 and segment['segment'] != '__LINKEDIT'
+result = dict(verdict='PASS_STATIC_STRUCTURAL_HTML_COMPARISON',
+    generatedAsset=str(candidate.relative_to(target)),
+    distSha256=sha(dist), distBytes=len(dist), decodedSha256=sha(decoded), decodedBytes=len(decoded),
+    encodedSha256=sha(encoded), encodedBytes=len(encoded), binaryFileOffset=offset,
+    readableLoadSegment=segment['segment'], encodedBinarySliceEquals=True, rawHtmlBytesEqual=dist == decoded,
+    canonicalEventsEqual=True, canonicalEventCount=len(a.events), resourceReferencesEqual=True, resourceReferences=a.refs,
+    normalization='HTMLParser event comparison: declaration case, attribute order, valueless vs empty attributes, self-closing tag spelling, and whitespace-only text nodes normalized; non-whitespace text and script contents retained exactly.',
+    limitation='This bounded structural comparison is not full browser DOM/runtime equivalence and does not claim raw index.html byte equality.')
+(out / 'html-review.json').write_text(json.dumps(result, indent=2) + '\n')
+print(json.dumps(result, indent=2))

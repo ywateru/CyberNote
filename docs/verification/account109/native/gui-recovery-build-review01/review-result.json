@@ -1,0 +1,517 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-13T06:46:17.094Z",
+  "finishedAt": "2026-11-13T06:46:18.573Z",
+  "verdict": "PASS_STATIC_DEBUG_E2E_PACKAGE_ONLY",
+  "source": {
+    "root": "/private/tmp/cybernote-account109-gui-reauth-01",
+    "tree": "ccebd5352c34559a22040b2f4bf64725de7d9c41",
+    "sourceRevision": "10814415ca088273bacc311d192b9605bda16775",
+    "sourceFingerprint": "a410d97848c82a11373791d311231e488d0f3da21b332f40cfd00f9d689c1387",
+    "sourceDirty": false,
+    "inputCount": 1654,
+    "allInputsMatchCommittedBlobs": true,
+    "lockfiles": [
+      {
+        "path": "pnpm-lock.yaml",
+        "bytes": 69103,
+        "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+        "matchesCommitAndBothReceiptSnapshots": true
+      },
+      {
+        "path": "src-tauri/Cargo.lock",
+        "bytes": 216418,
+        "sha256": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+        "matchesCommitAndBothReceiptSnapshots": true
+      },
+      {
+        "path": "crates/account-auth/Cargo.lock",
+        "bytes": 66092,
+        "sha256": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+        "matchesCommitAndBothReceiptSnapshots": true
+      },
+      {
+        "path": "services/coordinator/package-lock.json",
+        "bytes": 19635,
+        "sha256": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1",
+        "matchesCommitAndBothReceiptSnapshots": true
+      }
+    ],
+    "dotenvNames": []
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-10814415-debug-e2e-02/notes-clone",
+    "sha256": "b981400529f36cb698616d3871cc83b9a5d7cc4c10fb75009276697daba9ee6f",
+    "bytes": 203587424,
+    "format": "thin Mach-O 64-bit little-endian",
+    "architecture": "arm64",
+    "filetype": "MH_EXECUTE",
+    "sections": [
+      {
+        "segment": "__TEXT",
+        "section": "__text",
+        "offset": 5824,
+        "size": 46414488
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__text_startup",
+        "offset": 46420312,
+        "size": 56
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__stubs",
+        "offset": 46420368,
+        "size": 4812
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_stubs",
+        "offset": 46425184,
+        "size": 14432
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__init_offsets",
+        "offset": 46439616,
+        "size": 4
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methlist",
+        "offset": 46439624,
+        "size": 3836
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__gcc_except_tab",
+        "offset": 46443460,
+        "size": 2398096
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__const",
+        "offset": 48844800,
+        "size": 58417664
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__cstring",
+        "offset": 107262464,
+        "size": 372567
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__ustring",
+        "offset": 107635032,
+        "size": 1062
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methname",
+        "offset": 107636094,
+        "size": 12372
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_classname",
+        "offset": 107648466,
+        "size": 525
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__objc_methtype",
+        "offset": 107648991,
+        "size": 2410
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__unwind_info",
+        "offset": 107651404,
+        "size": 2323928
+      },
+      {
+        "segment": "__TEXT",
+        "section": "__eh_frame",
+        "offset": 109975336,
+        "size": 11430696
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__got",
+        "offset": 121421824,
+        "size": 4288
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__const",
+        "offset": 121426112,
+        "size": 2267128
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__cfstring",
+        "offset": 123693240,
+        "size": 9472
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_classlist",
+        "offset": 123702712,
+        "size": 152
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_protolist",
+        "offset": 123702864,
+        "size": 48
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_imageinfo",
+        "offset": 123702912,
+        "size": 8
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_arraydata",
+        "offset": 123702920,
+        "size": 2288
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_arrayobj",
+        "offset": 123705208,
+        "size": 432
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_dictobj",
+        "offset": 123705640,
+        "size": 1120
+      },
+      {
+        "segment": "__DATA_CONST",
+        "section": "__objc_intobj",
+        "offset": 123706760,
+        "size": 96
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_const",
+        "offset": 123715584,
+        "size": 7376
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_selrefs",
+        "offset": 123722960,
+        "size": 4272
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_classrefs",
+        "offset": 123727232,
+        "size": 576
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_superrefs",
+        "offset": 123727808,
+        "size": 104
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_ivar",
+        "offset": 123727912,
+        "size": 316
+      },
+      {
+        "segment": "__DATA",
+        "section": "__objc_data",
+        "offset": 123728232,
+        "size": 1520
+      },
+      {
+        "segment": "__DATA",
+        "section": "__data",
+        "offset": 123729752,
+        "size": 43576
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_vars",
+        "offset": 123773328,
+        "size": 768
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_data",
+        "offset": 123774096,
+        "size": 208
+      },
+      {
+        "segment": "__DATA",
+        "section": "__thread_bss",
+        "offset": 0,
+        "size": 856
+      },
+      {
+        "segment": "__DATA",
+        "section": "__bss",
+        "offset": 0,
+        "size": 6352
+      },
+      {
+        "segment": "__DATA",
+        "section": "__common",
+        "offset": 0,
+        "size": 10304
+      }
+    ],
+    "segments": [
+      {
+        "segment": "__PAGEZERO",
+        "fileoff": 0,
+        "filesize": 0,
+        "initprot": 0
+      },
+      {
+        "segment": "__TEXT",
+        "fileoff": 0,
+        "filesize": 121421824,
+        "initprot": 5
+      },
+      {
+        "segment": "__DATA_CONST",
+        "fileoff": 121421824,
+        "filesize": 2293760,
+        "initprot": 3
+      },
+      {
+        "segment": "__DATA",
+        "fileoff": 123715584,
+        "filesize": 65536,
+        "initprot": 3
+      },
+      {
+        "segment": "__LINKEDIT",
+        "fileoff": 123781120,
+        "filesize": 79806304,
+        "initprot": 1
+      }
+    ],
+    "matchesCurrentTargetBinary": true
+  },
+  "receipt": {
+    "sha256": "1cf0ae910513206587969d12c3c48e7c07518e2228ecaebda4a0923feeeff072",
+    "controllerSha256": "a51ce7b33ecb3bf7cc9e769a2f29fa1f6c9af92c858ba139c9e5c99e5457d91b",
+    "allLogHashesMatch": true,
+    "logs": [
+      {
+        "name": "frontend-build",
+        "command": [
+          "pnpm",
+          "build"
+        ],
+        "exitCode": 0,
+        "bytes": 1062,
+        "sha256": "c24b98e1321a34a42a3b028de2efb156748573a7e54950498d31999dca498076",
+        "receiptMatches": true
+      },
+      {
+        "name": "compiled-capability",
+        "command": [
+          "node",
+          "scripts/debug/account-native-capability.mjs"
+        ],
+        "exitCode": 0,
+        "bytes": 2704,
+        "sha256": "640aed259c00b33683b07d603fc04ddf54e711e9883ed576bf0c81f3d6887079",
+        "receiptMatches": true
+      },
+      {
+        "name": "native-build",
+        "command": [
+          "cargo",
+          "build",
+          "--manifest-path",
+          "src-tauri/Cargo.toml",
+          "--features",
+          "sync-e2e,tauri/custom-protocol",
+          "--locked",
+          "--offline"
+        ],
+        "exitCode": 0,
+        "bytes": 10835,
+        "sha256": "2fed0bfefb741ece4acdc146e8ed24e753d3c35d5bf0a34bd0fa9855947c9b40",
+        "receiptMatches": true
+      },
+      {
+        "name": "embedded-identity",
+        "command": [
+          "node",
+          "scripts/publish/package-identity.mjs",
+          "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-10814415-debug-e2e-02/notes-clone",
+          "/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/build"
+        ],
+        "exitCode": 0,
+        "bytes": 561,
+        "sha256": "79e0f6c13f14e0bf15a2f11bd2a64a8d38cc59404c7773c8891a201c2811a27d",
+        "receiptMatches": true
+      }
+    ],
+    "capabilityChecksReported": 24
+  },
+  "embeddedIdentity": {
+    "encoding": "brotli",
+    "sha256": "e5f492daf3edf3c7258429e222d87bb82c35badc93a1b6264a4ddf365c1a16d3"
+  },
+  "buildInfo": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-13T06:34:42.619Z",
+    "target": "macos",
+    "sourceRevision": "10814415ca088273bacc311d192b9605bda16775",
+    "sourceFingerprint": "a410d97848c82a11373791d311231e488d0f3da21b332f40cfd00f9d689c1387",
+    "sourceDirty": false,
+    "inputCount": 1654,
+    "releasePreparedAt": null
+  },
+  "tools": [
+    {
+      "path": "scripts/build-info.mjs",
+      "sha256": "30f986b0128714efad89b25db1e257667d94ec5db422b9975c94574e497b78b2",
+      "bytes": 7316,
+      "matchesCommit": true
+    },
+    {
+      "path": "scripts/publish/package-identity.mjs",
+      "sha256": "9102fd8f2e70a7a1633b0bc3c3f02cf08592fe3a87691fb0ae570a5e9184cb2a",
+      "bytes": 3580,
+      "matchesCommit": true
+    },
+    {
+      "path": "scripts/publish/policy.mjs",
+      "sha256": "8d21a8575c6d0eec0dc680571adfdfb1a453bd97bdc4551bb953284455acf8e1",
+      "bytes": 10757,
+      "matchesCommit": true
+    },
+    {
+      "path": "scripts/debug/account-native-capability.mjs",
+      "sha256": "d847a0a64a6670ebf0fcbb07827ee5c4366f2accc89262afb9d1f57798027b5c",
+      "bytes": 2946,
+      "matchesCommit": true
+    },
+    {
+      "path": "vite.config.ts",
+      "sha256": "71c90a7f9f4c1343002dc701dc1085d58e8825e9225602674b04be0aa9f25d2a",
+      "bytes": 566,
+      "matchesCommit": true
+    },
+    {
+      "path": "package.json",
+      "sha256": "5f0e5086c4d00d7cc6cfa5a06b75d6abe12f49096610bf8a82435eaeb74bb119",
+      "bytes": 3341,
+      "matchesCommit": true
+    },
+    {
+      "path": "src-tauri/build.rs",
+      "sha256": "487059eaf8a947b80f20a9aacac038a5047b2ad69d2401b827376c67d6fe847f",
+      "bytes": 39,
+      "matchesCommit": true
+    },
+    {
+      "path": "src-tauri/Cargo.toml",
+      "sha256": "11455c14d1f5b68f417466bba8e745d99c0526fd3cbaac3c8403eba710a9f7d8",
+      "bytes": 2415,
+      "matchesCommit": true
+    },
+    {
+      "path": "src-tauri/tauri.conf.json",
+      "sha256": "3df6d75b2425945d5351540dd0af6a748de29d28f2b8f6a4803d5caeacdb2bad",
+      "bytes": 1979,
+      "matchesCommit": true
+    },
+    {
+      "path": "src/App.tsx",
+      "sha256": "51895af4a4f14c4fbee72d524e39ba59671f0c17f80bf4dfd812baf66e2ca333",
+      "bytes": 215644,
+      "matchesCommit": true
+    },
+    {
+      "path": "src/debug/runtime.ts",
+      "sha256": "e665322bbc2127cadb4e7d7ea5c8b383ff5202cd199a0ccfc16589c888f8b8f9",
+      "bytes": 16167,
+      "matchesCommit": true
+    },
+    {
+      "path": "src/account-client.ts",
+      "sha256": "f17dff38c16bbfcdc305d8a98aa9ccd3d2d5e72eb8b3b9b63fd32cdfb7a227d9",
+      "bytes": 8093,
+      "matchesCommit": true
+    }
+  ],
+  "fingerprints": [
+    {
+      "path": "notes-clone-63305be8bf99585f/bin-notes-clone.json",
+      "sha256": "55cbb93c576f18f232858e57e19c325977bd46a571fa68078f42eccd3cf833ab",
+      "features": [
+        "sync-e2e"
+      ],
+      "profile": 8378823585564974000,
+      "rustflags": []
+    },
+    {
+      "path": "notes-clone-3cecca753b1ac10a/lib-notes_clone_lib.json",
+      "sha256": "564f677bb96d421e25d0ffb04b53fb18073cdb70eb385d31d97246c72aca10de",
+      "features": [
+        "sync-e2e"
+      ],
+      "profile": 8378823585564974000,
+      "rustflags": []
+    }
+  ],
+  "frontend": {
+    "distFiles": 9,
+    "exactEmbeddedFiles": 8,
+    "requiredJsCssJsonSvgAllExact": true,
+    "unmatchedPaths": [
+      "index.html"
+    ],
+    "mainChunk": "assets/index-BHmkJm2B.js",
+    "debugChunk": "assets/runtime-cxc5oHZG.js",
+    "debugDynamicImportPresent": true,
+    "debugMarkers": [
+      {
+        "marker": "__NOTES_DEBUG__",
+        "present": true
+      },
+      {
+        "marker": "app.state",
+        "present": true
+      },
+      {
+        "marker": "registerDebug",
+        "present": true
+      }
+    ],
+    "htmlAssetReferences": [
+      "assets/index-BHmkJm2B.js",
+      "assets/index-BgotpY8d.css"
+    ]
+  },
+  "boundary": {
+    "appExecuted": false,
+    "buildPerformed": false,
+    "targetWrites": false,
+    "storesAccessed": false,
+    "adbUsed": false,
+    "networkUsed": false,
+    "classification": "Debug E2E with sync-e2e and VITE_NOTES_DEBUG=1 under NODE_ENV=development. Vite production build-info label describes build command only; not a production release, signing, runtime, account acceptance, or exhaustive binary/source equivalence claim.",
+    "provenanceLimit": "Receipts and Cargo fingerprints corroborate provenance, but no rebuild or native-code source equivalence proof was performed. Exact resource bytes were checked in readable Mach-O file segments."
+  },
+  "reaEvidenceId": "ev_f63ee75eeb52129943644c3346292c6ab1473408a919df17513a4275973910ee"
+}

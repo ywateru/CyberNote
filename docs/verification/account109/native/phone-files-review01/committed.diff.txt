@@ -1,0 +1,361 @@
+diff --git a/scripts/verification/account109-android-files.test.mjs b/scripts/verification/account109-android-files.test.mjs
+new file mode 100644
+index 00000000..c4e8beaa
+--- /dev/null
++++ b/scripts/verification/account109-android-files.test.mjs
+@@ -0,0 +1,63 @@
++// Fixed browser-command and ownership fixtures only; no CDP/ADB/App invocation.
++import assert from 'node:assert/strict';
++import {test} from 'node:test';
++import {runInNewContext} from 'node:vm';
++import {PHONE_FILES,phoneFileSubmission,phoneFileControls} from './account109-android.mjs';
++
++const id='11111111-1111-4111-8111-111111111111';
++const other='22222222-2222-4222-8222-222222222222';
++const note=()=>({id,document:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'完整手机正文 😀'}]}]},plainText:'完整手机正文 😀'});
++function browser(mode){
++  const calls=[],state={selection:{noteId:mode==='wrong-selected'?other:id},workspace:{access:{notes:{[id]:{authorized:mode!=='unauthorized'}}}}};
++  const debug={version:1,list:()=>['app.state','attachment.submit','app.flush'].map(id=>({id,available:!(mode==='unavailable'&&id==='attachment.submit')})),
++    execute:async(command,args)=>{calls.push({command,args});if(mode==='rejected'&&command==='attachment.submit')throw Error('private provider detail must not escape');return {result:command==='app.state'?state:null};},
++    waitForIdle:async args=>{calls.push({command:'waitForIdle',args});}};
++  if(mode==='old-protocol')debug.version=2;
++  const window=mode==='no-debug'?{}:{__NOTES_DEBUG__:debug};
++  const document={querySelector:selector=>{assert.equal(selector,`.tiptap[data-note-id="${id}"][contenteditable="true"]`);return mode==='no-editor'?null:{getClientRects:()=>mode==='invisible'?[]:[{}]};}};
++  return {calls,context:{window,document}};
++}
++test('candidate must expose the existing fixed debug capability and selected authorized editor',async()=>{
++  for(const mode of ['no-debug','old-protocol','unavailable','wrong-selected','unauthorized','no-editor','invisible']){
++    const {calls,context}=browser(mode),result=await runInNewContext(phoneFileSubmission(id),context);
++    assert.equal(result.code,['no-debug','old-protocol','unavailable'].includes(mode)?'ANDROID_FILE_CAPABILITY_REQUIRED':'ANDROID_FILE_OWNER_REQUIRED');
++    assert(!calls.some(c=>c.command==='attachment.submit'||c.command==='app.flush'));
++  }
++});
++test('browser submission sends exactly two immutable fixed File payloads and flushes; no arbitrary input or raw failure',async()=>{
++  const {calls,context}=browser();assert.deepEqual(JSON.parse(JSON.stringify(await runInNewContext(phoneFileSubmission(id),context))),{submitted:true});
++  assert.deepEqual(calls.map(c=>c.command),['app.state','attachment.submit','app.flush','waitForIdle']);
++  assert.deepEqual(JSON.parse(JSON.stringify(calls[1].args)),{files:PHONE_FILES});
++  assert.deepEqual(PHONE_FILES.map(f=>Buffer.from(f.base64,'base64').length),[68,4096]);
++  assert(Object.isFrozen(PHONE_FILES)&&PHONE_FILES.every(Object.isFrozen));assert(PHONE_FILES.every(f=>Object.keys(f).sort().join(',')==='base64,mime,name'&&!/[\\/]/.test(f.name)));
++  const rejected=browser('rejected'),result=await runInNewContext(phoneFileSubmission(id),rejected.context);
++  assert.equal(result.code,'ANDROID_FILE_SUBMIT_REJECTED');assert(!JSON.stringify(result).includes('private'));
++  for(const value of ['bad',id+';globalThis.secret',{},undefined,'/private/tmp/file','https://example.invalid'])assert.throws(()=>phoneFileSubmission(value),{code:'ANDROID_FILE_NOTE_INVALID'});
++});
++function controlsFixture({afterOpen,submitResult={submitted:true}}={}){
++  const saved=note(),ws={notes:[saved],attachments:[],access:{notes:{[id]:{authorized:true}}}},events=[];
++  const controls=phoneFileControls({readWorkspace:async()=>{events.push('read');return structuredClone(ws);},openNote:async actual=>{assert.equal(actual,id);events.push('open');afterOpen?.(ws);},submit:async actual=>{assert.equal(actual,id);events.push('submit');return submitResult;}});
++  return {controls,ws,events,saved};
++}
++test('only a recorded new-note receipt admits one attempt; rejects extra file, action, path and auth arguments before effects',async()=>{
++  const {controls,events,saved}=controlsFixture();
++  for(const args of [[],[id],[other],[{}],['https://example.invalid'],[id,PHONE_FILES],[id,{token:'fixture'}],[id,{path:'/fixture/input'}]])await assert.rejects(controls.submitNoteFiles(...args));
++  assert.equal(events.length,0);controls.created(saved);
++  assert.throws(()=>controls.created(saved),{code:'ANDROID_FILE_NOTE_INVALID'});
++  const result=await controls.submitNoteFiles(id);assert.equal(result.id,id);assert.deepEqual(events,['read','open','read','submit','read']);
++  const count=events.length;await assert.rejects(controls.submitNoteFiles(id),{code:'ANDROID_FILE_NEW_NOTE_REQUIRED'});assert.equal(events.length,count);
++});
++test('owner, body, prior attachment or authorization changes fail closed before submission, including after reopening',async()=>{
++  const changes=[ws=>{ws.notes=[];},ws=>{ws.notes[0].document.content=[];},ws=>{ws.notes[0].plainText='lost';},ws=>{ws.attachments.push({noteId:id});},ws=>{ws.access.notes[id].authorized=false;},ws=>{ws.notes[0].deletedAt='fixture';}];
++  for(const change of changes)for(const after of [false,true]){
++    const f=controlsFixture(after?{afterOpen:change}:{});f.controls.created(f.saved);if(!after)change(f.ws);
++    await assert.rejects(f.controls.submitNoteFiles(id),{code:'ANDROID_FILE_OWNER_REQUIRED'});assert(!f.events.includes('submit'));
++    await assert.rejects(f.controls.submitNoteFiles(id),{code:'ANDROID_FILE_NEW_NOTE_REQUIRED'});
++  }
++});
++test('missing or unknown submission acknowledgement cannot turn into success or expose upstream details',async()=>{
++  for(const submitResult of [undefined,{}, {code:'raw untrusted failure'}, {code:'ANDROID_FILE_CAPABILITY_REQUIRED'}]){
++    const f=controlsFixture({submitResult:submitResult??{}});f.controls.created(f.saved);
++    await assert.rejects(f.controls.submitNoteFiles(id),error=>['ANDROID_FILE_SUBMIT_REJECTED','ANDROID_FILE_CAPABILITY_REQUIRED'].includes(error.code)&&!error.message.includes('raw'));
++  }
++});
+diff --git a/scripts/verification/account109-android.mjs b/scripts/verification/account109-android.mjs
+index 7aa60b7f..b0f79aad 100644
+--- a/scripts/verification/account109-android.mjs
++++ b/scripts/verification/account109-android.mjs
+@@ -1,6 +1,8 @@
+ /** Fixed Account109 Samsung driver derived from the committed Sync108 helper.
+  * Note writes use visible product controls and CDP Input. Two fixed account
+  * sync controls also use production IPC, explicitly bypassing UI confirmation.
++ * Fixed synthetic attachments use the existing debug File[] submission path,
++ * only for a note successfully created by this driver. No system picker claim.
+  * No token/grant access, arbitrary evaluation API, SQL, manual pairing or ADB shell API.
+  * Node >=22. close() is idempotent and removes only its exact PID-owned forward.
+  */
+@@ -103,6 +105,62 @@ export function installedApkPath(output) {
+   return lines[0].slice('package:'.length);
+ }
+ 
++// Immutable, credential-free, bounded fixtures. Callers cannot supply file bytes,
++// names, paths, command IDs or expressions to the live driver method.
++export const PHONE_FILES = Object.freeze([
++  Object.freeze({name:'account109-phone.png',mime:'image/png',base64:'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jGZkAAAAASUVORK5CYII='}),
++  Object.freeze({name:'account109-phone.bin',mime:'application/octet-stream',base64:Buffer.from(Array.from({length:4096},(_,i)=>(i*17+3)%256)).toString('base64')}),
++]);
++const noteId = id => typeof id === 'string' && /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(id);
++const fileFailure = code => Object.assign(Error(code), {code,phase:'phone-origin-files'});
++
++// Fixed browser program, also exercised in a device-free VM fixture. Capability
++// and live selected/authorized editor owner are checked before any mutation.
++export function phoneFileSubmission(id) {
++  if (!noteId(id)) throw fileFailure('ANDROID_FILE_NOTE_INVALID');
++  return `(async()=>{
++    const debug=window.__NOTES_DEBUG__,id=${quote(id)};
++    if(debug?.version!==1||typeof debug.execute!=='function'||typeof debug.list!=='function'||typeof debug.waitForIdle!=='function')return {code:'ANDROID_FILE_CAPABILITY_REQUIRED'};
++    try {
++      const commands=debug.list();
++      if(!['app.state','attachment.submit','app.flush'].every(id=>commands.some(c=>c.id===id&&c.available===true)))return {code:'ANDROID_FILE_CAPABILITY_REQUIRED'};
++      const state=(await debug.execute('app.state')).result;
++      const editor=document.querySelector('.tiptap[data-note-id="'+id+'"][contenteditable="true"]');
++      if(state.selection?.noteId!==id||!state.workspace?.access?.notes?.[id]?.authorized||!editor||!editor.getClientRects().length)return {code:'ANDROID_FILE_OWNER_REQUIRED'};
++      await debug.execute('attachment.submit',${quote({files:PHONE_FILES})});
++      await debug.execute('app.flush');await debug.waitForIdle({timeoutMs:10000});
++      return {submitted:true};
++    } catch {return {code:'ANDROID_FILE_SUBMIT_REJECTED'};}
++  })()`;
++}
++
++// Private new-note receipts are recorded only after createNote's real UI/save
++// succeeds. Test callbacks stand in for effects; they are not live driver APIs.
++export function phoneFileControls({readWorkspace,openNote,submit}) {
++  const created = new Map();
++  return {
++    created(note) {
++      if (!noteId(note?.id) || created.has(note.id)) throw fileFailure('ANDROID_FILE_NOTE_INVALID');
++      created.set(note.id, JSON.stringify({document:note.document,plainText:note.plainText}));
++    },
++    async submitNoteFiles(...args) {
++      const [id]=args;
++      if(args.length!==1||!noteId(id)||!created.has(id))throw fileFailure('ANDROID_FILE_NEW_NOTE_REQUIRED');
++      const before=created.get(id);created.delete(id); // One attempt, including failure.
++      const check=async()=>{
++        const ws=await readWorkspace(),notes=ws.notes.filter(n=>n.id===id&&!n.deletedAt);
++        if(notes.length!==1||JSON.stringify({document:notes[0].document,plainText:notes[0].plainText})!==before||ws.attachments.some(a=>a.noteId===id)||!ws.access?.notes?.[id]?.authorized)throw fileFailure('ANDROID_FILE_OWNER_REQUIRED');
++      };
++      await check();await openNote(id);await check();
++      const result=await submit(id);
++      if(result?.submitted!==true)throw fileFailure(['ANDROID_FILE_CAPABILITY_REQUIRED','ANDROID_FILE_OWNER_REQUIRED','ANDROID_FILE_SUBMIT_REJECTED'].includes(result?.code)?result.code:'ANDROID_FILE_SUBMIT_REJECTED');
++      const ws=await readWorkspace(),note=ws.notes.find(n=>n.id===id&&!n.deletedAt);
++      if(!note)throw fileFailure('ANDROID_FILE_OWNER_REQUIRED');
++      return note;
++    },
++  };
++}
++
+ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, launch = false } = {}) {
+   if (typeof launch !== 'boolean') throw Error('ANDROID_INVALID_LAUNCH_ARGUMENT');
+   if (typeof WebSocketImpl !== 'function') throw Object.assign(Error('ANDROID_WEBSOCKET_UNAVAILABLE'), { code: 'ANDROID_WEBSOCKET_UNAVAILABLE' });
+@@ -227,8 +285,18 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
+       await wait(() => has('.account-settings'), 'account settings');
+       await wait(async () => (await accountStatus()).state === await evaluate(`document.querySelector('.account-settings')?.dataset.accountState`), 'native account state rendered');
+     };
++    const phoneFiles=phoneFileControls({readWorkspace,openNote:async id=>{
++      await api.openNote(id);
++      const selector=`.tiptap[data-note-id=${quote(id)}][contenteditable="true"]`;
++      await wait(()=>has(selector),'phone file exact editor owner');
++      await click(selector);await key('End','End',35,2);
++    },submit:async id=>{
++      assertInteractive();diagnostics.phase='phone-origin-files';diagnostics.selector=null;
++      return evaluate(phoneFileSubmission(id));
++    }});
+     const api = {
+       owned, diagnostics, close, readWorkspace, readNote, accountStatus, openAccount, closeSettings,
++      submitNoteFiles:phoneFiles.submitNoteFiles,
+       ...accountSyncControls(async command => {
+         assertInteractive();
+         diagnostics.phase = `account.${command.type}`; diagnostics.selector = null;
+@@ -280,11 +348,13 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
+         await pause(900);
+         await click('[aria-label="返回笔记"]');
+         diagnostics.phase = 'create-note.persisted-full-body'; diagnostics.selector = null;
+-        return wait(async () => {
++        const saved=await wait(async () => {
+           const w = await readWorkspace();
+           const note = w.notes.find(n => n.id === created.id && n.title === title && body.split('\n').every(line => (n.plainText || '').includes(line)));
+           return note || false;
+         }, 'persisted complete note');
++        phoneFiles.created(saved);
++        return saved;
+       },
+       async openNote(id) {
+         await closeSettings();
+@@ -296,6 +366,7 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
+         const w = await readWorkspace();
+         const attachment = w.attachments.find(a => a.id === id);
+         if (!attachment) throw Error('Attachment missing');
++        if (!w.access?.notes?.[attachment.noteId]?.authorized) throw fileFailure('ANDROID_FILE_OWNER_REQUIRED');
+         const expected = { sessionId: w.access.sessionId, epoch: w.access.epoch, noteEpoch: w.access.notes[attachment.noteId].epoch };
+         const result = await evaluate(`window.__TAURI_INTERNALS__.invoke('read_attachment',${quote({ id, expected })})`);
+         const bytes = Buffer.from(result.data, 'base64');
+diff --git a/scripts/verification/account109-three-peers.mjs b/scripts/verification/account109-three-peers.mjs
+index 064cd45e..c1bbe0af 100644
+--- a/scripts/verification/account109-three-peers.mjs
++++ b/scripts/verification/account109-three-peers.mjs
+@@ -7,7 +7,7 @@ import {mkdir,readFile,writeFile,lstat,realpath} from 'node:fs/promises';
+ import {resolve,isAbsolute,sep} from 'node:path';
+ import {fileURLToPath} from 'node:url';
+ import {NativeApp,delay} from './sync108-native-driver.mjs';
+-import {connectAndroid,ownedForwardPresent,PACKAGE,SERIAL} from './account109-android.mjs';
++import {connectAndroid,ownedForwardPresent,PHONE_FILES,PACKAGE,SERIAL} from './account109-android.mjs';
+ import {safeStatus,statusObserver,requireHealthy,waitForAccountStatuses,accountEnabled,nativeAccount,signedOut,noteBody,attachmentRefs,canonicalBody,snapshotNotes,assertPreserved,failureCode,fail} from './account109-desktop-helpers.mjs';
+ 
+ export const STORES='/private/tmp/account109-desktop-real-90b8b28b-01';
+@@ -48,6 +48,20 @@ const rich=text=>({type:'doc',content:[
+ ]});
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jGZkAAAAASUVORK5CYII=','base64');
+ export const fixtures=[{name:'account109-three.png',mime:'image/png',bytes:png},{name:'account109-three.bin',mime:'application/octet-stream',bytes:Buffer.from(Array.from({length:4096},(_,i)=>i%256))}];
++export const phoneFixtures=PHONE_FILES.map(({name,mime,base64})=>({name,mime,bytes:Buffer.from(base64,'base64')}));
++
++// Attachment insertion may leave an empty trailing editor paragraph. Compare
++// every original text block/mark and exact plainText, not an includes() check.
++export function assertPhoneBodyRetained(before,after) {
++  const textDocument=note=>{
++    const doc=structuredClone(note.document);doc.content=doc.content.filter(n=>n.type!=='attachment');
++    while(doc.content.at(-1)?.type==='paragraph'&&!(doc.content.at(-1).content||[]).length)doc.content.pop();
++    return doc;
++  };
++  assert.equal(after.id,before.id,'Exact new phone note identity');
++  assert.deepEqual(textDocument(after),textDocument(before),'Complete phone text document retained after attachment insertion');
++  assert.equal(after.plainText,before.plainText,'Complete phone plainText retained after attachment insertion');
++}
+ 
+ class Desktop {
+   constructor(app,name){this.app=app;this.name=name;this.directory=app.directory;}
+@@ -152,10 +166,15 @@ export async function runCases({peers,report,save,readStatuses,record,phoneBasel
+   await caseRun('a-rich-media',async()=>{const id=await a.create(rich('Account109 三端 A '+report.runId),fixtures);await same(a,[b,c],id,'A to B/C formatted PNG+bin',fixtures);});
+   await caseRun('c-ui-note',async()=>{
+     const title='Account109 三端 C '+report.runId,lines=['手机真实界面创建完整正文','C → A/B 中文与 emoji 🌏'];
++    const previous=new Set((await c.workspace()).notes.map(n=>n.id));
+     const created=await c.createNote({title,body:lines.join('\n')});
+     const expected={type:'doc',content:[{type:'heading',attrs:{level:1},content:[{type:'text',text:title}]},...lines.map(text=>({type:'paragraph',content:[{type:'text',text}]}))]};
+     assert.deepEqual(created.document,expected);assert.equal(created.plainText,[title,...lines].join('\n'));
+-    await same(c,[a,b],created.id,'C real UI note to A/B',[]);
++    assert(!previous.has(created.id),'Phone file owner must be newly created in this case');
++    const attached=await c.submitNoteFiles(created.id);assertPhoneBodyRetained(created,attached);
++    assert.equal(attachmentRefs(attached.document).length,phoneFixtures.length,'Exactly the fixed phone fixture references required');
++    await same(c,[a,b],created.id,'C real UI body plus fixed File[] PNG+bin to A/B',phoneFixtures);
++    report.observations.push({kind:'phone-origin-file-submission',noteId:created.id,bodyViaVisibleUI:true,filesViaFixedDebugCommand:true,systemPicker:false,verifiedPeers:['C','A','B']});
+   });
+   await caseRun('b-file',async()=>{const files=[fixtures[1]],id=await b.create(rich('Account109 三端 B '+report.runId),files);await same(b,[a,c],id,'B new file to A/C',files);});
+   await caseRun('phone-pause-resume',async()=>{
+@@ -197,7 +216,7 @@ export async function run(argv=process.argv.slice(2)){
+   const report={schema:1,kind:'account109-two-native-desktops-plus-fixed-android',status:'running',runId:randomUUID().slice(0,8),startedAt:new Date().toISOString(),phase:'phone-prerequisite',stores:{root:opts.stores,priorReportSha256:hash(priorBytes)},binary:{path:opts.binary,sha256:binarySha256,sourceRevision:'unverified'},android:{package:PACKAGE,serial:SERIAL},tools:{},observations:[],cases:CASES.map(id=>({id,status:'not-run'})),authorization:{allowDesktopSignIn:opts.allowDesktopSignIn,desktopASignInRequested:false,phoneSignInRequested:false},limitations:[
+     'Actual runtime account discovery/Noise/data paths only; no manual pairing, reverse mapping, grants, callbacks, tokens, workspace IDs or URL injection.',
+     'Desktop note creation uses existing debug commands and synthetic File[] attachment.submit, not physical typing or an OS picker. Phone note creation uses existing visible UI and CDP Input.',
+-    'C to A/B is text-only. Phone-origin attachments are unexecuted; this runner does not complete the attachment part of ANDROID-03.',
++    'C to A/B checks a phone UI-created complete body plus fixed synthetic File[] through existing attachment.submit, including phone authorized reads and desktop managed raw bytes. It does not exercise the Android system picker; prepared cases are not evidence of an executed ANDROID-03.',
+     'Desktop and phone setEnabled/syncNow use fixed production IPC and bypass UI confirmations. Phone must already be signed in as the expected synthetic username; this runner never signs the phone in.',
+     'Desktop A signIn is opt-in native PKCE plus system-browser SSO; no credentials are supplied. Desktop B must restore its existing grant.',
+     'Runner commit/tool hashes identify the harness only. Desktop binary and installed APK are independently fingerprinted; matching product source revisions are not claimed.',
+@@ -213,7 +232,7 @@ export async function run(argv=process.argv.slice(2)){
+     await save();phone=await connectAndroid({launch:true});
+     const {serial,package:packageId,pid,local,remote}=phone.owned;
+     report.android={...report.android,...await phone.artifactIdentity(),owned:{serial,package:packageId,pid,local,remote}};
+-    const c={name:'C',status:()=>phone.accountStatus(),workspace:()=>phone.readWorkspace(),setEnabled:v=>phone.setEnabled(v),syncNow:()=>phone.syncNow(),createNote:v=>phone.createNote(v),readAttachment:id=>phone.readAttachment(id)};
++    const c={name:'C',status:()=>phone.accountStatus(),workspace:()=>phone.readWorkspace(),setEnabled:v=>phone.setEnabled(v),syncNow:()=>phone.syncNow(),createNote:v=>phone.createNote(v),submitNoteFiles:id=>phone.submitNoteFiles(id),readAttachment:id=>phone.readAttachment(id)};
+     const phoneInitial=await c.status();await record(c,phoneInitial);requireHealthy(phoneInitial);assertThat(!!phoneInitial.profile&&!['authorizing','signedOut'].includes(phoneInitial.state),'ANDROID_SIGN_IN_REQUIRED');expectedAccount(phoneInitial);
+     const phoneBaseline=await capturePhoneBaseline(c,report);await save();
+     report.phase='restore-desktops';const peers=[];
+@@ -229,7 +248,7 @@ export async function run(argv=process.argv.slice(2)){
+     }
+     const all=[a,b,c],readStatuses=()=>read(all);sameAccount(await readStatuses());
+     await runCases({peers:all,report,save,readStatuses,record,phoneBaseline});
+-  }catch(error){report.status='fail';report.failure={phase:report.phase,code:['ANDROID_SIGN_IN_REQUIRED','DESKTOP_A_SIGN_IN_REQUIRED','EXPECTED_ACCOUNT_REQUIRED','ACCOUNT_OWNER_MISMATCH','ANDROID_DRIVER_LOCK_BUSY','ANDROID_DEVICE_AUTH_REQUIRED','ANDROID_OWNED_APP_NOT_FOREGROUND','ANDROID_PID_CHANGED','ANDROID_CDP_TIMEOUT','ANDROID_PAGE_EVALUATION_FAILED','ANDROID_UI_TIMEOUT','ANDROID_APK_PATH_INVALID','ANDROID_APK_HASH_INVALID'].includes(error.code)?error.code:failureCode(error)};
++  }catch(error){report.status='fail';report.failure={phase:report.phase,code:['ANDROID_SIGN_IN_REQUIRED','DESKTOP_A_SIGN_IN_REQUIRED','EXPECTED_ACCOUNT_REQUIRED','ACCOUNT_OWNER_MISMATCH','ANDROID_DRIVER_LOCK_BUSY','ANDROID_DEVICE_AUTH_REQUIRED','ANDROID_OWNED_APP_NOT_FOREGROUND','ANDROID_PID_CHANGED','ANDROID_CDP_TIMEOUT','ANDROID_PAGE_EVALUATION_FAILED','ANDROID_UI_TIMEOUT','ANDROID_APK_PATH_INVALID','ANDROID_APK_HASH_INVALID','ANDROID_FILE_NOTE_INVALID','ANDROID_FILE_NEW_NOTE_REQUIRED','ANDROID_FILE_CAPABILITY_REQUIRED','ANDROID_FILE_OWNER_REQUIRED','ANDROID_FILE_SUBMIT_REJECTED'].includes(error.code)?error.code:failureCode(error)};
+   }finally{await finishThreePeers(report,{desktops,phone},save);}
+   return report;
+ }
+diff --git a/scripts/verification/account109-three-peers.test.mjs b/scripts/verification/account109-three-peers.test.mjs
+index 8cd382fe..6bec60f0 100644
+--- a/scripts/verification/account109-three-peers.test.mjs
++++ b/scripts/verification/account109-three-peers.test.mjs
+@@ -1,9 +1,12 @@
+ // In-memory policy/orchestration fixtures only. Never native synchronization evidence.
+ import assert from 'node:assert/strict';
+ import {test} from 'node:test';
+-import {createHash} from 'node:crypto';
+-import {accountSyncControls,installedApkPath,PACKAGE} from './account109-android.mjs';
+-import {options,STORES,USERNAME,PHONE_ORIGINAL_IDS,expectedAccount,sameAccount,meshReady,fixtures,verifyOriginals,phoneSnapshot,capturePhoneBaseline,verifyPhoneBaseline,samplePhonePause,runCases,finishThreePeers} from './account109-three-peers.mjs';
++import {createHash,randomUUID} from 'node:crypto';
++import {mkdtemp,mkdir,writeFile,rm} from 'node:fs/promises';
++import {tmpdir} from 'node:os';
++import {join} from 'node:path';
++import {accountSyncControls,installedApkPath,phoneFileControls,PACKAGE} from './account109-android.mjs';
++import {options,STORES,USERNAME,PHONE_ORIGINAL_IDS,expectedAccount,sameAccount,meshReady,fixtures,phoneFixtures,assertPhoneBodyRetained,verifyOriginals,phoneSnapshot,capturePhoneBaseline,verifyPhoneBaseline,samplePhonePause,runCases,finishThreePeers} from './account109-three-peers.mjs';
+ 
+ test('CLI accepts only original stores, absolute paths and explicit A sign-in opt-in',()=>{
+   const argv=['--binary','/unit/native','--stores',STORES,'--output','/unit/fresh'];
+@@ -26,21 +29,28 @@ test('installed APK lookup accepts only one safe base APK path',()=>{
+ 
+ function memoryPeers(){
+   const baseline=PHONE_ORIGINAL_IDS.map((id,i)=>({id,document:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'保留已有中文 😀 '+i}]}]},plainText:'保留已有中文 😀 '+i}));
+-  const events=[],blobs=new Map();let serial=0;
++  const events=[],blobs=new Map();
+   const peers=['A','B','C'].map(name=>({name,enabled:true,ws:{notes:structuredClone(baseline),attachments:[]}}));
+   const publish=(source,note,rows)=>{for(const p of peers.filter(p=>p.enabled||p===source)){p.ws.notes=p.ws.notes.filter(n=>n.id!==note.id);p.ws.notes.push(structuredClone(note));p.ws.attachments=p.ws.attachments.filter(a=>a.noteId!==note.id);p.ws.attachments.push(...structuredClone(rows));}};
+   for(const peer of peers){
+     peer.status=async()=>({state:peer.enabled?'ready':'paused',enabled:peer.enabled,profile:{subject:'unit-owner',username:USERNAME},devices:peers.map(p=>({id:p.name,current:p===peer,online:true,connected:p!==peer&&p.enabled&&peer.enabled})),pendingCount:0,conflictCount:0});
+-    peer.workspace=async()=>structuredClone(peer.ws);
++    peer.workspace=async()=>({...structuredClone(peer.ws),access:{notes:Object.fromEntries(peer.ws.notes.map(n=>[n.id,{authorized:true}]))}});
+     peer.setEnabled=async enabled=>{events.push(peer.name+':enabled:'+enabled);peer.enabled=enabled;if(enabled){for(const source of peers.filter(p=>p!==peer&&p.enabled))for(const note of [...source.ws.notes])publish(source,note,source.ws.attachments.filter(a=>a.noteId===note.id));}return peer.status();};
+     peer.syncNow=async()=>{events.push(peer.name+':syncNow');return peer.status();};
+     peer.create=async(document,files)=>{
+-      const id=peer.name+'-note-'+(++serial),copy=structuredClone(document),rows=files.map((f,i)=>({id:id+'-attachment-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file'}));
++      const id=randomUUID(),copy=structuredClone(document),rows=files.map((f,i)=>({id:id+'-attachment-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file'}));
+       for(const [i,f] of files.entries()){blobs.set(rows[i].id,Buffer.from(f.bytes));copy.content.push({type:'attachment',attrs:{id:rows[i].id,name:f.name,kind:rows[i].kind}});}
+       const texts=node=>[...(node.text?[node.text]:[]),...(node.content||[]).flatMap(texts)];
+       publish(peer,{id,document:copy,plainText:texts(copy).join('\n')},rows);events.push(peer.name+':create');return id;
+     };
+-    peer.createNote=async({title,body})=>{events.push(peer.name+':real-ui-fixture');const document={type:'doc',content:[{type:'heading',attrs:{level:1},content:[{type:'text',text:title}]},...body.split('\n').map(text=>({type:'paragraph',content:[{type:'text',text}]}))]};const id=await peer.create(document,[]);return structuredClone(peer.ws.notes.find(n=>n.id===id));};
++    const files=phoneFileControls({readWorkspace:peer.workspace,openNote:async id=>{events.push(peer.name+':open:'+id);},submit:async id=>{
++      events.push(peer.name+':fixed-files:'+id);
++      const note=structuredClone(peer.ws.notes.find(n=>n.id===id)),rows=phoneFixtures.map((f,i)=>({id:id+'-phone-'+i,noteId:id,displayName:f.name,mime:f.mime,size:f.bytes.length,kind:f.mime==='image/png'?'image':'file'}));
++      for(const [i,f] of phoneFixtures.entries()){blobs.set(rows[i].id,Buffer.from(f.bytes));note.document.content.push({type:'attachment',attrs:{id:rows[i].id,name:f.name,kind:rows[i].kind}});}
++      publish(peer,note,rows);return {submitted:true};
++    }});
++    peer.submitNoteFiles=files.submitNoteFiles;
++    peer.createNote=async({title,body})=>{events.push(peer.name+':real-ui-fixture');const document={type:'doc',content:[{type:'heading',attrs:{level:1},content:[{type:'text',text:title}]},...body.split('\n').map(text=>({type:'paragraph',content:[{type:'text',text}]}))]};const id=await peer.create(document,[]),note=structuredClone(peer.ws.notes.find(n=>n.id===id));files.created(note);return note;};
+     peer.readAttachment=async id=>({data:(peer.corrupt?Buffer.from('wrong original'):blobs.get(id)).toString('base64')});
+   }
+   return {peers,events,baseline};
+@@ -82,6 +92,42 @@ test('all five cases exercise both directions, media, phone pause and catch-up w
+   for(const peer of peers)assert.deepEqual(peer.ws.notes.map(n=>n.id).sort(),phoneNotes.map(n=>n.id).sort());
+   const originals=report.observations.filter(o=>o.kind==='original-attachment');assert(originals.some(o=>o.device==='C'&&o.name.endsWith('.png')));assert(originals.some(o=>o.device==='A'&&o.name.endsWith('.bin')));
+   assert.equal(originals.find(o=>o.name===fixtures[1].name).sha256,createHash('sha256').update(fixtures[1].bytes).digest('hex'));
++  for(const name of ['C','A','B'])for(const file of phoneFixtures)assert(originals.some(o=>o.device===name&&o.name===file.name&&o.bytes===file.bytes.length&&o.sha256===createHash('sha256').update(file.bytes).digest('hex')));
++  const submission=report.observations.find(o=>o.kind==='phone-origin-file-submission');assert(submission&&submission.bodyViaVisibleUI&&submission.filesViaFixedDebugCommand&&!submission.systemPicker);
++  assert(events.some(e=>e.startsWith('C:fixed-files:')));
++});
++
++test('phone-origin failures leave later scenarios unexecuted and cleanup cannot manufacture success',async()=>{
++  for(const mode of ['capability','old-note-id','wrong-owner','lost-reference','changed-body','corrupt-phone-read','corrupt-desktop-read','wrong-length']){
++    const {peers,events}=memoryPeers(),[a,b,c]=peers,report={status:'running',runId:'unit',observations:[]};
++    const phoneBaseline=await capturePhoneBaseline(c,report),submit=c.submitNoteFiles;
++    c.submitNoteFiles=async id=>{
++      if(mode==='capability')throw Object.assign(Error('fixed capability failure'),{code:'ANDROID_FILE_CAPABILITY_REQUIRED'});
++      if(mode==='old-note-id')return submit(PHONE_ORIGINAL_IDS[0]);
++      const note=await submit(id);
++      if(mode==='corrupt-phone-read')c.corrupt=true;if(mode==='corrupt-desktop-read')b.corrupt=true;
++      for(const p of peers){const n=p.ws.notes.find(n=>n.id===id);if(mode==='wrong-owner')p.ws.attachments.find(a=>a.noteId===id).noteId=PHONE_ORIGINAL_IDS[0];if(mode==='lost-reference')n.document.content=n.document.content.filter(n=>n.type!=='attachment');if(mode==='changed-body')n.document.content[1].content[0].text='lost full body';if(mode==='wrong-length')p.ws.attachments.find(a=>a.noteId===id).size++;}
++      return structuredClone(c.ws.notes.find(n=>n.id===id));
++    };
++    await assert.rejects(runCases({peers,report,phoneBaseline,save:async()=>{},readStatuses:()=>Promise.all(peers.map(p=>p.status())),record:async()=>{},timeoutMs:1000,connectionTimeoutMs:1000}));
++    assert.equal(report.cases[2].status,'fail',mode);assert(report.cases.slice(3).every(r=>r.status==='not-run'));assert(!events.includes('C:enabled:false'));assert(!report.observations.some(o=>o.kind==='phone-origin-file-submission'));
++    for(const p of [a,b,c])for(const original of phoneBaseline.notes)assert.equal(JSON.stringify({document:p.ws.notes.find(n=>n.id===original.id).document,plainText:p.ws.notes.find(n=>n.id===original.id).plainText}),original.body);
++    await finishThreePeers(report,{desktops:[{lifecycle:{naturalExit:true},close:async()=>{}}],phone:{owned:{},close:async()=>{}},forwardPresent:async()=>false},async()=>{});assert.equal(report.status,'fail');
++  }
++});
++
++test('phone-origin bytes are checked against both desktop managed files as well as production-read fixtures',async()=>{
++  const root=await mkdtemp(join(tmpdir(),'account109-phone-files-fixture-'));
++  try{
++    const {peers:[a,b,c]}=memoryPeers(),note=await c.createNote({title:'固定新笔记',body:'完整正文 😀'}),attached=await c.submitNoteFiles(note.id);assertPhoneBodyRetained(note,attached);
++    for(const peer of [a,b]){
++      peer.directory=join(root,peer.name);await mkdir(join(peer.directory,'attachments'),{recursive:true});
++      for(const [i,file] of phoneFixtures.entries()){const row=peer.ws.attachments.find(a=>a.noteId===note.id&&a.displayName===file.name);row.relativePath='phone-'+i;await writeFile(join(peer.directory,'attachments',row.relativePath),file.bytes);}
++      const report={observations:[]};await verifyOriginals(peer,note.id,phoneFixtures,report);assert.equal(report.observations.length,2);assert(report.observations.every(o=>o.storedFileMatches&&o.productionReadMatches&&o.ownedDocumentReference));
++      const row=peer.ws.attachments.find(a=>a.noteId===note.id),sameLength=Buffer.alloc(row.size,77);await writeFile(join(peer.directory,'attachments',row.relativePath),sameLength);
++      await assert.rejects(verifyOriginals(peer,note.id,phoneFixtures,{observations:[]}),'Same-length managed-file corruption must fail SHA proof');
++    }
++  }finally{await rm(root,{recursive:true,force:true});}
+ });
+ test('failed original-byte proof leaves later cases unrun and cannot pass cleanup finalization',async()=>{
+   const {peers}=memoryPeers();peers[2].corrupt=true;

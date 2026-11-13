@@ -1,0 +1,85 @@
+"""Exact committed snapshot and finite device-free tests; no live runner entry."""
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import tempfile
+import time
+
+ROOT = Path('/Users/water/work/2026/Apple-Notes-Clone')
+AUTHOR = Path('/private/tmp/cybernote-account109-phone-files')
+OUT = Path(__file__).resolve().parent
+COMMIT = '4b639adfc9d3abfd724b825819855e9d216c9351'
+BASE = '44c46313c7fa7c174ca1a33f587f3878b5e8d5d9'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+def digest(b):
+    return hashlib.sha256(b).hexdigest()
+
+def save(name, value):
+    (OUT / name).write_text(json.dumps(value, indent=2) + '\n')
+
+assert git('rev-parse', COMMIT + '^').decode().strip() == BASE
+changed = git('diff', '--name-only', BASE, COMMIT).decode().splitlines()
+expected = ['scripts/verification/account109-android-files.test.mjs',
+            'scripts/verification/account109-android.mjs',
+            'scripts/verification/account109-three-peers.mjs',
+            'scripts/verification/account109-three-peers.test.mjs']
+assert changed == expected
+author_head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=AUTHOR).decode().strip()
+author_status = subprocess.check_output(['git', 'status', '--porcelain'], cwd=AUTHOR)
+assert author_head == COMMIT and not author_status
+snapshot = Path(tempfile.mkdtemp(prefix='account109-phone-files-review01-source-', dir='/private/tmp'))
+paths = expected + ['scripts/verification/sync108-native-driver.mjs',
+    'scripts/verification/account109-desktop-helpers.mjs',
+    'scripts/verification/sync108-android-lifecycle.mjs']
+inputs = []
+for path in paths:
+    data = git('show', COMMIT + ':' + path)
+    assert data == (AUTHOR / path).read_bytes()
+    destination = snapshot / path
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(data)
+    if path in expected:
+        tool = OUT / 'tools' / Path(path).name
+        tool.parent.mkdir(exist_ok=True)
+        tool.write_bytes(data)
+    inputs.append(dict(path=path, sha256=digest(data), bytes=len(data), exactCommittedBytes=True,
+                       unchangedFromBase=(path not in expected)))
+
+source_context = []
+for path in ['src/App.tsx', 'src/debug/runtime.ts', 'src/debug/catalog.ts',
+             'src/attachment-operations/operations.ts', 'src/attachment-submission.ts']:
+    data = git('show', COMMIT + ':' + path)
+    assert data == git('show', BASE + ':' + path) == (AUTHOR / path).read_bytes()
+    source_context.append(dict(path=path, sha256=digest(data), bytes=len(data), unchangedFromBase=True))
+
+(OUT / 'committed.diff.txt').write_bytes(git('diff', '--no-ext-diff', '--no-color', BASE, COMMIT))
+save('inputs.json', dict(commit=COMMIT, base=BASE, changedPaths=changed, snapshot=str(snapshot),
+                        sourceInputs=inputs, unchangedProductCommandContext=source_context,
+                        authorHeadBefore=author_head, authorCleanBefore=True))
+# Explicit list rather than glob: only the two reviewed files, never live runners.
+argv = ['node', '--test', '--test-reporter=tap', '--test-timeout=30000',
+        'scripts/verification/account109-android-files.test.mjs',
+        'scripts/verification/account109-three-peers.test.mjs']
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+tick = time.monotonic()
+run = subprocess.run(argv, cwd=snapshot, capture_output=True, timeout=90)
+(OUT / 'focused-tests.stdout.txt').write_bytes(run.stdout)
+(OUT / 'focused-tests.stderr.txt').write_bytes(run.stderr)
+save('focused-test-receipt.json', dict(argv=argv, cwd=str(snapshot), startedAt=started,
+    finishedAt=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    elapsedSeconds=round(time.monotonic() - tick, 3), exitCode=run.returncode,
+    stdoutSha256=digest(run.stdout), stderrSha256=digest(run.stderr),
+    nodeVersion=subprocess.check_output(['node', '--version']).decode().strip(),
+    boundary='Device-free fixtures only; no connectAndroid/run/NativeApp construction. Scratch disk files are synthetic and test-owned.'))
+assert run.returncode == 0, 'Focused tests failed; preserve output'
+for entry in inputs:
+    assert digest((snapshot / entry['path']).read_bytes()) == entry['sha256']
+assert subprocess.check_output(['git', 'status', '--porcelain'], cwd=AUTHOR) == author_status
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=AUTHOR).decode().strip() == author_head
+print(run.stdout.decode())
+print(json.dumps(dict(exactSnapshotInputsUnchanged=True, authorCheckoutUnchangedAndClean=True), indent=2))

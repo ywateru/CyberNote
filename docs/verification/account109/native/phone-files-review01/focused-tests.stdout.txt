@@ -1,0 +1,136 @@
+TAP version 13
+# Subtest: candidate must expose the existing fixed debug capability and selected authorized editor
+ok 1 - candidate must expose the existing fixed debug capability and selected authorized editor
+  ---
+  duration_ms: 2.487792
+  type: 'test'
+  ...
+# Subtest: browser submission sends exactly two immutable fixed File payloads and flushes; no arbitrary input or raw failure
+ok 2 - browser submission sends exactly two immutable fixed File payloads and flushes; no arbitrary input or raw failure
+  ---
+  duration_ms: 1.007583
+  type: 'test'
+  ...
+# Subtest: only a recorded new-note receipt admits one attempt; rejects extra file, action, path and auth arguments before effects
+ok 3 - only a recorded new-note receipt admits one attempt; rejects extra file, action, path and auth arguments before effects
+  ---
+  duration_ms: 0.398709
+  type: 'test'
+  ...
+# Subtest: owner, body, prior attachment or authorization changes fail closed before submission, including after reopening
+ok 4 - owner, body, prior attachment or authorization changes fail closed before submission, including after reopening
+  ---
+  duration_ms: 0.6095
+  type: 'test'
+  ...
+# Subtest: missing or unknown submission acknowledgement cannot turn into success or expose upstream details
+ok 5 - missing or unknown submission acknowledgement cannot turn into success or expose upstream details
+  ---
+  duration_ms: 0.150375
+  type: 'test'
+  ...
+# Subtest: CLI accepts only original stores, absolute paths and explicit A sign-in opt-in
+ok 6 - CLI accepts only original stores, absolute paths and explicit A sign-in opt-in
+  ---
+  duration_ms: 0.99825
+  type: 'test'
+  ...
+# Subtest: fixed Android account methods reject extra arguments and injection
+ok 7 - fixed Android account methods reject extra arguments and injection
+  ---
+  duration_ms: 0.430167
+  type: 'test'
+  ...
+# Subtest: installed APK lookup accepts only one safe base APK path
+ok 8 - installed APK lookup accepts only one safe base APK path
+  ---
+  duration_ms: 0.184541
+  type: 'test'
+  ...
+# Subtest: discovery needs all three actual peer connections and one common expected account
+ok 9 - discovery needs all three actual peer connections and one common expected account
+  ---
+  duration_ms: 0.415292
+  type: 'test'
+  ...
+# Subtest: full fixture byte/reference checks reject corruption and missing document attachment refs
+ok 10 - full fixture byte/reference checks reject corruption and missing document attachment refs
+  ---
+  duration_ms: 1.225459
+  type: 'test'
+  ...
+# Subtest: paused phone snapshots repeatedly exclude remote notes and preserve all prior bodies and rows
+ok 11 - paused phone snapshots repeatedly exclude remote notes and preserve all prior bodies and rows
+  ---
+  duration_ms: 6.947708
+  type: 'test'
+  ...
+# Subtest: all five cases exercise both directions, media, phone pause and catch-up without assigning overall pass
+ok 12 - all five cases exercise both directions, media, phone pause and catch-up without assigning overall pass
+  ---
+  duration_ms: 5.642208
+  type: 'test'
+  ...
+# Subtest: phone-origin failures leave later scenarios unexecuted and cleanup cannot manufacture success
+ok 13 - phone-origin failures leave later scenarios unexecuted and cleanup cannot manufacture success
+  ---
+  duration_ms: 9.01775
+  type: 'test'
+  ...
+# Subtest: phone-origin bytes are checked against both desktop managed files as well as production-read fixtures
+ok 14 - phone-origin bytes are checked against both desktop managed files as well as production-read fixtures
+  ---
+  duration_ms: 6.58775
+  type: 'test'
+  ...
+# Subtest: failed original-byte proof leaves later cases unrun and cannot pass cleanup finalization
+ok 15 - failed original-byte proof leaves later cases unrun and cannot pass cleanup finalization
+  ---
+  duration_ms: 0.951625
+  type: 'test'
+  ...
+# Subtest: overall pass waits for every owned desktop and exact phone forward cleanup
+ok 16 - overall pass waits for every owned desktop and exact phone forward cleanup
+  ---
+  duration_ms: 0.356209
+  type: 'test'
+  ...
+# Subtest: retained forward, rejected cleanup, forced exit and original failure all prevent pass
+ok 17 - retained forward, rejected cleanup, forced exit and original failure all prevent pass
+  ---
+  duration_ms: 0.151
+  type: 'test'
+  ...
+# Subtest: missing expected original is rejected before any sync mutations; a late baseline is not accepted
+ok 18 - missing expected original is rejected before any sync mutations; a late baseline is not accepted
+  ---
+  duration_ms: 0.125167
+  type: 'test'
+  ...
+# Subtest: loss or changed complete original body before the pause snapshot fails even when every new transfer succeeds
+ok 19 - loss or changed complete original body before the pause snapshot fails even when every new transfer succeeds
+  ---
+  duration_ms: 1.907875
+  type: 'test'
+  ...
+# Subtest: baseline attachment ownership, metadata, references and actual bytes survive with additional notes allowed
+ok 20 - baseline attachment ownership, metadata, references and actual bytes survive with additional notes allowed
+  ---
+  duration_ms: 0.578292
+  type: 'test'
+  ...
+# Subtest: cleanup cannot turn green cases into overall pass without each initial-baseline preservation gate
+ok 21 - cleanup cannot turn green cases into overall pass without each initial-baseline preservation gate
+  ---
+  duration_ms: 0.096583
+  type: 'test'
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 71.385542
