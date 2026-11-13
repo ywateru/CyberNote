@@ -13,6 +13,10 @@
 
 作者与独立审阅者分离。离线故障测试覆盖请求网络失败、OAuth server rejection、无效响应、成功轮换和授权/暂停边界；不为诊断直接使用原库 grant 发请求。修复经审阅后才能安排新候选与新的实际运行目录。旧 relogin01、full02 超时和原始 DB 保留；脱敏归档不收录凭据或原始数据库。
 
+## relogin04 后的人工授权等待预算
+
+第四轮在新候选中实际进入 authorizing，原生 Chrome 出现登录页；父级浏览器控制会话超时重置，未完成表单，执行器 120 秒授权等待到期。保留失败，不能据此判定历史 scope 故障已解决。原生 callback 本身有 600 秒上限，执行器可增加显式 `--authorization-timeout-ms`，缺省保持 120000，仅接受 120000 至 600000 的十进制整数并写入结果。该值只传入 B 两种 SignIn 与 A SignIn 的终态等待，不改变 B 启动只读 120 秒、连接/数据预算、错误立即失败、严格 owner/username、一次恢复和自然清理规则。不得传入密码、token 或 callback；不启动新实际运行来单独测试等待参数。通过模拟时钟验证上下界、无效输入、三条授权路径预算以及中途错误立即终止，独立审阅后合入。
+
 ## relogin02 源码调查（delegated author）
 
 调查与补充离线回归见[responseMetadata 调查](../analysis/account109-response-metadata.md)。本增量只允许 `crates/account-auth/src/tests.rs` 中按现有 README 契约补充负例、正例和调用顺序断言，不改变运行时认证行为或响应容错规则。`responseMetadata` 是 token response 检查，不是 discovery metadata 检查；不得基于名称放宽固定 issuer/endpoint/JWKS、签名或 claims 校验。所有网络响应均使用 test-only fixture，独立 target 编译；不运行 live login、原库恢复或 live smoke。更细诊断字段和任何 provider 兼容性修复仅作为待审提案，须先确定具体失败字段及契约。
