@@ -1,0 +1,9 @@
+# 独立证据复核：APPROVE（仅限当前数据保全）
+
+Erdos只读确认归档result与原始逐字节相同，SHA256 `960a6fc409c039f36d3925c3d604b313dd1cf92ca7fac81ed44d74fa20cdc1b9`；执行器与三个直接依赖匹配父级记录的 `610b9a5c563c23aecf53fd6b7c8fb03782b8d864` 及已独审作者提交。原始result不含工具hash，执行revision来源为父级receipt。9f60a949只新增relogin05文档。
+
+原TAP哈希及305/305、零fail/cancel/skip/todo汇总匹配。实际新APK大小/SHA匹配已独核88b2dabe候选，old/new/source/签名pin正确。源码要求当前完整捕获与安装后两次所有note字段、全文、descriptor、引用和授权原字节长度/SHA相同，失败或cleanup失败均不可PASS；实际结果与该契约一致。
+
+私有snapshot仅检查文件类型、0600权限、父目录0700及流式SHA，不解析/输出正文；SHA `df83265e2b527804bdfa88cc673ba82b6edb38a2d2b4e0acb1423b3d5339fa18` 匹配。lease/forward释放、两次数据比较和cleanupComplete记录一致。
+
+账户变为signedOut是正常重启后的实际观察，不证明登录、账户恢复或产品coordinator访问。未知附件来源未解释，原历史baseline未接纳；后续当前快照的保全检查不能改写历史gate。没有设备、安装、App、网络、清理或文件修改。

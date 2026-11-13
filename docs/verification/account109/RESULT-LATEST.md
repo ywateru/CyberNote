@@ -10,6 +10,8 @@
 
 最新补足：[window05](native/login-window-live05/README.md)通过隔离wrapper真实显示托管登录表单，父级CUA点击原生close后回到账户未登录；五项完整正文/编辑/自然重启检查PASS并独核，两进程自然退出0。window04绑定失败仍保留。手机[新域CELLULAR匿名health](android/approved-domain-phone-health01/README.md)单次HTTP200、可信TLS通过，仅限shell匿名路径。新Android包已独核，未安装；[重复产物清理](native/88b2dabe-derived-cleanup01/README.md)约724MiB已独核。独立[Node续验](server/custom-domain-public-followup02/README.md)新域200且与父级新域hash匹配，canonical请求仍失败，不能将父级两域比较写为独立实时通过；未据此改写原失败。
 
+当前手机最新：[88b2dabe保数据升级](android/preserving-upgrade-live01/README.md)实际PASS且独核通过，已安装准确新包；四篇当前完整笔记、未知附件引用/descriptor及授权原字节两次一致，当前clean signedOut。历史baseline未变，未知来源未解释。完整组305/305、零跳过。桌面原库[relogin05](native/relogin-live05/README.md)完整600秒等待人工认证后超时，两进程自然退出0，未编辑/enable，scope问题未进入验证路径。后续需有效原QA授权；手机新入口取消测试将单独保护当前完整状态。
+
 ## 分析与完善
 
 数据链为 Logto 原生授权 owner → Vercel profile/enrollment → CyberGrid 自动发现与可信连接 → 原有同步 adapter/Session → SQLite 文档与受管附件。设置页不拥有账户 Runtime 生命周期；同步完成需验证实际文档、附件归属及原字节，不能以命令 ACK 或设备 online 判定。完整契约见 [架构](../../architecture/account-sync.md)；两个自定义数据根的 lease/cache 隔离和此前手工同步结果见 [sync108](../sync108/RESULT.md)。

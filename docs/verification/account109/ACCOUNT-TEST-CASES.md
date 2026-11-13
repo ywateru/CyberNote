@@ -1,3 +1,5 @@
+最新Android当前数据保全：[preserving-upgrade-live01](android/preserving-upgrade-live01/README.md)实际安装精确88b2dabe包，当前四篇全字段/正文与唯一附件引用/descriptor/授权字节两次完全一致，独核通过。正常重启后signedOut；不代表成功登录/三端或接受历史未知附件来源。原桌面relogin05完整600秒人工授权超时，旧scope问题未验证。
+
 最新AUTH-09补足：[window05](native/login-window-live05/README.md)在已独核隔离Mac wrapper真实显示固定托管登录表单，CUA原生close后signedOut，五项全文/自然重启检查PASS并独核。未使用account.cancel；不证明人手输入、成功认证或Android分支。此前window04失败保留。新域手机CELLULAR匿名health已通过，仅证明shell路径，尚未安装新包或完成三端。
 
 最新局部实际结果：[login-surfaces-live03](native/login-surfaces-live03/README.md)在 `72513d12` Mac 真实候选通过 browser、embedded、embedded→browser 三条命令调用流程，各5/5，完整正文与自然重启保全、六进程自然退出0均已独核。覆盖 AUTH-08 的命令分支、AUTH-09 的自动取消分支及 AUTH-10 的 surface 转移/取消；不包含 radio物理点击、表单可见性、用户关窗或成功认证，完整用例仍按下表边界验收。
