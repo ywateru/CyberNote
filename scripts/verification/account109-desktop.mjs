@@ -15,7 +15,7 @@ assert(isAbsolute(opts['--binary']||'')&&isAbsolute(opts['--output']||''),'Absol
 const binary=opts['--binary'], output=opts['--output'];
 await mkdir(output); // Never reuse, clear or replace an existing library.
 const hash=b=>createHash('sha256').update(b).digest('hex');
-const report={schema:1,kind:'real-account-two-native-desktops',startedAt:new Date().toISOString(),binary:{path:binary,sha256:hash(await readFile(binary))},checks:[],observations:[],limitations:['Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.','Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.','Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change.']};
+const report={schema:1,kind:'real-account-two-native-desktops',startedAt:new Date().toISOString(),tools:{runnerSha256:hash(await readFile(new URL(import.meta.url))),driverSha256:hash(await readFile(new URL('./sync108-native-driver.mjs',import.meta.url)))},binary:{path:binary,sha256:hash(await readFile(binary))},checks:[],observations:[],limitations:['Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.','Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.','Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change.']};
 const check=name=>{report.checks.push({name,status:'pass'});console.log('PASS '+name);};
 // Scoped to this runner's lifetime; does not unlock or change system settings.
 if(process.platform==='darwin'){
@@ -32,7 +32,7 @@ async function open(name){
 async function command(app,id,args={}){const v=await app.execute(id,args);await app.idle();return v;}
 async function workspace(app){return (await app.state()).workspace;}
 async function account(app){return app.evaluate("window.__TAURI_INTERNALS__.invoke('account_command',{command:{type:'status'}})");}
-function safeStatus(s){return {state:s.state,enabled:s.enabled,hasProfile:!!s.profile,expectedSyntheticUser:s.profile?.username==='cybernoteqa20261113a',error:s.error?{code:s.error.code,stage:s.error.stage}:undefined,devices:s.devices.map(d=>({online:d.online,current:d.current,connected:d.connected})),pendingCount:s.pendingCount,conflictCount:s.conflictCount};}
+function safeStatus(s){return {state:s.state,enabled:s.enabled,hasProfile:!!s.profile,identityCheck:s.profile?.username===undefined?'unverified':s.profile.username==='cybernoteqa20261113a'?'expectedSyntheticUser':'differentUser',error:s.error?{code:s.error.code,stage:s.error.stage}:undefined,devices:s.devices.map(d=>({online:d.online,current:d.current,connected:d.connected})),pendingCount:s.pendingCount,conflictCount:s.conflictCount};}
 async function enter(app){await command(app,'settings.open');await command(app,'settings.tab',{tab:'account'});}
 async function leave(app){if((await app.state()).preferences.open)await command(app,'app.back');}
 const doc=text=>({type:'doc',content:[{type:'paragraph',content:[{type:'text',text,marks:[{type:'bold'}]}]},{type:'paragraph',content:[{type:'text',text:'中文第二段 / UTF-8 / 😀'}]}]});
@@ -47,17 +47,20 @@ async function create(app,text,attachments=true){
 }
 const body=n=>JSON.stringify({document:n.document,plainText:n.plainText});
 async function note(app,id){return (await workspace(app)).notes.find(n=>n.id===id);}
+const attachmentRefs=node=>[...(node?.type==='attachment'?[node.attrs?.id]:[]),...(node?.content||[]).flatMap(attachmentRefs)];
 async function originals(app,id){
  const ws=await workspace(app),n=ws.notes.find(n=>n.id===id);assert(n);
  for(const [name,,bytes] of files){
   const a=ws.attachments.find(a=>a.noteId===id&&a.displayName===name);assert(a,'Attachment exists');
+  assert(attachmentRefs(n.document).includes(a.id),'Document references original attachment');
   const result=await app.evaluate(`(async()=>{const s=(await window.__NOTES_DEBUG__.execute('app.state')).result;const access=s.workspace.access,owner=access.notes[arg.noteId];if(!owner?.authorized)throw Error('OWNER_NOT_AUTHORIZED');return window.__TAURI_INTERNALS__.invoke('read_attachment',{id:arg.id,expected:{sessionId:access.sessionId,epoch:access.epoch,noteEpoch:owner.epoch}});})()`,{id:a.id,noteId:id});
   const actual=Buffer.from(result.data,'base64');assert.equal(actual.length,bytes.length);assert.equal(hash(actual),hash(bytes));
   assert.equal(hash(await readFile(resolve(app.directory,'attachments',a.relativePath))),hash(bytes));
+  report.observations.push({device:app.name,kind:'original-attachment',noteId:id,name,bytes:actual.length,sha256:hash(actual),documentReference:true,productionReadMatches:true,storedFileMatches:true});
  }
 }
 async function converge(source,target,id,label){
- const expected=body(await note(source,id));await until(label,async()=>{const n=await note(target,id);return n&&body(n)===expected;},60000);await command(target,'note.select',{id});await originals(target,id);check(label+' full document/plainText and raw attachment bytes');
+ const expected=body(await note(source,id));await until(label,async()=>{const n=await note(target,id);return n&&body(n)===expected;},60000);await command(target,'note.select',{id});await originals(target,id);report.observations.push({kind:'convergence',label,noteId:id,documentAndPlainTextSha256:hash(expected)});check(label+' full document/plainText and raw attachment bytes');
 }
 async function login(app,name){
  await enter(app);assert.equal((await account(app)).enabled,false);await command(app,'account.signIn');

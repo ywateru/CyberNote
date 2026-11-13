@@ -74,6 +74,8 @@ pub(crate) enum NetworkStage {
 pub(crate) enum Error {
     Configuration,
     Authentication,
+    InvalidCallback,
+    InvalidIdentity,
     OwnershipMismatch,
     Network,
     NetworkAt(NetworkStage),
@@ -90,6 +92,8 @@ impl Error {
         match self {
             Self::Configuration => "account_configuration",
             Self::Authentication => "account_authentication",
+            Self::InvalidCallback => "account_auth_callback_invalid",
+            Self::InvalidIdentity => "account_auth_identity_invalid",
             Self::OwnershipMismatch => "account_owner_workspace_mismatch",
             Self::Network | Self::NetworkAt(_) => "account_network",
             Self::InvalidProof => "account_enrollment_invalid",
@@ -138,6 +142,8 @@ impl From<account_auth::AuthError> for Error {
             A::OwnershipMismatch => Self::OwnershipMismatch,
             A::Busy => Self::Busy,
             A::Storage => Self::Storage,
+            A::InvalidCallback => Self::InvalidCallback,
+            A::InvalidIdentity => Self::InvalidIdentity,
             _ => Self::Authentication,
         }
     }
@@ -187,6 +193,14 @@ mod tests {
         assert_eq!(
             Error::from(account_auth::AuthError::Network),
             Error::NetworkAt(NetworkStage::IdentityProvider)
+        );
+        assert_eq!(
+            Error::from(account_auth::AuthError::InvalidCallback).code(),
+            "account_auth_callback_invalid"
+        );
+        assert_eq!(
+            Error::from(account_auth::AuthError::InvalidIdentity).code(),
+            "account_auth_identity_invalid"
         );
     }
 }

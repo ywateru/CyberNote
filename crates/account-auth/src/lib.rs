@@ -346,7 +346,13 @@ impl AuthClient {
             .add_extra_param("resource", self.inner.config.resource.as_str())
             .request_async(&self.inner.http)
             .await
-            .map_err(|_| AuthError::InvalidIdentity)?;
+            .map_err(|error| match error {
+                // An unreachable token endpoint does not establish an invalid
+                // identity. Preserve only our fixed safe HTTP error category;
+                // never replay an authorization code after an uncertain send.
+                oauth2::RequestTokenError::Request(error) => error,
+                _ => AuthError::InvalidIdentity,
+            })?;
         let identity = self.verify_response(&client, &response, transaction.nonce.secret(), true);
         let mut grant = self.grant(&response, None, transaction.nonce.secret())?;
         grant.identity = identity.as_ref().ok().cloned();
