@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "scope": "fixed-read-only-original-android-attachment-audit",
+  "status": "verified-read-only",
+  "startedAt": "2026-11-13T13:15:41.409Z",
+  "serial": "98895a3147304c3132",
+  "package": "com.local.notesclone.account109",
+  "noteId": "321e9d6c-d590-437d-8edb-d6ed2feae3fa",
+  "historicalBaselineSha256": "d78456fb352f26bebfe1177a07dfdb5e8a39e9d79481321d28346a0b89232626",
+  "helperSha256": "501f74f71cf608ea414cb14949f9826c2a75dd5cba440f5aa0ec8938cdd21f8c",
+  "operations": [
+    "connect-existing-owned-main-page",
+    "account.status",
+    "load_workspace",
+    "read_attachment-with-current-native-access",
+    "load_workspace",
+    "account.status"
+  ],
+  "policy": {
+    "launch": false,
+    "install": false,
+    "signIn": false,
+    "cancel": false,
+    "signOut": false,
+    "enable": false,
+    "editorCommands": false,
+    "baselineReplacement": false,
+    "dbOrGrantAccess": false,
+    "rawContentSaved": false
+  },
+  "owned": {
+    "pid": 28911,
+    "local": "tcp:56716",
+    "remote": "localabstract:webview_devtools_remote_28911"
+  },
+  "accountBefore": {
+    "state": "error",
+    "enabled": false,
+    "hasProfile": false,
+    "error": {
+      "code": "account_network",
+      "stage": "coordinator"
+    }
+  },
+  "structure": {
+    "sameFourIds": true,
+    "allPlainTextEqual": true,
+    "threeDocumentsEqual": true,
+    "originalThreeBlocksEqual": true,
+    "soleAdditionIsOwnedAttachmentAndEmptyParagraph": true,
+    "exactSingleReference": true,
+    "nodeNameAndKindMatchDescriptor": true,
+    "attachmentIdSha256": "dd1ffcd89c62a90945fcfae1a89d52e406894c4a2752adf9a04c45a9fc21b87e",
+    "noteAuthorized": true
+  },
+  "bytes": {
+    "authorizedProductRead": true,
+    "byteLength": 114608,
+    "sha256": "c95b15e981fe59edf68449ac3a73bc01f609e5e5e74696bb0ef7302927e40cab",
+    "descriptorSizeMatches": true
+  },
+  "fixtureComparisons": [
+    {
+      "source": "scripts/verification/account109-android.mjs:PHONE_FILES",
+      "name": "account109-phone.png",
+      "byteLength": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+      "sameBytes": false,
+      "sameMime": false,
+      "sameDisplayName": false
+    },
+    {
+      "source": "scripts/verification/account109-android.mjs:PHONE_FILES",
+      "name": "account109-phone.bin",
+      "byteLength": 4096,
+      "sha256": "f1a9116e64d5ce92231de69558afad42a650a9ee7ad481813ef824d649784ded",
+      "sameBytes": false,
+      "sameMime": false,
+      "sameDisplayName": false
+    },
+    {
+      "source": "scripts/verification/account109-desktop.mjs:png",
+      "name": "account109.png",
+      "byteLength": 68,
+      "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f",
+      "sameBytes": false,
+      "sameMime": false,
+      "sameDisplayName": false
+    },
+    {
+      "source": "scripts/verification/account109-desktop.mjs:raw",
+      "name": "account109.bin",
+      "byteLength": 4096,
+      "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193",
+      "sameBytes": false,
+      "sameMime": false,
+      "sameDisplayName": false
+    }
+  ],
+  "accountAfter": {
+    "state": "error",
+    "enabled": false,
+    "hasProfile": false,
+    "error": {
+      "code": "account_network",
+      "stage": "coordinator"
+    }
+  },
+  "invariance": {
+    "allNoteAndAttachmentFieldsUnchanged": true,
+    "originalAccountErrorUnchanged": true,
+    "ownedPidUnchanged": true
+  },
+  "cleanup": {
+    "driverClosed": true,
+    "exactForwardAbsent": true
+  },
+  "finishedAt": "2026-11-13T13:15:43.484Z"
+}
