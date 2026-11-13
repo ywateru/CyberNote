@@ -11,18 +11,19 @@ import {STORES,hash,canonicalBranch,verifyBytes,boundedPoll} from './account109-
 import {connectedPair} from './account109-headless-recovery.mjs';
 import {nativeAccount,requireHealthy,signedOut,noteBody,statusObserver,safeStatus,failureCode} from './account109-desktop-helpers.mjs';
 
-export const BINARY_SHA='b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2';
-const SOURCE='39c1420d23daaa9397036d24826219e1bd2b89ff',USERNAME='cybernoteqa20261113a';
+export const BINARY_SHA='b981400529f36cb698616d3871cc83b9a5d7cc4c10fb75009276697daba9ee6f';
+export const SOURCE='10814415ca088273bacc311d192b9605bda16775';
+const USERNAME='cybernoteqa20261113a';
 const PRIOR=new URL('../../docs/verification/account109/native/headless-continuation01/result.json',import.meta.url);
 const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(value);
 export function options(argv){
   const o={};
-  for(let i=0;i<argv.length;i++){const k=argv[i];assert(['--binary','--stores','--output','--end-state','--allow-b-relogin'].includes(k)&&!Object.hasOwn(o,k),'Unknown/duplicate option');o[k]=k==='--allow-b-relogin'?true:argv[++i];}
-  assert.equal(Object.keys(o).length,o['--allow-b-relogin']?5:4,'--binary ABS --stores ORIGINAL --output FRESH --end-state enabled|paused [--allow-b-relogin] required');
+  for(let i=0;i<argv.length;i++){const k=argv[i];assert(['--binary','--stores','--output','--end-state','--allow-b-relogin','--allow-b-network-retry'].includes(k)&&!Object.hasOwn(o,k),'Unknown/duplicate option');o[k]=k.startsWith('--allow-b-')?true:argv[++i];}
+  assert.equal(Object.keys(o).length,4+Number(!!o['--allow-b-relogin'])+Number(!!o['--allow-b-network-retry']),'--binary ABS --stores ORIGINAL --output FRESH --end-state enabled|paused [--allow-b-relogin] [--allow-b-network-retry] required');
   for(const k of ['--binary','--stores','--output'])assert(isAbsolute(o[k]||'')&&resolve(o[k])===o[k],'Canonical absolute paths required');
   assert.equal(o['--stores'],STORES,'Only original synthetic stores allowed');assert(['enabled','paused'].includes(o['--end-state']),'Explicit final state required');
   const output=o['--output'];assert(output!==STORES&&!output.startsWith(STORES+sep)&&!STORES.startsWith(output+sep),'Evidence must be outside original stores');
-  return {binary:o['--binary'],stores:STORES,output,endState:o['--end-state'],allowBRelogin:o['--allow-b-relogin']===true};
+  return {binary:o['--binary'],stores:STORES,output,endState:o['--end-state'],allowBRelogin:o['--allow-b-relogin']===true,allowBNetworkRetry:o['--allow-b-network-retry']===true};
 }
 export function checkProfile(s){
   // An unsuccessful refresh and pending SignIn can retain only the bound subject.
@@ -30,15 +31,38 @@ export function checkProfile(s){
   if(!s.error&&s.state!=='error'&&s.profile&&!(s.state==='authorizing'&&s.profile.username===undefined))assert.equal(s.profile.username,USERNAME,'Expected original synthetic account');
   return s;
 }
-export const isBRefreshFailure=s=>s?.state==='error'&&s.enabled===false&&s.error?.code==='account_authentication'&&s.error.stage==='identityRefresh'&&typeof s.profile?.subject==='string'&&s.profile.subject.length>0&&s.profile.username===undefined&&Array.isArray(s.devices)&&!s.devices.some(d=>d.connected)&&s.conflictCount===0;
-export const refreshClassification=s=>s?.error?.code==='account_network'?'transport':s?.error?.code==='account_authentication'&&s.error.stage==='identityRefresh'?'unclassified':'other';
-export async function reauthorizeB(initial,{allowed,record}){
-  if(!allowed||!isBRefreshFailure(initial)){requireHealthy(initial);assert.fail('B re-login requires the explicitly allowed exact refresh failure');}
-  await record({kind:'b-refresh-classification-unavailable',classification:refreshClassification(initial),originalSubjectSha256:hash(initial.profile.subject),...safeStatus(initial)});
-  // Pinned 39c1420 folds transport, server and local refresh failures together.
-  // No field (including providerReason=refreshFailed) proves server rejection.
-  // Re-enable B authorization only with a reviewed diagnostic contract AND binary.
-  throw Object.assign(new Error('Refresh cause unavailable in pinned candidate'),{code:'B_REFRESH_CLASSIFICATION_UNAVAILABLE'});
+// These finite meanings belong only to the pinned 10814415 auth implementation:
+// RefreshFailed here is produced only by HTTP 400 invalid_grant, not all refresh errors.
+export const refreshClassification=s=>s?.error?.code==='account_network'||(s?.error?.code==='account_authentication'&&s.error.stage==='authorizationProvider'&&s.error.providerReason==='network')?'transport':s?.error?.code==='account_authentication'&&s.error.stage==='identityRefresh'&&s.error.providerReason===undefined?'serverInvalidGrant400':s?.error?.code==='account_authentication'&&s.error.stage==='identitySession'?'noSession':'other';
+export const isBRefreshFailure=s=>s?.state==='error'&&s.enabled===false&&refreshClassification(s)==='serverInvalidGrant400'&&typeof s.profile?.subject==='string'&&s.profile.subject.length>0&&Array.isArray(s.devices)&&!s.devices.some(d=>d.connected)&&s.conflictCount===0;
+export async function waitForBStartup(read,{poll=boundedPoll}={}){
+  let result,subject;
+  await poll('B asynchronous restore result',async()=>{
+    result=checkProfile(await read());
+    if(result.profile){assert(typeof result.profile.subject==='string'&&result.profile.subject.length>0);subject??=result.profile.subject;assert.equal(result.profile.subject,subject,'Original B subject during startup');}
+    // Runtime starts signedOut before restore is spawned. Polling issues no mutation.
+    return !!result.error||result.state==='error'||!!result.profile&&['paused','ready'].includes(result.state);
+  },120000);return result;
+}
+export async function recoverB(initial,{allowRelogin,allowNetworkRetry,login,retry,enable,record,before=async()=>{}}){
+  const classification=refreshClassification(initial);
+  await record({kind:'b-startup-recovery-decision',classification,...safeStatus(initial),...(initial.profile?.subject?{originalSubjectSha256:hash(initial.profile.subject)}:{})});
+  if(classification==='noSession'){
+    await record({kind:'b-session-action-required',guidance:'Explicit UI SignOut and cleanup is required before another login; not performed.',signOutExecuted:false});
+    throw Object.assign(new Error('Explicit session cleanup required'),{code:'B_SESSION_ACTION_REQUIRED'});
+  }
+  const network=classification==='transport';
+  if(network?!allowNetworkRetry:!allowRelogin||!isBRefreshFailure(initial)){requireHealthy(initial);assert.fail('Explicit supported B recovery required');}
+  assert(initial.state==='error'&&initial.profile?.subject&&initial.conflictCount===0&&!initial.devices.some(d=>d.connected),'Retained original B owner required');
+  const subject=initial.profile.subject;
+  if(initial.profile.username!==undefined)assert.equal(initial.profile.username,USERNAME);
+  // One chosen action only. A failed retry never falls through to SignIn or SignOut.
+  await before();
+  const restored=checkProfile(await (network?retry():login()));requireHealthy(restored);
+  assert.equal(restored.profile?.subject,subject,'B recovery must retain original bound subject');
+  assert(['paused','ready','connecting'].includes(restored.state));
+  await record({kind:'b-recovery-completed',classification,sameOriginalSubject:true,command:network?'account.syncNow':'account.signIn',replacementAuthorizationRequested:!network,...safeStatus(restored)});
+  await enable();return restored;
 }
 export async function waitForOriginalAccount(label,read,subject,{poll=boundedPoll}={}){
   return waitHealthy(label,async()=>{
@@ -132,20 +156,20 @@ export async function finish(report,children,save){
   report.finishedAt=new Date().toISOString();await save();
 }
 const documentFor=text=>({type:'doc',content:[{type:'paragraph',content:[{type:'text',text,marks:[{type:'bold'}]}]},{type:'paragraph',content:[{type:'text',text:'完整第二段 中文 😀'}]}]});
-const operations=['ready','state','idle','close','account.status','account.signIn','account.setEnabled','settings.open','settings.tab','app.back','folder.select','note.create','note.select','editor.setContent','app.flush','attachment.read','confirmation.inspect','dom.click'];
+const operations=['ready','state','idle','close','account.status','account.signIn','account.syncNow','account.setEnabled','settings.open','settings.tab','app.back','folder.select','note.create','note.select','editor.setContent','app.flush','attachment.read','confirmation.inspect','recovery.inspect','dom.click'];
 
 export async function run(argv=process.argv.slice(2)){
-  const {binary,stores,output,endState,allowBRelogin}=options(argv);
-  assert.equal(hash(await readFile(binary)),BINARY_SHA,'Only reviewed 39c1420 GUI candidate allowed');
+  const {binary,stores,output,endState,allowBRelogin,allowBNetworkRetry}=options(argv);
+  assert.equal(hash(await readFile(binary)),BINARY_SHA,'Only reviewed 10814415 GUI candidate allowed');
   for(const dir of [stores,...['a','b'].map(n=>resolve(stores,'desktop-'+n))])assert.equal(await realpath(dir),dir);
   await mkdir(output,{mode:0o700});assert.equal(await realpath(output),output);
   const priorBytes=await readFile(PRIOR),prior=JSON.parse(priorBytes);
-  const report={schema:1,kind:'account109-original-desktop-relogin',status:'running',phase:'baseline',startedAt:new Date().toISOString(),endState,allowBRelogin,scenarios:Object.fromEntries(['baseline','login','pausedEdits','catchup','bidirectional','restart','endState','auth06'].map(k=>[k,'not-run'])),checks:[],observations:[],binary:{path:binary,sha256:BINARY_SHA,sourceRevision:SOURCE,currentMainBuild:false},prior:{sha256:hash(priorBytes)},limitations:[
+  const report={schema:1,kind:'account109-original-desktop-relogin',status:'running',phase:'baseline',startedAt:new Date().toISOString(),endState,allowBRelogin,allowBNetworkRetry,scenarios:Object.fromEntries(['baseline','login','pausedEdits','catchup','bidirectional','restart','endState','auth06'].map(k=>[k,'not-run'])),checks:[],observations:[],binary:{path:binary,sha256:BINARY_SHA,sourceRevision:SOURCE,candidateKind:'debug-e2e'},prior:{sha256:hash(priorBytes)},limitations:[
     'Existing synthetic roots only. SignIn uses the product UI handler and native PKCE/system browser; parent completes authorization. No credentials, tokens, callback URLs, grants or manual pairing inputs.',
     'Merge confirmation is inspected and clicked through the existing dom.click UI handler, not physical input. Parent only completes system-browser authorization. Editor commands use debug/e2e UI handlers; no physical typing or OS picker claim.',
     'Pause is the production account setting, not OS network loss. Negative windows are bounded to 3 seconds. AUTH06 is not executed.',
     'Cross-baseline overlap requires exact note fields/references except local revision, and exact attachment ownership/metadata/SHA except physical relativePath. Later canonical preservation excludes local revision/path, normalizes absent/null nullable fields and reference IDs to descriptors; original attachment IDs/ownership/SHA are verified separately. Only live unlocked baselines are supported.',
-    'Shell proxy variables are blanked only for owned child processes. No system settings change or conflict creation. Pinned 39c1420 cannot distinguish identityRefresh transport/server/local failures; even --allow-b-relogin stops without SignIn. No grant-invalidity claim or reauthorization retry; a reviewed classified diagnostic and binary are required before B recovery can be enabled.'
+    'Shell proxy variables are blanked only for owned child processes. No system settings change or conflict creation. Pinned 10814415 maps identityRefresh without providerReason to HTTP 400 invalid_grant. Explicit B flags select at most one UI recovery: network syncNow retains the production owner, rejected refresh signIn requires same subject. NoSession stops with explicit SignOut guidance; no automatic SignOut or recovery fallback. No grant bytes are read to infer state.'
   ],tools:{}};
   for(const file of ['account109-desktop-relogin.mjs','sync108-native-driver.mjs','account109-desktop-helpers.mjs','account109-desktop-recovery.mjs','account109-headless-recovery.mjs'])report.tools[file]=hash(await readFile(new URL(file,import.meta.url)));
   let saving=Promise.resolve(),sequence=0,interrupted=false;
@@ -159,7 +183,7 @@ export async function run(argv=process.argv.slice(2)){
     try{const value=await work();report.lastOperation={...row,event:'after'};return value;}
     catch(e){report.lastOperation={...row,event:'failed',code:failureCode(e)};await save();throw e;}
   }
-  const command=async(app,op,args={})=>{await trace(app,op,()=>app.execute(op,args));await trace(app,'idle',()=>app.idle());};
+  const command=async(app,op,args={})=>{await trace(app,op,()=>app.execute(op,args,op==='account.syncNow'?60000:undefined));await trace(app,'idle',()=>app.idle());};
   const state=app=>trace(app,'state',()=>app.state());
   const workspace=async app=>(await state(app)).workspace;
   const status=async app=>{const s=await trace(app,'account.status',()=>nativeAccount(app,'status'));observe(app.name,s);return checkProfile(s);};
@@ -206,15 +230,29 @@ export async function run(argv=process.argv.slice(2)){
     report.baseline={sha256:hash(await readFile(resolve(output,'baseline.json'))),originalFilesUnchanged:true,overlapAgreementCheckedBeforeLaunch:true,notes:Object.fromEntries(['a','b'].map(k=>[k,baselines[k].notes.map(n=>({id:n.id,sha256:hash(noteBody(n))}))])),gap};await check('baseline');
     report.phase='startup';let a=await open('a');const b=await open('b');
     assert(signedOut(await status(a)),'A must begin genuinely signed out');
-    const initialB=await status(b);
-    if(isBRefreshFailure(initialB)){
-      if(!allowBRelogin)requireHealthy(initialB);
-      report.phase='b-relogin';subject=initialB.profile.subject;
-      await reauthorizeB(initialB,{allowed:allowBRelogin,
-        record:async row=>{report.observations.push(row);await save();}
+    const initialB=await waitForBStartup(()=>status(b));subject=initialB.profile?.subject;
+    if(initialB.error||initialB.state==='error'){
+      report.phase='b-recovery';subject=initialB.profile?.subject;
+      const classification=refreshClassification(initialB);
+      async function invokeRecovery(type,label){
+        await enter(b);
+        await boundedPoll('B recovery UI ready',async()=>{
+          const current=await status(b);assert.equal(refreshClassification(current),classification,'B recovery classification changed');assert.equal(current.profile?.subject,subject);
+          const p=await trace(b,'recovery.inspect',()=>b.evaluate("(()=>{const p=document.querySelector('.account-settings'),bs=Array.from(p?.querySelectorAll('section.account-error button')||[]);return {state:p?.dataset.accountState,count:bs.length,label:bs[0]?.textContent,enabled:!!bs[0]&&!bs[0].disabled,visible:!!bs[0]&&bs[0].getClientRects().length>0};})()"));
+          return p.state==='error'&&p.count===1&&p.label===label&&p.enabled&&p.visible;
+        },5000);
+        report.observations.push({kind:'b-recovery-ui-shown',label,uiHandler:'account.'+type,physicalInput:false});await save();
+        if(type==='signIn')console.log('WAIT b system-browser-sign-in (one explicit same-subject authorization)');
+        await command(b,'account.'+type);
+      }
+      await recoverB(initialB,{allowRelogin:allowBRelogin,allowNetworkRetry:allowBNetworkRetry,
+        record:async row=>{report.observations.push(row);await save();},before:async()=>{await preserved(a,baselines.a);await preserved(b,baselines.b);},enable:()=>enable(b),
+        login:async()=>{await invokeRecovery('signIn','重新登录');const [restored]=await waitForOriginalAccount('B same-subject sign-in',()=>statuses([b]),subject);return restored;},
+        retry:async()=>{await invokeRecovery('syncNow','重试连接');return status(b);}
       });
       report.phase='startup';
-    }else requireHealthy(initialB,{pendingNetwork:true});
+    }
+    const beforeReady=await status(b);if(subject&&beforeReady.profile)assert.equal(beforeReady.profile.subject,subject);requireHealthy(beforeReady,{pendingNetwork:true});if(!beforeReady.error&&!beforeReady.enabled&&beforeReady.state==='paused')await enable(b);
     const [bs]=await accountWait('B saved account restored',[b],ss=>ss.every(s=>s.profile&&s.enabled&&s.state==='ready'),120000);subject=bs.profile.subject;assert(subject);assert.equal(bs.conflictCount,0,'Existing conflict must already be resolved');
     await preserved(a,baselines.a);await preserved(b,baselines.b);
     report.phase='login';await enter(a);console.log('WAIT a system-browser-sign-in (parent completes native PKCE authorization)');await command(a,'account.signIn');
@@ -237,7 +275,7 @@ export async function run(argv=process.argv.slice(2)){
     for(const app of [a,b]){await preserved(app,combined);assertLibrary(await workspace(app),{notes:[an,bn],attachments:[]});await leave(app);}
     const final=await accountWait('explicit final state',[a,b],ss=>endState==='enabled'?connectedPair(ss):ss.every(s=>s.profile&&!s.enabled&&s.state==='paused'&&!s.devices.some(d=>d.connected)),15000);
     assert(final.every(s=>s.conflictCount===0),'No new conflict');report.finalStatuses=final.map(safeStatus);await check('endState');
-  }catch(error){report.failure={phase:report.phase,code:['RUN_INTERRUPTED','B_REFRESH_CLASSIFICATION_UNAVAILABLE'].includes(error.code)?error.code:failureCode(error),lastOperation:report.lastOperation};}
+  }catch(error){report.failure={phase:report.phase,code:['RUN_INTERRUPTED','B_SESSION_ACTION_REQUIRED'].includes(error.code)?error.code:failureCode(error),lastOperation:report.lastOperation};}
   finally{report.phase='cleanup';await finish(report,children,save);process.off('SIGINT',onSignal);process.off('SIGTERM',onSignal);}
   if(report.status!=='pass')process.exitCode=1;return report;
 }

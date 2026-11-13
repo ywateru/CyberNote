@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
-import {options,checkProfile,isBRefreshFailure,refreshClassification,reauthorizeB,waitForOriginalAccount,assertLibrary,combineBaselines,readLibrary,priorGate,waitHealthy,connectionThenData,confirmEnableUi,finish} from './account109-desktop-relogin.mjs';
+import {BINARY_SHA,SOURCE,options,checkProfile,isBRefreshFailure,refreshClassification,recoverB,waitForBStartup,waitForOriginalAccount,assertLibrary,combineBaselines,readLibrary,priorGate,waitHealthy,connectionThenData,confirmEnableUi,finish} from './account109-desktop-relogin.mjs';
 import {STORES,hash,boundedPoll,verifyBytes} from './account109-desktop-recovery.mjs';
 import {noteBody,safeStatus} from './account109-desktop-helpers.mjs';
 
@@ -16,11 +16,16 @@ const pair=()=>[status('a'),status('b')];
 const network=()=>pair().map(s=>({...s,state:'error',error:{code:'account_network',stage:'coordinatorSession'}}));
 function clock(){let time=0;return {now:()=>time,sleep:async ms=>{time+=ms;}};}
 
+test('runner source and binary pin match the independently recorded exact GUI build',async()=>{
+  const r=JSON.parse(await readFile(new URL('../../docs/verification/account109/macos/10814415-debug-e2e-build01/build-record.json',import.meta.url)));
+  assert.equal(BINARY_SHA,r.binary.sha256);assert.equal(SOURCE,r.sourceRevision);assert.equal(r.sourceBefore.sourceDirty,false);assert.deepEqual(r.sourceBefore,r.sourceAfter);assert.deepEqual(r.lockfilesBefore,r.lockfilesAfter);assert.equal(r.identityReceipt.nativeBinarySha256,BINARY_SHA);assert.equal(r.identityReceipt.info.sourceRevision,SOURCE);
+});
+
 test('CLI requires explicit end state and rejects credential/URL/store/duplicate inputs',()=>{
   const args=['--binary','/tmp/candidate','--stores',STORES,'--output','/private/tmp/relogin-evidence','--end-state','paused'];
   assert.equal(options(args).endState,'paused');
-  assert.equal(options(args).allowBRelogin,false);assert.equal(options([...args,'--allow-b-relogin']).allowBRelogin,true);
-  for(const bad of [args.slice(0,-2),[...args,'--token','secret'],[...args,'--binary','/tmp/other'],args.map(x=>x===STORES?'/tmp/other':x),args.map(x=>x==='paused'?'signedOut':x),args.map(x=>x==='/private/tmp/relogin-evidence'?STORES+'/evidence':x)])assert.throws(()=>options(bad));
+  assert.equal(options(args).allowBRelogin,false);assert.equal(options([...args,'--allow-b-relogin']).allowBRelogin,true);assert.equal(options([...args,'--allow-b-network-retry']).allowBNetworkRetry,true);
+  for(const bad of [args.slice(0,-2),[...args,'--token','secret'],[...args,'--binary','/tmp/other'],[...args,'--allow-b-network-retry','--allow-b-network-retry'],args.map(x=>x===STORES?'/tmp/other':x),args.map(x=>x==='paused'?'signedOut':x),args.map(x=>x==='/private/tmp/relogin-evidence'?STORES+'/evidence':x)])assert.throws(()=>options(bad));
 });
 
 const refreshFailure=()=>({...status('b'),state:'error',enabled:false,profile:{subject:'synthetic-owner'},devices:[],error:{code:'account_authentication',stage:'identityRefresh'}});
@@ -29,15 +34,47 @@ test('partial refresh-failure profile retains its actual error, while healthy us
   await assert.rejects(()=>waitHealthy('original auth error',async()=>[checkProfile(failed)],()=>true,120000),e=>e.code==='ACCOUNT_AUTHENTICATION_FAILED');
   assert.throws(()=>checkProfile({...failed,state:'paused',error:undefined}));assert.throws(()=>checkProfile({...status('b'),profile:{subject:'synthetic-owner',username:'different-owner'}}));
 });
-test('pinned ambiguous refresh failure cannot invoke SignIn even with explicit opt-in',async()=>{
-  for(const providerReason of [undefined,'refreshFailed','identityRejected','network']){
-    const initial=refreshFailure();if(providerReason)initial.error.providerReason=providerReason;
-    const records=[];let calls=0;
-    await assert.rejects(()=>reauthorizeB(initial,{allowed:true,record:async row=>records.push(row),login:async()=>{calls++;},enable:async()=>{calls++;}}),e=>e.code==='B_REFRESH_CLASSIFICATION_UNAVAILABLE');
-    assert.equal(calls,0);assert.equal(records.length,1);assert.equal(records[0].classification,'unclassified');assert.deepEqual(records[0].error,initial.error);assert.equal(records[0].originalSubjectSha256,hash(initial.profile.subject));assert(!JSON.stringify(records).includes(initial.profile.subject));
+test('pinned classification admits only the reviewed HTTP400 invalid_grant mapping',()=>{
+  assert.equal(refreshClassification(refreshFailure()),'serverInvalidGrant400');
+  for(const reason of ['refreshFailed','identityRejected','network']){const s=refreshFailure();s.error.providerReason=reason;assert.equal(isBRefreshFailure(s),false);}
+  assert.equal(refreshClassification({...refreshFailure(),error:{code:'account_network',stage:'identityProvider'}}),'transport');
+  assert.equal(refreshClassification({...refreshFailure(),error:{code:'account_authentication',stage:'authorizationProvider',providerReason:'network'}}),'transport');
+  assert.equal(refreshClassification({...refreshFailure(),error:{code:'account_authentication',stage:'identitySession'}}),'noSession');
+});
+test('startup polls signedOut until delayed restore error/profile without issuing commands',async()=>{
+  for(const terminal of [refreshFailure(),{...refreshFailure(),error:{code:'account_network',stage:'identityProvider'}},status('b')]){
+    let reads=0;const c=clock(),poll=(l,p,m)=>boundedPoll(l,p,m,c);
+    const result=await waitForBStartup(async()=>++reads<5?{state:'signedOut',enabled:false,devices:[]}:terminal,{poll});assert.equal(result,terminal);assert.equal(reads,5);assert.equal(c.now(),4000);
   }
-  const transport={...refreshFailure(),error:{code:'account_network',stage:'identityRefresh'}};assert.equal(refreshClassification(transport),'transport');let calls=0;
-  await assert.rejects(()=>reauthorizeB(transport,{allowed:true,record:async()=>{},login:async()=>{calls++;}}),e=>e.code==='ACCOUNT_STATUS_FAILED');assert.equal(calls,0);
+  const c=clock();await assert.rejects(()=>waitForBStartup(async()=>({state:'signedOut',enabled:false,devices:[]}),{poll:(l,p,m)=>boundedPoll(l,p,m,c)}),e=>e.code==='CONDITION_TIMEOUT:B asynchronous restore result');assert.equal(c.now(),120000);
+  let reads=0;const c2=clock();await assert.rejects(()=>waitForBStartup(async()=>({state:'authorizing',profile:{subject:++reads===1?'original':'other'}}),{poll:(l,p,m)=>boundedPoll(l,p,m,c2)}),/Original B subject/);
+});
+test('startup profile while connecting cannot hide a later recoverable error',async()=>{
+  let reads=0;const c=clock(),terminal={...refreshFailure(),error:{code:'account_network',stage:'coordinatorSession'}};
+  const result=await waitForBStartup(async()=>++reads===1?{state:'signedOut',enabled:false,devices:[]}:reads<5?{...status('b'),state:'connecting'}:terminal,{poll:(l,p,m)=>boundedPoll(l,p,m,c)});
+  assert.equal(result,terminal);assert.equal(reads,5);assert.equal(refreshClassification(result),'transport');
+});
+test('one explicitly allowed B recovery preserves subject and enables only after healthy result',async()=>{
+  for(const network of [false,true]){
+    const initial=refreshFailure();if(network)initial.error={code:'account_network',stage:'identityProvider'};
+    const events=[],records=[];const restored={...status('b'),state:'paused',enabled:false};
+    await recoverB(initial,{allowRelogin:true,allowNetworkRetry:true,record:async r=>records.push(r),before:async()=>events.push('preserve originals'),login:async()=>{events.push('UI signIn');return restored;},retry:async()=>{events.push('UI syncNow');return restored;},enable:async()=>events.push('UI enable')});
+    assert.deepEqual(events,['preserve originals',network?'UI syncNow':'UI signIn','UI enable']);assert.equal(records[0].error.stage,initial.error.stage);assert.equal(records[1].sameOriginalSubject,true);assert.equal(records[1].replacementAuthorizationRequested,!network);assert.equal(records[0].originalSubjectSha256,hash(initial.profile.subject));
+  }
+});
+test('server-rejected re-login cannot enable a changed or incomplete terminal owner',async()=>{
+  for(const result of [{...status('b'),profile:{subject:'other',username:'cybernoteqa20261113a'}},{...status('b'),profile:{subject:'synthetic-owner'}},refreshFailure()]){
+    const calls=[];await assert.rejects(()=>recoverB(refreshFailure(),{allowRelogin:true,record:async()=>{},login:async()=>{calls.push('login');return result;},retry:async()=>calls.push('retry'),enable:async()=>calls.push('enable')}));assert.deepEqual(calls,['login']);
+  }
+});
+test('failed network retry never falls through to SignIn, SignOut or another retry',async()=>{
+  for(const result of [refreshFailure(),{...status('b'),profile:{subject:'other',username:'cybernoteqa20261113a'}},{...status('b'),profile:{subject:'synthetic-owner'}}]){
+    const calls=[];await assert.rejects(()=>recoverB({...refreshFailure(),error:{code:'account_network',stage:'identityProvider'}},{allowNetworkRetry:true,allowRelogin:true,record:async()=>{},retry:async()=>{calls.push('retry');return result;},login:async()=>calls.push('login'),enable:async()=>calls.push('enable')}));assert.deepEqual(calls,['retry']);
+  }
+  let retries=0;await assert.rejects(()=>recoverB({...refreshFailure(),error:{code:'account_network'}},{allowNetworkRetry:true,record:async()=>{},retry:async()=>{retries++;throw Error('injected failure');}}));assert.equal(retries,1);
+});
+test('noSession preserves initial error and gives explicit SignOut guidance without executing it',async()=>{
+  const records=[],calls=[];await assert.rejects(()=>recoverB({...refreshFailure(),error:{code:'account_authentication',stage:'identitySession'}},{allowNetworkRetry:true,allowRelogin:true,record:async r=>records.push(r),login:async()=>calls.push('login'),retry:async()=>calls.push('retry'),enable:async()=>calls.push('enable')}),e=>e.code==='B_SESSION_ACTION_REQUIRED');assert.deepEqual(calls,[]);assert.equal(records[0].error.stage,'identitySession');assert.equal(records[1].signOutExecuted,false);assert.match(records[1].guidance,/Explicit UI SignOut/);
 });
 test('authorizing partial profile waits for strict same-subject terminal after initial refresh failure',async()=>{
   const initial=refreshFailure();assert.equal(checkProfile(initial),initial);
@@ -50,10 +87,11 @@ test('authorizing partial profile waits for strict same-subject terminal after i
   }
   const pendingClock=clock();await assert.rejects(()=>waitForOriginalAccount('bounded pending',async()=>[partial],initial.profile.subject,{poll:(l,p,m)=>boundedPoll(l,p,m,pendingClock)}),e=>e.code==='CONDITION_TIMEOUT:bounded pending');assert.equal(pendingClock.now(),120000);
 });
-test('B recovery is opt-in and rejects other authentication stages, states and connected profiles',async()=>{
-  for(const [allowed,initial] of [[false,refreshFailure()],[true,{...refreshFailure(),error:{code:'account_authentication',stage:'authorizationProvider'}}],[true,{...refreshFailure(),enabled:true}],[true,{...refreshFailure(),profile:{subject:'synthetic-owner',username:'cybernoteqa20261113a'}}],[true,{...refreshFailure(),devices:[{connected:true}]}],[true,{...refreshFailure(),conflictCount:1}]]){
-    let calls=0;await assert.rejects(()=>reauthorizeB(initial,{allowed,record:async()=>{},login:async()=>{calls++;},enable:async()=>{calls++;}}),e=>e.code==='ACCOUNT_AUTHENTICATION_FAILED');assert.equal(calls,0);
+test('B recovery flags and unsupported authentication states cannot mutate an account',async()=>{
+  for(const initial of [refreshFailure(),{...refreshFailure(),error:{code:'account_network'}},{...refreshFailure(),error:{code:'account_authentication',stage:'authorizationProvider',providerReason:'refreshFailed'}},{...refreshFailure(),enabled:true},{...refreshFailure(),devices:[{connected:true}]}]){
+    const calls=[];await assert.rejects(()=>recoverB(initial,{record:async()=>{},login:async()=>calls.push('login'),retry:async()=>calls.push('retry'),enable:async()=>calls.push('enable')}));assert.deepEqual(calls,[]);
   }
+  const calls=[];await assert.rejects(()=>recoverB({...refreshFailure(),devices:[{connected:true}]},{allowRelogin:true,record:async()=>{},login:async()=>calls.push('login')}));assert.deepEqual(calls,[]);
 });
 
 test('complete baseline rejects missing notes, changed text/marks, ownership and lost refs',()=>{
