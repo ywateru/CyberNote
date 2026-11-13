@@ -12,3 +12,7 @@
 ## 验证与交付
 
 作者与独立审阅者分离。离线故障测试覆盖请求网络失败、OAuth server rejection、无效响应、成功轮换和授权/暂停边界；不为诊断直接使用原库 grant 发请求。修复经审阅后才能安排新候选与新的实际运行目录。旧 relogin01、full02 超时和原始 DB 保留；脱敏归档不收录凭据或原始数据库。
+
+## relogin02 源码调查（delegated author）
+
+调查与补充离线回归见[responseMetadata 调查](../analysis/account109-response-metadata.md)。本增量只允许 `crates/account-auth/src/tests.rs` 中按现有 README 契约补充负例、正例和调用顺序断言，不改变运行时认证行为或响应容错规则。`responseMetadata` 是 token response 检查，不是 discovery metadata 检查；不得基于名称放宽固定 issuer/endpoint/JWKS、签名或 claims 校验。所有网络响应均使用 test-only fixture，独立 target 编译；不运行 live login、原库恢复或 live smoke。更细诊断字段和任何 provider 兼容性修复仅作为待审提案，须先确定具体失败字段及契约。

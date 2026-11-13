@@ -1353,3 +1353,209 @@ async fn missing_refresh_and_failed_revocation_offer_safe_explicit_cleanup_witho
     f.login(&client).await;
     assert!(!client.cleanup_required().await);
 }
+
+// relogin02 reports only ResponseMetadata. Exercise its possible token-envelope
+// causes without reading a live grant or conflating them with OIDC discovery.
+#[tokio::test]
+async fn relogin02_response_metadata_rejects_each_envelope_condition_on_all_token_paths() {
+    for path in ["code", "refresh-id", "refresh-no-id"] {
+        for condition in ["type", "access", "expiry-missing", "expiry-zero", "scope"] {
+            let f = Fixture::new();
+            f.omit_refresh_id
+                .store(path == "refresh-no-id", Ordering::SeqCst);
+            let dir = private_temp();
+            let cfg = config();
+            let mut http = f.http(&cfg);
+            let responder = http.responder.take().unwrap();
+            let mutate = Arc::new(AtomicBool::new(path == "code"));
+            let enabled = mutate.clone();
+            http.responder = Some(Arc::new(move |request| {
+                let token = request.uri().path() == "/oidc/token";
+                let change = enabled.load(Ordering::SeqCst) && token;
+                let result = responder(request);
+                Box::pin(async move {
+                    let mut reply = result.await?;
+                    if change {
+                        let mut body: Value = serde_json::from_slice(reply.body()).unwrap();
+                        match condition {
+                            "type" => body["token_type"] = json!("mac"),
+                            "access" => body["access_token"] = json!(""),
+                            "expiry-missing" => {
+                                body.as_object_mut().unwrap().remove("expires_in");
+                            }
+                            "expiry-zero" => body["expires_in"] = json!(0),
+                            "scope" => body["scope"] = json!("openid profile offline_access"),
+                            _ => unreachable!(),
+                        }
+                        *reply.body_mut() = serde_json::to_vec(&body).unwrap();
+                    }
+                    Ok(reply)
+                })
+            }));
+            let client = AuthClient::initialize(cfg, &dir.path().join("grant.json"), http).unwrap();
+            let error = if path == "code" {
+                let (transaction, callback) = f.begin(&client, false).await;
+                client
+                    .complete_callback(transaction, callback)
+                    .await
+                    .unwrap_err()
+            } else {
+                f.login(&client).await;
+                mutate.store(true, Ordering::SeqCst);
+                client.access_token(Duration::ZERO, true).await.unwrap_err()
+            };
+            assert_eq!(
+                error,
+                AuthError::IdentityRejected(IdentityRejection::ResponseMetadata),
+                "{path}/{condition}"
+            );
+            // Initial failure revokes the rejected grant; refresh retains the
+            // latest rotation quarantined for explicit cleanup. Neither exposes access.
+            assert!(matches!(
+                client.access_token(Duration::ZERO, false).await,
+                Err(AuthError::NoSession)
+            ));
+            assert_eq!(client.cleanup_required().await, path != "code");
+            assert_eq!(
+                f.tokens.load(Ordering::SeqCst),
+                if path == "code" { 1 } else { 2 }
+            );
+            if path != "code" {
+                let state = client.inner.state.lock().await;
+                let grant = state.grant.as_ref().unwrap();
+                assert!(!grant.usable);
+                assert_eq!(grant.refresh.as_deref(), Some("fixture-refresh-2"));
+            }
+            client.logout().await.unwrap();
+            assert!(!client.cleanup_required().await);
+        }
+    }
+}
+
+#[tokio::test]
+async fn relogin02_scope_omission_and_connect_subsets_are_accepted_on_all_token_paths() {
+    for path in ["code", "refresh-id", "refresh-no-id"] {
+        for scope in [
+            None,
+            Some("connect"),
+            Some("openid profile offline_access connect"),
+        ] {
+            let f = Fixture::new();
+            f.omit_refresh_id
+                .store(path == "refresh-no-id", Ordering::SeqCst);
+            let dir = private_temp();
+            let cfg = config();
+            let mut http = f.http(&cfg);
+            let responder = http.responder.take().unwrap();
+            http.responder = Some(Arc::new(move |request| {
+                let change = request.uri().path() == "/oidc/token";
+                let result = responder(request);
+                Box::pin(async move {
+                    let mut reply = result.await?;
+                    if change {
+                        let mut body: Value = serde_json::from_slice(reply.body()).unwrap();
+                        if let Some(scope) = scope {
+                            body["scope"] = json!(scope);
+                        } else {
+                            body.as_object_mut().unwrap().remove("scope");
+                        }
+                        *reply.body_mut() = serde_json::to_vec(&body).unwrap();
+                    }
+                    Ok(reply)
+                })
+            }));
+            let client = AuthClient::initialize(cfg, &dir.path().join("grant.json"), http).unwrap();
+            let identity = f.login(&client).await;
+            if path != "code" {
+                client.access_token(Duration::ZERO, true).await.unwrap();
+                assert_eq!(
+                    client
+                        .inner
+                        .state
+                        .lock()
+                        .await
+                        .grant
+                        .as_ref()
+                        .unwrap()
+                        .identity
+                        .as_ref(),
+                    Some(&identity)
+                );
+            }
+            assert!(!client.cleanup_required().await);
+            client.logout().await.unwrap();
+        }
+    }
+}
+
+#[tokio::test]
+async fn relogin02_replacement_begin_does_not_restore_and_requires_settled_logout() {
+    for fail_revoke in [false, true] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let cfg = config();
+        let mut http = f.http(&cfg);
+        let responder = http.responder.take().unwrap();
+        let operations = Arc::new(SyncMutex::new(Vec::new()));
+        let observed = operations.clone();
+        http.responder = Some(Arc::new(move |request| {
+            let operation = match request.uri().path() {
+                "/oidc/.well-known/openid-configuration" => "discovery",
+                "/oidc/jwks" => "jwks",
+                "/oidc/token/revocation" => "revoke",
+                "/oidc/token" => {
+                    let form: HashMap<String, String> = url::form_urlencoded::parse(request.body())
+                        .into_owned()
+                        .collect();
+                    if form["grant_type"] == "refresh_token" {
+                        "refresh"
+                    } else {
+                        "code"
+                    }
+                }
+                _ => panic!("unexpected fixture endpoint"),
+            };
+            observed.lock().unwrap().push(operation);
+            responder(request)
+        }));
+        let client = AuthClient::initialize(cfg, &dir.path().join("grant.json"), http).unwrap();
+        f.login(&client).await;
+        f.fail_refresh.store(true, Ordering::SeqCst);
+        assert_eq!(
+            client.restore().await.unwrap_err(),
+            AuthError::RefreshFailed
+        );
+        assert!(matches!(
+            client
+                .begin_authorization(config().redirect_uris[0].clone(), false)
+                .await,
+            Err(AuthError::Busy)
+        ));
+        f.fail_revoke.store(fail_revoke, Ordering::SeqCst);
+        let logout = client.logout().await;
+        if fail_revoke {
+            assert_eq!(logout, Err(AuthError::RevocationFailed));
+            assert!(client.cleanup_required().await);
+            assert!(matches!(
+                client
+                    .begin_authorization(config().redirect_uris[0].clone(), false)
+                    .await,
+                Err(AuthError::Busy)
+            ));
+        } else {
+            logout.unwrap();
+            let (transaction, _) = client
+                .begin_authorization(config().redirect_uris[0].clone(), false)
+                .await
+                .unwrap();
+            drop(transaction); // no browser or callback; begin sends no token request
+            assert!(client.restore().await.unwrap().is_none());
+        }
+        assert_eq!(
+            *operations.lock().unwrap(),
+            vec!["discovery", "jwks", "code", "refresh", "revoke"]
+        );
+        f.fail_revoke.store(false, Ordering::SeqCst);
+        client.logout().await.unwrap();
+    }
+}
