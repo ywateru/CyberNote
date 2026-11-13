@@ -1,6 +1,6 @@
 # 账户同步实际验证结果
 
-2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；新 `920fa9cf` 候选的原库 relogin04 未完成浏览器授权，后续 fresh cancel-local-live01 又在 GUI ready 阶段失败，未执行登录或取消。当前桌面 AX 可访问，不能把后者归因于锁屏。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
+2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；最新 `9e7c46d2` GUI 的 [fresh cancel-local-live02](native/cancel-local-live02/README.md) 五项通过，涵盖本地完整正文保存、发起/取消登录、继续编辑及自然重启保持，两进程自然退出 0。旧 `920fa9cf` 的原库 relogin04 浏览器授权未完成、fresh live01 ready 超时仍保留。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
 
 ## 分析与完善
 
@@ -21,6 +21,7 @@
 - 精确 `920fa9cf` debug E2E GUI 已[构建](macos/920fa9cf-debug-e2e-build01/README.md)并[独立核包](native/gui-explicit-login-build-review01/README.md)，SHA256 `bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd`，1,654 输入、四份 lockfile 与实际二进制内嵌身份一致；runner 已 pin 并实际运行 relogin04。新候选不是正式 release。
 - `3aa8889a` 在第四轮后增加可选人工授权等待预算，默认 120 秒、最高 600 秒，仅用于三条显式 SignIn 终态等待；[独审](native/authorization-timeout-review01.md) 58/58、父级[整合](native/recovery-integration02.md) 161/161 通过、零跳过。未再次发起真实登录，启动/连接/数据预算与严格身份门槛不变。
 - `ae4b7e33` 增加仅 fresh 临时库的 GUI 本地保存/取消/重启执行器，[独审](native/cancel-local-review01.md) 11/11；父级在 `44a9f43f` 整合 172/172、零跳过。随后真实 [cancel-local-live01](native/cancel-local-live01/README.md) 在 prepare.ready 超时，详见下文，不能将 fixture 通过当作实机用例通过。
+- 启动 handoff 保持原 `startupReady` 条件，采用同步 commit 取消及双 rAF/250ms 有界后备；debug idle 改为有界重新采样，保留命令双 rAF 和全部真实 busy/save/error 门槛。固定启动诊断在 ready 前只读开放，严格拒绝额外参数，显式测试 slot 对 owned 窗口请求一次正常激活。[独审](native/startup-debug-review01.md)关闭 serde 参数解析发现并实际执行 native 2/2；父级[整合](native/startup-debug-integration01.md) **214/214**，零跳过。新精确 [GUI 构建](macos/9e7c46d2-debug-e2e-build01/README.md)经[独立身份核验](native/gui-startup-build-review01/README.md)后实跑 live02，通过不证明 live01 的精确根因或真实账号授权。
 
 ## 实际桌面证据
 

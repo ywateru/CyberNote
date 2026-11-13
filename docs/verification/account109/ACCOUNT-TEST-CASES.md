@@ -11,11 +11,12 @@
 | SYNC-06 | 关闭账户 UI 时同步、原库新进程恢复授权并自动连接、B 离线重启补齐通过 | 未执行所有双端重启后修改排列 |
 | SYNC-07 | A 原生退出后本地新建/重启保留，两向新笔记排除，原有全文与全部附件保留通过 | 重启前 27 次/3005.87ms、后 29 次/3009.15ms 采样；relogin01 失败在 B 启动错误检查，重新登录恢复尚未通过 |
 | AUTH-07 续验 | [relogin04](native/relogin-live04/README.md) 使用 `920fa9cf` GUI：原库基线和两 GUI ready、完整 120 秒 clean signedOut 启动观察后实际执行一次 UI SignIn；原生 Chrome 出现登录页，两端自然退出 0。[signedOut 执行器独审](native/relogin-signedout-review01/README.md) 29 项通过 | 本轮未完成浏览器表单，B 保持 authorizing 后终态等待超时；没有编辑/enable，补齐、双向修改和重启未执行。不能据此认定 relogin03 的 `codeExchange / scope` 已修复，旧运行保留 |
-
-当前候选另可在全新专用临时库验证无需 QA 凭据的实际 GUI 命令路径：signedOut 创建并保存完整文档 → 打开账户页发起一次 SignIn → 观察 authorizing → 调用同页现有取消 handler → signedOut/无 profile/disabled → 保持本地编辑可用 → 自然退出并同目录重开核对完整正文与 signedOut。只使用已核包的 `920fa9cf` GUI 和原 e2e driver，不使用 headless、表单凭据、grant/原库读写、角色变更或系统网络操作。错误即失败，不自动重试授权；关闭自然退出与残留进程均需确认。此运行即使通过，也只补充当前候选的真实本地保存/取消/重启证据，不能替代已取消浏览器完成有效旧 callback 的负例、QA 重新登录、账户切换或三端同步。新临时库与中间输出在有限结果归档核对后清理。
+| AUTH-04 部分 | [cancel-local-live02](native/cancel-local-live02/README.md) 在精确 `9e7c46d2` GUI 全新库五项通过：完整格式正文保存、一次 SignIn 进入 authorizing、取消后重复 signedOut/全文核对、本地编辑、自然重启后全文与 signedOut 保持；两进程自然退出 0、零强制信号 | 使用现有 UI handler/debug 编辑器命令，无物理输入或浏览器表单；未提交取消后的有效旧 callback，不证明真实登录、账户切换或三端 |
 | AUTH-06 部分 | 实际原生 signOut 关闭 profile/连接并禁用；B 保持 ready | 取消确认、UI 成功提示与切换另一账户不在此次实测中 |
 | ANDROID-01～04 | 本地四篇合成全文保留、实际 coordinator 网络失败已有记录 | 账户三端前提未满足，手机起源附件亦未执行 |
 | RELAY-01 | [独立公网实测](native/relay-live01/receipt.json) 44.639 秒通过：正常 Client::map 自动回退至真实 Quick Tunnel，64 KiB 原字节及错误指纹拒绝通过，本次 provider PID 已回收 | 本地合成协调面与身份，关闭 iroh 并丢弃 WebRTC 信令；不代表真实账户、Android 或 4G/WiFi 已验收 |
+
+fresh cancel-local 用例契约：signedOut 创建并保存完整文档 → 打开账户页发起一次 SignIn → 观察 authorizing → 调用同页现有取消 handler → signedOut/无 profile/disabled → 保持本地编辑可用 → 自然退出并同目录重开核对完整正文与 signedOut。只使用已核包的 GUI 和 e2e driver，不使用 headless、表单凭据、grant/原库读写、角色变更或系统网络操作。错误即失败，不自动重试授权；关闭自然退出与残留进程均需确认。旧 `920fa9cf` 的 live01 在 ready 前失败，原样保留；新 `9e7c46d2` 的 live02 通过不追认旧失败原因。新临时库与中间输出在有限结果归档核对后清理。
 
 无界面入口仅在 `sync-e2e && debug_assertions && desktop` 并同时启用两项显式开关时生效。它使用正常 Workspace lease、Store/Session、账户 owner 和同步 adapter，以真实 token 回答保存协调；没有 WebView、编辑器草稿或身份注入。独立 Rust 7 项和关闭 feature 编译、Node 59 项、实际临时库 7 项烟测均通过；详见 [native 审阅](native/headless-review01/review.md)、[Node 审阅](macos/headless-node-review01/review.md)、[烟测](native/headless-smoke01/README.md)。
 
