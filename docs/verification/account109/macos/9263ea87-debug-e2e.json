@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "passed-static-preinstallation-identity-only",
+  "recordedAt": "2026-11-13T02:30:58.554Z",
+  "sourceRevision": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+  "sourceTree": "d72ca37aa5555fcf73327d9201b59d15e24116b1",
+  "sourceRoot": "/Users/water/work/2026/Apple-Notes-Clone",
+  "sourceCleanAtInitialIndependentCheck": true,
+  "sourceStatusAtReceipt": "",
+  "sourceStatusExplanation": "Initial independent git status was empty at 9263. Concurrent parent documentation edits are recorded separately. Actual product fingerprint and input count were recomputed unchanged against the initially validated 9263 identity.",
+  "sourceIdentityRecomputed": {
+    "sourceRevision": "0a80fdda170cf7dfa346fe56276b2e49c7cbd7ec",
+    "sourceFingerprint": "53c8941f3a133f55e03cacf65e89c71a9a12f343c11c2f52b86679a8ce3ccb2c",
+    "sourceDirty": false,
+    "inputCount": 1652
+  },
+  "buildInfo": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-13T02:14:42.943Z",
+    "target": "macos",
+    "sourceRevision": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+    "sourceFingerprint": "53c8941f3a133f55e03cacf65e89c71a9a12f343c11c2f52b86679a8ce3ccb2c",
+    "sourceDirty": false,
+    "inputCount": 1652,
+    "releasePreparedAt": null
+  },
+  "buildInfoExactUtf8": "{\n  \"schema\": 1,\n  \"version\": \"0.1.0\",\n  \"mode\": \"production\",\n  \"builtAt\": \"2026-11-13T02:14:42.943Z\",\n  \"target\": \"macos\",\n  \"sourceRevision\": \"9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3\",\n  \"sourceFingerprint\": \"53c8941f3a133f55e03cacf65e89c71a9a12f343c11c2f52b86679a8ce3ccb2c\",\n  \"sourceDirty\": false,\n  \"inputCount\": 1652,\n  \"releasePreparedAt\": null\n}\n",
+  "buildInfoSha256": "4b426c6f8ad76caf0a19ddf8c7c4be559a41a2933818a2edf74f01fd5bd1f679",
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-9263ea87-initial-recovery/notes-clone",
+    "bytes": 203070800,
+    "sha256": "2d878d7dedf23f039889c97fc6651a54f4407f3dfeb96d001d998605519f9449",
+    "expectedSha256": "2d878d7dedf23f039889c97fc6651a54f4407f3dfeb96d001d998605519f9449",
+    "mtime": "2026-11-13T02:16:18.877Z",
+    "architecture": "arm64",
+    "format": "Mach-O 64-bit"
+  },
+  "embeddedIdentity": {
+    "encoding": "brotli",
+    "sha256": "4b426c6f8ad76caf0a19ddf8c7c4be559a41a2933818a2edf74f01fd5bd1f679",
+    "verifier": "scripts/publish/package-identity.mjs#verifyEmbeddedIdentity",
+    "verifierSha256": "9102fd8f2e70a7a1633b0bc3c3f02cf08592fe3a87691fb0ae570a5e9184cb2a",
+    "candidateGeneration": "Local Brotli recompression of exact captured build-info; successful candidate is byte-present in executable and decodes to exact expected identity.",
+    "encodingParameters": {
+      "quality": 2,
+      "mode": 0,
+      "encodedSha256": "20d26234bc88a2eebc4509850bf566171374ae7e4c8d751b87bcf448a4fa9c27",
+      "encodedBytes": 267
+    }
+  },
+  "environment": {
+    "buildEnvironmentIndependentlyObserved": false,
+    "buildEnvironmentReceiptAvailable": false,
+    "verifier": {
+      "node": "v22.16.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    "envFilesPresentAtVerification": [],
+    "limitation": "Embedded target/mode/source identity is verified. Historical compiler environment, Cargo features, signing, and debug/sync-e2e flags were not independently established."
+  },
+  "cargoTargetAccessed": false,
+  "appLaunched": false,
+  "installed": false,
+  "e2eExecuted": false,
+  "authExecuted": false,
+  "syncAccepted": false,
+  "published": false,
+  "distOverwriteSafeForThisIdentityCheck": true,
+  "boundary": "Static byte/source identity only. Filename debug-e2e names the requested candidate, not an E2E result. No app, browser, ADB, network, build, Cargo target access, installation, runtime behavior, account login, sync, release signing, or notarization acceptance."
+}

@@ -1,0 +1,205 @@
+{
+  "schema": 1,
+  "sourceCandidate": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+  "serial": "98895a3147304c3132",
+  "package": "com.local.notesclone.account109",
+  "recordedAt": "2026-11-13T02:38:18.072Z",
+  "passed": true,
+  "installationAttempted": false,
+  "installed": true,
+  "signInCalled": false,
+  "cancelCalled": false,
+  "signOutCalled": false,
+  "syncEnabled": false,
+  "dataCleared": false,
+  "originalAppTouched": false,
+  "boundary": "One local debug in-place update with synthetic isolated notes only. No real-account login or three-way sync acceptance.",
+  "mappings": [
+    {
+      "serial": "98895a3147304c3132",
+      "package": "com.local.notesclone.account109",
+      "pid": 28050,
+      "local": "tcp:52881",
+      "remote": "localabstract:webview_devtools_remote_28050",
+      "pageId": "92F9A5C86D4BD6EB0EE6389191C99FD8",
+      "pageURL": "http://tauri.localhost/"
+    },
+    {
+      "serial": "98895a3147304c3132",
+      "package": "com.local.notesclone.account109",
+      "pid": 28050,
+      "local": "tcp:52989",
+      "remote": "localabstract:webview_devtools_remote_28050",
+      "pageId": "92F9A5C86D4BD6EB0EE6389191C99FD8",
+      "pageURL": "http://tauri.localhost/"
+    },
+    {
+      "serial": "98895a3147304c3132",
+      "package": "com.local.notesclone.account109",
+      "pid": 28911,
+      "local": "tcp:53276",
+      "remote": "localabstract:webview_devtools_remote_28911",
+      "pageId": "C14DB8620D18BBB20219DD77E416F5B7",
+      "pageURL": "http://tauri.localhost/"
+    }
+  ],
+  "checks": [
+    "all-original-preinstall-synthetic-notes-rechecked",
+    "installed-apk-exact-candidate-hash-and-certificate",
+    "every-preexisting-document-and-plainText-preserved-after-update",
+    "default-native-account-ui-matches-read-only-native-status",
+    "new-full-document-and-all-preexisting-documents-preserved-after-package-restart"
+  ],
+  "cleanup": {
+    "closedMappings": [
+      {
+        "serial": "98895a3147304c3132",
+        "package": "com.local.notesclone.account109",
+        "pid": 28050,
+        "local": "tcp:52881",
+        "remote": "localabstract:webview_devtools_remote_28050",
+        "pageId": "92F9A5C86D4BD6EB0EE6389191C99FD8",
+        "pageURL": "http://tauri.localhost/",
+        "exactForwardAbsent": true,
+        "leaseClosed": true
+      },
+      {
+        "serial": "98895a3147304c3132",
+        "package": "com.local.notesclone.account109",
+        "pid": 28050,
+        "local": "tcp:52989",
+        "remote": "localabstract:webview_devtools_remote_28050",
+        "pageId": "92F9A5C86D4BD6EB0EE6389191C99FD8",
+        "pageURL": "http://tauri.localhost/",
+        "exactForwardAbsent": true,
+        "leaseClosed": true
+      },
+      {
+        "serial": "98895a3147304c3132",
+        "package": "com.local.notesclone.account109",
+        "pid": 28911,
+        "local": "tcp:53276",
+        "remote": "localabstract:webview_devtools_remote_28911",
+        "pageId": "C14DB8620D18BBB20219DD77E416F5B7",
+        "pageURL": "http://tauri.localhost/",
+        "exactForwardAbsent": true,
+        "leaseClosed": true
+      }
+    ],
+    "forwardsAfter": [],
+    "allOwnedForwardsAbsent": true,
+    "preexistingForwardsPreserved": true,
+    "leaseAbsent": true,
+    "adbOwnershipReturned": true
+  },
+  "resumedAfterVerifiedInstall": true,
+  "forwardsBefore": [],
+  "priorInstallReceipt": "local-update-initial-result.json",
+  "priorAccountTransition": {
+    "before": {
+      "state": "error",
+      "enabled": false,
+      "profilePresent": false,
+      "errorPresent": true
+    },
+    "after": {
+      "state": "signedOut",
+      "enabled": false,
+      "profilePresent": false,
+      "errorPresent": false
+    },
+    "interpretation": "Terminal error changed to signedOut on process recreation; no authorization cancellation was performed."
+  },
+  "baselineNoteCount": 3,
+  "baselineNotes": [
+    {
+      "id": "d6e3b2e2-d799-49e5-91ac-b76e2a7126f4",
+      "documentSha256": "2ef3ab0c109f60929183ad8c88da07a67b29d9e202f143254e3810fe5596e926",
+      "plainTextSha256": "3332298e27c631ef061f33f41c1970e4e89557ccd77440f6df27294abaebdb4f"
+    },
+    {
+      "id": "2113f89b-8183-458a-a97a-27d4b4be9b73",
+      "documentSha256": "bd9ea5bbcbdd78be953502ec79b4672df2c76ef392382600d3ef98864f5f905f",
+      "plainTextSha256": "9e6d2246786f9d5750fb4005bfdb71cdaad4cc95dfe8ea1e85f79814bf033d46"
+    },
+    {
+      "id": "3cfe6fa1-8a3e-4c4c-94d3-4f377562dc3f",
+      "documentSha256": "e606487a9ecaf42fe1ab07b73ce2f67ae5e27ab6b2c471c2b23a22b62266dee8",
+      "plainTextSha256": "4fcdfd16146f5e761502336f3333eac225e31269b76a2c67cf146a29fdc8376d"
+    }
+  ],
+  "accountBefore": {
+    "state": "signedOut",
+    "enabled": false,
+    "profilePresent": false,
+    "errorPresent": false
+  },
+  "installedApkSha256": "da74379984dfc0af86bff1ae89aeac43c83fdab4e7884b9b032961519c404ce9",
+  "postUpdateNotes": [
+    {
+      "id": "d6e3b2e2-d799-49e5-91ac-b76e2a7126f4",
+      "documentSha256": "2ef3ab0c109f60929183ad8c88da07a67b29d9e202f143254e3810fe5596e926",
+      "plainTextSha256": "3332298e27c631ef061f33f41c1970e4e89557ccd77440f6df27294abaebdb4f"
+    },
+    {
+      "id": "2113f89b-8183-458a-a97a-27d4b4be9b73",
+      "documentSha256": "bd9ea5bbcbdd78be953502ec79b4672df2c76ef392382600d3ef98864f5f905f",
+      "plainTextSha256": "9e6d2246786f9d5750fb4005bfdb71cdaad4cc95dfe8ea1e85f79814bf033d46"
+    },
+    {
+      "id": "3cfe6fa1-8a3e-4c4c-94d3-4f377562dc3f",
+      "documentSha256": "e606487a9ecaf42fe1ab07b73ce2f67ae5e27ab6b2c471c2b23a22b62266dee8",
+      "plainTextSha256": "4fcdfd16146f5e761502336f3333eac225e31269b76a2c67cf146a29fdc8376d"
+    }
+  ],
+  "accountAfter": {
+    "state": "signedOut",
+    "enabled": false,
+    "profilePresent": false,
+    "errorPresent": false
+  },
+  "accountUI": {
+    "ready": true,
+    "renderedState": "signedOut",
+    "loginControlPresent": true,
+    "cancelControlPresent": false
+  },
+  "createdNote": {
+    "id": "321e9d6c-d590-437d-8edb-d6ed2feae3fa",
+    "documentSha256": "b78b60511187238090dbd210ce1d30b962e88649f8dd0190a9602bbdab432dab",
+    "plainTextSha256": "c27da2b1a84901e448334c9d01c663bcd6c5bfc016ea31c5061d142d45ae2ecb"
+  },
+  "restart": {
+    "oldPid": 28050,
+    "newPid": 28911
+  },
+  "restartNotes": [
+    {
+      "id": "d6e3b2e2-d799-49e5-91ac-b76e2a7126f4",
+      "documentSha256": "2ef3ab0c109f60929183ad8c88da07a67b29d9e202f143254e3810fe5596e926",
+      "plainTextSha256": "3332298e27c631ef061f33f41c1970e4e89557ccd77440f6df27294abaebdb4f"
+    },
+    {
+      "id": "2113f89b-8183-458a-a97a-27d4b4be9b73",
+      "documentSha256": "bd9ea5bbcbdd78be953502ec79b4672df2c76ef392382600d3ef98864f5f905f",
+      "plainTextSha256": "9e6d2246786f9d5750fb4005bfdb71cdaad4cc95dfe8ea1e85f79814bf033d46"
+    },
+    {
+      "id": "3cfe6fa1-8a3e-4c4c-94d3-4f377562dc3f",
+      "documentSha256": "e606487a9ecaf42fe1ab07b73ce2f67ae5e27ab6b2c471c2b23a22b62266dee8",
+      "plainTextSha256": "4fcdfd16146f5e761502336f3333eac225e31269b76a2c67cf146a29fdc8376d"
+    },
+    {
+      "id": "321e9d6c-d590-437d-8edb-d6ed2feae3fa",
+      "documentSha256": "b78b60511187238090dbd210ce1d30b962e88649f8dd0190a9602bbdab432dab",
+      "plainTextSha256": "c27da2b1a84901e448334c9d01c663bcd6c5bfc016ea31c5061d142d45ae2ecb"
+    }
+  ],
+  "accountAfterRestart": {
+    "state": "signedOut",
+    "enabled": false,
+    "profilePresent": false,
+    "errorPresent": false
+  },
+  "completedAt": "2026-11-13T02:39:01.893Z"
+}

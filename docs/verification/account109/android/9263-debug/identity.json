@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "status": "passed-static-preinstallation-identity-only",
+  "recordedAt": "2026-11-13T02:33:36.389888+00:00",
+  "sourceCommit": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+  "sourceTree": "d72ca37aa5555fcf73327d9201b59d15e24116b1",
+  "sourceRoot": "/private/tmp/cybernote-account109-android-90b8b28b-01",
+  "sourceClean": true,
+  "derivedDiffEmpty": true,
+  "apk": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/android-candidate-9263ea87-debug.apk",
+    "sourcePath": "/private/tmp/cybernote-account109-android-90b8b28b-01/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk",
+    "bytes": 77150696,
+    "sha256": "da74379984dfc0af86bff1ae89aeac43c83fdab4e7884b9b032961519c404ce9",
+    "sourceAndPreservedMatch": true
+  },
+  "packageId": "com.local.notesclone.account109",
+  "activity": "com.local.notesclone.MainActivity",
+  "displayName": "CyberNote Account Test",
+  "signatureCertificateSha256": "e71ec0b1b626c9e54c7b4a1517ba1c12703d86364c17100658d954a94e6bec79",
+  "backup": false,
+  "debuggable": true,
+  "extractNativeLibs": true,
+  "authorities": [
+    "com.local.notesclone.account109.fileprovider",
+    "com.local.notesclone.account109.mlkitinitprovider",
+    "com.local.notesclone.account109.androidx-startup"
+  ],
+  "callback": "com.local.notesclone.auth://callback",
+  "callbackSchemeCount": 1,
+  "callbackHostCount": 1,
+  "libraries": [
+    {
+      "path": "lib/arm64-v8a/libcloudflared.so",
+      "bytes": 28812032,
+      "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+      "elfClass": 64,
+      "machine": "AArch64"
+    },
+    {
+      "path": "lib/arm64-v8a/libimage_processing_util_jni.so",
+      "bytes": 32528,
+      "sha256": "0292b063fafccf734472cbb59588e756c2dbca907c72021ba6fbf126385508a2",
+      "elfClass": 64,
+      "machine": "AArch64"
+    },
+    {
+      "path": "lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+      "bytes": 11064544,
+      "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+      "elfClass": 64,
+      "machine": "AArch64"
+    },
+    {
+      "path": "lib/arm64-v8a/libnotes_clone_lib.so",
+      "bytes": 153780712,
+      "sha256": "c1d068fa092d5c5938ba01a331630179f2f84385b56dcc56887d6a40d2601a89",
+      "elfClass": 64,
+      "machine": "AArch64"
+    },
+    {
+      "path": "lib/arm64-v8a/libsurface_util_jni.so",
+      "bytes": 4896,
+      "sha256": "a5c9d1928ea92ec7a94dff8cf666e7739cd734198b9f0ae1d4e28ea3c86516ba",
+      "elfClass": 64,
+      "machine": "AArch64"
+    }
+  ],
+  "frontendBuildInfo": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-13T02:15:51.112Z",
+    "target": "android",
+    "sourceRevision": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+    "sourceFingerprint": "53c8941f3a133f55e03cacf65e89c71a9a12f343c11c2f52b86679a8ce3ccb2c",
+    "sourceDirty": false,
+    "inputCount": 1652,
+    "releasePreparedAt": null
+  },
+  "frontendBuildInfoSha256": "3895c515443d40cfb24a192177ed061eef1b77e4db6258d7392824e2e11b6f58",
+  "frontendBuildInfoExactUtf8": "{\n  \"schema\": 1,\n  \"version\": \"0.1.0\",\n  \"mode\": \"production\",\n  \"builtAt\": \"2026-11-13T02:15:51.112Z\",\n  \"target\": \"android\",\n  \"sourceRevision\": \"9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3\",\n  \"sourceFingerprint\": \"53c8941f3a133f55e03cacf65e89c71a9a12f343c11c2f52b86679a8ce3ccb2c\",\n  \"sourceDirty\": false,\n  \"inputCount\": 1652,\n  \"releasePreparedAt\": null\n}\n",
+  "embeddedIdentity": {
+    "encoding": "brotli",
+    "sha256": "3895c515443d40cfb24a192177ed061eef1b77e4db6258d7392824e2e11b6f58"
+  },
+  "encodingParameters": {
+    "quality": 2,
+    "mode": 0,
+    "encodedSha256": "28e671652e7e64b531bb31ddbe4667e49290f78b80fb56b974cb60ee6f43b5d7"
+  },
+  "sourceIdentity": {
+    "sourceRevision": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+    "sourceFingerprint": "53c8941f3a133f55e03cacf65e89c71a9a12f343c11c2f52b86679a8ce3ccb2c",
+    "sourceDirty": false,
+    "inputCount": 1652
+  },
+  "defaultGate": {
+    "accountFlagsRemovedPerRequest": [
+      "VITE_NOTES_ACCOUNT_NATIVE",
+      "VITE_NOTES_ACCOUNT_UI"
+    ],
+    "envFilesPresent": [],
+    "sourcePath": "src/account-client.ts",
+    "sourceSha256": "804b70fdb1d6ccc934f574592ee38751508b492689d554d916e83286acf52d59",
+    "limitation": "Request records removed flags; historical process environment was not observed. Native default UI/behavior is not established by this static receipt."
+  },
+  "environment": {
+    "buildFlagsPerRequest": {
+      "NODE_ENV": "development",
+      "VITE_NOTES_DEBUG": "1",
+      "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-android-90b8b28b-target-01",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_INCREMENTAL": "0"
+    },
+    "historicalEnvironmentIndependentlyObserved": false
+  },
+  "lifecycle": {
+    "buildExitCodePerResult": 0,
+    "signalPerResult": null,
+    "independentlyObservedBuild": false
+  },
+  "evidence": {
+    "badging.txt": "95d7e1d8f0b9839f371b63cf8881ccb8d7b8bcc9568bc6e1e5836dc5d82e8ee6",
+    "build-info.json": "3895c515443d40cfb24a192177ed061eef1b77e4db6258d7392824e2e11b6f58",
+    "build-request.json": "8ede84a3413cf1b35bf16fd0300511827427156844745d28a9f8121e15cc6bd8",
+    "build-result.json": "2d1299edfaa325953f16832af6f6850933aa5f6d94101456e208007dc1ce088f",
+    "manifest.txt": "6f3fc5a91fb7ecb79dac487a14a5b9c8b8e9f8f6817c0cfb8d28fd5b173f2fe2",
+    "signature.txt": "ad5dcc6a8094668d0804d0a1b19dc2bf6fcae21dbf76ff6a876d31e27e05c5ac",
+    "source/identity.py": "ac38eff0e31ab8dc299e3c94d671092333992d7b184369efd94966a8fbb6e24e"
+  },
+  "inputReceipts": {
+    "requestSha256": "8ede84a3413cf1b35bf16fd0300511827427156844745d28a9f8121e15cc6bd8",
+    "resultSha256": "2d1299edfaa325953f16832af6f6850933aa5f6d94101456e208007dc1ce088f"
+  },
+  "installed": false,
+  "appLaunched": false,
+  "authExecuted": false,
+  "syncAccepted": false,
+  "boundary": "Static identity only, before installation. Build success/environment are attributed to supplied build receipts; APK signature/manifest/ELF/provider/embedded source bytes were independently checked. No runtime, account, sync, production signing, store, or release acceptance."
+}

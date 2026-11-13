@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-13T02:40:48.523Z",
+  "deploymentId": "dpl_8TFiHJE6dzcfafFeQaDwybB6cQTk",
+  "state": "READY",
+  "origin": "https://cybernote-sync.vercel.app",
+  "sourceRevision": "d86b43b1ce80cec80095d0ad04e163f111984db0",
+  "stageFingerprint": "3da4d5a1c59e192bd6a55e5c7766ef1f12dba6417affc8458b9b207211aee62c",
+  "fileCount": 116,
+  "checks": [
+    {
+      "path": "/healthz",
+      "status": 200
+    },
+    {
+      "path": "/api/v1/auth/config?appId=il4abzwbu1ohjwv5mb667",
+      "status": 200,
+      "scope": "openid offline_access profile connect",
+      "issuerMatches": true,
+      "clientMatches": true
+    },
+    {
+      "path": "/api/v1/account/jwks",
+      "status": 200,
+      "publicKeysOnly": true
+    },
+    {
+      "path": "/api/v1/account/profile",
+      "status": 401
+    }
+  ],
+  "noAuthHeaders": true,
+  "networkOverrides": false
+}
