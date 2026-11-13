@@ -1,0 +1,9 @@
+# 独立证据复核：APPROVE，运行仍FAIL
+
+Erdos只读核验原始SHA256 `e368a077ce0d04e4c682de5fcfca8683bcb933c0bcab9b1780148d3ecc2174d1`、归档SHA256 `2f4f985680744ab3f5eccea1f94906f0b963d20f9d05d2af881a32033d8e81c0`与receipt一致，结构差异恰为binary.path及两lifecycle.directory。五工具hash匹配 `78fa814e1c124516288aa47ab865432cb387c42b` 提交字节，实际wrapper binary匹配已核候选；9e989b61仅为随后docs提交。
+
+baseline PASS、两GUI ready；B完整120秒clean signedOut只读观察后只发起一次SignIn，600000ms等待终态超时b-recovery。后续场景未执行。两PID41958、41967自然退出0、无信号/forcedSignals；独立复核再次确认PID不存在。
+
+浏览器固定origin表单、未输入凭据/未完成人工授权、旧内存密码无可恢复来源均明确归属父级观察或说明，不是runner独立断言。没有归因超时为产品故障，也未将scope问题视为修复或再次复现。未发现凭据、token、授权地址或DB/grant内容泄露。
+
+未修改文件、启动App、操作设备、联网、清理或读取私有baseline/原库。
