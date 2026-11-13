@@ -1,6 +1,6 @@
 # 账户同步实际验证结果
 
-2026-11-13，Asia/Shanghai。**双桌面核心同步功能已完成本轮实际数据验证；Android 账户三端仍受 coordinator 网络连接阻塞，整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
+2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；本轮桌面访问恢复，新候选原库 relogin02 在真实重新登录操作后因 `responseMetadata` 失败，仍未完成登录补齐。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
 
 ## 分析与完善
 
@@ -12,7 +12,8 @@
 - 原生错误保留有限的操作阶段和 SDK provider 原因，前端严格校验 DTO，避免第三方原文或凭据进入报告，见 [诊断审阅](native/coordination-diagnostics-review01.md)。
 - 测试执行器区分 120 秒连接预算和 60 秒数据预算；保留失败原库与证据。为完成用户允许的命令调用验证，新增只在显式桌面 debug 测试模式生效的无 WebView 入口，使用真实 Session token 与生产协调协议，不修改生产同步权限或提交规则。
 - 三端执行器在启动桌面或同步前保存手机原有四篇全文及附件证据，并在合并、补齐和结束检查保全；设备外 37 项及独审通过，但尚无三端实际运行结果。手机起源附件明确列为未执行，见 [复审](macos/three-peer-runner-review02.md)。
-- 本轮登录恢复修正已合入 `99198fd`、`35ebf385`、`0fe41dca`：只有 HTTP 400 的 typed `invalid_grant` 才归为刷新拒绝；网络/429/5xx、配置与无效响应保持各自有限类别。网络“重试连接”复用保留授权和严格 bind，尊重已暂停状态，状态轮询仍只读；未知错误不能触发 replacement logout。独立 native 25 项、Node policy 6 项、auth crate 与增量反例，以及父级 [124 项 Node 整合](native/recovery-integration01.md)均通过。此为源码/fixture 验证，新 GUI 实际恢复仍待执行。
+- `20d62c11` 已补齐手机起源固定 PNG/bin 用例：通过既有产品附件提交路径写入本轮新笔记，比较 C/A/B 完整正文、引用、授权读取原字节及 A/B 受管磁盘文件；[独立检查](native/phone-files-review01/README.md) 21 项通过。此为执行器准备，尚未在手机实际执行。
+- 本轮登录恢复修正已合入 `99198fd`、`35ebf385`、`0fe41dca`：只有 HTTP 400 的 typed `invalid_grant` 才归为刷新拒绝；网络/429/5xx、配置与无效响应保持各自有限类别。网络“重试连接”复用保留授权和严格 bind，尊重已暂停状态，状态轮询仍只读；未知错误不能触发 replacement logout。独立 native 25 项、Node policy 6 项、auth crate 与增量反例，以及父级旧 [124 项](native/recovery-integration01.md)、新增手机附件后的 [138 项 Node 整合](native/recovery-integration02.md)均通过。此为源码/fixture 验证，新 GUI 实际恢复结果另列下方。
 
 ## 实际桌面证据
 
@@ -54,7 +55,11 @@ keep-all 比较完整字段，仅正规化新副本必须改变的身份 ID、�
 
 13:40 原库 GUI relogin01 实际执行失败，仍使用 source `39c1420d` 的旧精确候选。启动前两个原库重叠文档/附件基线一致；A/B 均真实 GUI ready。A 为 signedOut，B 为 `account_authentication / identityRefresh` 且仅有部分 profile，随后 runner 的 username 断言过早报 `CHECK_FAILED`。没有发起 SignIn、enable 或编辑，两端自然退出 0、零强制信号。私有原始输出保留在 `/private/tmp/account109-desktop-relogin01`，不收录数据库或授权材料。旧认证库把所有 refresh HTTP/OAuth 请求错误折叠为 RefreshFailed，因此本次不证明 B grant 失效；[修复契约](../../plan/tasks/app-account109-refresh-recovery.md)要求保留网络/拒绝/响应类别，并在新候选和新输出目录续验。
 
-真实 ANDROID-01～04 尚未执行。需要测试手机/测试应用能够正常连接协调服务，再完成真实账户授权和三端收敛。A 已因退出用例正常退出账户，后续三端需通过真实系统浏览器重新登录 A；桌面访问已恢复，但重新登录续验尚未通过。不得恢复旧 grant 副本来跳过登录。
+[后来当前访问检查](native/current-access03/README.md)再次被 Mac locked 阻止；记录于 14:50，精确 AX 操作时间未单独返回。新 `10814415` GUI 已构建，尚未在原库运行 relogin02 或发起新的授权。13:18/13:40 的可访问状态仍按其历史时点保留，不作为当前已解锁证明；不尝试绕锁或改变系统设置。
+
+15:06–15:07 的[新原库 relogin02](native/relogin-live02/README.md) 使用 source `10814415`、SHA256 `b981400529f36cb698616d3871cc83b9a5d7cc4c10fb75009276697daba9ee6f` 的 debug E2E GUI。启动前原库重叠基线一致，两端 GUI ready。B 启动错误在新实现上明确分类为 HTTP 400 `invalid_grant`；执行器核对实际“重新登录”界面后调用一次产品 SignIn handler，状态从 authorizing 转为 `account_auth_identity_invalid / responseMetadata`，本轮失败。浏览器前后观察未发现新增标签；这不证明期间从未短暂打开页面，也尚未确定底层原因。没有编辑笔记或 enable，A 的 SignIn、补齐、双向修改及重启未执行；两端自然退出 0、无强制信号。原始私有输出保留 `/private/tmp/account109-desktop-relogin02`，不收录 DB 或 grant。新的[包静态独核](native/gui-recovery-build-review01/README.md)和[执行器独审](native/relogin-review03.md)不替代这次失败。
+
+真实 ANDROID-01～04 尚未执行。需要测试手机/测试应用能够正常连接协调服务，再完成真实账户授权和三端收敛。A 已因退出用例正常退出账户，后续三端需通过真实系统浏览器重新登录 A；当前桌面访问已恢复，但原库重新登录续验失败待诊断。不得恢复旧 grant 副本来跳过登录。
 
 [正式域名提案](server/custom-domain-proposal01/PROPOSAL.md)只读确认现有项目没有已配置的自定义域；拟议 `cybernote-sync.aixgg.com` 尚未配置或获得该域使用确认。原生 transport 与 enrollment issuer 的拆分已由[独立审阅](native/coordinator-alias-review01/README.md)接受并合入 `4461753f`，12/12 定向测试通过；两个生产常量仍为旧 Vercel 地址，不改变 token 目的地、部署或 DNS。此兼容准备不表示手机可达性已经恢复。
 

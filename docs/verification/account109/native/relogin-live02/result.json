@@ -1,0 +1,301 @@
+{
+  "schema": 1,
+  "kind": "account109-original-desktop-relogin",
+  "status": "fail",
+  "phase": "cleanup",
+  "startedAt": "2026-11-13T07:06:50.106Z",
+  "endState": "enabled",
+  "allowBRelogin": true,
+  "allowBNetworkRetry": true,
+  "scenarios": {
+    "baseline": "pass",
+    "login": "not-run",
+    "pausedEdits": "not-run",
+    "catchup": "not-run",
+    "bidirectional": "not-run",
+    "restart": "not-run",
+    "endState": "not-run",
+    "auth06": "not-run"
+  },
+  "checks": [
+    {
+      "name": "baseline",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "kind": "ready",
+      "device": "a",
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "kind": "ready",
+      "device": "b",
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "kind": "b-startup-recovery-decision",
+      "classification": "serverInvalidGrant400",
+      "state": "error",
+      "enabled": false,
+      "hasProfile": true,
+      "identityCheck": "unverified",
+      "error": {
+        "code": "account_authentication",
+        "stage": "identityRefresh"
+      },
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "originalSubjectSha256": "03efb3ceea182d57ea4a56fc7e9b0e5e3577192f6a4818d8a454d77cb1cffc8b"
+    },
+    {
+      "kind": "b-recovery-ui-shown",
+      "label": "重新登录",
+      "uiHandler": "account.signIn",
+      "physicalInput": false
+    }
+  ],
+  "binary": {
+    "path": "[redacted: local candidate binary path]",
+    "sha256": "b981400529f36cb698616d3871cc83b9a5d7cc4c10fb75009276697daba9ee6f",
+    "sourceRevision": "10814415ca088273bacc311d192b9605bda16775",
+    "candidateKind": "debug-e2e"
+  },
+  "prior": {
+    "sha256": "d0d89a9361aa4311a49ce4463617981757ce1bb8be0dc3e8d2d2b0b3b401b8f4"
+  },
+  "limitations": [
+    "Existing synthetic roots only. SignIn uses the product UI handler and native PKCE/system browser; parent completes authorization. No credentials, tokens, callback URLs, grants or manual pairing inputs.",
+    "Merge confirmation is inspected and clicked through the existing dom.click UI handler, not physical input. Parent only completes system-browser authorization. Editor commands use debug/e2e UI handlers; no physical typing or OS picker claim.",
+    "Pause is the production account setting, not OS network loss. Negative windows are bounded to 3 seconds. AUTH06 is not executed.",
+    "Cross-baseline overlap requires exact note fields/references except local revision, and exact attachment ownership/metadata/SHA except physical relativePath. Later canonical preservation excludes local revision/path, normalizes absent/null nullable fields and reference IDs to descriptors; original attachment IDs/ownership/SHA are verified separately. Only live unlocked baselines are supported.",
+    "Shell proxy variables are blanked only for owned child processes. No system settings change or conflict creation. Pinned 10814415 maps identityRefresh without providerReason to HTTP 400 invalid_grant. Explicit B flags select at most one UI recovery: network syncNow retains the production owner, rejected refresh signIn requires same subject. NoSession stops with explicit SignOut guidance; no automatic SignOut or recovery fallback. No grant bytes are read to infer state."
+  ],
+  "tools": {
+    "account109-desktop-relogin.mjs": "4ffb33d173c2bf85e8299614f4fc1aafc1b2459a99df2fdb1392ef6b8746ccd8",
+    "sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+    "account109-desktop-helpers.mjs": "67a2651b92d5311c6a0382a752b9e13aa408c599870ceea9ddb57fb3ff3bb943",
+    "account109-desktop-recovery.mjs": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672",
+    "account109-headless-recovery.mjs": "6e1511ff3d90d159b5335035bb858c352f794643ed93651e43f5fc9330aa7a74"
+  },
+  "baseline": {
+    "sha256": "e9fe00b85113ef1c69ef4461a766705a242dada33ebf45ea4dc75a2bbdd8bfa5",
+    "originalFilesUnchanged": true,
+    "overlapAgreementCheckedBeforeLaunch": true,
+    "notes": {
+      "a": [
+        {
+          "id": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+          "sha256": "0e772a417f7a63db4de6043858382d4ad777f7caa430298fc92a47d304606053"
+        },
+        {
+          "id": "32ed2d3e-de5d-426c-8339-bf815d3b9ea3",
+          "sha256": "8e30ce1b0aec2ef41381f45ae1784fdf53840c33de90d2da2a851e6d352f0a18"
+        },
+        {
+          "id": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+          "sha256": "e703f1c0de0216fa2ff35008c83b24130d70d58e8d462a94cb32e1176d78b986"
+        },
+        {
+          "id": "73a8425e-36cd-4e83-832b-221762c30c34",
+          "sha256": "52d0e523d722f37d31c609f3ca43c3bb1f0745cb522244d14120cff416539bad"
+        },
+        {
+          "id": "78f94bed-6826-43da-8dec-beabed4413ee",
+          "sha256": "5261cce733dd1c0ec7f277bca3b5cd34e2b3f9ef7aa610a49aa0ffbb49eca7d3"
+        },
+        {
+          "id": "9413691d-88b2-4954-aad5-0e1818450357",
+          "sha256": "8d5d6eaf98743f9a5a0ef75741669ea36698bf3e3d1eee42f32f408e69d3c414"
+        },
+        {
+          "id": "951103e5-8f47-41f5-9af8-ab5022a782da",
+          "sha256": "88196eea8895dfadfabed90896824abb4fe9de2f79c6b3793410ffba973e4793"
+        },
+        {
+          "id": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+          "sha256": "32ca63fd76993be8e8057623bbbf8ece853190f95934a461d606d84129bf119c"
+        }
+      ],
+      "b": [
+        {
+          "id": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+          "sha256": "0e772a417f7a63db4de6043858382d4ad777f7caa430298fc92a47d304606053"
+        },
+        {
+          "id": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+          "sha256": "e703f1c0de0216fa2ff35008c83b24130d70d58e8d462a94cb32e1176d78b986"
+        },
+        {
+          "id": "6ef4b4b9-c366-4b2a-8450-25c2d1755739",
+          "sha256": "c547f9f448de0bb1827e70941f39903d4be8dd9fb7f4c00796534cf1e0cdd566"
+        },
+        {
+          "id": "73a8425e-36cd-4e83-832b-221762c30c34",
+          "sha256": "52d0e523d722f37d31c609f3ca43c3bb1f0745cb522244d14120cff416539bad"
+        },
+        {
+          "id": "78f94bed-6826-43da-8dec-beabed4413ee",
+          "sha256": "5261cce733dd1c0ec7f277bca3b5cd34e2b3f9ef7aa610a49aa0ffbb49eca7d3"
+        },
+        {
+          "id": "9413691d-88b2-4954-aad5-0e1818450357",
+          "sha256": "8d5d6eaf98743f9a5a0ef75741669ea36698bf3e3d1eee42f32f408e69d3c414"
+        },
+        {
+          "id": "951103e5-8f47-41f5-9af8-ab5022a782da",
+          "sha256": "88196eea8895dfadfabed90896824abb4fe9de2f79c6b3793410ffba973e4793"
+        },
+        {
+          "id": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+          "sha256": "32ca63fd76993be8e8057623bbbf8ece853190f95934a461d606d84129bf119c"
+        },
+        {
+          "id": "fe392b95-1c54-454e-bf49-43d3ba43d741",
+          "sha256": "5c5928151e90e044305d0d451f0020e3e0ecf74b205674d6a7d5fc18cfc758b9"
+        }
+      ]
+    },
+    "gap": {
+      "localId": "32ed2d3e-de5d-426c-8339-bf815d3b9ea3",
+      "remoteIds": [
+        "fe392b95-1c54-454e-bf49-43d3ba43d741",
+        "6ef4b4b9-c366-4b2a-8450-25c2d1755739"
+      ]
+    }
+  },
+  "lastOperation": {
+    "sequence": 158,
+    "phase": "b-recovery",
+    "device": "b",
+    "operation": "account.status",
+    "event": "after",
+    "at": "2026-11-13T07:07:03.116Z"
+  },
+  "statusTransitions": [
+    {
+      "device": "a",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "startup",
+      "state": "error",
+      "enabled": false,
+      "hasProfile": true,
+      "identityCheck": "unverified",
+      "error": {
+        "code": "account_authentication",
+        "stage": "identityRefresh"
+      },
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "b-recovery",
+      "state": "error",
+      "enabled": false,
+      "hasProfile": true,
+      "identityCheck": "unverified",
+      "error": {
+        "code": "account_authentication",
+        "stage": "identityRefresh"
+      },
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "b-recovery",
+      "state": "authorizing",
+      "enabled": false,
+      "hasProfile": true,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "b-recovery",
+      "state": "error",
+      "enabled": false,
+      "hasProfile": true,
+      "identityCheck": "unverified",
+      "error": {
+        "code": "account_auth_identity_invalid",
+        "reason": "responseMetadata"
+      },
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    }
+  ],
+  "failure": {
+    "phase": "b-recovery",
+    "code": "ACCOUNT_AUTHENTICATION_FAILED",
+    "lastOperation": {
+      "sequence": 158,
+      "phase": "b-recovery",
+      "device": "b",
+      "operation": "account.status",
+      "event": "after",
+      "at": "2026-11-13T07:07:03.116Z"
+    }
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "[redacted: original synthetic store path]",
+      "stderrBytes": 58,
+      "commands": 74,
+      "forcedSignals": [],
+      "pid": 61048,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "[redacted: original synthetic store path]",
+      "stderrBytes": 58,
+      "commands": 86,
+      "forcedSignals": [],
+      "pid": 61074,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "finishedAt": "2026-11-13T07:07:04.075Z"
+}

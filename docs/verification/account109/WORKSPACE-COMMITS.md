@@ -89,3 +89,16 @@ UI 作者原提交为 `4cc18c1c`，经 cherry-pick 收入 main，细节与复跑
 - `3192943d`：净化清单精确更新已审阅的 lib.rs 与新增 sync_headless.rs；其他 pin 不漂移。独立准备 1771 文件的全新单 root，发布工具 19 项和版本/隐私/依赖检查通过，旧封存候选保持。
 
 实际原库 headless continuation01 已 PASS，保留两完整分支与原字节、实际退出后的本地保存/重启和两向排除均通过，三个进程自然退出。精确证据和覆盖限制见 [本轮结果](RESULT-LATEST.md)。历史失败、私有原库和授权保持在各自范围。Android 三端仍需 coordinator 网络条件与后续真实授权；本轮尚无 GitHub/Actions 远程写入，不把本地提交或净化准备称为远程交付。
+
+
+### 2026-11-13 新 GUI 与手机附件续验
+
+- `4461753f`：固定 coordinator transport 与 enrollment issuer 的独立输入；两个生产值仍保持旧地址，未切换域名或 DNS。
+- `99198fd6`、`35ebf385`、`0fe41dca`：保留刷新故障有限分类，仅 typed HTTP 400 invalid_grant 表示刷新拒绝；显式网络重试恢复保留 owner 并尊重暂停。独立审阅及反例见本轮结果。
+- `10814415`：更新上述已审来源的净化清单 pin；旧封存根未改动。`b0c8bab9` 保存该来源新 GUI 的精确构建身份，`e21cd0b1` 固定执行器候选及一次恢复决策。
+- `20d62c11`：手机新建笔记的固定 PNG/bin 提交与三端全文/引用/授权原字节、双桌面磁盘原字节校验；独立设备外检查通过，真实手机运行尚未执行。
+- `30813aec`：收拢 GUI 包静态独核、执行器审阅、手机附件独审及历史 current-access03 记录。
+
+新的父级整合组 **138/138 通过，零跳过**，见 [整合摘要](native/recovery-integration02.md)。本轮桌面已恢复访问并实际运行 [relogin02](native/relogin-live02/README.md)：原库基线、两 GUI ready；一次真实 UI SignIn 后发生 responseMetadata 错误，保留 FAIL；两端自然退出，零强制信号。没有把它作为登录恢复或三端通过。原始 DB/grant 和运行目录保留私有，归档仅包含脱敏结果与已知工具源码。
+
+所有上述提交均为本地 main；截至本记录没有创建远程仓库、push 或运行 Actions。新的 native 修改不包含在旧净化草案中，最终受验来源仍需单独封存。

@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-11-13T07:09:03.697700+00:00",
+  "kind": "read-only-owned-pid-absence",
+  "checks": [
+    {
+      "device": "a",
+      "pid": 61048,
+      "method": "ps -p PID -o pid=,ppid=,comm=",
+      "exitCode": 1,
+      "stdoutEmpty": true,
+      "stderrEmpty": true,
+      "present": false
+    },
+    {
+      "device": "b",
+      "pid": 61074,
+      "method": "ps -p PID -o pid=,ppid=,comm=",
+      "exitCode": 1,
+      "stdoutEmpty": true,
+      "stderrEmpty": true,
+      "present": false
+    }
+  ]
+}
