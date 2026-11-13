@@ -1,0 +1,108 @@
+[
+  {
+    "argv": [
+      "node",
+      "scripts/publish/manifest.mjs",
+      "--ref",
+      "9010c5bada147936c9f3e8db8159ef777d3bbb87"
+    ],
+    "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+    "exitCode": 0,
+    "label": "manifest-dryrun",
+    "seconds": 16.315,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutSha256": "cb601c97ff13bd09786c4016f970b6ed05f2e60a9280b21ba2b192daf008d43c"
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/publish/export.mjs",
+      "--ref",
+      "9010c5bada147936c9f3e8db8159ef777d3bbb87",
+      "--target",
+      "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01",
+      "--expected-target",
+      "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01"
+    ],
+    "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+    "exitCode": 0,
+    "label": "export-dryrun",
+    "seconds": 15.421,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutSha256": "aff38cab0720a7587d01d16d742900ca09c1c27ea0d0ac0e157792378d49b2cb"
+  },
+  {
+    "argv": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "\nimport {planExport,digest} from './scripts/publish/export.mjs';\nconst p=planExport(process.cwd(),'9010c5bada147936c9f3e8db8159ef777d3bbb87');\nconsole.log(JSON.stringify(Object.fromEntries([...p.files].sort(([a],[b])=>a.localeCompare(b,'en')).map(([name,b])=>\n [name,{type:'file',mode:p.modes.get(name)==='100755'?'0755':'0644',bytes:b.length,sha256:digest(b)}])),null,2));\n"
+    ],
+    "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+    "exitCode": 0,
+    "label": "planned-inventory",
+    "seconds": 12.247,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutSha256": "6055420122d479a96288eb2c10dbfcb5d7145a420f75456dcc2df5c04638aec0"
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/publish/export.mjs",
+      "--ref",
+      "9010c5bada147936c9f3e8db8159ef777d3bbb87",
+      "--target",
+      "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01",
+      "--expected-target",
+      "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01",
+      "--apply",
+      "--init"
+    ],
+    "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+    "exitCode": 0,
+    "label": "export-apply-init",
+    "seconds": 17.55,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutSha256": "a9258995bdada257ba3159c1bc2995c19135e8993bd955bc7c0a6728216cdc98"
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/publish/verify.mjs",
+      "--new-root"
+    ],
+    "cwd": "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01",
+    "exitCode": 0,
+    "label": "verify-new-root",
+    "seconds": 10.878,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutSha256": "9d109f8f7829a0a27a28091570e00ea01e6e79ef571a8371214c0276fcd6c8e8"
+  },
+  {
+    "argv": [
+      "node",
+      "scripts/versions.mjs",
+      "--check"
+    ],
+    "cwd": "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01",
+    "exitCode": 0,
+    "label": "version-check",
+    "seconds": 0.032,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutSha256": "8d7e9322c3168b93e7e548552cd30950f6ae1bd67b5e64a0ee2f8d21afb458a9"
+  },
+  {
+    "argv": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import {sourceIdentity} from './scripts/build-info.mjs'; console.log(JSON.stringify(sourceIdentity(process.cwd(),{metadataPath:null})));"
+    ],
+    "cwd": "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01",
+    "exitCode": 0,
+    "label": "source-identity",
+    "seconds": 0.18,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdoutSha256": "3fdfb3c344344b0996f49aee38fdd6f9b551bea7b4f2ae6abf762605332a0799"
+  }
+]

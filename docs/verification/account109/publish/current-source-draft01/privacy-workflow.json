@@ -1,0 +1,29 @@
+{
+  "checkoutPersistCredentials": false,
+  "contentsPermission": "read",
+  "exactManifestAndCredentialPathPolicyPassed": true,
+  "explicitAndroidArm64AndPinnedToolchain": true,
+  "jobs": 2,
+  "noWorkflowPublishPushDeployOrSigningClaim": true,
+  "privateDocsEvidenceStoresAndBuildOutputsExcluded": true,
+  "publicTemplateTransformsExact": true,
+  "realMacArm64Gate": true,
+  "releaseUploadAllowlist": [
+    "release-packages/CyberNote-macos-arm64.zip",
+    "release-packages/CyberNote-macos-arm64-notices.zip",
+    "release-packages/CyberNote-macos-arm64.json",
+    "release-packages/CyberNote-macos-arm64.sha256",
+    "release-packages/CyberNote-android-arm64-unsigned.apk",
+    "release-packages/CyberNote-android-arm64-notices.zip",
+    "release-packages/CyberNote-android-arm64.json",
+    "release-packages/CyberNote-android-arm64.sha256"
+  ],
+  "sanitizedCheckBeforeDependencyInstall": true,
+  "scannerBoundary": "Reviewed exact allowlist plus credential/path/binary/provenance scanners; not a mathematical proof that source contains no sensitive text. Fixed synthetic test fixtures and declared public runtime/provider bytes are intended inputs.",
+  "sourceOnlyAllowlistAndDependencyClosurePassed": true,
+  "syntheticArchiveCount": 4,
+  "timeoutMinutesEach": 60,
+  "workflowExecuted": false,
+  "workflowSha256": "ecd9862f73c39b03f78b97103f431e659b6aa56f364c19d614957f7f6bb3d6f0",
+  "workflowUnchangedFromExactRef": true
+}
