@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "scope": "account109-android-current-data-login-cancellation",
+  "case": "embedded-back",
+  "source": "88b2dabe4bb898b0bf225e913883b43ed2cac865",
+  "apkSha256": "2fee1cfbe27dd3b4c537c7051206831daa5c22bb9d08db50cf25f28d6e381870",
+  "serial": "98895a3147304c3132",
+  "package": "com.local.notesclone.account109",
+  "upgradeReceiptSha256": "960a6fc409c039f36d3925c3d604b313dd1cf92ca7fac81ed44d74fa20cdc1b9",
+  "currentPrivateSnapshotSha256": "df83265e2b527804bdfa88cc673ba82b6edb38a2d2b4e0acb1423b3d5339fa18",
+  "status": "fail",
+  "startedAt": "2026-11-13T14:04:02.746Z",
+  "checks": [
+    "baseline-preserved"
+  ],
+  "observations": [
+    {
+      "kind": "baseline-preserved",
+      "samples": 3,
+      "durationMs": 3593
+    }
+  ],
+  "historicalBaselineAccepted": false,
+  "attachmentOriginExplained": false,
+  "credentialsEntered": false,
+  "loginOrSyncAccepted": false,
+  "installed": false,
+  "observedAuthorizationSurfaces": [
+    "embedded"
+  ],
+  "lastSafeStatus": {
+    "state": "authorizing",
+    "enabled": false,
+    "hasProfile": false,
+    "identityCheck": "unverified",
+    "devices": [],
+    "pendingCount": 0,
+    "conflictCount": 0,
+    "authorizationSurface": "embedded"
+  },
+  "failure": {
+    "code": "CHECK_FAILED"
+  },
+  "cleanup": {
+    "exactForwardsAbsent": true,
+    "leaseReleased": true
+  },
+  "finishedAt": "2026-11-13T14:04:19.898Z"
+}

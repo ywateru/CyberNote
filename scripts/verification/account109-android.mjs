@@ -86,9 +86,9 @@ export function nativeLoginControls({capture,guard,back,tap}) {
 
 export function assertInteractive() {
   const policy = run('shell', 'dumpsys', 'window', 'policy');
-  if (!/\bshowing=false\b/.test(policy) || !/\binputRestricted=false\b/.test(policy)) throw Error('ANDROID_DEVICE_AUTH_REQUIRED');
+  if (!/\bshowing=false\b/.test(policy) || !/\binputRestricted=false\b/.test(policy)) throw Object.assign(Error('ANDROID_DEVICE_AUTH_REQUIRED'), {code:'ANDROID_DEVICE_AUTH_REQUIRED'});
   const resumed = run('shell', 'dumpsys', 'activity', 'activities').split('\n').find(line => line.includes('mResumedActivity:')) || '';
-  if (!resumed.includes(`${PACKAGE}/`)) throw Error('ANDROID_OWNED_APP_NOT_FOREGROUND');
+  if (!resumed.includes(`${PACKAGE}/`)) throw Object.assign(Error('ANDROID_OWNED_APP_NOT_FOREGROUND'), {code:'ANDROID_OWNED_APP_NOT_FOREGROUND'});
 }
 
 export function ownPid() {
@@ -358,7 +358,7 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
       radios:()=>evaluate(`Array.from(document.querySelectorAll('.account-settings input[name="account-login-surface"]')).map(r=>({value:r.value,label:r.closest('label')?.textContent.trim(),disabled:r.matches(':disabled'),visible:r.getClientRects().length>0}))`),
       select:async surface=>{await click(`.account-settings input[name="account-login-surface"][value="${surface}"]`);if(!await evaluate(`document.querySelector('.account-settings input[name="account-login-surface"][value="${surface}"]')?.checked===true`))throw loginFailure('ANDROID_LOGIN_RADIO_NOT_SELECTED');},
       clickLogin:()=>click('.account-settings .account-primary','登录')});
-    const nativeLogin=nativeLoginControls({guard:()=>{assertPid();assertInteractive();},capture:()=>run('shell','uiautomator','dump','/dev/tty'),back:()=>run('shell','input','keyevent','KEYCODE_BACK'),tap:(x,y)=>run('shell','input','tap',String(x),String(y))});
+    const nativeLogin=nativeLoginControls({guard:()=>{assertPid();assertInteractive();},capture:()=>run('shell','-tt','uiautomator','dump','/dev/tty'),back:()=>run('shell','input','keyevent','KEYCODE_BACK'),tap:(x,y)=>run('shell','input','tap',String(x),String(y))});
     const api = {
       owned, diagnostics, close, readWorkspace, readNote, accountStatus, openAccount, closeSettings,
       ...login,...nativeLogin,

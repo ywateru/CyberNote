@@ -31,7 +31,7 @@ function xml({inside=false,duplicate=false,form=true,foreign=false,hidden=false}
 test('RAM-only native projection exposes booleans and rejects web content posing as native toolbar',()=>{
   assert.deepEqual(nativeLoginProjection(xml()),{dialog:true,webView:true,hostedForm:true});assert(!JSON.stringify(nativeLoginProjection(xml())).includes('PRIVATE'));
   for(const config of [{inside:true},{duplicate:true},{foreign:true},{hidden:true},{form:false}])assert(Object.values(nativeLoginProjection(xml(config))).some(x=>x===false));
-  for(const raw of ['', '<!DOCTYPE x><hierarchy/>','<hierarchy><node class="x">','x'.repeat(2_000_001)])assert.throws(()=>nativeLoginProjection(raw));
+  for(const raw of ['', 'UI hierarchy dumped to: /dev/tty', '<!DOCTYPE x><hierarchy/>','<hierarchy><node class="x">','x'.repeat(2_000_001)])assert.throws(()=>nativeLoginProjection(raw),{code:'ANDROID_NATIVE_XML_INVALID'});
 });
 test('form evidence cannot be borrowed from a foreign or second WebView or foreign child nodes',async()=>{
   const node=(pkg,cls,attrs='',body='')=>`<node package="${pkg}" class="${cls}" bounds="[0,0][100,100]" enabled="true" ${attrs}>${body}</node>`;

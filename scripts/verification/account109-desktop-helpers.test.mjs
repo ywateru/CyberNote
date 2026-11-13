@@ -178,6 +178,15 @@ test('failure reporting never copies arbitrary upstream error strings',()=>{
   assert.equal(failureCode({code:'ACCOUNT_AUTHENTICATION_FAILED'}),'ACCOUNT_AUTHENTICATION_FAILED');
 });
 
+test('fixed Android diagnostics survive without accepting arbitrary prefixes, suffixes or error messages',()=>{
+  for(const code of ['ANDROID_DEVICE_AUTH_REQUIRED','ANDROID_OWNED_APP_NOT_FOREGROUND','ANDROID_NATIVE_XML_INVALID','ANDROID_NATIVE_LOGIN_FORM_REQUIRED','ANDROID_PID_CHANGED','ANDROID_DRIVER_LOCK_BUSY','ANDROID_CDP_TIMEOUT','ANDROID_PAGE_EVALUATION_FAILED','ANDROID_CDP_COMMAND_REJECTED','ANDROID_UI_TIMEOUT','ANDROID_NATIVE_ACCOUNT_STATUS_REJECTED']){
+    assert.equal(failureCode({code,message:'PRIVATE upstream output',stdout:'PRIVATE XML',stderr:'PRIVATE error'}),code);
+    assert.equal(failureCode({code:code+': PRIVATE output'}),'CHECK_FAILED');
+  }
+  for(const code of ['ANDROID_UNKNOWN','ANDROID_NATIVE_XML_INVALID\nPRIVATE','ANDROID_DEVICE_AUTH_REQUIRED_EXTRA','ANDROID_OWNED_APP_NOT_FOREGROUND https://private.invalid'])assert.equal(failureCode({code,message:code}),'CHECK_FAILED');
+  assert.equal(failureCode(Error('ANDROID_NATIVE_XML_INVALID')),'CHECK_FAILED');
+});
+
 test('native account path constructs only existing command payloads and rejects injection',async()=>{
   const calls=[];const app={evaluate:async(expression,arg)=>{calls.push({expression,arg});return out();}};
   for(const type of ['status','signIn','signOut','syncNow'])await nativeAccount(app,type);
