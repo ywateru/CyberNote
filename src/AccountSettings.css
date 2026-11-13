@@ -12,6 +12,12 @@
 .account-avatar { display: grid; place-items: center; width: 46px; height: 46px; flex-shrink: 0; background: var(--grouped); border-radius: 50%; color: var(--secondary); }
 .account-avatar svg { width: 25px; height: 25px; }
 .account-identifier { user-select: text; -webkit-user-select: text; }
+.account-login-method { min-width: 0; margin: 16px 0 0; padding: 0; border: 0; }
+.account-login-method legend { padding: 0; font-weight: 600; }
+.account-login-options { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.account-login-options label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; }
+.account-login-options input { flex-shrink: 0; width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+.account-login-method:disabled label { color: var(--secondary); cursor: default; }
 .account-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .account-settings button { min-height: max(28px, var(--interface-hit-min, 28px)); min-width: 64px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--line); border-radius: var(--interface-radius-button, 7px); background: var(--grouped); white-space: normal; overflow-wrap: anywhere; text-align: center; }
 .account-settings .account-primary { background: var(--selection); color: var(--accent); border-color: transparent; }

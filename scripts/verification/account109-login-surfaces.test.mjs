@@ -1,0 +1,261 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import vm from 'node:vm';
+import {resolve} from 'node:path';
+import {accountFixture, signedOutAccount} from '../debug/account-fixture.mjs';
+
+// Device-free host for real React DOM commits. User actions below invoke the
+// actual committed React props; no browser event routing/layout is claimed.
+let document;
+class HostNode {
+  constructor(type,name) {this.nodeType=type;this.nodeName=name;this.ownerDocument=document;this.parentNode=null;this.childNodes=[];}
+  appendChild(node) {node.parentNode?.removeChild(node);this.childNodes.push(node);node.parentNode=this;return node;}
+  insertBefore(node,before) {node.parentNode?.removeChild(node);const i=this.childNodes.indexOf(before);assert(i>=0);this.childNodes.splice(i,0,node);node.parentNode=this;return node;}
+  removeChild(node) {const i=this.childNodes.indexOf(node);assert(i>=0);this.childNodes.splice(i,1);node.parentNode=null;return node;}
+  get firstChild() {return this.childNodes[0]??null;}
+  get nextSibling() {return this.parentNode?.childNodes[this.parentNode.childNodes.indexOf(this)+1]??null;}
+  get isConnected() {return this===document || !!this.parentNode?.isConnected;}
+  contains(node) {return this===node || this.childNodes.some(c=>c.contains(node));}
+  get textContent() {return this.nodeType===3?this.nodeValue:this.childNodes.map(c=>c.textContent).join('');}
+  set textContent(value) {for(const child of [...this.childNodes])this.removeChild(child);if(value)this.appendChild(new HostText(String(value)));}
+  addEventListener() {} removeEventListener() {}
+}
+class HostText extends HostNode {
+  constructor(value) {super(3,'#text');this.nodeValue=value;}
+}
+class HostElement extends HostNode {
+  constructor(name='div') {
+    super(1,name.toUpperCase());this.tagName=this.nodeName;this.localName=name;this.namespaceURI='http://www.w3.org/1999/xhtml';this.attributes={};
+    this.style={setProperty(k,v){this[k]=v;},removeProperty(k){delete this[k];}};
+  }
+  setAttribute(key,value) {this.attributes[key]=String(value);if(key==='disabled')this.disabled=true;if(key==='type')this.type=value;}
+  removeAttribute(key) {delete this.attributes[key];if(key==='disabled')this.disabled=false;}
+  getAttribute(key) {return this.attributes[key]??null;}
+  setAttributeNS(_ns,key,value) {this.setAttribute(key,value);}
+  removeAttributeNS(_ns,key) {this.removeAttribute(key);}
+  focus() {document.activeElement=this;}
+  scrollIntoView() {}
+  querySelector(selector) {return descendants(this).find(e=>e.localName===selector)??null;}
+}
+document=new HostNode(9,'#document');document.ownerDocument=document;
+document.createElement=name=>new HostElement(name);
+document.createElementNS=(_ns,name)=>new HostElement(name);
+document.createTextNode=value=>new HostText(value);
+document.visibilityState='visible';document.body=document.appendChild(new HostElement('body'));document.activeElement=document.body;
+const intervals=new Map();let timerId=0;
+const window={document,HTMLElement:HostElement,HTMLIFrameElement:class {},addEventListener(){},removeEventListener(){},
+  setInterval(fn){const id=++timerId;intervals.set(id,fn);return id;},clearInterval(id){intervals.delete(id);}};
+document.defaultView=window;
+Object.assign(globalThis,{window,document,HTMLElement:HostElement,IS_REACT_ACT_ENVIRONMENT:true});
+const React=await import('react');
+const {createRoot}=await import('react-dom/client');
+const {act}=React;
+const require=createRequire(import.meta.url);
+const {build}=createRequire(require.resolve('vite'))('esbuild');
+const built=await build({stdin:{contents:`export {default as AccountSettings} from './src/AccountSettings'; export * from './src/account-client'; export {catalog} from './src/debug/catalog';`,resolveDir:resolve('.'),loader:'ts'},
+  bundle:true,write:false,format:'cjs',platform:'node',jsx:'automatic',external:['react','react/jsx-runtime'],loader:{'.css':'empty'},
+  define:{'import.meta.env.DEV':'true','import.meta.env.VITE_NOTES_DEBUG':'"1"','import.meta.env.VITE_NOTES_ACCOUNT_NATIVE':'"1"','import.meta.env.VITE_NOTES_ACCOUNT_UI':'"0"'},
+  plugins:[{name:'fixed-ipc-fixture',setup(b){
+    b.onResolve({filter:/^@tauri-apps\/api\/core$/},()=>({path:'ipc',namespace:'fixture'}));
+    b.onResolve({filter:/^lucide-react$/},()=>({path:'icons',namespace:'fixture'}));
+    b.onResolve({filter:/^\.\/data-management$/},()=>({path:'time',namespace:'fixture'}));
+    b.onLoad({filter:/.*/,namespace:'fixture'},({path})=>({contents:path==='ipc'
+      ? 'export const isTauri=()=>true; export const invoke=(name,args)=>globalThis.__invoke(name,args);'
+      : path==='icons'?'export const UserRound=()=>null,Laptop=()=>null,Smartphone=()=>null;'
+      : 'export const formatFileTime=()=>"Fixture time";'}));
+  }}]});
+
+function descendants(node) {return node.childNodes.flatMap(c=>[c,...descendants(c)]).filter(n=>n.nodeType===1);}
+function props(node) {const key=Object.keys(node).find(k=>k.startsWith('__reactProps$'));assert(key);return node[key];}
+function deferred() {let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};}
+const authorizing=surface=>({...signedOutAccount(),state:'authorizing',...(surface?{authorizationSurface:surface}:{})});
+
+function setup(t,{initial=signedOutAccount(),reply}={}) {
+  let native=structuredClone(initial),handle;
+  const calls=[],context=vm.createContext({module:{exports:{}},require,window,document,HTMLElement:HostElement,queueMicrotask,
+    __invoke:async(name,{command})=>{
+      assert.equal(name,'account_command');calls.push(structuredClone(command));
+      if(reply){const result=reply(command,{get:()=>native,set:s=>{native=structuredClone(s);}});if(result!==undefined)return result;}
+      if(command.type==='signIn'||command.type==='signUp')native=authorizing(Object.hasOwn(command,'surface')?command.surface:'browser');
+      else if(command.type==='cancel'||command.type==='signOut')native=signedOutAccount();
+      else if(command.type==='openLoginInBrowser'){assert.equal(native.authorizationSurface,'embedded');native=authorizing('browser');}
+      return structuredClone(native);
+    }});
+  vm.runInContext(built.outputFiles[0].text,context,{timeout:1000});
+  const client=context.module.exports;
+  const container=document.body.appendChild(new HostElement());const root=createRoot(container);
+  t.after(async()=>{await act(async()=>root.unmount());document.body.removeChild(container);});
+  const all=()=>descendants(container);
+  const h={client,calls,setNative:s=>{native=structuredClone(s);},getNative:()=>native,
+    async mount(){await act(async()=>root.render(React.createElement(client.AccountSettings,{active:true,onHandle:h=>{handle=h;},onConflicts(){}})));},
+    all,handle:()=>handle,text:()=>container.textContent,
+    panel:()=>all().find(e=>props(e).className==='account-settings'),
+    radio:value=>all().find(e=>e.localName==='input'&&props(e).name==='account-login-surface'&&props(e).value===value),
+    buttons:()=>all().filter(e=>e.localName==='button'),
+    button:label=>all().find(e=>e.localName==='button'&&e.textContent===label),
+    actionLabels:()=>{const section=all().find(e=>props(e)['aria-label']==='CyberNote 账户');return descendants(section).filter(e=>e.localName==='button').map(e=>e.textContent);},
+    async click(label){const button=h.button(label);assert(button,`Missing ${label}`);assert(!props(button).disabled);await act(async()=>{props(button).onClick();});},
+    async choose(value){const radio=h.radio(value);assert(radio);const fieldset=all().find(e=>e.localName==='fieldset');assert(!props(fieldset).disabled);await act(async()=>{props(radio).onChange();});},
+    async poll(){await act(async()=>{await handle.run({type:'status'});});},
+    async tick(){await act(async()=>{for(const fn of intervals.values())fn();});},
+  };
+  return h;
+}
+
+test('IPC preserves omitted browser compatibility and only fixed optional surfaces/transfer',async t=>{
+ const h=setup(t);
+ for(const type of ['signIn','signUp'])for(const extra of [{},{surface:'embedded'},{surface:'browser'}]){
+  await h.client.accountCommand({type,...extra});
+  assert.deepEqual(h.calls.at(-1),{type,...extra});
+ }
+ h.setNative(authorizing('embedded'));await h.client.accountCommand({type:'openLoginInBrowser'});
+ assert.deepEqual(h.calls.at(-1),{type:'openLoginInBrowser'});
+ for(const surface of [undefined,null,0,false,{},[],'unknown','https://private.invalid'])
+  for(const type of ['signIn','signUp'])await assert.rejects(h.client.accountCommand({type,surface}),/无效数据/);
+ for(const command of [{type:'signIn',url:'untrusted'},{type:'signUp',clientId:'untrusted'},
+  {type:'openLoginInBrowser',surface:'embedded'},{type:'openLoginInBrowser',url:'untrusted'},
+  {type:'status',surface:'embedded'},{type:'signOut',token:'untrusted'}])await assert.rejects(h.client.accountCommand(command),/无效数据/);
+ assert.equal(h.calls.length,7,'invalid requests never reach invoke');
+});
+
+test('real account UI defaults embedded; both radios and both buttons share explicit choice',async t=>{
+ for(const type of ['signIn','signUp'])for(const surface of ['embedded','browser']){
+  const h=setup(t);await h.mount();assert.deepEqual(h.actionLabels(),['登录','创建账户']);assert(props(h.radio('embedded')).checked);
+  const before=h.calls.length;await h.choose(surface);assert.equal(h.calls.length,before,'radio selection has no IPC');
+  await h.click(type==='signIn'?'登录':'创建账户');assert.deepEqual(h.calls.at(-1),{type,surface});
+  assert.deepEqual(h.actionLabels(),surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录']);
+  assert(props(h.all().find(e=>e.localName==='fieldset')).disabled);
+ }
+});
+
+test('waiting text/data follow only native surface; missing legacy field stays unknown',async t=>{
+ for(const surface of [undefined,'embedded','browser']){
+  const h=setup(t,{initial:authorizing(surface)});await h.mount();
+  assert.equal(h.panel().getAttribute('data-account-authorization-surface'),surface??null);
+  assert(h.text().includes(surface==='embedded'?'请在应用内登录窗口中完成授权':surface==='browser'?'请在系统浏览器中完成授权':'请完成登录授权'));
+  assert.deepEqual(h.actionLabels(),surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录']);
+  await h.tick();assert(h.calls.every(c=>c.type==='status'),'polling never opens or transfers authorization');
+ }
+});
+
+test('transfer failure retains embedded owner/status and explicit retry never starts another signIn',async t=>{
+ let fail=true;
+ const h=setup(t,{initial:authorizing('embedded'),reply:(command,model)=>{
+  if(command.type==='openLoginInBrowser'&&fail){fail=false;const s={...authorizing('embedded'),error:{code:'account_network',stage:'browserOpen',message:'safe'}};model.set(s);return s;}
+ }});await h.mount();await h.click('在浏览器中继续');
+ assert(h.text().includes('未能打开系统浏览器'));assert(h.text().includes('你仍可在应用内登录窗口完成授权'));
+ assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');
+ assert.deepEqual(h.actionLabels(),['取消登录','在浏览器中继续']);
+ await h.tick();assert.equal(h.calls.filter(c=>c.type==='openLoginInBrowser').length,1);
+ await h.click('在浏览器中继续');assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'browser');
+ assert(!h.text().includes('未能打开系统浏览器'));assert.deepEqual(h.actionLabels(),['取消登录']);
+ assert.equal(h.calls.filter(c=>c.type==='signIn'||c.type==='signUp').length,0);
+});
+
+test('pending original opener allows status and transfer; its late response cannot undo browser surface',async t=>{
+ const opener=deferred();
+ const h=setup(t,{reply:(command,model)=>{
+  if(command.type==='signIn'){model.set(authorizing('embedded'));return opener.promise;}
+ }});await h.mount();await h.click('登录');await h.tick();
+ assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');
+ assert(!props(h.button('在浏览器中继续')).disabled);await h.click('在浏览器中继续');
+ assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'browser');
+ await act(async()=>opener.resolve(authorizing('embedded')));
+ assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'browser');
+ assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);await h.click('取消登录');assert.deepEqual(h.actionLabels(),['登录','创建账户']);
+});
+
+test('cancel during transfer permits a new generation; late old transfer cannot overwrite it',async t=>{
+ const transfer=deferred();
+ const h=setup(t,{initial:authorizing('embedded'),reply:command=>command.type==='openLoginInBrowser'?transfer.promise:undefined});
+ await h.mount();await h.click('在浏览器中继续');assert(!props(h.button('取消登录')).disabled);
+ await h.click('取消登录');await h.click('登录');
+ await act(async()=>transfer.resolve(authorizing('browser')));
+ assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');
+ assert.deepEqual(h.actionLabels(),['取消登录','在浏览器中继续']);
+ assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
+});
+
+test('transfer IPC rejection retains embedded; late original reply cannot release transfer operation gate',async t=>{
+ const opener=deferred(),transfer=deferred();let firstTransfer=true;
+ const h=setup(t,{reply:(command,model)=>{
+  if(command.type==='signIn'){model.set(authorizing('embedded'));return opener.promise;}
+  if(command.type==='openLoginInBrowser'&&firstTransfer){firstTransfer=false;return transfer.promise;}
+ }});await h.mount();await h.click('登录');await h.tick();await h.click('在浏览器中继续');
+ await act(async()=>opener.resolve(authorizing('embedded')));
+ assert(props(h.button('在浏览器中继续')).disabled,'old signIn completion must not clear current transfer busy');
+ await act(async()=>{await h.handle().run({type:'signIn',surface:'browser'});});
+ assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
+ await act(async()=>transfer.reject(Error('unexported opener sentinel')));
+ assert(!h.text().includes('unexported opener sentinel'));assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');
+ assert(!props(h.button('在浏览器中继续')).disabled);assert(!props(h.button('取消登录')).disabled);
+ await h.click('重试');assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'browser');
+ assert.equal(h.calls.filter(c=>c.type==='openLoginInBrowser').length,2);await h.click('取消登录');
+});
+
+test('cancel before original signIn reply fences that late reply and keeps single pending authorization',async t=>{
+ const opener=deferred();let first=true;
+ const h=setup(t,{reply:(command,model)=>{
+  if(command.type==='signIn'&&first){first=false;model.set(authorizing('embedded'));return opener.promise;}
+ }});await h.mount();await h.click('登录');await h.tick();await h.click('在浏览器中继续');await h.click('取消登录');
+ assert.equal(h.panel().getAttribute('data-account-state'),'signedOut');
+ await act(async()=>{await h.handle().run({type:'signIn',surface:'embedded'});});
+ assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
+ await act(async()=>opener.resolve(authorizing('embedded')));
+ assert.equal(h.panel().getAttribute('data-account-state'),'signedOut');assert.equal(h.panel().getAttribute('data-account-authorization-surface'),null);
+ await h.click('登录');assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'browser'});
+});
+
+test('failed cancel never unlocks a second authorization, before or after the original IPC completes',async t=>{
+ const opener=deferred();
+ const h=setup(t,{reply:(command,model)=>{
+  if(command.type==='signIn'){model.set(authorizing('embedded'));return opener.promise;}
+  if(command.type==='cancel')throw Error('unexported cancel sentinel');
+ }});await h.mount();await h.click('登录');await h.tick();await h.click('取消登录');
+ for(const type of ['signIn','signUp'])await act(async()=>{await h.handle().run({type,surface:'browser'});});
+ assert.equal(h.calls.filter(c=>c.type==='signIn'||c.type==='signUp').length,1);
+ await act(async()=>opener.resolve(authorizing('embedded')));
+ for(const type of ['signIn','signUp'])await act(async()=>{await h.handle().run({type,surface:'browser'});});
+ assert.equal(h.calls.filter(c=>c.type==='signIn'||c.type==='signUp').length,1);
+ assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');assert(!h.text().includes('unexported cancel sentinel'));
+});
+
+test('failed signUp retry uses current radio while preserving operation; status retry does not authorize',async t=>{
+ let fail=true;
+ const h=setup(t,{reply:command=>{if(command.type==='signUp'&&fail){fail=false;throw Error('unexported provider sentinel');}}});
+ await h.mount();await h.click('创建账户');assert(h.button('重试'));assert(!h.text().includes('unexported provider sentinel'));
+ await h.choose('browser');await h.click('重试');
+ assert.deepEqual(h.calls.filter(c=>c.type==='signUp'),[{type:'signUp',surface:'embedded'},{type:'signUp',surface:'browser'}]);
+ assert.equal(h.calls.filter(c=>c.type==='signIn').length,0);
+});
+
+test('connection login retry uses selection; retained network retry remains syncNow without surface',async t=>{
+ const h=setup(t,{initial:{...signedOutAccount(),state:'error',error:{code:'account_auth_code_rejected',message:'safe'}}});
+ await h.mount();await h.choose('browser');await h.click('重试登录');assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'browser'});
+ h.setNative({...signedOutAccount(),state:'error',profile:{subject:'fixture',displayName:'Fixture'},error:{code:'account_network',stage:'identityProvider',message:'safe'}});
+ await h.poll();await h.click('重试连接');assert.deepEqual(h.calls.at(-1),{type:'syncNow'});
+});
+
+test('catalog allows optional enum only for authorization; transfer is fixed and argument-free',t=>{
+ const {catalog}=setup(t).client;
+ for(const type of ['signIn','signUp']){
+  const descriptor=catalog.find(c=>c.id==='account.'+type);assert.deepEqual(Object.keys(descriptor.args),['surface']);
+  assert.equal(descriptor.args.surface.required,false);assert.equal(descriptor.args.surface.type,'string');
+  assert.deepEqual(Array.from(descriptor.args.surface.enum),['embedded','browser']);
+ }
+ assert.deepEqual(Object.keys(catalog.find(c=>c.id==='account.openLoginInBrowser').args),[]);
+});
+
+test('JS IPC fixture preserves legacy omission, finite failure and same current authorization',async()=>{
+ const events=[];let fail=false;
+ const backend={boundary:async kind=>{events.push(kind);if(fail){fail=false;throw Error('unexported');}}};
+ assert.equal((await accountFixture(backend,{type:'signIn'})).authorizationSurface,'browser');
+ await assert.rejects(accountFixture(backend,{type:'openLoginInBrowser'}));
+ await accountFixture(backend,{type:'cancel'});await accountFixture(backend,{type:'signUp',surface:'embedded'});
+ fail=true;const s=await accountFixture(backend,{type:'openLoginInBrowser'});assert.equal(s.state,'authorizing');assert.equal(s.authorizationSurface,'embedded');
+ assert.deepEqual(s.error,{code:'account_network',stage:'browserOpen',message:'Fixture browser unavailable'});
+ assert.equal((await accountFixture(backend,{type:'openLoginInBrowser'})).authorizationSurface,'browser');
+ assert.equal(events.filter(e=>e==='account-signUp').length,1);
+ for(const surface of [undefined,null,0,'unknown'])await assert.rejects(accountFixture(backend,{type:'signIn',surface}));
+});

@@ -6,6 +6,22 @@ const built = await build({configFile:false,logLevel:'silent',build:{write:false
 const output = (Array.isArray(built) ? built[0] : built).output;
 const {validateAccountStatus,accountConnectionRetry,accountNeedsLogin,accountTokenResponseMessage} = await import('data:text/javascript;base64,'+Buffer.from(output[0].code).toString('base64'));
 const status = error => ({state:'error',enabled:false,devices:[],pendingCount:0,conflictCount:0,error});
+test('authorization surface is finite, authorizing-only and optional for legacy native status',()=>{
+ const authorizing={state:'authorizing',enabled:false,devices:[],pendingCount:0,conflictCount:0};
+ assert.equal(validateAccountStatus(authorizing).authorizationSurface,undefined);
+ for(const authorizationSurface of ['embedded','browser']) {
+  const parsed=validateAccountStatus({...authorizing,authorizationSurface});
+  assert.equal(parsed.authorizationSurface,authorizationSurface);
+  assert.deepEqual(accountConnectionRetry(parsed),{type:'status'});
+  for(const state of ['signedOut','connecting','ready','paused','error'])
+   assert.throws(()=>validateAccountStatus({...authorizing,state,authorizationSurface}),/无效数据/);
+ }
+ for(const authorizationSurface of [undefined,null,0,{},[],false,'external','https://private.invalid'])
+  assert.throws(()=>validateAccountStatus({...authorizing,authorizationSurface}),/无效数据/);
+ const failedTransfer={...authorizing,authorizationSurface:'embedded',error:{code:'account_network',stage:'browserOpen',message:'safe'}};
+ assert.deepEqual(validateAccountStatus(failedTransfer).error,failedTransfer.error);
+ assert.deepEqual(accountConnectionRetry(validateAccountStatus(failedTransfer)),{type:'status'});
+});
 test('explicit network retry restores a retained owner without authorizing or enabling',()=>{
  for(const enabled of [false,true]) for(const error of [
   {code:'account_network',message:'safe',stage:'identityProvider'},

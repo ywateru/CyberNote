@@ -19,10 +19,13 @@ type TokenField = typeof tokenFields[number];
 const transportKinds = ["webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
 type TransportKind = typeof transportKinds[number];
 type MappingObservation = { generation: number; sample: number; ageMs: number; enrollment: TransportKind; sync: TransportKind };
+const authorizationSurfaces = ["embedded", "browser"] as const;
+export type AccountAuthorizationSurface = typeof authorizationSurfaces[number];
 
 // Frozen account109 DTO. The native singleton owns authorization and networking.
 export type AccountStatus = {
   state: "signedOut" | "authorizing" | "connecting" | "ready" | "paused" | "error";
+  authorizationSurface?: AccountAuthorizationSurface;
   enabled: boolean;
   profile?: { subject: string; displayName: string; username?: string };
   devices: { id: string; name: string; online: boolean; current: boolean; connected: boolean; transport?: MappingObservation }[];
@@ -33,7 +36,8 @@ export type AccountStatus = {
   error?: { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField };
 };
 export type AccountCommand =
-  | { type: "status" | "signIn" | "signUp" | "cancel" | "signOut" | "syncNow" }
+  | { type: "signIn" | "signUp"; surface?: AccountAuthorizationSurface }
+  | { type: "status" | "openLoginInBrowser" | "cancel" | "signOut" | "syncNow" }
   | { type: "setEnabled"; enabled: boolean };
 
 export function accountNetworkError(error: AccountStatus["error"]): boolean {
@@ -83,8 +87,9 @@ function text(value: unknown, max = 256): string {
 function bool(value: unknown): boolean { if (typeof value !== "boolean") return invalid(); return value; }
 function count(value: unknown): number { if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) return invalid(); return value; }
 export function validateAccountStatus(value: unknown): AccountStatus {
-  const s = record(value, ["state", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "error", "transportGeneration"]);
+  const s = record(value, ["state", "authorizationSurface", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "error", "transportGeneration"]);
   if (!["signedOut", "authorizing", "connecting", "ready", "paused", "error"].includes(s.state as string)) return invalid();
+  if ("authorizationSurface" in s && (s.state !== "authorizing" || !authorizationSurfaces.includes(s.authorizationSurface as AccountAuthorizationSurface))) return invalid();
   if (!Array.isArray(s.devices) || s.devices.length > 256) return invalid();
   const profile = s.profile === undefined ? undefined : record(s.profile, ["subject", "displayName", "username"]);
   const error = s.error === undefined ? undefined : record(s.error, ["code", "message", "stage", "reason", "providerReason", "tokenOperation", "tokenField"]);
@@ -101,6 +106,7 @@ export function validateAccountStatus(value: unknown): AccountStatus {
   if (generation !== undefined && (generation === 0 || s.state !== "ready" || s.enabled !== true || error !== undefined)) return invalid();
   return {
     state: s.state as AccountStatus["state"], enabled: bool(s.enabled),
+    ...(s.authorizationSurface === undefined ? {} : { authorizationSurface: s.authorizationSurface as AccountAuthorizationSurface }),
     profile: profile ? { subject: text(profile.subject, 1024), displayName: text(profile.displayName, 512), username: profile.username === undefined ? undefined : text(profile.username, 1024) } : undefined,
     devices: s.devices.map(value => {
       const d = record(value, ["id", "name", "online", "current", "connected", "transport"]);
@@ -126,8 +132,18 @@ export async function accountCommand(command: AccountCommand): Promise<AccountSt
   // Construct an allowlisted request; tokens/URLs/debug objects never reach IPC.
   let request: AccountCommand;
   switch (command.type) {
-    case "setEnabled": request = { type: "setEnabled", enabled: bool(command.enabled) }; break;
-    case "status": case "signIn": case "signUp": case "cancel": case "signOut": case "syncNow":
+    case "signIn": case "signUp":
+      record(command, ["type", "surface"]);
+      if ("surface" in command) {
+        if (command.surface !== "embedded" && command.surface !== "browser") return invalid();
+        request = { type: command.type, surface: command.surface };
+      } else request = { type: command.type };
+      break;
+    case "setEnabled":
+      record(command, ["type", "enabled"]);
+      request = { type: "setEnabled", enabled: bool(command.enabled) }; break;
+    case "status": case "openLoginInBrowser": case "cancel": case "signOut": case "syncNow":
+      record(command, ["type"]);
       request = { type: command.type }; break;
     default: throw Error("未知账户指令");
   }
