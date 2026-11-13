@@ -1,3 +1,5 @@
+最新续验：手机[error态正常重开](android/error-reopen-live01/README.md)独立PASS并独核，完整当前数据3次/3649ms一致，APK保持、新PID、clean signedOut；不是旧smoke通过或错误根因结论。[完整整合](android/pty-integration02.md)315/315、零跳过。新[取消live02](android/current-login-smoke-live02/README.md)在进入embedded后表单识别超时FAIL；只读结构发现内层WebView控件未满足现有最近owner与顶层owner相等的判断。正在窄修，未执行取消/重启及另两case，实际认证与账户三端仍待验收。
+
 # 账户同步实际验证结果
 
 2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；此前 `9e7c46d2` GUI 的 [fresh cancel-local-live02](native/cancel-local-live02/README.md) 五项通过，涵盖本地完整正文保存、发起/取消登录、继续编辑及自然重启保持，两进程自然退出 0。旧 `920fa9cf` 的原库 relogin04 浏览器授权未完成、fresh live01 ready 超时仍保留。Android 已完成新域包保数据升级，账户三端待有效QA授权及产品链实测。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。

@@ -1,3 +1,5 @@
+2026-11-13最新：手机独立[正常重开](verification/account109/android/error-reopen-live01/README.md)PASS并独核，error态原PID经Home/owned背景回收后正常启动，新PID下完整当前数据3次/3649ms一致、clean signedOut；不归类旧错误原因。[PTY修正整合](verification/account109/android/pty-integration02.md)315/315通过。新[取消live02](verification/account109/android/current-login-smoke-live02/README.md)仍FAIL：进入embedded后表单识别超时，后两case停止；随后只读结构发现嵌套WebView归属不匹配，正在窄修执行器。原失败/私有快照保留，不把历史未知附件来源视为已接受。以下为历史阶段。
+
 2026-11-13当前手机状态：[新域88b2dabe包已保数据升级并独核](verification/account109/android/preserving-upgrade-live01/README.md)，四篇完整笔记和唯一附件/原字节两次逐字段一致，当前clean signedOut。历史未知附件来源不变；即将以固定当前私有快照单独保护登录取消测试，不改旧基线。完整执行器整合305/305、零跳过。原桌面[relogin05](verification/account109/native/relogin-live05/README.md)在600秒人工认证等待超时，未编辑/enable，两进程正常退出；缺有效QA密码，实际认证与账户三端仍未完成。
 
 2026-11-13最新实测：[macOS内置表单及原生关窗](verification/account109/native/login-window-live05/README.md)五项通过并独核，完整正文编辑/自然重启保持；两个进程自然退出0，成功临时库已清理。[手机CELLULAR新域匿名health](verification/account109/android/approved-domain-phone-health01/README.md)一次200、可信TLS，未安装新包或发起授权。新Android包已独核；重复构建产物[清理](verification/account109/native/88b2dabe-derived-cleanup01/README.md)约724MiB。两域配置/公钥父级对照通过，独立复核可读新域但旧域请求失败，保留各自范围；认证与账户三端仍未完成。
