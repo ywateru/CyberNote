@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
-import {BINARY_SHA,SOURCE,B_HISTORY_SHA,B_SUBJECT_SHA,readBHistory,checkBHistoryProfile,cleanBSignedOut,recoverBSignedOut,waitForBHistoryAccount,options,checkProfile,isBRefreshFailure,refreshClassification,recoverB,waitForBStartup,waitForOriginalAccount,assertLibrary,combineBaselines,readLibrary,priorGate,waitHealthy,connectionThenData,confirmEnableUi,finish} from './account109-desktop-relogin.mjs';
+import {BINARY_SHA,SOURCE,B_HISTORY_SHA,B_SUBJECT_SHA,readBHistory,checkBHistoryProfile,cleanBSignedOut,recoverBSignedOut,waitForBHistoryAccount,authorizationWaits,options,checkProfile,isBRefreshFailure,refreshClassification,recoverB,waitForBStartup,waitForOriginalAccount,assertLibrary,combineBaselines,readLibrary,priorGate,waitHealthy,connectionThenData,confirmEnableUi,finish} from './account109-desktop-relogin.mjs';
 import {STORES,hash,boundedPoll,verifyBytes} from './account109-desktop-recovery.mjs';
 import {noteBody,safeStatus} from './account109-desktop-helpers.mjs';
 
@@ -28,6 +28,77 @@ test('CLI requires explicit end state and rejects credential/URL/store/duplicate
   assert.equal(options(args).allowBSignedOutRelogin,false);assert.equal(options([...args,'--allow-b-signed-out-relogin']).allowBSignedOutRelogin,true);
   assert.throws(()=>options([...args,'--allow-b-signed-out-relogin','--allow-b-signed-out-relogin']));assert.throws(()=>options([...args,'--subject-hash',B_SUBJECT_SHA]));
   for(const bad of [args.slice(0,-2),[...args,'--token','secret'],[...args,'--binary','/tmp/other'],[...args,'--allow-b-network-retry','--allow-b-network-retry'],args.map(x=>x===STORES?'/tmp/other':x),args.map(x=>x==='paused'?'signedOut':x),args.map(x=>x==='/private/tmp/relogin-evidence'?STORES+'/evidence':x)])assert.throws(()=>options(bad));
+});
+
+const cliArgs=['--binary','/tmp/candidate','--stores',STORES,'--output','/private/tmp/relogin-evidence','--end-state','paused'];
+test('authorization budget accepts only bounded canonical decimal milliseconds and returns the numeric option',()=>{
+ assert.equal(options(cliArgs).authorizationTimeoutMs,120000);
+ for(const value of ['120000','120001','300000','600000']){
+  const parsed=options([...cliArgs,'--authorization-timeout-ms',value]);
+  assert.equal(parsed.authorizationTimeoutMs,Number(value));
+  assert.equal(options(['--authorization-timeout-ms',value,...cliArgs,'--allow-b-relogin','--allow-b-network-retry','--allow-b-signed-out-relogin']).authorizationTimeoutMs,Number(value));
+ }
+ for(const value of ['119999','600001','0','-120000','+120000','120000.0','120000.5','1.2e5','0x1d4c0','0120000',' 120000','120000 ','120000\n','','NaN','Infinity','9007199254740993','9'.repeat(400),undefined])
+  assert.throws(()=>options([...cliArgs,'--authorization-timeout-ms',value]));
+ assert.throws(()=>options([...cliArgs,'--authorization-timeout-ms']));
+ assert.throws(()=>options([...cliArgs,'--authorization-timeout-ms','120000','--authorization-timeout-ms','600000']));
+ assert.throws(()=>options([...cliArgs,'--authorization-timeout-ms','--allow-b-relogin']));
+});
+const authorizationPaths=[['bSignedOut','B historical-owner sign-in'],['bRefresh','B same-subject sign-in'],['a','A real sign-in']];
+const pendingAuthorization=()=>({...cleanB(),state:'authorizing'});
+function terminalWait(waits,path,read){return path==='bSignedOut'?waits.bSignedOut(read):waits[path](async()=>[await read()],'synthetic-owner');}
+test('all three terminal SignIn paths use the parsed budget with exact simulated timeout boundaries',async()=>{
+ for(const raw of [undefined,'120000','120001','300000','600000'])for(const [path,label] of authorizationPaths){
+  const {authorizationTimeoutMs}=options(raw===undefined?cliArgs:[...cliArgs,'--authorization-timeout-ms',raw]);
+  const c=clock(),budgets=[],times=[];
+  const waits=authorizationWaits(authorizationTimeoutMs,{poll:(l,p,m)=>{budgets.push({label:l,ms:m});return boundedPoll(l,p,m,c);}});
+  await assert.rejects(()=>terminalWait(waits,path,async()=>{times.push(c.now());return pendingAuthorization();}),{code:'CONDITION_TIMEOUT:'+label});
+  assert.deepEqual(budgets,[{label,ms:authorizationTimeoutMs}]);assert.equal(c.now(),authorizationTimeoutMs);
+  assert.equal(times.at(-1),Math.floor((authorizationTimeoutMs-1)/1000)*1000);
+ }
+});
+test('extended authorization allows a late healthy same-owner terminal for B refresh and A without extending other waits',async()=>{
+ for(const path of ['bRefresh','a']){
+  const c=clock(),waits=authorizationWaits(600000,{poll:(l,p,m)=>boundedPoll(l,p,m,c)});
+  const terminal={...status(),state:'paused',enabled:false};
+  const result=await terminalWait(waits,path,async()=>c.now()<599000?pendingAuthorization():terminal);
+  assert.equal(result[0],terminal);assert.equal(c.now(),599000);
+ }
+ const c=clock(),budgets=[],poll=(l,p,m)=>{budgets.push({label:l,ms:m});return boundedPoll(l,p,m,c);};
+ const waits=authorizationWaits(600000,{poll});
+ await assert.rejects(()=>terminalWait(waits,'a',async()=>pendingAuthorization()),{code:'CONDITION_TIMEOUT:A real sign-in'});
+ const startupAt=c.now();await waitForBStartup(async()=>cleanB(),{allowSignedOut:true,poll});assert.equal(c.now()-startupAt,120000);
+ const connectionAt=c.now();await assert.rejects(()=>connectionThenData('fixed connection',async()=>network(),()=>true,{poll}),{code:'CONDITION_TIMEOUT:fixed connection connection'});assert.equal(c.now()-connectionAt,120000);
+ const dataAt=c.now();await assert.rejects(()=>connectionThenData('fixed data',async()=>pair(),()=>false,{poll}),{code:'CONDITION_TIMEOUT:fixed data data'});assert.equal(c.now()-dataAt,60000);
+ assert.deepEqual(budgets.map(b=>b.ms),[600000,120000,120000,120000,60000]);
+});
+test('extended authorization fails immediately on intermediate auth/cleanup errors, signedOut or owner mismatch in every path',async()=>{
+ for(const [path] of authorizationPaths)for(const terminal of [
+  {...cleanB(),state:'error',error:{code:'account_authentication',stage:'identityRefresh'}},
+  {...cleanB(),state:'error',error:{code:'account_auth_identity_invalid',reason:'responseMetadata'}},
+  {...cleanB(),state:'error',error:{code:'account_cleanup_required'}},
+  cleanB(),
+  {...pendingAuthorization(),profile:{subject:'different-owner'}},
+  {...status(),profile:{subject:'synthetic-owner',username:'wrong-user'}},
+ ]){
+  const c=clock(),waits=authorizationWaits(600000,{poll:(l,p,m)=>boundedPoll(l,p,m,c)});let reads=0;
+  await assert.rejects(()=>terminalWait(waits,path,async()=>{reads++;return c.now()<3000?pendingAuthorization():terminal;}));
+  assert.equal(c.now(),3000);assert.equal(reads,4);
+ }
+});
+test('extended B authorization remains one recovery and never enables after failure',async()=>{
+ for(const signedOut of [false,true]){
+  const c=clock(),calls=[],waits=authorizationWaits(600000,{poll:(l,p,m)=>boundedPoll(l,p,m,c)});
+  const login=async()=>{
+   calls.push('one UI signIn');
+   const result=await terminalWait(waits,signedOut?'bSignedOut':'bRefresh',async()=>c.now()<130000?pendingAuthorization():{...cleanB(),state:'error',error:{code:'account_auth_identity_invalid',reason:'responseMetadata'}});
+   return signedOut?result:result[0];
+  };
+  const common={login,record:async()=>{},before:async()=>calls.push('preserve'),enable:async()=>calls.push('enable'),retry:async()=>calls.push('retry')};
+  if(signedOut)await assert.rejects(()=>recoverBSignedOut(cleanB(),{...common,allow:true,history:history()}));
+  else await assert.rejects(()=>recoverB(refreshFailure(),{...common,allowRelogin:true}));
+  assert.deepEqual(calls,['preserve','one UI signIn']);assert.equal(c.now(),130000);
+ }
 });
 
 // Immutable public sanitized history blob committed with the parent contract.

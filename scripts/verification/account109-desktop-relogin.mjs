@@ -32,12 +32,19 @@ export const cleanBSignedOut=s=>s?.state==='signedOut'&&s.enabled===false&&!s.pr
 const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(value);
 export function options(argv){
   const o={};
-  for(let i=0;i<argv.length;i++){const k=argv[i];assert(['--binary','--stores','--output','--end-state','--allow-b-relogin','--allow-b-network-retry','--allow-b-signed-out-relogin'].includes(k)&&!Object.hasOwn(o,k),'Unknown/duplicate option');o[k]=k.startsWith('--allow-b-')?true:argv[++i];}
-  assert.equal(Object.keys(o).length,4+Number(!!o['--allow-b-relogin'])+Number(!!o['--allow-b-network-retry'])+Number(!!o['--allow-b-signed-out-relogin']),'--binary ABS --stores ORIGINAL --output FRESH --end-state enabled|paused [--allow-b-relogin] [--allow-b-network-retry] [--allow-b-signed-out-relogin] required');
+  for(let i=0;i<argv.length;i++){const k=argv[i];assert(['--binary','--stores','--output','--end-state','--allow-b-relogin','--allow-b-network-retry','--allow-b-signed-out-relogin','--authorization-timeout-ms'].includes(k)&&!Object.hasOwn(o,k),'Unknown/duplicate option');o[k]=k.startsWith('--allow-b-')?true:argv[++i];}
+  assert.equal(Object.keys(o).length,4+Number(!!o['--allow-b-relogin'])+Number(!!o['--allow-b-network-retry'])+Number(!!o['--allow-b-signed-out-relogin'])+Number(Object.hasOwn(o,'--authorization-timeout-ms')),'--binary ABS --stores ORIGINAL --output FRESH --end-state enabled|paused [--allow-b-relogin] [--allow-b-network-retry] [--allow-b-signed-out-relogin] [--authorization-timeout-ms 120000..600000] required');
+  let authorizationTimeoutMs=120000;
+  if(Object.hasOwn(o,'--authorization-timeout-ms')){
+    const value=o['--authorization-timeout-ms'];
+    assert(typeof value==='string'&&/^[1-9][0-9]*$/.test(value),'Authorization timeout must be a decimal integer from 120000 to 600000');
+    authorizationTimeoutMs=Number(value);
+    assert(Number.isSafeInteger(authorizationTimeoutMs)&&authorizationTimeoutMs>=120000&&authorizationTimeoutMs<=600000,'Authorization timeout must be a decimal integer from 120000 to 600000');
+  }
   for(const k of ['--binary','--stores','--output'])assert(isAbsolute(o[k]||'')&&resolve(o[k])===o[k],'Canonical absolute paths required');
   assert.equal(o['--stores'],STORES,'Only original synthetic stores allowed');assert(['enabled','paused'].includes(o['--end-state']),'Explicit final state required');
   const output=o['--output'];assert(output!==STORES&&!output.startsWith(STORES+sep)&&!STORES.startsWith(output+sep),'Evidence must be outside original stores');
-  return {binary:o['--binary'],stores:STORES,output,endState:o['--end-state'],allowBRelogin:o['--allow-b-relogin']===true,allowBNetworkRetry:o['--allow-b-network-retry']===true,allowBSignedOutRelogin:o['--allow-b-signed-out-relogin']===true};
+  return {binary:o['--binary'],stores:STORES,output,endState:o['--end-state'],allowBRelogin:o['--allow-b-relogin']===true,allowBNetworkRetry:o['--allow-b-network-retry']===true,allowBSignedOutRelogin:o['--allow-b-signed-out-relogin']===true,authorizationTimeoutMs};
 }
 export function checkProfile(s){
   // An unsuccessful refresh and pending SignIn can retain only the bound subject.
@@ -68,11 +75,11 @@ export async function waitForBStartup(read,{poll=boundedPoll,allowSignedOut=fals
   }
   return result;
 }
-export async function waitForBHistoryAccount(read,{poll=boundedPoll}={}){
+export async function waitForBHistoryAccount(read,{poll=boundedPoll,authorizationTimeoutMs=120000}={}){
   const [s]=await waitHealthy('B historical-owner sign-in',async()=>[checkProfile(checkBHistoryProfile(await read()))],([s])=>{
     if(signedOut(s))throw Object.assign(new Error('Login ended signed out'),{code:'LOGIN_ENDED_SIGNED_OUT'});
     return !!s.profile&&['paused','ready','connecting'].includes(s.state);
-  },120000,{poll});return s;
+  },authorizationTimeoutMs,{poll});return s;
 }
 export async function recoverBSignedOut(initial,{allow,history,before,login,enable,record}){
   assert.equal(allow,true,'Explicit B signed-out re-login required');assert(cleanBSignedOut(initial));
@@ -103,10 +110,19 @@ export async function recoverB(initial,{allowRelogin,allowNetworkRetry,login,ret
   await record({kind:'b-recovery-completed',classification,sameOriginalSubject:true,command:network?'account.syncNow':'account.signIn',replacementAuthorizationRequested:!network,...safeStatus(restored)});
   await enable();return restored;
 }
-export async function waitForOriginalAccount(label,read,subject,{poll=boundedPoll}={}){
+export async function waitForOriginalAccount(label,read,subject,{poll=boundedPoll,authorizationTimeoutMs=120000}={}){
   return waitHealthy(label,async()=>{
     const ss=await read();for(const s of ss){checkProfile(s);if(s.profile)assert.equal(s.profile.subject,subject,'Original account binding during authorization');}return ss;
-  },([s])=>{if(signedOut(s))throw Object.assign(new Error('Login ended signed out'),{code:'LOGIN_ENDED_SIGNED_OUT'});return !!s.profile&&['paused','ready','connecting'].includes(s.state);},120000,{poll});
+  },([s])=>{if(signedOut(s))throw Object.assign(new Error('Login ended signed out'),{code:'LOGIN_ENDED_SIGNED_OUT'});return !!s.profile&&['paused','ready','connecting'].includes(s.state);},authorizationTimeoutMs,{poll});
+}
+// Only these three terminal SignIn waits use the interactive authorization budget.
+export function authorizationWaits(authorizationTimeoutMs=120000,{poll=boundedPoll}={}){
+  const config={authorizationTimeoutMs,poll};
+  return {
+    bSignedOut:read=>waitForBHistoryAccount(read,config),
+    bRefresh:(read,subject)=>waitForOriginalAccount('B same-subject sign-in',read,subject,config),
+    a:(read,subject)=>waitForOriginalAccount('A real sign-in',read,subject,config),
+  };
 }
 
 const sql=String.raw`import sqlite3,json,sys
@@ -198,14 +214,15 @@ const documentFor=text=>({type:'doc',content:[{type:'paragraph',content:[{type:'
 const operations=['ready','state','idle','close','account.status','account.signIn','account.syncNow','account.setEnabled','settings.open','settings.tab','app.back','folder.select','note.create','note.select','editor.setContent','app.flush','attachment.read','confirmation.inspect','recovery.inspect','dom.click'];
 
 export async function run(argv=process.argv.slice(2)){
-  const {binary,stores,output,endState,allowBRelogin,allowBNetworkRetry,allowBSignedOutRelogin}=options(argv);
+  const {binary,stores,output,endState,allowBRelogin,allowBNetworkRetry,allowBSignedOutRelogin,authorizationTimeoutMs}=options(argv);
+  const authorization=authorizationWaits(authorizationTimeoutMs);
   // Public committed evidence only; missing/mismatched history stops before Apps or output.
   const bHistory=allowBSignedOutRelogin?await readBHistory():undefined;
   assert.equal(hash(await readFile(binary)),BINARY_SHA,'Only reviewed 920fa9cf GUI candidate allowed');
   for(const dir of [stores,...['a','b'].map(n=>resolve(stores,'desktop-'+n))])assert.equal(await realpath(dir),dir);
   await mkdir(output,{mode:0o700});assert.equal(await realpath(output),output);
   const priorBytes=await readFile(PRIOR),prior=JSON.parse(priorBytes);
-  const report={schema:1,kind:'account109-original-desktop-relogin',status:'running',phase:'baseline',startedAt:new Date().toISOString(),endState,allowBRelogin,allowBNetworkRetry,allowBSignedOutRelogin,...(bHistory?{bHistory}:{}),scenarios:Object.fromEntries(['baseline','login','pausedEdits','catchup','bidirectional','restart','endState','auth06'].map(k=>[k,'not-run'])),checks:[],observations:[],binary:{path:binary,sha256:BINARY_SHA,sourceRevision:SOURCE,candidateKind:'debug-e2e'},prior:{sha256:hash(priorBytes)},limitations:[
+  const report={schema:1,kind:'account109-original-desktop-relogin',status:'running',phase:'baseline',startedAt:new Date().toISOString(),endState,allowBRelogin,allowBNetworkRetry,allowBSignedOutRelogin,authorizationTimeoutMs,...(bHistory?{bHistory}:{}),scenarios:Object.fromEntries(['baseline','login','pausedEdits','catchup','bidirectional','restart','endState','auth06'].map(k=>[k,'not-run'])),checks:[],observations:[],binary:{path:binary,sha256:BINARY_SHA,sourceRevision:SOURCE,candidateKind:'debug-e2e'},prior:{sha256:hash(priorBytes)},limitations:[
     'Existing synthetic roots only. SignIn uses the product UI handler and native PKCE/system browser; parent completes authorization. No credentials, tokens, callback URLs, grants or manual pairing inputs.',
     'Merge confirmation is inspected and clicked through the existing dom.click UI handler, not physical input. Parent only completes system-browser authorization. Editor commands use debug/e2e UI handlers; no physical typing or OS picker claim.',
     'Pause is the production account setting, not OS network loss. Negative windows are bounded to 3 seconds. AUTH06 is not executed.',
@@ -285,7 +302,7 @@ export async function run(argv=process.argv.slice(2)){
           },5000);
           report.observations.push({kind:'b-recovery-ui-shown',label:'登录',uiHandler:'account.signIn',physicalInput:false});await save();
           console.log('WAIT b system-browser-sign-in (one explicit historical same-subject authorization)');await command(b,'account.signIn');
-          return waitForBHistoryAccount(()=>status(b));
+          return authorization.bSignedOut(()=>status(b));
         }
       });subject=restored.profile.subject;report.phase='startup';
     }
@@ -305,7 +322,7 @@ export async function run(argv=process.argv.slice(2)){
       }
       await recoverB(initialB,{allowRelogin:allowBRelogin,allowNetworkRetry:allowBNetworkRetry,
         record:async row=>{report.observations.push(row);await save();},before:async()=>{await preserved(a,baselines.a);await preserved(b,baselines.b);},enable:()=>enable(b),
-        login:async()=>{await invokeRecovery('signIn','重新登录');const [restored]=await waitForOriginalAccount('B same-subject sign-in',()=>statuses([b]),subject);return restored;},
+        login:async()=>{await invokeRecovery('signIn','重新登录');const [restored]=await authorization.bRefresh(()=>statuses([b]),subject);return restored;},
         retry:async()=>{await invokeRecovery('syncNow','重试连接');return status(b);}
       });
       report.phase='startup';
@@ -314,7 +331,7 @@ export async function run(argv=process.argv.slice(2)){
     const [bs]=await accountWait('B saved account restored',[b],ss=>ss.every(s=>s.profile&&s.enabled&&s.state==='ready'),120000);subject=bs.profile.subject;assert(subject);assert.equal(bs.conflictCount,0,'Existing conflict must already be resolved');
     await preserved(a,baselines.a);await preserved(b,baselines.b);
     report.phase='login';await enter(a);console.log('WAIT a system-browser-sign-in (parent completes native PKCE authorization)');await command(a,'account.signIn');
-    const [logged]=await waitForOriginalAccount('A real sign-in',()=>statuses([a]),subject);
+    const [logged]=await authorization.a(()=>statuses([a]),subject);
     assert.equal(logged.profile.subject,subject);assert.equal(logged.conflictCount,0);assert(logged.enabled||logged.state==='paused');report.observations.push({kind:'login-result',...safeStatus(logged)});await preserved(a,baselines.a);await check('login');
     report.phase='paused-edits';await setPaused(a);await setPaused(b);
     const suffix=randomUUID();let an=await create(a,'ACCOUNT109 re-login A '+suffix),bn=await create(b,'ACCOUNT109 re-login B '+suffix);
