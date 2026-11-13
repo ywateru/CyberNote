@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "kind": "account109-disposable-native-headless-smoke",
+  "status": "pass",
+  "phase": "restart-close",
+  "startedAt": "2026-11-13T04:08:28.482Z",
+  "checks": [
+    {
+      "name": "initial native participant ready with zero WebViews",
+      "status": "pass"
+    },
+    {
+      "name": "fresh disposable store is signed out and blank",
+      "status": "pass"
+    },
+    {
+      "name": "native Session save and workspace match the complete document and plainText",
+      "status": "pass"
+    },
+    {
+      "name": "initial owned process closed naturally",
+      "status": "pass"
+    },
+    {
+      "name": "same-store restart is a signed-out native participant with zero WebViews",
+      "status": "pass"
+    },
+    {
+      "name": "restart restores the same note and complete saved body",
+      "status": "pass"
+    },
+    {
+      "name": "restarted owned process closed naturally",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "kind": "native-ready",
+      "device": "initial",
+      "participant": "account109-native-harness",
+      "protocol": 1,
+      "transport": "native-session-stdio",
+      "windows": 0,
+      "nativeParticipant": true,
+      "noWebView": true
+    },
+    {
+      "kind": "account-status",
+      "device": "initial",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "hasError": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "connectedDevices": 0
+    },
+    {
+      "kind": "saved-full-body",
+      "noteId": "acb6c473-3ccf-4627-a540-1b60782aaeca",
+      "fullBodySha256": "25ce650fa3828168b92ca676f201534c72eae703af805518f87604bbd0bc5c6c",
+      "createReplyMatchesWorkspace": true,
+      "fullDocumentAndPlainText": true
+    },
+    {
+      "kind": "native-ready",
+      "device": "restart",
+      "participant": "account109-native-harness",
+      "protocol": 1,
+      "transport": "native-session-stdio",
+      "windows": 0,
+      "nativeParticipant": true,
+      "noWebView": true
+    },
+    {
+      "kind": "account-status",
+      "device": "restart",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "hasError": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "connectedDevices": 0
+    },
+    {
+      "kind": "restarted-full-body",
+      "noteId": "acb6c473-3ccf-4627-a540-1b60782aaeca",
+      "fullBodySha256": "25ce650fa3828168b92ca676f201534c72eae703af805518f87604bbd0bc5c6c",
+      "sameNoteId": true,
+      "fullDocumentAndPlainTextEqual": true
+    }
+  ],
+  "store": {
+    "path": "/private/tmp/account109-headless-smoke-be037f3c-01/store",
+    "createdFresh": true,
+    "disposable": true,
+    "originalAccountStoresUsed": false
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-be037f3c-native-headless/notes-clone",
+    "sha256": "f5b64d0dbaa7001b2e00ee94f40fcdc69f6da7f0584f44dc6c42cf3bc2405add",
+    "sourceRevision": "be037f3cc542f53fba06d604f932743542e29bc4",
+    "nativeOnly": true,
+    "embeddedFrontendIdentityClaim": false
+  },
+  "buildReceipt": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/account109/native/headless-build01/receipt.json",
+    "sha256": "4a896af90781d50a239df098f7606ee146d9615efdbff4d754ddfc604aaf5843"
+  },
+  "tools": {
+    "account109-headless-smoke.mjs": "668b4e4cdb88c79ee43587e5a077dae960ee72aeb68470564e1fa696b3aca029",
+    "account109-headless-driver.mjs": "ce9fedd92d3dfce7ed96d67896402ef1d6cec6b43bf056d112b03241f9b00647",
+    "sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2"
+  },
+  "limitations": [
+    "Fresh signed-out disposable store only; no real-account restore, discovery, conflict or logout coverage.",
+    "Fixed native Session createPlainNote and workspace operations; no WebView, frontend editor or GUI acceptance claim.",
+    "Readiness asserts native protocol identity and zero native-reported windows; no embedded frontend identity is asserted.",
+    "Full synthetic document/plainText are compared in memory; only hashes, fixed labels and lifecycle evidence are reported.",
+    "No retry, account sign-in/sign-out, manual pairing, original-store access, browser, ADB or network-setting changes."
+  ],
+  "lastOperation": {
+    "sequence": 10,
+    "stage": "restart-close",
+    "device": "restart",
+    "operation": "close",
+    "event": "after",
+    "at": "2026-11-13T04:08:31.107Z"
+  },
+  "lifecycle": [
+    {
+      "name": "initial",
+      "directory": "/private/tmp/account109-headless-smoke-be037f3c-01/store",
+      "commands": 6,
+      "stderrBytes": 0,
+      "forcedSignals": [],
+      "pid": 67598,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "restart",
+      "directory": "/private/tmp/account109-headless-smoke-be037f3c-01/store",
+      "commands": 4,
+      "stderrBytes": 0,
+      "forcedSignals": [],
+      "pid": 67605,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "evidenceIntegrity": {
+    "binaryUnchanged": true,
+    "buildReceiptUnchanged": true
+  },
+  "finishedAt": "2026-11-13T04:08:31.204Z"
+}
