@@ -1,0 +1,11 @@
+PASS two isolated native stores become interactive
+PASS same real account grants restore without a new authorization
+PASS account automatic discovery without manual pairing
+PASS A to B full document/plainText and raw attachment bytes
+PASS B to A full document/plainText and raw attachment bytes
+PASS paused device retains account and does not apply remote new note
+PASS resume catch-up full document/plainText and raw attachment bytes
+PASS offline restart catch-up full document/plainText and raw attachment bytes
+PASS account runtime restores and syncs with account UI closed
+PASS concurrent shared base full document/plainText and raw attachment bytes
+FAIL concurrent-offline NATIVE_TIMEOUT

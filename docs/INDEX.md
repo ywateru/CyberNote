@@ -1,4 +1,4 @@
-2026-11-13最新：[39c1420d 真实双桌面续验](verification/account109/macos/finite-diagnostics01/README.md)在原有两端授权及数据根上于 78 秒内自动连接，两个原始全文已在双方出现且保持一致；此前[五轮失败](verification/account109/macos/real-account-runs01/README.md)保留。服务端 JWKS 网络错误被误判 401 的问题已修复、独审并重新部署；完整服务 172 项（含 29 项 Redis）通过，0 跳过。双向附件原字节、暂停/冲突/退出及 Android 三端账户验收仍在继续，新 GitHub/Actions 尚未交付。用户允许命令行调用真实功能测试。下方文档按各历史时点阅读，不把早期锁屏或入口门控结论当作当前状态。
+2026-11-13最新：[full-native02 双桌面原生验收](verification/account109/macos/full-native02/README.md) 已通过十项检查，包含完整正文/附件原字节双向同步、暂停恢复及离线重启补齐；并发后两端各有一个冲突，但执行器原生调用超时，保留全部和退出隔离仍待命令续验。[当前用例状态](verification/account109/ACCOUNT-TEST-CASES.md)已分项说明。Android [同源原生探测](verification/account109/android/public-native01/README.md)确认 coordinator 连接阶段超时、Logto 200；三端尚未执行。服务端 JWKS 修复已独审部署，全服务 172 项（含 29 项 Redis）通过且零跳过。原始失败保留；GitHub/Actions 尚未交付。下方文档按历史时点阅读。
 
 2026-11-13早期：本轮整理账户同步开发检查点，见[工作区提交记录](verification/account109/WORKSPACE-COMMITS.md)。已保留[架构](architecture/account-sync.md)、[界面设计](ui/account-sync.md)和[原生 SDK 调查](plan/analysis/account109-native-research.md)；当时账户界面仅在显式开发测试中启用，默认设置与手工同步仍可用。不能以局部检查替代端到端验收。
 
