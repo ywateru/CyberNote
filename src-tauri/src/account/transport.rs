@@ -593,7 +593,7 @@ mod tests {
         let http = TcpListener::bind("127.0.0.1:0").await.unwrap();
         let origin = format!("http://{}", http.local_addr().unwrap());
         let claims = Claims {
-            iss: origin.clone(),
+            iss: config::ENROLLMENT_ISSUER.into(),
             aud: "cybernote-enrollment-v1".into(),
             sub: binding.subject.clone(),
             account_issuer: binding.issuer.clone(),
