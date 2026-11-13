@@ -158,6 +158,29 @@ test('partial preflight failure still checks captured sources and cannot claim f
   assert.equal(report.preservation.beforeCleanup,false);assert.equal(report.cleanupPreservation.unionOnAllPeers,false);assert.deepEqual(report.cleanupPreservation.sourceDevices,['A']);
   await closeClean(report);assert.equal(report.status,'fail');
 });
+test('cleanup checks C/B/A independently after a first read failure or change and still performs owned cleanup',async()=>{
+  for(const firstFailure of ['read','changed']){
+    const {peers,sources,union}=await setup();merge(peers);
+    const attempts=[];
+    for(const peer of peers){const workspace=peer.workspace;peer.workspace=async()=>{attempts.push(peer.name);return workspace();};}
+    if(firstFailure==='read')peers[2].workspace=async()=>{attempts.push('C');throw Error('synthetic private detail');};
+    else peers[2].ws.notes.find(n=>n.id==='C-note').title='changed';
+    peers[1].ws.notes.find(n=>n.id==='B-note').title='also changed';
+    const report={...readyReport(),status:'fail',failure:{phase:'a-rich-media',code:'ORIGINAL_FAILURE'}};
+    await preserveBeforeCleanup(report,[...sources].reverse(),union);
+    assert.deepEqual(report.cleanupPreservation.sourceChecks.map(({device,status})=>({device,status})),[
+      {device:'C',status:'fail'},{device:'B',status:'fail'},{device:'A',status:'pass'},
+    ]);
+    assert.deepEqual(report.cleanupPreservation.unionChecks.map(({device,status})=>({device,status})),[
+      {device:'C',status:'fail'},{device:'B',status:'fail'},{device:'A',status:'pass'},
+    ]);
+    assert(attempts.filter(name=>name==='A').length>=4,'A source and union must both be attempted');
+    assert.equal(report.preservation.beforeCleanup,false);assert.equal(report.cleanupPreservation.allSourceDescriptorsAndBytes,false);
+    assert.equal(report.cleanupPreservation.unionOnAllPeers,false);assert.equal(report.failure.code,'ORIGINAL_FAILURE');
+    assert.equal(report.originalPreservationFailure.failures.length,4);assert(!JSON.stringify(report).includes('synthetic private detail'));
+    await closeClean(report);assert.equal(report.cleanup.desktopNaturalExits,true);assert.equal(report.cleanup.androidDriverClosed,true);assert.equal(report.status,'fail');
+  }
+});
 test('completion requires fixed preparation evidence and a successful before-cleanup preservation gate',async()=>{
   const good=readyReport();requirePreparation(good);
   for(const change of [r=>delete r.preparation,r=>r.preparation.historicalSubjectSha256='0'.repeat(64),r=>r.preparation.phoneAttachmentOriginExplained=true,r=>delete r.originalBaseline]){

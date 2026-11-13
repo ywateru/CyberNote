@@ -131,8 +131,17 @@ export function assertOriginalLibrary(actual,baseline){
   }
 }
 export async function verifyOriginalLibrary(peer,baseline){assertOriginalLibrary(await captureOriginalLibrary(peer),baseline);}
-export async function verifyOriginalUnion(peers,baseline){for(const peer of peers)await verifyOriginalLibrary(peer,baseline);}
-export async function verifyOriginalSources(sources){for(const {peer,baseline} of sources)await verifyOriginalLibrary(peer,baseline);}
+async function originalChecks(sources){
+  const results=[];
+  for(const {peer,baseline} of sources){
+    try{await verifyOriginalLibrary(peer,baseline);results.push({device:peer.name,status:'pass'});}
+    catch(error){results.push({device:peer.name,status:'fail',code:preflightCodes.includes(error?.code)?error.code:failureCode(error)});}
+  }
+  return results;
+}
+function requireOriginalChecks(results){const failed=results.find(row=>row.status==='fail');if(failed)throw fail(failed.code);}
+export async function verifyOriginalUnion(peers,baseline){requireOriginalChecks(await originalChecks(peers.map(peer=>({peer,baseline}))));}
+export async function verifyOriginalSources(sources){requireOriginalChecks(await originalChecks(sources));}
 export function originalSummary(baseline){
   return {notes:baseline.notes.length,attachments:baseline.attachments.length,semanticSnapshotSha256:hash(canonical({notes:baseline.notes.map(semanticNote),attachments:baseline.attachments.map(semanticAttachment),attachmentBytes:baseline.attachmentBytes})),
     exactIdsAndReferences:true,allSemanticFields:true,authorizedBytes:true,ignoredFields:['note.revision','attachment.relativePath']};
@@ -144,16 +153,20 @@ export function requirePreparation(report){
 }
 export async function preserveBeforeCleanup(report,sources,union){
   if(!sources.length)return;
-  try{
-    // Even a partial preflight/failing transfer must check every captured source.
-    await verifyOriginalSources(sources);
-    const unionOnAllPeers=!!union&&report.preservation?.afterMerge===true;
-    if(unionOnAllPeers)await verifyOriginalUnion(sources.map(s=>s.peer),union);
-    (report.preservation??={}).beforeCleanup=sources.length===3;
-    report.cleanupPreservation={sourceDevices:sources.map(s=>s.peer.name),allSourceDescriptorsAndBytes:true,unionOnAllPeers,crossPeerAttachmentScope:'document-referenced-only'};
-  }catch(error){
-    const code=preflightCodes.includes(error.code)?error.code:failureCode(error);
-    report.originalPreservationFailure={phase:'beforeCleanup',code};
+  // One inaccessible/changed source must not suppress either desktop's final proof.
+  const sourceChecks=await originalChecks(sources);
+  const checkUnion=!!union&&report.preservation?.afterMerge===true;
+  const unionChecks=checkUnion?await originalChecks(sources.map(({peer})=>({peer,baseline:union}))):
+    sources.map(({peer})=>({device:peer.name,status:'not-checked',reason:'merge-not-completed'}));
+  const allSourceDescriptorsAndBytes=sourceChecks.every(row=>row.status==='pass');
+  const unionOnAllPeers=sources.length===3&&checkUnion&&unionChecks.every(row=>row.status==='pass');
+  (report.preservation??={}).beforeCleanup=sources.length===3&&allSourceDescriptorsAndBytes&&(!checkUnion||unionOnAllPeers);
+  report.cleanupPreservation={sourceDevices:sources.map(s=>s.peer.name),sourceChecks,unionChecks,allSourceDescriptorsAndBytes,unionOnAllPeers,crossPeerAttachmentScope:'document-referenced-only'};
+  const failures=[...sourceChecks.filter(row=>row.status==='fail').map(row=>({...row,scope:'source'})),
+    ...unionChecks.filter(row=>row.status==='fail').map(row=>({...row,scope:'union'}))];
+  if(failures.length){
+    const code=failures[0].code;
+    report.originalPreservationFailure={phase:'beforeCleanup',code,failures};
     report.failure??={phase:'beforeCleanup',code};report.status='fail';
   }
 }
