@@ -32,6 +32,10 @@ Feynman 实施 native host/平台容器；Huygens 实施账户页、DTO/命令 a
 
 ## 当前执行状态
 
+最新局部实际结果：[live03](../../verification/account109/native/login-surfaces-live03/README.md)在精确 `72513d12` Mac候选完成browser、embedded、embedded→browser三条命令驱动取消流程，各5项PASS；完整正文/自然重启保全与六进程自然退出0已独核。成功临时库已清理。Chrome原生窗口访问已恢复；[window04](../../verification/account109/native/login-window-live04/README.md)因plain executable无法CUA绑定而关窗等待超时，保留失败现场，不能算真实关窗或表单可见通过。[隔离.app包装](../../verification/account109/macos/72513d12-debug-wrapper01/README.md)正独核，以补测实际窗口。
+
+固定新域精确 `88b2dabe` Android[包身份独核](../../verification/account109/native/88b2dabe-android-build-review01/README.md)通过，尚未安装；既有账户error和追加附件仍保留，引用/原字节及来源待核对。成功认证及真实账户三端中转未完成。下方保留前轮执行记录，旧锁屏与尚无实际运行的描述不再代表当前桌面条件。
+
 双入口源码、UI、native owner 和平台实现已合并并独审。补齐两端执行器及精确候选pin后，[最终集成检查](../../verification/account109/native/login-surfaces-integration02.md)274项通过；精确源码 `72513d12` 的[两端构建](../../verification/account109/native/72513d12-platform-build01/README.md)及[独立实际包身份检查](../../verification/account109/native/72513d12-platform-build-review01/README.md)通过。Android首次生成文件缺失失败及同源retry02成功均保留，修复仅失效一个旧共享target fingerprint，没有改产品源码。已[清理本轮重复Gradle中间产物与APK](../../verification/account109/native/72513d12-derived-cleanup01/README.md)约724MiB，准确候选、logs、身份和原库保留。
 
 新入口运行验收未完成。桌面本轮CUA观察仍被锁屏拒绝。安卓设备可访问，但[升级前只读检查](../../verification/account109/android/login-surfaces-preflight01/README.md)发现原应用保留账户error；四篇纯文本相同、三篇完整正文相同、一篇完整文档与旧基线不同且当前有一附件。未安装新APK、未发起授权、未改写数据或清理error，不将此差异归因于尚未安装的新代码。

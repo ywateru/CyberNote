@@ -2,7 +2,13 @@
 
 2026-11-13。用户在域名与手动解锁请求后回复“继续 允许使用”，授权使用精确主机 `cybernote-sync.aixgg.com`。本任务接续[域名提案](../../verification/account109/server/custom-domain-proposal01/PROPOSAL.md)，不再等待同一主机使用许可。
 
-## 实施边界与当前外部状态
+## 当前执行状态
+
+[live02](../../verification/account109/server/custom-domain-live02/README.md)已通过原生Chrome Water profile已有目标zone会话添加准确CNAME和独立TXT，原三条TXT保留；Vercel verify HTTP200、verified=true。新域可信TLS与三个匿名接口200独核通过，首轮Python canonical TLS失败保留；父级Node单轮两域配置/JWKS均200且原始字节相同，独立Node复核进行中。DNS管理员登录前提已经解决，不再要求用户重复登录。
+
+精确 `88b2dabe` 新域Android候选已[离线构建并独核](../../verification/account109/native/88b2dabe-android-build-review01/README.md)，尚未安装。手机CELLULAR匿名新域检查及既有新增附件的只读核对正在进行；原账户错误、历史基线和数据保留。源码/manifest完整Node集成274项通过。以下实施记录保留各自历史时点。
+
+## 初始绑定与DNS等待
 
 父级已用现有Vercel登录刷新凭据、核对唯一 `cybernote-sync` 项目，并将精确主机绑定至该项目production：redirect=null、gitBranch=null。域名目前unverified。项目级实时DNS建议首选 `673bb9aa89cda1fe.vercel-dns-017.com.`，不沿用绑定前的通用目标；TXT挑战由实际绑定响应给出。现有Cloudflare凭据能查询唯一 `aixgg.com` zone，但DNS记录查询返回403/code10000。未改任何DNS记录，未发送账户token到新域名。浏览器管理入口一直显示加载中，未进入记录编辑页。
 

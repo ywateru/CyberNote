@@ -125,3 +125,13 @@ UI 作者原提交为 `4cc18c1c`，经 cherry-pick 收入 main，细节与复跑
 本轮浏览器控制会话超时重置后，RAM-only QA 登录凭据没有已知恢复来源。没有读取 grant、重置账号或创建替代账号。真实重新登录、Android 4G 三端与匿名中转验收仍需有效 QA 授权和手机 coordinator 可达性；当前正式域名提案未应用。
 
 用户随后要求清理中间文件。父级删除 12 个过期 Cargo target，仅删除经 marker、无 .git 与进程检查的显式目录；文件系统可用量观测增加约 23.47 GiB、结束约 27.30 GiB。独立只读复核确认目录已清理，保留共享 target、当前 GUI 原 SHA256、两原库和新草案均在，见 [清理记录](workspace-cleanup04/README.md)。
+
+### 2026-11-13 双入口实测、域名配置与新Android候选
+
+- `a2401c94`：72513d12 Mac三条真实取消流程各5项通过并独核；另保留window04窗口绑定失败/关窗等待超时及自然退出结果。
+- `92adc7fc`：仅清理已归档独核的六个成功合成store/out目录，回收348KiB，原库与所有失败现场保留。
+- `f4322b41`、`927cf1c7`：新域88b2dabe精确Android debug候选离线构建与独立包身份核验，尚未安装。
+- `46dd6df5`、`9ef7b5df`：新域DNS/TLS独核、真实DNS追加、Vercel verified=true及Node双域匿名配置/公钥一致对照。首轮Python canonical TLS失败保留，独立Node续验另列。
+- `10428afb`：相同已核binary的隔离debug.app包装，未启动/重签，签名限制明确，待独核与真实窗口验证。
+
+以上均为本地main提交。DNS管理员登录前提已解决；有效QA表单授权、Android原库保全门槛和真实账户三端仍需续验。未创建GitHub仓库、push开发历史或运行Actions，正式净化交付保持原顺序。
