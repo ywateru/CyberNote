@@ -79,12 +79,22 @@
   },
   "oldRootCount": 9,
   "oldRootsUnchanged": true,
+  "parentActivityCorrection": {
+    "documentationWorktreeDirtyAtTimes": true,
+    "draftModifiedForCorrection": false,
+    "mainAdvancedThrough": [
+      "0e06b715",
+      "a6cc1182"
+    ],
+    "source": "Parent correction after report integration; not a continuous monitor"
+  },
   "payloadSeal": {
     "entries": 1772,
     "sha256": "39293077d1664806356fe26c89dd6f58891a119f924953a10975515086debfea"
   },
   "preparedAtUtc": "2026-11-13T08:53:14.897452+00:00",
   "snapshotDefinition": "Sorted relative paths, type, mode, size/SHA256 for regular files, mtime/ctime ns and symlink-target SHA256; includes root and .git; excludes access times. Payload omits directories/.git/timestamps.",
+  "sourceCheckoutObservationBoundary": "sourceHeadObservedAfter is a single recorded command observation, not a continuous HEAD or cleanliness assertion. Export inputs are exact committed blobs at sourceRef; later parent commits and dirty development documentation do not affect this fixed-ref export.",
   "sourceHeadObservedAfter": "9010c5bada147936c9f3e8db8159ef777d3bbb87",
   "sourceRef": "9010c5bada147936c9f3e8db8159ef777d3bbb87",
   "status": "DRAFT_PREPARED_REAL_ACCEPTANCE_PENDING",
