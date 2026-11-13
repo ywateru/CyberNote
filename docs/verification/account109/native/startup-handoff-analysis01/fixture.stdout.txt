@@ -1,0 +1,94 @@
+{
+  "kind": "device-free-source-fixture",
+  "passed": true,
+  "checks": 10,
+  "appEffectSha256": "2c69c1161a81697e8c1d6ff29e9b497b2ad4fa82e1ebaa62250af41a68500460",
+  "splashSha256": "ed5c34bf3f142f9619e680059c4c5fa95c07a4b41eaf9871a757e784e0881ff9",
+  "cases": [
+    {
+      "name": "ready gates true: two frames plus actual splash timer releases root",
+      "startup": "detached",
+      "rootInert": false,
+      "rootHidden": null,
+      "retryShown": false,
+      "pendingFrames": 0
+    },
+    {
+      "name": "ready gates true but no delivered frames: slow timer alone never releases root",
+      "startup": "loading",
+      "rootInert": true,
+      "rootHidden": "true",
+      "retryShown": true,
+      "pendingFrames": 1
+    },
+    {
+      "name": "workspace not loaded: same loading/inert DOM without handoff scheduling",
+      "startup": "loading",
+      "rootInert": true,
+      "rootHidden": "true",
+      "retryShown": true,
+      "pendingFrames": 0
+    },
+    {
+      "name": "native binding pending: same loading/inert DOM without handoff scheduling",
+      "startup": "loading",
+      "rootInert": true,
+      "rootHidden": "true",
+      "retryShown": true,
+      "pendingFrames": 0
+    },
+    {
+      "name": "initial load pending: same loading/inert DOM without handoff scheduling",
+      "startup": "loading",
+      "rootInert": true,
+      "rootHidden": "true",
+      "retryShown": true,
+      "pendingFrames": 0
+    },
+    {
+      "name": "synchronization cover retained: same loading/inert DOM without handoff scheduling",
+      "startup": "loading",
+      "rootInert": true,
+      "rootHidden": "true",
+      "retryShown": true,
+      "pendingFrames": 0
+    },
+    {
+      "name": "settled initial workspace failure keeps content gated and exposes error",
+      "startup": "error",
+      "rootInert": true,
+      "rootHidden": "true",
+      "retryShown": true,
+      "pendingFrames": 0
+    },
+    {
+      "name": "effect cleanup cancels already scheduled second frame",
+      "startup": "loading",
+      "rootInert": true,
+      "rootHidden": "true",
+      "retryShown": true,
+      "pendingFrames": 0
+    },
+    {
+      "name": "reduced motion still waits for App frames before public ready can finish",
+      "startup": "loading",
+      "rootInert": true,
+      "rootHidden": "true",
+      "retryShown": true,
+      "pendingFrames": 1
+    },
+    {
+      "name": "existing explicit error permits native-info fallback after workspace readiness",
+      "startup": "detached",
+      "rootInert": false,
+      "rootHidden": null,
+      "retryShown": false,
+      "pendingFrames": 0
+    }
+  ],
+  "limitations": [
+    "Synthetic DOM and manually delivered frame/timer queues, no React renderer, WebKit, Tauri or OS execution.",
+    "Withholding frames is an injected condition; it does not establish the failed run experienced that condition.",
+    "Cases execute current product source but do not test a proposed fix or explain real pending IPC."
+  ]
+}

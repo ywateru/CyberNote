@@ -1,0 +1,165 @@
+{
+  "schema": 1,
+  "kind": "read-only-startup-handoff-investigation",
+  "archivedAt": "2026-11-13T09:32:52.072935+00:00",
+  "analysisBase": "44a9f43f5600174682b1ef7e71eb2649205dcc0e",
+  "candidateSourceRecordedByRun": "920fa9cf3af6e3b3cc3b99fb1a78d960ab0c7d11",
+  "candidateBinaryRecordedByRun": "bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd",
+  "originalResult": {
+    "path": "/private/tmp/account109-cancel-local-live01-output/result.json",
+    "sha256": "81e608bcbce43122aa6628f552b574e1ee946a29770075daa6aaa6182c142c97",
+    "reReadUnchanged": true
+  },
+  "run": {
+    "status": "fail",
+    "startedAt": "2026-11-13T09:21:37.412Z",
+    "finishedAt": "2026-11-13T09:22:37.654Z",
+    "failure": {
+      "phase": "prepare",
+      "code": "TIMEOUT",
+      "lastOperation": {
+        "sequence": 1,
+        "phase": "prepare",
+        "device": "local-1",
+        "operation": "ready",
+        "event": "failed",
+        "code": "TIMEOUT"
+      }
+    },
+    "cleanupFailure": {
+      "code": "CLEANUP_FAILED"
+    },
+    "checksCount": 0,
+    "failurePhase": "documentProbe",
+    "documentProbes": 1332,
+    "lastDocument": {
+      "debug": true,
+      "interactive": false,
+      "readyState": "complete",
+      "rootHidden": "true",
+      "rootInert": true,
+      "startup": "loading",
+      "timeOrigin": 1794561698992,
+      "visibility": "hidden"
+    },
+    "readinessFailure": {
+      "code": "DIAGNOSTIC_UNAVAILABLE"
+    },
+    "commands": 2,
+    "lastAction": "eval",
+    "forcedSignals": [
+      "SIGTERM"
+    ],
+    "exit": {
+      "code": null,
+      "signal": "SIGTERM"
+    },
+    "naturalExit": false,
+    "rawPidAbsentField": false
+  },
+  "parentSuppliedContext": {
+    "ownedProcessReportedGoneAfterRun": true,
+    "goneObservationTimestampRetained": false,
+    "postRunAxAvailableAndNotLocked": true,
+    "axObservationTimestampRetained": false,
+    "signInOrNoteEditPerformed": false,
+    "limit": "These post-run observations are supplied by parent; this author did not inspect OS processes, AX, a store or device."
+  },
+  "sourceInputs": [
+    {
+      "path": "src/App.tsx",
+      "sha256": "51895af4a4f14c4fbee72d524e39ba59671f0c17f80bf4dfd812baf66e2ca333",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "public/startup.js",
+      "sha256": "ed5c34bf3f142f9619e680059c4c5fa95c07a4b41eaf9871a757e784e0881ff9",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src/startup.ts",
+      "sha256": "75eef5410e42aa112005db2ec8ea788b26b8f0b1bf16b3c6e5e73083033924fc",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "index.html",
+      "sha256": "1048f1b00c7684bcd23c9722d22d82155d716a7ffb32d403b0e87dd608716b07",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src/main.tsx",
+      "sha256": "92a4bf43e21875cf2c85ee1593dbcd1f2bd3fd76ce58e9d7a84399ee7d554b51",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src/native-toolbar.ts",
+      "sha256": "7de503b2c2485e75b08d594da324f4584922d13ed6e70944b0a82d96ce372a56",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src/native-toolbar-controller.ts",
+      "sha256": "72a4f219eb5f6fc2f5be5b4a0c3ffd3e483e0bc41d63c76bf2985c82a9bcacee",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src/platform/native-platform.ts",
+      "sha256": "68463a80a15776e033e883e9b016af4d0f54732f64a96515ec4970f0ae908f03",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src/bridge.ts",
+      "sha256": "a33300d798ca292a71fb8b1ff9c4269a2d16153b7df79567c1b21625029bae4e",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src-tauri/src/lib.rs",
+      "sha256": "7721259e60a410d03c2065805b265480eee2556555afdc28a4f6c0723e4d995e",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src-tauri/src/sync_e2e.rs",
+      "sha256": "22eeeabd78327942236823bfba168f85770a3641a1ba7805543c9c996c726cef",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src-tauri/tauri.conf.json",
+      "sha256": "3df6d75b2425945d5351540dd0af6a748de29d28f2b8f6a4803d5caeacdb2bad",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "scripts/verification/sync108-native-driver.mjs",
+      "sha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+      "equalsGuiCandidateSource": true
+    },
+    {
+      "path": "src/debug/runtime.ts",
+      "sha256": "e665322bbc2127cadb4e7d7ea5c8b383ff5202cd199a0ccfc16589c888f8b8f9",
+      "equalsGuiCandidateSource": true
+    }
+  ],
+  "fixture": {
+    "checks": 10,
+    "passed": true,
+    "outputSha256": "12e76fe74e2ace0b1154abad899a768c7f0d6f046be72754ad4baa5544ddd361",
+    "scope": "startup only; related debug idle issue is static source analysis, not an executed idle regression"
+  },
+  "findings": {
+    "unboundedFrameWaitGivenReadyGatesDemonstrated": true,
+    "preReadyEvalDiagnosticsDeniedByNativePolicy": true,
+    "liveFrameStarvationProven": false,
+    "liveWorkspaceOrNativeGateCompletionProven": false,
+    "nativeShowWaitsForSplash": false,
+    "initialToolbarBindRequiresRaf": false,
+    "debugIdleFrameAwaitCanOutliveItsLoopDeadline": true,
+    "startupFallbackAloneEstablishesCompleteNativeReady": false
+  },
+  "executionBoundary": {
+    "appLaunched": false,
+    "networkRequested": false,
+    "nativeBuildRun": false,
+    "storeOrGrantRead": false,
+    "productModified": false,
+    "browserOrDeviceRun": false,
+    "systemHomeVariablesOverridden": false
+  }
+}
