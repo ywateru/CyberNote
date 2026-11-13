@@ -521,11 +521,24 @@ async fn callback_state_redirect_duplicates_nonce_issuer_audience_subject_and_ex
             _ => unreachable!(),
         }
         let error = client.complete_callback(txn, callback).await.unwrap_err();
-        assert!(
-            matches!(
-                error,
-                AuthError::InvalidCallback | AuthError::InvalidIdentity
-            ),
+        let rejection = match kind {
+            "nonce" => Some(IdentityRejection::Nonce),
+            "issuer" => Some(IdentityRejection::Issuer),
+            "audience" => Some(IdentityRejection::Audience),
+            "subject" => Some(IdentityRejection::Subject),
+            "expiry" => Some(IdentityRejection::Expired),
+            "azp" => Some(IdentityRejection::AuthorizedParty),
+            "issued_at" => Some(IdentityRejection::IssuedAt),
+            "signature" => Some(IdentityRejection::Signature),
+            "algorithm" => Some(IdentityRejection::Algorithm),
+            "at_hash" => Some(IdentityRejection::AccessTokenHash),
+            _ => None,
+        };
+        assert_eq!(
+            error,
+            rejection
+                .map(AuthError::IdentityRejected)
+                .unwrap_or(AuthError::InvalidCallback),
             "{kind}"
         );
         assert!(client.restore().await.unwrap().is_none());
@@ -880,7 +893,7 @@ async fn refresh_inherits_scope_and_requires_connect_with_or_without_an_id_token
         *f.refresh_scope.lock().unwrap() = "profile".into();
         assert_eq!(
             client.access_token(Duration::ZERO, true).await.unwrap_err(),
-            AuthError::InvalidIdentity
+            AuthError::IdentityRejected(IdentityRejection::ResponseMetadata)
         );
         assert!(client.cleanup_required().await);
         assert!(matches!(

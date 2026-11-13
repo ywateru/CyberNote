@@ -29,7 +29,9 @@ use storage::PrivateStore;
 use subtle::ConstantTimeEq;
 use tokio::sync::Mutex;
 use types::TransactionStatus;
-pub use types::{AccessToken, AuthError, AuthorizationCancellation, Identity, PinnedConfig};
+pub use types::{
+    AccessToken, AuthError, AuthorizationCancellation, Identity, IdentityRejection, PinnedConfig,
+};
 use url::Url;
 use zeroize::{Zeroize, ZeroizeOnDrop, Zeroizing};
 
@@ -441,13 +443,15 @@ impl AuthClient {
                 .scopes()
                 .is_some_and(|scopes| !scopes.iter().any(|s| s.as_str() == "connect"))
         {
-            return Err(AuthError::InvalidIdentity);
+            return Err(AuthError::IdentityRejected(
+                IdentityRejection::ResponseMetadata,
+            ));
         }
         let token = match response.id_token() {
             Some(token) => token,
             None => {
                 return Err(if required {
-                    AuthError::InvalidIdentity
+                    AuthError::IdentityRejected(IdentityRejection::MissingIdToken)
                 } else {
                     AuthError::NoSession
                 })
@@ -474,31 +478,56 @@ impl AuthClient {
                     Err("nonce mismatch".to_owned())
                 }
             })
-            .map_err(|_| AuthError::InvalidIdentity)?;
-        if claims.subject().as_str().is_empty()
-            || claims.subject().as_str().len() > 128
-            || claims
-                .authorized_party()
-                .is_some_and(|azp| azp.as_str() != self.inner.config.client_id)
+            .map_err(|error| {
+                use openidconnect::{
+                    ClaimsVerificationError as C, SignatureVerificationError as S,
+                };
+                AuthError::IdentityRejected(match error {
+                    C::Expired(_) => IdentityRejection::Expired,
+                    C::InvalidAudience(_) => IdentityRejection::Audience,
+                    C::InvalidIssuer(_) => IdentityRejection::Issuer,
+                    C::InvalidNonce(_) => IdentityRejection::Nonce,
+                    C::InvalidSubject(_) => IdentityRejection::Subject,
+                    C::SignatureVerification(S::NoMatchingKey | S::AmbiguousKeyId(_)) => {
+                        IdentityRejection::SigningKey
+                    }
+                    C::SignatureVerification(S::DisallowedAlg(_)) => IdentityRejection::Algorithm,
+                    C::SignatureVerification(_) => IdentityRejection::Signature,
+                    _ => IdentityRejection::OtherClaims,
+                })
+            })?;
+        if claims.subject().as_str().is_empty() || claims.subject().as_str().len() > 128 {
+            return Err(AuthError::IdentityRejected(IdentityRejection::Subject));
+        }
+        if claims
+            .authorized_party()
+            .is_some_and(|azp| azp.as_str() != self.inner.config.client_id)
             || (claims.audiences().len() != 1 && claims.authorized_party().is_none())
-            || claims.expiration() <= claims.issue_time()
+        {
+            return Err(AuthError::IdentityRejected(
+                IdentityRejection::AuthorizedParty,
+            ));
+        }
+        if claims.expiration() <= claims.issue_time()
             || claims.issue_time().timestamp() > now()? as i64 + 5
         {
-            return Err(AuthError::InvalidIdentity);
+            return Err(AuthError::IdentityRejected(IdentityRejection::IssuedAt));
         }
         if let Some(expected) = claims.access_token_hash() {
             let actual = AccessTokenHash::from_token(
                 response.access_token(),
                 token
                     .signing_alg()
-                    .map_err(|_| AuthError::InvalidIdentity)?,
+                    .map_err(|_| AuthError::IdentityRejected(IdentityRejection::AccessTokenHash))?,
                 token
                     .signing_key(&verifier)
-                    .map_err(|_| AuthError::InvalidIdentity)?,
+                    .map_err(|_| AuthError::IdentityRejected(IdentityRejection::AccessTokenHash))?,
             )
-            .map_err(|_| AuthError::InvalidIdentity)?;
+            .map_err(|_| AuthError::IdentityRejected(IdentityRejection::AccessTokenHash))?;
             if actual != *expected {
-                return Err(AuthError::InvalidIdentity);
+                return Err(AuthError::IdentityRejected(
+                    IdentityRejection::AccessTokenHash,
+                ));
             }
         }
         let subject = claims.subject().as_str().to_owned();
@@ -572,7 +601,7 @@ impl AuthClient {
                 .scopes()
                 .is_some_and(|s| !s.iter().any(|s| s.as_str() == "connect"))
         {
-            Err(AuthError::InvalidIdentity)
+            Err(AuthError::IdentityRejected(IdentityRejection::ResponseMetadata))
         } else {
             Ok(old_identity.clone())
         };

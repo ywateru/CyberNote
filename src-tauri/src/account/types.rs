@@ -59,6 +59,8 @@ pub(crate) struct SafeError {
     pub message: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<NetworkStage>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<account_auth::IdentityRejection>,
 }
 /// Fixed labels only; never serialize upstream errors, URLs or credentials.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
@@ -76,6 +78,7 @@ pub(crate) enum Error {
     Authentication,
     InvalidCallback,
     InvalidIdentity,
+    IdentityRejected(account_auth::IdentityRejection),
     CodeExchangeRejected,
     TokenResponseInvalid,
     MissingRefreshToken,
@@ -96,7 +99,7 @@ impl Error {
             Self::Configuration => "account_configuration",
             Self::Authentication => "account_authentication",
             Self::InvalidCallback => "account_auth_callback_invalid",
-            Self::InvalidIdentity => "account_auth_identity_invalid",
+            Self::InvalidIdentity | Self::IdentityRejected(_) => "account_auth_identity_invalid",
             Self::CodeExchangeRejected => "account_auth_code_rejected",
             Self::TokenResponseInvalid => "account_auth_token_response_invalid",
             Self::MissingRefreshToken => "account_auth_refresh_missing",
@@ -122,6 +125,10 @@ impl Error {
             .into(),
             stage: match self {
                 Self::NetworkAt(stage) => Some(stage),
+                _ => None,
+            },
+            reason: match self {
+                Self::IdentityRejected(reason) => Some(reason),
                 _ => None,
             },
         }
@@ -150,6 +157,7 @@ impl From<account_auth::AuthError> for Error {
             A::Storage => Self::Storage,
             A::InvalidCallback => Self::InvalidCallback,
             A::InvalidIdentity => Self::InvalidIdentity,
+            A::IdentityRejected(reason) => Self::IdentityRejected(reason),
             A::CodeExchangeRejected => Self::CodeExchangeRejected,
             A::TokenResponseInvalid => Self::TokenResponseInvalid,
             A::MissingRefreshToken => Self::MissingRefreshToken,

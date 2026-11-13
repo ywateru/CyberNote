@@ -79,6 +79,7 @@ mod macos {
             AuthError::Network => "auth_network",
             AuthError::InvalidCallback => "auth_invalid_callback",
             AuthError::InvalidIdentity => "auth_invalid_identity",
+            AuthError::IdentityRejected(_) => "auth_invalid_identity",
             AuthError::CodeExchangeRejected => "auth_code_rejected",
             AuthError::TokenResponseInvalid => "auth_token_response_invalid",
             AuthError::MissingRefreshToken => "auth_refresh_missing",

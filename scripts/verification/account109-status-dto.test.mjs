@@ -10,6 +10,8 @@ test('legacy errors and fixed native network stages remain valid DTOs',()=>{
  assert.deepEqual(validateAccountStatus(status({code:'account_network',message:'safe'})).error,{code:'account_network',message:'safe'});
  for(const stage of ['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator'])
   assert.equal(validateAccountStatus(status({code:'account_network',message:'safe',stage})).error.stage,stage);
+ for(const reason of ['responseMetadata','missingIdToken','issuer','audience','expired','nonce','signingKey','signature','algorithm','subject','authorizedParty','issuedAt','accessTokenHash','otherClaims'])
+  assert.equal(validateAccountStatus(status({code:'account_auth_identity_invalid',message:'safe',reason})).error.reason,reason);
 });
 test('untrusted diagnostic fields and upstream values fail closed',()=>{
  for(const error of [
@@ -17,5 +19,7 @@ test('untrusted diagnostic fields and upstream values fail closed',()=>{
   {code:'account_network',message:'safe',stage:null},
   {code:'account_network',message:'safe',stage:{token:'synthetic'}},
   {code:'account_network',message:'safe',stage:'coordinator',url:'https://upstream.invalid'},
+  {code:'account_auth_identity_invalid',message:'safe',reason:'upstream-sensitive-response'},
+  {code:'account_auth_identity_invalid',message:'safe',reason:null},
  ]) assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);
 });

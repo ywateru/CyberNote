@@ -93,12 +93,33 @@ impl fmt::Debug for AccessToken {
     }
 }
 
+/// Finite diagnostic labels; no token claims or provider error text are retained.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum IdentityRejection {
+    ResponseMetadata,
+    MissingIdToken,
+    Issuer,
+    Audience,
+    Expired,
+    Nonce,
+    SigningKey,
+    Signature,
+    Algorithm,
+    Subject,
+    AuthorizedParty,
+    IssuedAt,
+    AccessTokenHash,
+    OtherClaims,
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum AuthError {
     Configuration,
     Network,
     InvalidCallback,
     InvalidIdentity,
+    IdentityRejected(IdentityRejection),
     CodeExchangeRejected,
     TokenResponseInvalid,
     MissingRefreshToken,
@@ -117,6 +138,7 @@ impl fmt::Display for AuthError {
             Self::Network => "认证服务暂时不可用",
             Self::InvalidCallback => "登录回跳无效，请重新登录",
             Self::InvalidIdentity => "身份验证失败，请重新登录",
+            Self::IdentityRejected(_) => "身份验证失败，请重新登录",
             Self::CodeExchangeRejected => "登录授权未被接受，请重新登录",
             Self::TokenResponseInvalid => "认证服务返回了无效的授权数据",
             Self::MissingRefreshToken => "认证服务未提供持久登录授权",

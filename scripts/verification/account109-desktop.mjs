@@ -32,7 +32,7 @@ async function open(name){
 async function command(app,id,args={}){const v=await app.execute(id,args);await app.idle();return v;}
 async function workspace(app){return (await app.state()).workspace;}
 async function account(app){return app.evaluate("window.__TAURI_INTERNALS__.invoke('account_command',{command:{type:'status'}})");}
-function safeStatus(s){return {state:s.state,enabled:s.enabled,hasProfile:!!s.profile,identityCheck:s.profile?.username===undefined?'unverified':s.profile.username==='cybernoteqa20261113a'?'expectedSyntheticUser':'differentUser',error:s.error?{code:s.error.code,stage:s.error.stage}:undefined,devices:s.devices.map(d=>({online:d.online,current:d.current,connected:d.connected})),pendingCount:s.pendingCount,conflictCount:s.conflictCount};}
+function safeStatus(s){return {state:s.state,enabled:s.enabled,hasProfile:!!s.profile,identityCheck:s.profile?.username===undefined?'unverified':s.profile.username==='cybernoteqa20261113a'?'expectedSyntheticUser':'differentUser',error:s.error?{code:s.error.code,stage:s.error.stage,reason:s.error.reason}:undefined,devices:s.devices.map(d=>({online:d.online,current:d.current,connected:d.connected})),pendingCount:s.pendingCount,conflictCount:s.conflictCount};}
 async function enter(app){await command(app,'settings.open');await command(app,'settings.tab',{tab:'account'});}
 async function leave(app){if((await app.state()).preferences.open)await command(app,'app.back');}
 const doc=text=>({type:'doc',content:[{type:'paragraph',content:[{type:'text',text,marks:[{type:'bold'}]}]},{type:'paragraph',content:[{type:'text',text:'中文第二段 / UTF-8 / 😀'}]}]});
