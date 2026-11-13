@@ -1,0 +1,20 @@
+dumpsys connectivity | awk '
+/Active default network:/ {
+  v=$0; sub(/.*Active default network:[ ]*/, "", v);
+  if (v ~ /[0-9]/) { gsub(/[^0-9]/, "", v); active=v }
+}
+/NetworkAgentInfo/ { rows[++n]=$0 }
+END {
+  if (active == "") { print "defaultPresent=unknown"; exit }
+  print "defaultPresent=true";
+  for (i=1; i<=n; i++) {
+    if (rows[i] ~ ("network\\{[ ]*" active "[ ]*\\}")) {
+      v=rows[i];
+      if (v !~ /Transports:/) continue;
+      sub(/.*Transports:[ ]*/, "", v); sub(/[ ]*Capabilities:.*/, "", v);
+      count=split("WIFI CELLULAR VPN ETHERNET BLUETOOTH USB LOWPAN WIFI_AWARE", labels, " ");
+      for (j=1; j<=count; j++)
+        if (v ~ ("(^|[^A-Z_])" labels[j] "([^A-Z_]|$)")) print "defaultTransport=" labels[j];
+    }
+  }
+}' 

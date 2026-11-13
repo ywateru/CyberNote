@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "kind": "single-phone-approved-domain-anonymous-health",
+  "sourceCommit": "0fa7f1afd36976dbe9b12e3341942afad67da7b9",
+  "startedAt": "2026-11-13T13:14:18.331258+00:00",
+  "status": "passed-anonymous-shell-health-only",
+  "scriptSha256": "ad64ff7dbcfbd33f28fb56690d985076f50bd7c9bb7699a50548c175c30f5133",
+  "readOnly": true,
+  "boundary": {
+    "appOpened": false,
+    "installed": false,
+    "adbDeviceDataOrSettingsChanged": false,
+    "credentialsSupplied": false,
+    "toolsInstalledOrCopied": false,
+    "oldEndpointProbed": false,
+    "hostControlRequested": false,
+    "dnsOrRouteOrProxyOverrides": false,
+    "rawTopologyRetained": false,
+    "rawResponseRetained": false,
+    "rawStderrRetained": false
+  },
+  "device": {
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedMs": 71,
+    "state": "authorized"
+  },
+  "defaultNetwork": {
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedMs": 184,
+    "defaultPresent": true,
+    "transportLabels": [
+      "CELLULAR"
+    ],
+    "limitation": "Active-default Android system metadata only; not app UID routing or peer transport."
+  },
+  "toolPreflight": {
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedMs": 66,
+    "existingCurlAndTimeoutAvailable": true,
+    "httpsProtocolAvailable": true,
+    "curlVersion": "7.58.0"
+  },
+  "phone": {
+    "attemptCount": 1,
+    "method": "GET",
+    "endpoint": "https://cybernote-sync.aixgg.com/healthz",
+    "startedAt": "2026-11-13T13:14:18.653912+00:00",
+    "finishedAt": "2026-11-13T13:14:22.707006+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedMs": 4053,
+    "networkCategory": "httpsOk",
+    "metrics": {
+      "http": 200,
+      "dnsSeconds": 2.518777,
+      "connectSeconds": 2.619358,
+      "tlsSeconds": 2.911271,
+      "totalSeconds": 3.944328,
+      "verifyResult": 0
+    },
+    "responseSummary": {
+      "bytes": 3,
+      "sha256": "dc51b8c96c2d745df3bd5590d990230a482fd247123599548e0632fdbf97fc22",
+      "matchesExpectedOkLine": true,
+      "bodyRetained": false
+    },
+    "tls": {
+      "peerCertificateVerificationEnabled": true,
+      "hostnameVerificationEnabled": true,
+      "curlConfigDisabled": true,
+      "insecureFlagUsed": false,
+      "completedVerifiedHandshake": true
+    },
+    "connectTimeoutSeconds": 5,
+    "totalTimeoutSeconds": 10,
+    "deviceGuardSeconds": 12,
+    "hostGuardSeconds": 15,
+    "retries": 0,
+    "redirectsFollowed": false,
+    "authenticationHeadersSupplied": false,
+    "proxyOrEnvironmentChanged": false,
+    "passed": true
+  },
+  "priorEvidenceSha256": {
+    "current-access02/README.md": "530ec95f2838ce83aaae4d9df2893f251f5e8fb7f63c32f34f790ea6813eef8f",
+    "current-access02/SHA256SUMS": "bb579cc6407fe3e875d5584d6bd08addab3330c7526eca7096b547d47cd02edf",
+    "current-access02/check.py": "f0ea46abe6400c17d734e309e93a9360593b48acb51020e2a44a75cf8741fc12",
+    "current-access02/default-network.json": "6d2f64f93525a4d8520834fe9a01a1bfa25595a571ce4c5502e8205cb74214a3",
+    "current-access02/device-state.json": "807cfc64ff41540a088697a207237531fa3cff154b4a73e1205eface0faea0a1",
+    "current-access02/host-control.json": "904f3ccc7c0f2b3c8e2a40f21fe18ce82cc2bbe3ac4712a07ffaea10e32dfbbf",
+    "current-access02/phone-health.json": "4039def16de27b73c4485038244a53f794312b31c027b36374ff25c6cf97d89c",
+    "current-access02/result.json": "4faa23d26fc807e7ddcf31ff64e7587bb3f6f236fc3a3bd674172dc5b140d89c",
+    "coordinator-route-class01/README.md": "5ed65cbee3d04be267c7c50dfd4a1bff8301ecd92f22363d509b56fd08cc5467",
+    "coordinator-route-class01/SHA256SUMS": "b5d84a342c85b3f9debeef2d99edc924e12e7266c5e6ab56cf2cdcf24c9eac11",
+    "coordinator-route-class01/diagnostic.py": "6afaa033e584ac5468be8510b0871e089cedc1f5f240288244a153c1394e291f",
+    "coordinator-route-class01/result.json": "60452054c9da4444db9d0e5a6a1213e6e6a8ad1357506d5d435846ea0117813c",
+    "login-surfaces-preflight01/README.md": "d5150db72cc1fbc73de77a5aae46e0cb282e4c2e85adee1d74fb29df9f847763",
+    "login-surfaces-preflight01/comparison.json": "16def0d26184b086ca31c72d65be9e9f1e60aadfc39fb7ae1507dd255c68dac2",
+    "login-surfaces-preflight01/result.json": "abeade92e9c828b9b38feea38095bd976843693c10d013fb0964712bc2501541",
+    "source5d30-baseline01/README.md": "403d065cea0bc373b44bac304508019af766a91964e43d08e3cd384b4b402fb6",
+    "source5d30-baseline01/evidence.json": "397112c3c86ffe032dbe95b768f7c060ac3e5ec10a5d70e8749f91fd7c5353d6"
+  },
+  "priorEvidenceUnchanged": true,
+  "finishedAt": "2026-11-13T13:14:22.708683+00:00",
+  "adbOwnershipReleased": true
+}
