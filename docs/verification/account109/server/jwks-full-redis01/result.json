@@ -1,0 +1,92 @@
+{
+  "commit": "d3c0ea8e28536e2284ce5957610815e628d04955",
+  "checkout": "/private/tmp/cybernote-account109-jwks-errors",
+  "workingDirectory": "/private/tmp/cybernote-account109-jwks-errors/services/coordinator",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "environment": {
+    "REDIS_TEST_SERVER": "/private/tmp/cybergrid-redis-build/redis-7.4.3/src/redis-server",
+    "REQUIRE_REDIS": "1"
+  },
+  "environmentIsolation": "Only PATH, HOME, TMPDIR, LANG, LC_ALL, TZ inherited if set; no production service or credential variables inherited.",
+  "startedUtc": "2026-11-13T02:49:06.000738+00:00",
+  "finishedUtc": "2026-11-13T02:49:57.019513+00:00",
+  "elapsedSeconds": 51.018,
+  "exitCode": 0,
+  "nodeVersion": "v22.16.0",
+  "npmVersion": "10.9.2",
+  "dependencies": {
+    "jose": "6.2.15",
+    "redis": "6.3.1",
+    "tsx": "4.23.15"
+  },
+  "redis": {
+    "binary": "/private/tmp/cybergrid-redis-build/redis-7.4.3/src/redis-server",
+    "version": "Redis server v=7.4.3 sha=00000000:1 malloc=libc bits=64 build=ba4426d0b057d15c",
+    "sha256Before": "b44cd92670678e3d4cfe413ef04deb1c91f7aa5bf24638bf9435ddf7d36e59b1",
+    "sha256After": "b44cd92670678e3d4cfe413ef04deb1c91f7aa5bf24638bf9435ddf7d36e59b1"
+  },
+  "tests": {
+    "tests": 172,
+    "suites": 0,
+    "pass": 172,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "tapDurationMs": 50829.025916,
+  "sanitization": {
+    "rawLogPersisted": false,
+    "redactionCounts": {
+      "private_key": 0,
+      "jwt": 0,
+      "bearer": 0,
+      "url_credentials": 0,
+      "credential_value": 0
+    }
+  },
+  "sanitizedLogSha256": "483138c8ddfba242595506300e4804e67a03f601d060dedca22ed8a74b66b969",
+  "remainingTestProcessGroupMembers": [],
+  "checkoutStatusAfter": "",
+  "networkScope": "Redis fixtures bind 127.0.0.1 on dynamically allocated fixture ports with mkdtemp storage and random namespaces. No deployment endpoints or external Redis configured.",
+  "previouslySkippedRedisTests": {
+    "count": 29,
+    "allPassedNow": true,
+    "names": [
+      "two enrollment instances share real Redis source and account budgets; public keys do not spend signing quota",
+      "real Redis mint is idempotent after challenge expiry, CAS fenced and retains old active until new registration",
+      "real Redis 24h GC rejects old zero/nonzero challenges and tickets, clamps heartbeat and never reuses domain",
+      "real Redis bounded windows permit more than 128 fresh keys while rejecting instant quota and retaining legacy fences",
+      "real Redis mint capacity/wrongtype/counter exhaustion reject without partially advancing domain",
+      "real ES384 + HTTP two-handler challenge/mint/exchange/publish/discover enforce all identity and origin bounds",
+      "real Redis epoch reset and late register past ticket deadline fail at atomic commit",
+      "real Redis GC holds a finite fence while any related session remains valid",
+      "redis: bounded bridge history survives withdrawal, exact retry and incarnation reset",
+      "Redis TIME checks at transaction commit, same revision expired replay acknowledges without extending expiry",
+      "bridge publication bounds cover complete 24KiB snapshot and rollback leaves prior revision intact",
+      "Redis bridge safe integer address revisions survive cjson persistence and exact replay",
+      "Redis safe publication revisions preserve MAX_SAFE_INTEGER ordering and bound withdrawn bridge identities",
+      "two real Redis handlers + ES384 verification return scope-bound complete Native/Console directories",
+      "current provider policy filters new and old directories; expiry and lease crossing change effective hash",
+      "directory Store transaction rechecks exact live session and derives owner/product from stored identity",
+      "complete Native and Console snapshot envelopes enforce 2MiB without truncation",
+      "account Node entrypoint pins PUBLIC_ORIGIN and ignores request-forwarded origins",
+      "actual stateless Node processes coexist and SIGKILL/restart preserves Redis epoch/session",
+      "real Redis HTTP binds actual Native/SPA clients to canonical products and isolates users/products",
+      "real Redis registration receipts bind real client and policy mode across handler instances",
+      "current static policy rejects removed/moved Native and removed SPA product while retaining logout",
+      "dynamic mode preserves legacy one-to-one apps and rejects static session mode transitions",
+      "upgrade replays only exact live unbound dynamic receipts with the original HMAC and fences",
+      "real Redis two handlers share discovery/signals/session across cold store and revoke fences",
+      "real Redis atomic registration/publication races, replay, capacity, permanent fences",
+      "real Redis TTL/index cleanup, distributed waiter cancellation, failclosed and no partial snapshot",
+      "real Redis reset fencing pins original request epoch despite concurrent ready and partial loss fails closed",
+      "real Redis signal/rate/receipt expiry is reclaimed atomically without reviving an old registration fence"
+    ],
+    "priorLog": "/private/tmp/cybernote-account109-jwks-service-tests.log",
+    "priorLogEvidence": "Prior run inspected only; current run independently executed."
+  }
+}

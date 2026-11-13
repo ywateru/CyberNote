@@ -1,0 +1,254 @@
+{
+  "schema": 1,
+  "kind": "two-desktop-readonly-finite-auth-diagnostic",
+  "startedAt": "2026-11-13T02:48:01.609Z",
+  "output": "/private/tmp/account109-desktop-real-39c1420d-diagnostic01",
+  "stores": "/private/tmp/account109-desktop-real-90b8b28b-01",
+  "maxRuntimeMs": 120000,
+  "pollingIntervalMs": 1000,
+  "accountCommands": [
+    "status"
+  ],
+  "accountMutationRequested": false,
+  "grantFilesReadCopiedOrCleared": false,
+  "loginRequested": false,
+  "browserRequested": false,
+  "buildsRun": false,
+  "adbUsed": false,
+  "inheritedProxyVariablesBlanked": [
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "ALL_PROXY",
+    "NO_PROXY",
+    "http_proxy",
+    "https_proxy",
+    "all_proxy",
+    "no_proxy"
+  ],
+  "slots": {
+    "a": "left",
+    "b": "right"
+  },
+  "observations": [
+    {
+      "device": "a",
+      "elapsedMs": 4084,
+      "enabled": false,
+      "error": null,
+      "hasError": false,
+      "hasProfile": false,
+      "hasRemoteConnected": false,
+      "hasRemoteOnline": false,
+      "state": "signedOut"
+    },
+    {
+      "device": "b",
+      "elapsedMs": 4085,
+      "enabled": false,
+      "error": null,
+      "hasError": false,
+      "hasProfile": false,
+      "hasRemoteConnected": false,
+      "hasRemoteOnline": false,
+      "state": "signedOut"
+    },
+    {
+      "device": "a",
+      "elapsedMs": 5087,
+      "enabled": true,
+      "error": null,
+      "hasError": false,
+      "hasProfile": true,
+      "hasRemoteConnected": false,
+      "hasRemoteOnline": false,
+      "state": "connecting"
+    },
+    {
+      "device": "b",
+      "elapsedMs": 5088,
+      "enabled": true,
+      "error": null,
+      "hasError": false,
+      "hasProfile": true,
+      "hasRemoteConnected": false,
+      "hasRemoteOnline": false,
+      "state": "connecting"
+    },
+    {
+      "device": "a",
+      "elapsedMs": 70449,
+      "enabled": true,
+      "error": null,
+      "hasError": false,
+      "hasProfile": true,
+      "hasRemoteConnected": true,
+      "hasRemoteOnline": true,
+      "state": "ready"
+    },
+    {
+      "device": "b",
+      "elapsedMs": 70495,
+      "enabled": true,
+      "error": null,
+      "hasError": false,
+      "hasProfile": true,
+      "hasRemoteConnected": false,
+      "hasRemoteOnline": true,
+      "state": "ready"
+    },
+    {
+      "device": "b",
+      "elapsedMs": 77537,
+      "enabled": true,
+      "error": null,
+      "hasError": false,
+      "hasProfile": true,
+      "hasRemoteConnected": true,
+      "hasRemoteOnline": true,
+      "state": "ready"
+    }
+  ],
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a",
+      "pid": 72183,
+      "commands": 76,
+      "stderrBytes": 58,
+      "stdoutNoiseBytes": 0,
+      "forcedSignals": [],
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "failureCode": null
+    },
+    {
+      "name": "b",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-b",
+      "pid": 72184,
+      "commands": 76,
+      "stderrBytes": 58,
+      "stdoutNoiseBytes": 0,
+      "forcedSignals": [],
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "naturalExit": true,
+      "failureCode": null
+    }
+  ],
+  "diagnosis": {
+    "outcome": "both-desktops-connected"
+  },
+  "boundary": "Real native runtime startup may restore existing grants and run its configured background work. The diagnostic requests only account status and reads original note documents; no sign-in, sign-out, cancel, enablement, syncNow, document mutation or full runner.",
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-39c1420d-finite-diagnostics/notes-clone",
+    "bytes": 203095936,
+    "sha256": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2",
+    "identityReceiptSha256": "ec3d70daa3b3fb5bf5ab7a3f6b5bf09948168bf7d73e0dc73c06b652eec935cf",
+    "embeddedIdentityPerReceipt": {
+      "encoding": "brotli",
+      "sha256": "824239b4baf76d76a7ab6bdd65d832f151ebffb49c0293e2aec06a0abc842d1e"
+    },
+    "embeddedIdentityIndependentlyRecheckedThisRun": false
+  },
+  "helperSha256": "a76298ab92d725518d6f1e46d92a183290a0e860e4772f4b5bd8989dfb3cf3dc",
+  "driverSha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+  "originalNotes": {
+    "a": [
+      {
+        "id": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+        "documentSha256": "adbd2b3959340a694aa24b3fd7185af92663a7798c037d5d2b6de3b749054855",
+        "plainTextSha256": "343706beab74732afd227ef1fbbf3793262fca738ae6a7f5a77ca53229c58fa5"
+      }
+    ],
+    "b": [
+      {
+        "id": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+        "documentSha256": "1b456f4aaddab7820e4d0296c136d69781092fea0e18978e817da7b92a1c91ef",
+        "plainTextSha256": "13698676d558c933ccdc694d1cb4d0a31a122676644f5fae2324a2ef13760bcb"
+      }
+    ]
+  },
+  "processesStartedAt": "2026-11-13T02:48:01.861Z",
+  "pids": {
+    "a": 72183,
+    "b": 72184
+  },
+  "ready": [
+    {
+      "device": "a",
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "device": "b",
+      "interactive": true,
+      "startupDetached": true
+    }
+  ],
+  "pollingElapsedMs": 78486,
+  "lastSafeStatus": {
+    "a": {
+      "enabled": true,
+      "error": null,
+      "hasError": false,
+      "hasProfile": true,
+      "hasRemoteConnected": true,
+      "hasRemoteOnline": true,
+      "state": "ready"
+    },
+    "b": {
+      "enabled": true,
+      "error": null,
+      "hasError": false,
+      "hasProfile": true,
+      "hasRemoteConnected": true,
+      "hasRemoteOnline": true,
+      "state": "ready"
+    }
+  },
+  "bothClosedNaturally": true,
+  "originalDocumentsUnchanged": {
+    "a": true,
+    "b": true
+  },
+  "finalNotes": {
+    "a": [
+      {
+        "id": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+        "documentSha256": "1b456f4aaddab7820e4d0296c136d69781092fea0e18978e817da7b92a1c91ef",
+        "plainTextSha256": "13698676d558c933ccdc694d1cb4d0a31a122676644f5fae2324a2ef13760bcb"
+      },
+      {
+        "id": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+        "documentSha256": "adbd2b3959340a694aa24b3fd7185af92663a7798c037d5d2b6de3b749054855",
+        "plainTextSha256": "343706beab74732afd227ef1fbbf3793262fca738ae6a7f5a77ca53229c58fa5"
+      }
+    ],
+    "b": [
+      {
+        "id": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+        "documentSha256": "1b456f4aaddab7820e4d0296c136d69781092fea0e18978e817da7b92a1c91ef",
+        "plainTextSha256": "13698676d558c933ccdc694d1cb4d0a31a122676644f5fae2324a2ef13760bcb"
+      },
+      {
+        "id": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+        "documentSha256": "adbd2b3959340a694aa24b3fd7185af92663a7798c037d5d2b6de3b749054855",
+        "plainTextSha256": "343706beab74732afd227ef1fbbf3793262fca738ae6a7f5a77ca53229c58fa5"
+      }
+    ]
+  },
+  "finishedAt": "2026-11-13T02:49:21.999Z"
+}

@@ -1,4 +1,4 @@
-2026-11-13最新：账户默认原生入口已接线、协调服务已部署；[真实双桌面续验](verification/account109/macos/real-account-runs01/README.md)已证明两端独立库全文/附件与重启保留、同账号真实登录、持久授权恢复。账户自动发现尚失败：最新 `9263ea87` B 为认证错误，后续双向/三端账户数据验收未完成。用户允许命令行调用真实功能测试，继续定位并复验；新 GitHub/Actions 尚未交付。下方文档按各历史时点阅读，不把早期锁屏或入口门控结论当作当前状态。
+2026-11-13最新：[39c1420d 真实双桌面续验](verification/account109/macos/finite-diagnostics01/README.md)在原有两端授权及数据根上于 78 秒内自动连接，两个原始全文已在双方出现且保持一致；此前[五轮失败](verification/account109/macos/real-account-runs01/README.md)保留。服务端 JWKS 网络错误被误判 401 的问题已修复、独审并重新部署；完整服务 172 项（含 29 项 Redis）通过，0 跳过。双向附件原字节、暂停/冲突/退出及 Android 三端账户验收仍在继续，新 GitHub/Actions 尚未交付。用户允许命令行调用真实功能测试。下方文档按各历史时点阅读，不把早期锁屏或入口门控结论当作当前状态。
 
 2026-11-13早期：本轮整理账户同步开发检查点，见[工作区提交记录](verification/account109/WORKSPACE-COMMITS.md)。已保留[架构](architecture/account-sync.md)、[界面设计](ui/account-sync.md)和[原生 SDK 调查](plan/analysis/account109-native-research.md)；当时账户界面仅在显式开发测试中启用，默认设置与手工同步仍可用。不能以局部检查替代端到端验收。
 
