@@ -1,0 +1,50 @@
+{
+  "recordedAt": "2026-11-13T13:08:42.635189+00:00",
+  "scope": "only six successful live03 synthetic store/output directories",
+  "preconditions": [
+    "raw bytes equal committed archive",
+    "three independent-review APPROVE results",
+    "all six owned PIDs absent",
+    "all paths canonical, same owner and no symlinks",
+    "lsof confirms no open files"
+  ],
+  "removed": [
+    {
+      "path": "/private/tmp/account109-cancel-local-surface-browser03-store",
+      "files": 5,
+      "allocatedBytes": 110592
+    },
+    {
+      "path": "/private/tmp/account109-cancel-local-surface-browser03-out",
+      "files": 1,
+      "allocatedBytes": 8192
+    },
+    {
+      "path": "/private/tmp/account109-cancel-local-surface-embedded03-store",
+      "files": 5,
+      "allocatedBytes": 110592
+    },
+    {
+      "path": "/private/tmp/account109-cancel-local-surface-embedded03-out",
+      "files": 1,
+      "allocatedBytes": 8192
+    },
+    {
+      "path": "/private/tmp/account109-cancel-local-surface-transfer03-store",
+      "files": 5,
+      "allocatedBytes": 110592
+    },
+    {
+      "path": "/private/tmp/account109-cancel-local-surface-transfer03-out",
+      "files": 1,
+      "allocatedBytes": 8192
+    }
+  ],
+  "allocatedBytesRecovered": 356352,
+  "preserved": [
+    "window04 failure store and output",
+    "all earlier failure evidence",
+    "original desktop and Android stores",
+    "candidate binaries and build logs"
+  ]
+}

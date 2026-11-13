@@ -29,7 +29,7 @@ node scripts/verification/account109-cancel-local.mjs \
 
 embedded 运行使用同一二进制、独立 `embedded03-store/out` 及 `--surface embedded`；transfer 使用独立 `transfer03-store/out` 及 `--surface embedded --continue-in-browser`。三次先后执行，不共享测试库。
 
-[receipt.json](receipt.json)记录父级执行身份、独立 PID 检查和原始结果校验和；[browser-result.json](browser-result.json)、[embedded-result.json](embedded-result.json)、[transfer-result.json](transfer-result.json)逐字节归档原报告。当前未清理这三组小型临时库/输出；总计约348KiB，保留至归档复核完成，旧失败及原库保持。
+[receipt.json](receipt.json)记录父级执行身份、独立 PID 检查和原始结果校验和；[browser-result.json](browser-result.json)、[embedded-result.json](embedded-result.json)、[transfer-result.json](transfer-result.json)逐字节归档原报告。归档独核通过后，仅清理这三组成功运行的合成临时库/输出，恢复分配空间348KiB；精确所有权、无符号链接、无打开文件、PID消失和原始结果逐字节相等门槛见 [cleanup.json](cleanup.json)。window04及旧失败和原库保留。
 
 ## 可证边界
 
