@@ -98,7 +98,10 @@ export async function exercise({open,record,checkpoint,poll=boundedPoll,clock,su
   await checkpoint('authorizing');const proof=await beginAuthorization(first,{surface,continueInBrowser},{poll,now:clock?.now??Date.now});await record('authorizing',proof);
   if(cancelViaWindow)await checkpoint('awaitingNativeWindowClose',{event:'awaiting-native-window-close',authorizationSurface:'embedded',timeoutMs:60000,readOnlyWait:true});
   else{await checkpoint('cancelledWindow');await first.inspectAction('cancel',proof.authorizationSurface);await first.action('cancel');}
-  await poll(cancelViaWindow?'native window close signedOut':'one cancel signedOut',async()=>{const s=await first.status();disconnected(s);assert(['signedOut','authorizing'].includes(s.state));if(s.state==='authorizing')assert.equal(s.authorizationSurface,proof.authorizationSurface);return s.state==='signedOut';},cancelViaWindow?60000:15000);
+  // The window deadline starts after checkpoint persistence. A status request
+  // started in time must also finish before it; the shared poll checks only entry.
+  const now=clock?.now??Date.now,windowDeadline=cancelViaWindow?now()+60000:undefined;
+  await poll(cancelViaWindow?'native window close signedOut':'one cancel signedOut',async()=>{const s=await first.status();if(cancelViaWindow&&now()>=windowDeadline)throw Object.assign(Error('Window close deadline expired'),{code:'CONDITION_TIMEOUT:native window close signedOut'});disconnected(s);assert(['signedOut','authorizing'].includes(s.state));if(s.state==='authorizing')assert.equal(s.authorizationSurface,proof.authorizationSurface);return s.state==='signedOut';},cancelViaWindow?60000:15000);
   if(cancelViaWindow)await checkpoint('cancelledWindow');
   await record('cancelledWindow',{...(cancelViaWindow?{cancelOrigin:'native-window-close-observed'}:{uiHandler:'account.cancel',physicalInput:false}),...await stableSignedOut(first,id,initial,clock)});
   await checkpoint('localEdit');await first.leaveAccount();await first.edit(id,edited.document);strictSignedOut(await first.status());assertDocument(await first.workspace(),id,edited);

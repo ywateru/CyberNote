@@ -155,6 +155,17 @@ test('unconfirmed window close times out at fixed 60s with no automatic cancel o
     await finish(report,h.peers,async()=>{});assert.equal(report.status,'fail');assert.equal(report.failure.code,'CONDITION_TIMEOUT:native window close signedOut');
   }
 });
+test('status begun at 59s cannot pass when its awaited signedOut arrives at or beyond the fixed deadline',async()=>{
+  for(const delayMs of [999,1000,2000]){
+    let delayed=0;
+    const h=harness({windowStatus:async now=>{if(now<59000)return embeddedPending();if(!delayed++){assert.equal(now,59000);await h.c.sleep(delayMs);}return signedOut();}});
+    if(delayMs===999){await exercise({...h.args,surface:'embedded',cancelViaWindow:true});assert.equal(h.c.now(),65999);assert.equal(h.proofs.length,5);continue;}
+    let failure;await assert.rejects(()=>exercise({...h.args,surface:'embedded',cancelViaWindow:true}),e=>{failure=e;return e.code==='CONDITION_TIMEOUT:native window close signedOut';});
+    assert.equal(h.c.now(),59000+delayMs);assert.deepEqual(h.proofs.map(p=>p.name),['localSave','authorizing']);assert.equal(h.peers.length,1);assert(!h.events.includes('edit'));assert.deepEqual(h.calls.filter(c=>c.action),[{action:'signIn',args:{surface:'embedded'}}]);
+    const report={status:'running',checks:h.proofs.map(p=>({name:p.name,status:'pass'})),failure:{code:failure.code}};
+    await finish(report,h.peers,async()=>{});assert.equal(report.status,'fail');assert.equal(report.failure.code,'CONDITION_TIMEOUT:native window close signedOut');
+  }
+});
 test('window wait rejects errors, changed surface and invalid signedOut; full-body restart loss still fails',async()=>{
   for(const windowStatus of [()=>({...embeddedPending(),error:{code:'account_network'}}),()=>({...embeddedPending(),authorizationSurface:'browser'}),()=>({...signedOut(),profile:{subject:'synthetic'}}),()=>({...signedOut(),enabled:true}),()=>({...signedOut(),authorizationSurface:'embedded'}),()=>({...signedOut(),devices:[{connected:true}]}),()=>({...signedOut(),conflictCount:1})]){
     const h=harness({windowStatus});await assert.rejects(()=>exercise({...h.args,surface:'embedded',cancelViaWindow:true}));assert.equal(h.c.now(),0);assert(!h.events.includes('cancel'));assert(!h.events.includes('edit'));assert.equal(h.peers.length,1);assert(!h.proofs.some(p=>p.name==='cancelledWindow'));
