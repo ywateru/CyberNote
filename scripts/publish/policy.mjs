@@ -70,7 +70,7 @@ export function validatePolicy(manifest, files) {
   for (const item of first) {
     fields(item, ['root', 'provenance', 'rights', 'rightsSource'], 'first-party');
     safePath(item.root);
-    if (!/^crates\/[A-Za-z0-9_-]+$/.test(item.root) || item.provenance !== 'project-authored' || item.rights !== 'reserved' || item.rightsSource !== rightsSource) throw Error('First-party requires exact project crate and reserved rights source');
+    if ((!/^crates\/[A-Za-z0-9_-]+$/.test(item.root) && item.root !== 'plugins/tauri-plugin-notes-auth') || item.provenance !== 'project-authored' || item.rights !== 'reserved' || item.rightsSource !== rightsSource) throw Error('First-party requires exact project crate or reviewed auth plugin and reserved rights source');
     retained(files, [item.rightsSource]); roots.push(item.root);
   }
   for (const item of third) {
@@ -86,7 +86,7 @@ export function validatePolicy(manifest, files) {
     if (roots.slice(0, i).some(r => r === roots[i] || under(r, roots[i]) || under(roots[i], r))) throw Error('Overlapping ownership roots');
   }
   for (const path of files.keys()) {
-    if (/^(?:crates|vendor)\//.test(path) && !roots.some(root => under(path, root))) throw Error(`SDK/vendor requires explicit ownership and license: ${path}`);
+    if ((/^(?:crates|vendor)\//.test(path) || under(path, 'plugins/tauri-plugin-notes-auth')) && !roots.some(root => under(path, root))) throw Error(`SDK/vendor/auth plugin requires explicit ownership and license: ${path}`);
   }
   const approved = new Map();
   for (const asset of assets) {

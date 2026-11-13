@@ -72,7 +72,9 @@ external origin or a third-party license:
 ```
 
 This is an explicit reviewed authorship/rights assertion. Only exact crate roots
-are eligible; vendor roots cannot be classified as first party. Overlapping
+and the reviewed `plugins/tauri-plugin-notes-auth` root are eligible; the auth
+plugin uses the same project-authored/reserved declaration and requires explicit
+ownership. Other plugin roots and vendor roots cannot be classified as first party. Overlapping
 ownership roots, absent rights/license sources and empty roots are rejected.
 
 Binary providers additionally require `runtimeAssets` entries, supplied in the

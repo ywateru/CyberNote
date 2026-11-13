@@ -57,6 +57,26 @@ test('project-authored crates require exact first-party roots and reserved proje
   assert.throws(() => readInventory(vendor.manifest, vendor.read), /First-party/);
 });
 
+test('only the reviewed auth plugin accepts reserved first-party ownership, with no sibling or vendor expansion', () => {
+  const c = candidate(), plugin = 'plugins/tauri-plugin-notes-auth';
+  c.add(plugin + '/src/lib.rs', '// project host-only plugin');
+  const declaration = { root: plugin, provenance: 'project-authored', rights: 'reserved', rightsSource: rights };
+  assert.throws(() => readInventory(c.manifest, c.read), /explicit ownership/);
+  c.manifest.firstParty.push(declaration);
+  assert.doesNotThrow(() => readInventory(c.manifest, c.read));
+  for (const root of ['plugins', plugin + '/src', plugin + '-other', 'plugins/other', 'vendor/tauri-plugin-notes-auth']) {
+    const bad = candidate(); bad.add(root + '/lib.rs', '// fixture');
+    bad.manifest.firstParty.push({ ...declaration, root });
+    assert.throws(() => readInventory(bad.manifest, bad.read), /First-party/);
+  }
+  for (const patch of [{ provenance: 'external' }, { rights: 'MIT' }, { rightsSource: 'LICENSE' }]) {
+    const manifest = structuredClone(c.manifest); Object.assign(manifest.firstParty[0], patch);
+    assert.throws(() => readInventory(manifest, c.read), /First-party/);
+  }
+  const duplicate = structuredClone(c.manifest); duplicate.firstParty.push(declaration);
+  assert.throws(() => readInventory(duplicate, c.read), /Overlapping/);
+});
+
 test('runtime exception binds actual bytes, path, source metadata and retained licenses, with no wildcard JNI exemption', () => {
   const good = runtimeCandidate();
   assert.doesNotThrow(() => readInventory(good.manifest, good.read));
