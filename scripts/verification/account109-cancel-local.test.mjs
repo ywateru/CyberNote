@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,symlink,rm,realpath,writeFile,lstat} from 'node:fs/promises';
 import {join} from 'node:path';
-import {options,preflight,SOURCE,BINARY_SHA,surfacePolicy,authorizationSurface,beginAuthorization,fixture,strictSignedOut,assertDocument,actionShown,stableSignedOut,assertNatural,exercise,finish} from './account109-cancel-local.mjs';
+import {runInNewContext} from 'node:vm';
+import {options,preflight,SOURCE,BINARY_SHA,surfacePolicy,authorizationSurface,beginAuthorization,fixture,strictSignedOut,assertDocument,actionShown,ACTION_PROJECTION,stableSignedOut,assertNatural,exercise,finish} from './account109-cancel-local.mjs';
 import {boundedPoll} from './account109-desktop-recovery.mjs';
 
 const id='272b0013-7b6a-4729-88f0-a10e2fd48e43';
@@ -58,6 +59,25 @@ test('UI actions require exact surface, ordered labels/count, target visibility 
   }
   assert.equal(actionShown({},'openLoginInBrowser','browser'),false);
   assert.throws(()=>actionShown({},'signOut'));
+});
+test('fixed DOM projection reads effective fieldset-disabled radios rather than their own disabled attributes',()=>{
+  // Device-free DOM API fixture: input.disabled is false while :disabled reflects
+  // the disabled ancestor fieldset. Execute the same fixed expression as native.
+  for(const surface of ['embedded','browser']){
+    const fieldset={disabled:true},seen=[];
+    const radios=['embedded','browser'].map(value=>({value,disabled:false,matches(selector){assert.equal(selector,':disabled');seen.push(value);return this.disabled||fieldset.disabled;}}));
+    const labels=surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录'];
+    const buttons=labels.map(textContent=>({textContent,disabled:false,getClientRects:()=>[{}]}));
+    const panel={dataset:{accountState:'authorizing',accountAuthorizationSurface:surface},querySelectorAll(selector){if(selector==='input[name="account-login-surface"]')return radios;assert.equal(selector,'.account-group[aria-label="CyberNote 账户"] .account-actions button');return buttons;}};
+    const document={querySelector(selector){assert.equal(selector,'.account-settings');return panel;}};
+    const project=kind=>structuredClone(runInNewContext(ACTION_PROJECTION,{document,arg:kind}));
+    assert.deepEqual(radios.map(r=>r.disabled),[false,false]);assert(actionShown(project('cancel'),'cancel',surface));assert.deepEqual(seen,['embedded','browser']);
+    if(surface==='embedded')assert(actionShown(project('openLoginInBrowser'),'openLoginInBrowser',surface));
+    fieldset.disabled=false;assert.equal(actionShown(project('cancel'),'cancel',surface),false);
+    panel.dataset={accountState:'signedOut'};buttons.splice(0,buttons.length,...['登录','创建账户'].map(textContent=>({textContent,disabled:false,getClientRects:()=>[{}]})));
+    assert(actionShown(project('signIn'),'signIn',surface));
+    radios[0].disabled=true;assert.equal(actionShown(project('signIn'),'signIn',surface),false);
+  }
 });
 test('postcancel window uses repeated status plus full body samples and checks the 3s boundary',async()=>{
   const c=clock();let statuses=0,bodies=0;

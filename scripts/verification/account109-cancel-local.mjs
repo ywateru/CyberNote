@@ -85,6 +85,8 @@ export function actionShown(p,kind,surface='browser'){
   const labels=kind==='signIn'?['登录','创建账户']:surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录'];
   return p.state===(kind==='signIn'?'signedOut':'authorizing')&&p.authorizationSurface===(kind==='signIn'?undefined:surface)&&p.count===labels.length&&JSON.stringify(p.labels)===JSON.stringify(labels)&&p.label===(kind==='signIn'?'登录':kind==='cancel'?'取消登录':'在浏览器中继续')&&p.enabled===true&&p.visible===true&&JSON.stringify(p.radioValues)===JSON.stringify(['embedded','browser'])&&JSON.stringify(p.radioDisabled)===JSON.stringify([kind!=='signIn',kind!=='signIn']);
 }
+// Fixed read-only projection; :disabled includes disabled ancestor fieldsets.
+export const ACTION_PROJECTION="(()=>{const p=document.querySelector('.account-settings'),bs=Array.from(p?.querySelectorAll('.account-group[aria-label=\"CyberNote 账户\"] .account-actions button')||[]),b=bs[arg==='openLoginInBrowser'?1:0],rs=Array.from(p?.querySelectorAll('input[name=\"account-login-surface\"]')||[]);return {state:p?.dataset.accountState,authorizationSurface:p?.dataset.accountAuthorizationSurface,count:bs.length,labels:bs.map(b=>b.textContent),label:b?.textContent,enabled:!!b&&!b.disabled,visible:!!b&&b.getClientRects().length>0,radioValues:rs.map(r=>r.value),radioDisabled:rs.map(r=>r.matches(':disabled'))};})()";
 export async function exercise({open,record,checkpoint,poll=boundedPoll,clock,surface='browser',continueInBrowser=false}){
   const initial=fixture(false),edited=fixture(true),first=await open();
   await checkpoint('localSave');strictSignedOut(await first.status());
@@ -146,7 +148,7 @@ export async function run(argv=process.argv.slice(2)){
           assert(['signIn','cancel','openLoginInBrowser'].includes(kind));
           await boundedPoll('visible '+kind+' action',async()=>{
             const s=await peer.status();if(kind==='signIn')strictSignedOut(s);else{disconnected(s);assert.equal(s.state,'authorizing');assert.equal(s.authorizationSurface,surface);}
-            const p=await step(app,'action.inspect',()=>app.evaluate("(()=>{const p=document.querySelector('.account-settings'),bs=Array.from(p?.querySelectorAll('.account-group[aria-label=\"CyberNote 账户\"] .account-actions button')||[]),b=bs[arg==='openLoginInBrowser'?1:0],rs=Array.from(p?.querySelectorAll('input[name=\"account-login-surface\"]')||[]);return {state:p?.dataset.accountState,authorizationSurface:p?.dataset.accountAuthorizationSurface,count:bs.length,labels:bs.map(b=>b.textContent),label:b?.textContent,enabled:!!b&&!b.disabled,visible:!!b&&b.getClientRects().length>0,radioValues:rs.map(r=>r.value),radioDisabled:rs.map(r=>r.disabled)};})()",kind));
+            const p=await step(app,'action.inspect',()=>app.evaluate(ACTION_PROJECTION,kind));
             return actionShown(p,kind,surface);
           },5000);
         },
