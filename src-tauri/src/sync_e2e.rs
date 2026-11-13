@@ -126,7 +126,9 @@ fn default_timeout() -> u64 {
 #[serde(tag = "op", rename_all = "camelCase", deny_unknown_fields)]
 enum Action {
     Ready,
-    StartupDiagnostic,
+    // An empty struct variant makes serde reject unknown fields; a tagged
+    // unit variant would silently ignore them even with deny_unknown_fields.
+    StartupDiagnostic {},
     Execute {
         command: String,
         #[serde(default = "empty_object")]
@@ -151,7 +153,7 @@ fn empty_object() -> Value {
 fn allowed_before_ready(action: &Action) -> bool {
     matches!(
         action,
-        Action::Ready | Action::StartupDiagnostic | Action::Shutdown
+        Action::Ready | Action::StartupDiagnostic {} | Action::Shutdown
     )
 }
 // Called only in the validated, explicit left/right slot branch below. Each
@@ -426,7 +428,7 @@ fn dispatch_once(
 ) -> Value {
     let id = json!(request.id);
     let body = match &request.action {
-        Action::StartupDiagnostic => STARTUP_DIAGNOSTIC.into(),
+        Action::StartupDiagnostic {} => STARTUP_DIAGNOSTIC.into(),
         Action::Ready => format!(
             "await report('debugRegistration');\n\
              while (!window.__NOTES_DEBUG__) {{ if (Date.now() >= deadline) throw {{code:'TIMEOUT'}}; await new Promise(r=>setTimeout(r,25)); }}\n\
@@ -570,7 +572,7 @@ fn dispatch_once(
             })
     };
     app.unlisten(listener);
-    if matches!(request.action, Action::StartupDiagnostic) && result.get("ok") == Some(&json!(true)) {
+    if matches!(request.action, Action::StartupDiagnostic {}) && result.get("ok") == Some(&json!(true)) {
         result["value"]["nativeWindow"] = json!({
             "visible":window.is_visible().ok(), "minimized":window.is_minimized().ok(),
             "focused":window.is_focused().ok()
@@ -627,6 +629,9 @@ mod tests {
             json!({"args":{}}),
             json!({"command":"app.state"}),
             json!({"options":{}}),
+            json!({"expression":null}),
+            json!({"timeoutMs":1}),
+            json!({"unknown":null}),
         ] {
             let mut value = json!({"id":1,"action":{"op":"startupDiagnostic"}});
             value["action"]
