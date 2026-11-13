@@ -1,0 +1,261 @@
+{
+  "status": "prepared-draft-not-final-accepted",
+  "preparedAtUtc": "2026-11-13T04:13:13.019957+00:00",
+  "sourceRef": "3192943d8deef802629616e91e95190c37ab0b6b",
+  "sourceHeadObserved": "f57098091541dc99523e82be2cb4959cc500ffc4",
+  "nativeReviewedCommit": "be037f3cc542f53fba06d604f932743542e29bc4",
+  "priorSourceRef": "2b0bd7e211352cda6c03f4ba7707c78453e4c36a",
+  "priorTarget": "/private/tmp/account109-source-2b0bd7e2-prepared-20261113-01",
+  "target": "/private/tmp/account109-source-3192943d-prepared-20261113-01",
+  "commands": {
+    "refresh-pre-pin-dryrun": {
+      "command": [
+        "node",
+        "scripts/publish/manifest.mjs",
+        "--ref",
+        "3f64f2baf38615ba26041622d3cafab559ba7b70",
+        "--extension",
+        "/Users/water/work/2026/Apple-Notes-Clone/docs/verification/account109/publish/recovery-319-prepared01/native-extension.json"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "exitCode": 0,
+      "elapsedSeconds": 6.595
+    },
+    "refresh-pinned-dryrun": {
+      "command": [
+        "node",
+        "scripts/publish/manifest.mjs",
+        "--ref",
+        "3192943d8deef802629616e91e95190c37ab0b6b"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "exitCode": 0,
+      "elapsedSeconds": 6.404
+    },
+    "export-dryrun": {
+      "command": [
+        "node",
+        "scripts/publish/export.mjs",
+        "--ref",
+        "3192943d8deef802629616e91e95190c37ab0b6b"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "exitCode": 0,
+      "elapsedSeconds": 6.529
+    },
+    "export": {
+      "command": [
+        "node",
+        "scripts/publish/export.mjs",
+        "--ref",
+        "3192943d8deef802629616e91e95190c37ab0b6b",
+        "--target",
+        "/private/tmp/account109-source-3192943d-prepared-20261113-01",
+        "--expected-target",
+        "/private/tmp/account109-source-3192943d-prepared-20261113-01",
+        "--apply",
+        "--init"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "exitCode": 0,
+      "elapsedSeconds": 8.836
+    },
+    "new-root": {
+      "command": [
+        "node",
+        "scripts/publish/verify.mjs",
+        "--new-root"
+      ],
+      "cwd": "/private/tmp/account109-source-3192943d-prepared-20261113-01",
+      "exitCode": 0,
+      "elapsedSeconds": 6.709
+    },
+    "versions": {
+      "command": [
+        "node",
+        "scripts/versions.mjs",
+        "--check"
+      ],
+      "cwd": "/private/tmp/account109-source-3192943d-prepared-20261113-01",
+      "exitCode": 0,
+      "elapsedSeconds": 0.047
+    },
+    "publish-tests": {
+      "command": [
+        "node",
+        "--test",
+        "scripts/publish/build-info.test.mjs",
+        "scripts/publish/export.test.mjs",
+        "scripts/publish/history.test.mjs",
+        "scripts/publish/package-identity.test.mjs",
+        "scripts/publish/policy.test.mjs",
+        "scripts/publish/stage-packages.test.mjs"
+      ],
+      "cwd": "/private/tmp/account109-source-3192943d-prepared-20261113-01",
+      "exitCode": 0,
+      "elapsedSeconds": 1.222
+    },
+    "source-identity": {
+      "command": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import {sourceIdentity} from './scripts/build-info.mjs'; console.log(JSON.stringify(sourceIdentity(process.cwd(),{metadataPath:null})));"
+      ],
+      "cwd": "/private/tmp/account109-source-3192943d-prepared-20261113-01",
+      "exitCode": 0,
+      "elapsedSeconds": 0.197
+    }
+  },
+  "export": {
+    "dryRun": false,
+    "sourceCommit": "3192943d8deef802629616e91e95190c37ab0b6b",
+    "fileCount": 1771,
+    "bytes": 95171916,
+    "removedPackageScripts": [
+      "test:schema",
+      "test:editor",
+      "test:access",
+      "test:secure-id",
+      "test:desktop-appearance",
+      "test:native-toolbar",
+      "debug",
+      "test:debug",
+      "test:native-appearance",
+      "test:table-controls",
+      "test:button-feedback",
+      "test:startup",
+      "test:attachment-gallery",
+      "test:recording-refresh",
+      "test:mobile-editor",
+      "test:note-move-menu",
+      "test:attachment-files",
+      "test:attachment-mime",
+      "test:attachment-clipboard-native",
+      "test:menu-lifetimes",
+      "test:native-menus",
+      "test:native-menu-client",
+      "test:drawing",
+      "release",
+      "test:build-info"
+    ],
+    "initializedNewHistory": true
+  },
+  "newRootVerification": {
+    "ok": true,
+    "files": 1771,
+    "sourceRevision": "d29e4abd94591a9b197ad80beac8fe899148cb30",
+    "historyChecked": true,
+    "history": {
+      "rootCommit": "d29e4abd94591a9b197ad80beac8fe899148cb30",
+      "reachableCommits": 1,
+      "refs": 1,
+      "remotes": 0,
+      "retainedHistoricalObjects": false
+    }
+  },
+  "sourceIdentity": {
+    "sourceRevision": "d29e4abd94591a9b197ad80beac8fe899148cb30",
+    "sourceFingerprint": "525db23d515cf34793b1a3602d30d8db6326b6d8c0c87f9eb0edcab5cb7c3844",
+    "sourceDirty": false,
+    "inputCount": 1620
+  },
+  "manifestPinsChanged": [
+    "src-tauri/src/lib.rs",
+    "src-tauri/src/sync_headless.rs"
+  ],
+  "nativeSourceHashes": {
+    "src-tauri/src/lib.rs": "7721259e60a410d03c2065805b265480eee2556555afdc28a4f6c0723e4d995e",
+    "src-tauri/src/sync_headless.rs": "56361c27f32b74b44f13de4a3fa1fb6e543fca46ec6837c8796c5c53c49975b2"
+  },
+  "prePinRefresh": {
+    "dryRun": true,
+    "sourceCommit": "3f64f2baf38615ba26041622d3cafab559ba7b70",
+    "changes": [
+      {
+        "path": "src-tauri/src/lib.rs",
+        "changed": true
+      },
+      {
+        "path": "src-tauri/src/sync_headless.rs",
+        "added": true
+      }
+    ]
+  },
+  "pinnedRefresh": {
+    "dryRun": true,
+    "sourceCommit": "3192943d8deef802629616e91e95190c37ab0b6b",
+    "changes": []
+  },
+  "initialSeal": {
+    "sha256": "3138f4505021f559da2cc15be9bdc4b69a4c1d19d96eb4fc69a42cc873fdd750",
+    "files": 3612,
+    "bytes": 142754816,
+    "definition": "SHA256 of canonical sorted JSON mapping relative regular-file paths to mode, byte length and SHA256; .git included unless payload."
+  },
+  "finalSeal": {
+    "sha256": "3138f4505021f559da2cc15be9bdc4b69a4c1d19d96eb4fc69a42cc873fdd750",
+    "files": 3612,
+    "bytes": 142754816,
+    "definition": "SHA256 of canonical sorted JSON mapping relative regular-file paths to mode, byte length and SHA256; .git included unless payload."
+  },
+  "sourcePayloadSeal": {
+    "sha256": "ecb50ce3fc0df8b86d499a418903a8d0b0e5a82b0b413063a15af71fe5d91440",
+    "files": 1771,
+    "bytes": 95171916,
+    "definition": "SHA256 of canonical sorted JSON mapping relative regular-file paths to mode, byte length and SHA256; .git included unless payload."
+  },
+  "priorRootSealBefore": {
+    "sha256": "21e335b6d40f594e9674278a8942aedea987a109ebd2108a206c863552003de4",
+    "files": 3610,
+    "bytes": 142720599,
+    "definition": "SHA256 of canonical sorted JSON mapping relative regular-file paths to mode, byte length and SHA256; .git included unless payload."
+  },
+  "priorRootSealAfter": {
+    "sha256": "21e335b6d40f594e9674278a8942aedea987a109ebd2108a206c863552003de4",
+    "files": 3610,
+    "bytes": 142720599,
+    "definition": "SHA256 of canonical sorted JSON mapping relative regular-file paths to mode, byte length and SHA256; .git included unless payload."
+  },
+  "candidateUnchangedAfterInitialization": true,
+  "oldCandidateUnchanged": true,
+  "changedExportPaths": [
+    "scripts/publish/manifest.json",
+    "src-tauri/src/lib.rs",
+    "src-tauri/src/sync_headless.rs"
+  ],
+  "sourceManifestSha256": "09a7a7dd63a56a8fda32ad169076f48a54850b8db66d5179d74f495d5bac680d",
+  "exportManifestSha256": "6d0ee68f9616ab67063695846a619fa4b41c282b4ac6cb4d3d7c8521dc35663b",
+  "policyDeclarationsUnchanged": true,
+  "acceptanceBoundary": {
+    "finalAcceptance": false,
+    "phoneConnectivity": "Parent reports blocked; live three-device acceptance pending",
+    "runtimeAccessed": false,
+    "publicationActionsOrExternalWrites": false
+  },
+  "gitReadAndMaintenanceControls": {
+    "GIT_CONFIG_COUNT": "2",
+    "GIT_CONFIG_KEY_0": "gc.auto",
+    "GIT_CONFIG_VALUE_0": "0",
+    "GIT_CONFIG_KEY_1": "maintenance.auto",
+    "GIT_CONFIG_VALUE_1": "false",
+    "GIT_OPTIONAL_LOCKS": "0",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "publishTests": {
+    "tests": 19,
+    "pass": 19,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "executedExportToolHashes": {
+    "scripts/publish/export.mjs": "c661e6fccc5b977079b450b30a0e63266c665f7a3a9100345e09b4743eb404cd",
+    "scripts/publish/manifest.mjs": "408b4dbd552e18d3519c9f7c01a79d0a588c83f42d209b8f9de16280b81dfbc3",
+    "scripts/publish/policy.mjs": "8d21a8575c6d0eec0dc680571adfdfb1a453bd97bdc4551bb953284455acf8e1",
+    "scripts/publish/history.mjs": "9921ec46cf1ac32f8a6e1b1a98016f75b14dce69b83f09b14eecef7586630e98",
+    "scripts/publish/verify.mjs": "fa0ed4ca12d62f33909cdfaa47903f05d0aa02d5244fa6b72b409bd9ab80407b",
+    "scripts/publish/package-transform.mjs": "6f1e42c7ec720a5a0de618687d29d69b74733be874754dcb2db3e0c61556950b"
+  }
+}

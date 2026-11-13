@@ -1,0 +1,639 @@
+{
+  "schema": 1,
+  "kind": "account109-preserved-full02-headless-recovery",
+  "status": "pass",
+  "phase": "logout",
+  "startedAt": "2026-11-13T04:12:00.735Z",
+  "checks": [
+    {
+      "name": "two exact full branch baselines sealed read-only before any process launch",
+      "status": "pass"
+    },
+    {
+      "name": "exact existing conflict keep-all preserves both complete branches and original PNG/bin on both peers",
+      "status": "pass"
+    },
+    {
+      "name": "real sign-out stops new data in both directions before/after A restart while all local bodies, local edit and raw attachments survive",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "kind": "resolved-complete-branch",
+      "device": "a",
+      "noteId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+      "existingHeadDigest": "817fdfea5592daf15d3d5c684deb631f990e3a7fb89f2281948da73103c14a21",
+      "canonicalPayloadSha256": "0eab1059eeae3d4ecac891ee7d3bc3f4773ec4f34535e985d0ef874990e4e991",
+      "attachments": [
+        {
+          "id": "7ec5ee38-2ed0-44f0-9c83-b80a131fa589",
+          "noteId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+          "name": "account109.bin",
+          "size": 4096,
+          "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+        },
+        {
+          "id": "b6d5c5f8-4d6d-4e95-8ac5-52cc476f434b",
+          "noteId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+          "name": "account109.png",
+          "size": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        }
+      ],
+      "productionReadAndStoredFile": true
+    },
+    {
+      "kind": "resolved-complete-branch",
+      "device": "a",
+      "noteId": "73a8425e-36cd-4e83-832b-221762c30c34",
+      "existingHeadDigest": "e4af4b91b084c41b726250a0d8bdfda969a640beecbd0f8d40740b4ef63f67cd",
+      "canonicalPayloadSha256": "5e5ee2b492f04d170468fec70edc1031a70a0e3c0da4bafd9516d29fdcf87c21",
+      "attachments": [
+        {
+          "id": "aeb7cd72-110c-4d27-a57a-77c5ce9963e3",
+          "noteId": "73a8425e-36cd-4e83-832b-221762c30c34",
+          "name": "account109.png",
+          "size": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "id": "d6f7386d-316d-4d37-8f20-4dfc5708de88",
+          "noteId": "73a8425e-36cd-4e83-832b-221762c30c34",
+          "name": "account109.bin",
+          "size": 4096,
+          "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+        }
+      ],
+      "productionReadAndStoredFile": true
+    },
+    {
+      "kind": "resolved-complete-branch",
+      "device": "b",
+      "noteId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+      "existingHeadDigest": "817fdfea5592daf15d3d5c684deb631f990e3a7fb89f2281948da73103c14a21",
+      "canonicalPayloadSha256": "0eab1059eeae3d4ecac891ee7d3bc3f4773ec4f34535e985d0ef874990e4e991",
+      "attachments": [
+        {
+          "id": "7ec5ee38-2ed0-44f0-9c83-b80a131fa589",
+          "noteId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+          "name": "account109.bin",
+          "size": 4096,
+          "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+        },
+        {
+          "id": "b6d5c5f8-4d6d-4e95-8ac5-52cc476f434b",
+          "noteId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+          "name": "account109.png",
+          "size": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        }
+      ],
+      "productionReadAndStoredFile": true
+    },
+    {
+      "kind": "resolved-complete-branch",
+      "device": "b",
+      "noteId": "73a8425e-36cd-4e83-832b-221762c30c34",
+      "existingHeadDigest": "e4af4b91b084c41b726250a0d8bdfda969a640beecbd0f8d40740b4ef63f67cd",
+      "canonicalPayloadSha256": "5e5ee2b492f04d170468fec70edc1031a70a0e3c0da4bafd9516d29fdcf87c21",
+      "attachments": [
+        {
+          "id": "aeb7cd72-110c-4d27-a57a-77c5ce9963e3",
+          "noteId": "73a8425e-36cd-4e83-832b-221762c30c34",
+          "name": "account109.png",
+          "size": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "id": "d6f7386d-316d-4d37-8f20-4dfc5708de88",
+          "noteId": "73a8425e-36cd-4e83-832b-221762c30c34",
+          "name": "account109.bin",
+          "size": 4096,
+          "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+        }
+      ],
+      "productionReadAndStoredFile": true
+    },
+    {
+      "kind": "two-way-logout-exclusion",
+      "label": "before restart",
+      "samples": 27,
+      "observedMs": 3005.8665000000037,
+      "localNoteId": "32ed2d3e-de5d-426c-8339-bf815d3b9ea3",
+      "remoteNoteIds": [
+        "fe392b95-1c54-454e-bf49-43d3ba43d741"
+      ],
+      "allLocalBodiesAndRawAttachmentsPreserved": true,
+      "localEditPreservedAndAbsentRemotely": true
+    },
+    {
+      "kind": "two-way-logout-exclusion",
+      "label": "after restart",
+      "samples": 29,
+      "observedMs": 3009.1470830000035,
+      "localNoteId": "32ed2d3e-de5d-426c-8339-bf815d3b9ea3",
+      "remoteNoteIds": [
+        "fe392b95-1c54-454e-bf49-43d3ba43d741",
+        "6ef4b4b9-c366-4b2a-8450-25c2d1755739"
+      ],
+      "allLocalBodiesAndRawAttachmentsPreserved": true,
+      "localEditPreservedAndAbsentRemotely": true
+    }
+  ],
+  "scenarios": {
+    "conflict": "pass",
+    "logout": "pass"
+  },
+  "prior": {
+    "path": "/private/tmp/account109-desktop-real-39c1420d-full02",
+    "resultSha256": "d8e092bff3e1b82781594f03bb53eca4ae575a802be88c17ea23f9bd6ca067f2",
+    "failure": {
+      "phase": "concurrent-offline",
+      "code": "NATIVE_TIMEOUT"
+    },
+    "passedChecks": 10
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-be037f3c-native-headless/notes-clone",
+    "sha256": "f5b64d0dbaa7001b2e00ee94f40fcdc69f6da7f0584f44dc6c42cf3bc2405add",
+    "sourceRevision": "be037f3cc542f53fba06d604f932743542e29bc4",
+    "sourceAuthority": "caller-declared; independent build receipt review required",
+    "differsFromPrior": true,
+    "priorSha256": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2"
+  },
+  "nativeBoundary": {
+    "transport": "native-session-stdio",
+    "participant": "account109-native-harness",
+    "windows": 0,
+    "fixedOperations": true
+  },
+  "tools": {
+    "account109-headless-driver.mjs": "ce9fedd92d3dfce7ed96d67896402ef1d6cec6b43bf056d112b03241f9b00647",
+    "account109-headless-recovery.mjs": "6e1511ff3d90d159b5335035bb858c352f794643ed93651e43f5fc9330aa7a74",
+    "account109-desktop-recovery.mjs": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672",
+    "account109-desktop-helpers.mjs": "67a2651b92d5311c6a0382a752b9e13aa408c599870ceea9ddb57fb3ff3bb943"
+  },
+  "limitations": [
+    "Preserved full02 continuation only; the ten prior passed phases are not rerun or reclassified. Historical eval/startup failure causes remain unproven.",
+    "Native harness participant replies to real Session coordination without any WebView, renderer, editor draft or GUI confirmation. This is native function/account transport coverage, not IPC-origin or UI acceptance.",
+    "Only existing original grants restore through production owners. No sign-in, grant copies, tokens, callbacks, URLs, settings or manual pairing are supplied.",
+    "createPlainNote uses production Session save operations with bounded synthetic title/text; it does not exercise the frontend editor.",
+    "Logout exclusion is sampled for 3 seconds before/after actual A process restart. Original read-only DB snapshots/full synthetic branch payloads are private evidence, not sanitized repository exports.",
+    "Updated executable hash and caller-declared source revision differ from the prior WebView candidate; source/build linkage requires the independent build receipt."
+  ],
+  "baseline": {
+    "entityId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+    "sha256": "689668c1c4aae1656128f93cecd36fd20b61538e3f8c018df6dde77f0294752f",
+    "heads": [
+      {
+        "digest": "817fdfea5592daf15d3d5c684deb631f990e3a7fb89f2281948da73103c14a21",
+        "canonicalPayloadSha256": "0eab1059eeae3d4ecac891ee7d3bc3f4773ec4f34535e985d0ef874990e4e991"
+      },
+      {
+        "digest": "e4af4b91b084c41b726250a0d8bdfda969a640beecbd0f8d40740b4ef63f67cd",
+        "canonicalPayloadSha256": "5e5ee2b492f04d170468fec70edc1031a70a0e3c0da4bafd9516d29fdcf87c21"
+      }
+    ],
+    "originalFiles": [
+      {
+        "notes.sqlite3": "0b9a578d127bd6a9d4638f58bbef86a7780529ef617e218bc35e74bdfc7ed796",
+        "notes.sqlite3-wal": "35ddf306b9e921341c8b32e007ae5d2e8331f96349c749c4ca3bac41a53028bd",
+        "notes.sqlite3-shm": "3579b0e6158a79e2e10f57fb30cebd6592068177a8aee56dfa5b9d45d4a47f15"
+      },
+      {
+        "notes.sqlite3": "cdbe34545483db7e05da35acd2fdaec2ea14663e8dadc152487b594cbd6875f4",
+        "notes.sqlite3-wal": "c6933fe5fa85260361605dc8e18c409a67516da3d3bb0044d74890e210eca1df",
+        "notes.sqlite3-shm": "8d0cf42d1977ad38417f9ead57b60624ad1497b7e87ab753a760e227443e1fcc"
+      }
+    ],
+    "mode": "ro",
+    "queryOnly": true,
+    "originalFilesUnchanged": true
+  },
+  "lastOperation": {
+    "sequence": 461,
+    "stage": "logout",
+    "device": "b",
+    "operation": "close",
+    "event": "after",
+    "at": "2026-11-13T04:13:31.866Z"
+  },
+  "statusTransitions": [
+    {
+      "device": "b",
+      "phase": "existing-conflict",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 1
+    },
+    {
+      "device": "a",
+      "phase": "existing-conflict",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 1
+    },
+    {
+      "device": "a",
+      "phase": "existing-conflict",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 1
+    },
+    {
+      "device": "b",
+      "phase": "existing-conflict",
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 1
+    },
+    {
+      "device": "a",
+      "phase": "existing-conflict",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": false,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 1
+    },
+    {
+      "device": "b",
+      "phase": "existing-conflict",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 1
+    },
+    {
+      "device": "a",
+      "phase": "existing-conflict",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        },
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 1
+    },
+    {
+      "device": "b",
+      "phase": "existing-conflict",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 1
+    },
+    {
+      "device": "a",
+      "phase": "existing-conflict",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        },
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "existing-conflict",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "a",
+      "phase": "logout",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "logout",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        },
+        {
+          "online": true,
+          "current": false,
+          "connected": true
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "logout",
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "identityCheck": "expectedSyntheticUser",
+      "devices": [
+        {
+          "online": true,
+          "current": true,
+          "connected": false
+        }
+      ],
+      "pendingCount": 0,
+      "conflictCount": 0
+    }
+  ],
+  "resolve": {
+    "entityId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+    "chosenExistingDigest": "817fdfea5592daf15d3d5c684deb631f990e3a7fb89f2281948da73103c14a21",
+    "keepAll": true,
+    "bypassesGuiConfirmation": true
+  },
+  "preLogout": {
+    "notes": [
+      {
+        "id": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+        "fullBodySha256": "0e772a417f7a63db4de6043858382d4ad777f7caa430298fc92a47d304606053"
+      },
+      {
+        "id": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+        "fullBodySha256": "e703f1c0de0216fa2ff35008c83b24130d70d58e8d462a94cb32e1176d78b986"
+      },
+      {
+        "id": "73a8425e-36cd-4e83-832b-221762c30c34",
+        "fullBodySha256": "52d0e523d722f37d31c609f3ca43c3bb1f0745cb522244d14120cff416539bad"
+      },
+      {
+        "id": "78f94bed-6826-43da-8dec-beabed4413ee",
+        "fullBodySha256": "5261cce733dd1c0ec7f277bca3b5cd34e2b3f9ef7aa610a49aa0ffbb49eca7d3"
+      },
+      {
+        "id": "9413691d-88b2-4954-aad5-0e1818450357",
+        "fullBodySha256": "8d5d6eaf98743f9a5a0ef75741669ea36698bf3e3d1eee42f32f408e69d3c414"
+      },
+      {
+        "id": "951103e5-8f47-41f5-9af8-ab5022a782da",
+        "fullBodySha256": "88196eea8895dfadfabed90896824abb4fe9de2f79c6b3793410ffba973e4793"
+      },
+      {
+        "id": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+        "fullBodySha256": "32ca63fd76993be8e8057623bbbf8ece853190f95934a461d606d84129bf119c"
+      }
+    ],
+    "attachments": [
+      {
+        "id": "33262a94-09b2-4649-b410-c48378b8d5ff",
+        "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+        "size": 68,
+        "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+      },
+      {
+        "id": "5f016f3d-4d82-43ab-9f77-16e3b8a34210",
+        "noteId": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+        "size": 4096,
+        "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+      },
+      {
+        "id": "ca9a20aa-7626-4274-94fe-f1769bfc82f8",
+        "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+        "size": 68,
+        "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+      },
+      {
+        "id": "fbb02c7b-0075-4cf8-a899-ab39a8179c84",
+        "noteId": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+        "size": 4096,
+        "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+      },
+      {
+        "id": "2d9f0177-696b-42ae-a748-4feb4338a953",
+        "noteId": "9413691d-88b2-4954-aad5-0e1818450357",
+        "size": 68,
+        "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+      },
+      {
+        "id": "3dc001ef-80bc-4d1c-a232-d7d8ff002314",
+        "noteId": "951103e5-8f47-41f5-9af8-ab5022a782da",
+        "size": 68,
+        "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+      },
+      {
+        "id": "439c8c12-5f6f-4695-8a6d-52c0d02c5f22",
+        "noteId": "78f94bed-6826-43da-8dec-beabed4413ee",
+        "size": 4096,
+        "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+      },
+      {
+        "id": "4664b2cc-ab0b-46ad-b742-0c038448a00f",
+        "noteId": "78f94bed-6826-43da-8dec-beabed4413ee",
+        "size": 68,
+        "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+      },
+      {
+        "id": "6f7f2924-c782-4a55-ab00-30f07aa2decc",
+        "noteId": "9413691d-88b2-4954-aad5-0e1818450357",
+        "size": 4096,
+        "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+      },
+      {
+        "id": "7ec5ee38-2ed0-44f0-9c83-b80a131fa589",
+        "noteId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+        "size": 4096,
+        "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+      },
+      {
+        "id": "84f76afd-e5b0-419d-9b95-c7bfda9b3265",
+        "noteId": "951103e5-8f47-41f5-9af8-ab5022a782da",
+        "size": 4096,
+        "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+      },
+      {
+        "id": "b6d5c5f8-4d6d-4e95-8ac5-52cc476f434b",
+        "noteId": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+        "size": 68,
+        "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+      },
+      {
+        "id": "aeb7cd72-110c-4d27-a57a-77c5ce9963e3",
+        "noteId": "73a8425e-36cd-4e83-832b-221762c30c34",
+        "size": 68,
+        "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+      },
+      {
+        "id": "d6f7386d-316d-4d37-8f20-4dfc5708de88",
+        "noteId": "73a8425e-36cd-4e83-832b-221762c30c34",
+        "size": 4096,
+        "sha256": "c8f5d0341d54d951a71b136e6e2afcb14d11ed8489a7ae126a8fee0df6ecf193"
+      }
+    ]
+  },
+  "postLogoutLocalEdit": {
+    "noteId": "32ed2d3e-de5d-426c-8339-bf815d3b9ea3",
+    "fullBodySha256": "8e30ce1b0aec2ef41381f45ae1784fdf53840c33de90d2da2a851e6d352f0a18",
+    "sessionSave": true
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a",
+      "commands": 179,
+      "stderrBytes": 0,
+      "forcedSignals": [],
+      "pid": 93294,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-b",
+      "commands": 207,
+      "stderrBytes": 0,
+      "forcedSignals": [],
+      "pid": 93295,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a",
+      "commands": 75,
+      "stderrBytes": 0,
+      "forcedSignals": [],
+      "pid": 58932,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "finishedAt": "2026-11-13T04:13:31.866Z"
+}

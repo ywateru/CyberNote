@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "kind": "native-only-headless-debug-candidate",
+  "finishedAt": "2026-11-13T04:04:11.321Z",
+  "source": {
+    "sourceRevision": "be037f3cc542f53fba06d604f932743542e29bc4",
+    "sourceFingerprint": "3618b4b1a0ace6cf0e2d333c6362ff8754f106c4a3e2a47ac596cd2bc1f8e61e",
+    "sourceDirty": false,
+    "inputCount": 1653
+  },
+  "sourceInventoryUnchanged": true,
+  "toolchain": {
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: aarch64-apple-darwin\nrelease: 1.97.1\nLLVM version: 22.1.6",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)"
+  },
+  "build": {
+    "command": [
+      "cargo",
+      "build",
+      "--manifest-path",
+      "/private/tmp/cybernote-account109-headless-native/src-tauri/Cargo.toml",
+      "--features",
+      "sync-e2e",
+      "--locked",
+      "--offline"
+    ],
+    "environment": {
+      "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    }
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-be037f3c-native-headless/notes-clone",
+    "sha256": "f5b64d0dbaa7001b2e00ee94f40fcdc69f6da7f0584f44dc6c42cf3bc2405add",
+    "bytes": 203259056,
+    "executable": true
+  },
+  "frontend": "No WebView required; no frontend rebuild or embedded frontend identity asserted",
+  "limitations": [
+    "Build only; disposable zero-window App smoke and real-store continuation remain unexecuted",
+    "No embedded frontend identity asserted; exact source and product input inventory sealed before/after compilation"
+  ]
+}
