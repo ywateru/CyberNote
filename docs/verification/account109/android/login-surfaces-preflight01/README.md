@@ -1,0 +1,11 @@
+# Android login surfaces: pre-upgrade stop
+
+2026-11-13. **STOPPED BEFORE INSTALL OR AUTHORIZATION.** This is a read-only check of the existing isolated `com.local.notesclone.account109` app, not a run of the new `72513d12` candidate.
+
+ADB reported the fixed device accessible, `showing=false` and `inputRestricted=false`. The existing committed `account109-android.mjs` driver launched the owned app under its exclusive lease, bound only its local Tauri page, and read native account status and the workspace through product functions. Native status was `error`, sync disabled, no profile, with an error present. No SignIn, cancel, signOut, network probe, installation, restart, database access or data change was requested.
+
+The first preflight stopped on a full-document comparison with `9263-debug/synthetic-after-restart.json`. No fresh baseline file was written. A second read-only comparison localized the mismatch: exactly the same four note IDs remain, every plainText matches, and three complete document objects match. Note `321e9d6c-d590-437d-8edb-d6ed2feae3fa` has a different document object; the current workspace has one attachment. This does not establish when or why the difference occurred, whether it is related to the attachment, or that data was lost. No new candidate had been installed. The comparison records only IDs, counts and equality booleans; no unknown document or attachment content was archived.
+
+Both driver sessions closed normally. The original error and data were left intact. The existing error state and unexplained document difference prevent treating this as the clean signedOut baseline required by the new smoke. Do not clear a grant, log out, delete a note/attachment or overwrite the historical baseline to force a pass. The new APK remains independently identity-approved but uninstalled here; embedded page visibility, native Back, browser transfer and restart preservation remain unexecuted on it.
+
+`result.json` preserves the initial failed preflight; `comparison.json` records the subsequent limited diagnosis. The original two small files remain under `/private/tmp/account109-login-surfaces-android-preflight01/`. No browser URL, credential, callback, grant or page content was collected.
