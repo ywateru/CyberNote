@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {loginRadioPolicy,loginControls,nativeLoginProjection,nativeLoginControls,loginForeground,PACKAGE} from './account109-android.mjs';
-import {KNOWN_BODIES,APK_SHA,options,cleanSignedOut,snapshot,validateBaseline,bounded,exercise,run} from './account109-android-login-surfaces.mjs';
+import {KNOWN_BODIES,APK_SHA,options,cleanSignedOut,snapshot,validateBaseline,bounded,stableLocal,exercise,run} from './account109-android-login-surfaces.mjs';
 import {hash} from './account109-desktop-recovery.mjs';
 const out=()=>({state:'signedOut',enabled:false,devices:[],conflictCount:0});
 const pending=surface=>({...out(),state:'authorizing',authorizationSurface:surface});
@@ -85,6 +85,32 @@ test('external browser observation accepts exact known package only, never perso
 });
 test('strict signedOut never admits profile, error, surface, enabled, connected or conflicted samples',()=>{
   assert(cleanSignedOut(out()));for(const change of [{profile:{}},{error:{code:'account_network'}},{authorizationSurface:'embedded'},{enabled:true},{devices:[{connected:true}]},{devices:null},{conflictCount:1},{state:'authorizing'}])assert.throws(()=>cleanSignedOut({...out(),...change}));
+});
+function localSampling({statusMs=()=>0,captureMs=()=>0,status=()=>out(),read=()=>({same:true})}={}){
+  let time=0,statuses=0,captures=0;const waits=[];
+  return {waits,counts:()=>({statuses,captures}),args:[{accountStatus:async()=>{time+=statusMs(++statuses);return status(statuses);}},{same:true},{now:()=>time,sleep:async ms=>{assert(ms>=0&&ms<=500);waits.push(ms);time+=ms;},capture:async()=>{time+=captureMs(++captures);return read(captures);}}]};
+}
+test('stable local requires both three samples and three seconds, including slow capture or status',async()=>{
+  const fast=localSampling();assert.deepEqual(await stableLocal(...fast.args),{samples:7,durationMs:3000});assert.deepEqual(fast.waits,Array(6).fill(500));
+  for(const kind of ['captureMs','statusMs']){
+    // Sample two completes at 3700ms: the old duration-only exit asserted with only two samples.
+    const slow=localSampling({[kind]:()=>1600});assert.deepEqual(await stableLocal(...slow.args),{samples:3,durationMs:5300});
+    assert.deepEqual(slow.counts(),{statuses:3,captures:3});assert.deepEqual(slow.waits,[500]);
+    const first=localSampling({[kind]:n=>n===1?3200:0});assert.deepEqual(await stableLocal(...first.args),{samples:3,durationMs:3200});assert.deepEqual(first.waits,[]);
+  }
+});
+test('stable local never accepts a sample at or beyond its fixed deadline or continues expired status reads',async()=>{
+  for(const end of [30000,30001]){
+    const slow=localSampling({captureMs:n=>n<3?1600:end-3700});await assert.rejects(()=>stableLocal(...slow.args),{code:'CONDITION_TIMEOUT:stable local'});assert.deepEqual(slow.counts(),{statuses:3,captures:3});assert.deepEqual(slow.waits,[500]);
+  }
+  const status=localSampling({statusMs:()=>30000});await assert.rejects(()=>stableLocal(...status.args),{code:'CONDITION_TIMEOUT:stable local'});assert.deepEqual(status.counts(),{statuses:1,captures:0});assert.deepEqual(status.waits,[]);
+});
+test('stable local preserves immediate status, data and read failures instead of resampling',async()=>{
+  const failure=Object.assign(Error('synthetic read failure'),{code:'ANDROID_CDP_TIMEOUT'});
+  for(const [change,expected] of [[{status:n=>n===3?{...out(),state:'error',error:{code:'account_network'}}:out()},{code:'ACCOUNT_STATUS_FAILED'}],[{read:n=>n===3?{same:false}:{same:true}},{code:'ERR_ASSERTION'}],[{read:n=>{if(n===3)throw failure;return {same:true};}},e=>e===failure]]){
+    const f=localSampling({captureMs:()=>1600,...change});await assert.rejects(()=>stableLocal(...f.args),expected);
+    assert.equal(f.counts().statuses,3);assert.equal(f.counts().captures,change.status?2:3);assert.deepEqual(f.waits,[500]);
+  }
 });
 function workspaceFixture(){
   const ws={notes:KNOWN_BODIES.map(([id],i)=>({id,document:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'synthetic '+i,marks:[{type:'bold'}]}]}]},plainText:'synthetic '+i,title:'test '+i,pinned:false})),attachments:[]};

@@ -44,7 +44,14 @@ export async function bounded(label,read,ms,{now=Date.now,sleep:wait=sleep}={}){
   const deadline=now()+ms;while(now()<deadline){const result=await read();if(now()>=deadline)break;if(result)return result;await wait(Math.min(500,deadline-now()));}throw Object.assign(Error('Bounded Android observation expired'),{code:'CONDITION_TIMEOUT:'+label});
 }
 export async function stableLocal(peer,baseline,{now=Date.now,sleep:wait=sleep,capture=snapshot}={}){
-  const start=now();let samples=0;for(;;){cleanSignedOut(await peer.accountStatus());assert.deepEqual(await capture(peer),baseline);samples++;if(now()-start>=3000){assert(samples>=3);return {samples,durationMs:now()-start};}await wait(Math.min(500,3000-(now()-start)));}
+  const start=now(),deadline=start+30000;let samples=0;
+  const withinDeadline=()=>{const time=now();if(time>=deadline)throw Object.assign(Error('Bounded Android observation expired'),{code:'CONDITION_TIMEOUT:stable local'});return time;};
+  for(;;){
+    withinDeadline();cleanSignedOut(await peer.accountStatus());withinDeadline();
+    assert.deepEqual(await capture(peer),baseline);samples++;
+    const elapsed=withinDeadline()-start;if(samples>=3&&elapsed>=3000)return {samples,durationMs:elapsed};
+    if(elapsed<3000)await wait(Math.max(0,Math.min(500,3000-elapsed,deadline-now())));
+  }
 }
 export async function exercise({peer,baseline,scenario='embedded-back',reopen,record,clock={},capture=snapshot}){
   assert(['embedded-back','embedded-browser','browser'].includes(scenario));cleanSignedOut(await peer.accountStatus());assert.deepEqual(await capture(peer),baseline);
