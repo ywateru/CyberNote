@@ -36,6 +36,11 @@ export async function waitForAccountStatuses(name,readStatuses,ready,timeoutMs,b
   return statuses;
 }
 export const accountEnabled=s=>s.enabled&&!s.error&&s.state!=='authorizing'&&s.state!=='error';
+export const accountConnected=s=>s.state==='ready'&&s.enabled&&!s.error&&s.devices.some(d=>!d.current&&d.connected);
+export async function waitForConnectedData(name,readStatuses,ready){
+  await waitForAccountStatuses(name+' connection',readStatuses,statuses=>statuses.every(accountConnected),120000);
+  return waitForAccountStatuses(name,readStatuses,ready,60000);
+}
 export function statusObserver(report,getPhase){
   const previous=new Map();
   return (device,status)=>{

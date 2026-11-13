@@ -6,7 +6,7 @@ import {spawn} from 'node:child_process';
 import {mkdir,readFile,writeFile,realpath,lstat} from 'node:fs/promises';
 import {resolve,isAbsolute} from 'node:path';
 import {NativeApp,delay} from './sync108-native-driver.mjs';
-import {safeStatus,requireHealthy,waitForAccountStatuses,accountEnabled,statusObserver,nativeAccount,signedOut,noteBody,attachmentRefs,preserveAttachments,canonicalBody,snapshotNotes,observeLogout,failureCode,finishReport,fail} from './account109-desktop-helpers.mjs';
+import {safeStatus,requireHealthy,waitForAccountStatuses,waitForConnectedData,accountEnabled,statusObserver,nativeAccount,signedOut,noteBody,attachmentRefs,preserveAttachments,canonicalBody,snapshotNotes,observeLogout,failureCode,finishReport,fail} from './account109-desktop-helpers.mjs';
 const args=process.argv.slice(2), opts={};
 for(let i=0;i<args.length;i++){
  assert(['--binary','--output','--resume-from','--account-path'].includes(args[i])&&!opts[args[i]],'Expected --binary ABS_PATH --output FRESH_ABS_DIR [--resume-from OWNED_PRIOR_OUTPUT] [--account-path ui|native]');
@@ -51,6 +51,7 @@ async function workspace(app){return (await app.state()).workspace;}
 async function recordStatus(app,s,{allowFailure=false,pendingNetwork=false}={}){if(observeStatus(app.name,s))await save();if(!allowFailure)requireHealthy(s,{pendingNetwork});return s;}
 async function account(app,options){return recordStatus(app,await nativeAccount(app,'status'),options);}
 const waitAccounts=(name,apps,ready,timeoutMs,begin)=>waitForAccountStatuses(name,()=>Promise.all(apps.map(app=>account(app,{pendingNetwork:true}))),ready,timeoutMs,begin);
+const waitConnectedData=(name,apps,ready)=>waitForConnectedData(name,()=>Promise.all(apps.map(app=>account(app,{pendingNetwork:true}))),ready);
 async function accountAction(app,type,args={},options){
  if(accountPath==='native')return recordStatus(app,await nativeAccount(app,type,args),options);
  await enter(app);await command(app,'account.'+type,args);
@@ -87,7 +88,7 @@ async function originals(app,id){
  }
 }
 async function converge(source,target,id,label){
- const expected=body(await note(source,id));await waitAccounts(label,[source,target],async()=>{const n=await note(target,id);return n&&body(n)===expected;},60000);await command(target,'note.select',{id});await originals(target,id);report.observations.push({kind:'convergence',label,noteId:id,documentAndPlainTextSha256:hash(expected)});check(label+' full document/plainText and raw attachment bytes');
+ const expected=body(await note(source,id));await waitConnectedData(label,[source,target],async()=>{const n=await note(target,id);return n&&body(n)===expected;});await command(target,'note.select',{id});await originals(target,id);report.observations.push({kind:'convergence',label,noteId:id,documentAndPlainTextSha256:hash(expected)});check(label+' full document/plainText and raw attachment bytes');
 }
 async function login(app,name){
  assert.equal((await account(app)).enabled,false);
@@ -143,7 +144,7 @@ try{
  assert.notEqual(branchBodies[0],branchBodies[1]);
  await enable(a);await enable(b);
  for(const app of [a,b]){
-  await waitAccounts('both concurrent heads visible on '+app.name,[app],async()=>{const rows=await conflictRows(app,false);return rows.some(r=>r.variants>=2&&branches.every(n=>r.titles.includes(n.title)));},60000);
+  await waitConnectedData('both concurrent heads visible on '+app.name,[a,b],async()=>{const rows=await conflictRows(app,false);return rows.some(r=>r.variants>=2&&branches.every(n=>r.titles.includes(n.title)));});
   assert((await account(app)).conflictCount>0,'Account metrics must expose the conflict');await leave(app);
  }
  // Use the same production keep-all confirmation as the existing sync runner.
@@ -154,7 +155,7 @@ try{
  for(const app of [a,b]){
   await leave(app);
   let copies;
-  await waitAccounts('keep-all preserves both complete branches on '+app.name,[a,b],async statuses=>{const ws=await workspace(app);copies=branchBodies.map(expected=>ws.notes.find(n=>!n.deletedAt&&canonicalBody(ws,n)===expected));return statuses[app===a?0:1].conflictCount===0&&copies.every(Boolean);},60000);
+  await waitConnectedData('keep-all preserves both complete branches on '+app.name,[a,b],async statuses=>{const ws=await workspace(app);copies=branchBodies.map(expected=>ws.notes.find(n=>!n.deletedAt&&canonicalBody(ws,n)===expected));return statuses[app===a?0:1].conflictCount===0&&copies.every(Boolean);});
   for(const copy of copies){await command(app,'note.select',{id:copy.id});await originals(app,copy.id);}
   if(app===a)resolvedIds.push(...copies.map(n=>n.id));
  }

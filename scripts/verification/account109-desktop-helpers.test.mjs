@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {until} from './sync108-native-driver.mjs';
-import {safeStatus,requireHealthy,waitForAccountStatuses,accountEnabled,statusObserver,nativeAccount,attachmentRefs,preserveAttachments,canonicalBody,snapshotNotes,observeLogout,failureCode,finishReport} from './account109-desktop-helpers.mjs';
+import {safeStatus,requireHealthy,waitForAccountStatuses,waitForConnectedData,accountEnabled,statusObserver,nativeAccount,attachmentRefs,preserveAttachments,canonicalBody,snapshotNotes,observeLogout,failureCode,finishReport} from './account109-desktop-helpers.mjs';
 
 const status=(overrides={})=>({state:'ready',enabled:true,profile:{subject:'private-subject',username:'cybernoteqa20261113a'},devices:[{id:'private-device-id',name:'private-name',online:true,current:true,connected:false}],pendingCount:0,conflictCount:0,...overrides});
 const out=()=>status({state:'signedOut',enabled:false,profile:undefined,devices:[]});
@@ -30,6 +30,24 @@ test('authorization, restore and enable errors fail immediately, including error
 });
 
 const network=()=>status({state:'error',error:{code:'account_network',stage:'coordinatorRegistration'}});
+for(const scenario of ['slow connection then data','connection timeout','data timeout'])test(scenario+' keeps connection and data deadlines separate',async t=>{
+  t.mock.timers.enable({apis:['Date','setTimeout'],now:0});
+  const connectedAt=scenario==='connection timeout'?Infinity:80000,appliedAt=scenario==='slow connection then data'?130000:Infinity;
+  let firstDataPoll,finished=false,rejection;
+  const pending=waitForConnectedData('controlled catch-up',async()=>[status({state:Date.now()<connectedAt?'connecting':'ready',devices:[{current:false,connected:Date.now()>=connectedAt}]})],()=>{
+    firstDataPoll??=Date.now();return Date.now()>=appliedAt;
+  });
+  pending.then(()=>{finished=true;},error=>{rejection=error;finished=true;});
+  // Drive the real until() implementation without wall-clock sleeps or devices.
+  for(let tick=0;tick<=150&&!finished;tick++){await new Promise(resolve=>setImmediate(resolve));if(!finished)t.mock.timers.tick(1000);}
+  assert(finished,'Both phase budgets must remain bounded');
+  if(scenario==='connection timeout'){assert.equal(firstDataPoll,undefined);assert.equal(rejection.code,'CONDITION_TIMEOUT:controlled catch-up connection');assert.equal(Date.now(),120000);}
+  else{
+    assert.equal(firstDataPoll,80000,'No data polling before connection readiness');
+    if(scenario==='data timeout'){assert.equal(rejection.code,'CONDITION_TIMEOUT:controlled catch-up');assert.equal(Date.now(),140000,'Data gets its own 60 seconds after connection');}
+    else{assert.equal(rejection,undefined);assert.equal(Date.now(),130000,'80-second setup plus 50-second data transfer succeeds');}
+  }
+});
 test('bounded polling retains network transitions and waits for ready before evaluating success',async()=>{
   const report={},observe=statusObserver(report,()=> 'automatic-discovery');let polls=0,successCalls=0;
   const result=await waitForAccountStatuses('network recovers',async()=>{
