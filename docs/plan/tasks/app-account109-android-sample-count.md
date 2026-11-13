@@ -1,0 +1,7 @@
+# Android完整数据观察的最少采样数
+
+嵌套WebView修正后，独立native Back续验已观察表单和signedOut，随后stableLocal抛CHECK_FAILED，未完成取消后采样/重启。原报告保留FAIL，有限异常未证明精确失败点。随后只读3次完整current snapshot与deepEqual比较均通过，总3621ms；没有数据写入或新授权。
+
+源码独立存在确定的时序缺陷：stableLocal在duration>=3000时立即assert(samples>=3)，若慢status/capture使前两样本已耗时3秒，会过早失败。既定契约要求至少3样本且至少3秒；修正循环直到两者均满足，超过时间但不足次数时立即补足次数，等待时间不可为负。保持每次healthy signedOut、完整snapshot比较、错误直接抛出、既有CDP有界调用和账户/数据门槛。不能放宽数据比较或吞掉错误，不能无限重采样。
+
+Socrates最小修正及确定性慢读取/慢状态正反例，Cicero独审，父级完整整合后新鲜输出继续真实三条取消用例。只修改执行器，不改产品或构建；不把修正追认为既有CHECK_FAILED的确切原因。原失败/原库/私有快照保留。
