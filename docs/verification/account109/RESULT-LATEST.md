@@ -41,6 +41,8 @@ keep-all 比较完整字段，仅正规化新副本必须改变的身份 ID、�
 
 隔离测试包 `com.local.notesclone.account109` 未覆盖用户原应用。最近一次保数据更新和重启核对保留了四篇合成全文；实际登录终态为 `account_network / coordinator`。同源 Rust/reqwest 探测中六次 coordinator 请求均在约 5 秒连接阶段超时，而 Logto discovery 在 1.093 秒返回 200，见 [原始探测](android/public-native01/README.md)。没有改 DNS、VPN、路由、证书或固定 IP，也未确认精确网络原因。
 
+[12:23–12:25 最新只读复查](android/goal-network-recheck01/README.md)：手机单次 health GET 退出码 7、无 HTTP/TCP/TLS 成功结果，随后主机单次同地址请求为 200。原生桌面访问也仍明确报告 Mac locked。没有新的登录、应用/数据操作或网络设置变更。
+
 真实 ANDROID-01～04 尚未执行。需要测试手机/测试应用能够正常连接 `https://cybernote-sync.vercel.app/healthz`，再完成真实账户授权和三端收敛。A 已因本次退出用例正常退出账户，后续三端需通过真实系统浏览器重新登录 A；最近原生访问曾明确报告 Mac locked，需要可交互桌面条件。不得恢复旧 grant 副本来跳过登录。
 
 WebView IPC、编辑器草稿、物理输入、系统附件 picker、全部登录取消/账户切换/重新登录排列不由无界面结果替代。逐项边界见 [用例](ACCOUNT-TEST-CASES.md)。历史超时原因仍未证明，不能把无界面测试通过描述为 UI 启动故障已修复。
