@@ -12,6 +12,8 @@ import {safeStatus,statusObserver,requireHealthy,waitForAccountStatuses,accountE
 
 export const STORES='/private/tmp/account109-desktop-real-90b8b28b-01';
 export const USERNAME='cybernoteqa20261113a';
+// Preserved isolated-package originals recorded in android/9263-signin01/result.json.
+export const PHONE_ORIGINAL_IDS=['321e9d6c-d590-437d-8edb-d6ed2feae3fa','d6e3b2e2-d799-49e5-91ac-b76e2a7126f4','2113f89b-8183-458a-a97a-27d4b4be9b73','3cfe6fa1-8a3e-4c4c-94d3-4f377562dc3f'];
 const CASES=['auto-discovery','a-rich-media','c-ui-note','b-file','phone-pause-resume'];
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const assertThat=(condition,code)=>{if(!condition)throw fail(code);};
@@ -77,8 +79,29 @@ export async function verifyOriginals(peer,id,files,report){
     report.observations.push({kind:'original-attachment',device:peer.name,noteId:id,name:f.name,bytes:bytes.length,sha256:hash(bytes),ownedDocumentReference:true,productionReadMatches:true,storedFileMatches:!!peer.directory});
   }
 }
-const attachmentSnapshot=ws=>ws.attachments.map(({id,noteId,displayName,mime,size,kind})=>({id,noteId,displayName,mime,size,kind})).sort((a,b)=>a.id.localeCompare(b.id));
+const attachmentSnapshot=ws=>ws.attachments.map(({id,noteId,displayName,mime,size,kind,recordedAt})=>({id,noteId,displayName,mime,size,kind,...(recordedAt===undefined?{}:{recordedAt})})).sort((a,b)=>a.id.localeCompare(b.id));
 export const phoneSnapshot=ws=>({notes:snapshotNotes(ws.notes),attachments:attachmentSnapshot(ws)});
+// This runs immediately after phone account validation, before any desktop is
+// constructed or any sync mutation is issued. Full original bodies stay in memory.
+export async function capturePhoneBaseline(peer,report){
+  const ws=await peer.workspace();
+  for(const id of PHONE_ORIGINAL_IDS){const matches=ws.notes.filter(n=>n.id===id&&!n.deletedAt);assert.equal(matches.length,1,'All four expected original phone notes required');}
+  const baseline=phoneSnapshot(ws);
+  for(const a of baseline.attachments){const owner=ws.notes.find(n=>n.id===a.noteId);assert(owner&&attachmentRefs(owner.document).includes(a.id),'Original phone attachment must have an owned document reference');canonicalBody(ws,owner);const result=await peer.readAttachment(a.id,a.noteId),bytes=Buffer.from(result.data,'base64');assert.equal(bytes.length,a.size);a.sha256=hash(bytes);}
+  report.phoneBaseline={capturedBeforeDesktops:true,requiredNoteIds:[...PHONE_ORIGINAL_IDS],notes:baseline.notes.map(n=>({id:n.id,documentAndPlainTextSha256:hash(n.body)})),attachments:baseline.attachments.map(a=>({...a}))};
+  report.preservation={afterMerge:false,afterCatchUp:false,final:false};
+  return baseline;
+}
+export async function verifyPhoneBaseline(peer,baseline){
+  const ws=await peer.workspace();assertPreserved(ws.notes,baseline.notes);
+  const current=attachmentSnapshot(ws);
+  for(const original of baseline.attachments){
+    const {sha256,...expected}=original,matches=current.filter(a=>a.id===original.id);assert.equal(matches.length,1,'Original phone attachment row retained');assert.deepEqual(matches[0],expected,'Original phone ownership metadata retained');
+    const owner=ws.notes.find(n=>n.id===original.noteId);assert(attachmentRefs(owner.document).includes(original.id),'Original phone document reference retained');canonicalBody(ws,owner);
+    const result=await peer.readAttachment(original.id,original.noteId),bytes=Buffer.from(result.data,'base64');assert.equal(bytes.length,original.size);assert.equal(hash(bytes),sha256,'Original phone raw attachment bytes retained');
+    if(peer.directory){const root=resolve(peer.directory,'attachments'),path=resolve(root,ws.attachments.find(a=>a.id===original.id).relativePath);assert(path.startsWith(root+sep));assert.equal(hash(await readFile(path)),sha256);}
+  }
+}
 export async function samplePhonePause({readStatus,readWorkspace,before,remoteId,durationMs=3000,now=()=>performance.now(),sleep=delay}){
   const start=now();let samples=0;
   for(;;){
@@ -91,9 +114,11 @@ export async function samplePhonePause({readStatus,readWorkspace,before,remoteId
 }
 
 // Device-free orchestration seam: tests supply in-memory peers, never native evidence.
-export async function runCases({peers,report,save,readStatuses,record,timeoutMs=60000,connectionTimeoutMs=120000,pauseWindowMs=3000,clock={}}){
+export async function runCases({peers,report,save,readStatuses,record,phoneBaseline,timeoutMs=60000,connectionTimeoutMs=120000,pauseWindowMs=3000,clock={}}){
   const [a,b,c]=peers;
   report.cases=CASES.map(id=>({id,status:'not-run'}));
+  assert(phoneBaseline&&report.phoneBaseline?.capturedBeforeDesktops,'Pre-desktop phone baseline required');
+  const preservation=async stage=>{for(const peer of peers)await verifyPhoneBaseline(peer,phoneBaseline);report.preservation[stage]=true;report.observations.push({kind:'original-phone-preservation',stage,peers:peers.map(p=>p.name),requiredOriginalNotes:4,allBaselineBodiesAndRawAttachments:true});await save();};
   const wait=(label,ready,begin,budget=timeoutMs)=>waitForAccountStatuses(label,readStatuses,async statuses=>{sameAccount(statuses);return ready(statuses);},budget,begin);
   const operation=async(peer,type,...args)=>{const s=await peer[type](...args);await record(peer,s);requireHealthy(s,{pendingNetwork:true});};
   const enabled=async peer=>wait('enable '+peer.name,statuses=>accountEnabled(statuses[peers.indexOf(peer)]),()=>operation(peer,'setEnabled',true));
@@ -111,12 +136,17 @@ export async function runCases({peers,report,save,readStatuses,record,timeoutMs=
   };
   const caseRun=async(id,work)=>{
     report.phase=id;const row=report.cases.find(c=>c.id===id);row.status='running';await save();
-    try{await work();row.status='pass';}catch(error){row.status='fail';throw error;}finally{await save();}
+    try{await work();assertPreserved((await c.workspace()).notes,phoneBaseline.notes);row.status='pass';}catch(error){row.status='fail';throw error;}finally{await save();}
   };
   await caseRun('auto-discovery',async()=>{
     const initial=await wait('initial three account statuses',()=>true);
     for(const [i,peer] of peers.entries())if(!initial[i].enabled)await enabled(peer);
     await wait('all three automatic account connections',meshReady,undefined,connectionTimeoutMs);
+    await wait('original phone notes merge',async()=>{
+      assertPreserved((await c.workspace()).notes,phoneBaseline.notes);
+      for(const peer of [a,b]){const ws=await peer.workspace();for(const original of phoneBaseline.notes){const n=ws.notes.find(n=>n.id===original.id);if(!n)return false;assert.equal(noteBody(n),original.body,'Merged original phone body must remain exact');}}return true;
+    });
+    await preservation('afterMerge');
     report.observations.push({kind:'account-discovery',currentPeers:3,connectedDirectedEdges:6,manualPairing:false});
   });
   await caseRun('a-rich-media',async()=>{const id=await a.create(rich('Account109 三端 A '+report.runId),fixtures);await same(a,[b,c],id,'A to B/C formatted PNG+bin',fixtures);});
@@ -139,7 +169,9 @@ export async function runCases({peers,report,save,readStatuses,record,timeoutMs=
     report.observations.push({kind:'phone-pause-no-apply',...proof,retainedNoteCount:before.notes.length,remoteNoteAbsent:true});
     await enabled(c);await wait('phone sync request ready',meshReady,()=>operation(c,'syncNow'),connectionTimeoutMs);
     await same(a,[b,c],id,'phone resume catch-up',fixtures);assertPreserved((await c.workspace()).notes,before.notes);
+    await preservation('afterCatchUp');
   });
+  await preservation('final');
 }
 
 export async function finishThreePeers(report,{desktops,phone,forwardPresent=ownedForwardPresent},save){
@@ -150,7 +182,7 @@ export async function finishThreePeers(report,{desktops,phone,forwardPresent=own
   const clean=results.every(r=>r.status==='fulfilled')&&report.cleanup.desktopNaturalExits&&report.cleanup.androidDriverClosed&&forwardAbsent;
   if(!clean){report.status='fail';report.cleanup.failureCode='CLEANUP_FAILED';report.failure??={phase:'cleanup',code:'CLEANUP_FAILED'};}
   if(report.status!=='fail'){
-    report.status=CASES.every(id=>report.cases?.some(row=>row.id===id&&row.status==='pass'))?'pass':'fail';
+    report.status=CASES.every(id=>report.cases?.some(row=>row.id===id&&row.status==='pass'))&&report.phoneBaseline?.capturedBeforeDesktops===true&&['afterMerge','afterCatchUp','final'].every(stage=>report.preservation?.[stage]===true)?'pass':'fail';
     if(report.status==='fail')report.failure={phase:'completion',code:'CHECK_FAILED'};
   }
   report.finishedAt=new Date().toISOString();await save();
@@ -165,6 +197,7 @@ export async function run(argv=process.argv.slice(2)){
   const report={schema:1,kind:'account109-two-native-desktops-plus-fixed-android',status:'running',runId:randomUUID().slice(0,8),startedAt:new Date().toISOString(),phase:'phone-prerequisite',stores:{root:opts.stores,priorReportSha256:hash(priorBytes)},binary:{path:opts.binary,sha256:binarySha256,sourceRevision:'unverified'},android:{package:PACKAGE,serial:SERIAL},tools:{},observations:[],cases:CASES.map(id=>({id,status:'not-run'})),authorization:{allowDesktopSignIn:opts.allowDesktopSignIn,desktopASignInRequested:false,phoneSignInRequested:false},limitations:[
     'Actual runtime account discovery/Noise/data paths only; no manual pairing, reverse mapping, grants, callbacks, tokens, workspace IDs or URL injection.',
     'Desktop note creation uses existing debug commands and synthetic File[] attachment.submit, not physical typing or an OS picker. Phone note creation uses existing visible UI and CDP Input.',
+    'C to A/B is text-only. Phone-origin attachments are unexecuted; this runner does not complete the attachment part of ANDROID-03.',
     'Desktop and phone setEnabled/syncNow use fixed production IPC and bypass UI confirmations. Phone must already be signed in as the expected synthetic username; this runner never signs the phone in.',
     'Desktop A signIn is opt-in native PKCE plus system-browser SSO; no credentials are supplied. Desktop B must restore its existing grant.',
     'Runner commit/tool hashes identify the harness only. Desktop binary and installed APK are independently fingerprinted; matching product source revisions are not claimed.',
@@ -182,6 +215,7 @@ export async function run(argv=process.argv.slice(2)){
     report.android={...report.android,...await phone.artifactIdentity(),owned:{serial,package:packageId,pid,local,remote}};
     const c={name:'C',status:()=>phone.accountStatus(),workspace:()=>phone.readWorkspace(),setEnabled:v=>phone.setEnabled(v),syncNow:()=>phone.syncNow(),createNote:v=>phone.createNote(v),readAttachment:id=>phone.readAttachment(id)};
     const phoneInitial=await c.status();await record(c,phoneInitial);requireHealthy(phoneInitial);assertThat(!!phoneInitial.profile&&!['authorizing','signedOut'].includes(phoneInitial.state),'ANDROID_SIGN_IN_REQUIRED');expectedAccount(phoneInitial);
+    const phoneBaseline=await capturePhoneBaseline(c,report);await save();
     report.phase='restore-desktops';const peers=[];
     const env=Object.fromEntries(['HTTP_PROXY','HTTPS_PROXY','ALL_PROXY','NO_PROXY','http_proxy','https_proxy','all_proxy','no_proxy'].map(k=>[k,'']));
     for(const name of ['B','A']){const app=new NativeApp(opts.binary,resolve(opts.stores,'desktop-'+name.toLowerCase()),{name,env:{...env,NOTES_SYNC_E2E_SLOT:name==='A'?'left':'right'}});desktops.push(app);await app.ready(45000);peers.push(new Desktop(app,name));}
@@ -194,7 +228,7 @@ export async function run(argv=process.argv.slice(2)){
       await waitForAccountStatuses('A official native PKCE sign-in',()=>read([a]),([s])=>{if(signedOut(s))throw fail('LOGIN_ENDED_SIGNED_OUT');if(!s.profile||s.state==='authorizing')return false;expectedAccount(s);return true;},120000,async()=>{report.authorization.desktopASignInRequested=true;await save();const s=await nativeAccount(a.app,'signIn');await record(a,s);requireHealthy(s,{pendingNetwork:true});});
     }
     const all=[a,b,c],readStatuses=()=>read(all);sameAccount(await readStatuses());
-    await runCases({peers:all,report,save,readStatuses,record});
+    await runCases({peers:all,report,save,readStatuses,record,phoneBaseline});
   }catch(error){report.status='fail';report.failure={phase:report.phase,code:['ANDROID_SIGN_IN_REQUIRED','DESKTOP_A_SIGN_IN_REQUIRED','EXPECTED_ACCOUNT_REQUIRED','ACCOUNT_OWNER_MISMATCH','ANDROID_DRIVER_LOCK_BUSY','ANDROID_DEVICE_AUTH_REQUIRED','ANDROID_OWNED_APP_NOT_FOREGROUND','ANDROID_PID_CHANGED','ANDROID_CDP_TIMEOUT','ANDROID_PAGE_EVALUATION_FAILED','ANDROID_UI_TIMEOUT','ANDROID_APK_PATH_INVALID','ANDROID_APK_HASH_INVALID'].includes(error.code)?error.code:failureCode(error)};
   }finally{await finishThreePeers(report,{desktops,phone},save);}
   return report;
