@@ -24,3 +24,22 @@ idle 每轮最多等待 min(50ms, remaining) 或 rAF，胜者清理另一通道�
 作者验证：device-free readiness fixture + Node driver + relogin + helper **84/84**；TypeScript、Node 语法、diff check 通过。fixture 直接 bundle 生产 debug runtime 并执行 Rust 常量中的精确固定 JS，不启动浏览器或产品 App；stdio 子进程只是 Node fixture。覆盖无帧、正常帧、竞争/迟到 callback、dispose、busy/pending/saving、失败/错误变化、deadline、active execute、快照未知/注入、旧动作不支持与原错误保留。Rust 两项单测已写入但**未编译/执行**：`fixed_startup_diagnostic_is_parameterless_and_preserves_ready_gate`、`owned_slot_focus_follows_presentation_once_and_never_hides_failure`；待父级协调共享 target 后定向 `cargo test --offline --locked --manifest-path src-tauri/Cargo.toml --features sync-e2e --lib sync_e2e::tests::`。没有使用任何 Cargo target、新建大 target、HOME override、App/UI、网络、凭据、原库或实际认证；不证明 live01 原因或 WebKit/焦点/paint 效果。源码先提交，manifest 若涉及既有 inventory 条目再从精确 source SHA 单独刷新；不扩展 inventory。独审范围为上述三个源码文件、两测试文件及本回执；App handoff 最终接线由父级整合后核验。
 
 独审早期修正：Serde 1.0.229 的 internally tagged unit variant 会忽略额外字段，即使 enum 标注 deny_unknown_fields；原 StartupDiagnostic unit 写法不满足拒绝参数契约。新动作单独改为 `StartupDiagnostic {}` empty struct variant 并同步全部匹配模式；原 Ready/Shutdown 等动作不变。原生负例新增 null expression、嵌套 timeoutMs 和 unknown 字段，仍待父级协调定向 Rust 执行。固定脚本、准入权限及 DTO 未扩展。
+
+## 最终提交链与验证回执
+
+基线 `c090d7b4`，作者分支 `codex/account109-debug-readiness`，按以下顺序交付：
+
+1. `2727172864ffbe1f30bb54c71dc5b7357baf8e42`：固定 ready 前诊断、bounded idle、owned slot focus、必要测试及作者回执。
+2. `2dbe982c4569f4a471d3dc0a1e1c0ac8ffca335a`：从已提交 `2727172864ffbe1f30bb54c71dc5b7357baf8e42` 刷新 manifest 中 `src-tauri/src/sync_e2e.rs`、`src/debug/runtime.ts` 的 pin。
+3. `bb810833389110244a1c48a48de87315b4e7c034`：serde empty struct variant 修正与原生拒绝额外参数负例。
+4. `f5d812387b9760d35e272e05cc76129ba5b86f5a`：从已提交 `bb810833389110244a1c48a48de87315b4e7c034` 仅刷新 `src-tauri/src/sync_e2e.rs` pin。
+
+两个 manifest 提交均独立于源码提交，哈希对应精确已提交源码；inventory 路径与 ownership 未扩展。后续本节的 docs-only 回执提交不改变源码或 manifest。
+
+验证证据：
+
+- `/private/tmp/account109-debug-readiness-all-node.log`：readiness、native-driver、relogin、helper 四组 device-free 测试共 **84/84 PASS**；首轮 TypeScript、Node 语法及 diff check 通过。
+- `/private/tmp/account109-debug-readiness-serde-fix-node.log`：serde 修正后 readiness、native-driver 两组 **26/26 PASS**，diff check 通过；这不是原生 serde 单测执行结果。该修正没有 TS/JS 变更。
+- `/private/tmp/account109-debug-readiness-serde-fix-export.json`：export dry-run 通过，精确绑定 `f5d812387b9760d35e272e05cc76129ba5b86f5a`；1772 files、95283204 bytes、`initializedNewHistory=false`。
+
+Rust 两项定向单测仍为已准备、未编译/执行，待父级协调；没有使用 native 共享 target，也没有另建或复用 Cargo target。本回执补充仅核对提交、有限日志和 manifest，不启动 App/UI、网络或认证。独审应包含全部四个实现/pin 提交及 docs-only 最终回执，尤其检查 native 参数拒绝、Ready 门槛、真实三次 idle 样本、取消/超时和 owned slot 失败传播；不能将 device-free 通过解释为 live readiness、焦点或 paint 已验证。
