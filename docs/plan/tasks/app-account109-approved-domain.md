@@ -15,3 +15,12 @@ Feynman在既有独立稀疏工作树准备最小修改：仅Android固定coordi
 ## 运行门槛
 
 源码准备可以并行；在DNS完成、Vercel verified、公开TLS/固定匿名接口/身份配置通过前，不向该主机发送账户授权材料或安装后发起登录。随后仅做一次有界手机CELLULAR匿名native检查；通过后续验真实授权、三端完整正文与附件、中转承载与重启恢复。手机旧账户错误、历史基线和新增附件均保留，不通过清库/改grant/替换历史哈希取得通过。若缺DNS权限，向用户提供准确CNAME/TXT及现有记录保护要求，不重复请求已给出的域名授权。
+
+
+## 作者定向回执
+
+基于`093c32ab`，复用既有cone sparse树并新建`codex/account109-approved-domain`，源码提交`b4ba3f9609871b0b896b72a63eb641e899d57f92`。仅以target_os固定Android transport新域/非Android旧域，ENROLLMENT_ISSUER与Logto输入未改；两处Enrollment及SDK仍沿用config::origin，provider和proof信任校验无变化。架构说明同步更新。`c39458d4c33baffc2218a439170cdfd214807ab7`仅从该精确源码刷新既有config.rs/enrollment.rs两项manifest pin，无新增路径。
+
+指定唯一共享target上使用`cargo test --offline --locked --manifest-path src-tauri/Cargo.toml --features sync-e2e --lib <filter>`，jobs=2、DEV/TEST DEBUG=0、INCREMENTAL=0，两项filter各1/1通过：`http_transport_is_independent_of_pinned_signed_enrollment_issuer`（合成loopback传输、旧issuer成功与同key alias issuer拒绝）及`signed_proof_rejects_cross_owner_workspace_and_unbound_keys_not_just_jwt_decode`（owner/workspace/key等负例）。macOS执行覆盖桌面固定值；Android cfg分支为源码检查，未执行Android包/设备测试。首次编译因sparse排除既有include_str测试语料而停止，仅临时restore精确提交中的`docs/fixtures/smart-projection09.json`后通过，随后已reapply sparse移除该副本。未修改测试语料或扩大docs checkout。
+
+`node scripts/publish/export.mjs --ref c39458d4c33baffc2218a439170cdfd214807ab7`只读dry-run通过（1782项），diff检查通过，磁盘约余21GiB。共享target已释放。没有公网请求、App、ADB、认证材料读取或整包构建；DNS/TLS/verified与运行门槛仍开放。Cicero已接精确源码/manifest及作者结果独审，独审结论另归档；此回执不把新域视作已可用。
