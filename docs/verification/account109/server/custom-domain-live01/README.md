@@ -1,3 +1,5 @@
+最新状态：[live02](../custom-domain-live02/README.md)已通过正确Chrome profile现有会话完成DNS追加，Vercel verify 200/verified=true，双域匿名配置/公钥父级对照通过；本文件保留先前DNS等待的原时点。
+
 # Approved custom coordinator domain: binding complete, DNS pending
 
 2026-11-13, Asia/Shanghai. User replied “继续 允许使用” after the request to use exact host `cybernote-sync.aixgg.com`. **Existing Vercel project binding succeeded; DNS/TLS/phone acceptance remain pending.** No new deployment/project, environment change, redirect or account request to this host occurred.

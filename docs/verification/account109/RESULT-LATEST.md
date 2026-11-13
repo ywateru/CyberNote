@@ -6,6 +6,8 @@
 
 最新追加：[login-surfaces-live03](native/login-surfaces-live03/README.md) 在精确 `72513d12` Mac 候选上实际完成 browser、embedded、embedded→browser 三条命令调用流程，各五项 PASS；取消及同目录重启后各持续至少3秒核对 signedOut 与完整 document/plainText，六个进程均自然退出0、PID已独立确认消失。[独立复核](native/login-surfaces-live03/review.md)通过。未输入凭据、未观察托管表单或物理关窗，不构成成功登录或 AUTH-09 关窗分支验收。本轮 Dock 两次访问 timeout，随后 Chrome 原生窗口访问成功，当前桌面已可操作。
 
+最新域名与包进展：[live02](server/custom-domain-live02/README.md)已完成授权DNS记录，Vercel验证200/verified=true；新域可信TLS和匿名端点通过，首轮Python canonical TLS失败保留，父级Node双域配置/JWKS单轮均200且原字节/解析值相同，独核续验中。精确新Android `88b2dabe` [候选构建](native/88b2dabe-android-build01/README.md)通过，未安装。另一次 [真实关窗尝试](native/login-window-live04/README.md)因CUA无法绑定plain测试可执行文件而等待超时，正常退出0，失败库保留；不算关窗通过。
+
 ## 分析与完善
 
 数据链为 Logto 原生授权 owner → Vercel profile/enrollment → CyberGrid 自动发现与可信连接 → 原有同步 adapter/Session → SQLite 文档与受管附件。设置页不拥有账户 Runtime 生命周期；同步完成需验证实际文档、附件归属及原字节，不能以命令 ACK 或设备 online 判定。完整契约见 [架构](../../architecture/account-sync.md)；两个自定义数据根的 lease/cache 隔离和此前手工同步结果见 [sync108](../sync108/RESULT.md)。

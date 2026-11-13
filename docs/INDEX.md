@@ -1,3 +1,5 @@
+2026-11-13域名续验：[DNS已写入且Vercel verified=true](verification/account109/server/custom-domain-live02/README.md)。正确Chrome profile已有目标zone登录会话，无需新输入凭据；CNAME和附加TXT已完成，原三条TXT保留。新域匿名端点/TLS通过；首轮Python canonical TLS失败保留，父级Node单轮两域配置/公钥均200且相同，独核续验中。新Android精确 `88b2dabe` 候选已[离线构建](verification/account109/native/88b2dabe-android-build01/README.md)，未安装，身份独核进行中。
+
 2026-11-13最新：[双入口真实桌面命令测试](verification/account109/native/login-surfaces-live03/README.md)三条流程各五项通过，涵盖浏览器取消、内置取消、内置转浏览器取消及完整正文编辑/自然重启；六进程自然退出0，[独核](verification/account109/native/login-surfaces-live03/review.md)通过。精确候选仍为 `72513d12` Mac；真实表单、物理关窗、成功认证及Android三端未由此验收。Dock访问超时后，Chrome原生窗口访问已成功；已用正确profile的现有会话配置DNS，服务验证续验中。下方按历史时点读取。
 
 2026-11-13后续：[自定义域名使用已获用户许可](plan/tasks/app-account109-approved-domain.md)，`cybernote-sync.aixgg.com` 已绑定原Vercel项目production，仍待DNS验证。[执行回执](verification/account109/server/custom-domain-live01/README.md)提供准确CNAME/TXT；现有API凭据DNS查询403，浏览器现存账户没有目标zone，已准备管理员登录交接。Android固定transport新域/桌面旧域及固定旧enrollment issuer的源码和manifest已独审合并，完整Node检查274项通过；尚未构建或安装新域候选，不沿用下述旧包身份。
