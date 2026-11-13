@@ -6,6 +6,9 @@ export const accountUIAvailable =
   (import.meta.env.VITE_NOTES_ACCOUNT_NATIVE !== "0" && isTauri()) ||
   (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" && import.meta.env.VITE_NOTES_ACCOUNT_UI === "1");
 
+const networkStages = ["callbackListen", "browserOpen", "callbackReceive", "identityProvider", "coordinator"] as const;
+type NetworkStage = typeof networkStages[number];
+
 // Frozen account109 DTO. The native singleton owns authorization and networking.
 export type AccountStatus = {
   state: "signedOut" | "authorizing" | "connecting" | "ready" | "paused" | "error";
@@ -15,7 +18,7 @@ export type AccountStatus = {
   lastSyncAt?: number;
   pendingCount: number;
   conflictCount: number;
-  error?: { code: string; message: string };
+  error?: { code: string; message: string; stage?: NetworkStage };
 };
 export type AccountCommand =
   | { type: "status" | "signIn" | "signUp" | "cancel" | "signOut" | "syncNow" }
@@ -38,7 +41,8 @@ export function validateAccountStatus(value: unknown): AccountStatus {
   if (!["signedOut", "authorizing", "connecting", "ready", "paused", "error"].includes(s.state as string)) return invalid();
   if (!Array.isArray(s.devices) || s.devices.length > 256) return invalid();
   const profile = s.profile === undefined ? undefined : record(s.profile, ["subject", "displayName", "username"]);
-  const error = s.error === undefined ? undefined : record(s.error, ["code", "message"]);
+  const error = s.error === undefined ? undefined : record(s.error, ["code", "message", "stage"]);
+  if (error?.stage !== undefined && !networkStages.includes(error.stage as NetworkStage)) return invalid();
   return {
     state: s.state as AccountStatus["state"], enabled: bool(s.enabled),
     profile: profile ? { subject: text(profile.subject, 1024), displayName: text(profile.displayName, 512), username: profile.username === undefined ? undefined : text(profile.username, 1024) } : undefined,
@@ -48,7 +52,7 @@ export function validateAccountStatus(value: unknown): AccountStatus {
     }),
     lastSyncAt: s.lastSyncAt === undefined ? undefined : count(s.lastSyncAt),
     pendingCount: count(s.pendingCount), conflictCount: count(s.conflictCount),
-    error: error ? { code: text(error.code), message: text(error.message, 1000) } : undefined,
+    error: error ? { code: text(error.code), message: text(error.message, 1000), ...(error.stage === undefined ? {} : { stage: error.stage as NetworkStage }) } : undefined,
   };
 }
 export async function accountCommand(command: AccountCommand): Promise<AccountStatus> {
