@@ -1,0 +1,274 @@
+{
+  "schema": 1,
+  "kind": "account109-original-desktop-relogin",
+  "status": "fail",
+  "phase": "cleanup",
+  "startedAt": "2026-11-13T08:46:44.025Z",
+  "endState": "enabled",
+  "allowBRelogin": true,
+  "allowBNetworkRetry": true,
+  "allowBSignedOutRelogin": true,
+  "bHistory": {
+    "sha256": "b553d6ba27ba43e4281ebfc6abc445c583cf7e25bc4bfe285e3fa749d86fa439",
+    "originalSubjectSha256": "03efb3ceea182d57ea4a56fc7e9b0e5e3577192f6a4818d8a454d77cb1cffc8b"
+  },
+  "scenarios": {
+    "baseline": "pass",
+    "login": "not-run",
+    "pausedEdits": "not-run",
+    "catchup": "not-run",
+    "bidirectional": "not-run",
+    "restart": "not-run",
+    "endState": "not-run",
+    "auth06": "not-run"
+  },
+  "checks": [
+    {
+      "name": "baseline",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "kind": "ready",
+      "device": "a",
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "kind": "ready",
+      "device": "b",
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "kind": "b-clean-signed-out-recovery",
+      "startupReadOnlyMs": 120000,
+      "historySha256": "b553d6ba27ba43e4281ebfc6abc445c583cf7e25bc4bfe285e3fa749d86fa439",
+      "originalSubjectSha256": "03efb3ceea182d57ea4a56fc7e9b0e5e3577192f6a4818d8a454d77cb1cffc8b"
+    },
+    {
+      "kind": "b-recovery-ui-shown",
+      "label": "登录",
+      "uiHandler": "account.signIn",
+      "physicalInput": false
+    }
+  ],
+  "binary": {
+    "path": "[redacted: local candidate binary path]",
+    "sha256": "bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd",
+    "sourceRevision": "920fa9cf3af6e3b3cc3b99fb1a78d960ab0c7d11",
+    "candidateKind": "debug-e2e"
+  },
+  "prior": {
+    "sha256": "d0d89a9361aa4311a49ce4463617981757ce1bb8be0dc3e8d2d2b0b3b401b8f4"
+  },
+  "limitations": [
+    "Existing synthetic roots only. SignIn uses the product UI handler and native PKCE/system browser; parent completes authorization. No credentials, tokens, callback URLs, grants or manual pairing inputs.",
+    "Merge confirmation is inspected and clicked through the existing dom.click UI handler, not physical input. Parent only completes system-browser authorization. Editor commands use debug/e2e UI handlers; no physical typing or OS picker claim.",
+    "Pause is the production account setting, not OS network loss. Negative windows are bounded to 3 seconds. AUTH06 is not executed.",
+    "Explicit clean B signedOut recovery requires the entire 120-second read-only startup interval and fixed committed relogin02 owner history. Profile subject hashes are checked before runner enable; native bind retains its same-owner and persisted enabled checks. Login is not guaranteed to begin paused. No binding/grant read or identity injection.",
+    "Cross-baseline overlap requires exact note fields/references except local revision, and exact attachment ownership/metadata/SHA except physical relativePath. Later canonical preservation excludes local revision/path, normalizes absent/null nullable fields and reference IDs to descriptors; original attachment IDs/ownership/SHA are verified separately. Only live unlocked baselines are supported.",
+    "Shell proxy variables are blanked only for owned child processes. No system settings change or conflict creation. Pinned 920fa9cf maps identityRefresh without providerReason to HTTP 400 invalid_grant. Explicit B flags select at most one UI recovery: network syncNow retains the production owner, rejected refresh signIn requires same subject. NoSession stops with explicit SignOut guidance; no automatic SignOut or recovery fallback. No grant bytes are read to infer state."
+  ],
+  "tools": {
+    "account109-desktop-relogin.mjs": "d69718ce79e4b7e9039b51d0bd5b3361af46332f13a6ed9d972876ea0d89f03e",
+    "sync108-native-driver.mjs": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+    "account109-desktop-helpers.mjs": "e5278d612598946624209c3aae8be8bf7243b806ce9de3dd2e406ed87a505ab0",
+    "account109-desktop-recovery.mjs": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672",
+    "account109-headless-recovery.mjs": "6e1511ff3d90d159b5335035bb858c352f794643ed93651e43f5fc9330aa7a74"
+  },
+  "baseline": {
+    "sha256": "f4a80c87db5e009c2d2c9582602acfcbbb7ddc7e2a0c61ca73f04b3f25cc3541",
+    "originalFilesUnchanged": true,
+    "overlapAgreementCheckedBeforeLaunch": true,
+    "notes": {
+      "a": [
+        {
+          "id": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+          "sha256": "0e772a417f7a63db4de6043858382d4ad777f7caa430298fc92a47d304606053"
+        },
+        {
+          "id": "32ed2d3e-de5d-426c-8339-bf815d3b9ea3",
+          "sha256": "8e30ce1b0aec2ef41381f45ae1784fdf53840c33de90d2da2a851e6d352f0a18"
+        },
+        {
+          "id": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+          "sha256": "e703f1c0de0216fa2ff35008c83b24130d70d58e8d462a94cb32e1176d78b986"
+        },
+        {
+          "id": "73a8425e-36cd-4e83-832b-221762c30c34",
+          "sha256": "52d0e523d722f37d31c609f3ca43c3bb1f0745cb522244d14120cff416539bad"
+        },
+        {
+          "id": "78f94bed-6826-43da-8dec-beabed4413ee",
+          "sha256": "5261cce733dd1c0ec7f277bca3b5cd34e2b3f9ef7aa610a49aa0ffbb49eca7d3"
+        },
+        {
+          "id": "9413691d-88b2-4954-aad5-0e1818450357",
+          "sha256": "8d5d6eaf98743f9a5a0ef75741669ea36698bf3e3d1eee42f32f408e69d3c414"
+        },
+        {
+          "id": "951103e5-8f47-41f5-9af8-ab5022a782da",
+          "sha256": "88196eea8895dfadfabed90896824abb4fe9de2f79c6b3793410ffba973e4793"
+        },
+        {
+          "id": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+          "sha256": "32ca63fd76993be8e8057623bbbf8ece853190f95934a461d606d84129bf119c"
+        }
+      ],
+      "b": [
+        {
+          "id": "272b0013-7b6a-4729-88f0-a10e2fd48e43",
+          "sha256": "0e772a417f7a63db4de6043858382d4ad777f7caa430298fc92a47d304606053"
+        },
+        {
+          "id": "3382dc4a-1a1e-4304-a151-1e740d0dfa40",
+          "sha256": "e703f1c0de0216fa2ff35008c83b24130d70d58e8d462a94cb32e1176d78b986"
+        },
+        {
+          "id": "6ef4b4b9-c366-4b2a-8450-25c2d1755739",
+          "sha256": "c547f9f448de0bb1827e70941f39903d4be8dd9fb7f4c00796534cf1e0cdd566"
+        },
+        {
+          "id": "73a8425e-36cd-4e83-832b-221762c30c34",
+          "sha256": "52d0e523d722f37d31c609f3ca43c3bb1f0745cb522244d14120cff416539bad"
+        },
+        {
+          "id": "78f94bed-6826-43da-8dec-beabed4413ee",
+          "sha256": "5261cce733dd1c0ec7f277bca3b5cd34e2b3f9ef7aa610a49aa0ffbb49eca7d3"
+        },
+        {
+          "id": "9413691d-88b2-4954-aad5-0e1818450357",
+          "sha256": "8d5d6eaf98743f9a5a0ef75741669ea36698bf3e3d1eee42f32f408e69d3c414"
+        },
+        {
+          "id": "951103e5-8f47-41f5-9af8-ab5022a782da",
+          "sha256": "88196eea8895dfadfabed90896824abb4fe9de2f79c6b3793410ffba973e4793"
+        },
+        {
+          "id": "dda0ce00-e1b4-4a2f-848d-41193c937e47",
+          "sha256": "32ca63fd76993be8e8057623bbbf8ece853190f95934a461d606d84129bf119c"
+        },
+        {
+          "id": "fe392b95-1c54-454e-bf49-43d3ba43d741",
+          "sha256": "5c5928151e90e044305d0d451f0020e3e0ecf74b205674d6a7d5fc18cfc758b9"
+        }
+      ]
+    },
+    "gap": {
+      "localId": "32ed2d3e-de5d-426c-8339-bf815d3b9ea3",
+      "remoteIds": [
+        "fe392b95-1c54-454e-bf49-43d3ba43d741",
+        "6ef4b4b9-c366-4b2a-8450-25c2d1755739"
+      ]
+    }
+  },
+  "lastOperation": {
+    "sequence": 394,
+    "phase": "b-recovery",
+    "device": "b",
+    "operation": "account.status",
+    "event": "after",
+    "at": "2026-11-13T08:50:52.816Z"
+  },
+  "statusTransitions": [
+    {
+      "device": "a",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "b-recovery",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "b-recovery",
+      "state": "authorizing",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    }
+  ],
+  "failure": {
+    "phase": "b-recovery",
+    "code": "CONDITION_TIMEOUT",
+    "lastOperation": {
+      "sequence": 394,
+      "phase": "b-recovery",
+      "device": "b",
+      "operation": "account.status",
+      "event": "after",
+      "at": "2026-11-13T08:50:52.816Z"
+    }
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "[redacted: original synthetic store path]",
+      "stderrBytes": 58,
+      "commands": 74,
+      "forcedSignals": [],
+      "pid": 86247,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "directory": "[redacted: original synthetic store path]",
+      "stderrBytes": 58,
+      "commands": 322,
+      "forcedSignals": [],
+      "pid": 86257,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "finishedAt": "2026-11-13T08:50:54.102Z"
+}

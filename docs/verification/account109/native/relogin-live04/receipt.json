@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "kind": "account109-relogin-live04-archive",
+  "sourceResultSha256Before": "8c9cae1a08f0c3054a8cab160b3176eebba2d6ff0c8fe2bf72a3eebc818e474a",
+  "sourceResultSha256After": "8c9cae1a08f0c3054a8cab160b3176eebba2d6ff0c8fe2bf72a3eebc818e474a",
+  "sourceResultUnchanged": true,
+  "sanitizedResultSha256": "914e2169b2caeb6479c4372bacb277125bca866f1c1597cf599106742cf56f4c",
+  "runSourceReference": "9010c5bada147936c9f3e8db8159ef777d3bbb87",
+  "pinAuthorCommit": "8806ca4eb84175754ad54a021bdf60c47afe3b5d",
+  "modules": [
+    {
+      "path": "scripts/verification/account109-desktop-relogin.mjs",
+      "commit": "9010c5bada147936c9f3e8db8159ef777d3bbb87",
+      "gitBlob": "cd6257ca9194c1e73bf6008310ef3b15af9cdb69",
+      "sha256": "d69718ce79e4b7e9039b51d0bd5b3361af46332f13a6ed9d972876ea0d89f03e"
+    },
+    {
+      "path": "scripts/verification/sync108-native-driver.mjs",
+      "commit": "9010c5bada147936c9f3e8db8159ef777d3bbb87",
+      "gitBlob": "401a8b196c64dbbae3a6da7c9923ea6231f5f915",
+      "sha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-helpers.mjs",
+      "commit": "9010c5bada147936c9f3e8db8159ef777d3bbb87",
+      "gitBlob": "2fc204e637d3be8a410ea989aea98fe2fa834e9d",
+      "sha256": "e5278d612598946624209c3aae8be8bf7243b806ce9de3dd2e406ed87a505ab0"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-recovery.mjs",
+      "commit": "9010c5bada147936c9f3e8db8159ef777d3bbb87",
+      "gitBlob": "215b042877ef19191c519c742811720f176e1ccd",
+      "sha256": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672"
+    },
+    {
+      "path": "scripts/verification/account109-headless-recovery.mjs",
+      "commit": "9010c5bada147936c9f3e8db8159ef777d3bbb87",
+      "gitBlob": "73442820984271fb77aa6484762e8eb46c0607fa",
+      "sha256": "6e1511ff3d90d159b5335035bb858c352f794643ed93651e43f5fc9330aa7a74"
+    }
+  ],
+  "pidCheck": {
+    "checkedAt": "2026-11-13T08:52:55.302076+00:00",
+    "checks": [
+      {
+        "device": "a",
+        "pid": 86247,
+        "method": "ps -p PID -o pid=,ppid=,comm=",
+        "exitCode": 1,
+        "stdoutEmpty": true,
+        "stderrEmpty": true,
+        "present": false
+      },
+      {
+        "device": "b",
+        "pid": 86257,
+        "method": "ps -p PID -o pid=,ppid=,comm=",
+        "exitCode": 1,
+        "stdoutEmpty": true,
+        "stderrEmpty": true,
+        "present": false
+      }
+    ]
+  },
+  "sanitization": [
+    "binary.path",
+    "lifecycle[*].directory"
+  ]
+}
