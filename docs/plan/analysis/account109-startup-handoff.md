@@ -59,3 +59,11 @@ Fake host 直接执行从当前 App 提取的真实 startupReady/effect 和完�
 建议另一个有限诊断增量：原 documentProbe 在失败前直接附带**只读、固定结构**的 render-committed startup snapshot：loading/workspaceLoaded/syncCover/synchronizing、editorSatisfied、nativeRequired/nativeInfoPresent、errorPresent、startupReady，及有限 handoff phase（notScheduled/frame1/frame2/fallback/ready/cancelled）。未发布时返回 unknown/null，不猜测；不读完整 app.state/workspace、账户、正文、ID 或原错误字符串。Rust 在同一失败回执附带 visible/minimized/focused 的有限 bool/null；这些当前只在 Ready 成功分支保存（`sync_e2e.rs:333–338`）。由此区分依赖 pending 与已排队 paint wait，无需新任意 Eval，也不改变 admission/ready 规则。不要通过 debug.execute('app.state') 取得这个快照：除了 pre-ready admission 问题，该 execute 自身还有上述双帧完成屏障。
 
 本轮只运行 Node device-free fixture 与语法检查；无 App、网络、浏览器、ADB、native build、grant/原库读取、系统变量覆盖。原失败和全部原始结果保持不变。
+
+## Parent 实现授权与两任务接线
+
+上述无界等待反例与最小修复范围已由 parent 接受，可继续实现并交独立审阅，无需改变既有账户/权限契约。只有审阅通过的精确 source 才构建新 GUI；本节不将 live01 归因升级为定论。
+
+产品 handoff 作者仅拥有 App.tsx/startup.ts 及对应 fixture，不改 quiet-cover 或 debug execute 的双帧命令屏障。为下一轮失败能够区分 gate 未就绪与帧等待，可在显式 debug bridge 构建中发布 `window.__CYBERNOTE_STARTUP_DIAGNOSTIC__` 的有限已提交快照，普通构建不发布。固定 schema=1；gates 仅含 loading/workspaceLoaded/syncCover/synchronizing/editorSatisfied/nativeRequired/nativeInfoPresent/errorPresent/startupReady 布尔值；phase 仅为 notScheduled/frame1/frame2/fallback/ready/cancelled。未提交/未初始化时视为 unknown/null。它仅用于观测，不成为 Ready、IPC、owner 或任何权限依据，不含当前笔记/账户/URL/错误原文。每个新提交/取消更新该快照；debug-only guard 和字段边界须有 fixture。
+
+debug 作者按 [debug readiness 契约](../tasks/app-account109-debug-readiness.md) 负责 native 固定诊断动作、driver 与 debug.waitForIdle。固定动作直接投影上述 debug 快照及已知 DOM/render/window 有限状态，不调用 debug.execute('app.state')；拒绝缺失/非法字段而返回 unknown，不从失败 DOM 推断 readiness。两作者不修改对方拥有的文件；parent 整合后再验证最终 wiring。debug execute 完成屏障仍保持，若其未结束，idle 必须保持 active 并超时；不将 timer 当命令完成或绘制证明。
