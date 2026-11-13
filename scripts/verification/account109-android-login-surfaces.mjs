@@ -9,7 +9,7 @@ import {hash,canonicalBranch} from './account109-desktop-recovery.mjs';
 import {requireHealthy,safeStatus,failureCode} from './account109-desktop-helpers.mjs';
 
 export const SOURCE='72513d1296df4526a08834db65a3427957d3fb50';
-export const APK_SHA=null; // Set only after parent supplies the reviewed exact candidate.
+export const APK_SHA='654ab2a820de70588edcceb5231818b3580e425cdf7de1db395b585066091268'; // 01f7639b receipt; independent package review 5e706346.
 // Committed synthetic history: android/9263-signin01/result.json originalNotes.
 export const KNOWN_BODIES=Object.freeze([
   ['321e9d6c-d590-437d-8edb-d6ed2feae3fa','713c75fe69914dfd1f971f5917aedc95210f917f181ab6743cd28d7faf712f7d','c27da2b1a84901e448334c9d01c663bcd6c5bfc016ea31c5061d142d45ae2ecb'],

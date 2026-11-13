@@ -100,9 +100,9 @@ test('form not loaded, transfer not confirmed, terminal error/lock/body loss/for
   }
 });
 test('fixed wait rejects status that only arrives at deadline',async()=>{const c=clock();await assert.rejects(()=>bounded('late',async()=>{await c.sleep(1000);return true;},1000,c));});
-test('CLI separates read-only export from smoke; absent APK pin refuses before any output/device access',async()=>{
+test('CLI separates read-only export from smoke; reviewed APK pin and baseline are required before device access',async()=>{
   const output='/private/tmp/account109-android-login-surfaces-unit-no-run';assert(options(['--output',output,'--export-baseline']).exportBaseline);
   assert.equal(options(['--output',output,'--baseline','/private/tmp/baseline.json','--case','embedded-back']).scenario,'embedded-back');
   for(const args of [['--output',output,'--export-baseline','--case','browser'],['--output',output,'--baseline','/private/tmp/baseline.json','--case','unknown'],['--output',output,'--token','private'],['--output','/Users/personal/output','--export-baseline']])assert.throws(()=>options(args));
-  assert.equal(APK_SHA,null);await assert.rejects(()=>run(['--output',output,'--baseline','/private/tmp/absent.json','--case','embedded-back']),/pin pending/);
+  assert.equal(APK_SHA,'654ab2a820de70588edcceb5231818b3580e425cdf7de1db395b585066091268');await assert.rejects(()=>run(['--output',output,'--baseline',`/private/tmp/account109-android-login-surfaces-missing-${process.pid}.json`,'--case','embedded-back']),{code:'ENOENT'});
 });
