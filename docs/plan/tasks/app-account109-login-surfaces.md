@@ -14,9 +14,10 @@
 
 ## 原生窗口边界
 
-- 桌面用独立原生 WebView 窗口，使用不匹配 `main`/`note-*` 的专用 label。远程页无应用 IPC/capability、无账户/文件/笔记接口、无正文或密码采集脚本。授权 URL 只由 native 生成并验证为固定 HTTPS 托管 origin。
+- 桌面用独立原生 WebView 窗口。直接使用无 Tauri 桥接的原生窗口时，以本次实例 ID 绑定 owner；若使用 Tauri WebView，则其专用 label 不得匹配 `main`/`note-*`。远程页无应用 IPC/capability、无账户/文件/笔记接口、无正文或密码采集脚本。授权 URL 只由 native 生成并验证为固定 HTTPS 托管 origin。
 - Android 使用独立原生 WebView 容器，不复用带本地 NotesKeyboard/应用桥接的主编辑器 WebView。实现方式由实际平台 API 调研确定；不得把 Custom Tabs 当作自有 WebView 验收。平台代码不新增未经授权的网络/存储/系统设置。
 - 允许当前托管同源流程及精确本次回跳所需导航；禁止任意新窗口、非授权 scheme/host、下载、文件访问、证书忽略或通用 JS bridge。其他外部身份站点由用户显式选择浏览器继续。禁止记录授权导航地址或页面正文。
+- 上述固定 origin 约束针对主框架导航和 native 打开目的地。平台可额外过滤其收到的资源请求，但普通 WebView API 不保证逐次观察 HTTPS 子资源重定向，不能据此声称完整网络防火墙或所有外部子资源均被阻断。远程内容始终没有本地应用权限，文件/content/应用协议与下载边界不因此放宽。
 - 用户关闭内置窗、系统返回或点击取消必须终止本次事务并返回可用的本地账户页。成功回跳、转浏览器、取消、超时、打开失败和 App 正常退出都释放本次 owned 窗口/监听器；程序关闭与用户关闭区分，不能因清理误取消已交给浏览器或已完成的事务。迟到的创建/关闭/回跳回调不得影响下一代。
 - 原生窗口创建和销毁遵循平台主线程规则，不能阻塞 Tauri event loop。保存/同步/quiet-cover/主窗 readiness 语义不变。
 - Android 转入系统浏览器导致的 onPause 不等同用户取消。进程重建不恢复或重放 RAM 授权 URL。明确每端内置 WebView 的 cookie/data store 策略与是否支持临时上下文；不得将普通平台 cookie store 声称为临时隔离，也不以全局清 cookie 影响其他登录或浏览器会话。关闭本次窗口须清理其活跃句柄、导航与监听器。
