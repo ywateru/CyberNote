@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
-import {BINARY_SHA,SOURCE,options,checkProfile,isBRefreshFailure,refreshClassification,recoverB,waitForBStartup,waitForOriginalAccount,assertLibrary,combineBaselines,readLibrary,priorGate,waitHealthy,connectionThenData,confirmEnableUi,finish} from './account109-desktop-relogin.mjs';
+import {BINARY_SHA,SOURCE,B_HISTORY_SHA,B_SUBJECT_SHA,readBHistory,checkBHistoryProfile,cleanBSignedOut,recoverBSignedOut,waitForBHistoryAccount,options,checkProfile,isBRefreshFailure,refreshClassification,recoverB,waitForBStartup,waitForOriginalAccount,assertLibrary,combineBaselines,readLibrary,priorGate,waitHealthy,connectionThenData,confirmEnableUi,finish} from './account109-desktop-relogin.mjs';
 import {STORES,hash,boundedPoll,verifyBytes} from './account109-desktop-recovery.mjs';
 import {noteBody,safeStatus} from './account109-desktop-helpers.mjs';
 
@@ -25,7 +25,62 @@ test('CLI requires explicit end state and rejects credential/URL/store/duplicate
   const args=['--binary','/tmp/candidate','--stores',STORES,'--output','/private/tmp/relogin-evidence','--end-state','paused'];
   assert.equal(options(args).endState,'paused');
   assert.equal(options(args).allowBRelogin,false);assert.equal(options([...args,'--allow-b-relogin']).allowBRelogin,true);assert.equal(options([...args,'--allow-b-network-retry']).allowBNetworkRetry,true);
+  assert.equal(options(args).allowBSignedOutRelogin,false);assert.equal(options([...args,'--allow-b-signed-out-relogin']).allowBSignedOutRelogin,true);
+  assert.throws(()=>options([...args,'--allow-b-signed-out-relogin','--allow-b-signed-out-relogin']));assert.throws(()=>options([...args,'--subject-hash',B_SUBJECT_SHA]));
   for(const bad of [args.slice(0,-2),[...args,'--token','secret'],[...args,'--binary','/tmp/other'],[...args,'--allow-b-network-retry','--allow-b-network-retry'],args.map(x=>x===STORES?'/tmp/other':x),args.map(x=>x==='paused'?'signedOut':x),args.map(x=>x==='/private/tmp/relogin-evidence'?STORES+'/evidence':x)])assert.throws(()=>options(bad));
+});
+
+// Immutable public sanitized history blob committed with the parent contract.
+// No private store, original subject, grant or live App is needed by these tests.
+const historyBytes=()=>execFileSync('git',['show','b2df1e9da30c09a2643e53c8584a3087cfbb37cc']);
+const cleanB=()=>({state:'signedOut',enabled:false,devices:[],pendingCount:0,conflictCount:0});
+const history=()=>({sha256:B_HISTORY_SHA,originalSubjectSha256:B_SUBJECT_SHA});
+test('signed-out opt-in requires byte-exact committed history; absent or altered evidence fails',async()=>{
+  assert.deepEqual(await readBHistory(async()=>historyBytes()),history());
+  let reads=0;await assert.rejects(()=>readBHistory(async()=>{reads++;throw Object.assign(Error('missing public evidence'),{code:'ENOENT'});}),e=>e.code==='ENOENT');assert.equal(reads,1);
+  for(const bytes of [Buffer.from('{}'),Buffer.concat([historyBytes(),Buffer.from('\n')]),Buffer.from(historyBytes().toString().replace(B_SUBJECT_SHA,'0'.repeat(64)))])await assert.rejects(()=>readBHistory(async()=>bytes),/Exact committed relogin02 history/);
+});
+test('explicit clean signedOut waits the full read-only 120 seconds including boundary sample',async()=>{
+  let reads=0;const c=clock(),poll=(l,p,m)=>boundedPoll(l,p,m,c);
+  const result=await waitForBStartup(async()=>{reads++;return cleanB();},{allowSignedOut:true,poll});
+  assert(cleanBSignedOut(result));assert.equal(c.now(),120000);assert.equal(reads,121);
+  const defaultClock=clock();await assert.rejects(()=>waitForBStartup(async()=>cleanB(),{poll:(l,p,m)=>boundedPoll(l,p,m,defaultClock)}),e=>e.code==='CONDITION_TIMEOUT:B asynchronous restore result');assert.equal(defaultClock.now(),120000);
+});
+test('initial clean signedOut never hides a later noSession/cleanup/error, including at deadline',async()=>{
+  for(const error of [{code:'account_authentication',stage:'identitySession'},{code:'account_cleanup_required'},{code:'account_auth_identity_invalid',reason:'responseMetadata'},{code:'account_network',stage:'identityProvider'}]){
+    for(const after of [4000,120000]){
+      const c=clock(),terminal={...cleanB(),state:'error',error};
+      const result=await waitForBStartup(async()=>c.now()<after?cleanB():terminal,{allowSignedOut:true,poll:(l,p,m)=>boundedPoll(l,p,m,c)});
+      assert.equal(result,terminal);assert.equal(c.now(),after);
+      const calls=[];await assert.rejects(()=>recoverBSignedOut(result,{allow:true,history:history(),record:async()=>calls.push('record'),before:async()=>calls.push('preserve'),login:async()=>calls.push('login'),enable:async()=>calls.push('enable')}));assert.deepEqual(calls,[]);
+    }
+  }
+});
+test('any unclean or mixed startup sample disqualifies signed-out recovery for the entire interval',async()=>{
+  for(const change of [{enabled:true},{enabled:undefined},{devices:[{connected:true}]},{devices:undefined},{conflictCount:1},{conflictCount:undefined},{state:'authorizing'}]){
+    const c=clock();await assert.rejects(()=>waitForBStartup(async()=>c.now()===2000?{...cleanB(),...change}:cleanB(),{allowSignedOut:true,poll:(l,p,m)=>boundedPoll(l,p,m,c)}),e=>e.code==='CONDITION_TIMEOUT:B asynchronous restore result');assert.equal(c.now(),120000);
+  }
+  const c=clock();await assert.rejects(()=>waitForBStartup(async()=>c.now()<3000?cleanB():{...cleanB(),state:'authorizing',profile:{subject:'different-owner'}},{allowSignedOut:true,poll:(l,p,m)=>boundedPoll(l,p,m,c)}),/committed bound-owner history/);assert.equal(c.now(),3000);
+});
+test('historical owner gate checks every profile, including partial authorizing and error profiles',async()=>{
+  assert.equal(checkBHistoryProfile(cleanB()).state,'signedOut');
+  for(const state of ['authorizing','paused','ready','connecting','error']){
+    for(const profile of [{subject:'different-owner'},{subject:'different-owner',username:'cybernoteqa20261113a'},{subject:''},{}]){
+      const c=clock();let reads=0;await assert.rejects(()=>waitForBHistoryAccount(async()=>{reads++;return {...cleanB(),state,profile};},{poll:(l,p,m)=>boundedPoll(l,p,m,c)}));assert.equal(reads,1);assert.equal(c.now(),0);
+    }
+  }
+  const c=clock();await assert.rejects(()=>waitForBHistoryAccount(async()=>({...cleanB(),state:'authorizing'}),{poll:(l,p,m)=>boundedPoll(l,p,m,c)}),e=>e.code==='CONDITION_TIMEOUT:B historical-owner sign-in');assert.equal(c.now(),120000);
+});
+test('signed-out recovery requires opt-in/history and never enables after owner/auth/cleanup failure',async()=>{
+  const deps=()=>{const calls=[];return {calls,args:{allow:true,history:history(),before:async()=>calls.push('preserve originals'),record:async()=>calls.push('record'),login:async()=>{calls.push('one UI signIn');throw Error('injected authorization failure');},enable:async()=>calls.push('enable')}};};
+  for(const override of [{allow:false},{history:undefined},{history:{...history(),originalSubjectSha256:'0'.repeat(64)}},{history:{...history(),sha256:'0'.repeat(64)}}]){
+    const {calls,args}=deps();await assert.rejects(()=>recoverBSignedOut(cleanB(),{...args,...override}));assert.deepEqual(calls,[]);
+  }
+  for(const result of [undefined,{...status('b'),profile:{subject:'different-owner',username:'cybernoteqa20261113a'}},{...cleanB(),state:'error',error:{code:'account_cleanup_required'}},{...cleanB(),state:'error',error:{code:'account_authentication',stage:'identitySession'}}]){
+    const {calls,args}=deps();if(result)args.login=async()=>{calls.push('one UI signIn');return result;};
+    await assert.rejects(()=>recoverBSignedOut(cleanB(),args));assert.deepEqual(calls,['record','preserve originals','one UI signIn']);
+  }
+  const {calls,args}=deps();args.before=async()=>{calls.push('preserve originals');throw Error('baseline changed');};await assert.rejects(()=>recoverBSignedOut(cleanB(),args));assert.deepEqual(calls,['record','preserve originals']);
 });
 
 const refreshFailure=()=>({...status('b'),state:'error',enabled:false,profile:{subject:'synthetic-owner'},devices:[],error:{code:'account_authentication',stage:'identityRefresh'}});

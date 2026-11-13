@@ -15,15 +15,29 @@ export const BINARY_SHA='b981400529f36cb698616d3871cc83b9a5d7cc4c10fb75009276697
 export const SOURCE='10814415ca088273bacc311d192b9605bda16775';
 const USERNAME='cybernoteqa20261113a';
 const PRIOR=new URL('../../docs/verification/account109/native/headless-continuation01/result.json',import.meta.url);
+const B_HISTORY=new URL('../../docs/verification/account109/native/relogin-live02/result.json',import.meta.url);
+export const B_HISTORY_SHA='b553d6ba27ba43e4281ebfc6abc445c583cf7e25bc4bfe285e3fa749d86fa439';
+export const B_SUBJECT_SHA='03efb3ceea182d57ea4a56fc7e9b0e5e3577192f6a4818d8a454d77cb1cffc8b';
+export async function readBHistory(read=()=>readFile(B_HISTORY)){
+  const bytes=await read();assert.equal(hash(bytes),B_HISTORY_SHA,'Exact committed relogin02 history required');
+  const r=JSON.parse(bytes),rows=r.observations.filter(o=>o.kind==='b-startup-recovery-decision');
+  assert.equal(r.kind,'account109-original-desktop-relogin');assert.equal(r.status,'fail');assert.equal(rows.length,1);
+  assert.equal(rows[0].originalSubjectSha256,B_SUBJECT_SHA);return {sha256:B_HISTORY_SHA,originalSubjectSha256:B_SUBJECT_SHA};
+}
+export function checkBHistoryProfile(s){
+  if(s.profile){assert(typeof s.profile.subject==='string'&&s.profile.subject.length>0);assert.equal(hash(s.profile.subject),B_SUBJECT_SHA,'B subject must match committed bound-owner history');}
+  return s;
+}
+export const cleanBSignedOut=s=>s?.state==='signedOut'&&s.enabled===false&&!s.profile&&!s.error&&Array.isArray(s.devices)&&!s.devices.some(d=>d.connected)&&s.conflictCount===0;
 const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(value);
 export function options(argv){
   const o={};
-  for(let i=0;i<argv.length;i++){const k=argv[i];assert(['--binary','--stores','--output','--end-state','--allow-b-relogin','--allow-b-network-retry'].includes(k)&&!Object.hasOwn(o,k),'Unknown/duplicate option');o[k]=k.startsWith('--allow-b-')?true:argv[++i];}
-  assert.equal(Object.keys(o).length,4+Number(!!o['--allow-b-relogin'])+Number(!!o['--allow-b-network-retry']),'--binary ABS --stores ORIGINAL --output FRESH --end-state enabled|paused [--allow-b-relogin] [--allow-b-network-retry] required');
+  for(let i=0;i<argv.length;i++){const k=argv[i];assert(['--binary','--stores','--output','--end-state','--allow-b-relogin','--allow-b-network-retry','--allow-b-signed-out-relogin'].includes(k)&&!Object.hasOwn(o,k),'Unknown/duplicate option');o[k]=k.startsWith('--allow-b-')?true:argv[++i];}
+  assert.equal(Object.keys(o).length,4+Number(!!o['--allow-b-relogin'])+Number(!!o['--allow-b-network-retry'])+Number(!!o['--allow-b-signed-out-relogin']),'--binary ABS --stores ORIGINAL --output FRESH --end-state enabled|paused [--allow-b-relogin] [--allow-b-network-retry] [--allow-b-signed-out-relogin] required');
   for(const k of ['--binary','--stores','--output'])assert(isAbsolute(o[k]||'')&&resolve(o[k])===o[k],'Canonical absolute paths required');
   assert.equal(o['--stores'],STORES,'Only original synthetic stores allowed');assert(['enabled','paused'].includes(o['--end-state']),'Explicit final state required');
   const output=o['--output'];assert(output!==STORES&&!output.startsWith(STORES+sep)&&!STORES.startsWith(output+sep),'Evidence must be outside original stores');
-  return {binary:o['--binary'],stores:STORES,output,endState:o['--end-state'],allowBRelogin:o['--allow-b-relogin']===true,allowBNetworkRetry:o['--allow-b-network-retry']===true};
+  return {binary:o['--binary'],stores:STORES,output,endState:o['--end-state'],allowBRelogin:o['--allow-b-relogin']===true,allowBNetworkRetry:o['--allow-b-network-retry']===true,allowBSignedOutRelogin:o['--allow-b-signed-out-relogin']===true};
 }
 export function checkProfile(s){
   // An unsuccessful refresh and pending SignIn can retain only the bound subject.
@@ -35,14 +49,39 @@ export function checkProfile(s){
 // RefreshFailed here is produced only by HTTP 400 invalid_grant, not all refresh errors.
 export const refreshClassification=s=>s?.error?.code==='account_network'||(s?.error?.code==='account_authentication'&&s.error.stage==='authorizationProvider'&&s.error.providerReason==='network')?'transport':s?.error?.code==='account_authentication'&&s.error.stage==='identityRefresh'&&s.error.providerReason===undefined?'serverInvalidGrant400':s?.error?.code==='account_authentication'&&s.error.stage==='identitySession'?'noSession':'other';
 export const isBRefreshFailure=s=>s?.state==='error'&&s.enabled===false&&refreshClassification(s)==='serverInvalidGrant400'&&typeof s.profile?.subject==='string'&&s.profile.subject.length>0&&Array.isArray(s.devices)&&!s.devices.some(d=>d.connected)&&s.conflictCount===0;
-export async function waitForBStartup(read,{poll=boundedPoll}={}){
-  let result,subject;
-  await poll('B asynchronous restore result',async()=>{
+export async function waitForBStartup(read,{poll=boundedPoll,allowSignedOut=false}={}){
+  let result,subject,entirelyClean=true;
+  const sample=async()=>{
     result=checkProfile(await read());
+    if(allowSignedOut)checkBHistoryProfile(result);
+    entirelyClean=entirelyClean&&cleanBSignedOut(result);
     if(result.profile){assert(typeof result.profile.subject==='string'&&result.profile.subject.length>0);subject??=result.profile.subject;assert.equal(result.profile.subject,subject,'Original B subject during startup');}
     // Runtime starts signedOut before restore is spawned. Polling issues no mutation.
     return !!result.error||result.state==='error'||!!result.profile&&['paused','ready'].includes(result.state);
-  },120000);return result;
+  };
+  try{await poll('B asynchronous restore result',sample,120000);}
+  catch(error){
+    if(error.code!=='CONDITION_TIMEOUT:B asynchronous restore result'||!allowSignedOut)throw error;
+    // Also inspect the deadline boundary: a late error must not become a login.
+    if(await sample())return result;
+    if(!entirelyClean)throw error;
+  }
+  return result;
+}
+export async function waitForBHistoryAccount(read,{poll=boundedPoll}={}){
+  const [s]=await waitHealthy('B historical-owner sign-in',async()=>[checkProfile(checkBHistoryProfile(await read()))],([s])=>{
+    if(signedOut(s))throw Object.assign(new Error('Login ended signed out'),{code:'LOGIN_ENDED_SIGNED_OUT'});
+    return !!s.profile&&['paused','ready','connecting'].includes(s.state);
+  },120000,{poll});return s;
+}
+export async function recoverBSignedOut(initial,{allow,history,before,login,enable,record}){
+  assert.equal(allow,true,'Explicit B signed-out re-login required');assert(cleanBSignedOut(initial));
+  assert.equal(history?.sha256,B_HISTORY_SHA);assert.equal(history?.originalSubjectSha256,B_SUBJECT_SHA);
+  await record({kind:'b-clean-signed-out-recovery',startupReadOnlyMs:120000,historySha256:B_HISTORY_SHA,originalSubjectSha256:B_SUBJECT_SHA});
+  await before();const restored=checkProfile(checkBHistoryProfile(await login()));requireHealthy(restored);
+  assert(restored.profile&&['paused','ready','connecting'].includes(restored.state));assert.equal(restored.profile.username,USERNAME);
+  await record({kind:'b-clean-signed-out-recovery-completed',sameOriginalSubject:true,command:'account.signIn',...safeStatus(restored)});
+  await enable();return restored;
 }
 export async function recoverB(initial,{allowRelogin,allowNetworkRetry,login,retry,enable,record,before=async()=>{}}){
   const classification=refreshClassification(initial);
@@ -159,15 +198,18 @@ const documentFor=text=>({type:'doc',content:[{type:'paragraph',content:[{type:'
 const operations=['ready','state','idle','close','account.status','account.signIn','account.syncNow','account.setEnabled','settings.open','settings.tab','app.back','folder.select','note.create','note.select','editor.setContent','app.flush','attachment.read','confirmation.inspect','recovery.inspect','dom.click'];
 
 export async function run(argv=process.argv.slice(2)){
-  const {binary,stores,output,endState,allowBRelogin,allowBNetworkRetry}=options(argv);
+  const {binary,stores,output,endState,allowBRelogin,allowBNetworkRetry,allowBSignedOutRelogin}=options(argv);
+  // Public committed evidence only; missing/mismatched history stops before Apps or output.
+  const bHistory=allowBSignedOutRelogin?await readBHistory():undefined;
   assert.equal(hash(await readFile(binary)),BINARY_SHA,'Only reviewed 10814415 GUI candidate allowed');
   for(const dir of [stores,...['a','b'].map(n=>resolve(stores,'desktop-'+n))])assert.equal(await realpath(dir),dir);
   await mkdir(output,{mode:0o700});assert.equal(await realpath(output),output);
   const priorBytes=await readFile(PRIOR),prior=JSON.parse(priorBytes);
-  const report={schema:1,kind:'account109-original-desktop-relogin',status:'running',phase:'baseline',startedAt:new Date().toISOString(),endState,allowBRelogin,allowBNetworkRetry,scenarios:Object.fromEntries(['baseline','login','pausedEdits','catchup','bidirectional','restart','endState','auth06'].map(k=>[k,'not-run'])),checks:[],observations:[],binary:{path:binary,sha256:BINARY_SHA,sourceRevision:SOURCE,candidateKind:'debug-e2e'},prior:{sha256:hash(priorBytes)},limitations:[
+  const report={schema:1,kind:'account109-original-desktop-relogin',status:'running',phase:'baseline',startedAt:new Date().toISOString(),endState,allowBRelogin,allowBNetworkRetry,allowBSignedOutRelogin,...(bHistory?{bHistory}:{}),scenarios:Object.fromEntries(['baseline','login','pausedEdits','catchup','bidirectional','restart','endState','auth06'].map(k=>[k,'not-run'])),checks:[],observations:[],binary:{path:binary,sha256:BINARY_SHA,sourceRevision:SOURCE,candidateKind:'debug-e2e'},prior:{sha256:hash(priorBytes)},limitations:[
     'Existing synthetic roots only. SignIn uses the product UI handler and native PKCE/system browser; parent completes authorization. No credentials, tokens, callback URLs, grants or manual pairing inputs.',
     'Merge confirmation is inspected and clicked through the existing dom.click UI handler, not physical input. Parent only completes system-browser authorization. Editor commands use debug/e2e UI handlers; no physical typing or OS picker claim.',
     'Pause is the production account setting, not OS network loss. Negative windows are bounded to 3 seconds. AUTH06 is not executed.',
+    'Explicit clean B signedOut recovery requires the entire 120-second read-only startup interval and fixed committed relogin02 owner history. Profile subject hashes are checked before runner enable; native bind retains its same-owner and persisted enabled checks. Login is not guaranteed to begin paused. No binding/grant read or identity injection.',
     'Cross-baseline overlap requires exact note fields/references except local revision, and exact attachment ownership/metadata/SHA except physical relativePath. Later canonical preservation excludes local revision/path, normalizes absent/null nullable fields and reference IDs to descriptors; original attachment IDs/ownership/SHA are verified separately. Only live unlocked baselines are supported.',
     'Shell proxy variables are blanked only for owned child processes. No system settings change or conflict creation. Pinned 10814415 maps identityRefresh without providerReason to HTTP 400 invalid_grant. Explicit B flags select at most one UI recovery: network syncNow retains the production owner, rejected refresh signIn requires same subject. NoSession stops with explicit SignOut guidance; no automatic SignOut or recovery fallback. No grant bytes are read to infer state.'
   ],tools:{}};
@@ -186,7 +228,7 @@ export async function run(argv=process.argv.slice(2)){
   const command=async(app,op,args={})=>{await trace(app,op,()=>app.execute(op,args,op==='account.syncNow'?60000:undefined));await trace(app,'idle',()=>app.idle());};
   const state=app=>trace(app,'state',()=>app.state());
   const workspace=async app=>(await state(app)).workspace;
-  const status=async app=>{const s=await trace(app,'account.status',()=>nativeAccount(app,'status'));observe(app.name,s);return checkProfile(s);};
+  const status=async app=>{const s=await trace(app,'account.status',()=>nativeAccount(app,'status'));observe(app.name,s);if(bHistory&&app.name==='b')checkBHistoryProfile(s);return checkProfile(s);};
   let subject;
   async function statuses(apps){const ss=[];for(const app of apps){const s=await status(app);if(s.profile&&subject)assert.equal(s.profile.subject,subject,'Original account binding');ss.push(s);}return ss;}
   const accountWait=(label,apps,accept,ms)=>waitHealthy(label,()=>statuses(apps),accept,ms);
@@ -230,7 +272,23 @@ export async function run(argv=process.argv.slice(2)){
     report.baseline={sha256:hash(await readFile(resolve(output,'baseline.json'))),originalFilesUnchanged:true,overlapAgreementCheckedBeforeLaunch:true,notes:Object.fromEntries(['a','b'].map(k=>[k,baselines[k].notes.map(n=>({id:n.id,sha256:hash(noteBody(n))}))])),gap};await check('baseline');
     report.phase='startup';let a=await open('a');const b=await open('b');
     assert(signedOut(await status(a)),'A must begin genuinely signed out');
-    const initialB=await waitForBStartup(()=>status(b));subject=initialB.profile?.subject;
+    const initialB=await waitForBStartup(()=>status(b),{allowSignedOut:allowBSignedOutRelogin});subject=initialB.profile?.subject;
+    if(allowBSignedOutRelogin&&cleanBSignedOut(initialB)){
+      report.phase='b-recovery';
+      const restored=await recoverBSignedOut(initialB,{allow:allowBSignedOutRelogin,history:bHistory,
+        record:async row=>{report.observations.push(row);await save();},before:async()=>{await preserved(a,baselines.a);await preserved(b,baselines.b);},enable:()=>enable(b),
+        login:async()=>{
+          await enter(b);await boundedPoll('B signed-out login UI ready',async()=>{
+            assert(cleanBSignedOut(await status(b)),'B must remain clean signedOut before one SignIn');
+            const p=await trace(b,'recovery.inspect',()=>b.evaluate("(()=>{const p=document.querySelector('.account-settings'),bs=p?.querySelectorAll('.account-group .account-actions button.account-primary'),b=bs?.[0];return {state:p?.dataset.accountState,count:bs?.length,label:b?.textContent,enabled:!!b&&!b.disabled,visible:!!b&&b.getClientRects().length>0};})()"));
+            return p.state==='signedOut'&&p.count===1&&p.label==='登录'&&p.enabled&&p.visible;
+          },5000);
+          report.observations.push({kind:'b-recovery-ui-shown',label:'登录',uiHandler:'account.signIn',physicalInput:false});await save();
+          console.log('WAIT b system-browser-sign-in (one explicit historical same-subject authorization)');await command(b,'account.signIn');
+          return waitForBHistoryAccount(()=>status(b));
+        }
+      });subject=restored.profile.subject;report.phase='startup';
+    }
     if(initialB.error||initialB.state==='error'){
       report.phase='b-recovery';subject=initialB.profile?.subject;
       const classification=refreshClassification(initialB);
