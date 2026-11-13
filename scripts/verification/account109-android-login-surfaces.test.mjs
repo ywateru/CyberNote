@@ -44,6 +44,32 @@ test('form evidence cannot be borrowed from a foreign or second WebView or forei
     assert.equal(nativeLoginProjection(raw).hostedForm,false);const effects=[];const c=nativeLoginControls({capture:async()=>raw,guard:async()=>{},back:async()=>effects.push('back'),tap:async()=>effects.push('tap')});await assert.rejects(()=>c.closeNativeLogin());await assert.rejects(()=>c.continueNativeLogin());assert.deepEqual(effects,[]);
   }
 });
+test('nested form belongs to the unique owned visible WebView root; foreign, hidden or independent paths fail closed',async()=>{
+  const node=(cls,body='',{pkg=PACKAGE,shown=true,attrs=''}={})=>`<node package="${pkg}" class="${cls}" bounds="[0,0][100,100]" visible-to-user="${shown}" enabled="true" ${attrs}>${body}</node>`;
+  const field=()=>node('android.widget.EditText');
+  const action=()=>node('android.widget.Button','',{attrs:'text="登录" clickable="true"'});
+  const form=field()+field()+action();
+  const web=(body,opts)=>node('android.webkit.WebView',body,opts);
+  const toolbar=node('android.widget.Button','',{attrs:'text="在浏览器中继续" clickable="true"'})+node('android.widget.Button','',{attrs:'text="取消登录" clickable="true"'});
+  const tree=body=>'<hierarchy>'+node('android.widget.FrameLayout',toolbar+body)+'</hierarchy>';
+  const valid=tree(web(web(form)));
+  assert.deepEqual(nativeLoginProjection(valid),{dialog:true,webView:true,hostedForm:true});
+  const invalid=[
+    tree(web(web(form,{pkg:'com.personal.app'}))),
+    tree(web(node('android.widget.FrameLayout',web(form),{pkg:'com.personal.app'}))),
+    tree(web(web(web(form),{pkg:'com.personal.app'}))),
+    tree(web(web(form,{shown:false}))),
+    tree(web(web(node('android.widget.FrameLayout',form,{shown:false})))),
+    tree(web(web(form))+web(web(form))),
+    tree(web('')+web(form,{pkg:'com.personal.app'})),
+    tree(web(web(field()+node('android.widget.Button','',{shown:false,attrs:'text="登录" clickable="true"'})))),
+  ];
+  for(const method of ['closeNativeLogin','continueNativeLogin']){
+    const effects=[];const controls=raw=>nativeLoginControls({capture:async()=>raw,guard:async()=>{},back:async()=>effects.push('back'),tap:async()=>effects.push('tap')});
+    await controls(valid)[method]();assert.deepEqual(effects,[method==='closeNativeLogin'?'back':'tap']);effects.length=0;
+    for(const raw of invalid){assert.equal(nativeLoginProjection(raw).hostedForm,false);await assert.rejects(()=>controls(raw)[method](),{code:'ANDROID_NATIVE_LOGIN_FORM_REQUIRED'});assert.deepEqual(effects,[]);}
+  }
+});
 test('only owned visible form permits fixed native Back/tap; guard loss or ambiguity causes no input',async()=>{
   for(const action of ['closeNativeLogin','continueNativeLogin']){
     const events=[];const c=nativeLoginControls({capture:async()=>xml(),guard:async()=>events.push('guard'),back:async()=>events.push('back'),tap:async(x,y)=>events.push(['tap',x,y])});await c[action]();assert.deepEqual(events.at(-1),action==='closeNativeLogin'?'back':['tap',50,50]);

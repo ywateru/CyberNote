@@ -61,14 +61,15 @@ function nativeAuthTree(xml) {
     const attrs=Object.fromEntries([...token[1].matchAll(/([\w:-]+)="([^"]*)"/g)].map(m=>[m[1],decode(m[2])]));
     const bounds=attrs.bounds?.match(/^\[(\d+),(\d+)\]\[(\d+),(\d+)\]$/)?.slice(1).map(Number);
     const shown=attrs['visible-to-user']!=='false'&&bounds?.[2]>bounds?.[0]&&bounds?.[3]>bounds?.[1]&&stack.every(n=>n.shown);
-    const webOwner=stack.findLast(n=>n.attrs.class==='android.webkit.WebView');
-    const n={attrs,bounds,shown,inWeb:!!webOwner,webOwner};nodes.push(n);if(!token[2])stack.push(n);
+    const webOwner=stack.find(n=>n.attrs.class==='android.webkit.WebView');
+    const ownedWebPath=!!webOwner&&stack.slice(stack.indexOf(webOwner)).every(n=>n.attrs.package===PACKAGE)&&attrs.package===PACKAGE;
+    const n={attrs,bounds,shown,inWeb:!!webOwner,webOwner,ownedWebPath};nodes.push(n);if(!token[2])stack.push(n);
   }
   if(stack.length||!nodes.length)throw loginFailure('ANDROID_NATIVE_XML_INVALID');
   const nativeButton=label=>nodes.filter(n=>!n.inWeb&&n.shown&&n.attrs.package===PACKAGE&&n.attrs.class==='android.widget.Button'&&n.attrs.text===label&&n.attrs.enabled==='true'&&n.attrs.clickable==='true');
   const continuing=nativeButton('在浏览器中继续'),cancel=nativeButton('取消登录');
   const web=nodes.filter(n=>!n.inWeb&&n.shown&&n.attrs.class==='android.webkit.WebView'&&n.attrs.package===PACKAGE);
-  const ownFormNode=n=>web.length===1&&n.webOwner===web[0]&&n.attrs.package===PACKAGE&&n.shown;
+  const ownFormNode=n=>web.length===1&&n.webOwner===web[0]&&n.ownedWebPath&&n.shown;
   const editable=nodes.some(n=>ownFormNode(n)&&n.attrs.class==='android.widget.EditText');
   const formAction=nodes.some(n=>ownFormNode(n)&&['Sign in','Continue','Next','登录','继续','下一步'].includes(n.attrs.text)&&n.attrs.enabled==='true'&&n.attrs.clickable==='true');
   const safe={dialog:continuing.length===1&&cancel.length===1,webView:web.length===1,hostedForm:editable&&formAction};
