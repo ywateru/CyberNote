@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "date": "2026-11-13",
+  "kind": "safe-observed-desktop-checkpoint",
+  "ec4348c6": {
+    "binarySha256": "a55fe20c462ee372183e4dc5d66b4feaeaca66e483213c121a63d3021ebaa3e8",
+    "dataRoot": "/private/tmp/account109-unlocked-desktops-sTVojd",
+    "devices": {
+      "a": {
+        "pid": 48403,
+        "interactive": true,
+        "startupDetached": true,
+        "login": "error",
+        "safeErrorCode": "account_network",
+        "profilePresent": false,
+        "syncEnabled": false,
+        "naturalExit": true
+      },
+      "b": {
+        "pid": 49074,
+        "interactive": true,
+        "startupDetached": true,
+        "login": "not-attempted",
+        "naturalExit": true
+      }
+    }
+  },
+  "11cbf61f": {
+    "sourceRevision": "11cbf61ff4fddcfecbeb38c944e32a543fe44fb6",
+    "binarySha256": "5a69f905d3513e920ef19a896c9688c00f0938a03309873320b4187e5b4ef50c",
+    "dataRoot": "/private/tmp/account109-unlocked-desktops-Gwayfo",
+    "devices": {
+      "a": {
+        "pid": 62055,
+        "interactive": true,
+        "startupDetached": true,
+        "login": "paused",
+        "expectedSyntheticUser": true,
+        "profilePresent": true,
+        "initialSyncEnabled": false,
+        "firstMergePromptObserved": true,
+        "firstMergeConfirmed": true,
+        "subsequentSyncState": "error",
+        "safeErrorCode": "account_network",
+        "syncEnabledAfterConfirmation": true,
+        "connectedPeers": 0
+      },
+      "b": {
+        "pid": 62170,
+        "interactive": true,
+        "startupDetached": true,
+        "login": "error",
+        "profilePresent": false,
+        "syncEnabled": false,
+        "nativeSafeErrorCode": "account_network",
+        "nativeSafeStage": "coordinator",
+        "frontendDTORejectedNewStage": true
+      }
+    },
+    "cleanup": {
+      "bothExitedCodeZero": true,
+      "bothShutdownAcksTimedOut": true,
+      "signalsSent": [],
+      "naturalExitAccepted": false
+    }
+  },
+  "fixes": {
+    "nativeSafeStages": "efe9902c",
+    "frontendStrictStageAllowlist": "f28818ad",
+    "latestBuiltSource": "7841f308",
+    "dtoTestsPassed": 2,
+    "nativeAccountTestsPassed": 14,
+    "typecheckPassed": true,
+    "publishTargetedTestsPassed": 14
+  },
+  "limits": [
+    "Observed first product login success is only desktop A on 11cbf61f, before the DTO allowlist correction.",
+    "B did not complete login; automatic discovery and multi-device data convergence were not executed.",
+    "No credential entry, callback injection, grant copying or manual pairing in these desktop attempts. Existing hosted SSO was used.",
+    "Mac independently reported locked after the 7841f308 startup attempt. No startup visibility or inert gate was altered.",
+    "Production packages from d69ffbce are historical and exclude the new diagnostic/DTO changes. No new GitHub repository, push or Actions run."
+  ]
+}

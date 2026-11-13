@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "kind": "debug-e2e-candidate",
+  "source": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-13T01:23:47.390Z",
+    "target": "macos",
+    "sourceRevision": "7841f308cb3c461d45edcd45517a44164b39fcfa",
+    "sourceFingerprint": "98df19ef9d2bc4cf729b7e3f057283b3d930ff001d01e7c22f6c90becf85a347",
+    "sourceDirty": false,
+    "inputCount": 1652,
+    "releasePreparedAt": null
+  },
+  "binary": {
+    "path": "artifacts/account109/mac-7841f308-network-stage/notes-clone",
+    "bytes": 203033504,
+    "sha256": "d36c5e23b6406ea31235220c8384750667038380fcc4ccb7c19be7d5f0078a70"
+  },
+  "embeddedIdentity": {
+    "encoding": "brotli",
+    "sha256": "ce07dc3dabfe005e33a2052021d0e2e3592045f2747d702a75849d874b0706bf"
+  },
+  "features": [
+    "sync-e2e",
+    "tauri/custom-protocol"
+  ],
+  "frontendEnvironment": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "CYBERNOTE_BUILD_TARGET": "macos",
+    "VITE_NOTES_ACCOUNT_NATIVE": null,
+    "VITE_NOTES_ACCOUNT_UI": null
+  },
+  "logs": {
+    "frontend02": "72fb161453eb3a6d8021af5c70db4ea238452d046485dcc498f04a4cb3d0fd1e",
+    "native02": "9b873d59ef61e859467b87f9b459f494353bcb0ff6599a47e2d9de7c495ac319"
+  },
+  "acceptance": "startup attempt failed while Mac was independently confirmed locked; no account or sync pass asserted"
+}

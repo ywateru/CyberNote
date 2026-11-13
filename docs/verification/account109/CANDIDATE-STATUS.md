@@ -4,6 +4,12 @@
 
 当前能力入口已在 `5d30f16c` 收口：原生默认开放账户 UI，显式 `VITE_NOTES_ACCOUNT_NATIVE=0` 可关闭；普通浏览器默认隐藏，fixture 仍受开发条件隔离。主线 compiled capability 24/24 与 typecheck 通过。下文旧候选中的 opt-in 描述指对应历史构建；真实登录和多端验收仍须逐项完成。
 
+## 最新解锁后进展
+
+已在解锁状态实际启动两轮各两个独立桌面。11cb 候选的桌面 A 真实产品登录成功，首次状态 paused；B 的原生失败阶段为 coordinator，A 开启并合并后的建连也未成功。固定安全 stage 和前端严格 DTO 已修正，原生账户 14/14、DTO 2/2、typecheck、发布工具定向 14/14 通过；精确导出 dry-run 1,770 文件通过。新的 7841 候选已构建并匹配实际嵌入身份，但后续启动时 Mac 再次锁定，执行器停在 ready 前置。见 [解锁后记录](macos/unlocked01/README.md)。
+
+当前生产包仍是旧 d69 的已验证本地包，未包含新诊断修正；未向新 GitHub 仓库推送或运行 Actions。双桌面与三端收敛尚未通过。下文旧候选结果保留各自时间和边界。
+
 ## 已执行
 
 | 检查 | 结果与边界 |
@@ -27,7 +33,7 @@
 
 ## macOS 候选与实际启动尝试
 
-已另从干净主线 `ec4348c6` 构建不设置 ACCOUNT_NATIVE/UI 的 debug/e2e 候选，默认账户入口、实际嵌入身份和 24 项能力检查通过，二进制保留供后续真实双桌面验收。该候选尚未启动；本轮两次原生工具检查仍返回 Mac 锁定，未绕过可见性或 startup gate。详见 [最新 macOS 候选](macos/LATEST-CANDIDATE.md)。
+已另从干净主线 `ec4348c6` 构建不设置 ACCOUNT_NATIVE/UI 的 debug/e2e 候选，默认账户入口、实际嵌入身份和 24 项能力检查通过，二进制保留供后续真实双桌面验收。该候选后来已在解锁状态于两个独立资料库启动成功；后续登录结果及最新 7841 候选再次遇锁见本页最新进展。未绕过可见性或 startup gate。详见 [最新 macOS 候选](macos/LATEST-CANDIDATE.md)。
 
 后续已从干净主线 `ad18a872` 重新构建包含最新修复的 debug 候选，前端及原生构建均通过，二进制已保留。本次 Mac 仍锁定；新候选在一个独立根进行有界 ready 检查，页面为 hidden 且 startup=loading，45 秒后未进入可交互状态；只关闭本次持有进程，未继续第二端登录。身份、结果及边界见 [最新 macOS 候选](macos/LATEST-CANDIDATE.md)。下文保留旧候选的原始尝试记录。
 
@@ -65,8 +71,8 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 
 ## 尚未执行或尚未完成
 
-- macOS 产品内真实托管登录、双桌面账户自动发现和完整 document/plainText/附件原字节比对。最近可见启动尝试受 Mac 锁定限制；继续前须重新确认解锁和候选身份。
+- macOS 的 A 已有一次真实产品登录成功；B 成功登录、双桌面账户自动发现和完整 document/plainText/附件原字节比对仍未完成。最新候选启动受再次锁定限制；继续前须重新确认解锁和候选身份。
 - Android 最新 d69 隔离账户测试包已通过一次真实 UI SignIn 独立重现 `account_network`；成功登录、原生回跳验收及三端同步尚未完成。继续前需恢复手机对正式 coordinator 的正常可达性或提供可达的正式服务域名；当前证据未确定原生故障层级，未进行 DNS/TLS 或部署防护绕过。原用户应用及旧 Sync108 合成测试包保持原地。
-- 当前精确源码清单、新历史本地导出及双平台生产包均已完成，见上文 `d7f3e2a9`。远程 GitHub 发布和 Actions 实际包构建尚未执行；若后续产品源码调整，须刷新清单和重做对应验证。
+- 当前诊断修正对应的精确源码清单已刷新，导出 dry-run 通过。`d7f3e2a9` 的双平台生产包属于修正前历史；最终新历史、生产包和远程 Actions 仍须基于验收后的源码重做，尚未推送。
 
 验收操作与通过标准继续使用 [ACCOUNT-TEST-CASES.md](ACCOUNT-TEST-CASES.md)。原开发仓库没有被直接推送，未执行最终发布。

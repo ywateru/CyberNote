@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "kind": "real-account-two-native-desktops",
+  "startedAt": "2026-11-13T01:26:40.173Z",
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-7841f308-network-stage/notes-clone",
+    "sha256": "d36c5e23b6406ea31235220c8384750667038380fcc4ccb7c19be7d5f0078a70"
+  },
+  "checks": [],
+  "observations": [],
+  "limitations": [
+    "Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.",
+    "Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.",
+    "Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change."
+  ],
+  "status": "fail",
+  "failure": {
+    "phase": "startup",
+    "code": "TIMEOUT"
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "directory": "/private/tmp/account109-desktop-real-7841f308-01/desktop-a",
+      "stderrBytes": 58,
+      "commands": 2,
+      "forcedSignals": [
+        "SIGTERM"
+      ],
+      "pid": 75748,
+      "lastAction": "eval",
+      "failurePhase": "documentProbe",
+      "nativeDiagnostic": {
+        "documentProbes": 1333,
+        "lastDocument": {
+          "debug": true,
+          "interactive": false,
+          "readyState": "complete",
+          "rootHidden": "true",
+          "rootInert": true,
+          "startup": "loading",
+          "timeOrigin": 1794533202047,
+          "visibility": "hidden"
+        }
+      },
+      "readinessFailure": {
+        "code": "DIAGNOSTIC_UNAVAILABLE"
+      },
+      "failureCode": "TIMEOUT",
+      "exit": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "close": {
+        "code": null,
+        "signal": "SIGTERM"
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": false
+    }
+  ],
+  "finishedAt": "2026-11-13T01:27:42.024Z"
+}

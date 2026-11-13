@@ -2,6 +2,7 @@
 // Real native account handlers + system-browser login; no grants or invites injected.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {spawn} from 'node:child_process';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {resolve,isAbsolute} from 'node:path';
 import {NativeApp,until,delay} from './sync108-native-driver.mjs';
@@ -16,6 +17,11 @@ await mkdir(output); // Never reuse, clear or replace an existing library.
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const report={schema:1,kind:'real-account-two-native-desktops',startedAt:new Date().toISOString(),binary:{path:binary,sha256:hash(await readFile(binary))},checks:[],observations:[],limitations:['Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.','Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.','Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change.']};
 const check=name=>{report.checks.push({name,status:'pass'});console.log('PASS '+name);};
+// Scoped to this runner's lifetime; does not unlock or change system settings.
+if(process.platform==='darwin'){
+ const awake=spawn('/usr/bin/caffeinate',['-di','-w',String(process.pid)],{stdio:'ignore'});
+ awake.on('error',()=>{report.sleepAssertionUnavailable=true;});awake.unref();
+}
 const children=[],devices={}; let phase='startup';
 const save=()=>writeFile(resolve(output,'result.json'),JSON.stringify(report,null,2)+'\n');
 const proxyEnv=Object.fromEntries(['HTTP_PROXY','HTTPS_PROXY','ALL_PROXY','NO_PROXY','http_proxy','https_proxy','all_proxy','no_proxy'].map(k=>[k,'']));

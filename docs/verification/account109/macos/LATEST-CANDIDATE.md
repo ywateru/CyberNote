@@ -1,5 +1,13 @@
 # macOS 最新账户验收候选
 
+## 最新 debug/e2e 与解锁后结果：7841f308
+
+`7841f308cb3c461d45edcd45517a44164b39fcfa` 已纳入固定安全网络阶段及前端 DTO 白名单修正，当前可执行文件为 `artifacts/account109/mac-7841f308-network-stage/notes-clone`，203,033,504 bytes、SHA256 `d36c5e23b6406ea31235220c8384750667038380fcc4ccb7c19be7d5f0078a70`。实际包内 Brotli build-info 已匹配，fingerprint `98df19ef9d2bc4cf729b7e3f057283b3d930ff001d01e7c22f6c90becf85a347`、1,652 inputs、clean。见[精确回执](7841f308-debug-e2e.json)。
+
+解锁期间，ec4348 与 11cb 两轮各两个独立桌面均实际 ready。11cb 的 A 完成真实产品登录、状态 paused 且为预期合成账户；B 登录在原生 coordinator 阶段失败。A 首次合并确认后建连仍失败。11cb 的诊断字段曾被前端严格 DTO 拒绝，现已修正；不能把旧二进制覆盖到最新源码。
+
+最新 7841 候选启动时，Mac 已再次锁定，45 秒 ready 未通过，数据与账户用例均未执行。原生工具独立确认锁定；没有修改 visibility/inert/startup gate。所有 owned App 已退出。详细区分见[解锁后检查点](unlocked01/README.md)。双桌面自动同步、Android 三端和最终发布仍未完成。下文 d69 等生产包是历史构建，不包含本次诊断变更。
+
 ## 当前完整 production 包：d69ffbce 导出的同一新 root
 
 2026-11-13。Tesla 从 `d69ffbce2ad1284e6c7ce830f6840ba083148aab` 导出 pristine root，在任何安装或构建前交付其身份：root commit **`d7f3e2a9431f80ae5711a6a8f3fb3c55b86e3cbd`**、tree `dd810c45833ffb999a292a1ffc8bbe9a9df9fd27`，1,770 文件，clean、无 remote。Mac 以 APFS clone 创建 `/private/tmp/account109-sourced69-macos-source-20261113-01`，独立 `.git`、node_modules、dist；从旧 production cache 克隆到独立 `/private/tmp/account109-sourced69-macos-target-20261113-01`。pristine root 始终未安装依赖或产生构建输出，旧包未覆盖。
