@@ -8,13 +8,18 @@ const codes=['account_configuration','account_authentication','account_auth_call
 const stages=['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration','coordinatorProfile','coordinatorEnrollment','coordinatorJwks','authorizationProvider','identitySession','identityRefresh','identityRevocation','coordinatorSession'];
 const reasons=['responseMetadata','missingIdToken','issuer','audience','expired','nonce','signingKey','signature','algorithm','subject','authorizedParty','issuedAt','accessTokenHash','otherClaims'];
 const providerReasons=['configuration','network','invalidCallback','invalidIdentity','identityRejected','codeExchangeRejected','tokenResponseInvalid','missingRefreshToken','cancelled','noSession','ownershipMismatch','storage','refreshFailed','revocationFailed','busy'];
+const tokenOperations=['codeExchange','refresh'];
+const tokenFields=['tokenType','accessToken','expiresIn','scope'];
 const label=(value,allowed)=>allowed.includes(value)?value:'unknown';
 const count=value=>Number.isSafeInteger(value)&&value>=0?value:undefined;
 export const fail=code=>Object.assign(new Error(code),{code});
 export function safeStatus(s){
+  const e=s?.error;
+  const tokenDiagnostic=e?.code==='account_auth_identity_invalid'&&e.reason==='responseMetadata'&&e.stage===undefined&&e.providerReason===undefined&&tokenOperations.includes(e.tokenOperation)&&tokenFields.includes(e.tokenField)
+    ?{tokenOperation:e.tokenOperation,tokenField:e.tokenField}:{};
   return {state:label(s?.state,states),enabled:s?.enabled===true,hasProfile:!!s?.profile,
     identityCheck:s?.profile?.username===undefined?'unverified':s.profile.username==='cybernoteqa20261113a'?'expectedSyntheticUser':'differentUser',
-    error:s?.error?{code:label(s.error.code,codes),...(s.error.stage===undefined?{}:{stage:label(s.error.stage,stages)}),...(s.error.reason===undefined?{}:{reason:label(s.error.reason,reasons)}),...(s.error.providerReason===undefined?{}:{providerReason:label(s.error.providerReason,providerReasons)})}:undefined,
+    error:s?.error?{code:label(s.error.code,codes),...(s.error.stage===undefined?{}:{stage:label(s.error.stage,stages)}),...(s.error.reason===undefined?{}:{reason:label(s.error.reason,reasons)}),...(s.error.providerReason===undefined?{}:{providerReason:label(s.error.providerReason,providerReasons)}),...tokenDiagnostic}:undefined,
     devices:Array.isArray(s?.devices)?s.devices.slice(0,256).map(d=>({online:d?.online===true,current:d?.current===true,connected:d?.connected===true})):[],
     pendingCount:count(s?.pendingCount),conflictCount:count(s?.conflictCount)};
 }

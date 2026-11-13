@@ -79,6 +79,18 @@ Errors are the public, copyable enum `Configuration`, `Network`, `InvalidCallbac
 `RefreshFailed`, `RevocationFailed`, `Busy`. Display is fixed safe text. Raw
 provider error bodies, tokens, codes, paths and request URLs are not included.
 
+Token-envelope rejection additionally returns
+`ResponseMetadata(TokenOperation, TokenResponseField)`. Operations serialize as
+`codeExchange` or `refresh`; fields as `tokenType`, `accessToken`, `expiresIn`,
+or `scope`, with that fixed precedence on all three token verification paths.
+These labels classify the existing rejection without retaining any rejected
+value. Native status preserves `account_auth_identity_invalid / responseMetadata`
+and adds the paired `tokenOperation` / `tokenField` labels. Legacy generic
+`IdentityRejected(ResponseMetadata)` has no inferred details. SDK provider
+handoff retains its existing coarse `identityRejected` category. Validation,
+rotation persistence, quarantine and cleanup behavior are unchanged; details
+do not survive a later cleanup-required error overriding the rejection.
+
 ## Cancellation and lifecycle boundary
 
 `AuthorizationCancellation` is cloneable. `cancel() -> bool` returns true when

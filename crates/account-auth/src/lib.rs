@@ -31,6 +31,7 @@ use tokio::sync::Mutex;
 use types::TransactionStatus;
 pub use types::{
     AccessToken, AuthError, AuthorizationCancellation, Identity, IdentityRejection, PinnedConfig,
+    TokenOperation, TokenResponseField,
 };
 use url::Url;
 use zeroize::{Zeroize, ZeroizeOnDrop, Zeroizing};
@@ -356,7 +357,12 @@ impl AuthClient {
                 oauth2::RequestTokenError::ServerResponse(_) => AuthError::CodeExchangeRejected,
                 _ => AuthError::TokenResponseInvalid,
             })?;
-        let identity = self.verify_response(&client, &response, transaction.nonce.secret(), true);
+        let identity = self.verify_response(
+            &client,
+            &response,
+            transaction.nonce.secret(),
+            TokenOperation::CodeExchange,
+        );
         let mut grant = self.grant(&response, None, transaction.nonce.secret())?;
         grant.identity = identity.as_ref().ok().cloned();
         let outcome = if !transaction.cancellation.active() {
@@ -434,19 +440,10 @@ impl AuthClient {
         client: &OidcClient,
         response: &CoreTokenResponse,
         nonce: &str,
-        required: bool,
+        operation: TokenOperation,
     ) -> Result<Identity, AuthError> {
-        if response.token_type() != &CoreTokenType::Bearer
-            || response.access_token().secret().is_empty()
-            || response.expires_in().is_none_or(|d| d.is_zero())
-            || response
-                .scopes()
-                .is_some_and(|scopes| !scopes.iter().any(|s| s.as_str() == "connect"))
-        {
-            return Err(AuthError::IdentityRejected(
-                IdentityRejection::ResponseMetadata,
-            ));
-        }
+        validate_response_metadata(response, operation)?;
+        let required = operation == TokenOperation::CodeExchange;
         let token = match response.id_token() {
             Some(token) => token,
             None => {
@@ -643,17 +640,10 @@ impl AuthClient {
             // Keep the previous nonempty owner for cleanup; never deliver the new access.
             Err(AuthError::InvalidIdentity)
         } else if response.id_token().is_some() {
-            self.verify_response(&client, &response, &nonce, false)
-        } else if response.token_type() != &CoreTokenType::Bearer
-            || response.expires_in().is_none_or(|d| d.is_zero())
-            || response.access_token().secret().is_empty()
-            || response
-                .scopes()
-                .is_some_and(|s| !s.iter().any(|s| s.as_str() == "connect"))
-        {
-            Err(AuthError::IdentityRejected(IdentityRejection::ResponseMetadata))
+            self.verify_response(&client, &response, &nonce, TokenOperation::Refresh)
         } else {
-            Ok(old_identity.clone())
+            validate_response_metadata(&response, TokenOperation::Refresh)
+                .map(|()| old_identity.clone())
         };
         let mut grant = self.grant(&response, state.grant.as_ref(), &nonce)?;
         let result = verified.and_then(|identity| {
@@ -704,6 +694,29 @@ impl AuthClient {
         let _ = self.persist(state);
     }
 }
+// A fixed precedence applies on all token paths, including multi-field failures.
+// This only classifies existing rejections; it never retains response values.
+fn validate_response_metadata(
+    response: &CoreTokenResponse,
+    operation: TokenOperation,
+) -> Result<(), AuthError> {
+    let field = if response.token_type() != &CoreTokenType::Bearer {
+        TokenResponseField::TokenType
+    } else if response.access_token().secret().is_empty() {
+        TokenResponseField::AccessToken
+    } else if response.expires_in().is_none_or(|d| d.is_zero()) {
+        TokenResponseField::ExpiresIn
+    } else if response
+        .scopes()
+        .is_some_and(|scopes| !scopes.iter().any(|s| s.as_str() == "connect"))
+    {
+        TokenResponseField::Scope
+    } else {
+        return Ok(());
+    };
+    Err(AuthError::ResponseMetadata(operation, field))
+}
+
 fn now() -> Result<u64, AuthError> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)

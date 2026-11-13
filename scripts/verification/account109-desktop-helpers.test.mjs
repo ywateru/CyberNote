@@ -8,6 +8,31 @@ const status=(overrides={})=>({state:'ready',enabled:true,profile:{subject:'priv
 const out=()=>status({state:'signedOut',enabled:false,profile:undefined,devices:[]});
 const local={id:'local',document:{type:'doc',content:[{type:'text',text:'完整中文 😀'}]},plainText:'完整中文 😀'};
 
+test('token response diagnostics survive safe status recording before terminal failure',()=>{
+ for(const tokenOperation of ['codeExchange','refresh']) for(const tokenField of ['tokenType','accessToken','expiresIn','scope']) {
+  const error={code:'account_auth_identity_invalid',reason:'responseMetadata',tokenOperation,tokenField,message:'private-response-sentinel',token:'private-response-sentinel'};
+  const s=status({state:'error',error}),report={};
+  statusObserver(report,()=> 'b-recovery')('b',s);
+  assert.deepEqual(report.statusTransitions[0].error,{code:error.code,reason:error.reason,tokenOperation,tokenField});
+  assert(!JSON.stringify(report).includes('private-response-sentinel'));
+  assert.throws(()=>requireHealthy(s),{code:'ACCOUNT_AUTHENTICATION_FAILED'});
+ }
+});
+
+test('safe status never guesses partial or cross-branch token diagnostics',()=>{
+ const valid={code:'account_auth_identity_invalid',reason:'responseMetadata',tokenOperation:'refresh',tokenField:'scope'};
+ const {tokenOperation,...missingOperation}=valid,{tokenField,...missingField}=valid;
+ for(const error of [missingOperation,missingField,{code:valid.code,reason:valid.reason},
+  ...[null,0,{},[], 'private-response-sentinel'].flatMap(value=>[{...valid,tokenOperation:value},{...valid,tokenField:value}]),
+  {...valid,code:'account_cleanup_required'},{...valid,reason:'signature'},
+  {...valid,stage:'identityRefresh'},{...valid,providerReason:'identityRejected'},
+ ]) {
+  const safe=safeStatus(status({state:'error',error}));
+  assert.equal(safe.error.tokenOperation,undefined);assert.equal(safe.error.tokenField,undefined);
+  assert(!JSON.stringify(safe).includes('private-response-sentinel'));
+ }
+});
+
 test('recorded recovery authentication failure terminates discovery on the first poll',async()=>{
   // Same safe DTO shape as recovery01: one ready device and one auth error.
   const report={};const observe=statusObserver(report,()=> 'automatic-discovery');let polls=0;

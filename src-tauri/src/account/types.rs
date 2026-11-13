@@ -63,6 +63,10 @@ pub(crate) struct SafeError {
     pub reason: Option<account_auth::IdentityRejection>,
     #[serde(rename = "providerReason", skip_serializing_if = "Option::is_none")]
     pub provider_reason: Option<cybergrid_sdk::AuthProviderFailure>,
+    #[serde(rename = "tokenOperation", skip_serializing_if = "Option::is_none")]
+    pub token_operation: Option<account_auth::TokenOperation>,
+    #[serde(rename = "tokenField", skip_serializing_if = "Option::is_none")]
+    pub token_field: Option<account_auth::TokenResponseField>,
 }
 impl SafeError {
     pub(super) fn refresh_rejected(&self) -> bool {
@@ -127,6 +131,7 @@ pub(crate) enum Error {
     InvalidCallback,
     InvalidIdentity,
     IdentityRejected(account_auth::IdentityRejection),
+    ResponseMetadata(account_auth::TokenOperation, account_auth::TokenResponseField),
     CodeExchangeRejected,
     TokenResponseInvalid,
     MissingRefreshToken,
@@ -150,7 +155,9 @@ impl Error {
                 "account_authentication"
             }
             Self::InvalidCallback => "account_auth_callback_invalid",
-            Self::InvalidIdentity | Self::IdentityRejected(_) => "account_auth_identity_invalid",
+            Self::InvalidIdentity | Self::IdentityRejected(_) | Self::ResponseMetadata(_, _) => {
+                "account_auth_identity_invalid"
+            }
             Self::CodeExchangeRejected => "account_auth_code_rejected",
             Self::TokenResponseInvalid => "account_auth_token_response_invalid",
             Self::MissingRefreshToken => "account_auth_refresh_missing",
@@ -182,10 +189,21 @@ impl Error {
             },
             reason: match self {
                 Self::IdentityRejected(reason) => Some(reason),
+                Self::ResponseMetadata(_, _) => {
+                    Some(account_auth::IdentityRejection::ResponseMetadata)
+                }
                 _ => None,
             },
             provider_reason: match self {
                 Self::ProviderAuthentication(reason) => Some(reason),
+                _ => None,
+            },
+            token_operation: match self {
+                Self::ResponseMetadata(operation, _) => Some(operation),
+                _ => None,
+            },
+            token_field: match self {
+                Self::ResponseMetadata(_, field) => Some(field),
                 _ => None,
             },
         }
@@ -215,6 +233,7 @@ impl From<account_auth::AuthError> for Error {
             A::InvalidCallback => Self::InvalidCallback,
             A::InvalidIdentity => Self::InvalidIdentity,
             A::IdentityRejected(reason) => Self::IdentityRejected(reason),
+            A::ResponseMetadata(operation, field) => Self::ResponseMetadata(operation, field),
             A::CodeExchangeRejected => Self::CodeExchangeRejected,
             A::TokenResponseInvalid => Self::TokenResponseInvalid,
             A::MissingRefreshToken => Self::MissingRefreshToken,
@@ -271,6 +290,42 @@ impl Error {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn token_response_diagnostics_preserve_generic_reason_and_exact_finite_details() {
+        use account_auth::{AuthError, TokenOperation as O, TokenResponseField as F};
+        for (operation, label) in [(O::CodeExchange, "codeExchange"), (O::Refresh, "refresh")] {
+            for (field, field_label) in [
+                (F::TokenType, "tokenType"),
+                (F::AccessToken, "accessToken"),
+                (F::ExpiresIn, "expiresIn"),
+                (F::Scope, "scope"),
+            ] {
+                let error = Error::from(AuthError::ResponseMetadata(operation, field));
+                let value = serde_json::to_value(error.safe()).unwrap();
+                assert_eq!(
+                    value,
+                    serde_json::json!({
+                        "code":"account_auth_identity_invalid", "message":error.safe().message,
+                        "reason":"responseMetadata", "tokenOperation":label, "tokenField":field_label
+                    })
+                );
+                assert!(!error.safe().refresh_rejected());
+            }
+        }
+        for error in [
+            Error::InvalidIdentity,
+            Error::IdentityRejected(account_auth::IdentityRejection::ResponseMetadata),
+            Error::IdentityRejected(account_auth::IdentityRejection::Signature),
+            Error::CleanupRequired,
+            Error::Network,
+            Error::TokenResponseInvalid,
+        ] {
+            let value = serde_json::to_value(error.safe()).unwrap();
+            assert!(value.get("tokenOperation").is_none());
+            assert!(value.get("tokenField").is_none());
+        }
+    }
 
     #[test]
     fn authentication_diagnostics_preserve_boundaries_without_upstream_details() {

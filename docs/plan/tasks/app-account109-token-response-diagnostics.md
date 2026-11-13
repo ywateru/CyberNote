@@ -11,3 +11,9 @@
 - 作者与独立审阅分离。离线验证后更新精确 export pin，构建并核对新 GUI 身份，再使用新输出目录进行一次真实诊断运行。旧 relogin02 保留 FAIL；不读取现有 grant 或原始 provider 响应，不复制授权，不自动扩大重试。
 
 这是用户已授权的功能完善与测试所需的诊断改进，不改变登录策略、接收方、账户归属或同步启用意图。实际复验需在桌面正常可访问时执行。
+
+## 实现归约与兼容
+
+错误 DTO 扩展为 `tokenOperation?: 'codeExchange'|'refresh'` 和 `tokenField?: 'tokenType'|'accessToken'|'expiresIn'|'scope'`。两字段必须成对出现，且只允许 `code=account_auth_identity_invalid`、`reason=responseMetadata`、无 stage/providerReason 的分支。旧的无细分字段 `responseMetadata` 仍可读取，但不推断操作或字段。统一优先级为 tokenType → accessToken → expiresIn → scope，三条校验路径均按此顺序选第一个失败字段。UI 用固定中文解释操作和字段，不展示原值；执行器 safeStatus 仅保留上下文完整的有限字段对。
+
+SDK provider 既有分类接口只有 `identityRejected`，本增量维持该粗分类，不添加推断字段或修改 vendor。直达 native 的 code/refresh 错误保留细分字段；若原生产 `cleanup_status` 以 `account_cleanup_required` 覆盖错误，细分字段也不跨分支携带。失败后的可能启动状态及验证记录见[作者记录](../analysis/account109-token-response-diagnostics.md)。

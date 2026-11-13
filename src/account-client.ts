@@ -12,6 +12,10 @@ const identityReasons = ["responseMetadata", "missingIdToken", "issuer", "audien
 type IdentityReason = typeof identityReasons[number];
 const providerReasons = ["configuration", "network", "invalidCallback", "invalidIdentity", "identityRejected", "codeExchangeRejected", "tokenResponseInvalid", "missingRefreshToken", "cancelled", "noSession", "ownershipMismatch", "storage", "refreshFailed", "revocationFailed", "busy"] as const;
 type ProviderReason = typeof providerReasons[number];
+const tokenOperations = ["codeExchange", "refresh"] as const;
+type TokenOperation = typeof tokenOperations[number];
+const tokenFields = ["tokenType", "accessToken", "expiresIn", "scope"] as const;
+type TokenField = typeof tokenFields[number];
 
 // Frozen account109 DTO. The native singleton owns authorization and networking.
 export type AccountStatus = {
@@ -22,7 +26,7 @@ export type AccountStatus = {
   lastSyncAt?: number;
   pendingCount: number;
   conflictCount: number;
-  error?: { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason };
+  error?: { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField };
 };
 export type AccountCommand =
   | { type: "status" | "signIn" | "signUp" | "cancel" | "signOut" | "syncNow" }
@@ -36,6 +40,15 @@ export function accountNeedsLogin(error: AccountStatus["error"]): boolean {
   return error?.code === "account_authentication" && (
     (error.stage === "identityRefresh" && error.providerReason === undefined) ||
     (error.stage === "authorizationProvider" && error.providerReason === "refreshFailed"));
+}
+// Fixed local explanations only. Legacy generic errors have no inferred cause.
+export function accountTokenResponseMessage(error: AccountStatus["error"]): string | undefined {
+  if (error?.code !== "account_auth_identity_invalid" || error.reason !== "responseMetadata" ||
+    !tokenOperations.includes(error.tokenOperation as TokenOperation) || !tokenFields.includes(error.tokenField as TokenField) ||
+    error.stage !== undefined || error.providerReason !== undefined) return undefined;
+  const operation = error.tokenOperation === "codeExchange" ? "登录响应" : "刷新响应";
+  const field = { tokenType: "授权类型", accessToken: "访问授权", expiresIn: "有效期", scope: "授权范围" }[error.tokenField!];
+  return `${operation}的${field}未通过校验。请检查服务或更新应用。本机备忘录会保留。`;
 }
 function initialAuthorizationRetry(error: AccountStatus["error"]): boolean {
   if (!error || error.providerReason !== undefined) return false;
@@ -70,10 +83,16 @@ export function validateAccountStatus(value: unknown): AccountStatus {
   if (!["signedOut", "authorizing", "connecting", "ready", "paused", "error"].includes(s.state as string)) return invalid();
   if (!Array.isArray(s.devices) || s.devices.length > 256) return invalid();
   const profile = s.profile === undefined ? undefined : record(s.profile, ["subject", "displayName", "username"]);
-  const error = s.error === undefined ? undefined : record(s.error, ["code", "message", "stage", "reason", "providerReason"]);
+  const error = s.error === undefined ? undefined : record(s.error, ["code", "message", "stage", "reason", "providerReason", "tokenOperation", "tokenField"]);
   if (error?.stage !== undefined && !networkStages.includes(error.stage as NetworkStage)) return invalid();
   if (error?.reason !== undefined && !identityReasons.includes(error.reason as IdentityReason)) return invalid();
   if (error?.providerReason !== undefined && (!providerReasons.includes(error.providerReason as ProviderReason) || error.code !== "account_authentication" || error.stage !== "authorizationProvider")) return invalid();
+  // Accept legacy responseMetadata without details; partial, unknown or
+  // cross-branch details are invalid, never a guessed operation or field.
+  if (error && ("tokenOperation" in error || "tokenField" in error) &&
+    (error.code !== "account_auth_identity_invalid" || error.reason !== "responseMetadata" ||
+      error.stage !== undefined || error.providerReason !== undefined ||
+      !tokenOperations.includes(error.tokenOperation as TokenOperation) || !tokenFields.includes(error.tokenField as TokenField))) return invalid();
   return {
     state: s.state as AccountStatus["state"], enabled: bool(s.enabled),
     profile: profile ? { subject: text(profile.subject, 1024), displayName: text(profile.displayName, 512), username: profile.username === undefined ? undefined : text(profile.username, 1024) } : undefined,
@@ -83,7 +102,7 @@ export function validateAccountStatus(value: unknown): AccountStatus {
     }),
     lastSyncAt: s.lastSyncAt === undefined ? undefined : count(s.lastSyncAt),
     pendingCount: count(s.pendingCount), conflictCount: count(s.conflictCount),
-    error: error ? { code: text(error.code), message: text(error.message, 1000), ...(error.stage === undefined ? {} : { stage: error.stage as NetworkStage }), ...(error.reason === undefined ? {} : { reason: error.reason as IdentityReason }), ...(error.providerReason === undefined ? {} : { providerReason: error.providerReason as ProviderReason }) } : undefined,
+    error: error ? { code: text(error.code), message: text(error.message, 1000), ...(error.stage === undefined ? {} : { stage: error.stage as NetworkStage }), ...(error.reason === undefined ? {} : { reason: error.reason as IdentityReason }), ...(error.providerReason === undefined ? {} : { providerReason: error.providerReason as ProviderReason }), ...(error.tokenOperation === undefined ? {} : { tokenOperation: error.tokenOperation as TokenOperation, tokenField: error.tokenField as TokenField }) } : undefined,
   };
 }
 export async function accountCommand(command: AccountCommand): Promise<AccountStatus> {

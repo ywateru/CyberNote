@@ -1019,7 +1019,7 @@ async fn refresh_inherits_scope_and_requires_connect_with_or_without_an_id_token
         *f.refresh_scope.lock().unwrap() = "profile".into();
         assert_eq!(
             client.access_token(Duration::ZERO, true).await.unwrap_err(),
-            AuthError::IdentityRejected(IdentityRejection::ResponseMetadata)
+            AuthError::ResponseMetadata(TokenOperation::Refresh, TokenResponseField::Scope)
         );
         assert!(client.cleanup_required().await);
         assert!(matches!(
@@ -1359,7 +1359,16 @@ async fn missing_refresh_and_failed_revocation_offer_safe_explicit_cleanup_witho
 #[tokio::test]
 async fn relogin02_response_metadata_rejects_each_envelope_condition_on_all_token_paths() {
     for path in ["code", "refresh-id", "refresh-no-id"] {
-        for condition in ["type", "access", "expiry-missing", "expiry-zero", "scope"] {
+        for condition in [
+            "type",
+            "access",
+            "expiry-missing",
+            "expiry-zero",
+            "scope",
+            "all",
+            "access-expiry-scope",
+            "expiry-scope",
+        ] {
             let f = Fixture::new();
             f.omit_refresh_id
                 .store(path == "refresh-no-id", Ordering::SeqCst);
@@ -1385,6 +1394,16 @@ async fn relogin02_response_metadata_rejects_each_envelope_condition_on_all_toke
                             }
                             "expiry-zero" => body["expires_in"] = json!(0),
                             "scope" => body["scope"] = json!("openid profile offline_access"),
+                            "all" | "access-expiry-scope" | "expiry-scope" => {
+                                body["expires_in"] = json!(0);
+                                body["scope"] = json!("profile");
+                                if condition != "expiry-scope" {
+                                    body["access_token"] = json!("");
+                                }
+                                if condition == "all" {
+                                    body["token_type"] = json!("mac");
+                                }
+                            }
                             _ => unreachable!(),
                         }
                         *reply.body_mut() = serde_json::to_vec(&body).unwrap();
@@ -1404,9 +1423,21 @@ async fn relogin02_response_metadata_rejects_each_envelope_condition_on_all_toke
                 mutate.store(true, Ordering::SeqCst);
                 client.access_token(Duration::ZERO, true).await.unwrap_err()
             };
+            let operation = if path == "code" {
+                TokenOperation::CodeExchange
+            } else {
+                TokenOperation::Refresh
+            };
+            let field = match condition {
+                "type" | "all" => TokenResponseField::TokenType,
+                "access" | "access-expiry-scope" => TokenResponseField::AccessToken,
+                "expiry-missing" | "expiry-zero" | "expiry-scope" => TokenResponseField::ExpiresIn,
+                "scope" => TokenResponseField::Scope,
+                _ => unreachable!(),
+            };
             assert_eq!(
                 error,
-                AuthError::IdentityRejected(IdentityRejection::ResponseMetadata),
+                AuthError::ResponseMetadata(operation, field),
                 "{path}/{condition}"
             );
             // Initial failure revokes the rejected grant; refresh retains the

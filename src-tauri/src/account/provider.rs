@@ -52,7 +52,7 @@ fn provider_error(error: account_auth::AuthError) -> cybergrid_sdk::Error {
         A::Network => P::Network,
         A::InvalidCallback => P::InvalidCallback,
         A::InvalidIdentity => P::InvalidIdentity,
-        A::IdentityRejected(_) => P::IdentityRejected,
+        A::IdentityRejected(_) | A::ResponseMetadata(_, _) => P::IdentityRejected,
         A::CodeExchangeRejected => P::CodeExchangeRejected,
         A::TokenResponseInvalid => P::TokenResponseInvalid,
         A::MissingRefreshToken => P::MissingRefreshToken,
@@ -80,6 +80,13 @@ mod tests {
             (A::InvalidIdentity, "invalidIdentity"),
             (
                 A::IdentityRejected(account_auth::IdentityRejection::Signature),
+                "identityRejected",
+            ),
+            (
+                A::ResponseMetadata(
+                    account_auth::TokenOperation::Refresh,
+                    account_auth::TokenResponseField::Scope,
+                ),
                 "identityRejected",
             ),
             (A::CodeExchangeRejected, "codeExchangeRejected"),

@@ -4,7 +4,7 @@ import {build} from 'vite';
 import {resolve} from 'node:path';
 const built = await build({configFile:false,logLevel:'silent',build:{write:false,minify:false,lib:{entry:resolve('src/account-client.ts'),formats:['es']}},define:{'import.meta.env':'{VITE_NOTES_ACCOUNT_NATIVE:"0",DEV:false}'}});
 const output = (Array.isArray(built) ? built[0] : built).output;
-const {validateAccountStatus,accountConnectionRetry,accountNeedsLogin} = await import('data:text/javascript;base64,'+Buffer.from(output[0].code).toString('base64'));
+const {validateAccountStatus,accountConnectionRetry,accountNeedsLogin,accountTokenResponseMessage} = await import('data:text/javascript;base64,'+Buffer.from(output[0].code).toString('base64'));
 const status = error => ({state:'error',enabled:false,devices:[],pendingCount:0,conflictCount:0,error});
 test('explicit network retry restores a retained owner without authorizing or enabling',()=>{
  for(const enabled of [false,true]) for(const error of [
@@ -90,4 +90,38 @@ test('authentication diagnostics preserve only the finite native operation stage
  }
  for(const stage of ['coordinatorProfile','coordinatorEnrollment','coordinatorJwks'])
   assert.equal(validateAccountStatus(status({code:'account_network',message:'safe',stage})).error.stage,stage);
+});
+
+test('token envelope details preserve exact finite operation/field and safe UI explanation',()=>{
+ for(const tokenOperation of ['codeExchange','refresh']) for(const tokenField of ['tokenType','accessToken','expiresIn','scope']) {
+  const error={code:'account_auth_identity_invalid',message:'safe',reason:'responseMetadata',tokenOperation,tokenField};
+  const parsed=validateAccountStatus(status(error));
+  assert.deepEqual(parsed.error,error);
+  const expectedOperation=tokenOperation==='codeExchange'?'登录响应':'刷新响应';
+  const expectedField={tokenType:'授权类型',accessToken:'访问授权',expiresIn:'有效期',scope:'授权范围'}[tokenField];
+  assert.equal(accountTokenResponseMessage(parsed.error),`${expectedOperation}的${expectedField}未通过校验。请检查服务或更新应用。本机备忘录会保留。`);
+  assert.equal(accountNeedsLogin(parsed.error),false);
+  assert.deepEqual(accountConnectionRetry({...parsed,profile:{subject:'fixture-owner',displayName:'Fixture'}}),{type:'status'});
+ }
+ const legacy={code:'account_auth_identity_invalid',message:'safe',reason:'responseMetadata'};
+ assert.deepEqual(validateAccountStatus(status(legacy)).error,legacy);
+ assert.equal(accountTokenResponseMessage(legacy),undefined);
+});
+
+test('partial, unknown and cross-branch token diagnostics fail closed without inferred cause',()=>{
+ const valid={code:'account_auth_identity_invalid',message:'safe',reason:'responseMetadata',tokenOperation:'refresh',tokenField:'scope'};
+ const {tokenOperation,...missingOperation}=valid,{tokenField,...missingField}=valid;
+ for(const error of [missingOperation,missingField,
+  ...[null,undefined,0,{},[], 'provider-private-sentinel'].flatMap(value=>[{...valid,tokenOperation:value},{...valid,tokenField:value}]),
+  ...['account_network','account_authentication','account_cleanup_required','account_auth_token_response_invalid'].map(code=>({...valid,code})),
+  ...[undefined,'signature','issuer'].map(reason=>({...valid,reason})),
+  {...valid,stage:'identityRefresh'},
+  {...valid,providerReason:'identityRejected'},
+  {...valid,tokenValue:'provider-private-sentinel'},
+ ]) {
+  assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);
+  // The UI helper itself also refuses invalid finite context or missing labels.
+  if(!('tokenValue' in error))assert.equal(accountTokenResponseMessage(error),undefined);
+ }
+ assert.equal(accountTokenResponseMessage(undefined),undefined);
 });

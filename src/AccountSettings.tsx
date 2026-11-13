@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { UserRound, Laptop, Smartphone } from "lucide-react";
-import { accountCommand, accountConnectionRetry, accountNeedsLogin, type AccountCommand, type AccountStatus } from "./account-client";
+import { accountCommand, accountConnectionRetry, accountNeedsLogin, accountTokenResponseMessage, type AccountCommand, type AccountStatus } from "./account-client";
 import { formatFileTime } from "./data-management";
 import "./AccountSettings.css";
 
@@ -15,6 +15,8 @@ const states: Record<AccountStatus["state"], string> = {
 };
 function accountError(error: AccountStatus["error"]) {
   if (!error) return "账户连接未完成，请检查网络后重试。";
+  const tokenMessage = accountTokenResponseMessage(error);
+  if (tokenMessage) return tokenMessage;
   if (error.code === "account_cleanup_required") return "存在待撤销的登录授权，请先退出账户并完成授权清理，再重新登录。本机备忘录会保留。";
   if (error.code === "account_authentication" && error.stage === "identitySession") return "尚未恢复可用的登录授权。请先退出账户并确认清理，再登录原账户。本机备忘录会保留。";
   if (/owner|workspace|bound/i.test(error.code)) return "此资料库已关联其他账户或手工同步空间，无法与当前账户合并。请退出后登录原账户；本机备忘录会保留。";
