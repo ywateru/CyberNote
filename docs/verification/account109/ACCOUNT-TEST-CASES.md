@@ -16,6 +16,8 @@
 
 下方较早阶段保留原时点，不能覆盖本段当前状态。
 
+追加续验：[continuation01](macos/full-native02-continuation01/README.md) 的两分支只读基线通过，但 A 启动 `ready/documentProbe` 超时，B 未启动，未执行冲突解决或退出。清理记录保留 SIGTERM 与 `CLEANUP_FAILED`。随后父级原生访问明确报告当前 Mac locked；该访问观察不构成历史失败原因证明。现按 [任务中的无 WebView 入口契约](../../plan/tasks/app-account109-live-recovery.md) 实现固定 Rust 命令续验：使用真实账户 owner、Store/Session、adapter 与原始授权，先完成独立临时库烟测，再运行原库。入口准备、设备外测试和协议 ACK 均不表示冲突或退出用例已经通过。
+
 最新续验：[真实双桌面五轮记录](macos/real-account-runs01/README.md)。`90b8b28b` 两端真实登录与首次合并确认已成功；`9263ea87` 在同一对数据根恢复两个真实授权，无新授权请求。两轮均未建立自动连接，后一轮 B 返回 `account_authentication`，SYNC-01 失败，后续账户数据和三端场景仍未完成。用户已允许命令行调用真实功能进行测试；后续采用原生功能调用与必要 UI 冒烟组合，仍核对完整文档和附件原字节。下文较早的锁屏/单端登录记录保留其历史时点。
 
 2026-11-13。状态：**产品内真实托管登录/注册、双桌面及 Android 账户自动同步尚未完成验收**。独立浏览器测试已验证托管注册/PKCE→真实服务 profile/enrollment，但不能替代产品内下述验收。`5d30f16c` 起原生应用默认开放账户入口，可显式设置 `VITE_NOTES_ACCOUNT_NATIVE=0` 关闭；普通浏览器默认隐藏。开发浏览器 fixture 仍须 DEV、DEBUG、ACCOUNT_UI 三项同时满足，其结果只验证 React、命令包装、状态恢复、布局和生命周期。
