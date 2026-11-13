@@ -97,3 +97,11 @@ CARGO_TARGET_DIR=/private/tmp/cybernote-account109-target CARGO_BUILD_JOBS=2 \
 当前 ZIP 大小 51,959,083 bytes，SHA256 `a79a3fa077d9ed8b828c1c2309140ac16f8c31035c8af699ba9e9a2ea6d18895`；主程序 SHA256 `2e3fdb3b364eb0fb3f209a7344cd15673742d62085eec33f1f35f11adc196f94`。包内 clean build-info 的 fingerprint 为 `bedc35bf7875de54a9e1183a48a92858d00591acfbaa9af462d660a1c369c61a`，1,619 个输入。实际包内 Brotli 主 JS 的账户门控为 isTauri() 判断，未依赖测试环境标志。
 
 Pauli 独立核对新 root、精确源码、实际包内门控、身份、feature、四份锁文件及 1,200 项 notices 后有限接受；未运行 App。旧 ad18 包和主程序字节保持不变。新包及全部记录单独保留于被忽略的 `artifacts/account109/macos-source5d30-default-candidate/`。它是当前本地构建候选，仍需完成真实产品登录和多端数据验收，不能将静态门控检查写成可见 UI 或同步成功。
+# 当前原生诊断候选（2026-11-13 续验）
+
+最新桌面 debug/e2e 候选源码为 `39c1420d23daaa9397036d24826219e1bd2b89ff`，binary SHA256 `b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2`，保存在 ignored `artifacts/account109/mac-39c1420d-finite-diagnostics/notes-clone`。前端与原生构建均自然 exit 0；编译 features 为 `sync-e2e,tauri/custom-protocol`，Cargo offline、jobs=2、debug=0、incremental=0。账户入口没有 opt-in/opt-out 覆盖。
+
+[精确身份回执](39c1420d-debug-e2e.json)证明构建时源码 clean、1652 项产品输入摘要 `0da5b36318a0cedfd5b66065c4d4eaaa03c6532d80f945aaa9fe6a7775855f18`，包内 Brotli build-info 与本次前端逐字节一致。该包用于在原有两个已登录数据根进行只读诊断；不是正式 production 分发或完整同步通过证据。
+
+更早的 `9263ea87` 候选已[独立核包](9263ea87-debug-e2e.json)，实际双端授权恢复与自动发现失败保存在[五轮续验](real-account-runs01/README.md)。下面各 production 包及历史候选仍保留原时点结论，不代表当前最终源码。
+
