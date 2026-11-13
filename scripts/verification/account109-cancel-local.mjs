@@ -8,8 +8,8 @@ import {NativeApp,delay} from './sync108-native-driver.mjs';
 import {nativeAccount,requireHealthy,statusObserver,failureCode} from './account109-desktop-helpers.mjs';
 import {hash,boundedPoll} from './account109-desktop-recovery.mjs';
 
-export const SOURCE='9e7c46d2fcc8ed31bf1210ce4272f73edffe9143';
-export const BINARY_SHA='3fa9a3851e610348352f5594f976f145e2d344fd97a9f0d27124566f458ce65c';
+export const SOURCE='72513d1296df4526a08834db65a3427957d3fb50';
+export const BINARY_SHA='187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459';
 const checks=['localSave','authorizing','cancelledWindow','localEdit','restartWindow'];
 // UI contract f048fd15; candidate pins change only after a new reviewed build.
 export function surfacePolicy({surface='browser',continueInBrowser=false,cancelViaWindow=false,...extra}={}){
@@ -60,7 +60,7 @@ export async function preflight(o){
     try{await lstat(p);assert.fail('Store and output must both be absent');}catch(e){if(e.code!=='ENOENT')throw e;}
   }
   assert.equal(await realpath(o.binary),o.binary);assert((await lstat(o.binary)).isFile());
-  assert.equal(hash(await readFile(o.binary)),BINARY_SHA,'Only verified 9e7c46d2 GUI binary allowed');
+  assert.equal(hash(await readFile(o.binary)),BINARY_SHA,'Only verified 72513d12 GUI binary allowed');
 }
 function disconnected(s,surfaceOptions){
   requireHealthy(s);authorizationSurface(s,surfaceOptions);assert.equal(s.enabled,false);assert(!s.profile);assert(Array.isArray(s.devices)&&!s.devices.some(d=>d.connected));assert.equal(s.conflictCount,0);
