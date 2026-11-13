@@ -1,0 +1,33 @@
+{
+  "cwd": "/private/tmp/account109-android-public-native-probe01",
+  "argv": [
+    "cargo",
+    "build",
+    "--manifest-path",
+    "/private/tmp/account109-android-public-native-probe01/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--target",
+    "aarch64-linux-android",
+    "--jobs",
+    "2"
+  ],
+  "environmentOverrides": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-android-90b8b28b-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android28-clang",
+    "CC_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/aarch64-linux-android28-clang",
+    "AR_aarch64_linux_android": "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar"
+  },
+  "sourceManifest": "/private/tmp/account109-android-public-native-probe01/source-manifest.json",
+  "buildLog": "/private/tmp/account109-android-public-native-probe01/build.log",
+  "probeExecuted": false,
+  "adbUsed": false,
+  "productFilesModified": false,
+  "exitCode": 0,
+  "elapsedSeconds": 12.108
+}

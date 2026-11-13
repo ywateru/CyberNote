@@ -1,0 +1,138 @@
+{
+  "firstParty": [
+    {
+      "root": "crates/account-auth",
+      "provenance": "project-authored",
+      "rights": "reserved",
+      "rightsSource": "scripts/publish/LICENSE.project-reserved.txt"
+    }
+  ],
+  "thirdPartyRoots": [
+    {
+      "root": "services/coordinator",
+      "origin": "https://github.com/ywateru/CyberGrid.git",
+      "revision": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+      "licenseCount": 1
+    },
+    {
+      "root": "vendor/cybergrid-sdk",
+      "origin": "https://github.com/ywateru/CyberGrid.git",
+      "revision": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+      "licenseCount": 1140
+    }
+  ],
+  "runtimeAssets": [
+    {
+      "path": "vendor/cybergrid-sdk/provider-assets/darwin-arm64/cloudflared",
+      "sha256": "2d67b7315f96799123e19442580ce7c7616d6d7f322686fa829dd4e3fddfe715",
+      "size": 38893120,
+      "source": {
+        "url": "https://github.com/cloudflare/cloudflared",
+        "revision": "b749dfd998f4bced81f48727b9c971cfc3056865",
+        "version": "2026.9.0"
+      },
+      "licenses": [
+        "vendor/cybergrid-sdk/provider-assets/LICENSE",
+        "vendor/cybergrid-sdk/provider-assets/THIRD_PARTY_NOTICES.md"
+      ]
+    },
+    {
+      "path": "vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so",
+      "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+      "size": 28812032,
+      "source": {
+        "url": "https://github.com/cloudflare/cloudflared",
+        "revision": "b749dfd998f4bced81f48727b9c971cfc3056865",
+        "version": "2026.9.0"
+      },
+      "licenses": [
+        "vendor/cybergrid-sdk/provider-assets/LICENSE",
+        "vendor/cybergrid-sdk/provider-assets/THIRD_PARTY_NOTICES.md"
+      ]
+    }
+  ],
+  "noticeFilesValidated": 1200,
+  "noticeBytesValidated": 5137754,
+  "manifestUpdate": {
+    "changedPins": [
+      {
+        "path": "services/coordinator/src/identity.ts",
+        "previousSha256": "27484a07e39ba764936cf9500222b6db4c0cc39e48eba14db25b3cc18c8f7ddb",
+        "sha256": "650d14f1a95b24e68ed3067ffcf5e8131ef7c0f7eb157916921ae16912bbcac6"
+      },
+      {
+        "path": "services/coordinator/test/identity.test.ts",
+        "previousSha256": "d5441407cece1f56efa4c6a38b5cf817fdb714e21ff0fe43b10a3714309687c6",
+        "sha256": "bef16cab4f9b98b52cc3292e3d78dab7c0f417c2180dd328c5cccabb048d2f3b"
+      },
+      {
+        "path": "src-tauri/src/account/enrollment.rs",
+        "previousSha256": "02630fe6ae14ef3490d0d895edada902da242b1ab2051d98dacdbaaa6b5ad78f",
+        "sha256": "60e255baf33b792f45c467029c44da67ed050b15a42296d6bdd5808304a50e41"
+      },
+      {
+        "path": "src-tauri/src/account/provider.rs",
+        "previousSha256": "f4d8dba42b1551e2f5aaf6987ef47e4efd23a0e529ef9a8e421306cf0af3b334",
+        "sha256": "aa4f066e04e70e2e8b37c69a095e39fff5c6c631502b346903f1d99e7829c313"
+      },
+      {
+        "path": "src-tauri/src/account/transport.rs",
+        "previousSha256": "2aa75fb08d524ff9b502d4db8761f55e49be0c63fc5795c7dff825bc4207c772",
+        "sha256": "b40b0954c3dce75df211c45b21c977c769ff925fdf9ba8fb518c94dd4bb00a26"
+      },
+      {
+        "path": "src-tauri/src/account/types.rs",
+        "previousSha256": "4c113bdd8fb6577d5f0c73f0e4287cf99462103d0a93ecfbdb6c4b2a1beed63b",
+        "sha256": "e81613a73782fdcdf0368d0bcdab3ee1f8cea8bb17b822c8ab52d4c18bd8d74e"
+      },
+      {
+        "path": "src/account-client.ts",
+        "previousSha256": "804b70fdb1d6ccc934f574592ee38751508b492689d554d916e83286acf52d59",
+        "sha256": "16e4b281e0d63d9f94ec17cbdefe638d32246ec947656a6228b06c218271750d"
+      },
+      {
+        "path": "vendor/cybergrid-sdk/src/client.rs",
+        "previousSha256": "be60f359759c15cc3cf5adb1cb4f60ac1ab09776047d3a50a4c0ffb366b09f38",
+        "sha256": "778088191827f11c2d24ad9e1feed3b3ca3d22c36326bbf0415614f4161c9858"
+      },
+      {
+        "path": "vendor/cybergrid-sdk/src/error.rs",
+        "previousSha256": "e3e778df1ba2ee6b0862f04d1e26ed70a9658e364d79315069a690fde2df712c",
+        "sha256": "57aab76f4b2f1d3b9f5e2e62a2ee92cc9dfaae952c44feec3000f7f8f0f55f5f"
+      },
+      {
+        "path": "vendor/cybergrid-sdk/src/lib.rs",
+        "previousSha256": "3d6e4890dca9cac6ee2a02fd11ddad977af6171d9c537b371afdb77517a84beb",
+        "sha256": "03f4bd3539ca77d92605d92b16cffb1070bf16d58cc5df10b23465a54e01aef1"
+      },
+      {
+        "path": "vendor/cybergrid-sdk/src/tests.rs",
+        "previousSha256": "ab0976253c7cf8327d721bb5099dc0a2ac16b56806529ceab8d5271edf77e8f7",
+        "sha256": "2a3d1ce9c5b322a37b969fb7f36d789094ed669cc18460fc600ddf85b458dedf"
+      }
+    ],
+    "addedPaths": 0,
+    "removedPaths": 0,
+    "policyOwnershipRuntimeDeclarationsUnchanged": true
+  },
+  "sourceIdentity": {
+    "sourceRevision": "111e7ef088050412277712f5b7a52373525e5ac5",
+    "sourceFingerprint": "a7054da10268ef665e8f7375df0ae13e6e311cc3cd0a07b9695a60b6a6b4793e",
+    "sourceDirty": false,
+    "inputCount": 1619
+  },
+  "providerArtifactClosureProbes": [
+    {
+      "case": "missing-provider",
+      "validatorAccepted": true,
+      "expectedForProviderClosure": "reject",
+      "exercised": "android_native_bytes; other staging checks are independent of provider presence/hash"
+    },
+    {
+      "case": "wrong-provider-bytes",
+      "validatorAccepted": true,
+      "expectedForProviderClosure": "reject",
+      "exercised": "android_native_bytes; other staging checks are independent of provider presence/hash"
+    }
+  ]
+}

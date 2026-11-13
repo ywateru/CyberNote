@@ -1,0 +1,37 @@
+{
+  "binary": "/private/tmp/account109-android-public-native-probe01/account109-public-connectivity",
+  "builtBinary": "/private/tmp/cybernote-account109-android-90b8b28b-target-01/aarch64-linux-android/debug/account109-public-connectivity",
+  "sha256": "b9c628a47f70c6be884478c3957185a2ecf5a6a086880505a1bf2bdfc2494d02",
+  "bytes": 11655616,
+  "elf": {
+    "class": "ELF64",
+    "endianness": "little",
+    "machine": "AArch64",
+    "eMachine": 183,
+    "type": "DYN/PIE",
+    "interpreter": "/system/bin/linker64"
+  },
+  "androidApi": 28,
+  "ndkVersion": "27.2.12479018",
+  "inspectionArgv": [
+    "/Users/water/Library/Android/sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-readelf",
+    "--file-header",
+    "--program-headers",
+    "--notes",
+    "--dynamic",
+    "/private/tmp/account109-android-public-native-probe01/account109-public-connectivity"
+  ],
+  "sourceByteIdentical": true,
+  "requests": 7,
+  "concurrent": true,
+  "perRequestTimeoutSeconds": 15,
+  "connectTimeoutSeconds": 5,
+  "redirects": "none",
+  "reqwest": "0.12.28",
+  "reqwestFeatures": [
+    "json",
+    "rustls-tls"
+  ],
+  "probeExecuted": false,
+  "adbUsed": false
+}

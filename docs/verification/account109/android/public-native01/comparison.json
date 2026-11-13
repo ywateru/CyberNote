@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-13T03:06:51.672187+00:00",
+  "sourceByteIdentical": true,
+  "reqwest": "0.12.28",
+  "declaredFeatures": [
+    "json",
+    "rustls-tls"
+  ],
+  "defaultFeatures": false,
+  "rows": [
+    {
+      "endpoint": "coordinatorHealth",
+      "mode": "inherited",
+      "desktopHttpStatus": 200,
+      "desktopMs": 2695,
+      "phoneHttpStatus": null,
+      "phoneMs": 5003,
+      "phoneConnectionTimeout": true
+    },
+    {
+      "endpoint": "coordinatorHealth",
+      "mode": "direct",
+      "desktopHttpStatus": 200,
+      "desktopMs": 2649,
+      "phoneHttpStatus": null,
+      "phoneMs": 5003,
+      "phoneConnectionTimeout": true
+    },
+    {
+      "endpoint": "coordinatorConfig",
+      "mode": "inherited",
+      "desktopHttpStatus": 200,
+      "desktopMs": 2691,
+      "phoneHttpStatus": null,
+      "phoneMs": 5003,
+      "phoneConnectionTimeout": true
+    },
+    {
+      "endpoint": "coordinatorConfig",
+      "mode": "direct",
+      "desktopHttpStatus": 200,
+      "desktopMs": 2670,
+      "phoneHttpStatus": null,
+      "phoneMs": 5003,
+      "phoneConnectionTimeout": true
+    },
+    {
+      "endpoint": "coordinatorAnonymousProfile",
+      "mode": "inherited",
+      "desktopHttpStatus": 401,
+      "desktopMs": 1413,
+      "phoneHttpStatus": null,
+      "phoneMs": 5002,
+      "phoneConnectionTimeout": true
+    },
+    {
+      "endpoint": "coordinatorAnonymousProfile",
+      "mode": "direct",
+      "desktopHttpStatus": 401,
+      "desktopMs": 1413,
+      "phoneHttpStatus": null,
+      "phoneMs": 5003,
+      "phoneConnectionTimeout": true
+    },
+    {
+      "endpoint": "identityDiscovery",
+      "mode": "direct",
+      "desktopHttpStatus": 200,
+      "desktopMs": 821,
+      "phoneHttpStatus": 200,
+      "phoneMs": 1093,
+      "phoneConnectionTimeout": false
+    }
+  ],
+  "diagnosis": "Phone Rust connection-phase timeouts for coordinator in both inherited and no_proxy client modes; successful verified HTTPS identity discovery. Desktop probe received expected public HTTP responses for all seven requests.",
+  "limitation": "Separate shell-UID probe using product-matching HTTP feature declarations, not an app-UID authenticated request. Coordinator TLS/HTTP was not completed; root routing/filtering cause remains unproven. reqwest error connect=true is an error classification, not successful TCP connection."
+}

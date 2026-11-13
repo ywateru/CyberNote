@@ -1,0 +1,129 @@
+{
+  "status": "prepared-draft-not-final-accepted",
+  "preparedAtUtc": "2026-11-13T02:59:13.600385+00:00",
+  "sourceRef": "f7a2a0a6a8a767f39aee257ab8200649be0cb136",
+  "target": "/private/tmp/account109-source-f7a2a0a6-prepared-20261113-01",
+  "command": [
+    "node",
+    "scripts/publish/export.mjs",
+    "--ref",
+    "f7a2a0a6a8a767f39aee257ab8200649be0cb136",
+    "--target",
+    "/private/tmp/account109-source-f7a2a0a6-prepared-20261113-01",
+    "--expected-target",
+    "/private/tmp/account109-source-f7a2a0a6-prepared-20261113-01",
+    "--apply",
+    "--init"
+  ],
+  "export": {
+    "dryRun": false,
+    "sourceCommit": "f7a2a0a6a8a767f39aee257ab8200649be0cb136",
+    "fileCount": 1770,
+    "bytes": 95145618,
+    "removedPackageScripts": [
+      "test:schema",
+      "test:editor",
+      "test:access",
+      "test:secure-id",
+      "test:desktop-appearance",
+      "test:native-toolbar",
+      "debug",
+      "test:debug",
+      "test:native-appearance",
+      "test:table-controls",
+      "test:button-feedback",
+      "test:startup",
+      "test:attachment-gallery",
+      "test:recording-refresh",
+      "test:mobile-editor",
+      "test:note-move-menu",
+      "test:attachment-files",
+      "test:attachment-mime",
+      "test:attachment-clipboard-native",
+      "test:menu-lifetimes",
+      "test:native-menus",
+      "test:native-menu-client",
+      "test:drawing",
+      "release",
+      "test:build-info"
+    ],
+    "initializedNewHistory": true
+  },
+  "sourceManifestSha256": "b6d053738b9d69b6bfe1fb842111879beba218c37bdd3d35c479702bd38a6b75",
+  "initialSeal": {
+    "sha256": "1be1ef577a13239f14e526f069f815295a8989ee6b1b053c673fac87c406256c",
+    "filesIncludingGit": 3612,
+    "bytesIncludingGit": 143244268
+  },
+  "sealDefinition": "Sorted relative regular-file paths, permissions, byte lengths and bytes; includes .git; SHA-256 over NUL-separated fields. Stored only outside candidate.",
+  "reviewCompletedAtUtc": "2026-11-13T03:04:15.794344+00:00",
+  "finalSeal": {
+    "sha256": "bf1907cdade081330f5c0df118b1b9008bbfb4a8f072c1c1fae81d242c1be26d",
+    "files": 1783,
+    "bytes": 139995241
+  },
+  "sourcePayloadSeal": {
+    "sha256": "f20245d10206b93b48fcce94256af3e8301330250786f8954c7901a281a0d2b9",
+    "files": 1770,
+    "bytes": 95145618
+  },
+  "sourcePayloadMatchesExactExport": true,
+  "candidateSourceNotEditedAfterExport": true,
+  "initialSnapshotGitStorageChanged": true,
+  "gitStorageTransition": {
+    "initialSnapshotWasNotQuiescent": true,
+    "observed": "Loose Git objects were replaced by packed storage, with pack/index metadata mtimes approximately 2026-11-13T02:59:15Z, about two seconds after initial commit. No manual candidate write, git gc, repack or manifest refresh was performed by this review. Exact source bytes, root commit and history boundary revalidated.",
+    "finalSnapshotStableAcrossFullNewRootCheck": true
+  },
+  "finalNewRootVerification": {
+    "ok": true,
+    "files": 1770,
+    "sourceRevision": "111e7ef088050412277712f5b7a52373525e5ac5",
+    "historyChecked": true,
+    "history": {
+      "rootCommit": "111e7ef088050412277712f5b7a52373525e5ac5",
+      "reachableCommits": 1,
+      "refs": 1,
+      "remotes": 0,
+      "retainedHistoricalObjects": false
+    }
+  },
+  "findings": [
+    {
+      "priority": "P2",
+      "file": "vendor/cybergrid-sdk/SOURCE.json",
+      "line": 6,
+      "title": "Empty changes list omits four reviewed local SDK diagnostics edits",
+      "classification": "known bounded publication provenance finding; not secret risk",
+      "status": "Correction merged in source commit 159be3d5 and pinned by 2b0bd7e2; retained f7a root remains stale and unchanged, superseded for source selection by separate 2b0 preparation.",
+      "affectedFiles": [
+        "src/client.rs",
+        "src/error.rs",
+        "src/lib.rs",
+        "src/tests.rs"
+      ]
+    },
+    {
+      "priority": "P2",
+      "file": "scripts/publish/stage-packages.py",
+      "line": 90,
+      "title": "Require pinned Android provider presence and bytes in staged APK",
+      "status": "unmodified; follow-up required before claiming artifact provider closure"
+    }
+  ],
+  "finalAcceptance": "Not granted: f7a draft retained as historical stale-provenance boundary, superseded for source selection by separate 2b0 preparation. Current device acceptance incomplete; parent reports Android coordinator TCP 443 blocked. Android package-provider validation gap remains documented.",
+  "parentSteering": {
+    "metadataOnlyFix": "No functional source delta requested; no broad tests rerun solely for metadata correction.",
+    "sealedCandidate": "Do not mutate; new final export must use a separate path.",
+    "externalActions": "No push, network, GitHub credentials or external writes."
+  },
+  "provenanceFindingResolution": {
+    "mergedFixCommit": "159be3d5fdb547ec8be4beb31c69e8d59e2dd764",
+    "pinCommit": "2b0bd7e211352cda6c03f4ba7707c78453e4c36a",
+    "separatePreparedTarget": "/private/tmp/account109-source-2b0bd7e2-prepared-20261113-01",
+    "newRootCommit": "7e87c29fe4fcb48303b337f2e8bdbb842f1c5350",
+    "boundary": "Stale changes=[] remains in sealed f7a draft; successor export contains corrected metadata. No f7a root mutation or relabeling.",
+    "functionalExportedSourceUnchanged": true,
+    "oldCandidateUnchangedDuringSuccessorPreparation": true
+  }
+}

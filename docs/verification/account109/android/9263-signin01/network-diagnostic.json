@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-13T02:59:35.749429+00:00",
+  "serial": "98895a3147304c3132",
+  "readOnly": true,
+  "allowedHosts": [
+    "cybernote-sync.vercel.app",
+    "auth.x.aixgg.com"
+  ],
+  "maxPerDnsProbeSeconds": 6,
+  "maxPerTcpProbeSeconds": 7,
+  "maxHttpsSeconds": 10,
+  "networkSettingsChanged": false,
+  "vpnChangedOrBypassed": false,
+  "ipPinningUsed": false,
+  "toolsInstalled": false,
+  "oauthOpened": false,
+  "accountCommandsCalled": false,
+  "rawOutputRetained": false,
+  "ipAddressesRetained": false,
+  "commandAvailability": {
+    "toybox": true,
+    "curl": true,
+    "wget": false,
+    "openssl": false,
+    "nslookup": false,
+    "getent": false,
+    "timeout": true,
+    "nc": false,
+    "ping": true,
+    "ip": true,
+    "getprop": true,
+    "settings": true
+  },
+  "toyboxAppletAvailability": {
+    "curl": false,
+    "wget": false,
+    "openssl": false,
+    "nslookup": false,
+    "getent": false,
+    "timeout": true,
+    "nc": true,
+    "ping": false,
+    "ip": false,
+    "getprop": false,
+    "settings": false
+  },
+  "deviceNetworkMetadata": {
+    "dnsServers": {
+      "exitCode": 0,
+      "elapsedMs": 219,
+      "hostTimedOut": false,
+      "filteredEntries": 4,
+      "addressClasses": [
+        "public"
+      ],
+      "limitation": "Filtered LinkProperties entries can include multiple networks, not only the active default."
+    },
+    "transportsPresent": {
+      "exitCode": 0,
+      "elapsedMs": 139,
+      "hostTimedOut": false,
+      "types": [
+        "CELLULAR",
+        "WIFI"
+      ]
+    },
+    "ipv4DefaultRoutes": {
+      "exitCode": 0,
+      "elapsedMs": 96,
+      "hostTimedOut": false,
+      "defaultRouteCount": 4,
+      "interfaceTypes": [
+        "cellular",
+        "other"
+      ],
+      "gatewayAddressClasses": [
+        "linkLocal",
+        "privateOrReserved"
+      ]
+    },
+    "ipv6DefaultRoutes": {
+      "exitCode": 0,
+      "elapsedMs": 59,
+      "hostTimedOut": false,
+      "defaultRouteCount": 2,
+      "interfaceTypes": [
+        "cellular",
+        "other"
+      ],
+      "gatewayAddressClasses": [
+        "linkLocal"
+      ]
+    },
+    "globalHttpProxy": {
+      "exitCode": 0,
+      "elapsedMs": 106,
+      "hostTimedOut": false,
+      "configured": false,
+      "endpointRetained": false,
+      "limitation": "Global setting only; does not establish per-app/VPN interception or bypass."
+    },
+    "privateDnsMode": {
+      "exitCode": 0,
+      "elapsedMs": 85,
+      "hostTimedOut": false,
+      "mode": "null"
+    },
+    "privateDnsSpecifier": {
+      "exitCode": 0,
+      "elapsedMs": 90,
+      "hostTimedOut": false,
+      "configured": false,
+      "hostnameRetained": false
+    }
+  },
+  "hosts": {
+    "cybernote-sync.vercel.app": {
+      "dns": {
+        "exitCode": 1,
+        "elapsedMs": 1161,
+        "hostTimedOut": false,
+        "method": "system-ping-name-resolution",
+        "resolved": true,
+        "selectedAddressClass": "public",
+        "errorKind": "otherOrNone",
+        "limitation": "One system-selected address, not a complete RRset. ICMP status is not a TCP-connectivity verdict."
+      },
+      "tcp443": {
+        "exitCode": 1,
+        "elapsedMs": 5096,
+        "hostTimedOut": false,
+        "method": "toybox-nc-canonical-host",
+        "connected": false,
+        "errorKind": "timeout",
+        "applicationPayloadSent": false
+      }
+    },
+    "auth.x.aixgg.com": {
+      "dns": {
+        "exitCode": 0,
+        "elapsedMs": 431,
+        "hostTimedOut": false,
+        "method": "system-ping-name-resolution",
+        "resolved": true,
+        "selectedAddressClass": "public",
+        "errorKind": "otherOrNone",
+        "limitation": "One system-selected address, not a complete RRset. ICMP status is not a TCP-connectivity verdict."
+      },
+      "tcp443": {
+        "exitCode": 0,
+        "elapsedMs": 570,
+        "hostTimedOut": false,
+        "method": "toybox-nc-canonical-host",
+        "connected": true,
+        "errorKind": "otherOrNone",
+        "applicationPayloadSent": false
+      }
+    }
+  },
+  "coordinatorHttpsHealth": {
+    "exitCode": 7,
+    "elapsedMs": 2823,
+    "hostTimedOut": false,
+    "host": "cybernote-sync.vercel.app",
+    "path": "/healthz",
+    "certificateVerificationEnabled": true,
+    "redirectsFollowed": false,
+    "errorKind": "timeout",
+    "responseBodyRetained": false,
+    "status": 0,
+    "dnsSeconds": 0.061162,
+    "connectSeconds": 0.0,
+    "tlsSeconds": 0.0,
+    "totalSeconds": 2.27563,
+    "verifyResult": 0
+  },
+  "diagnosis": {
+    "fakeIpRangeObservedForCanonicalHosts": [],
+    "tcp443Connected": {
+      "cybernote-sync.vercel.app": false,
+      "auth.x.aixgg.com": true
+    },
+    "coordinatorHttpsSucceeded": false,
+    "limitation": "Phone shell path only. Fake-IP range is an observation, not proof of causality. App runtime, VPN routing and trust behavior may differ. No account retry or upstream provider response is inspected."
+  },
+  "finishedAt": "2026-11-13T02:59:46.625556+00:00",
+  "totalElapsedMs": 10876,
+  "adbOwnershipReturned": true
+}

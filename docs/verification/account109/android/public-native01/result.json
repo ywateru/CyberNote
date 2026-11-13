@@ -1,0 +1,76 @@
+{
+  "credentialsSent": false,
+  "hasLowercaseProxy": false,
+  "kind": "public-native-connectivity",
+  "networkSettingsChanged": false,
+  "reqwest": "0.12.28",
+  "rows": [
+    {
+      "connect": true,
+      "endpoint": "coordinatorHealth",
+      "ioKind": null,
+      "mode": "inherited",
+      "ms": 5003,
+      "osCode": null,
+      "request": true,
+      "timeout": true
+    },
+    {
+      "connect": true,
+      "endpoint": "coordinatorHealth",
+      "ioKind": null,
+      "mode": "direct",
+      "ms": 5003,
+      "osCode": null,
+      "request": true,
+      "timeout": true
+    },
+    {
+      "connect": true,
+      "endpoint": "coordinatorConfig",
+      "ioKind": null,
+      "mode": "inherited",
+      "ms": 5003,
+      "osCode": null,
+      "request": true,
+      "timeout": true
+    },
+    {
+      "connect": true,
+      "endpoint": "coordinatorConfig",
+      "ioKind": null,
+      "mode": "direct",
+      "ms": 5003,
+      "osCode": null,
+      "request": true,
+      "timeout": true
+    },
+    {
+      "connect": true,
+      "endpoint": "coordinatorAnonymousProfile",
+      "ioKind": null,
+      "mode": "inherited",
+      "ms": 5002,
+      "osCode": null,
+      "request": true,
+      "timeout": true
+    },
+    {
+      "connect": true,
+      "endpoint": "coordinatorAnonymousProfile",
+      "ioKind": null,
+      "mode": "direct",
+      "ms": 5003,
+      "osCode": null,
+      "request": true,
+      "timeout": true
+    },
+    {
+      "endpoint": "identityDiscovery",
+      "mode": "direct",
+      "ms": 1093,
+      "status": 200
+    }
+  ],
+  "schema": 1
+}

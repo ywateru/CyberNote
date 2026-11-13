@@ -1,0 +1,193 @@
+{
+  "status": "prepared-source-candidate-not-final-accepted",
+  "preparedAtUtc": "2026-11-13T03:08:24.229166+00:00",
+  "sourceRef": "2b0bd7e211352cda6c03f4ba7707c78453e4c36a",
+  "sourceHeadObserved": "2b0bd7e211352cda6c03f4ba7707c78453e4c36a",
+  "provenanceFixCommit": "159be3d5fdb547ec8be4beb31c69e8d59e2dd764",
+  "priorSourceRef": "f7a2a0a6a8a767f39aee257ab8200649be0cb136",
+  "priorTarget": "/private/tmp/account109-source-f7a2a0a6-prepared-20261113-01",
+  "target": "/private/tmp/account109-source-2b0bd7e2-prepared-20261113-01",
+  "export": {
+    "dryRun": false,
+    "sourceCommit": "2b0bd7e211352cda6c03f4ba7707c78453e4c36a",
+    "fileCount": 1770,
+    "bytes": 95146064,
+    "removedPackageScripts": [
+      "test:schema",
+      "test:editor",
+      "test:access",
+      "test:secure-id",
+      "test:desktop-appearance",
+      "test:native-toolbar",
+      "debug",
+      "test:debug",
+      "test:native-appearance",
+      "test:table-controls",
+      "test:button-feedback",
+      "test:startup",
+      "test:attachment-gallery",
+      "test:recording-refresh",
+      "test:mobile-editor",
+      "test:note-move-menu",
+      "test:attachment-files",
+      "test:attachment-mime",
+      "test:attachment-clipboard-native",
+      "test:menu-lifetimes",
+      "test:native-menus",
+      "test:native-menu-client",
+      "test:drawing",
+      "release",
+      "test:build-info"
+    ],
+    "initializedNewHistory": true
+  },
+  "commands": {
+    "export": {
+      "command": [
+        "node",
+        "scripts/publish/export.mjs",
+        "--ref",
+        "2b0bd7e211352cda6c03f4ba7707c78453e4c36a",
+        "--target",
+        "/private/tmp/account109-source-2b0bd7e2-prepared-20261113-01",
+        "--expected-target",
+        "/private/tmp/account109-source-2b0bd7e2-prepared-20261113-01",
+        "--apply",
+        "--init"
+      ],
+      "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+      "exitCode": 0,
+      "elapsedSeconds": 9.49
+    },
+    "new-root": {
+      "command": [
+        "node",
+        "scripts/publish/verify.mjs",
+        "--new-root"
+      ],
+      "cwd": "/private/tmp/account109-source-2b0bd7e2-prepared-20261113-01",
+      "exitCode": 0,
+      "elapsedSeconds": 7.162
+    },
+    "versions": {
+      "command": [
+        "node",
+        "scripts/versions.mjs",
+        "--check"
+      ],
+      "cwd": "/private/tmp/account109-source-2b0bd7e2-prepared-20261113-01",
+      "exitCode": 0,
+      "elapsedSeconds": 0.026
+    },
+    "policy-tests": {
+      "command": [
+        "node",
+        "--test",
+        "scripts/publish/policy.test.mjs"
+      ],
+      "cwd": "/private/tmp/account109-source-2b0bd7e2-prepared-20261113-01",
+      "exitCode": 0,
+      "elapsedSeconds": 0.087
+    }
+  },
+  "policyTests": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "newRootVerification": {
+    "ok": true,
+    "files": 1770,
+    "sourceRevision": "7e87c29fe4fcb48303b337f2e8bdbb842f1c5350",
+    "historyChecked": true,
+    "history": {
+      "rootCommit": "7e87c29fe4fcb48303b337f2e8bdbb842f1c5350",
+      "reachableCommits": 1,
+      "refs": 1,
+      "remotes": 0,
+      "retainedHistoricalObjects": false
+    }
+  },
+  "sourceIdentity": {
+    "sourceRevision": "7e87c29fe4fcb48303b337f2e8bdbb842f1c5350",
+    "sourceFingerprint": "921a76c52d566782a6e51fffe000519f012ee2707666ea95d9fe3556b85b9a28",
+    "sourceDirty": false,
+    "inputCount": 1619
+  },
+  "sourceManifestSha256": "f88726231d915f626d3348f117930f77bf35be4aaa418c04b2e98faa86a1335f",
+  "provenanceSha256": "9fcb650c054f2cafed841db6cd80484b241953ff6316c5da07740bfb420c836d",
+  "initialSeal": {
+    "sha256": "b72848cf61d87e5a366dc1c2f3cb09eb56e5973a9f9a3d40d596fbaefb368734",
+    "files": 3610,
+    "bytes": 142720599
+  },
+  "finalSeal": {
+    "sha256": "b72848cf61d87e5a366dc1c2f3cb09eb56e5973a9f9a3d40d596fbaefb368734",
+    "files": 3610,
+    "bytes": 142720599
+  },
+  "sourcePayloadSeal": {
+    "sha256": "c01150beaa78d92a0fb4d06397c6c7012259579b38d685b077c2cd14ada90436",
+    "files": 1770,
+    "bytes": 95146064
+  },
+  "priorSourcePayloadSeal": {
+    "sha256": "f20245d10206b93b48fcce94256af3e8301330250786f8954c7901a281a0d2b9",
+    "files": 1770,
+    "bytes": 95145618
+  },
+  "candidateUnchangedAfterInitialization": true,
+  "priorCandidateUnchanged": true,
+  "gitMaintenance": "gc.auto=0 and maintenance.auto=false supplied through process environment before initialization; no repository config modification.",
+  "sealDefinition": "SHA-256 over sorted regular-file relative paths, permissions, lengths and bytes with NUL separators; includes .git unless sourcePayloadSeal.",
+  "comparison": {
+    "changedExportedPaths": [
+      "scripts/publish/manifest.json",
+      "vendor/cybergrid-sdk/SOURCE.json"
+    ],
+    "addedExportedPaths": [],
+    "removedExportedPaths": [],
+    "changedManifestPins": [
+      "vendor/cybergrid-sdk/SOURCE.json"
+    ],
+    "ownershipPolicyRuntimeDeclarationsUnchanged": true,
+    "functionalExportedSourceUnchanged": true,
+    "privateChangesNotExported": [
+      "docs/verification/account109/macos/desktop-runner-review03.md",
+      "docs/verification/account109/macos/full-native01/README.md",
+      "docs/verification/account109/macos/full-native01/SHA256SUMS",
+      "docs/verification/account109/macos/full-native01/account109-desktop-helpers.mjs",
+      "docs/verification/account109/macos/full-native01/account109-desktop-helpers.test.mjs",
+      "docs/verification/account109/macos/full-native01/account109-desktop.mjs",
+      "docs/verification/account109/macos/full-native01/helper-driver-checks.json",
+      "docs/verification/account109/macos/full-native01/identity-receipt.json",
+      "docs/verification/account109/macos/full-native01/post-run-status.json",
+      "docs/verification/account109/macos/full-native01/result.json",
+      "docs/verification/account109/macos/full-native01/sync108-native-driver.mjs",
+      "docs/verification/account109/macos/full-native01/sync108-native-driver.test.mjs",
+      "scripts/verification/account109-desktop-helpers.mjs",
+      "scripts/verification/account109-desktop-helpers.test.mjs",
+      "scripts/verification/account109-desktop.mjs"
+    ]
+  },
+  "provenance": {
+    "upstream": "CyberGrid",
+    "revision": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+    "source": "sdk-rust",
+    "authorization": "Original-source owner authorized CyberNote integration; upstream LICENSE and third-party notices retained.",
+    "changes": [
+      "Added and exported a finite AuthProviderFailure enum and AuthorizationProvider error variant without provider messages or credentials.",
+      "Preserved typed provider failure categories during token acquisition while retaining authorization-unavailable login and recovery classification and sanitizing unclassified provider errors.",
+      "Added regression coverage for provider failure propagation and unchanged recovery classification."
+    ]
+  },
+  "acceptanceBoundary": {
+    "currentDeviceAcceptance": "pending; parent reports Android coordinator TCP 443 blocked",
+    "finalAcceptance": false,
+    "androidPackageProviderValidation": "Prior P2 presence/hash validation finding remains unchanged; no built-package closure claim."
+  },
+  "operations": "No broad tests repeated, dependency installs, build, remote, credentials, network, app or device operation; no manifest refresh."
+}

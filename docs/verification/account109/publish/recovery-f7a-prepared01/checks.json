@@ -1,0 +1,55 @@
+{
+  "publish-tests": {
+    "command": [
+      "node",
+      "--test",
+      "scripts/publish/build-info.test.mjs",
+      "scripts/publish/export.test.mjs",
+      "scripts/publish/history.test.mjs",
+      "scripts/publish/package-identity.test.mjs",
+      "scripts/publish/policy.test.mjs",
+      "scripts/publish/stage-packages.test.mjs"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 1.384,
+    "tests": {
+      "tests": 19,
+      "pass": 19,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "new-root": {
+    "command": [
+      "node",
+      "scripts/publish/verify.mjs",
+      "--new-root"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 8.293,
+    "result": {
+      "ok": true,
+      "files": 1770,
+      "sourceRevision": "111e7ef088050412277712f5b7a52373525e5ac5",
+      "historyChecked": true,
+      "history": {
+        "rootCommit": "111e7ef088050412277712f5b7a52373525e5ac5",
+        "reachableCommits": 1,
+        "refs": 1,
+        "remotes": 0,
+        "retainedHistoricalObjects": false
+      }
+    }
+  },
+  "versions": {
+    "command": [
+      "node",
+      "scripts/versions.mjs",
+      "--check"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.032
+  }
+}

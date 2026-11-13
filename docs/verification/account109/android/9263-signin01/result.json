@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "kind": "one-android-real-product-signin-initially-paused",
+  "startedAt": "2026-11-13T02:53:52.923Z",
+  "serial": "98895a3147304c3132",
+  "package": "com.local.notesclone.account109",
+  "expectedApkSha256": "da74379984dfc0af86bff1ae89aeac43c83fdab4e7884b9b032961519c404ce9",
+  "signinCalls": 1,
+  "maxAuthenticationWaitMs": 90000,
+  "observations": [
+    {
+      "elapsedMs": 0,
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "hasError": false,
+      "error": null
+    },
+    {
+      "elapsedMs": 2867,
+      "state": "authorizing",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "hasError": false,
+      "error": null
+    },
+    {
+      "elapsedMs": 20691,
+      "state": "error",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "hasError": true,
+      "error": {
+        "code": "account_network",
+        "stage": "coordinator",
+        "providerReason": null
+      }
+    }
+  ],
+  "enablementCalled": false,
+  "credentialsInjected": false,
+  "callbackInjected": false,
+  "tokenInjected": false,
+  "cancelCalled": false,
+  "signOutCalled": false,
+  "originalAppTouched": false,
+  "deviceSettingsTouched": false,
+  "output": "/private/tmp/account109-android-real-9263-jwks01",
+  "cleanup": {
+    "driverClosed": true,
+    "exactForwardAbsent": true,
+    "finalForwards": [],
+    "leaseAbsent": true,
+    "adbOwnershipReturned": true
+  },
+  "outcome": "TERMINAL_NATIVE_ERROR",
+  "forwardsBefore": [],
+  "owned": {
+    "serial": "98895a3147304c3132",
+    "package": "com.local.notesclone.account109",
+    "pid": 28911,
+    "local": "tcp:55175",
+    "remote": "localabstract:webview_devtools_remote_28911",
+    "pageId": "C14DB8620D18BBB20219DD77E416F5B7",
+    "pageURL": "http://tauri.localhost/"
+  },
+  "allFourOriginalDocumentsAndPlainTextPreserved": true,
+  "finalNotes": [
+    {
+      "id": "321e9d6c-d590-437d-8edb-d6ed2feae3fa",
+      "documentSha256": "713c75fe69914dfd1f971f5917aedc95210f917f181ab6743cd28d7faf712f7d",
+      "plainTextSha256": "c27da2b1a84901e448334c9d01c663bcd6c5bfc016ea31c5061d142d45ae2ecb"
+    },
+    {
+      "id": "d6e3b2e2-d799-49e5-91ac-b76e2a7126f4",
+      "documentSha256": "2ef3ab0c109f60929183ad8c88da07a67b29d9e202f143254e3810fe5596e926",
+      "plainTextSha256": "3332298e27c631ef061f33f41c1970e4e89557ccd77440f6df27294abaebdb4f"
+    },
+    {
+      "id": "2113f89b-8183-458a-a97a-27d4b4be9b73",
+      "documentSha256": "bd9ea5bbcbdd78be953502ec79b4672df2c76ef392382600d3ef98864f5f905f",
+      "plainTextSha256": "9e6d2246786f9d5750fb4005bfdb71cdaad4cc95dfe8ea1e85f79814bf033d46"
+    },
+    {
+      "id": "3cfe6fa1-8a3e-4c4c-94d3-4f377562dc3f",
+      "documentSha256": "e606487a9ecaf42fe1ab07b73ce2f67ae5e27ab6b2c471c2b23a22b62266dee8",
+      "plainTextSha256": "4fcdfd16146f5e761502336f3333eac225e31269b76a2c67cf146a29fdc8376d"
+    }
+  ],
+  "originalNotes": [
+    {
+      "id": "321e9d6c-d590-437d-8edb-d6ed2feae3fa",
+      "documentSha256": "713c75fe69914dfd1f971f5917aedc95210f917f181ab6743cd28d7faf712f7d",
+      "plainTextSha256": "c27da2b1a84901e448334c9d01c663bcd6c5bfc016ea31c5061d142d45ae2ecb"
+    },
+    {
+      "id": "d6e3b2e2-d799-49e5-91ac-b76e2a7126f4",
+      "documentSha256": "2ef3ab0c109f60929183ad8c88da07a67b29d9e202f143254e3810fe5596e926",
+      "plainTextSha256": "3332298e27c631ef061f33f41c1970e4e89557ccd77440f6df27294abaebdb4f"
+    },
+    {
+      "id": "2113f89b-8183-458a-a97a-27d4b4be9b73",
+      "documentSha256": "bd9ea5bbcbdd78be953502ec79b4672df2c76ef392382600d3ef98864f5f905f",
+      "plainTextSha256": "9e6d2246786f9d5750fb4005bfdb71cdaad4cc95dfe8ea1e85f79814bf033d46"
+    },
+    {
+      "id": "3cfe6fa1-8a3e-4c4c-94d3-4f377562dc3f",
+      "documentSha256": "e606487a9ecaf42fe1ab07b73ce2f67ae5e27ab6b2c471c2b23a22b62266dee8",
+      "plainTextSha256": "4fcdfd16146f5e761502336f3333eac225e31269b76a2c67cf146a29fdc8376d"
+    }
+  ],
+  "lastSafeStatus": {
+    "state": "error",
+    "enabled": false,
+    "hasProfile": false,
+    "identityCheck": "unverified",
+    "hasError": true,
+    "error": {
+      "code": "account_network",
+      "stage": "coordinator",
+      "providerReason": null
+    }
+  },
+  "signinRequestedAtMs": 1794538445257,
+  "signinRequestedAt": "2026-11-13T02:54:05.257Z",
+  "authenticationWaitMs": 20692,
+  "finishedAt": "2026-11-13T02:54:26.296Z"
+}
