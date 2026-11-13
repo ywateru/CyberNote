@@ -48,3 +48,10 @@ depends-on: [app-account109-native, app-account109-server, app-account109-ui]
 6. Node 驱动在新鲜输出目录延续 full02 两分支只读基线与精确 digest gate，核对完整两分支、附件引用/归属和读取/磁盘原字节；再执行退出、本地编辑、两向排除和重启。旧失败保留，不重跑此前十项或重新制造冲突。驱动与真实运行由不同代理复核。
 
 先在一次性独立合成库完成初始化/协议/保存/退出烟测并独立审阅，再允许原库单次续验。构建须记录准确 source revision、工具/可执行字节哈希及无 WebView/native participant 覆盖边界。若此方案需要放松生产协调或授权规则，停止该方案并回到外部访问前提。
+
+
+## 2026-11-13 实际原生续验结果
+
+[临时库 7 项烟测](../../verification/account109/native/headless-smoke01/README.md)和[原库 91.131 秒续验](../../verification/account109/native/headless-continuation01/README.md)均通过。原库既有两个冲突分支经一次生产 keep-all 后双方完整保留，PNG/bin 原字节一致；A 实际退出、本地新建、重启与两向排除通过，三个进程全部自然退出且最终不存在。保持旧 full02 和 WebView continuation01 失败，不追认其根因或 UI 修复。
+
+本任务仍 in-progress：Android coordinator 网络前提未满足，实际账户三端用例未执行；A 已正常退出，三端前需要真实浏览器重新登录，不能复制 grant。最新结果、覆盖限制与净化候选见 [RESULT-LATEST](../../verification/account109/RESULT-LATEST.md)。GitHub/Actions 维持测试完成后顺序，尚未执行。

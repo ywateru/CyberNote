@@ -1,4 +1,4 @@
-2026-11-13最新：[full-native02 双桌面原生验收](verification/account109/macos/full-native02/README.md) 已通过十项检查，包含完整正文/附件原字节双向同步、暂停恢复及离线重启补齐；并发后两端各有一个冲突，但执行器原生调用超时，保留全部和退出隔离仍待命令续验。[当前用例状态](verification/account109/ACCOUNT-TEST-CASES.md)已分项说明。Android [同源原生探测](verification/account109/android/public-native01/README.md)确认 coordinator 连接阶段超时、Logto 200；三端尚未执行。服务端 JWKS 修复已独审部署，全服务 172 项（含 29 项 Redis）通过且零跳过。原始失败保留；GitHub/Actions 尚未交付。下方文档按历史时点阅读。
+2026-11-13最新：账户同步的[双桌面核心实测](verification/account109/RESULT-LATEST.md)已覆盖双向完整正文/附件原字节、暂停恢复与离线重启；在原库中用真实 Rust 功能续验完成既有冲突两分支保全、退出后本地保存/重启和两向排除，三个进程自然退出。旧 WebView 超时失败保留，不代表 UI 全部通过。Android coordinator 连接阶段超时仍阻塞真实账户三端；[逐项用例](verification/account109/ACCOUNT-TEST-CASES.md)区分已测、部分与未执行。工作区代码/证据已分组收拢；净化候选已更新封存，GitHub/Actions 尚待测试完成。下方按历史时点阅读。
 
 2026-11-13早期：本轮整理账户同步开发检查点，见[工作区提交记录](verification/account109/WORKSPACE-COMMITS.md)。已保留[架构](architecture/account-sync.md)、[界面设计](ui/account-sync.md)和[原生 SDK 调查](plan/analysis/account109-native-research.md)；当时账户界面仅在显式开发测试中启用，默认设置与手工同步仍可用。不能以局部检查替代端到端验收。
 

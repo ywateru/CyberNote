@@ -1,22 +1,23 @@
 # account109 登录与双桌面验收用例
 
-最新实际进展（2026-11-13）：[full-native02](macos/full-native02/README.md) 已通过十个实际原生检查：两端恢复已有真实授权、自动连接、双向完整 document/plainText 和 PNG/bin 原字节、暂停排除、恢复补齐、离线重启补齐及账户 UI 关闭期间同步。并发编辑后两端均记录一个冲突；执行器随后在 `concurrent-offline / NATIVE_TIMEOUT` 失败，并记录独立清理失败。保留全部和退出隔离尚未完成，不把十项局部通过记为整轮通过。保留原库和冲突，后续通过生产 `sync_command` 继续验收，不重建现场。
+最新实际进展（2026-11-13）：双桌面核心数据场景已有实际证据，见 [本轮结果](RESULT-LATEST.md)。[full-native02](macos/full-native02/README.md) 的十项通过覆盖自动连接、双向完整 document/plainText 和 PNG/bin 原字节、暂停恢复及进程离线补齐，但该整轮仍因原生 eval 超时而失败。随后 [headless-continuation01](native/headless-continuation01/README.md) 在保留的同一对库中，用生产 Rust 功能完成既有冲突 keep-all、双端完整两分支及原始附件核对、真实退出、本地新建、重启和两向排除；三个进程全部自然退出，零强制信号。此续验为新的原生无界面候选，不重分类旧失败，也不替代 UI/浏览器验收。
 
-安卓最新：[同源 Rust 原生公共连通诊断](android/public-native01/README.md) 中，canonical coordinator 六次请求均在连接阶段超时，Logto discovery 为 200；实际应用此前也返回 `account_network / coordinator`。未定位网络路径的精确原因，未改手机网络设置。三端账户用例因此前提未满足而未执行，准备好的执行器不能代替真实结果。新私有 GitHub 和 Actions 仍待测试完成后交付。
-
-| 本轮用例 | 当前可证范围 | 尚缺范围 |
+| 本轮用例 | 当前可证范围 | 尚缺或限制 |
 | --- | --- | --- |
-| SYNC-01 | 原库恢复、同账户自动连接通过 | 无需以标题/online 代替收敛 |
-| SYNC-02/03 | 双向完整正文、文档附件引用、授权读取与磁盘原字节通过 | OS picker/物理键盘不在此命令覆盖内；SYNC-03 修改既有正文不单独授予整项通过 |
-| SYNC-04 | B 暂停时不应用新笔记，恢复及进程离线重启补齐通过 | 不是设备断网/系统网络配置测试 |
-| SYNC-05 | 共同基线一致；两端并发后各有一个冲突 | 保留全部后完整双分支和附件核对待续验 |
-| SYNC-06 | 账户页关闭期间同步、B 同目录重启恢复通过 | 双端完整重启修改矩阵不单独授予整项通过 |
-| SYNC-07 | 未执行 | 退出后双向不收发、本地编辑及重启持久化待续验 |
-| ANDROID-01～04 | 本地四篇合成正文保留及 coordinator 网络失败已记录 | 真实账户三端收敛未执行；手机起源附件亦未执行 |
+| SYNC-01 | 已有真实授权恢复、同账户自动连接、两端当前 device 不同且互相连接通过 | 无手工配对；不能仅用 online 判收敛 |
+| SYNC-02/03 | A/B 新笔记双向完整格式正文、引用、授权读取及 PNG/bin 磁盘原字节通过 | OS picker/物理键盘、普通非冲突的既有正文修改未单独授予整项通过 |
+| SYNC-04 | B 暂停时排除新笔记，恢复及进程离线重启补齐通过 | 不等于系统断网或全部暂停本地编辑排列 |
+| SYNC-05 | 两端原有两个完整冲突分支经生产 keep-all 后双方均保全，原字节一致、冲突归零 | 无界面命令绕过确认；冲突页面交互未由此验收 |
+| SYNC-06 | 关闭账户 UI 时同步、原库新进程恢复授权并自动连接、B 离线重启补齐通过 | 未执行所有双端重启后修改排列 |
+| SYNC-07 | A 原生退出后本地新建/重启保留，两向新笔记排除，原有全文与全部附件保留通过 | 重启前 27 次/3005.87ms、后 29 次/3009.15ms 采样；重新登录恢复未执行 |
+| AUTH-06 部分 | 实际原生 signOut 关闭 profile/连接并禁用；B 保持 ready | 取消确认、UI 成功提示与切换另一账户不在此次实测中 |
+| ANDROID-01～04 | 本地四篇合成全文保留、实际 coordinator 网络失败已有记录 | 账户三端前提未满足，手机起源附件亦未执行 |
 
-下方较早阶段保留原时点，不能覆盖本段当前状态。
+无界面入口仅在 `sync-e2e && debug_assertions && desktop` 并同时启用两项显式开关时生效。它使用正常 Workspace lease、Store/Session、账户 owner 和同步 adapter，以真实 token 回答保存协调；没有 WebView、编辑器草稿或身份注入。独立 Rust 7 项和关闭 feature 编译、Node 59 项、实际临时库 7 项烟测均通过；详见 [native 审阅](native/headless-review01/review.md)、[Node 审阅](macos/headless-node-review01/review.md)、[烟测](native/headless-smoke01/README.md)。
 
-追加续验：[continuation01](macos/full-native02-continuation01/README.md) 的两分支只读基线通过，但 A 启动 `ready/documentProbe` 超时，B 未启动，未执行冲突解决或退出。清理记录保留 SIGTERM 与 `CLEANUP_FAILED`。随后父级原生访问明确报告当前 Mac locked；该访问观察不构成历史失败原因证明。现按 [任务中的无 WebView 入口契约](../../plan/tasks/app-account109-live-recovery.md) 实现固定 Rust 命令续验：使用真实账户 owner、Store/Session、adapter 与原始授权，先完成独立临时库烟测，再运行原库。入口准备、设备外测试和协议 ACK 均不表示冲突或退出用例已经通过。
+Android [同源 Rust 公共探测](android/public-native01/README.md) 的六次 coordinator 请求均连接阶段超时，而 Logto discovery 200；应用实际为 `account_network / coordinator`。没有修改手机网络设置，也没有定位精确路由原因。三端执行器已独审并补齐最初四篇正文保全，但实际三端用例仍未执行。净化源码全新历史候选已更新封存；GitHub 和 Actions 尚未执行，维持测试完成后的交付顺序。
+
+历史失败：[continuation01](macos/full-native02-continuation01/README.md) 只读两分支基线通过，但 A 的 WebView `ready/documentProbe` 超时，B 未启动，未执行冲突或退出；SIGTERM 与清理失败保留。后续父级原生访问明确报告当时 Mac locked，只作当时访问条件，不追认为历史根因。下方早期记录保留原时点，当前状态以上述结果为准。
 
 最新续验：[真实双桌面五轮记录](macos/real-account-runs01/README.md)。`90b8b28b` 两端真实登录与首次合并确认已成功；`9263ea87` 在同一对数据根恢复两个真实授权，无新授权请求。两轮均未建立自动连接，后一轮 B 返回 `account_authentication`，SYNC-01 失败，后续账户数据和三端场景仍未完成。用户已允许命令行调用真实功能进行测试；后续采用原生功能调用与必要 UI 冒烟组合，仍核对完整文档和附件原字节。下文较早的锁屏/单端登录记录保留其历史时点。
 
