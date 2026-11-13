@@ -3986,17 +3986,20 @@ function App() {
   const startupReady = !loading && workspaceLoaded && !syncCover && !synchronizing &&
     (!current || current.deletedAt || (current.locked && !unlocked.has(current.id)) || (!!editor && !editor.isDestroyed)) &&
     (!native || !macNative || mobile || !!nativeInfo || !!error);
-  useEffect(() => {
+  useLayoutEffect(() => {
+    startup.diagnostic({
+      loading, workspaceLoaded, syncCover, synchronizing,
+      editorSatisfied: !!(!current || current.deletedAt || (current.locked && !unlocked.has(current.id)) || (!!editor && !editor.isDestroyed)),
+      nativeRequired: native && macNative && !mobile,
+      nativeInfoPresent: !!nativeInfo,
+      errorPresent: !!error,
+      startupReady: !!startupReady,
+    });
+  });
+  useLayoutEffect(() => {
     if (!loading && !workspaceLoaded && (syncError || error)) startup.fail();
     if (!startupReady) return;
-    let second = 0;
-    const first = requestAnimationFrame(() => {
-      second = requestAnimationFrame(() => startup.ready());
-    });
-    return () => {
-      cancelAnimationFrame(first);
-      cancelAnimationFrame(second);
-    };
+    return startup.scheduleReady();
   }, [startupReady, loading, workspaceLoaded, syncError, error]);
   return (
     <NativeMenuContext.Provider value={nativeTop && nativeInfo?.native.popupMenus === true}>
