@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "kind": "debug-e2e-candidate",
+  "status": "passed-build-and-embedded-identity-only",
+  "sourceRevision": "10814415ca088273bacc311d192b9605bda16775",
+  "sourceRoot": "/private/tmp/cybernote-account109-gui-reauth-01",
+  "sourceTree": "ccebd5352c34559a22040b2f4bf64725de7d9c41",
+  "sourceBefore": {
+    "sourceRevision": "10814415ca088273bacc311d192b9605bda16775",
+    "sourceFingerprint": "a410d97848c82a11373791d311231e488d0f3da21b332f40cfd00f9d689c1387",
+    "sourceDirty": false,
+    "inputCount": 1654
+  },
+  "lockfilesBefore": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "cargoTarget": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "CYBERNOTE_BUILD_TARGET": "macos",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "commands": [
+    {
+      "name": "frontend-build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 4.677,
+      "logSha256": "c24b98e1321a34a42a3b028de2efb156748573a7e54950498d31999dca498076"
+    },
+    {
+      "name": "compiled-capability",
+      "command": [
+        "node",
+        "scripts/debug/account-native-capability.mjs"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.237,
+      "logSha256": "640aed259c00b33683b07d603fc04ddf54e711e9883ed576bf0c81f3d6887079"
+    },
+    {
+      "name": "native-build",
+      "command": [
+        "cargo",
+        "build",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--features",
+        "sync-e2e,tauri/custom-protocol",
+        "--locked",
+        "--offline"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 22.407,
+      "logSha256": "2fed0bfefb741ece4acdc146e8ed24e753d3c35d5bf0a34bd0fa9855947c9b40"
+    },
+    {
+      "name": "embedded-identity",
+      "command": [
+        "node",
+        "scripts/publish/package-identity.mjs",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-10814415-debug-e2e-02/notes-clone",
+        "/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/build"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.59,
+      "logSha256": "79e0f6c13f14e0bf15a2f11bd2a64a8d38cc59404c7773c8891a201c2811a27d"
+    }
+  ],
+  "appLaunched": false,
+  "adbUsed": false,
+  "originalStoresOpened": false,
+  "toolchain": {
+    "node": "v22.16.0",
+    "pnpm": "10.15.0",
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: aarch64-apple-darwin\nrelease: 1.97.1\nLLVM version: 22.1.6",
+    "developerDirectory": "/Library/Developer/CommandLineTools",
+    "sdk": "26.5"
+  },
+  "identityReceipt": {
+    "info": {
+      "schema": 1,
+      "version": "0.1.0",
+      "mode": "production",
+      "builtAt": "2026-11-13T06:34:42.619Z",
+      "target": "macos",
+      "sourceRevision": "10814415ca088273bacc311d192b9605bda16775",
+      "sourceFingerprint": "a410d97848c82a11373791d311231e488d0f3da21b332f40cfd00f9d689c1387",
+      "sourceDirty": false,
+      "inputCount": 1654,
+      "releasePreparedAt": null
+    },
+    "nativeBinarySha256": "b981400529f36cb698616d3871cc83b9a5d7cc4c10fb75009276697daba9ee6f",
+    "embeddedIdentity": {
+      "encoding": "brotli",
+      "sha256": "e5f492daf3edf3c7258429e222d87bb82c35badc93a1b6264a4ddf365c1a16d3"
+    },
+    "currentSourceRevalidated": true
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-10814415-debug-e2e-02/notes-clone",
+    "sha256": "b981400529f36cb698616d3871cc83b9a5d7cc4c10fb75009276697daba9ee6f",
+    "bytes": 203587424,
+    "architecture": "Mach-O 64-bit executable arm64"
+  },
+  "sourceAfter": {
+    "sourceRevision": "10814415ca088273bacc311d192b9605bda16775",
+    "sourceFingerprint": "a410d97848c82a11373791d311231e488d0f3da21b332f40cfd00f9d689c1387",
+    "sourceDirty": false,
+    "inputCount": 1654
+  },
+  "lockfilesAfter": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "buildControllerSha256": "a51ce7b33ecb3bf7cc9e769a2f29fa1f6c9af92c858ba139c9e5c99e5457d91b",
+  "features": [
+    "sync-e2e",
+    "tauri/custom-protocol"
+  ],
+  "frontendAccountOverrides": {
+    "VITE_NOTES_ACCOUNT_NATIVE": null,
+    "VITE_NOTES_ACCOUNT_UI": null
+  },
+  "dotenvInputs": [],
+  "targetReleased": true,
+  "boundary": "Build and static embedded identity only; no app, UI, auth, original store or device execution. Vite production identity label does not remove the explicitly enabled debug API."
+}
