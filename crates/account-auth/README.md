@@ -40,6 +40,7 @@ one owner, Tokio mutex, connection policy and process-lifetime file lock.
 
 - `begin_authorization(Url, bool) -> (AuthorizationTransaction, Url)` creates
   PKCE S256, state and nonce. Scopes are `openid profile offline_access connect`;
+  interactive sign-in and sign-up both request `prompt=login consent`.
   `profile` can supply `preferred_username`. No unadvertised `username` scope is
   requested. Both code and refresh requests explicitly include pinned `resource`.
   Refresh omits `scope` to inherit the original grant, matching Logto's resource
@@ -140,15 +141,20 @@ the host uses it for profile/CyberGrid. It is separate from the resource identif
 
 ## Logto registration parameter and verification
 
-Authorization explicitly uses `CoreAuthPrompt::Consent` (`prompt=consent`),
-matching the official SDK default. A real hosted PKCE recheck by the main agent
-confirmed `prompt=login` omitted the refresh token while `prompt=consent` returned
-one for the same Native client, scopes and resource. The crate still rejects a
-missing/empty refresh token; it never assumes `offline_access` alone is enough.
-If forced reauthentication is added later, the library supports adding both
-`CoreAuthPrompt::Login` and `CoreAuthPrompt::Consent` to produce `login consent`;
-do not replace consent with login. This release keeps the frozen API and always
-requests consent.
+User-initiated authorization requests both `CoreAuthPrompt::Login` and
+`CoreAuthPrompt::Consent` (`prompt=login consent`): require reauthentication
+while retaining consent for offline authorization. This does not clear browser
+cookies or perform global logout. Restore, refresh and background access-token
+requests do not enter this interactive path. The crate still rejects a
+missing/empty refresh token and present scopes without `connect`; it never
+assumes `offline_access` alone is enough. The returned identity must pass the
+existing signature, issuer and owner checks. This prompt change does not prove
+which hosted identity was returned during earlier failures.
+
+The offline request test covers sign-in and sign-up with both pinned platform
+callbacks, exact request keys and fixed inputs, both prompts, independently
+random state/nonce/PKCE and no token exchange or revocation. It does not perform
+hosted registration or establish the deployed provider's prompt behavior.
 
 Sign-up uses `first_screen=register`, based on Logto's official JS SDK
 `packages/js/src/core/sign-in.ts` and `packages/js/src/types/index.ts`:

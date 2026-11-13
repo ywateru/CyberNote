@@ -178,6 +178,7 @@ impl AuthClient {
                 Nonce::new_random,
             )
             .set_pkce_challenge(challenge)
+            .add_prompt(CoreAuthPrompt::Login)
             .add_prompt(CoreAuthPrompt::Consent)
             .add_extra_param("resource", self.inner.config.resource.as_str());
         for scope in &SCOPES[1..] {

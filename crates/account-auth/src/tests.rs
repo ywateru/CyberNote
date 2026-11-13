@@ -343,23 +343,64 @@ async fn code_exchange_rejection_and_malformed_response_have_fixed_safe_categori
 }
 
 #[tokio::test]
-async fn pkce_signup_scopes_and_exact_redirect_are_pinned() {
+async fn signin_signup_require_login_and_consent_with_pinned_inputs_and_fresh_transactions() {
     let f = Fixture::new();
     let dir = private_temp();
     let client = f.client(&dir).await;
-    let (txn, url) = client
-        .begin_authorization(config().redirect_uris[0].clone(), true)
-        .await
-        .unwrap();
-    let pairs: HashMap<String, String> = url.query_pairs().into_owned().collect();
-    assert_eq!(pairs["response_type"], "code");
-    assert_eq!(pairs["code_challenge_method"], "S256");
-    assert_eq!(pairs["first_screen"], "register");
-    assert_eq!(pairs["prompt"], "consent");
-    assert_eq!(pairs["scope"], "openid profile offline_access connect");
-    assert_eq!(pairs["resource"], "https://fixture.example/api");
-    assert!(!pairs.contains_key("code_verifier"));
-    drop(txn);
+    let mut previous: Vec<HashMap<String, String>> = Vec::new();
+    for signup in [false, true] {
+        for redirect in config().redirect_uris {
+            let (txn, url) = client
+                .begin_authorization(redirect.clone(), signup)
+                .await
+                .unwrap();
+            assert_eq!(url.origin(), config().issuer.origin());
+            assert_eq!(url.path(), "/oidc/auth");
+            let pairs: HashMap<String, String> = url.query_pairs().into_owned().collect();
+            // Exact keys and count also reject duplicate parameters and secret inputs.
+            let mut keys = vec![
+                "client_id",
+                "code_challenge",
+                "code_challenge_method",
+                "nonce",
+                "prompt",
+                "redirect_uri",
+                "resource",
+                "response_type",
+                "scope",
+                "state",
+            ];
+            if signup {
+                keys.push("first_screen");
+                assert_eq!(pairs["first_screen"], "register");
+            }
+            assert_eq!(url.query_pairs().count(), keys.len());
+            assert_eq!(pairs.len(), keys.len());
+            assert!(keys.iter().all(|key| pairs.contains_key(*key)));
+            assert_eq!(pairs["client_id"], "FixtureNative");
+            assert_eq!(pairs["response_type"], "code");
+            assert_eq!(pairs["redirect_uri"], redirect.as_str());
+            assert_eq!(pairs["code_challenge_method"], "S256");
+            assert_eq!(pairs["prompt"], "login consent");
+            assert_eq!(pairs["scope"], "openid profile offline_access connect");
+            assert_eq!(pairs["resource"], "https://fixture.example/api");
+            assert_eq!(pairs["state"], *txn.state.secret());
+            assert_eq!(pairs["nonce"], *txn.nonce.secret());
+            assert_eq!(
+                pairs["code_challenge"],
+                PkceCodeChallenge::from_code_verifier_sha256(txn.verifier.as_ref().unwrap())
+                    .as_str()
+            );
+            for key in ["state", "nonce", "code_challenge"] {
+                assert!(!pairs[key].is_empty());
+                for prior in &previous {
+                    assert_ne!(pairs[key], prior[key]);
+                }
+            }
+            previous.push(pairs);
+            drop(txn);
+        }
+    }
     assert!(matches!(
         client
             .begin_authorization(
@@ -369,12 +410,9 @@ async fn pkce_signup_scopes_and_exact_redirect_are_pinned() {
             .await,
         Err(AuthError::Configuration)
     ));
-    let (android, _) = client
-        .begin_authorization(config().redirect_uris[1].clone(), false)
-        .await
-        .unwrap();
-    drop(android);
     assert!(client.restore().await.unwrap().is_none());
+    assert_eq!(f.tokens.load(Ordering::SeqCst), 0);
+    assert_eq!(f.revokes.load(Ordering::SeqCst), 0);
 }
 
 #[tokio::test]
