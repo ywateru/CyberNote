@@ -1,3 +1,5 @@
+2026-11-13最新实测：[macOS内置表单及原生关窗](verification/account109/native/login-window-live05/README.md)五项通过并独核，完整正文编辑/自然重启保持；两个进程自然退出0，成功临时库已清理。[手机CELLULAR新域匿名health](verification/account109/android/approved-domain-phone-health01/README.md)一次200、可信TLS，未安装新包或发起授权。新Android包已独核；重复构建产物[清理](verification/account109/native/88b2dabe-derived-cleanup01/README.md)约724MiB。两域配置/公钥父级对照通过，独立复核可读新域但旧域请求失败，保留各自范围；认证与账户三端仍未完成。
+
 2026-11-13域名续验：[DNS已写入且Vercel verified=true](verification/account109/server/custom-domain-live02/README.md)。正确Chrome profile已有目标zone登录会话，无需新输入凭据；CNAME和附加TXT已完成，原三条TXT保留。新域匿名端点/TLS通过；首轮Python canonical TLS失败保留，父级Node单轮两域配置/公钥均200且相同，独核续验中。新Android精确 `88b2dabe` 候选已[离线构建](verification/account109/native/88b2dabe-android-build01/README.md)，未安装，身份独核进行中。
 
 2026-11-13最新：[双入口真实桌面命令测试](verification/account109/native/login-surfaces-live03/README.md)三条流程各五项通过，涵盖浏览器取消、内置取消、内置转浏览器取消及完整正文编辑/自然重启；六进程自然退出0，[独核](verification/account109/native/login-surfaces-live03/review.md)通过。精确候选仍为 `72513d12` Mac；真实表单、物理关窗、成功认证及Android三端未由此验收。Dock访问超时后，Chrome原生窗口访问已成功；已用正确profile的现有会话配置DNS，服务验证续验中。下方按历史时点读取。

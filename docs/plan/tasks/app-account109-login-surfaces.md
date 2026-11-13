@@ -32,6 +32,10 @@ Feynman 实施 native host/平台容器；Huygens 实施账户页、DTO/命令 a
 
 ## 当前执行状态
 
+最新：[window05](../../verification/account109/native/login-window-live05/README.md)已补测并独核通过真实托管表单显示、CUA原生关窗、完整正文/编辑/自然重启五项。wrapper绑定成功，两个进程自然退出0，成功临时库已按门槛清理。下方window04是保留的前次失败，不能覆盖本次实际结果。
+
+后续原库重新登录执行器需从旧 `920fa9cf` 精确pin更新到已核且通过实际窗口测试的 `72513d12` Mac候选。只更新候选source/SHA及对应身份引用和说明；默认省略surface仍走系统浏览器，复用已有最多600秒人工授权等待。保留历史owner/profile、完整正文/附件、错误分类和停止门槛，不放宽账户身份、不读取grant、不改旧结果或自动重试。作者Huygens，独审Cicero；源码准备不表示已经成功登录。
+
 最新局部实际结果：[live03](../../verification/account109/native/login-surfaces-live03/README.md)在精确 `72513d12` Mac候选完成browser、embedded、embedded→browser三条命令驱动取消流程，各5项PASS；完整正文/自然重启保全与六进程自然退出0已独核。成功临时库已清理。Chrome原生窗口访问已恢复；[window04](../../verification/account109/native/login-window-live04/README.md)因plain executable无法CUA绑定而关窗等待超时，保留失败现场，不能算真实关窗或表单可见通过。[隔离.app包装](../../verification/account109/macos/72513d12-debug-wrapper01/README.md)正独核，以补测实际窗口。
 
 固定新域精确 `88b2dabe` Android[包身份独核](../../verification/account109/native/88b2dabe-android-build-review01/README.md)通过，尚未安装；既有账户error和追加附件仍保留，引用/原字节及来源待核对。成功认证及真实账户三端中转未完成。下方保留前轮执行记录，旧锁屏与尚无实际运行的描述不再代表当前桌面条件。

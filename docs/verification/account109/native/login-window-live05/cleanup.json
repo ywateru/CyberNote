@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-11-13T13:22:56.481309+00:00",
+  "independentReview": "APPROVE",
+  "preconditions": [
+    "exact raw archive equality",
+    "all owned PIDs absent",
+    "canonical owned paths without symlinks",
+    "lsof confirms no open files"
+  ],
+  "removed": [
+    {
+      "path": "/private/tmp/account109-cancel-local-window05-store",
+      "allocatedBytes": 110592
+    },
+    {
+      "path": "/private/tmp/account109-cancel-local-window05-out",
+      "allocatedBytes": 8192
+    }
+  ],
+  "preserved": [
+    "window04 failure and every original store",
+    "private before/after screenshots",
+    "approved wrapper and standalone candidate"
+  ]
+}

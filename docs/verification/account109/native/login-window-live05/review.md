@@ -1,0 +1,9 @@
+# 独立复核：APPROVE（有限范围）
+
+Erdos只读核验原始及归档result逐字节一致：8163 bytes，SHA256 `0630dc7d89ab2f9cc37eb98d7da7ef06ac7ae7764252d2f871308214d36f19f0`。五项PASS；embedded、cancelViaWindow=true。匹配runner在60秒关窗等待分支不发送account.cancel。关窗后7次/3021ms、重启后7次/3016ms完整正文比较通过，noteId保持。两进程自然退出0，无信号；复核者另行确认36637、36758均不存在。
+
+实际wrapper binary与已核187cf39d候选一致；bundle id匹配；四工具字节匹配父级记录的执行HEAD `3f5c3981a78bbef7be0c76ec7c64eadf89055f19`，原始result未直接记录HEAD。两张私有截图哈希及大小匹配，画面支持空字段表单和随后返回主账户登录入口。固定origin、准确CUA绑定及AX close动作来源为父级观察回执，截图本身不独立证明origin或动作过程。
+
+接受AUTH-09 macOS表单显示与原生关窗分支；不证明认证成功、迟到callback、Android、三端同步或人工物理输入。window04失败保持。
+
+同次只读复核接受phone-health01有限匿名shell HTTPS结果及88b2dabe-derived-cleanup01记录范围：归档校验和一致，前者仅证明一次HTTP200/可信TLS/预期3byte响应，后者两目录已不存在、20项保留文件SHA不变。未重跑、联网、操作设备或执行清理。
