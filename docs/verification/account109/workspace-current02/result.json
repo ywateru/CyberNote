@@ -1,0 +1,774 @@
+{
+  "schema": 1,
+  "startedAt": "2026-11-13T07:15:23.310203+00:00",
+  "finishedAt": "2026-11-13T07:15:26.925375+00:00",
+  "requestedMain": "20d62c11fcfead606680928ec5f4f83297a72969",
+  "observedMain": "9f536a5e1721fee1833a8600010f7cb9d45e06d6",
+  "priorAudit": {
+    "path": "docs/verification/account109/WORKSPACE-AUDIT-LATEST.md",
+    "sha256": "c1faf94e28279e5bd1c280cbfb63c20397d235067314986577a9720d4edcae8f",
+    "validWorktrees": 20
+  },
+  "registry": {
+    "entries": 69,
+    "valid": 27,
+    "invalidOrPrunableRetained": 42,
+    "newSincePrior": [
+      "/private/tmp/cybernote-account109-gui-reauth-01",
+      "/private/tmp/cybernote-account109-headless-native",
+      "/private/tmp/cybernote-account109-phone-files",
+      "/private/tmp/cybernote-account109-refresh-classification",
+      "/private/tmp/cybernote-account109-relay-test",
+      "/private/tmp/cybernote-account109-relogin-test",
+      "/private/tmp/cybernote-account109-response-metadata"
+    ]
+  },
+  "worktrees": [
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone",
+      "head": "9f536a5e1721fee1833a8600010f7cb9d45e06d6",
+      "branch": "refs/heads/main",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "trackedStatus": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "main"
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android",
+      "head": "6537b74bf2c957be2ada5511778f597400877029",
+      "branch": "refs/heads/codex/account109-android-main6537",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "ancestor-of-main"
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-90b8b28b-01",
+      "head": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+      "branch": null,
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "ancestor-of-main"
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-d69-debug",
+      "head": "d69ffbce2ad1284e6c7ce830f6840ba083148aab",
+      "branch": "refs/heads/codex/account109-android-d69-debug",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "ancestor-of-main"
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-auth",
+      "head": "9ec4172c82c461e52016178fa54f418a8eab18d2",
+      "branch": "refs/heads/codex/account109-auth",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 12
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-coordination-diagnostics",
+      "head": "b396582a6f45286cebd8dd88c5a03e674a2c5b2a",
+      "branch": "refs/heads/codex/account109-coordination-diagnostics",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 2
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-delivery",
+      "head": "bb4d4ef3548abb22bebecebad3ade27d8f56adc7",
+      "branch": "refs/heads/codex/account109-sourced69-android-evidence",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 1
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-gui-reauth-01",
+      "head": "10814415ca088273bacc311d192b9605bda16775",
+      "branch": null,
+      "newSincePrior": true,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "ancestor-of-main"
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-headless-native",
+      "head": "72b397a334494acf2fb12f1d12c6325c4f602f32",
+      "branch": "refs/heads/codex/account109-coordinator-alias",
+      "newSincePrior": true,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 1
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-jwks-errors",
+      "head": "d3c0ea8e28536e2284ce5957610815e628d04955",
+      "branch": "refs/heads/codex/account109-jwks-errors",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 1
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-mac-ec4348c6-01",
+      "head": "ec4348c6df15c2b0dbd20af3c05f5a0cc7f75497",
+      "branch": null,
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "ancestor-of-main"
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-native",
+      "head": "9103dbc99693490273dc92b354229608212958ca",
+      "branch": "refs/heads/codex/account109-native",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 1,
+        "patchEquivalentCommits": 43,
+        "firstPartyTipPaths": 17,
+        "exactMain": 9,
+        "differentMain": 8,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "92c6ffb9614aa2a5bac579b7e5bfb37517782926"
+        ],
+        "differentPathsOrRoots": [
+          "src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+          "src-tauri/src/account/config.rs",
+          "src-tauri/src/account/enrollment.rs",
+          "src-tauri/src/account/mod.rs",
+          "src-tauri/src/account/provider.rs",
+          "src-tauri/src/account/transport.rs",
+          "src-tauri/src/account/types.rs",
+          "src-tauri/src/lib.rs"
+        ]
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-phone-files",
+      "head": "4b639adfc9d3abfd724b825819855e9d216c9351",
+      "branch": "refs/heads/codex/account109-phone-files",
+      "newSincePrior": true,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 1
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-refresh-classification",
+      "head": "4a5cdf8d1b61a482d0317967936fa93c33b5014d",
+      "branch": "refs/heads/codex/account109-refresh-classification",
+      "newSincePrior": true,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 2,
+        "patchEquivalentCommits": 3,
+        "firstPartyTipPaths": 3,
+        "exactMain": 3,
+        "differentMain": 0,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "7e8ddd17bfc75e34344b7d2bbb5210fc2abc8eff",
+          "5aef7718800275d6d6c37326f90bb345616094b4"
+        ],
+        "differentPathsOrRoots": []
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-relay-test",
+      "head": "d3a5f10e000aa24936d21e1aeaf6df980191f666",
+      "branch": "refs/heads/codex/account109-relay-test",
+      "newSincePrior": true,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 1
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-relogin-test",
+      "head": "b867bccfa3b4a57b3f5a94f3347f64349ff2eceb",
+      "branch": "refs/heads/codex/account109-relogin-test",
+      "newSincePrior": true,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 7,
+        "patchEquivalentCommits": 1,
+        "firstPartyTipPaths": 2,
+        "exactMain": 2,
+        "differentMain": 0,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "4d4fcf37b801d0b83a41449ff0593abaf4bfbaae",
+          "7ffe4e12f4795e0407502d5936bd365d6d45b80a",
+          "b867bccfa3b4a57b3f5a94f3347f64349ff2eceb"
+        ],
+        "differentPathsOrRoots": []
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-response-metadata",
+      "head": "a40185abef012964c3fe45bc80aeab21af117ff9",
+      "branch": "refs/heads/codex/account109-response-metadata",
+      "newSincePrior": true,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": true,
+      "statusMetadata": [],
+      "integration": {
+        "classification": "active-excluded",
+        "owner": "Feynman"
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-server",
+      "head": "9a0c7f152f42cc043e8f792f02a27fa22dd15695",
+      "branch": "refs/heads/codex/account109-server",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 1
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-test-audit",
+      "head": "bb701339340eabeb448ec2853a9f0de374938571",
+      "branch": "refs/heads/codex/account109-test-audit",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "patch-equivalent-to-main",
+        "unmatchedCommits": 0,
+        "patchEquivalentCommits": 8
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-ui",
+      "head": "97cd013cb9192bacfda00f0ce5be1ee12349232b",
+      "branch": "refs/heads/codex/account109-ui",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 7,
+        "patchEquivalentCommits": 1,
+        "firstPartyTipPaths": 16,
+        "exactMain": 14,
+        "differentMain": 2,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "b37bca3ae7ac6f2c12cf89b2fd63b2cd1effcea9",
+          "ff34998e41648a903d2ae9f2ce09876d2fe8709a",
+          "30ecbf4f3cc26d9826a7107332c049bb11a1cf7b"
+        ],
+        "differentPathsOrRoots": [
+          "src/AccountSettings.tsx",
+          "src/account-client.ts"
+        ]
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-android-manifest103",
+      "head": "6578613a40d35e4debce5d50800896ef2c1ad630",
+      "branch": "refs/heads/codex/android-manifest103",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 24,
+        "patchEquivalentCommits": 0,
+        "firstPartyTipPaths": 267,
+        "exactMain": 230,
+        "differentMain": 37,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "e521306ea61a4d28ac9de44752524a4f2a838cf0",
+          "89d4c352be56e189f49d6fb994446faa89e22666",
+          "6578613a40d35e4debce5d50800896ef2c1ad630"
+        ],
+        "differentPathsOrRoots": {
+          "README.md": 1,
+          "package.json": 1,
+          "scripts": 13,
+          "src-tauri": 14,
+          "src": 8
+        }
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-delivery",
+      "head": "5b15ce1d96efeaf54d78ccf6c29a72e2a1ecbf4b",
+      "branch": "refs/heads/codex/cybernote-delivery",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 18,
+        "patchEquivalentCommits": 0,
+        "firstPartyTipPaths": 263,
+        "exactMain": 209,
+        "differentMain": 54,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "1507d66a152ac2ac9838d2bcd37791449135a370",
+          "1e3d3e398c2d1555987e93b6a8f462eb82613714",
+          "5b15ce1d96efeaf54d78ccf6c29a72e2a1ecbf4b"
+        ],
+        "differentPathsOrRoots": {
+          "README.md": 1,
+          "index.html": 1,
+          "package.json": 1,
+          "plugins": 4,
+          "public": 1,
+          "scripts": 11,
+          "src-tauri": 15,
+          "src": 20
+        }
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-interface-settings",
+      "head": "988ade3b185c3a256c158f0537530c4439806b8b",
+      "branch": "refs/heads/codex/format102-cause-research",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 168,
+      "categories": {
+        "generated-android-or-copied-dependency": 168
+      },
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {
+        "plugins/tauri-plugin-notes-media/android/.tauri/tauri-api": 29,
+        "plugins/tauri-plugin-notes-media/android/build/intermediates": 55,
+        "plugins/tauri-plugin-notes-media/android/build/kotlin": 80,
+        "plugins/tauri-plugin-notes-media/android/build/outputs": 1,
+        "plugins/tauri-plugin-notes-media/android/build/tmp": 3
+      },
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 35,
+        "patchEquivalentCommits": 0,
+        "firstPartyTipPaths": 277,
+        "exactMain": 227,
+        "differentMain": 40,
+        "absentMain": [
+          "scripts/check-format102-close-only.mjs",
+          "scripts/check-format102-diagnostic.mjs",
+          "scripts/check-format102-kotlin.py",
+          "scripts/check-format102-source-boundaries.mjs",
+          "scripts/diagnose-mobile-format102-browser.mjs",
+          "scripts/verification/check-format102-diagnostic-independent.mjs",
+          "scripts/verification/check-format102-native-independent.py",
+          "scripts/verification/check-format102-v2-independent.mjs",
+          "src-tauri/gen/android/app/src/main/java/com/local/notesclone/FormatDiagnostic102.kt",
+          "src/editor-session/diagnostic102.ts"
+        ],
+        "unmatchedRecentCommits": [
+          "31feeed15b60dbdd86972f67389fffac0b824082",
+          "6a6c66ffc027d0d02b3349be1fc0dffe02349810",
+          "988ade3b185c3a256c158f0537530c4439806b8b"
+        ],
+        "differentPathsOrRoots": {
+          "README.md": 1,
+          "package.json": 1,
+          "scripts": 14,
+          "src-tauri": 15,
+          "src": 9
+        }
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-svg104",
+      "head": "59cbbf74822c626750295bcdc374d6fb1a2d9243",
+      "branch": "refs/heads/codex/media-svg104",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 26,
+        "patchEquivalentCommits": 0,
+        "firstPartyTipPaths": 275,
+        "exactMain": 245,
+        "differentMain": 30,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "6d2462b0f985afe94d0ac030937274e3dac07cfd",
+          "99e220c16d8c109c371b9e0c8bac5d43052da070",
+          "59cbbf74822c626750295bcdc374d6fb1a2d9243"
+        ],
+        "differentPathsOrRoots": {
+          "README.md": 1,
+          "package.json": 1,
+          "scripts": 13,
+          "src-tauri": 7,
+          "src": 8
+        }
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-sync108",
+      "head": "9d72db2fb060b36ef36b595eda097333cfc3ff72",
+      "branch": "refs/heads/codex/sync108-current",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 1,
+        "patchEquivalentCommits": 11,
+        "firstPartyTipPaths": 295,
+        "exactMain": 276,
+        "differentMain": 19,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "67b35ca55c3861ee079c054ee1e434d935dff5bf"
+        ],
+        "differentPathsOrRoots": [
+          "package.json",
+          "scripts/build-info.mjs",
+          "scripts/check-startup.mjs",
+          "scripts/debug/platform.mjs",
+          "scripts/debug/preferences.mjs",
+          "scripts/debug/runtime.mjs",
+          "scripts/debug/scenarios.mjs",
+          "scripts/debug/sync-settings.mjs",
+          "src-tauri/Cargo.lock",
+          "src-tauri/Cargo.toml",
+          "src-tauri/gen/android/app/build.gradle.kts",
+          "src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+          "src-tauri/src/lib.rs",
+          "src-tauri/src/store/archive/tests.rs",
+          "src-tauri/tauri.conf.json",
+          "src/App.tsx",
+          "src/Preferences.css",
+          "src/Preferences.tsx",
+          "src/debug/catalog.ts"
+        ]
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-sync108-android",
+      "head": "7000cdde141dc65167e8b8354a80f044b0dc8cb2",
+      "branch": "refs/heads/codex/sync108-android",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 111,
+      "categories": {
+        "generated-android-or-copied-dependency": 111
+      },
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {
+        "plugins/tauri-plugin-notes-media/android/build/.transforms": 5,
+        "plugins/tauri-plugin-notes-media/android/build/intermediates": 22,
+        "plugins/tauri-plugin-notes-media/android/build/kotlin": 80,
+        "plugins/tauri-plugin-notes-media/android/build/outputs": 1,
+        "plugins/tauri-plugin-notes-media/android/build/tmp": 3
+      },
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 4,
+        "patchEquivalentCommits": 16,
+        "firstPartyTipPaths": 298,
+        "exactMain": 278,
+        "differentMain": 20,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "b2b2bbc880e7a3066010793d215f340e13af0feb",
+          "1313183526a6e570f87b963fcb2214a4624c9528",
+          "d18e90b1b52550eb80180eb0caa55af83ea420e7"
+        ],
+        "differentPathsOrRoots": [
+          "package.json",
+          "scripts/build-info.mjs",
+          "scripts/check-startup.mjs",
+          "scripts/debug/platform.mjs",
+          "scripts/debug/preferences.mjs",
+          "scripts/debug/runtime.mjs",
+          "scripts/debug/scenarios.mjs",
+          "scripts/debug/sync-settings.mjs",
+          "scripts/verification/sync108-native.mjs",
+          "src-tauri/Cargo.lock",
+          "src-tauri/Cargo.toml",
+          "src-tauri/gen/android/app/build.gradle.kts",
+          "src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+          "src-tauri/src/lib.rs",
+          "src-tauri/src/store/archive/tests.rs",
+          "src-tauri/tauri.conf.json",
+          "src/App.tsx",
+          "src/Preferences.css",
+          "src/Preferences.tsx",
+          "src/debug/catalog.ts"
+        ]
+      }
+    },
+    {
+      "path": "/private/tmp/cybernote-sync108-driver",
+      "head": "fe10afa6df7b10379d15390f0a489227a00f7846",
+      "branch": "refs/heads/codex/sync108-driver",
+      "newSincePrior": false,
+      "trackedCount": 0,
+      "untrackedCount": 0,
+      "categories": {},
+      "activeExcluded": false,
+      "pendingFirstPartyCode": [],
+      "untrackedGroups": {},
+      "integration": {
+        "classification": "historical-patch-unmatched",
+        "unmatchedCommits": 1,
+        "patchEquivalentCommits": 18,
+        "firstPartyTipPaths": 295,
+        "exactMain": 276,
+        "differentMain": 19,
+        "absentMain": [],
+        "unmatchedRecentCommits": [
+          "67b35ca55c3861ee079c054ee1e434d935dff5bf"
+        ],
+        "differentPathsOrRoots": [
+          "package.json",
+          "scripts/build-info.mjs",
+          "scripts/check-startup.mjs",
+          "scripts/debug/platform.mjs",
+          "scripts/debug/preferences.mjs",
+          "scripts/debug/runtime.mjs",
+          "scripts/debug/scenarios.mjs",
+          "scripts/debug/sync-settings.mjs",
+          "src-tauri/Cargo.lock",
+          "src-tauri/Cargo.toml",
+          "src-tauri/gen/android/app/build.gradle.kts",
+          "src-tauri/gen/android/app/src/main/AndroidManifest.xml",
+          "src-tauri/src/lib.rs",
+          "src-tauri/src/store/archive/tests.rs",
+          "src-tauri/tauri.conf.json",
+          "src/App.tsx",
+          "src/Preferences.css",
+          "src/Preferences.tsx",
+          "src/debug/catalog.ts"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "nonActiveUncommittedFirstPartyCode": [],
+    "untrackedGeneratedHistorical": 279,
+    "activeExcluded": [
+      "/private/tmp/cybernote-account109-response-metadata"
+    ],
+    "nonAtomicSnapshot": true,
+    "ignoredAndRuntimeContentsOpened": false,
+    "live02ContentOrChecksumsOpened": false
+  },
+  "completedArchiveByteChecks": [
+    {
+      "archive": "docs/verification/account109/native/current-access03",
+      "checksumEntriesVerified": 2,
+      "alreadyTrackedAtObservedMain": true
+    },
+    {
+      "archive": "docs/verification/account109/native/gui-recovery-build-review01",
+      "checksumEntriesVerified": 12,
+      "alreadyTrackedAtObservedMain": true
+    },
+    {
+      "archive": "docs/verification/account109/native/phone-files-review01",
+      "checksumEntriesVerified": 12,
+      "alreadyTrackedAtObservedMain": true
+    }
+  ],
+  "commitReadiness": {
+    "alreadyIntegratedArchives": [
+      {
+        "archive": "docs/verification/account109/native/current-access03",
+        "checksumEntriesVerified": 2,
+        "alreadyTrackedAtObservedMain": true
+      },
+      {
+        "archive": "docs/verification/account109/native/gui-recovery-build-review01",
+        "checksumEntriesVerified": 12,
+        "alreadyTrackedAtObservedMain": true
+      },
+      {
+        "archive": "docs/verification/account109/native/phone-files-review01",
+        "checksumEntriesVerified": 12,
+        "alreadyTrackedAtObservedMain": true
+      }
+    ],
+    "parentDocumentationEdits": [],
+    "untrackedMainGroups": {},
+    "ownerExcluded": "relogin-live02 is now tracked at snapshot main, remains excluded from content/checksum inspection; Feynman active investigation is excluded from readiness judgment.",
+    "historyBoundary": "Historical patch-unmatched branch commits are separate from uncommitted source. Exact/different/absent tip paths are metadata only, not source-review findings or automatic merge recommendations.",
+    "generatedBoundary": "Keep 279 generated/copy-dependency files unstaged and unchanged.",
+    "self": "This new workspace-current02 report/result/checksums is the only audit write.",
+    "trackedEvidenceAtSnapshot": {
+      "native/relogin-live02/": true,
+      "native/recovery-integration02.md": true,
+      "native/relogin-review03.md": true
+    },
+    "currentAction": "Only this new workspace-current02 directory is an audit addition; observed main was otherwise clean. Prior parent docs and known reviews were concurrently committed."
+  },
+  "operationBoundary": "No stage/commit, delete/prune/reset, build/tests, App/ADB/AX/network, target, original store, remote or seal operations.",
+  "closingObservation": {
+    "mainHead": "54db8fb47aa8c0642326390cdafe619b8455eebf",
+    "checkedAt": "2026-11-13T07:16:41.954468+00:00",
+    "committedChangesSinceSnapshot": [
+      "docs/plan/tasks/app-account109-token-response-diagnostics.md"
+    ],
+    "changesAreDocsOnly": true,
+    "mainShortStatusPathsOnly": [
+      "?? docs/verification/account109/workspace-current02/"
+    ]
+  }
+}
