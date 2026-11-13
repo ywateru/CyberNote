@@ -8,8 +8,8 @@ import {NativeApp,delay} from './sync108-native-driver.mjs';
 import {nativeAccount,requireHealthy,statusObserver,failureCode} from './account109-desktop-helpers.mjs';
 import {hash,boundedPoll} from './account109-desktop-recovery.mjs';
 
-export const SOURCE='920fa9cf3af6e3b3cc3b99fb1a78d960ab0c7d11';
-export const BINARY_SHA='bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd';
+export const SOURCE='9e7c46d2fcc8ed31bf1210ce4272f73edffe9143';
+export const BINARY_SHA='3fa9a3851e610348352f5594f976f145e2d344fd97a9f0d27124566f458ce65c';
 const checks=['localSave','authorizing','cancelledWindow','localEdit','restartWindow'];
 export function options(argv){
   const o={};
@@ -25,7 +25,7 @@ export async function preflight(o){
     try{await lstat(p);assert.fail('Store and output must both be absent');}catch(e){if(e.code!=='ENOENT')throw e;}
   }
   assert.equal(await realpath(o.binary),o.binary);assert((await lstat(o.binary)).isFile());
-  assert.equal(hash(await readFile(o.binary)),BINARY_SHA,'Only verified 920fa9cf GUI binary allowed');
+  assert.equal(hash(await readFile(o.binary)),BINARY_SHA,'Only verified 9e7c46d2 GUI binary allowed');
 }
 function disconnected(s){
   requireHealthy(s);assert.equal(s.enabled,false);assert(!s.profile);assert(Array.isArray(s.devices)&&!s.devices.some(d=>d.connected));assert.equal(s.conflictCount,0);

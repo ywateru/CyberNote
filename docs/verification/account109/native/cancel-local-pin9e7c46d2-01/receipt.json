@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "kind": "account109-cancel-local-candidate-pin",
+  "checkedAt": "2026-11-13T10:09:23.747600+00:00",
+  "baseCommit": "af9a6d75a5c8aea34dbf8e7ef5c715f8fab68a1b",
+  "candidate": {
+    "sourceRevision": "9e7c46d2fcc8ed31bf1210ce4272f73edffe9143",
+    "artifactPath": "artifacts/account109/mac-9e7c46d2-debug-e2e-01/notes-clone",
+    "sha256": "3fa9a3851e610348352f5594f976f145e2d344fd97a9f0d27124566f458ce65c",
+    "bytes": 203967312,
+    "architecture": "Mach-O 64-bit arm64"
+  },
+  "buildReceipt": {
+    "path": "artifacts/account109/mac-9e7c46d2-debug-e2e-01/build-record.json",
+    "sha256": "01cab56b2361c0600ff3aaa28017d076c450ffb8ee7f4e597ec4a9a2780af45a",
+    "status": "passed-build-and-embedded-identity-only",
+    "sourceBeforeAfterEqualAndClean": true,
+    "lockfilesUnchanged": true,
+    "embeddedIdentityMatches": true,
+    "commandExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "patch": {
+    "onlySourceBinaryConstantsPreflightTextAndExistingTestPins": true,
+    "changedCodeLines": 4,
+    "driverHelpersUnchangedFromBase": true,
+    "fiveFullBodyChecksBudgetsAndNaturalExitRulesUnchanged": true,
+    "moduleSha256": {
+      "scripts/verification/account109-cancel-local.mjs": "57b6b384c7f4a8662f8df7ad61043d010017b5968386dee1a8f9a314f58ba498",
+      "scripts/verification/account109-cancel-local.test.mjs": "60673286cefe17ef2ce6ab0a9224a9576ac69bf3e3c8fee3e94602edbe08d41f"
+    }
+  },
+  "validation": {
+    "syntaxChecks": 2,
+    "deviceFreePolicyTestsPassed": 11,
+    "deviceFreePolicyTestsFailed": 0,
+    "diffCheckPassed": true
+  },
+  "boundary": "Static pin verification and device-free tests only. No App, live/network/ADB/native build, store/grant/DB access or browser operation. Independent build/pin reviews remain external; no live fix or cancellation success is established. Prior failures retained."
+}

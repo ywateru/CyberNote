@@ -12,7 +12,7 @@ const lifecycle=()=>({pid:123456,forcedSignals:[],naturalExit:true,exit:{code:0,
 const ws=(expected=fixture(false))=>({notes:[{id,...structuredClone(expected)}],attachments:[]});
 
 test('fixed verified GUI candidate and fresh-only CLI reject original/default roots and arbitrary inputs',()=>{
-  assert.equal(SOURCE,'920fa9cf3af6e3b3cc3b99fb1a78d960ab0c7d11');assert.equal(BINARY_SHA,'bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd');
+  assert.equal(SOURCE,'9e7c46d2fcc8ed31bf1210ce4272f73edffe9143');assert.equal(BINARY_SHA,'3fa9a3851e610348352f5594f976f145e2d344fd97a9f0d27124566f458ce65c');
   const args=['--binary','/private/tmp/candidate','--store','/private/tmp/account109-cancel-local-unit-store','--output','/private/tmp/account109-cancel-local-unit-output'];
   assert.equal(options(args).store,args[3]);
   for(const bad of [args.slice(0,-2),[...args,'--token','secret'],[...args,'--callback','https://invalid.test'],[...args,'--headless'],[...args,'--store',args[3]],args.map(s=>s===args[3]?'/private/tmp/account109-desktop-real-90b8b28b-01/desktop-a':s),args.map(s=>s===args[3]?'/Users/synthetic/Library/Application Support/CyberNote':s),args.map(s=>s===args[3]?'/private/tmp/account109-cancel-local-nested/child':s),args.map(s=>s===args[3]?'/tmp/account109-cancel-local-unit-store':s),args.map(s=>s===args[5]?args[3]:s)])assert.throws(()=>options(bad));
