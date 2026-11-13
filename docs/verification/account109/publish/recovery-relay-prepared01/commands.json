@@ -1,0 +1,87 @@
+{
+  "committed-plan-comparison": {
+    "argv": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "\nimport {planExport,digest} from \"file:///Users/water/work/2026/Apple-Notes-Clone/scripts/publish/export.mjs\";\nconst current=planExport(\"/Users/water/work/2026/Apple-Notes-Clone\",\"86cf971f925e375b63caa6771abe211f470dee43\");\nconst prior=planExport(\"/Users/water/work/2026/Apple-Notes-Clone\",\"ec4147b6fdd7656a794f126d5860ca60eec891b6\");\nfunction describe(p) { return Object.fromEntries([...p.files].sort(([a],[b])=>a.localeCompare(b,'en')).map(([name,bytes])=>[name,{mode:p.modes.get(name)==='100755'?'0755':'0644',bytes:bytes.length,sha256:digest(bytes)}])); }\nconst a=describe(current),b=describe(prior);\nif(JSON.stringify(a)!==JSON.stringify(b)) throw Error('Requested ref export differs from ec4147b6');\nif(Object.keys(a).length!==1771) throw Error('Unexpected inventory count');\nconsole.log(JSON.stringify({sourceCommit:current.tree.commit,equivalentRef:prior.tree.commit,identicalExportBytesAndModes:true,files:a,manifest:current.manifest},null,2));\n"
+    ],
+    "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+    "elapsedSeconds": 29.952,
+    "exitCode": 0
+  },
+  "export-apply-init": {
+    "argv": [
+      "node",
+      "scripts/publish/export.mjs",
+      "--ref",
+      "86cf971f925e375b63caa6771abe211f470dee43",
+      "--target",
+      "/private/tmp/account109-source-86cf971f-prepared-20261113-01",
+      "--expected-target",
+      "/private/tmp/account109-source-86cf971f-prepared-20261113-01",
+      "--apply",
+      "--init"
+    ],
+    "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+    "elapsedSeconds": 40.123,
+    "exitCode": 0
+  },
+  "export-dryrun": {
+    "argv": [
+      "node",
+      "scripts/publish/export.mjs",
+      "--ref",
+      "86cf971f925e375b63caa6771abe211f470dee43",
+      "--target",
+      "/private/tmp/account109-source-86cf971f-prepared-20261113-01",
+      "--expected-target",
+      "/private/tmp/account109-source-86cf971f-prepared-20261113-01"
+    ],
+    "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+    "elapsedSeconds": 29.735,
+    "exitCode": 0
+  },
+  "manifest-dryrun": {
+    "argv": [
+      "node",
+      "scripts/publish/manifest.mjs",
+      "--ref",
+      "86cf971f925e375b63caa6771abe211f470dee43"
+    ],
+    "cwd": "/Users/water/work/2026/Apple-Notes-Clone",
+    "elapsedSeconds": 15.307,
+    "exitCode": 0
+  },
+  "new-root-verify": {
+    "argv": [
+      "node",
+      "scripts/publish/verify.mjs",
+      "--new-root"
+    ],
+    "cwd": "/private/tmp/account109-source-86cf971f-prepared-20261113-01",
+    "elapsedSeconds": 31.481,
+    "exitCode": 0
+  },
+  "source-identity": {
+    "argv": [
+      "node",
+      "--input-type=module",
+      "-e",
+      "import {sourceIdentity} from './scripts/build-info.mjs'; console.log(JSON.stringify(sourceIdentity(process.cwd(),{metadataPath:null})));"
+    ],
+    "cwd": "/private/tmp/account109-source-86cf971f-prepared-20261113-01",
+    "elapsedSeconds": 0.387,
+    "exitCode": 0
+  },
+  "versions": {
+    "argv": [
+      "node",
+      "scripts/versions.mjs",
+      "--check"
+    ],
+    "cwd": "/private/tmp/account109-source-86cf971f-prepared-20261113-01",
+    "elapsedSeconds": 0.086,
+    "exitCode": 0
+  }
+}

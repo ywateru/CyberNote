@@ -1,0 +1,280 @@
+{
+  "schema": 1,
+  "kind": "gui-candidate-source-input-equivalence",
+  "recordedAt": "2026-11-13T13:11:00.026460+08:00",
+  "baselineSourceRevision": "39c1420d23daaa9397036d24826219e1bd2b89ff",
+  "comparisonMainRevision": "86cf971f925e375b63caa6771abe211f470dee43",
+  "method": "Local Git tree/blob SHA-1 object equality; SHA-256 of existing executable bytes; no build, tests, application launch or store access.",
+  "scope": "AUTH-06 and AUTH-07 GUI continuation; equivalence applies to listed inputs and normal GUI branch, not complete revision/build identity.",
+  "inputs": [
+    {
+      "path": "src",
+      "gitObjectType": "tree",
+      "baselineGitSha1": "276ba32903b2c61d3e2946612076aa9ebc9a0418",
+      "comparisonGitSha1": "276ba32903b2c61d3e2946612076aa9ebc9a0418",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/src/account",
+      "gitObjectType": "tree",
+      "baselineGitSha1": "3df1be36c7293850d38c82ec4ff242ce80f0bdfd",
+      "comparisonGitSha1": "3df1be36c7293850d38c82ec4ff242ce80f0bdfd",
+      "equal": true
+    },
+    {
+      "path": "crates/account-auth",
+      "gitObjectType": "tree",
+      "baselineGitSha1": "1844e0cf83783ef89ae5b86886748eef467d9c2b",
+      "comparisonGitSha1": "1844e0cf83783ef89ae5b86886748eef467d9c2b",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/src/store",
+      "gitObjectType": "tree",
+      "baselineGitSha1": "1fe54e27ed04bca9438aa1917d2a5d24f7a7408b",
+      "comparisonGitSha1": "1fe54e27ed04bca9438aa1917d2a5d24f7a7408b",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/src/store.rs",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "d13a615348c71f36bdd86c18dfad1763afbc4b15",
+      "comparisonGitSha1": "d13a615348c71f36bdd86c18dfad1763afbc4b15",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/src/session",
+      "gitObjectType": "tree",
+      "baselineGitSha1": "8f21cbd48de305e413262a5320492edd70941a8f",
+      "comparisonGitSha1": "8f21cbd48de305e413262a5320492edd70941a8f",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/src/session.rs",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "d20d38d67a90c41d33b5558043a95fb5c7397aef",
+      "comparisonGitSha1": "d20d38d67a90c41d33b5558043a95fb5c7397aef",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/src/sync",
+      "gitObjectType": "tree",
+      "baselineGitSha1": "ca44e490c98cb1bdd64581efcdbdc58004930987",
+      "comparisonGitSha1": "ca44e490c98cb1bdd64581efcdbdc58004930987",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/src/sync_e2e.rs",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "1da3e913fa762c1ec992f076accdb0cf60509461",
+      "comparisonGitSha1": "1da3e913fa762c1ec992f076accdb0cf60509461",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/Cargo.toml",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "c4592869461a1b8e68ba620ee4601c14c8e22ec4",
+      "comparisonGitSha1": "c4592869461a1b8e68ba620ee4601c14c8e22ec4",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "e3b02dd812e14ef7bd1dda3c3b33754f13716ab6",
+      "comparisonGitSha1": "e3b02dd812e14ef7bd1dda3c3b33754f13716ab6",
+      "equal": true
+    },
+    {
+      "path": "src-tauri/tauri.conf.json",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "b019d04d0690eeccec75cfcf06e2d8ed00f86131",
+      "comparisonGitSha1": "b019d04d0690eeccec75cfcf06e2d8ed00f86131",
+      "equal": true
+    },
+    {
+      "path": "plugins",
+      "gitObjectType": "tree",
+      "baselineGitSha1": "1276ded1c49b94544900ea72e594b2992bf41dad",
+      "comparisonGitSha1": "1276ded1c49b94544900ea72e594b2992bf41dad",
+      "equal": true
+    },
+    {
+      "path": "package.json",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "73a0e824d2f07a305f65b4002f0fae2721e464b0",
+      "comparisonGitSha1": "73a0e824d2f07a305f65b4002f0fae2721e464b0",
+      "equal": true
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "e8b97bb2b23b68591d235ff89b942bd054715dcf",
+      "comparisonGitSha1": "e8b97bb2b23b68591d235ff89b942bd054715dcf",
+      "equal": true
+    },
+    {
+      "path": "vendor/cybergrid-sdk/Cargo.toml",
+      "gitObjectType": "blob",
+      "baselineGitSha1": "f78bd2892e3ebaa9eeb1585c5ff8e5a6d3f29d51",
+      "comparisonGitSha1": "f78bd2892e3ebaa9eeb1585c5ff8e5a6d3f29d51",
+      "equal": true
+    },
+    {
+      "path": "vendor/cybergrid-sdk/provider-assets",
+      "gitObjectType": "tree",
+      "baselineGitSha1": "399dd97614878440232ebbcae5c82ea175e6f45e",
+      "comparisonGitSha1": "399dd97614878440232ebbcae5c82ea175e6f45e",
+      "equal": true
+    }
+  ],
+  "nonDocumentationChangedPaths": [
+    {
+      "status": "M",
+      "path": "scripts/publish/manifest.json"
+    },
+    {
+      "status": "M",
+      "path": "scripts/verification/account109-android.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-desktop-helpers.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-desktop-helpers.test.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-desktop-recovery.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-desktop-recovery.test.mjs"
+    },
+    {
+      "status": "M",
+      "path": "scripts/verification/account109-desktop.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-headless-driver.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-headless-driver.test.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-headless-recovery.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-headless-recovery.test.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-headless-smoke.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-three-peers.mjs"
+    },
+    {
+      "status": "A",
+      "path": "scripts/verification/account109-three-peers.test.mjs"
+    },
+    {
+      "status": "M",
+      "path": "src-tauri/src/lib.rs"
+    },
+    {
+      "status": "A",
+      "path": "src-tauri/src/sync_headless.rs"
+    },
+    {
+      "status": "M",
+      "path": "vendor/cybergrid-sdk/SOURCE.json"
+    },
+    {
+      "status": "M",
+      "path": "vendor/cybergrid-sdk/src/tests.rs"
+    }
+  ],
+  "productionEntrypointChanges": [
+    {
+      "path": "src-tauri/src/lib.rs",
+      "classification": "debug/desktop/sync-e2e headless module, configure hook, conditional WindowHost and stdio startup wiring; normal GUI retains SyncWindows and sync_e2e::start"
+    },
+    {
+      "path": "src-tauri/src/sync_headless.rs",
+      "classification": "new module compiled only with sync-e2e && debug_assertions && desktop; headless path requires both NOTES_SYNC_E2E_HEADLESS=1 and NOTES_SYNC_E2E=1"
+    }
+  ],
+  "otherChangeClasses": {
+    "vendor/cybergrid-sdk/src/tests.rs": "test-only changes; module gated by cfg(test)",
+    "vendor/cybergrid-sdk/SOURCE.json": "provenance metadata",
+    "scripts/verification/": "acceptance tooling",
+    "scripts/publish/manifest.json": "publish manifest; no matching binary rebuild implied",
+    "docs/": "documentation/evidence excluded from changed-path list"
+  },
+  "candidate": {
+    "path": "artifacts/account109/mac-39c1420d-finite-diagnostics/notes-clone",
+    "bytes": 203095936,
+    "sha256": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2",
+    "matchesArchivedReceipt": true,
+    "archivedReceipt": "docs/verification/account109/macos/39c1420d-debug-e2e.json",
+    "buildInfo": {
+      "schema": 1,
+      "version": "0.1.0",
+      "mode": "production",
+      "builtAt": "2026-11-13T02:43:22.234Z",
+      "target": "macos",
+      "sourceRevision": "39c1420d23daaa9397036d24826219e1bd2b89ff",
+      "sourceFingerprint": "0da5b36318a0cedfd5b66065c4d4eaaa03c6532d80f945aaa9fe6a7775855f18",
+      "sourceDirty": false,
+      "inputCount": 1652,
+      "releasePreparedAt": null
+    },
+    "features": [
+      "sync-e2e",
+      "tauri/custom-protocol"
+    ],
+    "frontendEnvironment": {
+      "NODE_ENV": "development",
+      "VITE_NOTES_DEBUG": "1",
+      "CYBERNOTE_BUILD_TARGET": "macos",
+      "VITE_NOTES_ACCOUNT_NATIVE": null,
+      "VITE_NOTES_ACCOUNT_UI": null
+    },
+    "embeddedIdentity": {
+      "encoding": "brotli",
+      "sha256": "824239b4baf76d76a7ab6bdd65d832f151ebffb49c0293e2aec06a0abc842d1e"
+    },
+    "embeddedIdentityEvidence": "Copied from archived build receipt; embedded assets were not re-extracted. Whole-executable SHA-256 was rechecked and matches."
+  },
+  "decision": {
+    "reuseForScopedGuiAuthContinuation": true,
+    "newBuildRequiredForThisScope": false,
+    "reportSourceRevisionAs": "39c1420d23daaa9397036d24826219e1bd2b89ff",
+    "mayClaimExactMainBuild": false,
+    "coveragePending": [
+      "AUTH-07 real same-account re-login, sync enable and closed-settings restart recovery",
+      "AUTH-06 GUI cancel/confirm logout, truthful success indication and different-account ownership rejection"
+    ]
+  },
+  "operations": {
+    "sourceOrRuntimeFilesChanged": false,
+    "buildExecuted": false,
+    "testsExecuted": false,
+    "applicationLaunched": false,
+    "originalStoreReadOrChanged": false,
+    "credentialFilesRead": false,
+    "remoteWrites": false,
+    "archiveFilesWritten": [
+      "README.md",
+      "inputs.json",
+      "SHA256SUMS"
+    ]
+  }
+}

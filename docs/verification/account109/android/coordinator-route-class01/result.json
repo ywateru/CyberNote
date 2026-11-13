@@ -1,0 +1,151 @@
+{
+  "schema": 1,
+  "kind": "single-android-canonical-connect-address-class-diagnostic",
+  "startedAt": "2026-11-13T05:24:06.546810+00:00",
+  "sourceCommit": "ca08c3b548a50a15f9349a07c9ec4b38d724c906",
+  "serial": "98895a3147304c3132",
+  "endpoint": "https://cybernote-sync.vercel.app/healthz",
+  "method": "GET",
+  "attemptCount": 1,
+  "hostControlRequests": 0,
+  "retries": 0,
+  "purpose": "Classify resolved/attempted connection addresses and finite connect errno labels; not another reachability acceptance test.",
+  "freshEvidenceReview": {
+    "files": [
+      "current-access02/phone-health.json",
+      "current-access02/result.json",
+      "goal-network-recheck01/result.json"
+    ],
+    "hasResolvedOrAttemptedAddressClasses": false,
+    "hasSpecificConnectErrno": false,
+    "rawStreamsPreviouslyRetained": false,
+    "reusableVerboseEvidenceAvailable": false
+  },
+  "scriptSha256": "6afaa033e584ac5468be8510b0871e089cedc1f5f240288244a153c1394e291f",
+  "adbSha256": "9fdf861259dc807937b13afdd5f053c7fda9f3b7726933fe0e0f45130ecb8dc7",
+  "certificateVerificationEnabled": true,
+  "redirectsFollowed": false,
+  "connectTimeoutSeconds": 5,
+  "curlTotalTimeoutSeconds": 10,
+  "deviceGuardSeconds": 12,
+  "hostGuardSeconds": 15,
+  "rawStdoutRetained": false,
+  "rawStderrRetained": false,
+  "ipAddressesRetained": false,
+  "responseBodyRetained": false,
+  "credentialsSupplied": false,
+  "loginCalled": false,
+  "userStoreRead": false,
+  "systemNetworkSettingsChanged": false,
+  "dnsOrIpOverridesUsed": false,
+  "proxyEnvironmentChanged": false,
+  "vpnChangedOrBypassed": false,
+  "separateDnsOrTcpProbesPerformed": false,
+  "executionIdentity": {
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedMs": 147,
+    "uid": 2000,
+    "isAndroidShellUid": true,
+    "limitation": "ADB shell UID networking only; app UID may have different routing, VPN/proxy/firewall or DNS policy. No app request or app UID test was performed."
+  },
+  "requestStartedAt": "2026-11-13T05:24:06.721628+00:00",
+  "commandResult": {
+    "exitCode": 7,
+    "timedOut": false,
+    "elapsedMs": 2886
+  },
+  "routeClassEvidence": {
+    "resolvedAddressClasses": [],
+    "attemptedAddressClasses": [
+      {
+        "addressClass": "public",
+        "family": "IPv4"
+      },
+      {
+        "addressClass": "public",
+        "family": "IPv6"
+      }
+    ],
+    "resolvedAddressObservationCount": 0,
+    "attemptAddressObservationCount": 2,
+    "connectErrors": [
+      {
+        "errnoLabels": [
+          "ETIMEDOUT"
+        ],
+        "source": "curl-verbose-connect-error-text",
+        "explicitErrnoNumbers": [],
+        "attemptAddressClass": {
+          "family": "IPv4",
+          "addressClass": "public"
+        }
+      },
+      {
+        "errnoLabels": [
+          "ETIMEDOUT"
+        ],
+        "source": "curl-verbose-connect-error-text",
+        "explicitErrnoNumbers": [],
+        "attemptAddressClass": {
+          "family": "IPv4",
+          "addressClass": "public"
+        }
+      },
+      {
+        "errnoLabels": [
+          "ETIMEDOUT"
+        ],
+        "source": "curl-verbose-connect-error-text",
+        "explicitErrnoNumbers": [],
+        "attemptAddressClass": {
+          "family": "IPv4",
+          "addressClass": "public"
+        }
+      },
+      {
+        "errnoLabels": [
+          "ETIMEDOUT"
+        ],
+        "source": "curl-verbose-connect-error-text",
+        "explicitErrnoNumbers": [],
+        "attemptAddressClass": {
+          "family": "IPv4",
+          "addressClass": "public"
+        }
+      }
+    ],
+    "canonicalHostResolutionMarkerObserved": false,
+    "proxyEnvironmentNoticeObserved": false,
+    "proxyTunnelMarkerObserved": false,
+    "tlsCertificateFailureTextObserved": false,
+    "note": "Errno labels map finite OS error text, not syscall tracing; explicitErrnoNumbers remain empty unless verbose explicitly prints errno."
+  },
+  "requestFinishedAt": "2026-11-13T05:24:09.609078+00:00",
+  "benchmarkReservedAddressObserved": false,
+  "priorEvidenceHashes": {
+    "current-access02/README.md": "530ec95f2838ce83aaae4d9df2893f251f5e8fb7f63c32f34f790ea6813eef8f",
+    "current-access02/SHA256SUMS": "bb579cc6407fe3e875d5584d6bd08addab3330c7526eca7096b547d47cd02edf",
+    "current-access02/check.py": "f0ea46abe6400c17d734e309e93a9360593b48acb51020e2a44a75cf8741fc12",
+    "current-access02/default-network.json": "6d2f64f93525a4d8520834fe9a01a1bfa25595a571ce4c5502e8205cb74214a3",
+    "current-access02/device-state.json": "807cfc64ff41540a088697a207237531fa3cff154b4a73e1205eface0faea0a1",
+    "current-access02/host-control.json": "904f3ccc7c0f2b3c8e2a40f21fe18ce82cc2bbe3ac4712a07ffaea10e32dfbbf",
+    "current-access02/phone-health.json": "4039def16de27b73c4485038244a53f794312b31c027b36374ff25c6cf97d89c",
+    "current-access02/result.json": "4faa23d26fc807e7ddcf31ff64e7587bb3f6f236fc3a3bd674172dc5b140d89c",
+    "goal-network-recheck01/README.md": "cad80ca21c03d2e3033118ab8aa8bdc6deeb5f32fc7dac4919f1934711bccfcd",
+    "goal-network-recheck01/SHA256SUMS": "bdf359615dba8b8b6afb9c45b88420fe79edfb1c406a8da622f4b647620c8123",
+    "goal-network-recheck01/desktop-current-access.json": "d6182071dca117c73e2bf6c5caa3d504af0f0ae689d0782ff2cd365ea9eea695",
+    "goal-network-recheck01/host-control.json": "c3728f6ae047e48d9fbe0a96b1c7d1820621e0161ef93d12218505ec511e9479",
+    "goal-network-recheck01/network-recheck.py": "fa7c192fece1d31b6b53758dc2da82810818e538e615e83ca67ab159ec4f591b",
+    "goal-network-recheck01/result.json": "0442e40dc24d968f47a383af67f7ae49bfc070678f8585a50f9ea8fbfbab7cd8"
+  },
+  "priorEvidenceUnchanged": true,
+  "underlyingCauseProven": false,
+  "limitations": [
+    "One canonical curl sample under shell UID only. No IP addresses/raw verbose retained.",
+    "Classification does not identify the resolver, interception source, routing mechanism, address ownership or root cause.",
+    "No new/proposed hostname was queried; no claim about its DNS existence. No SDK peer/tunnel or login validation."
+  ],
+  "adbOwnershipReleased": true,
+  "finishedAt": "2026-11-13T05:24:09.610316+00:00"
+}

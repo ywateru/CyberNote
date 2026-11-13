@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "kind": "isolated-gui-interactive-access-preflight",
+  "status": "pass",
+  "phase": "complete",
+  "startedAt": "2026-11-13T05:18:21.768Z",
+  "sourceCommit": "ca08c3b548a50a15f9349a07c9ec4b38d724c906",
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-39c1420d-finite-diagnostics/notes-clone",
+    "sha256": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2"
+  },
+  "tools": {
+    "driverSha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+    "helperSha256": "67a2651b92d5311c6a0382a752b9e13aa408c599870ceea9ddb57fb3ff3bb943"
+  },
+  "store": {
+    "path": "/private/tmp/account109-gui-access02-FRESH/store",
+    "freshRootWasAbsent": true,
+    "originalOrDefaultStoreOpened": false
+  },
+  "environment": {
+    "blankProxyKeys": [
+      "HTTP_PROXY",
+      "HTTPS_PROXY",
+      "ALL_PROXY",
+      "NO_PROXY",
+      "http_proxy",
+      "https_proxy",
+      "all_proxy",
+      "no_proxy"
+    ],
+    "slot": "left",
+    "e2e": true,
+    "headless": false,
+    "systemNetworkSettingsChanged": false
+  },
+  "readyTimeoutMs": 45000,
+  "steps": [
+    {
+      "step": "ready",
+      "status": "pass",
+      "at": "2026-11-13T05:18:25.067Z"
+    },
+    {
+      "step": "app.state",
+      "status": "pass",
+      "at": "2026-11-13T05:18:25.099Z"
+    },
+    {
+      "step": "native account.status signedOut",
+      "status": "pass",
+      "at": "2026-11-13T05:18:25.104Z"
+    },
+    {
+      "step": "close",
+      "status": "pass",
+      "at": "2026-11-13T05:18:25.363Z"
+    }
+  ],
+  "loginCalled": false,
+  "scopeExpanded": false,
+  "rawStdoutRetained": false,
+  "rawStderrRetained": false,
+  "ownedPid": 83452,
+  "ready": {
+    "version": 1,
+    "native": true,
+    "window": "main",
+    "interactive": true,
+    "startupDetached": true
+  },
+  "appState": {
+    "busy": false,
+    "hasError": false,
+    "saveState": "otherOrStructured",
+    "noteCount": 0,
+    "attachmentCount": 0,
+    "preferencesOpen": false
+  },
+  "accountStatus": {
+    "state": "signedOut",
+    "enabled": false,
+    "hasProfile": false,
+    "hasError": false,
+    "deviceCount": 0,
+    "connectedDeviceCount": 0
+  },
+  "lifecycle": {
+    "name": "gui-access02",
+    "directory": "/private/tmp/account109-gui-access02-FRESH/store",
+    "pid": 83452,
+    "stderrBytes": 58,
+    "commands": 4,
+    "forcedSignals": [],
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "close": {
+      "code": 0,
+      "signal": null
+    },
+    "stdoutNoiseBytes": 0,
+    "naturalExit": true,
+    "lastAction": "shutdown"
+  },
+  "ownedProcessAbsent": true,
+  "binarySha256After": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2",
+  "finishedAt": "2026-11-13T05:18:25.585Z",
+  "desktopTestOwnershipReleased": true
+}

@@ -1,0 +1,220 @@
+{
+  "schema": 1,
+  "kind": "sanitized-account109-relogin01-failure-receipt",
+  "status": "fail",
+  "startedAt": "2026-11-13T05:40:04.134Z",
+  "finishedAt": "2026-11-13T05:40:12.077Z",
+  "sourceResult": {
+    "privatePath": "/private/tmp/account109-desktop-relogin01/result.json",
+    "sha256": "74c8e43288182e26b08ad7a91ab2a27acd4ae7145d818f21c7e57a608728fab7",
+    "rawCopiedIntoArchive": false
+  },
+  "sourceSteps": {
+    "privatePath": "/private/tmp/account109-desktop-relogin01/steps.jsonl",
+    "sha256": "149d2224f625a25758ffbceee13c9154ccab29bae042cbbf80b7b1b9b53e0a90",
+    "projection": "Only fixed operation labels, phase/device, sequence/event and time."
+  },
+  "toolSourceCommit": "195cd3354ca22979030586f574568a131ae736da",
+  "tools": {
+    "account109-desktop-relogin.mjs": {
+      "sha256": "ad6423d6a313f3e2e507bc24c53d9d29a4e2896839a5d4b468ba6b6ee80ac280",
+      "bytes": 23559,
+      "matchesPrivateResult": true,
+      "sourceCommit": "195cd3354ca22979030586f574568a131ae736da"
+    },
+    "sync108-native-driver.mjs": {
+      "sha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+      "bytes": 13231,
+      "matchesPrivateResult": true,
+      "sourceCommit": "195cd3354ca22979030586f574568a131ae736da"
+    },
+    "account109-desktop-helpers.mjs": {
+      "sha256": "67a2651b92d5311c6a0382a752b9e13aa408c599870ceea9ddb57fb3ff3bb943",
+      "bytes": 9129,
+      "matchesPrivateResult": true,
+      "sourceCommit": "195cd3354ca22979030586f574568a131ae736da"
+    },
+    "account109-desktop-recovery.mjs": {
+      "sha256": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672",
+      "bytes": 24168,
+      "matchesPrivateResult": true,
+      "sourceCommit": "195cd3354ca22979030586f574568a131ae736da"
+    },
+    "account109-headless-recovery.mjs": {
+      "sha256": "6e1511ff3d90d159b5335035bb858c352f794643ed93651e43f5fc9330aa7a74",
+      "bytes": 15687,
+      "matchesPrivateResult": true,
+      "sourceCommit": "195cd3354ca22979030586f574568a131ae736da"
+    },
+    "account109-headless-driver.mjs": {
+      "sha256": "ce9fedd92d3dfce7ed96d67896402ef1d6cec6b43bf056d112b03241f9b00647",
+      "bytes": 10470,
+      "matchesPrivateResult": null,
+      "sourceCommit": "195cd3354ca22979030586f574568a131ae736da",
+      "reason": "Transitive import dependency; not separately hashed by original runner."
+    }
+  },
+  "binary": {
+    "sha256": "b4cec5d9b78509ab07d5e0b3700032bad9b09ba178024e4e1863b7ab3fa310d2",
+    "sourceRevision": "39c1420d23daaa9397036d24826219e1bd2b89ff",
+    "currentMainBuild": false
+  },
+  "requestedEndState": "enabled",
+  "requestedEndStateReached": false,
+  "scenarios": {
+    "baseline": "pass",
+    "login": "not-run",
+    "pausedEdits": "not-run",
+    "catchup": "not-run",
+    "bidirectional": "not-run",
+    "restart": "not-run",
+    "endState": "not-run",
+    "auth06": "not-run"
+  },
+  "checks": [
+    {
+      "name": "baseline",
+      "status": "pass"
+    }
+  ],
+  "baseline": {
+    "sha256": "3133973b4d703463eb9583341f5a133696dd6a5cd38d6428db44ed2d3f887ac8",
+    "originalFilesUnchangedDuringBaselineSnapshot": true,
+    "overlapAgreementCheckedBeforeLaunch": true,
+    "noteCounts": {
+      "a": 8,
+      "b": 9
+    },
+    "payloadCopiedIntoArchive": false
+  },
+  "observations": [
+    {
+      "kind": "ready",
+      "device": "a",
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "kind": "ready",
+      "device": "b",
+      "interactive": true,
+      "startupDetached": true
+    }
+  ],
+  "statusTransitions": [
+    {
+      "device": "a",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "b",
+      "phase": "startup",
+      "state": "error",
+      "enabled": false,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "error": {
+        "code": "account_authentication",
+        "stage": "identityRefresh"
+      }
+    }
+  ],
+  "failure": {
+    "phase": "startup",
+    "code": "CHECK_FAILED",
+    "lastOperation": {
+      "sequence": 4,
+      "phase": "startup",
+      "device": "b",
+      "operation": "account.status",
+      "event": "after",
+      "at": "2026-11-13T05:40:09.629Z"
+    },
+    "interpretation": "B restore status already reported account_authentication at identityRefresh; a subsequent fixed expected-username assertion masks the health error as CHECK_FAILED. No captured username or subject is archived.",
+    "authOrTransportRootCause": "undetermined"
+  },
+  "operations": {
+    "beforeCounts": {
+      "ready": 2,
+      "account.status": 2
+    },
+    "nativeCommandsPerProcess": 3,
+    "nativeCommandSequence": [
+      "ready",
+      "account.status",
+      "shutdown"
+    ],
+    "signInIssued": false,
+    "noteCreationOrEditingIssued": false,
+    "enableOrPauseSettingIssued": false,
+    "mergeConfirmationReached": false
+  },
+  "lifecycle": [
+    {
+      "name": "a",
+      "pid": 91658,
+      "stderrBytes": 58,
+      "commands": 3,
+      "forcedSignals": [],
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    },
+    {
+      "name": "b",
+      "pid": 91681,
+      "stderrBytes": 58,
+      "commands": 3,
+      "forcedSignals": [],
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true
+    }
+  ],
+  "recordedNaturalExits": 2,
+  "recordedForcedSignals": 0,
+  "redactions": {
+    "dbOrWalShmCopied": false,
+    "grantCopied": false,
+    "baselinePayloadCopied": false,
+    "profileObjectCopied": false,
+    "subjectCopied": false,
+    "runtimeUsernameOrUserIdentityCopied": false,
+    "identityCheckProjectionOmitted": true,
+    "arbitraryRawStreamsCopied": false
+  },
+  "archiveActions": {
+    "appOrAdbOrNetworkOperation": false,
+    "sourceRecordsChanged": false,
+    "toolBytesModified": false,
+    "committed": false
+  },
+  "limitations": [
+    "This receipt relies on the recorded run; no desktop/ADB/network re-execution or new process inspection was performed.",
+    "Baseline unchanged fields describe its snapshot phase only; this archive makes no assertion of post-run account/cache byte equality.",
+    "Exact committed tools retain source-authored static synthetic fixture constants; no captured runtime profile, subject or username is included in report or traces."
+  ],
+  "archivedAt": "2026-11-13T05:53:23.137830+00:00"
+}

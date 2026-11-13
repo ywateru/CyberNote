@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "kind": "independent-native-coordinator-alias-review",
+  "commit": "72b397a334494acf2fb12f1d12c6325c4f602f32",
+  "baseCommit": "8417e23db1b71f7d32b3132d5fbfe015a4593330",
+  "worktree": "/private/tmp/cybernote-account109-headless-native",
+  "worktreeCleanBefore": true,
+  "sourceHashes": {
+    "src-tauri/src/account/config.rs": "ec2a1e6ad93568f3ef46f78c9561d4b0ed2ec2dd94491c29226d46b151db0e94",
+    "src-tauri/src/account/enrollment.rs": "ad5f93aeff0565e1b29b7c852d94bc47ba65061bbadac6061025dae3b6d2dda9",
+    "src-tauri/src/account/transport.rs": "c2df9abe0687c559772230099142d333953a90cca823742f459b0bf5a3dab792"
+  },
+  "authorReceiptSha256": "dfccd6ffc31540449a0bd96ad445d6af2029381f5e5235059828e9727a27c6f5",
+  "sharedTarget": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+  "settings": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "tests": [
+    {
+      "suite": "enrollment",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "account::enrollment::tests",
+        "--",
+        "--test-threads=2"
+      ],
+      "startedAt": "2026-11-13T05:41:19.084114+00:00",
+      "finishedAt": "2026-11-13T05:41:21.674819+00:00",
+      "elapsedSeconds": 2.590684167,
+      "exitCode": 0,
+      "timedOut": false,
+      "counts": {
+        "passed": 7,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filteredOut": 248
+      }
+    },
+    {
+      "suite": "transport",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "account::transport::tests",
+        "--",
+        "--test-threads=2"
+      ],
+      "startedAt": "2026-11-13T05:41:21.675484+00:00",
+      "finishedAt": "2026-11-13T05:41:25.483099+00:00",
+      "elapsedSeconds": 3.8075606250000003,
+      "exitCode": 0,
+      "timedOut": false,
+      "counts": {
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0,
+        "measured": 0,
+        "filteredOut": 250
+      }
+    }
+  ],
+  "status": "pass",
+  "startedAt": "2026-11-13T05:41:19.083215+00:00",
+  "desktopOrAdbUsed": false,
+  "externalNetworkProbeRun": false,
+  "domainWriteOrDeployment": false,
+  "worktreeCleanAfter": true,
+  "sourceUnchangedAfter": true,
+  "finishedAt": "2026-11-13T05:41:25.731085+00:00",
+  "sharedTargetReleased": true
+}

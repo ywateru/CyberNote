@@ -45,9 +45,17 @@ keep-all 比较完整字段，仅正规化新副本必须改变的身份 ID、�
 
 隔离测试包 `com.local.notesclone.account109` 未覆盖用户原应用。最近一次保数据更新和重启核对保留了四篇合成全文；实际登录终态为 `account_network / coordinator`。同源 Rust/reqwest 探测中六次 coordinator 请求均在约 5 秒连接阶段超时，而 Logto discovery 在 1.093 秒返回 200，见 [原始探测](android/public-native01/README.md)。没有改 DNS、VPN、路由、证书或固定 IP，也未确认精确网络原因。
 
-[12:23–12:25 最新只读复查](android/goal-network-recheck01/README.md)：手机单次 health GET 退出码 7、无 HTTP/TCP/TLS 成功结果，随后主机单次同地址请求为 200。原生桌面访问也仍明确报告 Mac locked。没有新的登录、应用/数据操作或网络设置变更。
+[此前 12:23–12:25 只读复查](android/goal-network-recheck01/README.md)：手机单次 health GET 退出码 7、无 HTTP/TCP/TLS 成功结果，随后主机单次同地址请求为 200。当时原生桌面访问明确报告 Mac locked。没有新的登录、应用/数据操作或网络设置变更。
 
-真实 ANDROID-01～04 尚未执行。需要测试手机/测试应用能够正常连接 `https://cybernote-sync.vercel.app/healthz`，再完成真实账户授权和三端收敛。A 已因本次退出用例正常退出账户，后续三端需通过真实系统浏览器重新登录 A；最近原生访问曾明确报告 Mac locked，需要可交互桌面条件。不得恢复旧 grant 副本来跳过登录。
+后续当前条件更新：[13:09 手机复查](android/current-access02/README.md)的 active-default 为 CELLULAR，单次 canonical GET 仍 curl 7／HTTP 000、无 TCP/TLS 完成；host control 200。父级原生 Chrome AX 已成功，随后 [13:18 全新库 GUI preflight](native/gui-access02/result.json)在旧精确候选上约 3.3 秒 ready，interactive/startupDetached 为 true，正常读取空库与 signedOut，进程自然退出 0、无强制信号且已消失。桌面本轮访问前提已恢复；此通过不追认此前 WebView 超时原因，也未打开原库或发起登录。
+
+[13:24 有限路由分类](android/coordinator-route-class01/README.md)补足了此前记录缺少的尝试地址类别：同一次 curl 中观察到 public IPv4/IPv6 与文本归约的 ETIMEDOUT，没有观察到 benchmark-reserved 地址。此为 shell UID 2000，不证明 app UID 路径或精确根因；原始 IP/verbose 未保留。ADB 已释放，不重复相同 health 检查。
+
+13:40 原库 GUI relogin01 实际执行失败，仍使用 source `39c1420d` 的旧精确候选。启动前两个原库重叠文档/附件基线一致；A/B 均真实 GUI ready。A 为 signedOut，B 为 `account_authentication / identityRefresh` 且仅有部分 profile，随后 runner 的 username 断言过早报 `CHECK_FAILED`。没有发起 SignIn、enable 或编辑，两端自然退出 0、零强制信号。私有原始输出保留在 `/private/tmp/account109-desktop-relogin01`，不收录数据库或授权材料。旧认证库把所有 refresh HTTP/OAuth 请求错误折叠为 RefreshFailed，因此本次不证明 B grant 失效；[修复契约](../../plan/tasks/app-account109-refresh-recovery.md)要求保留网络/拒绝/响应类别，并在新候选和新输出目录续验。
+
+真实 ANDROID-01～04 尚未执行。需要测试手机/测试应用能够正常连接协调服务，再完成真实账户授权和三端收敛。A 已因退出用例正常退出账户，后续三端需通过真实系统浏览器重新登录 A；桌面访问已恢复，但重新登录续验尚未通过。不得恢复旧 grant 副本来跳过登录。
+
+[正式域名提案](server/custom-domain-proposal01/PROPOSAL.md)只读确认现有项目没有已配置的自定义域；拟议 `cybernote-sync.aixgg.com` 尚未配置或获得该域使用确认。原生 transport 与 enrollment issuer 的拆分已由[独立审阅](native/coordinator-alias-review01/README.md)接受并合入 `4461753f`，12/12 定向测试通过；两个生产常量仍为旧 Vercel 地址，不改变 token 目的地、部署或 DNS。此兼容准备不表示手机可达性已经恢复。
 
 WebView IPC、编辑器草稿、物理输入、系统附件 picker、全部登录取消/账户切换/重新登录排列不由无界面结果替代。逐项边界见 [用例](ACCOUNT-TEST-CASES.md)。历史超时原因仍未证明，不能把无界面测试通过描述为 UI 启动故障已修复。
 
@@ -55,8 +63,8 @@ WebView IPC、编辑器草稿、物理输入、系统附件 picker、全部登�
 
 [工作区审计](WORKSPACE-AUDIT-LATEST.md)检查了 20 个当时有效工作树，没有遗漏的未提交第一方产品或执行器代码；279 个历史未跟踪文件按路径判为 Android 构建输出/复制依赖，保留原地。其后新增的原生测试代码、驱动、用例和证据按审阅范围提交，见 [提交记录](WORKSPACE-COMMITS.md)。
 
-最新净化来源为 `3192943d`，已准备 1771 文件、一个全新无父提交的独立 sealed root；原历史、授权文件、原始 DB、过程证据与密钥不进入可发布源树。净化/隐私/许可/依赖与版本检查通过，发布工具 19 项通过。旧封存候选保持原样。此为本地准备，尚未创建 GitHub 仓库、push 或运行 Actions；维持真实测试完成后的交付顺序。
+最新已封存净化来源为 `86cf971f`，已[独立准备](publish/recovery-relay-prepared01/review.md) 1771 文件、全新无父 root `b489451a`；与旧 319 候选仅 SDK relay 测试和对应 manifest pin 不同。原历史、授权文件、原始 DB、过程证据与密钥不进入可发布源树。净化/隐私/许可/依赖与版本检查通过，八个旧候选保持原样。此为本地草案，尚未创建 GitHub 仓库、push 或运行 Actions；本轮后续 native 修改需要最终受验来源的后继候选，维持真实测试完成后的交付顺序。
 
 随后匿名中转测试已合入 `f84bb9e1`，`ec4147b6` 只更新该文件的清单 SHA；旧 `3192943d` 封存候选仍保持原字节，未含此次新测试。正式发布前需从最终已验来源重新封存，不能把旧候选称为包含本轮测试。
 
-[本轮净化来源独核](publish/relay-source-check01/README.md)在精确 `ec4147b6` 上通过：发布工具 19/19、零跳过；仅校验导出 1,771 文件，未创建新历史或新封存根。八个已有候选的 60,084 项快照保持一致，未执行远程操作。后续 main 只增加文档与证据，不改变上述受核产品/发布源字节。
+[本轮净化来源独核](publish/relay-source-check01/README.md)在精确 `ec4147b6` 上通过：发布工具 19/19、零跳过；该次仅校验导出 1,771 文件，未创建新历史或新封存根。八个已有候选的 60,084 项快照保持一致，未执行远程操作。至 `86cf971f` 的后续 main 只增加文档与证据，故该次草案复用相同导出字节；之后 `4461753f` 已修改 native 输入，不再属于相同产品字节范围。

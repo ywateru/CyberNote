@@ -1,0 +1,119 @@
+{
+  "acceptanceBoundary": {
+    "committed": false,
+    "dependencyInstallOrBuild": false,
+    "deviceOrRuntimeAccess": false,
+    "finalAccepted": false,
+    "networkOrLiveTest": false,
+    "realDeviceAcceptancePending": true,
+    "remoteOrGithubOperation": false,
+    "testsRerun": false
+  },
+  "candidateUnchangedAfterInitialization": true,
+  "changedExportPathsVs319": [
+    "scripts/publish/manifest.json",
+    "vendor/cybergrid-sdk/src/tests.rs"
+  ],
+  "equivalentExportRef": "ec4147b6fdd7656a794f126d5860ca60eec891b6",
+  "existingPublishingTests": {
+    "evidence": "../relay-source-check01/result.json",
+    "rerunHere": false,
+    "result": {
+      "cancelled": 0,
+      "fail": 0,
+      "pass": 19,
+      "skipped": 0,
+      "tests": 19,
+      "todo": 0
+    },
+    "sourceRef": "ec4147b6fdd7656a794f126d5860ca60eec891b6"
+  },
+  "export": {
+    "bytes": 95195176,
+    "dryRun": false,
+    "fileCount": 1771,
+    "initializedNewHistory": true,
+    "removedPackageScripts": [
+      "test:schema",
+      "test:editor",
+      "test:access",
+      "test:secure-id",
+      "test:desktop-appearance",
+      "test:native-toolbar",
+      "debug",
+      "test:debug",
+      "test:native-appearance",
+      "test:table-controls",
+      "test:button-feedback",
+      "test:startup",
+      "test:attachment-gallery",
+      "test:recording-refresh",
+      "test:mobile-editor",
+      "test:note-move-menu",
+      "test:attachment-files",
+      "test:attachment-mime",
+      "test:attachment-clipboard-native",
+      "test:menu-lifetimes",
+      "test:native-menus",
+      "test:native-menu-client",
+      "test:drawing",
+      "release",
+      "test:build-info"
+    ],
+    "sourceCommit": "86cf971f925e375b63caa6771abe211f470dee43"
+  },
+  "exportManifestSha256": "cfadae39287eb239b7f627a06160af7d0f114f31da168b2a28d3e3d77858ac17",
+  "finalSeal": {
+    "entries": 4550,
+    "sha256": "ea42e5e1113d65209281a454ec9980219d797de6f3c1098d9d5bb31c75fda4e0"
+  },
+  "identicalExportBytesAndModesToEquivalentRef": true,
+  "initialSeal": {
+    "entries": 4550,
+    "sha256": "ea42e5e1113d65209281a454ec9980219d797de6f3c1098d9d5bb31c75fda4e0"
+  },
+  "manifestPinsChanged": [
+    "vendor/cybergrid-sdk/src/tests.rs"
+  ],
+  "newRootVerification": {
+    "files": 1771,
+    "history": {
+      "reachableCommits": 1,
+      "refs": 1,
+      "remotes": 0,
+      "retainedHistoricalObjects": false,
+      "rootCommit": "b489451a55541eb7ddc6daef92613c197a0e23bd"
+    },
+    "historyChecked": true,
+    "ok": true,
+    "sourceRevision": "b489451a55541eb7ddc6daef92613c197a0e23bd"
+  },
+  "oldRootsUnchanged": true,
+  "preparedAtUtc": "2026-11-13T05:14:09.976623+00:00",
+  "priorRootsCount": 8,
+  "processOnlyGitControls": {
+    "GIT_CONFIG_COUNT": "2",
+    "GIT_CONFIG_KEY_0": "gc.auto",
+    "GIT_CONFIG_KEY_1": "maintenance.auto",
+    "GIT_CONFIG_VALUE_0": "0",
+    "GIT_CONFIG_VALUE_1": "false",
+    "GIT_OPTIONAL_LOCKS": "0",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "sealDefinition": "SHA256 of UTF-8 JSON with sorted keys and compact separators. Full inventories include relative paths, entry types, modes, mtime/ctime nanoseconds and regular-file size/SHA256 (symlink target SHA256); exclude atime. Payload includes only non-.git regular-file paths/modes/size/SHA256.",
+  "sourceHeadObservedAfter": "ca08c3b548a50a15f9349a07c9ec4b38d724c906",
+  "sourceIdentity": {
+    "inputCount": 1620,
+    "sourceDirty": false,
+    "sourceFingerprint": "b0b2b595675781db75f2174f727f6c37a16d66ca4f70d2f8b4173098472af0ac",
+    "sourceRevision": "b489451a55541eb7ddc6daef92613c197a0e23bd"
+  },
+  "sourceManifestSha256": "32dc5fa080f151ff2696c926e561edf89cfc3eec72d7e8ac375ee4a7b494cfb4",
+  "sourcePayloadSeal": {
+    "entries": 1771,
+    "sha256": "9e0abc3b19a9149f9c93e27afd39c48e060cc83bccf919b1cc2b6ee0751dcc5e"
+  },
+  "sourceRef": "86cf971f925e375b63caa6771abe211f470dee43",
+  "status": "prepared-draft-not-final-accepted",
+  "target": "/private/tmp/account109-source-86cf971f-prepared-20261113-01"
+}

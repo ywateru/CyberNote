@@ -1,0 +1,105 @@
+{
+  "observedAt": "2026-11-13T05:26:01.111896+00:00",
+  "method": "GET only",
+  "project": {
+    "status": 200,
+    "name": "cybernote-sync",
+    "framework": null,
+    "serverlessFunctionRegion": "iad1",
+    "ssoProtection": {
+      "deploymentType": "all_except_custom_domains"
+    },
+    "redirects": null,
+    "rewrites": null
+  },
+  "domain": "cybernote-sync.aixgg.com",
+  "projectDomains": {
+    "status": 200,
+    "domains": [
+      {
+        "name": "cybernote-sync.vercel.app",
+        "verified": true,
+        "redirect": null,
+        "redirectStatusCode": null,
+        "gitBranch": null,
+        "customEnvironmentId": null,
+        "verification": null
+      }
+    ],
+    "hasNextPage": false
+  },
+  "proposedProjectDomain": {
+    "status": 404
+  },
+  "proposedDomainConfig": {
+    "status": 200,
+    "configuredBy": null,
+    "acceptedChallenges": [],
+    "misconfigured": true,
+    "recommendedCNAME": [
+      {
+        "rank": 1,
+        "value": "cname.vercel-dns.com."
+      }
+    ],
+    "recommendedIPv4": [
+      {
+        "rank": 1,
+        "value": [
+          "76.76.21.21"
+        ]
+      }
+    ],
+    "serviceType": "external",
+    "nameservers": [
+      "chad.ns.cloudflare.com",
+      "miki.ns.cloudflare.com"
+    ],
+    "cnames": [],
+    "aValues": []
+  },
+  "productionDeployment": {
+    "status": 200,
+    "target": "production",
+    "readyState": "READY",
+    "alias": [
+      "cybernote-sync.vercel.app",
+      "cybernote-sync-yywater68-1778s-projects.vercel.app"
+    ],
+    "routes": null
+  },
+  "sourceCommit": "ca08c3b548a50a15f9349a07c9ec4b38d724c906",
+  "scope": {
+    "externalWrites": 0,
+    "proposedHostRequests": 0,
+    "phoneRequests": 0,
+    "dnsQueriesPerformed": false,
+    "environmentValuesRetrieved": false,
+    "credentialMaterialArchived": false,
+    "availabilityProven": false,
+    "ownershipProven": false
+  },
+  "apiQueries": [
+    {
+      "method": "GET",
+      "endpoint": "/v9/projects?search=cybernote-sync&limit=20"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/v9/projects/{projectId}/domains?limit=100"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/v9/projects/{projectId}/domains/cybernote-sync.aixgg.com"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/v6/domains/cybernote-sync.aixgg.com/config?projectId={projectId}"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/v13/deployments/{productionDeploymentId}"
+    }
+  ],
+  "apiNotes": "Project/team/deployment identifiers omitted; authenticated scope selected the existing exact project. Response fields are selected, not complete bodies. Null means returned/selected null, not an exhaustive absence claim. No credentials or environment values retained."
+}

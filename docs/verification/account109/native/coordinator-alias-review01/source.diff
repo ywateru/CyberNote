@@ -1,0 +1,191 @@
+diff --git a/src-tauri/src/account/config.rs b/src-tauri/src/account/config.rs
+index 54468350..8538a564 100644
+--- a/src-tauri/src/account/config.rs
++++ b/src-tauri/src/account/config.rs
+@@ -6,8 +6,11 @@ pub const MAC_REDIRECT: &str = "http://127.0.0.1:17897/callback";
+ pub const ANDROID_REDIRECT: &str = "com.local.notesclone.auth://callback";
+ pub const SYNC_PORT: &str = "cybernote-sync-v1";
+ pub const ENROLL_PORT: &str = "cybernote-enroll-v1";
++pub const COORDINATOR_TRANSPORT_ORIGIN: &str = "https://cybernote-sync.vercel.app";
++// Stable proof identity, independent of the HTTP transport hostname.
++pub const ENROLLMENT_ISSUER: &str = "https://cybernote-sync.vercel.app";
+ pub fn origin() -> Result<String> {
+-    let raw = "https://cybernote-sync.vercel.app";
++    let raw = COORDINATOR_TRANSPORT_ORIGIN;
+     let url = url::Url::parse(raw).map_err(|_| Error::Configuration)?;
+     if url.scheme() != "https"
+         || url.host_str().is_none()
+diff --git a/src-tauri/src/account/enrollment.rs b/src-tauri/src/account/enrollment.rs
+index 01bdb10f..3c425270 100644
+--- a/src-tauri/src/account/enrollment.rs
++++ b/src-tauri/src/account/enrollment.rs
+@@ -61,12 +61,12 @@ impl VerifiedWorkspace {
+ }
+ pub(crate) struct Enrollment {
+     http: reqwest::Client,
+-    origin: String,
++    transport_origin: String,
+ }
+ impl Enrollment {
+-    pub fn new(origin: String) -> Result<Self> {
++    pub fn new(transport_origin: String) -> Result<Self> {
+         Ok(Self {
+-            origin,
++            transport_origin,
+             http: reqwest::Client::builder()
+                 .redirect(reqwest::redirect::Policy::none())
+                 .timeout(std::time::Duration::from_secs(15))
+@@ -102,7 +102,7 @@ impl Enrollment {
+         let profile: Profile = self
+             .json(
+                 self.http
+-                    .get(format!("{}/api/v1/account/profile", self.origin))
++                    .get(format!("{}/api/v1/account/profile", self.transport_origin))
+                     .bearer_auth(token),
+                 NetworkStage::CoordinatorProfile,
+             )
+@@ -124,7 +124,7 @@ impl Enrollment {
+         let envelope: Envelope = self
+             .json(
+                 self.http
+-                    .post(format!("{}/api/v1/account/enrollment", self.origin))
++                    .post(format!("{}/api/v1/account/enrollment", self.transport_origin))
+                     .bearer_auth(access)
+                     .json(&serde_json::json!({"deviceId":binding.device_id,"noisePublicKey":binding.noise_public_key})),
+                 NetworkStage::CoordinatorEnrollment,
+@@ -148,15 +148,15 @@ impl Enrollment {
+         Ok((envelope.token, claims, verified))
+     }
+     pub async fn verify(&self, token: &str, binding: &Binding) -> Result<Claims> {
+-        // Fixed origin; never follow a JWT jku/x5u or a peer-supplied key URL.
++        // Fixed transport; never follow a JWT jku/x5u or a peer-supplied key URL.
+         let jwks: JwkSet = self
+             .json(
+                 self.http
+-                    .get(format!("{}/api/v1/account/jwks", self.origin)),
++                    .get(format!("{}/api/v1/account/jwks", self.transport_origin)),
+                 NetworkStage::CoordinatorJwks,
+             )
+             .await?;
+-        verify(token, &jwks, &self.origin, binding)
++        verify(token, &jwks, config::ENROLLMENT_ISSUER, binding)
+     }
+ }
+ fn canonical_key(value: &str) -> bool {
+@@ -166,7 +166,7 @@ fn canonical_key(value: &str) -> bool {
+ pub(crate) fn verify(
+     token: &str,
+     jwks: &JwkSet,
+-    origin: &str,
++    enrollment_issuer: &str,
+     binding: &Binding,
+ ) -> Result<Claims> {
+     if token.len() > 8192 || jwks.keys.len() > 8 {
+@@ -187,14 +187,14 @@ pub(crate) fn verify(
+     }
+     let key = DecodingKey::from_jwk(keys[0]).map_err(|_| Error::InvalidProof)?;
+     let mut validation = Validation::new(Algorithm::ES384);
+-    validation.set_issuer(&[origin]);
++    validation.set_issuer(&[enrollment_issuer]);
+     validation.set_audience(&["cybernote-enrollment-v1"]);
+     validation.leeway = 0;
+     validation.set_required_spec_claims(&["exp", "iat", "iss", "aud", "sub"]);
+     let c = decode::<Claims>(token, &key, &validation)
+         .map_err(|_| Error::InvalidProof)?
+         .claims;
+-    if c.iss != origin
++    if c.iss != enrollment_issuer
+         || c.aud != "cybernote-enrollment-v1"
+         || c.sub != binding.subject
+         || c.account_issuer != binding.issuer
+@@ -307,6 +307,77 @@ impl ReplicationPolicy for Gate {
+ #[cfg(test)]
+ mod tests {
+     use super::*;
++    #[tokio::test]
++    async fn http_transport_is_independent_of_pinned_signed_enrollment_issuer() {
++        use tokio::io::{AsyncReadExt, AsyncWriteExt};
++        tokio::time::timeout(std::time::Duration::from_secs(5), async {
++            assert_eq!(config::origin().unwrap(), "https://cybernote-sync.vercel.app");
++            let (binding, jwks, key) = fixture();
++            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
++            let transport_origin = format!("http://{}", listener.local_addr().unwrap());
++            assert_ne!(transport_origin, config::ENROLLMENT_ISSUER);
++            let enrollment = Enrollment::new(transport_origin.clone()).unwrap();
++            let claims = Claims {
++                iss: "https://cybernote-sync.vercel.app".into(),
++                aud: "cybernote-enrollment-v1".into(),
++                sub: binding.subject.clone(),
++                account_issuer: binding.issuer.clone(),
++                product_id: binding.product_id.clone(),
++                workspace_id: binding.workspace_id.clone(),
++                device_id: binding.device_id.clone(),
++                noise_public_key: binding.noise_public_key.clone(),
++                purpose: "pair".into(),
++                iat: now(),
++                exp: now() + 300,
++                jti: uuid::Uuid::new_v4().to_string(),
++            };
++            let sign = |claims: &Claims| {
++                let mut header = jsonwebtoken::Header::new(Algorithm::ES384);
++                header.kid = Some("synthetic-fixture".into());
++                jsonwebtoken::encode(&header, claims, &key).unwrap()
++            };
++            let proof = sign(&claims);
++            let profile = serde_json::json!({
++                "schemaVersion":1,"subject":binding.subject,"issuer":binding.issuer,
++                "productId":binding.product_id,"workspaceId":binding.workspace_id
++            });
++            let envelope = serde_json::json!({"schemaVersion":1,"token":proof,"expiresAt":claims.exp});
++            let public_keys = serde_json::to_value(&jwks).unwrap();
++            let server = tokio::spawn(async move {
++                for (target, body) in [
++                    ("GET /api/v1/account/profile HTTP/1.1", profile),
++                    ("POST /api/v1/account/enrollment HTTP/1.1", envelope),
++                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys.clone()),
++                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys.clone()),
++                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys),
++                ] {
++                    let (mut socket, _) = listener.accept().await.unwrap();
++                    let mut request = Vec::new();
++                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
++                        let mut bytes = [0; 1024];
++                        let n = socket.read(&mut bytes).await.unwrap();
++                        assert!(n > 0 && request.len() < 8192);
++                        request.extend_from_slice(&bytes[..n]);
++                    }
++                    assert_eq!(String::from_utf8(request).unwrap().lines().next(), Some(target));
++                    let body = body.to_string();
++                    socket.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}", body.len()).as_bytes()).await.unwrap();
++                }
++            });
++            assert_eq!(enrollment.profile("synthetic-access").await.unwrap().workspace_id, binding.workspace_id);
++            let (_, verified_claims, workspace) = enrollment.issue("synthetic-access", &binding).await.unwrap();
++            assert_eq!(verified_claims.iss, config::ENROLLMENT_ISSUER);
++            assert_eq!(workspace.workspace(), binding.workspace_id);
++            assert_eq!(workspace.device, binding.device_id);
++            assert_eq!(workspace.noise_key, binding.noise_public_key);
++            for alias in [transport_origin.as_str(), "https://cybernote-sync.aixgg.com"] {
++                let alias_proof = sign(&Claims { iss: alias.into(), ..claims.clone() });
++                assert!(matches!(enrollment.verify(&alias_proof, &binding).await, Err(Error::InvalidProof)));
++            }
++            server.await.unwrap();
++        }).await.expect("bounded loopback enrollment fixture");
++    }
++
+     #[tokio::test]
+     async fn http_rejections_keep_endpoint_stage_and_never_return_response_details() {
+         use tokio::io::{AsyncReadExt, AsyncWriteExt};
+diff --git a/src-tauri/src/account/transport.rs b/src-tauri/src/account/transport.rs
+index 3ac8001b..6452fcdf 100644
+--- a/src-tauri/src/account/transport.rs
++++ b/src-tauri/src/account/transport.rs
+@@ -593,7 +593,7 @@ mod tests {
+         let http = TcpListener::bind("127.0.0.1:0").await.unwrap();
+         let origin = format!("http://{}", http.local_addr().unwrap());
+         let claims = Claims {
+-            iss: origin.clone(),
++            iss: config::ENROLLMENT_ISSUER.into(),
+             aud: "cybernote-enrollment-v1".into(),
+             sub: binding.subject.clone(),
+             account_issuer: binding.issuer.clone(),
