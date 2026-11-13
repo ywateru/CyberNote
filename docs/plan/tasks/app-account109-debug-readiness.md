@@ -9,6 +9,7 @@
 - driver 在原 ready 超时后只调用上述固定动作；原始失败与 diagnostic 不可用分别保留，不能将诊断成功当启动通过。现有旧候选不支持新动作时仍失败并保留有限不可用结果，不回退任意 Eval 或重试启动。
 - debug.waitForIdle 每轮采用有界的“rAF 或 timer 到达”采样机会；timer 只恢复循环，必须重新读取实际 active/busy/save.pending/save.saving/save.failed/error。只有原有连续三次真实空闲样本可返回 idle；错误、销毁、忙碌或 timeout 不能形成 PASS。实际 timeout 不再依赖帧交付。不声称 timer 证明 paint、像素、物理输入或浏览器授权成功。
 - 不改 App 中 quiet cover 的 rAF/flushSync 隐私顺序，不以强制 ready、默认开启账户同步、清除 pending/save/error 或隐藏窗口故障来解决。
+- 既有 `NOTES_SYNC_E2E_SLOT=left|right` 是显式测试窗口布局：show/unminimize 后可对该 owned main window 请求一次正常 `set_focus`，使 CLI 启动的实际 GUI 获得正常前台呈现机会。仅该已存在的显式布局分支生效，不设系统偏好/权限，不操作其他 App，不模拟点击，不跳过真实 DOM/idle/帧/关闭检查，失败则保留错误。这是执行前提的显式窗口激活，不证明 live01 根因；普通构建与未设 slot 的启动不增加焦点行为。
 
 ## 交付与验证
 
