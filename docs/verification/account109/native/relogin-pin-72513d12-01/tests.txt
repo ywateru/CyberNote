@@ -1,0 +1,360 @@
+TAP version 13
+# (node:37765) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: token response diagnostics survive safe status recording before terminal failure
+ok 1 - token response diagnostics survive safe status recording before terminal failure
+  ---
+  duration_ms: 1.629292
+  type: 'test'
+  ...
+# Subtest: safe status never guesses partial or cross-branch token diagnostics
+ok 2 - safe status never guesses partial or cross-branch token diagnostics
+  ---
+  duration_ms: 0.252416
+  type: 'test'
+  ...
+# Subtest: safe status preserves live per-path samples and drops stale or inactive evidence without raw provider text
+ok 3 - safe status preserves live per-path samples and drops stale or inactive evidence without raw provider text
+  ---
+  duration_ms: 0.891541
+  type: 'test'
+  ...
+# Subtest: recorded recovery authentication failure terminates discovery on the first poll
+ok 4 - recorded recovery authentication failure terminates discovery on the first poll
+  ---
+  duration_ms: 0.492916
+  type: 'test'
+  ...
+# Subtest: authorization, restore and enable errors fail immediately, including errors with profiles
+ok 5 - authorization, restore and enable errors fail immediately, including errors with profiles
+  ---
+  duration_ms: 0.506709
+  type: 'test'
+  ...
+# Subtest: slow connection then data keeps connection and data deadlines separate
+ok 6 - slow connection then data keeps connection and data deadlines separate
+  ---
+  duration_ms: 11.345125
+  type: 'test'
+  ...
+# Subtest: connection timeout keeps connection and data deadlines separate
+ok 7 - connection timeout keeps connection and data deadlines separate
+  ---
+  duration_ms: 7.597458
+  type: 'test'
+  ...
+# Subtest: data timeout keeps connection and data deadlines separate
+ok 8 - data timeout keeps connection and data deadlines separate
+  ---
+  duration_ms: 5.0715
+  type: 'test'
+  ...
+# Subtest: bounded polling retains network transitions and waits for ready before evaluating success
+ok 9 - bounded polling retains network transitions and waits for ready before evaluating success
+  ---
+  duration_ms: 101.258875
+  type: 'test'
+  ...
+# Subtest: persistent network status reaches the bounded timeout even if data already matches
+ok 10 - persistent network status reaches the bounded timeout even if data already matches
+  ---
+  duration_ms: 202.426583
+  type: 'test'
+  ...
+# Subtest: authentication and permanent failures still fail immediately inside bounded waits
+ok 11 - authentication and permanent failures still fail immediately inside bounded waits
+  ---
+  duration_ms: 0.503667
+  type: 'test'
+  ...
+# Subtest: enable stays pending through a transient command result and enabled error sample
+ok 12 - enable stays pending through a transient command result and enabled error sample
+  ---
+  duration_ms: 101.566917
+  type: 'test'
+  ...
+# Subtest: transitions are deduplicated per device/phase, record recovery, and bound oscillation
+ok 13 - transitions are deduplicated per device/phase, record recovery, and bound oscillation
+  ---
+  duration_ms: 0.639958
+  type: 'test'
+  ...
+# Subtest: safe projection retains only fixed labels, booleans and bounded numeric metrics
+ok 14 - safe projection retains only fixed labels, booleans and bounded numeric metrics
+  ---
+  duration_ms: 0.190792
+  type: 'test'
+  ...
+# Subtest: new fixed endpoint stages and finite provider failure categories survive transitions and failure snapshots
+ok 15 - new fixed endpoint stages and finite provider failure categories survive transitions and failure snapshots
+  ---
+  duration_ms: 0.548084
+  type: 'test'
+  ...
+# Subtest: branch edits preserve attachment nodes while replacing complete rich text
+ok 16 - branch edits preserve attachment nodes while replacing complete rich text
+  ---
+  duration_ms: 0.210042
+  type: 'test'
+  ...
+# Subtest: keepAll comparisons resolve remapped IDs to owned metadata and retain full content/reference checks
+ok 17 - keepAll comparisons resolve remapped IDs to owned metadata and retain full content/reference checks
+  ---
+  duration_ms: 0.643208
+  type: 'test'
+  ...
+# Subtest: failure reporting never copies arbitrary upstream error strings
+ok 18 - failure reporting never copies arbitrary upstream error strings
+  ---
+  duration_ms: 0.053292
+  type: 'test'
+  ...
+# Subtest: native account path constructs only existing command payloads and rejects injection
+ok 19 - native account path constructs only existing command payloads and rejects injection
+  ---
+  duration_ms: 0.668375
+  type: 'test'
+  ...
+# Subtest: logout samples full windows before/after restart and preserves complete local bodies
+ok 20 - logout samples full windows before/after restart and preserves complete local bodies
+  ---
+  duration_ms: 0.867542
+  type: 'test'
+  ...
+# Subtest: logout detects delayed remote application, lost notes, changed rich document and reauthentication
+ok 21 - logout detects delayed remote application, lost notes, changed rich document and reauthentication
+  ---
+  duration_ms: 0.774375
+  type: 'test'
+  ...
+# Subtest: one slow read cannot substitute for repeated logout observations
+ok 22 - one slow read cannot substitute for repeated logout observations
+  ---
+  duration_ms: 0.083708
+  type: 'test'
+  ...
+# Subtest: overall pass is deferred until all owned processes close naturally
+ok 23 - overall pass is deferred until all owned processes close naturally
+  ---
+  duration_ms: 0.976083
+  type: 'test'
+  ...
+# Subtest: cleanup rejection, nonnatural exit, prior failure and unfinished coverage cannot pass
+ok 24 - cleanup rejection, nonnatural exit, prior failure and unfinished coverage cannot pass
+  ---
+  duration_ms: 0.259833
+  type: 'test'
+  ...
+# Subtest: runner source and binary pin match the independently recorded exact GUI build
+ok 25 - runner source and binary pin match the independently recorded exact GUI build
+  ---
+  duration_ms: 4.841208
+  type: 'test'
+  ...
+# Subtest: CLI requires explicit end state and rejects credential/URL/store/duplicate inputs
+ok 26 - CLI requires explicit end state and rejects credential/URL/store/duplicate inputs
+  ---
+  duration_ms: 1.313541
+  type: 'test'
+  ...
+# Subtest: authorization budget accepts only bounded canonical decimal milliseconds and returns the numeric option
+ok 27 - authorization budget accepts only bounded canonical decimal milliseconds and returns the numeric option
+  ---
+  duration_ms: 0.4775
+  type: 'test'
+  ...
+# Subtest: all three terminal SignIn paths use the parsed budget with exact simulated timeout boundaries
+ok 28 - all three terminal SignIn paths use the parsed budget with exact simulated timeout boundaries
+  ---
+  duration_ms: 23.085916
+  type: 'test'
+  ...
+# Subtest: extended authorization allows a late healthy same-owner terminal for B refresh and A without extending other waits
+ok 29 - extended authorization allows a late healthy same-owner terminal for B refresh and A without extending other waits
+  ---
+  duration_ms: 9.26225
+  type: 'test'
+  ...
+# Subtest: extended authorization fails immediately on intermediate auth/cleanup errors, signedOut or owner mismatch in every path
+ok 30 - extended authorization fails immediately on intermediate auth/cleanup errors, signedOut or owner mismatch in every path
+  ---
+  duration_ms: 2.177083
+  type: 'test'
+  ...
+# Subtest: extended B authorization remains one recovery and never enables after failure
+ok 31 - extended B authorization remains one recovery and never enables after failure
+  ---
+  duration_ms: 1.079042
+  type: 'test'
+  ...
+# Subtest: signed-out opt-in requires byte-exact committed history; absent or altered evidence fails
+ok 32 - signed-out opt-in requires byte-exact committed history; absent or altered evidence fails
+  ---
+  duration_ms: 47.127958
+  type: 'test'
+  ...
+# Subtest: explicit clean signedOut waits the full read-only 120 seconds including boundary sample
+ok 33 - explicit clean signedOut waits the full read-only 120 seconds including boundary sample
+  ---
+  duration_ms: 1.106417
+  type: 'test'
+  ...
+# Subtest: initial clean signedOut never hides a later noSession/cleanup/error, including at deadline
+ok 34 - initial clean signedOut never hides a later noSession/cleanup/error, including at deadline
+  ---
+  duration_ms: 5.35875
+  type: 'test'
+  ...
+# Subtest: any unclean or mixed startup sample disqualifies signed-out recovery for the entire interval
+ok 35 - any unclean or mixed startup sample disqualifies signed-out recovery for the entire interval
+  ---
+  duration_ms: 3.147084
+  type: 'test'
+  ...
+# Subtest: historical owner gate checks every profile, including partial authorizing and error profiles
+ok 36 - historical owner gate checks every profile, including partial authorizing and error profiles
+  ---
+  duration_ms: 2.551083
+  type: 'test'
+  ...
+# Subtest: signed-out recovery requires opt-in/history and never enables after owner/auth/cleanup failure
+ok 37 - signed-out recovery requires opt-in/history and never enables after owner/auth/cleanup failure
+  ---
+  duration_ms: 0.377208
+  type: 'test'
+  ...
+# Subtest: partial refresh-failure profile retains its actual error, while healthy username remains strict
+ok 38 - partial refresh-failure profile retains its actual error, while healthy username remains strict
+  ---
+  duration_ms: 0.138208
+  type: 'test'
+  ...
+# Subtest: pinned classification admits only the reviewed HTTP400 invalid_grant mapping
+ok 39 - pinned classification admits only the reviewed HTTP400 invalid_grant mapping
+  ---
+  duration_ms: 0.049125
+  type: 'test'
+  ...
+# Subtest: startup polls signedOut until delayed restore error/profile without issuing commands
+ok 40 - startup polls signedOut until delayed restore error/profile without issuing commands
+  ---
+  duration_ms: 0.331416
+  type: 'test'
+  ...
+# Subtest: startup profile while connecting cannot hide a later recoverable error
+ok 41 - startup profile while connecting cannot hide a later recoverable error
+  ---
+  duration_ms: 0.049833
+  type: 'test'
+  ...
+# Subtest: one explicitly allowed B recovery preserves subject and enables only after healthy result
+ok 42 - one explicitly allowed B recovery preserves subject and enables only after healthy result
+  ---
+  duration_ms: 0.159584
+  type: 'test'
+  ...
+# Subtest: server-rejected re-login cannot enable a changed or incomplete terminal owner
+ok 43 - server-rejected re-login cannot enable a changed or incomplete terminal owner
+  ---
+  duration_ms: 0.177916
+  type: 'test'
+  ...
+# Subtest: failed network retry never falls through to SignIn, SignOut or another retry
+ok 44 - failed network retry never falls through to SignIn, SignOut or another retry
+  ---
+  duration_ms: 0.227458
+  type: 'test'
+  ...
+# Subtest: noSession preserves initial error and gives explicit SignOut guidance without executing it
+ok 45 - noSession preserves initial error and gives explicit SignOut guidance without executing it
+  ---
+  duration_ms: 0.097959
+  type: 'test'
+  ...
+# Subtest: authorizing partial profile waits for strict same-subject terminal after initial refresh failure
+ok 46 - authorizing partial profile waits for strict same-subject terminal after initial refresh failure
+  ---
+  duration_ms: 0.530833
+  type: 'test'
+  ...
+# Subtest: B recovery flags and unsupported authentication states cannot mutate an account
+ok 47 - B recovery flags and unsupported authentication states cannot mutate an account
+  ---
+  duration_ms: 0.142542
+  type: 'test'
+  ...
+# Subtest: complete baseline rejects missing notes, changed text/marks, ownership and lost refs
+ok 48 - complete baseline rejects missing notes, changed text/marks, ownership and lost refs
+  ---
+  duration_ms: 1.211709
+  type: 'test'
+  ...
+# Subtest: shared-note baseline rejects B metadata loss while allowing local revision/path differences
+ok 49 - shared-note baseline rejects B metadata loss while allowing local revision/path differences
+  ---
+  duration_ms: 2.81975
+  type: 'test'
+  ...
+# Subtest: shared attachment IDs require identical original owner, metadata, hash and exact references
+ok 50 - shared attachment IDs require identical original owner, metadata, hash and exact references
+  ---
+  duration_ms: 1.337833
+  type: 'test'
+  ...
+# Subtest: readonly copy captures full projection and original bytes without querying account tables
+ok 51 - readonly copy captures full projection and original bytes without querying account tables
+  ---
+  duration_ms: 83.1115
+  type: 'test'
+  ...
+# Subtest: retained raw-byte check rejects same-size corruption and production-read disagreement
+ok 52 - retained raw-byte check rejects same-size corruption and production-read disagreement
+  ---
+  duration_ms: 2.570583
+  type: 'test'
+  ...
+# Subtest: preserved continuation gate rejects historical loss/byte changes and pre-applied remote notes
+ok 53 - preserved continuation gate rejects historical loss/byte changes and pre-applied remote notes
+  ---
+  duration_ms: 2.725584
+  type: 'test'
+  ...
+# Subtest: transient network becomes ready; persistent network times out despite matching predicate
+ok 54 - transient network becomes ready; persistent network times out despite matching predicate
+  ---
+  duration_ms: 0.259041
+  type: 'test'
+  ...
+# Subtest: authentication fails immediately and enable-pending cannot pass until healthy
+ok 55 - authentication fails immediately and enable-pending cannot pass until healthy
+  ---
+  duration_ms: 0.23325
+  type: 'test'
+  ...
+# Subtest: connection time is excluded from the data deadline; data health stays strict
+ok 56 - connection time is excluded from the data deadline; data health stays strict
+  ---
+  duration_ms: 1.111208
+  type: 'test'
+  ...
+# Subtest: real UI confirmation requires complete explanation and enabled button before one click
+ok 57 - real UI confirmation requires complete explanation and enabled button before one click
+  ---
+  duration_ms: 0.500333
+  type: 'test'
+  ...
+# Subtest: PASS waits for every natural close and cleanup attempts all children after a failure
+ok 58 - PASS waits for every natural close and cleanup attempts all children after a failure
+  ---
+  duration_ms: 1.41725
+  type: 'test'
+  ...
+1..58
+# tests 58
+# suites 0
+# pass 58
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 479.986041

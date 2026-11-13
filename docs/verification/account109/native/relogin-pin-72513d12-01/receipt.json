@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "baseCommit": "3f5c3981a78bbef7be0c76ec7c64eadf89055f19",
+  "sourceRevision": "72513d1296df4526a08834db65a3427957d3fb50",
+  "binarySha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459",
+  "buildIdentityFixture": "docs/verification/account109/native/72513d12-platform-build01/mac-build-record.json",
+  "wrapperIdentityFixture": "docs/verification/account109/macos/72513d12-debug-wrapper01/receipt.json",
+  "onlyPinCommentsAndMessageChangedInRunner": true,
+  "sourceSha256": {
+    "scripts/verification/account109-desktop-relogin.mjs": "109601e498b95e80af833dde30dcb163265b6f3c1bae250e4d55c1e1c43c7bee",
+    "scripts/verification/account109-desktop-relogin.test.mjs": "5dc3a6fca5214ab8b5a64e6b6e5cff48337f9eb112f3f6f7c5fcddccc3e13f1d"
+  },
+  "checks": {
+    "reloginAndDesktopHelpers": {
+      "passed": 58,
+      "failed": 0,
+      "skipped": 0
+    },
+    "syntax": "PASS",
+    "diffCheck": "PASS"
+  },
+  "contractComparison": {
+    "from": "920fa9cf3af6e3b3cc3b99fb1a78d960ab0c7d11",
+    "to": "72513d1296df4526a08834db65a3427957d3fb50",
+    "accountAuthSourceAndNativeProviderExactSame": true,
+    "safeErrorAndAuthErrorMappingSameIgnoringWhitespace": true
+  },
+  "runtimeExecuted": false,
+  "appBuildAdbNetworkOrOriginalStores": false
+}
