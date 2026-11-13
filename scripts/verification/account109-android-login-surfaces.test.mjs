@@ -33,6 +33,17 @@ test('RAM-only native projection exposes booleans and rejects web content posing
   for(const config of [{inside:true},{duplicate:true},{foreign:true},{hidden:true},{form:false}])assert(Object.values(nativeLoginProjection(xml(config))).some(x=>x===false));
   for(const raw of ['', '<!DOCTYPE x><hierarchy/>','<hierarchy><node class="x">','x'.repeat(2_000_001)])assert.throws(()=>nativeLoginProjection(raw));
 });
+test('form evidence cannot be borrowed from a foreign or second WebView or foreign child nodes',async()=>{
+  const node=(pkg,cls,attrs='',body='')=>`<node package="${pkg}" class="${cls}" bounds="[0,0][100,100]" enabled="true" ${attrs}>${body}</node>`;
+  const form=pkg=>node(pkg,'android.widget.EditText')+node(pkg,'android.widget.Button','text="Continue" clickable="true"');
+  const addedWeb=pkg=>node(pkg,'android.webkit.WebView','',form(pkg));
+  const mixed=pkg=>xml({form:false}).replace('</node></hierarchy>',addedWeb(pkg)+'</node></hierarchy>');
+  const foreignChildren=xml({form:false}).replace('<node package="'+PACKAGE+'" bounds="[0,0][100,100]" enabled="true" class="android.webkit.WebView" visible-to-user="true"></node>',node(PACKAGE,'android.webkit.WebView','',form('com.personal.app')));
+  assert(foreignChildren.includes('com.personal.app'));
+  for(const raw of [mixed('com.personal.app'),mixed(PACKAGE),foreignChildren]){
+    assert.equal(nativeLoginProjection(raw).hostedForm,false);const effects=[];const c=nativeLoginControls({capture:async()=>raw,guard:async()=>{},back:async()=>effects.push('back'),tap:async()=>effects.push('tap')});await assert.rejects(()=>c.closeNativeLogin());await assert.rejects(()=>c.continueNativeLogin());assert.deepEqual(effects,[]);
+  }
+});
 test('only owned visible form permits fixed native Back/tap; guard loss or ambiguity causes no input',async()=>{
   for(const action of ['closeNativeLogin','continueNativeLogin']){
     const events=[];const c=nativeLoginControls({capture:async()=>xml(),guard:async()=>events.push('guard'),back:async()=>events.push('back'),tap:async(x,y)=>events.push(['tap',x,y])});await c[action]();assert.deepEqual(events.at(-1),action==='closeNativeLogin'?'back':['tap',50,50]);
