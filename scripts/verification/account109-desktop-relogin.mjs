@@ -11,8 +11,8 @@ import {STORES,hash,canonicalBranch,verifyBytes,boundedPoll} from './account109-
 import {connectedPair} from './account109-headless-recovery.mjs';
 import {nativeAccount,requireHealthy,signedOut,noteBody,statusObserver,safeStatus,failureCode} from './account109-desktop-helpers.mjs';
 
-export const BINARY_SHA='bb45bfe591463c4197e8f856090daf666b6b22031bc240b6c52f10b28b5cc5b5';
-export const SOURCE='d1a6eadfd62ac45ba4ecb82e39dd3bd61fd4f5b4';
+export const BINARY_SHA='bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd';
+export const SOURCE='920fa9cf3af6e3b3cc3b99fb1a78d960ab0c7d11';
 const USERNAME='cybernoteqa20261113a';
 const PRIOR=new URL('../../docs/verification/account109/native/headless-continuation01/result.json',import.meta.url);
 const B_HISTORY=new URL('../../docs/verification/account109/native/relogin-live02/result.json',import.meta.url);
@@ -45,7 +45,7 @@ export function checkProfile(s){
   if(!s.error&&s.state!=='error'&&s.profile&&!(s.state==='authorizing'&&s.profile.username===undefined))assert.equal(s.profile.username,USERNAME,'Expected original synthetic account');
   return s;
 }
-// These finite meanings belong only to the pinned d1a6eadf auth implementation:
+// These finite meanings belong only to the pinned 920fa9cf auth implementation:
 // RefreshFailed here is produced only by HTTP 400 invalid_grant, not all refresh errors.
 export const refreshClassification=s=>s?.error?.code==='account_network'||(s?.error?.code==='account_authentication'&&s.error.stage==='authorizationProvider'&&s.error.providerReason==='network')?'transport':s?.error?.code==='account_authentication'&&s.error.stage==='identityRefresh'&&s.error.providerReason===undefined?'serverInvalidGrant400':s?.error?.code==='account_authentication'&&s.error.stage==='identitySession'?'noSession':'other';
 export const isBRefreshFailure=s=>s?.state==='error'&&s.enabled===false&&refreshClassification(s)==='serverInvalidGrant400'&&typeof s.profile?.subject==='string'&&s.profile.subject.length>0&&Array.isArray(s.devices)&&!s.devices.some(d=>d.connected)&&s.conflictCount===0;
@@ -201,7 +201,7 @@ export async function run(argv=process.argv.slice(2)){
   const {binary,stores,output,endState,allowBRelogin,allowBNetworkRetry,allowBSignedOutRelogin}=options(argv);
   // Public committed evidence only; missing/mismatched history stops before Apps or output.
   const bHistory=allowBSignedOutRelogin?await readBHistory():undefined;
-  assert.equal(hash(await readFile(binary)),BINARY_SHA,'Only reviewed d1a6eadf GUI candidate allowed');
+  assert.equal(hash(await readFile(binary)),BINARY_SHA,'Only reviewed 920fa9cf GUI candidate allowed');
   for(const dir of [stores,...['a','b'].map(n=>resolve(stores,'desktop-'+n))])assert.equal(await realpath(dir),dir);
   await mkdir(output,{mode:0o700});assert.equal(await realpath(output),output);
   const priorBytes=await readFile(PRIOR),prior=JSON.parse(priorBytes);
@@ -211,7 +211,7 @@ export async function run(argv=process.argv.slice(2)){
     'Pause is the production account setting, not OS network loss. Negative windows are bounded to 3 seconds. AUTH06 is not executed.',
     'Explicit clean B signedOut recovery requires the entire 120-second read-only startup interval and fixed committed relogin02 owner history. Profile subject hashes are checked before runner enable; native bind retains its same-owner and persisted enabled checks. Login is not guaranteed to begin paused. No binding/grant read or identity injection.',
     'Cross-baseline overlap requires exact note fields/references except local revision, and exact attachment ownership/metadata/SHA except physical relativePath. Later canonical preservation excludes local revision/path, normalizes absent/null nullable fields and reference IDs to descriptors; original attachment IDs/ownership/SHA are verified separately. Only live unlocked baselines are supported.',
-    'Shell proxy variables are blanked only for owned child processes. No system settings change or conflict creation. Pinned d1a6eadf maps identityRefresh without providerReason to HTTP 400 invalid_grant. Explicit B flags select at most one UI recovery: network syncNow retains the production owner, rejected refresh signIn requires same subject. NoSession stops with explicit SignOut guidance; no automatic SignOut or recovery fallback. No grant bytes are read to infer state.'
+    'Shell proxy variables are blanked only for owned child processes. No system settings change or conflict creation. Pinned 920fa9cf maps identityRefresh without providerReason to HTTP 400 invalid_grant. Explicit B flags select at most one UI recovery: network syncNow retains the production owner, rejected refresh signIn requires same subject. NoSession stops with explicit SignOut guidance; no automatic SignOut or recovery fallback. No grant bytes are read to infer state.'
   ],tools:{}};
   for(const file of ['account109-desktop-relogin.mjs','sync108-native-driver.mjs','account109-desktop-helpers.mjs','account109-desktop-recovery.mjs','account109-headless-recovery.mjs'])report.tools[file]=hash(await readFile(new URL(file,import.meta.url)));
   let saving=Promise.resolve(),sequence=0,interrupted=false;
