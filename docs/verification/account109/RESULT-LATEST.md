@@ -1,6 +1,6 @@
 # 账户同步实际验证结果
 
-2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；最新原库 relogin03 精确返回 `codeExchange / scope` 校验失败；新 `920fa9cf` 候选与执行器已准备，准备第四轮时桌面再次报告锁定，relogin04 未启动。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
+2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；新 `920fa9cf` 候选已运行原库 relogin04，两 GUI 与基线通过，B 发起一次登录并保持 authorizing，未完成浏览器表单而等待超时。原生 Chrome 曾出现登录页，不能将未出现历史 scope 错误认定为已修复。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
 
 ## 分析与完善
 
@@ -18,7 +18,8 @@
 
 - `08e9a923` 在显式 SignIn/SignUp 保留 Consent 并增加 Login，后台 restore/refresh 不变。只读核对确认 [QA 与应用权限配置一致](server/logto-scope-config01/README.md)，没有修改角色或放宽 connect；[独立检查](native/auth-explicit-login-review01/README.md)通过，SSO 是否为历史根因仍未证明。
 - `9c19cbef`、`d20f350b` 增加实时 Mapping 只读缓存与退役 sampler 取消栅栏；[独审](native/relay-observation-review01.md)发现并复审关闭一项 P2。作者最终 native 33/33，独立初版 native 31、Node 55 及最终源码复审通过；父级两项整合后 Node 156/156、零跳过。普通三端数据 PASS 与显式 RELAY-02 的新鲜中转样本断言分开，尚无真实 4G 运行。
-- 精确 `920fa9cf` debug E2E GUI 已[构建](macos/920fa9cf-debug-e2e-build01/README.md)并[独立核包](native/gui-explicit-login-build-review01/README.md)，SHA256 `bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd`，1,654 输入、四份 lockfile 与实际二进制内嵌身份一致；runner 已 pin。新候选不是正式 release，也未运行 relogin04。
+- 精确 `920fa9cf` debug E2E GUI 已[构建](macos/920fa9cf-debug-e2e-build01/README.md)并[独立核包](native/gui-explicit-login-build-review01/README.md)，SHA256 `bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd`，1,654 输入、四份 lockfile 与实际二进制内嵌身份一致；runner 已 pin 并实际运行 relogin04。新候选不是正式 release。
+- `3aa8889a` 在第四轮后增加可选人工授权等待预算，默认 120 秒、最高 600 秒，仅用于三条显式 SignIn 终态等待；[独审](native/authorization-timeout-review01.md) 58/58、父级[整合](native/recovery-integration02.md) 161/161 通过、零跳过。未再次发起真实登录，启动/连接/数据预算与严格身份门槛不变。
 
 ## 实际桌面证据
 
@@ -72,13 +73,17 @@ keep-all 比较完整字段，仅正规化新副本必须改变的身份 ID、�
 
 WebView IPC、编辑器草稿、物理输入、系统附件 picker、全部登录取消/账户切换/重新登录排列不由无界面结果替代。逐项边界见 [用例](ACCOUNT-TEST-CASES.md)。历史超时原因仍未证明，不能把无界面测试通过描述为 UI 启动故障已修复。
 
-准备第四轮的 CUA 只读访问明确返回 Mac locked；[current-access04](native/current-access04/README.md)保留有限记录。没有启动新的 App/OAuth，relogin04 输出目录不存在；单独检查无 notes-clone 进程。正常解锁后从新候选续验，不绕过系统认证。
+此前准备第四轮的 CUA 只读访问明确返回 Mac locked；[current-access04](native/current-access04/README.md)保留该历史记录。随后正常桌面访问恢复，16:46:44–16:50:54 的 [relogin04](native/relogin-live04/README.md)实际运行新候选：两 GUI ready、原库重叠基线通过；B 完整 120 秒 clean signedOut 观察后发起一次产品 SignIn，保持 authorizing，等待终态超时。父级未填写表单，没有编辑/enable，后续数据阶段未运行；两端自然退出 0、无强制信号，结束后两个 PID 已不存在。原生 Chrome AX 曾出现登录页，但扩展清单未列出对应页；期间一次 AX 读取超时导致控制会话重置，精确 AX 操作时间未记录。这不证明 opener 失败、历史 scope 故障解决或返回身份正确。私有原始目录保留 `/private/tmp/account109-desktop-relogin04`。
+
+控制会话重置后，仅存在于该会话 RAM 的受控 QA 登录密码不可恢复；协作者也未持有可恢复来源。未重置密码、读取 grant、复制授权或创建替代账号。再次真实授权需要受控凭据来源重新提供，或由用户在新一轮有效登录页完成 QA 登录。Android 的正式域名提案仍待负责人输入，未改变 DNS、部署或 token 目的地。
 
 ## 工作区与交付
 
+按用户追加的磁盘要求已[清理 12 个过期 Cargo target](workspace-cleanup04/README.md)，保留当前共享 target、候选、原库和全部证据。目录原 du 合计 42.56 GiB，不等于真实回收；文件系统空闲量观测增加约 23.47 GiB，结束时约 27.30 GiB 可用。后续优先复用保留的构建目录。
+
 [详细工作区审计](workspace-current02/README.md)覆盖当时 27 树；本轮[收尾复查](workspace-closing03/README.md)覆盖 35 个有效树，第一方产品/执行器代码均已提交整合，待提交仅为本轮结果与归档文档。279 个历史未跟踪文件为 Android 构建输出/复制依赖，保留原地；历史分支独有诊断代码也保留，不盲目合并或删除。新代码、驱动、用例和证据按审阅范围提交，见 [提交记录](WORKSPACE-COMMITS.md)。
 
-最新已封存净化来源为 `86cf971f`，已[独立准备](publish/recovery-relay-prepared01/review.md) 1771 文件、全新无父 root `b489451a`；与旧 319 候选仅 SDK relay 测试和对应 manifest pin 不同。原历史、授权文件、原始 DB、过程证据与密钥不进入可发布源树。净化/隐私/许可/依赖与版本检查通过，八个旧候选保持原样。此为本地草案，尚未创建 GitHub 仓库、push 或运行 Actions；本轮后续 native 修改需要最终受验来源的后继候选，维持真实测试完成后的交付顺序。
+最新已准备的净化来源为 `9010c5ba`，见[当前源码草案](publish/current-source-draft01/README.md)：1772 文件、95,275,206 字节，全新无父 root `66ad8c52`，独立 Git、单一 main、无 remote 或历史残留；精确 inventory、隐私/许可/依赖闭包、版本和 `verify --new-root` 通过。与 `920fa9cf` GUI 候选相比，该固定源 ref 只增加过程文档与验证脚本，没有产品路径改变。九个旧净化根保持原样。原历史、授权文件、原始 DB、过程证据与密钥不进入可发布源树。此为真实验收尚未完成的本地 DRAFT，尚未创建 GitHub 仓库、push 或运行 Actions；最终受验来源若改变产品输入需新建后继候选，维持真实测试完成后的交付顺序。
 
 随后匿名中转测试已合入 `f84bb9e1`，`ec4147b6` 只更新该文件的清单 SHA；旧 `3192943d` 封存候选仍保持原字节，未含此次新测试。正式发布前需从最终已验来源重新封存，不能把旧候选称为包含本轮测试。
 
