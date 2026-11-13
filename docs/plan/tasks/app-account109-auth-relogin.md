@@ -19,3 +19,11 @@
 7. 所有步骤有界，失败保留阶段与原库，不自动重新授权或无限重启。由原生 shutdown 正常退出优先；强制清理按 owned PID 记录，不能隐藏。原操作与清理分别记账。
 
 本轮是用户已授权测试的继续；若实际浏览器操作遇到必须由用户完成的安全关卡，停止对应动作并准确记录，不绕过。
+
+## relogin02 失败后的有限续验
+
+新候选固定为经审阅构建的精确来源/SHA；不得给旧 binary 赋予新诊断语义。失败的 token 校验可能由生产 cleanup 移除 grant 并保留原 binding。源码允许下次启动保持 clean signedOut，现有 B 启动等待不能将其误当成已恢复授权；这只是可能状态，不读取私有 grant 推定现场。
+
+后续执行器可增加独立显式 `--allow-b-signed-out-relogin`，默认行为不变。保留完整 120 秒只读启动预算，仅该预算内持续为严格 clean signedOut（无 profile/error、enabled=false、无连接/冲突）的 B 才在 opt-in 下允许一次正常 UI SignIn；任何错误/中途 profile 变化继续原有严格判定，noSession/cleanup-required 不进入此分支，也不执行 SignOut。使用已归档 relogin02 的原 subject SHA256 `03efb3ceea182d57ea4a56fc7e9b0e5e3577192f6a4818d8a454d77cb1cffc8b` 作固定历史证据，不提供任意 subject/hash 输入，不向 native 注入身份。
+
+授权期间任何 profile 的 subject 哈希均须匹配该历史值；健康终态同时要求原预期 QA username。身份通过前执行器不得发出 enable；生产 bind 对原 binding 的同 owner 校验及已持久 enabled 意图保持有效。仅全部身份检查通过后才走既有 UI enable 确认；失败不重试、不切换恢复路径。测试须覆盖首次 signedOut 后出现错误、混合/不洁状态、错误 owner、缺失历史证据以及 cleanup 失败，保持全文与原字节基线。
