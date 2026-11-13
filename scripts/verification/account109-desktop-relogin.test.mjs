@@ -17,7 +17,7 @@ const network=()=>pair().map(s=>({...s,state:'error',error:{code:'account_networ
 function clock(){let time=0;return {now:()=>time,sleep:async ms=>{time+=ms;}};}
 
 test('runner source and binary pin match the independently recorded exact GUI build',async()=>{
-  const r=JSON.parse(await readFile(new URL('../../docs/verification/account109/macos/10814415-debug-e2e-build01/build-record.json',import.meta.url)));
+  const r=JSON.parse(await readFile(new URL('../../docs/verification/account109/macos/d1a6eadf-debug-e2e-build01/build-record.json',import.meta.url)));
   assert.equal(BINARY_SHA,r.binary.sha256);assert.equal(SOURCE,r.sourceRevision);assert.equal(r.sourceBefore.sourceDirty,false);assert.deepEqual(r.sourceBefore,r.sourceAfter);assert.deepEqual(r.lockfilesBefore,r.lockfilesAfter);assert.equal(r.identityReceipt.nativeBinarySha256,BINARY_SHA);assert.equal(r.identityReceipt.info.sourceRevision,SOURCE);
 });
 
