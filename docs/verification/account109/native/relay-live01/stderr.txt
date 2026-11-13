@@ -1,0 +1,11 @@
+ACCOUNT109_RELAY {"stage": "fixture-coordinator-identity-and-dropped-signals; real-public-provider; iroh-disabled"}
+ACCOUNT109_RELAY {"stage": "external-PID-wrapper-executes-per-start-verified-bundled-binary; default-WebPKI"}
+ACCOUNT109_RELAY {"stage": "await-real-provider-heartbeat-directory"}
+ACCOUNT109_RELAY {"stage": "Client-map-direct-failure-to-public-tunnel"}
+ACCOUNT109_RELAY {"bytes": 65536, "events": [["direct-attempt", "webrtc-direct"], ["iroh-skipped", "iroh-direct"], ["fallback-attempt", "cloudflare-tunnel"], ["websocket-dial", "cloudflare-tunnel"], ["websocket-upgraded", "cloudflare-tunnel"], ["mutual-tls-ready", "cloudflare-tunnel"], ["multiplexer-ready", "cloudflare-tunnel"], ["port-open", "cloudflare-tunnel"], ["port-open", "cloudflare-tunnel"]], "sha256": "3dcea1e1a0f4b3488ecb5b90375d9d9534cc24997424331bb0059aef8ba78844", "stage": "public-tunnel-original-bytes"}
+ACCOUNT109_RELAY {"stage": "fixture-wrong-fingerprint-must-reject-real-WSS-inner-mTLS"}
+ACCOUNT109_RELAY {"stage": "wrong-fingerprint-rejected-after-real-WebSocket-upgrade"}
+ACCOUNT109_RELAY {"stage": "operation-complete"}
+ACCOUNT109_RELAY {"stage": "cleanup-SDK-bounded-provider-termination-not-natural-exit"}
+ACCOUNT109_RELAY {"cleanupFailures": [], "operation": "pass", "operationErrorKind": null, "physical4gWifi": false, "providerExit": "attempted SDK bounded termination; require PID proof; not natural exit", "providerPidsReaped": 1, "realAccount": false, "stage": "final-verdict"}
+ACCOUNT109_RELAY {"stage": "PASS-real-public-relay-transport-with-fixture-control-plane-only"}

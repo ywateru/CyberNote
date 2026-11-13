@@ -1,0 +1,29 @@
+{
+  "verdict": "APPROVED-SCOPED-SOURCE-AND-LIVE-TRANSPORT",
+  "reviewedCommit": "d3a5f10e000aa24936d21e1aeaf6df980191f666",
+  "changedFiles": [
+    "vendor/cybergrid-sdk/src/tests.rs"
+  ],
+  "sourceSha256": "c45f8ce2cce31da0643ff5c7835ad8ac30ab3c5853c58c11a2957a2b64d196c2",
+  "sourceMatchesPreviouslyReviewedWip": true,
+  "productionChanges": false,
+  "authorValidationAttributedOnly": {
+    "offlineCompile": "pass; no warnings",
+    "newLocalHelpersPassed": 4,
+    "existingWebrtcWebsocketPassed": 2,
+    "existingFakeProviderLifecyclePassed": 1
+  },
+  "independentExecution": {
+    "liveInvocations": 1,
+    "rebuilt": false,
+    "dependenciesResolved": false,
+    "helperOrFullSuiteRepeated": false
+  },
+  "listenerEvidence": {
+    "mapping": "close task joined",
+    "echo": "listener and session tasks joined",
+    "fixture": "listener and request tasks joined",
+    "sdkOrigin": "cancellation requested by SDK close; no dedicated task join or port probe"
+  },
+  "processOwnership": "Only test-created process and PID-wrapper recorded provider; no process-name cleanup; kill(pid,0) observation only; external process-group termination not used"
+}

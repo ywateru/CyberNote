@@ -1,0 +1,128 @@
+{
+  "commit": "d3a5f10e000aa24936d21e1aeaf6df980191f666",
+  "sourceSha256": "c45f8ce2cce31da0643ff5c7835ad8ac30ab3c5853c58c11a2957a2b64d196c2",
+  "binaryPath": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/deps/cybergrid_sdk-b9051040ca450c69",
+  "binarySha256": "afaa74e80e1f0e157a67dc3d4450bb7da194d97cf650184e54dda85e118ee882",
+  "authorLockPath": "/private/tmp/account109-relay-review-zbhvp7uz/Cargo.lock",
+  "authorLockSha256": "abab534b0238d437320a7d1fa2493056abe084227f7c1531bf1d578eebd22df4",
+  "cwd": "/private/tmp/cybernote-account109-relay-test",
+  "argv": [
+    "/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/deps/cybergrid_sdk-b9051040ca450c69",
+    "--exact",
+    "tests::live_relay::real_bundled_quick_tunnel_map_fallback_bytes_and_wrong_pin",
+    "--ignored",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "explicitEnvironment": {
+    "CYBERGRID_LIVE_RELAY": "1"
+  },
+  "executionCount": 1,
+  "externalDeadlineSeconds": 240,
+  "operationBudgetSeconds": 150,
+  "cleanupWaitAndGraceBudgetSeconds": 70,
+  "rebuilt": false,
+  "dependenciesResolved": false,
+  "rawProviderLogsRetained": false,
+  "temporaryTunnelUrlsRetained": false,
+  "startedAtUtc": "2026-11-13T04:55:17.961668+00:00",
+  "ownedTestPid": 69540,
+  "finishedAtUtc": "2026-11-13T04:56:02.602256+00:00",
+  "elapsedSeconds": 44.639,
+  "exitCode": 0,
+  "externalDeadlineExceeded": false,
+  "ownedProcessGroupKilled": false,
+  "omittedNonContractLines": {
+    "stdout": 0,
+    "stderr": 0
+  },
+  "urlContainingContractLinesDiscarded": {
+    "stdout": 0,
+    "stderr": 0
+  },
+  "stages": [
+    {
+      "stage": "fixture-coordinator-identity-and-dropped-signals; real-public-provider; iroh-disabled"
+    },
+    {
+      "stage": "external-PID-wrapper-executes-per-start-verified-bundled-binary; default-WebPKI"
+    },
+    {
+      "stage": "await-real-provider-heartbeat-directory"
+    },
+    {
+      "stage": "Client-map-direct-failure-to-public-tunnel"
+    },
+    {
+      "bytes": 65536,
+      "events": [
+        [
+          "direct-attempt",
+          "webrtc-direct"
+        ],
+        [
+          "iroh-skipped",
+          "iroh-direct"
+        ],
+        [
+          "fallback-attempt",
+          "cloudflare-tunnel"
+        ],
+        [
+          "websocket-dial",
+          "cloudflare-tunnel"
+        ],
+        [
+          "websocket-upgraded",
+          "cloudflare-tunnel"
+        ],
+        [
+          "mutual-tls-ready",
+          "cloudflare-tunnel"
+        ],
+        [
+          "multiplexer-ready",
+          "cloudflare-tunnel"
+        ],
+        [
+          "port-open",
+          "cloudflare-tunnel"
+        ],
+        [
+          "port-open",
+          "cloudflare-tunnel"
+        ]
+      ],
+      "sha256": "3dcea1e1a0f4b3488ecb5b90375d9d9534cc24997424331bb0059aef8ba78844",
+      "stage": "public-tunnel-original-bytes"
+    },
+    {
+      "stage": "fixture-wrong-fingerprint-must-reject-real-WSS-inner-mTLS"
+    },
+    {
+      "stage": "wrong-fingerprint-rejected-after-real-WebSocket-upgrade"
+    },
+    {
+      "stage": "operation-complete"
+    },
+    {
+      "stage": "cleanup-SDK-bounded-provider-termination-not-natural-exit"
+    },
+    {
+      "cleanupFailures": [],
+      "operation": "pass",
+      "operationErrorKind": null,
+      "physical4gWifi": false,
+      "providerExit": "attempted SDK bounded termination; require PID proof; not natural exit",
+      "providerPidsReaped": 1,
+      "realAccount": false,
+      "stage": "final-verdict"
+    },
+    {
+      "stage": "PASS-real-public-relay-transport-with-fixture-control-plane-only"
+    }
+  ],
+  "worktreeCleanAfter": true,
+  "sourceSha256After": "c45f8ce2cce31da0643ff5c7835ad8ac30ab3c5853c58c11a2957a2b64d196c2",
+  "binarySha256After": "afaa74e80e1f0e157a67dc3d4450bb7da194d97cf650184e54dda85e118ee882"
+}

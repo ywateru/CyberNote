@@ -12,6 +12,7 @@
 | SYNC-07 | A 原生退出后本地新建/重启保留，两向新笔记排除，原有全文与全部附件保留通过 | 重启前 27 次/3005.87ms、后 29 次/3009.15ms 采样；重新登录恢复未执行 |
 | AUTH-06 部分 | 实际原生 signOut 关闭 profile/连接并禁用；B 保持 ready | 取消确认、UI 成功提示与切换另一账户不在此次实测中 |
 | ANDROID-01～04 | 本地四篇合成全文保留、实际 coordinator 网络失败已有记录 | 账户三端前提未满足，手机起源附件亦未执行 |
+| RELAY-01 | [独立公网实测](native/relay-live01/receipt.json) 44.639 秒通过：正常 Client::map 自动回退至真实 Quick Tunnel，64 KiB 原字节及错误指纹拒绝通过，本次 provider PID 已回收 | 本地合成协调面与身份，关闭 iroh 并丢弃 WebRTC 信令；不代表真实账户、Android 或 4G/WiFi 已验收 |
 
 无界面入口仅在 `sync-e2e && debug_assertions && desktop` 并同时启用两项显式开关时生效。它使用正常 Workspace lease、Store/Session、账户 owner 和同步 adapter，以真实 token 回答保存协调；没有 WebView、编辑器草稿或身份注入。独立 Rust 7 项和关闭 feature 编译、Node 59 项、实际临时库 7 项烟测均通过；详见 [native 审阅](native/headless-review01/review.md)、[Node 审阅](macos/headless-node-review01/review.md)、[烟测](native/headless-smoke01/README.md)。
 
@@ -93,11 +94,11 @@ AUTH-02/03 完成后执行；两端均使用账户 A。首次登录默认暂停�
 
 ## 4G 与 WiFi 匿名中转
 
-依据 [跨网络任务](../../plan/tasks/app-account109-relay.md)。以下均为新增待执行场景；既有双桌面数据通过不证明使用了中转。不得以 `tunnel-ready`、设备 online 或“立即同步”命令 ACK 单独判通过。读取实时 `Mapping::current_transport()`，不能使用可能在重连后过期的初始 `Mapping::transport()`。证据只记录有限传输标签、时间和合成正文/附件校验，不保留真实临时隧道 URL、证书或凭据。
+依据 [跨网络任务](../../plan/tasks/app-account109-relay.md)。RELAY-01 已按下述受控前提独立实测通过，RELAY-02～04 尚未执行；既有双桌面数据通过不证明使用了中转。不得以 `tunnel-ready`、设备 online 或“立即同步”命令 ACK 单独判通过。读取实时 `Mapping::current_transport()`，不能使用可能在重连后过期的初始 `Mapping::transport()`。证据只记录有限传输标签、时间和合成正文/附件校验，不保留真实临时隧道 URL、证书或凭据。
 
 | ID | 可执行操作 | 通过标准与最小证据 |
 | --- | --- | --- |
-| RELAY-01 自动回退 | 显式 opt-in SDK 检查中，让本地合成目录丢弃直连信令，并使用真实预置 Quick Tunnel；调用正常 `Client::map`，通过映射传输合成字节。 | 顺序记录 direct-attempt、fallback-attempt；实时传输为 `cloudflare-tunnel`；完整字节往返一致、未经放宽的设备认证生效；SDK close 后提供程序有界终止并回收、监听关闭且无残留。明确这是公网传输层实测，非真实产品账户或手机网络结果。 |
+| RELAY-01 自动回退 | 显式 opt-in SDK 检查中，让本地合成目录丢弃直连信令，并使用真实预置 Quick Tunnel；调用正常 `Client::map`，通过映射传输合成字节。 | 顺序记录 direct-attempt、fallback-attempt；实时传输为 `cloudflare-tunnel`；完整字节往返一致、未经放宽的设备认证生效；SDK close 后本次提供程序有界终止并确认 PID 无残留；mapping 与测试监听任务 join，SDK origin 的取消证据单列，不作全端口独立关闭声明。明确这是公网传输层实测，非真实产品账户或手机网络结果。 |
 | RELAY-02 手机 4G ↔ 桌面 WiFi | 两桌面独立数据根、手机独立包；记录测试时实际默认网络。完成真实账户授权后执行 ANDROID-02/03 的双向正文及附件同步。 | 手机与至少一个桌面的实际承载映射为 `cloudflare-tunnel`，三端完整 document/plainText、附件归属及长度/SHA 一致；原四篇全文/附件保全。未观察到中转则本场景未覆盖，即使数据同步成功。 |
 | RELAY-03 切网恢复 | 保留同一库和授权，在手机移动网络与 WiFi 间切换，再双向修改合成笔记。 | 记录默认网络变化、通道延续或重建及实时传输；有界恢复并补齐，身份与原数据保留。自动恢复与点“立即同步”后的手动恢复分开判定，不能混为通过。 |
 | RELAY-04 中转不可用 | 受控测试中模拟 provider 启动/注册失败或远端 tunnel 未发布，保持本地编辑。 | 有界错误/重试、无假成功、无未认证降级；本地正文与附件保存正常。恢复中转后补齐并核对完整数据。受控模拟结果不替代真实公网故障结果。 |

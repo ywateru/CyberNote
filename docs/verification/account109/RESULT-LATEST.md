@@ -39,6 +39,10 @@ keep-all 比较完整字段，仅正规化新副本必须改变的身份 ID、�
 
 ## Android 与剩余条件
 
+手机 4G 与桌面 WiFi 可能无法打洞的要求已单列 [匿名中转用例](ACCOUNT-TEST-CASES.md#4g-与-wifi-匿名中转)。产品已显式配置 Quick Tunnel；默认先尝试 WebRTC/iroh direct，再回退至 Cloudflare，中转内部保留 mTLS 与产品 enrollment/Noise 检查。
+
+新增 [RELAY-01 独立公网回执](native/relay-live01/receipt.json)：精确测试源码 `d3a5f10e`，一次执行 44.639 秒、退出 0。使用真实预置 provider 和正常 heartbeat 发布，公开 `Client::map` 经 WebRTC 受控失败、iroh 明确关闭后，实际选中 `cloudflare-tunnel`。64 KiB 合成字节往返、EOF/SHA256、错误 fingerprint 在真实 WSS upgrade 后被内层 mTLS 拒绝均通过；operation pass、cleanup 无错误，本次一个 provider PID 已回收。测试默认 ignored 且要求显式网络开关，无新增生产配置或认证绕过。协调面和身份为本地 fixture，所以此结果只验收真实公网中转传输层，不验收 Logto、产品 enrollment/Noise、Android provider、4G/WiFi 或切网恢复。
+
 隔离测试包 `com.local.notesclone.account109` 未覆盖用户原应用。最近一次保数据更新和重启核对保留了四篇合成全文；实际登录终态为 `account_network / coordinator`。同源 Rust/reqwest 探测中六次 coordinator 请求均在约 5 秒连接阶段超时，而 Logto discovery 在 1.093 秒返回 200，见 [原始探测](android/public-native01/README.md)。没有改 DNS、VPN、路由、证书或固定 IP，也未确认精确网络原因。
 
 [12:23–12:25 最新只读复查](android/goal-network-recheck01/README.md)：手机单次 health GET 退出码 7、无 HTTP/TCP/TLS 成功结果，随后主机单次同地址请求为 200。原生桌面访问也仍明确报告 Mac locked。没有新的登录、应用/数据操作或网络设置变更。
@@ -52,3 +56,5 @@ WebView IPC、编辑器草稿、物理输入、系统附件 picker、全部登�
 [工作区审计](WORKSPACE-AUDIT-LATEST.md)检查了 20 个当时有效工作树，没有遗漏的未提交第一方产品或执行器代码；279 个历史未跟踪文件按路径判为 Android 构建输出/复制依赖，保留原地。其后新增的原生测试代码、驱动、用例和证据按审阅范围提交，见 [提交记录](WORKSPACE-COMMITS.md)。
 
 最新净化来源为 `3192943d`，已准备 1771 文件、一个全新无父提交的独立 sealed root；原历史、授权文件、原始 DB、过程证据与密钥不进入可发布源树。净化/隐私/许可/依赖与版本检查通过，发布工具 19 项通过。旧封存候选保持原样。此为本地准备，尚未创建 GitHub 仓库、push 或运行 Actions；维持真实测试完成后的交付顺序。
+
+随后匿名中转测试已合入 `f84bb9e1`，`ec4147b6` 只更新该文件的清单 SHA；旧 `3192943d` 封存候选仍保持原字节，未含此次新测试。正式发布前需从最终已验来源重新封存，不能把旧候选称为包含本轮测试。

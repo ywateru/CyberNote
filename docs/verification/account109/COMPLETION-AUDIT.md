@@ -1,5 +1,7 @@
 # Account109 completion audit
 
+Later supplement, 2026-11-13: [independent RELAY-01](native/relay-live01/README.md) passed once on author source `d3a5f10e`, merged as `f84bb9e1`; `ec4147b6` refreshes only that reviewed test file's export pin. This proves real public Quick Tunnel fallback transport with fixture control plane/identities, not Android 4G/WiFi or real product account acceptance. Production networking and deployed service bytes are unchanged. The older sealed source described below excludes this new test and remains immutable; prepare a successor from the final accepted source before publication. The full completion decision remains unchanged.
+
 2026-11-13, Asia/Shanghai. Audited main **`9677c9ee83abd6e4ccdf35d025f4cc910ecc0076`**. **The full objective is incomplete.** Real desktop native data-path evidence is substantial; complete live authentication/UI coverage, Android three-device acceptance, a fresh private `ywateru` repository and actual GitHub Actions builds remain outstanding.
 
 Authority: [original objective and delivery gates](../../plan/analysis/account109.md), [architecture](../../architecture/account-sync.md), [current result](RESULT-LATEST.md), and [case definitions/current coverage](ACCOUNT-TEST-CASES.md). Their latest dated summaries take precedence over explicitly historical failure/status sections. “Proven” below means the stated recorded boundary, not every permutation or a single all-green run.
