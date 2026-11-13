@@ -311,7 +311,12 @@ mod tests {
     async fn http_transport_is_independent_of_pinned_signed_enrollment_issuer() {
         use tokio::io::{AsyncReadExt, AsyncWriteExt};
         tokio::time::timeout(std::time::Duration::from_secs(5), async {
-            assert_eq!(config::origin().unwrap(), "https://cybernote-sync.vercel.app");
+            assert_eq!(config::origin().unwrap(), if cfg!(target_os = "android") {
+                "https://cybernote-sync.aixgg.com"
+            } else {
+                "https://cybernote-sync.vercel.app"
+            });
+            assert_eq!(config::ENROLLMENT_ISSUER, "https://cybernote-sync.vercel.app");
             let (binding, jwks, key) = fixture();
             let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
             let transport_origin = format!("http://{}", listener.local_addr().unwrap());

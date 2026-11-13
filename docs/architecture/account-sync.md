@@ -6,6 +6,7 @@
 
 - Logto可信issuer固定为部署配置的HTTPS issuer，使用应用专用Native客户端，authorization code＋PKCE S256、state/nonce、精确回跳；注册入口进入同一Logto托管注册页。客户端不能包含Management客户端secret。用户可选择独立内置 WebView 或系统浏览器，均由同一 native owner 持有授权；内置转浏览器复用本次 RAM 事务，仅向 React 返回有限账户状态。远程 WebView 无本地应用权限，窗口生命周期与取消代际绑定，见[双入口契约](../plan/tasks/app-account109-login-surfaces.md)。
 - Vercel Node22服务采用固定CyberGrid源码版本`f2a3961536e5c69b13c7dbc661953d9243becbae`，Redis通过验证证书的TLS TCP连接。每个环境使用独立namespace；Redis存协调状态而非笔记/附件。
+- 协调HTTP transport按平台编译固定：Android为`https://cybernote-sync.aixgg.com`，桌面仍为`https://cybernote-sync.vercel.app`。profile绑定与网络创建两处Enrollment、SDK的base_url均使用同一平台固定值，不提供运行时URL覆盖或自动降级。enrollment proof的`ENROLLMENT_ISSUER`仍严格为`https://cybernote-sync.vercel.app`，不接受transport别名作为issuer；Logto固定输入、provider、签名key、workspace seed和owner验证不随host改变。新域在DNS、Vercel验证、TLS及固定匿名接口通过前不发送账户授权材料，见[已授权域名任务](../plan/tasks/app-account109-approved-domain.md)。
 - CyberNote专用API resource提供connect用户scope；专用SPA仅用于服务控制台。Native与SPA静态产品策略限定同一产品，其他Logto应用的token不可加入。
 - `/api/v1/account/profile`接受Bearer资源access token，验证issuer/audience/ES384/expiry/client_id/connect和产品允许策略后返回`{schemaVersion:1,subject,issuer,productId,workspaceId}`。workspace UUID由固定服务端随机seed对issuer＋subject＋canonical product的分域HMAC派生；seed必须显式配置，部署后不能随意轮换，不能用请求Host/未验证JWT字段生成账号归属。
 - Logto身份校验仅在固定issuer的远程JWKS获取发生网络/超时、响应体传输失败或非200响应时返回`503 IDENTITY_UNAVAILABLE`及固定安全提示；签名、claims、未知/无效密钥和JWT错误仍返回`401 INVALID_IDENTITY`，不透传上游异常或响应内容。此区分不代表已证明某次原生运行失败的原因。
@@ -18,9 +19,9 @@
 CyberGrid 将 peer stream 接入本机 TCP 后，业务 listener 不能从 `127.0.0.1` 判断对端账户。自动配对必须额外验证服务签发的短期设备凭证：
 
 - `POST /api/v1/account/enrollment`：Bearer 资源 JWT，body 严格为 `{deviceId,noisePublicKey}`。deviceId 为持久同步 UUIDv4，Noise 公钥为 canonical base64url 32 bytes。服务按已验证账户派生 workspace，不接受客户端 subject/workspace。
-- 响应 `{schemaVersion:1,token,expiresAt}`，时间为 epoch seconds。token 为 ES384 JWT，`iss` 固定协调 origin，`aud=cybernote-enrollment-v1`，`sub` 为 Logto subject；附 `accountIssuer,productId,workspaceId,deviceId,noisePublicKey,purpose=pair,iat,exp,jti`，有效期 300 秒。专用稳定 `CYBERNOTE_ENROLLMENT_JWK` 与 workspace seed 分离。
+- 响应 `{schemaVersion:1,token,expiresAt}`，时间为 epoch seconds。token 为 ES384 JWT，`iss` 固定为旧协调 origin `https://cybernote-sync.vercel.app`（不随transport改变），`aud=cybernote-enrollment-v1`，`sub` 为 Logto subject；附 `accountIssuer,productId,workspaceId,deviceId,noisePublicKey,purpose=pair,iat,exp,jti`，有效期 300 秒。专用稳定 `CYBERNOTE_ENROLLMENT_JWK` 与 workspace seed 分离。
 - 签发请求接入同 Redis 原子配额：验 JWT 前按可信来源 IP 每分钟 30 次，验证后按 issuer/subject/product 每分钟 60 次；超额返回 429 / Retry-After 60，公钥读取不消耗签发配额。
-- `GET /api/v1/account/jwks` 只发布签名公钥。端上从已固定协调 origin 获取，验证算法、kid、issuer、audience、purpose、有效期及本机账户/workspace/product，再通过 Noise 握手证明对端持有绑定的私钥。不得接受 JWT 内任意 jwks URL。
+- `GET /api/v1/account/jwks` 只发布签名公钥。端上从平台固定transport origin获取，验证算法、kid、固定旧enrollment issuer、audience、purpose、有效期及本机账户/workspace/product，再通过 Noise 握手证明对端持有绑定的私钥。不得接受 JWT 内任意 jwks URL。
 - bootstrap 双向交换凭证；host 只给预期 deviceId 和 Noise key 生成一次邀请，client 校验 host proof 与邀请的 host key/workspace。nonce/challenge 只在受限 bootstrap 业务流内使用，邀请不入目录/日志/前端。
 - 账号配对与 manual 凭据明确区分；暂停、退出、凭证过期或账号代际变化必须关闭现存账号业务流与新请求，不能降级成永久 manual 配对。对旧手工空间仅允许相同 workspace 的明确兼容路径，不清空其历史以迁移。
 
