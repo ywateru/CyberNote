@@ -31,11 +31,19 @@ test('preflight rejects existing store/output, dangling symlink and wrong binary
 });
 test('surface CLI preserves browser default and permits only fixed embedded continuation',()=>{
   const args=['--binary','/private/tmp/candidate','--store','/private/tmp/account109-cancel-local-unit-store','--output','/private/tmp/account109-cancel-local-unit-output'];
-  assert.deepEqual(surfacePolicy(),{surface:'browser',continueInBrowser:false});assert.equal(options(args).surface,'browser');assert.equal(options(args).continueInBrowser,false);
+  assert.deepEqual(surfacePolicy(),{surface:'browser',continueInBrowser:false,cancelViaWindow:false});assert.equal(options(args).surface,'browser');assert.equal(options(args).continueInBrowser,false);assert.equal(options(args).cancelViaWindow,false);
   for(const surface of ['embedded','browser'])assert.equal(options([...args,'--surface',surface]).surface,surface);
   const mode=options([...args,'--surface','embedded','--continue-in-browser']);assert.equal(mode.surface,'embedded');assert.equal(mode.continueInBrowser,true);
   for(const more of [['--surface'],['--surface','unknown'],['--surface','https://invalid.test'],['--surface','embedded','--surface','browser'],['--continue-in-browser'],['--surface','browser','--continue-in-browser'],['--surface','embedded','--continue-in-browser','true'],['--surface','embedded','--continue-in-browser','--continue-in-browser']])assert.throws(()=>options([...args,...more]));
   for(const mode of [{surface:'unknown'},{surface:'embedded',url:'https://invalid.test'},{surface:'embedded',continueInBrowser:1},{surface:'browser',continueInBrowser:true}])assert.throws(()=>surfacePolicy(mode));
+});
+test('window cancellation is explicit, embedded-only and mutually exclusive with browser continuation',async()=>{
+  const args=['--binary','/private/tmp/candidate','--store','/private/tmp/account109-cancel-local-unit-store','--output','/private/tmp/account109-cancel-local-unit-output'];
+  assert.equal(options([...args,'--surface','embedded','--cancel-via-window']).cancelViaWindow,true);
+  for(const more of [['--cancel-via-window'],['--surface','browser','--cancel-via-window'],['--surface','embedded','--continue-in-browser','--cancel-via-window'],['--surface','embedded','--cancel-via-window','--cancel-via-window'],['--surface','embedded','--cancel-via-window','true']])assert.throws(()=>options([...args,...more]));
+  for(const mode of [{surface:'embedded',cancelViaWindow:1},{surface:'browser',cancelViaWindow:true},{surface:'embedded',continueInBrowser:true,cancelViaWindow:true}]){
+    assert.throws(()=>surfacePolicy(mode));const h=harness();await assert.rejects(()=>exercise({...h.args,...mode}));assert.equal(h.peers.length,0);
+  }
 });
 test('actual surface is finite, required during authorizing and absent after authorization',()=>{
   for(const surface of ['embedded','browser'])assert.equal(authorizationSurface({...signedOut(),state:'authorizing',authorizationSurface:surface}),surface);
@@ -89,12 +97,13 @@ test('postcancel window uses repeated status plus full body samples and checks t
   const changed=clock();await assert.rejects(()=>stableSignedOut({status:async()=>signedOut(),workspace:async()=>{const w=ws();if(changed.now()>=1000)w.notes[0].document.content[1].content[0].marks=[];return w;}},id,fixture(false),changed));assert.equal(changed.now(),1000);
 });
 
-function harness({signInError,pendingForever=false,cancelError,restartMutation,afterCancelStatus,transferError,transferStatus,transferStuck=false,initialSurface,cancelSurface}={}){
-  const c=clock(),events=[],peers=[],proofs=[],calls=[];let document,plainText;
+function harness({signInError,pendingForever=false,cancelError,restartMutation,afterCancelStatus,transferError,transferStatus,transferStuck=false,initialSurface,cancelSurface,windowStatus}={}){
+  const c=clock(),events=[],peers=[],proofs=[],calls=[],checkpoints=[];let document,plainText,awaitingWindow=false;
   async function open(){
     const index=peers.length;events.push('open '+index);let mode='signedOut',surface,cancelReads=0,closed=false,transferred=false;
     const peer={lifecycle:lifecycle(),pidAbsent:true,
       status:async()=>{
+        if(mode==='authorizing'&&awaitingWindow&&windowStatus)return windowStatus(c.now());
         if(mode==='cancelling'&&++cancelReads>=3)mode='signedOut';
         if(mode==='signedOut'&&cancelReads&&afterCancelStatus)return afterCancelStatus();
         if(transferred&&transferStatus)return transferStatus();
@@ -109,7 +118,7 @@ function harness({signInError,pendingForever=false,cancelError,restartMutation,a
       close:async()=>{if(!closed){events.push('close '+index);closed=true;}}
     };peers.push(peer);return peer;
   }
-  return {c,events,peers,proofs,calls,args:{open,record:async(name,proof)=>proofs.push({name,...proof}),checkpoint:async phase=>events.push('phase '+phase),clock:c,poll:(l,p,m)=>boundedPoll(l,p,m,c)}};
+  return {c,events,peers,proofs,calls,checkpoints,args:{open,record:async(name,proof)=>proofs.push({name,...proof}),checkpoint:async(phase,proof)=>{events.push('phase '+phase);checkpoints.push({phase,proof});if(phase==='awaitingNativeWindowClose')awaitingWindow=true;},clock:c,poll:(l,p,m)=>boundedPoll(l,p,m,c)}};
 }
 test('one GUI SignIn/cancel, postcancel full body window, local edit, natural restart and second window',async()=>{
   const h=harness();await exercise(h.args);
@@ -127,6 +136,30 @@ test('embedded cancel and embedded-to-browser keep five full-body/natural-restar
     assert.deepEqual(h.calls.filter(c=>c.inspect).map(c=>[c.inspect,c.surface]),[['signIn','embedded'],...(continueInBrowser?[['openLoginInBrowser','embedded']]:[]),['cancel',continueInBrowser?'browser':'embedded']]);
     assert.equal(h.proofs[2].samples,7);assert.equal(h.proofs[4].samples,7);for(const peer of h.peers)assertNatural(peer);
   }
+});
+const embeddedPending=()=>({...signedOut(),state:'authorizing',authorizationSurface:'embedded'});
+test('window mode saves checkpoint before read-only wait, never sends cancel, and retains all five checks',async()=>{
+  let reads=0;const h=harness({cancelError:Error('cancel must never be sent'),windowStatus:now=>{reads++;assert(h.checkpoints.some(c=>c.phase==='awaitingNativeWindowClose'));return now>=45000?signedOut():embeddedPending();}});
+  await exercise({...h.args,surface:'embedded',cancelViaWindow:true});
+  assert.deepEqual(h.calls,[{inspect:'signIn',surface:'embedded'},{action:'signIn',args:{surface:'embedded'}}]);
+  assert.deepEqual(h.checkpoints.find(c=>c.phase==='awaitingNativeWindowClose').proof,{event:'awaiting-native-window-close',authorizationSurface:'embedded',timeoutMs:60000,readOnlyWait:true});
+  assert.equal(h.c.now(),51000);assert(reads>45);assert.equal(h.peers.length,2);
+  assert.deepEqual(h.proofs.map(p=>p.name),['localSave','authorizing','cancelledWindow','localEdit','restartWindow']);assert.equal(h.proofs[2].cancelOrigin,'native-window-close-observed');assert(!Object.hasOwn(h.proofs[2],'uiHandler'));assert(!Object.hasOwn(h.proofs[2],'physicalInput'));assert.equal(h.proofs[2].samples,7);assert.equal(h.proofs[4].samples,7);
+  for(const peer of h.peers)assertNatural(peer);
+});
+test('unconfirmed window close times out at fixed 60s with no automatic cancel or later PASS',async()=>{
+  for(const windowStatus of [embeddedPending,now=>now>=60000?signedOut():embeddedPending()]){
+    const h=harness({windowStatus});await assert.rejects(()=>exercise({...h.args,surface:'embedded',cancelViaWindow:true}),e=>e.code==='CONDITION_TIMEOUT:native window close signedOut');
+    assert.equal(h.c.now(),60000);assert.deepEqual(h.calls.filter(c=>c.action),[{action:'signIn',args:{surface:'embedded'}}]);assert(!h.events.includes('edit'));assert.equal(h.peers.length,1);assert.deepEqual(h.proofs.map(p=>p.name),['localSave','authorizing']);
+    const report={status:'running',checks:h.proofs.map(p=>({name:p.name,status:'pass'})),failure:{code:'CONDITION_TIMEOUT:native window close signedOut'}};
+    await finish(report,h.peers,async()=>{});assert.equal(report.status,'fail');assert.equal(report.failure.code,'CONDITION_TIMEOUT:native window close signedOut');
+  }
+});
+test('window wait rejects errors, changed surface and invalid signedOut; full-body restart loss still fails',async()=>{
+  for(const windowStatus of [()=>({...embeddedPending(),error:{code:'account_network'}}),()=>({...embeddedPending(),authorizationSurface:'browser'}),()=>({...signedOut(),profile:{subject:'synthetic'}}),()=>({...signedOut(),enabled:true}),()=>({...signedOut(),authorizationSurface:'embedded'}),()=>({...signedOut(),devices:[{connected:true}]}),()=>({...signedOut(),conflictCount:1})]){
+    const h=harness({windowStatus});await assert.rejects(()=>exercise({...h.args,surface:'embedded',cancelViaWindow:true}));assert.equal(h.c.now(),0);assert(!h.events.includes('cancel'));assert(!h.events.includes('edit'));assert.equal(h.peers.length,1);assert(!h.proofs.some(p=>p.name==='cancelledWindow'));
+  }
+  const h=harness({windowStatus:signedOut,restartMutation:w=>{w.notes[0].document.content[1].content[0].marks=[];}});await assert.rejects(()=>exercise({...h.args,surface:'embedded',cancelViaWindow:true}));assert.equal(h.peers.length,2);assert(!h.proofs.some(p=>p.name==='restartWindow'));assert(!h.events.includes('cancel'));
 });
 test('wrong/missing actual surface and transfer errors never pass authorizing or retry/fall back',async()=>{
   for(const config of [{initialSurface:'browser'},{initialSurface:'unknown'},{transferError:Error('private unexported failure')},{transferStatus:()=>({...signedOut(),state:'authorizing',authorizationSurface:'embedded',error:{code:'account_network'}})},{transferStatus:()=>({...signedOut(),state:'authorizing'})},{transferStatus:signedOut},{transferStuck:true}]){
