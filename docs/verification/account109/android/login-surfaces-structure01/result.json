@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "scope": "read-only-structural-baseline-diagnosis",
+  "recordedAt": "2026-11-13T11:46:55.185Z",
+  "noteId": "321e9d6c-d590-437d-8edb-d6ed2feae3fa",
+  "plainTextEqual": true,
+  "differences": [
+    {
+      "path": "/document/content/3",
+      "beforeKind": "undefined",
+      "afterKind": "object",
+      "beforeSha256": "eb045d78d273107348b0300c01d29b7552d622abbc6faf81b3ec55359aa9950c",
+      "afterSha256": "d8dcd99aa38434d7927f917a30d8c15501289dcf1f6c0f339db2e744f5b49d18",
+      "afterKeys": [
+        "attrs",
+        "type"
+      ],
+      "afterNodeType": "attachment"
+    },
+    {
+      "path": "/document/content/4",
+      "beforeKind": "undefined",
+      "afterKind": "object",
+      "beforeSha256": "eb045d78d273107348b0300c01d29b7552d622abbc6faf81b3ec55359aa9950c",
+      "afterSha256": "dc12ef9abf86947f26d9911226920fdbfa07c76275f546b8c0750ca587cb2f19",
+      "afterKeys": [
+        "type"
+      ],
+      "afterNodeType": "paragraph"
+    }
+  ],
+  "attachments": [
+    {
+      "idSha256": "e95eb58a02f73e8c8afe7a069cec4afbda910f97d5b32d34d41951af676b220d",
+      "belongsToChangedNote": true,
+      "metadataKeys": [
+        "displayName",
+        "id",
+        "kind",
+        "mime",
+        "noteId",
+        "recordedAt",
+        "relativePath",
+        "size"
+      ]
+    }
+  ],
+  "account": {
+    "state": "error",
+    "enabled": false,
+    "profilePresent": false,
+    "errorPresent": true,
+    "errorCode": "account_network",
+    "errorStage": "coordinator"
+  },
+  "driverClosed": true
+}
