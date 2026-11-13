@@ -1,0 +1,36 @@
+{
+  "recordedAt": "2026-11-13T13:10:05.085Z",
+  "method": "Node built-in fetch; redirects rejected; default trusted TLS; one bounded follow-up after independent Python canonical TLS resets",
+  "requests": [
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "endpoint": "account-jwks",
+      "status": 200,
+      "durationMs": 714,
+      "bodySha256": "139478b460a04e2453bff73323e497e40193aa6892f776868237648f96d04c88"
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "endpoint": "account-jwks",
+      "status": 200,
+      "durationMs": 1053,
+      "bodySha256": "139478b460a04e2453bff73323e497e40193aa6892f776868237648f96d04c88"
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "endpoint": "auth-config",
+      "status": 200,
+      "durationMs": 1324,
+      "bodySha256": "87c9070f5f0f85596c7dcd3078c779f9ec8604158e3a96113469de73370cb419"
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "endpoint": "auth-config",
+      "status": 200,
+      "durationMs": 1407,
+      "bodySha256": "87c9070f5f0f85596c7dcd3078c779f9ec8604158e3a96113469de73370cb419"
+    }
+  ],
+  "authConfigDeepEqual": true,
+  "publicJwksDeepEqual": true
+}
