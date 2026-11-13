@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "verdict": "APPROVE",
+  "sourceCommit": "474f98313a1bfc04f520ed2da0e2528bcbbccd18",
+  "pinCommit": "632cb374f20251555dfe6cc7ac75ec29be81338f",
+  "blockingFindings": [],
+  "runtimeChange": "One added Login prompt immediately before retained Consent in explicit begin_authorization",
+  "explicitSigninSignupBothPlatformCallbacksCovered": true,
+  "exactRequestKeysAndFixedInputsPreserved": true,
+  "pkceNonceStateFreshAndMatchedToTransactions": true,
+  "restoreRefreshAndBackgroundCodeUnchanged": true,
+  "scopeIssuerAudienceSignatureOwnerAndCleanupValidationUnchanged": true,
+  "manifestOnlyThreeExactPins": true,
+  "independentFocusedTests": {
+    "passed": 5,
+    "failed": 0,
+    "ignored": 0,
+    "fullSuiteRerun": false,
+    "optInLiveRun": false
+  },
+  "snapshotStillMatchesExactCommit": true,
+  "sharedTargetUsed": false,
+  "ownedTestCommandsCompleted": true,
+  "ownedTargetReleased": true,
+  "boundary": "Committed crate patch and separate manifest hash update only. In-memory fixtures, cargo locked/offline with own cached target. No App, ADB, external network, original/default store, provider configuration changes, source edits or commit. No claim that prompts are honored by deployed provider or prove relogin03 cause. No build04/runtime approval implied.",
+  "completedAt": "2026-11-13T08:21:30.286830+00:00"
+}

@@ -22,3 +22,15 @@ Compact local output identities (temporary logs retained outside the main archiv
 - `native.txt`: SHA-256 `9618164393d16b8d85fee87fdaf45eb25b37e25f84c7a3aeac861c335375dac2` (11190 bytes)
 - `node.txt`: SHA-256 `cb8e582235872d19e6468aa22fb566bda9bf3ef73b6786f9d8614374f90b7b7d` (13343 bytes)
 - `typecheck.txt`: SHA-256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` (0 bytes)
+
+## P2 resolved: exact source follow-up
+
+2026-11-13. **APPROVE final HEAD `d22f267a2fa55cbae5a10ee5cdafadd5eb047f87`.** The initial BLOCKED verdict above remains the historical result for `40f8b028`/`b25aa6a7`. Source fix `028811eca4e5686ee772133c6305096dd0d8ee23` resolves that finding; no remaining blocking finding in the cumulative observer change. Re-reviewed committed objects and advanced the independent clean detached checkout to this final HEAD; no product edits.
+
+`Lease::record` now checks the sampler token under the cache mutex before insertion. New `task_remove` checks the same token under that mutex before deletion. Both spawned-task call sites pass their own cancellation token; Drop still cancels before abort and unconditional locked removal. An operation already past the check completes under the lock and is removed by Drop; an operation obtaining the lock after cancellation refuses mutation. Current `run_service` retires/awaits old Mapping closure before recreating that peer, so a replacement cannot precede old Drop's final unconditional removal. No new task/peer generation input, mapping policy, authentication or DTO changes are introduced by the fix.
+
+The two new regression tests inspect the actual cache methods: retired record cannot resurrect success; retired record/remove cannot alter a same-generation replacement; replacement's own remove/Drop remain effective; and old record/remove issued while the cache lock is held reject mutation after cancellation. The lock-contention test forces cancellation before either thread can acquire the cache lock, without relying on scheduler ordering to obtain the protected result. These address the original missing coverage. This follow-up is independent source review; the new tests were not independently rerun, and prior independent 31/55/typecheck results above are not relabeled as 33.
+
+Author's final receipt independently received: full native `account::` **33/33**, locked/offline, two jobs, debug disabled; diff check and final export dry-run passed; worktree clean; shared target explicitly released. Reviewer directly verified cumulative diff check and the separate final manifest: exactly one existing pin (`src-tauri/src/account/transport.rs`) changes to SHA-256 `7464d77daaed0bd2d5a426a46315483d585d4243f42bce6310fb0520fcb056f9`, matching the exact `028811ec` source blob. All inventory, policy, license and runtime-asset lists remain unchanged.
+
+No new cargo/build/test, target acquisition, App, network or ADB operation occurred in this source follow-up. **Reviewer holds no shared target lease.** Source approval is complete for parent merge/build; explicit-login prompt review and real three-device/RELAY-02 acceptance remain separate gates. No live relay pass is asserted.

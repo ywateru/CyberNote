@@ -1,0 +1,127 @@
+{
+  "settings": {
+    "CARGO_TARGET_DIR": "/private/tmp/account109-auth-refresh-review01-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "tests": [
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "/private/tmp/account109-auth-explicit-login-review01-source/Cargo.toml",
+        "--lib",
+        "tests::signin_signup_require_login_and_consent_with_pinned_inputs_and_fresh_transactions",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "startedAt": "2026-11-13T08:20:31.058747+00:00",
+      "durationSeconds": 2.949,
+      "exitCode": 0,
+      "onePassedZeroFailedZeroIgnored": true,
+      "stdoutSha256": "789d5b60779ea55e47e8e5eeab04318cefaafeda1d6691ede2ff984572250b9d",
+      "stderrSha256": "6ceaab90ab11846ba3f69b3946f83455623f22e6949950c9e0e1f652c3d73b1b",
+      "stderrBytes": 286
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "/private/tmp/account109-auth-explicit-login-review01-source/Cargo.toml",
+        "--lib",
+        "tests::callback_state_redirect_duplicates_nonce_issuer_audience_subject_and_expiry_are_verified",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "startedAt": "2026-11-13T08:20:34.007571+00:00",
+      "durationSeconds": 0.24,
+      "exitCode": 0,
+      "onePassedZeroFailedZeroIgnored": true,
+      "stdoutSha256": "9ba507d5a1b08123bbf4b7cdcbfceca85068e166d5552b4968fa9e2c01af7f75",
+      "stderrSha256": "6b1afa01bc4f7be78d1620b8e3726c0ccbfcab47dafb477e598a90cc864dce1e",
+      "stderrBytes": 191
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "/private/tmp/account109-auth-explicit-login-review01-source/Cargo.toml",
+        "--lib",
+        "tests::successful_identity_and_rotation_are_private_persistent_serial_and_restorable",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "startedAt": "2026-11-13T08:20:34.247788+00:00",
+      "durationSeconds": 0.181,
+      "exitCode": 0,
+      "onePassedZeroFailedZeroIgnored": true,
+      "stdoutSha256": "acf44f401ad372f99ce639938f7f338aaf7e7645c678c9fd760953007a5e7b35",
+      "stderrSha256": "6e4bb1f26f9386ee74880c94a9c87fac1fe39275de106c9e11a75f14a07aba47",
+      "stderrBytes": 191
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "/private/tmp/account109-auth-explicit-login-review01-source/Cargo.toml",
+        "--lib",
+        "tests::refresh_inherits_scope_and_requires_connect_with_or_without_an_id_token",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "startedAt": "2026-11-13T08:20:34.429250+00:00",
+      "durationSeconds": 0.21,
+      "exitCode": 0,
+      "onePassedZeroFailedZeroIgnored": true,
+      "stdoutSha256": "eb29d3c80754cf152eea02cf9f4c7437d130301b9cfa9db85357486688a20842",
+      "stderrSha256": "6e4bb1f26f9386ee74880c94a9c87fac1fe39275de106c9e11a75f14a07aba47",
+      "stderrBytes": 191
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "/private/tmp/account109-auth-explicit-login-review01-source/Cargo.toml",
+        "--lib",
+        "tests::relogin02_response_metadata_rejects_each_envelope_condition_on_all_token_paths",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "startedAt": "2026-11-13T08:20:34.639297+00:00",
+      "durationSeconds": 0.781,
+      "exitCode": 0,
+      "onePassedZeroFailedZeroIgnored": true,
+      "stdoutSha256": "e6cca40c9b9868adf35e8ccc38a34543550707b6b2e90bea6c4dac6abe276f93",
+      "stderrSha256": "6e4bb1f26f9386ee74880c94a9c87fac1fe39275de106c9e11a75f14a07aba47",
+      "stderrBytes": 191
+    }
+  ],
+  "fullSuiteRerun": false,
+  "liveOptInRun": false,
+  "sharedTargetUsed": false,
+  "ownedCommandsCompleted": true,
+  "ownedTargetReleased": true
+}
