@@ -1,0 +1,128 @@
+
+> cybernote@0.1.0 test:publish /private/tmp/account109-source-66ad8c52-node-preflight01
+> node --test scripts/publish/*.test.mjs
+
+TAP version 13
+# Subtest: archive build requires explicit matching trusted metadata; changed bytes cannot reuse it
+ok 1 - archive build requires explicit matching trusted metadata; changed bytes cannot reuse it
+  ---
+  duration_ms: 128.358959
+  type: 'test'
+  ...
+# Subtest: pnpm patch and SDK crate bytes participate in product identity
+ok 2 - pnpm patch and SDK crate bytes participate in product identity
+  ---
+  duration_ms: 190.110166
+  type: 'test'
+  ...
+# Subtest: only the reserved Android Kotlin cache is excluded while handwritten platform source remains an input
+ok 3 - only the reserved Android Kotlin cache is excluded while handwritten platform source remains an input
+  ---
+  duration_ms: 252.868125
+  type: 'test'
+  ...
+# Subtest: default dry-run reads only pinned tracked blobs; apply requires exact absent destination and creates new history
+ok 4 - default dry-run reads only pinned tracked blobs; apply requires exact absent destination and creates new history
+  ---
+  duration_ms: 1518.064416
+  type: 'test'
+  ...
+# Subtest: hash tampering, process paths, credentials and symlink tree entries fail closed
+ok 5 - hash tampering, process paths, credentials and symlink tree entries fail closed
+  ---
+  duration_ms: 394.384333
+  type: 'test'
+  ...
+# Subtest: public smart corpus redirect is exact and idempotent, without changing development source
+ok 6 - public smart corpus redirect is exact and idempotent, without changing development source
+  ---
+  duration_ms: 0.263833
+  type: 'test'
+  ...
+# Subtest: committed SDK runtime extension exports exact binary bytes while project auth retains first-party rights
+ok 7 - committed SDK runtime extension exports exact binary bytes while project auth retains first-party rights
+  ---
+  duration_ms: 769.4475
+  type: 'test'
+  ...
+# Subtest: new-root acceptance checks all refs, old parents, remotes, reflogs and unreachable objects independently of HEAD content
+ok 8 - new-root acceptance checks all refs, old parents, remotes, reflogs and unreachable objects independently of HEAD content
+  ---
+  duration_ms: 1380.085209
+  type: 'test'
+  ...
+# Subtest: packaging revalidates actual source identity and rejects an old clean stamp after non-product dirt
+ok 9 - packaging revalidates actual source identity and rejects an old clean stamp after non-product dirt
+  ---
+  duration_ms: 341.056542
+  type: 'test'
+  ...
+# Subtest: packaging verifies build identity in actual native bytes, not a new sidecar next to an old executable
+ok 10 - packaging verifies build identity in actual native bytes, not a new sidecar next to an old executable
+  ---
+  duration_ms: 1.655333
+  type: 'test'
+  ...
+# Subtest: packaged-identity CLI finds real Cargo asset files and refuses an older native payload
+ok 11 - packaged-identity CLI finds real Cargo asset files and refuses an older native payload
+  ---
+  duration_ms: 314.497833
+  type: 'test'
+  ...
+# Subtest: project-authored crates require exact first-party roots and reserved project rights, never vendor reclassification
+ok 12 - project-authored crates require exact first-party roots and reserved project rights, never vendor reclassification
+  ---
+  duration_ms: 3.504583
+  type: 'test'
+  ...
+# Subtest: runtime exception binds actual bytes, path, source metadata and retained licenses, with no wildcard JNI exemption
+ok 13 - runtime exception binds actual bytes, path, source metadata and retained licenses, with no wildcard JNI exemption
+  ---
+  duration_ms: 33.524875
+  type: 'test'
+  ...
+# Subtest: reviewed extension admits ownership and runtime declarations atomically; refresh cannot repin changed binary bytes
+ok 14 - reviewed extension admits ownership and runtime declarations atomically; refresh cannot repin changed binary bytes
+  ---
+  duration_ms: 8.299708
+  type: 'test'
+  ...
+# Subtest: package sidecar retains declared notices with ordinary dependency filenames
+ok 15 - package sidecar retains declared notices with ordinary dependency filenames
+  ---
+  duration_ms: 172.115291
+  type: 'test'
+  ...
+# Subtest: notice archive inputs reject traversal, absolute paths, wrong hashes and parent symlinks before reading or copying
+ok 16 - notice archive inputs reject traversal, absolute paths, wrong hashes and parent symlinks before reading or copying
+  ---
+  duration_ms: 159.593541
+  type: 'test'
+  ...
+# Subtest: Android ABI checks actual ELF headers for every library rather than ZIP directory labels
+ok 17 - Android ABI checks actual ELF headers for every library rather than ZIP directory labels
+  ---
+  duration_ms: 163.70825
+  type: 'test'
+  ...
+# Subtest: unsigned Android staging rejects verifier errors and both JAR and APK block signing material
+ok 18 - unsigned Android staging rejects verifier errors and both JAR and APK block signing material
+  ---
+  duration_ms: 263.785917
+  type: 'test'
+  ...
+# Subtest: Android release staging requires a decodable production manifest and rejects debug/test-only builds
+ok 19 - Android release staging requires a decodable production manifest and rejects debug/test-only builds
+  ---
+  duration_ms: 238.897083
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2729.364167

@@ -1,0 +1,266 @@
+{
+  "schema": 1,
+  "kind": "sanitized-source-draft-node-frontend-preflight",
+  "startedAt": "2026-11-13T09:10:33.493116+00:00",
+  "draft": "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01",
+  "disposableClone": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+  "expectedRoot": "66ad8c524841acd574b705ead8d08c7bb9a50ad7",
+  "developmentBase": "6aa009b216d0fb6a64ebeb2c9c53580fe7581e38",
+  "diskLimitBytes": 2147483648,
+  "diskPeakLogicalBytes": 276059136,
+  "diskPeakAllocatedBytes": 315953152,
+  "diskMeasurement": "owned clone plus receipt; conservative max of logical and allocated bytes, sampled during commands",
+  "commands": [
+    {
+      "name": "clone",
+      "argv": [
+        "git",
+        "clone",
+        "--no-local",
+        "/private/tmp/account109-source-9010c5ba-DRAFT-20261113-01",
+        "/private/tmp/account109-source-66ad8c52-node-preflight01"
+      ],
+      "cwd": "/private/tmp",
+      "exitCode": 0,
+      "durationSeconds": 3.057,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "fa447b02d5493395e4b3b7b8a0a900c91b657b022b843e8aa16df49bd8f544af"
+    },
+    {
+      "name": "remove-origin",
+      "argv": [
+        "git",
+        "remote",
+        "remove",
+        "origin"
+      ],
+      "cwd": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+      "exitCode": 0,
+      "durationSeconds": 0.569,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "verify",
+      "argv": [
+        "node",
+        "scripts/publish/verify.mjs"
+      ],
+      "cwd": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+      "exitCode": 0,
+      "durationSeconds": 18.089,
+      "stdoutSha256": "3913564351529d5d566d52d7eec55c35a1653ad9f5178cb59ae35fbf61d9251f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "install",
+      "argv": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile",
+        "--offline",
+        "--store-dir",
+        "/Users/water/Library/pnpm/store/v10",
+        "--package-import-method=copy",
+        "--side-effects-cache-readonly"
+      ],
+      "cwd": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+      "exitCode": 0,
+      "durationSeconds": 1.983,
+      "stdoutSha256": "89bad758e943fcc43ee053cfd9b0ce67bdb8cef77acbc9ad731204536e8a585a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "versions",
+      "argv": [
+        "pnpm",
+        "version:check"
+      ],
+      "cwd": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+      "exitCode": 0,
+      "durationSeconds": 0.818,
+      "stdoutSha256": "bbe686019a2c2d40052f9a84045efe7136e32680fb40a1980bfa0ea7ee91a2f4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "typecheck",
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "cwd": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+      "exitCode": 0,
+      "durationSeconds": 4.956,
+      "stdoutSha256": "a9f3cf33488f7e896ba589fe0b3a5ad85974db41738edd90a7ad42c88b776db7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "publish-tests",
+      "argv": [
+        "pnpm",
+        "test:publish"
+      ],
+      "cwd": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+      "exitCode": 0,
+      "durationSeconds": 3.547,
+      "stdoutSha256": "c6382a83500eea3426bc66c1a546624f7c0fabd03dd1e741b8529634d395e3d7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "frontend-build",
+      "argv": [
+        "pnpm",
+        "build"
+      ],
+      "cwd": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+      "exitCode": 0,
+      "durationSeconds": 6.724,
+      "stdoutSha256": "32b68466a8edf0ffabb3e496bd8438da447013cb3c0abdb157f529189158633b",
+      "stderrSha256": "aa9b7207d2d2d42fbf4e013331ee76fc39b9b042505b38551893c1f60f35b63a"
+    }
+  ],
+  "status": "passed-node-frontend-only",
+  "environment": {
+    "PATH": "/Users/water/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/pkg/env/active/bin:/opt/pmk/env/global/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/water/.codex/tmp/arg0-macos/codex-arg0CllPky:/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/water/.antigravity-ide/antigravity-ide/bin:/Users/water/.local/node-v22.16.0-darwin-arm64/bin:/Users/water/.local/bin:/opt/zerobrew/bin:/Applications/Cursor.app/Contents/Resources/app/bin:/Users/water/.rbenv/bin:/Users/water/.antigravity/antigravity/bin:/Users/water/.cargo/bin:/Users/water/work/tina/ref/clawdbot/.bin:/opt/zerobrew/opt/openjdk@17/bin:/Users/water/.opencode/bin:/Users/water/.bun/bin:/Users/water/Library/pnpm:/opt/homebrew/opt/openjdk@21/bin:/opt/homebrew/opt/python@3.12/libexec/bin:/Users/water/Library/Android/sdk/emulator:/Applications/\u6781\u7a7a\u95f4.app/Contents/Resources/app.asar.unpacked/bin/platform-tools:/Users/water/.lmstudio/bin:/Users/water/Library/Android/sdk/platform-tools:/Users/water/Library/Android/sdk/cmdline-tools/latest/bin:/Users/water/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS",
+    "LANG": "C.UTF-8",
+    "LC_ALL": "C.UTF-8",
+    "HOME": "/private/tmp/account109-source-66ad8c52-node-preflight01/.git/task-home",
+    "GIT_CONFIG_GLOBAL": "/dev/null",
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "CI": "true",
+    "COREPACK_ENABLE_NETWORK": "0",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "npm_config_userconfig": "/dev/null",
+    "npm_config_offline": "true",
+    "XDG_CONFIG_HOME": "/private/tmp/account109-source-66ad8c52-node-preflight01/.git/task-home/.config",
+    "XDG_CACHE_HOME": "/private/tmp/account109-source-66ad8c52-node-preflight01/.git/task-home/.cache",
+    "TMPDIR": "/private/tmp/account109-source-66ad8c52-node-preflight01/.git/task-tmp/"
+  },
+  "nativeBuildRun": false,
+  "deviceOrUiRun": false,
+  "externalAccountAccess": false,
+  "dependencyNetworkAllowed": false,
+  "oldDraftWritten": false,
+  "cloneIndependent": true,
+  "rootTree": "0857239a05d12f81f2147c4dc435e0ef8cbf542b",
+  "sourceBefore": {
+    "sourceRevision": "66ad8c524841acd574b705ead8d08c7bb9a50ad7",
+    "sourceFingerprint": "87db73de665537b85a8c4de87c0bc1a837c70c567d96ef1bf23a00f187877585",
+    "sourceDirty": false,
+    "inputCount": 1621
+  },
+  "lockfilesBefore": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "toolchain": {
+    "node": "v22.16.0",
+    "pnpm": "10.15.0"
+  },
+  "frontendBuildInfo": {
+    "schema": 1,
+    "version": "0.1.0",
+    "mode": "production",
+    "builtAt": "2026-11-13T09:11:11.162Z",
+    "target": "web",
+    "sourceRevision": "66ad8c524841acd574b705ead8d08c7bb9a50ad7",
+    "sourceFingerprint": "87db73de665537b85a8c4de87c0bc1a837c70c567d96ef1bf23a00f187877585",
+    "sourceDirty": false,
+    "inputCount": 1621,
+    "releasePreparedAt": null
+  },
+  "sourceAfter": {
+    "sourceRevision": "66ad8c524841acd574b705ead8d08c7bb9a50ad7",
+    "sourceFingerprint": "87db73de665537b85a8c4de87c0bc1a837c70c567d96ef1bf23a00f187877585",
+    "sourceDirty": false,
+    "inputCount": 1621
+  },
+  "lockfilesAfter": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "finalGitStatus": "",
+  "safeToRemoveClone": true,
+  "completedAt": "2026-11-13T09:11:13.947154+00:00",
+  "distFilesBeforeRemoval": [
+    {
+      "path": "assets/index-BGDDmeUA.js",
+      "bytes": 1244587,
+      "sha256": "f773a9eb38dc4d3110a7cb46f75942ab2998502916066ce25d78f76e95701270"
+    },
+    {
+      "path": "assets/index-BgotpY8d.css",
+      "bytes": 169621,
+      "sha256": "3746edeb3d9be74e390f9ee5a55001651220a19b3c214fb6af5863e6bbd4c215"
+    },
+    {
+      "path": "assets/native-recording-access-C9wKffCN.js",
+      "bytes": 1018,
+      "sha256": "3d55e8a5de2467a2776b76a4a34ddb783c357dbced19f6445693da10f5db40b9"
+    },
+    {
+      "path": "build-info.json",
+      "bytes": 354,
+      "sha256": "4697225e94c1b29590cc51df14a7571601ed219134b39b252e41a0cc8b6a4db2"
+    },
+    {
+      "path": "cybernote.svg",
+      "bytes": 2874,
+      "sha256": "64ced2fa3d9f18adcc1bb20b2f53c371f0791facf08c3acfaebc6e89bba0ff8f"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1919,
+      "sha256": "30e6accd0ee7c19931c623570f2c473fa317bca36498b97bc70473d949a46f1f"
+    },
+    {
+      "path": "startup.css",
+      "bytes": 2925,
+      "sha256": "12a5b4b8b693f3eb219f0dc02b725d226b2fa81220b2ba7dce3d46fbe4404327"
+    },
+    {
+      "path": "startup.js",
+      "bytes": 2319,
+      "sha256": "ed5c34bf3f142f9619e680059c4c5fa95c07a4b41eaf9871a757e784e0881ff9"
+    }
+  ],
+  "preCleanupSourceIdentity": {
+    "sourceRevision": "66ad8c524841acd574b705ead8d08c7bb9a50ad7",
+    "sourceFingerprint": "87db73de665537b85a8c4de87c0bc1a837c70c567d96ef1bf23a00f187877585",
+    "sourceDirty": false,
+    "inputCount": 1621
+  },
+  "preCleanupControllerSha256": "2f05f4c43624ebc377b49ed03909a26913d1da7856c33598fbecc5834158ab45",
+  "cleanup": {
+    "authorizedRoot": "/private/tmp/account109-source-66ad8c52-node-preflight01",
+    "receiptSavedBeforeDeletion": true,
+    "sourceAndLocksUnchanged": true,
+    "removed": [
+      "/private/tmp/account109-source-66ad8c52-node-preflight01/node_modules",
+      "/private/tmp/account109-source-66ad8c52-node-preflight01/dist",
+      "/private/tmp/account109-source-66ad8c52-node-preflight01"
+    ],
+    "complete": true,
+    "cloneAbsent": true,
+    "completedAt": "2026-11-13T09:12:23.927622+00:00"
+  },
+  "remainingReceiptLogicalBytes": 30551,
+  "publishTestSummary": {
+    "tests": 19,
+    "pass": 19,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "installWarnings": [
+    "pnpm 10 default dependency lifecycle scripts core-js and esbuild not approved; no approve-builds or source/config modification performed"
+  ],
+  "frontendWarnings": [
+    "Vite reports a minified chunk above 500 kB; build exited zero"
+  ]
+}
