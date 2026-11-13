@@ -20,6 +20,7 @@ struct Fixture {
     base: String,
     cert: Vec<u8>,
     cancel: CancellationToken,
+    task: tokio::task::JoinHandle<()>,
 }
 impl Fixture {
     async fn new(handler: Handler) -> Self {
@@ -44,11 +45,12 @@ impl Fixture {
         let acceptor = tokio_rustls::TlsAcceptor::from(Arc::new(config));
         let cancel = CancellationToken::new();
         let stop = cancel.clone();
-        tokio::spawn(async move {
+        let task = tokio::spawn(async move {
+            let mut tasks = tokio::task::JoinSet::new();
             loop {
-                tokio::select! {_=stop.cancelled()=>break,res=listener.accept()=>{
+                tokio::select! {_=stop.cancelled()=>break,Some(_)=tasks.join_next(),if !tasks.is_empty()=>{},res=listener.accept()=>{
                     let Ok((socket,_))=res else{break};let handler=handler.clone();let acceptor=acceptor.clone();
-                    tokio::spawn(async move{let Ok(mut s)=acceptor.accept(socket).await else{return};let mut head=Vec::new();let mut one=[0];
+                    tasks.spawn(async move{let Ok(mut s)=acceptor.accept(socket).await else{return};let mut head=Vec::new();let mut one=[0];
                         while !head.ends_with(b"\r\n\r\n"){if head.len()>16384||s.read_exact(&mut one).await.is_err(){return;}head.push(one[0]);}
                         let h=String::from_utf8_lossy(&head);let mut lines=h.lines();let request=lines.next().unwrap_or("");let mut parts=request.split_whitespace();let method=parts.next().unwrap_or("").to_owned();let path=parts.next().unwrap_or("").to_owned();
                         let length=lines.find_map(|l|l.to_ascii_lowercase().strip_prefix("content-length:").and_then(|v|v.trim().parse::<usize>().ok())).unwrap_or(0);if length>65536{return;}let mut body=vec![0;length];if s.read_exact(&mut body).await.is_err(){return;}
@@ -56,11 +58,14 @@ impl Fixture {
                     });
                 }}
             }
+            tasks.abort_all();
+            while tasks.join_next().await.is_some() {}
         });
         Self {
             base: format!("https://{addr}"),
             cert: cert.der().to_vec(),
             cancel,
+            task,
         }
     }
     fn client(&self, app: &str) -> Arc<Client> {
@@ -80,6 +85,10 @@ impl Fixture {
             .build()
             .unwrap();
         c
+    }
+    async fn stop(&mut self) -> std::io::Result<()> {
+        self.cancel.cancel();
+        (&mut self.task).await.map_err(|_| std::io::Error::other("fixture join"))
     }
 }
 impl Drop for Fixture {
@@ -711,6 +720,7 @@ struct Control {
     user_override: Option<String>,
     config_failure: bool,
     config_override: Option<(String, String)>,
+    wrong_fingerprint_for: Option<String>,
 }
 async fn control() -> (Fixture, Arc<Mutex<Control>>) {
     let state = Arc::new(Mutex::new(Control {
@@ -733,7 +743,7 @@ async fn control() -> (Fixture, Arc<Mutex<Control>>) {
             let id=who.clone();
             let epoch=s.epoch.clone();let fail=s.fail_next_publish;s.fail_next_publish=false;let d=s.devices.get_mut(&id).unwrap();d["publishRevision"]=body["publishRevision"].clone();d["certificateFingerprint"]=fp;d["ports"]=body["ports"].clone();d["tunnelUrl"]=body.get("tunnelUrl").cloned().unwrap_or(Value::Null);d["iroh"]=body.get("iroh").cloned().unwrap_or(Value::Null);if fail{return(599,json!({"coordinatorEpoch":epoch,"error":{"code":"RESPONSE_LOST"}}));}return(200,json!({"device":d,"coordinatorEpoch":epoch}));
         }
-        if method=="GET"&&path=="/api/v1/devices"{return(200,json!({"coordinatorEpoch":s.epoch,"devices":s.devices.values().collect::<Vec<_>>()}));}
+        if method=="GET"&&path=="/api/v1/devices"{let devices=s.devices.iter().map(|(id,d)|{let mut d=d.clone();if s.wrong_fingerprint_for.as_ref()==Some(id){d["certificateFingerprint"]=json!("0".repeat(64));}d}).collect::<Vec<_>>();return(200,json!({"coordinatorEpoch":s.epoch,"devices":devices}));}
         if method=="POST"&&path=="/api/v1/signals"{let mut v:Value=serde_json::from_slice(&body).unwrap();s.n+=1;v["id"]=json!(s.n);let kind=v["kind"].as_str().unwrap().to_owned();v["fromDeviceId"]=json!(who);v["coordinatorEpoch"]=json!(s.epoch);v["fromIncarnation"]=s.devices[&who]["incarnation"].clone();assert!(matches!(kind.as_str(),"offer"|"answer"|"candidate"|"close"));s.signals.push(v);return(200,json!({"id":s.n,"coordinatorEpoch":s.epoch}));}
         if method=="GET"&&path.starts_with("/api/v1/signals?"){if s.drop_signals{return(200,json!({"coordinatorEpoch":s.epoch,"signals":[],"cursor":s.n}));}let after=path.split("after=").nth(1).unwrap().split('&').next().unwrap().parse::<u64>().unwrap();return(200,json!({"coordinatorEpoch":s.epoch,"signals":s.signals.iter().filter(|s|s["id"].as_u64().unwrap()>after&&s["toDeviceId"]==who).collect::<Vec<_>>(),"cursor":s.n}));}
         if method=="DELETE"&&path=="/api/v1/session"{if s.revoke_fails{return(503,json!({"error":{"code":"UNAVAILABLE"}}));}return(200,json!({"ok":true}));}
@@ -2862,4 +2872,516 @@ async fn known_first_publication_manual_token_retry_preserves_committed_identity
     tokio::time::sleep(Duration::from_millis(30)).await;
     assert!(c.active().await.is_ok());
     c.close().await.unwrap();
+}
+
+// This module's nonignored tests are local helper checks. Only the ignored test
+// contacts Cloudflare. Its identity/directory/signaling remain explicit fixtures.
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+mod live_relay {
+    use super::*;
+    use std::{io, os::unix::fs::OpenOptionsExt, path::Path};
+
+    fn require(ok: bool, stage: &'static str) -> io::Result<()> {
+        if ok {
+            Ok(())
+        } else {
+            Err(io::Error::other(stage))
+        }
+    }
+    fn step<T, E>(result: std::result::Result<T, E>, stage: &'static str) -> io::Result<T> {
+        result.map_err(|_| io::Error::other(stage))
+    }
+    fn checkpoint(stage: &str) {
+        eprintln!("ACCOUNT109_RELAY {}", json!({"stage":stage}));
+    }
+    fn quote(path: &Path) -> io::Result<String> {
+        let s = path
+            .to_str()
+            .ok_or_else(|| io::Error::other("non UTF-8 path"))?;
+        require(
+            path.is_absolute() && !s.contains(['\n', '\r', '\0']),
+            "wrapper path",
+        )?;
+        Ok(format!("'{}'", s.replace('\'', "'\\''")))
+    }
+    fn wrapper(script: &Path, binary: &Path, record: &Path) -> io::Result<()> {
+        use std::io::Write;
+        // $$ is preserved by exec. No manufactured hostname/readiness output.
+        let text = format!(
+            "#!/bin/sh\nset -eu\nprintf '%s\\n' \"$$\" >> {}\nexec {} \"$@\"\n",
+            quote(record)?,
+            quote(binary)?
+        );
+        let mut file = std::fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o700)
+            .open(script)?;
+        file.write_all(text.as_bytes())?;
+        file.sync_all()
+    }
+    fn pids(text: &str) -> io::Result<Vec<i32>> {
+        require(
+            text.len() <= 128 && (text.is_empty() || text.ends_with('\n')),
+            "PID record framing",
+        )?;
+        let mut result = Vec::new();
+        for line in text.lines() {
+            let pid: i32 = step(line.parse(), "PID syntax")?;
+            require(
+                pid > 1
+                    && pid.to_string() == line
+                    && pid != std::process::id() as i32
+                    && !result.contains(&pid),
+                "PID identity",
+            )?;
+            result.push(pid);
+        }
+        require(result.len() <= 5, "provider restart bound")?;
+        Ok(result)
+    }
+    fn reaped(record: &Path) -> io::Result<usize> {
+        require(std::fs::metadata(record)?.len() <= 128, "PID record size")?;
+        let ids = pids(&std::fs::read_to_string(record)?)?;
+        for id in &ids {
+            // Observe only. Never signal a recorded PID, which could be reused.
+            require(
+                unsafe { libc::kill(*id, 0) } == -1
+                    && io::Error::last_os_error().raw_os_error() == Some(libc::ESRCH),
+                "provider PID still present or unverifiable",
+            )?;
+        }
+        Ok(ids.len())
+    }
+    fn route(events: &[(String, Option<String>)], success: bool) -> io::Result<()> {
+        let mut cursor = 0;
+        let mut expected = vec![
+            ("direct-attempt", "webrtc-direct"),
+            ("iroh-skipped", "iroh-direct"),
+            ("fallback-attempt", "cloudflare-tunnel"),
+            ("websocket-dial", "cloudflare-tunnel"),
+            ("websocket-upgraded", "cloudflare-tunnel"),
+        ];
+        if success {
+            expected.extend([
+                ("mutual-tls-ready", "cloudflare-tunnel"),
+                ("multiplexer-ready", "cloudflare-tunnel"),
+            ]);
+        }
+        for (phase, transport) in events {
+            if matches!(phase.as_str(), "mutual-tls-ready" | "multiplexer-ready") {
+                require(
+                    success && transport.as_deref() == Some("cloudflare-tunnel"),
+                    "unexpected authenticated transport",
+                )?;
+            }
+            if cursor < expected.len()
+                && phase == expected[cursor].0
+                && transport.as_deref() == Some(expected[cursor].1)
+            {
+                cursor += 1;
+            }
+        }
+        require(cursor == expected.len(), "incomplete fallback event chain")
+    }
+    fn drain(
+        receiver: &mut tokio::sync::broadcast::Receiver<Event>,
+        peer: &str,
+        generation: u64,
+    ) -> io::Result<Vec<(String, Option<String>)>> {
+        let mut events = Vec::new();
+        loop {
+            match receiver.try_recv() {
+                Ok(e) if e.peer_id.as_deref() == Some(peer) => {
+                    require(e.generation == generation, "transport generation changed")?;
+                    events.push((e.phase, e.transport)); // Never retain arbitrary message.
+                }
+                Ok(_) => (),
+                Err(tokio::sync::broadcast::error::TryRecvError::Empty) => return Ok(events),
+                Err(_) => return Err(io::Error::other("transport event lag or closure")),
+            }
+        }
+    }
+    async fn owned_echo() -> io::Result<(u16, CancellationToken, tokio::task::JoinHandle<()>)> {
+        let listener = TcpListener::bind("127.0.0.1:0").await?;
+        let port = listener.local_addr()?.port();
+        let stop = CancellationToken::new();
+        let cancel = stop.clone();
+        let task = tokio::spawn(async move {
+            let mut sessions = tokio::task::JoinSet::new();
+            loop {
+                tokio::select! {
+                    _ = cancel.cancelled() => break,
+                    Some(_) = sessions.join_next(), if !sessions.is_empty() => {},
+                    accepted = listener.accept() => {
+                        let Ok((mut socket, _)) = accepted else { break };
+                        let cancel = cancel.clone();
+                        sessions.spawn(async move {
+                            let (mut r, mut w) = socket.split();
+                            tokio::select! { _ = cancel.cancelled() => {}, _ = async { let _ = tokio::io::copy(&mut r, &mut w).await; let _ = w.shutdown().await; } => {} }
+                        });
+                    }
+                }
+            }
+            sessions.abort_all();
+            while sessions.join_next().await.is_some() {}
+        });
+        Ok((port, stop, task))
+    }
+
+    // A deadline observes an owned task, never drops the SDK close future.
+    // Even an eventual join after the grace period cannot erase the deadline.
+    async fn cleanup_task(
+        task: &mut tokio::task::JoinHandle<io::Result<()>>,
+        budget: Duration,
+        grace: Duration,
+        label: &'static str,
+        errors: &mut Vec<(&'static str, &'static str)>,
+    ) {
+        match tokio::time::timeout(budget, &mut *task).await {
+            Ok(Ok(Ok(()))) => (),
+            Ok(Ok(Err(_))) => errors.push((label, "failed")),
+            Ok(Err(_)) => errors.push((label, "join-failed")),
+            Err(_) => {
+                errors.push((label, "deadline"));
+                if tokio::time::timeout(grace, &mut *task).await.is_err() {
+                    errors.push((label, "join-unconfirmed"));
+                }
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn relay_cleanup_failure_continues_and_deadline_retains_owned_task() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let first_calls = calls.clone();
+        let mut first = tokio::spawn(async move {
+            first_calls.lock().unwrap().push("failed cleanup");
+            Err(io::Error::other("injected"))
+        });
+        let mut errors = Vec::new();
+        let budget = Duration::from_secs(1);
+        cleanup_task(&mut first, budget, budget, "first", &mut errors).await;
+        let next = calls.clone();
+        let mut second = tokio::spawn(async move {
+            next.lock().unwrap().push("later cleanup");
+            Ok(())
+        });
+        cleanup_task(&mut second, budget, budget, "second", &mut errors).await;
+        let root = tempfile::tempdir().unwrap();
+        let record = root.path().join("pids");
+        std::fs::write(&record, format!("{}\n", std::process::id())).unwrap();
+        calls.lock().unwrap().push("PID verification");
+        if reaped(&record).is_err() {
+            errors.push(("provider-PIDs", "unconfirmed"));
+        }
+        assert_eq!(
+            *calls.lock().unwrap(),
+            ["failed cleanup", "later cleanup", "PID verification"]
+        );
+        assert_eq!(
+            errors,
+            [("first", "failed"), ("provider-PIDs", "unconfirmed")]
+        );
+
+        let (release, wait) = tokio::sync::oneshot::channel::<()>();
+        let mut owned = tokio::spawn(async move {
+            let _ = wait.await;
+            Ok(())
+        });
+        cleanup_task(
+            &mut owned,
+            Duration::from_millis(1),
+            Duration::from_millis(1),
+            "slow",
+            &mut errors,
+        )
+        .await;
+        assert!(!owned.is_finished(), "deadline must retain the close task");
+        release.send(()).unwrap();
+        tokio::time::timeout(budget, &mut owned)
+            .await
+            .unwrap()
+            .unwrap()
+            .unwrap();
+        assert!(
+            errors.contains(&("slow", "deadline"))
+                && errors.contains(&("slow", "join-unconfirmed"))
+        );
+    }
+
+    #[test]
+    fn relay_pid_parser_and_event_contract_reject_false_success() {
+        assert!(pids("42\n43\n").is_ok());
+        for bad in [
+            "42",
+            "0\n",
+            "1\n",
+            "-2\n",
+            "042\n",
+            "+42\n",
+            "42\n42\n",
+            "42 extra\n",
+            "2147483648\n",
+        ] {
+            assert!(pids(bad).is_err());
+        }
+        let phases = [
+            ("direct-attempt", "webrtc-direct"),
+            ("iroh-skipped", "iroh-direct"),
+            ("fallback-attempt", "cloudflare-tunnel"),
+            ("websocket-dial", "cloudflare-tunnel"),
+            ("websocket-upgraded", "cloudflare-tunnel"),
+            ("mutual-tls-ready", "cloudflare-tunnel"),
+            ("multiplexer-ready", "cloudflare-tunnel"),
+        ];
+        let good = phases.map(|(p, t)| (p.into(), Some(t.into()))).to_vec();
+        assert!(route(&good, true).is_ok());
+        for i in 0..good.len() {
+            let mut bad = good.clone();
+            bad.remove(i);
+            assert!(route(&bad, true).is_err());
+        }
+        assert!(route(&good[..5], false).is_ok());
+        assert!(route(&good, false).is_err());
+        let mut direct = good.clone();
+        direct[5].1 = Some("webrtc-direct".into());
+        assert!(route(&direct, true).is_err());
+    }
+
+    #[tokio::test]
+    async fn relay_wrapper_records_exec_pid_without_manufacturing_success_and_fixture_joins() {
+        let root = tempfile::tempdir().unwrap();
+        let script = root.path().join("wrapper ' quoted.sh");
+        let record = root.path().join("pids ' quoted");
+        wrapper(&script, Path::new("/usr/bin/false"), &record).unwrap();
+        let child = tokio::process::Command::new(&script)
+            .stdout(std::process::Stdio::piped())
+            .stderr(std::process::Stdio::piped())
+            .spawn()
+            .unwrap();
+        let pid = child.id().unwrap();
+        let output = child.wait_with_output().await.unwrap();
+        assert!(!output.status.success());
+        assert!(output.stdout.is_empty() && output.stderr.is_empty());
+        assert_eq!(
+            pids(&std::fs::read_to_string(&record).unwrap()).unwrap(),
+            vec![pid as i32]
+        );
+        assert_eq!(reaped(&record).unwrap(), 1);
+        let mut f = Fixture::new(Arc::new(|_, _, _, _| (200, json!({})))).await;
+        f.stop().await.unwrap();
+        assert!(f.task.is_finished());
+    }
+
+    #[tokio::test]
+    async fn relay_event_lag_and_live_pid_cannot_pass_cleanup() {
+        let (sender, mut receiver) = tokio::sync::broadcast::channel(1);
+        for _ in 0..3 {
+            sender
+                .send(Event {
+                    generation: 1,
+                    epoch: None,
+                    phase: "direct-attempt".into(),
+                    transport: Some("webrtc-direct".into()),
+                    peer_id: Some("fixture".into()),
+                    message: Some("must not be retained".into()),
+                })
+                .unwrap();
+        }
+        assert!(drain(&mut receiver, "fixture", 1).is_err());
+        let root = tempfile::tempdir().unwrap();
+        let record = root.path().join("pids");
+        std::fs::write(&record, format!("{}\n", std::process::id())).unwrap();
+        assert!(reaped(&record).is_err());
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+    #[ignore = "opt-in real public Quick Tunnel; synthetic coordinator/identity, NOT account or 4G acceptance"]
+    async fn real_bundled_quick_tunnel_map_fallback_bytes_and_wrong_pin() {
+        assert_eq!(
+            std::env::var("CYBERGRID_LIVE_RELAY").as_deref(),
+            Ok("1"),
+            "explicit live-network opt-in required"
+        );
+        checkpoint(
+            "fixture-coordinator-identity-and-dropped-signals; real-public-provider; iroh-disabled",
+        );
+        let root = tempfile::tempdir().unwrap();
+        let bundled = CloudflaredConfig::bundled(root.path()).unwrap();
+        let binary = crate::provider::resolve(&bundled.source, &bundled.binary).unwrap();
+        let script = root.path().join("record-and-exec.sh");
+        let record = root.path().join("provider-pids");
+        std::fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o600)
+            .open(&record)
+            .unwrap();
+        wrapper(&script, &binary, &record).unwrap();
+        // External describes this PID-only wrapper, not an arbitrary provider.
+        // Revalidate the original bundled bytes before EVERY provider start.
+        let mut provider = CloudflaredConfig::new(&script);
+        provider.temp_dir = Some(root.path().into());
+        let checked = bundled.clone();
+        let expected_binary = binary.clone();
+        provider.env_provider = Some(Arc::new(move || {
+            if crate::provider::resolve(&checked.source, &checked.binary)? != expected_binary {
+                return Err(Error::Config("bundled path changed".into()));
+            }
+            Ok(HashMap::new())
+        }));
+        checkpoint(
+            "external-PID-wrapper-executes-per-start-verified-bundled-binary; default-WebPKI",
+        );
+        let (mut f, state) = control().await;
+        state.lock().unwrap().drop_signals = true;
+        let a = f.client("RealA");
+        let mut b = f.client("RealA");
+        Arc::get_mut(&mut b).unwrap().cfg.cloudflared = Some(provider);
+        let (port, echo_stop, echo_task) = owned_echo().await.unwrap();
+        let mut mapping: Option<Mapping> = None;
+        // Timeout failure still proceeds through the independent cleanup below.
+        let operation = tokio::time::timeout(Duration::from_secs(150), async {
+            step(a.login_with_access_token("fixture-token-a", "a").await, "fixture login A")?;
+            let session = step(b.login_with_access_token("fixture-token-b", "b").await, "fixture login B")?;
+            step(b.expose(Port::tcp("echo", port, "fixture-echo")).await, "expose echo")?;
+            step(b.enable_remote().await, "enable B")?;
+            checkpoint("await-real-provider-heartbeat-directory");
+            step(tokio::time::timeout(Duration::from_secs(60), async {
+                loop {
+                    let devices = step(a.devices().await, "fixture directory")?;
+                    if let Some(d) = devices.iter().find(|d| d.id == session.device_id && d.tunnel_url.is_some() && d.certificate_fingerprint.is_some()) {
+                        step(validate_tunnel_url(d.tunnel_url.as_deref().unwrap()), "real Quick Tunnel allowlist")?;
+                        require(d.ports.iter().any(|p| p.id == "echo"), "heartbeat port publication")?;
+                        break Ok::<_,io::Error>(());
+                    }
+                    tokio::time::sleep(Duration::from_millis(250)).await;
+                }
+            }).await, "provider publication deadline")??;
+            require(!pids(&std::fs::read_to_string(&record)?)?.is_empty(), "provider PID required")?;
+            let generation = a.snapshot().generation;
+            let mut events = a.subscribe();
+            checkpoint("Client-map-direct-failure-to-public-tunnel");
+            mapping = Some(step(a.map(&session.device_id, "echo", "127.0.0.1:0".parse().unwrap()).await, "fallback map")?);
+            let m = mapping.as_ref().unwrap();
+            require(m.current_transport().await.as_deref() == Some("cloudflare-tunnel"), "transport before bytes")?;
+            let stream = step(tokio::net::TcpStream::connect(m.addr).await, "mapping TCP")?;
+            let data: Vec<u8> = (0..65536).map(|i| ((i * 31 + i / 251) % 256) as u8).collect();
+            let (read, mut write) = stream.into_split();
+            let transfer = async {
+                tokio::try_join!(async { write.write_all(&data).await?; write.shutdown().await }, async { let mut bytes = Vec::new(); read.take(65537).read_to_end(&mut bytes).await?; Ok::<_,io::Error>(bytes) })
+            };
+            let (_, received) = step(tokio::time::timeout(Duration::from_secs(15), transfer).await, "byte deadline")??;
+            require(received == data && Sha256::digest(&received) == Sha256::digest(&data), "original bytes and SHA256")?;
+            require(m.current_transport().await.as_deref() == Some("cloudflare-tunnel"), "transport after bytes")?;
+            let phases = drain(&mut events, &session.device_id, generation)?;
+            route(&phases, true)?;
+            require(state.lock().unwrap().signals.iter().any(|s| s["kind"] == "offer" && s["fromDeviceId"] == "id-a"), "real direct offer must be submitted to dropped-signals fixture")?;
+            eprintln!("ACCOUNT109_RELAY {}", json!({"stage":"public-tunnel-original-bytes","bytes":received.len(),"sha256":hex::encode(Sha256::digest(&received)),"events":phases}));
+            m.close().await;
+            require(m.current_transport().await.is_none(), "mapping closed")?;
+            // Only the NEGATIVE fixture response is altered; never invent the
+            // positive URL/fingerprint or replace WebPKI/inner mTLS verifiers.
+            state.lock().unwrap().wrong_fingerprint_for = Some(session.device_id.clone());
+            let mut events = a.subscribe();
+            checkpoint("fixture-wrong-fingerprint-must-reject-real-WSS-inner-mTLS");
+            match a.map(&session.device_id, "echo", "127.0.0.1:0".parse().unwrap()).await {
+                Err(Error::Transport(reason)) if reason == "peer TLS authentication rejected" => (),
+                Ok(unexpected) => { unexpected.close().await; return Err(io::Error::other("wrong fingerprint admitted")); },
+                Err(_) => return Err(io::Error::other("negative failed outside expected inner mTLS check")),
+            }
+            route(&drain(&mut events, &session.device_id, generation)?, false)?;
+            checkpoint("wrong-fingerprint-rejected-after-real-WebSocket-upgrade");
+            Ok::<_,io::Error>(())
+        }).await;
+        checkpoint(match &operation {
+            Ok(Ok(())) => "operation-complete",
+            Ok(Err(_)) => "operation-failed",
+            Err(_) => "operation-deadline",
+        });
+        checkpoint("cleanup-SDK-bounded-provider-termination-not-natural-exit");
+        echo_stop.cancel();
+        // Start SDK closes concurrently and retain ALL task handles until the
+        // final verdict, including tasks whose joins could not be confirmed.
+        let mut mapping_close = tokio::spawn(async move {
+            if let Some(m) = mapping {
+                m.close().await;
+            }
+            Ok(())
+        });
+        let mut close_a = tokio::spawn(async move { step(a.close().await, "close A") });
+        let mut close_b = tokio::spawn(async move { step(b.close().await, "close B") });
+        let mut close_echo = tokio::spawn(async move { step(echo_task.await, "echo join") });
+        let mut errors = Vec::new();
+        let grace = Duration::from_secs(3);
+        cleanup_task(
+            &mut mapping_close,
+            Duration::from_secs(5),
+            grace,
+            "mapping",
+            &mut errors,
+        )
+        .await;
+        cleanup_task(
+            &mut close_a,
+            Duration::from_secs(20),
+            grace,
+            "SDK-close-A",
+            &mut errors,
+        )
+        .await;
+        cleanup_task(
+            &mut close_b,
+            Duration::from_secs(20),
+            grace,
+            "SDK-close-B",
+            &mut errors,
+        )
+        .await;
+        cleanup_task(
+            &mut close_echo,
+            Duration::from_secs(5),
+            grace,
+            "echo",
+            &mut errors,
+        )
+        .await;
+        // Fixture APIs remain available during SDK closes; always stop it next,
+        // regardless of SDK/mapping/echo errors or unconfirmed joins.
+        let mut close_fixture = tokio::spawn(async move { f.stop().await });
+        cleanup_task(
+            &mut close_fixture,
+            Duration::from_secs(5),
+            grace,
+            "fixture",
+            &mut errors,
+        )
+        .await;
+        let count = match reaped(&record) {
+            Ok(n) => Some(n),
+            Err(_) => {
+                errors.push(("provider-PIDs", "unconfirmed"));
+                None
+            }
+        };
+        if crate::provider::resolve(&bundled.source, &bundled.binary).is_err() {
+            errors.push(("bundled-bytes", "changed-or-unverifiable"));
+        }
+        let (operation_status, operation_error_kind) = match &operation {
+            Ok(Ok(())) => ("pass", None),
+            Ok(Err(e)) => ("fail", Some(format!("{:?}", e.kind()))),
+            Err(_) => ("deadline", None),
+        };
+        // Preserve BOTH outcomes; a cleanup failure never hides the operation.
+        eprintln!(
+            "ACCOUNT109_RELAY {}",
+            json!({"stage":"final-verdict","operation":operation_status,"operationErrorKind":operation_error_kind,"cleanupFailures":errors,"providerPidsReaped":count,"providerExit":"attempted SDK bounded termination; require PID proof; not natural exit","realAccount":false,"physical4gWifi":false})
+        );
+        assert!(
+            operation_status == "pass" && errors.is_empty(),
+            "operation={operation_status}; cleanup={errors:?}"
+        );
+        checkpoint("PASS-real-public-relay-transport-with-fixture-control-plane-only");
+    }
 }
