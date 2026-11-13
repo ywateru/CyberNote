@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "verdict": "APPROVE_EXACT_DEBUG_E2E_ARTIFACT_IDENTITY",
+  "startedAt": "2026-11-13T07:49:29.973138+00:00",
+  "completedAt": "2026-11-13T07:49:31.763185+00:00",
+  "sourceRoot": "/private/tmp/cybernote-account109-gui-token-diagnostics-01",
+  "sourceTree": "4dc9a9d3e0bd5246d7d18e7e6b9e8fe506c68ebd",
+  "source": {
+    "sourceRevision": "d1a6eadfd62ac45ba4ecb82e39dd3bd61fd4f5b4",
+    "sourceFingerprint": "9b666aeca860bdc72610753094a45347b38302f61b95145649b3d075ed877313",
+    "sourceDirty": false,
+    "inputCount": 1654
+  },
+  "committedInputBlobMatches": 1654,
+  "lockfiles": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "495f4a00a0322ab1f275ad9c08b693aab093b42a3ccca2f8419f9f1f38c9e307",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "services/coordinator/package-lock.json": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1"
+  },
+  "binary": {
+    "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-d1a6eadf-debug-e2e-01/notes-clone",
+    "sha256": "bb45bfe591463c4197e8f856090daf666b6b22031bc240b6c52f10b28b5cc5b5",
+    "bytes": 203686896,
+    "format": "thin Mach-O64 little-endian arm64 MH_EXECUTE"
+  },
+  "buildRecordSha256": "a5c5b2d3f2d861db687c0b874955a30aa94de5afcef39f87be75779b880cf69d",
+  "controllerSha256": "cb431e9315ca0604f2d28a0fb55085d5ea79e436d08f6a408a8f368ce5028ac5",
+  "logs": {
+    "frontend-build": {
+      "sha256": "25b8646d9798091678c7c5b0d8962c449f798c8ac80f2a8046de8528f945a034",
+      "authorExitCode": 0
+    },
+    "compiled-capability": {
+      "sha256": "640aed259c00b33683b07d603fc04ddf54e711e9883ed576bf0c81f3d6887079",
+      "authorExitCode": 0
+    },
+    "native-build": {
+      "sha256": "3fb6cf050bae3160198290d3390355697c6e0dea9a1e1a99d022e823a0b42e36",
+      "authorExitCode": 0
+    },
+    "embedded-identity": {
+      "sha256": "878ab1f2bfb4ed34405b6383fab7a9bfd166aa5f34678eb1377235f4e3249172",
+      "authorExitCode": 0
+    }
+  },
+  "compiledCapability": {
+    "authorChecks": 24,
+    "resultCount": 24,
+    "allExpectedFixtureValuesMatch": true,
+    "independentlyRerun": false,
+    "boundary": "Compiled capability only; no native IPC or auth executed"
+  },
+  "embeddedIdentity": {
+    "encoding": "brotli",
+    "sha256": "4d4ff46ca3900f1ecf3776df12cac2bd3e6be7099e194ef6104c9b2e54f1e4d8"
+  },
+  "frontendIdentitySha256": "4d4ff46ca3900f1ecf3776df12cac2bd3e6be7099e194ef6104c9b2e54f1e4d8",
+  "verifier": {
+    "command": [
+      "node",
+      "scripts/publish/package-identity.mjs",
+      "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-d1a6eadf-debug-e2e-01/notes-clone",
+      "/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/build"
+    ],
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "helpersSha256": {
+      "scripts/publish/package-identity.mjs": "9102fd8f2e70a7a1633b0bc3c3f02cf08592fe3a87691fb0ae570a5e9184cb2a",
+      "scripts/build-info.mjs": "30f986b0128714efad89b25db1e257667d94ec5db422b9975c94574e497b78b2",
+      "scripts/publish/policy.mjs": "8d21a8575c6d0eec0dc680571adfdfb1a453bd97bdc4551bb953284455acf8e1",
+      "scripts/debug/account-native-capability.mjs": "d847a0a64a6670ebf0fcbb07827ee5c4366f2accc89262afb9d1f57798027b5c"
+    }
+  },
+  "runnerPinAdaptation": {
+    "commit": "fb6d26a1f368e460d8ad9e82bc372fb174a39a27",
+    "parent": "d1a6eadfd62ac45ba4ecb82e39dd3bd61fd4f5b4",
+    "integrationRef": "2fb4fe11",
+    "onlyExpectedSixReplacements": true,
+    "constantsMatchActualBinaryAndEmbeddedSource": true,
+    "runnerSha256": "14116b95c5b29360301e67710502bac9a8cdc9dea7752535380e2dc2f9384b1b",
+    "testSha256": "b5bf2216325efc7b4e8b73d0d6e553349b106aff3a3e5b9c95461c17d73c008e",
+    "testsRerun": false
+  },
+  "buildFlags": {
+    "NODE_ENV": "development",
+    "VITE_NOTES_DEBUG": "1",
+    "CYBERNOTE_BUILD_TARGET": "macos",
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "features": [
+    "sync-e2e",
+    "tauri/custom-protocol"
+  ],
+  "frontendAccountOverrides": {
+    "VITE_NOTES_ACCOUNT_NATIVE": null,
+    "VITE_NOTES_ACCOUNT_UI": null
+  },
+  "dotenvInputsAbsent": true,
+  "closing": {
+    "sourceCleanAndIdentityUnchanged": true,
+    "binaryAndReceiptUnchanged": true,
+    "leaseHeld": false
+  },
+  "boundary": "Static identity approval only; author build/capability evidence hash-checked, not independently rebuilt/retested. No App, GUI, auth, store, ADB, network, target writes, lease or runtime acceptance. Vite mode production is build-command identity; this is debug E2E, not production release. No original or historical failure evidence modified."
+}
