@@ -23,6 +23,65 @@ const hash = data => createHash('sha256').update(data).digest('hex');
 const quote = JSON.stringify;
 const lockPath = path.join(os.tmpdir(), `cybernote-account109-${SERIAL}.lock`);
 const visible = `e=>!!(e.getClientRects().length&&!e.closest('[hidden],[inert]')&&getComputedStyle(e).visibility!=='hidden')`;
+const loginFailure = code => Object.assign(Error(code), {code,phase:'login-surfaces'});
+const resumedLine = output => output.split('\n').find(line => line.includes('mResumedActivity:')) || '';
+export function loginForeground(output) {
+  const line=resumedLine(output),component=line.match(/\s([\w.]+)\/[\w.$]+/),pkg=component?.[1];
+  return {owned:pkg===PACKAGE,browser:['com.android.chrome','com.sec.android.app.sbrowser','org.mozilla.firefox'].includes(pkg)};
+}
+function assertUnlocked() {
+  const policy=run('shell','dumpsys','window','policy');
+  if(!/\bshowing=false\b/.test(policy)||!/\binputRestricted=false\b/.test(policy))throw loginFailure('ANDROID_DEVICE_AUTH_REQUIRED');
+}
+
+// Pure policies; callbacks below are fixtures in tests, fixed private effects live.
+export function loginRadioPolicy(radios,surface,explicit) {
+  if(!['embedded','browser'].includes(surface)||typeof explicit!=='boolean')throw loginFailure('ANDROID_LOGIN_SURFACE_INVALID');
+  if(!Array.isArray(radios))throw loginFailure('ANDROID_LOGIN_RADIOS_INVALID');
+  if(!radios.length){if(surface!=='browser'||explicit)throw loginFailure('ANDROID_LOGIN_RADIOS_REQUIRED');return false;}
+  if(radios.length!==2||radios.some((r,i)=>r.value!==['embedded','browser'][i]||r.label!==['应用内登录','系统浏览器'][i]||r.disabled!==false||r.visible!==true))throw loginFailure('ANDROID_LOGIN_RADIOS_INVALID');
+  return true;
+}
+export function loginControls({open,radios,select,clickLogin,status,wait}) {
+  return {async signIn(...args){
+    if(args.length>1||(args.length&&!['embedded','browser'].includes(args[0])))throw loginFailure('ANDROID_LOGIN_SURFACE_INVALID');
+    const surface=args[0]??'browser';await open();
+    if(loginRadioPolicy(await radios(),surface,args.length===1))await select(surface);
+    await clickLogin();
+    return wait(async()=>{const s=await status();return ['authorizing','error'].includes(s.state)?s:false;},'native authorization started');
+  }};
+}
+
+function nativeAuthTree(xml) {
+  if(typeof xml!=='string'||xml.length>2_000_000||!/\<hierarchy\b/.test(xml)||/<!DOCTYPE|<!ENTITY/i.test(xml))throw loginFailure('ANDROID_NATIVE_XML_INVALID');
+  const decode=s=>s.replace(/&(?:quot|apos|lt|gt|amp);/g,v=>({'&quot;':'"','&apos;':"'",'&lt;':'<','&gt;':'>','&amp;':'&'}[v]));
+  const stack=[],nodes=[];
+  for(const token of xml.matchAll(/<node\b([^>]*?)(\/?)>|<\/node>/g)){
+    if(token[0]==='</node>'){if(!stack.length)throw loginFailure('ANDROID_NATIVE_XML_INVALID');stack.pop();continue;}
+    const attrs=Object.fromEntries([...token[1].matchAll(/([\w:-]+)="([^"]*)"/g)].map(m=>[m[1],decode(m[2])]));
+    const bounds=attrs.bounds?.match(/^\[(\d+),(\d+)\]\[(\d+),(\d+)\]$/)?.slice(1).map(Number);
+    const shown=attrs['visible-to-user']!=='false'&&bounds?.[2]>bounds?.[0]&&bounds?.[3]>bounds?.[1]&&stack.every(n=>n.shown);
+    const inWeb=stack.some(n=>n.attrs.class==='android.webkit.WebView');
+    const n={attrs,bounds,shown,inWeb};nodes.push(n);if(!token[2])stack.push(n);
+  }
+  if(stack.length||!nodes.length)throw loginFailure('ANDROID_NATIVE_XML_INVALID');
+  const nativeButton=label=>nodes.filter(n=>!n.inWeb&&n.shown&&n.attrs.package===PACKAGE&&n.attrs.class==='android.widget.Button'&&n.attrs.text===label&&n.attrs.enabled==='true'&&n.attrs.clickable==='true');
+  const continuing=nativeButton('在浏览器中继续'),cancel=nativeButton('取消登录');
+  const web=nodes.filter(n=>n.shown&&n.attrs.class==='android.webkit.WebView'&&n.attrs.package===PACKAGE);
+  const editable=nodes.some(n=>n.inWeb&&n.shown&&n.attrs.class==='android.widget.EditText');
+  const formAction=nodes.some(n=>n.inWeb&&n.shown&&['Sign in','Continue','Next','登录','继续','下一步'].includes(n.attrs.text)&&n.attrs.enabled==='true'&&n.attrs.clickable==='true');
+  const safe={dialog:continuing.length===1&&cancel.length===1,webView:web.length===1,hostedForm:editable&&formAction};
+  return {safe,continuing};
+}
+export function nativeLoginProjection(xml){return nativeAuthTree(xml).safe;}
+export function nativeLoginControls({capture,guard,back,tap}) {
+  async function checked(){await guard();const tree=nativeAuthTree(await capture());await guard();if(!Object.values(tree.safe).every(v=>v===true))throw loginFailure('ANDROID_NATIVE_LOGIN_FORM_REQUIRED');return tree;}
+  return {
+    async nativeLoginPresentation(){await guard();const result=nativeAuthTree(await capture()).safe;await guard();return result;},
+    async closeNativeLogin(){await checked();await guard();await back();return {action:'native-back',ownedDialog:true};},
+    async continueNativeLogin(){const t=await checked(),[x1,y1,x2,y2]=t.continuing[0].bounds;await guard();await tap(Math.floor((x1+x2)/2),Math.floor((y1+y2)/2));return {action:'native-toolbar-continue',ownedDialog:true};}
+  };
+}
 
 export function assertInteractive() {
   const policy = run('shell', 'dumpsys', 'window', 'policy');
@@ -294,8 +353,17 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
       assertInteractive();diagnostics.phase='phone-origin-files';diagnostics.selector=null;
       return evaluate(phoneFileSubmission(id));
     }});
+    const login=loginControls({open:openAccount,status:accountStatus,wait,
+      radios:()=>evaluate(`Array.from(document.querySelectorAll('.account-settings input[name="account-login-surface"]')).map(r=>({value:r.value,label:r.closest('label')?.textContent.trim(),disabled:r.matches(':disabled'),visible:r.getClientRects().length>0}))`),
+      select:async surface=>{await click(`.account-settings input[name="account-login-surface"][value="${surface}"]`);if(!await evaluate(`document.querySelector('.account-settings input[name="account-login-surface"][value="${surface}"]')?.checked===true`))throw loginFailure('ANDROID_LOGIN_RADIO_NOT_SELECTED');},
+      clickLogin:()=>click('.account-settings .account-primary','登录')});
+    const nativeLogin=nativeLoginControls({guard:()=>{assertPid();assertInteractive();},capture:()=>run('shell','uiautomator','dump','/dev/tty'),back:()=>run('shell','input','keyevent','KEYCODE_BACK'),tap:(x,y)=>run('shell','input','tap',String(x),String(y))});
     const api = {
       owned, diagnostics, close, readWorkspace, readNote, accountStatus, openAccount, closeSettings,
+      ...login,...nativeLogin,
+      async externalLoginActivity(){assertPid();assertUnlocked();return loginForeground(run('shell','dumpsys','activity','activities'));},
+      async returnFromLoginBrowser(){assertPid();assertUnlocked();if(!loginForeground(run('shell','dumpsys','activity','activities')).browser)throw loginFailure('ANDROID_LOGIN_BROWSER_REQUIRED');const s=await accountStatus();if(s.state!=='authorizing'||s.authorizationSurface!=='browser'||s.error)throw loginFailure('ANDROID_LOGIN_BROWSER_REQUIRED');assertPid();launchAndroid();assertInteractive();},
+      async reclaimSignedOut(){assertPid();assertInteractive();const s=await accountStatus();if(s.state!=='signedOut'||s.enabled!==false||s.profile||s.error||s.authorizationSurface!==undefined||s.conflictCount!==0||!Array.isArray(s.devices)||s.devices.some(d=>d.connected))throw loginFailure('ANDROID_CLEAN_SIGNED_OUT_REQUIRED');assertPid();const background=backgroundAndroid();assertPid();const reclaimed=await reclaimBackgroundAndroid();if(background.pid!==owned.pid||reclaimed.oldPid!==owned.pid)throw loginFailure('ANDROID_PID_CHANGED');return {oldPid:owned.pid,action:'am kill background package',forceStop:false};},
       submitNoteFiles:phoneFiles.submitNoteFiles,
       ...accountSyncControls(async command => {
         assertInteractive();
@@ -311,11 +379,6 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
       },
       async inspect() {
         return { ...owned, account: await accountStatus(), ui: await evaluate(`({ready:!!document.querySelector('.app'),state:document.querySelector('.account-settings')?.dataset.accountState||null,login:!!document.querySelector('.account-primary'),cancel:Array.from(document.querySelectorAll('.account-actions button')).some(e=>e.textContent.trim()==='取消登录')})`) };
-      },
-      async signIn() {
-        await openAccount();
-        await click('.account-settings .account-primary', '登录');
-        return wait(async () => {const status = await accountStatus(); return status.state === 'authorizing' || status.state === 'error' ? status : false;}, 'native authorization started');
       },
       async cancelLogin() {
         await openAccount();
