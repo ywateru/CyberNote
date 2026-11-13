@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "kind": "android-existing-tunnel-evidence-review",
+  "recordedAt": "2026-11-13T04:38:01.331660+00:00",
+  "mainHead": "6e219696d1cb39bbb98ba47a0357237d3223247e",
+  "installedCandidateEvidenceSource": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+  "readOnlyEvidenceReview": true,
+  "adbUsed": false,
+  "newNetworkRequests": 0,
+  "appStoreOrUiAccessed": false,
+  "credentialsOrTokensReadOrCopied": false,
+  "networkSettingsChanged": false,
+  "findings": {
+    "providerPackagedStaticEvidence": true,
+    "providerName": "cloudflared / Cloudflare Quick Tunnel",
+    "packagedProviderSha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
+    "configuredFallbackTransport": "cloudflare-tunnel",
+    "runtimeProviderLaunchProven": false,
+    "runtimeTunnelReadyProven": false,
+    "runtimeMappingEstablishedProven": false,
+    "actualAndroidPeerTransportProven": false,
+    "actualAndroidPeerTransport": null,
+    "fourGWifiNatTraversalFailureProven": false
+  },
+  "latestRealSignIn": {
+    "startedAt": "2026-11-13T02:53:52.923Z",
+    "finishedAt": "2026-11-13T02:54:26.296Z",
+    "signInCalls": 1,
+    "authenticationWaitMs": 20692,
+    "enablementCalled": false,
+    "state": "error",
+    "enabled": false,
+    "hasProfile": false,
+    "error": {
+      "code": "account_network",
+      "stage": "coordinator",
+      "providerReason": null
+    },
+    "exactCoordinatorEndpointProven": false,
+    "underlyingNetworkCauseProven": false
+  },
+  "freshExistingReachabilityEvidence": {
+    "phone": {
+      "startedAt": "2026-11-13T04:23:18.799291+00:00",
+      "exitCode": 7,
+      "httpStatus": 0,
+      "healthPrerequisiteRestored": false
+    },
+    "hostControl": {
+      "startedAt": "2026-11-13T04:25:33.274061+00:00",
+      "exitCode": 0,
+      "httpStatus": 200,
+      "healthEndpointSucceeded": true
+    },
+    "reexecuted": false
+  },
+  "eventCoverage": {
+    "existingAndroidJsonAndJsonlFilesScanned": 84,
+    "fixedLabelHits": {
+      "tunnel-ready": [],
+      "mapping-ready": [],
+      "multiplexer-ready": [],
+      "fallback-attempt": [],
+      "coordination-ready": [],
+      "cloudflare-tunnel": [],
+      "webrtc-direct": [],
+      "iroh-direct": []
+    },
+    "limitation": "Absent labels in retained reports do not prove a provider was never run. Sign-in status projection did not retain SDK provider/mapping/transport events; no raw historical device log is archived in the latest sign-in output."
+  },
+  "nextRealTestPrerequisites": [
+    "Normal canonical coordinator HTTPS reachable from Android and production app path; current phone evidence still fails.",
+    "Normal real account callback and owner/profile binding succeed under the existing user authorization, then enablement and reciprocal peer discovery.",
+    "Reviewed finite event collection for provider readiness, exact peer mapping and selected transport; never retain tunnel URLs, account/device identifiers, raw logs or tokens.",
+    "Within the existing user-authorized network test scope, obtain actual cloudflare-tunnel selected-transport and authenticated multiplexer/mapping evidence plus full document/raw attachment convergence."
+  ],
+  "evidenceSha256": {
+    "docs/verification/account109/android/9263-signin01/result.json": "a23901989f004db72c22708f1c1ed55496c0f32cc409df5b7d84241a2705bef8",
+    "docs/verification/account109/android/9263-signin01/signin.mjs": "556b03bef6dce8cf8ac9174d270669ecd2446713097321331c478e96b47f1d84",
+    "docs/verification/account109/android/9263-signin01/apk-static-identity.json": "ca4b819275284b31d382573850729b06e73f97269a98ce205b7007501e21f15f",
+    "docs/verification/account109/android/9263-debug/README.md": "ae8cb865ce594935bcf2b83b0428c911bff4ff9848b00ea90fe8813e3ed5cafa",
+    "docs/verification/account109/android/public-native01/result.json": "75c9667d6ada86a750b68386064c91fc82c47ea9ae4b4fde56b7b86a1f5c9528",
+    "docs/verification/account109/android/public-native01/README.md": "ec1174159373cdef0688d0a7656d7d76d4bf21d69386537246b0dadafad84612",
+    "docs/verification/account109/android/goal-network-recheck01/result.json": "0442e40dc24d968f47a383af67f7ae49bfc070678f8585a50f9ea8fbfbab7cd8",
+    "docs/verification/account109/android/goal-network-recheck01/host-control.json": "c3728f6ae047e48d9fbe0a96b1c7d1820621e0161ef93d12218505ec511e9479"
+  },
+  "sourceSha256": {
+    "src-tauri/src/account/mod.rs": "7b5c93cfd4d162ab6ce4588fb59ab5bdc7d9cf44ce8817d90b697cf8c6612d22",
+    "src-tauri/src/account/provider.rs": "aa4f066e04e70e2e8b37c69a095e39fff5c6c631502b346903f1d99e7829c313",
+    "src-tauri/src/account/transport.rs": "b40b0954c3dce75df211c45b21c977c769ff925fdf9ba8fb518c94dd4bb00a26",
+    "vendor/cybergrid-sdk/src/peer.rs": "5c8c129a1e3f80b5e743738dcc956b014d1fa5a3e8412267271d28348b06061c",
+    "vendor/cybergrid-sdk/src/tunnel.rs": "bc709d1acca022da54e34edd7926207a38fc73ffba954b7b6d734e63d42d32d9",
+    "vendor/cybergrid-sdk/src/client.rs": "778088191827f11c2d24ad9e1feed3b3ca3d22c36326bbf0415614f4161c9858"
+  },
+  "historicalCodeCheck": {
+    "sourceRevision": "9263ea87b5f6112bbd23d4b57d6d7a8b21c9fee3",
+    "genericCoordinatorStageNotFineEndpointAttribution": true,
+    "accountModPeerAndTunnelUnchangedSinceInstalledSource": true
+  },
+  "conclusion": "Configured and packaged anonymous fallback exists; existing Android evidence does not prove tunnel activation, established mappings, selected transport, or NAT traversal failure. The observed blocker is coordinator reachability before enabled peer-sync acceptance."
+}
