@@ -1,0 +1,366 @@
+TAP version 13
+# (node:66962) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: recorded recovery authentication failure terminates discovery on the first poll
+ok 1 - recorded recovery authentication failure terminates discovery on the first poll
+  ---
+  duration_ms: 0.768084
+  type: 'test'
+  ...
+# Subtest: authorization, restore and enable errors fail immediately, including errors with profiles
+ok 2 - authorization, restore and enable errors fail immediately, including errors with profiles
+  ---
+  duration_ms: 0.280916
+  type: 'test'
+  ...
+# Subtest: slow connection then data keeps connection and data deadlines separate
+ok 3 - slow connection then data keeps connection and data deadlines separate
+  ---
+  duration_ms: 6.663708
+  type: 'test'
+  ...
+# Subtest: connection timeout keeps connection and data deadlines separate
+ok 4 - connection timeout keeps connection and data deadlines separate
+  ---
+  duration_ms: 5.392792
+  type: 'test'
+  ...
+# Subtest: data timeout keeps connection and data deadlines separate
+ok 5 - data timeout keeps connection and data deadlines separate
+  ---
+  duration_ms: 4.440875
+  type: 'test'
+  ...
+# Subtest: bounded polling retains network transitions and waits for ready before evaluating success
+ok 6 - bounded polling retains network transitions and waits for ready before evaluating success
+  ---
+  duration_ms: 100.952875
+  type: 'test'
+  ...
+# Subtest: persistent network status reaches the bounded timeout even if data already matches
+ok 7 - persistent network status reaches the bounded timeout even if data already matches
+  ---
+  duration_ms: 204.3535
+  type: 'test'
+  ...
+# Subtest: authentication and permanent failures still fail immediately inside bounded waits
+ok 8 - authentication and permanent failures still fail immediately inside bounded waits
+  ---
+  duration_ms: 0.3275
+  type: 'test'
+  ...
+# Subtest: enable stays pending through a transient command result and enabled error sample
+ok 9 - enable stays pending through a transient command result and enabled error sample
+  ---
+  duration_ms: 100.424958
+  type: 'test'
+  ...
+# Subtest: transitions are deduplicated per device/phase, record recovery, and bound oscillation
+ok 10 - transitions are deduplicated per device/phase, record recovery, and bound oscillation
+  ---
+  duration_ms: 0.89675
+  type: 'test'
+  ...
+# Subtest: safe projection retains only fixed labels, booleans and bounded numeric metrics
+ok 11 - safe projection retains only fixed labels, booleans and bounded numeric metrics
+  ---
+  duration_ms: 0.408
+  type: 'test'
+  ...
+# Subtest: new fixed endpoint stages and finite provider failure categories survive transitions and failure snapshots
+ok 12 - new fixed endpoint stages and finite provider failure categories survive transitions and failure snapshots
+  ---
+  duration_ms: 0.426416
+  type: 'test'
+  ...
+# Subtest: branch edits preserve attachment nodes while replacing complete rich text
+ok 13 - branch edits preserve attachment nodes while replacing complete rich text
+  ---
+  duration_ms: 0.23075
+  type: 'test'
+  ...
+# Subtest: keepAll comparisons resolve remapped IDs to owned metadata and retain full content/reference checks
+ok 14 - keepAll comparisons resolve remapped IDs to owned metadata and retain full content/reference checks
+  ---
+  duration_ms: 0.657084
+  type: 'test'
+  ...
+# Subtest: failure reporting never copies arbitrary upstream error strings
+ok 15 - failure reporting never copies arbitrary upstream error strings
+  ---
+  duration_ms: 0.053458
+  type: 'test'
+  ...
+# Subtest: native account path constructs only existing command payloads and rejects injection
+ok 16 - native account path constructs only existing command payloads and rejects injection
+  ---
+  duration_ms: 0.56425
+  type: 'test'
+  ...
+# Subtest: logout samples full windows before/after restart and preserves complete local bodies
+ok 17 - logout samples full windows before/after restart and preserves complete local bodies
+  ---
+  duration_ms: 0.483042
+  type: 'test'
+  ...
+# Subtest: logout detects delayed remote application, lost notes, changed rich document and reauthentication
+ok 18 - logout detects delayed remote application, lost notes, changed rich document and reauthentication
+  ---
+  duration_ms: 1.0705
+  type: 'test'
+  ...
+# Subtest: one slow read cannot substitute for repeated logout observations
+ok 19 - one slow read cannot substitute for repeated logout observations
+  ---
+  duration_ms: 0.144459
+  type: 'test'
+  ...
+# Subtest: overall pass is deferred until all owned processes close naturally
+ok 20 - overall pass is deferred until all owned processes close naturally
+  ---
+  duration_ms: 0.75175
+  type: 'test'
+  ...
+# Subtest: cleanup rejection, nonnatural exit, prior failure and unfinished coverage cannot pass
+ok 21 - cleanup rejection, nonnatural exit, prior failure and unfinished coverage cannot pass
+  ---
+  duration_ms: 0.142667
+  type: 'test'
+  ...
+# Subtest: CLI confines recovery to original stores and fresh external evidence, no injection options
+ok 22 - CLI confines recovery to original stores and fresh external evidence, no injection options
+  ---
+  duration_ms: 0.962208
+  type: 'test'
+  ...
+# Subtest: prior entity must be the sole recorded shared base with both connected preserved conflicts and closed children
+ok 23 - prior entity must be the sole recorded shared base with both connected preserved conflicts and closed children
+  ---
+  duration_ms: 0.444584
+  type: 'test'
+  ...
+# Subtest: full branch comparison normalizes only IDs/revision/paths and rejects lost formatting, bodies and metadata
+ok 24 - full branch comparison normalizes only IDs/revision/paths and rejects lost formatting, bodies and metadata
+  ---
+  duration_ms: 5.775125
+  type: 'test'
+  ...
+# Subtest: baseline requires both exact complete heads with original fixture descriptors, never substitutes invented digests
+ok 25 - baseline requires both exact complete heads with original fixture descriptors, never substitutes invented digests
+  ---
+  duration_ms: 6.088125
+  type: 'test'
+  ...
+# Subtest: copied SQLite WAL evidence uses mode=ro/query_only, queries only target rows and leaves original bytes unchanged
+ok 26 - copied SQLite WAL evidence uses mode=ro/query_only, queries only target rows and leaves original bytes unchanged
+  ---
+  duration_ms: 89.2785
+  type: 'test'
+  ...
+# Subtest: fixed native conflicts/resolve use genuine current app access, with no arbitrary token/URL/command inputs
+ok 27 - fixed native conflicts/resolve use genuine current app access, with no arbitrary token/URL/command inputs
+  ---
+  duration_ms: 1.821458
+  type: 'test'
+  ...
+# Subtest: fixed trace checkpoints precede every evaluation and preserve exact failed operation without raw input
+ok 28 - fixed trace checkpoints precede every evaluation and preserve exact failed operation without raw input
+  ---
+  duration_ms: 0.716041
+  type: 'test'
+  ...
+# Subtest: raw attachment proof checks every file and production read, preserved metadata and missing rows
+ok 29 - raw attachment proof checks every file and production read, preserved metadata and missing rows
+  ---
+  duration_ms: 2.962125
+  type: 'test'
+  ...
+# Subtest: continuation polls only once per second and timeout remains bounded without retrying resolution
+ok 30 - continuation polls only once per second and timeout remains bounded without retrying resolution
+  ---
+  duration_ms: 0.369791
+  type: 'test'
+  ...
+# Subtest: logout local edit persists across both windows while delayed transfer in either direction fails
+ok 31 - logout local edit persists across both windows while delayed transfer in either direction fails
+  ---
+  duration_ms: 0.984459
+  type: 'test'
+  ...
+# Subtest: completion cannot pass until both required cases and all exact owned children close naturally
+ok 32 - completion cannot pass until both required cases and all exact owned children close naturally
+  ---
+  duration_ms: 0.191208
+  type: 'test'
+  ...
+# Subtest: wire is exact native v1: fixed ops, increasing safe IDs, no timeout/eval/action injection and bounded synthetic text
+ok 33 - wire is exact native v1: fixed ops, increasing safe IDs, no timeout/eval/action injection and bounded synthetic text
+  ---
+  duration_ms: 2.444958
+  type: 'test'
+  ...
+# Subtest: framing matches 16 MB native budget, UTF-8 byte splitting, discarded noise and malformed/truncated replies
+ok 34 - framing matches 16 MB native budget, UTF-8 byte splitting, discarded noise and malformed/truncated replies
+  ---
+  duration_ms: 1.842583
+  type: 'test'
+  ...
+# Subtest: fixed requests serialize and require both environment switches; natural shutdown waits for child exit
+ok 35 - fixed requests serialize and require both environment switches; natural shutdown waits for child exit
+  ---
+  duration_ms: 74.843459
+  type: 'test'
+  ...
+# Subtest: clean stdin EOF uses exact owned normal exit
+ok 36 - clean stdin EOF uses exact owned normal exit
+  ---
+  duration_ms: 24.113333
+  type: 'test'
+  ...
+# Subtest: badHello cannot become headless-ready
+ok 37 - badHello cannot become headless-ready
+  ---
+  duration_ms: 22.418209
+  type: 'test'
+  ...
+# Subtest: badReady cannot become headless-ready
+ok 38 - badReady cannot become headless-ready
+  ---
+  duration_ms: 22.976875
+  type: 'test'
+  ...
+# Subtest: wrongId fails closed without raw error strings or another operation
+ok 39 - wrongId fails closed without raw error strings or another operation
+  ---
+  duration_ms: 23.890167
+  type: 'test'
+  ...
+# Subtest: invalidResponse fails closed without raw error strings or another operation
+ok 40 - invalidResponse fails closed without raw error strings or another operation
+  ---
+  duration_ms: 22.544084
+  type: 'test'
+  ...
+# Subtest: badWorkspace fails closed without raw error strings or another operation
+ok 41 - badWorkspace fails closed without raw error strings or another operation
+  ---
+  duration_ms: 23.8055
+  type: 'test'
+  ...
+# Subtest: rawError fails closed without raw error strings or another operation
+ok 42 - rawError fails closed without raw error strings or another operation
+  ---
+  duration_ms: 22.269292
+  type: 'test'
+  ...
+# Subtest: nativeError fails closed without raw error strings or another operation
+ok 43 - nativeError fails closed without raw error strings or another operation
+  ---
+  duration_ms: 22.318125
+  type: 'test'
+  ...
+# Subtest: nullInputError fails closed without raw error strings or another operation
+ok 44 - nullInputError fails closed without raw error strings or another operation
+  ---
+  duration_ms: 22.37375
+  type: 'test'
+  ...
+# Subtest: local timeout is not sent on wire, fails closed, and exact owned fixture is joined
+ok 45 - local timeout is not sent on wire, fails closed, and exact owned fixture is joined
+  ---
+  duration_ms: 28.479542
+  type: 'test'
+  ...
+# Subtest: missing hello is bounded and cannot send business operations
+ok 46 - missing hello is bounded and cannot send business operations
+  ---
+  duration_ms: 105.155208
+  type: 'test'
+  ...
+# Subtest: shutdown ACK cannot mask a truncated stream tail or required signal
+ok 47 - shutdown ACK cannot mask a truncated stream tail or required signal
+  ---
+  duration_ms: 159.060959
+  type: 'test'
+  ...
+# Subtest: native diagnostic code allowlist is exactly the agreed finite set
+ok 48 - native diagnostic code allowlist is exactly the agreed finite set
+  ---
+  duration_ms: 0.1225
+  type: 'test'
+  ...
+# Subtest: CLI requires explicit independent binary source revision and only original stores/full02/fresh output
+ok 49 - CLI requires explicit independent binary source revision and only original stores/full02/fresh output
+  ---
+  duration_ms: 0.99075
+  type: 'test'
+  ...
+# Subtest: native conflict gate checks exact existing digest pair, target, sole conflict and full variant metadata
+ok 50 - native conflict gate checks exact existing digest pair, target, sole conflict and full variant metadata
+  ---
+  duration_ms: 0.942542
+  type: 'test'
+  ...
+# Subtest: connection readiness requires both actual peers, not another remote or an errored enabled status
+ok 51 - connection readiness requires both actual peers, not another remote or an errored enabled status
+  ---
+  duration_ms: 0.108708
+  type: 'test'
+  ...
+# Subtest: exact native save-note shape is required for local and remote synthetic bodies
+ok 52 - exact native save-note shape is required for local and remote synthetic bodies
+  ---
+  duration_ms: 0.657375
+  type: 'test'
+  ...
+# Subtest: headless continuation resolves once, validates full remapped branches/raw files, then checks both logout directions and real restart ordering
+ok 53 - headless continuation resolves once, validates full remapped branches/raw files, then checks both logout directions and real restart ordering
+  ---
+  duration_ms: 22.403041
+  type: 'test'
+  ...
+# Subtest: changed or additional existing conflict fails before any keep-all, sign-out or new note
+ok 54 - changed or additional existing conflict fails before any keep-all, sign-out or new note
+  ---
+  duration_ms: 4.053958
+  type: 'test'
+  ...
+# Subtest: 80-second connection phases leave a fresh 60-second data budget for 50-second body convergence
+ok 55 - 80-second connection phases leave a fresh 60-second data budget for 50-second body convergence
+  ---
+  duration_ms: 9.302708
+  type: 'test'
+  ...
+# Subtest: authentication fails on the first bounded connection check and retains fixed endpoint/provider diagnostics
+ok 56 - authentication fails on the first bounded connection check and retains fixed endpoint/provider diagnostics
+  ---
+  duration_ms: 1.693542
+  type: 'test'
+  ...
+# Subtest: original-byte corruption prevents conflict pass and leaves logout untouched
+ok 57 - original-byte corruption prevents conflict pass and leaves logout untouched
+  ---
+  duration_ms: 4.620041
+  type: 'test'
+  ...
+# Subtest: delayed notes in either direction and lost local edit after restart cannot pass logout
+ok 58 - delayed notes in either direction and lost local edit after restart cannot pass logout
+  ---
+  duration_ms: 17.86225
+  type: 'test'
+  ...
+# Subtest: successful business assertions still cannot pass after non-natural owned cleanup
+ok 59 - successful business assertions still cannot pass after non-natural owned cleanup
+  ---
+  duration_ms: 10.6475
+  type: 'test'
+  ...
+1..59
+# tests 59
+# suites 0
+# pass 59
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 617.570417
