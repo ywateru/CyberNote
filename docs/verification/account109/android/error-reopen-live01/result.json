@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "kind": "account109-independent-error-state-normal-reopen",
+  "status": "pass-reopen-current-data-only",
+  "startedAt": "2026-11-13T14:48:50.989Z",
+  "runnerRevision": "08a3421a",
+  "source": "88b2dabe4bb898b0bf225e913883b43ed2cac865",
+  "apkSha256": "2fee1cfbe27dd3b4c537c7051206831daa5c22bb9d08db50cf25f28d6e381870",
+  "accountMutationSent": false,
+  "notesOrAttachmentsWritten": false,
+  "priorSmokeReclassified": false,
+  "forceStop": false,
+  "phase": "after-compare",
+  "tools": {
+    "account109-android.mjs": "cfbc582c436e8aefa9547f79c513737a6447d4349b1d01b323408b242face618",
+    "account109-android-current-login-smoke.mjs": "661db2f29d42aceeb14c1bcfc8a28edd0957f093a6e42f196e5ef76df75dfb38",
+    "account109-android-preserving-upgrade.mjs": "3308b5c5ab54895ca06e4ed4ef487382fd36934326bd239c5e65a9cdfb813bdf",
+    "account109-android-login-surfaces.mjs": "f9ef371406fa5769bfafa3d7341ee8d88a2435a88e1ed5fa12a808e0d88e523a",
+    "account109-desktop-helpers.mjs": "8c9e21dcb13f72a6d5f5095754e577e068331557af032c565e7a6cf1438e31f4"
+  },
+  "oldPid": 17885,
+  "accountBefore": {
+    "state": "error",
+    "enabled": false,
+    "hasProfile": false,
+    "identityCheck": "unverified",
+    "error": {
+      "code": "account_authentication"
+    },
+    "devices": [],
+    "pendingCount": 0,
+    "conflictCount": 0
+  },
+  "currentDataPreservedBefore": true,
+  "backgroundReclaimed": true,
+  "preLaunchForwardReleased": true,
+  "newPid": 28586,
+  "installedIdentityUnchanged": true,
+  "preservation": {
+    "samples": 3,
+    "durationMs": 3649
+  },
+  "accountAfter": {
+    "state": "signedOut",
+    "enabled": false,
+    "hasProfile": false,
+    "identityCheck": "unverified",
+    "devices": [],
+    "pendingCount": 0,
+    "conflictCount": 0
+  },
+  "cleanup": {
+    "exactForwardsAbsent": true,
+    "leaseReleased": true
+  },
+  "finishedAt": "2026-11-13T14:49:04.935Z"
+}
