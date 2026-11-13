@@ -1,0 +1,124 @@
+"""Read committed manifest inputs; run validation-only CLIs, never export writes."""
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import time
+
+ROOT = Path('/Users/water/work/2026/Apple-Notes-Clone')
+OUT = Path(__file__).resolve().parent
+MANIFEST = 'scripts/publish/manifest.json'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+def revision(ref):
+    return git('rev-parse', '--verify', ref + '^{commit}').decode().strip()
+
+def blob(ref, path):
+    return git('show', ref + ':' + path)
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+def save(name, value):
+    (OUT / name).write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\n')
+
+def utc():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+started = utc()
+base, candidate = revision('43b977c5'), revision('4a5cdf8d')
+parents = git('show', '-s', '--format=%P', candidate).decode().strip().split()
+assert parents == [base], parents
+commit_paths = git('diff', '--name-only', base, candidate).decode().splitlines()
+assert commit_paths == [MANIFEST], commit_paths
+before_bytes, after_bytes = blob(base, MANIFEST), blob(candidate, MANIFEST)
+before, after = json.loads(before_bytes), json.loads(after_bytes)
+assert {k: v for k, v in before.items() if k != 'files'} == {k: v for k, v in after.items() if k != 'files'}
+old, new = before['files'], after['files']
+changed = sorted(p for p in old.keys() & new.keys() if old[p] != new[p])
+added, removed = sorted(new.keys() - old.keys()), sorted(old.keys() - new.keys())
+assert added == ['src-tauri/src/account/recovery.rs'] and not removed
+groups = {
+    'alias': ('72b397a334494acf2fb12f1d12c6325c4f602f32', [
+        'src-tauri/src/account/config.rs', 'src-tauri/src/account/enrollment.rs',
+        'src-tauri/src/account/transport.rs']),
+    'auth': ('29412dfb1fb1ed4281cdd14d7a5a5db1fe5a9f24', [
+        'crates/account-auth/src/lib.rs', 'crates/account-auth/src/tests.rs',
+        'crates/account-auth/src/types.rs']),
+    'native_ui_pending_cicero_source_approval': (base, [
+        'src-tauri/src/account/mod.rs', 'src-tauri/src/account/provider.rs',
+        'src-tauri/src/account/types.rs', 'src-tauri/src/account/recovery.rs',
+        'src/account-client.ts', 'src/AccountSettings.tsx'])
+}
+expected = sorted(p for _, paths in groups.values() for p in paths)
+assert sorted(changed + added) == expected and len(changed) == 11
+assert [p for p, h in new.items() if h == 'SELF'] == [MANIFEST]
+assert all('*' not in p and '?' not in p and '[' not in p for p in new)
+pins = []
+for group, (approved, paths) in groups.items():
+    for path in paths:
+        data, parent_data = blob(candidate, path), blob(base, path)
+        source_data = blob(approved, path)
+        assert data == parent_data == source_data, path
+        assert new[path] == digest(data), path
+        mode = git('ls-tree', candidate, '--', path).decode().split()[0]
+        assert mode in ['100644', '100755'], path
+        pins.append(dict(path=path, group=group, oldPin=old.get(path), newPin=new[path],
+                         blobBytes=len(data), mode=mode, referenceCommit=revision(approved),
+                         matchesParentSource=True, matchesReferenceSource=True,
+                         sha256Matches=True, sourceApprovalGrantedByThisReview=False))
+
+tools = []
+for name in ['export.mjs', 'manifest.mjs', 'policy.mjs', 'history.mjs', 'package-transform.mjs']:
+    path = 'scripts/publish/' + name
+    data = blob(candidate, path)
+    assert data == blob(base, path) == (ROOT / path).read_bytes(), path
+    tools.append(dict(path=path, sha256=digest(data), bytes=len(data),
+                      matchesCandidateAndParentAndWorkingFile=True))
+
+result = dict(startedAt=started, candidate=candidate, parent=base, commitChangedPaths=commit_paths,
+              manifestBeforeSha256=digest(before_bytes), manifestAfterSha256=digest(after_bytes),
+              manifestBytesBefore=len(before_bytes), manifestBytesAfter=len(after_bytes),
+              manifestCountBefore=len(old), manifestCountAfter=len(new),
+              topLevelFieldsUnchangedExceptFiles=True, changedExistingPins=changed,
+              addedExactPaths=added, removedPaths=removed, wildcardPathsAdded=False,
+              selfRuleUnchanged=True, firstPartyThirdPartyRuntimeAssetsUnchanged=True,
+              processMaterialPathsAdded=False, policyAndToolBytesUnchanged=True,
+              pins=pins, tools=tools,
+              approvalBoundary='Manifest semantics and exact source hash verification only; conditional on Cicero approval of native/UI source at parent commit. Pins do not replace source review.',
+              restrictions=dict(noSeal=True, noTarget=True, noRemoteOperation=True,
+                                noLiveTest=True, noPublishingTestsRepeated=True,
+                                noAppAdbOrNetworkOperation=True))
+(OUT / 'manifest.diff.txt').write_bytes(git('diff', '--no-ext-diff', '--no-color', base, candidate, '--', MANIFEST))
+save('semantics-and-hashes.json', result)
+print(json.dumps(dict(semanticChecks='PASS', changedPins=len(changed), addedPaths=added,
+                      pinHashesVerified=len(pins), manifestSha256=result['manifestAfterSha256']), indent=2))
+
+commands = []
+for label, tool in [('manifest', 'manifest.mjs'), ('export', 'export.mjs')]:
+    argv = ['node', 'scripts/publish/' + tool, '--ref', candidate]
+    begun, tick = utc(), time.monotonic()
+    run = subprocess.run(argv, cwd=ROOT, capture_output=True, timeout=180)
+    (OUT / (label + '.stdout.txt')).write_bytes(run.stdout)
+    (OUT / (label + '.stderr.txt')).write_bytes(run.stderr)
+    receipt = dict(argv=argv, startedAt=begun, endedAt=utc(),
+                   elapsedSeconds=round(time.monotonic() - tick, 3), exitCode=run.returncode,
+                   stdoutSha256=digest(run.stdout), stderrSha256=digest(run.stderr))
+    commands.append(receipt)
+    save('command-receipts.json', commands)
+    assert run.returncode == 0, label + ' failed; stop, no retry'
+    value = json.loads(run.stdout)
+    assert value['sourceCommit'] == candidate and value['dryRun'] is True
+    if label == 'manifest':
+        assert value['changes'] == []
+    else:
+        assert value['initializedNewHistory'] is False
+        assert value['fileCount'] == len(new) + 4
+    print(json.dumps(dict(phase=label, result=value), indent=2))
+
+result.update(finishedAt=utc(), semanticAndHashVerdict='PASS',
+              dryRunsPassed=True, approval='CONDITIONAL_APPROVE_MANIFEST_ONLY')
+save('semantics-and-hashes.json', result)

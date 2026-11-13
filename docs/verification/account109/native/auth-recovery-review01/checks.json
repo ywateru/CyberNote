@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-13",
+  "base": "29412dfb1fb1ed4281cdd14d7a5a5db1fe5a9f24",
+  "commit": "43b977c578e7ddb79fc624b1e5282e5d67d825ec",
+  "observedHeadAtFinalByteCheck": "4a5cdf8d1b61a482d0317967936fa93c33b5014d",
+  "verdict": "approved-source-integration",
+  "files": [
+    {
+      "path": "scripts/verification/account109-status-dto.test.mjs",
+      "sha256": "263983ff231fafec7de261ea627734376ca7001043b960b6688a66dce9c727d5",
+      "worktreeMatchesCommit": true
+    },
+    {
+      "path": "src-tauri/src/account/mod.rs",
+      "sha256": "6d2f7da3f4d9d0136508f5833b9dbcb3fdb300660822bf1bc5ab1d79d6c26328",
+      "worktreeMatchesCommit": true
+    },
+    {
+      "path": "src-tauri/src/account/provider.rs",
+      "sha256": "2f690843650099af3b34bb764d3855d80777929bc4dfa4841ed4eecc5ffadc8d",
+      "worktreeMatchesCommit": true
+    },
+    {
+      "path": "src-tauri/src/account/recovery.rs",
+      "sha256": "945fec40bd6f377b80535f6269aac25b5c93a3bdc3cbdeb32c038f258b2ac59d",
+      "worktreeMatchesCommit": true
+    },
+    {
+      "path": "src-tauri/src/account/types.rs",
+      "sha256": "7b09d764cbcad3442c0ae60bbf47bfc5884839476e58ceb7dd4db9f128ede773",
+      "worktreeMatchesCommit": true
+    },
+    {
+      "path": "src/AccountSettings.tsx",
+      "sha256": "f6c6d12674c45daee0be23fbd8215c9858d23f68e7d6bd0520c59cf778445ed9",
+      "worktreeMatchesCommit": true
+    },
+    {
+      "path": "src/account-client.ts",
+      "sha256": "f17dff38c16bbfcdc305d8a98aa9ccd3d2d5e72eb8b3b9b63fd32cdfb7a227d9",
+      "worktreeMatchesCommit": true
+    }
+  ],
+  "excludedPaths": [
+    "scripts/publish/manifest.json"
+  ],
+  "independentChecks": {
+    "nativeAccount": {
+      "passed": 25,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 234,
+      "testSeconds": 3.72,
+      "offline": true,
+      "locked": true,
+      "jobs": 2,
+      "debug": 0,
+      "incremental": 0
+    },
+    "nodePolicy": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 191.155042
+    },
+    "typecheckExitCode": 0,
+    "diffCheckExitCode": 0
+  },
+  "limits": [
+    "Auth-crate base reviewed separately by Erdos",
+    "No original store or App execution",
+    "Recovery uses production orchestration with fixture Host; actual Runtime/UI wiring inspected statically",
+    "Separate manifest commit excluded",
+    "No live recovery claim"
+  ],
+  "sharedTargetReleased": true
+}

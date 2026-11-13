@@ -1,0 +1,72 @@
+// Reviewer-only in-memory HTTP fixture, added only to a separate temporary snapshot.
+#[tokio::test]
+async fn reviewer_status_is_per_refresh_and_non400_cannot_reject_grant() {
+    let f = Fixture::new();
+    let dir = private_temp();
+    let fault = Arc::new(AtomicUsize::new(0));
+    let attempts = Arc::new(AtomicUsize::new(0));
+    let mut http = f.http(&config());
+    let fixture = f.clone();
+    let failure = fault.clone();
+    let requests = attempts.clone();
+    http.responder = Some(Arc::new(move |request: HttpRequest| {
+        let f = fixture.clone();
+        let failure = failure.clone();
+        let requests = requests.clone();
+        Box::pin(async move {
+            let refresh = request.uri().path() == "/oidc/token"
+                && url::form_urlencoded::parse(request.body())
+                    .any(|(key,value)| key == "grant_type" && value == "refresh_token");
+            if refresh {
+                requests.fetch_add(1, Ordering::SeqCst);
+                let (status, code) = match failure.load(Ordering::SeqCst) {
+                    1 => (429, "invalid_grant"),
+                    2 => return Err(AuthError::Configuration),
+                    3 => (503, "invalid_grant"),
+                    4 => (400, "invalid_grant"),
+                    5 => return Err(AuthError::Network),
+                    6 => (401, "invalid_grant"),
+                    7 => (302, "invalid_grant"),
+                    8 => (200, "invalid_grant"),
+                    9 => (400, "reviewer_unknown_error"),
+                    10 => (400, "invalid_client"),
+                    11 => return Ok(response(500, json!({"private":"synthetic-malformed-error"}))),
+                    12 => (503, "invalid_client"),
+                    13 => (400, "server_error"),
+                    14 => (418, "invalid_grant"),
+                    _ => return f.respond(request).await,
+                };
+                return Ok(response(status, json!({"error":code,"error_description":"synthetic-sensitive-description"})));
+            }
+            f.respond(request).await
+        })
+    }));
+    let path = dir.path().join("grant.json");
+    let client = AuthClient::initialize(config(), &path, http).unwrap();
+    let identity = f.login(&client).await;
+    let before = fs::read(&path).unwrap();
+    let expected = [
+        AuthError::Network, AuthError::Configuration, AuthError::Network,
+        AuthError::RefreshFailed, AuthError::Network, AuthError::TokenResponseInvalid,
+        AuthError::TokenResponseInvalid, AuthError::TokenResponseInvalid,
+        AuthError::TokenResponseInvalid, AuthError::Configuration, AuthError::Network,
+        AuthError::Network, AuthError::Network, AuthError::TokenResponseInvalid,
+    ];
+    for (index, wanted) in expected.into_iter().enumerate() {
+        fault.store(index+1, Ordering::SeqCst);
+        let error = client.restore().await.unwrap_err();
+        println!("review-status-case mode={} observed={error:?}", index+1);
+        assert_eq!(error, wanted);
+        assert_eq!(attempts.load(Ordering::SeqCst), index+1);
+        assert_eq!(fs::read(&path).unwrap(), before);
+        assert_eq!(f.revokes.load(Ordering::SeqCst), 0);
+        assert!(!client.cleanup_required().await);
+        assert!(!error.to_string().contains("synthetic-sensitive"));
+    }
+    // One explicit valid operation can still rotate after the error sequence.
+    fault.store(0, Ordering::SeqCst);
+    assert_eq!(client.restore().await.unwrap(), Some(identity));
+    assert_eq!(attempts.load(Ordering::SeqCst), 15);
+    let saved: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    assert_eq!(saved["refresh"], "fixture-refresh-2");
+}

@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "--locked",
+    "--manifest-path",
+    "/private/tmp/account109-auth-refresh-review03-counterexample/Cargo.toml",
+    "--lib",
+    "tests::reviewer_status_is_per_refresh_and_non400_cannot_reject_grant",
+    "--",
+    "--exact",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "settings": {
+    "CARGO_TARGET_DIR": "/private/tmp/account109-auth-refresh-review01-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "startedAt": "2026-11-13T06:22:35.988850+00:00",
+  "source": "Committed production code plus one reviewer-only in-memory fixture in separate snapshot",
+  "overlaySha256": "454d7009baa9f18e9118f4ee7c8c5e4542db33c1707984e3be3feb6bb2133341",
+  "fullCrateSuiteRun": false,
+  "exitCode": 0,
+  "timedOut": false,
+  "finishedAt": "2026-11-13T06:22:38.839286+00:00",
+  "elapsedSeconds": 2.850276958
+}

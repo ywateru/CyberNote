@@ -1,0 +1,56 @@
+{
+  "reviewedCommit": "29412dfb1fb1ed4281cdd14d7a5a5db1fe5a9f24",
+  "reviewBase": "5aef7718800275d6d6c37326f90bb345616094b4",
+  "parentCommit": "5aef7718800275d6d6c37326f90bb345616094b4",
+  "sourceSnapshot": "/private/tmp/account109-auth-refresh-review03-source",
+  "snapshotFiles": {
+    ".gitignore": "306fd52e74fca6746e12acc750f232de15e71da917756a1270d74c91f5eb7368",
+    "Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7",
+    "Cargo.toml": "8381e37c001a309920477b7b422f0d2ce624f3145d9a049f276cdda6f50ea84e",
+    "README.md": "13a8c30f9d32ba9fdd70123026b17d61bd0fd045bea9d3703b492a398c5056e5",
+    "examples/live_smoke.rs": "52337babdb7f5dd073a77521fdecf624f01b69481a95a7bfdcf129fa680a6b35",
+    "src/http.rs": "01186768e9bdec16db77254a259c9be7bfcb9bd1751e9c1860899cb5fc3eb780",
+    "src/lib.rs": "03b60b665143503cb628f7d903d925e726c0979b6b75f0ec3e82914c03afb216",
+    "src/storage.rs": "20e903f2229bcad6973e5bc01ee1dac72717672c812a36a49eb50b4c7f7d1369",
+    "src/tests.rs": "12b195dd666df81a3ab759c31c575f94230b3121ca6ff9ef6aede7ae4593fe62",
+    "src/types.rs": "27bd10c907dc7e191bea2e299a32aa0e5071e36961682b64ae9635d7183085fd"
+  },
+  "authorReceiptSha256": "89bd55ae08df4885cc8a4d97f611c7920ab4b9f0dc0579445b08add2090d9daf",
+  "authorLogSha256": "62fb0cd033dba1d21d1ecf66e3004290b7b05dfca2799edef44a54893dbb3f32",
+  "historicalReviewHashes": {
+    "auth-refresh-crate-review01": {
+      "reviewer-counterexample.rs.txt": "1c3d04d7596ea405df0ad5aeed3e5697efafe780de384b7f9f3d8e7126abeb35",
+      "exact-crate.stdout.txt": "6eb3e2647ee58321c7eb6ca85e77892466387b6d4992d1dfd1d72776366c47e0",
+      "exact-crate-receipt.json": "4ad6be882b4be0045225f6958de9ff243794f419c0e3147800c3689edaac974c",
+      "result.json": "b14180a91f91020cde8b049e7cf76294f90d9fa2c4f7ae4ecc7e605a50c1d6a1",
+      "precondition.json": "6efd839eb697f5fc2b061a5d2b86b0c994f53ec0674d59489dd60364672ecd0d",
+      "counterexample.stdout.txt": "293def5a63daaf3c4fa60f414353d3f271e5500a59e79e41e0e4677f3bbcff24",
+      "counterexample-receipt.json": "14d298ff527ef9a22a9652bda467ac454aad803e7e7e6e10e7952880aabade5e",
+      "README.md": "b815843d94b0a8e88bc39d53f8fd54752fc07bd71a5c427e06b19c819b7e1cb1",
+      "exact-crate.stderr.txt": "fbc883570a7c76aac8a0b583cd979f8f5e6ec311626d5bdd397cef0b1be0493b",
+      "counterexample.stderr.txt": "ff899100f482a58c6803c9188e90798a4ef1900d9f23f4b13c7bbc0e8904b652",
+      "source.diff": "8203066bf5cbea4ef85888e654f93bd33286cfa837d2d7769880230c6b04dc02",
+      "author-receipt.json": "64a04a648e3518098d7f663085b312b99bb1b8738cdad3b7c0c903ac3968281e",
+      "SHA256SUMS": "b27ba96fb1eec13e2dea4603ed1d284014ea790381e1163f5b84e20d78904672"
+    },
+    "auth-refresh-crate-review02": {
+      "reviewer-counterexample.rs.txt": "1c3d04d7596ea405df0ad5aeed3e5697efafe780de384b7f9f3d8e7126abeb35",
+      "exact-crate.stdout.txt": "5ce17d9c0921c7e3abac4f7c6331e9e5b40e95754752c6e46e54ed353d3c9756",
+      "exact-crate-receipt.json": "7f0c880a949fbd0addb11dbb6b887f45f6f6caebd0480d43e29e11e6d653fff5",
+      "result.json": "a2b45a7fb757b730e259006b2b2d7f1cf5a1eb8c3cd9659048285b09796c10fe",
+      "precondition.json": "2f9beedbdfbf57ba7acbc363d19944e0f57077f89e461bcb70ff38f836c60641",
+      "counterexample.stdout.txt": "34c34433f8f6ffe01f4c6dabea599d24cb86aed85ce64b55e0e0541839bfc05d",
+      "counterexample-receipt.json": "0a0754f0bb2e0f45777803730bc82cc83a2862c05eb136f591f3113fb743c0d4",
+      "README.md": "a2e12e002c48e927054fbd4afb39dc1f37e83805a18a89ae5c7d9cebc2ebe7eb",
+      "fix.diff": "67f916daa9b9a93e1c0511da550520bfe2c0be992120a1aa630b1e7c8e58a70b",
+      "exact-crate.stderr.txt": "e072925c263f4a24327832bd179726da92ccff47bbb5ebaa1ab2e761f1230df7",
+      "counterexample.stderr.txt": "84d2645fb6482408eb666e680d10e09d971495333ed5454bbd076beed21e8b62",
+      "author-receipt.json": "422c63c64d7973658abd0fc374062ccb298a1509a37489e56414e99de2c74857",
+      "SHA256SUMS": "6bd7750441879c84ebd70b30e7dc9533567a9d3112a1c9dfaef95b6fe1cd6471"
+    }
+  },
+  "ownedTarget": "/private/tmp/account109-auth-refresh-review01-target",
+  "sharedAuthorTargetUsed": false,
+  "nativeUiReviewed": false,
+  "authorWorktreeModified": false
+}

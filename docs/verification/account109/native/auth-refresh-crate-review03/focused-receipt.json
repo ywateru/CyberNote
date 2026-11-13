@@ -1,0 +1,54 @@
+{
+  "settings": {
+    "CARGO_TARGET_DIR": "/private/tmp/account109-auth-refresh-review01-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "tests": [
+    {
+      "label": "classification",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "/private/tmp/account109-auth-refresh-review03-source/Cargo.toml",
+        "--lib",
+        "tests::refresh_request_errors_keep_categories_and_owner_until_explicit_retry",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "startedAt": "2026-11-13T06:21:28.153781+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "finishedAt": "2026-11-13T06:21:31.362784+00:00",
+      "elapsedSeconds": 3.208792334
+    },
+    {
+      "label": "interrupted-reauth",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "/private/tmp/account109-auth-refresh-review03-source/Cargo.toml",
+        "--lib",
+        "tests::rejected_owner_then_interrupted_reauthorization_can_explicitly_exit_and_sign_in_again",
+        "--",
+        "--exact",
+        "--test-threads=1"
+      ],
+      "startedAt": "2026-11-13T06:21:31.363194+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "finishedAt": "2026-11-13T06:21:31.561085+00:00",
+      "elapsedSeconds": 0.19791104199999987
+    }
+  ],
+  "fullCrateSuiteRun": false
+}

@@ -1,0 +1,10 @@
+   Compiling account-auth v0.1.0 (/private/tmp/account109-auth-refresh-review01-counterexample)
+    Finished `test` profile [unoptimized] target(s) in 2.24s
+     Running unittests src/lib.rs (/private/tmp/account109-auth-refresh-review01-target/debug/deps/account_auth-b4ca485a30fce174)
+
+thread 'tests::reviewer_server_response_does_not_equate_all_errors_with_invalid_grant' (60812974) panicked at src/tests.rs:1347:5:
+assertion `left == right` failed: Only invalid_grant confirms grant rejection; temporary/config/unknown errors must remain distinct
+  left: [RefreshFailed, RefreshFailed, RefreshFailed, RefreshFailed, RefreshFailed]
+ right: [RefreshFailed, Network, Network, Configuration, TokenResponseInvalid]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--lib`

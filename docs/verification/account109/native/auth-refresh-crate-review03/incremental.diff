@@ -1,0 +1,129 @@
+diff --git a/crates/account-auth/src/lib.rs b/crates/account-auth/src/lib.rs
+index d64e0012..c9967b5c 100644
+--- a/crates/account-auth/src/lib.rs
++++ b/crates/account-auth/src/lib.rs
+@@ -581,25 +581,60 @@ impl AuthClient {
+         let request = client
+             .exchange_refresh_token(&refresh)
+             .add_extra_param("resource", self.inner.config.resource.as_str());
+-        let response = request
+-            .request_async(&self.inner.http)
+-            .await
+-            .map_err(|error| match error {
++        // RequestTokenError omits the HTTP status. Keep only this per-request
++        // number so a 5xx body claiming invalid_grant cannot trigger replacement.
++        let status = Arc::new(std::sync::atomic::AtomicU16::new(0));
++        let observed = status.clone();
++        let pinned_http = self.inner.http.clone();
++        let http = move |request| {
++            let status = observed.clone();
++            let pinned_http = pinned_http.clone();
++            async move {
++                let response = oauth2::AsyncHttpClient::call(&pinned_http, request).await?;
++                status.store(
++                    response.status().as_u16(),
++                    std::sync::atomic::Ordering::Relaxed,
++                );
++                Ok::<_, AuthError>(response)
++            }
++        };
++        let response = request.request_async(&http).await.map_err(|error| {
++            let status = status.load(std::sync::atomic::Ordering::Relaxed);
++            if matches!(status, 429 | 500..=599) {
++                return AuthError::Network;
++            }
++            match error {
+                 // Transport/configuration failures do not establish grant rejection.
+                 // Preserve only our finite categories; never replay an uncertain refresh.
+                 oauth2::RequestTokenError::Request(error) => error,
+                 oauth2::RequestTokenError::ServerResponse(response) => {
+                     use oauth2::basic::BasicErrorResponseType as E;
+                     match response.error() {
+-                        E::InvalidGrant => AuthError::RefreshFailed,
+-                        E::InvalidClient | E::UnauthorizedClient | E::InvalidRequest
+-                        | E::UnsupportedGrantType | E::InvalidScope => AuthError::Configuration,
+-                        E::Extension(code) if matches!(code.as_str(), "temporarily_unavailable" | "server_error") => AuthError::Network,
++                        E::InvalidGrant if status == 400 => AuthError::RefreshFailed,
++                        E::InvalidClient
++                        | E::UnauthorizedClient
++                        | E::InvalidRequest
++                        | E::UnsupportedGrantType
++                        | E::InvalidScope
++                            if matches!(status, 400 | 401) =>
++                        {
++                            AuthError::Configuration
++                        }
++                        E::Extension(code)
++                            if matches!(status, 400 | 401)
++                                && matches!(
++                                    code.as_str(),
++                                    "temporarily_unavailable" | "server_error"
++                                ) =>
++                        {
++                            AuthError::Network
++                        }
+                         _ => AuthError::TokenResponseInvalid,
+                     }
+                 }
+                 _ => AuthError::TokenResponseInvalid,
+-            })?;
++            }
++        })?;
+         let verified = if response
+             .refresh_token()
+             .is_some_and(|token| token.secret().is_empty())
+diff --git a/crates/account-auth/src/tests.rs b/crates/account-auth/src/tests.rs
+index 861607d6..8b354afe 100644
+--- a/crates/account-auth/src/tests.rs
++++ b/crates/account-auth/src/tests.rs
+@@ -625,6 +625,10 @@ async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry()
+         (8, AuthError::TokenResponseInvalid),
+         (9, AuthError::Configuration),
+         (10, AuthError::TokenResponseInvalid),
++        (11, AuthError::Network),
++        (12, AuthError::TokenResponseInvalid),
++        (13, AuthError::TokenResponseInvalid),
++        (14, AuthError::TokenResponseInvalid),
+     ] {
+         let f = Fixture::new();
+         let dir = private_temp();
+@@ -655,6 +659,10 @@ async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry()
+                         8 => return Ok(response(400, json!({"error":"unknown_fixture_rejection","error_description":"fixture-sensitive-response"}))),
+                         9 => return Ok(response(400, json!({"error":"invalid_scope","error_description":"fixture-sensitive-response"}))),
+                         10 => panic!("synthetic refresh owner failure"),
++                        11 => return Ok(response(503, json!({"error":"invalid_grant"}))),
++                        12 => return Ok(response(401, json!({"error":"invalid_grant"}))),
++                        13 => return Ok(response(302, json!({"error":"invalid_grant"}))),
++                        14 => return Ok(response(200, json!({"error":"invalid_grant"}))),
+                         _ => {}
+                     }
+                 }
+@@ -708,6 +716,28 @@ async fn local_refresh_prerequisites_and_freshness_do_not_claim_server_rejection
+     assert_eq!(fs::read(&path).unwrap(), before);
+ }
+ 
++#[tokio::test]
++async fn rejected_owner_then_interrupted_reauthorization_can_explicitly_exit_and_sign_in_again() {
++    let f = Fixture::new();
++    let dir = private_temp();
++    let client = f.client(&dir).await;
++    let identity = f.login(&client).await;
++    f.fail_refresh.store(true, Ordering::SeqCst);
++    assert_eq!(client.restore().await.unwrap_err(), AuthError::RefreshFailed);
++    client.logout().await.unwrap();
++    assert!(!dir.path().join("grant.json").exists());
++    let (transaction, _) = f.begin(&client, false).await;
++    drop(transaction); // The host could not open the browser; no code was exchanged.
++    assert!(client.restore().await.unwrap().is_none());
++    assert!(!client.cleanup_required().await);
++    assert_eq!(f.tokens.load(Ordering::SeqCst), 1);
++    client.logout().await.unwrap(); // Explicit UI exit is safe even without a grant.
++    assert_eq!(f.revokes.load(Ordering::SeqCst), 1);
++    f.fail_refresh.store(false, Ordering::SeqCst);
++    assert_eq!(f.login(&client).await, identity);
++    assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
++}
++
+ #[tokio::test]
+ async fn refresh_and_revocation_failures_preserve_the_only_owner_and_errors_are_redacted() {
+     let f = Fixture::new();

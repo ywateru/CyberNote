@@ -1,0 +1,20 @@
+
+running 1 test
+test tests::reviewer_status_is_per_refresh_and_non400_cannot_reject_grant ... review-status-case mode=1 observed=Network
+review-status-case mode=2 observed=Configuration
+review-status-case mode=3 observed=Network
+review-status-case mode=4 observed=RefreshFailed
+review-status-case mode=5 observed=Network
+review-status-case mode=6 observed=TokenResponseInvalid
+review-status-case mode=7 observed=TokenResponseInvalid
+review-status-case mode=8 observed=TokenResponseInvalid
+review-status-case mode=9 observed=TokenResponseInvalid
+review-status-case mode=10 observed=Configuration
+review-status-case mode=11 observed=Network
+review-status-case mode=12 observed=Network
+review-status-case mode=13 observed=Network
+review-status-case mode=14 observed=TokenResponseInvalid
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.04s
+

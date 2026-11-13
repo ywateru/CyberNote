@@ -12,6 +12,7 @@
 - 原生错误保留有限的操作阶段和 SDK provider 原因，前端严格校验 DTO，避免第三方原文或凭据进入报告，见 [诊断审阅](native/coordination-diagnostics-review01.md)。
 - 测试执行器区分 120 秒连接预算和 60 秒数据预算；保留失败原库与证据。为完成用户允许的命令调用验证，新增只在显式桌面 debug 测试模式生效的无 WebView 入口，使用真实 Session token 与生产协调协议，不修改生产同步权限或提交规则。
 - 三端执行器在启动桌面或同步前保存手机原有四篇全文及附件证据，并在合并、补齐和结束检查保全；设备外 37 项及独审通过，但尚无三端实际运行结果。手机起源附件明确列为未执行，见 [复审](macos/three-peer-runner-review02.md)。
+- 本轮登录恢复修正已合入 `99198fd`、`35ebf385`、`0fe41dca`：只有 HTTP 400 的 typed `invalid_grant` 才归为刷新拒绝；网络/429/5xx、配置与无效响应保持各自有限类别。网络“重试连接”复用保留授权和严格 bind，尊重已暂停状态，状态轮询仍只读；未知错误不能触发 replacement logout。独立 native 25 项、Node policy 6 项、auth crate 与增量反例，以及父级 [124 项 Node 整合](native/recovery-integration01.md)均通过。此为源码/fixture 验证，新 GUI 实际恢复仍待执行。
 
 ## 实际桌面证据
 

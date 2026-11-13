@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "verdict": "REQUEST_CHANGES",
+  "priority": "P1",
+  "reviewedCommit": "7e8ddd17bfc75e34344b7d2bbb5210fc2abc8eff",
+  "baseCommit": "5a42891787272b0448c39d6b28f4063d0d18382f",
+  "reviewScope": [
+    "crates/account-auth/src/lib.rs",
+    "crates/account-auth/src/tests.rs"
+  ],
+  "finding": {
+    "file": "crates/account-auth/src/lib.rs",
+    "line": 591,
+    "title": "All OAuth ServerResponse errors still collapse into RefreshFailed",
+    "impact": "Temporary server failures, invalid client configuration, unknown server errors and explicit invalid_grant remain indistinguishable; this error cannot safely authorize grant replacement/reauthorization.",
+    "cases": [
+      {
+        "httpStatus": 400,
+        "syntheticOAuthError": "invalid_grant",
+        "observedFiniteError": "RefreshFailed"
+      },
+      {
+        "httpStatus": 503,
+        "syntheticOAuthError": "server_error",
+        "observedFiniteError": "RefreshFailed"
+      },
+      {
+        "httpStatus": 503,
+        "syntheticOAuthError": "temporarily_unavailable",
+        "observedFiniteError": "RefreshFailed"
+      },
+      {
+        "httpStatus": 401,
+        "syntheticOAuthError": "invalid_client",
+        "observedFiniteError": "RefreshFailed"
+      },
+      {
+        "httpStatus": 400,
+        "syntheticOAuthError": "reviewer_unknown_error",
+        "observedFiniteError": "RefreshFailed"
+      }
+    ]
+  },
+  "independentTests": {
+    "exactCommittedCrate": {
+      "passed": 21,
+      "failed": 0,
+      "ignored": 1,
+      "ignoredKind": "existing opt-in public discovery/JWKS live test; not executed"
+    },
+    "reviewerCounterexample": {
+      "passed": 0,
+      "failed": 1,
+      "expectedDiagnosticFailure": true,
+      "exitCode": 101,
+      "allFiveCasesExecuted": true
+    }
+  },
+  "preservedBoundaries": {
+    "requestNetworkConfigurationFinitePassthrough": true,
+    "parseOtherResponseInvalidFinite": true,
+    "serverErrorsNeverReturnSuccess": true,
+    "singleRequestPerExplicitRestore": true,
+    "ownerUnchangedAndNotRevokedOnErrors": true,
+    "rotationPersistedBeforeSuccessfulReturnOrValidationErrorPublication": true,
+    "originalSignatureIssuerAudienceSubjectChecksChanged": false
+  },
+  "requiredCorrection": [
+    "Introduce a finite typed distinction for confirmed invalid_grant; do not treat generic RefreshFailed as equivalent to server rejection.",
+    "Map server_error/temporarily_unavailable and relevant HTTP 503 failures to non-reauthorization temporary/network categories.",
+    "Map invalid_client and other client/request policy errors to finite configuration categories.",
+    "Keep unknown OAuth extension errors, malformed/invalid responses and missing/local unusable refresh outcomes non-reauthorizing by default.",
+    "Retain no automatic replay, raw-error redaction, owner preservation, cancellation and durable rotation ordering; add 503/config/unknown negative fixtures."
+  ],
+  "sourceSnapshotStillMatchesCommit": true,
+  "sharedAuthorTargetUsed": false,
+  "ownedIndependentTarget": "/private/tmp/account109-auth-refresh-review01-target",
+  "ownedTestProcessesEnded": true,
+  "ownedTargetReleased": true,
+  "authorUncommittedNativeUiReviewed": false,
+  "authorWorktreeModified": false,
+  "originalStoresAppsAdbNetworkUsed": false,
+  "historicalReloginRootCauseDetermined": false,
+  "finishedAt": "2026-11-13T06:07:48.452931+00:00"
+}

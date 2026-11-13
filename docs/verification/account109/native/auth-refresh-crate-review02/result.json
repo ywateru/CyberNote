@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "verdict": "APPROVE",
+  "blockingFindings": [],
+  "reviewedCommit": "5aef7718800275d6d6c37326f90bb345616094b4",
+  "previousReviewedCommit": "7e8ddd17bfc75e34344b7d2bbb5210fc2abc8eff",
+  "changedCommittedFiles": [
+    "crates/account-auth/src/lib.rs",
+    "crates/account-auth/src/tests.rs",
+    "crates/account-auth/src/types.rs"
+  ],
+  "scope": "Committed auth crate only; no native/UI approval.",
+  "historicalP1": {
+    "archive": "../auth-refresh-crate-review01",
+    "unchanged": true,
+    "resolvedByReviewedCommit": true,
+    "byteIdenticalCounterexampleOverlay": true,
+    "overlaySha256": "1c3d04d7596ea405df0ad5aeed3e5697efafe780de384b7f9f3d8e7126abeb35"
+  },
+  "classificationCases": [
+    {
+      "httpStatus": 400,
+      "syntheticOAuthError": "invalid_grant",
+      "observedFiniteError": "RefreshFailed"
+    },
+    {
+      "httpStatus": 503,
+      "syntheticOAuthError": "server_error",
+      "observedFiniteError": "Network"
+    },
+    {
+      "httpStatus": 503,
+      "syntheticOAuthError": "temporarily_unavailable",
+      "observedFiniteError": "Network"
+    },
+    {
+      "httpStatus": 401,
+      "syntheticOAuthError": "invalid_client",
+      "observedFiniteError": "Configuration"
+    },
+    {
+      "httpStatus": 400,
+      "syntheticOAuthError": "reviewer_unknown_error",
+      "observedFiniteError": "TokenResponseInvalid"
+    }
+  ],
+  "localCases": {
+    "missingRefreshToken": "MissingRefreshToken",
+    "unsatisfiedAccessFreshness": "TokenResponseInvalid",
+    "spawnedOwnerTaskJoinFailure": "TokenResponseInvalid"
+  },
+  "independentTests": {
+    "exactCommittedCrate": {
+      "passed": 22,
+      "failed": 0,
+      "ignored": 1,
+      "ignoredKind": "existing opt-in public discovery/JWKS test; not executed"
+    },
+    "originalP1Counterexample": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "preservedBoundaries": {
+    "finiteRequestNetworkConfigurationPassthrough": true,
+    "unknownAndParseNonReauthorizingByClassification": true,
+    "onlyExplicitInvalidGrantProducesRefreshFailed": true,
+    "noAutomaticRefreshReplay": true,
+    "noRawProviderErrorTextForwarded": true,
+    "ownerPreservedOnFailedRefresh": true,
+    "rotationPersistenceBeforePublication": true,
+    "issuerAudienceSignatureSubjectValidationUnchanged": true
+  },
+  "sourceSnapshotStillMatchesCommit": true,
+  "authorUncommittedNativeUiReviewed": false,
+  "authorWorktreeModified": false,
+  "sharedAuthorTargetUsed": false,
+  "ownedTarget": "/private/tmp/account109-auth-refresh-review01-target",
+  "ownedTestProcessesEnded": true,
+  "ownedTargetReleased": true,
+  "originalStoreAppAdbNetworkUsed": false,
+  "historicalReloginRootCauseDetermined": false,
+  "finishedAt": "2026-11-13T06:13:43.523550+00:00"
+}

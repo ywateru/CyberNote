@@ -1,0 +1,240 @@
+{
+  "startedAt": "2026-11-13T06:28:52.335940+00:00",
+  "candidate": "4a5cdf8d1b61a482d0317967936fa93c33b5014d",
+  "parent": "43b977c578e7ddb79fc624b1e5282e5d67d825ec",
+  "commitChangedPaths": [
+    "scripts/publish/manifest.json"
+  ],
+  "manifestBeforeSha256": "32dc5fa080f151ff2696c926e561edf89cfc3eec72d7e8ac375ee4a7b494cfb4",
+  "manifestAfterSha256": "7a8f7950b87facb6b65598eda9eb8ddb1f8cf9dc013439e361d7588d83b7cf75",
+  "manifestBytesBefore": 313052,
+  "manifestBytesAfter": 313161,
+  "manifestCountBefore": 1767,
+  "manifestCountAfter": 1768,
+  "topLevelFieldsUnchangedExceptFiles": true,
+  "changedExistingPins": [
+    "crates/account-auth/src/lib.rs",
+    "crates/account-auth/src/tests.rs",
+    "crates/account-auth/src/types.rs",
+    "src-tauri/src/account/config.rs",
+    "src-tauri/src/account/enrollment.rs",
+    "src-tauri/src/account/mod.rs",
+    "src-tauri/src/account/provider.rs",
+    "src-tauri/src/account/transport.rs",
+    "src-tauri/src/account/types.rs",
+    "src/AccountSettings.tsx",
+    "src/account-client.ts"
+  ],
+  "addedExactPaths": [
+    "src-tauri/src/account/recovery.rs"
+  ],
+  "removedPaths": [],
+  "wildcardPathsAdded": false,
+  "selfRuleUnchanged": true,
+  "firstPartyThirdPartyRuntimeAssetsUnchanged": true,
+  "processMaterialPathsAdded": false,
+  "policyAndToolBytesUnchanged": true,
+  "pins": [
+    {
+      "path": "src-tauri/src/account/config.rs",
+      "group": "alias",
+      "oldPin": "2a2dc19fc5f666f99ba2e0d5f19022f8607efa9c787b3d47d2a05b288dc122dd",
+      "newPin": "ec2a1e6ad93568f3ef46f78c9561d4b0ed2ec2dd94491c29226d46b151db0e94",
+      "blobBytes": 1728,
+      "mode": "100644",
+      "referenceCommit": "72b397a334494acf2fb12f1d12c6325c4f602f32",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "src-tauri/src/account/enrollment.rs",
+      "group": "alias",
+      "oldPin": "60e255baf33b792f45c467029c44da67ed050b15a42296d6bdd5808304a50e41",
+      "newPin": "ad5f93aeff0565e1b29b7c852d94bc47ba65061bbadac6061025dae3b6d2dda9",
+      "blobBytes": 30219,
+      "mode": "100644",
+      "referenceCommit": "72b397a334494acf2fb12f1d12c6325c4f602f32",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "src-tauri/src/account/transport.rs",
+      "group": "alias",
+      "oldPin": "b40b0954c3dce75df211c45b21c977c769ff925fdf9ba8fb518c94dd4bb00a26",
+      "newPin": "c2df9abe0687c559772230099142d333953a90cca823742f459b0bf5a3dab792",
+      "blobBytes": 28020,
+      "mode": "100644",
+      "referenceCommit": "72b397a334494acf2fb12f1d12c6325c4f602f32",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "crates/account-auth/src/lib.rs",
+      "group": "auth",
+      "oldPin": "9c1695e514e911fc4f98622a85444b4027a6355a99b5057e586ed8360838d458",
+      "newPin": "03b60b665143503cb628f7d903d925e726c0979b6b75f0ec3e82914c03afb216",
+      "blobBytes": 29281,
+      "mode": "100644",
+      "referenceCommit": "29412dfb1fb1ed4281cdd14d7a5a5db1fe5a9f24",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "crates/account-auth/src/tests.rs",
+      "group": "auth",
+      "oldPin": "7aa7bc6818554371e4a6a6cab91e8e77854fa25bd955d5e3768daf189cd11c50",
+      "newPin": "12b195dd666df81a3ab759c31c575f94230b3121ca6ff9ef6aede7ae4593fe62",
+      "blobBytes": 52215,
+      "mode": "100644",
+      "referenceCommit": "29412dfb1fb1ed4281cdd14d7a5a5db1fe5a9f24",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "crates/account-auth/src/types.rs",
+      "group": "auth",
+      "oldPin": "7691cf1b2e6f99d910455b807568b7a8aad41a8dbe16708eea7877abb3adad13",
+      "newPin": "27bd10c907dc7e191bea2e299a32aa0e5071e36961682b64ae9635d7183085fd",
+      "blobBytes": 6035,
+      "mode": "100644",
+      "referenceCommit": "29412dfb1fb1ed4281cdd14d7a5a5db1fe5a9f24",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "src-tauri/src/account/mod.rs",
+      "group": "native_ui_pending_cicero_source_approval",
+      "oldPin": "7b5c93cfd4d162ab6ce4588fb59ab5bdc7d9cf44ce8817d90b697cf8c6612d22",
+      "newPin": "6d2f7da3f4d9d0136508f5833b9dbcb3fdb300660822bf1bc5ab1d79d6c26328",
+      "blobBytes": 37456,
+      "mode": "100644",
+      "referenceCommit": "43b977c578e7ddb79fc624b1e5282e5d67d825ec",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "src-tauri/src/account/provider.rs",
+      "group": "native_ui_pending_cicero_source_approval",
+      "oldPin": "aa4f066e04e70e2e8b37c69a095e39fff5c6c631502b346903f1d99e7829c313",
+      "newPin": "2f690843650099af3b34bb764d3855d80777929bc4dfa4841ed4eecc5ffadc8d",
+      "blobBytes": 10325,
+      "mode": "100644",
+      "referenceCommit": "43b977c578e7ddb79fc624b1e5282e5d67d825ec",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "src-tauri/src/account/types.rs",
+      "group": "native_ui_pending_cicero_source_approval",
+      "oldPin": "e81613a73782fdcdf0368d0bcdab3ee1f8cea8bb17b822c8ab52d4c18bd8d74e",
+      "newPin": "7b09d764cbcad3442c0ae60bbf47bfc5884839476e58ceb7dd4db9f128ede773",
+      "blobBytes": 14547,
+      "mode": "100644",
+      "referenceCommit": "43b977c578e7ddb79fc624b1e5282e5d67d825ec",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "src-tauri/src/account/recovery.rs",
+      "group": "native_ui_pending_cicero_source_approval",
+      "oldPin": null,
+      "newPin": "945fec40bd6f377b80535f6269aac25b5c93a3bdc3cbdeb32c038f258b2ac59d",
+      "blobBytes": 7096,
+      "mode": "100644",
+      "referenceCommit": "43b977c578e7ddb79fc624b1e5282e5d67d825ec",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "src/account-client.ts",
+      "group": "native_ui_pending_cicero_source_approval",
+      "oldPin": "16e4b281e0d63d9f94ec17cbdefe638d32246ec947656a6228b06c218271750d",
+      "newPin": "f17dff38c16bbfcdc305d8a98aa9ccd3d2d5e72eb8b3b9b63fd32cdfb7a227d9",
+      "blobBytes": 8093,
+      "mode": "100644",
+      "referenceCommit": "43b977c578e7ddb79fc624b1e5282e5d67d825ec",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    },
+    {
+      "path": "src/AccountSettings.tsx",
+      "group": "native_ui_pending_cicero_source_approval",
+      "oldPin": "20e9bbeb468da931d9d0413052630337fe61a1692cf36b4eb06541b55bdc7482",
+      "newPin": "f6c6d12674c45daee0be23fbd8215c9858d23f68e7d6bd0520c59cf778445ed9",
+      "blobBytes": 16767,
+      "mode": "100644",
+      "referenceCommit": "43b977c578e7ddb79fc624b1e5282e5d67d825ec",
+      "matchesParentSource": true,
+      "matchesReferenceSource": true,
+      "sha256Matches": true,
+      "sourceApprovalGrantedByThisReview": false
+    }
+  ],
+  "tools": [
+    {
+      "path": "scripts/publish/export.mjs",
+      "sha256": "c661e6fccc5b977079b450b30a0e63266c665f7a3a9100345e09b4743eb404cd",
+      "bytes": 7992,
+      "matchesCandidateAndParentAndWorkingFile": true
+    },
+    {
+      "path": "scripts/publish/manifest.mjs",
+      "sha256": "408b4dbd552e18d3519c9f7c01a79d0a588c83f42d209b8f9de16280b81dfbc3",
+      "bytes": 3121,
+      "matchesCandidateAndParentAndWorkingFile": true
+    },
+    {
+      "path": "scripts/publish/policy.mjs",
+      "sha256": "8d21a8575c6d0eec0dc680571adfdfb1a453bd97bdc4551bb953284455acf8e1",
+      "bytes": 10757,
+      "matchesCandidateAndParentAndWorkingFile": true
+    },
+    {
+      "path": "scripts/publish/history.mjs",
+      "sha256": "9921ec46cf1ac32f8a6e1b1a98016f75b14dce69b83f09b14eecef7586630e98",
+      "bytes": 1825,
+      "matchesCandidateAndParentAndWorkingFile": true
+    },
+    {
+      "path": "scripts/publish/package-transform.mjs",
+      "sha256": "6f1e42c7ec720a5a0de618687d29d69b74733be874754dcb2db3e0c61556950b",
+      "bytes": 1982,
+      "matchesCandidateAndParentAndWorkingFile": true
+    }
+  ],
+  "approvalBoundary": "Manifest semantics and exact source hash verification only; conditional on Cicero approval of native/UI source at parent commit. Pins do not replace source review.",
+  "restrictions": {
+    "noSeal": true,
+    "noTarget": true,
+    "noRemoteOperation": true,
+    "noLiveTest": true,
+    "noPublishingTestsRepeated": true,
+    "noAppAdbOrNetworkOperation": true
+  },
+  "finishedAt": "2026-11-13T06:29:05.739977+00:00",
+  "semanticAndHashVerdict": "PASS",
+  "dryRunsPassed": true,
+  "approval": "CONDITIONAL_APPROVE_MANIFEST_ONLY"
+}

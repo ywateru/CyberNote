@@ -1,0 +1,131 @@
+diff --git a/crates/account-auth/src/lib.rs b/crates/account-auth/src/lib.rs
+index 589ac27d..d64e0012 100644
+--- a/crates/account-auth/src/lib.rs
++++ b/crates/account-auth/src/lib.rs
+@@ -228,7 +228,7 @@ impl AuthClient {
+         let client = self.clone();
+         tokio::spawn(async move { client.access_owned(min_validity, force_refresh).await })
+             .await
+-            .map_err(|_| AuthError::RefreshFailed)?
++            .map_err(|_| AuthError::TokenResponseInvalid)?
+     }
+     pub async fn restore(&self) -> Result<Option<Identity>, AuthError> {
+         let client = self.clone();
+@@ -241,7 +241,7 @@ impl AuthClient {
+             Ok(state.grant.as_ref().and_then(|g| g.identity.clone()))
+         })
+         .await
+-        .map_err(|_| AuthError::RefreshFailed)?
++        .map_err(|_| AuthError::TokenResponseInvalid)?
+     }
+     /// Read-only local state: the host can offer explicit grant cleanup without a profile.
+     /// This does not discover, refresh, revoke, create an identity, or return credentials.
+@@ -557,7 +557,7 @@ impl AuthClient {
+         }
+         let g = state.grant.as_ref().ok_or(AuthError::NoSession)?;
+         if !g.usable || g.expires_at <= now()?.saturating_add(min.as_secs()) {
+-            return Err(AuthError::RefreshFailed);
++            return Err(AuthError::TokenResponseInvalid);
+         }
+         Ok(AccessToken(Zeroizing::new(g.access.clone())))
+     }
+@@ -572,7 +572,7 @@ impl AuthClient {
+                 .as_ref()
+                 .filter(|token| !token.is_empty())
+                 .cloned()
+-                .ok_or(AuthError::RefreshFailed)?,
++                .ok_or(AuthError::MissingRefreshToken)?,
+         );
+         let nonce = Zeroizing::new(g.nonce.clone());
+         let old_identity = g.identity.clone().ok_or(AuthError::InvalidIdentity)?;
+@@ -588,7 +588,16 @@ impl AuthClient {
+                 // Transport/configuration failures do not establish grant rejection.
+                 // Preserve only our finite categories; never replay an uncertain refresh.
+                 oauth2::RequestTokenError::Request(error) => error,
+-                oauth2::RequestTokenError::ServerResponse(_) => AuthError::RefreshFailed,
++                oauth2::RequestTokenError::ServerResponse(response) => {
++                    use oauth2::basic::BasicErrorResponseType as E;
++                    match response.error() {
++                        E::InvalidGrant => AuthError::RefreshFailed,
++                        E::InvalidClient | E::UnauthorizedClient | E::InvalidRequest
++                        | E::UnsupportedGrantType | E::InvalidScope => AuthError::Configuration,
++                        E::Extension(code) if matches!(code.as_str(), "temporarily_unavailable" | "server_error") => AuthError::Network,
++                        _ => AuthError::TokenResponseInvalid,
++                    }
++                }
+                 _ => AuthError::TokenResponseInvalid,
+             })?;
+         let verified = if response
+diff --git a/crates/account-auth/src/tests.rs b/crates/account-auth/src/tests.rs
+index f9787792..861607d6 100644
+--- a/crates/account-auth/src/tests.rs
++++ b/crates/account-auth/src/tests.rs
+@@ -619,6 +619,12 @@ async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry()
+         (2, AuthError::Configuration),
+         (3, AuthError::RefreshFailed),
+         (4, AuthError::TokenResponseInvalid),
++        (5, AuthError::Network),
++        (6, AuthError::Network),
++        (7, AuthError::Configuration),
++        (8, AuthError::TokenResponseInvalid),
++        (9, AuthError::Configuration),
++        (10, AuthError::TokenResponseInvalid),
+     ] {
+         let f = Fixture::new();
+         let dir = private_temp();
+@@ -643,6 +649,12 @@ async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry()
+                         2 => return Err(AuthError::Configuration),
+                         3 => return Ok(response(400, json!({"error":"invalid_grant","error_description":"fixture-sensitive-response"}))),
+                         4 => return Ok(response(200, json!({"private":"fixture-sensitive-response"}))),
++                        5 => return Ok(response(503, json!({"error":"temporarily_unavailable","error_description":"fixture-sensitive-response"}))),
++                        6 => return Ok(response(500, json!({"error":"server_error","error_description":"fixture-sensitive-response"}))),
++                        7 => return Ok(response(401, json!({"error":"invalid_client","error_description":"fixture-sensitive-response"}))),
++                        8 => return Ok(response(400, json!({"error":"unknown_fixture_rejection","error_description":"fixture-sensitive-response"}))),
++                        9 => return Ok(response(400, json!({"error":"invalid_scope","error_description":"fixture-sensitive-response"}))),
++                        10 => panic!("synthetic refresh owner failure"),
+                         _ => {}
+                     }
+                 }
+@@ -672,6 +684,30 @@ async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry()
+     }
+ }
+ 
++#[tokio::test]
++async fn local_refresh_prerequisites_and_freshness_do_not_claim_server_rejection() {
++    let f = Fixture::new();
++    let dir = private_temp();
++    let client = f.client(&dir).await;
++    f.login(&client).await;
++    // A successful rotation whose lifetime cannot satisfy this caller is not invalid_grant.
++    assert_eq!(client.access_token(Duration::from_secs(7200), true).await.unwrap_err(), AuthError::TokenResponseInvalid);
++    let path = dir.path().join("grant.json");
++    let mut saved: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
++    assert_eq!(saved["refresh"], "fixture-refresh-2");
++    assert_eq!(client.access_token(Duration::ZERO, false).await.unwrap().secret(), "fixture-access-2");
++    drop(client);
++    // A malformed local owner must not be described as a response from the server.
++    saved["refresh"] = Value::Null;
++    fs::write(&path, serde_json::to_vec(&saved).unwrap()).unwrap();
++    let before = fs::read(&path).unwrap();
++    let client = f.client(&dir).await;
++    assert_eq!(client.restore().await.unwrap_err(), AuthError::MissingRefreshToken);
++    assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
++    assert_eq!(f.revokes.load(Ordering::SeqCst), 0);
++    assert_eq!(fs::read(&path).unwrap(), before);
++}
++
+ #[tokio::test]
+ async fn refresh_and_revocation_failures_preserve_the_only_owner_and_errors_are_redacted() {
+     let f = Fixture::new();
+diff --git a/crates/account-auth/src/types.rs b/crates/account-auth/src/types.rs
+index b447ff63..9258a4d8 100644
+--- a/crates/account-auth/src/types.rs
++++ b/crates/account-auth/src/types.rs
+@@ -127,6 +127,7 @@ pub enum AuthError {
+     NoSession,
+     OwnershipMismatch,
+     Storage,
++    /// The refresh endpoint explicitly returned OAuth invalid_grant.
+     RefreshFailed,
+     RevocationFailed,
+     Busy,
