@@ -2,6 +2,10 @@
 
 用户已授权完善同步、ADB实际测试、命令行调用产品功能及继续使用新域名。精确88b2dabe debug APK已独核，新域DNS/Vercel/TLS及手机CELLULAR匿名health通过。原四篇纯文本及原文档前缀保持，一篇文档另有来源未明的附件和空段；产品授权读取已核对引用、归属与字节摘要，前后内容和原coordinator网络错误保持。
 
+## 实际结果
+
+[实际升级](../../verification/account109/android/preserving-upgrade-live01/README.md)已完成并独核：唯一install -r更新到准确88b2dabe包，两次当前完整数据及附件原字节完全相同、owned资源释放。正常重启后clean signedOut；不证明认证或产品协调访问。私有快照继续保留以保护后续取消测试，历史未知来源仍未解释。
+
 ## 本次验证契约
 
 此任务验证受测隔离包的保数据升级，不执行要求clean signedOut的登录取消smoke。原历史基线、旧失败和未知追加来源的结论保持，不能将当前内容替换成历史基线或宣称追加来源已解释。

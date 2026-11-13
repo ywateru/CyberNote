@@ -1,6 +1,6 @@
 # 账户同步实际验证结果
 
-2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；此前 `9e7c46d2` GUI 的 [fresh cancel-local-live02](native/cancel-local-live02/README.md) 五项通过，涵盖本地完整正文保存、发起/取消登录、继续编辑及自然重启保持，两进程自然退出 0。旧 `920fa9cf` 的原库 relogin04 浏览器授权未完成、fresh live01 ready 超时仍保留。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
+2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；此前 `9e7c46d2` GUI 的 [fresh cancel-local-live02](native/cancel-local-live02/README.md) 五项通过，涵盖本地完整正文保存、发起/取消登录、继续编辑及自然重启保持，两进程自然退出 0。旧 `920fa9cf` 的原库 relogin04 浏览器授权未完成、fresh live01 ready 超时仍保留。Android 已完成新域包保数据升级，账户三端待有效QA授权及产品链实测。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
 
 本轮新增用户要求：[应用内托管页与系统浏览器双入口](../../plan/tasks/app-account109-login-surfaces.md)已实现并独审，包含内置授权转浏览器的同事务交接。精确 `72513d12` 的[两端构建](native/72513d12-platform-build01/README.md)和[实际包身份独核](native/72513d12-platform-build-review01/README.md)通过；两端执行器补齐后的[完整检查](native/login-surfaces-integration02.md)274项通过。上述 `9e7c46d2` 运行属于新增需求前，不能作为新入口验收。此前桌面交互观察为锁屏；安卓[升级前检查](android/login-surfaces-preflight01/README.md)因保留账户error和旧基线差异停止，未安装或发起授权。后续[结构比较](android/login-surfaces-structure01/README.md)确认原文档前缀及纯文本保持一致，仅末尾新增附件节点和无内容段落；新增来源、引用及原字节仍未验证，不改写历史基线。新入口此前未有实际运行；最新局部通过及剩余边界见下。真实账户三端验收仍未完成。已清理本轮重复构建产物约724MiB，候选包、logs、身份与原库保留。
 

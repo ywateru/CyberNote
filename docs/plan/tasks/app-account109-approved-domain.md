@@ -4,11 +4,11 @@
 
 ## 当前执行状态
 
-最新：[手机新域CELLULAR匿名health](../../verification/account109/android/approved-domain-phone-health01/README.md)单次200/可信TLS通过且有限证据已独核。新包仍未安装；正在核对原附件差异。独立Node followup仍不能完成canonical实时比较，父级成功对照与独立失败各自保留，不扩大shell结果为产品认证或三端。
+最新：[手机新域CELLULAR匿名health](../../verification/account109/android/approved-domain-phone-health01/README.md)单次200/可信TLS通过且有限证据已独核。准确新包随后已完成[保数据升级及独核](../../verification/account109/android/preserving-upgrade-live01/README.md)，当前signedOut；原附件追加来源仍未解释，完整当前数据已保全。独立Node followup仍不能完成canonical实时比较，父级成功对照与独立失败各自保留，不扩大shell结果为产品认证或三端。
 
 [live02](../../verification/account109/server/custom-domain-live02/README.md)已通过原生Chrome Water profile已有目标zone会话添加准确CNAME和独立TXT，原三条TXT保留；Vercel verify HTTP200、verified=true。新域可信TLS与三个匿名接口200独核通过，首轮Python canonical TLS失败保留；父级Node单轮两域配置/JWKS均200且原始字节相同，独立Node复核进行中。DNS管理员登录前提已经解决，不再要求用户重复登录。
 
-精确 `88b2dabe` 新域Android候选已[离线构建并独核](../../verification/account109/native/88b2dabe-android-build-review01/README.md)，尚未安装。手机CELLULAR匿名新域检查及既有新增附件的只读核对正在进行；原账户错误、历史基线和数据保留。源码/manifest完整Node集成274项通过。以下实施记录保留各自历史时点。
+精确 `88b2dabe` 新域Android候选已[离线构建并独核](../../verification/account109/native/88b2dabe-android-build-review01/README.md)，已安装并完成当前数据保全。手机CELLULAR匿名新域检查及新增附件的只读引用/原字节核对均已有有限通过；原账户错误、历史基线和数据保留。源码/manifest完整Node集成274项通过。以下实施记录保留各自历史时点。
 
 ## 初始绑定与DNS等待
 
