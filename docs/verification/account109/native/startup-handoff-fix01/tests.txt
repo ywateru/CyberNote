@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: two frames win immediately; cancelled timer and duplicate callbacks cannot release twice
+ok 1 - two frames win immediately; cancelled timer and duplicate callbacks cannot release twice
+  ---
+  duration_ms: 51.917458
+  type: 'test'
+  ...
+# Subtest: zero frames: only after 250ms paint budget, actual splash finishes its existing fade
+ok 2 - zero frames: only after 250ms paint budget, actual splash finishes its existing fade
+  ---
+  duration_ms: 3.27175
+  type: 'test'
+  ...
+# Subtest: one frame: fallback cancels the second frame; its already queued callback is harmless
+ok 3 - one frame: fallback cancels the second frame; its already queued callback is harmless
+  ---
+  duration_ms: 2.283709
+  type: 'test'
+  ...
+# Subtest: both race orders produce exactly one ready
+ok 4 - both race orders produce exactly one ready
+  ---
+  duration_ms: 4.291292
+  type: 'test'
+  ...
+# Subtest: false gate cancels synchronously inside actual React commit, before a later layout callback
+ok 5 - false gate cancels synchronously inside actual React commit, before a later layout callback
+  ---
+  duration_ms: 2.3775
+  type: 'test'
+  ...
+# Subtest: commit regression fixture detects the unsafe passive-cleanup variant
+ok 6 - commit regression fixture detects the unsafe passive-cleanup variant
+  ---
+  duration_ms: 2.137083
+  type: 'test'
+  ...
+# Subtest: gate recovery starts a new budget; callbacks from the cancelled committed attempt stay stale
+ok 7 - gate recovery starts a new budget; callbacks from the cancelled committed attempt stay stale
+  ---
+  duration_ms: 1.973792
+  type: 'test'
+  ...
+# Subtest: unmount cancels first/second frame and timer, including forced late delivery
+ok 8 - unmount cancels first/second frame and timer, including forced late delivery
+  ---
+  duration_ms: 5.023833
+  type: 'test'
+  ...
+# Subtest: real React StrictMode replays setup/cleanup; old generation cannot complete the new one
+ok 9 - real React StrictMode replays setup/cleanup; old generation cannot complete the new one
+  ---
+  duration_ms: 1.995916
+  type: 'test'
+  ...
+# Subtest: superseded owner and its old cancel function cannot release/cancel the current owner
+ok 10 - superseded owner and its old cancel function cannot release/cancel the current owner
+  ---
+  duration_ms: 1.718209
+  type: 'test'
+  ...
+# Subtest: all original workspace/editor/native gates still prevent scheduling
+ok 11 - all original workspace/editor/native gates still prevent scheduling
+  ---
+  duration_ms: 10.552167
+  type: 'test'
+  ...
+# Subtest: empty/deleted/locked and non-native/mobile/native-error cases retain their original admission
+ok 12 - empty/deleted/locked and non-native/mobile/native-error cases retain their original admission
+  ---
+  duration_ms: 9.48
+  type: 'test'
+  ...
+# Subtest: initial load error exposes the independent splash error and never schedules fallback
+ok 13 - initial load error exposes the independent splash error and never schedules fallback
+  ---
+  duration_ms: 1.421333
+  type: 'test'
+  ...
+# Subtest: reduced-motion splash still honors ready gates, then finishes without fade delay
+ok 14 - reduced-motion splash still honors ready gates, then finishes without fade delay
+  ---
+  duration_ms: 1.550334
+  type: 'test'
+  ...
+# Subtest: diagnostic is unknown before commit, finite/frozen after commit, refreshed without restarting paint wait
+ok 15 - diagnostic is unknown before commit, finite/frozen after commit, refreshed without restarting paint wait
+  ---
+  duration_ms: 2.069375
+  type: 'test'
+  ...
+# Subtest: ordinary production, flag-off and absent-flag builds never publish the diagnostic
+ok 16 - ordinary production, flag-off and absent-flag builds never publish the diagnostic
+  ---
+  duration_ms: 5.028167
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 191.048333

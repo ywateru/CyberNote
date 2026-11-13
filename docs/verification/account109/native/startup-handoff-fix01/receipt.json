@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-13T09:52:15.289270+00:00",
+  "baseCommit": "816041b387024d9aa620abb4c50affae6ddffb6f",
+  "sourceCommit": "1abadb7bac9f08893ba371b2969abe5639b45b99",
+  "sourceSha256": {
+    "src/App.tsx": "d903f1a263bb7adacdb28248dca008de4c9956c6f14bebc7d9c711eaca66ac43",
+    "src/startup.ts": "84ae7937988927c68fedd5a67832c662de4a19854353bddf1d718b2bfadfff83",
+    "scripts/verification/account109-startup-handoff.test.mjs": "52d5f062a65777d0a3b0125639e3ad281a07982c6adc7c75349cd68820f0c4d2"
+  },
+  "checks": {
+    "fixtureSyntax": true,
+    "fixtureTests": {
+      "pass": 16,
+      "fail": 0,
+      "skipped": 0
+    },
+    "typecheck": true,
+    "productionFrontendBuild": true,
+    "startupReadyExpressionByteIdentical": true,
+    "onlyOwnedSourceAndFixtureChanged": true,
+    "productionJavascriptFilesScanned": 2,
+    "productionDiagnosticGlobalMarkerAbsent": true
+  },
+  "versions": {
+    "node": "v22.16.0",
+    "pnpm": "10.15.0"
+  },
+  "scope": {
+    "actualReactCommit": true,
+    "fullAppMount": false,
+    "nativeBuild": false,
+    "appOrBrowserRun": false,
+    "network": false,
+    "originalStoreAccess": false,
+    "sharedCargoTargetUse": false
+  },
+  "generatedDistBytes": 1426025
+}
