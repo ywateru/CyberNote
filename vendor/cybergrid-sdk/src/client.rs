@@ -712,7 +712,7 @@ impl Client {
         {
             Ok(session) => session,
             Err(error) => {
-                if matches!(error, Error::AuthorizationUnavailable) {
+                if error.authorization_unavailable() {
                     self.update_state(|s| {
                         s.identity = LayerState::new(
                             StatePhase::RequiresLogin,
@@ -766,7 +766,10 @@ impl Client {
         let result = provider
             .access_token_for(self, &request)
             .await
-            .map_err(|_| Error::AuthorizationUnavailable);
+            .map_err(|error| match error {
+                Error::AuthorizationProvider(_) => error,
+                _ => Error::AuthorizationUnavailable,
+            });
         if self.is_closed() {
             return Err(Error::Cancelled);
         }
@@ -1284,10 +1287,8 @@ impl Client {
                         Err(Error::Cancelled) => break,
                         Err(e)
                             if e.fatal()
-                                || matches!(
-                                    e,
-                                    Error::AuthorizationUnavailable | Error::IdentityChanged
-                                )
+                                || e.authorization_unavailable()
+                                || matches!(e, Error::IdentityChanged)
                                 || matches!(&e,Error::Api{code,..} if code=="SESSION_SUPERSEDED")
                                 || matches!(
                                     e,

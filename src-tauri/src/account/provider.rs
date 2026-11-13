@@ -26,6 +26,8 @@ impl AuthProvider for Provider {
             }
             // Do not select/drop an already dispatched refresh operation. The auth
             // crate checkpoints rotation even if this consumer has been cancelled.
+            // Only finite categories cross the SDK boundary. Rotation and
+            // recovery ownership remain with the auth client.
             let token = self
                 .0
                 .access_token(
@@ -33,12 +35,124 @@ impl AuthProvider for Provider {
                     request.force_refresh,
                 )
                 .await
-                .map_err(|_| cybergrid_sdk::Error::AuthorizationUnavailable)?;
+                .map_err(provider_error)?;
             if request.cancel.is_cancelled() {
                 return Err(cybergrid_sdk::Error::Cancelled);
             }
             Ok(token.secret().into())
         })
+    }
+}
+
+fn provider_error(error: account_auth::AuthError) -> cybergrid_sdk::Error {
+    use account_auth::AuthError as A;
+    use cybergrid_sdk::AuthProviderFailure as P;
+    cybergrid_sdk::Error::AuthorizationProvider(match error {
+        A::Configuration => P::Configuration,
+        A::Network => P::Network,
+        A::InvalidCallback => P::InvalidCallback,
+        A::InvalidIdentity => P::InvalidIdentity,
+        A::IdentityRejected(_) => P::IdentityRejected,
+        A::CodeExchangeRejected => P::CodeExchangeRejected,
+        A::TokenResponseInvalid => P::TokenResponseInvalid,
+        A::MissingRefreshToken => P::MissingRefreshToken,
+        A::Cancelled => P::Cancelled,
+        A::NoSession => P::NoSession,
+        A::OwnershipMismatch => P::OwnershipMismatch,
+        A::Storage => P::Storage,
+        A::RefreshFailed => P::RefreshFailed,
+        A::RevocationFailed => P::RevocationFailed,
+        A::Busy => P::Busy,
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn every_auth_error_category_survives_the_safe_sdk_handoff() {
+        use account_auth::AuthError as A;
+        for (error, label) in [
+            (A::Configuration, "configuration"),
+            (A::Network, "network"),
+            (A::InvalidCallback, "invalidCallback"),
+            (A::InvalidIdentity, "invalidIdentity"),
+            (
+                A::IdentityRejected(account_auth::IdentityRejection::Signature),
+                "identityRejected",
+            ),
+            (A::CodeExchangeRejected, "codeExchangeRejected"),
+            (A::TokenResponseInvalid, "tokenResponseInvalid"),
+            (A::MissingRefreshToken, "missingRefreshToken"),
+            (A::Cancelled, "cancelled"),
+            (A::NoSession, "noSession"),
+            (A::OwnershipMismatch, "ownershipMismatch"),
+            (A::Storage, "storage"),
+            (A::RefreshFailed, "refreshFailed"),
+            (A::RevocationFailed, "revocationFailed"),
+            (A::Busy, "busy"),
+        ] {
+            let safe = serde_json::to_value(
+                Error::sdk_at(
+                    provider_error(error),
+                    super::super::types::NetworkStage::CoordinatorRegistration,
+                )
+                .safe(),
+            )
+            .unwrap();
+            assert_eq!(safe["code"], "account_authentication");
+            assert_eq!(safe["stage"], "authorizationProvider");
+            assert_eq!(safe["providerReason"], label);
+            assert_eq!(safe.as_object().unwrap().len(), 4);
+        }
+    }
+
+    #[tokio::test]
+    async fn missing_grant_is_reported_at_provider_boundary_without_network_or_details() {
+        let directory = tempfile::tempdir().unwrap();
+        super::super::private::directory(directory.path()).unwrap();
+        let auth =
+            account_auth::AuthClient::new(config::pinned(), directory.path().join("grant.json"))
+                .await
+                .unwrap();
+        let provider = Provider(Arc::new(auth));
+        let client = Client::new(cybergrid_sdk::Config {
+            base_url: config::origin().unwrap(),
+            app_id: config::CLIENT_ID.into(),
+            ..Default::default()
+        })
+        .unwrap();
+        let request = AuthTokenRequest {
+            issuer: config::ISSUER.into(),
+            client_id: config::CLIENT_ID.into(),
+            resource: config::RESOURCE.into(),
+            scopes: vec!["connect".into()],
+            min_validity: 60,
+            force_refresh: false,
+            reason: cybergrid_sdk::AuthRequestReason::CoordinationRecovery,
+            generation: 1,
+            cancel: cybergrid_sdk::CancellationToken::new(),
+        };
+        let sdk_error = provider
+            .access_token_for(&client, &request)
+            .await
+            .unwrap_err();
+        assert!(matches!(
+            sdk_error,
+            cybergrid_sdk::Error::AuthorizationProvider(
+                cybergrid_sdk::AuthProviderFailure::NoSession
+            )
+        ));
+        let error = Error::sdk_at(
+            sdk_error,
+            super::super::types::NetworkStage::CoordinatorRegistration,
+        );
+        let safe = serde_json::to_value(error.safe()).unwrap();
+        assert_eq!(safe["code"], "account_authentication");
+        assert_eq!(safe["stage"], "authorizationProvider");
+        assert_eq!(safe["providerReason"], "noSession");
+        assert_eq!(safe.as_object().unwrap().len(), 4);
+        client.close().await.unwrap();
     }
 }
 #[cfg(all(target_os = "macos", target_arch = "aarch64"))]

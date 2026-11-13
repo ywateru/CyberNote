@@ -1,7 +1,7 @@
 use super::{
     config,
     private::Binding,
-    types::{Error, Result},
+    types::{Error, NetworkStage, Result},
 };
 use crate::sync::{
     identity::{now, SyncError},
@@ -76,15 +76,16 @@ impl Enrollment {
     async fn json<T: serde::de::DeserializeOwned>(
         &self,
         request: reqwest::RequestBuilder,
+        stage: NetworkStage,
     ) -> Result<T> {
-        let network = |_| Error::NetworkAt(super::types::NetworkStage::Coordinator);
+        let network = |_| Error::NetworkAt(stage);
         let mut response = request.send().await.map_err(network)?;
         if !response.status().is_success() {
             return Err(
                 if response.status().as_u16() == 401 || response.status().as_u16() == 403 {
-                    Error::Authentication
+                    Error::AuthenticationAt(stage)
                 } else {
-                    Error::NetworkAt(super::types::NetworkStage::Coordinator)
+                    Error::NetworkAt(stage)
                 },
             );
         }
@@ -103,6 +104,7 @@ impl Enrollment {
                 self.http
                     .get(format!("{}/api/v1/account/profile", self.origin))
                     .bearer_auth(token),
+                NetworkStage::CoordinatorProfile,
             )
             .await?;
         if profile.schema_version != 1
@@ -119,8 +121,15 @@ impl Enrollment {
         access: &str,
         binding: &Binding,
     ) -> Result<(String, Claims, VerifiedWorkspace)> {
-        let envelope:Envelope=self.json(self.http.post(format!("{}/api/v1/account/enrollment",self.origin)).bearer_auth(access)
-            .json(&serde_json::json!({"deviceId":binding.device_id,"noisePublicKey":binding.noise_public_key}))).await?;
+        let envelope: Envelope = self
+            .json(
+                self.http
+                    .post(format!("{}/api/v1/account/enrollment", self.origin))
+                    .bearer_auth(access)
+                    .json(&serde_json::json!({"deviceId":binding.device_id,"noisePublicKey":binding.noise_public_key})),
+                NetworkStage::CoordinatorEnrollment,
+            )
+            .await?;
         if envelope.schema_version != 1 {
             return Err(Error::InvalidProof);
         }
@@ -144,6 +153,7 @@ impl Enrollment {
             .json(
                 self.http
                     .get(format!("{}/api/v1/account/jwks", self.origin)),
+                NetworkStage::CoordinatorJwks,
             )
             .await?;
         verify(token, &jwks, &self.origin, binding)
@@ -297,6 +307,66 @@ impl ReplicationPolicy for Gate {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[tokio::test]
+    async fn http_rejections_keep_endpoint_stage_and_never_return_response_details() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        let (binding, _, _) = fixture();
+        for (stage, path) in [
+            (NetworkStage::CoordinatorProfile, "/api/v1/account/profile"),
+            (
+                NetworkStage::CoordinatorEnrollment,
+                "/api/v1/account/enrollment",
+            ),
+            (NetworkStage::CoordinatorJwks, "/api/v1/account/jwks"),
+        ] {
+            for status in [401, 403, 302, 503, 200] {
+                let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+                let enrollment =
+                    Enrollment::new(format!("http://{}", listener.local_addr().unwrap())).unwrap();
+                let server = tokio::spawn(async move {
+                    let (mut socket, _) = listener.accept().await.unwrap();
+                    let mut request = Vec::new();
+                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
+                        let mut bytes = [0; 1024];
+                        let n = socket.read(&mut bytes).await.unwrap();
+                        assert!(n > 0 && request.len() < 8192);
+                        request.extend_from_slice(&bytes[..n]);
+                    }
+                    assert!(String::from_utf8(request)
+                        .unwrap()
+                        .lines()
+                        .next()
+                        .unwrap()
+                        .contains(path));
+                    let body = "private-response-sentinel";
+                    socket.write_all(format!("HTTP/1.1 {status} Test\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}", body.len()).as_bytes()).await.unwrap();
+                });
+                let error = match stage {
+                    NetworkStage::CoordinatorProfile => {
+                        enrollment.profile("synthetic-access").await.err()
+                    }
+                    NetworkStage::CoordinatorEnrollment => {
+                        enrollment.issue("synthetic-access", &binding).await.err()
+                    }
+                    _ => enrollment.verify("synthetic-proof", &binding).await.err(),
+                }
+                .unwrap();
+                server.await.unwrap();
+                assert_eq!(
+                    error,
+                    match status {
+                        401 | 403 => Error::AuthenticationAt(stage),
+                        200 => Error::InvalidProof,
+                        _ => Error::NetworkAt(stage),
+                    }
+                );
+                assert!(!serde_json::to_string(&error.safe())
+                    .unwrap()
+                    .contains("private-response-sentinel"));
+            }
+        }
+    }
+
     fn fixture() -> (Binding, JwkSet, jsonwebtoken::EncodingKey) {
         use p384::{
             elliptic_curve::sec1::ToEncodedPoint,

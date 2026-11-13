@@ -61,8 +61,11 @@ pub(crate) struct SafeError {
     pub stage: Option<NetworkStage>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<account_auth::IdentityRejection>,
+    #[serde(rename = "providerReason", skip_serializing_if = "Option::is_none")]
+    pub provider_reason: Option<cybergrid_sdk::AuthProviderFailure>,
 }
-/// Fixed labels only; never serialize upstream errors, URLs or credentials.
+/// Fixed operation labels for network and authentication failures only;
+/// never serialize upstream errors, URLs or credentials.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) enum NetworkStage {
@@ -73,11 +76,21 @@ pub(crate) enum NetworkStage {
     Coordinator,
     CoordinatorConfiguration,
     CoordinatorRegistration,
+    CoordinatorProfile,
+    CoordinatorEnrollment,
+    CoordinatorJwks,
+    AuthorizationProvider,
+    IdentitySession,
+    IdentityRefresh,
+    IdentityRevocation,
+    CoordinatorSession,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Error {
     Configuration,
     Authentication,
+    AuthenticationAt(NetworkStage),
+    ProviderAuthentication(cybergrid_sdk::AuthProviderFailure),
     InvalidCallback,
     InvalidIdentity,
     IdentityRejected(account_auth::IdentityRejection),
@@ -100,7 +113,9 @@ impl Error {
     pub fn code(self) -> &'static str {
         match self {
             Self::Configuration => "account_configuration",
-            Self::Authentication => "account_authentication",
+            Self::Authentication | Self::AuthenticationAt(_) | Self::ProviderAuthentication(_) => {
+                "account_authentication"
+            }
             Self::InvalidCallback => "account_auth_callback_invalid",
             Self::InvalidIdentity | Self::IdentityRejected(_) => "account_auth_identity_invalid",
             Self::CodeExchangeRejected => "account_auth_code_rejected",
@@ -128,11 +143,16 @@ impl Error {
             }
             .into(),
             stage: match self {
-                Self::NetworkAt(stage) => Some(stage),
+                Self::NetworkAt(stage) | Self::AuthenticationAt(stage) => Some(stage),
+                Self::ProviderAuthentication(_) => Some(NetworkStage::AuthorizationProvider),
                 _ => None,
             },
             reason: match self {
                 Self::IdentityRejected(reason) => Some(reason),
+                _ => None,
+            },
+            provider_reason: match self {
+                Self::ProviderAuthentication(reason) => Some(reason),
                 _ => None,
             },
         }
@@ -165,7 +185,9 @@ impl From<account_auth::AuthError> for Error {
             A::CodeExchangeRejected => Self::CodeExchangeRejected,
             A::TokenResponseInvalid => Self::TokenResponseInvalid,
             A::MissingRefreshToken => Self::MissingRefreshToken,
-            _ => Self::Authentication,
+            A::NoSession => Self::AuthenticationAt(NetworkStage::IdentitySession),
+            A::RefreshFailed => Self::AuthenticationAt(NetworkStage::IdentityRefresh),
+            A::RevocationFailed => Self::AuthenticationAt(NetworkStage::IdentityRevocation),
         }
     }
 }
@@ -197,12 +219,16 @@ impl Error {
             S::Credentials(_) => Self::Storage,
             S::Cancelled => Self::Cancelled,
             S::IdentityChanged => Self::OwnershipMismatch,
-            S::AuthorizationUnavailable
-            | S::NotLoggedIn
-            | S::OAuth { .. }
-            | S::Api {
+            S::AuthorizationProvider(reason) => Self::ProviderAuthentication(reason),
+            // Unclassified adapters still report the fixed provider boundary.
+            S::AuthorizationUnavailable => {
+                Self::AuthenticationAt(NetworkStage::AuthorizationProvider)
+            }
+            S::NotLoggedIn => Self::AuthenticationAt(NetworkStage::CoordinatorSession),
+            S::OAuth { .. } => Self::AuthenticationAt(NetworkStage::IdentityProvider),
+            S::Api {
                 status: 401 | 403, ..
-            } => Self::Authentication,
+            } => Self::AuthenticationAt(stage),
             S::RevocationPending => Self::CleanupRequired,
             _ => Self::NetworkAt(stage),
         }
@@ -212,6 +238,93 @@ impl Error {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn authentication_diagnostics_preserve_boundaries_without_upstream_details() {
+        use cybergrid_sdk::Error as S;
+        for stage in [
+            NetworkStage::Coordinator,
+            NetworkStage::CoordinatorConfiguration,
+            NetworkStage::CoordinatorRegistration,
+        ] {
+            for status in [401, 403] {
+                let error = Error::sdk_at(
+                    S::Api {
+                        status,
+                        code: "private-response-sentinel https://private.invalid/token".into(),
+                    },
+                    stage,
+                );
+                assert_eq!(error, Error::AuthenticationAt(stage));
+                let value = serde_json::to_value(error.safe()).unwrap();
+                assert_eq!(value["code"], "account_authentication");
+                assert_eq!(value["stage"], serde_json::to_value(stage).unwrap());
+                assert_eq!(value.as_object().unwrap().len(), 3);
+                assert!(!value.to_string().contains("private"));
+            }
+        }
+        for (sdk, stage) in [
+            (
+                S::AuthorizationUnavailable,
+                NetworkStage::AuthorizationProvider,
+            ),
+            (S::NotLoggedIn, NetworkStage::CoordinatorSession),
+            (
+                S::OAuth {
+                    status: 400,
+                    code: "private-response-sentinel".into(),
+                },
+                NetworkStage::IdentityProvider,
+            ),
+        ] {
+            assert_eq!(
+                Error::sdk_at(sdk, NetworkStage::CoordinatorRegistration),
+                Error::AuthenticationAt(stage)
+            );
+        }
+        for (auth, stage) in [
+            (
+                account_auth::AuthError::NoSession,
+                NetworkStage::IdentitySession,
+            ),
+            (
+                account_auth::AuthError::RefreshFailed,
+                NetworkStage::IdentityRefresh,
+            ),
+            (
+                account_auth::AuthError::RevocationFailed,
+                NetworkStage::IdentityRevocation,
+            ),
+        ] {
+            assert_eq!(Error::from(auth), Error::AuthenticationAt(stage));
+        }
+        assert!(serde_json::to_value(Error::Authentication.safe())
+            .unwrap()
+            .get("stage")
+            .is_none());
+        // Classification outside authentication remains unchanged.
+        assert_eq!(Error::from(S::Cancelled), Error::Cancelled);
+        assert_eq!(Error::from(S::IdentityChanged), Error::OwnershipMismatch);
+        assert_eq!(Error::from(S::RevocationPending), Error::CleanupRequired);
+        assert_eq!(
+            Error::from(S::Credentials("private-response-sentinel".into())),
+            Error::Storage
+        );
+        assert_eq!(
+            Error::from(S::Protocol("private-response-sentinel".into())),
+            Error::CoordinationProtocol
+        );
+        assert_eq!(
+            Error::sdk_at(
+                S::Api {
+                    status: 503,
+                    code: "private-response-sentinel".into()
+                },
+                NetworkStage::CoordinatorRegistration
+            ),
+            Error::NetworkAt(NetworkStage::CoordinatorRegistration)
+        );
+    }
 
     #[test]
     fn network_diagnostics_keep_safe_code_and_only_fixed_stage_labels() {

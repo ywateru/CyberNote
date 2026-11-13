@@ -24,7 +24,7 @@ pub use credentials::CredentialStore;
 pub use endpoints::{
     BridgeLimits, BrowserBridge, DirectorySnapshot, EndpointPolicy, EndpointProvider,
 };
-pub use error::{Error, Result};
+pub use error::{AuthProviderFailure, Error, Result};
 pub use peer::{Mapping, Peer};
 pub use state::{
     BusinessAuthorization, CoordinatorRevocation, LayerState, RemoteDisableOutcome, StatePhase,

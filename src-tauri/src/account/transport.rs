@@ -274,7 +274,9 @@ async fn run_service(
                 claims = next;
                 gate.renew_local(claims.exp);
             }
-            let session = client.device_session().await.ok_or(Error::Authentication)?;
+            let session = client.device_session().await.ok_or(Error::AuthenticationAt(
+                super::types::NetworkStage::CoordinatorSession,
+            ))?;
             if session.user.id != binding.subject
                 || session.product_id.as_deref().unwrap_or(&session.app_id) != binding.product_id
             {
@@ -437,7 +439,11 @@ async fn run_service(
                 // Authentication/proof errors fence it immediately; never manual fallback.
                 if matches!(
                     error,
-                    Error::Authentication | Error::InvalidProof | Error::OwnershipMismatch
+                    Error::Authentication
+                        | Error::AuthenticationAt(_)
+                        | Error::ProviderAuthentication(_)
+                        | Error::InvalidProof
+                        | Error::OwnershipMismatch
                 ) {
                     gate.close();
                     publish(Err(error));

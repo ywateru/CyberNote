@@ -2598,6 +2598,35 @@ impl AuthProvider for UnavailableHost {
         Box::pin(async { Err(Error::Credentials("sensitive-host-error".into())) })
     }
 }
+struct ClassifiedUnavailableHost(AuthProviderFailure);
+impl AuthProvider for ClassifiedUnavailableHost {
+    fn access_token<'a>(&'a self, _: &'a Client) -> AuthFuture<'a> {
+        Box::pin(async move { Err(Error::AuthorizationProvider(self.0)) })
+    }
+}
+#[tokio::test]
+async fn provider_categories_survive_login_without_changing_recovery_classification() {
+    for reason in [
+        AuthProviderFailure::RefreshFailed,
+        AuthProviderFailure::Network,
+        AuthProviderFailure::Storage,
+    ] {
+        let (f, state) = control().await;
+        let c = f.client("RealA");
+        c.set_auth_provider(Arc::new(ClassifiedUnavailableHost(reason))).await;
+        let error = c.login_with_auth_provider("a").await.unwrap_err();
+        assert!(matches!(error, Error::AuthorizationProvider(value) if value == reason));
+        assert_eq!(c.snapshot().identity.phase, StatePhase::RequiresLogin);
+        assert_eq!(
+            c.snapshot().identity.reason,
+            StateReason::AuthorizationUnavailable
+        );
+        assert!(!c.snapshot().identity.retryable);
+        assert!(state.lock().unwrap().registrations.is_empty());
+        c.close().await.unwrap();
+    }
+}
+
 #[tokio::test]
 async fn provider_errors_are_fixed_and_freshness_budget_is_validated() {
     for value in [0, 3601] {

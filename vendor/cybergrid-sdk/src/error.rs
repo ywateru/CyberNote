@@ -1,5 +1,26 @@
 use thiserror::Error;
 
+/// Optional host classification. No messages, URLs, claims or credentials.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum AuthProviderFailure {
+    Configuration,
+    Network,
+    InvalidCallback,
+    InvalidIdentity,
+    IdentityRejected,
+    CodeExchangeRejected,
+    TokenResponseInvalid,
+    MissingRefreshToken,
+    Cancelled,
+    NoSession,
+    OwnershipMismatch,
+    Storage,
+    RefreshFailed,
+    RevocationFailed,
+    Busy,
+}
+
 /// Errors intentionally omit provider response bodies and all credentials.
 #[derive(Debug, Error)]
 pub enum Error {
@@ -27,6 +48,8 @@ pub enum Error {
     IdentityChanged,
     #[error("the configured authorization provider is unavailable")]
     AuthorizationUnavailable,
+    #[error("the configured authorization provider failed ({0:?})")]
+    AuthorizationProvider(AuthProviderFailure),
     #[error("transport failed: {0}")]
     Transport(String),
     #[error("I/O failure: {0}")]
@@ -36,6 +59,13 @@ pub enum Error {
 }
 pub type Result<T> = std::result::Result<T, Error>;
 impl Error {
+    pub(crate) fn authorization_unavailable(&self) -> bool {
+        matches!(
+            self,
+            Self::AuthorizationUnavailable | Self::AuthorizationProvider(_)
+        )
+    }
+
     pub(crate) fn fatal(&self) -> bool {
         matches!(
             self,

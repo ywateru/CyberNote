@@ -21,5 +21,29 @@ test('untrusted diagnostic fields and upstream values fail closed',()=>{
   {code:'account_network',message:'safe',stage:'coordinator',url:'https://upstream.invalid'},
   {code:'account_auth_identity_invalid',message:'safe',reason:'upstream-sensitive-response'},
   {code:'account_auth_identity_invalid',message:'safe',reason:null},
+  {code:'account_authentication',message:'safe',stage:'https://private.invalid/token'},
+  {code:'account_authentication',message:'safe',stage:'authorizationProvider',cause:'private-response-sentinel'},
+  {code:'account_authentication',message:'safe',stage:['coordinatorEnrollment']},
+  {code:'account_authentication',message:'safe',stage:0},
+  {code:'account_authentication',message:'safe',stage:null},
+  ...[null, 0, {}, [], 'https://private.invalid/token', 'private-response-sentinel'].map(providerReason=>({code:'account_authentication',message:'safe',stage:'authorizationProvider',providerReason})),
+  {code:'account_authentication',message:'safe',stage:'coordinatorRegistration',providerReason:'refreshFailed'},
+  {code:'account_authentication',message:'safe',providerReason:'refreshFailed'},
+  {code:'account_network',message:'safe',stage:'authorizationProvider',providerReason:'network'},
  ]) assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);
+});
+test('provider diagnostics preserve finite auth categories in their strict context',()=>{
+ for(const providerReason of ['configuration','network','invalidCallback','invalidIdentity','identityRejected','codeExchangeRejected','tokenResponseInvalid','missingRefreshToken','cancelled','noSession','ownershipMismatch','storage','refreshFailed','revocationFailed','busy']) {
+  const error = {code:'account_authentication',message:'safe',stage:'authorizationProvider',providerReason};
+  assert.deepEqual(validateAccountStatus(status(error)).error,error);
+ }
+});
+test('authentication diagnostics preserve only the finite native operation stages',()=>{
+ assert.deepEqual(validateAccountStatus(status({code:'account_authentication',message:'safe'})).error,{code:'account_authentication',message:'safe'});
+ for(const stage of ['identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration','coordinatorProfile','coordinatorEnrollment','coordinatorJwks','authorizationProvider','identitySession','identityRefresh','identityRevocation','coordinatorSession']) {
+  const error = {code:'account_authentication',message:'safe',stage};
+  assert.deepEqual(validateAccountStatus(status(error)).error,error);
+ }
+ for(const stage of ['coordinatorProfile','coordinatorEnrollment','coordinatorJwks'])
+  assert.equal(validateAccountStatus(status({code:'account_network',message:'safe',stage})).error.stage,stage);
 });
