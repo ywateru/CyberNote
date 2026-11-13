@@ -142,15 +142,30 @@ pub(super) mod observation {
                 }
             }
         }
+        fn task_remove(&self, peer: &str, stop: &CancellationToken) {
+            if let Ok(mut state) = self.cache.0.lock() {
+                // Check under the same lock as Drop's final removal: a task
+                // already executing synchronously may outlive abort().
+                if !stop.is_cancelled()
+                    && state
+                        .active
+                        .is_some_and(|(generation, _)| generation == self.generation)
+                {
+                    state.samples.remove(peer);
+                }
+            }
+        }
         fn record(
             &self,
             peer: &str,
+            stop: &CancellationToken,
             enrollment: TransportKind,
             sync: TransportKind,
             started: Instant,
         ) {
             if let Ok(mut state) = self.cache.0.lock() {
-                if !state.ready
+                if stop.is_cancelled()
+                    || !state.ready
                     || !state.ready_since.is_some_and(|since| started >= since)
                     || !state
                         .active
@@ -190,7 +205,7 @@ pub(super) mod observation {
             let task = tokio::spawn(async move {
                 loop {
                     // A pending/failed sample never reuses the previous success.
-                    lease.remove(&task_peer);
+                    lease.task_remove(&task_peer, &task_stop);
                     let started = Instant::now();
                     let result = tokio::select! {
                         biased;
@@ -199,7 +214,7 @@ pub(super) mod observation {
                     };
                     let (enrollment, sync) =
                         result.unwrap_or((TransportKind::Unavailable, TransportKind::Unavailable));
-                    lease.record(&task_peer, enrollment, sync, started);
+                    lease.record(&task_peer, &task_stop, enrollment, sync, started);
                     tokio::select! { biased; _ = task_stop.cancelled() => break, _ = tokio::time::sleep(Duration::from_secs(1)) => {} }
                 }
             });
@@ -294,10 +309,12 @@ pub(super) mod observation {
         #[test]
         fn stale_failure_pause_logout_and_account_or_network_generation_cannot_reuse_success() {
             let cache = Arc::new(Cache::default());
+            let stop = CancellationToken::new();
             let lease = cache.begin(7).unwrap();
             lease.resume();
             lease.record(
                 "fixture-peer",
+                &stop,
                 TransportKind::WebrtcDirect,
                 TransportKind::CloudflareTunnel,
                 Instant::now(),
@@ -338,6 +355,7 @@ pub(super) mod observation {
             lease.resume();
             lease.record(
                 "fixture-peer",
+                &stop,
                 TransportKind::CloudflareTunnel,
                 TransportKind::CloudflareTunnel,
                 before_failure,
@@ -348,6 +366,7 @@ pub(super) mod observation {
             );
             lease.record(
                 "fixture-peer",
+                &stop,
                 TransportKind::Unknown,
                 TransportKind::IrohDirect,
                 Instant::now(),
@@ -366,6 +385,7 @@ pub(super) mod observation {
             next.resume();
             lease.record(
                 "fixture-peer",
+                &stop,
                 TransportKind::CloudflareTunnel,
                 TransportKind::CloudflareTunnel,
                 Instant::now(),
@@ -373,6 +393,7 @@ pub(super) mod observation {
             assert!(sample(&cache, 7).is_none());
             next.record(
                 "fixture-peer",
+                &stop,
                 TransportKind::Unavailable,
                 TransportKind::Unavailable,
                 Instant::now(),
@@ -382,12 +403,127 @@ pub(super) mod observation {
             next.resume();
             next.record(
                 "fixture-peer",
+                &stop,
                 TransportKind::CloudflareTunnel,
                 TransportKind::CloudflareTunnel,
                 Instant::now(),
             );
             assert!(sample(&cache, 7).is_none());
         }
+        #[tokio::test]
+        async fn retired_sampler_cannot_record_or_remove_replacement_in_same_generation() {
+            let cache = Arc::new(Cache::default());
+            let lease = cache.begin(1).unwrap();
+            lease.resume();
+            let old = lease.spawn("fixture-peer".into(), || std::future::pending());
+            let old_stop = old.stop.clone();
+            lease.record(
+                "fixture-peer",
+                &old_stop,
+                TransportKind::WebrtcDirect,
+                TransportKind::CloudflareTunnel,
+                Instant::now(),
+            );
+            let first = sample(&cache, 1).unwrap();
+            drop(old);
+            assert!(old_stop.is_cancelled());
+            assert!(sample(&cache, 1).is_none());
+            // Simulate synchronous operations that continue after abort/Drop.
+            lease.record(
+                "fixture-peer",
+                &old_stop,
+                TransportKind::WebrtcDirect,
+                TransportKind::CloudflareTunnel,
+                Instant::now(),
+            );
+            assert!(
+                sample(&cache, 1).is_none(),
+                "retired record cannot resurrect relay evidence"
+            );
+            let replacement = lease.spawn("fixture-peer".into(), || std::future::pending());
+            lease.record(
+                "fixture-peer",
+                &replacement.stop,
+                TransportKind::IrohDirect,
+                TransportKind::IrohDirect,
+                Instant::now(),
+            );
+            let current = sample(&cache, 1).unwrap();
+            assert_eq!(current.generation, first.generation);
+            assert!(current.sample > first.sample);
+            lease.record(
+                "fixture-peer",
+                &old_stop,
+                TransportKind::WebrtcDirect,
+                TransportKind::CloudflareTunnel,
+                Instant::now(),
+            );
+            lease.task_remove("fixture-peer", &old_stop);
+            let preserved = sample(&cache, 1).unwrap();
+            assert_eq!(preserved.sample, current.sample);
+            assert_eq!(preserved.sync, TransportKind::IrohDirect);
+            // The replacement's own task removal and Drop remain effective.
+            lease.task_remove("fixture-peer", &replacement.stop);
+            assert!(sample(&cache, 1).is_none());
+            lease.record(
+                "fixture-peer",
+                &replacement.stop,
+                TransportKind::IrohDirect,
+                TransportKind::IrohDirect,
+                Instant::now(),
+            );
+            drop(replacement);
+            assert!(sample(&cache, 1).is_none());
+        }
+
+        #[test]
+        fn cancellation_while_waiting_for_cache_lock_fences_record_and_task_remove() {
+            let cache = Arc::new(Cache::default());
+            let lease = cache.begin(1).unwrap();
+            lease.resume();
+            let old_stop = CancellationToken::new();
+            let current_stop = CancellationToken::new();
+            lease.record(
+                "fixture-peer",
+                &current_stop,
+                TransportKind::IrohDirect,
+                TransportKind::IrohDirect,
+                Instant::now(),
+            );
+            let current = sample(&cache, 1).unwrap();
+            std::thread::scope(|scope| {
+                let held = cache.0.lock().unwrap();
+                let (entered, waiting) = std::sync::mpsc::channel();
+                let entered_remove = entered.clone();
+                let old_stop = &old_stop;
+                let lease = &lease;
+                let record = scope.spawn(move || {
+                    entered.send(()).unwrap();
+                    lease.record(
+                        "fixture-peer",
+                        old_stop,
+                        TransportKind::WebrtcDirect,
+                        TransportKind::CloudflareTunnel,
+                        Instant::now(),
+                    );
+                });
+                let remove = scope.spawn(move || {
+                    entered_remove.send(()).unwrap();
+                    lease.task_remove("fixture-peer", old_stop);
+                });
+                for _ in 0..2 {
+                    waiting.recv_timeout(Duration::from_secs(2)).unwrap();
+                }
+                old_stop.cancel();
+                drop(held);
+                record.join().unwrap();
+                remove.join().unwrap();
+            });
+            let preserved = sample(&cache, 1).unwrap();
+            assert_eq!(preserved.sample, current.sample);
+            assert_eq!(preserved.sync, TransportKind::IrohDirect);
+        }
+
         #[tokio::test]
         async fn pending_sample_revokes_previous_success_and_timeout_records_unavailable() {
             use std::sync::atomic::{AtomicUsize, Ordering};
