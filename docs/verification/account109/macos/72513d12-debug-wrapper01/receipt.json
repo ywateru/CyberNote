@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "status": "packaged-and-static-nsbundle-checked-only",
+  "sourceRevision": "72513d1296df4526a08834db65a3427957d3fb50",
+  "originalBinary": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-e2e-01/notes-clone",
+  "appPath": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app",
+  "bundleIdentifier": "com.local.notesclone.account109.debug72513d12",
+  "displayName": "CyberNote Account109 72513d12",
+  "executable": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app/Contents/MacOS/notes-clone",
+  "binarySha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459",
+  "copyMethod": "APFS clonefile via cp -c -p; independent inode, no hardlink",
+  "originalInode": 46263817,
+  "wrapperInode": 46313872,
+  "originalBytesModeMtimeInodeUnchanged": true,
+  "sourceUsagePlistSha256": "d729a400002653ae56a7a7e24d87e5117bdaaa233457fa9186891c3f88e0b7b6",
+  "sourceIconSha256": "ca978a1c8d212cd0a462d064c1c49695c5a3e573ba71aeed55f075181f4dd468",
+  "files": {
+    "CyberNote-Account109-72513d12.app/Contents/Info.plist": {
+      "bytes": 1528,
+      "sha256": "982dad85443759f03344394c578e7e54ac059a0a5c72806b6d80168bbb1159e1"
+    },
+    "CyberNote-Account109-72513d12.app/Contents/MacOS/notes-clone": {
+      "bytes": 204326848,
+      "sha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459"
+    },
+    "CyberNote-Account109-72513d12.app/Contents/PkgInfo": {
+      "bytes": 8,
+      "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0"
+    },
+    "CyberNote-Account109-72513d12.app/Contents/Resources/icon.icns": {
+      "bytes": 141567,
+      "sha256": "ca978a1c8d212cd0a462d064c1c49695c5a3e573ba71aeed55f075181f4dd468"
+    }
+  },
+  "nsbundle": {
+    "bundleIdentifier": "com.local.notesclone.account109.debug72513d12",
+    "bundlePath": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app",
+    "executablePath": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app/Contents/MacOS/notes-clone",
+    "displayName": "CyberNote Account109 72513d12"
+  },
+  "commands": [
+    {
+      "name": "plist-lint",
+      "argv": [
+        "plutil",
+        "-lint",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app/Contents/Info.plist"
+      ],
+      "exitCode": 0,
+      "logSha256": "b34d9831dcab80a606d3d8b3a24e53c165f15d1a7beaf30fa9fe4a0474e07aa0"
+    },
+    {
+      "name": "original-signature",
+      "argv": [
+        "codesign",
+        "-dvvv",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-e2e-01/notes-clone"
+      ],
+      "exitCode": 0,
+      "logSha256": "ecd744eae5619f4f89c00e2948d8bd30446fe2c774b6ec3d607158e41dc70f6b"
+    },
+    {
+      "name": "wrapper-signature",
+      "argv": [
+        "codesign",
+        "-dvvv",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app"
+      ],
+      "exitCode": 0,
+      "logSha256": "b0c857f9e76549a70f861cc71f148a516d7315c84e69b306d1087585a54cf7bf"
+    },
+    {
+      "name": "original-signature-verify",
+      "argv": [
+        "codesign",
+        "--verify",
+        "--strict",
+        "--verbose=2",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-e2e-01/notes-clone"
+      ],
+      "exitCode": 0,
+      "logSha256": "3363df4378e728d42e50d45c920eccb9ce161e213fef6893a0a21497efb901f1"
+    },
+    {
+      "name": "wrapper-signature-verify",
+      "argv": [
+        "codesign",
+        "--verify",
+        "--strict",
+        "--verbose=2",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app"
+      ],
+      "exitCode": 1,
+      "logSha256": "2c4964d489dff7f4b23fceba230ee17e9018d0c1861946fc35c04b001eb6e623"
+    },
+    {
+      "name": "linked-libraries",
+      "argv": [
+        "otool",
+        "-L",
+        "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app/Contents/MacOS/notes-clone"
+      ],
+      "exitCode": 0,
+      "logSha256": "db457e595bb58c923630dbe6cda4b0272b2b1f28695434418ca19a303b32c430"
+    },
+    {
+      "name": "nsbundle-static",
+      "argv": [
+        "osascript",
+        "-l",
+        "JavaScript",
+        "-e",
+        "ObjC.import(\"Foundation\"); const b=$.NSBundle.bundleWithPath(\"/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-wrapper-01/CyberNote-Account109-72513d12.app\"); if (!b) throw Error(\"Missing bundle\"); JSON.stringify({bundleIdentifier:ObjC.unwrap(b.bundleIdentifier),bundlePath:ObjC.unwrap(b.bundlePath),executablePath:ObjC.unwrap(b.executablePath),displayName:ObjC.unwrap(b.objectForInfoDictionaryKey(\"CFBundleDisplayName\"))});"
+      ],
+      "exitCode": 0,
+      "logSha256": "35ab83b20d2371e9adbba0e8b7d9a71ac15a01f62afce3917df54934170efa42"
+    }
+  ],
+  "signatureBoundary": "Original linker ad-hoc signature retained byte-for-byte. No signing identity added; wrapper is not a signed/sealed production app. Read exact verification results.",
+  "isolationBoundary": "Bundle ID/name only; compiled Tauri identifier remains com.local.notesclone. Caller must retain approved isolated store/environment. Wrapper does not isolate storage or retrofit an already-running plain process.",
+  "notPerformed": [
+    "App launch",
+    "NSWorkspace launch or registration",
+    "CUA/AX access",
+    "build",
+    "target access",
+    "signing",
+    "device/ADB",
+    "network",
+    "user app replacement",
+    "store or credential access"
+  ]
+}
