@@ -19,8 +19,8 @@ export function surfacePolicy({surface='browser',continueInBrowser=false,cancelV
   assert.equal(typeof cancelViaWindow,'boolean');assert(!cancelViaWindow||(surface==='embedded'&&!continueInBrowser),'Window cancellation requires embedded without browser continuation');
   return {surface,continueInBrowser,cancelViaWindow};
 }
-export function authorizationSurface(s){
-  if(s.state==='authorizing')assert(['embedded','browser'].includes(s.authorizationSurface),'Authorizing requires a finite actual surface');
+export function authorizationSurface(s,{pendingSurface=false}={}){
+  if(s.state==='authorizing')assert((pendingSurface&&s.authorizationSurface===undefined)||['embedded','browser'].includes(s.authorizationSurface),'Authorizing requires a finite actual surface');
   else assert.equal(s.authorizationSurface,undefined,'Authorization surface must be absent outside authorizing');
   return s.authorizationSurface;
 }
@@ -30,13 +30,17 @@ export async function beginAuthorization(peer,mode,{poll=boundedPoll,now=Date.no
   // Transfer shares the original authorizing budget; it cannot reset the clock.
   const deadline=now()+30000;
   await poll('one SignIn authorizing',async()=>{
-    const s=await peer.status();disconnected(s);const actual=authorizationSurface(s);assert(['signedOut','authorizing'].includes(s.state));
-    if(s.state==='signedOut')return false;assert.equal(actual,surface,'Requested/actual authorization surface mismatch');return true;
+    // Native publishes authorizing before asynchronous window/browser opening.
+    // Only this initial read permits an absent actual surface while still pending.
+    const s=await peer.status({pendingSurface:true});
+    if(now()>=deadline)throw Object.assign(Error('Authorization deadline expired'),{code:'CONDITION_TIMEOUT:one SignIn authorizing'});
+    disconnected(s,{pendingSurface:true});const actual=s.authorizationSurface;assert(['signedOut','authorizing'].includes(s.state));
+    if(s.state==='signedOut'||actual===undefined)return false;assert.equal(actual,surface,'Requested/actual authorization surface mismatch');return true;
   },30000);
   if(continueInBrowser){
     await peer.inspectAction('openLoginInBrowser','embedded');await peer.action('openLoginInBrowser');
     await poll('same authorization continues in browser',async()=>{
-      const s=await peer.status();disconnected(s);const actual=authorizationSurface(s);assert.equal(s.state,'authorizing','Transfer must retain pending authorization');return actual==='browser';
+      const s=await peer.status();if(now()>=deadline)throw Object.assign(Error('Authorization deadline expired'),{code:'CONDITION_TIMEOUT:same authorization continues in browser'});disconnected(s);const actual=authorizationSurface(s);assert.equal(s.state,'authorizing','Transfer must retain pending authorization');return actual==='browser';
     },Math.max(0,deadline-now()));
   }
   return {requestedSurface:surface,authorizationSurface:continueInBrowser?'browser':surface,browserContinuation:continueInBrowser,uiHandler:'account.signIn',...(continueInBrowser?{continuationUiHandler:'account.openLoginInBrowser'}:{}),physicalInput:false};
@@ -58,8 +62,8 @@ export async function preflight(o){
   assert.equal(await realpath(o.binary),o.binary);assert((await lstat(o.binary)).isFile());
   assert.equal(hash(await readFile(o.binary)),BINARY_SHA,'Only verified 9e7c46d2 GUI binary allowed');
 }
-function disconnected(s){
-  requireHealthy(s);authorizationSurface(s);assert.equal(s.enabled,false);assert(!s.profile);assert(Array.isArray(s.devices)&&!s.devices.some(d=>d.connected));assert.equal(s.conflictCount,0);
+function disconnected(s,surfaceOptions){
+  requireHealthy(s);authorizationSurface(s,surfaceOptions);assert.equal(s.enabled,false);assert(!s.profile);assert(Array.isArray(s.devices)&&!s.devices.some(d=>d.connected));assert.equal(s.conflictCount,0);
 }
 export function strictSignedOut(s){disconnected(s);assert.equal(s.state,'signedOut');return true;}
 export const fixture=edited=>{
@@ -147,7 +151,7 @@ export async function run(argv=process.argv.slice(2)){
       const state=()=>step(app,'state',()=>app.state());
       let observedSurface;
       const peer={lifecycle:app.lifecycle,pidAbsent:false,
-        status:async()=>{const s=await step(app,'account.status',()=>nativeAccount(app,'status'));observe(app.name,s);const actual=authorizationSurface(s);if(actual!==observedSurface){report.observations.push({kind:'authorization-surface',device:app.name,authorizationSurface:actual??null});observedSurface=actual;}await save();return s;},
+        status:async surfaceOptions=>{const s=await step(app,'account.status',()=>nativeAccount(app,'status'));observe(app.name,s);const actual=authorizationSurface(s,surfaceOptions);if(actual!==observedSurface){report.observations.push({kind:'authorization-surface',device:app.name,authorizationSurface:actual??null});observedSurface=actual;}await save();return s;},
         workspace:async()=>(await state()).workspace,
         enterAccount:async()=>{await command('settings.open');await command('settings.tab',{tab:'account'});},
         leaveAccount:async()=>{for(let i=0;i<3&&(await state()).preferences.open;i++)await command('app.back');assert(!(await state()).preferences.open);},

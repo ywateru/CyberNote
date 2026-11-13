@@ -49,6 +49,9 @@ test('actual surface is finite, required during authorizing and absent after aut
   for(const surface of ['embedded','browser'])assert.equal(authorizationSurface({...signedOut(),state:'authorizing',authorizationSurface:surface}),surface);
   for(const surface of [undefined,null,'unknown','https://invalid.test'])assert.throws(()=>authorizationSurface({...signedOut(),state:'authorizing',authorizationSurface:surface}));
   for(const state of ['signedOut','ready','error'])for(const authorizationSurfaceValue of ['embedded','browser'])assert.throws(()=>authorizationSurface({...signedOut(),state,authorizationSurface:authorizationSurfaceValue}));
+  assert.equal(authorizationSurface({...signedOut(),state:'authorizing'},{pendingSurface:true}),undefined);
+  for(const value of [null,'unknown'])assert.throws(()=>authorizationSurface({...signedOut(),state:'authorizing',authorizationSurface:value},{pendingSurface:true}));
+  assert.throws(()=>authorizationSurface({...signedOut(),authorizationSurface:'embedded'},{pendingSurface:true}));
 });
 test('signedOut requires authoritative state, disabled, absent profile/error, no connections/conflicts',()=>{
   assert(strictSignedOut(signedOut()));
@@ -97,14 +100,16 @@ test('postcancel window uses repeated status plus full body samples and checks t
   const changed=clock();await assert.rejects(()=>stableSignedOut({status:async()=>signedOut(),workspace:async()=>{const w=ws();if(changed.now()>=1000)w.notes[0].document.content[1].content[0].marks=[];return w;}},id,fixture(false),changed));assert.equal(changed.now(),1000);
 });
 
-function harness({signInError,pendingForever=false,cancelError,restartMutation,afterCancelStatus,transferError,transferStatus,transferStuck=false,initialSurface,cancelSurface,windowStatus}={}){
+function harness({signInError,pendingForever=false,cancelError,restartMutation,afterCancelStatus,transferError,transferStatus,transferStuck=false,initialSurface,cancelSurface,windowStatus,initialStatus,cancelMissingSurface=false}={}){
   const c=clock(),events=[],peers=[],proofs=[],calls=[],checkpoints=[];let document,plainText,awaitingWindow=false;
   async function open(){
     const index=peers.length;events.push('open '+index);let mode='signedOut',surface,cancelReads=0,closed=false,transferred=false;
     const peer={lifecycle:lifecycle(),pidAbsent:true,
-      status:async()=>{
+      status:async surfaceOptions=>{
+        if(initialStatus&&surfaceOptions?.pendingSurface){const s=await initialStatus(c.now());authorizationSurface(s,surfaceOptions);return s;}
         if(mode==='authorizing'&&awaitingWindow&&windowStatus)return windowStatus(c.now());
         if(mode==='cancelling'&&++cancelReads>=3)mode='signedOut';
+        if(mode==='cancelling'&&cancelMissingSurface)return {...signedOut(),state:'authorizing'};
         if(mode==='signedOut'&&cancelReads&&afterCancelStatus)return afterCancelStatus();
         if(transferred&&transferStatus)return transferStatus();
         return {...signedOut(),state:mode==='cancelling'?'authorizing':mode,...(mode!=='signedOut'?{authorizationSurface:mode==='cancelling'?cancelSurface??surface:surface}:{})};
@@ -138,6 +143,32 @@ test('embedded cancel and embedded-to-browser keep five full-body/natural-restar
   }
 });
 const embeddedPending=()=>({...signedOut(),state:'authorizing',authorizationSurface:'embedded'});
+const unopened=()=>({...signedOut(),state:'authorizing'});
+test('initial asynchronous opening waits read-only for the requested actual surface in both modes',async()=>{
+  for(const surface of ['embedded','browser']){
+    const samples=[];const h=harness({initialStatus:now=>{samples.push(now);return now<2000?unopened():({...unopened(),authorizationSurface:surface});}});
+    await exercise({...h.args,surface});assert.deepEqual(samples,[0,1000,2000]);assert.equal(h.c.now(),10000);assert.equal(h.proofs[1].authorizationSurface,surface);assert.equal(h.proofs.length,5);assert.equal(h.events.filter(e=>e==='signIn').length,1);
+  }
+});
+test('candidate that never reports actual surface times out without authorizing PASS or retry',async()=>{
+  const h=harness({initialStatus:unopened});await assert.rejects(()=>exercise({...h.args,surface:'embedded'}),e=>e.code==='CONDITION_TIMEOUT:one SignIn authorizing');assert.equal(h.c.now(),30000);assert.deepEqual(h.proofs.map(p=>p.name),['localSave']);assert.equal(h.events.filter(e=>e==='signIn').length,1);assert(!h.events.includes('cancel'));assert.equal(h.peers.length,1);
+  const report={status:'running',checks:h.proofs.map(p=>({name:p.name,status:'pass'})),failure:{code:'CONDITION_TIMEOUT:one SignIn authorizing'}};await finish(report,h.peers,async()=>{});assert.equal(report.status,'fail');
+});
+test('initial pending rejects errors, invalid or mismatched surface and never relaxes later stages',async()=>{
+  for(const initialStatus of [()=>({...unopened(),error:{code:'account_network'}}),()=>({...unopened(),authorizationSurface:null}),()=>({...unopened(),authorizationSurface:'unknown'}),()=>({...unopened(),authorizationSurface:'browser'})]){
+    const h=harness({initialStatus});await assert.rejects(()=>exercise({...h.args,surface:'embedded'}));assert.equal(h.c.now(),0);assert.deepEqual(h.proofs.map(p=>p.name),['localSave']);assert.equal(h.events.filter(e=>e==='signIn').length,1);
+  }
+  for(const config of [{cancelMissingSurface:true},{windowStatus:unopened}]){
+    const h=harness({...config,initialStatus:()=>embeddedPending()});await assert.rejects(()=>exercise({...h.args,surface:'embedded',cancelViaWindow:!!config.windowStatus}));assert(!h.proofs.some(p=>p.name==='cancelledWindow'));assert(!h.events.includes('edit'));
+  }
+});
+test('initial actual-surface status must return strictly before the original 30s deadline',async()=>{
+  for(const delayMs of [999,1000,2000]){
+    const h=harness({initialStatus:async now=>{if(now<29000)return unopened();assert.equal(now,29000);await h.c.sleep(delayMs);return embeddedPending();}});
+    if(delayMs===999){await exercise({...h.args,surface:'embedded'});assert.equal(h.proofs.length,5);assert.equal(h.c.now(),37999);continue;}
+    await assert.rejects(()=>exercise({...h.args,surface:'embedded'}),e=>e.code==='CONDITION_TIMEOUT:one SignIn authorizing');assert.equal(h.c.now(),29000+delayMs);assert.deepEqual(h.proofs.map(p=>p.name),['localSave']);assert(!h.events.includes('cancel'));assert.equal(h.events.filter(e=>e==='signIn').length,1);
+  }
+});
 test('window mode saves checkpoint before read-only wait, never sends cancel, and retains all five checks',async()=>{
   let reads=0;const h=harness({cancelError:Error('cancel must never be sent'),windowStatus:now=>{reads++;assert(h.checkpoints.some(c=>c.phase==='awaitingNativeWindowClose'));return now>=45000?signedOut():embeddedPending();}});
   await exercise({...h.args,surface:'embedded',cancelViaWindow:true});
@@ -188,6 +219,11 @@ test('transfer consumes only remaining authorizing budget, including inspection/
     await assert.rejects(()=>beginAuthorization(peer,{surface:'embedded',continueInBrowser:true},{now:c.now,poll}),e=>e.code==='CONDITION_TIMEOUT:same authorization continues in browser');
     assert(started);assert.deepEqual(budgets,[30000,transferTime===3000?15000:0]);assert.equal(c.now(),transferTime===3000?30000:37000);assert.deepEqual(calls,[['signIn',{surface:'embedded'}],['openLoginInBrowser',undefined]]);
   }
+});
+test('transfer status arriving at the original authorization deadline fails without accepting browser',async()=>{
+  const c=clock();let transferred=false;const calls=[];
+  const peer={enterAccount:async()=>{},inspectAction:async()=>{},action:async kind=>{calls.push(kind);if(kind==='openLoginInBrowser')transferred=true;},status:async()=>{if(!transferred)return embeddedPending();await c.sleep(30000);return {...embeddedPending(),authorizationSurface:'browser'};}};
+  await assert.rejects(()=>beginAuthorization(peer,{surface:'embedded',continueInBrowser:true},{now:c.now,poll:(l,p,m)=>boundedPoll(l,p,m,c)}),e=>e.code==='CONDITION_TIMEOUT:same authorization continues in browser');assert.equal(c.now(),30000);assert.deepEqual(calls,['signIn','openLoginInBrowser']);
 });
 test('SignIn/bind or cancel error stops without retry, port change, local edit or restart',async()=>{
   for(const config of [{signInError:Object.assign(Error('unexported native text'),{code:'CALLBACK_BIND_FAILED'})},{cancelError:Error('unexported cancellation failure')},{afterCancelStatus:()=>({...signedOut(),error:{code:'account_auth_identity_invalid'}})}]){
