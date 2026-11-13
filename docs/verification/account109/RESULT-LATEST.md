@@ -2,6 +2,8 @@
 
 2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；最新 `9e7c46d2` GUI 的 [fresh cancel-local-live02](native/cancel-local-live02/README.md) 五项通过，涵盖本地完整正文保存、发起/取消登录、继续编辑及自然重启保持，两进程自然退出 0。旧 `920fa9cf` 的原库 relogin04 浏览器授权未完成、fresh live01 ready 超时仍保留。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
 
+本轮新增用户要求：[应用内托管页与系统浏览器双入口](../../plan/tasks/app-account109-login-surfaces.md)正在实施，包含内置授权转浏览器的同事务交接。上述 `9e7c46d2` 结果属于新增需求前的候选，不能作为双入口验收；新的精确构建和实际窗口/取消检查须另记。
+
 ## 分析与完善
 
 数据链为 Logto 原生授权 owner → Vercel profile/enrollment → CyberGrid 自动发现与可信连接 → 原有同步 adapter/Session → SQLite 文档与受管附件。设置页不拥有账户 Runtime 生命周期；同步完成需验证实际文档、附件归属及原字节，不能以命令 ACK 或设备 online 判定。完整契约见 [架构](../../architecture/account-sync.md)；两个自定义数据根的 lease/cache 隔离和此前手工同步结果见 [sync108](../sync108/RESULT.md)。

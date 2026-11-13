@@ -1,4 +1,6 @@
-2026-11-13最新：账户同步的[双桌面核心实测](verification/account109/RESULT-LATEST.md)已覆盖双向完整正文/附件原字节、暂停恢复与离线重启；在原库中用真实 Rust 功能续验完成既有冲突两分支保全、退出后本地保存/重启和两向排除，三个进程自然退出。旧 WebView 超时失败保留，不代表 UI 全部通过。Android coordinator 连接阶段超时仍阻塞真实账户三端；[逐项用例](verification/account109/ACCOUNT-TEST-CASES.md)区分已测、部分与未执行。工作区代码/证据已分组收拢；净化候选已更新封存，GitHub/Actions 尚待测试完成。下方按历史时点阅读。
+2026-11-13新增要求：正在实施[应用内托管页与系统浏览器登录](plan/tasks/app-account109-login-surfaces.md)，两入口共享原生授权并可将当前内置事务交给浏览器。此前 `9e7c46d2` 的[真实取消与重启检查](verification/account109/native/cancel-local-live02/README.md)五项通过，两进程自然退出；它不包含新入口。临时库已在独立复核后清理。双桌面核心数据、Android 网络与发布整体边界仍见[当前结果](verification/account109/RESULT-LATEST.md)。
+
+2026-11-13：账户同步的[双桌面核心实测](verification/account109/RESULT-LATEST.md)已覆盖双向完整正文/附件原字节、暂停恢复与离线重启；在原库中用真实 Rust 功能续验完成既有冲突两分支保全、退出后本地保存/重启和两向排除，三个进程自然退出。旧 WebView 超时失败保留，不代表 UI 全部通过。Android coordinator 连接阶段超时仍阻塞真实账户三端；[逐项用例](verification/account109/ACCOUNT-TEST-CASES.md)区分已测、部分与未执行。工作区代码/证据已分组收拢；净化候选已更新封存，GitHub/Actions 尚待测试完成。下方按历史时点阅读。
 
 2026-11-13早期：本轮整理账户同步开发检查点，见[工作区提交记录](verification/account109/WORKSPACE-COMMITS.md)。已保留[架构](architecture/account-sync.md)、[界面设计](ui/account-sync.md)和[原生 SDK 调查](plan/analysis/account109-native-research.md)；当时账户界面仅在显式开发测试中启用，默认设置与手工同步仍可用。不能以局部检查替代端到端验收。
 
