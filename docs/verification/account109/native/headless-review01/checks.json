@@ -1,0 +1,60 @@
+{
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "results": [
+    {
+      "label": "focused-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "--features",
+        "sync-e2e",
+        "sync_headless::tests::",
+        "--",
+        "--test-threads=2"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 37.08
+    },
+    {
+      "label": "feature-disabled-check",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 14.991
+    }
+  ],
+  "cleanSourceAndProductInventoryUnchanged": true,
+  "productInventoryFiles": 1497,
+  "appExecuted": false,
+  "originalStoresAccessed": false,
+  "focusedTests": {
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0,
+    "filtered": 254
+  },
+  "targetReleased": true,
+  "reviewedSourceSha256": {
+    "sync_headless.rs": "56361c27f32b74b44f13de4a3fa1fb6e543fca46ec6837c8796c5c53c49975b2",
+    "lib.rs": "7721259e60a410d03c2065805b265480eee2556555afdc28a4f6c0723e4d995e"
+  }
+}
