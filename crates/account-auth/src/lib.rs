@@ -581,25 +581,60 @@ impl AuthClient {
         let request = client
             .exchange_refresh_token(&refresh)
             .add_extra_param("resource", self.inner.config.resource.as_str());
-        let response = request
-            .request_async(&self.inner.http)
-            .await
-            .map_err(|error| match error {
+        // RequestTokenError omits the HTTP status. Keep only this per-request
+        // number so a 5xx body claiming invalid_grant cannot trigger replacement.
+        let status = Arc::new(std::sync::atomic::AtomicU16::new(0));
+        let observed = status.clone();
+        let pinned_http = self.inner.http.clone();
+        let http = move |request| {
+            let status = observed.clone();
+            let pinned_http = pinned_http.clone();
+            async move {
+                let response = oauth2::AsyncHttpClient::call(&pinned_http, request).await?;
+                status.store(
+                    response.status().as_u16(),
+                    std::sync::atomic::Ordering::Relaxed,
+                );
+                Ok::<_, AuthError>(response)
+            }
+        };
+        let response = request.request_async(&http).await.map_err(|error| {
+            let status = status.load(std::sync::atomic::Ordering::Relaxed);
+            if matches!(status, 429 | 500..=599) {
+                return AuthError::Network;
+            }
+            match error {
                 // Transport/configuration failures do not establish grant rejection.
                 // Preserve only our finite categories; never replay an uncertain refresh.
                 oauth2::RequestTokenError::Request(error) => error,
                 oauth2::RequestTokenError::ServerResponse(response) => {
                     use oauth2::basic::BasicErrorResponseType as E;
                     match response.error() {
-                        E::InvalidGrant => AuthError::RefreshFailed,
-                        E::InvalidClient | E::UnauthorizedClient | E::InvalidRequest
-                        | E::UnsupportedGrantType | E::InvalidScope => AuthError::Configuration,
-                        E::Extension(code) if matches!(code.as_str(), "temporarily_unavailable" | "server_error") => AuthError::Network,
+                        E::InvalidGrant if status == 400 => AuthError::RefreshFailed,
+                        E::InvalidClient
+                        | E::UnauthorizedClient
+                        | E::InvalidRequest
+                        | E::UnsupportedGrantType
+                        | E::InvalidScope
+                            if matches!(status, 400 | 401) =>
+                        {
+                            AuthError::Configuration
+                        }
+                        E::Extension(code)
+                            if matches!(status, 400 | 401)
+                                && matches!(
+                                    code.as_str(),
+                                    "temporarily_unavailable" | "server_error"
+                                ) =>
+                        {
+                            AuthError::Network
+                        }
                         _ => AuthError::TokenResponseInvalid,
                     }
                 }
                 _ => AuthError::TokenResponseInvalid,
-            })?;
+            }
+        })?;
         let verified = if response
             .refresh_token()
             .is_some_and(|token| token.secret().is_empty())

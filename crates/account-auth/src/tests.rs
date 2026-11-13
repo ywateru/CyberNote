@@ -625,6 +625,10 @@ async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry()
         (8, AuthError::TokenResponseInvalid),
         (9, AuthError::Configuration),
         (10, AuthError::TokenResponseInvalid),
+        (11, AuthError::Network),
+        (12, AuthError::TokenResponseInvalid),
+        (13, AuthError::TokenResponseInvalid),
+        (14, AuthError::TokenResponseInvalid),
     ] {
         let f = Fixture::new();
         let dir = private_temp();
@@ -655,6 +659,10 @@ async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry()
                         8 => return Ok(response(400, json!({"error":"unknown_fixture_rejection","error_description":"fixture-sensitive-response"}))),
                         9 => return Ok(response(400, json!({"error":"invalid_scope","error_description":"fixture-sensitive-response"}))),
                         10 => panic!("synthetic refresh owner failure"),
+                        11 => return Ok(response(503, json!({"error":"invalid_grant"}))),
+                        12 => return Ok(response(401, json!({"error":"invalid_grant"}))),
+                        13 => return Ok(response(302, json!({"error":"invalid_grant"}))),
+                        14 => return Ok(response(200, json!({"error":"invalid_grant"}))),
                         _ => {}
                     }
                 }
@@ -706,6 +714,28 @@ async fn local_refresh_prerequisites_and_freshness_do_not_claim_server_rejection
     assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
     assert_eq!(f.revokes.load(Ordering::SeqCst), 0);
     assert_eq!(fs::read(&path).unwrap(), before);
+}
+
+#[tokio::test]
+async fn rejected_owner_then_interrupted_reauthorization_can_explicitly_exit_and_sign_in_again() {
+    let f = Fixture::new();
+    let dir = private_temp();
+    let client = f.client(&dir).await;
+    let identity = f.login(&client).await;
+    f.fail_refresh.store(true, Ordering::SeqCst);
+    assert_eq!(client.restore().await.unwrap_err(), AuthError::RefreshFailed);
+    client.logout().await.unwrap();
+    assert!(!dir.path().join("grant.json").exists());
+    let (transaction, _) = f.begin(&client, false).await;
+    drop(transaction); // The host could not open the browser; no code was exchanged.
+    assert!(client.restore().await.unwrap().is_none());
+    assert!(!client.cleanup_required().await);
+    assert_eq!(f.tokens.load(Ordering::SeqCst), 1);
+    client.logout().await.unwrap(); // Explicit UI exit is safe even without a grant.
+    assert_eq!(f.revokes.load(Ordering::SeqCst), 1);
+    f.fail_refresh.store(false, Ordering::SeqCst);
+    assert_eq!(f.login(&client).await, identity);
+    assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
 }
 
 #[tokio::test]
