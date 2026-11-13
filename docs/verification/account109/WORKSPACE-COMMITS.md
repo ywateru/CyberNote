@@ -102,3 +102,15 @@ UI 作者原提交为 `4cc18c1c`，经 cherry-pick 收入 main，细节与复跑
 新的父级整合组 **138/138 通过，零跳过**，见 [整合摘要](native/recovery-integration02.md)。本轮桌面已恢复访问并实际运行 [relogin02](native/relogin-live02/README.md)：原库基线、两 GUI ready；一次真实 UI SignIn 后发生 responseMetadata 错误，保留 FAIL；两端自然退出，零强制信号。没有把它作为登录恢复或三端通过。原始 DB/grant 和运行目录保留私有，归档仅包含脱敏结果与已知工具源码。
 
 所有上述提交均为本地 main；截至本记录没有创建远程仓库、push 或运行 Actions。新的 native 修改不包含在旧净化草案中，最终受验来源仍需单独封存。
+
+### 2026-11-13 分类诊断、显式登录与中转观测
+
+- `16a85725`、`370ee4f4`、`d1a6eadf`：token 响应固定 operation/field、三路径拒绝与正确 scope 正例，精确更新九个 export pin。原有认证要求保留。
+- `278bbe28` 与后续候选 pin：显式允许的 B clean signedOut 续验，完整只读预算、固定历史 subject 摘要与同账号 gate；不恢复旧 grant。
+- `9c19cbef`、`d20f350b`、`298be89f`：实时 Mapping 缓存、三端独立 relay 断言和退役 sampler 竞态修复；初始 P2 与最终解决均保留。
+- `08e9a923`、`920fa9cf`：主动登录增加 Login、保留 Consent，后台 restore/refresh 不变，精确更新三个 auth pin。没有修改 Logto 角色/权限。
+- `2fb4fe11`、`e97731a4` 等 pin 只替换对应候选常量/说明/构建回执路径；当前 `920fa9cf` GUI 的真实二进制、内嵌前端和干净源码已独立核对。
+
+父级整合组依次 138、148、最终 **156/156，零跳过**，各自源码边界见 recovery-integration02。真实 relogin02/03 仍为 FAIL；第三轮已精确定位 codeExchange/scope，未假定其返回身份。当前候选包含显式重新认证和新中转观测，准备 relogin04 时系统再次锁定，尚无第四轮运行。
+
+[收尾工作区检查](workspace-closing03/README.md)覆盖 35 个有效树；本轮第一方代码已提交整合，原 279 个生成/依赖文件保留未暂存。数据库、grant、原始提供者响应与凭据没有进入本轮归档。最新源码未替换旧封存草案；GitHub 新仓/push/Actions 仍按实际验收后的原顺序待执行。
