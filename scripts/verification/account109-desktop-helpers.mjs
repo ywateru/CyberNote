@@ -1,5 +1,6 @@
 // Runner policy only. Importing this module never launches a native process.
 import assert from 'node:assert/strict';
+import {until} from './sync108-native-driver.mjs';
 
 const states=['signedOut','authorizing','connecting','ready','paused','error'];
 const codes=['account_configuration','account_authentication','account_auth_callback_invalid','account_auth_identity_invalid','account_auth_code_rejected','account_auth_token_response_invalid','account_auth_refresh_missing','account_owner_workspace_mismatch','account_network','account_enrollment_invalid','account_storage','account_cancelled','account_busy','account_platform_unsupported','account_cleanup_required','account_sync_failed','account_sync_protocol'];
@@ -17,9 +18,24 @@ export function safeStatus(s){
     devices:Array.isArray(s?.devices)?s.devices.slice(0,256).map(d=>({online:d?.online===true,current:d?.current===true,connected:d?.connected===true})):[],
     pendingCount:count(s?.pendingCount),conflictCount:count(s?.conflictCount)};
 }
-export function requireHealthy(s){
+export function requireHealthy(s,{pendingNetwork=false}={}){
+  if(pendingNetwork&&s?.error?.code==='account_network')return false;
   if(s?.error||s?.state==='error')throw fail(codes.includes(s?.error?.code)&&/^account_auth/.test(s.error.code)?'ACCOUNT_AUTHENTICATION_FAILED':'ACCOUNT_STATUS_FAILED');
+  return true;
 }
+// Only bounded waits opt into network-pending status. Never let a matching data
+// projection or enabled flag turn an error sample into phase success.
+export async function waitForAccountStatuses(name,readStatuses,ready,timeoutMs,begin){
+  let started=false,statuses;
+  await until(name,async()=>{
+    if(!started){started=true;await begin?.();}
+    statuses=await readStatuses();
+    const healthy=statuses.map(s=>requireHealthy(s,{pendingNetwork:true}));
+    return healthy.every(Boolean)&&await ready(statuses);
+  },timeoutMs);
+  return statuses;
+}
+export const accountEnabled=s=>s.enabled&&!s.error&&s.state!=='authorizing'&&s.state!=='error';
 export function statusObserver(report,getPhase){
   const previous=new Map();
   return (device,status)=>{

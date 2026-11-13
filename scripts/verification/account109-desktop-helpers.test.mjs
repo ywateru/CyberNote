@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {until} from './sync108-native-driver.mjs';
-import {safeStatus,requireHealthy,statusObserver,nativeAccount,attachmentRefs,preserveAttachments,canonicalBody,snapshotNotes,observeLogout,failureCode,finishReport} from './account109-desktop-helpers.mjs';
+import {safeStatus,requireHealthy,waitForAccountStatuses,accountEnabled,statusObserver,nativeAccount,attachmentRefs,preserveAttachments,canonicalBody,snapshotNotes,observeLogout,failureCode,finishReport} from './account109-desktop-helpers.mjs';
 
 const status=(overrides={})=>({state:'ready',enabled:true,profile:{subject:'private-subject',username:'cybernoteqa20261113a'},devices:[{id:'private-device-id',name:'private-name',online:true,current:true,connected:false}],pendingCount:0,conflictCount:0,...overrides});
 const out=()=>status({state:'signedOut',enabled:false,profile:undefined,devices:[]});
@@ -27,6 +27,41 @@ test('authorization, restore and enable errors fail immediately, including error
   assert.throws(()=>requireHealthy(status({state:'error',error:undefined})),{code:'ACCOUNT_STATUS_FAILED'});
   assert.throws(()=>requireHealthy(status({error:{code:'account_network'}})),{code:'ACCOUNT_STATUS_FAILED'});
   for(const state of ['authorizing','connecting','ready','paused','signedOut'])assert.doesNotThrow(()=>requireHealthy(status({state})));
+});
+
+const network=()=>status({state:'error',error:{code:'account_network',stage:'coordinatorRegistration'}});
+test('bounded polling retains network transitions and waits for ready before evaluating success',async()=>{
+  const report={},observe=statusObserver(report,()=> 'automatic-discovery');let polls=0,successCalls=0;
+  const result=await waitForAccountStatuses('network recovers',async()=>{
+    const s=polls++===0?network():status();observe('a',s);return [s];
+  },([s])=>{successCalls++;return s.state==='ready';},1000);
+  assert.equal(polls,2);assert.equal(successCalls,1);assert.equal(result[0].state,'ready');
+  assert.equal(report.statusTransitions[0].error.code,'account_network');assert.equal(report.statusTransitions[1].state,'ready');
+});
+test('persistent network status reaches the bounded timeout even if data already matches',async()=>{
+  let polls=0,successCalls=0;
+  await assert.rejects(waitForAccountStatuses('persistent network',async()=>{polls++;return [network()];},()=>{successCalls++;return true;},150),{code:'CONDITION_TIMEOUT:persistent network'});
+  assert(polls>=2);assert.equal(successCalls,0);
+  assert.throws(()=>requireHealthy(network()),{code:'ACCOUNT_STATUS_FAILED'},'Network remains fatal outside bounded waits');
+});
+test('authentication and permanent failures still fail immediately inside bounded waits',async()=>{
+  for(const code of ['account_authentication','account_configuration','account_owner_workspace_mismatch','account_enrollment_invalid','account_storage','account_sync_protocol','account_sync_failed','account_cancelled','account_busy','account_platform_unsupported','account_cleanup_required','unknown']){
+    let polls=0,successCalls=0;
+    const s=status({state:'error',error:{code,providerReason:'network'}});
+    await assert.rejects(waitForAccountStatuses('permanent failure',async()=>{polls++;return [network(),s];},()=>{successCalls++;return true;},120000),{code:code==='account_authentication'?'ACCOUNT_AUTHENTICATION_FAILED':'ACCOUNT_STATUS_FAILED'});
+    assert.equal(polls,1);assert.equal(successCalls,0);
+  }
+  assert.throws(()=>requireHealthy(status({state:'error'}),{pendingNetwork:true}),{code:'ACCOUNT_STATUS_FAILED'});
+});
+test('enable stays pending through a transient command result and enabled error sample',async()=>{
+  let began=0,polls=0,successCalls=0;
+  const transient=status({state:'ready',enabled:true,error:{code:'account_network'}});
+  assert.equal(accountEnabled(transient),false);
+  assert.equal(accountEnabled(status({state:'error'})),false);
+  assert.equal(accountEnabled(status({state:'authorizing'})),false);
+  assert.equal(accountEnabled(status({enabled:false})),false);
+  const [enabled]=await waitForAccountStatuses('enable settles',async()=>[polls++===0?transient:status({state:'connecting'})],([s])=>{successCalls++;return accountEnabled(s);},1000,async()=>{began++;assert.equal(requireHealthy(transient,{pendingNetwork:true}),false);});
+  assert.equal(began,1);assert.equal(polls,2);assert.equal(successCalls,1);assert.equal(enabled.state,'connecting');assert(!enabled.error);
 });
 
 test('transitions are deduplicated per device/phase, record recovery, and bound oscillation',()=>{
