@@ -7,7 +7,8 @@ import {resolve} from 'node:path';
 import {execFileSync,spawn} from 'node:child_process';
 import {once} from 'node:events';
 import vm from 'node:vm';
-import {STORES,options,hash,priorEntity,readBaseline,canonicalBranch,validateBaselines,nativeSync,checkpoint,verifyBytes,boundedPoll,finishRecovery} from './account109-desktop-recovery.mjs';
+import {STORES,options,hash,priorEntity,readBaseline,canonicalBranch,validateBaselines,nativeSync,checkpoint,verifyBytes,boundedPoll,observeLogoutDirections,finishRecovery} from './account109-desktop-recovery.mjs';
+import {snapshotNotes} from './account109-desktop-helpers.mjs';
 
 const id='272b0013-7b6a-4729-88f0-a10e2fd48e43';
 const attachmentIds=['11111111-1111-4111-8111-111111111111','22222222-2222-4222-8222-222222222222'];
@@ -92,6 +93,24 @@ test('raw attachment proof checks every file and production read, preserved meta
 test('continuation polls only once per second and timeout remains bounded without retrying resolution',async()=>{
   let clock=0,calls=0;
   await assert.rejects(boundedPoll('heads',async()=>{calls++;return false;},3000,{now:()=>clock,sleep:async ms=>{clock+=ms;}}),{code:'CONDITION_TIMEOUT:heads'});assert.equal(calls,3);assert.equal(clock,3000);
+});
+test('logout local edit persists across both windows while delayed transfer in either direction fails',async()=>{
+  const localNoteId='33333333-3333-4333-8333-333333333333';
+  const original=payload('existing preserved body').note,edited={id:localNoteId,document:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'退出后本地编辑 😀'}]}]},plainText:'退出后本地编辑 😀'};
+  const snapshot=snapshotNotes([original,edited]);
+  for(const mode of ['ok','a-to-b','b-to-a','lost-local-after-restart','changed-local-after-restart']){
+    let clock=0,window=0;
+    const observe=()=>observeLogoutDirections({localNoteId,snapshot,remoteIds:['remote-after-logout'],durationMs:300,now:()=>clock,sleep:async ms=>{clock+=ms;},readStatus:async()=>({state:'signedOut',enabled:false,devices:[]}),readNotes:async()=>{
+      const notes=structuredClone([original,edited]);
+      if(clock>=200&&mode==='b-to-a')notes.push({id:'remote-after-logout'});
+      if(window===1&&mode==='lost-local-after-restart')notes.pop();
+      if(window===1&&mode==='changed-local-after-restart')notes[1].document.content=[];
+      return notes;
+    },readRemoteNotes:async()=>clock>=200&&mode==='a-to-b'?[structuredClone(edited)]:[]});
+    if(['a-to-b','b-to-a'].includes(mode)){await assert.rejects(observe());continue;}
+    assert.equal((await observe()).samples,4);window=1;clock=0;
+    if(mode==='ok'){const proof=await observe();assert.equal(proof.samples,4);assert.equal(proof.observedMs,300);}else await assert.rejects(observe());
+  }
 });
 test('completion cannot pass until both required cases and all exact owned children close naturally',async()=>{
   for(const mode of ['ok','prior-fail','logout-not-run','cleanup-reject','forced']){

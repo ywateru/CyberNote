@@ -126,6 +126,14 @@ export async function boundedPoll(label,predicate,timeoutMs,{now=Date.now,sleep=
   while(now()<end){if(await predicate())return;await sleep(Math.min(1000,Math.max(0,end-now())));}
   throw Object.assign(new Error('Bounded continuation timeout'),{code:'CONDITION_TIMEOUT:'+label});
 }
+export function observeLogoutDirections({readRemoteNotes,localNoteId,...options}){
+  assert(uuid(localNoteId));
+  return observeLogout({...options,readNotes:async()=>{
+    const notes=await options.readNotes();
+    assert(!(await readRemoteNotes()).some(n=>n.id===localNoteId),'Signed-out local edit reached the remote desktop');
+    return notes;
+  }});
+}
 export async function finishRecovery(report,children,close,save){
   const results=await Promise.allSettled(children.map(close));report.lifecycle=children.map(a=>a.lifecycle);
   if(results.some(r=>r.status==='rejected')||children.some(a=>a.lifecycle.naturalExit!==true)){report.status='fail';report.cleanupFailure={code:'CLEANUP_FAILED'};}
@@ -184,11 +192,16 @@ export async function run(argv=process.argv.slice(2)){
     const local=await workspace(a),snapshot=snapshotNotes(local.notes),allBytes=await bytes(a,local);
     report.preLogout={notes:snapshot.map(n=>({id:n.id,fullBodySha256:hash(n.body)})),attachments:allBytes.map(r=>({id:r.id,noteId:r.noteId,sha256:r.sha256,size:r.size}))};await save();
     await account(a,'signOut');await waitForAccountStatuses('signed out',()=>statuses([a]),ss=>ss.every(s=>s.state==='signedOut'&&!s.profile&&!s.enabled&&!s.devices.some(d=>d.connected)),15000);
+    const localText='退出账户后本地编辑 '+randomUUID(),localDocument={type:'doc',content:[{type:'paragraph',content:[{type:'text',text:localText}]}]};
+    await command(a,'folder.select',{id:'default'});await command(a,'note.create');await command(a,'editor.setContent',{document:localDocument});await command(a,'app.flush');
+    const localState=await trace('a','state',()=>a.state()),localNoteId=localState.selection.noteId,localNote=localState.workspace.notes.find(n=>n.id===localNoteId);
+    assert(uuid(localNoteId)&&!snapshot.some(n=>n.id===localNoteId));assert.deepEqual(localNote?.document,localDocument);assert.equal(localNote.plainText,localText);snapshot.push(...snapshotNotes([localNote]));
+    report.postLogoutLocalEdit={noteId:localNoteId,fullBodySha256:hash(snapshot.at(-1).body),createdThroughEditorCommands:true};await save();
     const remoteIds=[];
     async function remote(){const s=await account(b);requireHealthy(s);assert(s.profile?.username===USERNAME&&s.enabled&&s.state==='ready');await command(b,'folder.select',{id:'default'});await command(b,'note.create');await command(b,'editor.setContent',{document:{type:'doc',content:[{type:'paragraph',content:[{type:'text',text:'退出后远端新备忘录 '+randomUUID()}]}]}});await command(b,'app.flush');const ws=await trace('b','state',()=>b.state());const id=ws.selection.noteId;assert(uuid(id)&&!snapshot.some(n=>n.id===id)&&!remoteIds.includes(id));remoteIds.push(id);const body=ws.workspace.notes.find(n=>n.id===id);assert(body?.plainText.includes('退出后远端新备忘录'));await account(b,'syncNow');}
-    async function exclude(label){const proof=await observeLogout({readStatus:()=>account(a),readNotes:async()=>{const ws=await workspace(a);const s=await account(b);requireHealthy(s);assert(s.profile?.username===USERNAME&&s.enabled&&s.state==='ready');return ws.notes;},snapshot,remoteIds,now:()=>performance.now()});const ws=await workspace(a);await bytes(a,ws,allBytes);report.observations.push({kind:'logout-exclusion',label,...proof,remoteIds:[...remoteIds],allLocalBodiesAndRawAttachmentsPreserved:true});}
+    async function exclude(label){const proof=await observeLogoutDirections({readStatus:()=>account(a),readNotes:async()=>(await workspace(a)).notes,readRemoteNotes:async()=>{const s=await account(b);requireHealthy(s);assert(s.profile?.username===USERNAME&&s.enabled&&s.state==='ready');return (await workspace(b)).notes;},localNoteId,snapshot,remoteIds,now:()=>performance.now()});const ws=await workspace(a);await bytes(a,ws,allBytes);report.observations.push({kind:'logout-exclusion',label,...proof,remoteIds:[...remoteIds],localNoteId,postLogoutLocalEditPreservedAndAbsentRemotely:true,allLocalBodiesAndRawAttachmentsPreserved:true});}
     await remote();await exclude('before restart');await trace('a','close',()=>a.close());assert(a.lifecycle.naturalExit);a=await open('a');await remote();await exclude('after restart');
-    check('logout rejects new remote notes for 3 seconds before/after restart and preserves every local body and raw attachment');report.scenarios.logout='pass';await save();
+    check('logout stops new notes in both directions for 3 seconds before/after restart, retains the post-logout local edit and every prior body/raw attachment');report.scenarios.logout='pass';await save();
   }catch(error){report.status='fail';report.failure={phase:report.phase,code:failureCode(error),lastOperation:report.lastOperation};}
   finally{
     try{assert.equal(hash(await readFile(resolve(prior,'result.json'))),hash(priorBytes));}catch{report.status='fail';report.failure??={phase:'prior-evidence',code:'CHECK_FAILED'};}
