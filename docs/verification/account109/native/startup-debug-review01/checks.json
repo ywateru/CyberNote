@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "date": "2026-11-13",
+  "verdict": "approve final source group; native gate passed",
+  "integratedSourceCommit": "abeda3780aff4a026d3d44effe2679800cb6e956",
+  "integratedTree": "90587979ceaf31d7336b228d7f2feba3995514c1",
+  "handoffSource": "1abadb7bac9f08893ba371b2969abe5639b45b99",
+  "debugInitialSource": "2727172864ffbe1f30bb54c71dc5b7357baf8e42",
+  "nativeSchemaFix": "bb810833389110244a1c48a48de87315b4e7c034",
+  "debugManifestHead": "f5d812387b9760d35e272e05cc76129ba5b86f5a",
+  "sourceSha256": {
+    "src/App.tsx": "d903f1a263bb7adacdb28248dca008de4c9956c6f14bebc7d9c711eaca66ac43",
+    "src/startup.ts": "84ae7937988927c68fedd5a67832c662de4a19854353bddf1d718b2bfadfff83",
+    "src-tauri/src/sync_e2e.rs": "ed7f0e1e33bcc890ad98b0bcdc3024a1aaa566a5ecf6f94cae493e14b9b6d143",
+    "src/debug/runtime.ts": "aa00e510588a041a067cf4e02fa4565d927325ad361bd8f269493364fce9a9fe",
+    "scripts/verification/sync108-native-driver.mjs": "d521530738daf0586846445de14e6ecf57799c2c441e78cb0d25312b640a2c23"
+  },
+  "nativeCommand": "cargo test --offline --locked --verbose --manifest-path src-tauri/Cargo.toml --features sync-e2e --lib sync_e2e::tests:: -- --test-threads=2",
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "native": {
+    "exit": 0,
+    "passed": 2,
+    "failed": 0,
+    "filtered": 274,
+    "freshDependencies": 568,
+    "compiled": [
+      "Compiling tauri-plugin-notes-media v0.1.0 (/private/tmp/cybernote-account109-relay-observer-review-01/plugins/tauri-plugin-notes-media)",
+      "Compiling account-auth v0.1.0 (/private/tmp/cybernote-account109-relay-observer-review-01/crates/account-auth)",
+      "Compiling notes-clone v0.1.0 (/private/tmp/cybernote-account109-relay-observer-review-01/src-tauri)"
+    ]
+  },
+  "integratedNode": {
+    "passed": 100,
+    "failed": 0,
+    "skipped": 0
+  },
+  "integratedTypecheckExit": 0,
+  "sampledFreeGiB": {
+    "before": 22.43,
+    "after": 21.26
+  },
+  "sharedTargetReleased": true,
+  "newTargetCreated": false,
+  "AppOrDeviceOrNetwork": false,
+  "logs": {
+    "/private/tmp/account109-startup-debug-native-review01.txt": "32f410cd1924f4621a95c4379a3dce5c4052bf1fe92a818b2fa7ea1ad393194a",
+    "/private/tmp/account109-startup-debug-integrated-review01.txt": "bd757f1c55a69e376ab7cc30ffcd78b5cc7ba35df4fb29a929971bf4fd373bc7",
+    "/private/tmp/account109-startup-debug-integrated-typecheck01.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
