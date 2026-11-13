@@ -1,0 +1,154 @@
+TAP version 13
+# Subtest: IPC preserves omitted browser compatibility and only fixed optional surfaces/transfer
+ok 1 - IPC preserves omitted browser compatibility and only fixed optional surfaces/transfer
+  ---
+  duration_ms: 11.194625
+  type: 'test'
+  ...
+# Subtest: real account UI defaults embedded; both radios and both buttons share explicit choice
+ok 2 - real account UI defaults embedded; both radios and both buttons share explicit choice
+  ---
+  duration_ms: 33.154042
+  type: 'test'
+  ...
+# Subtest: waiting text/data follow only native surface; missing legacy field stays unknown
+ok 3 - waiting text/data follow only native surface; missing legacy field stays unknown
+  ---
+  duration_ms: 13.386334
+  type: 'test'
+  ...
+# Subtest: transfer failure retains embedded owner/status and explicit retry never starts another signIn
+ok 4 - transfer failure retains embedded owner/status and explicit retry never starts another signIn
+  ---
+  duration_ms: 5.979041
+  type: 'test'
+  ...
+# Subtest: pending original opener allows status and transfer; its late response cannot undo browser surface
+ok 5 - pending original opener allows status and transfer; its late response cannot undo browser surface
+  ---
+  duration_ms: 7.965792
+  type: 'test'
+  ...
+# Subtest: cancel during transfer permits a new generation; late old transfer cannot overwrite it
+ok 6 - cancel during transfer permits a new generation; late old transfer cannot overwrite it
+  ---
+  duration_ms: 5.799167
+  type: 'test'
+  ...
+# Subtest: transfer IPC rejection retains embedded; late original reply cannot release transfer operation gate
+ok 7 - transfer IPC rejection retains embedded; late original reply cannot release transfer operation gate
+  ---
+  duration_ms: 9.148916
+  type: 'test'
+  ...
+# Subtest: cancel before original signIn reply fences that late reply and keeps single pending authorization
+ok 8 - cancel before original signIn reply fences that late reply and keeps single pending authorization
+  ---
+  duration_ms: 8.947208
+  type: 'test'
+  ...
+# Subtest: failed cancel never unlocks a second authorization, before or after the original IPC completes
+ok 9 - failed cancel never unlocks a second authorization, before or after the original IPC completes
+  ---
+  duration_ms: 4.978084
+  type: 'test'
+  ...
+# Subtest: failed signUp retry uses current radio while preserving operation; status retry does not authorize
+ok 10 - failed signUp retry uses current radio while preserving operation; status retry does not authorize
+  ---
+  duration_ms: 6.076791
+  type: 'test'
+  ...
+# Subtest: connection login retry uses selection; retained network retry remains syncNow without surface
+ok 11 - connection login retry uses selection; retained network retry remains syncNow without surface
+  ---
+  duration_ms: 6.925458
+  type: 'test'
+  ...
+# Subtest: catalog allows optional enum only for authorization; transfer is fixed and argument-free
+ok 12 - catalog allows optional enum only for authorization; transfer is fixed and argument-free
+  ---
+  duration_ms: 0.912208
+  type: 'test'
+  ...
+# Subtest: JS IPC fixture preserves legacy omission, finite failure and same current authorization
+ok 13 - JS IPC fixture preserves legacy omission, finite failure and same current authorization
+  ---
+  duration_ms: 0.372
+  type: 'test'
+  ...
+# Subtest: authorization surface is finite, authorizing-only and optional for legacy native status
+ok 14 - authorization surface is finite, authorizing-only and optional for legacy native status
+  ---
+  duration_ms: 1.728792
+  type: 'test'
+  ...
+# Subtest: explicit network retry restores a retained owner without authorizing or enabling
+ok 15 - explicit network retry restores a retained owner without authorizing or enabling
+  ---
+  duration_ms: 0.541
+  type: 'test'
+  ...
+# Subtest: retry respects authentication, cleanup, ownership and unknown-error fences
+ok 16 - retry respects authentication, cleanup, ownership and unknown-error fences
+  ---
+  duration_ms: 0.129416
+  type: 'test'
+  ...
+# Subtest: legacy errors and fixed native network stages remain valid DTOs
+ok 17 - legacy errors and fixed native network stages remain valid DTOs
+  ---
+  duration_ms: 0.106125
+  type: 'test'
+  ...
+# Subtest: untrusted diagnostic fields and upstream values fail closed
+ok 18 - untrusted diagnostic fields and upstream values fail closed
+  ---
+  duration_ms: 0.203625
+  type: 'test'
+  ...
+# Subtest: provider diagnostics preserve finite auth categories in their strict context
+ok 19 - provider diagnostics preserve finite auth categories in their strict context
+  ---
+  duration_ms: 0.075958
+  type: 'test'
+  ...
+# Subtest: authentication diagnostics preserve only the finite native operation stages
+ok 20 - authentication diagnostics preserve only the finite native operation stages
+  ---
+  duration_ms: 0.113459
+  type: 'test'
+  ...
+# Subtest: token envelope details preserve exact finite operation/field and safe UI explanation
+ok 21 - token envelope details preserve exact finite operation/field and safe UI explanation
+  ---
+  duration_ms: 0.129125
+  type: 'test'
+  ...
+# Subtest: partial, unknown and cross-branch token diagnostics fail closed without inferred cause
+ok 22 - partial, unknown and cross-branch token diagnostics fail closed without inferred cause
+  ---
+  duration_ms: 0.421583
+  type: 'test'
+  ...
+# Subtest: live Mapping DTO retains only finite per-path labels and explicit generation/sample age
+ok 23 - live Mapping DTO retains only finite per-path labels and explicit generation/sample age
+  ---
+  duration_ms: 0.421291
+  type: 'test'
+  ...
+# Subtest: Mapping DTO rejects stale, wrong-generation, invalid-label and inactive evidence
+ok 24 - Mapping DTO rejects stale, wrong-generation, invalid-label and inactive evidence
+  ---
+  duration_ms: 0.320959
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 229.479833
