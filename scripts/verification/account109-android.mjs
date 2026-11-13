@@ -1,5 +1,6 @@
 /** Fixed Account109 Samsung driver derived from the committed Sync108 helper.
- * Writes use visible product controls and CDP Input. IPC exposes reads only.
+ * Note writes use visible product controls and CDP Input. Two fixed account
+ * sync controls also use production IPC, explicitly bypassing UI confirmation.
  * No token/grant access, arbitrary evaluation API, SQL, manual pairing or ADB shell API.
  * Node >=22. close() is idempotent and removes only its exact PID-owned forward.
  */
@@ -65,20 +66,45 @@ export async function reclaimBackgroundAndroid() {
 }
 
 export async function removeOwnedForward(owned) {
-  if (owned.serial !== SERIAL || owned.package !== PACKAGE ||
-      !Number.isInteger(owned.pid) || !/^tcp:\d+$/.test(owned.local) ||
-      owned.remote !== `localabstract:webview_devtools_remote_${owned.pid}`) {
-    throw Error('Invalid owned mapping');
-  }
-  const exact = `${SERIAL} ${owned.local} ${owned.remote}`;
-  if (run('forward', '--list').trim().split('\n').includes(exact)) {
+  if (ownedForwardPresent(owned)) {
     run('forward', '--remove', owned.local);
     return true;
   }
   return false;
 }
 
-export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket } = {}) {
+export function ownedForwardPresent(owned) {
+  if (owned.serial !== SERIAL || owned.package !== PACKAGE ||
+      !Number.isInteger(owned.pid) || !/^tcp:\d+$/.test(owned.local) ||
+      owned.remote !== `localabstract:webview_devtools_remote_${owned.pid}`) {
+    throw Error('Invalid owned mapping');
+  }
+  const exact = `${SERIAL} ${owned.local} ${owned.remote}`;
+  return run('forward', '--list').trim().split('\n').includes(exact);
+}
+
+// No caller-supplied command types or account payloads escape this boundary.
+export function accountSyncControls(invoke) {
+  return {
+    async setEnabled(...args) {
+      if (args.length !== 1 || typeof args[0] !== 'boolean') throw Error('ANDROID_INVALID_ACCOUNT_ARGUMENTS');
+      return invoke({ type: 'setEnabled', enabled: args[0] });
+    },
+    async syncNow(...args) {
+      if (args.length) throw Error('ANDROID_INVALID_ACCOUNT_ARGUMENTS');
+      return invoke({ type: 'syncNow' });
+    },
+  };
+}
+
+export function installedApkPath(output) {
+  const lines=output.trim().split('\n');
+  if(lines.length!==1||!/^package:\/data\/app\/[A-Za-z0-9_.+=/-]+\/base\.apk$/.test(lines[0])||lines[0].split('/').includes('..'))throw Object.assign(Error('ANDROID_APK_PATH_INVALID'),{code:'ANDROID_APK_PATH_INVALID'});
+  return lines[0].slice('package:'.length);
+}
+
+export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, launch = false } = {}) {
+  if (typeof launch !== 'boolean') throw Error('ANDROID_INVALID_LAUNCH_ARGUMENT');
   if (typeof WebSocketImpl !== 'function') throw Object.assign(Error('ANDROID_WEBSOCKET_UNAVAILABLE'), { code: 'ANDROID_WEBSOCKET_UNAVAILABLE' });
   // Exclusive live driver; stale locks are intentionally not deleted automatically.
   const lease = await acquireDriverLease(lockPath);
@@ -109,6 +135,9 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket } = 
     if (owned && !keepForward) await removeOwnedForward(owned);
   });
   try {
+    // Launch only after taking the same lease used for CDP. Never race another
+    // operator's phone session, and never force-stop/restart the package here.
+    if (launch) { launchAndroid(); assertInteractive(); }
     const pid = ownPid();
     const remote = `localabstract:webview_devtools_remote_${pid}`;
     const port = Number(run('forward', '--no-rebind', 'tcp:0', remote).trim());
@@ -200,6 +229,18 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket } = 
     };
     const api = {
       owned, diagnostics, close, readWorkspace, readNote, accountStatus, openAccount, closeSettings,
+      ...accountSyncControls(async command => {
+        assertInteractive();
+        diagnostics.phase = `account.${command.type}`; diagnostics.selector = null;
+        return evaluate(`window.__TAURI_INTERNALS__.invoke('account_command',${quote({ command })})`);
+      }),
+      async artifactIdentity() {
+        assertPid();
+        const apkPath=installedApkPath(run('shell', 'pm', 'path', PACKAGE));
+        const apkSha256 = run('shell', 'sha256sum', apkPath).trim().split(/\s+/)[0];
+        if (!/^[a-f0-9]{64}$/.test(apkSha256)) throw failure('ANDROID_APK_HASH_INVALID');
+        return { package: PACKAGE, apkSha256, sourceRevision: 'unverified' };
+      },
       async inspect() {
         return { ...owned, account: await accountStatus(), ui: await evaluate(`({ready:!!document.querySelector('.app'),state:document.querySelector('.account-settings')?.dataset.accountState||null,login:!!document.querySelector('.account-primary'),cancel:Array.from(document.querySelectorAll('.account-actions button')).some(e=>e.textContent.trim()==='取消登录')})`) };
       },
