@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: runner source and binary pin match the independently recorded exact GUI build
+ok 1 - runner source and binary pin match the independently recorded exact GUI build
+  ---
+  duration_ms: 3.337375
+  type: 'test'
+  ...
+# Subtest: CLI requires explicit end state and rejects credential/URL/store/duplicate inputs
+ok 2 - CLI requires explicit end state and rejects credential/URL/store/duplicate inputs
+  ---
+  duration_ms: 1.128042
+  type: 'test'
+  ...
+# Subtest: signed-out opt-in requires byte-exact committed history; absent or altered evidence fails
+ok 3 - signed-out opt-in requires byte-exact committed history; absent or altered evidence fails
+  ---
+  duration_ms: 17.244958
+  type: 'test'
+  ...
+# Subtest: explicit clean signedOut waits the full read-only 120 seconds including boundary sample
+ok 4 - explicit clean signedOut waits the full read-only 120 seconds including boundary sample
+  ---
+  duration_ms: 1.242292
+  type: 'test'
+  ...
+# Subtest: initial clean signedOut never hides a later noSession/cleanup/error, including at deadline
+ok 5 - initial clean signedOut never hides a later noSession/cleanup/error, including at deadline
+  ---
+  duration_ms: 6.271792
+  type: 'test'
+  ...
+# Subtest: any unclean or mixed startup sample disqualifies signed-out recovery for the entire interval
+ok 6 - any unclean or mixed startup sample disqualifies signed-out recovery for the entire interval
+  ---
+  duration_ms: 3.077
+  type: 'test'
+  ...
+# Subtest: historical owner gate checks every profile, including partial authorizing and error profiles
+ok 7 - historical owner gate checks every profile, including partial authorizing and error profiles
+  ---
+  duration_ms: 2.132125
+  type: 'test'
+  ...
+# Subtest: signed-out recovery requires opt-in/history and never enables after owner/auth/cleanup failure
+ok 8 - signed-out recovery requires opt-in/history and never enables after owner/auth/cleanup failure
+  ---
+  duration_ms: 0.430208
+  type: 'test'
+  ...
+# Subtest: partial refresh-failure profile retains its actual error, while healthy username remains strict
+ok 9 - partial refresh-failure profile retains its actual error, while healthy username remains strict
+  ---
+  duration_ms: 0.341333
+  type: 'test'
+  ...
+# Subtest: pinned classification admits only the reviewed HTTP400 invalid_grant mapping
+ok 10 - pinned classification admits only the reviewed HTTP400 invalid_grant mapping
+  ---
+  duration_ms: 0.294208
+  type: 'test'
+  ...
+# Subtest: startup polls signedOut until delayed restore error/profile without issuing commands
+ok 11 - startup polls signedOut until delayed restore error/profile without issuing commands
+  ---
+  duration_ms: 1.431208
+  type: 'test'
+  ...
+# Subtest: startup profile while connecting cannot hide a later recoverable error
+ok 12 - startup profile while connecting cannot hide a later recoverable error
+  ---
+  duration_ms: 0.071792
+  type: 'test'
+  ...
+# Subtest: one explicitly allowed B recovery preserves subject and enables only after healthy result
+ok 13 - one explicitly allowed B recovery preserves subject and enables only after healthy result
+  ---
+  duration_ms: 0.26925
+  type: 'test'
+  ...
+# Subtest: server-rejected re-login cannot enable a changed or incomplete terminal owner
+ok 14 - server-rejected re-login cannot enable a changed or incomplete terminal owner
+  ---
+  duration_ms: 0.122416
+  type: 'test'
+  ...
+# Subtest: failed network retry never falls through to SignIn, SignOut or another retry
+ok 15 - failed network retry never falls through to SignIn, SignOut or another retry
+  ---
+  duration_ms: 0.364708
+  type: 'test'
+  ...
+# Subtest: noSession preserves initial error and gives explicit SignOut guidance without executing it
+ok 16 - noSession preserves initial error and gives explicit SignOut guidance without executing it
+  ---
+  duration_ms: 0.113916
+  type: 'test'
+  ...
+# Subtest: authorizing partial profile waits for strict same-subject terminal after initial refresh failure
+ok 17 - authorizing partial profile waits for strict same-subject terminal after initial refresh failure
+  ---
+  duration_ms: 0.540208
+  type: 'test'
+  ...
+# Subtest: B recovery flags and unsupported authentication states cannot mutate an account
+ok 18 - B recovery flags and unsupported authentication states cannot mutate an account
+  ---
+  duration_ms: 0.1735
+  type: 'test'
+  ...
+# Subtest: complete baseline rejects missing notes, changed text/marks, ownership and lost refs
+ok 19 - complete baseline rejects missing notes, changed text/marks, ownership and lost refs
+  ---
+  duration_ms: 1.067375
+  type: 'test'
+  ...
+# Subtest: shared-note baseline rejects B metadata loss while allowing local revision/path differences
+ok 20 - shared-note baseline rejects B metadata loss while allowing local revision/path differences
+  ---
+  duration_ms: 2.279
+  type: 'test'
+  ...
+# Subtest: shared attachment IDs require identical original owner, metadata, hash and exact references
+ok 21 - shared attachment IDs require identical original owner, metadata, hash and exact references
+  ---
+  duration_ms: 1.232292
+  type: 'test'
+  ...
+# Subtest: readonly copy captures full projection and original bytes without querying account tables
+ok 22 - readonly copy captures full projection and original bytes without querying account tables
+  ---
+  duration_ms: 62.135417
+  type: 'test'
+  ...
+# Subtest: retained raw-byte check rejects same-size corruption and production-read disagreement
+ok 23 - retained raw-byte check rejects same-size corruption and production-read disagreement
+  ---
+  duration_ms: 1.603834
+  type: 'test'
+  ...
+# Subtest: preserved continuation gate rejects historical loss/byte changes and pre-applied remote notes
+ok 24 - preserved continuation gate rejects historical loss/byte changes and pre-applied remote notes
+  ---
+  duration_ms: 1.673833
+  type: 'test'
+  ...
+# Subtest: transient network becomes ready; persistent network times out despite matching predicate
+ok 25 - transient network becomes ready; persistent network times out despite matching predicate
+  ---
+  duration_ms: 0.120667
+  type: 'test'
+  ...
+# Subtest: authentication fails immediately and enable-pending cannot pass until healthy
+ok 26 - authentication fails immediately and enable-pending cannot pass until healthy
+  ---
+  duration_ms: 0.087834
+  type: 'test'
+  ...
+# Subtest: connection time is excluded from the data deadline; data health stays strict
+ok 27 - connection time is excluded from the data deadline; data health stays strict
+  ---
+  duration_ms: 0.476917
+  type: 'test'
+  ...
+# Subtest: real UI confirmation requires complete explanation and enabled button before one click
+ok 28 - real UI confirmation requires complete explanation and enabled button before one click
+  ---
+  duration_ms: 0.636333
+  type: 'test'
+  ...
+# Subtest: PASS waits for every natural close and cleanup attempts all children after a failure
+ok 29 - PASS waits for every natural close and cleanup attempts all children after a failure
+  ---
+  duration_ms: 0.691042
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 150.854583

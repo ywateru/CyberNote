@@ -1,0 +1,77 @@
+{
+  "verdict": "APPROVE",
+  "reviewedAt": "2026-11-13T07:32:22.011421+00:00",
+  "commit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0",
+  "parent": "b867bccfa3b4a57b3f5a94f3347f64349ff2eceb",
+  "contractCommit": "f720c5f8b8a1f007a7a424cb30db3ca958253e35",
+  "scope": "Only exact two-file explicit signed-out B continuation harness delta",
+  "findings": [],
+  "tests": {
+    "tests": 29,
+    "pass": 29,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "testExitCode": 0,
+  "historyEvidenceVerified": {
+    "path": "docs/verification/account109/native/relogin-live02/result.json",
+    "fromCommit": "f720c5f8b8a1f007a7a424cb30db3ca958253e35",
+    "blob": "b2df1e9da30c09a2643e53c8584a3087cfbb37cc",
+    "sha256": "b553d6ba27ba43e4281ebfc6abc445c583cf7e25bc4bfe285e3fa749d86fa439",
+    "subjectHashMatchesContract": true,
+    "kind": "account109-original-desktop-relogin",
+    "status": "fail",
+    "decisionRows": 1
+  },
+  "unchangedGates": [
+    {
+      "gate": "existing-recovery-noSession-no-fallback",
+      "unchangedFromParent": true,
+      "sha256": "c2194846d88b75ae0386509ca1f598388492de50e20d2bf71561d783fd48ad4e"
+    },
+    {
+      "gate": "original-readonly-baseline-raw-bytes-confirmation-cleanup",
+      "unchangedFromParent": true,
+      "sha256": "80312d49a84662f43f8be4962ce5d47b256b3fa8eb590af0898455095f9a6e5c"
+    },
+    {
+      "gate": "enable-preservation-edit-and-original-id-guards",
+      "unchangedFromParent": true,
+      "sha256": "8c3338ea646eadff69e40e30d7bfdef6091ed9f9b4ca8e6c90f77ddaf5705f75"
+    },
+    {
+      "gate": "all-downstream-scenarios-and-final-cleanup",
+      "unchangedFromParent": true,
+      "sha256": "01d1dedae941d0ac2a402ffe33453715dadb017a1bdd4b1dc1ebc9740cfe6bc1"
+    }
+  ],
+  "checks": {
+    "defaultOff": true,
+    "full120SecondSampledCleanStartupAndBoundary": true,
+    "mixedStartupDisqualifiesNewBranch": true,
+    "fixedHistoryBeforeAppOrOutput": true,
+    "allObservedBProfilesMatchHistoryWhenOptedIn": true,
+    "healthyTerminalExpectedUsernameBeforeEnable": true,
+    "noSessionStops": true,
+    "noAutomaticSignOutOrRecoveryFallback": true,
+    "noArbitraryIdentityHistoryCredentialOrEndpointInputs": true,
+    "originalBodiesReferencesMetadataAndBytesRetained": true,
+    "naturalCleanupAndFailureRetentionUnchanged": true
+  },
+  "integrationPrerequisite": "Retain exact already-committed relogin02 public history blob in the integrated main tree. Native/runtime diagnostic review remains separate.",
+  "limits": [
+    "Device-free fixtures and static control-flow review only; no actual authorization, GUI readiness, native bind/storage or sync acceptance claim.",
+    "The 120-second proof uses a fake clock in tests; real runner uses unchanged bounded polling."
+  ],
+  "operations": {
+    "focusedTestInvocations": 1,
+    "liveAppAdbAxNetworkBuild": false,
+    "originalStoreAccess": false,
+    "authorOrProductEdits": false,
+    "workspaceAuditRepeated": false,
+    "commitCreated": false,
+    "fullToolCopiesArchived": false
+  }
+}

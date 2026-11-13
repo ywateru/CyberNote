@@ -1,0 +1,93 @@
+{
+  "commit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0",
+  "parent": "b867bccfa3b4a57b3f5a94f3347f64349ff2eceb",
+  "contractCommit": "f720c5f8b8a1f007a7a424cb30db3ca958253e35",
+  "contractSha256": "8f22c340a1b91eb9f9aec666a71f057895d3928102a4dcc746f3f0d100c93f73",
+  "changedPaths": [
+    "scripts/verification/account109-desktop-relogin.mjs",
+    "scripts/verification/account109-desktop-relogin.test.mjs"
+  ],
+  "snapshot": "/private/tmp/account109-relogin-signedout-review01-gcv6sncb",
+  "inputs": [
+    {
+      "path": "scripts/verification/account109-desktop-relogin.mjs",
+      "sha256": "a546d416876f8d0e3977b00e1b8dc84bc229e32154982bc6af4b82214f651875",
+      "bytes": 35870,
+      "fromCommit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-relogin.test.mjs",
+      "sha256": "3c4aca9ec6592fb8f004130f757b9b844017cc886e5159e664f2cec371f603b2",
+      "bytes": 29561,
+      "fromCommit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-recovery.mjs",
+      "sha256": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672",
+      "bytes": 24168,
+      "fromCommit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0"
+    },
+    {
+      "path": "scripts/verification/account109-desktop-helpers.mjs",
+      "sha256": "67a2651b92d5311c6a0382a752b9e13aa408c599870ceea9ddb57fb3ff3bb943",
+      "bytes": 9129,
+      "fromCommit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0"
+    },
+    {
+      "path": "scripts/verification/account109-headless-recovery.mjs",
+      "sha256": "6e1511ff3d90d159b5335035bb858c352f794643ed93651e43f5fc9330aa7a74",
+      "bytes": 15687,
+      "fromCommit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0"
+    },
+    {
+      "path": "scripts/verification/account109-headless-driver.mjs",
+      "sha256": "ce9fedd92d3dfce7ed96d67896402ef1d6cec6b43bf056d112b03241f9b00647",
+      "bytes": 10470,
+      "fromCommit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0"
+    },
+    {
+      "path": "scripts/verification/sync108-native-driver.mjs",
+      "sha256": "8501c7f55777ec9de2292433fa5ab122253d6302e844914ece44245a343524e2",
+      "bytes": 13231,
+      "fromCommit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0"
+    },
+    {
+      "path": "docs/verification/account109/macos/10814415-debug-e2e-build01/build-record.json",
+      "sha256": "1cf0ae910513206587969d12c3c48e7c07518e2228ecaebda4a0923feeeff072",
+      "fromCommit": "4477a30d14ac293b9b7531ab0ea71bdb9d1c97e0"
+    }
+  ],
+  "history": {
+    "path": "docs/verification/account109/native/relogin-live02/result.json",
+    "fromCommit": "f720c5f8b8a1f007a7a424cb30db3ca958253e35",
+    "blob": "b2df1e9da30c09a2643e53c8584a3087cfbb37cc",
+    "sha256": "b553d6ba27ba43e4281ebfc6abc445c583cf7e25bc4bfe285e3fa749d86fa439",
+    "subjectHashMatchesContract": true,
+    "kind": "account109-original-desktop-relogin",
+    "status": "fail",
+    "decisionRows": 1
+  },
+  "unchangedGates": [
+    {
+      "gate": "existing-recovery-noSession-no-fallback",
+      "unchangedFromParent": true,
+      "sha256": "c2194846d88b75ae0386509ca1f598388492de50e20d2bf71561d783fd48ad4e"
+    },
+    {
+      "gate": "original-readonly-baseline-raw-bytes-confirmation-cleanup",
+      "unchangedFromParent": true,
+      "sha256": "80312d49a84662f43f8be4962ce5d47b256b3fa8eb590af0898455095f9a6e5c"
+    },
+    {
+      "gate": "enable-preservation-edit-and-original-id-guards",
+      "unchangedFromParent": true,
+      "sha256": "8c3338ea646eadff69e40e30d7bfdef6091ed9f9b4ca8e6c90f77ddaf5705f75"
+    },
+    {
+      "gate": "all-downstream-scenarios-and-final-cleanup",
+      "unchangedFromParent": true,
+      "sha256": "01d1dedae941d0ac2a402ffe33453715dadb017a1bdd4b1dc1ebc9740cfe6bc1"
+    }
+  ],
+  "noToolSourceCopiesInArchive": true
+}
