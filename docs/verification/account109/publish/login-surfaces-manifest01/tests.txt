@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: default dry-run reads only pinned tracked blobs; apply requires exact absent destination and creates new history
+ok 1 - default dry-run reads only pinned tracked blobs; apply requires exact absent destination and creates new history
+  ---
+  duration_ms: 1001.807542
+  type: 'test'
+  ...
+# Subtest: hash tampering, process paths, credentials and symlink tree entries fail closed
+ok 2 - hash tampering, process paths, credentials and symlink tree entries fail closed
+  ---
+  duration_ms: 381.59075
+  type: 'test'
+  ...
+# Subtest: public smart corpus redirect is exact and idempotent, without changing development source
+ok 3 - public smart corpus redirect is exact and idempotent, without changing development source
+  ---
+  duration_ms: 0.275708
+  type: 'test'
+  ...
+# Subtest: committed SDK runtime extension exports exact binary bytes while project auth retains first-party rights
+ok 4 - committed SDK runtime extension exports exact binary bytes while project auth retains first-party rights
+  ---
+  duration_ms: 581.119334
+  type: 'test'
+  ...
+# Subtest: project-authored crates require exact first-party roots and reserved project rights, never vendor reclassification
+ok 5 - project-authored crates require exact first-party roots and reserved project rights, never vendor reclassification
+  ---
+  duration_ms: 2.21625
+  type: 'test'
+  ...
+# Subtest: only the reviewed auth plugin accepts reserved first-party ownership, with no sibling or vendor expansion
+ok 6 - only the reviewed auth plugin accepts reserved first-party ownership, with no sibling or vendor expansion
+  ---
+  duration_ms: 0.411167
+  type: 'test'
+  ...
+# Subtest: runtime exception binds actual bytes, path, source metadata and retained licenses, with no wildcard JNI exemption
+ok 7 - runtime exception binds actual bytes, path, source metadata and retained licenses, with no wildcard JNI exemption
+  ---
+  duration_ms: 27.231458
+  type: 'test'
+  ...
+# Subtest: reviewed extension admits ownership and runtime declarations atomically; refresh cannot repin changed binary bytes
+ok 8 - reviewed extension admits ownership and runtime declarations atomically; refresh cannot repin changed binary bytes
+  ---
+  duration_ms: 5.805459
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1995.001125

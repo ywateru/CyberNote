@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "timestamp": "2026-11-13T10:59:51.381009+00:00",
+  "baseCommit": "45876d3e62655ff99b148779b606c72da7775117",
+  "policyCommit": "49414bbf422f9d826f8f11fd6eb58426c92f3e0c",
+  "manifestCommit": "af926c52b878aad1c42a98d24e88afbd25da4ddc",
+  "extensionSha256": "8a4007282cb0959eed3617fb3edfb5312dbc798e4f0cb82a89efc5ac8a973651",
+  "manifestSha256": "6795a4a381db73d94186928e348eabb42d9152c2b3ad3e21a1cc501b0b197523",
+  "newPaths": [
+    "plugins/tauri-plugin-notes-auth/Cargo.toml",
+    "plugins/tauri-plugin-notes-auth/android/build.gradle.kts",
+    "plugins/tauri-plugin-notes-auth/android/consumer-rules.pro",
+    "plugins/tauri-plugin-notes-auth/android/src/main/AndroidManifest.xml",
+    "plugins/tauri-plugin-notes-auth/android/src/main/java/com/local/notesauth/NotesAuthPlugin.kt",
+    "plugins/tauri-plugin-notes-auth/build.rs",
+    "plugins/tauri-plugin-notes-auth/macos/login.m",
+    "plugins/tauri-plugin-notes-auth/policy.test.mjs",
+    "plugins/tauri-plugin-notes-auth/src/lib.rs",
+    "src-tauri/src/account/surface.rs"
+  ],
+  "refreshedPins": [
+    "scripts/publish/policy.mjs",
+    "scripts/publish/policy.test.mjs",
+    "scripts/publish/README.md",
+    "src-tauri/Cargo.lock",
+    "src-tauri/Cargo.toml",
+    "src-tauri/src/account/mod.rs",
+    "src-tauri/src/account/types.rs",
+    "src-tauri/src/lib.rs",
+    "src/account-client.ts",
+    "src/AccountSettings.css",
+    "src/AccountSettings.tsx",
+    "src/App.tsx",
+    "src/debug/catalog.ts"
+  ],
+  "thirdPartyDeclarationsUnchanged": true,
+  "runtimeAssetsUnchanged": true,
+  "allVendorPinsUnchanged": true,
+  "checks": {
+    "policyExportTests": {
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0
+    },
+    "manifestDryChanges": [],
+    "exportDry": {
+      "dryRun": true,
+      "sourceCommit": "af926c52b878aad1c42a98d24e88afbd25da4ddc",
+      "fileCount": 1782,
+      "bytes": 95347068,
+      "removedPackageScripts": [
+        "test:schema",
+        "test:editor",
+        "test:access",
+        "test:secure-id",
+        "test:desktop-appearance",
+        "test:native-toolbar",
+        "debug",
+        "test:debug",
+        "test:native-appearance",
+        "test:table-controls",
+        "test:button-feedback",
+        "test:startup",
+        "test:attachment-gallery",
+        "test:recording-refresh",
+        "test:mobile-editor",
+        "test:note-move-menu",
+        "test:attachment-files",
+        "test:attachment-mime",
+        "test:attachment-clipboard-native",
+        "test:menu-lifetimes",
+        "test:native-menus",
+        "test:native-menu-client",
+        "test:drawing",
+        "release",
+        "test:build-info"
+      ],
+      "initializedNewHistory": false
+    },
+    "diffCheck": "PASS"
+  },
+  "boundary": {
+    "newDraftCreated": false,
+    "nativeOrFrontendBuild": false,
+    "targetUsed": false,
+    "networkOrAppOrAdb": false,
+    "credentialsOrOriginalStores": false
+  }
+}
