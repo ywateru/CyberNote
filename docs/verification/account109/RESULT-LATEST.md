@@ -1,6 +1,6 @@
 # 账户同步实际验证结果
 
-2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；新 `920fa9cf` 候选已运行原库 relogin04，两 GUI 与基线通过，B 发起一次登录并保持 authorizing，未完成浏览器表单而等待超时。原生 Chrome 曾出现登录页，不能将未出现历史 scope 错误认定为已修复。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
+2026-11-13，Asia/Shanghai。**双桌面核心同步功能已有实际数据验证；新 `920fa9cf` 候选的原库 relogin04 未完成浏览器授权，后续 fresh cancel-local-live01 又在 GUI ready 阶段失败，未执行登录或取消。当前桌面 AX 可访问，不能把后者归因于锁屏。Android 账户三端仍受 coordinator 网络连接阻塞。整体交付未完成。** 下列结果来自多轮明确候选，不是一次完整 UI 测试全部通过。
 
 ## 分析与完善
 
@@ -20,6 +20,7 @@
 - `9c19cbef`、`d20f350b` 增加实时 Mapping 只读缓存与退役 sampler 取消栅栏；[独审](native/relay-observation-review01.md)发现并复审关闭一项 P2。作者最终 native 33/33，独立初版 native 31、Node 55 及最终源码复审通过；父级两项整合后 Node 156/156、零跳过。普通三端数据 PASS 与显式 RELAY-02 的新鲜中转样本断言分开，尚无真实 4G 运行。
 - 精确 `920fa9cf` debug E2E GUI 已[构建](macos/920fa9cf-debug-e2e-build01/README.md)并[独立核包](native/gui-explicit-login-build-review01/README.md)，SHA256 `bea14bbe7fe136578d27d691c49425bc7e6e438097780154406dbde796ca83fd`，1,654 输入、四份 lockfile 与实际二进制内嵌身份一致；runner 已 pin 并实际运行 relogin04。新候选不是正式 release。
 - `3aa8889a` 在第四轮后增加可选人工授权等待预算，默认 120 秒、最高 600 秒，仅用于三条显式 SignIn 终态等待；[独审](native/authorization-timeout-review01.md) 58/58、父级[整合](native/recovery-integration02.md) 161/161 通过、零跳过。未再次发起真实登录，启动/连接/数据预算与严格身份门槛不变。
+- `ae4b7e33` 增加仅 fresh 临时库的 GUI 本地保存/取消/重启执行器，[独审](native/cancel-local-review01.md) 11/11；父级在 `44a9f43f` 整合 172/172、零跳过。随后真实 [cancel-local-live01](native/cancel-local-live01/README.md) 在 prepare.ready 超时，详见下文，不能将 fixture 通过当作实机用例通过。
 
 ## 实际桌面证据
 
@@ -77,6 +78,8 @@ WebView IPC、编辑器草稿、物理输入、系统附件 picker、全部登�
 
 控制会话重置后，仅存在于该会话 RAM 的受控 QA 登录密码不可恢复；协作者也未持有可恢复来源。未重置密码、读取 grant、复制授权或创建替代账号。再次真实授权需要受控凭据来源重新提供，或由用户在新一轮有效登录页完成 QA 登录。Android 的正式域名提案仍待负责人输入，未改变 DNS、部署或 token 目的地。
 
+17:21:37–17:22:37 的 [cancel-local-live01](native/cancel-local-live01/README.md) 只创建了全新临时库。45 秒 ready 等待中页面保持 complete，但 root aria-hidden/inert、startup=loading、WebView visibility=hidden；未获得 interactive，没有任何文档编辑、SignIn 或 cancel。关闭亦超时并由 driver 对 owned PID 27714 发 SIGTERM，整体 FAIL/cleanup failure；结束后单独确认 PID 不存在。原结果 `pidAbsent:false` 是 close 抛错后检查未执行的字段，原样保留，不据此判定进程仍运行。之后 Finder AX 正常成功，精确操作时刻未留存，不保存其原始内容，不把此成功追溯成测试期间状态或锁屏根因。失败临时库仅 72 KiB allocated，保留供调查。
+
 ## 工作区与交付
 
 按用户追加的磁盘要求已[清理 12 个过期 Cargo target](workspace-cleanup04/README.md)，保留当前共享 target、候选、原库和全部证据。目录原 du 合计 42.56 GiB，不等于真实回收；文件系统空闲量观测增加约 23.47 GiB，结束时约 27.30 GiB 可用。后续优先复用保留的构建目录。
@@ -84,6 +87,8 @@ WebView IPC、编辑器草稿、物理输入、系统附件 picker、全部登�
 [详细工作区审计](workspace-current02/README.md)覆盖当时 27 树；本轮[收尾复查](workspace-closing03/README.md)覆盖 35 个有效树，第一方产品/执行器代码均已提交整合，待提交仅为本轮结果与归档文档。279 个历史未跟踪文件为 Android 构建输出/复制依赖，保留原地；历史分支独有诊断代码也保留，不盲目合并或删除。新代码、驱动、用例和证据按审阅范围提交，见 [提交记录](WORKSPACE-COMMITS.md)。
 
 最新已准备的净化来源为 `9010c5ba`，见[当前源码草案](publish/current-source-draft01/README.md)：1772 文件、95,275,206 字节，全新无父 root `66ad8c52`，独立 Git、单一 main、无 remote 或历史残留；精确 inventory、隐私/许可/依赖闭包、版本和 `verify --new-root` 通过。与 `920fa9cf` GUI 候选相比，该固定源 ref 只增加过程文档与验证脚本，没有产品路径改变。九个旧净化根保持原样。原历史、授权文件、原始 DB、过程证据与密钥不进入可发布源树。此为真实验收尚未完成的本地 DRAFT，尚未创建 GitHub 仓库、push 或运行 Actions；最终受验来源若改变产品输入需新建后继候选，维持真实测试完成后的交付顺序。
+
+该 DRAFT 已补齐[实际 Node/前端前置](publish/current-source-node-preflight01/README.md)：独立临时 clone 中离线锁定安装、净化 checkout gate、版本、typecheck、发布测试 19/19 与前端 build 均通过。固定净化 root `66ad8c52`、fingerprint `87db73de…877585`、1621 输入与前后 clean/四 lockfile 一致；这与开发 GUI 候选的输入计数不同，不混用身份。采样最大新增分配量 301.32 MiB，回执保存后已删除该次 clone/依赖/dist，仅保留小型证据。没有 native 编译、实机验证或实际 Actions。
 
 随后匿名中转测试已合入 `f84bb9e1`，`ec4147b6` 只更新该文件的清单 SHA；旧 `3192943d` 封存候选仍保持原字节，未含此次新测试。正式发布前需从最终已验来源重新封存，不能把旧候选称为包含本轮测试。
 
