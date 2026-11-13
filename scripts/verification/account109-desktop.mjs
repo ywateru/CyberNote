@@ -3,19 +3,28 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {spawn} from 'node:child_process';
-import {mkdir,readFile,writeFile} from 'node:fs/promises';
+import {mkdir,readFile,writeFile,realpath,lstat} from 'node:fs/promises';
 import {resolve,isAbsolute} from 'node:path';
 import {NativeApp,until,delay} from './sync108-native-driver.mjs';
 const args=process.argv.slice(2), opts={};
 for(let i=0;i<args.length;i++){
- assert(['--binary','--output'].includes(args[i])&&!opts[args[i]],'Expected --binary ABS_PATH --output FRESH_ABS_DIR');
+ assert(['--binary','--output','--resume-from'].includes(args[i])&&!opts[args[i]],'Expected --binary ABS_PATH --output FRESH_ABS_DIR [--resume-from OWNED_PRIOR_OUTPUT]');
  opts[args[i]]=args[++i];
 }
 assert(isAbsolute(opts['--binary']||'')&&isAbsolute(opts['--output']||''),'Absolute paths required');
 const binary=opts['--binary'], output=opts['--output'];
+let prior;
+const stores=opts['--resume-from']||output;
+if(opts['--resume-from']){
+ assert(isAbsolute(stores)&&/^\/private\/tmp\/account109-desktop-real-[A-Za-z0-9-]+$/.test(stores)&&await realpath(stores)===stores,'Resume only a canonical owned prior test root');
+ const bytes=await readFile(resolve(stores,'result.json'));prior=JSON.parse(bytes);
+ assert(prior.kind==='real-account-two-native-desktops'&&['a','b'].every(name=>prior.observations.some(r=>r.device===name&&r.kind==='login'&&r.hasProfile&&r.state==='paused')),'Both prior real logins must be recorded');
+ for(const name of ['a','b']){const path=resolve(stores,'desktop-'+name);assert((await lstat(path)).isDirectory()&&await realpath(path)===path,'Owned stores must be regular canonical directories');}
+}
 await mkdir(output); // Never reuse, clear or replace an existing library.
 const hash=b=>createHash('sha256').update(b).digest('hex');
 const report={schema:1,kind:'real-account-two-native-desktops',startedAt:new Date().toISOString(),tools:{runnerSha256:hash(await readFile(new URL(import.meta.url))),driverSha256:hash(await readFile(new URL('./sync108-native-driver.mjs',import.meta.url)))},binary:{path:binary,sha256:hash(await readFile(binary))},checks:[],observations:[],limitations:['Debug/e2e build and existing synthetic File[] attachment boundary; no physical keyboard or OS picker claim.','Only dedicated synthetic hosted SSO may be used. This runner never supplies credentials, callbacks, tokens, workspace IDs or pairing invitations.','Inherited shell proxy variables are blanked for these owned test processes, matching an app launched outside the shell; no system network settings change.']};
+if(prior)report.resume={from:stores,priorReportSha256:hash(await readFile(resolve(stores,'result.json'))),mode:'existing-real-grants-restored-by-native-runtime',newAuthorizationRequested:false};
 const check=name=>{report.checks.push({name,status:'pass'});console.log('PASS '+name);};
 // Scoped to this runner's lifetime; does not unlock or change system settings.
 if(process.platform==='darwin'){
@@ -26,7 +35,7 @@ const children=[],devices={}; let phase='startup';
 const save=()=>writeFile(resolve(output,'result.json'),JSON.stringify(report,null,2)+'\n');
 const proxyEnv=Object.fromEntries(['HTTP_PROXY','HTTPS_PROXY','ALL_PROXY','NO_PROXY','http_proxy','https_proxy','all_proxy','no_proxy'].map(k=>[k,'']));
 async function open(name){
- const app=new NativeApp(binary,resolve(output,'desktop-'+name),{name,env:{...proxyEnv,NOTES_SYNC_E2E_SLOT:name==='a'?'left':'right'}});children.push(app);devices[name]=app;
+ const app=new NativeApp(binary,resolve(stores,'desktop-'+name),{name,env:{...proxyEnv,NOTES_SYNC_E2E_SLOT:name==='a'?'left':'right'}});children.push(app);devices[name]=app;
  const ready=await app.ready(45000);report.observations.push({device:name,kind:'ready',pid:app.child.pid,interactive:ready.interactive,startupDetached:ready.startupDetached});return app;
 }
 async function command(app,id,args={}){const v=await app.execute(id,args);await app.idle();return v;}
@@ -80,13 +89,21 @@ async function enable(app){
 }
 try{
  let a=await open('a'),b=await open('b');check('two isolated native stores become interactive');
- phase='local-data';const ids={a:await create(a,'账户验收 A → B'),b:await create(b,'账户验收 B → A')};
- const expected={a:body(await note(a,ids.a)),b:body(await note(b,ids.b))};
+ let ids,expected;
+ if(prior){
+  phase='restore-existing-grants';ids=Object.fromEntries(['a','b'].map(name=>[name,prior.observations.find(r=>r.device===name&&r.kind==='original-attachment')?.noteId]));assert(ids.a&&ids.b,'Prior local note IDs required');
+  expected={a:body(await note(a,ids.a)),b:body(await note(b,ids.b))};
+  await until('both existing real grants restore',async()=>{const s=await Promise.all([account(a),account(b)]);return s.every(v=>v.enabled&&v.profile?.username==='cybernoteqa20261113a'&&!v.error);},120000);
+  assert.equal((await account(a)).profile.subject,(await account(b)).profile.subject);check('same real account grants restore without a new authorization');
+ }else{
+ phase='local-data';ids={a:await create(a,'账户验收 A → B'),b:await create(b,'账户验收 B → A')};
+ expected={a:body(await note(a,ids.a)),b:body(await note(b,ids.b))};
  await originals(a,ids.a);await originals(b,ids.b);assert(!(await note(a,ids.b))&&!(await note(b,ids.a)));check('local rich documents and PNG/bin raw bytes, isolated before login');
  await a.close();await b.close();assert(a.lifecycle.naturalExit&&b.lifecycle.naturalExit);a=await open('a');b=await open('b');
  for(const name of ['a','b']){assert.equal(body(await note(devices[name],ids[name])),expected[name]);await command(devices[name],'note.select',{id:ids[name]});await originals(devices[name],ids[name]);}check('both local documents and attachments survive real process restarts');await save();
  phase='login-a';const owner=await login(a,'a');phase='login-b';assert.equal(await login(b,'b'),owner);check('both native grants resolve to the same account');
  phase='first-merge';await enable(a);await enable(b);
+ }
  phase='automatic-discovery';await until('trusted automatic peer connection',async()=>{const [x,y]=await Promise.all([account(a),account(b)]);return [x,y].every(s=>s.state==='ready'&&!s.error&&s.devices.some(d=>!d.current&&d.connected));},120000);check('account automatic discovery without manual pairing');
  phase='bidirectional-data';await converge(a,b,ids.a,'A to B');await converge(b,a,ids.b,'B to A');
  phase='pause';await enter(b);await command(b,'account.setEnabled',{enabled:false});await leave(b);assert.equal((await account(b)).enabled,false);

@@ -71,6 +71,8 @@ pub(crate) enum NetworkStage {
     CallbackReceive,
     IdentityProvider,
     Coordinator,
+    CoordinatorConfiguration,
+    CoordinatorRegistration,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Error {
@@ -92,6 +94,7 @@ pub(crate) enum Error {
     Unsupported,
     CleanupRequired,
     Sync,
+    CoordinationProtocol,
 }
 impl Error {
     pub fn code(self) -> &'static str {
@@ -112,6 +115,7 @@ impl Error {
             Self::Unsupported => "account_platform_unsupported",
             Self::CleanupRequired => "account_cleanup_required",
             Self::Sync => "account_sync_failed",
+            Self::CoordinationProtocol => "account_sync_protocol",
         }
     }
     pub fn safe(self) -> SafeError {
@@ -180,8 +184,28 @@ impl From<crate::sync::identity::SyncError> for Error {
     }
 }
 impl From<cybergrid_sdk::Error> for Error {
-    fn from(_: cybergrid_sdk::Error) -> Self {
-        Self::Network
+    fn from(error: cybergrid_sdk::Error) -> Self {
+        Self::sdk_at(error, NetworkStage::Coordinator)
+    }
+}
+impl Error {
+    pub fn sdk_at(error: cybergrid_sdk::Error, stage: NetworkStage) -> Self {
+        use cybergrid_sdk::Error as S;
+        match error {
+            S::Config(_) => Self::Configuration,
+            S::Protocol(_) => Self::CoordinationProtocol,
+            S::Credentials(_) => Self::Storage,
+            S::Cancelled => Self::Cancelled,
+            S::IdentityChanged => Self::OwnershipMismatch,
+            S::AuthorizationUnavailable
+            | S::NotLoggedIn
+            | S::OAuth { .. }
+            | S::Api {
+                status: 401 | 403, ..
+            } => Self::Authentication,
+            S::RevocationPending => Self::CleanupRequired,
+            _ => Self::NetworkAt(stage),
+        }
     }
 }
 

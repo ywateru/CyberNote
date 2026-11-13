@@ -23,6 +23,50 @@ use tokio::{
     task::JoinSet,
 };
 use tokio_util::sync::CancellationToken;
+
+pub(crate) fn transient_sdk(error: &cybergrid_sdk::Error) -> bool {
+    matches!(
+        error,
+        cybergrid_sdk::Error::Http(_)
+            | cybergrid_sdk::Error::Timeout(_)
+            | cybergrid_sdk::Error::Api {
+                status: 500..=599,
+                ..
+            }
+    )
+}
+
+/// Retry coordination on the SAME SDK owner. Never drop an in-flight owned
+/// registration or replace an uncertain operation with a fresh Client/device.
+pub(crate) async fn retry_sdk<T, F, Fut, R>(
+    stop: &CancellationToken,
+    mut operation: F,
+    retryable: R,
+) -> cybergrid_sdk::Result<T>
+where
+    F: FnMut() -> Fut,
+    Fut: std::future::Future<Output = cybergrid_sdk::Result<T>>,
+    R: Fn(&cybergrid_sdk::Error) -> bool,
+{
+    for attempt in 0..3 {
+        if stop.is_cancelled() {
+            return Err(cybergrid_sdk::Error::Cancelled);
+        }
+        // The SDK owns reconciliation of a request whose result is uncertain.
+        // Cancellation fences the next attempt, rather than dropping this one.
+        match operation().await {
+            Ok(value) if !stop.is_cancelled() => return Ok(value),
+            Ok(_) => return Err(cybergrid_sdk::Error::Cancelled),
+            Err(error) if attempt == 2 || !retryable(&error) => return Err(error),
+            Err(_) => {}
+        }
+        tokio::select! {
+            _ = stop.cancelled() => return Err(cybergrid_sdk::Error::Cancelled),
+            _ = tokio::time::sleep(Duration::from_secs(1 << attempt)) => {}
+        }
+    }
+    unreachable!()
+}
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 struct Request {
@@ -115,7 +159,17 @@ pub(crate) async fn run(
     stop: CancellationToken,
     publish: Arc<dyn Fn(std::result::Result<Snapshot, Error>) + Send + Sync>,
 ) -> Result<()> {
-    let session = client.login_with_auth_provider("CyberNote").await?;
+    let session = retry_sdk(
+        &stop,
+        || client.login_with_auth_provider("CyberNote"),
+        |error| {
+            transient_sdk(error)
+                || (matches!(error, cybergrid_sdk::Error::ExchangeOutcomeUnknown)
+                    && client.snapshot().coordination.retryable)
+        },
+    )
+    .await
+    .map_err(|error| Error::sdk_at(error, super::types::NetworkStage::CoordinatorRegistration))?;
     if session.user.id != binding.subject
         || session.product_id.as_deref().unwrap_or(&session.app_id) != binding.product_id
     {
@@ -415,6 +469,99 @@ mod tests {
         SecretKey,
     };
     use std::sync::atomic::{AtomicBool, Ordering};
+
+    #[tokio::test]
+    async fn initial_coordination_retries_are_bounded_and_permanent_rejections_do_not_retry() {
+        use std::sync::atomic::AtomicUsize;
+        let stop = CancellationToken::new();
+        let calls = AtomicUsize::new(0);
+        let result = retry_sdk(
+            &stop,
+            || async {
+                if calls.fetch_add(1, Ordering::SeqCst) < 2 {
+                    Err(cybergrid_sdk::Error::Timeout("synthetic registration"))
+                } else {
+                    Ok(7)
+                }
+            },
+            transient_sdk,
+        )
+        .await
+        .unwrap();
+        assert_eq!(result, 7);
+        assert_eq!(calls.load(Ordering::SeqCst), 3);
+
+        for status in [401, 403, 400, 429] {
+            let calls = AtomicUsize::new(0);
+            assert!(retry_sdk::<(), _, _, _>(
+                &stop,
+                || async {
+                    calls.fetch_add(1, Ordering::SeqCst);
+                    Err(cybergrid_sdk::Error::Api {
+                        status,
+                        code: "synthetic-private-provider-text".into(),
+                    })
+                },
+                transient_sdk
+            )
+            .await
+            .is_err());
+            assert_eq!(calls.load(Ordering::SeqCst), 1);
+        }
+        assert!(!transient_sdk(
+            &cybergrid_sdk::Error::ExchangeOutcomeUnknown
+        ));
+        assert!(!transient_sdk(&cybergrid_sdk::Error::Protocol(
+            "synthetic".into()
+        )));
+    }
+
+    #[tokio::test]
+    async fn cancelling_initial_coordination_drains_dispatched_work_and_fences_retry() {
+        use std::sync::atomic::AtomicUsize;
+        let stop = CancellationToken::new();
+        let entered = tokio::sync::Notify::new();
+        let release = tokio::sync::Notify::new();
+        let completed = AtomicBool::new(false);
+        let calls = AtomicUsize::new(0);
+        let operation = retry_sdk::<(), _, _, _>(
+            &stop,
+            || async {
+                calls.fetch_add(1, Ordering::SeqCst);
+                entered.notify_one();
+                release.notified().await;
+                completed.store(true, Ordering::SeqCst);
+                Err(cybergrid_sdk::Error::Timeout(
+                    "synthetic uncertain response",
+                ))
+            },
+            transient_sdk,
+        );
+        let cancel = async {
+            entered.notified().await;
+            stop.cancel();
+            assert!(!completed.load(Ordering::SeqCst));
+            release.notify_one();
+        };
+        let (result, _) = tokio::join!(operation, cancel);
+        assert!(matches!(result, Err(cybergrid_sdk::Error::Cancelled)));
+        assert!(completed.load(Ordering::SeqCst));
+        assert_eq!(calls.load(Ordering::SeqCst), 1);
+        let called_after_cancel = AtomicBool::new(false);
+        assert!(matches!(
+            retry_sdk(
+                &stop,
+                || async {
+                    called_after_cancel.store(true, Ordering::SeqCst);
+                    Ok(())
+                },
+                transient_sdk
+            )
+            .await,
+            Err(cybergrid_sdk::Error::Cancelled)
+        ));
+        assert!(!called_after_cancel.load(Ordering::SeqCst));
+    }
 
     async fn bootstrap_during_verification(revoke: &str) {
         let directory = tempfile::tempdir().unwrap();

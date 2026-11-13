@@ -6,7 +6,7 @@ export const accountUIAvailable =
   (import.meta.env.VITE_NOTES_ACCOUNT_NATIVE !== "0" && isTauri()) ||
   (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" && import.meta.env.VITE_NOTES_ACCOUNT_UI === "1");
 
-const networkStages = ["callbackListen", "browserOpen", "callbackReceive", "identityProvider", "coordinator"] as const;
+const networkStages = ["callbackListen", "browserOpen", "callbackReceive", "identityProvider", "coordinator", "coordinatorConfiguration", "coordinatorRegistration"] as const;
 type NetworkStage = typeof networkStages[number];
 const identityReasons = ["responseMetadata", "missingIdToken", "issuer", "audience", "expired", "nonce", "signingKey", "signature", "algorithm", "subject", "authorizedParty", "issuedAt", "accessTokenHash", "otherClaims"] as const;
 type IdentityReason = typeof identityReasons[number];

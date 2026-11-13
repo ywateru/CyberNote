@@ -8,7 +8,7 @@ const {validateAccountStatus} = await import('data:text/javascript;base64,'+Buff
 const status = error => ({state:'error',enabled:false,devices:[],pendingCount:0,conflictCount:0,error});
 test('legacy errors and fixed native network stages remain valid DTOs',()=>{
  assert.deepEqual(validateAccountStatus(status({code:'account_network',message:'safe'})).error,{code:'account_network',message:'safe'});
- for(const stage of ['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator'])
+ for(const stage of ['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration'])
   assert.equal(validateAccountStatus(status({code:'account_network',message:'safe',stage})).error.stage,stage);
  for(const reason of ['responseMetadata','missingIdToken','issuer','audience','expired','nonce','signingKey','signature','algorithm','subject','authorizedParty','issuedAt','accessTokenHash','otherClaims'])
   assert.equal(validateAccountStatus(status({code:'account_auth_identity_invalid',message:'safe',reason})).error.reason,reason);

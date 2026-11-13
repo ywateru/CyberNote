@@ -255,6 +255,11 @@ impl Runtime {
             });
             return Ok(());
         }
+        self.mutate(|d| {
+            d.status.state = Phase::Connecting;
+            d.status.enabled = true;
+            d.status.error = None;
+        });
         let auth = self.auth().await?;
         let origin = config::origin()?;
         std::fs::create_dir_all(&self.cache)?;
@@ -266,7 +271,17 @@ impl Runtime {
             cloudflared: Some(provider),
             ..Default::default()
         })?;
-        let advertised = client.auth_config().await?;
+        let initialization_stop = CancellationToken::new();
+        let advertised = transport::retry_sdk(
+            &initialization_stop,
+            || async {
+                if !self.current(generation) {
+                    return Err(cybergrid_sdk::Error::Cancelled);
+                }
+                client.auth_config().await
+            },
+            transport::transient_sdk,
+        ).await.map_err(|error| Error::sdk_at(error, types::NetworkStage::CoordinatorConfiguration))?;
         if advertised.issuer != config::ISSUER
             || advertised.client_id != config::CLIENT_ID
             || advertised.resource != config::RESOURCE
