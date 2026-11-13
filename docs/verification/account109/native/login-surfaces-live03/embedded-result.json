@@ -1,0 +1,238 @@
+{
+  "schema": 1,
+  "kind": "account109-fresh-gui-cancel-local",
+  "status": "pass",
+  "phase": "cleanup",
+  "startedAt": "2026-11-13T12:49:31.526Z",
+  "surface": "embedded",
+  "continueInBrowser": false,
+  "cancelViaWindow": false,
+  "binary": {
+    "sha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459",
+    "sourceRevision": "72513d1296df4526a08834db65a3427957d3fb50",
+    "candidateKind": "debug-e2e"
+  },
+  "checks": [
+    {
+      "name": "localSave",
+      "status": "pass"
+    },
+    {
+      "name": "authorizing",
+      "status": "pass"
+    },
+    {
+      "name": "cancelledWindow",
+      "status": "pass"
+    },
+    {
+      "name": "localEdit",
+      "status": "pass"
+    },
+    {
+      "name": "restartWindow",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "kind": "ready",
+      "device": "local-1",
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "kind": "localSave",
+      "noteId": "1e9676da-5a25-43f6-bb69-1cc449f75cac",
+      "documentAndPlainTextSha256": "5e6c45164dc3cd218a1b76352d4f0017c618a44007a8b0cf4a5804f7b5b6108e"
+    },
+    {
+      "kind": "authorization-surface",
+      "device": "local-1",
+      "authorizationSurface": "embedded"
+    },
+    {
+      "kind": "authorizing",
+      "requestedSurface": "embedded",
+      "authorizationSurface": "embedded",
+      "browserContinuation": false,
+      "uiHandler": "account.signIn",
+      "physicalInput": false
+    },
+    {
+      "kind": "authorization-surface",
+      "device": "local-1",
+      "authorizationSurface": null
+    },
+    {
+      "kind": "cancelledWindow",
+      "uiHandler": "account.cancel",
+      "physicalInput": false,
+      "samples": 7,
+      "durationMs": 3015,
+      "documentAndPlainTextSha256": "5e6c45164dc3cd218a1b76352d4f0017c618a44007a8b0cf4a5804f7b5b6108e"
+    },
+    {
+      "kind": "localEdit",
+      "noteId": "1e9676da-5a25-43f6-bb69-1cc449f75cac",
+      "documentAndPlainTextSha256": "c5602b097adca7fe896aed904c25f0a971849a030ab95c4ae236e665812ecd15"
+    },
+    {
+      "kind": "ready",
+      "device": "local-2",
+      "interactive": true,
+      "startupDetached": true
+    },
+    {
+      "kind": "restartWindow",
+      "samples": 7,
+      "durationMs": 3017,
+      "documentAndPlainTextSha256": "c5602b097adca7fe896aed904c25f0a971849a030ab95c4ae236e665812ecd15",
+      "sameStore": true
+    }
+  ],
+  "tools": {
+    "account109-cancel-local.mjs": "b0d563e753b53b72b554f809fe29a13ca7ceb51be52fac6d344d0fdbefe0c012",
+    "sync108-native-driver.mjs": "d521530738daf0586846445de14e6ecf57799c2c441e78cb0d25312b640a2c23",
+    "account109-desktop-helpers.mjs": "e5278d612598946624209c3aae8be8bf7243b806ce9de3dd2e406ed87a505ab0",
+    "account109-desktop-recovery.mjs": "c88f2b2f14a6fe04657f5a51dcce4e1076f8d12c4b2bb592c5cfcc799a508672"
+  },
+  "limitations": [
+    "Fresh synthetic store only; no original/default store, DB, grant or binding is read by the runner. Product functions use normal GUI Store/Session and the pinned native account Runtime.",
+    "SignIn and automatic cancel use existing account UI handlers after checking visible enabled buttons. Window cancellation mode sends no account.cancel command. Editor commands use debug/e2e UI handlers, not physical input. No form credentials, URLs, callbacks, port changes, process-name kills, authorization retries or headless mode.",
+    "Window cancellation mode records an awaitingNativeWindowClose checkpoint then only polls native account status for up to 60 seconds. cancelOrigin identifies the expected window-close observation flow; signedOut alone proves neither a physical action, a specific closing method nor hosted Logto form rendering. Those observations require separate parent CUA evidence.",
+    "No browser content is inspected or saved. Authorizing alone does not prove a browser page opened or identity was validated. Bind/SignIn errors fail without changing fixed callback port 17897 or interfering with other Apps.",
+    "The explicit fixed surface goes through the real UI handler, not physical radio input. Embedded-to-browser continuation uses one openLoginInBrowser after one SignIn; same-transaction ownership is a native contract, not independently proved by surface labels. No transaction secret or remote window content is inspected.",
+    "Cancellation is sampled with full document preservation before and after natural restart. No valid old callback is submitted: late-callback rejection, QA re-login, account switching and three-peer/relay acceptance are not proved.",
+    "Fresh store/output are retained on success and failure. Only parent may clean this run after finite evidence is archived and checked."
+  ],
+  "lastOperation": {
+    "sequence": 75,
+    "phase": "cleanup",
+    "device": "local-2",
+    "operation": "close",
+    "event": "after"
+  },
+  "statusTransitions": [
+    {
+      "device": "local-1",
+      "phase": "localSave",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "local-1",
+      "phase": "authorizing",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "local-1",
+      "phase": "authorizing",
+      "state": "authorizing",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "local-1",
+      "phase": "cancelledWindow",
+      "state": "authorizing",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "local-1",
+      "phase": "cancelledWindow",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "local-1",
+      "phase": "localEdit",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    },
+    {
+      "device": "local-2",
+      "phase": "restartWindow",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "identityCheck": "unverified",
+      "devices": [],
+      "pendingCount": 0,
+      "conflictCount": 0
+    }
+  ],
+  "lifecycle": [
+    {
+      "name": "local-1",
+      "directory": "/private/tmp/account109-cancel-local-surface-embedded03-store",
+      "stderrBytes": 58,
+      "commands": 56,
+      "forcedSignals": [],
+      "pid": 27586,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true,
+      "pidAbsent": true
+    },
+    {
+      "name": "local-2",
+      "directory": "/private/tmp/account109-cancel-local-surface-embedded03-store",
+      "stderrBytes": 58,
+      "commands": 17,
+      "forcedSignals": [],
+      "pid": 27600,
+      "lastAction": "shutdown",
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "stdoutNoiseBytes": 0,
+      "naturalExit": true,
+      "pidAbsent": true
+    }
+  ],
+  "finishedAt": "2026-11-13T12:49:42.804Z"
+}

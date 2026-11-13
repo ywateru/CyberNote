@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-13T12:54:30.628382+00:00",
+  "runnerRevision": "88b2dabe4bb898b0bf225e913883b43ed2cac865",
+  "cases": [
+    {
+      "case": "browser",
+      "sourceResult": "/private/tmp/account109-cancel-local-surface-browser03-out/result.json",
+      "sourceResultSha256": "5421df85bc84c21da1004fd7d5679231bafd980bfb4826900db63ed458584a9c",
+      "binary": {
+        "sha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459",
+        "sourceRevision": "72513d1296df4526a08834db65a3427957d3fb50",
+        "candidateKind": "debug-e2e"
+      },
+      "checks": [
+        {
+          "name": "localSave",
+          "status": "pass"
+        },
+        {
+          "name": "authorizing",
+          "status": "pass"
+        },
+        {
+          "name": "cancelledWindow",
+          "status": "pass"
+        },
+        {
+          "name": "localEdit",
+          "status": "pass"
+        },
+        {
+          "name": "restartWindow",
+          "status": "pass"
+        }
+      ],
+      "surface": "browser",
+      "continueInBrowser": false,
+      "startedAt": "2026-11-13T12:48:57.805Z",
+      "finishedAt": "2026-11-13T12:49:11.289Z",
+      "ownedPids": [
+        27510,
+        27541
+      ],
+      "ownedPidsIndependentlyAbsent": true,
+      "recordedModuleHashesMatchCurrentCommittedFiles": true
+    },
+    {
+      "case": "embedded",
+      "sourceResult": "/private/tmp/account109-cancel-local-surface-embedded03-out/result.json",
+      "sourceResultSha256": "3a4d71ea4a115be792cd948187514193f9027f7b7b82e21cedca853c009e6a62",
+      "binary": {
+        "sha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459",
+        "sourceRevision": "72513d1296df4526a08834db65a3427957d3fb50",
+        "candidateKind": "debug-e2e"
+      },
+      "checks": [
+        {
+          "name": "localSave",
+          "status": "pass"
+        },
+        {
+          "name": "authorizing",
+          "status": "pass"
+        },
+        {
+          "name": "cancelledWindow",
+          "status": "pass"
+        },
+        {
+          "name": "localEdit",
+          "status": "pass"
+        },
+        {
+          "name": "restartWindow",
+          "status": "pass"
+        }
+      ],
+      "surface": "embedded",
+      "continueInBrowser": false,
+      "startedAt": "2026-11-13T12:49:31.526Z",
+      "finishedAt": "2026-11-13T12:49:42.804Z",
+      "ownedPids": [
+        27586,
+        27600
+      ],
+      "ownedPidsIndependentlyAbsent": true,
+      "recordedModuleHashesMatchCurrentCommittedFiles": true
+    },
+    {
+      "case": "transfer",
+      "sourceResult": "/private/tmp/account109-cancel-local-surface-transfer03-out/result.json",
+      "sourceResultSha256": "6d10c1606bd09181022fee8387bec80e799ff8cb743503108602e93fbbfbf102",
+      "binary": {
+        "sha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459",
+        "sourceRevision": "72513d1296df4526a08834db65a3427957d3fb50",
+        "candidateKind": "debug-e2e"
+      },
+      "checks": [
+        {
+          "name": "localSave",
+          "status": "pass"
+        },
+        {
+          "name": "authorizing",
+          "status": "pass"
+        },
+        {
+          "name": "cancelledWindow",
+          "status": "pass"
+        },
+        {
+          "name": "localEdit",
+          "status": "pass"
+        },
+        {
+          "name": "restartWindow",
+          "status": "pass"
+        }
+      ],
+      "surface": "embedded",
+      "continueInBrowser": true,
+      "startedAt": "2026-11-13T12:50:17.349Z",
+      "finishedAt": "2026-11-13T12:50:29.064Z",
+      "ownedPids": [
+        27734,
+        27760
+      ],
+      "ownedPidsIndependentlyAbsent": true,
+      "recordedModuleHashesMatchCurrentCommittedFiles": true
+    }
+  ]
+}

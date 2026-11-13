@@ -1,6 +1,8 @@
+最新局部实际结果：[login-surfaces-live03](native/login-surfaces-live03/README.md)在 `72513d12` Mac 真实候选通过 browser、embedded、embedded→browser 三条命令调用流程，各5/5，完整正文与自然重启保全、六进程自然退出0均已独核。覆盖 AUTH-08 的命令分支、AUTH-09 的自动取消分支及 AUTH-10 的 surface 转移/取消；不包含 radio物理点击、表单可见性、用户关窗或成功认证，完整用例仍按下表边界验收。
+
 # account109 登录与双桌面验收用例
 
-新增双入口状态（2026-11-13）：源码和 `72513d12` 两端构建/包身份已通过审查；[最终集成检查](native/login-surfaces-integration02.md)274项通过。AUTH-08～11见下，均尚无新候选真实窗口/认证验收结果。桌面本轮被锁屏阻止；安卓[升级前检查](android/login-surfaces-preflight01/README.md)保留账户error和旧基线差异，[结构诊断](android/login-surfaces-structure01/README.md)仅证明原文档前缀保持、末尾新增附件节点与空段，不作为接受新基线的依据。原APK、数据和失败均保留。
+新增双入口状态（2026-11-13）：源码和 `72513d12` 两端构建/包身份已通过审查；[最终集成检查](native/login-surfaces-integration02.md)274项通过。AUTH-08～11见下，均尚无新候选真实窗口/认证验收结果。此前桌面观察为锁屏；安卓[升级前检查](android/login-surfaces-preflight01/README.md)保留账户error和旧基线差异，[结构诊断](android/login-surfaces-structure01/README.md)仅证明原文档前缀保持、末尾新增附件节点与空段，不作为接受新基线的依据。原APK、数据和失败均保留。
 
 最新实际进展（2026-11-13）：双桌面核心数据场景已有实际证据，见 [本轮结果](RESULT-LATEST.md)。[full-native02](macos/full-native02/README.md) 的十项通过覆盖自动连接、双向完整 document/plainText 和 PNG/bin 原字节、暂停恢复及进程离线补齐，但该整轮仍因原生 eval 超时而失败。随后 [headless-continuation01](native/headless-continuation01/README.md) 在保留的同一对库中，用生产 Rust 功能完成既有冲突 keep-all、双端完整两分支及原始附件核对、真实退出、本地新建、重启和两向排除；三个进程全部自然退出，零强制信号。此续验为新的原生无界面候选，不重分类旧失败，也不替代 UI/浏览器验收。
 
