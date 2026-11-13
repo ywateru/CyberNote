@@ -613,6 +613,102 @@ async fn successful_identity_and_rotation_are_private_persistent_serial_and_rest
 }
 
 #[tokio::test]
+async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry() {
+    for (mode, expected) in [
+        (1, AuthError::Network),
+        (2, AuthError::Configuration),
+        (3, AuthError::RefreshFailed),
+        (4, AuthError::TokenResponseInvalid),
+        (5, AuthError::Network),
+        (6, AuthError::Network),
+        (7, AuthError::Configuration),
+        (8, AuthError::TokenResponseInvalid),
+        (9, AuthError::Configuration),
+        (10, AuthError::TokenResponseInvalid),
+    ] {
+        let f = Fixture::new();
+        let dir = private_temp();
+        let fault = Arc::new(AtomicUsize::new(0));
+        let attempts = Arc::new(AtomicUsize::new(0));
+        let mut http = f.http(&config());
+        let fixture = f.clone();
+        let failure = fault.clone();
+        let requests = attempts.clone();
+        http.responder = Some(Arc::new(move |request: HttpRequest| {
+            let f = fixture.clone();
+            let failure = failure.clone();
+            let requests = requests.clone();
+            Box::pin(async move {
+                let is_refresh = request.uri().path() == "/oidc/token"
+                    && url::form_urlencoded::parse(request.body())
+                        .any(|(key, value)| key == "grant_type" && value == "refresh_token");
+                if is_refresh {
+                    requests.fetch_add(1, Ordering::SeqCst);
+                    match failure.load(Ordering::SeqCst) {
+                        1 => return Err(AuthError::Network),
+                        2 => return Err(AuthError::Configuration),
+                        3 => return Ok(response(400, json!({"error":"invalid_grant","error_description":"fixture-sensitive-response"}))),
+                        4 => return Ok(response(200, json!({"private":"fixture-sensitive-response"}))),
+                        5 => return Ok(response(503, json!({"error":"temporarily_unavailable","error_description":"fixture-sensitive-response"}))),
+                        6 => return Ok(response(500, json!({"error":"server_error","error_description":"fixture-sensitive-response"}))),
+                        7 => return Ok(response(401, json!({"error":"invalid_client","error_description":"fixture-sensitive-response"}))),
+                        8 => return Ok(response(400, json!({"error":"unknown_fixture_rejection","error_description":"fixture-sensitive-response"}))),
+                        9 => return Ok(response(400, json!({"error":"invalid_scope","error_description":"fixture-sensitive-response"}))),
+                        10 => panic!("synthetic refresh owner failure"),
+                        _ => {}
+                    }
+                }
+                f.respond(request).await
+            })
+        }));
+        let path = dir.path().join("grant.json");
+        let client = AuthClient::initialize(config(), &path, http.clone()).unwrap();
+        let identity = f.login(&client).await;
+        drop(client);
+        let before = fs::read(&path).unwrap();
+        let client = AuthClient::initialize(config(), &path, http).unwrap();
+        fault.store(mode, Ordering::SeqCst);
+        let error = client.restore().await.unwrap_err();
+        assert_eq!(error, expected);
+        assert!(!error.to_string().contains("fixture-sensitive"));
+        assert_eq!(attempts.load(Ordering::SeqCst), 1);
+        assert_eq!(fs::read(&path).unwrap(), before);
+        assert!(!client.cleanup_required().await);
+        assert_eq!(f.revokes.load(Ordering::SeqCst), 0);
+        // Only a second explicit operation may retry; successful rotation is durable.
+        fault.store(0, Ordering::SeqCst);
+        assert_eq!(client.restore().await.unwrap(), Some(identity));
+        assert_eq!(attempts.load(Ordering::SeqCst), 2);
+        let saved: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        assert_eq!(saved["refresh"], "fixture-refresh-2");
+    }
+}
+
+#[tokio::test]
+async fn local_refresh_prerequisites_and_freshness_do_not_claim_server_rejection() {
+    let f = Fixture::new();
+    let dir = private_temp();
+    let client = f.client(&dir).await;
+    f.login(&client).await;
+    // A successful rotation whose lifetime cannot satisfy this caller is not invalid_grant.
+    assert_eq!(client.access_token(Duration::from_secs(7200), true).await.unwrap_err(), AuthError::TokenResponseInvalid);
+    let path = dir.path().join("grant.json");
+    let mut saved: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+    assert_eq!(saved["refresh"], "fixture-refresh-2");
+    assert_eq!(client.access_token(Duration::ZERO, false).await.unwrap().secret(), "fixture-access-2");
+    drop(client);
+    // A malformed local owner must not be described as a response from the server.
+    saved["refresh"] = Value::Null;
+    fs::write(&path, serde_json::to_vec(&saved).unwrap()).unwrap();
+    let before = fs::read(&path).unwrap();
+    let client = f.client(&dir).await;
+    assert_eq!(client.restore().await.unwrap_err(), AuthError::MissingRefreshToken);
+    assert_eq!(f.tokens.load(Ordering::SeqCst), 2);
+    assert_eq!(f.revokes.load(Ordering::SeqCst), 0);
+    assert_eq!(fs::read(&path).unwrap(), before);
+}
+
+#[tokio::test]
 async fn refresh_and_revocation_failures_preserve_the_only_owner_and_errors_are_redacted() {
     let f = Fixture::new();
     let dir = private_temp();

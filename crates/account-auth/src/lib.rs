@@ -228,7 +228,7 @@ impl AuthClient {
         let client = self.clone();
         tokio::spawn(async move { client.access_owned(min_validity, force_refresh).await })
             .await
-            .map_err(|_| AuthError::RefreshFailed)?
+            .map_err(|_| AuthError::TokenResponseInvalid)?
     }
     pub async fn restore(&self) -> Result<Option<Identity>, AuthError> {
         let client = self.clone();
@@ -241,7 +241,7 @@ impl AuthClient {
             Ok(state.grant.as_ref().and_then(|g| g.identity.clone()))
         })
         .await
-        .map_err(|_| AuthError::RefreshFailed)?
+        .map_err(|_| AuthError::TokenResponseInvalid)?
     }
     /// Read-only local state: the host can offer explicit grant cleanup without a profile.
     /// This does not discover, refresh, revoke, create an identity, or return credentials.
@@ -557,7 +557,7 @@ impl AuthClient {
         }
         let g = state.grant.as_ref().ok_or(AuthError::NoSession)?;
         if !g.usable || g.expires_at <= now()?.saturating_add(min.as_secs()) {
-            return Err(AuthError::RefreshFailed);
+            return Err(AuthError::TokenResponseInvalid);
         }
         Ok(AccessToken(Zeroizing::new(g.access.clone())))
     }
@@ -572,7 +572,7 @@ impl AuthClient {
                 .as_ref()
                 .filter(|token| !token.is_empty())
                 .cloned()
-                .ok_or(AuthError::RefreshFailed)?,
+                .ok_or(AuthError::MissingRefreshToken)?,
         );
         let nonce = Zeroizing::new(g.nonce.clone());
         let old_identity = g.identity.clone().ok_or(AuthError::InvalidIdentity)?;
@@ -584,7 +584,22 @@ impl AuthClient {
         let response = request
             .request_async(&self.inner.http)
             .await
-            .map_err(|_| AuthError::RefreshFailed)?;
+            .map_err(|error| match error {
+                // Transport/configuration failures do not establish grant rejection.
+                // Preserve only our finite categories; never replay an uncertain refresh.
+                oauth2::RequestTokenError::Request(error) => error,
+                oauth2::RequestTokenError::ServerResponse(response) => {
+                    use oauth2::basic::BasicErrorResponseType as E;
+                    match response.error() {
+                        E::InvalidGrant => AuthError::RefreshFailed,
+                        E::InvalidClient | E::UnauthorizedClient | E::InvalidRequest
+                        | E::UnsupportedGrantType | E::InvalidScope => AuthError::Configuration,
+                        E::Extension(code) if matches!(code.as_str(), "temporarily_unavailable" | "server_error") => AuthError::Network,
+                        _ => AuthError::TokenResponseInvalid,
+                    }
+                }
+                _ => AuthError::TokenResponseInvalid,
+            })?;
         let verified = if response
             .refresh_token()
             .is_some_and(|token| token.secret().is_empty())

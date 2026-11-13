@@ -127,6 +127,7 @@ pub enum AuthError {
     NoSession,
     OwnershipMismatch,
     Storage,
+    /// The refresh endpoint explicitly returned OAuth invalid_grant.
     RefreshFailed,
     RevocationFailed,
     Busy,
