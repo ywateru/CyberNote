@@ -73,7 +73,7 @@ keep-all 比较完整字段，仅正规化新副本必须改变的身份 ID、�
 
 真实 ANDROID-01～04 尚未执行。需要测试手机/测试应用能够正常连接协调服务，再完成真实账户授权和三端收敛。A 已因退出用例正常退出账户，后续三端需通过真实系统浏览器重新登录 A；本轮曾恢复桌面访问，但[准备第四轮时再次锁定](native/current-access04/README.md)，原库重新登录续验尚未通过。不得恢复旧 grant 副本来跳过登录。
 
-[正式域名提案](server/custom-domain-proposal01/PROPOSAL.md)只读确认现有项目没有已配置的自定义域；拟议 `cybernote-sync.aixgg.com` 尚未配置或获得该域使用确认。原生 transport 与 enrollment issuer 的拆分已由[独立审阅](native/coordinator-alias-review01/README.md)接受并合入 `4461753f`，12/12 定向测试通过；两个生产常量仍为旧 Vercel 地址，不改变 token 目的地、部署或 DNS。此兼容准备不表示手机可达性已经恢复。
+[正式域名提案](server/custom-domain-proposal01/PROPOSAL.md)最初只读确认现有项目没有自定义域。后续用户已授权 `cybernote-sync.aixgg.com`，父级[绑定原production项目](server/custom-domain-live01/README.md)成功，但DNS权限不足且现存浏览器账户没有目标zone，正等待管理员登录或按回执追加CNAME/TXT。原生 transport 与 enrollment issuer 的拆分曾经独审并合入 `4461753f`；新一轮仅将Android固定transport改为已准许域名，桌面transport和严格enrollment issuer仍为旧Vercel值，[源码/pins独审](native/approved-domain-review01.md)通过，父级完整Node集成274项通过。尚未构建或安装新域候选，未向新host发送账户授权；绑定与源码准备不表示DNS/TLS、手机可达性或三端同步已经通过。
 
 WebView IPC、编辑器草稿、物理输入、系统附件 picker、全部登录取消/账户切换/重新登录排列不由无界面结果替代。逐项边界见 [用例](ACCOUNT-TEST-CASES.md)。历史超时原因仍未证明，不能把无界面测试通过描述为 UI 启动故障已修复。
 
