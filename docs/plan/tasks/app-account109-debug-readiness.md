@@ -43,3 +43,9 @@ idle 每轮最多等待 min(50ms, remaining) 或 rAF，胜者清理另一通道�
 - `/private/tmp/account109-debug-readiness-serde-fix-export.json`：export dry-run 通过，精确绑定 `f5d812387b9760d35e272e05cc76129ba5b86f5a`；1772 files、95283204 bytes、`initializedNewHistory=false`。
 
 Rust 两项定向单测仍为已准备、未编译/执行，待父级协调；没有使用 native 共享 target，也没有另建或复用 Cargo target。本回执补充仅核对提交、有限日志和 manifest，不启动 App/UI、网络或认证。独审应包含全部四个实现/pin 提交及 docs-only 最终回执，尤其检查 native 参数拒绝、Ready 门槛、真实三次 idle 样本、取消/超时和 owned slot 失败传播；不能将 device-free 通过解释为 live readiness、焦点或 paint 已验证。
+
+## 独立 Rust gate 补充回执
+
+2026-11-13，父级委派回报：独立审阅者在干净集成源码 `abeda3780aff4a026d3d44effe2679800cb6e956`（handoff `1abad` 与本分支 debug `f5d81238`，包含 serde 修正 `bb810833`）完成 `sync_e2e::tests::`，**2/2 PASS**，包含实际 native serde 额外字段拒绝及 ready 前准入门槛验证。此前“Rust 待执行”是作者阶段的历史状态，此项独立 gate 已完成；本作者未重跑 Cargo，也未自行核读该次原始 Rust 日志。
+
+同一回报确认集成 Node/tsc 已完成，集成 docs-only 最终证据由父级整理；未提供额外计数，本回执不推定。审阅者明确释放共享 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`；本作者此次仅追加文档，无 target 写入、构建、App/UI、网络或认证操作。此 gate 不构成 live readiness、焦点或 paint 的验证。
