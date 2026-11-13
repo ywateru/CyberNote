@@ -10,6 +10,8 @@ mod store;
 mod sync;
 #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 mod sync_e2e;
+#[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+mod sync_headless;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use serde_json::{json, Value};
 use session::{Session, Token};
@@ -608,6 +610,11 @@ pub fn run() {
     #[cfg(mobile)]
     let options = startup::Options::default();
     let mut context = tauri::generate_context!();
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+    sync_headless::configure(context.config_mut()).unwrap_or_else(|_| {
+        eprintln!("CyberNote headless startup rejected");
+        std::process::exit(2);
+    });
     if options.data_dir.is_some() {
         // Do not retain permission to read the default library in custom mode.
         // The canonical selected attachments directory is granted during setup.
@@ -694,12 +701,23 @@ pub fn run() {
                     .map_err(|e| std::io::Error::other(e.message))?;
             }
             app.manage(MediaState(media));
-            let sync = sync::adapter::Runtime::new(
-                shared,
-                root.clone(),
-                Arc::new(SyncWindows(app.handle().clone())),
-            )
-            .map_err(|e| std::io::Error::other(e.message))?;
+            let sync_host: Arc<dyn sync::adapter::WindowHost> =
+                Arc::new(SyncWindows(app.handle().clone()));
+            #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+            let headless_host = sync_headless::enabled()
+                .then(|| sync_headless::Host::new(app.handle().clone(), shared.clone()));
+            #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+            let sync_host: Arc<dyn sync::adapter::WindowHost> = match &headless_host {
+                Some(host) => host.clone(),
+                None => sync_host,
+            };
+            let sync = sync::adapter::Runtime::new(shared, root.clone(), sync_host)
+                .map_err(|e| std::io::Error::other(e.message))?;
+            #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+            if let Some(host) = headless_host {
+                host.bind(&sync)
+                    .map_err(|_| std::io::Error::other("headless participant invalid"))?;
+            }
             app.manage(SyncState(sync.clone()));
             let account =
                 account::Runtime::new(app.handle().clone(), sync, &root, &selected.media_cache)
@@ -823,7 +841,11 @@ pub fn run() {
                 });
             }
             #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
-            sync_e2e::start(app.handle())?;
+            if sync_headless::enabled() {
+                sync_headless::start(app.handle())?;
+            } else {
+                sync_e2e::start(app.handle())?;
+            }
             Ok(())
         });
     #[cfg(target_os = "macos")]
