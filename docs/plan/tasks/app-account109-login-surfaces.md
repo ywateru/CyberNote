@@ -32,7 +32,7 @@ Feynman 实施 native host/平台容器；Huygens 实施账户页、DTO/命令 a
 
 ## 当前执行状态
 
-双入口源码、UI、native owner 和平台实现已合并并独审。[集成检查](../../verification/account109/native/login-surfaces-integration01.md)260项通过；精确源码 `72513d12` 的[两端构建](../../verification/account109/native/72513d12-platform-build01/README.md)及[独立实际包身份检查](../../verification/account109/native/72513d12-platform-build-review01/README.md)通过。Android首次生成文件缺失失败及同源retry02成功均保留，修复仅失效一个旧共享target fingerprint，没有改产品源码。
+双入口源码、UI、native owner 和平台实现已合并并独审。补齐两端执行器及精确候选pin后，[最终集成检查](../../verification/account109/native/login-surfaces-integration02.md)274项通过；精确源码 `72513d12` 的[两端构建](../../verification/account109/native/72513d12-platform-build01/README.md)及[独立实际包身份检查](../../verification/account109/native/72513d12-platform-build-review01/README.md)通过。Android首次生成文件缺失失败及同源retry02成功均保留，修复仅失效一个旧共享target fingerprint，没有改产品源码。已[清理本轮重复Gradle中间产物与APK](../../verification/account109/native/72513d12-derived-cleanup01/README.md)约724MiB，准确候选、logs、身份和原库保留。
 
 新入口运行验收未完成。桌面本轮CUA观察仍被锁屏拒绝。安卓设备可访问，但[升级前只读检查](../../verification/account109/android/login-surfaces-preflight01/README.md)发现原应用保留账户error；四篇纯文本相同、三篇完整正文相同、一篇完整文档与旧基线不同且当前有一附件。未安装新APK、未发起授权、未改写数据或清理error，不将此差异归因于尚未安装的新代码。
 
