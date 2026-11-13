@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "verdict": "APPROVE",
+  "checked_at_utc": "2026-11-13T15:14:10.235262+00:00",
+  "reviewed_main": "66177e902952f1847a21e9575260feb6e216e1e4",
+  "author_commit": "5f1febfbad4e9bd747ffcdb060abc0590b0078dc",
+  "reviewer_base": "76fe3dfd650814a5e9c42e6c1cf9b96231a55820",
+  "receipt_sha256": "42113869dc4d95ddd0a39d5bee7cd9c0320e1ce2e3b63465614ab69e6f3320c4",
+  "worktrees_before_review_docs": [
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces-ui",
+      "head": "5f1febfbad4e9bd747ffcdb060abc0590b0078dc",
+      "status": "clean"
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01",
+      "head": "72513d1296df4526a08834db65a3427957d3fb50",
+      "status": "clean"
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces",
+      "head": "76fe3dfd650814a5e9c42e6c1cf9b96231a55820",
+      "status": "clean"
+    }
+  ],
+  "removed_generated_paths_absent": 12,
+  "preserved_inventories": [
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01/dist",
+      "files": 9,
+      "inventory_sha256": "bf256af4e7ca3912a48c47352c96653d93dd074591c4acfe25eb1540b41d7117",
+      "matches_receipt": true
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-android-72513d12-01/src-tauri/gen/android/app/build/outputs/logs",
+      "files": 1,
+      "inventory_sha256": "a4f1b74c565ab5bb02aba883f3096240be8813bf8ad87456cfca9d06adb80728",
+      "matches_receipt": true
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces/dist",
+      "files": 9,
+      "inventory_sha256": "3b40a149a6f7087dbbc1feb5c0577dbb84e9007d5b3af2508dc83ed3c8164af4",
+      "matches_receipt": true
+    },
+    {
+      "path": "/private/tmp/cybernote-account109-login-surfaces/src-tauri/gen/android/app/build/outputs/logs",
+      "files": 1,
+      "inventory_sha256": "5f493a417f95f1afb2481672841fbf2cd918c61a07dc135cccc1b783ed49766c",
+      "matches_receipt": true
+    }
+  ],
+  "prior_intermediates_and_apk_outputs_absent": true,
+  "sole_target_directory_present_without_traversal": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+  "six_files_git_blobs_and_materialized_bytes_match": true,
+  "ui_sparse_scopes": [
+    ".github",
+    "api",
+    "assets",
+    "crates",
+    "docs/architecture",
+    "docs/plan",
+    "docs/ui",
+    "docs/verification/account109",
+    "labs",
+    "output",
+    "patches",
+    "plugins",
+    "public",
+    "references",
+    "scripts",
+    "services",
+    "src",
+    "src-tauri",
+    "vendor"
+  ],
+  "ui_cone_mode": true,
+  "kept_prior_tracked_docs": 1400,
+  "excluded_tracked_docs": 19360,
+  "excluded_logical_bytes": 920970026,
+  "path_list_hashes": {
+    "excluded": {
+      "expected": "788a3d21b438d7edc0a4910a28e92b56ac5e156b0aaf4633333d78c91b1b8605",
+      "matching_serialization": [
+        "newline_no_trailing"
+      ]
+    },
+    "kept": {
+      "expected": "c2df7ffe9ba505bd3e41cf84753d03edc5ab0137b8fd3a2a8187a3dc56bf2418",
+      "matching_serialization": [
+        "newline_no_trailing"
+      ]
+    }
+  },
+  "preserved_candidate_checks": [
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/android-88b2dabe-debug-01/CyberNote-account109-debug.apk",
+      "bytes": 77335388,
+      "sha256": "2fee1cfbe27dd3b4c537c7051206831daa5c22bb9d08db50cf25f28d6e381870"
+    },
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/android-72513d12-debug-01/CyberNote-account109-debug.apk",
+      "bytes": 77337368,
+      "sha256": "654ab2a820de70588edcceb5231818b3580e425cdf7de1db395b585066091268"
+    },
+    {
+      "path": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account109/mac-72513d12-debug-e2e-01/notes-clone",
+      "bytes": 204326848,
+      "sha256": "187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459"
+    }
+  ],
+  "receipt_measurements_arithmetic_verified": {
+    "sparse_du_reduction_KiB": 942696,
+    "generated_du_reduction_KiB": 54600,
+    "total_root_du_reduction_KiB": 997296,
+    "removed_regular_file_logical_bytes": 967022937,
+    "df_available_before_KiB": 21842720,
+    "df_available_after_KiB": 22802900,
+    "df_available_observed_increase_KiB": 960180,
+    "df_is_filesystem_wide_observation_not_exclusive_reclaimed_extent_proof": true,
+    "measurement_before_receipt_creation": true
+  },
+  "limits": [
+    "Deletion-time guards and before measurements are historical author observations, not independently reproduced.",
+    "No exclusive physical reclamation or causal df attribution.",
+    "No traversal of target, stores, private snapshots, DB or grant; candidates checked only at three explicit artifact paths.",
+    "No device, network, build, or deletion."
+  ],
+  "excluded_tracked_symlinks_absent_without_following": 44,
+  "path_list_hash_serialization": "Sorted relative regular-file paths joined with LF, no trailing LF; SHA-256 of UTF-8 bytes."
+}
