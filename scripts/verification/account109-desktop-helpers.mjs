@@ -13,7 +13,7 @@ const tokenFields=['tokenType','accessToken','expiresIn','scope'];
 const requestReasons=['timeout','connect','request','responseBody','httpStatus','invalidResponse'];
 function safeRequestDiagnostic(e){
   if(!e||!['account_network','account_authentication'].includes(e.code)||!['coordinatorProfile','coordinatorEnrollment','coordinatorJwks'].includes(e.stage)||
-    !requestReasons.includes(e.requestReason)||e.reason!==undefined||e.providerReason!==undefined||'tokenOperation' in e||'tokenField' in e)return {};
+    !requestReasons.includes(e.requestReason)||'reason' in e||'providerReason' in e||'tokenOperation' in e||'tokenField' in e)return {};
   if(e.requestReason==='httpStatus')return Number.isInteger(e.httpStatus)&&e.httpStatus>=100&&e.httpStatus<=599&&!(e.httpStatus>=200&&e.httpStatus<300)&&(e.code==='account_authentication')===(e.httpStatus===401||e.httpStatus===403)?{requestReason:e.requestReason,httpStatus:e.httpStatus}:{};
   return 'httpStatus' in e||e.code!=='account_network'?{}:{requestReason:e.requestReason};
 }

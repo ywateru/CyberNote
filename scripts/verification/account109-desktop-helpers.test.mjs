@@ -26,11 +26,43 @@ test('safe status never guesses partial or cross-branch token diagnostics',()=>{
   ...[null,0,{},[], 'private-response-sentinel'].flatMap(value=>[{...valid,tokenOperation:value},{...valid,tokenField:value}]),
   {...valid,code:'account_cleanup_required'},{...valid,reason:'signature'},
   {...valid,stage:'identityRefresh'},{...valid,providerReason:'identityRejected'},
+  {...valid,requestReason:'timeout'},{...valid,httpStatus:401},
  ]) {
   const safe=safeStatus(status({state:'error',error}));
   assert.equal(safe.error.tokenOperation,undefined);assert.equal(safe.error.tokenField,undefined);
   assert(!JSON.stringify(safe).includes('private-response-sentinel'));
  }
+});
+
+test('coordinator request diagnostics retain exact finite native categories without raw response text',()=>{
+ for(const stage of ['coordinatorProfile','coordinatorEnrollment','coordinatorJwks']) {
+  for(const requestReason of ['timeout','connect','request','responseBody','invalidResponse']) {
+   const error={code:'account_network',stage,requestReason,message:'private-response-sentinel',url:'private-response-sentinel'};
+   const safe=safeStatus(status({state:'error',error}));assert.deepEqual(safe.error,{code:error.code,stage,requestReason});assert(!JSON.stringify(safe).includes('private-'));
+  }
+  for(const httpStatus of [100,199,300,401,403,429,503,599]) {
+   const error={code:[401,403].includes(httpStatus)?'account_authentication':'account_network',stage,requestReason:'httpStatus',httpStatus};
+   assert.deepEqual(safeStatus(status({state:'error',error})).error,error);
+  }
+ }
+ assert.equal(safeStatus(status({error:{code:'account_window_invalid'}})).error.code,'account_window_invalid');
+});
+
+test('request report refuses partial, mismatched, mixed and legacy-stage diagnostics without guessing',()=>{
+ const base={code:'account_network',stage:'coordinatorProfile',requestReason:'timeout'};
+ for(const error of [
+  ...['identityProvider','coordinator','identityRefresh',undefined].map(stage=>({...base,stage})),
+  ...['account_authentication','account_busy','unknown'].map(code=>({...base,code})),
+  ...[undefined,null,0,{},'private-response-sentinel'].map(requestReason=>({...base,requestReason})),
+  ...[99,200,204,299,600,401,403,401.5,'503',null,undefined].map(httpStatus=>({...base,requestReason:'httpStatus',httpStatus})),
+  ...[400,429,500].map(httpStatus=>({...base,code:'account_authentication',requestReason:'httpStatus',httpStatus})),
+  {...base,httpStatus:503},{...base,requestReason:'httpStatus'},
+  {code:base.code,stage:base.stage,httpStatus:503},
+  {...base,reason:'responseMetadata'},{...base,reason:undefined},{...base,providerReason:'network'},{...base,providerReason:undefined},{...base,tokenOperation:undefined},{...base,tokenField:'scope'},
+ ]) {
+  const safe=safeStatus(status({state:'error',error}));assert.equal(safe.error.requestReason,undefined);assert.equal(safe.error.httpStatus,undefined);assert(!JSON.stringify(safe).includes('private-'));
+ }
+ assert.deepEqual(safeStatus(status({error:{code:'account_network',stage:'identityProvider'}})).error,{code:'account_network',stage:'identityProvider'});
 });
 
 test('safe status preserves live per-path samples and drops stale or inactive evidence without raw provider text',()=>{

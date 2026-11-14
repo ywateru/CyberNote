@@ -164,7 +164,7 @@ test('coordinator request diagnostics accept only exact endpoint, reason and nat
   ...[400,429,500].map(httpStatus=>({...base,code:'account_authentication',requestReason:'httpStatus',httpStatus})),
   {...base,httpStatus:503},{...base,requestReason:'httpStatus'},
   {code:base.code,message:base.message,stage:base.stage,httpStatus:503},
-  {...base,reason:'responseMetadata'},{...base,providerReason:'network'},{...base,tokenOperation:undefined},{...base,tokenField:'scope'},
+  {...base,reason:'responseMetadata'},{...base,reason:undefined},{...base,providerReason:'network'},{...base,providerReason:undefined},{...base,tokenOperation:undefined},{...base,tokenField:'scope'},
   {...base,url:'private-response-sentinel'},
  ])assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);
 });
@@ -175,6 +175,7 @@ test('fixed local error copy and details never expose unknown codes or upstream 
  assert.deepEqual(accountErrorDetails(error),[['code','account_network'],['stage','coordinatorProfile'],['requestReason','timeout']]);
  const legacy={code:'account_network',message:'private-response-sentinel',stage:'identityProvider'};
  assert(accountErrorMessage(legacy).includes('连接登录服务时网络请求未完成'));assert(!accountErrorMessage(legacy).includes('超时'));
+ const opening=accountErrorMessage({code:'account_network',stage:'browserOpen',message:'safe'});assert(opening.includes('打开登录页面'));assert(!opening.includes('系统浏览器'));
  const unknown={code:'private-sync-owner-url-sentinel',message:'private-response-sentinel'};
  const parsed=validateAccountStatus(status(unknown));assert.equal(parsed.error.code,'unknown');
  assert(accountErrorMessage(unknown).includes('未知错误'));assert.deepEqual(accountErrorDetails(unknown),[['code','未知错误']]);

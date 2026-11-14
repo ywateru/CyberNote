@@ -109,7 +109,7 @@ export function validateAccountError(value: unknown): SafeError {
       !tokenOperations.includes(error.tokenOperation as TokenOperation) || !tokenFields.includes(error.tokenField as TokenField))) return invalid();
   if ("requestReason" in error || "httpStatus" in error) {
     if (!["account_network", "account_authentication"].includes(error.code as string) || !requestStages.includes(error.stage as string) ||
-      !requestReasons.includes(error.requestReason as RequestReason) || error.reason !== undefined || error.providerReason !== undefined ||
+      !requestReasons.includes(error.requestReason as RequestReason) || "reason" in error || "providerReason" in error ||
       "tokenOperation" in error || "tokenField" in error) return invalid();
     if (error.requestReason === "httpStatus") {
       if (!Number.isInteger(error.httpStatus) || (error.httpStatus as number) < 100 || (error.httpStatus as number) > 599 ||
@@ -130,7 +130,7 @@ export function validateAccountError(value: unknown): SafeError {
 
 // Only fixed labels are rendered. Neither status nor IPC message text is used as user copy.
 const stageNames: Record<NetworkStage, string> = {
-  callbackListen: "建立登录回跳监听", browserOpen: "打开系统浏览器", callbackReceive: "接收登录回跳",
+  callbackListen: "建立登录回跳监听", browserOpen: "打开登录页面", callbackReceive: "接收登录回跳",
   identityProvider: "连接登录服务", coordinator: "连接协调服务", coordinatorConfiguration: "读取协调服务配置",
   coordinatorRegistration: "注册账户设备", coordinatorProfile: "读取账户资料", coordinatorEnrollment: "取得设备授权凭证",
   coordinatorJwks: "读取授权公钥", authorizationProvider: "处理登录服务授权", identitySession: "恢复登录授权",

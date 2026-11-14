@@ -79,7 +79,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       if (next.state === "authorizing" && next.authorizationSurface) setLoginSurface(next.authorizationSurface);
       const completedExit = command.type === "status" && next.state === "signedOut" && !next.profile && !next.error &&
         (retry.current.type === "cancel" || retry.current.type === "signOut");
-      if (latestError.current && latestError.current.stateKey !== accountErrorStateKey(next)) {
+      if (latestError.current && ((query && latestError.current.command === "status") || latestError.current.stateKey !== accountErrorStateKey(next))) {
         clearError();
         retry.current = { type: "status" };
       }

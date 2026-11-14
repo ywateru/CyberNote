@@ -237,6 +237,48 @@ test('connection login retry uses selection; retained network retry remains sync
  await h.poll();await h.click('重试连接');assert.deepEqual(h.calls.at(-1),{type:'syncNow'});
 });
 
+test('unbound profile failure shows fixed stage/request details; polling never restarts login',async t=>{
+ const h=setup(t,{initial:{...signedOutAccount(),state:'error',error:{code:'account_network',stage:'coordinatorProfile',requestReason:'timeout',message:'private-response-sentinel'}}});
+ await h.mount();assert(h.text().includes('读取账户资料时请求超时'));assert(!h.text().includes('private-response-sentinel'));
+ const details=h.all().find(e=>e.localName==='details');assert(details);assert(!props(details).open);assert(details.textContent.includes('requestReasontimeout'));
+ await h.tick();await h.tick();assert(h.calls.every(c=>c.type==='status'));
+ await h.choose('browser');await h.click('重试登录');assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'browser'});assert(!h.calls.some(c=>c.type==='setEnabled'||c.type==='signOut'));
+});
+
+test('instant Busy stays separate from old status across same-error polls, then clears on real progress',async t=>{
+ for(const change of ['error','state']) {
+  let failStatus=false;
+  const initial={...signedOutAccount(),state:'error',error:{code:'account_network',stage:'coordinatorProfile',requestReason:'timeout',message:'private-response-sentinel'}};
+  const h=setup(t,{initial,reply:command=>{
+   if(command.type==='signIn')throw {code:'account_busy',message:'private-ipc-sentinel',commit:null};
+   if(command.type==='status'&&failStatus)throw Error('private-status-sentinel');
+  }});
+  await h.mount();await h.click('重试登录');assert(h.text().includes('本次登录未完成'));assert(h.text().includes('已有账户操作正在进行'));assert(h.text().includes('读取账户资料时请求超时'));
+  h.setNative({...initial,pendingCount:9,error:{...initial.error,message:'another-private-sentinel'}});await h.tick();await h.poll();assert(h.text().includes('本次登录未完成'));
+  failStatus=true;await h.tick();assert(h.text().includes('已有账户操作正在进行'));failStatus=false;
+  h.setNative(change==='error'?{...initial,error:{...initial.error,requestReason:'connect'}}:authorizing('browser'));await h.tick();assert(!h.text().includes('本次登录未完成'));assert(!h.text().includes('private-'));
+  assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);assert(!h.calls.some(c=>c.type==='setEnabled'||c.type==='signOut'));
+ }
+});
+
+test('a successful identical status read retires only the prior read failure, including manual retry',async t=>{
+ for(const state of ['signedOut','ready','paused'])for(const recovery of ['poll','retry']) {
+  let fail=false;
+  const initial={...signedOutAccount(),state,enabled:state==='ready',...(state==='signedOut'?{}:{profile:{subject:'fixture-owner',displayName:'Fixture'}})};
+  const h=setup(t,{initial,reply:command=>{if(command.type==='status'&&fail){fail=false;throw Error('private-status-sentinel');}}});
+  await h.mount();fail=true;await h.tick();assert(h.text().includes('本次读取账户状态未完成'));
+  if(recovery==='poll')await h.tick();else await h.click('重试');
+  assert(!h.text().includes('本次读取账户状态未完成'));assert.equal(h.handle().inspect().error,'');assert(h.calls.every(c=>c.type==='status'));assert(!h.text().includes('private-'));
+ }
+});
+
+test('finite IPC rejection copy discards legacy message; unknown rejection never becomes a network claim',async t=>{
+ for(const [cause,expected] of [[{code:'account_window_invalid',message:'private-ipc-sentinel'},'当前窗口不能管理账户'],[{code:'account_busy',message:'private-ipc-sentinel',commit:null},'已有账户操作正在进行'],['timeout https://private.invalid/token','具体原因尚未确认'],[{code:'private-ipc-sentinel',message:'private-ipc-sentinel'},'具体原因尚未确认']]) {
+  const h=setup(t,{reply:command=>{if(command.type==='signIn')throw cause;}});await h.mount();await h.click('登录');assert(h.text().includes(expected));assert(!h.text().includes('private'));assert(!h.text().includes('请检查网络'));
+ }
+ const h=setup(t,{initial:{...signedOutAccount(),state:'error',error:{code:'private-owner-sync-sentinel',message:'private-ipc-sentinel'}}});await h.mount();assert(h.text().includes('未知错误'));assert(!h.text().includes('private'));assert(!h.button('重试连接'));assert(!h.button('重试登录'));
+});
+
 test('catalog allows optional enum only for authorization; transfer is fixed and argument-free',t=>{
  const {catalog}=setup(t).client;
  for(const type of ['signIn','signUp']){
