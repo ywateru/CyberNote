@@ -272,7 +272,7 @@ test('explicit unbound profile retry agrees with native; no polling, replacement
  for(const change of [{state:'authorizing'}, {enabled:true},{profile:{subject:'fixture'}},{error:{...s.error,requestReason:'connect'}}])assert.notEqual(accountErrorStateKey({...s,...change}),key);
 });
 
-const mappingStatus=()=>({state:'ready',enabled:true,devices:[{id:'peer',name:'Fixture',online:true,current:false,connected:true,transport:{generation:2,sample:7,ageMs:10,enrollment:'webrtc-direct',sync:'cloudflare-tunnel'}}],transportGeneration:2,pendingCount:0,conflictCount:0});
+const mappingStatus=()=>({state:'ready',enabled:true,devices:[{id:'11111111-1111-4111-8111-111111111111',name:'Fixture',online:true,current:false,connected:true,syncAvailable:true,transport:{generation:2,sample:7,ageMs:10,enrollment:'webrtc-direct',sync:'cloudflare-tunnel'}}],transportGeneration:2,pendingCount:0,conflictCount:0});
 test('live Mapping DTO retains only finite per-path labels and explicit generation/sample age',()=>{
  for(const kind of ['webrtc-direct','iroh-direct','cloudflare-tunnel','unavailable','unknown']) {
   const s=mappingStatus();s.devices[0].transport.enrollment=kind;s.devices[0].transport.sync=kind;
@@ -290,4 +290,45 @@ test('Mapping DTO rejects stale, wrong-generation, invalid-label and inactive ev
   ...[{generation:3},{sample:0},{sample:Number.MAX_SAFE_INTEGER+1},{sample:1.5},{ageMs:3001},{ageMs:-1},{enrollment:'private-address-sentinel'},{sync:null},{url:'private-address-sentinel'}].map(value=>s=>{Object.assign(s.devices[0].transport,value);}),
  ];
  for(const change of corrupt){const s=mappingStatus();change(s);assert.throws(()=>validateAccountStatus(s),/无效数据/);}
+});
+
+const registryPeer='12345678-1234-4123-8123-123456789abc';
+const deviceStatus=()=>({...status(undefined),state:'paused',devices:[{id:registryPeer,name:'Fixture',current:false,online:true,connected:false,syncAvailable:false}]});
+test('registry summary distinguishes missing, empty and ordinary note modification time',()=>{
+ const s=deviceStatus();assert.equal(validateAccountStatus(s).devices[0].summary,undefined);
+ for(const summary of [{noteCount:0,lastNoteUpdatedAt:null,capturedAt:100},{noteCount:12,lastNoteUpdatedAt:80,capturedAt:100}]) {
+  s.devices[0].summary=summary;assert.deepEqual(validateAccountStatus(s).devices[0].summary,summary);
+ }
+ for(const summary of [null,{},
+  {noteCount:0,lastNoteUpdatedAt:1,capturedAt:100},{noteCount:2,lastNoteUpdatedAt:null,capturedAt:100},
+  {noteCount:1,lastNoteUpdatedAt:80,capturedAt:100,heartbeat:100},
+  ...['noteCount','lastNoteUpdatedAt','capturedAt'].flatMap(key=>[-1,1.5,NaN,Infinity,Number.MAX_SAFE_INTEGER+1,'100',undefined].map(value=>({...{noteCount:1,lastNoteUpdatedAt:80,capturedAt:100},[key]:value}))),
+ ]) {s.devices[0].summary=summary;assert.throws(()=>validateAccountStatus(s),/无效数据/);}
+});
+test('registry device DTO rejects invalid identifiers, duplicate stable IDs, unknown fields and missing permission',()=>{
+ for(const mutate of [
+  s=>{s.devices[0].id='protocol-id';},s=>{s.devices[0].id=registryPeer.replace('-4123-','-5123-');},
+  s=>{delete s.devices[0].syncAvailable;},s=>{s.devices[0].syncAvailable='true';},
+  s=>{s.devices[0].owner='other';},s=>{s.devices[0].transportDeviceId='private';},
+  s=>{s.devices.push({...s.devices[0],id:registryPeer.toUpperCase()});},
+  s=>{s.devices=Array.from({length:65},()=>({...s.devices[0]}));},
+ ]) {const s=deviceStatus();mutate(s);assert.throws(()=>validateAccountStatus(s),/无效数据/);}
+});
+test('device operations retain only a finite target direction phase and safe time receipt',()=>{
+ for(const phase of ['running','succeeded','failed'])for(const direction of ['push','pull','both']) {
+  const op={deviceId:registryPeer,direction,phase,startedAt:100,...(phase==='running'?{}:{finishedAt:200})};
+  assert.deepEqual(validateAccountStatus({...deviceStatus(),deviceOperation:op}).deviceOperation,op);
+ }
+ const op={deviceId:registryPeer,direction:'push',phase:'running',startedAt:100};
+ for(const patch of [{deviceId:'private-url'},{direction:'broadcast'},{phase:'complete'},{startedAt:-1},{startedAt:1.5},{finishedAt:50},{finishedAt:200},{url:'private'},{direction:undefined}])
+  assert.throws(()=>validateAccountStatus({...deviceStatus(),deviceOperation:{...op,...patch}}),/无效数据/);
+});
+test('device failures have fixed safe copy; unrecognized or cross-branch diagnostics cannot leak a peer message',()=>{
+ for(const code of ['account_device_offline','account_device_incompatible','account_sync_not_enabled','account_directory_unavailable','account_directory_unsupported']) {
+  const safe=accountIPCError({code,message:'private-remote-message'});assert.equal(safe.code,code);assert(!safe.message.includes('private-remote-message'));
+  assert(!accountErrorMessage(safe).includes('private-remote-message'));
+  assert.equal(accountIPCError({code,message:'private',stage:'identityProvider'}),undefined);
+ }
+ assert.equal(accountIPCError({code:'account_device_private-message',message:'private'}),undefined);
+ assert(accountErrorMessage({code:'account_directory_unsupported',message:'private'}).includes('不会退回自动'));
 });

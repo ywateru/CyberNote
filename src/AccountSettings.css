@@ -65,3 +65,18 @@
 .preferences-mobile .account-intro { margin-bottom: 18px; }
 @media (prefers-reduced-motion: reduce) { .account-switch-track, .account-switch-track::before { transition: none; } }
 @media (max-width: 350px) { .account-profile { gap: 10px; } .account-avatar { width: 36px; height: 36px; } .preferences-mobile .account-actions > button { flex: 1; } }
+.account-device-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.account-device-heading h4 { margin: 0; }
+.account-device-info { flex: 1; min-width: 0; }
+.account-settings .account-device-open { min-width: 0; padding: 4px 0; border: 0; background: transparent; font-weight: 500; text-align: start; }
+.account-device-open span { color: var(--secondary); }
+.account-device-directions { border: 0; padding: 0; margin: 16px 0; min-width: 0; }
+.account-device-directions legend { font-weight: 600; margin-bottom: 6px; }
+.account-device-directions label { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
+.account-device-directions input { width: 18px; height: 18px; margin: 0; flex-shrink: 0; accent-color: var(--accent); }
+.account-device-directions small { display: block; color: var(--secondary); line-height: 1.5; }
+.account-device-directions:disabled label { color: var(--secondary); cursor: default; }
+.account-device-name { display: grid; gap: 8px; margin-top: 16px; }
+.account-device-name input { box-sizing: border-box; min-width: 0; width: 100%; min-height: 44px; padding: 8px; border: 1px solid var(--line); border-radius: var(--interface-radius-button, 7px); background: var(--paper); color: var(--ink); font: inherit; }
+.account-operation { margin-top: 14px !important; color: var(--secondary); }
+.account-device-open:focus-visible, .account-device-name input:focus-visible, .account-device-directions input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

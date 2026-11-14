@@ -21,7 +21,7 @@ type RequestReason = typeof requestReasons[number];
 const requestStages = ["coordinatorProfile", "coordinatorEnrollment", "coordinatorJwks"];
 const adoptionStages = ["probe", "prepare", "media"] as const;
 type AdoptionStage = typeof adoptionStages[number];
-const errorCodes = ["account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_sync_adoption_blocked", "account_window_invalid"];
+const errorCodes = ["account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_sync_adoption_blocked", "account_window_invalid", "account_device_offline", "account_device_incompatible", "account_sync_not_enabled", "account_directory_unavailable", "account_directory_unsupported"];
 export type SafeError = { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number; adoptionStage?: AdoptionStage; adoptionReason?: "timeout" };
 const transportKinds = ["webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
 type TransportKind = typeof transportKinds[number];
@@ -29,13 +29,18 @@ type MappingObservation = { generation: number; sample: number; ageMs: number; e
 const authorizationSurfaces = ["embedded", "browser"] as const;
 export type AccountAuthorizationSurface = typeof authorizationSurfaces[number];
 
-// Frozen account109 DTO. The native singleton owns authorization and networking.
+// Frozen account110 DTO. The native singleton owns authorization and networking.
+export const deviceDirections = ["push", "pull", "both"] as const;
+export type DeviceDirection = typeof deviceDirections[number];
+export type AccountDevice = { id: string; name: string; online: boolean; current: boolean; connected: boolean; syncAvailable: boolean; transport?: MappingObservation; summary?: {noteCount: number; lastNoteUpdatedAt: number | null; capturedAt: number} };
+export type DeviceOperation = {deviceId: string; direction: DeviceDirection; phase: "running" | "succeeded" | "failed"; startedAt: number; finishedAt?: number};
 export type AccountStatus = {
   state: "signedOut" | "authorizing" | "connecting" | "ready" | "paused" | "error";
   authorizationSurface?: AccountAuthorizationSurface;
   enabled: boolean;
   profile?: { subject: string; displayName: string; username?: string };
-  devices: { id: string; name: string; online: boolean; current: boolean; connected: boolean; transport?: MappingObservation }[];
+  devices: AccountDevice[];
+  deviceOperation?: DeviceOperation;
   transportGeneration?: number;
   lastSyncAt?: number;
   pendingCount: number;
@@ -45,7 +50,9 @@ export type AccountStatus = {
 export type AccountCommand =
   | { type: "signIn" | "signUp"; surface?: AccountAuthorizationSurface }
   | { type: "status" | "openLoginInBrowser" | "cancel" | "signOut" | "syncNow" }
-  | { type: "setEnabled"; enabled: boolean };
+  | { type: "setEnabled"; enabled: boolean }
+  | { type: "renameDevice"; name: string }
+  | { type: "syncDevice"; deviceId: string; direction: DeviceDirection };
 
 export function accountNetworkError(error: AccountStatus["error"]): boolean {
   return error?.code === "account_network" ||
@@ -92,6 +99,20 @@ function record(value: unknown, keys: string[]): Record<string, unknown> {
 function text(value: unknown, max = 256): string {
   if (typeof value !== "string" || value.length > max || /[\u0000-\u001f\u007f]/.test(value)) return invalid();
   return value;
+}
+export function deviceName(value: unknown): string {
+  if (typeof value !== "string" || /[\u0000-\u001f\u007f-\u009f]/.test(value)) return invalid();
+  const name = value.trim();
+  if (!name || [...name].length > 96) return invalid();
+  return name;
+}
+function deviceId(value: unknown): string {
+  if (typeof value !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) return invalid();
+  return value.toLowerCase();
+}
+function deviceDirection(value: unknown): DeviceDirection {
+  if (!deviceDirections.includes(value as DeviceDirection)) return invalid();
+  return value as DeviceDirection;
 }
 function bool(value: unknown): boolean { if (typeof value !== "boolean") return invalid(); return value; }
 function count(value: unknown): number { if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) return invalid(); return value; }
@@ -174,6 +195,11 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     account_busy: "已有账户操作正在进行，请等待该操作结束后再重试。本机备忘录会保留。",
     account_window_invalid: "当前窗口不能管理账户，请回到应用主窗口后重试。本机备忘录会保留。",
     account_platform_unsupported: "此平台暂不支持账户操作。本机备忘录仍可继续编辑。",
+    account_device_offline: "目标设备已离线，本次传输未完成。请待其上线后重新选择并确认同步。",
+    account_device_incompatible: "目标设备不支持本次同步协议，请更新目标设备后重新选择。",
+    account_sync_not_enabled: "本机或目标设备尚未允许内容同步。请在两端允许同步后重新选择并确认。",
+    account_directory_unavailable: "暂时无法读取账户设备目录，请明确刷新设备或重试连接。本机备忘录会保留。",
+    account_directory_unsupported: "账户服务尚不支持设备目录，请更新服务。不会退回自动向全部设备传输，本机备忘录会保留。",
     account_sync_failed: "同步未完成，请查看账户状态后重试。本地更改仍保存在此设备。",
     account_sync_protocol: "设备同步响应未通过校验，请检查服务或更新应用。本地更改仍会保留。",
     account_sync_adoption_blocked: "旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。若旧同步来自“设备同步”，可退出当前账户，再前往“设备同步”恢复并处理旧同步。若旧账户仍有待接收内容，可退出当前账户并重新登录旧账户；身份及同步空间验证通过且原同步凭证仍可用时，会恢复旧设备身份，同步仍保持暂停。请确认开启原同步空间并处理待接收内容，完成后再退出，登录目标账户并确认开启合并。",
@@ -234,20 +260,41 @@ export function accountIPCError(cause: unknown): SafeError | undefined {
   } catch { return undefined; }
 }
 export function validateAccountStatus(value: unknown): AccountStatus {
-  const s = record(value, ["state", "authorizationSurface", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "error", "transportGeneration"]);
+  const s = record(value, ["state", "authorizationSurface", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "error", "transportGeneration", "deviceOperation"]);
   if (!["signedOut", "authorizing", "connecting", "ready", "paused", "error"].includes(s.state as string)) return invalid();
   if ("authorizationSurface" in s && (s.state !== "authorizing" || !authorizationSurfaces.includes(s.authorizationSurface as AccountAuthorizationSurface))) return invalid();
-  if (!Array.isArray(s.devices) || s.devices.length > 256) return invalid();
+  if (!Array.isArray(s.devices) || s.devices.length > 64) return invalid();
   const profile = s.profile === undefined ? undefined : record(s.profile, ["subject", "displayName", "username"]);
   const error = s.error === undefined ? undefined : validateAccountError(s.error);
   const generation = s.transportGeneration === undefined ? undefined : count(s.transportGeneration);
   if (generation !== undefined && (generation === 0 || s.state !== "ready" || s.enabled !== true || error !== undefined)) return invalid();
+  const ids = new Set<string>();
+  let operation: DeviceOperation | undefined;
+  if (s.deviceOperation !== undefined) {
+    const o = record(s.deviceOperation, ["deviceId", "direction", "phase", "startedAt", "finishedAt"]);
+    if (!["running", "succeeded", "failed"].includes(o.phase as string)) return invalid();
+    const startedAt = count(o.startedAt), finishedAt = o.finishedAt === undefined ? undefined : count(o.finishedAt);
+    if (finishedAt !== undefined && (finishedAt < startedAt || o.phase === "running")) return invalid();
+    operation = {deviceId: deviceId(o.deviceId), direction: deviceDirection(o.direction), phase: o.phase as DeviceOperation["phase"], startedAt, ...(finishedAt === undefined ? {} : {finishedAt})};
+  }
   return {
+    ...(operation === undefined ? {} : {deviceOperation: operation}),
     state: s.state as AccountStatus["state"], enabled: bool(s.enabled),
     ...(s.authorizationSurface === undefined ? {} : { authorizationSurface: s.authorizationSurface as AccountAuthorizationSurface }),
     profile: profile ? { subject: text(profile.subject, 1024), displayName: text(profile.displayName, 512), username: profile.username === undefined ? undefined : text(profile.username, 1024) } : undefined,
     devices: s.devices.map(value => {
-      const d = record(value, ["id", "name", "online", "current", "connected", "transport"]);
+      const d = record(value, ["id", "name", "online", "current", "connected", "transport", "syncAvailable", "summary"]);
+      const id = deviceId(d.id);
+      if (ids.has(id.toLowerCase())) return invalid();
+      ids.add(id.toLowerCase());
+      let summary: AccountDevice["summary"];
+      if (d.summary !== undefined) {
+        const m = record(d.summary, ["noteCount", "lastNoteUpdatedAt", "capturedAt"]);
+        const noteCount = count(m.noteCount);
+        const lastNoteUpdatedAt = m.lastNoteUpdatedAt === null ? null : count(m.lastNoteUpdatedAt);
+        if ((noteCount === 0) !== (lastNoteUpdatedAt === null)) return invalid();
+        summary = {noteCount, lastNoteUpdatedAt, capturedAt: count(m.capturedAt)};
+      }
       let transport: MappingObservation | undefined;
       if (d.transport !== undefined) {
         const t = record(d.transport, ["generation", "sample", "ageMs", "enrollment", "sync"]);
@@ -256,7 +303,7 @@ export function validateAccountStatus(value: unknown): AccountStatus {
           !transportKinds.includes(t.enrollment as TransportKind) || !transportKinds.includes(t.sync as TransportKind)) return invalid();
         transport = {generation, sample: t.sample as number, ageMs: t.ageMs as number, enrollment: t.enrollment as TransportKind, sync: t.sync as TransportKind};
       }
-      return { id: text(d.id), name: text(d.name, 512), online: bool(d.online), current: bool(d.current), connected: bool(d.connected), ...(transport === undefined ? {} : {transport}) };
+      return { id, name: text(d.name, 512), online: bool(d.online), current: bool(d.current), connected: bool(d.connected), syncAvailable: bool(d.syncAvailable), ...(summary === undefined ? {} : {summary}), ...(transport === undefined ? {} : {transport}) };
     }),
     lastSyncAt: s.lastSyncAt === undefined ? undefined : count(s.lastSyncAt),
     ...(generation === undefined ? {} : {transportGeneration: generation}),
@@ -277,6 +324,12 @@ export async function accountCommand(command: AccountCommand): Promise<AccountSt
         request = { type: command.type, surface: command.surface };
       } else request = { type: command.type };
       break;
+    case "renameDevice":
+      record(command, ["type", "name"]);
+      request = {type: "renameDevice", name: deviceName(command.name)}; break;
+    case "syncDevice":
+      record(command, ["type", "deviceId", "direction"]);
+      request = {type: "syncDevice", deviceId: deviceId(command.deviceId), direction: deviceDirection(command.direction)}; break;
     case "setEnabled":
       record(command, ["type", "enabled"]);
       request = { type: "setEnabled", enabled: bool(command.enabled) }; break;

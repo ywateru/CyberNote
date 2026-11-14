@@ -38,6 +38,7 @@ class HostElement extends HostNode {
   scrollIntoView() {throw Error('account confirmation must not scroll inline');}
   matches(selector) {return selector===':disabled'&&!!this.disabled;}
   querySelector(selector) {return descendants(this).find(e=>selector==='button:not(:disabled)'?e.localName==='button'&&!e.disabled:e.localName===selector)??null;}
+  querySelectorAll(selector) {return descendants(this).filter(e=>['button','input','summary'].includes(e.localName)&&!e.disabled&&!descendants(this).some(p=>p.localName==='fieldset'&&p.disabled&&p.contains(e)));}
   // Observe requests to the native dialog API; this host does not simulate
   // browser top-layer rendering, hit testing or automatic background inertness.
   showModal() {assert.equal(this.localName,'dialog');assert(!this.open);this.open=true;this.modalShows=(this.modalShows??0)+1;}
@@ -340,8 +341,8 @@ test('A exit then B login stays paused; enabling requires explicit consent for r
  const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
  await act(async()=>props(toggle).onChange({target:{checked:true}}));
  assert(!h.calls.some(c=>c.type==='setEnabled'));
- assert(h.text().includes('本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）将与当前账户其他设备的备忘录合并'));
- await h.click('开启并合并');assert.deepEqual(h.calls.at(-1),{type:'setEnabled',enabled:true});
+ assert(h.text().includes('本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）与当前账户选定设备合并'));
+ await h.click('允许同步');assert.deepEqual(h.calls.at(-1),{type:'setEnabled',enabled:true});
  assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,1);
 });
 
@@ -367,9 +368,9 @@ test('switch opens a labelled native modal without enabling; local Tab/Escape ha
   });
   assert(prevented);assert(stopped);assert.equal(parentCalls,0);
  };
- await key('Tab',true);assert.equal(document.activeElement,h.button('开启并合并'));
+ await key('Tab',true);assert.equal(document.activeElement,h.button('允许同步'));
  await key('Tab');assert.equal(document.activeElement,h.button('取消'));
- await key('Tab');assert.equal(document.activeElement,h.button('开启并合并'));
+ await key('Tab');assert.equal(document.activeElement,h.button('允许同步'));
  await key('Tab',true);assert.equal(document.activeElement,h.button('取消'));
  await key('Escape');assert(!h.all().some(e=>e.localName==='dialog'));assert.equal(modal.open,false);
  assert.equal(document.activeElement,toggle);assert(h.calls.every(c=>c.type==='status'));
@@ -416,10 +417,10 @@ test('switch reflects only authoritative enable response; a confirmed in-flight 
  const enabling=deferred(),initial={...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}};
  const h=setup(t,{initial,reply:command=>command.type==='setEnabled'?enabling.promise:undefined});await h.mount();
  const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');toggle.focus();
- await act(async()=>props(toggle).onChange({target:{checked:true}}));await h.click('开启并合并');
+ await act(async()=>props(toggle).onChange({target:{checked:true}}));await h.click('允许同步');
  const modal=h.all().find(e=>e.localName==='dialog');
  assert.equal(props(toggle).checked,false);assert.equal(props(toggle).disabled,true);
- assert(props(h.button('取消')).disabled);assert(props(h.button('开启并合并')).disabled);
+ assert(props(h.button('取消')).disabled);assert(props(h.button('允许同步')).disabled);
  await act(async()=>assert.equal(h.handle().dismiss(),true));assert.equal(modal.open,true);
  let prevented=false;await act(async()=>props(modal).onCancel({preventDefault(){prevented=true;},stopPropagation(){}}));
  assert(prevented);assert.equal(modal.open,true);assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,1);
@@ -443,7 +444,7 @@ test('failed confirmed enable remains off with a visible fixed error in the moda
  const h=setup(t,{initial:{...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}},reply:command=>{
   if(command.type==='setEnabled')throw {code:'account_busy',message:'private-ipc-sentinel'};
  }});await h.mount();const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
- toggle.focus();await act(async()=>props(toggle).onChange({target:{checked:true}}));await h.click('开启并合并');
+ toggle.focus();await act(async()=>props(toggle).onChange({target:{checked:true}}));await h.click('允许同步');
  const modal=h.all().find(e=>e.localName==='dialog');assert.equal(modal.open,true);assert.equal(props(toggle).checked,false);
  assert(descendants(modal).some(e=>props(e).role==='alert'&&e.textContent.includes('已有账户操作正在进行')));
  assert(!modal.textContent.includes('private-ipc-sentinel'));
@@ -460,7 +461,7 @@ test('blocked adoption retains paused login and exposes only actual conflicts wi
   assert(h.text().includes('当前账户已登录且同步暂停，本机内容会保留'));
   assert(h.text().includes(adoptionRecoveryGuidance),'status error explains both explicit recovery paths and their preconditions');
   assert(!h.text().includes('private-response-sentinel'));assert(!h.button('登录'));assert(h.button('退出账户'));
-  assert(!h.button('重试登录'));assert(!h.button('重试连接'));assert(props(h.button('立即同步')).disabled);
+  assert(!h.button('重试登录'));assert(!h.button('重试连接'));assert(!h.button('立即同步'));assert(h.button('刷新设备'));
   const links=h.buttons().filter(b=>b.textContent.startsWith('查看冲突'));
   assert.equal(links.length,conflictCount?1:0);
   if(conflictCount) {await h.click('查看冲突（2）');assert.equal(opened,1);}
@@ -478,7 +479,7 @@ test('immediate adoption rejection keeps full enable confirmation and retries st
  await h.mount();const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
  await act(async()=>props(toggle).onChange({target:{checked:true}}));
  assert(h.text().includes('包括先前同步后保留的内容'));assert(!h.calls.some(c=>c.type==='setEnabled'));
- await h.click('开启并合并');assert(h.text().includes('开启同步前需要处理旧同步内容'));
+ await h.click('允许同步');assert(h.text().includes('开启同步前需要处理旧同步内容'));
  assert(h.text().includes('当前账户已登录且同步暂停'));assert(!h.text().includes('private-response-sentinel'));
  assert(h.text().includes(adoptionRecoveryGuidance),'IPC rejection gives the same safe recovery guidance');
  await h.click('取消');
@@ -499,7 +500,7 @@ test('explicit adoption timeouts show stage and retry guidance without claiming 
   }});await h.mount();
   if(mode==='IPC') {
    const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
-   await act(async()=>props(toggle).onChange({currentTarget:toggle,target:{checked:true}}));await h.click('开启并合并');
+   await act(async()=>props(toggle).onChange({currentTarget:toggle,target:{checked:true}}));await h.click('允许同步');
    const modal=h.all().find(e=>e.localName==='dialog');assert(modal.textContent.includes(`${label}超时`));
    await h.click('取消');
   }
@@ -567,4 +568,167 @@ test('JS IPC fixture preserves legacy omission, finite failure and same current 
  assert.equal((await accountFixture(backend,{type:'openLoginInBrowser'})).authorizationSurface,'browser');
  assert.equal(events.filter(e=>e==='account-signUp').length,1);
  for(const surface of [undefined,null,0,'unknown'])await assert.rejects(accountFixture(backend,{type:'signIn',surface}));
+});
+
+// Account110 tests exercise production UI dispatch and authoritative DTO replies.
+// They do not claim native discovery, peer transfer or data application.
+const SELF='10000000-0000-4000-8000-000000000001', PEER='10000000-0000-4000-8000-000000000002', OTHER='10000000-0000-4000-8000-000000000003';
+const device=(id,extra={})=>({id,name:id===SELF?'本机名称':'同名设备',online:true,current:id===SELF,connected:false,syncAvailable:true,...extra});
+const directory=(extra={})=>({...signedOutAccount(),state:'ready',enabled:true,profile:{subject:'fixture-A',displayName:'A'},devices:[device(SELF),device(PEER),device(OTHER)],...extra});
+const row=(h,id)=>h.all().find(e=>props(e)['data-device-id']===id);
+const openPeer=async(h,id=PEER)=>{const opener=descendants(row(h,id)).find(e=>e.localName==='button');await act(async()=>props(opener).onClick({currentTarget:opener}));return opener;};
+const chooseDirection=async(h,direction)=>{const radio=h.all().find(e=>e.localName==='input'&&props(e).name==='account-device-direction'&&props(e).value===direction);await act(async()=>props(radio).onChange());return radio;};
+
+test('device directory survives pause; offline summaries stay hidden and unknown is distinct from an empty library',async t=>{
+ const h=setup(t,{initial:directory({state:'paused',enabled:false,devices:[
+  device(SELF,{summary:{noteCount:0,lastNoteUpdatedAt:null,capturedAt:999}}),
+  device(PEER,{online:false,summary:{noteCount:777,lastNoteUpdatedAt:111,capturedAt:999}}),device(OTHER),
+ ]})});await h.mount();
+ assert(row(h,SELF).textContent.includes('此设备 · 在线'));assert(row(h,SELF).textContent.includes('0 篇笔记 · 暂无笔记更新时间'));
+ assert(row(h,PEER).textContent.includes('离线'));assert(!row(h,PEER).textContent.includes('777'));assert(!row(h,PEER).textContent.includes('笔记更新于'));
+ assert(row(h,OTHER).textContent.includes('笔记信息暂不可用'));assert(!row(h,OTHER).textContent.includes('0 篇'));
+ assert(!h.button('立即同步'));await h.tick();assert(h.calls.every(c=>c.type==='status'));
+ await h.click('刷新设备');assert.deepEqual(h.calls.at(-1),{type:'syncNow'});assert(!h.calls.some(c=>c.type==='syncDevice'));
+ await openPeer(h);assert(props(h.button('开始同步')).disabled);assert(h.text().includes('同步许可已关闭'));
+ await h.click('取消');assert(!h.calls.some(c=>c.type==='syncDevice'));
+});
+
+test('each direction confirms exactly one stable target despite duplicate names; opening and cancelling are read-only',async t=>{
+ for(const direction of ['push','pull','both']) {
+  const h=setup(t,{initial:directory()});await h.mount();const opener=await openPeer(h,OTHER);
+  assert.equal(document.activeElement,h.button('取消'));assert(h.calls.every(c=>c.type==='status'));
+  const defaultRadio=h.all().find(e=>props(e).name==='account-device-direction'&&props(e).value==='both');assert(props(defaultRadio).checked);
+  await chooseDirection(h,direction);await h.click('取消');assert.equal(document.activeElement,opener);assert(h.calls.every(c=>c.type==='status'));
+  await openPeer(h,OTHER);await chooseDirection(h,direction);await h.click('开始同步');
+  assert.deepEqual(h.calls.filter(c=>c.type==='syncDevice'),[{type:'syncDevice',deviceId:OTHER,direction}]);
+  assert(!h.text().includes('本次传输完成'),'an ACK without a new durable operation is not success');
+  await h.click('取消');await h.tick();assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);
+ }
+});
+
+test('device action latches invalidation for offline, missing, paused, account and local identity changes without replay',async t=>{
+ for(const change of [
+  s=>{s.enabled=false;},s=>{s.devices[1].online=false;},s=>{s.devices[1].syncAvailable=false;},
+  s=>{s.devices.splice(1,1);},s=>{s.profile.subject='fixture-B';},s=>{s.devices[0].id='20000000-0000-4000-8000-000000000001';},
+ ]) {
+  const h=setup(t,{initial:directory()});await h.mount();await openPeer(h);const changed=directory();change(changed);h.setNative(changed);await h.tick();
+  assert(props(h.button('开始同步')).disabled);assert(!h.calls.some(c=>c.type==='syncDevice'));
+  h.setNative(directory());await h.tick();assert(props(h.button('开始同步')).disabled,'restoration must not silently re-arm the dialog');
+  await h.click('取消');await openPeer(h);assert(!props(h.button('开始同步')).disabled);await h.click('取消');
+ }
+});
+
+test('in-flight device transfer observes status but rejects repeat confirm; durable receipt remains separate from application/conflicts',async t=>{
+ const pending=deferred(),initial=directory();
+ const h=setup(t,{initial,reply:command=>command.type==='syncDevice'?pending.promise:undefined});await h.mount();await openPeer(h);await h.click('开始同步');
+ assert(props(h.button('开始同步')).disabled);assert(props(h.button('取消')).disabled);
+ await act(async()=>props(h.button('开始同步')).onClick());assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);
+ const running={...initial,deviceOperation:{deviceId:PEER,direction:'both',phase:'running',startedAt:100}};h.setNative(running);await h.tick();
+ assert(h.text().includes('正在执行本次传输'));assert(h.text().includes('方向：双向同步'));
+ const succeeded={...initial,pendingCount:3,conflictCount:2,deviceOperation:{...running.deviceOperation,phase:'succeeded',finishedAt:200}};
+ await act(async()=>pending.resolve(succeeded));assert(h.text().includes('本次传输完成'));assert(h.text().includes('持久传输收据'));
+ assert(h.text().includes('待应用'));assert(h.text().includes('查看冲突（2）'));assert(!h.text().includes('全部笔记已应用'));
+ await h.click('取消');await h.tick();assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);
+});
+
+test('prior or mismatched operation receipts never claim this dialog completed; retry keeps target and direction explicit',async t=>{
+ for(const receipt of [
+  {deviceId:PEER,direction:'both',phase:'succeeded',startedAt:100,finishedAt:200},
+  {deviceId:OTHER,direction:'pull',phase:'succeeded',startedAt:100,finishedAt:200},
+ ]) {
+  const h=setup(t,{initial:directory({deviceOperation:receipt})});await h.mount();await openPeer(h);assert(!h.text().includes('本次传输完成'));
+  await h.click('开始同步');assert(!h.text().includes('本次传输完成'));await h.click('取消');
+ }
+ const h=setup(t,{initial:directory(),reply:command=>{if(command.type==='syncDevice')throw {code:'account_sync_failed',message:'private-peer-error'};}});
+ await h.mount();await openPeer(h);await chooseDirection(h,'pull');await h.click('开始同步');assert(h.text().includes('同步未完成'));assert(!h.text().includes('private-peer-error'));
+ await h.tick();assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);assert(props(h.button('开始同步')).disabled===false);assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);
+ await h.click('开始同步');assert.deepEqual(h.calls.filter(c=>c.type==='syncDevice'),Array(2).fill({type:'syncDevice',deviceId:PEER,direction:'pull'}));
+});
+
+test('rename is local-only, validates before IPC and waits for authoritative saved name; modal focus includes the input',async t=>{
+ const h=setup(t,{initial:directory(),reply:(command,model)=>{
+  if(command.type==='renameDevice'){const next=structuredClone(model.get());next.devices[0].name=command.name;model.set(next);return next;}
+ }});await h.mount();const opener=h.button('更改名称');await h.click('更改名称');assert.equal(document.activeElement,h.button('取消'));
+ const input=h.all().find(e=>e.localName==='input'&&props(e).value==='本机名称');assert(input);
+ const modal=h.all().find(e=>e.localName==='dialog');await act(async()=>props(modal).onKeyDown({key:'Tab',shiftKey:true,preventDefault(){},stopPropagation(){}}));assert(document.activeElement===input);
+ await act(async()=>props(modal).onKeyDown({key:'Tab',shiftKey:true,preventDefault(){},stopPropagation(){}}));assert(document.activeElement===h.button('保存名称'));
+ await act(async()=>props(modal).onKeyDown({key:'Tab',shiftKey:false,preventDefault(){},stopPropagation(){}}));assert(document.activeElement===input);
+ for(const value of ['   ','x'.repeat(97),'bad\u0001name']) {
+  await act(async()=>props(input).onChange({target:{value}}));await h.click('保存名称');assert(h.text().includes('请输入 1–96'));assert(!h.calls.some(c=>c.type==='renameDevice'));
+ }
+ await act(async()=>props(input).onChange({target:{value:'  新的本机名称  '}}));await h.click('保存名称');
+ assert.deepEqual(h.calls.at(-1),{type:'renameDevice',name:'新的本机名称'});assert(row(h,SELF).textContent.includes('新的本机名称'));assert.equal(document.activeElement,opener);
+ assert(h.getNative().devices.slice(1).every(d=>d.name==='同名设备'));assert(!h.calls.some(c=>c.type==='syncDevice'));
+});
+
+test('enabling permission and refreshing never dispatch a peer transfer',async t=>{
+ const h=setup(t,{initial:directory({state:'paused',enabled:false}),reply:(command,model)=>{
+  if(command.type==='setEnabled'){const next={...model.get(),state:'ready',enabled:command.enabled};model.set(next);return next;}
+ }});await h.mount();const toggle=h.all().find(e=>props(e).id==='account-enabled');
+ await act(async()=>props(toggle).onChange({currentTarget:toggle,target:{checked:true}}));assert(h.text().includes('开启本身不会自动传输'));
+ await h.click('允许同步');await h.tick();await h.click('刷新设备');await h.tick();
+ assert(h.calls.some(c=>c.type==='setEnabled'));assert(!h.calls.some(c=>c.type==='syncDevice'));assert(h.text().includes('开启后不会自动传输'));
+});
+
+test('IPC constructs only exact rename and target/direction requests; invalid input never reaches native',async t=>{
+ const h=setup(t,{initial:directory()});
+ await h.client.accountCommand({type:'renameDevice',name:'  Mac 工作台  '});assert.deepEqual(h.calls.at(-1),{type:'renameDevice',name:'Mac 工作台'});
+ for(const direction of ['push','pull','both']) {await h.client.accountCommand({type:'syncDevice',deviceId:PEER,direction});assert.deepEqual(h.calls.at(-1),{type:'syncDevice',deviceId:PEER,direction});}
+ const before=h.calls.length;
+ for(const command of [
+  {type:'renameDevice',name:''},{type:'renameDevice',name:'x'.repeat(97)},{type:'renameDevice',name:'bad\nname'},
+  {type:'renameDevice',name:'valid',deviceId:PEER},{type:'renameDevice',name:'valid',owner:'another-account'},
+  {type:'syncDevice',deviceId:'http://private.invalid',direction:'push'},
+  {type:'syncDevice',deviceId:PEER,direction:'all'},{type:'syncDevice',deviceId:PEER,direction:'both',url:'private'},
+  {type:'syncDevice',deviceId:PEER,direction:'both',owner:'another-account'},
+ ]) await assert.rejects(h.client.accountCommand(command),/无效数据/);
+ assert.equal(h.calls.length,before);
+});
+
+test('late device receipt after an observed account change cannot overwrite new-account status or claim success',async t=>{
+ const pending=deferred(),initial=directory();const h=setup(t,{initial,reply:command=>command.type==='syncDevice'?pending.promise:undefined});
+ await h.mount();await openPeer(h);await h.click('开始同步');const changed=directory({profile:{subject:'fixture-B',displayName:'B'}});
+ h.setNative(changed);await h.tick();assert.equal(h.handle().inspect().status.profile.subject,'fixture-B');
+ await act(async()=>pending.resolve({...initial,deviceOperation:{deviceId:PEER,direction:'both',phase:'succeeded',startedAt:100,finishedAt:200}}));
+ assert.equal(h.handle().inspect().status.profile.subject,'fixture-B');assert(!h.text().includes('本次传输完成'));assert(props(h.button('开始同步')).disabled);
+});
+
+test('device direction controls join the modal Tab loop and Escape restores the exact remote opener',async t=>{
+ const h=setup(t,{initial:directory()});await h.mount();const opener=await openPeer(h,OTHER),modal=h.all().find(e=>e.localName==='dialog');
+ const push=h.all().find(e=>props(e).name==='account-device-direction'&&props(e).value==='push');
+ const both=h.all().find(e=>props(e).name==='account-device-direction'&&props(e).value==='both');
+ const key=async(key,shiftKey=false)=>{let stopped=false;await act(async()=>props(modal).onKeyDown({key,shiftKey,preventDefault(){},stopPropagation(){stopped=true;}}));assert(stopped);};
+ await key('Tab',true);assert(document.activeElement===both);await key('Tab');assert(document.activeElement===h.button('取消'));
+ await key('Tab');assert(document.activeElement===h.button('开始同步'));await key('Tab');assert(document.activeElement===push);
+ await key('Escape');assert(document.activeElement===opener);assert(h.calls.every(c=>c.type==='status'));
+});
+
+test('JS device fixture renames only the local row and never invents a transfer receipt',async()=>{
+ const backend={account:directory(),async boundary(){}};
+ await accountFixture(backend,{type:'renameDevice',name:'  Fixture Mac  '});assert.equal(backend.account.devices[0].name,'Fixture Mac');
+ assert(backend.account.devices.slice(1).every(d=>d.name==='同名设备'));
+ const before=structuredClone(backend.account);await accountFixture(backend,{type:'syncNow'});
+ await accountFixture(backend,{type:'syncDevice',deviceId:PEER,direction:'pull'});assert.deepEqual(backend.account,before);assert.equal(backend.account.deviceOperation,undefined);
+ await assert.rejects(accountFixture(backend,{type:'renameDevice',name:'valid',deviceId:PEER}));
+ await assert.rejects(accountFixture(backend,{type:'syncDevice',deviceId:PEER,direction:'broadcast'}));
+});
+
+test('an older matching receipt after confirm is not new success, and invalidated dialogs cannot regain success by polling',async t=>{
+ const receipt={deviceId:PEER,direction:'both',phase:'succeeded',startedAt:100,finishedAt:200};
+ const h=setup(t,{initial:directory({deviceOperation:receipt}),reply:command=>command.type==='syncDevice'?directory({deviceOperation:{...receipt,startedAt:90}}):undefined});
+ await h.mount();await openPeer(h);await h.click('开始同步');assert(!h.text().includes('本次传输完成'));
+ for(const change of [s=>{s.profile.subject='fixture-B';},s=>{s.devices[0].id='20000000-0000-4000-8000-000000000001';}]) {
+  await h.click('取消');h.setNative(directory());await h.tick();await openPeer(h);await h.click('开始同步');
+  const changed=directory();change(changed);h.setNative(changed);await h.tick();assert(props(h.button('开始同步')).disabled);
+  h.setNative(directory({deviceOperation:{...receipt,startedAt:300,finishedAt:400}}));await h.tick();
+  assert(!h.text().includes('本次传输完成'));assert(props(h.button('开始同步')).disabled);
+ }
+});
+
+test('a late device rejection cannot write an old account error into the new owner view',async t=>{
+ const pending=deferred(),initial=directory();const h=setup(t,{initial,reply:command=>command.type==='syncDevice'?pending.promise:undefined});
+ await h.mount();await openPeer(h);await h.click('开始同步');h.setNative(directory({profile:{subject:'fixture-B',displayName:'B'}}));await h.tick();
+ await act(async()=>pending.reject({code:'account_sync_failed',message:'private-old-owner-error'}));
+ assert.equal(h.handle().inspect().status.profile.subject,'fixture-B');assert.equal(h.handle().inspect().error,'');
+ assert(!h.text().includes('本次设备同步未完成'));assert(!h.text().includes('private-old-owner-error'));
 });
