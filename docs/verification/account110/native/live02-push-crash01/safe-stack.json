@@ -1,0 +1,357 @@
+{
+  "schema": 1,
+  "sourceRevision": "a663586b47f136508d1cab50f7ca2a075b9fd67b",
+  "reportSha256": "da7eb2f571b579b660af7aa56f2326f0cee241cc4a876d9c7096b62bb91f0bcd",
+  "signedExecutableSha256": "a6c2d19e0ec1c33fe206235d16ad3452e31b8c57c281531f5c6da30d1ab7fc0f",
+  "machOUuidMatchesSignedExecutable": true,
+  "bundleMatchesWrapper": true,
+  "bundleMatchesCompiledProduct": false,
+  "procPathMatchesExactExecutable": false,
+  "captureTime": "2026-11-14 20:21:23.4662 +0800",
+  "launchTime": "2026-11-14 20:20:33.3797 +0800",
+  "exception": {
+    "type": "EXC_BAD_ACCESS",
+    "signal": "SIGABRT"
+  },
+  "termination": {
+    "namespace": "SIGNAL",
+    "code": 6
+  },
+  "faultingThreadIndex": 8,
+  "faultingThreadIsTokioWorker": true,
+  "frameCount": 82,
+  "symbols": [
+    {
+      "index": 0,
+      "symbol": "__pthread_kill",
+      "isExactAppImage": false,
+      "symbolOffset": 8
+    },
+    {
+      "index": 1,
+      "symbol": "pthread_kill",
+      "isExactAppImage": false,
+      "symbolOffset": 296
+    },
+    {
+      "index": 2,
+      "symbol": "abort",
+      "isExactAppImage": false,
+      "symbolOffset": 148
+    },
+    {
+      "index": 3,
+      "symbol": "_RNvNtNtNtCsa9BKTri5B3M_3std3sys3pal4unix14abort_internal",
+      "isExactAppImage": true,
+      "symbolOffset": 12
+    },
+    {
+      "index": 4,
+      "symbol": "_RNvNtCsa9BKTri5B3M_3std7process5abort",
+      "isExactAppImage": true,
+      "symbolOffset": 12
+    },
+    {
+      "index": 5,
+      "symbol": "_RNvNtNtNtNtNtCsa9BKTri5B3M_3std3sys3pal4unix14stack_overflow3imp14signal_handler",
+      "isExactAppImage": true,
+      "symbolOffset": 644
+    },
+    {
+      "index": 6,
+      "symbol": "_sigtramp",
+      "isExactAppImage": false,
+      "symbolOffset": 56
+    },
+    {
+      "index": 7,
+      "symbol": "_RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0B7_",
+      "isExactAppImage": true,
+      "symbolOffset": 652
+    },
+    {
+      "index": 8,
+      "symbol": "_RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0B7_",
+      "isExactAppImage": true,
+      "symbolOffset": 652
+    },
+    {
+      "index": 9,
+      "symbol": "_RNvXs_NtNtCsgtPOCBgevO_4core6future6futureINtNtB8_3pin3PinQNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0ENtB4_6Future4pollB13_",
+      "isExactAppImage": true,
+      "symbolOffset": 28
+    },
+    {
+      "index": 10,
+      "symbol": "_RNvXNtNtCsgtPOCBgevO_4core6future6futureQINtNtB6_3pin3PinQNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0ENtB2_6Future4pollB12_",
+      "isExactAppImage": true,
+      "symbolOffset": 28
+    },
+    {
+      "index": 11,
+      "symbol": "_RNCNCINvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker15execute_requestNCNvNtB8_9transport15transfer_target0E00Ba_",
+      "isExactAppImage": true,
+      "symbolOffset": 580
+    },
+    {
+      "index": 12,
+      "symbol": "_RNvXs0_NtNtCsgtPOCBgevO_4core6future7poll_fnINtB5_6PollFnNCNCINvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker15execute_requestNCNvNtB12_9transport15transfer_target0E00ENtNtB7_6future6Future4pollB14_",
+      "isExactAppImage": true,
+      "symbolOffset": 16
+    },
+    {
+      "index": 13,
+      "symbol": "_RNCINvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker15execute_requestNCNvNtB6_9transport15transfer_target0E0B8_",
+      "isExactAppImage": true,
+      "symbolOffset": 1460
+    },
+    {
+      "index": 14,
+      "symbol": "_RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport11run_service0B7_",
+      "isExactAppImage": true,
+      "symbolOffset": 5176
+    },
+    {
+      "index": 15,
+      "symbol": "_RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport11run_content0B7_",
+      "isExactAppImage": true,
+      "symbolOffset": 3820
+    },
+    {
+      "index": 16,
+      "symbol": "_RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker13content_owner0B7_",
+      "isExactAppImage": true,
+      "symbolOffset": 3840
+    },
+    {
+      "index": 17,
+      "symbol": "_RNvXs_NtNtCsgtPOCBgevO_4core6future6futureINtNtB8_3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker13content_owner0EENtB4_6Future4pollB1B_",
+      "isExactAppImage": true,
+      "symbolOffset": 28
+    },
+    {
+      "index": 18,
+      "symbol": "_RNCNCINvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker11join_ownersNCNvB6_13content_owner0NCNvB6_15directory_owner0E00Ba_",
+      "isExactAppImage": true,
+      "symbolOffset": 264
+    },
+    {
+      "index": 19,
+      "symbol": "_RNvXs_NtNtCsjGmPZ6FXkcf_5tokio6future10maybe_doneINtB4_9MaybeDoneNCNCINvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker11join_ownersNCNvB18_13content_owner0NCNvB18_15directory_owner0E00ENtNtNtCsgtPOCBgevO_4core6future6future6Future4pollB1c_",
+      "isExactAppImage": true,
+      "symbolOffset": 92
+    },
+    {
+      "index": 20,
+      "symbol": "_RNCNCINvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker11join_ownersNCNvB6_13content_owner0NCNvB6_15directory_owner0E0s0_0Ba_",
+      "isExactAppImage": true,
+      "symbolOffset": 208
+    },
+    {
+      "index": 21,
+      "symbol": "_RNvXs0_NtNtCsgtPOCBgevO_4core6future7poll_fnINtB5_6PollFnNCNCINvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker11join_ownersNCNvB10_13content_owner0NCNvB10_15directory_owner0E0s0_0ENtNtB7_6future6Future4pollB14_",
+      "isExactAppImage": true,
+      "symbolOffset": 12
+    },
+    {
+      "index": 22,
+      "symbol": "_RNCINvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker11join_ownersNCNvB4_13content_owner0NCNvB4_15directory_owner0E0B8_",
+      "isExactAppImage": true,
+      "symbolOffset": 524
+    },
+    {
+      "index": 23,
+      "symbol": "_RNCNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker3run00B9_",
+      "isExactAppImage": true,
+      "symbolOffset": 4668
+    },
+    {
+      "index": 24,
+      "symbol": "_RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account6worker3run0B7_",
+      "isExactAppImage": true,
+      "symbolOffset": 520
+    },
+    {
+      "index": 25,
+      "symbol": "_RNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB6_7Runtime13start_network0s0_0B8_",
+      "isExactAppImage": true,
+      "symbolOffset": 808
+    },
+    {
+      "index": 26,
+      "symbol": "_RNvXs_NtNtCsgtPOCBgevO_4core6future6futureINtNtB8_3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB1A_7Runtime13start_network0s0_0EENtB4_6Future4pollB1C_",
+      "isExactAppImage": true,
+      "symbolOffset": 28
+    },
+    {
+      "index": 27,
+      "symbol": "_RNCNvMs4_NtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task4coreINtB7_4CoreINtNtCsgtPOCBgevO_4core3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB2b_7Runtime13start_network0s0_0EEINtNtB1A_4sync3ArcNtNtNtNtBb_9scheduler12multi_thread6handle6HandleEE4poll0B2d_",
+      "isExactAppImage": true,
+      "symbolOffset": 156
+    },
+    {
+      "index": 28,
+      "symbol": "_RNvMs4_NtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task4coreINtB5_4CoreINtNtCsgtPOCBgevO_4core3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB29_7Runtime13start_network0s0_0EEINtNtB1y_4sync3ArcNtNtNtNtB9_9scheduler12multi_thread6handle6HandleEE4pollB2b_",
+      "isExactAppImage": true,
+      "symbolOffset": 84
+    },
+    {
+      "index": 29,
+      "symbol": "_RNCINvNtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task7harness11poll_futureINtNtCsgtPOCBgevO_4core3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB2d_7Runtime13start_network0s0_0EEINtNtB1C_4sync3ArcNtNtNtNtB8_9scheduler12multi_thread6handle6HandleEE0B2f_",
+      "isExactAppImage": true,
+      "symbolOffset": 64
+    },
+    {
+      "index": 30,
+      "symbol": "_RNvXsn_NtNtCsgtPOCBgevO_4core5panic11unwind_safeINtB5_16AssertUnwindSafeNCINvNtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task7harness11poll_futureINtNtB9_3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB37_7Runtime13start_network0s0_0EEINtNtB2w_4sync3ArcNtNtNtNtB1h_9scheduler12multi_thread6handle6HandleEE0EINtNtNtB9_3ops8function6FnOnceuE9call_onceB39_",
+      "isExactAppImage": true,
+      "symbolOffset": 44
+    },
+    {
+      "index": 31,
+      "symbol": "_RINvNvNtCsa9BKTri5B3M_3std9panicking12catch_unwind7do_callINtNtNtCsgtPOCBgevO_4core5panic11unwind_safe16AssertUnwindSafeNCINvNtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task7harness11poll_futureINtNtB11_3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB3U_7Runtime13start_network0s0_0EEINtNtB3j_4sync3ArcNtNtNtNtB23_9scheduler12multi_thread6handle6HandleEE0EINtNtNtB11_4task4poll4PolluEEB3W_",
+      "isExactAppImage": true,
+      "symbolOffset": 48
+    },
+    {
+      "index": 32,
+      "symbol": "__rust_try",
+      "isExactAppImage": true,
+      "symbolOffset": 32
+    },
+    {
+      "index": 33,
+      "symbol": "_RINvNtCsa9BKTri5B3M_3std5panic12catch_unwindINtNtNtCsgtPOCBgevO_4core5panic11unwind_safe16AssertUnwindSafeNCINvNtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task7harness11poll_futureINtNtBN_3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB3F_7Runtime13start_network0s0_0EEINtNtB34_4sync3ArcNtNtNtNtB1P_9scheduler12multi_thread6handle6HandleEE0EINtNtNtBN_4task4poll4PolluEEB3H_",
+      "isExactAppImage": true,
+      "symbolOffset": 108
+    },
+    {
+      "index": 34,
+      "symbol": "_RINvNtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task7harness11poll_futureINtNtCsgtPOCBgevO_4core3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB2b_7Runtime13start_network0s0_0EEINtNtB1A_4sync3ArcNtNtNtNtB6_9scheduler12multi_thread6handle6HandleEEB2d_",
+      "isExactAppImage": true,
+      "symbolOffset": 88
+    },
+    {
+      "index": 35,
+      "symbol": "_RNvMs0_NtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task7harnessINtB5_7HarnessINtNtCsgtPOCBgevO_4core3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB2f_7Runtime13start_network0s0_0EEINtNtB1E_4sync3ArcNtNtNtNtB9_9scheduler12multi_thread6handle6HandleEE10poll_innerB2h_",
+      "isExactAppImage": true,
+      "symbolOffset": 164
+    },
+    {
+      "index": 36,
+      "symbol": "_RNvMs0_NtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task7harnessINtB5_7HarnessINtNtCsgtPOCBgevO_4core3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB2f_7Runtime13start_network0s0_0EEINtNtB1E_4sync3ArcNtNtNtNtB9_9scheduler12multi_thread6handle6HandleEE4pollB2h_",
+      "isExactAppImage": true,
+      "symbolOffset": 28
+    },
+    {
+      "index": 37,
+      "symbol": "_RINvNtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task3raw4pollINtNtCsgtPOCBgevO_4core3pin3PinINtNtCslJsSqIQKwiA_5alloc5boxed3BoxNCNCNvMNtCsh17s46oQDej_15notes_clone_lib7accountNtB1Z_7Runtime13start_network0s0_0EEINtNtB1o_4sync3ArcNtNtNtNtB6_9scheduler12multi_thread6handle6HandleEEB21_",
+      "isExactAppImage": true,
+      "symbolOffset": 16
+    },
+    {
+      "index": 38,
+      "symbol": "_RNvMs_NtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task3rawNtB4_7RawTask4poll",
+      "isExactAppImage": true,
+      "symbolOffset": 44
+    },
+    {
+      "index": 39,
+      "symbol": "_RNvMsb_NtNtCsjGmPZ6FXkcf_5tokio7runtime4taskINtB5_13LocalNotifiedINtNtCslJsSqIQKwiA_5alloc4sync3ArcNtNtNtNtB7_9scheduler12multi_thread6handle6HandleEE3runB9_",
+      "isExactAppImage": true,
+      "symbolOffset": 28
+    },
+    {
+      "index": 40,
+      "symbol": "_RNCNvMs_NtNtNtNtCsjGmPZ6FXkcf_5tokio7runtime9scheduler12multi_thread6workerNtB6_7Context8run_task0Be_",
+      "isExactAppImage": true,
+      "symbolOffset": 1924
+    },
+    {
+      "index": 41,
+      "symbol": "_RNvMs_NtNtNtNtCsjGmPZ6FXkcf_5tokio7runtime9scheduler12multi_thread6workerNtB4_7Context8run_task",
+      "isExactAppImage": true,
+      "symbolOffset": 1024
+    },
+    {
+      "index": 42,
+      "symbol": "_RNvMs_NtNtNtNtCsjGmPZ6FXkcf_5tokio7runtime9scheduler12multi_thread6workerNtB4_7Context3run",
+      "isExactAppImage": true,
+      "symbolOffset": 924
+    },
+    {
+      "index": 43,
+      "symbol": "_RNCNCNvNtNtNtNtCsjGmPZ6FXkcf_5tokio7runtime9scheduler12multi_thread6worker3run00Bd_",
+      "isExactAppImage": true,
+      "symbolOffset": 100
+    },
+    {
+      "index": 44,
+      "symbol": "_RINvMNtNtNtCsjGmPZ6FXkcf_5tokio7runtime7context6scopedINtB3_6ScopedNtNtB7_9scheduler7ContextE3setNCNCNvNtNtB15_12multi_thread6worker3run00uEB9_",
+      "isExactAppImage": true,
+      "symbolOffset": 128
+    },
+    {
+      "index": 45,
+      "symbol": "_RNCINvNtNtCsjGmPZ6FXkcf_5tokio7runtime7context13set_scheduleruNCNCNvNtNtNtB6_9scheduler12multi_thread6worker3run00E0B8_",
+      "isExactAppImage": true,
+      "symbolOffset": 32
+    },
+    {
+      "index": 46,
+      "symbol": "_RINvMs2_NtNtCsa9BKTri5B3M_3std6thread5localINtB6_8LocalKeyNtNtNtCsjGmPZ6FXkcf_5tokio7runtime7context7ContextE8try_withNCINvBW_13set_scheduleruNCNCNvNtNtNtBY_9scheduler12multi_thread6worker3run00E0uEB10_",
+      "isExactAppImage": true,
+      "symbolOffset": 172
+    },
+    {
+      "index": 47,
+      "symbol": "_RINvMs2_NtNtCsa9BKTri5B3M_3std6thread5localINtB6_8LocalKeyNtNtNtCsjGmPZ6FXkcf_5tokio7runtime7context7ContextE4withNCINvBW_13set_scheduleruNCNCNvNtNtNtBY_9scheduler12multi_thread6worker3run00E0uEB10_",
+      "isExactAppImage": true,
+      "symbolOffset": 16
+    },
+    {
+      "index": 48,
+      "symbol": "_RINvNtNtCsjGmPZ6FXkcf_5tokio7runtime7context13set_scheduleruNCNCNvNtNtNtB4_9scheduler12multi_thread6worker3run00EB6_",
+      "isExactAppImage": true,
+      "symbolOffset": 44
+    },
+    {
+      "index": 49,
+      "symbol": "_RNCNvNtNtNtNtCsjGmPZ6FXkcf_5tokio7runtime9scheduler12multi_thread6worker3run0Bb_",
+      "isExactAppImage": true,
+      "symbolOffset": 244
+    },
+    {
+      "index": 50,
+      "symbol": "_RINvNtNtNtCsjGmPZ6FXkcf_5tokio7runtime7context7runtime13enter_runtimeNCNvNtNtNtB6_9scheduler12multi_thread6worker3run0uEB8_",
+      "isExactAppImage": true,
+      "symbolOffset": 168
+    },
+    {
+      "index": 51,
+      "symbol": "_RNvNtNtNtNtCsjGmPZ6FXkcf_5tokio7runtime9scheduler12multi_thread6worker3run",
+      "isExactAppImage": true,
+      "symbolOffset": 596
+    },
+    {
+      "index": 52,
+      "symbol": "_RNCNvMNtNtNtNtCsjGmPZ6FXkcf_5tokio7runtime9scheduler12multi_thread6workerNtB4_6Launch6launch0Bc_",
+      "isExactAppImage": true,
+      "symbolOffset": 12
+    },
+    {
+      "index": 53,
+      "symbol": "_RNvXs0_NtNtNtCsjGmPZ6FXkcf_5tokio7runtime8blocking4taskINtB5_12BlockingTaskNCNvMNtNtNtB9_9scheduler12multi_thread6workerNtB1g_6Launch6launch0ENtNtNtCsgtPOCBgevO_4core6future6future6Future4pollBb_",
+      "isExactAppImage": true,
+      "symbolOffset": 124
+    },
+    {
+      "index": 54,
+      "symbol": "_RNCNvMs4_NtNtNtCsjGmPZ6FXkcf_5tokio7runtime4task4coreINtB7_4CoreINtNtNtBb_8blocking4task12BlockingTaskNCNvMNtNtNtBb_9scheduler12multi_thread6workerNtB1H_6Launch6launch0ENtNtB15_8schedule16BlockingScheduleE4poll0Bd_",
+      "isExactAppImage": true,
+      "symbolOffset": 156
+    }
+  ],
+  "stackOverflowHandlerPresent": true,
+  "rawReportArchived": false
+}

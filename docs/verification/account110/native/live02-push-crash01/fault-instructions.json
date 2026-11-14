@@ -1,0 +1,90 @@
+{
+  "exactCrashSymbolOffset": 652,
+  "prologueStaticStackBytes": 203344,
+  "instructionsAroundCrash": [
+    {
+      "offset": 612,
+      "instruction": "97f42810    \tbl\t<code-address> <__RINvNtCsgtPOCBgevO_4core3ptr9drop_glueNCNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target00EBK_>"
+    },
+    {
+      "offset": 616,
+      "instruction": "17ffffe2    \tb\t<code-address> <__RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0B7_+0x1f0>"
+    },
+    {
+      "offset": 620,
+      "instruction": "f94043e9    \tldr\tx9, [sp, #0x80]"
+    },
+    {
+      "offset": 624,
+      "instruction": "f9012d20    \tstr\tx0, [x9, #0x258]"
+    },
+    {
+      "offset": 628,
+      "instruction": "aa0103e8    \tmov\tx8, x1"
+    },
+    {
+      "offset": 632,
+      "instruction": "b9026128    \tstr\tw8, [x9, #0x260]"
+    },
+    {
+      "offset": 636,
+      "instruction": "17fffff8    \tb\t<code-address> <__RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0B7_+0x25c>"
+    },
+    {
+      "offset": 640,
+      "instruction": "f94017e0    \tldr\tx0, [sp, #0x28]"
+    },
+    {
+      "offset": 644,
+      "instruction": "f94053e1    \tldr\tx1, [sp, #0xa0]"
+    },
+    {
+      "offset": 648,
+      "instruction": "97ff4fbc    \tbl\t<code-address> <__RNCNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target00B9_>"
+    },
+    {
+      "offset": 652,
+      "instruction": "f90013e0    \tstr\tx0, [sp, #0x20]"
+    },
+    {
+      "offset": 656,
+      "instruction": "14000001    \tb\t<code-address> <__RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0B7_+0x294>"
+    },
+    {
+      "offset": 660,
+      "instruction": "f94043e8    \tldr\tx8, [sp, #0x80]"
+    },
+    {
+      "offset": 664,
+      "instruction": "f94013ea    \tldr\tx10, [sp, #0x20]"
+    },
+    {
+      "offset": 668,
+      "instruction": "d360fd49    \tlsr\tx9, x10, #32"
+    },
+    {
+      "offset": 672,
+      "instruction": "b902690a    \tstr\tw10, [x8, #0x268]"
+    },
+    {
+      "offset": 676,
+      "instruction": "7904d909    \tstrh\tw9, [x8, #0x26c]"
+    },
+    {
+      "offset": 680,
+      "instruction": "b9426909    \tldr\tw9, [x8, #0x268]"
+    },
+    {
+      "offset": 684,
+      "instruction": "b9000109    \tstr\tw9, [x8]"
+    },
+    {
+      "offset": 688,
+      "instruction": "7944d909    \tldrh\tw9, [x8, #0x26c]"
+    },
+    {
+      "offset": 692,
+      "instruction": "79000909    \tstrh\tw9, [x8, #0x4]"
+    }
+  ]
+}

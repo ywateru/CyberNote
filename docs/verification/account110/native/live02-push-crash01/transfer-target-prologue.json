@@ -1,0 +1,46 @@
+{
+  "exactAppSymbolFromCrash": "_RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0B7_",
+  "symbolLocated": true,
+  "instructions": [
+    {
+      "offset": 0,
+      "instruction": "a9be6ffc    \tstp\tx28, x27, [sp, #-0x20]!"
+    },
+    {
+      "offset": 4,
+      "instruction": "a9017bfd    \tstp\tx29, x30, [sp, #0x10]"
+    },
+    {
+      "offset": 8,
+      "instruction": "910043fd    \tadd\tx29, sp, #0x10"
+    },
+    {
+      "offset": 12,
+      "instruction": "d140c7e9    \tsub\tx9, sp, #0x31, lsl #12  ; =0x31000"
+    },
+    {
+      "offset": 16,
+      "instruction": "d14007ff    \tsub\tsp, sp, #0x1, lsl #12   ; =0x1000"
+    },
+    {
+      "offset": 20,
+      "instruction": "f90003ff    \tstr\txzr, [sp]"
+    },
+    {
+      "offset": 24,
+      "instruction": "eb2963ff    \tcmp\tsp, x9"
+    },
+    {
+      "offset": 28,
+      "instruction": "54ffffa1    \tb.ne\t<code-address> <__RNCNvNtNtCsh17s46oQDej_15notes_clone_lib7account9transport15transfer_target0B7_+0x10>"
+    },
+    {
+      "offset": 32,
+      "instruction": "d128c3ff    \tsub\tsp, sp, #0xa30"
+    },
+    {
+      "offset": 36,
+      "instruction": "f90003ff    \tstr\txzr, [sp]"
+    }
+  ]
+}
