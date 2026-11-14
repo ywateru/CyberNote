@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-14T10:09:29.327327+00:00",
+  "source": "cb91f4b82995a314268aa47b491b7973679dff8f",
+  "runStatus": "fail",
+  "firstFailure": {
+    "phase": "directory",
+    "code": "CHECK_FAILED"
+  },
+  "firstResultSha256": "01640ccdd6863aee66809793da5b03039114186aafe726ff0fe8eb637cfb7a7c",
+  "runnerLogSha256": "b8e08b333131892d599341922ad7af3983ad048266d1736530565332fed38142",
+  "completedChecks": [
+    {
+      "name": "two fresh independent native stores, rich documents and original attachment bytes",
+      "status": "pass"
+    },
+    {
+      "name": "independent real process restart preserves local content and attachments",
+      "status": "pass"
+    },
+    {
+      "name": "two normal hosted logins resolve to same verified account, initially paused",
+      "status": "pass"
+    }
+  ],
+  "cleanupFailure": {
+    "code": "CLEANUP_FAILED"
+  },
+  "lifecycle": [
+    {
+      "device": "a",
+      "naturalExit": true,
+      "exitCode": 0,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitCode": 0,
+      "forcedSignals": []
+    },
+    {
+      "device": "a",
+      "naturalExit": false,
+      "exitCode": null,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitCode": 0,
+      "forcedSignals": []
+    }
+  ],
+  "probes": {
+    "allClosed": true,
+    "hadFailures": false,
+    "receipts": [
+      {
+        "closed": true,
+        "exitCode": 0,
+        "signals": []
+      },
+      {
+        "closed": true,
+        "exitCode": 0,
+        "signals": []
+      },
+      {
+        "closed": true,
+        "exitCode": 0,
+        "signals": []
+      },
+      {
+        "closed": true,
+        "exitCode": 0,
+        "signals": []
+      }
+    ]
+  },
+  "crash": {
+    "systemReportSha256": "6e09820c22f310bb045057e78dee97a5b02ba481efd2745e3bc5d1031615beeb",
+    "candidateBundleSuffixMatches": true,
+    "parentMatchesRunner": true,
+    "captureTime": "2026-11-14 18:03:17.4113 +0800",
+    "exceptionType": "EXC_BAD_ACCESS",
+    "signal": "SIGABRT",
+    "terminationNamespace": "SIGNAL",
+    "terminationCode": 6,
+    "faultThreadName": "tokio-rt-worker",
+    "faultThreadFrameCount": 70,
+    "symbolEvidence": {
+      "rustStackOverflowHandler": true,
+      "accountWorkerRun": true,
+      "tokioMaybeDoneAccountWorkerPoll": true,
+      "runtimeStartNetwork": true
+    },
+    "rawReportCopied": false
+  },
+  "conclusion": "Owned candidate A native process aborted on tokio worker in Rust stack overflow handler before the directory phase. Result does not retain first driver code/exit signal; exact CHECK_FAILED mapping remains inferred, not independently recovered.",
+  "nextSourceBoundary": "src-tauri/src/account/worker.rs run join child futures and Runtime::start_network task poll stack; no server rejection established",
+  "enabledOrDirectionStagesReached": false,
+  "exactOwnedAppProcessesRemaining": false,
+  "ownedLibrariesRetained": true,
+  "runRepeated": false,
+  "productModified": false,
+  "artifactsModified": false,
+  "privateDataRead": false
+}

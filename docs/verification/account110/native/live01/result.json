@@ -1,0 +1,298 @@
+{
+  "schema": 1,
+  "kind": "account110-real-two-client-device-actions",
+  "mode": "run",
+  "status": "fail",
+  "source": "cb91f4b82995a314268aa47b491b7973679dff8f",
+  "candidate": {
+    "sourceRevision": "cb91f4b82995a314268aa47b491b7973679dff8f",
+    "sourceFingerprint": "210aca54d96fdd35a090ce1aa82654589d50fed0542151d746d78a84357e0dc0",
+    "binarySha256": "43f2d86d3ceab4dabf24d395259037ae46b19c58b5fde15ecbc7e7f0cd4482a3",
+    "receiptSha256": "129b0a2f21b32c2a8957f17b0e51f3827d6fe8df8a8a5c6ef1b7c955e1d4792b"
+  },
+  "deployment": {
+    "sourceRevision": "e220111362084d4c72b6d6fe2dada505b97a6df3",
+    "deploymentId": "dpl_8Fewyd8o8HHUouDYJDULDd6XSweY",
+    "readyState": "READY",
+    "receiptSha256": "6eb360ff873b159683e9ae8ee2419ad4b2bd32b78be2c3b6b34da6e6b46414db",
+    "publicSmokePassed": true,
+    "boundary": "Pinned independently reviewed deployment receipt; no fresh provider query or authenticated registry proof."
+  },
+  "authorizationTimeoutMs": 600000,
+  "runnerSha256": "599aa1de2f4d82c165fbf3b63e468c63fab1cf9bdd493f8c57c236079043619f",
+  "driverSha256": "d521530738daf0586846445de14e6ecf57799c2c441e78cb0d25312b640a2c23",
+  "checks": [
+    {
+      "name": "two fresh independent native stores, rich documents and original attachment bytes",
+      "status": "pass"
+    },
+    {
+      "name": "independent real process restart preserves local content and attachments",
+      "status": "pass"
+    },
+    {
+      "name": "two normal hosted logins resolve to same verified account, initially paused",
+      "status": "pass"
+    }
+  ],
+  "observations": [
+    {
+      "device": "a",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "b",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "a",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "b",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "a",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "b",
+      "phase": "startup",
+      "state": "signedOut",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "a",
+      "phase": "login-a",
+      "state": "authorizing",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "a",
+      "phase": "login-a",
+      "state": "paused",
+      "enabled": false,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "b",
+      "phase": "login-b",
+      "state": "authorizing",
+      "enabled": false,
+      "hasProfile": false,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    },
+    {
+      "device": "b",
+      "phase": "login-b",
+      "state": "paused",
+      "enabled": false,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": []
+    }
+  ],
+  "boundaries": [
+    "Only two fresh owned data-dir libraries; no default library access or credential/Noise copying.",
+    "Real normal hosted SignIn with human form assistance. No credentials/callbacks/tokens/endpoints are accepted by the runner.",
+    "Synthetic content enters production UI/debug handlers; attachment checks use disk bytes and production read_attachment.",
+    "Debug/e2e, synthetic File[] submission; no physical file-picker or keyboard claim.",
+    "Absence/idle observations are finite, not an unbounded guarantee.",
+    "No logout, destructive cleanup or automatic retry; failed evidence and owned test libraries are retained."
+  ],
+  "initialBusinessBaselines": [
+    {
+      "device": "a",
+      "notes": 0,
+      "folders": 3,
+      "attachments": 0,
+      "semanticSha256": "c69eaccc8bc18259e7a4b52c695fe02a4100817ce775fb989bc80af7a3b6ca82"
+    },
+    {
+      "device": "b",
+      "notes": 0,
+      "folders": 3,
+      "attachments": 0,
+      "semanticSha256": "4d98a76eddf80abff23e16813d9e4f3bec9e03454bcad45beb88480183a26912"
+    }
+  ],
+  "specimens": [
+    {
+      "label": "initial-a",
+      "origin": "a",
+      "semanticSha256": "f9c6cabc1ad693760d82301dd77a67c0bf70dff6ee9b0a214cf1a60c53aa951c",
+      "attachments": [
+        {
+          "mime": "image/png",
+          "bytes": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "mime": "application/octet-stream",
+          "bytes": 262161,
+          "sha256": "b9ce5a7ad5a7b9e3d623cef55d20d84e03519197c361e3e6d19f7f0e935c0dbb"
+        }
+      ]
+    },
+    {
+      "label": "initial-b",
+      "origin": "b",
+      "semanticSha256": "d8470fc03054a06b42bfcf85f06d18b401248b42c29fc0540af7a27c125c563d",
+      "attachments": [
+        {
+          "mime": "image/png",
+          "bytes": 68,
+          "sha256": "11f8a69f10d1f9296a6aa25c92b0b9b35d0b1fbc039211d59d2ffa55747a753f"
+        },
+        {
+          "mime": "application/octet-stream",
+          "bytes": 262161,
+          "sha256": "e76a4a1f1e503974a097ff766af5ad95e7534232ac1725a0a6af4d41c54ba2ba"
+        }
+      ]
+    }
+  ],
+  "contentVerifications": [
+    {
+      "phase": "startup",
+      "device": "a",
+      "specimen": "initial-a",
+      "semanticSha256": "f9c6cabc1ad693760d82301dd77a67c0bf70dff6ee9b0a214cf1a60c53aa951c",
+      "attachmentCount": 2,
+      "storedFilesMatch": true,
+      "productionReadsMatch": true
+    },
+    {
+      "phase": "startup",
+      "device": "b",
+      "specimen": "initial-b",
+      "semanticSha256": "d8470fc03054a06b42bfcf85f06d18b401248b42c29fc0540af7a27c125c563d",
+      "attachmentCount": 2,
+      "storedFilesMatch": true,
+      "productionReadsMatch": true
+    },
+    {
+      "phase": "startup",
+      "device": "a",
+      "specimen": "initial-a",
+      "semanticSha256": "f9c6cabc1ad693760d82301dd77a67c0bf70dff6ee9b0a214cf1a60c53aa951c",
+      "attachmentCount": 2,
+      "storedFilesMatch": true,
+      "productionReadsMatch": true
+    },
+    {
+      "phase": "startup",
+      "device": "b",
+      "specimen": "initial-b",
+      "semanticSha256": "d8470fc03054a06b42bfcf85f06d18b401248b42c29fc0540af7a27c125c563d",
+      "attachmentCount": 2,
+      "storedFilesMatch": true,
+      "productionReadsMatch": true
+    }
+  ],
+  "failure": {
+    "phase": "directory",
+    "code": "CHECK_FAILED"
+  },
+  "probes": {
+    "allClosed": true,
+    "hadFailures": false,
+    "receipts": [
+      {
+        "closed": true,
+        "exitCode": 0,
+        "signals": []
+      },
+      {
+        "closed": true,
+        "exitCode": 0,
+        "signals": []
+      },
+      {
+        "closed": true,
+        "exitCode": 0,
+        "signals": []
+      },
+      {
+        "closed": true,
+        "exitCode": 0,
+        "signals": []
+      }
+    ]
+  },
+  "lifecycle": [
+    {
+      "device": "a",
+      "naturalExit": true,
+      "exitCode": 0,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitCode": 0,
+      "forcedSignals": []
+    },
+    {
+      "device": "a",
+      "naturalExit": false,
+      "exitCode": null,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitCode": 0,
+      "forcedSignals": []
+    }
+  ],
+  "cleanupFailure": {
+    "code": "CLEANUP_FAILED"
+  },
+  "finishedAt": "2026-11-14T10:05:54.452Z"
+}

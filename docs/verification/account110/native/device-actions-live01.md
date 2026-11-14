@@ -57,10 +57,12 @@ is an inference, not a captured code. Preserve the failure instead of bypassing 
 - Owned root: `/private/tmp/account110-device-actions-cb91f4b8-live01`.
 - First `result.json` SHA256:
   `01640ccdd6863aee66809793da5b03039114186aafe726ff0fe8eb637cfb7a7c`.
+  Exact privacy-reviewed archive: [live01/result.json](live01/result.json).
 - Safe runner stdout: sibling `account110-device-actions-cb91f4b8-live01-runner.log`.
 - Sanitized crash receipt:
   `/private/tmp/account110-device-actions-cb91f4b8-live01-diagnosis01/safe-diagnosis.json`,
   SHA256 `c6394bd18eb00a3b79f1de64ffcfa5a5ac5aa6d7227c206f2defd974c286ddc9`.
+  Exact archive: [live01/safe-diagnosis.json](live01/safe-diagnosis.json).
 - System crash report SHA256:
   `6e09820c22f310bb045057e78dee97a5b02ba481efd2745e3bc5d1031615beeb`.
   Raw report was not copied into runner evidence or Git; no raw addresses/IDs,
