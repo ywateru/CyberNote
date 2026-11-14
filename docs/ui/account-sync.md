@@ -1,6 +1,6 @@
 # 账户与同步界面
 
-手动验证入口：[双桌面、Android 与两种登录方式](../verification/account109/MANUAL-TESTING.md)。最新代码整理与未验边界见[收尾记录](../verification/account109/CONSOLIDATION.md)；本文件描述界面行为，不等于已完成整体验收。
+手动验证入口：[当前双桌面启动与设备动作](../verification/account110/MANUAL-TESTING.md)，实际范围与保留失败见[当前交付结果](../verification/account110/RESULT-LATEST.md)。旧版Android及两种登录方式的历史记录见[account109指南](../verification/account109/MANUAL-TESTING.md)。本文件描述界面行为，不能代替按版本记录的实测结果。
 
 沿用CyberNote已有白纸、柔灰分组、黄色选择和系统字体。新增设置分类“账户与同步”，保留原“设备同步”高级手工入口。保持未登录即可本地编辑，不在启动时强制登录。
 
