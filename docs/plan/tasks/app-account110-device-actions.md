@@ -26,6 +26,7 @@ depends-on: []
 | 模块 | 作者 | 路径 | 独立审阅 |
 | --- | --- | --- | --- |
 | 原生账户调度与摘要 | Huygens | `src-tauri/src/account/**`、`src-tauri/src/sync/adapter.rs`及所需 Store 摘要接口 | Erdos |
+| 最小SDK登记凭据借用接口 | Huygens | `vendor/cybergrid-sdk/src/types.rs`与现有`SOURCE.json`修改说明；字段仍私有，序列化/Debug脱敏保持 | Erdos |
 | 单次方向传输 | Feynman | `src-tauri/src/sync/network.rs`、`src-tauri/src/sync/network/**`、独立测试 | Erdos |
 | 持久账户设备目录 | Erdos | `services/coordinator/**`，不修改通用 SDK 目录契约 | Cicero |
 | 设备界面与前端 DTO | Socrates | `src/AccountSettings*`、`src/account-client.ts`、有关前端检查 | Cicero |
@@ -47,8 +48,8 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 
 - 已读既有实现：目前列表过滤 offline；`start_network` 在 paused 直接返回，开启后自动 `pair/connect/sync_now`。需要拆开目录与内容服务。
 - 设计与接口已提交；独立设计审阅补充 `registryKey` 与持久 `revision`，防止同账户其他设备接管登记及迟到发布覆盖暂停。
-- UI `58b54da1` 已独审 PASS 并合入 main（`ac0b03a2`），67项定向检查及类型检查通过；debug命令注册增量 `29600b05`（69项）待增量独审。
-- 设备服务作者提交 `74d1a891`，作者验证190项通过、含实际Redis/AOF；独立审阅中，尚未部署。
-- 网络作者提交 `29b2a86d`，作者29项网络检查和4组真实Store场景通过；独立审阅中。账户作者正在以该接口整合。
+- UI `58b54da1` 与命令注册增量 `29600b05` 已独审 PASS 并合入 main，最终69项定向检查及类型检查通过。
+- 设备服务 `74d1a891` 已独审 PASS，独立完整190项通过、含实际Redis/AOF；服务源码e2201113已部署到原生产项目，最终READY。见[部署回执](../../verification/account110/server/registry-deployment01/README.md)，真实账户GET/PUT仍待客户端验收。
+- 网络 `29b2a86d` 的初审P1/P2经`51040df6`与`7177ca9c`修复，最终独审APPROVE并合入main；36项网络检查及4组实际Store场景通过，计数不与前轮相加。见[review02](../reviews/app-account110-network-02.md)。账户作者正在整合原生层。
 - target由网络作者释放后交原生账户作者；已清理22个未打开的旧应用可执行产物，依赖/原包/失败证据保留，回执 `/private/tmp/account110-network-target-executable-cleanup01.json`。
 - 本任务尚未构建最终精确包、尚未执行两个真实账户客户端验收；不能把上述模块通过当作整体通过。
