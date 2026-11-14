@@ -1,0 +1,117 @@
+   Compiling objc2-exception-helper v0.1.1
+   Compiling ring v0.17.14
+   Compiling objc2 v0.6.5
+   Compiling block2 v0.6.2
+   Compiling dispatch2 v0.3.1
+   Compiling objc2-core-foundation v0.3.2
+   Compiling rustls v0.23.46
+   Compiling rustls-webpki v0.103.16
+   Compiling objc2-foundation v0.3.2
+   Compiling objc2-quartz-core v0.3.2
+   Compiling objc2-app-kit v0.3.2
+   Compiling tokio-rustls v0.26.6
+   Compiling hyper-rustls v0.27.10
+   Compiling rustls-platform-verifier v0.7.1
+   Compiling reqwest v0.13.5
+   Compiling objc2-security v0.3.2
+   Compiling noq-proto v1.4.0
+   Compiling objc2-web-kit v0.3.2
+   Compiling tauri-runtime v2.12.2
+   Compiling wry v0.57.1
+   Compiling tao v0.37.2
+   Compiling tauri-runtime-wry v2.12.3
+   Compiling window-vibrancy v0.8.1
+   Compiling muda v0.20.0
+   Compiling n0-dns-resolver v0.1.0
+   Compiling tauri v2.12.5
+   Compiling stun v0.9.0
+   Compiling objc2-system-configuration v0.3.2
+   Compiling reqwest v0.12.28
+   Compiling x509-parser v0.16.0
+   Compiling tokio-websockets v0.13.3
+   Compiling netdev v0.46.3
+   Compiling rcgen v0.13.2
+   Compiling noq v1.4.0
+   Compiling iroh-dns v1.4.1
+   Compiling turn v0.11.0
+   Compiling iroh-relay v1.4.1
+   Compiling webrtc-ice v0.14.0
+   Compiling oauth2 v5.0.0
+   Compiling dtls v0.13.0
+warning: tauri-plugin-notes-ui@0.1.0: macos/toolbar.m:32:49: warning: unused parameter 'tableFocused' [-Wunused-parameter]
+warning: tauri-plugin-notes-ui@0.1.0:    32 | static NSString *labelFor(NSString *action,BOOL tableFocused) {
+warning: tauri-plugin-notes-ui@0.1.0:       |                                                 ^
+warning: tauri-plugin-notes-ui@0.1.0: 1 warning generated.
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:25:1: warning: writable atomic property 'notesHovered' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    25 | - (void)setNotesHovered:(BOOL)value {_notesHovered=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     8 | @property BOOL notesHovered;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:26:1: warning: writable atomic property 'notesMenuOpen' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    26 | - (void)setNotesMenuOpen:(BOOL)value {_notesMenuOpen=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     9 | @property BOOL notesMenuOpen;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:27:1: warning: writable atomic property 'notesSelected' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    27 | - (void)setNotesSelected:(BOOL)value {_notesSelected=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:    10 | @property BOOL notesSelected;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: 3 warnings generated.
+   Compiling netwatch v0.19.3
+   Compiling libsqlite3-sys v0.30.1
+   Compiling tungstenite v0.29.0
+   Compiling webrtc v0.14.0
+   Compiling openidconnect v4.1.0
+   Compiling rcgen v0.14.10
+   Compiling tokio-tungstenite v0.29.0
+   Compiling iroh v1.4.1
+   Compiling rfd v0.17.2
+   Compiling tauri-plugin-fs v2.7.1
+   Compiling rusqlite v0.32.1
+   Compiling tauri-plugin-opener v2.7.3
+   Compiling notes-clone v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/src-tauri)
+   Compiling jsonwebtoken v9.3.1
+   Compiling tauri-plugin-dialog v2.8.4
+   Compiling account-auth v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/crates/account-auth)
+   Compiling tauri-plugin-notes-scan v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/plugins/tauri-plugin-notes-scan)
+   Compiling tauri-plugin-deep-link v2.6.3
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/plugins/tauri-plugin-notes-ui)
+   Compiling cybergrid-sdk v0.3.0 (/private/tmp/cybernote-account109-login-surfaces-ui/vendor/cybergrid-sdk)
+   Compiling tauri-plugin-notes-media v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/plugins/tauri-plugin-notes-media)
+   Compiling tauri-plugin-notes-auth v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/plugins/tauri-plugin-notes-auth)
+error[E0599]: no method named `authorize` found for struct `std::sync::Arc<account::enrollment::Gate>` in the current scope
+   --> src/account/worker.rs:831:43
+    |
+831 |                         assert!(work_gate.authorize("late-device", "late-key").is_err());
+    |                                           ^^^^^^^^^ method not found in `std::sync::Arc<account::enrollment::Gate>`
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `ReplicationPolicy` which provides `authorize` is implemented but not in scope; perhaps you want to import it
+    |
+518 +     use crate::sync::network::ReplicationPolicy;
+    |
+
+error[E0599]: no method named `authorize` found for struct `std::sync::Arc<account::enrollment::Gate>` in the current scope
+   --> src/account/worker.rs:889:43
+    |
+889 |                         assert!(work_gate.authorize("late-device", "late-key").is_err());
+    |                                           ^^^^^^^^^ method not found in `std::sync::Arc<account::enrollment::Gate>`
+    |
+    = help: items from traits can only be used if the trait is in scope
+help: trait `ReplicationPolicy` which provides `authorize` is implemented but not in scope; perhaps you want to import it
+    |
+518 +     use crate::sync::network::ReplicationPolicy;
+    |
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `notes-clone` (lib test) due to 2 previous errors

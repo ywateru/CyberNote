@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--locked",
+    "--offline",
+    "account::worker::tests::unified_deadline",
+    "--",
+    "--nocapture"
+  ],
+  "exitCode": 101,
+  "diskFloorStopped": false,
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  }
+}

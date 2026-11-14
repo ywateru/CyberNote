@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "date": "2026-11-14",
+  "sourceCommit": "493550e545749e735ff862e46a79bdddd0529b92",
+  "contractCommit": "7b950f2eb55205e8ce8563b8f54392fe8e2dad22",
+  "sourceSha256": {
+    "src-tauri/Cargo.toml": "4e49af43e79abecd461158073efdfb8b6a55fa8eecb64efed107f41740db6bbc",
+    "src-tauri/src/account/transport.rs": "667d3b5e88ef26e6f3b48ac7c2b59e13d3c0ae15139d22e2e57a188f52be8bdf",
+    "src-tauri/src/account/worker.rs": "3a30c63e84c9778ae0dc762154902243f2009ad4902d3473472cac38e7bff285"
+  },
+  "unchangedLockSha256": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "compile01": {
+    "exitCode": 101,
+    "cause": "New test omitted ReplicationPolicy trait import; added test-only import.",
+    "retained": true
+  },
+  "verification": {
+    "virtualClock": {
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "wallTimeSeconds": 0.0
+    },
+    "retirementAndIdentity": {
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "wallTimeSeconds": 0.28
+    },
+    "gitDiffCheck": "pass"
+  },
+  "target": {
+    "path": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "leaseReleased": true,
+    "jobs": 2,
+    "debug": 0,
+    "incremental": 0,
+    "offline": true,
+    "locked": true,
+    "minimumFreeGiB": 6,
+    "floorTriggered": false,
+    "freeKiBAtRelease": 8958020
+  },
+  "scope": {
+    "appLaunched": false,
+    "accountNetworkRequested": false,
+    "privateDataRead": false,
+    "productAcceptance": false,
+    "testsUseSyntheticFixturesAndLoopback": true
+  }
+}
