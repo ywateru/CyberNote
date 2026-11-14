@@ -177,6 +177,36 @@ impl Runtime {
             let generation = this.generation.load(Ordering::Acquire);
             let result = async {
                 let auth = this.auth().await?;
+                if let Some(identity) = auth.retained_identity().await {
+                    let cached = this
+                        .data
+                        .lock()
+                        .map_err(|_| Error::Storage)?
+                        .binding
+                        .clone();
+                    if this.current(generation) {
+                        if let Some(binding) =
+                            cached.filter(|b| session_identity_matches(b, &identity))
+                        {
+                            let enabled = binding.enabled
+                                && !private::adoption_pending(&this.root)?
+                                && !this.sync.account_adoption_needed(
+                                    &binding.workspace_id,
+                                    &binding.device_id,
+                                )?;
+                            this.mutate(|d| {
+                                if this.current(generation) {
+                                    present_retained_session(
+                                        &mut d.status,
+                                        &binding,
+                                        &identity,
+                                        enabled,
+                                    )
+                                }
+                            });
+                        }
+                    }
+                }
                 if let Some(identity) = auth.restore().await? {
                     if let Err(error) = this.bind(&identity, generation, false).await {
                         // A crash between grant commit and first binding must
@@ -241,6 +271,10 @@ impl Runtime {
             profile,
             fresh_login,
         )?;
+        if let Some(old) = &old {
+            private::remember_session(&self.root, old)?;
+        }
+        private::remember_session(&self.root, &binding)?;
         private::write(&self.root.join("binding.json"), &binding)?;
         self.mutate(|d| {
             d.binding = Some(binding.clone());
@@ -430,6 +464,11 @@ impl Runtime {
                 }
                 let reauthorize =
                     authorization_mode(&self.data.lock().map_err(|_| Error::Storage)?.status)?;
+                // Never turn an offline retained session into a new login or
+                // change its enable intent before the sole grant owner agrees.
+                if !reauthorize && self.auth().await?.retained_identity().await.is_some() {
+                    return Err(Error::Busy);
+                }
                 self.stop_network().await;
                 self.sync.pause_for_account()?;
                 self.set_enabled(false)?;
@@ -514,7 +553,11 @@ impl Runtime {
                     return self.snapshot();
                 }
                 self.set_enabled(false)?;
-                self.mutate(|d| d.status = Status::default());
+                private::clear_session(&self.root)?;
+                self.mutate(|d| {
+                    d.binding = None;
+                    d.status = Status::default();
+                });
             }
             Command::SetEnabled { enabled } => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
@@ -878,6 +921,28 @@ impl recovery::Host for Arc<Runtime> {
         self.start_network().await
     }
 }
+fn session_identity_matches(binding: &private::Binding, identity: &account_auth::Identity) -> bool {
+    identity.issuer == config::ISSUER
+        && binding.issuer == identity.issuer
+        && binding.subject == identity.subject
+}
+fn present_retained_session(
+    status: &mut Status,
+    binding: &private::Binding,
+    identity: &account_auth::Identity,
+    enabled: bool,
+) {
+    if !session_identity_matches(binding, identity) {
+        return;
+    }
+    status.profile = Some(Profile {
+        subject: identity.subject.clone(),
+        display_name: safe_text(&identity.display_name, 120),
+        username: identity.username.as_ref().map(|name| safe_text(name, 120)),
+    });
+    status.enabled = enabled;
+    status.state = Phase::Paused;
+}
 // Shared by real bind and device-free host fixtures; no local workspace check
 // belongs in authentication. Preparation may create only private session keys.
 fn prepare_session_binding(
@@ -903,8 +968,34 @@ fn prepare_session_binding(
             && b.product_id == profile.product_id
             && b.workspace_id == profile.workspace_id
     });
+    let store = sync.account_store_identity()?;
+    let previous = if let Some(store) = &store {
+        if store.workspace_id == profile.workspace_id {
+            let matches = |b: &private::Binding| {
+                b.device_id == store.device_id
+                    && session_identity_matches(b, identity)
+                    && b.product_id == profile.product_id
+                    && b.workspace_id == profile.workspace_id
+            };
+            match old.filter(|b| matches(b)) {
+                Some(binding) => Some(binding.clone()),
+                None => private::remembered_session(root, &store.device_id)?.filter(matches),
+            }
+        } else {
+            None
+        }
+    } else {
+        None
+    };
+    let reusable = if let Some(previous) = &previous {
+        sync.existing_account_identity(&previous.device_id)?
+            .filter(|noise| noise.public_key().ok().as_deref() == Some(&previous.noise_public_key))
+    } else {
+        None
+    };
     let device = retained
         .map(|b| b.device_id.clone())
+        .or_else(|| reusable.as_ref().and_then(|noise| noise.device_id().ok()))
         .unwrap_or_else(|| uuid::Uuid::new_v4().to_string());
     let noise = sync.account_identity_for(&device)?;
     let binding = private::Binding {
@@ -1047,9 +1138,10 @@ mod tests {
             assert!(devices.insert(binding.device_id.clone()));
             assert!(keys.insert(binding.noise_public_key.clone()));
             private::write(&root.join("binding.json"), &binding).unwrap();
-            // Sign-out's persisted effect retains the binding with enable=false;
-            // the next accepted identity must not compare against the old owner.
+            // A successful sign-out archives public metadata, not a current owner.
+            private::clear_session(&root).unwrap();
             old = private::read(&root.join("binding.json")).unwrap();
+            assert!(old.is_none());
             assert_eq!(
                 shared
                     .0
@@ -1068,6 +1160,124 @@ mod tests {
             );
         }
         sync.shutdown().unwrap();
+    }
+    #[test]
+    fn returning_authenticated_account_reuses_only_exact_saved_store_device_and_key() {
+        use crate::{session::Session, store::Store};
+        let dir = tempfile::tempdir().unwrap();
+        let shared = Arc::new((
+            Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
+            std::sync::Condvar::new(),
+        ));
+        let sync =
+            adapter::Runtime::new(shared.clone(), dir.path().into(), Arc::new(SessionWindows))
+                .unwrap();
+        let root = dir.path().join(".account");
+        private::directory(&root).unwrap();
+        let identity = |owner: &str| account_auth::Identity {
+            issuer: config::ISSUER.into(),
+            subject: owner.into(),
+            display_name: owner.into(),
+            username: None,
+        };
+        let workspace = uuid::Uuid::new_v4().to_string();
+        let profile = |owner: &str| enrollment::Profile {
+            schema_version: 1,
+            issuer: config::ISSUER.into(),
+            subject: owner.into(),
+            product_id: "cybernote".into(),
+            workspace_id: workspace.clone(),
+        };
+        let mut a = prepare_session_binding(&sync, &root, None, &identity("a"), profile("a"), true)
+            .unwrap();
+        shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_enable_with_device(Some(&workspace), &a.device_id)
+            .unwrap();
+        let mut remote = Store::open(dir.path().join("synthetic-remote")).unwrap();
+        remote.sync_enable(Some(&workspace)).unwrap();
+        remote.action(serde_json::json!({"type":"createNote"})).unwrap();
+        remote.sync_flush().unwrap();
+        let versions = remote.sync_inventory().unwrap().iter()
+            .map(|v| remote.sync_version(&v.digest).unwrap()).collect();
+        shared.0.lock().unwrap().store.sync_receive(versions).unwrap();
+        assert!(shared.0.lock().unwrap().store.sync_pending_count().unwrap() > 0);
+        a.enabled = true;
+        private::write(&root.join("binding.json"), &a).unwrap();
+        private::clear_session(&root).unwrap();
+        // Even a different authenticated subject on the same workspace cannot
+        // borrow A's device. Nor does an unrelated current binding shadow A's record.
+        let b = prepare_session_binding(&sync, &root, None, &identity("b"), profile("b"), true)
+            .unwrap();
+        assert_ne!(b.device_id, a.device_id);
+        private::write(&root.join("binding.json"), &b).unwrap();
+        private::clear_session(&root).unwrap();
+        let returned =
+            prepare_session_binding(&sync, &root, Some(&b), &identity("a"), profile("a"), true)
+                .unwrap();
+        assert_eq!(returned.device_id, a.device_id);
+        assert_eq!(returned.noise_public_key, a.noise_public_key);
+        assert!(!returned.enabled);
+        assert!(!sync
+            .account_adoption_needed(&workspace, &returned.device_id)
+            .unwrap());
+        // An ordinary pending inbox forbids changing namespaces, but must not
+        // force a returning A through adoption instead of its normal apply path.
+        sync.account_adoption_preflight(&workspace, &returned.device_id).unwrap();
+        assert!(sync.account_adoption_preflight(&workspace, &b.device_id).is_err());
+        let mut corrupt = a.clone();
+        corrupt.noise_public_key = "not-the-existing-key".into();
+        private::remember_session(&root, &corrupt).unwrap();
+        let denied =
+            prepare_session_binding(&sync, &root, None, &identity("a"), profile("a"), true)
+                .unwrap();
+        assert_ne!(denied.device_id, a.device_id);
+        // A correctly named record must also contain the exact device identity.
+        let path = root.join("sessions").join(format!("{}.json", a.device_id));
+        private::write(&path, &b).unwrap();
+        let denied =
+            prepare_session_binding(&sync, &root, None, &identity("a"), profile("a"), true)
+                .unwrap();
+        assert_ne!(denied.device_id, a.device_id);
+        sync.shutdown().unwrap();
+    }
+    #[test]
+    fn offline_presentation_requires_retained_identity_and_preserves_pause_or_enable_intent() {
+        let identity = account_auth::Identity {
+            issuer: config::ISSUER.into(),
+            subject: "a".into(),
+            display_name: "A".into(),
+            username: None,
+        };
+        let mut binding = private::Binding {
+            issuer: config::ISSUER.into(),
+            subject: "a".into(),
+            workspace_id: uuid::Uuid::new_v4().to_string(),
+            device_id: uuid::Uuid::new_v4().to_string(),
+            product_id: "cybernote".into(),
+            noise_public_key: "fixture".into(),
+            enabled: false,
+        };
+        for enabled in [false, true] {
+            binding.enabled = enabled;
+            let mut status = Status::default();
+            present_retained_session(&mut status, &binding, &identity, enabled);
+            status.state = Phase::Error;
+            status.error = Some(Error::NetworkAt(types::NetworkStage::IdentityRefresh).safe());
+            assert_eq!(status.profile.as_ref().unwrap().subject, "a");
+            assert_eq!(status.enabled, enabled);
+            assert!(network_recovery(&status, true));
+            assert_eq!(authorization_mode(&status), Err(Error::Busy));
+            let mut other = identity.clone();
+            other.subject = "b".into();
+            let mut empty = Status::default();
+            present_retained_session(&mut empty, &binding, &other, enabled);
+            assert!(empty.profile.is_none());
+            assert!(!empty.enabled);
+        }
     }
     #[test]
     fn retained_session_enable_requires_exact_store_identity_and_no_interrupted_adoption() {

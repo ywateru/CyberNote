@@ -234,6 +234,7 @@ struct Quiet {
     plan: Option<SyncApplyPlan>,
     resolution: Option<Resolution>,
     adoption: Option<WorkspaceAdoption>,
+    local_recovery: bool,
 }
 struct WorkspaceAdoption {
     workspace: String,
@@ -248,6 +249,13 @@ fn adoption_blocked() -> AppError {
     }
 }
 impl Session {
+    /// Explicit recovery of this Store's existing workspace, through the same
+    /// renderer and final-plan gates. Never adopts or imports another workspace.
+    pub(crate) fn sync_begin_local_recovery(&mut self, live: HashSet<String>) -> Result<Value> {
+        let event = self.sync_begin(live, None)?;
+        self.quiet.current.as_mut().unwrap().local_recovery = true;
+        Ok(event)
+    }
     /// Use the existing renderer freeze/flush/ACK protocol without projecting
     /// any old remote version. The coordinator only advances this purpose to
     /// prepare; the adopting caller alone may commit and release it.
@@ -415,6 +423,7 @@ impl Session {
             plan: None,
             resolution,
             adoption: None,
+            local_recovery: false,
         });
         Ok(json!({"phase":"probe","operationId":id,"sessionId":self.id}))
     }
@@ -630,7 +639,9 @@ impl Session {
                         .sync_release_abort(AbortReason::ProtectedTarget)
                         .map(Some);
                 }
-            } else if plan.eligible_digests.is_empty() {
+            } else if plan.eligible_digests.is_empty()
+                && !(q.local_recovery && !plan.changes.is_empty())
+            {
                 return self
                     .sync_release_abort(AbortReason::NoEligiblePlan)
                     .map(Some);
@@ -804,6 +815,98 @@ mod tests {
             .as_str()
             .unwrap()
             .into()
+    }
+    #[test]
+    fn explicit_local_recovery_projects_head_only_with_real_renderer_and_final_gates() {
+        for scenario in [
+            "commit",
+            "ordinary",
+            "blocked",
+            "participant",
+            "intent",
+            "empty",
+        ] {
+            let (root, mut s) = session();
+            let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
+                .as_str()
+                .unwrap()
+                .to_string();
+            s.store.sync_flush().unwrap();
+            if scenario != "empty" {
+                // Synthetic interrupted projection: durable head already exists,
+                // no inbox remains, but its projection receipt is absent.
+                let db = rusqlite::Connection::open(root.path().join("notes.sqlite3")).unwrap();
+                db.execute(
+                    "DELETE FROM sync_projection WHERE kind='note' AND entity_id=?1",
+                    [&note],
+                )
+                .unwrap();
+            }
+            assert_eq!(s.store.sync_pending_count().unwrap(), 0);
+            let plan = s.store.sync_plan_apply(&[]).unwrap();
+            assert!(plan.eligible_digests.is_empty());
+            assert_eq!(plan.changes.is_empty(), scenario == "empty");
+            let live = HashSet::from(["main".into()]);
+            let event = if scenario == "ordinary" {
+                s.sync_begin(live.clone(), None)
+            } else {
+                s.sync_begin_local_recovery(live.clone())
+            }
+            .unwrap();
+            let operation = event["operationId"].as_str().unwrap().to_string();
+            let t = token(&s);
+            s.sync_reply(
+                "main",
+                WindowReply::Probe {
+                    operation_id: operation.clone(),
+                    protected_note_ids: vec![],
+                    blocked: scenario == "blocked",
+                },
+                &t,
+            )
+            .unwrap();
+            let event = s.sync_tick(&live).unwrap().unwrap().0;
+            if matches!(scenario, "ordinary" | "empty" | "blocked") {
+                assert_eq!(event["outcome"], "abort", "{scenario}");
+            } else {
+                assert_eq!(event["phase"], "prepare");
+                assert_eq!(event["noteIds"], json!([note]));
+                s.sync_reply(
+                    "main",
+                    WindowReply::Prepare {
+                        operation_id: operation,
+                        ready: true,
+                    },
+                    &t,
+                )
+                .unwrap();
+                if scenario == "intent" {
+                    let t = Token {
+                        note_epoch: Some(s.note_epoch(&note)),
+                        ..t
+                    };
+                    s.register_save("main", &note, "pending-save", t).unwrap();
+                }
+                let participants = if scenario == "participant" {
+                    HashSet::from(["other".into()])
+                } else {
+                    live
+                };
+                let event = s.sync_tick(&participants).unwrap().unwrap().0;
+                assert_eq!(
+                    event["outcome"],
+                    if scenario == "commit" {
+                        "commit"
+                    } else {
+                        "abort"
+                    }
+                );
+            }
+            assert_eq!(
+                s.store.sync_plan_apply(&[]).unwrap().changes.is_empty(),
+                matches!(scenario, "commit" | "empty")
+            );
+        }
     }
     #[test]
     fn workspace_adoption_session_blocks_save_barrier_and_quiet_work_without_mutation() {

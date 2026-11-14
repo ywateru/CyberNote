@@ -245,6 +245,19 @@ impl AuthClient {
         .await
         .map_err(|_| AuthError::TokenResponseInvalid)?
     }
+    /// Previously accepted local identity, for offline session presentation only.
+    /// It never discovers, refreshes or returns a token, and does not authorize
+    /// remote work. The host must match its binding and restore before networking.
+    pub async fn retained_identity(&self) -> Option<Identity> {
+        self.inner
+            .state
+            .lock()
+            .await
+            .grant
+            .as_ref()
+            .filter(|grant| grant.usable)
+            .and_then(|grant| grant.identity.clone())
+    }
     /// Read-only local state: the host can offer explicit grant cleanup without a profile.
     /// This does not discover, refresh, revoke, create an identity, or return credentials.
     pub async fn cleanup_required(&self) -> bool {

@@ -651,6 +651,49 @@ async fn successful_identity_and_rotation_are_private_persistent_serial_and_rest
 }
 
 #[tokio::test]
+async fn retained_identity_is_local_and_does_not_replace_offline_grant() {
+    let f = Fixture::new();
+    let dir = private_temp();
+    let path = dir.path().join("grant.json");
+    let client = f.client(&dir).await;
+    assert!(client.retained_identity().await.is_none());
+    let identity = f.login(&client).await;
+    drop(client);
+    let requests = Arc::new(AtomicUsize::new(0));
+    let calls = requests.clone();
+    let mut http = f.http(&config());
+    http.responder = Some(Arc::new(move |_: HttpRequest| {
+        calls.fetch_add(1, Ordering::SeqCst);
+        Box::pin(async { Err(AuthError::Network) })
+    }));
+    let before = fs::read(&path).unwrap();
+    let client = AuthClient::initialize(config(), &path, http).unwrap();
+    assert_eq!(client.retained_identity().await, Some(identity.clone()));
+    assert_eq!(requests.load(Ordering::SeqCst), 0);
+    assert_eq!(client.restore().await.unwrap_err(), AuthError::Network);
+    let after_restore = requests.load(Ordering::SeqCst);
+    assert_eq!(client.retained_identity().await, Some(identity));
+    assert_eq!(requests.load(Ordering::SeqCst), after_restore);
+    assert!(matches!(
+        client
+            .begin_authorization(config().redirect_uris[0].clone(), false)
+            .await,
+        Err(AuthError::Busy)
+    ));
+    assert_eq!(fs::read(&path).unwrap(), before);
+    client
+        .inner
+        .state
+        .lock()
+        .await
+        .grant
+        .as_mut()
+        .unwrap()
+        .usable = false;
+    assert!(client.retained_identity().await.is_none());
+}
+
+#[tokio::test]
 async fn refresh_request_errors_keep_categories_and_owner_until_explicit_retry() {
     for (mode, expected) in [
         (1, AuthError::Network),

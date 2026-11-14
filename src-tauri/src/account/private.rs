@@ -88,6 +88,46 @@ fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
     result
 }
 
+// Public session metadata, separate from the current login. It permits return
+// to a paused old account workspace without relabeling its device/causal history.
+// No grant, enrollment proof, peer secret or Noise private key is copied here.
+pub(crate) fn remember_session(root: &Path, binding: &Binding) -> Result<()> {
+    let device = uuid::Uuid::parse_str(&binding.device_id).map_err(|_| Error::Storage)?;
+    if device.to_string() != binding.device_id {
+        return Err(Error::Storage);
+    }
+    directory(root)?;
+    let records = root.join("sessions");
+    directory(&records)?;
+    let mut paused = binding.clone();
+    paused.enabled = false;
+    write(&records.join(format!("{device}.json")), &paused)
+}
+pub(crate) fn remembered_session(root: &Path, device: &str) -> Result<Option<Binding>> {
+    let id = uuid::Uuid::parse_str(device).map_err(|_| Error::Storage)?;
+    if id.to_string() != device {
+        return Err(Error::Storage);
+    }
+    let records = root.join("sessions");
+    match fs::symlink_metadata(&records) {
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(None),
+        Ok(m) if m.is_dir() && !m.file_type().is_symlink() => (),
+        _ => return Err(Error::Storage),
+    }
+    read(&records.join(format!("{id}.json")))
+}
+pub(crate) fn clear_session(root: &Path) -> Result<()> {
+    let path = root.join("binding.json");
+    if let Some(binding) = read(&path)? {
+        // Remember first, so interruption never strands the old account history.
+        remember_session(root, &binding)?;
+        fs::remove_file(path)?;
+        File::open(root)?.sync_all()?;
+    }
+    // With no retained login this marker must not prevent manual recovery.
+    complete_adoption(root)
+}
+
 // This marker contains no identity or grant. It is written before explicit
 // adoption and prevents an interrupted attempt from becoming automatic opt-in
 // on restart. The SQLite transaction is the authority for the actual workspace.
@@ -159,6 +199,39 @@ mod tests {
         assert!(std::fs::read_dir(&private)
             .unwrap()
             .all(|p| p.unwrap().file_name() == "binding.json"));
+    }
+    #[test]
+    fn signout_remembers_paused_device_without_retaining_current_binding_or_touching_grant() {
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path().join(".account");
+        directory(&root).unwrap();
+        let original = binding();
+        write(&root.join("binding.json"), &original).unwrap();
+        fs::write(root.join("grant.json"), b"synthetic untouched bytes").unwrap();
+        begin_adoption(&root).unwrap();
+        clear_session(&root).unwrap();
+        clear_session(&root).unwrap();
+        assert!(read(&root.join("binding.json")).unwrap().is_none());
+        assert!(!adoption_pending(&root).unwrap());
+        let saved = remembered_session(&root, &original.device_id)
+            .unwrap()
+            .unwrap();
+        let mut expected = original;
+        expected.enabled = false;
+        assert!(saved == expected);
+        assert_eq!(
+            fs::read(root.join("grant.json")).unwrap(),
+            b"synthetic untouched bytes"
+        );
+        assert!(remembered_session(&root, "../binding").is_err());
+        #[cfg(unix)]
+        {
+            let records = root.join("sessions");
+            fs::rename(&records, root.join("saved-sessions")).unwrap();
+            std::os::unix::fs::symlink(root.join("saved-sessions"), &records).unwrap();
+            assert!(remembered_session(&root, &expected.device_id).is_err());
+            assert!(remember_session(&root, &expected).is_err());
+        }
     }
     #[test]
     fn adoption_marker_survives_restart_and_does_not_rewrite_binding() {

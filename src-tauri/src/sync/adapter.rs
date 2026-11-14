@@ -440,7 +440,10 @@ impl Runtime {
         let existing = IdentityStore::existing_device_id(&sync_dir).map_err(network_error)?;
         let device = match (store_identity, existing) {
             (Some(i), Some(d)) if i.device_id != d => return Err(error("sync_device_mismatch")),
-            (Some(i), _) => i.device_id,
+            // A signed-out account schema must not become a policy-free manual
+            // service merely because a manual credential is absent.
+            (Some(_), None) => return Err(error("sync_workspace_mismatch")),
+            (Some(i), Some(_)) => i.device_id,
             (None, Some(d)) => d,
             (None, None) => uuid::Uuid::new_v4().to_string(),
         };
@@ -555,6 +558,41 @@ impl Runtime {
             IdentityStore::open(&directory, device).map_err(network_error)?,
         ))
     }
+    pub(crate) fn account_store_identity(&self) -> Result<Option<super::model::SyncIdentity>> {
+        self.shared
+            .0
+            .lock()
+            .map_err(|_| error("sync_internal"))?
+            .store
+            .sync_identity()
+    }
+    /// Reuse is permitted only for a credential which already exists with this
+    /// exact device. A missing/corrupt retired credential is never recreated here.
+    pub(crate) fn existing_account_identity(
+        &self,
+        device: &str,
+    ) -> Result<Option<Arc<IdentityStore>>> {
+        if uuid::Uuid::parse_str(device)
+            .ok()
+            .is_none_or(|id| id.to_string() != device)
+        {
+            return Err(error("sync_device_mismatch"));
+        }
+        let base = self.root.join(".account/noise");
+        for dir in [base.join(device), base] {
+            if IdentityStore::existing_device_id(&dir)
+                .ok()
+                .flatten()
+                .as_deref()
+                == Some(device)
+            {
+                return IdentityStore::open(&dir, device)
+                    .map(|identity| Some(Arc::new(identity)))
+                    .map_err(network_error);
+            }
+        }
+        Ok(None)
+    }
     pub(crate) fn account_adoption_needed(&self, workspace: &str, device: &str) -> Result<bool> {
         let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
         Ok(s.store
@@ -632,7 +670,25 @@ impl Runtime {
         crate::account::private::complete_adoption(&self.root.join(".account"))
             .map_err(|_| error("sync_internal"))?;
         self.active.store(true, Ordering::Release);
+        // This verified account is back on its exact old workspace/device.
+        // Local heads may need projection even when the inbox is already empty.
+        let _ = self.begin_local_recovery();
         Ok(service)
+    }
+    fn begin_local_recovery(&self) -> Result<()> {
+        let event = {
+            let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+            s.sync_begin_local_recovery(self.host.participants())?
+        };
+        if let Err(e) = self.host.emit("notes-sync", &event) {
+            self.shared
+                .0
+                .lock()
+                .map_err(|_| error("sync_internal"))?
+                .sync_abort_reason(AbortReason::EmitError);
+            return Err(e);
+        }
+        Ok(())
     }
     fn adopt_account_store(
         &self,
@@ -865,6 +921,7 @@ impl Runtime {
                         .ok_or_else(|| error("sync_disabled"))?
                         .sync_now()
                         .map_err(network_error)?;
+                    self.begin_local_recovery()?;
                 }
                 Command::Stop {} => {
                     let mut c = inner.config.clone().ok_or_else(|| error("sync_disabled"))?;
@@ -883,11 +940,14 @@ impl Runtime {
                 }
                 Command::Resume {} => {
                     let mut c = inner.config.clone().ok_or_else(|| error("sync_disabled"))?;
+                    // Validate the old manual device before persisting opt-in.
+                    self.service(&mut inner)?;
                     c.paused = false;
                     self.persist(&c)?;
                     inner.config = Some(c);
                     self.active.store(true, Ordering::Release);
                     self.activate(&mut inner)?;
+                    self.begin_local_recovery()?;
                 }
                 Command::Revoke { peer_id } => {
                     inner
@@ -1361,6 +1421,31 @@ mod tests {
             serde_json::from_slice(&fs::read(d.path().join(".sync/runtime-v1.json")).unwrap())
                 .unwrap();
         assert!(config.paused);
+        runtime
+            .command(Command::Resume {}, "main", &token(&shared))
+            .unwrap();
+        assert!(runtime.active.load(Ordering::Acquire));
+        assert!(runtime.inner.lock().unwrap().service.is_some());
+        assert!(old.workspace_id().is_err()); // Resume never revives the retired backend.
+        runtime.pause_for_account().unwrap();
+        // Losing the old credential cannot create a new manual key over the
+        // old Store identity, nor may a failed Resume persist an enabled config.
+        fs::rename(d.path().join(".sync"), d.path().join("retired-manual")).unwrap();
+        let err = runtime
+            .command(Command::Resume {}, "main", &token(&shared))
+            .unwrap_err();
+        assert_eq!(err.code, "sync_workspace_mismatch");
+        assert!(!runtime.active.load(Ordering::Acquire));
+        assert!(
+            runtime
+                .inner
+                .lock()
+                .unwrap()
+                .config
+                .as_ref()
+                .unwrap()
+                .paused
+        );
         runtime.shutdown().unwrap();
     }
     #[test]
