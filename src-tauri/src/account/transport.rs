@@ -630,14 +630,86 @@ pub(super) mod observation {
     }
 }
 
-struct OwnedMapping(Arc<Mapping>);
-impl Drop for OwnedMapping {
-    fn drop(&mut self) {
-        let mapping = self.0.clone();
-        // Cancellation/timeout of a selected operation must also retire mappings.
-        tokio::spawn(async move {
-            mapping.close().await;
-        });
+/// Cancellation cannot drop a queued/running blocking admission or treat a
+/// disconnect timeout as retirement. The request owns its permit throughout.
+async fn blocking_request<T, F, R>(
+    stop: &CancellationToken,
+    admission_stop: &CancellationToken,
+    action: F,
+    retire: R,
+) -> Result<T>
+where
+    T: Send + 'static,
+    F: FnOnce() -> Result<T> + Send + 'static,
+    R: Fn() -> Result<()> + Send + Sync + 'static,
+{
+    if stop.is_cancelled() {
+        return Err(Error::Cancelled);
+    }
+    let action_stop = stop.clone();
+    let mut task = tokio::task::spawn_blocking(move || {
+        if action_stop.is_cancelled() {
+            return Err(Error::Cancelled);
+        }
+        action()
+    });
+    let retire = Arc::new(retire);
+    let mut retirement_error = None;
+    let result = tokio::select! {
+        biased;
+        _=stop.cancelled()=>{
+            admission_stop.cancel();
+            // Aborting a queued task prevents admission; a running task still
+            // requires its policy fence, disconnect, and observed termination.
+            task.abort();
+            let cancel = retire.clone();
+            match tokio::task::spawn_blocking(move || cancel()).await {
+                Ok(Ok(())) => {},
+                Ok(Err(error)) => { retirement_error.get_or_insert(error); },
+                Err(_) => { retirement_error.get_or_insert(Error::Sync); },
+            }
+            if task.await.is_err() { retirement_error.get_or_insert(Error::Sync); }
+            Err(Error::Cancelled)
+        },
+        result=&mut task=>result.unwrap_or(Err(Error::Sync)),
+    };
+    if result.is_err() {
+        admission_stop.cancel();
+    }
+    loop {
+        let retire = retire.clone();
+        match tokio::task::spawn_blocking(move || retire()).await {
+            Ok(Ok(())) => break,
+            Ok(Err(error)) => {
+                admission_stop.cancel();
+                retirement_error.get_or_insert(error);
+            }
+            Err(_) => {
+                admission_stop.cancel();
+                retirement_error.get_or_insert(Error::Sync);
+            }
+        }
+        // A retiring task retains Busy and the cancellation fence until the
+        // network join observer confirms exit; no retry of the transfer itself.
+        tokio::time::sleep(Duration::from_millis(25)).await;
+    }
+    if stop.is_cancelled() {
+        Err(Error::Cancelled)
+    } else if let Some(error) = retirement_error {
+        Err(error)
+    } else {
+        result
+    }
+}
+async fn request_io<T, E, F>(stop: &CancellationToken, future: F) -> Result<T>
+where
+    F: std::future::Future<Output = std::result::Result<T, E>>,
+    Error: From<E>,
+{
+    tokio::select! {
+        biased;
+        _=stop.cancelled()=>Err(Error::Cancelled),
+        result=future=>result.map_err(Error::from),
     }
 }
 
@@ -929,15 +1001,18 @@ async fn run_service(
             },
             request=requests.recv()=>{
                 let Some(request)=request else{break Ok(())};
-                if request.epoch != epoch || !control.current(epoch) || request.done.is_closed() {
-                    let _=request.done.send(Err(Error::Cancelled)); continue;
+                if request.epoch != epoch || !control.current(epoch) || request.done.is_closed()
+                    || request.cancellation.stop.is_cancelled() {
+                    request.complete(Err(Error::Cancelled)); continue;
                 }
-                let transfer = transfer_target(service, &identity, &binding, &client, &enrollment, &gate,
-                    &bootstrap, &request.target, request.direction, observation.as_ref(), &stop);
-                let outcome = transfer.await;
+                let request_stop = stop.child_token();
+                let outcome = super::worker::execute_request(&request.cancellation, &request_stop,
+                    transfer_target(service, &identity, &binding, &client, &enrollment, &gate,
+                        &bootstrap, &request.target, request.direction, observation.as_ref(), &request_stop,
+                        &request.cancellation)).await;
                 let terminal = outcome.as_ref().err().is_some_and(|e| fence_authorization(&gate, *e));
                 let error = outcome.as_ref().err().copied();
-                let _=request.done.send(outcome);
+                request.complete(outcome);
                 if terminal { break Err(error.unwrap_or(Error::Sync)); }
             }
         }
@@ -959,135 +1034,594 @@ async fn transfer_target(
     direction: super::types::TransferDirection,
     observation: Option<&observation::Lease>,
     stop: &CancellationToken,
+    cancellation: &super::worker::RequestCancellation,
 ) -> Result<()> {
-    let prepare = async {
-        let (transport, protocol, key) = target.target("")?;
-        let enroll = OwnedMapping(Arc::new(
-            client
-                .map(
-                    transport,
-                    config::ENROLL_PORT,
-                    "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+    let mut mappings: Vec<Arc<Mapping>> = Vec::new();
+    let result = async {
+        let prepare = async {
+            let (transport, protocol, key) = target.target("")?;
+            let enroll = Arc::new(
+                request_io(
+                    stop,
+                    client.map(
+                        transport,
+                        config::ENROLL_PORT,
+                        "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+                    ),
                 )
                 .await?,
-        ));
-        let sync = OwnedMapping(Arc::new(
-            client
-                .map(
-                    transport,
-                    config::SYNC_PORT,
-                    "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+            );
+            mappings.push(enroll.clone());
+            let sync = Arc::new(
+                request_io(
+                    stop,
+                    client.map(
+                        transport,
+                        config::SYNC_PORT,
+                        "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+                    ),
                 )
                 .await?,
-        ));
-        let sampler = observation.map(|lease| {
-            let enroll = enroll.0.clone();
-            let sync = sync.0.clone();
-            lease.spawn(target.id.clone(), move || {
+            );
+            mappings.push(sync.clone());
+            let sampler = observation.map(|lease| {
                 let enroll = enroll.clone();
                 let sync = sync.clone();
-                async move {
-                    tokio::join!(
-                        observation::read_path(async { Ok(enroll.current_transport().await) }),
-                        observation::read_path(async { Ok(sync.current_transport().await) })
-                    )
-                }
+                lease.spawn(target.id.clone(), move || {
+                    let enroll = enroll.clone();
+                    let sync = sync.clone();
+                    async move {
+                        tokio::join!(
+                            observation::read_path(async { Ok(enroll.current_transport().await) }),
+                            observation::read_path(async { Ok(sync.current_transport().await) })
+                        )
+                    }
+                })
+            });
+            let mut stream = request_io(stop, TcpStream::connect(enroll.addr)).await?;
+            let nonce = uuid::Uuid::new_v4().to_string();
+            let proof = bootstrap.proof.lock().map_err(|_| Error::Storage)?.clone();
+            request_io(
+                stop,
+                write(
+                    &mut stream,
+                    &Request {
+                        proof,
+                        nonce: nonce.clone(),
+                    },
+                ),
+            )
+            .await?;
+            let response: Response = request_io(stop, async {
+                tokio::time::timeout(Duration::from_secs(25), read(&mut stream))
+                    .await
+                    .map_err(|_| Error::Network)?
             })
-        });
-        let mut stream = TcpStream::connect(enroll.0.addr).await?;
-        let nonce = uuid::Uuid::new_v4().to_string();
-        let proof = bootstrap.proof.lock().map_err(|_| Error::Storage)?.clone();
-        write(
-            &mut stream,
-            &Request {
-                proof,
-                nonce: nonce.clone(),
-            },
-        )
-        .await?;
-        let response: Response = tokio::time::timeout(Duration::from_secs(25), read(&mut stream))
-            .await
-            .map_err(|_| Error::Network)??;
-        if response.nonce != nonce {
-            return Err(Error::InvalidProof);
-        }
-        let remote = enrollment.verify(&response.proof, binding).await?;
-        // Selection pins both the enrollment identity and static Noise key.
-        // A directory refresh never redirects an already selected operation.
-        if remote.device_id != protocol
-            || remote.noise_public_key != key
-            || remote.device_id == binding.device_id
-        {
-            return Err(Error::InvalidProof);
-        }
-        let mut invite = PairingInvite::decode(&response.invitation)?;
-        if invite.workspace_id != binding.workspace_id || invite.host_key != remote.noise_public_key
-        {
-            return Err(Error::InvalidProof);
-        }
-        gate.admit(&remote);
-        gate.route(&remote.device_id, format!("ws://{}/", sync.0.addr));
-        let paired = identity.peer_for_device(&remote.device_id)?;
-        if let Some(id) = paired {
-            let pinned = identity.credential(&id)?;
-            if pinned.host_key != remote.noise_public_key {
+            .await?;
+            if response.nonce != nonce {
                 return Err(Error::InvalidProof);
             }
-            if pinned.phase == crate::sync::identity::PairingPhase::Prepared {
-                tokio::task::block_in_place(|| service.recover_pairing(&id))?;
+            let remote = request_io(stop, enrollment.verify(&response.proof, binding)).await?;
+            // Selection pins both the enrollment identity and static Noise key.
+            // A directory refresh never redirects an already selected operation.
+            if remote.device_id != protocol
+                || remote.noise_public_key != key
+                || remote.device_id == binding.device_id
+            {
+                return Err(Error::InvalidProof);
             }
-        } else {
-            invite.endpoint = format!("ws://{}/", sync.0.addr);
-            tokio::task::block_in_place(|| service.pair(&invite.token()?))?;
+            let mut invite = PairingInvite::decode(&response.invitation)?;
+            if invite.workspace_id != binding.workspace_id
+                || invite.host_key != remote.noise_public_key
+            {
+                return Err(Error::InvalidProof);
+            }
+            if stop.is_cancelled() || !gate.is_current() {
+                return Err(Error::Cancelled);
+            }
+            gate.admit(&remote);
+            gate.route(&remote.device_id, format!("ws://{}/", sync.addr));
+            let paired = identity.peer_for_device(&remote.device_id)?;
+            if let Some(id) = paired {
+                let pinned = identity.credential(&id)?;
+                if pinned.host_key != remote.noise_public_key {
+                    return Err(Error::InvalidProof);
+                }
+                if pinned.phase == crate::sync::identity::PairingPhase::Prepared {
+                    let action_service = service.clone();
+                    let action_id = id.clone();
+                    let retire_service = service.clone();
+                    blocking_request(
+                        stop,
+                        &cancellation.admission_stop,
+                        move || {
+                            action_service
+                                .recover_pairing(&action_id)
+                                .map_err(Error::from)
+                        },
+                        move || retire_service.disconnect(&id).map_err(Error::from),
+                    )
+                    .await?;
+                }
+            } else {
+                invite.endpoint = format!("ws://{}/", sync.addr);
+                let token = invite.token()?;
+                let id = invite.invitation_id.clone();
+                let action_service = service.clone();
+                let retire_service = service.clone();
+                blocking_request(
+                    stop,
+                    &cancellation.admission_stop,
+                    move || action_service.pair(&token).map_err(Error::from),
+                    move || retire_service.disconnect(&id).map_err(Error::from),
+                )
+                .await?;
+            }
+            let id = identity
+                .peer_for_device(&remote.device_id)?
+                .ok_or(Error::InvalidProof)?;
+            Ok((id, sampler))
+        };
+        tokio::pin!(prepare);
+        let (id, sampler) = tokio::select! {
+            biased;
+            _=stop.cancelled()=>{ let _=prepare.await; return Err(Error::Cancelled); },
+            _=tokio::time::sleep(Duration::from_secs(60))=>{
+                cancellation.stop.cancel();
+                let _=prepare.await;
+                return Err(Error::Network);
+            },
+            prepared=&mut prepare=>prepared?,
+        };
+        if stop.is_cancelled() || !gate.is_current() {
+            return Err(Error::Cancelled);
         }
-        let id = identity
-            .peer_for_device(&remote.device_id)?
-            .ok_or(Error::InvalidProof)?;
-        Ok((id, enroll, sync, sampler))
-    };
-    let (id, enroll, sync, sampler) = tokio::select! {
-        _=stop.cancelled()=>return Err(Error::Cancelled),
-        prepared=tokio::time::timeout(Duration::from_secs(60),prepare)=>prepared.map_err(|_| Error::Network)??,
-    };
-    if stop.is_cancelled() || !gate.is_current() {
-        return Err(Error::Cancelled);
+        let direction = match direction {
+            super::types::TransferDirection::Push => crate::sync::network::TransferDirection::Push,
+            super::types::TransferDirection::Pull => crate::sync::network::TransferDirection::Pull,
+            super::types::TransferDirection::Both => crate::sync::network::TransferDirection::Both,
+        };
+        let task_service = service.clone();
+        let task_id = id.clone();
+        let retire_service = service.clone();
+        let result = blocking_request(
+            stop,
+            &cancellation.admission_stop,
+            move || {
+                task_service
+                    .transfer_once(&task_id, direction)
+                    .map_err(Error::from)
+            },
+            move || retire_service.disconnect(&id).map_err(Error::from),
+        )
+        .await;
+        drop(sampler);
+        result
     }
-    let direction = match direction {
-        super::types::TransferDirection::Push => crate::sync::network::TransferDirection::Push,
-        super::types::TransferDirection::Pull => crate::sync::network::TransferDirection::Pull,
-        super::types::TransferDirection::Both => crate::sync::network::TransferDirection::Both,
-    };
-    let task_service = service.clone();
-    let task_id = id.clone();
-    let mut action =
-        tokio::task::spawn_blocking(move || task_service.transfer_once(&task_id, direction));
-    // No lifecycle/Session/Store lock is held. Cancellation disconnects AND joins
-    // the network-owned task before mappings or the content service can retire.
-    let result = tokio::select! {
-        result=&mut action=>result.map_err(|_| Error::Sync)?.map_err(Error::from),
-        _=stop.cancelled()=>{
-            let task_service=service.clone();
-            let _=tokio::task::spawn_blocking(move ||task_service.disconnect(&id)).await;
-            let _=action.await;
-            Err(Error::Cancelled)
-        },
-    };
-    drop(sampler);
-    enroll.0.close().await;
-    sync.0.close().await;
+    .await;
+    for mapping in mappings {
+        mapping.close().await;
+    }
     result
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[tokio::test]
+    async fn blocking_panic_still_fences_admission_and_confirms_retirement() {
+        let stop = CancellationToken::new();
+        let admission = CancellationToken::new();
+        let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let retired = calls.clone();
+        let result: Result<()> = blocking_request(
+            &stop,
+            &admission,
+            || panic!("synthetic blocking action failure"),
+            move || {
+                retired.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                Ok(())
+            },
+        )
+        .await;
+        assert_eq!(result, Err(Error::Sync));
+        assert!(admission.is_cancelled());
+        assert_eq!(calls.load(std::sync::atomic::Ordering::SeqCst), 1);
+    }
+    #[tokio::test]
+    async fn unconfirmed_retirement_is_not_success_and_keeps_admission_fenced() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let stop = CancellationToken::new();
+            let admission = CancellationToken::new();
+            let release = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+            let entered = Arc::new(tokio::sync::Notify::new());
+            let task_entered = entered.clone();
+            let task_release = release.clone();
+            let task_admission = admission.clone();
+            let task = tokio::spawn(async move {
+                blocking_request(
+                    &stop,
+                    &task_admission,
+                    || Ok(()),
+                    move || {
+                        task_entered.notify_one();
+                        if task_release.load(std::sync::atomic::Ordering::SeqCst) == 0 {
+                            Err(Error::Sync)
+                        } else {
+                            Ok(())
+                        }
+                    },
+                )
+                .await
+            });
+            entered.notified().await;
+            admission.cancelled().await;
+            assert!(!task.is_finished());
+            release.store(1, std::sync::atomic::Ordering::SeqCst);
+            assert_eq!(
+                task.await.unwrap(),
+                Err(Error::Sync),
+                "retirement error cannot become durable success"
+            );
+        })
+        .await
+        .unwrap();
+    }
+    use crate::sync::{
+        identity::SyncError,
+        network::{BlobRef, InventoryPage, Receipt, SyncBackend},
+    };
+    use std::{
+        path::Path,
+        sync::{
+            atomic::{AtomicUsize, Ordering},
+            Condvar,
+        },
+    };
+    struct BlockingBackend {
+        device: String,
+        workspace: String,
+        block: bool,
+        entered: tokio::sync::Notify,
+        release: Arc<(Mutex<bool>, Condvar)>,
+        inventories: AtomicUsize,
+    }
+    impl SyncBackend for BlockingBackend {
+        fn device_id(&self) -> crate::sync::identity::Result<String> {
+            Ok(self.device.clone())
+        }
+        fn workspace_id(&self) -> crate::sync::identity::Result<String> {
+            Ok(self.workspace.clone())
+        }
+        fn prepare_pairing(&self, workspace: &str) -> crate::sync::identity::Result<()> {
+            if workspace == self.workspace {
+                Ok(())
+            } else {
+                Err(SyncError::WorkspaceMismatch)
+            }
+        }
+        fn adopt_workspace(&self, workspace: &str) -> crate::sync::identity::Result<()> {
+            self.prepare_pairing(workspace)
+        }
+        fn flush(&self) -> crate::sync::identity::Result<()> {
+            if self.block {
+                self.entered.notify_one();
+                let (lock, changed) = &*self.release;
+                let released = lock.lock().unwrap();
+                let _guard = changed.wait_while(released, |released| !*released).unwrap();
+            }
+            Ok(())
+        }
+        fn inventory(
+            &self,
+            _: Option<&str>,
+            _: usize,
+        ) -> crate::sync::identity::Result<InventoryPage> {
+            self.inventories.fetch_add(1, Ordering::SeqCst);
+            Ok(InventoryPage {
+                digests: vec![],
+                next: None,
+            })
+        }
+        fn version(&self, _: &str) -> crate::sync::identity::Result<serde_json::Value> {
+            panic!("no content after cancel")
+        }
+        fn required_blobs(
+            &self,
+            _: &serde_json::Value,
+        ) -> crate::sync::identity::Result<Vec<BlobRef>> {
+            panic!("no content after cancel")
+        }
+        fn has_blob(&self, _: &BlobRef) -> crate::sync::identity::Result<bool> {
+            panic!("no content after cancel")
+        }
+        fn read_blob_chunk(
+            &self,
+            _: &BlobRef,
+            _: u64,
+            _: usize,
+        ) -> crate::sync::identity::Result<Vec<u8>> {
+            panic!("no content after cancel")
+        }
+        fn store_blob(&self, _: &BlobRef, _: &Path) -> crate::sync::identity::Result<()> {
+            panic!("no content after cancel")
+        }
+        fn receive_head(&self, _: serde_json::Value) -> crate::sync::identity::Result<Receipt> {
+            panic!("no content after cancel")
+        }
+    }
+    struct ReleaseBackend(Arc<(Mutex<bool>, Condvar)>);
+    impl Drop for ReleaseBackend {
+        fn drop(&mut self) {
+            *self.0 .0.lock().unwrap() = true;
+            self.0 .1.notify_all();
+        }
+    }
+    fn admit(gate: &Gate, identity: &IdentityStore, workspace: &str) {
+        let until = now() + 300;
+        gate.renew_local(until);
+        gate.admit(&Claims {
+            iss: config::ENROLLMENT_ISSUER.into(),
+            aud: "fixture".into(),
+            sub: "fixture".into(),
+            account_issuer: config::ISSUER.into(),
+            product_id: "fixture".into(),
+            workspace_id: workspace.into(),
+            device_id: identity.device_id().unwrap(),
+            noise_public_key: identity.public_key().unwrap(),
+            purpose: "pair".into(),
+            iat: now(),
+            exp: until,
+            jti: uuid::Uuid::new_v4().to_string(),
+        });
+    }
+    #[tokio::test]
+    async fn native_deadline_with_real_network_blocked_backend_keeps_busy_until_join() {
+        use super::super::worker::{
+            execute_request, wait_request, Control, DeviceRequest, RequestCancellation,
+        };
+        tokio::time::timeout(Duration::from_secs(10), async {
+            let roots = tempfile::tempdir().unwrap();
+            let workspace = uuid::Uuid::new_v4().to_string();
+            let control = Arc::new(Control::default());
+            control.configure(true);
+            let epoch = control.epoch().unwrap();
+            let local_gate = Arc::new(Gate::default());
+            let weak = Arc::downgrade(&control);
+            local_gate.bind_lifecycle(Arc::new(move || {
+                weak.upgrade().is_some_and(|c| c.authorized(epoch))
+            }));
+            let remote_gate = Arc::new(Gate::default());
+            let local_identity = Arc::new(
+                IdentityStore::open(
+                    &roots.path().join("local"),
+                    &uuid::Uuid::new_v4().to_string(),
+                )
+                .unwrap(),
+            );
+            let remote_identity = Arc::new(
+                IdentityStore::open(
+                    &roots.path().join("remote"),
+                    &uuid::Uuid::new_v4().to_string(),
+                )
+                .unwrap(),
+            );
+            admit(&local_gate, &remote_identity, &workspace);
+            admit(&remote_gate, &local_identity, &workspace);
+            let release = Arc::new((Mutex::new(false), Condvar::new()));
+            let _release_on_failure = ReleaseBackend(release.clone());
+            let local_backend = Arc::new(BlockingBackend {
+                device: local_identity.device_id().unwrap(),
+                workspace: workspace.clone(),
+                block: true,
+                entered: Default::default(),
+                release: release.clone(),
+                inventories: AtomicUsize::new(0),
+            });
+            let remote_backend = Arc::new(BlockingBackend {
+                device: remote_identity.device_id().unwrap(),
+                workspace,
+                block: false,
+                entered: Default::default(),
+                release: release.clone(),
+                inventories: AtomicUsize::new(0),
+            });
+            let local = Arc::new(
+                SyncService::with_policy(
+                    local_backend.clone(),
+                    local_identity,
+                    roots.path().join("local-stage"),
+                    Some(local_gate.clone()),
+                )
+                .unwrap(),
+            );
+            let remote = Arc::new(
+                SyncService::with_policy(
+                    remote_backend.clone(),
+                    remote_identity.clone(),
+                    roots.path().join("remote-stage"),
+                    Some(remote_gate),
+                )
+                .unwrap(),
+            );
+            let address = remote
+                .start_listener("127.0.0.1:0".parse().unwrap())
+                .unwrap();
+            let token = remote.invitation(&format!("ws://{address}/")).unwrap();
+            local_gate.route(
+                &remote_identity.device_id().unwrap(),
+                format!("ws://{address}/"),
+            );
+            let pair_local = local.clone();
+            let peer = tokio::task::spawn_blocking(move || pair_local.pair(&token))
+                .await
+                .unwrap()
+                .unwrap()
+                .peer_id;
+            assert!(control.attach(epoch, CancellationToken::new(), local_gate.clone()));
+            control.mark_ready(epoch);
+            let cancellation = Arc::new(RequestCancellation::new(Duration::from_millis(200)));
+            let permit = control.reserve(epoch, &cancellation).unwrap();
+            let (done, receiver) = tokio::sync::oneshot::channel();
+            let request = DeviceRequest {
+                target: super::super::directory::Row {
+                    id: uuid::Uuid::new_v4().to_string(),
+                    name: "Remote".into(),
+                    online: true,
+                    sync_available: false,
+                    summary: None,
+                    transport_device_id: None,
+                    protocol_device_id: None,
+                    noise_public_key: None,
+                },
+                direction: super::super::types::TransferDirection::Both,
+                epoch,
+                _permit: permit,
+                cancellation: cancellation.clone(),
+                owner: std::sync::Weak::new(),
+                generation: 1,
+                operation_id: uuid::Uuid::new_v4(),
+                done,
+            };
+            let task_cancellation = cancellation.clone();
+            let action_local = local.clone();
+            let action_peer = peer.clone();
+            let retire_local = local.clone();
+            let work = tokio::spawn(async move {
+                let stop = CancellationToken::new();
+                let result = execute_request(
+                    &task_cancellation,
+                    &stop,
+                    blocking_request(
+                        &stop,
+                        &task_cancellation.admission_stop,
+                        move || {
+                            action_local
+                                .transfer_once(
+                                    &action_peer,
+                                    crate::sync::network::TransferDirection::Both,
+                                )
+                                .map_err(Error::from)
+                        },
+                        move || retire_local.disconnect(&peer).map_err(Error::from),
+                    ),
+                )
+                .await;
+                request.complete(result);
+            });
+            local_backend.entered.notified().await;
+            let waiter = tokio::spawn(wait_request(receiver, cancellation.clone()));
+            cancellation.stop.cancelled().await;
+            assert!(control.busy());
+            assert!(!local_gate.is_current());
+            assert!(!waiter.is_finished());
+            assert!(!work.is_finished());
+            assert!(
+                control
+                    .reserve(epoch, &Arc::new(RequestCancellation::default()))
+                    .err()
+                    == Some(Error::Busy)
+            );
+            *release.0.lock().unwrap() = true;
+            release.1.notify_all();
+            work.await.unwrap();
+            assert_eq!(waiter.await.unwrap(), Err(Error::Sync));
+            assert!(!control.busy());
+            assert_eq!(local_backend.inventories.load(Ordering::SeqCst), 0);
+            assert_eq!(remote_backend.inventories.load(Ordering::SeqCst), 0);
+            // No queued retry or broadcast follows retirement.
+            tokio::task::yield_now().await;
+            assert_eq!(remote_backend.inventories.load(Ordering::SeqCst), 0);
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn request_cancel_interrupts_pending_preparation_without_running_next_step() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let stop = CancellationToken::new();
+            let entered = Arc::new(tokio::sync::Notify::new());
+            let next = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+            let task_stop = stop.clone();
+            let task_entered = entered.clone();
+            let task_next = next.clone();
+            let task = tokio::spawn(async move {
+                let result = request_io(&task_stop, async {
+                    task_entered.notify_one();
+                    std::future::pending::<Result<()>>().await
+                })
+                .await;
+                if result.is_ok() {
+                    task_next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                }
+                result
+            });
+            entered.notified().await;
+            stop.cancel();
+            assert_eq!(task.await.unwrap(), Err(Error::Cancelled));
+            assert_eq!(next.load(std::sync::atomic::Ordering::SeqCst), 0);
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn late_blocking_admission_after_early_disconnect_is_fenced_and_joined() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let stop = CancellationToken::new();
+            let gate = Arc::new(Gate::default());
+            let gate_stop = stop.clone();
+            gate.bind_lifecycle(Arc::new(move || !gate_stop.is_cancelled()));
+            let entered = Arc::new(tokio::sync::Notify::new());
+            let retired = Arc::new(tokio::sync::Notify::new());
+            let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+            let (release, blocked) = std::sync::mpsc::channel();
+            let task_stop = stop.clone();
+            let task_entered = entered.clone();
+            let task_retired = retired.clone();
+            let task_calls = calls.clone();
+            let task = tokio::spawn(async move {
+                blocking_request(
+                    &task_stop,
+                    &task_stop,
+                    move || {
+                        task_entered.notify_one();
+                        blocked.recv_timeout(Duration::from_secs(2)).unwrap();
+                        // This is after the helper's start check and after the first
+                        // disconnect observed no admitted action. Real Gate policy
+                        // must still reject the late admission, not merely the waiter.
+                        assert!(!gate.is_current());
+                        assert!(gate.authorize("late-device", "late-key").is_err());
+                        Ok(())
+                    },
+                    move || {
+                        task_calls.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                        task_retired.notify_one();
+                        Ok(())
+                    },
+                )
+                .await
+            });
+            entered.notified().await;
+            stop.cancel();
+            retired.notified().await;
+            assert!(
+                !task.is_finished(),
+                "early disconnect cannot retire a queued admission"
+            );
+            release.send(()).unwrap();
+            assert_eq!(task.await.unwrap(), Err(Error::Cancelled));
+            assert!(calls.load(std::sync::atomic::Ordering::SeqCst) >= 2);
+        })
+        .await
+        .unwrap();
+    }
     use base64::{engine::general_purpose::URL_SAFE_NO_PAD as B64, Engine};
     use p384::{
         elliptic_curve::sec1::ToEncodedPoint,
         pkcs8::{EncodePrivateKey, LineEnding},
         SecretKey,
     };
-    use std::sync::atomic::{AtomicBool, Ordering};
+    use std::sync::atomic::AtomicBool;
 
     #[test]
     fn coordinator_request_classification_preserves_authorization_fences() {

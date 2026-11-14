@@ -5,7 +5,13 @@ use super::{
     types::{Error, Result, TransferDirection},
     Runtime,
 };
-use std::sync::{Arc, Mutex, Weak};
+use std::{
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc, Mutex, Weak,
+    },
+    time::Duration,
+};
 use tokio::sync::{mpsc, oneshot, Notify};
 use tokio_util::sync::CancellationToken;
 
@@ -14,7 +20,112 @@ pub(super) struct DeviceRequest {
     pub direction: TransferDirection,
     pub epoch: u64,
     pub _permit: OperationPermit,
+    pub cancellation: Arc<RequestCancellation>,
+    pub owner: Weak<Runtime>,
+    pub generation: u64,
+    pub operation_id: uuid::Uuid,
     pub done: oneshot::Sender<Result<()>>,
+}
+impl DeviceRequest {
+    pub fn complete(self, outcome: Result<()>) {
+        let mut outcome = self.cancellation.outcome(outcome);
+        if self
+            ._permit
+            .control
+            .upgrade()
+            .is_some_and(|c| !c.current(self.epoch))
+        {
+            outcome = Err(Error::Cancelled);
+        }
+        if let Some(owner) = self.owner.upgrade() {
+            owner.finish_device_operation(self.generation, self.operation_id, outcome);
+        }
+        // Receipt is emitted only after all execution and retirement have ended.
+        let _ = self.done.send(outcome);
+    }
+}
+pub(super) struct RequestCancellation {
+    pub stop: CancellationToken,
+    pub admission_stop: CancellationToken,
+    deadline: tokio::time::Instant,
+    deadline_expired: AtomicBool,
+}
+impl Default for RequestCancellation {
+    fn default() -> Self {
+        Self::new(Duration::from_secs(185))
+    }
+}
+impl RequestCancellation {
+    pub fn new(budget: Duration) -> Self {
+        Self {
+            stop: CancellationToken::new(),
+            admission_stop: CancellationToken::new(),
+            deadline: tokio::time::Instant::now() + budget,
+            deadline_expired: Default::default(),
+        }
+    }
+    fn expire(&self) {
+        self.deadline_expired.store(true, Ordering::Release);
+        self.stop.cancel();
+    }
+    pub fn outcome(&self, outcome: Result<()>) -> Result<()> {
+        if tokio::time::Instant::now() >= self.deadline {
+            self.expire();
+        }
+        if self.deadline_expired.load(Ordering::Acquire) {
+            Err(Error::Sync)
+        } else if self.stop.is_cancelled() {
+            Err(Error::Cancelled)
+        } else {
+            outcome
+        }
+    }
+}
+struct CancelWaiter(Arc<RequestCancellation>);
+impl Drop for CancelWaiter {
+    fn drop(&mut self) {
+        self.0.stop.cancel();
+    }
+}
+pub(super) async fn wait_request(
+    mut receiver: oneshot::Receiver<Result<()>>,
+    cancellation: Arc<RequestCancellation>,
+) -> Result<()> {
+    let _waiter = CancelWaiter(cancellation.clone());
+    let result = match tokio::time::timeout_at(cancellation.deadline, &mut receiver).await {
+        Ok(result) => result,
+        Err(_) => {
+            cancellation.expire();
+            // Timeout requests cancellation; it is not proof of retirement.
+            // Keep waiting for the work-owned receipt before publishing terminal UI.
+            receiver.await
+        }
+    };
+    cancellation.outcome(result.unwrap_or(Err(Error::Cancelled)))
+}
+pub(super) async fn execute_request<Fut>(
+    cancellation: &RequestCancellation,
+    stop: &CancellationToken,
+    work: Fut,
+) -> Result<()>
+where
+    Fut: std::future::Future<Output = Result<()>>,
+{
+    if cancellation.outcome(Ok(())).is_err() || stop.is_cancelled() {
+        return Err(Error::Cancelled);
+    }
+    let future = work;
+    tokio::pin!(future);
+    let result = tokio::select! {
+        biased;
+        _=cancellation.stop.cancelled()=>{
+            stop.cancel();
+            let _ = future.await;
+            Err(Error::Cancelled)
+        },
+        result=&mut future=>result,
+    };
+    cancellation.outcome(result)
 }
 pub(super) struct OperationPermit {
     control: Weak<Control>,
@@ -26,6 +137,7 @@ impl Drop for OperationPermit {
             if let Ok(mut state) = control.state.lock() {
                 if state.epoch == self.epoch {
                     state.operation = false;
+                    state.operation_cancellation = None;
                 }
             };
         }
@@ -37,6 +149,7 @@ struct State {
     enabled: bool,
     ready: bool,
     operation: bool,
+    operation_cancellation: Option<Arc<RequestCancellation>>,
     stop: Option<CancellationToken>,
     gate: Option<Arc<enrollment::Gate>>,
 }
@@ -53,12 +166,19 @@ impl Control {
             state.enabled = enabled;
             state.ready = false;
             state.operation = false;
-            Some((state.gate.take(), state.stop.take()))
+            Some((
+                state.gate.take(),
+                state.stop.take(),
+                state.operation_cancellation.take(),
+            ))
         } else {
             None
         };
         // Gate authorization calls back into current(); never invert those locks.
-        if let Some((gate, stop)) = retired {
+        if let Some((gate, stop, operation)) = retired {
+            if let Some(operation) = operation {
+                operation.stop.cancel();
+            }
             if let Some(gate) = gate {
                 gate.close();
             }
@@ -76,7 +196,11 @@ impl Control {
     pub fn epoch(&self) -> Result<u64> {
         Ok(self.intent()?.0)
     }
-    pub fn reserve(self: &Arc<Self>, epoch: u64) -> Result<OperationPermit> {
+    pub fn reserve(
+        self: &Arc<Self>,
+        epoch: u64,
+        cancellation: &Arc<RequestCancellation>,
+    ) -> Result<OperationPermit> {
         let mut state = self.state.lock().map_err(|_| Error::Storage)?;
         if state.epoch != epoch || !state.enabled || !state.ready {
             return Err(Error::SyncNotEnabled);
@@ -85,6 +209,7 @@ impl Control {
             return Err(Error::Busy);
         }
         state.operation = true;
+        state.operation_cancellation = Some(cancellation.clone());
         Ok(OperationPermit {
             control: Arc::downgrade(self),
             epoch,
@@ -94,6 +219,21 @@ impl Control {
         self.state
             .lock()
             .is_ok_and(|s| s.epoch == epoch && s.enabled)
+    }
+    pub fn busy(&self) -> bool {
+        self.state.lock().is_ok_and(|s| s.operation)
+    }
+    pub(super) fn authorized(&self, epoch: u64) -> bool {
+        self.state.lock().is_ok_and(|s| {
+            s.epoch == epoch
+                && s.enabled
+                && s.operation_cancellation
+                    .as_ref()
+                    .is_none_or(|cancellation| {
+                        !cancellation.admission_stop.is_cancelled()
+                            && cancellation.outcome(Ok(())).is_ok()
+                    })
+        })
     }
     pub fn ready(&self) -> bool {
         let gate = self
@@ -111,7 +251,12 @@ impl Control {
         }
         self.refresh.notify_one();
     }
-    fn attach(&self, epoch: u64, stop: CancellationToken, gate: Arc<enrollment::Gate>) -> bool {
+    pub(super) fn attach(
+        &self,
+        epoch: u64,
+        stop: CancellationToken,
+        gate: Arc<enrollment::Gate>,
+    ) -> bool {
         if let Ok(mut s) = self.state.lock() {
             if s.epoch == epoch && s.enabled {
                 s.stop = Some(stop);
@@ -361,6 +506,190 @@ async fn directory_owner(
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn queued(
+        cancellation: Arc<RequestCancellation>,
+    ) -> (
+        DeviceRequest,
+        oneshot::Receiver<Result<()>>,
+        Arc<Control>,
+        Arc<enrollment::Gate>,
+    ) {
+        let control = Arc::new(Control::default());
+        control.configure(true);
+        let epoch = control.epoch().unwrap();
+        let gate = Arc::new(enrollment::Gate::default());
+        let weak = Arc::downgrade(&control);
+        gate.bind_lifecycle(Arc::new(move || {
+            weak.upgrade().is_some_and(|c| c.authorized(epoch))
+        }));
+        assert!(control.attach(epoch, CancellationToken::new(), gate.clone()));
+        control.mark_ready(epoch);
+        let permit = control.reserve(epoch, &cancellation).unwrap();
+        let (done, receiver) = oneshot::channel();
+        (
+            DeviceRequest {
+                target: directory::Row {
+                    id: uuid::Uuid::new_v4().to_string(),
+                    name: "Selected".into(),
+                    online: true,
+                    sync_available: false,
+                    summary: None,
+                    transport_device_id: None,
+                    protocol_device_id: None,
+                    noise_public_key: None,
+                },
+                direction: TransferDirection::Push,
+                epoch,
+                _permit: permit,
+                cancellation,
+                owner: Weak::new(),
+                generation: 1,
+                operation_id: uuid::Uuid::new_v4(),
+                done,
+            },
+            receiver,
+            control,
+            gate,
+        )
+    }
+    #[tokio::test]
+    async fn request_deadline_before_dequeue_never_starts_and_remains_busy_until_receipt() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let cancellation = Arc::new(RequestCancellation::new(Duration::from_millis(5)));
+            let (request, receiver, control, gate) = queued(cancellation.clone());
+            let waiter = tokio::spawn(wait_request(receiver, cancellation.clone()));
+            cancellation.stop.cancelled().await;
+            assert!(
+                !waiter.is_finished(),
+                "deadline is cancellation, not retirement"
+            );
+            assert!(!gate.is_current(), "late admission must already be fenced");
+            assert!(
+                control
+                    .reserve(request.epoch, &Arc::new(RequestCancellation::default()))
+                    .err()
+                    == Some(Error::Busy)
+            );
+            let mut started = false;
+            let result = execute_request(&cancellation, &CancellationToken::new(), async {
+                started = true;
+                Ok(())
+            })
+            .await;
+            assert!(!started);
+            request.complete(result);
+            assert_eq!(waiter.await.unwrap(), Err(Error::Sync));
+            assert!(!control.busy());
+            assert!(gate.is_current());
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn dropped_ipc_waiter_cancels_before_dequeue_without_releasing_work_permit() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let cancellation = Arc::new(RequestCancellation::default());
+            let (request, receiver, control, gate) = queued(cancellation.clone());
+            let mut waiter = Box::pin(wait_request(receiver, cancellation.clone()));
+            std::future::poll_fn(|cx| {
+                assert!(std::future::Future::poll(waiter.as_mut(), cx).is_pending());
+                std::task::Poll::Ready(())
+            })
+            .await;
+            drop(waiter);
+            assert!(cancellation.stop.is_cancelled());
+            assert!(control.busy());
+            assert!(!gate.is_current());
+            request.complete(Ok(()));
+            assert!(!control.busy());
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn in_flight_deadline_waits_for_cleanup_and_late_success_is_not_success() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let cancellation = Arc::new(RequestCancellation::new(Duration::from_millis(20)));
+            let (request, receiver, control, gate) = queued(cancellation.clone());
+            let (cleanup, released) = oneshot::channel();
+            let entered = Arc::new(Notify::new());
+            let task_entered = entered.clone();
+            let task_cancellation = cancellation.clone();
+            let work = tokio::spawn(async move {
+                let stop = CancellationToken::new();
+                let outcome = execute_request(&task_cancellation, &stop, async {
+                    task_entered.notify_one();
+                    stop.cancelled().await;
+                    let _ = released.await; // deterministic delayed retirement
+                    Ok(()) // late durable receipt cannot turn deadline into success
+                })
+                .await;
+                request.complete(outcome);
+            });
+            entered.notified().await;
+            let waiter = tokio::spawn(wait_request(receiver, cancellation.clone()));
+            cancellation.stop.cancelled().await;
+            assert!(!waiter.is_finished());
+            assert!(!work.is_finished());
+            assert!(control.busy());
+            assert!(!gate.is_current());
+            assert!(
+                control
+                    .reserve(
+                        control.epoch().unwrap(),
+                        &Arc::new(RequestCancellation::default())
+                    )
+                    .err()
+                    == Some(Error::Busy)
+            );
+            cleanup.send(()).unwrap();
+            work.await.unwrap();
+            assert_eq!(waiter.await.unwrap(), Err(Error::Sync));
+            assert!(!control.busy());
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn dropping_in_flight_waiter_cancels_execution_but_retains_permit_until_cleanup() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let cancellation = Arc::new(RequestCancellation::default());
+            let (request, receiver, control, gate) = queued(cancellation.clone());
+            let (release, released) = oneshot::channel();
+            let entered = Arc::new(Notify::new());
+            let task_entered = entered.clone();
+            let task_cancellation = cancellation.clone();
+            let work = tokio::spawn(async move {
+                let stop = CancellationToken::new();
+                let outcome = execute_request(&task_cancellation, &stop, async {
+                    task_entered.notify_one();
+                    stop.cancelled().await;
+                    let _ = released.await;
+                    Ok(())
+                })
+                .await;
+                assert_eq!(outcome, Err(Error::Cancelled));
+                request.complete(outcome);
+            });
+            entered.notified().await;
+            let mut waiter = Box::pin(wait_request(receiver, cancellation.clone()));
+            std::future::poll_fn(|cx| {
+                assert!(std::future::Future::poll(waiter.as_mut(), cx).is_pending());
+                std::task::Poll::Ready(())
+            })
+            .await;
+            drop(waiter);
+            assert!(cancellation.stop.is_cancelled());
+            assert!(!gate.is_current());
+            assert!(control.busy());
+            assert!(!work.is_finished());
+            release.send(()).unwrap();
+            work.await.unwrap();
+            assert!(!control.busy());
+        })
+        .await
+        .unwrap();
+    }
     #[tokio::test]
     async fn paused_real_content_owner_rejects_actions_without_runtime_or_sdk_registration() {
         let root = tempfile::tempdir().unwrap();
@@ -426,6 +755,10 @@ mod tests {
                     control: Weak::new(),
                     epoch: 0,
                 },
+                cancellation: Arc::new(RequestCancellation::default()),
+                owner: Weak::new(),
+                generation: 0,
+                operation_id: uuid::Uuid::new_v4(),
                 done,
             })
             .await
@@ -483,8 +816,9 @@ mod tests {
             Arc::new(enrollment::Gate::default())
         ));
         control.mark_ready(old);
-        let first = control.reserve(old).unwrap();
-        assert!(control.reserve(old).err() == Some(Error::Busy));
+        let cancellation = Arc::new(RequestCancellation::default());
+        let first = control.reserve(old, &cancellation).unwrap();
+        assert!(control.reserve(old, &cancellation).err() == Some(Error::Busy));
         control.configure(false);
         control.configure(true);
         let new = control.epoch().unwrap();
@@ -494,13 +828,13 @@ mod tests {
             Arc::new(enrollment::Gate::default())
         ));
         control.mark_ready(new);
-        let second = control.reserve(new).unwrap();
+        let second = control.reserve(new, &cancellation).unwrap();
         // A retired operation dropping after a new enable cannot release the
         // newer operation's reservation or make a second job admissible.
         drop(first);
-        assert!(control.reserve(new).err() == Some(Error::Busy));
+        assert!(control.reserve(new, &cancellation).err() == Some(Error::Busy));
         drop(second);
-        assert!(control.reserve(new).is_ok());
+        assert!(control.reserve(new, &cancellation).is_ok());
     }
 }
 async fn content_owner(
@@ -527,7 +861,7 @@ async fn content_owner(
             let weak = owner.clone();
             let fence = Arc::downgrade(&control);
             gate.bind_lifecycle(Arc::new(move || {
-                fence.upgrade().is_some_and(|fence| fence.current(epoch))
+                fence.upgrade().is_some_and(|fence| fence.authorized(epoch))
                     && weak.upgrade().is_some_and(|r| r.current(generation))
             }));
             if !control.attach(epoch, task_stop.clone(), gate.clone()) {
@@ -568,7 +902,7 @@ async fn content_owner(
         tokio::select! {
             _=stop.cancelled()=>return Ok(()),
             _=control.changed.notified()=>{},
-            request=requests.recv()=>if let Some(request)=request { let _=request.done.send(Err(Error::SyncNotEnabled)); },
+            request=requests.recv()=>if let Some(request)=request { request.complete(Err(Error::SyncNotEnabled)); },
         }
     }
 }

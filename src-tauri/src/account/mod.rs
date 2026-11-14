@@ -58,6 +58,7 @@ struct Network {
 struct Data {
     status: Status,
     binding: Option<private::Binding>,
+    device_operation_id: Option<uuid::Uuid>,
 }
 pub(crate) struct Runtime {
     blocked: Option<Error>,
@@ -115,7 +116,11 @@ impl Runtime {
             sync,
             root: directory,
             cache: cache.join("account-provider"),
-            data: Mutex::new(Data { status, binding }),
+            data: Mutex::new(Data {
+                status,
+                binding,
+                device_operation_id: None,
+            }),
             auth: OnceCell::new(),
             lifecycle: AsyncMutex::new(()),
             operation: AsyncMutex::new(()),
@@ -637,13 +642,18 @@ impl Runtime {
                 // and signout remain callable throughout bounded network IO.
                 let _operation = self.operation.try_lock().map_err(|_| Error::Busy)?;
                 let generation = self.generation.load(Ordering::Acquire);
-                let (receiver, control, content_epoch) = {
+                let cancellation = Arc::new(worker::RequestCancellation::default());
+                let operation_id = uuid::Uuid::new_v4();
+                let receiver = {
                     let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
                     if !self.data.lock().map_err(|_| Error::Storage)?.status.enabled {
                         return Err(Error::SyncNotEnabled);
                     }
                     let network = self.network.lock().await;
                     let network = network.as_ref().ok_or(Error::DirectoryUnavailable)?;
+                    if network.control.busy() {
+                        return Err(Error::Busy);
+                    }
                     if !network.control.ready() {
                         return Err(Error::SyncNotEnabled);
                     }
@@ -651,19 +661,10 @@ impl Runtime {
                     let target = network
                         .catalog
                         .target(&device_id, &self.registry()?.registry_device_id)?;
-                    let permit = network.control.reserve(content_epoch)?;
+                    let permit = network.control.reserve(content_epoch, &cancellation)?;
                     let (done, receiver) = oneshot::channel();
-                    network
-                        .requests
-                        .try_send(worker::DeviceRequest {
-                            target,
-                            direction,
-                            epoch: content_epoch,
-                            _permit: permit,
-                            done,
-                        })
-                        .map_err(|_| Error::Busy)?;
                     self.mutate(|d| {
+                        d.device_operation_id = Some(operation_id);
                         d.status.device_operation = Some(types::DeviceOperation {
                             device_id: device_id.clone(),
                             direction,
@@ -673,41 +674,44 @@ impl Runtime {
                         });
                         d.status.error = None;
                     });
-                    (receiver, network.control.clone(), content_epoch)
+                    network
+                        .requests
+                        .try_send(worker::DeviceRequest {
+                            target,
+                            direction,
+                            epoch: content_epoch,
+                            _permit: permit,
+                            cancellation: cancellation.clone(),
+                            owner: Arc::downgrade(self),
+                            generation,
+                            operation_id,
+                            done,
+                        })
+                        .map_err(|_| {
+                            self.finish_device_operation(
+                                generation,
+                                operation_id,
+                                Err(Error::Busy),
+                            );
+                            Error::Busy
+                        })?;
+                    receiver
                 };
-                let mut outcome = tokio::time::timeout(Duration::from_secs(185), receiver)
-                    .await
-                    .map_err(|_| Error::Sync)
-                    .and_then(|r| r.map_err(|_| Error::Cancelled))
-                    .and_then(|r| r);
-                if !self.current(generation) {
-                    return Err(Error::Cancelled);
-                }
-                if !control.current(content_epoch) {
-                    outcome = Err(Error::Cancelled);
-                }
-                self.mutate(|d| {
-                    if !self.current(generation) {
-                        return;
-                    }
-                    if let Some(operation) = &mut d.status.device_operation {
-                        operation.phase = if outcome.is_ok() {
-                            types::DeviceOperationPhase::Succeeded
-                        } else {
-                            types::DeviceOperationPhase::Failed
-                        };
-                        operation.finished_at = Some(unix_ms());
-                    }
-                    if let Err(error) = outcome {
-                        d.status.error = Some(error.safe());
-                    } else {
-                        d.status.last_sync_at = Some(unix_ms());
-                    }
-                });
+                // Worker owns terminal state and reservation, including when this
+                // IPC future is dropped. A deadline cancels then awaits retirement.
+                let _ = worker::wait_request(receiver, cancellation).await;
             }
         }
         self.cleanup_status().await;
         self.snapshot()
+    }
+    fn finish_device_operation(&self, generation: u64, id: uuid::Uuid, outcome: Result<()>) {
+        self.mutate(|d| {
+            if !self.current(generation) || d.device_operation_id != Some(id) {
+                return;
+            }
+            complete_device_status(d, id, outcome);
+        });
     }
     fn set_enabled(&self, enabled: bool) -> Result<()> {
         let mut data = self.data.lock().map_err(|_| Error::Storage)?;
@@ -1091,6 +1095,33 @@ fn prepare_session_binding(
     }
     Ok(binding)
 }
+fn complete_device_status(d: &mut Data, id: uuid::Uuid, outcome: Result<()>) {
+    if d.device_operation_id != Some(id) {
+        return;
+    }
+    if !d
+        .status
+        .device_operation
+        .as_ref()
+        .is_some_and(|operation| matches!(operation.phase, types::DeviceOperationPhase::Running))
+    {
+        return;
+    }
+    if let Some(operation) = &mut d.status.device_operation {
+        operation.phase = if outcome.is_ok() {
+            types::DeviceOperationPhase::Succeeded
+        } else {
+            types::DeviceOperationPhase::Failed
+        };
+        operation.finished_at = Some(unix_ms());
+    }
+    if let Err(error) = outcome {
+        d.status.error = Some(error.safe());
+    } else {
+        d.status.last_sync_at = Some(unix_ms());
+    }
+}
+
 fn network_recovery(status: &Status, bound: bool) -> bool {
     bound
         && status.state == Phase::Error
@@ -1142,6 +1173,42 @@ fn trusted_application_origin(source: &url::Url) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn device_receipts_match_operation_identity_and_cancel_never_sets_last_sync() {
+        let old = uuid::Uuid::new_v4();
+        let current = uuid::Uuid::new_v4();
+        let mut data = Data {
+            status: Status::default(),
+            binding: None,
+            device_operation_id: Some(current),
+        };
+        data.status.device_operation = Some(types::DeviceOperation {
+            device_id: uuid::Uuid::new_v4().to_string(),
+            direction: types::TransferDirection::Pull,
+            phase: types::DeviceOperationPhase::Running,
+            started_at: 10,
+            finished_at: None,
+        });
+        complete_device_status(&mut data, old, Ok(()));
+        assert!(matches!(
+            data.status.device_operation.as_ref().unwrap().phase,
+            types::DeviceOperationPhase::Running
+        ));
+        assert!(data.status.last_sync_at.is_none());
+        complete_device_status(&mut data, current, Err(Error::Sync));
+        assert!(matches!(
+            data.status.device_operation.as_ref().unwrap().phase,
+            types::DeviceOperationPhase::Failed
+        ));
+        assert!(data.status.last_sync_at.is_none());
+        assert!(data.status.error.is_some());
+        complete_device_status(&mut data, current, Ok(()));
+        assert!(matches!(
+            data.status.device_operation.as_ref().unwrap().phase,
+            types::DeviceOperationPhase::Failed
+        ));
+        assert!(data.status.last_sync_at.is_none());
+    }
     struct SessionWindows;
     impl adapter::WindowHost for SessionWindows {
         fn participants(&self) -> std::collections::HashSet<String> {
