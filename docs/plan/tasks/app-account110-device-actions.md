@@ -65,3 +65,5 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - [精确锁CLI探针](../../verification/account110/native/sdk-mapping-probe01/README.md)在正常恢复的owned测试环境中，两次map经匿名隧道成功，用时33.026+28.400秒；仅映射已超出产品整段prepare的60秒期限。Huygens与Feynman独立核对SDK每次map均重新走连接链，确定为独立预算缺陷。最小修复仅删除重复60秒prepare分支，以原185秒绝对请求期限覆盖准备和传输，保留所有取消、门禁、退役及收尾规则。
 - Huygens负责该期限增量和可控时钟/真实退役回归，Erdos独审；通过后更新单文件pin并重包。暂不引入映射复用、并行或更长总体期限，不把CLI映射成功当App验收。
 - 期限源码 `493550e5` 已[独审批准](../reviews/app-account110-request-budget-01.md)并合入，作者与独立定向各12/12通过。实际增量含transport helper、worker测试及Cargo的dev测试声明，锁不变；正常/build依赖特性树与修复前一致。更新对应3个既有产品pin后重包，尚未重跑App验收。
+- `a663586b`包[静态独核](../../verification/account110/mac-package-review04.md)通过，owned单次push再次失败，A为SIGABRT而B正常退出。[精确崩溃证据](../../verification/account110/native/live02-push-crash01/README.md)确认实际transfer_target poll链栈溢出，单个poll frame约198.6KiB；旧paused-owner小栈及mock deadline测试未覆盖真实SDK准备链，不能以它们推断该路径有界。
+- Huygens获授权测量真实transfer/prepare/execute future布局并在必要组合边界heap-pin，新增真实类型/小栈poll回归，保留185秒统一期限和所有退役、身份校验规则；Erdos独审。不得加大生产线程栈、并行映射或修改成功条件掩盖崩溃。
