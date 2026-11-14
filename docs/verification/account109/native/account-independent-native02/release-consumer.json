@@ -1,0 +1,10 @@
+{
+  "source": "src/network-sync.ts",
+  "sha256": "3b46699920df0bd3fd6fc205399c489273505ba4cac095fd0f0c6cf3b939837e",
+  "result": "PASS",
+  "cases": [
+    "in-flight duplicate uses one committed read",
+    "missed second window release recovers",
+    "replay keeps post-release draft and releases each lease once"
+  ]
+}

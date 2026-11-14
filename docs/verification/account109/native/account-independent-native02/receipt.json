@@ -1,0 +1,64 @@
+{
+  "source": "ca7545967d77a10b06ddab592359aa1fd04f1e0e",
+  "env": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "statusBefore": "",
+  "locksBefore": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "freeBefore": 13500751872,
+  "runs": [
+    {
+      "filter": "workspace_adoption",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "workspace_adoption",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794629764.83155,
+      "pid": 37235,
+      "exitCode": 0,
+      "end": 1794629782.887878
+    },
+    {
+      "filter": "account::",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "account::",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794629782.8883111,
+      "pid": 37290,
+      "exitCode": 0,
+      "end": 1794629791.916336
+    }
+  ],
+  "statusAfter": "",
+  "locksAfter": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "freeAfter": 13499109376
+}
