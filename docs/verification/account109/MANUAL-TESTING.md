@@ -20,7 +20,9 @@
 
 ## 本机现有候选
 
-2026-11-14最新：当前已运行 `artifacts/account109/mac-6dadbb8a-debug-01/CyberNote-Account109-6dadbb8a.app`，增加“同步此设备”滑动开关及开启／退出的模态确认框。Mac 上取消、Escape、空格与焦点循环核对通过，账户仍已登录且同步暂停；见[界面实机记录](switch-modal-live01.md)及[构建身份](native/6dadbb8a-mac-build01.md)。当前手动测试请使用此包，双桌面隔离仍须传入各自 `--data-dir`。
+2026-11-14最新：当前已运行 `artifacts/account109/mac-5590e25e-debug-01/CyberNote-Account109-5590e25e.app`，修正大资料库开启时媒体准备占用 5 秒窗口期限的问题，并细分已识别的超时阶段。新包恢复原账户且保持暂停，真实开启由用户确认；首次准备可能需要几十秒。原因、定向验证与未验边界见[本轮交付](adoption-large-library-delivery01.md)，精确身份见[构建回执](native/5590e25e-mac-build01.md)。双桌面隔离仍须传入各自 `--data-dir`，下方旧命令需要替换 executable 路径。
+
+此前 `artifacts/account109/mac-6dadbb8a-debug-01/CyberNote-Account109-6dadbb8a.app` 增加“同步此设备”滑动开关及开启／退出的模态确认框。Mac 上取消、Escape、空格与焦点循环核对通过；见[界面实机记录](switch-modal-live01.md)及[构建身份](native/6dadbb8a-mac-build01.md)。该旧包不包含新的媒体准备期限修正。
 
 此前 `artifacts/account109/mac-bb8014ce-debug-01/CyberNote-Account109-bb8014ce.app` 包含“本地资料库不绑定用户名”、失败重试及显式合并切换修正。在原默认库用所给测试账户完成应用内登录→退出→重新登录，最终已登录且同步暂停；184条笔记、18个文件夹、189个附件记录和原字节保全。精确身份、回归与未验范围见[此前实机记录](native/account-independent-login-live01/README.md)。旧候选保留为历史证据，不能用其验证新开关和对话框。
 
