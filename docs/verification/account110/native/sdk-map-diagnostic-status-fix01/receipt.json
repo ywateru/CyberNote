@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "source": "53e3f139d6df9ed68e9395ca585757e3dc49ba23",
+  "reviewFinding": "c56f1ccd74e96ca559d6799877c76e4d41706761 P1",
+  "sourceSha256": {
+    "scripts/verification/account110-sdk-diagnostic.mjs": "5388b4917d2e9f331a9233406ad448cb9637b228a92fcb00974b51d1158e4e5b",
+    "scripts/verification/account110-sdk-diagnostic.test.mjs": "3e3b43c8549b4aa92505a44f8ea6f702df971fa9f8ba446d6868cd39c62efcb1"
+  },
+  "command": [
+    "node",
+    "--test",
+    "--test-name-pattern=\u51fa\u53e3",
+    "scripts/verification/account110-sdk-diagnostic.test.mjs"
+  ],
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "onlyAffectedFixturesRun": true,
+  "stdoutSha256": "b68dbf29cfb46a163bfb2d447d014a19f81e30a130607288738ab59189d018a2",
+  "checks": [
+    "node --check scripts/verification/account110-sdk-diagnostic.mjs",
+    "git diff --check"
+  ],
+  "boundaries": [
+    "No Cargo/target, App, account, network or private-data operation.",
+    "Existing collector20, driver15 and native8 results are historical, not rerun or added to this count.",
+    "The collector never persists/prints malformed DTOs or sentinels; fixtures are synthetic."
+  ]
+}
