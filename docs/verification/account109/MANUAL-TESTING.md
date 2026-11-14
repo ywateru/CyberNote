@@ -20,7 +20,9 @@
 
 ## 本机现有候选
 
-这些是已有调试候选，源码身份分别如下，不能标为最新 main 的重新构建。当前整理不重新打包。
+2026-11-14追加：按用户后续要求已重新打包并启动最新Mac登录修正候选 `artifacts/account109/mac-027501e7-debug-01/CyberNote-Account109-027501e7.app`，源码 `027501e7`。构建、包身份及主窗口启动通过，登录与同步仍由用户手动验收。完整身份、默认资料库启动方式及签名边界见[新包构建启动记录](native/027501e7-mac-build01/README.md)。下表与后续旧包命令保留为历史候选说明；使用新包时须相应替换 executable 路径，双端隔离仍需显式 `--data-dir`。
+
+下表为前次保留的调试候选，源码身份分别如下，不能标为新源码的重新构建。
 
 | 平台 | 路径（相对仓库根） | 产品源码 | 二进制 SHA256 |
 | --- | --- | --- | --- |
@@ -29,7 +31,7 @@
 
 Mac wrapper 是用于显示和绑定原生窗口的本地调试包装，未公证、未封装为正式签名发布包，需按下述方式显式传数据目录。不能通过直接双击来代替隔离启动。Android 包名 `com.local.notesclone.account109`，不覆盖用户正常应用。包身份及限制见 [Mac 独核](macos/72513d12-debug-wrapper-review01/README.md)、[Android 独核](native/88b2dabe-android-build-review01/README.md)。
 
-上表已有 Android 候选的协调 HTTP 地址为 `https://cybernote-sync.aixgg.com`，Mac候选为 `https://cybernote-sync.vercel.app`；两者的 enrollment issuer 仍固定为后者。2026-11-14源码将桌面transport统一到新域并细分错误，但本轮未重新构建，上表旧包不会因此改变。客户端不需要手填服务地址。完整说明见[架构](../../architecture/account-sync.md)及[本次问题分析](native/mac-post-login-diagnosis-20261114.md)。
+上表已有 Android 候选的协调 HTTP 地址为 `https://cybernote-sync.aixgg.com`，Mac候选为 `https://cybernote-sync.vercel.app`；两者的 enrollment issuer 仍固定为后者。2026-11-14源码将桌面transport统一到新域并细分错误，后续新构建的 `027501e7` Mac包已包含这些修正，上表旧包保持原身份。客户端不需要手填服务地址。完整说明见[架构](../../architecture/account-sync.md)及[本次问题分析](native/mac-post-login-diagnosis-20261114.md)。
 
 ## 启动两个独立桌面端
 
