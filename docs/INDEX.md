@@ -1,5 +1,7 @@
 # 文档导航
 
+2026-11-14最新：[本地资料库独立于账户](plan/tasks/app-account109-account-independent-library.md)已实现；新Mac `bb8014ce` 在原库[应用内登录、退出及重新登录通过](verification/account109/native/account-independent-login-live01/README.md)，正文与附件保持，最终已登录且同步暂停。当前[手动指南](verification/account109/MANUAL-TESTING.md)已更新候选入口；完整多端合并仍待手动验收。
+
 2026-11-14：[Mac托管登录返回后错误分析](verification/account109/native/mac-post-login-diagnosis-20261114.md)与[错误细分/显式重试契约](plan/tasks/app-account109-post-login-errors.md)。本轮修改源码并做静态复审，旧候选身份不变，未重新构建或自动测试。
 
 2026-11-13：按最新要求暂停自动测试，先合并整理代码与说明，由测试者手动验收。当前入口如下；历史阶段记录保留在折叠区中，不能作为当前执行指令。
