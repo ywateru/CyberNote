@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-14",
+  "base": "c4cb45ac2cf0913d9f105d3e6a087bbaf03f247b",
+  "nativeCommits": [
+    "75da39e22293bc71a630864e6f5f72f0810a16ef",
+    "a105583e30a74f7f0812b48b2867304b177512f2",
+    "5bfc5f33"
+  ],
+  "testedProductHead": "5bfc5f33395fb70e27fe40ad493a0d859a2d3781",
+  "networkDependencies": {
+    "29b2a86d5b65cfad469d62fe87098302e4c1d4ef": "17ba8a86",
+    "51040df6": "73772963",
+    "7177ca9c": "c6f6e6da"
+  },
+  "environment": {
+    "targetDir": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "offline": true,
+    "lockedTests": true
+  },
+  "results": [
+    {
+      "log": "account.log",
+      "result": "compile failed before tests; two Arc<Client> receiver errors and absent SDK accessor; preserved original checkpoint"
+    },
+    {
+      "log": "account-resume01.log",
+      "passed": 61,
+      "failed": 1,
+      "ignored": 0,
+      "result": "compile passed; new paused-owner fixture directory lacked required private mode"
+    },
+    {
+      "log": "account-resume02.log",
+      "passed": 62,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "summary.log",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "sdk-accessor.log",
+      "result": "Cargo refused SDK dev-dependency tests through non-workspace dependency; no tests ran"
+    },
+    {
+      "log": "sdk-lock-prepare.log",
+      "result": "offline temporary harness lock preparation only; no product lock changes"
+    },
+    {
+      "log": "sdk-accessor-harness.log",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "result": "actual SDK lib source and accessor unit fixture; separate temporary manifest/lock, same shared target"
+    },
+    {
+      "log": "adoption.log",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0,
+      "result": "incorrect module filter; not coverage evidence"
+    },
+    {
+      "log": "adoption-focused.log",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "targetReleased": true,
+  "scopeLimit": "Device-free author verification, synthetic temporary data and loopback HTTP only; no live directory, devices, account login, original/private stores, or release build. Independent review and manifest integration pending."
+}
