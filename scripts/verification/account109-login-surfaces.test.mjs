@@ -245,6 +245,69 @@ test('unbound profile failure shows fixed stage/request details; polling never r
  await h.choose('browser');await h.click('重试登录');assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'browser'});assert(!h.calls.some(c=>c.type==='setEnabled'||c.type==='signOut'));
 });
 
+test('terminal service mismatch offers login retry and confirmed cleanup without claiming library ownership',async t=>{
+ for(const state of ['error','signedOut']) {
+  const h=setup(t,{initial:{...signedOutAccount(),state,error:{code:'account_owner_workspace_mismatch',message:'private-response-sentinel'}}});
+  await h.mount();assert(h.button('重试登录'));assert(h.button('退出账户'));
+  assert(h.text().includes('账户身份或同步空间校验失败'));
+  assert(!/资料库归属|登录原账户|资料库已关联|private-response-sentinel/.test(h.text()));
+  await h.tick();assert(h.calls.every(c=>c.type==='status'));
+  await h.choose('browser');await h.click('重试登录');
+  assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'browser'});
+  assert(!h.calls.some(c=>['signOut','setEnabled'].includes(c.type)));
+ }
+});
+
+test('old mismatch plus immediate Busy retries status and keeps an explicit confirmed exit',async t=>{
+ const h=setup(t,{initial:{...signedOutAccount(),state:'error',error:{code:'account_owner_workspace_mismatch',message:'safe'}},reply:command=>{
+  if(command.type==='signIn')throw {code:'account_busy',message:'private-ipc-sentinel'};
+ }});
+ await h.mount();await h.click('重试登录');await h.tick();
+ assert(h.text().includes('已有账户操作正在进行'));
+ await h.click('重试');assert.equal(h.calls.at(-1).type,'status');
+ assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
+ const before=h.calls.length;await h.click('退出账户');assert.equal(h.calls.length,before);
+ assert(h.text().includes('本库全部备忘录及附件会保留'));
+ await h.click('确认退出');assert.equal(h.calls.at(-1).type,'signOut');
+ assert(h.text().includes('你可以登录其他账户'));
+ assert(!h.calls.some(c=>c.type==='setEnabled'));
+});
+
+test('authoritative Busy blocks new authorization while cleanup-required retains only confirmed exit',async t=>{
+ for(const error of [{code:'account_busy',message:'safe'},
+  {code:'account_authentication',stage:'authorizationProvider',providerReason:'busy',message:'safe'},
+  {code:'account_cleanup_required',message:'safe'}]) {
+  const h=setup(t,{initial:{...signedOutAccount(),state:'error',error}});await h.mount();
+  if(error.code==='account_cleanup_required')assert(!h.button('登录'));
+  else assert(props(h.button('登录')).disabled);
+  await act(async()=>{await h.handle().run({type:'signIn',surface:'browser'});await h.handle().run({type:'signUp',surface:'embedded'});});
+  await h.tick();assert(h.calls.every(c=>c.type==='status'));
+  if(error.code==='account_cleanup_required') {
+   await h.click('退出账户');assert(h.calls.every(c=>c.type==='status'));
+   await h.click('确认退出');assert.equal(h.calls.at(-1).type,'signOut');
+  }
+ }
+});
+
+test('A exit then B login stays paused; enabling requires explicit consent for retained previous sync content',async t=>{
+ const paused=subject=>({...signedOutAccount(),state:'paused',profile:{subject,displayName:subject}});
+ const h=setup(t,{initial:paused('fixture-A'),reply:(command,model)=>{
+  if(command.type==='signIn') {const next=paused('fixture-B');model.set(next);return next;}
+  if(command.type==='setEnabled') {const next={...model.get(),state:'ready',enabled:command.enabled};model.set(next);return next;}
+ }});
+ await h.mount();await h.click('退出账户');assert(h.calls.every(c=>c.type==='status'));
+ await h.click('确认退出');assert.equal(h.calls.at(-1).type,'signOut');
+ await h.click('登录');assert.equal(h.handle().inspect().status.profile.subject,'fixture-B');
+ assert.equal(h.handle().inspect().status.state,'paused');assert.equal(h.handle().inspect().status.enabled,false);
+ await h.tick();assert(!h.calls.some(c=>c.type==='setEnabled'));
+ const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
+ await act(async()=>props(toggle).onChange({target:{checked:true}}));
+ assert(!h.calls.some(c=>c.type==='setEnabled'));
+ assert(h.text().includes('本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）将与当前账户其他设备的备忘录合并'));
+ await h.click('开启并合并');assert.deepEqual(h.calls.at(-1),{type:'setEnabled',enabled:true});
+ assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,1);
+});
+
 test('instant Busy stays separate from old status across same-error polls, then clears on real progress',async t=>{
  for(const change of ['error','state']) {
   let failStatus=false;

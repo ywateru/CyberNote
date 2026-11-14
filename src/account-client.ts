@@ -65,13 +65,14 @@ export function accountTokenResponseMessage(error: AccountStatus["error"]): stri
 }
 function initialAuthorizationRetry(error: AccountStatus["error"]): boolean {
   if (!error || error.providerReason !== undefined) return false;
-  return ["account_auth_callback_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_identity_invalid", "account_cancelled"].includes(error.code) ||
+  return ["account_auth_callback_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_identity_invalid", "account_owner_workspace_mismatch", "account_cancelled"].includes(error.code) ||
     (["account_network", "account_authentication"].includes(error.code) && error.stage === "coordinatorProfile") ||
     (error.code === "account_network" && ["callbackListen", "browserOpen", "callbackReceive", "identityProvider"].includes(error.stage || "")) ||
     (error.code === "account_authentication" && error.stage === "identitySession");
 }
 // Polling remains status-only. This chooses an action solely for an explicit retry.
 export function accountConnectionRetry(status: AccountStatus): AccountCommand {
+  if (!status.profile && status.state === "signedOut" && status.error?.code === "account_owner_workspace_mismatch") return { type: "signIn" };
   if (status.state !== "error") return { type: "status" };
   if (accountNeedsLogin(status.error)) return { type: "signIn" };
   if (!status.profile && initialAuthorizationRetry(status.error)) return { type: "signIn" };
@@ -155,7 +156,7 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
   }
   const fixed: Record<string, string> = {
     account_cleanup_required: "存在待撤销的登录授权，请先退出账户并完成授权清理，再重新登录。本机备忘录会保留。",
-    account_owner_workspace_mismatch: "此资料库已关联其他账户或手工同步空间。请登录原账户，本机备忘录会保留。",
+    account_owner_workspace_mismatch: "账户服务返回的身份或同步空间与本次登录信息不一致，无法继续账户同步。请重新登录；如仍有未完成的授权，可先退出账户。本机备忘录会保留。",
     account_configuration: "账户配置无效，请检查服务配置或更新应用。本机备忘录会保留。",
     account_storage: "无法安全读取或保存账户授权，请检查本机存储。本机备忘录会保留。",
     account_cancelled: "登录已取消，你可以继续使用本地备忘录。",
@@ -170,13 +171,13 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     account_auth_refresh_missing: "登录响应缺少可续用的授权，请检查服务或更新应用。本机备忘录会保留。",
   };
   if (fixed[error.code]) return fixed[error.code];
-  if (error.code === "account_authentication" && error.stage === "identitySession") return "尚未恢复可用的登录授权。请先退出账户并确认清理，再登录原账户。本机备忘录会保留。";
+  if (error.code === "account_authentication" && error.stage === "identitySession") return "尚未恢复可用的登录授权。请先退出账户并确认清理，再重新登录。本机备忘录会保留。";
   if (error.providerReason) {
     const provider: Record<ProviderReason, string> = {
       configuration: "登录服务配置无效", network: "登录服务请求未完成，请检查网络", invalidCallback: "登录回跳未通过校验",
       invalidIdentity: "登录身份无效", identityRejected: "登录身份校验被拒绝", codeExchangeRejected: "登录授权码交换被拒绝",
       tokenResponseInvalid: "登录授权响应无效", missingRefreshToken: "缺少可续用的登录授权", cancelled: "登录已取消",
-      noSession: "没有可恢复的登录授权，请先退出账户并确认清理，再登录原账户", ownershipMismatch: "登录身份与本机绑定不匹配，请登录原账户",
+      noSession: "没有可恢复的登录授权，请先退出账户并确认清理，再重新登录", ownershipMismatch: "登录服务返回的身份与本次授权会话不一致，请结束当前登录后重试",
       storage: "无法读取或保存登录授权", refreshFailed: "登录授权刷新被拒绝，请重新登录", revocationFailed: "登录授权撤销未完成", busy: "已有登录操作正在进行",
     };
     return `${at}${provider[error.providerReason]}。本机备忘录会保留。`;

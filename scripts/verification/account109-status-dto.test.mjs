@@ -37,7 +37,7 @@ test('explicit network retry restores a retained owner without authorizing or en
    assert.deepEqual(accountConnectionRetry({...s,state}),{type:'status'});
  }
 });
-test('retry respects authentication, cleanup, ownership and unknown-error fences',()=>{
+test('retry respects authentication, cleanup, service identity and unknown-error fences',()=>{
  for(const code of ['account_configuration','account_storage','account_cleanup_required','account_owner_workspace_mismatch','account_sync_protocol','account_auth_token_response_invalid','unknown_auth_error']) {
   const s={...status({code,message:'safe'}),enabled:true,profile:{subject:'fixture-owner',displayName:'Fixture'}};
   assert.equal(accountNeedsLogin(s.error),false);
@@ -65,6 +65,26 @@ test('retry respects authentication, cleanup, ownership and unknown-error fences
   assert.equal(accountNeedsLogin(s.error),false);
   assert.deepEqual(accountConnectionRetry(s),{type:'status'});
  }
+});
+test('service identity mismatch permits only explicit unauthenticated terminal login retry',()=>{
+ const error={code:'account_owner_workspace_mismatch',message:'private-response-sentinel'};
+ for(const state of ['error','signedOut']) {
+  const s=validateAccountStatus({...status(error),state});
+  assert.deepEqual(accountConnectionRetry(s),{type:'signIn'});
+  assert.deepEqual(accountConnectionRetry({...s,profile:{subject:'fixture-A',displayName:'A'}}),{type:'status'});
+ }
+ for(const state of ['authorizing','connecting','paused','ready'])
+  assert.deepEqual(accountConnectionRetry({...status(error),state}),{type:'status'});
+ for(const code of ['account_busy','account_cleanup_required'])
+  for(const state of ['error','signedOut'])assert.deepEqual(accountConnectionRetry({...status({code,message:'safe'}),state}),{type:'status'});
+ for(const diagnostic of [error,
+  {code:'account_authentication',stage:'identitySession',message:'safe'},
+  ...['noSession','ownershipMismatch'].map(providerReason=>({code:'account_authentication',stage:'authorizationProvider',providerReason,message:'safe'}))]) {
+  const copy=accountErrorMessage(validateAccountStatus(status(diagnostic)).error);
+  assert(!/原账户|本机绑定|资料库已关联|资料库归属|private-response-sentinel/.test(copy));
+  assert(copy.includes('本机备忘录会保留'));
+ }
+ assert(accountErrorMessage(error).includes('账户服务返回的身份或同步空间'));
 });
 test('legacy errors and fixed native network stages remain valid DTOs',()=>{
  assert.deepEqual(validateAccountStatus(status({code:'account_network',message:'safe'})).error,{code:'account_network',message:'safe'});

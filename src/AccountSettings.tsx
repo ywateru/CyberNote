@@ -54,7 +54,8 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     const authorization = command.type === "signIn" || command.type === "signUp";
     const transfer = command.type === "openLoginInBrowser";
     const startingAuthorization = working.current === "signIn" || working.current === "signUp";
-    if (authorization && status?.state === "authorizing") return;
+    if (authorization && (status?.state === "authorizing" || status?.error?.code === "account_cleanup_required" ||
+      status?.error?.code === "account_busy" || status?.error?.providerReason === "busy")) return;
     // Read-only status, explicit transfer and cancel stay available while the
     // original opener IPC is pending. They never start a second authorization.
     if (authorizationPending.current && !query && command.type !== "cancel" && !transfer) return;
@@ -92,7 +93,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       if (!query) setConfirmation(null);
       if (command.type === "syncNow" && !next.error) setNotice(next.state === "paused" ? "账户连接已恢复，自动传输仍已暂停。" : "同步请求已发送，实际进度请查看待处理数和最近成功时间。");
       if (command.type === "cancel") setNotice("登录已取消。本地备忘录仍可继续编辑。");
-      if (command.type === "signOut") setNotice("已退出账户，本机备忘录已保留。");
+      if (command.type === "signOut") setNotice("已退出账户，本机备忘录及附件已保留。你可以登录其他账户；同步需另行确认开启。");
     } catch (cause) {
       if (alive.current && visible.current && ticket === generation.current && !(query && background && latestError.current && latestError.current.command !== "status")) {
         retry.current = command;
@@ -120,7 +121,8 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     const failed = retry.current;
     // The native status may have advanced since the failed operation. Retrying
     // an old login/exit in that new state must not start another transaction.
-    if (status?.error?.code === "account_cleanup_required") {
+    if (status?.error?.code === "account_cleanup_required" || status?.error?.code === "account_busy" ||
+      status?.error?.providerReason === "busy" || latestError.current?.safeError?.code === "account_busy" || latestError.current?.safeError?.providerReason === "busy") {
       request({ type: "status" });
     } else if ((failed.type === "signIn" || failed.type === "signUp") &&
       (status?.state === "authorizing" || (status?.profile && !status.error))) {
@@ -164,7 +166,8 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const authorizing = authorizationPending.current || status?.state === "authorizing" || (busy && (workingType === "signIn" || workingType === "signUp"));
   const signedIn = !!status?.profile && status.state !== "signedOut" && !authorizing;
   const cleanupRequired = status?.error?.code === "account_cleanup_required";
-  const ownership = status?.error?.code === "account_owner_workspace_mismatch";
+  const identityMismatch = status?.error?.code === "account_owner_workspace_mismatch";
+  const nativeBusy = status?.error?.code === "account_busy" || status?.error?.providerReason === "busy";
   const needsLogin = accountNeedsLogin(status?.error);
   const connectionRetry = status ? accountConnectionRetry(status) : { type: "status" } as const;
   const browserOpenFailed = status?.state === "authorizing" && status.authorizationSurface === "embedded" &&
@@ -187,9 +190,9 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       <section className="account-group" aria-label="CyberNote 账户">
         <div className="account-profile"><span className="account-avatar" aria-hidden="true"><UserRound /></span><div>
           <h4>{signedIn ? status?.profile?.displayName || "CyberNote 账户" : authorizing ? "正在等待登录" : "登录 CyberNote"}</h4>
-          {signedIn ? <p className="account-identifier">{status?.profile?.username || status?.profile?.subject}</p> : <p>{authorizing ? pendingMessage : "备忘录保存在此设备。登录同一账户后，可在你的设备间同步。"}</p>}
+          {signedIn ? <p className="account-identifier">{status?.profile?.username || status?.profile?.subject}</p> : <p>{authorizing ? pendingMessage : "本地备忘录不绑定账户。你可以登录任意账户，用于该账户的多端同步。登录后同步默认暂停。"}</p>}
         </div></div>
-        {(!signedIn || needsLogin) && !cleanupRequired && <fieldset className="account-login-method" disabled={busy || !status || authorizing}>
+        {(!signedIn || needsLogin) && !cleanupRequired && <fieldset className="account-login-method" disabled={busy || nativeBusy || !status || authorizing}>
           <legend>登录方式</legend>
           <div className="account-login-options">
             <label><input type="radio" name="account-login-surface" value="embedded" checked={loginSurface === "embedded"} onChange={() => setLoginSurface("embedded")} />应用内登录</label>
@@ -199,23 +202,26 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         <div className="account-actions">
           {authorizing ? <><button type="button" disabled={workingType === "cancel"} onClick={() => request({ type: "cancel" })}>取消登录</button>
             {status?.authorizationSurface === "embedded" && <button type="button" disabled={!!workingType && workingType !== "signIn" && workingType !== "signUp"} onClick={() => request({ type: "openLoginInBrowser" })}>在浏览器中继续</button>}
-          </> : signedIn || cleanupRequired ? <button type="button" disabled={busy} onClick={() => request({ type: "signOut" })}>退出账户</button> : <>
-            <button type="button" className="account-primary" disabled={busy || !status} onClick={() => request({ type: "signIn", surface: loginSurface })}>登录</button>
-            <button type="button" disabled={busy || !status} onClick={() => request({ type: "signUp", surface: loginSurface })}>创建账户</button>
+          </> : <>
+            {!signedIn && !cleanupRequired && <>
+              <button type="button" className="account-primary" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signIn", surface: loginSurface })}>登录</button>
+              <button type="button" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signUp", surface: loginSurface })}>创建账户</button>
+            </>}
+            {(signedIn || cleanupRequired || status?.state === "error" || identityMismatch) && <button type="button" disabled={busy || nativeBusy} onClick={() => request({ type: "signOut" })}>退出账户</button>}
           </>}
         </div>
-        {!signedIn && !authorizing && <p className="account-help">首次开启同步时，本地备忘录将与同一账户设备的备忘录合并。本机内容会保留。</p>}
+        {!signedIn && !authorizing && <p className="account-help">登录不会自动开启同步。确认开启后，本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）会与当前账户合并。</p>}
       </section>
-      {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{ownership ? "资料库归属不匹配" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
-        {!ownership && !cleanupRequired && connectionRetry.type !== "status" && <button type="button" disabled={busy} onClick={() => request(connectionRetry.type === "signIn" || connectionRetry.type === "signUp" ? { type: connectionRetry.type, surface: loginSurface } : connectionRetry)}>{connectionRetry.type === "signIn" ? needsLogin ? "重新登录" : "重试登录" : "重试连接"}</button>}
+      {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{identityMismatch ? "账户身份或同步空间校验失败" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
+        {!cleanupRequired && connectionRetry.type !== "status" && <button type="button" disabled={busy || nativeBusy} onClick={() => request(connectionRetry.type === "signIn" || connectionRetry.type === "signUp" ? { type: connectionRetry.type, surface: loginSurface } : connectionRetry)}>{connectionRetry.type === "signIn" ? needsLogin ? "重新登录" : "重试登录" : "重试连接"}</button>}
       </section>}
       {signedIn && status && <>
         <section className="account-group" aria-label="账户同步">
-          <div className="account-toggle"><label htmlFor="account-enabled">同步此设备</label><input id="account-enabled" type="checkbox" role="switch" checked={status.enabled} disabled={busy || ownership || needsLogin || cleanupRequired} onChange={event => request({ type: "setEnabled", enabled: event.target.checked })} /></div>
-          <p className="account-help">{status.enabled ? "本地备忘录将与同一账户的设备合并，离线时仍可编辑。" : "自动传输已暂停。你仍保持登录，本地更改会保存在此设备。"}</p>
+          <div className="account-toggle"><label htmlFor="account-enabled">同步此设备</label><input id="account-enabled" type="checkbox" role="switch" checked={status.enabled} disabled={busy || nativeBusy || identityMismatch || needsLogin || cleanupRequired} onChange={event => request({ type: "setEnabled", enabled: event.target.checked })} /></div>
+          <p className="account-help">{status.enabled ? "本库当前已有的备忘录及附件（包括先前同步后保留的内容）会与当前账户同步，离线时仍可编辑。" : "自动传输已暂停。你仍保持登录，本地更改会保存在此设备；确认开启后才会与当前账户合并。"}</p>
           <p className="account-state">{states[status.state]}</p>
           <dl className="account-metrics"><div><dt>待处理</dt><dd>{status.pendingCount} 项</dd></div><div><dt>最近成功同步</dt><dd>{status.lastSyncAt === undefined ? "尚无成功同步记录" : formatFileTime(status.lastSyncAt)}</dd></div></dl>
-          <div className="account-actions"><button type="button" disabled={busy || !status.enabled || ownership || needsLogin || cleanupRequired} onClick={() => request({ type: "syncNow" })}>立即同步</button>
+          <div className="account-actions"><button type="button" disabled={busy || nativeBusy || !status.enabled || identityMismatch || needsLogin || cleanupRequired} onClick={() => request({ type: "syncNow" })}>立即同步</button>
             {status.conflictCount > 0 && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
           </div>
         </section>
@@ -230,7 +236,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     </>}
     {confirmation && <div ref={confirmPanel} className="account-confirmation" role="group" aria-label="确认账户操作" tabIndex={-1}>
       <h4>{confirmation === "signOut" ? "退出账户？" : "开启账户同步？"}</h4>
-      <p>{confirmation === "signOut" ? "本机备忘录会保留。此设备将停止账户同步，并移除本机登录授权。" : "此设备的本地备忘录将与该账户其他设备的备忘录合并。请确认你登录了正确的账户。"}</p>
+      <p>{confirmation === "signOut" ? "本库全部备忘录及附件会保留。此设备将停止账户同步，并移除本机登录授权。退出后可登录其他账户，登录不会自动开启同步。" : "本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）将与当前账户其他设备的备忘录合并。请确认允许将这些内容同步至当前账户。"}</p>
       <div className="account-actions"><button type="button" onClick={dismiss}>取消</button><button type="button" disabled={busy} onClick={() => void run(confirmation === "signOut" ? { type: "signOut" } : { type: "setEnabled", enabled: true }, true).catch(() => {})}>{confirmation === "signOut" ? "确认退出" : "开启并合并"}</button></div>
     </div>}
     <p className="account-notice" role="status">{notice}</p>
