@@ -1,0 +1,82 @@
+{
+  "source": "4c1ac0033d10cd7bc864f2ff4ca087f147f235d8",
+  "sourceSha256": {
+    "src-tauri/src/account/transport.rs": "5a8c33a1df810a78b5dee01de7316e24142bd78608df4ef884bc58e16efff11e",
+    "src-tauri/src/account/worker.rs": "464117c35ad2c4a44bb9921d0fb6b01e51df976e392ac81ff2724277f0940e88"
+  },
+  "authorManifestEntriesVerified": 11,
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--locked",
+    "--offline",
+    "--",
+    "--exact",
+    "account::worker::tests::unified_deadline_allows_preparation_beyond_sixty_seconds",
+    "account::worker::tests::unified_deadline_spans_preparation_and_transfer_and_waits_for_retirement",
+    "account::worker::tests::unified_deadline_dropped_waiter_drains_long_preparation_without_late_admission",
+    "account::worker::tests::request_deadline_before_dequeue_never_starts_and_remains_busy_until_receipt",
+    "account::worker::tests::dropping_in_flight_waiter_cancels_execution_but_retains_permit_until_cleanup",
+    "account::transport::tests::real_selected_transfer_future_layout_and_small_stack_poll",
+    "account::transport::tests::native_deadline_with_real_network_blocked_backend_keeps_busy_until_join",
+    "account::transport::tests::late_blocking_admission_after_early_disconnect_is_fenced_and_joined",
+    "account::transport::tests::request_cancel_interrupts_pending_preparation_without_running_next_step",
+    "account::transport::tests::unconfirmed_retirement_is_not_success_and_keeps_admission_fenced",
+    "account::transport::tests::bootstrap_rechecks_closed_gate_after_proof_verification",
+    "account::transport::tests::bootstrap_rechecks_cancelled_owner_after_proof_verification",
+    "account::transport::tests::active_bootstrap_returns_nonce_bound_noise_key_pinned_invitation",
+    "--nocapture"
+  ],
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "startedAt": "2026-11-14T12:42:33.345004+00:00",
+  "floorBytes": 6442450944,
+  "beforeFreeBytes": 8720240640,
+  "exitCode": 0,
+  "finishedAt": "2026-11-14T12:42:34.858268+00:00",
+  "minimumFreeBytes": 8720179200,
+  "diskFloorTriggered": false,
+  "afterFreeBytes": 8720265216,
+  "verdict": "CHANGES-REQUESTED-test-path-assertion-only",
+  "passed": 13,
+  "failed": 0,
+  "ignored": 0,
+  "productionBlockerIdentified": false,
+  "remainingRequirement": "Replace wildcard Ready(Err(_)) with exact expected SDK NotLoggedIn mapping AuthenticationAt(CoordinatorSession).",
+  "targetReleased": true,
+  "noCompilerAtRelease": true,
+  "authorTreeCleanAfter": true,
+  "releasedAt": "2026-11-14T12:43:14.055809+00:00",
+  "releaseFreeBytes": 8719593472,
+  "actualFutureBytes": {
+    "sdkMap": 24792,
+    "sdkConnect": 24560,
+    "requestIo": 128,
+    "prepare": 1360,
+    "prepareRequest": 208,
+    "transferTarget": 832,
+    "executeRequest": 152
+  },
+  "smallStackBytes": 524288,
+  "limits": [
+    "Reject test currently accepts any error; exact authentication boundary not asserted.",
+    "No logged-in network branch or App acceptance performed.",
+    "No binary/instruction analysis; source and normal regression only.",
+    "No original/live library or grant/Noise data accessed."
+  ],
+  "preservedAuthorEvidence": {
+    "author-baseline.stdout.txt": "746d9e813b35274216199f2fc29c49060d0149b6ab62f7398c3cf00ccdd454b6",
+    "author-partial-failure.stdout.txt": "685cb3c9c0e79c372cd4d44a015d2f765a5f2ddeb37006a1ef473e6540936790",
+    "author-final.stdout.txt": "27e88eb970e0728f4d9f70c4d606c93eecfc4673601310bad82883f3e4d56013",
+    "author-receipt.json": "e5fb78d25991adfd8335ecea3ec5a877f80f781432d7822b820e7de39c8f61f6",
+    "author-SHA256SUMS.txt": "1e76533383552b3f17dbf9115a12f5001af6cf8d8644d5ccd875252dd12fc19e"
+  }
+}
