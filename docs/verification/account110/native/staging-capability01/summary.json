@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "source": "28b00eb733891c3430052c5415236505ec8f6e52",
+  "base": "66a1fa6bca204f7690abe12f31f27021a5ee7477",
+  "testedCheckpoint": "1171dca12e61517aee5c01502068b6184857d864",
+  "finalNativeInputsEqualTested": true,
+  "results": [
+    {
+      "name": "publication01",
+      "passed": 2,
+      "failed": 1,
+      "ignored": 0,
+      "exitCode": 101,
+      "classification": "new negative fixture called existing-only path lookup before publication; corrected to contains; no product adjustment"
+    },
+    {
+      "name": "publication02",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "exitCode": 0
+    },
+    {
+      "name": "real-store01",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "exitCode": 0
+    },
+    {
+      "name": "adapter-compat01",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "exitCode": 0
+    }
+  ],
+  "finalPassed": 13,
+  "finalFailed": 0,
+  "finalIgnored": 0,
+  "targetReleased": true,
+  "noAppOrAccountOrDeviceOperation": true
+}

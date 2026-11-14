@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--features",
+    "sync-e2e",
+    "--locked",
+    "--offline",
+    "sync::adapter::account_transfer_tests::",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "root": "/private/tmp/cybernote-account109-login-surfaces-ui",
+  "base": "f857f4faa132316de63e58655df48509fb7dcaad",
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "started": 1794666474.528265,
+  "floorBytes": 6442450944,
+  "initialFreeBytes": 8620265472,
+  "pid": 23673,
+  "exitCode": 0,
+  "finished": 1794666476.531214,
+  "finalFreeBytes": 8620273664
+}
