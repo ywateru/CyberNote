@@ -71,7 +71,7 @@ function props(node) {const key=Object.keys(node).find(k=>k.startsWith('__reactP
 function deferred() {let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};}
 const authorizing=surface=>({...signedOutAccount(),state:'authorizing',...(surface?{authorizationSurface:surface}:{})});
 
-function setup(t,{initial=signedOutAccount(),reply}={}) {
+function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
   let native=structuredClone(initial),handle;
   const calls=[],context=vm.createContext({module:{exports:{}},require,window,document,HTMLElement:HostElement,queueMicrotask,
     __invoke:async(name,{command})=>{
@@ -88,7 +88,7 @@ function setup(t,{initial=signedOutAccount(),reply}={}) {
   t.after(async()=>{await act(async()=>root.unmount());document.body.removeChild(container);});
   const all=()=>descendants(container);
   const h={client,calls,setNative:s=>{native=structuredClone(s);},getNative:()=>native,
-    async mount(){await act(async()=>root.render(React.createElement(client.AccountSettings,{active:true,onHandle:h=>{handle=h;},onConflicts(){}})));},
+    async mount(){await act(async()=>root.render(React.createElement(client.AccountSettings,{active:true,onHandle:h=>{handle=h;},onConflicts})));},
     all,handle:()=>handle,text:()=>container.textContent,
     panel:()=>all().find(e=>props(e).className==='account-settings'),
     radio:value=>all().find(e=>e.localName==='input'&&props(e).name==='account-login-surface'&&props(e).value===value),
@@ -306,6 +306,42 @@ test('A exit then B login stays paused; enabling requires explicit consent for r
  assert(h.text().includes('本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）将与当前账户其他设备的备忘录合并'));
  await h.click('开启并合并');assert.deepEqual(h.calls.at(-1),{type:'setEnabled',enabled:true});
  assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,1);
+});
+
+test('blocked adoption retains paused login and exposes only actual conflicts without starting any account operation',async t=>{
+ for(const conflictCount of [0,2]) {
+  let opened=0;
+  const h=setup(t,{initial:{...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'},conflictCount,
+   error:{code:'account_sync_adoption_blocked',message:'private-response-sentinel'}},onConflicts:()=>{opened++;}});
+  await h.mount();assert(h.text().includes('开启同步前需要处理旧同步内容'));
+  assert(h.text().includes('当前账户已登录且同步暂停，本机内容会保留'));
+  assert(!h.text().includes('private-response-sentinel'));assert(!h.button('登录'));assert(h.button('退出账户'));
+  assert(!h.button('重试登录'));assert(!h.button('重试连接'));assert(props(h.button('立即同步')).disabled);
+  const links=h.buttons().filter(b=>b.textContent.startsWith('查看冲突'));
+  assert.equal(links.length,conflictCount?1:0);
+  if(conflictCount) {await h.click('查看冲突（2）');assert.equal(opened,1);}
+  await h.tick();assert(h.calls.every(c=>c.type==='status'));
+  assert.equal(h.handle().inspect().status.enabled,false);
+ }
+});
+
+test('immediate adoption rejection keeps full enable confirmation and retries status instead of replaying enable',async t=>{
+ let opened=0;
+ const h=setup(t,{initial:{...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'},conflictCount:1},
+  onConflicts:()=>{opened++;},reply:command=>{
+   if(command.type==='setEnabled')throw {code:'account_sync_adoption_blocked',message:'private-response-sentinel'};
+  }});
+ await h.mount();const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
+ await act(async()=>props(toggle).onChange({target:{checked:true}}));
+ assert(h.text().includes('包括先前同步后保留的内容'));assert(!h.calls.some(c=>c.type==='setEnabled'));
+ await h.click('开启并合并');assert(h.text().includes('开启同步前需要处理旧同步内容'));
+ assert(h.text().includes('当前账户已登录且同步暂停'));assert(!h.text().includes('private-response-sentinel'));
+ assert.equal(h.buttons().filter(b=>b.textContent.startsWith('查看冲突')).length,1);
+ await h.click('查看冲突（1）');assert.equal(opened,1);
+ await h.click('读取账户状态');assert.equal(h.calls.at(-1).type,'status');
+ await h.tick();assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,1);
+ assert(!h.calls.some(c=>['signIn','signUp','syncNow','signOut'].includes(c.type)));
+ assert.equal(h.handle().inspect().status.enabled,false);
 });
 
 test('instant Busy stays separate from old status across same-error polls, then clears on real progress',async t=>{

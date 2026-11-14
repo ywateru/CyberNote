@@ -19,7 +19,7 @@ type TokenField = typeof tokenFields[number];
 const requestReasons = ["timeout", "connect", "request", "responseBody", "httpStatus", "invalidResponse"] as const;
 type RequestReason = typeof requestReasons[number];
 const requestStages = ["coordinatorProfile", "coordinatorEnrollment", "coordinatorJwks"];
-const errorCodes = ["account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_window_invalid"];
+const errorCodes = ["account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_sync_adoption_blocked", "account_window_invalid"];
 export type SafeError = { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number };
 const transportKinds = ["webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
 type TransportKind = typeof transportKinds[number];
@@ -165,6 +165,7 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     account_platform_unsupported: "此平台暂不支持账户操作。本机备忘录仍可继续编辑。",
     account_sync_failed: "同步未完成，请查看账户状态后重试。本地更改仍保存在此设备。",
     account_sync_protocol: "设备同步响应未通过校验，请检查服务或更新应用。本地更改仍会保留。",
+    account_sync_adoption_blocked: "旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。",
     account_enrollment_invalid: "设备授权凭证未通过校验，请检查服务或更新应用。本机备忘录会保留。",
     account_auth_callback_invalid: "登录回跳未通过校验，请重新开始登录。本机备忘录会保留。",
     account_auth_code_rejected: "登录授权码交换被拒绝，请重新开始登录。本机备忘录会保留。",

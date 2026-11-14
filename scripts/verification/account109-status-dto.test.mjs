@@ -86,6 +86,24 @@ test('service identity mismatch permits only explicit unauthenticated terminal l
  }
  assert(accountErrorMessage(error).includes('账户服务返回的身份或同步空间'));
 });
+test('adoption blocked is a finite local sync error, never an authentication or connection retry',()=>{
+ const error={code:'account_sync_adoption_blocked',message:'private-response-sentinel'};
+ const expected='旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。';
+ for(const state of ['paused','error'])for(const profile of [undefined,{subject:'fixture-B',displayName:'B'}]) {
+  const parsed=validateAccountStatus({...status(error),state,...(profile?{profile}:{})});
+  assert.equal(parsed.error.code,error.code);assert.equal(accountNeedsLogin(parsed.error),false);
+  assert.deepEqual(accountConnectionRetry(parsed),{type:'status'});
+ }
+ assert.equal(accountErrorMessage(error),expected);
+ for(const shape of [error,{...error,commit:null}])assert.deepEqual(accountIPCError(shape),{code:error.code,message:expected});
+ assert.deepEqual(accountErrorDetails(error),[['code',error.code]]);
+ for(const extra of [{stage:'coordinatorProfile'},{reason:'subject'},{providerReason:'busy'},
+  {requestReason:'timeout'},{httpStatus:409},{tokenOperation:'refresh',tokenField:'scope'},{url:'private-response-sentinel'}]) {
+  assert.throws(()=>validateAccountStatus(status({...error,...extra})),/无效数据/);
+  assert.equal(accountIPCError({...error,...extra}),undefined);
+ }
+ assert.equal(accountIPCError({...error,code:error.code+'_private-response-sentinel'}),undefined);
+});
 test('legacy errors and fixed native network stages remain valid DTOs',()=>{
  assert.deepEqual(validateAccountStatus(status({code:'account_network',message:'safe'})).error,{code:'account_network',message:'safe'});
  for(const stage of ['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration'])
