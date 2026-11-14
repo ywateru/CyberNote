@@ -233,8 +233,96 @@ struct Quiet {
     started: Instant,
     plan: Option<SyncApplyPlan>,
     resolution: Option<Resolution>,
+    adoption: Option<WorkspaceAdoption>,
+}
+struct WorkspaceAdoption {
+    workspace: String,
+    device: String,
+    targets: HashSet<String>,
+}
+fn adoption_blocked() -> AppError {
+    AppError {
+        code: "sync_adoption_blocked".into(),
+        message: "同步空间切换的保存屏障未完成或已失效，请完成本地操作后重试".into(),
+        commit: None,
+    }
 }
 impl Session {
+    /// Use the existing renderer freeze/flush/ACK protocol without projecting
+    /// any old remote version. The coordinator only advances this purpose to
+    /// prepare; the adopting caller alone may commit and release it.
+    pub(crate) fn sync_begin_workspace_adoption(
+        &mut self,
+        workspace: &str,
+        device: &str,
+        live: HashSet<String>,
+    ) -> Result<Value> {
+        self.sync_adoption_preflight(workspace, device)?;
+        let event = self.sync_begin(live, None)?;
+        self.quiet.current.as_mut().unwrap().adoption = Some(WorkspaceAdoption {
+            workspace: workspace.into(),
+            device: device.into(),
+            targets: HashSet::new(),
+        });
+        Ok(event)
+    }
+
+    /// Read-only and repeatable both before media preparation and under the
+    /// final Session lock immediately before Store adoption. ACKs alone never
+    /// authorize a new participant, note, Store instance or expired operation.
+    pub(crate) fn sync_workspace_adoption_ready(
+        &self,
+        operation: &str,
+        workspace: &str,
+        device: &str,
+        live: &HashSet<String>,
+    ) -> Result<bool> {
+        let q = self.quiet.current.as_ref().ok_or_else(adoption_blocked)?;
+        let adoption = q.adoption.as_ref().ok_or_else(adoption_blocked)?;
+        if q.id != operation || adoption.workspace != workspace || adoption.device != device
+            || q.store_instance != self.store.sync_store_instance() || q.epoch != self.epoch
+            || q.participants != *live || q.aborted || self.pending.is_some()
+            || q.started.elapsed() >= Duration::from_secs(5)
+        {
+            return Err(adoption_blocked());
+        }
+        if q.phase != "prepare" || q.replies != q.participants {
+            return Ok(false);
+        }
+        let notes: HashSet<_> = self.store.notes()?.into_iter().map(|n| n.id).collect();
+        if !self.intents.is_empty() || !q.protected.is_empty() || notes != adoption.targets {
+            return Err(adoption_blocked());
+        }
+        self.store.sync_adoption_preflight(workspace, device)?;
+        Ok(true)
+    }
+
+    /// Emit this release before the new notes-access snapshot. A coordinator
+    /// abort may already have released this exact operation; cleanup is then a
+    /// no-op and cannot retire a replacement operation.
+    pub(crate) fn sync_release_workspace_adoption(
+        &mut self,
+        operation: &str,
+        committed: bool,
+    ) -> Result<Option<Value>> {
+        let Some(q) = self.quiet.current.as_ref() else { return Ok(None); };
+        if q.id != operation {
+            if self.quiet.completed.iter().any(|t| t.id == operation) {
+                return Ok(None);
+            }
+            return Err(adoption_blocked());
+        }
+        if q.adoption.is_none() || (committed && (q.phase != "prepare"
+            || q.replies != q.participants || q.aborted
+            || q.store_instance == self.store.sync_store_instance()))
+        {
+            return Err(adoption_blocked());
+        }
+        if !committed { self.sync_note_abort_reason(AbortReason::ExternalAbort); }
+        self.sync_release(if committed { "commit" } else { "abort" }, None)
+            .map(|(event, _)| Some(event))
+    }
+
     /// Caller must keep this Session lock across the final preflight, Store
     /// adoption and finish call. Local unsaved/quiet work cannot cross accounts.
     pub(crate) fn sync_adoption_preflight(&self, workspace: &str, device_id: &str) -> Result<()> {
@@ -326,6 +414,7 @@ impl Session {
             started: Instant::now(),
             plan: None,
             resolution,
+            adoption: None,
         });
         Ok(json!({"phase":"probe","operationId":id,"sessionId":self.id}))
     }
@@ -496,6 +585,27 @@ impl Session {
             return self.sync_release_abort(reason).map(Some);
         }
         if q.replies != q.participants {
+            return Ok(None);
+        }
+        if q.adoption.is_some() {
+            if q.phase == "probe" {
+                // Every note is a target. Protected editors/recordings cannot
+                // be excluded during a workspace-wide authority change.
+                if !q.protected.is_empty() {
+                    return self.sync_release_abort(AbortReason::ProtectedTarget).map(Some);
+                }
+                let mut targets: Vec<_> = self.store.notes()?.into_iter().map(|n| n.id).collect();
+                targets.sort();
+                let q = self.quiet.current.as_mut().unwrap();
+                q.adoption.as_mut().unwrap().targets = targets.iter().cloned().collect();
+                q.phase = "prepare";
+                q.replies.clear();
+                q.started = Instant::now();
+                return Ok(Some((json!({"phase":"prepare","operationId":q.id,
+                    "sessionId":self.id,"noteIds":targets}), None)));
+            }
+            // Store adoption, never old inbox application, is the sole commit
+            // path for this purpose. Keep the renderer frozen until release.
             return Ok(None);
         }
         if q.phase == "probe" {
@@ -755,6 +865,102 @@ mod tests {
         s.store.sync_adopt_workspace(&workspace, &device).unwrap();
         assert!(s.sync_finish_workspace_adoption(instance).unwrap().is_none());
         s.check(&current, None).unwrap();
+    }
+    fn adoption_prepared(s: &mut Session) -> (String, String, String, HashSet<String>) {
+        let workspace = Uuid::new_v4().to_string();
+        let device = Uuid::new_v4().to_string();
+        let live = HashSet::from(["main".into(), "note-test".into()]);
+        let event = s.sync_begin_workspace_adoption(&workspace, &device, live.clone()).unwrap();
+        let operation = event["operationId"].as_str().unwrap().to_string();
+        let t = token(s);
+        for window in &live {
+            s.sync_reply(window, WindowReply::Probe { operation_id: operation.clone(),
+                protected_note_ids: vec![], blocked: false }, &t).unwrap();
+        }
+        let prepare = s.sync_tick(&live).unwrap().unwrap().0;
+        assert_eq!(prepare["phase"], "prepare");
+        let expected: HashSet<_> = s.store.notes().unwrap().into_iter().map(|n| n.id).collect();
+        let actual: HashSet<_> = prepare["noteIds"].as_array().unwrap().iter()
+            .map(|id| id.as_str().unwrap().to_string()).collect();
+        assert_eq!(actual, expected);
+        assert!(!s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live).unwrap());
+        (operation, workspace, device, live)
+    }
+    fn adoption_ack(s: &mut Session, operation: &str, live: &HashSet<String>) {
+        let t = token(s);
+        for window in live {
+            s.sync_reply(window, WindowReply::Prepare { operation_id: operation.into(), ready: true }, &t).unwrap();
+        }
+    }
+    #[test]
+    fn workspace_adoption_barrier_freezes_all_notes_without_a_remote_apply_plan() {
+        let (_root, mut s) = session();
+        for _ in 0..2 { s.store.action(json!({"type":"createNote"})).unwrap(); }
+        let instance = s.store.sync_store_instance();
+        let (operation, workspace, device, live) = adoption_prepared(&mut s);
+        adoption_ack(&mut s, &operation, &live);
+        assert!(s.sync_tick(&live).unwrap().is_none()); // NoEligiblePlan must not abort this purpose.
+        assert!(s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live).unwrap());
+        s.store.sync_adopt_workspace(&workspace, &device).unwrap();
+        let release = s.sync_release_workspace_adoption(&operation, true).unwrap().unwrap();
+        assert_eq!(release["phase"], "release");
+        assert_eq!(release["outcome"], "commit");
+        assert_eq!(release["sessionId"], s.id);
+        let access = s.sync_finish_workspace_adoption(instance).unwrap().unwrap();
+        assert_ne!(access["access"]["sessionId"], release["sessionId"]);
+        assert!(s.sync_release_workspace_adoption(&operation, false).unwrap().is_none());
+    }
+    #[test]
+    fn workspace_adoption_barrier_rechecks_every_final_authority_and_save_fence() {
+        for scenario in ["ackMissing", "cancel", "participant", "timeout", "store", "epoch", "newNote", "intent", "workspace", "device"] {
+            let (_root, mut s) = session();
+            let replacement_root = tempfile::tempdir().unwrap();
+            let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+            let (operation, mut workspace, mut device, mut live) = adoption_prepared(&mut s);
+            if scenario != "ackMissing" { adoption_ack(&mut s, &operation, &live); }
+            let t = token(&s);
+            match scenario {
+                "ackMissing" => {}
+                "cancel" => { s.sync_reply("main", WindowReply::Prepare { operation_id: operation.clone(), ready: false }, &t).unwrap(); }
+                "participant" => { live.remove("note-test"); }
+                "timeout" => { s.quiet.current.as_mut().unwrap().started = Instant::now() - Duration::from_secs(6); }
+                "store" => { s.store = Store::open(replacement_root.path()).unwrap(); }
+                "epoch" => { s.epoch += 1; }
+                "newNote" => { s.store.action(json!({"type":"createNote"})).unwrap(); }
+                "intent" => { s.register_save("main", &note, "late-save", Token { note_epoch: Some(s.note_epoch(&note)), ..t }).unwrap(); }
+                "workspace" => { workspace = Uuid::new_v4().to_string(); }
+                "device" => { device = Uuid::new_v4().to_string(); }
+                _ => unreachable!(),
+            }
+            let ready = s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live);
+            if scenario == "ackMissing" { assert!(!ready.unwrap()); }
+            else { assert_eq!(ready.unwrap_err().code, "sync_adoption_blocked", "{scenario}"); }
+            let release = s.sync_release_workspace_adoption(&operation, false).unwrap().unwrap();
+            assert_eq!(release["outcome"], "abort");
+        }
+    }
+    #[test]
+    fn workspace_adoption_barrier_rejects_protected_notes_and_never_applies_late_inbox() {
+        let (_root, mut s) = session();
+        let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+        let workspace = Uuid::new_v4().to_string();
+        let device = Uuid::new_v4().to_string();
+        let live = HashSet::from(["main".into()]);
+        let operation = s.sync_begin_workspace_adoption(&workspace, &device, live.clone()).unwrap()["operationId"].as_str().unwrap().to_string();
+        s.sync_reply("main", WindowReply::Probe { operation_id: operation.clone(),
+            protected_note_ids: vec![note.clone()], blocked: false }, &token(&s)).unwrap();
+        assert_eq!(s.sync_tick(&live).unwrap().unwrap().0["outcome"], "abort");
+        assert!(s.sync_release_workspace_adoption(&operation, false).unwrap().is_none());
+        s.quiet.retry_after = None;
+        let (operation, workspace, device, live) = adoption_prepared(&mut s);
+        let incoming = incoming(&mut s);
+        adoption_ack(&mut s, &operation, &live);
+        assert!(s.sync_tick(&live).unwrap().is_none());
+        assert!(s.store.note(&incoming).is_err());
+        assert_eq!(s.store.sync_pending_count().unwrap(), 1);
+        assert_eq!(s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live).unwrap_err().code, "sync_adoption_blocked");
+        s.sync_release_workspace_adoption(&operation, false).unwrap();
+        assert!(s.store.note(&incoming).is_err());
     }
     #[test]
     fn strict_replies_real_window_phase_token_and_cancellation_receipt() {
