@@ -1,7 +1,7 @@
 // Device-free fixtures only; importing the collector starts no App or network.
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {safeSdkDiagnostic,SdkTrace,SDK_VARIANTS,SDK_TIMEOUTS,SDK_PHASES,parseDiagnosticArgs,mapEvidence,observeOperation} from './account110-sdk-diagnostic.mjs';
+import {safeSdkDiagnostic,SdkTrace,SDK_VARIANTS,SDK_TIMEOUTS,SDK_PHASES,parseDiagnosticArgs,mapEvidence,observeOperation,safeStatusSample,safeCommandTerminal} from './account110-sdk-diagnostic.mjs';
 import {encodeRequest} from './sync108-native-driver.mjs';
 
 const map=(overrides={})=>({sequence:1,elapsedMs:10,sdkGeneration:2,kind:'map',phase:null,transport:null,operation:1,mapStage:'enroll',mapOutcome:'started',sdkVariant:null,timeout:null,apiStatus:null,selectedTransportMatchesExpected:null,...overrides});
@@ -120,4 +120,53 @@ test('run requires exact source/package and a new finite private output name; no
  const good=['--source','a'.repeat(40),'--package-receipt','/unit/package.json','--output','/private/tmp/account110-device-actions-unit-sdk'];
  assert.equal(parseDiagnosticArgs(good).run,false);assert.equal(parseDiagnosticArgs(['--run',...good]).run,true);
  for(const args of [[],[...good,'--data-dir','/private'],[...good,'--endpoint','https://invalid.test'],[...good,'--run','--run'],good.map(x=>x==='a'.repeat(40)?'latest':x),good.map(x=>x==='/private/tmp/account110-device-actions-unit-sdk'?'/tmp/reuse':x)])assert.throws(()=>parseDiagnosticArgs(args),{code:'INVALID_ARGUMENTS'});
+});
+
+const PRIVATE_STATUS_SENTINEL='PRIVATE_STATUS_SENTINEL';
+const idA='11111111-1111-4111-8111-111111111111',idB='22222222-2222-4222-8222-222222222222';
+const observedStatus=()=>({state:'ready',enabled:true,pendingCount:0,conflictCount:0,profile:{subject:PRIVATE_STATUS_SENTINEL,displayName:PRIVATE_STATUS_SENTINEL,username:PRIVATE_STATUS_SENTINEL},
+ devices:[{id:idA,name:PRIVATE_STATUS_SENTINEL,current:true,online:true,connected:false,syncAvailable:true,summary:{noteCount:1,lastNoteUpdatedAt:5,capturedAt:6}},
+ {id:idB,name:PRIVATE_STATUS_SENTINEL,current:false,online:true,connected:false,syncAvailable:true}],
+ error:{code:'account_network',message:PRIVATE_STATUS_SENTINEL,stage:'coordinator'},deviceOperation:{deviceId:idB,direction:'push',phase:'running',startedAt:10}});
+// Exercise the actual two output functions used by runtime, with both rejection
+// and allowed error-bearing observations; no raw sample/terminal is serialized.
+function sentinelBoundary(project){
+ const outputs=[];
+ for(const malformed of [undefined,null,[],{},'PRIVATE_STATUS_SENTINEL'])assert.throws(()=>project(malformed),{code:'INVALID_DTO'});
+ const valid=observedStatus();outputs.push(project(valid));
+ valid.deviceOperation={...valid.deviceOperation,phase:'failed',finishedAt:20};outputs.push(project(valid));
+ valid.state='error';outputs.push(project(valid));
+ assert.equal(outputs[0].deviceOperation.phase,'running');assert.equal(outputs[1].deviceOperation.phase,'failed');
+ assert.deepEqual(outputs[0].error,{code:'account_network',stage:'coordinator'});
+ assert(!JSON.stringify(outputs).includes(PRIVATE_STATUS_SENTINEL));
+ assert(!JSON.stringify(outputs).includes(idA));assert(!JSON.stringify(outputs).includes(idB));
+ const mutate=[
+  s=>{s.state=PRIVATE_STATUS_SENTINEL;},s=>{s.devices[0].summary.message=PRIVATE_STATUS_SENTINEL;},
+  s=>{s.devices[0].summary.noteCount=PRIVATE_STATUS_SENTINEL;},s=>{s.devices[0].summary.lastNoteUpdatedAt=-1;},
+  s=>{s.devices[0].summary.capturedAt=Number.MAX_SAFE_INTEGER+1;},s=>{s.devices[0].summary.noteCount=0;},
+  s=>{s.devices[0].extra=PRIVATE_STATUS_SENTINEL;},s=>{s.devices[0].id=PRIVATE_STATUS_SENTINEL;},
+  s=>{s.devices[1].id=idA;},s=>{s.devices[1].current=true;},s=>{s.devices[0].online='true';},
+  s=>{s.deviceOperation.message=PRIVATE_STATUS_SENTINEL;},s=>{s.deviceOperation.direction=PRIVATE_STATUS_SENTINEL;},
+  s=>{s.deviceOperation.phase=PRIVATE_STATUS_SENTINEL;},s=>{s.deviceOperation.finishedAt=20;},
+  s=>{s.deviceOperation={...s.deviceOperation,phase:'failed',finishedAt:9};},
+  s=>{s.deviceOperation.deviceId=PRIVATE_STATUS_SENTINEL;},s=>{s.profile.extra=PRIVATE_STATUS_SENTINEL;},
+  s=>{s.profile.subject=42;},s=>{s.enabled='true';},s=>{s.pendingCount=-1;},s=>{s.conflictCount=0.5;},
+  s=>{s.error.code=PRIVATE_STATUS_SENTINEL;},s=>{s.error.stage=PRIVATE_STATUS_SENTINEL;},
+  s=>{s.error.reason=PRIVATE_STATUS_SENTINEL;},s=>{s.error.requestReason='timeout';},
+  s=>{s.error.extra=PRIVATE_STATUS_SENTINEL;},s=>{s.error.message={message:PRIVATE_STATUS_SENTINEL};},
+  s=>{s.extra=PRIVATE_STATUS_SENTINEL;},s=>{s.authorizationSurface='browser';},
+  s=>{s.transportGeneration=PRIVATE_STATUS_SENTINEL;},s=>{s.lastSyncAt=PRIVATE_STATUS_SENTINEL;},
+  s=>{s.transportGeneration=1;s.devices[1].transport={generation:1,sample:1,ageMs:10,enrollment:'unknown',sync:'unknown',message:PRIVATE_STATUS_SENTINEL};},
+ ];
+ for(const change of mutate){const bad=observedStatus();change(bad);assert.throws(()=>outputs.push(project(bad)),{code:'INVALID_DTO'});}
+ // Unsafe label maps cannot inject arbitrary output either.
+ const labels=new Map([[idA,PRIVATE_STATUS_SENTINEL],[idB,PRIVATE_STATUS_SENTINEL]]);
+ assert(!JSON.stringify(project(observedStatus(),labels)).includes(PRIVATE_STATUS_SENTINEL));
+ assert.equal(outputs.length,3);
+}
+test('status sample出口 rejects state/summary sentinels and preserves finite error-bearing running/failed observations',()=>{
+ sentinelBoundary((s,labels)=>safeStatusSample('a','push',s,labels));
+});
+test('command terminal出口 rejects state/summary sentinels before printing or persistence and preserves actual failed terminal',()=>{
+ sentinelBoundary((s,labels)=>safeCommandTerminal(s,labels));
 });

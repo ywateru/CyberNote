@@ -7,7 +7,7 @@ import {execFileSync} from 'node:child_process';
 import {resolve, isAbsolute} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {NativeApp, delay} from './sync108-native-driver.mjs';
-import {validatePackage, safeStatus, safeAccountError, safeFailure, closeNativeClients} from './account110-device-actions.mjs';
+import {validatePackage, safeAccountError, safeFailure, closeNativeClients} from './account110-device-actions.mjs';
 
 const fail=code=>Object.assign(new Error(code),{code});
 const need=(condition,code='INVALID_SDK_DIAGNOSTIC')=>{if(!condition)throw fail(code);};
@@ -15,6 +15,56 @@ const exact=(v,keys)=>{need(v&&Object.getPrototypeOf(v)===Object.prototype&&Obje
 const count=v=>{need(Number.isSafeInteger(v)&&v>=0);return v;};
 const choice=(v,values)=>{need(values.includes(v));return v;};
 const nullable=(v,validate)=>v===null?null:validate(v);
+const statusNeed=v=>need(v,'INVALID_DTO');
+const shape=(v,required,optional=[])=>{
+ statusNeed(v&&Object.getPrototypeOf(v)===Object.prototype&&required.every(k=>Object.hasOwn(v,k))&&Object.keys(v).every(k=>required.includes(k)||optional.includes(k)));return v;
+};
+const statusCount=v=>{statusNeed(Number.isSafeInteger(v)&&v>=0);return v;};
+const statusBool=v=>{statusNeed(typeof v==='boolean');return v;};
+const statusText=(v,max,min=0)=>{statusNeed(typeof v==='string'&&v.length>=min&&v.length<=max);return v;};
+const statusEnum=(v,values)=>{statusNeed(values.includes(v));return v;};
+const statusUuid=v=>{statusNeed(typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v));return v;};
+// Unlike acceptance parseStatus, validation here preserves valid error-bearing
+// and failed-operation observations. No free-form value is projected below.
+export function validateObservedStatus(value){
+ const s=shape(value,['state','enabled','devices','pendingCount','conflictCount'],['authorizationSurface','profile','lastSyncAt','error','transportGeneration','deviceOperation']);
+ statusEnum(s.state,['signedOut','authorizing','connecting','ready','paused','error']);statusBool(s.enabled);statusCount(s.pendingCount);statusCount(s.conflictCount);
+ if('authorizationSurface'in s){statusNeed(s.state==='authorizing');statusEnum(s.authorizationSurface,['embedded','browser']);}
+ if('profile'in s){const p=shape(s.profile,['subject','displayName'],['username']);statusText(p.subject,1024,1);statusText(p.displayName,512);if('username'in p)statusText(p.username,1024,1);}
+ if('lastSyncAt'in s)statusCount(s.lastSyncAt);
+ if('transportGeneration'in s)statusNeed(statusCount(s.transportGeneration)>0&&s.state==='ready'&&s.enabled);
+ if('error'in s){
+  const e=shape(s.error,['code','message'],['stage','reason','providerReason','tokenOperation','tokenField','requestReason','httpStatus','adoptionStage','adoptionReason','syncStage','syncReason']);
+  statusText(e.message,1000);safeAccountError(e);
+  if('reason'in e){statusNeed(e.code==='account_auth_identity_invalid');statusEnum(e.reason,['responseMetadata','missingIdToken','issuer','audience','expired','nonce','signingKey','signature','algorithm','subject','authorizedParty','issuedAt','accessTokenHash','otherClaims']);}
+  if('providerReason'in e){statusNeed(e.code==='account_authentication'&&e.stage==='authorizationProvider');statusEnum(e.providerReason,['configuration','network','invalidCallback','invalidIdentity','identityRejected','codeExchangeRejected','tokenResponseInvalid','missingRefreshToken','cancelled','noSession','ownershipMismatch','storage','refreshFailed','revocationFailed','busy']);}
+  if('tokenOperation'in e||'tokenField'in e){statusNeed(e.code==='account_auth_identity_invalid'&&e.reason==='responseMetadata'&&!('stage'in e)&&!('providerReason'in e));statusEnum(e.tokenOperation,['codeExchange','refresh']);statusEnum(e.tokenField,['tokenType','accessToken','expiresIn','scope']);}
+  if('adoptionStage'in e||'adoptionReason'in e){statusNeed(e.code==='account_sync_adoption_blocked'&&e.adoptionReason==='timeout'&&Object.keys(e).every(k=>['code','message','adoptionStage','adoptionReason'].includes(k)));statusEnum(e.adoptionStage,['probe','prepare','media']);}
+ }
+ statusNeed(Array.isArray(s.devices)&&s.devices.length<=64);const ids=new Set();let current=0;
+ for(const value of s.devices){
+  const d=shape(value,['id','name','online','current','connected','syncAvailable'],['summary','transport']);statusUuid(d.id);statusNeed(!ids.has(d.id.toLowerCase()));ids.add(d.id.toLowerCase());statusText(d.name,512,1);
+  for(const k of ['online','current','connected','syncAvailable'])statusBool(d[k]);if(d.current)current++;
+  if('summary'in d){const m=shape(d.summary,['noteCount','lastNoteUpdatedAt','capturedAt']);statusCount(m.noteCount);statusCount(m.capturedAt);if(m.lastNoteUpdatedAt!==null)statusCount(m.lastNoteUpdatedAt);statusNeed((m.noteCount===0)===(m.lastNoteUpdatedAt===null)&&d.online);}
+  if('transport'in d){const t=shape(d.transport,['generation','sample','ageMs','enrollment','sync']);statusNeed(statusCount(t.generation)>0&&t.generation===s.transportGeneration&&statusCount(t.sample)>0&&statusCount(t.ageMs)<=3000&&d.online&&!d.current);for(const k of ['enrollment','sync'])statusEnum(t[k],['webrtc-direct','iroh-direct','cloudflare-tunnel','unavailable','unknown']);}
+ }
+ statusNeed(current<=1);
+ if('deviceOperation'in s){const o=shape(s.deviceOperation,['deviceId','direction','phase','startedAt'],['finishedAt']);statusUuid(o.deviceId);statusEnum(o.direction,['push','pull','both']);statusEnum(o.phase,['running','succeeded','failed']);statusCount(o.startedAt);if('finishedAt'in o)statusNeed(statusCount(o.finishedAt)>=o.startedAt&&o.phase!=='running');}
+ return s;
+}
+function finiteObservedStatus(value,labels){
+ const s=validateObservedStatus(value),label=id=>['a','b'].includes(labels.get(id))?labels.get(id):'other';
+ const devices=s.devices.map(d=>({label:label(d.id),current:d.current,online:d.online,connected:d.connected,syncAvailable:d.syncAvailable,
+  ...('summary'in d?{summary:{noteCount:d.summary.noteCount,lastNoteUpdatedAt:d.summary.lastNoteUpdatedAt,capturedAt:d.summary.capturedAt}}:{})}));
+ const o=s.deviceOperation;
+ return {state:s.state,enabled:s.enabled,hasProfile:'profile'in s,pendingCount:s.pendingCount,conflictCount:s.conflictCount,devices,
+  ...(o?{deviceOperation:{device:label(o.deviceId),direction:o.direction,phase:o.phase,startedAt:o.startedAt,...('finishedAt'in o?{finishedAt:o.finishedAt}:{})}}:{}),
+  error:'error'in s?safeAccountError(s.error):null};
+}
+export function safeStatusSample(device,phase,value,labels=new Map()){
+ statusEnum(device,['a','b']);statusEnum(phase,['restore','push']);return {device,phase,...finiteObservedStatus(value,labels)};
+}
+export function safeCommandTerminal(value,labels=new Map()){return finiteObservedStatus(value,labels);}
 export const SDK_VARIANTS=['Config','Api','OAuth','Protocol','Credentials','Cancelled','Timeout','NotLoggedIn','ExchangeOutcomeUnknown','RevocationPending','IdentityChanged','AuthorizationUnavailable','AuthorizationProvider','Transport','Io','Http'];
 export const SDK_TIMEOUTS=['peer connection budget','remote tunnel readiness or authentication','remote port open','port selection','WebRTC direct','direct iroh handshake','device authorization','credential lock','peer TLS handshake','WebSocket connect','Quick Tunnel registration (30 seconds)','unknown'];
 export const SDK_PHASES=['coordination-ready','requires-login','recovering','connecting','direct-attempt','iroh-attempt','iroh-skipped','fallback-attempt','websocket-dial','websocket-upgraded','mutual-tls-ready','multiplexer-ready','mapping-ready','mapping-disconnected','port-open','tunnel-ready','provider-failed','provider-restarting','error','closed','unknown'];
@@ -125,10 +175,10 @@ export async function main(argv,{App=NativeApp,print=console.log}={}){
  if(!opts.run){await save();return report;}
  const apps={},raw={},labels=new Map(),traces={a:new SdkTrace(),b:new SdkTrace()};let diagnosticFailed=false,owner;
  const sample=async(n,phase)=>{
-  const s=await apps[n].evaluate(account,{type:'status'});raw[n]=s;
+  const s=validateObservedStatus(await apps[n].evaluate(account,{type:'status'}));raw[n]=s;
   const own=s.devices?.find(d=>d.current);if(own)labels.set(own.id,n);
-  const row={device:n,phase,...safeStatus(s,labels),error:s.error===undefined?null:safeAccountError(s.error)};
-  if(row.error)report.accountErrorObserved=true;
+  const row=safeStatusSample(n,phase,s,labels);
+  if(row.error||row.state==='error')report.accountErrorObserved=true;
   const previous=report.samples.findLast(x=>x.device===n);
   if(JSON.stringify(previous)!==JSON.stringify(row)&&report.samples.length<512)report.samples.push(row);
   if(owner!==undefined)need(s.profile?.subject===owner&&s.state!=='authorizing','ACCOUNT_OWNER_CHANGED');
@@ -166,11 +216,11 @@ export async function main(argv,{App=NativeApp,print=console.log}={}){
   report.pushSubmitted=true;await save();print('PUSH_SUBMITTED_ONCE');
   const {marker,elapsedMs}=await observeOperation({sample,diagnostic,poll:()=>apps.a.evaluate(poll),save});
   report.pushElapsedMs=elapsedMs;report.commandDone=true;report.commandRejected=marker.failed;
-  if(marker.status)report.commandTerminal={...safeStatus(marker.status,labels),error:marker.status.error===undefined?null:safeAccountError(marker.status.error)};
+  if(!marker.failed)report.commandTerminal=safeCommandTerminal(marker.status,labels);
   report.mapEvidence=mapEvidence(traces.a.records,baseline);
   report.mapEvidenceComplete=report.mapEvidence.oneOperation&&!report.mapEvidence.hasStartedWithoutReturn&&!traces.a.overflow&&traces.a.dropped===0;
   const op=marker.status?.deviceOperation;
-  report.status=report.accountErrorObserved||marker.failed||marker.status?.error||op?.phase!=='succeeded'||op?.deviceId!==target||op?.direction!=='push'||diagnosticFailed||!report.mapEvidenceComplete||!report.mapEvidence.bothMapsReturnedOk?'fail':'push-command-succeeded-not-acceptance';
+  report.status=report.accountErrorObserved||marker.failed||marker.status?.error||marker.status?.state==='error'||op?.phase!=='succeeded'||op?.deviceId!==target||op?.direction!=='push'||diagnosticFailed||!report.mapEvidenceComplete||!report.mapEvidence.bothMapsReturnedOk?'fail':'push-command-succeeded-not-acceptance';
   await save();print(JSON.stringify({status:report.status,pushElapsedMs:report.pushElapsedMs,terminal:report.commandTerminal,diagnosticFailure:report.diagnosticFailure}));
  }catch(e){report.status='fail';report.failure=failure(e);}
  finally{
