@@ -60,3 +60,4 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - 执行器诊断增量 `bbd2b897` 已[独审批准](../reviews/app-account110-live-runner-03.md)并合入，24项fixture通过；原生退出码/信号和pipe close分别记录，主错误与清理错误同时保留。等待更新来源清单后构建新精确包并执行第二轮。
 - 新精确包 `0a4a4cda` 已[静态独核](../../verification/account110/mac-package-review02.md)通过。[live02](../../verification/account110/native/live02/README.md)实际通过双端登录、暂停目录、稳定登记ID、改名、准确笔记摘要与开启不广播；push阶段失败，四次进程均正常退出。单独诊断观察到约51秒后push终态failed、`account_sync_failed`，不能定位具体网络阶段。原始结果与诊断分别保留，尚未完成方向同步验收。
 - 最小诊断增量由Huygens实现原生类型/转换，Socrates实现严格前端解析和固定文案，Feynman实现执行器有限错误收据；Erdos审原生，Cicero审前端，执行器另独审。按架构中的成对`syncStage/syncReason`契约，不改成功条件、超时或传输行为；通过后重包继续定位并完成实际验收。
+- 有限诊断源码、前端及执行器均已独审批准并合入。作者account78/78、前端74/74、runner29/29通过，独立原生定向3项和前端/runner对应组通过。此增量仅补充后续故障证据，不代表live02的push原因已修复；正在更新pins并准备精确新包。
