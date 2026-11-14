@@ -29,7 +29,7 @@
 
 Mac wrapper 是用于显示和绑定原生窗口的本地调试包装，未公证、未封装为正式签名发布包，需按下述方式显式传数据目录。不能通过直接双击来代替隔离启动。Android 包名 `com.local.notesclone.account109`，不覆盖用户正常应用。包身份及限制见 [Mac 独核](macos/72513d12-debug-wrapper-review01/README.md)、[Android 独核](native/88b2dabe-android-build-review01/README.md)。
 
-当前 Android 协调 HTTP 地址固定为 `https://cybernote-sync.aixgg.com`，桌面为 `https://cybernote-sync.vercel.app`；两者的 enrollment issuer 仍固定为后者。客户端不需要手填服务地址。完整说明见[架构](../../architecture/account-sync.md)。
+上表已有 Android 候选的协调 HTTP 地址为 `https://cybernote-sync.aixgg.com`，Mac候选为 `https://cybernote-sync.vercel.app`；两者的 enrollment issuer 仍固定为后者。2026-11-14源码将桌面transport统一到新域并细分错误，但本轮未重新构建，上表旧包不会因此改变。客户端不需要手填服务地址。完整说明见[架构](../../architecture/account-sync.md)及[本次问题分析](native/mac-post-login-diagnosis-20261114.md)。
 
 ## 启动两个独立桌面端
 
@@ -61,6 +61,8 @@ printf '本轮数据目录：%s\n' "$ACCOUNT109_MANUAL_ROOT"
 6. 补做一次“内置 → 在浏览器中继续 → 成功回到 App”，记录真实成功身份；打开页面、显示 authorizing 或取消成功都不能替代该步骤。
 
 出现错误时记录界面安全错误及发生步骤，保留数据目录。例如 `account_auth_identity_invalid / responseMetadata / codeExchange / scope` 仍需手动复验；不要将该错误归为网络失败，也不要通过清空身份资料跳过它。凭据仅在托管页输入，不放进终端、记录或截图。
+
+2026-11-14新增错误细分源码需新包才能验收：登录返回后失败时展开“错误详情”，记录code/stage及可选requestReason/httpStatus；上方“本次操作”与下方“账户状态”分别记录。先核对读取账户资料是否超时/被HTTP拒绝，或授权码响应是否scope校验失败。重复相同状态轮询不应抹去SignIn/Busy操作失败；一次读取状态失败后，后续读取成功应清除读取失败提示。不要把页面提示变得具体等同于登录或同步成功。
 
 ## 双桌面检查表
 

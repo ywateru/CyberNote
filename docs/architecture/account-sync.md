@@ -6,7 +6,7 @@
 
 - Logto可信issuer固定为部署配置的HTTPS issuer，使用应用专用Native客户端，authorization code＋PKCE S256、state/nonce、精确回跳；注册入口进入同一Logto托管注册页。客户端不能包含Management客户端secret。用户可选择独立内置 WebView 或系统浏览器，均由同一 native owner 持有授权；内置转浏览器复用本次 RAM 事务，仅向 React 返回有限账户状态。远程 WebView 无本地应用权限，窗口生命周期与取消代际绑定，见[双入口契约](../plan/tasks/app-account109-login-surfaces.md)。
 - Vercel Node22服务采用固定CyberGrid源码版本`f2a3961536e5c69b13c7dbc661953d9243becbae`，Redis通过验证证书的TLS TCP连接。每个环境使用独立namespace；Redis存协调状态而非笔记/附件。
-- 协调HTTP transport按平台编译固定：Android为`https://cybernote-sync.aixgg.com`，桌面仍为`https://cybernote-sync.vercel.app`。profile绑定与网络创建两处Enrollment、SDK的base_url均使用同一平台固定值，不提供运行时URL覆盖或自动降级。enrollment proof的`ENROLLMENT_ISSUER`仍严格为`https://cybernote-sync.vercel.app`，不接受transport别名作为issuer；Logto固定输入、provider、签名key、workspace seed和owner验证不随host改变。新域在DNS、Vercel验证、TLS及固定匿名接口通过前不发送账户授权材料，见[已授权域名任务](../plan/tasks/app-account109-approved-domain.md)。
+- 协调HTTP transport编译固定为`https://cybernote-sync.aixgg.com`。2026-11-14按[登录返回后修正](../plan/tasks/app-account109-post-login-errors.md)将桌面与Android统一；旧 `72513d12` Mac候选仍访问旧域，必须重新构建才采用新值。profile绑定与网络创建两处Enrollment、SDK的base_url均使用该固定值，不提供运行时URL覆盖或自动降级。enrollment proof的`ENROLLMENT_ISSUER`仍严格为`https://cybernote-sync.vercel.app`，不接受transport别名作为issuer；Logto固定输入、provider、签名key、workspace seed和owner验证不随host改变。已授权新域的DNS、Vercel验证、TLS及匿名接口记录见[域名任务](../plan/tasks/app-account109-approved-domain.md)。
 - CyberNote专用API resource提供connect用户scope；专用SPA仅用于服务控制台。Native与SPA静态产品策略限定同一产品，其他Logto应用的token不可加入。
 - `/api/v1/account/profile`接受Bearer资源access token，验证issuer/audience/ES384/expiry/client_id/connect和产品允许策略后返回`{schemaVersion:1,subject,issuer,productId,workspaceId}`。workspace UUID由固定服务端随机seed对issuer＋subject＋canonical product的分域HMAC派生；seed必须显式配置，部署后不能随意轮换，不能用请求Host/未验证JWT字段生成账号归属。
 - Logto身份校验仅在固定issuer的远程JWKS获取发生网络/超时、响应体传输失败或非200响应时返回`503 IDENTITY_UNAVAILABLE`及固定安全提示；签名、claims、未知/无效密钥和JWT错误仍返回`401 INVALID_IDENTITY`，不透传上游异常或响应内容。此区分不代表已证明某次原生运行失败的原因。
@@ -66,6 +66,8 @@ type AccountStatus = {
 状态不返回access/refresh token、Noise密钥、邀请、管理secret、Redis配置。可选择的错误分类包括登录取消/过期、认证失败、协调不可用、资料库归属冲突和同步失败。返回安全中文操作说明，不能将原始第三方异常/响应串直接显示。命令完成不是网络收敛证明，UI只按实际运行状态展示。
 
 完整DTO另含有限的错误 `stage/reason/providerReason/tokenOperation/tokenField` 和可选实时 `transportGeneration/devices[].transport`。传输观测只在匹配代际、远端在线、样本年龄不超过3000ms时接受；`sync='cloudflare-tunnel'` 才能作为该样本时点的业务中转证据，目录 online 不足以证明中转。观测不追踪每个数据字节。实际手动步骤见[手动测试指南](../verification/account109/MANUAL-TESTING.md)。
+
+账户资料、设备凭证和公钥HTTP请求另保留有限 `requestReason`，区分超时、连接、请求、读取响应、非成功HTTP状态及无效响应；`httpStatus`仅记录实际非2xx状态，与`requestReason=httpStatus`成对出现。401/403保留认证拒绝，响应无效及认证拒绝维持原立即封闭授权通道的行为。账户IPC拒绝也只返回`SafeError`；可信窗口限制保持。UI从本地表生成提示，不显示上游正文或授权材料。未绑定账户在读取资料失败后仅可由用户显式开始正常登录，已有grant/cleanup栅栏保持；状态轮询不做重登。精确字段和接受组合见[本轮契约](../plan/tasks/app-account109-post-login-errors.md)。
 
 ## 验收
 

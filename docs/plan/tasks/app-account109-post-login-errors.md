@@ -2,6 +2,8 @@
 
 2026-11-14。用户确认托管页登录已完成，要求检查后续代码并具体显示错误。按现有手动验收安排，本轮修改和独立静态复审，不启动自动测试、构建、设备或真实登录。
 
+收尾：native `6c100207`、UI `1b59adf5` / `aee68928`、8项来源pin `b6677c38` 已合入main；各部分及跨层静态审查均批准。过程、精确边界和手动验证注意见[问题分析](../../verification/account109/native/mac-post-login-diagnosis-20261114.md)。测试/构建未运行，旧Mac包不变。
+
 ## 已确认与尚待确认
 
 原 Mac `72513d12` 的流程是回跳 → 授权码交换/身份校验 → `bind()` 请求 coordinator profile → 校验资料库归属并保存 binding → 按原 enabled 状态启动同步。托管页结束不等于上述步骤全部成功。
@@ -13,10 +15,10 @@
 ## 修改契约
 
 1. 所有原生平台的 coordinator HTTP transport 固定为已授权 `https://cybernote-sync.aixgg.com`。enrollment issuer 保持 `https://cybernote-sync.vercel.app`，不新增运行时地址、降级或证书例外。
-2. `SafeError` 可选新增 `requestReason`，仅限 `timeout|connect|request|responseBody|httpStatus|invalidResponse`。适用于 `account_network` 或 `account_authentication` 的 coordinatorProfile/Enrollment/Jwks 阶段，HTTP状态仅由实际响应产生；`httpStatus` 只与 `requestReason=httpStatus` 成对出现，范围100～599且不能是2xx。401/403仍为认证拒绝，其他非成功HTTP响应保留网络类与准确状态。不能返回第三方原文、地址、请求头或正文。
+2. `SafeError` 可选新增 `requestReason`，仅限 `timeout|connect|request|responseBody|httpStatus|invalidResponse`。适用于 `account_network` 或 `account_authentication` 的 coordinatorProfile/Enrollment/Jwks 阶段，HTTP状态仅由实际响应产生；`httpStatus` 只与 `requestReason=httpStatus` 成对出现，范围100～599且不能是2xx。401/403仍为认证拒绝，其他非成功HTTP响应保留网络类与准确状态；新增诊断中只有HTTP401/403可搭配account_authentication，其余原因均搭配account_network，不夹带token/provider/identity诊断。响应无效及认证拒绝维持原同步通道立即封闭行为，不能因改了Rust错误枚举而退为普通网络重试。不能返回第三方原文、地址、请求头或正文。
 3. account IPC 的拒绝返回固定 `SafeError`，可信窗口检查保留，窗口拒绝使用固定 `account_window_invalid`。前端只识别严格白名单形状及组合，未知IPC异常保持固定说明，不显示上游 message。
 4. 用户错误文案由本地表按阶段和分类生成：回跳监听/接收、登录服务、账户资料读取、设备注册、授权凭证/公钥、刷新、撤销。明确区分超时、连接失败、响应读取失败、HTTP拒绝/限流/服务错误、响应无效及 token字段校验。附折叠“错误详情”，只列白名单 code/stage/reason/providerReason/tokenOperation/tokenField/requestReason/httpStatus，不能显示 profile、URL或凭据。
 5. 仅在无profile、`coordinatorProfile` 网络/认证失败时，允许用户显式重新开始正常登录；不允许自动轮询重登、replacement logout 或静默启用同步。原grant owner的Busy/cleanup栅栏继续生效。存在profile的恢复仍复用已有授权，保持暂停设置。UI与native规则一致。
-6. 重试触发的IPC Busy等即时错误应显示其固定原因，不能与旧status错误混淆；后续状态真正推进或错误已变化时清除旧即时提示。不得因每次同错误轮询就丢掉当前即时失败。
+6. 重试触发的IPC Busy等即时错误应显示其固定原因，不能与旧status错误混淆；后续状态真正推进或错误已变化时清除旧即时提示。不得因每次同错误轮询就丢掉当前即时失败。例外是读取status本身的即时失败：后续成功读取即表示该读取已恢复，应清除这条读取失败提示，即使安全状态值未变化。
 
 作者分工：Huygens修改native/config及native反例源码；Socrates修改前端、DTO/辅助报告与前端反例源码；Feynman/Cicero独立静态复审。使用既有干净工作树新分支，不复制target或大目录。最终由父级合并，准确刷新相关发布来源pin，文档明确“源码已改、未构建/未运行”，不改旧候选身份或既有失败。
