@@ -64,3 +64,4 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - `d0ad2267` 新包[独核通过](../../verification/account110/mac-package-review03.md)，[单次App诊断](../../verification/account110/native/live02-push-diagnostic02/README.md)仍失败，实际为SDK映射阶段的`account_network/coordinator`，未进入本次应用层pair/transfer。该次错误不同于旧`account_sync_failed`，不能互相回填原因。
 - [精确锁CLI探针](../../verification/account110/native/sdk-mapping-probe01/README.md)在正常恢复的owned测试环境中，两次map经匿名隧道成功，用时33.026+28.400秒；仅映射已超出产品整段prepare的60秒期限。Huygens与Feynman独立核对SDK每次map均重新走连接链，确定为独立预算缺陷。最小修复仅删除重复60秒prepare分支，以原185秒绝对请求期限覆盖准备和传输，保留所有取消、门禁、退役及收尾规则。
 - Huygens负责该期限增量和可控时钟/真实退役回归，Erdos独审；通过后更新单文件pin并重包。暂不引入映射复用、并行或更长总体期限，不把CLI映射成功当App验收。
+- 期限源码 `493550e5` 已[独审批准](../reviews/app-account110-request-budget-01.md)并合入，作者与独立定向各12/12通过。实际增量含transport helper、worker测试及Cargo的dev测试声明，锁不变；正常/build依赖特性树与修复前一致。更新对应3个既有产品pin后重包，尚未重跑App验收。
