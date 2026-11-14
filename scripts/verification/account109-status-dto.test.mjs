@@ -4,7 +4,7 @@ import {build} from 'vite';
 import {resolve} from 'node:path';
 const built = await build({configFile:false,logLevel:'silent',build:{write:false,minify:false,lib:{entry:resolve('src/account-client.ts'),formats:['es']}},define:{'import.meta.env':'{VITE_NOTES_ACCOUNT_NATIVE:"0",DEV:false}'}});
 const output = (Array.isArray(built) ? built[0] : built).output;
-const {validateAccountStatus,accountConnectionRetry,accountNeedsLogin,accountTokenResponseMessage} = await import('data:text/javascript;base64,'+Buffer.from(output[0].code).toString('base64'));
+const {validateAccountStatus,accountConnectionRetry,accountNeedsLogin,accountTokenResponseMessage,accountErrorMessage,accountErrorDetails,accountIPCError,accountErrorStateKey} = await import('data:text/javascript;base64,'+Buffer.from(output[0].code).toString('base64'));
 const status = error => ({state:'error',enabled:false,devices:[],pendingCount:0,conflictCount:0,error});
 test('authorization surface is finite, authorizing-only and optional for legacy native status',()=>{
  const authorizing={state:'authorizing',enabled:false,devices:[],pendingCount:0,conflictCount:0};
@@ -133,6 +133,8 @@ test('partial, unknown and cross-branch token diagnostics fail closed without in
   ...[undefined,'signature','issuer'].map(reason=>({...valid,reason})),
   {...valid,stage:'identityRefresh'},
   {...valid,providerReason:'identityRejected'},
+  {...valid,requestReason:'timeout'},
+  {...valid,httpStatus:401},
   {...valid,tokenValue:'provider-private-sentinel'},
  ]) {
   assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);
@@ -140,6 +142,68 @@ test('partial, unknown and cross-branch token diagnostics fail closed without in
   if(!('tokenValue' in error))assert.equal(accountTokenResponseMessage(error),undefined);
  }
  assert.equal(accountTokenResponseMessage(undefined),undefined);
+});
+
+test('coordinator request diagnostics accept only exact endpoint, reason and native HTTP classification',()=>{
+ for(const stage of ['coordinatorProfile','coordinatorEnrollment','coordinatorJwks']) {
+  for(const requestReason of ['timeout','connect','request','responseBody','invalidResponse']) {
+   const error={code:'account_network',message:'safe',stage,requestReason};assert.deepEqual(validateAccountStatus(status(error)).error,error);
+  }
+  for(const httpStatus of [100,199,300,400,401,403,429,500,599]) {
+   const error={code:[401,403].includes(httpStatus)?'account_authentication':'account_network',message:'safe',stage,requestReason:'httpStatus',httpStatus};
+   assert.deepEqual(validateAccountStatus(status(error)).error,error);assert(accountErrorMessage(error).includes(`HTTP ${httpStatus}`));
+  }
+ }
+ const base={code:'account_network',message:'safe',stage:'coordinatorProfile',requestReason:'timeout'};
+ for(const error of [
+  ...['identityProvider','authorizationProvider','coordinator','identityRefresh',undefined].map(stage=>({...base,stage})),
+  ...['account_authentication','account_busy','unknown'].map(code=>({...base,code})),
+  ...[null,undefined,{},0,'private-response-sentinel'].map(requestReason=>({...base,requestReason})),
+  ...[99,200,204,299,600,401.5,'401',null,undefined].map(httpStatus=>({...base,requestReason:'httpStatus',httpStatus})),
+  ...[401,403].map(httpStatus=>({...base,requestReason:'httpStatus',httpStatus})),
+  ...[400,429,500].map(httpStatus=>({...base,code:'account_authentication',requestReason:'httpStatus',httpStatus})),
+  {...base,httpStatus:503},{...base,requestReason:'httpStatus'},
+  {code:base.code,message:base.message,stage:base.stage,httpStatus:503},
+  {...base,reason:'responseMetadata'},{...base,providerReason:'network'},{...base,tokenOperation:undefined},{...base,tokenField:'scope'},
+  {...base,url:'private-response-sentinel'},
+ ])assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);
+});
+
+test('fixed local error copy and details never expose unknown codes or upstream message and never infer timeout',()=>{
+ const error={code:'account_network',message:'private-response-sentinel',stage:'coordinatorProfile',requestReason:'timeout'};
+ assert(accountErrorMessage(error).includes('读取账户资料时请求超时'));
+ assert.deepEqual(accountErrorDetails(error),[['code','account_network'],['stage','coordinatorProfile'],['requestReason','timeout']]);
+ const legacy={code:'account_network',message:'private-response-sentinel',stage:'identityProvider'};
+ assert(accountErrorMessage(legacy).includes('连接登录服务时网络请求未完成'));assert(!accountErrorMessage(legacy).includes('超时'));
+ const unknown={code:'private-sync-owner-url-sentinel',message:'private-response-sentinel'};
+ const parsed=validateAccountStatus(status(unknown));assert.equal(parsed.error.code,'unknown');
+ assert(accountErrorMessage(unknown).includes('未知错误'));assert.deepEqual(accountErrorDetails(unknown),[['code','未知错误']]);
+ assert(!JSON.stringify([parsed.error,accountErrorDetails(unknown),accountErrorMessage(unknown),accountErrorMessage(error),accountErrorDetails(error)]).includes('private-'));
+});
+
+test('IPC accepts finite new/legacy rejection shapes, discards messages and never guesses from raw exceptions',()=>{
+ for(const shape of [{code:'account_busy',message:'private-response-sentinel'},{code:'account_busy',message:'private-response-sentinel',commit:null},{code:'account_window_invalid',message:'private-response-sentinel'},
+  {code:'account_authentication',message:'private-response-sentinel',stage:'coordinatorProfile',requestReason:'httpStatus',httpStatus:401}]) {
+  const safe=accountIPCError(shape);assert.equal(safe.code,shape.code);assert(!JSON.stringify(safe).includes('private-'));assert(!('commit' in safe));
+ }
+ for(const shape of ['network timeout private-response-sentinel',new Error('private-response-sentinel'),{code:'unknown',message:'private-response-sentinel'},
+  {code:'account_busy',message:'private-response-sentinel',commit:undefined},{code:'account_busy',message:'private-response-sentinel',commit:{}},
+  {code:'account_busy',message:'private-response-sentinel',url:'private-response-sentinel'},
+  {code:'account_network',message:'private-response-sentinel',commit:null,stage:'coordinatorProfile'},
+  {code:'account_authentication',message:'private-response-sentinel',stage:'coordinatorProfile',requestReason:'timeout'},
+ ])assert.equal(accountIPCError(shape),undefined);
+});
+
+test('explicit unbound profile retry agrees with native; no polling, replacement or enable is inferred',()=>{
+ for(const error of [{code:'account_network',message:'safe',stage:'coordinatorProfile',requestReason:'timeout'},
+  {code:'account_authentication',message:'safe',stage:'coordinatorProfile',requestReason:'httpStatus',httpStatus:403}]) {
+  const s=validateAccountStatus(status(error));assert.deepEqual(accountConnectionRetry(s),{type:'signIn'});
+  const bound={...s,profile:{subject:'fixture',displayName:'Fixture'}};assert.deepEqual(accountConnectionRetry(bound),{type:error.code==='account_network'?'syncNow':'status'});
+  for(const stage of ['coordinatorEnrollment','coordinatorJwks'])assert.deepEqual(accountConnectionRetry({...s,error:{...s.error,stage}}),{type:'status'});
+ }
+ const s=status({code:'account_network',message:'safe',stage:'coordinatorProfile',requestReason:'timeout'}),key=accountErrorStateKey(s);
+ assert.equal(accountErrorStateKey({...s,pendingCount:10,devices:[{id:'different'}],error:{...s.error,message:'different'}}),key);
+ for(const change of [{state:'authorizing'}, {enabled:true},{profile:{subject:'fixture'}},{error:{...s.error,requestReason:'connect'}}])assert.notEqual(accountErrorStateKey({...s,...change}),key);
 });
 
 const mappingStatus=()=>({state:'ready',enabled:true,devices:[{id:'peer',name:'Fixture',online:true,current:false,connected:true,transport:{generation:2,sample:7,ageMs:10,enrollment:'webrtc-direct',sync:'cloudflare-tunnel'}}],transportGeneration:2,pendingCount:0,conflictCount:0});

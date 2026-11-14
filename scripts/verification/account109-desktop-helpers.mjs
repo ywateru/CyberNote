@@ -3,13 +3,20 @@ import assert from 'node:assert/strict';
 import {until} from './sync108-native-driver.mjs';
 
 const states=['signedOut','authorizing','connecting','ready','paused','error'];
-const codes=['account_configuration','account_authentication','account_auth_callback_invalid','account_auth_identity_invalid','account_auth_code_rejected','account_auth_token_response_invalid','account_auth_refresh_missing','account_owner_workspace_mismatch','account_network','account_enrollment_invalid','account_storage','account_cancelled','account_busy','account_platform_unsupported','account_cleanup_required','account_sync_failed','account_sync_protocol'];
+const codes=['account_configuration','account_authentication','account_auth_callback_invalid','account_auth_identity_invalid','account_auth_code_rejected','account_auth_token_response_invalid','account_auth_refresh_missing','account_owner_workspace_mismatch','account_network','account_enrollment_invalid','account_storage','account_cancelled','account_busy','account_platform_unsupported','account_cleanup_required','account_sync_failed','account_sync_protocol','account_window_invalid'];
 // Includes the endpoint/provider diagnostics from account109 coordination work.
 const stages=['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration','coordinatorProfile','coordinatorEnrollment','coordinatorJwks','authorizationProvider','identitySession','identityRefresh','identityRevocation','coordinatorSession'];
 const reasons=['responseMetadata','missingIdToken','issuer','audience','expired','nonce','signingKey','signature','algorithm','subject','authorizedParty','issuedAt','accessTokenHash','otherClaims'];
 const providerReasons=['configuration','network','invalidCallback','invalidIdentity','identityRejected','codeExchangeRejected','tokenResponseInvalid','missingRefreshToken','cancelled','noSession','ownershipMismatch','storage','refreshFailed','revocationFailed','busy'];
 const tokenOperations=['codeExchange','refresh'];
 const tokenFields=['tokenType','accessToken','expiresIn','scope'];
+const requestReasons=['timeout','connect','request','responseBody','httpStatus','invalidResponse'];
+function safeRequestDiagnostic(e){
+  if(!e||!['account_network','account_authentication'].includes(e.code)||!['coordinatorProfile','coordinatorEnrollment','coordinatorJwks'].includes(e.stage)||
+    !requestReasons.includes(e.requestReason)||e.reason!==undefined||e.providerReason!==undefined||'tokenOperation' in e||'tokenField' in e)return {};
+  if(e.requestReason==='httpStatus')return Number.isInteger(e.httpStatus)&&e.httpStatus>=100&&e.httpStatus<=599&&!(e.httpStatus>=200&&e.httpStatus<300)&&(e.code==='account_authentication')===(e.httpStatus===401||e.httpStatus===403)?{requestReason:e.requestReason,httpStatus:e.httpStatus}:{};
+  return 'httpStatus' in e||e.code!=='account_network'?{}:{requestReason:e.requestReason};
+}
 const transportKinds=['webrtc-direct','iroh-direct','cloudflare-tunnel','unavailable','unknown'];
 const positive=value=>Number.isSafeInteger(value)&&value>0;
 export function safeMappingObservation(t,generation){
@@ -21,12 +28,12 @@ const count=value=>Number.isSafeInteger(value)&&value>=0?value:undefined;
 export const fail=code=>Object.assign(new Error(code),{code});
 export function safeStatus(s){
   const e=s?.error;
-  const tokenDiagnostic=e?.code==='account_auth_identity_invalid'&&e.reason==='responseMetadata'&&e.stage===undefined&&e.providerReason===undefined&&tokenOperations.includes(e.tokenOperation)&&tokenFields.includes(e.tokenField)
+  const tokenDiagnostic=e?.code==='account_auth_identity_invalid'&&e.reason==='responseMetadata'&&e.stage===undefined&&e.providerReason===undefined&&!('requestReason' in e)&&!('httpStatus' in e)&&tokenOperations.includes(e.tokenOperation)&&tokenFields.includes(e.tokenField)
     ?{tokenOperation:e.tokenOperation,tokenField:e.tokenField}:{};
   const generation=s?.state==='ready'&&s.enabled===true&&!s.error&&positive(s.transportGeneration)?s.transportGeneration:undefined;
   return {state:label(s?.state,states),enabled:s?.enabled===true,hasProfile:!!s?.profile,
     identityCheck:s?.profile?.username===undefined?'unverified':s.profile.username==='cybernoteqa20261113a'?'expectedSyntheticUser':'differentUser',
-    error:s?.error?{code:label(s.error.code,codes),...(s.error.stage===undefined?{}:{stage:label(s.error.stage,stages)}),...(s.error.reason===undefined?{}:{reason:label(s.error.reason,reasons)}),...(s.error.providerReason===undefined?{}:{providerReason:label(s.error.providerReason,providerReasons)}),...tokenDiagnostic}:undefined,
+    error:s?.error?{code:label(s.error.code,codes),...(s.error.stage===undefined?{}:{stage:label(s.error.stage,stages)}),...(s.error.reason===undefined?{}:{reason:label(s.error.reason,reasons)}),...(s.error.providerReason===undefined?{}:{providerReason:label(s.error.providerReason,providerReasons)}),...tokenDiagnostic,...safeRequestDiagnostic(e)}:undefined,
     ...(generation===undefined?{}:{transportGeneration:generation}),
     devices:Array.isArray(s?.devices)?s.devices.slice(0,256).map(d=>{
       const transport=d?.online===true&&d.current===false?safeMappingObservation(d.transport,generation):undefined;

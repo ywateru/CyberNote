@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { UserRound, Laptop, Smartphone } from "lucide-react";
-import { accountCommand, accountConnectionRetry, accountNeedsLogin, accountTokenResponseMessage, type AccountAuthorizationSurface, type AccountCommand, type AccountStatus } from "./account-client";
+import { accountCommand, accountConnectionRetry, accountNeedsLogin, accountErrorMessage, accountErrorDetails, accountErrorStateKey, AccountCommandFailure, type SafeError, type AccountAuthorizationSurface, type AccountCommand, type AccountStatus } from "./account-client";
 import { formatFileTime } from "./data-management";
 import "./AccountSettings.css";
 
@@ -13,20 +13,11 @@ const states: Record<AccountStatus["state"], string> = {
   signedOut: "未登录", authorizing: "正在等待登录", connecting: "正在连接账户设备",
   ready: "账户连接可用", paused: "同步已暂停", error: "账户或同步需要处理",
 };
-function accountError(error: AccountStatus["error"]) {
-  if (!error) return "账户连接未完成，请检查网络后重试。";
-  const tokenMessage = accountTokenResponseMessage(error);
-  if (tokenMessage) return tokenMessage;
-  if (error.code === "account_cleanup_required") return "存在待撤销的登录授权，请先退出账户并完成授权清理，再重新登录。本机备忘录会保留。";
-  if (error.code === "account_authentication" && error.stage === "identitySession") return "尚未恢复可用的登录授权。请先退出账户并确认清理，再登录原账户。本机备忘录会保留。";
-  if (/owner|workspace|bound/i.test(error.code)) return "此资料库已关联其他账户或手工同步空间，无法与当前账户合并。请退出后登录原账户；本机备忘录会保留。";
-  if (error.code === "account_configuration" || error.providerReason === "configuration") return "账户配置无效，请检查服务配置或更新应用。本机备忘录会保留。";
-  if (error.code === "account_storage" || error.providerReason === "storage") return "无法安全读取或保存账户授权，请检查本机存储。本机备忘录会保留。";
-  if (["account_auth_token_response_invalid", "account_auth_identity_invalid"].includes(error.code) || ["tokenResponseInvalid", "identityRejected", "invalidIdentity"].includes(error.providerReason || "")) return "认证服务返回的数据未通过校验，未自动替换登录授权。请检查服务或更新应用。本机备忘录会保留。";
-  if (accountNeedsLogin(error)) return "登录已失效或未完成，请重新登录。本机备忘录会保留。";
-  if (/cancel/i.test(error.code)) return "登录已取消，你可以继续使用本地备忘录。";
-  if (/sync/i.test(error.code)) return "同步未完成，请检查网络后重试。本地更改仍保存在此设备。";
-  return "账户连接暂不可用，请检查网络后重试。本地备忘录仍可继续编辑。";
+const commandNames: Record<AccountCommand["type"], string> = {status:"读取账户状态",signIn:"登录",signUp:"创建账户",openLoginInBrowser:"在浏览器中继续",cancel:"取消登录",signOut:"退出账户",syncNow:"立即同步",setEnabled:"更改同步设置"};
+type CommandError = {command:AccountCommand["type"];message:string;safeError?:SafeError;stateKey:string};
+function ErrorDetails({error}: {error: AccountStatus["error"]}) {
+  const details = accountErrorDetails(error);
+  return details.length ? <details className="account-error-details"><summary>错误详情</summary><dl>{details.map(([key,value]) => <div key={key}><dt>{key}</dt><dd>{value}</dd></div>)}</dl></details> : null;
 }
 
 export default function AccountSettings({ active, onHandle, onConflicts }: {
@@ -34,7 +25,10 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
 }) {
   const [status, setStatus] = useState<AccountStatus | null>(null), [busy, setBusy] = useState(false);
   const [workingType, setWorkingType] = useState<AccountCommand["type"] | null>(null);
-  const [error, setError] = useState(""), [notice, setNotice] = useState("");
+  const [commandError, setCommandError] = useState<CommandError | null>(null), [notice, setNotice] = useState("");
+  const error = commandError?.message || "";
+  const latestStatus = useRef<AccountStatus | null>(null), latestError = useRef<CommandError | null>(null);
+  const clearError = () => { latestError.current = null; setCommandError(null); };
   const [loginSurface, setLoginSurface] = useState<AccountAuthorizationSurface>("embedded");
   const [confirmation, setConfirmation] = useState<"signOut" | "enable" | null>(null);
   const panel = useRef<HTMLDivElement>(null), confirmPanel = useRef<HTMLDivElement>(null);
@@ -77,31 +71,34 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     if (!query) { generation.current++; working.current = command.type; setWorkingType(command.type); setBusy(true); setNotice(""); }
     else reading.current = true;
     const ticket = generation.current, op = query ? operation.current : ++operation.current;
-    if (!background) setError("");
+    if (!query) clearError();
     try {
       const next = await accountCommand(command);
       if (!alive.current || !visible.current || ticket !== generation.current) return;
-      setStatus(next);
+      setStatus(next); latestStatus.current = next;
       if (next.state === "authorizing" && next.authorizationSurface) setLoginSurface(next.authorizationSurface);
       const completedExit = command.type === "status" && next.state === "signedOut" && !next.profile && !next.error &&
         (retry.current.type === "cancel" || retry.current.type === "signOut");
-      if (!background || completedExit || (!next.error && (next.state === "ready" || next.state === "paused"))) {
-        setError("");
+      if (latestError.current && latestError.current.stateKey !== accountErrorStateKey(next)) {
+        clearError();
         retry.current = { type: "status" };
       }
+      if (!query || completedExit) retry.current = { type: "status" };
       if (completedExit) setConfirmation(null);
       if ((command.type === "cancel" || command.type === "signOut") &&
         (next.state !== "signedOut" || next.profile || next.error)) {
-        throw Error(command.type === "cancel" ? "取消登录尚未确认，请等待账户状态更新后重试。" : "退出账户尚未完成，请检查账户状态后重试。");
+        throw new AccountCommandFailure(undefined, command.type === "cancel" ? "cancelPending" : "signOutPending");
       }
       if (!query) setConfirmation(null);
       if (command.type === "syncNow" && !next.error) setNotice(next.state === "paused" ? "账户连接已恢复，自动传输仍已暂停。" : "同步请求已发送，实际进度请查看待处理数和最近成功时间。");
       if (command.type === "cancel") setNotice("登录已取消。本地备忘录仍可继续编辑。");
       if (command.type === "signOut") setNotice("已退出账户，本机备忘录已保留。");
     } catch (cause) {
-      if (alive.current && visible.current && ticket === generation.current) {
+      if (alive.current && visible.current && ticket === generation.current && !(query && background && latestError.current && latestError.current.command !== "status")) {
         retry.current = command;
-        setError(cause instanceof Error ? cause.message : "账户操作未完成，请重试");
+        const failure = cause instanceof AccountCommandFailure ? cause : new AccountCommandFailure();
+        const nextError = {command:command.type,message:failure.message,safeError:failure.safeError,stateKey:accountErrorStateKey(latestStatus.current)};
+        latestError.current = nextError; setCommandError(nextError);
       }
       throw cause;
     } finally {
@@ -167,7 +164,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const authorizing = authorizationPending.current || status?.state === "authorizing" || (busy && (workingType === "signIn" || workingType === "signUp"));
   const signedIn = !!status?.profile && status.state !== "signedOut" && !authorizing;
   const cleanupRequired = status?.error?.code === "account_cleanup_required";
-  const ownership = /owner|workspace|bound/i.test(status?.error?.code || "");
+  const ownership = status?.error?.code === "account_owner_workspace_mismatch";
   const needsLogin = accountNeedsLogin(status?.error);
   const connectionRetry = status ? accountConnectionRetry(status) : { type: "status" } as const;
   const browserOpenFailed = status?.state === "authorizing" && status.authorizationSurface === "embedded" &&
@@ -184,7 +181,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     <h3 className="preferences-page-title">账户与同步</h3>
     <p className="account-intro">在你的设备间同步备忘录</p>
     <span className="account-accessible-state" role="status" aria-live="polite" aria-atomic="true">{status ? states[status.state] : "正在读取账户状态"}</span>
-    {error && <div className="account-error" role="alert"><p>{error}</p><button type="button" disabled={busy} onClick={retryRequest}>重试</button></div>}
+    {commandError && <div className="account-error account-command-error" role="alert"><h4>本次{commandNames[commandError.command]}未完成</h4><p>{error}</p><ErrorDetails error={commandError.safeError} /><button type="button" disabled={busy} onClick={retryRequest}>重试</button></div>}
     {!status && !error && <p role="status">正在读取账户状态…</p>}
     {(status || error) && <>
       <section className="account-group" aria-label="CyberNote 账户">
@@ -209,7 +206,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         </div>
         {!signedIn && !authorizing && <p className="account-help">首次开启同步时，本地备忘录将与同一账户设备的备忘录合并。本机内容会保留。</p>}
       </section>
-      {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{ownership ? "资料库归属不匹配" : browserOpenFailed ? "未能打开系统浏览器" : "需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountError(status.error)}</p>
+      {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{ownership ? "资料库归属不匹配" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
         {!ownership && !cleanupRequired && connectionRetry.type !== "status" && <button type="button" disabled={busy} onClick={() => request(connectionRetry.type === "signIn" || connectionRetry.type === "signUp" ? { type: connectionRetry.type, surface: loginSurface } : connectionRetry)}>{connectionRetry.type === "signIn" ? needsLogin ? "重新登录" : "重试登录" : "重试连接"}</button>}
       </section>}
       {signedIn && status && <>

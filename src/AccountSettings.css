@@ -39,6 +39,12 @@
 .account-devices p { margin: 4px 0 0; color: var(--secondary); font-size: .9em; }
 .account-error { margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: 9px; color: var(--danger, #c53527); }
 .account-error p { margin: 0 0 12px; }
+.account-error-details { margin: 12px 0; color: var(--secondary); font-size: .9em; }
+.account-error-details summary { cursor: pointer; min-height: var(--interface-hit-min, 28px); }
+.account-error-details dl { margin: 8px 0; user-select: text; }
+.account-error-details dl > div { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0; }
+.account-error-details dt { font-weight: 500; }
+.account-error-details dd { margin: 0; overflow-wrap: anywhere; }
 .account-confirmation { margin: 18px 0; padding: 16px; background: var(--grouped); border: 1px solid var(--accent); border-radius: 9px; }
 .account-confirmation p { margin: 0; }
 .account-notice { color: var(--secondary); font-size: .9em; }
