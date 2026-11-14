@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "kind": "account110-runner-finite-error-author-verification",
+  "status": "author-passed-independent-review-pending",
+  "contractRevision": "47572b955d75ac7e7bffd1f46d2588eb454de1b0",
+  "sourceCommits": [
+    "ffff8f6dd2e79903569998fc878d3b78d84a2890",
+    "67587914dcbf4fa6990d25db014aa787749b0323"
+  ],
+  "command": [
+    "node",
+    "--test",
+    "scripts/verification/account110-device-actions.test.mjs"
+  ],
+  "results": [
+    {
+      "run": "author01",
+      "pass": 28,
+      "fail": 1,
+      "sha256": "59b93f1c32b0d1d00bde8577dedd05f153b1b80a8ec206c266b5d4872fe69a1e",
+      "explanation": "New terminal-error fixture exposed its mocked status failure before reaching the intended command-terminal path; fixture scheduling was corrected, without changing product failure behavior."
+    },
+    {
+      "run": "author02",
+      "pass": 29,
+      "fail": 0,
+      "sha256": "6d827e6eadf13ee7306ae0052003a32dd3a7993ba03318cd5ecef8af36d41779"
+    },
+    {
+      "run": "author03-final",
+      "pass": 29,
+      "fail": 0,
+      "sha256": "1a2cc2faa9fb5d4f3318d03f4c9a7688cfa8d33751561139ed95520277ae133c"
+    }
+  ],
+  "sourceFiles": {
+    "scripts/verification/account110-device-actions.mjs": "20ddcc4aab9b766990e77a703c5af77678210daf8c247b59f78bf3a1275f212a",
+    "scripts/verification/account110-device-actions.test.mjs": "3e3271d38e6ef1a30985cbd51c52b84a78bddc084896c7099535fa0f85a4830e"
+  },
+  "boundaries": {
+    "realAppStarted": false,
+    "networkUsed": false,
+    "cargoUsed": false,
+    "targetUsed": false,
+    "credentialsRead": false,
+    "realLibraryRead": false,
+    "liveReceiptsChanged": false,
+    "manifestChanged": false
+  }
+}
