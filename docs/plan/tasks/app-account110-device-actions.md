@@ -67,3 +67,4 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - 期限源码 `493550e5` 已[独审批准](../reviews/app-account110-request-budget-01.md)并合入，作者与独立定向各12/12通过。实际增量含transport helper、worker测试及Cargo的dev测试声明，锁不变；正常/build依赖特性树与修复前一致。更新对应3个既有产品pin后重包，尚未重跑App验收。
 - `a663586b`包[静态独核](../../verification/account110/mac-package-review04.md)通过，owned单次push再次失败，A为SIGABRT而B正常退出。[精确崩溃证据](../../verification/account110/native/live02-push-crash01/README.md)确认实际transfer_target poll链栈溢出，单个poll frame约198.6KiB；旧paused-owner小栈及mock deadline测试未覆盖真实SDK准备链，不能以它们推断该路径有界。
 - Huygens获授权测量真实transfer/prepare/execute future布局并在必要组合边界heap-pin，新增真实类型/小栈poll回归，保留185秒统一期限和所有退役、身份校验规则；Erdos独审。不得加大生产线程栈、并行映射或修改成功条件掩盖崩溃。
+- 实际future堆固定源码 `4c1ac003 + ddf7b792` 已[最终独审批准](../reviews/app-account110-transfer-stack-02.md)并合入。prepare50472→1360B、transfer253008→832B、execute506160→152B；作者与独立13项定向通过，另将真实SDK拒绝断言收紧后只重跑受影响1项通过。保留baseline/首次部分修复失败，生产线程栈与185秒期限不变。更新2项pin后重包复测，尚未得到App传输PASS。
