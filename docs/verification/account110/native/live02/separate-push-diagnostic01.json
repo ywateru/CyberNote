@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "kind": "separate-owned-live02-push-diagnostic",
+  "source": "0a4a4cda80d926c470cfbc8d5cef3bb2937ca58a",
+  "binarySha256": "a9cca8b3bdd6c270162924287ab4a12c59d72ae5219a47167d8061b9384b967b",
+  "firstResultSha256": "af7cc9c56d3b46ddfbc2f86983df6cd9764c1bf9ed1ceb7206a4c51889649571",
+  "firstResultUnchanged": true,
+  "status": "fail",
+  "startedAt": "2026-11-14T10:55:28.190Z",
+  "boundary": "Separate authorized reopen of only live02 owned A/B. One push only. No fresh signin, no copied credentials, no acceptance rerun. Raw account DTOs RAM only; no message/IDs/profile/URLs persisted.",
+  "pushSubmitted": true,
+  "commandDone": true,
+  "commandRejected": false,
+  "commandTerminal": {
+    "state": "ready",
+    "enabled": true,
+    "hasProfile": true,
+    "pendingCount": 0,
+    "conflictCount": 0,
+    "devices": [
+      {
+        "label": "a",
+        "current": true,
+        "online": true,
+        "connected": false,
+        "syncAvailable": true,
+        "summary": {
+          "capturedAt": 1794653817675,
+          "lastNoteUpdatedAt": 1794653408652,
+          "noteCount": 2
+        }
+      },
+      {
+        "label": "b",
+        "current": false,
+        "online": true,
+        "connected": false,
+        "syncAvailable": true,
+        "summary": {
+          "capturedAt": 1794653818327,
+          "lastNoteUpdatedAt": 1794653409244,
+          "noteCount": 2
+        }
+      }
+    ],
+    "deviceOperation": {
+      "device": "b",
+      "direction": "push",
+      "phase": "failed",
+      "startedAt": 1794653775161,
+      "finishedAt": 1794653826276
+    },
+    "error": {
+      "code": "account_sync_failed"
+    }
+  },
+  "lifecycle": [
+    {
+      "device": "a",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    }
+  ],
+  "nativeCleanup": {
+    "allClosed": true,
+    "failed": false
+  },
+  "finishedAt": "2026-11-14T10:57:15.229Z",
+  "fullPrivateDiagnosticResultSha256": "2c561d416a4867a5a5b5f64f14129b0ad36ad278b7bb3696d51ffb4aa2f3cac7",
+  "diagnosticHarnessSha256": "d6d74aa7fdf6bff4549da7418c7c85212c983afc198bd61d70450a6ba0a91385",
+  "sampleCount": 518,
+  "observedErrorsBeforeTerminal": [],
+  "operationDurationMs": 51115,
+  "acceptanceClaim": false
+}

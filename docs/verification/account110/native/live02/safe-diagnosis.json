@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "kind": "account110-live02-safe-diagnosis",
+  "source": "0a4a4cda80d926c470cfbc8d5cef3bb2937ca58a",
+  "firstResultSha256": "af7cc9c56d3b46ddfbc2f86983df6cd9764c1bf9ed1ceb7206a4c51889649571",
+  "failure": {
+    "phase": "push",
+    "code": "ACCOUNT_FAILURE"
+  },
+  "nativeCrashObserved": false,
+  "allFourNativeProcessesNaturalExitZero": true,
+  "nativeCleanup": {
+    "allClosed": true
+  },
+  "firstPushSubmittedAndRunningObserved": true,
+  "firstPushTerminalObserved": false,
+  "accountErrorDetailsCaptured": false,
+  "errorDetails": {
+    "code": null,
+    "stage": null,
+    "reason": null,
+    "requestReason": null,
+    "httpStatus": null
+  },
+  "lastObservedOperation": {
+    "device": "b",
+    "direction": "push",
+    "phase": "running",
+    "startedAt": 1794653410748
+  },
+  "interpretation": [
+    "Normal hosted A/B login, paused directory, rename and true summaries passed.",
+    "Enable/discovery/syncNow unsolicited-data observation passed: 11 samples over 5289 ms.",
+    "The runner throws ACCOUNT_FAILURE before retaining an error DTO; exact account error and operation terminal cannot be recovered.",
+    "A directory worker error may coexist with a running push. This receipt does not establish transfer failure or protocol rejection.",
+    "Four native processes naturally exited zero with confirmed close and no forced signals; the prior stack crash was not reproduced in this run.",
+    "A separately authorized owned-data diagnostic is not the first failure and must not overwrite or reclassify it."
+  ]
+}
