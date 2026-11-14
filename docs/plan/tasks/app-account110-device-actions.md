@@ -56,3 +56,5 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - 精确源码 `cb91f4b8` 的 Mac debug 包已构建并通过[静态独核](../../verification/account110/mac-package-review01.md)。两个新资料库真实启动、重启、正文和附件保存检查，以及两次正常托管登录通过。
 - [首轮真实运行](../../verification/account110/native/device-actions-live01.md)在目录阶段失败：A 等待 B 登录期间发生原生栈溢出，故障涉及 `worker::run` 组合子任务的 poll；尚未进入方向同步，不能宣称整体通过。首失败资料库及小型诊断保留。
 - 后续修复限于组合边界 heap-pin 子 future，保留取消、双方 join 和任务退役规则；补 future 大小/小栈 poll 回归并独审后，重新生成精确包、重跑两个独立客户端。执行器同时补充安全异常及退出生命周期证据。
+- 栈修复 `8c3fc430` 与真实重启 fixture 修正 `08e4b6c7` 已[最终独审批准](../reviews/app-account110-worker-stack-02.md)并合入；作者与独立验证完整 account75/75、adoption6/6通过。旧73/1失败确定为复用未退役Session的伪重启：有限状态捕获 `pending=false, quiet=true, phase=probe`，真实release/reopen反例保持严格preflight。历史失败不改写。
+- 执行器诊断增量 `bbd2b897` 已[独审批准](../reviews/app-account110-live-runner-03.md)并合入，24项fixture通过；原生退出码/信号和pipe close分别记录，主错误与清理错误同时保留。等待更新来源清单后构建新精确包并执行第二轮。
