@@ -24,6 +24,23 @@ pub const MAX_HEAD: usize = 16 * 1024 * 1024;
 pub const MAX_BLOB: u64 = 256 * 1024 * 1024;
 pub const PAGE_SIZE: usize = 128;
 pub(crate) const NETWORK_TIMEOUT: Duration = Duration::from_secs(5);
+/// One explicit account action, including connection and all data RPCs. Never retried in background.
+pub(crate) const ACCOUNT_TRANSFER_TIMEOUT: Duration = Duration::from_secs(120);
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub enum TransferDirection {
+    Push,
+    Pull,
+    Both,
+}
+impl TransferDirection {
+    fn sends(self) -> bool {
+        matches!(self, Self::Push | Self::Both)
+    }
+    fn receives(self) -> bool {
+        matches!(self, Self::Pull | Self::Both)
+    }
+}
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BlobRef {

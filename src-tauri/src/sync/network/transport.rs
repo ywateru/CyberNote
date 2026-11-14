@@ -317,7 +317,11 @@ pub(super) async fn serve(
     s.status(&id, "connected", None, false);
     let mut handler = wire::Handler::new();
     let mut last = Instant::now();
+    let started = Instant::now();
     loop {
+        if s.policy.is_some() && started.elapsed() >= ACCOUNT_TRANSFER_TIMEOUT {
+            return Err(SyncError::Timeout);
+        }
         s.authorize(&device, &key)?;
         s.identity
             .check_authorized(&id, &workspace, &key, &device)?;
@@ -349,7 +353,11 @@ pub(super) async fn serve(
         if matches!(&response, wire::Response::Stored { .. }) {
             s.status(&id, "idle", None, true);
         }
+        let complete = matches!(&response, wire::Response::TransferComplete);
         tokio::select! {r=socket.send(&response)=>r?,_=stop.changed()=>return Err(SyncError::Stopped)};
+        if complete {
+            return Ok(());
+        }
     }
 }
 
@@ -490,6 +498,184 @@ mod tests {
         fn endpoint(&self, _: &str) -> Result<String> {
             Err(SyncError::Transport)
         }
+    }
+    fn account_host() -> (tempfile::TempDir, SyncService, PairingInvite, Arc<Backend>) {
+        let dir = tempfile::tempdir().unwrap();
+        let workspace = uuid::Uuid::new_v4().to_string();
+        let (shared, backend) = shared(dir.path(), &workspace);
+        let service = SyncService::with_policy(
+            backend.clone(),
+            shared.identity.clone(),
+            dir.path().join("stage"),
+            Some(Arc::new(Gate(AtomicBool::new(true)))),
+        )
+        .unwrap();
+        let address = service
+            .start_listener("127.0.0.1:0".parse().unwrap())
+            .unwrap();
+        let invite =
+            PairingInvite::decode(&service.invitation(&format!("ws://{address}/")).unwrap())
+                .unwrap();
+        (dir, service, invite, backend)
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn account_requires_capability_and_push_cannot_read_or_renegotiate() {
+        let (_dir, _service, invite, backend) = account_host();
+        let client_dir = tempfile::tempdir().unwrap();
+        let (client_shared, _) = shared(client_dir.path(), &invite.workspace_id);
+        let (mut socket, _) = client(&client_shared, &invite).await.unwrap();
+        // Simulates an old account client: Noise authentication alone is insufficient.
+        assert!(matches!(
+            socket
+                .rpc(&wire::Request::Inventory {
+                    after: None,
+                    limit: 1
+                })
+                .await,
+            Err(SyncError::Protocol)
+        ));
+        assert!(matches!(
+            socket
+                .rpc(&wire::Request::BeginTransfer {
+                    version: 2,
+                    direction: TransferDirection::Both
+                })
+                .await,
+            Err(SyncError::Protocol)
+        ));
+        assert!(matches!(
+            socket
+                .rpc(&wire::Request::BeginTransfer {
+                    version: 1,
+                    direction: TransferDirection::Push
+                })
+                .await,
+            Ok(wire::Response::TransferReady {
+                version: 1,
+                direction: TransferDirection::Push
+            })
+        ));
+        assert!(matches!(
+            socket
+                .rpc(&wire::Request::BeginTransfer {
+                    version: 1,
+                    direction: TransferDirection::Both
+                })
+                .await,
+            Err(SyncError::Protocol)
+        ));
+        let digest = "a".repeat(64);
+        assert!(matches!(
+            socket
+                .rpc(&wire::Request::Head {
+                    digest: digest.clone(),
+                    offset: 0
+                })
+                .await,
+            Err(SyncError::Protocol)
+        ));
+        assert!(matches!(
+            socket
+                .rpc(&wire::Request::Blob {
+                    blob: BlobRef {
+                        sha256: digest,
+                        size: 0
+                    },
+                    offset: 0
+                })
+                .await,
+            Err(SyncError::Protocol)
+        ));
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 0);
+        assert!(matches!(
+            socket
+                .rpc(&wire::Request::Inventory {
+                    after: None,
+                    limit: 1
+                })
+                .await,
+            Ok(wire::Response::Inventory { .. })
+        ));
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 1);
+        assert!(matches!(
+            socket.rpc(&wire::Request::FinishTransfer).await,
+            Ok(wire::Response::TransferComplete)
+        ));
+        assert!(socket.rpc(&wire::Request::Status).await.is_err());
+        assert_eq!(backend.publications.load(Ordering::SeqCst), 0);
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn account_pull_cannot_prepare_write_or_publish_blob() {
+        let (_dir, _service, invite, backend) = account_host();
+        let client_dir = tempfile::tempdir().unwrap();
+        let (client_shared, _) = shared(client_dir.path(), &invite.workspace_id);
+        let (mut socket, _) = client(&client_shared, &invite).await.unwrap();
+        assert!(matches!(
+            socket
+                .rpc(&wire::Request::BeginTransfer {
+                    version: 1,
+                    direction: TransferDirection::Pull
+                })
+                .await,
+            Ok(wire::Response::TransferReady {
+                direction: TransferDirection::Pull,
+                ..
+            })
+        ));
+        let digest = "a".repeat(64);
+        let value = serde_json::json!({"digest":digest,"valid":true});
+        let bytes = serde_json::to_vec(&value).unwrap();
+        for request in [
+            wire::Request::PutHead {
+                digest: digest.clone(),
+                total: bytes.len(),
+                offset: 0,
+                data: wire::encoded(&bytes),
+            },
+            wire::Request::BlobOffset {
+                blob: BlobRef {
+                    sha256: digest.clone(),
+                    size: 1,
+                },
+            },
+            wire::Request::PutBlob {
+                blob: BlobRef {
+                    sha256: digest.clone(),
+                    size: 1,
+                },
+                offset: 0,
+                data: wire::encoded(&[1]),
+                finish: true,
+            },
+            wire::Request::CommitHead { digest },
+        ] {
+            assert!(matches!(
+                socket.rpc(&request).await,
+                Err(SyncError::Protocol)
+            ));
+        }
+        assert_eq!(backend.publications.load(Ordering::SeqCst), 0);
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 0);
+        assert!(matches!(
+            socket.rpc(&wire::Request::FinishTransfer).await,
+            Ok(wire::Response::TransferComplete)
+        ));
+    }
+    #[test]
+    fn account_capability_schema_is_finite_and_strict() {
+        for json in [
+            r#"{"type":"beginTransfer","version":1,"direction":"send"}"#,
+            r#"{"type":"beginTransfer","version":1,"direction":"push","extra":true}"#,
+            r#"{"type":"beginTransfer","direction":"push"}"#,
+            r#"{"type":"transferReady","version":1,"direction":"push","extra":true}"#,
+        ] {
+            assert!(serde_json::from_str::<wire::Request>(json).is_err());
+            assert!(serde_json::from_str::<wire::Response>(json).is_err());
+        }
+        assert!(serde_json::from_str::<wire::Request>(
+            r#"{"type":"beginTransfer","version":1,"direction":"both"}"#
+        )
+        .is_ok());
     }
     #[tokio::test(flavor = "current_thread")]
     async fn account_gate_closes_already_authenticated_stream_without_business_reads() {

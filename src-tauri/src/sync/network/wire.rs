@@ -3,6 +3,11 @@ use base64::{engine::general_purpose::STANDARD as B64, Engine};
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "camelCase", deny_unknown_fields)]
 pub(super) enum Request {
+    BeginTransfer {
+        version: u8,
+        direction: TransferDirection,
+    },
+    FinishTransfer,
     Inventory {
         after: Option<String>,
         limit: usize,
@@ -38,6 +43,11 @@ pub(super) enum Request {
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "camelCase", deny_unknown_fields)]
 pub(super) enum Response {
+    TransferReady {
+        version: u8,
+        direction: TransferDirection,
+    },
+    TransferComplete,
     Inventory {
         page: InventoryPage,
     },
@@ -95,6 +105,8 @@ pub(super) fn encoded(data: &[u8]) -> String {
     B64.encode(data)
 }
 pub(super) struct Handler {
+    direction: Option<TransferDirection>,
+    finished: bool,
     incoming: Option<(String, usize, Vec<u8>)>,
     outgoing: Option<(String, Vec<u8>)>,
     prepared: Option<(String, Value, Vec<BlobRef>)>,
@@ -102,6 +114,8 @@ pub(super) struct Handler {
 impl Handler {
     pub fn new() -> Self {
         Self {
+            direction: None,
+            finished: false,
             incoming: None,
             outgoing: None,
             prepared: None,
@@ -118,7 +132,51 @@ impl Handler {
         Ok(())
     }
     pub fn handle(&mut self, s: &Shared, req: Request) -> Result<Response> {
+        // Account capability is fixed for this authenticated socket. Legacy peers
+        // without the new handshake cannot issue even inventory/content requests.
+        if s.policy.is_some() {
+            match &req {
+                Request::Status => {}
+                Request::BeginTransfer {
+                    version: 1,
+                    direction,
+                } if self.direction.is_none() && !self.finished => {
+                    self.direction = Some(*direction);
+                    return Ok(Response::TransferReady {
+                        version: 1,
+                        direction: *direction,
+                    });
+                }
+                Request::BeginTransfer { .. } => return Err(SyncError::Protocol),
+                _ => {
+                    let direction = self
+                        .direction
+                        .filter(|_| !self.finished)
+                        .ok_or(SyncError::Protocol)?;
+                    let allowed = match &req {
+                        Request::Inventory { .. } | Request::FinishTransfer => true,
+                        Request::Head { .. } | Request::Blob { .. } => direction.receives(),
+                        Request::PutHead { .. }
+                        | Request::PutBlob { .. }
+                        | Request::BlobOffset { .. }
+                        | Request::CommitHead { .. } => direction.sends(),
+                        _ => false,
+                    };
+                    if !allowed {
+                        return Err(SyncError::Protocol);
+                    }
+                }
+            }
+        }
         match req {
+            Request::BeginTransfer { .. } => Err(SyncError::Protocol),
+            Request::FinishTransfer => {
+                if s.policy.is_none() || self.incoming.is_some() || self.prepared.is_some() {
+                    return Err(SyncError::Protocol);
+                }
+                self.finished = true;
+                Ok(Response::TransferComplete)
+            }
             Request::CommitHead { digest: id } => {
                 let (prepared_id, value, refs) =
                     self.prepared.as_ref().ok_or(SyncError::Protocol)?;

@@ -37,6 +37,11 @@ impl Worker {
         }
     }
 }
+struct AccountTask {
+    peer_id: String,
+    token: Arc<()>,
+    worker: Option<Worker>,
+}
 /// Owns a bounded Rust networking runtime. No installed application, microphone or UI timer is used.
 pub struct SyncService {
     shared: Arc<Shared>,
@@ -45,6 +50,7 @@ pub struct SyncService {
     thread: Option<thread::JoinHandle<()>>,
     listener: Mutex<Option<Worker>>,
     clients: Mutex<BTreeMap<String, Worker>>,
+    account_task: Mutex<Option<AccountTask>>,
     wake: Arc<Notify>,
     stopped: AtomicBool,
 }
@@ -97,6 +103,7 @@ impl SyncService {
             thread: Some(thread),
             listener: Mutex::new(None),
             clients: Mutex::new(BTreeMap::new()),
+            account_task: Mutex::new(None),
             wake: Arc::new(Notify::new()),
             stopped: AtomicBool::new(false),
         })
@@ -172,6 +179,15 @@ impl SyncService {
     pub fn pair(&self, token: &str) -> Result<PairingStatus> {
         self.active()?;
         let invite = PairingInvite::decode(token)?;
+        if self.shared.policy.is_some() {
+            let id = invite.invitation_id.clone();
+            return self.account_action(&id, Duration::from_secs(27), move |s| async move {
+                s.backend.prepare_pairing(&invite.workspace_id)?;
+                let (peer, _socket) = pair_socket(&s, &invite).await?;
+                s.status(&peer.invitation_id, "paired", None, false);
+                Ok(PairingStatus::from(&peer))
+            });
+        }
         self.shared.backend.prepare_pairing(&invite.workspace_id)?;
         let id = invite.invitation_id.clone();
         let mut clients = self.clients.lock().map_err(|_| SyncError::Io)?;
@@ -237,6 +253,13 @@ impl SyncService {
         if self.shared.backend.workspace_id()? != peer.workspace_id {
             return Err(SyncError::WorkspaceMismatch);
         }
+        if self.shared.policy.is_some() {
+            return self.account_action(id, Duration::from_secs(27), move |s| async move {
+                let _socket = account_socket(&s, &peer).await?;
+                s.status(&peer.invitation_id, "connected", None, false);
+                Ok(())
+            });
+        }
         let mut clients = self.clients.lock().map_err(|_| SyncError::Io)?;
         if clients.contains_key(id) {
             return Err(SyncError::Busy);
@@ -263,10 +286,36 @@ impl SyncService {
         Ok(())
     }
     pub fn disconnect(&self, id: &str) -> Result<()> {
+        let account = {
+            let mut task = self.account_task.lock().map_err(|_| SyncError::Io)?;
+            task.as_mut()
+                .filter(|task| task.peer_id == id)
+                .and_then(|task| {
+                    task.worker
+                        .take()
+                        .map(|worker| (task.token.clone(), worker))
+                })
+        };
+        if let Some((token, worker)) = account {
+            // Keep the reservation until the cancelled task is joined. An old task
+            // must never overlap a replacement action while its socket is retiring.
+            let result = worker.stop();
+            let mut slot = self.account_task.lock().map_err(|_| SyncError::Io)?;
+            if slot
+                .as_ref()
+                .is_some_and(|task| Arc::ptr_eq(&task.token, &token))
+            {
+                self.shared.status(id, "stopped", None, false);
+                slot.take();
+            }
+            result?;
+        }
         if let Some(w) = self.clients.lock().map_err(|_| SyncError::Io)?.remove(id) {
             w.stop()?;
         }
-        self.shared.status(id, "stopped", None, false);
+        if self.shared.policy.is_none() {
+            self.shared.status(id, "stopped", None, false);
+        }
         Ok(())
     }
     pub fn revoke(&self, id: &str) -> Result<()> {
@@ -275,14 +324,120 @@ impl SyncService {
     }
     pub fn sync_now(&self) -> Result<()> {
         self.active()?;
-        self.wake.notify_waiters();
+        if self.shared.policy.is_none() {
+            self.wake.notify_waiters();
+        }
         Ok(())
+    }
+    /// Account-only, selected pinned peer, one finite exchange. Success means durable
+    /// version/blob receipts, never foreground application. No retry or retained worker.
+    /// Call outside account lifecycle/Store locks; disconnect/shutdown cancels the action.
+    pub fn transfer_once(&self, id: &str, direction: TransferDirection) -> Result<()> {
+        self.active()?;
+        if self.shared.policy.is_none() {
+            return Err(SyncError::InvalidInput);
+        }
+        let peer = self.shared.identity.peer(id)?;
+        self.account_action(id, ACCOUNT_TRANSFER_TIMEOUT, move |s| async move {
+            let socket = account_socket(&s, &peer).await?;
+            let mut client = Client {
+                shared: s.clone(),
+                peer,
+                socket,
+            };
+            match client
+                .rpc(wire::Request::BeginTransfer {
+                    version: 1,
+                    direction,
+                })
+                .await?
+            {
+                wire::Response::TransferReady {
+                    version: 1,
+                    direction: accepted,
+                } if accepted == direction => {}
+                _ => return Err(SyncError::Protocol),
+            }
+            s.status(&client.peer.invitation_id, "transferring", None, false);
+            client.cycle(direction).await?;
+            match client.rpc(wire::Request::FinishTransfer).await? {
+                wire::Response::TransferComplete => {}
+                _ => return Err(SyncError::Protocol),
+            }
+            s.status(&client.peer.invitation_id, "idle", None, true);
+            Ok(())
+        })
+    }
+    fn account_action<T, F, Fut>(&self, id: &str, budget: Duration, action: F) -> Result<T>
+    where
+        T: Send + 'static,
+        F: FnOnce(Arc<Shared>) -> Fut + Send + 'static,
+        Fut: std::future::Future<Output = Result<T>> + Send + 'static,
+    {
+        let token = Arc::new(());
+        let (result_tx, result_rx) = mpsc::channel();
+        {
+            let mut slot = self.account_task.lock().map_err(|_| SyncError::Io)?;
+            self.active()?;
+            if slot.is_some() {
+                return Err(SyncError::Busy);
+            }
+            self.shared.status(id, "connecting", None, false);
+            let (stop, mut rx) = watch::channel(false);
+            let (done_tx, done) = mpsc::channel();
+            let s = self.shared.clone();
+            let peer_id = id.to_string();
+            let task = self.handle.spawn(async move {
+                let result = tokio::select! {
+                    biased;
+                    _=rx.changed()=>Err(SyncError::Stopped),
+                    result=timeout(budget, action(s.clone()))=>result.unwrap_or(Err(SyncError::Timeout)),
+                };
+                if let Err(error) = &result { s.status(&peer_id, "error", Some(*error), false); }
+                let _ = result_tx.send(result);
+                let _ = done_tx.send(());
+            });
+            *slot = Some(AccountTask {
+                peer_id: id.into(),
+                token: token.clone(),
+                worker: Some(Worker {
+                    stop,
+                    done,
+                    abort: task.abort_handle(),
+                }),
+            });
+        }
+        // No account-task mutex is held while waiting: pause/revoke must cancel promptly.
+        let result = result_rx
+            .recv_timeout(budget + Duration::from_secs(1))
+            .unwrap_or_else(|error| Err(channel_error(error)));
+        let task = {
+            let mut slot = self.account_task.lock().map_err(|_| SyncError::Io)?;
+            if slot
+                .as_ref()
+                .is_some_and(|task| Arc::ptr_eq(&task.token, &token))
+            {
+                slot.take()
+            } else {
+                None
+            }
+        };
+        if let Some(worker) = task.and_then(|task| task.worker) {
+            worker.stop()?;
+        }
+        result
     }
     pub fn shutdown(&mut self) -> Result<()> {
         if self.stopped.swap(true, Ordering::AcqRel) {
             return Ok(());
         }
         let mut error = self.stop_listener().err();
+        let account = self.account_task.lock().map_err(|_| SyncError::Io)?.take();
+        if let Some(worker) = account.and_then(|task| task.worker) {
+            if let Err(e) = worker.stop() {
+                error.get_or_insert(e);
+            }
+        }
         match self.clients.lock() {
             Ok(mut clients) => {
                 for (_, worker) in std::mem::take(&mut *clients) {
@@ -374,6 +529,48 @@ async fn pair_loop(
             let _ = ready.send(Err(error));
         }
     }
+}
+async fn pair_socket(
+    shared: &Shared,
+    invite: &PairingInvite,
+) -> Result<(Peer, transport::SecureSocket)> {
+    let (socket, device) = transport::client(shared, invite).await?;
+    let peer = (|| {
+        shared.authorize(&device, &invite.host_key)?;
+        let mut durable = invite.clone();
+        if shared.policy.is_some() {
+            durable.endpoint = "wss://account.invalid/".into();
+        }
+        let peer = shared.identity.remember_peer(&durable, &device)?;
+        shared.backend.adopt_workspace(&peer.workspace_id)?;
+        shared.identity.commit_pairing(&peer.invitation_id)
+    })()?;
+    Ok((peer, socket))
+}
+async fn account_socket(shared: &Shared, peer: &Peer) -> Result<transport::SecureSocket> {
+    shared.authorize(&peer.device_id, &peer.host_key)?;
+    if shared.backend.workspace_id()? != peer.workspace_id {
+        return Err(SyncError::WorkspaceMismatch);
+    }
+    let invite = PairingInvite {
+        version: 1,
+        workspace_id: peer.workspace_id.clone(),
+        invitation_id: peer.invitation_id.clone(),
+        endpoint: shared
+            .policy
+            .as_ref()
+            .ok_or(SyncError::InvalidInput)?
+            .endpoint(&peer.device_id)?,
+        host_key: peer.host_key.clone(),
+        psk: peer.psk.clone(),
+        expires_at: 0,
+    };
+    let (socket, device) = transport::client(shared, &invite).await?;
+    if device != peer.device_id {
+        return Err(SyncError::Authentication);
+    }
+    shared.authorize(&peer.device_id, &peer.host_key)?;
+    Ok(socket)
 }
 struct Client {
     shared: Arc<Shared>,
@@ -578,38 +775,42 @@ impl Client {
         }
         Err(SyncError::Protocol)
     }
-    async fn cycle(&mut self) -> Result<()> {
+    async fn cycle(&mut self, direction: TransferDirection) -> Result<()> {
         self.authorized()?;
         self.shared.backend.flush()?;
         let remote = self.inventory().await?;
         let mut local = local_inventory(&self.shared)?;
-        for id in remote.difference(&local) {
-            let v = self.get_head(id).await?;
-            for b in blobs(&self.shared, &v)? {
-                if !self.shared.backend.has_blob(&b)? {
-                    self.get_blob(&b).await?;
+        if direction.receives() {
+            for id in remote.difference(&local) {
+                let v = self.get_head(id).await?;
+                for b in blobs(&self.shared, &v)? {
+                    if !self.shared.backend.has_blob(&b)? {
+                        self.get_blob(&b).await?;
+                    }
                 }
-            }
-            if !self.shared.backend.receive_head(v)?.durable {
-                return Err(SyncError::Backend);
+                if !self.shared.backend.receive_head(v)?.durable {
+                    return Err(SyncError::Backend);
+                }
             }
         }
         // Re-read after pull, as another device/local editor may have committed during transfer.
-        local = local_inventory(&self.shared)?;
-        for id in local.difference(&remote) {
-            let v = self.shared.backend.version(id)?;
-            check_json(&v)?;
-            let refs = blobs(&self.shared, &v)?;
-            self.prepare_head(id, &v).await?;
-            for b in refs {
-                self.put_blob(&b).await?;
-            }
-            match self
-                .rpc(wire::Request::CommitHead { digest: id.clone() })
-                .await?
-            {
-                wire::Response::Stored { receipt } if receipt.durable => {}
-                _ => return Err(SyncError::Protocol),
+        if direction.sends() {
+            local = local_inventory(&self.shared)?;
+            for id in local.difference(&remote) {
+                let v = self.shared.backend.version(id)?;
+                check_json(&v)?;
+                let refs = blobs(&self.shared, &v)?;
+                self.prepare_head(id, &v).await?;
+                for b in refs {
+                    self.put_blob(&b).await?;
+                }
+                match self
+                    .rpc(wire::Request::CommitHead { digest: id.clone() })
+                    .await?
+                {
+                    wire::Response::Stored { receipt } if receipt.durable => {}
+                    _ => return Err(SyncError::Protocol),
+                }
             }
         }
         Ok(())
@@ -641,6 +842,11 @@ async fn client_loop(
     wake: Arc<Notify>,
 ) {
     let id = peer.invitation_id.clone();
+    // Defense against accidentally routing an account caller through legacy workers.
+    if shared.policy.is_some() {
+        shared.status(&id, "error", Some(SyncError::Protocol), false);
+        return;
+    }
     let mut socket = initial;
     let mut backoff = Duration::from_millis(500);
     loop {
@@ -682,7 +888,7 @@ async fn client_loop(
                 };
                 loop {
                     shared.status(&id, "transferring", None, false);
-                    let cycle = tokio::select! {r=client.cycle()=>r,_=stop.changed()=>break Err(SyncError::Stopped)};
+                    let cycle = tokio::select! {r=client.cycle(TransferDirection::Both)=>r,_=stop.changed()=>break Err(SyncError::Stopped)};
                     if let Err(e) = cycle {
                         break Err(e);
                     }
@@ -715,6 +921,71 @@ async fn client_loop(
 #[cfg(test)]
 mod channel_tests {
     use super::*;
+    struct UnusedBackend(String);
+    macro_rules! unused_backend {
+        ($name:ident($($arg:ident:$ty:ty),*) -> $out:ty) => {
+            fn $name(&self, $($arg:$ty),*) -> Result<$out> {
+                $(let _ = $arg;)*
+                panic!("account task deadline must not access backend")
+            }
+        };
+    }
+    impl SyncBackend for UnusedBackend {
+        fn device_id(&self) -> Result<String> {
+            Ok(self.0.clone())
+        }
+        unused_backend!(workspace_id() -> String);
+        unused_backend!(prepare_pairing(workspace: &str) -> ());
+        unused_backend!(adopt_workspace(workspace: &str) -> ());
+        unused_backend!(flush() -> ());
+        unused_backend!(inventory(after: Option<&str>, limit: usize) -> InventoryPage);
+        unused_backend!(version(digest: &str) -> Value);
+        unused_backend!(required_blobs(version: &Value) -> Vec<BlobRef>);
+        unused_backend!(has_blob(blob: &BlobRef) -> bool);
+        unused_backend!(read_blob_chunk(blob: &BlobRef, offset: u64, max: usize) -> Vec<u8>);
+        unused_backend!(store_blob(blob: &BlobRef, source: &Path) -> ());
+        unused_backend!(receive_head(version: Value) -> Receipt);
+    }
+    struct UnusedPolicy;
+    impl ReplicationPolicy for UnusedPolicy {
+        fn authorize(&self, _: &str, _: &str) -> Result<()> {
+            Ok(())
+        }
+        fn endpoint(&self, _: &str) -> Result<String> {
+            Err(SyncError::Transport)
+        }
+    }
+    #[test]
+    fn account_action_deadline_retires_task_and_allows_only_explicit_retry() {
+        let dir = tempfile::tempdir().unwrap();
+        let device = uuid::Uuid::new_v4().to_string();
+        let backend = Arc::new(UnusedBackend(device.clone()));
+        let identity =
+            Arc::new(IdentityStore::open(&dir.path().join("identity"), &device).unwrap());
+        let service = SyncService::with_policy(
+            backend,
+            identity,
+            dir.path().join("stage"),
+            Some(Arc::new(UnusedPolicy)),
+        )
+        .unwrap();
+        let started = std::time::Instant::now();
+        assert_eq!(
+            service.account_action("deadline", Duration::from_millis(30), |_| {
+                std::future::pending::<Result<()>>()
+            }),
+            Err(SyncError::Timeout)
+        );
+        assert!(started.elapsed() < Duration::from_secs(2));
+        assert!(service.account_task.lock().unwrap().is_none());
+        assert_eq!(
+            service.account_action("explicit-retry", Duration::from_secs(1), |_| async {
+                Ok(())
+            }),
+            Ok(())
+        );
+        assert!(service.account_task.lock().unwrap().is_none());
+    }
     #[test]
     fn ready_channel_disconnect_is_transport_and_elapsed_wait_is_timeout() {
         let (tx, rx) = mpsc::channel::<()>();
