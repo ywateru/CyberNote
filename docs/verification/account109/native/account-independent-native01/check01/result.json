@@ -1,0 +1,25 @@
+{
+  "source": "5f9fb153451ce03b6000be9885bcba371e97c5ec",
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--lib",
+    "account::",
+    "--",
+    "--test-threads=2"
+  ],
+  "env": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "freeBefore": 14336495616,
+  "exitCode": 101,
+  "freeAfter": 14196957184
+}

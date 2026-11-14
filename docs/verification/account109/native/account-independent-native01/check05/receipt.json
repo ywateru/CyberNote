@@ -1,0 +1,120 @@
+{
+  "source": "2d0e228adfcd2879820e3df77b778a3e6bf32401",
+  "env": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "statusBefore": "",
+  "locksBefore": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "freeBefore": 13889794048,
+  "runs": [
+    {
+      "name": "local-recovery",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "explicit_local_recovery",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794629036.53608,
+      "pid": 33993,
+      "exitCode": 0,
+      "end": 1794629060.602252
+    },
+    {
+      "name": "manual-resume",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "account_pause_joins_manual",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794629060.603025,
+      "pid": 34085,
+      "exitCode": 0,
+      "end": 1794629062.611625
+    },
+    {
+      "name": "workspace-adoption",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "workspace_adoption",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794629062.6122382,
+      "pid": 34102,
+      "exitCode": 0,
+      "end": 1794629064.6212878
+    },
+    {
+      "name": "account",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "account::",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794629064.621981,
+      "pid": 34124,
+      "exitCode": 0,
+      "end": 1794629072.648629
+    },
+    {
+      "name": "account-auth",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "crates/account-auth/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794629072.6493251,
+      "pid": 34154,
+      "exitCode": 0,
+      "end": 1794629075.6662312
+    }
+  ],
+  "statusAfter": "",
+  "locksAfter": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "freeAfter": 13520445440
+}

@@ -1,0 +1,74 @@
+{
+  "source": "5634c8fb39ecbf8b441974e9ecb9df9e410edba6",
+  "statusBefore": "",
+  "env": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "locksBefore": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "freeBefore": 14195597312,
+  "runs": [
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "account::",
+        "--",
+        "--test-threads=2"
+      ],
+      "log": "account.log",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "workspace_adoption",
+        "--",
+        "--test-threads=2"
+      ],
+      "log": "workspace-adoption.log",
+      "exitCode": 0
+    },
+    {
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "sync::adapter",
+        "--",
+        "--test-threads=2"
+      ],
+      "log": "adapter.log",
+      "exitCode": 0
+    }
+  ],
+  "locksAfter": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "statusAfter": "",
+  "freeAfter": 14109515776
+}

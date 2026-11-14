@@ -1,0 +1,82 @@
+{
+  "source": "a675d959ec9ead6a40fbf74209fdc4a9272dd1d3",
+  "env": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "statusBefore": "",
+  "locksBefore": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "freeBefore": 14000553984,
+  "runs": [
+    {
+      "name": "account-auth",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "crates/account-auth/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794628878.366702,
+      "pid": 33160,
+      "exitCode": 0,
+      "end": 1794628893.417544
+    },
+    {
+      "name": "account",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "account::",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794628893.418069,
+      "pid": 33336,
+      "exitCode": 0,
+      "end": 1794628970.666867
+    },
+    {
+      "name": "local-recovery",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--lib",
+        "explicit_local_recovery",
+        "--",
+        "--test-threads=2"
+      ],
+      "start": 1794628970.667504,
+      "pid": 33724,
+      "exitCode": 101,
+      "end": 1794628972.674033
+    }
+  ],
+  "statusAfter": "",
+  "locksAfter": {
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "freeAfter": 13982023680
+}
