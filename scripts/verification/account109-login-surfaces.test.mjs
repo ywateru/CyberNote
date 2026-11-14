@@ -70,6 +70,7 @@ function descendants(node) {return node.childNodes.flatMap(c=>[c,...descendants(
 function props(node) {const key=Object.keys(node).find(k=>k.startsWith('__reactProps$'));assert(key);return node[key];}
 function deferred() {let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};}
 const authorizing=surface=>({...signedOutAccount(),state:'authorizing',...(surface?{authorizationSurface:surface}:{})});
+const adoptionRecoveryGuidance='若旧同步来自“设备同步”，可退出当前账户，再前往“设备同步”恢复并处理旧同步。若旧账户仍有待接收内容，可退出当前账户并重新登录旧账户；身份及同步空间验证通过且原同步凭证仍可用时，会恢复旧设备身份，同步仍保持暂停。请确认开启原同步空间并处理待接收内容，完成后再退出，登录目标账户并确认开启合并。';
 
 function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
   let native=structuredClone(initial),handle;
@@ -346,6 +347,7 @@ test('blocked adoption retains paused login and exposes only actual conflicts wi
    error:{code:'account_sync_adoption_blocked',message:'private-response-sentinel'}},onConflicts:()=>{opened++;}});
   await h.mount();assert(h.text().includes('开启同步前需要处理旧同步内容'));
   assert(h.text().includes('当前账户已登录且同步暂停，本机内容会保留'));
+  assert(h.text().includes(adoptionRecoveryGuidance),'status error explains both explicit recovery paths and their preconditions');
   assert(!h.text().includes('private-response-sentinel'));assert(!h.button('登录'));assert(h.button('退出账户'));
   assert(!h.button('重试登录'));assert(!h.button('重试连接'));assert(props(h.button('立即同步')).disabled);
   const links=h.buttons().filter(b=>b.textContent.startsWith('查看冲突'));
@@ -367,6 +369,7 @@ test('immediate adoption rejection keeps full enable confirmation and retries st
  assert(h.text().includes('包括先前同步后保留的内容'));assert(!h.calls.some(c=>c.type==='setEnabled'));
  await h.click('开启并合并');assert(h.text().includes('开启同步前需要处理旧同步内容'));
  assert(h.text().includes('当前账户已登录且同步暂停'));assert(!h.text().includes('private-response-sentinel'));
+ assert(h.text().includes(adoptionRecoveryGuidance),'IPC rejection gives the same safe recovery guidance');
  assert.equal(h.buttons().filter(b=>b.textContent.startsWith('查看冲突')).length,1);
  await h.click('查看冲突（1）');assert.equal(opened,1);
  await h.click('读取账户状态');assert.equal(h.calls.at(-1).type,'status');

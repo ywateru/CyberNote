@@ -165,7 +165,7 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     account_platform_unsupported: "此平台暂不支持账户操作。本机备忘录仍可继续编辑。",
     account_sync_failed: "同步未完成，请查看账户状态后重试。本地更改仍保存在此设备。",
     account_sync_protocol: "设备同步响应未通过校验，请检查服务或更新应用。本地更改仍会保留。",
-    account_sync_adoption_blocked: "旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。",
+    account_sync_adoption_blocked: "旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。若旧同步来自“设备同步”，可退出当前账户，再前往“设备同步”恢复并处理旧同步。若旧账户仍有待接收内容，可退出当前账户并重新登录旧账户；身份及同步空间验证通过且原同步凭证仍可用时，会恢复旧设备身份，同步仍保持暂停。请确认开启原同步空间并处理待接收内容，完成后再退出，登录目标账户并确认开启合并。",
     account_enrollment_invalid: "设备授权凭证未通过校验，请检查服务或更新应用。本机备忘录会保留。",
     account_auth_callback_invalid: "登录回跳未通过校验，请重新开始登录。本机备忘录会保留。",
     account_auth_code_rejected: "登录授权码交换被拒绝，请重新开始登录。本机备忘录会保留。",

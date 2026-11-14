@@ -88,7 +88,7 @@ test('service identity mismatch permits only explicit unauthenticated terminal l
 });
 test('adoption blocked is a finite local sync error, never an authentication or connection retry',()=>{
  const error={code:'account_sync_adoption_blocked',message:'private-response-sentinel'};
- const expected='旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。';
+ const expected='旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。若旧同步来自“设备同步”，可退出当前账户，再前往“设备同步”恢复并处理旧同步。若旧账户仍有待接收内容，可退出当前账户并重新登录旧账户；身份及同步空间验证通过且原同步凭证仍可用时，会恢复旧设备身份，同步仍保持暂停。请确认开启原同步空间并处理待接收内容，完成后再退出，登录目标账户并确认开启合并。';
  for(const state of ['paused','error'])for(const profile of [undefined,{subject:'fixture-B',displayName:'B'}]) {
   const parsed=validateAccountStatus({...status(error),state,...(profile?{profile}:{})});
   assert.equal(parsed.error.code,error.code);assert.equal(accountNeedsLogin(parsed.error),false);
