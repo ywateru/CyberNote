@@ -38,3 +38,7 @@ Final evidence totals **13 passed, zero failed/ignored**; the first publication 
 Summary SHA-256: `4adbafe15111620bd7adf0a5ebf0f168d494ab574cc6668fc50e46a445f6d4ef`. Tested-inputs SHA-256: `7a1c9423b4509b6c79b89b5556f41938fcf3ac8cc42cad64e950b27fc383d240`. Existing command/result receipts specify the shared target, jobs 2, debug 0, incremental 0, locked/offline, serial tests and a 6 GiB floor. The author's summary reports target released; the reviewer acquired no lease.
 
 This approves the exact source repair and bounded regression evidence. The prior real-App transfer remains FAIL; push/pull/both actual acceptance remains pending.
+
+## Final committed evidence confirmation
+
+The author subsequently committed the evidence as `22f1031650b73b3cace80fc297dbdd8d0fb2b719`, directly atop reviewed product `28b00eb733891c3430052c5415236505ec8f6e52`. Independent Git-object verification confirms all **16/16 SHA256SUMS entries**, all seven committed source pins, and byte-for-byte equality of the four logs, summary and tested-inputs with the previously reviewed evidence. The first failed run is preserved. The evidence commit changes documentation only. Verdict remains **APPROVE** for this exact product/evidence chain. No additional Cargo rerun was necessary after the evidence was committed; no target work was started, and the newly offered exclusive lease is relinquished for pins/build coordination.
