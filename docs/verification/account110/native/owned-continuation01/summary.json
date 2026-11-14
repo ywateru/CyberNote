@@ -1,0 +1,180 @@
+{
+  "schema": 1,
+  "kind": "same-owned-independent-direction-continuation",
+  "status": "continuation-pass-original-fresh-run-still-failed",
+  "productSource": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+  "harnessSource": "7d9e48285fbb80300d666981e2771b073fcb053b",
+  "harnessSourceClean": true,
+  "harnessSha256": "b830a116342f1ef91d622b8bf12b1c60c9bbf321917f8c397fb6c3a6722d8334",
+  "candidate": {
+    "binary": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account110/mac-29c87810-debug-01/CyberNote-Account110-29c87810.app/Contents/MacOS/notes-clone",
+    "binarySha256": "96192c49b6abcc9b689dad895203455c7ceefa713d2e17e15c7379ca85c7ef42",
+    "sourceRevision": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+    "sourceFingerprint": "6c6d07a520305917f668f63ae5ac91c307da049103edc8bce003865af95fe491",
+    "receiptSha256": "8f1dc6d52f00732b9e76018ef76433404e23314573e5f59efb55b7c1832c13b0"
+  },
+  "originalResultSha256": "33b8150f542aa3eab1dfce2151923837cb693191df8edc6ece9996eee00f49fb",
+  "originalFailure": {
+    "phase": "push",
+    "code": "NATIVE_TIMEOUT"
+  },
+  "checks": [
+    {
+      "name": "completed-push complete original documents/bytes and reverse exclusion remain stable",
+      "status": "pass",
+      "samples": 13,
+      "observedMs": 5157,
+      "totalBudgetMs": 30000
+    },
+    {
+      "name": "completed-push independently verified from pinned original semantic and byte expectations",
+      "status": "pass"
+    },
+    {
+      "name": "pull complete content/attachments and forbidden direction remain stable",
+      "status": "pass",
+      "samples": 12,
+      "observedMs": 5057,
+      "totalBudgetMs": 30000
+    },
+    {
+      "name": "pull explicit durable receipt plus complete allowed and forbidden checks",
+      "status": "pass",
+      "runningObserved": true
+    },
+    {
+      "name": "both complete content/attachments and forbidden direction remain stable",
+      "status": "pass",
+      "samples": 17,
+      "observedMs": 5086,
+      "totalBudgetMs": 30000
+    },
+    {
+      "name": "both explicit durable receipt plus complete allowed and forbidden checks",
+      "status": "pass",
+      "runningObserved": true
+    },
+    {
+      "name": "local edits and new notes remain local including remote protocol version fingerprints",
+      "status": "pass",
+      "samples": 6,
+      "observedMs": 5096,
+      "totalBudgetMs": 30000
+    },
+    {
+      "name": "normal B close expires online lease but retains same directory row and hides current summary",
+      "status": "pass"
+    },
+    {
+      "name": "B normal restart retains identity without hidden transfer",
+      "status": "pass",
+      "samples": 7,
+      "observedMs": 5578,
+      "totalBudgetMs": 30000
+    },
+    {
+      "name": "both final normal restarts preserve local divergence and never exchange unsolicited data",
+      "status": "pass",
+      "samples": 7,
+      "observedMs": 5616,
+      "totalBudgetMs": 30000
+    },
+    {
+      "name": "final both-client normal restart preserves every complete document format and original attachment byte",
+      "status": "pass"
+    }
+  ],
+  "nativeCleanup": {
+    "allClosed": true,
+    "failed": false
+  },
+  "productAfter": {
+    "head": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+    "clean": true
+  },
+  "harnessAfter": {
+    "head": "7d9e48285fbb80300d666981e2771b073fcb053b",
+    "clean": true
+  },
+  "originalResultUnchanged": true,
+  "resultSha256": "246c0f624784e16797a9d27a871a9d5af2da482e9b3f8db099e7c6fa017a21ca",
+  "resultBytes": 2003633,
+  "actionRows": 11052,
+  "documentAttachmentVerifications": 110,
+  "finalSpecimensByDevice": {
+    "a": 10,
+    "b": 9
+  },
+  "finalAttachmentsByDevice": {
+    "a": 20,
+    "b": 18
+  },
+  "directionCommands": [
+    "pull",
+    "both"
+  ],
+  "lifecycle": [
+    {
+      "device": "a",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    },
+    {
+      "device": "a",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    }
+  ],
+  "probeSummary": {
+    "absence": {
+      "allClosed": true,
+      "hadFailures": false,
+      "processes": 77
+    },
+    "footprints": {
+      "allClosed": true,
+      "hadFailures": false,
+      "processes": 42
+    }
+  }
+}
