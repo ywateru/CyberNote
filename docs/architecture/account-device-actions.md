@@ -86,6 +86,21 @@ presence 最多65秒，定期续租；syncAvailable 还要求底层 transport se
 
 网络API具体Rust函数签名由network与account作者同步后记录于实现报告，不以父级猜测替代类型检查；语义不得削弱本契约。
 
+## 单次传输的有限错误诊断
+
+真实 live02 的独立 push 诊断已观察到 `failed + account_sync_failed`，但既有转换丢弃了具体 SyncError，不能据此判断配对还是传输失败。为定位实际故障，`SafeError` 可在 `code=account_sync_failed` 时增加成对可选字段：
+
+```text
+syncStage: pair | recoverPairing | transfer | retirement
+syncReason: io | invalid_input | corrupt_identity | authentication | expired
+          | revoked | workspace_mismatch | protocol | limit | timeout
+          | stopped | backend | plan_stale | busy | transport
+```
+
+两字段同时存在或同时缺失，仅由具体配对、恢复配对、单次传输或退役调用返回的类型化错误生成；不能从时间、错误文本或账户状态推测。未知旧错误维持通用文案。前端严格拒绝未知枚举、半对字段及其他错误代码携带这组字段，用本地固定中文表显示阶段和原因，不显示上游消息、endpoint、用户内容或内部身份。原错误 code、取消、门禁、期限、join/drain 和退役完成规则保持原语义；补充诊断不构成重试、降级或放宽成功条件。
+
+测试执行器在遇到错误时保存经过固定字段和枚举校验的有限诊断，再终止本轮；有目录错误仍不能标为整体通过。目录状态和设备操作终态分别观察，诊断复跑单独记录，不能覆盖首轮结果或把复跑字段补造为首错证据。
+
 ## 保全与验收
 
 本轮使用新建的两个独立 data-dir 和合成数据，不在默认原库开启同步。登录凭据仅进入真实授权表单，不进源码、回执或截图。测试内容包含格式、附件与双向独有笔记；每次操作验证允许方向和禁止方向，另验证空闲后不自发传输。详细矩阵与实际执行回执链接由任务收尾补充。

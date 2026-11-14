@@ -58,3 +58,5 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - 后续修复限于组合边界 heap-pin 子 future，保留取消、双方 join 和任务退役规则；补 future 大小/小栈 poll 回归并独审后，重新生成精确包、重跑两个独立客户端。执行器同时补充安全异常及退出生命周期证据。
 - 栈修复 `8c3fc430` 与真实重启 fixture 修正 `08e4b6c7` 已[最终独审批准](../reviews/app-account110-worker-stack-02.md)并合入；作者与独立验证完整 account75/75、adoption6/6通过。旧73/1失败确定为复用未退役Session的伪重启：有限状态捕获 `pending=false, quiet=true, phase=probe`，真实release/reopen反例保持严格preflight。历史失败不改写。
 - 执行器诊断增量 `bbd2b897` 已[独审批准](../reviews/app-account110-live-runner-03.md)并合入，24项fixture通过；原生退出码/信号和pipe close分别记录，主错误与清理错误同时保留。等待更新来源清单后构建新精确包并执行第二轮。
+- 新精确包 `0a4a4cda` 已[静态独核](../../verification/account110/mac-package-review02.md)通过。[live02](../../verification/account110/native/live02/README.md)实际通过双端登录、暂停目录、稳定登记ID、改名、准确笔记摘要与开启不广播；push阶段失败，四次进程均正常退出。单独诊断观察到约51秒后push终态failed、`account_sync_failed`，不能定位具体网络阶段。原始结果与诊断分别保留，尚未完成方向同步验收。
+- 最小诊断增量由Huygens实现原生类型/转换，Socrates实现严格前端解析和固定文案，Feynman实现执行器有限错误收据；Erdos审原生，Cicero审前端，执行器另独审。按架构中的成对`syncStage/syncReason`契约，不改成功条件、超时或传输行为；通过后重包继续定位并完成实际验收。
