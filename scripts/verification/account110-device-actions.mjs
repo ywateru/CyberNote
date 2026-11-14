@@ -10,7 +10,7 @@ import {mkdir,readFile,writeFile,lstat,realpath} from 'node:fs/promises';
 import {resolve,isAbsolute,relative,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawn} from 'node:child_process';
-import {NativeApp,delay} from './sync108-native-driver.mjs';
+import {NativeApp,delay,bounded} from './sync108-native-driver.mjs';
 
 const bad=code=>Object.assign(new Error(code),{code});
 const need=(v,code='CHECK_FAILED')=>{if(!v)throw bad(code);};
@@ -27,6 +27,35 @@ const stable=v=>Array.isArray(v)?v.map(stable):object(v)?Object.fromEntries(Obje
 const equal=(a,b)=>JSON.stringify(stable(a))===JSON.stringify(stable(b));
 const directions=['push','pull','both'];
 const states=['signedOut','authorizing','connecting','ready','paused','error'];
+// Only codes already emitted by the fixed native driver/bridge; never raw errors.
+const driverFailureCodes=['APP_CLOSING','APP_EXITED','EXIT_BEFORE_HELLO','EXIT_BEFORE_RESPONSE','STDIN_ERROR','INVALID_HELLO','INVALID_RESPONSE','UNEXPECTED_RESPONSE','INVALID_FRAME','TRUNCATED_FRAME','STDOUT_LINE_TOO_LARGE','INVALID_REQUEST','INPUT_TOO_LARGE','NOT_NATIVE_DEBUG_APP','NATURAL_EXIT_TIMEOUT','TERM_EXIT_TIMEOUT','KILL_EXIT_TIMEOUT','PIPE_CLOSE_TIMEOUT','NON_NATURAL_EXIT','DRIVER_ERROR','INVALID_DIAGNOSTIC','EVAL_FAILED','INPUT_ERROR','NOT_READY','PAGE_STATE_ERROR','PARTIAL_RECORD','WINDOW_UNAVAILABLE','INVALID_ARGUMENT','UNKNOWN_COMMAND','UNAVAILABLE','UNSUPPORTED','APP_ERROR','WRONG_WINDOW','OUTPUT_TOO_LARGE','SENSITIVE_DOM','JS_ERROR'];
+const signals=['SIGHUP','SIGINT','SIGQUIT','SIGILL','SIGTRAP','SIGABRT','SIGBUS','SIGFPE','SIGKILL','SIGSEGV','SIGPIPE','SIGALRM','SIGTERM','SIGUSR1','SIGUSR2','SIGXCPU','SIGXFSZ','SIGSYS'];
+const safeSignal=value=>value===null?null:signals.includes(value)?value:'unknown';
+export function safeLifecycle(app,{closeConfirmed=false,cleanupError}={}){
+ const l=app.lifecycle??{},exitObserved=object(l.exit),closeObserved=object(l.close);
+ const exitCode=exitObserved&&Number.isInteger(l.exit.code)&&l.exit.code>=0&&l.exit.code<=255?l.exit.code:null;
+ const exitSignal=exitObserved?safeSignal(l.exit.signal):null;
+ const forcedSignals=(Array.isArray(l.forcedSignals)?l.forcedSignals:[]).filter(s=>['SIGTERM','SIGKILL'].includes(s));
+ return {device:['a','b'].includes(app.name)?app.name:'unknown',naturalExit:l.naturalExit===true&&closeConfirmed&&closeObserved&&exitObserved&&exitCode===0&&exitSignal===null&&forcedSignals.length===0&&l.failureCode===undefined&&!cleanupError,
+  exitObserved,exitCode,exitSignal,closeObserved,closeConfirmed,forcedSignals,
+  ...(l.failureCode===undefined?{}:{driverFailureCode:safeFailure({code:l.failureCode})}),
+  ...(cleanupError?{cleanupErrorCode:safeFailure(cleanupError)}:{})};
+}
+export async function closeNativeClients(apps,{closeWaitMs=3000}={}){
+ const lifecycle=await Promise.all(apps.map(async app=>{
+  let cleanupError,closeConfirmed=false;
+  try{await app.close();}catch(error){cleanupError={code:safeFailure(error)};}
+  // An exit event or shutdown ACK does not confirm that the child's pipes closed.
+  try{
+   need(app.closed&&typeof app.closed.then==='function','INVALID_LIFECYCLE');
+   await bounded(app.closed,closeWaitMs,'PIPE_CLOSE_TIMEOUT');
+   closeConfirmed=object(app.lifecycle?.close);
+   need(closeConfirmed,'INVALID_LIFECYCLE');
+  }catch(error){cleanupError??={code:safeFailure(error)};}
+  return safeLifecycle(app,{closeConfirmed,cleanupError});
+ }));
+ return {allClosed:lifecycle.every(l=>l.closeConfirmed),failed:lifecycle.some(l=>!l.naturalExit),lifecycle};
+}
 const accountExpression="window.__TAURI_INTERNALS__.invoke('account_command',{command:arg})";
 const startExpression=`(()=>{const key='__CYBERNOTE_ACCOUNT110_ACTION__';if(window[key]&&!window[key].done)throw Error('ACTION_BUSY');const s={sequence:arg.sequence,done:false,failed:false};window[key]=s;Promise.resolve().then(()=>window.__TAURI_INTERNALS__.invoke('account_command',{command:arg.command})).then(status=>{s.status=status;s.done=true;},()=>{s.failed=true;s.done=true;});return {started:true,sequence:s.sequence};})()`;
 const pollExpression=`(()=>{const s=window.__CYBERNOTE_ACCOUNT110_ACTION__;if(!s||s.sequence!==arg.sequence)throw Error('ACTION_OWNER');const v={sequence:s.sequence,done:s.done,failed:s.failed,...(s.done&&!s.failed?{status:s.status}:{})};if(s.done)delete window.__CYBERNOTE_ACCOUNT110_ACTION__;return v;})()`;
@@ -262,7 +291,7 @@ export async function main(argv, {App=NativeApp,print=console.log}={}){
  const ws=async app=>(await app.state()).workspace;
  const leave=async app=>{for(let i=0;i<4&&(await app.state()).preferences.open;i++)await commandUI(app,'app.back');need(!(await app.state()).preferences.open,'UI_NOT_READY');};
  const open=async name=>{if(authenticated.has(name))restoring.add(name);need(await fileHash(candidate.binary)===candidate.binarySha256,'BINARY_CHANGED');const app=new App(candidate.binary,resolve(opts.output,'desktop-'+name),{name,env:{NOTES_SYNC_E2E_SLOT:name==='a'?'left':'right'}});children.push(app);apps[name]=app;await app.ready(60000);return app;};
- const close=async app=>{await app.close();need(app.lifecycle.naturalExit===true,'CLEANUP_FAILED');};
+ const close=async app=>{const result=await closeNativeClients([app]);need(!result.failed,'CLEANUP_FAILED');};
  const capture=async(app,label)=>{
   await leave(app);await commandUI(app,'folder.select',{id:'default'});await commandUI(app,'note.create');
   const document={type:'doc',content:[{type:'paragraph',content:[{type:'text',text:`Account110 ${label}`,marks:[{type:'bold'}]}]},{type:'paragraph',content:[{type:'text',text:'完整正文 / UTF-8 😀 / '+label,marks:[{type:'italic'}]}]}]};
@@ -345,13 +374,13 @@ export async function main(argv, {App=NativeApp,print=console.log}={}){
   report.probes=await probes.closeAll();
   if(report.probes.hadFailures){report.status='fail';report.failure??={phase:'probe',code:report.probes.receipts.find(r=>r.failureCode)?.failureCode??'PROBE_FAILED'};}
   if(!report.probes.allClosed||report.probes.receipts.some(r=>r.cleanupFailure)){report.status='fail';report.probeCleanupFailure={code:'PROBE_CLEANUP_FAILED'};}
-  const closed=await Promise.allSettled(children.map(app=>app.close()));report.lifecycle=children.map(app=>({device:app.name,naturalExit:app.lifecycle.naturalExit===true,exitCode:app.lifecycle.exit?.code??null,forcedSignals:(app.lifecycle.forcedSignals||[]).filter(s=>['SIGTERM','SIGKILL'].includes(s))}));
-  if(closed.some(r=>r.status==='rejected')||report.lifecycle.some(l=>!l.naturalExit)){report.status='fail';report.cleanupFailure={code:'CLEANUP_FAILED'};}
+  const closed=await closeNativeClients(children);report.lifecycle=closed.lifecycle;report.nativeCleanup={allClosed:closed.allClosed};
+  if(closed.failed){report.status='fail';report.cleanupFailure={code:'CLEANUP_FAILED'};}
   report.finishedAt=new Date().toISOString();await save();
  }
  return report;
 }
-export function safeFailure(error){const codes=['OBSERVATION_TIMEOUT','PROBE_OUTPUT_LIMIT','PROBE_STDIN_ERROR','PROBE_PROCESS_ERROR','PROBE_CANCELLED','PROBE_CLEANUP_FAILED','INVALID_DTO','ACCOUNT_FAILURE','DEVICE_OPERATION_FAILED','ACCOUNT_OWNER_CHANGED','ACTION_OWNER','ACTION_RECEIPT','ACCOUNT_COMMAND_FAILED','DEVICE_OPERATION_TIMEOUT','BINARY_CHANGED','OWNERSHIP_FAILED','PROBE_TIMEOUT','PROBE_FAILED','REVERSE_PROTOCOL_DATA','REVERSE_ATTACHMENT_BYTES','CONTENT_MISSING','CONTENT_MISMATCH','ATTACHMENT_MISMATCH','ATTACHMENT_BYTES_MISMATCH','ATTACHMENT_READ_MISMATCH','REVERSE_CONTENT','UNREQUESTED_TRANSFER','ACCOUNT_NOT_ENABLED','CURRENT_DEVICE_MISSING','DIRECTORY_TIMEOUT','SUMMARY_TIMEOUT','FRESH_LIBRARY_REQUIRED','LOGIN_FAILED','LOGIN_NOT_PAUSED','AUTHORIZATION_TIMEOUT','DEVICE_ID_COLLISION','FOREGROUND_APPLY_TIMEOUT','RESTORE_TIMEOUT','RESTORE_FAILED','UI_NOT_READY','CLEANUP_FAILED','HELLO_TIMEOUT','NATIVE_TIMEOUT','DRIVER_TIMEOUT','TIMEOUT','SPAWN_ERROR'];return codes.includes(error?.code)?error.code:'CHECK_FAILED';}
+export function safeFailure(error){const codes=['OBSERVATION_TIMEOUT','PROBE_OUTPUT_LIMIT','PROBE_STDIN_ERROR','PROBE_PROCESS_ERROR','PROBE_CANCELLED','PROBE_CLEANUP_FAILED','INVALID_DTO','INVALID_LIFECYCLE','ACCOUNT_FAILURE','DEVICE_OPERATION_FAILED','ACCOUNT_OWNER_CHANGED','ACTION_OWNER','ACTION_RECEIPT','ACCOUNT_COMMAND_FAILED','DEVICE_OPERATION_TIMEOUT','BINARY_CHANGED','OWNERSHIP_FAILED','PROBE_TIMEOUT','PROBE_FAILED','REVERSE_PROTOCOL_DATA','REVERSE_ATTACHMENT_BYTES','CONTENT_MISSING','CONTENT_MISMATCH','ATTACHMENT_MISMATCH','ATTACHMENT_BYTES_MISMATCH','ATTACHMENT_READ_MISMATCH','REVERSE_CONTENT','UNREQUESTED_TRANSFER','ACCOUNT_NOT_ENABLED','CURRENT_DEVICE_MISSING','DIRECTORY_TIMEOUT','SUMMARY_TIMEOUT','FRESH_LIBRARY_REQUIRED','LOGIN_FAILED','LOGIN_NOT_PAUSED','AUTHORIZATION_TIMEOUT','DEVICE_ID_COLLISION','FOREGROUND_APPLY_TIMEOUT','RESTORE_TIMEOUT','RESTORE_FAILED','UI_NOT_READY','CLEANUP_FAILED','HELLO_TIMEOUT','NATIVE_TIMEOUT','DRIVER_TIMEOUT','TIMEOUT','SPAWN_ERROR'];return codes.includes(error?.code)||driverFailureCodes.includes(error?.code)?error.code:'CHECK_FAILED';}
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  main(process.argv.slice(2)).then(report=>{console.log('RESULT '+report.status);if(report.status==='fail')process.exitCode=1;}).catch(()=>{console.error('FAIL INPUT_OR_PREPARE');process.exitCode=1;});
 }

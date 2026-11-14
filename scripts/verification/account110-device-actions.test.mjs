@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import vm from 'node:vm';
 import {EventEmitter} from 'node:events';
 import {resolve} from 'node:path';
-import {parseArgs,parseStatus,command,safeStatus,safeFailure,waitFor,observeWindow,syncOnce,validatePackage,ownedFile,expectedSummary,expectedAfter,validateDeployment,ProtocolProbes,main} from './account110-device-actions.mjs';
+import {parseArgs,parseStatus,command,safeStatus,safeFailure,safeLifecycle,closeNativeClients,waitFor,observeWindow,syncOnce,validatePackage,ownedFile,expectedSummary,expectedAfter,validateDeployment,ProtocolProbes,main} from './account110-device-actions.mjs';
 
 const a='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',b='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 const deploymentId='dpl_SyntheticApprovedDeployment';
@@ -49,6 +49,47 @@ test('safe reports contain finite device labels/counts, never profile, IDs, name
  for(const privateValue of [a,b,'private-subject','private-display-name','private-username','Synthetic name'])assert(!safe.includes(privateValue));
  assert(safe.includes('"device":"b"'));assert(safe.includes('"noteCount":1'));
  assert.equal(safeFailure(Object.assign(new Error('private raw error'),{code:'private_code'})),'CHECK_FAILED');
+});
+test('observed fixed driver/bridge failures survive safe mapping; unknown errors and raw strings do not',()=>{
+ for(const code of ['APP_EXITED','EXIT_BEFORE_RESPONSE','EXIT_BEFORE_HELLO','STDIN_ERROR','INVALID_FRAME','TRUNCATED_FRAME','UNEXPECTED_RESPONSE','EVAL_FAILED','JS_ERROR','NATIVE_TIMEOUT','PIPE_CLOSE_TIMEOUT','NON_NATURAL_EXIT'])
+  assert.equal(safeFailure(Object.assign(new Error('private raw message and authorization URL'),{code})),code);
+ for(const code of ['PRIVATE_PROVIDER_BODY','SIGABRT','APP_EXITED https://private/','private_code'])assert.equal(safeFailure({code}),'CHECK_FAILED');
+ assert.equal(safeFailure(new Error('APP_EXITED')),'CHECK_FAILED'); // Do not infer a code from text.
+});
+test('lifecycle distinguishes observed signal exits from unknown exit state without emitting private fields',()=>{
+ const app={name:'a',lifecycle:{naturalExit:true,pid:999,directory:'/private/library',argv:['private'],failureCode:'EXIT_BEFORE_RESPONSE',forcedSignals:[]}};
+ let safe=safeLifecycle(app);assert.equal(safe.exitObserved,false);assert.equal(safe.exitSignal,null);assert.equal(safe.closeObserved,false);assert.equal(safe.naturalExit,false);assert.equal(safe.driverFailureCode,'EXIT_BEFORE_RESPONSE');
+ app.lifecycle.exit={code:null,signal:'SIGABRT'};app.lifecycle.close={code:null,signal:'SIGABRT'};
+ safe=safeLifecycle(app,{closeConfirmed:true});assert.equal(safe.exitObserved,true);assert.equal(safe.exitSignal,'SIGABRT');assert.equal(safe.exitCode,null);assert.equal(safe.closeConfirmed,true);assert.equal(safe.naturalExit,false);
+ app.lifecycle.exit={code:0,signal:null};assert.equal(safeLifecycle(app,{closeConfirmed:true}).naturalExit,false);delete app.lifecycle.failureCode;assert.equal(safeLifecycle(app,{closeConfirmed:true}).naturalExit,true);
+ app.lifecycle.exit.signal='private signal';app.lifecycle.failureCode='PRIVATE_PROVIDER_BODY';safe=safeLifecycle(app,{closeConfirmed:true});assert.equal(safe.exitSignal,'unknown');assert.equal(safe.driverFailureCode,'CHECK_FAILED');assert.equal(safe.naturalExit,false);
+ for(const secret of ['private','999','argv','directory'])assert(!JSON.stringify(safe).includes(secret));
+});
+function nativeLifecycleFixture(name='a'){
+ let finish;const lifecycle={naturalExit:true,forcedSignals:[]};const closed=new Promise(resolve=>{finish=(code=0,signal=null)=>{lifecycle.close={code,signal};resolve(lifecycle);};});
+ return {app:{name,lifecycle,closed,close:async()=>{}},finish};
+}
+test('native finalization waits for observed pipe close after exit or shutdown ACK',async()=>{
+ const f=nativeLifecycleFixture();f.app.lifecycle.exit={code:0,signal:null};let settled=false;
+ const cleanup=closeNativeClients([f.app]).then(value=>{settled=true;return value;});
+ await Promise.resolve();await Promise.resolve();assert.equal(settled,false); // close() ACK and exit are insufficient.
+ f.finish();const result=await cleanup;assert(result.allClosed);assert(!result.failed);assert(result.lifecycle[0].naturalExit);assert(result.lifecycle[0].closeConfirmed);
+});
+test('native failure retains observed signal/driver/cleanup codes and joins the healthy sibling',async()=>{
+ const a=nativeLifecycleFixture('a'),b=nativeLifecycleFixture('b');
+ a.app.lifecycle.exit={code:null,signal:'SIGABRT'};a.app.lifecycle.failureCode='EXIT_BEFORE_RESPONSE';a.app.lifecycle.naturalExit=false;
+ a.app.close=async()=>{throw Object.assign(new Error('private process error with URL'),{code:'EXIT_BEFORE_RESPONSE'});};a.finish(null,'SIGABRT');
+ b.app.lifecycle.exit={code:0,signal:null};let settled=false;
+ const cleanup=closeNativeClients([a.app,b.app]).then(value=>{settled=true;return value;});await Promise.resolve();await Promise.resolve();assert(!settled);
+ b.finish();const result=await cleanup;assert(result.allClosed);assert(result.failed);assert(!result.lifecycle[0].naturalExit);assert(result.lifecycle[1].naturalExit);
+ assert.equal(result.lifecycle[0].exitSignal,'SIGABRT');assert.equal(result.lifecycle[0].driverFailureCode,'EXIT_BEFORE_RESPONSE');assert.equal(result.lifecycle[0].cleanupErrorCode,'EXIT_BEFORE_RESPONSE');assert(!JSON.stringify(result).includes('private'));
+});
+test('unconfirmed close is bounded, remains failed, and does not invent exit or signal evidence',async()=>{
+ const f=nativeLifecycleFixture(),result=await closeNativeClients([f.app],{closeWaitMs:5});
+ assert(!result.allClosed);assert(result.failed);const l=result.lifecycle[0];assert(!l.exitObserved);assert(!l.closeObserved);assert(!l.closeConfirmed);assert.equal(l.exitCode,null);assert.equal(l.exitSignal,null);assert.equal(l.cleanupErrorCode,'PIPE_CLOSE_TIMEOUT');
+ f.finish();assert(!l.closeConfirmed); // Late close does not rewrite the captured failure receipt.
+ const invalid=await closeNativeClients([{name:'b',lifecycle:{naturalExit:true},close:async()=>{}}]);assert(!invalid.allClosed);assert.equal(invalid.lifecycle[0].cleanupErrorCode,'INVALID_LIFECYCLE');
+ const rejected=nativeLifecycleFixture();rejected.app.lifecycle.exit={code:0,signal:null};rejected.finish();rejected.app.close=async()=>{throw null;};const nullError=await closeNativeClients([rejected.app]);assert(nullError.failed);assert.equal(nullError.lifecycle[0].cleanupErrorCode,'CHECK_FAILED');
 });
 test('command builder accepts only fixed commands/directions and bounded names',()=>{
  assert.deepEqual(command('signIn'),{type:'signIn',surface:'browser'});
@@ -122,7 +163,7 @@ test('exact package identity, clean source and executable bytes are required bef
  }finally{await rm(root,{recursive:true,force:true});}
 });
 test('run verifies deployment evidence before any client and always passes an owned fresh data-dir',async()=>{
- const root=await mkdtemp('/private/tmp/account110-device-actions-gate-fixture-'),output=root+'-run';
+ const root=await mkdtemp('/private/tmp/account110-device-actions-gate-fixture-'),output=root+'-run',crashOutput=root+'-crash';
  try{
   const appPath=resolve(root,'candidate.app'),binary=resolve(appPath,'Contents/MacOS/notes-clone'),receipt=resolve(root,'package.json'),deployment=resolve(root,'deployment.json');
   await mkdir(resolve(appPath,'Contents/MacOS'),{recursive:true});await writeFile(binary,'synthetic executable, never started');const sum=sha(await readFile(binary));
@@ -130,15 +171,23 @@ test('run verifies deployment evidence before any client and always passes an ow
   const deploymentBytes=Buffer.from(JSON.stringify(deploymentReceipt()));await writeFile(deployment,deploymentBytes);
   const args=['--run','--output',output,'--package-receipt',receipt,'--source',source,'--deployment-receipt',deployment,'--deployment-source',source,'--deployment-id',deploymentId,'--deployment-sha256','c'.repeat(64)];let calls=0;
   const App=class{
-   constructor(executable,directory,options){calls++;assert.equal(executable,binary);assert.equal(directory,resolve(output,'desktop-a'));assert.equal(options.name,'a');this.name=options.name;this.directory=directory;this.lifecycle={exit:{code:0},forcedSignals:[]};}
+   constructor(executable,directory,options){calls++;assert.equal(executable,binary);assert.equal(directory,resolve(output,'desktop-a'));assert.equal(options.name,'a');this.name=options.name;this.directory=directory;this.lifecycle={exit:{code:0,signal:null},forcedSignals:[]};this.closed=Promise.resolve();}
    async ready(timeout){assert.equal(timeout,60000);throw new Error('synthetic startup stop; no app launched');}
-   async close(){this.lifecycle.naturalExit=true;}
+   async close(){this.lifecycle.naturalExit=true;this.lifecycle.close={code:0,signal:null};}
   };
   await rejection(main(args,{App,print:()=>{}}),'DEPLOYMENT_EVIDENCE_INVALID');assert.equal(calls,0);
   for(const value of ['ordinary text',JSON.stringify({...deploymentReceipt(),readyState:'ERROR'}),JSON.stringify({...deploymentReceipt(),sourceRevision:'b'.repeat(40)}),JSON.stringify({...deploymentReceipt(),productionDeploymentId:'dpl_WrongDeployment'})]){await writeFile(deployment,value);args[args.length-1]=sha(value);await rejection(main(args,{App,print:()=>{}}),'DEPLOYMENT_EVIDENCE_INVALID');assert.equal(calls,0);}
   await writeFile(deployment,deploymentBytes);args[args.length-1]=sha(deploymentBytes);const report=await main(args,{App,print:()=>{}});assert.equal(calls,1);assert.equal(report.status,'fail');assert.equal(report.failure.phase,'startup');assert.equal(report.failure.code,'CHECK_FAILED');assert(report.lifecycle.every(v=>v.naturalExit));
   assert(!JSON.stringify(report).includes('synthetic startup stop'));
- }finally{await rm(root,{recursive:true,force:true});await rm(output,{recursive:true,force:true});}
+  const CrashedApp=class{
+   constructor(executable,directory,options){assert.equal(executable,binary);assert.equal(directory,resolve(crashOutput,'desktop-a'));this.name=options.name;this.lifecycle={exit:{code:null,signal:'SIGABRT'},failureCode:'EXIT_BEFORE_RESPONSE',forcedSignals:[]};this.closed=Promise.resolve();}
+   async ready(){throw Object.assign(new Error('private raw callback URL'),{code:'EXIT_BEFORE_RESPONSE'});}
+   async close(){this.lifecycle.close={code:null,signal:'SIGABRT'};this.lifecycle.naturalExit=false;throw Object.assign(new Error('private cleanup error'),{code:'NON_NATURAL_EXIT'});}
+  };
+  const crashArgs=[...args];crashArgs[2]=crashOutput;const crashed=await main(crashArgs,{App:CrashedApp,print:()=>{}});
+  assert.equal(crashed.failure.code,'EXIT_BEFORE_RESPONSE');assert.equal(crashed.cleanupFailure.code,'CLEANUP_FAILED');assert(crashed.nativeCleanup.allClosed);assert.equal(crashed.lifecycle[0].exitSignal,'SIGABRT');assert.equal(crashed.lifecycle[0].driverFailureCode,'EXIT_BEFORE_RESPONSE');assert.equal(crashed.lifecycle[0].cleanupErrorCode,'NON_NATURAL_EXIT');
+  const persisted=JSON.parse(await readFile(resolve(crashOutput,'result.json')));assert.deepEqual(persisted.failure,crashed.failure);assert(!JSON.stringify(persisted).includes('private raw'));assert(!JSON.stringify(persisted).includes('private cleanup'));
+ }finally{await rm(root,{recursive:true,force:true});await rm(output,{recursive:true,force:true});await rm(crashOutput,{recursive:true,force:true});}
 });
 test('deployment receipt validates successful state and exact source/deployment/hash, not arbitrary hashed text',()=>{
  const validate=value=>{const bytes=Buffer.from(typeof value==='string'?value:JSON.stringify(value));return validateDeployment(bytes,{source,id:deploymentId,sha256:sha(bytes)});};
