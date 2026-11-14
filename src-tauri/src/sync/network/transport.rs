@@ -296,6 +296,7 @@ impl SecureSocket {
         self.send(req).await?;
         match self.recv().await? {
             wire::Response::Error { code } => Err(match code {
+                wire::SyncErrorWire::Busy => SyncError::Busy,
                 wire::SyncErrorWire::Limit => SyncError::Limit,
                 wire::SyncErrorWire::Workspace => SyncError::WorkspaceMismatch,
                 wire::SyncErrorWire::Revoked => SyncError::Revoked,
@@ -309,7 +310,25 @@ impl SecureSocket {
 pub(super) async fn serve(
     s: Arc<Shared>,
     tcp: TcpStream,
+    stop: watch::Receiver<bool>,
+) -> Result<()> {
+    serve_with_limits(
+        s,
+        tcp,
+        stop,
+        ACCOUNT_TRANSFER_TIMEOUT,
+        Duration::from_secs(30),
+        Duration::from_millis(200),
+    )
+    .await
+}
+async fn serve_with_limits(
+    s: Arc<Shared>,
+    tcp: TcpStream,
     mut stop: watch::Receiver<bool>,
+    elapsed_budget: Duration,
+    idle_budget: Duration,
+    poll: Duration,
 ) -> Result<()> {
     let (mut socket, id, key, device) =
         tokio::select! {r=server(&s,tcp)=>r?,_=stop.changed()=>return Err(SyncError::Stopped)};
@@ -319,7 +338,7 @@ pub(super) async fn serve(
     let mut last = Instant::now();
     let started = Instant::now();
     loop {
-        if s.policy.is_some() && started.elapsed() >= ACCOUNT_TRANSFER_TIMEOUT {
+        if s.policy.is_some() && started.elapsed() >= elapsed_budget {
             return Err(SyncError::Timeout);
         }
         s.authorize(&device, &key)?;
@@ -328,9 +347,9 @@ pub(super) async fn serve(
         if s.backend.workspace_id()? != workspace {
             return Err(SyncError::WorkspaceMismatch);
         }
-        let request = tokio::select! {r=socket.recv::<wire::Request>()=>Some(r?),_=stop.changed()=>return Err(SyncError::Stopped),_=tokio::time::sleep(Duration::from_millis(200))=>None};
+        let request = tokio::select! {r=socket.recv::<wire::Request>()=>Some(r?),_=stop.changed()=>return Err(SyncError::Stopped),_=tokio::time::sleep(poll)=>None};
         let Some(request) = request else {
-            if last.elapsed() > Duration::from_secs(30) {
+            if last.elapsed() > idle_budget {
                 return Err(SyncError::Timeout);
             }
             continue;
@@ -354,7 +373,16 @@ pub(super) async fn serve(
             s.status(&id, "idle", None, true);
         }
         let complete = matches!(&response, wire::Response::TransferComplete);
+        let busy = matches!(
+            &response,
+            wire::Response::Error {
+                code: wire::SyncErrorWire::Busy
+            }
+        );
         tokio::select! {r=socket.send(&response)=>r?,_=stop.changed()=>return Err(SyncError::Stopped)};
+        if busy {
+            return Err(SyncError::Busy);
+        }
         if complete {
             return Ok(());
         }
@@ -452,6 +480,7 @@ mod tests {
             Arc::new(IdentityStore::open(&dir.join("identity"), &backend.device).unwrap());
         let s = Arc::new(Shared {
             policy: None,
+            account_operation: Arc::new(Mutex::new(false)),
             backend: backend.clone(),
             identity,
             staging: staging::Staging::open(dir.join("stage")).unwrap(),
@@ -517,6 +546,174 @@ mod tests {
             PairingInvite::decode(&service.invitation(&format!("ws://{address}/")).unwrap())
                 .unwrap();
         (dir, service, invite, backend)
+    }
+    async fn test_socket(
+        host: &Arc<Shared>,
+        elapsed: Duration,
+        idle: Duration,
+    ) -> (
+        tempfile::TempDir,
+        SecureSocket,
+        tokio::task::JoinHandle<Result<()>>,
+        watch::Sender<bool>,
+    ) {
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        // Distinct invitations and client identities, not two handlers over one session.
+        let invite = host
+            .identity
+            .invite(
+                &host.backend.workspace_id().unwrap(),
+                &format!("ws://{}/", listener.local_addr().unwrap()),
+            )
+            .unwrap();
+        let (stop_tx, stop) = watch::channel(false);
+        let server_host = host.clone();
+        let task = tokio::spawn(async move {
+            let (tcp, _) = listener.accept().await.unwrap();
+            serve_with_limits(
+                server_host,
+                tcp,
+                stop,
+                elapsed,
+                idle,
+                Duration::from_millis(5),
+            )
+            .await
+        });
+        let dir = tempfile::tempdir().unwrap();
+        let (client_shared, _) = shared(dir.path(), &invite.workspace_id);
+        let (socket, _) = client(&client_shared, &invite).await.unwrap();
+        (dir, socket, task, stop_tx)
+    }
+    async fn begin(socket: &mut SecureSocket) -> Result<wire::Response> {
+        socket
+            .rpc(&wire::Request::BeginTransfer {
+                version: 1,
+                direction: TransferDirection::Both,
+            })
+            .await
+    }
+    fn ready(response: Result<wire::Response>) {
+        assert!(matches!(
+            response,
+            Ok(wire::Response::TransferReady {
+                version: 1,
+                direction: TransferDirection::Both
+            })
+        ));
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn two_passive_sockets_reject_busy_without_business_and_release_on_finish() {
+        let dir = tempfile::tempdir().unwrap();
+        let (mut host, backend) = shared(dir.path(), &uuid::Uuid::new_v4().to_string());
+        Arc::get_mut(&mut host).unwrap().policy = Some(Arc::new(Gate(true.into())));
+        let (_a, mut a, a_task, _a_stop) =
+            test_socket(&host, Duration::from_secs(2), Duration::from_secs(1)).await;
+        let (_b, mut b, b_task, _b_stop) =
+            test_socket(&host, Duration::from_secs(2), Duration::from_secs(1)).await;
+        ready(begin(&mut a).await);
+        assert!(matches!(begin(&mut b).await, Err(SyncError::Busy)));
+        assert_eq!(b_task.await.unwrap(), Err(SyncError::Busy));
+        assert!(b
+            .rpc(&wire::Request::Inventory {
+                after: None,
+                limit: 1
+            })
+            .await
+            .is_err());
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 0);
+        assert_eq!(backend.publications.load(Ordering::SeqCst), 0);
+        assert!(matches!(
+            a.rpc(&wire::Request::FinishTransfer).await,
+            Ok(wire::Response::TransferComplete)
+        ));
+        assert_eq!(a_task.await.unwrap(), Ok(()));
+        let (_c, mut c, c_task, _c_stop) =
+            test_socket(&host, Duration::from_secs(2), Duration::from_secs(1)).await;
+        ready(begin(&mut c).await);
+        c.rpc(&wire::Request::FinishTransfer).await.unwrap();
+        assert_eq!(c_task.await.unwrap(), Ok(()));
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn passive_permit_released_only_on_confirmed_disconnect_timeout_stop_or_revocation() {
+        for end in ["disconnect", "idle", "elapsed", "stop", "revoke"] {
+            let dir = tempfile::tempdir().unwrap();
+            let (mut host, backend) = shared(dir.path(), &uuid::Uuid::new_v4().to_string());
+            let gate = Arc::new(Gate(true.into()));
+            Arc::get_mut(&mut host).unwrap().policy = Some(gate.clone());
+            let elapsed = if end == "elapsed" {
+                Duration::from_millis(60)
+            } else {
+                Duration::from_secs(2)
+            };
+            let idle = if end == "idle" {
+                Duration::from_millis(40)
+            } else {
+                Duration::from_secs(1)
+            };
+            let (_client, mut socket, task, stop) = test_socket(&host, elapsed, idle).await;
+            ready(begin(&mut socket).await);
+            assert!(matches!(
+                host.reserve_account_operation(),
+                Err(SyncError::Busy)
+            ));
+            match end {
+                "disconnect" => drop(socket),
+                "stop" => {
+                    stop.send(true).unwrap();
+                }
+                "revoke" => {
+                    gate.0.store(false, Ordering::Release);
+                }
+                _ => {}
+            }
+            let result = tokio::time::timeout(Duration::from_secs(1), task)
+                .await
+                .unwrap()
+                .unwrap();
+            assert_eq!(
+                result,
+                Err(match end {
+                    "disconnect" => SyncError::Transport,
+                    "stop" => SyncError::Stopped,
+                    "revoke" => SyncError::Revoked,
+                    _ => SyncError::Timeout,
+                })
+            );
+            gate.0.store(true, Ordering::Release);
+            // Join, not the cancellation request, establishes release.
+            assert!(host.reserve_account_operation().unwrap().is_some());
+            assert_eq!(backend.reads.load(Ordering::SeqCst), 0);
+            assert_eq!(backend.publications.load(Ordering::SeqCst), 0);
+        }
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn legacy_passive_sockets_keep_concurrent_inventory_without_account_permit() {
+        let dir = tempfile::tempdir().unwrap();
+        let (host, backend) = shared(dir.path(), &uuid::Uuid::new_v4().to_string());
+        // Even a reserved account flag must have no effect on a None-policy service.
+        *host.account_operation.lock().unwrap() = true;
+        assert!(host.reserve_account_operation().unwrap().is_none());
+        let (_a, mut a, a_task, a_stop) =
+            test_socket(&host, Duration::from_secs(2), Duration::from_secs(1)).await;
+        let (_b, mut b, b_task, b_stop) =
+            test_socket(&host, Duration::from_secs(2), Duration::from_secs(1)).await;
+        for socket in [&mut a, &mut b] {
+            assert!(matches!(
+                socket
+                    .rpc(&wire::Request::Inventory {
+                        after: None,
+                        limit: 1
+                    })
+                    .await,
+                Ok(wire::Response::Inventory { .. })
+            ));
+        }
+        assert_eq!(backend.reads.load(Ordering::SeqCst), 2);
+        a_stop.send(true).unwrap();
+        b_stop.send(true).unwrap();
+        assert_eq!(a_task.await.unwrap(), Err(SyncError::Stopped));
+        assert_eq!(b_task.await.unwrap(), Err(SyncError::Stopped));
     }
     #[tokio::test(flavor = "current_thread")]
     async fn account_requires_capability_and_push_cannot_read_or_renegotiate() {

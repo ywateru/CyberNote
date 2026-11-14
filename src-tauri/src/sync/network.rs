@@ -122,12 +122,33 @@ pub(crate) trait ReplicationPolicy: Send + Sync {
 }
 pub(crate) struct Shared {
     policy: Option<Arc<dyn ReplicationPolicy>>,
+    account_operation: Arc<Mutex<bool>>,
     backend: Arc<dyn SyncBackend>,
     identity: Arc<IdentityStore>,
     staging: staging::Staging,
     status: Mutex<ServiceStatus>,
 }
+/// Nonqueueing authority, held through task destruction (including synchronous calls).
+struct AccountPermit(Arc<Mutex<bool>>);
+impl Drop for AccountPermit {
+    fn drop(&mut self) {
+        if let Ok(mut busy) = self.0.lock() {
+            *busy = false;
+        }
+    }
+}
 impl Shared {
+    fn reserve_account_operation(&self) -> Result<Option<AccountPermit>> {
+        if self.policy.is_none() {
+            return Ok(None);
+        }
+        let mut busy = self.account_operation.lock().map_err(|_| SyncError::Io)?;
+        if *busy {
+            return Err(SyncError::Busy);
+        }
+        *busy = true;
+        Ok(Some(AccountPermit(self.account_operation.clone())))
+    }
     fn authorize(&self, device: &str, key: &str) -> Result<()> {
         if let Some(policy) = &self.policy {
             policy.authorize(device, key)?;

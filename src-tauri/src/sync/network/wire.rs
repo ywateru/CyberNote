@@ -74,6 +74,7 @@ pub(super) enum Response {
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(super) enum SyncErrorWire {
+    Busy,
     Invalid,
     Backend,
     Limit,
@@ -83,6 +84,7 @@ pub(super) enum SyncErrorWire {
 impl From<SyncError> for SyncErrorWire {
     fn from(e: SyncError) -> Self {
         match e {
+            SyncError::Busy => Self::Busy,
             SyncError::Limit => Self::Limit,
             SyncError::WorkspaceMismatch => Self::Workspace,
             SyncError::Revoked => Self::Revoked,
@@ -105,6 +107,7 @@ pub(super) fn encoded(data: &[u8]) -> String {
     B64.encode(data)
 }
 pub(super) struct Handler {
+    permit: Option<AccountPermit>,
     direction: Option<TransferDirection>,
     finished: bool,
     incoming: Option<(String, usize, Vec<u8>)>,
@@ -114,6 +117,7 @@ pub(super) struct Handler {
 impl Handler {
     pub fn new() -> Self {
         Self {
+            permit: None,
             direction: None,
             finished: false,
             incoming: None,
@@ -141,6 +145,7 @@ impl Handler {
                     version: 1,
                     direction,
                 } if self.direction.is_none() && !self.finished => {
+                    self.permit = s.reserve_account_operation()?;
                     self.direction = Some(*direction);
                     return Ok(Response::TransferReady {
                         version: 1,
