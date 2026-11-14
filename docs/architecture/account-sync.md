@@ -23,7 +23,7 @@ CyberGrid 将 peer stream 接入本机 TCP 后，业务 listener 不能从 `127.
 - 签发请求接入同 Redis 原子配额：验 JWT 前按可信来源 IP 每分钟 30 次，验证后按 issuer/subject/product 每分钟 60 次；超额返回 429 / Retry-After 60，公钥读取不消耗签发配额。
 - `GET /api/v1/account/jwks` 只发布签名公钥。端上从平台固定transport origin获取，验证算法、kid、固定旧enrollment issuer、audience、purpose、有效期及本机账户/workspace/product，再通过 Noise 握手证明对端持有绑定的私钥。不得接受 JWT 内任意 jwks URL。
 - bootstrap 双向交换凭证；host 只给预期 deviceId 和 Noise key 生成一次邀请，client 校验 host proof 与邀请的 host key/workspace。nonce/challenge 只在受限 bootstrap 业务流内使用，邀请不入目录/日志/前端。
-- 账号配对与 manual 凭据明确区分；暂停、退出、凭证过期或账号代际变化必须关闭现存账号业务流与新请求，不能降级成永久 manual 配对。对旧手工空间仅允许相同 workspace 的明确兼容路径，不清空其历史以迁移。
+- 账号配对与 manual 凭据明确区分；暂停、退出、凭证过期或账号代际变化必须关闭现存账号业务流与新请求，不能降级成永久 manual 配对。本地资料库可从手工同步切换到账户同步；只有显式开启并合并才切换协议状态，须先停止旧连接并保全本地内容及未解决版本，见[资料库独立契约](../plan/tasks/app-account109-account-independent-library.md)。
 
 ## 创建链与所有权
 
@@ -39,9 +39,9 @@ CyberGrid 将 peer stream 接入本机 TCP 后，业务 listener 不能从 `127.
 
 账户Runtime由App创建一次，独立于设置页的挂载/可见性。设置页只订阅安全状态和提交用户操作；关页不结束同步。每次登录/退出/恢复有代际，取消与迟到结果不可恢复旧账号连接。状态查询不创建身份、不启动网络；注册/登录入口明确启动授权。启动可恢复已持久授权；刷新时须区分实际网络故障、授权服务器拒绝和无效响应。不能把所有 OAuth 请求错误都当作凭据失效。只有认证拒绝才提示重新登录；网络故障保留原授权与绑定，提供明确的有界恢复操作，不无限循环或冒称已连接。恢复操作不得静默启用用户已暂停的同步，`status` 仍只读。某次旧候选显示认证失败不构成该次 grant 已撤销的证明。
 
-同一数据根只可绑定已确认的一个账号，绑定含issuer/subject/product/workspace。换账号不得把已有账号数据发给另一个账号；拒绝不匹配并提供明确恢复说明。退出账户先封闭自动连接和邀请、停止SDK映射及本轮账号同步，再撤销/删除本地授权；本机笔记继续保留。没有明确账号库迁移和冲突保全证明时，不清空同步元数据或偷偷改workspace。已有手工同步workspace不兼容必须明确报告，并保全原库，不能为了通过新测试清数据。
+本地资料库不绑定用户名，任何用户均可登录同一资料库。当前登录会话记录issuer/subject/product/workspace，以验证远程同步身份。退出先封闭自动连接和邀请、停止SDK映射及本轮账号同步，再撤销/删除登录授权；本机笔记继续保留。登录另一账户保持同步暂停，用户明确开启并合并后，本库当前内容才与该账户设备合并，包括此前同步保留的内容。切换前必须停止旧协议会话、隔离其peer/邀请和版本状态，并保全冲突与待应用数据；不能因本地旧workspace拒绝登录，也不能在状态查询中偷偷迁移。
 
-首次为尚未开启同步的本地库登录时，以真实已验账号workspace原子启用现有Store同步schema，保留所有现有笔记并bootstrap。已绑定同账号重启保持workspace/device；多端并发首次登录必须得到同一workspace。自动配对邀请仅通过已认证的CyberGrid peer业务流交换，不进入Redis设备描述、日志、前端快照、命令argv或Git。端口仅loopback监听；不增加未认证公网邀请服务。
+首次登录不启用Store同步。用户明确开启时，以真实已验账号workspace原子建立同步基线，保留所有现有笔记并bootstrap；本地旧workspace不同时按资料库独立契约迁移。已启用的同会话重启保持workspace/device；多端并发首次登录必须得到同一workspace。自动配对邀请仅通过已认证的CyberGrid peer业务流交换，不进入Redis设备描述、日志、前端快照、命令argv或Git。端口仅loopback监听；不增加未认证公网邀请服务。
 
 自动连接必须与真实应用同步状态区分：已登录、设备在线、TCP通道成立、同步进行、已应用是不同事实。待处理数/冲突/最后成功时间来自原有同步Runtime；目录心跳不等于数据同步成功。断网保持本地编辑，重试有界退避；恢复复用原账号/设备身份和dirty/inbox。手工设备同步入口保留。
 
