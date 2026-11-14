@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "resultSha256": "33ff3e7728ff62571c42cccfe4ef40dca87653147ca6125cda1ad54d9ee3a716",
+  "privateResultPath": "/private/tmp/account110-device-actions-a663586b-live02-push-diagnostic01/result.json",
+  "privateHarnessSha256": "471973811890f39aa8e8016bfd0393795b76192f852aac0271cfb29243cec3c9",
+  "sourceRevision": "a663586b47f136508d1cab50f7ca2a075b9fd67b",
+  "binarySha256": "a6c2d19e0ec1c33fe206235d16ad3452e31b8c57c281531f5c6da30d1ab7fc0f",
+  "status": "fail",
+  "failure": {
+    "code": "EXIT_BEFORE_RESPONSE"
+  },
+  "pushSubmitted": true,
+  "commandTerminalObserved": false,
+  "accountErrorObserved": false,
+  "lifecycle": [
+    {
+      "device": "a",
+      "naturalExit": false,
+      "exitObserved": true,
+      "exitCode": null,
+      "exitSignal": "SIGABRT",
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": [],
+      "driverFailureCode": "EXIT_BEFORE_RESPONSE",
+      "cleanupErrorCode": "EXIT_BEFORE_RESPONSE"
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    }
+  ],
+  "nativeCleanup": {
+    "allClosed": true,
+    "failed": true
+  },
+  "firstResultUnchanged": true,
+  "sourceCleanAfter": true
+}
