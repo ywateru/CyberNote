@@ -1,4 +1,170 @@
 use super::*;
+
+// Synthetic SQL only: include every protocol column, business row and schema
+// definition so a failed adoption cannot hide a partially rebuilt extension.
+fn adoption_sql_snapshot(store: &Store) -> Vec<(String, Vec<Vec<rusqlite::types::Value>>)> {
+    let mut query = store.db.prepare(
+        "SELECT name FROM sqlite_schema WHERE type='table' AND (name GLOB 'sync_*' OR name IN ('notes','folders','attachments')) ORDER BY name",
+    ).unwrap();
+    let tables = query.query_map([], |r| r.get::<_, String>(0)).unwrap()
+        .collect::<std::result::Result<Vec<_>, _>>().unwrap();
+    let mut result = Vec::new();
+    for (name, sql) in std::iter::once(("schema".to_string(),
+        "SELECT type,name,sql FROM sqlite_schema WHERE name GLOB 'sync_*' ORDER BY name".to_string()))
+        .chain(tables.into_iter().map(|name| {
+            let sql = format!("SELECT * FROM {name} ORDER BY rowid");
+            (name, sql)
+        }))
+    {
+        let mut query = store.db.prepare(&sql).unwrap();
+        let width = query.column_count();
+        let rows = query.query_map([], |r| (0..width).map(|i| r.get(i)).collect()).unwrap()
+            .collect::<std::result::Result<Vec<Vec<rusqlite::types::Value>>, _>>().unwrap();
+        result.push((name, rows));
+    }
+    result
+}
+
+#[test]
+fn workspace_adoption_preserves_business_rows_media_and_bootstraps_only_new_protocol() {
+    let root = tempfile::tempdir().unwrap();
+    let mut s = Store::open(root.path()).unwrap();
+    let folder = s.action(json!({"type":"createFolder","name":"local library"})).unwrap();
+    let note = create(&mut s, "retained local content");
+    s.action(json!({"type":"patchNote","id":note,"folderId":folder["id"]})).unwrap();
+    let attachment = add_media(&mut s, &note, "retained.png", b"retained original bytes");
+    let old = s.sync_enable(None).unwrap();
+    // Save after the old baseline: adoption must flush this edit transactionally.
+    s.action(json!({"type":"patchNote","id":note,"pinned":true})).unwrap();
+    let business_before: Vec<_> = adoption_sql_snapshot(&s).into_iter()
+        .filter(|(name, _)| ["notes", "folders", "attachments"].contains(&name.as_str())).collect();
+    let bytes = fs::read(s.attachment_path(&attachment.relative_path).unwrap()).unwrap();
+    let previous = s.sync_store_instance();
+    let workspace = id();
+    let device = id();
+    s.sync_adoption_preflight(&workspace, &device).unwrap();
+    let media = s.sync_media_snapshot(&[], true).unwrap().verify().unwrap();
+    let adopted = s.sync_with_media(media, |s| s.sync_adopt_workspace(&workspace, &device)).unwrap();
+    assert_eq!(adopted.workspace_id, workspace);
+    assert_eq!(adopted.device_id, device);
+    assert_ne!(previous, s.sync_store_instance());
+    assert_ne!(old.workspace_id, adopted.workspace_id);
+    assert_eq!(business_before, adoption_sql_snapshot(&s).into_iter()
+        .filter(|(name, _)| ["notes", "folders", "attachments"].contains(&name.as_str())).collect::<Vec<_>>());
+    assert_eq!(fs::read(s.attachment_path(&attachment.relative_path).unwrap()).unwrap(), bytes);
+    let wires = versions(&mut s);
+    assert_eq!(wires.len(), 2);
+    assert!(wires.iter().all(|wire| wire.workspace_id == workspace
+        && wire.vector.keys().all(|actor| actor == &device)));
+    assert!(wires.iter().any(|wire| wire.entity_id == note && wire.payload.as_ref().unwrap()["note"]["pinned"] == true));
+    assert_eq!(s.sync_pending_count().unwrap(), 0);
+    s.validate_sync_schema().unwrap();
+}
+
+#[test]
+fn workspace_adoption_same_pair_is_exact_noop_even_with_dirty_and_pending_versions() {
+    let (_root, mut s, _remote_root, remote) = pair();
+    let note = create(&mut s, "dirty local edit");
+    let incoming = foreign_note(&remote, &note, "pending remote", &remote.sync_identity().unwrap().unwrap().device_id);
+    s.sync_receive(vec![incoming]).unwrap();
+    let identity = s.sync_identity().unwrap().unwrap();
+    let before = adoption_sql_snapshot(&s);
+    let instance = s.sync_store_instance();
+    s.sync_adoption_preflight(&identity.workspace_id, &identity.device_id).unwrap();
+    assert_eq!(s.sync_adopt_workspace(&identity.workspace_id, &identity.device_id).unwrap(), identity);
+    assert_eq!(s.sync_store_instance(), instance);
+    assert_eq!(adoption_sql_snapshot(&s), before);
+}
+
+#[test]
+fn workspace_adoption_blocks_pending_conflicting_unprojected_and_drifted_content() {
+    for scenario in ["inbox", "conflict", "unprojected", "unprojectedDirty", "contentDrift"] {
+        let (_root, mut s, _remote_root, remote) = pair();
+        let note = create(&mut s, "retained projection");
+        s.sync_flush().unwrap();
+        let incoming = foreign_note(&remote, &note, "unapplied remote content", &remote.sync_identity().unwrap().unwrap().device_id);
+        match scenario {
+            "inbox" => { s.sync_receive(vec![incoming]).unwrap(); }
+            "conflict" => { merge_head(&s.db, &incoming).unwrap(); }
+            "unprojected" | "unprojectedDirty" => {
+                s.db.execute("DELETE FROM sync_heads", []).unwrap();
+                merge_head(&s.db, &incoming).unwrap();
+                if scenario == "unprojectedDirty" { edit(&mut s, &note, "unsent local edit"); }
+            }
+            "contentDrift" => {
+                s.db.execute("UPDATE sync_identity SET capture=0", []).unwrap();
+                edit(&mut s, &note, "uncaptured content");
+                s.db.execute("UPDATE sync_identity SET capture=1", []).unwrap();
+            }
+            _ => unreachable!(),
+        }
+        let before = adoption_sql_snapshot(&s);
+        let instance = s.sync_store_instance();
+        assert_eq!(s.sync_adopt_workspace(&id(), &id()).unwrap_err().code, "sync_adoption_blocked", "{scenario}");
+        assert_eq!(adoption_sql_snapshot(&s), before, "{scenario}");
+        assert_eq!(s.sync_store_instance(), instance);
+    }
+}
+
+#[test]
+fn workspace_adoption_ddl_failure_rolls_back_flush_schema_identity_and_all_rows() {
+    use rusqlite::hooks::{AuthAction, AuthContext, Authorization};
+    let root = tempfile::tempdir().unwrap();
+    let mut s = Store::open(root.path()).unwrap();
+    let note = create(&mut s, "old baseline");
+    s.sync_enable(None).unwrap();
+    edit(&mut s, &note, "dirty edit retained on failure");
+    let before = adoption_sql_snapshot(&s);
+    let instance = s.sync_store_instance();
+    // This INSERT occurs after the old flush and every DROP/CREATE. Denial
+    // proves those writes and transactional DDL all roll back together.
+    s.db.authorizer(Some(|ctx: AuthContext<'_>| match ctx.action {
+        AuthAction::Insert { table_name: "sync_identity" } => Authorization::Deny,
+        _ => Authorization::Allow,
+    }));
+    let error = s.sync_adopt_workspace(&id(), &id()).unwrap_err();
+    s.db.authorizer(None::<fn(AuthContext<'_>) -> Authorization>);
+    assert_eq!(error.code, "database");
+    assert_eq!(s.sync_store_instance(), instance);
+    assert_eq!(adoption_sql_snapshot(&s), before);
+    assert_eq!(s.note(&note).unwrap().plain_text, "dirty edit retained on failure");
+    s.validate_sync_schema().unwrap();
+}
+
+#[test]
+fn workspace_adoption_return_to_old_pair_does_not_revive_plans_or_media() {
+    let root = tempfile::tempdir().unwrap();
+    let mut s = Store::open(root.path()).unwrap();
+    create(&mut s, "unchanged library");
+    let a = s.sync_enable(None).unwrap();
+    let plan = s.sync_plan_apply(&[]).unwrap();
+    let media = s.sync_media_snapshot(&[], true).unwrap().verify().unwrap();
+    s.sync_adopt_workspace(&id(), &id()).unwrap();
+    s.sync_adopt_workspace(&a.workspace_id, &a.device_id).unwrap();
+    assert_eq!(s.sync_apply_plan(&plan).unwrap_err().code, "sync_plan_stale");
+    assert_eq!(s.sync_with_media(media, |_| Ok(())).unwrap_err().code, "sync_plan_stale");
+}
+
+#[test]
+fn workspace_adoption_clean_media_bootstrap_and_corrupt_bytes_are_fenced() {
+    let root = tempfile::tempdir().unwrap();
+    let mut s = Store::open(root.path()).unwrap();
+    let note = create(&mut s, "media owner");
+    let attachment = add_media(&mut s, &note, "clean.png", b"clean baseline media");
+    s.sync_enable(None).unwrap();
+    let workspace = id();
+    let device = id();
+    // Clean old notes still need local media jobs when rebootstrap is requested.
+    let media = s.sync_media_snapshot(&[], true).unwrap().verify().unwrap();
+    s.sync_with_media(media, |s| s.sync_adopt_workspace(&workspace, &device)).unwrap();
+    let before = adoption_sql_snapshot(&s);
+    let instance = s.sync_store_instance();
+    fs::write(s.attachment_path(&attachment.relative_path).unwrap(), b"wrong baseline media").unwrap();
+    assert_eq!(s.sync_adopt_workspace(&id(), &id()).unwrap_err().code, "sync_adoption_blocked");
+    assert_eq!(adoption_sql_snapshot(&s), before);
+    assert_eq!(s.sync_store_instance(), instance);
+}
+
 #[test]
 fn initial_enable_is_opt_in_and_persistent() {
     let root = tempfile::tempdir().unwrap();

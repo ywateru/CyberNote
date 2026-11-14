@@ -696,6 +696,67 @@ mod tests {
             .into()
     }
     #[test]
+    fn workspace_adoption_session_blocks_save_barrier_and_quiet_work_without_mutation() {
+        for scenario in ["intent", "barrier", "quiet"] {
+            let (_root, mut s) = session();
+            let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
+                .as_str().unwrap().to_string();
+            s.store.sync_flush().unwrap();
+            let t = token(&s);
+            match scenario {
+                "intent" => {
+                    let note_token = Token { note_epoch: Some(s.note_epoch(&note)), ..t.clone() };
+                    s.register_save("main", &note, "pending-local-save", note_token).unwrap();
+                }
+                "barrier" => {
+                    s.begin(json!({"type":"deleteNote","id":note}), HashSet::from(["main".into()]), &t).unwrap();
+                }
+                "quiet" => { begin(&mut s); }
+                _ => unreachable!(),
+            }
+            let before = s.snapshot().unwrap();
+            let instance = s.store.sync_store_instance();
+            let identity = s.store.sync_identity().unwrap().unwrap();
+            assert_eq!(s.sync_adoption_preflight(&Uuid::new_v4().to_string(), &Uuid::new_v4().to_string())
+                .unwrap_err().code, "sync_adoption_blocked", "{scenario}");
+            assert_eq!(s.snapshot().unwrap(), before);
+            assert_eq!(s.store.sync_store_instance(), instance);
+            assert_eq!(s.store.sync_identity().unwrap().unwrap(), identity);
+            // The exact existing pair needs no migration and no token rotation.
+            s.sync_adoption_preflight(&identity.workspace_id, &identity.device_id).unwrap();
+            assert!(s.sync_finish_workspace_adoption(instance).unwrap().is_none());
+        }
+    }
+    #[test]
+    fn workspace_adoption_session_revokes_global_note_media_tokens_and_publishes_access() {
+        let (_root, mut s) = session();
+        let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
+            .as_str().unwrap().to_string();
+        let global = token(&s);
+        let note_token = Token { note_epoch: Some(s.note_epoch(&note)), ..global.clone() };
+        let media_token = s.sync_media_token();
+        let original = s.store.note(&note).unwrap();
+        let instance = s.store.sync_store_instance();
+        let workspace = Uuid::new_v4().to_string();
+        let device = Uuid::new_v4().to_string();
+        s.sync_adoption_preflight(&workspace, &device).unwrap();
+        s.store.sync_adopt_workspace(&workspace, &device).unwrap();
+        let access = s.sync_finish_workspace_adoption(instance).unwrap().unwrap();
+        assert_eq!(access["phase"], "commit");
+        assert_eq!(access["operationId"], "sync-workspace-adopted");
+        assert_eq!(access["noteIds"], json!([note]));
+        assert_eq!(access["access"], s.snapshot().unwrap());
+        assert_eq!(s.check(&global, None).unwrap_err().code, "access_changed");
+        assert_eq!(s.check(&note_token, Some(&note)).unwrap_err().code, "access_changed");
+        assert_eq!(s.check(&media_token, None).unwrap_err().code, "access_changed");
+        assert_eq!(serde_json::to_value(s.store.note(&note).unwrap()).unwrap(), serde_json::to_value(original).unwrap());
+        let instance = s.store.sync_store_instance();
+        let current = token(&s);
+        s.store.sync_adopt_workspace(&workspace, &device).unwrap();
+        assert!(s.sync_finish_workspace_adoption(instance).unwrap().is_none());
+        s.check(&current, None).unwrap();
+    }
+    #[test]
     fn strict_replies_real_window_phase_token_and_cancellation_receipt() {
         let (_d, mut s) = session();
         let id = begin(&mut s);
