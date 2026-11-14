@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-14T12:39:36.917677+00:00",
+  "source": "4c1ac0033d10cd7bc864f2ff4ca087f147f235d8",
+  "base": "a663586b47f136508d1cab50f7ca2a075b9fd67b",
+  "scope": [
+    "src-tauri/src/account/transport.rs",
+    "src-tauri/src/account/worker.rs"
+  ],
+  "sourceSha256": {
+    "src-tauri/src/account/transport.rs": "5a8c33a1df810a78b5dee01de7316e24142bd78608df4ef884bc58e16efff11e",
+    "src-tauri/src/account/worker.rs": "464117c35ad2c4a44bb9921d0fb6b01e51df976e392ac81ff2724277f0940e88"
+  },
+  "tests": {
+    "final": {
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "log": "final-focused.log",
+      "command": "final-focused-command.json"
+    },
+    "preservedFirstFailures": [
+      "baseline.log",
+      "fixed01.log"
+    ]
+  },
+  "actualFutureBytes": {
+    "sdkMap": 24792,
+    "sdkConnect": 24560,
+    "requestIo": 128,
+    "prepare": 1360,
+    "prepareRequest": 208,
+    "transferTarget": 832,
+    "executeRequest": 152
+  },
+  "smallStackBytes": 524288,
+  "smallStackCases": [
+    "actual unauthenticated SDK map rejects locally before HTTP",
+    "actual transfer preparation observes pre-cancelled stop"
+  ],
+  "limits": [
+    "No logged-in network branch or real App acceptance executed",
+    "No production thread stack changes",
+    "185-second request deadline and cancellation/retirement behavior preserved"
+  ],
+  "targetReleased": true,
+  "freeBytes": 8725872640
+}

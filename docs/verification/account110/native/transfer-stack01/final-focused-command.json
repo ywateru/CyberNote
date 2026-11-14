@@ -1,0 +1,36 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--locked",
+    "--offline",
+    "--",
+    "--exact",
+    "account::worker::tests::unified_deadline_allows_preparation_beyond_sixty_seconds",
+    "account::worker::tests::unified_deadline_spans_preparation_and_transfer_and_waits_for_retirement",
+    "account::worker::tests::unified_deadline_dropped_waiter_drains_long_preparation_without_late_admission",
+    "account::worker::tests::request_deadline_before_dequeue_never_starts_and_remains_busy_until_receipt",
+    "account::worker::tests::dropping_in_flight_waiter_cancels_execution_but_retains_permit_until_cleanup",
+    "account::transport::tests::real_selected_transfer_future_layout_and_small_stack_poll",
+    "account::transport::tests::native_deadline_with_real_network_blocked_backend_keeps_busy_until_join",
+    "account::transport::tests::late_blocking_admission_after_early_disconnect_is_fenced_and_joined",
+    "account::transport::tests::request_cancel_interrupts_pending_preparation_without_running_next_step",
+    "account::transport::tests::unconfirmed_retirement_is_not_success_and_keeps_admission_fenced",
+    "account::transport::tests::bootstrap_rechecks_closed_gate_after_proof_verification",
+    "account::transport::tests::bootstrap_rechecks_cancelled_owner_after_proof_verification",
+    "account::transport::tests::active_bootstrap_returns_nonce_bound_noise_key_pinned_invitation",
+    "--nocapture"
+  ],
+  "exitCode": 0,
+  "controllerStopped": false,
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  }
+}
