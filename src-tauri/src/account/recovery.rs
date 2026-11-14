@@ -11,6 +11,8 @@ pub(super) trait Host: Sync {
         identity: account_auth::Identity,
         generation: u64,
     ) -> impl Future<Output = Result<bool>> + Send;
+    /// Starts the directory owner for both paused and enabled sessions. Only
+    /// the owner's persisted enabled child may activate content/adopt Store.
     fn start(&self) -> impl Future<Output = Result<()>> + Send;
 }
 
@@ -22,13 +24,11 @@ pub(super) async fn run(host: &impl Host, generation: u64) -> Result<()> {
     if !host.current(generation) {
         return Err(Error::Cancelled);
     }
-    let enabled = host.bind(identity, generation).await?;
+    let _enabled = host.bind(identity, generation).await?;
     if !host.current(generation) {
         return Err(Error::Cancelled);
     }
-    if enabled {
-        host.start().await?;
-    }
+    host.start().await?;
     Ok(())
 }
 
@@ -124,8 +124,11 @@ mod tests {
             Ok(binding.enabled)
         }
         async fn start(&self) -> Result<()> {
-            self.effects.lock().unwrap().push("network");
-            self.status.lock().unwrap().state = Phase::Connecting;
+            self.effects.lock().unwrap().push("directory");
+            let mut status = self.status.lock().unwrap();
+            if status.enabled {
+                status.state = Phase::Connecting;
+            }
             Ok(())
         }
     }
@@ -149,11 +152,7 @@ mod tests {
             );
             assert_eq!(
                 *host.effects.lock().unwrap(),
-                if enabled {
-                    vec!["restore", "profile", "bound", "network"]
-                } else {
-                    vec!["restore", "profile", "bound"]
-                }
+                vec!["restore", "profile", "bound", "directory"]
             );
             assert_eq!(std::fs::read(&host.path).unwrap(), before);
         }
@@ -183,7 +182,7 @@ mod tests {
                     Err(Error::Cancelled)
                 );
                 assert!(!host.effects.lock().unwrap().contains(&"bound"));
-                assert!(!host.effects.lock().unwrap().contains(&"network"));
+                assert!(!host.effects.lock().unwrap().contains(&"directory"));
                 assert!(host.status.lock().unwrap().state == Phase::Error);
                 assert_eq!(std::fs::read(&host.path).unwrap(), before);
                 assert_eq!(run(host.as_ref(), 1).await, Err(Error::Cancelled));

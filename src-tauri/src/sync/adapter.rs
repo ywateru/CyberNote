@@ -861,6 +861,19 @@ impl Runtime {
             s.store.sync_conflict_count()? as u64,
         ))
     }
+    pub(crate) fn account_summary(&self) -> Result<crate::account::types::DeviceSummary> {
+        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+        let summary: crate::store::AccountSummary = s.store.account_summary()?;
+        let summary = crate::account::types::DeviceSummary {
+            note_count: summary.note_count,
+            last_note_updated_at: summary.last_note_updated_at,
+            captured_at: std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH)
+                .map_err(|_| error("sync_internal"))?.as_millis().try_into()
+                .map_err(|_| error("sync_internal"))?,
+        };
+        if !summary.valid() { return Err(error("sync_internal")); }
+        Ok(summary)
+    }
     pub(crate) fn command(
         &self,
         command: Command,

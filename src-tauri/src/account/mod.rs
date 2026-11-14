@@ -2,6 +2,7 @@
 //! safe status; grants, enrollment proofs, invitations and Noise keys stay native.
 mod callback;
 mod config;
+mod directory;
 pub(crate) mod enrollment;
 pub(crate) mod private;
 mod provider;
@@ -9,6 +10,7 @@ mod recovery;
 mod surface;
 mod transport;
 pub(crate) mod types;
+mod worker;
 use crate::sync::adapter;
 use std::{
     path::{Path, PathBuf},
@@ -49,7 +51,9 @@ fn take_android_callback(
 struct Network {
     stop: CancellationToken,
     task: tokio::task::JoinHandle<()>,
-    gate: Arc<enrollment::Gate>,
+    control: Arc<worker::Control>,
+    catalog: Arc<directory::Catalog>,
+    requests: tokio::sync::mpsc::Sender<worker::DeviceRequest>,
 }
 struct Data {
     status: Status,
@@ -64,6 +68,8 @@ pub(crate) struct Runtime {
     data: Mutex<Data>,
     auth: OnceCell<Arc<account_auth::AuthClient>>,
     lifecycle: AsyncMutex<()>,
+    operation: AsyncMutex<()>,
+    registry: Mutex<Option<private::Registry>>,
     attempt: AsyncMutex<Option<Attempt>>,
     presentation: Mutex<Option<Arc<surface::Presentation>>>,
     android: AsyncMutex<Option<AndroidCallback>>,
@@ -83,9 +89,20 @@ impl Runtime {
         let directory = root.join(".account");
         let loaded = private::directory(&directory)
             .and_then(|_| private::read(&directory.join("binding.json")));
-        let (binding, blocked) = match loaded {
+        let (binding, mut blocked) = match loaded {
             Ok(binding) => (binding, None),
             Err(error) => (None, Some(error)),
+        };
+        let registry = if blocked.is_none() {
+            match private::registry(&directory) {
+                Ok(value) => Some(value),
+                Err(error) => {
+                    blocked = Some(error);
+                    None
+                }
+            }
+        } else {
+            None
         };
         let mut status = Status::default();
         if let Some(error) = blocked {
@@ -101,6 +118,8 @@ impl Runtime {
             data: Mutex::new(Data { status, binding }),
             auth: OnceCell::new(),
             lifecycle: AsyncMutex::new(()),
+            operation: AsyncMutex::new(()),
+            registry: Mutex::new(registry),
             attempt: AsyncMutex::new(None),
             presentation: Mutex::new(None),
             android: AsyncMutex::new(None),
@@ -144,6 +163,15 @@ impl Runtime {
             d.status.state = Phase::Error;
             d.status.error = Some(error.safe())
         })
+    }
+    fn fail_current(&self, generation: u64, error: Error) {
+        self.mutate(|d| {
+            if self.current(generation) {
+                self.observations.suspend();
+                d.status.state = Phase::Error;
+                d.status.error = Some(error.safe());
+            }
+        });
     }
     pub fn snapshot(&self) -> Result<Status> {
         let mut status = self.data.lock().map_err(|_| Error::Storage)?.status.clone();
@@ -289,12 +317,33 @@ impl Runtime {
         });
         Ok(())
     }
+    fn registry(&self) -> Result<private::Registry> {
+        self.registry
+            .lock()
+            .map_err(|_| Error::Storage)?
+            .as_ref()
+            .cloned()
+            .ok_or(Error::Storage)
+    }
+    fn next_registration(&self) -> Result<private::Registry> {
+        let mut registry = self.registry.lock().map_err(|_| Error::Storage)?;
+        private::next_registration(&self.root, registry.as_mut().ok_or(Error::Storage)?)
+    }
     async fn start_network(self: &Arc<Self>) -> Result<()> {
         let generation = self.generation.load(Ordering::Acquire);
         if !self.current(generation) {
             return Err(Error::Cancelled);
         }
-        self.stop_network().await;
+        let mut slot = self.network.lock().await;
+        if let Some(network) = slot.as_ref().filter(|n| !n.task.is_finished()) {
+            network.control.refresh.notify_one();
+            return Ok(());
+        }
+        if let Some(old) = slot.take() {
+            old.control.configure(false);
+            old.stop.cancel();
+            let _ = old.task.await;
+        }
         let binding = self
             .data
             .lock()
@@ -302,142 +351,54 @@ impl Runtime {
             .binding
             .clone()
             .ok_or(Error::Authentication)?;
-        if !binding.enabled {
-            self.mutate(|d| {
-                d.status.state = Phase::Paused;
-                d.status.enabled = false;
-            });
-            return Ok(());
-        }
-        self.mutate(|d| {
-            d.status.state = Phase::Connecting;
-            d.status.enabled = true;
-            d.status.error = None;
-        });
         let auth = self.auth().await?;
-        let origin = config::origin()?;
         std::fs::create_dir_all(&self.cache)?;
         private::directory(&self.cache)?;
-        let provider = provider::configuration(&self.cache)?;
         let client = cybergrid_sdk::Client::new(cybergrid_sdk::Config {
-            base_url: origin.clone(),
+            base_url: config::origin()?,
             app_id: config::CLIENT_ID.into(),
-            cloudflared: Some(provider),
+            cloudflared: Some(provider::configuration(&self.cache)?),
             ..Default::default()
         })?;
-        let initialization_stop = CancellationToken::new();
-        let advertised = transport::retry_sdk(
-            &initialization_stop,
-            || async {
-                if !self.current(generation) {
-                    return Err(cybergrid_sdk::Error::Cancelled);
-                }
-                client.auth_config().await
-            },
-            transport::transient_sdk,
-        )
-        .await
-        .map_err(|error| Error::sdk_at(error, types::NetworkStage::CoordinatorConfiguration))?;
-        if advertised.issuer != config::ISSUER
-            || advertised.client_id != config::CLIENT_ID
-            || advertised.resource != config::RESOURCE
-            || !advertised.scope.split_whitespace().any(|s| s == "connect")
-            || advertised
-                .product_id
-                .as_deref()
-                .unwrap_or(&advertised.client_id)
-                != binding.product_id
-        {
-            return Err(Error::Configuration);
-        }
-        if !self.current(generation) {
-            let _ = client.close().await;
-            return Err(Error::Cancelled);
-        }
-        client
-            .set_auth_provider(Arc::new(provider::Provider(auth.clone())))
-            .await;
-        let enrollment = Arc::new(enrollment::Enrollment::new(origin)?);
-        let gate = Arc::new(enrollment::Gate::default());
-        gate.attach(&client);
-        let owner = Arc::downgrade(self);
-        gate.bind_lifecycle(Arc::new(move || {
-            owner
-                .upgrade()
-                .is_some_and(|runtime| runtime.current(generation))
-        }));
         let stop = CancellationToken::new();
-        let identity = self.sync.account_identity_for(&binding.device_id)?;
-        let runtime = self.sync.clone();
+        let control = Arc::new(worker::Control::default());
+        control.configure(binding.enabled);
+        let catalog = Arc::new(directory::Catalog::default());
+        let (requests, receiver) = tokio::sync::mpsc::channel(1);
         let weak = Arc::downgrade(self);
-        let generation = self.generation.load(Ordering::Acquire);
-        let observation = self.observations.begin(generation);
-        let published_observation = observation.clone();
-        let publish = Arc::new(
-            move |result: std::result::Result<transport::Snapshot, Error>| {
-                if let Some(this) = weak.upgrade() {
-                    if !this.current(generation) {
-                        return;
-                    }
-                    match result {
-                        Ok(snapshot) => {
-                            if let Some(observation) = &published_observation {
-                                observation.resume();
-                            }
-                            this.mutate(|d| {
-                                d.status.state = Phase::Ready;
-                                d.status.error = None;
-                                d.status.devices = snapshot.devices;
-                                d.status.last_sync_at = snapshot.last_sync_at;
-                            });
-                        }
-                        Err(error) => this.fail(error),
-                    }
-                }
-            },
-        );
-        self.mutate(|d| {
-            d.status.state = Phase::Connecting;
-            d.status.enabled = true;
-            d.status.error = None;
-        });
         let task_stop = stop.clone();
-        let task_gate = gate.clone();
-        let weak = Arc::downgrade(self);
+        let task_control = control.clone();
+        let task_catalog = catalog.clone();
         let task = tokio::spawn(async move {
-            let result = transport::run(
-                runtime,
-                identity,
+            let result = worker::run(
+                weak.clone(),
+                generation,
                 binding,
                 auth,
-                client.clone(),
-                enrollment,
-                task_gate.clone(),
+                client,
+                task_control,
+                task_catalog,
                 task_stop,
-                observation,
-                publish,
+                receiver,
             )
             .await;
-            task_gate.close();
-            let _ = client.close().await;
-            if let Err(error) = result {
-                if let Some(this) = weak.upgrade() {
-                    if this.current(generation) {
-                        if private::adoption_pending(&this.root).unwrap_or(true) {
-                            let _ = this.set_enabled(false);
-                        }
-                        this.fail(error)
-                    }
-                }
+            if let (Err(error), Some(this)) = (result, weak.upgrade()) {
+                this.fail_current(generation, error);
             }
         });
-        *self.network.lock().await = Some(Network { stop, task, gate });
+        *slot = Some(Network {
+            stop,
+            task,
+            control,
+            catalog,
+            requests,
+        });
         Ok(())
     }
     async fn stop_network(&self) {
         self.observations.close();
         if let Some(network) = self.network.lock().await.take() {
-            network.gate.close();
+            network.control.configure(false);
             network.stop.cancel();
             let _ = network.task.await;
         }
@@ -562,63 +523,52 @@ impl Runtime {
             }
             Command::SetEnabled { enabled } => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
-                if self
-                    .data
-                    .lock()
-                    .map_err(|_| Error::Storage)?
-                    .status
-                    .profile
-                    .is_none()
-                {
-                    return Err(Error::Authentication);
+                let binding = {
+                    let d = self.data.lock().map_err(|_| Error::Storage)?;
+                    if d.status.profile.is_none() {
+                        return Err(Error::Authentication);
+                    }
+                    d.binding.clone().ok_or(Error::Authentication)?
+                };
+                // Seal content immediately. Directory/SDK remain owned and alive.
+                if let Some(network) = self.network.lock().await.as_ref() {
+                    network.control.configure(false);
                 }
-                self.generation.fetch_add(1, Ordering::AcqRel);
-                self.stop_network().await;
                 self.sync.pause_for_account()?;
-                if enabled {
-                    let binding = self
-                        .data
-                        .lock()
-                        .map_err(|_| Error::Storage)?
-                        .binding
-                        .clone()
-                        .ok_or(Error::Authentication)?;
-                    if self
+                self.set_enabled(false)?;
+                if enabled
+                    && self
                         .sync
                         .account_adoption_needed(&binding.workspace_id, &binding.device_id)?
+                {
+                    if let Err(error) = self
+                        .sync
+                        .account_adoption_preflight(&binding.workspace_id, &binding.device_id)
                     {
-                        if let Err(error) = self
-                            .sync
-                            .account_adoption_preflight(&binding.workspace_id, &binding.device_id)
-                        {
-                            self.set_enabled(false)?;
-                            self.fail(error.into());
-                            return self.snapshot();
-                        }
-                        private::begin_adoption(&self.root)?;
+                        self.fail(error.into());
+                        return self.snapshot();
                     }
+                    private::begin_adoption(&self.root)?;
                 }
                 self.set_enabled(enabled)?;
-                if enabled {
-                    if let Err(error) = self.start_network().await {
-                        if private::adoption_pending(&self.root).unwrap_or(true) {
-                            self.set_enabled(false)?;
-                        }
-                        self.fail(error)
-                    }
-                } else {
-                    self.stop_network().await;
-                    self.mutate(|d| {
-                        d.status.state = Phase::Paused;
-                        d.status.error = None;
-                    });
+                self.start_network().await?;
+                if let Some(network) = self.network.lock().await.as_ref() {
+                    network.control.configure(enabled);
                 }
+                self.mutate(|d| {
+                    d.status.state = if enabled {
+                        Phase::Connecting
+                    } else {
+                        Phase::Paused
+                    };
+                    d.status.error = None;
+                });
             }
             Command::SyncNow {} => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
                 let restore = {
-                    let data = self.data.lock().map_err(|_| Error::Storage)?;
-                    network_recovery(&data.status, data.binding.is_some())
+                    let d = self.data.lock().map_err(|_| Error::Storage)?;
+                    network_recovery(&d.status, d.binding.is_some())
                 };
                 if restore {
                     let generation = self.generation.fetch_add(1, Ordering::AcqRel) + 1;
@@ -630,11 +580,130 @@ impl Runtime {
                         }
                     }
                 } else {
-                    if !self.data.lock().map_err(|_| Error::Storage)?.status.enabled {
+                    if self
+                        .data
+                        .lock()
+                        .map_err(|_| Error::Storage)?
+                        .status
+                        .profile
+                        .is_none()
+                    {
                         return Err(Error::Authentication);
                     }
+                    // Refresh metadata only. Never wake replication or restart a live SDK owner.
                     self.start_network().await?;
                 }
+            }
+            Command::RenameDevice { name } => {
+                let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
+                if self
+                    .data
+                    .lock()
+                    .map_err(|_| Error::Storage)?
+                    .status
+                    .profile
+                    .is_none()
+                {
+                    return Err(Error::Authentication);
+                }
+                let renamed = {
+                    let mut slot = self.registry.lock().map_err(|_| Error::Storage)?;
+                    let value = slot.as_mut().ok_or(Error::Storage)?;
+                    let mut next = value.clone();
+                    next.name = private::device_name(&name)?;
+                    private::write_registry(&self.root, &next)?;
+                    *value = next;
+                    (value.registry_device_id.clone(), value.name.clone())
+                };
+                self.mutate(|d| {
+                    if let Some(device) = d
+                        .status
+                        .devices
+                        .iter_mut()
+                        .find(|device| device.id == renamed.0)
+                    {
+                        device.name = renamed.1;
+                    }
+                });
+                if let Some(network) = self.network.lock().await.as_ref() {
+                    network.control.refresh.notify_one();
+                }
+            }
+            Command::SyncDevice {
+                device_id,
+                direction,
+            } => {
+                // Operation ownership is separate from lifecycle: status, disable
+                // and signout remain callable throughout bounded network IO.
+                let _operation = self.operation.try_lock().map_err(|_| Error::Busy)?;
+                let generation = self.generation.load(Ordering::Acquire);
+                let (receiver, control, content_epoch) = {
+                    let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
+                    if !self.data.lock().map_err(|_| Error::Storage)?.status.enabled {
+                        return Err(Error::SyncNotEnabled);
+                    }
+                    let network = self.network.lock().await;
+                    let network = network.as_ref().ok_or(Error::DirectoryUnavailable)?;
+                    if !network.control.ready() {
+                        return Err(Error::SyncNotEnabled);
+                    }
+                    let content_epoch = network.control.epoch()?;
+                    let target = network
+                        .catalog
+                        .target(&device_id, &self.registry()?.registry_device_id)?;
+                    let permit = network.control.reserve(content_epoch)?;
+                    let (done, receiver) = oneshot::channel();
+                    network
+                        .requests
+                        .try_send(worker::DeviceRequest {
+                            target,
+                            direction,
+                            epoch: content_epoch,
+                            _permit: permit,
+                            done,
+                        })
+                        .map_err(|_| Error::Busy)?;
+                    self.mutate(|d| {
+                        d.status.device_operation = Some(types::DeviceOperation {
+                            device_id: device_id.clone(),
+                            direction,
+                            phase: types::DeviceOperationPhase::Running,
+                            started_at: unix_ms(),
+                            finished_at: None,
+                        });
+                        d.status.error = None;
+                    });
+                    (receiver, network.control.clone(), content_epoch)
+                };
+                let mut outcome = tokio::time::timeout(Duration::from_secs(185), receiver)
+                    .await
+                    .map_err(|_| Error::Sync)
+                    .and_then(|r| r.map_err(|_| Error::Cancelled))
+                    .and_then(|r| r);
+                if !self.current(generation) {
+                    return Err(Error::Cancelled);
+                }
+                if !control.current(content_epoch) {
+                    outcome = Err(Error::Cancelled);
+                }
+                self.mutate(|d| {
+                    if !self.current(generation) {
+                        return;
+                    }
+                    if let Some(operation) = &mut d.status.device_operation {
+                        operation.phase = if outcome.is_ok() {
+                            types::DeviceOperationPhase::Succeeded
+                        } else {
+                            types::DeviceOperationPhase::Failed
+                        };
+                        operation.finished_at = Some(unix_ms());
+                    }
+                    if let Err(error) = outcome {
+                        d.status.error = Some(error.safe());
+                    } else {
+                        d.status.last_sync_at = Some(unix_ms());
+                    }
+                });
             }
         }
         self.cleanup_status().await;
@@ -922,6 +991,13 @@ impl recovery::Host for Arc<Runtime> {
         self.start_network().await
     }
 }
+fn unix_ms() -> u64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_millis()
+        .min(types::MAX_SAFE_INTEGER as u128) as u64
+}
 fn session_identity_matches(binding: &private::Binding, identity: &account_auth::Identity) -> bool {
     identity.issuer == config::ISSUER
         && binding.issuer == identity.issuer
@@ -1200,11 +1276,23 @@ mod tests {
             .unwrap();
         let mut remote = Store::open(dir.path().join("synthetic-remote")).unwrap();
         remote.sync_enable(Some(&workspace)).unwrap();
-        remote.action(serde_json::json!({"type":"createNote"})).unwrap();
+        remote
+            .action(serde_json::json!({"type":"createNote"}))
+            .unwrap();
         remote.sync_flush().unwrap();
-        let versions = remote.sync_inventory().unwrap().iter()
-            .map(|v| remote.sync_version(&v.digest).unwrap()).collect();
-        shared.0.lock().unwrap().store.sync_receive(versions).unwrap();
+        let versions = remote
+            .sync_inventory()
+            .unwrap()
+            .iter()
+            .map(|v| remote.sync_version(&v.digest).unwrap())
+            .collect();
+        shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_receive(versions)
+            .unwrap();
         assert!(shared.0.lock().unwrap().store.sync_pending_count().unwrap() > 0);
         a.enabled = true;
         private::write(&root.join("binding.json"), &a).unwrap();
@@ -1227,8 +1315,11 @@ mod tests {
             .unwrap());
         // An ordinary pending inbox forbids changing namespaces, but must not
         // force a returning A through adoption instead of its normal apply path.
-        sync.account_adoption_preflight(&workspace, &returned.device_id).unwrap();
-        assert!(sync.account_adoption_preflight(&workspace, &b.device_id).is_err());
+        sync.account_adoption_preflight(&workspace, &returned.device_id)
+            .unwrap();
+        assert!(sync
+            .account_adoption_preflight(&workspace, &b.device_id)
+            .is_err());
         let mut corrupt = a.clone();
         corrupt.noise_public_key = "not-the-existing-key".into();
         private::remember_session(&root, &corrupt).unwrap();
@@ -1509,7 +1600,12 @@ mod tests {
                     types::RequestFailure::HttpStatus(reqwest::StatusCode::UNAUTHORIZED),
                 ),
             ] {
-                let mut status = Status { state: Phase::Error, enabled, error: Some(error.safe()), ..Status::default() };
+                let mut status = Status {
+                    state: Phase::Error,
+                    enabled,
+                    error: Some(error.safe()),
+                    ..Status::default()
+                };
                 assert_eq!(authorization_mode(&status), Ok(false)); // ordinary begin, never logout
                 assert_eq!(status.enabled, enabled);
                 status.profile = Some(Profile {
@@ -1647,9 +1743,5 @@ pub(crate) async fn account_command(
     if window.label() != "main" || !allowed {
         return Err(Error::WindowInvalid.safe());
     }
-    runtime
-        .0
-        .command(command)
-        .await
-        .map_err(Error::safe)
+    runtime.0.command(command).await.map_err(Error::safe)
 }

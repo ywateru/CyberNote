@@ -32,6 +32,9 @@ mod commits;
 mod open;
 #[path = "store/smart.rs"]
 mod smart;
+#[path = "store/account_summary.rs"]
+mod account_summary;
+pub(crate) use account_summary::AccountSummary;
 #[path = "store/synchronization.rs"]
 mod synchronization;
 pub(crate) use attachment_operations::AttachmentOwner;

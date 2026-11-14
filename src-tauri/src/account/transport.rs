@@ -3,7 +3,7 @@ use super::{
     config,
     enrollment::{Claims, Enrollment, Gate},
     private::Binding,
-    types::{Device, Error, RequestFailure, Result},
+    types::{Error, RequestFailure, Result},
 };
 use crate::sync::{
     adapter,
@@ -13,7 +13,6 @@ use crate::sync::{
 use cybergrid_sdk::{Client, Mapping, Port};
 use serde::{Deserialize, Serialize};
 use std::{
-    collections::HashMap,
     sync::{Arc, Mutex},
     time::Duration,
 };
@@ -267,6 +266,8 @@ pub(super) mod observation {
                     online: true,
                     current: false,
                     connected: true,
+                    sync_available: true,
+                    summary: None,
                     transport: None,
                 }],
                 ..Status::default()
@@ -629,16 +630,14 @@ pub(super) mod observation {
     }
 }
 
-struct MappedPeer {
-    enroll: Arc<Mapping>,
-    sync: Arc<Mapping>,
-    observation: Option<observation::Sampler>,
-}
-impl MappedPeer {
-    async fn close(self) {
-        drop(self.observation);
-        self.enroll.close().await;
-        self.sync.close().await;
+struct OwnedMapping(Arc<Mapping>);
+impl Drop for OwnedMapping {
+    fn drop(&mut self) {
+        let mapping = self.0.clone();
+        // Cancellation/timeout of a selected operation must also retire mappings.
+        tokio::spawn(async move {
+            mapping.close().await;
+        });
     }
 }
 
@@ -762,12 +761,8 @@ impl Bootstrap {
         .await
     }
 }
-pub(crate) struct Snapshot {
-    pub devices: Vec<Device>,
-    pub last_sync_at: Option<u64>,
-}
-fn fence_authorization(gate: &Gate, error: Error) -> bool {
-    let terminal = match error {
+pub(super) fn authorization_failure(error: Error) -> bool {
+    match error {
         Error::Authentication
         | Error::AuthenticationAt(_)
         | Error::ProviderAuthentication(_)
@@ -775,18 +770,21 @@ fn fence_authorization(gate: &Gate, error: Error) -> bool {
         | Error::OwnershipMismatch
         | Error::RequestAt(_, RequestFailure::InvalidResponse) => true,
         Error::RequestAt(_, RequestFailure::HttpStatus(status)) => {
-            matches!(status.as_u16(), 401 | 403)
-                || status.is_success()
-                || status.as_u16() > 599
+            matches!(status.as_u16(), 401 | 403) || status.is_success() || status.as_u16() > 599
         }
         _ => false,
-    };
+    }
+}
+fn fence_authorization(gate: &Gate, error: Error) -> bool {
+    let terminal = authorization_failure(error);
     if terminal {
         gate.close();
     }
     terminal
 }
-pub(crate) async fn run(
+/// Content service is entered only by the enabled child owner. Directory never
+/// calls this path, and no directory poll pairs or cycles a peer.
+pub(crate) async fn run_content(
     runtime: Arc<adapter::Runtime>,
     identity: Arc<IdentityStore>,
     binding: Binding,
@@ -796,65 +794,53 @@ pub(crate) async fn run(
     gate: Arc<Gate>,
     stop: CancellationToken,
     observation: Option<observation::Lease>,
-    publish: Arc<dyn Fn(std::result::Result<Snapshot, Error>) + Send + Sync>,
+    control: Arc<super::worker::Control>,
+    epoch: u64,
+    requests: &mut tokio::sync::mpsc::Receiver<super::worker::DeviceRequest>,
 ) -> Result<()> {
-    let session = retry_sdk(
-        &stop,
-        || client.login_with_auth_provider("CyberNote"),
-        |error| {
-            transient_sdk(error)
-                || (matches!(error, cybergrid_sdk::Error::ExchangeOutcomeUnknown)
-                    && client.snapshot().coordination.retryable)
-        },
-    )
-    .await
-    .map_err(|error| Error::sdk_at(error, super::types::NetworkStage::CoordinatorRegistration))?;
-    if session.user.id != binding.subject
-        || session.product_id.as_deref().unwrap_or(&session.app_id) != binding.product_id
-    {
-        let _ = client.close().await;
-        return Err(Error::OwnershipMismatch);
-    }
     let access = auth.access_token(Duration::from_secs(60), false).await?;
     let (proof, claims, verified) = enrollment.issue(access.secret(), &binding).await?;
+    if stop.is_cancelled() || !gate.is_current() {
+        return Err(Error::Cancelled);
+    }
     let service = {
         let runtime = runtime.clone();
         let identity = identity.clone();
-        let binding = binding.clone();
         let gate = gate.clone();
         tokio::task::spawn_blocking(move || runtime.activate_account(&verified, identity, gate))
             .await
             .map_err(|_| Error::Sync)??
     };
+    let service = Arc::new(service);
     let result = run_service(
         &service,
         identity,
         binding,
         auth,
-        client.clone(),
+        client,
         enrollment,
         gate.clone(),
         stop,
         observation,
-        publish,
+        control,
+        epoch,
+        requests,
         proof,
         claims,
     )
     .await;
     gate.close();
     runtime.pause_account();
-    let _ = client.close().await;
-    // No listener survives owner shutdown; join sync workers before dropping state.
     let shutdown = tokio::task::spawn_blocking(move || {
-        let mut service = service;
-        service.shutdown()
+        let mut service = Arc::try_unwrap(service).map_err(|_| Error::Sync)?;
+        service.shutdown().map_err(Error::from)
     })
     .await
     .map_err(|_| Error::Sync)?;
-    result.and(shutdown.map_err(Error::from))
+    result.and(shutdown)
 }
 async fn run_service(
-    service: &SyncService,
+    service: &Arc<SyncService>,
     identity: Arc<IdentityStore>,
     binding: Binding,
     auth: Arc<account_auth::AuthClient>,
@@ -863,7 +849,9 @@ async fn run_service(
     gate: Arc<Gate>,
     stop: CancellationToken,
     observation: Option<observation::Lease>,
-    publish: Arc<dyn Fn(std::result::Result<Snapshot, Error>) + Send + Sync>,
+    control: Arc<super::worker::Control>,
+    epoch: u64,
+    requests: &mut tokio::sync::mpsc::Receiver<super::worker::DeviceRequest>,
     proof: String,
     mut claims: Claims,
 ) -> Result<()> {
@@ -878,7 +866,11 @@ async fn run_service(
     });
     gate.renew_local(claims.exp);
     client
-        .expose(Port::tcp(config::SYNC_PORT, sync.port(), "notes-sync/1"))
+        .expose(Port::tcp(
+            config::SYNC_PORT,
+            sync.port(),
+            "notes-sync/account110",
+        ))
         .await?;
     client
         .expose(Port::tcp(
@@ -888,6 +880,9 @@ async fn run_service(
         ))
         .await?;
     client.enable_remote().await?;
+    if stop.is_cancelled() || !control.current(epoch) {
+        return Err(Error::Cancelled);
+    }
     let child = stop.child_token();
     let server_stop = child.clone();
     let handler = bootstrap.clone();
@@ -904,214 +899,182 @@ async fn run_service(
         tasks.abort_all();
         while tasks.join_next().await.is_some() {}
     });
-    let mut mappings: HashMap<String, MappedPeer> = HashMap::new();
-    let mut backoff = Duration::from_secs(2);
+    control.mark_ready(epoch);
+    if let Some(observation) = &observation {
+        observation.resume();
+    }
     let result = loop {
-        let cycle = async {
-            if claims.exp <= now() + 90 {
-                let access = auth.access_token(Duration::from_secs(60), false).await?;
-                let (proof, next, _) = enrollment.issue(access.secret(), &binding).await?;
-                *bootstrap.proof.lock().map_err(|_| Error::Storage)? = proof;
-                claims = next;
-                gate.renew_local(claims.exp);
-            }
-            let session = client.device_session().await.ok_or(Error::AuthenticationAt(
-                super::types::NetworkStage::CoordinatorSession,
-            ))?;
-            if session.user.id != binding.subject
-                || session.product_id.as_deref().unwrap_or(&session.app_id) != binding.product_id
-            {
-                return Err(Error::OwnershipMismatch);
-            }
-            let current_device = session.device_id;
-            let devices = client.devices().await?;
-            let retired = mappings
-                .keys()
-                .filter(|id| !devices.iter().any(|d| &d.id == *id && d.online))
-                .cloned()
-                .collect::<Vec<_>>();
-            for id in retired {
-                if let Some(mapping) = mappings.remove(&id) {
-                    mapping.close().await;
-                }
-            }
-            let mut snapshot = Vec::new();
-            let mut remote_count = 0;
-            for device in &devices {
-                if !device.online || !device.ports.iter().any(|p| p.id == config::ENROLL_PORT) {
-                    continue;
-                }
-                // Publication includes this device. Never bootstrap ourselves.
-                let is_current = device.id == current_device;
-                if is_current {
-                    snapshot.push(Device {
-                        id: device.id.clone(),
-                        name: device
-                            .name
-                            .chars()
-                            .take(120)
-                            .filter(|c| !c.is_control())
-                            .collect(),
-                        online: true,
-                        current: true,
-                        connected: false,
-                        transport: None,
-                    });
-                    continue;
-                }
-                if remote_count >= 3 {
-                    continue;
-                }
-                remote_count += 1;
-                if !mappings.contains_key(&device.id) {
-                    let enroll = client
-                        .map(
-                            &device.id,
-                            config::ENROLL_PORT,
-                            "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
-                        )
-                        .await?;
-                    let sync = match client
-                        .map(
-                            &device.id,
-                            config::SYNC_PORT,
-                            "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
-                        )
-                        .await
-                    {
-                        Ok(v) => v,
-                        Err(e) => {
-                            enroll.close().await;
-                            return Err(Error::from(e));
-                        }
+        tokio::select! {
+            _=stop.cancelled()=>break Ok(()),
+            _=tokio::time::sleep(Duration::from_secs(20))=>{
+                if claims.exp <= now() + 90 {
+                    let renewed = async {
+                        let access = auth.access_token(Duration::from_secs(60), false).await?;
+                        enrollment.issue(access.secret(), &binding).await
                     };
-                    let enroll = Arc::new(enroll);
-                    let sync = Arc::new(sync);
-                    let sampler = observation.as_ref().map(|lease| {
-                        let enroll = enroll.clone();
-                        let sync = sync.clone();
-                        lease.spawn(device.id.clone(), move || {
-                            let enroll = enroll.clone();
-                            let sync = sync.clone();
-                            async move {
-                                tokio::join!(
-                                    observation::read_path(async { Ok(enroll.current_transport().await) }),
-                                    observation::read_path(async { Ok(sync.current_transport().await) }),
-                                )
+                    let renewed = tokio::select! {_=stop.cancelled()=>break Ok(()), value=renewed=>value};
+                    match renewed {
+                        Ok((proof, next, _))=>{
+                            match bootstrap.proof.lock() {
+                                Ok(mut slot)=>*slot=proof,
+                                Err(_)=>break Err(Error::Storage),
                             }
-                        })
-                    });
-                    mappings.insert(device.id.clone(), MappedPeer { enroll, sync, observation: sampler });
-                }
-                let mapping = mappings.get(&device.id).ok_or(Error::Network)?;
-                let (enroll, sync) = (&mapping.enroll, &mapping.sync);
-                let mut stream = TcpStream::connect(enroll.addr).await?;
-                let nonce = uuid::Uuid::new_v4().to_string();
-                let proof = bootstrap.proof.lock().map_err(|_| Error::Storage)?.clone();
-                write(
-                    &mut stream,
-                    &Request {
-                        proof,
-                        nonce: nonce.clone(),
-                    },
-                )
-                .await?;
-                let response: Response =
-                    tokio::time::timeout(Duration::from_secs(25), read(&mut stream))
-                        .await
-                        .map_err(|_| Error::Network)??;
-                if response.nonce != nonce {
-                    return Err(Error::InvalidProof);
-                }
-                let remote = enrollment.verify(&response.proof, &binding).await?;
-                if remote.device_id == binding.device_id {
-                    return Err(Error::InvalidProof);
-                }
-                let mut invite = PairingInvite::decode(&response.invitation)?;
-                if invite.workspace_id != binding.workspace_id
-                    || invite.host_key != remote.noise_public_key
-                {
-                    return Err(Error::InvalidProof);
-                }
-                gate.admit(&remote);
-                gate.route(&remote.device_id, format!("ws://{}/", sync.addr));
-                let paired = identity.peer_for_device(&remote.device_id)?;
-                if let Some(id) = paired {
-                    let pinned = identity.credential(&id)?;
-                    if pinned.host_key != remote.noise_public_key {
-                        return Err(Error::InvalidProof);
+                            claims=next; gate.renew_local(claims.exp);
+                        }
+                        Err(error) if fence_authorization(&gate, error)=>break Err(error),
+                        Err(_) if claims.exp <= now()=>break Err(Error::Authentication),
+                        Err(_)=>{},
                     }
-                    if pinned.phase == crate::sync::identity::PairingPhase::Prepared {
-                        service.recover_pairing(&id)?;
-                    }
-                    match service.connect(&id) {
-                        Ok(()) | Err(crate::sync::identity::SyncError::Busy) => (),
-                        Err(e) => return Err(e.into()),
-                    }
-                    service.sync_now()?;
-                } else {
-                    invite.endpoint = format!("ws://{}/", sync.addr);
-                    // SyncService has its own runtime; block only this dedicated
-                    // network worker, never the WebView or Session lock.
-                    tokio::task::block_in_place(|| service.pair(&invite.token()?))?;
                 }
-                let live = service.status()?;
-                let peer_id = identity.peer_for_device(&remote.device_id)?;
-                let connected = live.connections.iter().any(|s| {
-                    peer_id.as_ref() == Some(&s.peer_id)
-                        && (s.phase == "idle" || s.phase == "transferring")
-                });
-                snapshot.push(Device {
-                    id: device.id.clone(),
-                    name: device
-                        .name
-                        .chars()
-                        .take(120)
-                        .filter(|c| !c.is_control())
-                        .collect(),
-                    online: true,
-                    current: false,
-                    connected,
-                    transport: None,
-                });
-            }
-            let live = service.status()?;
-            let last_sync_at = live
-                .connections
-                .iter()
-                .filter_map(|s| s.last_success)
-                .max()
-                .map(|s| s * 1000);
-            Ok(Snapshot {
-                devices: snapshot,
-                last_sync_at,
-            })
-        };
-        let outcome = tokio::select! {_=stop.cancelled()=>break Ok(()),result=cycle=>result};
-        match outcome {
-            Ok(snapshot) => {
-                backoff = Duration::from_secs(5);
-                publish(Ok(snapshot));
-            }
-            Err(error) => {
-                // Old authorization may only continue until the signed lease expires.
-                // Authentication/proof errors fence it immediately; never manual fallback.
-                if fence_authorization(&gate, error) {
-                    publish(Err(error));
-                    break Err(error);
+            },
+            request=requests.recv()=>{
+                let Some(request)=request else{break Ok(())};
+                if request.epoch != epoch || !control.current(epoch) || request.done.is_closed() {
+                    let _=request.done.send(Err(Error::Cancelled)); continue;
                 }
-                publish(Err(error));
-                backoff = (backoff * 2).min(Duration::from_secs(30));
+                let transfer = transfer_target(service, &identity, &binding, &client, &enrollment, &gate,
+                    &bootstrap, &request.target, request.direction, observation.as_ref(), &stop);
+                let outcome = transfer.await;
+                let terminal = outcome.as_ref().err().is_some_and(|e| fence_authorization(&gate, *e));
+                let error = outcome.as_ref().err().copied();
+                let _=request.done.send(outcome);
+                if terminal { break Err(error.unwrap_or(Error::Sync)); }
             }
         }
-        tokio::select! {_=stop.cancelled()=>break Ok(()),_=tokio::time::sleep(backoff)=>{}}
     };
     gate.close();
     child.cancel();
     let _ = server.await;
-    for (_, mapping) in mappings {
-        mapping.close().await;
+    result
+}
+async fn transfer_target(
+    service: &Arc<SyncService>,
+    identity: &IdentityStore,
+    binding: &Binding,
+    client: &Arc<Client>,
+    enrollment: &Enrollment,
+    gate: &Gate,
+    bootstrap: &Bootstrap,
+    target: &super::directory::Row,
+    direction: super::types::TransferDirection,
+    observation: Option<&observation::Lease>,
+    stop: &CancellationToken,
+) -> Result<()> {
+    let prepare = async {
+        let (transport, protocol, key) = target.target("")?;
+        let enroll = OwnedMapping(Arc::new(
+            client
+                .map(
+                    transport,
+                    config::ENROLL_PORT,
+                    "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+                )
+                .await?,
+        ));
+        let sync = OwnedMapping(Arc::new(
+            client
+                .map(
+                    transport,
+                    config::SYNC_PORT,
+                    "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+                )
+                .await?,
+        ));
+        let sampler = observation.map(|lease| {
+            let enroll = enroll.0.clone();
+            let sync = sync.0.clone();
+            lease.spawn(target.id.clone(), move || {
+                let enroll = enroll.clone();
+                let sync = sync.clone();
+                async move {
+                    tokio::join!(
+                        observation::read_path(async { Ok(enroll.current_transport().await) }),
+                        observation::read_path(async { Ok(sync.current_transport().await) })
+                    )
+                }
+            })
+        });
+        let mut stream = TcpStream::connect(enroll.0.addr).await?;
+        let nonce = uuid::Uuid::new_v4().to_string();
+        let proof = bootstrap.proof.lock().map_err(|_| Error::Storage)?.clone();
+        write(
+            &mut stream,
+            &Request {
+                proof,
+                nonce: nonce.clone(),
+            },
+        )
+        .await?;
+        let response: Response = tokio::time::timeout(Duration::from_secs(25), read(&mut stream))
+            .await
+            .map_err(|_| Error::Network)??;
+        if response.nonce != nonce {
+            return Err(Error::InvalidProof);
+        }
+        let remote = enrollment.verify(&response.proof, binding).await?;
+        // Selection pins both the enrollment identity and static Noise key.
+        // A directory refresh never redirects an already selected operation.
+        if remote.device_id != protocol
+            || remote.noise_public_key != key
+            || remote.device_id == binding.device_id
+        {
+            return Err(Error::InvalidProof);
+        }
+        let mut invite = PairingInvite::decode(&response.invitation)?;
+        if invite.workspace_id != binding.workspace_id || invite.host_key != remote.noise_public_key
+        {
+            return Err(Error::InvalidProof);
+        }
+        gate.admit(&remote);
+        gate.route(&remote.device_id, format!("ws://{}/", sync.0.addr));
+        let paired = identity.peer_for_device(&remote.device_id)?;
+        if let Some(id) = paired {
+            let pinned = identity.credential(&id)?;
+            if pinned.host_key != remote.noise_public_key {
+                return Err(Error::InvalidProof);
+            }
+            if pinned.phase == crate::sync::identity::PairingPhase::Prepared {
+                tokio::task::block_in_place(|| service.recover_pairing(&id))?;
+            }
+        } else {
+            invite.endpoint = format!("ws://{}/", sync.0.addr);
+            tokio::task::block_in_place(|| service.pair(&invite.token()?))?;
+        }
+        let id = identity
+            .peer_for_device(&remote.device_id)?
+            .ok_or(Error::InvalidProof)?;
+        Ok((id, enroll, sync, sampler))
+    };
+    let (id, enroll, sync, sampler) = tokio::select! {
+        _=stop.cancelled()=>return Err(Error::Cancelled),
+        prepared=tokio::time::timeout(Duration::from_secs(60),prepare)=>prepared.map_err(|_| Error::Network)??,
+    };
+    if stop.is_cancelled() || !gate.is_current() {
+        return Err(Error::Cancelled);
     }
+    let direction = match direction {
+        super::types::TransferDirection::Push => crate::sync::network::TransferDirection::Push,
+        super::types::TransferDirection::Pull => crate::sync::network::TransferDirection::Pull,
+        super::types::TransferDirection::Both => crate::sync::network::TransferDirection::Both,
+    };
+    let task_service = service.clone();
+    let task_id = id.clone();
+    let mut action =
+        tokio::task::spawn_blocking(move || task_service.transfer_once(&task_id, direction));
+    // No lifecycle/Session/Store lock is held. Cancellation disconnects AND joins
+    // the network-owned task before mappings or the content service can retire.
+    let result = tokio::select! {
+        result=&mut action=>result.map_err(|_| Error::Sync)?.map_err(Error::from),
+        _=stop.cancelled()=>{
+            let task_service=service.clone();
+            let _=tokio::task::spawn_blocking(move ||task_service.disconnect(&id)).await;
+            let _=action.await;
+            Err(Error::Cancelled)
+        },
+    };
+    drop(sampler);
+    enroll.0.close().await;
+    sync.0.close().await;
     result
 }
 
@@ -1129,42 +1092,78 @@ mod tests {
     #[test]
     fn coordinator_request_classification_preserves_authorization_fences() {
         use super::super::types::NetworkStage;
-        for stage in [NetworkStage::CoordinatorProfile, NetworkStage::CoordinatorEnrollment, NetworkStage::CoordinatorJwks] {
+        for stage in [
+            NetworkStage::CoordinatorProfile,
+            NetworkStage::CoordinatorEnrollment,
+            NetworkStage::CoordinatorJwks,
+        ] {
             let mut cases = vec![
                 (Error::AuthenticationAt(stage), true),
                 (Error::InvalidProof, true),
                 (Error::OwnershipMismatch, true),
-                (Error::RequestAt(stage, RequestFailure::InvalidResponse), true),
+                (
+                    Error::RequestAt(stage, RequestFailure::InvalidResponse),
+                    true,
+                ),
                 (Error::RequestAt(stage, RequestFailure::Timeout), false),
                 (Error::RequestAt(stage, RequestFailure::Connect), false),
                 (Error::RequestAt(stage, RequestFailure::Request), false),
                 (Error::RequestAt(stage, RequestFailure::ResponseBody), false),
             ];
-            for (status, terminal) in [(401, true), (403, true), (429, false), (503, false), (200, true), (600, true)] {
-                cases.push((Error::RequestAt(stage, RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap())), terminal));
+            for (status, terminal) in [
+                (401, true),
+                (403, true),
+                (429, false),
+                (503, false),
+                (200, true),
+                (600, true),
+            ] {
+                cases.push((
+                    Error::RequestAt(
+                        stage,
+                        RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap()),
+                    ),
+                    terminal,
+                ));
             }
             for (error, terminal) in cases {
                 let gate = Gate::default();
                 let proof = Claims {
-                    iss: config::ENROLLMENT_ISSUER.into(), aud: "cybernote-enrollment-v1".into(),
-                    sub: "synthetic-owner".into(), account_issuer: config::ISSUER.into(),
-                    product_id: "cybernote".into(), workspace_id: uuid::Uuid::new_v4().to_string(),
-                    device_id: uuid::Uuid::new_v4().to_string(), noise_public_key: B64.encode([7; 32]),
-                    purpose: "pair".into(), iat: now(), exp: now() + 200,
+                    iss: config::ENROLLMENT_ISSUER.into(),
+                    aud: "cybernote-enrollment-v1".into(),
+                    sub: "synthetic-owner".into(),
+                    account_issuer: config::ISSUER.into(),
+                    product_id: "cybernote".into(),
+                    workspace_id: uuid::Uuid::new_v4().to_string(),
+                    device_id: uuid::Uuid::new_v4().to_string(),
+                    noise_public_key: B64.encode([7; 32]),
+                    purpose: "pair".into(),
+                    iat: now(),
+                    exp: now() + 200,
                     jti: uuid::Uuid::new_v4().to_string(),
                 };
                 gate.renew_local(proof.exp);
                 gate.admit(&proof);
                 gate.route(&proof.device_id, "ws://127.0.0.1:1234/".into());
-                assert!(gate.authorize(&proof.device_id, &proof.noise_public_key).is_ok());
+                assert!(gate
+                    .authorize(&proof.device_id, &proof.noise_public_key)
+                    .is_ok());
                 assert_eq!(fence_authorization(&gate, error), terminal);
-                assert_eq!(gate.authorize(&proof.device_id, &proof.noise_public_key).is_err(), terminal);
+                assert_eq!(
+                    gate.authorize(&proof.device_id, &proof.noise_public_key)
+                        .is_err(),
+                    terminal
+                );
                 assert_eq!(gate.endpoint(&proof.device_id).is_err(), terminal);
                 // A fenced gate cannot be resurrected by a stale renewal/admit.
                 gate.renew_local(proof.exp);
                 gate.admit(&proof);
                 gate.route(&proof.device_id, "ws://127.0.0.1:1234/".into());
-                assert_eq!(gate.authorize(&proof.device_id, &proof.noise_public_key).is_err(), terminal);
+                assert_eq!(
+                    gate.authorize(&proof.device_id, &proof.noise_public_key)
+                        .is_err(),
+                    terminal
+                );
             }
         }
     }

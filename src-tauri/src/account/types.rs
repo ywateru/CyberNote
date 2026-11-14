@@ -1,7 +1,12 @@
-use serde::{Deserialize, Serialize};
 use crate::session::synchronization::AdoptionStage;
+use serde::{Deserialize, Serialize};
 #[derive(Clone, Deserialize)]
-#[serde(tag = "type", rename_all = "camelCase", deny_unknown_fields)]
+#[serde(
+    tag = "type",
+    rename_all = "camelCase",
+    rename_all_fields = "camelCase",
+    deny_unknown_fields
+)]
 pub(crate) enum Command {
     Status {},
     SignIn {
@@ -18,6 +23,14 @@ pub(crate) enum Command {
     SyncNow {},
     SetEnabled {
         enabled: bool,
+    },
+    RenameDevice {
+        name: String,
+    },
+    SyncDevice {
+        #[serde(deserialize_with = "device_id")]
+        device_id: String,
+        direction: TransferDirection,
     },
 }
 #[derive(Clone, Serialize, Default)]
@@ -38,6 +51,8 @@ pub(crate) struct Status {
     pub error: Option<SafeError>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport_generation: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_operation: Option<DeviceOperation>,
 }
 #[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
@@ -73,8 +88,70 @@ pub(crate) struct Device {
     pub online: bool,
     pub current: bool,
     pub connected: bool,
+    pub sync_available: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<DeviceSummary>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport: Option<MappingObservation>,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum TransferDirection {
+    Push,
+    Pull,
+    Both,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct DeviceSummary {
+    pub note_count: u64,
+    #[serde(deserialize_with = "nullable_timestamp")]
+    pub last_note_updated_at: Option<u64>,
+    pub captured_at: u64,
+}
+fn device_id<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> std::result::Result<String, D::Error> {
+    let value = String::deserialize(deserializer)?;
+    if !super::private::registry_id(&value) {
+        return Err(serde::de::Error::custom("invalid device id"));
+    }
+    Ok(value)
+}
+fn nullable_timestamp<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> std::result::Result<Option<u64>, D::Error> {
+    Option::<u64>::deserialize(deserializer)
+}
+pub(super) const MAX_SAFE_INTEGER: u64 = 9_007_199_254_740_991;
+impl DeviceSummary {
+    pub(crate) fn valid(&self) -> bool {
+        self.note_count <= MAX_SAFE_INTEGER
+            && self.captured_at <= MAX_SAFE_INTEGER
+            && self
+                .last_note_updated_at
+                .is_none_or(|n| n <= MAX_SAFE_INTEGER)
+            && (self.note_count == 0) == self.last_note_updated_at.is_none()
+    }
+}
+#[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct DeviceOperation {
+    pub device_id: String,
+    pub direction: TransferDirection,
+    pub phase: DeviceOperationPhase,
+    pub started_at: u64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finished_at: Option<u64>,
+}
+#[derive(Clone, Copy, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum DeviceOperationPhase {
+    Running,
+    Succeeded,
+    Failed,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
@@ -125,7 +202,9 @@ pub(crate) struct SafeError {
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub(crate) enum AdoptionReason { Timeout }
+pub(crate) enum AdoptionReason {
+    Timeout,
+}
 impl SafeError {
     pub(super) fn refresh_rejected(&self) -> bool {
         self.code == "account_authentication"
@@ -250,6 +329,11 @@ pub(crate) enum Error {
     AdoptionBlocked,
     AdoptionTimeout(AdoptionStage),
     WindowInvalid,
+    DeviceOffline,
+    DeviceIncompatible,
+    SyncNotEnabled,
+    DirectoryUnavailable,
+    DirectoryUnsupported,
 }
 impl Error {
     pub fn code(self) -> &'static str {
@@ -283,6 +367,11 @@ impl Error {
             Self::CoordinationProtocol => "account_sync_protocol",
             Self::AdoptionBlocked | Self::AdoptionTimeout(_) => "account_sync_adoption_blocked",
             Self::WindowInvalid => "account_window_invalid",
+            Self::DeviceOffline => "account_device_offline",
+            Self::DeviceIncompatible => "account_device_incompatible",
+            Self::SyncNotEnabled => "account_sync_not_enabled",
+            Self::DirectoryUnavailable => "account_directory_unavailable",
+            Self::DirectoryUnsupported => "account_directory_unsupported",
         }
     }
     pub fn safe(self) -> SafeError {
@@ -424,10 +513,51 @@ impl Error {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn device_commands_reject_unknown_shapes_and_directions() {
+        let id = uuid::Uuid::new_v4().to_string();
+        let valid = serde_json::json!({"type":"syncDevice","deviceId":id,"direction":"push"});
+        assert!(matches!(
+            serde_json::from_value::<Command>(valid.clone()),
+            Ok(Command::SyncDevice {
+                direction: TransferDirection::Push,
+                ..
+            })
+        ));
+        for field in ["direction", "deviceId"] {
+            for bad in [serde_json::Value::Null, serde_json::json!(7)] {
+                let mut value = valid.clone();
+                value[field] = bad;
+                assert!(serde_json::from_value::<Command>(value).is_err());
+            }
+        }
+        for direction in ["Push", "all", "broadcast", ""] {
+            let mut value = valid.clone();
+            value["direction"] = serde_json::json!(direction);
+            assert!(serde_json::from_value::<Command>(value).is_err());
+        }
+        let mut value = valid;
+        value["url"] = serde_json::json!("https://untrusted.invalid");
+        assert!(serde_json::from_value::<Command>(value).is_err());
+        for error in [
+            Error::DeviceOffline,
+            Error::DeviceIncompatible,
+            Error::SyncNotEnabled,
+            Error::DirectoryUnavailable,
+            Error::DirectoryUnsupported,
+        ] {
+            let value = serde_json::to_value(error.safe()).unwrap();
+            assert_eq!(value.as_object().unwrap().len(), 2);
+        }
+    }
 
     #[test]
     fn adoption_block_is_a_finite_local_error_without_provider_details() {
-        let error = Error::from(crate::store::AppError { code: "sync_adoption_blocked".into(), message: "untrusted detail".into(), commit: None });
+        let error = Error::from(crate::store::AppError {
+            code: "sync_adoption_blocked".into(),
+            message: "untrusted detail".into(),
+            commit: None,
+        });
         assert_eq!(error, Error::AdoptionBlocked);
         let value = serde_json::to_value(error.safe()).unwrap();
         assert_eq!(value["code"], "account_sync_adoption_blocked");
@@ -442,7 +572,9 @@ mod tests {
             ("sync_adoption_media_timeout", "media"),
         ] {
             let error = Error::from(crate::store::AppError {
-                code: code.into(), message: "untrusted /path and upstream text".into(), commit: None,
+                code: code.into(),
+                message: "untrusted /path and upstream text".into(),
+                commit: None,
             });
             let value = serde_json::to_value(error.safe()).unwrap();
             assert_eq!(value["code"], "account_sync_adoption_blocked");
@@ -451,10 +583,20 @@ mod tests {
             assert_eq!(value.as_object().unwrap().len(), 4);
             assert!(!value.to_string().contains("untrusted"));
         }
-        for code in ["sync_adoption_unknown_timeout", "sync_adoption_media_timeout_extra", "filesystem"] {
-            let value = serde_json::to_value(Error::from(crate::store::AppError {
-                code: code.into(), message: "sync_adoption_media_timeout".into(), commit: None,
-            }).safe()).unwrap();
+        for code in [
+            "sync_adoption_unknown_timeout",
+            "sync_adoption_media_timeout_extra",
+            "filesystem",
+        ] {
+            let value = serde_json::to_value(
+                Error::from(crate::store::AppError {
+                    code: code.into(),
+                    message: "sync_adoption_media_timeout".into(),
+                    commit: None,
+                })
+                .safe(),
+            )
+            .unwrap();
             assert_eq!(value["code"], "account_sync_failed");
             assert!(value.get("adoptionStage").is_none());
             assert!(value.get("adoptionReason").is_none());
@@ -462,7 +604,11 @@ mod tests {
     }
     #[test]
     fn request_details_are_finite_stage_scoped_and_http_status_is_paired() {
-        for stage in [NetworkStage::CoordinatorProfile, NetworkStage::CoordinatorEnrollment, NetworkStage::CoordinatorJwks] {
+        for stage in [
+            NetworkStage::CoordinatorProfile,
+            NetworkStage::CoordinatorEnrollment,
+            NetworkStage::CoordinatorJwks,
+        ] {
             for (failure, label) in [
                 (RequestFailure::Timeout, "timeout"),
                 (RequestFailure::Connect, "connect"),
@@ -479,19 +625,44 @@ mod tests {
                 }
             }
             for status in [100, 302, 401, 403, 429, 503, 599] {
-                let value = serde_json::to_value(Error::RequestAt(stage, RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap())).safe()).unwrap();
+                let value = serde_json::to_value(
+                    Error::RequestAt(
+                        stage,
+                        RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap()),
+                    )
+                    .safe(),
+                )
+                .unwrap();
                 assert_eq!(value["requestReason"], "httpStatus");
                 assert_eq!(value["httpStatus"], status);
-                assert_eq!(value["code"], if matches!(status, 401 | 403) { "account_authentication" } else { "account_network" });
+                assert_eq!(
+                    value["code"],
+                    if matches!(status, 401 | 403) {
+                        "account_authentication"
+                    } else {
+                        "account_network"
+                    }
+                );
             }
             for status in [200, 204, 299, 600, 999] {
-                let value = serde_json::to_value(Error::RequestAt(stage, RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap())).safe()).unwrap();
+                let value = serde_json::to_value(
+                    Error::RequestAt(
+                        stage,
+                        RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap()),
+                    )
+                    .safe(),
+                )
+                .unwrap();
                 assert_eq!(value["requestReason"], "invalidResponse");
                 assert!(value.get("httpStatus").is_none());
             }
         }
-        for error in [Error::Network, Error::Busy, Error::WindowInvalid,
-            Error::RequestAt(NetworkStage::IdentityProvider, RequestFailure::Timeout)] {
+        for error in [
+            Error::Network,
+            Error::Busy,
+            Error::WindowInvalid,
+            Error::RequestAt(NetworkStage::IdentityProvider, RequestFailure::Timeout),
+        ] {
             let value = serde_json::to_value(error.safe()).unwrap();
             assert!(value.get("requestReason").is_none());
             assert!(value.get("httpStatus").is_none());

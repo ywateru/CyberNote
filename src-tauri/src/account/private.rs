@@ -88,6 +88,108 @@ fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
     result
 }
 
+/// Installation metadata, independent of account/enrollment and never removed
+/// by logout. Contains no credential, protocol key or transport association.
+#[derive(Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct Registry {
+    pub registry_device_id: String,
+    pub registry_key: String,
+    pub revision: u64,
+    pub name: String,
+}
+pub(crate) fn device_name(input: &str) -> Result<String> {
+    let name = input.trim();
+    if name.is_empty() || name.chars().count() > 96 || input.chars().any(char::is_control) {
+        return Err(Error::Configuration);
+    }
+    Ok(name.into())
+}
+pub(crate) fn registry(root: &Path) -> Result<Registry> {
+    let path = root.join("registry.json");
+    match fs::symlink_metadata(&path) {
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+            use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
+            use rand::RngCore;
+            let id = uuid::Uuid::new_v4().to_string();
+            let mut key = [0_u8; 32];
+            rand::rngs::OsRng.fill_bytes(&mut key);
+            let value = Registry {
+                name: format!(
+                    "CyberNote {} {}",
+                    if cfg!(target_os = "android") {
+                        "Android"
+                    } else {
+                        "Mac"
+                    },
+                    &id[..8]
+                ),
+                registry_device_id: id,
+                registry_key: URL_SAFE_NO_PAD.encode(key),
+                revision: 0,
+            };
+            write_registry(root, &value)?;
+            Ok(value)
+        }
+        Ok(m) if m.is_file() && !m.file_type().is_symlink() && m.len() <= 8192 => {
+            let mut options = OpenOptions::new();
+            options.read(true);
+            #[cfg(unix)]
+            {
+                use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
+                if m.mode() & 0o777 != 0o600 || m.uid() != unsafe { libc::geteuid() } {
+                    return Err(Error::Storage);
+                }
+                options.custom_flags(libc::O_NOFOLLOW);
+            }
+            let mut bytes = Vec::new();
+            options.open(path)?.take(8193).read_to_end(&mut bytes)?;
+            let value: Registry = serde_json::from_slice(&bytes).map_err(|_| Error::Storage)?;
+            if !valid_registry(&value) {
+                return Err(Error::Storage);
+            }
+            Ok(value)
+        }
+        _ => Err(Error::Storage),
+    }
+}
+pub(crate) fn registry_id(input: &str) -> bool {
+    uuid::Uuid::parse_str(input).is_ok_and(|id| {
+        id.get_version_num() == 4
+            && id.get_variant() == uuid::Variant::RFC4122
+            && id.to_string() == input
+    })
+}
+pub(crate) fn write_registry(root: &Path, value: &Registry) -> Result<()> {
+    if !valid_registry(value) {
+        return Err(Error::Configuration);
+    }
+    atomic_write(
+        &root.join("registry.json"),
+        &serde_json::to_vec(value).map_err(|_| Error::Storage)?,
+    )
+}
+fn valid_registry(value: &Registry) -> bool {
+    use base64::{engine::general_purpose::URL_SAFE_NO_PAD as B64, Engine};
+    registry_id(&value.registry_device_id)
+        && device_name(&value.name).is_ok_and(|name| name == value.name)
+        && value.revision <= super::types::MAX_SAFE_INTEGER
+        && B64
+            .decode(&value.registry_key)
+            .is_ok_and(|key| key.len() == 32 && B64.encode(&key) == value.registry_key)
+}
+pub(crate) fn next_registration(root: &Path, registry: &mut Registry) -> Result<Registry> {
+    let mut next = registry.clone();
+    next.revision = next
+        .revision
+        .checked_add(1)
+        .filter(|n| *n <= super::types::MAX_SAFE_INTEGER)
+        .ok_or(Error::Storage)?;
+    write_registry(root, &next)?;
+    *registry = next.clone();
+    Ok(next)
+}
+
 // Public session metadata, separate from the current login. It permits return
 // to a paused old account workspace without relabeling its device/causal history.
 // No grant, enrollment proof, peer secret or Noise private key is copied here.
@@ -170,6 +272,49 @@ pub(crate) fn complete_adoption(root: &Path) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn registry_key_id_and_revision_survive_signout_and_rejected_late_publications() {
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path().join(".account");
+        directory(&root).unwrap();
+        let mut first = registry(&root).unwrap();
+        assert!(registry_id(&first.registry_device_id));
+        let key = first.registry_key.clone();
+        let id = first.registry_device_id.clone();
+        assert_eq!(first.revision, 0);
+        let put = next_registration(&root, &mut first).unwrap();
+        assert_eq!(put.revision, 1);
+        // Simulate a failed/ambiguous HTTP PUT, restart, rename and logout.
+        let mut restored = registry(&root).unwrap();
+        assert_eq!(restored.revision, 1);
+        restored.name = device_name("  Work Mac  ").unwrap();
+        write_registry(&root, &restored).unwrap();
+        write(&root.join("binding.json"), &binding()).unwrap();
+        clear_session(&root).unwrap();
+        let mut restored = registry(&root).unwrap();
+        assert_eq!(restored.registry_device_id, id);
+        assert!(restored.registry_key == key);
+        assert_eq!(restored.name, "Work Mac");
+        assert_eq!(next_registration(&root, &mut restored).unwrap().revision, 2);
+        restored.revision = super::super::types::MAX_SAFE_INTEGER;
+        write_registry(&root, &restored).unwrap();
+        let bytes = fs::read(root.join("registry.json")).unwrap();
+        assert_eq!(
+            next_registration(&root, &mut restored).err(),
+            Some(Error::Storage)
+        );
+        assert_eq!(fs::read(root.join("registry.json")).unwrap(), bytes);
+        for name in ["", "   ", "bad\nname", &"x".repeat(97)] {
+            assert!(device_name(name).is_err());
+        }
+        #[cfg(unix)]
+        {
+            fs::remove_file(root.join("registry.json")).unwrap();
+            std::os::unix::fs::symlink(root.join("binding.json"), root.join("registry.json"))
+                .unwrap();
+            assert!(registry(&root).is_err());
+        }
+    }
     fn binding() -> Binding {
         Binding {
             issuer: super::super::config::ISSUER.into(),
