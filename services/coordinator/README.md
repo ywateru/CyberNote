@@ -6,6 +6,9 @@ CyberGrid rights notice; `notices/` retains the locked npm dependency licenses.
 This is the real Redis/Lua coordinator, including device registration, directory,
 signals and the upstream console. It does not store notes or attachments.
 
+CyberNote additionally has an account-scoped persistent device registry, separate
+from the SDK's transient device directory. See [the API and deployment contract](notes-devices.md).
+
 ## Configuration
 
 All configuration is injected into the environment. No real credentials or

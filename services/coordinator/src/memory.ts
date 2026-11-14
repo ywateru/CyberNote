@@ -3,6 +3,7 @@ import {directoryScope} from './directory-snapshot.js';
 import {ADMISSION_CAPABILITY,admissionError,keyHash,registrationMode as parseRegistrationMode,signAdmission,verifyAdmission,type RegistrationMode,type AdmissionClaim} from './admission.js';
 import {createHash,createHmac,randomBytes,randomUUID} from 'node:crypto';
 import {irohReachability} from './iroh.js';
+import {NOTES_DEVICE_LIMIT,NOTES_PRESENCE_MS,notesProjection,notesScope,notesUpdate,notesRegistration,type NotesDeviceRecord,type NotesDeviceUpdate,type NotesRegistration,type NotesScope} from './notes-devices.js';
 import {ApiError,ONLINE_TTL,SESSION_TTL,SIGNAL_TTL,type SessionBinding,type DeviceRow,type DevicePublication,type Session,type DeviceSession,type ConsoleSession,type StoredSignal,type Store,type AdminOverviewQuery,type AdminOverview,type AdminDevice} from './types.js';
 export interface MemoryLimits {sessions:number;sessionsPerUser:number;devices:number;devicesPerUser:number;signals:number;signalsPerDevice:number;signalsPerUser:number;signalBytes:number;signalBytesPerDevice:number;signalBytesPerUser:number;rateKeys:number;idempotency:number;waiters:number;waitersPerDevice:number;registrationKeys:number;registrationKeysPerUser:number}
 export const defaultLimits:MemoryLimits={sessions:10000,sessionsPerUser:128,devices:5000,devicesPerUser:64,signals:20000,signalsPerDevice:512,signalsPerUser:2048,signalBytes:33554432,signalBytesPerDevice:2097152,signalBytesPerUser:8388608,rateKeys:20000,idempotency:20000,waiters:1000,waitersPerDevice:2,registrationKeys:10000,registrationKeysPerUser:128};
@@ -20,6 +21,7 @@ export class MemoryStore implements Store {
  private readonly startedAt=Date.now();
  readonly epoch=randomUUID(); private boot=randomBytes(32); revision=0;
  private sessions=new Map<string,Session>();private peers=new Map<string,DeviceRow>();private messages:StoredSignal[]=[];private sequence=0;
+ private notes=new Map<string,Map<string,NotesDeviceRecord>>();
  private rates=new Map<string,{start:number;count:number}>();private registrations=new Map<string,Registration>();private dedup=new Map<string,Dedup>();private waiters=new Set<Waiter>();private stopped=false;private fences=new Map<string,AdmissionFence>();private admissions=new Map<string,MintReceipt>();private admissionSequence=0;private deviceExpiries=new Map<string,number>();private bridgeHistory=new Map<string,BridgeHistory[]>();
  readonly limits:MemoryLimits;readonly registrationMode:RegistrationMode;
  private readonly admissionNow:()=>number;private readonly clock?:()=>number;
@@ -73,6 +75,37 @@ export class MemoryStore implements Store {
  async createSession(s:DeviceSession,d:DeviceRow){this.available();if(this.registrationMode==='finite-v2')throw admissionError('REGISTRATION_ADMISSION_REQUIRED');const update=publication(d);this.sessionCapacity(s.userId);this.deviceCapacity(s.userId,d.id);this.peers.set(d.id,structuredClone({...d,...update}));this.sessions.set(s.hash,{...s});this.notify();}
  async createConsoleSession(s:ConsoleSession){this.available();this.sessionCapacity(s.userId);this.sessions.set(s.hash,{...s});}
  async session(hash:string){const s=this.sessions.get(hash);return s?{...s}:undefined;}
+ private notesOnline(record:NotesDeviceRecord,scope:NotesScope,now:number){
+  const s=this.sessions.get(record.sessionHash),d=this.peers.get(record.transportDeviceId);
+  return record.leaseUntil>now&&!!s&&s.purpose==='device'&&s.userId===scope.subject&&s.appId===scope.productId&&
+   s.expiresAt>now&&!s.superseded&&s.deviceId===record.transportDeviceId&&
+   s.incarnation===record.incarnation&&d?.incarnation===record.incarnation&&d.lastSeen>now-ONLINE_TTL;
+ }
+ async notesDevices(scope:NotesScope,now:number){
+  this.available();now=this.clock?.()??now;
+  return [...(this.notes.get(notesScope(scope))?.values()??[])].sort((a,b)=>a.deviceId.localeCompare(b.deviceId)).map(r=>structuredClone(notesProjection(r,this.notesOnline(r,scope,now))));
+ }
+ async putNotesDevice(scope:NotesScope,hash:string,value:NotesDeviceUpdate,credential:NotesRegistration,now:number){
+  this.available();now=this.clock?.()??now;const update=notesUpdate(value),registration=notesRegistration(credential),s=this.sessions.get(hash);
+  if(!s||s.purpose!=='device')throw new ApiError(401,'INVALID_TRANSPORT_SESSION','请重新连接设备目录');
+  if(s.userId!==scope.subject||s.appId!==scope.productId||s.policyMode!=='static')throw new ApiError(403,'TRANSPORT_ACCOUNT_MISMATCH','设备连接与当前账户产品不匹配');
+  this.checkCurrent(s,now);
+  if(!s.incarnation)throw new ApiError(401,'INVALID_TRANSPORT_SESSION','请重新连接设备目录');
+  const partition=notesScope(scope),records=this.notes.get(partition)??new Map<string,NotesDeviceRecord>(),old=records.get(update.deviceId);
+  if(old){
+   if(old.keyHash!==registration.keyHash)throw new ApiError(403,'REGISTRY_KEY_MISMATCH','设备登记凭据不匹配');
+   if(registration.revision<old.revision)throw new ApiError(409,'STALE_DEVICE_REVISION','设备目录版本已过期');
+   if(registration.revision===old.revision){
+    if(registration.requestDigest!==old.requestDigest||hash!==old.sessionHash)throw new ApiError(409,'DEVICE_REVISION_CONFLICT','同版本设备目录内容不一致');
+    return structuredClone(notesProjection(old,this.notesOnline(old,scope,now)));
+   }
+  }
+  if(!old&&records.size>=NOTES_DEVICE_LIMIT)throw new ApiError(409,'NOTES_DEVICE_LIMIT','账户设备数已达到64台上限');
+  const record:NotesDeviceRecord={...update,...registration,sessionHash:hash,transportDeviceId:s.deviceId,incarnation:s.incarnation,leaseUntil:Math.min(now+NOTES_PRESENCE_MS,s.expiresAt)};
+  // No await between the current-session check, generation fence and mutation.
+  records.set(update.deviceId,structuredClone(record));this.notes.set(partition,records);
+  return structuredClone(notesProjection(record,this.notesOnline(record,scope,now)));
+ }
  async revoke(hash:string){const s=this.sessions.get(hash);this.sessions.delete(hash);if(s?.purpose==='device'){const d=this.peers.get(s.deviceId);if(!s.protocol||d?.incarnation===s.incarnation){this.peers.delete(s.deviceId);this.deviceExpiries.delete(s.deviceId);this.bridgeHistory.delete(s.deviceId);this.messages=this.messages.filter(m=>m.fromDeviceId!==s.deviceId&&m.toDeviceId!==s.deviceId);}}this.notify();}
  private online(d:DeviceRow,now:number,authoritative=false){if(!authoritative&&this.registrationMode==='finite-v2')now=this.admissionNow();return d.lastSeen>now-ONLINE_TTL&&[...this.sessions.values()].some(s=>s.purpose==='device'&&s.deviceId===d.id&&!s.superseded&&s.expiresAt>now&&(!s.protocol||s.incarnation===d.incarnation));}
  async sampleDirectory(session:Session,productId:string,policy:string,now:number){

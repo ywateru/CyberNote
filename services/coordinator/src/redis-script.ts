@@ -102,6 +102,47 @@ if op=='cleanup' then return ok(true) end
 if op=='meta' then return ok({epoch=meta.epoch,revision=rev(),now=now,startedAt=meta.startedAt}) end
 if op=='current' then local s,e=current(a.hash);if not s then return err(e,401) end;return ok(s) end
 if op=='session' then return ok(get('sessions',a.hash) or cjson.null) end
+-- CyberNote-only persistent inventory. Never indexed by the transient GC, and
+-- never used as content authorization. The raw transport session key is absent.
+if op=='notesList' or op=='notesPut' then
+ local registry='notes:devices:'..a.scope
+ local ty=redis.call('TYPE',key(registry)).ok
+ if ty~='none' and ty~='hash' then return err('COORDINATOR_UNAVAILABLE',503) end
+ local function projection(r)
+  local s=get('sessions',r.sessionHash)
+  local d=get('devices',r.transportDeviceId)
+  local on=r.leaseUntil>now and s and live(s) and s.purpose=='device' and s.userId==a.subject and s.appId==a.productId and s.deviceId==r.transportDeviceId and s.incarnation==r.incarnation and d and d.incarnation==r.incarnation and online(d)
+  on=not not on
+  return {id=r.deviceId,name=r.name,online=on,syncAvailable=on and r.syncAvailable,
+   summaryJson=on and r.summaryJson or 'null',transportDeviceId=on and r.transportDeviceId or cjson.null,
+   protocolDeviceId=on and r.protocolDeviceId or cjson.null,noisePublicKey=on and r.noisePublicKey or cjson.null}
+ end
+ if op=='notesList' then
+  if size(registry)>64 then return err('COORDINATOR_UNAVAILABLE',503) end
+  local result={};for _,r in pairs(rows(registry)) do table.insert(result,projection(r)) end
+  table.sort(result,function(l,r) return l.id<r.id end);return ok(result)
+ end
+ local s,e=current(a.hash);if not s then return err(e,401) end
+ if s.purpose~='device' then return err('INVALID_TRANSPORT_SESSION',401) end
+ if s.userId~=a.subject or s.appId~=a.productId or s.policyMode~='static' then return err('TRANSPORT_ACCOUNT_MISMATCH',403) end
+ if not s.incarnation then return err('INVALID_TRANSPORT_SESSION',401) end
+ local old=get(registry,a.update.deviceId)
+ if old then
+  if old.keyHash~=a.keyHash then return err('REGISTRY_KEY_MISMATCH',403) end
+  local revision=tonumber(a.revisionText);local previous=tonumber(old.revisionText)
+  if revision<previous then return err('STALE_DEVICE_REVISION') end
+  if revision==previous then
+   if a.requestDigest~=old.requestDigest or s.hash~=old.sessionHash then return err('DEVICE_REVISION_CONFLICT') end
+   return ok(projection(old)) -- exact retry does not renew the presence lease
+  end
+ end
+ if not old and size(registry)>=64 then return err('NOTES_DEVICE_LIMIT') end
+ local r=a.update;r.summary=nil;r.summaryJson=a.summaryJson
+ r.keyHash=a.keyHash;r.revisionText=a.revisionText;r.requestDigest=a.requestDigest
+ r.sessionHash=s.hash;r.transportDeviceId=s.deviceId;r.incarnation=s.incarnation;r.leaseUntil=math.min(now+65000,s.expiresAt)
+ put(registry,r.deviceId,r) -- no expiry, no session/admission/epoch GC
+ return ok(projection(r))
+end
 if op=='register' then
  if a.expectedEpoch~=meta.epoch then return err('COORDINATOR_RESET') end
  local f=a.logical and get('fences',a.logical)

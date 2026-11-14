@@ -6,6 +6,7 @@ import {createClient} from 'redis';
 import {REDIS_SCRIPT} from './redis-script.js';
 import {MAX_DEVICE_METADATA_BYTES,uuid,type MemoryLimits} from './memory.js';
 import {irohReachability} from './iroh.js';
+import {notesScope,notesUpdate,notesRegistration,type NotesDevice,type NotesDeviceUpdate,type NotesRegistration,type NotesScope} from './notes-devices.js';
 import {ApiError,type Store,type SessionBinding,type Session,type DeviceSession,type ConsoleSession,type DeviceRow,type DevicePublication,type Device,type StoredSignal,type Signal,type AdminOverview,type AdminOverviewQuery} from './types.js';
 const digest=(v:unknown)=>createHash('sha256').update(JSON.stringify(v)).digest('hex');
 export const REDIS_HARD_LIMITS:MemoryLimits={sessions:512,sessionsPerUser:128,devices:256,devicesPerUser:64,signals:1024,signalsPerDevice:128,signalsPerUser:512,signalBytes:2097152,signalBytesPerDevice:1048576,signalBytesPerUser:2097152,rateKeys:2048,idempotency:4096,waiters:128,waitersPerDevice:2,registrationKeys:2048,registrationKeysPerUser:128};
@@ -41,6 +42,11 @@ export function redisTransport(env:NodeJS.ProcessEnv):RedisTransport {
 }
 const messages:Record<string,string>={INVALID_SESSION:'会话已失效，请重新登录',SESSION_SUPERSEDED:'设备已被新注册代际接管',COORDINATOR_RESET:'协调服务已重置，请重新注册',REGISTRATION_ID_CONFLICT:'注册内容冲突',REGISTRATION_ATTEMPT_EXPIRED:'原注册会话已失效，请增加注册revision',CAPACITY_EXCEEDED:'协调容量已满，请稍后重试',INCARNATION_MISMATCH:'设备代际已变化',STALE_PUBLISH_REVISION:'快照revision过期',PUBLISH_REVISION_CONFLICT:'同revision快照冲突',PEER_UNAVAILABLE:'目标设备不可用',SIGNAL_ID_CONFLICT:'信令ID内容冲突',COORDINATOR_UNAVAILABLE:'协调存储暂时不可用',REGISTRATION_ADMISSION_REQUIRED:'注册需要有限期准入票据',REGISTRATION_ADMISSION_EXPIRED:'注册准入已到期',REGISTRATION_ADMISSION_CONFLICT:'注册准入内容或域冲突',REGISTRATION_ADMISSION_INVALID:'注册准入无效',INVALID_INPUT:'入口或桥接元数据不符合受信策略',FORBIDDEN:'不能读取其他产品',REGISTRATION_MODE_MISMATCH:'注册模式与存储不一致'};
 const array=<T>(v:unknown):T[]=>Array.isArray(v)?v as T[]:[];
+Object.assign(messages,{
+ INVALID_TRANSPORT_SESSION:'请重新连接设备目录',TRANSPORT_ACCOUNT_MISMATCH:'设备连接与当前账户产品不匹配',
+ REGISTRY_KEY_MISMATCH:'设备登记凭据不匹配',STALE_DEVICE_REVISION:'设备目录版本已过期',DEVICE_REVISION_CONFLICT:'同版本设备目录内容不一致',
+ NOTES_DEVICE_LIMIT:'账户设备数已达到64台上限',
+});
 /** Redis owns all mutable coordination state. Local values are projections only. */
 export class RedisStore implements Store {
  #transport:RedisTransport;#prefix:string;#seed='';#closed=false;
@@ -77,6 +83,18 @@ export class RedisStore implements Store {
  async challenge(userId:string,productId:string,authClientId:string,key:string){await this.#ensure();if(this.registrationMode!=='finite-v2')throw admissionError('REGISTRATION_ADMISSION_INVALID');const context={userId,productId,authClientId,keyHash:keyHash(key)},logical='d_'+digest([userId,productId,key]).slice(0,48),result=await this.#eval<{now:number;domain:string;epoch:string}>('admissionChallenge',{logical}),claim={...context,epoch:result.epoch,domain:result.domain,nonce:randomUUID(),issuedAt:result.now,notAfter:result.now+ADMISSION_CAPABILITY.challengeSeconds*1000};return {challenge:signAdmission(Buffer.from(this.#seed,'base64url'),'challenge',claim),epoch:claim.epoch,expiresAt:new Date(claim.notAfter).toISOString()};}
  async admit(userId:string,productId:string,authClientId:string,key:string,raw:unknown,requestId:string){await this.#ensure();if(this.registrationMode!=='finite-v2')throw admissionError('REGISTRATION_ADMISSION_INVALID');if(!uuid(requestId))throw new ApiError(400,'INVALID_INPUT','requestId 须为 UUID');const context={userId,productId,authClientId,keyHash:keyHash(key)},claim=verifyAdmission(Buffer.from(this.#seed,'base64url'),'challenge',raw,context,this.epoch),logical='d_'+digest([userId,productId,key]).slice(0,48),result=await this.#eval<{domain:string;issuedAt:number;notAfter:number;epoch:string}>('admissionMint',{logical,userId,claim,id:digest([claim.epoch,userId,authClientId,requestId]),content:digest([raw,context.keyHash,productId])}),ticket={...context,...result};return {admissionTicket:signAdmission(Buffer.from(this.#seed,'base64url'),'ticket',ticket),epoch:result.epoch,expiresAt:new Date(result.notAfter).toISOString()};}
  async session(hash:string){await this.#ensure();return (await this.#eval<Session|null>('session',{hash}))??undefined;}
+ #notesDevice(value:Omit<NotesDevice,'summary'>&{summaryJson:string}):NotesDevice {
+  const {summaryJson,...safe}=value;return {...safe,summary:JSON.parse(summaryJson)};
+ }
+ async notesDevices(scope:NotesScope,_now:number){
+  await this.#ensure();const rows=await this.#eval<(Omit<NotesDevice,'summary'>&{summaryJson:string})[]>('notesList',{scope:notesScope(scope),subject:scope.subject,productId:scope.productId});
+  return array<typeof rows[number]>(rows).map(row=>this.#notesDevice(row));
+ }
+ async putNotesDevice(scope:NotesScope,hash:string,value:NotesDeviceUpdate,credential:NotesRegistration,_now:number){
+  const update=notesUpdate(value),registration=notesRegistration(credential);await this.#ensure();
+  const row=await this.#eval<Omit<NotesDevice,'summary'>&{summaryJson:string}>('notesPut',{scope:notesScope(scope),subject:scope.subject,productId:scope.productId,hash,update,summaryJson:JSON.stringify(update.summary),keyHash:registration.keyHash,revisionText:String(registration.revision),requestDigest:registration.requestDigest});
+  return this.#notesDevice(row);
+ }
  async revoke(hash:string){await this.#ensure();await this.#eval('revoke',{hash});}
  // Legacy password-era/non-negotiated registrations are deliberately unavailable.
  async createSession(_s:DeviceSession,_d:DeviceRow):Promise<void>{throw new ApiError(400,'COORDINATION_REQUIRED','请使用 memory-v1 协调协议注册');}

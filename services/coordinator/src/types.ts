@@ -1,4 +1,5 @@
 import type {RegistrationMode,AdmissionChallenge,AdmissionTicket} from './admission.js';
+import type {NotesDevice,NotesDeviceUpdate,NotesRegistration,NotesScope} from './notes-devices.js';
 export const SESSION_TTL=24*60*60*1000;
 export const ONLINE_TTL=65_000;
 export const SIGNAL_TTL=120_000;
@@ -31,6 +32,8 @@ export interface AdminOverview {
  devices:AdminDevice[];
 }
 export interface Store {
+ notesDevices(scope:NotesScope,now:number):Promise<NotesDevice[]>;
+ putNotesDevice(scope:NotesScope,sessionHash:string,update:NotesDeviceUpdate,registration:NotesRegistration,now:number):Promise<NotesDevice>;
  readonly registrationMode:RegistrationMode;
  sampleDirectory(session:Session,productId:string,endpointPolicyVersion:string,now:number):Promise<DirectorySample>;
  challenge(userId:string,productId:string,authClientId:string,key:string):Promise<AdmissionChallenge>;
