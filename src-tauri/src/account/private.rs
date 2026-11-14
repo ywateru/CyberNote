@@ -58,6 +58,12 @@ pub fn read(path: &Path) -> Result<Option<Binding>> {
     Ok(Some(binding))
 }
 pub fn write(path: &Path, binding: &Binding) -> Result<()> {
+    atomic_write(
+        path,
+        &serde_json::to_vec(binding).map_err(|_| Error::Storage)?,
+    )
+}
+fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
     let dir = path.parent().ok_or(Error::Storage)?;
     directory(dir)?;
     let temp = dir.join(format!(".binding-{}", uuid::Uuid::new_v4()));
@@ -70,7 +76,7 @@ pub fn write(path: &Path, binding: &Binding) -> Result<()> {
             options.mode(0o600);
         }
         let mut file = options.open(&temp)?;
-        file.write_all(&serde_json::to_vec(binding).map_err(|_| Error::Storage)?)?;
+        file.write_all(bytes)?;
         file.sync_all()?;
         fs::rename(&temp, path)?;
         File::open(dir)?.sync_all()?;
@@ -80,6 +86,45 @@ pub fn write(path: &Path, binding: &Binding) -> Result<()> {
         let _ = fs::remove_file(temp);
     }
     result
+}
+
+// This marker contains no identity or grant. It is written before explicit
+// adoption and prevents an interrupted attempt from becoming automatic opt-in
+// on restart. The SQLite transaction is the authority for the actual workspace.
+pub(crate) fn adoption_pending(root: &Path) -> Result<bool> {
+    let path = root.join("adoption-pending");
+    match fs::symlink_metadata(&path) {
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(false),
+        Ok(m) if m.is_file() && !m.file_type().is_symlink() && m.len() == 1 => {
+            let mut options = OpenOptions::new();
+            options.read(true);
+            #[cfg(unix)]
+            {
+                use std::os::unix::fs::OpenOptionsExt;
+                options.custom_flags(libc::O_NOFOLLOW);
+            }
+            let mut byte = [0];
+            options.open(path)?.read_exact(&mut byte)?;
+            if byte != [1] {
+                return Err(Error::Storage);
+            }
+            Ok(true)
+        }
+        _ => Err(Error::Storage),
+    }
+}
+pub(crate) fn begin_adoption(root: &Path) -> Result<()> {
+    if adoption_pending(root)? {
+        return Ok(());
+    }
+    atomic_write(&root.join("adoption-pending"), &[1])
+}
+pub(crate) fn complete_adoption(root: &Path) -> Result<()> {
+    if adoption_pending(root)? {
+        fs::remove_file(root.join("adoption-pending"))?;
+        File::open(root)?.sync_all()?;
+    }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -114,6 +159,26 @@ mod tests {
         assert!(std::fs::read_dir(&private)
             .unwrap()
             .all(|p| p.unwrap().file_name() == "binding.json"));
+    }
+    #[test]
+    fn adoption_marker_survives_restart_and_does_not_rewrite_binding() {
+        let dir = tempfile::tempdir().unwrap();
+        let root = dir.path().join(".account");
+        directory(&root).unwrap();
+        let path = root.join("binding.json");
+        write(&path, &binding()).unwrap();
+        let before = fs::read(&path).unwrap();
+        assert!(!adoption_pending(&root).unwrap());
+        begin_adoption(&root).unwrap();
+        begin_adoption(&root).unwrap();
+        assert!(adoption_pending(&root).unwrap());
+        assert_eq!(fs::read(&path).unwrap(), before);
+        complete_adoption(&root).unwrap();
+        complete_adoption(&root).unwrap();
+        assert!(!adoption_pending(&root).unwrap());
+        fs::write(root.join("adoption-pending"), [2]).unwrap();
+        assert_eq!(adoption_pending(&root), Err(Error::Storage));
+        assert_eq!(complete_adoption(&root), Err(Error::Storage));
     }
     #[cfg(unix)]
     #[test]

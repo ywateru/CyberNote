@@ -19,7 +19,7 @@ use std::{
     io::{Read, Seek, SeekFrom, Write},
     path::{Path, PathBuf},
     sync::{
-        atomic::{AtomicBool, Ordering},
+        atomic::{AtomicBool, AtomicU64, Ordering},
         Arc, Condvar, Mutex,
     },
     thread,
@@ -96,11 +96,43 @@ fn backend_error(e: AppError) -> SyncError {
 pub(crate) struct StoreBackend {
     shared: SharedSession,
     device: String,
+    fence: Option<(Arc<AtomicU64>, u64)>,
 }
 impl StoreBackend {
     fn with<T>(&self, f: impl FnOnce(&mut Session) -> Result<T>) -> super::identity::Result<T> {
         let mut s = self.shared.0.lock().map_err(|_| SyncError::Backend)?;
+        self.validate(&s).map_err(backend_error)?;
         f(&mut s).map_err(backend_error)
+    }
+    fn validate(&self, s: &Session) -> Result<()> {
+        if self
+            .fence
+            .as_ref()
+            .is_some_and(|(epoch, captured)| epoch.load(Ordering::Acquire) != *captured)
+        {
+            return Err(error("sync_plan_stale"));
+        }
+        if s.store
+            .sync_identity()?
+            .is_some_and(|i| i.device_id != self.device)
+        {
+            return Err(error("sync_device_mismatch"));
+        }
+        Ok(())
+    }
+    fn prepared<T>(
+        &self,
+        incoming: &[WireVersion],
+        bootstrap: bool,
+        operation: impl FnOnce(&mut Store) -> Result<T>,
+    ) -> Result<T> {
+        prepared_store_checked(
+            &self.shared,
+            incoming,
+            bootstrap,
+            |s| self.validate(s),
+            operation,
+        )
     }
 }
 impl SyncBackend for StoreBackend {
@@ -136,7 +168,7 @@ impl SyncBackend for StoreBackend {
         })
     }
     fn adopt_workspace(&self, workspace: &str) -> super::identity::Result<()> {
-        prepared_store(&self.shared, &[], true, |store| {
+        self.prepared(&[], true, |store| {
             store
                 .sync_enable_with_device(Some(workspace), &self.device)
                 .map(|_| ())
@@ -144,7 +176,8 @@ impl SyncBackend for StoreBackend {
         .map_err(backend_error)
     }
     fn flush(&self) -> super::identity::Result<()> {
-        prepared_store(&self.shared, &[], false, |store| store.sync_flush()).map_err(backend_error)
+        self.prepared(&[], false, |store| store.sync_flush())
+            .map_err(backend_error)
     }
     fn inventory(
         &self,
@@ -176,8 +209,8 @@ impl SyncBackend for StoreBackend {
     fn required_blobs(&self, version: &Value) -> super::identity::Result<Vec<network::BlobRef>> {
         let wire: WireVersion =
             serde_json::from_value(version.clone()).map_err(|_| SyncError::Protocol)?;
-        let (references, storage) =
-            prepared_store(&self.shared, std::slice::from_ref(&wire), false, |store| {
+        let (references, storage) = self
+            .prepared(std::slice::from_ref(&wire), false, |store| {
                 store.sync_validate_receive(std::slice::from_ref(&wire))?;
                 Ok((
                     store.sync_required_blobs(&wire)?,
@@ -230,7 +263,7 @@ impl SyncBackend for StoreBackend {
     }
     fn receive_head(&self, v: Value) -> super::identity::Result<network::Receipt> {
         let wire: WireVersion = serde_json::from_value(v).map_err(|_| SyncError::Protocol)?;
-        prepared_store(&self.shared, std::slice::from_ref(&wire), false, |store| {
+        self.prepared(std::slice::from_ref(&wire), false, |store| {
             let r = store.sync_receive(vec![wire.clone()])?;
             Ok(network::Receipt {
                 durable: r.durable,
@@ -295,6 +328,7 @@ pub(crate) struct Runtime {
     stopped: Arc<AtomicBool>,
     active: AtomicBool,
     worker: Mutex<Option<thread::JoinHandle<()>>>,
+    backend_epoch: Arc<AtomicU64>,
 }
 impl Runtime {
     pub(crate) fn new(
@@ -318,7 +352,9 @@ impl Runtime {
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
             Err(e) => return Err(e.into()),
         };
-        let active = config.as_ref().is_some_and(|c| !c.paused);
+        let account_mode = root.join(".account/binding.json").exists()
+            || root.join(".account/adoption-pending").exists();
+        let active = !account_mode && config.as_ref().is_some_and(|c| !c.paused);
         let stopped = Arc::new(AtomicBool::new(false));
         let runtime = Arc::new(Self {
             shared,
@@ -333,6 +369,7 @@ impl Runtime {
             stopped: stopped.clone(),
             active: AtomicBool::new(active),
             worker: Mutex::new(None),
+            backend_epoch: Arc::new(AtomicU64::new(0)),
         });
         let weak = Arc::downgrade(&runtime);
         let worker = thread::Builder::new()
@@ -351,7 +388,7 @@ impl Runtime {
         // Restore only a persisted explicit opt-in. status alone never creates identity.
         {
             let mut inner = runtime.inner.lock().map_err(|_| error("sync_internal"))?;
-            if inner.config.as_ref().is_some_and(|c| !c.paused) {
+            if !account_mode && inner.config.as_ref().is_some_and(|c| !c.paused) {
                 if let Err(e) = runtime.activate(&mut inner) {
                     inner.error = Some(e.code);
                 }
@@ -411,6 +448,10 @@ impl Runtime {
         let backend = Arc::new(StoreBackend {
             shared: self.shared.clone(),
             device,
+            fence: Some((
+                self.backend_epoch.clone(),
+                self.backend_epoch.load(Ordering::Acquire),
+            )),
         });
         let service = SyncService::new(backend, identity.clone(), sync_dir.join("network-staging"))
             .map_err(network_error)?;
@@ -457,6 +498,74 @@ impl Runtime {
     /// Account runtime owns a separate Noise credential namespace and listener.
     /// This only enables the existing Store/Session apply coordinator. It never
     /// adopts an arbitrary renderer-supplied workspace or starts manual peers.
+    /// Persistently pause manual transport without discarding its metadata.
+    /// Called under the account lifecycle owner, before any new authentication.
+    pub(crate) fn pause_for_account(&self) -> Result<()> {
+        self.active.store(false, Ordering::Release);
+        self.backend_epoch.fetch_add(1, Ordering::AcqRel);
+        let mut inner = self.inner.lock().map_err(|_| error("sync_internal"))?;
+        // Stop and join even if persisting pause fails. A failed write must never
+        // leave a listener running under an account the UI is replacing.
+        let persisted = if let Some(mut config) = inner.config.clone() {
+            config.paused = true;
+            let result = self.persist(&config);
+            inner.config = Some(config);
+            result
+        } else {
+            Ok(())
+        };
+        let shutdown = if let Some(mut service) = inner.service.take() {
+            service.shutdown().map_err(network_error)
+        } else {
+            Ok(())
+        };
+        inner.identity = None;
+        self.shared
+            .0
+            .lock()
+            .map_err(|_| error("sync_internal"))?
+            .sync_abort();
+        persisted.and(shutdown)
+    }
+    /// The device is generated by the native login owner, never by IPC. Each
+    /// new session gets a distinct peer/key/staging namespace; existing legacy
+    /// sessions can still reopen their exact credential for a normal restart.
+    pub(crate) fn account_identity_for(&self, device: &str) -> Result<Arc<IdentityStore>> {
+        if uuid::Uuid::parse_str(device)
+            .ok()
+            .is_none_or(|id| id.to_string() != device)
+        {
+            return Err(error("sync_device_mismatch"));
+        }
+        let base = self.root.join(".account/noise");
+        if let Ok(meta) = fs::symlink_metadata(&base) {
+            if !meta.is_dir() || meta.file_type().is_symlink() {
+                return Err(error("sync_internal"));
+            }
+        }
+        // A corrupt retired legacy credential must not block a fresh session.
+        // Restoring that exact session still checks its pinned public key.
+        let legacy = IdentityStore::existing_device_id(&base).ok().flatten();
+        let directory = if legacy.as_deref() == Some(device) {
+            base
+        } else {
+            base.join(device)
+        };
+        Ok(Arc::new(
+            IdentityStore::open(&directory, device).map_err(network_error)?,
+        ))
+    }
+    pub(crate) fn account_adoption_needed(&self, workspace: &str, device: &str) -> Result<bool> {
+        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+        Ok(s.store
+            .sync_identity()?
+            .is_none_or(|i| i.workspace_id != workspace || i.device_id != device))
+    }
+    pub(crate) fn account_adoption_preflight(&self, workspace: &str, device: &str) -> Result<()> {
+        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+        s.sync_adoption_preflight(workspace, device)
+    }
+    #[cfg(test)]
     pub(crate) fn account_identity(&self) -> Result<Arc<IdentityStore>> {
         let inner = self.inner.lock().map_err(|_| error("sync_internal"))?;
         if inner.config.is_some() {
@@ -481,31 +590,14 @@ impl Runtime {
             IdentityStore::open(&dir, &device).map_err(network_error)?,
         ))
     }
-    pub(crate) fn check_account_workspace(
-        &self,
-        workspace: &str,
-        previously_bound: bool,
-    ) -> Result<()> {
-        let inner = self.inner.lock().map_err(|_| error("sync_internal"))?;
-        if inner.config.is_some() {
-            return Err(error("sync_workspace_mismatch"));
-        }
-        let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
-        if let Some(identity) = s.store.sync_identity()? {
-            if !previously_bound || identity.workspace_id != workspace {
-                return Err(error("sync_workspace_mismatch"));
-            }
-        }
-        Ok(())
-    }
     pub(crate) fn activate_account(
         &self,
         verified: &crate::account::enrollment::VerifiedWorkspace,
         identity: Arc<IdentityStore>,
-        policy: Arc<dyn network::ReplicationPolicy>,
+        policy: Arc<crate::account::enrollment::Gate>,
     ) -> Result<SyncService> {
-        let inner = self.inner.lock().map_err(|_| error("sync_internal"))?;
-        if inner.config.is_some() {
+        let mut inner = self.inner.lock().map_err(|_| error("sync_internal"))?;
+        if inner.service.is_some() || inner.config.as_ref().is_some_and(|c| !c.paused) {
             return Err(error("sync_workspace_mismatch"));
         }
         if !verified.matches(&identity) {
@@ -513,22 +605,60 @@ impl Runtime {
         }
         let workspace = verified.workspace();
         let device = identity.device_id().map_err(network_error)?;
-        prepared_store(&self.shared, &[], true, |store| {
-            store
-                .sync_enable_with_device(Some(workspace), &device)
-                .map(|_| ())
-        })?;
+        let (snapshot, authority) = {
+            let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+            if !policy.is_current() {
+                return Err(error("sync_plan_stale"));
+            }
+            s.sync_adoption_preflight(workspace, &device)?;
+            (
+                s.store.sync_media_snapshot(&[], true)?,
+                s.sync_media_token(),
+            )
+        };
+        let media = snapshot.verify()?;
+        let access = {
+            let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+            s.check(&authority, None)
+                .map_err(|_| error("sync_plan_stale"))?;
+            if !policy.is_current() {
+                return Err(error("sync_plan_stale"));
+            }
+            s.sync_adoption_preflight(workspace, &device)?;
+            let previous = s.store.sync_store_instance();
+            s.store.sync_with_media(media, |store| {
+                store.sync_adopt_workspace(workspace, &device)
+            })?;
+            s.sync_finish_workspace_adoption(previous)?
+        };
+        if let Some(access) = access {
+            self.host.emit("notes-access", &access)?;
+        }
+        // The old manual configuration stays paused on disk as recovery evidence.
+        // A retained account binding suppresses manual restoration at startup.
+        inner.config = None;
+        inner.identity = None;
+        self.backend_epoch.fetch_add(1, Ordering::AcqRel);
         let backend = Arc::new(StoreBackend {
             shared: self.shared.clone(),
-            device,
+            device: device.clone(),
+            fence: Some((
+                self.backend_epoch.clone(),
+                self.backend_epoch.load(Ordering::Acquire),
+            )),
         });
         let service = SyncService::with_policy(
             backend,
             identity,
-            self.root.join(".account/staging"),
-            Some(policy),
+            self.root.join(".account/staging").join(&device),
+            Some(policy.clone()),
         )
         .map_err(network_error)?;
+        if !policy.is_current() {
+            return Err(error("sync_plan_stale"));
+        }
+        crate::account::private::complete_adoption(&self.root.join(".account"))
+            .map_err(|_| error("sync_internal"))?;
         self.active.store(true, Ordering::Release);
         Ok(service)
     }
@@ -1102,7 +1232,56 @@ mod tests {
             .unwrap()
     }
     #[test]
-    fn rejected_account_setup_does_not_pause_existing_manual_sync() {
+    fn account_pause_joins_manual_service_fences_backend_and_persists_pause() {
+        let d = tempfile::tempdir().unwrap();
+        let shared = shared(d.path());
+        let runtime = Runtime::new(shared.clone(), d.path().into(), Arc::new(Windows)).unwrap();
+        runtime
+            .command(
+                Command::StartHost {
+                    device_name: "fixture".into(),
+                    port: 0,
+                },
+                "main",
+                &token(&shared),
+            )
+            .unwrap();
+        let device = shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_identity()
+            .unwrap()
+            .unwrap()
+            .device_id;
+        let old = StoreBackend {
+            shared: shared.clone(),
+            device,
+            fence: Some((
+                runtime.backend_epoch.clone(),
+                runtime.backend_epoch.load(Ordering::Acquire),
+            )),
+        };
+        assert!(old.workspace_id().is_ok());
+        runtime.pause_for_account().unwrap();
+        assert!(!runtime.active.load(Ordering::Acquire));
+        let inner = runtime.inner.lock().unwrap();
+        assert!(inner.service.is_none());
+        assert!(inner.identity.is_none());
+        assert!(inner.config.as_ref().unwrap().paused);
+        drop(inner);
+        assert!(old.workspace_id().is_err());
+        assert!(old.inventory(None, 1).is_err());
+        assert!(old.flush().is_err());
+        let config: Config =
+            serde_json::from_slice(&fs::read(d.path().join(".sync/runtime-v1.json")).unwrap())
+                .unwrap();
+        assert!(config.paused);
+        runtime.shutdown().unwrap();
+    }
+    #[test]
+    fn account_preflight_is_read_only_and_does_not_pause_manual_sync() {
         let d = tempfile::tempdir().unwrap();
         let shared = shared(d.path());
         let runtime = Runtime::new(shared.clone(), d.path().into(), Arc::new(Windows)).unwrap();
@@ -1126,8 +1305,11 @@ mod tests {
             .unwrap();
         let config = fs::read(d.path().join(".sync/runtime-v1.json")).unwrap();
         assert!(runtime
-            .check_account_workspace(&uuid::Uuid::new_v4().to_string(), false)
-            .is_err());
+            .account_adoption_preflight(
+                &uuid::Uuid::new_v4().to_string(),
+                &uuid::Uuid::new_v4().to_string()
+            )
+            .is_ok());
         runtime.pause_account();
         assert!(runtime.active.load(Ordering::Acquire));
         let inner = runtime.inner.lock().unwrap();
@@ -1257,6 +1439,7 @@ mod tests {
         let backend = StoreBackend {
             shared: s.clone(),
             device: identity.device_id,
+            fence: None,
         };
         let remote_dir = tempfile::tempdir().unwrap();
         let mut remote = Store::open(remote_dir.path()).unwrap();
@@ -1331,6 +1514,7 @@ mod tests {
         let backend = StoreBackend {
             shared: s.clone(),
             device: identity.device_id.clone(),
+            fence: None,
         };
         let bytes = vec![9; 65537];
         let hash = super::super::model::sha256(&bytes);
@@ -1390,6 +1574,7 @@ mod allocation_tests {
             StoreBackend {
                 shared,
                 device: identity.device_id,
+                fence: None,
             },
             remote,
             nid,

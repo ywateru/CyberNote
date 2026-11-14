@@ -3,7 +3,7 @@
 mod callback;
 mod config;
 pub(crate) mod enrollment;
-mod private;
+pub(crate) mod private;
 mod provider;
 mod recovery;
 mod surface;
@@ -142,15 +142,6 @@ impl Runtime {
         self.observations.suspend();
         self.mutate(|d| {
             d.status.state = Phase::Error;
-            if d.status.profile.is_none() {
-                if let Some(binding) = &d.binding {
-                    d.status.profile = Some(Profile {
-                        subject: binding.subject.clone(),
-                        display_name: "CyberNote 账户".into(),
-                        username: None,
-                    });
-                }
-            }
             d.status.error = Some(error.safe())
         })
     }
@@ -187,7 +178,7 @@ impl Runtime {
             let result = async {
                 let auth = this.auth().await?;
                 if let Some(identity) = auth.restore().await? {
-                    if let Err(error) = this.bind(&identity, generation).await {
+                    if let Err(error) = this.bind(&identity, generation, false).await {
                         // A crash between grant commit and first binding must
                         // not leave a hidden usable grant blocking SignIn. An
                         // already bound account keeps its grant when offline.
@@ -217,7 +208,12 @@ impl Runtime {
             }
         });
     }
-    async fn bind(&self, identity: &account_auth::Identity, generation: u64) -> Result<()> {
+    async fn bind(
+        &self,
+        identity: &account_auth::Identity,
+        generation: u64,
+        fresh_login: bool,
+    ) -> Result<()> {
         if identity.issuer != config::ISSUER {
             return Err(Error::OwnershipMismatch);
         }
@@ -227,12 +223,6 @@ impl Runtime {
             .map_err(|_| Error::Storage)?
             .binding
             .clone();
-        if old
-            .as_ref()
-            .is_some_and(|b| b.issuer != identity.issuer || b.subject != identity.subject)
-        {
-            return Err(Error::OwnershipMismatch);
-        }
         let auth = self.auth().await?;
         let token = auth.access_token(Duration::from_secs(60), false).await?;
         let enrollment = enrollment::Enrollment::new(config::origin()?)?;
@@ -243,23 +233,14 @@ impl Runtime {
         if !self.current(generation) {
             return Err(Error::Cancelled);
         }
-        self.sync
-            .check_account_workspace(&profile.workspace_id, old.is_some())?;
-        let noise = self.sync.account_identity()?;
-        let binding = private::Binding {
-            issuer: identity.issuer.clone(),
-            subject: identity.subject.clone(),
-            product_id: profile.product_id,
-            workspace_id: profile.workspace_id,
-            device_id: noise.device_id()?,
-            noise_public_key: noise.public_key()?,
-            enabled: old.as_ref().is_some_and(|b| b.enabled),
-        };
-        if let Some(old) = old {
-            if old != binding {
-                return Err(Error::OwnershipMismatch);
-            }
-        }
+        let binding = prepare_session_binding(
+            &self.sync,
+            &self.root,
+            old.as_ref(),
+            identity,
+            profile,
+            fresh_login,
+        )?;
         private::write(&self.root.join("binding.json"), &binding)?;
         self.mutate(|d| {
             d.binding = Some(binding.clone());
@@ -352,7 +333,7 @@ impl Runtime {
                 .is_some_and(|runtime| runtime.current(generation))
         }));
         let stop = CancellationToken::new();
-        let identity = self.sync.account_identity()?;
+        let identity = self.sync.account_identity_for(&binding.device_id)?;
         let runtime = self.sync.clone();
         let weak = Arc::downgrade(self);
         let generation = self.generation.load(Ordering::Acquire);
@@ -408,6 +389,9 @@ impl Runtime {
             if let Err(error) = result {
                 if let Some(this) = weak.upgrade() {
                     if this.current(generation) {
+                        if private::adoption_pending(&this.root).unwrap_or(true) {
+                            let _ = this.set_enabled(false);
+                        }
                         this.fail(error)
                     }
                 }
@@ -447,6 +431,8 @@ impl Runtime {
                 let reauthorize =
                     authorization_mode(&self.data.lock().map_err(|_| Error::Storage)?.status)?;
                 self.stop_network().await;
+                self.sync.pause_for_account()?;
+                self.set_enabled(false)?;
                 let generation = self.generation.fetch_add(1, Ordering::AcqRel) + 1;
                 let stop = CancellationToken::new();
                 *self.attempt.lock().await = Some(Attempt {
@@ -456,6 +442,8 @@ impl Runtime {
                 });
                 self.mutate(|d| {
                     d.status.state = Phase::Authorizing;
+                    d.status.profile = None;
+                    d.status.enabled = false;
                     d.status.error = None;
                 });
                 let signup = matches!(command, Command::SignUp { .. });
@@ -541,9 +529,37 @@ impl Runtime {
                     return Err(Error::Authentication);
                 }
                 self.generation.fetch_add(1, Ordering::AcqRel);
+                self.stop_network().await;
+                self.sync.pause_for_account()?;
+                if enabled {
+                    let binding = self
+                        .data
+                        .lock()
+                        .map_err(|_| Error::Storage)?
+                        .binding
+                        .clone()
+                        .ok_or(Error::Authentication)?;
+                    if self
+                        .sync
+                        .account_adoption_needed(&binding.workspace_id, &binding.device_id)?
+                    {
+                        if let Err(error) = self
+                            .sync
+                            .account_adoption_preflight(&binding.workspace_id, &binding.device_id)
+                        {
+                            self.set_enabled(false)?;
+                            self.fail(error.into());
+                            return self.snapshot();
+                        }
+                        private::begin_adoption(&self.root)?;
+                    }
+                }
                 self.set_enabled(enabled)?;
                 if enabled {
                     if let Err(error) = self.start_network().await {
+                        if private::adoption_pending(&self.root).unwrap_or(true) {
+                            self.set_enabled(false)?;
+                        }
                         self.fail(error)
                     }
                 } else {
@@ -723,7 +739,7 @@ impl Runtime {
             if !self.current(generation) || stop.is_cancelled() {
                 return Err(Error::Cancelled);
             }
-            if let Err(error) = self.bind(&identity, generation).await {
+            if let Err(error) = self.bind(&identity, generation, true).await {
                 // Complete_callback committed a grant, but no account was
                 // accepted. Settle revocation before returning the bind error;
                 // failed revocation is surfaced by cleanup_status below.
@@ -848,7 +864,7 @@ impl recovery::Host for Arc<Runtime> {
             ))
     }
     async fn bind(&self, identity: account_auth::Identity, generation: u64) -> Result<bool> {
-        Runtime::bind(self, &identity, generation).await?;
+        Runtime::bind(self, &identity, generation, false).await?;
         Ok(self
             .data
             .lock()
@@ -861,6 +877,51 @@ impl recovery::Host for Arc<Runtime> {
     async fn start(&self) -> Result<()> {
         self.start_network().await
     }
+}
+// Shared by real bind and device-free host fixtures; no local workspace check
+// belongs in authentication. Preparation may create only private session keys.
+fn prepare_session_binding(
+    sync: &adapter::Runtime,
+    root: &Path,
+    old: Option<&private::Binding>,
+    identity: &account_auth::Identity,
+    profile: enrollment::Profile,
+    fresh_login: bool,
+) -> Result<private::Binding> {
+    if identity.issuer != config::ISSUER
+        || profile.issuer != identity.issuer
+        || profile.subject != identity.subject
+    {
+        return Err(Error::OwnershipMismatch);
+    }
+    // A login session selects an account, never the ownership of local content.
+    // Only a retained, exactly matching session may preserve enable intent.
+    let retained = old.filter(|b| {
+        !fresh_login
+            && b.issuer == identity.issuer
+            && b.subject == identity.subject
+            && b.product_id == profile.product_id
+            && b.workspace_id == profile.workspace_id
+    });
+    let device = retained
+        .map(|b| b.device_id.clone())
+        .unwrap_or_else(|| uuid::Uuid::new_v4().to_string());
+    let noise = sync.account_identity_for(&device)?;
+    let binding = private::Binding {
+        issuer: identity.issuer.clone(),
+        subject: identity.subject.clone(),
+        product_id: profile.product_id.clone(),
+        workspace_id: profile.workspace_id.clone(),
+        device_id: noise.device_id()?,
+        noise_public_key: noise.public_key()?,
+        enabled: retained.is_some_and(|b| b.enabled)
+            && !private::adoption_pending(root)?
+            && !sync.account_adoption_needed(&profile.workspace_id, &device)?,
+    };
+    if retained.is_some_and(|b| b.noise_public_key != binding.noise_public_key) {
+        return Err(Error::OwnershipMismatch);
+    }
+    Ok(binding)
 }
 fn network_recovery(status: &Status, bound: bool) -> bool {
     bound
@@ -913,6 +974,169 @@ fn trusted_application_origin(source: &url::Url) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    struct SessionWindows;
+    impl adapter::WindowHost for SessionWindows {
+        fn participants(&self) -> std::collections::HashSet<String> {
+            std::collections::HashSet::from(["main".into()])
+        }
+        fn emit(&self, _: &str, _: &serde_json::Value) -> crate::store::Result<()> {
+            Ok(())
+        }
+    }
+    #[test]
+    fn login_sessions_a_out_b_out_a_preserve_manual_library_and_never_inherit_enable() {
+        use crate::{session::Session, store::Store};
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path()).unwrap();
+        store
+            .action(serde_json::json!({"type":"createNote"}))
+            .unwrap();
+        let shared = Arc::new((Mutex::new(Session::new(store)), std::sync::Condvar::new()));
+        let sync =
+            adapter::Runtime::new(shared.clone(), dir.path().into(), Arc::new(SessionWindows))
+                .unwrap();
+        let token = shared.0.lock().unwrap().sync_media_token();
+        sync.command(
+            adapter::Command::StartHost {
+                device_name: "fixture".into(),
+                port: 0,
+            },
+            "main",
+            &token,
+        )
+        .unwrap();
+        let old_workspace = shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_identity()
+            .unwrap()
+            .unwrap();
+        let before = shared.0.lock().unwrap().workspace().unwrap();
+        sync.pause_for_account().unwrap();
+        let root = dir.path().join(".account");
+        private::directory(&root).unwrap();
+        let mut old = None;
+        let mut devices = std::collections::HashSet::new();
+        let mut keys = std::collections::HashSet::new();
+        let mut workspaces = std::collections::HashMap::new();
+        for owner in ["fixture-a", "fixture-b", "fixture-a"] {
+            let identity = account_auth::Identity {
+                issuer: config::ISSUER.into(),
+                subject: owner.into(),
+                display_name: owner.into(),
+                username: None,
+            };
+            let workspace = workspaces
+                .entry(owner)
+                .or_insert_with(|| uuid::Uuid::new_v4().to_string())
+                .clone();
+            let profile = enrollment::Profile {
+                schema_version: 1,
+                subject: owner.into(),
+                issuer: config::ISSUER.into(),
+                product_id: "cybernote".into(),
+                workspace_id: workspace,
+            };
+            let binding =
+                prepare_session_binding(&sync, &root, old.as_ref(), &identity, profile, true)
+                    .unwrap();
+            assert_eq!(binding.subject, owner);
+            assert!(!binding.enabled);
+            assert!(devices.insert(binding.device_id.clone()));
+            assert!(keys.insert(binding.noise_public_key.clone()));
+            private::write(&root.join("binding.json"), &binding).unwrap();
+            // Sign-out's persisted effect retains the binding with enable=false;
+            // the next accepted identity must not compare against the old owner.
+            old = private::read(&root.join("binding.json")).unwrap();
+            assert_eq!(
+                shared
+                    .0
+                    .lock()
+                    .unwrap()
+                    .store
+                    .sync_identity()
+                    .unwrap()
+                    .unwrap()
+                    .workspace_id,
+                old_workspace.workspace_id
+            );
+            assert_eq!(
+                shared.0.lock().unwrap().workspace().unwrap()["notes"],
+                before["notes"]
+            );
+        }
+        sync.shutdown().unwrap();
+    }
+    #[test]
+    fn retained_session_enable_requires_exact_store_identity_and_no_interrupted_adoption() {
+        use crate::{session::Session, store::Store};
+        let dir = tempfile::tempdir().unwrap();
+        let shared = Arc::new((
+            Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
+            std::sync::Condvar::new(),
+        ));
+        let sync =
+            adapter::Runtime::new(shared.clone(), dir.path().into(), Arc::new(SessionWindows))
+                .unwrap();
+        let root = dir.path().join(".account");
+        private::directory(&root).unwrap();
+        let identity = account_auth::Identity {
+            issuer: config::ISSUER.into(),
+            subject: "fixture-a".into(),
+            display_name: "A".into(),
+            username: None,
+        };
+        let workspace = uuid::Uuid::new_v4().to_string();
+        let profile = || enrollment::Profile {
+            schema_version: 1,
+            issuer: config::ISSUER.into(),
+            subject: "fixture-a".into(),
+            product_id: "cybernote".into(),
+            workspace_id: workspace.clone(),
+        };
+        let mut old =
+            prepare_session_binding(&sync, &root, None, &identity, profile(), true).unwrap();
+        old.enabled = true;
+        // Persisted intent alone cannot automatically adopt a different DB.
+        assert!(
+            !prepare_session_binding(&sync, &root, Some(&old), &identity, profile(), false)
+                .unwrap()
+                .enabled
+        );
+        shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_enable_with_device(Some(&workspace), &old.device_id)
+            .unwrap();
+        let retained =
+            prepare_session_binding(&sync, &root, Some(&old), &identity, profile(), false).unwrap();
+        assert_eq!(retained.device_id, old.device_id);
+        assert!(retained.enabled);
+        private::begin_adoption(&root).unwrap();
+        assert!(
+            !prepare_session_binding(&sync, &root, Some(&old), &identity, profile(), false)
+                .unwrap()
+                .enabled
+        );
+        private::complete_adoption(&root).unwrap();
+        let mut bad = profile();
+        bad.subject = "other".into();
+        assert!(matches!(
+            prepare_session_binding(&sync, &root, Some(&old), &identity, bad, true),
+            Err(Error::OwnershipMismatch)
+        ));
+        let mut bad = identity.clone();
+        bad.issuer = "https://untrusted.invalid".into();
+        assert!(matches!(
+            prepare_session_binding(&sync, &root, None, &bad, profile(), true),
+            Err(Error::OwnershipMismatch)
+        ));
+        sync.shutdown().unwrap();
+    }
     #[test]
     fn explicit_network_recovery_requires_bound_error_and_does_not_select_enable() {
         for enabled in [false, true] {
@@ -995,7 +1219,6 @@ mod tests {
                 Error::Network,
                 Error::Configuration,
                 Error::Storage,
-                Error::OwnershipMismatch,
                 Error::CleanupRequired,
                 Error::CoordinationProtocol,
                 Error::Authentication,
@@ -1028,6 +1251,7 @@ mod tests {
             Error::TokenResponseInvalid,
             Error::InvalidIdentity,
             Error::Cancelled,
+            Error::OwnershipMismatch,
         ] {
             let mut status = Status {
                 state: Phase::Error,
@@ -1065,18 +1289,35 @@ mod tests {
             for error in [
                 Error::NetworkAt(types::NetworkStage::CoordinatorProfile),
                 Error::AuthenticationAt(types::NetworkStage::CoordinatorProfile),
-                Error::RequestAt(types::NetworkStage::CoordinatorProfile, types::RequestFailure::Timeout),
-                Error::RequestAt(types::NetworkStage::CoordinatorProfile, types::RequestFailure::HttpStatus(reqwest::StatusCode::UNAUTHORIZED)),
+                Error::RequestAt(
+                    types::NetworkStage::CoordinatorProfile,
+                    types::RequestFailure::Timeout,
+                ),
+                Error::RequestAt(
+                    types::NetworkStage::CoordinatorProfile,
+                    types::RequestFailure::HttpStatus(reqwest::StatusCode::UNAUTHORIZED),
+                ),
             ] {
                 let mut status = Status { state: Phase::Error, enabled, error: Some(error.safe()), ..Status::default() };
                 assert_eq!(authorization_mode(&status), Ok(false)); // ordinary begin, never logout
                 assert_eq!(status.enabled, enabled);
-                status.profile = Some(Profile { subject: "synthetic-owner".into(), display_name: "Synthetic".into(), username: None });
+                status.profile = Some(Profile {
+                    subject: "synthetic-owner".into(),
+                    display_name: "Synthetic".into(),
+                    username: None,
+                });
                 assert_eq!(authorization_mode(&status), Err(Error::Busy));
             }
-            for stage in [types::NetworkStage::CoordinatorEnrollment, types::NetworkStage::CoordinatorJwks] {
-                let status = Status { state: Phase::Error, enabled,
-                    error: Some(Error::RequestAt(stage, types::RequestFailure::Timeout).safe()), ..Status::default() };
+            for stage in [
+                types::NetworkStage::CoordinatorEnrollment,
+                types::NetworkStage::CoordinatorJwks,
+            ] {
+                let status = Status {
+                    state: Phase::Error,
+                    enabled,
+                    error: Some(Error::RequestAt(stage, types::RequestFailure::Timeout).safe()),
+                    ..Status::default()
+                };
                 assert_eq!(authorization_mode(&status), Err(Error::Busy));
             }
         }

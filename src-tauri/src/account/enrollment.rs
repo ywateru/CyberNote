@@ -130,7 +130,10 @@ impl Enrollment {
             ));
         }
         uuid::Uuid::parse_str(&profile.workspace_id).map_err(|_| {
-            Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::InvalidResponse)
+            Error::RequestAt(
+                NetworkStage::CoordinatorProfile,
+                RequestFailure::InvalidResponse,
+            )
         })?;
         Ok(profile)
     }
@@ -246,6 +249,13 @@ struct GateState {
 #[derive(Default)]
 pub(crate) struct Gate(Mutex<GateState>);
 impl Gate {
+    /// Local adoption must obey the same owner generation as peer admission.
+    /// This checks cancellation only; signed enrollment is checked separately.
+    pub(crate) fn is_current(&self) -> bool {
+        self.0
+            .lock()
+            .is_ok_and(|s| !s.closed && s.lifecycle.as_ref().is_none_or(|active| active()))
+    }
     pub fn bind_lifecycle(&self, active: std::sync::Arc<dyn Fn() -> bool + Send + Sync>) {
         if let Ok(mut state) = self.0.lock() {
             state.lifecycle = Some(active);
@@ -447,11 +457,16 @@ mod tests {
                 server.await.unwrap();
                 assert_eq!(
                     error,
-                    Error::RequestAt(stage, if status == 200 {
-                        RequestFailure::InvalidResponse
-                    } else {
-                        RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap())
-                    })
+                    Error::RequestAt(
+                        stage,
+                        if status == 200 {
+                            RequestFailure::InvalidResponse
+                        } else {
+                            RequestFailure::HttpStatus(
+                                reqwest::StatusCode::from_u16(status).unwrap(),
+                            )
+                        }
+                    )
                 );
                 let safe = serde_json::to_value(error.safe()).unwrap();
                 assert_eq!(safe["code"], if matches!(status, 401 | 403) { "account_authentication" } else { "account_network" });
@@ -663,7 +678,7 @@ mod tests {
         runtime.shutdown().unwrap();
     }
     #[test]
-    fn real_store_activation_preserves_documents_and_restart_identity_and_rejects_legacy_workspace()
+    fn real_store_activation_preserves_documents_and_restart_identity_and_allows_explicit_adoption()
     {
         use crate::{session::Session, store::Store, sync::adapter::Runtime};
         use std::sync::{Arc, Condvar, Mutex};
@@ -679,7 +694,9 @@ mod tests {
         let device = noise.device_id().unwrap();
         let key = noise.public_key().unwrap();
         let workspace = uuid::Uuid::new_v4().to_string();
-        runtime.check_account_workspace(&workspace, false).unwrap();
+        runtime
+            .account_adoption_preflight(&workspace, &device)
+            .unwrap();
         let verified = VerifiedWorkspace {
             workspace: workspace.clone(),
             device: device.clone(),
@@ -701,11 +718,20 @@ mod tests {
         let noise = runtime.account_identity().unwrap();
         assert_eq!(noise.device_id().unwrap(), device);
         assert_eq!(noise.public_key().unwrap(), key);
-        runtime.check_account_workspace(&workspace, true).unwrap();
+        runtime
+            .account_adoption_preflight(&workspace, &device)
+            .unwrap();
+        assert!(!runtime
+            .account_adoption_needed(&workspace, &device)
+            .unwrap());
+        let other_workspace = uuid::Uuid::new_v4().to_string();
+        let other_device = uuid::Uuid::new_v4().to_string();
         assert!(runtime
-            .check_account_workspace(&uuid::Uuid::new_v4().to_string(), true)
-            .is_err());
-        assert!(runtime.check_account_workspace(&workspace, false).is_err());
+            .account_adoption_needed(&other_workspace, &other_device)
+            .unwrap());
+        runtime
+            .account_adoption_preflight(&other_workspace, &other_device)
+            .unwrap();
         let identity = shared
             .0
             .lock()
@@ -721,6 +747,44 @@ mod tests {
             original["notes"]
         );
         runtime.shutdown().unwrap();
+    }
+    #[test]
+    fn closed_or_stale_account_gate_cannot_adopt_a_local_library() {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        for closed in [false, true] {
+            let dir = tempfile::tempdir().unwrap();
+            let shared = Arc::new((
+                Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
+                Condvar::new(),
+            ));
+            let runtime =
+                Runtime::new(shared.clone(), dir.path().into(), Arc::new(Windows)).unwrap();
+            let identity = runtime
+                .account_identity_for(&uuid::Uuid::new_v4().to_string())
+                .unwrap();
+            let verified = VerifiedWorkspace {
+                workspace: uuid::Uuid::new_v4().to_string(),
+                device: identity.device_id().unwrap(),
+                noise_key: identity.public_key().unwrap(),
+            };
+            let gate = Arc::new(Gate::default());
+            if closed {
+                gate.close();
+            } else {
+                gate.bind_lifecycle(Arc::new(|| false));
+            }
+            assert!(runtime.activate_account(&verified, identity, gate).is_err());
+            assert!(shared
+                .0
+                .lock()
+                .unwrap()
+                .store
+                .sync_identity()
+                .unwrap()
+                .is_none());
+            runtime.shutdown().unwrap();
+        }
     }
     #[test]
     fn signed_proof_rejects_cross_owner_workspace_and_unbound_keys_not_just_jwt_decode() {

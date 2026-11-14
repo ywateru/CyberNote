@@ -136,9 +136,13 @@ impl SafeError {
                 | "account_auth_code_rejected"
                 | "account_auth_token_response_invalid"
                 | "account_auth_identity_invalid"
-                | "account_cancelled" => true,
+                | "account_cancelled"
+                | "account_owner_workspace_mismatch" => true,
                 "account_network" | "account_authentication"
-                    if self.stage == Some(NetworkStage::CoordinatorProfile) => true,
+                    if self.stage == Some(NetworkStage::CoordinatorProfile) =>
+                {
+                    true
+                }
                 "account_network" => matches!(
                     self.stage,
                     Some(
@@ -235,6 +239,7 @@ pub(crate) enum Error {
     CleanupRequired,
     Sync,
     CoordinationProtocol,
+    AdoptionBlocked,
     WindowInvalid,
 }
 impl Error {
@@ -267,6 +272,7 @@ impl Error {
             Self::CleanupRequired => "account_cleanup_required",
             Self::Sync => "account_sync_failed",
             Self::CoordinationProtocol => "account_sync_protocol",
+            Self::AdoptionBlocked => "account_sync_adoption_blocked",
             Self::WindowInvalid => "account_window_invalid",
         }
     }
@@ -284,6 +290,8 @@ impl Error {
             code: self.code().into(),
             message: if self == Self::CleanupRequired {
                 "存在待撤销的登录授权，请先退出授权后重新登录。本机备忘录会保留。"
+            } else if self == Self::AdoptionBlocked {
+                "旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。"
             } else {
                 "账户操作未完成，本机备忘录仍会保留。请检查账户状态后重试。"
             }
@@ -355,7 +363,9 @@ impl From<account_auth::AuthError> for Error {
 }
 impl From<crate::store::AppError> for Error {
     fn from(value: crate::store::AppError) -> Self {
-        if value.code.contains("mismatch") {
+        if value.code == "sync_adoption_blocked" {
+            Self::AdoptionBlocked
+        } else if value.code.contains("mismatch") {
             Self::OwnershipMismatch
         } else {
             Self::Sync
@@ -401,6 +411,15 @@ impl Error {
 mod tests {
     use super::*;
 
+    #[test]
+    fn adoption_block_is_a_finite_local_error_without_provider_details() {
+        let error = Error::from(crate::store::AppError { code: "sync_adoption_blocked".into(), message: "untrusted detail".into(), commit: None });
+        assert_eq!(error, Error::AdoptionBlocked);
+        let value = serde_json::to_value(error.safe()).unwrap();
+        assert_eq!(value["code"], "account_sync_adoption_blocked");
+        assert_eq!(value.as_object().unwrap().len(), 2);
+        assert!(!value.to_string().contains("untrusted detail"));
+    }
     #[test]
     fn request_details_are_finite_stage_scoped_and_http_status_is_paired() {
         for stage in [NetworkStage::CoordinatorProfile, NetworkStage::CoordinatorEnrollment, NetworkStage::CoordinatorJwks] {
