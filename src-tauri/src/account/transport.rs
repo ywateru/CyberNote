@@ -3,7 +3,7 @@ use super::{
     config,
     enrollment::{Claims, Enrollment, Gate},
     private::Binding,
-    types::{Device, Error, Result},
+    types::{Device, Error, RequestFailure, Result},
 };
 use crate::sync::{
     adapter,
@@ -766,6 +766,26 @@ pub(crate) struct Snapshot {
     pub devices: Vec<Device>,
     pub last_sync_at: Option<u64>,
 }
+fn fence_authorization(gate: &Gate, error: Error) -> bool {
+    let terminal = match error {
+        Error::Authentication
+        | Error::AuthenticationAt(_)
+        | Error::ProviderAuthentication(_)
+        | Error::InvalidProof
+        | Error::OwnershipMismatch
+        | Error::RequestAt(_, RequestFailure::InvalidResponse) => true,
+        Error::RequestAt(_, RequestFailure::HttpStatus(status)) => {
+            matches!(status.as_u16(), 401 | 403)
+                || status.is_success()
+                || status.as_u16() > 599
+        }
+        _ => false,
+    };
+    if terminal {
+        gate.close();
+    }
+    terminal
+}
 pub(crate) async fn run(
     runtime: Arc<adapter::Runtime>,
     identity: Arc<IdentityStore>,
@@ -1076,15 +1096,7 @@ async fn run_service(
             Err(error) => {
                 // Old authorization may only continue until the signed lease expires.
                 // Authentication/proof errors fence it immediately; never manual fallback.
-                if matches!(
-                    error,
-                    Error::Authentication
-                        | Error::AuthenticationAt(_)
-                        | Error::ProviderAuthentication(_)
-                        | Error::InvalidProof
-                        | Error::OwnershipMismatch
-                ) {
-                    gate.close();
+                if fence_authorization(&gate, error) {
                     publish(Err(error));
                     break Err(error);
                 }
@@ -1113,6 +1125,49 @@ mod tests {
         SecretKey,
     };
     use std::sync::atomic::{AtomicBool, Ordering};
+
+    #[test]
+    fn coordinator_request_classification_preserves_authorization_fences() {
+        use super::super::types::NetworkStage;
+        for stage in [NetworkStage::CoordinatorProfile, NetworkStage::CoordinatorEnrollment, NetworkStage::CoordinatorJwks] {
+            let mut cases = vec![
+                (Error::AuthenticationAt(stage), true),
+                (Error::InvalidProof, true),
+                (Error::OwnershipMismatch, true),
+                (Error::RequestAt(stage, RequestFailure::InvalidResponse), true),
+                (Error::RequestAt(stage, RequestFailure::Timeout), false),
+                (Error::RequestAt(stage, RequestFailure::Connect), false),
+                (Error::RequestAt(stage, RequestFailure::Request), false),
+                (Error::RequestAt(stage, RequestFailure::ResponseBody), false),
+            ];
+            for (status, terminal) in [(401, true), (403, true), (429, false), (503, false), (200, true), (600, true)] {
+                cases.push((Error::RequestAt(stage, RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap())), terminal));
+            }
+            for (error, terminal) in cases {
+                let gate = Gate::default();
+                let proof = Claims {
+                    iss: config::ENROLLMENT_ISSUER.into(), aud: "cybernote-enrollment-v1".into(),
+                    sub: "synthetic-owner".into(), account_issuer: config::ISSUER.into(),
+                    product_id: "cybernote".into(), workspace_id: uuid::Uuid::new_v4().to_string(),
+                    device_id: uuid::Uuid::new_v4().to_string(), noise_public_key: B64.encode([7; 32]),
+                    purpose: "pair".into(), iat: now(), exp: now() + 200,
+                    jti: uuid::Uuid::new_v4().to_string(),
+                };
+                gate.renew_local(proof.exp);
+                gate.admit(&proof);
+                gate.route(&proof.device_id, "ws://127.0.0.1:1234/".into());
+                assert!(gate.authorize(&proof.device_id, &proof.noise_public_key).is_ok());
+                assert_eq!(fence_authorization(&gate, error), terminal);
+                assert_eq!(gate.authorize(&proof.device_id, &proof.noise_public_key).is_err(), terminal);
+                assert_eq!(gate.endpoint(&proof.device_id).is_err(), terminal);
+                // A fenced gate cannot be resurrected by a stale renewal/admit.
+                gate.renew_local(proof.exp);
+                gate.admit(&proof);
+                gate.route(&proof.device_id, "ws://127.0.0.1:1234/".into());
+                assert_eq!(gate.authorize(&proof.device_id, &proof.noise_public_key).is_err(), terminal);
+            }
+        }
+    }
 
     #[tokio::test]
     async fn initial_coordination_retries_are_bounded_and_permanent_rejections_do_not_retry() {

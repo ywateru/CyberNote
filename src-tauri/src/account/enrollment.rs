@@ -1,7 +1,7 @@
 use super::{
     config,
     private::Binding,
-    types::{Error, NetworkStage, Result},
+    types::{Error, NetworkStage, RequestFailure, Result},
 };
 use crate::sync::{
     identity::{now, SyncError},
@@ -78,25 +78,38 @@ impl Enrollment {
         request: reqwest::RequestBuilder,
         stage: NetworkStage,
     ) -> Result<T> {
-        let network = |_| Error::NetworkAt(stage);
-        let mut response = request.send().await.map_err(network)?;
+        let mut response = request.send().await.map_err(|error| {
+            let reason = if error.is_timeout() {
+                RequestFailure::Timeout
+            } else if error.is_connect() {
+                RequestFailure::Connect
+            } else {
+                RequestFailure::Request
+            };
+            Error::RequestAt(stage, reason)
+        })?;
         if !response.status().is_success() {
-            return Err(
-                if response.status().as_u16() == 401 || response.status().as_u16() == 403 {
-                    Error::AuthenticationAt(stage)
-                } else {
-                    Error::NetworkAt(stage)
-                },
-            );
+            return Err(Error::RequestAt(
+                stage,
+                RequestFailure::HttpStatus(response.status()),
+            ));
         }
         let mut bytes = Vec::new();
-        while let Some(chunk) = response.chunk().await.map_err(network)? {
+        while let Some(chunk) = response.chunk().await.map_err(|error| {
+            let reason = if error.is_timeout() {
+                RequestFailure::Timeout
+            } else {
+                RequestFailure::ResponseBody
+            };
+            Error::RequestAt(stage, reason)
+        })? {
             if bytes.len() + chunk.len() > 65536 {
-                return Err(Error::InvalidProof);
+                return Err(Error::RequestAt(stage, RequestFailure::InvalidResponse));
             }
             bytes.extend_from_slice(&chunk)
         }
-        serde_json::from_slice(&bytes).map_err(|_| Error::InvalidProof)
+        serde_json::from_slice(&bytes)
+            .map_err(|_| Error::RequestAt(stage, RequestFailure::InvalidResponse))
     }
     pub async fn profile(&self, token: &str) -> Result<Profile> {
         let profile: Profile = self
@@ -111,9 +124,14 @@ impl Enrollment {
             || profile.issuer != config::ISSUER
             || profile.product_id.is_empty()
         {
-            return Err(Error::InvalidProof);
+            return Err(Error::RequestAt(
+                NetworkStage::CoordinatorProfile,
+                RequestFailure::InvalidResponse,
+            ));
         }
-        uuid::Uuid::parse_str(&profile.workspace_id).map_err(|_| Error::InvalidProof)?;
+        uuid::Uuid::parse_str(&profile.workspace_id).map_err(|_| {
+            Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::InvalidResponse)
+        })?;
         Ok(profile)
     }
     pub async fn issue(
@@ -131,7 +149,10 @@ impl Enrollment {
             )
             .await?;
         if envelope.schema_version != 1 {
-            return Err(Error::InvalidProof);
+            return Err(Error::RequestAt(
+                NetworkStage::CoordinatorEnrollment,
+                RequestFailure::InvalidResponse,
+            ));
         }
         let claims = self.verify(&envelope.token, binding).await?;
         if claims.device_id != binding.device_id
@@ -311,11 +332,7 @@ mod tests {
     async fn http_transport_is_independent_of_pinned_signed_enrollment_issuer() {
         use tokio::io::{AsyncReadExt, AsyncWriteExt};
         tokio::time::timeout(std::time::Duration::from_secs(5), async {
-            assert_eq!(config::origin().unwrap(), if cfg!(target_os = "android") {
-                "https://cybernote-sync.aixgg.com"
-            } else {
-                "https://cybernote-sync.vercel.app"
-            });
+            assert_eq!(config::origin().unwrap(), "https://cybernote-sync.aixgg.com");
             assert_eq!(config::ENROLLMENT_ISSUER, "https://cybernote-sync.vercel.app");
             let (binding, jwks, key) = fixture();
             let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
@@ -395,7 +412,7 @@ mod tests {
             ),
             (NetworkStage::CoordinatorJwks, "/api/v1/account/jwks"),
         ] {
-            for status in [401, 403, 302, 503, 200] {
+            for status in [401, 403, 302, 408, 429, 500, 503, 200] {
                 let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
                 let enrollment =
                     Enrollment::new(format!("http://{}", listener.local_addr().unwrap())).unwrap();
@@ -430,17 +447,82 @@ mod tests {
                 server.await.unwrap();
                 assert_eq!(
                     error,
-                    match status {
-                        401 | 403 => Error::AuthenticationAt(stage),
-                        200 => Error::InvalidProof,
-                        _ => Error::NetworkAt(stage),
-                    }
+                    Error::RequestAt(stage, if status == 200 {
+                        RequestFailure::InvalidResponse
+                    } else {
+                        RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap())
+                    })
                 );
-                assert!(!serde_json::to_string(&error.safe())
-                    .unwrap()
-                    .contains("private-response-sentinel"));
+                let safe = serde_json::to_value(error.safe()).unwrap();
+                assert_eq!(safe["code"], if matches!(status, 401 | 403) { "account_authentication" } else { "account_network" });
+                assert_eq!(safe["requestReason"], if status == 200 { "invalidResponse" } else { "httpStatus" });
+                if status == 200 { assert!(safe.get("httpStatus").is_none()); }
+                else { assert_eq!(safe["httpStatus"], status); }
+                let text = safe.to_string();
+                for private in ["private-response-sentinel", "synthetic-access", "127.0.0.1"] {
+                    assert!(!text.contains(private));
+                }
             }
         }
+    }
+
+    #[tokio::test]
+    async fn truncated_and_oversized_success_bodies_fail_without_body_or_address_details() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        tokio::time::timeout(std::time::Duration::from_secs(5), async {
+            let oversized = "x".repeat(65537);
+            let invalid_schema = serde_json::json!({
+                "schemaVersion": 2, "subject": "synthetic-owner", "issuer": config::ISSUER,
+                "productId": "cybernote", "workspaceId": uuid::Uuid::new_v4().to_string()
+            }).to_string();
+            for (response, expected) in [
+                ("HTTP/1.1 200 OK\r\nContent-Length: 100\r\nConnection: close\r\n\r\nprivate-response-sentinel".to_owned(), RequestFailure::ResponseBody),
+                (format!("HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{oversized}", oversized.len()), RequestFailure::InvalidResponse),
+                (format!("HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{invalid_schema}", invalid_schema.len()), RequestFailure::InvalidResponse),
+            ] {
+                let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+                let mut enrollment = Enrollment::new(format!("http://{}", listener.local_addr().unwrap())).unwrap();
+                enrollment.http = reqwest::Client::builder().no_proxy()
+                    .timeout(std::time::Duration::from_secs(2)).build().unwrap();
+                let server = tokio::spawn(async move {
+                    let (mut socket, _) = listener.accept().await.unwrap();
+                    let mut request = Vec::new();
+                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
+                        let mut bytes = [0; 1024];
+                        let n = socket.read(&mut bytes).await.unwrap();
+                        assert!(n > 0 && request.len() < 8192);
+                        request.extend_from_slice(&bytes[..n]);
+                    }
+                    socket.write_all(response.as_bytes()).await.unwrap();
+                });
+                let error = enrollment.profile("synthetic-access").await.err().unwrap();
+                assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, expected));
+                let safe = serde_json::to_string(&error.safe()).unwrap();
+                for private in ["private-response-sentinel", "synthetic-access", "127.0.0.1"] {
+                    assert!(!safe.contains(private));
+                }
+                server.await.unwrap();
+            }
+        }).await.expect("bounded synthetic body fixture");
+    }
+
+    #[tokio::test]
+    async fn request_builder_connect_and_timeout_have_distinct_finite_results() {
+        tokio::time::timeout(std::time::Duration::from_secs(5), async {
+            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+            let origin = format!("http://{}", listener.local_addr().unwrap());
+            let mut enrollment = Enrollment::new(origin).unwrap();
+            enrollment.http = reqwest::Client::builder().no_proxy()
+                .timeout(std::time::Duration::from_millis(250)).build().unwrap();
+            let error = enrollment.profile("invalid\nheader").await.err().unwrap();
+            assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Request));
+            // Listening socket intentionally sends no response. No external service.
+            let error = enrollment.profile("synthetic-access").await.err().unwrap();
+            assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Timeout));
+            drop(listener);
+            let error = enrollment.profile("synthetic-access").await.err().unwrap();
+            assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Connect));
+        }).await.expect("bounded synthetic request fixture");
     }
 
     fn fixture() -> (Binding, JwkSet, jsonwebtoken::EncodingKey) {

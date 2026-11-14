@@ -6,10 +6,7 @@ pub const MAC_REDIRECT: &str = "http://127.0.0.1:17897/callback";
 pub const ANDROID_REDIRECT: &str = "com.local.notesclone.auth://callback";
 pub const SYNC_PORT: &str = "cybernote-sync-v1";
 pub const ENROLL_PORT: &str = "cybernote-enroll-v1";
-#[cfg(target_os = "android")]
 pub const COORDINATOR_TRANSPORT_ORIGIN: &str = "https://cybernote-sync.aixgg.com";
-#[cfg(not(target_os = "android"))]
-pub const COORDINATOR_TRANSPORT_ORIGIN: &str = "https://cybernote-sync.vercel.app";
 // Stable proof identity, independent of the HTTP transport hostname.
 pub const ENROLLMENT_ISSUER: &str = "https://cybernote-sync.vercel.app";
 pub fn origin() -> Result<String> {

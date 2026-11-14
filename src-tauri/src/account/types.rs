@@ -113,6 +113,10 @@ pub(crate) struct SafeError {
     pub token_operation: Option<account_auth::TokenOperation>,
     #[serde(rename = "tokenField", skip_serializing_if = "Option::is_none")]
     pub token_field: Option<account_auth::TokenResponseField>,
+    #[serde(rename = "requestReason", skip_serializing_if = "Option::is_none")]
+    pub request_reason: Option<RequestReason>,
+    #[serde(rename = "httpStatus", skip_serializing_if = "Option::is_none")]
+    pub http_status: Option<u16>,
 }
 impl SafeError {
     pub(super) fn refresh_rejected(&self) -> bool {
@@ -133,6 +137,8 @@ impl SafeError {
                 | "account_auth_token_response_invalid"
                 | "account_auth_identity_invalid"
                 | "account_cancelled" => true,
+                "account_network" | "account_authentication"
+                    if self.stage == Some(NetworkStage::CoordinatorProfile) => true,
                 "account_network" => matches!(
                     self.stage,
                     Some(
@@ -168,6 +174,39 @@ pub(crate) enum NetworkStage {
     IdentityRevocation,
     CoordinatorSession,
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum RequestReason {
+    Timeout,
+    Connect,
+    Request,
+    ResponseBody,
+    HttpStatus,
+    InvalidResponse,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum RequestFailure {
+    Timeout,
+    Connect,
+    Request,
+    ResponseBody,
+    HttpStatus(reqwest::StatusCode),
+    InvalidResponse,
+}
+impl RequestFailure {
+    fn details(self) -> (RequestReason, Option<u16>) {
+        match self {
+            Self::Timeout => (RequestReason::Timeout, None),
+            Self::Connect => (RequestReason::Connect, None),
+            Self::Request => (RequestReason::Request, None),
+            Self::ResponseBody => (RequestReason::ResponseBody, None),
+            Self::HttpStatus(status) if !status.is_success() && status.as_u16() <= 599 => {
+                (RequestReason::HttpStatus, Some(status.as_u16()))
+            }
+            Self::HttpStatus(_) | Self::InvalidResponse => (RequestReason::InvalidResponse, None),
+        }
+    }
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Error {
     Configuration,
@@ -187,6 +226,7 @@ pub(crate) enum Error {
     OwnershipMismatch,
     Network,
     NetworkAt(NetworkStage),
+    RequestAt(NetworkStage, RequestFailure),
     InvalidProof,
     Storage,
     Cancelled,
@@ -195,6 +235,7 @@ pub(crate) enum Error {
     CleanupRequired,
     Sync,
     CoordinationProtocol,
+    WindowInvalid,
 }
 impl Error {
     pub fn code(self) -> &'static str {
@@ -212,6 +253,12 @@ impl Error {
             Self::MissingRefreshToken => "account_auth_refresh_missing",
             Self::OwnershipMismatch => "account_owner_workspace_mismatch",
             Self::Network | Self::NetworkAt(_) => "account_network",
+            Self::RequestAt(_, RequestFailure::HttpStatus(status))
+                if matches!(status.as_u16(), 401 | 403) =>
+            {
+                "account_authentication"
+            }
+            Self::RequestAt(_, _) => "account_network",
             Self::InvalidProof => "account_enrollment_invalid",
             Self::Storage => "account_storage",
             Self::Cancelled => "account_cancelled",
@@ -220,9 +267,19 @@ impl Error {
             Self::CleanupRequired => "account_cleanup_required",
             Self::Sync => "account_sync_failed",
             Self::CoordinationProtocol => "account_sync_protocol",
+            Self::WindowInvalid => "account_window_invalid",
         }
     }
     pub fn safe(self) -> SafeError {
+        let request_details = match self {
+            Self::RequestAt(
+                NetworkStage::CoordinatorProfile
+                | NetworkStage::CoordinatorEnrollment
+                | NetworkStage::CoordinatorJwks,
+                failure,
+            ) => Some(failure.details()),
+            _ => None,
+        };
         SafeError {
             code: self.code().into(),
             message: if self == Self::CleanupRequired {
@@ -232,7 +289,9 @@ impl Error {
             }
             .into(),
             stage: match self {
-                Self::NetworkAt(stage) | Self::AuthenticationAt(stage) => Some(stage),
+                Self::NetworkAt(stage)
+                | Self::AuthenticationAt(stage)
+                | Self::RequestAt(stage, _) => Some(stage),
                 Self::ProviderAuthentication(_) => Some(NetworkStage::AuthorizationProvider),
                 _ => None,
             },
@@ -255,6 +314,8 @@ impl Error {
                 Self::ResponseMetadata(_, field) => Some(field),
                 _ => None,
             },
+            request_reason: request_details.map(|(reason, _)| reason),
+            http_status: request_details.and_then(|(_, status)| status),
         }
     }
 }
@@ -339,6 +400,45 @@ impl Error {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn request_details_are_finite_stage_scoped_and_http_status_is_paired() {
+        for stage in [NetworkStage::CoordinatorProfile, NetworkStage::CoordinatorEnrollment, NetworkStage::CoordinatorJwks] {
+            for (failure, label) in [
+                (RequestFailure::Timeout, "timeout"),
+                (RequestFailure::Connect, "connect"),
+                (RequestFailure::Request, "request"),
+                (RequestFailure::ResponseBody, "responseBody"),
+                (RequestFailure::InvalidResponse, "invalidResponse"),
+            ] {
+                let value = serde_json::to_value(Error::RequestAt(stage, failure).safe()).unwrap();
+                assert_eq!(value["code"], "account_network");
+                assert_eq!(value["requestReason"], label);
+                assert!(value.get("httpStatus").is_none());
+                for key in ["reason", "providerReason", "tokenOperation", "tokenField"] {
+                    assert!(value.get(key).is_none());
+                }
+            }
+            for status in [100, 302, 401, 403, 429, 503, 599] {
+                let value = serde_json::to_value(Error::RequestAt(stage, RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap())).safe()).unwrap();
+                assert_eq!(value["requestReason"], "httpStatus");
+                assert_eq!(value["httpStatus"], status);
+                assert_eq!(value["code"], if matches!(status, 401 | 403) { "account_authentication" } else { "account_network" });
+            }
+            for status in [200, 204, 299, 600, 999] {
+                let value = serde_json::to_value(Error::RequestAt(stage, RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap())).safe()).unwrap();
+                assert_eq!(value["requestReason"], "invalidResponse");
+                assert!(value.get("httpStatus").is_none());
+            }
+        }
+        for error in [Error::Network, Error::Busy, Error::WindowInvalid,
+            Error::RequestAt(NetworkStage::IdentityProvider, RequestFailure::Timeout)] {
+            let value = serde_json::to_value(error.safe()).unwrap();
+            assert!(value.get("requestReason").is_none());
+            assert!(value.get("httpStatus").is_none());
+        }
+        assert_eq!(Error::WindowInvalid.safe().code, "account_window_invalid");
+    }
 
     #[test]
     fn mapping_observation_serializes_finite_paths_and_legacy_status_omits_extension() {

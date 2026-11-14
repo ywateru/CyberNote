@@ -1060,7 +1060,35 @@ mod tests {
         );
     }
     #[test]
+    fn unbound_profile_request_retry_begins_without_replacement_or_enabling() {
+        for enabled in [false, true] {
+            for error in [
+                Error::NetworkAt(types::NetworkStage::CoordinatorProfile),
+                Error::AuthenticationAt(types::NetworkStage::CoordinatorProfile),
+                Error::RequestAt(types::NetworkStage::CoordinatorProfile, types::RequestFailure::Timeout),
+                Error::RequestAt(types::NetworkStage::CoordinatorProfile, types::RequestFailure::HttpStatus(reqwest::StatusCode::UNAUTHORIZED)),
+            ] {
+                let mut status = Status { state: Phase::Error, enabled, error: Some(error.safe()), ..Status::default() };
+                assert_eq!(authorization_mode(&status), Ok(false)); // ordinary begin, never logout
+                assert_eq!(status.enabled, enabled);
+                status.profile = Some(Profile { subject: "synthetic-owner".into(), display_name: "Synthetic".into(), username: None });
+                assert_eq!(authorization_mode(&status), Err(Error::Busy));
+            }
+            for stage in [types::NetworkStage::CoordinatorEnrollment, types::NetworkStage::CoordinatorJwks] {
+                let status = Status { state: Phase::Error, enabled,
+                    error: Some(Error::RequestAt(stage, types::RequestFailure::Timeout).safe()), ..Status::default() };
+                assert_eq!(authorization_mode(&status), Err(Error::Busy));
+            }
+        }
+    }
+    #[test]
     fn native_ipc_trusts_exact_app_origins_and_strict_command_types() {
+        for error in [Error::WindowInvalid, Error::Busy] {
+            let value = serde_json::to_value(error.safe()).unwrap();
+            assert_eq!(value["code"], error.code());
+            assert_eq!(value.as_object().unwrap().len(), 2); // SafeError, no old AppError.commit
+            assert!(value["message"].is_string());
+        }
         for raw in ["tauri://localhost/index.html", "http://tauri.localhost/"] {
             assert!(trusted_application_origin(&raw.parse().unwrap()));
         }
@@ -1154,9 +1182,9 @@ pub(crate) async fn account_command(
     command: Command,
     window: tauri::WebviewWindow,
     runtime: tauri::State<'_, crate::AccountState>,
-) -> crate::store::Result<Status> {
+) -> std::result::Result<Status, types::SafeError> {
     // Account mutations are restricted to the trusted main application origin.
-    let source = window.url().map_err(|_| crate::failure("账户窗口无效"))?;
+    let source = window.url().map_err(|_| Error::WindowInvalid.safe())?;
     let mut allowed = trusted_application_origin(&source);
     #[cfg(debug_assertions)]
     {
@@ -1165,15 +1193,11 @@ pub(crate) async fn account_command(
         }
     }
     if window.label() != "main" || !allowed {
-        return Err(crate::failure("此窗口不可管理账户"));
+        return Err(Error::WindowInvalid.safe());
     }
     runtime
         .0
         .command(command)
         .await
-        .map_err(|e| crate::store::AppError {
-            code: e.code().into(),
-            message: e.safe().message,
-            commit: None,
-        })
+        .map_err(Error::safe)
 }
