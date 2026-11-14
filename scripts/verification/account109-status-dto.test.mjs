@@ -6,6 +6,46 @@ const built = await build({configFile:false,logLevel:'silent',build:{write:false
 const output = (Array.isArray(built) ? built[0] : built).output;
 const {validateAccountStatus,accountConnectionRetry,accountNeedsLogin,accountTokenResponseMessage,accountErrorMessage,accountErrorDetails,accountIPCError,accountErrorStateKey} = await import('data:text/javascript;base64,'+Buffer.from(output[0].code).toString('base64'));
 const status = error => ({state:'error',enabled:false,devices:[],pendingCount:0,conflictCount:0,error});
+const syncStageLabels={pair:'配对',recoverPairing:'恢复配对',transfer:'传输',retirement:'收尾'};
+const syncReasonLabels={io:'读写操作未完成',invalid_input:'同步请求参数无效',corrupt_identity:'同步身份数据未通过校验',authentication:'设备身份验证未通过',expired:'同步凭证或请求已过期',revoked:'同步授权已撤销',workspace_mismatch:'设备同步空间不一致',protocol:'设备同步协议校验未通过',limit:'本次同步超出支持的限制',timeout:'操作超时',stopped:'同步操作已停止',backend:'同步数据处理未完成',plan_stale:'同步计划已失效',busy:'已有同步操作正在处理',transport:'同步传输连接未完成'};
+test('typed sync failure accepts every frozen stage/reason pair with local-only status and IPC copy',()=>{
+ for(const [syncStage,stage] of Object.entries(syncStageLabels))for(const [syncReason,reason] of Object.entries(syncReasonLabels)) {
+  const error={code:'account_sync_failed',message:'private-response-sentinel',syncStage,syncReason};
+  assert.deepEqual(validateAccountStatus(status(error)).error,error);
+  const message=`设备同步在${stage}阶段未完成：${reason}。本地更改仍保存在此设备。`;
+  assert.equal(accountErrorMessage(error),message);
+  assert.deepEqual(accountErrorDetails(error),[['code','account_sync_failed'],['syncStage',stage],['syncReason',reason]]);
+  const ipc=accountIPCError(error);assert.deepEqual(ipc,{...error,message});
+  assert(!JSON.stringify([ipc,accountErrorDetails(error),message]).includes('private-'));
+  assert.equal(accountNeedsLogin(error),false);
+ }
+});
+test('sync diagnostics reject partial, unknown, cross-code and cross-branch fields in status and IPC',()=>{
+ const base={code:'account_sync_failed',message:'private-response-sentinel'},valid={...base,syncStage:'transfer',syncReason:'timeout'};
+ const invalids=[{...base,syncStage:'transfer'},{...base,syncReason:'timeout'},
+  ...[undefined,null,0,false,{},[],'private-response-sentinel'].flatMap(value=>[{...valid,syncStage:value},{...valid,syncReason:value}]),
+  ...['invalidInput','corruptIdentity','workspaceMismatch','planStale'].map(syncReason=>({...valid,syncReason})),
+  ...['account_network','account_authentication','account_sync_protocol','account_sync_adoption_blocked','unknown'].map(code=>({...valid,code})),
+  ...['stage','reason','providerReason','requestReason','httpStatus','tokenOperation','tokenField','adoptionStage','adoptionReason','url','commit'].flatMap(key=>[{...valid,[key]:undefined},{...valid,[key]:'private-response-sentinel'}]),
+ ];
+ for(const error of invalids) {
+  assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);
+  assert.equal(accountIPCError(error),undefined);assert.deepEqual(accountErrorDetails(error),[]);
+  assert.equal(accountErrorMessage(error),accountErrorMessage(undefined));
+ }
+ const token={code:'account_auth_identity_invalid',message:'safe',reason:'responseMetadata',tokenOperation:'refresh',tokenField:'scope'};
+ for(const extra of [{syncStage:undefined},{syncReason:undefined},{syncStage:'transfer',syncReason:'timeout'}])assert.equal(accountTokenResponseMessage({...token,...extra}),undefined);
+});
+test('legacy sync failures stay generic and diagnostic changes alone advance the error state key',()=>{
+ const error={code:'account_sync_failed',message:'private-response-sentinel'};
+ assert.deepEqual(validateAccountStatus(status(error)).error,error);
+ assert.equal(accountErrorMessage(error),'同步未完成，请查看账户状态后重试。本地更改仍保存在此设备。');
+ assert.deepEqual(accountErrorDetails(error),[['code','account_sync_failed']]);assert(!accountIPCError(error).message.includes('private-'));
+ const typed={...error,syncStage:'pair',syncReason:'timeout'},s=status(typed),key=accountErrorStateKey(s);
+ assert.equal(accountErrorStateKey({...s,pendingCount:20,error:{...typed,message:'different'}}),key);
+ for(const change of [{syncStage:'transfer'},{syncReason:'transport'}])assert.notEqual(accountErrorStateKey({...s,error:{...typed,...change}}),key);
+ for(const enabled of [false,true])assert.deepEqual(accountConnectionRetry({...s,enabled}),accountConnectionRetry({...s,enabled,error}));
+});
 test('authorization surface is finite, authorizing-only and optional for legacy native status',()=>{
  const authorizing={state:'authorizing',enabled:false,devices:[],pendingCount:0,conflictCount:0};
  assert.equal(validateAccountStatus(authorizing).authorizationSurface,undefined);

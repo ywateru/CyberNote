@@ -668,6 +668,37 @@ test('prior or mismatched operation receipts never claim this dialog completed; 
  await h.click('开始同步');assert.deepEqual(h.calls.filter(c=>c.type==='syncDevice'),Array(2).fill({type:'syncDevice',deviceId:PEER,direction:'pull'}));
 });
 
+test('typed sync failures show fixed Chinese details in status and actual device-command modal without replay',async t=>{
+ for(const [syncStage,label] of [['pair','配对'],['recoverPairing','恢复配对'],['transfer','传输'],['retirement','收尾']])for(const mode of ['status','IPC']) {
+  const error={code:'account_sync_failed',message:'private-peer-sentinel',syncStage,syncReason:'timeout'};
+  const h=setup(t,{initial:directory(mode==='status'?{error}:{}),reply:command=>{if(mode==='IPC'&&command.type==='syncDevice')throw error;}});
+  await h.mount();await openPeer(h);await chooseDirection(h,'push');
+  if(mode==='IPC')await h.click('开始同步');
+  const modal=h.all().find(e=>e.localName==='dialog');
+  assert(modal.textContent.includes(`设备同步在${label}阶段未完成：操作超时`));
+  assert(modal.textContent.includes(`同步阶段${label}失败原因操作超时`));
+  assert(descendants(modal).some(e=>e.localName==='details'&&e.textContent.includes('错误详情')));
+  assert(!h.text().includes('private-peer-sentinel'));assert(!h.text().includes('本次传输完成'));
+  await h.tick();assert(modal.textContent.includes(`同步阶段${label}失败原因操作超时`));
+  assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,mode==='IPC'?1:0);
+  await h.click('取消');assert(!h.calls.some(c=>['signIn','setEnabled','syncNow','signOut'].includes(c.type)));
+ }
+});
+
+test('sync diagnostic progress retires an immediate error while invalid diagnostic payloads never leak',async t=>{
+ const first={code:'account_sync_failed',message:'private-first-sentinel',syncStage:'pair',syncReason:'timeout'};
+ const next={...first,message:'private-next-sentinel',syncStage:'transfer',syncReason:'transport'};
+ const h=setup(t,{initial:directory(),reply:command=>{if(command.type==='syncDevice')throw first;}});
+ await h.mount();await openPeer(h);await h.click('开始同步');assert(h.text().includes('操作超时'));
+ h.setNative(directory({error:next}));await h.tick();assert.equal(h.handle().inspect().error,'');
+ assert(h.text().includes('传输阶段未完成：同步传输连接未完成'));assert(!h.text().includes('操作超时'));assert(!h.text().includes('private-'));
+ assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);await h.click('取消');
+ for(const error of [{...first,syncReason:undefined},{...first,syncStage:'private-stage-sentinel'},{...first,syncReason:'invalidInput'},{...first,code:'account_network'}]) {
+  const invalid=setup(t,{initial:directory({error})});await invalid.mount();assert(invalid.text().includes('无效数据'));
+  assert(!invalid.text().includes('同步阶段'));assert(!invalid.text().includes('private-'));assert(invalid.calls.every(c=>c.type==='status'));
+ }
+});
+
 test('rename is local-only, validates before IPC and waits for authoritative saved name; modal focus includes the input',async t=>{
  const h=setup(t,{initial:directory(),reply:(command,model)=>{
   if(command.type==='renameDevice'){const next=structuredClone(model.get());next.devices[0].name=command.name;model.set(next);return next;}

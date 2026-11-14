@@ -29,7 +29,7 @@ function targetIssue(status: AccountStatus | null, target: DeviceTarget | null, 
 }
 function ErrorDetails({error}: {error: AccountStatus["error"]}) {
   const details = accountErrorDetails(error);
-  return details.length ? <details className="account-error-details"><summary>错误详情</summary><dl>{details.map(([key,value]) => <div key={key}><dt>{key}</dt><dd>{value}</dd></div>)}</dl></details> : null;
+  return details.length ? <details className="account-error-details"><summary>错误详情</summary><dl>{details.map(([key,value]) => <div key={key}><dt>{key === "syncStage" ? "同步阶段" : key === "syncReason" ? "失败原因" : key}</dt><dd>{value}</dd></div>)}</dl></details> : null;
 }
 
 export default function AccountSettings({ active, onHandle, onConflicts }: {
@@ -359,7 +359,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       {(issue || formError) && <p className="account-confirmation-error" role="alert">{issue || formError}</p>}
       {confirmation === "syncDevice" && operationText && <p className="account-operation" role="status">{operationText}{deviceOperation?.phase === "running" ? `目标：${target?.name}；方向：${directionNames[direction]}。` : ""}</p>}
       {deviceDialog && status?.error && !commandError && <div className="account-confirmation-error" role="alert"><p>{accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} /></div>}
-      {commandError?.command === (deviceDialog ? confirmation : confirmation === "signOut" ? "signOut" : "setEnabled") && <p className="account-confirmation-error" role="alert">{error}</p>}
+      {commandError?.command === (deviceDialog ? confirmation : confirmation === "signOut" ? "signOut" : "setEnabled") && <><p className="account-confirmation-error" role="alert">{error}</p>{deviceDialog && <ErrorDetails error={commandError.safeError} />}</>}
       <div className="account-actions"><button ref={cancelButton} type="button" disabled={busy} onClick={dismiss}>取消</button><button ref={confirmButton} className="account-primary" type="button" disabled={busy || (deviceDialog && (nativeBusy || !!issue || needsLogin || cleanupRequired || identityMismatch))} onClick={confirm}>{confirmation === "signOut" ? "确认退出" : confirmation === "enable" ? "允许同步" : confirmation === "renameDevice" ? "保存名称" : "开始同步"}</button></div>
     </dialog>}
     <p className="account-notice" role="status">{notice}</p>
