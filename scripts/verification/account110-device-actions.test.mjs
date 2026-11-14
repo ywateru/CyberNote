@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 import vm from 'node:vm';
 import {EventEmitter} from 'node:events';
 import {resolve} from 'node:path';
-import {parseArgs,parseStatus,command,safeStatus,safeFailure,safeLifecycle,closeNativeClients,waitFor,observeWindow,syncOnce,validatePackage,ownedFile,expectedSummary,expectedAfter,validateDeployment,ProtocolProbes,main} from './account110-device-actions.mjs';
+import {parseArgs,parseStatus,command,safeStatus,safeFailure,safeAccountError,safeFailureReceipt,safeLifecycle,closeNativeClients,waitFor,observeWindow,syncOnce,validatePackage,ownedFile,expectedSummary,expectedAfter,validateDeployment,ProtocolProbes,main} from './account110-device-actions.mjs';
 
 const a='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',b='bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 const deploymentId='dpl_SyntheticApprovedDeployment';
@@ -49,6 +49,49 @@ test('safe reports contain finite device labels/counts, never profile, IDs, name
  for(const privateValue of [a,b,'private-subject','private-display-name','private-username','Synthetic name'])assert(!safe.includes(privateValue));
  assert(safe.includes('"device":"b"'));assert(safe.includes('"noteCount":1'));
  assert.equal(safeFailure(Object.assign(new Error('private raw error'),{code:'private_code'})),'CHECK_FAILED');
+});
+test('account failure retains only validated finite fields before parseStatus throws',()=>{
+ const error={code:'account_network',stage:'coordinatorJwks',requestReason:'httpStatus',httpStatus:503,message:'DO NOT EMIT https://private/ bearer secret'};
+ assert.throws(()=>parseStatus(status({error,deviceOperation:op()})),e=>{
+  assert.equal(e.code,'ACCOUNT_FAILURE');assert.deepEqual(safeFailureReceipt(e),{code:'ACCOUNT_FAILURE',accountError:{code:'account_network',stage:'coordinatorJwks',requestReason:'httpStatus',httpStatus:503}});
+  assert(!JSON.stringify(e).includes('private'));return true;
+ });
+ assert.deepEqual(safeAccountError({code:'account_auth_identity_invalid',message:'secret',reason:'responseMetadata',tokenOperation:'codeExchange',tokenField:'scope'}),{code:'account_auth_identity_invalid'});
+ assert.deepEqual(safeAccountError({code:'account_sync_failed'}),{code:'account_sync_failed'}); // Legacy generic error remains valid.
+});
+test('sync error diagnostics require exact paired enums and account_sync_failed',()=>{
+ for(const syncStage of ['pair','recoverPairing','transfer','retirement'])for(const syncReason of ['io','invalid_input','corrupt_identity','authentication','expired','revoked','workspace_mismatch','protocol','limit','timeout','stopped','backend','plan_stale','busy','transport']){
+  const error={code:'account_sync_failed',syncStage,syncReason,message:'secret'};
+  assert.deepEqual(safeAccountError(error),{code:error.code,syncStage,syncReason});
+  assert.throws(()=>parseStatus(status({error,deviceOperation:op('failed')})),e=>e.code==='ACCOUNT_FAILURE'&&e.accountError.syncStage===syncStage&&e.accountError.syncReason===syncReason);
+ }
+ for(const error of [
+  {code:'account_sync_failed',syncStage:'pair'},{code:'account_sync_failed',syncReason:'timeout'},
+  ...[null,1,'Pair','unknown','https://private/'].map(syncStage=>({code:'account_sync_failed',syncStage,syncReason:'timeout'})),
+  ...[null,1,'Timeout','workspaceMismatch','private message'].map(syncReason=>({code:'account_sync_failed',syncStage:'pair',syncReason})),
+  {code:'account_network',syncStage:'pair',syncReason:'timeout'},
+  {code:'account_sync_failed',syncStage:'pair',syncReason:'timeout',stage:'coordinator'},
+  {code:'account_sync_failed',syncStage:'pair',syncReason:'timeout',httpStatus:500},
+ ])expectCode(()=>parseStatus(status({error})),'INVALID_DTO');
+});
+test('request diagnostics preserve valid HTTP/code combinations and reject false or unknown details',()=>{
+ for(const stage of ['coordinatorProfile','coordinatorEnrollment','coordinatorJwks']){
+  for(const httpStatus of [100,199,300,400,401,403,500,599]){
+   const code=[401,403].includes(httpStatus)?'account_authentication':'account_network';
+   assert.deepEqual(safeAccountError({code,stage,requestReason:'httpStatus',httpStatus}),{code,stage,requestReason:'httpStatus',httpStatus});
+  }
+  for(const requestReason of ['timeout','connect','request','responseBody','invalidResponse'])assert.deepEqual(safeAccountError({code:'account_network',stage,requestReason}),{code:'account_network',stage,requestReason});
+ }
+ const base={code:'account_network',stage:'coordinatorJwks',requestReason:'httpStatus',httpStatus:500};
+ for(const extra of [{httpStatus:200},{httpStatus:299},{httpStatus:600},{httpStatus:999},{httpStatus:null},{httpStatus:'500'},{httpStatus:401},{code:'account_authentication'},{stage:'coordinator'},{stage:'private'},{requestReason:'private'},{requestReason:'timeout'},{requestReason:null},{requestReason:undefined}])expectCode(()=>safeAccountError({...base,...extra}),'INVALID_DTO');
+ for(const e of [{code:'account_network',httpStatus:500},{code:'account_network',requestReason:'timeout'},{code:'account_authentication',stage:'coordinatorJwks',requestReason:'timeout'}])expectCode(()=>safeAccountError(e),'INVALID_DTO');
+});
+test('unknown account diagnostics never become report strings or inferred native reasons',()=>{
+ for(const error of [{code:'PRIVATE_PROVIDER_BODY',message:'private'}, {code:'account_network',stage:'https://private/'}, {code:'account_network',rawBody:'private'},null,'private'])expectCode(()=>parseStatus(status({error})),'INVALID_DTO');
+ assert.deepEqual(safeFailureReceipt({code:'ACCOUNT_FAILURE',accountError:{code:'PRIVATE_PROVIDER_BODY',message:'private'}}),{code:'ACCOUNT_FAILURE'});
+ assert.deepEqual(safeFailureReceipt({code:'ACCOUNT_FAILURE',accountError:{code:'account_network',message:'private',stage:'coordinator'}}),{code:'ACCOUNT_FAILURE',accountError:{code:'account_network',stage:'coordinator'}});
+ assert.deepEqual(safeFailureReceipt({code:'CHECK_FAILED',accountError:{code:'account_network'}}),{code:'CHECK_FAILED'});
+ assert.deepEqual(safeFailureReceipt({code:'ACCOUNT_FAILURE',message:'account_network HTTP 503'}),{code:'ACCOUNT_FAILURE'});
 });
 test('observed fixed driver/bridge failures survive safe mapping; unknown errors and raw strings do not',()=>{
  for(const code of ['APP_EXITED','EXIT_BEFORE_RESPONSE','EXIT_BEFORE_HELLO','STDIN_ERROR','INVALID_FRAME','TRUNCATED_FRAME','UNEXPECTED_RESPONSE','EVAL_FAILED','JS_ERROR','NATIVE_TIMEOUT','PIPE_CLOSE_TIMEOUT','NON_NATURAL_EXIT'])
@@ -118,11 +161,11 @@ test('bounded wait and negative observation sample the full finite window; failu
  time=0;reads=0;await rejection(waitFor(async()=>++reads,()=>false,{...clock,timeoutMs:1000,code:'DEADLINE'}),'DEADLINE');assert.equal(time,1000);
  time=0;reads=0;await rejection(waitFor(async()=>{reads++;return parseStatus(status({error:{code:'account_authentication'}}));},()=>true,{...clock,timeoutMs:1000}),'ACCOUNT_FAILURE');assert.equal(reads,1);assert.equal(time,0);
 });
-function mockApp({finishAt=61000,reject=false,terminal=status({deviceOperation:op('succeeded')}),statusError=false}={}){
+function mockApp({finishAt=61000,reject=false,terminal=status({deviceOperation:op('succeeded')}),statusError=false,terminalOnly=false}={}){
  let time=0,calls=0,resolver;let done=false;const pending=new Promise((ok,no)=>{resolver=()=>{done=true;reject?no(new Error('DO NOT REPORT private token or URL')):ok(terminal);};});
  const window={__TAURI_INTERNALS__:{invoke:(name,{command})=>{
   assert.equal(name,'account_command');
-  if(command.type==='status')return Promise.resolve(statusError?status({error:{code:'account_network'}}):status({deviceOperation:done?terminal.deviceOperation:op()}));
+  if(command.type==='status')return Promise.resolve(statusError?status({error:statusError===true?{code:'account_network'}:statusError,deviceOperation:op()}):status({deviceOperation:done&&!terminalOnly?terminal.deviceOperation:op()}));
   calls++;assert.deepEqual(JSON.parse(JSON.stringify(command)),{type:'syncDevice',deviceId:b,direction:'push'});return pending;
  }}};
  const context=vm.createContext({window,Promise});
@@ -137,6 +180,16 @@ test('async command rejection, wrong receipt, status error and timeout all fail 
  for(const [options,code] of [[{finishAt:150,reject:true},'ACCOUNT_COMMAND_FAILED'],[{finishAt:150,terminal:status({deviceOperation:op('succeeded',{deviceId:a})})},'ACTION_RECEIPT'],[{statusError:true},'ACCOUNT_FAILURE'],[{finishAt:1e9},'DEVICE_OPERATION_TIMEOUT']]){
   const m=mockApp(options);await rejection(syncOnce(m.app,b,'push',{...m.clock,timeoutMs:1000}),code);assert.equal(m.calls(),1);
  }
+});
+test('both status polling and command terminal retain finite failure details without replay or acceptance',async()=>{
+ const error={code:'account_sync_failed',syncStage:'transfer',syncReason:'protocol',message:'private raw URL'};
+ for(const options of [{statusError:error},{finishAt:150,terminalOnly:true,terminal:status({error,deviceOperation:op('failed')})}]){
+  const m=mockApp(options);await assert.rejects(syncOnce(m.app,b,'push',{...m.clock}),e=>{
+   assert.deepEqual(safeFailureReceipt(e),{code:'ACCOUNT_FAILURE',accountError:{code:'account_sync_failed',syncStage:'transfer',syncReason:'protocol'}});return true;
+  });assert.equal(m.calls(),1);
+ }
+ const directory=mockApp({statusError:{code:'account_directory_unavailable',message:'private'}});
+ await rejection(syncOnce(directory.app,b,'push',{...directory.clock}),'ACCOUNT_FAILURE');assert.equal(directory.calls(),1);assert.equal(directory.time(),0); // A running operation never excuses a directory error.
 });
 test('owned filesystem checks reject traversal and symlinks; prepare creates no clients',async()=>{
  const root=await mkdtemp('/private/tmp/account110-device-actions-fixture-');
@@ -163,7 +216,7 @@ test('exact package identity, clean source and executable bytes are required bef
  }finally{await rm(root,{recursive:true,force:true});}
 });
 test('run verifies deployment evidence before any client and always passes an owned fresh data-dir',async()=>{
- const root=await mkdtemp('/private/tmp/account110-device-actions-gate-fixture-'),output=root+'-run',crashOutput=root+'-crash';
+ const root=await mkdtemp('/private/tmp/account110-device-actions-gate-fixture-'),output=root+'-run',crashOutput=root+'-crash',accountOutput=root+'-account';
  try{
   const appPath=resolve(root,'candidate.app'),binary=resolve(appPath,'Contents/MacOS/notes-clone'),receipt=resolve(root,'package.json'),deployment=resolve(root,'deployment.json');
   await mkdir(resolve(appPath,'Contents/MacOS'),{recursive:true});await writeFile(binary,'synthetic executable, never started');const sum=sha(await readFile(binary));
@@ -187,7 +240,14 @@ test('run verifies deployment evidence before any client and always passes an ow
   const crashArgs=[...args];crashArgs[2]=crashOutput;const crashed=await main(crashArgs,{App:CrashedApp,print:()=>{}});
   assert.equal(crashed.failure.code,'EXIT_BEFORE_RESPONSE');assert.equal(crashed.cleanupFailure.code,'CLEANUP_FAILED');assert(crashed.nativeCleanup.allClosed);assert.equal(crashed.lifecycle[0].exitSignal,'SIGABRT');assert.equal(crashed.lifecycle[0].driverFailureCode,'EXIT_BEFORE_RESPONSE');assert.equal(crashed.lifecycle[0].cleanupErrorCode,'NON_NATURAL_EXIT');
   const persisted=JSON.parse(await readFile(resolve(crashOutput,'result.json')));assert.deepEqual(persisted.failure,crashed.failure);assert(!JSON.stringify(persisted).includes('private raw'));assert(!JSON.stringify(persisted).includes('private cleanup'));
- }finally{await rm(root,{recursive:true,force:true});await rm(output,{recursive:true,force:true});await rm(crashOutput,{recursive:true,force:true});}
+  const AccountFailedApp=class extends App{
+   constructor(executable,directory,options){super(executable,resolve(output,'desktop-a'),options);this.directory=directory;}
+   async ready(){parseStatus(status({error:{code:'account_sync_failed',syncStage:'pair',syncReason:'timeout',message:'private raw callback URL'},deviceOperation:op('failed')}));}
+  };
+  const accountArgs=[...args];accountArgs[2]=accountOutput;const failed=await main(accountArgs,{App:AccountFailedApp,print:()=>{}});
+  assert.equal(failed.status,'fail');assert.deepEqual(failed.failure,{phase:'startup',code:'ACCOUNT_FAILURE',accountError:{code:'account_sync_failed',syncStage:'pair',syncReason:'timeout'}});assert(failed.nativeCleanup.allClosed);
+  const saved=JSON.parse(await readFile(resolve(accountOutput,'result.json')));assert.deepEqual(saved.failure,failed.failure);assert(!JSON.stringify(saved).includes('private'));assert(!JSON.stringify(saved).includes('raw callback'));
+ }finally{await rm(root,{recursive:true,force:true});await rm(output,{recursive:true,force:true});await rm(crashOutput,{recursive:true,force:true});await rm(accountOutput,{recursive:true,force:true});}
 });
 test('deployment receipt validates successful state and exact source/deployment/hash, not arbitrary hashed text',()=>{
  const validate=value=>{const bytes=Buffer.from(typeof value==='string'?value:JSON.stringify(value));return validateDeployment(bytes,{source,id:deploymentId,sha256:sha(bytes)});};

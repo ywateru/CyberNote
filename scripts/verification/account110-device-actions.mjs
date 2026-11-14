@@ -27,6 +27,42 @@ const stable=v=>Array.isArray(v)?v.map(stable):object(v)?Object.fromEntries(Obje
 const equal=(a,b)=>JSON.stringify(stable(a))===JSON.stringify(stable(b));
 const directions=['push','pull','both'];
 const states=['signedOut','authorizing','connecting','ready','paused','error'];
+const accountErrorCodes=['account_configuration','account_authentication','account_auth_callback_invalid','account_auth_identity_invalid','account_auth_code_rejected','account_auth_token_response_invalid','account_auth_refresh_missing','account_owner_workspace_mismatch','account_network','account_enrollment_invalid','account_storage','account_cancelled','account_busy','account_platform_unsupported','account_cleanup_required','account_sync_failed','account_sync_protocol','account_sync_adoption_blocked','account_window_invalid','account_device_offline','account_device_incompatible','account_sync_not_enabled','account_directory_unavailable','account_directory_unsupported'];
+const accountStages=['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration','coordinatorProfile','coordinatorEnrollment','coordinatorJwks','authorizationProvider','identitySession','identityRefresh','identityRevocation','coordinatorSession'];
+const requestStages=['coordinatorProfile','coordinatorEnrollment','coordinatorJwks'];
+const requestReasons=['timeout','connect','request','responseBody','httpStatus','invalidResponse'];
+const syncStages=['pair','recoverPairing','transfer','retirement'];
+const syncReasons=['io','invalid_input','corrupt_identity','authentication','expired','revoked','workspace_mismatch','protocol','limit','timeout','stopped','backend','plan_stale','busy','transport'];
+// Whitelist projection only. Never copy message, profile, upstream text or URLs.
+export function safeAccountError(value){
+ const e=record(value,['code','message','stage','reason','providerReason','tokenOperation','tokenField','requestReason','httpStatus','adoptionStage','adoptionReason','syncStage','syncReason']);
+ need(accountErrorCodes.includes(e.code),'INVALID_DTO');const safe={code:e.code};
+ if('stage'in e){need(accountStages.includes(e.stage),'INVALID_DTO');safe.stage=e.stage;}
+ if('requestReason'in e||'httpStatus'in e){
+  need(['account_network','account_authentication'].includes(e.code)&&requestStages.includes(e.stage)&&requestReasons.includes(e.requestReason),'INVALID_DTO');
+  need(!['reason','providerReason','tokenOperation','tokenField','adoptionStage','adoptionReason','syncStage','syncReason'].some(k=>k in e),'INVALID_DTO');
+  if(e.requestReason==='httpStatus'){
+   need(Number.isInteger(e.httpStatus)&&e.httpStatus>=100&&e.httpStatus<=599&&!(e.httpStatus>=200&&e.httpStatus<300),'INVALID_DTO');
+   need((e.code==='account_authentication')===(e.httpStatus===401||e.httpStatus===403),'INVALID_DTO');safe.httpStatus=e.httpStatus;
+  }else need(!('httpStatus'in e)&&e.code==='account_network','INVALID_DTO');
+  safe.requestReason=e.requestReason;
+ }
+ if('syncStage'in e||'syncReason'in e){
+  need(e.code==='account_sync_failed'&&syncStages.includes(e.syncStage)&&syncReasons.includes(e.syncReason),'INVALID_DTO');
+  need(!['stage','requestReason','httpStatus','reason','providerReason','tokenOperation','tokenField','adoptionStage','adoptionReason'].some(k=>k in e),'INVALID_DTO');
+  safe.syncStage=e.syncStage;safe.syncReason=e.syncReason;
+ }
+ return safe;
+}
+export function safeFailureReceipt(error){
+ const failure={code:safeFailure(error)};
+ // Revalidate even the attached projection; callers cannot smuggle raw fields
+ // through an Error object into the persisted failure receipt.
+ if(failure.code==='ACCOUNT_FAILURE'&&error?.accountError!==undefined){
+  try{failure.accountError=safeAccountError(error.accountError);}catch{/* Omit invalid diagnostics; retain failure. */}
+ }
+ return failure;
+}
 // Only codes already emitted by the fixed native driver/bridge; never raw errors.
 const driverFailureCodes=['APP_CLOSING','APP_EXITED','EXIT_BEFORE_HELLO','EXIT_BEFORE_RESPONSE','STDIN_ERROR','INVALID_HELLO','INVALID_RESPONSE','UNEXPECTED_RESPONSE','INVALID_FRAME','TRUNCATED_FRAME','STDOUT_LINE_TOO_LARGE','INVALID_REQUEST','INPUT_TOO_LARGE','NOT_NATIVE_DEBUG_APP','NATURAL_EXIT_TIMEOUT','TERM_EXIT_TIMEOUT','KILL_EXIT_TIMEOUT','PIPE_CLOSE_TIMEOUT','NON_NATURAL_EXIT','DRIVER_ERROR','INVALID_DIAGNOSTIC','EVAL_FAILED','INPUT_ERROR','NOT_READY','PAGE_STATE_ERROR','PARTIAL_RECORD','WINDOW_UNAVAILABLE','INVALID_ARGUMENT','UNKNOWN_COMMAND','UNAVAILABLE','UNSUPPORTED','APP_ERROR','WRONG_WINDOW','OUTPUT_TOO_LARGE','SENSITIVE_DOM','JS_ERROR'];
 const signals=['SIGHUP','SIGINT','SIGQUIT','SIGILL','SIGTRAP','SIGABRT','SIGBUS','SIGFPE','SIGKILL','SIGSEGV','SIGPIPE','SIGALRM','SIGTERM','SIGUSR1','SIGUSR2','SIGXCPU','SIGXFSZ','SIGSYS'];
@@ -66,7 +102,7 @@ export function parseStatus(value){
  if('authorizationSurface'in s)need(s.state==='authorizing'&&['embedded','browser'].includes(s.authorizationSurface),'INVALID_DTO');
  if(s.profile!==undefined){record(s.profile,['subject','displayName','username']);text(s.profile.subject,1024);need(typeof s.profile.displayName==='string'&&s.profile.displayName.length<=512,'INVALID_DTO');if(s.profile.username!==undefined)text(s.profile.username,1024);}
  if(s.lastSyncAt!==undefined)count(s.lastSyncAt);
- if(s.error!==undefined){need(object(s.error),'INVALID_DTO');throw bad('ACCOUNT_FAILURE');}
+ if(s.error!==undefined)throw Object.assign(bad('ACCOUNT_FAILURE'),{accountError:safeAccountError(s.error)});
  need(s.state!=='error','ACCOUNT_FAILURE');
  if(s.transportGeneration!==undefined)need(count(s.transportGeneration)>0&&s.state==='ready'&&s.enabled,'INVALID_DTO');
  need(Array.isArray(s.devices)&&s.devices.length<=64,'INVALID_DTO');const ids=new Set();
@@ -369,7 +405,7 @@ export async function main(argv, {App=NativeApp,print=console.log}={}){
   const restored=await waitFor(()=>status(apps.b),s=>!!s.profile&&s.state!=='authorizing',{timeoutMs:120000,code:'RESTORE_TIMEOUT'});need(restored.profile.subject===owner&&restored.enabled,'RESTORE_FAILED');restoring.delete('b');
   await waitFor(()=>status(apps.b),s=>s.devices.some(d=>d.current&&d.id===ids.b&&d.name==='Account110 B'),{timeoutMs:90000,code:'DIRECTORY_TIMEOUT'});await directory();await idle('offline restart restores same device and account without hidden transfer');await verifyExpected();await summary();check('normal offline restart preserves registry identity, name, complete content and original attachment bytes');
   report.status='pass';
- }catch(error){report.status='fail';report.failure={phase,code:safeFailure(error),...(error.cleanupFailure?{cleanupFailure:{code:'PROBE_CLEANUP_FAILED'}}:{})};print('FAIL '+phase+' '+report.failure.code);}
+ }catch(error){report.status='fail';report.failure={phase,...safeFailureReceipt(error),...(error.cleanupFailure?{cleanupFailure:{code:'PROBE_CLEANUP_FAILED'}}:{})};print('FAIL '+phase+' '+report.failure.code);}
  finally{
   report.probes=await probes.closeAll();
   if(report.probes.hadFailures){report.status='fail';report.failure??={phase:'probe',code:report.probes.receipts.find(r=>r.failureCode)?.failureCode??'PROBE_FAILED'};}
