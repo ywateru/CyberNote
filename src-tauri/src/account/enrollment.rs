@@ -751,6 +751,57 @@ mod tests {
         runtime.shutdown().unwrap();
     }
     #[test]
+    fn aborted_local_recovery_blocks_adoption_until_release_or_real_session_reopen() {
+        use crate::{session::Session, store::Store};
+        use std::collections::HashSet;
+        for recovery in ["release", "reopen"] {
+            let dir = tempfile::tempdir().unwrap();
+            let mut store = Store::open(dir.path()).unwrap();
+            store.action(serde_json::json!({"type":"createNote"})).unwrap();
+            let identity = store.sync_enable(None).unwrap();
+            store.sync_flush().unwrap();
+            let mut session = Session::new(store);
+            let before = session.workspace().unwrap();
+            let next_workspace = uuid::Uuid::new_v4().to_string();
+            let next_device = uuid::Uuid::new_v4().to_string();
+            let live = HashSet::from(["main".into()]);
+            let operation = session.sync_begin_local_recovery(live.clone()).unwrap();
+            // This is the real pause_account transition, without a coordinator
+            // racing to tick/release it before we can observe the finite state.
+            session.sync_abort();
+            assert!(session.pending.is_none());
+            assert!(session.sync_has_operation());
+            assert_eq!(session.sync_diagnostics()["activePhase"], "probe");
+            let denied = session.sync_adoption_preflight(&next_workspace, &next_device)
+                .unwrap_err();
+            assert_eq!(denied.code, "sync_adoption_blocked");
+            assert_eq!(denied.message, "本机仍有未完成的保存或同步屏障，请先完成后再开启新账户同步");
+            session.sync_adoption_preflight(&identity.workspace_id, &identity.device_id)
+                .unwrap();
+            eprintln!("restart fixture: path={recovery} before_retirement pending=false quiet=true phase=probe different_workspace=blocked same_workspace=allowed");
+            if recovery == "release" {
+                // Exercise the actual coordinator release protocol, not a
+                // fixture-only clearing of quiet/pending/intent structures.
+                let (release, access) = session.sync_tick(&live).unwrap().unwrap();
+                assert_eq!(release["phase"], "release");
+                assert_eq!(release["outcome"], "abort");
+                assert_eq!(release["operationId"], operation["operationId"]);
+                assert!(access.is_none());
+                assert_eq!(session.sync_diagnostics()["latestAbortReason"], "externalAbort");
+            } else {
+                drop(session); // closes the real Store/SQLite connection too
+                session = Session::new(Store::open(dir.path()).unwrap());
+            }
+            assert!(session.pending.is_none());
+            assert!(!session.sync_has_operation());
+            assert!(session.sync_diagnostics()["activePhase"].is_null());
+            session.sync_adoption_preflight(&next_workspace, &next_device).unwrap();
+            assert_eq!(session.store.sync_identity().unwrap().unwrap(), identity);
+            assert_eq!(session.workspace().unwrap()["notes"], before["notes"]);
+            eprintln!("restart fixture: path={recovery} after_retirement pending=false quiet=false phase=none different_workspace=allowed identity_preserved=true notes_preserved=true");
+        }
+    }
+    #[test]
     fn real_store_activation_preserves_documents_and_restart_identity_and_allows_explicit_adoption()
     {
         use crate::{session::Session, store::Store, sync::adapter::Runtime};
@@ -795,6 +846,30 @@ mod tests {
         runtime.shutdown().unwrap();
         drop(service);
         drop(runtime);
+        {
+            let session = shared.0.lock().unwrap();
+            // Shutdown joins the coordinator; it need not consume the last
+            // aborted quiet operation before process exit. Observe it, without
+            // assuming which side of that scheduling race won this time.
+            eprintln!("restart fixture: stopped_session pending={} quiet={} phase={}",
+                session.pending.is_some(), session.sync_has_operation(),
+                session.sync_diagnostics()["activePhase"]);
+        }
+        // Simulate an actual process restart: every Arc owner is gone, so the
+        // old Session and its Store connection close. Reusing it here raced
+        // the new coordinator against an aborted local-recovery quiet barrier.
+        assert_eq!(Arc::strong_count(&shared), 1);
+        drop(shared);
+        let shared = Arc::new((
+            Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
+            Condvar::new(),
+        ));
+        {
+            let session = shared.0.lock().unwrap();
+            assert!(session.pending.is_none());
+            assert!(!session.sync_has_operation());
+            assert!(session.sync_diagnostics()["activePhase"].is_null());
+        }
         let runtime = Runtime::new(
             shared.clone(),
             dir.path().into(),
