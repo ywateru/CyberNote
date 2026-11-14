@@ -53,7 +53,7 @@ export function safeSdkDiagnostic(value){
 // Tracks one owned client's bounded ring across samples, detects retirement or
 // truncation, and preserves earlier safe records if a later read is malformed.
 export class SdkTrace {
- constructor(){this.owner=null;this.last=0;this.records=[];this.dropped=0;this.overflow=false;}
+ constructor(){this.owner=null;this.sdkGeneration=null;this.last=0;this.records=[];this.dropped=0;this.overflow=false;}
  accept(value){
   const s=safeSdkDiagnostic(value);
   need(this.owner===null||this.owner===s.ownerGeneration,'SDK_OWNER_CHANGED');
@@ -62,13 +62,13 @@ export class SdkTrace {
    const prior=this.records.find(p=>p.sequence===r.sequence);
    need(!prior||JSON.stringify(prior)===JSON.stringify(r));
   }
-  this.owner=s.ownerGeneration;this.dropped=Math.max(this.dropped,s.dropped);
+  this.owner=s.ownerGeneration;this.sdkGeneration=s.sdkGeneration;this.dropped=Math.max(this.dropped,s.dropped);
   const fresh=s.records.filter(r=>r.sequence>this.last);
   if(fresh.length&&fresh[0].sequence!==this.last+1)this.overflow=true;
   for(const r of fresh){if(this.records.length<512)this.records.push(r);else this.overflow=true;this.last=r.sequence;}
   return fresh;
  }
- safe(){return {ownerGeneration:this.owner,dropped:this.dropped,overflow:this.overflow,records:this.records};}
+ safe(){return {ownerGeneration:this.owner,sdkGeneration:this.sdkGeneration,dropped:this.dropped,overflow:this.overflow,records:this.records};}
 }
 
 export function mapEvidence(records,baseline=0){
@@ -109,7 +109,7 @@ export function parseDiagnosticArgs(args){
  need(/^\/private\/tmp\/account110-device-actions-[A-Za-z0-9-]+$/.test(o.output??''),'INVALID_ARGUMENTS');
  need(/^[a-f0-9]{40}$/.test(o.source??'')&&isAbsolute(o['package-receipt']??''),'INVALID_ARGUMENTS');return o;
 }
-const diagnosticCodes=['INVALID_SDK_DIAGNOSTIC','SDK_OWNER_CHANGED','SDK_DIAGNOSTIC_DISABLED','SDK_DIAGNOSTIC_INCOMPLETE','SOURCE_CHANGED','FIRST_RESULT_CHANGED','OWNERSHIP_FAILED','ACCOUNT_FAILURE','ACCOUNT_OWNER_CHANGED','ACTION_OWNER','RESTORE_TIMEOUT','DEVICE_OPERATION_TIMEOUT'];
+const diagnosticCodes=['INVALID_SDK_DIAGNOSTIC','SDK_OWNER_CHANGED','SDK_DIAGNOSTIC_DISABLED','SDK_DIAGNOSTIC_UNAVAILABLE','SDK_DIAGNOSTIC_INCOMPLETE','SOURCE_CHANGED','FIRST_RESULT_CHANGED','OWNERSHIP_FAILED','ACCOUNT_FAILURE','ACCOUNT_OWNER_CHANGED','ACTION_OWNER','RESTORE_TIMEOUT','DEVICE_OPERATION_TIMEOUT'];
 const failure=e=>({code:diagnosticCodes.includes(e?.code)?e.code:safeFailure(e)});
 
 export async function main(argv,{App=NativeApp,print=console.log}={}){
@@ -123,7 +123,7 @@ export async function main(argv,{App=NativeApp,print=console.log}={}){
  const report={schema:1,kind:'owned-real-App-sdk-map-diagnostic',status:opts.run?'running':'prepared-not-run',source:opts.source,candidate,collectorSha256:hash(await readFile(fileURLToPath(import.meta.url))),driverSha256:hash(await readFile(new URL('./sync108-native-driver.mjs',import.meta.url))),firstResultSha256:original,pushSubmitted:false,samples:[],diagnostics:{},routeComparison:{available:false,selectedTransportMatchesLiveB:null},boundaries:['Only existing owned live02 A/B, normal restore, at most one real push.','No copied grant/Noise, no fresh signin, no default library access.','Fixed native diagnostic opt-in; no raw stderr, message, URL, account/device IDs or identity witnesses saved.','Diagnostic collection failure remains distinct from actual operation terminal; no error can pass acceptance.']};
  const save=()=>writeFile(opts.output+'/result.json',JSON.stringify(report,null,2)+'\n',{mode:0o600});
  if(!opts.run){await save();return report;}
- const apps={},raw={},labels=new Map(),traces={a:new SdkTrace(),b:new SdkTrace()};let diagnosticFailed=false;
+ const apps={},raw={},labels=new Map(),traces={a:new SdkTrace(),b:new SdkTrace()};let diagnosticFailed=false,owner;
  const sample=async(n,phase)=>{
   const s=await apps[n].evaluate(account,{type:'status'});raw[n]=s;
   const own=s.devices?.find(d=>d.current);if(own)labels.set(own.id,n);
@@ -131,6 +131,7 @@ export async function main(argv,{App=NativeApp,print=console.log}={}){
   if(row.error)report.accountErrorObserved=true;
   const previous=report.samples.findLast(x=>x.device===n);
   if(JSON.stringify(previous)!==JSON.stringify(row)&&report.samples.length<512)report.samples.push(row);
+  if(owner!==undefined)need(s.profile?.subject===owner&&s.state!=='authorizing','ACCOUNT_OWNER_CHANGED');
   return s;
  };
  const diagnostic=async n=>{
@@ -155,6 +156,7 @@ export async function main(argv,{App=NativeApp,print=console.log}={}){
    if(['a','b'].every(n=>raw[n].state==='ready'&&raw[n].enabled&&raw[n].profile&&raw[n].devices.some(d=>!d.current&&d.online&&d.syncAvailable)))break;
    need(Date.now()<until,'RESTORE_TIMEOUT');await delay(300);
   }
+  owner=raw.a.profile.subject;
   // The fixed diagnostic must be available before any new push is submitted.
   await diagnostic('a');await diagnostic('b');need(!diagnosticFailed,'SDK_DIAGNOSTIC_INCOMPLETE');
   const baseline=traces.a.last;
@@ -163,13 +165,13 @@ export async function main(argv,{App=NativeApp,print=console.log}={}){
   await apps.a.evaluate(begin,{type:'syncDevice',deviceId:target,direction:'push'});
   report.pushSubmitted=true;await save();print('PUSH_SUBMITTED_ONCE');
   const {marker,elapsedMs}=await observeOperation({sample,diagnostic,poll:()=>apps.a.evaluate(poll),save});
-    report.pushElapsedMs=elapsedMs;report.commandDone=true;report.commandRejected=marker.failed;
-    if(marker.status)report.commandTerminal={...safeStatus(marker.status,labels),error:marker.status.error===undefined?null:safeAccountError(marker.status.error)};
-    report.mapEvidence=mapEvidence(traces.a.records,baseline);
-    report.mapEvidenceComplete=report.mapEvidence.oneOperation&&!report.mapEvidence.hasStartedWithoutReturn&&!traces.a.overflow&&traces.a.dropped===0;
-    const op=marker.status?.deviceOperation;
-    report.status=report.accountErrorObserved||marker.failed||marker.status?.error||op?.phase!=='succeeded'||op?.deviceId!==target||op?.direction!=='push'||diagnosticFailed||!report.mapEvidenceComplete||!report.mapEvidence.bothMapsReturnedOk?'fail':'push-command-succeeded-not-acceptance';
-    await save();print(JSON.stringify({status:report.status,pushElapsedMs:report.pushElapsedMs,terminal:report.commandTerminal,diagnosticFailure:report.diagnosticFailure}));
+  report.pushElapsedMs=elapsedMs;report.commandDone=true;report.commandRejected=marker.failed;
+  if(marker.status)report.commandTerminal={...safeStatus(marker.status,labels),error:marker.status.error===undefined?null:safeAccountError(marker.status.error)};
+  report.mapEvidence=mapEvidence(traces.a.records,baseline);
+  report.mapEvidenceComplete=report.mapEvidence.oneOperation&&!report.mapEvidence.hasStartedWithoutReturn&&!traces.a.overflow&&traces.a.dropped===0;
+  const op=marker.status?.deviceOperation;
+  report.status=report.accountErrorObserved||marker.failed||marker.status?.error||op?.phase!=='succeeded'||op?.deviceId!==target||op?.direction!=='push'||diagnosticFailed||!report.mapEvidenceComplete||!report.mapEvidence.bothMapsReturnedOk?'fail':'push-command-succeeded-not-acceptance';
+  await save();print(JSON.stringify({status:report.status,pushElapsedMs:report.pushElapsedMs,terminal:report.commandTerminal,diagnosticFailure:report.diagnosticFailure}));
  }catch(e){report.status='fail';report.failure=failure(e);}
  finally{
   // Best effort final finite snapshot never overwrites an earlier failure.
