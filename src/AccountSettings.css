@@ -24,7 +24,15 @@
 .account-help { color: var(--secondary); font-size: .9em; margin: 10px 0; }
 .account-toggle { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .account-toggle label { flex: 1; font-weight: 600; cursor: pointer; }
-.account-toggle input { flex-shrink: 0; width: 38px; height: 28px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.account-switch { position: relative; display: inline-grid; place-items: center; flex-shrink: 0; width: 48px; height: 44px; }
+.account-switch input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.account-switch-track { width: 38px; height: 24px; border-radius: 999px; background: var(--secondary); pointer-events: none; transition: background-color .16s ease; }
+.account-switch-track::before { content: ""; display: block; width: 20px; height: 20px; margin: 2px; border-radius: 50%; background: var(--paper); box-shadow: 0 1px 3px #0003; transition: transform .16s ease; }
+.account-switch input:checked + .account-switch-track { background: var(--accent); }
+.account-switch input:checked + .account-switch-track::before { transform: translateX(14px); }
+.account-switch input:focus-visible + .account-switch-track { outline: 2px solid var(--accent); outline-offset: 3px; }
+.account-switch input:disabled { cursor: default; }
+.account-switch input:disabled + .account-switch-track { opacity: .5; }
 .account-state { margin: 16px 0 10px; font-weight: 500; }
 .account-metrics { margin: 0; }
 .account-metrics > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; margin: 8px 0; }
@@ -45,12 +53,15 @@
 .account-error-details dl > div { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0; }
 .account-error-details dt { font-weight: 500; }
 .account-error-details dd { margin: 0; overflow-wrap: anywhere; }
-.account-confirmation { margin: 18px 0; padding: 16px; background: var(--grouped); border: 1px solid var(--accent); border-radius: 9px; }
+.account-confirmation { box-sizing: border-box; width: min(420px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow-y: auto; margin: auto; padding: 22px; background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: var(--interface-radius-card, 14px); box-shadow: 0 20px 70px #0003; }
+.account-confirmation::backdrop { background: #0005; }
 .account-confirmation p { margin: 0; }
+.account-confirmation .account-actions { justify-content: flex-end; }
+.account-confirmation .account-confirmation-error { margin-top: 14px; color: var(--danger, #c53527); }
 .account-notice { color: var(--secondary); font-size: .9em; }
 .account-notice:empty { display: none; }
 .preferences-mobile .account-group { padding: 16px; margin-bottom: 18px; border: 0; border-radius: 10px; background: var(--paper); }
 .preferences-mobile .account-settings button { min-height: 44px; min-width: 80px; }
-.preferences-mobile .account-toggle input { width: 44px; height: 44px; }
 .preferences-mobile .account-intro { margin-bottom: 18px; }
+@media (prefers-reduced-motion: reduce) { .account-switch-track, .account-switch-track::before { transition: none; } }
 @media (max-width: 350px) { .account-profile { gap: 10px; } .account-avatar { width: 36px; height: 36px; } .preferences-mobile .account-actions > button { flex: 1; } }

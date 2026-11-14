@@ -35,8 +35,13 @@ class HostElement extends HostNode {
   setAttributeNS(_ns,key,value) {this.setAttribute(key,value);}
   removeAttributeNS(_ns,key) {this.removeAttribute(key);}
   focus() {document.activeElement=this;}
-  scrollIntoView() {}
-  querySelector(selector) {return descendants(this).find(e=>e.localName===selector)??null;}
+  scrollIntoView() {throw Error('account confirmation must not scroll inline');}
+  matches(selector) {return selector===':disabled'&&!!this.disabled;}
+  querySelector(selector) {return descendants(this).find(e=>selector==='button:not(:disabled)'?e.localName==='button'&&!e.disabled:e.localName===selector)??null;}
+  // Observe requests to the native dialog API; this host does not simulate
+  // browser top-layer rendering, hit testing or automatic background inertness.
+  showModal() {assert.equal(this.localName,'dialog');assert(!this.open);this.open=true;this.modalShows=(this.modalShows??0)+1;}
+  close() {assert.equal(this.localName,'dialog');this.open=false;}
 }
 document=new HostNode(9,'#document');document.ownerDocument=document;
 document.createElement=name=>new HostElement(name);
@@ -96,7 +101,7 @@ function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
     buttons:()=>all().filter(e=>e.localName==='button'),
     button:label=>all().find(e=>e.localName==='button'&&e.textContent===label),
     actionLabels:()=>{const section=all().find(e=>props(e)['aria-label']==='CyberNote 账户');return descendants(section).filter(e=>e.localName==='button').map(e=>e.textContent);},
-    async click(label){const button=h.button(label);assert(button,`Missing ${label}`);assert(!props(button).disabled);await act(async()=>{props(button).onClick();});},
+    async click(label){const button=h.button(label);assert(button,`Missing ${label}`);assert(!props(button).disabled);const modal=all().find(e=>e.localName==='dialog'&&e.open);assert(!modal||modal.contains(button),'host actions must respect native modal isolation');await act(async()=>{props(button).onClick({currentTarget:button});});},
     async choose(value){const radio=h.radio(value);assert(radio);const fieldset=all().find(e=>e.localName==='fieldset');assert(!props(fieldset).disabled);await act(async()=>{props(radio).onChange();});},
     async poll(){await act(async()=>{await handle.run({type:'status'});});},
     async tick(){await act(async()=>{for(const fn of intervals.values())fn();});},
@@ -340,6 +345,112 @@ test('A exit then B login stays paused; enabling requires explicit consent for r
  assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,1);
 });
 
+test('switch opens a labelled native modal without enabling; local Tab/Escape handling protects the parent trap',async t=>{
+ const h=setup(t,{initial:{...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}}});
+ await h.mount();const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
+ assert.equal(props(toggle).type,'checkbox');assert.equal(props(toggle).role,'switch');
+ assert.equal(props(toggle).checked,false);assert.equal(props(toggle).disabled,false);
+ assert(h.all().some(e=>e.localName==='label'&&props(e).htmlFor==='account-enabled'&&e.textContent==='同步此设备'));
+ assert.equal(props(toggle).onKeyDown,undefined,'native checkbox retains its Space behavior');
+ toggle.focus();await act(async()=>props(toggle).onChange({target:{checked:true}}));
+ const modal=h.all().find(e=>e.localName==='dialog');assert(modal);assert.equal(modal.open,true);assert.equal(modal.modalShows,1);
+ assert.equal(props(modal).role,'alertdialog');assert.equal(props(modal)['aria-modal'],'true');
+ assert(descendants(modal).some(e=>props(e).id===props(modal)['aria-labelledby']&&e.textContent==='开启账户同步？'));
+ assert(descendants(modal).some(e=>props(e).id===props(modal)['aria-describedby']&&e.textContent.includes('包括先前同步后保留的内容')));
+ assert.equal(document.activeElement,h.button('取消'));assert.equal(props(toggle).checked,false);
+ const key=async(key,shiftKey=false)=>{
+  let prevented=false,stopped=false,parentCalls=0;
+  await act(async()=>{
+   props(modal).onKeyDown({key,shiftKey,preventDefault(){prevented=true;},stopPropagation(){stopped=true;}});
+   // Preferences handles these same keys on document in the bubble phase.
+   if(!stopped)parentCalls++;
+  });
+  assert(prevented);assert(stopped);assert.equal(parentCalls,0);
+ };
+ await key('Tab',true);assert.equal(document.activeElement,h.button('开启并合并'));
+ await key('Tab');assert.equal(document.activeElement,h.button('取消'));
+ await key('Tab');assert.equal(document.activeElement,h.button('开启并合并'));
+ await key('Tab',true);assert.equal(document.activeElement,h.button('取消'));
+ await key('Escape');assert(!h.all().some(e=>e.localName==='dialog'));assert.equal(modal.open,false);
+ assert.equal(document.activeElement,toggle);assert(h.calls.every(c=>c.type==='status'));
+});
+
+test('enable and exit share modal cancellation via button, native cancel and handle.dismiss with focus restored',async t=>{
+ for(const kind of ['enable','signOut'])for(const method of ['button','native','handle']) {
+  const h=setup(t,{initial:{...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}}});await h.mount();
+  const origin=kind==='enable'?h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled'):h.button('退出账户');
+  origin.focus();
+  if(kind==='enable')await act(async()=>props(origin).onChange({target:{checked:true}}));else await h.click('退出账户');
+  const modal=h.all().find(e=>e.localName==='dialog');assert.equal(modal.open,true);assert.equal(document.activeElement,h.button('取消'));
+  assert(descendants(modal).some(e=>e.localName==='h4'&&e.textContent===(kind==='enable'?'开启账户同步？':'退出账户？')));
+  assert(h.calls.every(c=>c.type==='status'));
+  if(method==='button')await h.click('取消');
+  else if(method==='handle')await act(async()=>assert.equal(h.handle().dismiss(),true));
+  else {
+   let prevented=false,stopped=false;
+   await act(async()=>props(modal).onCancel({preventDefault(){prevented=true;},stopPropagation(){stopped=true;}}));
+   assert(prevented);assert(stopped);
+  }
+  assert.equal(modal.open,false);assert.equal(document.activeElement,origin);
+  assert.equal(h.handle().dismiss(),false);assert(h.calls.every(c=>c.type==='status'));
+  assert.equal(h.handle().inspect().status.enabled,false);assert.equal(h.handle().inspect().status.profile.subject,'fixture-B');
+ }
+});
+
+test('pointer openers are restored even when the click never focused them',async t=>{
+ for(const kind of ['enable','signOut'])for(const prior of ['body','other-control'])for(const cancellation of ['button','Escape']) {
+  const h=setup(t,{initial:{...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}}});await h.mount();
+  const opener=kind==='enable'?h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled'):h.button('退出账户');
+  const other=kind==='enable'?h.button('退出账户'):h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
+  (prior==='body'?document.body:other).focus();assert.notEqual(document.activeElement,opener);
+  if(kind==='signOut')await h.click('退出账户');
+  else await act(async()=>props(opener).onChange({currentTarget:opener,target:{checked:true}}));
+  assert.equal(document.activeElement,h.button('取消'));
+  if(cancellation==='button')await h.click('取消');
+  else await act(async()=>props(h.all().find(e=>e.localName==='dialog')).onKeyDown({key:'Escape',preventDefault(){},stopPropagation(){}}));
+  assert.equal(document.activeElement,opener);assert(h.calls.every(c=>c.type==='status'));
+ }
+});
+
+test('switch reflects only authoritative enable response; a confirmed in-flight mutation cannot be dismissed as cancelled',async t=>{
+ const enabling=deferred(),initial={...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}};
+ const h=setup(t,{initial,reply:command=>command.type==='setEnabled'?enabling.promise:undefined});await h.mount();
+ const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');toggle.focus();
+ await act(async()=>props(toggle).onChange({target:{checked:true}}));await h.click('开启并合并');
+ const modal=h.all().find(e=>e.localName==='dialog');
+ assert.equal(props(toggle).checked,false);assert.equal(props(toggle).disabled,true);
+ assert(props(h.button('取消')).disabled);assert(props(h.button('开启并合并')).disabled);
+ await act(async()=>assert.equal(h.handle().dismiss(),true));assert.equal(modal.open,true);
+ let prevented=false;await act(async()=>props(modal).onCancel({preventDefault(){prevented=true;},stopPropagation(){}}));
+ assert(prevented);assert.equal(modal.open,true);assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,1);
+ await act(async()=>enabling.resolve({...initial,state:'ready',enabled:true}));
+ assert.equal(modal.open,false);assert.equal(props(toggle).checked,true);assert.equal(props(toggle).disabled,false);
+ assert.equal(document.activeElement,toggle);
+});
+
+test('switch off pauses directly and stays checked until the authoritative paused response',async t=>{
+ const pausing=deferred(),initial={...signedOutAccount(),state:'ready',enabled:true,profile:{subject:'fixture-B',displayName:'B'}};
+ const h=setup(t,{initial,reply:command=>command.type==='setEnabled'?pausing.promise:undefined});await h.mount();
+ const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
+ await act(async()=>props(toggle).onChange({target:{checked:false}}));
+ assert.deepEqual(h.calls.at(-1),{type:'setEnabled',enabled:false});assert(!h.all().some(e=>e.localName==='dialog'));
+ assert.equal(props(toggle).checked,true);assert.equal(props(toggle).disabled,true);
+ await act(async()=>pausing.resolve({...initial,state:'paused',enabled:false}));
+ assert.equal(props(toggle).checked,false);assert.equal(props(toggle).disabled,false);
+});
+
+test('failed confirmed enable remains off with a visible fixed error in the modal; cancelling never replays it',async t=>{
+ const h=setup(t,{initial:{...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}},reply:command=>{
+  if(command.type==='setEnabled')throw {code:'account_busy',message:'private-ipc-sentinel'};
+ }});await h.mount();const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
+ toggle.focus();await act(async()=>props(toggle).onChange({target:{checked:true}}));await h.click('开启并合并');
+ const modal=h.all().find(e=>e.localName==='dialog');assert.equal(modal.open,true);assert.equal(props(toggle).checked,false);
+ assert(descendants(modal).some(e=>props(e).role==='alert'&&e.textContent.includes('已有账户操作正在进行')));
+ assert(!modal.textContent.includes('private-ipc-sentinel'));
+ await h.click('取消');assert.equal(modal.open,false);assert.equal(document.activeElement,toggle);
+ await h.tick();assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,1);
+});
+
 test('blocked adoption retains paused login and exposes only actual conflicts without starting any account operation',async t=>{
  for(const conflictCount of [0,2]) {
   let opened=0;
@@ -370,6 +481,7 @@ test('immediate adoption rejection keeps full enable confirmation and retries st
  await h.click('开启并合并');assert(h.text().includes('开启同步前需要处理旧同步内容'));
  assert(h.text().includes('当前账户已登录且同步暂停'));assert(!h.text().includes('private-response-sentinel'));
  assert(h.text().includes(adoptionRecoveryGuidance),'IPC rejection gives the same safe recovery guidance');
+ await h.click('取消');
  assert.equal(h.buttons().filter(b=>b.textContent.startsWith('查看冲突')).length,1);
  await h.click('查看冲突（1）');assert.equal(opened,1);
  await h.click('读取账户状态');assert.equal(h.calls.at(-1).type,'status');

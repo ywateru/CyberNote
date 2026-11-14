@@ -31,7 +31,8 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const clearError = () => { latestError.current = null; setCommandError(null); };
   const [loginSurface, setLoginSurface] = useState<AccountAuthorizationSurface>("embedded");
   const [confirmation, setConfirmation] = useState<"signOut" | "enable" | null>(null);
-  const panel = useRef<HTMLDivElement>(null), confirmPanel = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLDivElement>(null), confirmPanel = useRef<HTMLDialogElement>(null);
+  const cancelButton = useRef<HTMLButtonElement>(null), confirmButton = useRef<HTMLButtonElement>(null);
   const origin = useRef<HTMLElement | null>(null), alive = useRef(false), visible = useRef(active);
   const focused = useRef<HTMLElement | null>(null);
   const authorizationPending = useRef(false);
@@ -40,15 +41,16 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   visible.current = active;
   const dismiss = () => {
     if (!confirmation) return false;
+    // Once confirmed, the native mutation cannot be cancelled by closing UI.
+    if (working.current) return true;
     setConfirmation(null);
-    queueMicrotask(() => { if (origin.current?.isConnected) origin.current.focus({ preventScroll: true }); });
     return true;
   };
-  const ask = (kind: "signOut" | "enable") => {
-    origin.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  const ask = (kind: "signOut" | "enable", initiator?: HTMLElement) => {
+    origin.current = initiator || (document.activeElement instanceof HTMLElement ? document.activeElement : null);
     setConfirmation(kind);
   };
-  const run = async (command: AccountCommand, confirmed = false, background = false) => {
+  const run = async (command: AccountCommand, confirmed = false, background = false, initiator?: HTMLElement) => {
     if (!alive.current || !visible.current) throw Error("请先打开账户与同步");
     const query = command.type === "status";
     const authorization = command.type === "signIn" || command.type === "signUp";
@@ -66,7 +68,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     if (transfer && (status?.state !== "authorizing" || status.authorizationSurface !== "embedded"))
       throw Error("当前没有可在浏览器中继续的应用内登录，请先读取账户状态。");
     if (!confirmed && (command.type === "signOut" || (command.type === "setEnabled" && command.enabled))) {
-      ask(command.type === "signOut" ? "signOut" : "enable"); return;
+      ask(command.type === "signOut" ? "signOut" : "enable", initiator); return;
     }
     if (authorization) authorizationPending.current = true;
     if (!query) { generation.current++; working.current = command.type; setWorkingType(command.type); setBusy(true); setNotice(""); }
@@ -116,7 +118,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         queueMicrotask(() => request({ type: "status" }, true));
     }
   };
-  const request = (command: AccountCommand, background = false) => void run(command, false, background).catch(() => {});
+  const request = (command: AccountCommand, background = false, initiator?: HTMLElement) => void run(command, false, background, initiator).catch(() => {});
   const retryRequest = () => {
     const failed = retry.current;
     const rejectedBusy = latestError.current?.safeError?.code === "account_busy" || latestError.current?.safeError?.providerReason === "busy";
@@ -152,8 +154,21 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   }, [active]);
   useLayoutEffect(() => {
     if (!confirmation || !active) return;
-    confirmPanel.current?.scrollIntoView({ block: "nearest" });
-    confirmPanel.current?.querySelector<HTMLButtonElement>("button")?.focus({ preventScroll: true });
+    const dialog = confirmPanel.current, previous = origin.current;
+    if (!dialog) return;
+    // Native top-layer modality isolates every background surface, including
+    // Preferences navigation, without a portal losing the app's theme tokens.
+    dialog.showModal();
+    cancelButton.current?.focus({ preventScroll: true });
+    return () => {
+      dialog.close();
+      queueMicrotask(() => {
+        if (!alive.current || !visible.current) return;
+        const target = previous?.isConnected && !previous.matches(":disabled") ? previous :
+          panel.current?.querySelector<HTMLButtonElement>("button:not(:disabled)");
+        target?.focus({ preventScroll: true });
+      });
+    };
   }, [confirmation, active]);
   useLayoutEffect(() => {
     onHandle({ dismiss, run, inspect: () => ({ status, busy, error, confirmation: !!confirmation }) });
@@ -214,7 +229,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
               <button type="button" className="account-primary" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signIn", surface: loginSurface })}>登录</button>
               <button type="button" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signUp", surface: loginSurface })}>创建账户</button>
             </>}
-            {(signedIn || cleanupRequired || status?.state === "error" || identityMismatch || nativeBusy) && <button type="button" disabled={busy} onClick={() => request({ type: "signOut" })}>退出账户</button>}
+            {(signedIn || cleanupRequired || status?.state === "error" || identityMismatch || nativeBusy) && <button type="button" disabled={busy} onClick={event => request({ type: "signOut" }, false, event.currentTarget)}>退出账户</button>}
           </>}
         </div>
         {!signedIn && !authorizing && <p className="account-help">登录不会自动开启同步。确认开启后，本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）会与当前账户合并。</p>}
@@ -225,7 +240,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       </section>}
       {signedIn && status && <>
         <section className="account-group" aria-label="账户同步">
-          <div className="account-toggle"><label htmlFor="account-enabled">同步此设备</label><input id="account-enabled" type="checkbox" role="switch" checked={status.enabled} disabled={busy || nativeBusy || identityMismatch || needsLogin || cleanupRequired} onChange={event => request({ type: "setEnabled", enabled: event.target.checked })} /></div>
+          <div className="account-toggle"><label htmlFor="account-enabled">同步此设备</label><span className="account-switch"><input id="account-enabled" type="checkbox" role="switch" checked={status.enabled} disabled={busy || nativeBusy || identityMismatch || needsLogin || cleanupRequired} onChange={event => request({ type: "setEnabled", enabled: event.target.checked }, false, event.currentTarget)} /><span className="account-switch-track" aria-hidden="true" /></span></div>
           <p className="account-help">{status.enabled ? "本库当前已有的备忘录及附件（包括先前同步后保留的内容）会与当前账户同步，离线时仍可编辑。" : "自动传输已暂停。你仍保持登录，本地更改会保存在此设备；确认开启后才会与当前账户合并。"}</p>
           <p className="account-state">{states[status.state]}</p>
           <dl className="account-metrics"><div><dt>待处理</dt><dd>{status.pendingCount} 项</dd></div><div><dt>最近成功同步</dt><dd>{status.lastSyncAt === undefined ? "尚无成功同步记录" : formatFileTime(status.lastSyncAt)}</dd></div></dl>
@@ -242,11 +257,27 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         </section>
       </>}
     </>}
-    {confirmation && <div ref={confirmPanel} className="account-confirmation" role="group" aria-label="确认账户操作" tabIndex={-1}>
-      <h4>{confirmation === "signOut" ? "退出账户？" : "开启账户同步？"}</h4>
-      <p>{confirmation === "signOut" ? "本库全部备忘录及附件会保留。此设备将停止账户同步，并移除本机登录授权。退出后可登录其他账户，登录不会自动开启同步。" : "本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）将与当前账户其他设备的备忘录合并。请确认允许将这些内容同步至当前账户。"}</p>
-      <div className="account-actions"><button type="button" onClick={dismiss}>取消</button><button type="button" disabled={busy} onClick={() => void run(confirmation === "signOut" ? { type: "signOut" } : { type: "setEnabled", enabled: true }, true).catch(() => {})}>{confirmation === "signOut" ? "确认退出" : "开启并合并"}</button></div>
-    </div>}
+    {confirmation && active && <dialog ref={confirmPanel} className="account-confirmation" role="alertdialog" aria-modal="true" aria-labelledby="account-confirmation-title" aria-describedby="account-confirmation-description" aria-busy={busy} tabIndex={-1}
+      onCancel={event => { event.preventDefault(); event.stopPropagation(); dismiss(); }}
+      onClick={event => event.stopPropagation()}
+      onKeyDown={event => {
+        // Preferences has a document bubble trap; keep modal keys local.
+        event.stopPropagation();
+        if (event.key === "Escape") { event.preventDefault(); dismiss(); }
+        if (event.key === "Tab") {
+          event.preventDefault();
+          const buttons = [cancelButton.current, confirmButton.current].filter((button): button is HTMLButtonElement => !!button && !button.disabled);
+          if (!buttons.length) { confirmPanel.current?.focus({ preventScroll: true }); return; }
+          const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+          const next = index < 0 ? (event.shiftKey ? buttons.length - 1 : 0) : (index + (event.shiftKey ? -1 : 1) + buttons.length) % buttons.length;
+          (buttons[next] || confirmPanel.current)?.focus({ preventScroll: true });
+        }
+      }}>
+      <h4 id="account-confirmation-title">{confirmation === "signOut" ? "退出账户？" : "开启账户同步？"}</h4>
+      <p id="account-confirmation-description">{confirmation === "signOut" ? "本库全部备忘录及附件会保留。此设备将停止账户同步，并移除本机登录授权。退出后可登录其他账户，登录不会自动开启同步。" : "本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）将与当前账户其他设备的备忘录合并。请确认允许将这些内容同步至当前账户。"}</p>
+      {commandError?.command === (confirmation === "signOut" ? "signOut" : "setEnabled") && <p className="account-confirmation-error" role="alert">{error}</p>}
+      <div className="account-actions"><button ref={cancelButton} type="button" disabled={busy} onClick={dismiss}>取消</button><button ref={confirmButton} className="account-primary" type="button" disabled={busy} onClick={() => void run(confirmation === "signOut" ? { type: "signOut" } : { type: "setEnabled", enabled: true }, true).catch(() => {})}>{confirmation === "signOut" ? "确认退出" : "开启并合并"}</button></div>
+    </dialog>}
     <p className="account-notice" role="status">{notice}</p>
     <p className="account-help">本地使用不需要账户。</p>
   </div>;
