@@ -329,7 +329,10 @@ pub(super) async fn run(
         .await
         .map_err(|e| Error::sdk_at(e, super::types::NetworkStage::CoordinatorRegistration))?;
         check_session(&session, &binding)?;
-        let contents = content_owner(
+        // Heap-pin before composing the children. The paused content owner's
+        // concrete future still contains the full enabled transfer state machine;
+        // embedding it in join's MaybeDone inflated the debug worker poll stack.
+        let contents = Box::pin(content_owner(
             owner.clone(),
             generation,
             binding.clone(),
@@ -338,8 +341,8 @@ pub(super) async fn run(
             control.clone(),
             stop.clone(),
             requests,
-        );
-        let directory = directory_owner(
+        ));
+        let directory = Box::pin(directory_owner(
             owner.clone(),
             generation,
             &binding,
@@ -348,26 +351,8 @@ pub(super) async fn run(
             &control,
             &catalog,
             &stop,
-        );
-        // Join both children even on failure: dropping the content future could
-        // strand a listener/adoption verifier instead of sealing and joining it.
-        let (content_result, directory_result) = tokio::join!(
-            async {
-                let result = contents.await;
-                if result.is_err() {
-                    stop.cancel();
-                }
-                result
-            },
-            async {
-                let result = directory.await;
-                if result.is_err() {
-                    stop.cancel();
-                }
-                result
-            },
-        );
-        content_result.and(directory_result)?;
+        ));
+        join_owners(contents, directory, &stop).await?;
         Ok(())
     }
     .await;
@@ -375,6 +360,31 @@ pub(super) async fn run(
     catalog.clear();
     let _ = client.close().await;
     result
+}
+async fn join_owners(
+    contents: std::pin::Pin<Box<impl std::future::Future<Output = Result<()>>>>,
+    directory: std::pin::Pin<Box<impl std::future::Future<Output = Result<()>>>>,
+    stop: &CancellationToken,
+) -> Result<()> {
+    // Join both children even on failure: dropping the content future could
+    // strand a listener/adoption verifier instead of sealing and joining it.
+    let (content_result, directory_result) = tokio::join!(
+        async {
+            let result = contents.await;
+            if result.is_err() {
+                stop.cancel();
+            }
+            result
+        },
+        async {
+            let result = directory.await;
+            if result.is_err() {
+                stop.cancel();
+            }
+            result
+        },
+    );
+    content_result.and(directory_result)
 }
 fn check_session(session: &cybergrid_sdk::Session, binding: &private::Binding) -> Result<()> {
     if session.user.id != binding.subject
@@ -506,6 +516,218 @@ async fn directory_owner(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[tokio::test]
+    async fn real_owner_futures_have_bounded_composition_and_poll_on_small_stack() {
+        use std::{
+            future::Future,
+            task::{Context, Poll, Waker},
+        };
+        fn future_size<F: Future>(_: impl FnOnce() -> F) -> usize {
+            // Type-only measurement: never starts registration or touches HTTP.
+            std::mem::size_of::<F>()
+        }
+        let root = tempfile::tempdir().unwrap();
+        private::directory(root.path()).unwrap();
+        let auth = Arc::new(
+            account_auth::AuthClient::new(
+                super::super::config::pinned(),
+                root.path().join("grant.json"),
+            )
+            .await
+            .unwrap(),
+        );
+        let client = cybergrid_sdk::Client::new(cybergrid_sdk::Config {
+            base_url: super::super::config::origin().unwrap(),
+            app_id: super::super::config::CLIENT_ID.into(),
+            ..Default::default()
+        })
+        .unwrap();
+        let binding = private::Binding {
+            issuer: super::super::config::ISSUER.into(),
+            subject: "fixture-owner".into(),
+            product_id: "cybernote".into(),
+            workspace_id: uuid::Uuid::new_v4().to_string(),
+            device_id: uuid::Uuid::new_v4().to_string(),
+            noise_public_key: "fixture-key".into(),
+            enabled: false,
+        };
+        let control = Arc::new(Control::default());
+        let catalog = Arc::new(directory::Catalog::default());
+        let stop = CancellationToken::new();
+        let (_sender, receiver) = mpsc::channel(1);
+        let contents = Box::pin(content_owner(
+            Weak::new(),
+            0,
+            binding.clone(),
+            auth.clone(),
+            client.clone(),
+            control.clone(),
+            stop.clone(),
+            receiver,
+        ));
+        let directory = Box::pin(directory_owner(
+            Weak::new(),
+            0,
+            &binding,
+            &auth,
+            &client,
+            &control,
+            &catalog,
+            &stop,
+        ));
+        let content_bytes = std::mem::size_of_val(contents.as_ref().get_ref());
+        let directory_bytes = std::mem::size_of_val(directory.as_ref().get_ref());
+        let mut joined = Box::pin(join_owners(contents, directory, &stop));
+        let joined_bytes = std::mem::size_of_val(joined.as_ref().get_ref());
+        let (_, inline_receiver) = mpsc::channel(1);
+        let inline_bytes = future_size(|| async {
+            // Former concrete-child composition, measured but NEVER polled:
+            // a failing baseline must not abort the test process with overflow.
+            let contents = content_owner(
+                Weak::new(),
+                0,
+                binding.clone(),
+                auth.clone(),
+                client.clone(),
+                control.clone(),
+                stop.clone(),
+                inline_receiver,
+            );
+            let directory = directory_owner(
+                Weak::new(),
+                0,
+                &binding,
+                &auth,
+                &client,
+                &control,
+                &catalog,
+                &stop,
+            );
+            let (content, directory) = tokio::join!(
+                async {
+                    let result = contents.await;
+                    if result.is_err() {
+                        stop.cancel();
+                    }
+                    result
+                },
+                async {
+                    let result = directory.await;
+                    if result.is_err() {
+                        stop.cancel();
+                    }
+                    result
+                },
+            );
+            content.and(directory)
+        });
+        let (_, receiver) = mpsc::channel(1);
+        let worker_bytes = future_size(|| {
+            run(
+                Weak::new(),
+                0,
+                binding.clone(),
+                auth.clone(),
+                client.clone(),
+                control.clone(),
+                catalog.clone(),
+                stop.clone(),
+                receiver,
+            )
+        });
+        eprintln!("owner future bytes: content={content_bytes} directory={directory_bytes} inline={inline_bytes} joined={joined_bytes} worker={worker_bytes}");
+        assert!(
+            inline_bytes > joined_bytes * 8,
+            "measure the real child layout reduction"
+        );
+        assert!(
+            joined_bytes <= 4096,
+            "join must hold pinned handles, not child layouts"
+        );
+        assert!(
+            worker_bytes <= 128 * 1024,
+            "worker must not re-embed child layouts"
+        );
+        let (_, receiver) = mpsc::channel(1);
+        let mut worker = Box::pin(run(
+            Weak::new(),
+            0,
+            binding.clone(),
+            auth.clone(),
+            client.clone(),
+            control.clone(),
+            catalog.clone(),
+            stop.clone(),
+            receiver,
+        ));
+        // Poll the REAL owners, not dummy pending futures, below Tokio's normal
+        // worker stack budget. Directory reaches the absent-owner fence before
+        // summary/access-token/HTTP; content is genuinely paused and then drains.
+        let handle = tokio::runtime::Handle::current();
+        std::thread::scope(|scope| {
+            std::thread::Builder::new()
+                .name("account-owner-small-stack".into())
+                .stack_size(512 * 1024)
+                .spawn_scoped(scope, move || {
+                    let _entered = handle.enter();
+                    let mut cx = Context::from_waker(Waker::noop());
+                    let mut drained = false;
+                    for _ in 0..8 {
+                        if let Poll::Ready(result) = joined.as_mut().poll(&mut cx) {
+                            assert_eq!(result, Err(Error::Cancelled));
+                            drained = true;
+                            break;
+                        }
+                    }
+                    assert!(drained, "cancelled directory must drain paused content");
+                    // Also enter the REAL worker poll frame on this stack. The
+                    // shared stop is now cancelled, so retry_sdk fences before
+                    // HTTP and run performs its normal control/catalog/SDK close.
+                    for _ in 0..8 {
+                        if let Poll::Ready(result) = worker.as_mut().poll(&mut cx) {
+                            assert!(result.is_err());
+                            return;
+                        }
+                    }
+                    panic!("cancelled worker must finish cleanup without HTTP");
+                })
+                .unwrap()
+                .join()
+                .unwrap();
+        });
+        assert!(stop.is_cancelled());
+        assert!(client.device_session().await.is_none());
+        assert!(!client.snapshot().remote_enabled);
+    }
+    #[tokio::test]
+    async fn heap_pinned_owners_cancel_in_both_directions_but_wait_for_retirement() {
+        for content_fails in [false, true] {
+            let stop = CancellationToken::new();
+            let (release, released) = oneshot::channel();
+            let slow_stop = stop.clone();
+            let slow = Box::pin(async move {
+                slow_stop.cancelled().await;
+                let _ = released.await;
+                Ok(())
+            });
+            let fail = Box::pin(async { Err(Error::DirectoryUnavailable) });
+            let mut joined: std::pin::Pin<Box<dyn std::future::Future<Output = Result<()>>>> =
+                if content_fails {
+                    Box::pin(join_owners(fail, slow, &stop))
+                } else {
+                    Box::pin(join_owners(slow, fail, &stop))
+                };
+            std::future::poll_fn(|cx| {
+                assert!(joined.as_mut().poll(cx).is_pending());
+                std::task::Poll::Ready(())
+            })
+            .await;
+            assert!(stop.is_cancelled());
+            // Cancellation is not retirement: joined still owns the slow child.
+            release.send(()).unwrap();
+            assert_eq!(joined.await, Err(Error::DirectoryUnavailable));
+        }
+    }
     fn queued(
         cancellation: Arc<RequestCancellation>,
     ) -> (
