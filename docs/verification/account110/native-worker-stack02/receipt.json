@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-14T18:28:45+08:00",
+  "sourceCommit": "08e4b6c76a4fd9f8b4e74b9625fa94be562d2de3",
+  "stackFixCommit": "8c3fc430c7289a4e5a96f45f676612861037fd2e",
+  "baseSource": "cb91f4b82995a314268aa47b491b7973679dff8f",
+  "reviewRespondedTo": "ea1e04864b7dee642313827d99c2a246e634b18a",
+  "sourceFiles": [
+    {
+      "path": "src-tauri/src/account/worker.rs",
+      "sha256": "46a1e697311521aebaec92030af680b89c998e35d92e97ee0388919063c0726a"
+    },
+    {
+      "path": "src-tauri/src/account/enrollment.rs",
+      "sha256": "c9135a8b3809b9eacd349698cdeb1655713e6c4caac548db8bfa58c879305e05"
+    }
+  ],
+  "deltaScope": "Only enrollment.rs cfg(test) restart fixture and deterministic lifecycle counterexample; worker stack patch unchanged.",
+  "environment": {
+    "target": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "locked": true,
+    "offline": true,
+    "diskFloorBytes": 6442450944,
+    "minimumObservedFreeBytes": 10190401536,
+    "diskFloorTriggered": false,
+    "targetReleased": true
+  },
+  "commandPrefix": "cargo test --manifest-path src-tauri/Cargo.toml --lib --features sync-e2e --locked --offline",
+  "commandSuffix": "-- --nocapture",
+  "commands": [
+    {
+      "filter": "account::enrollment::tests::aborted_local_recovery_blocks_adoption_until_release_or_real_session_reopen",
+      "log": "restart-counterexample.log",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "filter": "account::",
+      "log": "account-default-parallel.log",
+      "parallelism": "default",
+      "passed": 75,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "filter": "sync::adapter::adoption_tests",
+      "log": "adoption.log",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "finiteObservedOldSession": {
+    "pending": false,
+    "quiet": true,
+    "activePhase": "probe"
+  },
+  "deterministicCounterexample": {
+    "beforeRetirement": {
+      "pending": false,
+      "quiet": true,
+      "activePhase": "probe",
+      "differentWorkspace": "blocked",
+      "sameWorkspace": "allowed"
+    },
+    "afterActualTickReleaseOrReopen": {
+      "pending": false,
+      "quiet": false,
+      "activePhase": null,
+      "differentWorkspace": "allowed",
+      "identityPreserved": true,
+      "notesPreserved": true
+    }
+  },
+  "historicalFailuresRetained": [
+    {
+      "commit": "75d0a4cba2fc33c27cce1057abbf054360878f74",
+      "path": "docs/verification/account110/native-worker-stack01/account-group01.log",
+      "passed": 73,
+      "failed": 1
+    },
+    {
+      "commit": "ea1e04864b7dee642313827d99c2a246e634b18a",
+      "path": "docs/verification/account110/native-worker-stack-independent01/account-default-parallel.stdout.txt",
+      "sha256": "b9b25c3ab331d8aff72c86bee191f55cae9f1db70194ae86e7e72ad0ec348d56",
+      "passed": 73,
+      "failed": 1
+    }
+  ],
+  "limits": [
+    "No product lifecycle, preflight, pause, release or authorization semantics changed.",
+    "No sleeps, hand-cleared state, repeated green-until-pass loop or gate relaxation.",
+    "No original library, device, app, account traffic, manifest refresh or package build.",
+    "Historical failed runs did not capture Session state; the corrected run captured the old lifecycle state and a deterministic counterexample establishes its guard behavior.",
+    "Independent review and real-client acceptance remain pending."
+  ]
+}
