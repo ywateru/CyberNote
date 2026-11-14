@@ -701,25 +701,32 @@ where
         result
     }
 }
-async fn request_io<T, E, F>(stop: &CancellationToken, future: F) -> Result<T>
+async fn request_io<T, E, F>(
+    stop: &CancellationToken,
+    mut future: std::pin::Pin<Box<F>>,
+) -> Result<T>
 where
     F: std::future::Future<Output = std::result::Result<T, E>>,
     Error: From<E>,
 {
+    // Keep the SDK future out of this wrapper's inline state. Cancellation
+    // still drops this IO future; mapping ownership/retirement stays outside.
     tokio::select! {
         biased;
         _=stop.cancelled()=>Err(Error::Cancelled),
-        result=future=>result.map_err(Error::from),
+        result=&mut future=>result.map_err(Error::from),
     }
 }
 
 // Preparation consumes the existing request deadline, not a separate stage
 // budget. Cancellation still waits for the preparation owner to finish.
-pub(super) async fn prepare_request<T, F>(stop: &CancellationToken, prepare: F) -> Result<T>
+pub(super) async fn prepare_request<T, F>(
+    stop: &CancellationToken,
+    mut prepare: std::pin::Pin<Box<F>>,
+) -> Result<T>
 where
     F: std::future::Future<Output = Result<T>>,
 {
-    tokio::pin!(prepare);
     tokio::select! {
         biased;
         _ = stop.cancelled() => { let _ = prepare.await; Err(Error::Cancelled) },
@@ -1021,9 +1028,9 @@ async fn run_service(
                 }
                 let request_stop = stop.child_token();
                 let outcome = super::worker::execute_request(&request.cancellation, &request_stop,
-                    transfer_target(service, &identity, &binding, &client, &enrollment, &gate,
+                    Box::pin(transfer_target(service, &identity, &binding, &client, &enrollment, &gate,
                         &bootstrap, &request.target, request.direction, observation.as_ref(), &request_stop,
-                        &request.cancellation)).await;
+                        &request.cancellation))).await;
                 let terminal = outcome.as_ref().err().is_some_and(|e| fence_authorization(&gate, *e));
                 let error = outcome.as_ref().err().copied();
                 request.complete(outcome);
@@ -1052,16 +1059,16 @@ async fn transfer_target(
 ) -> Result<()> {
     let mut mappings: Vec<Arc<Mapping>> = Vec::new();
     let result = async {
-        let prepare = async {
+        let prepare = Box::pin(async {
             let (transport, protocol, key) = target.target("")?;
             let enroll = Arc::new(
                 request_io(
                     stop,
-                    client.map(
+                    Box::pin(client.map(
                         transport,
                         config::ENROLL_PORT,
                         "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
-                    ),
+                    )),
                 )
                 .await?,
             );
@@ -1069,11 +1076,11 @@ async fn transfer_target(
             let sync = Arc::new(
                 request_io(
                     stop,
-                    client.map(
+                    Box::pin(client.map(
                         transport,
                         config::SYNC_PORT,
                         "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
-                    ),
+                    )),
                 )
                 .await?,
             );
@@ -1092,30 +1099,30 @@ async fn transfer_target(
                     }
                 })
             });
-            let mut stream = request_io(stop, TcpStream::connect(enroll.addr)).await?;
+            let mut stream = request_io(stop, Box::pin(TcpStream::connect(enroll.addr))).await?;
             let nonce = uuid::Uuid::new_v4().to_string();
             let proof = bootstrap.proof.lock().map_err(|_| Error::Storage)?.clone();
             request_io(
                 stop,
-                write(
+                Box::pin(write(
                     &mut stream,
                     &Request {
                         proof,
                         nonce: nonce.clone(),
                     },
-                ),
+                )),
             )
             .await?;
-            let response: Response = request_io(stop, async {
+            let response: Response = request_io(stop, Box::pin(async {
                 tokio::time::timeout(Duration::from_secs(25), read(&mut stream))
                     .await
                     .map_err(|_| Error::Network)?
-            })
+            }))
             .await?;
             if response.nonce != nonce {
                 return Err(Error::InvalidProof);
             }
-            let remote = request_io(stop, enrollment.verify(&response.proof, binding)).await?;
+            let remote = request_io(stop, Box::pin(enrollment.verify(&response.proof, binding))).await?;
             // Selection pins both the enrollment identity and static Noise key.
             // A directory refresh never redirects an already selected operation.
             if remote.device_id != protocol
@@ -1178,8 +1185,25 @@ async fn transfer_target(
                 .peer_for_device(&remote.device_id)?
                 .ok_or(Error::InvalidProof)?;
             Ok((id, sampler))
-        };
-        let (id, sampler) = prepare_request(stop, prepare).await?;
+        });
+        #[cfg(test)]
+        if std::env::var_os("ACCOUNT110_TRANSFER_STACK_FIXTURE").is_some() {
+            eprintln!(
+                "real prepare future bytes={}",
+                std::mem::size_of_val(prepare.as_ref().get_ref())
+            );
+            assert!(std::mem::size_of_val(prepare.as_ref().get_ref()) <= 4096);
+        }
+        let preparing = prepare_request(stop, prepare);
+        #[cfg(test)]
+        if std::env::var_os("ACCOUNT110_TRANSFER_STACK_FIXTURE").is_some() {
+            eprintln!(
+                "real preparation wrapper bytes={}",
+                std::mem::size_of_val(&preparing)
+            );
+            assert!(std::mem::size_of_val(&preparing) <= 4096);
+        }
+        let (id, sampler) = preparing.await?;
         if stop.is_cancelled() || !gate.is_current() {
             return Err(Error::Cancelled);
         }
@@ -1216,6 +1240,186 @@ async fn transfer_target(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn real_selected_transfer_future_layout_and_small_stack_poll() {
+        use std::{
+            future::Future,
+            task::{Context, Poll, Waker},
+        };
+        const KEY: &str = "ACCOUNT110_TRANSFER_STACK_FIXTURE";
+        if let Some(mode) = std::env::var_os(KEY) {
+            let mode = mode.to_str().unwrap().to_owned();
+            assert!(["measure", "reject", "cancel"].contains(&mode.as_str()));
+            // The large stack is diagnostic only, to measure the unfixed real
+            // type without aborting before emitting its layout. Production
+            // runtime stacks are never changed. Both actual poll regressions
+            // run on 512 KiB stacks in their own disposable test process.
+            let stack = if mode == "measure" {
+                16 * 1024 * 1024
+            } else {
+                512 * 1024
+            };
+            std::thread::Builder::new()
+                .name("selected-transfer-fixture".into())
+                .stack_size(stack)
+                .spawn(move || {
+                    let runtime = tokio::runtime::Builder::new_current_thread()
+                        .enable_all()
+                        .build()
+                        .unwrap();
+                    let _entered = runtime.enter();
+                    let root = tempfile::tempdir().unwrap();
+                    let identity = Arc::new(
+                        IdentityStore::open(root.path(), &uuid::Uuid::new_v4().to_string())
+                            .unwrap(),
+                    );
+                    let binding = Binding {
+                        issuer: config::ISSUER.into(),
+                        subject: "fixture-owner".into(),
+                        product_id: "fixture".into(),
+                        workspace_id: uuid::Uuid::new_v4().to_string(),
+                        device_id: identity.device_id().unwrap(),
+                        noise_public_key: identity.public_key().unwrap(),
+                        enabled: true,
+                    };
+                    let backend = Arc::new(BlockingBackend {
+                        device: binding.device_id.clone(),
+                        workspace: binding.workspace_id.clone(),
+                        block: false,
+                        entered: Default::default(),
+                        release: Arc::new((Mutex::new(true), Condvar::new())),
+                        inventories: AtomicUsize::new(0),
+                    });
+                    let gate = Arc::new(Gate::default());
+                    let service = Arc::new(
+                        SyncService::with_policy(
+                            backend.clone(),
+                            identity.clone(),
+                            root.path().join("stage"),
+                            Some(gate.clone()),
+                        )
+                        .unwrap(),
+                    );
+                    let client = Client::new(cybergrid_sdk::Config {
+                        base_url: config::origin().unwrap(),
+                        app_id: config::CLIENT_ID.into(),
+                        ..Default::default()
+                    })
+                    .unwrap();
+                    let enrollment = Arc::new(Enrollment::new(config::origin().unwrap()).unwrap());
+                    let bootstrap = Bootstrap {
+                        enrollment: enrollment.clone(),
+                        binding: binding.clone(),
+                        identity: identity.clone(),
+                        gate: gate.clone(),
+                        proof: Mutex::new(String::new()),
+                    };
+                    let target = super::super::directory::Row {
+                        id: uuid::Uuid::new_v4().to_string(),
+                        name: "Fixture".into(),
+                        online: true,
+                        sync_available: true,
+                        summary: None,
+                        transport_device_id: Some("fixture-transport".into()),
+                        protocol_device_id: Some(uuid::Uuid::new_v4().to_string()),
+                        noise_public_key: Some(B64.encode([9; 32])),
+                    };
+                    let stop = CancellationToken::new();
+                    let cancellation = super::super::worker::RequestCancellation::default();
+                    // Construct actual SDK futures without polling or logging
+                    // in. These measurements use the locked production types.
+                    let mapping = client.map(
+                        "fixture-transport",
+                        config::ENROLL_PORT,
+                        "127.0.0.1:0".parse().unwrap(),
+                    );
+                    let connecting = client.connect("fixture-transport");
+                    eprintln!(
+                        "real SDK map future bytes={}",
+                        std::mem::size_of_val(&mapping)
+                    );
+                    eprintln!(
+                        "real SDK connect future bytes={}",
+                        std::mem::size_of_val(&connecting)
+                    );
+                    let io = request_io(&stop, Box::pin(mapping));
+                    eprintln!(
+                        "real request_io future bytes={}",
+                        std::mem::size_of_val(&io)
+                    );
+                    assert!(std::mem::size_of_val(&io) <= 4096);
+                    drop(io);
+                    drop(connecting);
+                    let make = || {
+                        transfer_target(
+                            &service,
+                            &identity,
+                            &binding,
+                            &client,
+                            &enrollment,
+                            &gate,
+                            &bootstrap,
+                            &target,
+                            super::super::types::TransferDirection::Push,
+                            None,
+                            &stop,
+                            &cancellation,
+                        )
+                    };
+                    let transfer = make();
+                    eprintln!(
+                        "real transfer_target future bytes={}",
+                        std::mem::size_of_val(&transfer)
+                    );
+                    assert!(std::mem::size_of_val(&transfer) <= 4096);
+                    let mut cx = Context::from_waker(Waker::noop());
+                    if mode == "cancel" {
+                        stop.cancel();
+                        let mut transfer = Box::pin(transfer);
+                        assert!(matches!(
+                            transfer.as_mut().poll(&mut cx),
+                            Poll::Ready(Err(Error::Cancelled))
+                        ));
+                    } else {
+                        // The client has never logged in. This enters the REAL
+                        // SDK map future, which rejects locally before HTTP.
+                        let mut execution = Box::pin(super::super::worker::execute_request(
+                            &cancellation,
+                            &stop,
+                            Box::pin(transfer),
+                        ));
+                        eprintln!(
+                            "real execute_request future bytes={}",
+                            std::mem::size_of_val(execution.as_ref().get_ref())
+                        );
+                        assert!(std::mem::size_of_val(execution.as_ref().get_ref()) <= 4096);
+                        assert!(matches!(
+                            execution.as_mut().poll(&mut cx),
+                            Poll::Ready(Err(_))
+                        ));
+                    }
+                    assert_eq!(backend.inventories.load(Ordering::SeqCst), 0);
+                    assert!(runtime.block_on(client.device_session()).is_none());
+                    runtime.block_on(client.close()).unwrap();
+                })
+                .unwrap()
+                .join()
+                .unwrap();
+            return;
+        }
+        for mode in ["measure", "reject", "cancel"] {
+            let output = std::process::Command::new(std::env::current_exe().unwrap())
+                .args(["--exact", "account::transport::tests::real_selected_transfer_future_layout_and_small_stack_poll", "--nocapture"])
+                .env(KEY, mode).output().unwrap();
+            eprintln!("fixture mode={mode} status={}", output.status);
+            eprint!("{}", String::from_utf8_lossy(&output.stdout));
+            eprint!("{}", String::from_utf8_lossy(&output.stderr));
+            assert!(
+                output.status.success(),
+                "isolated real-future fixture {mode} failed"
+            );
+        }
+    }
     #[tokio::test]
     async fn selected_device_sync_stage_survives_action_failure_without_changing_auth_fences() {
         for stage in [SyncStage::Pair, SyncStage::RecoverPairing, SyncStage::Transfer] {
@@ -1552,7 +1756,7 @@ mod tests {
                 let result = execute_request(
                     &task_cancellation,
                     &stop,
-                    blocking_request(
+                    Box::pin(blocking_request(
                         &stop,
                         &task_cancellation.admission_stop,
                         move || {
@@ -1564,7 +1768,7 @@ mod tests {
                                 .map_err(Error::from)
                         },
                         move || retire_local.disconnect(&peer).map_err(Error::from),
-                    ),
+                    )),
                 )
                 .await;
                 request.complete(result);
@@ -1606,10 +1810,10 @@ mod tests {
             let task_entered = entered.clone();
             let task_next = next.clone();
             let task = tokio::spawn(async move {
-                let result = request_io(&task_stop, async {
+                let result = request_io(&task_stop, Box::pin(async {
                     task_entered.notify_one();
                     std::future::pending::<Result<()>>().await
-                })
+                }))
                 .await;
                 if result.is_ok() {
                     task_next.fetch_add(1, std::sync::atomic::Ordering::SeqCst);

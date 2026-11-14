@@ -106,7 +106,7 @@ pub(super) async fn wait_request(
 pub(super) async fn execute_request<Fut>(
     cancellation: &RequestCancellation,
     stop: &CancellationToken,
-    work: Fut,
+    work: std::pin::Pin<Box<Fut>>,
 ) -> Result<()>
 where
     Fut: std::future::Future<Output = Result<()>>,
@@ -114,8 +114,9 @@ where
     if cancellation.outcome(Ok(())).is_err() || stop.is_cancelled() {
         return Err(Error::Cancelled);
     }
-    let future = work;
-    tokio::pin!(future);
+    // Require a heap boundary at the call site: pinning an inline generic
+    // future here would still embed it in this async function's state.
+    let mut future = work;
     let result = tokio::select! {
         biased;
         _=cancellation.stop.cancelled()=>{
@@ -782,21 +783,28 @@ mod tests {
         let (request, receiver, control, gate) = queued(cancellation.clone());
         let work = async {
             let stop = CancellationToken::new();
-            let outcome = execute_request(&cancellation, &stop, async {
-                transport::prepare_request(&stop, async {
-                    // Actual probe map durations, followed by bootstrap/pair work.
-                    tokio::time::sleep(Duration::from_millis(33_026)).await;
-                    tokio::time::sleep(Duration::from_millis(28_400)).await;
-                    tokio::time::sleep(Duration::from_secs(2)).await;
-                    assert!(gate.is_current());
+            let outcome = execute_request(
+                &cancellation,
+                &stop,
+                Box::pin(async {
+                    transport::prepare_request(
+                        &stop,
+                        Box::pin(async {
+                            // Actual probe map durations, followed by bootstrap/pair work.
+                            tokio::time::sleep(Duration::from_millis(33_026)).await;
+                            tokio::time::sleep(Duration::from_millis(28_400)).await;
+                            tokio::time::sleep(Duration::from_secs(2)).await;
+                            assert!(gate.is_current());
+                            Ok(())
+                        }),
+                    )
+                    .await?;
+                    assert!(control.busy());
+                    tokio::time::sleep(Duration::from_secs(10)).await;
+                    assert!(!cancellation.stop.is_cancelled());
                     Ok(())
-                })
-                .await?;
-                assert!(control.busy());
-                tokio::time::sleep(Duration::from_secs(10)).await;
-                assert!(!cancellation.stop.is_cancelled());
-                Ok(())
-            })
+                }),
+            )
             .await;
             request.complete(outcome);
         };
@@ -819,11 +827,11 @@ mod tests {
             let (release, released) = oneshot::channel();
             let worker = tokio::spawn(async move {
                 let stop = CancellationToken::new();
-                let outcome = execute_request(&work_cancellation, &stop, async {
-                transport::prepare_request(&stop, async {
+                let outcome = execute_request(&work_cancellation, &stop, Box::pin(async {
+                transport::prepare_request(&stop, Box::pin(async {
                     tokio::time::sleep(Duration::from_secs(100)).await;
                     Ok(())
-                })
+                }))
                 .await?;
                 tokio::select! {
                     biased;
@@ -838,7 +846,7 @@ mod tests {
                         panic!("transfer received a fresh deadline instead of the remaining budget")
                     },
                 }
-            })
+            }))
             .await;
                 request.complete(outcome);
             });
@@ -882,19 +890,26 @@ mod tests {
             let (release, released) = oneshot::channel();
             let worker = tokio::spawn(async move {
                 let stop = CancellationToken::new();
-                let outcome = execute_request(&work_cancellation, &stop, async {
-                    transport::prepare_request(&stop, async {
-                        work_entered.notify_one();
-                        stop.cancelled().await;
-                        assert!(!work_gate.is_current());
-                        assert!(work_gate.authorize("late-device", "late-key").is_err());
-                        work_retiring.notify_one();
-                        let _ = released.await;
-                        Ok(())
-                    })
-                    .await?;
-                    panic!("cancelled preparation must not reach transfer")
-                })
+                let outcome = execute_request(
+                    &work_cancellation,
+                    &stop,
+                    Box::pin(async {
+                        transport::prepare_request(
+                            &stop,
+                            Box::pin(async {
+                                work_entered.notify_one();
+                                stop.cancelled().await;
+                                assert!(!work_gate.is_current());
+                                assert!(work_gate.authorize("late-device", "late-key").is_err());
+                                work_retiring.notify_one();
+                                let _ = released.await;
+                                Ok(())
+                            }),
+                        )
+                        .await?;
+                        panic!("cancelled preparation must not reach transfer")
+                    }),
+                )
                 .await;
                 assert_eq!(outcome, Err(Error::Cancelled));
                 request.complete(outcome);
@@ -936,10 +951,14 @@ mod tests {
                     == Some(Error::Busy)
             );
             let mut started = false;
-            let result = execute_request(&cancellation, &CancellationToken::new(), async {
-                started = true;
-                Ok(())
-            })
+            let result = execute_request(
+                &cancellation,
+                &CancellationToken::new(),
+                Box::pin(async {
+                    started = true;
+                    Ok(())
+                }),
+            )
             .await;
             assert!(!started);
             request.complete(result);
@@ -982,12 +1001,16 @@ mod tests {
             let task_cancellation = cancellation.clone();
             let work = tokio::spawn(async move {
                 let stop = CancellationToken::new();
-                let outcome = execute_request(&task_cancellation, &stop, async {
-                    task_entered.notify_one();
-                    stop.cancelled().await;
-                    let _ = released.await; // deterministic delayed retirement
-                    Ok(()) // late durable receipt cannot turn deadline into success
-                })
+                let outcome = execute_request(
+                    &task_cancellation,
+                    &stop,
+                    Box::pin(async {
+                        task_entered.notify_one();
+                        stop.cancelled().await;
+                        let _ = released.await; // deterministic delayed retirement
+                        Ok(()) // late durable receipt cannot turn deadline into success
+                    }),
+                )
                 .await;
                 request.complete(outcome);
             });
@@ -1026,12 +1049,16 @@ mod tests {
             let task_cancellation = cancellation.clone();
             let work = tokio::spawn(async move {
                 let stop = CancellationToken::new();
-                let outcome = execute_request(&task_cancellation, &stop, async {
-                    task_entered.notify_one();
-                    stop.cancelled().await;
-                    let _ = released.await;
-                    Ok(())
-                })
+                let outcome = execute_request(
+                    &task_cancellation,
+                    &stop,
+                    Box::pin(async {
+                        task_entered.notify_one();
+                        stop.cancelled().await;
+                        let _ = released.await;
+                        Ok(())
+                    }),
+                )
                 .await;
                 assert_eq!(outcome, Err(Error::Cancelled));
                 request.complete(outcome);
