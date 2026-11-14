@@ -1,0 +1,528 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "e220111362084d4c72b6d6fe2dada505b97a6df3",
+  "reviewedServerRevision": "74d1a891d890cd22fec4c5618a5ef6b247f2db02",
+  "serverDiffFromReviewedEmpty": true,
+  "fileCount": 86,
+  "totalBytes": 385445,
+  "framedSha256": "9b83173fcb7e44e035da15a8f4a96edcf9937b08d4a2490020942b36150e7f49",
+  "allBytesFromGitCommit": true,
+  "files": [
+    {
+      "path": "api/index.ts",
+      "bytes": 145,
+      "sha256": "69726ae12c7772f78700d9182983b7dbe1c5d275ffd3ecc591b80298bcb5c9ab",
+      "sha1": "39621c959dcf9ef725fe14a183bd15231d90d4af"
+    },
+    {
+      "path": "services/coordinator/LICENSE",
+      "bytes": 518,
+      "sha256": "8c239b03ee76f4a2e9206e3c5be03c1fbf8dd249026af4c102467498de22431f",
+      "sha1": "26b6a8e22f074ada3813afa9ba0eb4b4df0172e1"
+    },
+    {
+      "path": "services/coordinator/notices/README.md",
+      "bytes": 477,
+      "sha256": "99642bb1f1279b9ab46f25edfceb5ba777340a1edb87d8b8502a58db9f9cfded",
+      "sha1": "dfad7c64d143f517ad6dfae6914952489ef13eb4"
+    },
+    {
+      "path": "services/coordinator/notices/manifest.json",
+      "bytes": 27541,
+      "sha256": "78315fdabb24a0ea8d89d072ccf0bd359b249c686163e75f3e242f93400cdc82",
+      "sha1": "b36eaf3a3f8a4bbad4d5174d14d442414931e110"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__aix-ppc64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__android-arm-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__android-arm64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__android-x64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__darwin-arm64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__darwin-x64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__freebsd-arm64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__freebsd-x64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-arm-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-arm64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-ia32-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-loong64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-mips64el-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-ppc64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-riscv64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-s390x-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__linux-x64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__netbsd-arm64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__netbsd-x64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__openbsd-arm64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__openbsd-x64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__openharmony-arm64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__sunos-x64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__win32-arm64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__win32-ia32-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@esbuild__win32-x64-0.28.2/upstream-wrapper/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@redis__bloom-6.3.1/upstream-repository/LICENSE",
+      "bytes": 1074,
+      "sha256": "a57b250a5bf03d7afe55b74063313f2adb7b00d546c0ab149a89398333fe3cc8",
+      "sha1": "c8303dce1148499d0d54040c80802c197a4c8aa4"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@redis__client-6.3.1/upstream-repository/LICENSE",
+      "bytes": 1074,
+      "sha256": "a57b250a5bf03d7afe55b74063313f2adb7b00d546c0ab149a89398333fe3cc8",
+      "sha1": "c8303dce1148499d0d54040c80802c197a4c8aa4"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@redis__json-6.3.1/upstream-repository/LICENSE",
+      "bytes": 1074,
+      "sha256": "a57b250a5bf03d7afe55b74063313f2adb7b00d546c0ab149a89398333fe3cc8",
+      "sha1": "c8303dce1148499d0d54040c80802c197a4c8aa4"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@redis__search-6.3.1/upstream-repository/LICENSE",
+      "bytes": 1074,
+      "sha256": "a57b250a5bf03d7afe55b74063313f2adb7b00d546c0ab149a89398333fe3cc8",
+      "sha1": "c8303dce1148499d0d54040c80802c197a4c8aa4"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@redis__time-series-6.3.1/upstream-repository/LICENSE",
+      "bytes": 1074,
+      "sha256": "a57b250a5bf03d7afe55b74063313f2adb7b00d546c0ab149a89398333fe3cc8",
+      "sha1": "c8303dce1148499d0d54040c80802c197a4c8aa4"
+    },
+    {
+      "path": "services/coordinator/notices/npm/@types__node-22.20.5/LICENSE",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+      "sha1": "689ec0681815ecc32bee639c68e7740add7bd301"
+    },
+    {
+      "path": "services/coordinator/notices/npm/esbuild-0.28.2/LICENSE.md",
+      "bytes": 1069,
+      "sha256": "b40ec5baec7bb34fa5b1c09521fa3cd52d5fad7adafed74932a2010d3612a681",
+      "sha1": "d11e36e13b219e0c0cb023a56eb6d411d136316a"
+    },
+    {
+      "path": "services/coordinator/notices/npm/fsevents-2.3.3/LICENSE",
+      "bytes": 1133,
+      "sha256": "2a8a5d6197bb97a018b8a190dd3ed853d750ca87c8e80c17aad41d6c6ff448e1",
+      "sha1": "ec92320664e24cfb1fd63498769b127ce64726f5"
+    },
+    {
+      "path": "services/coordinator/notices/npm/jose-6.2.15/LICENSE.md",
+      "bytes": 1079,
+      "sha256": "8078b0829d6c3e9ecde2f003e1966e4cad3efc6e7a640efbab0313cc166b1af1",
+      "sha1": "a89a00f658f01e4fbb0320a622d550f26422a648"
+    },
+    {
+      "path": "services/coordinator/notices/npm/redis-6.3.1/upstream-repository/LICENSE",
+      "bytes": 1074,
+      "sha256": "a57b250a5bf03d7afe55b74063313f2adb7b00d546c0ab149a89398333fe3cc8",
+      "sha1": "c8303dce1148499d0d54040c80802c197a4c8aa4"
+    },
+    {
+      "path": "services/coordinator/notices/npm/tsx-4.23.15/LICENSE",
+      "bytes": 1088,
+      "sha256": "8dded67841a9261a622c739fb61c81785e93765de852828ceeb9403d20a74581",
+      "sha1": "acbe739bdeae124ef0815e8a499875a4b63f49c0"
+    },
+    {
+      "path": "services/coordinator/notices/npm/typescript-5.9.3/LICENSE.txt",
+      "bytes": 9197,
+      "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47",
+      "sha1": "557ce4c1f2d1480bef1fe3db9c14615e3b213a99"
+    },
+    {
+      "path": "services/coordinator/notices/npm/undici-types-6.21.0/LICENSE",
+      "bytes": 1090,
+      "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27",
+      "sha1": "f5dca982a259634f86df3c69c54fe1c004085489"
+    },
+    {
+      "path": "services/coordinator/package-lock.json",
+      "bytes": 19635,
+      "sha256": "a247145cde2856d92954d77aaa1e786aa9421df85ba57e5fbc7d3d004b2a12a1",
+      "sha1": "35cb6c2f23ff37f6c9a45239b7ca9c1439de5a85"
+    },
+    {
+      "path": "services/coordinator/package.json",
+      "bytes": 809,
+      "sha256": "24ec15c1c18ddaab8ba6db715e9b9779368e5c1591a74038f201f73940652c7b",
+      "sha1": "c2bafa34711f491fe852d0f89446ace4068d5c60"
+    },
+    {
+      "path": "services/coordinator/public/admin/admin.js",
+      "bytes": 8418,
+      "sha256": "2acc1bb6ee48fff709bbcc4dbdc6d2498dfda6f1b5dc4141432d8d308363236d",
+      "sha1": "9f70be1bffc82cba026a796937567c3e437aad10"
+    },
+    {
+      "path": "services/coordinator/public/admin/index.html",
+      "bytes": 3468,
+      "sha256": "651bfec98bf8a776d5e5fe6fbb7143329facccd347b436adf864ea3ae0578987",
+      "sha1": "6a5eaafb328626bfbc70093fd6c2dd6ea8f71538"
+    },
+    {
+      "path": "services/coordinator/public/console/callback/index.html",
+      "bytes": 2147,
+      "sha256": "ec345334ef3e5c7ba39341e193d7df55f0cc036eaa5535f2ef84cccf551a43cd",
+      "sha1": "98704e7ccb2cd2c9c731696e82a693849a78e9b4"
+    },
+    {
+      "path": "services/coordinator/public/console/console.css",
+      "bytes": 2792,
+      "sha256": "6fb6222f594cb874700a6e3524c85da8b22f208793e54c45b3c9de4e47740eac",
+      "sha1": "e7c15961c74c083b2d8a292a17c33ea24099f382"
+    },
+    {
+      "path": "services/coordinator/public/console/console.js",
+      "bytes": 17996,
+      "sha256": "f8d142f77fd455f978950dc6d2ba2558d38792a028c73806703bc666c57a01c1",
+      "sha1": "f70ff3b34b0c428b10fea13258218eef2e1d9876"
+    },
+    {
+      "path": "services/coordinator/public/console/index.html",
+      "bytes": 2147,
+      "sha256": "ec345334ef3e5c7ba39341e193d7df55f0cc036eaa5535f2ef84cccf551a43cd",
+      "sha1": "98704e7ccb2cd2c9c731696e82a693849a78e9b4"
+    },
+    {
+      "path": "services/coordinator/public/docs/index.html",
+      "bytes": 34076,
+      "sha256": "04665f2059f5b6dcb86ebf8e5fcdf6c4f4dfb0fb64b8abf91c9a4d75e4d8958a",
+      "sha1": "579ba5c2588a87fd35470e78b350e46b55f9b142"
+    },
+    {
+      "path": "services/coordinator/public/index.html",
+      "bytes": 13983,
+      "sha256": "8236cb8c25db85553e965e2789ee8d8be3ea731f877c1240bfa3b4c2d7347d80",
+      "sha1": "dcf3d3655f35aa59a2f6afbee4448b5fb2c64af5"
+    },
+    {
+      "path": "services/coordinator/public/site.css",
+      "bytes": 23290,
+      "sha256": "f812f1291b7dcdf8be4ff006810c327ff7a4e1ef92ff0f0aa15959d26c20a8d3",
+      "sha1": "80d05e42dd53b91a83796a03dc10b279f73a113c"
+    },
+    {
+      "path": "services/coordinator/public/site.js",
+      "bytes": 1125,
+      "sha256": "9d4d86213eefb4f749d8348b811df5abc25098fbd10fa697df9337850e3d2d65",
+      "sha1": "4e5e933d7d668ecfb9729d9fd4037ffe78f9e414"
+    },
+    {
+      "path": "services/coordinator/release/build-vercel.mjs",
+      "bytes": 223,
+      "sha256": "cc0250773f70ad04a939a838b5760b2647191809c8aa286ee18572d3aff9e187",
+      "sha1": "e1494c5b554028918cf6993226f9c6e1f1ca8ba9"
+    },
+    {
+      "path": "services/coordinator/release/build.mjs",
+      "bytes": 812,
+      "sha256": "3ce8b24f1494f9aca2af980286522a1f7611aa22016d4fdca8cbee600117464a",
+      "sha1": "9b8690feab2ce58a9ad0bd038031efd5d66d9427"
+    },
+    {
+      "path": "services/coordinator/src/account-config.ts",
+      "bytes": 2083,
+      "sha256": "2b5fb6b8d18279a535b9a1c392d24a654dca30d0544245584624268c7b7e3427",
+      "sha1": "46204decab6ff80305ade61d0042e26f18f8bc4a"
+    },
+    {
+      "path": "services/coordinator/src/account-enrollment.ts",
+      "bytes": 5564,
+      "sha256": "7a313c7a6ba2f18a39adcd3c45b7391bf96ad86e511dab97c1ce711d6ebbfe94",
+      "sha1": "893562bfc69a2eda6dc9cd240b33a98b92202f41"
+    },
+    {
+      "path": "services/coordinator/src/account-profile.ts",
+      "bytes": 3666,
+      "sha256": "aa3c2003e3b51eab4916b0ab6c693260ce03fe3858bd177547e61e27db6637bd",
+      "sha1": "8412cf1597c62931e851fe19c0f84997eafcba46"
+    },
+    {
+      "path": "services/coordinator/src/admin.ts",
+      "bytes": 1856,
+      "sha256": "3ec14d08c07c908d67c2cdbaf53958ef195769e2fa7c2ebb09ac4f08d838db4d",
+      "sha1": "28880cb7234e8e29c733ea3ba5e64604cba38d99"
+    },
+    {
+      "path": "services/coordinator/src/admission.ts",
+      "bytes": 4262,
+      "sha256": "bc5c9255308e642f1a58415307580aa32e5dbcec7753c81624babda387cf90f7",
+      "sha1": "be89fc25866fa94541f8e009a5c754f06662a2da"
+    },
+    {
+      "path": "services/coordinator/src/config.ts",
+      "bytes": 2512,
+      "sha256": "9d7a713ba10f206ef4e213333a75f7b2331d70bbe62d6535dff9a6db3e413b56",
+      "sha1": "281ee97ffa6a4f17cfb63b118e62a7279e79cf01"
+    },
+    {
+      "path": "services/coordinator/src/console-cors.ts",
+      "bytes": 3248,
+      "sha256": "e9e86e02213a93e5cd6e1c414525f874cec5aceb0a71e792d81477910bed6ff9",
+      "sha1": "485f010487daa72b2ea4a77698f52cbb0044c4bd"
+    },
+    {
+      "path": "services/coordinator/src/deployment-config.ts",
+      "bytes": 3000,
+      "sha256": "45f867256639323e73101fdbbd604e9ba09afdf2b63408266c729d32c76bbef9",
+      "sha1": "a6773eb3dd3eaf154cce7e044ba34a8a5b26e885"
+    },
+    {
+      "path": "services/coordinator/src/directory-snapshot.ts",
+      "bytes": 1506,
+      "sha256": "07a46199ba80e20eb9048e5b7a43f8ad91931e4544cd75f8883c4b374a04c0c9",
+      "sha1": "fd1c3c8a41ee2fc3ce007340789fdbec63653adc"
+    },
+    {
+      "path": "services/coordinator/src/directory.ts",
+      "bytes": 5752,
+      "sha256": "9cf35343941ab76ca4e8d0b4addc5070d54c3cc164fe0ef9dbad6bbec1ee003f",
+      "sha1": "d488ae0119d025164d6d4da1a49e8e5151ab4e7a"
+    },
+    {
+      "path": "services/coordinator/src/endpoints.ts",
+      "bytes": 8234,
+      "sha256": "e77a1e1f55cb3b91eaf25928a2d96989e10cb69b965b273380a1cbd28edd051f",
+      "sha1": "6665c39fc88e9cdf0e7efcd11407ed6875e209ec"
+    },
+    {
+      "path": "services/coordinator/src/function-client-ip.ts",
+      "bytes": 871,
+      "sha256": "85d7e113f2043bced5053088acc1abfb010f1443d343b7629133efd700e3078b",
+      "sha1": "7615cb10a08a5b9fc719b1cbc1f382ce70db4c33"
+    },
+    {
+      "path": "services/coordinator/src/function.ts",
+      "bytes": 1538,
+      "sha256": "5d1e31bacae075485d1a40866af4c7327daba8927da10eddb95fe406ee2e7762",
+      "sha1": "26bb31c2a96efab1a5937d48f54bdba786e5a9b8"
+    },
+    {
+      "path": "services/coordinator/src/http.ts",
+      "bytes": 8203,
+      "sha256": "15dc83f046aa4caf2b8efe2cb5b20e7f516e2bec12e528bc2aab1be849826381",
+      "sha1": "b134afcb0bb8092b648cc1c4d8fa24faa410b08c"
+    },
+    {
+      "path": "services/coordinator/src/identity.ts",
+      "bytes": 3462,
+      "sha256": "650d14f1a95b24e68ed3067ffcf5e8131ef7c0f7eb157916921ae16912bbcac6",
+      "sha1": "799cddf5891a97c6bf52cea362a91bf97d904c44"
+    },
+    {
+      "path": "services/coordinator/src/iroh.ts",
+      "bytes": 2590,
+      "sha256": "b52dc806790efc14f31c661bfdbaa38cd4034de0be6a0068f0aacc5e2aed4713",
+      "sha1": "95866a753f8cd441252134393e1cf93bf74f7f76"
+    },
+    {
+      "path": "services/coordinator/src/local.ts",
+      "bytes": 103,
+      "sha256": "d7adfe981c8a61e389fc57f74f795dc3392b0601fa159478748de90327b36af7",
+      "sha1": "87a88ff57bed751a6e53bd6156284e7ed5ea90b2"
+    },
+    {
+      "path": "services/coordinator/src/main.ts",
+      "bytes": 1063,
+      "sha256": "a7f0b3dfb4c5d1731c5d051d6c003f15c86a5f5f7486c2c7c745a1042e330a0c",
+      "sha1": "c6a4eef39341fb55bfdb30292a67572941650387"
+    },
+    {
+      "path": "services/coordinator/src/memory.ts",
+      "bytes": 30834,
+      "sha256": "ebe4acf87845853c3095a25b005f79d2e6fbcdf710b1e5819ad5c98616f9eab1",
+      "sha1": "3714aaa99fbb4ea5500066e7e18c7dddf526d64a"
+    },
+    {
+      "path": "services/coordinator/src/node-server.ts",
+      "bytes": 4567,
+      "sha256": "f9bc901fab38df7b338dc084166439f4f71d8d3e6905489a0c65e7c00c35c05c",
+      "sha1": "427b99e8b358df56d09d6d96e9dd519eb505033f"
+    },
+    {
+      "path": "services/coordinator/src/notes-devices.ts",
+      "bytes": 7501,
+      "sha256": "d7a6e92f981cf81bb77aae2a34edbf72ee72267968fad6e771605332d1674d83",
+      "sha1": "f1184c9157f2804701eb719d2d6f371d07da18bd"
+    },
+    {
+      "path": "services/coordinator/src/owner.ts",
+      "bytes": 88,
+      "sha256": "fe941e8dff11104278859ed1d43b80711a3eeacd2560a289811221e6f78b0b7d",
+      "sha1": "4746d2e9ed88f0cdbe73b0e1dd0ef2a09c574d34"
+    },
+    {
+      "path": "services/coordinator/src/products.ts",
+      "bytes": 2851,
+      "sha256": "f0b1bd80fb5031c683c75f12b16aecf82c272d6ee989c9953125e46d8a87000b",
+      "sha1": "8bda7482f8f3ae65655b5e89a23f3a3586852e2c"
+    },
+    {
+      "path": "services/coordinator/src/redis-script.ts",
+      "bytes": 22218,
+      "sha256": "3948ac6007b470d7aca488fd1d6d822b05cc690f73b20bf99a9bfcff98ac5765",
+      "sha1": "d821c0827171038c58b6aa8fba9c04d20f7cea21"
+    },
+    {
+      "path": "services/coordinator/src/redis.ts",
+      "bytes": 20246,
+      "sha256": "84a027e00362dc1d61ab03d2c37ccf6db41c14ec7e11f5092b01bb0737b094cd",
+      "sha1": "105adc799cbd576b50de9f041816fa8b4f52a750"
+    },
+    {
+      "path": "services/coordinator/src/service.ts",
+      "bytes": 21115,
+      "sha256": "7885355e586a5aaca1a363399a1cb037aec5385f45ec66008f03b07dd719dff1",
+      "sha1": "4089b90a1b23cf665e93e5596424b53d74f78785"
+    },
+    {
+      "path": "services/coordinator/src/types.ts",
+      "bytes": 5952,
+      "sha256": "55d86e2d503e68e5090c2a0b2701ba3d850d2065f6b890efefc1946aadde734d",
+      "sha1": "423b3cb7cca361dbc8e2a9224e5586faee3a4692"
+    },
+    {
+      "path": "services/coordinator/tsconfig.json",
+      "bytes": 402,
+      "sha256": "c9a72f16ccbdf2103cb9818a60d98b1e94d72aa26c884e7b2d721c41eb028c24",
+      "sha1": "3bb4543786b9a4a91b001a1260618a11562d481e"
+    },
+    {
+      "path": "vercel.json",
+      "bytes": 521,
+      "sha256": "3c15ed543e2ddc9a01a51bc58c88f67e83ae39812c6f3de34f40e089a83ad4e6",
+      "sha1": "02482d8229927579175d572e00ef1c97d1b0cad3"
+    }
+  ]
+}

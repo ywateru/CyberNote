@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-14T08:58:40.253Z",
+  "status": "READY-anonymous-smoke-passed-with-preserved-first-failure-and-bounded-health-followup",
+  "sourceRevision": "e220111362084d4c72b6d6fe2dada505b97a6df3",
+  "reviewedServerRevision": "74d1a891d890cd22fec4c5618a5ef6b247f2db02",
+  "serverSourceDiffEmpty": true,
+  "projectId": "prj_GxQsPabn6tJgX57KyIATAX5DmX7N",
+  "projectName": "cybernote-sync",
+  "productionDeploymentId": "dpl_8Fewyd8o8HHUouDYJDULDd6XSweY",
+  "readyState": "READY",
+  "domains": [
+    "cybernote-sync.vercel.app",
+    "cybernote-sync.aixgg.com"
+  ],
+  "fileCount": 87,
+  "totalBytes": 385518,
+  "sourceFramedSha256": "93b40a2e1ffaa37a2f5ce1aa2424cd20f5bb4cdebaba121afe61a908836a751f",
+  "sourceManifestFileSha256": "92e343d68549931c802d5143343cd5d0f1d4eb5e67ff59bb2a3e07058d514b97",
+  "allUploadedSourceBytesFromPinnedCommit": true,
+  "successfulUploadRequests": 87,
+  "deploymentCreateRequests": 2,
+  "finalProductionAssignmentConfirmed": true,
+  "firstAttempt": {
+    "deploymentId": "dpl_45Yk8kCgg2osRb74XVPuxyj3n3eB",
+    "readyButAnonymousSmokeFailed": true,
+    "http500Observed": true,
+    "packagingOmission": "api/package.json",
+    "runtimeExceptionNotEstablished": true,
+    "rawRuntimeLogsRetained": false
+  },
+  "repair": {
+    "onlyAddedPath": "api/package.json",
+    "bytes": 73,
+    "sameSourceCommit": true,
+    "sourceCodeEdits": false
+  },
+  "originalCanonicalHealthFetchFailureRetained": true,
+  "boundedHealthFollowupPassed": true,
+  "publicSmokePassed": true,
+  "checks": [
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/healthz",
+      "status": 200
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "status": 200
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/account/jwks",
+      "status": 200
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/notes/devices",
+      "status": 401,
+      "errorCode": "INVALID_IDENTITY"
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "POST",
+      "path": "/api/v1/notes/devices",
+      "status": 405,
+      "errorCode": "METHOD_NOT_ALLOWED"
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/notes/devices/self",
+      "status": 405,
+      "errorCode": "METHOD_NOT_ALLOWED"
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/healthz",
+      "status": 200
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "status": 200
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/account/jwks",
+      "status": 200
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/notes/devices",
+      "status": 401,
+      "errorCode": "INVALID_IDENTITY"
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "POST",
+      "path": "/api/v1/notes/devices",
+      "status": 405,
+      "errorCode": "METHOD_NOT_ALLOWED"
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/notes/devices/self",
+      "status": 405,
+      "errorCode": "METHOD_NOT_ALLOWED"
+    }
+  ],
+  "publicConfigurationAndJwksIdentityContinuity": [
+    {
+      "host": "cybernote-sync.vercel.app",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "configurationEqual": true,
+      "keyIdentitiesEqual": null
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "path": "/api/v1/account/jwks",
+      "configurationEqual": null,
+      "keyIdentitiesEqual": true
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "configurationEqual": true,
+      "keyIdentitiesEqual": null
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "path": "/api/v1/account/jwks",
+      "configurationEqual": null,
+      "keyIdentitiesEqual": true
+    }
+  ],
+  "scope": {
+    "existingProjectOnly": true,
+    "newProjects": 0,
+    "environmentWrites": 0,
+    "environmentOverrides": false,
+    "credentialsInArgvOrLogs": false,
+    "credentialMaterialRetained": false,
+    "accountTokensUsed": false,
+    "loginOrSynchronizationTriggered": false,
+    "privateStoresReadOrChanged": false,
+    "localInstallOrNativeBuild": false
+  },
+  "unproven": [
+    "authenticated registry GET/PUT",
+    "real-account device discovery",
+    "production Redis durability/backups",
+    "native directional content transfer",
+    "live signed enrollment issuer/workspace continuity"
+  ]
+}

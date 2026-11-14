@@ -1,0 +1,158 @@
+{
+  "recordedAt": "2026-11-14T08:52:15.811Z",
+  "phase": "after",
+  "anonymousOnly": true,
+  "accountTokensUsed": false,
+  "redirectPolicy": "error",
+  "tls": "Node default verification",
+  "rows": [
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/healthz",
+      "observedAt": "2026-11-14T08:51:45.945Z",
+      "status": 500,
+      "redirected": false,
+      "bodySha256": "6deec8737d3a2ef882241e7647fade183731d1e4ef5a28825bdd93ed2ed486fe",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "expectedBody": false
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "observedAt": "2026-11-14T08:51:46.866Z",
+      "failureStage": "fetch-or-body-before-complete"
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/account/jwks",
+      "observedAt": "2026-11-14T08:51:51.870Z",
+      "failureStage": "fetch-or-body-before-complete"
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/notes/devices",
+      "observedAt": "2026-11-14T08:51:56.873Z",
+      "failureStage": "fetch-or-body-before-complete"
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "POST",
+      "path": "/api/v1/notes/devices",
+      "observedAt": "2026-11-14T08:52:01.876Z",
+      "failureStage": "fetch-or-body-before-complete"
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/notes/devices/self",
+      "observedAt": "2026-11-14T08:52:06.898Z",
+      "failureStage": "fetch-or-body-before-complete"
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/healthz",
+      "observedAt": "2026-11-14T08:52:11.902Z",
+      "status": 500,
+      "redirected": false,
+      "bodySha256": "631c7d9cf8b3758feae1f2cb5c78b452dcf076968c19c3ce79de38042749e627",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "expectedBody": false
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "observedAt": "2026-11-14T08:52:13.023Z",
+      "status": 500,
+      "redirected": false,
+      "bodySha256": "6ab3f3e6d43eb2859c2effdbad0fd516f99b7dc8b5cc5eee2b29a553c46b6c10",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "issuerMatches": false,
+      "clientMatches": false,
+      "resourceMatches": false,
+      "scopeMatches": false,
+      "fixedConfigurationSha256": "9318536c7a8f9758f3329da9580904b7e529bae5172d5307049f3bb2fb782486",
+      "productPresent": false
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/account/jwks",
+      "observedAt": "2026-11-14T08:52:13.786Z",
+      "status": 500,
+      "redirected": false,
+      "bodySha256": "af8620c67dde6cbe205a60f7aceeaa6bd9bb26b1b2807f0d2727ab8ffe59951c",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "publicKeysOnly": false,
+      "keyIdentities": []
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/notes/devices",
+      "observedAt": "2026-11-14T08:52:14.447Z",
+      "status": 500,
+      "redirected": false,
+      "bodySha256": "e7b1e22ccde768b8227fdbe5bb3686bbf4d739c1960be2ac7441dd1b0d51fd1d",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "errorCode": "UNRECOGNIZED",
+      "allow": null
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "POST",
+      "path": "/api/v1/notes/devices",
+      "observedAt": "2026-11-14T08:52:14.902Z",
+      "status": 500,
+      "redirected": false,
+      "bodySha256": "9944874a2e8e6e179545460c68e302e0fe2c209a0cfb39f4f21618abfb21fa94",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "errorCode": "UNRECOGNIZED",
+      "allow": null
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/notes/devices/self",
+      "observedAt": "2026-11-14T08:52:15.353Z",
+      "status": 500,
+      "redirected": false,
+      "bodySha256": "71fa9013cbea1562a211d02c075ebc928115625c93e657eea19737a656670833",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "errorCode": "UNRECOGNIZED",
+      "allow": null
+    }
+  ],
+  "continuity": [
+    {
+      "host": "cybernote-sync.vercel.app",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "configurationEqual": null,
+      "keyIdentitiesEqual": null
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "path": "/api/v1/account/jwks",
+      "configurationEqual": null,
+      "keyIdentitiesEqual": null
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "configurationEqual": false,
+      "keyIdentitiesEqual": null
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "path": "/api/v1/account/jwks",
+      "configurationEqual": null,
+      "keyIdentitiesEqual": false
+    }
+  ],
+  "passed": false
+}

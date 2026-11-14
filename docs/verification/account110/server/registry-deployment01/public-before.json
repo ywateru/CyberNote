@@ -1,0 +1,122 @@
+{
+  "recordedAt": "2026-11-14T08:49:33.610Z",
+  "phase": "before",
+  "anonymousOnly": true,
+  "accountTokensUsed": false,
+  "redirectPolicy": "error",
+  "tls": "Node default verification",
+  "rows": [
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/healthz",
+      "observedAt": "2026-11-14T08:49:25.537Z",
+      "status": 200,
+      "redirected": false,
+      "bodySha256": "dc51b8c96c2d745df3bd5590d990230a482fd247123599548e0632fdbf97fc22",
+      "cacheControl": "no-store",
+      "expectedBody": true
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "observedAt": "2026-11-14T08:49:28.268Z",
+      "status": 200,
+      "redirected": false,
+      "bodySha256": "87c9070f5f0f85596c7dcd3078c779f9ec8604158e3a96113469de73370cb419",
+      "cacheControl": "no-store",
+      "issuerMatches": true,
+      "clientMatches": true,
+      "resourceMatches": true,
+      "scopeMatches": true,
+      "fixedConfigurationSha256": "73c04866e638b4ab3b53f7667c6d372c7170bf0caaaba9895eaab5c5a34aac47",
+      "productPresent": true
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/account/jwks",
+      "observedAt": "2026-11-14T08:49:29.043Z",
+      "status": 200,
+      "redirected": false,
+      "bodySha256": "139478b460a04e2453bff73323e497e40193aa6892f776868237648f96d04c88",
+      "cacheControl": "no-store",
+      "publicKeysOnly": true,
+      "keyIdentities": [
+        {
+          "kidSha256": "dafdd1df148f7d9df7a4c6c041514e2a3c87a9d395ea73864f8c8d33c8eff769",
+          "thumbprintSha256": "8e4fb3b0cc9c672922f570bb9cc87ae3e664bc66d18f3af136320020f15560a3"
+        }
+      ]
+    },
+    {
+      "host": "cybernote-sync.vercel.app",
+      "method": "GET",
+      "path": "/api/v1/notes/devices",
+      "observedAt": "2026-11-14T08:49:29.335Z",
+      "status": 401,
+      "redirected": false,
+      "bodySha256": "cd5457f2ea8d621b41bc6e201a4c47e10a089fdcf1577430a4c8db78dec54651",
+      "cacheControl": "no-store",
+      "errorCode": "INVALID_SESSION",
+      "allow": null
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/healthz",
+      "observedAt": "2026-11-14T08:49:30.291Z",
+      "status": 200,
+      "redirected": false,
+      "bodySha256": "dc51b8c96c2d745df3bd5590d990230a482fd247123599548e0632fdbf97fc22",
+      "cacheControl": "no-store",
+      "expectedBody": true
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/auth/config?appId=<fixed-native-client>",
+      "observedAt": "2026-11-14T08:49:31.433Z",
+      "status": 200,
+      "redirected": false,
+      "bodySha256": "87c9070f5f0f85596c7dcd3078c779f9ec8604158e3a96113469de73370cb419",
+      "cacheControl": "no-store",
+      "issuerMatches": true,
+      "clientMatches": true,
+      "resourceMatches": true,
+      "scopeMatches": true,
+      "fixedConfigurationSha256": "73c04866e638b4ab3b53f7667c6d372c7170bf0caaaba9895eaab5c5a34aac47",
+      "productPresent": true
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/account/jwks",
+      "observedAt": "2026-11-14T08:49:32.220Z",
+      "status": 200,
+      "redirected": false,
+      "bodySha256": "139478b460a04e2453bff73323e497e40193aa6892f776868237648f96d04c88",
+      "cacheControl": "no-store",
+      "publicKeysOnly": true,
+      "keyIdentities": [
+        {
+          "kidSha256": "dafdd1df148f7d9df7a4c6c041514e2a3c87a9d395ea73864f8c8d33c8eff769",
+          "thumbprintSha256": "8e4fb3b0cc9c672922f570bb9cc87ae3e664bc66d18f3af136320020f15560a3"
+        }
+      ]
+    },
+    {
+      "host": "cybernote-sync.aixgg.com",
+      "method": "GET",
+      "path": "/api/v1/notes/devices",
+      "observedAt": "2026-11-14T08:49:32.716Z",
+      "status": 401,
+      "redirected": false,
+      "bodySha256": "cd5457f2ea8d621b41bc6e201a4c47e10a089fdcf1577430a4c8db78dec54651",
+      "cacheControl": "no-store",
+      "errorCode": "INVALID_SESSION",
+      "allow": null
+    }
+  ]
+}
