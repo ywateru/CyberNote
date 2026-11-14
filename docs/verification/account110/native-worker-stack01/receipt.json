@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-14T18:18:25+08:00",
+  "baseSource": "cb91f4b82995a314268aa47b491b7973679dff8f",
+  "sourceCommit": "8c3fc430c7289a4e5a96f45f676612861037fd2e",
+  "changedProductPaths": [
+    {
+      "path": "src-tauri/src/account/worker.rs",
+      "sha256": "46a1e697311521aebaec92030af680b89c998e35d92e97ee0388919063c0726a"
+    }
+  ],
+  "inputLocks": [
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+      "unchangedFromBase": true
+    },
+    {
+      "path": "src-tauri/Cargo.lock",
+      "sha256": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+      "unchangedFromBase": true
+    }
+  ],
+  "crashEvidence": {
+    "documentationCommit": "633bc98209000375d9290b459607d25ed850cc66",
+    "sanitizedDiagnosisSha256": "c6394bd18eb00a3b79f1de64ffcfa5a5ac5aa6d7227c206f2defd974c286ddc9",
+    "liveRunRepeated": false
+  },
+  "environment": {
+    "target": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "locked": true,
+    "offline": true,
+    "diskFloorBytes": 6442450944,
+    "diskFloorTriggered": false,
+    "targetReleased": true
+  },
+  "futureBytes": {
+    "realContentOwner": 105400,
+    "realDirectoryOwner": 1488,
+    "previousInlineCompositionTypeOnly": 213904,
+    "heapPinnedJoin": 128,
+    "realWorker": 10608
+  },
+  "smallStackBytes": 524288,
+  "commands": [
+    {
+      "filter": "account::worker::tests::real_owner_futures_have_bounded_composition_and_poll_on_small_stack",
+      "log": "owner-preliminary.log",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "sourceScope": "Preliminary uncommitted patch before adding full-worker cancelled-entry poll; not the final exact-source receipt."
+    },
+    {
+      "filter": "account::",
+      "log": "account-group01.log",
+      "sourceCommit": "8c3fc430c7289a4e5a96f45f676612861037fd2e",
+      "passed": 73,
+      "failed": 1,
+      "ignored": 0,
+      "newRegressionTestsPassed": 2,
+      "failedTest": "account::enrollment::tests::real_store_activation_preserves_documents_and_restart_identity_and_allows_explicit_adoption"
+    },
+    {
+      "filter": "account::enrollment::tests::real_store_activation_preserves_documents_and_restart_identity_and_allows_explicit_adoption",
+      "log": "enrollment-isolated.log",
+      "sourceCommit": "8c3fc430c7289a4e5a96f45f676612861037fd2e",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "filter": "sync::adapter::adoption_tests",
+      "log": "adoption-final.log",
+      "sourceCommit": "8c3fc430c7289a4e5a96f45f676612861037fd2e",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "commandPrefix": "cargo test --manifest-path src-tauri/Cargo.toml --lib --features sync-e2e --locked --offline",
+  "commandSuffix": "-- --nocapture",
+  "limits": [
+    "First full account group did not pass; isolated existing fixture later passed, failure cause not established.",
+    "No full-suite green claim. No further broad rerun.",
+    "No real login, application launch, live directory call, private store or device operation.",
+    "Small stack applies only to regression thread; production thread stack unchanged.",
+    "Size and no-network polls establish bounded composition; real GUI acceptance and independent review remain pending."
+  ]
+}
