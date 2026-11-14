@@ -46,4 +46,9 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 ## 进度
 
 - 已读既有实现：目前列表过滤 offline；`start_network` 在 paused 直接返回，开启后自动 `pair/connect/sync_now`。需要拆开目录与内容服务。
-- 设计及边界调查中，尚无本任务功能验收结果。
+- 设计与接口已提交；独立设计审阅补充 `registryKey` 与持久 `revision`，防止同账户其他设备接管登记及迟到发布覆盖暂停。
+- UI `58b54da1` 已独审 PASS 并合入 main（`ac0b03a2`），67项定向检查及类型检查通过；debug命令注册增量 `29600b05`（69项）待增量独审。
+- 设备服务作者提交 `74d1a891`，作者验证190项通过、含实际Redis/AOF；独立审阅中，尚未部署。
+- 网络作者提交 `29b2a86d`，作者29项网络检查和4组真实Store场景通过；独立审阅中。账户作者正在以该接口整合。
+- target由网络作者释放后交原生账户作者；已清理22个未打开的旧应用可执行产物，依赖/原包/失败证据保留，回执 `/private/tmp/account110-network-target-executable-cleanup01.json`。
+- 本任务尚未构建最终精确包、尚未执行两个真实账户客户端验收；不能把上述模块通过当作整体通过。
