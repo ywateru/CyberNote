@@ -1,0 +1,818 @@
+{
+  "schema": 1,
+  "kind": "one-bounded-independent-sdk-mapping-probe",
+  "source": "d0ad2267289cbe3f527fd7ee30299a62812d6ac9",
+  "appBinarySha256": "2823cfb35ca6f3c4a55e677d37b63bd74dab3c4b96d2ad70fefa38084375141e",
+  "probeBinarySha256": "2deea2958e60825f8b32b06b4dcf3fad65951d6f370d3cbae3714747377b37b6",
+  "status": "map-calls-succeeded-not-app-acceptance",
+  "appAcceptance": false,
+  "grantCopied": false,
+  "noiseRead": false,
+  "credentialsCaptured": false,
+  "eventCodeAvailable": false,
+  "inputFingerprintBefore": "53a80133de8b95fb5bb0ba74cf82f67a3a215d3a96c7a8f30c9c100d299ccaec",
+  "events": [
+    {
+      "phase": "coordination-ready",
+      "transport": null
+    },
+    {
+      "phase": "direct-attempt",
+      "transport": "webrtc-direct"
+    },
+    {
+      "phase": "tunnel-ready",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "iroh-attempt",
+      "transport": "iroh-direct"
+    },
+    {
+      "phase": "fallback-attempt",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "websocket-dial",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "websocket-upgraded",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "mutual-tls-ready",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "multiplexer-ready",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "port-open",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "direct-attempt",
+      "transport": "webrtc-direct"
+    },
+    {
+      "phase": "iroh-attempt",
+      "transport": "iroh-direct"
+    },
+    {
+      "phase": "fallback-attempt",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "websocket-dial",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "websocket-upgraded",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "mutual-tls-ready",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "multiplexer-ready",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "port-open",
+      "transport": "cloudflare-tunnel"
+    },
+    {
+      "phase": "mapping-disconnected",
+      "transport": null
+    },
+    {
+      "phase": "mapping-disconnected",
+      "transport": null
+    },
+    {
+      "phase": "mapping-disconnected",
+      "transport": null
+    },
+    {
+      "phase": "mapping-disconnected",
+      "transport": null
+    },
+    {
+      "phase": "error",
+      "transport": null
+    },
+    {
+      "phase": "mapping-disconnected",
+      "transport": null
+    },
+    {
+      "phase": "mapping-disconnected",
+      "transport": null
+    }
+  ],
+  "steps": [
+    {
+      "appAcceptance": false,
+      "eventCodeAvailable": false,
+      "kind": "independent-cli-sdk-map-probe",
+      "schema": 1
+    },
+    {
+      "phase": "authRestore",
+      "status": "pass"
+    },
+    {
+      "phase": "sdkRegistration",
+      "status": "pass"
+    },
+    {
+      "phase": "registryGet",
+      "status": "selected-owned-b-in-ram"
+    },
+    {
+      "phase": "enrollmentMapping",
+      "status": "started"
+    },
+    {
+      "elapsedMs": 33026,
+      "phase": "enrollmentMapping",
+      "status": "success"
+    },
+    {
+      "phase": "syncMapping",
+      "status": "started"
+    },
+    {
+      "elapsedMs": 28400,
+      "phase": "syncMapping",
+      "status": "success"
+    },
+    {
+      "phase": "probe",
+      "status": "two-map-calls-complete"
+    },
+    {
+      "phase": "sdkClose",
+      "status": "closed"
+    }
+  ],
+  "bStatus": [
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656717626,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656717626,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656717626,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656717626,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656717626,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656721171,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656721171,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656721171,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656721171,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "connecting",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": false,
+          "summary": {
+            "capturedAt": 1794656721171,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": true,
+          "summary": {
+            "capturedAt": 1794656724340,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    },
+    {
+      "state": "ready",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [
+        {
+          "label": "other",
+          "current": false,
+          "online": false,
+          "connected": false,
+          "syncAvailable": false
+        },
+        {
+          "label": "b",
+          "current": true,
+          "online": true,
+          "connected": false,
+          "syncAvailable": true,
+          "summary": {
+            "capturedAt": 1794656791189,
+            "lastNoteUpdatedAt": 1794653409244,
+            "noteCount": 2
+          }
+        }
+      ],
+      "error": null
+    }
+  ],
+  "probeLifecycle": {
+    "exit": {
+      "code": 0,
+      "signal": null
+    },
+    "close": {
+      "code": 0,
+      "signal": null
+    },
+    "ownedProcessGroupGone": true,
+    "cleanupRequiredForced": false,
+    "forcedSignals": [],
+    "stderrBytes": 0,
+    "stdoutBytes": 2177
+  },
+  "bLifecycle": [
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    }
+  ],
+  "nativeCleanup": {
+    "allClosed": true,
+    "failed": false
+  },
+  "inputFingerprintAfter": "53a80133de8b95fb5bb0ba74cf82f67a3a215d3a96c7a8f30c9c100d299ccaec",
+  "sourceInputsUnchanged": true,
+  "sourceHeadAfter": "d0ad2267289cbe3f527fd7ee30299a62812d6ac9",
+  "finishedAt": "2026-11-14T11:46:48.132Z",
+  "firstLive02ResultUnchanged": true
+}
