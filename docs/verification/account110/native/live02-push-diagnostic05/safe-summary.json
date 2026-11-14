@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "source": "39711ae8f6c2cc92c387a3638c92c43024dcc68e",
+  "binarySha256": "b3270ad720bce83fc16f5da38f9ce7caeb7120b219b8a2c4674b76491322a4f6",
+  "status": "fail",
+  "pushElapsedMs": 27075,
+  "pushSubmitted": true,
+  "commandDone": true,
+  "commandRejected": false,
+  "commandTerminal": {
+    "state": "ready",
+    "enabled": true,
+    "hasProfile": true,
+    "pendingCount": 0,
+    "conflictCount": 0,
+    "devices": [
+      {
+        "label": "a",
+        "current": true,
+        "online": true,
+        "connected": false,
+        "syncAvailable": true,
+        "summary": {
+          "capturedAt": 1794661816733,
+          "lastNoteUpdatedAt": 1794653408652,
+          "noteCount": 2
+        }
+      },
+      {
+        "label": "b",
+        "current": false,
+        "online": true,
+        "connected": false,
+        "syncAvailable": true,
+        "summary": {
+          "capturedAt": 1794661816292,
+          "lastNoteUpdatedAt": 1794653409244,
+          "noteCount": 2
+        }
+      }
+    ],
+    "deviceOperation": {
+      "device": "b",
+      "direction": "push",
+      "phase": "failed",
+      "startedAt": 1794661796850,
+      "finishedAt": 1794661823517
+    },
+    "error": {
+      "code": "account_network",
+      "stage": "coordinator"
+    }
+  },
+  "lifecycle": [
+    {
+      "device": "a",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    }
+  ],
+  "nativeCleanup": {
+    "allClosed": true,
+    "failed": false
+  },
+  "firstResultUnchanged": true,
+  "sourceHeadAfter": "39711ae8f6c2cc92c387a3638c92c43024dcc68e",
+  "sourceCleanAfter": true,
+  "resultSha256": "aedc615ce65d54a18e0ea737eb54bd2fe193a54d35c94422c738f14457b76044",
+  "actualSdkVariantObserved": false,
+  "actualMapStageObserved": false,
+  "sourceInterpretation": "The coordinator label is the SDK error conversion fallback. This receipt does not distinguish enroll versus sync map, SDK variant, grant validity, or business transfer entry. No retry was performed."
+}
