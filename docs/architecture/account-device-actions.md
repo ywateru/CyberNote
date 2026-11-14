@@ -1,0 +1,85 @@
+# 账户设备目录与单次同步
+
+本契约对应 2026-11-14 用户要求，覆盖账户模式；原“设备同步”手工配对入口保持既有规则。账户登录用于同步，本地数据库不归属于用户名。
+
+## 行为
+
+- 登录后即可发现同账户、同产品的设备，目录发现和元数据发布不传笔记正文或附件，不要求启用内容同步。
+- 设备使用资料库安装级持久 `registryDeviceId`（UUIDv4），退出、换账户和 workspace adoption 不旋转，和既有 enrollment 的协议 device UUID 分开。每个账户的记录仍按 owner/product 隔离。每台设备有可辨认的默认名称，并可修改本机名称。
+- 账户设备记录持久保留；断线与会话过期使其离线，不删除已登记设备。列表不得仅显示本机曾见过的在线设备缓存。
+- 在线来自服务端 presence lease 和当前 transport 可达性；连接状态、笔记最后更新时间、最近传输成功是不同事实。不能用心跳填充笔记时间。
+- 笔记数量计当前未删除的普通笔记，包含上锁笔记，不包含文件夹、回收站、已永久删除记录与历史版本。更新时间取这些笔记的 `updatedAt` 最大值（Unix 毫秒）；空库没有更新时间。读取摘要不得解锁或读取正文。
+- 远端摘要未获得或版本不兼容时显示“暂不可用”，不得填 0；离线设备不将历史摘要显示为当前数据。
+
+## 数据传输
+
+“同步此设备”开关含义为允许当前账户内容传输。开启时仍执行已有资料库采用/保存确认，并显示明确合并范围；开启本身不向所有设备交换内容。关闭不登出，目录仍可用，内容服务及在途任务受到 fence。
+
+点击一台远端在线且允许同步的设备，选择一次操作：
+
+| 方向 | 发送 | 接收 |
+| --- | --- | --- |
+| push | 本机 → 选定设备 | 不拉取远端独有版本/附件 |
+| pull | 不向远端推送本机独有版本/附件 | 选定设备 → 本机 |
+| both | 本机 → 选定设备 | 选定设备 → 本机 |
+
+这三个动作执行既有版本合并与冲突保全规则，不是覆盖数据库/镜像删除。操作只针对选择的稳定设备 UUID；目录变化不能把任务改投另一设备。服务只在用户动作后建立客户端内容交换；自动配对、恢复、后台唤醒、目录轮询均不启动 cycle。接收端仅被动响应已验证同账户请求，不反向启动双向任务。旧手工同步的自动双向行为不变。
+
+同一账户 runtime 同时仅一项设备操作，串行且有界。失联/暂停/退出/账户切换使操作失败或取消，不能无限排队自动重放，重试必须是同一明确目标和方向。完成表示该次版本交换获得持久收据；未应用/冲突仍单独显示。
+
+## 模块连接与部署
+
+```text
+账户登录 → 受验证账户身份 → 持久设备目录（仅名称、摘要、presence、transport关联）
+                              ↓ 选定稳定设备
+显式方向请求 → enrollment验证/Noise key钉住 → 单次网络交换
+                                              ↓
+                                    持久inbox → Session应用/冲突
+```
+
+设备目录属于 CyberNote 的账户 API，和通用 SDK 的短期 transport 目录分离，避免改变其他 SDK 使用者的租约、注册和注销语义。服务端以 verifiedAccount 的 issuer/subject/product 分区，客户端不能传 owner 来改变分区。目录关联须验证 coordinator session 和稳定 device 身份，元数据采用有限 schema、大小和数量限制；不能发布凭据、内部路径、正文或附件 URL。
+
+若线上服务尚未支持新设备 API，返回明确“不支持设备目录/需要更新服务”状态，不能静默退回旧自动广播。发布与实际双端测试必须记录所用服务版本和精确客户端源码，不把 fixture 测试当作线上同账户发现通过。
+
+## 账户 IPC v110
+
+保留原 `Status`、登录、退出、暂停/启用命令；`syncNow` 只允许显式恢复连接/刷新目录，不启动无目标内容同步。新增严格命令：
+
+```text
+renameDevice { name: string }                 // 只修改本机，trim后1..96字符，无控制字符
+syncDevice { deviceId: UUIDv4, direction: "push" | "pull" | "both" }
+```
+
+`Device.id` 改为稳定 registry ID；既有名称/online/current/connected/transport保留，新增：
+
+```text
+syncAvailable: boolean                       // 在线、启用内容服务且兼容新协议
+summary?: { noteCount: u64, lastNoteUpdatedAt: u64|null, capturedAt: u64 }
+```
+
+`summary` 缺失表示未知，空库 `{noteCount:0,lastNoteUpdatedAt:null}`；全部时间为 Unix 毫秒，不允许非法负值/非安全整数。`Status` 新增可选 `deviceOperation`：
+
+```text
+{ deviceId: UUIDv4, direction: push|pull|both,
+  phase: running|succeeded|failed, startedAt: u64, finishedAt?: u64 }
+```
+
+只描述本 runtime 最新一次操作；失败使用已有有限 `SafeError` 并补充受限错误代码（设备离线/不兼容/未启用/目录不可用等），不能显示内部任意远端错误文本。`syncDevice` IPC 可以等待一次有限操作完成；运行状态应能被只读 status 观察。成功只表示持久传输收据，不代表已解决冲突或所有窗口已应用。
+
+## 专用设备 API v1
+
+`GET /api/v1/notes/devices` 与 `PUT /api/v1/notes/devices/self` 都使用当前已验证账户 Bearer；不得使用 grant/Noise 私钥做目录凭据。GET 返回 `{schemaVersion:1,devices:[...]}`；每行的 `id,name,online,syncAvailable,summary` 对应上述安全设备字段，另含原生专用 `transportDeviceId,protocolDeviceId,noisePublicKey` 可空关联，均不得直接泄露到前端。服务端不得接受客户端自选 owner。
+
+PUT 固定字段：`deviceId`（registry UUID）、`name`、`summary`（可null）、`syncAvailable`、`transportSessionKey`、`protocolDeviceId`（UUID或null）、`noisePublicKey`（32字节base64url或null）。`transportSessionKey` 仅用于服务端验证当前 SDK device session 的 subject/product 并解析实际 transport id/incarnation，不落日志或registry记录；输入最多8KiB。未启用同步时后两个为null，syncAvailable=false。GET只对owner返回，内容授权仍必须验证 enrollment + Noise。SDK session重建后重新PUT，旧session迟到更新不能覆盖新presence（以session注册/到期序列加原子fence实现）。
+
+presence 最多65秒，定期续租；syncAvailable 还要求底层 transport session有效且在线。持久设备记录无TTL，与通用coordinator GC分离；每账户最多64台，超限明确报错，不淘汰旧记录。过期presence后的摘要可以保留在服务端，但原生投影必须隐藏离线摘要。历史旧版本从未登记的设备只有升级后才会进入此表，不能声称能恢复已删除的旧目录。
+
+## 网络执行边界
+
+账户专用 `SyncService` 不创建自动内容worker；纯配对和 reconnect不调用cycle。提供明确的 `TransferDirection` 及单次传输API。账户连接使用新有限能力握手并固定方向；被动handler仅允许该方向对应的读取或写入RPC（inventory可用于差集），没有握手的旧账户peer拒绝内容请求。方向限制在主动cycle与被动handler均执行。非账户手工服务维持既有wire/自动循环兼容。
+
+网络API具体Rust函数签名由network与account作者同步后记录于实现报告，不以父级猜测替代类型检查；语义不得削弱本契约。
+
+## 保全与验收
+
+本轮使用新建的两个独立 data-dir 和合成数据，不在默认原库开启同步。登录凭据仅进入真实授权表单，不进源码、回执或截图。测试内容包含格式、附件与双向独有笔记；每次操作验证允许方向和禁止方向，另验证空闲后不自发传输。详细矩阵与实际执行回执链接由任务收尾补充。
