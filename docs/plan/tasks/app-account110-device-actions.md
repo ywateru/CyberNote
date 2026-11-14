@@ -1,7 +1,7 @@
 ---
 id: app-account110-device-actions
 scope: account directory, native replication, account settings
-status: in-progress
+status: complete
 depends-on: []
 ---
 
@@ -79,3 +79,4 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - 同一对fresh-live03资料库使用原`syncOnce`独立一次Push成功；[完整owned续验](../../verification/account110/native/owned-continuation01/README.md)只新增一次Pull与一次Both，11项检查、110条完整数据核验、idle编辑／新增隔离、offline与最终双重启均通过，[实际结果独核PASS](../reviews/app-account110-owned-continuation-live-01.md)。110为重复核对记录，不是唯一文档或用例总数。
 - [GUI与收尾](../../verification/account110/native/post-gui01/README.md)完成在线A10／B9及真实笔记时间、offline隐藏摘要、rename取消焦点、方向radio／键盘／Tab闭环、Escape／取消焦点；未点开始传输。随后独立正常重开只读核对全部semantic集合不变，所有holder及核对实例自然exit0并关闭，两个测试库保留。source freeze已解除。
 - [当前结果](../../verification/account110/RESULT-LATEST.md)、[双端启动／手动指南](../../verification/account110/MANUAL-TESTING.md)及两个固定owned启动器已收拢，进入最终文档一致性与本地main提交检查；Android和未列明视觉变体不在本轮实测范围。
+- 最终文档经Cicero链接／证据边界审阅，修正产品输入与导出文件计数、启动器额外参数语义及D11实机范围；post-GUI回执和原单Push trace经Erdos只读字节／hash复核通过。主线包后差异仅工具及文档，产品源码／manifest与`29c87810`一致；本轮要求完成，原fresh失败及未测范围继续保留，不声称所有计划用例均实机通过。
