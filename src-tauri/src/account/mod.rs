@@ -553,6 +553,7 @@ impl Runtime {
                     return self.snapshot();
                 }
                 self.set_enabled(false)?;
+                self.sync.replay_adoption_release()?;
                 private::clear_session(&self.root)?;
                 self.mutate(|d| {
                     d.binding = None;

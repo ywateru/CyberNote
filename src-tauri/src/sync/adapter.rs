@@ -329,6 +329,7 @@ pub(crate) struct Runtime {
     active: AtomicBool,
     worker: Mutex<Option<thread::JoinHandle<()>>>,
     backend_epoch: Arc<AtomicU64>,
+    pending_adoption_release: Mutex<Option<Value>>,
 }
 impl Runtime {
     pub(crate) fn new(
@@ -370,6 +371,7 @@ impl Runtime {
             active: AtomicBool::new(active),
             worker: Mutex::new(None),
             backend_epoch: Arc::new(AtomicU64::new(0)),
+            pending_adoption_release: Mutex::new(None),
         });
         let weak = Arc::downgrade(&runtime);
         let worker = thread::Builder::new()
@@ -699,6 +701,9 @@ impl Runtime {
         if !policy.is_current() {
             return Err(error("sync_plan_stale"));
         }
+        // A committed Store must not take the no-op return (or adopt another
+        // workspace) while any original renderer notification is unsettled.
+        self.replay_adoption_release()?;
         if !self.account_adoption_needed(workspace, device)? {
             // A retained session never resets causal state or editor authority.
             return Ok(());
@@ -754,7 +759,7 @@ impl Runtime {
                 )
             };
             let media = snapshot.verify()?;
-            let (release, access) = {
+            {
                 let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
                 s.check(&authority, None)
                     .map_err(|_| error("sync_plan_stale"))?;
@@ -769,21 +774,17 @@ impl Runtime {
                 )? {
                     return Err(error("sync_adoption_blocked"));
                 }
-                let previous = s.store.sync_store_instance();
                 s.store.sync_with_media(media, |store| {
                     store.sync_adopt_workspace(workspace, device)
                 })?;
                 committed = true;
                 let release = s.sync_release_workspace_adoption(&operation, true)?;
-                let access = s.sync_finish_workspace_adoption(previous);
-                (release, access)
-            };
-            if let Some(release) = release {
-                self.host.emit("notes-sync", &release)?;
+                // Protocol adoption leaves the local editor Session untouched.
+                // Preserve the original release before any fallible broadcast;
+                // partial delivery is safe to retry without clearing editors.
+                *self.pending_adoption_release.lock().map_err(|_| error("sync_internal"))? = release;
             }
-            if let Some(access) = access? {
-                self.host.emit("notes-access", &access)?;
-            }
+            self.replay_adoption_release()?;
             Ok(())
         })();
         if result.is_err() && !committed {
@@ -800,6 +801,16 @@ impl Runtime {
             }
         }
         result
+    }
+    pub(crate) fn replay_adoption_release(&self) -> Result<()> {
+        let mut pending = self.pending_adoption_release.lock().map_err(|_| error("sync_internal"))?;
+        if let Some(release) = pending.as_ref() {
+            // The existing renderer quiet protocol consumes release idempotently
+            // by original operation/Session. Never broadcast destructive access.
+            self.host.emit("notes-sync", release)?;
+            *pending = None;
+        }
+        Ok(())
     }
     pub(crate) fn pause_account(&self) {
         // Account setup/cancellation can run before the legacy-workspace check.

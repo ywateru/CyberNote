@@ -911,6 +911,95 @@ mod tests {
         }
     }
     #[test]
+    fn workspace_adoption_partial_release_retries_keep_editor_authority_and_terminal_receipt() {
+        use crate::{session::{Session, Token, synchronization::WindowReply}, store::Store, sync::adapter::{Runtime, SharedSession, WindowHost}};
+        use std::{collections::HashSet, sync::{Arc, Condvar, Mutex}};
+        struct PartialWindows {
+            shared: SharedSession,
+            failures: Mutex<u8>,
+            deliveries: Mutex<Vec<(String, String, serde_json::Value)>>,
+        }
+        impl WindowHost for PartialWindows {
+            fn participants(&self) -> HashSet<String> {
+                HashSet::from(["main".into(), "note-second".into()])
+            }
+            fn emit(&self, name: &str, value: &serde_json::Value) -> crate::store::Result<()> {
+                for window in ["main", "note-second"] {
+                    if name == "notes-sync" && value["phase"] == "release" && window == "note-second" {
+                        let mut remaining = self.failures.lock().unwrap();
+                        if *remaining > 0 {
+                            *remaining -= 1;
+                            return Err(crate::store::AppError { code: "fixture_emit_failed".into(), message: "synthetic partial delivery".into(), commit: None });
+                        }
+                    }
+                    self.deliveries.lock().unwrap().push((window.into(), name.into(), value.clone()));
+                    if name == "notes-sync" {
+                        let operation = value["operationId"].as_str().unwrap().to_string();
+                        let reply = match value["phase"].as_str() {
+                            Some("probe") => WindowReply::Probe { operation_id: operation, protected_note_ids: vec![], blocked: false },
+                            Some("prepare") => WindowReply::Prepare { operation_id: operation, ready: true },
+                            _ => continue,
+                        };
+                        let mut s = self.shared.0.lock().unwrap();
+                        let token = s.sync_media_token();
+                        s.sync_reply(window, reply, &token)?;
+                    }
+                }
+                Ok(())
+            }
+        }
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path()).unwrap();
+        let note = store.action(serde_json::json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+        store.sync_enable(None).unwrap();
+        let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
+        let old_token = shared.0.lock().unwrap().sync_media_token();
+        let host = Arc::new(PartialWindows { shared: shared.clone(), failures: Mutex::new(2), deliveries: Mutex::new(vec![]) });
+        let runtime = Runtime::new(shared.clone(), dir.path().into(), host.clone()).unwrap();
+        runtime.pause_for_account().unwrap();
+        let identity = runtime.account_identity_for(&uuid::Uuid::new_v4().to_string()).unwrap();
+        let target = VerifiedWorkspace { workspace: uuid::Uuid::new_v4().to_string(), device: identity.device_id().unwrap(), noise_key: identity.public_key().unwrap() };
+        let private_root = dir.path().join(".account");
+        super::super::private::begin_adoption(&private_root).unwrap();
+        assert!(runtime.activate_account(&target, identity.clone(), Arc::new(Gate::default())).is_err());
+        let instance = shared.0.lock().unwrap().store.sync_store_instance();
+        let release = host.deliveries.lock().unwrap().iter().find(|(_, name, value)| name == "notes-sync" && value["phase"] == "release").unwrap().2.clone();
+        assert_eq!(release["sessionId"], old_token.session_id);
+        assert_eq!(release["outcome"], "commit");
+        assert!(super::super::private::adoption_pending(&private_root).unwrap());
+        {
+            let mut s = shared.0.lock().unwrap();
+            // A missed release can query the real terminal with its original
+            // Session token; it is not stranded behind a rotated authority.
+            assert_eq!(s.sync_reply("note-second", WindowReply::Prepare { operation_id: release["operationId"].as_str().unwrap().into(), ready: true }, &old_token).unwrap()["outcome"], "commit");
+            let revision = s.store.note(&note).unwrap().revision;
+            let token = Token { note_epoch: Some(0), ..old_token.clone() };
+            s.register_save("main", &note, "post-partial-draft", token).unwrap();
+            s.save("main", serde_json::json!({"type":"saveNote", "id":note, "saveIntent":"post-partial-draft", "revision":revision,
+                "document":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"draft after partial release"}]}]}})).unwrap();
+        }
+        assert!(runtime.activate_account(&target, identity.clone(), Arc::new(Gate::default())).is_err());
+        assert!(super::super::private::adoption_pending(&private_root).unwrap());
+        assert_eq!(shared.0.lock().unwrap().store.sync_store_instance(), instance);
+        let mut service = runtime.activate_account(&target, identity, Arc::new(Gate::default())).unwrap();
+        assert!(!super::super::private::adoption_pending(&private_root).unwrap());
+        {
+            let s = shared.0.lock().unwrap();
+            assert_eq!(s.store.sync_store_instance(), instance);
+            s.check(&old_token, None).unwrap();
+            assert_eq!(s.store.note(&note).unwrap().plain_text, "draft after partial release");
+        }
+        let deliveries = host.deliveries.lock().unwrap();
+        assert!(deliveries.iter().all(|(_, name, _)| name != "notes-access"));
+        let releases: Vec<_> = deliveries.iter().filter(|(_, name, value)| name == "notes-sync" && value["phase"] == "release").collect();
+        assert_eq!(releases.iter().filter(|(window, _, _)| window == "main").count(), 3);
+        assert_eq!(releases.iter().filter(|(window, _, _)| window == "note-second").count(), 1);
+        assert!(releases.iter().all(|(_, _, value)| value == &release));
+        drop(deliveries);
+        service.shutdown().unwrap();
+        runtime.shutdown().unwrap();
+    }
+    #[test]
     fn closed_or_stale_account_gate_cannot_adopt_a_local_library() {
         use crate::{session::Session, store::Store, sync::adapter::Runtime};
         use std::sync::{Arc, Condvar, Mutex};

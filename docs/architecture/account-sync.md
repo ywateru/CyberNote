@@ -24,6 +24,7 @@ CyberGrid 将 peer stream 接入本机 TCP 后，业务 listener 不能从 `127.
 - `GET /api/v1/account/jwks` 只发布签名公钥。端上从平台固定transport origin获取，验证算法、kid、固定旧enrollment issuer、audience、purpose、有效期及本机账户/workspace/product，再通过 Noise 握手证明对端持有绑定的私钥。不得接受 JWT 内任意 jwks URL。
 - bootstrap 双向交换凭证；host 只给预期 deviceId 和 Noise key 生成一次邀请，client 校验 host proof 与邀请的 host key/workspace。nonce/challenge 只在受限 bootstrap 业务流内使用，邀请不入目录/日志/前端。
 - 账号配对与 manual 凭据明确区分；暂停、退出、凭证过期或账号代际变化必须关闭现存账号业务流与新请求，不能降级成永久 manual 配对。本地资料库可从手工同步切换到账户同步；只有显式开启并合并才切换协议状态，须先停止旧连接并保全本地内容及未解决版本，见[资料库独立契约](../plan/tasks/app-account109-account-independent-library.md)。
+- 同步协议 workspace adoption 保留本地编辑 Session/token、附件窗口身份及解锁状态；旧协议由 stop/join、backend epoch/device 和 Store instance/generation 隔离。采用全窗口保存屏障后，只发布原 operation 的幂等 `notes-sync release`，不发布 destructive `notes-access`；部分投递失败保留 release 和 terminal receipt，显式重试补发成功后才完成 marker 清理。真实访问权限变更仍走既有授权屏障。
 
 ## 创建链与所有权
 

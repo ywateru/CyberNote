@@ -347,25 +347,6 @@ impl Session {
         self.store.sync_adoption_preflight(workspace, device_id)
     }
 
-    /// After Store commit, revoke every old global/note/media token by rotating
-    /// session identity. No business row, unlocked key or file is changed.
-    /// Emit the returned payload as `notes-access` after releasing the lock.
-    pub(crate) fn sync_finish_workspace_adoption(&mut self, previous_instance: Uuid) -> Result<Option<Value>> {
-        if self.store.sync_store_instance() == previous_instance {
-            return Ok(None);
-        }
-        self.id = Uuid::new_v4().to_string();
-        self.quiet = QuietState::default();
-        self.attachment_windows.clear();
-        self.metadata_event = None;
-        self.last_commit = None;
-        // event() falls back to unauthorized access if post-commit reads fail.
-        let mut event = self.event("commit", "sync-workspace-adopted", &[])?;
-        event["noteIds"] = json!(event["access"]["notes"].as_object()
-            .map(|notes| notes.keys().cloned().collect::<Vec<_>>()).unwrap_or_default());
-        Ok(Some(event))
-    }
-
     pub(crate) fn sync_media_token(&self) -> Token {
         Token {
             session_id: self.id.clone(),
@@ -942,37 +923,47 @@ mod tests {
             assert_eq!(s.store.sync_identity().unwrap().unwrap(), identity);
             // The exact existing pair needs no migration and no token rotation.
             s.sync_adoption_preflight(&identity.workspace_id, &identity.device_id).unwrap();
-            assert!(s.sync_finish_workspace_adoption(instance).unwrap().is_none());
         }
     }
     #[test]
-    fn workspace_adoption_session_revokes_global_note_media_tokens_and_publishes_access() {
+    fn workspace_adoption_preserves_local_authority_but_rejects_old_protocol_plans_and_media() {
         let (_root, mut s) = session();
-        let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
-            .as_str().unwrap().to_string();
+        let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
         let global = token(&s);
         let note_token = Token { note_epoch: Some(s.note_epoch(&note)), ..global.clone() };
         let media_token = s.sync_media_token();
+        let owner = s.attachment_owner("main").unwrap();
         let original = s.store.note(&note).unwrap();
-        let instance = s.store.sync_store_instance();
-        let workspace = Uuid::new_v4().to_string();
-        let device = Uuid::new_v4().to_string();
-        s.sync_adoption_preflight(&workspace, &device).unwrap();
-        s.store.sync_adopt_workspace(&workspace, &device).unwrap();
-        let access = s.sync_finish_workspace_adoption(instance).unwrap().unwrap();
-        assert_eq!(access["phase"], "commit");
-        assert_eq!(access["operationId"], "sync-workspace-adopted");
-        assert_eq!(access["noteIds"], json!([note]));
-        assert_eq!(access["access"], s.snapshot().unwrap());
-        assert_eq!(s.check(&global, None).unwrap_err().code, "access_changed");
-        assert_eq!(s.check(&note_token, Some(&note)).unwrap_err().code, "access_changed");
-        assert_eq!(s.check(&media_token, None).unwrap_err().code, "access_changed");
-        assert_eq!(serde_json::to_value(s.store.note(&note).unwrap()).unwrap(), serde_json::to_value(original).unwrap());
-        let instance = s.store.sync_store_instance();
-        let current = token(&s);
-        s.store.sync_adopt_workspace(&workspace, &device).unwrap();
-        assert!(s.sync_finish_workspace_adoption(instance).unwrap().is_none());
-        s.check(&current, None).unwrap();
+        s.metadata_event = Some(json!({"fixture":"retained-metadata"}));
+        s.last_commit = Some(json!({"fixture":"retained-commit"}));
+        let workspace = s.store.sync_identity().unwrap().unwrap().workspace_id;
+        let mut instances = HashSet::new();
+        for next in [Uuid::new_v4().to_string(), workspace] {
+            let plan = s.store.sync_plan_apply(&[]).unwrap();
+            let media = s.store.sync_media_snapshot(&[], true).unwrap().verify().unwrap();
+            let instance = s.store.sync_store_instance();
+            assert!(instances.insert(instance));
+            let device = Uuid::new_v4().to_string();
+            s.sync_adoption_preflight(&next, &device).unwrap();
+            s.store.sync_adopt_workspace(&next, &device).unwrap();
+            assert_ne!(s.store.sync_store_instance(), instance);
+            assert!(!instances.contains(&s.store.sync_store_instance()));
+            assert_eq!(s.store.sync_apply_plan(&plan).unwrap_err().code, "sync_plan_stale");
+            assert_eq!(s.store.sync_begin_media(media).unwrap_err().code, "sync_plan_stale");
+            s.check(&global, None).unwrap();
+            s.check(&note_token, Some(&note)).unwrap();
+            s.check(&media_token, None).unwrap();
+            let current = s.attachment_owner("main").unwrap();
+            assert_eq!(current.session, owner.session);
+            assert_eq!(current.window, owner.window);
+            assert_eq!(current.incarnation, owner.incarnation);
+            assert_eq!(s.metadata_event, Some(json!({"fixture":"retained-metadata"})));
+            assert_eq!(s.last_commit, Some(json!({"fixture":"retained-commit"})));
+            assert_eq!(serde_json::to_value(s.store.note(&note).unwrap()).unwrap(), serde_json::to_value(&original).unwrap());
+            let instance = s.store.sync_store_instance();
+            s.store.sync_adopt_workspace(&next, &device).unwrap();
+            assert_eq!(s.store.sync_store_instance(), instance);
+        }
     }
     fn adoption_prepared(s: &mut Session) -> (String, String, String, HashSet<String>) {
         let workspace = Uuid::new_v4().to_string();
@@ -1014,8 +1005,12 @@ mod tests {
         assert_eq!(release["phase"], "release");
         assert_eq!(release["outcome"], "commit");
         assert_eq!(release["sessionId"], s.id);
-        let access = s.sync_finish_workspace_adoption(instance).unwrap().unwrap();
-        assert_ne!(access["access"]["sessionId"], release["sessionId"]);
+        assert_ne!(s.store.sync_store_instance(), instance);
+        let t = token(&s);
+        assert_eq!(s.sync_reply("main", WindowReply::Prepare { operation_id: operation.clone(), ready: true }, &t).unwrap()["outcome"], "commit");
+        // Retaining the local Session does not authorize an old resolution read
+        // across the Store instance boundary.
+        assert!(s.sync_check_committed_resolution(&operation, &t.session_id, "main", &live).is_err());
         assert!(s.sync_release_workspace_adoption(&operation, false).unwrap().is_none());
     }
     #[test]

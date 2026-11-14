@@ -14,6 +14,14 @@
 8. `account_owner_workspace_mismatch` 若保留，只表示服务身份或同步凭证不一致，不再表示数据库属于另一用户名。错误文案和重试动作必须与原生状态机一致。
 9. 纯同步协议空间切换不改变本地编辑权限：保留 Session 身份、笔记/附件窗口权限和已解锁状态，不发送会销毁编辑器内容的权限撤销事件。仍须先取得全部窗口的冻结、保存确认并在提交时复核；Store instance 与 transport epoch 隔离旧协议计划、prepared media 和 backend。提交后保留原操作的 terminal receipt，释放通知丢失或部分送达时，窗口可用既有 Session 权限取得最终回执并恢复；真实锁定、删除、撤销权限仍走原有机制。
 
+## 同步协议迁移与本地编辑权限
+
+同步 workspace adoption 仅更换同步协议空间，不更换本地资料库的编辑权限。保留所有窗口 freeze/flush/ACK、最终 Session 锁内 ready 检查、旧 transport stop/join 和 backend epoch/device fence；真实提交后仍旋转 Store instance，旧 apply plan 和 VerifiedMedia 的 generation 包含该 instance，A→B→A 也不能复用旧计划。
+
+纯协议迁移保留本地 Session ID、global/note token、附件窗口 incarnation、本地解锁 keys、metadata_event、last_commit。不得为迁移发送会销毁编辑器的 `notes-access`，不得清空 quiet terminal receipts。原 operation 的 `notes-sync release(commit)` 保持同一 Session；广播失败或部分窗口已收到时须保留并幂等重放该 release，在补发成功前不得由下一次同 workspace/device 启用或成功退出清掉 adoption marker。漏收窗口也能用原 Session token 查询真实 commit receipt 解除冻结。
+
+待补发 release 属于当前进程；整个进程退出后原 renderer 已不存在，新进程从新 Session 快照初始化，持久 marker 仍要求暂停及显式恢复。真实 lock/delete/revoke、资料库替换和其他访问权限变更继续使用原授权屏障，不适用这里的纯协议规则。
+
 ## 验证与交付
 
 优先执行与修改相关的小范围 Store/adapter/状态机及前端回归，覆盖旧手工库登录、A退出后B登录、失败后重试、同会话恢复、显式启用、旧协议状态隔离、事务失败回滚、本地完整内容与附件保全。独立复核后更新来源pin，再复用已有target重新构建Mac候选。使用用户提供的测试账户验证登录；凭据只进入登录页，不进入代码、命令日志或文档。此次不扩展为完整三端同步验收，不清空原库。运行结果应区分构建、登录、启用与数据同步各自实际完成范围。
