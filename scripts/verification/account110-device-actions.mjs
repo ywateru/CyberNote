@@ -2,7 +2,7 @@
 // Account110 real-client acceptance. Import/prepare never starts an app or network.
 // Prepare: node scripts/verification/account110-device-actions.mjs --output FRESH_PRIVATE_TMP_ROOT
 // Run adds: --run --source SHA40 --package-receipt ABS --deployment-source SHA40
-//           --deployment-receipt ABS --deployment-sha256 SHA64
+//           --deployment-receipt ABS --deployment-id dpl_ID --deployment-sha256 SHA64
 // The parent must complete each WAIT via the actual hosted browser form.
 import {createHash} from 'node:crypto';
 import {createReadStream} from 'node:fs';
@@ -68,8 +68,27 @@ export function safeStatus(s,deviceLabels=new Map()){
 export async function waitFor(read,ready,{timeoutMs,now=Date.now,sleep=delay,code='CONDITION_TIMEOUT'}={}){
  const start=now();for(;;){const value=await read();if(await ready(value))return value;const left=timeoutMs-(now()-start);need(left>0,code);await sleep(Math.min(150,left));}
 }
-export async function observeWindow(read,check,{durationMs=5000,now=Date.now,sleep=delay}={}){
- const started=now();let samples=0;for(;;){await check(await read());samples++;const left=durationMs-(now()-started);if(left<=0){need(samples>=2,'INSUFFICIENT_SAMPLES');return {samples,observedMs:now()-started};}await sleep(Math.min(250,left));}
+export async function observeWindow(read,check,{durationMs=5000,totalBudgetMs=30000,now=Date.now,sleep=delay}={}){
+ need(Number.isSafeInteger(durationMs)&&durationMs>0&&Number.isSafeInteger(totalBudgetMs)&&totalBudgetMs>=durationMs,'INVALID_ARGUMENTS');
+ const started=now(),controller=new AbortController();let samples=0;
+ try{
+  for(;;){
+   const remaining=totalBudgetMs-(now()-started);need(remaining>0,'OBSERVATION_TIMEOUT');let timer;
+   try{
+    await Promise.race([
+     Promise.resolve().then(async()=>{const value=await read(controller.signal);controller.signal.throwIfAborted();await check(value,controller.signal);controller.signal.throwIfAborted();}),
+     new Promise((_,reject)=>{timer=setTimeout(()=>{const error=bad('OBSERVATION_TIMEOUT');controller.abort(error);reject(error);},remaining);}),
+    ]);
+   }finally{clearTimeout(timer);}
+   const elapsed=now()-started;need(elapsed<=totalBudgetMs,'OBSERVATION_TIMEOUT');samples++;
+   if(samples>=2&&elapsed>=durationMs)return {samples,observedMs:elapsed,totalBudgetMs};
+   need(elapsed<totalBudgetMs,'OBSERVATION_TIMEOUT');
+   // A slow first read may already cover the window. Take the second sample
+   // immediately, rather than sleeping a negative duration or declaring failure.
+   const pause=Math.min(250,Math.max(0,durationMs-elapsed),totalBudgetMs-elapsed);
+   if(pause>0)await sleep(pause);
+  }
+ }finally{controller.abort(bad('OBSERVATION_ENDED'));}
 }
 export async function syncOnce(app,target,direction,{timeoutMs=200000,now=Date.now,sleep=delay,onStatus=()=>{}}={}){
  const request=command('syncDevice',{deviceId:target,direction});
@@ -89,16 +108,17 @@ export async function syncOnce(app,target,direction,{timeoutMs=200000,now=Date.n
 }
 export function parseArgs(args){
  const opts={mode:'prepare',authorizationTimeoutMs:120000};const seen=new Set();
- for(let i=0;i<args.length;i++){const k=args[i];need(['--run','--output','--package-receipt','--source','--deployment-receipt','--deployment-source','--deployment-sha256','--authorization-timeout-ms'].includes(k)&&!seen.has(k),'INVALID_ARGUMENTS');seen.add(k);
+ for(let i=0;i<args.length;i++){const k=args[i];need(['--run','--output','--package-receipt','--source','--deployment-receipt','--deployment-source','--deployment-id','--deployment-sha256','--authorization-timeout-ms'].includes(k)&&!seen.has(k),'INVALID_ARGUMENTS');seen.add(k);
   if(k==='--run'){opts.mode='run';continue;}const v=args[++i];need(typeof v==='string'&&!v.startsWith('--'),'INVALID_ARGUMENTS');
   if(k==='--authorization-timeout-ms'){need(/^[0-9]+$/.test(v)&&Number.isSafeInteger(Number(v))&&Number(v)>=120000&&Number(v)<=600000,'INVALID_ARGUMENTS');opts.authorizationTimeoutMs=Number(v);}else opts[k.slice(2)]=v;
  }
  need(isAbsolute(opts.output||'')&&/^\/private\/tmp\/account110-device-actions-[A-Za-z0-9-]+$/.test(opts.output),'INVALID_OUTPUT');
  if(opts.source!==undefined)need(revision(opts.source),'INVALID_ARGUMENTS');
  for(const k of ['package-receipt','deployment-receipt'])if(opts[k]!==undefined)need(isAbsolute(opts[k]),'INVALID_ARGUMENTS');
+ if(opts['deployment-id']!==undefined)need(/^dpl_[A-Za-z0-9]{1,80}$/.test(opts['deployment-id']),'INVALID_ARGUMENTS');
  if(opts['deployment-source']!==undefined)need(revision(opts['deployment-source']),'INVALID_ARGUMENTS');
  if(opts['deployment-sha256']!==undefined)need(digest(opts['deployment-sha256']),'INVALID_ARGUMENTS');
- if(opts.mode==='run')need(opts.source&&opts['package-receipt']&&opts['deployment-source']&&opts['deployment-receipt']&&opts['deployment-sha256'],'LIVE_INPUTS_REQUIRED');
+ if(opts.mode==='run')need(opts.source&&opts['package-receipt']&&opts['deployment-source']&&opts['deployment-receipt']&&opts['deployment-id']&&opts['deployment-sha256'],'LIVE_INPUTS_REQUIRED');
  return opts;
 }
 async function fileHash(path){const sha=createHash('sha256');for await(const b of createReadStream(path))sha.update(b);return sha.digest('hex');}
@@ -110,6 +130,19 @@ export async function validatePackage(path,source){
  need((await lstat(p.executable)).isFile()&&await realpath(p.executable)===p.executable,'INVALID_PACKAGE');
  need(await fileHash(p.executable)===p.binarySha256,'BINARY_CHANGED');
  return {binary:p.executable,binarySha256:p.binarySha256,sourceRevision:source,sourceFingerprint:i.info.sourceFingerprint,receiptSha256:hash(bytes)};
+}
+// Consumes the already independently reviewed registry-deployment01/result.json.
+// No provider/network query is made here. Its claims are pinned to expected identity.
+export function validateDeployment(bytes,{source,id,sha256}){
+ try{
+  need(bytes.length>0&&bytes.length<=1000000&&revision(source)&&/^dpl_[A-Za-z0-9]{1,80}$/.test(id)&&digest(sha256)&&hash(bytes)===sha256);
+  const r=record(JSON.parse(bytes.toString('utf8')),['schemaVersion','recordedAt','status','sourceRevision','reviewedServerRevision','serverSourceDiffEmpty','projectId','projectName','productionDeploymentId','readyState','domains','fileCount','totalBytes','sourceFramedSha256','sourceManifestFileSha256','allUploadedSourceBytesFromPinnedCommit','successfulUploadRequests','deploymentCreateRequests','finalProductionAssignmentConfirmed','firstAttempt','repair','originalCanonicalHealthFetchFailureRetained','boundedHealthFollowupPassed','publicSmokePassed','checks','publicConfigurationAndJwksIdentityContinuity','scope','unproven']);
+  need(r.schemaVersion===1&&r.status==='READY-anonymous-smoke-passed-with-preserved-first-failure-and-bounded-health-followup'&&r.readyState==='READY'&&r.sourceRevision===source&&r.productionDeploymentId===id);
+  need(r.serverSourceDiffEmpty===true&&r.allUploadedSourceBytesFromPinnedCommit===true&&r.finalProductionAssignmentConfirmed===true&&r.publicSmokePassed===true);
+  need(revision(r.reviewedServerRevision)&&digest(r.sourceFramedSha256)&&digest(r.sourceManifestFileSha256)&&r.projectName==='cybernote-sync');
+  need(equal(r.domains,['cybernote-sync.vercel.app','cybernote-sync.aixgg.com']));
+  return {sourceRevision:source,deploymentId:id,readyState:'READY',receiptSha256:sha256,publicSmokePassed:true,boundary:'Pinned independently reviewed deployment receipt; no fresh provider query or authenticated registry proof.'};
+ }catch{throw bad('DEPLOYMENT_EVIDENCE_INVALID');}
 }
 export async function ownedFile(root,path,{optional=false}={}){
  need(await realpath(root)===root&&(await lstat(root)).isDirectory(),'OWNERSHIP_FAILED');
@@ -134,17 +167,66 @@ for entity in p['notes']:
  if names: r['descriptors']+=db.execute("SELECT count(*) FROM sync_attachments WHERE json_extract(descriptor,'$.noteId')=?",(entity,)).fetchone()[0]
 print(json.dumps(r,separators=(',',':')))
 `;
-async function protocolAbsence(app,specimens){
+// Owns only the fixed read-only Python probe. Never exposes a shell/process API.
+// Records remain owned until close, even after all termination budgets expire.
+export class ProtocolProbes {
+ constructor({spawnProcess=spawn,setTimer=setTimeout,clearTimer=clearTimeout,runMs=10000,termMs=3000,killMs=3000}={}){
+  Object.assign(this,{spawnProcess,setTimer,clearTimer,runMs,termMs,killMs});this.active=new Set();this.records=[];
+ }
+ run(db,input,{signal}={}){
+  signal?.throwIfAborted();
+  const child=this.spawnProcess('/usr/bin/python3',['-I','-c',probeScript,db],{stdio:['pipe','pipe','ignore']});
+  const r={closed:false,code:null,signals:[],primary:null,cleanupFailure:null};this.records.push(r);this.active.add(r);
+  let bytes=Buffer.alloc(0),timer,settled=false,resolveResult,rejectResult,resolveSettled;
+  const completion=new Promise(resolve=>{resolveSettled=resolve;});r.completion=completion;
+  const result=new Promise((resolve,reject)=>{resolveResult=resolve;rejectResult=reject;});
+  const clear=()=>{this.clearTimer(timer);timer=undefined;};
+  const settle=()=>{
+   if(settled)return;settled=true;clear();resolveSettled();
+   if(r.primary){const error=bad(r.primary);if(r.cleanupFailure)error.cleanupFailure={code:r.cleanupFailure};rejectResult(error);}
+   else{try{resolveResult(JSON.parse(bytes));}catch{r.primary='PROBE_FAILED';rejectResult(bad(r.primary));}}
+  };
+  const send=name=>{r.signals.push(name);try{child.kill(name);}catch{/* still wait for close */}};
+  const fail=code=>{
+   r.primary??=code;if(r.closed||r.signals.length)return;
+   clear();send('SIGTERM');if(r.closed)return;
+   timer=this.setTimer(()=>{
+    send('SIGKILL');if(r.closed)return;
+    timer=this.setTimer(()=>{if(!r.closed){r.cleanupFailure='PROBE_CLEANUP_FAILED';settle();}},this.killMs);
+   },this.termMs);
+  };
+  r.retire=()=>{fail('PROBE_CANCELLED');return completion;};
+  // A failed final confirmation keeps ownership; final runner cleanup gives close
+  // one more bounded opportunity without forgetting or substituting another PID.
+  r.confirm=async()=>{
+   await r.retire();if(r.closed)return;
+   await new Promise(resolve=>{let waitTimer;const done=()=>{this.clearTimer(waitTimer);child.off('close',done);resolve();};child.once('close',done);waitTimer=this.setTimer(done,this.killMs);});
+  };
+  const abort=()=>fail('PROBE_CANCELLED');signal?.addEventListener('abort',abort,{once:true});
+  child.on('error',()=>fail('PROBE_PROCESS_ERROR'));
+  child.stdout.on('error',()=>fail('PROBE_FAILED'));
+  child.stdout.on('data',b=>{if(r.primary||r.closed)return;if(bytes.length+b.length>2048){fail('PROBE_OUTPUT_LIMIT');return;}bytes=Buffer.concat([bytes,b]);});
+  child.on('close',(code,closedSignal)=>{
+   if(r.closed)return;r.closed=true;r.code=Number.isInteger(code)?code:null;
+   if(code!==0||closedSignal)r.primary??='PROBE_FAILED';
+   clear();signal?.removeEventListener('abort',abort);this.active.delete(r);settle();
+  });
+  child.stdin.on('error',()=>fail('PROBE_STDIN_ERROR'));
+  timer=this.setTimer(()=>fail('PROBE_TIMEOUT'),this.runMs);
+  try{child.stdin.end(JSON.stringify(input));}catch{fail('PROBE_STDIN_ERROR');}
+  if(signal?.aborted)abort();
+  return result;
+ }
+ async closeAll(){
+  await Promise.all([...this.active].map(r=>r.confirm()));
+  return {allClosed:this.active.size===0,hadFailures:this.records.some(r=>r.primary!==null||r.cleanupFailure!==null),receipts:this.records.map(r=>({closed:r.closed,exitCode:r.code,signals:[...r.signals],...(r.primary?{failureCode:r.primary}:{}),...(r.cleanupFailure?{cleanupFailure:{code:r.cleanupFailure}}:{})}))};
+ }
+}
+async function protocolAbsence(app,specimens,probes,signal){
  if(!specimens.length)return;
- const db=await ownedFile(app.directory,'notes.sqlite3');
- const result=await new Promise((ok,reject)=>{
-  const child=spawn('/usr/bin/python3',['-I','-c',probeScript,db],{stdio:['pipe','pipe','ignore']});let bytes=Buffer.alloc(0),settled=false;
-  const finish=(error,value)=>{if(settled)return;settled=true;clearTimeout(timer);error?reject(error):ok(value);};
-  const timer=setTimeout(()=>{child.kill('SIGTERM');finish(bad('PROBE_TIMEOUT'));},10000);
-  child.on('error',()=>finish(bad('PROBE_FAILED')));child.stdout.on('data',b=>{bytes=Buffer.concat([bytes,b]);if(bytes.length>2048){child.kill('SIGTERM');finish(bad('PROBE_FAILED'));}});
-  child.on('close',code=>{if(code!==0)return finish(bad('PROBE_FAILED'));try{finish(null,JSON.parse(bytes));}catch{finish(bad('PROBE_FAILED'));}});
-  child.stdin.on('error',()=>finish(bad('PROBE_FAILED')));child.stdin.end(JSON.stringify({notes:specimens.map(s=>s.id),requireSync:app.account110Enabled===true}));
- });
+ signal?.throwIfAborted();const db=await ownedFile(app.directory,'notes.sqlite3');signal?.throwIfAborted();
+ const result=await probes.run(db,{notes:specimens.map(s=>s.id),requireSync:app.account110Enabled===true},{signal});
+ signal?.throwIfAborted();
  record(result,['heads','seen','projection','branches','frontiers','inbox','attachments','descriptors']);need(Object.keys(result).length===8&&Object.values(result).every(v=>v===0),'REVERSE_PROTOCOL_DATA');
  for(const specimen of specimens)for(const file of specimen.files.filter(f=>f.mime==='application/octet-stream')){
   for(const path of [`.sync/blobs/${file.sha256}.blob`,`.sync/network-staging/${file.sha256}-${file.bytes.length}.part`])need(await ownedFile(app.directory,path,{optional:true})===null,'REVERSE_ATTACHMENT_BYTES');
@@ -164,12 +246,13 @@ export async function main(argv, {App=NativeApp,print=console.log}={}){
  let candidate;
  if(opts['package-receipt'])candidate=await validatePackage(opts['package-receipt'],opts.source);
  let deployment;
- if(opts['deployment-receipt']){const bytes=await readFile(opts['deployment-receipt']);need(bytes.length<=1000000&&opts['deployment-source']&&hash(bytes)===opts['deployment-sha256'],'DEPLOYMENT_EVIDENCE_INVALID');deployment={sourceRevision:opts['deployment-source'],receiptSha256:hash(bytes),boundary:'Operator-supplied deployment receipt; runner does not attest its contents. Real native directory commands are exercised during run.'};}
+ if(opts['deployment-receipt'])deployment=validateDeployment(await readFile(opts['deployment-receipt']),{source:opts['deployment-source'],id:opts['deployment-id'],sha256:opts['deployment-sha256']});
  await mkdir(opts.output,{mode:0o700}); // Fresh, exclusive root; never reuse an existing library.
  const report={schema:1,kind:'account110-real-two-client-device-actions',mode:opts.mode,status:opts.mode==='prepare'?'prepared-not-run':'running',source:opts.source??null,candidate: candidate?{sourceRevision:candidate.sourceRevision,sourceFingerprint:candidate.sourceFingerprint,binarySha256:candidate.binarySha256,receiptSha256:candidate.receiptSha256}:null,deployment:deployment??null,authorizationTimeoutMs:opts.authorizationTimeoutMs,
   runnerSha256:hash(await readFile(fileURLToPath(import.meta.url))),driverSha256:hash(await readFile(new URL('./sync108-native-driver.mjs',import.meta.url))),checks:[],observations:[],boundaries:['Only two fresh owned data-dir libraries; no default library access or credential/Noise copying.','Real normal hosted SignIn with human form assistance. No credentials/callbacks/tokens/endpoints are accepted by the runner.','Synthetic content enters production UI/debug handlers; attachment checks use disk bytes and production read_attachment.','Debug/e2e, synthetic File[] submission; no physical file-picker or keyboard claim.','Absence/idle observations are finite, not an unbounded guarantee.','No logout, destructive cleanup or automatic retry; failed evidence and owned test libraries are retained.']};
  const save=()=>writeFile(resolve(opts.output,'result.json'),JSON.stringify(report,null,2)+'\n',{mode:0o600});
  if(opts.mode==='prepare'){report.requiredBeforeRun=['independently reviewed merged client and exact static-verified package','independently verified production device API deployment and its receipt hash/source','parent authorization for real hosted SignIn and two fresh owned clients'];await save();return report;}
+ const probes=new ProtocolProbes();
  const children=[],apps={},specimens=[],baselines={},ids={},labels=new Map(),authenticated=new Set(),restoring=new Set();let expected={a:new Set(),b:new Set()},owner,phase='startup';
  const check=name=>{report.checks.push({name,status:'pass'});print('PASS '+name);};
  const noteStatus=(name,s)=>{const safe={device:name,phase,...safeStatus(s,labels)},last=report.observations.at(-1);if(!equal(last,safe)&&report.observations.length<512)report.observations.push(safe);};
@@ -216,10 +299,10 @@ export async function main(argv, {App=NativeApp,print=console.log}={}){
  };
  const verifyExpected=async()=>{for(const name of ['a','b']){const app=apps[name];await status(app);const workspace=await ws(app);await preserveBaseline(app,workspace);const forbidden=specimens.filter(s=>!expected[name].has(s.id));
   for(const s of specimens.filter(s=>expected[name].has(s.id)))await verify(app,s);
-  need(forbidden.every(s=>!workspace.notes.some(n=>n.id===s.id)),'REVERSE_CONTENT');await protocolAbsence(app,forbidden);
+  need(forbidden.every(s=>!workspace.notes.some(n=>n.id===s.id)),'REVERSE_CONTENT');await protocolAbsence(app,forbidden,probes);
  }};
- const idle=async label=>{const sample=await observeWindow(async()=>{const rows=await Promise.all(['a','b'].map(n=>status(apps[n])));for(const s of rows)need(s.profile&&s.enabled,'ACCOUNT_NOT_ENABLED');return Promise.all(['a','b'].map(n=>ws(apps[n])));},async workspaces=>{
-  for(const [i,name] of ['a','b'].entries()){for(const s of specimens){const note=workspaces[i].notes.find(n=>n.id===s.id);if(expected[name].has(s.id))need(note&&equal(noteSemantic(note),s.note),'CONTENT_MISMATCH');else need(!note,'UNREQUESTED_TRANSFER');}await protocolAbsence(apps[name],specimens.filter(s=>!expected[name].has(s.id)));}
+ const idle=async label=>{const sample=await observeWindow(async signal=>{const rows=await Promise.all(['a','b'].map(n=>status(apps[n])));signal.throwIfAborted();for(const s of rows)need(s.profile&&s.enabled,'ACCOUNT_NOT_ENABLED');return Promise.all(['a','b'].map(n=>ws(apps[n])));},async(workspaces,signal)=>{
+  for(const [i,name] of ['a','b'].entries()){for(const s of specimens){const note=workspaces[i].notes.find(n=>n.id===s.id);if(expected[name].has(s.id))need(note&&equal(noteSemantic(note),s.note),'CONTENT_MISMATCH');else need(!note,'UNREQUESTED_TRANSFER');}signal.throwIfAborted();await protocolAbsence(apps[name],specimens.filter(s=>!expected[name].has(s.id)),probes,signal);}
  });report.checks.push({name:label,status:'pass',...sample});};
  const current=s=>{const rows=s.devices.filter(d=>d.current);need(rows.length===1,'CURRENT_DEVICE_MISSING');return rows[0];};
  const directory=async({offline=false}={})=>waitFor(async()=>{const s=await status(apps.a);return {s,row:s.devices.find(d=>d.id===ids.b)};},({row})=>!!row&&(offline?!row.online&&row.summary===undefined:row.online),{timeoutMs:90000,code:'DIRECTORY_TIMEOUT'});
@@ -257,15 +340,18 @@ export async function main(argv, {App=NativeApp,print=console.log}={}){
   const restored=await waitFor(()=>status(apps.b),s=>!!s.profile&&s.state!=='authorizing',{timeoutMs:120000,code:'RESTORE_TIMEOUT'});need(restored.profile.subject===owner&&restored.enabled,'RESTORE_FAILED');restoring.delete('b');
   await waitFor(()=>status(apps.b),s=>s.devices.some(d=>d.current&&d.id===ids.b&&d.name==='Account110 B'),{timeoutMs:90000,code:'DIRECTORY_TIMEOUT'});await directory();await idle('offline restart restores same device and account without hidden transfer');await verifyExpected();await summary();check('normal offline restart preserves registry identity, name, complete content and original attachment bytes');
   report.status='pass';
- }catch(error){report.status='fail';report.failure={phase,code:safeFailure(error)};print('FAIL '+phase+' '+report.failure.code);}
+ }catch(error){report.status='fail';report.failure={phase,code:safeFailure(error),...(error.cleanupFailure?{cleanupFailure:{code:'PROBE_CLEANUP_FAILED'}}:{})};print('FAIL '+phase+' '+report.failure.code);}
  finally{
+  report.probes=await probes.closeAll();
+  if(report.probes.hadFailures){report.status='fail';report.failure??={phase:'probe',code:report.probes.receipts.find(r=>r.failureCode)?.failureCode??'PROBE_FAILED'};}
+  if(!report.probes.allClosed||report.probes.receipts.some(r=>r.cleanupFailure)){report.status='fail';report.probeCleanupFailure={code:'PROBE_CLEANUP_FAILED'};}
   const closed=await Promise.allSettled(children.map(app=>app.close()));report.lifecycle=children.map(app=>({device:app.name,naturalExit:app.lifecycle.naturalExit===true,exitCode:app.lifecycle.exit?.code??null,forcedSignals:(app.lifecycle.forcedSignals||[]).filter(s=>['SIGTERM','SIGKILL'].includes(s))}));
   if(closed.some(r=>r.status==='rejected')||report.lifecycle.some(l=>!l.naturalExit)){report.status='fail';report.cleanupFailure={code:'CLEANUP_FAILED'};}
   report.finishedAt=new Date().toISOString();await save();
  }
  return report;
 }
-export function safeFailure(error){const codes=['INVALID_DTO','ACCOUNT_FAILURE','DEVICE_OPERATION_FAILED','ACCOUNT_OWNER_CHANGED','ACTION_OWNER','ACTION_RECEIPT','ACCOUNT_COMMAND_FAILED','DEVICE_OPERATION_TIMEOUT','BINARY_CHANGED','OWNERSHIP_FAILED','PROBE_TIMEOUT','PROBE_FAILED','REVERSE_PROTOCOL_DATA','REVERSE_ATTACHMENT_BYTES','CONTENT_MISSING','CONTENT_MISMATCH','ATTACHMENT_MISMATCH','ATTACHMENT_BYTES_MISMATCH','ATTACHMENT_READ_MISMATCH','REVERSE_CONTENT','UNREQUESTED_TRANSFER','ACCOUNT_NOT_ENABLED','CURRENT_DEVICE_MISSING','DIRECTORY_TIMEOUT','SUMMARY_TIMEOUT','FRESH_LIBRARY_REQUIRED','LOGIN_FAILED','LOGIN_NOT_PAUSED','AUTHORIZATION_TIMEOUT','DEVICE_ID_COLLISION','FOREGROUND_APPLY_TIMEOUT','RESTORE_TIMEOUT','RESTORE_FAILED','UI_NOT_READY','CLEANUP_FAILED','HELLO_TIMEOUT','NATIVE_TIMEOUT','DRIVER_TIMEOUT','TIMEOUT','SPAWN_ERROR'];return codes.includes(error?.code)?error.code:'CHECK_FAILED';}
+export function safeFailure(error){const codes=['OBSERVATION_TIMEOUT','PROBE_OUTPUT_LIMIT','PROBE_STDIN_ERROR','PROBE_PROCESS_ERROR','PROBE_CANCELLED','PROBE_CLEANUP_FAILED','INVALID_DTO','ACCOUNT_FAILURE','DEVICE_OPERATION_FAILED','ACCOUNT_OWNER_CHANGED','ACTION_OWNER','ACTION_RECEIPT','ACCOUNT_COMMAND_FAILED','DEVICE_OPERATION_TIMEOUT','BINARY_CHANGED','OWNERSHIP_FAILED','PROBE_TIMEOUT','PROBE_FAILED','REVERSE_PROTOCOL_DATA','REVERSE_ATTACHMENT_BYTES','CONTENT_MISSING','CONTENT_MISMATCH','ATTACHMENT_MISMATCH','ATTACHMENT_BYTES_MISMATCH','ATTACHMENT_READ_MISMATCH','REVERSE_CONTENT','UNREQUESTED_TRANSFER','ACCOUNT_NOT_ENABLED','CURRENT_DEVICE_MISSING','DIRECTORY_TIMEOUT','SUMMARY_TIMEOUT','FRESH_LIBRARY_REQUIRED','LOGIN_FAILED','LOGIN_NOT_PAUSED','AUTHORIZATION_TIMEOUT','DEVICE_ID_COLLISION','FOREGROUND_APPLY_TIMEOUT','RESTORE_TIMEOUT','RESTORE_FAILED','UI_NOT_READY','CLEANUP_FAILED','HELLO_TIMEOUT','NATIVE_TIMEOUT','DRIVER_TIMEOUT','TIMEOUT','SPAWN_ERROR'];return codes.includes(error?.code)?error.code:'CHECK_FAILED';}
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  main(process.argv.slice(2)).then(report=>{console.log('RESULT '+report.status);if(report.status==='fail')process.exitCode=1;}).catch(()=>{console.error('FAIL INPUT_OR_PREPARE');process.exitCode=1;});
 }
