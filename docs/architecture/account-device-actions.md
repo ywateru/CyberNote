@@ -76,6 +76,8 @@ PUT 固定字段：`deviceId`（registry UUID）、`registryKey`（32字节随�
 
 每次发布前将递增revision持久保存；服务端原子校验仍有效的transport session、登记key hash、revision后更新presence。严格较新revision才可覆盖；同revision仅允许完全相同内容的幂等重试且不能额外续租，不同内容拒绝。用revision拒绝旧session、同session旧heartbeat、暂停前请求的迟到覆盖；不能用可能相等的session expiresAt推断注册先后。SDK session重建后使用同registryKey与更高revision重新PUT。验证与更新在同一个Redis原子操作完成，不能在session校验与写记录之间留下撤销竞态。
 
+SDK 的 `Session` 可提供最小只读借用接口 `transport_session_key(&self) -> &str`，仅供原生设备登记把当前 transport 会话证明放入受信 API 的请求体。保持字段私有，不增加 Serialize/Debug 输出，不通过 grant/序列化绕过；调用方不得将返回值纳入前端状态、错误、日志或回执。此 vendored 小改动必须记录在既有 SDK modifications/发布 pin 中，独立审阅请求目的地与无泄露边界。
+
 presence 最多65秒，定期续租；syncAvailable 还要求底层 transport session有效且在线。持久设备记录无TTL，与通用coordinator GC分离；每账户最多64台，超限明确报错，不淘汰旧记录。过期presence后的摘要可以保留在服务端，但原生投影必须隐藏离线摘要。历史旧版本从未登记的设备只有升级后才会进入此表，不能声称能恢复已删除的旧目录。
 
 ## 网络执行边界
