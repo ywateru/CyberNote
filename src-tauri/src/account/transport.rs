@@ -1058,32 +1058,30 @@ async fn transfer_target(
     cancellation: &super::worker::RequestCancellation,
 ) -> Result<()> {
     let mut mappings: Vec<Arc<Mapping>> = Vec::new();
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+    let sdk_diagnostic_operation = super::sdk_diagnostic::begin(client);
     let result = async {
         let prepare = Box::pin(async {
             let (transport, protocol, key) = target.target("")?;
-            let enroll = Arc::new(
-                request_io(
-                    stop,
-                    Box::pin(client.map(
-                        transport,
-                        config::ENROLL_PORT,
-                        "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
-                    )),
-                )
-                .await?,
-            );
+            let mapping = Box::pin(client.map(
+                transport, config::ENROLL_PORT,
+                "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+            ));
+            #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+            let mapping = Box::pin(super::sdk_diagnostic::observe(
+                sdk_diagnostic_operation, client, super::sdk_diagnostic::MapStage::Enroll, mapping,
+            ));
+            let enroll = Arc::new(request_io(stop, mapping).await?);
             mappings.push(enroll.clone());
-            let sync = Arc::new(
-                request_io(
-                    stop,
-                    Box::pin(client.map(
-                        transport,
-                        config::SYNC_PORT,
-                        "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
-                    )),
-                )
-                .await?,
-            );
+            let mapping = Box::pin(client.map(
+                transport, config::SYNC_PORT,
+                "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+            ));
+            #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+            let mapping = Box::pin(super::sdk_diagnostic::observe(
+                sdk_diagnostic_operation, client, super::sdk_diagnostic::MapStage::Sync, mapping,
+            ));
+            let sync = Arc::new(request_io(stop, mapping).await?);
             mappings.push(sync.clone());
             let sampler = observation.map(|lease| {
                 let enroll = enroll.clone();

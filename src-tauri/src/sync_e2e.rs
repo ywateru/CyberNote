@@ -129,6 +129,7 @@ enum Action {
     // An empty struct variant makes serde reject unknown fields; a tagged
     // unit variant would silently ignore them even with deny_unknown_fields.
     StartupDiagnostic {},
+    AccountSdkDiagnostic {},
     Execute {
         command: String,
         #[serde(default = "empty_object")]
@@ -428,6 +429,12 @@ fn dispatch_once(
 ) -> Value {
     let id = json!(request.id);
     let body = match &request.action {
+        Action::AccountSdkDiagnostic {} => {
+            return match crate::account::sdk_diagnostic::snapshot() {
+                Ok(value) => json!({"type":"response","id":request.id,"ok":true,"value":value}),
+                Err(code) => error(id, code),
+            };
+        }
         Action::StartupDiagnostic {} => STARTUP_DIAGNOSTIC.into(),
         Action::Ready => format!(
             "await report('debugRegistration');\n\
@@ -659,5 +666,18 @@ mod tests {
         }
         assert!(allowed_before_ready(&Action::Ready));
         assert!(allowed_before_ready(&Action::Shutdown));
+    }
+
+    #[test]
+    fn sdk_diagnostic_is_fixed_native_read_and_requires_ready() {
+        let request: Request = serde_json::from_value(json!({
+            "id":1,"action":{"op":"accountSdkDiagnostic"}
+        })).unwrap();
+        assert!(!allowed_before_ready(&request.action));
+        for field in ["expression", "args", "options", "path", "url", "command", "sha256"] {
+            let mut value = json!({"id":1,"action":{"op":"accountSdkDiagnostic"}});
+            value["action"][field] = json!("PRIVATE");
+            assert!(serde_json::from_value::<Request>(value).is_err());
+        }
     }
 }

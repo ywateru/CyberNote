@@ -294,6 +294,8 @@ pub(super) async fn run(
     stop: CancellationToken,
     requests: mpsc::Receiver<DeviceRequest>,
 ) -> Result<()> {
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+    let _sdk_diagnostic = super::sdk_diagnostic::attach(&client);
     // All HTTP initialization is inside this owned task. No lifecycle guard is held.
     let result = async {
         let advertised =

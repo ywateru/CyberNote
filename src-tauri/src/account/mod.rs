@@ -7,6 +7,8 @@ pub(crate) mod enrollment;
 pub(crate) mod private;
 mod provider;
 mod recovery;
+#[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+pub(crate) mod sdk_diagnostic;
 mod surface;
 mod transport;
 pub(crate) mod types;
