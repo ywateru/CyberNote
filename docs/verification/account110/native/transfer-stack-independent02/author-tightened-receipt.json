@@ -1,0 +1,21 @@
+{
+  "recordedAt": "2026-11-14T12:46:03.753555+00:00",
+  "source": "ddf7b79281a2c94f35a28f470855f5bb990268f9",
+  "parent": "4c1ac0033d10cd7bc864f2ff4ca087f147f235d8",
+  "change": "Only tighten actual unauthenticated SDK result to AuthenticationAt(CoordinatorSession); production unchanged.",
+  "test": {
+    "name": "account::transport::tests::real_selected_transfer_future_layout_and_small_stack_poll",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "modes": [
+      "measure",
+      "reject",
+      "cancel"
+    ],
+    "otherTwelveRerun": false
+  },
+  "targetReleased": true,
+  "freeBytes": 8716025856,
+  "priorEvidence": "Preserved unchanged; existing SHA256SUMS verified."
+}

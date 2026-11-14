@@ -1,0 +1,61 @@
+{
+  "source": "ddf7b79281a2c94f35a28f470855f5bb990268f9",
+  "parent": "4c1ac0033d10cd7bc864f2ff4ca087f147f235d8",
+  "command": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--locked",
+    "--offline",
+    "account::transport::tests::real_selected_transfer_future_layout_and_small_stack_poll",
+    "--",
+    "--exact",
+    "--nocapture"
+  ],
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "floorBytes": 6442450944,
+  "beforeFreeBytes": 8711012352,
+  "startedAt": "2026-11-14T12:48:16.611022+00:00",
+  "exitCode": 0,
+  "minimumFreeBytes": 8711000064,
+  "diskFloorTriggered": false,
+  "finishedAt": "2026-11-14T12:48:18.124227+00:00",
+  "afterFreeBytes": 8711094272,
+  "verdict": "APPROVE-source-chain",
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "subprocessModes": [
+    "measure",
+    "reject",
+    "cancel"
+  ],
+  "otherTwelveRerun": false,
+  "previousIndependentReviewCommit": "2c134144b4e7fd44822a6e1a151260f7c3c9b081",
+  "previousIndependentResult": "13 passed, 0 failed, 0 ignored at parent source; retained unchanged.",
+  "remainingBlockers": 0,
+  "targetReleased": true,
+  "noCompilerAtRelease": true,
+  "authorTreeCleanAfter": true,
+  "releasedAt": "2026-11-14T12:49:08.202482+00:00",
+  "releaseFreeBytes": 8710414336,
+  "authorPriorManifestUnchangedAndVerified": true,
+  "logSha256": "2c856e6ee545ebf37a05db70c5c7cbd508b35ad20485b6dcbb8b8173d4c8d2fb",
+  "sourceHashes": {
+    "src-tauri/src/account/transport.rs": "08e33e38633ad01ef3b40992262fc8a72cef13d390ab25c6ccff022fade34aa3",
+    "src-tauri/src/account/worker.rs": "464117c35ad2c4a44bb9921d0fb6b01e51df976e392ac81ff2724277f0940e88"
+  },
+  "limits": [
+    "No authenticated SDK connection or real App acceptance.",
+    "No private library/grant/Noise data, device or external account operation.",
+    "No binary/instruction analysis or package build."
+  ]
+}
