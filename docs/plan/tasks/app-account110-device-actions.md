@@ -52,4 +52,7 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - 设备服务 `74d1a891` 已独审 PASS，独立完整190项通过、含实际Redis/AOF；服务源码e2201113已部署到原生产项目，最终READY。见[部署回执](../../verification/account110/server/registry-deployment01/README.md)，真实账户GET/PUT仍待客户端验收。
 - 网络 `29b2a86d` 的初审P1/P2经`51040df6`与`7177ca9c`修复，最终独审APPROVE并合入main；36项网络检查及4组实际Store场景通过，计数不与前轮相加。见[review02](../reviews/app-account110-network-02.md)。账户作者正在整合原生层。
 - target由网络作者释放后交原生账户作者；已清理22个未打开的旧应用可执行产物，依赖/原包/失败证据保留，回执 `/private/tmp/account110-network-target-executable-cleanup01.json`。
-- 本任务尚未构建最终精确包、尚未执行两个真实账户客户端验收；不能把上述模块通过当作整体通过。
+- 原生账户、请求取消与退役修复已独审通过并合入，最终账户72项、adoption6项及独立定向13项通过。执行器已独审通过；模块检查组存在重叠，不相加作为唯一用例总数。
+- 精确源码 `cb91f4b8` 的 Mac debug 包已构建并通过[静态独核](../../verification/account110/mac-package-review01.md)。两个新资料库真实启动、重启、正文和附件保存检查，以及两次正常托管登录通过。
+- [首轮真实运行](../../verification/account110/native/device-actions-live01.md)在目录阶段失败：A 等待 B 登录期间发生原生栈溢出，故障涉及 `worker::run` 组合子任务的 poll；尚未进入方向同步，不能宣称整体通过。首失败资料库及小型诊断保留。
+- 后续修复限于组合边界 heap-pin 子 future，保留取消、双方 join 和任务退役规则；补 future 大小/小栈 poll 回归并独审后，重新生成精确包、重跑两个独立客户端。执行器同时补充安全异常及退出生命周期证据。
