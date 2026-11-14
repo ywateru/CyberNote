@@ -61,7 +61,16 @@ export function safeFailureReceipt(error){
  if(failure.code==='ACCOUNT_FAILURE'&&error?.accountError!==undefined){
   try{failure.accountError=safeAccountError(error.accountError);}catch{/* Omit invalid diagnostics; retain failure. */}
  }
+ if(failure.code==='ACCOUNT_FAILURE'&&error?.deviceOperation!==undefined){
+  try{failure.deviceOperation=safeFailureOperation(error.deviceOperation);}catch{/* Never manufacture an operation state. */}
+ }
  return failure;
+}
+function safeFailureOperation(value){
+ const o=record(value,['direction','phase','startedAt','finishedAt']);
+ need(directions.includes(o.direction)&&['running','succeeded','failed'].includes(o.phase),'INVALID_DTO');count(o.startedAt);
+ if('finishedAt'in o)need(count(o.finishedAt)>=o.startedAt&&o.phase!=='running','INVALID_DTO');
+ return {direction:o.direction,phase:o.phase,startedAt:o.startedAt,...('finishedAt'in o?{finishedAt:o.finishedAt}:{})};
 }
 // Only codes already emitted by the fixed native driver/bridge; never raw errors.
 const driverFailureCodes=['APP_CLOSING','APP_EXITED','EXIT_BEFORE_HELLO','EXIT_BEFORE_RESPONSE','STDIN_ERROR','INVALID_HELLO','INVALID_RESPONSE','UNEXPECTED_RESPONSE','INVALID_FRAME','TRUNCATED_FRAME','STDOUT_LINE_TOO_LARGE','INVALID_REQUEST','INPUT_TOO_LARGE','NOT_NATIVE_DEBUG_APP','NATURAL_EXIT_TIMEOUT','TERM_EXIT_TIMEOUT','KILL_EXIT_TIMEOUT','PIPE_CLOSE_TIMEOUT','NON_NATURAL_EXIT','DRIVER_ERROR','INVALID_DIAGNOSTIC','EVAL_FAILED','INPUT_ERROR','NOT_READY','PAGE_STATE_ERROR','PARTIAL_RECORD','WINDOW_UNAVAILABLE','INVALID_ARGUMENT','UNKNOWN_COMMAND','UNAVAILABLE','UNSUPPORTED','APP_ERROR','WRONG_WINDOW','OUTPUT_TOO_LARGE','SENSITIVE_DOM','JS_ERROR'];
@@ -102,7 +111,16 @@ export function parseStatus(value){
  if('authorizationSurface'in s)need(s.state==='authorizing'&&['embedded','browser'].includes(s.authorizationSurface),'INVALID_DTO');
  if(s.profile!==undefined){record(s.profile,['subject','displayName','username']);text(s.profile.subject,1024);need(typeof s.profile.displayName==='string'&&s.profile.displayName.length<=512,'INVALID_DTO');if(s.profile.username!==undefined)text(s.profile.username,1024);}
  if(s.lastSyncAt!==undefined)count(s.lastSyncAt);
- if(s.error!==undefined)throw Object.assign(bad('ACCOUNT_FAILURE'),{accountError:safeAccountError(s.error)});
+ if(s.error!==undefined){
+  const failure=Object.assign(bad('ACCOUNT_FAILURE'),{accountError:safeAccountError(s.error)});
+  // An account/directory error does not establish that its concurrent operation
+  // failed. Preserve only the actually observed finite operation state, separately.
+  if(s.deviceOperation!==undefined){
+   const o=record(s.deviceOperation,['deviceId','direction','phase','startedAt','finishedAt']);uuid(o.deviceId);
+   failure.deviceOperation=safeFailureOperation({direction:o.direction,phase:o.phase,startedAt:o.startedAt,...('finishedAt'in o?{finishedAt:o.finishedAt}:{})});
+  }
+  throw failure;
+ }
  need(s.state!=='error','ACCOUNT_FAILURE');
  if(s.transportGeneration!==undefined)need(count(s.transportGeneration)>0&&s.state==='ready'&&s.enabled,'INVALID_DTO');
  need(Array.isArray(s.devices)&&s.devices.length<=64,'INVALID_DTO');const ids=new Set();
