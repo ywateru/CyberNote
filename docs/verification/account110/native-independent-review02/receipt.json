@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-14",
+  "reviewedHead": "d9baee6f7172f9432098d712b834bf97280e5d04",
+  "productCommit": "5d4eac3bbf90be851fc91ed931ced2f5ec81670d",
+  "kind": "independent-native-focused-verification",
+  "exit": 0,
+  "tests": {
+    "passed": 13,
+    "failed": 0,
+    "ignored": 0,
+    "filteredOut": 337
+  },
+  "log": {
+    "path": "focused.stdout.txt",
+    "sha256": "bbc7f8a2047e0ba8754a950e29f1a72265848d44a4e4dbaf89038720b0a8f7cc"
+  },
+  "manifest": "src-tauri/Cargo.toml",
+  "features": [
+    "sync-e2e"
+  ],
+  "environment": {
+    "targetDir": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "jobs": 2,
+    "devDebug": 0,
+    "testDebug": 0,
+    "incremental": 0,
+    "locked": true,
+    "offline": true,
+    "testThreads": 1
+  },
+  "filters": [
+    "account::worker::tests::",
+    "account::transport::tests::native_deadline_with_real_network_blocked_backend_keeps_busy_until_join",
+    "account::transport::tests::late_blocking_admission_after_early_disconnect_is_fenced_and_joined",
+    "account::transport::tests::request_cancel_interrupts_pending_preparation_without_running_next_step",
+    "account::transport::tests::blocking_panic_still_fences_admission_and_confirms_retirement",
+    "account::transport::tests::unconfirmed_retirement_is_not_success_and_keeps_admission_fenced",
+    "account::tests::device_receipts_match_operation_identity_and_cancel_never_sets_last_sync"
+  ],
+  "sourceDirectory": "/private/tmp/cybernote-account109-login-surfaces-ui",
+  "authorTreeCleanBeforeAndAfter": true,
+  "candidateComparison": {
+    "source": "d9baee6f7172f9432098d712b834bf97280e5d04",
+    "candidate": "3f244eaea439d6d0002cfa5e1a82dd03211377da",
+    "files": [
+      {
+        "path": "src-tauri/src/account/directory.rs",
+        "sha256": "8dbe654c8616525136ec9f4da06032fe50af559682e93861f0ba49989ae29051",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/account/mod.rs",
+        "sha256": "33b135715561d829b9b63b3fe12dcb58680a5f4d3d97000aee39f6dd94f6ecef",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/account/private.rs",
+        "sha256": "20102c2599968d4fd3f766b5c559091eea9ccca4e0dbae74659a0faa9059abbb",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/account/recovery.rs",
+        "sha256": "060ab38c18a229a016cb5a90abdfaef66692064fe2f5b643adbea666b59445fa",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/account/transport.rs",
+        "sha256": "d442ae3b7173253f7cf1f64613ba08017cf35cd2044bdcbdcee4c1a532f5f2df",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/account/types.rs",
+        "sha256": "8985fbd5657670e2c017e80460d7e4b2086d048f240231a3cb545bbf23352c96",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/account/worker.rs",
+        "sha256": "db3b4fd65e7ba01b5c96105c69c731f926d2cb15a829a9381aebd93454ee3897",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/store.rs",
+        "sha256": "a38ac519025605ef04bb5367d86b09ebf71e5a19004c50b91a8c735e7083e407",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/store/account_summary.rs",
+        "sha256": "5ce984297b78e745762ceab82ff060d17ba054373e2557a5013d0d0b3e87101f",
+        "candidateMatches": true
+      },
+      {
+        "path": "src-tauri/src/sync/adapter.rs",
+        "sha256": "1829331640dc6823e8ada28fa136d5972c14d5d143268b4d2311df1ab47990cf",
+        "candidateMatches": true
+      },
+      {
+        "path": "vendor/cybergrid-sdk/SOURCE.json",
+        "sha256": "1b3ac1c40f4b389d76bf6910f94ceff48bf358377d0cef56b04d484fe8f2969f",
+        "candidateMatches": true
+      },
+      {
+        "path": "vendor/cybergrid-sdk/src/types.rs",
+        "sha256": "859dee4256932de822d4b334ba084b61b07161235f4ea5d07b2ff48a8d57d3e5",
+        "candidateMatches": true
+      }
+    ],
+    "compilerProcesses": []
+  },
+  "networkSourcesMatchApproved7177": true,
+  "targetReleased": true,
+  "ownedCompilerProcessesRemaining": 0,
+  "scope": [
+    "Synthetic temporary fixtures and loopback only",
+    "No App, real login, private/original store, device, external account traffic or package build",
+    "No source, manifest or lock changes; no new target",
+    "Execution deadline cancels; blocked synchronous work can keep Running/Busy until confirmed retirement"
+  ]
+}
