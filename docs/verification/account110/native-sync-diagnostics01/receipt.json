@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-14T19:08:23+08:00",
+  "baseSource": "0a4a4cda80d926c470cfbc8d5cef3bb2937ca58a",
+  "sourceCommit": "c31a9b1c1cc4a7d56c73544fef987024b4111c3f",
+  "contractCommit": "47572b955d75ac7e7bffd1f46d2588eb454de1b0",
+  "productFiles": [
+    {
+      "path": "src-tauri/src/account/types.rs",
+      "sha256": "019f500d28e984a8e7f2cab9d09bd5aa0343e5fc466b8a642e072c3f0a7ba041"
+    },
+    {
+      "path": "src-tauri/src/account/transport.rs",
+      "sha256": "8537f08171b48e18bf06eaed2898d90ee24bc4c888c661c9d38a9e5b37ea8919"
+    }
+  ],
+  "wire": {
+    "code": "account_sync_failed",
+    "pairedOptionalFields": [
+      "syncStage",
+      "syncReason"
+    ],
+    "syncStage": [
+      "pair",
+      "recoverPairing",
+      "transfer",
+      "retirement"
+    ],
+    "syncReason": [
+      "io",
+      "invalid_input",
+      "corrupt_identity",
+      "authentication",
+      "expired",
+      "revoked",
+      "workspace_mismatch",
+      "protocol",
+      "limit",
+      "timeout",
+      "stopped",
+      "backend",
+      "plan_stale",
+      "busy",
+      "transport"
+    ],
+    "otherErrorsOmitBoth": true
+  },
+  "command": "cargo test --manifest-path src-tauri/Cargo.toml --lib --features sync-e2e --locked --offline account:: -- --nocapture",
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "results": {
+    "passed": 78,
+    "failed": 0,
+    "ignored": 0,
+    "defaultParallelism": true,
+    "log": "account.log",
+    "newTests": 3
+  },
+  "disk": {
+    "floorBytes": 6442450944,
+    "minimumObservedFreeBytes": 10578083840,
+    "floorTriggered": false
+  },
+  "targetReleased": true,
+  "boundaries": [
+    "Only concrete typed pair/recover_pairing/transfer_once/disconnect conversions inside transfer_target produce SyncAt.",
+    "Unknown Sync and native join/deadline/cancellation paths retain their prior generic classification.",
+    "blocking_request and all timeouts, cancellation, gates, permits, error precedence and retirement rules unchanged.",
+    "No frontend, network implementation, manifest, input locks, package, app, live retry, account request or device action changed/run.",
+    "Tests use synthetic temporary stores and loopback fixtures only.",
+    "This adds diagnosis, not a root-cause fix or a claim that live02 push succeeds. Independent review pending."
+  ]
+}

@@ -1,0 +1,295 @@
+   Compiling objc2-exception-helper v0.1.1
+   Compiling ring v0.17.14
+   Compiling objc2 v0.6.5
+   Compiling block2 v0.6.2
+   Compiling dispatch2 v0.3.1
+   Compiling objc2-core-foundation v0.3.2
+   Compiling rustls v0.23.46
+   Compiling rustls-webpki v0.103.16
+   Compiling objc2-foundation v0.3.2
+   Compiling objc2-quartz-core v0.3.2
+   Compiling objc2-app-kit v0.3.2
+   Compiling tokio-rustls v0.26.6
+   Compiling hyper-rustls v0.27.10
+   Compiling rustls-platform-verifier v0.7.1
+   Compiling reqwest v0.13.5
+   Compiling objc2-security v0.3.2
+   Compiling noq-proto v1.4.0
+   Compiling objc2-web-kit v0.3.2
+   Compiling wry v0.57.1
+   Compiling tauri-runtime v2.12.2
+   Compiling tao v0.37.2
+   Compiling tauri-runtime-wry v2.12.3
+   Compiling window-vibrancy v0.8.1
+   Compiling muda v0.20.0
+   Compiling n0-dns-resolver v0.1.0
+   Compiling tauri v2.12.5
+   Compiling stun v0.9.0
+   Compiling objc2-system-configuration v0.3.2
+   Compiling reqwest v0.12.28
+   Compiling x509-parser v0.16.0
+   Compiling tokio-websockets v0.13.3
+   Compiling netdev v0.46.3
+   Compiling rcgen v0.13.2
+   Compiling noq v1.4.0
+   Compiling iroh-dns v1.4.1
+   Compiling turn v0.11.0
+   Compiling iroh-relay v1.4.1
+   Compiling webrtc-ice v0.14.0
+   Compiling oauth2 v5.0.0
+   Compiling dtls v0.13.0
+warning: tauri-plugin-notes-ui@0.1.0: macos/toolbar.m:32:49: warning: unused parameter 'tableFocused' [-Wunused-parameter]
+warning: tauri-plugin-notes-ui@0.1.0:    32 | static NSString *labelFor(NSString *action,BOOL tableFocused) {
+warning: tauri-plugin-notes-ui@0.1.0:       |                                                 ^
+warning: tauri-plugin-notes-ui@0.1.0: 1 warning generated.
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:25:1: warning: writable atomic property 'notesHovered' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    25 | - (void)setNotesHovered:(BOOL)value {_notesHovered=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     8 | @property BOOL notesHovered;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:26:1: warning: writable atomic property 'notesMenuOpen' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    26 | - (void)setNotesMenuOpen:(BOOL)value {_notesMenuOpen=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     9 | @property BOOL notesMenuOpen;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:27:1: warning: writable atomic property 'notesSelected' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    27 | - (void)setNotesSelected:(BOOL)value {_notesSelected=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:    10 | @property BOOL notesSelected;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: 3 warnings generated.
+   Compiling netwatch v0.19.3
+   Compiling libsqlite3-sys v0.30.1
+   Compiling tungstenite v0.29.0
+   Compiling webrtc v0.14.0
+   Compiling openidconnect v4.1.0
+   Compiling rcgen v0.14.10
+   Compiling tokio-tungstenite v0.29.0
+   Compiling iroh v1.4.1
+   Compiling rfd v0.17.2
+   Compiling tauri-plugin-fs v2.7.1
+   Compiling rusqlite v0.32.1
+   Compiling tauri-plugin-opener v2.7.3
+   Compiling jsonwebtoken v9.3.1
+   Compiling tauri-plugin-dialog v2.8.4
+   Compiling account-auth v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/crates/account-auth)
+   Compiling tauri-plugin-notes-media v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/plugins/tauri-plugin-notes-media)
+   Compiling tauri-plugin-notes-scan v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/plugins/tauri-plugin-notes-scan)
+   Compiling tauri-plugin-deep-link v2.6.3
+   Compiling tauri-plugin-notes-auth v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/plugins/tauri-plugin-notes-auth)
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/plugins/tauri-plugin-notes-ui)
+   Compiling cybergrid-sdk v0.3.0 (/private/tmp/cybernote-account109-login-surfaces-ui/vendor/cybergrid-sdk)
+   Compiling notes-clone v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/src-tauri)
+warning: constant `REDIRECT` is never used
+ --> src/account/callback.rs:9:11
+  |
+9 | pub const REDIRECT: &str = "http://127.0.0.1:17897/callback";
+  |           ^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variant `Unsupported` is never constructed
+   --> src/account/types.rs:339:5
+    |
+316 | pub(crate) enum Error {
+    |                 ----- variant in this enum
+...
+339 |     Unsupported,
+    |     ^^^^^^^^^^^
+    |
+    = note: `Error` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: method `shutdown` is never used
+   --> src/attachment_media/http.rs:110:25
+    |
+ 36 | impl MediaServer {
+    | ---------------- method in this implementation
+...
+110 |     pub(crate) async fn shutdown(mut self) {
+    |                         ^^^^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `stage_attachment`, `stage_archive`, and `import_stage` are never used
+   --> src/session.rs:188:19
+    |
+ 60 | impl Session {
+    | ------------ methods in this implementation
+...
+188 |     pub(crate) fn stage_attachment(
+    |                   ^^^^^^^^^^^^^^^^
+...
+197 |     pub(crate) fn stage_archive(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+...
+201 |     pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^
+
+warning: method `stage_archive` is never used
+   --> src/store/archive.rs:630:19
+    |
+449 | impl Store {
+    | ---------- method in this implementation
+...
+630 |     pub(crate) fn stage_archive(&self) -> Result<super::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+
+warning: method `path` is never used
+  --> src/store/data_management.rs:79:12
+   |
+78 | impl DocumentStage {
+   | ------------------ method in this implementation
+79 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: methods `document_stage` and `stage_attachment` are never used
+   --> src/store/data_management.rs:324:19
+    |
+159 | impl Store {
+    | ---------- methods in this implementation
+...
+324 |     pub(crate) fn document_stage(&self) -> Result<DocumentStage> {
+    |                   ^^^^^^^^^^^^^^
+...
+463 |     pub(crate) fn stage_attachment(&self, id: &str) -> Result<(DocumentStage, AttachmentExport)> {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: function `prepared_store` is never used
+  --> src/sync/adapter.rs:29:4
+   |
+29 | fn prepared_store<T>(
+   |    ^^^^^^^^^^^^^^
+
+warning: `notes-clone` (lib test) generated 13 warnings
+    Finished `test` profile [unoptimized] target(s) in 1m 37s
+     Running unittests src/lib.rs (/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/deps/notes_clone_lib-749a51bffb02c7d7)
+
+running 78 tests
+test account::enrollment::tests::close_and_expiry_fail_closed_for_both_directions_and_routes_are_ephemeral ... ok
+test account::directory::tests::offline_projection_hides_history_and_native_associations ... ok
+test account::directory::tests::malformed_or_duplicate_registry_never_becomes_a_target ... ok
+test account::callback::tests::actual_tcp_callback_rejects_rebinding_duplicate_and_forwarded_host ... ok
+test account::directory::tests::fixed_registration_request_keeps_private_proof_out_of_directory_projection ... ok
+test account::directory::tests::actual_http_unsupported_and_untrusted_response_are_finite ... ok
+test account::enrollment::tests::truncated_and_oversized_success_bodies_fail_without_body_or_address_details ... ok
+test account::enrollment::tests::fresh_account_status_metrics_do_not_require_or_enable_sync ... ok
+restart fixture: path=release before_retirement pending=false quiet=true phase=probe different_workspace=blocked same_workspace=allowed
+restart fixture: path=release after_retirement pending=false quiet=false phase=none different_workspace=allowed identity_preserved=true notes_preserved=true
+test account::enrollment::tests::http_transport_is_independent_of_pinned_signed_enrollment_issuer ... ok
+restart fixture: path=reopen before_retirement pending=false quiet=true phase=probe different_workspace=blocked same_workspace=allowed
+test account::enrollment::tests::http_rejections_keep_endpoint_stage_and_never_return_response_details ... ok
+restart fixture: path=test account::private::tests::adoption_marker_survives_restart_and_does_not_rewrite_binding ... ok
+reopen after_retirement pending=false quiet=false phase=none different_workspace=allowed identity_preserved=true notes_preserved=true
+test account::private::tests::binding_symlink_and_unsafe_modes_fail_closed ... ok
+test account::enrollment::tests::aborted_local_recovery_blocks_adoption_until_release_or_real_session_reopen ... ok
+test account::private::tests::durable_binding_survives_pause_without_changing_workspace_or_device ... ok
+test account::provider::tests::every_auth_error_category_survives_the_safe_sdk_handoff ... ok
+test account::provider::tests::missing_grant_is_reported_at_provider_boundary_without_network_or_details ... ok
+test account::enrollment::tests::signed_proof_rejects_cross_owner_workspace_and_unbound_keys_not_just_jwt_decode ... ok
+test account::recovery::tests::explicit_recovery_restores_persisted_pause_and_enable_without_rewriting_binding ... ok
+test account::private::tests::signout_remembers_paused_device_without_retaining_current_binding_or_touching_grant ... ok
+test account::surface::tests::cancellation_and_callback_win_over_late_transfer_without_rearming ... ok
+test account::surface::tests::switch_reuses_url_preserves_failed_owner_and_rejects_duplicates ... ok
+test account::surface::tests::native_host_policy_rejects_other_schemes_hosts_ports_and_credentials ... ok
+test account::tests::device_receipts_match_operation_identity_and_cancel_never_sets_last_sync ... ok
+test account::enrollment::tests::request_builder_connect_and_timeout_have_distinct_finite_results ... ok
+test account::tests::explicit_error_reauthentication_can_cleanup_but_healthy_owner_is_preserved ... ok
+test account::tests::explicit_network_recovery_requires_bound_error_and_does_not_select_enable ... ok
+test account::tests::late_embedded_callback_cannot_consume_replacement_receiver ... ok
+test account::tests::native_ipc_trusts_exact_app_origins_and_strict_command_types ... ok
+test account::tests::replacement_authorization_rejects_network_unknown_and_local_failures ... ok
+test account::tests::offline_presentation_requires_retained_identity_and_preserves_pause_or_enable_intent ... ok
+test account::private::tests::registry_key_id_and_revision_survive_signout_and_rejected_late_publications ... ok
+test account::tests::unbound_profile_request_retry_begins_without_replacement_or_enabling ... ok
+test account::transport::observation::tests::cancellation_while_waiting_for_cache_lock_fences_record_and_task_remove ... ok
+test account::recovery::tests::generation_change_during_refresh_or_profile_prevents_binding_and_network_resurrection ... ok
+restart fixture: stopped_session pending=false quiet=true phase="probe"
+test account::enrollment::tests::account_foreground_does_not_construct_manual_identity_or_policy_free_service ... ok
+test account::transport::observation::tests::retired_sampler_cannot_record_or_remove_replacement_in_same_generation ... ok
+test account::transport::observation::tests::stale_failure_pause_logout_and_account_or_network_generation_cannot_reuse_success ... ok
+test account::enrollment::tests::workspace_adoption_partial_release_retries_keep_editor_authority_and_terminal_receipt ... ok
+test account::transport::observation::tests::only_current_finite_paths_survive_closed_unknown_error_and_lock_timeout ... ok
+
+thread 'tokio-rt-worker' (64752453) panicked at src/account/transport.rs:1276:16:
+synthetic blocking action failure
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test account::transport::tests::blocking_panic_still_fences_admission_and_confirms_retirement ... ok
+test account::transport::tests::bootstrap_rechecks_cancelled_owner_after_proof_verification ... ok
+test account::transport::tests::active_bootstrap_returns_nonce_bound_noise_key_pinned_invitation ... ok
+test account::transport::tests::cancelling_initial_coordination_drains_dispatched_work_and_fences_retry ... ok
+test account::transport::tests::classified_retirement_error_keeps_priority_and_cancellation_still_wins ... ok
+test account::transport::tests::coordinator_request_classification_preserves_authorization_fences ... ok
+test account::transport::tests::bootstrap_rechecks_closed_gate_after_proof_verification ... ok
+test account::transport::tests::late_blocking_admission_after_early_disconnect_is_fenced_and_joined ... ok
+test account::tests::retained_session_enable_requires_exact_store_identity_and_no_interrupted_adoption ... ok
+test account::transport::tests::request_cancel_interrupts_pending_preparation_without_running_next_step ... ok
+test account::tests::login_sessions_a_out_b_out_a_preserve_manual_library_and_never_inherit_enable ... ok
+test account::transport::tests::selected_device_sync_stage_survives_action_failure_without_changing_auth_fences ... ok
+test account::types::tests::adoption_block_is_a_finite_local_error_without_provider_details ... ok
+test account::types::tests::adoption_timeout_is_an_exact_finite_pair_without_raw_details ... ok
+test account::types::tests::authentication_diagnostics_preserve_boundaries_without_upstream_details ... ok
+test account::types::tests::device_commands_reject_unknown_shapes_and_directions ... ok
+test account::types::tests::mapping_observation_serializes_finite_paths_and_legacy_status_omits_extension ... ok
+test account::types::tests::network_diagnostics_keep_safe_code_and_only_fixed_stage_labels ... ok
+test account::tests::returning_authenticated_account_reuses_only_exact_saved_store_device_and_key ... ok
+test account::types::tests::request_details_are_finite_stage_scoped_and_http_status_is_paired ... ok
+test account::types::tests::token_response_diagnostics_preserve_generic_reason_and_exact_finite_details ... ok
+test account::types::tests::selected_device_sync_diagnostics_are_an_exact_pair_of_finite_fields ... ok
+test account::worker::tests::dropped_ipc_waiter_cancels_before_dequeue_without_releasing_work_permit ... ok
+test account::worker::tests::heap_pinned_owners_cancel_in_both_directions_but_wait_for_retirement ... ok
+test account::worker::tests::dropping_in_flight_waiter_cancels_execution_but_retains_permit_until_cleanup ... ok
+test account::worker::tests::operation_reservation_is_owned_by_work_not_the_dropped_ipc_waiter ... ok
+test account::worker::tests::pause_and_reenable_fence_late_ready_and_old_operations_without_a_store ... ok
+test account::worker::tests::paused_real_content_owner_rejects_actions_without_runtime_or_sdk_registration ... ok
+owner future bytes: content=105400 directory=1488 inline=213904 joined=128 worker=10608
+test account::worker::tests::real_owner_futures_have_bounded_composition_and_poll_on_small_stack ... ok
+test account::worker::tests::request_deadline_before_dequeue_never_starts_and_remains_busy_until_receipt ... ok
+test account::worker::tests::in_flight_deadline_waits_for_cleanup_and_late_success_is_not_success ... ok
+test account::transport::tests::unconfirmed_retirement_is_not_success_and_keeps_admission_fenced ... ok
+test account::enrollment::tests::closed_or_stale_account_gate_cannot_adopt_a_local_library ... ok
+test account::enrollment::tests::real_store_activation_preserves_documents_and_restart_identity_and_allows_explicit_adoption ... ok
+test account::transport::tests::native_deadline_with_real_network_blocked_backend_keeps_busy_until_join ... ok
+test account::enrollment::tests::workspace_adoption_native_handshake_preserves_manual_content_and_blocks_unready_window ... ok
+test account::transport::observation::tests::switching_live_samples_and_cancelling_pending_sampler_clear_evidence ... ok
+test account::transport::observation::tests::pending_sample_revokes_previous_success_and_timeout_records_unavailable ... ok
+test account::transport::tests::initial_coordination_retries_are_bounded_and_permanent_rejections_do_not_retry ... ok
+
+test result: ok. 78 passed; 0 failed; 0 ignored; 0 measured; 278 filtered out; finished in 3.69s
+
