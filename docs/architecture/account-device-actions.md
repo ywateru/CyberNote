@@ -70,7 +70,11 @@ summary?: { noteCount: u64, lastNoteUpdatedAt: u64|null, capturedAt: u64 }
 
 `GET /api/v1/notes/devices` 与 `PUT /api/v1/notes/devices/self` 都使用当前已验证账户 Bearer；不得使用 grant/Noise 私钥做目录凭据。GET 返回 `{schemaVersion:1,devices:[...]}`；每行的 `id,name,online,syncAvailable,summary` 对应上述安全设备字段，另含原生专用 `transportDeviceId,protocolDeviceId,noisePublicKey` 可空关联，均不得直接泄露到前端。服务端不得接受客户端自选 owner。
 
-PUT 固定字段：`deviceId`（registry UUID）、`name`、`summary`（可null）、`syncAvailable`、`transportSessionKey`、`protocolDeviceId`（UUID或null）、`noisePublicKey`（32字节base64url或null）。`transportSessionKey` 仅用于服务端验证当前 SDK device session 的 subject/product 并解析实际 transport id/incarnation，不落日志或registry记录；输入最多8KiB。未启用同步时后两个为null，syncAvailable=false。GET只对owner返回，内容授权仍必须验证 enrollment + Noise。SDK session重建后重新PUT，旧session迟到更新不能覆盖新presence（以session注册/到期序列加原子fence实现）。
+PUT 固定字段：`deviceId`（registry UUID）、`registryKey`（32字节随机base64url本机私密登记凭据）、`revision`（持久递增安全整数）、`name`、`summary`（可null）、`syncAvailable`、`transportSessionKey`、`protocolDeviceId`（UUID或null）、`noisePublicKey`（32字节base64url或null）。`transportSessionKey` 仅用于服务端验证当前 SDK device session 的 subject/product 并解析实际 transport id/incarnation，不落日志或registry记录；输入最多8KiB。未启用同步时后两个为null，syncAvailable=false。GET只对owner返回，内容授权仍必须验证 enrollment + Noise。
+
+`registryDeviceId` 不是认证凭据。首次登记原子绑定 registryKey 的不可逆hash，后续修改必须匹配；同账户另一台设备不能拿自己的SDK session和已知UUID替换他机名称/路由。registryKey只保存在本机私密配置，不能发给对端/前端或放入GET。丢失私密登记配置时创建新设备记录，不伪造接管旧记录。
+
+每次发布前将递增revision持久保存；服务端原子校验仍有效的transport session、登记key hash、revision后更新presence。严格较新revision才可覆盖；同revision仅允许完全相同内容的幂等重试且不能额外续租，不同内容拒绝。用revision拒绝旧session、同session旧heartbeat、暂停前请求的迟到覆盖；不能用可能相等的session expiresAt推断注册先后。SDK session重建后使用同registryKey与更高revision重新PUT。验证与更新在同一个Redis原子操作完成，不能在session校验与写记录之间留下撤销竞态。
 
 presence 最多65秒，定期续租；syncAvailable 还要求底层 transport session有效且在线。持久设备记录无TTL，与通用coordinator GC分离；每账户最多64台，超限明确报错，不淘汰旧记录。过期presence后的摘要可以保留在服务端，但原生投影必须隐藏离线摘要。历史旧版本从未登记的设备只有升级后才会进入此表，不能声称能恢复已删除的旧目录。
 
