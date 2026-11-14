@@ -1,0 +1,47 @@
+{
+  "source": "53e3f139d6df9ed68e9395ca585757e3dc49ba23",
+  "authorReceiptHead": "3764cf054481843aaf592e4e3d8a733d4bdc858f",
+  "sourceSha256": {
+    "scripts/verification/account110-sdk-diagnostic.mjs": "5388b4917d2e9f331a9233406ad448cb9637b228a92fcb00974b51d1158e4e5b",
+    "scripts/verification/account110-sdk-diagnostic.test.mjs": "3e3b43c8549b4aa92505a44f8ea6f702df971fa9f8ba446d6868cd39c62efcb1"
+  },
+  "command": [
+    "node",
+    "--test",
+    "--test-name-pattern=\u51fa\u53e3",
+    "scripts/verification/account110-sdk-diagnostic.test.mjs"
+  ],
+  "exitCode": 0,
+  "authorHashesVerified": 3,
+  "finishedAt": "2026-11-14T13:38:57.106690+00:00",
+  "verdict": "APPROVE-final-diagnostic-source-chain",
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "p1Closed": true,
+  "nativeSource": "c603cab6300b314c087cea2e88df9d25217e30ba",
+  "collectorChain": [
+    "01dbb992a360c28dde071b373926f5fc1747dd4c",
+    "a6fecc69b25223b615866c07e9b462ef2cec3203",
+    "53e3f139d6df9ed68e9395ca585757e3dc49ba23"
+  ],
+  "previousReview": "c56f1ccd74e96ca559d6799877c76e4d41706761",
+  "previousResultsRetained": {
+    "native": 8,
+    "collector": 20,
+    "driver": 15
+  },
+  "previousSuitesRerun": false,
+  "cargoOrTargetUsed": false,
+  "appDeviceNetworkOrPrivateDataUsed": false,
+  "authorTreeCleanAfter": true,
+  "routeComparison": {
+    "available": false,
+    "selectedTransportMatchesLiveB": null
+  },
+  "limits": [
+    "Source/fixture approval only; no actual map or push success established.",
+    "Cancellation with a started-only diagnostic remains incomplete.",
+    "Historical App failures and separate CLI success remain unchanged."
+  ]
+}

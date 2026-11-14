@@ -1,0 +1,19 @@
+# Account110 controlled SDK map diagnostics final review
+
+Verdict: **APPROVE final diagnostic source chain**, 2026-11-14. Native `c603cab6300b314c087cea2e88df9d25217e30ba`; collector `01dbb992a360c28dde071b373926f5fc1747dd4c` + `a6fecc69b25223b615866c07e9b462ef2cec3203` + correction `53e3f139d6df9ed68e9395ca585757e3dc49ba23`. Author correction receipt `3764cf054481843aaf592e4e3d8a733d4bdc858f`. The P1 from [review 01](app-account110-sdk-map-diagnostics-01.md), commit `c56f1ccd74e96ca559d6799877c76e4d41706761`, is closed. No remaining blocker identified within this diagnostic-only scope.
+
+The exact correction changes only collector/test. Both sample and command-terminal paths now invoke strict status validation and explicit finite projection. Required/optional fields are checked at the root and nested profile, error, device, summary, transport and operation levels. Unknown fields, arbitrary enums/types, invalid numeric bounds/IDs/duplicate current devices, and inapplicable error/transport shapes are rejected. Output is constructed field by field, with only a/b/other labels; raw profile, device name/ID, messages and nested extra values are not spread into the result. The former unsafe safeStatus import/calls are removed.
+
+Valid error-bearing and state=error observations remain usable for diagnostics, including running and failed operations. These are preserved rather than passed through acceptance parseStatus's early ACCOUNT_FAILURE throw. Error/state=error still latch overall failure. Terminal validation occurs before persistence or printing, including a missing status on a supposedly fulfilled command. Source/ownership/first-result checks, owner fence, at-most-one push, actual command-terminal observation, SDK ring loss checks and native cleanup remain. The fix adds no retry, success relaxation, live operation or new diagnostic identity field.
+
+Verified all three committed author archive manifest entries, both exact source hashes, and clean author receipt HEAD. Ran only the two affected output-boundary fixtures once:
+
+```text
+node --test --test-name-pattern=出口 scripts/verification/account110-sdk-diagnostic.test.mjs
+```
+
+**2 passed, 0 failed, 0 skipped**, exit 0. Both real projection functions are exercised with root/nested sentinels and raw/invalid field types, unsafe label maps, and valid error-bearing running/failed states. The rejected sentinel never enters either projected output. These directly cover the previous concrete counterexamples. Native8, existing collector20 and driver15 independent PASS results from review 01 remain historical and unchanged; none was rerun or added to the current count.
+
+Native approval from review 01 remains in force: feature/debug/desktop capability plus explicit environment switches; finite static SDK variant/timeout/event labels and bounded API numbers; bounded owner-fenced ring; no raw errors/events/stderr; no change to DTOs, identity, 185-second absolute deadline, cancellation/drain, mappings or retirement Busy. Events are observations, not delivery receipts. The cross-process route witness remains unimplemented: **available=false, match=null**. Started without a result means incomplete, not an inferred Cancelled result.
+
+[Independent output, source hashes and receipt](../../verification/account110/native/sdk-map-diagnostics-independent02/receipt.json) are archived with SHA256SUMS. The author tree stayed clean. No Cargo/target lease, App, account/device/network operation, real library/grant/Noise material, manifest change or package build was involved in this follow-up. Historical App push failures and CLI success remain separate evidence. Approval permits integration of the controlled diagnostic source; exact packaging and an authorized real run remain necessary before any runtime/route/transfer conclusion.
