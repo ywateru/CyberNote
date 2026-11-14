@@ -1,0 +1,33 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--features",
+    "sync-e2e",
+    "--locked",
+    "--offline",
+    "--",
+    "--exact",
+    "account::sdk_diagnostic::tests::projection_discards_all_event_identity_and_message_fields",
+    "account::sdk_diagnostic::tests::typed_error_projection_never_formats_payload_and_bounds_status",
+    "account::sdk_diagnostic::tests::ring_has_strict_capacity_and_reports_eviction",
+    "account::sdk_diagnostic::tests::real_sdk_rejection_is_observed_only_under_both_environment_switches",
+    "sync_e2e::tests::sdk_diagnostic_is_fixed_native_read_and_requires_ready",
+    "account::transport::tests::real_selected_transfer_future_layout_and_small_stack_poll",
+    "account::transport::tests::request_cancel_interrupts_pending_preparation_without_running_next_step",
+    "account::worker::tests::unified_deadline_spans_preparation_and_transfer_and_waits_for_retirement",
+    "--nocapture"
+  ],
+  "exitCode": 0,
+  "controllerStopped": false,
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  }
+}

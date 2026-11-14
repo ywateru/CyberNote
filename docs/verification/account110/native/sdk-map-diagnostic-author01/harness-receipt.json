@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "source": "a6fecc69b25223b615866c07e9b462ef2cec3203",
+  "sourceChain": [
+    "01dbb992a360c28dde071b373926f5fc1747dd4c",
+    "a6fecc69b25223b615866c07e9b462ef2cec3203"
+  ],
+  "sourceSha256": {
+    "scripts/verification/account110-sdk-diagnostic.mjs": "8bb538118c2dc5fa6ee7a8b3e754bd51e6f25e0fcb867a910dfdfce8a595acd8",
+    "scripts/verification/account110-sdk-diagnostic.test.mjs": "7d1e925b07ee438d6da0839cb5b40efeaa48c937b3758d00d1d9d17489a3a5ba",
+    "scripts/verification/sync108-native-driver.mjs": "a78910f4ee8c972e27671f80458e23196ca74f0c578bbbf181b2a65bff163324"
+  },
+  "collector": {
+    "command": [
+      "node",
+      "--test",
+      "scripts/verification/account110-sdk-diagnostic.test.mjs"
+    ],
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "stdoutFile": "collector20.tap",
+    "stdoutSha256": "9e0a8f027ca60a73020ecd9a6449a01b268ebb5cad0d53ed22385b539a451e8a"
+  },
+  "driver": {
+    "command": [
+      "node",
+      "--test",
+      "scripts/verification/account110-sdk-diagnostic.test.mjs",
+      "scripts/verification/sync108-native-driver.test.mjs"
+    ],
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0,
+    "evidenceKind": "summary-of-completed-tool-output",
+    "combinedRunTotal": 29,
+    "combinedCollectorAtThatTime": 14,
+    "rawStandaloneDriverLogCaptured": false,
+    "note": "15 driver cases passed in the earlier combined invocation; final collector20 replaced the earlier collector14. This archive adds no rerun and does not reconstruct a raw driver log."
+  },
+  "nativeAuthor": {
+    "source": "c603cab6300b314c087cea2e88df9d25217e30ba",
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "directory": "native-author",
+    "originalInputChecksumsVerified": true,
+    "fiveSourceHashesMatchCommit": true,
+    "archivedLogRedacted": true
+  },
+  "archiveBoundary": "Docs-only copy of existing device-free receipts; no tests, build, App, network, credentials, private library or target operation in this archival step."
+}
