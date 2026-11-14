@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "nativeVerdict": "APPROVE",
+  "collectorVerdict": "CHANGES_REQUESTED",
+  "native": {
+    "source": "c603cab6300b314c087cea2e88df9d25217e30ba",
+    "sourceSha256": {
+      "src-tauri/src/account/mod.rs": "693c6ec76b9909497f743adbf9f3156b5d7eaf745495048473a8741282548c90",
+      "src-tauri/src/account/sdk_diagnostic.rs": "a9a86d9d06973e972826686e895acba2e62f1388a46bf99f863f332c1cb266b8",
+      "src-tauri/src/account/transport.rs": "d4876b6e88a51db07c980176fba1b2d394fe0cbe3227036c424a4e4c18304ade",
+      "src-tauri/src/account/worker.rs": "415f1e054b6c73cd36fafaed67ff8dcc116afbfccac1e2f4a565ad087f27d027",
+      "src-tauri/src/sync_e2e.rs": "79ce779aa498d669128923c6c04db3aa01bad36037f82d6327c35bb22ed57934"
+    },
+    "authorHashesVerified": 3,
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "src-tauri/Cargo.toml",
+      "--lib",
+      "--features",
+      "sync-e2e",
+      "--locked",
+      "--offline",
+      "--",
+      "--exact",
+      "account::sdk_diagnostic::tests::projection_discards_all_event_identity_and_message_fields",
+      "account::sdk_diagnostic::tests::typed_error_projection_never_formats_payload_and_bounds_status",
+      "account::sdk_diagnostic::tests::ring_has_strict_capacity_and_reports_eviction",
+      "account::sdk_diagnostic::tests::real_sdk_rejection_is_observed_only_under_both_environment_switches",
+      "sync_e2e::tests::sdk_diagnostic_is_fixed_native_read_and_requires_ready",
+      "account::transport::tests::real_selected_transfer_future_layout_and_small_stack_poll",
+      "account::transport::tests::request_cancel_interrupts_pending_preparation_without_running_next_step",
+      "account::worker::tests::unified_deadline_spans_preparation_and_transfer_and_waits_for_retirement",
+      "--nocapture"
+    ],
+    "environment": {
+      "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_INCREMENTAL": "0"
+    },
+    "beforeFreeBytes": 8254992384,
+    "floorBytes": 6442450944,
+    "startedAt": "2026-11-14T13:28:08.357933+00:00",
+    "exitCode": 0,
+    "minimumFreeBytes": 8254955520,
+    "diskFloorTriggered": false,
+    "finishedAt": "2026-11-14T13:28:09.866606+00:00"
+  },
+  "collector": {
+    "sourceHead": "108129f4b9e17bfefb83878b62f997ff38df6a61",
+    "command": [
+      "node",
+      "--test",
+      "scripts/verification/account110-sdk-diagnostic.test.mjs",
+      "scripts/verification/sync108-native-driver.test.mjs"
+    ],
+    "exitCode": 0,
+    "sourceHashes": {
+      "scripts/verification/account110-sdk-diagnostic.mjs": "8bb538118c2dc5fa6ee7a8b3e754bd51e6f25e0fcb867a910dfdfce8a595acd8",
+      "scripts/verification/account110-sdk-diagnostic.test.mjs": "7d1e925b07ee438d6da0839cb5b40efeaa48c937b3758d00d1d9d17489a3a5ba",
+      "scripts/verification/sync108-native-driver.mjs": "a78910f4ee8c972e27671f80458e23196ca74f0c578bbbf181b2a65bff163324"
+    }
+  },
+  "nativeTests": {
+    "pass": 8,
+    "fail": 0,
+    "ignored": 0
+  },
+  "nodeTests": {
+    "collectorPass": 20,
+    "driverPass": 15,
+    "fail": 0,
+    "skipped": 0
+  },
+  "collectorReviewedCommits": [
+    "01dbb992a360c28dde071b373926f5fc1747dd4c",
+    "a6fecc69b25223b615866c07e9b462ef2cec3203"
+  ],
+  "collectorAuthorReport": "108129f4",
+  "finding": {
+    "priority": "P1",
+    "kind": "unvalidated-status-report-projection",
+    "syntheticSummaryExtraFieldCopied": true,
+    "syntheticUnknownStateCopied": true,
+    "affectedPaths": [
+      "sample status",
+      "command terminal status"
+    ],
+    "actualPrivateDataUsed": false
+  },
+  "nativeEvidenceActualPath": "/private/tmp/account110-sdk-diagnostic-native01",
+  "routeComparison": {
+    "available": false,
+    "selectedTransportMatchesLiveB": null
+  },
+  "targetReleased": true,
+  "noCompilerAtRelease": true,
+  "authorTreesCleanAfter": true,
+  "releasedAt": "2026-11-14T13:29:08.481491+00:00",
+  "releaseFreeBytes": 8253624320,
+  "limits": [
+    "Source review and synthetic native/Node tests only; no App/real account/owned library/device operation.",
+    "Native ring events are asynchronous owner observations, not operation receipts.",
+    "Started without return means incomplete; no synthetic cancellation reason.",
+    "Native approval does not approve collector for live use until finite status validation is corrected."
+  ]
+}

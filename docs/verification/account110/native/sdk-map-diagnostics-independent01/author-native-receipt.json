@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-11-14T13:23:20.016172+00:00",
+  "source": "c603cab6300b314c087cea2e88df9d25217e30ba",
+  "base": "aa432624350db85e927c6f1057acf9fbdd3ec690",
+  "sourceSha256": {
+    "src-tauri/src/account/mod.rs": "693c6ec76b9909497f743adbf9f3156b5d7eaf745495048473a8741282548c90",
+    "src-tauri/src/account/sdk_diagnostic.rs": "a9a86d9d06973e972826686e895acba2e62f1388a46bf99f863f332c1cb266b8",
+    "src-tauri/src/account/transport.rs": "d4876b6e88a51db07c980176fba1b2d394fe0cbe3227036c424a4e4c18304ade",
+    "src-tauri/src/account/worker.rs": "415f1e054b6c73cd36fafaed67ff8dcc116afbfccac1e2f4a565ad087f27d027",
+    "src-tauri/src/sync_e2e.rs": "79ce779aa498d669128923c6c04db3aa01bad36037f82d6327c35bb22ed57934"
+  },
+  "checks": {
+    "focusedPassed": 8,
+    "focusedFailed": 0,
+    "focusedIgnored": 0,
+    "features": [
+      "sync-e2e"
+    ],
+    "log": "focused01.log",
+    "command": "focused01-command.json"
+  },
+  "fixedEnv": [
+    "NOTES_SYNC_E2E=1",
+    "NOTES_SYNC_E2E_SDK_DIAGNOSTIC=1"
+  ],
+  "stdinOp": "accountSdkDiagnostic",
+  "ringCapacity": 256,
+  "targetReleased": true,
+  "freeBytes": 8258551808,
+  "limitations": [
+    "No actual App/network/account operation executed",
+    "Cross-process route witness not implemented pending explicit privacy contract; match field remains null",
+    "Diagnostics are observations, not operation success or delivery receipts",
+    "Event order/timing denotes observation from asynchronous SDK broadcast",
+    "No frontend DTO/transport policy/deadline/dependency/manifest changes"
+  ]
+}

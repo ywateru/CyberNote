@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: diagnostic action is parameterless and rejects expressions, extra fields and endpoint inputs
+ok 1 - diagnostic action is parameterless and rejects expressions, extra fields and endpoint inputs
+  ---
+  duration_ms: 1.882083
+  type: 'test'
+  ...
+# Subtest: all sixteen typed SDK errors survive only as finite variants
+ok 2 - all sixteen typed SDK errors survive only as finite variants
+  ---
+  duration_ms: 0.824334
+  type: 'test'
+  ...
+# Subtest: static timeout labels are exhaustive and unknown is explicit, never raw text
+ok 3 - static timeout labels are exhaustive and unknown is explicit, never raw text
+  ---
+  duration_ms: 0.299833
+  type: 'test'
+  ...
+# Subtest: only audited event phases and transport labels are admitted
+ok 4 - only audited event phases and transport labels are admitted
+  ---
+  duration_ms: 0.857708
+  type: 'test'
+  ...
+# Subtest: raw messages, IDs, epoch, credentials and unknown fields are never copied
+ok 5 - raw messages, IDs, epoch, credentials and unknown fields are never copied
+  ---
+  duration_ms: 0.961417
+  type: 'test'
+  ...
+# Subtest: inapplicable fields must be null and paired error fields must agree
+ok 6 - inapplicable fields must be null and paired error fields must agree
+  ---
+  duration_ms: 0.263459
+  type: 'test'
+  ...
+# Subtest: API and OAuth numeric statuses are bounded, no upstream code/string escapes
+ok 7 - API and OAuth numeric statuses are bounded, no upstream code/string escapes
+  ---
+  duration_ms: 0.2625
+  type: 'test'
+  ...
+# Subtest: exact schema and safe numeric bounds reject partial or unbounded snapshots
+ok 8 - exact schema and safe numeric bounds reject partial or unbounded snapshots
+  ---
+  duration_ms: 0.837083
+  type: 'test'
+  ...
+# Subtest: map stage/outcome and boolean route evidence are finite without inventing a match
+ok 9 - map stage/outcome and boolean route evidence are finite without inventing a match
+  ---
+  duration_ms: 0.675125
+  type: 'test'
+  ...
+# Subtest: collector deduplicates overlapping samples and retains finite earlier failure
+ok 10 - collector deduplicates overlapping samples and retains finite earlier failure
+  ---
+  duration_ms: 0.753291
+  type: 'test'
+  ...
+# Subtest: retired owner cannot contribute records to a new owned client
+ok 11 - retired owner cannot contribute records to a new owned client
+  ---
+  duration_ms: 0.210542
+  type: 'test'
+  ...
+# Subtest: ring drop and finite collection overflow remain visible instead of claiming complete evidence
+ok 12 - ring drop and finite collection overflow remain visible instead of claiming complete evidence
+  ---
+  duration_ms: 7.202292
+  type: 'test'
+  ...
+# Subtest: out of order or duplicate sequences are rejected inside one native snapshot
+ok 13 - out of order or duplicate sequences are rejected inside one native snapshot
+  ---
+  duration_ms: 0.158583
+  type: 'test'
+  ...
+# Subtest: absent/retired SDK generation may be null only at snapshot root
+ok 14 - absent/retired SDK generation may be null only at snapshot root
+  ---
+  duration_ms: 0.133208
+  type: 'test'
+  ...
+# Subtest: a repeated sequence cannot change meaning or rewind the owned ring
+ok 15 - a repeated sequence cannot change meaning or rewind the owned ring
+  ---
+  duration_ms: 0.155958
+  type: 'test'
+  ...
+# Subtest: a dropped map future is not invented as an SDK Cancelled result
+ok 16 - a dropped map future is not invented as an SDK Cancelled result
+  ---
+  duration_ms: 0.268125
+  type: 'test'
+  ...
+# Subtest: intermediate account/diagnostic errors do not discard eventual operation terminal
+ok 17 - intermediate account/diagnostic errors do not discard eventual operation terminal
+  ---
+  duration_ms: 0.309667
+  type: 'test'
+  ...
+# Subtest: finite operation observation timeout neither fabricates terminal nor extends on sampling
+ok 18 - finite operation observation timeout neither fabricates terminal nor extends on sampling
+  ---
+  duration_ms: 0.190375
+  type: 'test'
+  ...
+# Subtest: actual command rejection is returned separately from collected diagnostic failures
+ok 19 - actual command rejection is returned separately from collected diagnostic failures
+  ---
+  duration_ms: 0.075584
+  type: 'test'
+  ...
+# Subtest: run requires exact source/package and a new finite private output name; no endpoint/data-dir override
+ok 20 - run requires exact source/package and a new finite private output name; no endpoint/data-dir override
+  ---
+  duration_ms: 0.400584
+  type: 'test'
+  ...
+# Subtest: request schema rejects unknown keys, unsafe IDs, unbounded values and invalid action types
+ok 21 - request schema rejects unknown keys, unsafe IDs, unbounded values and invalid action types
+  ---
+  duration_ms: 11.139125
+  type: 'test'
+  ...
+# Subtest: prefixed framing handles UTF-8 and multiple frames across byte-sized chunks; noise is counted only
+ok 22 - prefixed framing handles UTF-8 and multiple frames across byte-sized chunks; noise is counted only
+  ---
+  duration_ms: 1.046875
+  type: 'test'
+  ...
+# Subtest: framing refuses oversized lines, malformed JSON and truncated protocol frames
+ok 23 - framing refuses oversized lines, malformed JSON and truncated protocol frames
+  ---
+  duration_ms: 1.564208
+  type: 'test'
+  ...
+# Subtest: readyTimeout attempts only fixed diagnostic and preserves original ready failure
+ok 24 - readyTimeout attempts only fixed diagnostic and preserves original ready failure
+  ---
+  duration_ms: 51.898833
+  type: 'test'
+  ...
+# Subtest: readyTimeoutOldCandidate attempts only fixed diagnostic and preserves original ready failure
+ok 25 - readyTimeoutOldCandidate attempts only fixed diagnostic and preserves original ready failure
+  ---
+  duration_ms: 49.959458
+  type: 'test'
+  ...
+# Subtest: readyTimeoutUnsafe attempts only fixed diagnostic and preserves original ready failure
+ok 26 - readyTimeoutUnsafe attempts only fixed diagnostic and preserves original ready failure
+  ---
+  duration_ms: 42.274708
+  type: 'test'
+  ...
+# Subtest: concurrent callers are serialized and explicit shutdown reaches owned natural exit
+ok 27 - concurrent callers are serialized and explicit shutdown reaches owned natural exit
+  ---
+  duration_ms: 129.248375
+  type: 'test'
+  ...
+# Subtest: clean stdin EOF reaches owned natural exit
+ok 28 - clean stdin EOF reaches owned natural exit
+  ---
+  duration_ms: 49.727083
+  type: 'test'
+  ...
+# Subtest: successful shutdown followed by a truncated tail rejects close despite exit zero
+ok 29 - successful shutdown followed by a truncated tail rejects close despite exit zero
+  ---
+  duration_ms: 48.422
+  type: 'test'
+  ...
+# Subtest: invalidResponse fails promptly and prevents another request
+ok 30 - invalidResponse fails promptly and prevents another request
+  ---
+  duration_ms: 50.81425
+  type: 'test'
+  ...
+# Subtest: wrongId fails promptly and prevents another request
+ok 31 - wrongId fails promptly and prevents another request
+  ---
+  duration_ms: 53.716791
+  type: 'test'
+  ...
+# Subtest: nativeTimeout fails promptly and prevents another request
+ok 32 - nativeTimeout fails promptly and prevents another request
+  ---
+  duration_ms: 47.352459
+  type: 'test'
+  ...
+# Subtest: local timeout fails closed and owned process is cleaned up
+ok 33 - local timeout fails closed and owned process is cleaned up
+  ---
+  duration_ms: 3051.413375
+  type: 'test'
+  ...
+# Subtest: hello timeout closes an unresponsive owned fixture without a second command
+ok 34 - hello timeout closes an unresponsive owned fixture without a second command
+  ---
+  duration_ms: 107.39375
+  type: 'test'
+  ...
+# Subtest: a process requiring a signal is recorded as failure, never a natural exit
+ok 35 - a process requiring a signal is recorded as failure, never a natural exit
+  ---
+  duration_ms: 141.921208
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3903.760875
