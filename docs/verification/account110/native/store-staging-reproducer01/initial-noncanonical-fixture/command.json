@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "source": "03bbd5e8e83b488360944c4dd71c3baf3869ff6c",
+  "worktree": "/private/tmp/cybernote-account109-login-surfaces",
+  "argv": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--features",
+    "sync-e2e",
+    "--locked",
+    "--offline",
+    "sync::adapter::account_transfer_tests::",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "ACCOUNT110_STORE_RPC_TRACE": "1"
+  },
+  "floorBytes": 6442450944,
+  "initialFreeBytes": 8822206464,
+  "startedUnix": 1794665657.092594,
+  "inputRestored": {
+    "path": "docs/fixtures/smart-projection09.json",
+    "sha256": "1af815d99b072a6a10d7d4dbb9ee3cca839f2af3e5fb1422e2a374b9cfe2f763",
+    "bytes": 7649
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "conclusion": "confirmed-fixed-staging-source-parent-contract-mismatch",
+  "productChanged": false,
+  "testSourceChain": [
+    "64ce1bb2",
+    "fa19e688",
+    "03bbd5e8",
+    "07b94f11"
+  ],
+  "authorFixtureChain": [
+    "0d23a74882c34a2537b150ef70e3d7a4625093fa",
+    "506ee61dad490473f534829833129a0441951ef0"
+  ],
+  "runs": [
+    {
+      "run": "first-compile",
+      "exitCode": 101,
+      "source": "03bbd5e8e83b488360944c4dd71c3baf3869ff6c",
+      "sourceCleanAfter": true,
+      "rawLogSha256": "8e7949c9d41162da52fbee5b8172348509bced0dfac2f4c4b748f140b80d020d",
+      "safeLogSha256": "50cdcb7532fa64485899c5848d92b0bebc623d9e8f833a5f4de651174134be10",
+      "elapsedSeconds": 82.209,
+      "minimumFreeBytes": 8802795520
+    },
+    {
+      "run": "initial-noncanonical-fixture",
+      "exitCode": 101,
+      "source": "03bbd5e8e83b488360944c4dd71c3baf3869ff6c",
+      "sourceCleanAfter": true,
+      "rawLogSha256": "b0bad5a4ef5732dc860305f510ac2f9e47dda6d9b82d247c47b0df0d7da202a4",
+      "safeLogSha256": "f122fe866e8149c58f0a7affc1dd3b44f86ba15c2cf5cc6e51b37ca8831d42ea",
+      "elapsedSeconds": 29.068,
+      "minimumFreeBytes": 8559583232
+    },
+    {
+      "run": "exact-account-layout",
+      "exitCode": 101,
+      "source": "07b94f115dd8136eb259e1281019f685a084cc54",
+      "sourceCleanAfter": true,
+      "rawLogSha256": "096131dfe27948de078f6b1dde51399b9261f60710335060ed55654bdc62a83d",
+      "safeLogSha256": "8c9c0aa6c27499345814a5c0bd7259ba74d4b981c9eeecdf19a42b6f2140f578",
+      "elapsedSeconds": 30.078,
+      "minimumFreeBytes": 8565858304
+    },
+    {
+      "run": "canonical-control",
+      "exitCode": 0,
+      "source": "07b94f115dd8136eb259e1281019f685a084cc54",
+      "sourceCleanAfter": true,
+      "rawLogSha256": "5f6e3e322f7e1b2210e6e4cf5f90f33d1cd54781a06eae8453477955e9161f32",
+      "safeLogSha256": "4cced9978f59f2051fe78e5e6ad5f1e89b6630f342a05c01b128dbc5f454ff94",
+      "elapsedSeconds": 2.009,
+      "minimumFreeBytes": 8640307200
+    }
+  ],
+  "exactAccount": {
+    "plain": "pass",
+    "dualAttachment": "fail",
+    "firstBackendError": {
+      "method": "store_blob",
+      "error": "Protocol"
+    },
+    "publisherBoundary": "source-path",
+    "publisherCode": "sync_invalid",
+    "rpc": "PutBlob",
+    "wireError": "Invalid"
+  },
+  "canonicalControl": {
+    "passed": 2,
+    "failed": 0,
+    "bothPublishedBlobBytesMatch": true
+  },
+  "targetReleased": true,
+  "appStarted": false,
+  "ownedLibraryAccessed": false,
+  "limitations": [
+    "Synthetic Claims directly admitted into real Gate; no SDK/OAuth or account lifecycle binding.",
+    "Fresh routes assigned after full close/reopen, but different socket address is not asserted.",
+    "Durable inbox and immutable blob bytes checked, not complete WireVersion equality or production Session application.",
+    "Pure-pair content-call assertion does not count read_blob_chunk.",
+    "Initial fixture stage path was noncanonical root/stage; exact-account-layout is the subsequent explicit production-layout reproduction.",
+    "No real-App rerun; original failure lacks a recorded publisher-specific branch."
+  ]
+}

@@ -1,0 +1,29 @@
+account110-rpc stage=BeginTransfer boundary=request error=None
+account110-rpc stage=BeginTransfer boundary=response error=None
+account110-rpc stage=Inventory boundary=request error=None
+account110-rpc stage=Inventory boundary=response error=None
+account110-rpc stage=PutHead boundary=request error=None
+account110-rpc stage=PutHead boundary=response error=None
+account110-rpc stage=BlobOffset boundary=request error=None
+account110-rpc stage=BlobOffset boundary=response error=None
+account110-rpc stage=PutBlob boundary=request error=None
+account110-rpc stage=PutBlob boundary=response error=None
+account110-rpc stage=PutBlob boundary=request error=None
+account110-rpc stage=PutBlob boundary=response error=None
+account110-rpc stage=PutBlob boundary=request error=None
+account110-store-publication boundary=source-path error=sync_invalid
+account110-rpc stage=PutBlob boundary=handler error=Some(Protocol)
+account110-rpc stage=PutBlob boundary=remoteInvalid error=Some(Protocol)
+ACTUAL_STORE_PUSH attachment=true result=Err(Protocol) A=[("device_id", None), ("workspace_id", None), ("device_id", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("flush", None), ("workspace_id", None), ("workspace_id", None), ("flush", None), ("inventory", None), ("flush", None), ("inventory", None), ("version", None), ("required_blobs", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("read_blob_chunk", None), ("workspace_id", None), ("workspace_id", None), ("read_blob_chunk", None), ("workspace_id", None), ("workspace_id", None), ("read_blob_chunk", None), ("workspace_id", None)] B=[("device_id", None), ("workspace_id", None), ("device_id", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("flush", None), ("inventory", None), ("workspace_id", None), ("required_blobs", None), ("workspace_id", None), ("has_blob", None), ("workspace_id", None), ("has_blob", None), ("workspace_id", None), ("has_blob", None), ("workspace_id", None), ("has_blob", None), ("store_blob", Some(Protocol)), ("workspace_id", None)]
+account110-rpc stage=BeginTransfer boundary=request error=None
+account110-rpc stage=BeginTransfer boundary=response error=None
+account110-rpc stage=Inventory boundary=request error=None
+account110-rpc stage=Inventory boundary=response error=None
+account110-rpc stage=PutHead boundary=request error=None
+account110-rpc stage=PutHead boundary=response error=None
+account110-rpc stage=CommitHead boundary=request error=None
+account110-rpc stage=CommitHead boundary=response error=None
+account110-rpc stage=FinishTransfer boundary=request error=None
+account110-rpc stage=FinishTransfer boundary=response error=None
+ACTUAL_STORE_PUSH attachment=false result=Ok(()) A=[("device_id", None), ("workspace_id", None), ("device_id", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("flush", None), ("workspace_id", None), ("workspace_id", None), ("flush", None), ("inventory", None), ("flush", None), ("inventory", None), ("version", None), ("required_blobs", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None)] B=[("device_id", None), ("workspace_id", None), ("device_id", None), ("workspace_id", None), ("workspace_id", None), ("workspace_id", None), ("flush", None), ("inventory", None), ("workspace_id", None), ("required_blobs", None), ("workspace_id", None), ("receive_head", None), ("workspace_id", None)]
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 365 filtered out; finished in 0.37s

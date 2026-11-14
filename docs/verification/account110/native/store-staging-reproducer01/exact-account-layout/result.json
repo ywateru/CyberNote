@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "source": "07b94f115dd8136eb259e1281019f685a084cc54",
+  "argv": [
+    "cargo",
+    "test",
+    "--manifest-path",
+    "src-tauri/Cargo.toml",
+    "--lib",
+    "--features",
+    "sync-e2e",
+    "--locked",
+    "--offline",
+    "sync::adapter::account_transfer_tests::",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "ACCOUNT110_STORE_RPC_TRACE": "1"
+  },
+  "layout": "exact-account-layout01",
+  "floorBytes": 6442450944,
+  "initialFreeBytes": 8641073152,
+  "startedUnix": 1794665792.176625,
+  "exitCode": 101,
+  "controllerStopped": null,
+  "elapsedSeconds": 30.078,
+  "minimumFreeBytes": 8565858304,
+  "finalFreeBytes": 8640569344,
+  "sourceAfter": "07b94f115dd8136eb259e1281019f685a084cc54",
+  "sourceCleanAfter": true,
+  "logSha256": "096131dfe27948de078f6b1dde51399b9261f60710335060ed55654bdc62a83d"
+}
