@@ -1,0 +1,104 @@
+{
+  "schema": 1,
+  "kind": "post-GUI-normal-reopen-readonly-verification",
+  "status": "pass",
+  "productSource": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+  "continuationResultSha256": "246c0f624784e16797a9d27a871a9d5af2da482e9b3f8db099e7c6fa017a21ca",
+  "readOnlyActions": [
+    "ready",
+    "account.status",
+    "app.state"
+  ],
+  "noTransferCommand": true,
+  "noLogin": true,
+  "boundary": "GUI holders lacked status/state control. Both were first closed normally. These status and semantic checks are from separate normal same-owned reopens, not the original GUI processes before close.",
+  "devices": [
+    {
+      "device": "a",
+      "status": {
+        "state": "ready",
+        "enabled": true,
+        "hasProfile": true,
+        "errorAbsent": true,
+        "deviceOperationAbsent": true,
+        "currentDeviceCount": 1,
+        "onlinePeerCount": 1,
+        "samples": 132
+      },
+      "semantic": {
+        "expectedNotes": 10,
+        "actualNotes": 10,
+        "exactSetEqual": true,
+        "expectedSetSha256": "8785d9a2382fad3724dfe3a5786e6374b67391125b77ebea268def9338597102",
+        "actualSetSha256": "8785d9a2382fad3724dfe3a5786e6374b67391125b77ebea268def9338597102"
+      },
+      "attachmentCount": 20
+    },
+    {
+      "device": "b",
+      "status": {
+        "state": "ready",
+        "enabled": true,
+        "hasProfile": true,
+        "errorAbsent": true,
+        "deviceOperationAbsent": true,
+        "currentDeviceCount": 1,
+        "onlinePeerCount": 1,
+        "samples": 4
+      },
+      "semantic": {
+        "expectedNotes": 9,
+        "actualNotes": 9,
+        "exactSetEqual": true,
+        "expectedSetSha256": "30fb312b9c9b3f45071bf1f4031d709e28a78c0612cd40d9a67dba9bb1f1bf9b",
+        "actualSetSha256": "30fb312b9c9b3f45071bf1f4031d709e28a78c0612cd40d9a67dba9bb1f1bf9b"
+      },
+      "attachmentCount": 18
+    }
+  ],
+  "candidate": {
+    "binary": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account110/mac-29c87810-debug-01/CyberNote-Account110-29c87810.app/Contents/MacOS/notes-clone",
+    "binarySha256": "96192c49b6abcc9b689dad895203455c7ceefa713d2e17e15c7379ca85c7ef42",
+    "sourceRevision": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+    "sourceFingerprint": "6c6d07a520305917f668f63ae5ac91c307da049103edc8bce003865af95fe491",
+    "receiptSha256": "8f1dc6d52f00732b9e76018ef76433404e23314573e5f59efb55b7c1832c13b0"
+  },
+  "sourceBefore": {
+    "head": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+    "clean": true
+  },
+  "harnessSha256": "2b1fcc9a524efcb848b119a041385243f0f6a957b248700409ee5f02c15426b4",
+  "cleanup": {
+    "allClosed": true,
+    "failed": false,
+    "lifecycle": [
+      {
+        "device": "a",
+        "naturalExit": true,
+        "exitObserved": true,
+        "exitCode": 0,
+        "exitSignal": null,
+        "closeObserved": true,
+        "closeConfirmed": true,
+        "forcedSignals": []
+      },
+      {
+        "device": "b",
+        "naturalExit": true,
+        "exitObserved": true,
+        "exitCode": 0,
+        "exitSignal": null,
+        "closeObserved": true,
+        "closeConfirmed": true,
+        "forcedSignals": []
+      }
+    ]
+  },
+  "sourceAfter": {
+    "head": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+    "clean": true
+  },
+  "continuationResultUnchanged": true,
+  "originalResultUnchanged": true,
+  "noCandidateProcessRemaining": true
+}

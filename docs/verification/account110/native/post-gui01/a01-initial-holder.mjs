@@ -1,0 +1,32 @@
+import {readFile,writeFile,mkdir,lstat,realpath} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {createInterface} from 'node:readline';
+import {NativeApp} from '/Users/water/work/2026/Apple-Notes-Clone/scripts/verification/sync108-native-driver.mjs';
+import {validatePackage,parseStatus,closeNativeClients,safeFailureReceipt} from '/Users/water/work/2026/Apple-Notes-Clone/scripts/verification/account110-device-actions.mjs';
+const root='/Users/water/work/2026/Apple-Notes-Clone',source='29c878108b2ea421b5e4fccd71547206071fdbfa';
+const owned='/private/tmp/account110-device-actions-staging-fix-fresh-live03',out='/private/tmp/account110-postgui-a-01';
+const result='/private/tmp/account110-device-actions-owned-continuation-01/result.json',sum='246c0f624784e16797a9d27a871a9d5af2da482e9b3f8db099e7c6fa017a21ca';
+const receipt=root+'/artifacts/account110/mac-29c87810-debug-01/packaging-receipt.json';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const need=(v,code)=>{if(!v)throw Object.assign(new Error(code),{code});};
+const currentSource=()=>({head:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),clean:execFileSync('git',['status','--porcelain'],{cwd:root}).length===0});
+let app,record={schema:1,kind:'owned-A-human-GUI-handoff',productSource:source,continuationResultSha256:sum,status:'preflight',onlyA:true,bStarted:false,noAutomaticTransfer:true};
+const save=()=>writeFile(out+'/result.json',JSON.stringify(record,null,2)+'\n',{mode:0o600});
+async function main(){
+ const s=currentSource();need(s.head===source&&s.clean,'SOURCE_CHANGED');need(hash(await readFile(result))===sum,'FIRST_RESULT_CHANGED');
+ const candidate=await validatePackage(receipt,source);
+ for(const p of [owned,owned+'/desktop-a',owned+'/desktop-b'])need((await lstat(p)).isDirectory()&&!(await lstat(p)).isSymbolicLink()&&await realpath(p)===p,'OWNERSHIP_FAILED');
+ const processes=execFileSync('/bin/ps',['-axo','command='],{encoding:'utf8'});need(!processes.split('\n').some(line=>line.includes(candidate.binary)),'APP_ALREADY_RUNNING');
+ await mkdir(out,{mode:0o700});record.candidate=candidate;record.sourceBefore=s;await save();
+ app=new NativeApp(candidate.binary,owned+'/desktop-a',{name:'a',env:{NOTES_SYNC_E2E_SLOT:'left'}});
+ await app.ready(60000);record.nativeReady=true;await save();
+ await app.execute('settings.open');await app.idle();await app.execute('settings.tab',{tab:'account'});await app.idle();
+ const status=parseStatus(await app.evaluate("window.__TAURI_INTERNALS__.invoke('account_command',{command:{type:'status'}})"));
+ need(!!status.profile,'RESTORE_FAILED');record.account={state:status.state,enabled:status.enabled,currentDeviceCount:status.devices.filter(d=>d.current).length,otherDeviceCount:status.devices.filter(d=>!d.current).length};
+ record.status='ready-for-parent-CUA';record.accountPageOpened=true;record.sourceAtReady=currentSource();await save();console.log('GUI_READY A account-page explicit-owned-scope B-closed');
+ const rl=createInterface({input:process.stdin});
+ for await(const line of rl){if(line.trim()==='close'){rl.close();break;}}
+ record.status='normal-closing';await save();record.cleanup=await closeNativeClients([app]);record.sourceAfter=currentSource();record.status=record.cleanup.failed?'cleanup-failed':'closed';await save();console.log('GUI_CLOSED '+record.status);
+}
+main().catch(async error=>{record.status='fail';record.failure=safeFailureReceipt(error);if(app)record.cleanup=await closeNativeClients([app]);try{await save();}catch{}console.log(JSON.stringify({status:'fail',failure:record.failure}));process.exitCode=1;});
