@@ -306,6 +306,13 @@ pub struct Session {
     pub device_id: String,
     pub user: User,
 }
+impl Session {
+    /// Borrows the secret for an authenticated transport registration request.
+    /// Do not log, persist, or expose it through frontend DTOs.
+    pub fn transport_session_key(&self) -> &str {
+        &self.session_key
+    }
+}
 impl std::fmt::Debug for Session {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Session")
@@ -349,4 +356,37 @@ pub(crate) struct Signal {
     pub connection_id: String,
     pub kind: String,
     pub payload: String,
+}
+
+#[cfg(test)]
+mod session_tests {
+    use super::Session;
+
+    #[test]
+    fn transport_key_is_borrowed_without_serialization_or_debug_exposure() {
+        let synthetic_key = ["fixture", "transport", "key"].join("-");
+        let session: Session = serde_json::from_value(serde_json::json!({
+            "purpose": "test",
+            "appId": "test-app",
+            "sessionKey": synthetic_key,
+            "expiresAt": "2030-01-01T00:00:00Z",
+            "deviceId": "test-device",
+            "user": { "id": "test-user", "email": null }
+        }))
+        .unwrap();
+        let borrowed = session.transport_session_key();
+        assert_eq!(borrowed, synthetic_key);
+        assert!(std::ptr::eq(
+            borrowed.as_ptr(),
+            session.session_key.as_ptr()
+        ));
+
+        let serialized = serde_json::to_value(&session).unwrap();
+        assert!(serialized.get("sessionKey").is_none());
+        assert!(serialized.get("session_key").is_none());
+        assert!(!serialized.to_string().contains(borrowed));
+        let debug = format!("{session:?}");
+        assert!(!debug.contains(borrowed));
+        assert!(!debug.contains("session_key"));
+    }
 }
