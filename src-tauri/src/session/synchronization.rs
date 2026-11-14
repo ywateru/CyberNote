@@ -834,13 +834,17 @@ mod tests {
             s.store.sync_flush().unwrap();
             if scenario != "empty" {
                 // Synthetic interrupted projection: durable head already exists,
-                // no inbox remains, but its projection receipt is absent.
+                // no inbox remains, and the business row differs from that head.
                 let db = rusqlite::Connection::open(root.path().join("notes.sqlite3")).unwrap();
+                db.execute("UPDATE sync_identity SET capture=0", []).unwrap();
+                db.execute("UPDATE notes SET body=json_set(body,'$.pinned',json('true')) WHERE id=?1", [&note]).unwrap();
                 db.execute(
                     "DELETE FROM sync_projection WHERE kind='note' AND entity_id=?1",
                     [&note],
                 )
                 .unwrap();
+                db.execute("UPDATE sync_identity SET capture=1", []).unwrap();
+                assert!(s.store.note(&note).unwrap().pinned);
             }
             assert_eq!(s.store.sync_pending_count().unwrap(), 0);
             let plan = s.store.sync_plan_apply(&[]).unwrap();
@@ -906,6 +910,7 @@ mod tests {
                 s.store.sync_plan_apply(&[]).unwrap().changes.is_empty(),
                 matches!(scenario, "commit" | "empty")
             );
+            assert_eq!(s.store.note(&note).unwrap().pinned, !matches!(scenario, "commit" | "empty"));
         }
     }
     #[test]
