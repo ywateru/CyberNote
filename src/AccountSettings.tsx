@@ -96,7 +96,11 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       ask(command.type === "signOut" ? "signOut" : "enable", initiator); return;
     }
     if (command.type === "syncDevice" || command.type === "renameDevice") {
-      if (!confirmed) { ask(command.type, initiator, command.type === "syncDevice" ? command.deviceId : undefined); return; }
+      if (!confirmed) {
+        ask(command.type, initiator, command.type === "syncDevice" ? command.deviceId : undefined);
+        if (command.type === "syncDevice") setDirection(command.direction); else setName(command.name);
+        return;
+      }
       const issue = targetInvalid || targetIssue(latestStatus.current, target, command.type === "syncDevice");
       if (issue || (command.type === "syncDevice" && (command.deviceId !== target?.id || command.direction !== direction))) { setFormError(issue || "设备或同步方向已变化，请重新确认。"); return; }
       if (command.type === "renameDevice") {

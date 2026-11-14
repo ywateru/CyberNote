@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import vm from 'node:vm';
 import {resolve} from 'node:path';
+import {readFileSync} from 'node:fs';
+import ts from 'typescript';
 import {accountFixture, signedOutAccount} from '../debug/account-fixture.mjs';
 
 // Device-free host for real React DOM commits. User actions below invoke the
@@ -59,7 +61,7 @@ const {createRoot}=await import('react-dom/client');
 const {act}=React;
 const require=createRequire(import.meta.url);
 const {build}=createRequire(require.resolve('vite'))('esbuild');
-const built=await build({stdin:{contents:`export {default as AccountSettings} from './src/AccountSettings'; export * from './src/account-client'; export {catalog} from './src/debug/catalog';`,resolveDir:resolve('.'),loader:'ts'},
+const built=await build({stdin:{contents:`export {default as AccountSettings} from './src/AccountSettings'; export * from './src/account-client'; export {catalog} from './src/debug/catalog'; export {registerDebug} from './src/debug/runtime';`,resolveDir:resolve('.'),loader:'ts'},
   bundle:true,write:false,format:'cjs',platform:'node',jsx:'automatic',external:['react','react/jsx-runtime'],loader:{'.css':'empty'},
   define:{'import.meta.env.DEV':'true','import.meta.env.VITE_NOTES_DEBUG':'"1"','import.meta.env.VITE_NOTES_ACCOUNT_NATIVE':'"1"','import.meta.env.VITE_NOTES_ACCOUNT_UI':'"0"'},
   plugins:[{name:'fixed-ipc-fixture',setup(b){
@@ -78,9 +80,20 @@ function deferred() {let resolve,reject;const promise=new Promise((a,b)=>{resolv
 const authorizing=surface=>({...signedOutAccount(),state:'authorizing',...(surface?{authorizationSurface:surface}:{})});
 const adoptionRecoveryGuidance='若旧同步来自“设备同步”，可退出当前账户，再前往“设备同步”恢复并处理旧同步。若旧账户仍有待接收内容，可退出当前账户并重新登录旧账户；身份及同步空间验证通过且原同步凭证仍可用时，会恢复旧设备身份，同步仍保持暂停。请确认开启原同步空间并处理待接收内容，完成后再退出，登录目标账户并确认开启合并。';
 
+// Extract the real production registration expression, rather than duplicating
+// the handler allowlist in a test-only adapter. No App/native process is mounted.
+const appAST=ts.createSourceFile('App.tsx',readFileSync('src/App.tsx','utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+const accountMaps=[];
+function findAccountMap(node){
+ if(ts.isCallExpression(node)&&node.expression.getText(appAST)==='Object.fromEntries'&&node.arguments[0]?.getText(appAST).includes('accountSettingsHandle.current.run'))accountMaps.push(node);
+ ts.forEachChild(node,findAccountMap);
+}
+findAccountMap(appAST);assert.equal(accountMaps.length,1);
+const appAccountMap=ts.transpileModule('('+accountMaps[0].getText(appAST)+')',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
+
 function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
   let native=structuredClone(initial),handle;
-  const calls=[],context=vm.createContext({module:{exports:{}},require,window,document,HTMLElement:HostElement,queueMicrotask,
+  const calls=[],context=vm.createContext({module:{exports:{}},require,window,document,HTMLElement:HostElement,queueMicrotask,structuredClone,requestAnimationFrame:callback=>{queueMicrotask(()=>callback(0));return 1;},
     __invoke:async(name,{command})=>{
       assert.equal(name,'account_command');calls.push(structuredClone(command));
       if(reply){const result=reply(command,{get:()=>native,set:s=>{native=structuredClone(s);}});if(result!==undefined)return result;}
@@ -96,6 +109,16 @@ function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
   const all=()=>descendants(container);
   const h={client,calls,setNative:s=>{native=structuredClone(s);},getNative:()=>native,
     async mount(){await act(async()=>root.render(React.createElement(client.AccountSettings,{active:true,onHandle:h=>{handle=h;},onConflicts})));},
+    debug(){
+      context.accountUIAvailable=true;context.modal='preferences';context.preferencesTab='account';
+      context.accountSettingsHandle={get current(){return handle;}};
+      const handlers=vm.runInContext(appAccountMap,context);
+      const stop=client.registerDebug(()=>({handlers,state:()=>({failure:{serial:0}})}));t.after(stop);
+      return {list:()=>window.__NOTES_DEBUG__.list(),async execute(command,args){
+        context.debugArgs=JSON.stringify(args);
+        return window.__NOTES_DEBUG__.execute(command,vm.runInContext('JSON.parse(debugArgs)',context));
+      },setPage:page=>{context.preferencesTab=page;}};
+    },
     all,handle:()=>handle,text:()=>container.textContent,
     panel:()=>all().find(e=>props(e).className==='account-settings'),
     radio:value=>all().find(e=>e.localName==='input'&&props(e).name==='account-login-surface'&&props(e).value===value),
@@ -731,4 +754,43 @@ test('a late device rejection cannot write an old account error into the new own
  await act(async()=>pending.reject({code:'account_sync_failed',message:'private-old-owner-error'}));
  assert.equal(h.handle().inspect().status.profile.subject,'fixture-B');assert.equal(h.handle().inspect().error,'');
  assert(!h.text().includes('本次设备同步未完成'));assert(!h.text().includes('private-old-owner-error'));
+});
+
+test('registered debug account actions validate exact parameters before dispatching through the real UI confirmation gate',async t=>{
+ const h=setup(t,{initial:directory()});await h.mount();const api=h.debug();
+ for(const id of ['account.renameDevice','account.syncDevice']) {
+  const descriptor=api.list().find(c=>c.id===id);assert(descriptor);assert.equal(descriptor.available,true);assert.equal(descriptor.mode,'semantic');
+ }
+ const rename=api.list().find(c=>c.id==='account.renameDevice');assert.deepEqual(Object.keys(rename.args),['name']);assert(rename.args.name.required);
+ const sync=api.list().find(c=>c.id==='account.syncDevice');assert.deepEqual(Object.keys(sync.args),['deviceId','direction']);assert(sync.args.deviceId.required);assert(sync.args.direction.required);
+ assert.deepEqual(Array.from(sync.args.direction.enum),['push','pull','both']);
+ const before=h.calls.length;
+ for(const [id,args] of [
+  ['account.renameDevice',{}],['account.renameDevice',{name:3}],['account.renameDevice',{name:'  '}],
+  ['account.renameDevice',{name:'x'.repeat(97)}],['account.renameDevice',{name:'bad\nname'}],
+  ['account.renameDevice',{name:'valid',deviceId:OTHER}],
+  ['account.syncDevice',{deviceId:OTHER}],['account.syncDevice',{deviceId:OTHER,direction:'broadcast'}],
+  ['account.syncDevice',{deviceId:'protocol-id',direction:'push'}],
+  ['account.syncDevice',{deviceId:OTHER,direction:'both',owner:'another-account'}],
+  ['account.syncDevice',{deviceId:OTHER,direction:'both',confirmed:true}],
+ ]) await assert.rejects(api.execute(id,args),e=>e.code==='INVALID_ARGUMENT');
+ assert.equal(h.calls.length,before);assert.equal(h.handle().inspect().confirmation,false);
+ api.setPage('settings');await assert.rejects(api.execute('account.syncDevice',{deviceId:OTHER,direction:'push'}),e=>e.code==='APP_ERROR');
+ assert.equal(h.calls.length,before);api.setPage('account');
+ await act(async()=>{await api.execute('account.syncDevice',{deviceId:OTHER,direction:'pull'});});
+ assert(h.handle().inspect().confirmation);assert(h.all().some(e=>props(e).name==='account-device-direction'&&props(e).value==='pull'&&props(e).checked));
+ assert.equal(h.calls.length,before);await h.click('取消');assert.equal(h.calls.length,before);
+ await act(async()=>{await api.execute('account.syncDevice',{deviceId:OTHER,direction:'push'});});await h.click('开始同步');
+ assert.deepEqual(h.calls.at(-1),{type:'syncDevice',deviceId:OTHER,direction:'push'});await h.click('取消');
+});
+
+test('debug rename pre-fills the requested local name and cannot save before explicit UI confirmation',async t=>{
+ const h=setup(t,{initial:directory(),reply:(command,model)=>{
+  if(command.type==='renameDevice'){const next=structuredClone(model.get());next.devices[0].name=command.name;model.set(next);return next;}
+ }});await h.mount();const api=h.debug();
+ await act(async()=>{await api.execute('account.renameDevice',{name:'  CLI Mac  '});});
+ assert(h.handle().inspect().confirmation);assert(h.all().some(e=>e.localName==='input'&&props(e).value==='  CLI Mac  '));assert(!h.calls.some(c=>c.type==='renameDevice'));
+ await h.click('取消');assert(!h.calls.some(c=>c.type==='renameDevice'));
+ await act(async()=>{await api.execute('account.renameDevice',{name:'  CLI Mac  '});});await h.click('保存名称');
+ assert.deepEqual(h.calls.at(-1),{type:'renameDevice',name:'CLI Mac'});assert(h.getNative().devices.slice(1).every(d=>d.name==='同名设备'));
 });

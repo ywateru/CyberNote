@@ -57,6 +57,12 @@ function validate(command: Command, value: unknown): DebugArgs {
       invalid("Unknown or invalid nested fields");
     return input as Record<string, unknown>;
   };
+  if (command.id === "account.renameDevice" &&
+    (typeof value.name !== "string" || !value.name.trim() || [...value.name.trim()].length > 96 || /[\u0000-\u001f\u007f-\u009f]/.test(value.name)))
+    invalid("Invalid device name");
+  if (command.id === "account.syncDevice" &&
+    (typeof value.deviceId !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(value.deviceId)))
+    invalid("Invalid registry device ID");
   if (command.id === "settings.update") {
     const patch = object(value.settings, [
       "theme",
