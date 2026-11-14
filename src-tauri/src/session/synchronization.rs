@@ -211,6 +211,8 @@ pub(super) struct QuietState {
     completed: VecDeque<Terminal>,
     retry_after: Option<Instant>,
     diagnostics: DiagnosticCounts,
+    #[cfg(test)]
+    clock: Option<Instant>,
 }
 struct Terminal {
     id: String,
@@ -218,6 +220,24 @@ struct Terminal {
     outcome: &'static str,
     authority: Token,
     store_instance: Uuid,
+    adoption_timeout: Option<AdoptionStage>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum AdoptionStage {
+    Probe,
+    Prepare,
+    Media,
+}
+impl AdoptionStage {
+    fn timeout(self) -> AppError {
+        let code = match self {
+            Self::Probe => "sync_adoption_probe_timeout",
+            Self::Prepare => "sync_adoption_prepare_timeout",
+            Self::Media => "sync_adoption_media_timeout",
+        };
+        AppError { code: code.into(), ..adoption_blocked() }
+    }
 }
 struct Quiet {
     store_instance: Uuid,
@@ -241,6 +261,21 @@ struct WorkspaceAdoption {
     device: String,
     targets: HashSet<String>,
 }
+impl Quiet {
+    fn adoption_stage(&self) -> Option<AdoptionStage> {
+        self.adoption.as_ref()?;
+        match self.phase {
+            "probe" => Some(AdoptionStage::Probe),
+            "prepare" => Some(AdoptionStage::Prepare),
+            "adoptionMedia" => Some(AdoptionStage::Media),
+            _ => None,
+        }
+    }
+    fn expired(&self, now: Instant) -> bool {
+        let seconds = if self.adoption_stage() == Some(AdoptionStage::Media) { 60 } else { 5 };
+        now.saturating_duration_since(self.started) >= Duration::from_secs(seconds)
+    }
+}
 fn adoption_blocked() -> AppError {
     AppError {
         code: "sync_adoption_blocked".into(),
@@ -249,6 +284,46 @@ fn adoption_blocked() -> AppError {
     }
 }
 impl Session {
+    fn sync_now(&self) -> Instant {
+        #[cfg(test)]
+        if let Some(now) = self.quiet.clock { return now; }
+        Instant::now()
+    }
+    #[cfg(test)]
+    pub(crate) fn sync_advance_clock(&mut self, elapsed: Duration) {
+        self.quiet.clock = Some(self.sync_now() + elapsed);
+    }
+    pub(crate) fn sync_has_workspace_adoption(&self) -> bool {
+        self.quiet.current.as_ref().is_some_and(|q| q.adoption.is_some())
+    }
+    /// The adopting caller can advance its own barrier while an older ordinary
+    /// coordinator snapshot is still verifying outside Session. No old apply
+    /// plan/media is needed, and a replacement operation is never advanced.
+    pub(crate) fn sync_tick_workspace_adoption(
+        &mut self, operation: &str, live: &HashSet<String>,
+    ) -> Result<Option<Value>> {
+        if !self.quiet.current.as_ref().is_some_and(|q| q.id == operation && q.adoption.is_some()) {
+            return Ok(None);
+        }
+        Ok(self.sync_tick(live)?.map(|(event, access)| {
+            debug_assert!(access.is_none());
+            event
+        }))
+    }
+    /// Retain a finite timeout even if the coordinator has already released
+    /// this operation. Never borrow a newer operation's failure or deadline.
+    pub(crate) fn sync_workspace_adoption_error(&self, operation: &str) -> AppError {
+        self.sync_workspace_adoption_timeout_error(operation).unwrap_or_else(adoption_blocked)
+    }
+    pub(crate) fn sync_workspace_adoption_timeout_error(&self, operation: &str) -> Option<AppError> {
+        let stage = self.quiet.completed.iter().find(|t| t.id == operation)
+            .and_then(|t| t.adoption_timeout)
+            .or_else(|| self.quiet.current.as_ref().filter(|q| q.id == operation)
+                .filter(|q| q.abort_reason == Some(AbortReason::Timeout)
+                    || (!q.aborted && q.expired(self.sync_now())))
+                .and_then(Quiet::adoption_stage));
+        stage.map(AdoptionStage::timeout)
+    }
     /// Explicit recovery of this Store's existing workspace, through the same
     /// renderer and final-plan gates. Never adopts or imports another workspace.
     pub(crate) fn sync_begin_local_recovery(&mut self, live: HashSet<String>) -> Result<Value> {
@@ -285,16 +360,53 @@ impl Session {
         device: &str,
         live: &HashSet<String>,
     ) -> Result<bool> {
-        let q = self.quiet.current.as_ref().ok_or_else(adoption_blocked)?;
-        let adoption = q.adoption.as_ref().ok_or_else(adoption_blocked)?;
-        if q.id != operation || adoption.workspace != workspace || adoption.device != device
+        self.sync_adoption_ready_for(operation, workspace, device, live, "prepare")
+    }
+
+    /// Enter exactly once, after all prepare ACKs have linearized. The media
+    /// event may reach a renderer before its final ACK's IPC response.
+    pub(crate) fn sync_begin_workspace_adoption_media(
+        &mut self,
+        operation: &str,
+        workspace: &str,
+        device: &str,
+        live: &HashSet<String>,
+    ) -> Result<Value> {
+        if !self.sync_workspace_adoption_ready(operation, workspace, device, live)? {
+            return Err(self.sync_workspace_adoption_error(operation));
+        }
+        let now = self.sync_now();
+        let q = self.quiet.current.as_mut().unwrap();
+        q.phase = "adoptionMedia";
+        q.started = now;
+        Ok(json!({"phase":"adoptionMedia", "operationId":operation, "sessionId":self.id}))
+    }
+
+    pub(crate) fn sync_workspace_adoption_commit_ready(
+        &self,
+        operation: &str,
+        workspace: &str,
+        device: &str,
+        live: &HashSet<String>,
+    ) -> Result<bool> {
+        self.sync_adoption_ready_for(operation, workspace, device, live, "adoptionMedia")
+    }
+
+    fn sync_adoption_ready_for(
+        &self, operation: &str, workspace: &str, device: &str,
+        live: &HashSet<String>, phase: &str,
+    ) -> Result<bool> {
+        let failure = || self.sync_workspace_adoption_error(operation);
+        let q = self.quiet.current.as_ref().filter(|q| q.id == operation).ok_or_else(failure)?;
+        let adoption = q.adoption.as_ref().ok_or_else(failure)?;
+        if adoption.workspace != workspace || adoption.device != device
             || q.store_instance != self.store.sync_store_instance() || q.epoch != self.epoch
             || q.participants != *live || q.aborted || self.pending.is_some()
-            || q.started.elapsed() >= Duration::from_secs(5)
+            || q.expired(self.sync_now())
         {
-            return Err(adoption_blocked());
+            return Err(failure());
         }
-        if q.phase != "prepare" || q.replies != q.participants {
+        if q.phase != phase || q.replies != q.participants {
             return Ok(false);
         }
         let notes: HashSet<_> = self.store.notes()?.into_iter().map(|n| n.id).collect();
@@ -302,10 +414,13 @@ impl Session {
             return Err(adoption_blocked());
         }
         self.store.sync_adoption_preflight(workspace, device)?;
+        // Store inspection is read-only but can itself consume the remaining
+        // budget. Never admit a transaction on a lease that expired in it.
+        if q.expired(self.sync_now()) { return Err(failure()); }
         Ok(true)
     }
 
-    /// Emit this release before the new notes-access snapshot. A coordinator
+    /// Preserve the local editor Session; only release the protocol freeze. A coordinator
     /// abort may already have released this exact operation; cleanup is then a
     /// no-op and cannot retire a replacement operation.
     pub(crate) fn sync_release_workspace_adoption(
@@ -320,13 +435,18 @@ impl Session {
             }
             return Err(adoption_blocked());
         }
-        if q.adoption.is_none() || (committed && (q.phase != "prepare"
+        if q.adoption.is_none() || (committed && (q.phase != "adoptionMedia"
             || q.replies != q.participants || q.aborted
             || q.store_instance == self.store.sync_store_instance()))
         {
             return Err(adoption_blocked());
         }
-        if !committed { self.sync_note_abort_reason(AbortReason::ExternalAbort); }
+        if !committed {
+            let reason = if !q.aborted && q.expired(self.sync_now()) {
+                AbortReason::Timeout
+            } else { AbortReason::ExternalAbort };
+            self.sync_note_abort_reason(reason);
+        }
         self.sync_release(if committed { "commit" } else { "abort" }, None)
             .map(|(event, _)| Some(event))
     }
@@ -384,7 +504,7 @@ impl Session {
         if self.quiet.current.is_some()
             || self.pending.is_some()
             || participants.is_empty()
-            || (resolution.is_none() && self.quiet.retry_after.is_some_and(|t| t > Instant::now()))
+            || (resolution.is_none() && self.quiet.retry_after.is_some_and(|t| t > self.sync_now()))
         {
             return Err(denied("同步正在等待安全应用时机"));
         }
@@ -400,7 +520,7 @@ impl Session {
             aborted: false,
             abort_reason: None,
             apply_error: None,
-            started: Instant::now(),
+            started: self.sync_now(),
             plan: None,
             resolution,
             adoption: None,
@@ -459,7 +579,8 @@ impl Session {
                     q.abort_reason.get_or_insert(AbortReason::ProbeBlocked);
                 }
             }
-            WindowReply::Prepare { ready, .. } if q.phase == "prepare" => {
+            WindowReply::Prepare { ready, .. }
+                if q.phase == "prepare" || (q.phase == "adoptionMedia" && !ready) => {
                 // A participant may cancel after its ready ACK. The same Session
                 // gate linearizes this cancellation against the Store commit.
                 if ready && !q.replies.insert(window.into()) {
@@ -557,7 +678,7 @@ impl Session {
             || q.epoch != self.epoch
             || q.participants != *live
             || self.pending.is_some()
-            || q.started.elapsed() >= Duration::from_secs(5)
+            || q.expired(self.sync_now())
         {
             let reason = if store_changed {
                 AbortReason::AuthorityChanged
@@ -586,11 +707,12 @@ impl Session {
                 }
                 let mut targets: Vec<_> = self.store.notes()?.into_iter().map(|n| n.id).collect();
                 targets.sort();
+                let now = self.sync_now();
                 let q = self.quiet.current.as_mut().unwrap();
                 q.adoption.as_mut().unwrap().targets = targets.iter().cloned().collect();
                 q.phase = "prepare";
                 q.replies.clear();
-                q.started = Instant::now();
+                q.started = now;
                 return Ok(Some((json!({"phase":"prepare","operationId":q.id,
                     "sessionId":self.id,"noteIds":targets}), None)));
             }
@@ -629,11 +751,12 @@ impl Session {
             }
             targets.sort();
             targets.dedup();
+            let now = self.sync_now();
             let q = self.quiet.current.as_mut().unwrap();
             q.plan = Some(plan);
             q.phase = "prepare";
             q.replies.clear();
-            q.started = Instant::now();
+            q.started = now;
             return Ok(Some((
                 json!({"phase":"prepare","operationId":q.id,"sessionId":self.id,"noteIds":targets}),
                 None,
@@ -757,16 +880,19 @@ impl Session {
         let event =
             json!({"phase":"release","operationId":q.id,"sessionId":self.id,"outcome":outcome});
         self.quiet.retry_after = if outcome == "abort" {
-            Some(Instant::now() + Duration::from_secs(2))
+            Some(self.sync_now() + Duration::from_secs(2))
         } else {
             None
         };
+        let adoption_timeout = (q.abort_reason == Some(AbortReason::Timeout))
+            .then(|| q.adoption_stage()).flatten();
         self.quiet.completed.push_back(Terminal {
             id: q.id,
             participants: q.participants,
             outcome,
             authority: self.sync_media_token(),
             store_instance: q.store_instance,
+            adoption_timeout,
         });
         while self.quiet.completed.len() > 64 {
             self.quiet.completed.pop_front();
@@ -1000,7 +1126,13 @@ mod tests {
         adoption_ack(&mut s, &operation, &live);
         assert!(s.sync_tick(&live).unwrap().is_none()); // NoEligiblePlan must not abort this purpose.
         assert!(s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live).unwrap());
+        let media = s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).unwrap();
+        assert_eq!(media, json!({"phase":"adoptionMedia", "operationId":operation, "sessionId":s.id}));
+        assert!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap());
         s.store.sync_adopt_workspace(&workspace, &device).unwrap();
+        // Once the same-lock transaction commits, a timer cannot turn its real
+        // result into an abort, even if commit work crossed the lease deadline.
+        s.sync_advance_clock(Duration::from_secs(61));
         let release = s.sync_release_workspace_adoption(&operation, true).unwrap().unwrap();
         assert_eq!(release["phase"], "release");
         assert_eq!(release["outcome"], "commit");
@@ -1038,9 +1170,99 @@ mod tests {
             }
             let ready = s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live);
             if scenario == "ackMissing" { assert!(!ready.unwrap()); }
-            else { assert_eq!(ready.unwrap_err().code, "sync_adoption_blocked", "{scenario}"); }
+            else { assert_eq!(ready.unwrap_err().code,
+                if scenario == "timeout" { "sync_adoption_prepare_timeout" } else { "sync_adoption_blocked" }, "{scenario}"); }
             let release = s.sync_release_workspace_adoption(&operation, false).unwrap().unwrap();
             assert_eq!(release["outcome"], "abort");
+        }
+    }
+    #[test]
+    fn workspace_adoption_media_lease_is_once_bounded_and_retains_timeout_after_release() {
+        let (_root, mut s) = session();
+        s.sync_advance_clock(Duration::ZERO);
+        let (operation, workspace, device, live) = adoption_prepared(&mut s);
+        // An incomplete prepare cannot start or extend the media lease.
+        assert!(s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).is_err());
+        adoption_ack(&mut s, &operation, &live);
+        s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).unwrap();
+        s.sync_advance_clock(Duration::from_millis(25_766));
+        assert!(s.sync_tick(&live).unwrap().is_none());
+        assert!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap());
+        assert!(s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).is_err());
+        // A duplicate transition did not restart the 60-second media clock.
+        s.sync_advance_clock(Duration::from_millis(34_234));
+        assert_eq!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap_err().code,
+            "sync_adoption_media_timeout");
+        assert_eq!(s.sync_tick(&live).unwrap().unwrap().0["outcome"], "abort");
+        assert_eq!(s.sync_workspace_adoption_error(&operation).code, "sync_adoption_media_timeout");
+        assert!(s.sync_release_workspace_adoption(&operation, false).unwrap().is_none());
+        assert_eq!(s.sync_workspace_adoption_error(&operation).code, "sync_adoption_media_timeout");
+        // A late verifier cannot authorize this released operation or a replacement.
+        s.sync_advance_clock(Duration::from_secs(3));
+        let next = s.sync_begin_workspace_adoption(&workspace, &device, live.clone()).unwrap();
+        assert_eq!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap_err().code,
+            "sync_adoption_media_timeout");
+        assert_ne!(next["operationId"], operation);
+        assert_eq!(s.quiet.current.as_ref().unwrap().phase, "probe");
+        assert_eq!(s.sync_workspace_adoption_error("unrelated").code, "sync_adoption_blocked");
+        let next = next["operationId"].as_str().unwrap();
+        s.sync_release_workspace_adoption(next, false).unwrap();
+        s.sync_advance_clock(Duration::from_secs(3));
+        s.sync_begin(live.clone(), None).unwrap();
+        assert_eq!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap_err().code,
+            "sync_adoption_media_timeout");
+    }
+    #[test]
+    fn workspace_adoption_probe_prepare_timeouts_remain_five_seconds_and_are_typed() {
+        for phase in ["probe", "prepare"] {
+            let (_root, mut s) = session();
+            s.sync_advance_clock(Duration::ZERO);
+            let (operation, live) = if phase == "prepare" {
+                let (id, _, _, live) = adoption_prepared(&mut s);
+                (id, live)
+            } else {
+                let live = HashSet::from(["main".into()]);
+                let event = s.sync_begin_workspace_adoption(&Uuid::new_v4().to_string(), &Uuid::new_v4().to_string(), live.clone()).unwrap();
+                (event["operationId"].as_str().unwrap().to_string(), live)
+            };
+            s.sync_advance_clock(Duration::from_secs(5));
+            let expected = format!("sync_adoption_{phase}_timeout");
+            assert_eq!(s.sync_workspace_adoption_error(&operation).code, expected);
+            assert_eq!(s.sync_tick(&live).unwrap().unwrap().0["outcome"], "abort");
+            assert_eq!(s.sync_workspace_adoption_error(&operation).code, expected);
+        }
+        let (_root, mut s) = session();
+        s.sync_advance_clock(Duration::ZERO);
+        let operation = begin(&mut s);
+        s.sync_advance_clock(Duration::from_secs(5));
+        assert_eq!(s.sync_tick(&HashSet::from(["main".into()])).unwrap().unwrap().0["outcome"], "abort");
+        assert_eq!(s.sync_workspace_adoption_error(&operation).code, "sync_adoption_blocked");
+        assert_eq!(s.sync_diagnostics()["latestAbortReason"], "timeout");
+    }
+    #[test]
+    fn workspace_adoption_media_rechecks_fences_and_accepts_renderer_cancellation() {
+        for scenario in ["participant", "epoch", "intent", "pending", "cancel", "note", "store"] {
+            let (_root, mut s) = session();
+            let replacement = tempfile::tempdir().unwrap();
+            let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+            let (operation, workspace, device, mut live) = adoption_prepared(&mut s);
+            adoption_ack(&mut s, &operation, &live);
+            s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).unwrap();
+            let t = token(&s);
+            match scenario {
+                "participant" => { live.remove("note-test"); }
+                "epoch" => { s.epoch += 1; }
+                "intent" => { s.register_save("main", &note, "media-save", Token { note_epoch: Some(s.note_epoch(&note)), ..t }).unwrap(); }
+                "pending" => { s.begin(json!({"type":"deleteNote", "id":note}), live.clone(), &t).unwrap(); }
+                "cancel" => { s.sync_reply("main", WindowReply::Prepare { operation_id: operation.clone(), ready: false }, &t).unwrap(); }
+                "note" => { s.store.action(json!({"type":"createNote"})).unwrap(); }
+                "store" => { s.store = Store::open(replacement.path()).unwrap(); }
+                _ => unreachable!(),
+            }
+            assert_eq!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap_err().code,
+                "sync_adoption_blocked", "{scenario}");
+            s.sync_release_workspace_adoption(&operation, false).unwrap();
+            assert_eq!(s.sync_workspace_adoption_error(&operation).code, "sync_adoption_blocked", "{scenario}");
         }
     }
     #[test]

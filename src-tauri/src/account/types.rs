@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use crate::session::synchronization::AdoptionStage;
 #[derive(Clone, Deserialize)]
 #[serde(tag = "type", rename_all = "camelCase", deny_unknown_fields)]
 pub(crate) enum Command {
@@ -117,7 +118,14 @@ pub(crate) struct SafeError {
     pub request_reason: Option<RequestReason>,
     #[serde(rename = "httpStatus", skip_serializing_if = "Option::is_none")]
     pub http_status: Option<u16>,
+    #[serde(rename = "adoptionStage", skip_serializing_if = "Option::is_none")]
+    pub adoption_stage: Option<AdoptionStage>,
+    #[serde(rename = "adoptionReason", skip_serializing_if = "Option::is_none")]
+    pub adoption_reason: Option<AdoptionReason>,
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum AdoptionReason { Timeout }
 impl SafeError {
     pub(super) fn refresh_rejected(&self) -> bool {
         self.code == "account_authentication"
@@ -240,6 +248,7 @@ pub(crate) enum Error {
     Sync,
     CoordinationProtocol,
     AdoptionBlocked,
+    AdoptionTimeout(AdoptionStage),
     WindowInvalid,
 }
 impl Error {
@@ -272,7 +281,7 @@ impl Error {
             Self::CleanupRequired => "account_cleanup_required",
             Self::Sync => "account_sync_failed",
             Self::CoordinationProtocol => "account_sync_protocol",
-            Self::AdoptionBlocked => "account_sync_adoption_blocked",
+            Self::AdoptionBlocked | Self::AdoptionTimeout(_) => "account_sync_adoption_blocked",
             Self::WindowInvalid => "account_window_invalid",
         }
     }
@@ -292,6 +301,8 @@ impl Error {
                 "存在待撤销的登录授权，请先退出授权后重新登录。本机备忘录会保留。"
             } else if self == Self::AdoptionBlocked {
                 "旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。"
+            } else if matches!(self, Self::AdoptionTimeout(_)) {
+                "同步空间准备超时，尚未完成切换。当前账户已登录，本机内容会保留，请稍后重试。"
             } else {
                 "账户操作未完成，本机备忘录仍会保留。请检查账户状态后重试。"
             }
@@ -324,6 +335,8 @@ impl Error {
             },
             request_reason: request_details.map(|(reason, _)| reason),
             http_status: request_details.and_then(|(_, status)| status),
+            adoption_stage: match self { Self::AdoptionTimeout(stage) => Some(stage), _ => None },
+            adoption_reason: match self { Self::AdoptionTimeout(_) => Some(AdoptionReason::Timeout), _ => None },
         }
     }
 }
@@ -363,12 +376,13 @@ impl From<account_auth::AuthError> for Error {
 }
 impl From<crate::store::AppError> for Error {
     fn from(value: crate::store::AppError) -> Self {
-        if value.code == "sync_adoption_blocked" {
-            Self::AdoptionBlocked
-        } else if value.code.contains("mismatch") {
-            Self::OwnershipMismatch
-        } else {
-            Self::Sync
+        match value.code.as_str() {
+            "sync_adoption_blocked" => Self::AdoptionBlocked,
+            "sync_adoption_probe_timeout" => Self::AdoptionTimeout(AdoptionStage::Probe),
+            "sync_adoption_prepare_timeout" => Self::AdoptionTimeout(AdoptionStage::Prepare),
+            "sync_adoption_media_timeout" => Self::AdoptionTimeout(AdoptionStage::Media),
+            code if code.contains("mismatch") => Self::OwnershipMismatch,
+            _ => Self::Sync,
         }
     }
 }
@@ -419,6 +433,32 @@ mod tests {
         assert_eq!(value["code"], "account_sync_adoption_blocked");
         assert_eq!(value.as_object().unwrap().len(), 2);
         assert!(!value.to_string().contains("untrusted detail"));
+    }
+    #[test]
+    fn adoption_timeout_is_an_exact_finite_pair_without_raw_details() {
+        for (code, stage) in [
+            ("sync_adoption_probe_timeout", "probe"),
+            ("sync_adoption_prepare_timeout", "prepare"),
+            ("sync_adoption_media_timeout", "media"),
+        ] {
+            let error = Error::from(crate::store::AppError {
+                code: code.into(), message: "untrusted /path and upstream text".into(), commit: None,
+            });
+            let value = serde_json::to_value(error.safe()).unwrap();
+            assert_eq!(value["code"], "account_sync_adoption_blocked");
+            assert_eq!(value["adoptionStage"], stage);
+            assert_eq!(value["adoptionReason"], "timeout");
+            assert_eq!(value.as_object().unwrap().len(), 4);
+            assert!(!value.to_string().contains("untrusted"));
+        }
+        for code in ["sync_adoption_unknown_timeout", "sync_adoption_media_timeout_extra", "filesystem"] {
+            let value = serde_json::to_value(Error::from(crate::store::AppError {
+                code: code.into(), message: "sync_adoption_media_timeout".into(), commit: None,
+            }).safe()).unwrap();
+            assert_eq!(value["code"], "account_sync_failed");
+            assert!(value.get("adoptionStage").is_none());
+            assert!(value.get("adoptionReason").is_none());
+        }
     }
     #[test]
     fn request_details_are_finite_stage_scoped_and_http_status_is_paired() {

@@ -330,6 +330,8 @@ pub(crate) struct Runtime {
     worker: Mutex<Option<thread::JoinHandle<()>>>,
     backend_epoch: Arc<AtomicU64>,
     pending_adoption_release: Mutex<Option<Value>>,
+    #[cfg(test)]
+    before_adoption_verify: Mutex<Option<Box<dyn FnOnce() + Send>>>,
 }
 impl Runtime {
     pub(crate) fn new(
@@ -372,6 +374,8 @@ impl Runtime {
             worker: Mutex::new(None),
             backend_epoch: Arc::new(AtomicU64::new(0)),
             pending_adoption_release: Mutex::new(None),
+            #[cfg(test)]
+            before_adoption_verify: Mutex::new(None),
         });
         let weak = Arc::downgrade(&runtime);
         let worker = thread::Builder::new()
@@ -724,6 +728,11 @@ impl Runtime {
                 if !policy.is_current() {
                     return Err(error("sync_plan_stale"));
                 }
+                let event = {
+                    let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                    s.sync_tick_workspace_adoption(&operation, &self.host.participants())?
+                };
+                if let Some(event) = event { self.host.emit("notes-sync", &event)?; }
                 let ready = {
                     let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
                     s.sync_workspace_adoption_ready(
@@ -737,42 +746,58 @@ impl Runtime {
                     break;
                 }
                 if Instant::now() >= deadline {
-                    return Err(error("sync_adoption_blocked"));
+                    let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                    return Err(s.sync_workspace_adoption_error(&operation));
                 }
                 thread::sleep(Duration::from_millis(25));
             }
             // Editor freeze + flush ACKs precede disk/media preparation. Both
             // the renderer authority and the adoption lease are rechecked at commit.
-            let (snapshot, authority) = {
-                let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
-                if !s.sync_workspace_adoption_ready(
+            let (media_event, snapshot, authority) = {
+                let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                let event = s.sync_begin_workspace_adoption_media(
                     &operation,
                     workspace,
                     device,
                     &self.host.participants(),
-                )? {
-                    return Err(error("sync_adoption_blocked"));
-                }
+                )?;
                 (
+                    event,
                     s.store.sync_media_snapshot(&[], true)?,
                     s.sync_media_token(),
                 )
             };
-            let media = snapshot.verify()?;
+            // Keep the original freeze lease. A failed broadcast aborts before
+            // media work; a lost event leaves the renderer's old cancel timer.
+            self.host.emit("notes-sync", &media_event)?;
+            #[cfg(test)]
+            if let Some(work) = self.before_adoption_verify.lock().unwrap().take() { work(); }
+            let media = match snapshot.verify() {
+                Ok(media) => media,
+                Err(failure) => {
+                    // A released/expired media lease takes precedence over a
+                    // late verifier failure for this exact operation only.
+                    let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                    return Err(s.sync_workspace_adoption_timeout_error(&operation).unwrap_or(failure));
+                }
+            };
             {
                 let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                if let Some(timeout) = s.sync_workspace_adoption_timeout_error(&operation) {
+                    return Err(timeout);
+                }
                 s.check(&authority, None)
                     .map_err(|_| error("sync_plan_stale"))?;
                 if !policy.is_current() {
                     return Err(error("sync_plan_stale"));
                 }
-                if !s.sync_workspace_adoption_ready(
+                if !s.sync_workspace_adoption_commit_ready(
                     &operation,
                     workspace,
                     device,
                     &self.host.participants(),
                 )? {
-                    return Err(error("sync_adoption_blocked"));
+                    return Err(s.sync_workspace_adoption_error(&operation));
                 }
                 s.store.sync_with_media(media, |store| {
                     store.sync_adopt_workspace(workspace, device)
@@ -1201,7 +1226,10 @@ impl Runtime {
         // pair command can remain in flight while stdin/IPC processes replies.
         let preparation = (|| -> Result<_> {
             let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
-            if s.store.sync_identity()?.is_some()
+            // Adoption has no old apply plan. Its probe/prepare must advance
+            // without cold-file hashing; the adopter owns its complete media
+            // verification under the distinct, bounded media lease.
+            if !s.sync_has_workspace_adoption() && s.store.sync_identity()?.is_some()
                 && (s.sync_has_operation()
                     || (self.active.load(Ordering::Acquire) && s.store.sync_pending_count()? > 0))
             {
@@ -1223,7 +1251,9 @@ impl Runtime {
         let result = (|| -> Result<_> {
             let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
             let live = self.host.participants();
-            let installed = match preparation {
+            // A snapshot started before adoption must not install an old apply
+            // scope or abort the adoption due to that obsolete preparation.
+            let installed = if s.sync_has_workspace_adoption() { false } else { match preparation {
                 Ok(Some((media, authority))) if s.check(&authority, None).is_ok() => {
                     match s.store.sync_begin_media(media) {
                         Ok(()) => true,
@@ -1242,7 +1272,7 @@ impl Runtime {
                     false
                 }
                 Ok(None) => false,
-            };
+            }};
             let outcome = (|| -> Result<_> {
                 let tick = s.sync_tick(&live);
                 if tick.is_err() {
@@ -1947,3 +1977,7 @@ mod retry_tests;
 #[cfg(test)]
 #[path = "adapter_resolve_tests.rs"]
 mod resolve_tests;
+
+#[cfg(test)]
+#[path = "adapter_adoption_tests.rs"]
+mod adoption_tests;
