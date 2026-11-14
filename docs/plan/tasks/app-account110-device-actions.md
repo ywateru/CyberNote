@@ -68,3 +68,5 @@ Cargo 共用 `/private/tmp/cybernote-account109-mac-ec4348c6-target-01`，只能
 - `a663586b`包[静态独核](../../verification/account110/mac-package-review04.md)通过，owned单次push再次失败，A为SIGABRT而B正常退出。[精确崩溃证据](../../verification/account110/native/live02-push-crash01/README.md)确认实际transfer_target poll链栈溢出，单个poll frame约198.6KiB；旧paused-owner小栈及mock deadline测试未覆盖真实SDK准备链，不能以它们推断该路径有界。
 - Huygens获授权测量真实transfer/prepare/execute future布局并在必要组合边界heap-pin，新增真实类型/小栈poll回归，保留185秒统一期限和所有退役、身份校验规则；Erdos独审。不得加大生产线程栈、并行映射或修改成功条件掩盖崩溃。
 - 实际future堆固定源码 `4c1ac003 + ddf7b792` 已[最终独审批准](../reviews/app-account110-transfer-stack-02.md)并合入。prepare50472→1360B、transfer253008→832B、execute506160→152B；作者与独立13项定向通过，另将真实SDK拒绝断言收紧后只重跑受影响1项通过。保留baseline/首次部分修复失败，生产线程栈与185秒期限不变。更新2项pin后重包复测，尚未得到App传输PASS。
+- `39711ae8`包[独核通过](../../verification/account110/mac-package-review05.md)。owned App单次push约27.075秒后failed，`account_network/coordinator`，两端均自然exit0、无崩溃，仍未进入本次应用pair/transfer。原结果保留，不能把未再崩溃当整体通过。
+- 下一步由Huygens与Feynman实现受控e2e映射诊断，仅固定SDK类别/静态timeout/状态/事件白名单，显式开启、输出有界，不动前端DTO及传输行为；Erdos审核。目标是定位真实App的map失败及在内存核对路由一致性，不以CLI成功反推或盲改网络。
