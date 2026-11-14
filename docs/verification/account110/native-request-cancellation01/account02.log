@@ -1,0 +1,83 @@
+warning: tauri-plugin-notes-ui@0.1.0: macos/toolbar.m:32:49: warning: unused parameter 'tableFocused' [-Wunused-parameter]
+warning: tauri-plugin-notes-ui@0.1.0:    32 | static NSString *labelFor(NSString *action,BOOL tableFocused) {
+warning: tauri-plugin-notes-ui@0.1.0:       |                                                 ^
+warning: tauri-plugin-notes-ui@0.1.0: 1 warning generated.
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:25:1: warning: writable atomic property 'notesHovered' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    25 | - (void)setNotesHovered:(BOOL)value {_notesHovered=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     8 | @property BOOL notesHovered;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:26:1: warning: writable atomic property 'notesMenuOpen' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    26 | - (void)setNotesMenuOpen:(BOOL)value {_notesMenuOpen=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     9 | @property BOOL notesMenuOpen;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:27:1: warning: writable atomic property 'notesSelected' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    27 | - (void)setNotesSelected:(BOOL)value {_notesSelected=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:    10 | @property BOOL notesSelected;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: 3 warnings generated.
+   Compiling notes-clone v0.1.0 (/private/tmp/cybernote-account109-login-surfaces-ui/src-tauri)
+error[E0252]: the name `Ordering` is defined multiple times
+    --> src/account/transport.rs:1545:41
+     |
+1200 |             atomic::{AtomicUsize, Ordering},
+     |                                   -------- previous import of the type `Ordering` here
+...
+1545 |     use std::sync::atomic::{AtomicBool, Ordering};
+     |                                         ^^^^^^^^ `Ordering` reimported here
+     |
+     = note: `Ordering` must be defined only once in the type namespace of this module
+
+error[E0433]: cannot find type `Ordering` in this scope
+   --> src/account/transport.rs:537:48
+    |
+537 |                 let call = source.fetch_add(1, Ordering::SeqCst);
+    |                                                ^^^^^^^^ use of undeclared type `Ordering`
+    |
+help: consider importing one of these enums
+    |
+257 +         use crate::account::Ordering;
+    |
+257 +         use std::cmp::Ordering;
+    |
+257 +         use std::sync::atomic::Ordering;
+    |
+
+error[E0433]: cannot find type `Ordering` in this scope
+   --> src/account/transport.rs:554:34
+    |
+554 |                 while calls.load(Ordering::SeqCst) < 2 {
+    |                                  ^^^^^^^^ use of undeclared type `Ordering`
+    |
+help: consider importing one of these enums
+    |
+257 +         use crate::account::Ordering;
+    |
+257 +         use std::cmp::Ordering;
+    |
+257 +         use std::sync::atomic::Ordering;
+    |
+
+warning: unused import: `Ordering`
+    --> src/account/transport.rs:1545:41
+     |
+1545 |     use std::sync::atomic::{AtomicBool, Ordering};
+     |                                         ^^^^^^^^
+     |
+     = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0252, E0433.
+For more information about an error, try `rustc --explain E0252`.
+warning: `notes-clone` (lib test) generated 1 warning
+error: could not compile `notes-clone` (lib test) due to 3 previous errors; 1 warning emitted

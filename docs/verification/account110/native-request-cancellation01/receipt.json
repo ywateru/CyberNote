@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-14",
+  "productCommit": "5d4eac3bbf90be851fc91ed931ced2f5ec81670d",
+  "parentCheckpoint": "0c44b9e59b09375597eb1f7d6cdf3378428626e2",
+  "reviewFinding": "dd9c7d827f36037896123faceeeea68840c6c6da",
+  "files": {
+    "src-tauri/src/account/mod.rs": "33b135715561d829b9b63b3fe12dcb58680a5f4d3d97000aee39f6dd94f6ecef",
+    "src-tauri/src/account/transport.rs": "d442ae3b7173253f7cf1f64613ba08017cf35cd2044bdcbdcee4c1a532f5f2df",
+    "src-tauri/src/account/worker.rs": "db3b4fd65e7ba01b5c96105c69c731f926d2cb15a829a9381aebd93454ee3897"
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "locked": true,
+    "offline": true
+  },
+  "invocationSuffix": "--manifest-path src-tauri/Cargo.toml --lib --features sync-e2e --locked --offline",
+  "results": [
+    {
+      "log": "account01.log",
+      "result": "compile failed: duplicate Ordering test import; no tests executed"
+    },
+    {
+      "log": "account02.log",
+      "result": "compile failed: incomplete test import correction; no tests executed"
+    },
+    {
+      "log": "account03.log",
+      "result": "intermediate source only",
+      "passed": 69,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "account04.log",
+      "result": "intermediate source before final cancellation-error preservation",
+      "passed": 72,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "account-final.log",
+      "filter": "account::",
+      "passed": 72,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "log": "adoption-final.log",
+      "filter": "sync::adapter::adoption_tests",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "targetReleased": true,
+  "observedFreeKiB": 10661328,
+  "networkFilesChanged": false,
+  "newIPCOrDTOFields": false,
+  "limits": [
+    "Author device-free verification; independent review pending.",
+    "Actual SyncService test uses loopback, synthetic identities and a controllably blocking synthetic backend, not live account directory or real note data.",
+    "Existing committed atomic work is not rolled back on cancellation.",
+    "Retirement safety can keep an operation Busy after its fixed 185-second execution deadline until the blocked task actually exits.",
+    "No App, original/private stores, account login, ADB, external account traffic, new target or downloads."
+  ]
+}
