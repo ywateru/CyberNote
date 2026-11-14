@@ -1136,6 +1136,70 @@ mod channel_tests {
             }
         }
     }
+    #[test]
+    fn simultaneous_opposite_initiations_reject_without_retaining_either_permit() {
+        let dir_a = tempfile::tempdir().unwrap();
+        let dir_b = tempfile::tempdir().unwrap();
+        let workspace = uuid::Uuid::new_v4().to_string();
+        let make = |dir: &Path| {
+            let device = uuid::Uuid::new_v4().to_string();
+            let service = Arc::new(
+                SyncService::with_policy(
+                    Arc::new(UnusedBackend(device.clone(), workspace.clone())),
+                    Arc::new(IdentityStore::open(&dir.join("identity"), &device).unwrap()),
+                    dir.join("stage"),
+                    Some(Arc::new(UnusedPolicy)),
+                )
+                .unwrap(),
+            );
+            let address = service
+                .start_listener("127.0.0.1:0".parse().unwrap())
+                .unwrap();
+            let invite =
+                PairingInvite::decode(&service.invitation(&format!("ws://{address}/")).unwrap())
+                    .unwrap();
+            (service, invite)
+        };
+        let (a, invite_a) = make(dir_a.path());
+        let (b, invite_b) = make(dir_b.path());
+        let admission = Arc::new(tokio::sync::Barrier::new(2));
+        let rejection = Arc::new(tokio::sync::Barrier::new(2));
+        let start = |service: Arc<SyncService>, invite, direction| {
+            let admission = admission.clone();
+            let rejection = rejection.clone();
+            thread::spawn(move || {
+                service.account_action("opposite", Duration::from_secs(2), move |s| async move {
+                    admission.wait().await;
+                    let (mut socket, _) = transport::client(&s, &invite).await?;
+                    let result = socket
+                        .rpc(&wire::Request::BeginTransfer {
+                            version: 1,
+                            direction,
+                        })
+                        .await;
+                    // Keep each active permit until both passive admissions have answered.
+                    rejection.wait().await;
+                    match result {
+                        Err(error) => Err(error),
+                        Ok(_) => Err(SyncError::Protocol),
+                    }
+                })
+            })
+        };
+        let left = start(a.clone(), invite_b, TransferDirection::Push);
+        let right = start(b.clone(), invite_a, TransferDirection::Pull);
+        assert_eq!(left.join().unwrap(), Err::<(), _>(SyncError::Busy));
+        assert_eq!(right.join().unwrap(), Err::<(), _>(SyncError::Busy));
+        for service in [a, b] {
+            assert!(service.account_task.lock().unwrap().is_none());
+            assert_eq!(
+                service.account_action("explicit-retry", Duration::from_secs(1), |_| async {
+                    Ok(())
+                }),
+                Ok(())
+            );
+        }
+    }
     struct BlockingBackend {
         device: String,
         entered: mpsc::Sender<()>,
