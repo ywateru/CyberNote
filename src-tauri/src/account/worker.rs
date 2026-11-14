@@ -364,6 +364,7 @@ mod tests {
     #[tokio::test]
     async fn paused_real_content_owner_rejects_actions_without_runtime_or_sdk_registration() {
         let root = tempfile::tempdir().unwrap();
+        private::directory(root.path()).unwrap();
         let auth = Arc::new(
             account_auth::AuthClient::new(
                 super::super::config::pinned(),
