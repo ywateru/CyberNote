@@ -706,7 +706,8 @@ impl Store {
         Ok(report)
     }
     fn generation(&self, db: &Connection) -> Result<String> {
-        let mut snapshot = Vec::new();
+        // Include process authority, so A -> B -> A cannot revive a prepared plan.
+        let mut snapshot = vec![vec![self.instance_id.to_string()]];
         for sql in ["SELECT body FROM notes ORDER BY id","SELECT body FROM folders ORDER BY id","SELECT body FROM attachments ORDER BY id","SELECT printf('%s:%s',kind,entity_id) FROM sync_dirty ORDER BY kind,entity_id","SELECT printf('%s:%s:%d',digest,vector,redacted) FROM sync_heads ORDER BY digest","SELECT printf('%s:%s:%s',kind,entity_id,digest) FROM sync_projection ORDER BY kind,entity_id","SELECT digest FROM sync_inbox ORDER BY digest","SELECT printf('%s:%s:%s:%d',kind,entity_id,actor_id,counter) FROM sync_frontiers ORDER BY kind,entity_id,actor_id","SELECT printf('%s:%s:%s:%s',kind,entity_id,head_digest,actor_id) FROM sync_branches ORDER BY kind,entity_id,head_digest","SELECT printf('%s:%s:%s',kind,entity_id,actor_id) FROM sync_local_actors ORDER BY kind,entity_id,actor_id","SELECT printf('%s:%s:%d',workspace_id,device_id,counter) FROM sync_identity", "SELECT descriptor FROM sync_attachments ORDER BY id", "SELECT printf('%s:%s:%s:%s',kind,entity_id,vector,digest) FROM sync_seen ORDER BY kind,entity_id,vector"] {
             let mut q=db.prepare(sql)?;
             let rows=q.query_map([],|r|r.get::<_,String>(0))?.collect::<std::result::Result<Vec<_>,_>>()?;

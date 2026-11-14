@@ -118,7 +118,7 @@ impl Store {
         if enabled(&self.db)? {
             return self.generation(&self.db);
         }
-        let mut rows = vec![];
+        let mut rows = vec![vec![self.instance_id.to_string()]];
         for sql in [
             "SELECT body FROM notes ORDER BY id",
             "SELECT body FROM folders ORDER BY id",
@@ -157,7 +157,7 @@ impl Store {
         wires.extend_from_slice(incoming);
         let attachments = self.attachments()?;
         let mut locals = BTreeMap::new();
-        let dirty = if is_enabled {
+        let dirty = if is_enabled && !bootstrap {
             let mut q = self
                 .db
                 .prepare("SELECT entity_id FROM sync_dirty WHERE kind='note'")?;

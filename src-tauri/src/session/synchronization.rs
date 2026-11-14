@@ -235,6 +235,41 @@ struct Quiet {
     resolution: Option<Resolution>,
 }
 impl Session {
+    /// Caller must keep this Session lock across the final preflight, Store
+    /// adoption and finish call. Local unsaved/quiet work cannot cross accounts.
+    pub(crate) fn sync_adoption_preflight(&self, workspace: &str, device_id: &str) -> Result<()> {
+        let same = self.store.sync_identity()?.is_some_and(|identity| {
+            identity.workspace_id == workspace && identity.device_id == device_id
+        });
+        if !same && (self.pending.is_some() || !self.intents.is_empty() || self.quiet.current.is_some()) {
+            return Err(crate::store::AppError {
+                code: "sync_adoption_blocked".into(),
+                message: "本机仍有未完成的保存或同步屏障，请先完成后再开启新账户同步".into(),
+                commit: None,
+            });
+        }
+        self.store.sync_adoption_preflight(workspace, device_id)
+    }
+
+    /// After Store commit, revoke every old global/note/media token by rotating
+    /// session identity. No business row, unlocked key or file is changed.
+    /// Emit the returned payload as `notes-access` after releasing the lock.
+    pub(crate) fn sync_finish_workspace_adoption(&mut self, previous_instance: Uuid) -> Result<Option<Value>> {
+        if self.store.sync_store_instance() == previous_instance {
+            return Ok(None);
+        }
+        self.id = Uuid::new_v4().to_string();
+        self.quiet = QuietState::default();
+        self.attachment_windows.clear();
+        self.metadata_event = None;
+        self.last_commit = None;
+        // event() falls back to unauthorized access if post-commit reads fail.
+        let mut event = self.event("commit", "sync-workspace-adopted", &[])?;
+        event["noteIds"] = json!(event["access"]["notes"].as_object()
+            .map(|notes| notes.keys().cloned().collect::<Vec<_>>()).unwrap_or_default());
+        Ok(Some(event))
+    }
+
     pub(crate) fn sync_media_token(&self) -> Token {
         Token {
             session_id: self.id.clone(),
