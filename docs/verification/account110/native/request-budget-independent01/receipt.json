@@ -1,0 +1,117 @@
+{
+  "sourceHead": "91ab7e802f0d6842dc758c49db5c875047948b96",
+  "sourceCommit": "493550e545749e735ff862e46a79bdddd0529b92",
+  "authorManifestEntriesVerified": 8,
+  "sourceAndLockHashesVerified": {
+    "src-tauri/Cargo.toml": "4e49af43e79abecd461158073efdfb8b6a55fa8eecb64efed107f41740db6bbc",
+    "src-tauri/src/account/transport.rs": "667d3b5e88ef26e6f3b48ac7c2b59e13d3c0ae15139d22e2e57a188f52be8bdf",
+    "src-tauri/src/account/worker.rs": "3a30c63e84c9778ae0dc762154902243f2009ad4902d3473472cac38e7bff285",
+    "pnpm-lock.yaml": "f8fe3b8fd0e19334ecca1d435a90292f34aee30231d0ce5f5dee072f8c5d30e2",
+    "src-tauri/Cargo.lock": "5220fc0603b5add4fb8616ba932e11d3d617327007435d7f1eaba61b773b2360",
+    "crates/account-auth/Cargo.lock": "fbd6888de925ad9fe70979df74c489d136359bb55371de6f5191ceb40d0b4ce7"
+  },
+  "floorBytes": 6442450944,
+  "beforeFreeBytes": 9186758656,
+  "runs": [
+    {
+      "label": "unified-deadline",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "--locked",
+        "--offline",
+        "account::worker::tests::unified_deadline",
+        "--",
+        "--nocapture"
+      ],
+      "startedAt": "2026-11-14T12:03:06.769810+00:00",
+      "finishedAt": "2026-11-14T12:03:07.780363+00:00",
+      "exitCode": 0,
+      "diskFloorTriggered": false,
+      "outputSha256": "0620b3f0290ac683c6f097263ba0e326b42a64be8178d69e2a46a32bd7952848"
+    },
+    {
+      "label": "retirement-and-identity",
+      "command": [
+        "/private/tmp/cybernote-account109-mac-ec4348c6-target-01/debug/deps/notes_clone_lib-af71c25146df96f6",
+        "--exact",
+        "account::worker::tests::request_deadline_before_dequeue_never_starts_and_remains_busy_until_receipt",
+        "account::worker::tests::dropping_in_flight_waiter_cancels_execution_but_retains_permit_until_cleanup",
+        "account::transport::tests::native_deadline_with_real_network_blocked_backend_keeps_busy_until_join",
+        "account::transport::tests::late_blocking_admission_after_early_disconnect_is_fenced_and_joined",
+        "account::transport::tests::request_cancel_interrupts_pending_preparation_without_running_next_step",
+        "account::transport::tests::unconfirmed_retirement_is_not_success_and_keeps_admission_fenced",
+        "account::transport::tests::bootstrap_rechecks_closed_gate_after_proof_verification",
+        "account::transport::tests::bootstrap_rechecks_cancelled_owner_after_proof_verification",
+        "account::transport::tests::active_bootstrap_returns_nonce_bound_noise_key_pinned_invitation",
+        "--nocapture"
+      ],
+      "startedAt": "2026-11-14T12:03:07.800009+00:00",
+      "finishedAt": "2026-11-14T12:03:08.310726+00:00",
+      "exitCode": 0,
+      "diskFloorTriggered": false,
+      "outputSha256": "4eec47ac33d36f67dad427906108642bbe76f4bae74eee8dd57c56a5aa114536"
+    },
+    {
+      "label": "production-features",
+      "command": [
+        "cargo",
+        "tree",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--locked",
+        "--offline",
+        "--edges",
+        "normal,build,features",
+        "--invert",
+        "tokio"
+      ],
+      "startedAt": "2026-11-14T12:03:08.311366+00:00",
+      "finishedAt": "2026-11-14T12:03:08.813611+00:00",
+      "exitCode": 0,
+      "diskFloorTriggered": false,
+      "outputSha256": "db58c29e764fca54b99a5c21946d07b5f70ed839a481ab0e3e3e1a04b5e6aa9a"
+    }
+  ],
+  "minimumFreeBytes": 9186201600,
+  "normalBuildFeatureTreeIdenticalToBaseline": true,
+  "baselineSourceHead": "f9c6b50f028161a4193678bb15785b68b64351dd",
+  "productionFeatureBoundary": "New direct test-util declaration is dev-only. Existing normal/build graph already enables tokio/test-util through n0-future; root-normalized inverse tokio feature trees are identical.",
+  "verificationCheckCorrection": "Initial assertion that the production graph excluded test-util was false; retained raw tree identifies pre-existing transitive activation, and baseline comparison proves no production graph expansion.",
+  "verdict": "APPROVE-source-and-targeted-regressions",
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "passed": 12,
+  "failed": 0,
+  "ignored": 0,
+  "targetReleased": true,
+  "noCompilerAtRelease": true,
+  "authorTreeCleanAfter": true,
+  "releasedAt": "2026-11-14T12:04:48.805407+00:00",
+  "releaseFreeBytes": 9184305152,
+  "limits": [
+    "12 targeted tests only; complete account suite not repeated.",
+    "Synthetic virtual-clock and existing loopback fixtures; no actual app/account/device operation.",
+    "Old SDK failure and live02 remain unchanged and unexplained by this new deadline defect."
+  ],
+  "normalBuildFeatureComparison": {
+    "baselineHead": "f9c6b50f028161a4193678bb15785b68b64351dd",
+    "candidateHead": "91ab7e802f0d6842dc758c49db5c875047948b96",
+    "baselineRawSha256": "8c5865df21a70cfd5236bc6836e42d7be6b051512173307aea94920e24c3ef21",
+    "candidateRawSha256": "db58c29e764fca54b99a5c21946d07b5f70ed839a481ab0e3e3e1a04b5e6aa9a",
+    "rootNormalizedSha256": "b46f673569500223130f258033f4c9a44fee339d6a442dbd2c4c4e9e0cf5e5fb",
+    "identical": true,
+    "preexistingTestUtilSource": "n0-future v0.3.2",
+    "normalProductionDependenciesChangedByPatch": false,
+    "newDirectDeclarationDevOnly": true,
+    "rawTreesPrivateOnly": true
+  }
+}
