@@ -258,7 +258,7 @@ impl Session {
         live: HashSet<String>,
     ) -> Result<Value> {
         self.sync_adoption_preflight(workspace, device)?;
-        let event = self.sync_begin(live, None)?;
+        let event = self.sync_begin(live, None).map_err(|_| adoption_blocked())?;
         self.quiet.current.as_mut().unwrap().adoption = Some(WorkspaceAdoption {
             workspace: workspace.into(),
             device: device.into(),
@@ -912,7 +912,7 @@ mod tests {
     }
     #[test]
     fn workspace_adoption_barrier_rechecks_every_final_authority_and_save_fence() {
-        for scenario in ["ackMissing", "cancel", "participant", "timeout", "store", "epoch", "newNote", "intent", "workspace", "device"] {
+        for scenario in ["ackMissing", "cancel", "participant", "timeout", "store", "epoch", "newNote", "intent", "pending", "workspace", "device"] {
             let (_root, mut s) = session();
             let replacement_root = tempfile::tempdir().unwrap();
             let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
@@ -928,6 +928,7 @@ mod tests {
                 "epoch" => { s.epoch += 1; }
                 "newNote" => { s.store.action(json!({"type":"createNote"})).unwrap(); }
                 "intent" => { s.register_save("main", &note, "late-save", Token { note_epoch: Some(s.note_epoch(&note)), ..t }).unwrap(); }
+                "pending" => { s.begin(json!({"type":"deleteNote","id":note}), live.clone(), &t).unwrap(); }
                 "workspace" => { workspace = Uuid::new_v4().to_string(); }
                 "device" => { device = Uuid::new_v4().to_string(); }
                 _ => unreachable!(),
@@ -961,6 +962,24 @@ mod tests {
         assert_eq!(s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live).unwrap_err().code, "sync_adoption_blocked");
         s.sync_release_workspace_adoption(&operation, false).unwrap();
         assert!(s.store.note(&incoming).is_err());
+    }
+    #[test]
+    fn workspace_adoption_barrier_empty_participants_and_late_cleanup_cannot_bypass_ownership() {
+        let (_root, mut s) = session();
+        let workspace = Uuid::new_v4().to_string();
+        let device = Uuid::new_v4().to_string();
+        assert_eq!(s.sync_begin_workspace_adoption(&workspace, &device, HashSet::new()).unwrap_err().code, "sync_adoption_blocked");
+        assert!(!s.sync_has_operation());
+        let (old, _, _, live) = adoption_prepared(&mut s);
+        s.quiet.current.as_mut().unwrap().started = Instant::now() - Duration::from_secs(6);
+        assert_eq!(s.sync_tick(&live).unwrap().unwrap().0["outcome"], "abort");
+        s.quiet.retry_after = None;
+        let replacement = s.sync_begin_workspace_adoption(&workspace, &device, live).unwrap()["operationId"].as_str().unwrap().to_string();
+        assert!(s.sync_release_workspace_adoption(&old, false).unwrap().is_none());
+        assert_eq!(s.quiet.current.as_ref().unwrap().id, replacement);
+        assert!(s.sync_release_workspace_adoption(&Uuid::new_v4().to_string(), false).is_err());
+        assert_eq!(s.quiet.current.as_ref().unwrap().id, replacement);
+        s.sync_release_workspace_adoption(&replacement, false).unwrap();
     }
     #[test]
     fn strict_replies_real_window_phase_token_and_cancellation_receipt() {
