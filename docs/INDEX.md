@@ -1,5 +1,7 @@
 # 文档导航
 
+2026-11-14最新界面更新：“同步此设备”已改为滑动开关，开启合并及退出账户改为模态确认。新 Mac `6dadbb8a` 已构建运行，[取消与键盘焦点实机核对通过](verification/account109/switch-modal-live01.md)，最终仍已登录且同步暂停。最新应用入口见[手动指南](verification/account109/MANUAL-TESTING.md)。
+
 2026-11-14最新：[本地资料库独立于账户](plan/tasks/app-account109-account-independent-library.md)已实现；新Mac `bb8014ce` 在原库[应用内登录、退出及重新登录通过](verification/account109/native/account-independent-login-live01/README.md)，正文与附件保持，最终已登录且同步暂停。当前[手动指南](verification/account109/MANUAL-TESTING.md)已更新候选入口；完整多端合并仍待手动验收。
 
 2026-11-14：[Mac托管登录返回后错误分析](verification/account109/native/mac-post-login-diagnosis-20261114.md)与[错误细分/显式重试契约](plan/tasks/app-account109-post-login-errors.md)。本轮修改源码并做静态复审，旧候选身份不变，未重新构建或自动测试。
