@@ -258,14 +258,14 @@ test('terminal service mismatch offers login retry and confirmed cleanup without
  }
 });
 
-test('old mismatch plus immediate Busy retries status and keeps an explicit confirmed exit',async t=>{
+test('old mismatch plus immediate Busy allows explicit login retry and keeps confirmed exit',async t=>{
  const h=setup(t,{initial:{...signedOutAccount(),state:'error',error:{code:'account_owner_workspace_mismatch',message:'safe'}},reply:command=>{
   if(command.type==='signIn')throw {code:'account_busy',message:'private-ipc-sentinel'};
  }});
  await h.mount();await h.click('重试登录');await h.tick();
  assert(h.text().includes('已有账户操作正在进行'));
- await h.click('重试');assert.equal(h.calls.at(-1).type,'status');
- assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
+ await h.click('重试');assert.equal(h.calls.at(-1).type,'signIn');
+ assert.equal(h.calls.filter(c=>c.type==='signIn').length,2);
  const before=h.calls.length;await h.click('退出账户');assert.equal(h.calls.length,before);
  assert(h.text().includes('本库全部备忘录及附件会保留'));
  await h.click('确认退出');assert.equal(h.calls.at(-1).type,'signOut');
@@ -273,19 +273,50 @@ test('old mismatch plus immediate Busy retries status and keeps an explicit conf
  assert(!h.calls.some(c=>c.type==='setEnabled'));
 });
 
-test('authoritative Busy blocks new authorization while cleanup-required retains only confirmed exit',async t=>{
- for(const error of [{code:'account_busy',message:'safe'},
+test('authoritative Busy and cleanup-required block new authorization but retain confirmed exit',async t=>{
+ for(const state of ['error','signedOut'])for(const error of [{code:'account_busy',message:'safe'},
   {code:'account_authentication',stage:'authorizationProvider',providerReason:'busy',message:'safe'},
   {code:'account_cleanup_required',message:'safe'}]) {
-  const h=setup(t,{initial:{...signedOutAccount(),state:'error',error}});await h.mount();
+  const h=setup(t,{initial:{...signedOutAccount(),state,error}});await h.mount();
   if(error.code==='account_cleanup_required')assert(!h.button('登录'));
   else assert(props(h.button('登录')).disabled);
   await act(async()=>{await h.handle().run({type:'signIn',surface:'browser'});await h.handle().run({type:'signUp',surface:'embedded'});});
   await h.tick();assert(h.calls.every(c=>c.type==='status'));
-  if(error.code==='account_cleanup_required') {
-   await h.click('退出账户');assert(h.calls.every(c=>c.type==='status'));
-   await h.click('确认退出');assert.equal(h.calls.at(-1).type,'signOut');
-  }
+  await h.click('退出账户');assert(h.calls.every(c=>c.type==='status'));
+  await h.click('确认退出');assert.equal(h.calls.at(-1).type,'signOut');
+ }
+});
+
+test('a transient action Busy cannot trap explicit login retry behind identical read-only polls',async t=>{
+ for(const type of ['signIn','signUp'])for(const initial of [signedOutAccount(),
+  {...signedOutAccount(),state:'error',error:{code:'account_owner_workspace_mismatch',message:'safe'}},
+  {...signedOutAccount(),state:'error',error:{code:'account_network',stage:'coordinatorProfile',requestReason:'timeout',message:'safe'}}]) {
+  let fail=true;
+  const h=setup(t,{initial,reply:command=>{
+   if(command.type===type&&fail){fail=false;throw {code:'account_busy',message:'private-ipc-sentinel'};}
+  }});
+  await h.mount();await h.click(type==='signIn'?'登录':'创建账户');
+  assert(h.text().includes('已有账户操作正在进行'));
+  const count=h.calls.length;await h.tick();await h.poll();
+  assert(h.calls.slice(count).every(c=>c.type==='status'));
+  assert.equal(h.calls.filter(c=>c.type===type).length,1);
+  assert(h.text().includes('已有账户操作正在进行'),'same status must not hide the action failure');
+  await h.choose('browser');await h.click('重试');assert.deepEqual(h.calls.at(-1),{type,surface:'browser'});
+  assert.equal(h.handle().inspect().status.state,'authorizing');assert.equal(h.calls.filter(c=>c.type===type).length,2);
+  await act(async()=>{await h.handle().run({type,surface:'embedded'});});
+  await h.tick();assert.equal(h.calls.filter(c=>c.type===type).length,2,'authorizing still fences another attempt');
+  assert(!h.calls.some(c=>['signOut','setEnabled','syncNow'].includes(c.type)));
+ }
+});
+
+test('cached action Busy cannot retry login after polling discovers active authorization or cleanup',async t=>{
+ for(const next of [authorizing('embedded'),{...signedOutAccount(),state:'error',error:{code:'account_cleanup_required',message:'safe'}},
+  {...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}}]) {
+  const h=setup(t,{reply:command=>{if(command.type==='signIn')throw {code:'account_busy',message:'private-ipc-sentinel'};}});
+  await h.mount();await h.click('登录');h.setNative(next);await h.tick();
+  assert(!h.button('重试'),'authoritative progression retires stale action retry');
+  await act(async()=>{if(next.state!=='paused')await h.handle().run({type:'signIn',surface:'browser'});});
+  assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
  }
 });
 

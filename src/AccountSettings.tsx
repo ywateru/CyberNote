@@ -119,14 +119,16 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const request = (command: AccountCommand, background = false) => void run(command, false, background).catch(() => {});
   const retryRequest = () => {
     const failed = retry.current;
+    const rejectedBusy = latestError.current?.safeError?.code === "account_busy" || latestError.current?.safeError?.providerReason === "busy";
+    const canRetryLogin = status && ((status.state === "signedOut" && !status.profile && !status.error) || accountConnectionRetry(status).type === "signIn");
     // The native status may have advanced since the failed operation. Retrying
     // an old login/exit in that new state must not start another transaction.
     if (status?.error?.code === "account_cleanup_required" || status?.error?.code === "account_busy" ||
-      status?.error?.providerReason === "busy" || latestError.current?.safeError?.code === "account_busy" || latestError.current?.safeError?.providerReason === "busy" ||
+      status?.error?.providerReason === "busy" ||
       latestError.current?.safeError?.code === "account_sync_adoption_blocked") {
       request({ type: "status" });
     } else if ((failed.type === "signIn" || failed.type === "signUp") &&
-      (status?.state === "authorizing" || (status?.profile && !status.error))) {
+      (status?.state === "authorizing" || (status?.profile && !status.error) || (rejectedBusy && !canRetryLogin))) {
       request({ type: "status" });
     } else if ((failed.type === "cancel" || failed.type === "signOut") && status?.state === "signedOut" && !status.profile) {
       request({ type: "status" });
@@ -212,7 +214,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
               <button type="button" className="account-primary" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signIn", surface: loginSurface })}>登录</button>
               <button type="button" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signUp", surface: loginSurface })}>创建账户</button>
             </>}
-            {(signedIn || cleanupRequired || status?.state === "error" || identityMismatch) && <button type="button" disabled={busy || nativeBusy} onClick={() => request({ type: "signOut" })}>退出账户</button>}
+            {(signedIn || cleanupRequired || status?.state === "error" || identityMismatch || nativeBusy) && <button type="button" disabled={busy} onClick={() => request({ type: "signOut" })}>退出账户</button>}
           </>}
         </div>
         {!signedIn && !authorizing && <p className="account-help">登录不会自动开启同步。确认开启后，本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）会与当前账户合并。</p>}
