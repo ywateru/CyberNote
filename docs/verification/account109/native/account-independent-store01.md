@@ -22,7 +22,13 @@ Store 在同一 SQLite 事务中先捕获 dirty 编辑，再验证唯一 head �
 
 成功后轮换 Store instance 与 Session id，使旧 apply plan、prepared media、global/note/media token 在 A→B→A 后仍然失效；本机已解锁 key 保留。此模块不处理登录、grant、网络服务或采用标记文件，其 fences 属于 adapter/account 接线。
 
-验证状态：作者执行 `git diff --check`；本树未运行 Cargo、App、设备、网络或访问真实库。十二个 `workspace_adoption` 合成 fixtures 已交 Huygens 在唯一共享 target 中串行执行，结果待其精确整合源回执；没有声明本轮运行通过。共享 target 的 ownership 已直接约定归 Huygens，作者不占用或新建 target。
+作者最终定向验证：父级从 Huygens 移交唯一共享 target ownership 后，在本树 `0f141f4bedb94b9582e4402dddbca7fb3f0a0bea`（最终产品代码 `213b1a5a`，后续仅本 receipt 文档）执行以下默认 feature 命令，退出码 0。十二个作者 `workspace_adoption` 合成 fixtures 全部通过：12 passed、0 failed、0 ignored、276 filtered out，编译 1m05s，测试 0.22s。[原始日志](account-independent-store01/workspace-adoption.log) SHA256 为 `b9c52c988e38c43e5f1dfab4dfe3fed4274e0b8cb9e688f346613e8eb29d106c`。
+
+```sh
+CARGO_TARGET_DIR=/private/tmp/cybernote-account109-mac-ec4348c6-target-01 CARGO_BUILD_JOBS=2 CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 cargo test --manifest-path src-tauri/Cargo.toml --lib --locked --offline workspace_adoption
+```
+
+本次只补出 Git 原有的 7.6KB `docs/fixtures/smart-projection09.json` 供稀疏树编译；未改其字节、未创建其他 target、未扩大 feature 组合、未运行 App/设备/网络或访问真实库。`git diff --check` 通过。结束后确认无 Cargo 进程，target ownership 已释放并通知 Huygens；结束时 `df -k` 可用 13,714,980 KiB（约 13.08GiB）。该结果仅证明此精确 Store/Session 源码的定向测试，不包含 Huygens 后续 P1/P2 修复或实际产品验收。
 
 Huygens 已报告较早整合 checkpoint `5634c8fb` 的 account 48/48、workspace_adoption 12/12、adapter 19/19，无 skip；该组包含 adapter 自身匹配过滤的 fixture，尚不含作者最后的 `213b1a5a`，不可作为最终链验证结果。最终精确测试源、日志及 target 释放以 Huygens 后续回执为准。
 
