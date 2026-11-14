@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "kind": "owned-real-App-sdk-map-diagnostic",
+  "status": "fail",
+  "source": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+  "candidate": {
+    "binary": "/Users/water/work/2026/Apple-Notes-Clone/artifacts/account110/mac-29c87810-debug-01/CyberNote-Account110-29c87810.app/Contents/MacOS/notes-clone",
+    "binarySha256": "96192c49b6abcc9b689dad895203455c7ceefa713d2e17e15c7379ca85c7ef42",
+    "sourceRevision": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+    "sourceFingerprint": "6c6d07a520305917f668f63ae5ac91c307da049103edc8bce003865af95fe491",
+    "receiptSha256": "8f1dc6d52f00732b9e76018ef76433404e23314573e5f59efb55b7c1832c13b0"
+  },
+  "collectorSha256": "5388b4917d2e9f331a9233406ad448cb9637b228a92fcb00974b51d1158e4e5b",
+  "driverSha256": "a78910f4ee8c972e27671f80458e23196ca74f0c578bbbf181b2a65bff163324",
+  "firstResultSha256": "af7cc9c56d3b46ddfbc2f86983df6cd9764c1bf9ed1ceb7206a4c51889649571",
+  "pushSubmitted": false,
+  "samples": [
+    {
+      "device": "a",
+      "phase": "restore",
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "device": "b",
+      "phase": "restore",
+      "state": "paused",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": null
+    },
+    {
+      "device": "b",
+      "phase": "restore",
+      "state": "error",
+      "enabled": true,
+      "hasProfile": true,
+      "pendingCount": 0,
+      "conflictCount": 0,
+      "devices": [],
+      "error": {
+        "code": "account_directory_unavailable"
+      }
+    }
+  ],
+  "diagnostics": {
+    "a": {
+      "ownerGeneration": 1,
+      "sdkGeneration": 1,
+      "dropped": 0,
+      "overflow": false,
+      "records": [
+        {
+          "sequence": 1,
+          "elapsedMs": 8261,
+          "sdkGeneration": 1,
+          "kind": "event",
+          "phase": "coordination-ready",
+          "transport": null,
+          "operation": null,
+          "mapStage": null,
+          "mapOutcome": null,
+          "sdkVariant": null,
+          "timeout": null,
+          "apiStatus": null,
+          "selectedTransportMatchesExpected": null
+        }
+      ]
+    },
+    "b": {
+      "ownerGeneration": 1,
+      "sdkGeneration": 1,
+      "dropped": 0,
+      "overflow": false,
+      "records": [
+        {
+          "sequence": 1,
+          "elapsedMs": 7745,
+          "sdkGeneration": 1,
+          "kind": "event",
+          "phase": "coordination-ready",
+          "transport": null,
+          "operation": null,
+          "mapStage": null,
+          "mapOutcome": null,
+          "sdkVariant": null,
+          "timeout": null,
+          "apiStatus": null,
+          "selectedTransportMatchesExpected": null
+        }
+      ]
+    }
+  },
+  "routeComparison": {
+    "available": false,
+    "selectedTransportMatchesLiveB": null
+  },
+  "boundaries": [
+    "Only existing owned live02 A/B, normal restore, at most one real push.",
+    "No copied grant/Noise, no fresh signin, no default library access.",
+    "Fixed native diagnostic opt-in; no raw stderr, message, URL, account/device IDs or identity witnesses saved.",
+    "Diagnostic collection failure remains distinct from actual operation terminal; no error can pass acceptance."
+  ],
+  "accountErrorObserved": true,
+  "failure": {
+    "code": "ACCOUNT_FAILURE"
+  },
+  "lifecycle": [
+    {
+      "device": "a",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    }
+  ],
+  "nativeCleanup": {
+    "allClosed": true,
+    "failed": false
+  },
+  "sourceHeadAfter": "29c878108b2ea421b5e4fccd71547206071fdbfa",
+  "sourceCleanAfter": true,
+  "firstResultUnchanged": true
+}
