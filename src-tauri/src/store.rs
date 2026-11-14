@@ -37,6 +37,7 @@ mod account_summary;
 pub(crate) use account_summary::AccountSummary;
 #[path = "store/synchronization.rs"]
 mod synchronization;
+pub(crate) use synchronization::NetworkStaging;
 pub(crate) use attachment_operations::AttachmentOwner;
 pub(crate) use commits::CommitReceipt;
 pub(crate) use smart::{SmartMembership, SmartQuery};

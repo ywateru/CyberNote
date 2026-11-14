@@ -8,6 +8,7 @@ use std::{
 };
 #[path = "synchronization/blob.rs"]
 mod blob;
+pub(crate) use blob::NetworkStaging;
 #[path = "synchronization/media.rs"]
 pub(crate) mod media;
 #[path = "synchronization/publication.rs"]

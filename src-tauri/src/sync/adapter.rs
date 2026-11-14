@@ -9,7 +9,7 @@ use crate::{
         synchronization::{AbortReason, Resolution, WindowReply},
         Session, Token,
     },
-    store::{AppError, Result, Store},
+    store::{AppError, NetworkStaging, Result, Store},
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
@@ -97,6 +97,7 @@ pub(crate) struct StoreBackend {
     shared: SharedSession,
     device: String,
     fence: Option<(Arc<AtomicU64>, u64)>,
+    staging: NetworkStaging,
 }
 impl StoreBackend {
     fn with<T>(&self, f: impl FnOnce(&mut Session) -> Result<T>) -> super::identity::Result<T> {
@@ -105,6 +106,9 @@ impl StoreBackend {
         f(&mut s).map_err(backend_error)
     }
     fn validate(&self, s: &Session) -> Result<()> {
+        if !self.staging.matches_device(&self.device) {
+            return Err(error("sync_device_mismatch"));
+        }
         if self
             .fence
             .as_ref()
@@ -258,7 +262,7 @@ impl SyncBackend for StoreBackend {
     fn store_blob(&self, b: &network::BlobRef, source: &Path) -> super::identity::Result<()> {
         let storage = self.with(|s| s.store.sync_blob_storage())?;
         storage
-            .publish_staged(&b.sha256, b.size, source)
+            .publish_staged(&self.staging, &b.sha256, b.size, source)
             .map_err(backend_error)
     }
     fn receive_head(&self, v: Value) -> super::identity::Result<network::Receipt> {
@@ -454,15 +458,18 @@ impl Runtime {
             (None, None) => uuid::Uuid::new_v4().to_string(),
         };
         let identity = Arc::new(IdentityStore::open(&sync_dir, &device).map_err(network_error)?);
+        let staging = NetworkStaging::manual(&self.root);
+        let staging_directory = staging.prepare()?;
         let backend = Arc::new(StoreBackend {
             shared: self.shared.clone(),
             device,
+            staging,
             fence: Some((
                 self.backend_epoch.clone(),
                 self.backend_epoch.load(Ordering::Acquire),
             )),
         });
-        let service = SyncService::new(backend, identity.clone(), sync_dir.join("network-staging"))
+        let service = SyncService::new(backend, identity.clone(), staging_directory)
             .map_err(network_error)?;
         inner.identity = Some(identity);
         inner.service = Some(service);
@@ -655,21 +662,20 @@ impl Runtime {
         inner.config = None;
         inner.identity = None;
         self.backend_epoch.fetch_add(1, Ordering::AcqRel);
+        let staging = NetworkStaging::account(&self.root, &device)?;
+        let staging_directory = staging.prepare()?;
         let backend = Arc::new(StoreBackend {
             shared: self.shared.clone(),
             device: device.clone(),
+            staging,
             fence: Some((
                 self.backend_epoch.clone(),
                 self.backend_epoch.load(Ordering::Acquire),
             )),
         });
-        let service = SyncService::with_policy(
-            backend,
-            identity,
-            self.root.join(".account/staging").join(&device),
-            Some(policy.clone()),
-        )
-        .map_err(network_error)?;
+        let service =
+            SyncService::with_policy(backend, identity, staging_directory, Some(policy.clone()))
+                .map_err(network_error)?;
         if !policy.is_current() {
             return Err(error("sync_plan_stale"));
         }
@@ -1453,6 +1459,7 @@ mod tests {
             .unwrap()
             .device_id;
         let old = StoreBackend {
+            staging: NetworkStaging::manual(d.path()),
             shared: shared.clone(),
             device,
             fence: Some((
@@ -1659,6 +1666,7 @@ mod tests {
         let s = shared(d.path());
         let identity = s.0.lock().unwrap().store.sync_enable(None).unwrap();
         let backend = StoreBackend {
+            staging: NetworkStaging::manual(d.path()),
             shared: s.clone(),
             device: identity.device_id,
             fence: None,
@@ -1734,6 +1742,7 @@ mod tests {
         let s = shared(d.path());
         let identity = s.0.lock().unwrap().store.sync_enable(None).unwrap();
         let backend = StoreBackend {
+            staging: NetworkStaging::manual(d.path()),
             shared: s.clone(),
             device: identity.device_id.clone(),
             fence: None,
@@ -1791,9 +1800,11 @@ mod allocation_tests {
             .as_str()
             .unwrap()
             .to_string();
+        let staging = NetworkStaging::manual(&d.path().join("local"));
         (
             d,
             StoreBackend {
+                staging,
                 shared,
                 device: identity.device_id,
                 fence: None,
@@ -1918,6 +1929,152 @@ mod publication_tests {
     use super::*;
     use crate::store::Store;
     #[test]
+    fn account_staging_is_fixed_device_scoped_and_never_accepts_another_capability() {
+        let d = tempfile::tempdir().unwrap();
+        let other = tempfile::tempdir().unwrap();
+        let mut store = Store::open(d.path()).unwrap();
+        let identity = store.sync_enable(None).unwrap();
+        let device = &identity.device_id;
+        let staging = NetworkStaging::account(d.path(), device).unwrap();
+        let stage = staging.prepare().unwrap();
+        assert_eq!(stage, d.path().join(".account/staging").join(device));
+        let manual = NetworkStaging::manual(d.path());
+        assert_eq!(
+            manual.prepare().unwrap(),
+            d.path().join(".sync/network-staging")
+        );
+        let different_device = uuid::Uuid::new_v4().to_string();
+        let different = NetworkStaging::account(d.path(), &different_device).unwrap();
+        different.prepare().unwrap();
+        let different_root = NetworkStaging::account(other.path(), device).unwrap();
+        different_root.prepare().unwrap();
+        for invalid in [
+            "../escape",
+            "",
+            "AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA",
+            "aaaaaaaaaaaa4aaa8aaaaaaaaaaaaaaa",
+        ] {
+            assert!(NetworkStaging::account(d.path(), invalid).is_err());
+        }
+        let bytes = vec![11; 32769];
+        let hash = super::super::model::sha256(&bytes);
+        let size = bytes.len() as u64;
+        let source = stage.join(format!("{hash}-{size}.part"));
+        fs::write(&source, &bytes).unwrap();
+        let storage = store.sync_blob_storage().unwrap();
+        for rejected in [&manual, &different, &different_root] {
+            assert!(storage
+                .publish_staged(rejected, &hash, size, &source)
+                .is_err());
+            assert_eq!(fs::read(&source).unwrap(), bytes);
+            assert!(!storage.contains(&hash, size).unwrap());
+        }
+        let wrong_name = stage.join("uncontrolled.part");
+        fs::write(&wrong_name, &bytes).unwrap();
+        assert!(storage
+            .publish_staged(&staging, &hash, size, &wrong_name)
+            .is_err());
+        fs::write(&source, vec![12; bytes.len()]).unwrap();
+        assert_eq!(
+            storage
+                .publish_staged(&staging, &hash, size, &source)
+                .unwrap_err()
+                .code,
+            "sync_blob_corrupt"
+        );
+        fs::write(&source, &bytes[..bytes.len() - 1]).unwrap();
+        assert!(storage
+            .publish_staged(&staging, &hash, size, &source)
+            .is_err());
+        fs::write(&source, &bytes).unwrap();
+        let epoch = Arc::new(AtomicU64::new(2));
+        let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
+        let mut backend = StoreBackend {
+            shared,
+            device: different_device,
+            staging: staging.clone(),
+            fence: Some((epoch.clone(), 2)),
+        };
+        let blob = network::BlobRef {
+            sha256: hash.clone(),
+            size,
+        };
+        assert_eq!(
+            backend.store_blob(&blob, &source),
+            Err(SyncError::Authentication)
+        );
+        backend.device = device.clone();
+        epoch.store(3, Ordering::Release);
+        assert_eq!(
+            backend.store_blob(&blob, &source),
+            Err(SyncError::PlanStale)
+        );
+        assert_eq!(fs::read(&source).unwrap(), bytes);
+        backend.fence = Some((epoch, 3));
+        backend.store_blob(&blob, &source).unwrap();
+        assert!(!source.exists());
+        assert_eq!(
+            fs::read(storage.sync_blob_path(&hash).unwrap()).unwrap(),
+            bytes
+        );
+    }
+    #[cfg(unix)]
+    #[test]
+    fn account_staging_rejects_symlinked_root_ancestors_directory_and_file() {
+        use std::os::unix::fs::symlink;
+        for component in [
+            ".account",
+            ".account/staging",
+            ".account/staging/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        ] {
+            let d = tempfile::tempdir().unwrap();
+            let outside = tempfile::tempdir().unwrap();
+            let mut store = Store::open(d.path()).unwrap();
+            store.sync_enable(None).unwrap();
+            let staging =
+                NetworkStaging::account(d.path(), "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa").unwrap();
+            let stage = staging.prepare().unwrap();
+            let directory = d.path().join(component);
+            fs::remove_dir_all(&directory).unwrap();
+            symlink(outside.path(), &directory).unwrap();
+            assert!(staging.prepare().is_err());
+            assert!(store
+                .sync_blob_storage()
+                .unwrap()
+                .publish_staged(
+                    &staging,
+                    &"0".repeat(64),
+                    0,
+                    &stage.join(format!("{}-0.part", "0".repeat(64)))
+                )
+                .is_err());
+            assert_eq!(fs::read_dir(outside.path()).unwrap().count(), 0);
+        }
+        let d = tempfile::tempdir().unwrap();
+        let alias = d.path().join("root-alias");
+        let root = d.path().join("root");
+        let mut store = Store::open(&root).unwrap();
+        store.sync_enable(None).unwrap();
+        symlink(&root, &alias).unwrap();
+        assert!(NetworkStaging::manual(&alias).prepare().is_err());
+        let staging =
+            NetworkStaging::account(&root, "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa").unwrap();
+        let stage = staging.prepare().unwrap();
+        let bytes = b"synthetic";
+        let hash = super::super::model::sha256(bytes);
+        let size = bytes.len() as u64;
+        let source = stage.join(format!("{hash}-{size}.part"));
+        let outside = d.path().join("outside");
+        fs::write(&outside, bytes).unwrap();
+        symlink(&outside, &source).unwrap();
+        assert!(store
+            .sync_blob_storage()
+            .unwrap()
+            .publish_staged(&staging, &hash, size, &source)
+            .is_err());
+        assert_eq!(fs::read(&outside).unwrap(), bytes);
+    }
+    #[test]
     fn controlled_stage_rename_reuses_inode_duplicate_cleanup_and_bad_cache_are_safe() {
         let d = tempfile::tempdir().unwrap();
         let mut store = Store::open(d.path()).unwrap();
@@ -1931,7 +2088,9 @@ mod publication_tests {
         let source = stage.join(format!("{hash}-{size}.part"));
         fs::write(&source, &bytes).unwrap();
         let meta = fs::metadata(&source).unwrap();
-        storage.publish_staged(&hash, size, &source).unwrap();
+        storage
+            .publish_staged(&NetworkStaging::manual(d.path()), &hash, size, &source)
+            .unwrap();
         assert!(!source.exists());
         let destination = storage.sync_blob_path(&hash).unwrap();
         #[cfg(unix)]
@@ -1940,20 +2099,28 @@ mod publication_tests {
             assert_eq!(meta.ino(), fs::metadata(&destination).unwrap().ino());
         }
         fs::write(&source, &bytes).unwrap();
-        storage.publish_staged(&hash, size, &source).unwrap();
+        storage
+            .publish_staged(&NetworkStaging::manual(d.path()), &hash, size, &source)
+            .unwrap();
         assert!(source.exists());
         assert_eq!(fs::read(&destination).unwrap(), bytes);
         fs::write(&destination, b"corrupt").unwrap();
-        assert!(storage.publish_staged(&hash, size, &source).is_err());
+        assert!(storage
+            .publish_staged(&NetworkStaging::manual(d.path()), &hash, size, &source)
+            .is_err());
         assert_eq!(fs::read(&destination).unwrap(), b"corrupt");
         let wrong = d.path().join("arbitrary-file");
         fs::write(&wrong, &bytes).unwrap();
-        assert!(storage.publish_staged(&hash, size, &wrong).is_err());
+        assert!(storage
+            .publish_staged(&NetworkStaging::manual(d.path()), &hash, size, &wrong)
+            .is_err());
         #[cfg(unix)]
         {
             fs::remove_file(&source).unwrap();
             std::os::unix::fs::symlink(&wrong, &source).unwrap();
-            assert!(storage.publish_staged(&hash, size, &source).is_err());
+            assert!(storage
+                .publish_staged(&NetworkStaging::manual(d.path()), &hash, size, &source)
+                .is_err());
             assert_eq!(fs::read(&wrong).unwrap(), bytes);
         }
     }
@@ -1994,3 +2161,7 @@ mod resolve_tests;
 #[cfg(test)]
 #[path = "adapter_adoption_tests.rs"]
 mod adoption_tests;
+
+#[cfg(test)]
+#[path = "adapter_account_transfer_tests.rs"]
+mod account_transfer_tests;

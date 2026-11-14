@@ -80,6 +80,7 @@ fn actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inb
     ));
     let abackend = Arc::new(StaleOnce {
         inner: StoreBackend {
+            staging: NetworkStaging::manual(&aroot),
             shared: ashared.clone(),
             device: identity.device_id.clone(),
             fence: None,
@@ -89,6 +90,7 @@ fn actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inb
     });
     let bdevice = uuid::Uuid::new_v4().to_string();
     let bbackend = Arc::new(StoreBackend {
+        staging: NetworkStaging::manual(&broot),
         shared: bshared.clone(),
         device: bdevice.clone(),
         fence: None,

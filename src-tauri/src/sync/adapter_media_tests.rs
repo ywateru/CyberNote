@@ -103,6 +103,7 @@ fn real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive() {
         .to_string();
     let shared = Arc::new((Mutex::new(Session::new(local)), Condvar::new()));
     let make_backend = || StoreBackend {
+        staging: NetworkStaging::manual(&root),
         shared: shared.clone(),
         device: identity.device_id.clone(),
         fence: None,

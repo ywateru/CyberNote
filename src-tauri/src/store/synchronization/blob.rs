@@ -20,6 +20,81 @@ fn safe_directory(path: &Path) -> Result<()> {
         Err(e) => Err(e.into()),
     }
 }
+/// A local capability, never deserialized or supplied by IPC/the peer. Both the
+/// transport and publisher derive their directory from this same value.
+#[derive(Clone)]
+pub(crate) struct NetworkStaging {
+    root: PathBuf,
+    namespace: StagingNamespace,
+}
+#[derive(Clone)]
+enum StagingNamespace {
+    Manual,
+    Account(uuid::Uuid),
+}
+impl NetworkStaging {
+    pub(crate) fn manual(root: &Path) -> Self {
+        Self {
+            root: root.into(),
+            namespace: StagingNamespace::Manual,
+        }
+    }
+    pub(crate) fn account(root: &Path, device: &str) -> Result<Self> {
+        let id = uuid::Uuid::parse_str(device)
+            .ok()
+            .filter(|id| id.to_string() == device)
+            .ok_or_else(|| invalid("账户暂存设备无效"))?;
+        Ok(Self {
+            root: root.into(),
+            namespace: StagingNamespace::Account(id),
+        })
+    }
+    pub(crate) fn matches_device(&self, device: &str) -> bool {
+        match self.namespace {
+            StagingNamespace::Manual => true,
+            StagingNamespace::Account(id) => id.to_string() == device,
+        }
+    }
+    fn directories(&self) -> Vec<PathBuf> {
+        match self.namespace {
+            StagingNamespace::Manual => vec![
+                self.root.join(".sync"),
+                self.root.join(".sync/network-staging"),
+            ],
+            StagingNamespace::Account(id) => vec![
+                self.root.join(".account"),
+                self.root.join(".account/staging"),
+                self.root.join(".account/staging").join(id.to_string()),
+            ],
+        }
+    }
+    fn check_directory(path: &Path) -> Result<()> {
+        let meta = fs::symlink_metadata(path)?;
+        if !meta.is_dir() || meta.file_type().is_symlink() {
+            return Err(invalid("同步暂存目录无效"));
+        }
+        Ok(())
+    }
+    pub(crate) fn prepare(&self) -> Result<PathBuf> {
+        Self::check_directory(&self.root)?;
+        let directories = self.directories();
+        for directory in &directories {
+            safe_directory(directory)?;
+        }
+        Ok(directories.last().expect("fixed staging directory").clone())
+    }
+    fn checked_directory(&self, root: &Path) -> Result<PathBuf> {
+        if self.root != root {
+            return Err(invalid("同步暂存根目录不匹配"));
+        }
+        Self::check_directory(root)?;
+        let directories = self.directories();
+        for directory in &directories {
+            Self::check_directory(directory)?;
+        }
+        Ok(directories.last().expect("fixed staging directory").clone())
+    }
+}
 pub(super) fn sync_dir(path: &Path) -> Result<()> {
     #[cfg(unix)]
     File::open(path)?.sync_all()?;
@@ -181,11 +256,17 @@ impl BlobStorage {
     }
     /// Only the transport-owned, bounded stage capability may be moved. The
     /// caller holds the transport's stage mutex throughout this operation.
-    pub(crate) fn publish_staged(&self, hash: &str, size: u64, source: &Path) -> Result<()> {
+    pub(crate) fn publish_staged(
+        &self,
+        staging: &NetworkStaging,
+        hash: &str,
+        size: u64,
+        source: &Path,
+    ) -> Result<()> {
         if !valid_hash(hash) || size > MAX_BLOB {
             return Err(invalid("blob引用无效"));
         }
-        let directory = self.root.join(".sync/network-staging");
+        let directory = staging.checked_directory(&self.root)?;
         if source.parent() != Some(directory.as_path())
             || source.file_name() != Some(std::ffi::OsStr::new(&format!("{hash}-{size}.part")))
         {
