@@ -1395,7 +1395,9 @@ mod tests {
                         assert!(std::mem::size_of_val(execution.as_ref().get_ref()) <= 4096);
                         assert!(matches!(
                             execution.as_mut().poll(&mut cx),
-                            Poll::Ready(Err(_))
+                            Poll::Ready(Err(Error::AuthenticationAt(
+                                super::super::types::NetworkStage::CoordinatorSession
+                            )))
                         ));
                     }
                     assert_eq!(backend.inventories.load(Ordering::SeqCst), 0);
