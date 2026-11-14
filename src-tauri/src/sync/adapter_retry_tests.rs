@@ -82,6 +82,7 @@ fn actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inb
         inner: StoreBackend {
             shared: ashared.clone(),
             device: identity.device_id.clone(),
+            fence: None,
         },
         flushes: AtomicUsize::new(0),
         note: note.clone(),
@@ -90,6 +91,7 @@ fn actual_store_stale_automatically_reconnects_and_quiet_converges_dirty_and_inb
     let bbackend = Arc::new(StoreBackend {
         shared: bshared.clone(),
         device: bdevice.clone(),
+        fence: None,
     });
     let aid = Arc::new(IdentityStore::open(&aroot.join(".sync"), &identity.device_id).unwrap());
     let bid = Arc::new(IdentityStore::open(&broot.join(".sync"), &bdevice).unwrap());

@@ -105,6 +105,7 @@ fn real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive() {
     let make_backend = || StoreBackend {
         shared: shared.clone(),
         device: identity.device_id.clone(),
+        fence: None,
     };
     let backend = make_backend();
     let v = serde_json::to_value(&wire).unwrap();

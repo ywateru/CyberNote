@@ -605,35 +605,7 @@ impl Runtime {
         }
         let workspace = verified.workspace();
         let device = identity.device_id().map_err(network_error)?;
-        let (snapshot, authority) = {
-            let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
-            if !policy.is_current() {
-                return Err(error("sync_plan_stale"));
-            }
-            s.sync_adoption_preflight(workspace, &device)?;
-            (
-                s.store.sync_media_snapshot(&[], true)?,
-                s.sync_media_token(),
-            )
-        };
-        let media = snapshot.verify()?;
-        let access = {
-            let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
-            s.check(&authority, None)
-                .map_err(|_| error("sync_plan_stale"))?;
-            if !policy.is_current() {
-                return Err(error("sync_plan_stale"));
-            }
-            s.sync_adoption_preflight(workspace, &device)?;
-            let previous = s.store.sync_store_instance();
-            s.store.sync_with_media(media, |store| {
-                store.sync_adopt_workspace(workspace, &device)
-            })?;
-            s.sync_finish_workspace_adoption(previous)?
-        };
-        if let Some(access) = access {
-            self.host.emit("notes-access", &access)?;
-        }
+        self.adopt_account_store(workspace, &device, &policy)?;
         // The old manual configuration stays paused on disk as recovery evidence.
         // A retained account binding suppresses manual restoration at startup.
         inner.config = None;
@@ -661,6 +633,117 @@ impl Runtime {
             .map_err(|_| error("sync_internal"))?;
         self.active.store(true, Ordering::Release);
         Ok(service)
+    }
+    fn adopt_account_store(
+        &self,
+        workspace: &str,
+        device: &str,
+        policy: &crate::account::enrollment::Gate,
+    ) -> Result<()> {
+        if !policy.is_current() {
+            return Err(error("sync_plan_stale"));
+        }
+        if !self.account_adoption_needed(workspace, device)? {
+            // A retained session never resets causal state or editor authority.
+            return Ok(());
+        }
+        let begin = {
+            let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+            s.sync_begin_workspace_adoption(workspace, device, self.host.participants())?
+        };
+        let operation = begin["operationId"]
+            .as_str()
+            .ok_or_else(|| error("sync_internal"))?
+            .to_string();
+        let mut committed = false;
+        let result = (|| -> Result<()> {
+            self.host.emit("notes-sync", &begin)?;
+            let deadline = Instant::now() + Duration::from_secs(11);
+            loop {
+                if !policy.is_current() {
+                    return Err(error("sync_plan_stale"));
+                }
+                let ready = {
+                    let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                    s.sync_workspace_adoption_ready(
+                        &operation,
+                        workspace,
+                        device,
+                        &self.host.participants(),
+                    )?
+                };
+                if ready {
+                    break;
+                }
+                if Instant::now() >= deadline {
+                    return Err(error("sync_adoption_blocked"));
+                }
+                thread::sleep(Duration::from_millis(25));
+            }
+            // Editor freeze + flush ACKs precede disk/media preparation. Both
+            // the renderer authority and the adoption lease are rechecked at commit.
+            let (snapshot, authority) = {
+                let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                if !s.sync_workspace_adoption_ready(
+                    &operation,
+                    workspace,
+                    device,
+                    &self.host.participants(),
+                )? {
+                    return Err(error("sync_adoption_blocked"));
+                }
+                (
+                    s.store.sync_media_snapshot(&[], true)?,
+                    s.sync_media_token(),
+                )
+            };
+            let media = snapshot.verify()?;
+            let (release, access) = {
+                let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+                s.check(&authority, None)
+                    .map_err(|_| error("sync_plan_stale"))?;
+                if !policy.is_current() {
+                    return Err(error("sync_plan_stale"));
+                }
+                if !s.sync_workspace_adoption_ready(
+                    &operation,
+                    workspace,
+                    device,
+                    &self.host.participants(),
+                )? {
+                    return Err(error("sync_adoption_blocked"));
+                }
+                let previous = s.store.sync_store_instance();
+                s.store.sync_with_media(media, |store| {
+                    store.sync_adopt_workspace(workspace, device)
+                })?;
+                committed = true;
+                let release = s.sync_release_workspace_adoption(&operation, true)?;
+                let access = s.sync_finish_workspace_adoption(previous);
+                (release, access)
+            };
+            if let Some(release) = release {
+                self.host.emit("notes-sync", &release)?;
+            }
+            if let Some(access) = access? {
+                self.host.emit("notes-access", &access)?;
+            }
+            Ok(())
+        })();
+        if result.is_err() && !committed {
+            // Every error path releases any renderer freeze. Old protocol state
+            // remains intact unless the Store transaction actually committed.
+            let release = self
+                .shared
+                .0
+                .lock()
+                .map_err(|_| error("sync_internal"))?
+                .sync_release_workspace_adoption(&operation, false);
+            if let Ok(Some(release)) = release {
+                let _ = self.host.emit("notes-sync", &release);
+            }
+        }
+        result
     }
     pub(crate) fn pause_account(&self) {
         // Account setup/cancellation can run before the legacy-workspace check.

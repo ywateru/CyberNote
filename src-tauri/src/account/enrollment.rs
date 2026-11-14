@@ -469,10 +469,27 @@ mod tests {
                     )
                 );
                 let safe = serde_json::to_value(error.safe()).unwrap();
-                assert_eq!(safe["code"], if matches!(status, 401 | 403) { "account_authentication" } else { "account_network" });
-                assert_eq!(safe["requestReason"], if status == 200 { "invalidResponse" } else { "httpStatus" });
-                if status == 200 { assert!(safe.get("httpStatus").is_none()); }
-                else { assert_eq!(safe["httpStatus"], status); }
+                assert_eq!(
+                    safe["code"],
+                    if matches!(status, 401 | 403) {
+                        "account_authentication"
+                    } else {
+                        "account_network"
+                    }
+                );
+                assert_eq!(
+                    safe["requestReason"],
+                    if status == 200 {
+                        "invalidResponse"
+                    } else {
+                        "httpStatus"
+                    }
+                );
+                if status == 200 {
+                    assert!(safe.get("httpStatus").is_none());
+                } else {
+                    assert_eq!(safe["httpStatus"], status);
+                }
                 let text = safe.to_string();
                 for private in ["private-response-sentinel", "synthetic-access", "127.0.0.1"] {
                     assert!(!text.contains(private));
@@ -527,17 +544,31 @@ mod tests {
             let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
             let origin = format!("http://{}", listener.local_addr().unwrap());
             let mut enrollment = Enrollment::new(origin).unwrap();
-            enrollment.http = reqwest::Client::builder().no_proxy()
-                .timeout(std::time::Duration::from_millis(250)).build().unwrap();
+            enrollment.http = reqwest::Client::builder()
+                .no_proxy()
+                .timeout(std::time::Duration::from_millis(250))
+                .build()
+                .unwrap();
             let error = enrollment.profile("invalid\nheader").await.err().unwrap();
-            assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Request));
+            assert_eq!(
+                error,
+                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Request)
+            );
             // Listening socket intentionally sends no response. No external service.
             let error = enrollment.profile("synthetic-access").await.err().unwrap();
-            assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Timeout));
+            assert_eq!(
+                error,
+                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Timeout)
+            );
             drop(listener);
             let error = enrollment.profile("synthetic-access").await.err().unwrap();
-            assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Connect));
-        }).await.expect("bounded synthetic request fixture");
+            assert_eq!(
+                error,
+                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Connect)
+            );
+        })
+        .await
+        .expect("bounded synthetic request fixture");
     }
 
     fn fixture() -> (Binding, JwkSet, jsonwebtoken::EncodingKey) {
@@ -568,6 +599,40 @@ mod tests {
             std::collections::HashSet::new()
         }
         fn emit(&self, _: &str, _: &serde_json::Value) -> crate::store::Result<()> {
+            Ok(())
+        }
+    }
+    // Device-free renderer fixture exercising the real Session reply boundary.
+    // Production renderers must supply these ACKs themselves.
+    struct AdoptionWindows {
+        shared: crate::sync::adapter::SharedSession,
+        blocked: bool,
+    }
+    impl crate::sync::adapter::WindowHost for AdoptionWindows {
+        fn participants(&self) -> std::collections::HashSet<String> {
+            std::collections::HashSet::from(["main".into()])
+        }
+        fn emit(&self, name: &str, value: &serde_json::Value) -> crate::store::Result<()> {
+            use crate::session::synchronization::WindowReply;
+            if name != "notes-sync" {
+                return Ok(());
+            }
+            let operation = value["operationId"].as_str().unwrap().to_string();
+            let reply = match value["phase"].as_str() {
+                Some("probe") => WindowReply::Probe {
+                    operation_id: operation,
+                    protected_note_ids: vec![],
+                    blocked: self.blocked,
+                },
+                Some("prepare") => WindowReply::Prepare {
+                    operation_id: operation,
+                    ready: true,
+                },
+                _ => return Ok(()),
+            };
+            let mut s = self.shared.0.lock().unwrap();
+            let token = s.sync_media_token();
+            s.sync_reply("main", reply, &token)?;
             Ok(())
         }
     }
@@ -612,7 +677,15 @@ mod tests {
             Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
             Condvar::new(),
         ));
-        let runtime = Runtime::new(shared.clone(), dir.path().into(), Arc::new(Windows)).unwrap();
+        let runtime = Runtime::new(
+            shared.clone(),
+            dir.path().into(),
+            Arc::new(AdoptionWindows {
+                shared: shared.clone(),
+                blocked: false,
+            }),
+        )
+        .unwrap();
         let identity = runtime.account_identity().unwrap();
         let device = identity.device_id().unwrap();
         let key = identity.public_key().unwrap();
@@ -689,7 +762,15 @@ mod tests {
             .unwrap();
         let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
         let original = shared.0.lock().unwrap().workspace().unwrap();
-        let runtime = Runtime::new(shared.clone(), dir.path().into(), Arc::new(Windows)).unwrap();
+        let runtime = Runtime::new(
+            shared.clone(),
+            dir.path().into(),
+            Arc::new(AdoptionWindows {
+                shared: shared.clone(),
+                blocked: false,
+            }),
+        )
+        .unwrap();
         let noise = runtime.account_identity().unwrap();
         let device = noise.device_id().unwrap();
         let key = noise.public_key().unwrap();
@@ -714,7 +795,15 @@ mod tests {
         runtime.shutdown().unwrap();
         drop(service);
         drop(runtime);
-        let runtime = Runtime::new(shared.clone(), dir.path().into(), Arc::new(Windows)).unwrap();
+        let runtime = Runtime::new(
+            shared.clone(),
+            dir.path().into(),
+            Arc::new(AdoptionWindows {
+                shared: shared.clone(),
+                blocked: false,
+            }),
+        )
+        .unwrap();
         let noise = runtime.account_identity().unwrap();
         assert_eq!(noise.device_id().unwrap(), device);
         assert_eq!(noise.public_key().unwrap(), key);
@@ -747,6 +836,79 @@ mod tests {
             original["notes"]
         );
         runtime.shutdown().unwrap();
+    }
+    #[test]
+    fn workspace_adoption_native_handshake_preserves_manual_content_and_blocks_unready_window() {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        for blocked in [true, false] {
+            let dir = tempfile::tempdir().unwrap();
+            let mut store = Store::open(dir.path()).unwrap();
+            store
+                .action(serde_json::json!({"type":"createNote"}))
+                .unwrap();
+            let original_identity = store.sync_enable(None).unwrap();
+            let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
+            let before = shared.0.lock().unwrap().workspace().unwrap();
+            let runtime = Runtime::new(
+                shared.clone(),
+                dir.path().into(),
+                Arc::new(AdoptionWindows {
+                    shared: shared.clone(),
+                    blocked,
+                }),
+            )
+            .unwrap();
+            runtime.pause_for_account().unwrap();
+            let identity = runtime
+                .account_identity_for(&uuid::Uuid::new_v4().to_string())
+                .unwrap();
+            let target = VerifiedWorkspace {
+                workspace: uuid::Uuid::new_v4().to_string(),
+                device: identity.device_id().unwrap(),
+                noise_key: identity.public_key().unwrap(),
+            };
+            let private_root = dir.path().join(".account");
+            super::super::private::begin_adoption(&private_root).unwrap();
+            let result = runtime.activate_account(&target, identity, Arc::new(Gate::default()));
+            if blocked {
+                assert!(result.is_err());
+                assert_eq!(
+                    shared
+                        .0
+                        .lock()
+                        .unwrap()
+                        .store
+                        .sync_identity()
+                        .unwrap()
+                        .unwrap()
+                        .workspace_id,
+                    original_identity.workspace_id
+                );
+                assert!(super::super::private::adoption_pending(&private_root).unwrap());
+            } else {
+                let mut service = result.unwrap();
+                assert_eq!(
+                    shared
+                        .0
+                        .lock()
+                        .unwrap()
+                        .store
+                        .sync_identity()
+                        .unwrap()
+                        .unwrap()
+                        .workspace_id,
+                    target.workspace
+                );
+                assert!(!super::super::private::adoption_pending(&private_root).unwrap());
+                service.shutdown().unwrap();
+            }
+            assert_eq!(
+                shared.0.lock().unwrap().workspace().unwrap()["notes"],
+                before["notes"]
+            );
+            runtime.shutdown().unwrap();
+        }
     }
     #[test]
     fn closed_or_stale_account_gate_cannot_adopt_a_local_library() {
