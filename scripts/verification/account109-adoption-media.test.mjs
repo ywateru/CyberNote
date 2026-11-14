@@ -11,6 +11,14 @@ const {NetworkSyncCoordinator,parseSyncWindowEvent}=await import('data:text/java
 const event=(phase,extra={})=>({phase,operationId:'op',sessionId:'session',...extra});
 const deferred=()=>{let resolve;const promise=new Promise(done=>{resolve=done;});return {promise,resolve};};
 const settle=async()=>{for(let n=0;n<16;n++)await Promise.resolve();};
+function captureTimers(t) {
+ const schedule=globalThis.setTimeout,timers=[];
+ t.mock.method(globalThis,'setTimeout',(callback,delay,...args)=>{
+  timers.push({delay,fire:()=>callback(...args)});
+  return schedule(callback,delay,...args);
+ });
+ return timers;
+}
 function fixture(t,{flush=async()=>{},onReady}={}) {
  t.mock.timers.enable({apis:['setTimeout']});
  let releases=0,commits=0,current=true;
@@ -86,5 +94,46 @@ test('invalidated permission or lease cannot gain a media extension',async t=>{
  h.snapshot.protectedNoteIds=['note'];await h.bridge.receive(event('adoptionMedia'));h.snapshot.protectedNoteIds=[];
  h.invalidLease();await h.bridge.receive(event('adoptionMedia'));
  await h.tick(5500);assert.equal(h.cancelled(),1);assert(h.bridge.frozen());
+ await h.bridge.receive(event('release',{outcome:'abort'}));assert.equal(h.releases(),1);
+});
+test('saved prepare and media callbacks cannot cancel a replacement operation after release',async t=>{
+ const h=fixture(t),timers=captureTimers(t);
+ for(const delay of [5500,60500]) {
+  const oldId='old-'+delay,newId='new-'+delay;
+  await h.bridge.receive(event('prepare',{operationId:oldId,noteIds:['old-note']}));
+  if(delay===60500)await h.bridge.receive(event('adoptionMedia',{operationId:oldId}));
+  const stale=timers.at(-1);assert.equal(stale.delay,delay);
+  await h.bridge.receive(event('release',{operationId:oldId,outcome:'abort'}));
+  await h.bridge.receive(event('prepare',{operationId:newId,noteIds:['new-note']}));
+  const replies=h.replies.length,releases=h.releases();stale.fire();await settle();
+  assert.equal(h.replies.length,replies);assert.equal(h.releases(),releases);assert(h.bridge.frozen('new-note'));
+  await h.bridge.receive(event('release',{operationId:newId,outcome:'abort'}));
+ }
+});
+test('saved callbacks do not cancel after Session replacement even before check/receive observes it',async t=>{
+ const h=fixture(t),timers=captureTimers(t);
+ for(const delay of [5500,60500]) {
+  const oldSession=h.snapshot.sessionId,oldId='old-'+delay,newId='new-'+delay;
+  await h.bridge.receive(event('prepare',{operationId:oldId,sessionId:oldSession,noteIds:['old-note']}));
+  if(delay===60500)await h.bridge.receive(event('adoptionMedia',{operationId:oldId,sessionId:oldSession}));
+  const stale=timers.at(-1);assert.equal(stale.delay,delay);
+  h.snapshot.sessionId='session-'+delay;
+  const replies=h.replies.length,releases=h.releases();stale.fire();await settle();
+  assert.equal(h.replies.length,replies);assert.equal(h.releases(),releases);assert(h.bridge.frozen('old-note'));
+  h.bridge.check();assert.equal(h.releases(),releases+1);
+  await h.bridge.receive(event('prepare',{operationId:newId,sessionId:h.snapshot.sessionId,noteIds:['new-note']}));
+  const current=timers.at(-1),before=h.replies.length;stale.fire();await settle();
+  assert.equal(h.replies.length,before);assert(h.bridge.frozen('new-note'));
+  current.fire();await settle();assert.equal(h.replies.at(-1).ready,false);assert.equal(h.replies.at(-1).operationId,newId);
+  assert(h.bridge.frozen('new-note'),'even the current timer cannot thaw without a terminal');
+  await h.bridge.receive(event('release',{operationId:newId,sessionId:h.snapshot.sessionId,outcome:'abort'}));
+ }
+});
+test('a queued old prepare callback cannot defeat the media deadline on the same operation',async t=>{
+ const h=fixture(t),timers=captureTimers(t);
+ await h.bridge.receive(event('prepare',{noteIds:['note']}));const prepare=timers.at(-1);
+ await h.bridge.receive(event('adoptionMedia'));const media=timers.at(-1);
+ prepare.fire();await settle();assert.equal(h.cancelled(),0);assert(h.bridge.frozen());
+ media.fire();await settle();assert.equal(h.cancelled(),1);assert(h.bridge.frozen());
  await h.bridge.receive(event('release',{outcome:'abort'}));assert.equal(h.releases(),1);
 });

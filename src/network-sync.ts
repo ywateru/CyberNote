@@ -138,6 +138,16 @@ export class NetworkSyncCoordinator {
       operation.terminal.then(() => undefined),
     ]);
   }
+  private armDeadline(operation: Operation, milliseconds: number) {
+    clearTimeout(operation.deadline);
+    const deadline = setTimeout(() => {
+      // A queued callback can outlive clearTimeout. It may cancel only its
+      // captured operation in the same trusted Session, never a replacement.
+      if (operation.deadline !== deadline || this.active !== operation || this.host.snapshot().sessionId !== operation.sessionId) return;
+      void this.cancel().catch(this.host.error);
+    }, milliseconds);
+    operation.deadline = deadline;
+  }
   private release(operation: Operation) {
     if (this.active !== operation) return;
     this.active = undefined;
@@ -206,12 +216,9 @@ export class NetworkSyncCoordinator {
         operation.targets.some((id) => snapshot.protectedNoteIds.includes(id))
       ) return;
       operation.adoptionMedia = true;
-      clearTimeout(operation.deadline);
       // One bounded media stage on the original lease. Expiry only asks the
       // backend to cancel; a terminal receipt/event still owns thawing.
-      operation.deadline = setTimeout(() => {
-        void this.cancel().catch(this.host.error);
-      }, 60500);
+      this.armDeadline(operation, 60500);
       return;
     }
     if (event.phase === "probe") {
@@ -259,9 +266,7 @@ export class NetworkSyncCoordinator {
       });
       // A missed release is recovered through the same backend receipt. This
       // timer requests cancellation; it never restores editability by itself.
-      operation.deadline = setTimeout(() => {
-        void this.cancel().catch(this.host.error);
-      }, 5500);
+      this.armDeadline(operation, 5500);
       await Promise.race([operation.lease.flush(), operation.terminal]);
       if (this.active !== operation || operation.cancelled) return;
       const live = this.host.snapshot();
