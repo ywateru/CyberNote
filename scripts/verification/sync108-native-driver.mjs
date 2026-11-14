@@ -31,6 +31,7 @@ export function encodeRequest(id, action, timeoutMs = 30_000) {
   if (!action || Object.getPrototypeOf(action) !== Object.prototype) throw failure("INVALID_REQUEST");
   const keys = {
     ready: [], startupDiagnostic: [], state: [], idle: [], shutdown: [],
+    accountSdkDiagnostic: [],
     execute: ["command", "args"], snapshot: ["options"], eval: ["expression", "arg"],
   };
   if (!Object.hasOwn(keys, action.op) || Object.keys(action).some((k) => k !== "op" && !keys[action.op].includes(k)))
