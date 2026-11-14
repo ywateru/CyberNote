@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "kind": "separate-owned-live02-push-diagnostic",
+  "source": "d0ad2267289cbe3f527fd7ee30299a62812d6ac9",
+  "binarySha256": "2823cfb35ca6f3c4a55e677d37b63bd74dab3c4b96d2ad70fefa38084375141e",
+  "firstResultSha256": "af7cc9c56d3b46ddfbc2f86983df6cd9764c1bf9ed1ceb7206a4c51889649571",
+  "firstResultUnchanged": true,
+  "status": "fail",
+  "startedAt": "2026-11-14T11:26:26.369Z",
+  "pushSubmitted": true,
+  "commandDone": true,
+  "commandRejected": false,
+  "commandTerminal": {
+    "state": "ready",
+    "enabled": true,
+    "hasProfile": true,
+    "pendingCount": 0,
+    "conflictCount": 0,
+    "devices": [
+      {
+        "label": "a",
+        "current": true,
+        "online": true,
+        "connected": false,
+        "syncAvailable": true,
+        "summary": {
+          "capturedAt": 1794655634419,
+          "lastNoteUpdatedAt": 1794653408652,
+          "noteCount": 2
+        }
+      },
+      {
+        "label": "b",
+        "current": false,
+        "online": true,
+        "connected": false,
+        "syncAvailable": true,
+        "summary": {
+          "capturedAt": 1794655634737,
+          "lastNoteUpdatedAt": 1794653409244,
+          "noteCount": 2
+        }
+      }
+    ],
+    "deviceOperation": {
+      "device": "b",
+      "direction": "push",
+      "phase": "failed",
+      "startedAt": 1794655614824,
+      "finishedAt": 1794655639070
+    },
+    "error": {
+      "code": "account_network",
+      "stage": "coordinator"
+    }
+  },
+  "nativeCleanup": {
+    "allClosed": true,
+    "failed": false
+  },
+  "lifecycle": [
+    {
+      "device": "a",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    },
+    {
+      "device": "b",
+      "naturalExit": true,
+      "exitObserved": true,
+      "exitCode": 0,
+      "exitSignal": null,
+      "closeObserved": true,
+      "closeConfirmed": true,
+      "forcedSignals": []
+    }
+  ],
+  "finishedAt": "2026-11-14T11:27:27.459Z",
+  "fullResultSha256": "a95000db96a409facdb65097dcba95c6768246ee3f389d5887902e7ed68bf669",
+  "temporaryHarnessSha256": "07769f3afc3a5252bf3537a89476bc1b7804e4d44f86f9ccfa9bb87937067f10",
+  "operationDurationMs": 24246,
+  "sampledErrorsBeforeOperationTerminal": [],
+  "acceptanceClaim": false
+}
