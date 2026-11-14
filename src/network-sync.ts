@@ -2,6 +2,7 @@ import type { AccessStamp } from "./access-client";
 
 export type SyncWindowEvent =
   | { phase: "probe"; operationId: string; sessionId: string }
+  | { phase: "adoptionMedia"; operationId: string; sessionId: string }
   | {
       phase: "prepare";
       operationId: string;
@@ -46,7 +47,7 @@ export function parseSyncWindowEvent(input: unknown): SyncWindowEvent {
   const value = record(input);
   if (!identity(value.operationId) || !identity(value.sessionId))
     throw Error("同步窗口身份无效");
-  if (value.phase === "probe")
+  if (value.phase === "probe" || value.phase === "adoptionMedia")
     exact(value, ["phase", "operationId", "sessionId"]);
   else if (value.phase === "prepare") {
     exact(value, ["phase", "operationId", "sessionId", "noteIds"]);
@@ -102,6 +103,8 @@ type Operation = {
   targets: string[];
   lease: QuietLease;
   cancelled: boolean;
+  prepared: boolean;
+  adoptionMedia: boolean;
   terminal: Promise<void>;
   resolve(): void;
   cancelling?: Promise<void>;
@@ -192,6 +195,25 @@ export class NetworkSyncCoordinator {
       return;
     }
     if (this.completed.has(event.operationId)) return;
+    if (event.phase === "adoptionMedia") {
+      const operation = this.active;
+      if (
+        operation?.id !== event.operationId ||
+        operation.sessionId !== event.sessionId ||
+        !operation.prepared || operation.adoptionMedia ||
+        operation.cancelled || operation.finishing ||
+        snapshot.blocked || !operation.lease.current() ||
+        operation.targets.some((id) => snapshot.protectedNoteIds.includes(id))
+      ) return;
+      operation.adoptionMedia = true;
+      clearTimeout(operation.deadline);
+      // One bounded media stage on the original lease. Expiry only asks the
+      // backend to cancel; a terminal receipt/event still owns thawing.
+      operation.deadline = setTimeout(() => {
+        void this.cancel().catch(this.host.error);
+      }, 60500);
+      return;
+    }
     if (event.phase === "probe") {
       await this.host.reply({
         phase: "probe",
@@ -223,6 +245,8 @@ export class NetworkSyncCoordinator {
       sessionId: event.sessionId,
       targets: event.noteIds,
       cancelled: false,
+      prepared: false,
+      adoptionMedia: false,
       terminal,
       resolve,
       lease: undefined!,
@@ -250,6 +274,9 @@ export class NetworkSyncCoordinator {
         await this.cancel();
         return;
       }
+      // Native can accept this ACK and publish adoptionMedia before the IPC
+      // promise resolves. Publish readiness before invoking that boundary.
+      operation.prepared = true;
       await this.receipt(operation, await this.send(operation, true));
     } catch (error) {
       this.host.error(error);

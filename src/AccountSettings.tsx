@@ -187,6 +187,8 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const identityMismatch = status?.error?.code === "account_owner_workspace_mismatch";
   const adoptionBlocked = status?.error?.code === "account_sync_adoption_blocked";
   const commandAdoptionBlocked = commandError?.safeError?.code === "account_sync_adoption_blocked";
+  const adoptionTimeout = adoptionBlocked && status?.error?.adoptionReason === "timeout";
+  const commandAdoptionTimeout = commandAdoptionBlocked && commandError?.safeError?.adoptionReason === "timeout";
   const nativeBusy = status?.error?.code === "account_busy" || status?.error?.providerReason === "busy";
   const needsLogin = accountNeedsLogin(status?.error);
   const connectionRetry = status ? accountConnectionRetry(status) : { type: "status" } as const;
@@ -204,7 +206,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     <h3 className="preferences-page-title">账户与同步</h3>
     <p className="account-intro">在你的设备间同步备忘录</p>
     <span className="account-accessible-state" role="status" aria-live="polite" aria-atomic="true">{status ? states[status.state] : "正在读取账户状态"}</span>
-    {commandError && <div className="account-error account-command-error" role="alert"><h4>{commandAdoptionBlocked ? "开启同步前需要处理旧同步内容" : `本次${commandNames[commandError.command]}未完成`}</h4><p>{error}</p><ErrorDetails error={commandError.safeError} />
+    {commandError && <div className="account-error account-command-error" role="alert"><h4>{commandAdoptionTimeout ? "开启同步准备超时" : commandAdoptionBlocked ? "开启同步前需要处理旧同步内容" : `本次${commandNames[commandError.command]}未完成`}</h4><p>{error}</p><ErrorDetails error={commandError.safeError} />
       {commandAdoptionBlocked && !!status?.conflictCount && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
       <button type="button" disabled={busy} onClick={retryRequest}>{commandAdoptionBlocked ? "读取账户状态" : "重试"}</button></div>}
     {!status && !error && <p role="status">正在读取账户状态…</p>}
@@ -234,7 +236,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         </div>
         {!signedIn && !authorizing && <p className="account-help">登录不会自动开启同步。确认开启后，本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）会与当前账户合并。</p>}
       </section>
-      {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{adoptionBlocked ? "开启同步前需要处理旧同步内容" : identityMismatch ? "账户身份或同步空间校验失败" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
+      {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{adoptionTimeout ? "开启同步准备超时" : adoptionBlocked ? "开启同步前需要处理旧同步内容" : identityMismatch ? "账户身份或同步空间校验失败" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
         {adoptionBlocked && !commandAdoptionBlocked && status.conflictCount > 0 && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
         {!cleanupRequired && connectionRetry.type !== "status" && <button type="button" disabled={busy || nativeBusy} onClick={() => request(connectionRetry.type === "signIn" || connectionRetry.type === "signUp" ? { type: connectionRetry.type, surface: loginSurface } : connectionRetry)}>{connectionRetry.type === "signIn" ? needsLogin ? "重新登录" : "重试登录" : "重试连接"}</button>}
       </section>}

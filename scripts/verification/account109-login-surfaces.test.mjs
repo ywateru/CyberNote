@@ -490,6 +490,28 @@ test('immediate adoption rejection keeps full enable confirmation and retries st
  assert.equal(h.handle().inspect().status.enabled,false);
 });
 
+test('explicit adoption timeouts show stage and retry guidance without claiming an old conflict or retrying automatically',async t=>{
+ for(const [adoptionStage,label] of [['probe','检查同步窗口'],['prepare','保存并冻结本地更改'],['media','准备附件']])for(const mode of ['status','IPC']) {
+  const error={code:'account_sync_adoption_blocked',message:'private-response-sentinel',adoptionStage,adoptionReason:'timeout'};
+  const initial={...signedOutAccount(),state:'paused',profile:{subject:'fixture-B',displayName:'B'}};
+  const h=setup(t,{initial:mode==='status'?{...initial,error}:initial,reply:command=>{
+   if(mode==='IPC'&&command.type==='setEnabled')throw error;
+  }});await h.mount();
+  if(mode==='IPC') {
+   const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
+   await act(async()=>props(toggle).onChange({currentTarget:toggle,target:{checked:true}}));await h.click('开启并合并');
+   const modal=h.all().find(e=>e.localName==='dialog');assert(modal.textContent.includes(`${label}超时`));
+   await h.click('取消');
+  }
+  assert(h.text().includes('开启同步准备超时'));assert(h.text().includes(`${label}超时`));
+  assert(h.text().includes('请稍后重新确认开启同步'));assert(h.text().includes(`adoptionStage${adoptionStage}adoptionReasontimeout`));
+  assert(!h.text().includes('开启同步前需要处理旧同步内容'));assert(!h.text().includes('未解决冲突'));assert(!h.text().includes('private-response-sentinel'));
+  await h.tick();if(mode==='IPC')await h.click('读取账户状态');
+  assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,mode==='IPC'?1:0);
+  assert(!h.calls.some(c=>['signIn','signOut','syncNow'].includes(c.type)));assert.equal(h.handle().inspect().status.enabled,false);
+ }
+});
+
 test('instant Busy stays separate from old status across same-error polls, then clears on real progress',async t=>{
  for(const change of ['error','state']) {
   let failStatus=false;

@@ -19,8 +19,10 @@ type TokenField = typeof tokenFields[number];
 const requestReasons = ["timeout", "connect", "request", "responseBody", "httpStatus", "invalidResponse"] as const;
 type RequestReason = typeof requestReasons[number];
 const requestStages = ["coordinatorProfile", "coordinatorEnrollment", "coordinatorJwks"];
+const adoptionStages = ["probe", "prepare", "media"] as const;
+type AdoptionStage = typeof adoptionStages[number];
 const errorCodes = ["account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_sync_adoption_blocked", "account_window_invalid"];
-export type SafeError = { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number };
+export type SafeError = { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number; adoptionStage?: AdoptionStage; adoptionReason?: "timeout" };
 const transportKinds = ["webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
 type TransportKind = typeof transportKinds[number];
 type MappingObservation = { generation: number; sample: number; ageMs: number; enrollment: TransportKind; sync: TransportKind };
@@ -58,7 +60,7 @@ export function accountNeedsLogin(error: AccountStatus["error"]): boolean {
 export function accountTokenResponseMessage(error: AccountStatus["error"]): string | undefined {
   if (error?.code !== "account_auth_identity_invalid" || error.reason !== "responseMetadata" ||
     !tokenOperations.includes(error.tokenOperation as TokenOperation) || !tokenFields.includes(error.tokenField as TokenField) ||
-    error.stage !== undefined || error.providerReason !== undefined || "requestReason" in error || "httpStatus" in error) return undefined;
+    error.stage !== undefined || error.providerReason !== undefined || "requestReason" in error || "httpStatus" in error || "adoptionStage" in error || "adoptionReason" in error) return undefined;
   const operation = error.tokenOperation === "codeExchange" ? "登录响应" : "刷新响应";
   const field = { tokenType: "授权类型", accessToken: "访问授权", expiresIn: "有效期", scope: "授权范围" }[error.tokenField!];
   return `${operation}的${field}未通过校验。请检查服务或更新应用。本机备忘录会保留。`;
@@ -94,7 +96,7 @@ function text(value: unknown, max = 256): string {
 function bool(value: unknown): boolean { if (typeof value !== "boolean") return invalid(); return value; }
 function count(value: unknown): number { if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) return invalid(); return value; }
 export function validateAccountError(value: unknown): SafeError {
-  const error = record(value, ["code", "message", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus"]);
+  const error = record(value, ["code", "message", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason"]);
   if (!errorCodes.includes(text(error.code))) {
     text(error.message, 1000);
     if (Object.keys(error).some(key => key !== "code" && key !== "message")) return invalid();
@@ -103,6 +105,10 @@ export function validateAccountError(value: unknown): SafeError {
   if (error.stage !== undefined && (!networkStages.includes(error.stage as NetworkStage) || !["account_network", "account_authentication"].includes(error.code as string))) return invalid();
   if (error.reason !== undefined && (!identityReasons.includes(error.reason as IdentityReason) || error.code !== "account_auth_identity_invalid")) return invalid();
   if (error.providerReason !== undefined && (!providerReasons.includes(error.providerReason as ProviderReason) || error.code !== "account_authentication" || error.stage !== "authorizationProvider")) return invalid();
+  if ("adoptionStage" in error || "adoptionReason" in error) {
+    if (error.code !== "account_sync_adoption_blocked" || !adoptionStages.includes(error.adoptionStage as AdoptionStage) || error.adoptionReason !== "timeout" ||
+      Object.keys(error).some(key => !["code", "message", "adoptionStage", "adoptionReason"].includes(key))) return invalid();
+  }
   // Legacy responseMetadata may omit both details; partial or cross-branch details fail closed.
   if (("tokenOperation" in error || "tokenField" in error) &&
     (error.code !== "account_auth_identity_invalid" || error.reason !== "responseMetadata" ||
@@ -126,6 +132,7 @@ export function validateAccountError(value: unknown): SafeError {
     ...(error.tokenOperation === undefined ? {} : {tokenOperation: error.tokenOperation as TokenOperation, tokenField: error.tokenField as TokenField}),
     ...(error.requestReason === undefined ? {} : {requestReason: error.requestReason as RequestReason}),
     ...(error.httpStatus === undefined ? {} : {httpStatus: error.httpStatus as number}),
+    ...(error.adoptionStage === undefined ? {} : {adoptionStage: error.adoptionStage as AdoptionStage, adoptionReason: "timeout" as const}),
   };
 }
 
@@ -142,6 +149,10 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
   try { error = validateAccountError(error); } catch { return accountErrorMessage(undefined); }
   if (error.code === "unknown") return "未知错误。账户操作未完成，请读取账户状态后重试。本机备忘录会保留。";
   const token = accountTokenResponseMessage(error); if (token) return token;
+  if (error.adoptionReason === "timeout") {
+    const stage: Record<AdoptionStage, string> = {probe:"检查同步窗口",prepare:"保存并冻结本地更改",media:"准备附件"};
+    return `开启同步时，${stage[error.adoptionStage!]}超时。当前账户仍已登录且同步暂停，本机内容会保留。请稍后重新确认开启同步。`;
+  }
   const operation = error.stage ? stageNames[error.stage] : undefined;
   const at = operation ? `${operation}时` : "账户操作时";
   if (error.requestReason) {
@@ -196,7 +207,7 @@ export function accountErrorDetails(error: AccountStatus["error"]): [string, str
   if (!error) return [];
   try {
     const safe = validateAccountError(error);
-    return (["code", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus"] as const)
+    return (["code", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason"] as const)
       .flatMap(key => safe[key] === undefined ? [] : [[key, key === "code" && safe.code === "unknown" ? "未知错误" : String(safe[key])] as [string, string]]);
   } catch { return []; }
 }

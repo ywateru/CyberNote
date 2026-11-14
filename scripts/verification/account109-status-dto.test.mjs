@@ -104,6 +104,33 @@ test('adoption blocked is a finite local sync error, never an authentication or 
  }
  assert.equal(accountIPCError({...error,code:error.code+'_private-response-sentinel'}),undefined);
 });
+test('adoption timeout diagnostics are a strict finite pair with fixed stage copy and details',()=>{
+ const base={code:'account_sync_adoption_blocked',message:'private-response-sentinel'};
+ for(const [adoptionStage,label] of [['probe','检查同步窗口'],['prepare','保存并冻结本地更改'],['media','准备附件']]) {
+  const error={...base,adoptionStage,adoptionReason:'timeout'},parsed=validateAccountStatus(status(error));
+  assert.deepEqual(parsed.error,error);assert.equal(accountNeedsLogin(parsed.error),false);
+  assert.deepEqual(accountConnectionRetry(parsed),{type:'status'});
+  const copy=`开启同步时，${label}超时。当前账户仍已登录且同步暂停，本机内容会保留。请稍后重新确认开启同步。`;
+  assert.equal(accountErrorMessage(error),copy);assert.deepEqual(accountIPCError(error),{...error,message:copy});
+  assert.deepEqual(accountErrorDetails(error),[['code',base.code],['adoptionStage',adoptionStage],['adoptionReason','timeout']]);
+  assert(!/private|未解决冲突|重新登录/.test(copy));
+  assert.notEqual(accountErrorStateKey(status(base)),accountErrorStateKey(parsed));
+ }
+ const valid={...base,adoptionStage:'media',adoptionReason:'timeout'};
+ const invalids=[{...base,adoptionStage:'media'},{...base,adoptionReason:'timeout'},
+  ...[undefined,null,0,{},[],'private-response-sentinel'].flatMap(value=>[{...valid,adoptionStage:value},{...valid,adoptionReason:value}]),
+  ...['account_network','account_authentication','account_busy','unknown'].map(code=>({...valid,code})),
+  ...['stage','reason','providerReason','tokenOperation','tokenField','requestReason','httpStatus'].flatMap(key=>[{...valid,[key]:undefined},{...valid,[key]:'private-response-sentinel'}]),
+  {...valid,operationId:'private-operation'},{...valid,path:'private-path'},
+ ];
+ for(const error of invalids) {
+  assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);assert.equal(accountIPCError(error),undefined);
+  assert.deepEqual(accountErrorDetails(error),[]);assert(!accountErrorMessage(error).includes('超时'));
+ }
+ assert(accountErrorMessage(base).includes('旧同步仍有未解决冲突'));
+ assert(!accountErrorMessage(base).includes('超时'),'legacy generic adoption error never invents timeout');
+ assert.equal(accountTokenResponseMessage({code:'account_auth_identity_invalid',message:'safe',reason:'responseMetadata',tokenOperation:'refresh',tokenField:'scope',adoptionReason:'timeout'}),undefined);
+});
 test('legacy errors and fixed native network stages remain valid DTOs',()=>{
  assert.deepEqual(validateAccountStatus(status({code:'account_network',message:'safe'})).error,{code:'account_network',message:'safe'});
  for(const stage of ['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration'])
