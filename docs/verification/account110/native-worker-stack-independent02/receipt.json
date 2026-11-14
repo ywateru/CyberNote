@@ -1,0 +1,89 @@
+{
+  "sourceHead": "a50c9a4c74fea0d793f237f0a50901fda080e696",
+  "floorBytes": 6442450944,
+  "startedAt": "2026-11-14T10:30:20.355392+00:00",
+  "beforeFreeBytes": 10262794240,
+  "runs": [
+    {
+      "label": "account-default-parallel",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "--features",
+        "sync-e2e",
+        "--locked",
+        "--offline",
+        "account::",
+        "--",
+        "--nocapture"
+      ],
+      "startedAt": "2026-11-14T10:30:20.355684+00:00",
+      "finishedAt": "2026-11-14T10:30:25.370890+00:00",
+      "exitCode": 0,
+      "diskFloorTriggered": false,
+      "log": "account-default-parallel.stdout.txt",
+      "sha256": "0811ddc9841a7ddbda20396029eaa5ddb067c4b628e7a1a4a5df9f76e0f14ebb",
+      "passed": 75,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "label": "adoption",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "--features",
+        "sync-e2e",
+        "--locked",
+        "--offline",
+        "sync::adapter::adoption_tests",
+        "--",
+        "--nocapture"
+      ],
+      "startedAt": "2026-11-14T10:30:25.372134+00:00",
+      "finishedAt": "2026-11-14T10:30:26.375841+00:00",
+      "exitCode": 0,
+      "diskFloorTriggered": false,
+      "log": "adoption.stdout.txt",
+      "sha256": "7427f17c048af8d59faffb5556d996286656503f282a38cfdc29705e3afb0ee4",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "minimumFreeBytes": 10261151744,
+  "afterFreeBytes": 10262286336,
+  "finishedAt": "2026-11-14T10:30:26.376506+00:00",
+  "verdict": "APPROVE-source-and-fixture-verification-only",
+  "productPatch": "8c3fc430c7289a4e5a96f45f676612861037fd2e",
+  "fixturePatch": "08e4b6c76a4fd9f8b4e74b9625fa94be562d2de3",
+  "authorReceipt": "a50c9a4c74fea0d793f237f0a50901fda080e696",
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "locked": true,
+    "offline": true,
+    "parallelism": "default"
+  },
+  "targetReleased": true,
+  "noCompilerAtRelease": true,
+  "authorTreeCleanAfter": true,
+  "releaseFreeBytes": 10260873216,
+  "releasedAt": "2026-11-14T10:31:06.823386+00:00",
+  "historicalFailureReview": "ea1e04864b7dee642313827d99c2a246e634b18a",
+  "limits": [
+    "Historical author and independent 73/1 failures retained unchanged.",
+    "New lifecycle counterexample runs within full account group, not separately repeated.",
+    "No app, real login, network/device operation or private library/grant/Noise access.",
+    "Approval permits source integration/repackaging; does not establish live GUI crash resolution."
+  ]
+}
