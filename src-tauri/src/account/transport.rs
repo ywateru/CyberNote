@@ -3,7 +3,7 @@ use super::{
     config,
     enrollment::{Claims, Enrollment, Gate},
     private::Binding,
-    types::{Error, RequestFailure, Result},
+    types::{Error, RequestFailure, Result, SyncStage},
 };
 use crate::sync::{
     adapter,
@@ -1137,9 +1137,10 @@ async fn transfer_target(
                         move || {
                             action_service
                                 .recover_pairing(&action_id)
-                                .map_err(Error::from)
+                                .map_err(|reason| Error::SyncAt(SyncStage::RecoverPairing, reason))
                         },
-                        move || retire_service.disconnect(&id).map_err(Error::from),
+                        move || retire_service.disconnect(&id)
+                            .map_err(|reason| Error::SyncAt(SyncStage::Retirement, reason)),
                     )
                     .await?;
                 }
@@ -1152,8 +1153,10 @@ async fn transfer_target(
                 blocking_request(
                     stop,
                     &cancellation.admission_stop,
-                    move || action_service.pair(&token).map_err(Error::from),
-                    move || retire_service.disconnect(&id).map_err(Error::from),
+                    move || action_service.pair(&token)
+                        .map_err(|reason| Error::SyncAt(SyncStage::Pair, reason)),
+                    move || retire_service.disconnect(&id)
+                        .map_err(|reason| Error::SyncAt(SyncStage::Retirement, reason)),
                 )
                 .await?;
             }
@@ -1190,9 +1193,10 @@ async fn transfer_target(
             move || {
                 task_service
                     .transfer_once(&task_id, direction)
-                    .map_err(Error::from)
+                    .map_err(|reason| Error::SyncAt(SyncStage::Transfer, reason))
             },
-            move || retire_service.disconnect(&id).map_err(Error::from),
+            move || retire_service.disconnect(&id)
+                .map_err(|reason| Error::SyncAt(SyncStage::Retirement, reason)),
         )
         .await;
         drop(sampler);
@@ -1208,6 +1212,58 @@ async fn transfer_target(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[tokio::test]
+    async fn selected_device_sync_stage_survives_action_failure_without_changing_auth_fences() {
+        for stage in [SyncStage::Pair, SyncStage::RecoverPairing, SyncStage::Transfer] {
+            let stop = CancellationToken::new();
+            let admission = CancellationToken::new();
+            let error = Error::SyncAt(stage, SyncError::Authentication);
+            let retired = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+            let calls = retired.clone();
+            let result: Result<()> = blocking_request(
+                &stop, &admission, move || Err(error), move || {
+                    calls.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    Ok(())
+                },
+            ).await;
+            assert_eq!(result, Err(error));
+            assert!(admission.is_cancelled());
+            assert_eq!(retired.load(std::sync::atomic::Ordering::SeqCst), 1);
+            // These were Sync, not enrollment/identity authorization failures.
+            // A diagnostic reason must not close more authority than before.
+            let gate = Gate::default();
+            assert!(!fence_authorization(&gate, error));
+            assert!(gate.is_current());
+            assert!(!stop.is_cancelled());
+        }
+    }
+    #[tokio::test]
+    async fn classified_retirement_error_keeps_priority_and_cancellation_still_wins() {
+        for cancelled in [false, true] {
+            let stop = CancellationToken::new();
+            let action_stop = stop.clone();
+            let admission = CancellationToken::new();
+            let retired = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+            let calls = retired.clone();
+            let result: Result<()> = blocking_request(
+                &stop, &admission,
+                move || {
+                    if cancelled { action_stop.cancel(); }
+                    Err(Error::SyncAt(SyncStage::Transfer, SyncError::Transport))
+                },
+                move || {
+                    if calls.fetch_add(1, std::sync::atomic::Ordering::SeqCst) == 0 {
+                        Err(Error::SyncAt(SyncStage::Retirement, SyncError::Timeout))
+                    } else { Ok(()) }
+                },
+            ).await;
+            assert!(retired.load(std::sync::atomic::Ordering::SeqCst) >= 2);
+            assert!(admission.is_cancelled());
+            assert_eq!(result, Err(if cancelled { Error::Cancelled } else {
+                Error::SyncAt(SyncStage::Retirement, SyncError::Timeout)
+            }));
+        }
+    }
     #[tokio::test]
     async fn blocking_panic_still_fences_admission_and_confirms_retirement() {
         let stop = CancellationToken::new();

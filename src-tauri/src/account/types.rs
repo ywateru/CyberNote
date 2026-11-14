@@ -199,6 +199,20 @@ pub(crate) struct SafeError {
     pub adoption_stage: Option<AdoptionStage>,
     #[serde(rename = "adoptionReason", skip_serializing_if = "Option::is_none")]
     pub adoption_reason: Option<AdoptionReason>,
+    #[serde(rename = "syncStage", skip_serializing_if = "Option::is_none")]
+    pub sync_stage: Option<SyncStage>,
+    #[serde(rename = "syncReason", skip_serializing_if = "Option::is_none")]
+    pub sync_reason: Option<crate::sync::identity::SyncError>,
+}
+/// Selected-device operation boundaries only. Reasons reuse the existing finite,
+/// payload-free SyncError enum; neither field accepts provider text or identity.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum SyncStage {
+    Pair,
+    RecoverPairing,
+    Transfer,
+    Retirement,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -325,6 +339,7 @@ pub(crate) enum Error {
     Unsupported,
     CleanupRequired,
     Sync,
+    SyncAt(SyncStage, crate::sync::identity::SyncError),
     CoordinationProtocol,
     AdoptionBlocked,
     AdoptionTimeout(AdoptionStage),
@@ -363,7 +378,7 @@ impl Error {
             Self::Busy => "account_busy",
             Self::Unsupported => "account_platform_unsupported",
             Self::CleanupRequired => "account_cleanup_required",
-            Self::Sync => "account_sync_failed",
+            Self::Sync | Self::SyncAt(_, _) => "account_sync_failed",
             Self::CoordinationProtocol => "account_sync_protocol",
             Self::AdoptionBlocked | Self::AdoptionTimeout(_) => "account_sync_adoption_blocked",
             Self::WindowInvalid => "account_window_invalid",
@@ -426,6 +441,8 @@ impl Error {
             http_status: request_details.and_then(|(_, status)| status),
             adoption_stage: match self { Self::AdoptionTimeout(stage) => Some(stage), _ => None },
             adoption_reason: match self { Self::AdoptionTimeout(_) => Some(AdoptionReason::Timeout), _ => None },
+            sync_stage: match self { Self::SyncAt(stage, _) => Some(stage), _ => None },
+            sync_reason: match self { Self::SyncAt(_, reason) => Some(reason), _ => None },
         }
     }
 }
@@ -513,6 +530,44 @@ impl Error {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn selected_device_sync_diagnostics_are_an_exact_pair_of_finite_fields() {
+        use crate::sync::identity::SyncError as S;
+        let reasons = [
+            (S::Io, "io"), (S::InvalidInput, "invalid_input"),
+            (S::CorruptIdentity, "corrupt_identity"), (S::Authentication, "authentication"),
+            (S::Expired, "expired"), (S::Revoked, "revoked"),
+            (S::WorkspaceMismatch, "workspace_mismatch"), (S::Protocol, "protocol"),
+            (S::Limit, "limit"), (S::Timeout, "timeout"), (S::Stopped, "stopped"),
+            (S::Backend, "backend"), (S::PlanStale, "plan_stale"),
+            (S::Busy, "busy"), (S::Transport, "transport"),
+        ];
+        for (stage, label) in [
+            (SyncStage::Pair, "pair"), (SyncStage::RecoverPairing, "recoverPairing"),
+            (SyncStage::Transfer, "transfer"), (SyncStage::Retirement, "retirement"),
+        ] {
+            for (reason, reason_label) in reasons {
+                let value = serde_json::to_value(Error::SyncAt(stage, reason).safe()).unwrap();
+                assert_eq!(value, serde_json::json!({
+                    "code":"account_sync_failed",
+                    "message":"账户操作未完成，本机备忘录仍会保留。请检查账户状态后重试。",
+                    "syncStage":label, "syncReason":reason_label,
+                }));
+            }
+        }
+        // Other call sites retain their old generic conversion. A task join
+        // failure or native timeout must not invent a network SyncError reason.
+        for (reason, _) in reasons {
+            assert_eq!(Error::from(reason), Error::Sync);
+        }
+        for error in [Error::Sync, Error::Cancelled, Error::Busy, Error::InvalidProof,
+            Error::Network, Error::Storage, Error::OwnershipMismatch,
+            Error::NetworkAt(NetworkStage::Coordinator)] {
+            let value = serde_json::to_value(error.safe()).unwrap();
+            assert!(value.get("syncStage").is_none());
+            assert!(value.get("syncReason").is_none());
+        }
+    }
     #[test]
     fn device_commands_reject_unknown_shapes_and_directions() {
         let id = uuid::Uuid::new_v4().to_string();
