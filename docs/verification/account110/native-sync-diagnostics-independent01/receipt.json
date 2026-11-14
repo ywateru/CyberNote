@@ -1,0 +1,89 @@
+{
+  "sourceHead": "21963aa645e52db63b5a45b2b50871b436e92ade",
+  "sourceCommit": "c31a9b1c1cc4a7d56c73544fef987024b4111c3f",
+  "authorArchiveHashesVerified": 3,
+  "productFiles": [
+    {
+      "path": "src-tauri/src/account/types.rs",
+      "sha256": "019f500d28e984a8e7f2cab9d09bd5aa0343e5fc466b8a642e072c3f0a7ba041"
+    },
+    {
+      "path": "src-tauri/src/account/transport.rs",
+      "sha256": "8537f08171b48e18bf06eaed2898d90ee24bc4c888c661c9d38a9e5b37ea8919"
+    }
+  ],
+  "environment": {
+    "CARGO_TARGET_DIR": "/private/tmp/cybernote-account109-mac-ec4348c6-target-01",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "floorBytes": 6442450944,
+  "beforeFreeBytes": 10828460032,
+  "runs": [
+    {
+      "label": "selected-device",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "--features",
+        "sync-e2e",
+        "--locked",
+        "--offline",
+        "selected_device_sync",
+        "--",
+        "--nocapture"
+      ],
+      "startedAt": "2026-11-14T11:11:37.026996+00:00",
+      "finishedAt": "2026-11-14T11:11:38.544820+00:00",
+      "exitCode": 0,
+      "diskFloorTriggered": false,
+      "log": "selected-device.stdout.txt",
+      "sha256": "720e07596035d9026d2235d06c04e002a00fcf5ccda23ff36f372ad4614a695d"
+    },
+    {
+      "label": "retirement",
+      "command": [
+        "cargo",
+        "test",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--lib",
+        "--features",
+        "sync-e2e",
+        "--locked",
+        "--offline",
+        "classified_retirement_error_keeps_priority_and_cancellation_still_wins",
+        "--",
+        "--nocapture"
+      ],
+      "startedAt": "2026-11-14T11:11:38.545634+00:00",
+      "finishedAt": "2026-11-14T11:11:39.553319+00:00",
+      "exitCode": 0,
+      "diskFloorTriggered": false,
+      "log": "retirement.stdout.txt",
+      "sha256": "301124d135678955754d63e61370f1a587e7a0abb977be23e4cf3d1acd103bb2"
+    }
+  ],
+  "minimumFreeBytes": 10828460032,
+  "afterFreeBytes": 10829443072,
+  "verdict": "APPROVE-source-only",
+  "targetReleased": true,
+  "noCompilerAtRelease": true,
+  "authorTreeCleanAfter": true,
+  "releasedAt": "2026-11-14T11:12:01.584672+00:00",
+  "releaseFreeBytes": 10780364800,
+  "passed": 3,
+  "failed": 0,
+  "ignored": 0,
+  "scope": "Three new native tests only; author full account group 78/78 independently hash-checked, not rerun.",
+  "limits": [
+    "No real app, login, owned live library, device or external network operation.",
+    "Diagnostic-only change; historical live02 push remains failed with unknown typed reason.",
+    "UI independently reviewed elsewhere."
+  ]
+}

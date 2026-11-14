@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "verdict": "APPROVE-runner-only",
+  "reviewedAt": "2026-11-14T11:10:39.132495+00:00",
+  "sourceCommits": [
+    "ffff8f6dd2e79903569998fc878d3b78d84a2890",
+    "67587914dcbf4fa6990d25db014aa787749b0323"
+  ],
+  "authorReceipt": "ebc6091c8514f008fc16799dcb84c40dccf72a7e",
+  "contract": "47572b955d75ac7e7bffd1f46d2588eb454de1b0",
+  "command": [
+    "node",
+    "--test",
+    "scripts/verification/account110-device-actions.test.mjs"
+  ],
+  "passed": 29,
+  "failed": 0,
+  "skipped": 0,
+  "exitCode": 0,
+  "logSha256": "c512a5dffe87e3f360a024bae7af117c4f3c482164cc9ba4cc6549028c85ee42",
+  "verifiedSourceHashes": {
+    "scripts/verification/account110-device-actions.mjs": "20ddcc4aab9b766990e77a703c5af77678210daf8c247b59f78bf3a1275f212a",
+    "scripts/verification/account110-device-actions.test.mjs": "3e3271d38e6ef1a30985cbd51c52b84a78bddc084896c7099535fa0f85a4830e"
+  },
+  "authorTapHashesVerified": 3,
+  "authorInitialFixtureFailureRetained": true,
+  "cargoOrTargetUsed": false,
+  "realAppOrNetworkUsed": false,
+  "realLibraryOrCredentialRead": false,
+  "liveEvidenceChanged": false
+}

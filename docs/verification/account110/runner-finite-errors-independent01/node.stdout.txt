@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: prepare is the default; run requires exact finite inputs; credential/URL options rejected
+ok 1 - prepare is the default; run requires exact finite inputs; credential/URL options rejected
+  ---
+  duration_ms: 1.536583
+  type: 'test'
+  ...
+# Subtest: authorization timeout uses strict decimal bounded integers, startup/network budgets stay separate
+ok 2 - authorization timeout uses strict decimal bounded integers, startup/network budgets stay separate
+  ---
+  duration_ms: 0.251583
+  type: 'test'
+  ...
+# Subtest: strict status rejects malformed DTOs, duplicates, offline summaries and terminal errors
+ok 3 - strict status rejects malformed DTOs, duplicates, offline summaries and terminal errors
+  ---
+  duration_ms: 1.194
+  type: 'test'
+  ...
+# Subtest: safe reports contain finite device labels/counts, never profile, IDs, names or raw failures
+ok 4 - safe reports contain finite device labels/counts, never profile, IDs, names or raw failures
+  ---
+  duration_ms: 0.302083
+  type: 'test'
+  ...
+# Subtest: account failure retains only validated finite fields before parseStatus throws
+ok 5 - account failure retains only validated finite fields before parseStatus throws
+  ---
+  duration_ms: 0.648
+  type: 'test'
+  ...
+# Subtest: sync error diagnostics require exact paired enums and account_sync_failed
+ok 6 - sync error diagnostics require exact paired enums and account_sync_failed
+  ---
+  duration_ms: 2.121333
+  type: 'test'
+  ...
+# Subtest: request diagnostics preserve valid HTTP/code combinations and reject false or unknown details
+ok 7 - request diagnostics preserve valid HTTP/code combinations and reject false or unknown details
+  ---
+  duration_ms: 0.885584
+  type: 'test'
+  ...
+# Subtest: unknown account diagnostics never become report strings or inferred native reasons
+ok 8 - unknown account diagnostics never become report strings or inferred native reasons
+  ---
+  duration_ms: 0.249166
+  type: 'test'
+  ...
+# Subtest: observed fixed driver/bridge failures survive safe mapping; unknown errors and raw strings do not
+ok 9 - observed fixed driver/bridge failures survive safe mapping; unknown errors and raw strings do not
+  ---
+  duration_ms: 0.464917
+  type: 'test'
+  ...
+# Subtest: lifecycle distinguishes observed signal exits from unknown exit state without emitting private fields
+ok 10 - lifecycle distinguishes observed signal exits from unknown exit state without emitting private fields
+  ---
+  duration_ms: 0.575458
+  type: 'test'
+  ...
+# Subtest: native finalization waits for observed pipe close after exit or shutdown ACK
+ok 11 - native finalization waits for observed pipe close after exit or shutdown ACK
+  ---
+  duration_ms: 0.526125
+  type: 'test'
+  ...
+# Subtest: native failure retains observed signal/driver/cleanup codes and joins the healthy sibling
+ok 12 - native failure retains observed signal/driver/cleanup codes and joins the healthy sibling
+  ---
+  duration_ms: 0.459042
+  type: 'test'
+  ...
+# Subtest: unconfirmed close is bounded, remains failed, and does not invent exit or signal evidence
+ok 13 - unconfirmed close is bounded, remains failed, and does not invent exit or signal evidence
+  ---
+  duration_ms: 6.563792
+  type: 'test'
+  ...
+# Subtest: command builder accepts only fixed commands/directions and bounded names
+ok 14 - command builder accepts only fixed commands/directions and bounded names
+  ---
+  duration_ms: 0.616917
+  type: 'test'
+  ...
+# Subtest: direction expectations retain all existing content and exclude the reverse direction
+ok 15 - direction expectations retain all existing content and exclude the reverse direction
+  ---
+  duration_ms: 0.287333
+  type: 'test'
+  ...
+# Subtest: bounded wait and negative observation sample the full finite window; failures stop immediately
+ok 16 - bounded wait and negative observation sample the full finite window; failures stop immediately
+  ---
+  duration_ms: 0.777167
+  type: 'test'
+  ...
+# Subtest: syncDevice is submitted exactly once and outlives the 60s driver request ceiling
+ok 17 - syncDevice is submitted exactly once and outlives the 60s driver request ceiling
+  ---
+  duration_ms: 17.224542
+  type: 'test'
+  ...
+# Subtest: async command rejection, wrong receipt, status error and timeout all fail without replay
+ok 18 - async command rejection, wrong receipt, status error and timeout all fail without replay
+  ---
+  duration_ms: 2.158375
+  type: 'test'
+  ...
+# Subtest: both status polling and command terminal retain finite failure details without replay or acceptance
+ok 19 - both status polling and command terminal retain finite failure details without replay or acceptance
+  ---
+  duration_ms: 1.267667
+  type: 'test'
+  ...
+# Subtest: owned filesystem checks reject traversal and symlinks; prepare creates no clients
+ok 20 - owned filesystem checks reject traversal and symlinks; prepare creates no clients
+  ---
+  duration_ms: 8.182458
+  type: 'test'
+  ...
+# Subtest: exact package identity, clean source and executable bytes are required before any launch
+ok 21 - exact package identity, clean source and executable bytes are required before any launch
+  ---
+  duration_ms: 9.247625
+  type: 'test'
+  ...
+# Subtest: run verifies deployment evidence before any client and always passes an owned fresh data-dir
+ok 22 - run verifies deployment evidence before any client and always passes an owned fresh data-dir
+  ---
+  duration_ms: 19.769333
+  type: 'test'
+  ...
+# Subtest: deployment receipt validates successful state and exact source/deployment/hash, not arbitrary hashed text
+ok 23 - deployment receipt validates successful state and exact source/deployment/hash, not arbitrary hashed text
+  ---
+  duration_ms: 0.604833
+  type: 'test'
+  ...
+# Subtest: observation continues after a slow first or later sample until both conditions are satisfied
+ok 24 - observation continues after a slow first or later sample until both conditions are satisfied
+  ---
+  duration_ms: 0.380334
+  type: 'test'
+  ...
+# Subtest: observation fails within the total budget, preserves check errors, and bounds a stuck read
+ok 25 - observation fails within the total budget, preserves check errors, and bounds a stuck read
+  ---
+  duration_ms: 11.240666
+  type: 'test'
+  ...
+# Subtest: probe success waits for close, not merely stdout or exit
+ok 26 - probe success waits for close, not merely stdout or exit
+  ---
+  duration_ms: 0.517042
+  type: 'test'
+  ...
+# Subtest: probe timeout, output limit and stdin error retain ownership until close and escalate ignored SIGTERM
+ok 27 - probe timeout, output limit and stdin error retain ownership until close and escalate ignored SIGTERM
+  ---
+  duration_ms: 0.477375
+  type: 'test'
+  ...
+# Subtest: probe final cleanup failure preserves original error and registry ownership for later confirmation
+ok 28 - probe final cleanup failure preserves original error and registry ownership for later confirmation
+  ---
+  duration_ms: 0.180542
+  type: 'test'
+  ...
+# Subtest: aborted observation cancels only its owned probe and final cleanup waits for close
+ok 29 - aborted observation cancels only its owned probe and final cleanup waits for close
+  ---
+  duration_ms: 0.168333
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 152.7735
