@@ -71,4 +71,4 @@ type AccountStatus = {
 
 ## 验收
 
-真实Logto托管注册→登录、取消/错误state、回跳校验、refresh/重启恢复、退出关闭、跨账号拒绝；同账号两个独立桌面数据目录自动发现/配对，完整中文格式document/plainText与PNG/文件原字节双向一致，离线补齐、并发冲突、重启身份保持；少量真实Android同账号发现/同步/恢复。测试必须说明真实边界，fixture不能替代Logto/Vercel/Redis/CyberGrid和实际原生同步链。服务器验JWT负例、产品隔离、无认证请求、并发workspace一致和TLS Redis冷启动；公开部署健康及真实认证API通过后才称部署完成。
+真实Logto托管注册→登录、取消/错误state、回跳校验、refresh/重启恢复、退出关闭、同库更换账户与异账户远程连接拒绝；同账号两个独立桌面数据目录自动发现/配对，完整中文格式document/plainText与PNG/文件原字节双向一致，离线补齐、并发冲突、重启身份保持；少量真实Android同账号发现/同步/恢复。测试必须说明真实边界，fixture不能替代Logto/Vercel/Redis/CyberGrid和实际原生同步链。服务器验JWT负例、产品隔离、无认证请求、并发workspace一致和TLS Redis冷启动；公开部署健康及真实认证API通过后才称部署完成。
