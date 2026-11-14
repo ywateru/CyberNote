@@ -516,6 +516,7 @@ async fn directory_owner(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::sync::network::ReplicationPolicy;
     #[tokio::test]
     async fn real_owner_futures_have_bounded_composition_and_poll_on_small_stack() {
         use std::{
@@ -774,6 +775,148 @@ mod tests {
             gate,
         )
     }
+    #[tokio::test(start_paused = true)]
+    async fn unified_deadline_allows_preparation_beyond_sixty_seconds() {
+        let start = tokio::time::Instant::now();
+        let cancellation = Arc::new(RequestCancellation::default());
+        let (request, receiver, control, gate) = queued(cancellation.clone());
+        let work = async {
+            let stop = CancellationToken::new();
+            let outcome = execute_request(&cancellation, &stop, async {
+                transport::prepare_request(&stop, async {
+                    // Actual probe map durations, followed by bootstrap/pair work.
+                    tokio::time::sleep(Duration::from_millis(33_026)).await;
+                    tokio::time::sleep(Duration::from_millis(28_400)).await;
+                    tokio::time::sleep(Duration::from_secs(2)).await;
+                    assert!(gate.is_current());
+                    Ok(())
+                })
+                .await?;
+                assert!(control.busy());
+                tokio::time::sleep(Duration::from_secs(10)).await;
+                assert!(!cancellation.stop.is_cancelled());
+                Ok(())
+            })
+            .await;
+            request.complete(outcome);
+        };
+        let (result, ()) = tokio::join!(wait_request(receiver, cancellation.clone()), work);
+        assert_eq!(result, Ok(()));
+        assert_eq!(start.elapsed(), Duration::from_millis(73_426));
+        assert!(!control.busy());
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn unified_deadline_spans_preparation_and_transfer_and_waits_for_retirement() {
+        tokio::time::timeout(Duration::from_secs(300), async {
+            let start = tokio::time::Instant::now();
+            let cancellation = Arc::new(RequestCancellation::default());
+            let (request, receiver, control, gate) = queued(cancellation.clone());
+            let retiring = Arc::new(Notify::new());
+            let work_retiring = retiring.clone();
+            let work_cancellation = cancellation.clone();
+            let work_gate = gate.clone();
+            let (release, released) = oneshot::channel();
+            let worker = tokio::spawn(async move {
+                let stop = CancellationToken::new();
+                let outcome = execute_request(&work_cancellation, &stop, async {
+                transport::prepare_request(&stop, async {
+                    tokio::time::sleep(Duration::from_secs(100)).await;
+                    Ok(())
+                })
+                .await?;
+                tokio::select! {
+                    biased;
+                    _ = stop.cancelled() => {
+                        assert!(!work_gate.is_current());
+                        assert!(work_gate.authorize("late-device", "late-key").is_err());
+                        work_retiring.notify_one();
+                        let _ = released.await;
+                        Ok(()) // A late success cannot override the expired request.
+                    },
+                    _ = tokio::time::sleep(Duration::from_secs(90)) => {
+                        panic!("transfer received a fresh deadline instead of the remaining budget")
+                    },
+                }
+            })
+            .await;
+                request.complete(outcome);
+            });
+            let waiter = tokio::spawn(wait_request(receiver, cancellation.clone()));
+            retiring.notified().await;
+            assert_eq!(start.elapsed(), Duration::from_secs(185));
+            assert!(cancellation.stop.is_cancelled());
+            assert!(!gate.is_current());
+            assert!(!worker.is_finished());
+            assert!(!waiter.is_finished());
+            assert!(control.busy());
+            assert_eq!(
+                control
+                    .reserve(
+                        control.epoch().unwrap(),
+                        &Arc::new(RequestCancellation::default())
+                    )
+                    .err(),
+                Some(Error::Busy)
+            );
+            release.send(()).unwrap();
+            worker.await.unwrap();
+            assert_eq!(waiter.await.unwrap(), Err(Error::Sync));
+            assert!(!control.busy());
+        })
+        .await
+        .unwrap();
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn unified_deadline_dropped_waiter_drains_long_preparation_without_late_admission() {
+        tokio::time::timeout(Duration::from_secs(300), async {
+            let cancellation = Arc::new(RequestCancellation::default());
+            let (request, receiver, control, gate) = queued(cancellation.clone());
+            let entered = Arc::new(Notify::new());
+            let work_entered = entered.clone();
+            let retiring = Arc::new(Notify::new());
+            let work_retiring = retiring.clone();
+            let work_cancellation = cancellation.clone();
+            let work_gate = gate.clone();
+            let (release, released) = oneshot::channel();
+            let worker = tokio::spawn(async move {
+                let stop = CancellationToken::new();
+                let outcome = execute_request(&work_cancellation, &stop, async {
+                    transport::prepare_request(&stop, async {
+                        work_entered.notify_one();
+                        stop.cancelled().await;
+                        assert!(!work_gate.is_current());
+                        assert!(work_gate.authorize("late-device", "late-key").is_err());
+                        work_retiring.notify_one();
+                        let _ = released.await;
+                        Ok(())
+                    })
+                    .await?;
+                    panic!("cancelled preparation must not reach transfer")
+                })
+                .await;
+                assert_eq!(outcome, Err(Error::Cancelled));
+                request.complete(outcome);
+            });
+            let waiter = tokio::spawn(wait_request(receiver, cancellation.clone()));
+            entered.notified().await;
+            tokio::time::sleep(Duration::from_millis(61_426)).await;
+            assert!(!cancellation.stop.is_cancelled());
+            assert!(!worker.is_finished());
+            waiter.abort();
+            assert!(waiter.await.unwrap_err().is_cancelled());
+            retiring.notified().await;
+            assert!(control.busy());
+            assert!(!worker.is_finished());
+            release.send(()).unwrap();
+            worker.await.unwrap();
+            assert!(!control.busy());
+        })
+        .await
+        .unwrap();
+    }
+
     #[tokio::test]
     async fn request_deadline_before_dequeue_never_starts_and_remains_busy_until_receipt() {
         tokio::time::timeout(Duration::from_secs(3), async {

@@ -713,6 +713,20 @@ where
     }
 }
 
+// Preparation consumes the existing request deadline, not a separate stage
+// budget. Cancellation still waits for the preparation owner to finish.
+pub(super) async fn prepare_request<T, F>(stop: &CancellationToken, prepare: F) -> Result<T>
+where
+    F: std::future::Future<Output = Result<T>>,
+{
+    tokio::pin!(prepare);
+    tokio::select! {
+        biased;
+        _ = stop.cancelled() => { let _ = prepare.await; Err(Error::Cancelled) },
+        prepared = &mut prepare => prepared,
+    }
+}
+
 pub(crate) fn transient_sdk(error: &cybergrid_sdk::Error) -> bool {
     matches!(
         error,
@@ -1165,17 +1179,7 @@ async fn transfer_target(
                 .ok_or(Error::InvalidProof)?;
             Ok((id, sampler))
         };
-        tokio::pin!(prepare);
-        let (id, sampler) = tokio::select! {
-            biased;
-            _=stop.cancelled()=>{ let _=prepare.await; return Err(Error::Cancelled); },
-            _=tokio::time::sleep(Duration::from_secs(60))=>{
-                cancellation.stop.cancel();
-                let _=prepare.await;
-                return Err(Error::Network);
-            },
-            prepared=&mut prepare=>prepared?,
-        };
+        let (id, sampler) = prepare_request(stop, prepare).await?;
         if stop.is_cancelled() || !gate.is_current() {
             return Err(Error::Cancelled);
         }

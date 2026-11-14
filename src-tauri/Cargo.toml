@@ -60,6 +60,7 @@ ndk-context = "0.1"
 [target.'cfg(target_os = "macos")'.dependencies]
 tauri-plugin-notes-ui = { path = "../plugins/tauri-plugin-notes-ui" }
 [dev-dependencies]
+tokio = { version = "1", features = ["test-util"] }
 p384 = { version = "0.13", features = ["pem", "pkcs8"] }
 tempfile = "3"
 rusqlite = { version = "0.32", features = ["hooks"] }
