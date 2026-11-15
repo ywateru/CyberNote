@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { UserRound, Laptop, Smartphone } from "lucide-react";
-import { accountCommand, accountConnectionRetry, accountNeedsLogin, accountErrorMessage, accountErrorDetails, accountErrorStateKey, AccountCommandFailure, deviceName, type DeviceDirection, type SafeError, type AccountAuthorizationSurface, type AccountCommand, type AccountStatus } from "./account-client";
+import { UserRound, Laptop, Smartphone, MonitorSmartphone, RefreshCw, ChevronRight, Pencil, FileText, Check, LoaderCircle } from "lucide-react";
+import { accountCommand, accountConnectionRetry, accountNeedsLogin, accountErrorMessage, accountErrorDetails, accountErrorStateKey, AccountCommandFailure, deviceName, type AccountDevice, type DeviceDirection, type SafeError, type AccountAuthorizationSurface, type AccountCommand, type AccountStatus } from "./account-client";
 import { formatFileTime } from "./data-management";
 import "./AccountSettings.css";
 
@@ -30,6 +30,14 @@ function targetIssue(status: AccountStatus | null, target: DeviceTarget | null, 
 function ErrorDetails({error}: {error: AccountStatus["error"]}) {
   const details = accountErrorDetails(error);
   return details.length ? <details className="account-error-details"><summary>错误详情</summary><dl>{details.map(([key,value]) => <div key={key}><dt>{key === "syncStage" ? "同步阶段" : key === "syncReason" ? "失败原因" : key}</dt><dd>{value}</dd></div>)}</dl></details> : null;
+}
+
+function DeviceInfo({device}: {device: AccountDevice}) {
+  return <span className="account-device-info">
+    <span className="account-device-title"><strong>{device.name || "未命名设备"}</strong>{device.current && <span className="account-current-badge"><Check aria-hidden="true" />此设备</span>}</span>
+    <span id={`account-device-status-${device.id}`} className="account-device-status"><span className={`account-status-dot${device.online ? " is-online" : ""}`} aria-hidden="true" /><span>{device.online ? "在线" : "离线"}</span>{device.online && <span className="account-device-availability">{device.syncAvailable ? "可同步" : "同步已暂停或暂不可用"}</span>}</span>
+    <span id={`account-device-summary-${device.id}`} className="account-device-summary">{!device.online ? "上线后可查看笔记信息" : !device.summary ? "笔记信息暂不可用" : <><span className="account-device-count"><FileText aria-hidden="true" />{device.summary.noteCount} 篇笔记</span><span>{device.summary.lastNoteUpdatedAt === null ? "暂无笔记更新时间" : `笔记更新于 ${formatFileTime(device.summary.lastNoteUpdatedAt)}`}</span></>}</span>
+  </span>;
 }
 
 export default function AccountSettings({ active, onHandle, onConflicts }: {
@@ -251,6 +259,10 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const nativeBusy = status?.error?.code === "account_busy" || status?.error?.providerReason === "busy" || status?.deviceOperation?.phase === "running";
   const needsLogin = accountNeedsLogin(status?.error);
   const connectionRetry = status ? accountConnectionRetry(status) : { type: "status" } as const;
+  const refreshing = workingType === "syncNow";
+  const devices = status ? [...status.devices.filter(device => device.current), ...status.devices.filter(device => !device.current)] : [];
+  const remoteCount = devices.filter(device => !device.current).length;
+  const localMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
   const browserOpenFailed = status?.state === "authorizing" && status.authorizationSurface === "embedded" &&
     status.error?.code === "account_network" && status.error.stage === "browserOpen";
   const pendingMessage = status?.authorizationSurface === "embedded"
@@ -276,9 +288,9 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     {commandError && <div className="account-error account-command-error" role="alert"><h4>{commandAdoptionTimeout ? "开启同步准备超时" : commandAdoptionBlocked ? "开启同步前需要处理旧同步内容" : `本次${commandNames[commandError.command]}未完成`}</h4><p>{error}</p><ErrorDetails error={commandError.safeError} />
       {commandAdoptionBlocked && !!status?.conflictCount && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
       <button type="button" disabled={busy} onClick={retryRequest}>{commandAdoptionBlocked ? "读取账户状态" : "重试"}</button></div>}
-    {!status && !error && <p role="status">正在读取账户状态…</p>}
+    {!status && !error && <p className="account-loading" role="status"><LoaderCircle className="account-spinner" aria-hidden="true" />正在读取账户状态…</p>}
     {(status || error) && <>
-      <section className="account-group" aria-label="CyberNote 账户">
+      <section className={`account-group account-profile-group${signedIn ? " is-signed-in" : ""}`} aria-label="CyberNote 账户">
         <div className="account-profile"><span className="account-avatar" aria-hidden="true"><UserRound /></span><div>
           <h4>{signedIn ? status?.profile?.displayName || "CyberNote 账户" : authorizing ? "正在等待登录" : "登录 CyberNote"}</h4>
           {signedIn ? <p className="account-identifier">{status?.profile?.username || status?.profile?.subject}</p> : <p>{authorizing ? pendingMessage : "本地备忘录不绑定账户。你可以登录任意账户，用于该账户的多端同步。登录后同步默认暂停。"}</p>}
@@ -308,28 +320,31 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         {!cleanupRequired && connectionRetry.type !== "status" && <button type="button" disabled={busy || nativeBusy} onClick={() => request(connectionRetry.type === "signIn" || connectionRetry.type === "signUp" ? { type: connectionRetry.type, surface: loginSurface } : connectionRetry)}>{connectionRetry.type === "signIn" ? needsLogin ? "重新登录" : "重试登录" : "重试连接"}</button>}
       </section>}
       {signedIn && status && <>
-        <section className="account-group" aria-label="账户同步">
+        <section className="account-group account-sync-group" aria-label="账户同步">
           <div className="account-toggle"><label htmlFor="account-enabled">同步此设备</label><span className="account-switch"><input id="account-enabled" type="checkbox" role="switch" checked={status.enabled} disabled={busy || nativeBusy || identityMismatch || needsLogin || cleanupRequired} onChange={event => request({ type: "setEnabled", enabled: event.target.checked }, false, event.currentTarget)} /><span className="account-switch-track" aria-hidden="true" /></span></div>
           <p className="account-help">{status.enabled ? "允许与选定设备收发笔记及附件。开启后不会自动传输，离线时仍可编辑。" : "内容同步许可已关闭。你仍保持登录，设备目录继续更新，本地更改保存在此设备。"}</p>
-          <p className="account-state">{states[status.state]}</p>
+          <p className="account-state"><span className={`account-status-dot${status.state === "ready" ? " is-online" : ""}`} aria-hidden="true" />{states[status.state]}</p>
           <dl className="account-metrics"><div><dt>待应用</dt><dd>{status.pendingCount} 项</dd></div><div><dt>最近成功传输</dt><dd>{status.lastSyncAt === undefined ? "尚无成功传输记录" : formatFileTime(status.lastSyncAt)}</dd></div></dl>
           <div className="account-actions">
             {!adoptionBlocked && !commandAdoptionBlocked && status.conflictCount > 0 && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
           </div>
         </section>
-        <section className="account-group" aria-label="账户设备">
-          <div className="account-device-heading"><h4>此账户的设备</h4><button type="button" disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={() => request({type:"syncNow"})}>刷新设备</button></div>
-          {!status.devices.some(device => !device.current) && <p className="account-help">在另一台设备登录同一账户，即可选择设备同步。</p>}
-          {status.devices.length > 0 && <ul className="account-devices">{status.devices.map(device => <li key={device.id} data-device-id={device.id}>
-            {device.current ? <Laptop aria-hidden="true" /> : <Smartphone aria-hidden="true" />}
-            <div className="account-device-info">
-              {device.current ? <strong>{device.name || "未命名设备"}</strong> : <button type="button" className="account-device-open" disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={event => ask("syncDevice", event.currentTarget, device.id)}>{device.name || "未命名设备"}<span aria-hidden="true"> ›</span></button>}
-              <p>{device.current ? "此设备 · " : ""}{device.online ? "在线" : "离线"}{device.online ? device.syncAvailable ? " · 可同步" : " · 同步已暂停或暂不可用" : ""}</p>
-              <p>{!device.online ? "设备上线后可查看笔记数量和更新时间" : !device.summary ? "笔记信息暂不可用" : <>{device.summary.noteCount} 篇笔记 · {device.summary.lastNoteUpdatedAt === null ? "暂无笔记更新时间" : `笔记更新于 ${formatFileTime(device.summary.lastNoteUpdatedAt)}`}</>}</p>
-            </div>
-            {device.current && <button type="button" disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={event => ask("renameDevice", event.currentTarget)}>更改名称</button>}
+        <section className="account-group account-device-group" aria-label="账户设备">
+          <div className="account-device-heading"><div><h4>我的设备</h4><p className="account-help">选择其他设备，开始一次同步</p></div><button type="button" className="account-refresh" aria-busy={refreshing} disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={() => request({type:"syncNow"})}><RefreshCw className={refreshing ? "account-spinner" : undefined} aria-hidden="true" /><span>{refreshing ? "正在刷新…" : "刷新设备"}</span></button></div>
+          <span className="account-accessible-state" role="status" aria-live="polite">{refreshing ? "正在刷新设备列表" : ""}</span>
+          {devices.length > 0 && <ul className="account-devices" aria-busy={refreshing}>{devices.map(device => <li key={device.id} data-device-id={device.id} className={device.current ? "account-device-current" : "account-device-remote"}>
+            {device.current ? <>
+              <span className="account-device-icon" aria-hidden="true">{localMobile ? <Smartphone /> : <Laptop />}</span>
+              <DeviceInfo device={device} />
+              <button type="button" className="account-rename" title="更改名称" disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={event => ask("renameDevice", event.currentTarget)}><Pencil aria-hidden="true" /><span>更改名称</span></button>
+            </> : <button type="button" className="account-device-open" aria-label={device.name || "未命名设备"} aria-describedby={`account-device-status-${device.id} account-device-summary-${device.id}`} disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={event => ask("syncDevice", event.currentTarget, device.id)}>
+              <span className="account-device-icon" aria-hidden="true"><MonitorSmartphone /></span>
+              <DeviceInfo device={device} />
+              <ChevronRight className="account-device-chevron" aria-hidden="true" />
+            </button>}
           </li>)}</ul>}
-          <p className="account-help">设备目录独立于内容同步许可。只有明确选择设备与方向后才会传输；在线和笔记更新时间分别显示。</p>
+          {!remoteCount && <div className="account-devices-empty"><MonitorSmartphone aria-hidden="true" /><div><strong>连接你的另一台设备</strong><p>在另一台设备登录同一账户，即可在这里选择同步。</p></div></div>}
+          <p className="account-help account-device-footnote">刷新仅更新设备状态。选择设备并确认同步方向后，才会传输笔记与附件。</p>
         </section>
       </>}
     </>}
@@ -362,7 +377,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       {commandError?.command === (deviceDialog ? confirmation : confirmation === "signOut" ? "signOut" : "setEnabled") && <><p className="account-confirmation-error" role="alert">{error}</p>{deviceDialog && <ErrorDetails error={commandError.safeError} />}</>}
       <div className="account-actions"><button ref={cancelButton} type="button" disabled={busy} onClick={dismiss}>取消</button><button ref={confirmButton} className="account-primary" type="button" disabled={busy || (deviceDialog && (nativeBusy || !!issue || needsLogin || cleanupRequired || identityMismatch))} onClick={confirm}>{confirmation === "signOut" ? "确认退出" : confirmation === "enable" ? "允许同步" : confirmation === "renameDevice" ? "保存名称" : "开始同步"}</button></div>
     </dialog>}
-    <p className="account-notice" role="status">{notice}</p>
+    <p className="account-notice" role="status">{notice && <Check aria-hidden="true" />}{notice}</p>
     <p className="account-help">本地使用不需要账户。</p>
   </div>;
 }

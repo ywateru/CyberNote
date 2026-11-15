@@ -36,3 +36,9 @@ src-tauri/gen/android/.tauri/
 *.pfx
 *.key
 *.pem
+
+# Local editor state and package cache are never source inputs.
+*.swp
+*.swo
+*~
+.pnpm-store/

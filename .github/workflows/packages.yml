@@ -10,6 +10,24 @@ concurrency:
   group: native-packages-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  website-and-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check exact source-only inventory
+        run: node scripts/publish/verify.mjs
+      - name: Install locked coordinator dependencies
+        run: npm --prefix services/coordinator ci --include=dev
+      - name: Test account boundaries and build website
+        run: |
+          npm --prefix services/coordinator test
+          npm --prefix services/coordinator run build:vercel
   macos-arm64:
     runs-on: macos-15
     timeout-minutes: 60

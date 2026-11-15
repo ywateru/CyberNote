@@ -4,6 +4,25 @@ Private source distribution of a local notes application for macOS and Android,
 with a separate Node coordinator service. Local development history, user stores,
 device evidence, credentials and installation packages are not part of this tree.
 
+Repository: [ywateru/CyberNote](https://github.com/ywateru/CyberNote).
+Download narrowly staged build artifacts from [GitHub Actions](https://github.com/ywateru/CyberNote/actions/workflows/packages.yml)
+after the packaging jobs succeed. Repository access is required while private.
+The macOS ZIP is not notarized; the Android release APK is unsigned and needs
+your own signing before installation. No signing keys are included in source or artifacts.
+
+## Product website and account
+
+`services/coordinator/public/` contains the responsive CyberNote product homepage
+and account/device console. Product, source and build links are real. Account
+login uses the existing same-origin OIDC/PKCE console flow; the site does not
+store passwords or expose a cloud note editor. The website design, routes,
+account states and deployment requirements are described in
+[WEBSITE.md](services/coordinator/WEBSITE.md).
+
+Run the coordinator with a dedicated configured environment to serve the website
+and API together. Website/account tests and the Vercel build also run in Actions.
+CI does not deploy or modify existing production infrastructure.
+
 ## Build
 
 Use Node 22, pnpm 10.15.0 and a compatible Rust toolchain (CI pins Rust 1.97.1,

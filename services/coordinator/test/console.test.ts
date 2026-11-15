@@ -73,14 +73,14 @@ test('old denied read cannot clear a later login session',async()=>{
  assert.equal(f.run('session.user.id'),'NewUser');assert.doesNotMatch(f.run("$('message').textContent"),/do-not-display/);
 });
 
-test('vendored public deploy buttons retain upstream static product configuration',async()=>{
- const expected=['LOGTO_ISSUER','LOGTO_RESOURCE','LOGTO_BROWSER_CLIENT_ID','CYBERGRID_PRODUCTS','CYBERGRID_REDIS_TRANSPORT','KV_REST_API_URL','KV_REST_API_TOKEN'].sort();
- // The upstream repository README is not part of this runtime-only vendor.
- for(const name of ['../public/index.html']){
-  const source=await readFile(new URL(name,import.meta.url),'utf8');
-  const links=source.match(/https:\/\/vercel\.com\/new[^\s"<>)]*/g)||[];assert.ok(links.length);
-  for(const href of links){const url=new URL(href.replaceAll('&amp;','&'));assert.deepEqual(url.searchParams.get('env')!.split(',').sort(),expected);assert.equal(url.searchParams.get('repository-url'),'https://github.com/ywateru/CyberGrid');}
- }
- const page=await readFile(new URL('../public/index.html',import.meta.url),'utf8');assert.match(page,/CYBERGRID_REDIS_TRANSPORT=vercel-kv/);
- const a=await readFile(new URL('../public/console/index.html',import.meta.url),'utf8'),b=await readFile(new URL('../public/console/callback/index.html',import.meta.url),'utf8');assert.equal(a,b);assert.match(a,/canonical 产品/);
+test('CyberNote product page exposes real source, build and account entry points',async()=>{
+ const page=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
+ assert.match(page,/<title>CyberNote/);
+ assert.match(page,/https:\/\/github\.com\/ywateru\/CyberNote\/actions\/workflows\/packages\.yml/);
+ assert.match(page,/href="\/console\/"/);
+ assert.match(page,/不保存笔记正文与附件/);
+ assert.match(page,/未签名/);
+ assert.doesNotMatch(page,/https:\/\/vercel\.com\/new/);
+ const a=await readFile(new URL('../public/console/index.html',import.meta.url),'utf8'),b=await readFile(new URL('../public/console/callback/index.html',import.meta.url),'utf8');
+ assert.equal(a,b);assert.match(a,/canonical 产品/);assert.match(a,/账户与设备 · CyberNote/);
 });
