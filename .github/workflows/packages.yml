@@ -24,6 +24,10 @@ jobs:
         run: node scripts/publish/verify.mjs
       - name: Install locked coordinator dependencies
         run: npm --prefix services/coordinator ci --include=dev
+      - name: Install isolated Redis test prerequisite
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y redis-server
       - name: Test account boundaries and build website
         run: |
           npm --prefix services/coordinator test
@@ -96,6 +100,8 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
       - name: Install exact SDK and NDK
         run: |
           sdkmanager 'platform-tools' 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.2.12479018'
