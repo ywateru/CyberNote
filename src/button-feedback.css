@@ -1,0 +1,77 @@
+/* Shared feedback overlays preserve each button's primary/selected styling. */
+:root {
+  --button-hover: rgb(0 0 0 / 8%);
+  --button-pressed: rgb(0 0 0 / 18%);
+  --button-activated: rgb(0 0 0 / 14%);
+  --button-selected: rgb(255 184 36 / 20%);
+  --button-selected-hover: rgb(255 184 36 / 28%);
+}
+.dark {
+  --button-hover: rgb(255 255 255 / 12%);
+  --button-pressed: rgb(255 255 255 / 27%);
+  --button-activated: rgb(255 255 255 / 21%);
+  --button-selected: rgb(255 184 36 / 24%);
+  --button-selected-hover: rgb(255 184 36 / 32%);
+}
+:where(button, [role="button"], summary) {
+  transition:
+    box-shadow 90ms ease,
+    background-color 90ms ease,
+    color 90ms ease;
+}
+:where(button, [role="button"], summary):not(:disabled):not(
+    [aria-disabled="true"]
+  ):is(
+    [aria-pressed="true"],
+    [aria-selected="true"],
+    [aria-expanded="true"][aria-haspopup="menu"],
+    .active,
+    .selected
+  ),
+details[open] > summary {
+  box-shadow: inset 0 0 0 999px var(--button-selected) !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  :where(button, [role="button"], summary):not(:disabled):not(
+      [aria-disabled="true"]
+    ):hover {
+    cursor: pointer;
+    box-shadow: inset 0 0 0 999px var(--button-hover) !important;
+  }
+  :where(button, [role="button"], summary):not(:disabled):not(
+      [aria-disabled="true"]
+    ):is(
+      [aria-pressed="true"],
+      [aria-selected="true"],
+      [aria-expanded="true"][aria-haspopup="menu"],
+      .active,
+      .selected
+    ):hover,
+  details[open] > summary:hover {
+    box-shadow: inset 0 0 0 999px var(--button-selected-hover) !important;
+  }
+}
+:where(button, [role="button"], summary):not(:disabled):not(
+    [aria-disabled="true"]
+  )[data-button-activated] {
+  box-shadow: inset 0 0 0 999px var(--button-activated) !important;
+}
+:where(button, [role="button"], summary):not(:disabled):not(
+    [aria-disabled="true"]
+  ):active {
+  transition-duration: 0s;
+  box-shadow: inset 0 0 0 999px var(--button-pressed) !important;
+}
+:where(button, [role="button"], summary):is(:disabled, [aria-disabled="true"]) {
+  cursor: default;
+  box-shadow: none !important;
+}
+:where(button, [role="button"], summary):focus-visible {
+  outline: 2px solid var(--accent, #d99300);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(button, [role="button"], summary) {
+    transition: none !important;
+  }
+}

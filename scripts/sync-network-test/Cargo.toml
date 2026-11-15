@@ -1,0 +1,38 @@
+[package]
+name = "notes-sync-network-tests"
+version = "0.1.0"
+edition = "2021"
+[features]
+store-tests = ["dep:rusqlite", "dep:aes-gcm", "dep:argon2", "dep:libc", "dep:html5ever", "dep:tempfile"]
+[workspace]
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4"] }
+base64 = "0.22"
+rand = "0.8"
+snow = "0.9.6"
+sha2 = "0.10"
+fs2 = "0.4"
+url = "2"
+tokio = { version = "1", features = ["rt", "net", "time", "sync", "macros"] }
+tokio-tungstenite = { version = "0.29", features = ["rustls-tls-webpki-roots"] }
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+webpki-roots = "1"
+futures-util = { version = "0.3", features = ["sink"] }
+# Optional, test-harness-only real Store dependencies. No product dependency changes.
+rusqlite = { version = "0.32", features = ["bundled", "hooks"], optional = true }
+aes-gcm = { version = "0.10", optional = true }
+argon2 = { version = "0.5", optional = true }
+libc = { version = "0.2", optional = true }
+html5ever = { version = "0.39", optional = true }
+tempfile = { version = "3", optional = true }
+[dev-dependencies]
+tempfile = "3"
+[lib]
+path = "lib.rs"
+[[bin]]
+name = "account-directions"
+path = "account_directions.rs"
+required-features = ["store-tests"]
+test = false

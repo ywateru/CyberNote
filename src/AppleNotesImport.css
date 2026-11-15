@@ -1,0 +1,158 @@
+.apple-import-section {
+  margin-top: 24px;
+}
+.apple-import-section h3 {
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+.apple-import-entry {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  padding: 14px 16px;
+  border: 1px solid var(--line, #dedede);
+  border-radius: 11px;
+  background: var(--paper, #fff);
+  color: inherit;
+}
+.apple-import-entry > span {
+  flex: 1;
+  display: grid;
+  gap: 4px;
+}
+.apple-import-entry strong {
+  font-weight: 500;
+}
+.apple-import-entry small,
+.apple-import-item small,
+.apple-import-result-item small {
+  display: block;
+  font-size: 12px;
+  color: var(--secondary, #777);
+  line-height: 1.5;
+}
+.apple-import-panel {
+  margin-top: 12px;
+  padding: 18px;
+  border: 1px solid var(--line, #dedede);
+  border-radius: 12px;
+  background: var(--paper, #fff);
+  font-size: 13px;
+}
+.apple-import-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.apple-import-heading h4 {
+  margin: 0;
+  font-size: 15px;
+}
+.apple-import-heading button {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+.apple-import-panel p {
+  line-height: 1.6;
+  color: var(--secondary, #777);
+}
+.apple-import-panel button:not(.apple-import-heading button) {
+  border: 1px solid var(--line, #dedede);
+  border-radius: 7px;
+  padding: 6px 12px;
+  background: var(--paper, #fff);
+  color: inherit;
+}
+.apple-import-panel .apple-import-primary {
+  background: #e7a718 !important;
+  border-color: #e7a718 !important;
+  color: #fff !important;
+}
+.apple-import-panel button:disabled {
+  opacity: 0.45;
+}
+.apple-import-summary,
+.apple-import-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+.apple-import-summary label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.apple-import-items {
+  max-height: 280px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  margin: 12px 0;
+  border-top: 1px solid var(--line, #dedede);
+  border-bottom: 1px solid var(--line, #dedede);
+}
+.apple-import-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--line, #ededed);
+}
+.apple-import-item:last-child {
+  border-bottom: 0;
+}
+.apple-import-item > input {
+  margin-top: 3px;
+  accent-color: #dca01b;
+}
+.apple-import-item strong,
+.apple-import-result-item strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.apple-import-item > span {
+  min-width: 0;
+}
+.apple-import-result-item {
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--line, #ededed);
+}
+.apple-import-panel .apple-import-warning {
+  color: #9b6914;
+}
+.apple-import-progress {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+.apple-import-progress progress {
+  width: 100%;
+  accent-color: #dca01b;
+}
+.apple-import-progress button {
+  justify-self: end;
+}
+.apple-import-result {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+}
+.apple-import-panel details > summary {
+  cursor: pointer;
+}
+.apple-import-panel button:focus-visible,
+.apple-import-panel input:focus-visible,
+.apple-import-entry:focus-visible {
+  outline: 2px solid #dfad43;
+  outline-offset: 3px;
+}

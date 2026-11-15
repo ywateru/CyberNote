@@ -1,0 +1,461 @@
+{
+  "notes": [
+    {
+      "id": "alpha",
+      "tags": [
+        "A",
+        "中"
+      ],
+      "pinned": true
+    },
+    {
+      "id": "beta",
+      "tags": [
+        "B"
+      ],
+      "pinned": false
+    },
+    {
+      "id": "plain",
+      "tags": [],
+      "pinned": false
+    },
+    {
+      "id": "locked",
+      "tags": null,
+      "pinned": true
+    },
+    {
+      "id": "deleted",
+      "tags": [
+        "A"
+      ],
+      "pinned": true,
+      "deleted": true
+    },
+    {
+      "id": "suspended",
+      "tags": [
+        "A"
+      ],
+      "pinned": true,
+      "suspended": true
+    }
+  ],
+  "cases": [
+    {
+      "name": "all-A",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "A"
+            ]
+          }
+        ]
+      },
+      "expected": [
+        "alpha"
+      ]
+    },
+    {
+      "name": "any-AB",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anySelected",
+            "names": [
+              "A",
+              "B"
+            ]
+          }
+        ]
+      },
+      "expected": [
+        "alpha",
+        "beta"
+      ]
+    },
+    {
+      "name": "any-tag",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          }
+        ]
+      },
+      "expected": [
+        "alpha",
+        "beta"
+      ]
+    },
+    {
+      "name": "no-tags",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "noTags"
+          }
+        ]
+      },
+      "expected": [
+        "plain"
+      ]
+    },
+    {
+      "name": "pinned",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": [
+        "alpha",
+        "locked"
+      ]
+    },
+    {
+      "name": "not-pinned",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "expected": [
+        "beta",
+        "plain"
+      ]
+    },
+    {
+      "name": "unknown-all",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "noTags"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "known-any",
+      "query": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "A"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": [
+        "alpha",
+        "locked"
+      ]
+    },
+    {
+      "name": "all-not-pin",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "A"
+            ]
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "any-empty-not-pin",
+      "query": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "noTags"
+          },
+          {
+            "type": "pinned",
+            "value": false
+          }
+        ]
+      },
+      "expected": [
+        "beta",
+        "plain"
+      ]
+    },
+    {
+      "name": "case-sensitive",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "a"
+            ]
+          }
+        ]
+      },
+      "expected": []
+    },
+    {
+      "name": "all-selected",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "allSelected",
+            "names": [
+              "A",
+              "中"
+            ]
+          }
+        ]
+      },
+      "expected": [
+        "alpha"
+      ]
+    },
+    {
+      "name": "mixed-all-tag-pinned",
+      "query": {
+        "version": 1,
+        "combine": "all",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": [
+        "alpha"
+      ]
+    },
+    {
+      "name": "mixed-any-tag-pinned",
+      "query": {
+        "version": 1,
+        "combine": "any",
+        "rules": [
+          {
+            "type": "tags",
+            "mode": "anyTag"
+          },
+          {
+            "type": "pinned",
+            "value": true
+          }
+        ]
+      },
+      "expected": [
+        "alpha",
+        "beta",
+        "locked"
+      ]
+    }
+  ],
+  "invalid": [
+    {
+      "version": 2,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "pinned",
+          "value": true
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": []
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "allSelected",
+          "names": []
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "anyTag",
+          "names": []
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "noTags",
+          "names": null
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "allSelected",
+          "names": [
+            "A",
+            "A"
+          ]
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "pinned",
+          "value": true
+        },
+        {
+          "type": "pinned",
+          "value": false
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "creationDate",
+          "mode": "today"
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "pinned",
+          "value": true,
+          "other": 1
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": "all",
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "allSelected",
+          "names": [
+            "123"
+          ]
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": [
+        "all"
+      ],
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "anyTag"
+        },
+        {
+          "type": "pinned",
+          "value": true
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "combine": [
+        "any"
+      ],
+      "rules": [
+        {
+          "type": "tags",
+          "mode": "anyTag"
+        },
+        {
+          "type": "pinned",
+          "value": true
+        }
+      ]
+    }
+  ]
+}

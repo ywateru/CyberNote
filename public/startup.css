@@ -1,0 +1,28 @@
+/* Loaded before the application bundle: the first paint is already branded. */
+:root { --startup-paper: #f7f7f9; --startup-ink: #292a2e; --startup-muted: #73757d; --startup-accent: #dca400; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-startup-theme="light"]) { --startup-paper: #1c1c1e; --startup-ink: #efeff2; --startup-muted: #a0a0aa; --startup-accent: #e5b32a; }
+}
+:root[data-startup-theme="dark"] { --startup-paper: #1c1c1e; --startup-ink: #efeff2; --startup-muted: #a0a0aa; --startup-accent: #e5b32a; }
+html, body { margin: 0; background: var(--startup-paper); }
+.startup { position: fixed; inset: 0; z-index: var(--layer-startup); display: grid; place-items: center; overflow: auto; background: var(--startup-paper); color: var(--startup-ink); font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", sans-serif; text-align: center; opacity: 1; transition: opacity 220ms ease; cursor: default; -webkit-user-select: none; user-select: none; }
+.startup-content { display: flex; flex-direction: column; align-items: center; padding: 40px 24px; transform: translateY(-14px); }
+.startup-logo { display: block; width: 104px; height: 104px; overflow: visible; }
+.startup-logo .startup-trace { stroke: var(--startup-accent); stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 17 83; animation: startup-trace 2.8s linear infinite; }
+.startup-logo .startup-eyes { stroke: var(--startup-accent); stroke-width: 7; opacity: .12; animation: startup-wake 2.8s ease-in-out infinite; }
+.startup-name { margin-top: 22px; font-size: 22px; font-weight: 600; line-height: 1.3; letter-spacing: -.6px; }
+.startup-message { margin: 10px 0 0; font-size: 13px; line-height: 1.6; font-weight: 400; color: var(--startup-muted); }
+.startup-retry { margin-top: 18px; min-height: 32px; padding: 6px 16px; border: 1px solid var(--startup-muted); border-radius: 7px; background: transparent; color: var(--startup-ink); font: inherit; font-size: 13px; cursor: pointer; }
+.startup-retry[hidden] { display: none; }
+.startup-retry:hover { background: color-mix(in srgb, var(--startup-ink) 7%, transparent); }
+.startup-retry:active { opacity: .65; }
+.startup-retry:focus-visible { outline: 2px solid var(--startup-accent); outline-offset: 3px; }
+.startup[data-state="leaving"] { opacity: 0; }
+.startup[data-state="error"] .startup-trace, .startup[data-state="error"] .startup-eyes { animation: none; opacity: 0; }
+@keyframes startup-trace { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -100; } }
+@keyframes startup-wake { 0%, 100% { opacity: .1; } 45%, 55% { opacity: .85; } }
+@media (max-width: 699px) { .startup-logo { width: 88px; height: 88px; } .startup-name { font-size: 21px; margin-top: 20px; } }
+@media (prefers-reduced-motion: reduce) {
+  .startup { transition: none; }
+  .startup-logo .startup-trace, .startup-logo .startup-eyes { animation: none; opacity: .45; }
+}

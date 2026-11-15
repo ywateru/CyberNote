@@ -1,0 +1,3387 @@
+use super::*;
+use crate::mux::{framed_stream, Mux};
+use serde_json::{json, Value};
+use sha2::{Digest, Sha256};
+use std::{
+    collections::HashMap,
+    sync::{
+        atomic::{AtomicUsize, Ordering},
+        Arc, Mutex,
+    },
+    time::Duration,
+};
+use tokio::{
+    io::{AsyncReadExt, AsyncWriteExt},
+    net::TcpListener,
+};
+
+type Handler = Arc<dyn Fn(String, String, Vec<u8>, String) -> (u16, Value) + Send + Sync>;
+struct Fixture {
+    base: String,
+    cert: Vec<u8>,
+    cancel: CancellationToken,
+    task: tokio::task::JoinHandle<()>,
+}
+impl Fixture {
+    async fn new(handler: Handler) -> Self {
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+        let key = rcgen::KeyPair::generate().unwrap();
+        let cert = rcgen::CertificateParams::new(vec!["127.0.0.1".into()])
+            .unwrap()
+            .self_signed(&key)
+            .unwrap();
+        let config = rustls::ServerConfig::builder_with_provider(Arc::new(
+            rustls::crypto::ring::default_provider(),
+        ))
+        .with_protocol_versions(&[&rustls::version::TLS13])
+        .unwrap()
+        .with_no_client_auth()
+        .with_single_cert(
+            vec![cert.der().clone()],
+            rustls::pki_types::PrivatePkcs8KeyDer::from(key.serialize_der()).into(),
+        )
+        .unwrap();
+        let acceptor = tokio_rustls::TlsAcceptor::from(Arc::new(config));
+        let cancel = CancellationToken::new();
+        let stop = cancel.clone();
+        let task = tokio::spawn(async move {
+            let mut tasks = tokio::task::JoinSet::new();
+            loop {
+                tokio::select! {_=stop.cancelled()=>break,Some(_)=tasks.join_next(),if !tasks.is_empty()=>{},res=listener.accept()=>{
+                    let Ok((socket,_))=res else{break};let handler=handler.clone();let acceptor=acceptor.clone();
+                    tasks.spawn(async move{let Ok(mut s)=acceptor.accept(socket).await else{return};let mut head=Vec::new();let mut one=[0];
+                        while !head.ends_with(b"\r\n\r\n"){if head.len()>16384||s.read_exact(&mut one).await.is_err(){return;}head.push(one[0]);}
+                        let h=String::from_utf8_lossy(&head);let mut lines=h.lines();let request=lines.next().unwrap_or("");let mut parts=request.split_whitespace();let method=parts.next().unwrap_or("").to_owned();let path=parts.next().unwrap_or("").to_owned();
+                        let length=lines.find_map(|l|l.to_ascii_lowercase().strip_prefix("content-length:").and_then(|v|v.trim().parse::<usize>().ok())).unwrap_or(0);if length>65536{return;}let mut body=vec![0;length];if s.read_exact(&mut body).await.is_err(){return;}
+                        let(status,value)=handler(method,path,body,h.lines().find_map(|l|l.split_once(':').filter(|(k,_)|k.eq_ignore_ascii_case("authorization")).map(|(_,v)|v.trim().to_owned())).unwrap_or_default());let bytes=serde_json::to_vec(&value).unwrap();let header=format!("HTTP/1.1 {status} OK\r\nContent-Type: application/json\r\nX-CyberGrid-Epoch: {}\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",value.get("coordinatorEpoch").and_then(Value::as_str).unwrap_or("fixture-epoch"),bytes.len());let _=s.write_all(header.as_bytes()).await;let _=s.write_all(&bytes).await;let _=s.shutdown().await;
+                    });
+                }}
+            }
+            tasks.abort_all();
+            while tasks.join_next().await.is_some() {}
+        });
+        Self {
+            base: format!("https://{addr}"),
+            cert: cert.der().to_vec(),
+            cancel,
+            task,
+        }
+    }
+    fn client(&self, app: &str) -> Arc<Client> {
+        let mut c = Client::new(Config {
+            base_url: self.base.clone(),
+            app_id: app.into(),
+            stun_servers: vec![],
+            direct_timeout: Duration::from_secs(10),
+            iroh_enabled: false,
+            ..Config::default()
+        })
+        .unwrap();
+        Arc::get_mut(&mut c).unwrap().http = reqwest::Client::builder()
+            .add_root_certificate(reqwest::Certificate::from_der(&self.cert).unwrap())
+            .redirect(reqwest::redirect::Policy::none())
+            .timeout(Duration::from_secs(5))
+            .build()
+            .unwrap();
+        c
+    }
+    async fn stop(&mut self) -> std::io::Result<()> {
+        self.cancel.cancel();
+        (&mut self.task).await.map_err(|_| std::io::Error::other("fixture join"))
+    }
+}
+impl Drop for Fixture {
+    fn drop(&mut self) {
+        self.cancel.cancel();
+    }
+}
+fn public_config(base: &str, app: &str) -> Value {
+    json!({"coordination":{"protocol":"memory-v1","epoch":"fixture-epoch","heartbeatSeconds":20,"leaseSeconds":65,"signalTtlSeconds":120,"maxSignalWaitSeconds":15},"provider":"logto","issuer":format!("{base}/oidc"),"clientId":app,"resource":"https://cybergrid.aixgg.com/api","scope":"openid offline_access profile email connect","deviceAuthorizationEndpoint":format!("{base}/oidc/device/auth"),"tokenEndpoint":format!("{base}/oidc/token"),"revocationEndpoint":format!("{base}/oidc/token/revocation")})
+}
+
+fn browser_tokens(refresh: &str) -> OAuthTokens {
+    OAuthTokens {
+        access_token: "unverified-resource-access".into(),
+        refresh_token: refresh.into(),
+        expires_in: 3600,
+        expires_at: chrono::Utc::now() + chrono::Duration::hours(1),
+        token_type: "Bearer".into(),
+        scope: "connect".into(),
+    }
+}
+
+#[tokio::test]
+async fn browser_import_checkpoints_without_refresh_and_ack_is_idempotent() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let calls = Arc::new(AtomicUsize::new(0));
+    let counter = calls.clone();
+    let config_calls = Arc::new(AtomicUsize::new(0));
+    let configs = config_calls.clone();
+    let f = Fixture::new(Arc::new(move |_, path, _, _| {
+        if path.starts_with("/api/v1/auth/config?") {
+            configs.fetch_add(1, Ordering::SeqCst);
+            return (200, public_config(&b.lock().unwrap(), "RealA"));
+        }
+        counter.fetch_add(1, Ordering::SeqCst);
+        (401, json!({"error":"invalid_token"}))
+    }))
+    .await;
+    *base.lock().unwrap() = f.base.clone();
+    let client = f.client("RealA");
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("browser.json");
+    let store = CredentialStore::new(&path);
+    client.use_credential_store(store.clone()).await.unwrap();
+    let mut config = client.auth_config().await.unwrap();
+    config.coordination.as_mut().unwrap().epoch = "old-non-OAuth-epoch".into();
+    let tokens = browser_tokens("latest-browser-refresh");
+    assert_eq!(
+        client
+            .import_browser_grant(&config, tokens.clone())
+            .await
+            .unwrap(),
+        GrantImportOutcome::OwnedPersisted
+    );
+    let bytes = std::fs::read(&path).unwrap();
+    let saved: Value = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(saved["version"], 4);
+    assert_eq!(saved["clientId"], "RealA");
+    assert_eq!(saved["refreshToken"], "latest-browser-refresh");
+    assert!(!String::from_utf8_lossy(&bytes).contains(&tokens.access_token));
+    let before_ack = config_calls.load(Ordering::SeqCst);
+    let mut retry = tokens.clone();
+    retry.expires_at = chrono::Utc::now() - chrono::Duration::seconds(1);
+    assert_eq!(
+        client.import_browser_grant(&config, retry).await.unwrap(),
+        GrantImportOutcome::OwnedPersisted
+    );
+    assert_eq!(
+        config_calls.load(Ordering::SeqCst),
+        before_ack,
+        "lost ACK confirmation must not depend on network"
+    );
+    assert_eq!(std::fs::read(&path).unwrap(), bytes);
+    assert!(!client.has_pending_grant().await);
+    assert!(client
+        .import_browser_grant(&config, browser_tokens("different-grant"))
+        .await
+        .is_err());
+    let other = f.client("RealA");
+    other
+        .use_credential_store(CredentialStore::new(&path))
+        .await
+        .unwrap();
+    assert_eq!(
+        other
+            .browser_grant_checkpoint(&config, &tokens.refresh_token)
+            .await
+            .unwrap(),
+        crate::BrowserGrantCheckpoint::Matching
+    );
+    assert_eq!(
+        other
+            .browser_grant_checkpoint(&config, "older-journal-token")
+            .await
+            .unwrap(),
+        crate::BrowserGrantCheckpoint::OtherGrant
+    );
+    let empty = f.client("RealA");
+    empty
+        .use_credential_store(CredentialStore::new(root.path().join("empty.json")))
+        .await
+        .unwrap();
+    assert_eq!(
+        empty
+            .browser_grant_checkpoint(&config, "unowned-journal-token")
+            .await
+            .unwrap(),
+        crate::BrowserGrantCheckpoint::Empty
+    );
+    assert!(other.import_browser_grant(&config, tokens).await.is_err());
+    assert_eq!(std::fs::read(&path).unwrap(), bytes);
+    assert_eq!(
+        calls.load(Ordering::SeqCst),
+        0,
+        "handoff must not refresh, exchange, or revoke"
+    );
+    assert!(
+        client.session.read().await.is_none(),
+        "server exchange remains a separate authenticated step"
+    );
+}
+
+#[tokio::test]
+async fn browser_import_and_native_refresh_share_the_grant_gate() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let calls = Arc::new(AtomicUsize::new(0));
+    let counter = calls.clone();
+    let f = Fixture::new(Arc::new(move |_, request, body, _| {
+        if request.starts_with("/api/v1/auth/config?") {
+            return (200, public_config(&b.lock().unwrap(), "RealA"));
+        }
+        assert_eq!(request, "/oidc/token");
+        let form = url::form_urlencoded::parse(&body).collect::<HashMap<_, _>>();
+        assert_eq!(form.get("refresh_token").unwrap(), "latest-browser-refresh");
+        assert_eq!(form.get("resource").unwrap(), "https://cybergrid.aixgg.com/api");
+        counter.fetch_add(1, Ordering::SeqCst);
+        (200, json!({"access_token":"native-resource-access", "refresh_token":"new-native-refresh", "expires_in":3600, "token_type":"Bearer", "scope":"connect"}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    let client = f.client("RealA");
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("browser.json");
+    let store = CredentialStore::new(&path);
+    client.use_credential_store(store.clone()).await.unwrap();
+    let config = client.auth_config().await.unwrap();
+    let gate = store.auth_gate.lock().await;
+    let c = client.clone();
+    let a = config.clone();
+    let importing = tokio::spawn(async move {
+        c.import_browser_grant(&a, browser_tokens("latest-browser-refresh"))
+            .await
+    });
+    // Wait for import to own the shared grant gate before submitting refresh.
+    tokio::time::timeout(Duration::from_secs(3), async {
+        loop {
+            if client.grant_operation.try_lock().is_err() {
+                break;
+            }
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .unwrap();
+    let c = client.clone();
+    let refreshing =
+        tokio::spawn(async move { c.refresh_access_token("stale-must-not-be-used").await });
+    assert_eq!(calls.load(Ordering::SeqCst), 0);
+    drop(gate);
+    assert_eq!(
+        importing.await.unwrap().unwrap(),
+        GrantImportOutcome::OwnedPersisted
+    );
+    let newest = refreshing.await.unwrap().unwrap();
+    assert_eq!(newest.refresh_token, "new-native-refresh");
+    assert_eq!(calls.load(Ordering::SeqCst), 1);
+    let saved: Value = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    assert_eq!(saved["refreshToken"], "new-native-refresh");
+    assert!(
+        client
+            .import_browser_grant(&config, browser_tokens("latest-browser-refresh"))
+            .await
+            .is_err(),
+        "stale handoff must not overwrite native rotation"
+    );
+}
+
+#[tokio::test]
+async fn browser_import_rejects_binding_and_token_errors_without_ownership() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let f = Fixture::new(Arc::new(move |_, path, _, _| {
+        assert!(path.starts_with("/api/v1/auth/config?"));
+        (200, public_config(&b.lock().unwrap(), "RealA"))
+    }))
+    .await;
+    *base.lock().unwrap() = f.base.clone();
+    let client = f.client("RealA");
+    let config = client.auth_config().await.unwrap();
+    assert!(client
+        .import_browser_grant(&config, browser_tokens("source-still-owned"))
+        .await
+        .is_err());
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("browser.json");
+    client
+        .use_credential_store(CredentialStore::new(&path))
+        .await
+        .unwrap();
+    for field in [
+        "client", "issuer", "resource", "scope", "endpoint", "revoke",
+    ] {
+        let mut wrong = config.clone();
+        match field {
+            "client" => wrong.client_id = "Other".into(),
+            "issuer" => wrong.issuer = format!("{}/different-issuer", f.base),
+            "resource" => wrong.resource = "https://other.example/api".into(),
+            "scope" => wrong.scope.push_str(" other"),
+            "endpoint" => wrong.token_endpoint = format!("{}/different-token", f.base),
+            "revoke" => wrong.revocation_endpoint = None,
+            _ => unreachable!(),
+        }
+        assert!(
+            client
+                .import_browser_grant(&wrong, browser_tokens("source-still-owned"))
+                .await
+                .is_err(),
+            "{field}"
+        );
+    }
+    for field in ["access", "refresh", "kind", "duration", "expiry", "scope"] {
+        let mut bad = browser_tokens("source-still-owned");
+        match field {
+            "access" => bad.access_token.clear(),
+            "refresh" => bad.refresh_token.clear(),
+            "kind" => bad.token_type = "Basic".into(),
+            "duration" => bad.expires_in = 0,
+            "expiry" => bad.expires_at = chrono::Utc::now() - chrono::Duration::seconds(1),
+            "scope" => bad.scope = "openid".into(),
+            _ => unreachable!(),
+        }
+        let error = client.import_browser_grant(&config, bad).await.unwrap_err();
+        assert!(!format!("{error:?}").contains("source-still-owned"));
+    }
+    assert!(!path.exists());
+    assert!(!client.has_pending_grant().await);
+    assert!(client.latest_grant.lock().await.is_none());
+}
+
+#[tokio::test]
+async fn browser_import_disk_failure_ack_retains_latest_for_retry_and_revoke() {
+    use std::os::unix::fs::PermissionsExt;
+    for retry_checkpoint in [false, true] {
+        let root = tempfile::tempdir().unwrap();
+        let storage = root.path().join("private");
+        std::fs::create_dir(&storage).unwrap();
+        let path = storage.join("browser.json");
+        let blocked = storage.clone();
+        let base = Arc::new(Mutex::new(String::new()));
+        let b = base.clone();
+        let revoke = Arc::new(AtomicUsize::new(0));
+        let revoked = revoke.clone();
+        let f = Fixture::new(Arc::new(move |_, request, body, _| {
+            if request.starts_with("/api/v1/auth/config?") {
+                std::fs::set_permissions(&blocked, std::fs::Permissions::from_mode(0o500)).unwrap();
+                return (200, public_config(&b.lock().unwrap(), "RealA"));
+            }
+            assert_eq!(request, "/oidc/token/revocation");
+            let form = url::form_urlencoded::parse(&body).collect::<HashMap<_, _>>();
+            assert_eq!(form.get("token").unwrap(), "latest-browser-refresh");
+            revoked.fetch_add(1, Ordering::SeqCst);
+            (200, json!({}))
+        }))
+        .await;
+        *base.lock().unwrap() = f.base.clone();
+        let client = f.client("RealA");
+        let store = CredentialStore::new(&path);
+        // The existing private lock remains writable while the directory denies
+        // atomic checkpoint creation. No timing or privileged filesystem needed.
+        drop(store.lock().await.unwrap());
+        client.use_credential_store(store.clone()).await.unwrap();
+        let config = client.auth_config().await.unwrap();
+        let tokens = browser_tokens("latest-browser-refresh");
+        assert_eq!(
+            client
+                .import_browser_grant(&config, tokens.clone())
+                .await
+                .unwrap(),
+            GrantImportOutcome::OwnedPending
+        );
+        assert!(client.has_pending_grant().await);
+        assert!(!path.exists());
+        assert_eq!(
+            client
+                .import_browser_grant(&config, tokens.clone())
+                .await
+                .unwrap(),
+            GrantImportOutcome::OwnedPending
+        );
+        assert!(client
+            .import_browser_grant(&config, browser_tokens("replacement"))
+            .await
+            .is_err());
+        if !retry_checkpoint {
+            client.revoke_pending_grant().await.unwrap();
+            assert_eq!(revoke.load(Ordering::SeqCst), 1);
+            assert!(!client.has_pending_grant().await);
+            assert!(client.latest_grant.lock().await.is_none());
+            assert!(!path.exists());
+            std::fs::set_permissions(&storage, std::fs::Permissions::from_mode(0o700)).unwrap();
+            continue;
+        }
+        std::fs::set_permissions(&storage, std::fs::Permissions::from_mode(0o700)).unwrap();
+        client.retry_pending_grant().await.unwrap();
+        assert!(!client.has_pending_grant().await);
+        let saved: Value = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+        assert_eq!(saved["refreshToken"], "latest-browser-refresh");
+        assert_eq!(
+            client.import_browser_grant(&config, tokens).await.unwrap(),
+            GrantImportOutcome::OwnedPersisted
+        );
+        // Discovery in logout deliberately re-applies the write failure, proving
+        // revocation is possible using the transferred grant even on storage error.
+        store.logout(&client).await.unwrap_err();
+        assert_eq!(revoke.load(Ordering::SeqCst), 1);
+        std::fs::set_permissions(&storage, std::fs::Permissions::from_mode(0o700)).unwrap();
+    }
+}
+
+#[test]
+fn config_and_tunnel_security() {
+    assert!(Client::new(Config::default()).is_err());
+    for base in [
+        "http://example.com",
+        "https://u:p@example.com",
+        "https://example.com?token=x",
+        "https://example.com/#x",
+    ] {
+        assert!(Client::new(Config {
+            base_url: base.into(),
+            app_id: "RealCaseID".into(),
+            ..Config::default()
+        })
+        .is_err());
+    }
+    assert!(Client::new(Config {
+        base_url: "http://127.0.0.1:99".into(),
+        app_id: "RealCaseID".into(),
+        ..Config::default()
+    })
+    .is_ok());
+    assert!(Client::new(Config {
+        app_id: "a".into(),
+        stun_servers: vec!["turn:example.com".into()],
+        ..Config::default()
+    })
+    .is_err());
+    for u in [
+        "https://a.b.trycloudflare.com",
+        "http://a.trycloudflare.com",
+        "https://a.trycloudflare.com:444",
+        "https://a.trycloudflare.com/connect",
+        "https://u@a.trycloudflare.com",
+        "https://a.trycloudflare.com?q=x",
+    ] {
+        assert!(validate_tunnel_url(u).is_err());
+    }
+    assert!(validate_tunnel_url("https://some-real-name.trycloudflare.com/").is_ok());
+}
+#[test]
+fn identity_certificate_pin_name_expiry_and_algorithm() {
+    let identity = crate::secure::Identity::new("device-one").unwrap();
+    let now = rustls::pki_types::UnixTime::now().as_secs();
+    assert!(crate::secure::check_certificate(
+        identity.cert.as_ref(),
+        "device-one",
+        &identity.fingerprint,
+        now
+    )
+    .is_ok());
+    assert!(crate::secure::check_certificate(
+        identity.cert.as_ref(),
+        "device-two",
+        &identity.fingerprint,
+        now
+    )
+    .is_err());
+    assert!(crate::secure::check_certificate(
+        identity.cert.as_ref(),
+        "device-one",
+        &"0".repeat(64),
+        now
+    )
+    .is_err());
+    assert!(crate::secure::check_certificate(
+        identity.cert.as_ref(),
+        "device-one",
+        &identity.fingerprint,
+        now + 172800
+    )
+    .is_err());
+    let key = rcgen::KeyPair::generate().unwrap();
+    let mut p = rcgen::CertificateParams::new(Vec::<String>::new()).unwrap();
+    p.distinguished_name
+        .push(rcgen::DnType::CommonName, "device-one");
+    let cert = p.self_signed(&key).unwrap();
+    let pin = hex::encode(Sha256::digest(cert.der()));
+    assert!(
+        crate::secure::check_certificate(cert.der().as_ref(), "device-one", &pin, now).is_err()
+    );
+}
+#[tokio::test]
+async fn smux_fin_drains_queued_payload_and_odd_even_stream_ids() {
+    let (a, b) = tokio::io::duplex(256);
+    let cancel = CancellationToken::new();
+    let mux = Mux::start(Box::new(a), true, cancel.clone());
+    let (mut r, mut w) = tokio::io::split(b);
+    let mut stream = mux.open().await.unwrap();
+    let mut header = [0; 8];
+    r.read_exact(&mut header).await.unwrap();
+    assert_eq!(header, [1, 0, 0, 0, 3, 0, 0, 0]);
+    let data: Vec<_> = (0..65536).map(|i| (i % 251) as u8).collect();
+    let expected = data.clone();
+    let write = tokio::spawn(async move {
+        for chunk in data.chunks(32768) {
+            let mut h = [1, 2, 0, 0, 3, 0, 0, 0];
+            h[2..4].copy_from_slice(&(chunk.len() as u16).to_le_bytes());
+            w.write_all(&h).await.unwrap();
+            w.write_all(chunk).await.unwrap();
+        }
+        w.write_all(&[1, 1, 0, 0, 3, 0, 0, 0]).await.unwrap();
+        tokio::time::sleep(Duration::from_secs(2)).await;
+    });
+    tokio::time::sleep(Duration::from_millis(100)).await;
+    let mut received = Vec::new();
+    tokio::time::timeout(Duration::from_secs(5), stream.read_to_end(&mut received))
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(received, expected);
+    cancel.cancel();
+    write.abort();
+}
+#[tokio::test]
+async fn framed_stream_preserves_half_close_and_final_response() {
+    let (a, b) = tokio::io::duplex(65536);
+    let cancel = CancellationToken::new();
+    let mut framed = framed_stream(a, cancel.clone());
+    let remote = tokio::spawn(async move {
+        let mut b = b;
+        let n = b.read_u32().await.unwrap();
+        assert_eq!(n, 5);
+        let mut bytes = [0; 5];
+        b.read_exact(&mut bytes).await.unwrap();
+        assert_eq!(&bytes, b"hello");
+        assert_eq!(b.read_u32().await.unwrap(), 0);
+        b.write_u32(5).await.unwrap();
+        b.write_all(b"reply").await.unwrap();
+        b.write_u32(0).await.unwrap();
+    });
+    framed.write_all(b"hello").await.unwrap();
+    framed.shutdown().await.unwrap();
+    let mut out = Vec::new();
+    framed.read_to_end(&mut out).await.unwrap();
+    assert_eq!(&out, b"reply");
+    remote.await.unwrap();
+    cancel.cancel();
+}
+#[tokio::test]
+async fn v2_cross_app_credentials_preserved_before_any_request() {
+    let count = Arc::new(AtomicUsize::new(0));
+    let x = count.clone();
+    let f = Fixture::new(Arc::new(move |_, _, _, _| {
+        x.fetch_add(1, Ordering::SeqCst);
+        (500, json!({}))
+    }))
+    .await;
+    let c = f.client("RealA");
+    let dir = tempfile::tempdir().unwrap();
+    let path = dir.path().join("private.json");
+    let store = CredentialStore::new(&path);
+    use std::os::unix::fs::PermissionsExt;
+    for (version, app) in [(2, "RealA"), (3, "RealB")] {
+        let text=json!({"version":version,"server":f.base,"appId":app,"clientId":app,"issuer":"https://provider.invalid/oidc","resource":"https://api.invalid","refreshToken":"sensitive-fixture"}).to_string();
+        std::fs::write(&path, &text).unwrap();
+        std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o600)).unwrap();
+        assert!(store.refresh(&c).await.is_err());
+        assert!(store.logout(&c).await.is_err());
+        assert_eq!(std::fs::read_to_string(&path).unwrap(), text);
+    }
+    assert_eq!(count.load(Ordering::SeqCst), 0);
+    std::fs::remove_file(&path).unwrap();
+    std::os::unix::fs::symlink(dir.path().join("other"), &path).unwrap();
+    assert!(store.refresh(&c).await.is_err());
+    assert_eq!(count.load(Ordering::SeqCst), 0);
+}
+#[tokio::test]
+async fn oauth_pending_slowdown_resource_rotation_and_redaction() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let polls = Arc::new(AtomicUsize::new(0));
+    let p = polls.clone();
+    let requests = Arc::new(Mutex::new(Vec::<String>::new()));
+    let requests2 = requests.clone();
+    let f=Fixture::new(Arc::new(move|_,path,body,_|{
+        if path.starts_with("/api/v1/auth/config?"){return(200,public_config(&b.lock().unwrap(),"RealA"));}
+        if path=="/oidc/device/auth"{return(200,json!({"device_code":"private-device-code","user_code":"ABCD-EFGH","verification_uri":format!("{}/activate",b.lock().unwrap()),"expires_in":120,"interval":0}));}
+        let form=String::from_utf8(body).unwrap();requests2.lock().unwrap().push(form.clone());
+        if form.contains("device_code"){
+            return match p.fetch_add(1,Ordering::SeqCst){0=>(400,json!({"error":"authorization_pending","error_description":"NEVER-LOG"})),1=>(400,json!({"error":"slow_down"})),_=>(200,json!({"access_token":"opaque-initial","refresh_token":"initial-refresh","expires_in":3600,"token_type":"Bearer"}))};
+        }
+        if path=="/oidc/token"{assert!(form.contains("resource=https%3A%2F%2Fcybergrid.aixgg.com%2Fapi"));return(200,json!({"access_token":"resource-jwt","refresh_token":"rotated-refresh","expires_in":3600,"token_type":"Bearer"}));}
+        (200,json!({}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    let c = f.client("RealA");
+    let auth = c.begin_device_authorization().await.unwrap();
+    assert_eq!(auth.interval, 5);
+    assert!(!format!("{auth:?}").contains("private-device-code"));
+    assert!(!serde_json::to_string(&auth)
+        .unwrap()
+        .contains("private-device-code"));
+    let started = std::time::Instant::now();
+    let tokens = c
+        .complete_device_authorization(&auth, &CancellationToken::new())
+        .await
+        .unwrap();
+    assert!(started.elapsed() >= Duration::from_secs(19));
+    assert_eq!(polls.load(Ordering::SeqCst), 3);
+    assert_eq!(tokens.access_token, "resource-jwt");
+    assert_eq!(tokens.refresh_token, "rotated-refresh");
+    assert!(!format!("{tokens:?}").contains("resource-jwt"));
+    let dir = tempfile::tempdir().unwrap();
+    let store = CredentialStore::new(dir.path().join("grant.json"));
+    store.save_new(&c, &tokens).await.unwrap();
+    let saved: Value = serde_json::from_slice(&std::fs::read(store.path()).unwrap()).unwrap();
+    assert_eq!(saved["refreshToken"], "rotated-refresh");
+    store.refresh(&c).await.unwrap();
+    store.logout(&c).await.unwrap();
+    assert!(!store.exists());
+    assert!(requests
+        .lock()
+        .unwrap()
+        .iter()
+        .any(|s| s.contains("refresh_token=initial-refresh")));
+}
+#[tokio::test]
+async fn cancellation_after_mint_preserves_latest_rotation_without_save_network() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let cancel = CancellationToken::new();
+    let stop = cancel.clone();
+    let reject_config = Arc::new(AtomicUsize::new(0));
+    let reject = reject_config.clone();
+    let f = Fixture::new(Arc::new(move |_, path, body, _| {
+        if path.starts_with("/api/v1/auth/config?") {
+            return if reject.load(Ordering::SeqCst) == 0 {
+                (200, public_config(&b.lock().unwrap(), "RealA"))
+            } else {
+                (503, json!({}))
+            };
+        }
+        if path == "/oidc/device/auth" {
+            return (200, json!({"device_code":"fixture-device-code","user_code":"CODE","verification_uri":format!("{}/activate",b.lock().unwrap()),"expires_in":60,"interval":5}));
+        }
+        let body = String::from_utf8(body).unwrap();
+        if body.contains("device_code") {
+            stop.cancel();
+            return (200, json!({"access_token":"opaque-fixture","refresh_token":"first-fixture-refresh","expires_in":3600,"token_type":"Bearer"}));
+        }
+        reject.store(1, Ordering::SeqCst);
+        (200, json!({"access_token":"resource-fixture","refresh_token":"latest-fixture-refresh","expires_in":3600,"token_type":"Bearer"}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    let c = f.client("RealA");
+    let auth = c.begin_device_authorization().await.unwrap();
+    let tokens = c
+        .complete_device_authorization(&auth, &cancel)
+        .await
+        .unwrap();
+    assert!(cancel.is_cancelled());
+    assert_eq!(tokens.refresh_token, "latest-fixture-refresh");
+    let dir = tempfile::tempdir().unwrap();
+    let store = CredentialStore::new(dir.path().join("grant.json"));
+    store.save_new(&c, &tokens).await.unwrap();
+    let saved: Value = serde_json::from_slice(&std::fs::read(store.path()).unwrap()).unwrap();
+    assert_eq!(saved["refreshToken"], "latest-fixture-refresh");
+    assert!(c.auth_config().await.is_err());
+}
+#[tokio::test]
+async fn oauth_cancel_and_configuration_mismatch() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let calls = Arc::new(AtomicUsize::new(0));
+    let counter = calls.clone();
+    let wrong = Arc::new(AtomicUsize::new(0));
+    let w = wrong.clone();
+    let f=Fixture::new(Arc::new(move|_,path,_,_|{if path.starts_with("/api/v1/auth/config?"){let app=if w.load(Ordering::SeqCst)==0{"RealA"}else{"WrongApp"};return(200,public_config(&b.lock().unwrap(),app));}
+        if path=="/oidc/device/auth"{return(200,json!({"device_code":"private","user_code":"CODE","verification_uri":format!("{}/activate",b.lock().unwrap()),"expires_in":60,"interval":5}));}counter.fetch_add(1,Ordering::SeqCst);(400,json!({"error":"access_denied"}))})).await;
+    *base.lock().unwrap() = f.base.clone();
+    let c = f.client("RealA");
+    let auth = c.begin_device_authorization().await.unwrap();
+    let cancel = CancellationToken::new();
+    cancel.cancel();
+    assert!(matches!(
+        c.complete_device_authorization(&auth, &cancel).await,
+        Err(Error::Cancelled)
+    ));
+    assert_eq!(calls.load(Ordering::SeqCst), 0);
+    wrong.store(1, Ordering::SeqCst);
+    assert!(c.auth_config().await.is_err());
+}
+
+#[derive(Default)]
+struct Control {
+    epoch: String,
+    fail_next_publish: bool,
+    drop_signals: bool,
+    attempts: HashMap<String, Value>,
+    registrations: Vec<Value>,
+    devices: HashMap<String, Value>,
+    signals: Vec<Value>,
+    n: u64,
+    exchange_replies: Vec<u16>,
+    revoke_fails: bool,
+    pause_publishes: usize,
+    publish_barrier: Option<Arc<std::sync::Barrier>>,
+    user_override: Option<String>,
+    config_failure: bool,
+    config_override: Option<(String, String)>,
+    wrong_fingerprint_for: Option<String>,
+}
+async fn control() -> (Fixture, Arc<Mutex<Control>>) {
+    let state = Arc::new(Mutex::new(Control {
+        epoch: "fixture-epoch".into(),
+        ..Control::default()
+    }));
+    let st = state.clone();
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let f=Fixture::new(Arc::new(move|method,path,body,auth|{
+        let mut s=st.lock().unwrap();
+        if path.starts_with("/api/v1/auth/config?"){if s.config_failure{return(503,json!({"error":{"code":"UNAVAILABLE"}}));}let mut config=public_config(&b.lock().unwrap(),"RealA");config["coordination"]["epoch"]=json!(s.epoch);if let Some((field,value))=&s.config_override {config[field]=json!(value);}return(200,config);}
+        let who=format!("id-{}",auth.strip_prefix("Bearer key-").unwrap_or("missing"));
+        if method=="POST"&&path=="/api/v1/auth/exchange"{let v:Value=serde_json::from_slice(&body).unwrap();s.registrations.push(v.clone());if v["coordinatorEpoch"]!=s.epoch{return(409,json!({"error":{"code":"COORDINATOR_RESET"}}));}let reply=if s.exchange_replies.is_empty(){200}else{s.exchange_replies.remove(0)};if reply==401||reply==403||reply==409{return(reply,json!({"error":{"code":if reply==401{"INVALID_IDENTITY"}else if reply==409{"COORDINATOR_RESET"}else{"APPLICATION_DENIED"}}}));}let request=v["requestId"].as_str().unwrap().to_owned();if let Some(old)=s.attempts.get(&request){return(200,old.clone());}let name=v["deviceName"].as_str().unwrap();let id=format!("id-{name}");let incarnation=uuid::Uuid::new_v4().to_string();s.devices.insert(id.clone(),json!({"incarnation":incarnation,"publishRevision":0,"id":id,"name":name,"online":true,"lastSeen":chrono::Utc::now(),"ports":[],"tunnelUrl":null,"certificateFingerprint":null}));let out=json!({"coordinatorEpoch":s.epoch,"incarnation":incarnation,"purpose":"device","appId":v["appId"],"sessionKey":format!("key-{name}"),"expiresAt":chrono::Utc::now()+chrono::Duration::hours(1),"deviceId":id,"user":{"id":s.user_override.as_deref().unwrap_or("fixture-user")}});s.attempts.insert(request,out.clone());if reply==599{return(599,json!({"error":{"code":"RESPONSE_LOST"}}));}return(200,out);}
+        // Each fixture client routes its own heartbeat through a separate name query.
+        if method=="PUT"&&path.starts_with("/api/v1/devices/self"){
+            // Certificate CN maps to the fixture's generated device identity; first missing fingerprint receives each initial heartbeat.
+            if s.pause_publishes>0 {s.pause_publishes-=1;let barrier=s.publish_barrier.as_ref().unwrap();barrier.wait();barrier.wait();}
+            let body:Value=serde_json::from_slice(&body).unwrap();let fp=body["certificateFingerprint"].clone();
+            let id=who.clone();
+            let epoch=s.epoch.clone();let fail=s.fail_next_publish;s.fail_next_publish=false;let d=s.devices.get_mut(&id).unwrap();d["publishRevision"]=body["publishRevision"].clone();d["certificateFingerprint"]=fp;d["ports"]=body["ports"].clone();d["tunnelUrl"]=body.get("tunnelUrl").cloned().unwrap_or(Value::Null);d["iroh"]=body.get("iroh").cloned().unwrap_or(Value::Null);if fail{return(599,json!({"coordinatorEpoch":epoch,"error":{"code":"RESPONSE_LOST"}}));}return(200,json!({"device":d,"coordinatorEpoch":epoch}));
+        }
+        if method=="GET"&&path=="/api/v1/devices"{let devices=s.devices.iter().map(|(id,d)|{let mut d=d.clone();if s.wrong_fingerprint_for.as_ref()==Some(id){d["certificateFingerprint"]=json!("0".repeat(64));}d}).collect::<Vec<_>>();return(200,json!({"coordinatorEpoch":s.epoch,"devices":devices}));}
+        if method=="POST"&&path=="/api/v1/signals"{let mut v:Value=serde_json::from_slice(&body).unwrap();s.n+=1;v["id"]=json!(s.n);let kind=v["kind"].as_str().unwrap().to_owned();v["fromDeviceId"]=json!(who);v["coordinatorEpoch"]=json!(s.epoch);v["fromIncarnation"]=s.devices[&who]["incarnation"].clone();assert!(matches!(kind.as_str(),"offer"|"answer"|"candidate"|"close"));s.signals.push(v);return(200,json!({"id":s.n,"coordinatorEpoch":s.epoch}));}
+        if method=="GET"&&path.starts_with("/api/v1/signals?"){if s.drop_signals{return(200,json!({"coordinatorEpoch":s.epoch,"signals":[],"cursor":s.n}));}let after=path.split("after=").nth(1).unwrap().split('&').next().unwrap().parse::<u64>().unwrap();return(200,json!({"coordinatorEpoch":s.epoch,"signals":s.signals.iter().filter(|s|s["id"].as_u64().unwrap()>after&&s["toDeviceId"]==who).collect::<Vec<_>>(),"cursor":s.n}));}
+        if method=="DELETE"&&path=="/api/v1/session"{if s.revoke_fails{return(503,json!({"error":{"code":"UNAVAILABLE"}}));}return(200,json!({"ok":true}));}
+        (404,json!({"error":{"code":"NOT_FOUND"}}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    (f, state)
+}
+async fn echo() -> (u16, tokio::task::JoinHandle<()>) {
+    let l = TcpListener::bind("127.0.0.1:0").await.unwrap();
+    let port = l.local_addr().unwrap().port();
+    let task = tokio::spawn(async move {
+        loop {
+            let Ok((mut s, _)) = l.accept().await else {
+                break;
+            };
+            tokio::spawn(async move {
+                let (mut r, mut w) = s.split();
+                let _ = tokio::io::copy(&mut r, &mut w).await;
+                let _ = w.shutdown().await;
+            });
+        }
+    });
+    (port, task)
+}
+#[tokio::test]
+async fn actual_local_websocket_mtls_smux_port_halfclose_wrong_pin_and_close() {
+    let (f, state) = control().await;
+    let a = f.client("RealA");
+    let b = f.client("RealA");
+    a.login_with_access_token("fixture-token-a", "a")
+        .await
+        .unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("fixture-token-b", "b")
+        .await
+        .unwrap();
+    b.enable_remote().await.unwrap();
+    let (port, echo) = echo().await;
+    b.expose(Port::tcp("echo", port, "echo")).await.unwrap();
+    let device = a.device("id-b").await.unwrap();
+    let rt = b.active().await.unwrap();
+    let endpoint = format!("ws://{}/connect", rt.origin_addr);
+    let p = a
+        .dial_ws_endpoint(
+            &device,
+            &endpoint,
+            a.active().await.unwrap().cancel.child_token(),
+        )
+        .await
+        .unwrap();
+    let mut stream = p.dial("echo").await.unwrap();
+    let data = vec![42; 65536];
+    let (mut r, mut w) = tokio::io::split(&mut stream);
+    let (_, read) = tokio::join!(
+        async {
+            w.write_all(&data).await.unwrap();
+            w.shutdown().await.unwrap();
+        },
+        async {
+            let mut out = Vec::new();
+            r.read_to_end(&mut out).await.unwrap();
+            out
+        }
+    );
+    assert_eq!(read, data);
+    assert!(p.dial("not-exposed").await.is_err());
+    state.lock().unwrap().devices.get_mut("id-b").unwrap()["certificateFingerprint"] =
+        json!("0".repeat(64));
+    let bad = a.device("id-b").await.unwrap();
+    assert!(a
+        .dial_ws_endpoint(
+            &bad,
+            &endpoint,
+            a.active().await.unwrap().cancel.child_token()
+        )
+        .await
+        .is_err());
+    a.close().await.unwrap();
+    assert!(p.is_closed());
+    b.close().await.unwrap();
+    echo.abort();
+}
+
+#[tokio::test]
+async fn actual_local_webrtc_mapping_and_idle_reuse() {
+    let (f, _) = control().await;
+    let a = f.client("RealA");
+    let b = f.client("RealA");
+    a.login_with_access_token("fixture-token-a", "a")
+        .await
+        .unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("fixture-token-b", "b")
+        .await
+        .unwrap();
+    b.enable_remote().await.unwrap();
+    let (port, echo) = echo().await;
+    b.expose(Port::tcp("echo", port, "echo")).await.unwrap();
+    let peer = tokio::time::timeout(Duration::from_secs(15), a.connect("id-b"))
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(peer.transport, "webrtc-direct");
+    for round in 0..2 {
+        if round == 1 {
+            tokio::time::sleep(Duration::from_secs(35)).await;
+        }
+        let mut stream = peer.dial("echo").await.unwrap();
+        let data = vec![round + 7; 65536];
+        let (mut r, mut w) = tokio::io::split(&mut stream);
+        let (_, out) = tokio::join!(
+            async {
+                w.write_all(&data).await.unwrap();
+                w.shutdown().await.unwrap();
+            },
+            async {
+                let mut out = Vec::new();
+                r.read_to_end(&mut out).await.unwrap();
+                out
+            }
+        );
+        assert_eq!(out, data);
+    }
+    assert!(a
+        .map("id-b", "echo", "0.0.0.0:0".parse().unwrap())
+        .await
+        .is_err());
+    a.close().await.unwrap();
+    assert!(peer.is_closed());
+    b.close().await.unwrap();
+    echo.abort();
+}
+
+#[tokio::test]
+async fn resource_failure_keeps_first_grant_and_blocks_old_refresh() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let rotations = Arc::new(Mutex::new(Vec::<String>::new()));
+    let rr = rotations.clone();
+    let f=Fixture::new(Arc::new(move|_,path,body,_|{
+        if path.starts_with("/api/v1/auth/config?"){return(200,public_config(&b.lock().unwrap(),"RealA"));}
+        if path=="/oidc/device/auth"{return(200,json!({"device_code":"private","user_code":"CODE","verification_uri":format!("{}/activate",b.lock().unwrap()),"expires_in":60,"interval":5}));}
+        let text=String::from_utf8(body).unwrap();
+        if text.contains("device_code") {return(200,json!({"access_token":"identity-access","refresh_token":"first-grant","expires_in":3600,"token_type":"Bearer"}));}
+        rr.lock().unwrap().push(text);
+        (503,json!({"error":"temporarily_unavailable"}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    let c = f.client("RealA");
+    let dir = tempfile::tempdir().unwrap();
+    let store = CredentialStore::new(dir.path().join("grant.json"));
+    c.use_credential_store(store.clone()).await.unwrap();
+    let mut auth = c.begin_device_authorization().await.unwrap();
+    auth.interval = 0;
+    assert!(c
+        .complete_device_authorization(&auth, &CancellationToken::new())
+        .await
+        .is_err());
+    let file: Value = serde_json::from_slice(&std::fs::read(store.path()).unwrap()).unwrap();
+    assert_eq!(file["refreshToken"], "first-grant");
+    assert!(c
+        .refresh_access_token("stale-unsafe-refresh")
+        .await
+        .is_err());
+    assert_eq!(rotations.lock().unwrap().len(), 2);
+    assert!(rotations
+        .lock()
+        .unwrap()
+        .iter()
+        .all(|s| s.contains("refresh_token=first-grant") && !s.contains("stale-unsafe")));
+}
+
+#[tokio::test]
+async fn failed_checkpoint_retains_latest_and_never_rotates_old_file() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let calls = Arc::new(AtomicUsize::new(0));
+    let cc = calls.clone();
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("grant.json");
+    let p = path.clone();
+    let f=Fixture::new(Arc::new(move|_,path,_,_|{
+        if path.starts_with("/api/v1/auth/config?"){return(200,public_config(&b.lock().unwrap(),"RealA"));}
+        cc.fetch_add(1,Ordering::SeqCst);
+        std::fs::remove_file(&p).unwrap();std::fs::create_dir(&p).unwrap();
+        (200,json!({"access_token":"new-access","refresh_token":"newest-owned","expires_in":3600,"token_type":"Bearer"}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    let c = f.client("RealA");
+    let store = CredentialStore::new(&path);
+    let t = OAuthTokens {
+        access_token: "old-access".into(),
+        refresh_token: "old-grant".into(),
+        expires_in: 3600,
+        expires_at: chrono::Utc::now() + chrono::Duration::hours(1),
+        token_type: "Bearer".into(),
+        scope: String::new(),
+    };
+    store.save_new(&c, &t).await.unwrap();
+    assert!(store.refresh(&c).await.is_err());
+    assert!(store.has_pending().await);
+    assert!(c.has_pending_grant().await);
+    assert!(store.refresh(&c).await.is_err());
+    assert_eq!(
+        calls.load(Ordering::SeqCst),
+        1,
+        "failed disk checkpoint must prevent a second refresh"
+    );
+    std::fs::remove_dir(&path).unwrap();
+    c.retry_pending_grant().await.unwrap();
+    let file: Value = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    assert_eq!(file["refreshToken"], "newest-owned");
+    assert!(!store.has_pending().await);
+}
+
+#[tokio::test]
+async fn volatile_epoch_does_not_change_immutable_oauth_binding() {
+    let epoch = Arc::new(AtomicUsize::new(1));
+    let ee = epoch.clone();
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let f = Fixture::new(Arc::new(move |_, _, _, _| {
+        let mut config = public_config(&b.lock().unwrap(), "RealA");
+        config["coordination"]["epoch"] = json!(format!("boot-{}", ee.load(Ordering::SeqCst)));
+        (200, config)
+    }))
+    .await;
+    *base.lock().unwrap() = f.base.clone();
+    let c = f.client("RealA");
+    assert_eq!(
+        c.auth_config().await.unwrap().coordination.unwrap().epoch,
+        "boot-1"
+    );
+    epoch.store(2, Ordering::SeqCst);
+    assert_eq!(
+        c.auth_config().await.unwrap().coordination.unwrap().epoch,
+        "boot-2"
+    );
+}
+
+#[tokio::test]
+async fn same_origin_oauth_endpoint_and_scope_changes_are_rejected() {
+    for field in [
+        "tokenEndpoint",
+        "revocationEndpoint",
+        "deviceAuthorizationEndpoint",
+        "scope",
+    ] {
+        let base = Arc::new(Mutex::new(String::new()));
+        let b = base.clone();
+        let changed = Arc::new(AtomicUsize::new(0));
+        let flag = changed.clone();
+        let f = Fixture::new(Arc::new(move |_, _, _, _| {
+            let mut cfg = public_config(&b.lock().unwrap(), "RealA");
+            if flag.load(Ordering::SeqCst) > 0 {
+                cfg[field] = json!(if field == "scope" {
+                    "openid offline_access connect profile".to_owned()
+                } else {
+                    format!("{}/oidc/changed", b.lock().unwrap())
+                });
+            }
+            (200, cfg)
+        }))
+        .await;
+        *base.lock().unwrap() = f.base.clone();
+        let c = f.client("RealA");
+        c.auth_config().await.unwrap();
+        changed.store(1, Ordering::SeqCst);
+        assert!(c.auth_config().await.is_err(), "accepted changed {field}");
+    }
+}
+
+struct TestProvider {
+    calls: AtomicUsize,
+}
+impl AuthProvider for TestProvider {
+    fn access_token<'a>(&'a self, _: &'a Client) -> AuthFuture<'a> {
+        Box::pin(async move {
+            self.calls.fetch_add(1, Ordering::SeqCst);
+            Ok("recovered-resource".into())
+        })
+    }
+}
+#[tokio::test]
+async fn epoch_reset_recovers_once_republishes_and_close_stops_recovery() {
+    let (f, state) = control().await;
+    let c = f.client("RealA");
+    let auth = Arc::new(TestProvider {
+        calls: AtomicUsize::new(0),
+    });
+    c.set_auth_provider(auth.clone()).await;
+    let first = c.login_with_access_token("first", "a").await.unwrap();
+    c.enable_remote().await.unwrap();
+    c.expose(Port::tcp("persist", 12345, "intent"))
+        .await
+        .unwrap();
+    let old = c.active().await.unwrap();
+    state.lock().unwrap().epoch = "second-boot".into();
+    assert!(c.devices().await.is_err());
+    assert!(old.cancel.is_cancelled());
+    tokio::time::timeout(Duration::from_secs(5), async {
+        loop {
+            if let Some(s) = c.device_session().await {
+                if s.coordinator_epoch == "second-boot" && c.active().await.is_ok() {
+                    break;
+                }
+            }
+            tokio::time::sleep(Duration::from_millis(20)).await;
+        }
+    })
+    .await
+    .unwrap();
+    let next = c.device_session().await.unwrap();
+    assert_eq!(first.device_id, next.device_id);
+    assert_ne!(first.incarnation, next.incarnation);
+    assert_eq!(auth.calls.load(Ordering::SeqCst), 1);
+    assert_eq!(
+        state.lock().unwrap().devices["id-a"]["ports"][0]["id"],
+        "persist"
+    );
+    c.close().await.unwrap();
+    state.lock().unwrap().epoch = "third-boot".into();
+    assert!(c.devices().await.is_err());
+    tokio::time::sleep(Duration::from_millis(100)).await;
+    assert_eq!(auth.calls.load(Ordering::SeqCst), 1);
+}
+
+#[tokio::test]
+async fn uncertain_first_snapshot_retires_attempt_before_changing_pin() {
+    let (f, state) = control().await;
+    let c = f.client("RealA");
+    c.set_auth_provider(Arc::new(TestProvider {
+        calls: AtomicUsize::new(0),
+    }))
+    .await;
+    c.login_with_access_token("first", "a").await.unwrap();
+    c.enable_remote().await.unwrap();
+    {
+        let mut s = state.lock().unwrap();
+        s.epoch = "new-boot".into();
+        s.fail_next_publish = true;
+    }
+    assert!(c.devices().await.is_err());
+    tokio::time::timeout(Duration::from_secs(8), async {
+        loop {
+            if c.device_session()
+                .await
+                .is_some_and(|s| s.coordinator_epoch == "new-boot")
+                && c.active().await.is_ok()
+            {
+                break;
+            }
+            tokio::time::sleep(Duration::from_millis(20)).await;
+        }
+    })
+    .await
+    .unwrap();
+    {
+        let s = state.lock().unwrap();
+        assert_eq!(s.registrations.len(), 3);
+        assert_ne!(
+            s.registrations[1]["requestId"],
+            s.registrations[2]["requestId"]
+        );
+        assert_eq!(s.registrations[1]["registrationRevision"], 2);
+        assert_eq!(s.registrations[2]["registrationRevision"], 3);
+    }
+    c.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn mapping_listener_survives_epoch_reset_and_only_new_tcp_uses_fresh_peer() {
+    let (f, state) = control().await;
+    let a = f.client("RealA");
+    let b = f.client("RealA");
+    for c in [&a, &b] {
+        c.set_auth_provider(Arc::new(TestProvider {
+            calls: AtomicUsize::new(0),
+        }))
+        .await;
+    }
+    a.login_with_access_token("a", "a").await.unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("b", "b").await.unwrap();
+    b.enable_remote().await.unwrap();
+    let (port, echo) = echo().await;
+    b.expose(Port::tcp("echo", port, "echo")).await.unwrap();
+    let mapping = a
+        .map("id-b", "echo", "127.0.0.1:0".parse().unwrap())
+        .await
+        .unwrap();
+    let mut old = tokio::net::TcpStream::connect(mapping.addr).await.unwrap();
+    old.write_all(b"before").await.unwrap();
+    let mut before = [0; 6];
+    old.read_exact(&mut before).await.unwrap();
+    assert_eq!(&before, b"before");
+    state.lock().unwrap().epoch = "restarted-owner".into();
+    let _ = a.devices().await;
+    let _ = b.devices().await;
+    tokio::time::timeout(Duration::from_secs(8), async {
+        loop {
+            if a.device_session()
+                .await
+                .is_some_and(|s| s.coordinator_epoch == "restarted-owner")
+                && b.device_session()
+                    .await
+                    .is_some_and(|s| s.coordinator_epoch == "restarted-owner")
+                && a.active().await.is_ok()
+                && b.active().await.is_ok()
+            {
+                break;
+            }
+            tokio::time::sleep(Duration::from_millis(20)).await;
+        }
+    })
+    .await
+    .unwrap();
+    assert!(mapping.current_transport().await.is_none());
+    let eof = tokio::time::timeout(Duration::from_secs(2), old.read(&mut before))
+        .await
+        .unwrap();
+    assert!(
+        matches!(eof, Ok(0) | Err(_)),
+        "old TCP must end instead of replaying bytes"
+    );
+    let mut next = tokio::net::TcpStream::connect(mapping.addr).await.unwrap();
+    next.write_all(b"after").await.unwrap();
+    let mut bytes = [0; 5];
+    tokio::time::timeout(Duration::from_secs(8), next.read_exact(&mut bytes))
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(&bytes, b"after");
+    assert!(mapping.current_transport().await.is_some());
+    mapping.close().await;
+    a.close().await.unwrap();
+    b.close().await.unwrap();
+    echo.abort();
+}
+
+#[tokio::test]
+async fn pending_checkpoint_and_next_rotation_share_one_authorization_gate() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let calls = Arc::new(AtomicUsize::new(0));
+    let cc = calls.clone();
+    let root = tempfile::tempdir().unwrap();
+    let path = root.path().join("grant.json");
+    let p = path.clone();
+    let f=Fixture::new(Arc::new(move|_,path,body,_|{
+        if path.starts_with("/api/v1/auth/config?"){return(200,public_config(&b.lock().unwrap(),"RealA"));}
+        let n=cc.fetch_add(1,Ordering::SeqCst);
+        if n==0 {std::fs::remove_file(&p).unwrap();std::fs::create_dir(&p).unwrap();}
+        else {let form=url::form_urlencoded::parse(&body).collect::<HashMap<_,_>>();assert_eq!(form.get("refresh_token").unwrap(),"owned-one");}
+        (200,json!({"access_token":"access","refresh_token":if n==0{"owned-one"}else{"owned-two"},"expires_in":3600,"token_type":"Bearer"}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    let c = f.client("RealA");
+    let store = CredentialStore::new(&path);
+    let old = OAuthTokens {
+        access_token: "access".into(),
+        refresh_token: "old".into(),
+        expires_in: 3600,
+        expires_at: chrono::Utc::now() + chrono::Duration::hours(1),
+        token_type: "Bearer".into(),
+        scope: String::new(),
+    };
+    store.save_new(&c, &old).await.unwrap();
+    assert!(store.refresh(&c).await.is_err());
+    std::fs::remove_dir(&path).unwrap();
+    let gate = store.auth_gate.lock().await;
+    let retry_client = c.clone();
+    let retry = tokio::spawn(async move { retry_client.retry_pending_grant().await });
+    tokio::time::sleep(Duration::from_millis(100)).await;
+    let next_store = store.clone();
+    let next_client = c.clone();
+    let next = tokio::spawn(async move { next_store.refresh(&next_client).await });
+    tokio::time::sleep(Duration::from_millis(100)).await;
+    assert_eq!(
+        calls.load(Ordering::SeqCst),
+        1,
+        "rotation must wait behind pending checkpoint"
+    );
+    drop(gate);
+    retry.await.unwrap().unwrap();
+    next.await.unwrap().unwrap();
+    let saved: Value = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    assert_eq!(saved["refreshToken"], "owned-two");
+    assert!(!c.has_pending_grant().await);
+    assert!(store.save_new(&c, &old).await.is_err());
+}
+
+#[tokio::test]
+async fn provider_exit_withdraws_url_and_close_joins_child_without_respawn() {
+    use std::os::unix::fs::PermissionsExt;
+    let (f, state) = control().await;
+    let mut c = f.client("RealA");
+    let root = tempfile::tempdir().unwrap();
+    let script = root.path().join("provider-fixture.sh");
+    let record = root.path().join("pids");
+    std::fs::write(&script,format!("#!/bin/sh\necho $$ >> '{}'\necho 'https://fixture-test.trycloudflare.com'\necho 'Registered tunnel connection'\nexec /bin/sleep 60\n",record.display())).unwrap();
+    std::fs::set_permissions(&script, std::fs::Permissions::from_mode(0o700)).unwrap();
+    Arc::get_mut(&mut c).unwrap().cfg.cloudflared = Some(CloudflaredConfig::new(script));
+    let reads = Arc::new(AtomicUsize::new(0));
+    let reads_callback = reads.clone();
+    Arc::get_mut(&mut c)
+        .unwrap()
+        .cfg
+        .cloudflared
+        .as_mut()
+        .unwrap()
+        .env_provider = Some(Arc::new(move || {
+        reads_callback.fetch_add(1, Ordering::SeqCst);
+        Ok(HashMap::new())
+    }));
+    let mut events = c.subscribe();
+    c.login_with_access_token("first", "a").await.unwrap();
+    c.enable_remote().await.unwrap();
+    tokio::time::timeout(Duration::from_secs(3), async {
+        loop {
+            if events.recv().await.unwrap().phase == "tunnel-ready" {
+                break;
+            }
+        }
+    })
+    .await
+    .unwrap();
+    let first: i32 = std::fs::read_to_string(&record)
+        .unwrap()
+        .trim()
+        .parse()
+        .unwrap();
+    assert_eq!(unsafe { libc::kill(first, libc::SIGTERM) }, 0);
+    tokio::time::timeout(Duration::from_secs(3), async {
+        loop {
+            if events.recv().await.unwrap().phase == "provider-restarting" {
+                break;
+            }
+        }
+    })
+    .await
+    .unwrap();
+    assert!(
+        state.lock().unwrap().devices["id-a"]["tunnelUrl"].is_null(),
+        "failed URL must be withdrawn before restart"
+    );
+    tokio::time::timeout(Duration::from_secs(4), async {
+        loop {
+            if events.recv().await.unwrap().phase == "tunnel-ready" {
+                break;
+            }
+        }
+    })
+    .await
+    .unwrap();
+    c.close().await.unwrap();
+    let pids = std::fs::read_to_string(&record).unwrap();
+    assert_eq!(pids.lines().count(), 2);
+    assert_eq!(
+        reads.load(Ordering::SeqCst),
+        2,
+        "each start must refresh platform environment"
+    );
+    for pid in pids.lines() {
+        assert_eq!(
+            unsafe { libc::kill(pid.parse().unwrap(), 0) },
+            -1,
+            "Close must reap its provider child"
+        );
+    }
+    tokio::time::sleep(Duration::from_millis(300)).await;
+    assert_eq!(
+        std::fs::read_to_string(&record).unwrap(),
+        pids,
+        "closed generation must not restart provider"
+    );
+}
+
+#[tokio::test]
+async fn v4_persisted_oauth_binding_rejects_endpoint_changes_in_a_new_client() {
+    for field in [
+        "tokenEndpoint",
+        "revocationEndpoint",
+        "deviceAuthorizationEndpoint",
+        "scope",
+    ] {
+        let base = Arc::new(Mutex::new(String::new()));
+        let b = base.clone();
+        let changed = Arc::new(AtomicUsize::new(0));
+        let flag = changed.clone();
+        let requests = Arc::new(AtomicUsize::new(0));
+        let count = requests.clone();
+        let f = Fixture::new(Arc::new(move |_, path, _, _| {
+            if path.starts_with("/api/v1/auth/config?") {
+                let mut cfg = public_config(&b.lock().unwrap(), "RealA");
+                if flag.load(Ordering::SeqCst) > 0 {
+                    cfg[field] = json!(if field == "scope" {
+                        "openid offline_access connect profile".to_owned()
+                    } else {
+                        format!("{}/oidc/changed", b.lock().unwrap())
+                    });
+                }
+                return (200, cfg);
+            }
+            count.fetch_add(1, Ordering::SeqCst);
+            (400, json!({"error":"invalid_grant"}))
+        }))
+        .await;
+        *base.lock().unwrap() = f.base.clone();
+        let root = tempfile::tempdir().unwrap();
+        let store = CredentialStore::new(root.path().join("grant.json"));
+        let c = f.client("RealA");
+        let t = OAuthTokens {
+            access_token: "access".into(),
+            refresh_token: "private".into(),
+            expires_in: 3600,
+            expires_at: chrono::Utc::now() + chrono::Duration::hours(1),
+            token_type: "Bearer".into(),
+            scope: String::new(),
+        };
+        store.save_new(&c, &t).await.unwrap();
+        let before = std::fs::read(store.path()).unwrap();
+        drop(c);
+        changed.store(1, Ordering::SeqCst);
+        let new_client = f.client("RealA");
+        assert!(
+            store.refresh(&new_client).await.is_err(),
+            "accepted persisted {field} change"
+        );
+        assert_eq!(
+            requests.load(Ordering::SeqCst),
+            0,
+            "must reject before sending refresh"
+        );
+        assert_eq!(std::fs::read(store.path()).unwrap(), before);
+    }
+}
+#[tokio::test]
+async fn v3_is_preserved_and_rejected_before_refresh_network() {
+    use std::os::unix::fs::PermissionsExt;
+    let calls = Arc::new(AtomicUsize::new(0));
+    let count = calls.clone();
+    let f = Fixture::new(Arc::new(move |_, _, _, _| {
+        count.fetch_add(1, Ordering::SeqCst);
+        (500, json!({}))
+    }))
+    .await;
+    let c = f.client("RealA");
+    let root = tempfile::tempdir().unwrap();
+    let store = CredentialStore::new(root.path().join("legacy.json"));
+    let bytes=serde_json::to_vec(&json!({"version":3,"server":f.base,"appId":"RealA","issuer":"https://old.example/oidc","clientId":"RealA","resource":"https://cybergrid.aixgg.com/api","refreshToken":"old-private"})).unwrap();
+    std::fs::write(store.path(), &bytes).unwrap();
+    std::fs::set_permissions(store.path(), std::fs::Permissions::from_mode(0o600)).unwrap();
+    assert!(store.refresh(&c).await.is_err());
+    assert_eq!(calls.load(Ordering::SeqCst), 0);
+    assert_eq!(std::fs::read(store.path()).unwrap(), bytes);
+}
+
+#[tokio::test]
+async fn credential_cross_process_child() {
+    let Ok(path) = std::env::var("CYBERGRID_LEASE_TEST_PATH") else {
+        return;
+    };
+    let server = std::env::var("CYBERGRID_LEASE_TEST_SERVER").unwrap();
+    let certificate = std::fs::read(std::env::var("CYBERGRID_LEASE_TEST_CERT").unwrap()).unwrap();
+    let mut client = Client::new(Config {
+        base_url: server,
+        app_id: "RealA".into(),
+        ..Config::default()
+    })
+    .unwrap();
+    Arc::get_mut(&mut client).unwrap().http = reqwest::Client::builder()
+        .add_root_certificate(reqwest::Certificate::from_der(&certificate).unwrap())
+        .timeout(Duration::from_secs(3))
+        .build()
+        .unwrap();
+    let store = CredentialStore::new(path);
+    if std::env::var("CYBERGRID_LEASE_TEST_ACTION").unwrap() == "blocked" {
+        assert!(
+            tokio::time::timeout(Duration::from_millis(300), store.refresh(&client))
+                .await
+                .is_err()
+        );
+    } else {
+        store.refresh(&client).await.unwrap();
+    }
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn disk_failure_holds_cross_process_lease_until_checkpoint_then_new_process_refreshes_latest()
+{
+    use std::os::unix::fs::PermissionsExt;
+    let root = tempfile::tempdir().unwrap();
+    let storage = root.path().join("private");
+    std::fs::create_dir(&storage).unwrap();
+    let path = storage.join("grant.json");
+    let blocked = storage.clone();
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let calls = Arc::new(AtomicUsize::new(0));
+    let counter = calls.clone();
+    let f=Fixture::new(Arc::new(move|_,path,body,_|{
+        if path.starts_with("/api/v1/auth/config?"){return(200,public_config(&b.lock().unwrap(),"RealA"));}
+        let n=counter.fetch_add(1,Ordering::SeqCst);if n==0{std::fs::set_permissions(&blocked,std::fs::Permissions::from_mode(0o500)).unwrap();}else{let form=url::form_urlencoded::parse(&body).collect::<HashMap<_,_>>();assert_eq!(form.get("refresh_token").unwrap(),"latest-one");}
+        (200,json!({"access_token":"access","refresh_token":if n==0{"latest-one"}else{"latest-two"},"expires_in":3600,"token_type":"Bearer"}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    let client = f.client("RealA");
+    let store = CredentialStore::new(&path);
+    let initial = OAuthTokens {
+        access_token: "access".into(),
+        refresh_token: "old-on-disk".into(),
+        expires_in: 3600,
+        expires_at: chrono::Utc::now() + chrono::Duration::hours(1),
+        token_type: "Bearer".into(),
+        scope: String::new(),
+    };
+    store.save_new(&client, &initial).await.unwrap();
+    assert!(store.refresh(&client).await.is_err());
+    assert!(store.has_pending().await);
+    let old: Value = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    assert_eq!(old["refreshToken"], "old-on-disk");
+    let cert = root.path().join("fixture.der");
+    std::fs::write(&cert, &f.cert).unwrap();
+    let child = |action: &str| {
+        std::process::Command::new(std::env::current_exe().unwrap())
+            .args([
+                "--exact",
+                "tests::credential_cross_process_child",
+                "--nocapture",
+            ])
+            .env("CYBERGRID_LEASE_TEST_PATH", &path)
+            .env("CYBERGRID_LEASE_TEST_SERVER", &f.base)
+            .env("CYBERGRID_LEASE_TEST_CERT", &cert)
+            .env("CYBERGRID_LEASE_TEST_ACTION", action)
+            .output()
+            .unwrap()
+    };
+    let result = child("blocked");
+    assert!(
+        result.status.success(),
+        "child lock barrier failed: {}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert_eq!(
+        calls.load(Ordering::SeqCst),
+        1,
+        "another process must not send the old refresh"
+    );
+    std::fs::set_permissions(&storage, std::fs::Permissions::from_mode(0o700)).unwrap();
+    tokio::time::timeout(Duration::from_secs(3), client.retry_pending_grant())
+        .await
+        .unwrap()
+        .unwrap();
+    let result = child("refresh");
+    assert!(
+        result.status.success(),
+        "child refresh after release failed: {}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert_eq!(calls.load(Ordering::SeqCst), 2);
+    let saved: Value = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    assert_eq!(saved["refreshToken"], "latest-two");
+}
+
+#[tokio::test]
+async fn pending_grant_can_be_revoked_after_close_while_disk_stays_unwritable() {
+    use std::os::unix::fs::PermissionsExt;
+    let root = tempfile::tempdir().unwrap();
+    let storage = root.path().join("private");
+    std::fs::create_dir(&storage).unwrap();
+    let path = storage.join("grant.json");
+    let blocked = storage.clone();
+    let base = Arc::new(Mutex::new(String::new()));
+    let b = base.clone();
+    let revoke = Arc::new(AtomicUsize::new(0));
+    let revoked = revoke.clone();
+    let f=Fixture::new(Arc::new(move|_,path,body,_|{
+        if path.starts_with("/api/v1/auth/config?"){return(200,public_config(&b.lock().unwrap(),"RealA"));}
+        if path.ends_with("/revocation"){let form=url::form_urlencoded::parse(&body).collect::<HashMap<_,_>>();assert_eq!(form.get("token").unwrap(),"newest-revocable");revoked.fetch_add(1,Ordering::SeqCst);return(200,json!({}));}
+        std::fs::set_permissions(&blocked,std::fs::Permissions::from_mode(0o500)).unwrap();(200,json!({"access_token":"access","refresh_token":"newest-revocable","expires_in":3600,"token_type":"Bearer"}))
+    })).await;
+    *base.lock().unwrap() = f.base.clone();
+    let client = f.client("RealA");
+    let store = CredentialStore::new(&path);
+    let initial = OAuthTokens {
+        access_token: "access".into(),
+        refresh_token: "old".into(),
+        expires_in: 3600,
+        expires_at: chrono::Utc::now() + chrono::Duration::hours(1),
+        token_type: "Bearer".into(),
+        scope: String::new(),
+    };
+    store.save_new(&client, &initial).await.unwrap();
+    assert!(store.refresh(&client).await.is_err());
+    client.close().await.unwrap();
+    // Remote revocation succeeds although deleting the stale local file cannot.
+    assert!(client.revoke_pending_grant().await.is_err());
+    assert_eq!(revoke.load(Ordering::SeqCst), 1);
+    assert!(!client.has_pending_grant().await);
+    let lock = std::fs::OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(path.with_extension("json.lock"))
+        .unwrap();
+    assert!(fs2::FileExt::try_lock_exclusive(&lock).is_ok());
+    std::fs::set_permissions(&storage, std::fs::Permissions::from_mode(0o700)).unwrap();
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn close_during_environment_callback_prevents_provider_spawn() {
+    use std::os::unix::fs::PermissionsExt;
+    let (f, _) = control().await;
+    let mut c = f.client("RealA");
+    let root = tempfile::tempdir().unwrap();
+    let script = root.path().join("must-not-start.sh");
+    let record = root.path().join("started");
+    std::fs::write(
+        &script,
+        format!("#!/bin/sh\necho started > '{}'\n", record.display()),
+    )
+    .unwrap();
+    std::fs::set_permissions(&script, std::fs::Permissions::from_mode(0o700)).unwrap();
+    let started = Arc::new(tokio::sync::Notify::new());
+    let notify = started.clone();
+    let barrier = Arc::new(std::sync::Barrier::new(2));
+    let release = barrier.clone();
+    let mut provider = CloudflaredConfig::new(script);
+    provider.env_provider = Some(Arc::new(move || {
+        notify.notify_one();
+        release.wait();
+        Ok(HashMap::new())
+    }));
+    Arc::get_mut(&mut c).unwrap().cfg.cloudflared = Some(provider);
+    c.login_with_access_token("first", "a").await.unwrap();
+    c.enable_remote().await.unwrap();
+    started.notified().await;
+    let close_client = c.clone();
+    let close = tokio::spawn(async move { close_client.close().await });
+    c.closed_token().cancelled().await;
+    barrier.wait();
+    close.await.unwrap().unwrap();
+    assert!(
+        !record.exists(),
+        "Close must fence spawn after environment callback completes"
+    );
+}
+
+#[tokio::test]
+async fn browser_login_flow_prevents_device_oauth_requests() {
+    let base = Arc::new(Mutex::new(String::new()));
+    let source = base.clone();
+    let oauth = Arc::new(AtomicUsize::new(0));
+    let attempts = oauth.clone();
+    let fixture = Fixture::new(Arc::new(move |_, path, _, _| {
+        if path.starts_with("/api/v1/auth/config?") {
+            let mut config = public_config(&source.lock().unwrap(), "RealA");
+            config["loginFlow"] = json!("authorization_code");
+            return (200, config);
+        }
+        attempts.fetch_add(1, Ordering::SeqCst);
+        (400, json!({"error":"unexpected_oauth"}))
+    }))
+    .await;
+    *base.lock().unwrap() = fixture.base.clone();
+    let client = fixture.client("RealA");
+    let error = client.begin_device_authorization().await.unwrap_err();
+    assert!(error.to_string().contains("Device Flow is not supported"));
+    assert_eq!(oauth.load(Ordering::SeqCst), 0);
+    let legacy: AuthConfig = serde_json::from_value(public_config(&fixture.base, "RealA")).unwrap();
+    assert!(legacy.login_flow.is_none());
+    legacy.validate("RealA").unwrap();
+    let mut invalid = legacy;
+    invalid.login_flow = Some("unknown".into());
+    assert!(invalid.validate("RealA").is_err());
+}
+
+fn iroh_fixture_client(f: &Fixture, strategy: DirectStrategy) -> Arc<Client> {
+    let mut c = f.client("RealA");
+    let cfg = &mut Arc::get_mut(&mut c).unwrap().cfg;
+    cfg.iroh_enabled = true;
+    cfg.direct_strategy = strategy;
+    cfg.direct_timeout = Duration::from_nanos(1);
+    cfg.iroh_timeout = Duration::from_secs(3);
+    cfg.fallback_timeout = Duration::from_millis(150);
+    cfg.poll_interval = Duration::from_millis(10);
+    cfg.stun_servers.clear();
+    c
+}
+async fn iroh_publish_ready(c: &Arc<Client>) {
+    for _ in 0..100 {
+        if !c
+            .active()
+            .await
+            .unwrap()
+            .iroh
+            .as_ref()
+            .unwrap()
+            .info()
+            .addresses
+            .is_empty()
+        {
+            c.heartbeat().await.unwrap();
+            return;
+        }
+        tokio::time::sleep(Duration::from_millis(10)).await;
+    }
+    panic!("local direct endpoint did not publish a numeric address");
+}
+async fn live_peers(c: &Arc<Client>) -> usize {
+    c.active()
+        .await
+        .unwrap()
+        .peers
+        .lock()
+        .await
+        .iter()
+        .filter(|p| !p.is_closed())
+        .count()
+}
+#[tokio::test]
+async fn iroh_actual_quic_inner_mtls_smux_halfclose_and_peer_cleanup() {
+    let (f, _) = control().await;
+    let a = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    let b = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    a.login_with_access_token("fixture-token-a", "a")
+        .await
+        .unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("fixture-token-b", "b")
+        .await
+        .unwrap();
+    b.enable_remote().await.unwrap();
+    iroh_publish_ready(&a).await;
+    iroh_publish_ready(&b).await;
+    let (port, echo) = echo().await;
+    b.expose(Port::tcp("echo", port, "echo")).await.unwrap();
+    let mut events = a.subscribe();
+    let peer = a.connect("id-b").await.unwrap();
+    assert_eq!(peer.transport, "iroh-direct");
+    let conn = peer.iroh.lock().await.clone().unwrap();
+    assert!(conn.paths().iter().any(|p| p.is_selected() && p.is_ip()));
+    assert!(conn.paths().iter().all(|p| !p.is_relay()));
+    let mut stream = peer.dial("echo").await.unwrap();
+    let data: Vec<u8> = (0..65536).map(|i| (i % 251) as u8).collect();
+    let (mut read, mut write) = tokio::io::split(&mut stream);
+    let (_, result) = tokio::join!(
+        async {
+            write.write_all(&data).await.unwrap();
+            write.shutdown().await.unwrap();
+        },
+        async {
+            let mut out = Vec::new();
+            read.read_to_end(&mut out).await.unwrap();
+            out
+        }
+    );
+    assert_eq!(result, data);
+    let mut phases = Vec::new();
+    while let Ok(e) = events.try_recv() {
+        phases.push((e.phase, e.transport));
+    }
+    let rtc = phases.iter().position(|e| e.0 == "direct-attempt").unwrap();
+    let iroh = phases.iter().position(|e| e.0 == "iroh-attempt").unwrap();
+    assert!(rtc < iroh);
+    assert!(phases
+        .iter()
+        .any(|e| e.0 == "mutual-tls-ready" && e.1.as_deref() == Some("iroh-direct")));
+    assert!(!phases.iter().any(|e| e.0 == "fallback-attempt"));
+    peer.close().await;
+    tokio::time::timeout(Duration::from_secs(2), conn.closed())
+        .await
+        .unwrap();
+    for _ in 0..100 {
+        if live_peers(&b).await == 0 {
+            break;
+        }
+        tokio::time::sleep(Duration::from_millis(10)).await;
+    }
+    assert_eq!(live_peers(&b).await, 0);
+    let endpoint = a
+        .active()
+        .await
+        .unwrap()
+        .iroh
+        .as_ref()
+        .unwrap()
+        .endpoint
+        .clone();
+    a.close().await.unwrap();
+    b.close().await.unwrap();
+    assert!(endpoint.is_closed());
+    echo.abort();
+}
+#[tokio::test]
+async fn iroh_wrong_inner_identity_and_endpoint_namespace_are_rejected() {
+    let (f, state) = control().await;
+    let a = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    let b = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    a.login_with_access_token("fixture-token-a", "a")
+        .await
+        .unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("fixture-token-b", "b")
+        .await
+        .unwrap();
+    b.enable_remote().await.unwrap();
+    iroh_publish_ready(&a).await;
+    iroh_publish_ready(&b).await;
+    let mut device = a.device("id-b").await.unwrap();
+    device.certificate_fingerprint = Some("0".repeat(64));
+    assert!(a.dial_iroh(&device).await.is_err());
+    // A real outer public key belonging to no published device must not get to
+    // use a valid inner certificate as a substitute for the missing binding.
+    state.lock().unwrap().devices.get_mut("id-a").unwrap()["iroh"] = Value::Null;
+    assert!(a.dial_iroh(&a.device("id-b").await.unwrap()).await.is_err());
+    assert_eq!(live_peers(&a).await, 0);
+    assert_eq!(live_peers(&b).await, 0);
+    a.close().await.unwrap();
+    b.close().await.unwrap();
+}
+#[tokio::test]
+async fn iroh_parallel_first_authenticated_winner_has_no_late_loser_peer() {
+    let (f, _) = control().await;
+    let mut a = iroh_fixture_client(&f, DirectStrategy::Parallel);
+    Arc::get_mut(&mut a).unwrap().cfg.direct_timeout = Duration::from_secs(3);
+    let b = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    a.login_with_access_token("fixture-token-a", "a")
+        .await
+        .unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("fixture-token-b", "b")
+        .await
+        .unwrap();
+    b.enable_remote().await.unwrap();
+    iroh_publish_ready(&a).await;
+    iroh_publish_ready(&b).await;
+    let mut events = a.subscribe();
+
+    let peer = a.connect("id-b").await.unwrap();
+
+    assert!(matches!(
+        peer.transport.as_str(),
+        "iroh-direct" | "webrtc-direct"
+    ));
+    tokio::time::sleep(Duration::from_millis(200)).await;
+    assert_eq!(live_peers(&a).await, 1);
+    assert_eq!(live_peers(&b).await, 1);
+    let mut ready = 0;
+    while let Ok(event) = events.try_recv() {
+        if event.phase == "multiplexer-ready" {
+            ready += 1;
+        }
+        assert_ne!(event.phase, "fallback-attempt");
+    }
+    assert_eq!(ready, 1);
+    let rt = a.active().await.unwrap();
+    assert!(rt
+        .attempts
+        .lock()
+        .await
+        .values()
+        .all(|attempt| attempt.connected.load(Ordering::SeqCst) || attempt.cancel.is_cancelled()));
+
+    peer.close().await;
+
+    a.close().await.unwrap();
+
+    b.close().await.unwrap();
+}
+#[tokio::test]
+async fn iroh_legacy_peer_skip_fallback_budget_and_cancel() {
+    let (f, state) = control().await;
+    state.lock().unwrap().drop_signals = true;
+    let a = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    let b = f.client("RealA"); // old peer: no iroh metadata
+    a.login_with_access_token("fixture-token-a", "a")
+        .await
+        .unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("fixture-token-b", "b")
+        .await
+        .unwrap();
+    b.enable_remote().await.unwrap();
+    let mut events = a.subscribe();
+    let started = std::time::Instant::now();
+    assert!(a.connect("id-b").await.is_err());
+    assert!(started.elapsed() < Duration::from_secs(2));
+    let mut phases = Vec::new();
+    while let Ok(e) = events.try_recv() {
+        phases.push(e.phase);
+    }
+    assert!(
+        phases.iter().position(|s| s == "direct-attempt").unwrap()
+            < phases.iter().position(|s| s == "iroh-skipped").unwrap()
+    );
+    assert!(phases.contains(&"fallback-attempt".to_owned()));
+    assert!(!phases.contains(&"iroh-attempt".to_owned()));
+    let pending = {
+        let a = a.clone();
+        tokio::spawn(async move { a.connect("id-b").await })
+    };
+    tokio::time::sleep(Duration::from_millis(10)).await;
+    let rt = a.active().await.unwrap();
+    a.close().await.unwrap();
+    assert!(tokio::time::timeout(Duration::from_secs(2), pending)
+        .await
+        .unwrap()
+        .unwrap()
+        .is_err());
+    assert!(rt.iroh.as_ref().unwrap().endpoint.is_closed());
+    assert!(rt
+        .attempts
+        .lock()
+        .await
+        .values()
+        .all(|a| a.cancel.is_cancelled()));
+    b.close().await.unwrap();
+}
+#[test]
+fn iroh_metadata_numeric_policy_and_parallel_budget() {
+    let valid = |addresses: Vec<&str>| json!({"endpointId":"ab".repeat(32),"addresses":addresses});
+    for addresses in [
+        vec![],
+        vec!["127.0.0.1:1234", "[::1]:1234", "[::ffff:192.0.2.1]:1234"],
+    ] {
+        serde_json::from_value::<IrohInfo>(valid(addresses))
+            .unwrap()
+            .validate()
+            .unwrap();
+    }
+    for addresses in [
+        vec!["0.0.0.0:1"],
+        vec!["[::]:1"],
+        vec!["224.0.0.1:1"],
+        vec!["[ff02::1]:1"],
+        vec!["[::ffff:224.0.0.1]:1"],
+        vec!["[::ffff:e000:1]:1"],
+        vec!["[::ffff:0.0.0.0]:1"],
+        vec!["192.0.2.1:1", "[::ffff:192.0.2.1]:1"],
+        vec!["127.0.0.1:0"],
+    ] {
+        assert!(serde_json::from_value::<IrohInfo>(valid(addresses))
+            .unwrap()
+            .validate()
+            .is_err());
+    }
+    assert!(serde_json::from_value::<IrohInfo>(valid(vec!["example.test:1"])).is_err());
+    for address in ["[fe80::1%0]:1", "[fe80::1%1]:1"] {
+        assert!(serde_json::from_value::<IrohInfo>(valid(vec![address])).is_err());
+    }
+    let mut unknown = valid(vec![]);
+    unknown["relayUrl"] = json!("https://relay.example.test");
+    assert!(serde_json::from_value::<IrohInfo>(unknown).is_err());
+    let mut c = Config::default();
+    assert_eq!(c.connection_budget(), Duration::from_secs(57));
+    c.direct_strategy = DirectStrategy::Parallel;
+    assert_eq!(c.connection_budget(), Duration::from_secs(49));
+    c.interface_name = Some("explicit-filter".into());
+    assert_eq!(c.connection_budget(), Duration::from_secs(49));
+    c.direct_timeout = Duration::MAX;
+    assert_eq!(c.connection_budget(), Duration::from_secs(90));
+}
+#[tokio::test]
+async fn port_tunnel_explicit_update_withdraw_preserves_service_snapshot() {
+    let (f, state) = control().await;
+    let c = f.client("RealA");
+    c.login_with_access_token("fixture-token-a", "a")
+        .await
+        .unwrap();
+    c.enable_remote().await.unwrap();
+    c.expose(Port::tcp("http", 6789, "http")).await.unwrap();
+    let url = "https://one-port-only.trycloudflare.com/";
+    c.update_port_tunnel_url("http", Some(url)).await.unwrap();
+    {
+        let s = state.lock().unwrap();
+        let p = &s.devices["id-a"]["ports"][0];
+        assert_eq!(p["port"], 6789);
+        assert_eq!(p["type"], "http");
+        assert_eq!(p["tunnelUrl"], url);
+        assert!(s.devices["id-a"]["tunnelUrl"].is_null());
+    }
+    for invalid in [
+        "http://one-port-only.trycloudflare.com/",
+        "https://secret@one-port-only.trycloudflare.com/",
+        "https://one-port-only.trycloudflare.com/path",
+        "https://one-port-only.trycloudflare.com/?q=1",
+        "https://one-port-only.trycloudflare.com:444/",
+    ] {
+        assert!(c
+            .update_port_tunnel_url("http", Some(invalid))
+            .await
+            .is_err());
+    }
+    assert_eq!(
+        c.ports.read().await["http"].tunnel_url.as_deref(),
+        Some(url)
+    );
+    c.update_port_tunnel_url("http", None).await.unwrap();
+    assert!(state.lock().unwrap().devices["id-a"]["ports"][0]
+        .get("tunnelUrl")
+        .is_none());
+    assert_eq!(c.ports.read().await["http"].port, 6789);
+    assert!(c.update_port_tunnel_url("absent", Some(url)).await.is_err());
+    c.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn iroh_generation_recovery_rotates_key_and_preserves_port_url() {
+    let (f, state) = control().await;
+    let c = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    c.set_auth_provider(Arc::new(TestProvider {
+        calls: AtomicUsize::new(0),
+    }))
+    .await;
+    c.login_with_access_token("first", "a").await.unwrap();
+    c.enable_remote().await.unwrap();
+    iroh_publish_ready(&c).await;
+    let mut port = Port::tcp("public-http", 6789, "http");
+    port.tunnel_url = Some("https://one-port-only.trycloudflare.com/".into());
+    c.expose(port).await.unwrap();
+    let old = c.active().await.unwrap();
+    let old_endpoint = old.iroh.as_ref().unwrap();
+    let old_id = old_endpoint.info().endpoint_id;
+    state.lock().unwrap().epoch = "iroh-next-generation".into();
+    assert!(c.devices().await.is_err());
+    tokio::time::timeout(Duration::from_secs(5), async {
+        loop {
+            if let Ok(rt) = c.active().await {
+                if rt.generation != old.generation {
+                    break;
+                }
+            }
+            tokio::time::sleep(Duration::from_millis(10)).await;
+        }
+    })
+    .await
+    .unwrap();
+    let current = c.active().await.unwrap();
+    assert!(old_endpoint.endpoint.is_closed());
+    assert_ne!(old_id, current.iroh.as_ref().unwrap().info().endpoint_id);
+    assert_eq!(
+        state.lock().unwrap().devices["id-a"]["ports"][0]["tunnelUrl"],
+        "https://one-port-only.trycloudflare.com/"
+    );
+    // A late attempt holding a retired generation cannot publish a new peer.
+    let stale = crate::peer::DialFence::single(CancellationToken::new(), old.generation);
+    let device = c.device("id-a").await.unwrap();
+    assert!(matches!(
+        c.dial_iroh_fenced(&device, &stale).await,
+        Err(Error::Cancelled)
+    ));
+    c.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn iroh_interface_filter_skips_endpoint_and_parallel_both_fail_before_fallback() {
+    let (f, state) = control().await;
+    state.lock().unwrap().drop_signals = true;
+    let mut a = iroh_fixture_client(&f, DirectStrategy::Parallel);
+
+    let cfg = &mut Arc::get_mut(&mut a).unwrap().cfg;
+    cfg.interface_name = Some("cybergrid-no-such-interface".into());
+    a.login_with_access_token("a", "a").await.unwrap();
+    a.enable_remote().await.unwrap();
+    assert!(a.active().await.unwrap().iroh.is_none());
+    assert!(state.lock().unwrap().devices["id-a"]["iroh"].is_null());
+    a.close().await.unwrap();
+
+    let mut a = iroh_fixture_client(&f, DirectStrategy::Parallel);
+
+    let cfg = &mut Arc::get_mut(&mut a).unwrap().cfg;
+    cfg.direct_timeout = Duration::from_millis(80);
+    cfg.iroh_timeout = Duration::from_millis(100);
+    let b = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    a.login_with_access_token("a", "a").await.unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("b", "b").await.unwrap();
+    b.enable_remote().await.unwrap();
+    iroh_publish_ready(&a).await;
+    iroh_publish_ready(&b).await;
+    state.lock().unwrap().devices.get_mut("id-b").unwrap()["iroh"]["addresses"] =
+        json!(["127.0.0.1:9"]);
+    let mut events = a.subscribe();
+    let start = std::time::Instant::now();
+
+    assert!(a.connect("id-b").await.is_err());
+
+    assert!(start.elapsed() >= Duration::from_millis(100));
+    assert!(start.elapsed() < Duration::from_secs(1));
+    let mut phases = Vec::new();
+    while let Ok(event) = events.try_recv() {
+        phases.push(event.phase);
+    }
+    assert!(
+        phases.iter().position(|p| p == "iroh-attempt").unwrap()
+            < phases.iter().position(|p| p == "fallback-attempt").unwrap()
+    );
+    assert_eq!(live_peers(&a).await, 0);
+    assert_eq!(live_peers(&b).await, 0);
+    let pending = {
+        let a = a.clone();
+        tokio::spawn(async move { a.connect("id-b").await })
+    };
+    tokio::time::sleep(Duration::from_millis(10)).await;
+    let rt = a.active().await.unwrap();
+    a.close().await.unwrap();
+    assert!(tokio::time::timeout(Duration::from_secs(2), pending)
+        .await
+        .unwrap()
+        .unwrap()
+        .is_err());
+    assert!(rt.iroh.as_ref().unwrap().endpoint.is_closed());
+
+    assert!(rt.attempts.lock().await.is_empty());
+    b.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn iroh_parallel_dropped_caller_retires_early_webrtc_creation() {
+    let (f, state) = control().await;
+    state.lock().unwrap().drop_signals = true;
+    let mut a = iroh_fixture_client(&f, DirectStrategy::Parallel);
+    Arc::get_mut(&mut a).unwrap().cfg.direct_timeout = Duration::from_secs(1);
+    let b = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    a.login_with_access_token("a", "a").await.unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("b", "b").await.unwrap();
+    b.enable_remote().await.unwrap();
+    iroh_publish_ready(&a).await;
+    iroh_publish_ready(&b).await;
+    state.lock().unwrap().devices.get_mut("id-b").unwrap()["iroh"]["addresses"] =
+        json!(["127.0.0.1:9"]);
+    for _ in 0..12 {
+        let mut events = a.subscribe();
+        let pending = {
+            let a = a.clone();
+            tokio::spawn(async move { a.connect("id-b").await })
+        };
+        tokio::time::timeout(Duration::from_secs(1), async {
+            loop {
+                if events.recv().await.unwrap().phase == "direct-attempt" {
+                    break;
+                }
+            }
+        })
+        .await
+        .unwrap();
+        pending.abort();
+        let _ = pending.await;
+        tokio::time::timeout(Duration::from_secs(2), async {
+            loop {
+                if a.active().await.unwrap().attempts.lock().await.is_empty() {
+                    break;
+                }
+                tokio::time::sleep(Duration::from_millis(5)).await;
+            }
+        })
+        .await
+        .unwrap();
+        assert_eq!(live_peers(&a).await, 0);
+        assert_eq!(live_peers(&b).await, 0);
+    }
+    a.close().await.unwrap();
+    b.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn iroh_mapping_close_joins_cancelled_parallel_reconnect() {
+    let (f, state) = control().await;
+    let a = iroh_fixture_client(&f, DirectStrategy::Parallel);
+    let b = iroh_fixture_client(&f, DirectStrategy::Sequential);
+    a.login_with_access_token("a", "a").await.unwrap();
+    a.enable_remote().await.unwrap();
+    b.login_with_access_token("b", "b").await.unwrap();
+    b.enable_remote().await.unwrap();
+    iroh_publish_ready(&a).await;
+    iroh_publish_ready(&b).await;
+    let (port, echo) = echo().await;
+    b.expose(Port::tcp("echo", port, "echo")).await.unwrap();
+    let mapping = a
+        .map("id-b", "echo", "127.0.0.1:0".parse().unwrap())
+        .await
+        .unwrap();
+    mapping.peer.close().await;
+    {
+        let mut s = state.lock().unwrap();
+        s.drop_signals = true;
+        s.devices.get_mut("id-b").unwrap()["iroh"]["addresses"] = json!(["127.0.0.1:9"]);
+    }
+    let mut events = a.subscribe();
+    let _socket = tokio::net::TcpStream::connect(mapping.addr).await.unwrap();
+    tokio::time::timeout(Duration::from_secs(1), async {
+        loop {
+            if events.recv().await.unwrap().phase == "iroh-attempt" {
+                break;
+            }
+        }
+    })
+    .await
+    .unwrap();
+    tokio::time::timeout(Duration::from_secs(2), mapping.close())
+        .await
+        .unwrap();
+    assert!(a.active().await.unwrap().attempts.lock().await.is_empty());
+    assert_eq!(live_peers(&a).await, 0);
+    a.close().await.unwrap();
+    b.close().await.unwrap();
+    echo.abort();
+}
+
+#[derive(Default)]
+struct ContextProvider {
+    requests: Mutex<Vec<AuthTokenRequest>>,
+}
+impl AuthProvider for ContextProvider {
+    fn access_token_for<'a>(
+        &'a self,
+        _: &'a Client,
+        request: &'a AuthTokenRequest,
+    ) -> AuthFuture<'a> {
+        Box::pin(async move {
+            self.requests.lock().unwrap().push(request.clone());
+            Ok(if request.force_refresh {
+                "fresh-host-resource"
+            } else {
+                "host-resource"
+            }
+            .into())
+        })
+    }
+}
+
+#[tokio::test]
+async fn contextual_ram_only_login_forces_once_on_explicit_identity_rejection() {
+    let (f, state) = control().await;
+    state.lock().unwrap().exchange_replies = vec![401];
+    let c = f.client("RealA");
+    let provider = Arc::new(ContextProvider::default());
+    c.set_auth_provider(provider.clone()).await;
+    let watch = c.watch_state();
+    assert_eq!(watch.borrow().revision, 0);
+    assert_eq!(
+        watch.borrow().business_authorization,
+        BusinessAuthorization::Unknown
+    );
+    assert!(!watch.borrow().remote_enabled);
+    c.login_with_auth_provider("a").await.unwrap();
+    {
+        let requests = provider.requests.lock().unwrap();
+        assert_eq!(requests.len(), 2);
+        let first = &requests[0];
+        assert_eq!(first.issuer, format!("{}/oidc", f.base));
+        assert_eq!(first.client_id, "RealA");
+        assert_eq!(first.resource, "https://cybergrid.aixgg.com/api");
+        assert!(first.scopes.iter().any(|s| s == "connect"));
+        assert_eq!(first.min_validity, 60);
+        assert_eq!(first.reason, AuthRequestReason::Connect);
+        assert!(!first.force_refresh);
+        assert_eq!(first.generation, 0);
+        assert!(!first.cancel.is_cancelled());
+        assert!(requests[1].force_refresh);
+        assert_eq!(requests[1].reason, AuthRequestReason::AuthorizationRejected);
+    }
+    {
+        let guard = state.lock().unwrap();
+        let registrations = &guard.registrations;
+        assert_eq!(registrations.len(), 2);
+        assert_eq!(registrations[0]["requestId"], registrations[1]["requestId"]);
+        assert_eq!(
+            registrations[0]["registrationRevision"],
+            registrations[1]["registrationRevision"]
+        );
+        assert_eq!(registrations[0]["accessToken"], "host-resource");
+        assert_eq!(registrations[1]["accessToken"], "fresh-host-resource");
+    }
+    // RAM-only path neither binds nor creates a credential store or takes a grant.
+    assert!(c.grant_store.read().await.is_none());
+    assert!(!c.has_pending_grant().await);
+    assert_eq!(watch.borrow().coordination.phase, StatePhase::Ready);
+    assert_eq!(watch.borrow().identity.phase, StatePhase::Authenticated);
+    assert_eq!(watch.borrow().publication.phase, StatePhase::Disabled);
+    assert_eq!(watch.borrow().generation, 1);
+    let public = serde_json::to_string(&c.snapshot()).unwrap();
+    assert!(!public.contains("host-resource"));
+    assert!(!public.contains("sessionKey"));
+    c.set_business_authorization(BusinessAuthorization::Denied);
+    assert_eq!(
+        watch.borrow().business_authorization,
+        BusinessAuthorization::Denied
+    );
+    c.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn contextual_identity_retry_is_bounded_and_other_denials_never_refresh() {
+    for replies in [vec![401, 401], vec![403]] {
+        let (f, state) = control().await;
+        state.lock().unwrap().exchange_replies = replies.clone();
+        let c = f.client("RealA");
+        let provider = Arc::new(ContextProvider::default());
+        c.set_auth_provider(provider.clone()).await;
+        assert!(c.login_with_auth_provider("a").await.is_err());
+        assert_eq!(
+            provider.requests.lock().unwrap().len(),
+            if replies[0] == 401 { 2 } else { 1 }
+        );
+        assert_eq!(c.snapshot().identity.phase, StatePhase::RequiresLogin);
+        c.close().await.unwrap();
+    }
+}
+
+#[tokio::test]
+async fn unknown_registration_replays_exact_private_attempt_even_after_401() {
+    let (f, state) = control().await;
+    state.lock().unwrap().exchange_replies = vec![599, 409, 401];
+    let c = f.client("RealA");
+    let provider = Arc::new(ContextProvider::default());
+    c.set_auth_provider(provider.clone()).await;
+    assert!(matches!(
+        c.login_with_auth_provider("a").await,
+        Err(Error::ExchangeOutcomeUnknown)
+    ));
+    assert_eq!(
+        c.snapshot().coordination.reason,
+        StateReason::ExchangeOutcomeUnknown
+    );
+    assert!(matches!(
+        c.login_with_access_token("different-token-must-not-be-used", "different-name")
+            .await,
+        Err(Error::ExchangeOutcomeUnknown)
+    ));
+    assert!(matches!(
+        c.login_with_auth_provider("different-name").await,
+        Err(Error::ExchangeOutcomeUnknown)
+    ));
+    c.login_with_auth_provider("different-name").await.unwrap();
+    assert_eq!(provider.requests.lock().unwrap().len(), 1);
+    {
+        let s = state.lock().unwrap();
+        assert_eq!(s.registrations.len(), 4);
+        assert!(s.registrations.windows(2).all(|r| r[0] == r[1]));
+    }
+    c.close().await.unwrap();
+}
+
+async fn authenticated_duplex(a: &Arc<Client>, b: &Arc<Client>) -> (Arc<Peer>, Arc<Peer>) {
+    let device = a.device("id-b").await.unwrap();
+    let (left, right) = tokio::io::duplex(65536);
+    let (out, incoming) = tokio::join!(
+        a.secure_client(Box::new(left), &device, "test-authenticated"),
+        b.secure_server(Box::new(right), "test-authenticated")
+    );
+    (out.unwrap(), incoming.unwrap())
+}
+
+#[tokio::test]
+async fn explicit_remote_gate_stops_both_directions_and_preserves_local_business() {
+    let (f, state) = control().await;
+    let a = f.client("RealA");
+    let b = f.client("RealA");
+    a.login_with_access_token("a", "a").await.unwrap();
+    b.login_with_access_token("b", "b").await.unwrap();
+    let (port_a, echo_a) = echo().await;
+    let (port_b, echo_b) = echo().await;
+    a.expose(Port::tcp("echo", port_a, "echo")).await.unwrap();
+    b.expose(Port::tcp("echo", port_b, "echo")).await.unwrap();
+    assert!(state.lock().unwrap().devices["id-a"]["ports"]
+        .as_array()
+        .unwrap()
+        .is_empty());
+    assert!(state.lock().unwrap().devices["id-b"]["ports"]
+        .as_array()
+        .unwrap()
+        .is_empty());
+    assert_eq!(a.port_intents().await.len(), 1);
+    // Even an authenticated incoming transport cannot open a disabled receiver.
+    let device = a.device("id-b").await.unwrap();
+    let (left, right) = tokio::io::duplex(65536);
+    let (out, incoming) = tokio::join!(
+        a.secure_client(Box::new(left), &device, "test"),
+        b.secure_server(Box::new(right), "test")
+    );
+    assert!(incoming.is_err());
+    assert!(out.is_err());
+    b.enable_remote().await.unwrap();
+    let (out, incoming) = authenticated_duplex(&a, &b).await;
+    // Reverse streams on an outgoing mux also obey the receiver's gate.
+    assert!(incoming.dial("echo").await.is_err());
+    let mut forward = out.dial("echo").await.unwrap();
+    forward.write_all(b"forward").await.unwrap();
+    let mut data = [0; 7];
+    forward.read_exact(&mut data).await.unwrap();
+    assert_eq!(&data, b"forward");
+    a.enable_remote().await.unwrap();
+    let mut reverse = incoming.dial("echo").await.unwrap();
+    reverse.write_all(b"reverse").await.unwrap();
+    reverse.read_exact(&mut data).await.unwrap();
+    assert_eq!(&data, b"reverse");
+    let result = a.disable_remote().await;
+    assert_eq!(
+        result,
+        RemoteDisableOutcome {
+            local_closed: true,
+            coordinator_revocation: CoordinatorRevocation::Confirmed
+        }
+    );
+    for stream in [&mut forward, &mut reverse] {
+        let read = tokio::time::timeout(Duration::from_secs(2), stream.read(&mut data))
+            .await
+            .unwrap();
+        assert!(matches!(read, Ok(0) | Err(_)));
+    }
+    assert!(incoming.dial("echo").await.is_err());
+    assert!(a.enable_remote().await.is_err());
+    assert_eq!(a.port_intents().await[0].port, port_a);
+    let mut local = tokio::net::TcpStream::connect((std::net::Ipv4Addr::LOCALHOST, port_a))
+        .await
+        .unwrap();
+    local.write_all(b"survive").await.unwrap();
+    local.read_exact(&mut data).await.unwrap();
+    assert_eq!(&data, b"survive");
+    assert_eq!(a.snapshot().publication.phase, StatePhase::Disabled);
+    b.close().await.unwrap();
+    echo_a.abort();
+    echo_b.abort();
+}
+
+#[tokio::test]
+async fn offline_disable_closes_inflight_handshake_and_cannot_recover_or_republish() {
+    let (f, state) = control().await;
+    let c = f.client("RealA");
+    let provider = Arc::new(ContextProvider::default());
+    c.set_auth_provider(provider.clone()).await;
+    c.login_with_auth_provider("a").await.unwrap();
+    c.expose(Port::tcp("echo", 6789, "local-intent"))
+        .await
+        .unwrap();
+    c.enable_remote().await.unwrap();
+    let rt = c.active().await.unwrap();
+    let device = c.device("id-a").await.unwrap();
+    let (_held_outgoing, outgoing_raw) = tokio::io::duplex(65536);
+    let outgoing_client = c.clone();
+    let pending_outgoing = tokio::spawn(async move {
+        outgoing_client
+            .secure_client(Box::new(outgoing_raw), &device, "late-outgoing-handshake")
+            .await
+    });
+    let (_held, right) = tokio::io::duplex(65536);
+    let client = c.clone();
+    let pending = tokio::spawn(async move {
+        client
+            .secure_server(Box::new(right), "late-handshake")
+            .await
+    });
+    // Wait until the incoming side has queried pins and is waiting for TLS bytes.
+    tokio::time::sleep(Duration::from_millis(40)).await;
+    assert!(rt.peers.lock().await.is_empty());
+    state.lock().unwrap().revoke_fails = true;
+    let result = c.disable_remote().await;
+    assert_eq!(
+        result.coordinator_revocation,
+        CoordinatorRevocation::Pending
+    );
+    assert!(result.local_closed);
+    assert!(tokio::time::timeout(Duration::from_secs(1), pending)
+        .await
+        .unwrap()
+        .unwrap()
+        .is_err());
+    assert!(
+        tokio::time::timeout(Duration::from_secs(1), pending_outgoing)
+            .await
+            .unwrap()
+            .unwrap()
+            .is_err()
+    );
+    assert!(rt.cancel.is_cancelled());
+    assert!(c.heartbeat().await.is_err());
+    assert!(c.active().await.is_err());
+    assert!(!c.remote_access_enabled());
+    assert_eq!(provider.requests.lock().unwrap().len(), 1);
+    assert_eq!(c.port_intents().await.len(), 1);
+    assert_eq!(c.snapshot().coordination.phase, StatePhase::Closed);
+    state.lock().unwrap().revoke_fails = false;
+    assert_eq!(
+        c.disable_remote().await.coordinator_revocation,
+        CoordinatorRevocation::Confirmed
+    );
+}
+
+async fn meet_barrier(barrier: &Arc<std::sync::Barrier>) {
+    let barrier = barrier.clone();
+    tokio::task::spawn_blocking(move || barrier.wait())
+        .await
+        .unwrap();
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn late_publication_never_confirms_newer_intent_or_reopens_disabled_client() {
+    let (f, state) = control().await;
+    let c = f.client("RealA");
+    c.login_with_access_token("a", "a").await.unwrap();
+    c.expose(Port::tcp("one", 1234, "one")).await.unwrap();
+    let barrier = Arc::new(std::sync::Barrier::new(2));
+    {
+        let mut s = state.lock().unwrap();
+        s.pause_publishes = 2;
+        s.publish_barrier = Some(barrier.clone());
+    }
+    let first_client = c.clone();
+    let first = tokio::spawn(async move { first_client.enable_remote().await });
+    meet_barrier(&barrier).await; // Old intent is already captured by the server.
+    let newer_client = c.clone();
+    let newer =
+        tokio::spawn(async move { newer_client.expose(Port::tcp("two", 2345, "two")).await });
+    tokio::time::timeout(Duration::from_secs(1), async {
+        while c.port_intents().await.len() != 2 {
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .unwrap();
+    meet_barrier(&barrier).await; // Allow the old response.
+    first.await.unwrap().unwrap();
+    meet_barrier(&barrier).await; // New publication is now pending.
+    assert_eq!(c.snapshot().publication.phase, StatePhase::Pending);
+    assert_eq!(c.snapshot().confirmed_intent_revision, None);
+    meet_barrier(&barrier).await;
+    newer.await.unwrap().unwrap();
+    assert_eq!(c.snapshot().publication.phase, StatePhase::Ready);
+    assert_eq!(
+        c.snapshot().confirmed_intent_revision,
+        Some(c.snapshot().intent_revision)
+    );
+    {
+        state.lock().unwrap().pause_publishes = 1;
+    }
+    let publishing_client = c.clone();
+    let publishing = tokio::spawn(async move { publishing_client.heartbeat().await });
+    meet_barrier(&barrier).await;
+    let closing_client = c.clone();
+    let closing = tokio::spawn(async move { closing_client.disable_remote().await });
+    tokio::time::timeout(Duration::from_secs(1), async {
+        while !c.is_closed() {
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .unwrap();
+    assert!(!c.remote_access_enabled());
+    meet_barrier(&barrier).await;
+    let _ = publishing.await.unwrap();
+    assert!(closing.await.unwrap().local_closed);
+    assert_eq!(c.snapshot().publication.phase, StatePhase::Disabled);
+    assert_eq!(c.snapshot().confirmed_intent_revision, None);
+    assert!(c.heartbeat().await.is_err());
+}
+
+#[tokio::test]
+async fn recovery_rejects_changed_verified_user_and_keeps_original_binding() {
+    let (f, state) = control().await;
+    let c = f.client("RealA");
+    c.set_auth_provider(Arc::new(ContextProvider::default()))
+        .await;
+    c.login_with_auth_provider("a").await.unwrap();
+    {
+        let mut s = state.lock().unwrap();
+        s.epoch = "new-epoch".into();
+        s.user_override = Some("different-verified-user".into());
+        s.revoke_fails = true;
+    }
+    assert!(c.devices().await.is_err());
+    tokio::time::timeout(Duration::from_secs(2), async {
+        while c.snapshot().identity.phase != StatePhase::RequiresLogin {
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .unwrap();
+    assert_eq!(c.device_session().await.unwrap().user.id, "fixture-user");
+    assert!(c.active().await.is_err());
+    assert_eq!(
+        c.disable_remote().await.coordinator_revocation,
+        CoordinatorRevocation::Pending
+    );
+    state.lock().unwrap().revoke_fails = false;
+    assert_eq!(
+        c.disable_remote().await.coordinator_revocation,
+        CoordinatorRevocation::Confirmed
+    );
+}
+
+struct CheckpointingProvider {
+    started: tokio::sync::Notify,
+    release: tokio::sync::Notify,
+    checkpointed: std::sync::atomic::AtomicBool,
+}
+impl AuthProvider for CheckpointingProvider {
+    fn access_token_for<'a>(&'a self, _: &'a Client, _: &'a AuthTokenRequest) -> AuthFuture<'a> {
+        Box::pin(async move {
+            self.started.notify_one();
+            self.release.notified().await;
+            self.checkpointed.store(true, Ordering::SeqCst);
+            Ok("owned-resource".into())
+        })
+    }
+}
+#[tokio::test]
+async fn disabling_does_not_drop_dispatched_host_rotation_owner() {
+    let (f, _) = control().await;
+    let c = f.client("RealA");
+    let owner = Arc::new(CheckpointingProvider {
+        started: tokio::sync::Notify::new(),
+        release: tokio::sync::Notify::new(),
+        checkpointed: false.into(),
+    });
+    c.set_auth_provider(owner.clone()).await;
+    let login_client = c.clone();
+    let login = tokio::spawn(async move { login_client.login_with_auth_provider("a").await });
+    owner.started.notified().await;
+    let close_client = c.clone();
+    let close = tokio::spawn(async move { close_client.disable_remote().await });
+    tokio::time::timeout(Duration::from_secs(1), async {
+        while !c.is_closed() {
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .unwrap();
+    assert!(!owner.checkpointed.load(Ordering::SeqCst));
+    assert!(!close.is_finished());
+    owner.release.notify_one();
+    assert!(matches!(login.await.unwrap(), Err(Error::Cancelled)));
+    assert!(close.await.unwrap().local_closed);
+    assert!(owner.checkpointed.load(Ordering::SeqCst));
+}
+
+#[tokio::test]
+async fn disable_never_claims_unknown_registration_was_revoked() {
+    let (f, state) = control().await;
+    state.lock().unwrap().exchange_replies = vec![599];
+    let c = f.client("RealA");
+    assert!(matches!(
+        c.login_with_access_token("original-resource", "a").await,
+        Err(Error::ExchangeOutcomeUnknown)
+    ));
+    assert!(c.device_session().await.is_none());
+    let result = c.disable_remote().await;
+    assert!(result.local_closed);
+    assert_eq!(
+        result.coordinator_revocation,
+        CoordinatorRevocation::Pending
+    );
+    assert_eq!(state.lock().unwrap().registrations.len(), 1);
+    assert!(c.login_with_access_token("replacement", "a").await.is_err());
+}
+
+struct UnavailableHost;
+impl AuthProvider for UnavailableHost {
+    fn access_token<'a>(&'a self, _: &'a Client) -> AuthFuture<'a> {
+        Box::pin(async { Err(Error::Credentials("sensitive-host-error".into())) })
+    }
+}
+struct ClassifiedUnavailableHost(AuthProviderFailure);
+impl AuthProvider for ClassifiedUnavailableHost {
+    fn access_token<'a>(&'a self, _: &'a Client) -> AuthFuture<'a> {
+        Box::pin(async move { Err(Error::AuthorizationProvider(self.0)) })
+    }
+}
+#[tokio::test]
+async fn provider_categories_survive_login_without_changing_recovery_classification() {
+    for reason in [
+        AuthProviderFailure::RefreshFailed,
+        AuthProviderFailure::Network,
+        AuthProviderFailure::Storage,
+    ] {
+        let (f, state) = control().await;
+        let c = f.client("RealA");
+        c.set_auth_provider(Arc::new(ClassifiedUnavailableHost(reason))).await;
+        let error = c.login_with_auth_provider("a").await.unwrap_err();
+        assert!(matches!(error, Error::AuthorizationProvider(value) if value == reason));
+        assert_eq!(c.snapshot().identity.phase, StatePhase::RequiresLogin);
+        assert_eq!(
+            c.snapshot().identity.reason,
+            StateReason::AuthorizationUnavailable
+        );
+        assert!(!c.snapshot().identity.retryable);
+        assert!(state.lock().unwrap().registrations.is_empty());
+        c.close().await.unwrap();
+    }
+}
+
+#[tokio::test]
+async fn provider_errors_are_fixed_and_freshness_budget_is_validated() {
+    for value in [0, 3601] {
+        assert!(matches!(
+            Client::new(Config {
+                app_id: "RealA".into(),
+                auth_min_validity: value,
+                ..Config::default()
+            }),
+            Err(Error::Config(_))
+        ));
+    }
+    for value in [1, 60, 3600] {
+        assert!(Client::new(Config {
+            app_id: "RealA".into(),
+            auth_min_validity: value,
+            ..Config::default()
+        })
+        .is_ok());
+    }
+    let (f, _) = control().await;
+    let c = f.client("RealA");
+    c.set_auth_provider(Arc::new(UnavailableHost)).await;
+    let error = c.login_with_auth_provider("a").await.unwrap_err();
+    assert!(matches!(error, Error::AuthorizationUnavailable));
+    assert!(!error.to_string().contains("sensitive-host-error"));
+    assert_eq!(c.snapshot().identity.phase, StatePhase::RequiresLogin);
+    assert!(!serde_json::to_string(&c.snapshot())
+        .unwrap()
+        .contains("sensitive-host-error"));
+    c.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn unknown_exchange_retires_only_after_trusted_new_epoch() {
+    let (f, state) = control().await;
+    state.lock().unwrap().exchange_replies = vec![599];
+    let c = f.client("RealA");
+    let owner = Arc::new(ContextProvider::default());
+    c.set_auth_provider(owner.clone()).await;
+    assert!(matches!(
+        c.login_with_auth_provider("a").await,
+        Err(Error::ExchangeOutcomeUnknown)
+    ));
+    {
+        let mut s = state.lock().unwrap();
+        s.epoch = "confirmed-new-epoch".into();
+        s.attempts.clear();
+        s.devices.clear();
+        // A reset error from exchange alone must not replace a pending attempt.
+        s.config_failure = true;
+    }
+    assert!(matches!(
+        c.login_with_auth_provider("ignored-name").await,
+        Err(Error::ExchangeOutcomeUnknown)
+    ));
+    assert_eq!(owner.requests.lock().unwrap().len(), 1);
+    {
+        let s = state.lock().unwrap();
+        assert_eq!(s.registrations[0], s.registrations[1]);
+    }
+    state.lock().unwrap().config_failure = false;
+    let session = c.login_with_auth_provider("ignored-name").await.unwrap();
+    assert_eq!(session.coordinator_epoch, "confirmed-new-epoch");
+    assert_eq!(session.device_id, "id-a");
+    assert_eq!(owner.requests.lock().unwrap().len(), 2);
+    {
+        let s = state.lock().unwrap();
+        assert_ne!(
+            s.registrations[0]["requestId"],
+            s.registrations[2]["requestId"]
+        );
+        assert_eq!(s.registrations[2]["registrationRevision"], 2);
+        assert_eq!(
+            s.registrations[0]["registrationKey"],
+            s.registrations[2]["registrationKey"]
+        );
+        assert_eq!(
+            s.registrations[2]["coordinatorEpoch"],
+            "confirmed-new-epoch"
+        );
+    }
+    assert!(!c.remote_access_enabled());
+    c.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn changed_oauth_binding_cannot_replace_unknown_epoch_attempt() {
+    for (field, value) in [
+        ("issuer", "https://untrusted.example/oidc"),
+        ("clientId", "DifferentClient"),
+        ("resource", "https://untrusted.example/api"),
+        ("scope", "openid connect"),
+        ("tokenEndpoint", "https://untrusted.example/token"),
+    ] {
+        let (f, state) = control().await;
+        state.lock().unwrap().exchange_replies = vec![599];
+        let c = f.client("RealA");
+        let owner = Arc::new(ContextProvider::default());
+        c.set_auth_provider(owner.clone()).await;
+        assert!(matches!(
+            c.login_with_auth_provider("a").await,
+            Err(Error::ExchangeOutcomeUnknown)
+        ));
+        {
+            let mut s = state.lock().unwrap();
+            s.epoch = "untrusted-config-new-epoch".into();
+            s.config_override = Some((field.into(), value.into()));
+        }
+        assert!(matches!(
+            c.login_with_auth_provider("a").await,
+            Err(Error::ExchangeOutcomeUnknown)
+        ));
+        assert_eq!(
+            owner.requests.lock().unwrap().len(),
+            1,
+            "refreshed on changed {field}"
+        );
+        {
+            let s = state.lock().unwrap();
+            assert_eq!(
+                s.registrations[0], s.registrations[1],
+                "replaced attempt on changed {field}"
+            );
+        }
+        assert_eq!(
+            c.disable_remote().await.coordinator_revocation,
+            CoordinatorRevocation::Pending
+        );
+    }
+}
+
+#[tokio::test]
+async fn known_first_publication_loss_supports_explicit_retry_without_new_identity() {
+    let (f, state) = control().await;
+    state.lock().unwrap().fail_next_publish = true;
+    let c = f.client("RealA");
+    let owner = Arc::new(ContextProvider::default());
+    c.set_auth_provider(owner).await;
+    assert!(c.login_with_auth_provider("a").await.is_err());
+    assert!(c.device_session().await.is_some());
+    let first: Session = {
+        let s = state.lock().unwrap();
+        let request = s.registrations[0]["requestId"].as_str().unwrap();
+        serde_json::from_value(s.attempts[request].clone()).unwrap()
+    };
+    let recovered = c.login_with_auth_provider("ignored-name").await.unwrap();
+    assert_eq!(first.user.id, recovered.user.id);
+    assert_eq!(first.device_id, recovered.device_id);
+    assert_ne!(first.incarnation, recovered.incarnation);
+    assert_eq!(c.snapshot().coordination.phase, StatePhase::Ready);
+    assert!(!c.remote_access_enabled());
+    {
+        let s = state.lock().unwrap();
+        assert_eq!(s.registrations.len(), 2);
+        assert_eq!(
+            s.registrations[0]["registrationKey"],
+            s.registrations[1]["registrationKey"]
+        );
+        assert_eq!(s.registrations[1]["registrationRevision"], 2);
+        assert_ne!(
+            s.registrations[0]["requestId"],
+            s.registrations[1]["requestId"]
+        );
+        assert_eq!(s.devices["id-a"]["publishRevision"], 1);
+        assert!(s.devices["id-a"]["ports"].as_array().unwrap().is_empty());
+    }
+    // A queued supervisor wakeup cannot cancel the explicitly recovered runtime.
+    tokio::time::sleep(Duration::from_millis(50)).await;
+    assert!(c.active().await.is_ok());
+    assert!(c.login_with_auth_provider("a").await.is_err());
+    c.close().await.unwrap();
+    c.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn known_first_publication_loss_recovers_without_explicit_retry() {
+    let (f, state) = control().await;
+    state.lock().unwrap().fail_next_publish = true;
+    let c = f.client("RealA");
+    c.set_auth_provider(Arc::new(ContextProvider::default()))
+        .await;
+    c.expose(Port::tcp("offline-intent", 1234, "test"))
+        .await
+        .unwrap();
+    assert!(c.login_with_auth_provider("a").await.is_err());
+    assert!(c.device_session().await.is_some());
+    let first: Session = {
+        let s = state.lock().unwrap();
+        let request = s.registrations[0]["requestId"].as_str().unwrap();
+        serde_json::from_value(s.attempts[request].clone()).unwrap()
+    };
+    tokio::time::timeout(Duration::from_secs(3), async {
+        while c.active().await.is_err() {
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .unwrap();
+    let ready = c.device_session().await.unwrap();
+    assert_ne!(first.incarnation, ready.incarnation);
+    assert_eq!(ready.user.id, first.user.id);
+    assert!(!c.remote_access_enabled());
+    assert_eq!(c.snapshot().publication.phase, StatePhase::Disabled);
+    assert_eq!(c.port_intents().await.len(), 1);
+    // Explicit host acknowledgement of background completion uses that same session.
+    let acknowledged = c.login_with_auth_provider("ignored-name").await.unwrap();
+    assert_eq!(acknowledged.incarnation, ready.incarnation);
+    assert_eq!(state.lock().unwrap().registrations.len(), 2);
+    c.close().await.unwrap();
+}
+
+#[tokio::test]
+async fn known_first_publication_manual_token_retry_preserves_committed_identity() {
+    let (f, state) = control().await;
+    state.lock().unwrap().fail_next_publish = true;
+    let c = f.client("RealA");
+    assert!(c
+        .login_with_access_token("manual-resource", "a")
+        .await
+        .is_err());
+    let committed = c.device_session().await.unwrap();
+    let recovered = c
+        .login_with_access_token("manual-resource", "ignored-name")
+        .await
+        .unwrap();
+    assert_eq!(committed.user.id, recovered.user.id);
+    assert_eq!(committed.device_id, recovered.device_id);
+    assert_ne!(committed.incarnation, recovered.incarnation);
+    assert_eq!(state.lock().unwrap().registrations.len(), 2);
+    assert_eq!(c.snapshot().coordination.phase, StatePhase::Ready);
+    assert!(!c.remote_access_enabled());
+    tokio::time::sleep(Duration::from_millis(30)).await;
+    assert!(c.active().await.is_ok());
+    c.close().await.unwrap();
+}
+
+// This module's nonignored tests are local helper checks. Only the ignored test
+// contacts Cloudflare. Its identity/directory/signaling remain explicit fixtures.
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+mod live_relay {
+    use super::*;
+    use std::{io, os::unix::fs::OpenOptionsExt, path::Path};
+
+    fn require(ok: bool, stage: &'static str) -> io::Result<()> {
+        if ok {
+            Ok(())
+        } else {
+            Err(io::Error::other(stage))
+        }
+    }
+    fn step<T, E>(result: std::result::Result<T, E>, stage: &'static str) -> io::Result<T> {
+        result.map_err(|_| io::Error::other(stage))
+    }
+    fn checkpoint(stage: &str) {
+        eprintln!("ACCOUNT109_RELAY {}", json!({"stage":stage}));
+    }
+    fn quote(path: &Path) -> io::Result<String> {
+        let s = path
+            .to_str()
+            .ok_or_else(|| io::Error::other("non UTF-8 path"))?;
+        require(
+            path.is_absolute() && !s.contains(['\n', '\r', '\0']),
+            "wrapper path",
+        )?;
+        Ok(format!("'{}'", s.replace('\'', "'\\''")))
+    }
+    fn wrapper(script: &Path, binary: &Path, record: &Path) -> io::Result<()> {
+        use std::io::Write;
+        // $$ is preserved by exec. No manufactured hostname/readiness output.
+        let text = format!(
+            "#!/bin/sh\nset -eu\nprintf '%s\\n' \"$$\" >> {}\nexec {} \"$@\"\n",
+            quote(record)?,
+            quote(binary)?
+        );
+        let mut file = std::fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o700)
+            .open(script)?;
+        file.write_all(text.as_bytes())?;
+        file.sync_all()
+    }
+    fn pids(text: &str) -> io::Result<Vec<i32>> {
+        require(
+            text.len() <= 128 && (text.is_empty() || text.ends_with('\n')),
+            "PID record framing",
+        )?;
+        let mut result = Vec::new();
+        for line in text.lines() {
+            let pid: i32 = step(line.parse(), "PID syntax")?;
+            require(
+                pid > 1
+                    && pid.to_string() == line
+                    && pid != std::process::id() as i32
+                    && !result.contains(&pid),
+                "PID identity",
+            )?;
+            result.push(pid);
+        }
+        require(result.len() <= 5, "provider restart bound")?;
+        Ok(result)
+    }
+    fn reaped(record: &Path) -> io::Result<usize> {
+        require(std::fs::metadata(record)?.len() <= 128, "PID record size")?;
+        let ids = pids(&std::fs::read_to_string(record)?)?;
+        for id in &ids {
+            // Observe only. Never signal a recorded PID, which could be reused.
+            require(
+                unsafe { libc::kill(*id, 0) } == -1
+                    && io::Error::last_os_error().raw_os_error() == Some(libc::ESRCH),
+                "provider PID still present or unverifiable",
+            )?;
+        }
+        Ok(ids.len())
+    }
+    fn route(events: &[(String, Option<String>)], success: bool) -> io::Result<()> {
+        let mut cursor = 0;
+        let mut expected = vec![
+            ("direct-attempt", "webrtc-direct"),
+            ("iroh-skipped", "iroh-direct"),
+            ("fallback-attempt", "cloudflare-tunnel"),
+            ("websocket-dial", "cloudflare-tunnel"),
+            ("websocket-upgraded", "cloudflare-tunnel"),
+        ];
+        if success {
+            expected.extend([
+                ("mutual-tls-ready", "cloudflare-tunnel"),
+                ("multiplexer-ready", "cloudflare-tunnel"),
+            ]);
+        }
+        for (phase, transport) in events {
+            if matches!(phase.as_str(), "mutual-tls-ready" | "multiplexer-ready") {
+                require(
+                    success && transport.as_deref() == Some("cloudflare-tunnel"),
+                    "unexpected authenticated transport",
+                )?;
+            }
+            if cursor < expected.len()
+                && phase == expected[cursor].0
+                && transport.as_deref() == Some(expected[cursor].1)
+            {
+                cursor += 1;
+            }
+        }
+        require(cursor == expected.len(), "incomplete fallback event chain")
+    }
+    fn drain(
+        receiver: &mut tokio::sync::broadcast::Receiver<Event>,
+        peer: &str,
+        generation: u64,
+    ) -> io::Result<Vec<(String, Option<String>)>> {
+        let mut events = Vec::new();
+        loop {
+            match receiver.try_recv() {
+                Ok(e) if e.peer_id.as_deref() == Some(peer) => {
+                    require(e.generation == generation, "transport generation changed")?;
+                    events.push((e.phase, e.transport)); // Never retain arbitrary message.
+                }
+                Ok(_) => (),
+                Err(tokio::sync::broadcast::error::TryRecvError::Empty) => return Ok(events),
+                Err(_) => return Err(io::Error::other("transport event lag or closure")),
+            }
+        }
+    }
+    async fn owned_echo() -> io::Result<(u16, CancellationToken, tokio::task::JoinHandle<()>)> {
+        let listener = TcpListener::bind("127.0.0.1:0").await?;
+        let port = listener.local_addr()?.port();
+        let stop = CancellationToken::new();
+        let cancel = stop.clone();
+        let task = tokio::spawn(async move {
+            let mut sessions = tokio::task::JoinSet::new();
+            loop {
+                tokio::select! {
+                    _ = cancel.cancelled() => break,
+                    Some(_) = sessions.join_next(), if !sessions.is_empty() => {},
+                    accepted = listener.accept() => {
+                        let Ok((mut socket, _)) = accepted else { break };
+                        let cancel = cancel.clone();
+                        sessions.spawn(async move {
+                            let (mut r, mut w) = socket.split();
+                            tokio::select! { _ = cancel.cancelled() => {}, _ = async { let _ = tokio::io::copy(&mut r, &mut w).await; let _ = w.shutdown().await; } => {} }
+                        });
+                    }
+                }
+            }
+            sessions.abort_all();
+            while sessions.join_next().await.is_some() {}
+        });
+        Ok((port, stop, task))
+    }
+
+    // A deadline observes an owned task, never drops the SDK close future.
+    // Even an eventual join after the grace period cannot erase the deadline.
+    async fn cleanup_task(
+        task: &mut tokio::task::JoinHandle<io::Result<()>>,
+        budget: Duration,
+        grace: Duration,
+        label: &'static str,
+        errors: &mut Vec<(&'static str, &'static str)>,
+    ) {
+        match tokio::time::timeout(budget, &mut *task).await {
+            Ok(Ok(Ok(()))) => (),
+            Ok(Ok(Err(_))) => errors.push((label, "failed")),
+            Ok(Err(_)) => errors.push((label, "join-failed")),
+            Err(_) => {
+                errors.push((label, "deadline"));
+                if tokio::time::timeout(grace, &mut *task).await.is_err() {
+                    errors.push((label, "join-unconfirmed"));
+                }
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn relay_cleanup_failure_continues_and_deadline_retains_owned_task() {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let first_calls = calls.clone();
+        let mut first = tokio::spawn(async move {
+            first_calls.lock().unwrap().push("failed cleanup");
+            Err(io::Error::other("injected"))
+        });
+        let mut errors = Vec::new();
+        let budget = Duration::from_secs(1);
+        cleanup_task(&mut first, budget, budget, "first", &mut errors).await;
+        let next = calls.clone();
+        let mut second = tokio::spawn(async move {
+            next.lock().unwrap().push("later cleanup");
+            Ok(())
+        });
+        cleanup_task(&mut second, budget, budget, "second", &mut errors).await;
+        let root = tempfile::tempdir().unwrap();
+        let record = root.path().join("pids");
+        std::fs::write(&record, format!("{}\n", std::process::id())).unwrap();
+        calls.lock().unwrap().push("PID verification");
+        if reaped(&record).is_err() {
+            errors.push(("provider-PIDs", "unconfirmed"));
+        }
+        assert_eq!(
+            *calls.lock().unwrap(),
+            ["failed cleanup", "later cleanup", "PID verification"]
+        );
+        assert_eq!(
+            errors,
+            [("first", "failed"), ("provider-PIDs", "unconfirmed")]
+        );
+
+        let (release, wait) = tokio::sync::oneshot::channel::<()>();
+        let mut owned = tokio::spawn(async move {
+            let _ = wait.await;
+            Ok(())
+        });
+        cleanup_task(
+            &mut owned,
+            Duration::from_millis(1),
+            Duration::from_millis(1),
+            "slow",
+            &mut errors,
+        )
+        .await;
+        assert!(!owned.is_finished(), "deadline must retain the close task");
+        release.send(()).unwrap();
+        tokio::time::timeout(budget, &mut owned)
+            .await
+            .unwrap()
+            .unwrap()
+            .unwrap();
+        assert!(
+            errors.contains(&("slow", "deadline"))
+                && errors.contains(&("slow", "join-unconfirmed"))
+        );
+    }
+
+    #[test]
+    fn relay_pid_parser_and_event_contract_reject_false_success() {
+        assert!(pids("42\n43\n").is_ok());
+        for bad in [
+            "42",
+            "0\n",
+            "1\n",
+            "-2\n",
+            "042\n",
+            "+42\n",
+            "42\n42\n",
+            "42 extra\n",
+            "2147483648\n",
+        ] {
+            assert!(pids(bad).is_err());
+        }
+        let phases = [
+            ("direct-attempt", "webrtc-direct"),
+            ("iroh-skipped", "iroh-direct"),
+            ("fallback-attempt", "cloudflare-tunnel"),
+            ("websocket-dial", "cloudflare-tunnel"),
+            ("websocket-upgraded", "cloudflare-tunnel"),
+            ("mutual-tls-ready", "cloudflare-tunnel"),
+            ("multiplexer-ready", "cloudflare-tunnel"),
+        ];
+        let good = phases.map(|(p, t)| (p.into(), Some(t.into()))).to_vec();
+        assert!(route(&good, true).is_ok());
+        for i in 0..good.len() {
+            let mut bad = good.clone();
+            bad.remove(i);
+            assert!(route(&bad, true).is_err());
+        }
+        assert!(route(&good[..5], false).is_ok());
+        assert!(route(&good, false).is_err());
+        let mut direct = good.clone();
+        direct[5].1 = Some("webrtc-direct".into());
+        assert!(route(&direct, true).is_err());
+    }
+
+    #[tokio::test]
+    async fn relay_wrapper_records_exec_pid_without_manufacturing_success_and_fixture_joins() {
+        let root = tempfile::tempdir().unwrap();
+        let script = root.path().join("wrapper ' quoted.sh");
+        let record = root.path().join("pids ' quoted");
+        wrapper(&script, Path::new("/usr/bin/false"), &record).unwrap();
+        let child = tokio::process::Command::new(&script)
+            .stdout(std::process::Stdio::piped())
+            .stderr(std::process::Stdio::piped())
+            .spawn()
+            .unwrap();
+        let pid = child.id().unwrap();
+        let output = child.wait_with_output().await.unwrap();
+        assert!(!output.status.success());
+        assert!(output.stdout.is_empty() && output.stderr.is_empty());
+        assert_eq!(
+            pids(&std::fs::read_to_string(&record).unwrap()).unwrap(),
+            vec![pid as i32]
+        );
+        assert_eq!(reaped(&record).unwrap(), 1);
+        let mut f = Fixture::new(Arc::new(|_, _, _, _| (200, json!({})))).await;
+        f.stop().await.unwrap();
+        assert!(f.task.is_finished());
+    }
+
+    #[tokio::test]
+    async fn relay_event_lag_and_live_pid_cannot_pass_cleanup() {
+        let (sender, mut receiver) = tokio::sync::broadcast::channel(1);
+        for _ in 0..3 {
+            sender
+                .send(Event {
+                    generation: 1,
+                    epoch: None,
+                    phase: "direct-attempt".into(),
+                    transport: Some("webrtc-direct".into()),
+                    peer_id: Some("fixture".into()),
+                    message: Some("must not be retained".into()),
+                })
+                .unwrap();
+        }
+        assert!(drain(&mut receiver, "fixture", 1).is_err());
+        let root = tempfile::tempdir().unwrap();
+        let record = root.path().join("pids");
+        std::fs::write(&record, format!("{}\n", std::process::id())).unwrap();
+        assert!(reaped(&record).is_err());
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+    #[ignore = "opt-in real public Quick Tunnel; synthetic coordinator/identity, NOT account or 4G acceptance"]
+    async fn real_bundled_quick_tunnel_map_fallback_bytes_and_wrong_pin() {
+        assert_eq!(
+            std::env::var("CYBERGRID_LIVE_RELAY").as_deref(),
+            Ok("1"),
+            "explicit live-network opt-in required"
+        );
+        checkpoint(
+            "fixture-coordinator-identity-and-dropped-signals; real-public-provider; iroh-disabled",
+        );
+        let root = tempfile::tempdir().unwrap();
+        let bundled = CloudflaredConfig::bundled(root.path()).unwrap();
+        let binary = crate::provider::resolve(&bundled.source, &bundled.binary).unwrap();
+        let script = root.path().join("record-and-exec.sh");
+        let record = root.path().join("provider-pids");
+        std::fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o600)
+            .open(&record)
+            .unwrap();
+        wrapper(&script, &binary, &record).unwrap();
+        // External describes this PID-only wrapper, not an arbitrary provider.
+        // Revalidate the original bundled bytes before EVERY provider start.
+        let mut provider = CloudflaredConfig::new(&script);
+        provider.temp_dir = Some(root.path().into());
+        let checked = bundled.clone();
+        let expected_binary = binary.clone();
+        provider.env_provider = Some(Arc::new(move || {
+            if crate::provider::resolve(&checked.source, &checked.binary)? != expected_binary {
+                return Err(Error::Config("bundled path changed".into()));
+            }
+            Ok(HashMap::new())
+        }));
+        checkpoint(
+            "external-PID-wrapper-executes-per-start-verified-bundled-binary; default-WebPKI",
+        );
+        let (mut f, state) = control().await;
+        state.lock().unwrap().drop_signals = true;
+        let a = f.client("RealA");
+        let mut b = f.client("RealA");
+        Arc::get_mut(&mut b).unwrap().cfg.cloudflared = Some(provider);
+        let (port, echo_stop, echo_task) = owned_echo().await.unwrap();
+        let mut mapping: Option<Mapping> = None;
+        // Timeout failure still proceeds through the independent cleanup below.
+        let operation = tokio::time::timeout(Duration::from_secs(150), async {
+            step(a.login_with_access_token("fixture-token-a", "a").await, "fixture login A")?;
+            let session = step(b.login_with_access_token("fixture-token-b", "b").await, "fixture login B")?;
+            step(b.expose(Port::tcp("echo", port, "fixture-echo")).await, "expose echo")?;
+            step(b.enable_remote().await, "enable B")?;
+            checkpoint("await-real-provider-heartbeat-directory");
+            step(tokio::time::timeout(Duration::from_secs(60), async {
+                loop {
+                    let devices = step(a.devices().await, "fixture directory")?;
+                    if let Some(d) = devices.iter().find(|d| d.id == session.device_id && d.tunnel_url.is_some() && d.certificate_fingerprint.is_some()) {
+                        step(validate_tunnel_url(d.tunnel_url.as_deref().unwrap()), "real Quick Tunnel allowlist")?;
+                        require(d.ports.iter().any(|p| p.id == "echo"), "heartbeat port publication")?;
+                        break Ok::<_,io::Error>(());
+                    }
+                    tokio::time::sleep(Duration::from_millis(250)).await;
+                }
+            }).await, "provider publication deadline")??;
+            require(!pids(&std::fs::read_to_string(&record)?)?.is_empty(), "provider PID required")?;
+            let generation = a.snapshot().generation;
+            let mut events = a.subscribe();
+            checkpoint("Client-map-direct-failure-to-public-tunnel");
+            mapping = Some(step(a.map(&session.device_id, "echo", "127.0.0.1:0".parse().unwrap()).await, "fallback map")?);
+            let m = mapping.as_ref().unwrap();
+            require(m.current_transport().await.as_deref() == Some("cloudflare-tunnel"), "transport before bytes")?;
+            let stream = step(tokio::net::TcpStream::connect(m.addr).await, "mapping TCP")?;
+            let data: Vec<u8> = (0..65536).map(|i| ((i * 31 + i / 251) % 256) as u8).collect();
+            let (read, mut write) = stream.into_split();
+            let transfer = async {
+                tokio::try_join!(async { write.write_all(&data).await?; write.shutdown().await }, async { let mut bytes = Vec::new(); read.take(65537).read_to_end(&mut bytes).await?; Ok::<_,io::Error>(bytes) })
+            };
+            let (_, received) = step(tokio::time::timeout(Duration::from_secs(15), transfer).await, "byte deadline")??;
+            require(received == data && Sha256::digest(&received) == Sha256::digest(&data), "original bytes and SHA256")?;
+            require(m.current_transport().await.as_deref() == Some("cloudflare-tunnel"), "transport after bytes")?;
+            let phases = drain(&mut events, &session.device_id, generation)?;
+            route(&phases, true)?;
+            require(state.lock().unwrap().signals.iter().any(|s| s["kind"] == "offer" && s["fromDeviceId"] == "id-a"), "real direct offer must be submitted to dropped-signals fixture")?;
+            eprintln!("ACCOUNT109_RELAY {}", json!({"stage":"public-tunnel-original-bytes","bytes":received.len(),"sha256":hex::encode(Sha256::digest(&received)),"events":phases}));
+            m.close().await;
+            require(m.current_transport().await.is_none(), "mapping closed")?;
+            // Only the NEGATIVE fixture response is altered; never invent the
+            // positive URL/fingerprint or replace WebPKI/inner mTLS verifiers.
+            state.lock().unwrap().wrong_fingerprint_for = Some(session.device_id.clone());
+            let mut events = a.subscribe();
+            checkpoint("fixture-wrong-fingerprint-must-reject-real-WSS-inner-mTLS");
+            match a.map(&session.device_id, "echo", "127.0.0.1:0".parse().unwrap()).await {
+                Err(Error::Transport(reason)) if reason == "peer TLS authentication rejected" => (),
+                Ok(unexpected) => { unexpected.close().await; return Err(io::Error::other("wrong fingerprint admitted")); },
+                Err(_) => return Err(io::Error::other("negative failed outside expected inner mTLS check")),
+            }
+            route(&drain(&mut events, &session.device_id, generation)?, false)?;
+            checkpoint("wrong-fingerprint-rejected-after-real-WebSocket-upgrade");
+            Ok::<_,io::Error>(())
+        }).await;
+        checkpoint(match &operation {
+            Ok(Ok(())) => "operation-complete",
+            Ok(Err(_)) => "operation-failed",
+            Err(_) => "operation-deadline",
+        });
+        checkpoint("cleanup-SDK-bounded-provider-termination-not-natural-exit");
+        echo_stop.cancel();
+        // Start SDK closes concurrently and retain ALL task handles until the
+        // final verdict, including tasks whose joins could not be confirmed.
+        let mut mapping_close = tokio::spawn(async move {
+            if let Some(m) = mapping {
+                m.close().await;
+            }
+            Ok(())
+        });
+        let mut close_a = tokio::spawn(async move { step(a.close().await, "close A") });
+        let mut close_b = tokio::spawn(async move { step(b.close().await, "close B") });
+        let mut close_echo = tokio::spawn(async move { step(echo_task.await, "echo join") });
+        let mut errors = Vec::new();
+        let grace = Duration::from_secs(3);
+        cleanup_task(
+            &mut mapping_close,
+            Duration::from_secs(5),
+            grace,
+            "mapping",
+            &mut errors,
+        )
+        .await;
+        cleanup_task(
+            &mut close_a,
+            Duration::from_secs(20),
+            grace,
+            "SDK-close-A",
+            &mut errors,
+        )
+        .await;
+        cleanup_task(
+            &mut close_b,
+            Duration::from_secs(20),
+            grace,
+            "SDK-close-B",
+            &mut errors,
+        )
+        .await;
+        cleanup_task(
+            &mut close_echo,
+            Duration::from_secs(5),
+            grace,
+            "echo",
+            &mut errors,
+        )
+        .await;
+        // Fixture APIs remain available during SDK closes; always stop it next,
+        // regardless of SDK/mapping/echo errors or unconfirmed joins.
+        let mut close_fixture = tokio::spawn(async move { f.stop().await });
+        cleanup_task(
+            &mut close_fixture,
+            Duration::from_secs(5),
+            grace,
+            "fixture",
+            &mut errors,
+        )
+        .await;
+        let count = match reaped(&record) {
+            Ok(n) => Some(n),
+            Err(_) => {
+                errors.push(("provider-PIDs", "unconfirmed"));
+                None
+            }
+        };
+        if crate::provider::resolve(&bundled.source, &bundled.binary).is_err() {
+            errors.push(("bundled-bytes", "changed-or-unverifiable"));
+        }
+        let (operation_status, operation_error_kind) = match &operation {
+            Ok(Ok(())) => ("pass", None),
+            Ok(Err(e)) => ("fail", Some(format!("{:?}", e.kind()))),
+            Err(_) => ("deadline", None),
+        };
+        // Preserve BOTH outcomes; a cleanup failure never hides the operation.
+        eprintln!(
+            "ACCOUNT109_RELAY {}",
+            json!({"stage":"final-verdict","operation":operation_status,"operationErrorKind":operation_error_kind,"cleanupFailures":errors,"providerPidsReaped":count,"providerExit":"attempted SDK bounded termination; require PID proof; not natural exit","realAccount":false,"physical4gWifi":false})
+        );
+        assert!(
+            operation_status == "pass" && errors.is_empty(),
+            "operation={operation_status}; cleanup={errors:?}"
+        );
+        checkpoint("PASS-real-public-relay-transport-with-fixture-control-plane-only");
+    }
+}

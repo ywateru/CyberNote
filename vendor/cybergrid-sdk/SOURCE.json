@@ -1,0 +1,12 @@
+{
+  "upstream": "CyberGrid",
+  "revision": "f2a3961536e5c69b13c7dbc661953d9243becbae",
+  "source": "sdk-rust",
+  "authorization": "Original-source owner authorized CyberNote integration; upstream LICENSE and third-party notices retained.",
+  "changes": [
+    "Added and exported a finite AuthProviderFailure enum and AuthorizationProvider error variant without provider messages or credentials.",
+    "Preserved typed provider failure categories during token acquisition while retaining authorization-unavailable login and recovery classification and sanitizing unclassified provider errors.",
+    "Added regression coverage for provider failure propagation and unchanged recovery classification.",
+    "Added Session::transport_session_key as a borrowed secret accessor for native device registration requests, retaining the private field and unchanged serialization omission and redacted Debug output, with regression coverage."
+  ]
+}

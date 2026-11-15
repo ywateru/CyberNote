@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "folders": [
+    {
+      "id": "default",
+      "kind": "default",
+      "name": "Notes",
+      "parentId": null,
+      "sortOrder": 0,
+      "createdAt": 1700000000000
+    },
+    {
+      "id": "quick",
+      "kind": "quick",
+      "name": "Quick",
+      "parentId": null,
+      "sortOrder": 1,
+      "createdAt": 1700000000000
+    },
+    {
+      "id": "trash",
+      "kind": "trash",
+      "name": "Trash",
+      "parentId": null,
+      "sortOrder": 2,
+      "createdAt": 1700000000000
+    }
+  ],
+  "notes": [
+    {
+      "id": "archive-fixture-note",
+      "folderId": "default",
+      "title": "Synthetic archive",
+      "plainText": "Synthetic archive\nSynthetic body",
+      "document": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 1
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Synthetic archive"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Invalid table child"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "createdAt": 1700000000000,
+      "updatedAt": 1700000000000,
+      "pinned": false,
+      "deletedAt": null,
+      "originalFolderId": null,
+      "locked": false,
+      "paperStyle": "plain",
+      "revision": 0,
+      "sealed": null
+    }
+  ],
+  "attachments": [
+    {
+      "id": "archive-fixture-attachment",
+      "noteId": "archive-fixture-note",
+      "kind": "file",
+      "relativePath": "fixture.txt",
+      "mime": "text/plain",
+      "displayName": "fixture.txt",
+      "size": 8
+    }
+  ],
+  "blobs": {
+    "archive-fixture-attachment": "Zml4dHVyZQo="
+  },
+  "settings": {
+    "theme": "light",
+    "view": "list",
+    "selectedFolder": "default"
+  }
+}

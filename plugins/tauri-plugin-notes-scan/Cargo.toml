@@ -1,0 +1,27 @@
+[package]
+name = "tauri-plugin-notes-scan"
+version = "0.1.0"
+edition = "2021"
+links = "tauri-plugin-notes-scan"
+description = "Private offline scan sessions, bundled Android Chinese OCR and macOS Vision"
+license = "MIT"
+
+[lib]
+name = "tauri_plugin_notes_scan"
+
+[dependencies]
+tauri = { version = "=2.12.5", default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4"] }
+base64 = "0.22"
+
+[build-dependencies]
+tauri-plugin = { version = "=2.7.2", features = ["build"] }
+cc = "1"
+
+[dev-dependencies]
+tempfile = "3"
+tauri = { version = "=2.12.5", default-features = false, features = ["test"] }
+
+[workspace]

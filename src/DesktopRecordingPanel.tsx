@@ -1,0 +1,396 @@
+import { useEffect, useRef, useState } from "react";
+import RecordingView from "./RecordingView";
+import type { RecordingPanelHandle } from "./RecordingPanel";
+import { DesktopRecordingSession } from "./desktop-recording-session";
+import { RecordingClock } from "./recording-clock";
+import {
+  RecordingWaveformHistory,
+  type RecordingSample,
+} from "./recording-waveform";
+import {
+  createRecordingPlayback,
+  initialRecordingPlaybackState,
+} from "./recording-playback";
+import type {
+  RecordingAction,
+  RecordingPresentation,
+  RecordingViewState,
+} from "./recording-coordinator";
+import type { RecordingRevision } from "./recording-metadata";
+
+export type DesktopRecordingPanelHandle = Omit<
+  RecordingPanelHandle,
+  "close"
+> & {
+  close: () => Promise<void>;
+  inspect?: () => { state: RecordingViewState; pending?: Promise<void> };
+};
+
+type Props = {
+  onCancel: () => void | Promise<void>;
+  onBeforeStart?: () => Promise<void>;
+  onComplete?: (saved: boolean, revision: number) => Promise<void>;
+  onRevision: (result: RecordingRevision) => Promise<void>;
+  onHandle?: (handle: DesktopRecordingPanelHandle | null) => void;
+  onState?: (state: RecordingViewState) => void;
+  onPresentation?: (mode: RecordingPresentation) => void;
+  switching?: boolean;
+};
+const text = (e: unknown) => (typeof e === "object" && e !== null && "message" in e ? String(e.message) : String(e));
+/** Desktop autosave is separate from the unchanged mobile recorder lifecycle. */
+export default function DesktopRecordingPanel(props: Props) {
+  const live = useRef(true),
+    phase = useRef<RecordingViewState["phase"]>("idle");
+  const [working, setWorking] = useState(false);
+  const [status, setStatus] = useState(phase.current),
+    [error, setError] = useState("");
+  const [elapsed, setElapsed] = useState(0),
+    [samples, setSamples] = useState<RecordingSample[]>([]);
+  const session = useRef<DesktopRecordingSession | null>(null),
+    clock = useRef(new RecordingClock());
+  const history = useRef(new RecordingWaveformHistory()),
+    recordedAt = useRef<number | undefined>(undefined);
+  const [openedAt] = useState(Date.now),
+    revision = useRef(0),
+    candidate = useRef<RecordingRevision | undefined>(undefined);
+  const busy = useRef<Promise<void> | undefined>(undefined),
+    closing = useRef(false),
+    closePromise = useRef<Promise<void> | undefined>(undefined),
+    finalAck = useRef(false),
+    latestBlob = useRef<Blob | undefined>(undefined);
+  const actions = useRef<(action: RecordingAction) => void>(() => {}),
+    currentProps = useRef(props);
+  currentProps.current = props;
+  const player = useRef<ReturnType<typeof createRecordingPlayback> | undefined>(
+      undefined,
+    ),
+    audio = useRef<HTMLAudioElement | undefined>(undefined);
+  const [playback, setPlayback] = useState(initialRecordingPlaybackState);
+  const transition = (next: RecordingViewState["phase"]) => {
+    phase.current = next;
+    if (live.current) setStatus(next);
+  };
+  const clearPlayer = () => {
+    player.current?.dispose();
+    player.current = undefined;
+    setPlayback(initialRecordingPlaybackState);
+  };
+  const stoppedClock = () => {
+    clock.current.pause();
+    setElapsed(clock.current.milliseconds());
+  };
+  const makePlayer = (blob: Blob) => {
+    clearPlayer();
+    audio.current = new Audio();
+    player.current = createRecordingPlayback(audio.current, blob, (state) => {
+      if (live.current) setPlayback(state);
+    });
+  };
+  const drain = (): Promise<void> => {
+    if (busy.current) return busy.current;
+    if (!live.current || phase.current === "submitted")
+      return Promise.resolve();
+    setWorking(true);
+    const work = (async () => {
+      try {
+        stoppedClock();
+        clearPlayer();
+        setError("");
+        transition("finalizing");
+        if (!candidate.current) {
+          const blob = await session.current!.checkpoint();
+          if (!live.current) return;
+          latestBlob.current = blob;
+          candidate.current = Object.freeze({
+            file: new File([blob], "新录音.wav", { type: "audio/wav" }),
+            recordedAt: recordedAt.current!,
+            revision: revision.current + 1,
+            intent: closing.current ? "final" : "checkpoint",
+          });
+        }
+        transition("saving");
+        await currentProps.current.onRevision(candidate.current);
+        if (!live.current) return;
+        const final = candidate.current.intent === "final";
+        revision.current = candidate.current.revision;
+        candidate.current = undefined;
+        if (final) {
+          finalAck.current = true;
+          transition("submitted");
+          return;
+        }
+        transition("paused");
+        if (latestBlob.current) makePlayer(latestBlob.current);
+      } catch (e) {
+        if (!live.current) return;
+        setError(text(e));
+        transition("retry");
+        if (latestBlob.current) makePlayer(latestBlob.current);
+        throw e;
+      }
+    })();
+    busy.current = work;
+    void work
+      .finally(() => {
+        if (busy.current === work) {
+          busy.current = undefined;
+          if (live.current) setWorking(false);
+        }
+      })
+      .catch(() => {});
+    return work;
+  };
+  // One close promise covers a checkpoint already in flight, its final revision,
+  // and native cleanup. A persisted final is never submitted again on retry.
+  const close = (): Promise<void> => {
+    if (closePromise.current) return closePromise.current;
+    if (!live.current) return Promise.resolve();
+    closing.current = true;
+    // Before onRecording establishes recordedAt there can be no captured audio.
+    // Cancel preparation synchronously: awaiting it first admits a late stream.
+    const empty = recordedAt.current === undefined;
+    const work = (async () => {
+      try {
+        if (empty) {
+          session.current?.dispose();
+          await currentProps.current.onComplete?.(false, revision.current);
+          if (!currentProps.current.onComplete)
+            await currentProps.current.onCancel();
+        } else {
+          await busy.current;
+          while (!finalAck.current) await drain();
+          await currentProps.current.onComplete?.(true, revision.current);
+        }
+        session.current?.dispose();
+        player.current?.dispose();
+        transition("submitted");
+      } catch (e) {
+        if (live.current) {
+          setError(text(e));
+          transition("retry");
+        }
+        throw e;
+      }
+    })();
+    closePromise.current = work;
+    void work
+      .finally(() => {
+        if (closePromise.current === work) closePromise.current = undefined;
+      })
+      .catch(() => {});
+    return work;
+  };
+  const closeAction = useRef(close);
+  closeAction.current = close;
+  const toggle = () => {
+    if (closing.current || busy.current) return;
+    if (phase.current === "idle") {
+      transition("requesting");
+      const capture = new DesktopRecordingSession({
+        onRecording: () => {
+          if (!live.current || closing.current) return;
+          if (recordedAt.current === undefined) recordedAt.current = Date.now();
+          clock.current.resume();
+          transition("recording");
+        },
+        onLevel: (level) => {
+          if (live.current && phase.current === "recording") {
+            history.current.append(clock.current.milliseconds(), level);
+            setSamples(history.current.samples());
+          }
+        },
+        onError: (e) => {
+          if (!live.current) return;
+          stoppedClock();
+          setError(text(e));
+          transition(recordedAt.current === undefined ? "error" : "retry");
+        },
+      });
+      session.current = capture;
+      const preparation = (async () => {
+        try {
+          await currentProps.current.onBeforeStart?.();
+          if (live.current && !closing.current) await capture.start();
+        } catch (e) {
+          if (!live.current || closing.current) return;
+          setError(text(e));
+          transition("error");
+          throw e;
+        }
+      })();
+      busy.current = preparation;
+      void preparation
+        .finally(() => {
+          if (busy.current === preparation) busy.current = undefined;
+        })
+        .catch(() => {});
+    } else if (phase.current === "recording") void drain().catch(() => {});
+    else if (
+      phase.current === "paused" &&
+      !playback.playing &&
+      !playback.playPending &&
+      session.current?.canResume
+    ) {
+      clearPlayer();
+      session.current.resume();
+    }
+  };
+  const previewAllowed =
+    !working && !busy.current && (status === "paused" || status === "retry");
+  const canToggle =
+    !closing.current &&
+    !working &&
+    !busy.current &&
+    (status === "idle" ||
+      status === "recording" ||
+      (status === "paused" &&
+        !playback.playing &&
+        !playback.playPending &&
+        !!session.current?.canResume));
+  const activityElapsed = Math.max(elapsed, samples.at(-1)?.at ?? 0);
+  const duration = (playback.duration ?? activityElapsed / 1000) * 1000;
+  const seekable: [number, number][] = [];
+  if (previewAllowed && audio.current && Number.isFinite(duration)) {
+    const ranges = audio.current.seekable;
+    for (let i = 0; i < Math.min(ranges.length, 64); i++) {
+      const start = Math.max(0, ranges.start(i) * 1000);
+      const end = Math.min(duration, ranges.end(i) * 1000);
+      if (Number.isFinite(start) && Number.isFinite(end) && end > start)
+        seekable.push([start, end]);
+    }
+  }
+  const state: RecordingViewState = {
+    sequence: 1,
+    phase: status,
+    openedAt,
+    recordedAt: recordedAt.current,
+    elapsed: activityElapsed,
+    paused: status === "paused",
+    canToggle,
+    canFinish:
+      !working &&
+      !busy.current &&
+      ["recording", "paused", "retry"].includes(status),
+    notice:
+      error ||
+      (status === "finalizing"
+        ? "正在完成录音…"
+        : status === "saving"
+          ? "正在保存录音…"
+          : status === "requesting"
+            ? "正在准备麦克风…"
+            : playback.mediaError ||
+              playback.playError ||
+              playback.seekError ||
+              playback.durationError),
+    hasError: !!error,
+    position:
+      previewAllowed && playback.ready ? playback.time * 1000 : activityElapsed,
+    duration,
+    previewPosition: previewAllowed && playback.ready,
+    playing: playback.playing,
+    playPending: playback.playPending,
+    previewPending: false,
+    seeking: playback.seeking,
+    canPlay: previewAllowed && playback.ready && !playback.playPending,
+    canSeek: previewAllowed && playback.canSeek,
+    canRetryPreview:
+      previewAllowed &&
+      !!latestBlob.current &&
+      !!(
+        playback.mediaError ||
+        playback.playError ||
+        playback.seekError ||
+        playback.durationError
+      ),
+    seekable,
+    samples,
+  };
+  actions.current = (action) => {
+    switch (action.action) {
+      case "close":
+      case "finish":
+        void close().catch(() => {});
+        break;
+      case "toggle":
+        if (canToggle) toggle();
+        break;
+      case "playback":
+        if (state.canPlay) player.current?.toggle();
+        break;
+      case "preview-retry":
+        player.current?.retry();
+        break;
+      case "skip":
+        if (state.canSeek) player.current?.skip(action.seconds);
+        break;
+      case "seek":
+        if (
+          state.canSeek &&
+          seekable.some(
+            ([s, e]) => action.milliseconds >= s && action.milliseconds <= e,
+          )
+        )
+          player.current?.seek(action.milliseconds / 1000);
+        break;
+    }
+  };
+  useEffect(() => {
+    live.current = true;
+    return () => {
+      live.current = false;
+      session.current?.dispose();
+      player.current?.dispose();
+    };
+  }, []);
+  const handle = useRef<DesktopRecordingPanelHandle>({
+    close: () => closeAction.current(),
+    toggle: () => actions.current({ action: "toggle" }),
+    dispatch: (a) => actions.current(a),
+    ...(import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" ? {
+      inspect: () => ({state: projection.current, pending: closePromise.current || busy.current}),
+    } : {}),
+  });
+  useEffect(() => {
+    props.onHandle?.(handle.current);
+    return () => props.onHandle?.(null);
+  }, [props.onHandle]);
+  const projection = useRef(state);
+  projection.current = state;
+  const sequence = useRef(0);
+  useEffect(() => {
+    const tick = () => {
+      if (phase.current === "recording")
+        setElapsed(clock.current.milliseconds());
+      currentProps.current.onState?.({
+        ...projection.current,
+        sequence: ++sequence.current,
+      });
+    };
+    tick();
+    const timer = setInterval(tick, 100);
+    return () => clearInterval(timer);
+  }, []);
+  useEffect(() => {
+    currentProps.current.onState?.({ ...projection.current, sequence: ++sequence.current });
+  }, [status, state.hasError]);
+  return (
+    <div
+      className="recording-local-panel"
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && !e.nativeEvent.isComposing) {
+          e.preventDefault();
+          e.stopPropagation();
+          void closeAction.current().catch(() => {});
+        }
+      }}
+    >
+      <RecordingView
+        state={state}
+        mobile={false}
+        act={(a) => actions.current(a)}
+        presentation="dock"
+      />
+    </div>
+  );
+}

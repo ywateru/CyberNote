@@ -1,0 +1,1219 @@
+use super::{
+    config,
+    private::Binding,
+    types::{Error, NetworkStage, RequestFailure, Result},
+};
+use crate::sync::{
+    identity::{now, SyncError},
+    network::ReplicationPolicy,
+};
+use base64::{engine::general_purpose::URL_SAFE_NO_PAD as B64, Engine};
+use jsonwebtoken::{decode, decode_header, jwk::JwkSet, Algorithm, DecodingKey, Validation};
+use serde::{Deserialize, Serialize};
+use std::{collections::HashMap, sync::Mutex};
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub(crate) struct Profile {
+    pub schema_version: u8,
+    pub subject: String,
+    pub issuer: String,
+    pub product_id: String,
+    pub workspace_id: String,
+}
+#[derive(Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct Claims {
+    pub iss: String,
+    pub aud: String,
+    pub sub: String,
+    pub account_issuer: String,
+    pub product_id: String,
+    pub workspace_id: String,
+    pub device_id: String,
+    pub noise_public_key: String,
+    pub purpose: String,
+    pub iat: u64,
+    pub exp: u64,
+    pub jti: String,
+}
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct Envelope {
+    schema_version: u8,
+    token: String,
+    expires_at: u64,
+}
+/// Constructed only after a signed local enrollment is verified against the
+/// fixed coordinator and authenticated owner. Cannot deserialize from IPC/disk.
+pub(crate) struct VerifiedWorkspace {
+    workspace: String,
+    device: String,
+    noise_key: String,
+}
+impl VerifiedWorkspace {
+    pub(crate) fn workspace(&self) -> &str {
+        &self.workspace
+    }
+    pub(crate) fn matches(&self, identity: &crate::sync::identity::IdentityStore) -> bool {
+        identity.device_id().is_ok_and(|id| id == self.device)
+            && identity.public_key().is_ok_and(|key| key == self.noise_key)
+    }
+}
+pub(crate) struct Enrollment {
+    http: reqwest::Client,
+    transport_origin: String,
+}
+impl Enrollment {
+    pub fn new(transport_origin: String) -> Result<Self> {
+        Ok(Self {
+            transport_origin,
+            http: reqwest::Client::builder()
+                .redirect(reqwest::redirect::Policy::none())
+                .timeout(std::time::Duration::from_secs(15))
+                .build()?,
+        })
+    }
+    async fn json<T: serde::de::DeserializeOwned>(
+        &self,
+        request: reqwest::RequestBuilder,
+        stage: NetworkStage,
+    ) -> Result<T> {
+        let mut response = request.send().await.map_err(|error| {
+            let reason = if error.is_timeout() {
+                RequestFailure::Timeout
+            } else if error.is_connect() {
+                RequestFailure::Connect
+            } else {
+                RequestFailure::Request
+            };
+            Error::RequestAt(stage, reason)
+        })?;
+        if !response.status().is_success() {
+            return Err(Error::RequestAt(
+                stage,
+                RequestFailure::HttpStatus(response.status()),
+            ));
+        }
+        let mut bytes = Vec::new();
+        while let Some(chunk) = response.chunk().await.map_err(|error| {
+            let reason = if error.is_timeout() {
+                RequestFailure::Timeout
+            } else {
+                RequestFailure::ResponseBody
+            };
+            Error::RequestAt(stage, reason)
+        })? {
+            if bytes.len() + chunk.len() > 65536 {
+                return Err(Error::RequestAt(stage, RequestFailure::InvalidResponse));
+            }
+            bytes.extend_from_slice(&chunk)
+        }
+        serde_json::from_slice(&bytes)
+            .map_err(|_| Error::RequestAt(stage, RequestFailure::InvalidResponse))
+    }
+    pub async fn profile(&self, token: &str) -> Result<Profile> {
+        let profile: Profile = self
+            .json(
+                self.http
+                    .get(format!("{}/api/v1/account/profile", self.transport_origin))
+                    .bearer_auth(token),
+                NetworkStage::CoordinatorProfile,
+            )
+            .await?;
+        if profile.schema_version != 1
+            || profile.issuer != config::ISSUER
+            || profile.product_id.is_empty()
+        {
+            return Err(Error::RequestAt(
+                NetworkStage::CoordinatorProfile,
+                RequestFailure::InvalidResponse,
+            ));
+        }
+        uuid::Uuid::parse_str(&profile.workspace_id).map_err(|_| {
+            Error::RequestAt(
+                NetworkStage::CoordinatorProfile,
+                RequestFailure::InvalidResponse,
+            )
+        })?;
+        Ok(profile)
+    }
+    pub async fn issue(
+        &self,
+        access: &str,
+        binding: &Binding,
+    ) -> Result<(String, Claims, VerifiedWorkspace)> {
+        let envelope: Envelope = self
+            .json(
+                self.http
+                    .post(format!("{}/api/v1/account/enrollment", self.transport_origin))
+                    .bearer_auth(access)
+                    .json(&serde_json::json!({"deviceId":binding.device_id,"noisePublicKey":binding.noise_public_key})),
+                NetworkStage::CoordinatorEnrollment,
+            )
+            .await?;
+        if envelope.schema_version != 1 {
+            return Err(Error::RequestAt(
+                NetworkStage::CoordinatorEnrollment,
+                RequestFailure::InvalidResponse,
+            ));
+        }
+        let claims = self.verify(&envelope.token, binding).await?;
+        if claims.device_id != binding.device_id
+            || claims.noise_public_key != binding.noise_public_key
+            || claims.exp != envelope.expires_at
+        {
+            return Err(Error::InvalidProof);
+        }
+        let verified = VerifiedWorkspace {
+            workspace: claims.workspace_id.clone(),
+            device: claims.device_id.clone(),
+            noise_key: claims.noise_public_key.clone(),
+        };
+        Ok((envelope.token, claims, verified))
+    }
+    pub async fn verify(&self, token: &str, binding: &Binding) -> Result<Claims> {
+        // Fixed transport; never follow a JWT jku/x5u or a peer-supplied key URL.
+        let jwks: JwkSet = self
+            .json(
+                self.http
+                    .get(format!("{}/api/v1/account/jwks", self.transport_origin)),
+                NetworkStage::CoordinatorJwks,
+            )
+            .await?;
+        verify(token, &jwks, config::ENROLLMENT_ISSUER, binding)
+    }
+}
+fn canonical_key(value: &str) -> bool {
+    B64.decode(value)
+        .is_ok_and(|bytes| bytes.len() == 32 && B64.encode(bytes) == value)
+}
+pub(crate) fn verify(
+    token: &str,
+    jwks: &JwkSet,
+    enrollment_issuer: &str,
+    binding: &Binding,
+) -> Result<Claims> {
+    if token.len() > 8192 || jwks.keys.len() > 8 {
+        return Err(Error::InvalidProof);
+    }
+    let header = decode_header(token).map_err(|_| Error::InvalidProof)?;
+    if header.alg != Algorithm::ES384 || header.typ.as_deref().is_some_and(|v| v != "JWT") {
+        return Err(Error::InvalidProof);
+    }
+    let kid = header.kid.ok_or(Error::InvalidProof)?;
+    let keys = jwks
+        .keys
+        .iter()
+        .filter(|key| key.common.key_id.as_deref() == Some(&kid))
+        .collect::<Vec<_>>();
+    if keys.len() != 1 {
+        return Err(Error::InvalidProof);
+    }
+    let key = DecodingKey::from_jwk(keys[0]).map_err(|_| Error::InvalidProof)?;
+    let mut validation = Validation::new(Algorithm::ES384);
+    validation.set_issuer(&[enrollment_issuer]);
+    validation.set_audience(&["cybernote-enrollment-v1"]);
+    validation.leeway = 0;
+    validation.set_required_spec_claims(&["exp", "iat", "iss", "aud", "sub"]);
+    let c = decode::<Claims>(token, &key, &validation)
+        .map_err(|_| Error::InvalidProof)?
+        .claims;
+    if c.iss != enrollment_issuer
+        || c.aud != "cybernote-enrollment-v1"
+        || c.sub != binding.subject
+        || c.account_issuer != binding.issuer
+        || c.product_id != binding.product_id
+        || c.workspace_id != binding.workspace_id
+        || c.purpose != "pair"
+        || c.exp <= now()
+        || c.iat > now() + 30
+        || c.exp <= c.iat
+        || c.exp - c.iat > 300
+        || !canonical_key(&c.noise_public_key)
+    {
+        return Err(Error::InvalidProof);
+    }
+    uuid::Uuid::parse_str(&c.device_id).map_err(|_| Error::InvalidProof)?;
+    uuid::Uuid::parse_str(&c.jti).map_err(|_| Error::InvalidProof)?;
+    Ok(c)
+}
+#[derive(Default)]
+struct GateState {
+    closed: bool,
+    lifecycle: Option<std::sync::Arc<dyn Fn() -> bool + Send + Sync>>,
+    sdk: Option<std::sync::Weak<cybergrid_sdk::Client>>,
+    local_until: u64,
+    peers: HashMap<String, (String, u64)>,
+    routes: HashMap<String, String>,
+}
+#[derive(Default)]
+pub(crate) struct Gate(Mutex<GateState>);
+impl Gate {
+    /// Local adoption must obey the same owner generation as peer admission.
+    /// This checks cancellation only; signed enrollment is checked separately.
+    pub(crate) fn is_current(&self) -> bool {
+        self.0
+            .lock()
+            .is_ok_and(|s| !s.closed && s.lifecycle.as_ref().is_none_or(|active| active()))
+    }
+    pub fn bind_lifecycle(&self, active: std::sync::Arc<dyn Fn() -> bool + Send + Sync>) {
+        if let Ok(mut state) = self.0.lock() {
+            state.lifecycle = Some(active);
+        }
+    }
+    pub fn attach(&self, client: &std::sync::Arc<cybergrid_sdk::Client>) {
+        if let Ok(mut state) = self.0.lock() {
+            state.sdk = Some(std::sync::Arc::downgrade(client));
+        }
+    }
+    pub fn renew_local(&self, until: u64) {
+        if let Ok(mut s) = self.0.lock() {
+            if !s.closed {
+                s.local_until = until;
+            }
+        }
+    }
+    pub fn admit(&self, proof: &Claims) {
+        if let Ok(mut s) = self.0.lock() {
+            if s.closed {
+                return;
+            }
+            s.peers.insert(
+                proof.device_id.clone(),
+                (proof.noise_public_key.clone(), proof.exp),
+            );
+        }
+    }
+    pub fn route(&self, device: &str, endpoint: String) {
+        if let Ok(mut s) = self.0.lock() {
+            if !s.closed {
+                s.routes.insert(device.into(), endpoint);
+            }
+        }
+    }
+    pub fn close(&self) {
+        if let Ok(mut s) = self.0.lock() {
+            s.closed = true;
+            s.local_until = 0;
+            s.peers.clear();
+            s.routes.clear();
+        }
+    }
+}
+impl ReplicationPolicy for Gate {
+    fn authorize(&self, device: &str, key: &str) -> crate::sync::identity::Result<()> {
+        let s = self.0.lock().map_err(|_| SyncError::Revoked)?;
+        if s.closed || s.lifecycle.as_ref().is_some_and(|active| !active()) {
+            return Err(SyncError::Revoked);
+        }
+        if let Some(sdk) = &s.sdk {
+            let sdk = sdk.upgrade().ok_or(SyncError::Revoked)?;
+            let snapshot = sdk.snapshot();
+            if !snapshot.remote_enabled
+                || snapshot.coordination.phase != cybergrid_sdk::StatePhase::Ready
+            {
+                return Err(SyncError::Revoked);
+            }
+        }
+        if s.local_until <= now()
+            || !s
+                .peers
+                .get(device)
+                .is_some_and(|(k, exp)| k == key && *exp > now())
+        {
+            return Err(SyncError::Revoked);
+        }
+        Ok(())
+    }
+    fn endpoint(&self, device: &str) -> crate::sync::identity::Result<String> {
+        self.0
+            .lock()
+            .map_err(|_| SyncError::Revoked)?
+            .routes
+            .get(device)
+            .cloned()
+            .ok_or(SyncError::Transport)
+    }
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[tokio::test]
+    async fn http_transport_is_independent_of_pinned_signed_enrollment_issuer() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        tokio::time::timeout(std::time::Duration::from_secs(5), async {
+            assert_eq!(config::origin().unwrap(), "https://cybernote-sync.aixgg.com");
+            assert_eq!(config::ENROLLMENT_ISSUER, "https://cybernote-sync.vercel.app");
+            let (binding, jwks, key) = fixture();
+            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+            let transport_origin = format!("http://{}", listener.local_addr().unwrap());
+            assert_ne!(transport_origin, config::ENROLLMENT_ISSUER);
+            let enrollment = Enrollment::new(transport_origin.clone()).unwrap();
+            let claims = Claims {
+                iss: "https://cybernote-sync.vercel.app".into(),
+                aud: "cybernote-enrollment-v1".into(),
+                sub: binding.subject.clone(),
+                account_issuer: binding.issuer.clone(),
+                product_id: binding.product_id.clone(),
+                workspace_id: binding.workspace_id.clone(),
+                device_id: binding.device_id.clone(),
+                noise_public_key: binding.noise_public_key.clone(),
+                purpose: "pair".into(),
+                iat: now(),
+                exp: now() + 300,
+                jti: uuid::Uuid::new_v4().to_string(),
+            };
+            let sign = |claims: &Claims| {
+                let mut header = jsonwebtoken::Header::new(Algorithm::ES384);
+                header.kid = Some("synthetic-fixture".into());
+                jsonwebtoken::encode(&header, claims, &key).unwrap()
+            };
+            let proof = sign(&claims);
+            let profile = serde_json::json!({
+                "schemaVersion":1,"subject":binding.subject,"issuer":binding.issuer,
+                "productId":binding.product_id,"workspaceId":binding.workspace_id
+            });
+            let envelope = serde_json::json!({"schemaVersion":1,"token":proof,"expiresAt":claims.exp});
+            let public_keys = serde_json::to_value(&jwks).unwrap();
+            let server = tokio::spawn(async move {
+                for (target, body) in [
+                    ("GET /api/v1/account/profile HTTP/1.1", profile),
+                    ("POST /api/v1/account/enrollment HTTP/1.1", envelope),
+                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys.clone()),
+                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys.clone()),
+                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys),
+                ] {
+                    let (mut socket, _) = listener.accept().await.unwrap();
+                    let mut request = Vec::new();
+                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
+                        let mut bytes = [0; 1024];
+                        let n = socket.read(&mut bytes).await.unwrap();
+                        assert!(n > 0 && request.len() < 8192);
+                        request.extend_from_slice(&bytes[..n]);
+                    }
+                    assert_eq!(String::from_utf8(request).unwrap().lines().next(), Some(target));
+                    let body = body.to_string();
+                    socket.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}", body.len()).as_bytes()).await.unwrap();
+                }
+            });
+            assert_eq!(enrollment.profile("synthetic-access").await.unwrap().workspace_id, binding.workspace_id);
+            let (_, verified_claims, workspace) = enrollment.issue("synthetic-access", &binding).await.unwrap();
+            assert_eq!(verified_claims.iss, config::ENROLLMENT_ISSUER);
+            assert_eq!(workspace.workspace(), binding.workspace_id);
+            assert_eq!(workspace.device, binding.device_id);
+            assert_eq!(workspace.noise_key, binding.noise_public_key);
+            for alias in [transport_origin.as_str(), "https://cybernote-sync.aixgg.com"] {
+                let alias_proof = sign(&Claims { iss: alias.into(), ..claims.clone() });
+                assert!(matches!(enrollment.verify(&alias_proof, &binding).await, Err(Error::InvalidProof)));
+            }
+            server.await.unwrap();
+        }).await.expect("bounded loopback enrollment fixture");
+    }
+
+    #[tokio::test]
+    async fn http_rejections_keep_endpoint_stage_and_never_return_response_details() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        let (binding, _, _) = fixture();
+        for (stage, path) in [
+            (NetworkStage::CoordinatorProfile, "/api/v1/account/profile"),
+            (
+                NetworkStage::CoordinatorEnrollment,
+                "/api/v1/account/enrollment",
+            ),
+            (NetworkStage::CoordinatorJwks, "/api/v1/account/jwks"),
+        ] {
+            for status in [401, 403, 302, 408, 429, 500, 503, 200] {
+                let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+                let enrollment =
+                    Enrollment::new(format!("http://{}", listener.local_addr().unwrap())).unwrap();
+                let server = tokio::spawn(async move {
+                    let (mut socket, _) = listener.accept().await.unwrap();
+                    let mut request = Vec::new();
+                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
+                        let mut bytes = [0; 1024];
+                        let n = socket.read(&mut bytes).await.unwrap();
+                        assert!(n > 0 && request.len() < 8192);
+                        request.extend_from_slice(&bytes[..n]);
+                    }
+                    assert!(String::from_utf8(request)
+                        .unwrap()
+                        .lines()
+                        .next()
+                        .unwrap()
+                        .contains(path));
+                    let body = "private-response-sentinel";
+                    socket.write_all(format!("HTTP/1.1 {status} Test\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}", body.len()).as_bytes()).await.unwrap();
+                });
+                let error = match stage {
+                    NetworkStage::CoordinatorProfile => {
+                        enrollment.profile("synthetic-access").await.err()
+                    }
+                    NetworkStage::CoordinatorEnrollment => {
+                        enrollment.issue("synthetic-access", &binding).await.err()
+                    }
+                    _ => enrollment.verify("synthetic-proof", &binding).await.err(),
+                }
+                .unwrap();
+                server.await.unwrap();
+                assert_eq!(
+                    error,
+                    Error::RequestAt(
+                        stage,
+                        if status == 200 {
+                            RequestFailure::InvalidResponse
+                        } else {
+                            RequestFailure::HttpStatus(
+                                reqwest::StatusCode::from_u16(status).unwrap(),
+                            )
+                        }
+                    )
+                );
+                let safe = serde_json::to_value(error.safe()).unwrap();
+                assert_eq!(
+                    safe["code"],
+                    if matches!(status, 401 | 403) {
+                        "account_authentication"
+                    } else {
+                        "account_network"
+                    }
+                );
+                assert_eq!(
+                    safe["requestReason"],
+                    if status == 200 {
+                        "invalidResponse"
+                    } else {
+                        "httpStatus"
+                    }
+                );
+                if status == 200 {
+                    assert!(safe.get("httpStatus").is_none());
+                } else {
+                    assert_eq!(safe["httpStatus"], status);
+                }
+                let text = safe.to_string();
+                for private in ["private-response-sentinel", "synthetic-access", "127.0.0.1"] {
+                    assert!(!text.contains(private));
+                }
+            }
+        }
+    }
+
+    #[tokio::test]
+    async fn truncated_and_oversized_success_bodies_fail_without_body_or_address_details() {
+        use tokio::io::{AsyncReadExt, AsyncWriteExt};
+        tokio::time::timeout(std::time::Duration::from_secs(5), async {
+            let oversized = "x".repeat(65537);
+            let invalid_schema = serde_json::json!({
+                "schemaVersion": 2, "subject": "synthetic-owner", "issuer": config::ISSUER,
+                "productId": "cybernote", "workspaceId": uuid::Uuid::new_v4().to_string()
+            }).to_string();
+            for (response, expected) in [
+                ("HTTP/1.1 200 OK\r\nContent-Length: 100\r\nConnection: close\r\n\r\nprivate-response-sentinel".to_owned(), RequestFailure::ResponseBody),
+                (format!("HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{oversized}", oversized.len()), RequestFailure::InvalidResponse),
+                (format!("HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{invalid_schema}", invalid_schema.len()), RequestFailure::InvalidResponse),
+            ] {
+                let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+                let mut enrollment = Enrollment::new(format!("http://{}", listener.local_addr().unwrap())).unwrap();
+                enrollment.http = reqwest::Client::builder().no_proxy()
+                    .timeout(std::time::Duration::from_secs(2)).build().unwrap();
+                let server = tokio::spawn(async move {
+                    let (mut socket, _) = listener.accept().await.unwrap();
+                    let mut request = Vec::new();
+                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
+                        let mut bytes = [0; 1024];
+                        let n = socket.read(&mut bytes).await.unwrap();
+                        assert!(n > 0 && request.len() < 8192);
+                        request.extend_from_slice(&bytes[..n]);
+                    }
+                    socket.write_all(response.as_bytes()).await.unwrap();
+                });
+                let error = enrollment.profile("synthetic-access").await.err().unwrap();
+                assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, expected));
+                let safe = serde_json::to_string(&error.safe()).unwrap();
+                for private in ["private-response-sentinel", "synthetic-access", "127.0.0.1"] {
+                    assert!(!safe.contains(private));
+                }
+                server.await.unwrap();
+            }
+        }).await.expect("bounded synthetic body fixture");
+    }
+
+    #[tokio::test]
+    async fn request_builder_connect_and_timeout_have_distinct_finite_results() {
+        tokio::time::timeout(std::time::Duration::from_secs(5), async {
+            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+            let origin = format!("http://{}", listener.local_addr().unwrap());
+            let mut enrollment = Enrollment::new(origin).unwrap();
+            enrollment.http = reqwest::Client::builder()
+                .no_proxy()
+                .timeout(std::time::Duration::from_millis(250))
+                .build()
+                .unwrap();
+            let error = enrollment.profile("invalid\nheader").await.err().unwrap();
+            assert_eq!(
+                error,
+                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Request)
+            );
+            // Listening socket intentionally sends no response. No external service.
+            let error = enrollment.profile("synthetic-access").await.err().unwrap();
+            assert_eq!(
+                error,
+                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Timeout)
+            );
+            drop(listener);
+            let error = enrollment.profile("synthetic-access").await.err().unwrap();
+            assert_eq!(
+                error,
+                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Connect)
+            );
+        })
+        .await
+        .expect("bounded synthetic request fixture");
+    }
+
+    fn fixture() -> (Binding, JwkSet, jsonwebtoken::EncodingKey) {
+        use p384::{
+            elliptic_curve::sec1::ToEncodedPoint,
+            pkcs8::{EncodePrivateKey, LineEnding},
+            SecretKey,
+        };
+        let secret = SecretKey::random(&mut rand::rngs::OsRng);
+        let point = secret.public_key().to_encoded_point(false);
+        let jwks=serde_json::from_value(serde_json::json!({"keys":[{"kty":"EC","crv":"P-384","kid":"synthetic-fixture","alg":"ES384","use":"sig","x":B64.encode(point.x().unwrap()),"y":B64.encode(point.y().unwrap())}]})).unwrap();
+        let pem = secret.to_pkcs8_pem(LineEnding::LF).unwrap();
+        let key = jsonwebtoken::EncodingKey::from_ec_pem(pem.as_bytes()).unwrap();
+        let binding = Binding {
+            issuer: config::ISSUER.into(),
+            subject: "synthetic-owner".into(),
+            product_id: "cybernote".into(),
+            workspace_id: uuid::Uuid::new_v4().to_string(),
+            device_id: uuid::Uuid::new_v4().to_string(),
+            noise_public_key: B64.encode([1; 32]),
+            enabled: true,
+        };
+        (binding, jwks, key)
+    }
+    struct Windows;
+    impl crate::sync::adapter::WindowHost for Windows {
+        fn participants(&self) -> std::collections::HashSet<String> {
+            std::collections::HashSet::new()
+        }
+        fn emit(&self, _: &str, _: &serde_json::Value) -> crate::store::Result<()> {
+            Ok(())
+        }
+    }
+    // Device-free renderer fixture exercising the real Session reply boundary.
+    // Production renderers must supply these ACKs themselves.
+    struct AdoptionWindows {
+        shared: crate::sync::adapter::SharedSession,
+        blocked: bool,
+    }
+    impl crate::sync::adapter::WindowHost for AdoptionWindows {
+        fn participants(&self) -> std::collections::HashSet<String> {
+            std::collections::HashSet::from(["main".into()])
+        }
+        fn emit(&self, name: &str, value: &serde_json::Value) -> crate::store::Result<()> {
+            use crate::session::synchronization::WindowReply;
+            if name != "notes-sync" {
+                return Ok(());
+            }
+            let operation = value["operationId"].as_str().unwrap().to_string();
+            let reply = match value["phase"].as_str() {
+                Some("probe") => WindowReply::Probe {
+                    operation_id: operation,
+                    protected_note_ids: vec![],
+                    blocked: self.blocked,
+                },
+                Some("prepare") => WindowReply::Prepare {
+                    operation_id: operation,
+                    ready: true,
+                },
+                _ => return Ok(()),
+            };
+            let mut s = self.shared.0.lock().unwrap();
+            let token = s.sync_media_token();
+            s.sync_reply("main", reply, &token)?;
+            Ok(())
+        }
+    }
+    #[test]
+    fn fresh_account_status_metrics_do_not_require_or_enable_sync() {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        let directory = tempfile::tempdir().unwrap();
+        let mut store = Store::open(directory.path()).unwrap();
+        store
+            .action(serde_json::json!({"type":"createNote"}))
+            .unwrap();
+        let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
+        let before = shared.0.lock().unwrap().workspace().unwrap();
+        let runtime =
+            Runtime::new(shared.clone(), directory.path().into(), Arc::new(Windows)).unwrap();
+        assert_eq!(runtime.account_metrics().unwrap(), (0, 0));
+        assert_eq!(runtime.account_metrics().unwrap(), (0, 0));
+        assert!(shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_identity()
+            .unwrap()
+            .is_none());
+        assert_eq!(
+            shared.0.lock().unwrap().workspace().unwrap()["notes"],
+            before["notes"]
+        );
+        assert!(!directory.path().join(".account/noise").exists());
+        assert!(!directory.path().join(".sync/identity-v1.json").exists());
+        runtime.shutdown().unwrap();
+    }
+    #[test]
+    fn account_foreground_does_not_construct_manual_identity_or_policy_free_service() {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        let dir = tempfile::tempdir().unwrap();
+        super::super::private::directory(&dir.path().join(".account")).unwrap();
+        let shared = Arc::new((
+            Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
+            Condvar::new(),
+        ));
+        let runtime = Runtime::new(
+            shared.clone(),
+            dir.path().into(),
+            Arc::new(AdoptionWindows {
+                shared: shared.clone(),
+                blocked: false,
+            }),
+        )
+        .unwrap();
+        let identity = runtime.account_identity().unwrap();
+        let device = identity.device_id().unwrap();
+        let key = identity.public_key().unwrap();
+        let verified = VerifiedWorkspace {
+            workspace: uuid::Uuid::new_v4().to_string(),
+            device: device.clone(),
+            noise_key: key.clone(),
+        };
+        super::super::private::write(
+            &dir.path().join(".account/binding.json"),
+            &Binding {
+                issuer: config::ISSUER.into(),
+                subject: "synthetic-owner".into(),
+                product_id: "cybernote".into(),
+                workspace_id: verified.workspace.clone(),
+                device_id: device.clone(),
+                noise_public_key: key.clone(),
+                enabled: true,
+            },
+        )
+        .unwrap();
+        let mut service = runtime
+            .activate_account(&verified, identity, Arc::new(Gate::default()))
+            .unwrap();
+        let manual_identity = || {
+            crate::sync::identity::IdentityStore::existing_device_id(&dir.path().join(".sync"))
+                .unwrap()
+        };
+        // Store owns shared .sync/blob directories independently of a manual
+        // Noise service. Check the actual identity, not directory existence.
+        assert_eq!(manual_identity(), None);
+        runtime.foreground();
+        assert_eq!(
+            manual_identity(),
+            None,
+            "account foreground created a manual Noise identity"
+        );
+        runtime.pause_account();
+        runtime.foreground();
+        assert_eq!(manual_identity(), None);
+        // Logout/pause preserves the account binding. An explicit manual start
+        // cannot open a policy-free service over the account credentials.
+        let token = serde_json::from_value(serde_json::json!({
+            "sessionId": shared.0.lock().unwrap().sync_session_id(), "epoch": 1
+        }))
+        .unwrap();
+        let denied = runtime
+            .command(
+                crate::sync::adapter::Command::StartHost {
+                    device_name: "Synthetic manual".into(),
+                    port: 0,
+                },
+                "main",
+                &token,
+            )
+            .unwrap_err();
+        assert_eq!(denied.code, "sync_workspace_mismatch");
+        assert_eq!(manual_identity(), None);
+        let restored = runtime.account_identity().unwrap();
+        assert_eq!(restored.device_id().unwrap(), device);
+        assert_eq!(restored.public_key().unwrap(), key);
+        service.shutdown().unwrap();
+        runtime.shutdown().unwrap();
+    }
+    #[test]
+    fn aborted_local_recovery_blocks_adoption_until_release_or_real_session_reopen() {
+        use crate::{session::Session, store::Store};
+        use std::collections::HashSet;
+        for recovery in ["release", "reopen"] {
+            let dir = tempfile::tempdir().unwrap();
+            let mut store = Store::open(dir.path()).unwrap();
+            store.action(serde_json::json!({"type":"createNote"})).unwrap();
+            let identity = store.sync_enable(None).unwrap();
+            store.sync_flush().unwrap();
+            let mut session = Session::new(store);
+            let before = session.workspace().unwrap();
+            let next_workspace = uuid::Uuid::new_v4().to_string();
+            let next_device = uuid::Uuid::new_v4().to_string();
+            let live = HashSet::from(["main".into()]);
+            let operation = session.sync_begin_local_recovery(live.clone()).unwrap();
+            // This is the real pause_account transition, without a coordinator
+            // racing to tick/release it before we can observe the finite state.
+            session.sync_abort();
+            assert!(session.pending.is_none());
+            assert!(session.sync_has_operation());
+            assert_eq!(session.sync_diagnostics()["activePhase"], "probe");
+            let denied = session.sync_adoption_preflight(&next_workspace, &next_device)
+                .unwrap_err();
+            assert_eq!(denied.code, "sync_adoption_blocked");
+            assert_eq!(denied.message, "本机仍有未完成的保存或同步屏障，请先完成后再开启新账户同步");
+            session.sync_adoption_preflight(&identity.workspace_id, &identity.device_id)
+                .unwrap();
+            eprintln!("restart fixture: path={recovery} before_retirement pending=false quiet=true phase=probe different_workspace=blocked same_workspace=allowed");
+            if recovery == "release" {
+                // Exercise the actual coordinator release protocol, not a
+                // fixture-only clearing of quiet/pending/intent structures.
+                let (release, access) = session.sync_tick(&live).unwrap().unwrap();
+                assert_eq!(release["phase"], "release");
+                assert_eq!(release["outcome"], "abort");
+                assert_eq!(release["operationId"], operation["operationId"]);
+                assert!(access.is_none());
+                assert_eq!(session.sync_diagnostics()["latestAbortReason"], "externalAbort");
+            } else {
+                drop(session); // closes the real Store/SQLite connection too
+                session = Session::new(Store::open(dir.path()).unwrap());
+            }
+            assert!(session.pending.is_none());
+            assert!(!session.sync_has_operation());
+            assert!(session.sync_diagnostics()["activePhase"].is_null());
+            session.sync_adoption_preflight(&next_workspace, &next_device).unwrap();
+            assert_eq!(session.store.sync_identity().unwrap().unwrap(), identity);
+            assert_eq!(session.workspace().unwrap()["notes"], before["notes"]);
+            eprintln!("restart fixture: path={recovery} after_retirement pending=false quiet=false phase=none different_workspace=allowed identity_preserved=true notes_preserved=true");
+        }
+    }
+    #[test]
+    fn real_store_activation_preserves_documents_and_restart_identity_and_allows_explicit_adoption()
+    {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path()).unwrap();
+        store
+            .action(serde_json::json!({"type":"createNote"}))
+            .unwrap();
+        let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
+        let original = shared.0.lock().unwrap().workspace().unwrap();
+        let runtime = Runtime::new(
+            shared.clone(),
+            dir.path().into(),
+            Arc::new(AdoptionWindows {
+                shared: shared.clone(),
+                blocked: false,
+            }),
+        )
+        .unwrap();
+        let noise = runtime.account_identity().unwrap();
+        let device = noise.device_id().unwrap();
+        let key = noise.public_key().unwrap();
+        let workspace = uuid::Uuid::new_v4().to_string();
+        runtime
+            .account_adoption_preflight(&workspace, &device)
+            .unwrap();
+        let verified = VerifiedWorkspace {
+            workspace: workspace.clone(),
+            device: device.clone(),
+            noise_key: key.clone(),
+        };
+        let mut service = runtime
+            .activate_account(&verified, noise, Arc::new(Gate::default()))
+            .unwrap();
+        assert_eq!(
+            shared.0.lock().unwrap().workspace().unwrap()["notes"],
+            original["notes"]
+        );
+        runtime.pause_account();
+        service.shutdown().unwrap();
+        runtime.shutdown().unwrap();
+        drop(service);
+        drop(runtime);
+        {
+            let session = shared.0.lock().unwrap();
+            // Shutdown joins the coordinator; it need not consume the last
+            // aborted quiet operation before process exit. Observe it, without
+            // assuming which side of that scheduling race won this time.
+            eprintln!("restart fixture: stopped_session pending={} quiet={} phase={}",
+                session.pending.is_some(), session.sync_has_operation(),
+                session.sync_diagnostics()["activePhase"]);
+        }
+        // Simulate an actual process restart: every Arc owner is gone, so the
+        // old Session and its Store connection close. Reusing it here raced
+        // the new coordinator against an aborted local-recovery quiet barrier.
+        assert_eq!(Arc::strong_count(&shared), 1);
+        drop(shared);
+        let shared = Arc::new((
+            Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
+            Condvar::new(),
+        ));
+        {
+            let session = shared.0.lock().unwrap();
+            assert!(session.pending.is_none());
+            assert!(!session.sync_has_operation());
+            assert!(session.sync_diagnostics()["activePhase"].is_null());
+        }
+        let runtime = Runtime::new(
+            shared.clone(),
+            dir.path().into(),
+            Arc::new(AdoptionWindows {
+                shared: shared.clone(),
+                blocked: false,
+            }),
+        )
+        .unwrap();
+        let noise = runtime.account_identity().unwrap();
+        assert_eq!(noise.device_id().unwrap(), device);
+        assert_eq!(noise.public_key().unwrap(), key);
+        runtime
+            .account_adoption_preflight(&workspace, &device)
+            .unwrap();
+        assert!(!runtime
+            .account_adoption_needed(&workspace, &device)
+            .unwrap());
+        let other_workspace = uuid::Uuid::new_v4().to_string();
+        let other_device = uuid::Uuid::new_v4().to_string();
+        assert!(runtime
+            .account_adoption_needed(&other_workspace, &other_device)
+            .unwrap());
+        runtime
+            .account_adoption_preflight(&other_workspace, &other_device)
+            .unwrap();
+        let identity = shared
+            .0
+            .lock()
+            .unwrap()
+            .store
+            .sync_identity()
+            .unwrap()
+            .unwrap();
+        assert_eq!(identity.workspace_id, workspace);
+        assert_eq!(identity.device_id, device);
+        assert_eq!(
+            shared.0.lock().unwrap().workspace().unwrap()["notes"],
+            original["notes"]
+        );
+        runtime.shutdown().unwrap();
+    }
+    #[test]
+    fn workspace_adoption_native_handshake_preserves_manual_content_and_blocks_unready_window() {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        for blocked in [true, false] {
+            let dir = tempfile::tempdir().unwrap();
+            let mut store = Store::open(dir.path()).unwrap();
+            store
+                .action(serde_json::json!({"type":"createNote"}))
+                .unwrap();
+            let original_identity = store.sync_enable(None).unwrap();
+            let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
+            let before = shared.0.lock().unwrap().workspace().unwrap();
+            let runtime = Runtime::new(
+                shared.clone(),
+                dir.path().into(),
+                Arc::new(AdoptionWindows {
+                    shared: shared.clone(),
+                    blocked,
+                }),
+            )
+            .unwrap();
+            runtime.pause_for_account().unwrap();
+            let identity = runtime
+                .account_identity_for(&uuid::Uuid::new_v4().to_string())
+                .unwrap();
+            let target = VerifiedWorkspace {
+                workspace: uuid::Uuid::new_v4().to_string(),
+                device: identity.device_id().unwrap(),
+                noise_key: identity.public_key().unwrap(),
+            };
+            let private_root = dir.path().join(".account");
+            super::super::private::begin_adoption(&private_root).unwrap();
+            let result = runtime.activate_account(&target, identity, Arc::new(Gate::default()));
+            if blocked {
+                assert!(result.is_err());
+                assert_eq!(
+                    shared
+                        .0
+                        .lock()
+                        .unwrap()
+                        .store
+                        .sync_identity()
+                        .unwrap()
+                        .unwrap()
+                        .workspace_id,
+                    original_identity.workspace_id
+                );
+                assert!(super::super::private::adoption_pending(&private_root).unwrap());
+            } else {
+                let mut service = result.unwrap();
+                assert_eq!(
+                    shared
+                        .0
+                        .lock()
+                        .unwrap()
+                        .store
+                        .sync_identity()
+                        .unwrap()
+                        .unwrap()
+                        .workspace_id,
+                    target.workspace
+                );
+                assert!(!super::super::private::adoption_pending(&private_root).unwrap());
+                service.shutdown().unwrap();
+            }
+            assert_eq!(
+                shared.0.lock().unwrap().workspace().unwrap()["notes"],
+                before["notes"]
+            );
+            runtime.shutdown().unwrap();
+        }
+    }
+    #[test]
+    fn workspace_adoption_partial_release_retries_keep_editor_authority_and_terminal_receipt() {
+        use crate::{session::{Session, Token, synchronization::WindowReply}, store::Store, sync::adapter::{Runtime, SharedSession, WindowHost}};
+        use std::{collections::HashSet, sync::{Arc, Condvar, Mutex}};
+        struct PartialWindows {
+            shared: SharedSession,
+            failures: Mutex<u8>,
+            deliveries: Mutex<Vec<(String, String, serde_json::Value)>>,
+        }
+        impl WindowHost for PartialWindows {
+            fn participants(&self) -> HashSet<String> {
+                HashSet::from(["main".into(), "note-second".into()])
+            }
+            fn emit(&self, name: &str, value: &serde_json::Value) -> crate::store::Result<()> {
+                for window in ["main", "note-second"] {
+                    if name == "notes-sync" && value["phase"] == "release" && window == "note-second" {
+                        let mut remaining = self.failures.lock().unwrap();
+                        if *remaining > 0 {
+                            *remaining -= 1;
+                            return Err(crate::store::AppError { code: "fixture_emit_failed".into(), message: "synthetic partial delivery".into(), commit: None });
+                        }
+                    }
+                    self.deliveries.lock().unwrap().push((window.into(), name.into(), value.clone()));
+                    if name == "notes-sync" {
+                        let operation = value["operationId"].as_str().unwrap().to_string();
+                        let reply = match value["phase"].as_str() {
+                            Some("probe") => WindowReply::Probe { operation_id: operation, protected_note_ids: vec![], blocked: false },
+                            Some("prepare") => WindowReply::Prepare { operation_id: operation, ready: true },
+                            _ => continue,
+                        };
+                        let mut s = self.shared.0.lock().unwrap();
+                        let token = s.sync_media_token();
+                        s.sync_reply(window, reply, &token)?;
+                    }
+                }
+                Ok(())
+            }
+        }
+        let dir = tempfile::tempdir().unwrap();
+        let mut store = Store::open(dir.path()).unwrap();
+        let note = store.action(serde_json::json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+        store.sync_enable(None).unwrap();
+        let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
+        let old_token = shared.0.lock().unwrap().sync_media_token();
+        let host = Arc::new(PartialWindows { shared: shared.clone(), failures: Mutex::new(2), deliveries: Mutex::new(vec![]) });
+        let runtime = Runtime::new(shared.clone(), dir.path().into(), host.clone()).unwrap();
+        runtime.pause_for_account().unwrap();
+        let identity = runtime.account_identity_for(&uuid::Uuid::new_v4().to_string()).unwrap();
+        let target = VerifiedWorkspace { workspace: uuid::Uuid::new_v4().to_string(), device: identity.device_id().unwrap(), noise_key: identity.public_key().unwrap() };
+        let private_root = dir.path().join(".account");
+        super::super::private::begin_adoption(&private_root).unwrap();
+        assert!(runtime.activate_account(&target, identity.clone(), Arc::new(Gate::default())).is_err());
+        let instance = shared.0.lock().unwrap().store.sync_store_instance();
+        let release = host.deliveries.lock().unwrap().iter().find(|(_, name, value)| name == "notes-sync" && value["phase"] == "release").unwrap().2.clone();
+        assert_eq!(release["sessionId"], old_token.session_id);
+        assert_eq!(release["outcome"], "commit");
+        assert!(super::super::private::adoption_pending(&private_root).unwrap());
+        {
+            let mut s = shared.0.lock().unwrap();
+            // A missed release can query the real terminal with its original
+            // Session token; it is not stranded behind a rotated authority.
+            assert_eq!(s.sync_reply("note-second", WindowReply::Prepare { operation_id: release["operationId"].as_str().unwrap().into(), ready: true }, &old_token).unwrap()["outcome"], "commit");
+            let revision = s.store.note(&note).unwrap().revision;
+            let token = Token { note_epoch: Some(0), ..old_token.clone() };
+            s.register_save("main", &note, "post-partial-draft", token).unwrap();
+            s.save("main", serde_json::json!({"type":"saveNote", "id":note, "saveIntent":"post-partial-draft", "revision":revision,
+                "document":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"draft after partial release"}]}]}})).unwrap();
+        }
+        assert!(runtime.activate_account(&target, identity.clone(), Arc::new(Gate::default())).is_err());
+        assert!(super::super::private::adoption_pending(&private_root).unwrap());
+        assert_eq!(shared.0.lock().unwrap().store.sync_store_instance(), instance);
+        let mut service = runtime.activate_account(&target, identity, Arc::new(Gate::default())).unwrap();
+        assert!(!super::super::private::adoption_pending(&private_root).unwrap());
+        {
+            let s = shared.0.lock().unwrap();
+            assert_eq!(s.store.sync_store_instance(), instance);
+            s.check(&old_token, None).unwrap();
+            assert_eq!(s.store.note(&note).unwrap().plain_text, "draft after partial release");
+        }
+        let deliveries = host.deliveries.lock().unwrap();
+        assert!(deliveries.iter().all(|(_, name, _)| name != "notes-access"));
+        let releases: Vec<_> = deliveries.iter().filter(|(_, name, value)| name == "notes-sync" && value["phase"] == "release").collect();
+        assert_eq!(releases.iter().filter(|(window, _, _)| window == "main").count(), 3);
+        assert_eq!(releases.iter().filter(|(window, _, _)| window == "note-second").count(), 1);
+        assert!(releases.iter().all(|(_, _, value)| value == &release));
+        drop(deliveries);
+        service.shutdown().unwrap();
+        runtime.shutdown().unwrap();
+    }
+    #[test]
+    fn closed_or_stale_account_gate_cannot_adopt_a_local_library() {
+        use crate::{session::Session, store::Store, sync::adapter::Runtime};
+        use std::sync::{Arc, Condvar, Mutex};
+        for closed in [false, true] {
+            let dir = tempfile::tempdir().unwrap();
+            let shared = Arc::new((
+                Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
+                Condvar::new(),
+            ));
+            let runtime =
+                Runtime::new(shared.clone(), dir.path().into(), Arc::new(Windows)).unwrap();
+            let identity = runtime
+                .account_identity_for(&uuid::Uuid::new_v4().to_string())
+                .unwrap();
+            let verified = VerifiedWorkspace {
+                workspace: uuid::Uuid::new_v4().to_string(),
+                device: identity.device_id().unwrap(),
+                noise_key: identity.public_key().unwrap(),
+            };
+            let gate = Arc::new(Gate::default());
+            if closed {
+                gate.close();
+            } else {
+                gate.bind_lifecycle(Arc::new(|| false));
+            }
+            assert!(runtime.activate_account(&verified, identity, gate).is_err());
+            assert!(shared
+                .0
+                .lock()
+                .unwrap()
+                .store
+                .sync_identity()
+                .unwrap()
+                .is_none());
+            runtime.shutdown().unwrap();
+        }
+    }
+    #[test]
+    fn signed_proof_rejects_cross_owner_workspace_and_unbound_keys_not_just_jwt_decode() {
+        let (binding, jwks, key) = fixture();
+        let original = Claims {
+            iss: "https://fixed.test".into(),
+            aud: "cybernote-enrollment-v1".into(),
+            sub: binding.subject.clone(),
+            account_issuer: binding.issuer.clone(),
+            product_id: binding.product_id.clone(),
+            workspace_id: binding.workspace_id.clone(),
+            device_id: binding.device_id.clone(),
+            noise_public_key: binding.noise_public_key.clone(),
+            purpose: "pair".into(),
+            iat: now(),
+            exp: now() + 300,
+            jti: uuid::Uuid::new_v4().to_string(),
+        };
+        let sign = |claims: &Claims| {
+            let mut header = jsonwebtoken::Header::new(Algorithm::ES384);
+            header.kid = Some("synthetic-fixture".into());
+            jsonwebtoken::encode(&header, claims, &key).unwrap()
+        };
+        assert!(verify(&sign(&original), &jwks, "https://fixed.test", &binding).is_ok());
+        for field in [
+            "iss",
+            "aud",
+            "sub",
+            "accountIssuer",
+            "productId",
+            "workspaceId",
+            "purpose",
+            "noisePublicKey",
+            "deviceId",
+            "jti",
+        ] {
+            let mut value = serde_json::to_value(&original).unwrap();
+            value[field] = serde_json::json!("wrong");
+            let claims: Claims = serde_json::from_value(value).unwrap();
+            assert!(
+                verify(&sign(&claims), &jwks, "https://fixed.test", &binding).is_err(),
+                "{field}"
+            );
+        }
+        for claims in [
+            Claims {
+                exp: now() - 1,
+                ..original.clone()
+            },
+            Claims {
+                exp: now() + 301,
+                ..original.clone()
+            },
+            Claims {
+                iat: now() + 60,
+                exp: now() + 300,
+                ..original.clone()
+            },
+        ] {
+            assert!(verify(&sign(&claims), &jwks, "https://fixed.test", &binding).is_err());
+        }
+        let (_, other, _) = fixture();
+        assert!(verify(&sign(&original), &other, "https://fixed.test", &binding).is_err());
+        let mut jwt = sign(&original);
+        let index = jwt.len() - 8;
+        let byte = jwt.as_bytes()[index];
+        jwt.replace_range(index..index + 1, if byte == b'A' { "B" } else { "A" });
+        assert!(verify(&jwt, &jwks, "https://fixed.test", &binding).is_err());
+    }
+    #[test]
+    fn close_and_expiry_fail_closed_for_both_directions_and_routes_are_ephemeral() {
+        let gate = Gate::default();
+        let device = uuid::Uuid::new_v4().to_string();
+        let key = B64.encode([1; 32]);
+        let proof = Claims {
+            iss: "https://fixed.test".into(),
+            aud: "cybernote-enrollment-v1".into(),
+            sub: "owner".into(),
+            account_issuer: config::ISSUER.into(),
+            product_id: "p".into(),
+            workspace_id: uuid::Uuid::new_v4().to_string(),
+            device_id: device.clone(),
+            noise_public_key: key.clone(),
+            purpose: "pair".into(),
+            iat: now(),
+            exp: now() + 200,
+            jti: uuid::Uuid::new_v4().to_string(),
+        };
+        gate.admit(&proof);
+        assert!(gate.authorize(&device, &key).is_err());
+        gate.renew_local(now() + 200);
+        assert!(gate.authorize(&device, &key).is_ok());
+        assert!(gate.authorize(&device, &B64.encode([2; 32])).is_err());
+        gate.route(&device, "ws://127.0.0.1:2222/".into());
+        assert!(gate.endpoint(&device).is_ok());
+        gate.close();
+        assert!(gate.authorize(&device, &key).is_err());
+        assert!(gate.endpoint(&device).is_err());
+        gate.renew_local(now() + 200);
+        gate.admit(&Claims {
+            exp: now() - 1,
+            ..proof
+        });
+        assert!(gate.authorize(&device, &key).is_err());
+    }
+}

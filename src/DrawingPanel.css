@@ -1,0 +1,67 @@
+.drawing-overlay {
+  --drawing-grid: #dcdce2;
+}
+.drawing-surface {
+  overflow: hidden;
+  overscroll-behavior: none;
+  padding: 0 !important;
+}
+.drawing-surface svg {
+  user-select: none;
+  -webkit-user-select: none;
+}
+.drawing-view-hint {
+  text-align: center;
+  color: var(--secondary);
+  font-size: 11px;
+  padding: 6px;
+  pointer-events: none;
+}
+.drawing-overlay header {
+  flex-shrink: 0;
+  gap: 8px;
+}
+.drawing-overlay header .icon-button {
+  width: 40px;
+  height: 44px;
+}
+.drawing-overlay header > button {
+  min-width: 44px;
+  min-height: 44px;
+}
+.drawing-overlay footer {
+  flex-shrink: 0;
+}
+.drawing-node {
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
+}
+.drawing-node .drawing-menu-notice {
+  font-size: 12px;
+  color: var(--secondary);
+}
+@media (max-width: 600px) {
+  .mobile .drawing-overlay header {
+    padding-inline: 10px;
+  }
+  .mobile .drawing-instruments {
+    gap: 10px;
+  }
+  .mobile .drawing-instruments .icon-button {
+    width: 44px;
+    height: 44px;
+  }
+  .mobile .drawing-instruments input {
+    width: 90px;
+  }
+  .mobile .drawing-colors {
+    gap: 12px;
+  }
+}
+.dark .drawing-overlay {
+  --drawing-grid: #414147;
+}
+/* AppKit's full-size webview extends behind the native titlebar. */
+.desktop.native-toolbar .drawing-overlay {
+  top: var(--native-top, 52px);
+}

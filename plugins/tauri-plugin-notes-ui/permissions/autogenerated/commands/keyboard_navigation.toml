@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-keyboard-navigation"
+description = "Enables the keyboard_navigation command without any pre-configured scope."
+commands.allow = ["keyboard_navigation"]
+
+[[permission]]
+identifier = "deny-keyboard-navigation"
+description = "Denies the keyboard_navigation command without any pre-configured scope."
+commands.deny = ["keyboard_navigation"]

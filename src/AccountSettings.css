@@ -1,0 +1,150 @@
+.account-settings { --account-highlight: color-mix(in srgb, var(--accent) 15%, var(--paper)); min-width: 0; overflow-wrap: anywhere; }
+.account-accessible-state { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.account-settings .preferences-page-title { margin-bottom: 6px; }
+.account-intro { color: var(--secondary); margin: 0 0 26px; }
+.account-group { padding: 20px 0; border-bottom: 1px solid var(--line); }
+.account-group:first-of-type { padding-top: 0; }
+.account-settings h4 { margin: 0 0 8px; font-size: 1em; font-weight: 600; }
+.account-settings p { line-height: 1.6; }
+.account-profile { display: flex; align-items: center; gap: 14px; }
+.account-profile-group.is-signed-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.account-profile-group.is-signed-in .account-profile { flex: 1; min-width: 0; }
+.account-profile-group.is-signed-in > .account-actions { margin: 0; flex-shrink: 0; }
+.account-profile > div { min-width: 0; flex: 1; }
+.account-profile p { margin: 0; color: var(--secondary); }
+.account-avatar { display: grid; place-items: center; width: 46px; height: 46px; flex-shrink: 0; background: var(--account-highlight); border-radius: 50%; color: var(--accent); }
+.account-avatar svg { width: 25px; height: 25px; }
+.account-identifier { user-select: text; -webkit-user-select: text; }
+.account-login-method { min-width: 0; margin: 16px 0 0; padding: 0; border: 0; }
+.account-login-method legend { padding: 0; font-weight: 600; }
+.account-login-options { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.account-login-options label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; }
+.account-login-options input { flex-shrink: 0; width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+.account-login-method:disabled label { color: var(--secondary); cursor: default; }
+.account-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.account-actions:empty { display: none; }
+.account-settings button { min-height: max(28px, var(--interface-hit-min, 28px)); min-width: 64px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--line); border-radius: var(--interface-radius-button, 7px); background: var(--grouped); white-space: normal; overflow-wrap: anywhere; text-align: center; }
+.account-settings .account-primary { background: var(--selection); color: var(--accent); border-color: transparent; }
+.account-help { color: var(--secondary); font-size: .9em; margin: 10px 0; }
+.account-toggle { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.account-toggle label { flex: 1; font-weight: 600; cursor: pointer; }
+.account-switch { position: relative; display: inline-grid; place-items: center; flex-shrink: 0; width: 48px; height: 44px; }
+.account-switch input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.account-switch-track { width: 38px; height: 24px; border-radius: 999px; background: var(--secondary); pointer-events: none; transition: background-color .16s ease; }
+.account-switch-track::before { content: ""; display: block; width: 20px; height: 20px; margin: 2px; border-radius: 50%; background: var(--paper); box-shadow: 0 1px 3px #0003; transition: transform .16s ease; }
+.account-switch input:checked + .account-switch-track { background: var(--accent); }
+.account-switch input:checked + .account-switch-track::before { transform: translateX(14px); }
+.account-switch input:focus-visible + .account-switch-track { outline: 2px solid var(--accent); outline-offset: 3px; }
+.account-switch input:disabled { cursor: default; }
+.account-switch input:disabled + .account-switch-track { opacity: .5; }
+.account-state { display: flex; align-items: center; gap: 7px; margin: 16px 0 10px; font-size: .9em; }
+.account-metrics { margin: 0; font-size: .9em; }
+.account-metrics > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; margin: 8px 0; }
+.account-metrics dt { color: var(--secondary); }
+.account-metrics dd { margin: 0; }
+.account-devices { padding: 0; margin: 0; list-style: none; }
+.account-devices li { position: relative; display: flex; align-items: center; gap: 14px; padding: 18px 14px; border-bottom: 1px solid var(--line); }
+.account-devices li:last-child { border-bottom: 0; }
+.account-devices .account-device-remote { display: block; padding: 0; }
+.account-devices .account-device-current { padding: 18px; margin-bottom: 8px; background: color-mix(in srgb, var(--accent) 7%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line)); border-radius: 12px; }
+.account-device-icon { --control-icon: 24px; display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border-radius: 11px; background: var(--grouped); color: var(--secondary); }
+.account-device-icon svg { width: 24px; height: 24px; }
+.account-device-current .account-device-icon { background: var(--account-highlight); color: var(--accent); }
+.account-devices li > div { min-width: 0; }
+.account-devices strong { font-weight: 600; }
+.account-device-status, .account-device-summary { margin: 6px 0 0; color: var(--secondary); font-size: .85em; line-height: 1.6; }
+.account-device-title { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.account-current-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 5px; background: var(--account-highlight); color: var(--ink); font-size: .72em; font-weight: 500; white-space: nowrap; }
+.account-current-badge svg { --control-icon: 12px; width: 12px; height: 12px; }
+.account-device-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.account-status-dot { display: inline-block; width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--secondary); }
+.account-status-dot.is-online { background: #32965b; }
+.account-device-availability { padding-left: 8px; margin-left: 2px; border-left: 1px solid var(--line); }
+.account-device-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 12px; }
+.account-device-count { --control-icon: 13px; display: inline-flex; align-items: center; gap: 4px; }
+.account-device-count svg { width: 13px; height: 13px; }
+.account-device-chevron { --control-icon: 17px; flex-shrink: 0; width: 17px; height: 17px; color: var(--secondary); }
+.account-device-remote:has(.account-device-open:not(:disabled)):hover { background: var(--grouped); }
+.account-device-remote:focus-within { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 8px; }
+.account-error { margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: 9px; color: var(--danger, #c53527); }
+.account-error p { margin: 0 0 12px; }
+.account-error-details { margin: 12px 0; color: var(--secondary); font-size: .9em; }
+.account-error-details summary { cursor: pointer; min-height: var(--interface-hit-min, 28px); }
+.account-error-details dl { margin: 8px 0; user-select: text; }
+.account-error-details dl > div { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0; }
+.account-error-details dt { font-weight: 500; }
+.account-error-details dd { margin: 0; overflow-wrap: anywhere; }
+.account-confirmation { box-sizing: border-box; width: min(420px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow-y: auto; margin: auto; padding: 22px; background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: var(--interface-radius-card, 14px); box-shadow: 0 20px 70px #0003; }
+.account-confirmation::backdrop { background: #0005; }
+.account-confirmation p { margin: 0; }
+.account-confirmation .account-actions { justify-content: flex-end; }
+.account-confirmation .account-confirmation-error { margin-top: 14px; color: var(--danger, #c53527); }
+.account-notice { display: flex; align-items: flex-start; gap: 8px; padding: 12px 14px; border-radius: 8px; background: var(--grouped); color: var(--secondary); font-size: .85em; }
+.account-notice svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 4px; color: var(--accent); }
+.account-notice:empty { display: none; }
+.preferences-mobile .account-group { padding: 16px; margin-bottom: 18px; border: 0; border-radius: 12px; background: var(--paper); }
+.preferences-mobile .account-settings button { min-height: 44px; }
+.account-device-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.account-device-heading h4 { margin: 0; }
+.account-device-heading .account-help { margin: 4px 0 0; font-size: .85em; }
+.account-settings .account-refresh { display: inline-flex; justify-content: center; align-items: center; gap: 7px; flex-shrink: 0; min-width: 112px; }
+.account-refresh svg { width: 15px; height: 15px; flex-shrink: 0; }
+.account-settings .account-refresh[aria-busy="true"] { color: var(--accent); opacity: 1; cursor: progress; }
+.account-spinner { animation: account-spin .85s linear infinite; }
+.account-loading { display: flex; align-items: center; gap: 9px; color: var(--secondary); }
+.account-loading svg { width: 18px; height: 18px; }
+@keyframes account-spin { to { transform: rotate(360deg); } }
+.account-settings .account-rename { display: inline-flex; justify-content: center; align-items: center; gap: 6px; flex-shrink: 0; background: var(--paper); font-size: .85em; }
+.account-rename svg { width: 13px; height: 13px; }
+.account-devices-empty { display: flex; align-items: center; gap: 14px; padding: 22px 14px; }
+.account-devices-empty > svg { flex-shrink: 0; width: 30px; height: 30px; color: var(--secondary); }
+.account-devices-empty strong { font-weight: 500; font-size: .95em; }
+.account-devices-empty p { margin: 4px 0 0; color: var(--secondary); font-size: .85em; }
+.account-device-footnote { margin: 16px 0 0; font-size: .8em; }
+.account-device-info { display: block; flex: 1; min-width: 0; }
+.account-settings .account-device-open { display: flex; align-items: center; gap: 14px; width: 100%; min-width: 0; padding: 18px 14px; border: 0; border-radius: 0; background: transparent; text-align: start; }
+.account-device-directions { border: 0; padding: 0; margin: 16px 0; min-width: 0; }
+.account-device-directions legend { font-weight: 600; margin-bottom: 6px; }
+.account-device-directions label { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
+.account-device-directions input { width: 18px; height: 18px; margin: 0; flex-shrink: 0; accent-color: var(--accent); }
+.account-device-directions small { display: block; color: var(--secondary); line-height: 1.5; }
+.account-device-directions:disabled label { color: var(--secondary); cursor: default; }
+.account-device-name { display: grid; gap: 8px; margin-top: 16px; }
+.account-device-name input { box-sizing: border-box; min-width: 0; width: 100%; min-height: 44px; padding: 8px; border: 1px solid var(--line); border-radius: var(--interface-radius-button, 7px); background: var(--paper); color: var(--ink); font: inherit; }
+.account-operation { margin-top: 14px !important; color: var(--secondary); }
+.account-device-open:focus-visible, .account-device-name input:focus-visible, .account-device-directions input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.preferences-mobile .account-intro { display: none; }
+.preferences-mobile .account-group { margin-bottom: 16px; }
+.preferences-mobile .account-profile-group.is-signed-in { flex-wrap: wrap; gap: 12px; }
+.preferences-mobile .account-profile-group.is-signed-in > .account-actions > button { padding: 0 4px; min-width: 64px; border: 0; background: transparent; color: var(--secondary); font-size: .85em; }
+.preferences-mobile .account-profile h4 { margin-bottom: 3px; }
+.preferences-mobile .account-identifier { font-size: .85em; }
+.preferences-mobile .account-sync-group { padding: 12px 16px; }
+.preferences-mobile .account-sync-group > .account-help { margin: 4px 0 12px; font-size: .85em; }
+.preferences-mobile .account-state { margin: 0; padding: 10px 0; border-top: 1px solid var(--line); font-size: .85em; }
+.preferences-mobile .account-metrics { font-size: .8em; }
+.preferences-mobile .account-metrics > div { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 12px; margin: 5px 0; }
+.preferences-mobile .account-metrics dd { text-align: end; }
+.preferences-mobile .account-device-group { padding: 0; background: transparent; }
+.preferences-mobile .account-device-heading { align-items: center; gap: 10px; padding: 0 4px; margin-bottom: 12px; }
+.preferences-mobile .account-device-heading > div { flex: 1; min-width: 0; }
+.preferences-mobile .account-refresh { --control-icon: 16px; min-width: 0; padding: 0 8px; border: 0; background: transparent; color: var(--accent); font-size: .85em; }
+.preferences-mobile .account-devices .account-device-current { display: grid; grid-template-columns: 36px minmax(0, 1fr) 44px; align-items: start; gap: 10px; padding: 14px 12px; margin-bottom: 12px; }
+.preferences-mobile .account-devices .account-device-remote { background: var(--paper); }
+.preferences-mobile .account-device-remote:first-child, .preferences-mobile .account-device-current + .account-device-remote { border-radius: 12px 12px 0 0; }
+.preferences-mobile .account-device-remote:last-child { border-radius: 0 0 12px 12px; }
+.preferences-mobile .account-device-remote:only-child { border-radius: 12px; }
+.preferences-mobile .account-device-open { padding: 14px; gap: 12px; }
+.preferences-mobile .account-device-icon { width: 38px; height: 38px; border-radius: 10px; }
+.preferences-mobile .account-device-current .account-device-icon { width: 36px; height: 36px; }
+.preferences-mobile .account-device-current .account-rename { --control-icon: 16px; width: 44px; min-width: 44px; padding: 0; margin-top: -4px; border: 0; background: transparent; color: var(--accent); }
+.preferences-mobile .account-rename > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.preferences-mobile .account-device-title { gap: 4px 8px; }
+.preferences-mobile .account-device-status { margin-top: 4px; font-size: .8em; }
+.preferences-mobile .account-device-summary { display: grid; gap: 2px; margin-top: 5px; font-size: .8em; }
+.preferences-mobile .account-device-current .account-device-summary { margin-right: -44px; }
+.preferences-mobile .account-device-footnote { padding: 0 4px; line-height: 1.6; }
+.preferences-mobile .account-devices-empty { padding: 20px 16px; border-radius: 12px; background: var(--paper); }
+.preferences-mobile .account-settings > .account-help:last-child { margin: 18px 4px 0; font-size: .8em; }
+@media (max-width: 350px) { .account-profile { gap: 10px; } .account-avatar { width: 36px; height: 36px; } .preferences-mobile .account-actions > button { flex: 1; } }
+@media (prefers-reduced-motion: reduce) { .account-switch-track, .account-switch-track::before { transition: none; } .account-spinner { animation: none; } }

@@ -1,0 +1,17 @@
+/* Semantic layers are fixed policy, never user preferences. Also loaded before
+   the startup shell, which must cover every application surface. */
+:root {
+  --layer-decoration: -1;
+  --layer-content: 0;
+  --layer-content-overlay: 1;
+  --layer-editor: 10;
+  --layer-toolbar: 20;
+  --layer-preview: 30;
+  --layer-menu: 40;
+  --layer-submenu: 41;
+  --layer-modal: 50;
+  --layer-modal-menu: 60;
+  --layer-notice: 70;
+  --layer-access: 80;
+  --layer-startup: 100;
+}

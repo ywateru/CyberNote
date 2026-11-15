@@ -1,0 +1,916 @@
+/* Local recording overrides. Mobile relationships come from recording-mobile.md;
+   compressed video bounds are not device points or a pixel-parity claim. */
+.recording-backdrop .recording-sheet header {
+  position: relative;
+  justify-content: center;
+}
+.recording-backdrop .recording-sheet .recording-cancel {
+  position: absolute;
+  left: 20px;
+}
+.recording-backdrop .recording-sheet .recording-notice {
+  min-height: 38px;
+  max-width: 90%;
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--secondary);
+}
+.recording-backdrop .recording-sheet .recording-notice[role="alert"] {
+  color: var(--danger);
+}
+.recording-backdrop .recording-sheet .recording-controls {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: 28px;
+  height: 58px;
+  flex-shrink: 0;
+}
+.recording-backdrop .recording-sheet .recording-primary {
+  width: 146px;
+  height: 58px;
+  min-width: 0;
+  border: 1px solid #aaa;
+  background: var(--paper);
+  color: #ff3b30;
+  border-radius: 32px;
+  font-size: 17px;
+}
+.recording-backdrop .recording-sheet .recording-primary-idle,
+.recording-backdrop .recording-sheet .recording-primary-requesting {
+  width: 58px;
+}
+.recording-backdrop .recording-sheet .recording-red-core {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #ff3b30;
+}
+.recording-backdrop .recording-sheet .recording-primary-paused {
+  border-color: #ff3b30;
+  background: rgba(255, 59, 48, 0.08);
+}
+.recording-backdrop .recording-sheet .recording-primary svg {
+  width: 28px;
+  height: 28px;
+}
+.recording-backdrop .recording-sheet .recording-done {
+  position: absolute;
+  right: 18px;
+  top: 0;
+  min-width: 44px;
+  height: 58px;
+  border: 0;
+  color: var(--accent);
+  background: transparent;
+  font-size: 16px;
+}
+.recording-backdrop .recording-sheet .recording-done:disabled {
+  color: #a6a6aa;
+}
+@media (max-width: 760px) {
+  .mobile .recording-backdrop[class] {
+    padding-top: max(6.875vh, env(safe-area-inset-top, 0px));
+  }
+  .mobile .recording-backdrop .recording-sheet {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .mobile .recording-backdrop .recording-sheet .sheet-handle {
+    position: absolute;
+    top: 0.45%;
+    margin: 0;
+    width: 9.4%;
+    height: 4px;
+  }
+  .mobile .recording-backdrop .recording-sheet header {
+    position: absolute;
+    top: 5.8%;
+    height: 8%;
+    padding: 0;
+  }
+  .mobile .recording-backdrop .recording-sheet header > div {
+    gap: 6px;
+  }
+  .mobile .recording-backdrop .recording-sheet header strong {
+    font-size: clamp(18px, 5.35vw, 23px);
+  }
+  .mobile .recording-backdrop .recording-sheet header small {
+    font-size: clamp(11px, 3.1vw, 13px);
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-cancel {
+    display: none;
+  }
+  .mobile .recording-backdrop .recording-sheet .waveform {
+    position: absolute;
+    top: 15.9%;
+    height: 36.9%;
+    min-height: 0;
+    margin: 0;
+    overflow: visible;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-playhead {
+    bottom: 2px;
+  }
+  .mobile .recording-backdrop .recording-sheet .wave-axis {
+    height: 20px;
+    bottom: -18px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .mobile .recording-backdrop .recording-sheet .wave-axis span {
+    padding-top: 6px;
+    font-size: 11px;
+    line-height: 13px;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-time {
+    position: absolute;
+    top: 65.2%;
+    margin: 0;
+    font-size: clamp(28px, 9.6vw, 42px);
+    font-weight: 600;
+    letter-spacing: -1.25px;
+    color: #000;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-notice {
+    position: absolute;
+    top: 71%;
+    margin: 0;
+    max-height: 12%;
+    overflow: auto;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-controls {
+    position: absolute;
+    top: 85.45%;
+    height: 7.4%;
+    min-height: 44px;
+    margin: 0;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-primary {
+    height: 100%;
+    width: 37.05%;
+    border-radius: 999px;
+    font-size: clamp(14px, 3.8vw, 17px);
+    /* The inset stroke preserves the existing border box and touch target. */
+    box-shadow: inset 0 0 0 2px #aaa;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-primary-paused {
+    position: relative;
+    isolation: isolate;
+    background: var(--paper);
+    box-shadow: inset 0 0 0 2px #ff3b30;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-primary-paused::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: inherit;
+    background: rgba(255, 59, 48, 0.33);
+    pointer-events: none;
+    z-index: var(--layer-decoration);
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-primary-idle,
+  .mobile .recording-backdrop .recording-sheet .recording-primary-requesting {
+    width: auto;
+    aspect-ratio: 1;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-red-core {
+    width: 80%;
+    height: 80%;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-primary svg {
+    width: 32%;
+    height: 45%;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-done {
+    right: 4.5%;
+    height: 100%;
+    font-size: clamp(13px, 3.8vw, 17px);
+  }
+}
+@media (max-width: 760px) and (max-height: 650px) {
+  /* Preserve the complete label line while clearing the 56% error/retry row. */
+  .mobile .recording-backdrop .recording-sheet .wave-axis {
+    height: 17px;
+    bottom: -15px;
+  }
+  .mobile .recording-backdrop .recording-sheet .wave-axis span {
+    padding-top: 3px;
+  }
+}
+
+.recording-backdrop .recording-sheet .wave-bars {
+  width: 50%;
+  margin-right: auto;
+  padding: 0;
+}
+
+.recording-backdrop .recording-sheet .recording-playback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: clamp(156px, 50%, 260px);
+  min-height: 44px;
+  margin: 12px 0 20px;
+  flex-shrink: 0;
+}
+.recording-backdrop .recording-sheet .recording-playback button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+}
+.recording-backdrop .recording-sheet .recording-playback button:disabled {
+  color: #a6a6aa;
+}
+.recording-backdrop .recording-sheet .recording-playback button svg {
+  width: 28px;
+  height: 28px;
+}
+.recording-backdrop .recording-sheet .recording-playback button span {
+  position: absolute;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 600;
+}
+.recording-backdrop .recording-sheet .recording-playback-retry {
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+}
+@media (max-width: 760px) {
+  .mobile .recording-backdrop .recording-sheet .recording-playback {
+    position: absolute;
+    top: 73.8%;
+    height: 8%;
+    margin: 0;
+  }
+  .mobile
+    .recording-backdrop
+    .recording-sheet
+    .recording-playback
+    .recording-mobile-play-icon {
+    width: 39px;
+    height: 40px;
+    transform: translateX(1px);
+  }
+  .mobile.dark .recording-backdrop .recording-sheet .recording-time,
+  .dark .mobile .recording-backdrop .recording-sheet .recording-time {
+    color: var(--ink);
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-notice {
+    top: 56%;
+    min-height: 0;
+    max-height: 4%;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-notice-with-retry {
+    left: 12px;
+    max-width: calc(100% - 100px);
+    max-height: 44px;
+    text-align: left;
+  }
+  .mobile .recording-backdrop .recording-sheet .recording-playback-retry {
+    position: absolute;
+    top: 56%;
+    right: 12px;
+    min-width: 64px;
+    font-size: 12px;
+    min-height: 44px;
+  }
+}
+
+/* Shared timeline: all bars are retained, time-stamped capture samples. */
+.recording-sheet .waveform {
+  touch-action: none;
+  user-select: none;
+}
+.recording-sheet .waveform[aria-disabled="false"] {
+  cursor: ew-resize;
+}
+.recording-sheet .waveform:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.recording-sheet .wave-samples {
+  position: absolute;
+  inset: 0 0 30px;
+  overflow: hidden;
+}
+.recording-sheet .wave-samples i {
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  transform: translate(-50%, -50%);
+  background: #ff3b30;
+}
+.recording-sheet .wave-axis {
+  position: absolute;
+  inset: auto 0 0;
+  height: 30px;
+  border-top: 1px solid #dedee1;
+}
+.recording-sheet .wave-axis span {
+  position: absolute;
+  padding-top: 12px;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: #8e8e93;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.recording-sheet .wave-axis span::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 6px;
+  width: 1px;
+  left: 50%;
+  background: #b8b8bd;
+}
+.recording-sheet .recording-playhead {
+  bottom: 30px;
+  pointer-events: none;
+}
+.recording-sheet .recording-playhead::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -2px;
+  width: 5px;
+  height: 5px;
+  background: #e8ba00;
+  border-radius: 50%;
+}
+.recording-action-spacer {
+  display: none;
+}
+
+/* The desktop session is the only view in its own native window. */
+.recording-window-host {
+  position: fixed;
+  inset: 0;
+  background: var(--paper);
+}
+.recording-window-error {
+  position: absolute;
+  top: 78px;
+  left: 12px;
+  right: 12px;
+  z-index: var(--layer-toolbar);
+  color: var(--danger);
+  background: var(--paper);
+  font-size: 12px;
+  padding: 8px;
+}
+.recording-window-connecting {
+  padding: 20px;
+  color: var(--secondary);
+  font-size: 13px;
+}
+.recording-desktop.recording-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: var(--layer-editor);
+  min-height: 0;
+  padding: 0;
+  background: var(--paper);
+}
+.recording-desktop.recording-backdrop .recording-sheet {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  border-radius: 0;
+}
+.recording-desktop.recording-backdrop .recording-sheet header {
+  height: 76px;
+  padding: 0 16px;
+  justify-content: flex-start;
+}
+.recording-desktop.recording-backdrop .recording-sheet header > div {
+  text-align: left;
+  gap: 7px;
+}
+.recording-desktop.recording-backdrop .recording-sheet header strong {
+  font-size: 16px;
+}
+.recording-desktop.recording-backdrop .recording-sheet header small {
+  font-size: 12px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-cancel {
+  left: auto;
+  right: 16px;
+  top: 19px;
+  min-width: 24px;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  color: #8e8e93;
+  border: 0;
+  border-radius: 50%;
+  background: #ededee;
+}
+.recording-desktop .recording-cancel svg {
+  width: 16px;
+  height: 16px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .waveform {
+  flex: 1;
+  height: auto;
+  min-height: 90px;
+  background-color: #fafafa;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-time {
+  margin-top: 28px;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-notice {
+  margin-top: 2px;
+  min-height: 18px;
+  max-height: 36px;
+  overflow: auto;
+  font-size: 11px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-playback {
+  width: 172px;
+  margin: 4px 0 12px;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-playback
+  button
+  svg {
+  width: 24px;
+  height: 24px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-controls {
+  height: 40px;
+  padding: 0 16px;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+.recording-desktop .recording-action-spacer {
+  display: block;
+  width: 40px;
+  flex-shrink: 0;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-primary {
+  width: auto;
+  flex: 1;
+  height: 40px;
+  font-size: 14px;
+  border: 0;
+  background: #f2e9e8;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-primary-idle,
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-primary-requesting {
+  width: 40px;
+  max-width: 40px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-red-core {
+  width: 30px;
+  height: 30px;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-primary:disabled {
+  color: #b7b7bc;
+  background: #eeeeef;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-done {
+  position: static;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  padding: 9px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-done:disabled {
+  background: #e4e4e7;
+  color: #b1b1b5;
+}
+.recording-desktop .recording-done svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 3;
+}
+.live-recording-anchor {
+  display: block;
+  max-width: 100%;
+  line-height: normal;
+  padding: 6px 0;
+}
+.live-recording-card {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 292px;
+  max-width: 100%;
+  min-height: 66px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #ededed;
+  color: var(--ink);
+  font:
+    13px/1.2 -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+.live-recording-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+.live-recording-metadata strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.live-recording-metadata small {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  color: #8e8e93;
+  font-variant-numeric: tabular-nums;
+}
+.live-recording-card button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  color: #ff3b30;
+  border: 0;
+}
+.live-recording-card .live-recording-stop {
+  width: 24px;
+  height: 28px;
+  background: transparent;
+}
+.live-recording-stop span {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.live-recording-card .live-recording-toggle {
+  width: 56px;
+  height: 28px;
+  border-radius: 16px;
+  background: #fff;
+  font-size: 11px;
+}
+.live-recording-card button:disabled {
+  color: #b7b7bc;
+}
+.live-recording-card button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The panel is a sibling in layout space; the capture renderer stays mounted. */
+.recording-layout {
+  display: flex;
+  width: 100%;
+  height: 100dvh;
+  min-width: 0;
+}
+.recording-layout > .app {
+  flex: 1;
+  min-width: 0;
+}
+.recording-dock {
+  position: relative;
+  flex: 0 0 280px;
+  width: 280px;
+  min-width: 0;
+  height: 100%;
+  border-left: 1px solid #d5d5d5;
+  background: var(--paper);
+  overflow: hidden;
+}
+.recording-layout:has(.recording-dock) > .app {
+  overflow-x: auto;
+}
+.recording-desktop .recording-sheet header > div:first-of-type {
+  padding-right: 60px;
+}
+.recording-desktop .recording-sheet .recording-presentation-menu {
+  position: absolute;
+  right: 48px;
+  top: 19px;
+  padding: 0;
+}
+.recording-presentation-menu > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--secondary);
+}
+.recording-presentation-menu > button svg {
+  width: 20px;
+  height: 20px;
+}
+.recording-presentation-menu > [role="menuitem"] {
+  position: absolute;
+  top: 29px;
+  right: -32px;
+  z-index: var(--layer-menu);
+  width: max-content;
+  height: 30px;
+  padding: 5px 12px;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  background: var(--paper);
+  box-shadow: 0 4px 12px #0002;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.recording-dock .recording-backdrop {
+  top: var(--recording-native-top, 0px);
+}
+.recording-dock .recording-window-error {
+  top: calc(var(--recording-native-top, 0px) + 78px);
+}
+
+/* Reference58: 560x934 source crop compared to a 280x467 logical view at 2x.
+   These are recording-local geometry/material approximations, not source DPR. */
+.recording-sheet .waveform,
+.dark .recording-sheet .waveform {
+  background-image: none;
+}
+.recording-sheet .wave-axis {
+  border-top: 0;
+}
+.recording-sheet .wave-axis span {
+  transform: none;
+  margin-left: -2px;
+}
+.recording-sheet .wave-axis span::before {
+  left: 2px;
+}
+.recording-sheet .wave-axis > i {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 5px;
+  background: #dedee1;
+}
+.recording-total-duration {
+  margin-left: 6px;
+}
+.recording-sheet .recording-playback .recording-skip-icon {
+  height: 28px;
+}
+.recording-desktop.recording-backdrop .recording-sheet {
+  background: #f9f9f9;
+  color: #000;
+}
+.recording-desktop.recording-backdrop .recording-sheet header {
+  height: 72px;
+  align-items: flex-start;
+  padding-top: 19px;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  header
+  > div:first-of-type {
+  gap: 3px;
+}
+.recording-desktop.recording-backdrop .recording-sheet header strong {
+  font-size: 14.5px;
+  line-height: 21px;
+}
+.recording-desktop.recording-backdrop .recording-sheet header small {
+  white-space: nowrap;
+  line-height: 17px;
+  color: #777;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-cancel,
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-presentation-menu
+  > button {
+  min-width: 18px;
+  width: 18px;
+  height: 18px;
+  padding: 1px;
+  background: #e9e9e9;
+  color: #000;
+  border-radius: 50%;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-cancel {
+  top: 23.5px;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+}
+.recording-desktop .recording-cancel svg {
+  stroke-width: 2;
+}
+.recording-desktop .recording-sheet .recording-presentation-menu {
+  top: 24.5px;
+  right: 48px;
+}
+.recording-desktop .recording-presentation-menu > button svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 3;
+}
+.recording-desktop.recording-backdrop .recording-sheet .waveform {
+  position: absolute;
+  top: 65.5px;
+  bottom: 171px;
+  min-height: 0;
+  height: auto;
+  flex: none;
+  background-color: transparent;
+}
+.recording-desktop .recording-sheet .wave-samples {
+  inset: 6.5px 0 32px;
+  background: #f5f5f5;
+}
+.recording-desktop .recording-sheet .wave-samples i {
+  width: 1px;
+}
+.recording-desktop .recording-sheet .wave-axis {
+  height: 32px;
+}
+.recording-desktop .recording-sheet .wave-axis span {
+  font-size: 11px;
+  padding-top: 12px;
+  color: #808080;
+}
+.recording-desktop .recording-sheet .wave-axis span::before {
+  height: 10px;
+  background: #dedee1;
+}
+.recording-desktop .recording-sheet .recording-playhead {
+  bottom: 25.5px;
+  background: #ffb51c;
+}
+.recording-desktop .recording-sheet .recording-playhead::before,
+.recording-desktop .recording-sheet .recording-playhead::after {
+  width: 7px;
+  height: 7px;
+  left: -3px;
+  background: #ffb51c;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-time {
+  position: absolute;
+  bottom: 110px;
+  margin: 0;
+  font-size: 22.5px;
+  line-height: 27px;
+  letter-spacing: -0.5px;
+  font-weight: 700;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-playback {
+  position: absolute;
+  bottom: 64px;
+  width: 138px;
+  height: 44px;
+  margin: 0;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-playback
+  button
+  .recording-skip-icon {
+  width: 25.2px;
+  height: 29.4px;
+}
+@media (max-width: 760px) {
+  .recording-mobile .recording-sheet .recording-playback .recording-skip-icon {
+    width: 34px;
+    height: 39.66px;
+  }
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-notice {
+  position: absolute;
+  top: 79px;
+  left: 10px;
+  right: 10px;
+  margin: 0;
+  min-height: 0;
+  max-height: 36px;
+  z-index: var(--layer-content-overlay);
+}
+.recording-desktop .recording-notice:not(:empty) {
+  background: var(--paper);
+}
+.recording-desktop .recording-playback-retry {
+  position: absolute;
+  bottom: 147px;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet:has(.recording-playback-retry)
+  .waveform {
+  bottom: 215px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-controls {
+  position: absolute;
+  bottom: 15.5px;
+  height: 41px;
+  margin: 0;
+  gap: 9px;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-primary {
+  height: 41px;
+  background: #f2e9e8;
+}
+.recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-primary:disabled {
+  opacity: 1;
+  color: #f8f8f8;
+  background: #f0f0f0;
+}
+.recording-desktop.recording-backdrop .recording-sheet .recording-done {
+  background: #ffb000;
+}
+.recording-desktop .recording-done svg {
+  stroke-width: 2.2;
+}
+.dark .recording-desktop.recording-backdrop .recording-sheet {
+  background: var(--paper);
+  color: var(--ink);
+}
+.dark .recording-desktop .recording-sheet .wave-samples {
+  background: #202020;
+}
+.dark .recording-desktop.recording-backdrop .recording-sheet .recording-cancel,
+.dark
+  .recording-desktop.recording-backdrop
+  .recording-sheet
+  .recording-presentation-menu
+  > button {
+  background: #3a3a3c;
+  color: var(--ink);
+}
+
+/* Registration recovery is visible before a desktop capture Panel can mount. */
+.recording-registration {
+  padding: calc(var(--recording-native-top, 0px) + 24px) 18px 24px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.recording-registration strong { font-size: 17px; }
+.recording-registration p { overflow-wrap: anywhere; }
+.recording-registration [role="alert"] { color: var(--danger); }
+.recording-registration button { margin: 8px 8px 0 0; }
+
+/* State-only capture indicators: these do not encode or simulate audio levels. */
+.recording-activity-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: #e63946;
+}
+.recording-active .recording-activity-dot {
+  animation: recording-capture-pulse 1.3s ease-in-out infinite;
+}
+.live-recording-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--secondary);
+}
+.live-recording-status.recording-active { color: #d92d3b; }
+.live-recording-status:not(.recording-active) .recording-activity-dot { display: none; }
+@keyframes recording-capture-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .recording-active .recording-activity-dot { animation: none; }
+}
