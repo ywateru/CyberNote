@@ -2,6 +2,8 @@
 
 2026-11-15：账户页[持久设备列表与单次推送／拉取／双向同步](architecture/account-device-actions.md)已完成本轮本机双客户端验收。[当前结果与保留失败](verification/account110/RESULT-LATEST.md)、[双客户端启动／手动指南](verification/account110/MANUAL-TESTING.md)、[测试用例](verification/account110/TEST-CASES.md)为最新入口。准确包为`29c87810`；原fresh-run驱动超时仍保留，独立续验及GUI核对通过。下述account109为各自时点记录。
 
+2026-11-15：[账户同步归并与工作区清理](verification/account110/workspace-cleanup01/README.md)补齐历史审阅链，清理已完成工作树和闲置构建缓存，保留当前包、双客户端手测库及全部归档证据；提交位于本地 main。
+
 2026-11-14最新同步修正：原库未查到 inbox／并发冲突，私有副本实际 Store 切换通过；已修正大资料库媒体准备占用 5 秒窗口期限的问题，并增加有限超时阶段。新 Mac `5590e25e` 已构建启动、保持已登录且同步暂停，实际开启仍由用户手动复验。见[原因与交付记录](verification/account109/adoption-large-library-delivery01.md)。
 
 2026-11-14最新界面更新：“同步此设备”已改为滑动开关，开启合并及退出账户改为模态确认。新 Mac `6dadbb8a` 已构建运行，[取消与键盘焦点实机核对通过](verification/account109/switch-modal-live01.md)，最终仍已登录且同步暂停。最新应用入口见[手动指南](verification/account109/MANUAL-TESTING.md)。

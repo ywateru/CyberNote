@@ -4,6 +4,8 @@ Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android�
 
 当前为可运行开发版，完整原版交互及逐像素一致目标仍在进行。功能是否完成以各次交付的准确版本和验证范围为准，见[文档索引](docs/INDEX.md)。
 
+账户同步最新桌面测试包为 `29c87810`，已完成本机两个独立客户端的设备列表、推送、拉取和双向验证。使用[测试端 A](scripts/verification/account110-desktop-a.command)／[测试端 B](scripts/verification/account110-desktop-b.command)启动，步骤与范围见[手动测试指南](docs/verification/account110/MANUAL-TESTING.md)和[结果及保留失败](docs/verification/account110/RESULT-LATEST.md)。[代码归并与空间清理](docs/verification/account110/workspace-cleanup01/README.md)已保留该包及两个测试库。下方安装包表仍是此前双端同源交付版本。
+
 ## 最新安装包
 
 <!-- latest-installers:start -->
