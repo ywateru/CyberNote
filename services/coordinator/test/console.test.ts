@@ -73,11 +73,12 @@ test('old denied read cannot clear a later login session',async()=>{
  assert.equal(f.run('session.user.id'),'NewUser');assert.doesNotMatch(f.run("$('message').textContent"),/do-not-display/);
 });
 
-test('CyberNote product page exposes real source, build and account entry points',async()=>{
+test('CyberNote product page exposes versioned packages and canonical account entry points',async()=>{
  const page=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
  assert.match(page,/<title>CyberNote/);
- assert.match(page,/https:\/\/github\.com\/ywateru\/CyberNote\/actions\/workflows\/packages\.yml/);
- assert.match(page,/href="\/console\/"/);
+ assert.match(page,/https:\/\/github\.com\/ywateru\/CyberNote\/releases\/tag\/v0\.1\.0-preview\.1/);
+ for(const filename of ['CyberNote-macos-arm64.zip','CyberNote-android-arm64-unsigned.apk'])assert.ok(page.includes('https://github.com/ywateru/CyberNote/releases/download/v0.1.0-preview.1/'+filename));
+ assert.match(page,/href="https:\/\/cybernote-sync\.vercel\.app\/console\/"/);
  assert.match(page,/不保存笔记正文与附件/);
  assert.match(page,/未签名/);
  assert.doesNotMatch(page,/https:\/\/vercel\.com\/new/);
