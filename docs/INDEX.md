@@ -1,5 +1,7 @@
 # 文档导航
 
+服务器后续开发与部署从[服务总览与生产记录](server/README.md)、[配置／部署／回滚／排障手册](server/DEPLOYMENT.md)开始；[环境模板](../services/coordinator/.env.example)不含真实凭据。资料依据源码和已有回执整理，未重新查询或变更线上配置。
+
 2026-11-15：账户页[持久设备列表与单次推送／拉取／双向同步](architecture/account-device-actions.md)已完成本轮本机双客户端验收。[当前结果与保留失败](verification/account110/RESULT-LATEST.md)、[双客户端启动／手动指南](verification/account110/MANUAL-TESTING.md)、[测试用例](verification/account110/TEST-CASES.md)为最新入口。准确包为`29c87810`；原fresh-run驱动超时仍保留，独立续验及GUI核对通过。下述account109为各自时点记录。
 
 2026-11-15：[账户同步归并与工作区清理](verification/account110/workspace-cleanup01/README.md)补齐历史审阅链，清理已完成工作树和闲置构建缓存，保留当前包、双客户端手测库及全部归档证据；提交位于本地 main。

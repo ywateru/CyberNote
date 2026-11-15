@@ -1,8 +1,11 @@
 # CyberNote persistent device registry v1
 
-Implementation for account110. Local verification passed; independent server
-review and deployment are pending. This is metadata discovery, not content
-authorization or a successful live synchronization result.
+Implementation for account110. The original author verification below was local;
+subsequent [independent server review](../../docs/plan/reviews/app-account110-registry-01.md)
+and [production deployment](../../docs/verification/account110/server/registry-deployment01/README.md)
+are recorded separately. Current development and deployment instructions are in
+[the server handoff](../../docs/server/README.md). This is metadata discovery, not
+content authorization or a successful live synchronization result.
 
 Both routes use the current Logto **resource access-token bearer**, validated by
 `verifiedAccount`: pinned issuer/audience/signature/lifetime/scope and static
