@@ -32,7 +32,7 @@ async function api(path,method='GET',body,canRecover=true,guard,signal){
  }
  return data;
 }
-function setBusy(value){busy=value;$('login').disabled=value;$('app-select').disabled=value||!session||!apps.length;$('copy-app').disabled=value||!session||!apps.length;$('refresh').disabled=value||!session;}
+function setBusy(value){busy=value;$('login').disabled=value||!config;$('app-select').disabled=value||!session||!apps.length;$('copy-app').disabled=value||!session||!apps.length;$('refresh').disabled=value||!session;}
 function empty(title,description){const wrap=node('div','empty-state');wrap.append(node('h3','',title),node('p','',description));$('devices').replaceChildren(wrap);}
 function unknown(){ $('device-subtitle').textContent='状态未知';$('refreshed').textContent='';empty('设备状态未知','正在读取或暂时无法确认当前产品目录；历史在线状态不作为当前结论。');}
 function invalidateReads(){selectionRevision++;deviceRevision++;appsRevision++;deviceAbort?.abort();appsAbort?.abort();deviceAbort=null;appsAbort=null;}

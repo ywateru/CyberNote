@@ -50,7 +50,7 @@ test('configured public origin pins callbacks while unset public origin validate
  const custom=coordinatorAuthConfiguration({...env,CYBERGRID_CONSOLE_REDIRECT_URI:'https://custom.example/return'}),f=await listener(t,custom);
  assert.equal((await f.request('internal',{'x-forwarded-host':'custom.example','x-forwarded-proto':'https'})).body.redirectUri,'https://custom.example/return');
  assert.equal((await f.request('other.example')).status,400);assert.equal((await f.request('other.example',{},'/return?code=fixture')).status,400);
- const callback=await f.request('internal',{'x-forwarded-host':'custom.example','x-forwarded-proto':'https'},'/return?code=fixture&state=value');assert.equal(callback.status,200);assert.match(callback.body,/CyberGrid/);
+ const callback=await f.request('internal',{'x-forwarded-host':'custom.example','x-forwarded-proto':'https'},'/return?code=fixture&state=value');assert.equal(callback.status,200);assert.match(callback.body,/CyberNote/);
 });
 test('real ES384 verifier retains fixed resource; a request-host audience cannot replace it',async()=>{
  const config=coordinatorAuthConfiguration(env),pair=await generateKeyPair('ES384'),jwk={...await exportJWK(pair.publicKey),kid:'origin-test',alg:'ES384'};const identity=new LogtoIdentity(config,['ES384'],createLocalJWKSet({keys:[jwk]}));
