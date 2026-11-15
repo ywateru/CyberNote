@@ -31,9 +31,9 @@ jobs:
   macos-arm64:
     runs-on: macos-15
     timeout-minutes: 60
-    env:
-      CARGO_TARGET_DIR: ${{ runner.temp }}/cybernote-macos-target
     steps:
+      - name: Set isolated Cargo output
+        run: echo "CARGO_TARGET_DIR=$RUNNER_TEMP/cybernote-macos-target" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
@@ -77,9 +77,9 @@ jobs:
   android-arm64:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
-    env:
-      CARGO_TARGET_DIR: ${{ runner.temp }}/cybernote-android-target
     steps:
+      - name: Set isolated Cargo output
+        run: echo "CARGO_TARGET_DIR=$RUNNER_TEMP/cybernote-android-target" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
