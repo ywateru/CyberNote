@@ -427,12 +427,14 @@ static NSPoint contentOffsetFor(NSString *action) {
     BOOL searchEnabled=hasSearch && !contentOverlay && [searchState[@"enabled"] boolValue];
     if(self.search.enabled!=searchEnabled)self.search.enabled=searchEnabled;
     if(hasSearch && !contentOverlay && ![self.search.stringValue isEqual:searchState[@"value"]])self.search.stringValue=searchState[@"value"];
+#if defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED >= 260000
     if(@available(macOS 26.0,*)) {
         if(initial || ![state[@"glassStyle"] isEqual:previous[@"glassStyle"]])for(NSView *view in [self.groups.allValues arrayByAddingObject:self.sidebarBackground])if([view isKindOfClass:NSClassFromString(@"NSGlassEffectView")]) {
             ((NSGlassEffectView *)view).style=[state[@"glassStyle"] isEqual:@"clear"]?NSGlassEffectViewStyleClear:NSGlassEffectViewStyleRegular;
             self.material=[state[@"glassStyle"] isEqual:@"clear"]?@"glassClear":@"glassRegular";
         }
     }
+#endif
     if(layoutChanged)[self layout];self.suppress=NO;return nil;
 }
 - (void)placeGroup:(NSString *)name x:(CGFloat)x width:(CGFloat)width actions:(NSArray<NSString *> *)actions {
