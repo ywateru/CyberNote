@@ -27,6 +27,7 @@ export interface AgentHostSettings {
   hostSessionId: string;
   workspaceId: string;
   incarnation: string;
+  runtimeDir: string;
   grants: AgentGrant[];
   recentOperations: AgentOperation[];
 }
@@ -91,28 +92,41 @@ function array<T>(value: unknown, parse: (item: unknown) => T, max: number): T[]
   if (!Array.isArray(value) || value.length > max) return invalid();
   return value.map(parse);
 }
-function strings(value: unknown): string[] {
-  const values = array(value, item => text(item), 256);
+function folderIds(value: unknown): string[] {
+  const values = array(value, item => {
+    const id = text(item, 128);
+    if (id.trim() !== id || new TextEncoder().encode(id).length > 128) return invalid();
+    return id;
+  }, 10_000);
   if (!values.length || new Set(values).size !== values.length) return invalid();
   return values;
 }
 function scopes(value: unknown): AgentScope[] {
-  const values = strings(value);
-  if (values.some(item => !agentScopes.includes(item as AgentScope))) return invalid();
-  return values as AgentScope[];
+  const values = array(value, item => {
+    if (typeof item !== "string" || !agentScopes.includes(item as AgentScope)) return invalid();
+    return item as AgentScope;
+  }, agentScopes.length);
+  if (!values.length || new Set(values).size !== values.length) return invalid();
+  return values;
+}
+function runtimeDir(value: unknown): string {
+  const dir = text(value, 4096);
+  if (!dir.startsWith("/")) return invalid();
+  return dir;
 }
 function grant(value: unknown): AgentGrant {
   const g = object(value, ["grantId", "clientId", "workspaceId", "incarnation", "scopes", "folderIds", "expiresAt", "revocation", "revoked", "credentialRef"]);
   return {
     grantId: text(g.grantId), clientId: text(g.clientId), workspaceId: text(g.workspaceId), incarnation: text(g.incarnation),
-    scopes: scopes(g.scopes), folderIds: strings(g.folderIds), expiresAt: time(g.expiresAt),
+    scopes: scopes(g.scopes), folderIds: folderIds(g.folderIds), expiresAt: time(g.expiresAt),
     revocation: integer(g.revocation), revoked: bool(g.revoked), credentialRef: text(g.credentialRef),
   };
 }
 export function parseAgentSettings(value: unknown): AgentHostSettings {
-  const s = object(value, ["enabled", "hostSessionId", "workspaceId", "incarnation", "grants", "recentOperations"]);
+  const s = object(value, ["enabled", "hostSessionId", "workspaceId", "incarnation", "runtimeDir", "grants", "recentOperations"]);
   const result: AgentHostSettings = {
     enabled: bool(s.enabled), hostSessionId: text(s.hostSessionId), workspaceId: text(s.workspaceId), incarnation: text(s.incarnation),
+    runtimeDir: runtimeDir(s.runtimeDir),
     grants: array(s.grants, grant, 256),
     recentOperations: array(s.recentOperations, item => {
       const a = object(item, ["clientId", "tool", "noteId", "at", "outcome"]);
@@ -126,9 +140,9 @@ export function parseCreatedAgentGrant(value: unknown, expected?: CreateAgentGra
   const c = object(value, ["grant", "connection"]), connection = object(c.connection, ["workspaceId", "credentialRef", "runtimeDir"]);
   const result = {
     grant: grant(c.grant),
-    connection: { workspaceId: text(connection.workspaceId), credentialRef: text(connection.credentialRef), runtimeDir: text(connection.runtimeDir, 4096) },
+    connection: { workspaceId: text(connection.workspaceId), credentialRef: text(connection.credentialRef), runtimeDir: runtimeDir(connection.runtimeDir) },
   };
-  if (result.connection.workspaceId !== result.grant.workspaceId || result.connection.credentialRef !== result.grant.credentialRef || !result.connection.runtimeDir.startsWith("/")) return invalid();
+  if (result.connection.workspaceId !== result.grant.workspaceId || result.connection.credentialRef !== result.grant.credentialRef) return invalid();
   if (expected && (result.grant.revoked || result.grant.clientId !== expected.clientId || result.grant.expiresAt !== expected.expiresAt ||
     JSON.stringify([...result.grant.scopes].sort()) !== JSON.stringify([...expected.scopes].sort()) ||
     JSON.stringify([...result.grant.folderIds].sort()) !== JSON.stringify([...expected.folderIds].sort()))) return invalid();
@@ -137,20 +151,15 @@ export function parseCreatedAgentGrant(value: unknown, expected?: CreateAgentGra
 export function parseCreateAgentGrant(value: unknown, now = Date.now()): CreateAgentGrant {
   try {
     const i = object(value, ["clientId", "scopes", "folderIds", "expiresAt"]);
-    const input = { clientId: text(i.clientId, 96).trim(), scopes: scopes(i.scopes), folderIds: strings(i.folderIds), expiresAt: time(i.expiresAt) };
+    const input = { clientId: text(i.clientId, 96).trim(), scopes: scopes(i.scopes), folderIds: folderIds(i.folderIds), expiresAt: time(i.expiresAt) };
     if (input.expiresAt <= now) throw new AgentClientError("input");
     return input;
   } catch { throw new AgentClientError("input"); }
 }
-export function agentLaunchConfig(binaryPath: string, connection: Pick<AgentConnection, "workspaceId" | "credentialRef"> & Partial<Pick<AgentConnection, "runtimeDir">>) {
+export function agentLaunchConfig(binaryPath: string, connection: AgentConnection) {
   const command = text(binaryPath.trim(), 4096);
   if (!command.startsWith("/")) throw new AgentClientError("input");
-  const args = ["--workspace-id", text(connection.workspaceId), "--credential-ref", text(connection.credentialRef)];
-  if (connection.runtimeDir !== undefined) {
-    const dir = text(connection.runtimeDir, 4096);
-    if (!dir.startsWith("/")) throw new AgentClientError("input");
-    args.push("--runtime-dir", dir);
-  }
+  const args = ["--workspace-id", text(connection.workspaceId), "--credential-ref", text(connection.credentialRef), "--runtime-dir", runtimeDir(connection.runtimeDir)];
   return {
     stdio: JSON.stringify({ command, args }, null, 2),
     toml: `[mcp_servers.cybernote]\ncommand = ${JSON.stringify(command)}\nargs = [${args.map(arg => JSON.stringify(arg)).join(", ")}]`,

@@ -8,7 +8,7 @@ import "/src/desktop.css";
 import "/src/design-tokens.css";
 import "/src/design-controls.css";
 
-const empty = () => ({ enabled: false, hostSessionId: "fixture-host", workspaceId: "fixture-workspace", incarnation: "fixture-incarnation", grants: [], recentOperations: [] });
+const empty = () => ({ enabled: false, hostSessionId: "fixture-host", workspaceId: "fixture-workspace", incarnation: "fixture-incarnation", runtimeDir: "/private/fixture-runtime", grants: [], recentOperations: [] });
 const folder = (id, kind, name = id) => ({ id, kind, name, parentId: null, sortOrder: 0, createdAt: 0 });
 const folders = [folder("default", "default", "默认目录"), folder("physical", "normal", "很长的文件夹名称".repeat(18)), folder("quick", "quick", "快速备忘录"), { ...folder("smart", "smart", "智能目录不应出现"), definitionRevision: 1, query: { version: 1, combine: "all", rules: [] } }, folder("trash", "trash", "最近删除不应出现")];
 let root;
@@ -34,9 +34,15 @@ window.agentFixture = {
       createGrant: input => f.call("create", input, () => {
         const grant = { ...input, grantId: `fixture-grant-${f.state.grants.length}`, workspaceId: f.state.workspaceId, incarnation: f.state.incarnation, revocation: 0, revoked: false, credentialRef: "fixture-reference" };
         f.state.grants.push(grant);
-        return { grant, connection: { workspaceId: grant.workspaceId, credentialRef: grant.credentialRef, runtimeDir: "/private/fixture-runtime" } };
+        return { grant, connection: { workspaceId: grant.workspaceId, credentialRef: grant.credentialRef, runtimeDir: f.state.runtimeDir } };
       }),
-      revokeGrant: grantId => f.call("revoke", { grantId }, () => { f.state.grants.find(g => g.grantId === grantId).revoked = true; return f.state; }),
+      revokeGrant: grantId => f.call("revoke", { grantId }, () => {
+        if (options.revokedSettings) {
+          if (!options.revokedSettings.grants.some(g => g.grantId === grantId && g.revoked)) throw Error("Unexpected grant in host DTO case");
+          f.state = structuredClone(options.revokedSettings);
+        } else f.state.grants.find(g => g.grantId === grantId).revoked = true;
+        return f.state;
+      }),
     };
     root = createRoot(document.getElementById("root"));
     root.render(React.createElement(React.StrictMode, null,

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { createServer } from "vite";
 import react from "@vitejs/plugin-react";
@@ -38,6 +39,14 @@ try {
   };
   const waitFor = async fn => page.waitForFunction(fn);
   const calls = operation => page.evaluate(operation => window.agentFixture.calls.filter(call => call.operation === operation), operation);
+  const copies = async (target, command, args) => {
+    const expected = { command, args };
+    assert.deepEqual(JSON.parse(await target.getByLabel("stdio JSON 配置").innerText()), expected);
+    await target.getByRole("button", { name: "复制 stdio JSON", exact: true }).click();
+    assert.deepEqual(JSON.parse(await target.evaluate(() => navigator.clipboard.readText())), expected);
+    await target.getByRole("button", { name: "复制 TOML", exact: true }).click();
+    assert.equal(await target.evaluate(() => navigator.clipboard.readText()), `[mcp_servers.cybernote]\ncommand = ${JSON.stringify(command)}\nargs = [${args.map(arg => JSON.stringify(arg)).join(", ")}]`);
+  };
   const chooseCreateOnly = async () => {
     await page.getByLabel("客户端名称", { exact: true }).fill("Codex 开发客户端");
     await page.getByRole("checkbox", { name: "新建 notes:create" }).check();
@@ -118,6 +127,17 @@ try {
   assert(!(await page.locator("body").innerText()).includes("rawcredential"));
   checks.push("create-only grant; creation failure retained input; busy prevents duplicate/cancel; explicit path and secret-free escaped config copies");
 
+  const persisted = await page.evaluate(() => structuredClone(window.agentFixture.state));
+  await page.getByRole("button", { name: "刷新", exact: true }).click();
+  await page.locator(".agent-config").waitFor({ state: "detached" });
+  await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
+  await copies(page, config.command, config.args);
+  await mount({ settings: persisted });
+  await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
+  await page.getByLabel("适配器可执行文件绝对路径", { exact: true }).fill(config.command);
+  await copies(page, config.command, config.args);
+  checks.push("custom runtime stays exact in JSON and TOML clipboard after settings refresh and component remount; no creation-only connection cache");
+
   await page.evaluate(() => { window.agentFixture.hold = "revoke"; });
   await page.getByRole("button", { name: "撤销 Codex 开发客户端", exact: true }).click();
   await waitFor(() => !!window.agentFixture.pending);
@@ -174,6 +194,7 @@ try {
   checks.push("load retry, parent close focus restoration, real client unavailable error, mobile no host call/switch");
 
   const nativePage = await context.newPage();
+  nativePage.on("pageerror", error => errors.push(String(error)));
   await nativePage.addInitScript(() => {
     window.isTauri = true;
     window.transportCalls = [];
@@ -223,6 +244,97 @@ try {
   assert.equal(transport.calls[2].args.grantId, "grant-fixture");
   assert.deepEqual(transport.calls[3].args.input.scopes, ["notes:create"]);
   checks.push("actual client command names/arguments and expected on all calls; strict DTO/input rejection and stale access response rejection (synthetic Tauri transport)");
+
+  const boundaries = await page.evaluate(async () => {
+    const c = await import("/src/agent-client.ts");
+    const settings = structuredClone(window.agentFixture.state);
+    const input = { clientId: "bounds", scopes: ["notes:read", "notes:create", "notes:update"], folderIds: ["default"], expiresAt: Date.now() + 86_400_000 };
+    const grant = { ...input, grantId: "bounds-grant", workspaceId: settings.workspaceId, incarnation: settings.incarnation, revocation: 0, revoked: false, credentialRef: "bounds-ref" };
+    const created = { grant, connection: { workspaceId: grant.workspaceId, credentialRef: grant.credentialRef, runtimeDir: settings.runtimeDir } };
+    const accepted = [], rejected = [];
+    const reject = (label, fn) => { try { fn(); } catch (error) { rejected.push({ label, code: error.code }); return; } throw Error(`Accepted invalid ${label}`); };
+    for (const count of [257, 10_000]) {
+      const folderIds = Array.from({ length: count }, (_, i) => `folder-${i}`);
+      if (c.parseCreateAgentGrant({ ...input, folderIds }).folderIds.length !== count || c.parseAgentSettings({ ...settings, grants: [{ ...grant, folderIds }] }).grants[0].folderIds.length !== count) throw Error("Lost folder IDs");
+      accepted.push(count);
+    }
+    for (const [label, folderIds] of [
+      ["10001 folders", Array.from({ length: 10_001 }, (_, i) => `folder-${i}`)],
+      ["empty folders", []], ["duplicate folder", ["default", "default"]], ["blank folder", [""]],
+      ["padded folder", [" default"]], ["control folder", ["a\nb"]], ["overlong UTF-8 folder", ["中".repeat(43)]], ["nonstring folder", [7]],
+    ]) {
+      reject(`create ${label}`, () => c.parseCreateAgentGrant({ ...input, folderIds }));
+      reject(`settings ${label}`, () => c.parseAgentSettings({ ...settings, grants: [{ ...grant, folderIds }] }));
+    }
+    for (const scopes of [[], ["notes:read", "notes:read"], ["notes:delete"], ["notes:read", "notes:create", "notes:update", "notes:delete"], [17]]) {
+      reject("create scope enum", () => c.parseCreateAgentGrant({ ...input, scopes }));
+      reject("settings scope enum", () => c.parseAgentSettings({ ...settings, grants: [{ ...grant, scopes }] }));
+    }
+    const { runtimeDir: _runtime, ...missingRuntime } = settings;
+    reject("missing settings runtime", () => c.parseAgentSettings(missingRuntime));
+    for (const runtimeDir of ["", "relative/runtime", "/private/\ncontrol", null]) {
+      reject("invalid settings runtime", () => c.parseAgentSettings({ ...settings, runtimeDir }));
+      reject("invalid connection runtime", () => c.parseCreatedAgentGrant({ ...created, connection: { ...created.connection, runtimeDir } }));
+      reject("invalid launch runtime", () => c.agentLaunchConfig("/private/mcp", { ...created.connection, runtimeDir }));
+    }
+    reject("missing launch runtime", () => c.agentLaunchConfig("/private/mcp", { workspaceId: grant.workspaceId, credentialRef: grant.credentialRef }));
+    return { accepted, rejected };
+  });
+  assert.deepEqual(boundaries.accepted, [257, 10_000]);
+  assert.equal(boundaries.rejected.length, 40);
+  checks.push("create/settings accept 257 and 10000 folder IDs, reject 10001/empty/duplicate/invalid IDs; scopes independently enforce supported unique enum; settings/connection/launch runtime required and absolute (40 negative boundaries)");
+
+  if (process.env.EVOLVE112_UI_SETTINGS_FIXTURE) {
+    // These snapshots come from real AgentHost create/settings/revoke calls;
+    // browser transport only replays their safe DTOs, not a live IPC connection.
+    const realHost = JSON.parse(await readFile(process.env.EVOLVE112_UI_SETTINGS_FIXTURE, "utf8"));
+    assert.deepEqual(realHost.cases.map(c => c.folderCount), [257, 10_000]);
+    for (const item of realHost.cases) {
+      assert.equal(item.settings.grants[0].folderIds.length, item.folderCount);
+      assert.equal(item.settings.runtimeDir, item.created.connection.runtimeDir);
+      const before = item.settings.grants[0];
+      await mount({ settings: item.settings, revokedSettings: item.revokedSettings });
+      assert.equal(await page.getByRole("switch").getAttribute("aria-checked"), "true");
+      assert.equal(await page.locator(".agent-grant dd ul li").count(), item.folderCount);
+      const command = '/private/Agent Tools/mcp"\\binary';
+      const args = ["--workspace-id", before.workspaceId, "--credential-ref", before.credentialRef, "--runtime-dir", item.settings.runtimeDir];
+      await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
+      await page.getByLabel("适配器可执行文件绝对路径", { exact: true }).fill(command);
+      await copies(page, command, args);
+      await page.getByRole("button", { name: "刷新", exact: true }).click();
+      await page.locator(".agent-config").waitFor({ state: "detached" });
+      await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
+      await copies(page, command, args);
+      await mount({ settings: item.settings, revokedSettings: item.revokedSettings });
+      await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
+      await page.getByLabel("适配器可执行文件绝对路径", { exact: true }).fill(command);
+      await copies(page, command, args);
+      await page.getByRole("button", { name: `撤销 ${before.clientId}`, exact: true }).click();
+      await waitFor(() => document.querySelector(".agent-badge")?.textContent === "已撤销");
+      assert.equal(await page.locator(".agent-config").count(), 0);
+      assert.equal(await page.getByRole("switch").count(), 1);
+      assert.deepEqual((await calls("revoke")).map(call => call.args.grantId), [before.grantId]);
+      assert(await page.getByRole("button", { name: `撤销 ${before.clientId}`, exact: true }).isDisabled());
+    }
+    checks.push("real host 257/10000-directory settings load with switch/revoke available; exact custom runtime JSON/TOML copies survive refresh/remount; real host revoked DTO is adopted (safe DTO replay, no live IPC)");
+  } else checks.push("real host DTO replay not run: set EVOLVE112_UI_SETTINGS_FIXTURE to host regression output");
+  await page.goto(url);
+  await mount({ settings: { enabled: true } });
+  await page.evaluate(() => {
+    const fixture = window.agentFixture, original = fixture.call;
+    fixture.call = async function(operation, args, complete) {
+      const result = await original.call(this, operation, args, complete);
+      if (operation === "create") result.connection.runtimeDir = "/private/different-runtime";
+      return result;
+    };
+  });
+  await page.getByRole("button", { name: "创建授权", exact: true }).click();
+  await chooseCreateOnly();
+  await page.getByRole("button", { name: "确认创建", exact: true }).click();
+  await page.getByRole("dialog").getByRole("alert").waitFor();
+  assert.equal(await page.locator(".agent-config").count(), 0);
+  assert.equal(await page.locator(".agent-grant").count(), 0);
+  checks.push("creation connection runtime differing from confirmed HostSettings is rejected without adopting grant or config");
   assert.deepEqual(errors, []);
   console.log(JSON.stringify({ stage: "develop component checks only; synthetic transport, no persistence or independent verify", checks }, null, 2));
 } finally {

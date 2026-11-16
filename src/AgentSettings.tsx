@@ -4,7 +4,7 @@ import {
   agentClient, agentErrorMessage, agentLaunchConfig, agentScopes,
   parseAgentSettings, parseCreatedAgentGrant, parseCreateAgentGrant,
   type AgentClient, type AgentGrant, type AgentHostSettings, type AgentScope,
-  type CreateAgentGrant, type CreatedAgentGrant,
+  type CreateAgentGrant,
 } from "./agent-client";
 import "./AgentSettings.css";
 
@@ -107,7 +107,7 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
   const [settings, setSettings] = useState<AgentHostSettings | null>(null);
   const [loading, setLoading] = useState(true), [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState(""), [dialogError, setDialogError] = useState("");
-  const [dialog, setDialog] = useState(false), [created, setCreated] = useState<CreatedAgentGrant | null>(null);
+  const [dialog, setDialog] = useState(false);
   const [configGrant, setConfigGrant] = useState<AgentGrant | null>(null), [binary, setBinary] = useState("");
   const [notice, setNotice] = useState("");
   const [now, setNow] = useState(Date.now);
@@ -115,7 +115,7 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
   const load = useCallback(async () => {
     if (working.current || mobile) return;
     const ticket = ++generation.current;
-    setLoading(true); setError(""); setCreated(null); setConfigGrant(null);
+    setLoading(true); setError(""); setConfigGrant(null);
     try {
       const result = parseAgentSettings(await client.settings());
       if (mounted.current && generation.current === ticket) setSettings(result);
@@ -153,7 +153,7 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
     if (result.workspaceId !== settings!.workspaceId || result.incarnation !== settings!.incarnation) throw Error();
     setSettings(result);
     setNow(Date.now());
-    if (configGrant && !result.grants.some(g => g.grantId === configGrant.grantId && !g.revoked && g.expiresAt > Date.now())) { setCreated(null); setConfigGrant(null); }
+    if (configGrant && !result.grants.some(g => g.grantId === configGrant.grantId && !g.revoked && g.expiresAt > Date.now())) setConfigGrant(null);
   };
   const changeEnabled = () => void mutate("enabled", async current => {
     const enabled = !settings!.enabled;
@@ -167,9 +167,9 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
     if (!settings!.enabled || input.folderIds.some(folderId => !physicalFolders.some(folder => folder.id === folderId))) throw Error();
     const result = parseCreatedAgentGrant(await client.createGrant(input), input);
     if (!current()) return;
-    if (result.grant.workspaceId !== settings!.workspaceId || result.grant.incarnation !== settings!.incarnation) throw Error();
+    if (result.grant.workspaceId !== settings!.workspaceId || result.grant.incarnation !== settings!.incarnation || result.connection.runtimeDir !== settings!.runtimeDir) throw Error();
     setSettings(previous => previous && { ...previous, grants: [...previous.grants.filter(g => g.grantId !== result.grant.grantId), result.grant] });
-    setCreated(result); setConfigGrant(result.grant); setDialog(false); setNotice("授权已创建。配置只包含凭据引用。");
+    setConfigGrant(result.grant); setDialog(false); setNotice("授权已创建。配置只包含凭据引用。");
   });
   const revoke = (g: AgentGrant) => void mutate(g.grantId, async current => {
     const result = parseAgentSettings(await client.revokeGrant(g.grantId));
@@ -180,10 +180,10 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
   });
   const availableGrant = configGrant && !configGrant.revoked && configGrant.expiresAt > now ? configGrant : null;
   let configuration: ReturnType<typeof agentLaunchConfig> | null = null;
-  if (availableGrant && binary.trim()) {
+  if (availableGrant && settings && binary.trim()) {
     try { configuration = agentLaunchConfig(binary, {
       workspaceId: availableGrant.workspaceId, credentialRef: availableGrant.credentialRef,
-      ...(created?.grant.grantId === availableGrant.grantId ? { runtimeDir: created.connection.runtimeDir } : {}),
+      runtimeDir: settings.runtimeDir,
     }); } catch { /* Inline path guidance below; never emit a placeholder config. */ }
   }
   const copy = async (format: "stdio" | "toml") => {
@@ -211,14 +211,13 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
           {!settings.grants.length ? <p>尚无授权客户端。开启接入后，可为单个客户端选择权限和目录。</p> : <ul className="agent-grants">{settings.grants.map(g => <li key={g.grantId} className="agent-grant">
             <div className="agent-section-heading"><strong>{g.clientId}</strong><span className="agent-badge">{g.revoked ? "已撤销" : g.expiresAt <= now ? "已过期" : settings.enabled ? "有效" : "接入已关闭"}</span></div>
             <dl className="agent-metadata"><div><dt>有效期至</dt><dd>{date(g.expiresAt)}</dd></div><div><dt>权限</dt><dd>{g.scopes.map(scope => `${scopeLabels[scope]} (${scope})`).join("、")}</dd></div><div><dt>目录范围</dt><dd><ul>{g.folderIds.map(folderId => <li key={folderId}>{physicalFolders.find(folder => folder.id === folderId)?.name ?? "当前不可见或已移除的目录"} <small>({folderId})</small></li>)}</ul></dd></div><div><dt>凭据引用</dt><dd>{g.credentialRef}</dd></div></dl>
-            <div className="agent-actions"><button type="button" disabled={!!busy || loading || g.revoked || g.expiresAt <= now} onClick={() => { setConfigGrant(g); if (created?.grant.grantId !== g.grantId) setCreated(null); setNotice(""); }}>查看接入配置</button><button type="button" className="agent-revoke" aria-label={`撤销 ${g.clientId}`} disabled={!!busy || loading || g.revoked} onClick={() => revoke(g)}>撤销授权</button></div>
+            <div className="agent-actions"><button type="button" disabled={!!busy || loading || g.revoked || g.expiresAt <= now} onClick={() => { setConfigGrant(g); setNotice(""); }}>查看接入配置</button><button type="button" className="agent-revoke" aria-label={`撤销 ${g.clientId}`} disabled={!!busy || loading || g.revoked} onClick={() => revoke(g)}>撤销授权</button></div>
           </li>)}</ul>}
         </section>
         {availableGrant && <section className="agent-section agent-config" aria-labelledby={`${id}-config`}>
           <h3 id={`${id}-config`}>{availableGrant.clientId} 的接入配置</h3>
           <label className="agent-field">适配器可执行文件绝对路径<input value={binary} spellCheck={false} autoComplete="off" placeholder="填写已安装的 cybernote-mcp 绝对路径" onChange={e => { setBinary(e.target.value); setNotice(""); }} /></label>
           <p className="agent-help">本页不安装或检测适配器。未安装 cybernote-mcp 时配置不可运行；填写路径也不代表文件已存在。桌面宿主必须保持运行。</p>
-          {!created && <p className="agent-help">已有授权使用适配器默认 runtime 目录；自定义目录的授权请在宿主联调时确认启动参数。</p>}
           {binary.trim() && !configuration && <p className="agent-error">请输入以 / 开头、不含控制字符的绝对路径。</p>}
           <div className="agent-actions"><button type="button" disabled={!configuration || !!busy} onClick={() => void copy("stdio")}>复制 stdio JSON</button><button type="button" disabled={!configuration || !!busy} onClick={() => void copy("toml")}>复制 TOML</button></div>
           {configuration && <><p className="agent-help">stdio JSON 为 command/args 片段；TOML 使用 mcp_servers.cybernote。客户端外层配置方式依其实际支持而定。以下仅包含凭据引用，不含原始凭据。</p><pre aria-label="stdio JSON 配置">{configuration.stdio}</pre><pre aria-label="TOML 配置">{configuration.toml}</pre></>}
