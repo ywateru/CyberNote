@@ -54,6 +54,8 @@ macOS Unix socket路径长度受限，宿主使用短basename（例如workspace/
 
 原始credential仅存在私有凭据文件和请求内，不出现在CLI、工具返回、错误和审计。授权UI复制的是引用配置。首版配置使用完整适配器可执行路径、workspace-id和credential-ref；隔离实例可附runtime-dir。Android不启动该listener。
 
+桌面内部`HostSettings`必须返回宿主实际使用的绝对`runtimeDir`（普通路径信息，不是凭据），重新载入后为既有grant复制配置仍使用该值；不得依赖仅存在于创建响应的临时组件状态或猜测默认目录。TS客户端对HostSettings与CreatedGrant.connection的runtimeDir均作严格校验。授权目录集合上限与宿主保持一致：最多10,000个物理目录ID；scope单独校验为已支持的权限集合，不与目录列表共用任意256项限制。合法宿主设置不能因前端更小的隐式上限而隐藏总开关和撤销入口。
+
 ## MCP适配器行为
 
 工具发现为固定九工具目录，输入/输出schema与agent-mcp一致。服务端grant只决定实际调用是否获准；capabilities返回真实授权，不能仅凭tools/list推断权限。未知工具按协议错误处理。每次tools/call生成requestId，认证信息从凭据引用加载，parameters原样经严格schema传输；成功与业务错误分别包装为structuredContent及同JSON文本。
