@@ -111,3 +111,22 @@
 | 对照：把目标改为活动笔记 A | prepare ready=false，A 的实际编辑保持可用，没有强制中断。 |
 
 本次未验证真实 native create 与本地保存事务的并发执行；该部分仍属于 native-open。探针、日志和结果保留在本树 `artifacts/evolve111-window-independent-extra/evolve111-window-independent-empty-target.mjs`、同名 `.log` 和 `evolve111-window-independent-empty-target-results.json`。仅追加本报告，生产源码指纹未变，diff/暂存 whitespace 检查通过。
+
+## 追加复核：113 page-in 测量修复，原 P2 nonblocking 已关闭
+
+被审补丁：Planck 提交 `8c7413ae7c850014aa267c0781637f8da0dc8594`，相对 `c808dda8` 仅改 `scripts/check-evolve113-interaction.mjs` 和作者 `docs/verification/evolve111-window.md`。增量独审 **PASS**，无新增 P1/P2 blocking；本文前述 P2 nonblocking 几何测量问题现记为 **closed**。前述两次原命令 exit 1、诊断副本通过和逐帧失败记录均保留，不追改为历史通过。
+
+已核对完整补丁及作者两次原 90 项 result/log 证据。`scripts/check-evolve113-interaction.mjs:129` 从实际按钮取所属 notes-pane，`:132` 只筛选该 pane 自身尚在运行的 page-in；`:134` 拒绝无限 endTime，`:138` 等真实 Animation.finished，仅接受取消产生的 AbortError，其他错误继续失败。`:139` 的 2 秒 timer 是失败上限，`:141` finally 清 timer；没有固定 sleep，也不等待其他/无限动画。`:142` 重验连接、pane 归属及动画重启，原严格 box 断言移至 `:147`，仍完整保留 `width>=44`、`height>=44`、`x>=0`、`x+width<=320`，没有 epsilon 或改用 computed width 冒充实测尺寸。
+
+本轮只运行变更涉及的原 113 脚本，未重跑未变化的 54/38/sync34/nav41，也未改产品或既有独立探针。
+
+| 实际命令/检查 | 结果 |
+| --- | --- |
+| `pnpm test:evolve113-interaction > artifacts/evolve111-window-independent-page-in/run1.log 2>&1` | exit 0，90 项；实际等待 1 个 page-in，states=[finished]，transform=none，box={x:106,y:232.59375,width:44,height:44}。 |
+| 同一原命令串行第二次，日志 `run2.log` | exit 0，90 项；同样实际等待 1 个 page-in，finished/none，box 同上。两轮原有桌面/移动无异常检查均通过。 |
+| `git diff 8c7413ae^ 8c7413ae -- src src-tauri plugins scripts/debug scripts/native package.json pnpm-lock.yaml vite.config.ts tsconfig.json` | exit 0，无输出；产品及独立组件运行脚本未变。 |
+| `git diff --check 8c7413ae^ 8c7413ae`、本次报告 diff/暂存 whitespace 检查 | exit 0，无错误。 |
+
+独立运行前后既有 249 文件产品/运行脚本指纹均为 `187f05da3275dd4bed98f419cc2ca0a63b4bd4aea61b1ef41df019be09797213`、gitDirty=false。此既有范围不含 `scripts/check-evolve113-interaction.mjs`，因此另记变更脚本 SHA-256：旧 `eb2bfd240d1cbbc1557f3294a4b9aa9e59025115bad78aae7f8019898188a023`，新 `4155165a3a370bf380b1afe17a9dd3ed0cdaef2b4324e32b4d6e6ec6d495490f`。脚本 source-map 单列该路径，按 `sha256(path NUL bytes NUL)` 计算 map hash 为 `6fcd683496ac4330187378173e2e83a3413808e6ff509074f72a05e824cfba48`，独立运行前后不变。
+
+独立两轮原始 log/result、脚本 identity/source-map hash 和产品 before/after identity 保留在 `artifacts/evolve111-window-independent-page-in/`。旧两份失败日志仍在 `artifacts/evolve111-window-independent-extra/evolve111-window-independent-evolve113{,-rerun}.log`，内容与断言失败已重新核对，未覆盖。两轮实际覆盖的是 finished 分支，cancel/timeout/infinite 拒绝与 timer 清理为本次代码审查结论，没有宣称这些分支也已动态运行。既有模块通过及 native-open 边界不变。
