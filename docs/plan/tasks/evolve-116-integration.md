@@ -35,7 +35,9 @@ depends-on: [evolve-112, evolve-115]
 
 本轮同步验收优先复用既有手工配对路径，在两个独立桌面资料库和本轮新建Android模拟器之间验证agent写入后的完整正文、元数据及附件引用。明确记录实际连接拓扑；ADB映射仅证明该映射路线，不推断局域网、移动网络或账户设备同步。账户同步仍按各自已有验收范围，不因本轮手工配对成功扩张为账户三端通过。先完成配对和身份稳定，再由真实设置页建立MCP授权，避免把配对引起的身份变化误判为授权持久化失败。
 
-Android准备目录为`artifacts/project-evolution/android-isolated-20261116T203629Z-dc8cf7db/`，元数据见该目录`env-metadata.json`；只完成创建，尚未boot/安装/验收。使用现有API36 ARM64 image、私有ANDROID_AVD_HOME/ANDROID_USER_HOME、2GiB数据盘、2GiB RAM、无快照和宿主采集。未来serial候选为`emulator-5580`，启动前检查端口及实际设备身份；所有adb命令显式限定owned serial和本轮包。旧sync108 Android脚本包含历史Samsung默认值，不能直接执行其安装、启动或输入操作。保留原机、历史AVD及其快照/锁文件。
+Android环境目录为`artifacts/project-evolution/android-isolated-20261116T203629Z-dc8cf7db/`，元数据见该目录`env-metadata.json`。新建API36 ARM64 AVD已独立boot完成并正常退出0；未安装产品APK。初始请求2GiB RAM/2GiB数据盘，emulator实际提高为2560MiB RAM/6GiB逻辑稀疏盘，首次只分配约0.847GiB，后续按这个实测配置预算，不为原先的内部资源估计强行缩盘。私有ANDROID_AVD_HOME/ANDROID_USER_HOME、2核、无快照/宿主采集、spawn PID/端口/guest AVD与boot ID核对均有记录。默认LatinIME未声明中文subtype，正在单独准备官方开源中文IME环境；这不代表产品IME验收。
+
+owned serial为`emulator-5580`，每次启动前检查5580/5581/8596端口、磁盘及实际设备身份，所有adb显式限定该serial和本轮包，不重启既有5037 server。首次emulator自行使用了其他应用附带adb调整该owned serial的logcat缓冲，未操作其他设备；后续启动固定SDK adb选择并核对现有server兼容性。旧sync108 Android脚本包含历史Samsung默认值，不能直接执行其安装、启动或输入操作。保留原机、历史AVD及其快照/锁文件。
 
 ### 可提前并行的执行器准备
 

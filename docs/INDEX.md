@@ -6,7 +6,7 @@
 
 后续开发已从111原生应用服务、113前端交互和112独立stdio传输模块展开；当前状态以[任务路线图](plan/project-evolution-20261116.md)为准。[本机IPC实现契约](architecture/agent-ipc.md)固定适配器/宿主帧和凭据引用；独立模块通过不代表已完成真实宿主或双端验收。
 
-11-17：111共享服务/窗口协调、112真实宿主/MCP/设置入口、113交互、114三主题已完成模块独审与合入复验，实际Codex九工具→SQLite/真实窗口链通过；115正在实现呈现resolver/专注布局/移动列表。116准确双端/MCP安装产物及设备/同步组合仍待完成。最新证据分层见[演进验证状态](verification/project-evolution/README.md)，不能用历史包或传输fixture替代本轮最终联调。
+11-17：111共享服务/窗口协调、112真实宿主/MCP/设置入口、113交互、114三主题已完成模块独审与合入复验，实际Codex九工具→SQLite/真实窗口链通过；115呈现resolver/专注布局/移动列表已提交独审。116准确双端/MCP安装产物及设备/同步组合仍待完成，执行器/核验器准备已合入，新隔离Android环境已boot调查但未安装产品APK。最新证据分层见[演进验证状态](verification/project-evolution/README.md)，不能用历史包或传输fixture替代本轮最终联调。
 
 服务器后续开发与部署从[服务总览与生产记录](server/README.md)、[配置／部署／回滚／排障手册](server/DEPLOYMENT.md)开始；[环境模板](../services/coordinator/.env.example)不含真实凭据。资料依据源码和已有回执整理，未重新查询或变更线上配置。
 

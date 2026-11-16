@@ -10,12 +10,12 @@
 | 112 MCP | done（模块）；真实装配`4ceb15e9`经`a1a69662`独审PASS，已合入`eca35abb` | 独立service11、实际设置双grant/Codex九工具/CAS/重启/撤销/20k/WK/刷新恢复通过；主树编译与17项native定向、376主题/90交互/12组Agent页及17组合UI检查通过 | 实际debug candidate通过；最终准确包及平台边界由116承接 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
 | 114 主题 | done（模块）；主题`39662e7d`与production Store runner`9bbb8562`均已合入 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199通过，实际AgentSettings额外18状态/450文字对/0失败。runner修复`975202a9`经`bd0aaf78`独审通过，主树真实3项Store再次通过 | native-open，116承接 |
-| 115 呈现 | in-progress；基于已合入114开始 | 未执行 | 未执行 |
+| 115 呈现 | 开发`7e53af80`已提交，独审中，尚未合入 | 作者实际App108项、Store2项/严格设置3项、交互90项及新Shell文字对比通过；待独立反例与审查 | native-open，116承接 |
 | 116 整合 | 产品联调等115；Android执行器与release verifier准备均已独审合入 | verifier`9878c254`主54项/独审`870d9ba3`；driver修复`c9d0b328`经`e16ff3b6`独审、`5eff3eb0`合入，主driver31+lifecycle2共33项通过；均非实际包/设备验收 | 最终准确包/设备未执行；owned AVD环境调查单独进行 |
 
 ## 分支写入边界
 
-下面111/113/112模块、111-window、114及112-integration均为已合入并清理的模块分支责任记录；当前活跃的是115、116-android-driver准备。清理保留提交、审查和失败证据，不清理历史sync108或用户数据。window原失败日志与独立探针已逐字节保全至`/tmp/evolve111-window-independent-postmerge-ercaff`。114树ignored artifacts另存`artifacts/project-evolution/evolve114-worktree-archive-20261117/`（185文件/7,324,729字节逐项SHA256一致），仅去除可重建旧复制harness target/dist/依赖链接。112-integration唯一候选前端另存`artifacts/project-evolution/evolve112-integration-worktree-archive/`（9文件/1,993,736字节逐项一致），真实候选仍保留在主Tauri bundle，所有/tmp失败和独立probe不变。
+下面111/113/112模块、111-window、114、112-integration及两项116执行器/核验器准备均已合入并清理；当前活跃source worktree只有115。清理保留提交、审查和失败证据，不清理历史sync108或用户数据。window原失败日志与独立探针已逐字节保全至`/tmp/evolve111-window-independent-postmerge-ercaff`。114树ignored artifacts另存`artifacts/project-evolution/evolve114-worktree-archive-20261117/`（185文件/7,324,729字节逐项SHA256一致），仅去除可重建旧复制harness target/dist/依赖链接。112-integration唯一候选前端另存`artifacts/project-evolution/evolve112-integration-worktree-archive/`（9文件/1,993,736字节逐项一致），真实候选仍保留在主Tauri bundle，所有/tmp失败和独立probe不变。116 driver树无ignored文件，独审原失败与探针保留在/tmp。
 
 - `codex/evolve-111`：application、可信授权context、Session/Store/schema、lib原生装配；不修改前端或agent_host。
 - `codex/evolve-113`：前端交互、相关验证脚本；不修改Rust。
@@ -26,7 +26,7 @@
 - `codex/evolve-114`：主题registry/token/外观偏好迁移、Rust归档校验及真实表面投影；不改agent_host/application或窗口外部协调语义。
 - `codex/evolve-112-integration`：同Session原生host/生命周期/命令/持久启用偏好与Preferences Agent入口，随后接已审窗口协调做真实链路；不改变theme/presentation或另建Store。
 - `codex/evolve-115`：从`5be79fce`开始，唯一呈现resolver、严格PresentationV1及其TS/Rust原子迁移、双端Shell/专注/移动列表/密度；不改变112宿主/授权/IPC，App中的保存/外部写/录音owner保持稳定。
-- `codex/evolve-116-android-driver`：独立owned emulator执行器，`c9d0b328`修复readUI parked Editor观测错误后经`e16ff3b6`复核PASS并合入`5eff3eb0`；待环境调查进程收尾后清理树。不改产品或旧Samsung driver，不代表设备验收。
+- `codex/evolve-116-android-driver`：独立owned emulator执行器，`c9d0b328`修复readUI parked Editor观测错误后经`e16ff3b6`复核PASS、合入`5eff3eb0`并清理树。不改产品或旧Samsung driver，不代表设备验收。
 
 开发提交后由另一agent复核并执行相关真实检查。合入按依赖顺序进行，涉及相同owner的接线串行完成；不把模块传输fixture当作真实资料库联调。
 
