@@ -261,10 +261,47 @@ pub(super) fn validate_interface_details(value: &Value) -> Result<()> {
     if !["compact", "standard", "comfortable"].contains(&object["menuSpacing"].as_str().unwrap_or("")) { return Err(invalid("菜单间距无效")); }
     Ok(())
 }
+/// Appearance is local settings, never a sync protocol field. Unknown versions
+/// and nested fields fail before any transaction or archive publication.
+fn validate_appearance(value: &Value) -> Result<()> {
+    let a = value.as_object().ok_or_else(|| invalid("外观必须是完整对象"))?;
+    if a.len() != 3 || a.get("version") != Some(&json!(2))
+        || !a.get("themeId").and_then(Value::as_str).is_some_and(|s| ["classic", "paper", "high-contrast"].contains(&s))
+        || !a.get("schemePreference").and_then(Value::as_str).is_some_and(|s| ["system", "light", "dark"].contains(&s)) {
+        return Err(invalid("外观字段、版本或主题无效"));
+    }
+    Ok(())
+}
+/// Read/import authority prefers AppearanceV2. Absence remains legacy on read.
+pub(super) fn project_appearance(settings: &mut Value) -> Result<()> {
+    validate_settings(settings)?;
+    if settings.get("appearance").is_some() {
+        settings["theme"] = settings["appearance"]["schemePreference"].clone();
+    }
+    Ok(())
+}
+/// One settings SQL update migrates legacy state and projects the old theme.
+/// Legacy API callers change only the scheme, preserving the current skin.
+pub(super) fn merge_settings(settings: &Value, patch: &Value) -> Result<Value> {
+    validate_settings(settings)?;
+    validate_settings(patch)?;
+    let mut next = settings.clone();
+    for (key, value) in patch.as_object().ok_or_else(|| invalid("无效设置"))? {
+        next[key] = value.clone();
+    }
+    if patch.get("appearance").is_none() {
+        let mut appearance = settings.get("appearance").cloned().unwrap_or_else(|| json!({"version":2,"themeId":"classic","schemePreference":settings.get("theme").cloned().unwrap_or(json!("system"))}));
+        if let Some(theme) = patch.get("theme") { appearance["schemePreference"] = theme.clone(); }
+        next["appearance"] = appearance;
+    }
+    project_appearance(&mut next)?;
+    Ok(next)
+}
 pub(super) fn validate_settings(settings: &Value) -> Result<()> {
     let object = settings
         .as_object()
         .ok_or_else(|| invalid("归档设置必须是对象"))?;
+    if let Some(appearance) = object.get("appearance") { validate_appearance(appearance)?; }
     if let Some(details) = object.get("interfaceDetails") { validate_interface_details(details)?; }
     for (key, choices) in [
         ("theme", &["system", "light", "dark"][..]),
@@ -453,7 +490,7 @@ impl Store {
             return Err(limit("归档实体超过 10,000 项上限"));
         }
         validate_graph(&archive.folders, &archive.notes, &archive.attachments)?;
-        validate_settings(&archive.settings)?;
+        project_appearance(&mut archive.settings)?;
         if archive.blobs.len() != archive.attachments.len() {
             return Err(invalid("归档附件内容与元数据数量不符"));
         }
@@ -601,7 +638,7 @@ impl Store {
         let settings: String =
             self.db
                 .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
-        let archive = Archive {
+        let mut archive = Archive {
             version: if folders.iter().any(|f| f.kind == "smart") {
                 3
             } else if attachments.iter().any(|a| a.recorded_at.is_some()) {
@@ -615,7 +652,7 @@ impl Store {
             settings: serde_json::from_str(&settings)?,
             blobs,
         };
-        validate_settings(&archive.settings)?;
+        project_appearance(&mut archive.settings)?;
         let bytes = serde_json::to_vec(&archive)?;
         if bytes.len() as u64 > MAX_ARCHIVE {
             return Err(limit("归档超过 256 MiB 上限"));

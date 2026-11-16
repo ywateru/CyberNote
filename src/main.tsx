@@ -10,6 +10,7 @@ import "./style.css";
 import "./desktop.css";
 import "./button-feedback.css";
 import "./design-tokens.css";
+import "./themes/tokens.css";
 import "./design-controls.css";
 import { installButtonFeedback } from "./button-feedback";
 const removeButtonFeedback = installButtonFeedback(document);

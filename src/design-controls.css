@@ -13,10 +13,6 @@
 }
 .recording-layout :is(button, [role="button"], summary) {
   min-width: var(--interface-hit-min) !important;
-  border-radius: var(--interface-radius-button) !important;
-}
-.recording-layout :is(select, input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), textarea) {
-  border-radius: var(--interface-radius-button) !important;
 }
 .recording-layout label:has(> input:is([type="checkbox"], [type="radio"])) {
   min-height: var(--interface-hit-min);
@@ -39,23 +35,9 @@
   justify-content: center;
   padding: 4px;
 }
-.recording-layout :is(.folder-row, .note-row, .gallery-card, .attachment-gallery-card,
-  .preferences-group, .preferences-interface-preview, .preferences-editor-preview,
-  .attachment-node, .audio-card, .file-card, .storage-summary, .storage-category,
-  .apple-import-panel, .sync-section, .search-box, .attachment-gallery-categories) {
-  border-radius: var(--interface-radius-card) !important;
-}
-.recording-layout :is(.preferences, .modal, .recording-sheet, .image-preview-window,
-  .attachment-info, .smart-form, .ocr-panel) {
-  border-radius: var(--interface-radius-panel) !important;
-}
-.recording-layout :is(.unified-menu.popover, .popover, .submenu-surface) {
-  border-radius: var(--interface-radius-menu) !important;
-}
 .recording-layout .unified-menu .menu-row {
   min-height: calc(var(--interface-menu-min) + 2 * var(--interface-menu-extra)) !important;
   padding-block: calc(3px + var(--interface-menu-extra));
-  border-radius: var(--interface-radius-button) !important;
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -85,7 +67,6 @@
 }
 .recording-layout .preferences :is(.preferences-appearance-card, .preferences-font-choice) {
   height: auto;
-  border-radius: var(--interface-radius-button) !important;
 }
 .recording-layout .preferences-appearance-card { min-height: 72px; }
 .recording-layout :is(.preferences-details-toggle, .preferences-details-reset) > svg { width: var(--control-icon-small); height: var(--control-icon-small); }
@@ -156,3 +137,10 @@
   .recording-layout .preferences-desktop .preferences-navigation { padding-top: 60px; padding-bottom: 8px; overflow-y: auto; }
   .recording-layout .preferences-desktop .preferences-settings { padding-top: 60px; }
 }
+
+/* Selected feedback adds a translucent tint. Text uses a tested pair for that
+   composite surface, rather than assuming the untinted palette still applies. */
+.recording-layout .folder-row.selected .folder-name { color: var(--selection-action); }
+.recording-layout :is(.folder-row, .note-row).selected :is(.count, .note-list-time, .snippet-copy, .snippet-text, .note-snippet, .note-folder, .note-list-metadata) { color: var(--selection-secondary); }
+
+.recording-layout .note-row.selected .recording-note-badge { color: var(--selection-recording); }

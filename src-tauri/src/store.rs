@@ -747,14 +747,7 @@ impl Store {
                 let old: String =
                     self.db
                         .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
-                let mut settings: Value = serde_json::from_str(&old)?;
-                for (k, v) in a["settings"]
-                    .as_object()
-                    .ok_or_else(|| err("invalid", "无效设置"))?
-                {
-                    settings[k] = v.clone();
-                }
-                archive::validate_settings(&settings)?;
+                let settings = archive::merge_settings(&serde_json::from_str(&old)?, &a["settings"])?;
                 self.db.execute(
                     "UPDATE settings SET body=?1 WHERE id=1",
                     [settings.to_string()],

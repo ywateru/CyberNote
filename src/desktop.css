@@ -1,33 +1,7 @@
 /* CyberNote desktop: geometry follows the supplied 1560 × 960 window.
    Mobile keeps its own layout; persisted user column widths remain adjustable. */
 .desktop {
-  --sidebar: #f3f3f6;
-  --paper: #fff;
-  --ink: #19191c;
-  --secondary: #7d7e88;
-  --tertiary: #7d7e88;
-  --line: #e0e1e8;
-  --accent: #d99300;
-  --selection: #fff1cc;
-  --desktop-list: #f9f9fb;
-  --desktop-toolbar: #f3f3f6;
-  --desktop-selected-folder: #e8e8eb;
-  --desktop-tag: #e1e1e5;
   font-size: calc(18px * var(--ui-font-scale, 1));
-}
-.dark .desktop {
-  --sidebar: #262629;
-  --paper: #1e1e20;
-  --ink: #f2f2f4;
-  --secondary: #a1a1aa;
-  --tertiary: #a1a1aa;
-  --line: #3c3c42;
-  --accent: #edac21;
-  --selection: #534422;
-  --desktop-list: #242426;
-  --desktop-toolbar: #2a2a2d;
-  --desktop-selected-folder: #3a3a3f;
-  --desktop-tag: #3c3c41;
 }
 .desktop .sidebar {
   margin: 0;
@@ -89,7 +63,7 @@
   height: calc(44px * var(--ui-scale, 1));
   padding: 0 calc(12px * var(--ui-scale, 1)) 0 calc(14px * var(--ui-scale, 1));
   gap: calc(12px * var(--ui-scale, 1));
-  border-radius: calc(11px * var(--ui-scale, 1));
+  border-radius: calc(var(--radius-11) * var(--ui-scale, 1));
   font-size: calc(18px * var(--ui-font-scale, 1));
   line-height: calc(24px * var(--ui-scale, 1));
   font-weight: 500;
@@ -111,7 +85,7 @@
   font-weight: 400;
 }
 .desktop .folder-row.selected {
-  color: var(--accent);
+  color: var(--action-ink);
   background: var(--desktop-selected-folder);
   font-weight: 500;
 }
@@ -142,7 +116,7 @@
   font-weight: 400;
   padding: calc(24px * var(--ui-scale, 1)) calc(10px * var(--ui-scale, 1))
     calc(8px * var(--ui-scale, 1));
-  color: #62636e;
+  color: var(--secondary);
 }
 .dark .desktop .account-title {
   color: var(--secondary);
@@ -166,12 +140,12 @@
   font-size: calc(17px * var(--ui-font-scale, 1));
   line-height: calc(23px * var(--ui-scale, 1));
   padding: calc(4px * var(--ui-scale, 1)) calc(11px * var(--ui-scale, 1));
-  border-radius: calc(10px * var(--ui-scale, 1));
+  border-radius: calc(var(--radius-10) * var(--ui-scale, 1));
   background: var(--desktop-tag);
 }
 .desktop .tag-chips button.selected {
   background: var(--selection);
-  color: var(--accent);
+  color: var(--action-ink);
 }
 .desktop .folder-footer {
   display: none;
@@ -198,7 +172,7 @@
 .desktop .notes-header > .icon-button {
   background: transparent;
   box-shadow: none;
-  border-radius: calc(7px * var(--ui-scale, 1));
+  border-radius: calc(var(--radius-7) * var(--ui-scale, 1));
   margin: 0;
   width: calc(40px * var(--ui-scale, 1));
   height: calc(40px * var(--ui-scale, 1));
@@ -210,7 +184,7 @@
 .desktop .toolbar-divider {
   width: 1px;
   height: calc(27px * var(--ui-scale, 1));
-  background: #d7d8e0;
+  background: var(--hover);
   flex-shrink: 0;
 }
 .desktop .notes-scroll:not(.gallery) {
@@ -247,7 +221,7 @@
   text-align: left;
 }
 .desktop .pinned-heading > svg:first-child {
-  color: var(--accent);
+  color: var(--action-ink);
 }
 .desktop .pinned-heading > svg:last-child {
   margin-left: auto;
@@ -255,13 +229,13 @@
 }
 .desktop .notes-scroll:not(.gallery) .note-row-wrap {
   margin: 0 0 0 calc(4px * var(--ui-scale, 1));
-  border-radius: calc(12px * var(--ui-scale, 1));
+  border-radius: calc(var(--radius-12) * var(--ui-scale, 1));
 }
 .desktop .notes-scroll:not(.gallery) .note-row {
   min-height: calc(90px * var(--ui-scale, 1));
   padding: calc(17px * var(--ui-scale, 1)) calc(18px * var(--ui-scale, 1))
     calc(17px * var(--ui-scale, 1)) calc(22px * var(--ui-scale, 1));
-  border-radius: calc(12px * var(--ui-scale, 1));
+  border-radius: calc(var(--radius-12) * var(--ui-scale, 1));
   background: transparent;
 }
 .desktop .notes-scroll:not(.gallery) .note-row-wrap::after {
@@ -348,7 +322,7 @@
 .desktop .note-list-metadata i {
   height: calc(17px * var(--ui-scale, 1));
   width: 1px;
-  background: #d8d0b9;
+  background: var(--hover);
 }
 .desktop .note-row:has(.note-list-metadata) .note-folder {
   display: none;
@@ -372,7 +346,7 @@
 .desktop .editor-header .glass-group .icon-button {
   width: calc(50px * var(--ui-scale, 1));
   height: calc(42px * var(--ui-scale, 1));
-  border-radius: calc(7px * var(--ui-scale, 1));
+  border-radius: calc(var(--radius-7) * var(--ui-scale, 1));
 }
 .desktop .editor-header .icon-button svg {
   width: calc(24px * var(--ui-scale, 1));
@@ -396,7 +370,7 @@
   height: calc(42px * var(--ui-scale, 1));
   padding: 0 calc(12px * var(--ui-scale, 1));
   white-space: nowrap;
-  border-radius: calc(7px * var(--ui-scale, 1));
+  border-radius: calc(var(--radius-7) * var(--ui-scale, 1));
   font-size: calc(18px * var(--ui-font-scale, 1));
 }
 .desktop .toolbar-labeled-button svg {
@@ -415,7 +389,7 @@
 .desktop .desktop-search .search-box {
   height: calc(40px * var(--ui-scale, 1));
   border: 1px solid var(--line);
-  border-radius: calc(22px * var(--ui-scale, 1));
+  border-radius: calc(var(--radius-22) * var(--ui-scale, 1));
   background: color-mix(in srgb, var(--paper) 55%, transparent);
   padding: 0 calc(14px * var(--ui-scale, 1));
   box-shadow: none;
@@ -439,7 +413,7 @@
   font-size: calc(18px * var(--ui-font-scale, 1));
   line-height: calc(26px * var(--ui-scale, 1));
   margin: calc(22px * var(--ui-scale, 1)) auto calc(32px * var(--ui-scale, 1));
-  color: #898a96;
+  color: var(--secondary);
 }
 .desktop .note-document {
   width: 100%;
@@ -523,17 +497,9 @@
   .desktop .folder-row {
     gap: calc(8px * var(--ui-scale, 1));
   }
-  .desktop .folder-row .count {
-  }
   .desktop .notes-scroll:not(.gallery) .note-row {
     padding-left: calc(18px * var(--ui-scale, 1));
     padding-right: calc(12px * var(--ui-scale, 1));
-  }
-  .desktop .note-list-time {
-  }
-  .desktop .notes-scroll:not(.gallery) .note-row strong {
-  }
-  .desktop .note-snippet {
   }
   .desktop .editor-header .glass-group .icon-button {
     width: calc(32px * var(--ui-scale, 1));
@@ -554,8 +520,6 @@
   .desktop .desktop-search .search-box {
     padding: 0 calc(8px * var(--ui-scale, 1));
   }
-  .desktop .desktop-search .search-box input {
-  }
   .desktop .desktop-settings {
     width: calc(32px * var(--ui-scale, 1));
   }
@@ -572,14 +536,14 @@
   display: inline-block;
   padding: calc(3px * var(--editor-scale, 1))
     calc(12px * var(--editor-scale, 1));
-  border-radius: calc(12px * var(--editor-scale, 1));
-  background: #fff3d8;
-  color: var(--accent);
+  border-radius: calc(var(--radius-12) * var(--editor-scale, 1));
+  background: var(--grouped);
+  color: var(--action-ink);
   font-size: calc(17px * var(--editor-font-scale, 1));
   line-height: calc(25px * var(--editor-scale, 1));
 }
 .dark .desktop .note-tag {
-  background: #4c3d21;
+  background: var(--sidebar);
 }
 .desktop .note-document .tiptap {
   font-size: calc(18px * var(--editor-font-scale, 1));
@@ -604,8 +568,8 @@
 .desktop .tiptap ul[data-type="taskList"] li > label input {
   width: calc(24px * var(--editor-scale, 1));
   height: calc(24px * var(--editor-scale, 1));
-  border-radius: calc(5px * var(--editor-scale, 1));
-  border: 1.4px solid #898a93;
+  border-radius: calc(var(--radius-5) * var(--editor-scale, 1));
+  border: 1.4px solid var(--line);
 }
 .desktop .tiptap ul[data-type="taskList"] li > label input:checked {
   background: var(--accent);
@@ -626,7 +590,7 @@
   width: 100%;
   min-height: calc(146px * var(--editor-scale, 1));
   border: 1px solid var(--line);
-  border-radius: calc(14px * var(--editor-scale, 1));
+  border-radius: calc(var(--radius-14) * var(--editor-scale, 1));
   background: var(--desktop-list);
 }
 .desktop .audio-summary {
@@ -663,7 +627,7 @@
   padding: 0;
   justify-content: center;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
   font-size: 0;
   gap: 0;
   flex-shrink: 0;
@@ -711,10 +675,10 @@
   display: block;
 }
 .desktop .audio-waveform-unplayed {
-  fill: #c9c9d0;
+  fill: var(--secondary);
 }
 .desktop .audio-waveform-played {
-  fill: var(--accent);
+  fill: var(--action-ink);
 }
 .desktop .audio-waveform-track input {
   position: absolute;
@@ -726,9 +690,9 @@
   cursor: pointer;
 }
 .desktop .audio-waveform-track:focus-within {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: calc(2px * var(--editor-scale, 1));
-  border-radius: calc(4px * var(--editor-scale, 1));
+  border-radius: calc(var(--radius-4) * var(--editor-scale, 1));
 }
 .desktop .audio-detail {
   font-size: calc(14px * var(--editor-font-scale, 1));
@@ -747,7 +711,7 @@
 .desktop .icon-button {
   width: calc(36px * var(--ui-scale));
   height: calc(36px * var(--ui-scale));
-  border-radius: calc(8px * var(--ui-scale));
+  border-radius: calc(var(--radius-8) * var(--ui-scale));
 }
 .desktop .icon-button svg {
   width: calc(24px * var(--ui-scale));
@@ -793,7 +757,7 @@
   height: calc(42px * var(--ui-scale));
   min-width: 0;
   flex-shrink: 0;
-  border-radius: calc(7px * var(--ui-scale));
+  border-radius: calc(var(--radius-7) * var(--ui-scale));
   font-size: calc(18px * var(--ui-font-scale));
   white-space: nowrap;
 }
@@ -803,7 +767,7 @@
   height: calc(24px * var(--ui-scale));
 }
 .desktop .desktop-tool.active {
-  color: var(--accent);
+  color: var(--action-ink);
 }
 .desktop .desktop-tool.share-start {
   position: relative;
@@ -842,7 +806,7 @@
   justify-content: center;
   width: calc(42px * var(--ui-scale));
   height: calc(42px * var(--ui-scale));
-  border-radius: calc(7px * var(--ui-scale));
+  border-radius: calc(var(--radius-7) * var(--ui-scale));
   cursor: pointer;
   list-style: none;
 }
@@ -850,7 +814,7 @@
   display: none;
 }
 .desktop-tool-overflow summary:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 1px;
 }
 .desktop .search-box input:focus-visible {
@@ -859,19 +823,19 @@
 .desktop .desktop-search .search-box {
   height: calc(40px * var(--ui-scale));
   border: 1px solid var(--search-border, var(--line));
-  border-radius: calc(20px * var(--ui-scale));
+  border-radius: calc(var(--radius-20) * var(--ui-scale));
   padding: 0 calc(14px * var(--ui-scale));
   gap: calc(10px * var(--ui-scale));
   box-shadow: none;
   background: var(--desktop-search-fill);
 }
 .desktop {
-  --desktop-search-fill: #fafafd;
-  --desktop-search-hover: #b6b7c2;
+  --desktop-search-fill: var(--paper);
+  --desktop-search-hover: var(--hover);
 }
 .dark .desktop {
-  --desktop-search-fill: #222225;
-  --desktop-search-hover: #71717d;
+  --desktop-search-fill: var(--sidebar);
+  --desktop-search-hover: var(--grouped);
 }
 .desktop .desktop-search .search-box:hover {
   --search-border: var(--desktop-search-hover);
@@ -909,7 +873,7 @@
 }
 
 /* Attachment thumbnails sit beside the complete text column, as in Notes. */
-.note-thumbnail { flex: none; display: block; width: calc(74px * var(--ui-scale, 1)); height: calc(74px * var(--ui-scale, 1)); border-radius: 5px; overflow: hidden; }
+.note-thumbnail { flex: none; display: block; width: calc(74px * var(--ui-scale, 1)); height: calc(74px * var(--ui-scale, 1)); border-radius: var(--radius-5); overflow: hidden; }
 .note-thumbnail img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .desktop .notes-scroll:not(.gallery) .note-row.has-thumbnail { display: flex; align-items: center; gap: calc(14px * var(--ui-scale, 1)); }
 .note-row.has-thumbnail .note-row-content { flex: 1; min-width: 0; }

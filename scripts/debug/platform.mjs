@@ -129,7 +129,19 @@ export class FakeBackend {
   }
   async action(action) {
     const type = action.type; let value;
-    if (type === 'settings') { await this.boundary('settings'); Object.assign(this.workspace.settings, action.settings); value = this.workspace; }
+    if (type === 'settings') {
+      await this.boundary('settings');
+      // Model the native atomic settings merge, not a frontend snapshot write.
+      // Failure boundaries remain observable. F1 captures actual App patches
+      // and replays them against production SQLite Store to check this model.
+      const current = this.workspace.settings, patch = action.settings;
+      const appearance = patch.appearance || {
+        ...(current.appearance || { version: 2, themeId: 'classic', schemePreference: current.theme || 'system' }),
+        ...(Object.hasOwn(patch, 'theme') ? { schemePreference: patch.theme } : {}),
+      };
+      Object.assign(current, patch, { appearance, theme: appearance.schemePreference });
+      value = this.workspace;
+    }
     else if (type === 'createNote') { await this.boundary('create'); const note = { ...seededWorkspace().notes[0], id: randomUUID(), folderId: action.folderId || 'default', title: '新备忘录', plainText: '', document: document(''), createdAt: Date.now(), updatedAt: Date.now(), revision: 0 }; this.workspace.notes.unshift(note); value = note; }
     else if (type === 'saveNote') { await this.boundary('save'); const note = this.assertNote(action.id); if (action.revision !== note.revision) throw failure('Controlled revision conflict', 'conflict'); note.document = clone(action.document); note.plainText = textOf(note.document); note.title = note.plainText.split('\n')[0] || '新备忘录'; note.updatedAt = Date.now(); note.revision++; value = note; }
     else if (type === 'createFolder' || type === 'createSmartFolder') { const input = type === 'createSmartFolder' ? action.input : action; const folder = { id: randomUUID(), name: input.name, parentId: input.parentId || null, sortOrder: Date.now(), createdAt: Date.now(), kind: type === 'createSmartFolder' ? 'smart' : 'normal', ...(type === 'createSmartFolder' ? { query: clone(input.query), definitionRevision: 1 } : {}) }; this.workspace.folders.push(folder); value = folder; }

@@ -1,7 +1,9 @@
+import type { AppearanceV2 } from "./themes/appearance";
 type Startup = {
   ready(): void;
   fail(): void;
   theme(value: string): void;
+  appearance(value: AppearanceV2): void;
 };
 
 export type StartupGates = Readonly<{
@@ -54,6 +56,7 @@ let cancelPending: (() => void) | undefined;
 export const startup = {
   ready() { window.__CYBERNOTE_STARTUP__?.ready(); },
   fail() { window.__CYBERNOTE_STARTUP__?.fail(); },
+  appearance(value: AppearanceV2) { window.__CYBERNOTE_STARTUP__?.appearance(value); },
   theme(value: string) { window.__CYBERNOTE_STARTUP__?.theme(value); },
   // Observation only: scheduling never reads these gates or the public snapshot.
   diagnostic(gates: StartupGates) {

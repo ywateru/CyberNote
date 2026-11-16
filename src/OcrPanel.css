@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--layer-modal);
-  background: #0004;
+  background: var(--scrim);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,10 +17,10 @@
   width: min(520px, 100%);
   max-height: 100%;
   padding: 24px;
-  border-radius: 18px;
+  border-radius: var(--radius-18);
   background: var(--paper);
   color: var(--ink);
-  box-shadow: 0 12px 40px #0002;
+  box-shadow: 0 12px 40px var(--shadow);
   overflow: auto;
 }
 .ocr-panel h2 {
@@ -43,9 +43,9 @@
   min-height: 44px;
   padding: 8px 16px;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: var(--grouped);
-  color: var(--accent);
+  color: var(--action-ink);
   font: inherit;
 }
 .ocr-panel button:disabled {
@@ -59,7 +59,7 @@
   line-height: 1.6;
   padding: 16px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   max-height: 45vh;
   min-height: 80px;
   overflow: auto;
