@@ -94,3 +94,58 @@ BEGIN SELECT RAISE(ABORT,'independent failure'); END;
 本结论仅针对上述 Rust source 模块及编译/production harness 行为。两项 P2 是本阶段内已有实现的契约缺口，应先由维护者修复，再复跑两个独立失败用例及受影响回归，才能把本原生审查改判 pass。
 
 111 仍不能整体宣告完成。credential/grant 生命周期、IPC/适配器 schema 共用 fixture、真实 AppHandle 参与集合、锁外有界驱动/取消、共享 RequestLimits admission、metadata 先于 release 的实际发送、release ACK 补偿刷新、独立前端 parser 与 freeze、中文组字/pendingDocs/录音/附件/Undo、真实窗口增减和与同步同时到达，以及 Android 同步结果，均留给后续宿主与前端集成验收。113 已独审合入或 114 开发启动不替代这些证据；不因缺少这些后续集成而伪造本 source 模块的运行失败。
+
+## 2026-11-17 修复提交独立复核（最新结论）
+
+被审修复：`eb9cee7d3ad1bf90a317ce9c286c653094512f90`，相对原报告提交 `f15ab771f86ac9dd6408b6cba375d2ca883680f9`。本复核者未开发 111 修复；此前协助的是独立的 112 host/UI 工作树，其修复不由本人独审。本次严格只追加本段，原 BLOCKED 结论、失败输入/输出和证据全部保留，对应的是原 `868c6dc`。
+
+**最新结论：native MODULE_SOURCE_PASS / integration-open。原两项 P2 blocking 均关闭，修复增量未发现新增 P1/P2 blocking。该结论不代表整个 111 或 host/IPC/UI 装配完成。**
+
+### 修复核对
+
+1. `store/archive/document.rs:49` 增加对象 envelope 白名单，`:184` 约束 mark 为 type/attrs，`:325` 约束所有 node/root 为 type/attrs/content/marks/text；原有类型、属性名/值、内容表达式、mark 组合、附件 owner 校验继续执行。不是只过滤 path 字面量，也不是静默剥除后提交。此验证位于既有共用 Store schema 边界，会覆盖 agent create/update、UI save、归档等真实调用路径。
+2. 原 8 个临时独立测试**没有修改**。`independent_document_unknown_path_fields_must_be_rejected` 现在取得 SCHEMA_INVALID；`independent_release_error_must_preserve_commit_fact` 现在取得 STORAGE_ERROR + operationId + committed:true，原来两项均从失败转为通过。`independent.rs` SHA-256 仍为 `005ff29155a987849f7ad02d37b2aed78124cad97cd1294b6ada93bcc53a75aa`。
+3. `session/external.rs:260`–`:269` 为既有 commit terminal 的 warning 持久化失败补充提交事实，未将终态改为 abort，未伪造 warning 已持久成功；失败参与者和 refresh_failed 已先保存在内存，正向迟 ACK 不清除已观察到的失败。
+4. 修复新增的三个正式回归已经在完整 production harness 中执行：root/block/text/mark 的24种额外字段 create/update 零 note/operation/dirty/receipt 提交；合法复杂 schema/同 owner 附件往返；warning 存储故障、终态 receipt、恢复持久化及重新打开 Store 的同 operation/version 重放。
+
+### 额外独立兼容及终态验证
+
+未仅复述新增作者测试。另在新的临时 harness 中增加两项复核，引用同一被审 production 源码，原 8 探针及其入口保持不变：
+
+- 将被审分支的真实 Editor factory、相关三个无 DOM 模块、原 schema 检查脚本及两份 schema JSON 原样复制到临时目录，依赖只读借用现有 node_modules。实际生成的 Editor manifest 与嵌入 Rust manifest 一致，**96 条语料**检查通过。再由真实 Editor `nodeFromJSON(...).check()/toJSON()` 序列化其中 **19 条 importAccepted 合法文档**，让真实 Session/service 逐条 update/read；附件占位符只替换为真实临时 owner 的附件 ID，所有合法文档（含全部支持 node/mark、默认 attrs、列表、tag、表格、drawing）完整保留，revision 正常，未见此次白名单造成的合法序列化文档退化。
+- 独立通过 SQLite BEFORE UPDATE trigger 注入 warning 故障：重复 negative release 的序列化错误均保留 committed:true / 原 operationId；后到 positive ACK 仍得到 commit receipt，不能消除已发生的刷新失败；abort 不能撤回已提交 operation；finish 在故障中给双 warning，移除故障后仅持久 WINDOW_REFRESH_REQUIRED。关闭/重开真实 Store 后 get_operation 和相同幂等参数均返回原 operation/version/warning，笔记全文/revision 不变且只有一条；重启后的旧窗口 release 无内存终态而被拒绝，持久回执仍可查询，不混淆两种生命周期。
+
+新增兼容探针首轮因测试自己的可变 JSON 下标遍历在无 content 的叶子插入 `content:null` 而误拒绝空 heading；只修正新临时探针为 `get_mut("content")` 非插入遍历，原 8 测试及产品源码均未改。最终19条均通过；该首轮测试构造错误不作为产品回归。
+
+### 实际命令 / 结果
+
+```sh
+# 原始未修改的8项探针；退出0，8 passed，201 filtered，2.00秒。
+CARGO_TARGET_DIR=/tmp/apple-notes-evolve111-independent-target \
+  cargo test --locked \
+  --manifest-path /var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/evolve111-independent-tp6kvb4y/Cargo.toml \
+  independent:: -- --nocapture
+
+# 正式 production harness；退出0，197 passed / 0 failed / 4 ignored，9.39秒。
+CARGO_TARGET_DIR=/tmp/apple-notes-evolve111-recheck-production-target \
+  cargo test --locked --manifest-path src-tauri/src/application/harness/Cargo.toml
+
+# 被审原 schema 脚本仅在临时副本运行；退出0，96条语料。
+node /var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/evolve111-recheck-schema-lgj7e49d/scripts/check-editor-schema.mjs
+node /var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/evolve111-recheck-schema-lgj7e49d/generate-legal.mjs
+
+# 新增独立兼容/终态复核；退出0，2 passed，209 filtered，0.33秒。
+EVOLVE111_COMPAT_DOCS=/tmp/evolve111-recheck-legal-serialized.json \
+CARGO_TARGET_DIR=/tmp/apple-notes-evolve111-independent-target \
+  cargo test --locked \
+  --manifest-path /var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/evolve111-recheck-extra-bc0ll0ih/Cargo.toml \
+  independent::recheck:: -- --nocapture
+
+git diff --check f15ab771..eb9cee7d
+```
+
+日志分别是 `/tmp/evolve111-recheck-original8.log`、`/tmp/evolve111-recheck-production.log`、`/tmp/evolve111-recheck-editor-schema.log`、`/tmp/evolve111-recheck-extra-final.log`。新探针文件：`/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/evolve111-recheck-extra-bc0ll0ih/src/independent/recheck.rs`；其 harness 路径另存 `/tmp/evolve111-recheck-extra-path`。原失败日志未覆写。4个 ignored 仍为父测试调用的原 subprocess workers，实际 SIGKILL/重启父测试通过。
+
+本轮未重复完整 Tauri cargo check 或 typecheck：本修复没有改 lib/命令签名、依赖或前端，变更的私有 Rust 校验函数/错误映射均由真实 production harness 编译及执行。作者的完整 cargo check 已记录于作者 evidence，但不充作本次独立执行。未使用主 Tauri target；无需继续占用。补充段与修复差异的 diff 检查均通过。
+
+剩余 host/IPC/适配器 fixture 互校验、真实窗口/中文组字/录音/附件/Undo/metadata→release 与 Android 同步等装配门槛，继续沿原报告“后续装配边界”承接。本次只关闭这两个 source 模块契约阻塞。
