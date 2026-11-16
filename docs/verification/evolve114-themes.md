@@ -35,7 +35,7 @@ node scripts/check-evolve114-themes.mjs
 
 脚本产生 `artifacts/evolve114-themes/results.json`、`rendered-contrast.json` 和原尺寸 PNG；这些运行产物不进入版本库。提交的 [receipt.json](evolve114-themes/receipt.json) 保留全部通过项和采样计数，以下联系图保留本轮截图。baseline 图在修改前从本树实际浏览器运行捕获，不使用历史截图充当当前运行证据。
 
-Rust harness 把当前生产 Store/Session/archive 模块复制到隔离常规 crate；不替换其持久化实现。使用 `artifacts/evolve114-store/target`、offline/locked、jobs=2，未占用主 target。`result.json` 记录被测试源文件哈希；未启动 Tauri GUI、真实 App 或用户 Store。该 harness 不等于整个原生应用 cargo check。
+首次提交的 Rust harness 把当时生产 Store/Session/archive 模块复制到隔离常规 crate；不替换其持久化实现。使用 `artifacts/evolve114-store/target`、offline/locked、jobs=2，未占用主 target。此复制方案在合入 111 后已退役，当前唯一 runner 改为生产 core harness，见本文末节。历史检查均未启动 Tauri GUI、真实 App 或用户 Store，不等于整个原生应用 cargo check。
 
 Rust 新测试对 3 themes × 3 schemePreference 做真实临时数据库导出→导入→关闭重开；验证旧配置首写迁移、非法更新/导入原子拒绝、同 patch 新对象优先、旧 API 保留皮肤、字号/details/扩展字段保留。浏览器 fixture 只证明 UI 与 owner 行为，不替代此落盘证据。
 
@@ -107,3 +107,31 @@ Rust 新测试对 3 themes × 3 schemePreference 做真实临时数据库导出�
 修订证据：[fix-receipt.json](evolve114-themes/fix-receipt.json)、[六配色修复表面联系图](evolve114-themes/review-fixes.jpg)。原尺寸图及逐文字采样在 `artifacts/evolve114-regressions/`；完整汇总在 `artifacts/evolve114-themes/`，Store 日志/源哈希在 `artifacts/evolve114-store/`。实际查看了 Paper 浅色标签表单、Classic 浅色矩形选区、HC 暗色附件分类与 toast 原图，并检查联系图六配色一致性。
 
 本轮未进入 AgentSettings、主树、其他工作树或 115；原生 116 的边界保持不变。
+
+## main 39662e7d 集成后的 Store runner 补齐
+
+114 已经独审 `7767625d` PASS 并合入 main `39662e7d`。本轮在已由主线程 fast-forward 的干净 114 树上，仅修改 `scripts/check-evolve114-store.mjs` 与作者 evidence；不修改产品源码、生产 harness、独审 report 或任务状态，不进入 115。该补齐仍待 Aquinas 增量独审，不自行更改其结论。
+
+合入 111 后 Store/Session 依赖 application、agent_access，原先复制少量模块并使用 old debug Cargo 的 runner 无法代表当前依赖。现已完全移除复制 crate、生成 wrapper 和 copy fallback，只调用已合入的 `src-tauri/src/application/harness/Cargo.toml`。该生产 harness 的 lib.rs 通过 `#[path]` 直接编译本树 Store、Session、application、agent_access；sync wrapper 指向生产 model。使用其自己的已提交 Cargo.lock，`--locked --offline --features rusqlite/hooks --lib`，真实 bundled SQLite/hooks 保持不变。
+
+runner 保留 `settings_and_archive_are_strict` 过滤，并检查以下三项都实际通过及汇总恰为 `3 passed / 0 failed`，防止仅凭 Cargo exit 0 接受零测试或漏测：
+
+- `interface_details_settings_and_archive_are_strict_and_atomic`
+- `appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip`
+- `appearance_recovery_settings_and_archive_are_strict_with_real_app_patches`
+
+`EVOLVE114_SETTINGS_REPLAY` 仍指向实际 App 捕获的 `artifacts/evolve114-regressions/app-settings-replays.json`，必须有四条路径并与提交的 capture 契约一致；缺失/不匹配即失败，不回退 fixture 伪装本轮 App capture。当前捕获文件保留自先前正式 UI 回归，本轮没有重跑主题 376 项；主树合入后的 UI 检查由 Aquinas 并行执行。这里的当前源码证据是生产 core 直接执行四路径 patches 的真实 SQLite 重开/归档测试。
+
+目标目录尊重调用者 `CARGO_TARGET_DIR`；未设置时默认本树 `artifacts/evolve114-store/target`，jobs 默认 2 并保留调用者配置。本轮默认/显式两条调用均顺序复用该独立缓存，没有使用 `/tmp/apple-notes-sync85-target` 或主 Tauri target。已验证指定 `./src-tauri/target` 会在调用 Cargo 前报错退出。
+
+```sh
+node --check scripts/check-evolve114-store.mjs
+node scripts/check-evolve114-store.mjs
+CARGO_TARGET_DIR=./artifacts/evolve114-store/target node scripts/check-evolve114-store.mjs
+```
+
+最终结果：默认和 caller-target 两次均 **3 passed / 0 failed / 200 filtered out**；`sourcesUnchanged=true`。运行前后对 runner、生产 harness 的 Cargo/lock/lib/build/sync wrapper、相关生产模块树、schema/fixture 及 actual App capture 共 56 个输入做 SHA256 比对。哈希清单用于标识相关输入，不表示每个文件都被这三项测试执行覆盖。日志中测试二进制为 `notes_application_native_tests`，源码诊断路径为生产 harness 直接引用的 `src/../../../store.rs`；没有读取旧的 artifacts/harness 源副本。
+
+`node --check` 与 `git diff --check` 通过。日志保留生产 core 既有的两条 unused-import warning，未为了 runner 检查修改产品代码；未运行完整 core 全回归或整套 Tauri 检查。
+
+新增证据：[core-harness-receipt.json](evolve114-themes/core-harness-receipt.json)（来源、目标选择、三项名称、四路径 replay、56 个源码哈希及日志 SHA256）、[core-harness-tests.txt](evolve114-themes/core-harness-tests.txt)。运行原件在 `artifacts/evolve114-store/{result.json,tests.log,default-target-result.json,default-target-tests.log,target-guard.json}`。前述复制 harness 的旧 receipt 保留为当时历史证据，不再是当前 runner。

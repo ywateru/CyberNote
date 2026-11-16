@@ -1,0 +1,53 @@
+Production core harness: final default-target run
+
+running 3 tests
+test store::archive::tests::interface_details_settings_and_archive_are_strict_and_atomic ... ok
+test store::archive::tests::appearance_recovery_settings_and_archive_are_strict_with_real_app_patches ... ok
+test store::archive::tests::appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 200 filtered out; finished in 0.61s
+
+warning: unused import: `account_summary::AccountSummary`
+  --> src/../../../store.rs:39:16
+   |
+39 | pub(crate) use account_summary::AccountSummary;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `BlobReader` and `NetworkStaging`
+  --> src/../../../store.rs:42:34
+   |
+42 | pub(crate) use synchronization::{BlobReader, NetworkStaging};
+   |                                  ^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: `notes-application-native-tests` (lib test) generated 2 warnings (run `cargo fix --lib -p notes-application-native-tests --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.27s
+     Running unittests src/lib.rs (artifacts/evolve114-store/target/debug/deps/notes_application_native_tests-5dfde49bec632b8b)
+
+Production core harness: caller CARGO_TARGET_DIR run
+
+running 3 tests
+test store::archive::tests::interface_details_settings_and_archive_are_strict_and_atomic ... ok
+test store::archive::tests::appearance_recovery_settings_and_archive_are_strict_with_real_app_patches ... ok
+test store::archive::tests::appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 200 filtered out; finished in 0.60s
+
+warning: unused import: `account_summary::AccountSummary`
+  --> src/../../../store.rs:39:16
+   |
+39 | pub(crate) use account_summary::AccountSummary;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `BlobReader` and `NetworkStaging`
+  --> src/../../../store.rs:42:34
+   |
+42 | pub(crate) use synchronization::{BlobReader, NetworkStaging};
+   |                                  ^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: `notes-application-native-tests` (lib test) generated 2 warnings (run `cargo fix --lib -p notes-application-native-tests --tests` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running unittests src/lib.rs (artifacts/evolve114-store/target/debug/deps/notes_application_native_tests-5dfde49bec632b8b)
