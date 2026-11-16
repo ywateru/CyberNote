@@ -1,7 +1,7 @@
 ---
 id: evolve-115
 scope: adaptive-presentation
-status: in-progress
+status: done
 depends-on: [evolve-114]
 ---
 
@@ -27,3 +27,5 @@ depends-on: [evolve-114]
 ## verification
 
 默认三栏/画廊行为保持；两栏/专注返回来源与焦点；移动列表独立于桌面view；旋转、699/700与1100边界不换错owner。主题/布局/密度切换期间中文组字、Undo、录音、附件、保存失败保全；实际组件证明同一Editor实例，不以重新加载正文代替。
+
+2026-11-17模块完成：开发`7e53af80`经独审发现三项P2，修复`7a5bb3dc`经`b94de7f4`复核PASS，合入`e5e66193`。合入后App108、reviewfix9、真实Store2、交互90、主题376、AgentSettings12组及实际Preferences→Agent17全部通过；原生定向19项与编译通过。源码/组件验证不代替实际安装包、IME或设备旋转，最终门槛由116承接。见[独审](../reviews/evolve115-independent.md)与[验证矩阵](../../verification/project-evolution/README.md)。

@@ -2,7 +2,7 @@
 
 2026-11-09。MODULES98已实现、经53a6d4ad独审接受并整合，前置SESSION96已接受。迁移不是重写持久化/授权/同步系统，也不以 App 行数作为唯一验收。最终双端交付范围见[恢复状态](../plan/cybernote-modernization-state.md)。
 
-2026-11-17演进补充：111/112共享应用与真实MCP宿主已独审合入，114主题已合入；115呈现Shell正在独审。下文原有前端owner继续保留，新增真实创建链如下。当前实现与最终包范围以[演进状态](../verification/project-evolution/README.md)为准。
+2026-11-17演进补充：111/112共享应用与真实MCP宿主、114主题、115呈现Shell均已独审合入并通过组合检查；116进入准确包构建与原生联调。下文原有前端owner继续保留，新增真实创建链如下。当前实现与最终包范围以[演进状态](../verification/project-evolution/README.md)为准。
 
 ## 新增的共享应用与agent边界
 
@@ -33,7 +33,7 @@ MCP stdio → 私有agent_host → agent_service ──┘
 
 NotesApplicationService借用宿主已有Session；agent_service注入AppState中的同一个共享Session。准入在Session锁之前，窗口/IO期间释放锁。一次read交付可按SQLite generation缓存成功的可见性检查，但实时身份、scope、有效期和撤销每片仍复核；该缓存不能升级为授权缓存。正文提交、幂等回执、metadata与刷新失败的精确定义以[业务契约](agent-mcp.md)和[IPC契约](agent-ipc.md)为真源。
 
-呈现层115的目标是保留永久WorkspaceShell槽位、同一个EditorSession与录音owner，平台/空间/布局只改变纯resolver输出和属性；其当前提交尚待独审合入，详见[主题与呈现](theme-presentation.md)。不要在最终整合时为每一种Shell复制上述共享应用状态。
+呈现层115保留永久WorkspaceShell槽位、同一个EditorSession与录音owner，平台/空间/布局只改变纯resolver输出和属性；已独审合入并通过实际App组合检查，详见[主题与呈现](theme-presentation.md)。不要在最终整合时为每一种Shell复制上述共享应用状态。
 
 ## 根所有权
 

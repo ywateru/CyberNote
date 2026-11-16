@@ -1,11 +1,13 @@
 ---
 id: evolve-116
 scope: release-integration
-status: pending
+status: in-progress
 depends-on: [evolve-112, evolve-115]
 ---
 
 # Agent与双端最终整合交付
+
+2026-11-17：112/115及执行器准备均已独审合入，`e5e66193`组合检查通过。进入固定源码、准确Mac/Android/MCP构建及真实运行阶段；安装包、原生输入与同步结论仍按实际证据逐项记录，不提前授予完成。
 
 ## objective
 
