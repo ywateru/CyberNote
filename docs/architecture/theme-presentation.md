@@ -61,6 +61,7 @@ type PresentationV1 = {
 | 旧 macSidebarVisible | false映射two-pane，其余映射three-pane，同时初始化lastNonFocusNavigation；不自动进入focus；兼容期新navigation向旧显隐字段投影，focus以lastNonFocusNavigation投影 |
 | 用户首次保存新设置 | 单事务写新字段，旧 theme/view 作为兼容投影同步写入；同一 settings owner 发布，不能两次异步写 |
 | 新字段存在 | appearance 为真源；同 patch 的旧 theme 不覆盖新对象。当前旧 theme-only action 保留 themeId、只更新 scheme，原子投影。presentation 尚未实现；更旧二进制的任意整对象覆盖无安全保证 |
+| 115 新旧呈现patch优先级 | 显式presentation对象为完整严格对象，同patch的view/macSidebarVisible由它重新投影，不反向覆盖。只有view的旧patch基于当前权威设置更新desktop.collectionView，保留navigation、lastNonFocusNavigation及mobile。只有macSidebarVisible的旧patch按true→three-pane、false→two-pane，同时更新lastNonFocusNavigation；若原为focus则退出focus，保证旧目录显隐动作可见生效。两种旧字段同patch时分别合并，单事务落盘。无关patch不携带UI缓存中的完整presentation |
 | 非法字段/未知版本 | 更新和导入报错且保留旧状态；不任意抹掉对象 |
 | 注册主题被移除 | 114 拒绝未知 ID 并保留旧确认值，不悄悄降级。真正删除注册主题前必须另做显式版本迁移与确认界面 |
 | 切换失败 | ConfirmedSettings 保持旧值，显示错误，原页面与焦点不提前切换 |
