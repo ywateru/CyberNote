@@ -103,6 +103,7 @@ fn real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive() {
         .to_string();
     let shared = Arc::new((Mutex::new(Session::new(local)), Condvar::new()));
     let make_backend = || StoreBackend {
+        outgoing: Mutex::new(None),
         staging: NetworkStaging::manual(&root),
         shared: shared.clone(),
         device: identity.device_id.clone(),
@@ -111,12 +112,12 @@ fn real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive() {
     let backend = make_backend();
     let v = serde_json::to_value(&wire).unwrap();
     let result = measure(
-        "cold_required_blobs_stale",
+        "cold_required_blobs_reprepare",
         &shared,
         Some(&other),
         move || backend.required_blobs(&v),
     );
-    assert_eq!(result.unwrap_err(), SyncError::PlanStale);
+    result.unwrap();
     make_backend()
         .required_blobs(&serde_json::to_value(&wire).unwrap())
         .unwrap();
@@ -135,12 +136,12 @@ fn real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive() {
     }
     let backend = make_backend();
     let result = measure(
-        "cold_flush_capture_stale",
+        "cold_flush_capture_reprepare",
         &shared,
         Some(&other),
         move || backend.flush(),
     );
-    assert_eq!(result.unwrap_err(), SyncError::PlanStale);
+    result.unwrap();
     assert!(shared.0.lock().unwrap().store.note(&id).unwrap().pinned);
     make_backend().flush().unwrap();
     // A new attachment ID with the same real64MiB blob requires an independent

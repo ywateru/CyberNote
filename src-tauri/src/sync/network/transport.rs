@@ -39,10 +39,11 @@ pub(super) struct SecureSocket {
     frames: u64,
     transferred: u64,
     started: Instant,
+    io_budget: Duration,
 }
-async fn read_binary(ws: &mut Socket) -> Result<Vec<u8>> {
+async fn read_binary_with_budget(ws: &mut Socket, budget: Duration) -> Result<Vec<u8>> {
     // A peer cannot extend the deadline indefinitely with Ping/Pong frames.
-    let deadline = Instant::now() + NETWORK_TIMEOUT;
+    let deadline = Instant::now() + budget;
     loop {
         let item = tokio::time::timeout_at(deadline, ws.next())
             .await
@@ -57,11 +58,15 @@ async fn read_binary(ws: &mut Socket) -> Result<Vec<u8>> {
         }
     }
 }
+#[cfg(test)]
 async fn send_binary(ws: &mut Socket, bytes: Vec<u8>) -> Result<()> {
+    send_binary_with_budget(ws, bytes, NETWORK_TIMEOUT).await
+}
+async fn send_binary_with_budget(ws: &mut Socket, bytes: Vec<u8>, budget: Duration) -> Result<()> {
     if bytes.len() > MAX_PLAIN_FRAME + 16 {
         return Err(SyncError::Limit);
     }
-    timeout(NETWORK_TIMEOUT, ws.send(Message::Binary(bytes.into())))
+    timeout(budget, ws.send(Message::Binary(bytes.into())))
         .await
         .map_err(|_| SyncError::Timeout)?
         .map_err(|_| SyncError::Transport)
@@ -119,9 +124,10 @@ fn tls_connector() -> Result<tokio_tungstenite::Connector> {
     Ok(tokio_tungstenite::Connector::Rustls(Arc::new(config)))
 }
 pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(SecureSocket, String)> {
+    let io_budget = if s.policy.is_some() { ACCOUNT_IO_TIMEOUT } else { NETWORK_TIMEOUT };
     super::super::identity::endpoint(&invite.endpoint)?;
     let (mut ws, _) = timeout(
-        NETWORK_TIMEOUT,
+        io_budget,
         tokio_tungstenite::connect_async_tls_with_config(
             &invite.endpoint,
             Some(config()),
@@ -137,9 +143,10 @@ pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(Secure
         workspace: invite.workspace_id.clone(),
         invitation: invite.invitation_id.clone(),
     };
-    send_binary(
+    send_binary_with_budget(
         &mut ws,
         serde_json::to_vec(&hello).map_err(|_| SyncError::Protocol)?,
+        io_budget,
     )
     .await?;
     let psk = key(&invite.psk)?;
@@ -150,8 +157,8 @@ pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(Secure
         &psk,
         true,
     )?;
-    send_binary(&mut ws, noise_write(&mut h, &[])?).await?;
-    let bytes = read_binary(&mut ws).await?;
+    send_binary_with_budget(&mut ws, noise_write(&mut h, &[])?, io_budget).await?;
+    let bytes = read_binary_with_budget(&mut ws, io_budget).await?;
     let host: Device = serde_json::from_slice(&noise_read(&mut h, &bytes)?)
         .map_err(|_| SyncError::Authentication)?;
     uuid(&host.device)?;
@@ -163,12 +170,13 @@ pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(Secure
     let device = Device {
         device: s.backend.device_id()?,
     };
-    send_binary(
+    send_binary_with_budget(
         &mut ws,
         noise_write(
             &mut h,
             &serde_json::to_vec(&device).map_err(|_| SyncError::Protocol)?,
         )?,
+        io_budget,
     )
     .await?;
     let mut socket = SecureSocket {
@@ -176,6 +184,7 @@ pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(Secure
         frames: 0,
         transferred: 0,
         started: Instant::now(),
+        io_budget,
         noise: h
             .into_transport_mode()
             .map_err(|_| SyncError::Authentication)?,
@@ -190,14 +199,15 @@ pub(super) async fn server(
     s: &Shared,
     tcp: TcpStream,
 ) -> Result<(SecureSocket, String, String, String)> {
+    let io_budget = if s.policy.is_some() { ACCOUNT_IO_TIMEOUT } else { NETWORK_TIMEOUT };
     let mut ws = timeout(
-        NETWORK_TIMEOUT,
+        io_budget,
         tokio_tungstenite::accept_async_with_config(MaybeTlsStream::Plain(tcp), Some(config())),
     )
     .await
     .map_err(|_| SyncError::Timeout)?
     .map_err(|_| SyncError::Transport)?;
-    let bytes = read_binary(&mut ws).await?;
+    let bytes = read_binary_with_budget(&mut ws, io_budget).await?;
     if bytes.len() > 1024 {
         return Err(SyncError::Limit);
     }
@@ -218,22 +228,23 @@ pub(super) async fn server(
         &psk,
         false,
     )?;
-    let bytes = read_binary(&mut ws).await?;
+    let bytes = read_binary_with_budget(&mut ws, io_budget).await?;
     if !noise_read(&mut h, &bytes)?.is_empty() {
         return Err(SyncError::Protocol);
     }
     let host = Device {
         device: s.backend.device_id()?,
     };
-    send_binary(
+    send_binary_with_budget(
         &mut ws,
         noise_write(
             &mut h,
             &serde_json::to_vec(&host).map_err(|_| SyncError::Protocol)?,
         )?,
+        io_budget,
     )
     .await?;
-    let bytes = read_binary(&mut ws).await?;
+    let bytes = read_binary_with_budget(&mut ws, io_budget).await?;
     let device: Device = serde_json::from_slice(&noise_read(&mut h, &bytes)?)
         .map_err(|_| SyncError::Authentication)?;
     let client_key = encode(h.get_remote_static().ok_or(SyncError::Authentication)?);
@@ -249,6 +260,7 @@ pub(super) async fn server(
         frames: 0,
         transferred: 0,
         started: Instant::now(),
+        io_budget,
         noise: h
             .into_transport_mode()
             .map_err(|_| SyncError::Authentication)?,
@@ -262,7 +274,9 @@ impl SecureSocket {
         self.transferred = self.transferred.saturating_add(bytes as u64);
         if self.frames > 65536
             || self.transferred > 1024 * 1024 * 1024
-            || self.started.elapsed() > Duration::from_secs(600)
+            || self.started.elapsed() > if self.io_budget == ACCOUNT_IO_TIMEOUT {
+                ACCOUNT_TRANSFER_TIMEOUT
+            } else { Duration::from_secs(600) }
         {
             return Err(SyncError::Transport);
         }
@@ -280,10 +294,10 @@ impl SecureSocket {
             .map_err(|_| SyncError::Authentication)?;
         out.truncate(n);
         self.budget(out.len())?;
-        send_binary(&mut self.ws, out).await
+        send_binary_with_budget(&mut self.ws, out, self.io_budget).await
     }
     pub async fn recv<T: DeserializeOwned>(&mut self) -> Result<T> {
-        let bytes = read_binary(&mut self.ws).await?;
+        let bytes = read_binary_with_budget(&mut self.ws, self.io_budget).await?;
         self.budget(bytes.len())?;
         let mut out = vec![0u8; MAX_PLAIN_FRAME];
         let n = self
@@ -294,6 +308,9 @@ impl SecureSocket {
     }
     pub async fn rpc(&mut self, req: &wire::Request) -> Result<wire::Response> {
         self.send(req).await?;
+        self.response().await
+    }
+    pub async fn response(&mut self) -> Result<wire::Response> {
         match self.recv().await? {
             wire::Response::Error { code } => Err(match code {
                 wire::SyncErrorWire::Busy => SyncError::Busy,
@@ -312,7 +329,9 @@ pub(super) async fn serve(
     tcp: TcpStream,
     stop: watch::Receiver<bool>,
 ) -> Result<()> {
-    serve_with_limits(
+    let began = Instant::now();
+    diagnostic("server", "accepted", 0, None);
+    let result = serve_with_limits(
         s,
         tcp,
         stop,
@@ -320,9 +339,11 @@ pub(super) async fn serve(
         Duration::from_secs(30),
         Duration::from_millis(200),
     )
-    .await
+    .await;
+    diagnostic("server", "closed", began.elapsed().as_millis() as u64, result.as_ref().err().copied());
+    result
 }
-async fn serve_with_limits(
+pub(super) async fn serve_with_limits(
     s: Arc<Shared>,
     tcp: TcpStream,
     mut stop: watch::Receiver<bool>,
@@ -332,6 +353,7 @@ async fn serve_with_limits(
 ) -> Result<()> {
     let (mut socket, id, key, device) =
         tokio::select! {r=server(&s,tcp)=>r?,_=stop.changed()=>return Err(SyncError::Stopped)};
+    diagnostic("server", "authenticated", 0, None);
     let workspace = s.backend.workspace_id()?;
     s.status(&id, "connected", None, false);
     let mut handler = wire::Handler::new();
@@ -339,6 +361,7 @@ async fn serve_with_limits(
     let started = Instant::now();
     loop {
         if s.policy.is_some() && started.elapsed() >= elapsed_budget {
+            diagnostic("server", "sessionDeadline", started.elapsed().as_millis() as u64, Some(SyncError::Timeout));
             return Err(SyncError::Timeout);
         }
         s.authorize(&device, &key)?;
@@ -350,15 +373,32 @@ async fn serve_with_limits(
         let request = tokio::select! {r=socket.recv::<wire::Request>()=>Some(r?),_=stop.changed()=>return Err(SyncError::Stopped),_=tokio::time::sleep(poll)=>None};
         let Some(request) = request else {
             if last.elapsed() > idle_budget {
+                diagnostic("server", "idleDeadline", last.elapsed().as_millis() as u64, Some(SyncError::Timeout));
                 return Err(SyncError::Timeout);
             }
             continue;
         };
         last = Instant::now();
+        let kind = match &request {
+            wire::Request::BeginTransfer {..} => "beginTransfer", wire::Request::FinishTransfer => "finishTransfer",
+            wire::Request::Inventory {..} => "inventory", wire::Request::Head {..} => "head",
+            wire::Request::Blob {..} => "blob", wire::Request::PutHead {..} => "putHead",
+            wire::Request::PutBlob {..} => "putBlob", wire::Request::BlobOffset {..} => "blobOffset",
+            wire::Request::CommitHead {..} => "commitHead", wire::Request::Status => "status",
+        };
+        diagnostic(kind, "received", 0, None);
         s.authorize(&device, &key)?;
         s.identity
             .check_authorized(&id, &workspace, &key, &device)?;
-        let response = match handler.handle(&s, request) {
+        // Disk verification / SQLite must not block the networking runtime.
+        // Move Handler with its admission permit into the tracked job, so a
+        // cancellation never releases Busy while a write is still running.
+        let (next_handler, result) = s.local(move |shared| {
+            let response = handler.handle(shared, request);
+            Ok((handler, response))
+        }).await?;
+        handler = next_handler;
+        let response = match result {
             Ok(r) => r,
             // A local metadata race says nothing about the peer protocol. End
             // this authenticated exchange so the client uses transport backoff
@@ -366,6 +406,7 @@ async fn serve_with_limits(
             Err(SyncError::PlanStale) => return Err(SyncError::PlanStale),
             Err(e) => wire::Response::Error { code: e.into() },
         };
+        diagnostic(kind, "handled", last.elapsed().as_millis() as u64, None);
         s.authorize(&device, &key)?;
         s.identity
             .check_authorized(&id, &workspace, &key, &device)?;
@@ -379,7 +420,9 @@ async fn serve_with_limits(
                 code: wire::SyncErrorWire::Busy
             }
         );
-        tokio::select! {r=socket.send(&response)=>r?,_=stop.changed()=>return Err(SyncError::Stopped)};
+        let sent = tokio::select! {r=socket.send(&response)=>r,_=stop.changed()=>return Err(SyncError::Stopped)};
+        diagnostic(kind, "sent", last.elapsed().as_millis() as u64, sent.as_ref().err().copied());
+        sent?;
         if busy {
             return Err(SyncError::Busy);
         }
@@ -479,6 +522,7 @@ mod tests {
         let identity =
             Arc::new(IdentityStore::open(&dir.join("identity"), &backend.device).unwrap());
         let s = Arc::new(Shared {
+            blocking: tokio_util::task::TaskTracker::new(),
             policy: None,
             account_operation: Arc::new(Mutex::new(false)),
             backend: backend.clone(),

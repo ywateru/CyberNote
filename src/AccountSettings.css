@@ -46,7 +46,7 @@
 .account-devices li { position: relative; display: flex; align-items: center; gap: 14px; padding: 18px 14px; border-bottom: 1px solid var(--line); }
 .account-devices li:last-child { border-bottom: 0; }
 .account-devices .account-device-remote { display: block; padding: 0; }
-.account-devices .account-device-current { padding: 18px; margin-bottom: 8px; background: color-mix(in srgb, var(--accent) 7%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line)); border-radius: 12px; }
+.account-devices .account-device-current { display: block; padding: 18px; margin-bottom: 8px; background: color-mix(in srgb, var(--accent) 7%, var(--paper)); border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line)); border-radius: 12px; }
 .account-device-icon { --control-icon: 24px; display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border-radius: 11px; background: var(--grouped); color: var(--secondary); }
 .account-device-icon svg { width: 24px; height: 24px; }
 .account-device-current .account-device-icon { background: var(--account-highlight); color: var(--accent); }
@@ -119,8 +119,6 @@
 .preferences-mobile .account-profile-group.is-signed-in > .account-actions > button { padding: 0 4px; min-width: 64px; border: 0; background: transparent; color: var(--secondary); font-size: .85em; }
 .preferences-mobile .account-profile h4 { margin-bottom: 3px; }
 .preferences-mobile .account-identifier { font-size: .85em; }
-.preferences-mobile .account-sync-group { padding: 12px 16px; }
-.preferences-mobile .account-sync-group > .account-help { margin: 4px 0 12px; font-size: .85em; }
 .preferences-mobile .account-state { margin: 0; padding: 10px 0; border-top: 1px solid var(--line); font-size: .85em; }
 .preferences-mobile .account-metrics { font-size: .8em; }
 .preferences-mobile .account-metrics > div { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 12px; margin: 5px 0; }
@@ -129,7 +127,7 @@
 .preferences-mobile .account-device-heading { align-items: center; gap: 10px; padding: 0 4px; margin-bottom: 12px; }
 .preferences-mobile .account-device-heading > div { flex: 1; min-width: 0; }
 .preferences-mobile .account-refresh { --control-icon: 16px; min-width: 0; padding: 0 8px; border: 0; background: transparent; color: var(--accent); font-size: .85em; }
-.preferences-mobile .account-devices .account-device-current { display: grid; grid-template-columns: 36px minmax(0, 1fr) 44px; align-items: start; gap: 10px; padding: 14px 12px; margin-bottom: 12px; }
+.preferences-mobile .account-devices .account-device-current { display: block; padding: 14px; margin-bottom: 12px; }
 .preferences-mobile .account-devices .account-device-remote { background: var(--paper); }
 .preferences-mobile .account-device-remote:first-child, .preferences-mobile .account-device-current + .account-device-remote { border-radius: 12px 12px 0 0; }
 .preferences-mobile .account-device-remote:last-child { border-radius: 0 0 12px 12px; }
@@ -142,9 +140,52 @@
 .preferences-mobile .account-device-title { gap: 4px 8px; }
 .preferences-mobile .account-device-status { margin-top: 4px; font-size: .8em; }
 .preferences-mobile .account-device-summary { display: grid; gap: 2px; margin-top: 5px; font-size: .8em; }
-.preferences-mobile .account-device-current .account-device-summary { margin-right: -44px; }
+.preferences-mobile .account-device-current .account-device-summary { margin-right: 0; }
 .preferences-mobile .account-device-footnote { padding: 0 4px; line-height: 1.6; }
 .preferences-mobile .account-devices-empty { padding: 20px 16px; border-radius: 12px; background: var(--paper); }
 .preferences-mobile .account-settings > .account-help:last-child { margin: 18px 4px 0; font-size: .8em; }
 @media (max-width: 350px) { .account-profile { gap: 10px; } .account-avatar { width: 36px; height: 36px; } .preferences-mobile .account-actions > button { flex: 1; } }
 @media (prefers-reduced-motion: reduce) { .account-switch-track, .account-switch-track::before { transition: none; } .account-spinner { animation: none; } }
+
+/* The local device owns its sync permission and recent activity. */
+.account-local-heading { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.account-local-heading > .account-device-info { flex: 1; min-width: 0; }
+.account-local-sync { margin-top: 16px; padding-top: 12px; border-top: 1px solid color-mix(in srgb, var(--accent) 16%, var(--line)); }
+.account-local-sync .account-toggle { align-items: center; }
+.account-local-sync .account-toggle > div { flex: 1; min-width: 0; }
+.account-local-sync .account-help { margin: 4px 0 0; font-size: .82em; }
+.account-local-footer { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-top: 12px; }
+.account-local-footer .account-state { padding: 0; margin: 0; border: 0; font-size: .8em; }
+.account-local-footer .account-metrics { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: .8em; }
+.account-local-footer .account-metrics > div { display: flex; align-items: baseline; justify-content: flex-start; gap: 6px; margin: 0; }
+.account-local-sync > .account-actions { margin-top: 10px; }
+.preferences-mobile .account-local-heading { display: grid; grid-template-columns: 36px minmax(0, 1fr) 44px; align-items: start; gap: 10px; }
+.preferences-mobile .account-local-heading .account-device-summary { margin-right: -44px; }
+.preferences-mobile .account-local-sync { margin-top: 14px; padding-top: 10px; }
+.preferences-mobile .account-local-sync .account-toggle { gap: 10px; }
+.preferences-mobile .account-local-sync .account-help { font-size: .8em; }
+.preferences-mobile .account-local-footer { gap: 8px; margin-top: 12px; }
+.preferences-mobile .account-local-footer .account-metrics { gap: 3px 14px; font-size: .75em; }
+
+.account-sync-progress { min-width: 0; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.account-progress-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: .9em; }
+.account-progress-heading > span:first-child { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.account-progress-heading svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--accent); }
+.account-progress-time { color: var(--secondary); font-size: .85em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.account-progress-target, .account-progress-counts { margin: 5px 0 0 !important; color: var(--secondary); font-size: .8em; }
+.account-progress-bar { display: block; appearance: none; -webkit-appearance: none; width: 100%; height: 5px; margin-top: 12px; border: 0; border-radius: 3px; overflow: hidden; background: var(--line); accent-color: var(--accent); }
+.account-progress-bar::-webkit-progress-bar { background: var(--line); border-radius: 3px; }
+.account-progress-bar::-webkit-progress-value { background: var(--accent); border-radius: 3px; }
+.account-progress-bar::-moz-progress-bar { background: var(--accent); border-radius: 3px; }
+.account-progress-bar:indeterminate { background: linear-gradient(90deg, var(--line) 0 30%, var(--accent) 50%, var(--line) 70%); background-size: 200% 100%; animation: account-progress-wait 1.8s linear infinite; }
+.account-progress-bar:indeterminate::-webkit-progress-bar { background: transparent; }
+.account-sync-progress.is-failed .account-progress-heading, .account-sync-progress.is-failed .account-progress-heading svg { color: var(--danger, #c53527); }
+.account-sync-progress.is-succeeded .account-progress-heading svg { color: #32965b; }
+.account-sync-progress > .account-help { margin-top: 8px; }
+.account-sync-progress.is-compact { margin: 0 14px 14px 70px; padding-top: 0; border: 0; }
+.account-confirmation .account-sync-progress { margin: 16px 0 0; }
+.account-confirmation .account-sync-progress > .account-help { margin-top: 10px; }
+.preferences-mobile .account-sync-progress.is-compact { margin-left: 64px; }
+.preferences-mobile .account-sync-progress .account-help { font-size: .78em; }
+@keyframes account-progress-wait { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .account-progress-bar:indeterminate { animation: none; } }

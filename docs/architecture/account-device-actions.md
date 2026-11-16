@@ -61,10 +61,12 @@ summary?: { noteCount: u64, lastNoteUpdatedAt: u64|null, capturedAt: u64 }
 
 ```text
 { deviceId: UUIDv4, direction: push|pull|both,
-  phase: running|succeeded|failed, startedAt: u64, finishedAt?: u64 }
+  phase: running|succeeded|failed, startedAt: u64, finishedAt?: u64,
+  progress?: { stage: connecting|pairing|inventory|receiving|sending|finishing,
+               completed: u64, total: u64, bytesTransferred: u64 } }
 ```
 
-只描述本 runtime 最新一次操作；失败使用已有有限 `SafeError` 并补充受限错误代码（设备离线/不兼容/未启用/目录不可用等），不能显示内部任意远端错误文本。`syncDevice` IPC 可以等待一次有限操作完成；运行状态应能被只读 status 观察。成功只表示持久传输收据，不代表已解决冲突或所有窗口已应用。
+只描述本 runtime 最新一次操作；失败使用已有有限 `SafeError` 并补充受限错误代码（设备离线/不兼容/未启用/目录不可用等），不能显示内部任意远端错误文本。`syncDevice` IPC 在请求入队后返回状态；原生运行时持有等待收据和绝对 deadline 的任务，关闭弹窗、切换设置或卸载前端组件均不取消已确认的传输。运行状态由只读 status 观察，账户退出/暂停/应用进程退出仍终止任务。进度仅投影本 runtime 最新操作，按 generation 和 operation UUID 防止迟到更新污染其他账户。计数为已取得持久确认的版本项，字节数为已传输的内容载荷，不是笔记数或已应用数。成功只表示持久传输收据，不代表已解决冲突或所有窗口已应用。
 
 ## 专用设备 API v1
 
@@ -103,9 +105,9 @@ syncReason: io | invalid_input | corrupt_identity | authentication | expired
 
 ## 请求准备与传输的统一期限
 
-请求创建时确定的185秒绝对deadline贯穿映射、bootstrap、验证、配对和传输。阶段切换不重置或延长该期限；准备耗时占用同一预算，不能为传输另加185秒。达到deadline触发取消，不代表后台已经退役：阻塞任务、disconnect/join及mapping关闭仍按既有规则完成，期间保持Busy，迟到成功不得覆盖取消或失败。
+请求创建时确定的23分钟绝对deadline贯穿映射、bootstrap、验证、配对和传输。阶段切换不重置或延长该期限；准备耗时占用同一预算，不能为传输另加23分钟。达到deadline触发取消，不代表后台已经退役：阻塞任务、disconnect/join及mapping关闭仍按既有规则完成，期间保持Busy，迟到成功不得覆盖取消或失败。
 
-SDK每次映射可能分别经历直连尝试和匿名隧道回退。真实独立探针观察两次映射成功但累计61.426秒，因此不能在上述统一预算内再用独立60秒prepare计时器提前截断合法准备。只移除这层重复期限，保留stop响应、目标及身份/Noise/workspace校验和完整收尾。此证据不解释此前24秒的SDK失败，不构成App方向同步已通过；必须由新包重新验收。
+历史上 SDK 0.3.0 的两次独立映射累计耗时61.426秒，因此移除了包围整个prepare的重复60秒计时器。2026-11-16接入SDK 0.4.0后，单次`connect_with_options`选择一条认证Peer，同一Peer分别映射enrollment/sync；共享一个不超过剩余请求期限的60秒SDK setup deadline，仅约束连接与两个端口建立，不包围后续bootstrap/配对/传输。直连采用单次Parallel，保留自动fallback和所有身份核对。调用取消通过options传入并继续await清理；按映射、Peer顺序显式关闭，不跨generation恢复或重放现有业务字节。
 
 ## 受控真实客户端映射诊断
 
@@ -122,3 +124,21 @@ SDK每次映射可能分别经历直连尝试和匿名隧道回退。真实独�
 ## 保全与验收
 
 本轮使用新建的两个独立 data-dir 和合成数据，不在默认原库开启同步。登录凭据仅进入真实授权表单，不进源码、回执或截图。测试内容包含格式、附件与双向独有笔记；每次操作验证允许方向和禁止方向，另验证空闲后不自发传输。详细矩阵与实际执行回执链接由任务收尾补充。
+
+2026-11-16：ADB 当前界面确认 `syncStage=transfer`、`syncReason=timeout`，日志未提供足够证据区分单 RPC 与整次 deadline。账户连接的单次读写/握手预算由5秒改为30秒；账户传输和被动会话仍保留120秒预算，总请求预算仍为185秒，仍保留有限等待、取消后的退役及收据规则。旧手工同步继续使用5秒网络预算。账户两端需同时更新才能使用完整的新预算。此调整缓解慢网络/大资料库被过早中断，不作为真实同步成功的证明。
+
+2026-11-16 SDK 0.4.0接入：Inventory只读取版本元数据，单个版本按digest查找；无dirty时flush不创建媒体固化计划。文件验证、收件和服务端RPC handler通过受追踪的blocking任务运行，避免阻塞网络runtime。取消或超时后，账户操作的join observer仍等待本地任务实际退出再释放permit和Busy；被动handler的permit随工作一起保留。登记证明提前到剩余210秒时续期，并在执行显式操作期间每20秒继续检查本机证明；每60秒经同一enrollment映射以新nonce重新验证选定设备及固定Noise key。只接受实际服务端签发的新证明，不本地延长对端证明。传输上限20分钟，外层含建连及清理的请求上限23分钟，单次IO仍30秒，失联和暂停仍终止。
+
+SDK 0.4.0固定诊断在显式本地debug诊断模式中记录；包括SDK本地相关性标识、有限阶段/原因和清理状态，无账户、设备身份、端点、凭据或正文。这与历史account110验证执行器的严格白名单stderr投影是不同输出：历史执行器不得直接接收新原始日志；普通启动和release构建保持关闭。
+
+历史预算调整仅改变单次IO，未扩展整次传输期限；随后SDK 0.4.0接入时一并设计了上述双端证明续期，才将内容传输预算调整为20分钟。不能单独增加timeout而略过证明生命周期。
+
+2026-11-16真机增量复测：首轮SDK 0.4.0包约14秒开始交换，Inventory handler从旧debug记录37,373ms降至1ms，收取43/196版本、6.5MB后受到旧120秒传输cap限制。该轮用于定位业务cap，不作为成功验收。随后加入上述长同步证明刷新和有限总预算，两端需一同更新。
+
+2026-11-16附件读取优化：每个backend最多保留一个正在发送的已验证文件句柄，首次/换文件/从零重读时完整校验SHA256。每个分块前后检查路径和句柄的文件戳（Unix包括dev/ino/ctime），变化或错误立即废弃凭据，末块后释放。复用既有VerifiedFile能力，不保留整附件内存副本；接收端完整摘要、暂存发布和身份fence校验保持有效。避免对同一大附件的每个24KiB分块重复扫描整文件。
+
+附件分块采用8块有界有序窗口（最多192KiB业务载荷待确认），通过现有24KiB分块和48KiB明文帧传输；不改变wire字段、帧/文件/会话预算、分块偏移校验或完整摘要。每次发送和接收均检查当前账户授权；错误会结束当前显式操作，未确认版本不报告成功，保留已有暂存供用户下一次明确重试。
+
+增量接收与前台quiet应用可能在媒体验证期间提交新的内容generation。生产backend的本地准备最多重新捕获两次：始终固定原Session token、Store instance、backend epoch及设备身份；失效的授权或切换不允许重建。只有验证或sync_begin_media尚未进入事务时可重新准备，业务operation仍严格只调用一次，不重放网络请求或可能已提交的结果。遇到持续修改仍以plan_stale终止并等待用户明确重试。
+
+真机日志已定位到上述安装阶段的generation变化，以及远端`idleDeadline=30098ms`。收件/分配检查使用不创建发布副本的专用媒体快照，正式quiet应用仍准备独立附件副本。客户端只在RPC已完成且没有管线响应待消费时，每5秒发送现有认证Status保持连接；不延长授权或绝对期限。两端证明续期与传输future并行轮询。授权socket IO显式分类为网络错误，临时刷新失败仅在原设备及key的原签名授权仍有效时延后，不能本地延长有效期。根因、时间线与边界见[SDK 0.4.0接入报告](cybergrid-sdk04-integration-20261116.md)。

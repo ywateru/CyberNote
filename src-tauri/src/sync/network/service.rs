@@ -94,7 +94,12 @@ impl SyncService {
         if backend.device_id()? != identity.device_id()? {
             return Err(SyncError::Authentication);
         }
+        let blocking = tokio_util::task::TaskTracker::new();
+        // Closing allows wait() to observe quiescence; tracked tasks can still
+        // be spawned. Admission stays held until the owner and its jobs exit.
+        blocking.close();
         let shared = Arc::new(Shared {
+            blocking,
             policy,
             account_operation: Arc::new(Mutex::new(false)),
             backend,
@@ -348,17 +353,23 @@ impl SyncService {
     /// version/blob receipts, never foreground application. No retry or retained worker.
     /// Call outside account lifecycle/Store locks; disconnect/shutdown cancels the action.
     pub fn transfer_once(&self, id: &str, direction: TransferDirection) -> Result<()> {
+        self.transfer_once_with_progress(id, direction, None)
+    }
+    pub(crate) fn transfer_once_with_progress(&self, id: &str, direction: TransferDirection, progress: Option<ProgressObserver>) -> Result<()> {
         self.active()?;
         if self.shared.policy.is_none() {
             return Err(SyncError::InvalidInput);
         }
         let peer = self.shared.identity.peer(id)?;
         self.account_action(id, ACCOUNT_TRANSFER_TIMEOUT, move |s| async move {
+            if let Some(observer) = &progress { observer(TransferProgress::default()); }
             let socket = account_socket(&s, &peer).await?;
             let mut client = Client {
                 shared: s.clone(),
                 peer,
                 socket,
+                progress,
+                counts: TransferProgress::default(),
             };
             match client
                 .rpc(wire::Request::BeginTransfer {
@@ -375,6 +386,7 @@ impl SyncService {
             }
             s.status(&client.peer.invitation_id, "transferring", None, false);
             client.cycle(direction).await?;
+            client.report(ProgressStage::Finishing);
             match client.rpc(wire::Request::FinishTransfer).await? {
                 wire::Response::TransferComplete => {}
                 _ => return Err(SyncError::Protocol),
@@ -448,9 +460,11 @@ impl SyncService {
                 worker: worker.clone(),
             });
             let slots = self.account_task.clone();
+            let jobs = self.shared.blocking.clone();
             self.handle.spawn(async move {
                 // Only observed task termination permits clearing this identity.
                 let _ = task.await;
+                jobs.wait().await;
                 drop(permit);
                 if let Ok(mut slot) = slots.lock() {
                     if slot
@@ -629,8 +643,47 @@ struct Client {
     shared: Arc<Shared>,
     peer: Peer,
     socket: transport::SecureSocket,
+    progress: Option<ProgressObserver>,
+    counts: TransferProgress,
 }
 impl Client {
+    /// Local file preparation may outlast the peer's idle budget. This helper
+    /// is only used between completed RPCs, never with pipelined responses in
+    /// flight. Status is authenticated by the existing socket and policy, and
+    /// does not renew authority or extend the absolute transfer deadline.
+    async fn local_preparation<T: Send + 'static>(
+        &mut self,
+        operation: impl FnOnce(&Shared) -> Result<T> + Send + 'static,
+    ) -> Result<T> {
+        self.local_preparation_with_interval(operation, Duration::from_secs(5)).await
+    }
+    async fn local_preparation_with_interval<T: Send + 'static>(
+        &mut self,
+        operation: impl FnOnce(&Shared) -> Result<T> + Send + 'static,
+        interval: Duration,
+    ) -> Result<T> {
+        let shared = self.shared.clone();
+        let mut work = Box::pin(shared.local(operation));
+        loop {
+            tokio::select! {
+                result=&mut work=>return result,
+                _=sleep(interval)=>{
+                    match self.rpc(wire::Request::Status).await? {
+                        wire::Response::Status { version: 1 } => (),
+                        _ => return Err(SyncError::Protocol),
+                    }
+                }
+            }
+        }
+    }
+    fn report(&mut self, stage: ProgressStage) {
+        self.counts.stage = stage;
+        if let Some(observer) = &self.progress { observer(self.counts.clone()); }
+    }
+    fn transferred(&mut self, bytes: u64) {
+        self.counts.bytes_transferred += bytes;
+        self.report(self.counts.stage);
+    }
     fn authorized(&self) -> Result<()> {
         self.shared
             .authorize(&self.peer.device_id, &self.peer.host_key)?;
@@ -704,6 +757,7 @@ impl Client {
             }
             size = Some(total);
             bytes.extend(data);
+            self.transferred(bytes.len() as u64 - offset);
             if bytes.len() as u64 == total {
                 break;
             }
@@ -716,44 +770,62 @@ impl Client {
         Ok(value)
     }
     async fn get_blob(&mut self, b: &BlobRef) -> Result<()> {
+        let blob = b.clone();
         let mut offset = self
             .shared
-            .staging
-            .offset(self.shared.backend.as_ref(), b)?;
+            .local(move |s| s.staging.offset(s.backend.as_ref(), &blob))
+            .await?;
         if offset == b.size && !self.shared.backend.has_blob(b)? {
             self.shared
                 .staging
                 .write(self.shared.backend.as_ref(), b, offset, &[], true)?;
         }
         while offset < b.size {
-            let (total, returned, data) = match self
-                .rpc(wire::Request::Blob {
-                    blob: b.clone(),
-                    offset,
-                })
-                .await?
-            {
-                wire::Response::Chunk {
-                    total,
-                    offset,
-                    data,
-                } => (total, offset, wire::bytes(&data)?),
-                _ => return Err(SyncError::Protocol),
-            };
-            if total != b.size
-                || returned != offset
-                || data.len() != (b.size - offset).min(CHUNK as u64) as usize
-            {
-                return Err(SyncError::Protocol);
+            // The peer still processes requests in order. A finite window
+            // avoids paying a full WAN RTT for every 24 KiB chunk, without
+            // changing the frame limit, staging offsets or durable receipts.
+            let mut requested = offset;
+            let mut count = 0;
+            while requested < b.size && count < BLOB_WINDOW {
+                self.authorized()?;
+                self.socket
+                    .send(&wire::Request::Blob {
+                        blob: b.clone(),
+                        offset: requested,
+                    })
+                    .await?;
+                requested += (b.size - requested).min(CHUNK as u64);
+                count += 1;
             }
-            let end = offset + data.len() as u64;
-            offset = self.shared.staging.write(
-                self.shared.backend.as_ref(),
-                b,
-                offset,
-                &data,
-                end == b.size,
-            )?;
+            for _ in 0..count {
+                self.authorized()?;
+                let (total, returned, data) = match self.socket.response().await? {
+                    wire::Response::Chunk {
+                        total,
+                        offset,
+                        data,
+                    } => (total, offset, wire::bytes(&data)?),
+                    _ => return Err(SyncError::Protocol),
+                };
+                self.authorized()?;
+                if total != b.size
+                    || returned != offset
+                    || data.len() != (b.size - offset).min(CHUNK as u64) as usize
+                {
+                    return Err(SyncError::Protocol);
+                }
+                let end = offset + data.len() as u64;
+                let length = data.len();
+                let blob = b.clone();
+                offset = self
+                    .shared
+                    .local(move |s| {
+                        s.staging
+                            .write(s.backend.as_ref(), &blob, offset, &data, end == blob.size)
+                    })
+                    .await?;
+                self.transferred(length as u64);
+            }
         }
         if !self.shared.backend.has_blob(b)? {
             return Err(SyncError::Backend);
@@ -783,22 +855,40 @@ impl Client {
             };
         }
         while offset < b.size {
-            let data = self.shared.backend.read_blob_chunk(b, offset, CHUNK)?;
-            if data.len() != (b.size - offset).min(CHUNK as u64) as usize {
-                return Err(SyncError::Backend);
+            let mut requested = offset;
+            let mut sent = Vec::with_capacity(BLOB_WINDOW);
+            while requested < b.size && sent.len() < BLOB_WINDOW {
+                let blob = b.clone();
+                let at = requested;
+                let data = self
+                    .shared
+                    .local(move |s| s.backend.read_blob_chunk(&blob, at, CHUNK))
+                    .await?;
+                if data.len() != (b.size - requested).min(CHUNK as u64) as usize {
+                    return Err(SyncError::Backend);
+                }
+                let end = requested + data.len() as u64;
+                self.authorized()?;
+                self.socket
+                    .send(&wire::Request::PutBlob {
+                        blob: b.clone(),
+                        offset: requested,
+                        data: wire::encoded(&data),
+                        finish: end == b.size,
+                    })
+                    .await?;
+                sent.push((end, data.len()));
+                requested = end;
             }
-            let end = offset + data.len() as u64;
-            match self
-                .rpc(wire::Request::PutBlob {
-                    blob: b.clone(),
-                    offset,
-                    data: wire::encoded(&data),
-                    finish: end == b.size,
-                })
-                .await?
-            {
-                wire::Response::Offset { offset: o } if o >= end && o <= b.size => offset = o,
-                _ => return Err(SyncError::Protocol),
+            for (end, length) in sent {
+                self.authorized()?;
+                let response = self.socket.response().await?;
+                self.authorized()?;
+                match response {
+                    wire::Response::Offset { offset: o } if o >= end && o <= b.size => offset = o,
+                    _ => return Err(SyncError::Protocol),
+                }
+                self.transferred(length as u64);
             }
         }
         Ok(())
@@ -821,38 +911,56 @@ impl Client {
                 .await?;
             match response {
                 wire::Response::Offset { offset: o } if end < data.len() && o == end as u64 => {}
-                wire::Response::Prepared if end == data.len() => return Ok(()),
+                wire::Response::Prepared if end == data.len() => {
+                    self.transferred(chunk.len() as u64);
+                    return Ok(());
+                }
                 _ => return Err(SyncError::Protocol),
             }
+            self.transferred(chunk.len() as u64);
             offset = end;
         }
         Err(SyncError::Protocol)
     }
     async fn cycle(&mut self, direction: TransferDirection) -> Result<()> {
+        self.report(ProgressStage::Inventory);
         self.authorized()?;
-        self.shared.backend.flush()?;
+        self.local_preparation(|s| s.backend.flush()).await?;
+        self.authorized()?;
         let remote = self.inventory().await?;
-        let mut local = local_inventory(&self.shared)?;
+        let mut local = self.local_preparation(local_inventory).await?;
+        self.counts.total = (if direction.receives() { remote.difference(&local).count() } else { 0 }
+            + if direction.sends() { local.difference(&remote).count() } else { 0 }) as u64;
+        self.report(ProgressStage::Inventory);
         if direction.receives() {
+            self.report(ProgressStage::Receiving);
             for id in remote.difference(&local) {
                 let v = self.get_head(id).await?;
-                for b in blobs(&self.shared, &v)? {
+                let head = v.clone();
+                let references = self.local_preparation(move |s| blobs(s, &head)).await?;
+                for b in references {
                     if !self.shared.backend.has_blob(&b)? {
                         self.get_blob(&b).await?;
                     }
                 }
-                if !self.shared.backend.receive_head(v)?.durable {
+                if !self.local_preparation(move |s| s.backend.receive_head(v)).await?.durable {
                     return Err(SyncError::Backend);
                 }
+                self.counts.completed += 1;
+                self.report(ProgressStage::Receiving);
             }
         }
         // Re-read after pull, as another device/local editor may have committed during transfer.
         if direction.sends() {
-            local = local_inventory(&self.shared)?;
+            local = self.local_preparation(local_inventory).await?;
+            self.counts.total = self.counts.completed + local.difference(&remote).count() as u64;
+            self.report(ProgressStage::Sending);
             for id in local.difference(&remote) {
-                let v = self.shared.backend.version(id)?;
+                let digest = id.clone();
+                let v = self.local_preparation(move |s| s.backend.version(&digest)).await?;
                 check_json(&v)?;
-                let refs = blobs(&self.shared, &v)?;
+                let head = v.clone();
+                let refs = self.local_preparation(move |s| blobs(s, &head)).await?;
                 self.prepare_head(id, &v).await?;
                 for b in refs {
                     self.put_blob(&b).await?;
@@ -864,6 +972,8 @@ impl Client {
                     wire::Response::Stored { receipt } if receipt.durable => {}
                     _ => return Err(SyncError::Protocol),
                 }
+                self.counts.completed += 1;
+                self.report(ProgressStage::Sending);
             }
         }
         Ok(())
@@ -938,6 +1048,8 @@ async fn client_loop(
                     shared: shared.clone(),
                     peer: peer.clone(),
                     socket,
+                    progress: None,
+                    counts: TransferProgress::default(),
                 };
                 loop {
                     shared.status(&id, "transferring", None, false);
@@ -1008,6 +1120,51 @@ mod channel_tests {
         }
         fn endpoint(&self, _: &str) -> Result<String> {
             Err(SyncError::Transport)
+        }
+    }
+    #[tokio::test(flavor = "current_thread")]
+    async fn local_preparation_keeps_authenticated_socket_alive_without_extending_idle_budget() {
+        // Real TCP/WebSocket/Noise sockets. The control case reproduces the
+        // observed remote idle timeout while the local blocking task runs.
+        for keepalive in [false, true] {
+            let root = tempfile::tempdir().unwrap();
+            let workspace = uuid::Uuid::new_v4().to_string();
+            let service = |name: &str| {
+                let device = uuid::Uuid::new_v4().to_string();
+                SyncService::new(
+                    Arc::new(UnusedBackend(device.clone(), workspace.clone())),
+                    Arc::new(IdentityStore::open(&root.path().join(name), &device).unwrap()),
+                    root.path().join(format!("{name}-stage")),
+                ).unwrap()
+            };
+            let host = service("host");
+            let client = service("client");
+            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+            let invite = host.shared.identity.invite(&workspace, &format!("ws://{}/", listener.local_addr().unwrap())).unwrap();
+            let (stop_tx, stop) = watch::channel(false);
+            let server_shared = host.shared.clone();
+            let server = tokio::spawn(async move {
+                let (tcp, _) = listener.accept().await.unwrap();
+                transport::serve_with_limits(server_shared, tcp, stop,
+                    Duration::from_secs(2), Duration::from_millis(150), Duration::from_millis(5)).await
+            });
+            let (socket, device) = transport::client(&client.shared, &invite).await.unwrap();
+            let peer = client.shared.identity.remember_peer(&invite, &device).unwrap();
+            let peer = client.shared.identity.commit_pairing(&peer.invitation_id).unwrap();
+            let mut connection = Client { shared: client.shared.clone(), peer, socket, progress: None, counts: TransferProgress::default() };
+            assert_eq!(connection.local_preparation_with_interval(|_| {
+                thread::sleep(Duration::from_millis(450));
+                Ok(7)
+            }, if keepalive { Duration::from_millis(30) } else { Duration::from_secs(1) }).await.unwrap(), 7);
+            let response = connection.rpc(wire::Request::Status).await;
+            if keepalive {
+                assert!(matches!(response, Ok(wire::Response::Status { version: 1 })));
+                stop_tx.send(true).unwrap();
+                assert_eq!(server.await.unwrap(), Err(SyncError::Stopped));
+            } else {
+                assert!(response.is_err());
+                assert_eq!(server.await.unwrap(), Err(SyncError::Timeout));
+            }
         }
     }
     #[test]
@@ -1256,10 +1413,14 @@ mod channel_tests {
                 Duration::from_millis(80),
                 Duration::from_millis(10),
                 Duration::from_millis(20),
-                |s| async move { s.backend.flush() },
+                |s| async move { s.local(|s| s.backend.flush()).await },
             )
         });
         entered.recv_timeout(Duration::from_secs(2)).unwrap();
+        let (alive_tx, alive_rx) = mpsc::channel();
+        service.handle.spawn(async move { let _ = alive_tx.send(()); });
+        alive_rx.recv_timeout(Duration::from_secs(1))
+            .expect("backend work blocked network scheduling");
         if disconnect {
             assert_eq!(
                 service.stop_account_task("held", Duration::from_millis(20)),

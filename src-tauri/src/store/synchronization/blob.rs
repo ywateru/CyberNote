@@ -215,7 +215,45 @@ impl Store {
 pub(crate) struct BlobStorage {
     pub(super) root: PathBuf,
 }
+/// One verified, pinned outgoing file. The descriptor and original path are
+/// checked before and after every range read; the receiver also verifies the
+/// complete SHA-256 before publishing. No whole-blob byte buffer is retained.
+pub(crate) struct BlobReader {
+    path: PathBuf,
+    verified: media::VerifiedFile,
+}
+impl BlobReader {
+    pub(crate) fn matches(&self, hash: &str, size: u64) -> bool {
+        self.verified.hash == hash && self.verified.stamp.size == size
+    }
+    pub(crate) fn read(&self, offset: u64, max: usize) -> Result<Vec<u8>> {
+        use std::io::{Seek, SeekFrom};
+        if offset > self.verified.stamp.size || !self.verified.current(&self.path) {
+            return Err(media::stale());
+        }
+        let mut file = self.verified.file.as_ref();
+        file.seek(SeekFrom::Start(offset))?;
+        let mut bytes = vec![0; (self.verified.stamp.size - offset).min(max as u64) as usize];
+        file.read_exact(&mut bytes)?;
+        if !self.verified.current(&self.path) {
+            return Err(media::stale());
+        }
+        Ok(bytes)
+    }
+}
 impl BlobStorage {
+    pub(crate) fn open_reader(&self, hash: &str, size: u64) -> Result<BlobReader> {
+        if !valid_hash(hash) || size > MAX_BLOB {
+            return Err(invalid("blob引用无效"));
+        }
+        self.sync_directories()?;
+        let path = self.root.join(".sync/blobs").join(format!("{hash}.blob"));
+        let verified = media::VerifiedFile::read(&path, &BTreeMap::new())?;
+        if verified.hash != hash || verified.stamp.size != size {
+            return Err(err("sync_blob_corrupt", "blob长度或摘要不符"));
+        }
+        Ok(BlobReader { path, verified })
+    }
     fn publication_file(&self) -> Result<File> {
         self.sync_directories()?;
         let path = self.root.join(".sync/blob-publish.lock");

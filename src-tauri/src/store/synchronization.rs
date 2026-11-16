@@ -8,7 +8,7 @@ use std::{
 };
 #[path = "synchronization/blob.rs"]
 mod blob;
-pub(crate) use blob::NetworkStaging;
+pub(crate) use blob::{BlobReader, NetworkStaging};
 #[path = "synchronization/media.rs"]
 pub(crate) mod media;
 #[path = "synchronization/publication.rs"]
@@ -259,15 +259,13 @@ fn set_projection(db: &Connection, wire: &WireVersion) -> Result<()> {
     Ok(())
 }
 fn summaries(db: &Connection) -> Result<Vec<VersionSummary>> {
-    Ok(heads(db)?
-        .into_iter()
-        .filter(|h| !h.redacted)
-        .map(|h| VersionSummary {
-            kind: h.wire.kind,
-            entity_id: h.wire.entity_id,
-            digest: h.wire.digest,
-        })
-        .collect())
+    // Inventory needs metadata only; do not decode every note payload per page.
+    let mut query = db.prepare("SELECT kind,entity_id,digest FROM sync_heads WHERE redacted=0 ORDER BY kind,entity_id,digest")?;
+    let rows = query.query_map([], |r| Ok((r.get::<_, String>(0)?, r.get(1)?, r.get(2)?)))?
+        .collect::<std::result::Result<Vec<(String, String, String)>, _>>()?;
+    rows.into_iter().map(|(k, entity_id, digest)| Ok(VersionSummary {
+        kind: kind(&k)?, entity_id, digest,
+    })).collect()
 }
 
 impl Store {
@@ -368,6 +366,12 @@ impl Store {
         tx.commit()?;
         Ok(())
     }
+    pub(crate) fn sync_has_dirty(&self) -> Result<bool> {
+        if !enabled(&self.db)? {
+            return Err(err("sync_disabled", "尚未开启同步"));
+        }
+        Ok(self.db.query_row("SELECT EXISTS(SELECT 1 FROM sync_dirty)", [], |r| r.get(0))?)
+    }
     pub fn sync_inventory(&self) -> Result<Vec<VersionSummary>> {
         if !enabled(&self.db)? {
             return Err(err("sync_disabled", "尚未开启同步"));
@@ -384,14 +388,23 @@ impl Store {
         if !valid_hash(digest) {
             return Err(invalid("版本摘要无效"));
         }
-        let head = heads(&self.db)?
-            .into_iter()
-            .find(|h| h.wire.digest == digest)
+        let head = self.db.query_row(
+            "SELECT kind,entity_id,vector,payload,redacted FROM sync_heads WHERE digest=?1",
+            [digest],
+            |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?, r.get::<_, String>(2)?, r.get::<_, Option<String>>(3)?, r.get::<_, bool>(4)?)),
+        ).optional()?
             .ok_or_else(|| err("sync_version_missing", "版本已压缩或不存在"))?;
-        if head.redacted {
+        if head.4 {
             return Err(err("sync_pending_flush", "版本已锁定或删除，等待固化"));
         }
-        Ok(head.wire)
+        Ok(WireVersion {
+            version: 1,
+            workspace_id: identity(&self.db)?.workspace_id,
+            kind: kind(&head.0)?, entity_id: head.1,
+            vector: serde_json::from_str(&head.2)?,
+            payload: head.3.map(|s| serde_json::from_str(&s)).transpose()?,
+            digest: digest.into(),
+        })
     }
     pub fn sync_required_blobs(&self, wire: &WireVersion) -> Result<Vec<BlobRef>> {
         let identity = identity(&self.db)?;

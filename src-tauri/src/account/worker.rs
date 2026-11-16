@@ -49,19 +49,36 @@ pub(super) struct RequestCancellation {
     pub admission_stop: CancellationToken,
     deadline: tokio::time::Instant,
     deadline_expired: AtomicBool,
+    progress: Mutex<Option<crate::sync::network::ProgressObserver>>,
 }
 impl Default for RequestCancellation {
     fn default() -> Self {
-        Self::new(Duration::from_secs(185))
+        // Includes mapping/pairing, the finite transfer, and confirmed retirement.
+        Self::new(Duration::from_secs(23 * 60))
     }
 }
 impl RequestCancellation {
+    pub fn deadline(&self) -> tokio::time::Instant {
+        self.deadline
+    }
     pub fn new(budget: Duration) -> Self {
         Self {
             stop: CancellationToken::new(),
             admission_stop: CancellationToken::new(),
             deadline: tokio::time::Instant::now() + budget,
             deadline_expired: Default::default(),
+            progress: Mutex::new(None),
+        }
+    }
+    pub fn observe_progress(&self, observer: crate::sync::network::ProgressObserver) {
+        if let Ok(mut slot) = self.progress.lock() { *slot = Some(observer); }
+    }
+    pub fn progress_observer(&self) -> Option<crate::sync::network::ProgressObserver> {
+        self.progress.lock().ok().and_then(|slot| slot.clone())
+    }
+    pub fn report_stage(&self, stage: crate::sync::network::ProgressStage) {
+        if let Some(observer) = self.progress_observer() {
+            observer(crate::sync::network::TransferProgress {stage, ..Default::default()});
         }
     }
     fn expire(&self) {
@@ -820,7 +837,7 @@ mod tests {
     async fn unified_deadline_spans_preparation_and_transfer_and_waits_for_retirement() {
         tokio::time::timeout(Duration::from_secs(300), async {
             let start = tokio::time::Instant::now();
-            let cancellation = Arc::new(RequestCancellation::default());
+            let cancellation = Arc::new(RequestCancellation::new(Duration::from_secs(185)));
             let (request, receiver, control, gate) = queued(cancellation.clone());
             let retiring = Arc::new(Notify::new());
             let work_retiring = retiring.clone();

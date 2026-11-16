@@ -10,7 +10,7 @@ use crate::sync::{
     identity::{now, IdentityStore, PairingInvite},
     network::{ReplicationPolicy, SyncService},
 };
-use cybergrid_sdk::{Client, Mapping, Port};
+use cybergrid_sdk::{Client, ConnectOptions, DirectStrategy, Mapping, OpenOptions, OperationOptions, Port};
 use serde::{Deserialize, Serialize};
 use std::{
     sync::{Arc, Mutex},
@@ -795,17 +795,17 @@ async fn write<T: Serialize>(io: &mut (impl AsyncWriteExt + Unpin), value: &T) -
     if bytes.len() > 16384 {
         return Err(Error::InvalidProof);
     }
-    io.write_u32(bytes.len() as u32).await?;
-    io.write_all(&bytes).await?;
+    io.write_u32(bytes.len() as u32).await.map_err(|_| Error::Network)?;
+    io.write_all(&bytes).await.map_err(|_| Error::Network)?;
     Ok(())
 }
 async fn read<T: serde::de::DeserializeOwned>(io: &mut (impl AsyncReadExt + Unpin)) -> Result<T> {
-    let size = io.read_u32().await? as usize;
+    let size = io.read_u32().await.map_err(|_| Error::Network)? as usize;
     if size == 0 || size > 16384 {
         return Err(Error::InvalidProof);
     }
     let mut bytes = vec![0; size];
-    io.read_exact(&mut bytes).await?;
+    io.read_exact(&mut bytes).await.map_err(|_| Error::Network)?;
     serde_json::from_slice(&bytes).map_err(|_| Error::InvalidProof)
 }
 struct Bootstrap {
@@ -822,7 +822,11 @@ impl Bootstrap {
         let claims = self
             .enrollment
             .verify(&request.proof, &self.binding)
-            .await?;
+            .await.map_err(|error| {
+                crate::store::sync_boundary_diagnostic("enrollment_verify_failed");
+                crate::store::sync_boundary_diagnostic(error.code());
+                error
+            })?;
         if claims.device_id == self.binding.device_id {
             return Err(Error::InvalidProof);
         }
@@ -853,6 +857,95 @@ impl Bootstrap {
         )
         .await
     }
+}
+// Long explicit transfers must renew real signed authority, never extend an
+// existing proof locally. Both idle and busy service paths run this same gate.
+async fn renew_registration(
+    bootstrap: &Bootstrap,
+    auth: &account_auth::AuthClient,
+    until: &mut u64,
+    stop: &CancellationToken,
+) -> Result<()> {
+    if *until > now() + 210 { return Ok(()); }
+    let renewed = Box::pin(async {
+        let access = auth.access_token(Duration::from_secs(60), false).await?;
+        bootstrap.enrollment.issue(access.secret(), &bootstrap.binding).await
+    });
+    let result = tokio::select! {
+        _=stop.cancelled()=>return Err(Error::Cancelled),
+        result=renewed=>result,
+    };
+    match result {
+        Ok((proof, claims, _)) => {
+            if stop.is_cancelled() || !bootstrap.gate.is_current() {
+                return Err(Error::Cancelled);
+            }
+            *bootstrap.proof.lock().map_err(|_| Error::Storage)? = proof;
+            *until = claims.exp;
+            bootstrap.gate.renew_local(claims.exp);
+            Ok(())
+        }
+        Err(error) if authorization_failure(error) => {
+            crate::store::sync_boundary_diagnostic("local_renewal_rejected");
+            crate::store::sync_boundary_diagnostic(error.code());
+            Err(error)
+        },
+        Err(_) if *until <= now() => Err(Error::Authentication),
+        Err(error) => {
+            crate::store::sync_boundary_diagnostic("local_renewal_transient");
+            crate::store::sync_boundary_diagnostic(error.code());
+            Ok(()) // A transient refresh never extends the existing lease.
+        },
+    }
+}
+
+async fn refresh_remote_registration(
+    bootstrap: &Bootstrap,
+    target: &super::directory::Row,
+    address: std::net::SocketAddr,
+    stop: &CancellationToken,
+) -> Result<()> {
+    let exchange = Box::pin(async {
+        let (_, protocol, key) = target.target("")?;
+        let mut stream = TcpStream::connect(address).await.map_err(|_| Error::Network)?;
+        let nonce = uuid::Uuid::new_v4().to_string();
+        let proof = bootstrap.proof.lock().map_err(|_| Error::Storage)?.clone();
+        write(&mut stream, &Request { proof, nonce: nonce.clone() }).await?;
+        let response: Response = read(&mut stream).await?;
+        if response.nonce != nonce { return Err(Error::InvalidProof); }
+        let claims = bootstrap.enrollment.verify(&response.proof, &bootstrap.binding).await?;
+        if claims.device_id != protocol || claims.noise_public_key != key
+            || claims.device_id == bootstrap.binding.device_id
+            || !bootstrap.gate.is_current() {
+            return Err(Error::InvalidProof);
+        }
+        // Refresh only the exact selected device and static key. Routing and
+        // current Noise credentials remain pinned to the original operation.
+        bootstrap.gate.admit(&claims);
+        bootstrap.gate.authorize(&claims.device_id, &claims.noise_public_key)?;
+        Ok(())
+    });
+    tokio::select! {
+        _=stop.cancelled()=>Err(Error::Cancelled),
+        result=tokio::time::timeout(Duration::from_secs(25), exchange)=>result.map_err(|_| Error::Network)?,
+    }
+}
+fn defer_remote_refresh(error: Error, gate: &Gate, device: &str, key: &str) -> Result<()> {
+    use super::types::RequestFailure as F;
+    let transient = match error {
+        Error::Network | Error::NetworkAt(_) => true,
+        Error::RequestAt(_, F::Timeout | F::Connect | F::Request | F::ResponseBody) => true,
+        Error::RequestAt(_, F::HttpStatus(status)) => status.is_server_error()
+            || matches!(status.as_u16(), 408 | 425 | 429),
+        _ => false,
+    };
+    if !transient { return Err(error); }
+    // A failed refresh cannot extend signed authority. Keep using only the
+    // exact original device/key while both original proofs remain valid.
+    gate.authorize(device, key).map_err(|reason| Error::SyncAt(SyncStage::Transfer, reason))?;
+    crate::store::sync_boundary_diagnostic("remote_renewal_transient");
+    crate::store::sync_boundary_diagnostic(error.code());
+    Ok(())
 }
 pub(super) fn authorization_failure(error: Error) -> bool {
     match error {
@@ -946,7 +1039,7 @@ async fn run_service(
     epoch: u64,
     requests: &mut tokio::sync::mpsc::Receiver<super::worker::DeviceRequest>,
     proof: String,
-    mut claims: Claims,
+    claims: Claims,
 ) -> Result<()> {
     let sync = service.start_listener("127.0.0.1:0".parse().map_err(|_| Error::Configuration)?)?;
     let listener = TcpListener::bind("127.0.0.1:0").await?;
@@ -958,6 +1051,7 @@ async fn run_service(
         proof: Mutex::new(proof),
     });
     gate.renew_local(claims.exp);
+    let mut proof_until = claims.exp;
     client
         .expose(Port::tcp(
             config::SYNC_PORT,
@@ -986,7 +1080,16 @@ async fn run_service(
                 _=server_stop.cancelled()=>break,
                 Some(_)=tasks.join_next(),if !tasks.is_empty()=>{},
                 accepted=listener.accept()=>{let Ok((stream,_))=accepted else{break};if tasks.len()>=4{drop(stream);continue}
-                    let handler=handler.clone();tasks.spawn(async move{let _=tokio::time::timeout(Duration::from_secs(20),handler.serve(stream)).await;});}
+                    let handler=handler.clone();tasks.spawn(async move{
+                        match tokio::time::timeout(Duration::from_secs(20),handler.serve(stream)).await {
+                            Ok(Ok(())) => (),
+                            Ok(Err(error)) => {
+                                crate::store::sync_boundary_diagnostic("enrollment_handler_failed");
+                                crate::store::sync_boundary_diagnostic(error.code());
+                            }
+                            Err(_) => crate::store::sync_boundary_diagnostic("enrollment_handler_timeout"),
+                        }
+                    });}
             }
         }
         tasks.abort_all();
@@ -996,30 +1099,20 @@ async fn run_service(
     if let Some(observation) = &observation {
         observation.resume();
     }
+    // Poll renewal alongside replication. Awaiting HTTP inside a select branch
+    // stops polling the data future and can exhaust the peer's idle deadline.
+    let mut renewal = Box::pin(async {
+        loop {
+            tokio::time::sleep(Duration::from_secs(20)).await;
+            renew_registration(&bootstrap, &auth, &mut proof_until, &stop).await?;
+        }
+        #[allow(unreachable_code)]
+        Ok::<(), Error>(())
+    });
     let result = loop {
         tokio::select! {
             _=stop.cancelled()=>break Ok(()),
-            _=tokio::time::sleep(Duration::from_secs(20))=>{
-                if claims.exp <= now() + 90 {
-                    let renewed = async {
-                        let access = auth.access_token(Duration::from_secs(60), false).await?;
-                        enrollment.issue(access.secret(), &binding).await
-                    };
-                    let renewed = tokio::select! {_=stop.cancelled()=>break Ok(()), value=renewed=>value};
-                    match renewed {
-                        Ok((proof, next, _))=>{
-                            match bootstrap.proof.lock() {
-                                Ok(mut slot)=>*slot=proof,
-                                Err(_)=>break Err(Error::Storage),
-                            }
-                            claims=next; gate.renew_local(claims.exp);
-                        }
-                        Err(error) if fence_authorization(&gate, error)=>break Err(error),
-                        Err(_) if claims.exp <= now()=>break Err(Error::Authentication),
-                        Err(_)=>{},
-                    }
-                }
-            },
+            result=&mut renewal=>break result,
             request=requests.recv()=>{
                 let Some(request)=request else{break Ok(())};
                 if request.epoch != epoch || !control.current(epoch) || request.done.is_closed()
@@ -1027,10 +1120,21 @@ async fn run_service(
                     request.complete(Err(Error::Cancelled)); continue;
                 }
                 let request_stop = stop.child_token();
-                let outcome = super::worker::execute_request(&request.cancellation, &request_stop,
+                let mut work = Box::pin(super::worker::execute_request(&request.cancellation, &request_stop,
                     Box::pin(transfer_target(service, &identity, &binding, &client, &enrollment, &gate,
                         &bootstrap, &request.target, request.direction, observation.as_ref(), &request_stop,
-                        &request.cancellation))).await;
+                        &request.cancellation))));
+                let outcome = loop {
+                    tokio::select! {
+                        result=&mut work=>break result,
+                        result=&mut renewal=>{
+                            request_stop.cancel();
+                            let _ = work.as_mut().await; // Confirm transfer and local-write retirement.
+                            break result;
+                        }
+                    }
+                };
+                drop(work);
                 let terminal = outcome.as_ref().err().is_some_and(|e| fence_authorization(&gate, *e));
                 let error = outcome.as_ref().err().copied();
                 request.complete(outcome);
@@ -1058,30 +1162,48 @@ async fn transfer_target(
     cancellation: &super::worker::RequestCancellation,
 ) -> Result<()> {
     let mut mappings: Vec<Arc<Mapping>> = Vec::new();
+    let mut session = None;
     #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
     let sdk_diagnostic_operation = super::sdk_diagnostic::begin(client);
     let result = async {
         let prepare = Box::pin(async {
             let (transport, protocol, key) = target.target("")?;
-            let mapping = Box::pin(client.map(
-                transport, config::ENROLL_PORT,
+            // One authenticated session owns both ports. Setup uses one absolute
+            // budget; cancellation is awaited so SDK cleanup is observed.
+            let operation = OperationOptions {
+                deadline: Some(cancellation.deadline().min(
+                    tokio::time::Instant::now() + Duration::from_secs(60),
+                )),
+                cancel: Some(stop.clone()),
+            };
+            let peer = Box::pin(client.connect_with_options(transport, ConnectOptions {
+                operation: operation.clone(),
+                direct_strategy: Some(DirectStrategy::Parallel),
+                ..Default::default()
+            })).await?;
+            session = Some(peer.clone());
+            let open = OpenOptions { operation, ..Default::default() };
+            let mapping = Box::pin(peer.map_with_options(
+                config::ENROLL_PORT,
                 "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+                open.clone(),
             ));
             #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
             let mapping = Box::pin(super::sdk_diagnostic::observe(
                 sdk_diagnostic_operation, client, super::sdk_diagnostic::MapStage::Enroll, mapping,
             ));
-            let enroll = Arc::new(request_io(stop, mapping).await?);
+            let enroll = Arc::new(mapping.await?);
             mappings.push(enroll.clone());
-            let mapping = Box::pin(client.map(
-                transport, config::SYNC_PORT,
+            let mapping = Box::pin(peer.map_with_options(
+                config::SYNC_PORT,
                 "127.0.0.1:0".parse().map_err(|_| Error::Configuration)?,
+                open,
             ));
             #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
             let mapping = Box::pin(super::sdk_diagnostic::observe(
                 sdk_diagnostic_operation, client, super::sdk_diagnostic::MapStage::Sync, mapping,
             ));
-            let sync = Arc::new(request_io(stop, mapping).await?);
+            let sync = Arc::new(mapping.await?);
             mappings.push(sync.clone());
             let sampler = observation.map(|lease| {
                 let enroll = enroll.clone();
@@ -1140,6 +1262,7 @@ async fn transfer_target(
             }
             gate.admit(&remote);
             gate.route(&remote.device_id, format!("ws://{}/", sync.addr));
+            cancellation.report_stage(crate::sync::network::ProgressStage::Pairing);
             let paired = identity.peer_for_device(&remote.device_id)?;
             if let Some(id) = paired {
                 let pinned = identity.credential(&id)?;
@@ -1213,18 +1336,39 @@ async fn transfer_target(
         let task_service = service.clone();
         let task_id = id.clone();
         let retire_service = service.clone();
-        let result = blocking_request(
+        let progress = cancellation.progress_observer();
+        let mut work = Box::pin(blocking_request(
             stop,
             &cancellation.admission_stop,
             move || {
                 task_service
-                    .transfer_once(&task_id, direction)
+                    .transfer_once_with_progress(&task_id, direction, progress)
                     .map_err(|reason| Error::SyncAt(SyncStage::Transfer, reason))
             },
             move || retire_service.disconnect(&id)
                 .map_err(|reason| Error::SyncAt(SyncStage::Retirement, reason)),
-        )
-        .await;
+        ));
+        let refresh = async {
+            loop {
+                tokio::time::sleep(Duration::from_secs(60)).await;
+                if let Err(error) = refresh_remote_registration(bootstrap, target, mappings[0].addr, stop).await {
+                    let (_, device, key) = target.target("")?;
+                    defer_remote_refresh(error, gate, device, key)?;
+                }
+            }
+            #[allow(unreachable_code)]
+            Ok::<(), Error>(())
+        };
+        tokio::pin!(refresh);
+        let result = tokio::select! {
+            result=&mut work=>result,
+            result=&mut refresh=>{
+                stop.cancel();
+                let _ = work.as_mut().await;
+                result
+            }
+        };
+        drop(work);
         drop(sampler);
         result
     }
@@ -1232,12 +1376,43 @@ async fn transfer_target(
     for mapping in mappings {
         mapping.close().await;
     }
+    if let Some(peer) = session {
+        peer.close().await;
+    }
     result
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[tokio::test]
+    async fn enrollment_socket_eof_is_network_failure_not_credential_storage() {
+        let (mut reader, writer) = tokio::io::duplex(64);
+        drop(writer);
+        assert!(matches!(read::<Request>(&mut reader).await, Err(Error::Network)));
+        let (reader, mut writer) = tokio::io::duplex(64);
+        drop(reader);
+        assert_eq!(write(&mut writer, &serde_json::json!({})).await, Err(Error::Network));
+    }
+    #[test]
+    fn transient_refresh_keeps_only_unexpired_original_authority() {
+        let dir = tempfile::tempdir().unwrap();
+        let identity = IdentityStore::open(dir.path(), &uuid::Uuid::new_v4().to_string()).unwrap();
+        let gate = Gate::default();
+        admit(&gate, &identity, &uuid::Uuid::new_v4().to_string());
+        let device = identity.device_id().unwrap();
+        let key = identity.public_key().unwrap();
+        defer_remote_refresh(Error::Network, &gate, &device, &key).unwrap();
+        for error in [Error::InvalidProof, Error::Authentication, Error::Storage, Error::Cancelled] {
+            assert_eq!(defer_remote_refresh(error, &gate, &device, &key), Err(error));
+        }
+        assert!(defer_remote_refresh(Error::Network, &gate, &device, "wrong-key").is_err());
+        gate.renew_local(now() - 1);
+        assert!(defer_remote_refresh(Error::Network, &gate, &device, &key).is_err());
+        gate.renew_local(now() + 300);
+        gate.close();
+        assert!(defer_remote_refresh(Error::Network, &gate, &device, &key).is_err());
+    }
     #[test]
     fn real_selected_transfer_future_layout_and_small_stack_poll() {
         use std::{

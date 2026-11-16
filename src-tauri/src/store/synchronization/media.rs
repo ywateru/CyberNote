@@ -4,6 +4,7 @@ use super::*;
 use sha2::{Digest, Sha256};
 use std::{cell::RefCell, fs::File, sync::Arc, time::SystemTime};
 
+#[track_caller]
 pub(super) fn stale() -> AppError {
     err("sync_plan_stale", "同步媒体快照已变化，请重新准备")
 }
@@ -55,7 +56,7 @@ impl VerifiedFile {
         };
         check().unwrap_or(false)
     }
-    fn read(path: &Path, cache: &BTreeMap<PathBuf, Self>) -> Result<Self> {
+    pub(super) fn read(path: &Path, cache: &BTreeMap<PathBuf, Self>) -> Result<Self> {
         if let Some(old) = cache.get(path).filter(|old| old.current(path)) {
             return Ok(old.clone());
         }
@@ -101,6 +102,7 @@ pub(crate) struct MediaSnapshot {
     targets: BTreeMap<PathBuf, (String, u64)>,
     candidates: BTreeMap<String, BTreeMap<String, usize>>,
     keep_all: Option<String>,
+    prepare_publication: bool,
     cache: BTreeMap<PathBuf, VerifiedFile>,
 }
 pub(crate) struct VerifiedMedia {
@@ -247,6 +249,7 @@ impl Store {
             targets,
             candidates,
             keep_all: None,
+            prepare_publication: true,
             cache: self.sync_media_cache.clone(),
         })
     }
@@ -295,6 +298,13 @@ impl Store {
     }
 }
 impl MediaSnapshot {
+    /// Network receipts persist immutable versions/blobs only. They never
+    /// publish live attachment paths; the quiet apply barrier prepares those
+    /// independently. Keep all hash, collision, generation and file checks.
+    pub(crate) fn receipt_only(mut self) -> Self {
+        self.prepare_publication = false;
+        self
+    }
     /// Reserve independent byte capabilities for IDs created by keep-all inside
     /// the eventual transaction. No extra copies for ordinary quiet ticks.
     pub(crate) fn reserve_keep_all(mut self, note: Option<&str>) -> Self {
@@ -399,7 +409,7 @@ impl MediaSnapshot {
             verified.blobs.insert(hash.clone(), (*size, true));
         }
         let mut demand: BTreeMap<String, usize> = BTreeMap::new();
-        if let Some(note) = &self.keep_all {
+        if let Some(note) = self.keep_all.as_ref().filter(|_| self.prepare_publication) {
             demand = self.candidates.get(note).cloned().unwrap_or_default();
             // A dirty local head can be captured by flush inside the transaction.
             // Reserve its actual local media as well, never just old wire heads.
@@ -421,7 +431,9 @@ impl MediaSnapshot {
                 }
                 Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
                     verified.absent.insert(path);
-                    *demand.entry(hash).or_default() += 1;
+                    if self.prepare_publication {
+                        *demand.entry(hash).or_default() += 1;
+                    }
                 }
                 Err(e) => return Err(e.into()),
             }

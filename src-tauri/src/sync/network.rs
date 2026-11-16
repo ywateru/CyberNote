@@ -20,12 +20,56 @@ mod wire;
 pub use service::SyncService;
 pub const MAX_PLAIN_FRAME: usize = 48 * 1024;
 pub const CHUNK: usize = 24 * 1024;
+// Keep the existing bounded wire frames, but amortize WAN round trips across
+// a small ordered window. At most 192 KiB of blob payload is outstanding.
+pub(super) const BLOB_WINDOW: usize = 8;
 pub const MAX_HEAD: usize = 16 * 1024 * 1024;
 pub const MAX_BLOB: u64 = 256 * 1024 * 1024;
 pub const PAGE_SIZE: usize = 128;
 pub(crate) const NETWORK_TIMEOUT: Duration = Duration::from_secs(5);
-/// One explicit account action, including connection and all data RPCs. Never retried in background.
-pub(crate) const ACCOUNT_TRANSFER_TIMEOUT: Duration = Duration::from_secs(120);
+/// One explicit transfer, bounded even while making progress. Short IO deadlines
+/// still detect a stalled peer; signed account authority is renewed separately.
+pub(crate) const ACCOUNT_TRANSFER_TIMEOUT: Duration = Duration::from_secs(20 * 60);
+pub(crate) const ACCOUNT_IO_TIMEOUT: Duration = Duration::from_secs(30);
+/// Local-only progress. Counts are acknowledged version records, not applied notes.
+#[derive(Clone, Default, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct TransferProgress {
+    pub stage: ProgressStage,
+    pub completed: u64,
+    pub total: u64,
+    pub bytes_transferred: u64,
+}
+#[derive(Clone, Copy, Default, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum ProgressStage {
+    #[default]
+    Connecting,
+    Pairing,
+    Inventory,
+    Receiving,
+    Sending,
+    Finishing,
+}
+pub(crate) type ProgressObserver = Arc<dyn Fn(TransferProgress) + Send + Sync>;
+// Explicit local diagnostic mode; never logs identifiers, content, endpoints or
+// upstream strings. Disabled in release builds and normal client launches.
+pub(crate) fn diagnostics_enabled() -> bool {
+    cfg!(debug_assertions) && std::env::var("CYBERNOTE_SYNC_DIAGNOSTICS").as_deref() == Ok("1")
+}
+pub(crate) fn diagnostic(stage: &'static str, event: &'static str, elapsed_ms: u64, error: Option<SyncError>) {
+    if !diagnostics_enabled() { return; }
+    static RECORDS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    if RECORDS.fetch_add(1, std::sync::atomic::Ordering::Relaxed) >= 8192 { return; }
+    let at = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0);
+    eprintln!("CYBERNOTE_SYNC_DIAGNOSTIC {}", serde_json::json!({"at":at,"stage":stage,"event":event,"elapsedMs":elapsed_ms,"error":error}));
+}
+pub(crate) fn sdk_diagnostic(snapshot: &cybergrid_sdk::DiagnosticSnapshot) {
+    static RECORDS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    if diagnostics_enabled() && RECORDS.fetch_add(1, std::sync::atomic::Ordering::Relaxed) < 8192 {
+        eprintln!("CYBERNOTE_SDK_DIAGNOSTIC {}", serde_json::to_string(snapshot).unwrap_or_default());
+    }
+}
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum TransferDirection {
@@ -121,6 +165,7 @@ pub(crate) trait ReplicationPolicy: Send + Sync {
     fn endpoint(&self, device: &str) -> Result<String>;
 }
 pub(crate) struct Shared {
+    blocking: tokio_util::task::TaskTracker,
     policy: Option<Arc<dyn ReplicationPolicy>>,
     account_operation: Arc<Mutex<bool>>,
     backend: Arc<dyn SyncBackend>,
@@ -138,6 +183,14 @@ impl Drop for AccountPermit {
     }
 }
 impl Shared {
+    async fn local<T: Send + 'static>(
+        self: &Arc<Self>,
+        operation: impl FnOnce(&Shared) -> Result<T> + Send + 'static,
+    ) -> Result<T> {
+        let owner = self.clone();
+        self.blocking.spawn_blocking(move || operation(&owner))
+            .await.map_err(|_| SyncError::Backend)?
+    }
     fn reserve_account_operation(&self) -> Result<Option<AccountPermit>> {
         if self.policy.is_none() {
             return Ok(None);

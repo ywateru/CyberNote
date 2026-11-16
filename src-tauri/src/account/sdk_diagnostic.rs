@@ -152,6 +152,7 @@ fn timeout(value: &str) -> &'static str {
 }
 fn classify(error: &Error) -> (&'static str, Option<&'static str>, Option<u16>) {
     let variant = match error {
+        Error::Operation { .. } => "Operation",
         Error::Config(_) => "Config",
         Error::Api { .. } => "Api",
         Error::OAuth { .. } => "OAuth",

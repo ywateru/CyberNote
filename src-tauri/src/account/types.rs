@@ -145,6 +145,8 @@ pub(crate) struct DeviceOperation {
     pub started_at: u64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finished_at: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub progress: Option<crate::sync::network::TransferProgress>,
 }
 #[derive(Clone, Copy, Serialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
@@ -506,6 +508,12 @@ impl Error {
     pub fn sdk_at(error: cybergrid_sdk::Error, stage: NetworkStage) -> Self {
         use cybergrid_sdk::Error as S;
         match error {
+            S::Operation { diagnostic } => match diagnostic.reason {
+                Some(cybergrid_sdk::CloseReason::Cancelled) => Self::Cancelled,
+                Some(cybergrid_sdk::CloseReason::Authentication) => Self::AuthenticationAt(stage),
+                Some(cybergrid_sdk::CloseReason::CoordinationLost) => Self::AuthenticationAt(NetworkStage::CoordinatorSession),
+                _ => Self::NetworkAt(stage),
+            },
             S::Config(_) => Self::Configuration,
             S::Protocol(_) => Self::CoordinationProtocol,
             S::Credentials(_) => Self::Storage,

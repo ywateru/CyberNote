@@ -9,14 +9,14 @@ use crate::{
         synchronization::{AbortReason, Resolution, WindowReply},
         Session, Token,
     },
-    store::{AppError, NetworkStaging, Result, Store},
+    store::{AppError, BlobReader, NetworkStaging, Result, Store},
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::{
     collections::HashSet,
     fs::{self, File, OpenOptions},
-    io::{Read, Seek, SeekFrom, Write},
+    io::Write,
     path::{Path, PathBuf},
     sync::{
         atomic::{AtomicBool, AtomicU64, Ordering},
@@ -41,27 +41,69 @@ fn prepared_store_checked<T>(
     validate: impl Fn(&Session) -> Result<()>,
     operation: impl FnOnce(&mut Store) -> Result<T>,
 ) -> Result<T> {
-    let (snapshot, authority) = {
+    prepared_store_rechecked(shared, incoming, bootstrap, validate, 0, false, operation)
+}
+fn prepared_store_rechecked<T>(
+    shared: &SharedSession,
+    incoming: &[WireVersion],
+    bootstrap: bool,
+    validate: impl Fn(&Session) -> Result<()>,
+    retries: usize,
+    receipt_only: bool,
+    operation: impl FnOnce(&mut Store) -> Result<T>,
+) -> Result<T> {
+    let (authority, instance) = {
         let s = shared.0.lock().map_err(|_| error("sync_internal"))?;
         validate(&s)?;
-        (
-            s.store.sync_media_snapshot(incoming, bootstrap)?,
-            s.sync_media_token(),
-        )
+        (s.sync_media_token(), s.store.sync_store_instance())
     };
-    let media = snapshot.verify()?;
-    let mut s = shared.0.lock().map_err(|_| error("sync_internal"))?;
-    s.check(&authority, None)
-        .map_err(|_| error("sync_plan_stale"))?;
-    validate(&s)?;
-    s.store.sync_with_media(media, operation)
+    for attempt in 0..=retries {
+        let snapshot = {
+            let s = shared.0.lock().map_err(|_| error("sync_internal"))?;
+            s.check(&authority, None).map_err(|_| error("sync_plan_stale"))?;
+            validate(&s)?;
+            if s.store.sync_store_instance() != instance {
+                return Err(error("sync_plan_stale"));
+            }
+            let snapshot = s.store.sync_media_snapshot(incoming, bootstrap)?;
+            if receipt_only { snapshot.receipt_only() } else { snapshot }
+        };
+        let media = match snapshot.verify() {
+            Err(e) if e.code == "sync_plan_stale" && attempt < retries => {
+                crate::store::sync_boundary_diagnostic("reprepare_verify");
+                continue;
+            }
+            result => result?,
+        };
+        let mut s = shared.0.lock().map_err(|_| error("sync_internal"))?;
+        s.check(&authority, None).map_err(|_| error("sync_plan_stale"))?;
+        validate(&s)?;
+        if s.store.sync_store_instance() != instance {
+            return Err(error("sync_plan_stale"));
+        }
+        match s.store.sync_begin_media(media) {
+            Err(e) if e.code == "sync_plan_stale" && attempt < retries => {
+                crate::store::sync_boundary_diagnostic("reprepare_install");
+                continue;
+            }
+            result => result?,
+        }
+        // Only preparation may be repeated. Invoke the transaction once; never
+        // replay business work, rebase authority or retry a possibly committed result.
+        let result = operation(&mut s.store);
+        s.store.sync_end_media();
+        return result;
+    }
+    unreachable!("finite preparation loop always returns on its last attempt")
 }
 
 pub(crate) trait WindowHost: Send + Sync + 'static {
     fn participants(&self) -> HashSet<String>;
     fn emit(&self, event: &str, payload: &Value) -> Result<()>;
 }
+#[track_caller]
 fn error(code: &str) -> AppError {
+    if code == "sync_plan_stale" { crate::store::sync_boundary_diagnostic("plan_stale"); }
     AppError {
         code: code.into(),
         message: match code {
@@ -98,6 +140,7 @@ pub(crate) struct StoreBackend {
     device: String,
     fence: Option<(Arc<AtomicU64>, u64)>,
     staging: NetworkStaging,
+    outgoing: Mutex<Option<BlobReader>>,
 }
 impl StoreBackend {
     fn with<T>(&self, f: impl FnOnce(&mut Session) -> Result<T>) -> super::identity::Result<T> {
@@ -128,13 +171,16 @@ impl StoreBackend {
         &self,
         incoming: &[WireVersion],
         bootstrap: bool,
+        receipt_only: bool,
         operation: impl FnOnce(&mut Store) -> Result<T>,
     ) -> Result<T> {
-        prepared_store_checked(
+        prepared_store_rechecked(
             &self.shared,
             incoming,
             bootstrap,
             |s| self.validate(s),
+            2,
+            receipt_only,
             operation,
         )
     }
@@ -172,7 +218,7 @@ impl SyncBackend for StoreBackend {
         })
     }
     fn adopt_workspace(&self, workspace: &str) -> super::identity::Result<()> {
-        self.prepared(&[], true, |store| {
+        self.prepared(&[], true, false, |store| {
             store
                 .sync_enable_with_device(Some(workspace), &self.device)
                 .map(|_| ())
@@ -180,7 +226,13 @@ impl SyncBackend for StoreBackend {
         .map_err(backend_error)
     }
     fn flush(&self) -> super::identity::Result<()> {
-        self.prepared(&[], false, |store| store.sync_flush())
+        // No dirty capture means no media publication is needed. The check is
+        // under the same Session/identity fence as other backend operations.
+        // Concurrent edits are picked up by the next inventory/flush.
+        if !self.with(|s| s.store.sync_has_dirty())? {
+            return Ok(());
+        }
+        self.prepared(&[], false, false, |store| store.sync_flush())
             .map_err(backend_error)
     }
     fn inventory(
@@ -214,14 +266,17 @@ impl SyncBackend for StoreBackend {
         let wire: WireVersion =
             serde_json::from_value(version.clone()).map_err(|_| SyncError::Protocol)?;
         let (references, storage) = self
-            .prepared(std::slice::from_ref(&wire), false, |store| {
+            .prepared(std::slice::from_ref(&wire), false, true, |store| {
                 store.sync_validate_receive(std::slice::from_ref(&wire))?;
                 Ok((
                     store.sync_required_blobs(&wire)?,
                     store.sync_blob_storage()?,
                 ))
             })
-            .map_err(backend_error)?;
+            .map_err(|e| {
+                if e.code == "sync_plan_stale" { crate::store::sync_boundary_diagnostic("required_blobs_failed"); }
+                backend_error(e)
+            })?;
         // Actual cache/disk checks do not keep the Session locked. Receive and
         // immutable publication repeat their own checks after the socket wait.
         storage
@@ -249,15 +304,16 @@ impl SyncBackend for StoreBackend {
             return Err(SyncError::Protocol);
         }
         let storage = self.with(|s| s.store.sync_blob_storage())?;
-        let path = storage.sync_blob_path(&b.sha256).map_err(backend_error)?;
-        let mut f = File::open(path).map_err(|_| SyncError::Io)?;
-        if f.metadata().map_err(|_| SyncError::Io)?.len() != b.size {
-            return Err(SyncError::Protocol);
+        let mut outgoing = self.outgoing.lock().map_err(|_| SyncError::Backend)?;
+        if offset == 0 || !outgoing.as_ref().is_some_and(|r| r.matches(&b.sha256, b.size)) {
+            *outgoing = None;
+            *outgoing = Some(storage.open_reader(&b.sha256, b.size).map_err(backend_error)?);
         }
-        f.seek(SeekFrom::Start(offset)).map_err(|_| SyncError::Io)?;
-        let mut bytes = vec![0; (b.size - offset).min(max as u64) as usize];
-        f.read_exact(&mut bytes).map_err(|_| SyncError::Io)?;
-        Ok(bytes)
+        let result = outgoing.as_ref().unwrap().read(offset, max).map_err(backend_error);
+        if result.as_ref().map_or(true, |bytes| offset + bytes.len() as u64 == b.size) {
+            *outgoing = None;
+        }
+        result
     }
     fn store_blob(&self, b: &network::BlobRef, source: &Path) -> super::identity::Result<()> {
         let storage = self.with(|s| s.store.sync_blob_storage())?;
@@ -267,14 +323,17 @@ impl SyncBackend for StoreBackend {
     }
     fn receive_head(&self, v: Value) -> super::identity::Result<network::Receipt> {
         let wire: WireVersion = serde_json::from_value(v).map_err(|_| SyncError::Protocol)?;
-        self.prepared(std::slice::from_ref(&wire), false, |store| {
+        self.prepared(std::slice::from_ref(&wire), false, true, |store| {
             let r = store.sync_receive(vec![wire.clone()])?;
             Ok(network::Receipt {
                 durable: r.durable,
                 applied: false,
             })
         })
-        .map_err(backend_error)
+        .map_err(|e| {
+            if e.code == "sync_plan_stale" { crate::store::sync_boundary_diagnostic("receive_head_failed"); }
+            backend_error(e)
+        })
     }
 }
 #[derive(Clone, Deserialize)]
@@ -461,6 +520,7 @@ impl Runtime {
         let staging = NetworkStaging::manual(&self.root);
         let staging_directory = staging.prepare()?;
         let backend = Arc::new(StoreBackend {
+            outgoing: Mutex::new(None),
             shared: self.shared.clone(),
             device,
             staging,
@@ -665,6 +725,7 @@ impl Runtime {
         let staging = NetworkStaging::account(&self.root, &device)?;
         let staging_directory = staging.prepare()?;
         let backend = Arc::new(StoreBackend {
+            outgoing: Mutex::new(None),
             shared: self.shared.clone(),
             device: device.clone(),
             staging,
@@ -1435,6 +1496,44 @@ mod tests {
             .unwrap()
     }
     #[test]
+    fn backend_reprepares_content_generation_but_never_replays_operation_or_rebases_fence() {
+        use std::cell::Cell;
+        let d = tempfile::tempdir().unwrap();
+        let session = shared(d.path());
+        session.0.lock().unwrap().store.sync_enable(None).unwrap();
+        let validations = Cell::new(0);
+        let calls = Cell::new(0);
+        prepared_store_rechecked(&session, &[], false, |_| {
+            validations.set(validations.get() + 1);
+            if validations.get() == 3 {
+                // Simulate a content commit after verification, while retaining
+                // the same Session, Store instance and account authority.
+                Store::open(d.path())?.action(json!({"type":"createNote"}))?;
+            }
+            Ok(())
+        }, 2, false, |store| {
+            calls.set(calls.get() + 1);
+            store.sync_flush()
+        }).unwrap();
+        assert!(validations.get() >= 5, "fresh content snapshot required");
+        assert_eq!(calls.get(), 1);
+        assert!(!session.0.lock().unwrap().store.sync_has_dirty().unwrap());
+
+        let result: Result<()> = prepared_store_rechecked(&session, &[], false, |_| Ok(()), 2, false, |_| {
+            calls.set(calls.get() + 1);
+            Err(error("sync_plan_stale"))
+        });
+        assert_eq!(result.unwrap_err().code, "sync_plan_stale");
+        assert_eq!(calls.get(), 2, "transaction result must never be replayed");
+
+        let valid = Cell::new(true);
+        let result: Result<()> = prepared_store_rechecked(&session, &[], false, |_| {
+            if !valid.replace(false) { return Err(error("sync_plan_stale")); }
+            Ok(())
+        }, 2, false, |_| { panic!("revoked backend must not reach transaction") });
+        assert_eq!(result.unwrap_err().code, "sync_plan_stale");
+    }
+    #[test]
     fn account_pause_joins_manual_service_fences_backend_and_persists_pause() {
         let d = tempfile::tempdir().unwrap();
         let shared = shared(d.path());
@@ -1459,6 +1558,7 @@ mod tests {
             .unwrap()
             .device_id;
         let old = StoreBackend {
+            outgoing: Mutex::new(None),
             staging: NetworkStaging::manual(d.path()),
             shared: shared.clone(),
             device,
@@ -1666,6 +1766,7 @@ mod tests {
         let s = shared(d.path());
         let identity = s.0.lock().unwrap().store.sync_enable(None).unwrap();
         let backend = StoreBackend {
+            outgoing: Mutex::new(None),
             staging: NetworkStaging::manual(d.path()),
             shared: s.clone(),
             device: identity.device_id,
@@ -1742,6 +1843,7 @@ mod tests {
         let s = shared(d.path());
         let identity = s.0.lock().unwrap().store.sync_enable(None).unwrap();
         let backend = StoreBackend {
+            outgoing: Mutex::new(None),
             staging: NetworkStaging::manual(d.path()),
             shared: s.clone(),
             device: identity.device_id.clone(),
@@ -1763,6 +1865,24 @@ mod tests {
             backend.read_blob_chunk(&b, 0, network::CHUNK).unwrap(),
             bytes[..network::CHUNK]
         );
+        assert!(backend.outgoing.lock().unwrap().is_some());
+        assert_eq!(
+            backend.read_blob_chunk(&b, network::CHUNK as u64, network::CHUNK).unwrap(),
+            bytes[network::CHUNK..2 * network::CHUNK]
+        );
+        // An in-place mutation invalidates the pinned proof, even with the same
+        // file length. Failed readers are discarded and a later retry rehashes.
+        let blob_path = d.path().join(".sync/blobs").join(format!("{}.blob", b.sha256));
+        fs::write(&blob_path, vec![8; bytes.len()]).unwrap();
+        assert!(backend.read_blob_chunk(&b, 2 * network::CHUNK as u64, network::CHUNK).is_err());
+        assert!(backend.outgoing.lock().unwrap().is_none());
+        assert!(backend.read_blob_chunk(&b, 0, network::CHUNK).is_err());
+        fs::write(&blob_path, &bytes).unwrap();
+        assert_eq!(
+            backend.read_blob_chunk(&b, 2 * network::CHUNK as u64, network::CHUNK).unwrap(),
+            bytes[2 * network::CHUNK..]
+        );
+        assert!(backend.outgoing.lock().unwrap().is_none());
         assert!(backend.read_blob_chunk(&b, b.size + 1, 1).is_err());
         let mut remote = Store::open(d.path().join("remote")).unwrap();
         remote.sync_enable(Some(&identity.workspace_id)).unwrap();
@@ -1804,6 +1924,7 @@ mod allocation_tests {
         (
             d,
             StoreBackend {
+                outgoing: Mutex::new(None),
                 staging,
                 shared,
                 device: identity.device_id,
@@ -1990,6 +2111,7 @@ mod publication_tests {
         let epoch = Arc::new(AtomicU64::new(2));
         let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
         let mut backend = StoreBackend {
+            outgoing: Mutex::new(None),
             shared,
             device: different_device,
             staging: staging.clone(),

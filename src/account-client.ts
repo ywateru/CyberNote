@@ -37,7 +37,9 @@ export type AccountAuthorizationSurface = typeof authorizationSurfaces[number];
 export const deviceDirections = ["push", "pull", "both"] as const;
 export type DeviceDirection = typeof deviceDirections[number];
 export type AccountDevice = { id: string; name: string; online: boolean; current: boolean; connected: boolean; syncAvailable: boolean; transport?: MappingObservation; summary?: {noteCount: number; lastNoteUpdatedAt: number | null; capturedAt: number} };
-export type DeviceOperation = {deviceId: string; direction: DeviceDirection; phase: "running" | "succeeded" | "failed"; startedAt: number; finishedAt?: number};
+const progressStages = ["connecting", "pairing", "inventory", "receiving", "sending", "finishing"] as const;
+export type DeviceProgress = {stage: typeof progressStages[number]; completed: number; total: number; bytesTransferred: number};
+export type DeviceOperation = {deviceId: string; direction: DeviceDirection; phase: "running" | "succeeded" | "failed"; startedAt: number; finishedAt?: number; progress?: DeviceProgress};
 export type AccountStatus = {
   state: "signedOut" | "authorizing" | "connecting" | "ready" | "paused" | "error";
   authorizationSurface?: AccountAuthorizationSurface;
@@ -66,6 +68,15 @@ export function accountNeedsLogin(error: AccountStatus["error"]): boolean {
   return error?.code === "account_authentication" && (
     (error.stage === "identityRefresh" && error.providerReason === undefined) ||
     (error.stage === "authorizationProvider" && error.providerReason === "refreshFailed"));
+}
+// A legacy sync failure carries no evidence of an expired token. Offer an
+// explicit sign-out recovery, without treating it as permission to reauthorize.
+export function accountSuggestsRelogin(error: AccountStatus["error"]): boolean {
+  if (!error) return false;
+  try {
+    const safe = validateAccountError(error);
+    return safe.code === "account_sync_failed" && safe.syncStage === undefined && safe.syncReason === undefined;
+  } catch { return false; }
 }
 // Fixed local explanations only. Legacy generic errors have no inferred cause.
 export function accountTokenResponseMessage(error: AccountStatus["error"]): string | undefined {
@@ -185,7 +196,7 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
   if (!error) return "账户操作未完成，具体原因尚未确认。请读取账户状态后重试。本机备忘录会保留。";
   try { error = validateAccountError(error); } catch { return accountErrorMessage(undefined); }
   if (error.code === "unknown") return "未知错误。账户操作未完成，请读取账户状态后重试。本机备忘录会保留。";
-  if (error.syncStage && error.syncReason) return `设备同步在${syncStageNames[error.syncStage]}阶段未完成：${syncReasonNames[error.syncReason]}。本地更改仍保存在此设备。`;
+  if (error.syncStage && error.syncReason) return `设备同步在${syncStageNames[error.syncStage]}阶段未完成：${syncReasonNames[error.syncReason]}。${error.syncReason === "timeout" ? "请确认两台设备保持运行且网络可用，再选择此设备重试。已接收的内容会保留。" : "本地更改仍保存在此设备。"}`;
   const token = accountTokenResponseMessage(error); if (token) return token;
   if (error.adoptionReason === "timeout") {
     const stage: Record<AdoptionStage, string> = {probe:"检查同步窗口",prepare:"保存并冻结本地更改",media:"准备附件"};
@@ -217,7 +228,7 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     account_sync_not_enabled: "本机或目标设备尚未允许内容同步。请在两端允许同步后重新选择并确认。",
     account_directory_unavailable: "暂时无法读取账户设备目录，请明确刷新设备或重试连接。本机备忘录会保留。",
     account_directory_unsupported: "账户服务尚不支持设备目录，请更新服务。不会退回自动向全部设备传输，本机备忘录会保留。",
-    account_sync_failed: "同步未完成，请查看账户状态后重试。本地更改仍保存在此设备。",
+    account_sync_failed: "同步未完成。请先退出账户并重新登录，再重新开启同步。本机备忘录及附件会保留。",
     account_sync_protocol: "设备同步响应未通过校验，请检查服务或更新应用。本地更改仍会保留。",
     account_sync_adoption_blocked: "旧同步仍有未解决冲突、待应用内容或正在保存的操作。请先处理后再开启合并；当前账户已登录且同步暂停，本机内容会保留。若旧同步来自“设备同步”，可退出当前账户，再前往“设备同步”恢复并处理旧同步。若旧账户仍有待接收内容，可退出当前账户并重新登录旧账户；身份及同步空间验证通过且原同步凭证仍可用时，会恢复旧设备身份，同步仍保持暂停。请确认开启原同步空间并处理待接收内容，完成后再退出，登录目标账户并确认开启合并。",
     account_enrollment_invalid: "设备授权凭证未通过校验，请检查服务或更新应用。本机备忘录会保留。",
@@ -288,11 +299,19 @@ export function validateAccountStatus(value: unknown): AccountStatus {
   const ids = new Set<string>();
   let operation: DeviceOperation | undefined;
   if (s.deviceOperation !== undefined) {
-    const o = record(s.deviceOperation, ["deviceId", "direction", "phase", "startedAt", "finishedAt"]);
+    const o = record(s.deviceOperation, ["deviceId", "direction", "phase", "startedAt", "finishedAt", "progress"]);
     if (!["running", "succeeded", "failed"].includes(o.phase as string)) return invalid();
     const startedAt = count(o.startedAt), finishedAt = o.finishedAt === undefined ? undefined : count(o.finishedAt);
     if (finishedAt !== undefined && (finishedAt < startedAt || o.phase === "running")) return invalid();
-    operation = {deviceId: deviceId(o.deviceId), direction: deviceDirection(o.direction), phase: o.phase as DeviceOperation["phase"], startedAt, ...(finishedAt === undefined ? {} : {finishedAt})};
+    let progress: DeviceProgress | undefined;
+    if (o.progress !== undefined) {
+      const p = record(o.progress, ["stage", "completed", "total", "bytesTransferred"]);
+      if (!progressStages.includes(p.stage as DeviceProgress["stage"])) return invalid();
+      const completed = count(p.completed), total = count(p.total);
+      if (completed > total) return invalid();
+      progress = {stage: p.stage as DeviceProgress["stage"], completed, total, bytesTransferred: count(p.bytesTransferred)};
+    }
+    operation = {deviceId: deviceId(o.deviceId), direction: deviceDirection(o.direction), phase: o.phase as DeviceOperation["phase"], startedAt, ...(finishedAt === undefined ? {} : {finishedAt}), ...(progress === undefined ? {} : {progress})};
   }
   return {
     ...(operation === undefined ? {} : {deviceOperation: operation}),

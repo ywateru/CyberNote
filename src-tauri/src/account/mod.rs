@@ -367,6 +367,46 @@ impl Runtime {
             cloudflared: Some(provider::configuration(&self.cache)?),
             ..Default::default()
         })?;
+        if crate::sync::network::diagnostics_enabled() {
+            let mut diagnostics = client.subscribe_diagnostics();
+            let owner = Arc::downgrade(&client);
+            tokio::spawn(async move {
+                loop {
+                    match diagnostics.recv().await {
+                        Ok(snapshot) => crate::sync::network::sdk_diagnostic(&snapshot),
+                        Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
+                            let Some(client) = owner.upgrade() else { break };
+                            for snapshot in client.diagnostics_snapshot() {
+                                crate::sync::network::sdk_diagnostic(&snapshot);
+                            }
+                        }
+                        Err(tokio::sync::broadcast::error::RecvError::Closed) => break,
+                    }
+                }
+            });
+            let mut events = client.subscribe();
+            tokio::spawn(async move {
+                loop {
+                    let event = match events.recv().await {
+                        Ok(event) => event,
+                        Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => continue,
+                        Err(tokio::sync::broadcast::error::RecvError::Closed) => break,
+                    };
+                    let phase = match event.phase.as_str() {
+                        "multiplexer-ready" => "multiplexer-ready", "mapping-disconnected" => "mapping-disconnected",
+                        "coordination-ready" => "coordination-ready", "recovering" => "recovering",
+                        "provider-failed" => "provider-failed", "provider-restarting" => "provider-restarting",
+                        "direct-attempt" => "direct-attempt", "iroh-attempt" => "iroh-attempt",
+                        "fallback-attempt" => "fallback-attempt", "error" => "error", _ => continue,
+                    };
+                    let transport = match event.transport.as_deref() {
+                        Some("webrtc-direct") => "webrtc-direct", Some("iroh-direct") => "iroh-direct",
+                        Some("cloudflare-tunnel") => "cloudflare-tunnel", _ => "unknown",
+                    };
+                    crate::sync::network::diagnostic(phase, transport, 0, None);
+                }
+            });
+        }
         let stop = CancellationToken::new();
         let control = Arc::new(worker::Control::default());
         control.configure(binding.enabled);
@@ -646,6 +686,20 @@ impl Runtime {
                 let generation = self.generation.load(Ordering::Acquire);
                 let cancellation = Arc::new(worker::RequestCancellation::default());
                 let operation_id = uuid::Uuid::new_v4();
+                let owner = Arc::downgrade(self);
+                cancellation.observe_progress(Arc::new(move |progress| {
+                    if let Some(owner) = owner.upgrade() {
+                        owner.mutate(|d| {
+                            if owner.current(generation) && d.device_operation_id == Some(operation_id) {
+                                if let Some(operation) = &mut d.status.device_operation {
+                                    if operation.phase == types::DeviceOperationPhase::Running {
+                                        operation.progress = Some(progress);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }));
                 let receiver = {
                     let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
                     if !self.data.lock().map_err(|_| Error::Storage)?.status.enabled {
@@ -673,6 +727,7 @@ impl Runtime {
                             phase: types::DeviceOperationPhase::Running,
                             started_at: unix_ms(),
                             finished_at: None,
+                            progress: Some(Default::default()),
                         });
                         d.status.error = None;
                     });
@@ -699,9 +754,11 @@ impl Runtime {
                         })?;
                     receiver
                 };
-                // Worker owns terminal state and reservation, including when this
-                // IPC future is dropped. A deadline cancels then awaits retirement.
-                let _ = worker::wait_request(receiver, cancellation).await;
+                // A runtime-owned waiter keeps both the deadline and receipt alive
+                // when the dialog/settings WebView goes away. UI only starts work.
+                tauri::async_runtime::spawn(async move {
+                    let _ = worker::wait_request(receiver, cancellation).await;
+                });
             }
         }
         self.cleanup_status().await;
@@ -1190,6 +1247,7 @@ mod tests {
             phase: types::DeviceOperationPhase::Running,
             started_at: 10,
             finished_at: None,
+            progress: None,
         });
         complete_device_status(&mut data, old, Ok(()));
         assert!(matches!(

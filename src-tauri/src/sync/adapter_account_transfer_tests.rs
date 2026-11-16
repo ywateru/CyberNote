@@ -62,6 +62,7 @@ impl SyncBackend for TracedStore {
 fn backend(store: Store, device: String, staging: NetworkStaging) -> Arc<TracedStore> {
     Arc::new(TracedStore {
         inner: StoreBackend {
+            outgoing: Mutex::new(None),
             staging,
             shared: Arc::new((Mutex::new(Session::new(store)), Condvar::new())),
             device,
@@ -110,7 +111,7 @@ fn seed(store: &mut Store, text: &str, attachments: &[(&str, &str, &[u8])]) -> S
         .unwrap();
     id
 }
-fn actual_store_push(attachment: bool) {
+fn actual_store_transfer(attachment: bool, pull: bool) {
     let root = tempfile::tempdir().unwrap();
     let aroot = root.path().join("A");
     let broot = root.path().join("B");
@@ -133,9 +134,9 @@ fn actual_store_push(attachment: bool) {
         writer.write_image_data(&[1, 2, 3, 255]).unwrap();
         writer.finish().unwrap();
     }
-    // A valid PNG and a distinct binary blob; the latter crosses two chunk
-    // boundaries, so normal attachment publication is exercised, not mocked.
-    let binary = vec![7u8; network::CHUNK * 2 + 17];
+    // Cross two complete pipeline windows plus a partial final chunk, using
+    // normal attachment publication and persisted pairing rather than mocks.
+    let binary = vec![7u8; network::CHUNK * (network::BLOB_WINDOW * 2 + 1) + 17];
     let attachments = [
         ("synthetic.png", "image/png", png.as_slice()),
         (
@@ -186,9 +187,11 @@ fn actual_store_push(attachment: bool) {
     bgate.route(&aid.device_id().unwrap(), format!("ws://{aa}/"));
     abackend.clear();
     bbackend.clear();
-    let paired = aservice
-        .pair(&bservice.invitation(&format!("ws://{ba}/")).unwrap())
-        .unwrap();
+    let paired = if pull {
+        bservice.pair(&aservice.invitation(&format!("ws://{aa}/")).unwrap())
+    } else {
+        aservice.pair(&bservice.invitation(&format!("ws://{ba}/")).unwrap())
+    }.unwrap();
     assert!(paired.ready);
     assert_eq!(abackend.content_calls(), 0, "pair must not cycle content");
     assert_eq!(bbackend.content_calls(), 0, "pair must not cycle content");
@@ -206,7 +209,11 @@ fn actual_store_push(attachment: bool) {
     let aid = Arc::new(IdentityStore::open(&aroot.join(".sync"), &ai.device_id).unwrap());
     let bid = Arc::new(IdentityStore::open(&broot.join(".sync"), &bi.device_id).unwrap());
     assert_eq!(
-        aid.peer_for_device(&bi.device_id).unwrap().as_deref(),
+        if pull {
+            bid.peer_for_device(&ai.device_id).unwrap()
+        } else {
+            aid.peer_for_device(&bi.device_id).unwrap()
+        }.as_deref(),
         Some(paired.peer_id.as_str())
     );
     let agate = Arc::new(Gate::default());
@@ -231,7 +238,11 @@ fn actual_store_push(attachment: bool) {
     bgate.route(&aid.device_id().unwrap(), format!("ws://{aa}/"));
     assert_eq!(abackend.content_calls(), 0);
     assert_eq!(bbackend.content_calls(), 0);
-    let result = aservice.transfer_once(&paired.peer_id, network::TransferDirection::Push);
+    let result = if pull {
+        bservice.transfer_once(&paired.peer_id, network::TransferDirection::Pull)
+    } else {
+        aservice.transfer_once(&paired.peer_id, network::TransferDirection::Push)
+    };
     // These traces do not contain note/attachment/peer IDs, hashes or paths.
     println!(
         "ACTUAL_STORE_PUSH attachment={attachment} result={result:?} A={:?} B={:?}",
@@ -239,6 +250,7 @@ fn actual_store_push(attachment: bool) {
         bbackend.calls.lock().unwrap()
     );
     aservice.disconnect(&paired.peer_id).unwrap();
+    bservice.disconnect(&paired.peer_id).unwrap();
     aservice.shutdown().unwrap();
     bservice.shutdown().unwrap();
     assert_eq!(result, Ok(()));
@@ -278,9 +290,13 @@ fn actual_store_push(attachment: bool) {
 }
 #[test]
 fn account_policy_real_store_plain_push_has_durable_directional_receipt() {
-    actual_store_push(false);
+    actual_store_transfer(false, false);
 }
 #[test]
 fn account_policy_real_store_attachment_push_has_durable_directional_receipt() {
-    actual_store_push(true);
+    actual_store_transfer(true, false);
+}
+#[test]
+fn account_policy_real_store_attachment_pull_has_durable_directional_receipt() {
+    actual_store_transfer(true, true);
 }

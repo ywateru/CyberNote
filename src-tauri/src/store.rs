@@ -37,7 +37,7 @@ mod account_summary;
 pub(crate) use account_summary::AccountSummary;
 #[path = "store/synchronization.rs"]
 mod synchronization;
-pub(crate) use synchronization::NetworkStaging;
+pub(crate) use synchronization::{BlobReader, NetworkStaging};
 pub(crate) use attachment_operations::AttachmentOwner;
 pub(crate) use commits::CommitReceipt;
 pub(crate) use smart::{SmartMembership, SmartQuery};
@@ -74,7 +74,31 @@ impl From<serde_json::Error> for AppError {
         err("document", e.to_string())
     }
 }
+/// Bounded failure breadcrumbs contain source boundaries only, never user data.
+/// Android release builds need logcat output because stderr is not collected.
+#[track_caller]
+pub(crate) fn sync_boundary_diagnostic(event: &'static str) {
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    static COUNT: AtomicUsize = AtomicUsize::new(0);
+    if COUNT.fetch_add(1, Ordering::Relaxed) >= 4096 { return; }
+    let at = std::panic::Location::caller();
+    let message = format!("event={event} boundary={}:{}", at.file(), at.line());
+    #[cfg(target_os = "android")]
+    {
+        #[link(name = "log")]
+        extern "C" {
+            fn __android_log_write(priority: i32, tag: *const libc::c_char, text: *const libc::c_char) -> i32;
+        }
+        if let Ok(text) = std::ffi::CString::new(message) {
+            unsafe { __android_log_write(5, b"CyberNoteSync\0".as_ptr().cast(), text.as_ptr()); }
+        }
+    }
+    #[cfg(not(target_os = "android"))]
+    eprintln!("CYBERNOTE_SYNC_BOUNDARY {message}");
+}
+#[track_caller]
 fn err(code: &str, message: impl Into<String>) -> AppError {
+    if code == "sync_plan_stale" { sync_boundary_diagnostic("plan_stale"); }
     AppError {
         code: code.into(),
         message: message.into(),
