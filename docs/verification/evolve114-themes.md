@@ -135,3 +135,25 @@ CARGO_TARGET_DIR=./artifacts/evolve114-store/target node scripts/check-evolve114
 `node --check` 与 `git diff --check` 通过。日志保留生产 core 既有的两条 unused-import warning，未为了 runner 检查修改产品代码；未运行完整 core 全回归或整套 Tauri 检查。
 
 新增证据：[core-harness-receipt.json](evolve114-themes/core-harness-receipt.json)（来源、目标选择、三项名称、四路径 replay、56 个源码哈希及日志 SHA256）、[core-harness-tests.txt](evolve114-themes/core-harness-tests.txt)。运行原件在 `artifacts/evolve114-store/{result.json,tests.log,default-target-result.json,default-target-tests.log,target-guard.json}`。前述复制 harness 的旧 receipt 保留为当时历史证据，不再是当前 runner。
+
+## 8f79c122 runner-only P2 修复：缺失后缀的 symlink target
+
+独审发现完整 target 不存在时直接采用 lexical path，导致已有 symlink 父目录指向 Tauri target 的新子目录绕过禁用边界。本轮只修改同一 runner 与作者 evidence；独审报告、原始失败证据、产品源码和任务状态保持原样，修复等待 Aquinas 增量复核。
+
+现从完整 target 向上寻找最近可 `realpath` 的祖先，再按原顺序附回所有缺失后缀；其他文件系统错误直接失败。对 lexical 与解析后路径检查禁用 target 及其子目录，检查仍先于 replay 读取、任何 runner `mkdir` 和 Cargo。没有改用新的 Store runner、复制生产模块或引入 fallback。
+
+在同一脚本增加可复跑的 `--check-target-guard` 边界回归，使用临时目录模拟 Tauri/main target，从不指向真实主 target。**10 个用例通过**：
+
+- 7 个拒绝用例：直接 Tauri target、已有完整 alias、Tauri alias 下不存在的一级／三级后缀、main target alias 下不存在的一级／三级后缀、本树 target 下不存在的多级目录。全部命中 forbidden guard，输出目录和缺失的首级目录均未创建，Cargo 未调用。
+- 3 个允许用例：安全目录下新一级／多级后缀，以及安全 symlink 下新多级后缀。均成功创建目标并到达 Cargo spy；spy 固定 exit 79，runner 回执 `passed=false`、`exitCode=79`。这只证明边界放行及失败回执正确，不能代替 Rust 测试成功。
+
+```sh
+node --check scripts/check-evolve114-store.mjs
+node scripts/check-evolve114-store.mjs --check-target-guard
+node scripts/check-evolve114-store.mjs
+git diff --check
+```
+
+正式 Store 仍只通过 production core harness 执行三项过滤：**3 passed / 0 failed / 200 filtered out**。使用当前 114 独立缓存 `artifacts/evolve114-store/target`，未占主 Tauri target 或 `/tmp/apple-notes-sync85-target`；运行结束缓存已无在跑 Cargo。沿用先前真实 App 的四路径捕获，未重跑 UI 376 或完整 core199。56 个输入运行前后哈希一致，边界回归与真实 Store 回执的 runner SHA256 一致；receipt 的 HEAD 为本轮未提交修改前的 `8f79c122`，精确执行内容由其中 runner hash 标识。
+
+新增证据：[target-guard-receipt.json](evolve114-themes/target-guard-receipt.json)（10 个边界结果、实际 Store 完整回执／56 个输入哈希、日志 SHA256）、[target-guard-store-tests.txt](evolve114-themes/target-guard-store-tests.txt)。边界原件及逐用例 stdout/stderr 路径见 receipt 的 `boundaryEvidence`，旧 core receipt 和独立原始失败记录没有覆盖。未进入 115。
