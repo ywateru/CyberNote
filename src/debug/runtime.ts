@@ -1,4 +1,5 @@
 import { parseAppearance } from "../themes/appearance";
+import { parsePresentation } from "../presentation/model";
 import { catalog, type Command } from "./catalog";
 import type {
   DebugAdapter,
@@ -75,10 +76,14 @@ function validate(command: Command, value: unknown): DebugArgs {
       "macSidebarVisible",
       "interfaceFontSize",
       "editorFontSize",
-      "interfaceDetails",
+      "interfaceDetails", "presentation",
     ]);
     if (!Object.keys(patch).length) invalid("Empty settings patch");
     for (const [key, v] of Object.entries(patch)) {
+      if (key === "presentation") {
+        try { parsePresentation(v); } catch { invalid("Invalid presentation"); }
+        continue;
+      }
       if (key === "appearance") {
         try { parseAppearance(v); } catch { invalid("Invalid appearance"); }
         continue;

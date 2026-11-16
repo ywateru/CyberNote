@@ -1,23 +1,14 @@
 # 桌面、移动与多种展现方式
 
-日期：2026-11-16。状态：代码阅读后的交互建议与待实现规格。默认兼容现有风格；当前功能/缺陷和建议分开列出。本轮未打开真实应用验收。
+日期：2026-11-17。状态：113–115 的已实现行为与后续原生验收规格。默认兼容现有风格；浏览器与真实 Store 证据不替代 116 安装包验收。
 
 依赖：[主题与呈现架构](../architecture/theme-presentation.md)、[编辑器会话](../architecture/editor-session.md)、[已有设计规则](design-rules.md)、[快速首页](android-quick-home.md)。既有 EditorSession、Navigation、保存和授权仍是状态真源。
 
-## 当前代码可确认的问题
+## 当前实现与验收边界
 
-| 优先级 | 当前入口 | 现象或风险 | 改进验收 |
-| --- | --- | --- | --- |
-| P1 | `style.css:2257`、`:3582` 一带 | 移动正文/标题/首页字号固定，未消费已存在的字号偏好 | 五档设置作用到真实正文与界面，预览与页面一致；极大字号仍可操作 |
-| P1 | `font-size.ts:25`、App 两处 ResizeHandle | ≤1100px 栏宽被 min(偏好,220/280) 压住，拖动下限又是220/280，拖动偏好和可见宽度不一致 | 区分偏好/有效宽度，窄窗拖动有真实反馈，恢复宽窗不出现意外跳宽 |
-| P1 | `style.css:2786`、`:3575` | 174px侧滑操作栏进入双列卡片；320px视口每卡约138px，操作被裁切 | 双列改长按/更多，或只显示一个完整动作；所有移动动作≥44px |
-| P2 | `App.tsx:4441` 一带 | 桌面笔记画廊 click 仅选中，打开依赖 doubleClick，键盘 Enter/Space 无打开正文路径 | Enter打开，返回恢复焦点；附件画廊已有行为不受影响 |
-| P2 | `App.tsx:5148` ResizeHandle | separator 缺 tabIndex/键盘调整/取消拖动处理 | 方向键调宽、Home/End边界、pointercancel/lostcapture正确清理 |
-| P2 | `App.tsx:1181` updateSettings | 持久化 view 前先清 galleryEditor，失败时设置回滚但已离开正文 | 仅在确认后转换，失败保留原页面/焦点 |
-| P2 | `Editor.tsx:300` 音频卡 | 仍按699px判断 mobile，与原生Android稳定身份分叉 | 音频卡消费同一 platform/presentation context |
-| P2 | `design-controls.css:42` 等 | 通用圆角 important 覆盖组件自身基础几何 | 组件基础值×倍率，兼容默认卡片与圆形按钮 |
+113 已完成五档真实字号、有效栏宽、separator 键盘/取消、画廊键盘进入与确认失败保全、共享移动身份、组件圆角基础。114 完成六份主题色板与严格 AppearanceV2。115 接入严格 PresentationV1、唯一 resolver、稳定 Shell、两栏目录抽屉、默认/临时专注、独立手机列表和双端密度。
 
-历史 FORMAT102 长按关闭格式面板仍须当前准确包复验。旋转后键盘误判（controller 使用历史高度差）、长按缺 touchcancel、边缘返回手势竞争属于待运行验证风险，不直接称为当前设备故障。
+源码与浏览器开发检查不等于原生设备验收。历史 FORMAT102、原生中文组字、实体键盘、safe-area/IME、边缘返回与表格/绘画手势竞争仍需 116 使用准确安装包验证；不引用旧截图作为当前设备故障或通过证据。115 定向检查索引见 [开发证据](../verification/evolve115-presentation.md)。
 
 ## 桌面主工作区
 
@@ -126,7 +117,7 @@ Agent 页首版优先桌面：总开关、单客户端授权、目录选择、�
 
 叠层继续复用 content → editor → toolbar → preview → menu → modal → notice → access → startup。抽屉和设置使用正确 portal 目标继承主题；模态约束焦点并恢复；录音右栏与图片浮动预览保持既有非模态语义。
 
-响应代表尺寸：320/390/430px手机、Android横屏与分屏、699/700边界、1100px桌面压缩边界、常用宽窗与短窗；具体断点最终由内容空间约束和实际验证确定。组件树建议为 `ApplicationProviders → PresentationProvider → DesktopShell|MobileShell → FolderPane / NoteCollection / EditorPane`，EditorSession、SaveQueue、recording owner 位于稳定装配层，不能随 Shell 条件卸载。
+响应代表尺寸：320/390/430px手机、Android横屏与分屏、699/700边界、1100px桌面压缩边界、常用宽窗与短窗；具体断点最终由内容空间约束和实际验证确定。实际组件树为 `PresentationContext → WorkspaceShell → 固定 sidebar / notes-pane / editor-pane`；DesktopShell 提供外围控制，MobileShell 提供集合表头，二者不条件包裹 Editor。EditorSession、SaveQueue、recording owner 位于稳定装配层，不能随 Shell 条件卸载。
 
 ## 交付门槛
 

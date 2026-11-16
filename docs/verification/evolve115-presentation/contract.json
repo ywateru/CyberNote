@@ -1,0 +1,363 @@
+{
+  "migrated": {
+    "version": 1,
+    "desktop": {
+      "navigation": "two-pane",
+      "lastNonFocusNavigation": "two-pane",
+      "collectionView": "gallery",
+      "density": "standard"
+    },
+    "mobile": {
+      "collectionView": "gallery",
+      "density": "standard"
+    }
+  },
+  "legacy": {
+    "view": "gallery",
+    "macSidebarVisible": false,
+    "theme": "dark"
+  },
+  "rejected": 13,
+  "invalidCount": 13,
+  "invalidReadPreserved": true,
+  "rows": [
+    {
+      "following": {
+        "sort": "title"
+      },
+      "blocked": true,
+      "reads": 3,
+      "patches": [
+        {
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "focus",
+              "lastNonFocusNavigation": "two-pane",
+              "collectionView": "gallery",
+              "density": "standard"
+            },
+            "mobile": {
+              "collectionView": "gallery",
+              "density": "standard"
+            }
+          },
+          "view": "gallery",
+          "macSidebarVisible": false
+        },
+        {
+          "sort": "title"
+        }
+      ],
+      "final": {
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "two-pane",
+            "collectionView": "gallery",
+            "density": "standard"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "view": "gallery",
+        "macSidebarVisible": false,
+        "sort": "title",
+        "theme": "dark"
+      }
+    },
+    {
+      "following": {
+        "view": "list"
+      },
+      "blocked": true,
+      "reads": 3,
+      "patches": [
+        {
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "focus",
+              "lastNonFocusNavigation": "two-pane",
+              "collectionView": "gallery",
+              "density": "standard"
+            },
+            "mobile": {
+              "collectionView": "gallery",
+              "density": "standard"
+            }
+          },
+          "view": "gallery",
+          "macSidebarVisible": false
+        },
+        {
+          "view": "list"
+        }
+      ],
+      "final": {
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "two-pane",
+            "collectionView": "list",
+            "density": "standard"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "view": "list",
+        "macSidebarVisible": false,
+        "theme": "dark"
+      }
+    },
+    {
+      "following": {
+        "macSidebarVisible": true
+      },
+      "blocked": true,
+      "reads": 3,
+      "patches": [
+        {
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "focus",
+              "lastNonFocusNavigation": "two-pane",
+              "collectionView": "gallery",
+              "density": "standard"
+            },
+            "mobile": {
+              "collectionView": "gallery",
+              "density": "standard"
+            }
+          },
+          "view": "gallery",
+          "macSidebarVisible": false
+        },
+        {
+          "macSidebarVisible": true
+        }
+      ],
+      "final": {
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "three-pane",
+            "lastNonFocusNavigation": "three-pane",
+            "collectionView": "gallery",
+            "density": "standard"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "view": "gallery",
+        "macSidebarVisible": true,
+        "theme": "dark"
+      }
+    },
+    {
+      "following": {
+        "view": "list",
+        "macSidebarVisible": false
+      },
+      "blocked": true,
+      "reads": 3,
+      "patches": [
+        {
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "focus",
+              "lastNonFocusNavigation": "two-pane",
+              "collectionView": "gallery",
+              "density": "standard"
+            },
+            "mobile": {
+              "collectionView": "gallery",
+              "density": "standard"
+            }
+          },
+          "view": "gallery",
+          "macSidebarVisible": false
+        },
+        {
+          "view": "list",
+          "macSidebarVisible": false
+        }
+      ],
+      "final": {
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "two-pane",
+            "lastNonFocusNavigation": "two-pane",
+            "collectionView": "list",
+            "density": "standard"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "view": "list",
+        "macSidebarVisible": false,
+        "theme": "dark"
+      }
+    }
+  ],
+  "writes": [
+    {
+      "sort": "title"
+    },
+    {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "standard"
+        },
+        "mobile": {
+          "collectionView": "gallery",
+          "density": "standard"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false
+    },
+    {
+      "view": "list"
+    }
+  ],
+  "mutationSafe": true,
+  "lateRejected": true,
+  "resolver": [
+    {
+      "width": 320,
+      "android": false,
+      "mode": "mobile",
+      "columns": 2,
+      "availableHeight": 600
+    },
+    {
+      "width": 320,
+      "android": true,
+      "mode": "mobile",
+      "columns": 2,
+      "availableHeight": 600
+    },
+    {
+      "width": 390,
+      "android": false,
+      "mode": "mobile",
+      "columns": 2,
+      "availableHeight": 600
+    },
+    {
+      "width": 390,
+      "android": true,
+      "mode": "mobile",
+      "columns": 2,
+      "availableHeight": 600
+    },
+    {
+      "width": 430,
+      "android": false,
+      "mode": "mobile",
+      "columns": 2,
+      "availableHeight": 600
+    },
+    {
+      "width": 430,
+      "android": true,
+      "mode": "mobile",
+      "columns": 2,
+      "availableHeight": 600
+    },
+    {
+      "width": 699,
+      "android": false,
+      "mode": "mobile",
+      "columns": 4,
+      "availableHeight": 600
+    },
+    {
+      "width": 699,
+      "android": true,
+      "mode": "mobile",
+      "columns": 4,
+      "availableHeight": 600
+    },
+    {
+      "width": 700,
+      "android": false,
+      "mode": "desktop",
+      "columns": 3,
+      "availableHeight": 600
+    },
+    {
+      "width": 700,
+      "android": true,
+      "mode": "mobile",
+      "columns": 4,
+      "availableHeight": 600
+    },
+    {
+      "width": 1100,
+      "android": false,
+      "mode": "desktop",
+      "columns": 5,
+      "availableHeight": 600
+    },
+    {
+      "width": 1100,
+      "android": true,
+      "mode": "mobile",
+      "columns": 4,
+      "availableHeight": 600
+    },
+    {
+      "width": 1600,
+      "android": false,
+      "mode": "desktop",
+      "columns": 7,
+      "availableHeight": 600
+    },
+    {
+      "width": 1600,
+      "android": true,
+      "mode": "mobile",
+      "columns": 4,
+      "availableHeight": 600
+    }
+  ]
+}

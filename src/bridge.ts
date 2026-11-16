@@ -1,5 +1,6 @@
 import { parseAgentWindowEvent, parseAgentWindowReply, parseAgentReplyReceipt, type AgentWindowEvent, type AgentWindowReply } from "./agent-window";
 import { appearancePatch } from "./themes/appearance";
+import { presentationPatch } from "./presentation/model";
 import { listen } from "@tauri-apps/api/event";
 import { AccessChanged } from "./access-client";
 import { validateDataManagement, type DataManagementSnapshot } from "./data-management";
@@ -230,8 +231,8 @@ function readPreview(): Workspace {
 }
 let preview: Workspace = readPreview();
 let previewSequence = 0;
-const persist = () =>
-  localStorage.setItem("notes-browser-preview", JSON.stringify(preview));
+const persist = (candidate: Workspace = preview) =>
+  localStorage.setItem("notes-browser-preview", JSON.stringify(candidate));
 export async function loadWorkspace(trusted = false): Promise<Workspace> {
   const stamp = accessGate.stamp();
   if (native) {
@@ -484,16 +485,23 @@ export async function action<T = Workspace>(
         }
       });
       break;
-    case "settings":
-      preview.settings = { ...preview.settings, ...appearancePatch(preview.settings, a.settings as Settings) };
+    case "settings": {
+      // Persist the validated candidate before publishing it as authority. A
+      // quota failure must leave the next partial intent based on old storage.
+      const candidate = { ...preview, settings: { ...preview.settings, ...presentationPatch(preview.settings, appearancePatch(preview.settings, a.settings as Settings)) } };
+      persist(candidate);
+      preview = candidate;
       break;
+    }
     case "lockNote":
     case "unlockNote":
     case "removeLock":
       throw Error("笔记加密需在已安装的 Mac/Android 应用中使用");
   }
-  persist();
-  if (a.type !== "settings") previewSequence++;
+  if (a.type !== "settings") {
+    persist();
+    previewSequence++;
+  }
   const value = structuredClone(result || preview) as T;
   const current = await loadWorkspace();
   const createdId = [

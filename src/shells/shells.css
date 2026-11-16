@@ -1,0 +1,33 @@
+.app .presentation-toolbar { position: absolute; right: 12px; bottom: 10px; z-index: var(--layer-content-overlay); display: flex; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: var(--interface-radius-button); background: var(--paper); color: var(--ink); }
+.app .presentation-toolbar button { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; min-height: max(28px, var(--interface-hit-min)); border-radius: var(--interface-radius-button); }
+.app .presentation-toolbar button[hidden] { display: none; }
+.app .presentation-toolbar button:focus-visible, .app .mobile-collection-choice:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.app .directory-scrim { position: absolute; inset: 0; background: var(--scrim); z-index: var(--layer-content-overlay); }
+.app.desktop[data-presentation="two-pane"][data-drawer="open"] > .sidebar { display: flex; position: absolute; left: 0; top: var(--native-top, 0px); bottom: 0; width: min(340px, calc(100% - 40px)); height: auto; z-index: var(--layer-menu); }
+.app.desktop[data-presentation="focus"] { grid-template-columns: minmax(0, 1fr); }
+.app.desktop[data-presentation="focus"] > .sidebar, .app.desktop[data-presentation="focus"] > .notes-pane, .app.desktop[data-presentation="focus"] > .resize-handle { display: none; }
+.app.desktop[data-presentation="focus"] > .editor-pane { display: flex; grid-column: 1; width: 100%; height: 100%; }
+.app.desktop[data-presentation="focus"] .editor-scroll { padding-bottom: 60px; }
+.app.mobile[data-collection="list"] .notes-scroll.mobile-gallery { display: block; }
+.app.mobile[data-collection="gallery"] .notes-scroll.mobile-gallery { grid-template-columns: repeat(var(--presentation-columns), minmax(0, 1fr)); }
+.app.desktop .notes-scroll.gallery { display: grid; grid-template-columns: repeat(var(--presentation-columns), minmax(0, calc(184px * var(--presentation-spacing)))); column-gap: calc(20px * var(--presentation-spacing)); }
+.app.desktop .gallery-entry > .date-section { grid-column: 1 / -1; }
+.app.desktop[data-collection="gallery"] .gallery-entry .note-row-wrap { width: 100%; margin-bottom: calc(18px * var(--presentation-spacing)); }
+.app.mobile[data-collection="list"] .mobile-note-card { min-height: 0; height: auto; padding: calc(14px * var(--presentation-spacing)) 16px; }
+.app.mobile[data-collection="list"] .mobile-card-body { max-height: 3.4em; overflow: hidden; }
+.app.mobile[data-collection="list"] .note-thumbnail { display: none; }
+.app.mobile .mobile-collection-choice { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; flex: 0 0 auto; color: var(--action-ink); }
+.app.mobile .mobile-home-actions { flex-wrap: wrap; justify-content: flex-end; }
+.app.desktop[data-density]:not([data-density="standard"]) .notes-scroll:not(.gallery) .note-row { min-height: max(var(--interface-hit-min), calc(90px * var(--ui-scale) * var(--presentation-spacing))); padding-block: calc(17px * var(--ui-scale) * var(--presentation-spacing)); }
+.app.desktop[data-density]:not([data-density="standard"]) .folder-row { height: auto; min-height: max(var(--interface-hit-min), calc(44px * var(--ui-scale) * var(--presentation-spacing))); }
+.app.mobile[data-density]:not([data-density="standard"]) .mobile-gallery .note-row { min-height: calc(144px * var(--presentation-spacing)); padding-block: calc(16px * var(--presentation-spacing)); }
+.app.mobile[data-density]:not([data-density="standard"]) .notes-scroll { row-gap: calc(12px * var(--presentation-spacing)); }
+.app.desktop[data-density]:not([data-density="standard"]) .note-row-content strong { line-height: max(1.2em, calc(1.4em * var(--presentation-spacing))); }
+.app.mobile[data-collection="list"] .mobile-gallery .note-row { min-height: max(88px, var(--interface-hit-min)); padding: 0; }
+.app.mobile[data-collection="list"] .mobile-note-card p { -webkit-line-clamp: 2; margin: 6px 0; }
+.recording-layout .recording-collapse { position: absolute; top: calc(var(--recording-native-top, 0px) + 4px); right: 8px; z-index: var(--layer-content-overlay); min-height: 28px; padding: 4px 8px; border: 1px solid var(--line); border-radius: var(--interface-radius-button); color: var(--ink); background: var(--paper); }
+.recording-layout > .recording-dock .recording-backdrop { top: calc(var(--recording-native-top, 0px) + 36px); }
+.recording-layout.mobile-controls > .recording-dock { position: absolute; top: 0; bottom: 0; right: 0; width: min(280px, 100%); z-index: var(--layer-preview); }
+.recording-layout.recording-collapsed > .recording-dock { position: absolute; right: 0; top: 0; width: 160px; height: 42px; overflow: hidden; z-index: var(--layer-content-overlay); }
+.recording-layout.recording-collapsed > .recording-dock > :not(.recording-collapse) { visibility: hidden; pointer-events: none; }
+.recording-layout.recording-collapsed > .app { flex: 1; width: 100%; }

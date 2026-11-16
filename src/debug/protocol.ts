@@ -134,6 +134,7 @@ export type DebugCommandArguments = {
       Settings,
       | "theme"
       | "appearance"
+      | "presentation"
       | "view"
       | "sort"
       | "groupDates"

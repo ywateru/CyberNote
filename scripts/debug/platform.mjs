@@ -139,7 +139,14 @@ export class FakeBackend {
         ...(current.appearance || { version: 2, themeId: 'classic', schemePreference: current.theme || 'system' }),
         ...(Object.hasOwn(patch, 'theme') ? { schemePreference: patch.theme } : {}),
       };
-      Object.assign(current, patch, { appearance, theme: appearance.schemePreference });
+      const prior = current.presentation || { version: 1, desktop: { navigation: current.macSidebarVisible === false ? 'two-pane' : 'three-pane', lastNonFocusNavigation: current.macSidebarVisible === false ? 'two-pane' : 'three-pane', collectionView: current.view || 'list', density: 'standard' }, mobile: { collectionView: 'gallery', density: 'standard' } };
+      const presentation = patch.presentation || clone(prior);
+      if (!patch.presentation) {
+        if (Object.hasOwn(patch, 'view')) presentation.desktop.collectionView = patch.view;
+        if (Object.hasOwn(patch, 'macSidebarVisible')) presentation.desktop.navigation = presentation.desktop.lastNonFocusNavigation = patch.macSidebarVisible ? 'three-pane' : 'two-pane';
+      }
+      const d = presentation.desktop;
+      Object.assign(current, patch, { appearance, theme: appearance.schemePreference, presentation, view: d.collectionView, macSidebarVisible: (d.navigation === 'focus' ? d.lastNonFocusNavigation : d.navigation) === 'three-pane' });
       value = this.workspace;
     }
     else if (type === 'createNote') { await this.boundary('create'); const note = { ...seededWorkspace().notes[0], id: randomUUID(), folderId: action.folderId || 'default', title: '新备忘录', plainText: '', document: document(''), createdAt: Date.now(), updatedAt: Date.now(), revision: 0 }; this.workspace.notes.unshift(note); value = note; }

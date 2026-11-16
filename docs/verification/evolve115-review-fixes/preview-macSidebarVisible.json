@@ -1,0 +1,991 @@
+{
+  "following": {
+    "macSidebarVisible": false
+  },
+  "before": {
+    "selectedFolder": "default",
+    "selectedNote": "note-a",
+    "theme": "dark",
+    "sort": "title",
+    "appearance": {
+      "version": 2,
+      "themeId": "paper",
+      "schemePreference": "dark"
+    },
+    "presentation": {
+      "version": 1,
+      "desktop": {
+        "navigation": "focus",
+        "lastNonFocusNavigation": "three-pane",
+        "collectionView": "list",
+        "density": "standard"
+      },
+      "mobile": {
+        "collectionView": "list",
+        "density": "comfortable"
+      }
+    },
+    "view": "list",
+    "macSidebarVisible": true
+  },
+  "storedBefore": {
+    "folders": [
+      {
+        "id": "default",
+        "name": "备忘录",
+        "kind": "default",
+        "parentId": null,
+        "sortOrder": 0,
+        "createdAt": 1
+      },
+      {
+        "id": "quick",
+        "name": "快速备忘录",
+        "kind": "quick",
+        "parentId": null,
+        "sortOrder": -1,
+        "createdAt": 1
+      },
+      {
+        "id": "trash",
+        "name": "最近删除",
+        "kind": "trash",
+        "parentId": null,
+        "sortOrder": 9999,
+        "createdAt": 1
+      }
+    ],
+    "notes": [
+      {
+        "id": "note-a",
+        "folderId": "default",
+        "title": "Fixture A",
+        "plainText": "Fixture A",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture A"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 1
+      },
+      {
+        "id": "note-b",
+        "folderId": "default",
+        "title": "Fixture B",
+        "plainText": "Fixture B",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture B"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 1
+      }
+    ],
+    "attachments": [],
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "dark",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "paper",
+        "schemePreference": "dark"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "three-pane",
+          "collectionView": "list",
+          "density": "standard"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "list",
+      "macSidebarVisible": true
+    }
+  },
+  "failed": {
+    "appearance": {
+      "version": 2,
+      "themeId": "high-contrast",
+      "schemePreference": "light"
+    },
+    "presentation": {
+      "version": 1,
+      "desktop": {
+        "navigation": "two-pane",
+        "lastNonFocusNavigation": "two-pane",
+        "collectionView": "list",
+        "density": "compact"
+      },
+      "mobile": {
+        "collectionView": "gallery",
+        "density": "standard"
+      }
+    }
+  },
+  "failures": [
+    {
+      "loaded": {
+        "selectedFolder": "default",
+        "selectedNote": "note-a",
+        "theme": "dark",
+        "sort": "title",
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "three-pane",
+            "collectionView": "list",
+            "density": "standard"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "view": "list",
+        "macSidebarVisible": true
+      },
+      "stored": {
+        "folders": [
+          {
+            "id": "default",
+            "name": "备忘录",
+            "kind": "default",
+            "parentId": null,
+            "sortOrder": 0,
+            "createdAt": 1
+          },
+          {
+            "id": "quick",
+            "name": "快速备忘录",
+            "kind": "quick",
+            "parentId": null,
+            "sortOrder": -1,
+            "createdAt": 1
+          },
+          {
+            "id": "trash",
+            "name": "最近删除",
+            "kind": "trash",
+            "parentId": null,
+            "sortOrder": 9999,
+            "createdAt": 1
+          }
+        ],
+        "notes": [
+          {
+            "id": "note-a",
+            "folderId": "default",
+            "title": "Fixture A",
+            "plainText": "Fixture A",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture A"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          },
+          {
+            "id": "note-b",
+            "folderId": "default",
+            "title": "Fixture B",
+            "plainText": "Fixture B",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture B"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          }
+        ],
+        "attachments": [],
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "note-a",
+          "theme": "dark",
+          "sort": "title",
+          "appearance": {
+            "version": 2,
+            "themeId": "paper",
+            "schemePreference": "dark"
+          },
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "focus",
+              "lastNonFocusNavigation": "three-pane",
+              "collectionView": "list",
+              "density": "standard"
+            },
+            "mobile": {
+              "collectionView": "list",
+              "density": "comfortable"
+            }
+          },
+          "view": "list",
+          "macSidebarVisible": true
+        }
+      },
+      "ui": {
+        "selectedFolder": "default",
+        "selectedNote": "note-a",
+        "theme": "dark",
+        "sort": "title",
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "three-pane",
+            "collectionView": "list",
+            "density": "standard"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "view": "list",
+        "macSidebarVisible": true
+      },
+      "layout": "focus"
+    },
+    {
+      "loaded": {
+        "selectedFolder": "default",
+        "selectedNote": "note-a",
+        "theme": "dark",
+        "sort": "title",
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "three-pane",
+            "collectionView": "list",
+            "density": "standard"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "view": "list",
+        "macSidebarVisible": true
+      },
+      "stored": {
+        "folders": [
+          {
+            "id": "default",
+            "name": "备忘录",
+            "kind": "default",
+            "parentId": null,
+            "sortOrder": 0,
+            "createdAt": 1
+          },
+          {
+            "id": "quick",
+            "name": "快速备忘录",
+            "kind": "quick",
+            "parentId": null,
+            "sortOrder": -1,
+            "createdAt": 1
+          },
+          {
+            "id": "trash",
+            "name": "最近删除",
+            "kind": "trash",
+            "parentId": null,
+            "sortOrder": 9999,
+            "createdAt": 1
+          }
+        ],
+        "notes": [
+          {
+            "id": "note-a",
+            "folderId": "default",
+            "title": "Fixture A",
+            "plainText": "Fixture A",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture A"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          },
+          {
+            "id": "note-b",
+            "folderId": "default",
+            "title": "Fixture B",
+            "plainText": "Fixture B",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture B"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          }
+        ],
+        "attachments": [],
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "note-a",
+          "theme": "dark",
+          "sort": "title",
+          "appearance": {
+            "version": 2,
+            "themeId": "paper",
+            "schemePreference": "dark"
+          },
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "focus",
+              "lastNonFocusNavigation": "three-pane",
+              "collectionView": "list",
+              "density": "standard"
+            },
+            "mobile": {
+              "collectionView": "list",
+              "density": "comfortable"
+            }
+          },
+          "view": "list",
+          "macSidebarVisible": true
+        }
+      },
+      "ui": {
+        "selectedFolder": "default",
+        "selectedNote": "note-a",
+        "theme": "dark",
+        "sort": "title",
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "three-pane",
+            "collectionView": "list",
+            "density": "standard"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "view": "list",
+        "macSidebarVisible": true
+      },
+      "layout": "focus"
+    }
+  ],
+  "final": {
+    "selectedFolder": "default",
+    "selectedNote": "note-a",
+    "theme": "dark",
+    "sort": "title",
+    "appearance": {
+      "version": 2,
+      "themeId": "paper",
+      "schemePreference": "dark"
+    },
+    "presentation": {
+      "version": 1,
+      "desktop": {
+        "navigation": "two-pane",
+        "lastNonFocusNavigation": "two-pane",
+        "collectionView": "list",
+        "density": "standard"
+      },
+      "mobile": {
+        "collectionView": "list",
+        "density": "comfortable"
+      }
+    },
+    "view": "list",
+    "macSidebarVisible": false
+  },
+  "persisted": {
+    "folders": [
+      {
+        "id": "default",
+        "name": "备忘录",
+        "kind": "default",
+        "parentId": null,
+        "sortOrder": 0,
+        "createdAt": 1
+      },
+      {
+        "id": "quick",
+        "name": "快速备忘录",
+        "kind": "quick",
+        "parentId": null,
+        "sortOrder": -1,
+        "createdAt": 1
+      },
+      {
+        "id": "trash",
+        "name": "最近删除",
+        "kind": "trash",
+        "parentId": null,
+        "sortOrder": 9999,
+        "createdAt": 1
+      }
+    ],
+    "notes": [
+      {
+        "id": "note-a",
+        "folderId": "default",
+        "title": "Fixture A",
+        "plainText": "Fixture A",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture A"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 1
+      },
+      {
+        "id": "note-b",
+        "folderId": "default",
+        "title": "Fixture B",
+        "plainText": "Fixture B",
+        "document": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Fixture B"
+                }
+              ]
+            }
+          ]
+        },
+        "createdAt": 1,
+        "updatedAt": 1,
+        "pinned": false,
+        "deletedAt": null,
+        "originalFolderId": null,
+        "locked": false,
+        "paperStyle": "plain",
+        "revision": 1
+      }
+    ],
+    "attachments": [],
+    "settings": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "dark",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "paper",
+        "schemePreference": "dark"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "two-pane",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "list",
+          "density": "standard"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "list",
+      "macSidebarVisible": false
+    }
+  },
+  "attempts": [
+    {
+      "rejected": true,
+      "candidate": {
+        "folders": [
+          {
+            "id": "default",
+            "name": "备忘录",
+            "kind": "default",
+            "parentId": null,
+            "sortOrder": 0,
+            "createdAt": 1
+          },
+          {
+            "id": "quick",
+            "name": "快速备忘录",
+            "kind": "quick",
+            "parentId": null,
+            "sortOrder": -1,
+            "createdAt": 1
+          },
+          {
+            "id": "trash",
+            "name": "最近删除",
+            "kind": "trash",
+            "parentId": null,
+            "sortOrder": 9999,
+            "createdAt": 1
+          }
+        ],
+        "notes": [
+          {
+            "id": "note-a",
+            "folderId": "default",
+            "title": "Fixture A",
+            "plainText": "Fixture A",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture A"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          },
+          {
+            "id": "note-b",
+            "folderId": "default",
+            "title": "Fixture B",
+            "plainText": "Fixture B",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture B"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          }
+        ],
+        "attachments": [],
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "note-a",
+          "theme": "light",
+          "sort": "title",
+          "appearance": {
+            "version": 2,
+            "themeId": "high-contrast",
+            "schemePreference": "light"
+          },
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "two-pane",
+              "lastNonFocusNavigation": "two-pane",
+              "collectionView": "list",
+              "density": "compact"
+            },
+            "mobile": {
+              "collectionView": "gallery",
+              "density": "standard"
+            }
+          },
+          "view": "list",
+          "macSidebarVisible": false
+        }
+      }
+    },
+    {
+      "rejected": true,
+      "candidate": {
+        "folders": [
+          {
+            "id": "default",
+            "name": "备忘录",
+            "kind": "default",
+            "parentId": null,
+            "sortOrder": 0,
+            "createdAt": 1
+          },
+          {
+            "id": "quick",
+            "name": "快速备忘录",
+            "kind": "quick",
+            "parentId": null,
+            "sortOrder": -1,
+            "createdAt": 1
+          },
+          {
+            "id": "trash",
+            "name": "最近删除",
+            "kind": "trash",
+            "parentId": null,
+            "sortOrder": 9999,
+            "createdAt": 1
+          }
+        ],
+        "notes": [
+          {
+            "id": "note-a",
+            "folderId": "default",
+            "title": "Fixture A",
+            "plainText": "Fixture A",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture A"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          },
+          {
+            "id": "note-b",
+            "folderId": "default",
+            "title": "Fixture B",
+            "plainText": "Fixture B",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture B"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          }
+        ],
+        "attachments": [],
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "note-a",
+          "theme": "light",
+          "sort": "title",
+          "appearance": {
+            "version": 2,
+            "themeId": "high-contrast",
+            "schemePreference": "light"
+          },
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "two-pane",
+              "lastNonFocusNavigation": "two-pane",
+              "collectionView": "list",
+              "density": "compact"
+            },
+            "mobile": {
+              "collectionView": "gallery",
+              "density": "standard"
+            }
+          },
+          "view": "list",
+          "macSidebarVisible": false
+        }
+      }
+    },
+    {
+      "rejected": false,
+      "candidate": {
+        "folders": [
+          {
+            "id": "default",
+            "name": "备忘录",
+            "kind": "default",
+            "parentId": null,
+            "sortOrder": 0,
+            "createdAt": 1
+          },
+          {
+            "id": "quick",
+            "name": "快速备忘录",
+            "kind": "quick",
+            "parentId": null,
+            "sortOrder": -1,
+            "createdAt": 1
+          },
+          {
+            "id": "trash",
+            "name": "最近删除",
+            "kind": "trash",
+            "parentId": null,
+            "sortOrder": 9999,
+            "createdAt": 1
+          }
+        ],
+        "notes": [
+          {
+            "id": "note-a",
+            "folderId": "default",
+            "title": "Fixture A",
+            "plainText": "Fixture A",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture A"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          },
+          {
+            "id": "note-b",
+            "folderId": "default",
+            "title": "Fixture B",
+            "plainText": "Fixture B",
+            "document": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Fixture B"
+                    }
+                  ]
+                }
+              ]
+            },
+            "createdAt": 1,
+            "updatedAt": 1,
+            "pinned": false,
+            "deletedAt": null,
+            "originalFolderId": null,
+            "locked": false,
+            "paperStyle": "plain",
+            "revision": 1
+          }
+        ],
+        "attachments": [],
+        "settings": {
+          "selectedFolder": "default",
+          "selectedNote": "note-a",
+          "theme": "dark",
+          "sort": "title",
+          "appearance": {
+            "version": 2,
+            "themeId": "paper",
+            "schemePreference": "dark"
+          },
+          "presentation": {
+            "version": 1,
+            "desktop": {
+              "navigation": "two-pane",
+              "lastNonFocusNavigation": "two-pane",
+              "collectionView": "list",
+              "density": "standard"
+            },
+            "mobile": {
+              "collectionView": "list",
+              "density": "comfortable"
+            }
+          },
+          "view": "list",
+          "macSidebarVisible": false
+        }
+      }
+    }
+  ]
+}

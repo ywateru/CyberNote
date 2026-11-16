@@ -1,6 +1,6 @@
 # 多主题与呈现架构
 
-日期：2026-11-17。114 已实现 AppearanceV2、主题注册与属性投影；本文的 PresentationV1、布局/密度偏好仍是 115 方案，不是当前能力。原生运行验收留给 116。
+日期：2026-11-17。114 已实现 AppearanceV2；115 已接入严格 PresentationV1、唯一呈现解析、专注布局和移动列表。开发定向检查与独立复核分开，原生运行验收留给 116。
 
 ## 职责与关系
 
@@ -17,7 +17,7 @@ OS scheme / contrast ── ThemeResolver ── ThemeRegistry
 平台身份 / window / safe-area / IME / 字号 / 展现偏好
                           │
                  PresentationResolver
-                          ├─DesktopShell / MobileShell
+                          ├─稳定 WorkspaceShell + DesktopShell / MobileShell
                           ├─共享音频/菜单/附件组件
                           └─原生工具栏能力与有效几何
 
@@ -26,7 +26,7 @@ OS scheme / contrast ── ThemeResolver ── ThemeRegistry
 
 ThemeRegistry 是内置预设的唯一来源；ThemeResolver 只解析和投影，不写内容。PresentationResolver 是纯计算，不创建 Editor、不触发保存，也不重新拥有 navigation 状态。App 的装配仍通过既有 navigation、EditorSession、ConfirmedSettings 和原生控制器。
 
-## 配置模型（AppearanceV2 已实现，PresentationV1 待 115）
+## 配置模型（AppearanceV2 与 PresentationV1 已实现）
 
 ```ts
 type AppearanceV2 = {
@@ -60,7 +60,7 @@ type PresentationV1 = {
 | 老设置只有 theme/view | 内存迁移为 classic + 原明暗；view 仅映射 desktop.collectionView；手机仍默认 gallery；双端density初值均为standard |
 | 旧 macSidebarVisible | false映射two-pane，其余映射three-pane，同时初始化lastNonFocusNavigation；不自动进入focus；兼容期新navigation向旧显隐字段投影，focus以lastNonFocusNavigation投影 |
 | 用户首次保存新设置 | 单事务写新字段，旧 theme/view 作为兼容投影同步写入；同一 settings owner 发布，不能两次异步写 |
-| 新字段存在 | appearance 为真源；同 patch 的旧 theme 不覆盖新对象。当前旧 theme-only action 保留 themeId、只更新 scheme，原子投影。presentation 尚未实现；更旧二进制的任意整对象覆盖无安全保证 |
+| 新字段存在 | appearance 为真源；同 patch 的旧 theme 不覆盖新对象。旧 theme-only action 保留 themeId、只更新 scheme，原子投影。presentation 按下行规则处理；更旧二进制的任意整对象覆盖无安全保证 |
 | 115 新旧呈现patch优先级 | 显式presentation对象为完整严格对象，同patch的view/macSidebarVisible由它重新投影，不反向覆盖。只有view的旧patch基于当前权威设置更新desktop.collectionView，保留navigation、lastNonFocusNavigation及mobile。只有macSidebarVisible的旧patch按true→three-pane、false→two-pane，同时更新lastNonFocusNavigation；若原为focus则退出focus，保证旧目录显隐动作可见生效。两种旧字段同patch时分别合并，单事务落盘。无关patch不携带UI缓存中的完整presentation |
 | 非法字段/未知版本 | 更新和导入报错且保留旧状态；不任意抹掉对象 |
 | 注册主题被移除 | 114 拒绝未知 ID 并保留旧确认值，不悄悄降级。真正删除注册主题前必须另做显式版本迁移与确认界面 |
@@ -139,4 +139,16 @@ type PresentationV1 = {
 - AppKit 原生 NSMenu/工具栏仅投影 `schemePreference` 与已有受支持字号/命中区；Paper/High Contrast 的 palette、Web 圆角不冒充系统菜单能力。安装包首屏、原生菜单、TCC、实体键盘/手机验收留在 116。
 - 114 基线未含后来合入主树的 AgentSettings；只读核对其 `ink/paper/secondary/grouped/line/accent/selection/danger` 均有六份色板映射，局部 `interface-radius-button/card/panel` 兼容别名仍按 6/10/16 × radiusScale 计算。未复制组件，实际 Agent 页验收留待合入后；其 accent 焦点样式不冒充本轮 focus token 对比度证据。
 
-开发检查与当前截图索引见 `docs/verification/evolve114-themes.md`。主题切换仅改 html 属性，不改 Editor key/document，也不重建录音 owner。115 的布局偏好没有混入此实现。
+开发检查与当前截图索引见 `docs/verification/evolve114-themes.md`。主题切换仅改 html 属性，不改 Editor key/document，也不重建录音 owner。该段描述 114 的边界，115 新增实现见下节。
+
+## 115 实现边界与可重复检查
+
+- `presentation/model.ts` 严格校验完整对象及嵌套键，缺失时只内存迁移旧 view/sidebar。`ConfirmedSettings` 延续 FIFO、确认后发布和权威读取恢复；显式对象入队时复制并附兼容投影，legacy/unrelated patch 保持部分更新。它也接管 App 原 sidebar 队列的 pending/flush 关闭等待，不新增保存 owner。Rust `archive::merge_settings` 在当前持久设置上迁移、合并、投影，一次 SQL UPDATE 落盘；读取旧库不写回，备份沿用同一校验与投影。
+- `presentation/resolver.ts` 是交互身份、有效导航、集合、密度、列数、有效栏宽和工具栏策略的唯一解析位置；旧 `createMobileLayout` 仅委托其身份函数。`useMobileInteraction` 优先消费 PresentationContext，独立表面回退也走同一规则。既有 interfaceMetrics 保留为栏宽几何函数。录音 dock 占用空间使三栏暂时降为两栏，不写回偏好；Web699/700 与 Android 稳定身份保留。
+- `WorkspaceShell` 永久承载同一组 sidebar/collection/editor 子槽；DesktopShell 只添加布局控制，MobileShell 只抽取集合表头。没有条件切换两个 Editor 父树，没有修改 Editor key 或为布局 setContent。EditorSession、保存/附件、访问屏障和录音仍归既有 owner。
+- Navigation 只新增 `temporaryFocus`，不保存副本路由。临时专注保留当前来源/搜索/集合滚动，退出恢复触发焦点；默认专注持久化，冷开退出用 lastNonFocusNavigation。两栏目录抽屉支持 Tab 环、Escape、遮罩、路由改变关闭和焦点回触发器；内层菜单/对话优先处理 Escape。
+- 密度通过 `--presentation-spacing` 和有效画廊列数投影基础几何；字号、interfaceDetails 仍独立。桌面 list/folder 和移动 card 分别消费留白倍率，命中区保持已有 desktop/mobile 下限；圆角仍按组件基础 × radiusScale。手机列表/画廊单独保存，默认手机画廊不跟随旧桌面 view。仅改密度不会退出已打开的桌面画廊正文。
+- 录音右栏提供收起/恢复，保留 mounted dock 和同一业务 ticket；跨 Web 断点不因 `!mobile` 条件卸载原桌面录音。原手机录音弹层路径不变。访问覆盖层保持原优先级，新布局控制在 blocked 时 inert。
+- 本树固定基线 5be79fce，不复制后来 112 assembly。合并 App/Preferences 时需同时保留主线 AgentSettings props、原生动态 open_note_window/WK 路径及本轮 presentation/context/shell 接线。原生菜单继续旧 view/sidebar 部分更新，不新增菜单 wire。
+
+开发检查和截图见 `docs/verification/evolve115-presentation.md`。真实浏览器 App/Editor 使用隔离模拟 IPC 输入；捕获 patch 再由生产 core harness 的真实 SQLite/归档验证。原生键盘组字、安装包窗口、Android safe-area/IME 与多窗口外部协调留给 116。

@@ -5,6 +5,7 @@ import { fontSizeOptions, fontSizeOption, type FontSize } from "./font-size";
 import type { Settings } from "./types";
 import "./Preferences.css";
 import PreferencesInterfaceDetails from "./PreferencesInterfaceDetails";
+import PreferencesPresentation from "./presentation/PreferencesPresentation";
 import { accountUIAvailable } from "./account-client";
 import { buildInfo } from "./build-info";
 
@@ -72,6 +73,13 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   const [visitedData, setVisitedData] = useState(tab === "data" || tab === "backup");
   const [visitedSync, setVisitedSync] = useState(tab === "sync");
   const [saving, setSaving] = useState(false), [error, setError] = useState("");
+  const saveFocus = useRef<{ element: HTMLElement; tab: PreferencesTab } | null>(null);
+  useLayoutEffect(() => {
+    if (saving || !saveFocus.current) return;
+    const target = saveFocus.current; saveFocus.current = null;
+    if (target.tab === tab && live.current && root.current?.contains(target.element) && !target.element.matches(":disabled") &&
+        (document.activeElement === document.body || document.activeElement === target.element)) target.element.focus({ preventScroll: true });
+  }, [saving, tab]);
   const current = preferencePages.find(page => page.id === tab);
   const home = mobile && tab === "home";
   useEffect(() => {
@@ -119,6 +127,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   }, [tab, mobile]);
   const apply = async (action: () => Promise<unknown>) => {
     if (working.current) return;
+    saveFocus.current = document.activeElement instanceof HTMLElement ? { element: document.activeElement, tab } : null;
     working.current = true; setSaving(true); setError("");
     try { await action(); }
     catch (cause) { if (live.current) setError(cause && typeof cause === "object" && "message" in cause ? String(cause.message) : "更改未保存，请重试"); }
@@ -194,8 +203,8 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
                 <div className="preferences-group"><h4>列表</h4>
                   <label className="preferences-row"><span>排序方式</span><select aria-label="排序方式" value={settings.sort || "updated"} onChange={event => void apply(() => onSettings({ sort: event.target.value as Settings["sort"] }))}><option value="updated">编辑日期</option><option value="created">创建日期</option><option value="title">标题</option></select></label>
                 </div>
-                <div className="preferences-group"><h4>{mobile ? "桌面列表选项" : "显示"}</h4>{mobile && <p className="preferences-help">这些选项用于桌面，手机首页始终以画廊显示。</p>}
-                  <label className="preferences-row"><span>{mobile ? "桌面显示方式" : "显示方式"}</span><select aria-label={mobile ? "桌面显示方式" : "显示方式"} value={settings.view || "list"} onChange={event => void apply(() => onSettings({ view: event.target.value as Settings["view"] }))}><option value="list">列表</option><option value="gallery">画廊</option></select></label>
+                <PreferencesPresentation settings={settings} save={patch => void apply(() => onSettings(patch))} />
+                <div className="preferences-group"><h4>桌面列表</h4>
                   <label className="preferences-row preferences-check"><span>{mobile ? "桌面按日期分组" : "按日期分组"}</span><input type="checkbox" checked={settings.groupDates !== false} onChange={event => void apply(() => onSettings({ groupDates: event.target.checked }))} /></label>
                 </div>
                 <div className="preferences-group"><h4>锁定备忘录</h4><button type="button" onClick={() => void apply(onCloseLocks)}>关闭所有已锁定的备忘录</button><p className="preferences-help">已打开的锁定备忘录将重新锁定。</p></div>

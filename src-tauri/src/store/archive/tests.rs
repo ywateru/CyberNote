@@ -865,3 +865,125 @@ fn appearance_recovery_settings_and_archive_are_strict_with_real_app_patches() {
         assert_eq!(target.workspace().unwrap()["settings"], actual);
     }
 }
+#[test]
+fn evolve115_presentation_is_strict_atomic_and_roundtrips() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("presentation-source");
+    let mut store = Store::open(&root).unwrap();
+    let legacy = json!({"view":"gallery","macSidebarVisible":false,"theme":"dark","extension":{"kept":true}});
+    store.db.execute("UPDATE settings SET body=?1 WHERE id=1", [legacy.to_string()]).unwrap();
+    assert!(store.workspace().unwrap()["settings"].get("presentation").is_none());
+    assert_eq!(store.db.query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get::<_, String>(0)).unwrap(), legacy.to_string());
+    store.action(json!({"type":"settings","settings":{"sort":"title"}})).unwrap();
+    let migrated = store.workspace().unwrap()["settings"].clone();
+    assert_eq!(migrated["presentation"]["desktop"]["navigation"], "two-pane");
+    assert_eq!(migrated["presentation"]["desktop"]["collectionView"], "gallery");
+    assert_eq!(migrated["presentation"]["mobile"]["collectionView"], "gallery");
+    let p = json!({"version":1,"desktop":{"navigation":"focus","lastNonFocusNavigation":"two-pane","collectionView":"list","density":"compact"},"mobile":{"collectionView":"list","density":"comfortable"}});
+    store.action(json!({"type":"settings","settings":{"presentation":p,"view":"gallery","macSidebarVisible":true}})).unwrap();
+    let good = store.workspace().unwrap()["settings"].clone();
+    assert_eq!(good["presentation"], p);
+    assert_eq!(good["view"], "list");
+    assert_eq!(good["macSidebarVisible"], false);
+    for (patch, nav, last, view) in [
+        (json!({"view":"gallery"}), "focus", "two-pane", "gallery"),
+        (json!({"macSidebarVisible":true}), "three-pane", "three-pane", "list"),
+        (json!({"macSidebarVisible":false}), "two-pane", "two-pane", "list"),
+        (json!({"view":"gallery","macSidebarVisible":true}), "three-pane", "three-pane", "gallery"),
+        (json!({"sort":"updated"}), "focus", "two-pane", "list"),
+    ] {
+        store.action(json!({"type":"settings","settings":{"presentation":p}})).unwrap();
+        store.action(json!({"type":"settings","settings":patch})).unwrap();
+        let next = store.workspace().unwrap()["settings"].clone();
+        assert_eq!(next["presentation"]["desktop"]["navigation"], nav);
+        assert_eq!(next["presentation"]["desktop"]["lastNonFocusNavigation"], last);
+        assert_eq!(next["view"], view);
+        assert_eq!(next["presentation"]["mobile"], p["mobile"]);
+        assert_eq!(next["appearance"], good["appearance"]);
+        assert_eq!(next["extension"], legacy["extension"]);
+    }
+    let mut invalid = vec![Value::Null, json!([]), json!({}), json!({"version":2,"desktop":p["desktop"],"mobile":p["mobile"]})];
+    for (path, value) in [
+        (vec!["extra"], json!(true)), (vec!["version"], json!(1.0)),
+        (vec!["desktop", "navigation"], json!("unknown")),
+        (vec!["desktop", "lastNonFocusNavigation"], json!("focus")),
+        (vec!["desktop", "collectionView"], json!("table")),
+        (vec!["desktop", "density"], Value::Null),
+        (vec!["mobile", "density"], json!("compact")),
+        (vec!["mobile", "extra"], json!(true)),
+    ] {
+        let mut bad = p.clone();
+        if path.len() == 1 { bad[path[0]] = value; } else { bad[path[0]][path[1]] = value; }
+        invalid.push(bad);
+    }
+    let mut bad = p.clone(); bad["mobile"].as_object_mut().unwrap().remove("collectionView"); invalid.push(bad);
+    let archive = temp.path().join("presentation.notesbackup");
+    let target_root = temp.path().join("presentation-import");
+    let mut target = Store::open(&target_root).unwrap();
+    for nav in ["three-pane", "two-pane", "focus"] { for desktop_view in ["list", "gallery"] { for mobile_view in ["list", "gallery"] { for density in ["compact", "standard", "comfortable"] {
+        let mut value = p.clone(); value["desktop"]["navigation"] = json!(nav); value["desktop"]["collectionView"] = json!(desktop_view); value["desktop"]["density"] = json!(density); value["mobile"]["collectionView"] = json!(mobile_view);
+        store.action(json!({"type":"settings","settings":{"presentation":value}})).unwrap();
+        store.export_archive(&archive).unwrap();
+        target.import_archive(&archive).unwrap();
+        drop(target); target = Store::open(&target_root).unwrap();
+        assert_eq!(target.workspace().unwrap()["settings"]["presentation"], value);
+    }}}}
+    let encoded: Value = serde_json::from_slice(&std::fs::read(&archive).unwrap()).unwrap();
+    for bad in invalid {
+        let before = store.workspace().unwrap();
+        assert!(store.action(json!({"type":"settings","settings":{"presentation":bad,"view":"list"}})).is_err());
+        assert_eq!(store.workspace().unwrap(), before);
+        let mut corrupt = encoded.clone(); corrupt["settings"]["presentation"] = bad;
+        let path = temp.path().join("invalid.notesbackup"); write_json(&path, &corrupt);
+        let previous = target.workspace().unwrap();
+        assert!(target.import_archive(&path).is_err()); assert_eq!(target.workspace().unwrap(), previous);
+    }
+    let before = store.workspace().unwrap();
+    assert_ne!(before["settings"]["presentation"], p);
+    store.db.execute_batch("CREATE TEMP TRIGGER fail_presentation BEFORE UPDATE ON settings BEGIN SELECT RAISE(FAIL, 'controlled disk failure'); END;").unwrap();
+    assert!(store.action(json!({"type":"settings","settings":{"presentation":p,"view":"gallery"}})).is_err());
+    assert_eq!(store.workspace().unwrap(), before);
+    store.db.execute_batch("DROP TRIGGER fail_presentation;").unwrap();
+    // A rejected candidate must not hitchhike on the next unrelated intent.
+    // Exercise real SQLite failure/retry/reopen, with full-state comparison.
+    store.action(json!({"type":"settings","settings":{"sort":"created"}})).unwrap();
+    let mut expected = before;
+    expected["settings"]["sort"] = json!("created");
+    assert_eq!(store.workspace().unwrap(), expected);
+    drop(store); let reopened = Store::open(&root).unwrap(); assert_eq!(reopened.workspace().unwrap(), expected);
+    reopened.export_archive(&archive).unwrap();
+    target.import_archive(&archive).unwrap();
+    drop(target); let target = Store::open(&target_root).unwrap();
+    assert_eq!(target.workspace().unwrap()["settings"], expected["settings"]);
+}
+
+#[test]
+fn evolve115_actual_app_patches_reopen_and_archive() {
+    let text = match std::env::var("EVOLVE115_SETTINGS_REPLAY") {
+        Ok(path) => std::fs::read_to_string(path).unwrap(),
+        Err(_) => include_str!("../../../tests/evolve115-presentation-replays.json").to_owned(),
+    };
+    let paths: Value = serde_json::from_str(&text).unwrap();
+    let paths = paths.as_array().unwrap(); assert_eq!(paths.len(), 9);
+    for row in paths {
+        let temp = tempfile::tempdir().unwrap(); let root = temp.path().join("actual-app");
+        let mut store = Store::open(&root).unwrap();
+        // The App capture selects a real fixture note. Materialize that note
+        // in SQLite too: archive correctly clears selections of absent notes.
+        let created = store.action(json!({"type":"createNote"})).unwrap();
+        let mut note = store.note(created["id"].as_str().unwrap()).unwrap();
+        note.id = row["initial"]["selectedNote"].as_str().unwrap().to_owned();
+        store.put_note(&note).unwrap();
+        store.db.execute("UPDATE settings SET body=?1 WHERE id=1", [row["initial"].to_string()]).unwrap();
+        for patch in row["patches"].as_array().unwrap() {
+            store.action(json!({"type":"settings","settings":patch})).unwrap();
+            drop(store); store = Store::open(&root).unwrap();
+        }
+        let settings = store.workspace().unwrap()["settings"].clone();
+        for (key, value) in row["expected"].as_object().unwrap() { assert_eq!(&settings[key], value, "{} {key}", row["scenario"]); }
+        let archive = temp.path().join("actual.notesbackup"); store.export_archive(&archive).unwrap();
+        let target_root = temp.path().join("restored"); let mut target = Store::open(&target_root).unwrap();
+        target.import_archive(&archive).unwrap(); drop(target); let target = Store::open(&target_root).unwrap();
+        assert_eq!(target.workspace().unwrap()["settings"], settings, "{}", row["scenario"]);
+    }
+}
