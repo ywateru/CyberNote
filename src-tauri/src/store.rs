@@ -28,6 +28,8 @@ mod data_management;
 pub(crate) use data_management::{AttachmentExport, DocumentStage};
 #[path = "store/commits.rs"]
 mod commits;
+#[path = "store/application.rs"]
+mod application;
 #[path = "store/open.rs"]
 mod open;
 #[path = "store/smart.rs"]
@@ -224,8 +226,10 @@ impl Store {
             sync_media: None,
             sync_media_cache: std::collections::BTreeMap::new(),
         };
+        s.validate_application_schema()?;
         s.validate_sync_schema()?;
         s.initialize_storage()?;
+        s.initialize_application_storage()?;
         s.db.execute_batch(
             "PRAGMA journal_mode=WAL; PRAGMA secure_delete=ON; PRAGMA foreign_keys=ON;",
         )?;
@@ -1364,4 +1368,10 @@ mod tests {
         s2.action(json!({"type":"restoreNote","id":nid})).unwrap();
         assert_eq!(s2.note(nid).unwrap().folder_id, "default");
     }
+}
+
+pub(crate) fn application_valid_tag(name: &str) -> bool { archive::valid_tag_name(name) }
+
+impl std::fmt::Display for AppError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { write!(f, "{}", self.code) }
 }

@@ -15,12 +15,15 @@ fn denied(message: &str) -> AppError {
 
 #[path = "session/metadata.rs"]
 mod metadata;
+#[path = "session/external.rs"]
+pub(crate) mod external;
 #[cfg(test)]
 #[path = "session/smart_tests.rs"]
 mod smart_tests;
 #[path = "session/synchronization.rs"]
 pub(crate) mod synchronization;
 #[cfg(test)]
+#[path = "session/tests.rs"]
 mod tests;
 #[derive(Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -56,6 +59,8 @@ pub struct Session {
     metadata_event: Option<Value>,
     last_commit: Option<Value>,
     quiet: synchronization::QuietState,
+    external: external::ExternalState,
+    pub(crate) application: crate::application::ApplicationState,
 }
 impl Session {
     pub fn new(store: Store) -> Self {
@@ -71,6 +76,8 @@ impl Session {
             metadata_event: None,
             last_commit: None,
             quiet: Default::default(),
+            external: Default::default(),
+            application: Default::default(),
         }
     }
     fn note_epoch(&self, id: &str) -> u64 {
@@ -156,7 +163,7 @@ impl Session {
     }
     pub(crate) fn apple_import_access(&self, token: &Token) -> Result<()> {
         self.require_global_document_access(token)?;
-        if self.sync_has_operation() {
+        if self.sync_has_operation() || self.external_has_operation() {
             return Err(denied("同步正在提交，请稍后导入"));
         }
         Ok(())
@@ -247,6 +254,7 @@ impl Session {
     ) -> Result<Value> {
         self.prepare_metadata(true)?;
         self.sensitive(note, token)?;
+        self.external_local_write(note);
         let owner = self.attachment_owner(window)?;
         let result = self.apply_store(|store| {
             store.store_attachment_operation(
@@ -285,6 +293,7 @@ impl Session {
     ) -> Result<Value> {
         self.prepare_metadata(true)?;
         self.sensitive(note, token)?;
+        self.external_local_write(note);
         let owner = self.attachment_owner(window)?;
         // Every registered save from every real window is checked while the
         // caller holds the same Session/Store mutex as the cleanup decision.
@@ -309,6 +318,7 @@ impl Session {
     ) -> Result<()> {
         self.prepare_metadata(true)?;
         self.sensitive(note, &token)?;
+        self.external_local_write(note);
         if self.intents.len() >= 10000 || self.intents.contains_key(intent) {
             return Err(denied("保存请求无效或过多"));
         }
@@ -352,6 +362,7 @@ impl Session {
                 return Err(denied("该保存不在锁定前的排空范围内"));
             }
         }
+        self.external_local_write(&id);
         action.as_object_mut().unwrap().remove("saveIntent");
         let result = self.apply_store(|store| store.action(action));
         match self.finish_value(result) {
@@ -397,6 +408,7 @@ impl Session {
             return Err(denied("此操作需要所有窗口确认保存"));
         }
         let unlock = action["type"] == "unlockNote";
+        if let Some(note) = action["id"].as_str() { self.external_local_write(note); }
         let id = action["id"].as_str().unwrap_or_default().to_string();
         if action["type"] == "recoverConflictCopy" {
             self.sensitive(&id, token)?;
@@ -452,8 +464,8 @@ impl Session {
     ) -> Result<Value> {
         self.prepare_metadata(Self::changes_facts(&action))?;
         self.check(token, None)?;
-        if self.pending.is_some() {
-            return Err(denied("已有锁定操作正在等待保存"));
+        if self.pending.is_some() || self.external_has_operation() {
+            return Err(denied("已有锁定或外部写操作正在等待保存"));
         }
         if !Self::requires_barrier(&action) {
             return Err(denied("无效锁定操作"));

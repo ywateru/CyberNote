@@ -719,6 +719,10 @@ impl Store {
                     [serde_json::to_string(&plan.archive.settings)?],
                 )?;
             }
+            if !append_only {
+                tx.execute("UPDATE application_identity SET incarnation=?1,generation=generation+1 WHERE id=1", [id()])?;
+                tx.execute("DELETE FROM application_operations", [])?;
+            }
             import_checkpoint("before_commit");
             tx.commit()?;
             for (kind, id, revision) in changes {

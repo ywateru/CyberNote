@@ -457,7 +457,7 @@ impl Session {
         let same = self.store.sync_identity()?.is_some_and(|identity| {
             identity.workspace_id == workspace && identity.device_id == device_id
         });
-        if !same && (self.pending.is_some() || !self.intents.is_empty() || self.quiet.current.is_some()) {
+        if !same && (self.pending.is_some() || !self.intents.is_empty() || self.quiet.current.is_some() || self.external_has_operation()) {
             return Err(crate::store::AppError {
                 code: "sync_adoption_blocked".into(),
                 message: "本机仍有未完成的保存或同步屏障，请先完成后再开启新账户同步".into(),
@@ -502,6 +502,7 @@ impl Session {
         resolution: Option<Resolution>,
     ) -> Result<Value> {
         if self.quiet.current.is_some()
+            || self.external_has_operation()
             || self.pending.is_some()
             || participants.is_empty()
             || (resolution.is_none() && self.quiet.retry_after.is_some_and(|t| t > self.sync_now()))
