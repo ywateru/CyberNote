@@ -21,6 +21,8 @@ EVOLVE-113 已确认的双端交互缺口
 
 当前并行边界：111第一阶段仅修改原生Rust（application/Session/Store与lib装配），113仅修改前端交互与其验证脚本；111的窗口协调前端接线在113合入后串行完成。每条线使用独立worktree，提交并独立审查后依次合入`codex/project-evolution`。
 
+112先并行开发不接数据库的stdio适配器和独立agent_host传输/授权模块；它们在111服务与113前端稳定后串行装配。实现、独立验证和真实运行分别记录于[当前验证矩阵](../verification/project-evolution/README.md)。
+
 | 任务 | 可独立交付的结果 | 依赖 | 首要验收 |
 | --- | --- | --- | --- |
 | [111](tasks/evolve-111-application-service.md) | UI复用的查询/命令入口与外部写协调 | 无 | 真实窗口未保存/组字与外部写相遇，零内容丢失 |
