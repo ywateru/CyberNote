@@ -1,7 +1,7 @@
 ---
 id: evolve-113
 scope: desktop-mobile-interaction
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -31,3 +31,5 @@ depends-on: []
 ## delivery stages
 
 本任务为前端模块交付：源码/真实React与ProseMirror交互检查及独立审查通过后，标记模块done并允许114基于该代码推进。上述准确APK/实体IME/Back/长按FORMAT102与手势验收作为116的强制原生门槛继续跟踪，不因模块done变成已通过，不删除或降低任何最终验收要求。现有历史现场与新包复验分别留证。
+
+模块已合入`codex/project-evolution`：开发`6309967f`、独审`3f93fbfe`，结论SOURCE_PASS / native-open。作者90项及独立20项组件检查通过；详见[独立报告](../reviews/evolve113-independent.md)。原生门槛由116继续承担。
