@@ -7,7 +7,7 @@
 | 任务 | 实现状态 | 独立验证 | 最终运行 |
 | --- | --- | --- | --- |
 | 111 应用服务 | 原生修复`eb9cee7d`及独审`6e728266`已合入；窗口前端`5e10f614`独审中 | native MODULE_SOURCE_PASS；合入后HEAD`892f9751`的197项/typecheck/11390项通过；独审另含原8探针、96条schema语料与19条合法service往返 | integration-open |
-| 112 MCP | 适配器/宿主/独立UI均已合入；接下来装配实际宿主与Preferences入口 | 三模块MODULE_SOURCE_PASS；host HEAD`371469dd`23项、UI HEAD`f750b848`typecheck/12组、adapter HEAD`efd8ac6e`完整suite/release/F1合入检查通过 | integration-open；Codex CLI 0.167.0初始化/九工具发现通过，零业务调用 |
+| 112 MCP | 适配器/宿主/独立UI均已合入；实际宿主与Preferences入口装配中 | 三模块MODULE_SOURCE_PASS；host HEAD`371469dd`23项、UI HEAD`f750b848`typecheck/12组、adapter HEAD`efd8ac6e`完整suite/release/F1合入检查通过 | integration-open；Codex CLI 0.167.0初始化/九工具/直接fixture能力调用通过，真实资料库业务待验 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
 | 114 主题 | 三主题明暗/外观V2/语义token已提交`b6040ea1` | 独立审查中；作者247项React/2项真实Store回归及对比度检查通过 | native-open |
 | 115 呈现 | 等114 | 未执行 | 未执行 |
