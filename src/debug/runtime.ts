@@ -1,3 +1,4 @@
+import { parseAppearance } from "../themes/appearance";
 import { catalog, type Command } from "./catalog";
 import type {
   DebugAdapter,
@@ -65,7 +66,7 @@ function validate(command: Command, value: unknown): DebugArgs {
     invalid("Invalid registry device ID");
   if (command.id === "settings.update") {
     const patch = object(value.settings, [
-      "theme",
+      "theme", "appearance",
       "view",
       "sort",
       "groupDates",
@@ -78,6 +79,10 @@ function validate(command: Command, value: unknown): DebugArgs {
     ]);
     if (!Object.keys(patch).length) invalid("Empty settings patch");
     for (const [key, v] of Object.entries(patch)) {
+      if (key === "appearance") {
+        try { parseAppearance(v); } catch { invalid("Invalid appearance"); }
+        continue;
+      }
       if (key === "interfaceDetails") {
         try { parseInterfaceDetails(v); } catch { invalid("Invalid interface details"); }
         continue;

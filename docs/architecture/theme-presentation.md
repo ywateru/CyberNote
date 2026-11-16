@@ -1,6 +1,6 @@
 # 多主题与呈现架构
 
-日期：2026-11-16。状态：待实现方案。当前已有 system/light/dark、列表/画廊、字号与界面细节；本文新增主题注册、双端呈现偏好及统一 resolver，不能视为现有产品能力。
+日期：2026-11-17。114 已实现 AppearanceV2、主题注册与属性投影；本文的 PresentationV1、布局/密度偏好仍是 115 方案，不是当前能力。原生运行验收留给 116。
 
 ## 职责与关系
 
@@ -10,7 +10,7 @@
 ConfirmedSettings → migrate/validate AppearanceV2 + PresentationV1
                           │
 OS scheme / contrast ── ThemeResolver ── ThemeRegistry
-                          ├─html data-theme-id / data-color-scheme / CSS token
+                          ├─html data-theme-id / data-scheme / CSS token
                           ├─portal / 启动页 / 附件预览
                           └─原生 Appearance + 支持的尺寸/颜色投影
 
@@ -26,7 +26,7 @@ OS scheme / contrast ── ThemeResolver ── ThemeRegistry
 
 ThemeRegistry 是内置预设的唯一来源；ThemeResolver 只解析和投影，不写内容。PresentationResolver 是纯计算，不创建 Editor、不触发保存，也不重新拥有 navigation 状态。App 的装配仍通过既有 navigation、EditorSession、ConfirmedSettings 和原生控制器。
 
-## 配置模型（拟议）
+## 配置模型（AppearanceV2 已实现，PresentationV1 待 115）
 
 ```ts
 type AppearanceV2 = {
@@ -60,9 +60,9 @@ type PresentationV1 = {
 | 老设置只有 theme/view | 内存迁移为 classic + 原明暗；view 仅映射 desktop.collectionView；手机仍默认 gallery；双端density初值均为standard |
 | 旧 macSidebarVisible | false映射two-pane，其余映射three-pane，同时初始化lastNonFocusNavigation；不自动进入focus；兼容期新navigation向旧显隐字段投影，focus以lastNonFocusNavigation投影 |
 | 用户首次保存新设置 | 单事务写新字段，旧 theme/view 作为兼容投影同步写入；同一 settings owner 发布，不能两次异步写 |
-| 新字段存在 | 新字段为真源；旧字段只有兼容作用；旧客户端写回不支持安全合并，跨版本降级需显式说明 |
+| 新字段存在 | appearance 为真源；同 patch 的旧 theme 不覆盖新对象。当前旧 theme-only action 保留 themeId、只更新 scheme，原子投影。presentation 尚未实现；更旧二进制的任意整对象覆盖无安全保证 |
 | 非法字段/未知版本 | 更新和导入报错且保留旧状态；不任意抹掉对象 |
-| 注册主题被移除 | 需显式迁移主题 ID；界面显示暂用 Classic 并允许用户确认，不能无提示覆盖原偏好 |
+| 注册主题被移除 | 114 拒绝未知 ID 并保留旧确认值，不悄悄降级。真正删除注册主题前必须另做显式版本迁移与确认界面 |
 | 切换失败 | ConfirmedSettings 保持旧值，显示错误，原页面与焦点不提前切换 |
 
 前端 `Settings` 类型、校验、Rust `archive::validate_settings`、settings action、备份导入/导出和预览默认值须同轮更新；只扩展 Preferences 下拉框会被 Rust 当前枚举校验阻止。保留旧配置用例与非法值拒绝用例。
@@ -71,7 +71,7 @@ type PresentationV1 = {
 
 ## 主题层次与 token
 
-当前 `design-tokens.css` 仅集中 z-index；颜色主要在 style、desktop、Preferences 等 CSS，几何还被 design-controls 的通用覆盖修改。先统一语义 token，再做新皮肤。
+114 的色板真源为 `src/themes/palettes.json`，`ThemeRegistry` 消费同一数据；`scripts/generate-theme-tokens.mjs` 生成 `src/themes/tokens.css`，在 head 和应用入口使用。`design-tokens.css` 继续拥有语义层级，主题不能更改它。组件 CSS 消费已有语义名称（如 `--paper`、`--ink`、`--secondary`、`--action-ink`、`--selection`、`--focus`、`--menu`、`--recording`），不再在 desktop/mobile 重定义 palette。
 
 | 层 | 所有权 | 示例 |
 | --- | --- | --- |
@@ -81,7 +81,7 @@ type PresentationV1 = {
 | 组件 token | 组件与平台 | `--note-card-radius-base`、`--menu-surface`、`--toolbar-surface`、`--search-highlight-bg` |
 | 字体/密度/命中区 | resolver + 既有设置 | `--font-ui`、`--font-editor`、`--space-control`、`--hit-min` |
 
-旧 `--paper`、`--ink`、`--accent` 等暂时映射到新 token，迁移完成后移除重复定义。平台 CSS 决定几何，不重新定义主题色；不继续添加 `.dark .desktop .某页` 色值补丁。按 reset → theme tokens → platform geometry → components → state 的显式顺序装载；若引入 cascade layers，必须处理旧未分层样式的优先级，不能混用后误以为新 layer 会覆盖旧 CSS。
+实现保留既有 `--paper`、`--ink`、`--accent` 等语义名以减小组件改动；它们的值只在注册色板中定义。平台 CSS 决定几何，不重新定义主题色；不继续添加 `.dark .desktop .某页` 色值补丁。按 reset → theme tokens → platform geometry → components → state 的显式顺序装载；若引入 cascade layers，必须处理旧未分层样式的优先级，不能混用后误以为新 layer 会覆盖旧 CSS。
 
 圆角按“组件基础值 × 既有 radiusScale”计算：画廊18px、菜单10px等保留各自基础；圆形录音/播放/色板保持语义形状。不使用统一 `border-radius: ... !important` 抹平组件。层级、遮挡、锁定与启动覆盖仍引用现有 `--layer-*`，主题无权改变它们。
 
@@ -126,3 +126,16 @@ type PresentationV1 = {
 5. 接入 PresentationResolver，再扩展专注布局与移动列表；逐项删除旧分支和状态来源。
 
 验证代表组合而非穷举所有笛卡尔积：classic 明暗全核心场景；每个新主题覆盖设置/列表/编辑/菜单/锁屏/预览；极大字号+舒适密度+320px、短桌面窗、Android横屏/IME为边界组。另验重启/备份恢复、未知字段、保存失败、系统明暗变化、主题切换时中文组字/Undo与录音不中断。
+
+## 114 实现边界与可重复检查
+
+- `appearanceOf` / `normalizeAppearanceSettings` 只做内存迁移；现存旧数据库不会因读取而被改写。`ConfirmedSettings` 在每次设置写入的队列执行点生成完整 appearance + theme；嵌套对象在入队时复制并校验。失败不提前发布，迟到的 workspace ticket 不回退已确认值。
+- Rust `merge_settings` 校验旧值和 patch，再用一次 settings SQL UPDATE 保存；archive 导入和导出验证完整新对象并修正旧投影。仅旧 theme 的 archive 保持旧格式，首写再迁移。扩展设置、字号与 interfaceDetails 保持原 owner；没有新增同步 wire。
+- `geometry.json` 集中基础值，生成 `--radius-*`；各组件选自己的基础 token，画廊18、菜单10，radiusScale 在真实 `.recording-layout` 与示例作用域重新求值，上限24px。圆形、胶囊和0圆角边界保留语义形状，不用全局圆角覆盖。
+- Classic 保留正文/侧栏/黄色强调与明暗方向；次要文字、动作文字与焦点色为对比度加深，边线更清楚。Paper 同样区分装饰 accent 和可读 action-ink。媒体内容、marks、速绘色板不改色；用户指定正文颜色不保证任意背景均可读，不重写原文解决。
+- 启动脚本只缓存已确认的三字段对象 `cybernote.startup-appearance-v2`，兼容旧 `cybernote.startup-theme`；非法缓存退到 Classic/system。权威读取完成之前 App 不覆盖缓存；随后按确认值校正，失败写不更新缓存。缓存只供外观首屏，不证明 workspace 授权或保存。
+- 主窗、`?note=` 独立笔记窗、录音栏/浮动录音表面、portal、设置、预览与 access-cover 使用根 token。独立窗初始从同一 workspace 设置读取；已有跨窗刷新/外部协调仍归原宿主，不新增事件或同步服务。
+- AppKit 原生 NSMenu/工具栏仅投影 `schemePreference` 与已有受支持字号/命中区；Paper/High Contrast 的 palette、Web 圆角不冒充系统菜单能力。安装包首屏、原生菜单、TCC、实体键盘/手机验收留在 116。
+- 114 基线未含后来合入主树的 AgentSettings；只读核对其 `ink/paper/secondary/grouped/line/accent/selection/danger` 均有六份色板映射，局部 `interface-radius-button/card/panel` 兼容别名仍按 6/10/16 × radiusScale 计算。未复制组件，实际 Agent 页验收留待合入后；其 accent 焦点样式不冒充本轮 focus token 对比度证据。
+
+开发检查与当前截图索引见 `docs/verification/evolve114-themes.md`。主题切换仅改 html 属性，不改 Editor key/document，也不重建录音 owner。115 的布局偏好没有混入此实现。

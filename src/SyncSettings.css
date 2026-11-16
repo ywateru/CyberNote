@@ -22,7 +22,7 @@
 }
 .sync-state-error,
 .sync-error {
-  color: #cf3446;
+  color: var(--danger);
 }
 .sync-description,
 .sync-live,
@@ -38,7 +38,7 @@
   margin-bottom: 12px;
 }
 .sync-group {
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: var(--grouped);
   margin-top: 12px;
   padding: 12px 14px;
@@ -65,7 +65,7 @@
   min-width: 0;
   width: 0;
   min-height: 44px;
-  border-radius: 7px;
+  border-radius: var(--radius-7);
   border: 1px solid var(--line);
   background: var(--paper);
   color: var(--ink);
@@ -88,7 +88,7 @@
   background: var(--paper);
 }
 .sync-settings input:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 .sync-address {
@@ -160,7 +160,7 @@
 }
 .sync-confirmation {
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   padding: 14px;
   margin-top: 14px;
 }

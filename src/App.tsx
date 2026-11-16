@@ -1,3 +1,4 @@
+import { appearanceOf, applyAppearance } from "./themes/appearance";
 import { AttachmentMetadataContext } from "./use-attachment-media";
 import { attachmentSourcePool } from "./attachment-source-pool";
 import { useSystemEvents } from "./platform/system-events";
@@ -566,7 +567,7 @@ function App() {
     longPressed.current = false;
   }, [navigationState, mobile, mobileSingleColumn]);
   useEffect(() => { setSwiped(null); }, [mobileSingleColumn]);
-  const theme = settings.theme || "system";
+  const { themeId, schemePreference } = appearanceOf(settings);
   const view = settings.view || "list";
   const sort = settings.sort || "updated";
   const tags = projectTags(ws, accessSuspended);
@@ -1026,19 +1027,12 @@ function App() {
     return () => window.removeEventListener("resize", resize);
   }, []);
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    if (workspaceLoaded) startup.theme(theme);
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const apply = () => {
-      document.documentElement.classList.toggle(
-        "dark",
-        theme === "dark" || (theme === "system" && media.matches),
-      );
-    };
-    apply();
-    media.addEventListener("change", apply);
-    return () => media.removeEventListener("change", apply);
-  }, [theme, workspaceLoaded]);
+    if (!workspaceLoaded) return; // Keep the validated first-paint cache until authority loads.
+    const appearance = { version: 2 as const, themeId, schemePreference };
+    const release = applyAppearance(appearance);
+    startup.appearance(appearance);
+    return release;
+  }, [themeId, schemePreference, workspaceLoaded]);
   const flush = useCallback(async () => {
     await Promise.all([...queues.current.values()]);
     if (pendingDocs.current.size || saveFailures.current.size)
@@ -3775,7 +3769,7 @@ function App() {
           assert();
           const patch = change as Settings;
           const keys = [
-            "theme",
+            "theme", "appearance",
             "view",
             "sort",
             "groupDates",

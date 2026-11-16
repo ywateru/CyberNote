@@ -7,13 +7,31 @@
   if (!surface || !root || !message || !retry) return;
   let leaving = false;
   let finished = false;
-  const theme = (value) => {
-    if (!["light", "dark", "system"].includes(value)) return;
-    document.documentElement.dataset.startupTheme = value;
-    // Only cache appearance, never workspace content. Storage can be unavailable.
-    try { localStorage.setItem("cybernote.startup-theme", value); } catch { /* Optional. */ }
+  const media = matchMedia("(prefers-color-scheme: dark)");
+  const valid = (v) => v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length === 3 && v.version === 2 && ["classic", "paper", "high-contrast"].includes(v.themeId) && ["system", "light", "dark"].includes(v.schemePreference);
+  let current = { version: 2, themeId: "classic", schemePreference: "system" };
+  const apply = () => {
+    const dark = current.schemePreference === "dark" || (current.schemePreference === "system" && media.matches);
+    const html = document.documentElement;
+    html.dataset.themeId = current.themeId;
+    html.dataset.theme = current.schemePreference;
+    html.dataset.scheme = dark ? "dark" : "light";
+    html.dataset.startupTheme = current.schemePreference;
+    html.classList.toggle("dark", dark);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", getComputedStyle(html).getPropertyValue("--paper").trim());
   };
-  try { theme(localStorage.getItem("cybernote.startup-theme")); } catch { /* System theme. */ }
+  const appearance = (value) => {
+    if (!valid(value)) return;
+    current = { ...value }; apply();
+    try { localStorage.setItem("cybernote.startup-appearance-v2", JSON.stringify(current)); } catch { /* Appearance cache is optional. */ }
+  };
+  const theme = (value) => { if (["light", "dark", "system"].includes(value)) appearance({ ...current, schemePreference: value }); };
+  try {
+    const cached = localStorage.getItem("cybernote.startup-appearance-v2");
+    if (cached !== null) { const value = JSON.parse(cached); if (valid(value)) current = value; }
+    else { const legacy = localStorage.getItem("cybernote.startup-theme"); if (["light", "dark", "system"].includes(legacy)) current.schemePreference = legacy; }
+  } catch { /* Invalid or inaccessible cache uses Classic/system. */ }
+  apply(); media.addEventListener("change", apply);
   const reload = () => location.reload();
   retry.addEventListener("click", reload);
   const slow = setTimeout(() => {
@@ -35,6 +53,7 @@
   window.addEventListener("error", onError, true);
   window.__CYBERNOTE_STARTUP__ = {
     theme,
+    appearance,
     fail,
     ready() {
       if (leaving || finished) return;

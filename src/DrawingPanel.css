@@ -1,5 +1,5 @@
 .drawing-overlay {
-  --drawing-grid: #dcdce2;
+  --drawing-grid: var(--grouped);
 }
 .drawing-surface {
   overflow: hidden;
@@ -59,7 +59,7 @@
   }
 }
 .dark .drawing-overlay {
-  --drawing-grid: #414147;
+  --drawing-grid: var(--grouped);
 }
 /* AppKit's full-size webview extends behind the native titlebar. */
 .desktop.native-toolbar .drawing-overlay {

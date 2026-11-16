@@ -1,3 +1,4 @@
+import type { AppearanceV2 } from "./themes/appearance";
 import type { InterfaceDetails } from "./interface-details";
 import type { FontSize } from "./font-size";
 import type { JSONContent } from "@tiptap/react";
@@ -60,6 +61,7 @@ export interface Settings {
   interfaceDetails?: InterfaceDetails;
   interfaceFontSize?: FontSize;
   editorFontSize?: FontSize;
+  appearance?: AppearanceV2;
   theme?: "system" | "light" | "dark";
   view?: "list" | "gallery";
   sort?: "updated" | "created" | "title";

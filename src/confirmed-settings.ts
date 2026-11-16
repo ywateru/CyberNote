@@ -1,3 +1,4 @@
+import { appearancePatch, normalizeAppearanceSettings, parseAppearance } from "./themes/appearance";
 import type { Settings } from "./types";
 import { parseInterfaceDetails } from "./interface-details";
 
@@ -15,7 +16,7 @@ export class ConfirmedSettings {
   observe(value: Settings, ticket = this.generation): boolean {
     if (ticket !== this.generation) return false;
     if (value.interfaceDetails !== undefined) parseInterfaceDetails(value.interfaceDetails);
-    this.value = { ...value };
+    this.value = normalizeAppearanceSettings(value);
     this.generation++;
     this.publish(this.value);
     return true;
@@ -27,13 +28,13 @@ export class ConfirmedSettings {
   ): Promise<void> {
     // Copy at admission, including the nested versioned object. Never retain a
     // mutable caller object while another write is awaiting its receipt.
-    const input = { ...patch, ...(patch.interfaceDetails === undefined ? {} : {
+    const input = { ...patch, ...(Object.hasOwn(patch, "appearance") ? { appearance: parseAppearance(patch.appearance) } : {}), ...(patch.interfaceDetails === undefined ? {} : {
       interfaceDetails: parseInterfaceDetails(patch.interfaceDetails),
     }) };
     const work = this.tail.then(async () => {
       this.generation++;
       try {
-        await persist(input);
+        await persist(appearancePatch(this.value, input));
         // External adoption during this read wins. Retry to confirm the actual
         // stored result, rather than replaying a captured patch over it.
         for (;;) {

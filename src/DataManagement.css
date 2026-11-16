@@ -36,9 +36,9 @@
   gap: 5px;
   border: 0;
   background: var(--grouped);
-  color: var(--accent);
+  color: var(--action-ink);
   padding: 8px 10px;
-  border-radius: 7px;
+  border-radius: var(--radius-7);
   font: inherit;
   cursor: pointer;
 }
@@ -49,7 +49,7 @@
 .data-management button:focus-visible,
 .data-management input:focus-visible,
 .data-management summary:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 .data-management .data-back {
@@ -75,7 +75,7 @@
 }
 .storage-summary {
   padding: 18px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: var(--grouped);
 }
 .storage-summary-heading {
@@ -104,7 +104,7 @@
   display: flex;
   width: 100%;
   height: 22px;
-  border-radius: 5px;
+  border-radius: var(--radius-5);
   overflow: hidden;
   background: var(--line);
 }
@@ -116,7 +116,7 @@
   color: var(--secondary);
   background: var(--paper);
   padding: 9px;
-  border-radius: 5px;
+  border-radius: var(--radius-5);
   font-size: 12px;
 }
 .storage-legend {
@@ -131,7 +131,7 @@
   padding: 5px 0;
   background: transparent;
   color: var(--secondary);
-  border-radius: 3px;
+  border-radius: var(--radius-3);
   font-size: 12px;
 }
 .storage-legend i {
@@ -148,7 +148,7 @@
 }
 .storage-category-list {
   background: var(--grouped);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   padding: 0 15px;
   margin-top: 20px;
 }
@@ -165,11 +165,11 @@
 .storage-category-icon {
   width: 30px;
   height: 30px;
-  border-radius: 7px;
+  border-radius: var(--radius-7);
   display: grid;
   place-items: center;
   flex: 0 0 30px;
-  color: white;
+  color: var(--accent-ink);
   background: var(--storage-color);
 }
 .storage-category-label {
@@ -241,10 +241,10 @@
   line-height: 1.6;
 }
 .data-error {
-  color: #cf3446;
+  color: var(--danger);
   padding: 10px;
-  border: 1px solid #cf344655;
-  border-radius: 8px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-8);
   overflow-wrap: anywhere;
   margin: 0 0 12px;
 }
@@ -304,7 +304,7 @@
   background: var(--grouped);
   color: inherit;
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: var(--radius-7);
   padding: 9px 10px;
   font: inherit;
 }
@@ -353,7 +353,7 @@
   font-variant-numeric: tabular-nums;
 }
 .data-file-stat small {
-  color: #cf3446;
+  color: var(--danger);
 }
 .data-pagination {
   display: flex;

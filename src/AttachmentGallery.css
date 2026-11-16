@@ -29,7 +29,7 @@
   align-self: center;
   margin: calc(18px * var(--ui-scale, 1)) 16px calc(12px * var(--ui-scale, 1));
   padding: 2px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: var(--grouped);
   flex-shrink: 0;
 }
@@ -43,7 +43,7 @@
   color: var(--ink);
   padding: 6px 14px;
   min-height: 30px;
-  border-radius: 6px;
+  border-radius: var(--radius-6);
   font: inherit;
   font-size: calc(17px * var(--ui-font-scale, 1));
   cursor: pointer;
@@ -54,11 +54,11 @@
   color: var(--secondary);
 }
 .attachment-gallery-categories button[aria-selected="true"] {
-  background: #ffbf27;
-  color: #302300;
+  background: var(--accent);
+  color: var(--ink);
 }
 .attachment-gallery-categories button[aria-selected="true"] span {
-  color: #705100;
+  color: var(--action-ink);
 }
 .attachment-gallery-categories button:hover:not([aria-selected="true"]) {
   background: var(--selection);
@@ -66,7 +66,7 @@
 .attachment-gallery-categories button:focus-visible,
 .attachment-gallery-select:focus-visible,
 .gallery-note-link:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
 }
 .attachment-gallery-scroll {
@@ -87,7 +87,7 @@
 .attachment-gallery-visual {
   position: relative;
   aspect-ratio: 4 / 3;
-  border-radius: 3px;
+  border-radius: var(--radius-3);
   background: var(--paper);
 }
 .attachment-gallery-select {
@@ -97,7 +97,7 @@
   display: grid;
   place-items: center;
   border: 2px solid transparent;
-  border-radius: 3px;
+  border-radius: var(--radius-3);
   background: transparent;
   color: var(--secondary);
   cursor: pointer;
@@ -133,7 +133,7 @@
 .attachment-gallery-visual.audio,
 .attachment-gallery-visual.files {
   background: var(--grouped);
-  border-radius: 8px;
+  border-radius: var(--radius-8);
 }
 .attachment-gallery-visual.audio .gallery-file-symbol {
   transform: translateY(-35px);
@@ -141,7 +141,7 @@
 .attachment-gallery-visual.audio .gallery-file-symbol svg {
   width: 38px;
   height: 38px;
-  color: var(--accent);
+  color: var(--action-ink);
 }
 .attachment-gallery-caption {
   padding: 10px 4px 0;
@@ -181,14 +181,14 @@
   text-overflow: ellipsis;
 }
 .gallery-note-link:hover {
-  color: var(--accent);
+  color: var(--action-ink);
 }
 .gallery-locate-label {
   display: none;
   white-space: nowrap;
 }
 .attachment-gallery-card.selected .gallery-note-link {
-  color: var(--accent);
+  color: var(--action-ink);
 }
 .attachment-gallery-card.selected .gallery-locate-label {
   display: inline;
@@ -207,7 +207,7 @@
   opacity: 0;
   background: var(--glass);
   backdrop-filter: blur(15px);
-  border-radius: 7px;
+  border-radius: var(--radius-7);
 }
 .attachment-gallery-card:hover .gallery-item-menu,
 .attachment-gallery-card:focus-within .gallery-item-menu,
@@ -226,7 +226,7 @@
   gap: 5px;
   align-items: center;
   background: var(--glass);
-  border-radius: 4px;
+  border-radius: var(--radius-4);
   padding: 4px 6px;
   font-size: 11px;
   pointer-events: none;
@@ -253,7 +253,7 @@
   border: 0;
   border-radius: 50%;
   background: var(--accent);
-  color: white;
+  color: var(--accent-ink);
   width: 32px;
   height: 32px;
   display: grid;
@@ -289,7 +289,7 @@
   border: 0;
   background: transparent;
   font: inherit;
-  color: var(--accent);
+  color: var(--action-ink);
   cursor: pointer;
 }
 .attachment-gallery-empty {
@@ -314,9 +314,9 @@
   line-height: 1.6;
 }
 .attachment-node[data-attachment-jump="true"] {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 5px;
-  border-radius: 4px;
+  border-radius: var(--radius-4);
 }
 @media (min-width: 700px) and (max-width: 1100px) {
   .attachment-gallery-grid {

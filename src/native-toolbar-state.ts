@@ -1,3 +1,4 @@
+import { appearanceOf } from "./themes/appearance";
 import { fontScales } from "./font-size";
 import type { Editor } from "@tiptap/react";
 import type { Folder, Note, Settings } from "./types";
@@ -278,6 +279,6 @@ export function toolbarState(input: {
     fontScale: fontScales(settings).interface,
     iconScale: parseInterfaceDetails(settings.interfaceDetails).iconScale / 100,
     hitScale: parseInterfaceDetails(settings.interfaceDetails).desktopHitScale / 100,
-    appearance: settings.theme || "system",
+    appearance: appearanceOf(settings).schemePreference,
   };
 }

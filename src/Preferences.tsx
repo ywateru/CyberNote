@@ -1,3 +1,4 @@
+import { appearanceOf, themeOptions, type ThemeId, type SchemePreference } from "./themes/appearance";
 import { useLayoutEffect, useEffect, useRef, useState, type ReactNode } from "react";
 import { Database, X, ChevronLeft, ChevronRight, Type, Notebook, RefreshCw, Archive, Folder, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound } from "lucide-react";
 import { fontSizeOptions, fontSizeOption, type FontSize } from "./font-size";
@@ -121,7 +122,9 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
     catch (cause) { if (live.current) setError(cause && typeof cause === "object" && "message" in cause ? String(cause.message) : "更改未保存，请重试"); }
     finally { working.current = false; if (live.current) setSaving(false); }
   };
-  const summary = (id: string) => id === "settings" ? ({ system: "跟随系统", light: "浅色", dark: "深色" }[settings.theme || "system"]) : id === "notes" ? ({ updated: "编辑日期", created: "创建日期", title: "标题" }[settings.sort || "updated"]) : "";
+  const appearance = appearanceOf(settings);
+  const changeAppearance = (patch: Partial<typeof appearance>) => apply(() => onSettings({ appearance: { ...appearance, ...patch } }));
+  const summary = (id: string) => id === "settings" ? ({ system: "跟随系统", light: "浅色", dark: "深色" }[appearance.schemePreference]) : id === "notes" ? ({ updated: "编辑日期", created: "创建日期", title: "标题" }[settings.sort || "updated"]) : "";
   return (
     <div className={`preferences-backdrop ${mobile ? "preferences-mobile" : "preferences-desktop"}`}>
       <section ref={root} className="preferences" role="dialog" aria-modal="true" aria-labelledby="preferences-title" data-preferences-tab={tab}>
@@ -149,10 +152,12 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
               <h3 className="preferences-page-title">外观与字号</h3>
               <fieldset disabled={mobile && saving} aria-busy={saving} className="preferences-form">
                 <div className="preferences-group preferences-appearance-group">
-                  {mobile ? <label className="preferences-row"><span>外观</span><select aria-label="外观" value={settings.theme || "system"} onChange={event => void apply(() => onSettings({ theme: event.target.value as Settings["theme"] }))}><option value="system">跟随系统</option><option value="light">浅色</option><option value="dark">深色</option></select></label> : <>
-                    <h4>外观</h4>
-                    <PreferenceChoices label="外观" value={settings.theme || "system"} options={appearanceOptions} disabled={saving} appearance onChange={theme => void apply(() => onSettings({ theme }))} />
-                  </>}
+                  <h4>主题</h4>
+                  {mobile ? <label className="preferences-row"><span>主题</span><select aria-label="主题" value={appearance.themeId} onChange={event => void changeAppearance({ themeId: event.target.value as ThemeId })}>{themeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <PreferenceChoices label="主题" value={appearance.themeId} options={themeOptions} disabled={saving} appearance onChange={themeId => void changeAppearance({ themeId })} />}
+                  <h4>外观</h4>
+                  {mobile ? <label className="preferences-row"><span>外观</span><select aria-label="外观" value={appearance.schemePreference} onChange={event => void changeAppearance({ schemePreference: event.target.value as SchemePreference })}>{appearanceOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <PreferenceChoices label="外观" value={appearance.schemePreference} options={appearanceOptions} disabled={saving} appearance onChange={schemePreference => void changeAppearance({ schemePreference })} />}
+                  <p className="preferences-help">主题用于应用内界面。macOS 系统菜单与原生工具栏仅支持跟随系统、浅色或深色，不支持自定义主题配色与圆角。</p>
+                  <p className="preferences-help" role="status">{saving ? "正在保存外观设置…" : "已保存的外观应用于此设备"}</p>
                 </div>
                 <div className="preferences-group preferences-interface-group">
                   {mobile ? <label className="preferences-row"><span>界面字体大小</span><select aria-label="界面字体大小" disabled={saving} value={fontSizeOption(settings.interfaceFontSize).value} onChange={event => void apply(() => onSettings({ interfaceFontSize: event.target.value as FontSize }))}>{fontSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <>

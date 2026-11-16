@@ -1,3 +1,4 @@
+import geometry from "./themes/geometry.json";
 import type { CSSProperties } from "react";
 
 declare const percent: unique symbol;
@@ -84,7 +85,7 @@ export const defaultInterfaceDetails: InterfaceDetails = Object.freeze({
   radiusScale: 100,
 }) as InterfaceDetails;
 export type InterfaceDetailVariables = CSSProperties &
-  Record<`--interface-${string}`, string>;
+  Record<`--${string}`, string>;
 /** Shared by the actual product controls and the settings example. */
 export function interfaceDetailVariables(
   value: unknown,
@@ -95,15 +96,16 @@ export function interfaceDetailVariables(
   const radius = (base: number) =>
     `${Math.min(24, (base * d.radiusScale) / 100)}px`;
   return {
+    "--radius-scale": String(d.radiusScale / 100),
     "--interface-icon-scale": String(d.iconScale / 100),
     "--interface-icon-size": `${(20 * d.iconScale) / 100}px`,
     "--interface-hit-scale": String(hitScale / 100),
     "--interface-hit-min": `${Math.max(mobile ? 44 : 28, ((mobile ? 44 : 28) * hitScale) / 100)}px`,
     "--interface-menu-min": `${(mobile ? 44 : 28) * hitScale / 100}px`,
     "--interface-menu-extra": `${{ compact: 0, standard: 2, comfortable: 4 }[d.menuSpacing]}px`,
-    "--interface-radius-button": radius(6),
-    "--interface-radius-card": radius(10),
-    "--interface-radius-menu": radius(10),
-    "--interface-radius-panel": radius(16),
+    "--interface-radius-button": radius(geometry.components.button),
+    "--interface-radius-card": radius(geometry.components.card),
+    "--interface-radius-menu": radius(geometry.components.menu),
+    "--interface-radius-panel": radius(geometry.components.panel),
   };
 }

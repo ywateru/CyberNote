@@ -133,6 +133,7 @@ export type DebugCommandArguments = {
     settings: Pick<
       Settings,
       | "theme"
+      | "appearance"
       | "view"
       | "sort"
       | "groupDates"

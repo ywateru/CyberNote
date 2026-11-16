@@ -1,3 +1,4 @@
+import { appearancePatch } from "./themes/appearance";
 import { listen } from "@tauri-apps/api/event";
 import { AccessChanged } from "./access-client";
 import { validateDataManagement, type DataManagementSnapshot } from "./data-management";
@@ -29,6 +30,7 @@ import {
   type Attachment,
   type Note,
   type Workspace,
+  type Settings,
 } from "./types";
 export const native = isTauri();
 const invoke =
@@ -472,7 +474,7 @@ export async function action<T = Workspace>(
       });
       break;
     case "settings":
-      preview.settings = { ...preview.settings, ...(a.settings as object) };
+      preview.settings = { ...preview.settings, ...appearancePatch(preview.settings, a.settings as Settings) };
       break;
     case "lockNote":
     case "unlockNote":

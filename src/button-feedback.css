@@ -1,17 +1,10 @@
-/* Shared feedback overlays preserve each button's primary/selected styling. */
+/* Shared translucent feedback retains the underlying surface/foreground pair. */
 :root {
-  --button-hover: rgb(0 0 0 / 8%);
-  --button-pressed: rgb(0 0 0 / 18%);
-  --button-activated: rgb(0 0 0 / 14%);
-  --button-selected: rgb(255 184 36 / 20%);
-  --button-selected-hover: rgb(255 184 36 / 28%);
-}
-.dark {
-  --button-hover: rgb(255 255 255 / 12%);
-  --button-pressed: rgb(255 255 255 / 27%);
-  --button-activated: rgb(255 255 255 / 21%);
-  --button-selected: rgb(255 184 36 / 24%);
-  --button-selected-hover: rgb(255 184 36 / 32%);
+  --button-hover: var(--feedback-hover);
+  --button-pressed: var(--feedback-pressed);
+  --button-activated: var(--feedback-activated);
+  --button-selected: var(--feedback-selected);
+  --button-selected-hover: var(--feedback-selected-hover);
 }
 :where(button, [role="button"], summary) {
   transition:
@@ -67,7 +60,7 @@ details[open] > summary {
   box-shadow: none !important;
 }
 :where(button, [role="button"], summary):focus-visible {
-  outline: 2px solid var(--accent, #d99300);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 @media (prefers-reduced-motion: reduce) {

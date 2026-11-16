@@ -1,3 +1,4 @@
+import { normalizeAppearanceSettings } from "./themes/appearance";
 import { documentTags, validTagName } from "./note-tags";
 import type {
   Folder,
@@ -132,7 +133,7 @@ export function validateWorkspace(value: Workspace): Workspace {
   const folders = value.folders.map(parseFolder),
     ids = new Set(folders.map((f) => f.id));
   if (ids.size !== folders.length) throw new SmartInvalid("文件夹身份重复");
-  return { ...value, folders };
+  return { ...value, folders, settings: normalizeAppearanceSettings(value.settings) };
 }
 export const isPhysicalOwner = (folder: Folder | undefined) =>
   !!folder && ["default", "quick", "normal"].includes(folder.kind);

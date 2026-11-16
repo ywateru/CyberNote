@@ -751,3 +751,73 @@ fn interface_details_settings_and_archive_are_strict_and_atomic() {
     target.import_archive(&legacy_path).unwrap();
     assert!(target.workspace().unwrap()["settings"].get("interfaceDetails").is_none());
 }
+
+#[test]
+fn appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("appearance-source");
+    let mut store = Store::open(&root).unwrap();
+    // Emulate a real pre-V2 database: reads must not silently rewrite it.
+    store.db.execute("UPDATE settings SET body=?1 WHERE id=1", [json!({"theme":"dark","interfaceFontSize":"small","editorFontSize":"huge","extension":{"retained":true}}).to_string()]).unwrap();
+    assert!(store.workspace().unwrap()["settings"].get("appearance").is_none());
+    store.action(json!({"type":"settings","settings":{"sort":"title"}})).unwrap();
+    assert_eq!(store.workspace().unwrap()["settings"]["appearance"], json!({"version":2,"themeId":"classic","schemePreference":"dark"}));
+    let details = json!({"version":1,"iconScale":100,"desktopHitScale":100,"mobileHitScale":100,"menuSpacing":"standard","radiusScale":150});
+    for skin in ["classic", "paper", "high-contrast"] {
+        for scheme in ["system", "light", "dark"] {
+            let appearance = json!({"version":2,"themeId":skin,"schemePreference":scheme});
+            // New authority wins over a stale (but legal) legacy projection.
+            store.action(json!({"type":"settings","settings":{"appearance":appearance,"theme":"light","interfaceDetails":details}})).unwrap();
+            let good = store.workspace().unwrap()["settings"].clone();
+            assert_eq!(good["appearance"], appearance);
+            assert_eq!(good["theme"], json!(scheme));
+            let archive = temp.path().join(format!("{skin}-{scheme}.notesbackup"));
+            store.export_archive(&archive).unwrap();
+            assert_eq!(read_json(&archive)["settings"], good);
+            let target_root = temp.path().join(format!("target-{skin}-{scheme}"));
+            let mut target = Store::open(&target_root).unwrap();
+            target.import_archive(&archive).unwrap();
+            drop(target);
+            let target = Store::open(&target_root).unwrap();
+            assert_eq!(target.workspace().unwrap()["settings"], good);
+        }
+    }
+    store.action(json!({"type":"settings","settings":{"theme":"light"}})).unwrap();
+    let good = store.workspace().unwrap()["settings"].clone();
+    assert_eq!(good["appearance"]["themeId"], "high-contrast");
+    assert_eq!(good["appearance"]["schemePreference"], "light");
+    assert_eq!(good["interfaceFontSize"], "small");
+    assert_eq!(good["editorFontSize"], "huge");
+    assert_eq!(good["extension"]["retained"], true);
+    let valid = good["appearance"].clone();
+    let mut invalid = vec![Value::Null, json!([]), json!({}), json!("dark")];
+    for (key, value) in [("version",json!(1)),("version",json!(2.0)),("version",json!("2")),("themeId",json!("deleted-theme")),("schemePreference",json!("sepia")),("css",json!("red"))] {
+        let mut bad = valid.clone(); bad[key] = value; invalid.push(bad);
+    }
+    for key in ["version", "themeId", "schemePreference"] { let mut bad = valid.clone(); bad.as_object_mut().unwrap().remove(key); invalid.push(bad); }
+    let archive = temp.path().join("valid.notesbackup"); store.export_archive(&archive).unwrap();
+    let encoded = read_json(&archive);
+    for (i, bad) in invalid.iter().enumerate() {
+        assert!(store.action(json!({"type":"settings","settings":{"appearance":bad,"theme":"dark","sort":"created"}})).is_err(), "accepted {i}");
+        assert_eq!(store.workspace().unwrap()["settings"], good);
+        let mut corrupted = encoded.clone(); corrupted["settings"]["appearance"] = bad.clone();
+        let path = temp.path().join(format!("bad-{i}.notesbackup")); write_json(&path, &corrupted);
+        let before = store.workspace().unwrap();
+        assert!(store.import_archive(&path).is_err(), "imported {i}");
+        assert_eq!(store.workspace().unwrap(), before);
+    }
+    // Archive import corrects a stale projection atomically, without new wire.
+    let mut stale = encoded.clone(); stale["settings"]["theme"] = json!("dark");
+    let path = temp.path().join("stale.notesbackup"); write_json(&path, &stale);
+    store.import_archive(&path).unwrap();
+    assert_eq!(store.workspace().unwrap()["settings"]["theme"], "light");
+    // Legacy archive remains legacy until its first write, with the old scheme.
+    let mut legacy = encoded; legacy["settings"].as_object_mut().unwrap().remove("appearance"); legacy["settings"]["theme"] = json!("system");
+    let path = temp.path().join("legacy.notesbackup"); write_json(&path, &legacy); store.import_archive(&path).unwrap();
+    assert!(store.workspace().unwrap()["settings"].get("appearance").is_none());
+    store.action(json!({"type":"settings","settings":{"groupDates":true}})).unwrap();
+    assert_eq!(store.workspace().unwrap()["settings"]["appearance"],json!({"version":2,"themeId":"classic","schemePreference":"system"}));
+    drop(store);
+    let store = Store::open(&root).unwrap();
+    assert_eq!(store.workspace().unwrap()["settings"]["theme"], "system");
+}
