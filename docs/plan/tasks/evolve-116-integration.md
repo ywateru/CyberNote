@@ -39,7 +39,7 @@ Android准备目录为`artifacts/project-evolution/android-isolated-20261116T203
 
 ### 可提前并行的执行器准备
 
-发布脚本已有一项可独立修复的阻塞，见[evolve-116-release-verifier](evolve-116-release-verifier.md)：verifyFrontend遗漏严格stamp字段会拒绝合法前端。该准备任务提交并独审合入后，才准备最终共用source stamp；不放宽校验来出包。
+发布脚本准备修复已独审合入，见[evolve-116-release-verifier](evolve-116-release-verifier.md)：verifyFrontend补全严格stamp字段，合法前端可通过，错误身份继续拒绝。owned Android执行器也已独审合入`5eff3eb0`，原parked Editor观测反例已修复；main工具33项通过，明确限于fake transport/CLI边界。最终共用source stamp仍等待115及必要产品修复合入后才准备，不放宽核验来出包。
 
 在112/115开发期间可独立准备`evolve116-android-driver`执行器，不代表116产品联调已经开始。它只依赖既有113移动身份和当前调试观察契约，path限于新执行器、其定向身份/清理检查及自身说明，不改产品App、旧Samsung driver或共享构建入口。此准备分支提交并独审后再合入；真实设备执行和最终功能验收仍须等待112/115整合及准确包。
 

@@ -11,7 +11,7 @@
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
 | 114 主题 | done（模块）；主题`39662e7d`与production Store runner`9bbb8562`均已合入 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199通过，实际AgentSettings额外18状态/450文字对/0失败。runner修复`975202a9`经`bd0aaf78`独审通过，主树真实3项Store再次通过 | native-open，116承接 |
 | 115 呈现 | in-progress；基于已合入114开始 | 未执行 | 未执行 |
-| 116 整合 | 产品联调等112与115；Android执行器准备已提交待独审，release verifier准备修复已合入 | verifier`9878c254`主54项通过、独审`870d9ba3`；不代表真实包核验。Android driver`35018fac`作者29项仅工具fixture | 最终准确包/设备未执行 |
+| 116 整合 | 产品联调等115；Android执行器与release verifier准备均已独审合入 | verifier`9878c254`主54项/独审`870d9ba3`；driver修复`c9d0b328`经`e16ff3b6`独审、`5eff3eb0`合入，主driver31+lifecycle2共33项通过；均非实际包/设备验收 | 最终准确包/设备未执行；owned AVD环境调查单独进行 |
 
 ## 分支写入边界
 
@@ -26,7 +26,7 @@
 - `codex/evolve-114`：主题registry/token/外观偏好迁移、Rust归档校验及真实表面投影；不改agent_host/application或窗口外部协调语义。
 - `codex/evolve-112-integration`：同Session原生host/生命周期/命令/持久启用偏好与Preferences Agent入口，随后接已审窗口协调做真实链路；不改变theme/presentation或另建Store。
 - `codex/evolve-115`：从`5be79fce`开始，唯一呈现resolver、严格PresentationV1及其TS/Rust原子迁移、双端Shell/专注/移动列表/密度；不改变112宿主/授权/IPC，App中的保存/外部写/录音owner保持稳定。
-- `codex/evolve-116-android-driver`：独立owned emulator执行器，当前`c9d0b328`修复readUI parked Editor观测错误待增量独审；不改产品或旧Samsung driver，不代表设备验收。
+- `codex/evolve-116-android-driver`：独立owned emulator执行器，`c9d0b328`修复readUI parked Editor观测错误后经`e16ff3b6`复核PASS并合入`5eff3eb0`；待环境调查进程收尾后清理树。不改产品或旧Samsung driver，不代表设备验收。
 
 开发提交后由另一agent复核并执行相关真实检查。合入按依赖顺序进行，涉及相同owner的接线串行完成；不把模块传输fixture当作真实资料库联调。
 
