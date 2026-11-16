@@ -28,7 +28,7 @@ export function verifyFrontend(frontend, stamp, root = projectRoot) {
   const info = json(resolve(frontend, 'build-info.json'));
   assert.equal(info.schema, 1); assert.equal(info.mode, 'production');
   assert.ok(info.builtAt && new Date(info.builtAt).toISOString() === info.builtAt, 'Missing real UTC build timestamp');
-  validateStamp({ schema: 1, version: info.version, sourceRevision: info.sourceRevision, sourceFingerprint: info.sourceFingerprint, preparedAt: info.releasePreparedAt || info.builtAt }, root);
+  validateStamp({ schema: 1, version: info.version, sourceRevision: info.sourceRevision, sourceFingerprint: info.sourceFingerprint, sourceDirty: info.sourceDirty, inputCount: info.inputCount, preparedAt: info.releasePreparedAt || info.builtAt }, root);
   if (stamp) {
     validateStamp(stamp, root);
     for (const key of ['version', 'sourceRevision', 'sourceFingerprint']) assert.equal(info[key], stamp[key], `Frontend differs from release stamp: ${key}`);
