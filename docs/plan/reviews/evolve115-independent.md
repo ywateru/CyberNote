@@ -60,3 +60,36 @@
 独立探针源码、日志、JSON和失败截图均保留在 `/tmp/evolve115-independent-8fNhI4/`；记录不覆盖作者已提交证据。671个tracked source/script文件按路径＋NUL＋内容＋NUL计算SHA-256为 `c87e9d0bcf1081323662ede7774dd6fd3977aee4b086571be3272ea114c34bea`，见 `source-manifest.json`；完成后复核未变。报告相对链接及行号检查通过。
 
 本结论针对115自身提交。主线eca35abb后的112 AgentSettings/host、动态原生窗口与115的组合仍须合入后复验，未复制接线或因此报模块缺陷。本轮没有启动native/真实设备、读写用户库或使用Tauri target；真实IME/Back/FORMAT102、safe-area、系统手势、原生录音、跨WebView/跨窗设置与准确安装包均保持116强制原生门槛OPEN。
+
+## 2026-11-17 增量独审：7a5bb3dc 三项P2闭合
+
+复核修复提交 `7a5bb3dcd1c521799e2d8b624130a9b9845a518e`，父提交为本报告首版 `4c889900affe839d9fa09d12cbc2487b9a2c5c45`。**最新结论：115模块 SOURCE_PASS；原F1/F2/F3全部闭合，未发现新增P1/P2 blocking或nonblocking。native acceptance与主线112组合复验仍OPEN。** 上文BLOCKED、原失败断言和原/tmp证据完整保留，不能将本节源码/组件通过扩张为原生验收。
+
+修复diff和实际路径复核：
+
+- **F1闭合**：[App:600](../../../src/App.tsx#L600)改为观察已确认的 `desktop.collectionView`，不再观察resolver因断点选出的当前view。原独立gallery反例及gallery对照均重新执行，1280→699→700→1100下正文可见、同一Editor保持；新增作者回归还比较DOM/View、全文、选区及路由。手机偏好单独修改不清桌面意图，主动确认修改desktop view仍按原契约清除galleryEditor。
+- **F2闭合**：[bridge:491](../../../src/bridge.ts#L491)在独立settings候选上完成严格合并，persist成功后才发布给内存preview，且settings不经过末尾第二次persist。原独立preview反例现在通过；作者九场景中，对sort/view/sidebar各自连续两次Quota失败，再核对loadWorkspace、完整持久工作区、确认UI、后续成功候选与reload，均通过。未改Rust产品保存实现。
+- **F3闭合**：[App:4131](../../../src/App.tsx#L4131)的来源key包含page/query/searching/filter、base/search note、附件及画廊路由等，仍排除菜单/模态的单纯开关。原独立同folder/note清搜索反例通过；作者覆盖page-only与内层菜单Escape优先，均通过。独立补验仅attachmentBrowser变化、folder/note/page均不变时，通过实际菜单点击进入附件来源，也关闭抽屉、移除scrim并恢复原触发器焦点。
+
+独立补查真实用户控件路径：无Tauri注入的生产preview App中，用实际设置按钮打开Preferences、点击备忘录页并选择desktop list；注入一次Storage配额失败后，控件、焦点、确认设置、loadWorkspace与localStorage均保持gallery旧值。正常关闭错误提示再退出设置，已打开gallery正文仍可见。随后通过真实排序下拉框保存created，再reload，失败list候选没有进入任何后续成功保存。该检查验证App→Preferences→ConfirmedSettings→真实preview bridge/localStorage，不只检查owner单元。
+
+附加探针首轮有一项操作顺序失败：全局错误条遮挡“关闭设置”按钮，Playwright如实超时；未强制点击或改产品。原脚本、日志、1 pass/1 fail记录保留；v2按可见的“关闭错误”入口先处理错误条，再继续原断言，两项均通过。这不是将失败候选当成已保存的复发，也没有删除该失败记录。
+
+实际执行（Node `v22.16.0`），独立增量证据目录 `/tmp/evolve115-independent-fixes-02l7a2eg/`：
+
+| 命令 | 实际结果 |
+| --- | --- |
+| `node scripts/check-evolve115-review-fixes.mjs` | exit 0；9场景pass、0 fail；`author-nine.log`及`author-nine/`保存本次原始回执 |
+| `node …/gallery-boundary-probe.mjs`、`node …/drawer-source-probe.mjs`、`node …/preview-probes.mjs` | 三份原独立反例仅更换输出目录后复跑，均exit 0；preview包含严格拒绝/优先级和原Quota反例两场景，均pass；见`original-rerun-results.json` |
+| `node …/extra-user-paths.mjs` | exit 1；附件来源pass，Preferences路径在错误条遮挡关闭按钮处超时；原记录保留 |
+| `node …/extra-user-v2/extra-user-paths.mjs` | exit 0；真实Preferences失败→恢复→后续sort→reload与仅附件来源变化两项均pass |
+| `CARGO_TARGET_DIR=/tmp/apple-notes-sync85-target cargo test --locked --offline --manifest-path src-tauri/src/application/harness/Cargo.toml --lib evolve115_presentation_is_strict_atomic_and_roundtrips -- --nocapture` | exit 0；加强后的真实SQLite/core单项pass，204 filtered out，约2.33s；验证trigger拒绝后完整状态、sort-only成功、重开及archive往返；见`core-one.log` |
+| `npm run typecheck` | exit 0；见`typecheck.log` |
+| `git diff --check 4c889900 7a5bb3dc`、`git diff --check`、`git diff --cached --check` | exit 0 |
+| 报告链接/源码差异/历史证据检查 | 相对链接与行号均有效；审查只追加本报告；原/tmp的26份文件SHA-256逐一未变，作者checks中672份source输入及22份evidence摘要匹配 |
+
+Rust产品代码与原108脚本未变，因此未重复108、完整Store两项或既有九路径capture；只执行本次加强的core单项。未跑376/400、未变113原90或build，没有使用Tauri target。作者的108/Store2/build回执作为其自测历史单列，不冒充本次独立执行。
+
+本轮672个tracked source/script文件沿用上文路径＋NUL＋内容＋NUL算法，摘要为 `4caefadd7ba0c28dde0655ddb8aef7610b85319daa26052967f81086dee4e0fd`，见增量目录`source-manifest.json`；完成时复核未变。原失败目录 `/tmp/evolve115-independent-8fNhI4/`未覆盖，新增回执全部分目录保存。
+
+允许本模块交主线组合合并/复验；尚未声称112装配、跨WebView、准确APK、真实IME/FORMAT102或其他116门槛通过。没有启动native/真实设备、读写用户库或更改实现。此前controlled composition/capture只保留原组件范围，Trime系统原生文本框准备也不属于本产品验收。
