@@ -50,6 +50,8 @@ type CredentialRecord = {
 
 workspaceId必须与CLI参数匹配。socketPath必须为该私有runtime目录中的socket，owner为当前用户、权限0600；不允许指向任意外部socket。宿主安装/关闭端点时校验路径与inode身份，不能删除另一个活跃宿主端点。socket只标识宿主，workspaceId和grant仍由宿主验证。
 
+macOS Unix socket路径长度受限，宿主使用短basename（例如workspace/宿主身份摘要的前12个十六进制字符加`.sock`），绑定前验证完整路径字节数；不能直接把完整UUID重复拼接进长应用数据目录。路径超限显式报错并允许指定较短的私有runtime-dir，不截断路径或复用其他宿主端点。
+
 原始credential仅存在私有凭据文件和请求内，不出现在CLI、工具返回、错误和审计。授权UI复制的是引用配置。首版配置使用完整适配器可执行路径、workspace-id和credential-ref；隔离实例可附runtime-dir。Android不启动该listener。
 
 ## MCP适配器行为
