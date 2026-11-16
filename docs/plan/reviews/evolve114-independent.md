@@ -185,3 +185,36 @@ CARGO_BUILD_JOBS=2 cargo test --locked --offline --features rusqlite/hooks \
 修复没有改 Editor key、Undo/selection/composition/recording owner，376 组再次验证相关实际组件连续性、启动/独立 note/portal/图片预览/access/录音与 component base × radiusScale。Classic 旧基线及改色理由沿用上文已独立核对证据，本次新增 notice 与选区角色各有明确可读性修复理由。actual AgentSettings 不在此基线，仍只承认作者记录的只读兼容边界；实际系统菜单仅 scheme projection，合成 composition/capture 仍不等同原生 IME/设备验收。
 
 最终判定为 **114 source/component 修复复核 PASS，F1–F5 closed**。完整原生宿主、actual AgentSettings 集成页面、Android/实际输入法/真实采集继续留给后续集成与 116；本次不修改任务状态或合入分支。
+
+## 2026-11-17 runner-only 增量独审：96272cc6
+
+**增量结论：BLOCKED，1 项 P2 blocking，仅涉及 runner 的 target 禁用边界；不重开已经关闭的产品 F1–F5。** 审查 `96272cc6debcf1cb49c33d13d6e94400761a2168`（父提交为已合入主树的 `39662e7d`），开始时工作树干净。diff 仅 runner 和作者 evidence/receipt/log，没有产品变化；本轮只追加本节，原报告全部保持原样，没有改脚本，也没有重跑 376、90、12 或完整 core199。
+
+### [P2 blocking] 新建子目录使 symlink 指向的 Tauri target 绕过禁用检查
+
+位置：`scripts/check-evolve114-store.mjs:13`–`:20`，触发写入 `:29`、Cargo 调用 `:71`。
+
+对完整 target 调用 realpath 时，如果末级目录尚不存在，代码在 ENOENT 分支直接返回原始 lexical target。这样没有解析已存在父目录中的 symlink。例：`alias -> <fixture>/src-tauri/target` 已存在，而 `CARGO_TARGET_DIR=<fixture>/alias/new-descendant` 尚不存在。两个待检查字符串均不含 `/src-tauri/target`，guard 放行；后续 mkdir 在被禁用 target 内创建子目录，然后把同一 alias 路径传给 Cargo。这违反本轮明确要求的“不碰主 Tauri target”，仅检查已经存在的完整 alias 不足以保护新建 cache 路径。
+
+独立复现使用临时 fixture 中的模拟 `src-tauri/target`，没有指向或写入真实主 target。原脚本逐字节从真实路径执行；fixture 的 production source 仅作只读引用，replay 为实际已有四路径 capture。PATH 中仅在这些负边界放置 Cargo spy，记录是否到达后退出 79，明确不把 spy 当真实 Rust 测试。结果：**应在 target 检查处拒绝，实际 guard=false、目录已建、cargoCalled=true**。子进程失败回执正确为 exitCode=79 / passed=false；此反例证明 target guard 绕过，不是伪造测试成功。
+
+修复应在任何 mkdir/Cargo 前解析 target 最近的已存在祖先，再拼回尚不存在的后缀，并对最终实际路径执行同一禁用判断；不能在完整路径 realpath 的 ENOENT 时直接信任 lexical path。补充“已有 symlink 父目录 + 不存在的一级/多级后缀”应拒绝且不建目录/不调用 Cargo 的回归。安全的新 isolated target 仍应可创建。修后仅需 runner 小范围复核，不需重跑产品完整组。
+
+### 其余审查与实际运行
+
+- 唯一 Cargo manifest 为当前树的 `src-tauri/src/application/harness/Cargo.toml`；没有 copy crate、wrapper 或 fallback。生产 harness 的 lib/build/sync wrapper 实际直接引用 Store/Session/application/agent_access/model，使用自己的 Cargo.lock、locked/offline/hooks/--lib 和三项过滤。
+- actual App replay 只能取 `artifacts/evolve114-regressions/app-settings-replays.json`，要求恰为四路径并与提交 capture deepEqual；缺失和不匹配都在 mkdir/Cargo 前退出 1，不回退到提交 fixture。未声称 equality 能证明任意 capture 的生成时间；本轮使用已有真实浏览器产物，没有重造或重跑 376。
+- `passed` 同时要求 Cargo exit 0、三个完整预期测试名、恰为 3 passed/0 failed 汇总，以及所列输入哈希前后不变；本轮真实结果与 receipt 对得上，没有发现伪成功回执。哈希清单标识所列 56 个输入，不冒称三项测试覆盖所有模块。作者已提交 receipt 的 56 个哈希也与当前输入逐一一致。
+- 对用户指定的既有缓存 `/tmp/apple-notes-sync85-target` 尊重 caller target，未创建重复大缓存；真实测试二进制为 `notes_application_native_tests`，日志中三项名称均实际通过。没有使用旧复制 harness 或真实主 Tauri target。
+
+| 本轮命令/独立边界 | 实际结果 |
+| --- | --- |
+| `node --check scripts/check-evolve114-store.mjs` | exit 0 |
+| `CARGO_TARGET_DIR=/tmp/apple-notes-sync85-target node scripts/check-evolve114-store.mjs` | exit 0，**3 passed / 0 failed / 200 filtered out**；四条 actual App patches 使用真实 SQLite；receipt source=96272cc6、caller target 准确、sourcesUnchanged=true，56 个输入哈希再次独立核对一致 |
+| 缺 replay；四路径但 expected 不匹配 | 各 exit 1，Cargo 均未调用、安全 target 均未创建 |
+| 直接禁用 target；其不存在子目录；已有完整 symlink alias | 各 exit 1，均报告 forbidden target，Cargo 均未调用，不创建缺失子目录 |
+| 已有 alias 的不存在子目录 | 失败反例：未触发 guard、创建被禁用 target 内子目录、到达 Cargo spy；runner 最终 exit 1 是子进程退出 79，不能误算为“guard 正常拒绝” |
+
+独立探针 `/tmp/evolve114-runner-independent-probe.py`；六个边界结果 `/tmp/evolve114-runner-independent-results.json`，原临时 fixture/日志位置记录在 `/tmp/evolve114-runner-independent-results-path.txt`。真实正向运行日志 `/tmp/evolve114-runner-independent-positive.log`，当前 runner 原件为 `artifacts/evolve114-store/{tests.log,result.json}`。未改动作者提交的 receipt/log 或原产品失败证据。
+
+主树 `39662e7d` 的 postmerge 199/376/90/12 及 AgentSettings 450 pairs 已在先前单独通过，本次不重复。当前 **产品 source/component PASS 保持；runner-only 96272cc6 暂不建议合入，等待 target guard 修复及增量复核**。
