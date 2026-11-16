@@ -36,3 +36,9 @@ depends-on: [evolve-112, evolve-115]
 本轮同步验收优先复用既有手工配对路径，在两个独立桌面资料库和本轮新建Android模拟器之间验证agent写入后的完整正文、元数据及附件引用。明确记录实际连接拓扑；ADB映射仅证明该映射路线，不推断局域网、移动网络或账户设备同步。账户同步仍按各自已有验收范围，不因本轮手工配对成功扩张为账户三端通过。先完成配对和身份稳定，再由真实设置页建立MCP授权，避免把配对引起的身份变化误判为授权持久化失败。
 
 Android准备目录为`artifacts/project-evolution/android-isolated-20261116T203629Z-dc8cf7db/`，元数据见该目录`env-metadata.json`；只完成创建，尚未boot/安装/验收。使用现有API36 ARM64 image、私有ANDROID_AVD_HOME/ANDROID_USER_HOME、2GiB数据盘、2GiB RAM、无快照和宿主采集。未来serial候选为`emulator-5580`，启动前检查端口及实际设备身份；所有adb命令显式限定owned serial和本轮包。旧sync108 Android脚本包含历史Samsung默认值，不能直接执行其安装、启动或输入操作。保留原机、历史AVD及其快照/锁文件。
+
+### 可提前并行的执行器准备
+
+在112/115开发期间可独立准备`evolve116-android-driver`执行器，不代表116产品联调已经开始。它只依赖既有113移动身份和当前调试观察契约，path限于新执行器、其定向身份/清理检查及自身说明，不改产品App、旧Samsung driver或共享构建入口。此准备分支提交并独审后再合入；真实设备执行和最终功能验收仍须等待112/115整合及准确包。
+
+入口必须显式接收adb路径/owned emulator serial/AVD name/package/activity/预期APK摘要及本轮evidence目录，不继承历史设备默认。运行时核对AVD、包与PID/前台/唯一WebView，变更则停止而不重放写操作；只创建并清理精确属于本轮的lease/forward/reverse，邀请串仅经内存传递。提供读取正文/设置/同步状态、可见UI交互及输入/旋转/Back的基础能力；CDP插文仅作数据准备，不能宣称真实IME验收。prepare阶段不boot、不安装、不修改IME，提供可复用机制后等待资源和准确包调度。
