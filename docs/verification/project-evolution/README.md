@@ -10,7 +10,7 @@
 | 112 MCP | done（模块）；真实装配`4ceb15e9`经`a1a69662`独审PASS，已合入`eca35abb` | 独立service11、实际设置双grant/Codex九工具/CAS/重启/撤销/20k/WK/刷新恢复通过；主树编译与17项native定向、376主题/90交互/12组Agent页及17组合UI检查通过 | 实际debug candidate通过；最终准确包及平台边界由116承接 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
 | 114 主题 | done（模块）；主题`39662e7d`与production Store runner`9bbb8562`均已合入 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199通过，实际AgentSettings额外18状态/450文字对/0失败。runner修复`975202a9`经`bd0aaf78`独审通过，主树真实3项Store再次通过 | native-open，116承接 |
-| 115 呈现 | 开发`7e53af80`已提交，独审中，尚未合入 | 作者实际App108项、Store2项/严格设置3项、交互90项及新Shell文字对比通过；待独立反例与审查 | native-open，116承接 |
+| 115 呈现 | 开发`7e53af80`独审`4c889900`发现3项P2，修复中，尚未合入 | 作者App108、Store2/严格设置3、交互90通过；独审确认断点关闭gallery正文、preview失败设置污染后续persist、搜索来源变化抽屉未关，原失败保留 | native-open，116承接 |
 | 116 整合 | 产品联调等115；Android执行器与release verifier准备均已独审合入 | verifier`9878c254`主54项/独审`870d9ba3`；driver修复`c9d0b328`经`e16ff3b6`独审、`5eff3eb0`合入，主driver31+lifecycle2共33项通过；均非实际包/设备验收 | 最终准确包/设备未执行；owned AVD环境调查单独进行 |
 
 ## 分支写入边界
