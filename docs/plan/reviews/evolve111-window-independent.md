@@ -63,3 +63,31 @@
 ## 交付边界
 
 本次通过的是前端模块源码与隔离真实组件门槛，允许主线后续装配；不是 task 111 全部完成或真实宿主端到端通过。真实 `agent_window_reply` command 与 WebView 身份/Session、document_participants、实际 probe/prepare/terminal 事件顺序、多窗口增减/关闭、事务后 notes-metadata 与 release 顺序、5 秒刷新截止及 WINDOW_REFRESH_REQUIRED warning/补偿、原生输入与访问撤销交错仍为 **native-open**。这些真实装配结果须单独验证，不用 Chrome fixture 或本报告替代。
+
+## 补充复核：刷新失败后的实际恢复路径
+
+按用户补充的 task 112“失败能恢复”门槛，进一步区分安全冻结中间态与最终可恢复性。被审实现仍为 `5e10f614`，此次未改代码。**补充结论仍为 MODULE_SOURCE_PASS / native-open，无新增 P1/P2 blocking**；恢复不依赖重启、手动重发 release 或重新执行 mutation。
+
+实际入口及约束：
+
+- `src/agent-window.ts:297`：prepare 安装的真实 5.5 秒 watchdog 在刷新失败后仍有效，调用 cancel。`:350` 在已知 outcome=commit 时直接重试 `finish(commit)`；`:357` 失败后以 100ms 起、最多 2 秒的间隔继续退避重试。重试必须经过 App 的可信 metadataRefresh 与真实 layout commit，不以计时器本身证明刷新成功。
+- `src/App.tsx:1017`、`:794`：迟到 notes-metadata 经既有 metadataGate/可信读取进入 hydration；若正文变化导致实际 Editor 注册，注册门禁 park Editor 并调用合并 cancel，因此可提前触发同一 commit 的可信重试。没有 Editor 注册变化时也保留 watchdog 兜底；不能把“迟到 metadata 必须立即解冻”当成契约。
+- `src/App.tsx:1225`：实际卡片等入口的点击先等待合并 cancel，只有可信 commit 刷新完成、原操作 terminal 后才重放点击。冻结期间写入口仍拒绝，不能靠写入操作绕过刷新。
+- 原 release 完全丢失时，watchdog 发送原 operation 的 ready:false，从对应终态 receipt 得到 commit 后进入同一可信刷新。旧 receipt/release、不同目标集合与后继 operation 仍受原身份校验，不把提交恢复变成新的写事务。
+
+额外命令 `node /tmp/evolve111-window-independent-recovery.mjs` 最终 **exit 0，12 项真实组件检查通过，无浏览器异常**。未缩短或替换生产计时器，运行真实 App/PM/metadata owner，synthetic transport 仅注入存储错误与原生收据。
+
+| 场景 | 实际观测 |
+| --- | --- |
+| 只发送一次 commit release，首次可信读取失败，不发 metadata/导航/手动 cancel | 先 refreshed:false 且保持 freeze；prepare 后约 **5611ms** 自动 ACK true 并解冻，ACK 当刻真实 DOM/PM 是已提交正文，revision 未再次改变。 |
+| 首次失败后迟到 metadata，可信读取延迟 240ms | 读取挂起期间无 true ACK、仍冻结；约 **694ms** 经实际 Editor 注册及同一可信完成路径恢复，ACK 当刻正文正确。探针初稿错误地要求迟到 metadata 投影后仍冻结；追踪确认是上述安全重试提前完成，已纠正探针前提，没有改产品。 |
+| native 已 commit，但不发送 release 或 metadata | 约 **5631ms**，原 operation 的 ready:false 获取 commit receipt，可信强制读回后 ACK/解冻，没有伪 abort。 |
+| 持续可信读取失败，且 refreshed:false 回复返回带 committed:true/operationId 的 STORAGE_ERROR | 至少 3 次负 ACK 尝试期间没有正 ACK，保持冻结；仅恢复 synthetic 存储可用性后，已有循环在约 **5923ms** 正 ACK 并解冻，无需新 release/用户动作。 |
+| 一次失败后真实点击另一笔记卡片 | 点击经实际 capture/cancel 路径，在 watchdog 到期前完成可信重试，随后才切换 owner。 |
+| 恢复后 prepare 新 operation，再送旧 release 和迟到 metadata | 新 operation 保持冻结；没有旧回复解新操作。全部场景均未重放 saveNote。 |
+
+原生 warning/幂等边界只读核对主树 `src-tauri/src/session/external.rs:157,245,352` 及 `application/tests/native_review.rs:119`：release false 记录 refresh_failed，即使 warning 写入失败也保留 commit 终态；原参与者可重取同 operation 的 commit receipt；后续 true ACK 不抹除已观察的失败。finish_delivery 在刷新失败/窗口变化/截止时交付 committed:true + WINDOW_REFRESH_REQUIRED，warning 持久化失败另加 WARNING_PERSIST_FAILED。相同 key 的 mutation replay 返回原结果，不重新执行写入，也不会自动重发 release；因此不能拿“工具可重放”代替窗口恢复调度。本次已验证前端自己的 watchdog/退避/实际 UI 入口承担恢复，synthetic warning 状态不会因后续 true ACK 被清除。
+
+这次没有重跑 Rust 原生测试，也未调用真实 finish_delivery 或证明 warning 实际落盘；上述 Rust 部分为源码/既有原生契约核对。真实宿主补偿装配、有限终态收据的 64 条/5 分钟保留以及多 WebView 交错仍需后续 native 门槛验证。
+
+新增探针与结果保留在 `artifacts/evolve111-window-independent-extra/evolve111-window-independent-recovery.{mjs,log}` 和 `evolve111-window-independent-recovery-results.json`。生产源码指纹继续为 `187f05da3275dd4bed98f419cc2ca0a63b4bd4aea61b1ef41df019be09797213`；补充只修改本报告，`git diff --check` 和暂存检查通过。
