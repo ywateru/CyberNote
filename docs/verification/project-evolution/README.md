@@ -15,7 +15,7 @@
 
 ## 分支写入边界
 
-下面前六条为已合入并清理的模块分支责任记录；当前活跃的是114、112-integration。清理只移除本轮已完成的worktree/分支，保留提交、审查、失败证据与独立生成缓存；不清理历史sync108或用户数据。window原失败日志与独立探针已逐字节保全至`/tmp/evolve111-window-independent-postmerge-ercaff`，历史失败段保留在已合入review。
+下面111/113/112模块、111-window与114均为已合入并清理的模块分支责任记录；当前活跃的是115、112-integration。清理只移除本轮已完成的worktree/分支，保留提交、审查、失败证据；不清理历史sync108或用户数据。window原失败日志与独立探针已逐字节保全至`/tmp/evolve111-window-independent-postmerge-ercaff`，历史失败段保留在已合入review。114树ignored原始artifacts另存`artifacts/project-evolution/evolve114-worktree-archive-20261117/`，185文件/7,324,729字节与原件SHA256逐项一致，清单见`archive-manifest.json`；仅去除可重建的旧复制harness target、dist与依赖链接，production core缓存保留。
 
 - `codex/evolve-111`：application、可信授权context、Session/Store/schema、lib原生装配；不修改前端或agent_host。
 - `codex/evolve-113`：前端交互、相关验证脚本；不修改Rust。
@@ -25,6 +25,7 @@
 - `codex/evolve-111-window`：基于已审113接入独立notes-agent协调、App目标保护与可信刷新；不改Rust、Preferences或主题。114只改App外观职责，合入时保留两者且重验真实组件。
 - `codex/evolve-114`：主题registry/token/外观偏好迁移、Rust归档校验及真实表面投影；不改agent_host/application或窗口外部协调语义。
 - `codex/evolve-112-integration`：同Session原生host/生命周期/命令/持久启用偏好与Preferences Agent入口，随后接已审窗口协调做真实链路；不改变theme/presentation或另建Store。
+- `codex/evolve-115`：从`5be79fce`开始，唯一呈现resolver、严格PresentationV1及其TS/Rust原子迁移、双端Shell/专注/移动列表/密度；不改变112宿主/授权/IPC，App中的保存/外部写/录音owner保持稳定。
 
 开发提交后由另一agent复核并执行相关真实检查。合入按依赖顺序进行，涉及相同owner的接线串行完成；不把模块传输fixture当作真实资料库联调。
 
