@@ -309,3 +309,87 @@ if __name__=='__main__':
  result=unittest.TextTestRunner(verbosity=2).run(suite)
  sys.exit(not result.wasSuccessful())
 ```
+
+## 修复独立复核：ec2a051e（2026-11-17，最新结论）
+
+被审修复 commit：`ec2a051e0b1e9c115b61c1494ecf10ae5225ee89`。本段是在原始 blocked 报告之后追加；上文 F1 失败记录、原始脚本和证据均保留，不用修复后的输出覆盖历史失败。
+
+**最新结论：pass（adapter 模块）；F1 已关闭，无剩余 P1/P2 blocking。可合入主线准备装配。** 该结论不包含运行中真实 host/service/窗口的端到端验收；真实 Codex 工具读写仍留116。
+
+### 增量审查
+
+产品代码增量限 `crates/notes-mcp/src/schema.rs:248` 的共享 bounded_content：只有含 `type` key 的对象计入节点数，attrs/strokes 等未含 type 的对象不增加业务节点数；JSON 根深度0，所有 JSON value（包括 null、scalar、空 object/array）均检查 `depth > 64`。create/update 经 `src/lib.rs` 使用同一检查，document read 经 `src/ipc.rs` 使用同一检查。
+
+这一算法与原生 application::document::input_document 的节点/深度资源遍历相符；1MiB UTF-8/紧凑 JSON、2MiB IPC frame、text/list 页上限、宿主业务 schema 校验职责均保留。未降低 capabilities.maxNodes，未修改旧12例 service fixture、原始独立 F1 fixture或新增第二 Store/宿主替身业务实现。
+
+作者新增 `document-boundary.json` 的 SHA-256、generatorSha256，以及其 `sourceCommit=eb9cee7d3ad1bf90a317ce9c286c653094512f90` 对应 document.rs Git blob，均在当前工作树共享 Git 对象上只读复核一致。未运行作者会覆盖其 fixture 的生成脚本。本轮真实原生再验证使用下述独立临时副本和独立输出文件。
+
+### 原始 F1 探针复跑及失败证据保全
+
+原封不动运行原有 `/tmp/evolve112-f1-probe.py`，分别指定修复后的 Debug 和 Release binary 并使用 `--expect pass`，两次 exit 0：
+
+```sh
+python3 -B /tmp/evolve112-f1-probe.py --binary crates/notes-mcp/target/debug/cybernote-mcp --expect pass
+python3 -B /tmp/evolve112-f1-probe.py --binary crates/notes-mcp/target/release/cybernote-mcp --expect pass
+```
+
+原始779,987 bytes/20,000 node实际 service fixture的 create/read 均不再 isError，structuredContent 与原生 createResult/readResult 完全相等，IPC请求数由原先 create 0/read后累计1变为 create 1/read后累计2。成功结果分别另存 `/tmp/evolve112-f1-fixed-debug-results.json` 和 `/tmp/evolve112-f1-fixed-release-results.json`。
+
+保留且重新核对原始证据指纹：
+
+| 原始证据 | SHA-256 |
+| --- | --- |
+| `/tmp/evolve112-actual-node-boundary.json` | `5966d0b580c459ba02e814f93853ba870a371674c9100372130bb7f12b1e1396` |
+| `/tmp/evolve112-f1-original-cybernote-mcp` | `3f623265f1b675cc7f3d3ea8c0dcb549fb923c9e40e0498f38d66b577a1f19a6` |
+| `/tmp/evolve112-f1-original-results.json` | `d3fd3621ef273a0d53010d163762696b1b378e872930789a95cbc08f0ba3963d` |
+
+修复后的 release SHA-256：`0d662506f19c51f08ce88637b12a5833812fb2a573cc16324db9edf3fe968f17`；Debug：`3157e659e083264d4983a02510b18b90e870936fcd8c3d9b5a356fcbf8c43c16`。
+
+### 独立真实原生边界及双向回归
+
+在原先从111 commit `868c6dcf960cb3c92f3c9330ec22fbaf7431fe91` 提取的临时 production harness副本追加 `independent_f1_recheck_document_boundaries`，继续使用独立 `/tmp/e112-native-boundary-target`。既有原始测试/fixture不覆盖；未进入111工作树，未使用其 target，没有运行主应用或用户库。
+
+原生测试 exit 0：1 passed，199 filtered（5.68秒）。两个完整合法文档分别经真实 service create → update → read：
+
+| 文档 | 紧凑 JSON bytes | 带 type 的节点 | 所有 JSON value 最大深度 | 实际原生结果 |
+| --- | --- | --- | --- | --- |
+| 原F1 heading文档 | 779,987 | 20,000 | 4 | create提交、update到revision 2，read完整相等 |
+| doc → 30层blockquote → drawing.attrs.strokes空数组 | 1,088 | 32 | 64 | create提交、update到revision 2，read完整相等 |
+
+原生同时验证20,001节点及depth 65文档的 create/update 均为 SCHEMA_INVALID；随后读取已有笔记，完整 DTO 与拒绝前完全一致。新生成的6个成功 DTO和两个非法边界文档另存 `/tmp/evolve112-f1-recheck-native-boundaries.json`，SHA-256 `2d21dfc0ef35fe37e20ae33e518234c54dc6b0ce51c9402f5dc257142ba64763`。
+
+独立脚本 `/tmp/evolve112-f1-independent-recheck.py` 通过实际 rmcp stdio和临时Unix fixture回放上述真实 DTO。新增4项，加上原独立用例中仍有效的13项，Debug **17/17**（6.074秒）、Release **17/17**（3.243秒）通过：
+
+- 上述6个真实 service create/update/read成功 DTO逐值通过，arguments原样转发。
+- 20,001节点和depth 65：create/update在IPC前CONTENT_TOO_LARGE，Unix请求数不增加；宿主read输出超限时同样CONTENT_TOO_LARGE，不交付非法内容。
+- 分别以 null、空object、空array、boolean、number、string作叶节点，JSON value深度64通过、65拒绝；在create/update/read三个方向均核对。
+- 超过20,000个不带type的辅助object不再被误计；marks等带type对象仍计数，type:null的key也按原生遍历规则计数并受上限约束。此项及任意child链只验证资源过滤，**不把这些可能不合法的业务document形状当成真实宿主schema成功**。
+- 原独立字节/frame/页大小、额外参数/错误字段、credential轮换/回显、socket替换、取消活动/排队写等13项全部通过。**原脚本旧 all-objects/depth 联合断言整项排除，不作为契约成功标准，也未改写原始脚本。**
+
+复跑命令：
+
+```sh
+python3 -B /tmp/evolve112-f1-independent-recheck.py --binary crates/notes-mcp/target/debug/cybernote-mcp
+python3 -B /tmp/evolve112-f1-independent-recheck.py --binary crates/notes-mcp/target/release/cybernote-mcp
+```
+
+新增独立探针SHA-256：`af962ce34a6fc82b3b6850669aae4c260c4c6769ca8fd20d19ffe9acc66fa9c6`。日志保留 `/tmp/evolve112-f1-independent-recheck-debug.log`、`/tmp/evolve112-f1-independent-recheck-release.log`。临时原生副本路径仍由 `/tmp/evolve112-native-boundary-dir` 指向；这次仅追加新测试并写新fixture。
+
+### 本次构建与完整模块回归
+
+以下全部 exit 0：
+
+```sh
+cargo fmt --manifest-path crates/notes-mcp/Cargo.toml -- --check
+cargo clippy --manifest-path crates/notes-mcp/Cargo.toml --locked --all-targets -- -D warnings
+cargo test --manifest-path crates/notes-mcp/Cargo.toml --locked -- --nocapture
+cargo build --manifest-path crates/notes-mcp/Cargo.toml --locked --release
+```
+
+cargo test：新增3个document_contract + 原4个query_contract + 8个transport测试通过；其中真实SDK stdio子进程套件从13项增为16项，16/16通过（33.315秒）。本次原生临时harness编译仅有其既有unused imports告警，测试通过，未修改生产源码处理告警。
+
+### 保留的集成边界
+
+本轮没有重新配置或重跑Codex初始化探针，也没有覆盖先前其wire日志；修复仅改变资源遍历，之前 **macOS / Codex CLI 0.167.0 / stdio初始化与九工具发现** 的真实模块兼容证据继续单独保留。它不代表所有harness或其他平台兼容。没有新的模型/真实credential/业务工具调用。
+
+真实运行中的 agent_host → 当前主应用 Session/SQLite → 窗口刷新 → 重启/撤销/幂等/同步，以及116的真实Codex工具读写仍未执行。本轮是真实原生服务隔离边界测试加实际adapter传输回放，**没有声称host/service已接通**。
