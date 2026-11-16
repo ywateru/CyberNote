@@ -56,3 +56,34 @@ Store 回执记录 base HEAD 和执行输入 SHA256，运行前后相同；HEAD 
 本树没有复制随后合入主线的 112 AgentSettings assembly。最终整合 `src/App.tsx` 时需同时保留主线 AgentSettings props、动态 `open_note_window`/WK 隔离路径，以及本轮 settings/context/WorkspaceShell/录音 dock 接线；`src/Preferences.tsx` 保留主线 Agent 页及本轮 Presentation 控件和保存焦点恢复。未改 host/access/protocol，也未自行 merge。
 
 原生系统菜单仍只使用既有能力与旧 view/sidebar 部分更新；没有新增 AppKit 专注菜单 wire。准确安装包冷开、WK 动态窗口、跨窗设置协调、原生中文 IME/实体键盘、真实录音、Android safe-area/系统 IME/手势均留给 116。浏览器页面 reload 仅用于冷开偏好测试，布局路径本身不 reload、不重开正文。没有更改 task 状态或独审报告。
+
+## 4c889900 独审三项 P2 修复（等待 Parfit 增量复核）
+
+本节是作者修复与定向检查记录，不改写独审 BLOCKED 结论。父提交为 `4c889900`，产品基线仍为 `7e53af80` / `5be79fce`；没有合入后续 112/main 接线。上文及原证据目录保留为首版历史结果，以下增量单独存入 `evolve115-review-fixes/`。独审报告与 `/tmp/evolve115-independent-8fNhI4/` 原始失败文件均未修改。
+
+- **F1**：App 只在已确认的 **desktop.collectionView** 变化时清除桌面 galleryEditor，resolver 选择另一端偏好不再触发路由重置。真实 App 以桌面 gallery＋手机 gallery/list 两组经过 1280→699→700→1100→1280，均断言同一 DOM/View、原 JSON/选区/路由、正文可见及桌面 gallery-edit。另有对照确认主动修改桌面 view 仍退出原画廊正文，单改手机 view 不退出。
+- **F2**：真实 preview bridge 的 settings 分支先验证、构造独立候选，localStorage 写入成功后才发布给内存 preview；settings 不再经过末尾第二次 persist。失败保留整份旧 settings，而非仅遮住 UI；下一笔部分意图仍基于旧权威设置合并。原生分支与其他业务 owner 不改。
+- **F3**：抽屉 routeKey 使用来源对象，包括 folder/tag、base/search note、page、query、searching、filter、attachmentBrowser 和 galleryEditor。对象键可区分 tag undefined/null；不把菜单/模态或未提交 searchDraft 纳入关闭条件。真实点击覆盖同 folder/note 的“清搜索＋换页面”和仅换页面，并断言遮罩移除、抽屉关闭、焦点返回原触发器；内层菜单先处理 Escape 的对照仍通过。
+
+复跑命令：
+
+```sh
+node scripts/check-evolve115-review-fixes.mjs
+node scripts/check-evolve115-presentation.mjs
+node scripts/check-evolve115-store.mjs
+npm run typecheck
+npm run build
+git diff --check
+```
+
+| 检查 | 增量结果 |
+| --- | --- |
+| 三项修复正式回归 | **9 场景 passed / 0 failed**，见 [fixed-results.json](evolve115-review-fixes/fixed-results.json) 和新脚本。包括两端集合不同时的真实正文可见性，搜索/页面来源与菜单对照，以及三种真实 preview 部分更新 |
+| 真实 preview 失败原子性 | 无 Tauri 注入页面，断言 bridge.native=false。连续两次实际 Storage.setItem Quota 失败后，每次比较 loadWorkspace、完整 localStorage 工作区、确认 UI 和实际 focus 布局。随后分别执行 sort-only、旧 view-only、旧 sidebar-only，比较完整结果、实际提交候选以及 reload 后结果。三份 [sort](evolve115-review-fixes/preview-sort.json) / [view](evolve115-review-fixes/preview-view.json) / [sidebar](evolve115-review-fixes/preview-macSidebarVisible.json) 记录包含拒绝与成功候选；该路径不使用 FakeBackend settings 实现 |
+| 原正式 App 回归 | **108 项 passed，9 条实际 App 写入捕获**；原脚本及提交 replay 未修改，捕获仍完全相同。见 [app108-results.json](evolve115-review-fixes/app108-results.json) |
+| 生产 SQLite/core | **2 passed / 203 filtered out**。扩展现有 strict/atomic 用例：明确失败候选与旧 presentation 不同，SQLite 临时 trigger 拒绝后保持完整 workspace；随后 sort-only 写入、重开、导出/导入重开仍比较完整设置。既有九路径实际 App replay 继续通过。见 [store-receipt.json](evolve115-review-fixes/store-receipt.json) 与 [store-tests.txt](evolve115-review-fixes/store-tests.txt) |
+| typecheck / build / diff | 通过；build 只有既有大 chunk 提示，core 只有两项既有 unused-import 提示。见 [checks.json](evolve115-review-fixes/checks.json) |
+
+新增脚本在修复前实际运行得到 **3 passed / 6 failed**，分别命中 F1 的 mobile-list 边界、F3 的搜索/页面两场景、F2 的三种后续部分更新。红测结果、旧脚本快照及关键状态见 `evolve115-review-fixes/baseline/`。首轮修复后测试器直接读取 debug 响应，漏取 value，导致 UI 快照 undefined；已改用既有 state() 解包，保留全部断言及 [首轮结果](evolve115-review-fixes/first-fixed-probe.json)。旧源码的 preview 红测先失败于权威 loaded 值断言，该测试器修正不改变原故障事实。
+
+本轮只运行新增九场景、相关原108、生产core两项及类型/build/diff；没有重跑376/400或未变113原90，也不重报原生通过。Store runner 仍直编生产 harness，使用获准的 `/tmp/apple-notes-sync85-target` 纯core缓存，运行后已释放；未使用 Tauri target。新增 App 场景的 IPC/平台仍为受控输入，preview 则为生产浏览器桥接与真实 localStorage；SQLite 为生产 Store，三者证据范围分别记录。116 原生门槛与主线112组合复验继续保留。

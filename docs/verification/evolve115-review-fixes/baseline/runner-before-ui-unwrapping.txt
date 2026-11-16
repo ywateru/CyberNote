@@ -1,0 +1,153 @@
+// Actual App/PM for route regressions; actual non-Tauri bridge/localStorage for
+// quota atomicity. Controlled browser platform is not native116 acceptance.
+import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { openRuntime, api, idle, state } from './debug/runtime.mjs';
+import { seededWorkspace } from './debug/platform.mjs';
+
+const out = resolve('artifacts/evolve115-review-fixes', process.argv.includes('--baseline') ? 'baseline' : 'fixed');
+await mkdir(out, { recursive: true });
+const results = [];
+const evidence = async (name, value) => { await writeFile(resolve(out, name + '.json'), JSON.stringify(value, null, 2) + '\n'); };
+const test = async (name, fn) => {
+  try { await fn(); results.push({ name, passed: true }); }
+  catch (error) { results.push({ name, passed: false, message: error.message, stack: error.stack }); }
+  await evidence('results', results);
+  console.log(results.at(-1).passed ? 'PASS' : 'FAIL', name, results.at(-1).message || '');
+};
+const update = async (p, settings) => { await api(p, 'settings.update', { settings }); await idle(p); };
+const r = await openRuntime({ ownedBrowser: true });
+try {
+  const p = r.page;
+  const reset = async () => { await p.setViewportSize({ width: 1280, height: 800 }); await r.reset(); };
+  for (const mobileView of ['gallery', 'list']) await test('F1 desktop gallery editor survives mobile ' + mobileView + ' boundaries', async () => {
+    await reset();
+    const q = (await state(p)).settings.presentation;
+    await update(p, { presentation: { ...q, desktop: { ...q.desktop, collectionView: 'gallery' }, mobile: { ...q.mobile, collectionView: mobileView } } });
+    await api(p, 'note.select', { id: 'note-a' }); await idle(p);
+    await api(p, 'editor.select', { from: 1, to: 4 }); await idle(p);
+    const before = await state(p);
+    assert.equal(await p.locator('.app.gallery-edit').count(), 1);
+    await p.evaluate(() => { window.boundaryEditor = document.querySelector('.tiptap'); window.boundaryView = window.boundaryEditor.editor.view; });
+    const sequence = [];
+    for (const width of [1280, 699, 700, 1100, 1280]) {
+      await p.setViewportSize({ width, height: 800 }); await idle(p);
+      sequence.push({ width, classes: await p.locator('.app').getAttribute('class'),
+        visible: await p.locator('.editor-pane').isVisible(),
+        sameOwner: await p.evaluate(() => window.boundaryEditor === document.querySelector('.tiptap') && window.boundaryView === document.querySelector('.tiptap').editor.view),
+        state: await state(p) });
+    }
+    await evidence('gallery-boundary-' + mobileView, sequence);
+    assert(sequence.every(s => s.visible && s.sameOwner), 'same mounted Editor must also remain visible');
+    for (const s of sequence) {
+      assert.deepEqual(s.state.selection, before.selection);
+      assert.deepEqual(s.state.editorJSON, before.editorJSON);
+      assert.deepEqual(s.state.editorSelection, before.editorSelection);
+      if (s.width >= 700) assert.match(s.classes, /gallery-edit/);
+    }
+  });
+  await test('F1 confirmed desktop edit still clears gallery route; mobile-only edit does not', async () => {
+    await reset(); const q = (await state(p)).settings.presentation;
+    await update(p, { view: 'gallery' }); await api(p, 'note.select', { id: 'note-a' }); await idle(p);
+    await update(p, { presentation: { ...(await state(p)).settings.presentation, mobile: { collectionView: 'list', density: 'comfortable' } } });
+    assert.equal(await p.locator('.app.gallery-edit').count(), 1);
+    await update(p, { view: 'list' }); await update(p, { view: 'gallery' });
+    assert.equal(await p.locator('.app.gallery-browse').count(), 1);
+    assert.equal((await state(p)).settings.presentation.mobile.collectionView, 'list');
+    assert.equal(q.desktop.navigation, (await state(p)).settings.presentation.desktop.navigation);
+  });
+  for (const query of ['Fixture', '']) await test('F3 same folder closes drawer after ' + (query ? 'search-source' : 'page-only') + ' change', async () => {
+    await reset(); await update(p, { macSidebarVisible: false });
+    if (query) { await api(p, 'search.set', { query }); await idle(p); }
+    await api(p, 'note.select', { id: 'note-a' }); await idle(p);
+    const before = (await state(p)).selection;
+    const trigger = p.getByRole('button', { name: '打开文件夹抽屉', exact: true });
+    await trigger.click(); await idle(p);
+    await p.locator('.sidebar .folder-row.selected').last().click(); await idle(p);
+    const observation = { before, after: (await state(p)).selection, drawer: await p.locator('.app').getAttribute('data-drawer'),
+      focusedTrigger: await trigger.evaluate(e => document.activeElement === e) };
+    await evidence('drawer-' + (query ? 'search' : 'page'), observation);
+    assert.equal(observation.after.folderId, before.folderId); assert.equal(observation.after.noteId, before.noteId);
+    assert.equal(observation.after.page, 'notes'); assert.equal(observation.after.query, '');
+    assert.equal(observation.drawer, 'closed'); assert.equal(observation.focusedTrigger, true);
+    assert.equal(await p.locator('.directory-scrim').count(), 0);
+  });
+  await test('F3 inner menu preserves drawer and Escape priority', async () => {
+    await reset(); await update(p, { macSidebarVisible: false });
+    const trigger = p.getByRole('button', { name: '打开文件夹抽屉', exact: true });
+    await trigger.click(); await p.locator('.sidebar .folder-row').last().click({ button: 'right' }); await idle(p);
+    assert(await p.locator('[role="menu"]').count() > 0);
+    assert.equal(await p.locator('.app').getAttribute('data-drawer'), 'open');
+    await p.keyboard.press('Escape'); await idle(p);
+    assert.equal(await p.locator('[role="menu"]').count(), 0);
+    assert.equal(await p.locator('.app').getAttribute('data-drawer'), 'open');
+    await p.keyboard.press('Escape'); await idle(p);
+    assert.equal(await p.locator('.app').getAttribute('data-drawer'), 'closed');
+    assert(await trigger.evaluate(e => document.activeElement === e));
+  });
+
+  for (const following of [{ sort: 'created' }, { view: 'gallery' }, { macSidebarVisible: false }]) await test('F2 real preview quota then partial ' + Object.keys(following)[0], async () => {
+    // A new page without installBrowserPlatform executes the production preview
+    // bridge. This path never uses FakeBackend's settings implementation.
+    await p.evaluate(() => localStorage.removeItem('notes-browser-preview'));
+    const preview = await p.context().newPage(); preview.setDefaultTimeout(10000);
+    try {
+      await preview.addInitScript(seed => { if (!localStorage.getItem('notes-browser-preview')) localStorage.setItem('notes-browser-preview', JSON.stringify(seed)); }, seededWorkspace());
+      await preview.goto(r.origin + '/?notesDebug=1');
+      await preview.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(preview);
+      await preview.waitForSelector('#startup', { state: 'detached' });
+      assert.equal(await preview.evaluate(async () => (await import('/src/bridge.ts')).native), false);
+      const q = (await state(preview)).settings.presentation;
+      await update(preview, { appearance: { version: 2, themeId: 'paper', schemePreference: 'dark' }, presentation: {
+        ...q, desktop: { ...q.desktop, navigation: 'focus', lastNonFocusNavigation: 'three-pane', density: 'standard' }, mobile: { collectionView: 'list', density: 'comfortable' } } });
+      const before = await state(preview);
+      const storedBefore = await preview.evaluate(() => JSON.parse(localStorage.getItem('notes-browser-preview')));
+      const failed = { appearance: { version: 2, themeId: 'high-contrast', schemePreference: 'light' }, presentation: { ...before.settings.presentation,
+        desktop: { ...before.settings.presentation.desktop, navigation: 'two-pane', lastNonFocusNavigation: 'two-pane', density: 'compact' }, mobile: { collectionView: 'gallery', density: 'standard' } } };
+      await preview.evaluate(() => {
+        window.previewQuotaAttempts = []; window.previewQuotaRemaining = 2;
+        const original = Storage.prototype.setItem;
+        Storage.prototype.setItem = function (key, value) {
+          if (key === 'notes-browser-preview') {
+            const rejected = window.previewQuotaRemaining-- > 0;
+            window.previewQuotaAttempts.push({ rejected, candidate: JSON.parse(value) });
+            if (rejected) throw new DOMException('controlled preview quota', 'QuotaExceededError');
+          }
+          return original.call(this, key, value);
+        };
+      });
+      const failures = [];
+      for (let i = 0; i < 2; i++) {
+        await assert.rejects(api(preview, 'settings.update', { settings: failed }), /controlled preview quota/);
+        await idle(preview).catch(e => assert.match(e.message, /controlled preview quota/));
+        failures.push(await preview.evaluate(async () => ({ loaded: (await (await import('/src/bridge.ts')).loadWorkspace()).settings,
+          stored: JSON.parse(localStorage.getItem('notes-browser-preview')), ui: (await window.__NOTES_DEBUG__.execute('app.state', {})).settings })));
+        await api(preview, 'app.dismissError');
+      }
+      await update(preview, following);
+      const final = await state(preview);
+      const persisted = await preview.evaluate(() => JSON.parse(localStorage.getItem('notes-browser-preview')));
+      const attempts = await preview.evaluate(() => window.previewQuotaAttempts);
+      const observation = { following, before: before.settings, storedBefore, failed, failures, final: final.settings, persisted, attempts };
+      await evidence('preview-' + Object.keys(following)[0], observation);
+      for (const row of failures) { assert.deepEqual(row.loaded, storedBefore.settings); assert.deepEqual(row.stored, storedBefore); assert.deepEqual(row.ui, before.settings); }
+      const expected = structuredClone(before.settings);
+      if ('sort' in following) expected.sort = following.sort;
+      if ('view' in following) expected.presentation.desktop.collectionView = expected.view = 'gallery';
+      if ('macSidebarVisible' in following) {
+        expected.presentation.desktop.navigation = expected.presentation.desktop.lastNonFocusNavigation = 'two-pane'; expected.macSidebarVisible = false;
+      }
+      assert.deepEqual(final.settings, expected); assert.deepEqual(persisted.settings, expected);
+      assert.equal(attempts.filter(a => a.rejected).length, 2);
+      assert.equal(attempts.filter(a => !a.rejected).length, 1);
+      assert.notDeepEqual(attempts[0].candidate.settings.presentation, expected.presentation);
+      assert.deepEqual(attempts.at(-1).candidate.settings, expected);
+      await preview.reload(); await preview.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1); await idle(preview);
+      assert.deepEqual((await state(preview)).settings, expected);
+    } finally { await preview.close(); }
+  });
+  assert.equal(r.errors.length, 0, r.errors.join('\n'));
+} finally { await r.cleanup(); }
+console.log(JSON.stringify({ passed: results.filter(r => r.passed).length, failed: results.filter(r => !r.passed).length }));
+if (results.some(r => !r.passed)) process.exitCode = 1;

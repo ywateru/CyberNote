@@ -939,11 +939,22 @@ fn evolve115_presentation_is_strict_atomic_and_roundtrips() {
         assert!(target.import_archive(&path).is_err()); assert_eq!(target.workspace().unwrap(), previous);
     }
     let before = store.workspace().unwrap();
+    assert_ne!(before["settings"]["presentation"], p);
     store.db.execute_batch("CREATE TEMP TRIGGER fail_presentation BEFORE UPDATE ON settings BEGIN SELECT RAISE(FAIL, 'controlled disk failure'); END;").unwrap();
     assert!(store.action(json!({"type":"settings","settings":{"presentation":p,"view":"gallery"}})).is_err());
     assert_eq!(store.workspace().unwrap(), before);
     store.db.execute_batch("DROP TRIGGER fail_presentation;").unwrap();
-    drop(store); let reopened = Store::open(&root).unwrap(); assert_eq!(reopened.workspace().unwrap(), before);
+    // A rejected candidate must not hitchhike on the next unrelated intent.
+    // Exercise real SQLite failure/retry/reopen, with full-state comparison.
+    store.action(json!({"type":"settings","settings":{"sort":"created"}})).unwrap();
+    let mut expected = before;
+    expected["settings"]["sort"] = json!("created");
+    assert_eq!(store.workspace().unwrap(), expected);
+    drop(store); let reopened = Store::open(&root).unwrap(); assert_eq!(reopened.workspace().unwrap(), expected);
+    reopened.export_archive(&archive).unwrap();
+    target.import_archive(&archive).unwrap();
+    drop(target); let target = Store::open(&target_root).unwrap();
+    assert_eq!(target.workspace().unwrap()["settings"], expected["settings"]);
 }
 
 #[test]

@@ -595,11 +595,14 @@ function App() {
   useEffect(() => { setSwiped(null); }, [mobileSingleColumn]);
   const { themeId, schemePreference } = appearanceOf(settings);
   const view = resolved.collectionView;
-  const confirmedCollection = useRef(view);
+  // The gallery editor is a desktop navigation intent. A breakpoint choosing
+  // the independent mobile preference must not turn that route into browse.
+  const desktopCollection = presentationOf(settings).desktop.collectionView;
+  const confirmedCollection = useRef(desktopCollection);
   useEffect(() => {
-    if (confirmedCollection.current !== view) setGalleryEditor(false);
-    confirmedCollection.current = view;
-  }, [view]);
+    if (confirmedCollection.current !== desktopCollection) setGalleryEditor(false);
+    confirmedCollection.current = desktopCollection;
+  }, [desktopCollection]);
   const sort = settings.sort || "updated";
   const tags = projectTags(ws, accessSuspended);
   const currentFolder = ws.folders.find((f) => f.id === folderId);
@@ -4125,7 +4128,7 @@ function App() {
       "--ui-scale": mobile ? 1 : metrics.scale,
     } as CSSProperties}>
     <WorkspaceShell
-      rootRef={appSurface} resolved={resolved} routeKey={JSON.stringify([folderId, tagFilter, noteId])} blocked={!!modal || quitPending || syncCover || !!accessSuspended.length}
+      rootRef={appSurface} resolved={resolved} routeKey={JSON.stringify({ folderId, tagFilter, baseNoteId, searchNoteId, page, query, searching, filter, attachmentBrowser, galleryEditor })} blocked={!!modal || quitPending || syncCover || !!accessSuspended.length}
       focus={() => { focusReturn.current = document.activeElement as HTMLElement; setTemporaryFocus(true); }} exitFocus={exitFocus}
       inert={quitPending}
       className={`app ${nativeTop ? "native-toolbar" : ""} ${syncCover || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${attachmentBrowser ? "attachment-browse gallery-browse" : view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${formatOpen && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}

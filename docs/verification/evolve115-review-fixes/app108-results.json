@@ -1,0 +1,242 @@
+{
+  "checks": [
+    "strict exact PresentationV1 rejects every invalid object",
+    "invalid read keeps confirmed settings",
+    "legacy migration is desktop-only and never focus",
+    "FIFO copies nested input and invalidates ACK-era reads",
+    "recovery blocks write and rejects late adopt: {\"sort\":\"title\"}",
+    "queued legacy/unrelated intent stays partial: {\"sort\":\"title\"}",
+    "legacy keeps authoritative mobile/appearance: {\"sort\":\"title\"}",
+    "recovery blocks write and rejects late adopt: {\"view\":\"list\"}",
+    "queued legacy/unrelated intent stays partial: {\"view\":\"list\"}",
+    "legacy keeps authoritative mobile/appearance: {\"view\":\"list\"}",
+    "recovery blocks write and rejects late adopt: {\"macSidebarVisible\":true}",
+    "queued legacy/unrelated intent stays partial: {\"macSidebarVisible\":true}",
+    "legacy keeps authoritative mobile/appearance: {\"macSidebarVisible\":true}",
+    "recovery blocks write and rejects late adopt: {\"view\":\"list\",\"macSidebarVisible\":false}",
+    "queued legacy/unrelated intent stays partial: {\"view\":\"list\",\"macSidebarVisible\":false}",
+    "legacy keeps authoritative mobile/appearance: {\"view\":\"list\",\"macSidebarVisible\":false}",
+    "all Android widths stay mobile; Web 699/700 remains compatible",
+    "two-pane uses actual shell and same Editor/JSON/selection",
+    "focus uses actual shell and same Editor/JSON/selection",
+    "three-pane uses actual shell and same Editor/JSON/selection",
+    "actual density increases collection row geometry monotonically",
+    "desktop gallery density scales cards and vertical spacing monotonically",
+    "desktop gallery consumes resolver columns at 700",
+    "desktop gallery consumes resolver columns at 1100",
+    "desktop gallery consumes resolver columns at 1280",
+    "density alone does not leave gallery editor",
+    "focus overrides gallery browse geometry without changing owner",
+    "two-pane opens real drawer and moves focus inside",
+    "drawer traps Tab",
+    "drawer Escape closes and returns trigger focus",
+    "temporary focus does not persist default",
+    "Escape restores temporary layout and original focus",
+    "Undo history survives density/layout changes",
+    "synthetic IME composition survives same view",
+    "actual Preferences save failure retains confirmed layout/value/focus",
+    "actual Preferences save is visibly busy and controls disabled",
+    "Preferences publishes only acknowledged layout",
+    "App authoritative merge preserves independent mobile: sort",
+    "App sends exact partial intent: sort",
+    "App authoritative merge preserves independent mobile: view",
+    "App sends exact partial intent: view",
+    "App authoritative merge preserves independent mobile: sidebar-true",
+    "App sends exact partial intent: sidebar-true",
+    "App authoritative merge preserves independent mobile: sidebar-false",
+    "App sends exact partial intent: sidebar-false",
+    "App authoritative merge preserves independent mobile: both",
+    "App sends exact partial intent: both",
+    "App authoritative merge preserves independent mobile: explicit-priority",
+    "App sends exact partial intent: explicit-priority",
+    "ACK/read failure keeps old layout {\"sort\":\"updated\"}",
+    "recovery failure prevents second IPC {\"sort\":\"updated\"}",
+    "recovered App keeps committed mobile and partial write {\"sort\":\"updated\"}",
+    "ACK/read failure keeps old layout {\"view\":\"list\"}",
+    "recovery failure prevents second IPC {\"view\":\"list\"}",
+    "recovered App keeps committed mobile and partial write {\"view\":\"list\"}",
+    "ACK/read failure keeps old layout {\"macSidebarVisible\":true}",
+    "recovery failure prevents second IPC {\"macSidebarVisible\":true}",
+    "recovered App keeps committed mobile and partial write {\"macSidebarVisible\":true}",
+    "Web boundary retains Editor at 700",
+    "Web identity at 700",
+    "Web boundary retains Editor at 900",
+    "Web identity at 900",
+    "Web boundary retains Editor at 1100",
+    "Web identity at 1100",
+    "Web boundary retains Editor at 1600",
+    "Web identity at 1600",
+    "Web boundary retains Editor at 699",
+    "Web identity at 699",
+    "Web boundary retains Editor at 700",
+    "Web identity at 700",
+    "collapsed recording retains owner/phase and mounted dock",
+    "narrow restored recording and Editor remain mounted",
+    "Web breakpoint does not unmount desktop recording owner",
+    "new shell contrast classic/light",
+    "new shell contrast classic/dark",
+    "new shell contrast paper/light",
+    "new shell contrast paper/dark",
+    "new shell contrast high-contrast/light",
+    "new shell contrast high-contrast/dark",
+    "temporary focus preserves source and real collection scroll",
+    "focus Escape preserves search source/query/results",
+    "layout and density keep actual inserted attachment document",
+    "layout keeps failed-save content and queue",
+    "failed save can retry after layout change",
+    "access barrier stays above layout changes and hides content",
+    "cold focus uses confirmed preference",
+    "cold focus exit restores persisted last nonfocus layout",
+    "separate note keeps desktop focus identity at 320",
+    "no App runtime errors",
+    "mobile defaults gallery independently",
+    "mobile quick choice persists only mobile view",
+    "Android list stays mobile at 320",
+    "list is one actual column at 320",
+    "Android list stays mobile at 390",
+    "list is one actual column at 390",
+    "Android list stays mobile at 430",
+    "list is one actual column at 430",
+    "Android list stays mobile at 700",
+    "list is one actual column at 700",
+    "Android list stays mobile at 1100",
+    "list is one actual column at 1100",
+    "Android rotation/IME keeps same Editor 1100/390",
+    "Android rotation/IME keeps same Editor 390/320",
+    "Android rotation/IME keeps same Editor 390/844",
+    "320 huge comfortable list and actions fit viewport",
+    "mobile actions retain 44px hits",
+    "real Preferences changes mobile independently",
+    "no mobile runtime errors"
+  ],
+  "count": 108,
+  "replays": 9,
+  "contrasts": [
+    {
+      "label": "classic/light",
+      "pairs": [
+        {
+          "text": "专注",
+          "class": "",
+          "ratio": 17.541588319220615,
+          "fg": [
+            25,
+            25,
+            28
+          ],
+          "bg": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "classic/dark",
+      "pairs": [
+        {
+          "text": "专注",
+          "class": "",
+          "ratio": 14.885938993220531,
+          "fg": [
+            242,
+            242,
+            244
+          ],
+          "bg": [
+            30,
+            30,
+            32
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "paper/light",
+      "pairs": [
+        {
+          "text": "专注",
+          "class": "",
+          "ratio": 13.968402684729984,
+          "fg": [
+            41,
+            39,
+            31
+          ],
+          "bg": [
+            250,
+            247,
+            239
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "paper/dark",
+      "pairs": [
+        {
+          "text": "专注",
+          "class": "",
+          "ratio": 13.816002479822636,
+          "fg": [
+            244,
+            239,
+            223
+          ],
+          "bg": [
+            36,
+            34,
+            29
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "high-contrast/light",
+      "pairs": [
+        {
+          "text": "专注",
+          "class": "",
+          "ratio": 21,
+          "fg": [
+            0,
+            0,
+            0
+          ],
+          "bg": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "failures": []
+    },
+    {
+      "label": "high-contrast/dark",
+      "pairs": [
+        {
+          "text": "专注",
+          "class": "",
+          "ratio": 21,
+          "fg": [
+            255,
+            255,
+            255
+          ],
+          "bg": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "failures": []
+    }
+  ]
+}

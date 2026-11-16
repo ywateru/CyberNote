@@ -1,0 +1,50 @@
+[
+  {
+    "name": "F1 desktop gallery editor survives mobile gallery boundaries",
+    "passed": true
+  },
+  {
+    "name": "F1 desktop gallery editor survives mobile list boundaries",
+    "passed": false,
+    "message": "same mounted Editor must also remain visible",
+    "stack": "AssertionError [ERR_ASSERTION]: same mounted Editor must also remain visible\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:42:5\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:24:49"
+  },
+  {
+    "name": "F1 confirmed desktop edit still clears gallery route; mobile-only edit does not",
+    "passed": true
+  },
+  {
+    "name": "F3 same folder closes drawer after search-source change",
+    "passed": false,
+    "message": "Expected values to be strictly equal:\n\n'open' !== 'closed'\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'open' !== 'closed'\n\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:73:12\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:60:40"
+  },
+  {
+    "name": "F3 same folder closes drawer after page-only change",
+    "passed": false,
+    "message": "Expected values to be strictly equal:\n\n'open' !== 'closed'\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'open' !== 'closed'\n\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:73:12\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:60:40"
+  },
+  {
+    "name": "F3 inner menu preserves drawer and Escape priority",
+    "passed": true
+  },
+  {
+    "name": "F2 real preview quota then partial sort",
+    "passed": false,
+    "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    appearance: {\n+     schemePreference: 'light',\n+     themeId: 'high-contrast',\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n      version: 2\n    },\n+   macSidebarVisible: false,\n-   macSidebarVisible: true,\n    presentation: {\n      desktop: {\n        collectionView: 'list',\n+       density: 'compact',\n+       lastNonFocusNavigation: 'two-pane',\n+       navigation: 'two-pane'\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n      },\n      mobile: {\n+       collectionView: 'gallery',\n+       density: 'standard'\n-       collectionView: 'list',\n-       density: 'comfortable'\n      },\n      version: 1\n    },\n    selectedFolder: 'default',\n    selectedNote: 'note-a',\n    sort: 'title',\n+   theme: 'light',\n-   theme: 'dark',\n    view: 'list'\n  }\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    appearance: {\n+     schemePreference: 'light',\n+     themeId: 'high-contrast',\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n      version: 2\n    },\n+   macSidebarVisible: false,\n-   macSidebarVisible: true,\n    presentation: {\n      desktop: {\n        collectionView: 'list',\n+       density: 'compact',\n+       lastNonFocusNavigation: 'two-pane',\n+       navigation: 'two-pane'\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n      },\n      mobile: {\n+       collectionView: 'gallery',\n+       density: 'standard'\n-       collectionView: 'list',\n-       density: 'comfortable'\n      },\n      version: 1\n    },\n    selectedFolder: 'default',\n    selectedNote: 'note-a',\n    sort: 'title',\n+   theme: 'light',\n-   theme: 'dark',\n    view: 'list'\n  }\n\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:134:44\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:90:101"
+  },
+  {
+    "name": "F2 real preview quota then partial view",
+    "passed": false,
+    "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    appearance: {\n+     schemePreference: 'light',\n+     themeId: 'high-contrast',\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n      version: 2\n    },\n+   macSidebarVisible: false,\n-   macSidebarVisible: true,\n    presentation: {\n      desktop: {\n        collectionView: 'list',\n+       density: 'compact',\n+       lastNonFocusNavigation: 'two-pane',\n+       navigation: 'two-pane'\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n      },\n      mobile: {\n+       collectionView: 'gallery',\n+       density: 'standard'\n-       collectionView: 'list',\n-       density: 'comfortable'\n      },\n      version: 1\n    },\n    selectedFolder: 'default',\n    selectedNote: 'note-a',\n    sort: 'title',\n+   theme: 'light',\n-   theme: 'dark',\n    view: 'list'\n  }\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    appearance: {\n+     schemePreference: 'light',\n+     themeId: 'high-contrast',\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n      version: 2\n    },\n+   macSidebarVisible: false,\n-   macSidebarVisible: true,\n    presentation: {\n      desktop: {\n        collectionView: 'list',\n+       density: 'compact',\n+       lastNonFocusNavigation: 'two-pane',\n+       navigation: 'two-pane'\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n      },\n      mobile: {\n+       collectionView: 'gallery',\n+       density: 'standard'\n-       collectionView: 'list',\n-       density: 'comfortable'\n      },\n      version: 1\n    },\n    selectedFolder: 'default',\n    selectedNote: 'note-a',\n    sort: 'title',\n+   theme: 'light',\n-   theme: 'dark',\n    view: 'list'\n  }\n\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:134:44\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:90:101"
+  },
+  {
+    "name": "F2 real preview quota then partial macSidebarVisible",
+    "passed": false,
+    "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    appearance: {\n+     schemePreference: 'light',\n+     themeId: 'high-contrast',\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n      version: 2\n    },\n+   macSidebarVisible: false,\n-   macSidebarVisible: true,\n    presentation: {\n      desktop: {\n        collectionView: 'list',\n+       density: 'compact',\n+       lastNonFocusNavigation: 'two-pane',\n+       navigation: 'two-pane'\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n      },\n      mobile: {\n+       collectionView: 'gallery',\n+       density: 'standard'\n-       collectionView: 'list',\n-       density: 'comfortable'\n      },\n      version: 1\n    },\n    selectedFolder: 'default',\n    selectedNote: 'note-a',\n    sort: 'title',\n+   theme: 'light',\n-   theme: 'dark',\n    view: 'list'\n  }\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    appearance: {\n+     schemePreference: 'light',\n+     themeId: 'high-contrast',\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n      version: 2\n    },\n+   macSidebarVisible: false,\n-   macSidebarVisible: true,\n    presentation: {\n      desktop: {\n        collectionView: 'list',\n+       density: 'compact',\n+       lastNonFocusNavigation: 'two-pane',\n+       navigation: 'two-pane'\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n      },\n      mobile: {\n+       collectionView: 'gallery',\n+       density: 'standard'\n-       collectionView: 'list',\n-       density: 'comfortable'\n      },\n      version: 1\n    },\n    selectedFolder: 'default',\n    selectedNote: 'note-a',\n    sort: 'title',\n+   theme: 'light',\n-   theme: 'dark',\n    view: 'list'\n  }\n\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:134:44\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:90:101"
+  }
+]

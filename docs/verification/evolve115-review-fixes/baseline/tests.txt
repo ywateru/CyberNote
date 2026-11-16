@@ -1,0 +1,130 @@
+PASS F1 desktop gallery editor survives mobile gallery boundaries
+FAIL F1 desktop gallery editor survives mobile list boundaries same mounted Editor must also remain visible
+PASS F1 confirmed desktop edit still clears gallery route; mobile-only edit does not
+FAIL F3 same folder closes drawer after search-source change Expected values to be strictly equal:
+
+'open' !== 'closed'
+
+FAIL F3 same folder closes drawer after page-only change Expected values to be strictly equal:
+
+'open' !== 'closed'
+
+PASS F3 inner menu preserves drawer and Escape priority
+FAIL F2 real preview quota then partial sort Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    appearance: {
++     schemePreference: 'light',
++     themeId: 'high-contrast',
+-     schemePreference: 'dark',
+-     themeId: 'paper',
+      version: 2
+    },
++   macSidebarVisible: false,
+-   macSidebarVisible: true,
+    presentation: {
+      desktop: {
+        collectionView: 'list',
++       density: 'compact',
++       lastNonFocusNavigation: 'two-pane',
++       navigation: 'two-pane'
+-       density: 'standard',
+-       lastNonFocusNavigation: 'three-pane',
+-       navigation: 'focus'
+      },
+      mobile: {
++       collectionView: 'gallery',
++       density: 'standard'
+-       collectionView: 'list',
+-       density: 'comfortable'
+      },
+      version: 1
+    },
+    selectedFolder: 'default',
+    selectedNote: 'note-a',
+    sort: 'title',
++   theme: 'light',
+-   theme: 'dark',
+    view: 'list'
+  }
+
+FAIL F2 real preview quota then partial view Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    appearance: {
++     schemePreference: 'light',
++     themeId: 'high-contrast',
+-     schemePreference: 'dark',
+-     themeId: 'paper',
+      version: 2
+    },
++   macSidebarVisible: false,
+-   macSidebarVisible: true,
+    presentation: {
+      desktop: {
+        collectionView: 'list',
++       density: 'compact',
++       lastNonFocusNavigation: 'two-pane',
++       navigation: 'two-pane'
+-       density: 'standard',
+-       lastNonFocusNavigation: 'three-pane',
+-       navigation: 'focus'
+      },
+      mobile: {
++       collectionView: 'gallery',
++       density: 'standard'
+-       collectionView: 'list',
+-       density: 'comfortable'
+      },
+      version: 1
+    },
+    selectedFolder: 'default',
+    selectedNote: 'note-a',
+    sort: 'title',
++   theme: 'light',
+-   theme: 'dark',
+    view: 'list'
+  }
+
+FAIL F2 real preview quota then partial macSidebarVisible Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    appearance: {
++     schemePreference: 'light',
++     themeId: 'high-contrast',
+-     schemePreference: 'dark',
+-     themeId: 'paper',
+      version: 2
+    },
++   macSidebarVisible: false,
+-   macSidebarVisible: true,
+    presentation: {
+      desktop: {
+        collectionView: 'list',
++       density: 'compact',
++       lastNonFocusNavigation: 'two-pane',
++       navigation: 'two-pane'
+-       density: 'standard',
+-       lastNonFocusNavigation: 'three-pane',
+-       navigation: 'focus'
+      },
+      mobile: {
++       collectionView: 'gallery',
++       density: 'standard'
+-       collectionView: 'list',
+-       density: 'comfortable'
+      },
+      version: 1
+    },
+    selectedFolder: 'default',
+    selectedNote: 'note-a',
+    sort: 'title',
++   theme: 'light',
+-   theme: 'dark',
+    view: 'list'
+  }
+
+{"passed":3,"failed":6}

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "F1 desktop gallery editor survives mobile gallery boundaries",
+    "passed": true
+  },
+  {
+    "name": "F1 desktop gallery editor survives mobile list boundaries",
+    "passed": true
+  },
+  {
+    "name": "F1 confirmed desktop edit still clears gallery route; mobile-only edit does not",
+    "passed": true
+  },
+  {
+    "name": "F3 same folder closes drawer after search-source change",
+    "passed": true
+  },
+  {
+    "name": "F3 same folder closes drawer after page-only change",
+    "passed": true
+  },
+  {
+    "name": "F3 inner menu preserves drawer and Escape priority",
+    "passed": true
+  },
+  {
+    "name": "F2 real preview quota then partial sort",
+    "passed": false,
+    "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ undefined\n- {\n-   appearance: {\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n-     version: 2\n-   },\n-   macSidebarVisible: true,\n-   presentation: {\n-     desktop: {\n-       collectionView: 'list',\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n-     },\n-     mobile: {\n-       collectionView: 'list',\n-       density: 'comfortable'\n-     },\n-     version: 1\n-   },\n-   selectedFolder: 'default',\n-   selectedNote: 'note-a',\n-   sort: 'title',\n-   theme: 'dark',\n-   view: 'list'\n- }\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ undefined\n- {\n-   appearance: {\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n-     version: 2\n-   },\n-   macSidebarVisible: true,\n-   presentation: {\n-     desktop: {\n-       collectionView: 'list',\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n-     },\n-     mobile: {\n-       collectionView: 'list',\n-       density: 'comfortable'\n-     },\n-     version: 1\n-   },\n-   selectedFolder: 'default',\n-   selectedNote: 'note-a',\n-   sort: 'title',\n-   theme: 'dark',\n-   view: 'list'\n- }\n\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:134:141\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:90:101"
+  },
+  {
+    "name": "F2 real preview quota then partial view",
+    "passed": false,
+    "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ undefined\n- {\n-   appearance: {\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n-     version: 2\n-   },\n-   macSidebarVisible: true,\n-   presentation: {\n-     desktop: {\n-       collectionView: 'list',\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n-     },\n-     mobile: {\n-       collectionView: 'list',\n-       density: 'comfortable'\n-     },\n-     version: 1\n-   },\n-   selectedFolder: 'default',\n-   selectedNote: 'note-a',\n-   sort: 'title',\n-   theme: 'dark',\n-   view: 'list'\n- }\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ undefined\n- {\n-   appearance: {\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n-     version: 2\n-   },\n-   macSidebarVisible: true,\n-   presentation: {\n-     desktop: {\n-       collectionView: 'list',\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n-     },\n-     mobile: {\n-       collectionView: 'list',\n-       density: 'comfortable'\n-     },\n-     version: 1\n-   },\n-   selectedFolder: 'default',\n-   selectedNote: 'note-a',\n-   sort: 'title',\n-   theme: 'dark',\n-   view: 'list'\n- }\n\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:134:141\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:90:101"
+  },
+  {
+    "name": "F2 real preview quota then partial macSidebarVisible",
+    "passed": false,
+    "message": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ undefined\n- {\n-   appearance: {\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n-     version: 2\n-   },\n-   macSidebarVisible: true,\n-   presentation: {\n-     desktop: {\n-       collectionView: 'list',\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n-     },\n-     mobile: {\n-       collectionView: 'list',\n-       density: 'comfortable'\n-     },\n-     version: 1\n-   },\n-   selectedFolder: 'default',\n-   selectedNote: 'note-a',\n-   sort: 'title',\n-   theme: 'dark',\n-   view: 'list'\n- }\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ undefined\n- {\n-   appearance: {\n-     schemePreference: 'dark',\n-     themeId: 'paper',\n-     version: 2\n-   },\n-   macSidebarVisible: true,\n-   presentation: {\n-     desktop: {\n-       collectionView: 'list',\n-       density: 'standard',\n-       lastNonFocusNavigation: 'three-pane',\n-       navigation: 'focus'\n-     },\n-     mobile: {\n-       collectionView: 'list',\n-       density: 'comfortable'\n-     },\n-     version: 1\n-   },\n-   selectedFolder: 'default',\n-   selectedNote: 'note-a',\n-   sort: 'title',\n-   theme: 'dark',\n-   view: 'list'\n- }\n\n    at file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:134:141\n    at async test (file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:14:9)\n    at async file:///Users/water/work/2026/Apple-Notes-Clone-evolve115/scripts/check-evolve115-review-fixes.mjs:90:101"
+  }
+]
