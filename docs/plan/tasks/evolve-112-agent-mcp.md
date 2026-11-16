@@ -1,7 +1,7 @@
 ---
 id: evolve-112
 scope: agent-interface
-status: pending
+status: in-progress
 depends-on: [evolve-111]
 ---
 
@@ -26,5 +26,7 @@ depends-on: [evolve-111]
 - `docs/architecture/agent-mcp.md`、`docs/ui/adaptive-presentation.md`
 
 ## verification
+
+开发分期：传输、宿主授权与独立设置组件先按模块开发/独审，装配依赖111真实服务和窗口协调；模块通过不代表本任务完成。最新提交与未通过项见[演进验证状态](../../verification/project-evolution/README.md)。
 
 真实stdio初始化/工具发现/schema/错误，stdout仅协议；IPC owner/权限/凭据/绑定库校验。真实读写重启及已打开窗口刷新、grant撤销、宿主停止、锁定排除、超限/分页、两client竞争、丢失ACK与幂等恢复。提供至少一个实际支持MCP的目标harness配置和实测范围；不能把示意CLI写成已可执行。
