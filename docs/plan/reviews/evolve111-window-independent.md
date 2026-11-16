@@ -91,3 +91,23 @@
 这次没有重跑 Rust 原生测试，也未调用真实 finish_delivery 或证明 warning 实际落盘；上述 Rust 部分为源码/既有原生契约核对。真实宿主补偿装配、有限终态收据的 64 条/5 分钟保留以及多 WebView 交错仍需后续 native 门槛验证。
 
 新增探针与结果保留在 `artifacts/evolve111-window-independent-extra/evolve111-window-independent-recovery.{mjs,log}` 和 `evolve111-window-independent-recovery-results.json`。生产源码指纹继续为 `187f05da3275dd4bed98f419cc2ca0a63b4bd4aea61b1ef41df019be09797213`；补充只修改本报告，`git diff --check` 和暂存检查通过。
+
+## 补充复核：空目标 create 与其他笔记编辑、组字及保存并行
+
+按用户提出的目标冻结/zero-loss 组合边界，验证 `noteIds=[]` 仍保留全局协调屏障，但不把另一笔记的活动编辑、PM/Tag 组字或未保存登记视作必须打断的目标。被审源码未变，结论仍为 **MODULE_SOURCE_PASS / native-open**，无新增 P1/P2 blocking。
+
+源码对应关系：`src/agent-window.ts:149` 区分无参数的全局 lease 与带 noteId 的目标判断；`:164` 始终重验全局 blocked，仅按 targets 判断 protected/unsaved。`src/App.tsx:1087,1187` 保留资料库/访问、同步、本地创建和导航 pending/未完成 layout 的全局屏障；`:1090` 的 freeze 只遍历传入目标。session configure (`:760`)、Editor 注册 (`:794`)、保存登记前 (`:1306`) 和 SearchEditorHost blocked (`:4910`) 均按实际 noteId 查门禁。主树原生 `session/external.rs:511` 的 external_local_write 也只在本地写入命中 targets 时取消 reservation，与空目标允许其他笔记正常保存一致。全局访问、本地创建和导航屏障的实际组件证据已在此前作者 38 项独立运行中确认，本次未把空目标检查改成忽略全局 blocked。
+
+额外命令 `node /tmp/evolve111-window-independent-empty-target.mjs` **exit 0，13 项真实组件检查通过，无浏览器异常**。沿用隔离 App/PM/save queue，仅合成 native 收据与创建后的 workspace；用 Chromium CDP 驱动真实 PM 和 TagComposition，不伪造 composing 标志。对实际 Editor 的 setEditable 方法做透传记录，不改变行为，同时检查原 Editor/DOM、contentEditable、焦点、选区和正文。
+
+| 组合边界 | 实际结果 |
+| --- | --- |
+| A 正在组字，且之前一笔保存仍挂起 register_save_intent；此时 probe/prepare `[]` | probe 同时报告 A protected 和 unsaved、全局 blocked=false；prepare ready=true。全局 lease=true，但 A 的按目标 frozen=false，Editor 仍 editable/contentEditable=true，原 DOM、正文、选区、焦点和 composing 均不变。 |
+| 空目标 prepare 尚未结束时继续真实 IME | `bian` 更新为 `bianji`，实际 PM/Tag 组字继续；没有 transient setEditable(false)。 |
+| 空目标仍 prepared 时恢复 A 的登记并排空保存 | A 的真实保存成功；空目标 lease 仍存在，没有发 ready:false，也没有为保存临时解冻全局 lease。 |
+| A 仍处于组字时，外部 create metadata + commit release | 新笔记进入可信 workspace，未改选中 owner；ACK 后仍是 A 的同一个 Editor/DOM、焦点、组字及原 PM 正文，未重建或变成只读。 |
+| create 后完成中文组字并继续普通输入 | 最终“最终组字”、此前未保存文本及后续输入全部进入实际保存队列，保存 document 与实际 PM JSON 完整相等。 |
+| 普通活动编辑期间再 prepare `[]`、输入、保存并 abort | prepare 接受，真实键盘输入与保存继续工作。整个探针 setEditable 调用记录为空，没有间歇全局只读。 |
+| 对照：把目标改为活动笔记 A | prepare ready=false，A 的实际编辑保持可用，没有强制中断。 |
+
+本次未验证真实 native create 与本地保存事务的并发执行；该部分仍属于 native-open。探针、日志和结果保留在本树 `artifacts/evolve111-window-independent-extra/evolve111-window-independent-empty-target.mjs`、同名 `.log` 和 `evolve111-window-independent-empty-target-results.json`。仅追加本报告，生产源码指纹未变，diff/暂存 whitespace 检查通过。
