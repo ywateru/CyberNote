@@ -12,6 +12,7 @@ import { MenuSurface, MenuItem } from "./Menu";
 import { copyDrawing, pasteDrawing, exportDrawing, drawingBounds } from "./drawing-transfer";
 import { accessGate } from "./bridge";
 import AudioWaveform from "./AudioWaveform";
+import { useMobileInteraction } from "./platform/interaction";
 import VideoAttachment from "./VideoAttachment";
 import TableControls from "./TableControls";
 import { closeHistory } from "@tiptap/pm/history";
@@ -297,13 +298,10 @@ function AudioPlayerSession({
   );
   const [playback, setPlayback] = useState(initialAudioPlaybackState);
   const [expanded, setExpanded] = useState(false);
-  const [mobile, setMobile] = useState(() => window.matchMedia("(max-width: 699px)").matches);
+  const mobile = useMobileInteraction();
   useEffect(() => {
-    const query = window.matchMedia("(max-width: 699px)");
-    const changed = () => { setMobile(query.matches); setExpanded(false); };
-    query.addEventListener("change", changed);
-    return () => query.removeEventListener("change", changed);
-  }, []);
+    setExpanded(false);
+  }, [mobile]);
   const detailId = useId();
   const toggleExpanded = () => setExpanded((value) => !value);
   const title = <>

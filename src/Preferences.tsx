@@ -155,15 +155,15 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
                   </>}
                 </div>
                 <div className="preferences-group preferences-interface-group">
-                  {mobile ? <label className="preferences-row"><span>界面字体大小</span><select aria-label="界面字体大小" value={fontSizeOption(settings.interfaceFontSize).value} onChange={event => void apply(() => onSettings({ interfaceFontSize: event.target.value as FontSize }))}>{fontSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <>
+                  {mobile ? <label className="preferences-row"><span>界面字体大小</span><select aria-label="界面字体大小" disabled={saving} value={fontSizeOption(settings.interfaceFontSize).value} onChange={event => void apply(() => onSettings({ interfaceFontSize: event.target.value as FontSize }))}>{fontSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <>
                     <div className="preferences-choice-heading"><h4>界面字号</h4><span>{fontSizeOption(settings.interfaceFontSize).label}</span></div>
                     <PreferenceChoices label="界面字体大小" value={fontSizeOption(settings.interfaceFontSize).value} options={fontSizeOptions} disabled={saving} onChange={interfaceFontSize => void apply(() => onSettings({ interfaceFontSize }))} />
                   </>}
-                  {mobile && <p className="preferences-help">调整界面文字、图标和间距。</p>}
+                  {mobile && <p className="preferences-help">调整界面文字大小。</p>}
                   <div className="preferences-interface-preview" aria-label="界面字号预览"><Folder size={20} /><span>工作项目</span><small>12 个备忘录</small></div>
                 </div>
                 <div className="preferences-group preferences-editor-group">
-                  {mobile ? <label className="preferences-row"><span>编辑器字体大小</span><select aria-label="编辑器字体大小" value={fontSizeOption(settings.editorFontSize).value} onChange={event => void apply(() => onSettings({ editorFontSize: event.target.value as FontSize }))}>{fontSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <>
+                  {mobile ? <label className="preferences-row"><span>编辑器字体大小</span><select aria-label="编辑器字体大小" disabled={saving} value={fontSizeOption(settings.editorFontSize).value} onChange={event => void apply(() => onSettings({ editorFontSize: event.target.value as FontSize }))}>{fontSizeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <>
                     <div className="preferences-choice-heading"><h4>编辑器字号</h4><span>{fontSizeOption(settings.editorFontSize).label}</span></div>
                     <PreferenceChoices label="编辑器字体大小" value={fontSizeOption(settings.editorFontSize).value} options={fontSizeOptions} disabled={saving} onChange={editorFontSize => void apply(() => onSettings({ editorFontSize }))} />
                   </>}

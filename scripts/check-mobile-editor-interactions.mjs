@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { openRuntime, api, idle, state, saveJSON } from './debug/runtime.mjs';
+import { installBrowserPlatform } from './debug/platform.mjs';
 
 const output = resolve('artifacts/mobile-editor-interactions');
 await mkdir(output, { recursive: true });
@@ -47,6 +48,9 @@ try {
     { type: 'paragraph', content: [{ type: 'text', text: '第一段 第二段 第三段' }] },
     { type: 'paragraph' },
   ] } });
+  // Settle the preceding real save before capturing attachment authorization;
+  // otherwise its late workspace refresh can invalidate the operation receipt.
+  await idle(page);
   await api(page, 'attachment.submit', { files: [{ name: '波形测试.wav', mime: 'audio/wav', base64: wav.toString('base64') }] });
   await page.getByRole('slider', { name: '录音波形进度' }).waitFor();
   check('idle recording shows neutral waveform without fetching original',await page.locator('.audio-card audio').evaluate(e=>!e.getAttribute('src')));
@@ -116,14 +120,28 @@ try {
   await api(page, 'recording.action', { action: 'close' });
   await page.screenshot({ path: resolve(output, 'narrow-toolbar.png') });
 
-  // The shared menu change must retain ordinary outside dismissal and desktop expansion.
+  // Android landscape keeps mobile identity. Test desktop semantics in an
+  // actual desktop-UA context, sharing only this isolated backend's saved note.
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.locator('.audio-expand').click();
-  check('desktop recording still supports expanded transport', await page.locator('.audio-detail').isVisible());
-  await page.getByRole('button', { name: '格式', exact: true }).click();
-  await page.locator('.menu-format').waitFor();
-  await page.locator('.tiptap p').first().click();
-  check('ordinary desktop format menu still dismisses on outside click', await page.locator('.menu-format').count() === 0);
+  check('Android landscape keeps mobile audio controls', await page.locator('.audio-expand').count() === 0 && await page.locator('.app.mobile').count() === 1);
+  const desktopContext = await page.context().browser().newContext({ viewport: { width: 1280, height: 800 } });
+  try {
+    await desktopContext.addInitScript(installBrowserPlatform, { mobile: false, nativeToolbar: false });
+    const desktopPage = await desktopContext.newPage();
+    desktopPage.on('pageerror', error => runtime.errors.push(String(error)));
+    await desktopPage.goto(runtime.origin + '/?notesDebug=1');
+    await desktopPage.waitForFunction(() => window.__NOTES_DEBUG__?.version === 1);
+    await desktopPage.waitForSelector('#startup', { state: 'detached' });
+    await idle(desktopPage);
+    await api(desktopPage, 'note.select', { id: 'note-a' });
+    await desktopPage.locator('.audio-expand').click();
+    check('desktop recording still supports expanded transport', await desktopPage.locator('.audio-detail').isVisible());
+    await desktopPage.getByRole('button', { name: '格式', exact: true }).click();
+    await desktopPage.locator('.menu-format').waitFor();
+    // Use a visible point outside the menu; the first paragraph can lie under it.
+    await desktopPage.locator('.sidebar').click({ position: { x: 10, y: 600 } });
+    check('ordinary desktop format menu still dismisses on outside click', await desktopPage.locator('.menu-format').count() === 0);
+  } finally { await desktopContext.close(); }
   check('no uncaught page errors', runtime.errors.length === 0);
   await saveJSON(resolve(output, 'result.json'), { status: 'pass', checks, toolbar: bounds, limits: runtime.metadata });
   console.log(JSON.stringify({ status: 'pass', checks }, null, 2));

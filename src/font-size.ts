@@ -18,28 +18,29 @@ export function fontSizeOption(value: unknown) {
 export function fontScales(settings: Settings) {
   return {
     interface: fontSizeOption(settings.interfaceFontSize).interface / 18,
+    // Mobile UI metrics were authored at the default (medium = 14px) preference.
+    mobileInterface: fontSizeOption(settings.interfaceFontSize).interface / 14,
     editor: fontSizeOption(settings.editorFontSize).editor / 18,
   };
 }
 
-/** Geometry shares the typography scale; reference metrics are authored at 18px. */
-export function interfaceMetrics(settings: Settings, width: number) {
+/** Width preferences are pixels, independent of typography. Only the effective
+ * projection is constrained by the current window; resizing never writes it. */
+export function interfaceMetrics(settings: Settings, width: number, sidebar = true) {
   const scale = fontScales(settings).interface;
   const details = parseInterfaceDetails(settings.interfaceDetails);
   const hit = details.desktopHitScale / 100;
-  const compact = width <= 1100;
+  const editorMin = Math.min(320, Math.max(200, width - 500));
+  const sidebarMin = 220;
+  const listMin = 280;
+  const sidebarMax = Math.max(sidebarMin, Math.min(360, width - editorMin - listMin));
+  const sidebarWidth = Math.round(Math.max(sidebarMin, Math.min(sidebarMax, settings.sidebarWidth || 272)));
+  const listMax = Math.max(listMin, Math.min(480, width - editorMin - (sidebar ? sidebarWidth : 0)));
   return {
     scale,
     toolbarHeight: Math.ceil(Math.max(68 * scale, 42 * scale * hit + 12, 28 * hit + 12)),
-    sidebarWidth: Math.round(
-      (compact
-        ? Math.min(settings.sidebarWidth || 272, 220)
-        : settings.sidebarWidth || 272) * scale,
-    ),
-    listWidth: Math.round(
-      (compact
-        ? Math.min(settings.listWidth || 390, 280)
-        : settings.listWidth || 390) * scale,
-    ),
+    sidebarMin, sidebarMax, listMin, listMax,
+    sidebarWidth,
+    listWidth: Math.round(Math.max(listMin, Math.min(listMax, settings.listWidth || 390))),
   };
 }

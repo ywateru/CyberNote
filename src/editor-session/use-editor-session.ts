@@ -11,11 +11,14 @@ export function useEditorSession() {
   );
   useLayoutEffect(() => {
     session.mount();
-    const resize = () => session.viewportChanged(window.innerHeight);
+    const resize = () => session.viewportChanged(window.innerHeight, window.innerWidth,
+      window.visualViewport?.scale === 1 ? window.visualViewport.height : window.innerHeight);
     resize();
     window.addEventListener("resize", resize);
+    window.visualViewport?.addEventListener("resize", resize);
     return () => {
       window.removeEventListener("resize", resize);
+      window.visualViewport?.removeEventListener("resize", resize);
       session.dispose();
     };
   }, [session]);
