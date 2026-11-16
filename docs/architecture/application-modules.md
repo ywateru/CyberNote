@@ -2,6 +2,39 @@
 
 2026-11-09。MODULES98已实现、经53a6d4ad独审接受并整合，前置SESSION96已接受。迁移不是重写持久化/授权/同步系统，也不以 App 行数作为唯一验收。最终双端交付范围见[恢复状态](../plan/cybernote-modernization-state.md)。
 
+2026-11-17演进补充：111/112共享应用与真实MCP宿主已独审合入，114主题已合入；115呈现Shell正在独审。下文原有前端owner继续保留，新增真实创建链如下。当前实现与最终包范围以[演进状态](../verification/project-evolution/README.md)为准。
+
+## 新增的共享应用与agent边界
+
+```text
+App/Editor → bridge → Tauri UI命令 ───────────┐
+                                            ▼
+                                     NotesApplicationService
+                                            │
+MCP stdio → 私有agent_host → agent_service ──┘
+            验证grant           注入同一SharedSession
+                                            │
+                                    Session → Store/SQLite
+                                            │
+                             receipt/metadata/既有同步dirty
+                                            │
+                              App AgentWindowCoordinator
+```
+
+| 入口 | 自己拥有 | 不能重新拥有 |
+| --- | --- | --- |
+| `src-tauri/src/application/` | 有界DTO、查询、正文转换/校验、外部写命令与UI共享入口、准入限额 | 不打开第二个Store，不加载原始credential，不伪造renderer保存intent |
+| `src-tauri/src/agent_access/` | 宿主验证后构造的进程内TrustedContext及撤销代次 | 不从工具参数反序列化可信身份，不把UI解锁当作agent授权 |
+| `src-tauri/src/agent_host/` | 私有IPC、grant/凭据文件、启用/退出/重启生命周期、交付复核；`service.rs`由lib以agent_service模块装配 | 不另建Session，不跨窗口等待/发送/IO持有Session锁，不把grant同步或导出 |
+| `crates/notes-mcp/` | 官方SDK stdio、严格工具schema、引用读取与私有IPC客户端 | 不直读SQLite/附件路径、不启动第二宿主、不自动重发写入 |
+| `src/agent-window.ts` | 独立外部写协议解析、目标保护/冻结、可信刷新与释放恢复 | 不复用sync消息解析，不新建保存队列，不用旧事件解冻新operation |
+| `src/AgentSettings.tsx`、`src/agent-client.ts` | 明确授权表单、typed UI命令与引用配置显示 | 不接收raw credential，不在不可用Android端显示可运行宿主 |
+| `src/themes/`、ConfirmedSettings | 外观严格对象/迁移、语义token与已确认设置发布 | 不重写笔记marks，不更换Editor key，不宣称AppKit支持任意palette |
+
+NotesApplicationService借用宿主已有Session；agent_service注入AppState中的同一个共享Session。准入在Session锁之前，窗口/IO期间释放锁。一次read交付可按SQLite generation缓存成功的可见性检查，但实时身份、scope、有效期和撤销每片仍复核；该缓存不能升级为授权缓存。正文提交、幂等回执、metadata与刷新失败的精确定义以[业务契约](agent-mcp.md)和[IPC契约](agent-ipc.md)为真源。
+
+呈现层115的目标是保留永久WorkspaceShell槽位、同一个EditorSession与录音owner，平台/空间/布局只改变纯resolver输出和属性；其当前提交尚待独审合入，详见[主题与呈现](theme-presentation.md)。不要在最终整合时为每一种Shell复制上述共享应用状态。
+
 ## 根所有权
 
 App 保留工作区及其可信更新、访问/同步屏障、保存队列与参与窗口、各领域控制器的创建和整体页面组装。领域模块从根注入最小明确依赖，不复制 Workspace、Editor、noteId、授权或录音 owner 的可变状态。异步步骤使用现有实时 snapshot/assert/书签契约，不能依赖一次 React render 的旧闭包。
