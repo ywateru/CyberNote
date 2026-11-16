@@ -61,3 +61,42 @@ cargo test --manifest-path /tmp/evolve112-host-independent-harness/Cargo.toml --
 - foreign-UID文件/peer分支只读源码与编译覆盖，未提权构造；磁盘故障测试证明当前进程fail-closed，不承诺未fsync状态跨进程持久化。
 
 P1/P2 blocking：0。P1/P2 nonblocking缺陷：0。上述integration-open是后续强制验证责任，不是已通过的运行证据。
+
+## 2026-11-17 修复增量复核（最新结论）
+
+被审host修复提交：`48b4711c`，相对原已审host模块；UI配套提交：`5b67db3e`。**host增量 MODULE_SOURCE_PASS / integration-open，P1/P2 blocking 0。** 历史审查及命令结果保留，不覆盖原证据。本轮只追加本报告，没有修改产品代码或作者测试。
+
+### 代码与契约
+
+- `types.rs:97`的HostSettings.runtime_dir是必需String，序列化为runtimeDir；`runtime.rs:392`直接使用已验证的inner.runtime.path，与CreatedGrant.connection同源。PrivateDir接受的目录必须绝对、UTF-8且满足既有权限/no-follow校验，因此这里不猜默认目录，也不会把非法路径作有损转换后当作有效路径返回。
+- 设置、启用、停用、重启重载、撤销均经同一settings生成入口返回准确目录。secret仍不出现在settings；audit结构没有runtime字段，真实请求后的审计也不含路径。
+- 容量仍为10,000显式目录；新增真实host测试已覆盖257、10,000的创建/设置/撤销和10,001拒绝。与主树最新agent-ipc的必需runtimeDir、目录容量和独立scope枚举契约一致。
+- UI针对两项阻塞的复核见对应UI独审报告追加段；host安全元数据已补齐，不再存在“只能从创建回执得知自定义runtime”的宿主接口缺口。
+
+### 本轮实际验证
+
+最终改用**主工作树**的真实agent_access/application定义，不再依赖待清理的旧111工作树。作者harness与独立临时harness使用不同target，避免同crate名称的产物复用。
+
+```sh
+EVOLVE111_ROOT=/Users/water/work/2026/Apple-Notes-Clone \
+EVOLVE112_UI_SETTINGS_FIXTURE=/tmp/evolve112-host-independent-runtime-settings-final.json \
+CARGO_TARGET_DIR=/tmp/evolve112-host-independent-author-final-target \
+cargo test --manifest-path src-tauri/src/agent_host/harness/Cargo.toml --offline --locked -- --test-threads=1
+
+EVOLVE111_ROOT=/Users/water/work/2026/Apple-Notes-Clone \
+CARGO_TARGET_DIR=/tmp/evolve112-host-independent-probes-target \
+cargo test --manifest-path /tmp/evolve112-host-independent-harness/Cargo.toml --offline --locked tests::independent_
+```
+
+结果：两命令均退出0；真实harness **23 passed / 0 failed**，doc-tests 0；独立探针 **6 passed / 0 failed / 22 filtered out**（原4项安全边界与新增2项runtime边界）。后两项验证中文/空格自定义路径准确返回、与创建回执一致、raw secret及runtime路径不进入审计，以及相对路径/symlink/非法UTF-8路径拒绝。
+
+生成的`/tmp/evolve112-host-independent-runtime-settings-final.json`包含真实host创建、设置和撤销的257/10,000目录安全DTO，已用于UI parser/组件回放；凭据及测试runtime结束清理，不可把该文件当作仍在线的IPC端点。仅证明真实host返回契约与UI消费兼容，不证明最终Session/SQLite或原生装配。
+
+### 验证过程中的非产品失败与限制
+
+- 首次沿用原共用target运行，Cargo复用了临时harness二进制，输出28项而不是当前作者23项；该次不计为作者新回归通过证据。改用两个独立target干净编译后确认实际测试集合。
+- 独立target首次并行跑作者23项时，`harness/tests.rs:845`的expiry测试在等待handler进入的`entered`辅助函数处超时（22过、1失败），尚未到交付断言。该用例仅给grant约100ms寿命，在并行负载下存在时序敏感性；随后同源码串行23项全过，切换主树上游后串行23项亦全过。此为nonblocking验证稳定性观察，建议开发后续用明确同步/受控时间消除短寿命竞态，不据单次并行失败认定新产品缺陷。
+- 新增非法UTF-8探针初次试图预建目录，本机文件系统先报Illegal byte sequence；改为直接向真实host传入该路径并验证拒绝后通过。未改产品代码。
+- 本轮不将作者Clippy/rustfmt结果冒充独立执行；`git diff --check`及暂存报告后的`git diff --cached --check`均退出0。
+
+原宿主MODULE_SOURCE_PASS证据保留，runtimeDir增量现已独立复核通过。真实Tauri/stdio/唯一Session/窗口协调及原生运行装配继续open；incarnation轮换仍须停止旧host并重新授权。
