@@ -218,3 +218,22 @@ CARGO_BUILD_JOBS=2 cargo test --locked --offline --features rusqlite/hooks \
 独立探针 `/tmp/evolve114-runner-independent-probe.py`；六个边界结果 `/tmp/evolve114-runner-independent-results.json`，原临时 fixture/日志位置记录在 `/tmp/evolve114-runner-independent-results-path.txt`。真实正向运行日志 `/tmp/evolve114-runner-independent-positive.log`，当前 runner 原件为 `artifacts/evolve114-store/{tests.log,result.json}`。未改动作者提交的 receipt/log 或原产品失败证据。
 
 主树 `39662e7d` 的 postmerge 199/376/90/12 及 AgentSettings 450 pairs 已在先前单独通过，本次不重复。当前 **产品 source/component PASS 保持；runner-only 96272cc6 暂不建议合入，等待 target guard 修复及增量复核**。
+
+## 2026-11-17 runner target 修复复核：975202a9
+
+**增量结论：PASS，8f79c122 所报 runner P2 blocking 已关闭；未发现新的 P1/P2。** 复核提交 `975202a9bc4c9b4e61129dac11530e114fed9c17`，开始时工作树干净。完整 diff 仍仅同一 runner 与作者 evidence，没有产品变化。本轮只追加本节，以上产品与 runner 的原失败证据/报告不覆盖、不改写；没有重复 376、完整199、90 或 AgentSettings 组，也未使用主 Tauri target。
+
+修复位置：`scripts/check-evolve114-store.mjs:21` 的 canonicalFuturePath 在 ENOENT 时向父层查找，按原顺序保留所有缺失后缀；找到可 realpath 的祖先后再拼回后缀，其他错误直接失败。`:34`–`:39` 同时检查 lexical 和解析后路径，包含本树 target 的所有子目录。检查先于 replay 读取、输出 mkdir 和 target mkdir（`:46`/`:47`）及 Cargo，因此原“已有 symlink 父目录 + 缺失末级”路径不再提前建目录或进入编译。
+
+| 本轮独立执行 | 实测结果 |
+| --- | --- |
+| `node --check scripts/check-evolve114-store.mjs` | exit 0 |
+| `/tmp/evolve114-runner-fix-independent-probe.py` | **6/6 边界通过**：原 alias/new-descendant 反例、alias 下三级缺失后缀、两层 symlink 下三级缺失后缀均命中 forbidden guard；不存在的首层/目标目录、输出目录均未创建，Cargo 未调用。安全新 target、安全多级后缀、安全 alias 多级后缀均能创建并到达 spy；spy 固定 exit 79，三个回执均 passed=false、sourcesUnchanged=true，没有把边界放行当 Rust 成功 |
+| `node scripts/check-evolve114-store.mjs --check-target-guard` | exit 0，作者 **10/10 边界通过**；检查其实现确实从真实脚本子进程执行 guard，用临时模拟目标而非真实主 target，断言 Cargo marker、输出目录、缺失首级目录及失败回执 |
+| `CARGO_TARGET_DIR=/tmp/apple-notes-sync85-target node scripts/check-evolve114-store.mjs` | exit 0，**3 passed / 0 failed / 200 filtered out**；复用既有缓存，没有新建重复大缓存。三项均为真实 production core manifest 的 details/appearance/archive 测试，四路径 actual App capture 沿用已复核产物，无 copy/fallback |
+
+独立探针复用原失败探针的 fixture/call setup，并在新文件增加多级后缀、两层 symlink 和安全 target；原 `/tmp/evolve114-runner-independent-probe.py` 保持原样（SHA256 `956ee5797757ce2a8417d4e38ca20341d166d2f1740145cec18605f8967adad5`），原失败结果未覆盖。新结果为 `/tmp/evolve114-runner-fix-independent-results.json`，含逐项 guard/Cargo/目录/receipt 与精确 runner hash；临时原件路径在 evidenceRoot。作者边界复跑日志 `/tmp/evolve114-runner-fix-author-boundaries.log`，真实三项日志 `/tmp/evolve114-runner-fix-independent-positive.log`。
+
+真实运行 `artifacts/evolve114-store/result.json` 的 source=975202a9、target=/tmp/apple-notes-sync85-target、replayPaths=4、passedTests=3、sourcesUnchanged=true 均核对；所列 **56 个输入 SHA256** 再与当前文件独立逐一比较一致。实际三项日志和 summary 与 receipt 相符，失败 spy 回执仍为 false。此次 guard 修复没有改变唯一 production core manifest、replay 精确校验或测试成功条件。
+
+最终 **runner-only 修复复核 PASS，可关闭此次增量阻塞**；既有 114 source/component PASS 和原生/actual AgentSettings/116 的验收边界保持原结论。本次不修改任务状态、不合入分支。
