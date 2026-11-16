@@ -821,3 +821,47 @@ fn appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip() {
     let store = Store::open(&root).unwrap();
     assert_eq!(store.workspace().unwrap()["settings"]["theme"], "system");
 }
+
+#[test]
+fn appearance_recovery_settings_and_archive_are_strict_with_real_app_patches() {
+    // Captured by the actual App -> ConfirmedSettings -> bridge -> IPC path.
+    // The harness uses this run's capture; normal cargo uses the committed
+    // capture. Neither path substitutes a fake persistence implementation.
+    let text = match std::env::var("EVOLVE114_SETTINGS_REPLAY") {
+        Ok(path) => std::fs::read_to_string(path).unwrap(),
+        Err(_) => include_str!("../../../tests/evolve114-settings-recovery.json").to_owned(),
+    };
+    let rows: Value = serde_json::from_str(&text).unwrap();
+    assert_eq!(rows.as_array().unwrap().len(), 4);
+    let temp = tempfile::tempdir().unwrap();
+    for (index, row) in rows.as_array().unwrap().iter().enumerate() {
+        let root = temp.path().join(format!("app-patch-{index}"));
+        let mut store = Store::open(&root).unwrap();
+        store.db.execute("UPDATE settings SET body=?1 WHERE id=1", [row["initial"].to_string()]).unwrap();
+        let patches = row["patches"].as_array().unwrap();
+        let last = patches.last().unwrap();
+        assert!(last.get("appearance").is_none(), "partial intent became an appearance overwrite: {index}");
+        for patch in patches {
+            store.action(json!({"type":"settings","settings":patch})).unwrap();
+            // Simulate a successful ACK whose confirmation cannot be read:
+            // close/reopen before the next intent; the committed skin survives.
+            drop(store);
+            store = Store::open(&root).unwrap();
+            let confirmed = store.workspace().unwrap()["settings"].clone();
+            assert_eq!(confirmed["appearance"]["themeId"], "paper", "lost committed skin: {index}");
+            assert_eq!(confirmed["theme"], confirmed["appearance"]["schemePreference"]);
+        }
+        let actual = store.workspace().unwrap()["settings"].clone();
+        assert_eq!(actual["appearance"], row["expected"]["appearance"]);
+        assert_eq!(actual["theme"], row["expected"]["theme"]);
+        if let Some(sort) = row["following"].get("sort") { assert_eq!(&actual["sort"], sort); }
+        let path = temp.path().join(format!("app-patch-{index}.notesbackup"));
+        store.export_archive(&path).unwrap();
+        let target_root = temp.path().join(format!("app-patch-import-{index}"));
+        let mut target = Store::open(&target_root).unwrap();
+        target.import_archive(&path).unwrap();
+        drop(target);
+        let target = Store::open(&target_root).unwrap();
+        assert_eq!(target.workspace().unwrap()["settings"], actual);
+    }
+}

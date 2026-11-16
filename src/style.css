@@ -753,7 +753,7 @@ a {
   inset: 0;
   pointer-events: none;
   content: "";
-  background: var(--accent);
+  background: var(--cell-selection-overlay);
 }
 .tiptap .column-resize-handle {
   position: absolute;
@@ -1337,8 +1337,8 @@ a {
   width: max-content;
   padding: 11px 18px;
   border-radius: var(--radius-13);
-  background: var(--scrim);
-  color: var(--accent-ink);
+  background: var(--notice-surface);
+  color: var(--notice-ink);
   font-size: 13px;
   box-shadow: 0 4px 20px var(--shadow);
   z-index: var(--layer-notice);

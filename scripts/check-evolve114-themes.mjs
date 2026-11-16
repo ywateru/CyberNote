@@ -6,6 +6,7 @@ import {mkdir,readFile,writeFile}from'node:fs/promises';
 import {resolve}from'node:path';
 import {openRuntime,api,idle,state}from'./debug/runtime.mjs';
 import {installBrowserPlatform}from'./debug/platform.mjs';
+import {runThemeRegressions}from'./check-evolve114-regressions.mjs';
 const out=resolve('artifacts/evolve114-themes');await mkdir(out,{recursive:true});
 const checks=[],contrasts=[],rendered=[];const check=(n,v)=>{assert.ok(v,n);checks.push(n);};
 const settings=async(p,patch)=>{await api(p,'settings.update',{settings:patch});await idle(p);};
@@ -16,7 +17,7 @@ const ratio=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05);
 const palettes=JSON.parse(await readFile('src/themes/palettes.json','utf8'));
 for(const [id,schemes]of Object.entries(palettes))for(const [scheme,p]of Object.entries(schemes)){
  for(const fg of ['ink','secondary','action-ink','danger','focus'])for(const bg of ['paper','sidebar','grouped','selection','hover']){const value=ratio(rgb(p[fg]),rgb(p[bg]));contrasts.push({id,scheme,fg,bg,ratio:value});check(`${id}/${scheme} ${fg}/${bg} >=4.5`,value>=4.5);}
- for(const [fg,bg]of [['accent-ink','accent'],['on-recording','recording']]){const value=ratio(rgb(p[fg]),rgb(p[bg]));contrasts.push({id,scheme,fg,bg,ratio:value});check(`${id}/${scheme} ${fg}/${bg} >=4.5`,value>=4.5);}
+ for(const [fg,bg]of [['accent-ink','accent'],['on-recording','recording'],['notice-ink','notice-surface']]){const value=ratio(rgb(p[fg]),rgb(p[bg]));contrasts.push({id,scheme,fg,bg,ratio:value});check(`${id}/${scheme} ${fg}/${bg} >=4.5`,value>=4.5);}
 }
 const r=await openRuntime();
 try{
@@ -41,13 +42,13 @@ try{
   const legacyPatch=appearancePatch({appearance:authoritative},{theme:'dark'});
   // Queued legacy writes resolve against the last ACK, not admission snapshot.
   let db=o.snapshot();
-  const a=o.write({appearance:{version:2,themeId:'paper',schemePreference:'system'}},async v=>{db={...db,...v};},async()=>db);
-  const b=o.write({theme:'dark'},async v=>{db={...db,...v};},async()=>db);await Promise.all([a,b]);
+  const a=o.write({appearance:{version:2,themeId:'paper',schemePreference:'system'}},async v=>{db={...db,...appearancePatch(db,v)};},async()=>db);
+  const b=o.write({theme:'dark'},async v=>{db={...db,...appearancePatch(db,v)};},async()=>db);await Promise.all([a,b]);
   const mutable={version:2,themeId:'classic',schemePreference:'light'};const queued=o.write({appearance:mutable},async v=>{db={...db,...v};},async()=>db);mutable.themeId='removed';await queued;const mutationSafe=o.snapshot().appearance.themeId==='classic';
   return {readFailed,mutationSafe,migrated,persisted,ticketRejected,failed,failurePreserved,invalid,rejectedRead,invalidPreserved,authoritative,legacyPatch,queued:o.snapshot(),seen};
  });
  check('legacy dark migrates in memory without caller mutation',owner.migrated.appearance.themeId==='classic'&&owner.migrated.appearance.schemePreference==='dark');
- check('first settings write includes atomic old theme projection',owner.persisted.theme==='dark'&&owner.persisted.appearance.version===2);
+ check('unrelated settings intent stays partial; confirmed legacy read still migrates in memory',JSON.stringify(owner.persisted)==='{"sort":"title"}'&&owner.migrated.theme==='dark'&&owner.migrated.appearance.version===2);
  check('stale reads cannot overwrite confirmed settings',owner.ticketRejected);
  check('failed persistence and post-ACK read preserve confirmed owner',owner.failed&&owner.failurePreserved&&owner.readFailed);
  check('unknown/missing/null/extra AppearanceV2 rejected without changing owner',owner.invalid===8&&owner.rejectedRead&&owner.invalidPreserved);
@@ -147,5 +148,7 @@ try{const p=mobile.page;const auditMobile=async label=>{await p.waitForTimeout(1
  for(const id of Object.keys(palettes))for(const scheme of ['light','dark']){await settings(p,{appearance:appearance(id,scheme)});await api(p,'note.select',{id:'note-a'});await idle(p);await api(p,'recording.open');await idle(p);await api(p,'recording.action',{action:'toggle'});await idle(p);await api(p,'recording.action',{action:'toggle'});await idle(p);await auditMobile(`${id}/${scheme}-mobile-recording-paused`);await p.screenshot({path:resolve(out,`${id}-${scheme}-mobile-recording.png`)});await api(p,'recording.action',{action:'close'});await idle(p);}
  check('mobile no page errors',mobile.errors.length===0);
 }finally{await mobile.cleanup();}
+const regression=await runThemeRegressions();checks.push(...regression.checks);rendered.push(...regression.rendered);
+await writeFile(resolve(out,'rendered-contrast.json'),JSON.stringify(rendered,null,2));
 check('rendered ordinary text including selected overlays reaches contrast target',rendered.every(row=>row.failures.length===0));
 await writeFile(resolve(out,'results.json'),JSON.stringify({checks,contrasts,rendered,scope:'Actual React App/Editor, isolated JS IPC/capture; production Store/archive tested separately. No native116 acceptance.'},null,2)+'\n');console.log(`PASS ${checks.length} checks; screenshots and contrast data: ${out}`);

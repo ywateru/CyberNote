@@ -6,13 +6,13 @@
 
 - `src/themes/palettes.json` 为 Classic、Paper、High Contrast 三主题 × 明暗的色板真源；registry 和生成的 CSS 共用数据。主题与 system/light/dark 策略分别选择。字体保持本地系统 fallback。
 - `AppearanceV2` 是完整、精确的三字段对象，拒绝 null、未知版本/主题、额外/缺失字段。旧 theme 只在新对象缺席时内存迁移；首次任意设置写入原子写 appearance + 旧 theme 投影。旧 theme-only 调用保留新皮肤，只改变明暗。
-- 继续使用 ConfirmedSettings 的串行写入、ACK 后权威读取与 ticket；失败不发布候选值。入队时复制/校验嵌套外观对象，执行时基于最后确认值计算兼容投影。
+- 继续使用 ConfirmedSettings 的串行写入、ACK 后权威读取与 ticket；失败不发布候选值。入队时复制/校验嵌套外观对象；独审修订后无关与旧 theme-only 意图保持 partial，由持久层根据当前已存状态原子迁移/投影，ACK 后读取失败另设权威恢复门槛，详见末节。
 - Rust 实际 Store 设置写入和 archive 导入/导出采用相同严格规则。只读取旧数据库不落盘迁移；新 archive 纠正过时旧投影，纯旧 archive 保持旧格式，首写迁移。
 - 根属性投影覆盖桌面/移动主页面、portal 菜单、设置、图片预览及信息、访问屏障、录音和启动恢复。独立 `?note=` 渲染器初始读取已保存外观；没有新增跨窗实时同步通道。
 - `geometry.json` 集中基础几何，组件各用自己的 radius token，再乘既有 radiusScale，上限 24px。菜单 10、画廊 18 等不同基础保留；圆形录音/新增按钮不拉平方形。兼容别名由消费组件局部使用。
 - App 改动只含外观派生、根属性 effect、确认后启动缓存及 debug 输入白名单。Editor、Undo、选区、IME、录音控制器仍由原 owner 持有。
 
-## 执行与结果
+## 首次提交的执行与结果（后续修订见末节）
 
 | 检查 | 结果 / 证据边界 |
 | --- | --- |
@@ -76,3 +76,34 @@ Rust 新测试对 3 themes × 3 schemePreference 做真实临时数据库导出�
 `--interface-radius-button/card/panel` 仍由 interfaceDetailVariables 按 geometry 的 6/10/16 × radiusScale 生成，`--interface-hit-min` 仍由原 details owner 提供；没有用全局半径规则覆盖 Agent 元素。该确认是源码契约兼容，实际 Agent 页及创建对话框要在合入后重测。Agent CSS 自带 `--accent` focus/checkbox 和固定黑色阴影，本次未把它们假称为 `--focus` 的完整对比度证据。
 
 原生 AppKit NSMenu/工具栏继续只接收 system/light/dark 和已有受支持尺寸投影，不能套用 Paper/HC 的 Web palette 或组件圆角。独立窗口实时更新仍依赖现有宿主刷新；不新增 wire。原生安装包冷启动/闪白、独立原生窗口、系统菜单、真实输入法、TCC/麦克风、实际录音文件、手机/横屏/键盘验收保留给 116。没有操作真实 App、手机、用户资料库或原配置。
+
+## 9ab9698e 独审后的 F1–F5 修订与正式回归
+
+本轮基于独审提交 `9ab9698e` 修复，未修改 review 或 `/tmp/evolve114-independent*` 原脚本/结果/原始失败备份。独审的 BLOCKED 结论等待 Aquinas 复核，本记录不自行改成独审 PASS。
+
+| Finding | 修复与新增证据 |
+| --- | --- |
+| F1 ACK/read 失败后覆盖已提交外观 | 无关与旧 theme-only patch 保持 partial，显式 appearance 才附带原子旧投影；Store/preview 基于当前持久值合并。ACK 后读取失败标记 recoveryRequired；下一 FIFO 写入前先恢复权威读，失败则阻止 persist，UI 保留最后确认值。ACK 使此前 ticket 失效，恢复期间外部 observe 使迟到结果重读。 |
+| F2 智能表单/警告/标签透明及 checkbox 不可见 | 移除未定义的 panel/surface/text/ordinary-* 引用，表单/警告/标签使用 paper+ink，输入使用 grouped；未选普通 checkbox 有 grouped 填充与 line 边框。主按钮改用 accent-ink。六配色实际打开普通→智能→标签候选→不完整条件警告，检查不透明度、控件边框和文字对比度。 |
+| F3 非 axis 矩形选区遮字 | 新增 cell-selection-overlay：当前主题 accent 的 12% 透明色；axis 的原透明层与 outline 保留。六配色通过真实 Tiptap setCellSelection 与实际列按钮分别选择，检查透明 alpha/无 axis、axis outline/透明层，审计器将矩形伪元素合成到前景和背景，截图确认正文仍可见。 |
+| F4 附件分类标题/计数 | 选中表面改用 selection，标题用 ink、计数用 selection-secondary；移除重复 amber 选中叠层，hover/press 使用局部中性反馈。六配色实际进入附件画廊，分别检查选中、hover、focus 的标题和计数，最低采样 5.015:1。 |
+| F5 toast 错误配对 | 新增 notice-surface/notice-ink，不再混用 scrim/accent-ink。六配色实际点击笔记日期触发生产 toast；检查实色表面与文字，最低采样 13.816:1，HC dark 为白底黑字。 |
+
+新增正式脚本 `scripts/check-evolve114-regressions.mjs` 被完整主题脚本调用，单独也可运行；共 **123 项**。其中 F1 包含：sort/旧 theme-only 两种排队后续写入、恢复再次失败阻止写入、后续恢复重试、恢复期间外部采纳和迟到读、persist 期间请求的过期票据；以及真实 App 的 ACK/read 失败和模拟另一窗口已提交但本窗缓存未刷新的两种后续意图，共四条 App 持久路径。实际 persist/read 错误仍通过原边界注入并显示，未吞掉生产失败。
+
+`scripts/debug/platform.mjs` 的隔离 IPC fixture 原先直接 Object.assign 设置，无法表达 native partial merge。现在显式建模 Store 的原子合并/投影，**保留原 fail/delay 边界**。为避免把 fixture 当落盘证明，测试捕获真实 App→bridge→IPC 发出的 patches，写入 `artifacts/evolve114-regressions/app-settings-replays.json`；同时逐项匹配提交的 `src-tauri/tests/evolve114-settings-recovery.json`。
+
+随后 `check-evolve114-store.mjs` **重新复制当前生产 Store/Session 源码**，以环境变量向新增 Rust 测试提供本轮实际 App capture。四条路径每笔 patch 都交给真实 SQLite Store 执行并关闭重开，确认 Paper 和 scheme/旧 theme 配对、sort 均正确；再做 export→import→关闭重开，比较完整设置。普通 cargo 测试可读取提交的 capture；脚本验收必须先跑浏览器以获得当轮实际 capture，不用旧 Store 副本或 fixture 代替持久化。
+
+最终执行结果：
+
+- `pnpm typecheck`、token `--check`、`git diff --check`：通过。
+- `node scripts/check-evolve114-themes.mjs`：**376 项通过**（原 247 项按 partial 意图修正一条前端责任断言，另增 6 对 notice 静态配对 + 123 项实际回归；首次写入原子迁移由真实 Store 检查承担）。
+- 对比度：**168 对静态配对、102 个 DOM 状态、1911 对实际可见文字，失败 0**。新矩形选区的合成文字最低 10.020:1；主题总体最低仍为 Classic 4.745、Paper 4.727、HC 5.217。
+- `pnpm test:evolve113-interaction`：90 项通过，覆盖保存失败、焦点与 Editor 稳定性等既有交互。
+- `node scripts/check-evolve114-store.mjs`：**3 passed / 0 failed**，含既有 interfaceDetails、9 种外观归档往返和新增四条真实 App patches 重开/归档回归。
+- `pnpm build`：通过，1976 modules；仍只有已有 >500kB chunk 提示。Rust 仍使用 `artifacts/evolve114-store/target`，未使用主 Tauri target。
+
+修订证据：[fix-receipt.json](evolve114-themes/fix-receipt.json)、[六配色修复表面联系图](evolve114-themes/review-fixes.jpg)。原尺寸图及逐文字采样在 `artifacts/evolve114-regressions/`；完整汇总在 `artifacts/evolve114-themes/`，Store 日志/源哈希在 `artifacts/evolve114-store/`。实际查看了 Paper 浅色标签表单、Classic 浅色矩形选区、HC 暗色附件分类与 toast 原图，并检查联系图六配色一致性。
+
+本轮未进入 AgentSettings、主树、其他工作树或 115；原生 116 的边界保持不变。

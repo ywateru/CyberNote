@@ -54,11 +54,17 @@
   color: var(--secondary);
 }
 .attachment-gallery-categories button[aria-selected="true"] {
-  background: var(--accent);
+  background: var(--selection);
   color: var(--ink);
+  /* The selection surface already conveys selection. A second amber tint
+     would invalidate its text pair; retain neutral hover/press feedback. */
+  --button-selected: transparent;
+  --button-selected-hover: var(--feedback-hover);
+  --button-pressed: var(--feedback-hover);
+  --button-activated: var(--feedback-hover);
 }
 .attachment-gallery-categories button[aria-selected="true"] span {
-  color: var(--action-ink);
+  color: var(--selection-secondary);
 }
 .attachment-gallery-categories button:hover:not([aria-selected="true"]) {
   background: var(--selection);

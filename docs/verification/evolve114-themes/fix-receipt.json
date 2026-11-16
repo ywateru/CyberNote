@@ -1,0 +1,296 @@
+{
+  "base": "9ab9698e",
+  "checks": 376,
+  "newRegressionChecks": 123,
+  "staticPairs": 168,
+  "renderedStates": 102,
+  "renderedPairs": 1911,
+  "failures": 0,
+  "checksPassed": [
+    "F1 queued sort ACK failure retains old UI and gates second persistence",
+    "F1 queued sort recovers before FIFO write, retains partial intent and rejects late ticket",
+    "F1 queued sort retains committed skin and atomic projection",
+    "F1 queued theme ACK failure retains old UI and gates second persistence",
+    "F1 queued theme recovers before FIFO write, retains partial intent and rejects late ticket",
+    "F1 queued theme retains committed skin and atomic projection",
+    "F1 repeated recovery failure prevents persistence and retains old UI",
+    "F1 later recovery resumes queue with committed skin",
+    "F1 late external adoption invalidates recovery read before partial sort",
+    "F1 late external adoption invalidates recovery read before partial theme",
+    "F1 snapshot requested during persistence cannot clear post-ACK recovery",
+    "F1 App sort ACK/read failure keeps confirmed UI",
+    "F1 App sort recovers committed Paper",
+    "F1 App sort explicit appearance is atomic, following intent partial",
+    "F1 App theme ACK/read failure keeps confirmed UI",
+    "F1 App theme recovers committed Paper",
+    "F1 App theme explicit appearance is atomic, following intent partial",
+    "F1 App external commit + sort keeps persisted skin with partial intent",
+    "F1 App external commit + theme keeps persisted skin with partial intent",
+    "F1 committed Store replay fixture matches this run actual App patches",
+    "classic-light F2 ordinary form is opaque",
+    "classic-light F2 unchecked ordinary checkbox visible",
+    "classic-light-ordinary-form ordinary text >=4.5",
+    "classic-light F2 smart form is opaque",
+    "classic-light F2 tag popover is opaque",
+    "classic-light-tag-options ordinary text >=4.5",
+    "classic-light F2 warning is opaque",
+    "classic-light-smart-warning ordinary text >=4.5",
+    "classic-light F3 non-axis rectangle has translucent overlay",
+    "classic-light-rectangular-selection ordinary text >=4.5",
+    "classic-light F3 axis selection retains outline and clear text layer",
+    "classic-light-axis-selection ordinary text >=4.5",
+    "classic-light-attachment-category-selected ordinary text >=4.5",
+    "classic-light-attachment-category-hover ordinary text >=4.5",
+    "classic-light-attachment-category-focus ordinary text >=4.5",
+    "classic-light F5 toast has opaque semantic surface",
+    "classic-light-date-toast ordinary text >=4.5",
+    "classic-dark F2 ordinary form is opaque",
+    "classic-dark F2 unchecked ordinary checkbox visible",
+    "classic-dark-ordinary-form ordinary text >=4.5",
+    "classic-dark F2 smart form is opaque",
+    "classic-dark F2 tag popover is opaque",
+    "classic-dark-tag-options ordinary text >=4.5",
+    "classic-dark F2 warning is opaque",
+    "classic-dark-smart-warning ordinary text >=4.5",
+    "classic-dark F3 non-axis rectangle has translucent overlay",
+    "classic-dark-rectangular-selection ordinary text >=4.5",
+    "classic-dark F3 axis selection retains outline and clear text layer",
+    "classic-dark-axis-selection ordinary text >=4.5",
+    "classic-dark-attachment-category-selected ordinary text >=4.5",
+    "classic-dark-attachment-category-hover ordinary text >=4.5",
+    "classic-dark-attachment-category-focus ordinary text >=4.5",
+    "classic-dark F5 toast has opaque semantic surface",
+    "classic-dark-date-toast ordinary text >=4.5",
+    "paper-light F2 ordinary form is opaque",
+    "paper-light F2 unchecked ordinary checkbox visible",
+    "paper-light-ordinary-form ordinary text >=4.5",
+    "paper-light F2 smart form is opaque",
+    "paper-light F2 tag popover is opaque",
+    "paper-light-tag-options ordinary text >=4.5",
+    "paper-light F2 warning is opaque",
+    "paper-light-smart-warning ordinary text >=4.5",
+    "paper-light F3 non-axis rectangle has translucent overlay",
+    "paper-light-rectangular-selection ordinary text >=4.5",
+    "paper-light F3 axis selection retains outline and clear text layer",
+    "paper-light-axis-selection ordinary text >=4.5",
+    "paper-light-attachment-category-selected ordinary text >=4.5",
+    "paper-light-attachment-category-hover ordinary text >=4.5",
+    "paper-light-attachment-category-focus ordinary text >=4.5",
+    "paper-light F5 toast has opaque semantic surface",
+    "paper-light-date-toast ordinary text >=4.5",
+    "paper-dark F2 ordinary form is opaque",
+    "paper-dark F2 unchecked ordinary checkbox visible",
+    "paper-dark-ordinary-form ordinary text >=4.5",
+    "paper-dark F2 smart form is opaque",
+    "paper-dark F2 tag popover is opaque",
+    "paper-dark-tag-options ordinary text >=4.5",
+    "paper-dark F2 warning is opaque",
+    "paper-dark-smart-warning ordinary text >=4.5",
+    "paper-dark F3 non-axis rectangle has translucent overlay",
+    "paper-dark-rectangular-selection ordinary text >=4.5",
+    "paper-dark F3 axis selection retains outline and clear text layer",
+    "paper-dark-axis-selection ordinary text >=4.5",
+    "paper-dark-attachment-category-selected ordinary text >=4.5",
+    "paper-dark-attachment-category-hover ordinary text >=4.5",
+    "paper-dark-attachment-category-focus ordinary text >=4.5",
+    "paper-dark F5 toast has opaque semantic surface",
+    "paper-dark-date-toast ordinary text >=4.5",
+    "high-contrast-light F2 ordinary form is opaque",
+    "high-contrast-light F2 unchecked ordinary checkbox visible",
+    "high-contrast-light-ordinary-form ordinary text >=4.5",
+    "high-contrast-light F2 smart form is opaque",
+    "high-contrast-light F2 tag popover is opaque",
+    "high-contrast-light-tag-options ordinary text >=4.5",
+    "high-contrast-light F2 warning is opaque",
+    "high-contrast-light-smart-warning ordinary text >=4.5",
+    "high-contrast-light F3 non-axis rectangle has translucent overlay",
+    "high-contrast-light-rectangular-selection ordinary text >=4.5",
+    "high-contrast-light F3 axis selection retains outline and clear text layer",
+    "high-contrast-light-axis-selection ordinary text >=4.5",
+    "high-contrast-light-attachment-category-selected ordinary text >=4.5",
+    "high-contrast-light-attachment-category-hover ordinary text >=4.5",
+    "high-contrast-light-attachment-category-focus ordinary text >=4.5",
+    "high-contrast-light F5 toast has opaque semantic surface",
+    "high-contrast-light-date-toast ordinary text >=4.5",
+    "high-contrast-dark F2 ordinary form is opaque",
+    "high-contrast-dark F2 unchecked ordinary checkbox visible",
+    "high-contrast-dark-ordinary-form ordinary text >=4.5",
+    "high-contrast-dark F2 smart form is opaque",
+    "high-contrast-dark F2 tag popover is opaque",
+    "high-contrast-dark-tag-options ordinary text >=4.5",
+    "high-contrast-dark F2 warning is opaque",
+    "high-contrast-dark-smart-warning ordinary text >=4.5",
+    "high-contrast-dark F3 non-axis rectangle has translucent overlay",
+    "high-contrast-dark-rectangular-selection ordinary text >=4.5",
+    "high-contrast-dark F3 axis selection retains outline and clear text layer",
+    "high-contrast-dark-axis-selection ordinary text >=4.5",
+    "high-contrast-dark-attachment-category-selected ordinary text >=4.5",
+    "high-contrast-dark-attachment-category-hover ordinary text >=4.5",
+    "high-contrast-dark-attachment-category-focus ordinary text >=4.5",
+    "high-contrast-dark F5 toast has opaque semantic surface",
+    "high-contrast-dark-date-toast ordinary text >=4.5",
+    "F1-F5 no unexpected page errors"
+  ],
+  "appReplays": [
+    {
+      "following": {
+        "sort": "updated"
+      },
+      "initial": {
+        "theme": "light"
+      },
+      "patches": [
+        {
+          "appearance": {
+            "version": 2,
+            "themeId": "paper",
+            "schemePreference": "dark"
+          },
+          "theme": "dark"
+        },
+        {
+          "sort": "updated"
+        }
+      ],
+      "expected": {
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "theme": "dark"
+      }
+    },
+    {
+      "following": {
+        "theme": "system"
+      },
+      "initial": {
+        "theme": "light"
+      },
+      "patches": [
+        {
+          "appearance": {
+            "version": 2,
+            "themeId": "paper",
+            "schemePreference": "dark"
+          },
+          "theme": "dark"
+        },
+        {
+          "theme": "system"
+        }
+      ],
+      "expected": {
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "system"
+        },
+        "theme": "system"
+      }
+    },
+    {
+      "following": {
+        "sort": "title"
+      },
+      "initial": {
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "theme": "dark"
+      },
+      "patches": [
+        {
+          "sort": "title"
+        }
+      ],
+      "expected": {
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "theme": "dark"
+      }
+    },
+    {
+      "following": {
+        "theme": "system"
+      },
+      "initial": {
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "theme": "dark"
+      },
+      "patches": [
+        {
+          "theme": "system"
+        }
+      ],
+      "expected": {
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "system"
+        },
+        "theme": "system"
+      }
+    }
+  ],
+  "store": {
+    "exitCode": 0,
+    "signal": null,
+    "command": [
+      "cargo",
+      "test",
+      "--locked",
+      "--offline",
+      "--features",
+      "rusqlite/hooks",
+      "--manifest-path",
+      "/Users/water/work/2026/Apple-Notes-Clone-evolve114/artifacts/evolve114-store/harness/Cargo.toml",
+      "settings_and_archive_are_strict",
+      "--",
+      "--nocapture"
+    ],
+    "target": "/Users/water/work/2026/Apple-Notes-Clone-evolve114/artifacts/evolve114-store/target",
+    "jobs": 2,
+    "source": "9ab9698eeb66249e7da021cc8d0641240521c130",
+    "sources": {
+      "src-tauri/src/store.rs": "052828e5e86b3f57f46ce33475d3d46b98378f204ea12c8de1e14e0ff5996fa3",
+      "src-tauri/src/store/archive.rs": "4b8877163360cdccb751647bbeae66fe7dd53652b1bf119a9adf83485a34608e",
+      "src-tauri/src/store/archive/tests.rs": "d92200a9c70264cd3258e64419d28fa808939eee22b889cc654774a59335ecc6",
+      "src-tauri/tests/evolve114-settings-recovery.json": "ab1d986a09bd8c92578c770c60307b2fe06d3c97867832962cf1dfdb55dd37be",
+      "artifacts/evolve114-regressions/app-settings-replays.json": "ab1d986a09bd8c92578c770c60307b2fe06d3c97867832962cf1dfdb55dd37be"
+    },
+    "scope": "Actual production Store/Session/archive tests in native-free conventional src tree; production Store/Session/model modules; transport and native adapters excluded; appearance + existing details settings/archive tests; no native or user Store."
+  },
+  "scope": "Actual React App/Tiptap; isolated IPC. Production App patches replayed separately by real Store.",
+  "attachment-category": {
+    "pairs": 144,
+    "minRatio": 5.01500298763434
+  },
+  "rectangular-selection": {
+    "pairs": 18,
+    "minRatio": 10.020323553037228
+  },
+  "date-toast": {
+    "pairs": 6,
+    "minRatio": 13.816002479822636
+  },
+  "currentSourceHashes": {
+    "src/confirmed-settings.ts": "87d1c42e775626ff5845a4d6e62e5069a5527884d0ac9af39f75d4da9fa61b47",
+    "src/smart-folders.css": "eae4534aa21a84f872d8d2354d887d6d999926c5a9471163571fe6f9b31533f6",
+    "src/AttachmentGallery.css": "364ef0f7a8cb9dc8d7919c06099082905f4767320d2813b06bb83afd04a40393",
+    "src/style.css": "8569058030947ecc5df71386e235e001f061a01cde0c385609b9d014bb296918",
+    "src/themes/palettes.json": "8b7a481d112e408a78d308c70099d675ff3ec44031e62dcf18b656b163c8d223",
+    "scripts/check-evolve114-regressions.mjs": "028873a3102860d679f607c935f3a3bfb7d719ea3774f8a28b02d72eaeac2021",
+    "scripts/debug/platform.mjs": "8fbf36363d04cf9364cb4184aba6105b9177e5f97a23b99e3705a2edf215f566"
+  }
+}

@@ -129,7 +129,7 @@ type PresentationV1 = {
 
 ## 114 实现边界与可重复检查
 
-- `appearanceOf` / `normalizeAppearanceSettings` 只做内存迁移；现存旧数据库不会因读取而被改写。`ConfirmedSettings` 在每次设置写入的队列执行点生成完整 appearance + theme；嵌套对象在入队时复制并校验。失败不提前发布，迟到的 workspace ticket 不回退已确认值。
+- `appearanceOf` / `normalizeAppearanceSettings` 只做内存迁移；现存旧数据库不会因读取而被改写。`ConfirmedSettings` 保留无关 patch 与旧 theme-only patch 的 partial 意图，只对显式 appearance 编辑附带旧 theme 投影；Rust Store / browser-preview 持久层基于当前已存设置原子迁移、合并与投影，不能用 UI 缓存补全外观域。嵌套对象在入队时复制并校验。ACK 成功后确认读取失败，UI 保留旧值，下一笔写入前必须恢复权威读；恢复仍失败则不继续 persist。ACK 边界使此前读票据过期，恢复期间外部采纳使迟到读重试，保持 FIFO。
 - Rust `merge_settings` 校验旧值和 patch，再用一次 settings SQL UPDATE 保存；archive 导入和导出验证完整新对象并修正旧投影。仅旧 theme 的 archive 保持旧格式，首写再迁移。扩展设置、字号与 interfaceDetails 保持原 owner；没有新增同步 wire。
 - `geometry.json` 集中基础值，生成 `--radius-*`；各组件选自己的基础 token，画廊18、菜单10，radiusScale 在真实 `.recording-layout` 与示例作用域重新求值，上限24px。圆形、胶囊和0圆角边界保留语义形状，不用全局圆角覆盖。
 - Classic 保留正文/侧栏/黄色强调与明暗方向；次要文字、动作文字与焦点色为对比度加深，边线更清楚。Paper 同样区分装饰 accent 和可读 action-ink。媒体内容、marks、速绘色板不改色；用户指定正文颜色不保证任意背景均可读，不重写原文解决。

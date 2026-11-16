@@ -1,0 +1,112 @@
+[
+  {
+    "following": {
+      "sort": "updated"
+    },
+    "initial": {
+      "theme": "light"
+    },
+    "patches": [
+      {
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "theme": "dark"
+      },
+      {
+        "sort": "updated"
+      }
+    ],
+    "expected": {
+      "appearance": {
+        "version": 2,
+        "themeId": "paper",
+        "schemePreference": "dark"
+      },
+      "theme": "dark"
+    }
+  },
+  {
+    "following": {
+      "theme": "system"
+    },
+    "initial": {
+      "theme": "light"
+    },
+    "patches": [
+      {
+        "appearance": {
+          "version": 2,
+          "themeId": "paper",
+          "schemePreference": "dark"
+        },
+        "theme": "dark"
+      },
+      {
+        "theme": "system"
+      }
+    ],
+    "expected": {
+      "appearance": {
+        "version": 2,
+        "themeId": "paper",
+        "schemePreference": "system"
+      },
+      "theme": "system"
+    }
+  },
+  {
+    "following": {
+      "sort": "title"
+    },
+    "initial": {
+      "appearance": {
+        "version": 2,
+        "themeId": "paper",
+        "schemePreference": "dark"
+      },
+      "theme": "dark"
+    },
+    "patches": [
+      {
+        "sort": "title"
+      }
+    ],
+    "expected": {
+      "appearance": {
+        "version": 2,
+        "themeId": "paper",
+        "schemePreference": "dark"
+      },
+      "theme": "dark"
+    }
+  },
+  {
+    "following": {
+      "theme": "system"
+    },
+    "initial": {
+      "appearance": {
+        "version": 2,
+        "themeId": "paper",
+        "schemePreference": "dark"
+      },
+      "theme": "dark"
+    },
+    "patches": [
+      {
+        "theme": "system"
+      }
+    ],
+    "expected": {
+      "appearance": {
+        "version": 2,
+        "themeId": "paper",
+        "schemePreference": "system"
+      },
+      "theme": "system"
+    }
+  }
+]

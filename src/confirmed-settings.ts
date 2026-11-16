@@ -1,4 +1,4 @@
-import { appearancePatch, normalizeAppearanceSettings, parseAppearance } from "./themes/appearance";
+import { normalizeAppearanceSettings, parseAppearance, parseScheme } from "./themes/appearance";
 import type { Settings } from "./types";
 import { parseInterfaceDetails } from "./interface-details";
 
@@ -10,6 +10,9 @@ export class ConfirmedSettings {
   private value: Settings = {};
   private generation = 0;
   private tail: Promise<unknown> = Promise.resolve();
+  // An ACK may commit successfully while its confirming read fails. Keep the
+  // old UI, but never use that old snapshot to construct another write.
+  private recoveryRequired = false;
   constructor(private publish: (value: Settings) => void) {}
   snapshot = () => this.value;
   ticket = () => this.generation;
@@ -17,6 +20,7 @@ export class ConfirmedSettings {
     if (ticket !== this.generation) return false;
     if (value.interfaceDetails !== undefined) parseInterfaceDetails(value.interfaceDetails);
     this.value = normalizeAppearanceSettings(value);
+    this.recoveryRequired = false;
     this.generation++;
     this.publish(this.value);
     return true;
@@ -31,17 +35,27 @@ export class ConfirmedSettings {
     const input = { ...patch, ...(Object.hasOwn(patch, "appearance") ? { appearance: parseAppearance(patch.appearance) } : {}), ...(patch.interfaceDetails === undefined ? {} : {
       interfaceDetails: parseInterfaceDetails(patch.interfaceDetails),
     }) };
+    if (Object.hasOwn(input, "theme")) parseScheme(input.theme);
+    // Only an explicit appearance edit owns that domain. Partial and legacy
+    // theme-only intents stay partial: Store/preview merge against persisted
+    // authority and atomically migrate/project there, including other windows.
+    if (input.appearance) input.theme = input.appearance.schemePreference;
     const work = this.tail.then(async () => {
       this.generation++;
       try {
-        await persist(appearancePatch(this.value, input));
+        if (this.recoveryRequired) {
+          await this.confirm(read);
+          // Invalidate reads admitted during recovery before starting a write.
+          this.generation++;
+        }
+        await persist(input);
+        // Snapshots requested while persistence was pending may predate this
+        // ACK. Only a read admitted after this boundary can confirm it.
+        this.generation++;
+        this.recoveryRequired = true;
         // External adoption during this read wins. Retry to confirm the actual
         // stored result, rather than replaying a captured patch over it.
-        for (;;) {
-          const ticket = this.ticket();
-          const stored = await read();
-          if (this.observe(stored, ticket)) return;
-        }
+        await this.confirm(read);
       } catch (cause) {
         // No rejected patch has been published. Republish the current owner,
         // also restoring transient column-resize geometry on save failure.
@@ -51,5 +65,12 @@ export class ConfirmedSettings {
     });
     this.tail = work.catch(() => {});
     return work;
+  }
+  private async confirm(read: () => Promise<Settings>): Promise<void> {
+    for (;;) {
+      const ticket = this.ticket();
+      const stored = await read();
+      if (this.observe(stored, ticket)) return;
+    }
   }
 }

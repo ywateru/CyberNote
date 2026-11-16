@@ -33,8 +33,9 @@ export function normalizeAppearanceSettings(value: Settings): Settings {
   const appearance = appearanceOf(value);
   return { ...value, appearance, theme: appearance.schemePreference };
 }
-/** Every settings write migrates in one receipt. Legacy callers retain the skin
- * and change the scheme; explicit AppearanceV2 always wins within the patch. */
+/** Browser-preview persistence merge, equivalent to the native Store merge.
+ * Use persisted authority, never a UI cache, as current. Legacy callers retain
+ * the skin; explicit AppearanceV2 wins. Unrelated IPC intents remain partial. */
 export function appearancePatch(current: Settings, patch: Settings): Settings {
   if (Object.hasOwn(patch, "theme")) parseScheme(patch.theme);
   const appearance = Object.hasOwn(patch, "appearance") ? parseAppearance(patch.appearance)

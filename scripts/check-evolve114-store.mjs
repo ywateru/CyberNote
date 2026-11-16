@@ -52,7 +52,7 @@ const command = [
   "--nocapture",
 ];
 const result = spawnSync("cargo", command, {
-  env: { ...process.env, CARGO_BUILD_JOBS: "2" },
+  env: { ...process.env, CARGO_BUILD_JOBS: "2", EVOLVE114_SETTINGS_REPLAY: resolve("artifacts/evolve114-regressions/app-settings-replays.json") },
   encoding: "utf8",
   timeout: 360000,
   maxBuffer: 8 * 1024 ** 2,
@@ -65,6 +65,8 @@ const files = [
   "src-tauri/src/store.rs",
   "src-tauri/src/store/archive.rs",
   "src-tauri/src/store/archive/tests.rs",
+  "src-tauri/tests/evolve114-settings-recovery.json",
+  "artifacts/evolve114-regressions/app-settings-replays.json",
 ];
 await writeFile(
   resolve(out, "result.json"),
