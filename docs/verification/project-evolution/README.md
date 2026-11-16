@@ -6,10 +6,10 @@
 
 | 任务 | 实现状态 | 独立验证 | 最终运行 |
 | --- | --- | --- | --- |
-| 111 应用服务 | 原生修复`eb9cee7d`及独审`6e728266`已合入；窗口前端`5e10f614`独审中 | native MODULE_SOURCE_PASS；合入后HEAD`892f9751`的197项/typecheck/11390项通过；独审另含原8探针、96条schema语料与19条合法service往返 | integration-open |
+| 111 应用服务 | 原生与窗口前端均已独审合入；窗口测试动画测量可靠性修复另复核中 | 两阶段MODULE_SOURCE_PASS；native HEAD`892f9751`197项/typecheck/11390通过；window HEAD`79241c09`typecheck/54/38/sync34/nav41通过，独审另含12恢复+13空目标组合 | integration-open |
 | 112 MCP | 适配器/宿主/独立UI均已合入；实际宿主与Preferences入口装配中 | 三模块MODULE_SOURCE_PASS；host HEAD`371469dd`23项、UI HEAD`f750b848`typecheck/12组、adapter HEAD`efd8ac6e`完整suite/release/F1合入检查通过 | integration-open；Codex CLI 0.167.0初始化/九工具/直接fixture能力调用通过，真实资料库业务待验 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
-| 114 主题 | 三主题明暗/外观V2/语义token已提交`b6040ea1` | 独立审查中；作者247项React/2项真实Store回归及对比度检查通过 | native-open |
+| 114 主题 | 三主题明暗/外观V2/语义token开发后修复独审发现中 | 独审`9ab9698e` BLOCKED：5项P2；作者247/2与其采样通过，独立新增表面/持久化失败 | native-open |
 | 115 呈现 | 等114 | 未执行 | 未执行 |
 | 116 整合 | 等112与115 | 未执行 | 未执行 |
 
@@ -33,6 +33,10 @@
 112 UI原两项阻塞（重载后丢失runtime配置、目录隐式256上限）经宿主/UI增量独审关闭；真实host返回准确runtimeDir，目录容量统一10,000，已验证重挂载复制与合法授权撤销。独立报告随模块合入后保留，真实装配另验。
 
 112适配器原F1（辅助object误计文档节点）经独审`d17b7a18`关闭；合法779,987字节/20,000节点与depth64输入输出通过，20,001节点/depth65仍拒绝；独审与原失败证据保留于[适配器报告](../../plan/reviews/evolve112-adapter-independent.md)。
+
+114当前阻塞：确认读取失败后覆盖已提交外观、智能文件夹缺少有效语义背景、普通表格选区遮字、附件分类选中计数与Toast对比度错误。修复及独审复核通过前不合入主题、不开始115布局；原先有限页面采样通过不抵消独立失败。
+
+112装配checkpoint`5eccb9f6`仅WIP：真实IPC→Service→SQLite九项通过，窗口仍协议输入；全native一次396通过/1失败/5 worker，64MiB同步阶段失败正在定位与baseline对照。已将主线已审window注入装配树，后续实际App/WebView与Codex读写另留证，未把WIP当作最终交付。
 
 ## 最终证据要求
 
