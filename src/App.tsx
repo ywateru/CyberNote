@@ -2,6 +2,7 @@ import { AttachmentMetadataContext } from "./use-attachment-media";
 import { attachmentSourcePool } from "./attachment-source-pool";
 import { useSystemEvents } from "./platform/system-events";
 import { createMobileLayout } from "./platform/layout";
+import { MobileInteractionContext } from "./platform/interaction";
 import { useNativePlatform } from "./platform/native-platform";
 import { useAttachmentPresentation } from "./attachment-operations/presentation";
 import { useAttachmentOperations } from "./attachment-operations/operations";
@@ -504,7 +505,8 @@ function App() {
   const [notice, setNotice] = useState("");
   const [mobile, setMobile] = useState(!!initialMobile);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const metrics = interfaceMetrics(settings, windowWidth);
+  const metrics = interfaceMetrics(settings, windowWidth, sidebar);
+  const mobileSingleColumn = mobile && windowWidth <= 430 && settings.interfaceFontSize === "huge";
   const desktopSidebarWidth = metrics.sidebarWidth;
   const desktopListWidth = metrics.listWidth;
   const mobileMode = useRef(!!initialMobile);
@@ -546,6 +548,24 @@ function App() {
   const swipe = useRef<{ x: number; y: number } | null>(null);
   const [swiped, setSwiped] = useState<string | null>(null);
   const longPress = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressed = useRef(false);
+  const galleryReturnFocus = useRef<HTMLElement | null>(null);
+  const wasGalleryEditor = useRef(galleryEditor);
+  useLayoutEffect(() => {
+    if (wasGalleryEditor.current && !galleryEditor && !mobile && !attachmentBrowser) {
+      const target = galleryReturnFocus.current;
+      if (target?.isConnected && target.getClientRects().length) target.focus({ preventScroll: true });
+      galleryReturnFocus.current = null;
+    }
+    wasGalleryEditor.current = galleryEditor;
+  }, [galleryEditor, mobile, attachmentBrowser]);
+  useEffect(() => () => {
+    if (longPress.current) clearTimeout(longPress.current);
+    longPress.current = null;
+    swipe.current = null;
+    longPressed.current = false;
+  }, [navigationState, mobile, mobileSingleColumn]);
+  useEffect(() => { setSwiped(null); }, [mobileSingleColumn]);
   const theme = settings.theme || "system";
   const view = settings.view || "list";
   const sort = settings.sort || "updated";
@@ -1180,11 +1200,12 @@ function App() {
   );
   const updateSettings = useCallback(
     (patch: Settings, throwOnFailure = false) => afterQuiet(() => {
-      if (patch.view) setGalleryEditor(false);
       const work = Promise.resolve().then(() => settingsOwner.write(patch,
         settings => action({ type: "settings", settings }),
         async () => (await loadWorkspace()).settings,
-      )).catch(cause => {
+      )).then(() => {
+        if (patch.view && settingsOwner.snapshot().view === patch.view) setGalleryEditor(false);
+      }).catch(cause => {
         fail(cause);
         if (throwOnFailure) throw cause;
       });
@@ -2523,17 +2544,28 @@ function App() {
     ? "无结果"
     : `${listed.length}个备忘录`;
   const startLong = (callback: () => void) => {
-    longPress.current = setTimeout(callback, 520);
+    stopLong();
+    longPressed.current = false;
+    longPress.current = setTimeout(() => {
+      longPress.current = null;
+      longPressed.current = true;
+      callback();
+    }, 520);
   };
   const stopLong = () => {
     if (longPress.current) clearTimeout(longPress.current);
+    longPress.current = null;
   };
+  const cancelTouch = () => { stopLong(); swipe.current = null; longPressed.current = false; setSwiped(null); };
   const folderRow = (f: FolderData, depth = 0) => (
     <div key={f.id}>
       <button
         className={`folder-row ${mobile && f.kind === "quick" ? "mobile-quick-folder-row" : ""} ${tagFilter === undefined && folderId === f.id ? "selected" : ""}`}
         style={{ paddingLeft: mobile ? 16 : (14 + depth * 30) * metrics.scale }}
-        onClick={() => chooseFolder(f.id)}
+        onClick={() => {
+          if (longPressed.current) { longPressed.current = false; return; }
+          chooseFolder(f.id);
+        }}
         onContextMenu={(e) => {
           e.preventDefault();
           setContextFolder(f.id);
@@ -2547,6 +2579,7 @@ function App() {
         }
         onTouchEnd={stopLong}
         onTouchMove={stopLong}
+        onTouchCancel={cancelTouch}
       >
         {!mobile && ws.folders.some(child => child.parentId === f.id) && (
           <span className="folder-disclosure" role="button" tabIndex={0}
@@ -4002,6 +4035,7 @@ function App() {
     return startup.scheduleReady();
   }, [startupReady, loading, workspaceLoaded, syncError, error]);
   return (
+    <MobileInteractionContext.Provider value={mobile}>
     <NativeMenuContext.Provider value={nativeTop && nativeInfo?.native.popupMenus === true}>
     <AttachmentMetadataContext.Provider value={ws.attachments}>
     <ImagePreviewContext.Provider value={{open:openImagePreview, closeSource:closePreviewSource}}>
@@ -4015,6 +4049,7 @@ function App() {
     <div className={`recording-layout ${mobile ? "mobile-controls" : "desktop-controls"}`} style={{
       ...interfaceDetailVariables(settings.interfaceDetails, mobile),
       "--ui-font-scale": fontScales(settings).interface,
+      "--mobile-ui-font-scale": fontScales(settings).mobileInterface,
       "--ui-scale": mobile ? 1 : metrics.scale,
     } as CSSProperties}>
     <div
@@ -4027,6 +4062,7 @@ function App() {
           "--sidebar-width": `${desktopSidebarWidth}px`,
           "--list-width": `${desktopListWidth}px`,
           "--ui-font-scale": fontScales(settings).interface,
+          "--mobile-ui-font-scale": fontScales(settings).mobileInterface,
           "--ui-scale": mobile ? 1 : metrics.scale,
           "--editor-scale": fontScales(settings).editor,
           "--toolbar-height": `${metrics.toolbarHeight}px`,
@@ -4267,11 +4303,12 @@ function App() {
       {!mobile && sidebar && !separate && (
         <ResizeHandle
           width={desktopSidebarWidth}
-          min={Math.round(220 * metrics.scale)}
-          max={Math.round(360 * metrics.scale)}
+          min={metrics.sidebarMin}
+          max={metrics.sidebarMax}
           className="sidebar-resize"
-          onChange={(w) => setSettings((s) => ({ ...s, sidebarWidth: w / metrics.scale }))}
-          onEnd={(w) => updateSettings({ sidebarWidth: w / metrics.scale })}
+          onChange={(w) => setSettings((s) => ({ ...s, sidebarWidth: w }))}
+          onEnd={(w) => updateSettings({ sidebarWidth: w })}
+          onCancel={() => setSettings(settingsOwner.snapshot())}
         />
       )}
       <section
@@ -4353,7 +4390,7 @@ function App() {
           onError={fail}
           topInset={nativeTop ? nativeInfo?.native.reservedTop || 0 : 0}
         /> : <div
-          className={`notes-scroll ${mobile ? "mobile-gallery" : view === "gallery" ? "gallery" : ""}`}
+          className={`notes-scroll ${mobile ? `mobile-gallery ${mobileSingleColumn ? "single-column" : ""}` : view === "gallery" ? "gallery" : ""}`}
           onClick={() => setSwiped(null)}
         >
           {loading ? (
@@ -4398,7 +4435,7 @@ function App() {
                     hidden={!mobile && n.pinned && pinnedCollapsed}
                     className={`note-row-wrap ${swiped === n.id ? "swiped" : ""}`}
                   >
-                    <div className="swipe-actions">
+                    {mobileSingleColumn && <div className="swipe-actions" aria-hidden={swiped !== n.id} inert={swiped !== n.id}>
                       <button
                         aria-label="置顶"
                         onClick={(e) => {
@@ -4434,12 +4471,13 @@ function App() {
                       >
                         <Trash2 size={20} />
                       </button>
-                    </div>
+                    </div>}
                     <button
                       className={`note-row ${thumbnail ? "has-thumbnail" : ""} ${n.pinned ? "pinned-note" : ""} ${noteId === n.id ? "selected" : ""}`}
                       data-note-id={n.id}
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (longPressed.current) { longPressed.current = false; return; }
                         if (swiped === n.id) {
                           setSwiped(null);
                           return;
@@ -4452,8 +4490,18 @@ function App() {
                           }
                         } else chooseNote(n);
                       }}
-                      onDoubleClick={() => {
-                        if (!mobile) chooseNote(n);
+                      onDoubleClick={(e) => {
+                        if (!mobile) {
+                          if (view === "gallery") galleryReturnFocus.current = e.currentTarget;
+                          chooseNote(n);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (!mobile && view === "gallery" && (e.key === "Enter" || e.key === " ")) {
+                          e.preventDefault();
+                          galleryReturnFocus.current = e.currentTarget;
+                          chooseNote(n);
+                        }
                       }}
                       onContextMenu={(e) => {
                         e.preventDefault();
@@ -4479,7 +4527,7 @@ function App() {
                       onTouchMove={(e) => {
                         stopLong();
                         if (
-                          swipe.current &&
+                          mobileSingleColumn && swipe.current &&
                           Math.abs(e.touches[0].clientY - swipe.current.y) <
                             20 &&
                           swipe.current.x - e.touches[0].clientX > 45
@@ -4487,6 +4535,7 @@ function App() {
                           setSwiped(n.id);
                       }}
                       onTouchEnd={stopLong}
+                      onTouchCancel={cancelTouch}
                     >
                       {mobile ? <div className="mobile-note-card">
                         <strong>{n.pinned && <Pin size={13} />}{n.title}</strong>
@@ -4577,6 +4626,10 @@ function App() {
                       {thumbnail && <NoteThumbnail key={`${thumbnail.id}:${imageAuthority(n.id)}`} id={thumbnail.id} kind={thumbnail.kind} />}
                       </>}
                     </button>
+                    {mobile && <button className="note-card-more" aria-label={`更多操作：${n.title}`} aria-haspopup="menu"
+                      onClick={(e) => { e.stopPropagation(); setContextNote(n.id); setNoteMenuPoint(null); setMenu("note"); }}>
+                      <MoreHorizontal size={20} />
+                    </button>}
                   </div>
                 </div>
               );
@@ -4593,11 +4646,12 @@ function App() {
       {!mobile && !separate && (
         <ResizeHandle
           width={desktopListWidth}
-          min={Math.round(280 * metrics.scale)}
-          max={Math.round(480 * metrics.scale)}
+          min={metrics.listMin}
+          max={metrics.listMax}
           className="list-resize"
-          onChange={(w) => setSettings((s) => ({ ...s, listWidth: w / metrics.scale }))}
-          onEnd={(w) => updateSettings({ listWidth: w / metrics.scale })}
+          onChange={(w) => setSettings((s) => ({ ...s, listWidth: w }))}
+          onEnd={(w) => updateSettings({ listWidth: w })}
+          onCancel={() => setSettings(settingsOwner.snapshot())}
         />
       )}
       <main
@@ -4621,6 +4675,7 @@ function App() {
             back();
           swipe.current = null;
         }}
+        onTouchCancel={cancelTouch}
       >
         {!nativeTop && !attachmentBrowser && (
           <header
@@ -5113,6 +5168,7 @@ function App() {
     </ImagePreviewContext.Provider>
     </AttachmentMetadataContext.Provider>
     </NativeMenuContext.Provider>
+    </MobileInteractionContext.Provider>
   );
 }
 function SearchSuggestions({
@@ -5151,6 +5207,7 @@ function ResizeHandle({
   max,
   onChange,
   onEnd,
+  onCancel,
   className,
 }: {
   width: number;
@@ -5158,23 +5215,51 @@ function ResizeHandle({
   max: number;
   onChange: (w: number) => void;
   onEnd: (w: number) => void;
+  onCancel: () => void;
   className: string;
 }) {
-  const drag = useRef<{ x: number; w: number } | null>(null);
+  const drag = useRef<{ x: number; w: number; id: number } | null>(null);
+  const cancelRef = useRef(onCancel);
+  cancelRef.current = onCancel;
+  useEffect(() => () => {
+    if (drag.current) cancelRef.current();
+    drag.current = null;
+  }, []);
+  const clamp = (value: number) => Math.max(min, Math.min(max, value));
+  const cancel = () => {
+    if (!drag.current) return;
+    drag.current = null;
+    onCancel();
+  };
   return (
     <div
       className={`resize-handle ${className}`}
       role="separator"
+      tabIndex={0}
       aria-label="调整分栏宽度"
+      aria-valuemin={min}
+      aria-valuemax={max}
       aria-valuenow={width}
       aria-orientation="vertical"
-      onPointerDown={(e) => {
+      onKeyDown={(e) => {
+        if (drag.current) return;
+        const step = e.shiftKey ? 24 : 8;
+        const next = e.key === "Home" ? min : e.key === "End" ? max
+          : e.key === "ArrowLeft" ? width - step : e.key === "ArrowRight" ? width + step : null;
+        if (next === null) return;
         e.preventDefault();
-        drag.current = { x: e.clientX, w: width };
+        onChange(clamp(next));
+        onEnd(clamp(next));
+      }}
+      onPointerDown={(e) => {
+        if (e.button !== 0 || drag.current) return;
+        e.preventDefault();
+        e.currentTarget.focus();
+        drag.current = { x: e.clientX, w: width, id: e.pointerId };
         e.currentTarget.setPointerCapture(e.pointerId);
       }}
       onPointerMove={(e) => {
-        if (drag.current)
+        if (drag.current?.id === e.pointerId)
           onChange(
             Math.max(
               min,
@@ -5183,16 +5268,21 @@ function ResizeHandle({
           );
       }}
       onPointerUp={(e) => {
-        if (drag.current) {
-          onEnd(
-            Math.max(
-              min,
-              Math.min(max, drag.current.w + e.clientX - drag.current.x),
-            ),
-          );
+        if (drag.current?.id === e.pointerId) {
+          const next = clamp(drag.current.w + e.clientX - drag.current.x);
           drag.current = null;
+          if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+          onEnd(
+            next,
+          );
         }
       }}
+      onPointerCancel={(e) => {
+        if (drag.current?.id !== e.pointerId) return;
+        cancel();
+        if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+      }}
+      onLostPointerCapture={(e) => { if (drag.current?.id === e.pointerId) cancel(); }}
     />
   );
 }

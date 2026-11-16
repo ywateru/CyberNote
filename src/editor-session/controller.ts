@@ -86,6 +86,8 @@ export class EditorSession {
   private active = true;
   private viewport = 0;
   private keyboardHeight = 0;
+  private viewportWidth = 0;
+  private keyboardInset = 0;
   generation = 0;
   constructor(private platform: SessionPlatform) {}
   snapshot = () => this.state;
@@ -201,13 +203,18 @@ export class EditorSession {
     // typing already follows the existing content/save path in App.
     if (captured) this.commit({ revision: this.state.revision + 1 });
   }
-  viewportChanged(height: number) {
+  viewportChanged(height: number, width = this.viewportWidth, visualHeight = height) {
+    if (width !== this.viewportWidth) {
+      this.viewportWidth = width;
+      this.viewport = height;
+      this.keyboardHeight = 0;
+    }
     this.viewport = Math.max(this.viewport, height);
-    const difference = this.viewport - height;
-    if (difference > 120) this.keyboardHeight = difference;
+    this.keyboardInset = Math.max(this.viewport - height, height - visualHeight);
+    if (this.keyboardInset > 120) this.keyboardHeight = this.keyboardInset;
   }
   get keyboardVisible() {
-    return this.viewport - window.innerHeight > 120;
+    return this.keyboardInset > 120;
   }
   cancelFocus = () => {
     this.generation++;
