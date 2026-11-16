@@ -1,8 +1,10 @@
 # 文档导航
 
-2026-11-16 项目演进规划（仅文档，产品开发未开始）：[代码梳理与优先级](plan/analysis/project-review-20261116.md) → [MCP 接口](architecture/agent-mcp.md) / [主题与呈现架构](architecture/theme-presentation.md) / [双端交互](ui/adaptive-presentation.md) → [实施路线图与六项任务](plan/project-evolution-20261116.md)。新 MCP 和主题契约以这些文档为准；已实现功能与历史验证仍按下方各自版本读取。
+2026-11-16 项目演进设计，11-17进入实现：[代码梳理与优先级](plan/analysis/project-review-20261116.md) → [MCP 接口](architecture/agent-mcp.md) / [主题与呈现架构](architecture/theme-presentation.md) / [双端交互](ui/adaptive-presentation.md) → [实施路线图与六项任务](plan/project-evolution-20261116.md)。新 MCP 和主题契约以这些文档为准；已实现功能与历史验证仍按下方各自版本读取。
 
 后续开发已从111原生应用服务、113前端交互和112独立stdio传输模块展开；当前状态以[任务路线图](plan/project-evolution-20261116.md)为准。[本机IPC实现契约](architecture/agent-ipc.md)固定适配器/宿主帧和凭据引用；独立模块通过不代表已完成真实宿主或双端验收。
+
+11-17：113交互源码已独审合入，114主题开发与111窗口协调接线开始；111原生、112适配器/私有宿主/授权UI按模块独审。最新实现、独审和真实运行分层记录见[演进验证状态](verification/project-evolution/README.md)，不能用历史包或传输fixture替代本轮最终联调。
 
 服务器后续开发与部署从[服务总览与生产记录](server/README.md)、[配置／部署／回滚／排障手册](server/DEPLOYMENT.md)开始；[环境模板](../services/coordinator/.env.example)不含真实凭据。资料依据源码和已有回执整理，未重新查询或变更线上配置。
 
