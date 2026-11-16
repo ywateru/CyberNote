@@ -9,7 +9,7 @@
 | 111 应用服务 | 原生与窗口前端均已独审合入；动画测量测试修复也已独审合入 | 两阶段MODULE_SOURCE_PASS；native HEAD`892f9751`197项/typecheck/11390，window HEAD`79241c09`54/38/sync34/nav41，脚本修复HEAD`ce663ade`原11390通过；独审另含12恢复+13空目标组合 | integration-open |
 | 112 MCP | 适配器/宿主/独立UI均已合入；实际宿主与Preferences入口装配中 | 三模块MODULE_SOURCE_PASS；host HEAD`371469dd`23项、UI HEAD`f750b848`typecheck/12组、adapter HEAD`efd8ac6e`完整suite/release/F1合入检查通过 | integration-open；Codex CLI 0.167.0初始化/九工具/直接fixture能力调用通过，真实资料库业务待验 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
-| 114 主题 | 五项修复`43f583e3`已独审通过，准备合入 | 独审`7767625d` MODULE_SOURCE_PASS；376主题/3正式Store/7独立Store/67独立浏览器/270实际文字对通过，原失败证据保留 | native-open |
+| 114 主题 | 五项修复`43f583e3`与独审已合入`39662e7d`；Store runner增量仍待修复复核 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199全部通过；实际AgentSettings额外18状态、450文字对、0失败。runner-only`96272cc6`独审`8f79c122`发现target路径别名保护缺口，未合入 | native-open |
 | 115 呈现 | 等114 | 未执行 | 未执行 |
 | 116 整合 | 等112与115 | 未执行 | 未执行 |
 
@@ -34,7 +34,9 @@
 
 112适配器原F1（辅助object误计文档节点）经独审`d17b7a18`关闭；合法779,987字节/20,000节点与depth64输入输出通过，20,001节点/depth65仍拒绝；独审与原失败证据保留于[适配器报告](../../plan/reviews/evolve112-adapter-independent.md)。
 
-114原五项阻塞（确认失败覆盖、智能文件夹背景、表格遮字、附件计数与Toast配色）经独审关闭。原表格探针有一条rgba字符串限定仍失败，新合法color(srgb … / .12)经独立对比度与实际字形绘制验证通过；不把该旧断言虚报为绿。合入检查通过后再开始115。
+114原五项阻塞（确认失败覆盖、智能文件夹背景、表格遮字、附件计数与Toast配色）经独审关闭并合入。原表格探针有一条rgba字符串限定仍失败，新合法color(srgb … / .12)经独立对比度与实际字形绘制验证通过；不把该旧断言虚报为绿。`39662e7d`合入检查确认bridge同时保留agent-window与appearance导入，typecheck/token生成一致性、376主题（102 DOM状态/1911文字对/0失败）、90交互、12组AgentSettings及production core199通过；4个worker为父测试驱动项。额外实际AgentSettings六配色18状态/450可见文字对/0失败，最低5.0905。
+
+Store runner需改为直接使用production core harness，并尊重独立CARGO_TARGET_DIR。增量`96272cc6`的真实3项SQLite测试通过，但独审`8f79c122`在临时fixture中证明“已有symlink父目录+尚不存在后缀”可绕过禁止共享Tauri target的检查；未触碰真实共享target，未合入该runner增量。开发修复并独审后再开始115；这项脚本边界不重开已关闭的产品主题缺陷，也不要求重复376/core199。
 
 112装配checkpoint`5eccb9f6`仅WIP：真实IPC→Service→SQLite九项通过，窗口仍协议输入；全native一次396通过/1失败/5 worker，64MiB同步阶段失败正在定位与baseline对照。已将主线已审window注入装配树，后续实际App/WebView与Codex读写另留证，未把WIP当作最终交付。
 
