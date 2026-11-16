@@ -61,6 +61,7 @@ impl Session {
     ) -> Result<Value> {
         self.prepare_metadata(true)?;
         self.sensitive(note, token)?;
+        self.external_local_write(note);
         let result = self.apply_store(|store| {
             Ok(serde_json::to_value(
                 store.store_attachment(note, name, mime, bytes)?,

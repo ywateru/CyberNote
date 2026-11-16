@@ -1,4 +1,6 @@
 mod account;
+pub mod agent_access;
+pub mod application;
 mod apple_notes_import;
 mod attachment_desktop;
 mod attachment_media;
@@ -15,6 +17,7 @@ mod sync_headless;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use serde_json::{json, Value};
 use session::{Session, Token};
+use application::NotesApplicationService;
 use std::{
     path::PathBuf,
     sync::{Arc, Condvar, Mutex},
@@ -147,6 +150,24 @@ fn sync_window_reply(
     state.0.reply(window.label(), reply, &expected)
 }
 
+/// Only renderer coordination replies are exposed; no agent grant or external
+/// mutation can be constructed through this UI command.
+#[tauri::command]
+fn agent_window_reply(
+    reply: application::WindowReply,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+    state: State<AppState>,
+) -> application::ToolResult<Value> {
+    let live = recording_window::document_participants(app.webview_windows().into_keys());
+    let mut session = state.0.0.lock().map_err(application::ToolError::storage)?;
+    let result = NotesApplicationService::new(&mut session).external_reply(window.label(), reply, &expected, &live);
+    drop(session);
+    state.0.1.notify_all();
+    result
+}
+
 #[cfg(feature = "access-boundary-proof")]
 #[tauri::command]
 fn proof_access_record(event: Value, window: tauri::WebviewWindow) -> Result<()> {
@@ -194,44 +215,27 @@ fn failure(message: impl Into<String>) -> AppError {
         commit: None,
     }
 }
+fn ui_session<T>(state: &AppState, operation: impl FnOnce(&mut Session) -> Result<T>) -> Result<T> {
+    let mut session = state.0.0.lock().map_err(|_| failure("数据锁错误"))?;
+    NotesApplicationService::new(&mut session).ui(operation)
+}
 #[tauri::command]
 fn load_workspace(state: State<AppState>) -> Result<Value> {
-    state
-        .0
-         .0
-        .lock()
-        .map_err(|_| failure("数据锁错误"))?
-        .workspace()
+    ui_session(&state, |session| session.workspace())
 }
 #[tauri::command]
 fn register_save_intent(
-    note_id: String,
-    intent: String,
-    expected: Token,
-    window: tauri::WebviewWindow,
-    state: State<AppState>,
+    note_id: String, intent: String, expected: Token,
+    window: tauri::WebviewWindow, state: State<AppState>,
 ) -> Result<()> {
-    state
-        .0
-         .0
-        .lock()
-        .map_err(|_| failure("数据锁错误"))?
-        .register_save(window.label(), &note_id, &intent, expected)
+    ui_session(&state, |session| session.register_save(window.label(), &note_id, &intent, expected))
 }
 #[tauri::command]
 fn acknowledge_access(
-    operation_id: String,
-    success: bool,
-    window: tauri::WebviewWindow,
-    state: State<AppState>,
+    operation_id: String, success: bool, window: tauri::WebviewWindow, state: State<AppState>,
 ) -> Result<()> {
-    let result = state
-        .0
-         .0
-        .lock()
-        .map_err(|_| failure("数据锁错误"))?
-        .acknowledge(&operation_id, window.label(), success);
-    state.0 .1.notify_all();
+    let result = ui_session(&state, |session| session.acknowledge(&operation_id, window.label(), success));
+    state.0.1.notify_all();
     result
 }
 async fn mutate(
@@ -252,11 +256,11 @@ async fn mutate_with_stage(
     stage: Option<store::DocumentStage>,
 ) -> Result<Value> {
     if action["type"] == "saveNote" {
-        return session_command(&app, state, |session| session.save(window, action));
+        return session_command(&app, state, |session| NotesApplicationService::new(session).ui_save(window, action));
     }
     if !Session::requires_barrier(&action) {
         let mut session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-        let result = session.ordinary(action, &expected);
+        let result = NotesApplicationService::new(&mut session).ui_ordinary(action, &expected);
         let metadata = session.take_metadata_event();
         drop(session);
         if let Ok((_, Some(event))) = &result {
@@ -268,12 +272,9 @@ async fn mutate_with_stage(
         return result.map(|(value, _)| value);
     }
     let participants = recording_window::document_participants(app.webview_windows().into_keys());
-    let event = state
-        .0
-         .0
-        .lock()
-        .map_err(|_| failure("数据锁错误"))?
-        .begin(action, participants, &expected)?;
+    let event = ui_session(state, |session| {
+        NotesApplicationService::new(session).ui_begin(action, participants, &expected)
+    })?;
     let operation = event["operationId"].as_str().unwrap().to_string();
     if emit_document_event(&app, "notes-access", &event).is_err() {
         if let Some(p) = state
@@ -298,7 +299,7 @@ async fn mutate_with_stage(
             .wait_timeout_while(guard, Duration::from_secs(10), |s| !s.ready())
             .map_err(|_| failure("数据锁错误"))?;
         let live = recording_window::document_participants(app.webview_windows().into_keys());
-        let (result, event) = guard.finish(&operation, &live, wait.timed_out())?;
+        let (result, event) = NotesApplicationService::new(&mut guard).ui_finish(&operation, &live, wait.timed_out())?;
         let metadata = guard.take_metadata_event();
         drop(guard);
         let _ = emit_document_event(&app, "notes-access", &event);
@@ -317,7 +318,7 @@ fn session_command(
     operation: impl FnOnce(&mut Session) -> Result<Value>,
 ) -> Result<Value> {
     let mut session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-    let result = operation(&mut session);
+    let result = NotesApplicationService::new(&mut session).ui(operation);
     let event = session.take_metadata_event();
     drop(session);
     if let Some(event) = event {
@@ -435,16 +436,18 @@ fn cancel_attachment_operation(
 }
 #[tauri::command]
 fn read_attachment(id: String, expected: Token, state: State<AppState>) -> Result<Value> {
-    let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-    let note = session.store.attachment_note(&id)?;
-    session.sensitive(&note, &expected)?;
-    session.tagged(session.store.read_attachment(&id)?)
+    ui_session(&state, |session| {
+        let note = session.store.attachment_note(&id)?;
+        session.sensitive(&note, &expected)?;
+        session.tagged(session.store.read_attachment(&id)?)
+    })
 }
 #[tauri::command]
 fn read_note_text(id: String, expected: Token, state: State<AppState>) -> Result<Value> {
-    let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-    session.sensitive(&id, &expected)?;
-    session.tagged(session.store.note_text(&id)?)
+    ui_session(&state, |session| {
+        session.sensitive(&id, &expected)?;
+        session.tagged(session.store.note_text(&id)?)
+    })
 }
 #[tauri::command]
 async fn get_data_management(expected: Token, media: State<'_, MediaState>) -> Result<Value> {
@@ -482,25 +485,26 @@ async fn export_attachment(
     // A revocation cannot interleave between authorization and publication.
     tauri::async_runtime::spawn_blocking(move || {
         let state = app.state::<AppState>();
-        let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-        #[cfg(target_os = "android")]
-        if path.starts_with("content://") {
-            let (stage, info) = session.stage_attachment(&id, &expected)?;
-            copy_document(
-                &app,
-                &path,
-                &stage,
-                "write",
-                100 * 1024 * 1024,
-                Some(info.bytes),
-            )?;
-            return serde_json::to_value(info).map_err(Into::into);
-        }
-        if path.contains("://") {
-            return Err(failure("此平台不支持该导出地址"));
-        }
-        serde_json::to_value(session.export_attachment(&id, &PathBuf::from(path), &expected)?)
-            .map_err(Into::into)
+        ui_session(&state, |session| {
+            #[cfg(target_os = "android")]
+            if path.starts_with("content://") {
+                let (stage, info) = session.stage_attachment(&id, &expected)?;
+                copy_document(
+                    &app,
+                    &path,
+                    &stage,
+                    "write",
+                    100 * 1024 * 1024,
+                    Some(info.bytes),
+                )?;
+                return serde_json::to_value(info).map_err(Into::into);
+            }
+            if path.contains("://") {
+                return Err(failure("此平台不支持该导出地址"));
+            }
+            serde_json::to_value(session.export_attachment(&id, &PathBuf::from(path), &expected)?)
+                .map_err(Into::into)
+        })
     })
     .await
     .map_err(|e| failure(e.to_string()))?
@@ -511,38 +515,40 @@ async fn export_drawing(
 ) -> Result<()> {
     tauri::async_runtime::spawn_blocking(move || {
         let state = app.state::<AppState>();
-        let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-        session.sensitive(&note_id, &expected)?;
-        if svg.len() > 16 * 1024 * 1024 || !svg.starts_with("<svg xmlns=\"http://www.w3.org/2000/svg\"") || !svg.ends_with("</svg>") {
-            return Err(failure("速绘导出数据无效"));
-        }
-        #[cfg(target_os = "android")]
-        if path.starts_with("content://") {
-            let stage = session.store.document_stage()?;
-            std::fs::write(stage.path(), svg.as_bytes())?;
-            copy_document(&app, &path, &stage, "write", 16 * 1024 * 1024, Some(svg.len() as u64))?;
-            return Ok(());
-        }
-        if path.contains("://") { return Err(failure("此平台不支持该导出地址")); }
-        session.store.publish_export(&PathBuf::from(path), svg.as_bytes())
+        ui_session(&state, |session| {
+            session.sensitive(&note_id, &expected)?;
+            if svg.len() > 16 * 1024 * 1024 || !svg.starts_with("<svg xmlns=\"http://www.w3.org/2000/svg\"") || !svg.ends_with("</svg>") {
+                return Err(failure("速绘导出数据无效"));
+            }
+            #[cfg(target_os = "android")]
+            if path.starts_with("content://") {
+                let stage = session.store.document_stage()?;
+                std::fs::write(stage.path(), svg.as_bytes())?;
+                copy_document(&app, &path, &stage, "write", 16 * 1024 * 1024, Some(svg.len() as u64))?;
+                return Ok(());
+            }
+            if path.contains("://") { return Err(failure("此平台不支持该导出地址")); }
+            session.store.publish_export(&PathBuf::from(path), svg.as_bytes())
+        })
     }).await.map_err(|e| failure(e.to_string()))?
 }
 #[tauri::command]
 async fn export_archive(path: String, expected: Token, app: tauri::AppHandle) -> Result<()> {
     tauri::async_runtime::spawn_blocking(move || {
         let state = app.state::<AppState>();
-        let session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
-        #[cfg(target_os = "android")]
-        if path.starts_with("content://") {
-            let stage = session.stage_archive(&expected)?;
-            let size = std::fs::metadata(stage.path())?.len();
-            copy_document(&app, &path, &stage, "write", 256 * 1024 * 1024, Some(size))?;
-            return Ok(());
-        }
-        if path.contains("://") {
-            return Err(failure("此平台不支持该导出地址"));
-        }
-        session.export_archive(&PathBuf::from(path), &expected)
+        ui_session(&state, |session| {
+            #[cfg(target_os = "android")]
+            if path.starts_with("content://") {
+                let stage = session.stage_archive(&expected)?;
+                let size = std::fs::metadata(stage.path())?.len();
+                copy_document(&app, &path, &stage, "write", 256 * 1024 * 1024, Some(size))?;
+                return Ok(());
+            }
+            if path.contains("://") {
+                return Err(failure("此平台不支持该导出地址"));
+            }
+            session.export_archive(&PathBuf::from(path), &expected)
+        })
     })
     .await
     .map_err(|e| failure(e.to_string()))?
@@ -858,6 +864,7 @@ pub fn run() {
         sync_command,
         sync_diagnostics,
         sync_window_reply,
+        agent_window_reply,
         register_save_intent,
         acknowledge_access,
         read_note_text,
@@ -895,6 +902,7 @@ pub fn run() {
         sync_command,
         sync_diagnostics,
         sync_window_reply,
+        agent_window_reply,
         register_save_intent,
         acknowledge_access,
         read_note_text,
