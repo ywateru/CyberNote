@@ -1,3 +1,4 @@
+import { parseAgentWindowEvent, parseAgentWindowReply, parseAgentReplyReceipt, type AgentWindowEvent, type AgentWindowReply } from "./agent-window";
 import { listen } from "@tauri-apps/api/event";
 import { AccessChanged } from "./access-client";
 import { validateDataManagement, type DataManagementSnapshot } from "./data-management";
@@ -48,6 +49,16 @@ export async function subscribeNetworkSync(handler: (event: SyncWindowEvent) => 
 export async function replyNetworkSync(reply: SyncWindowReply) {
   if (!native) throw Error("同步窗口协调需要本机应用");
   return parseSyncWindowReceipt(await invoke("sync_window_reply", { reply, expected: accessGate.expected() }), reply.operationId);
+}
+export async function subscribeAgentWindow(handler: (event: AgentWindowEvent) => void, onError: (error: unknown) => void) {
+  if (!native) return () => {};
+  return listen<unknown>("notes-agent", ({ payload }) => {
+    try { handler(parseAgentWindowEvent(payload)); } catch (error) { onError(error); }
+  });
+}
+export async function replyAgentWindow(reply: AgentWindowReply) {
+  if (!native) throw Error("外部写窗口协调需要本机应用");
+  return parseAgentReplyReceipt(await invoke("agent_window_reply", { reply: parseAgentWindowReply(reply), expected: accessGate.expected() }), reply.operationId);
 }
 export async function subscribeAccess(handler: (event: AccessEvent) => void) {
   if (!native) return () => {};
