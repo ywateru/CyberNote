@@ -6,8 +6,8 @@
 
 | 任务 | 实现状态 | 独立验证 | 最终运行 |
 | --- | --- | --- | --- |
-| 111 应用服务 | 原生与窗口前端均已独审合入；动画测量测试修复也已独审合入 | 两阶段MODULE_SOURCE_PASS；native HEAD`892f9751`197项/typecheck/11390，window HEAD`79241c09`54/38/sync34/nav41，脚本修复HEAD`ce663ade`原11390通过；独审另含12恢复+13空目标组合 | integration-open |
-| 112 MCP | 三模块已合入；真实宿主/Preferences装配提交`4ceb15e9`等待独审，未合入 | 三模块MODULE_SOURCE_PASS；装配作者完整native400/0/5（大文档增量前）、最终service11通过、真实WK隔离3项与最终大文档/Codex定向6项通过；范围见装配报告 | independent-review-open；已实际Codex CLI 0.167.0九工具→真实宿主/SQLite/WebView，尚非最终包 |
+| 111 应用服务 | done（模块）；原生与窗口前端已独审合入，112同Session真实调用也通过 | 两阶段MODULE_SOURCE_PASS；原native197、window54/38/sync34/nav41及独立12恢复/13空目标组合；112独审另验实际主/子窗ACK及刷新故障恢复 | 实际debug candidate集成通过；最终包/真实IME由116承接 |
+| 112 MCP | done（模块）；真实装配`4ceb15e9`经`a1a69662`独审PASS，已合入`eca35abb` | 独立service11、实际设置双grant/Codex九工具/CAS/重启/撤销/20k/WK/刷新恢复通过；主树编译与17项native定向、376主题/90交互/12组Agent页及17组合UI检查通过 | 实际debug candidate通过；最终准确包及平台边界由116承接 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
 | 114 主题 | done（模块）；主题`39662e7d`与production Store runner`9bbb8562`均已合入 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199通过，实际AgentSettings额外18状态/450文字对/0失败。runner修复`975202a9`经`bd0aaf78`独审通过，主树真实3项Store再次通过 | native-open，116承接 |
 | 115 呈现 | in-progress；基于已合入114开始 | 未执行 | 未执行 |
@@ -15,7 +15,7 @@
 
 ## 分支写入边界
 
-下面111/113/112模块、111-window与114均为已合入并清理的模块分支责任记录；当前活跃的是115、112-integration。清理只移除本轮已完成的worktree/分支，保留提交、审查、失败证据；不清理历史sync108或用户数据。window原失败日志与独立探针已逐字节保全至`/tmp/evolve111-window-independent-postmerge-ercaff`，历史失败段保留在已合入review。114树ignored原始artifacts另存`artifacts/project-evolution/evolve114-worktree-archive-20261117/`，185文件/7,324,729字节与原件SHA256逐项一致，清单见`archive-manifest.json`；仅去除可重建的旧复制harness target、dist与依赖链接，production core缓存保留。
+下面111/113/112模块、111-window、114及112-integration均为已合入并清理的模块分支责任记录；当前活跃的是115、116-android-driver准备。清理保留提交、审查和失败证据，不清理历史sync108或用户数据。window原失败日志与独立探针已逐字节保全至`/tmp/evolve111-window-independent-postmerge-ercaff`。114树ignored artifacts另存`artifacts/project-evolution/evolve114-worktree-archive-20261117/`（185文件/7,324,729字节逐项SHA256一致），仅去除可重建旧复制harness target/dist/依赖链接。112-integration唯一候选前端另存`artifacts/project-evolution/evolve112-integration-worktree-archive/`（9文件/1,993,736字节逐项一致），真实候选仍保留在主Tauri bundle，所有/tmp失败和独立probe不变。
 
 - `codex/evolve-111`：application、可信授权context、Session/Store/schema、lib原生装配；不修改前端或agent_host。
 - `codex/evolve-113`：前端交互、相关验证脚本；不修改Rust。
@@ -26,6 +26,7 @@
 - `codex/evolve-114`：主题registry/token/外观偏好迁移、Rust归档校验及真实表面投影；不改agent_host/application或窗口外部协调语义。
 - `codex/evolve-112-integration`：同Session原生host/生命周期/命令/持久启用偏好与Preferences Agent入口，随后接已审窗口协调做真实链路；不改变theme/presentation或另建Store。
 - `codex/evolve-115`：从`5be79fce`开始，唯一呈现resolver、严格PresentationV1及其TS/Rust原子迁移、双端Shell/专注/移动列表/密度；不改变112宿主/授权/IPC，App中的保存/外部写/录音owner保持稳定。
+- `codex/evolve-116-android-driver`：独立owned emulator执行器，当前`c9d0b328`修复readUI parked Editor观测错误待增量独审；不改产品或旧Samsung driver，不代表设备验收。
 
 开发提交后由另一agent复核并执行相关真实检查。合入按依赖顺序进行，涉及相同owner的接线串行完成；不把模块传输fixture当作真实资料库联调。
 
@@ -41,7 +42,11 @@ Store runner现直接使用production core harness，尊重独立CARGO_TARGET_DI
 
 112装配早期checkpoint`5eccb9f6`仅WIP：真实IPC→Service→SQLite九项通过，窗口仍协议输入；全native一次396通过/1失败/5 worker，64MiB同步阶段失败当时待定位与baseline对照。随后注入主线已审window并开展下述实际App/WebView与Codex读写，未把早期WIP当作最终交付。
 
-112装配现提交`4ceb15e9`供独审：作者在独立bundle/真实WK隔离候选完成27项真实业务全组，覆盖跨窗刷新ACK、CAS、授权撤销、幂等重启、保存失败/owner保护及incarnation轮换；PM组字、tone录音与picker/OCR分别明确为受控输入，不冒充真实IME/物理Mic/识别。最终候选在大文档交付优化后另跑WK3项与业务6项（含真实Codex九工具），没有把旧27项计作新候选重跑。20k-node真实read超时由逐片重复反序列化引起，修为单次交付按SQLite generation复核可见性、每片仍复核实时授权；service11通过，独审重点复核该边界。64MiB原失败保留，固定baseline与integration串行通过；仅测试使用既有协议时钟及有界IO等待，产品5秒期限不变，完整native随后400/0/5。Clippy的account never_loop在固定baseline同样失败，如实保留。报告在integration分支`docs/verification/evolve112-integration.md`，合入后成为主树入口；这些作者事实尚不授予SOURCE_PASS或116完成。
+112装配作者阶段提交`4ceb15e9`供独审：作者在独立bundle/真实WK隔离候选完成27项真实业务全组，覆盖跨窗刷新ACK、CAS、授权撤销、幂等重启、保存失败/owner保护及incarnation轮换；PM组字、tone录音与picker/OCR分别明确为受控输入，不冒充真实IME/物理Mic/识别。最终候选在大文档交付优化后另跑WK3项与业务6项（含真实Codex九工具），没有把旧27项计作新候选重跑。20k-node真实read超时由逐片重复反序列化引起，修为单次交付按SQLite generation复核可见性、每片仍复核实时授权；service11通过，独审重点复核该边界。64MiB原失败保留，固定baseline与integration串行通过；仅测试使用既有协议时钟及有界IO等待，产品5秒期限不变，完整native随后400/0/5。Clippy的account never_loop在固定baseline同样失败，如实保留。作者报告为`docs/verification/evolve112-integration.md`，现已随合入保留；作者阶段未自行授予SOURCE_PASS或116完成，后续独审和主线结果如下。
+
+112后续独审`a1a69662`已PASS：[独审报告](../../plan/reviews/evolve112-integration-independent.md)区分真实Codex/SQLite/WebView、受控输入和未测硬件。主树`eca35abb`复验：cargo check及service11/profile3/settings archive3通过，20k read763ms；typecheck/token、376主题（102 DOM状态/1917对/0失败）、11390、AgentSettings12组通过，另有实际App→Preferences→Agent页17检查、六配色96文字对及同Editor保持。未重跑无变化full400/network；最终正式包仍待116。模块111/112据此done。
+
+资源记录：native复验交还target且确认无cargo/rustc后，只移除主`target/debug/incremental`可重建缓存（du 7,175,152KiB），磁盘空闲同期增加4,245,905,408字节；deps/build/bundle/其他targets及候选保留，bundle入口/Info.plist SHA256前后一致。回执为`artifacts/project-evolution/resource-cleanup-20261117/result.json`，不是产品或用户数据清理。
 
 ## 最终证据要求
 

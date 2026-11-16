@@ -1,7 +1,7 @@
 ---
 id: evolve-111
 scope: native-application
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -29,3 +29,5 @@ depends-on: []
 ## verification
 
 真实Session/SQLite验证查询授权、版本CAS、复杂文档保护、创建一次事务、重启后幂等、已提交但通知失败的结果。真实App窗口验证pendingDocs、中文组字、录音、附件、参与窗口变化及sync同时到达的保护。证明UI调用新服务、事件沿原metadata路径发布，不能只新增未接入的模块。
+
+模块完成：原生及窗口协调独审后，112实际同Session/Codex/主子窗与刷新失败恢复亦经`a1a69662`独审、`eca35abb`合入复验通过。受控PM composition/tone/picker owner与真实IME/物理采集分开记录；后两类及最终准确包由116承接，不随模块done宣告完成。证据见`docs/verification/project-evolution/README.md`与112装配独审报告。

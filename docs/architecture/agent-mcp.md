@@ -1,6 +1,6 @@
 # Agent MCP 接口契约
 
-设计日期：2026-11-16。状态：开发中，原生共享服务、stdio适配器、私有宿主和独立授权UI已按模块独审合入，真实宿主/窗口装配及最终双端验收尚未完成；实际范围见[演进验证状态](../verification/project-evolution/README.md)。适用 Codex、DeepSeek harness 及其他支持 MCP 的 agent，不同 harness 的启动配置以其实际能力为准。本文为统一工具名、CLI、DTO、目录与错误码契约，不能把模块源码视为已安装可用的接口。
+设计日期：2026-11-16。状态：111/112模块及真实宿主/窗口装配已独审合入，Codex实际九工具调用已通过，最终安装产物与双端组合仍待116；实际范围见[演进验证状态](../verification/project-evolution/README.md)。适用 Codex、DeepSeek harness 及其他支持 MCP 的 agent，不同 harness 的启动配置以其实际能力为准。本文为统一工具名、CLI、DTO、目录与错误码契约，不能把模块源码视为已安装可用的接口。
 
 ## 范围与所有权
 
