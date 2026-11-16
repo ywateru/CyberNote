@@ -87,6 +87,16 @@ type ToolError = {
 };
 ```
 
+跨适配器/宿主的成功DTO固定如下，禁止两侧自行推断同义字段：
+
+- capabilities：`apiVersion: 1`、`schemaVersion: 1`（均为整数）、`workspaceId`、`hostSessionId`、`scopes`、`tools`、`formats`和`limits`。limits字段为`maxLimit`、`maxQueryCharacters`、`maxContentBytes`、`maxDocumentBytes`、`maxFrameBytes`、`maxTextPageBytes`、`maxListBytes`、`maxJsonDepth`、`maxNodes`、`idempotencyRetentionDays`、`queryDeadlineMs`、`writeDeadlineMs`、`maxConcurrentReads`、`maxConcurrentWrites`、`maxQueuedWrites`，均为有界非负整数。
+- folders：`{items: [{id, name, ancestorLabels: string[]}], nextCursor: string|null}`。
+- list：`{items: NoteSummary[], nextCursor: string|null}`。
+- search：同list，每个item增加`match: {field: "title"|"content", snippet: string}`；query匹配标题/可读正文，tags是独立的全部匹配过滤，snippet最多240字符。
+- operation：已提交时直接返回MutationResult；尚在协调/未找到时分别返回`{status: "pending"|"not_found", operationId}`。
+
+适配器的严格outputSchema与实际宿主必须用同一组成功/错误fixture相互校验，不能以传输fixture各自通过代替契约接通。
+
 列表 DTO 不返回 document、sealed、密钥、相对路径或 Session token。`preview` 最多240个 Unicode 字符且只来自授权正文。attachmentCount 排除内部来源附件；tag/filter 语义与现有 `projectTags`、智能规则保持一致，实施时抽取共享契约用例。
 
 分页使用不透明游标，绑定 grant/过滤条件/排序/快照代次，稳定追加 id 作为排序决胜键。首版不维持长期快照：任一相关内容变更或重启使旧 cursor 返回 `CURSOR_EXPIRED`，客户端从第一页重试；不能靠 offset 漏项或重复项。游标短期有效且不含明文正文。
