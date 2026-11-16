@@ -11,6 +11,7 @@ use std::{
 #[derive(Debug, Default, PartialEq, Eq)]
 pub(crate) struct Options {
     pub data_dir: Option<PathBuf>,
+    pub agent_runtime_dir: Option<PathBuf>,
 }
 
 impl Options {
@@ -19,22 +20,29 @@ impl Options {
         let mut args = args.into_iter();
         let mut options = Self::default();
         while let Some(arg) = args.next() {
-            if arg != "--data-dir" {
+            if arg != "--data-dir" && arg != "--agent-runtime-dir" {
                 return Err(invalid(
-                    "unknown argument; usage: CyberNote [--data-dir /absolute/path]",
+                    "unknown argument; usage: CyberNote [--data-dir /absolute/path] [--agent-runtime-dir /absolute/path]",
                 ));
             }
-            if options.data_dir.is_some() {
-                return Err(invalid("--data-dir may only be specified once"));
+            let slot = if arg == "--data-dir" {
+                &mut options.data_dir
+            } else {
+                &mut options.agent_runtime_dir
+            };
+            if slot.is_some() {
+                return Err(invalid("directory option may only be specified once"));
             }
             let value = args
                 .next()
-                .ok_or_else(|| invalid("--data-dir requires an absolute path"))?;
+                .ok_or_else(|| invalid("directory option requires an absolute path"))?;
             let path = PathBuf::from(value);
             if path.as_os_str().is_empty() || !path.is_absolute() {
-                return Err(invalid("--data-dir requires a nonempty absolute path"));
+                return Err(invalid(
+                    "directory option requires a nonempty absolute path",
+                ));
             }
-            options.data_dir = Some(path);
+            *slot = Some(path);
         }
         Ok(options)
     }

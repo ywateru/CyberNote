@@ -100,7 +100,6 @@ import {
 } from "./attachment-target";
 import { exit } from "@tauri-apps/api/app";
 import { getCurrentWindow, type CloseRequestedEvent } from "@tauri-apps/api/window";
-import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import {
   ChevronDown,
@@ -171,6 +170,7 @@ import type { SyncCommand } from "./sync-client";
 import AccountSettings, { type AccountSettingsHandle } from "./AccountSettings";
 import { accountUIAvailable, type AccountCommand } from "./account-client";
 import Preferences, { isPreferencesTab, type PreferencesTab } from "./Preferences";
+import AgentSettings from "./AgentSettings";
 import type { ArchiveResult } from "./data-management";
 import { documentsEqual } from "./document-equality";
 import {
@@ -2253,14 +2253,7 @@ function App() {
     try {
       await flush();
       if (quitState.current) return;
-      new WebviewWindow(`note-${Date.now()}`, {
-        url: `index.html?note=${n.id}`,
-        title: n.title,
-        width: 640,
-        height: 600,
-        titleBarStyle: "overlay",
-        hiddenTitle: true,
-      });
+      await invoke("open_note_window", { noteId: n.id, title: n.title });
     } catch (e) {
       fail(e);
     }
@@ -4972,6 +4965,7 @@ function App() {
           onTab={setPreferencesTab}
           onClose={() => setModal(null)}
           onBack={preferencesBack}
+          agent={<AgentSettings folders={ws.folders} mobile={mobile} />}
           account={accountUIAvailable && <AccountSettings active={preferencesTab === "account"} onHandle={handle => { accountSettingsHandle.current = handle; }} onConflicts={() => { accountConflictsRequested.current = true; setPreferencesTab("sync"); }} />}
           synchronization={<SyncSettings active={preferencesTab === "sync"} onHandle={handle => {
             syncSettingsHandle.current = handle;

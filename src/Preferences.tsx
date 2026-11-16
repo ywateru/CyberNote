@@ -1,6 +1,6 @@
 import { appearanceOf, themeOptions, type ThemeId, type SchemePreference } from "./themes/appearance";
 import { useLayoutEffect, useEffect, useRef, useState, type ReactNode } from "react";
-import { Database, X, ChevronLeft, ChevronRight, Type, Notebook, RefreshCw, Archive, Folder, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound } from "lucide-react";
+import { Database, X, ChevronLeft, ChevronRight, Type, Notebook, RefreshCw, Archive, Folder, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound, Bot } from "lucide-react";
 import { fontSizeOptions, fontSizeOption, type FontSize } from "./font-size";
 import type { Settings } from "./types";
 import "./Preferences.css";
@@ -13,6 +13,7 @@ const allPreferencePages = [
   { id: "settings", label: "外观与字号", icon: Type, desktopIcon: PanelsTopLeft },
   { id: "notes", label: "备忘录", icon: Notebook, desktopIcon: NotebookText },
   { id: "sync", label: "设备同步", icon: RefreshCw, desktopIcon: RefreshCw },
+  { id: "agent", label: "Agent 接入", icon: Bot, desktopIcon: Bot },
   { id: "data", label: "存储空间", icon: Database, desktopIcon: HardDrive },
   { id: "backup", label: "导入与备份", icon: Archive, desktopIcon: Upload },
 ] as const;
@@ -50,7 +51,7 @@ function PreferenceChoices<T extends string>({ label, value, options, onChange, 
   </div>;
 }
 
-export default function Preferences({ tab, onTab, onClose, onBack, settings, onSettings, onCloseLocks, returnFocus, data, synchronization, account, mobile }: {
+export default function Preferences({ tab, onTab, onClose, onBack, settings, onSettings, onCloseLocks, returnFocus, data, synchronization, account, agent, mobile }: {
   tab: PreferencesTab;
   onTab: (tab: PreferencesTab) => void;
   onClose: () => void;
@@ -62,6 +63,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   data: ReactNode;
   synchronization: ReactNode;
   account: ReactNode;
+  agent?: ReactNode;
   mobile: boolean;
 }) {
   const root = useRef<HTMLElement>(null), close = useRef<HTMLButtonElement>(null), heading = useRef<HTMLHeadingElement>(null);
@@ -202,6 +204,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
             </div>
             <div id="preferences-panel-account" className="preferences-panel preferences-settings" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "账户与同步" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-account"} hidden={tab !== "account"} inert={tab !== "account"}>{accountUIAvailable && tab === "account" && account}</div>
             <div id="preferences-panel-sync" className="preferences-panel preferences-sync" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "设备同步" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-sync"} hidden={tab !== "sync"} inert={tab !== "sync"}>{(visitedSync || tab === "sync") && synchronization}</div>
+            <div id="preferences-panel-agent" className="preferences-panel preferences-settings" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "Agent 接入" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-agent"} hidden={tab !== "agent"} inert={tab !== "agent"}>{tab === "agent" && agent}</div>
             <div id="preferences-panel-data" className="preferences-panel preferences-data" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? current?.label : undefined} aria-labelledby={mobile ? undefined : `preferences-tab-${tab === "backup" ? "backup" : "data"}`} hidden={tab !== "data" && tab !== "backup"} inert={tab !== "data" && tab !== "backup"}>{(visitedData || tab === "data" || tab === "backup") && data}</div>
           </div>
         </div>

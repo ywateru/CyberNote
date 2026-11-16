@@ -6,5 +6,8 @@ mod files;
 mod runtime;
 mod types;
 #[cfg(all(unix, not(target_os = "android")))]
-pub use runtime::{AgentHost, ApplicationHandler, HandlerFuture, HostConfig};
+pub use runtime::{
+    AgentHost, ApplicationHandler, DeliveryGuard, HandlerFuture, HandlerReply, HostConfig,
+    RequestFuture,
+};
 pub use types::*;

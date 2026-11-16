@@ -33,6 +33,40 @@ fn validates_all_arguments_before_opening_any_directory() {
 }
 
 #[test]
+fn agent_runtime_override_is_independent_absolute_and_strict() {
+    let selected = parse(&[
+        "--agent-runtime-dir",
+        "/private/tmp/agent",
+        "--data-dir",
+        "/private/tmp/data",
+    ])
+    .unwrap();
+    assert_eq!(
+        selected.agent_runtime_dir,
+        Some(PathBuf::from("/private/tmp/agent"))
+    );
+    assert_eq!(selected.data_dir, Some(PathBuf::from("/private/tmp/data")));
+    assert!(parse(&["--agent-runtime-dir", "/private/tmp/agent"])
+        .unwrap()
+        .data_dir
+        .is_none());
+    for args in [
+        vec!["--agent-runtime-dir"],
+        vec!["--agent-runtime-dir", ""],
+        vec!["--agent-runtime-dir", "relative"],
+        vec!["--agent-runtime-dir=/private/tmp/agent"],
+        vec!["--agent-runtime-dir", "/one", "--agent-runtime-dir", "/two"],
+        vec!["--agent-runtime-dir", "--data-dir", "/data"],
+    ] {
+        assert_eq!(
+            parse(&args).unwrap_err().kind(),
+            io::ErrorKind::InvalidInput,
+            "{args:?}"
+        );
+    }
+}
+
+#[test]
 fn defaults_keep_platform_paths_and_custom_cache_stays_outside_data() {
     let temp = tempfile::tempdir().unwrap();
     let data = temp.path().join("default-data");
@@ -40,6 +74,7 @@ fn defaults_keep_platform_paths_and_custom_cache_stays_outside_data() {
     let custom = temp.path().join("custom 中文");
     let options = Options {
         data_dir: Some(custom.clone()),
+        ..Options::default()
     };
     let workspace = Workspace::open(&options, &data, &cache).unwrap();
     assert_eq!(workspace.root, custom.canonicalize().unwrap());
@@ -75,6 +110,7 @@ fn same_directory_is_exclusive_aliases_cannot_bypass_and_drop_releases() {
     let temp = tempfile::tempdir().unwrap();
     let options = Options {
         data_dir: Some(temp.path().join("a")),
+        ..Options::default()
     };
     let first = Workspace::open(&options, temp.path(), temp.path()).unwrap();
     assert!(Workspace::open(&options, temp.path(), temp.path())
@@ -84,6 +120,7 @@ fn same_directory_is_exclusive_aliases_cannot_bypass_and_drop_releases() {
     let second = Workspace::open(
         &Options {
             data_dir: Some(temp.path().join("b")),
+            ..Options::default()
         },
         temp.path(),
         temp.path(),
@@ -96,7 +133,8 @@ fn same_directory_is_exclusive_aliases_cannot_bypass_and_drop_releases() {
         std::os::unix::fs::symlink(&first.root, &alias).unwrap();
         assert!(Workspace::open(
             &Options {
-                data_dir: Some(alias)
+                data_dir: Some(alias),
+                ..Options::default()
             },
             temp.path(),
             temp.path()
@@ -118,6 +156,7 @@ fn same_directory_is_exclusive_aliases_cannot_bypass_and_drop_releases() {
         let alias = Workspace::open(
             &Options {
                 data_dir: Some(temp.path().join("alias")),
+                ..Options::default()
             },
             temp.path(),
             temp.path(),
@@ -135,7 +174,8 @@ fn rejects_unusable_directories_before_sqlite_is_created() {
     for root in [file.clone(), file.join("child")] {
         assert!(Workspace::open(
             &Options {
-                data_dir: Some(root)
+                data_dir: Some(root),
+                ..Options::default()
             },
             temp.path(),
             temp.path()
@@ -153,7 +193,8 @@ fn rejects_unusable_directories_before_sqlite_is_created() {
         }
         assert!(Workspace::open(
             &Options {
-                data_dir: Some(dir.path().to_path_buf())
+                data_dir: Some(dir.path().to_path_buf()),
+                ..Options::default()
             },
             temp.path(),
             temp.path()
@@ -164,7 +205,8 @@ fn rejects_unusable_directories_before_sqlite_is_created() {
     let root = temp.path().join("bad-cache-root");
     assert!(Workspace::open(
         &Options {
-            data_dir: Some(root.clone())
+            data_dir: Some(root.clone()),
+            ..Options::default()
         },
         temp.path(),
         &file
@@ -174,7 +216,8 @@ fn rejects_unusable_directories_before_sqlite_is_created() {
     let root = temp.path().join("overlapping-cache");
     assert!(Workspace::open(
         &Options {
-            data_dir: Some(root.clone())
+            data_dir: Some(root.clone()),
+            ..Options::default()
         },
         temp.path(),
         &root.join("cache")
@@ -209,7 +252,8 @@ fn rejects_redirected_lock_cache_and_attachments() {
         std::os::unix::fs::symlink(&target, redirected).unwrap();
         assert!(Workspace::open(
             &Options {
-                data_dir: Some(root.clone())
+                data_dir: Some(root.clone()),
+                ..Options::default()
             },
             dir.path(),
             &cache
@@ -228,6 +272,7 @@ fn existing_dot_cache_is_not_reused_or_changed() {
     let selected = Workspace::open(
         &Options {
             data_dir: Some(root.clone()),
+            ..Options::default()
         },
         temp.path(),
         &temp.path().join("platform-cache"),
@@ -267,6 +312,7 @@ fn unwritable_parent_is_rejected_without_opening_sqlite() {
     let result = Workspace::open(
         &Options {
             data_dir: Some(root.clone()),
+            ..Options::default()
         },
         temp.path(),
         temp.path(),
@@ -311,6 +357,7 @@ async fn custom_workspaces_serve_real_registered_media_and_isolate_caches() {
         let selected = Workspace::open(
             &Options {
                 data_dir: Some(temp.path().join(name)),
+                ..Options::default()
             },
             &temp.path().join("unused-default"),
             &temp.path().join("platform-cache"),

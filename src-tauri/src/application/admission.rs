@@ -38,6 +38,14 @@ impl RequestLimits {
         })
     }
     pub fn write(&self, context: &TrustedContext, deadline: Instant) -> ToolResult<RequestPermit> {
+        self.write_cancellable(context, deadline, || false)
+    }
+    pub fn write_cancellable(
+        &self,
+        context: &TrustedContext,
+        deadline: Instant,
+        cancelled: impl Fn() -> bool,
+    ) -> ToolResult<RequestPermit> {
         let mut state = self.0 .0.lock().map_err(ToolError::storage)?;
         if state.queue.len() >= 1024
             || state
@@ -57,9 +65,11 @@ impl RequestLimits {
             .queue
             .push_back((ticket.clone(), context.client_id.clone()));
         loop {
-            if Instant::now() >= deadline || context.expires_at <= now() {
+            let authority = context.check(&context.workspace_id, &context.incarnation, None);
+            if Instant::now() >= deadline || cancelled() || authority.is_err() {
                 state.queue.retain(|(id, _)| id != &ticket);
                 self.0 .1.notify_all();
+                authority?;
                 return Err(ToolError::new(
                     "TIMEOUT",
                     "Write admission deadline exceeded",
@@ -78,7 +88,12 @@ impl RequestLimits {
             let (next, _) = self
                 .0
                  .1
-                .wait_timeout(state, deadline.saturating_duration_since(Instant::now()))
+                .wait_timeout(
+                    state,
+                    deadline
+                        .saturating_duration_since(Instant::now())
+                        .min(std::time::Duration::from_millis(20)),
+                )
                 .map_err(ToolError::storage)?;
             state = next;
         }

@@ -32,6 +32,8 @@ export function encodeRequest(id, action, timeoutMs = 30_000) {
   const keys = {
     ready: [], startupDiagnostic: [], state: [], idle: [], shutdown: [],
     accountSdkDiagnostic: [],
+    webviewStorageDiagnostic: [],
+    agentDiagnostic: [],
     execute: ["command", "args"], snapshot: ["options"], eval: ["expression", "arg"],
   };
   if (!Object.hasOwn(keys, action.op) || Object.keys(action).some((k) => k !== "op" && !keys[action.op].includes(k)))

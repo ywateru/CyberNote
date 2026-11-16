@@ -29,6 +29,10 @@ fn measure<T: Send + 'static>(
     let mut latency = vec![];
     let mut wrote = false;
     while !task.is_finished() {
+        assert!(
+            start.elapsed() < Duration::from_secs(120),
+            "{name}: bounded real IO wait exceeded 120s"
+        );
         let at = Instant::now();
         let mut s = shared.0.lock().unwrap();
         let workspace = s.workspace().unwrap();
@@ -181,6 +185,12 @@ fn real_64mib_preflight_capture_receive_and_quiet_keep_foreground_responsive() {
     let runtime = Runtime::new(shared.clone(), root, host.clone()).unwrap();
     runtime.shutdown().unwrap();
     runtime.active.store(true, Ordering::Release);
+    // This test measures actual 64MiB IO and foreground Session latency. Keep
+    // those wall-clock assertions, but drive protocol time explicitly so a slow
+    // hashing pass cannot turn a valid prepare into a five-second timeout.
+    // Dedicated timeout tests advance this same clock and assert the unchanged
+    // five-second production deadline. Production builds never use this clock.
+    shared.0.lock().unwrap().sync_advance_clock(Duration::ZERO);
     let r = runtime.clone();
     measure("cold_quiet_prepare", &shared, None, move || r.coordinate());
     let probe = host.0.lock().unwrap().last().unwrap().clone();

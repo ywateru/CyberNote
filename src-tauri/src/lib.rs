@@ -1,23 +1,31 @@
 mod account;
 pub mod agent_access;
-pub mod application;
+#[cfg(target_os = "macos")]
+#[path = "agent_host/desktop.rs"]
+mod agent_desktop;
+pub mod agent_host;
+#[cfg(target_os = "macos")]
+#[path = "agent_host/service.rs"]
+mod agent_service;
 mod apple_notes_import;
+pub mod application;
 mod attachment_desktop;
 mod attachment_media;
 mod media_permission;
 mod recording_window;
 mod session;
 mod startup;
+mod webview_profile;
 mod store;
 mod sync;
 #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 mod sync_e2e;
 #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 mod sync_headless;
+use application::NotesApplicationService;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use serde_json::{json, Value};
 use session::{Session, Token};
-use application::NotesApplicationService;
 use std::{
     path::PathBuf,
     sync::{Arc, Condvar, Mutex},
@@ -64,6 +72,104 @@ struct AppState(Arc<(Mutex<Session>, Condvar)>);
 struct MediaState(Arc<attachment_media::runtime::MediaRuntime>);
 struct SyncState(Arc<sync::adapter::Runtime>);
 struct AccountState(Arc<account::Runtime>);
+#[cfg(target_os = "macos")]
+struct AgentState(Arc<agent_desktop::Desktop>);
+
+#[tauri::command]
+async fn agent_settings(
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+) -> application::ToolResult<agent_host::HostSettings> {
+    #[cfg(target_os = "macos")]
+    {
+        return app
+            .state::<AgentState>()
+            .0
+            .settings(&expected, window.label())
+            .await;
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (expected, window, app);
+        Err(application::ToolError::new(
+            "HOST_UNAVAILABLE",
+            "Agent host is available on macOS only",
+        ))
+    }
+}
+#[tauri::command]
+async fn agent_set_enabled(
+    enabled: bool,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+) -> application::ToolResult<agent_host::HostSettings> {
+    #[cfg(target_os = "macos")]
+    {
+        return app
+            .state::<AgentState>()
+            .0
+            .set_enabled(enabled, &expected, window.label())
+            .await;
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (enabled, expected, window, app);
+        Err(application::ToolError::new(
+            "HOST_UNAVAILABLE",
+            "Agent host is available on macOS only",
+        ))
+    }
+}
+#[tauri::command]
+async fn agent_create_grant(
+    input: agent_host::CreateGrant,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+) -> application::ToolResult<agent_host::CreatedGrant> {
+    #[cfg(target_os = "macos")]
+    {
+        return app
+            .state::<AgentState>()
+            .0
+            .create(input, &expected, window.label())
+            .await;
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (input, expected, window, app);
+        Err(application::ToolError::new(
+            "HOST_UNAVAILABLE",
+            "Agent host is available on macOS only",
+        ))
+    }
+}
+#[tauri::command]
+async fn agent_revoke_grant(
+    grant_id: String,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+) -> application::ToolResult<agent_host::HostSettings> {
+    #[cfg(target_os = "macos")]
+    {
+        return app
+            .state::<AgentState>()
+            .0
+            .revoke(&grant_id, &expected, window.label())
+            .await;
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (grant_id, expected, window, app);
+        Err(application::ToolError::new(
+            "HOST_UNAVAILABLE",
+            "Agent host is available on macOS only",
+        ))
+    }
+}
 struct SyncWindows(tauri::AppHandle);
 impl sync::adapter::WindowHost for SyncWindows {
     fn participants(&self) -> std::collections::HashSet<String> {
@@ -160,11 +266,20 @@ fn agent_window_reply(
     app: tauri::AppHandle,
     state: State<AppState>,
 ) -> application::ToolResult<Value> {
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+    let observed_reply = sync_e2e::agent_reply_value(&reply);
     let live = recording_window::document_participants(app.webview_windows().into_keys());
-    let mut session = state.0.0.lock().map_err(application::ToolError::storage)?;
-    let result = NotesApplicationService::new(&mut session).external_reply(window.label(), reply, &expected, &live);
+    let mut session = state.0 .0.lock().map_err(application::ToolError::storage)?;
+    let result = NotesApplicationService::new(&mut session).external_reply(
+        window.label(),
+        reply,
+        &expected,
+        &live,
+    );
     drop(session);
-    state.0.1.notify_all();
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+    sync_e2e::agent_reply(window.label(), observed_reply, result.is_ok());
+    state.0 .1.notify_all();
     result
 }
 
@@ -256,7 +371,9 @@ async fn mutate_with_stage(
     stage: Option<store::DocumentStage>,
 ) -> Result<Value> {
     if action["type"] == "saveNote" {
-        return session_command(&app, state, |session| NotesApplicationService::new(session).ui_save(window, action));
+        return session_command(&app, state, |session| {
+            NotesApplicationService::new(session).ui_save(window, action)
+        });
     }
     if !Session::requires_barrier(&action) {
         let mut session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
@@ -272,9 +389,22 @@ async fn mutate_with_stage(
         return result.map(|(value, _)| value);
     }
     let participants = recording_window::document_participants(app.webview_windows().into_keys());
-    let event = ui_session(state, |session| {
+    #[cfg(target_os = "macos")]
+    let maintenance = if action["type"] == "importArchive" {
+        let manager = app.state::<AgentState>().0.clone();
+        Some(
+            manager
+                .pause(&expected, window)
+                .await
+                .map_err(AppError::from)?,
+        )
+    } else {
+        None
+    };
+    let begin = ui_session(state, |session| {
         NotesApplicationService::new(session).ui_begin(action, participants, &expected)
-    })?;
+    });
+    let event = begin?;
     let operation = event["operationId"].as_str().unwrap().to_string();
     if emit_document_event(&app, "notes-access", &event).is_err() {
         if let Some(p) = state
@@ -291,6 +421,8 @@ async fn mutate_with_stage(
     let shared = state.0.clone();
     // Condvar releases the Store mutex while windows drain registered saves.
     let outcome = tauri::async_runtime::spawn_blocking(move || -> Result<_> {
+        #[cfg(target_os = "macos")]
+        let _maintenance = maintenance;
         // The worker owns import staging even if the command future is dropped.
         let _stage = stage;
         let guard = shared.0.lock().map_err(|_| failure("数据锁错误"))?;
@@ -299,7 +431,11 @@ async fn mutate_with_stage(
             .wait_timeout_while(guard, Duration::from_secs(10), |s| !s.ready())
             .map_err(|_| failure("数据锁错误"))?;
         let live = recording_window::document_participants(app.webview_windows().into_keys());
-        let (result, event) = NotesApplicationService::new(&mut guard).ui_finish(&operation, &live, wait.timed_out())?;
+        let (result, event) = NotesApplicationService::new(&mut guard).ui_finish(
+            &operation,
+            &live,
+            wait.timed_out(),
+        )?;
         let metadata = guard.take_metadata_event();
         drop(guard);
         let _ = emit_document_event(&app, "notes-access", &event);
@@ -609,18 +745,23 @@ async fn import_archive(
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     #[cfg(desktop)]
-    let options = startup::Options::parse(std::env::args_os().skip(1)).unwrap_or_else(|error| {
+    let mut options = startup::Options::parse(std::env::args_os().skip(1)).unwrap_or_else(|error| {
         eprintln!("CyberNote startup rejected: {error}");
         std::process::exit(2);
     });
     #[cfg(mobile)]
-    let options = startup::Options::default();
+    let mut options = startup::Options::default();
     let mut context = tauri::generate_context!();
     #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
     sync_headless::configure(context.config_mut()).unwrap_or_else(|_| {
         eprintln!("CyberNote headless startup rejected");
         std::process::exit(2);
     });
+    let webview_profile = webview_profile::Profile::configure(&mut options, context.config_mut())
+        .unwrap_or_else(|error| {
+            eprintln!("CyberNote startup rejected: {error}");
+            std::process::exit(2);
+        });
     if options.data_dir.is_some() {
         // Do not retain permission to read the default library in custom mode.
         // The canonical selected attachments directory is granted during setup.
@@ -631,7 +772,10 @@ pub fn run() {
     // another process is permitted to open this directory.
     let workspace = Arc::new(std::sync::OnceLock::<startup::Workspace>::new());
     let startup_workspace = workspace.clone();
+    #[cfg(target_os = "macos")]
+    let agent_runtime_dir = options.agent_runtime_dir.clone();
     let builder = tauri::Builder::default()
+        .manage(webview_profile)
         .manage(recording_window::Recordings::default())
         .manage(apple_notes_import::Imports::default())
         .on_page_load(|webview, _payload| {
@@ -673,6 +817,8 @@ pub fn run() {
                 .ok_or_else(|| std::io::Error::other("workspace not initialized"))?;
             let root = selected.root.clone();
             let media_cache = selected.media_cache.clone();
+            app.state::<webview_profile::Profile>()
+                .create_initial_windows(app.handle())?;
             app.asset_protocol_scope()
                 .allow_directory(root.join("attachments"), true)?;
             let shared = Arc::new((
@@ -682,6 +828,20 @@ pub fn run() {
                 Condvar::new(),
             ));
             app.manage(AppState(shared.clone()));
+            #[cfg(target_os = "macos")]
+            {
+                let manager = agent_desktop::Desktop::new(
+                    app.handle().clone(),
+                    shared.clone(),
+                    agent_runtime_dir.clone(),
+                );
+                app.manage(AgentState(manager.clone()));
+                // Binding/private-state failure is retryable from Agent settings;
+                // it must not prevent the notes application from starting.
+                tauri::async_runtime::spawn(async move {
+                    let _ = manager.restore().await;
+                });
+            }
             let mut origins = std::collections::HashSet::from([
                 "tauri://localhost".to_string(),
                 "http://tauri.localhost".to_string(),
@@ -859,12 +1019,17 @@ pub fn run() {
     let builder = builder.plugin(tauri_plugin_notes_ui::init());
     #[cfg(not(feature = "access-boundary-proof"))]
     let builder = builder.invoke_handler(tauri::generate_handler![
+        webview_profile::open_note_window,
         account::account_command,
         load_workspace,
         sync_command,
         sync_diagnostics,
         sync_window_reply,
         agent_window_reply,
+        agent_settings,
+        agent_set_enabled,
+        agent_create_grant,
+        agent_revoke_grant,
         register_save_intent,
         acknowledge_access,
         read_note_text,
@@ -897,12 +1062,17 @@ pub fn run() {
     ]);
     #[cfg(feature = "access-boundary-proof")]
     let builder = builder.invoke_handler(tauri::generate_handler![
+        webview_profile::open_note_window,
         account::account_command,
         load_workspace,
         sync_command,
         sync_diagnostics,
         sync_window_reply,
         agent_window_reply,
+        agent_settings,
+        agent_set_enabled,
+        agent_create_grant,
+        agent_revoke_grant,
         register_save_intent,
         acknowledge_access,
         read_note_text,
@@ -955,6 +1125,10 @@ pub fn run() {
     workspace.set(selected).expect("workspace initialized once");
     app.run(|app, event| match event {
         tauri::RunEvent::Exit => {
+            #[cfg(target_os = "macos")]
+            if let Some(agent) = app.try_state::<AgentState>() {
+                let _ = tauri::async_runtime::block_on(agent.0.quit());
+            }
             if let Some(media) = app.try_state::<MediaState>() {
                 media.0.stop();
             }

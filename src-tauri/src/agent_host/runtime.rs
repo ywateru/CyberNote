@@ -30,6 +30,15 @@ use tokio::{
 use uuid::Uuid;
 
 pub type HandlerFuture = Pin<Box<dyn Future<Output = ToolResult<Value>> + Send + 'static>>;
+pub trait DeliveryGuard: Send + Sync {
+    fn check(&self) -> ToolResult<()>;
+}
+pub struct HandlerReply {
+    pub result: ToolResult<Value>,
+    /// Retains application admission through the final socket write/drop.
+    pub delivery: Option<Box<dyn DeliveryGuard>>,
+}
+pub type RequestFuture = Pin<Box<dyn Future<Output = HandlerReply> + Send + 'static>>;
 /// Implement using the existing process-owned application service and its coordinator.
 /// The handler must enforce strict tool DTOs, note/folder visibility, incarnation and
 /// context checks at read/commit/delivery. Cancellation must abort/release pre-commit
@@ -38,6 +47,21 @@ pub type HandlerFuture = Pin<Box<dyn Future<Output = ToolResult<Value>> + Send +
 /// Capabilities come from the real application (actual context grants and service session).
 pub trait ApplicationHandler: Send + Sync + 'static {
     fn call(&self, context: TrustedContext, tool: String, arguments: Value) -> HandlerFuture;
+    fn request(
+        &self,
+        context: TrustedContext,
+        tool: String,
+        arguments: Value,
+        _deadline: std::time::Instant,
+    ) -> RequestFuture {
+        let future = self.call(context, tool, arguments);
+        Box::pin(async move {
+            HandlerReply {
+                result: future.await,
+                delivery: None,
+            }
+        })
+    }
 }
 impl<F, Fut> ApplicationHandler for F
 where
@@ -105,12 +129,21 @@ struct Inner {
     config: HostConfig,
     session: String,
     registry_leaf: String,
+    preference_leaf: String,
     socket_basename: String,
     runtime: PrivateDir,
     credentials: PrivateDir,
     _lock: File,
     handler: Arc<dyn ApplicationHandler>,
     state: Mutex<State>,
+}
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct Preference {
+    version: u32,
+    workspace_id: String,
+    incarnation: String,
+    enabled: bool,
 }
 /// One host per workspace in a shared runtime directory. Opening is always disabled.
 /// Lifecycle methods require &mut self; settings/grants may be called concurrently.
@@ -310,14 +343,51 @@ impl Inner {
 }
 impl AgentHost {
     pub fn open(config: HostConfig, handler: Arc<dyn ApplicationHandler>) -> ToolResult<Self> {
+        Self::open_inner(config, handler, false)
+    }
+    /// Application lifecycle only: the previous owner must already be stopped.
+    /// Explicitly retire a mismatched incarnation; never reconstruct its authority.
+    pub fn open_for_application(
+        config: HostConfig,
+        handler: Arc<dyn ApplicationHandler>,
+    ) -> ToolResult<Self> {
+        Self::open_inner(config, handler, true)
+    }
+    fn open_inner(
+        config: HostConfig,
+        handler: Arc<dyn ApplicationHandler>,
+        retire_previous: bool,
+    ) -> ToolResult<Self> {
         if !identity(&config.workspace_id) || !identity(&config.incarnation) {
             return Err(files::invalid());
         }
         let runtime = PrivateDir::open(config.runtime_dir.clone())?;
         let workspace_hash = digest(&config.workspace_id);
         let registry_leaf = format!("grants-{}.json", &workspace_hash[..12]);
+        let preference_leaf = format!("enabled-{}.json", &workspace_hash[..12]);
         let lock = runtime.lock(&format!("host-{}.lock", &workspace_hash[..12]))?;
         let credentials = PrivateDir::open(runtime.path.join("credentials"))?;
+        if let Some(bytes) = runtime.read(&preference_leaf, 4096)? {
+            let p: Preference = serde_json::from_slice(&bytes).map_err(|_| files::invalid())?;
+            if p.version != 1 || p.workspace_id != config.workspace_id {
+                return Err(files::invalid());
+            }
+            if p.incarnation != config.incarnation {
+                if !retire_previous {
+                    return Err(files::invalid());
+                }
+                runtime.write(
+                    &preference_leaf,
+                    &serde_json::to_vec(&Preference {
+                        version: 1,
+                        workspace_id: config.workspace_id.clone(),
+                        incarnation: config.incarnation.clone(),
+                        enabled: false,
+                    })
+                    .map_err(|_| files::storage())?,
+                )?;
+            }
+        }
         let session = Uuid::new_v4().to_string();
         let socket_basename = format!(
             "{}.sock",
@@ -326,12 +396,15 @@ impl AgentHost {
         runtime.socket_path(&socket_basename)?;
         let mut grants = Vec::new();
         if let Some(bytes) = runtime.read(&registry_leaf, 4 * 1024 * 1024)? {
-            let saved: Registry = serde_json::from_slice(&bytes).map_err(|_| files::invalid())?;
+            let mut saved: Registry =
+                serde_json::from_slice(&bytes).map_err(|_| files::invalid())?;
             if saved.version != 1 || saved.grants.len() > MAX_GRANTS {
                 return Err(files::invalid());
             }
-            if saved.workspace_id != config.workspace_id || saved.incarnation != config.incarnation
-            {
+            if saved.workspace_id != config.workspace_id {
+                return Err(files::invalid());
+            }
+            if saved.incarnation != config.incarnation && !retire_previous {
                 // An imported/restored/switched library never inherits external authority.
                 // Do not silently overwrite another identity's registry. Reset requires an
                 // explicit app-managed new private runtime directory (or cleanup while stopped).
@@ -344,7 +417,7 @@ impl AgentHost {
             let mut refs = BTreeSet::new();
             let mut hashes = BTreeSet::new();
             for g in &saved.grants {
-                validate_info(&g.info, &config.workspace_id, &config.incarnation)?;
+                validate_info(&g.info, &saved.workspace_id, &saved.incarnation)?;
                 if g.credential_hash.len() != 64
                     || !g.credential_hash.bytes().all(|b| b.is_ascii_hexdigit())
                     || !ids.insert(&g.info.grant_id)
@@ -353,6 +426,37 @@ impl AgentHost {
                 {
                     return Err(files::invalid());
                 }
+            }
+            if saved.incarnation != config.incarnation {
+                // Durable tombstones precede credential deletion and replacement.
+                // Failure leaves the old identity retired/retryable, never enabled.
+                for g in &mut saved.grants {
+                    g.info.revoked = true;
+                    g.info.revocation = g.info.revocation.saturating_add(1);
+                }
+                runtime.write(
+                    &registry_leaf,
+                    &bounded_json(&saved, 4 * 1024 * 1024).map_err(|_| files::storage())?,
+                )?;
+                for g in &saved.grants {
+                    credentials.remove(&credential_leaf(&g.info.credential_ref)?)?;
+                }
+                runtime.write(
+                    &preference_leaf,
+                    &serde_json::to_vec(&Preference {
+                        version: 1,
+                        workspace_id: config.workspace_id.clone(),
+                        incarnation: config.incarnation.clone(),
+                        enabled: false,
+                    })
+                    .map_err(|_| files::storage())?,
+                )?;
+                saved.incarnation = config.incarnation.clone();
+                saved.grants.clear();
+                runtime.write(
+                    &registry_leaf,
+                    &serde_json::to_vec(&saved).map_err(|_| files::storage())?,
+                )?;
             }
             grants = saved.grants;
         }
@@ -365,6 +469,7 @@ impl AgentHost {
                 config,
                 session,
                 registry_leaf,
+                preference_leaf,
                 socket_basename,
                 runtime,
                 credentials,
@@ -381,6 +486,67 @@ impl AgentHost {
             }),
             run: None,
         })
+    }
+    fn preference(&self) -> ToolResult<bool> {
+        let Some(bytes) = self.inner.runtime.read(&self.inner.preference_leaf, 4096)? else {
+            return Ok(false);
+        };
+        let p: Preference = serde_json::from_slice(&bytes).map_err(|_| files::invalid())?;
+        if p.version != 1
+            || p.workspace_id != self.inner.config.workspace_id
+            || p.incarnation != self.inner.config.incarnation
+        {
+            return Err(files::invalid());
+        }
+        Ok(p.enabled)
+    }
+    fn save_preference(&self, enabled: bool) -> ToolResult<()> {
+        let p = Preference {
+            version: 1,
+            workspace_id: self.inner.config.workspace_id.clone(),
+            incarnation: self.inner.config.incarnation.clone(),
+            enabled,
+        };
+        self.inner.runtime.write(
+            &self.inner.preference_leaf,
+            &serde_json::to_vec(&p).map_err(|_| files::storage())?,
+        )
+    }
+    pub async fn restore_enabled(&mut self) -> ToolResult<HostSettings> {
+        if self.preference()? {
+            self.start().await
+        } else {
+            self.settings()
+        }
+    }
+    pub async fn set_enabled(&mut self, enabled: bool) -> ToolResult<HostSettings> {
+        if !enabled {
+            self.stop().await?;
+            self.save_preference(false)?;
+        } else {
+            // Persist only after successful bind. No accepting endpoint survives
+            // a preference failure (including ambiguous atomic-write/fsync errors).
+            self.start().await?;
+            if let Err(e) = self.save_preference(true) {
+                let _ = self.stop().await;
+                return Err(e);
+            }
+        }
+        self.settings()
+    }
+    pub async fn retire(&mut self) -> ToolResult<()> {
+        self.stop().await?;
+        self.save_preference(false)?;
+        let ids: Vec<_> = self
+            .settings()?
+            .grants
+            .into_iter()
+            .map(|g| g.grant_id)
+            .collect();
+        for id in ids {
+            self.revoke_grant(&id)?;
+        }
+        Ok(())
     }
     pub fn settings(&self) -> ToolResult<HostSettings> {
         let state = self.inner.state()?;
@@ -681,6 +847,17 @@ fn response(request_id: String, result: ToolResult<Value>) -> HostResponse {
         Err(e) => HostResponse { version: 1, request_id, result: serde_json::to_value(e).unwrap_or_else(|_| json!({"code":"STORAGE_ERROR","message":"Response encoding failed","retryable":false})), is_error: true },
     }
 }
+// Authority denial may hide business content, but cannot erase a committed fact.
+fn preserve_commit(mut error: ToolError, original: &Value) -> ToolError {
+    if original.get("committed") == Some(&Value::Bool(true)) {
+        error.committed = Some(true);
+        error.operation_id = original
+            .get("operationId")
+            .and_then(Value::as_str)
+            .map(str::to_owned);
+    }
+    error
+}
 async fn send(stream: &mut UnixStream, response: HostResponse) {
     let bytes = encode(response);
     let _ = timeout(Duration::from_secs(5), stream.write_all(&bytes)).await;
@@ -691,7 +868,10 @@ fn encode(response: HostResponse) -> Vec<u8> {
         Ok(bytes) => bytes,
         Err(_) => match serde_json::to_vec(&self::response(
             response.request_id,
-            Err(error("CONTENT_TOO_LARGE", "IPC response exceeds the limit")),
+            Err(preserve_commit(
+                error("CONTENT_TOO_LARGE", "IPC response exceeds the limit"),
+                &response.result,
+            )),
         )) {
             Ok(b) => b,
             Err(_) => return Vec::new(),
@@ -707,8 +887,10 @@ async fn deliver(
     tool: &str,
     response: HostResponse,
     deadline: Instant,
+    delivery: Option<Box<dyn DeliveryGuard>>,
 ) {
     let request_id = response.request_id.clone();
+    let committed = response.result.clone();
     let mut bytes = encode(response);
     let mut offset = 0;
     let mut denial = false;
@@ -716,6 +898,20 @@ async fn deliver(
         while offset < bytes.len() {
             if stream.writable().await.is_err() {
                 return;
+            }
+            if !denial {
+                if let Some(guard) = &delivery {
+                    if let Err(e) = guard.check() {
+                        if offset != 0 {
+                            return;
+                        }
+                        bytes = encode(self::response(
+                            request_id.clone(),
+                            Err(preserve_commit(e, &committed)),
+                        ));
+                        denial = true;
+                    }
+                }
             }
             // The check and each nonblocking write share the grant mutex with revoke.
             // Already written bytes cannot be recalled; never release more after revoke.
@@ -727,7 +923,10 @@ async fn deliver(
                     if offset != 0 {
                         return;
                     }
-                    bytes = encode(self::response(request_id.clone(), Err(e)));
+                    bytes = encode(self::response(
+                        request_id.clone(),
+                        Err(preserve_commit(e, &committed)),
+                    ));
                     denial = true;
                 }
             }
@@ -853,21 +1052,23 @@ async fn connection(inner: Arc<Inner>, mut stream: UnixStream) {
         // Recheck AFTER queue admission. This clone shares the same generation as
         // every other request for this grant, including the application's own queue.
         let ctx = inner.check(&*inner.state()?, &grant_id, &req.tool)?;
-        let result = std::panic::AssertUnwindSafe(inner.handler.call(
+        let mut reply = std::panic::AssertUnwindSafe(inner.handler.request(
             ctx,
             req.tool.clone(),
             Value::Object(req.arguments.clone()),
+            deadline.into_std(),
         ))
         .catch_unwind()
         .await
-        .map_err(|_| error("STORAGE_ERROR", "Application handler failed"))??;
-        if !result.is_object() {
-            return Err(error(
+        .map_err(|_| error("STORAGE_ERROR", "Application handler failed"))?;
+        if reply.result.as_ref().is_ok_and(|v| !v.is_object()) {
+            reply.result = Err(error(
                 "STORAGE_ERROR",
                 "Application handler returned an invalid DTO",
             ));
         }
-        Ok(result)
+        // Keep host concurrency and application delivery guards alive together.
+        Ok((reply, _slot, _permit))
     };
     let mut extra = [0u8; 1];
     let result = tokio::select! {
@@ -888,10 +1089,17 @@ async fn connection(inner: Arc<Inner>, mut stream: UnixStream) {
         };
         inner.check(&state, &grant_id, &req.tool)
     };
-    let result = match delivery_check {
-        Ok(_) => result,
-        Err(e) => Err(e),
+    let (mut result, delivery, _limits) = match result {
+        Ok((reply, slot, permit)) => (reply.result, reply.delivery, Some((slot, permit))),
+        Err(e) => (Err(e), None, None),
     };
+    if let Err(e) = delivery_check {
+        let original = match &result {
+            Ok(v) => v.clone(),
+            Err(e) => serde_json::to_value(e).unwrap_or(Value::Null),
+        };
+        result = Err(preserve_commit(e, &original));
+    }
     let note = result
         .as_ref()
         .ok()
@@ -910,6 +1118,7 @@ async fn connection(inner: Arc<Inner>, mut stream: UnixStream) {
         &req.tool,
         response(req.request_id, result),
         deadline,
+        delivery,
     )
     .await;
 }
