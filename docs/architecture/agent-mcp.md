@@ -172,6 +172,8 @@ text 读取每页最多32 KiB UTF-8，在 Unicode 边界截断；contentCursor �
 
 ## Agent 调用示例
 
+面向使用者的安装、设置页授权、Codex/其他harness配置及恢复步骤见[Agent接入指南](../agent-usage.md)；最终可执行路径以实际交付manifest为准。
+
 安装并在应用内授权后使用的中性stdio配置模板；必须填入实际交付可执行路径和当前资料库的凭据引用，不能直接运行下方示意值：
 
 ```json

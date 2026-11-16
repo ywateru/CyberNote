@@ -2,6 +2,8 @@
 
 2026-11-16 项目演进设计，11-17进入实现：[代码梳理与优先级](plan/analysis/project-review-20261116.md) → [MCP 接口](architecture/agent-mcp.md) / [主题与呈现架构](architecture/theme-presentation.md) / [双端交互](ui/adaptive-presentation.md) → [实施路线图与六项任务](plan/project-evolution-20261116.md)。新 MCP 和主题契约以这些文档为准；已实现功能与历史验证仍按下方各自版本读取。
 
+使用者入口：[Agent接入指南](agent-usage.md)说明设置页授权、Codex/DeepSeek harness配置边界及写入失败恢复；最终产物仍待116交付，不能把配置示例当成已安装接口。
+
 后续开发已从111原生应用服务、113前端交互和112独立stdio传输模块展开；当前状态以[任务路线图](plan/project-evolution-20261116.md)为准。[本机IPC实现契约](architecture/agent-ipc.md)固定适配器/宿主帧和凭据引用；独立模块通过不代表已完成真实宿主或双端验收。
 
 11-17：113交互、111原生服务与窗口协调、112适配器/私有宿主/独立授权UI、114三主题及production Store检查脚本均已独审合入并完成各自合入检查；112进行真实宿主与设置入口装配，115开始呈现resolver/专注布局/移动列表开发。最新实现、独审和真实运行分层记录见[演进验证状态](verification/project-evolution/README.md)，不能用历史包或传输fixture替代本轮最终联调。
