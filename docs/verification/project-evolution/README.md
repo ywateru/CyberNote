@@ -6,16 +6,16 @@
 
 | 任务 | 实现状态 | 独立验证 | 最终运行 |
 | --- | --- | --- | --- |
-| 111 应用服务 | 原生与窗口前端均已独审合入；窗口测试动画测量可靠性修复另复核中 | 两阶段MODULE_SOURCE_PASS；native HEAD`892f9751`197项/typecheck/11390通过；window HEAD`79241c09`typecheck/54/38/sync34/nav41通过，独审另含12恢复+13空目标组合 | integration-open |
+| 111 应用服务 | 原生与窗口前端均已独审合入；动画测量测试修复也已独审合入 | 两阶段MODULE_SOURCE_PASS；native HEAD`892f9751`197项/typecheck/11390，window HEAD`79241c09`54/38/sync34/nav41，脚本修复HEAD`ce663ade`原11390通过；独审另含12恢复+13空目标组合 | integration-open |
 | 112 MCP | 适配器/宿主/独立UI均已合入；实际宿主与Preferences入口装配中 | 三模块MODULE_SOURCE_PASS；host HEAD`371469dd`23项、UI HEAD`f750b848`typecheck/12组、adapter HEAD`efd8ac6e`完整suite/release/F1合入检查通过 | integration-open；Codex CLI 0.167.0初始化/九工具/直接fixture能力调用通过，真实资料库业务待验 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
-| 114 主题 | 三主题明暗/外观V2/语义token开发后修复独审发现中 | 独审`9ab9698e` BLOCKED：5项P2；作者247/2与其采样通过，独立新增表面/持久化失败 | native-open |
+| 114 主题 | 五项修复`43f583e3`已独审通过，准备合入 | 独审`7767625d` MODULE_SOURCE_PASS；376主题/3正式Store/7独立Store/67独立浏览器/270实际文字对通过，原失败证据保留 | native-open |
 | 115 呈现 | 等114 | 未执行 | 未执行 |
 | 116 整合 | 等112与115 | 未执行 | 未执行 |
 
 ## 分支写入边界
 
-下面前五条为已合入并清理的模块分支责任记录；当前活跃的是111-window、114、112-integration。清理只移除本轮已完成的worktree/分支，保留提交、审查、失败证据与独立生成缓存；不清理历史sync108或用户数据。
+下面前六条为已合入并清理的模块分支责任记录；当前活跃的是114、112-integration。清理只移除本轮已完成的worktree/分支，保留提交、审查、失败证据与独立生成缓存；不清理历史sync108或用户数据。window原失败日志与独立探针已逐字节保全至`/tmp/evolve111-window-independent-postmerge-ercaff`，历史失败段保留在已合入review。
 
 - `codex/evolve-111`：application、可信授权context、Session/Store/schema、lib原生装配；不修改前端或agent_host。
 - `codex/evolve-113`：前端交互、相关验证脚本；不修改Rust。
@@ -34,7 +34,7 @@
 
 112适配器原F1（辅助object误计文档节点）经独审`d17b7a18`关闭；合法779,987字节/20,000节点与depth64输入输出通过，20,001节点/depth65仍拒绝；独审与原失败证据保留于[适配器报告](../../plan/reviews/evolve112-adapter-independent.md)。
 
-114当前阻塞：确认读取失败后覆盖已提交外观、智能文件夹缺少有效语义背景、普通表格选区遮字、附件分类选中计数与Toast对比度错误。修复及独审复核通过前不合入主题、不开始115布局；原先有限页面采样通过不抵消独立失败。
+114原五项阻塞（确认失败覆盖、智能文件夹背景、表格遮字、附件计数与Toast配色）经独审关闭。原表格探针有一条rgba字符串限定仍失败，新合法color(srgb … / .12)经独立对比度与实际字形绘制验证通过；不把该旧断言虚报为绿。合入检查通过后再开始115。
 
 112装配checkpoint`5eccb9f6`仅WIP：真实IPC→Service→SQLite九项通过，窗口仍协议输入；全native一次396通过/1失败/5 worker，64MiB同步阶段失败正在定位与baseline对照。已将主线已审window注入装配树，后续实际App/WebView与Codex读写另留证，未把WIP当作最终交付。
 
