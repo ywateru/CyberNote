@@ -929,3 +929,83 @@ async fn connection_budget_is_bounded_before_request_frames_arrive() {
     drop(streams);
     host.stop().await.unwrap();
 }
+
+#[tokio::test]
+async fn settings_keep_actual_custom_runtime_after_restart_without_audit_or_secret_leaks() {
+    let temp = Temp::new();
+    let mut host = open(&temp, Arc::new(ProbeHandler::default()));
+    let actual = temp.0.to_str().unwrap();
+    assert_eq!(host.settings().unwrap().runtime_dir, actual);
+    assert_eq!(host.start().await.unwrap().runtime_dir, actual);
+    let grant = host.create_grant(input(&["notes:read"])).unwrap();
+    assert_eq!(grant.connection.runtime_dir, actual);
+    let cred = credential(&temp, &grant);
+    assert!(
+        !call(&cred, request(&cred, "notes_read", json!({})))
+            .await
+            .is_error
+    );
+    let settings = host.settings().unwrap();
+    let audit = serde_json::to_string(&settings.recent_operations).unwrap();
+    assert!(!audit.contains(actual));
+    assert!(!audit.contains("runtimeDir"));
+    assert!(!serde_json::to_string(&settings)
+        .unwrap()
+        .contains(cred["credential"].as_str().unwrap()));
+    assert_eq!(host.stop().await.unwrap().runtime_dir, actual);
+    drop(host);
+
+    let mut reopened = open(&temp, Arc::new(ProbeHandler::default()));
+    let settings = reopened.settings().unwrap();
+    assert!(!settings.enabled);
+    assert_eq!(settings.runtime_dir, actual);
+    assert_eq!(settings.grants[0].grant_id, grant.grant.grant_id);
+    assert_eq!(reopened.start().await.unwrap().runtime_dir, actual);
+    let revoked = reopened.revoke_grant(&grant.grant.grant_id).unwrap();
+    assert_eq!(revoked.runtime_dir, actual);
+    assert!(revoked.grants[0].revoked);
+    reopened.stop().await.unwrap();
+}
+
+#[tokio::test]
+async fn ui_contract_real_settings_and_revocation_support_257_and_10000_folder_ids() {
+    let mut cases = Vec::new();
+    for count in [257, 10_000] {
+        let temp = Temp::new();
+        let mut host = open(&temp, Arc::new(ProbeHandler::default()));
+        host.start().await.unwrap();
+        let mut large = input(&["notes:create"]);
+        large.expires_at = now() + 86_400_000;
+        large.folder_ids = (0..count).map(|i| format!("folder-{i:05}")).collect();
+        let created = host.create_grant(large).unwrap();
+        let settings = host.settings().unwrap();
+        assert_eq!(settings.grants[0].folder_ids.len(), count);
+        assert_eq!(settings.runtime_dir, created.connection.runtime_dir);
+        assert!(PathBuf::from(&settings.runtime_dir).is_absolute());
+        let cred = credential(&temp, &created);
+        let revoked_settings = host.revoke_grant(&created.grant.grant_id).unwrap();
+        assert!(revoked_settings.grants[0].revoked);
+        assert_eq!(revoked_settings.grants[0].folder_ids.len(), count);
+        assert_eq!(revoked_settings.runtime_dir, settings.runtime_dir);
+        let case = json!({"folderCount": count, "created": created, "settings": settings, "revokedSettings": revoked_settings});
+        assert!(!case
+            .to_string()
+            .contains(cred["credential"].as_str().unwrap()));
+        cases.push(case);
+        // The capacity boundary remains enforced by the real host, with no extra grant.
+        let mut overflow = input(&["notes:read"]);
+        overflow.folder_ids = (0..10_001).map(|i| format!("folder-{i:05}")).collect();
+        assert!(host.create_grant(overflow).is_err());
+        assert_eq!(host.settings().unwrap().grants.len(), 1);
+        host.stop().await.unwrap();
+    }
+    // Explicit opt-in exports only public settings/create/revocation DTOs for the
+    // UI contract check. Normal regression does not write a fixture into the repo.
+    if let Some(path) = std::env::var_os("EVOLVE112_UI_SETTINGS_FIXTURE") {
+        fs::write(
+            path,
+            serde_json::to_vec_pretty(&json!({"cases": cases})).unwrap(),
+        )
+        .unwrap();
+    }
+}

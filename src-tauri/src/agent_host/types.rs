@@ -94,6 +94,8 @@ pub struct HostSettings {
     pub host_session_id: String,
     pub workspace_id: String,
     pub incarnation: String,
+    /// Actual private runtime used by this host, including for existing grants.
+    pub runtime_dir: String,
     pub grants: Vec<GrantInfo>,
     pub recent_operations: Vec<AuditEntry>,
 }

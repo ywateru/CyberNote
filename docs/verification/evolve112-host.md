@@ -42,7 +42,7 @@ host.revoke_grant(grant_id: &str) -> ToolResult<HostSettings>
 
 `CreateGrant` 是 `clientId` / 显式 `scopes` / 显式物理 `folderIds` / Unix 毫秒 `expiresAt` 的严格对象。允许 scope 仅 `notes:read`、`notes:create`、`notes:update`；目录集合和 scope 不得为空，目录 ID 复用真实 `valid_id`，最多 10,000 个，grant 最多 256 条（含撤销记录）。不自动递归，不在此模块查询目录数据库。
 
-`HostSettings` 返回 enabled、hostSessionId、workspaceId、incarnation、grant 列表及最多 200 条 recentOperations。这里 hostSessionId 标识本次传输宿主实例；工具 capabilities 仍由真实 application 返回其 service/session 身份与实际能力。
+`HostSettings` 返回 enabled、hostSessionId、workspaceId、incarnation、必需的 runtimeDir、grant 列表及最多 200 条 recentOperations。runtimeDir 始终来自本实例已验证的私有目录绝对路径，供 UI 重载既有 grant 后准确复制连接配置；不进入 recentOperations。这里 hostSessionId 标识本次传输宿主实例；工具 capabilities 仍由真实 application 返回其 service/session 身份与实际能力。
 
 `CreatedGrant` 返回 `GrantInfo` 和 `ConnectionConfig { workspaceId, credentialRef, runtimeDir }`。UI 用这些引用字段组装适配器配置，并自行提供适配器完整可执行路径；**结果没有 credential、credential hash 或笔记正文**。Secret-bearing 请求 / 文件 DTO 不实现 Debug；credential 文件结构不是 UI 命令返回类型。
 
@@ -136,3 +136,30 @@ git diff --check
 - 真实 handler 到唯一 Session / NotesApplicationService、窗口 probe/prepare/release / parser、取消 barrier 清理、真实 metadata/同步通知，待串行装配。
 - 没有运行 stdio → host → SQLite receipt → 真实窗口 → 重启/Android 的最终链路；未据本 harness 声称业务落盘、锁定隐私、CAS、幂等、同步或窗口保护通过。
 - 不修改资料库维护路径；incarnation 轮换后的旧本机授权清理/重新授权入口由应用装配明确执行。
+
+## UI 独审阻塞修复：设置携带权威 runtimeDir
+
+2026-11-17 develop 增量，基线 `29404612`。只修改 HostSettings DTO、settings 生成、模块回归和本文；未修改独审报告、任务状态、lib/Session/其他模块。待 Parfit 独立复核，不自行给修复独审通过结论。
+
+- `HostSettings.runtimeDir` 是必需 String，来自 `inner.runtime.path`，与 CreatedGrant.connection.runtimeDir 同源。默认关闭、启用、停止、重启重载已有 grant、撤销返回都提供准确目录，不猜适配器默认值。
+- 新增真实 host 回归在自定义临时私有目录创建 grant、实际 Unix socket 请求、停止/重开/启用/撤销，验证 runtime 不丢失；序列化 settings 不含 raw credential，audit 不含 runtime 路径或 runtimeDir 字段。
+- 新增容量契约回归真实创建 257、10,000 个目录的 create-only grant，读取 settings 并真实撤销，核对原目录集合和 runtime；10,001 拒绝且 registry 无额外 grant。开启显式环境变量时输出 settings/created/revokedSettings 安全 DTO，供 UI 读取真实 host 结果，正常测试不写仓库 fixture。
+
+实际执行（仅隔离 `/tmp/evolve112-host-fix-target`，未使用主 Tauri target）：
+
+```sh
+EVOLVE111_ROOT=/Users/water/work/2026/Apple-Notes-Clone-evolve111 \
+EVOLVE112_UI_SETTINGS_FIXTURE=/tmp/evolve112-real-host-settings-fix.json \
+CARGO_TARGET_DIR=/tmp/evolve112-host-fix-target \
+cargo test --manifest-path src-tauri/src/agent_host/harness/Cargo.toml --offline --locked
+
+EVOLVE111_ROOT=/Users/water/work/2026/Apple-Notes-Clone-evolve111 \
+CARGO_TARGET_DIR=/tmp/evolve112-host-fix-target \
+cargo clippy --manifest-path src-tauri/src/agent_host/harness/Cargo.toml --offline --locked --all-targets -- -D warnings
+
+rustfmt --edition 2021 --config skip_children=true --check \
+  src-tauri/src/agent_host/*.rs src-tauri/src/agent_host/harness/*.rs
+git diff --check
+```
+
+结果：23 passed、0 failed；Clippy 严格检查、格式和 diff 检查退出 0。日志 `/tmp/evolve112-host-fix-tests.log`、`/tmp/evolve112-host-fix-clippy.log`。生成文件 `/tmp/evolve112-real-host-settings-fix.json` 只含安全返回 DTO，原临时 runtime/凭据在测试结束清理；UI 可核对路径准确性，不应使用该已清理路径尝试连接。真实最终 Session/SQLite/窗口/适配器装配边界不变。

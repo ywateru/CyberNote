@@ -389,6 +389,7 @@ impl AgentHost {
             host_session_id: self.inner.session.clone(),
             workspace_id: self.inner.config.workspace_id.clone(),
             incarnation: self.inner.config.incarnation.clone(),
+            runtime_dir: self.inner.runtime.path.to_string_lossy().into_owned(),
             grants: state.grants.iter().map(|g| g.info.clone()).collect(),
             recent_operations: state.audit.iter().rev().cloned().collect(),
         })
