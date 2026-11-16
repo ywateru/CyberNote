@@ -1127,3 +1127,5 @@ fn pending_operation_still_requires_original_tool_scope() {
     );
     s.external_abort(&id).unwrap();
 }
+
+mod native_review;

@@ -258,7 +258,15 @@ impl Session {
                     t.refresh_failed |= !refreshed;
                     if !refreshed {
                         self.store
-                            .application_warning(&id, "WINDOW_REFRESH_REQUIRED")?;
+                            .application_warning(&id, "WINDOW_REFRESH_REQUIRED")
+                            .map_err(|mut error| {
+                                // The commit and terminal receipt already exist.
+                                // Keep the failed refresh recorded in memory so a
+                                // retry/finish can compensate without another write.
+                                error.operation_id = Some(id.clone());
+                                error.committed = Some(true);
+                                error
+                            })?;
                     }
                 }
             }

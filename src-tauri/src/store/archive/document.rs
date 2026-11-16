@@ -43,6 +43,18 @@ fn kind(node: &Value) -> Result<&str> {
         .and_then(Value::as_str)
         .ok_or_else(|| invalid("文档节点必须是含 type 的对象"))
 }
+// ProseMirror's JSON envelopes are closed objects. Attribute names/values are
+// validated separately against the generated Editor schema below; arbitrary
+// extra envelope fields must not survive a save/read or archive round trip.
+fn object_fields(value: &Value, allowed: &[&str]) -> Result<()> {
+    let object = value
+        .as_object()
+        .ok_or_else(|| invalid("文档节点或格式标记必须是对象"))?;
+    if object.keys().any(|key| !allowed.contains(&key.as_str())) {
+        return Err(invalid("文档节点或格式标记含 schema 外字段"));
+    }
+    Ok(())
+}
 fn children(node: &Value) -> Result<&[Value]> {
     match node.get("content") {
         None => Ok(&[]),
@@ -66,8 +78,14 @@ fn nullable_string(value: &Value) -> bool {
 pub(super) fn valid_tag_name(name: &str) -> bool {
     let count = name.chars().count();
     (1..=64).contains(&count)
-        && name.chars().all(|c| c.is_ascii_alphanumeric() || matches!(c, '_' | '-' | '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}'))
-        && name.chars().any(|c| c.is_ascii_alphabetic() || matches!(c, '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}'))
+        && name.chars().all(|c| {
+            c.is_ascii_alphanumeric()
+                || matches!(c, '_' | '-' | '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}')
+        })
+        && name.chars().any(|c| {
+            c.is_ascii_alphabetic()
+                || matches!(c, '\u{3400}'..='\u{4dbf}' | '\u{4e00}'..='\u{9fff}')
+        })
 }
 fn valid_strokes(value: &Value) -> bool {
     value.as_array().is_some_and(|strokes| {
@@ -163,6 +181,7 @@ fn marks<'a>(node: &'a Value, schema: &Schema) -> Result<Vec<&'a str>> {
         .ok_or_else(|| invalid("文档格式标记必须是数组"))?;
     let mut seen: Vec<&str> = Vec::new();
     for mark in marks {
+        object_fields(mark, &["type", "attrs"])?;
         let name = kind(mark)?;
         let spec = schema
             .marks
@@ -186,26 +205,40 @@ fn marks<'a>(node: &'a Value, schema: &Schema) -> Result<Vec<&'a str>> {
     Ok(seen)
 }
 fn tag_name(node: &Value) -> Option<&str> {
-    node.get("marks")?.as_array()?.iter().find(|mark| mark["type"] == "noteTag")?["attrs"]["name"].as_str()
+    node.get("marks")?
+        .as_array()?
+        .iter()
+        .find(|mark| mark["type"] == "noteTag")?["attrs"]["name"]
+        .as_str()
 }
 fn tag_spans(nodes: &[Value]) -> Result<()> {
     let mut name: Option<&str> = None;
     let mut text = String::new();
     let finish = |name: Option<&str>, text: &str| -> Result<()> {
         if let Some(name) = name {
-            if text != format!("#{name}") { return Err(invalid("标签完整跨度与名称不符")); }
+            if text != format!("#{name}") {
+                return Err(invalid("标签完整跨度与名称不符"));
+            }
         }
         Ok(())
     };
     for node in nodes {
         let next = tag_name(node);
         if kind(node)? != "text" || next != name {
-            finish(name, &text)?; name = None; text.clear();
+            finish(name, &text)?;
+            name = None;
+            text.clear();
         }
         if let Some(next) = next {
-            if kind(node)? != "text" { return Err(invalid("标签只能标记文本")); }
+            if kind(node)? != "text" {
+                return Err(invalid("标签只能标记文本"));
+            }
             name = Some(next);
-            text.push_str(node["text"].as_str().ok_or_else(|| invalid("标签文本无效"))?);
+            text.push_str(
+                node["text"]
+                    .as_str()
+                    .ok_or_else(|| invalid("标签文本无效"))?,
+            );
         }
     }
     finish(name, &text)
@@ -289,15 +322,22 @@ pub(super) fn validate_document(
             return Err(limit("笔记文档层级或节点过多"));
         }
         let name = kind(node)?;
+        object_fields(node, &["type", "attrs", "content", "marks", "text"])?;
         let spec = schema
             .nodes
             .get(name)
             .ok_or_else(|| invalid(format!("不支持的文档节点: {name}")))?;
         attributes(node, name, &spec.attrs)?;
         let node_marks = marks(node, schema)?;
-        if node_marks.contains(&"noteTag") && node_marks.contains(&"link") { return Err(invalid("标签不能同时标记链接")); }
-        if note.locked && node_marks.contains(&"noteTag") { return Err(invalid("锁定的备忘录不能含标签")); }
-        if name != "text" && node_marks.contains(&"noteTag") { return Err(invalid("标签只能标记文本")); }
+        if node_marks.contains(&"noteTag") && node_marks.contains(&"link") {
+            return Err(invalid("标签不能同时标记链接"));
+        }
+        if note.locked && node_marks.contains(&"noteTag") {
+            return Err(invalid("锁定的备忘录不能含标签"));
+        }
+        if name != "text" && node_marks.contains(&"noteTag") {
+            return Err(invalid("标签只能标记文本"));
+        }
         content(node, spec, schema)?;
         if name == "text" {
             if node["text"].as_str().is_none_or(str::is_empty) {

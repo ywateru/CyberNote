@@ -109,3 +109,61 @@ CARGO_TARGET_DIR=/tmp/apple-notes-sync85-target \
 ```
 
 本阶段最终检查结束后已停止使用主目录共享 Tauri target，后续集成可接续使用。
+
+## 2026-11-17 独审两项 P2 修复（待独立复核）
+
+修复基线：`f15ab771`。未修改独审报告、任务状态、agent_host、前端或其他工作树；未启动应用、读取用户原库或创建新的工作树。
+
+### document 对象字段闭合校验
+
+在共用 production `store/archive/document.rs` 的文档 schema 校验中，为所有节点（包括根）增加 JSON envelope 字段白名单 `type / attrs / content / marks / text`，mark 仅允许 `type / attrs`。`text` 仍只允许出现在 text 节点；节点/mark 类型、属性名称及值、内容表达式、mark 组合、附件归属等继续由既有生成的 Editor schema 和验证规则约束。拒绝任意额外 envelope 字段，不是仅屏蔽 path / relativePath，不默默剥除未知数据后提交。
+
+该校验由真实 service 的 Store 提交边界调用，并由保存、归档等共用验证路径使用；没有新建第二套笔记 schema，也未改变合法附件和内部导入引用契约。原有内部导入隐藏/保留、归档/schema corpus、速绘、附件及链接回归全部保留并通过。
+
+新增正式回归 `application/tests/native_review.rs`：
+
+- `document_unknown_envelope_fields_reject_create_and_update_without_any_commit`：根、block、text、mark 四种位置，各添加 path / relativePath / 任意 unreviewedMetadata，经真实 Session probe/prepare/create 或 update，共 24 种调用均为 SCHEMA_INVALID / committed:false。核验原 note JSON/revision、SQLite notes/operation/dirty 行数、Session metadata 无变化、无 metadata event、reservation 释放；另经真实 Store `capture_commit` 验证 changes/createdId 为空、没有提交 receipt。
+- `strict_document_envelopes_keep_legal_schema_marks_attributes_and_owned_attachments`：合法 root/node attrs、heading、link/bold、hardBreak、taskList、table、drawing 实际 create/read，以及同 owner 附件的 document update/read，验证合法 JSON 完整保留、附件计数和 revision 正确。
+
+### release ACK 后的持久化错误保留提交事实
+
+`session/external.rs` 已有 commit terminal 的 Release { refreshed:false } 分支，在追加 WINDOW_REFRESH_REQUIRED 失败时，为原 ToolError 补充真实 operationId 与 committed:true。继续保留原 STORAGE_ERROR；不转成 abort 或普通未提交错误，也不伪造 warning 写入成功。
+
+失败前已记录的参与者 ACK / refresh_failed 与 commit terminal 不撤回。因此原参与者仍可取得 commit receipt；后续正向 ACK 不能清除已观察到的失败；`finish_delivery` 继续补偿 warning，持久化仍失败时返回 committed:true + WINDOW_REFRESH_REQUIRED / WARNING_PERSIST_FAILED，存储恢复后可以持久追加 warning。
+
+新增 `failed_release_warning_keeps_commit_error_terminal_receipt_and_finish_recovery`：在真实提交后为临时 SQLite application_operations 安装 BEFORE UPDATE RAISE(ABORT) trigger，验证重复失败 ACK 的序列化错误均有 committed:true / operationId、终态 receipt 仍为 commit、finish 双 warning 兜底；撤掉故障后 finish/replay 返回同一提交版本与持久 warning，note/revision 不变、operation 仍只有一条，重新打开真实 Store 后原幂等键也恢复同一结果。
+
+### 实际复现与复查
+
+独立 `src/independent.rs` 未修改，SHA-256 仍为 `005ff29155a987849f7ad02d37b2aed78124cad97cd1294b6ada93bcc53a75aa`。
+
+修复前以该原始独立 harness 复现：6 passed、2 failed；document 额外路径实际提交/回读，release_error 只有普通 STORAGE_ERROR、缺 committed/operationId。修复后原样复跑：**8 passed、0 failed**（201 production 项被过滤），包括两个原失败用例；ACK 的实际输出已为 STORAGE_ERROR + operationId + committed:true。
+
+```sh
+# 正式 production 回归：197 passed / 0 failed / 4 ignored，测试部分 10.19 秒。
+# 即原 194 个通过项 + 上述 3 个正式回归；ignored 仍为原 subprocess worker。
+CARGO_TARGET_DIR=/tmp/apple-notes-evolve111-fix-target \
+  cargo test --locked --manifest-path src-tauri/src/application/harness/Cargo.toml
+
+# 原样独立探针：8 passed / 0 failed，测试部分 1.16 秒。
+CARGO_TARGET_DIR=/tmp/apple-notes-evolve111-independent-target \
+  cargo test --locked \
+  --manifest-path /var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/evolve111-independent-tp6kvb4y/Cargo.toml \
+  independent:: -- --nocapture
+
+# 获准使用已释放的主 Tauri target，仅编译，不运行 App；退出码 0。
+CARGO_TARGET_DIR=/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target \
+  cargo check --locked --manifest-path src-tauri/Cargo.toml --lib
+
+rustfmt --edition 2021 --config skip_children=true --check \
+  src-tauri/src/store/archive/document.rs \
+  src-tauri/src/session/external.rs \
+  src-tauri/src/application/tests.rs \
+  src-tauri/src/application/tests/native_review.rs
+
+git diff --check
+```
+
+正式和独立 harness 保留 2 个既有 unused import warnings；完整 Tauri check 保留 26 个既有 Rust warnings 及原插件 warning，没有错误。格式和差异检查通过。Tauri 编译已结束，不再占用主 target。
+
+以上是修复作者的实际结果，未改写独立审查结论；等待 Aquinas 复核后再进行 host/Session/UI 装配。既有未接入点和真实窗口/设备端到端验收边界不变。
