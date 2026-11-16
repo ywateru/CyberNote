@@ -75,7 +75,24 @@ UTF-8 JSON + `\n`，完整帧（包括换行）最多2 MiB；读循环受此硬�
 | search | `{items:[NoteSummary & {match:{field:"title"\|"content", snippet:string}}], nextCursor:string\|null}`；snippet 最多240个 Unicode 字符，tags 仅作为输入过滤 |
 | get_operation | 已提交时为原 MutationResult；否则 `{status:"pending"\|"not_found", operationId:string}` |
 
-契约测试和真实 stdio 临时 Unix fixture 共用 `tests/fixtures/query-success.json` 中的 capabilities、search 与 ToolError；该文件可供主线宿主互校。旧字符串版本、`maxInputBytes`、缺少任何 canonical limit、旧 `matchedFields`/顶层 snippet、`match.field="tags"` 和额外字段均拒绝。`writeDeadlineMs` 披露宿主业务协调期限（fixture 为15000），适配器 IPC 写期限仍为20000毫秒。实际宿主还须补齐 `maxDocumentBytes` / `maxFrameBytes` 后完成接通验证。
+契约测试和真实 stdio 临时 Unix fixture 共用 `tests/fixtures/query-success.json` 中的 capabilities、search 与 ToolError；该文件可供主线宿主互校。旧字符串版本、`maxInputBytes`、缺少任何 canonical limit、旧 `matchedFields`/顶层 snippet、`match.field="tags"` 和额外字段均拒绝。`writeDeadlineMs` 披露宿主业务协调期限（fixture 为15000），适配器 IPC 写期限仍为20000毫秒。111实际 service fixture 已包含 `maxDocumentBytes` / `maxFrameBytes`；运行中宿主的完整接通仍需另行验证。
+
+跨模块兼容证据来自 `tests/fixtures/service-success.json`：从 evolve-111 commit `868c6dcf960cb3c92f3c9330ec22fbaf7431fe91` 的 `src-tauri/src/application/fixtures/service-success.json` 原样复制，共12个实际 NotesApplicationService 合成输出，覆盖九工具、text/document read 和 committed/pending/not_found operation。复制时与该 commit 的 Git blob 逐字节比较；`service-success.source.json` 保留来源 commit、路径、Git blob 与 SHA-256。Rust 测试检查全部 input/output schemas 和严格额外字段拒绝；真实 stdio/Unix fixture 原样回放这些输出，同时对九工具保留宿主 ServerError/scope-denied 对应的 ToolError + `isError: true` 分支。
+
+以下检查无需存在111工作树；fixture 指纹也由 stdio 测试校验：
+
+```sh
+cargo test --locked --manifest-path /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/Cargo.toml --test query_contract actual_application_service_fixture_validates_all_nine_tool_schemas
+python3 /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/tests/stdio_fixture.py /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/target/release/cybernote-mcp StdioFixture.test_application_service_fixture_cross_module
+```
+
+若要从来源 commit 复核副本字节，可执行只读比较：
+
+```sh
+git -C /Users/water/work/2026/Apple-Notes-Clone-evolve111 show 868c6dcf960cb3c92f3c9330ec22fbaf7431fe91:src-tauri/src/application/fixtures/service-success.json | cmp - /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/tests/fixtures/service-success.json
+```
+
+111的 provenance 表明源 fixture 由真实 NotesApplicationService 经临时 production Session/SQLite 生成，但窗口回复是 native test inputs。适配器本轮仅回放该 fixture，不将其称为运行中真实宿主、WebView 或业务授权验收；本轮没有修改111或宿主 scope/ServerError 实现。
 
 宿主负责所有工具权限、locked/trash/范围过滤、search 语义、分页与版本、文档节点/附件归属、有损覆盖保护、CAS/窗口协调、原子提交、持久幂等及重新交付前撤销复核。适配器不将 fixture 的模拟回执解释为真实提交。
 

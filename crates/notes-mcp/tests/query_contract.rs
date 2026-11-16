@@ -7,6 +7,61 @@ fn fixtures() -> Value {
 }
 
 #[test]
+fn actual_application_service_fixture_validates_all_nine_tool_schemas() {
+    // Exact copy from evolve-111 commit 868c6dcf960cb3c92f3c9330ec22fbaf7431fe91.
+    // Source and content hash are recorded in fixtures/service-success.source.json.
+    let fixture: Value =
+        serde_json::from_str(include_str!("fixtures/service-success.json")).unwrap();
+    let definitions = schema::definitions();
+    let cases = fixture["cases"].as_array().unwrap();
+    assert_eq!(cases.len(), 12);
+    let mut seen = std::collections::BTreeSet::new();
+    let mut read_formats = std::collections::BTreeSet::new();
+    let mut operation_states = std::collections::BTreeSet::new();
+    for (index, case) in cases.iter().enumerate() {
+        let name = case["tool"].as_str().unwrap();
+        let definition = definitions.iter().find(|d| d.tool.name == name).unwrap();
+        assert!(
+            definition.input.is_valid(&case["arguments"]),
+            "case {index}: {name} input"
+        );
+        assert!(
+            definition.output.is_valid(&case["result"]),
+            "case {index}: {name} output"
+        );
+        assert!(jsonschema::is_valid(
+            &schema::success(name),
+            &case["result"]
+        ));
+        assert!(!jsonschema::is_valid(
+            &schema::error_schema(),
+            &case["result"]
+        ));
+        seen.insert(name);
+        if name == "notes_read" {
+            read_formats.insert(case["result"]["format"].as_str().unwrap());
+        }
+        if name == "notes_get_operation" {
+            operation_states.insert(case["result"]["status"].as_str().unwrap_or("committed"));
+        }
+        // Success compatibility must not remove the host's scope-denied ToolError branch.
+        let denied =
+            json!({"code":"FORBIDDEN","message":"Synthetic grant scope denied","retryable":false});
+        assert!(definition.output.is_valid(&denied));
+        assert!(!jsonschema::is_valid(&schema::success(name), &denied));
+        let mut extra = case["result"].clone();
+        extra["unexpected"] = json!(true);
+        assert!(!definition.output.is_valid(&extra));
+    }
+    assert_eq!(seen, schema::NAMES.into_iter().collect());
+    assert_eq!(read_formats, ["text", "document"].into_iter().collect());
+    assert_eq!(
+        operation_states,
+        ["committed", "pending", "not_found"].into_iter().collect()
+    );
+}
+
+#[test]
 fn canonical_query_success_and_tool_error_match_declared_outputs() {
     let fixtures = fixtures();
     for definition in schema::definitions() {

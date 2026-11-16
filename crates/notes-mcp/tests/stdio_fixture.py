@@ -1,5 +1,6 @@
 """Real SDK stdio <-> temporary Unix fixture only; never a Store/host acceptance test."""
 import copy
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -16,6 +17,9 @@ import uuid
 BINARY = sys.argv.pop(1)
 KEY = "00000000-0000-4000-8000-000000000001"
 QUERY_SUCCESS = json.loads((Path(__file__).parent / "fixtures" / "query-success.json").read_text())
+SERVICE_FIXTURE_PATH = Path(__file__).parent / "fixtures" / "service-success.json"
+SERVICE_SUCCESS = json.loads(SERVICE_FIXTURE_PATH.read_text())
+SCOPE_ERROR = {"code": "FORBIDDEN", "message": "Synthetic grant scope denied", "retryable": False}
 ERROR = QUERY_SUCCESS["ToolError"]
 SUMMARY = dict(id="note", folderId="folder", title="Fixture", preview="中文", createdAt=1,
                updatedAt=2, pinned=False, revision=1, version="opaque-version", attachmentCount=0)
@@ -49,6 +53,8 @@ class StdioFixture(unittest.TestCase):
         (self.runtime / "credentials").mkdir(mode=0o700)
         self.ref = str(uuid.uuid4())
         self.record = dict(version=1, workspaceId="fixture-workspace", clientId="synthetic-client", credential="synthetic-fixture-token-no-user-secret", socketPath=str(self.runtime / "host.sock"))
+        if self._testMethodName == "test_application_service_fixture_cross_module":
+            self.record["workspaceId"] = SERVICE_SUCCESS["cases"][0]["result"]["workspaceId"]
         self.cred = self.runtime / "credentials" / (self.ref + ".json")
         self.write_record()
         self.listener = socket.socket(socket.AF_UNIX)
@@ -69,7 +75,7 @@ class StdioFixture(unittest.TestCase):
         self.workers = []
         self.thread = threading.Thread(target=self.host, daemon=True)
         self.thread.start()
-        self.process = subprocess.Popen([BINARY, "--workspace-id", "fixture-workspace", "--credential-ref", self.ref, "--runtime-dir", str(self.runtime)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=0)
+        self.process = subprocess.Popen([BINARY, "--workspace-id", self.record["workspaceId"], "--credential-ref", self.ref, "--runtime-dir", str(self.runtime)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=0)
         self.buffer = b""
         self.seq = 0
         init = self.rpc("initialize", dict(protocolVersion="2025-11-25", capabilities={}, clientInfo={"name": "fixture-test-client", "version": "1"}))
@@ -98,7 +104,7 @@ class StdioFixture(unittest.TestCase):
                 frame = connection.makefile("rb").readline(2097153)
                 request = json.loads(frame)
                 assert set(request) == {"version", "requestId", "workspaceId", "clientId", "credential", "tool", "arguments"}
-                assert request["version"] == 1 and request["workspaceId"] == "fixture-workspace"
+                assert request["version"] == 1 and request["workspaceId"] == self.record["workspaceId"]
                 uuid.UUID(request["requestId"])
                 self.requests.append(request)
                 writing = request["tool"] in ("notes_create", "notes_append", "notes_update")
@@ -114,6 +120,7 @@ class StdioFixture(unittest.TestCase):
                 result = success(request["tool"]) if self.output_override is None else copy.deepcopy(self.output_override)
                 response = dict(version=1, requestId=request["requestId"], result=result, isError=False)
                 if mode == "business": response.update(result=ERROR, isError=True)
+                if mode == "scope-error": response.update(result=SCOPE_ERROR, isError=True)
                 if mode == "error-as-success": response.update(result=ERROR, isError=False)
                 if mode == "success-as-error": response["isError"] = True
                 if mode == "unknown-output": response["result"] = dict(result, debugPath="must-not-leak")
@@ -200,6 +207,30 @@ class StdioFixture(unittest.TestCase):
         self.assertEqual(len({r["requestId"] for r in self.requests}), 9)
         for request in self.requests:
             self.assertEqual(request["arguments"], INPUTS[request["tool"]])
+
+    def test_application_service_fixture_cross_module(self):
+        source = json.loads(SERVICE_FIXTURE_PATH.with_name("service-success.source.json").read_text())
+        self.assertEqual(source["sourceCommit"], "868c6dcf960cb3c92f3c9330ec22fbaf7431fe91")
+        self.assertEqual(hashlib.sha256(SERVICE_FIXTURE_PATH.read_bytes()).hexdigest(), source["sha256"])
+        cases = SERVICE_SUCCESS["cases"]
+        self.assertEqual(len(cases), 12)
+        self.assertEqual({case["tool"] for case in cases}, set(INPUTS))
+        for index, case in enumerate(cases):
+            with self.subTest(index=index, tool=case["tool"], branch="actual-service-success"):
+                self.output_override = case["result"]
+                result = self.call(case["tool"], case["arguments"])
+                self.assertFalse(result["isError"])
+                self.assertEqual(result["structuredContent"], case["result"])
+                self.assertEqual(self.requests[-1]["arguments"], case["arguments"])
+        # The host's ServerError/scope-denial route remains a ToolError, never coerced to success.
+        self.output_override = None
+        self.mode = "scope-error"
+        for case in cases:
+            with self.subTest(tool=case["tool"], branch="host-scope-error"):
+                result = self.call(case["tool"], case["arguments"])
+                self.assertTrue(result["isError"])
+                self.assertEqual(result["structuredContent"], SCOPE_ERROR)
+        self.assertEqual(len(self.requests), len(cases) * 2)
 
     def test_canonical_query_dtos_keep_strict_output_validation(self):
         capabilities = self.call("notes_get_capabilities")["structuredContent"]

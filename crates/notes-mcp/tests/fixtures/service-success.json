@@ -1,0 +1,270 @@
+{
+  "cases": [
+    {
+      "arguments": {},
+      "result": {
+        "apiVersion": 1,
+        "formats": [
+          "text",
+          "document"
+        ],
+        "hostSessionId": "5a3461d0-eb94-4228-9d0d-c3f3b368c3dc",
+        "limits": {
+          "idempotencyRetentionDays": 30,
+          "maxConcurrentReads": 4,
+          "maxConcurrentWrites": 1,
+          "maxContentBytes": 1048576,
+          "maxDocumentBytes": 1048576,
+          "maxFrameBytes": 2097152,
+          "maxJsonDepth": 64,
+          "maxLimit": 100,
+          "maxListBytes": 524288,
+          "maxNodes": 20000,
+          "maxQueryCharacters": 512,
+          "maxQueuedWrites": 8,
+          "maxTextPageBytes": 32768,
+          "queryDeadlineMs": 5000,
+          "writeDeadlineMs": 15000
+        },
+        "schemaVersion": 1,
+        "scopes": [
+          "notes:create",
+          "notes:read",
+          "notes:update"
+        ],
+        "tools": [
+          "notes_get_capabilities",
+          "notes_list_folders",
+          "notes_list",
+          "notes_search",
+          "notes_read",
+          "notes_create",
+          "notes_append",
+          "notes_update",
+          "notes_get_operation"
+        ],
+        "workspaceId": "8fa9a2aa-fc04-4218-8418-d0af7c24bd75"
+      },
+      "tool": "notes_get_capabilities"
+    },
+    {
+      "arguments": {},
+      "result": {
+        "items": [
+          {
+            "ancestorLabels": [],
+            "id": "default",
+            "name": "备忘录"
+          }
+        ],
+        "nextCursor": null
+      },
+      "tool": "notes_list_folders"
+    },
+    {
+      "arguments": {
+        "content": "Fixture 标题\n中文正文",
+        "folderId": "default",
+        "format": "text",
+        "idempotencyKey": "25a4b2c3-be87-45d3-b552-ccb5de117091"
+      },
+      "result": {
+        "committed": true,
+        "committedRevision": 1,
+        "committedVersion": "a54197ae4167b4bc630eb6ed5c853c234d1841ea3c7113a2427eb391be79a043",
+        "noteId": "6500a898-17e1-4e73-94c9-70407c8b2448",
+        "operationId": "2b8cffb1-9372-4ec5-80d8-0cb32166189a",
+        "warnings": []
+      },
+      "tool": "notes_create"
+    },
+    {
+      "arguments": {
+        "expectedVersion": "a54197ae4167b4bc630eb6ed5c853c234d1841ea3c7113a2427eb391be79a043",
+        "idempotencyKey": "942dc5f3-9b96-4fb1-8f86-2cc2f01cb175",
+        "noteId": "6500a898-17e1-4e73-94c9-70407c8b2448",
+        "text": "追加段落"
+      },
+      "result": {
+        "committed": true,
+        "committedRevision": 2,
+        "committedVersion": "65396be111e76c1b885f5d9bf359c37ce0d267f2b6168fc9c55df8088110d3ea",
+        "noteId": "6500a898-17e1-4e73-94c9-70407c8b2448",
+        "operationId": "b2a4d83b-2b9d-44ba-9dc3-7d89829b1e2f",
+        "warnings": []
+      },
+      "tool": "notes_append"
+    },
+    {
+      "arguments": {
+        "content": "Updated 标题\n中文更新正文",
+        "expectedVersion": "65396be111e76c1b885f5d9bf359c37ce0d267f2b6168fc9c55df8088110d3ea",
+        "format": "text",
+        "idempotencyKey": "bae14438-3ce8-479e-aac6-75b9717c2fff",
+        "noteId": "6500a898-17e1-4e73-94c9-70407c8b2448"
+      },
+      "result": {
+        "committed": true,
+        "committedRevision": 3,
+        "committedVersion": "64f5d71aa9494a1ee601a2da693e55fcf53e78a7366b35020e4a59c011ea7b31",
+        "noteId": "6500a898-17e1-4e73-94c9-70407c8b2448",
+        "operationId": "4820ed19-efaf-4f09-9913-accc4d07896b",
+        "warnings": []
+      },
+      "tool": "notes_update"
+    },
+    {
+      "arguments": {},
+      "result": {
+        "items": [
+          {
+            "attachmentCount": 0,
+            "createdAt": 1794853266041,
+            "folderId": "default",
+            "id": "6500a898-17e1-4e73-94c9-70407c8b2448",
+            "pinned": false,
+            "preview": "Updated 标题\n中文更新正文",
+            "revision": 3,
+            "title": "Updated 标题",
+            "updatedAt": 1794853266046,
+            "version": "64f5d71aa9494a1ee601a2da693e55fcf53e78a7366b35020e4a59c011ea7b31"
+          }
+        ],
+        "nextCursor": null
+      },
+      "tool": "notes_list"
+    },
+    {
+      "arguments": {
+        "query": "中文"
+      },
+      "result": {
+        "items": [
+          {
+            "attachmentCount": 0,
+            "createdAt": 1794853266041,
+            "folderId": "default",
+            "id": "6500a898-17e1-4e73-94c9-70407c8b2448",
+            "match": {
+              "field": "content",
+              "snippet": "updated 标题\n中文更新正文"
+            },
+            "pinned": false,
+            "preview": "Updated 标题\n中文更新正文",
+            "revision": 3,
+            "title": "Updated 标题",
+            "updatedAt": 1794853266046,
+            "version": "64f5d71aa9494a1ee601a2da693e55fcf53e78a7366b35020e4a59c011ea7b31"
+          }
+        ],
+        "nextCursor": null
+      },
+      "tool": "notes_search"
+    },
+    {
+      "arguments": {
+        "noteId": "6500a898-17e1-4e73-94c9-70407c8b2448"
+      },
+      "result": {
+        "attachmentCount": 0,
+        "content": "Updated 标题\n中文更新正文",
+        "createdAt": 1794853266041,
+        "folderId": "default",
+        "format": "text",
+        "id": "6500a898-17e1-4e73-94c9-70407c8b2448",
+        "nextContentCursor": null,
+        "pinned": false,
+        "preview": "Updated 标题\n中文更新正文",
+        "revision": 3,
+        "title": "Updated 标题",
+        "truncated": false,
+        "updatedAt": 1794853266046,
+        "version": "64f5d71aa9494a1ee601a2da693e55fcf53e78a7366b35020e4a59c011ea7b31"
+      },
+      "tool": "notes_read"
+    },
+    {
+      "arguments": {
+        "format": "document",
+        "noteId": "6500a898-17e1-4e73-94c9-70407c8b2448"
+      },
+      "result": {
+        "attachmentCount": 0,
+        "content": {
+          "content": [
+            {
+              "attrs": {
+                "level": 1
+              },
+              "content": [
+                {
+                  "text": "Updated 标题",
+                  "type": "text"
+                }
+              ],
+              "type": "heading"
+            },
+            {
+              "content": [
+                {
+                  "text": "中文更新正文",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        },
+        "createdAt": 1794853266041,
+        "folderId": "default",
+        "format": "document",
+        "id": "6500a898-17e1-4e73-94c9-70407c8b2448",
+        "nextContentCursor": null,
+        "pinned": false,
+        "preview": "Updated 标题\n中文更新正文",
+        "revision": 3,
+        "title": "Updated 标题",
+        "truncated": false,
+        "updatedAt": 1794853266046,
+        "version": "64f5d71aa9494a1ee601a2da693e55fcf53e78a7366b35020e4a59c011ea7b31"
+      },
+      "tool": "notes_read"
+    },
+    {
+      "arguments": {
+        "operationId": "2b8cffb1-9372-4ec5-80d8-0cb32166189a"
+      },
+      "result": {
+        "committed": true,
+        "committedRevision": 1,
+        "committedVersion": "a54197ae4167b4bc630eb6ed5c853c234d1841ea3c7113a2427eb391be79a043",
+        "noteId": "6500a898-17e1-4e73-94c9-70407c8b2448",
+        "operationId": "2b8cffb1-9372-4ec5-80d8-0cb32166189a",
+        "warnings": []
+      },
+      "tool": "notes_get_operation"
+    },
+    {
+      "arguments": {
+        "operationId": "f7fc84b0-e84a-4cdb-ba00-1559bde25b92"
+      },
+      "result": {
+        "operationId": "f7fc84b0-e84a-4cdb-ba00-1559bde25b92",
+        "status": "not_found"
+      },
+      "tool": "notes_get_operation"
+    },
+    {
+      "arguments": {
+        "operationId": "13cc9492-299e-416f-81c0-51abbe096cbf"
+      },
+      "result": {
+        "operationId": "13cc9492-299e-416f-81c0-51abbe096cbf",
+        "status": "pending"
+      },
+      "tool": "notes_get_operation"
+    }
+  ],
+  "provenance": "Actual NotesApplicationService over temporary production Session/SQLite; protocol replies are native test inputs, not real WebViews"
+}

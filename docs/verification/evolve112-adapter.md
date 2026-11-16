@@ -66,7 +66,7 @@ python3 crates/notes-mcp/tests/stdio_fixture.py crates/notes-mcp/target/release/
 ## 宿主集成点与剩余验收
 
 1. 凭据和端点由真实 `agent_access/agent_host` 创建：严格 record v1、当前用户0700/0600、短 socket basename、完整路径字节校验；host 每连接重新认证，绑定 workspace/incarnation/client/grant。适配器不创建端点。
-2. 适配器 schema/fixture 已按主线完整成功 DTO 对齐：版本均为整数1、15个 canonical limits、search 的严格 `match`。宿主补齐 `maxDocumentBytes` / `maxFrameBytes`，使用 `crates/notes-mcp/tests/fixtures/query-success.json` 的同一组成功/ToolError fixture 做互校，再验证实际接通。宿主 limits 必须为实际限制，取应用与适配器上限交集；本次未修改后端或设计契约。
+2. 适配器 schema/fixture 已按主线完整成功 DTO 对齐：版本均为整数1、15个 canonical limits、search 的严格 `match`。111实际 service fixture 已包含 `maxDocumentBytes` / `maxFrameBytes`，九工具成功 DTO 的跨模块 schema 校验见下节；后续继续验证运行中宿主的实际接通。宿主 limits 必须为实际限制，取应用与适配器上限交集；本次未修改后端或设计契约。
 3. 真实 Session/SQLite 验证九工具、范围/locked/trash、中文搜索、cursor/version、document schema/附件归属、有损更新拒绝、并发 CAS、窗口活动保护、原子 create/持久幂等、响应丢失后原 key 恢复、重启读取和撤销后不交付。
 4. 验证真实窗口刷新/Undo/附件 owner、同步 dirty 和可选 Android 同步；由实际应用 receipt 和重启后的内容作证，不能用 metadata 事件或 fixture MutationResult 代替。
 5. README 提供 [官方 Codex CLI 配置](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) 的静态 TOML：`mcp_servers.<name>` 下 command/args/cwd、startup_timeout_sec/tool_timeout_sec。该页面已实际读取；未写配置，也未将本次 Python stdio 客户端称为 Codex CLI 实测。实际授权配置和 CLI→真实宿主联调留给主线。
@@ -98,3 +98,33 @@ git diff --check
 ```
 
 上节原有构建时间与指纹为初始提交记录。本轮仍不是最终真实宿主验收，没有访问后端/用户凭据/用户配置；未改 SDK 版本或任何包锁。
+
+
+## 跨模块实际 service fixture 校验（2026-11-17）
+
+根据111已提交实现，读取并原样复制以下非敏感合成产物，未修改111工作树：
+
+- 来源 commit：`868c6dcf960cb3c92f3c9330ec22fbaf7431fe91`。
+- 来源路径：`src-tauri/src/application/fixtures/service-success.json`。
+- 来源 Git blob：`c9943b3e096d68c0ce102906397b3bdb2b9d81e4`。
+- SHA-256：`62f905dc9de8fc01da3a955f8224ed183b8ecf77d0a149ebf3b33cc1cfef6f32`。
+- crate 内副本：`crates/notes-mcp/tests/fixtures/service-success.json`，来源记录为同目录 `service-success.source.json`。
+
+复制前已将111工作树文件与 `git show <sourceCommit>:<sourcePath>` 逐字节比较一致；JSON 未重新序列化。测试运行仅依赖副本，不依赖111工作树或用户凭据。Rust 契约测试逐例校验12个实际 service input、成功 output 和公布的 success/ToolError 联合 schema，确保九工具全覆盖、read 的 text/document 和 operation 的 committed/pending/not_found 均被检查；附加字段仍拒绝。成功不能误命中 ToolError 分支。
+
+stdio/Unix fixture 使用原 arguments 和原结果回放全部12例，校验 structuredContent、等值 JSON text、isError:false 和请求原样传输；并对同一组工具验证 host scope-denied ToolError + isError:true、不重试。宿主 ServerError/scope 实现保持宿主所有，本次没有改动或绕过。原适配器自行构造的边界 fixture 继续用于坏字段/限额回归，但不再作为跨模块成功兼容的唯一证据。
+
+来源 provenance 为 “Actual NotesApplicationService over temporary production Session/SQLite; protocol replies are native test inputs, not real WebViews”。适配器本次回放是跨模块 DTO/SDK/Unix 传输证据，仍不等于实际运行宿主/真实 WebView 接通或授权撤销验收。
+
+本轮命令均退出码0：
+
+```sh
+cargo fmt --manifest-path crates/notes-mcp/Cargo.toml -- --check
+cargo clippy --manifest-path crates/notes-mcp/Cargo.toml --locked --all-targets -- -D warnings
+cargo test --manifest-path crates/notes-mcp/Cargo.toml --locked -- --nocapture
+cargo build --manifest-path crates/notes-mcp/Cargo.toml --locked --release
+python3 crates/notes-mcp/tests/stdio_fixture.py crates/notes-mcp/target/release/cybernote-mcp StdioFixture.test_application_service_fixture_cross_module
+git diff --check
+```
+
+4项契约测试、8项传输 harness 全部通过，后者包含13项真实 stdio/Unix fixture（30.360秒）。release 构建通过（0.23秒，生产代码未改），对 release 的实际 service fixture 12例成功及12例 scope error 回放通过（0.831秒）。可执行 SHA-256 仍为 `3f623265f1b675cc7f3d3ea8c0dcb549fb923c9e40e0498f38d66b577a1f19a6`。fmt/Clippy/diff 检查通过。无 schema 放宽、无宿主/前端/契约/包锁更改。
