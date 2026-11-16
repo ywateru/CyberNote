@@ -56,7 +56,8 @@ import {
 import { TagComposition } from "./tag-composition";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { NetworkSyncCoordinator, sameQuietAuthority, type QuietHost } from "./network-sync";
-import { subscribeNetworkSync, replyNetworkSync } from "./bridge";
+import { AgentWindowCoordinator, type AgentWindowHost } from "./agent-window";
+import { subscribeAgentWindow, replyAgentWindow, subscribeNetworkSync, replyNetworkSync } from "./bridge";
 import { SmartFolderForm, type FolderFormHandle } from "./SmartFolderForm";
 import {
   MobileQuickFolderIcon,
@@ -316,6 +317,9 @@ function App() {
   const [error, setError] = useState("");
   const { navigation, state: navigationState } = useNavigation(!!initialMobile);
   const { folderId, baseNoteId, searchNoteId, page, query, searchDraft, searching, filter, tagFilter, galleryEditor, attachmentBrowser, mobileCreatedEditor } = navigationState;
+  // Navigation owns intent; only a layout commit proves its new owner reached DOM.
+  const committedNavigation = useRef(navigationState);
+  useLayoutEffect(() => { committedNavigation.current = navigationState; });
   const { setFolderId, setNoteId, setSearchNoteId, setPage, setQuery, setSearchDraft, setSearching, setFilter, setTagFilter, setGalleryEditor, setAttachmentBrowser } = navigation;
   const searchIntent = useRef(0);
   const { session, state: editorSession } = useEditorSession();
@@ -518,20 +522,36 @@ function App() {
   const quietHost = useRef<QuietHost>(undefined!);
   const [, updateQuietWindow] = useState(0);
   const [networkSync] = useState(() => new NetworkSyncCoordinator({
-    snapshot: () => quietHost.current.snapshot(),
+    snapshot: () => { const state = quietHost.current.snapshot(); return { ...state, blocked: state.blocked || agentWindow.frozen() }; },
     freeze: (ids, cancel) => quietHost.current.freeze(ids, cancel),
     reply: replyNetworkSync,
     committed: () => quietHost.current.committed(),
     error: (error) => quietHost.current.error(error),
   }));
+  const agentHost = useRef<AgentWindowHost>(undefined!);
+  const [agentWindow] = useState(() => new AgentWindowCoordinator({
+    snapshot: () => agentHost.current.snapshot(),
+    freeze: (ids, cancel) => quietHost.current.freeze(ids, cancel, "agent"),
+    reply: replyAgentWindow,
+    committed: sessionId => agentHost.current.committed(sessionId),
+    error: error => quietHost.current.error(error),
+  }));
+  const [windowWrites] = useState(() => ({
+    frozen: (id?: string | null) => networkSync.frozen(id) || agentWindow.frozen(id),
+    cancel: async () => {
+      while (networkSync.frozen() || agentWindow.frozen())
+        await Promise.all([networkSync.cancel(), agentWindow.cancel()]);
+    },
+  }));
+  const savingNotes = useRef(new Map<string, number>());
   const quietMounted = useRef(true);
   const quietWrites = useRef(0);
   // Keep user input responsive while the projection still owns the frozen note.
   // Recheck after each terminal: another operation may have arrived meanwhile.
   const afterQuiet = useCallback(async (action: () => void | Promise<unknown>) => {
-    while (networkSync.frozen()) await networkSync.cancel();
+    while (windowWrites.frozen()) await windowWrites.cancel();
     if (quietMounted.current && !quitState.current) await action();
-  }, [networkSync]);
+  }, [windowWrites]);
   const changeSearch = useCallback((next: { query?: string; searching?: boolean; resetFilter?: boolean }) => {
     const intent = ++searchIntent.current;
     if (next.query !== undefined) setSearchDraft(next.query);
@@ -738,7 +758,7 @@ function App() {
   session.configure({
     noteId, editor, mobile,
     visible: !!current && !current.deletedAt && (!mobile || page === "editor") && !attachmentBrowser,
-    blocked: !!quitState.current || !!modal || !!folderForm || !!ocr || record || loading || synchronizingRef.current || syncCoverRef.current || !!accessGate.state?.operationId || !!(noteId && (accessSuspended.includes(noteId) || blockedNotes.current.has(noteId) || networkSync.frozen(noteId) || accessGate.state?.suspended.includes(noteId))),
+    blocked: !!quitState.current || !!modal || !!folderForm || !!ocr || record || loading || synchronizingRef.current || syncCoverRef.current || !!accessGate.state?.operationId || !!(noteId && (accessSuspended.includes(noteId) || blockedNotes.current.has(noteId) || windowWrites.frozen(noteId) || accessGate.state?.suspended.includes(noteId))),
     authorized: !!noteId && !!accessGate.state?.notes[noteId]?.authorized,
     owner: editor ? nativeEditorOwners.current.get(editor) ?? null : null,
   });
@@ -747,17 +767,17 @@ function App() {
     return JSON.stringify([stamp.sessionId, stamp.epoch, id, stamp.noteEpoch]);
   };
   const galleryAvailable = attachmentBrowser && !loading && !syncCover && !synchronizing && !quitPending &&
-    !modal && !folderForm && !draw && !accessSuspended.length && !accessGate.state?.operationId && !networkSync.frozen();
+    !modal && !folderForm && !draw && !accessSuspended.length && !accessGate.state?.operationId && !windowWrites.frozen();
   presentation.configure({
     workspace: () => wsRef.current, editor: id => editorsRef.current.get(id), pending: id => pendingDocs.current.get(id),
     authority: imageAuthority, authorized: id => !!accessGate.state?.notes[id]?.authorized,
-    galleryBlocked: id => !!quitState.current || syncCoverRef.current || synchronizingRef.current || !!accessGate.state?.operationId || !!accessGate.state?.suspended.length || networkSync.frozen(id),
+    galleryBlocked: id => !!quitState.current || syncCoverRef.current || synchronizingRef.current || !!accessGate.state?.operationId || !!accessGate.state?.suspended.length || windowWrites.frozen(id),
     previewBlocked: () => !!quitState.current || syncCoverRef.current || !!accessGate.state?.operationId || !!accessGate.state?.suspended.length || !!modal,
     visibilityBlocked: () => quitPending || syncCover || !!accessSuspended.length || !!accessGate.state?.operationId,
     covered: () => syncCoverRef.current, noteId, currentEditor: editor, browser: attachmentBrowser, mobile, page,
     surface: () => appSurface.current, afterQuiet, fail: error => fail(error), notice: text => setNotice(text),
     openBrowser: () => navigation.openAttachmentBrowser(), reveal: owner => navigation.revealAttachment(owner),
-    menuBlocked: () => !!quitState.current || loading || syncCoverRef.current || synchronizingRef.current || !!accessGate.state?.operationId || !!accessGate.state?.suspended.length || networkSync.frozen(noteId) || !!modal || !!folderForm || !!draw || !!menu,
+    menuBlocked: () => !!quitState.current || loading || syncCoverRef.current || synchronizingRef.current || !!accessGate.state?.operationId || !!accessGate.state?.suspended.length || windowWrites.frozen(noteId) || !!modal || !!folderForm || !!draw || !!menu,
     ownedRecording: id => {const ticket=recordingTicket.current;return !!ticket && ticket.batch.operationIds.some(operation => attachmentSubmissions.current.get(operation)?.attachment?.id === id);},
   });
   const galleryEntries = presentation.projectGallery(listed,galleryAvailable,query);
@@ -772,9 +792,9 @@ function App() {
       }
       if (instance) {
         nativeEditorOwners.current.set(instance, id);
-        if (networkSync.frozen(id)) {
+        if (windowWrites.frozen(id)) {
           editorGate.park(instance);
-          void networkSync.cancel();
+          void windowWrites.cancel();
         }
         if (quitState.current) {
           quitState.current.editors.set(instance, instance.isEditable);
@@ -818,7 +838,7 @@ function App() {
           !!accessGate.state?.operationId ||
           !owner ||
           blockedNotes.current.has(owner) ||
-          networkSync.frozen(owner) ||
+          windowWrites.frozen(owner) ||
           !!accessGate.state?.suspended.includes(owner) ||
           accessGate.state?.notes[owner]?.authorized === false,
       );
@@ -1068,7 +1088,7 @@ function App() {
         blocked: !quietMounted.current || !initializedSelection.current || !access || !!access.operationId || !!access.suspended.length || !!quitState.current || !!createFlight.current || quietWrites.current > 0 || archiveRunning.current || synchronizingRef.current || syncCoverRef.current,
       };
     },
-    freeze: (ids, cancel) => {
+    freeze: (ids, cancel, source = "sync") => {
       const held = new Map<Editor, { id: string; editable: boolean; stamp: AccessStamp; document: JSONContent; dom: HTMLElement }>();
       const focused = [...editorsRef.current.values()].find(instance => !instance.isDestroyed && ids.includes(nativeEditorOwners.current.get(instance) || "") && instance.view.dom.contains(document.activeElement));
       const focus = focused && document.hasFocus() ? {
@@ -1087,9 +1107,10 @@ function App() {
         document.addEventListener("visibilitychange", visibility);
         window.addEventListener("blur", relinquishFocus);
       }
-      if (ids.includes(noteId || "")) session.invalidate("sync");
+      if (source === "sync" && ids.includes(noteId || "")) session.invalidate("sync");
+      const generation = session.generation;
       const scope = pickerRuntime.current.scope;
-      const key = new PluginKey("notes-sync-quiet");
+      const key = new PluginKey("notes-window-quiet");
       const input = (event: Event) => { if (event.cancelable) event.preventDefault(); };
       for (const id of ids) {
         const instance = editorsRef.current.get(id);
@@ -1115,7 +1136,7 @@ function App() {
             return;
           }
         },
-        current: () => pickerRuntime.current.scope === scope && [...held].every(([instance, value]) => !instance.isDestroyed && editorsRef.current.get(value.id) === instance && nativeEditorOwners.current.get(instance) === value.id && sameQuietAuthority(value.stamp, accessGate.stamp(value.id)) && documentsEqual(value.document, instance.getJSON())),
+        current: () => (source === "sync" || session.generation === generation) && pickerRuntime.current.scope === scope && [...held].every(([instance, value]) => !instance.isDestroyed && editorsRef.current.get(value.id) === instance && nativeEditorOwners.current.get(instance) === value.id && sameQuietAuthority(value.stamp, accessGate.stamp(value.id)) && documentsEqual(value.document, instance.getJSON())),
         release: () => {
           document.removeEventListener("focusin", focusIn, true);
           document.removeEventListener("pointerdown", relinquishFocus, true);
@@ -1130,7 +1151,7 @@ function App() {
             const note = wsRef.current.notes.find(note => note.id === value.id);
             const allowed = quietMounted.current && sameQuietAuthority(value.stamp, accessGate.stamp(value.id)) && editorsRef.current.get(value.id) === instance && nativeEditorOwners.current.get(instance) === value.id && !!note && !note.deletedAt && (!note.locked || accessGate.state?.notes[value.id]?.authorized === true);
             restoreEditor(instance, value.editable && allowed);
-            if (allowed && pickerRuntime.current.editor === instance) editorGate.activate(instance, !!quitState.current || synchronizingRef.current || !!accessGate.state?.operationId || blockedNotes.current.has(value.id) || !!accessGate.state?.suspended.includes(value.id));
+            if (allowed && pickerRuntime.current.editor === instance) editorGate.activate(instance, windowWrites.frozen(value.id) || !!quitState.current || synchronizingRef.current || !!accessGate.state?.operationId || blockedNotes.current.has(value.id) || !!accessGate.state?.suspended.includes(value.id));
             if (allowed && focus?.editor === instance && !focus.moved && instance.isEditable &&
               pickerRuntime.current.scope === scope && pickerRuntime.current.editor === instance &&
               instance.view.dom === value.dom && value.dom === focus.dom && value.dom.isConnected &&
@@ -1152,6 +1173,45 @@ function App() {
     },
     error: error => { if (quietMounted.current && import.meta.env.DEV) console.error("notes-sync window", error); },
   };
+  agentHost.current = {
+    snapshot: () => {
+      const base = quietHost.current.snapshot();
+      const protectedIds = new Set(base.protectedNoteIds);
+      for (const [id, instance] of editorsRef.current) {
+        if (!instance.isDestroyed && (instance.isFocused || (id === noteId && session.snapshot().body === "editing"))) protectedIds.add(id);
+      }
+      if (draw) protectedIds.add(draw.noteId);
+      const interaction = session.snapshot();
+      if (noteId && (interaction.formatOpen || interaction.menu)) protectedIds.add(noteId);
+      return { ...base, protectedNoteIds: [...protectedIds],
+        unsavedNoteIds: [...new Set([...pendingDocs.current.keys(), ...saveFailures.current.keys(), ...savingNotes.current.keys()])],
+        blocked: base.blocked || loading || !workspaceLoaded || networkSync.frozen() || navigation.pending || navigation.snapshot() !== committedNavigation.current || !!session.snapshot().pendingFocus,
+      };
+    },
+    freeze: (ids, cancel) => quietHost.current.freeze(ids, cancel, "agent"),
+    reply: replyAgentWindow,
+    committed: async sessionId => {
+      const snapshot = await metadataRefreshRef.current();
+      if (!snapshot || snapshot.access?.sessionId !== sessionId || accessGate.state?.sessionId !== sessionId ||
+        !snapshot.metadata || !metadataGate.canPublish(snapshot.metadata) || metadataGate.needsRefresh || metadataGate.applied < snapshot.metadata.sequence ||
+        synchronizingRef.current || accessGate.state.operationId || metadataDisposed.current)
+        throw Error("外部更改已提交，等待可信工作区刷新");
+      await waitRecordingEditorCommit(new AbortController().signal);
+      if (accessGate.state?.sessionId !== sessionId || accessGate.state.operationId || synchronizingRef.current ||
+        metadataGate.needsRefresh || metadataDisposed.current || !quietMounted.current)
+        throw Error("外部更改刷新时窗口或授权状态改变");
+    },
+    error: error => quietHost.current.error(error),
+  };
+  useLayoutEffect(() => { agentWindow.check(); });
+  useEffect(() => {
+    agentWindow.mount();
+    let disposed = false;
+    let unlisten: (() => void) | undefined;
+    void subscribeAgentWindow(event => { void agentWindow.receive(event).catch(quietHost.current.error); }, error => quietHost.current.error(error))
+      .then(release => { if (disposed) release(); else unlisten = release; }).catch(quietHost.current.error);
+    return () => { disposed = true; unlisten?.(); agentWindow.dispose(); };
+  }, [agentWindow]);
   useLayoutEffect(() => { networkSync.check(); });
   useEffect(() => {
     quietMounted.current = true;
@@ -1164,14 +1224,14 @@ function App() {
     // User navigation must wait for the cancellation's linearized terminal
     // receipt. A click in an unrelated writable editor remains independent.
     const click = (event: MouseEvent) => {
-      if (!networkSync.frozen()) return;
+      if (!windowWrites.frozen()) return;
       const target = event.target instanceof Element ? event.target : null;
       const owner = target?.closest<HTMLElement>("[data-mobile-editor-note]")?.dataset.mobileEditorNote;
-      if (owner && !networkSync.frozen(owner) && target?.closest(".tiptap")) return;
+      if (owner && !windowWrites.frozen(owner) && target?.closest(".tiptap")) return;
       const trigger = target?.closest<HTMLElement>("button, a, input, [role=button], .note-row, .gallery-card");
       if (!trigger) return;
       event.preventDefault(); event.stopImmediatePropagation();
-      void networkSync.cancel().then(() => { if (!disposed && trigger.isConnected) trigger.click(); }).catch(quietHost.current.error);
+      void windowWrites.cancel().then(() => { if (!disposed && trigger.isConnected) trigger.click(); }).catch(quietHost.current.error);
     };
     document.addEventListener("click", click, true);
     return () => { disposed = true; quietMounted.current = false; unlisten?.(); document.removeEventListener("click", click, true); networkSync.dispose(); };
@@ -1180,7 +1240,7 @@ function App() {
     async (a: Record<string, unknown>, validate?: () => void) => {
       quietWrites.current++;
       try {
-      await networkSync.cancel();
+      await windowWrites.cancel();
       if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
       await flush();
       if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
@@ -1245,12 +1305,13 @@ function App() {
   ]);
   const saveDoc = useCallback(
     (id: string, doc: JSONContent) => {
-      if (networkSync.frozen(id)) return Promise.resolve<SaveOutcome>({ saved: false, error: Error("备忘录正在应用同步更改，请稍候") });
+      if (windowWrites.frozen(id)) return Promise.resolve<SaveOutcome>({ saved: false, error: Error("备忘录正在更新，请稍候") });
       if (blockedNotes.current.has(id)) {
         const error = Error("备忘录正在同步锁定状态");
         fail(error);
         return Promise.resolve<SaveOutcome>({ saved: false, error });
       }
+      savingNotes.current.set(id, (savingNotes.current.get(id) || 0) + 1);
       const ticket = registerSaveIntent(id);
       void ticket.catch(() => {}); // The queued save handles and retains registration failures.
       pendingDocs.current.set(id, doc);
@@ -1322,7 +1383,11 @@ function App() {
             );
           else fail(e);
         },
-        () => setSaving((v) => Math.max(0, v - 1)),
+        () => {
+          const count = (savingNotes.current.get(id) || 1) - 1;
+          if (count) savingNotes.current.set(id, count); else savingNotes.current.delete(id);
+          setSaving(v => Math.max(0, v - 1));
+        },
       );
       queues.current.set(id, next);
       return next;
@@ -1412,7 +1477,9 @@ function App() {
     frozen?.setEditable(false, false);
     setSaving((v) => v + 1);
     let copyConfirmed = false;
+    quietWrites.current++;
     try {
+      await windowWrites.cancel();
       await queues.current.get(id);
       const doc = pendingDocs.current.get(id);
       const source = wsRef.current.notes.find((n) => n.id === id);
@@ -1463,6 +1530,7 @@ function App() {
         );
       else fail(e);
     } finally {
+      quietWrites.current--;
       blockedNotes.current.delete(id);
       if (frozen && !frozen.isDestroyed && editable !== undefined)
         restoreEditor(frozen, editable);
@@ -1470,9 +1538,9 @@ function App() {
     }
   };
   const handleCloseRequested = async (event: CloseRequestedEvent) => {
-          if (networkSync.frozen()) {
+          if (windowWrites.frozen()) {
             event.preventDefault();
-            await networkSync.cancel();
+            await windowWrites.cancel();
             await getCurrentWindow().close();
             return;
           }
@@ -1567,6 +1635,7 @@ function App() {
           instance,
           synchronizingRef.current ||
             !!accessGate.state?.operationId ||
+            windowWrites.frozen(owner) ||
             blockedNotes.current.has(owner) ||
             !!accessGate.state?.suspended.includes(owner) ||
             !note ||
@@ -1587,7 +1656,7 @@ function App() {
       });
     void getCurrentWindow()
       .listen<{ id: string }>("notes-recording-quit", async ({ payload }) => {
-        await networkSync.cancel();
+        await windowWrites.cancel();
         if (quitState.current) return;
         // Seal user/native entry synchronously, before close/flush can yield.
         const held = { id: payload.id, editors: new Map<Editor, boolean>() };
@@ -1905,7 +1974,7 @@ function App() {
   navigation.configure({
     workspace: () => wsRef.current, blocked: () => [...blockedNotes.current],
     noteId, mobile, contentSearch, view, sort, separate: !!separate && native,
-    sync: networkSync, session, clearComposition: clearTagComposition,
+    sync: windowWrites, session, clearComposition: clearTagComposition,
     clearJump: () => setAttachmentJump(null), clearSwipe: () => setSwiped(null),
     clearFind: () => setShowFind(false), closeModal: () => setModal(null), parkSmart: id => parkedSmartEditors.current.add(id),
     settings: updateSettings, flush, closeWindow: () => { void getCurrentWindow().close(); }, fail,
@@ -1922,7 +1991,7 @@ function App() {
       const work = (async () => {
       quietWrites.current++;
       try {
-        await networkSync.cancel();
+        await windowWrites.cancel();
         if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
         await flush();
         if (quitState.current) throw Error("正在完成保存并退出，请稍候。");
@@ -1965,14 +2034,14 @@ function App() {
   const newNote = useCallback(() => createNote(), [createNote]);
   const finishEditing = async () => {
     const intent = session.captureBodyIntent();
-    await networkSync.cancel();
+    await windowWrites.cancel();
     await flush();
     session.completeBodyIntent(intent);
   };
   const saveFolderDraft = async (draft: FolderDraft, committedId?: string) => {
     quietWrites.current++;
     try {
-    await networkSync.cancel();
+    await windowWrites.cancel();
     let id = committedId;
     if (!id) {
       const delivery = await action<FolderData>(
@@ -2109,7 +2178,7 @@ function App() {
       archiveRunning.current = true;
       setArchiveBusy(true);
       try {
-        await networkSync.cancel();
+        await windowWrites.cancel();
         if (!native) {
           setNotice("请在已安装的 Mac 或 Android 应用中导入、导出本地备份。");
           return { status: "error", message: "请在已安装的应用中操作本地备份" };
@@ -2161,7 +2230,7 @@ function App() {
     archiveRunning.current = true;
     setArchiveBusy(true);
     try {
-      await networkSync.cancel();
+      await windowWrites.cancel();
       await flush();
       if (recordingTicket.current || record || quitState.current) throw Error("当前无法开始导入");
     } catch (error) {
@@ -2182,7 +2251,7 @@ function App() {
     finally { archiveRunning.current = false; setArchiveBusy(false); }
   }, [synchronization, fail]);
   const openSeparate = async (n: Note) => {
-    await networkSync.cancel();
+    await windowWrites.cancel();
     if (quitState.current) return;
     if (!native) {
       chooseNote(n);
@@ -3301,14 +3370,13 @@ function App() {
       } else if (modal === "deleteSmartFolder") {
         const target = smartDeleteTarget.current;
         if (!target) throw Error("智能文件夹已不存在");
-        await action({
+        await doAction({
           type: "deleteSmartFolder",
           input: {
             id: target.id,
             expectedDefinitionRevision: target.revision,
           },
         });
-        await metadataRefreshRef.current();
       } else if (modal === "purge") {
         await doAction({ type: "purgeNote", id: selected?.id });
         setNoteId(null);
@@ -3347,7 +3415,7 @@ function App() {
   ]);
   const attachmentBaseAvailable =
     !attachmentBrowser &&
-    !networkSync.frozen(noteId) &&
+    !windowWrites.frozen(noteId) &&
     !quitPending &&
     !loading &&
     !draw &&
@@ -3399,7 +3467,7 @@ function App() {
     target: {noteId,scope:nativeScope,current,editor,loading,synchronizing,accessSuspended,modal,folderForm:!!folderForm,draw:!!draw,record,ocr:!!ocrOperation.current,quitPending,
       quitting:()=>!!quitState.current,blocked:id=>blockedNotes.current.has(id)},
     projection: {folderId,view,galleryEditor,attachmentBrowser,separate,page,sidebar,settings:{...settings,sidebarWidth:desktopSidebarWidth,listWidth:desktopListWidth},listTitle,count:listed.length,query,contentOverlay},
-    actions: {networkSync,changeSearch,setContextFolder,openModal,changeSidebar,back,createNote,shareTarget,openRecording,openAttachmentBrowser,setAttachmentBrowser,updateSettings,setShowFind,
+    actions: {networkSync: windowWrites,changeSearch,setContextFolder,openModal,changeSidebar,back,createNote,shareTarget,openRecording,openAttachmentBrowser,setAttachmentBrowser,updateSettings,setShowFind,
       workspace:()=>wsRef.current,doAction,setContextNote,setNoteId,pick:(accept,context)=>openAttachmentPicker(fileInput.current,accept,context),openOcr,openDrawing,focusGlobalSearch,archive:mode=>{void archive(mode);},fail},
   });
   const nativeSelection = nativePlatform.selection;
@@ -3482,10 +3550,11 @@ function App() {
           failed: saveFailures.current.size,
           saving,
         },
+        agentWindow: { frozen: agentWindow.frozen(), ...agentHost.current.snapshot() },
         quietWindow: {
-          frozen: networkSync.frozen(),
+          frozen: windowWrites.frozen(),
           ...quietHost.current.snapshot(),
-          editors: [...editorsRef.current].filter(([, instance]) => !instance.isDestroyed).map(([id, instance]) => ({ id, composing: instance.view.composing, pendingComposition: !!tagCompositions.current.get(id)?.pending, editable: instance.isEditable, frozen: networkSync.frozen(id), owner: nativeEditorOwners.current.get(instance), externalVersion: externalVersions.current.get(id) || 0 })),
+          editors: [...editorsRef.current].filter(([, instance]) => !instance.isDestroyed).map(([id, instance]) => ({ id, composing: instance.view.composing, pendingComposition: !!tagCompositions.current.get(id)?.pending, editable: instance.isEditable, frozen: windowWrites.frozen(id), owner: nativeEditorOwners.current.get(instance), externalVersion: externalVersions.current.get(id) || 0 })),
         },
         busy:
           loading ||
@@ -4042,7 +4111,7 @@ function App() {
     <ImagePreviewContext.Provider value={{open:openImagePreview, closeSource:closePreviewSource}}>
     <AttachmentTransferContext.Provider value={{paste:pasteAttachments}}>
     <AttachmentMenuProvider
-      scope={JSON.stringify([nativeScope, page, previewAuthority, loading, synchronizing, accessSuspended, modal, folderForm, !!draw, quitPending, menu, imagePreviewOpen, networkSync.frozen(noteId)])}
+      scope={JSON.stringify([nativeScope, page, previewAuthority, loading, synchronizing, accessSuspended, modal, folderForm, !!draw, quitPending, menu, imagePreviewOpen, windowWrites.frozen(noteId)])}
       topInset={nativeTop ? nativeInfo?.native.reservedTop || 0 : 0}
       onError={fail}
       permission={presentation.permission}
@@ -4839,7 +4908,7 @@ function App() {
                 synchronizingRef.current ||
                 !!accessGate.state?.operationId ||
                 blockedNotes.current.has(note.id) ||
-                networkSync.frozen(note.id) ||
+                windowWrites.frozen(note.id) ||
                 !!accessGate.state?.suspended.includes(note.id) ||
                 accessGate.state?.notes[note.id]?.authorized === false
               }
@@ -5084,7 +5153,7 @@ function App() {
           onCancel={() => session.closeDrawing("cancel")}
           onDone={(strokes, paperStyle) => {
             const target = draw.editor;
-            if (target.isDestroyed || target !== editor || draw.noteId !== noteId || imageAuthority(draw.noteId) !== draw.authority || !accessGate.state?.notes[draw.noteId]?.authorized || accessGate.state?.operationId || synchronizingRef.current || target.state.doc !== draw.originalDocument || (draw.pos !== undefined && target.state.doc.nodeAt(draw.pos) !== draw.originalNode)) {
+            if (windowWrites.frozen(draw.noteId) || target.isDestroyed || target !== editor || draw.noteId !== noteId || imageAuthority(draw.noteId) !== draw.authority || !accessGate.state?.notes[draw.noteId]?.authorized || accessGate.state?.operationId || synchronizingRef.current || target.state.doc !== draw.originalDocument || (draw.pos !== undefined && target.state.doc.nodeAt(draw.pos) !== draw.originalNode)) {
               session.closeDrawing("access"); fail(Error("原备忘录已改变，请重新打开速绘")); return;
             }
             editorGate.activate(target, false);
