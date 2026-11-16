@@ -81,6 +81,8 @@ export class Navigation {
   private listeners = new Set<() => void>();
   private request = 0;
   private active = true;
+  private pendingRequest: number | null = null;
+  get pending() { return this.pendingRequest !== null; }
   constructor(mobile: boolean) {
     this.value = {
       folderId: mobile ? "all" : "default",
@@ -165,21 +167,22 @@ export class Navigation {
     const request = ++this.request,
       ports = this.live(),
       generation = ports.session.generation;
+    this.pendingRequest = request;
+    const finish = () => { if (this.pendingRequest === request) this.pendingRequest = null; };
     const execute = () => {
       if (
         !this.active ||
         request !== this.request ||
         generation !== this.live().session.generation
-      )
-        return;
+      ) { finish(); return; }
       try {
         action(this.live());
       } catch (error) {
         this.live().fail(error);
-      }
+      } finally { finish(); }
     };
     if (ports.sync.frozen())
-      void ports.sync.cancel().then(execute).catch(ports.fail);
+      void ports.sync.cancel().then(execute).catch(error => { finish(); ports.fail(error); });
     else execute();
   }
   chooseFolder = (id: string) =>

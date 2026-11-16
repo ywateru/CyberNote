@@ -92,7 +92,7 @@ export interface QuietLease {
 }
 export interface QuietHost {
   snapshot(): QuietSnapshot;
-  freeze(noteIds: string[], cancel: () => void): QuietLease;
+  freeze(noteIds: string[], cancel: () => void, source?: "sync" | "agent"): QuietLease;
   reply(reply: SyncWindowReply): Promise<SyncWindowReceipt>;
   committed(): Promise<void>;
   error(error: unknown): void;
