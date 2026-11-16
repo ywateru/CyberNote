@@ -8,9 +8,29 @@ import { tmpdir } from 'node:os';
 import net from 'node:net';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import vm from 'node:vm';
 import { prepareOwnedAndroid, connectOwnedAndroid } from './evolve116-android-driver.mjs';
 
 const HASH = 'a'.repeat(64), BOOT = '12345678-1234-1234-1234-123456789abc';
+// DOM semantics doubles, not a WebView. Execute the actual readUI expression;
+// do not manufacture its result. A CDP returnByValue round-trip follows below.
+function uiElement({ id = 'owned-note', hidden = false, inert = false, parentElement = null,
+  display = 'block', visibility = 'visible', opacity = '1', rects = [{ width: 300, height: 100 }],
+  isConnected = true, focused = false, mustNotRead = false } = {}) {
+  const read = value => { assert(!mustNotRead, 'parked/ambiguous editor state must not be read'); return value; };
+  return { hidden, inert, parentElement, isConnected, style: { display, visibility, opacity },
+    dataset: { noteId: id }, getClientRects: () => rects,
+    closest(selector) { assert.equal(selector, '[hidden],[inert]'); for (let e = this; e; e = e.parentElement) if (e.hidden || e.inert) return e; return null; },
+    editor: { getJSON: () => read({ type: 'doc', content: [{ type: 'paragraph', text: id }] }),
+      state: { selection: { toJSON: () => read({ anchor: 2, head: 5 }) } }, get isFocused() { return read(focused); } } };
+}
+function uiContext(editors = [uiElement()], app = 'app mobile page-editor') {
+  return { innerWidth: 320, innerHeight: 640, devicePixelRatio: 2, visualViewport: { width: 320, scale: 1 },
+    getComputedStyle: e => e.style,
+    document: { documentElement: { clientWidth: 320 },
+      querySelectorAll: selector => { assert.equal(selector, '.tiptap'); return editors; },
+      querySelector: selector => selector === '.tiptap' ? editors[0] : selector === '.app' ? { className: app } : null } };
+}
 async function fixture(t) {
   const root = await mkdtemp(path.join(realpathSync(tmpdir()), 'evolve116-fake-'));
   t.after(() => rm(root, { recursive: true, force: true }));
@@ -18,7 +38,7 @@ async function fixture(t) {
     avd: 'evolve116_fixture_only', package: 'com.local.notesclone.fixture',
     activity: 'com.local.notesclone.fixture/com.local.notesclone.MainActivity', expectedAPKsha: HASH, evidence: path.join(root, 'evidence') };
   const state = { qemu: '1', avd: config.avd, boot: BOOT, hash: HASH, pid: '123', cmdline: config.package + '\0', activity: config.activity,
-    forwards: [], reverses: [], adb: [], cdp: [], pageId: 'owned-page', duplicate: false, badSocket: false,
+    forwards: [], reverses: [], adb: [], cdp: [], pageId: 'owned-page', duplicate: false, badSocket: false, uiContext: uiContext(),
     sync: { status: { workspaceId: 'workspace-fixture', deviceId: 'android-fixture', peers: [{ id: 'desktop-fixture', endpoint: 'ws://127.0.0.1:6010' }] } } };
   const workspace = { notes: [{ id: 'owned-note', document: { type: 'doc', content: [] } }], attachments: [], settings: { theme: 'fixture' } };
   const transport = {
@@ -64,7 +84,7 @@ async function fixture(t) {
           else if (e.includes('sync_command')) value = state.sync;
           else if (e.includes('return w.settings')) value = workspace.settings;
           else if (e.includes('getBoundingClientRect')) value = { x: 50, y: 80 };
-          else if (e.includes('return{viewport:')) value = { viewport: { width: 320 }, editor: { noteId: 'owned-note' } };
+          else if (e.includes('visualViewport')) value = JSON.parse(JSON.stringify(vm.runInNewContext(e, state.uiContext, { timeout: 1000 })));
           else if (e.includes('load_workspace')) value = workspace;
           else throw Error('unexpected fake expression');
           return { result: { value } };
@@ -134,6 +154,41 @@ test('fake read/UI/native/sync operations bind to explicit identity; mappings an
   assert.equal(receipt.expectedAPKsha, HASH); assert.equal(receipt.acceptance, false);
   assert.equal(f.state.closed, 1);
   assert(!f.state.adb.some(a => ['install', 'start-server', 'kill-server'].includes(a[0])));
+});
+
+test('readUI skips earlier hidden/inert parked hosts and observes only the truly visible editor', async t => {
+  const f = await fixture(t), client = await f.connect();
+  const hiddenHost = uiElement({ hidden: true }), inertHost = uiElement({ inert: true });
+  f.state.uiContext = uiContext([
+    uiElement({ id: 'old-hidden', parentElement: hiddenHost, mustNotRead: true }),
+    uiElement({ id: 'old-inert', parentElement: inertHost, mustNotRead: true }),
+    uiElement({ id: 'old-display', parentElement: uiElement({ display: 'none' }), mustNotRead: true }),
+    uiElement({ id: 'old-invisible', visibility: 'hidden', mustNotRead: true }),
+    uiElement({ id: 'old-transparent', parentElement: uiElement({ opacity: '0' }), mustNotRead: true }),
+    uiElement({ id: 'old-empty', rects: [], mustNotRead: true }),
+    uiElement({ id: 'old-zero', rects: [{ width: 300, height: 0 }], mustNotRead: true }),
+    uiElement({ id: 'old-detached', isConnected: false, mustNotRead: true }),
+    uiElement({ id: 'current', focused: true }),
+  ]);
+  const ui = await client.readUI();
+  assert.deepEqual(ui.editor, { noteId: 'current', document: { type: 'doc', content: [{ type: 'paragraph', text: 'current' }] },
+    selection: { anchor: 2, head: 5 }, focused: true });
+  assert.equal(ui.viewport.width, 320); assert(!Object.hasOwn(ui, 'editorCount'));
+});
+
+for (const parked of [false, true]) test(`readUI returns null on a non-editor page with ${parked ? 'only parked' : 'no'} Editor DOM`, async t => {
+  const f = await fixture(t), client = await f.connect();
+  f.state.uiContext = uiContext(parked ? [uiElement({ hidden: true, mustNotRead: true }), uiElement({ inert: true, mustNotRead: true })] : [], 'app mobile page-notes');
+  const ui = await client.readUI();
+  assert.equal(ui.editor, null); assert.equal(ui.app, 'app mobile page-notes'); assert.equal(ui.viewport.width, 320);
+});
+
+test('readUI rejects two visible Editors even with the same noteId and only one focused', async t => {
+  const f = await fixture(t), client = await f.connect();
+  f.state.uiContext = uiContext([uiElement({ id: 'same', focused: false, mustNotRead: true }), uiElement({ id: 'same', focused: true, mustNotRead: true })]);
+  await assert.rejects(client.readUI(), { code: 'UI_EDITOR_AMBIGUOUS' });
+  await assert.rejects(client.back(), { code: 'SESSION_STOPPED' });
+  assert(!f.state.cdp.some(m => m.method.startsWith('Input.')));
 });
 
 for (const [field, value] of [['avd', 'history-user-avd'], ['boot', '22345678-1234-1234-1234-123456789abc'],

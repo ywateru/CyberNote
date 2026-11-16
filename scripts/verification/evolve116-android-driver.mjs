@@ -267,7 +267,23 @@ export async function connectOwnedAndroid(input, { transport } = {}) {
       }),
       readSettings: operation(() => evaluate(`(async()=>{const w=await ${workspace};return w.settings})()`)),
       readSync: operation(() => evaluate(status)),
-      readUI: operation(() => evaluate(`(()=>{const e=document.querySelector('.tiptap');return{viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio,clientWidth:document.documentElement.clientWidth,visualWidth:visualViewport?.width,scale:visualViewport?.scale},editor:e?{noteId:e.dataset.noteId,document:e.editor.getJSON(),selection:e.editor.state.selection.toJSON(),focused:e.editor.isFocused}:null,format:!!document.querySelector('.mobile-format-panel'),app:document.querySelector('.app')?.className}})()`)),
+      readUI: operation(async () => {
+        const { editorCount, ...ui } = await evaluate(`(()=>{
+          const editors=[...document.querySelectorAll('.tiptap')].filter(e=>{
+            if(!e.isConnected||e.closest('[hidden],[inert]')||getComputedStyle(e).visibility!=='visible')return false;
+            for(let host=e;host;host=host.parentElement){
+              const style=getComputedStyle(host);
+              if(style.display==='none'||Number(style.opacity)===0)return false;
+            }
+            return [...e.getClientRects()].some(r=>r.width>0&&r.height>0);
+          });
+          if(editors.length>1)return{editorCount:editors.length};
+          const e=editors[0];
+          return{editorCount:editors.length,viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio,clientWidth:document.documentElement.clientWidth,visualWidth:visualViewport?.width,scale:visualViewport?.scale},editor:e?{noteId:e.dataset.noteId,document:e.editor.getJSON(),selection:e.editor.state.selection.toJSON(),focused:e.editor.isFocused}:null,format:!!document.querySelector('.mobile-format-panel'),app:document.querySelector('.app')?.className};
+        })()`);
+        requireThat(editorCount <= 1, 'UI_EDITOR_AMBIGUOUS');
+        return ui;
+      }),
       click: operation(click),
       // Values (including invitations) travel in memory over CDP, never adb argv/logs.
       fill: operation(async (selector, value) => {

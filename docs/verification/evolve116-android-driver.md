@@ -78,7 +78,7 @@ snapshots or locks. Unsupported/missing identity properties fail closed.
 | `readWorkspace()`, `readNote(id)`, `readSettings()` | Read the real App's `load_workspace`; note result includes its document and attachment references. No SQL or alternate Store. |
 | `readSync()` | Real read-only `sync_command/status`, with access expectation freshly read from the workspace. |
 | `assertSyncIdentity({workspaceId,deviceId,peerId,endpoint})` | Require exact workspace, local device and distinct peer with exact ws/wss endpoint; peer count alone is insufficient. Call after bounded read-only polling establishes readiness. |
-| `readUI()` | Read viewport/client/visual width, DPR/scale, editor document/selection/focus, format presence and App class. No debug adapter or synthetic state mutation. |
+| `readUI()` | Read viewport/client/visual width, DPR/scale, the unique visible non-hidden/non-inert editor's document/selection/focus, format presence and App class. No visible Editor returns `editor:null`; multiple visible Editors fail with `UI_EDITOR_AMBIGUOUS`. No debug adapter or synthetic state mutation. |
 | `readNativeState()` | Read guest `wm size/density/user-rotation` and `dumpsys input_method`; returns in memory, not automatically logged. |
 | `click(selector)` | Require one enabled, visible, unobscured target inside the viewport; dispatch one CDP mouse press/release, with identity recheck between events. No auto scroll/retry. |
 | `fill(selector,value)`, `insertText(value)` | Bounded in-memory CDP input. `fill` clicks, Ctrl+A, inserts; it does not log/persist the value or pass it to adb argv. This is data preparation, **not native IME evidence**. |
@@ -157,3 +157,31 @@ If sync uses a reverse, record guest endpoint → this serial's owned adb revers
 forward. Only existing **manual pairing without account credentials** is in the
 planned scope. ADB-assisted results do not prove LAN/mobile/public connectivity,
 account synchronization or account three-client acceptance.
+
+## Incremental readUI correction after independent review
+
+2026-11-17: independent review `b8c7afb6` identified one blocking P2: the first
+`.tiptap` may belong to an earlier parked `SearchEditorHost`. The original
+failure evidence `/tmp/evolve116-independent-W1xn2F/` and the review are retained
+unchanged. This author correction awaits independent incremental review.
+
+`readUI` now excludes disconnected nodes, hidden/inert ancestors, CSS hidden
+visibility, display-none/zero-opacity hosts and nonpositive/absent rectangles.
+Only the one remaining Editor supplies noteId, document, selection and focus;
+neither noteId nor focus is used to guess or disambiguate the target. Zero
+visible Editors returns null (including collection pages retaining parked DOM).
+Multiple candidates fail before reading either Editor's state and stop the
+driver session with the explicit `UI_EDITOR_AMBIGUOUS` code.
+
+The fake transport's canned UI result was replaced with VM execution of the
+driver's actual Runtime.evaluate expression and a CDP-style JSON round-trip.
+Four added cases cover earlier hidden/inert parked hosts plus other invisible
+nodes before the true current Editor, no Editor DOM, only parked DOM, and two
+visible Editors sharing one noteId with only one focused. Parked/ambiguous state
+getters assert if read. This remains a DOM semantics fixture, not native/React
+or WebView acceptance.
+
+Incremental commands: both driver/test `node --check` checks passed;
+`node --test --test-reporter=spec scripts/verification/evolve116-android-driver.test.mjs`
+passed **31/31**, zero failed/skipped. `git diff --check` passed. No large group,
+real adb, App/device action, boot/install, native build or shared target was used.
