@@ -27,3 +27,7 @@ depends-on: []
 ## verification
 
 320px实际控件可达；界面/正文五档字号对真实页面生效；1100px两侧拖动反馈与偏好保持；键盘可打开画廊和调整分栏；pointercancel/lostcapture后无残留；持久化失败不离开正文。Android横屏音频/IME/Back与长按格式保持用准确APK验证，分别记录已测与未测。
+
+## delivery stages
+
+本任务为前端模块交付：源码/真实React与ProseMirror交互检查及独立审查通过后，标记模块done并允许114基于该代码推进。上述准确APK/实体IME/Back/长按FORMAT102与手势验收作为116的强制原生门槛继续跟踪，不因模块done变成已通过，不删除或降低任何最终验收要求。现有历史现场与新包复验分别留证。
