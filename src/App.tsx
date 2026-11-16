@@ -169,6 +169,7 @@ import type { SyncCommand } from "./sync-client";
 import AccountSettings, { type AccountSettingsHandle } from "./AccountSettings";
 import { accountUIAvailable, type AccountCommand } from "./account-client";
 import Preferences, { isPreferencesTab, type PreferencesTab } from "./Preferences";
+import AgentSettings from "./AgentSettings";
 import type { ArchiveResult } from "./data-management";
 import { documentsEqual } from "./document-equality";
 import {
@@ -4909,6 +4910,7 @@ function App() {
           onTab={setPreferencesTab}
           onClose={() => setModal(null)}
           onBack={preferencesBack}
+          agent={<AgentSettings folders={ws.folders} mobile={mobile} />}
           account={accountUIAvailable && <AccountSettings active={preferencesTab === "account"} onHandle={handle => { accountSettingsHandle.current = handle; }} onConflicts={() => { accountConflictsRequested.current = true; setPreferencesTab("sync"); }} />}
           synchronization={<SyncSettings active={preferencesTab === "sync"} onHandle={handle => {
             syncSettingsHandle.current = handle;
