@@ -64,16 +64,18 @@ response = {version:1, requestId, result:object, isError:boolean}
 
 UTF-8 JSON + `\n`，完整帧（包括换行）最多2 MiB；读循环受此硬界限约束，EOF 没有换行拒绝，不使用无界 `read_to_end` 读取 IPC。requestId、版本、必需字段、额外/重复字段及 DTO 结构均检查。连接失败/不完整帧/无效响应映射 `HOST_UNAVAILABLE`，本地身份失败为 `UNAUTHORIZED`，记录绑定库不匹配为 `WORKSPACE_UNAVAILABLE`。没有后台重连或结果缓存。
 
-## 待宿主对齐的 DTO
+## 成功 DTO 契约
 
-架构文档定义了 NoteSummary、NoteRead、MutationResult 和 ToolError，但尚未完整规定以下成功对象的字段。为保持 outputSchema 严格，适配器采用下列 wire 字段；宿主联调应逐一对齐，不据此宣称业务契约已验收：
+按2026-11-17只读的主线 `docs/architecture/agent-mcp.md` 完整成功 DTO 对齐。根对象、limits、NoteSummary 扩展和 match 均保持 `additionalProperties: false`，所有 canonical limits 字段均必需：
 
 | 工具 | 成功 DTO |
 | --- | --- |
-| capabilities | `{apiVersion:string, schemaVersion:string, workspaceId:string, scopes:string[], tools:string[], formats:("text"\|"document")[], hostSessionId:string, limits:{maxInputBytes,maxJsonDepth,maxNodes,maxFrameBytes,maxListBytes,maxTextPageBytes,maxDocumentBytes,maxLimit,idempotencyRetentionDays}}`，limits 均为非负安全整数 |
+| capabilities | `{apiVersion:1, schemaVersion:1, workspaceId:string, scopes:string[], tools:string[], formats:("text"\|"document")[], hostSessionId:string, limits:{maxLimit,maxQueryCharacters,maxContentBytes,maxDocumentBytes,maxFrameBytes,maxTextPageBytes,maxListBytes,maxJsonDepth,maxNodes,idempotencyRetentionDays,queryDeadlineMs,writeDeadlineMs,maxConcurrentReads,maxConcurrentWrites,maxQueuedWrites}}`，两个版本字段为整数常量1，limits 均为非负安全整数 |
 | folders | `{items:[{id,name,ancestorLabels:string[]}], nextCursor:string\|null}`；祖先只暴露标签，无范围外 ID 或计数 |
-| search | `{items:[NoteSummary & {matchedFields:("title"\|"content"\|"tags")[], snippet:string}], nextCursor:string\|null}` |
+| search | `{items:[NoteSummary & {match:{field:"title"\|"content", snippet:string}}], nextCursor:string\|null}`；snippet 最多240个 Unicode 字符，tags 仅作为输入过滤 |
 | get_operation | 已提交时为原 MutationResult；否则 `{status:"pending"\|"not_found", operationId:string}` |
+
+契约测试和真实 stdio 临时 Unix fixture 共用 `tests/fixtures/query-success.json` 中的 capabilities、search 与 ToolError；该文件可供主线宿主互校。旧字符串版本、`maxInputBytes`、缺少任何 canonical limit、旧 `matchedFields`/顶层 snippet、`match.field="tags"` 和额外字段均拒绝。`writeDeadlineMs` 披露宿主业务协调期限（fixture 为15000），适配器 IPC 写期限仍为20000毫秒。实际宿主还须补齐 `maxDocumentBytes` / `maxFrameBytes` 后完成接通验证。
 
 宿主负责所有工具权限、locked/trash/范围过滤、search 语义、分页与版本、文档节点/附件归属、有损覆盖保护、CAS/窗口协调、原子提交、持久幂等及重新交付前撤销复核。适配器不将 fixture 的模拟回执解释为真实提交。
 

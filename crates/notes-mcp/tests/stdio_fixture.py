@@ -1,4 +1,5 @@
 """Real SDK stdio <-> temporary Unix fixture only; never a Store/host acceptance test."""
+import copy
 import json
 import os
 from pathlib import Path
@@ -14,7 +15,8 @@ import uuid
 
 BINARY = sys.argv.pop(1)
 KEY = "00000000-0000-4000-8000-000000000001"
-ERROR = {"code": "NOTE_BUSY", "message": "Synthetic fixture busy", "retryable": True, "retryAfterMs": 25}
+QUERY_SUCCESS = json.loads((Path(__file__).parent / "fixtures" / "query-success.json").read_text())
+ERROR = QUERY_SUCCESS["ToolError"]
 SUMMARY = dict(id="note", folderId="folder", title="Fixture", preview="中文", createdAt=1,
                updatedAt=2, pinned=False, revision=1, version="opaque-version", attachmentCount=0)
 MUTATION = dict(operationId="operation", noteId="note", committedRevision=2,
@@ -30,10 +32,10 @@ INPUTS = {
 
 def success(tool):
     return {
-        "notes_get_capabilities": dict(apiVersion="1", schemaVersion="1", workspaceId="fixture-workspace", scopes=["notes:read", "notes:create", "notes:update"], tools=list(INPUTS), formats=["text", "document"], hostSessionId="synthetic-host-session", limits=dict(maxInputBytes=1048576, maxJsonDepth=64, maxNodes=20000, maxFrameBytes=2097152, maxListBytes=524288, maxTextPageBytes=32768, maxDocumentBytes=1048576, maxLimit=100, idempotencyRetentionDays=30)),
+        "notes_get_capabilities": dict(QUERY_SUCCESS["notes_get_capabilities"], workspaceId="fixture-workspace"),
         "notes_list_folders": {"items": [{"id": "folder", "name": "Fixture", "ancestorLabels": ["Visible label"]}], "nextCursor": None},
         "notes_list": {"items": [SUMMARY], "nextCursor": None},
-        "notes_search": {"items": [dict(SUMMARY, matchedFields=["content"], snippet="中文")], "nextCursor": None},
+        "notes_search": copy.deepcopy(QUERY_SUCCESS["notes_search"]),
         "notes_read": dict(SUMMARY, format="text", content="中文 fixture content", truncated=False, nextContentCursor=None),
         "notes_create": MUTATION, "notes_append": MUTATION, "notes_update": MUTATION,
         "notes_get_operation": {"status": "pending", "operationId": "operation"},
@@ -58,6 +60,7 @@ class StdioFixture(unittest.TestCase):
         self.requests = []
         self.failures = []
         self.mode = "success"
+        self.output_override = None
         self.delay = 0
         self.accepted = threading.Event()
         self.host_lock = threading.Lock()
@@ -108,7 +111,7 @@ class StdioFixture(unittest.TestCase):
                 # Event wait can be stopped by tearDown, including timeout fixtures.
                 if self.stop.wait(delay):
                     return
-                result = success(request["tool"])
+                result = success(request["tool"]) if self.output_override is None else copy.deepcopy(self.output_override)
                 response = dict(version=1, requestId=request["requestId"], result=result, isError=False)
                 if mode == "business": response.update(result=ERROR, isError=True)
                 if mode == "error-as-success": response.update(result=ERROR, isError=False)
@@ -197,6 +200,60 @@ class StdioFixture(unittest.TestCase):
         self.assertEqual(len({r["requestId"] for r in self.requests}), 9)
         for request in self.requests:
             self.assertEqual(request["arguments"], INPUTS[request["tool"]])
+
+    def test_canonical_query_dtos_keep_strict_output_validation(self):
+        capabilities = self.call("notes_get_capabilities")["structuredContent"]
+        self.assertEqual(capabilities["apiVersion"], 1)
+        self.assertEqual(capabilities["schemaVersion"], 1)
+        self.assertEqual(capabilities["limits"], QUERY_SUCCESS["notes_get_capabilities"]["limits"])
+        invalid_capabilities = []
+        for key in ("apiVersion", "schemaVersion"):
+            for value in ("1", 2):
+                invalid_capabilities.append(dict(capabilities, **{key: value}))
+        for key in capabilities["limits"]:
+            missing = copy.deepcopy(capabilities)
+            del missing["limits"][key]
+            invalid_capabilities.append(missing)
+        for key in ("maxInputBytes", "unknownLimit"):
+            unknown = copy.deepcopy(capabilities)
+            unknown["limits"][key] = 1
+            invalid_capabilities.append(unknown)
+        for invalid in invalid_capabilities:
+            self.output_override = invalid
+            result = self.call("notes_get_capabilities")
+            self.assertTrue(result["isError"])
+            self.assertEqual(result["structuredContent"]["code"], "HOST_UNAVAILABLE")
+
+        self.output_override = None
+        result = self.call("notes_search", {"query": "中文", "tags": ["filter-only"]})
+        self.assertFalse(result["isError"])
+        self.assertEqual(self.requests[-1]["arguments"]["tags"], ["filter-only"])
+        search = result["structuredContent"]
+        for field in ("title", "content"):
+            valid = copy.deepcopy(search)
+            valid["items"][0]["match"] = {"field": field, "snippet": "中" * 240}
+            self.output_override = valid
+            self.assertFalse(self.call("notes_search")["isError"])
+        invalid_matches = [
+            {"field": "tags", "snippet": "中文"},
+            {"field": "content", "snippet": "中" * 241},
+            {"field": "content", "snippet": "中文", "extra": True},
+            {"field": "content"},
+        ]
+        invalid_searches = []
+        for match in invalid_matches:
+            invalid = copy.deepcopy(search)
+            invalid["items"][0]["match"] = match
+            invalid_searches.append(invalid)
+        legacy = copy.deepcopy(search)
+        del legacy["items"][0]["match"]
+        legacy["items"][0].update(matchedFields=["content"], snippet="中文")
+        invalid_searches.append(legacy)
+        for invalid in invalid_searches:
+            self.output_override = invalid
+            result = self.call("notes_search")
+            self.assertTrue(result["isError"])
+            self.assertEqual(result["structuredContent"]["code"], "HOST_UNAVAILABLE")
 
     def test_official_tool_input_errors_and_unknown_tool_protocol_error(self):
         for tool, args in [("notes_get_capabilities", {"unknown": True}), ("notes_search", {"query": ""}), ("notes_list", {"limit": 0}), ("notes_list", {"limit": 101}), ("notes_list", {"limit": 1.5}), ("notes_read", {"noteId": "note", "format": "markdown"}), ("notes_create", dict(INPUTS["notes_create"], idempotencyKey="not-uuid")), ("notes_update", dict(INPUTS["notes_update"], content="wrong type"))]:

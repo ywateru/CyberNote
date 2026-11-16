@@ -146,11 +146,19 @@ pub fn success(name: &str) -> Value {
     match name {
         "notes_get_capabilities" => object(
             json!({
-                "apiVersion":string(128),"schemaVersion":string(128),"workspaceId":string(1024),
+                "apiVersion":{"type":"integer","const":1},"schemaVersion":{"type":"integer","const":1},"workspaceId":string(1024),
                 "scopes":array(json!({"enum":["notes:read","notes:create","notes:update"]}),3),
                 "tools":array(json!({"enum":NAMES}),9),"formats":array(json!({"enum":["text","document"]}),2),
                 "hostSessionId":string(1024),
-                "limits":object(json!({"maxInputBytes":integer(),"maxJsonDepth":integer(),"maxNodes":integer(),"maxFrameBytes":integer(),"maxListBytes":integer(),"maxTextPageBytes":integer(),"maxDocumentBytes":integer(),"maxLimit":integer(),"idempotencyRetentionDays":integer()}), &["maxInputBytes","maxJsonDepth","maxNodes","maxFrameBytes","maxListBytes","maxTextPageBytes","maxDocumentBytes","maxLimit","idempotencyRetentionDays"])
+                "limits":object(json!({
+                    "maxLimit":integer(),"maxQueryCharacters":integer(),"maxContentBytes":integer(),
+                    "maxDocumentBytes":integer(),"maxFrameBytes":integer(),"maxTextPageBytes":integer(),
+                    "maxListBytes":integer(),"maxJsonDepth":integer(),"maxNodes":integer(),
+                    "idempotencyRetentionDays":integer(),"queryDeadlineMs":integer(),"writeDeadlineMs":integer(),
+                    "maxConcurrentReads":integer(),"maxConcurrentWrites":integer(),"maxQueuedWrites":integer()
+                }), &["maxLimit","maxQueryCharacters","maxContentBytes","maxDocumentBytes","maxFrameBytes",
+                    "maxTextPageBytes","maxListBytes","maxJsonDepth","maxNodes","idempotencyRetentionDays",
+                    "queryDeadlineMs","writeDeadlineMs","maxConcurrentReads","maxConcurrentWrites","maxQueuedWrites"])
             }),
             &[
                 "apiVersion",
@@ -171,9 +179,11 @@ pub fn success(name: &str) -> Value {
             let mut p = summary_props();
             let mut req = SUMMARY.to_vec();
             if name == "notes_search" {
-                p["matchedFields"] = array(json!({"enum":["title","content","tags"]}), 3);
-                p["snippet"] = json!({"type":"string","maxLength":240});
-                req.extend(["matchedFields", "snippet"]);
+                p["match"] = object(
+                    json!({"field":{"type":"string","enum":["title","content"]},"snippet":{"type":"string","maxLength":240}}),
+                    &["field", "snippet"],
+                );
+                req.push("match");
             }
             object(
                 json!({"items":array(object(p,&req),100),"nextCursor":nullable_string()}),
