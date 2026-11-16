@@ -1,7 +1,7 @@
 ---
 id: evolve-116-release-verifier
 scope: release-verification-preparation
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -24,3 +24,5 @@ depends-on: []
 ## verification
 
 真实verifyFrontend入口接受合法fixture并继续完成运行时核验；缺失/错误dirty及inputCount、stale revision/fingerprint、不同stamp和非生产前端仍拒绝。保留fixture与真实安装包检查的边界，不构建Mac/Android、不改版本或账户源码、不写唯一包入口。提交后由独立agent复核再合入。
+
+完成：开发`f9f1188b`、独审`870d9ba3`、合入`9878c254`；主树真实CLI定向54项再次通过。独审另有22次CLI及合成verify-package链核验，不等同真实包验收。报告见`docs/plan/reviews/evolve116-release-verifier-independent.md`。原工作树唯一ignored回执已逐字节归档到`artifacts/project-evolution/evolve116-release-verifier-worktree-archive/`，没有native构建缓存。

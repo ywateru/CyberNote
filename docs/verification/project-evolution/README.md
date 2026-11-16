@@ -11,7 +11,7 @@
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
 | 114 主题 | done（模块）；主题`39662e7d`与production Store runner`9bbb8562`均已合入 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199通过，实际AgentSettings额外18状态/450文字对/0失败。runner修复`975202a9`经`bd0aaf78`独审通过，主树真实3项Store再次通过 | native-open，116承接 |
 | 115 呈现 | in-progress；基于已合入114开始 | 未执行 | 未执行 |
-| 116 整合 | 等112与115 | 未执行 | 未执行 |
+| 116 整合 | 产品联调等112与115；Android执行器准备已提交待独审，release verifier准备修复已合入 | verifier`9878c254`主54项通过、独审`870d9ba3`；不代表真实包核验。Android driver`35018fac`作者29项仅工具fixture | 最终准确包/设备未执行 |
 
 ## 分支写入边界
 
