@@ -24,6 +24,8 @@ CyberNote desktop / agent_host
 
 建议适配器落在 `crates/notes-mcp/`，复用Rust工具链，以成熟MCP SDK处理协议；宿主 `agent_host` 管理IPC和生命周期，`agent_access`管理grant与凭据引用，`application`管理业务。协议DTO可独立为无Tauri依赖的小crate，不让适配器链接整个UI宿主。
 
+stdio适配器与宿主的具体帧/端点/凭据引用约定见[本机IPC实现契约](agent-ipc.md)，业务授权和提交规则仍以本页为准。
+
 优先本机 Unix domain socket；端点放在用户私有 runtime 目录，0600，目录0700，校验 owner，拒绝符号链接替换。端点描述仅含宿主身份和 workspaceId，不把绝对数据目录当客户端授权。首版 macOS，Android 继续经既有同步获得 agent 结果；Android 不默认开启常驻 MCP 服务。
 
 ## 协议与传输
