@@ -126,6 +126,7 @@ struct Delivery {
     tool: String,
     result: ToolResult<Value>,
     args: Value,
+    visibility_generation: Mutex<Option<i64>>,
 }
 impl DeliveryGuard for Delivery {
     fn check(&self) -> ToolResult<()> {
@@ -147,16 +148,38 @@ impl DeliveryGuard for Delivery {
                 let result: MutationResult =
                     serde_json::from_value(value.clone()).map_err(ToolError::storage)?;
                 NotesApplicationService::new(&mut s).check_delivery(&self.context, &result)?;
-            } else if self.tool == "notes_read" {
-                s.store
-                    .application_note(&self.context, self.args["noteId"].as_str().unwrap_or(""))?;
-            } else if matches!(self.tool.as_str(), "notes_list" | "notes_search") {
-                if let Some(items) = value["items"].as_array() {
+            } else if matches!(
+                self.tool.as_str(),
+                "notes_read" | "notes_list" | "notes_search"
+            ) {
+                // Revalidate live authority above on EVERY transport fragment.
+                // The schema-validated SQLite triggers increment this generation
+                // on every notes/folders/attachments change. Within the same
+                // Session gate an unchanged generation preserves the successful
+                // visibility result; avoid reparsing a full document per fragment.
+                let generation = s
+                    .store
+                    .application_generation()
+                    .map_err(ToolError::storage)?;
+                let mut checked = self
+                    .visibility_generation
+                    .lock()
+                    .map_err(ToolError::storage)?;
+                if *checked == Some(generation) {
+                    return Ok(());
+                }
+                if self.tool == "notes_read" {
+                    s.store.application_note(
+                        &self.context,
+                        self.args["noteId"].as_str().unwrap_or(""),
+                    )?;
+                } else if let Some(items) = value["items"].as_array() {
                     for item in items {
                         s.store
                             .application_note(&self.context, item["id"].as_str().unwrap_or(""))?;
                     }
                 }
+                *checked = Some(generation);
             }
         }
         Ok(())
@@ -218,6 +241,7 @@ impl Service {
             tool,
             result: result.clone(),
             args,
+            visibility_generation: Mutex::new(None),
         };
         HandlerReply {
             result,

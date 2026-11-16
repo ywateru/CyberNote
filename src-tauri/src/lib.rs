@@ -15,6 +15,7 @@ mod media_permission;
 mod recording_window;
 mod session;
 mod startup;
+mod webview_profile;
 mod store;
 mod sync;
 #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
@@ -265,6 +266,8 @@ fn agent_window_reply(
     app: tauri::AppHandle,
     state: State<AppState>,
 ) -> application::ToolResult<Value> {
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+    let observed_reply = sync_e2e::agent_reply_value(&reply);
     let live = recording_window::document_participants(app.webview_windows().into_keys());
     let mut session = state.0 .0.lock().map_err(application::ToolError::storage)?;
     let result = NotesApplicationService::new(&mut session).external_reply(
@@ -274,6 +277,8 @@ fn agent_window_reply(
         &live,
     );
     drop(session);
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+    sync_e2e::agent_reply(window.label(), observed_reply, result.is_ok());
     state.0 .1.notify_all();
     result
 }
@@ -740,18 +745,23 @@ async fn import_archive(
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     #[cfg(desktop)]
-    let options = startup::Options::parse(std::env::args_os().skip(1)).unwrap_or_else(|error| {
+    let mut options = startup::Options::parse(std::env::args_os().skip(1)).unwrap_or_else(|error| {
         eprintln!("CyberNote startup rejected: {error}");
         std::process::exit(2);
     });
     #[cfg(mobile)]
-    let options = startup::Options::default();
+    let mut options = startup::Options::default();
     let mut context = tauri::generate_context!();
     #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
     sync_headless::configure(context.config_mut()).unwrap_or_else(|_| {
         eprintln!("CyberNote headless startup rejected");
         std::process::exit(2);
     });
+    let webview_profile = webview_profile::Profile::configure(&mut options, context.config_mut())
+        .unwrap_or_else(|error| {
+            eprintln!("CyberNote startup rejected: {error}");
+            std::process::exit(2);
+        });
     if options.data_dir.is_some() {
         // Do not retain permission to read the default library in custom mode.
         // The canonical selected attachments directory is granted during setup.
@@ -765,6 +775,7 @@ pub fn run() {
     #[cfg(target_os = "macos")]
     let agent_runtime_dir = options.agent_runtime_dir.clone();
     let builder = tauri::Builder::default()
+        .manage(webview_profile)
         .manage(recording_window::Recordings::default())
         .manage(apple_notes_import::Imports::default())
         .on_page_load(|webview, _payload| {
@@ -806,6 +817,8 @@ pub fn run() {
                 .ok_or_else(|| std::io::Error::other("workspace not initialized"))?;
             let root = selected.root.clone();
             let media_cache = selected.media_cache.clone();
+            app.state::<webview_profile::Profile>()
+                .create_initial_windows(app.handle())?;
             app.asset_protocol_scope()
                 .allow_directory(root.join("attachments"), true)?;
             let shared = Arc::new((
@@ -1006,6 +1019,7 @@ pub fn run() {
     let builder = builder.plugin(tauri_plugin_notes_ui::init());
     #[cfg(not(feature = "access-boundary-proof"))]
     let builder = builder.invoke_handler(tauri::generate_handler![
+        webview_profile::open_note_window,
         account::account_command,
         load_workspace,
         sync_command,
@@ -1048,6 +1062,7 @@ pub fn run() {
     ]);
     #[cfg(feature = "access-boundary-proof")]
     let builder = builder.invoke_handler(tauri::generate_handler![
+        webview_profile::open_note_window,
         account::account_command,
         load_workspace,
         sync_command,

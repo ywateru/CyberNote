@@ -587,3 +587,114 @@ async fn application_permit_survives_result_until_delivery_and_revoked_waiter_ex
     drop(next);
     f.host.stop().await.unwrap();
 }
+
+#[tokio::test]
+async fn actual_ipc_twenty_thousand_document_nodes_read_within_query_deadline() {
+    let mut f = Fixture::new();
+    f.host.set_enabled(true).await.unwrap();
+    let (record, _) = f.record("boundary-client");
+    // Same shape/hash as the independently generated native adapter fixture:
+    // 20,000 type nodes, 39,999 objects; attrs are not document nodes.
+    let document =
+        json!({"type":"doc","content":vec![json!({"type":"heading","attrs":{"level":1}});19_999]});
+    let encoded = serde_json::to_vec(&document).unwrap();
+    assert_eq!(encoded.len(), 779_987);
+    assert_eq!(
+        format!("{:x}", sha2::Sha256::digest(&encoded)),
+        "cb8343980dda85ab89f1d76c1fb7d8953d78041ee1e6f0c63277d83cc9117475"
+    );
+    let started = Instant::now();
+    let created = call(&record, "notes_create", json!({"folderId":"default","format":"document","content":document,"idempotencyKey":Uuid::new_v4().to_string()})).await;
+    eprintln!("boundary create {:?}", started.elapsed());
+    assert_eq!(created["isError"], false, "{created}");
+    let started = Instant::now();
+    let read = call(
+        &record,
+        "notes_read",
+        json!({"noteId":created["result"]["noteId"],"format":"document"}),
+    )
+    .await;
+    eprintln!("boundary read {:?}", started.elapsed());
+    assert!(started.elapsed() < Duration::from_secs(5));
+    assert_eq!(read["isError"], false, "{read}");
+    assert_eq!(read["result"]["content"], document);
+    f.host.stop().await.unwrap();
+}
+
+#[tokio::test]
+async fn delivery_generation_rechecks_visibility_and_never_caches_authority() {
+    let mut f = Fixture::new();
+    f.host.set_enabled(true).await.unwrap();
+    let (record, _) = f.record("visibility-client");
+    let created = call(&record, "notes_create", create("visibility boundary")).await;
+    let note = created["result"]["noteId"].as_str().unwrap();
+    let info = f.host.settings().unwrap().grants.remove(0);
+    let (ctx, revocation) = TrustedContext::from_verified_grant(
+        info.client_id,
+        info.grant_id,
+        info.workspace_id,
+        info.incarnation,
+        info.scopes,
+        info.folder_ids,
+        info.expires_at,
+        info.revocation,
+    )
+    .unwrap();
+    let db = rusqlite::Connection::open(f.root.join("notes.sqlite3")).unwrap();
+    for (tool, args) in [
+        ("notes_read", json!({"noteId":note})),
+        ("notes_list", json!({})),
+        ("notes_search", json!({"query":"visibility"})),
+    ] {
+        let reply = f
+            .service
+            .request(
+                ctx.clone(),
+                tool.into(),
+                args,
+                Instant::now() + Duration::from_secs(5),
+            )
+            .await;
+        let value = reply.result.as_ref().unwrap();
+        if tool != "notes_read" {
+            assert_eq!(value["items"].as_array().unwrap().len(), 1);
+        }
+        let delivery = reply.delivery.as_ref().unwrap();
+        delivery.check().unwrap();
+        delivery.check().unwrap(); // successful cached generation
+        for (deny, restore) in [
+            (
+                "UPDATE notes SET body=json_set(body,'$.locked',json('true')) WHERE id=?1",
+                "UPDATE notes SET body=json_set(body,'$.locked',json('false')) WHERE id=?1",
+            ),
+            (
+                "UPDATE notes SET folder_id='quick' WHERE id=?1",
+                "UPDATE notes SET folder_id='default' WHERE id=?1",
+            ),
+            (
+                "UPDATE notes SET body=json_set(body,'$.deletedAt',1) WHERE id=?1",
+                "UPDATE notes SET body=json_set(body,'$.deletedAt',NULL) WHERE id=?1",
+            ),
+        ] {
+            db.execute(deny, [note]).unwrap();
+            assert_eq!(delivery.check().unwrap_err().code, "NOT_FOUND", "{tool}");
+            db.execute(restore, [note]).unwrap();
+            delivery.check().unwrap();
+        }
+    }
+    let reply = f
+        .service
+        .request(
+            ctx,
+            "notes_read".into(),
+            json!({"noteId":note}),
+            Instant::now() + Duration::from_secs(5),
+        )
+        .await;
+    let delivery = reply.delivery.as_ref().unwrap();
+    delivery.check().unwrap();
+    revocation.revoke(); // SQLite generation is unchanged; authority must still fail.
+    assert_eq!(delivery.check().unwrap_err().code, "UNAUTHORIZED");
+    drop(reply);
+    f.host.stop().await.unwrap();
+}

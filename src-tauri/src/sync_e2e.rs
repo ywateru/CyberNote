@@ -75,6 +75,43 @@ static PAGE: Mutex<PageState> = Mutex::new(PageState {
 });
 static PAGE_CHANGED: Condvar = Condvar::new();
 static READY_ACCEPTED: AtomicBool = AtomicBool::new(false);
+static AGENT_REPLIES: Mutex<Vec<Value>> = Mutex::new(Vec::new());
+
+pub(crate) fn agent_reply_value(reply: &crate::application::WindowReply) -> Value {
+    use crate::application::WindowReply;
+    match reply {
+        WindowReply::Probe {
+            operation_id,
+            protected_note_ids,
+            unsaved_note_ids,
+            blocked,
+        } => {
+            json!({"phase":"probe","operationId":operation_id,"protectedNoteIds":protected_note_ids,"unsavedNoteIds":unsaved_note_ids,"blocked":blocked})
+        }
+        WindowReply::Prepare {
+            operation_id,
+            ready,
+        } => json!({"phase":"prepare","operationId":operation_id,"ready":ready}),
+        WindowReply::Release {
+            operation_id,
+            refreshed,
+        } => json!({"phase":"release","operationId":operation_id,"refreshed":refreshed}),
+    }
+}
+
+pub(crate) fn agent_reply(label: &str, reply: Value, accepted: bool) {
+    if std::env::var("NOTES_SYNC_E2E").as_deref() != Ok("1")
+        || serde_json::to_vec(&reply).map_or(true, |bytes| bytes.len() > 8192)
+    {
+        return;
+    }
+    if let Ok(mut replies) = AGENT_REPLIES.lock() {
+        if replies.len() == 256 {
+            replies.remove(0);
+        }
+        replies.push(json!({"window":label,"reply":reply,"accepted":accepted}));
+    }
+}
 
 /// Wire from the existing main on_page_load callback under the module cfg.
 /// The native lifecycle is observed before any JS eval is permitted.
@@ -130,6 +167,8 @@ enum Action {
     // unit variant would silently ignore them even with deny_unknown_fields.
     StartupDiagnostic {},
     AccountSdkDiagnostic {},
+    WebviewStorageDiagnostic {},
+    AgentDiagnostic {},
     Execute {
         command: String,
         #[serde(default = "empty_object")]
@@ -429,6 +468,21 @@ fn dispatch_once(
 ) -> Value {
     let id = json!(request.id);
     let body = match &request.action {
+        Action::AgentDiagnostic {} => {
+            return match AGENT_REPLIES.lock() {
+                Ok(replies) => json!({"type":"response","id":request.id,"ok":true,"value":replies.clone()}),
+                Err(_) => error(id, "UNAVAILABLE"),
+            };
+        }
+        Action::WebviewStorageDiagnostic {} => {
+            #[cfg(target_os = "macos")]
+            return match crate::webview_profile::diagnostic(app) {
+                Ok(value) => json!({"type":"response","id":request.id,"ok":true,"value":value}),
+                Err(_) => error(id, "WEBVIEW_STORAGE_UNAVAILABLE"),
+            };
+            #[cfg(not(target_os = "macos"))]
+            return error(id, "UNAVAILABLE");
+        }
         Action::AccountSdkDiagnostic {} => {
             return match crate::account::sdk_diagnostic::snapshot() {
                 Ok(value) => json!({"type":"response","id":request.id,"ok":true,"value":value}),
@@ -591,6 +645,20 @@ fn dispatch_once(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn native_storage_and_ack_diagnostics_are_fixed_and_require_ready() {
+        for op in ["webviewStorageDiagnostic", "agentDiagnostic"] {
+            let request: Request =
+                serde_json::from_value(json!({"id":1,"action":{"op":op}})).unwrap();
+            assert!(!allowed_before_ready(&request.action));
+            for field in ["expression", "label", "args", "path"] {
+                let mut value = json!({"id":1,"action":{"op":op}});
+                value["action"][field] = json!("arbitrary");
+                assert!(serde_json::from_value::<Request>(value).is_err());
+            }
+        }
+    }
 
     #[test]
     fn owned_slot_focus_follows_presentation_once_and_never_hides_failure() {

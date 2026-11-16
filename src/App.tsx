@@ -99,7 +99,6 @@ import {
 } from "./attachment-target";
 import { exit } from "@tauri-apps/api/app";
 import { getCurrentWindow, type CloseRequestedEvent } from "@tauri-apps/api/window";
-import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import {
   ChevronDown,
@@ -2260,14 +2259,7 @@ function App() {
     try {
       await flush();
       if (quitState.current) return;
-      new WebviewWindow(`note-${Date.now()}`, {
-        url: `index.html?note=${n.id}`,
-        title: n.title,
-        width: 640,
-        height: 600,
-        titleBarStyle: "overlay",
-        hiddenTitle: true,
-      });
+      await invoke("open_note_window", { noteId: n.id, title: n.title });
     } catch (e) {
       fail(e);
     }
