@@ -128,3 +128,62 @@ git diff --check
 ```
 
 4项契约测试、8项传输 harness 全部通过，后者包含13项真实 stdio/Unix fixture（30.360秒）。release 构建通过（0.23秒，生产代码未改），对 release 的实际 service fixture 12例成功及12例 scope error 回放通过（0.831秒）。可执行 SHA-256 仍为 `3f623265f1b675cc7f3d3ea8c0dcb549fb923c9e40e0498f38d66b577a1f19a6`。fmt/Clippy/diff 检查通过。无 schema 放宽、无宿主/前端/契约/包锁更改。
+
+## 独审 F1 修复：document 节点与 depth 对齐（2026-11-17）
+
+独审基线为 `a84e36ff0e3509941f1281f14ea5b2e8c1417932` 的报告。此次仅修 adapter 的共享正文资源遍历，增加对应回归/生成器/fixture 并更新作者说明；没有修改独审报告、任务状态、111、host、根依赖或其他工作树。此处是作者修复证据，仍待独立复核。
+
+`schema::bounded_content` 原先把每个 object 都计节点，并以容器深度 `<64` 截断，错误收缩公开契约。现在逐项对照真实 `application/document.rs::input_document`：根深度0，所有 JSON 值（含标量、空容器）深度 `<=64`；只有包含 `type` 字段的对象计入20,000节点（包括 mark）；无 `type` 的 attrs/stroke 等辅助对象不计节点。create/update 输入与 notes_read 输出继续共用此函数。1 MiB UTF-8/紧凑 JSON 正文、2 MiB含换行帧限制、20,000 cap、严格工具 schema 与宿主业务 schema 验证责任均保留。
+
+### 原始独立失败及修复后原样复跑
+
+保持以下独立文件和旧二进制字节不变：
+
+| 文件 | SHA-256 |
+| --- | --- |
+| `/tmp/evolve112-actual-node-boundary.json` | `5966d0b580c459ba02e814f93853ba870a371674c9100372130bb7f12b1e1396` |
+| `/tmp/evolve112-f1-probe.py` | `b4c3585bda2fcedfd2032828b7eb6e6a949183e750fe6781b21122c854a8b6b6` |
+| `/tmp/evolve112-independent.py` | `256718a811f6c4b4564adbd4d167e49507e81849fda0970b621c435c7a16a942` |
+| `/tmp/evolve112-independent-release.py` | `4ac34e96507d17ab891b846309d42db2c118a6aa39d779224754f982fdde0b9e` |
+| `/tmp/evolve112-f1-original-cybernote-mcp` | `3f623265f1b675cc7f3d3ea8c0dcb549fb923c9e40e0498f38d66b577a1f19a6` |
+
+```sh
+python3 -B /tmp/evolve112-f1-probe.py --binary /tmp/evolve112-f1-original-cybernote-mcp --expect blocked
+python3 -B /tmp/evolve112-f1-probe.py --binary /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/target/release/cybernote-mcp --expect pass
+```
+
+两条均退出0。旧二进制 create 在发 IPC 前拒绝、read 在收到一次 IPC 后拒绝，均 CONTENT_TOO_LARGE。修复后 create/read 均成功，与独立真实 service DTO 逐值相等，累计 IPC 请求分别1/2。文档仍为20,000个含 type 对象、39,999个总 object、779,987字节；紧凑有序 JSON SHA-256 为 `cb8343980dda85ab89f1d76c1fb7d8953d78041ee1e6f0c63277d83cc9117475`。
+
+### 正式跨模块回归与来源
+
+新增 `tests/native/document_boundary.rs` 和 `tests/generate_document_boundary.py`：从本仓库只读 Git 对象提取固定111 production commit `eb9cee7d3ad1bf90a317ce9c286c653094512f90` 到临时目录，仅追加作者测试模块，调用真实生产 harness/Session/SQLite。没有运行或修改111工作树，没有替换业务实现，不使用主 Tauri target。目标为 `/tmp/evolve112-adapter-native-boundary-target`。
+
+定向真实 service 测试1 passed（201 filtered，6.50秒），验证：
+
+- 20,000节点/779,987字节原形 heading 文档真实 create、update 至 revision2、document read 完全相等。
+- doc→30层 blockquote→drawing 的合法文档，空 strokes 辅助 array 位于 JSON depth64；真实 create/update/read 全部成功。该边界可捕获原 adapter 对 depth64 空容器的误拒绝。
+- 20,001节点和标量位于 depth65 的合法 Editor 形状，真实 create/update 均 SCHEMA_INVALID；已有笔记数、版本及完整内容保持不变。
+- 单独通过真实 input_document 检查 depth64/65 的 null/object/array 叶值，以及含 type 的 mark 20,000/20,001计数。这些 `resourceCases` 仅证明资源遍历一致，不声称通过完整业务 schema。
+
+生成的6组 create/update/read 原 arguments/result 和单独标注的 resourceCases 写入 `tests/fixtures/document-boundary.json`（紧凑 JSON，3,430,296字节）。fixture SHA-256 `b5dd8d3bbfbb6eea07f17f268d8038918aae18510f134f7f9ace2544156595e1`。同目录 `document-boundary.source.json` 保留固定 source commit、document.rs Git blob `9b5133bef03c50bdc4d38875a906a3ddd0c39401`、生成测试 SHA-256 及 fixture SHA-256。重新生成会更新随机 ID 与 fixture 指纹。
+
+正式 `tests/document_contract.rs` 增加3项测试，逐例检查实际 service 的严格 input/output schemas、正文资源检查和20,001/depth65拒绝。stdio suite 增加3项：6组实际 DTO 原样往返、create/update超界零 IPC及read超界收到一次 IPC后拒绝、与 native resourceCases 对照。成功和错误均检查 structuredContent 与 JSON text 等值；fixture/生成测试指纹也在 suite 验证。
+
+### 本轮实际执行
+
+```sh
+python3 -B crates/notes-mcp/tests/generate_document_boundary.py
+cargo fmt --manifest-path crates/notes-mcp/Cargo.toml -- --check
+rustfmt --edition 2021 --check crates/notes-mcp/tests/native/document_boundary.rs
+cargo clippy --manifest-path crates/notes-mcp/Cargo.toml --locked --all-targets -- -D warnings
+cargo test --manifest-path crates/notes-mcp/Cargo.toml --locked -- --nocapture
+cargo build --manifest-path crates/notes-mcp/Cargo.toml --locked --release
+python3 -B crates/notes-mcp/tests/stdio_fixture.py crates/notes-mcp/target/release/cybernote-mcp StdioFixture.test_application_service_fixture_cross_module StdioFixture.test_actual_document_boundary_create_update_read StdioFixture.test_document_over_node_and_depth_limits_rejected_both_directions StdioFixture.test_resource_walk_agrees_with_native_without_claiming_schema_validity
+git diff --check
+```
+
+最终检查均退出0：fmt/Clippy通过；Rust 15项通过（3 document + 4 query + 8 transport），其中 transport 启动的16项 stdio suite 全过（32.893秒）；release 构建16.51秒，4项跨模块/边界回放全过（1.788秒）。native 生成测试仅有2条 production harness 既有 unused-import 警告。首次 fmt check 提示新增测试换行格式，已格式化后通过，未忽略检查失败。
+
+额外使用 importlib 加载两个未改动的 independent 脚本，各运行13项非 F1 旧边界用例：debug 13 passed（2.605秒）、release 13 passed（2.441秒），覆盖准确 bytes/frame、严格 schema、撤销引用/端点替换、取消等。明确排除 `test_ind_exact_depth_and_object_count`：它仍断言旧的容器深度和“任意 object 算节点”，与本次必须修复的公开业务规则冲突；没有修改独立脚本，也不声称其原14项全过。该项由上述实际 native 节点/depth 正反边界替代。
+
+当前 release arm64 可执行 SHA-256：`0d662506f19c51f08ce88637b12a5833812fb2a573cc16324db9edf3fe968f17`。完整原生生成日志在 `/tmp/evolve112-adapter-native-boundary-author.log`。这仍是实际 service 产物的跨模块回放；未运行真实 host→service 连线、真实 WebView/设备或用户资料库，不宣告112/116集成验收通过。

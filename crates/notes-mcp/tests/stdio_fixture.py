@@ -19,6 +19,8 @@ KEY = "00000000-0000-4000-8000-000000000001"
 QUERY_SUCCESS = json.loads((Path(__file__).parent / "fixtures" / "query-success.json").read_text())
 SERVICE_FIXTURE_PATH = Path(__file__).parent / "fixtures" / "service-success.json"
 SERVICE_SUCCESS = json.loads(SERVICE_FIXTURE_PATH.read_text())
+DOCUMENT_FIXTURE_PATH = Path(__file__).parent / "fixtures" / "document-boundary.json"
+DOCUMENT_BOUNDARY = json.loads(DOCUMENT_FIXTURE_PATH.read_text())
 SCOPE_ERROR = {"code": "FORBIDDEN", "message": "Synthetic grant scope denied", "retryable": False}
 ERROR = QUERY_SUCCESS["ToolError"]
 SUMMARY = dict(id="note", folderId="folder", title="Fixture", preview="中文", createdAt=1,
@@ -231,6 +233,57 @@ class StdioFixture(unittest.TestCase):
                 self.assertTrue(result["isError"])
                 self.assertEqual(result["structuredContent"], SCOPE_ERROR)
         self.assertEqual(len(self.requests), len(cases) * 2)
+
+    def test_actual_document_boundary_create_update_read(self):
+        source = json.loads(DOCUMENT_FIXTURE_PATH.with_suffix(".source.json").read_text())
+        self.assertEqual(hashlib.sha256(DOCUMENT_FIXTURE_PATH.read_bytes()).hexdigest(), source["sha256"])
+        self.assertEqual(hashlib.sha256((Path(__file__).parent / "native" / "document_boundary.rs").read_bytes()).hexdigest(), source["generatorSha256"])
+        doc = DOCUMENT_BOUNDARY["cases"][0]["arguments"]["content"]
+        raw = json.dumps(doc, sort_keys=True, separators=(",", ":")).encode()
+        self.assertEqual(len(raw), 779987)
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), "cb8343980dda85ab89f1d76c1fb7d8953d78041ee1e6f0c63277d83cc9117475")
+        for case in DOCUMENT_BOUNDARY["cases"]:
+            with self.subTest(tool=case["tool"]):
+                self.output_override = case["result"]
+                result = self.call(case["tool"], case["arguments"])
+                self.assertFalse(result["isError"])
+                self.assertEqual(result["structuredContent"], case["result"])
+                self.assertEqual(self.requests[-1]["arguments"], case["arguments"])
+        self.assertEqual(len(self.requests), 6)
+
+    def test_document_over_node_and_depth_limits_rejected_both_directions(self):
+        cases = DOCUMENT_BOUNDARY["cases"]
+        too_many = copy.deepcopy(cases[0]["arguments"]["content"])
+        too_many["content"].append({"type": "heading", "attrs": {"level": 1}})
+        too_deep = {"type": "paragraph"}
+        for _ in range(31):
+            too_deep = {"type": "blockquote", "content": [too_deep]}
+        too_deep = {"type": "doc", "content": [too_deep]}
+        for invalid in [too_many, too_deep]:
+            for case in cases[:2]:
+                count = len(self.requests)
+                result = self.call(case["tool"], dict(case["arguments"], content=invalid))
+                self.assertTrue(result["isError"])
+                self.assertEqual(result["structuredContent"]["code"], "CONTENT_TOO_LARGE")
+                self.assertEqual(len(self.requests), count)
+            self.output_override = dict(cases[2]["result"], content=invalid)
+            count = len(self.requests)
+            result = self.call("notes_read", cases[2]["arguments"])
+            self.assertTrue(result["isError"])
+            self.assertEqual(result["structuredContent"]["code"], "CONTENT_TOO_LARGE")
+            self.assertEqual(len(self.requests), count + 1)
+
+    def test_resource_walk_agrees_with_native_without_claiming_schema_validity(self):
+        # Only resource filtering is compared here. A real host still validates
+        # document envelopes/attributes and rejects malformed business documents.
+        for case in DOCUMENT_BOUNDARY["resourceCases"]:
+            args = dict(INPUTS["notes_create"], format="document", content=case["content"])
+            count = len(self.requests)
+            result = self.call("notes_create", args)
+            self.assertEqual(not result["isError"], case["accepted"])
+            self.assertEqual(len(self.requests), count + int(case["accepted"]))
+            if result["isError"]:
+                self.assertEqual(result["structuredContent"]["code"], "CONTENT_TOO_LARGE")
 
     def test_canonical_query_dtos_keep_strict_output_validation(self):
         capabilities = self.call("notes_get_capabilities")["structuredContent"]

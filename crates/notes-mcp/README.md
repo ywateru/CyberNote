@@ -39,7 +39,7 @@ macOS 默认 runtime 为 OS 账户数据库中当前有效用户 home 下的 `Li
 
 九工具：`notes_get_capabilities`、`notes_list_folders`、`notes_list`、`notes_search`、`notes_read`、`notes_create`、`notes_append`、`notes_update`、`notes_get_operation`。
 
-每个 input 是 `additionalProperties: false` 的 object；output 是 `type: object`、`oneOf: [成功 DTO, ToolError]`，在运行时校验，`isError` 必须与 ToolError 分支一致。成功 DTO 和 ToolError 的元数据对象均拒绝额外字段。唯一开放的业务对象是契约定义的 `document` 正文，由真实宿主的应用 schema 完整验证。适配器检查 document/text 格式与类型对应、1 MiB UTF-8 或紧凑 JSON 字节、64 层容器和最多 20,000 个对象节点；对象计数包含 attrs 等辅助对象，较业务节点计数更保守。
+每个 input 是 `additionalProperties: false` 的 object；output 是 `type: object`、`oneOf: [成功 DTO, ToolError]`，在运行时校验，`isError` 必须与 ToolError 分支一致。成功 DTO 和 ToolError 的元数据对象均拒绝额外字段。唯一开放的业务对象是契约定义的 `document` 正文，由真实宿主的应用 schema 完整验证。适配器检查 document/text 格式与类型对应、1 MiB UTF-8 或紧凑 JSON 字节，并与原生 `input_document` 逐项对齐资源遍历：根深度0，所有 JSON 值（包括标量）深度最多64；仅含 `type` 字段的对象计入20,000节点（含 mark），无 `type` 的 attrs/stroke 等辅助对象不计节点，仍受 bytes/depth/frame 限制。create/update 输入与 document read 输出使用同一检查。
 
 `limit` 为 1–100（默认20），query 为 1–512 Unicode 字符。适配器额外约束：ID 1–1024 字符、不透明版本/cursor 1–8192 字符、最多100个 tag（各1–512字符）。不插入默认值、不改写正文或幂等键，验证后 arguments 原样转发；省略默认值由宿主执行。正文超限不截断。预览/片段最大240字符；text 响应最多32 KiB UTF-8；document 不允许分页或截断；list/search/folders 的结果 JSON 最大512 KiB。宿主仍需执行更严格的 Store/业务限制、正文投影及授权。
 
@@ -93,6 +93,16 @@ git -C /Users/water/work/2026/Apple-Notes-Clone-evolve111 show 868c6dcf960cb3c92
 ```
 
 111的 provenance 表明源 fixture 由真实 NotesApplicationService 经临时 production Session/SQLite 生成，但窗口回复是 native test inputs。适配器本轮仅回放该 fixture，不将其称为运行中真实宿主、WebView 或业务授权验收；本轮没有修改111或宿主 scope/ServerError 实现。
+
+`tests/fixtures/document-boundary.json` 增补节点/depth 边界：在固定 production commit `eb9cee7d3ad1bf90a317ce9c286c653094512f90` 的隔离归档内运行真实 Session/SQLite，取得20,000节点/779,987字节文档及合法 depth 64 drawing 文档的 create/update/read 六组实际 DTO。另行标注的 resourceCases 只对照原生资源遍历，不能当作合法业务文档。来源、生成测试和 fixture 的 SHA-256 记录在 `document-boundary.source.json`。正式 Rust 与 stdio suite 原样消费该 fixture，同时拒绝20,001节点和 depth 65 的输入/输出。
+
+可复跑生成检查（仅提取 Git 对象到新临时目录，使用 `/tmp/evolve112-adapter-native-boundary-target`，不操作111工作树或主 Tauri target；重新生成会更新带随机 ID 的 fixture 及其来源指纹）：
+
+```sh
+python3 -B crates/notes-mcp/tests/generate_document_boundary.py
+cargo test --locked --manifest-path crates/notes-mcp/Cargo.toml --test document_contract
+python3 -B crates/notes-mcp/tests/stdio_fixture.py crates/notes-mcp/target/release/cybernote-mcp StdioFixture.test_actual_document_boundary_create_update_read StdioFixture.test_document_over_node_and_depth_limits_rejected_both_directions StdioFixture.test_resource_walk_agrees_with_native_without_claiming_schema_validity
+```
 
 宿主负责所有工具权限、locked/trash/范围过滤、search 语义、分页与版本、文档节点/附件归属、有损覆盖保护、CAS/窗口协调、原子提交、持久幂等及重新交付前撤销复核。适配器不将 fixture 的模拟回执解释为真实提交。
 

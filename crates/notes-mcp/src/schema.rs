@@ -244,7 +244,10 @@ pub fn definitions() -> Vec<Definition> {
         })
         .collect()
 }
-/// UTF-8 byte, JSON container-depth and document-node limits supplement JSON Schema.
+/// Match application::document::input_document: root depth zero, every JSON value
+/// at depth <= 64, and only objects containing `type` count toward maxNodes.
+/// Attribute/stroke objects without `type` still consume byte/depth/frame budgets.
+/// The host remains responsible for validating the actual document schema.
 pub fn bounded_content(value: &Value) -> bool {
     let bytes = if let Some(s) = value.as_str() {
         s.len()
@@ -257,20 +260,19 @@ pub fn bounded_content(value: &Value) -> bool {
     let mut stack = vec![(value, 0usize)];
     let mut nodes = 0;
     while let Some((v, depth)) = stack.pop() {
-        if v.is_object() || v.is_array() {
-            if depth >= 64 {
+        if depth > 64 {
+            return false;
+        }
+        if v.get("type").is_some() {
+            nodes += 1;
+            if nodes > 20_000 {
                 return false;
             }
-            if let Some(o) = v.as_object() {
-                nodes += 1;
-                if nodes > 20_000 {
-                    return false;
-                }
-                stack.extend(o.values().map(|v| (v, depth + 1)));
-            }
-            if let Some(a) = v.as_array() {
-                stack.extend(a.iter().map(|v| (v, depth + 1)));
-            }
+        }
+        match v {
+            Value::Object(o) => stack.extend(o.values().map(|v| (v, depth + 1))),
+            Value::Array(a) => stack.extend(a.iter().map(|v| (v, depth + 1))),
+            _ => (),
         }
     }
     true

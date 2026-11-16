@@ -160,9 +160,10 @@ fn strict_schemas_and_unicode_content_limits() {
     for _ in 0..64 {
         deep = json!({"child":deep});
     }
-    assert!(!schema::bounded_content(&deep));
+    assert!(schema::bounded_content(&deep));
+    assert!(!schema::bounded_content(&json!({"child":deep})));
     assert!(!schema::bounded_content(
-        &json!({"content":vec![json!({});20_000]})
+        &json!({"type":"doc","content":vec![json!({"type":"paragraph"});20_000]})
     ));
 }
 #[test]
