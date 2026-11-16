@@ -62,6 +62,8 @@ macOS Unix socket路径长度受限，宿主使用短basename（例如workspace/
 
 运行中的`HostSettings.enabled`反映实际listener/鉴权状态，不能仅根据偏好文件宣称已启用。启动或持久化失败显式报告，保留可重试状态；启用失败不留下可接受请求却显示关闭的端点。偏好记录严格绑定workspace/incarnation，使用与grant相同的私有文件/原子替换约束。资料库恢复或incarnation轮换时先停止旧宿主、撤销旧context并退役其本机授权状态；新身份默认关闭，不能继承旧启用许可或grant。
 
+macOS宿主提供可选`--agent-runtime-dir <absolute-private-directory>`，用于短socket路径和隔离运行；其选择、严格路径校验和失败语义与HostConfig一致，未知/重复/缺值显式报错，不回退其他目录。`--data-dir`仍仅负责应用资料库；验证时同时指定两者，避免隔离笔记实例把测试grant写入日常runtime。侧车配置的`--runtime-dir`必须与该宿主实际目录一致。
+
 装配只持有同一AppState中的Session。共享RequestLimits在取得Session锁前准入，permit覆盖等待/提交/交付；任何窗口等待、event发送或网络IO均不得持有Session锁。取消必须收尾本operation，提交后的断连不得被解释为回滚。真实窗口集合、metadata先于release、刷新ACK及补偿按application协议执行，不接入伪同步计划。
 
 ## MCP适配器行为
