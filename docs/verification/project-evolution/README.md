@@ -7,7 +7,7 @@
 | 任务 | 实现状态 | 独立验证 | 最终运行 |
 | --- | --- | --- | --- |
 | 111 应用服务 | 原生与窗口前端均已独审合入；动画测量测试修复也已独审合入 | 两阶段MODULE_SOURCE_PASS；native HEAD`892f9751`197项/typecheck/11390，window HEAD`79241c09`54/38/sync34/nav41，脚本修复HEAD`ce663ade`原11390通过；独审另含12恢复+13空目标组合 | integration-open |
-| 112 MCP | 适配器/宿主/独立UI均已合入；实际宿主与Preferences入口装配中 | 三模块MODULE_SOURCE_PASS；host HEAD`371469dd`23项、UI HEAD`f750b848`typecheck/12组、adapter HEAD`efd8ac6e`完整suite/release/F1合入检查通过 | integration-open；Codex CLI 0.167.0初始化/九工具/直接fixture能力调用通过，真实资料库业务待验 |
+| 112 MCP | 三模块已合入；真实宿主/Preferences装配提交`4ceb15e9`等待独审，未合入 | 三模块MODULE_SOURCE_PASS；装配作者完整native400/0/5（大文档增量前）、最终service11通过、真实WK隔离3项与最终大文档/Codex定向6项通过；范围见装配报告 | independent-review-open；已实际Codex CLI 0.167.0九工具→真实宿主/SQLite/WebView，尚非最终包 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
 | 114 主题 | done（模块）；主题`39662e7d`与production Store runner`9bbb8562`均已合入 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199通过，实际AgentSettings额外18状态/450文字对/0失败。runner修复`975202a9`经`bd0aaf78`独审通过，主树真实3项Store再次通过 | native-open，116承接 |
 | 115 呈现 | in-progress；基于已合入114开始 | 未执行 | 未执行 |
@@ -39,7 +39,9 @@
 
 Store runner现直接使用production core harness，尊重独立CARGO_TARGET_DIR。初版`96272cc6`经独审`8f79c122`在临时fixture中发现“已有symlink父目录+尚不存在后缀”可绕过禁止共享Tauri target的检查；未触碰真实共享target。修复`975202a9`解析最近已存在祖先及缺失后缀，经`bd0aaf78`独审6个独立/10个作者路径边界及真实3项Store通过，`9bbb8562`合入后主树再跑3项通过。原失败保留；未重复376/core199，115现已解锁。
 
-112装配checkpoint`5eccb9f6`仅WIP：真实IPC→Service→SQLite九项通过，窗口仍协议输入；全native一次396通过/1失败/5 worker，64MiB同步阶段失败正在定位与baseline对照。已将主线已审window注入装配树，后续实际App/WebView与Codex读写另留证，未把WIP当作最终交付。
+112装配早期checkpoint`5eccb9f6`仅WIP：真实IPC→Service→SQLite九项通过，窗口仍协议输入；全native一次396通过/1失败/5 worker，64MiB同步阶段失败当时待定位与baseline对照。随后注入主线已审window并开展下述实际App/WebView与Codex读写，未把早期WIP当作最终交付。
+
+112装配现提交`4ceb15e9`供独审：作者在独立bundle/真实WK隔离候选完成27项真实业务全组，覆盖跨窗刷新ACK、CAS、授权撤销、幂等重启、保存失败/owner保护及incarnation轮换；PM组字、tone录音与picker/OCR分别明确为受控输入，不冒充真实IME/物理Mic/识别。最终候选在大文档交付优化后另跑WK3项与业务6项（含真实Codex九工具），没有把旧27项计作新候选重跑。20k-node真实read超时由逐片重复反序列化引起，修为单次交付按SQLite generation复核可见性、每片仍复核实时授权；service11通过，独审重点复核该边界。64MiB原失败保留，固定baseline与integration串行通过；仅测试使用既有协议时钟及有界IO等待，产品5秒期限不变，完整native随后400/0/5。Clippy的account never_loop在固定baseline同样失败，如实保留。报告在integration分支`docs/verification/evolve112-integration.md`，合入后成为主树入口；这些作者事实尚不授予SOURCE_PASS或116完成。
 
 ## 最终证据要求
 
