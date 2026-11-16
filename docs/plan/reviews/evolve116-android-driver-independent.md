@@ -53,3 +53,32 @@ Expected values to be strictly equal: actual 'parked', expected 'current'
 审查前后源码校验依据：`git ls-tree -r HEAD src src-tauri | shasum -a 256` 为 `bd64139fb0efd35209c1925a4ae7c3f06b871e52757f3a0a857296254a20f32b`。driver SHA-256 为 `9233c71d27f3bf4cbc5249567bb468e199768c88647c77fb0ec460e4057a8fe0`，作者 test 为 `925e8e42c97274faaa2f3212d82000598db972a43d196bf18936d638393dffc6`；工作树差异仅本报告。
 
 本次没有构建、启动 App、boot/安装、执行真实 adb、操作手机或原库、使用共享 target。作者的 fake executable/fake protocol server 也仅为隔离测试。准确 APK、真实多客户端同步、原生 IME/Back/旋转/手势、FORMAT102 及最终 release APK 均仍 OPEN；debuggable/CDP 工具通过不能替代这些门槛。修复并复核 readUI 后才能将工具模块改为 PASS，115 正式独审等待其开发提交。
+
+## 2026-11-17 增量复核：readUI P2 已闭合
+
+复核修复提交 `c9d0b328f1b980232b19ba214fbeec6a26d6eea1`，基于原独审提交 `b8c7afb6374824a225054cb8627d0deb6f5ec8f4`。**当前工具模块结论：PASS；未发现新增 P1/P2 blocking 或 nonblocking；native acceptance 仍 OPEN。** 上文 BLOCKED 结论、原失败输出及原探针保持为历史证据，本节为最新结论。
+
+修复仅修改 driver、其定向测试和作者说明。[driver:270](../../../scripts/verification/evolve116-android-driver.mjs#L270)现在枚举 `.tiptap`，排除断开节点、hidden/inert 宿主、不可见 computed visibility、任一祖先的 display:none/零 opacity，以及无正宽高矩形的候选。无候选返回 `editor:null`；多个候选在读取任何 Editor 状态之前返回计数，由外层转换为 `UI_EDITOR_AMBIGUOUS`，沿既有 operation 失败路径停止 session。不根据 noteId 或 focus 猜测目标。唯一候选才提供正文、选区及焦点。
+
+独立探针沿用上一轮自己的 fake transport，在新的临时文件中补全查询/样式/矩形语义，并执行修复后的原始观测表达式；没有调用作者 fixture 或预设 readUI 返回值。结果 **4/4 pass**：
+
+1. 原失败场景重新验证：隐藏/inert `parked` 在前、可见 `current` 在后，现在返回 `current` 的完整正文、selection 和 focus。被排除 Editor 的状态 getter 若被访问会直接失败。
+2. 补查嵌套 hidden/inert、跨两层宿主零 opacity、display:none、visibility:collapse、空/零面积矩形和断开节点；唯一可见候选即使未聚焦、首个矩形为零而后续矩形有效，仍正确返回，且不泄露内部 `editorCount`。
+3. 无 Editor 或只剩隐藏宿主时返回 null，保留 viewport；之后出现唯一可见 Editor 可继续读取，session 未被误停。
+4. 两个同 noteId、仅一个 focused 的可见 Editor 仍拒绝歧义，未读取任一正文/选区/focus getter；随后 Back 与再次 readUI 均为 `SESSION_STOPPED`，没有 CDP/OS 输入。
+
+证据目录：`/tmp/evolve116-independent-incremental-yx7f_mba/`，文件 `readui-probes.test.mjs`、`readui-probes.tap`。关键输出为 `CLOSED_ORIGINAL_P2 {"noteId":"current","document":{"type":"doc","content":[{"type":"paragraph","text":"current"}]},"selection":{"anchor":3,"head":8},"focused":true}`。原目录 `/tmp/evolve116-independent-W1xn2F/` 未覆盖；原 probe/test 日志 SHA-256 分别仍为 `efff4e4fbaa7514e0fba4738b97cd591992cf5ad612256c4fd85ba29e7a0c8fc`、`98b3f6362847e3725fba4216b65da867c81ebf20a8ba59f63e5a28ea78f2b76d`。
+
+实际命令与结果（Node `v22.16.0`）：
+
+| 命令 | 实际结果 |
+| --- | --- |
+| `node --check scripts/verification/evolve116-android-driver.mjs` | exit 0 |
+| `node --check scripts/verification/evolve116-android-driver.test.mjs` | exit 0 |
+| `node --test --test-reporter=spec scripts/verification/evolve116-android-driver.test.mjs` | exit 0；31/31 pass，0 fail/cancelled/skipped；约 1.48 s |
+| `node --test /tmp/evolve116-independent-incremental-yx7f_mba/readui-probes.test.mjs` | exit 0；4/4 pass，0 fail/cancelled/skipped |
+| `git diff --check c9d0b328^ c9d0b328` | exit 0，无输出 |
+| `git diff HEAD --exit-code -- src src-tauri scripts docs/verification` | exit 0，无输出 |
+| `git diff --check`、`git diff --cached --check`、报告链接检查 | exit 0；报告 7 个相对链接的文件及行号均有效 |
+
+产品源码树摘要仍为 `bd64139fb0efd35209c1925a4ae7c3f06b871e52757f3a0a857296254a20f32b`。本次修复后 driver/test SHA-256 分别为 `632eedb646cd7efeae85218d117fb3f7a326c2a31c5326f3880f6398b3185276`、`ecd11615ae391418e5c4105c3a466f85eb34dec16fc7a371843b78b29d4ecf4b`；独审仅追加本报告。未重跑未变的 lifecycle 测试，未构建、启动 App、触真实 adb/设备/原库或共享 target。全部新增验证仍是工具层 fake transport/DOM 语义验证，不能证明准确 release APK、IME/FORMAT102 或最终设备功能；115 正式独审继续等待开发提交。
