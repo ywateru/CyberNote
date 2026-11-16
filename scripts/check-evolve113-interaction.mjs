@@ -123,7 +123,27 @@ try {
  const row='.note-row[data-note-id="note-a"]';
  await touch(p,row,'touchstart',140);await touch(p,row,'touchmove',50);await touch(p,row,'touchend',50);
  check('two-column horizontal touch never shifts a card',await p.locator(row).evaluate(e=>getComputedStyle(e).transform==='none'));
- const more=p.getByRole('button',{name:'更多操作：Fixture A',exact:true});const box=await more.boundingBox();
+ const more=p.getByRole('button',{name:'更多操作：Fixture A',exact:true});
+ // page-in's ancestor translation can round a computed 44px box below 44px.
+ // Wait for this target pane's finite animation, not a delay or all animations.
+ const pageIn=await more.evaluate(async target=>{
+  const pane=target.closest('.notes-pane');
+  if(!pane)throw Error('More target has no notes-pane');
+  const active=()=>pane.getAnimations().filter(a=>a.animationName==='page-in'&&a.effect?.target===pane&&a.playState!=='finished'&&a.playState!=='idle');
+  const animations=active();
+  if(animations.some(a=>!Number.isFinite(a.effect.getComputedTiming().endTime)))throw Error('Target page-in must be finite');
+  let deadline;
+  try{
+   await Promise.race([
+    Promise.all(animations.map(a=>a.finished.catch(error=>{if(error.name!=='AbortError')throw error;}))),
+    new Promise((_,reject)=>{deadline=setTimeout(()=>reject(Error('Target page-in did not finish or cancel within 2s')),2000);}),
+   ]);
+  }finally{clearTimeout(deadline);}
+  if(!target.isConnected||target.closest('.notes-pane')!==pane||active().length)throw Error('Target pane changed or page-in restarted before measurement');
+  return {waited:animations.length,states:animations.map(a=>a.playState),transform:getComputedStyle(pane).transform};
+ });
+ const box=await more.boundingBox();
+ geometry.push({target:'320px note-card-more',pageIn,...box});
  check('320px more target fits card and viewport at >=44px',box.width>=44&&box.height>=44&&box.x>=0&&box.x+box.width<=320);
  await more.click();await idle(p);
  check('explicit more opens real menu with pin/move/delete',await p.getByRole('menuitem',{name:/置顶/}).count()>0&&await p.getByRole('menuitem',{name:/移动/}).count()>0&&await p.getByRole('menuitem',{name:/删除/}).count()>0);

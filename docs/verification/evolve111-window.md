@@ -65,3 +65,23 @@ agent 用例通过 Chromium CDP 驱动真实 PM 中文组字和 TagComposition�
 ## 后续真实宿主接线
 
 原生/host 分支集成后须再确认：真实 document_participants/window label 与 Session token；probe/prepare/terminal 的事件顺序和窗口增减；宿主事务后先真实 notes-metadata、后带原目标 noteIds 的 release；agent_window_reply 对三阶段 ACK、有限终态收据和 refreshed:false 的处理；5 秒刷新交付截止、WINDOW_REFRESH_REQUIRED 持久 warning 与补偿；真实多 WebView/中文输入/录音附件/窗口关闭与访问撤销交错。私有 socket/credential、SQLite 事务和真实宿主提交不在本次前端 fixture 验收范围。此树没有承担 native command 实现或宿主线程/资料库 owner。
+
+## 追加：113 page-in 几何测量可靠性修复
+
+基于独审已通过的 `c808dda8`，仅修改 `scripts/check-evolve113-interaction.mjs` 和本作者记录；产品源码、主题/Preferences、独审报告及独立原探针保持不变。依据 [独审 P2 nonblocking 记录](../plan/reviews/evolve111-window-independent.md) 中原脚本 126/127 行，以及本地 `artifacts/evolve111-window-independent-extra/` 内的原始 geometry/113 diagnostic 探针：动画平移期间 160 帧中有 19 帧 box width 为 `43.99999237060547`、computed width 为 `44px`，8 次动画稳定后均为真实 44px。此前间歇失败的执行历史保留在上文。
+
+测量前从真实目标按钮取得其所属 `.notes-pane`，只选择 effect target 为该 pane、名称为 `page-in`、尚未结束或取消的动画；先拒绝无限 endTime，再等待其真实 `Animation.finished` promise。仅将取消的 `AbortError` 视作终止，其他错误继续失败。2 秒计时器是失败上限，正常结束立即清除，不是固定 sleep；不等待其他动画。测量前还检查目标未移除/换 pane，且该 pane 的 page-in 没有重新启动。原 `width>=44`、`height>=44`、`x>=0`、`x+width<=320` 断言原样保留，没有加入容差或替代尺寸来源。原脚本结果的 geometry 中额外记录等待次数、终止状态、pane transform 和实测 box。
+
+复现命令（在本树顺序执行，两个 run 均为原 pnpm 脚本，不是诊断副本）：
+
+```sh
+mkdir -p artifacts/evolve111-window-113-page-in
+pnpm typecheck > artifacts/evolve111-window-113-page-in/typecheck.log
+pnpm test:evolve113-interaction > artifacts/evolve111-window-113-page-in/run1.log
+cp artifacts/evolve113-interaction/result.json artifacts/evolve111-window-113-page-in/run1-result.json
+pnpm test:evolve113-interaction > artifacts/evolve111-window-113-page-in/run2.log
+cp artifacts/evolve113-interaction/result.json artifacts/evolve111-window-113-page-in/run2-result.json
+git diff --check
+```
+
+2026-11-17 实际结果：typecheck 和 diff check 退出码均为 0；两次原 113 脚本均退出码 0、各 90 项通过。两次均实际捕获并等待 **1 个 page-in，最终状态 finished**，pane transform 为 `none`；实测 box 均为 `{x:106,y:232.59375,width:44,height:44}`，严格 44px/320px 断言通过，无 React/browser exception。此次未触发取消分支，取消通过 finished promise 的 AbortError 路径处理，未额外宣称取消路径的实际运行证据。隔离 Chrome 的真实 React/PM 和合成 IPC/存储/平台边界与原脚本相同，不代表 native App/stdio e2e 或 theme114 验收。
