@@ -7,12 +7,12 @@
 ## 构建和运行
 
 ```sh
-cargo build --release --locked --manifest-path /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/Cargo.toml
-cargo test --locked --manifest-path /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/Cargo.toml
-cargo clippy --locked --all-targets --manifest-path /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/Cargo.toml -- -D warnings
+cargo build --release --locked --manifest-path crates/notes-mcp/Cargo.toml
+cargo test --locked --manifest-path crates/notes-mcp/Cargo.toml
+cargo clippy --locked --all-targets --manifest-path crates/notes-mcp/Cargo.toml -- -D warnings
 ```
 
-独立 crate 自带 `Cargo.lock`，不会更新根或宿主的包锁。测试需要 Python 3 标准库；不需要用户凭据或运行桌面应用。
+以上命令从项目根目录执行，不依赖已经清理的开发worktree。独立 crate 自带 `Cargo.lock`，不会更新根或宿主的包锁。测试需要 Python 3 标准库；不需要用户凭据或运行桌面应用。设置`CARGO_TARGET_DIR`时，后续二进制位置以该目录为准；发布配置使用最终交付路径，不直接依赖开发缓存。
 
 ```text
 /absolute/path/to/cybernote-mcp --workspace-id <id-from-app> --credential-ref <uuid-from-app> [--runtime-dir <absolute-private-directory>]
@@ -82,14 +82,14 @@ UTF-8 JSON + `\n`，完整帧（包括换行）最多2 MiB；读循环受此硬�
 以下检查无需存在111工作树；fixture 指纹也由 stdio 测试校验：
 
 ```sh
-cargo test --locked --manifest-path /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/Cargo.toml --test query_contract actual_application_service_fixture_validates_all_nine_tool_schemas
-python3 /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/tests/stdio_fixture.py /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/target/release/cybernote-mcp StdioFixture.test_application_service_fixture_cross_module
+cargo test --locked --manifest-path crates/notes-mcp/Cargo.toml --test query_contract actual_application_service_fixture_validates_all_nine_tool_schemas
+python3 crates/notes-mcp/tests/stdio_fixture.py crates/notes-mcp/target/release/cybernote-mcp StdioFixture.test_application_service_fixture_cross_module
 ```
 
 若要从来源 commit 复核副本字节，可执行只读比较：
 
 ```sh
-git -C /Users/water/work/2026/Apple-Notes-Clone-evolve111 show 868c6dcf960cb3c92f3c9330ec22fbaf7431fe91:src-tauri/src/application/fixtures/service-success.json | cmp - /Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/tests/fixtures/service-success.json
+git show 868c6dcf960cb3c92f3c9330ec22fbaf7431fe91:src-tauri/src/application/fixtures/service-success.json | cmp - crates/notes-mcp/tests/fixtures/service-success.json
 ```
 
 111的 provenance 表明源 fixture 由真实 NotesApplicationService 经临时 production Session/SQLite 生成，但窗口回复是 native test inputs。适配器本轮仅回放该 fixture，不将其称为运行中真实宿主、WebView 或业务授权验收；本轮没有修改111或宿主 scope/ServerError 实现。
@@ -112,9 +112,8 @@ python3 -B crates/notes-mcp/tests/stdio_fixture.py crates/notes-mcp/target/relea
 
 ```toml
 [mcp_servers.cybernote]
-command = "/Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp/target/release/cybernote-mcp"
+command = "/absolute/path/to/cybernote-mcp"
 args = ["--workspace-id", "workspace-id-from-agent-access", "--credential-ref", "credential-ref-uuid-from-agent-access"]
-cwd = "/Users/water/work/2026/Apple-Notes-Clone-evolve112-adapter/crates/notes-mcp"
 startup_timeout_sec = 10
 tool_timeout_sec = 30
 ```
