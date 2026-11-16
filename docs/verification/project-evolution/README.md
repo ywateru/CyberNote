@@ -7,7 +7,7 @@
 | 任务 | 实现状态 | 独立验证 | 最终运行 |
 | --- | --- | --- | --- |
 | 111 应用服务 | 原生修复`eb9cee7d`及独审`6e728266`已合入；窗口前端`5e10f614`独审中 | native MODULE_SOURCE_PASS；合入后HEAD`892f9751`的197项/typecheck/11390项通过；独审另含原8探针、96条schema语料与19条合法service往返 | integration-open |
-| 112 MCP | 适配器F1修复`ec2a051e`待复核；宿主`48b4711c`/UI`5b67db3e`已修复 | 宿主`5eecdf8f`/UI`45d40f92` MODULE_SOURCE_PASS；适配器复核中 | integration-open；Codex CLI 0.167.0初始化/九工具发现通过，零业务调用 |
+| 112 MCP | 适配器/宿主/独立UI均已合入；接下来装配实际宿主与Preferences入口 | 三模块MODULE_SOURCE_PASS；host HEAD`371469dd`23项、UI HEAD`f750b848`typecheck/12组、adapter HEAD`efd8ac6e`完整suite/release/F1合入检查通过 | integration-open；Codex CLI 0.167.0初始化/九工具发现通过，零业务调用 |
 | 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
 | 114 主题 | 基于113开始；palette/迁移规格已固定 | 未执行 | 未执行 |
 | 115 呈现 | 等114 | 未执行 | 未执行 |
@@ -22,6 +22,7 @@
 - `codex/evolve-112-ui`：独立AgentSettings/typed client组件与组件验证；Preferences/App接线随后串行。
 - `codex/evolve-111-window`：基于已审113接入独立notes-agent协调、App目标保护与可信刷新；不改Rust、Preferences或主题。114只改App外观职责，合入时保留两者且重验真实组件。
 - `codex/evolve-114`：主题registry/token/外观偏好迁移、Rust归档校验及真实表面投影；不改agent_host/application或窗口外部协调语义。
+- `codex/evolve-112-integration`：同Session原生host/生命周期/命令/持久启用偏好与Preferences Agent入口，随后接已审窗口协调做真实链路；不改变theme/presentation或另建Store。
 
 开发提交后由另一agent复核并执行相关真实检查。合入按依赖顺序进行，涉及相同owner的接线串行完成；不把模块传输fixture当作真实资料库联调。
 
@@ -29,7 +30,7 @@
 
 112 UI原两项阻塞（重载后丢失runtime配置、目录隐式256上限）经宿主/UI增量独审关闭；真实host返回准确runtimeDir，目录容量统一10,000，已验证重挂载复制与合法授权撤销。独立报告随模块合入后保留，真实装配另验。
 
-112适配器F1：把attrs等辅助JSON object计入文档节点上限，拒绝真实service可提交/读回的779,987字节、20,000文档节点文档。修复应统一节点含义，保留20,000上限及字节/深度/帧限制；不能仅提高上限掩盖分歧。
+112适配器原F1（辅助object误计文档节点）经独审`d17b7a18`关闭；合法779,987字节/20,000节点与depth64输入输出通过，20,001节点/depth65仍拒绝；独审与原失败证据保留于[适配器报告](../../plan/reviews/evolve112-adapter-independent.md)。
 
 ## 最终证据要求
 

@@ -56,6 +56,14 @@ macOS Unix socket路径长度受限，宿主使用短basename（例如workspace/
 
 桌面内部`HostSettings`必须返回宿主实际使用的绝对`runtimeDir`（普通路径信息，不是凭据），重新载入后为既有grant复制配置仍使用该值；不得依赖仅存在于创建响应的临时组件状态或猜测默认目录。TS客户端对HostSettings与CreatedGrant.connection的runtimeDir均作严格校验。授权目录集合上限与宿主保持一致：最多10,000个物理目录ID；scope单独校验为已支持的权限集合，不与目录列表共用任意256项限制。合法宿主设置不能因前端更小的隐式上限而隐藏总开关和撤销入口。
 
+## 宿主装配与启用状态
+
+总开关是当前本机资料库的持久偏好，首次默认关闭；用户成功开启后，同一workspace/incarnation正常重启可恢复listener，无需每次重新授权。启用偏好与grant位于本机私有运行状态，不能进入笔记备份或同步。优雅退出释放listener但不等于用户关闭开关；用户明确关闭则持久保存关闭，并立即拒绝新调用。
+
+运行中的`HostSettings.enabled`反映实际listener/鉴权状态，不能仅根据偏好文件宣称已启用。启动或持久化失败显式报告，保留可重试状态；启用失败不留下可接受请求却显示关闭的端点。偏好记录严格绑定workspace/incarnation，使用与grant相同的私有文件/原子替换约束。资料库恢复或incarnation轮换时先停止旧宿主、撤销旧context并退役其本机授权状态；新身份默认关闭，不能继承旧启用许可或grant。
+
+装配只持有同一AppState中的Session。共享RequestLimits在取得Session锁前准入，permit覆盖等待/提交/交付；任何窗口等待、event发送或网络IO均不得持有Session锁。取消必须收尾本operation，提交后的断连不得被解释为回滚。真实窗口集合、metadata先于release、刷新ACK及补偿按application协议执行，不接入伪同步计划。
+
 ## MCP适配器行为
 
 工具发现为固定九工具目录，输入/输出schema与agent-mcp一致。服务端grant只决定实际调用是否获准；capabilities返回真实授权，不能仅凭tools/list推断权限。未知工具按协议错误处理。每次tools/call生成requestId，认证信息从凭据引用加载，parameters原样经严格schema传输；成功与业务错误分别包装为structuredContent及同JSON文本。
