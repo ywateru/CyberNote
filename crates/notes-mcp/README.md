@@ -2,7 +2,7 @@
 
 独立 Rust 可执行程序，固定九个工具，转发到**正在运行**的桌面宿主私有 Unix protocol。它不打开 SQLite、不链接 Tauri/Store、不启动应用或第二个 Store，不持久保存工具结果或正文，也不自动重试写入。
 
-此阶段通过的是临时 Unix fixture 的传输和真实 SDK stdio 进程测试。尚未完成实际 Session/SQLite、窗口、撤销和幂等的宿主验收；fixture 没有 Store，不能证明业务提交。
+适配器模块的传输检查使用临时Unix fixture与真实SDK stdio进程；下文fixture证据都保持该模块阶段的范围，fixture没有Store，不能证明业务提交。后续真实宿主装配已独审合入：Codex九工具→同Session/SQLite/真实WebView、撤销/幂等/重启等见[当前状态](../../docs/verification/project-evolution/README.md)和[装配独审](../../docs/plan/reviews/evolve112-integration-independent.md)。最终安装产物仍待116；用户接入步骤见[指南](../../docs/agent-usage.md)。
 
 ## 构建和运行
 
@@ -108,7 +108,7 @@ python3 -B crates/notes-mcp/tests/stdio_fixture.py crates/notes-mcp/target/relea
 
 ## Codex CLI 静态配置示例
 
-字段依据 [官方 MCP 配置文档（CLI）](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)，2026-11-17 读取。以下为**静态模板**，workspace 和 credential-ref 必须替换为宿主授权 UI 提供的值。本次没有修改用户配置，也没有运行 Codex CLI 对真实宿主的集成验收。
+字段依据 [官方 MCP 配置文档（CLI）](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)，2026-11-17 读取。以下为**静态模板**，workspace 和 credential-ref 必须替换为宿主授权 UI 提供的值。适配器独立开发阶段没有修改用户配置或验收真实宿主；后续主线的实际Codex联调另见上方装配独审，仍未写入用户全局配置。
 
 ```toml
 [mcp_servers.cybernote]
