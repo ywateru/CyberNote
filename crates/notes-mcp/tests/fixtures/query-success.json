@@ -1,0 +1,53 @@
+{
+  "notes_get_capabilities": {
+    "apiVersion": 1,
+    "schemaVersion": 1,
+    "workspaceId": "contract-workspace",
+    "hostSessionId": "synthetic-host-session",
+    "scopes": ["notes:read", "notes:create", "notes:update"],
+    "tools": [
+      "notes_get_capabilities", "notes_list_folders", "notes_list", "notes_search",
+      "notes_read", "notes_create", "notes_append", "notes_update", "notes_get_operation"
+    ],
+    "formats": ["text", "document"],
+    "limits": {
+      "maxLimit": 100,
+      "maxQueryCharacters": 512,
+      "maxContentBytes": 1048576,
+      "maxDocumentBytes": 1048576,
+      "maxFrameBytes": 2097152,
+      "maxTextPageBytes": 32768,
+      "maxListBytes": 524288,
+      "maxJsonDepth": 64,
+      "maxNodes": 20000,
+      "idempotencyRetentionDays": 30,
+      "queryDeadlineMs": 5000,
+      "writeDeadlineMs": 15000,
+      "maxConcurrentReads": 4,
+      "maxConcurrentWrites": 1,
+      "maxQueuedWrites": 8
+    }
+  },
+  "notes_search": {
+    "items": [{
+      "id": "note",
+      "folderId": "folder",
+      "title": "Fixture",
+      "preview": "中文",
+      "createdAt": 1,
+      "updatedAt": 2,
+      "pinned": false,
+      "revision": 1,
+      "version": "opaque-version",
+      "attachmentCount": 0,
+      "match": {"field": "content", "snippet": "中文"}
+    }],
+    "nextCursor": null
+  },
+  "ToolError": {
+    "code": "NOTE_BUSY",
+    "message": "Synthetic fixture busy",
+    "retryable": true,
+    "retryAfterMs": 25
+  }
+}
