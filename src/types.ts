@@ -58,6 +58,7 @@ export interface Attachment {
   recordedAt?: number | null;
 }
 export interface Settings {
+  presentation?: import("./presentation/model").PresentationV1;
   interfaceDetails?: InterfaceDetails;
   interfaceFontSize?: FontSize;
   editorFontSize?: FontSize;

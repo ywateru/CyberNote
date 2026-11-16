@@ -159,7 +159,7 @@ export async function openRuntime(options = {}) {
     const playwrightPath = options.playwright || process.env.PLAYWRIGHT_CORE_PATH || playwrightDefault; if (!existsSync(playwrightPath)) throw Error('Set PLAYWRIGHT_CORE_PATH to an installed playwright-core; no dependencies are installed by this runner.');
     const { chromium } = await import(pathToFileURL(playwrightPath));
     const launchOptions = { executablePath: options.chrome || process.env.CHROME_PATH || chromeDefault, headless: true, args: ['--autoplay-policy=no-user-gesture-required', '--mute-audio', '--disable-background-timer-throttling'] };
-    if (options.rustEvents) {
+    if (options.rustEvents || options.ownedBrowser) {
       // Public process ownership lets us close this child's inherited log pipes
       // after its actual exit. Chrome updater/crashpad descendants may otherwise
       // keep stderr open, delaying Playwright's child `close` indefinitely.

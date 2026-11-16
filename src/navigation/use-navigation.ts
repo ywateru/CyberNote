@@ -17,6 +17,7 @@ export type NavigationState = {
   galleryEditor: boolean;
   attachmentBrowser: boolean;
   mobileCreatedEditor: string | null;
+  temporaryFocus: boolean;
 };
 type Update<T> = T | ((previous: T) => T);
 export type NavigationPorts = {
@@ -97,6 +98,7 @@ export class Navigation {
       galleryEditor: false,
       attachmentBrowser: false,
       mobileCreatedEditor: null,
+      temporaryFocus: false,
     };
   }
   snapshot = () => this.value;
@@ -159,6 +161,7 @@ export class Navigation {
   setTagFilter = (v: Update<NavigationState["tagFilter"]>) =>
     this.set("tagFilter", v);
   setGalleryEditor = (v: Update<boolean>) => this.set("galleryEditor", v);
+  setTemporaryFocus = (v: Update<boolean>) => this.set("temporaryFocus", v);
   setAttachmentBrowser = (v: Update<boolean>) =>
     this.set("attachmentBrowser", v);
   setMobileCreatedEditor = (v: Update<string | null>) =>

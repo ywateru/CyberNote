@@ -1,6 +1,7 @@
 import { normalizeAppearanceSettings, parseAppearance, parseScheme } from "./themes/appearance";
 import type { Settings } from "./types";
 import { parseInterfaceDetails } from "./interface-details";
+import { normalizePresentationSettings, parsePresentation, validateLegacyPresentation, legacyProjection } from "./presentation/model";
 
 /** One confirmed settings owner. Local writes are serialized at the persistence
  * boundary; values reach product controls only after a fresh post-ACK read.
@@ -13,13 +14,20 @@ export class ConfirmedSettings {
   // An ACK may commit successfully while its confirming read fails. Keep the
   // old UI, but never use that old snapshot to construct another write.
   private recoveryRequired = false;
+  private pendingWrites = 0;
+  get pending() { return this.pendingWrites > 0; }
+  get needsConfirmation() { return this.pending || this.recoveryRequired; }
+  async flush() {
+    await this.tail;
+    if (this.recoveryRequired) throw Error("设置已提交，等待权威读取确认，请重试后再关闭");
+  }
   constructor(private publish: (value: Settings) => void) {}
   snapshot = () => this.value;
   ticket = () => this.generation;
   observe(value: Settings, ticket = this.generation): boolean {
     if (ticket !== this.generation) return false;
     if (value.interfaceDetails !== undefined) parseInterfaceDetails(value.interfaceDetails);
-    this.value = normalizeAppearanceSettings(value);
+    this.value = normalizePresentationSettings(normalizeAppearanceSettings(value));
     this.recoveryRequired = false;
     this.generation++;
     this.publish(this.value);
@@ -35,11 +43,17 @@ export class ConfirmedSettings {
     const input = { ...patch, ...(Object.hasOwn(patch, "appearance") ? { appearance: parseAppearance(patch.appearance) } : {}), ...(patch.interfaceDetails === undefined ? {} : {
       interfaceDetails: parseInterfaceDetails(patch.interfaceDetails),
     }) };
+    validateLegacyPresentation(input);
+    if (Object.hasOwn(input, "presentation")) {
+      input.presentation = parsePresentation(input.presentation);
+      Object.assign(input, legacyProjection(input.presentation));
+    }
     if (Object.hasOwn(input, "theme")) parseScheme(input.theme);
     // Only an explicit appearance edit owns that domain. Partial and legacy
     // theme-only intents stay partial: Store/preview merge against persisted
     // authority and atomically migrate/project there, including other windows.
     if (input.appearance) input.theme = input.appearance.schemePreference;
+    this.pendingWrites++;
     const work = this.tail.then(async () => {
       this.generation++;
       try {
@@ -63,6 +77,7 @@ export class ConfirmedSettings {
         throw cause;
       }
     });
+    void work.then(() => this.pendingWrites--, () => this.pendingWrites--);
     this.tail = work.catch(() => {});
     return work;
   }

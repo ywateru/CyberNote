@@ -1,0 +1,572 @@
+[
+  {
+    "scenario": "sort",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false
+    },
+    "patches": [
+      {
+        "sort": "title"
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  },
+  {
+    "scenario": "view",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false
+    },
+    "patches": [
+      {
+        "view": "list"
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "list",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "list",
+      "macSidebarVisible": false,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  },
+  {
+    "scenario": "sidebar-true",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false
+    },
+    "patches": [
+      {
+        "macSidebarVisible": true
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "three-pane",
+          "lastNonFocusNavigation": "three-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": true,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  },
+  {
+    "scenario": "sidebar-false",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false
+    },
+    "patches": [
+      {
+        "macSidebarVisible": false
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "two-pane",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  },
+  {
+    "scenario": "both",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false
+    },
+    "patches": [
+      {
+        "view": "list",
+        "macSidebarVisible": true
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "three-pane",
+          "lastNonFocusNavigation": "three-pane",
+          "collectionView": "list",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "list",
+      "macSidebarVisible": true,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  },
+  {
+    "scenario": "explicit-priority",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false
+    },
+    "patches": [
+      {
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "two-pane",
+            "collectionView": "gallery",
+            "density": "compact"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "view": "gallery",
+        "macSidebarVisible": false
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  },
+  {
+    "scenario": "recovery-sort",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "title",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "three-pane",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "list",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "list",
+      "macSidebarVisible": true
+    },
+    "patches": [
+      {
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "two-pane",
+            "collectionView": "gallery",
+            "density": "compact"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "view": "gallery",
+        "macSidebarVisible": false
+      },
+      {
+        "sort": "updated"
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": false,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  },
+  {
+    "scenario": "recovery-view",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "updated",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "three-pane",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "list",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "list",
+      "macSidebarVisible": true
+    },
+    "patches": [
+      {
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "two-pane",
+            "collectionView": "gallery",
+            "density": "compact"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "view": "gallery",
+        "macSidebarVisible": false
+      },
+      {
+        "view": "list"
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "focus",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "list",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "list",
+      "macSidebarVisible": false,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  },
+  {
+    "scenario": "recovery-macSidebarVisible",
+    "initial": {
+      "selectedFolder": "default",
+      "selectedNote": "note-a",
+      "theme": "light",
+      "sort": "updated",
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      },
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "three-pane",
+          "lastNonFocusNavigation": "two-pane",
+          "collectionView": "list",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "list",
+      "macSidebarVisible": true
+    },
+    "patches": [
+      {
+        "presentation": {
+          "version": 1,
+          "desktop": {
+            "navigation": "focus",
+            "lastNonFocusNavigation": "two-pane",
+            "collectionView": "gallery",
+            "density": "compact"
+          },
+          "mobile": {
+            "collectionView": "list",
+            "density": "comfortable"
+          }
+        },
+        "view": "gallery",
+        "macSidebarVisible": false
+      },
+      {
+        "macSidebarVisible": true
+      }
+    ],
+    "expected": {
+      "presentation": {
+        "version": 1,
+        "desktop": {
+          "navigation": "three-pane",
+          "lastNonFocusNavigation": "three-pane",
+          "collectionView": "gallery",
+          "density": "compact"
+        },
+        "mobile": {
+          "collectionView": "list",
+          "density": "comfortable"
+        }
+      },
+      "view": "gallery",
+      "macSidebarVisible": true,
+      "appearance": {
+        "version": 2,
+        "themeId": "classic",
+        "schemePreference": "light"
+      }
+    }
+  }
+]

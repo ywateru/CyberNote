@@ -1,5 +1,6 @@
 import { parseAgentWindowEvent, parseAgentWindowReply, parseAgentReplyReceipt, type AgentWindowEvent, type AgentWindowReply } from "./agent-window";
 import { appearancePatch } from "./themes/appearance";
+import { presentationPatch } from "./presentation/model";
 import { listen } from "@tauri-apps/api/event";
 import { AccessChanged } from "./access-client";
 import { validateDataManagement, type DataManagementSnapshot } from "./data-management";
@@ -485,7 +486,7 @@ export async function action<T = Workspace>(
       });
       break;
     case "settings":
-      preview.settings = { ...preview.settings, ...appearancePatch(preview.settings, a.settings as Settings) };
+      preview.settings = { ...preview.settings, ...presentationPatch(preview.settings, appearancePatch(preview.settings, a.settings as Settings)) };
       break;
     case "lockNote":
     case "unlockNote":

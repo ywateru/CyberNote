@@ -1,0 +1,183 @@
+{
+  "checks": [
+    "rotation resets portrait height instead of reporting a 440px keyboard",
+    "same-width adjustResize IME is observed",
+    "IME dismissal clears current visibility",
+    "visual viewport IME is observed",
+    "visual viewport dismissal clears visibility",
+    "columns fit and editor retains space at 1100",
+    "sidebar separator exposes effective range at 1100",
+    "list separator exposes effective range at 1100",
+    "columns fit and editor retains space at 1000",
+    "sidebar separator exposes effective range at 1000",
+    "list separator exposes effective range at 1000",
+    "columns fit and editor retains space at 900",
+    "sidebar separator exposes effective range at 900",
+    "list separator exposes effective range at 900",
+    "columns fit and editor retains space at 700",
+    "sidebar separator exposes effective range at 700",
+    "list separator exposes effective range at 700",
+    "columns fit and editor retains space at 1280",
+    "sidebar separator exposes effective range at 1280",
+    "list separator exposes effective range at 1280",
+    "sidebar arrow moves actual geometry by 8px at 1100",
+    "sidebar Shift arrow moves 24px",
+    "sidebar End reaches effective max",
+    "sidebar Home reaches effective min",
+    "list arrow moves actual geometry by 8px at 1100",
+    "list Shift arrow moves 24px",
+    "list End reaches effective max",
+    "list Home reaches effective min",
+    "sidebar pointer drag gives real feedback before pointercancel",
+    "sidebar pointercancel restores confirmed preference",
+    "sidebar pointercancel leaves no drag",
+    "sidebar pointer drag gives real feedback before lostpointercapture",
+    "sidebar lostpointercapture restores confirmed preference",
+    "sidebar lostpointercapture leaves no drag",
+    "sidebar pointerup persists actual width",
+    "list pointer drag gives real feedback before pointercancel",
+    "list pointercancel restores confirmed preference",
+    "list pointercancel leaves no drag",
+    "list pointer drag gives real feedback before lostpointercapture",
+    "list lostpointercapture restores confirmed preference",
+    "list lostpointercapture leaves no drag",
+    "list pointerup persists actual width",
+    "narrow window clamps effective width without writing preference",
+    "wide window restores preferred pixels",
+    "font size does not multiply preferred widths",
+    "Enter opens gallery editor",
+    "Enter return restores card focus",
+    "Space opens gallery editor",
+    "Space return restores card focus",
+    "pending view write keeps gallery editor visible",
+    "view failure retains gallery editor and confirmed view",
+    "view failure retains exact Editor, body, selection and focus",
+    "view failure is visible",
+    "successful retry applies list",
+    "desktop has no uncaught errors",
+    "tiny mobile home follows confirmed UI scale",
+    "tiny preview uses actual UI hierarchy and body mapping",
+    "tiny actual editor uses body setting",
+    "small mobile home follows confirmed UI scale",
+    "small preview uses actual UI hierarchy and body mapping",
+    "small actual editor uses body setting",
+    "medium mobile home follows confirmed UI scale",
+    "medium preview uses actual UI hierarchy and body mapping",
+    "medium actual editor uses body setting",
+    "large mobile home follows confirmed UI scale",
+    "large preview uses actual UI hierarchy and body mapping",
+    "large actual editor uses body setting",
+    "huge mobile home follows confirmed UI scale",
+    "huge preview uses actual UI hierarchy and body mapping",
+    "huge actual editor uses body setting",
+    "320px default collection has two columns",
+    "two columns have no swipe tray",
+    "two-column horizontal touch never shifts a card",
+    "320px more target fits card and viewport at >=44px",
+    "explicit more opens real menu with pin/move/delete",
+    "touchcancel cancels long press",
+    "touchmove cancels long press",
+    "navigation cancels pending card menu",
+    "long press opens existing menu",
+    "huge UI uses a single reachable column at 320px",
+    "single-column swipe remains independent",
+    "single-column all three actions are >=44px and in viewport",
+    "single-column actions receive hits above the shifted card",
+    "switching columns clears swipe state",
+    "edge touchcancel cannot trigger stale Back",
+    "native Android audio retains mobile controls at 320",
+    "native Android audio retains mobile controls at 740",
+    "native Android audio retains mobile controls at 1024",
+    "native Android audio retains mobile controls at 500",
+    "mobile has no uncaught errors"
+  ],
+  "fonts": [
+    {
+      "size": "tiny",
+      "title": 15.4286,
+      "headline": 29.1429,
+      "preview": 14.5714,
+      "editorPreview": 12,
+      "realBody": 12
+    },
+    {
+      "size": "small",
+      "title": 16.7143,
+      "headline": 31.5714,
+      "preview": 15.7857,
+      "editorPreview": 14,
+      "realBody": 14
+    },
+    {
+      "size": "medium",
+      "title": 18,
+      "headline": 34,
+      "preview": 17,
+      "editorPreview": 16,
+      "realBody": 16
+    },
+    {
+      "size": "large",
+      "title": 20.5714,
+      "headline": 38.8571,
+      "preview": 19.4286,
+      "editorPreview": 18,
+      "realBody": 18
+    },
+    {
+      "size": "huge",
+      "title": 23.1429,
+      "headline": 43.7143,
+      "preview": 21.8571,
+      "editorPreview": 20,
+      "realBody": 20
+    }
+  ],
+  "geometry": [
+    {
+      "width": 1100,
+      "sidebar": 272,
+      "notes-pane": 390,
+      "editor-pane": 438
+    },
+    {
+      "width": 1000,
+      "sidebar": 272,
+      "notes-pane": 390,
+      "editor-pane": 338
+    },
+    {
+      "width": 900,
+      "sidebar": 272,
+      "notes-pane": 308,
+      "editor-pane": 320
+    },
+    {
+      "width": 700,
+      "sidebar": 220,
+      "notes-pane": 280,
+      "editor-pane": 200
+    },
+    {
+      "width": 1280,
+      "sidebar": 272,
+      "notes-pane": 390,
+      "editor-pane": 618
+    },
+    {
+      "target": "320px note-card-more",
+      "pageIn": {
+        "waited": 1,
+        "states": [
+          "finished"
+        ],
+        "transform": "none"
+      },
+      "x": 106,
+      "y": 232.59375,
+      "width": 44,
+      "height": 44
+    }
+  ],
+  "limits": "Chrome real App/PM, synthetic IPC/storage/platform/IME. No APK, device, native input or FORMAT102 claim."
+}

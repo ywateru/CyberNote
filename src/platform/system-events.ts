@@ -22,6 +22,8 @@ export type KeyboardBindings = {
   find: boolean;
   searching: boolean;
   searchDraft: boolean;
+  presentationFocus?: boolean;
+  exitPresentationFocus?(): void;
   create(): void;
   globalSearch(): void;
   findInNote(): void;
@@ -156,6 +158,7 @@ export function useSystemEvents(ports: SystemEventPorts) {
       else if (k.format) k.closeFormat();
       else if (k.drawing) k.closeDrawing();
       else if (k.find) k.closeFind();
+      else if (k.presentationFocus) k.exitPresentationFocus?.();
       else if (k.searching || k.searchDraft) k.clearSearch();
       else if (k.attachmentBrowser || (k.mobile && k.page !== "folders"))
         k.back();

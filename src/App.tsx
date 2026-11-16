@@ -19,7 +19,7 @@ import AttachmentGallery from "./AttachmentGallery";
 import { startup } from "./startup";
 import { NativeMenuContext, MenuItem as MenuRow } from "./Menu";
 import DesktopToolbar, { type DesktopToolbarAction } from "./DesktopToolbar";
-import { interfaceMetrics, fontScales } from "./font-size";
+import { fontScales } from "./font-size";
 import { interfaceDetailVariables, parseInterfaceDetails } from "./interface-details";
 import { ConfirmedSettings } from "./confirmed-settings";
 import { isStorageView } from "./storage-usage";
@@ -78,7 +78,11 @@ import {
   tagSelectionAfterAccess,
 } from "./note-tags";
 import { SaveRevisions } from "./save-revisions";
-import { SidebarPreference } from "./sidebar-preference";
+import { presentationOf, parsePresentation, withNavigation, type CollectionView } from "./presentation/model";
+import { platformIdentity, resolvePresentation } from "./presentation/resolver";
+import { PresentationContext } from "./presentation/context";
+import WorkspaceShell from "./shells/WorkspaceShell";
+import MobileShell from "./shells/MobileShell";
 import { secureId } from "./secure-id";
 import { invoke } from "@tauri-apps/api/core";
 import { validRecordingAction, type RecordingViewState } from "./recording-coordinator";
@@ -395,23 +399,8 @@ function App() {
   const {setImagePreview,setAttachmentJump,hideImagePreview,openImagePreview,closePreviewSource,imagePreviewRef,validGalleryEntry,openAttachmentBrowser,revealGalleryAttachment}=presentation;
   const editorsRef = useRef(editors);
   editorsRef.current = editors;
-  const [sidebar, setSidebar] = useState(true);
   const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(() => new Set());
   const [pinnedCollapsed, setPinnedCollapsed] = useState(false);
-  const sidebarRequested = useRef(true);
-  const initializedSidebar = useRef(false);
-  const ownsSidebarPreference = native && macNative && !separate;
-  const [sidebarPreference] = useState(
-    () =>
-      new SidebarPreference(
-        (visible) =>
-          action({
-            type: "settings",
-            settings: { macSidebarVisible: visible },
-          }),
-        () => loadWorkspace(),
-      ),
-  );
   const { platform: nativePlatform, state: nativePlatformState } = useNativePlatform();
   const nativeToolbar = nativePlatform.toolbar;
   const nativeInfo = nativePlatformState.info;
@@ -508,10 +497,27 @@ function App() {
   const [find, setFind] = useState("");
   const [showFind, setShowFind] = useState(false);
   const [notice, setNotice] = useState("");
-  const [mobile, setMobile] = useState(!!initialMobile);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const metrics = interfaceMetrics(settings, windowWidth, sidebar);
-  const mobileSingleColumn = mobile && windowWidth <= 430 && settings.interfaceFontSize === "huge";
+  const [windowSpace, setWindowSpace] = useState({ width: window.innerWidth, height: window.innerHeight, ime: 0 });
+  const windowWidth = windowSpace.width;
+  const identity = useRef(platformIdentity(native, navigator.userAgent, !!separate)).current;
+  const temporaryFocus = navigationState.temporaryFocus;
+  const setTemporaryFocus = navigation.setTemporaryFocus;
+  const focusReturn = useRef<HTMLElement | null>(null);
+  const [recordingCollapsed, setRecordingCollapsed] = useState(false);
+  const resolved = resolvePresentation({ platform: identity, width: windowWidth, height: windowSpace.height, imeHeight: windowSpace.ime,
+    contentWidth: windowWidth - (recordingTicket.current?.desktop && !recordingCollapsed ? 280 : 0),
+    settings, temporaryFocus, nativeTop: nativeInfo?.native.reservedTop, nativeToolbar: !!nativeInfo });
+  const mobile = resolved.interactionMode === "mobile";
+  useEffect(() => { if (mobile && recordingTicket.current?.desktop) setRecordingCollapsed(true); }, [mobile]);
+  const sidebar = resolved.effectiveNavigation === "three-pane";
+  const preferredNavigation = presentationOf(settings).desktop.navigation;
+  const confirmedNavigation = useRef(preferredNavigation);
+  useEffect(() => {
+    if (confirmedNavigation.current !== preferredNavigation) setTemporaryFocus(false);
+    confirmedNavigation.current = preferredNavigation;
+  }, [preferredNavigation]);
+  const metrics = resolved.effectiveWidths;
+  const mobileSingleColumn = mobile && resolved.effectiveColumns === 1;
   const desktopSidebarWidth = metrics.sidebarWidth;
   const desktopListWidth = metrics.listWidth;
   const mobileMode = useRef(!!initialMobile);
@@ -588,7 +594,12 @@ function App() {
   }, [navigationState, mobile, mobileSingleColumn]);
   useEffect(() => { setSwiped(null); }, [mobileSingleColumn]);
   const { themeId, schemePreference } = appearanceOf(settings);
-  const view = settings.view || "list";
+  const view = resolved.collectionView;
+  const confirmedCollection = useRef(view);
+  useEffect(() => {
+    if (confirmedCollection.current !== view) setGalleryEditor(false);
+    confirmedCollection.current = view;
+  }, [view]);
   const sort = settings.sort || "updated";
   const tags = projectTags(ws, accessSuspended);
   const currentFolder = ws.folders.find((f) => f.id === folderId);
@@ -862,18 +873,6 @@ function App() {
       };
     setError(errText(e));
   }, []);
-  const changeSidebar = useCallback(
-    (value: boolean | ((current: boolean) => boolean)) => {
-      if (ownsSidebarPreference && !initializedSidebar.current) return;
-      const visible =
-        typeof value === "function" ? value(sidebarRequested.current) : value;
-      sidebarRequested.current = visible;
-      setSidebar(visible);
-      if (ownsSidebarPreference)
-        void sidebarPreference.request(visible).catch(fail);
-    },
-    [ownsSidebarPreference, sidebarPreference, fail],
-  );
   const hydrate = useCallback((data: Workspace, passive = false) => {
     if (!metadataGate.canPublish(data.metadata)) return false;
     const previous = wsRef.current;
@@ -1037,14 +1036,15 @@ function App() {
   }, [hydrate, fail, separate]);
   useEffect(() => {
     const resize = () => {
-      setWindowWidth(window.innerWidth);
+      setWindowSpace({ width: window.innerWidth, height: window.innerHeight, ime: Math.max(0, window.innerHeight - (window.visualViewport?.height ?? window.innerHeight)) });
       const nextMobile = mobileLayout(window.innerWidth);
       if (!!nextMobile !== mobileMode.current) cancelCreateFocus();
       mobileMode.current = !!nextMobile;
-      setMobile(!!nextMobile);
+
     };
     window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+    window.visualViewport?.addEventListener("resize", resize);
+    return () => { window.removeEventListener("resize", resize); window.visualViewport?.removeEventListener("resize", resize); };
   }, []);
   useEffect(() => {
     if (!workspaceLoaded) return; // Keep the validated first-paint cache until authority loads.
@@ -1258,7 +1258,7 @@ function App() {
         settings => action({ type: "settings", settings }),
         async () => (await loadWorkspace()).settings,
       )).then(() => {
-        if (patch.view && settingsOwner.snapshot().view === patch.view) setGalleryEditor(false);
+        if (Object.hasOwn(patch, "macSidebarVisible")) setTemporaryFocus(false);
       }).catch(cause => {
         fail(cause);
         if (throwOnFailure) throw cause;
@@ -1271,6 +1271,23 @@ function App() {
     }),
     [fail, afterQuiet, settingsOwner],
   );
+  const changeSidebar = useCallback((value: boolean | ((current: boolean) => boolean)) => {
+    const current = presentationOf(settingsOwner.snapshot());
+    const visible = typeof value === "function" ? value(current.desktop.navigation === "three-pane") : value;
+    void updateSettings({ macSidebarVisible: visible });
+  }, [settingsOwner, updateSettings]);
+  const chooseCollection = (collectionView: CollectionView) => {
+    const current = presentationOf(settingsOwner.snapshot());
+    void updateSettings(mobile ? { presentation: parsePresentation({ ...current, mobile: { ...current.mobile, collectionView } }) } : { view: collectionView });
+  };
+  const exitFocus = () => {
+    if (temporaryFocus) setTemporaryFocus(false);
+    else void updateSettings({ presentation: withNavigation(presentationOf(settingsOwner.snapshot()), presentationOf(settingsOwner.snapshot()).desktop.lastNonFocusNavigation) }, true).then(() => {
+      const target = focusReturn.current;
+      if (target?.isConnected && target.getClientRects().length) target.focus({ preventScroll: true });
+    }).catch(() => {});
+    requestAnimationFrame(() => { const target = focusReturn.current; if (target?.isConnected && target.getClientRects().length) target.focus({ preventScroll: true }); });
+  };
   useEffect(() => {
     if (!workspaceLoaded || folderId === "all" || currentFolder) return;
     const original = ws.notes.find((n) => n.id === baseNoteId && !n.deletedAt);
@@ -1545,7 +1562,7 @@ function App() {
           }
           if (
             pendingDocs.current.size ||
-            (ownsSidebarPreference && sidebarPreference.needsConfirmation) ||
+            settingsOwner.needsConfirmation ||
             recordingLifecycle.current.active() ||
             ocrLifecycle.current.active()
           ) {
@@ -1580,11 +1597,10 @@ function App() {
               const recordingClosing = recordingLifecycle.current.close();
               await Promise.all([ocrClosing, recordingClosing]);
               do {
-                if (ownsSidebarPreference) await sidebarPreference.flush();
+                await settingsOwner.flush();
                 await flush();
               } while (
-                ownsSidebarPreference &&
-                sidebarPreference.needsConfirmation
+                settingsOwner.needsConfirmation
               );
               if (
                 !pendingDocs.current.size &&
@@ -1684,7 +1700,7 @@ function App() {
           const recordingClosing = recordingLifecycle.current.close();
           const ocrClosing = ocrLifecycle.current.close();
           await Promise.all([recordingClosing, ocrClosing]);
-          if (ownsSidebarPreference) await sidebarPreference.flush();
+          await settingsOwner.flush();
           await flush();
           if (quitState.current !== held)
             throw Error("本次退出已取消，请重新执行。");
@@ -1727,7 +1743,7 @@ function App() {
       ready.clear();
       releases.forEach((release) => release());
     };
-  }, [flush, fail, ownsSidebarPreference, sidebarPreference]);
+  }, [flush, fail, settingsOwner]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
     attachmentSourcePool.revoke(ids);
@@ -1826,14 +1842,6 @@ function App() {
       },
       (data) => {
         if (!hydrate(data)) throw new MetadataStale();
-        if (ownsSidebarPreference && !initializedSidebar.current) {
-          initializedSidebar.current = true;
-          sidebarRequested.current =
-            typeof data.settings.macSidebarVisible === "boolean"
-              ? data.settings.macSidebarVisible
-              : true;
-          setSidebar(sidebarRequested.current);
-        }
         if (!initializedSelection.current) {
           initializedSelection.current = true;
           restoreSelection(data, true);
@@ -3390,7 +3398,7 @@ function App() {
     note={{ selected, folders: ws.folders, unlocked, mobile, menu: menuType || "", patch, modal: openModal, separate: openSeparate,
       find: () => setShowFind(true), attachments: openAttachmentBrowser, flush, notice: setNotice, fail, share: shareNote,
       deleted: () => {setNoteId(null);if(mobile)setPage("notes");}, close: () => setMenu(null) }}
-    view={{ attachmentBrowser, view, sort, settings, separate: !!separate, chooseView: view => {setAttachmentBrowser(false);updateSettings({view});}, attachments: openAttachmentBrowser, update: updateSettings, modal: openModal, close: () => setMenu(null) }}
+    view={{ attachmentBrowser, view, sort, settings, separate: !!separate, chooseView: view => {setAttachmentBrowser(false);chooseCollection(view);}, attachments: openAttachmentBrowser, update: updateSettings, modal: openModal, close: () => setMenu(null) }}
     folder={{ folder: ws.folders.find(folder=>folder.id===contextFolder), modal: openModal }}
     app={{ archiveBusy, recording: !!recordingTicket.current || record, archive: mode => {void archive(mode);}, modal: openModal }}
   />;
@@ -3465,7 +3473,7 @@ function App() {
   });
   const nativeSelection = nativePlatform.selection;
   useSystemEvents({
-    keys: {quitting:!!quitState.current,folderForm:!!folderForm,ocr:!!ocrOperation.current,mobile,page,attachmentBrowser,modal:!!modal,menu:!!menu,format:formatOpen,drawing:!!draw,find:showFind,searching,searchDraft:searchDraft!==null,
+    keys: {quitting:!!quitState.current,folderForm:!!folderForm,ocr:!!ocrOperation.current,mobile,page,attachmentBrowser,modal:!!modal,menu:!!menu,format:formatOpen,drawing:!!draw,find:showFind,searching,searchDraft:searchDraft!==null, presentationFocus: !mobile && !separate && resolved.effectiveNavigation === "focus", exitPresentationFocus: exitFocus,
       create:newNote,globalSearch:focusGlobalSearch,findInNote:()=>setShowFind(true),cancelOcr:()=>{void cancelOcr().catch(fail);},closeModal:()=>setModal(null),closeMenu:()=>setMenu(null),
       closeFormat:()=>session.closeFormat("escape"),closeDrawing:()=>session.closeDrawing("escape"),closeFind:()=>setShowFind(false),clearSearch:()=>{void changeSearch({searching:false,query:""}).catch(fail);},back},
     androidBack:navigation.androidBack,nativeMenu:nativePlatform.menu,
@@ -3559,7 +3567,7 @@ function App() {
           synchronizingRef.current ||
           !!metadataRefreshRunning.current ||
           debugPending.current.size > 0 ||
-          sidebarPreference.needsConfirmation ||
+          settingsOwner.pending ||
           !!quitState.current ||
           ["processing", "confirming", "cancelling"].includes(
             ocrOperation.current?.state.phase || "",
@@ -3838,7 +3846,7 @@ function App() {
           assert();
           const patch = change as Settings;
           const keys = [
-            "theme", "appearance",
+            "theme", "appearance", "presentation",
             "view",
             "sort",
             "groupDates",
@@ -4075,7 +4083,7 @@ function App() {
       release?.();
     };
   }, []);
-  const nativeTop = !mobile && !!nativeInfo;
+  const nativeTop = resolved.toolbarPolicy === "native";
   // The HTML splash exists before React starts. Release it once the restored
   // selection, editor and (on macOS) native toolbar have committed to the DOM.
   // This is a one-time handoff; ordinary sync and note switches never recreate it.
@@ -4098,6 +4106,7 @@ function App() {
     return startup.scheduleReady();
   }, [startupReady, loading, workspaceLoaded, syncError, error]);
   return (
+    <PresentationContext.Provider value={resolved}>
     <MobileInteractionContext.Provider value={mobile}>
     <NativeMenuContext.Provider value={nativeTop && nativeInfo?.native.popupMenus === true}>
     <AttachmentMetadataContext.Provider value={ws.attachments}>
@@ -4109,14 +4118,15 @@ function App() {
       onError={fail}
       permission={presentation.permission}
     >
-    <div className={`recording-layout ${mobile ? "mobile-controls" : "desktop-controls"}`} style={{
+    <div className={`recording-layout ${mobile ? "mobile-controls" : "desktop-controls"} ${recordingCollapsed ? "recording-collapsed" : ""}`} style={{
       ...interfaceDetailVariables(settings.interfaceDetails, mobile),
       "--ui-font-scale": fontScales(settings).interface,
       "--mobile-ui-font-scale": fontScales(settings).mobileInterface,
       "--ui-scale": mobile ? 1 : metrics.scale,
     } as CSSProperties}>
-    <div
-      ref={appSurface}
+    <WorkspaceShell
+      rootRef={appSurface} resolved={resolved} routeKey={JSON.stringify([folderId, tagFilter, noteId])} blocked={!!modal || quitPending || syncCover || !!accessSuspended.length}
+      focus={() => { focusReturn.current = document.activeElement as HTMLElement; setTemporaryFocus(true); }} exitFocus={exitFocus}
       inert={quitPending}
       className={`app ${nativeTop ? "native-toolbar" : ""} ${syncCover || accessSuspended.length ? "access-sync" : ""} ${mobile ? "mobile" : "desktop"} ${attachmentBrowser ? "attachment-browse gallery-browse" : view === "gallery" && !separate ? (galleryEditor ? "gallery-edit" : "gallery-browse") : ""} ${formatOpen && mobile ? "format-open" : ""} page-${page} ${!sidebar ? "sidebar-hidden" : ""} ${separate ? "separate" : ""}`}
       style={
@@ -4363,7 +4373,7 @@ function App() {
           </IconButton>
         </div>
       </aside>
-      {!mobile && sidebar && !separate && (
+      {resolved.capabilities.resizeSidebar && (
         <ResizeHandle
           width={desktopSidebarWidth}
           min={metrics.sidebarMin}
@@ -4384,20 +4394,12 @@ function App() {
             data-tauri-drag-region={native && !mobile ? "deep" : undefined}
           >
             {mobile ? (
-              <>
-                {folderId !== "all" && <button className="back-button" aria-label="返回全部笔记" onClick={() => chooseFolder("all")}><ChevronLeft /></button>}
-                <h1 className="notes-large-title" title={filter ? "搜索结果" : folderId === "all" ? "笔记" : folderLabel}>
-                  {filter ? "搜索结果" : folderId === "all" ? "笔记" : folderLabel}
-                </h1>
-                <div className="mobile-home-actions">
-                  <IconButton label="显示选项" onClick={() => setMenu(menu === "view" ? null : "view")}><MoreHorizontal /></IconButton>
-                  <IconButton label="文件夹" onClick={openFolders}><Folder /></IconButton>
-                  <IconButton label="设置" className="mobile-home-settings" onClick={() => openModal("settings")}><SettingsIcon /></IconButton>
-                </div>
-              </>
+              <MobileShell view={view} choose={chooseCollection} title={filter ? "搜索结果" : folderId === "all" ? "笔记" : folderLabel}
+                back={folderId !== "all" ? () => chooseFolder("all") : undefined}
+                folders={openFolders} settings={() => openModal("settings")} options={() => setMenu(menu === "view" ? null : "view")} />
             ) : (
               <>
-                {!sidebar && (
+                {!sidebar && !resolved.capabilities.directoryDrawer && (
                   <IconButton
                     label="显示文件夹"
                     onClick={() => changeSidebar(true)}
@@ -4706,7 +4708,7 @@ function App() {
           </IconButton>
         </div>}
       </section>
-      {!mobile && !separate && (
+      {resolved.capabilities.resizeCollection && (
         <ResizeHandle
           width={desktopListWidth}
           min={metrics.listMin}
@@ -5173,8 +5175,8 @@ function App() {
           onDone={(result) => submitRecording(recording, result)}
         />
       )}
-    </div>
-      {!mobile && desktopRecording && (
+    </WorkspaceShell>
+      {desktopRecording && (
         <aside
           className="recording-dock"
           aria-label="录音面板"
@@ -5185,6 +5187,7 @@ function App() {
             } as CSSProperties
           }
         >
+          <button type="button" className="recording-collapse" aria-expanded={!recordingCollapsed} onClick={() => setRecordingCollapsed(value => !value)}>{recordingCollapsed ? "恢复录音面板" : "收起录音面板"}</button>
           {!desktopRecording.local || desktopRecording.registration?.cancelRequested ? (
             <section className="recording-registration" aria-label="准备录音">
               <strong>新录音</strong>
@@ -5232,6 +5235,7 @@ function App() {
     </AttachmentMetadataContext.Provider>
     </NativeMenuContext.Provider>
     </MobileInteractionContext.Provider>
+    </PresentationContext.Provider>
   );
 }
 function SearchSuggestions({
