@@ -4,6 +4,8 @@ Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android�
 
 当前为可运行开发版，完整原版交互及逐像素一致目标仍在进行。功能是否完成以各次交付的准确版本和验证范围为准，见[文档索引](docs/INDEX.md)。
 
+2026-11-16 项目梳理与后续方案：[代码现状及改进建议](docs/plan/analysis/project-review-20261116.md) · [Agent MCP 查询/读取/写入契约](docs/architecture/agent-mcp.md) · [多主题与呈现架构](docs/architecture/theme-presentation.md) · [桌面/移动交互方案](docs/ui/adaptive-presentation.md) · [实施路线图](docs/plan/project-evolution-20261116.md)。这些是待实现设计，本轮仅更新文档，不表示已提供 MCP 或新主题，也不改变下方安装包的验证范围。
+
 服务器维护入口：[服务关系与生产部署记录](docs/server/README.md) · [配置、开发、部署与排障](docs/server/DEPLOYMENT.md)。
 
 账户同步最新桌面测试包为 `29c87810`，已完成本机两个独立客户端的设备列表、推送、拉取和双向验证。使用[测试端 A](scripts/verification/account110-desktop-a.command)／[测试端 B](scripts/verification/account110-desktop-b.command)启动，步骤与范围见[手动测试指南](docs/verification/account110/MANUAL-TESTING.md)和[结果及保留失败](docs/verification/account110/RESULT-LATEST.md)。[代码归并与空间清理](docs/verification/account110/workspace-cleanup01/README.md)已保留该包及两个测试库。下方安装包表仍是此前双端同源交付版本。

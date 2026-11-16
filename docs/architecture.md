@@ -2,6 +2,8 @@
 
 状态：首版实现契约，允许依据真实对比继续完善。
 
+2026-11-16 新增待实现扩展：[Agent MCP](architecture/agent-mcp.md)通过同一应用服务与Session提供外部查询/读写；[主题与呈现](architecture/theme-presentation.md)区分配色、明暗、布局和设备偏好。现状与迁移顺序见[项目梳理](plan/analysis/project-review-20261116.md)，不将新契约标为现有实现。
+
 2026-11-07新增[Mac系统备忘录只读导入92](architecture/apple-notes-import.md)：固定Apple Events读取源数据，仅附件副本写入自有暂存目录；目标专用追加事务，不借用覆盖设置的完整备份恢复语义。正文转受校验schema，原始HTML作为明确标注的受管文件保留，来源/内容hash与真实目标关联用于重复跳过及变化新副本。实际源能力与失败见[研究](research/apple-notes-import92/README.md)，实施中不代表已交付。
 
 2026-11-06数据管理与跨端文档IO新增契约见[数据管理79](ui/data-management.md)：真实磁盘快照、独立媒体原字节导出、Android ContentResolver归档读写，继续保留Store/Session权限和事务边界。SQLite仅存元数据/引用，媒体文件不迁回数据库；导入导出是逻辑归档，不是运行中SQLite文件复制。

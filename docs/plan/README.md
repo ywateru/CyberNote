@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-16 新规划：[项目梳理](analysis/project-review-20261116.md)与[Agent MCP / 多主题 / 双端交互路线图](project-evolution-20261116.md)已整理，EVOLVE-111～116 为后续开发任务，尚未实施。111/113 无前置依赖，其余按任务图推进；这里的 ready 表示具备开发规格，不表示已启动开发。下方旧“当前”描述按各自日期阅读。
+
 2026-11-07 当前：已验收工作整合到本地主分支 `main`，当前 Mac32 / Android21。入口见[根 README](../../README.md)和[文档索引](../INDEX.md)。最新[键盘94](../verification/editor94/DELIVERY.md)、[附件93](../verification/attachments93/DELIVERY.md)、[导入92](../verification/apple-notes-import92/DELIVERY.md)及[同步91](../verification/sync91/DELIVERY.md)均有准确交付记录；旧同步 goal 已完成，下方“active/进行中”等按各自历史时点读取，不代表当前仍在等待这些已交付任务。
 
 ## 历史阶段记录

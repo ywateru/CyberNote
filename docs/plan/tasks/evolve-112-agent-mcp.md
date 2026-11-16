@@ -1,0 +1,30 @@
+---
+id: evolve-112
+scope: agent-interface
+status: pending
+depends-on: [evolve-111]
+---
+
+# 本机Agent MCP最小闭环
+
+## objective
+
+交付Rust独立stdio适配器、宿主私有IPC、客户端grant/撤销和桌面Agent接入设置页。按契约实现capabilities、folders、list、search、read、create、append、update、get_operation，接入真实application service。使用维护中的MCP SDK并固定经兼容测试的版本，不手工重造协议解析。首版宿主必须运行，不提供HTTP、独立Store、删除或附件上传。
+
+## context
+
+- `docs/architecture/agent-mcp.md`
+- `docs/ui/adaptive-presentation.md` 的Agent页
+- `docs/plan/project-evolution-20261116.md`
+
+## path
+
+- `src-tauri/src/agent_host/`、`src-tauri/src/agent_access/`（新增）及宿主装配
+- `crates/notes-mcp/`（新增Rust独立可执行程序）；协议DTO可按需要拆入不依赖Tauri的共享crate
+- `src/Preferences.tsx`、新增Agent设置组件及桥接
+- 对应Cargo/包配置、协议/安全/集成测试与使用说明
+- `docs/architecture/agent-mcp.md`、`docs/ui/adaptive-presentation.md`
+
+## verification
+
+真实stdio初始化/工具发现/schema/错误，stdout仅协议；IPC owner/权限/凭据/绑定库校验。真实读写重启及已打开窗口刷新、grant撤销、宿主停止、锁定排除、超限/分页、两client竞争、丢失ACK与幂等恢复。提供至少一个实际支持MCP的目标harness配置和实测范围；不能把示意CLI写成已可执行。

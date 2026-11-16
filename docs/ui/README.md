@@ -1,5 +1,7 @@
 # UI 证据与规格
 
+2026-11-16 新增多主题与多展现方式需求：现有风格保留为默认兼容预设，新增主题/布局按[多主题架构](../architecture/theme-presentation.md)和[双端交互方案](adaptive-presentation.md)独立验收。下文“不进行自由品牌设计”适用于原版兼容预设，不再限制显式选择的新主题；新方案尚未实现。
+
 界面以原版为目标，不进行自由品牌设计。Mac 使用系统 SF/PingFang 字体与 AppKit 窗口行为；Android 应用内容按用户 iPhone 录屏重建，手机系统字体/键盘差异另列。所有数值须区分观察值与估计值。
 
 - [Mac](macos.md)：本机 macOS 26.4，Notes 4.13。
