@@ -41,6 +41,14 @@ pnpm release publish --manifest artifacts/releases/current/mac.json --manifest a
 
 `publish` 同时要求两个平台 manifest、版本/源码指纹/prepare批次一致，且最终产物摘要仍匹配，才更新 README 唯一标记区。manifest 的 `validation` 默认只陈述构建标识核验；可通过 `--validation-note` 引用真实功能/设备记录，不自动把标识检查扩张为功能通过。Mac为目录时摘要按相对路径和最终签名字节构成；最终签名后再核验。
 
+## Agent适配器交付补充
+
+项目演进116同时交付`crates/notes-mcp`的真实release可执行文件。现有双端`release publish`命令不自动构建或校验第三个产物；不得把适配器源码目录、开发target路径或配置示意当成已安装程序。
+
+适配器随同一批次保存单独的`mcp.json`记录，至少包含：最终可执行文件绝对路径、目标平台/架构、实际构建时间、文件字节SHA-256、对应source stamp/源码指纹、锁定SDK版本、已验证MCP协议版本、真实stdio与宿主联调报告。使用现有产品指纹中的`crates/`输入，最终文件签名或复制后重新计算摘要。未运行的平台保留未验证，不从macOS运行推断其他桌面平台支持。
+
+用户接入说明和Agent页生成的配置必须指向实际交付位置，包含workspace-id与credential-ref；自定义runtime-dir需随配置准确保留。检查配置在重启和重新载入设置后仍能连接同一隔离资料库。最终包、manifest及文档均不携带测试grant、私有凭据文件或用户资料库。Android交付的是笔记客户端，不将它描述为可启动该本机stdio宿主。
+
 ## Android 工具输出的指纹边界
 
 `productFiles` 按项目相对路径排除 Tauri 工具拥有的输出，不能依靠 Git ignore，也不能整体排除 Android 源目录：
