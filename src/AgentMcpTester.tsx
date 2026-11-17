@@ -90,7 +90,7 @@ export default function AgentMcpTester({ binary, grant, settings, trigger, onClo
     const connectionId = crypto.randomUUID(), ticket = ++epoch.current;
     active.current = connectionId; working.current = true; setBusy("正在 initialize / initialized / tools/list…"); setError(""); setRows([]); setTools([]);
     try {
-      const result = await client.connect({ connectionId, binary, workspaceId: settings.workspaceId, grantId: grant.grantId });
+      const result = await client.connect({ connectionId, workspaceId: settings.workspaceId, grantId: grant.grantId });
       if (!mounted.current || ticket !== epoch.current) { await client.stop(connectionId); return; }
       setTools(result.tools); setSelected(result.tools[0]?.name ?? ""); setConnected(true);
       append({ tool: "initialize → initialized → tools/list", status: "pass", detail: `真实 stdio 已连接；发现 ${result.tools.length} 个工具。` });
@@ -137,7 +137,7 @@ export default function AgentMcpTester({ binary, grant, settings, trigger, onClo
     <section ref={root} className="agent-dialog agent-mcp-tester" role="dialog" aria-modal="true" aria-labelledby={`${id}-title`} tabIndex={-1}>
       <header><h3 id={`${id}-title`}>MCP 测试程序</h3><button type="button" onClick={() => void close()}>关闭</button></header>
       <div className="agent-mcp-scroll">
-        <dl className="agent-metadata"><div><dt>适配器</dt><dd>{binary}</dd></div><div><dt>资料库</dt><dd>{settings.workspaceId}</dd></div><div><dt>授权</dt><dd>{grant.clientId} · {grant.scopes.join("、")}</dd></div></dl>
+        <dl className="agent-metadata"><div><dt>内置适配器</dt><dd>{binary}</dd></div><div><dt>资料库</dt><dd>{settings.workspaceId}</dd></div><div><dt>授权</dt><dd>{grant.clientId} · {grant.scopes.join("、")}</dd></div></dl>
         <div className="agent-actions"><button ref={connectButton} type="button" disabled={!!busy || connected} onClick={() => void connect()}>连接</button><button type="button" disabled={!active.current} onClick={() => void disconnect()}>停止 / 断开</button></div>
         <p role="status" aria-live="polite">{busy || (connected ? "已连接（真实 MCP stdio）" : "未连接")}</p>
         {error && <p className="agent-error" role="alert">{error}</p>}

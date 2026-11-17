@@ -42,7 +42,8 @@ const { default: AgentSettings } = load(resolve(root, "src/AgentSettings.tsx"));
 const grant = (id, extra = {}) => ({ grantId: id, clientId: id, workspaceId: "workspace", incarnation: "incarnation", scopes: ["notes:read"], folderIds: ["folder"], expiresAt: clock + 60_000, revocation: 0, revoked: false, credentialRef: `ref-${id}`, ...extra });
 let state = { enabled: false, workspaceId: "workspace", incarnation: "incarnation", hostSessionId: "host", runtimeDir: "/runtime", grants: [], recentOperations: [] };
 const calls = [], copied = [];
-let loadingGate = null;
+let loadingGate = null, adapterFailure = false;
+const adapter = async () => { if (adapterFailure) throw Error("missing"); return "/Applications/CyberNote.app/Contents/MacOS/cybernote-mcp"; };
 const client = {
   async settings() { calls.push("settings"); if (loadingGate) await loadingGate; return structuredClone(state); },
   async setEnabled(enabled) { calls.push("enable"); state.enabled = enabled; return structuredClone(state); },
@@ -51,7 +52,7 @@ const client = {
 };
 const tick = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); };
 let tree;
-function render(props = {}) { cursor = 0; tree = AgentSettings({ folders: [], client, ...props }); return tree; }
+function render(props = {}) { cursor = 0; tree = AgentSettings({ folders: [], client, adapter, ...props }); return tree; }
 async function settle() { for (let i = 0; i < 4; i++) { for (const run of effects.splice(0)) run(); await tick(); render(); } }
 function nodes(node) { if (arguments.length === 0) node = tree; if (!node || typeof node !== "object") return []; if (Array.isArray(node)) return node.flatMap(nodes); return [node, ...nodes(node.props?.children)]; }
 function text(node) { if (typeof node === "string" || typeof node === "number") return String(node); if (Array.isArray(node)) return node.map(text).join(""); return node?.props ? text(node.props.children) : ""; }
@@ -87,12 +88,12 @@ surface(Setup).props.onClose(); render();
 // Enable is explicit. Loaded grants immediately expose configuration; no hidden prerequisite.
 state.grants = [grant("a"), grant("b")];
 await nodes().find(node => node.props?.role === "switch").props.onClick(); await settle();
-assert.ok(pathInput()); assert.equal(nodes().filter(node => node.type === "select")[0].props.value, "a"); checks++;
+assert.equal(pathInput(), undefined); assert.equal(nodes().filter(node => node.type === "select")[0].props.value, "a"); checks++;
+nodes().find(node => node.type === "select").props.onChange({ target: { value: "b" } }); render();
 button("启动 MCP 测试程序").props.onClick(); render();
-assert.ok(surface(Setup)); surface(Setup).props.onGrant("b"); surface(Setup).props.onBinary("/installed/agent adapter"); render();
-assert.equal(surface(Setup).props.setup.ready, true); assert.equal(surface(Tester), undefined); checks++;
-surface(Setup).props.onStart(); render();
-assert.equal(surface(Tester).props.grant.grantId, "b"); assert.equal(surface(Tester).props.binary, "/installed/agent adapter");
+assert.equal(surface(Setup), undefined);
+assert.equal(surface(Tester).props.grant.grantId, "b");
+assert.equal(surface(Tester).props.binary, "/Applications/CyberNote.app/Contents/MacOS/cybernote-mcp"); checks += 2;
 assert.equal(calls.filter(c => c !== "settings" && c !== "enable").length, 0); checks++;
 surface(Tester).props.onClose(); render();
 await button("复制 stdio JSON").props.onClick(); await tick();
@@ -121,6 +122,19 @@ for (const reason of ["disabled", "new-session"]) {
   assert.equal(surface(Tester), undefined); assert.equal(surface(Setup), undefined); checks++;
 }
 
+// An incomplete bundle cannot produce external config or open a runnable tester.
+state.enabled = true; state.grants = [grant("a")];
+adapterFailure = true;
+await button("刷新").props.onClick(); await settle();
+assert.equal(button("复制 stdio JSON").props.disabled, true);
+button("启动 MCP 测试程序").props.onClick(); render();
+assert.ok(surface(Setup)); assert.equal(surface(Tester), undefined);
+assert.ok(surface(Setup).props.setup.missing.some(message => message.includes("内置"))); checks++;
+surface(Setup).props.onClose(); render(); adapterFailure = false;
+await button("重新检查内置 MCP").props.onClick(); await settle();
+assert.equal(button("复制 stdio JSON").props.disabled, false);
+button("启动 MCP 测试程序").props.onClick(); render(); assert.ok(surface(Tester)); checks++;
+surface(Tester).props.onClose(); render();
 render({ mobile: true }); assert.equal(nodes().some(node => node.type === "button" && text(node) === "启动 MCP 测试程序"), false); checks++;
 for (const slot of slots) slot?.cleanup?.();
 console.log(`Agent settings: ${checks} prerequisite / production callback / entry visibility checks passed (no UI automation).`);

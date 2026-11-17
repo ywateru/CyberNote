@@ -1,10 +1,8 @@
 import { useId, useLayoutEffect, useRef } from "react";
 import type { agentSetup } from "./agent-setup";
 
-export default function AgentTestSetup({ setup, binary, onBinary, onGrant, onStart, onClose, onSetup, trigger }: {
+export default function AgentTestSetup({ setup, onGrant, onStart, onClose, onSetup, trigger }: {
   setup: ReturnType<typeof agentSetup>;
-  binary: string;
-  onBinary(value: string): void;
   onGrant(value: string): void;
   onStart(): void;
   onClose(): void;
@@ -40,8 +38,7 @@ export default function AgentTestSetup({ setup, binary, onBinary, onGrant, onSta
         <p className="agent-help">使用已授权的客户端运行单项调用或批量测试。打开窗口不会启动适配器。</p>
         {setup.missing.length > 0 && <div className="agent-prerequisites" role="status"><p>还需完成：</p><ul>{setup.missing.map(message => <li key={message}>{message}</li>)}</ul></div>}
         <label className="agent-field">测试使用的客户端<select value={setup.grant?.grantId ?? ""} onChange={event => onGrant(event.target.value)}><option value="" disabled>请选择有效授权</option>{setup.grants.map(grant => <option key={grant.grantId} value={grant.grantId}>{grant.clientId}</option>)}</select></label>
-        <label className="agent-field">适配器可执行文件绝对路径<input value={binary} spellCheck={false} autoComplete="off" placeholder="填写已安装的 cybernote-mcp 绝对路径" onChange={event => onBinary(event.target.value)} /></label>
-        <p className="agent-help">连接时会实际运行此文件。路径存在与否、适配器握手结果将在连接时检查。</p>
+        <p className="agent-help">MCP 已内置在应用中，无需安装或填写路径。开启接入并授权后即可连接。</p>
         <footer><button type="button" onClick={onSetup}>返回接入设置</button><button type="submit" className="agent-primary" disabled={!setup.ready}>打开测试控制台</button></footer>
       </form>
     </section>

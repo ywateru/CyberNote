@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type FormEvent } from "react";
 import type { Folder, PhysicalFolder } from "./types";
 import {
-  agentClient, agentErrorMessage, agentScopes,
+  agentClient, agentErrorMessage, agentScopes, bundledAgentAdapter,
   parseAgentSettings, parseCreatedAgentGrant, parseCreateAgentGrant,
   type AgentClient, type AgentGrant, type AgentHostSettings, type AgentScope,
   type CreateAgentGrant,
@@ -29,6 +29,7 @@ export interface AgentSettingsProps {
   /** Omit in production. Injected clients must still obey the host DTOs. */
   client?: AgentClient;
   testerClient?: McpTesterClient;
+  adapter?: () => Promise<string>;
   mobile?: boolean;
   onClose?: () => void;
   returnFocus?: HTMLElement | null;
@@ -107,7 +108,7 @@ function CreateDialog({ folders, busy, error, onCancel, onCreate, trigger }: {
   </div>;
 }
 
-export default function AgentSettings({ folders, client = agentClient, testerClient, mobile = false, onClose, returnFocus }: AgentSettingsProps) {
+export default function AgentSettings({ folders, client = agentClient, testerClient, adapter = bundledAgentAdapter, mobile = false, onClose, returnFocus }: AgentSettingsProps) {
   const id = useId(), mounted = useRef(false), generation = useRef(0), working = useRef(false);
   const root = useRef<HTMLElement>(null), createTrigger = useRef<HTMLButtonElement>(null);
   const [settings, setSettings] = useState<AgentHostSettings | null>(null);
@@ -117,6 +118,7 @@ export default function AgentSettings({ folders, client = agentClient, testerCli
   const [tester, setTester] = useState(false);
   const testerTrigger = useRef<HTMLButtonElement>(null);
   const [configGrantId, setConfigGrantId] = useState<string | null>(null), [binary, setBinary] = useState("");
+  const [adapterError, setAdapterError] = useState("");
   const [testerSession, setTesterSession] = useState<{ grant: AgentGrant; settings: AgentHostSettings; binary: string } | null>(null);
   const configSection = useRef<HTMLElement>(null);
   const setupFocus = useRef<"enabled" | "grant" | "config" | null>(null);
@@ -126,14 +128,20 @@ export default function AgentSettings({ folders, client = agentClient, testerCli
   const load = useCallback(async () => {
     if (working.current || mobile) return;
     const ticket = ++generation.current;
-    setLoading(true); setError("");
+    setLoading(true); setError(""); setBinary(""); setAdapterError("");
     try {
       const result = parseAgentSettings(await client.settings());
       if (mounted.current && generation.current === ticket) setSettings(result);
+      try {
+        const path = await adapter();
+        if (mounted.current && generation.current === ticket) setBinary(path);
+      } catch {
+        if (mounted.current && generation.current === ticket) setAdapterError("内置 MCP 适配器未就绪，请重新加载；若仍失败，请重新安装完整应用。");
+      }
     } catch (cause) {
       if (mounted.current && generation.current === ticket) { setSettings(null); setError(agentErrorMessage(cause)); }
     } finally { if (mounted.current && generation.current === ticket) setLoading(false); }
-  }, [client, mobile]);
+  }, [client, adapter, mobile]);
   useEffect(() => {
     mounted.current = true;
     working.current = false;
@@ -179,7 +187,7 @@ export default function AgentSettings({ folders, client = agentClient, testerCli
     if (!current()) return;
     if (result.grant.workspaceId !== settings!.workspaceId || result.grant.incarnation !== settings!.incarnation || result.connection.runtimeDir !== settings!.runtimeDir) throw Error();
     setSettings(previous => previous && { ...previous, grants: [...previous.grants.filter(g => g.grantId !== result.grant.grantId), result.grant] });
-    setConfigGrantId(result.grant.grantId); setDialog(false); setNotice("授权已创建。接下来填写适配器路径，复制配置或启动测试。");
+    setConfigGrantId(result.grant.grantId); setDialog(false); setNotice("授权已创建。现在可以启动 MCP 测试，或复制外部 Agent 的连接配置。");
     queueMicrotask(() => configSection.current?.scrollIntoView({ block: "nearest" }));
   });
   const revoke = (g: AgentGrant) => void mutate(g.grantId, async current => {
@@ -193,7 +201,7 @@ export default function AgentSettings({ folders, client = agentClient, testerCli
   const { grant: availableGrant, configuration } = setup;
   useLayoutEffect(() => {
     if (tester || !setupFocus.current) return;
-    const target = setupFocus.current === "enabled" ? root.current?.querySelector<HTMLButtonElement>('[role="switch"]') : setupFocus.current === "config" ? configSection.current?.querySelector<HTMLInputElement>("input") : createTrigger.current;
+    const target = setupFocus.current === "enabled" ? root.current?.querySelector<HTMLButtonElement>('[role="switch"]') : setupFocus.current === "config" ? configSection.current?.querySelector<HTMLSelectElement>("select") : createTrigger.current;
     setupFocus.current = null;
     // The setup dialog restores its trigger during unmount. Apply the explicit
     // destination after that cleanup and after the page is no longer inert.
@@ -216,7 +224,7 @@ export default function AgentSettings({ folders, client = agentClient, testerCli
   const showConfig = (grant: AgentGrant) => {
     setConfigGrantId(grant.grantId); setNotice("");
     configSection.current?.scrollIntoView({ block: "nearest" });
-    configSection.current?.querySelector<HTMLInputElement>("input")?.focus({ preventScroll: true });
+    configSection.current?.querySelector<HTMLSelectElement>("select")?.focus({ preventScroll: true });
   };
   const copy = async (format: "stdio" | "toml") => {
     if (!configuration) return;
@@ -255,11 +263,10 @@ export default function AgentSettings({ folders, client = agentClient, testerCli
           </section>
           <section ref={configSection} className="agent-section agent-config" aria-labelledby={`${id}-config`}>
             <h3 id={`${id}-config`}><span className="agent-step" aria-hidden="true">3</span>配置与连接</h3>
-            <p className="agent-help">选择授权和适配器路径，将配置复制到 Codex 或其他支持 MCP 的客户端。也可直接从页头启动测试。</p>
+            <p className="agent-help">MCP 已内置，无需另行安装。选择授权后可直接启动测试；外部 Agent 只需导入下方自动生成的连接配置。</p>
             <label className="agent-field">配置使用的客户端<select value={availableGrant?.grantId ?? ""} disabled={!!busy || loading} onChange={event => { setConfigGrantId(event.target.value); setNotice(""); }}><option value="" disabled>请选择有效授权</option>{setup.grants.map(grant => <option key={grant.grantId} value={grant.grantId}>{grant.clientId}</option>)}</select></label>
-            <label className="agent-field">适配器可执行文件绝对路径<input value={binary} disabled={!!busy} spellCheck={false} autoComplete="off" placeholder="填写已安装的 cybernote-mcp 绝对路径" onChange={event => { setBinary(event.target.value); setNotice(""); }} /></label>
-            <p className="agent-help">填写本机已安装的 cybernote-mcp 路径。生成配置不会运行或检查文件，实际连接时才会启动适配器。</p>
-            {binary.trim() && availableGrant && !configuration && <p className="agent-error">请输入以 / 开头、不含控制字符的绝对路径。</p>}
+            <p className="agent-help" role="status">{binary ? "内置 MCP 已就绪" : loading ? "正在检查内置 MCP…" : "内置 MCP 未就绪"}</p>
+            {adapterError && <div className="agent-error" role="alert"><p>{adapterError}</p><button type="button" disabled={!!busy || loading} onClick={() => void load()}>重新检查内置 MCP</button></div>}
             {!availableGrant && <p className="agent-help">{setup.grants.length ? "所选授权已失效，请重新选择有效客户端。" : "请先在上一步创建有效授权。"}</p>}
             <div className="agent-actions"><button type="button" disabled={!configuration || !!busy || !settings.enabled} onClick={() => void copy("stdio")}>复制 stdio JSON</button><button type="button" disabled={!configuration || !!busy || !settings.enabled} onClick={() => void copy("toml")}>复制 TOML</button></div>
             {configuration && <details className="agent-disclosure"><summary>查看配置文本</summary><p className="agent-help">JSON 为 command/args 片段；TOML 使用 mcp_servers.cybernote。配置只包含凭据引用，不含原始凭据。</p><pre aria-label="stdio JSON 配置">{configuration.stdio}</pre><pre aria-label="TOML 配置">{configuration.toml}</pre></details>}
@@ -273,7 +280,7 @@ export default function AgentSettings({ folders, client = agentClient, testerCli
         </>}
       </div>
     </div>
-    {tester && (testerSession ? <AgentMcpTester binary={testerSession.binary} grant={testerSession.grant} settings={testerSession.settings} trigger={testerTrigger.current} client={testerClient} onClose={() => { setTester(false); setTesterSession(null); }} /> : <AgentTestSetup setup={setup} binary={binary} onBinary={setBinary} onGrant={setConfigGrantId} onStart={startTester} onClose={() => setTester(false)} onSetup={() => { setupFocus.current = !settings?.enabled ? "enabled" : setup.grants.length ? "config" : "grant"; setTester(false); }} trigger={testerTrigger.current} />)}
+    {tester && (testerSession ? <AgentMcpTester binary={testerSession.binary} grant={testerSession.grant} settings={testerSession.settings} trigger={testerTrigger.current} client={testerClient} onClose={() => { setTester(false); setTesterSession(null); }} /> : <AgentTestSetup setup={setup} onGrant={setConfigGrantId} onStart={startTester} onClose={() => setTester(false)} onSetup={() => { setupFocus.current = !settings?.enabled ? "enabled" : setup.grants.length ? "config" : "grant"; setTester(false); }} trigger={testerTrigger.current} />)}
     {dialog && <CreateDialog folders={physicalFolders} busy={busy === "create"} error={dialogError} onCancel={() => { if (!working.current) setDialog(false); }} onCreate={create} trigger={createTrigger.current} />}
   </section>;
 }

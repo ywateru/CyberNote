@@ -2,7 +2,7 @@
 
 独立 Rust 可执行程序，固定九个工具，转发到**正在运行**的桌面宿主私有 Unix protocol。它不打开 SQLite、不链接 Tauri/Store、不启动应用或第二个 Store，不持久保存工具结果或正文，也不自动重试写入。
 
-适配器模块的传输检查使用临时Unix fixture与真实SDK stdio进程；下文fixture证据都保持该模块阶段的范围，fixture没有Store，不能证明业务提交。后续真实宿主装配已独审合入：Codex九工具→同Session/SQLite/真实WebView、撤销/幂等/重启等见[当前状态](../../docs/verification/project-evolution/README.md)和[装配独审](../../docs/plan/reviews/evolve112-integration-independent.md)。最终安装产物仍待116；用户接入步骤见[指南](../../docs/agent-usage.md)。
+适配器模块的传输检查使用临时Unix fixture与真实SDK stdio进程；下文fixture证据都保持该模块阶段的范围，fixture没有Store，不能证明业务提交。后续真实宿主装配已独审合入：Codex九工具→同Session/SQLite/真实WebView、撤销/幂等/重启等见[当前状态](../../docs/verification/project-evolution/README.md)和[装配独审](../../docs/plan/reviews/evolve112-integration-independent.md)。macOS 适配器现已随应用内置交付；用户接入步骤见[指南](../../docs/agent-usage.md)。
 
 ## 构建和运行
 
@@ -12,7 +12,7 @@ cargo test --locked --manifest-path crates/notes-mcp/Cargo.toml
 cargo clippy --locked --all-targets --manifest-path crates/notes-mcp/Cargo.toml -- -D warnings
 ```
 
-以上命令从项目根目录执行，不依赖已经清理的开发worktree。独立 crate 自带 `Cargo.lock`，不会更新根或宿主的包锁。测试需要 Python 3 标准库；不需要用户凭据或运行桌面应用。设置`CARGO_TARGET_DIR`时，后续二进制位置以该目录为准；发布配置使用最终交付路径，不直接依赖开发缓存。
+以上命令从项目根目录执行，不依赖已经清理的开发worktree。独立 crate 自带 `Cargo.lock`，不会更新根或宿主的包锁。测试需要 Python 3 标准库；不需要用户凭据或运行桌面应用。设置`CARGO_TARGET_DIR`时，后续二进制位置以该目录为准；macOS 的 pnpm mac:build / mac:dev 会自动运行 scripts/bundle-mcp.mjs，复用 src-tauri/target 构建并打包适配器；Android 不包含此 sidecar。用户无需独立构建或填写路径，直接复制应用生成的连接配置。
 
 ```text
 /absolute/path/to/cybernote-mcp --workspace-id <id-from-app> --credential-ref <uuid-from-app> [--runtime-dir <absolute-private-directory>]

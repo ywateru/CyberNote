@@ -9,7 +9,7 @@
 ```text
 支持 MCP 的 agent
      │ JSON-RPC / stdio
-cybernote-mcp（独立适配进程；stdout 仅协议，日志 stderr）
+cybernote-mcp（应用内置的独立适配进程；stdout 仅协议，日志 stderr）
      │ 私有本机 IPC + client credential + workspace identity
 CyberNote desktop / agent_host
      │ AgentGrant 校验 → NotesApplicationService
@@ -172,9 +172,9 @@ text 读取每页最多32 KiB UTF-8，在 Unicode 边界截断；contentCursor �
 
 ## Agent 调用示例
 
-面向使用者的安装、设置页授权、Codex/其他harness配置及恢复步骤见[Agent接入指南](../agent-usage.md)；最终可执行路径以实际交付manifest为准。
+面向使用者的安装、设置页授权、Codex/其他harness配置及恢复步骤见[Agent接入指南](../agent-usage.md)；适配器随 macOS 应用打包，路径由原生端按当前应用位置自动提供。
 
-安装并在应用内授权后使用的中性stdio配置模板；必须填入实际交付可执行路径和当前资料库的凭据引用，不能直接运行下方示意值：
+安装并在应用内授权后使用的中性stdio配置模板；应用自动生成内置路径及授权的凭据引用，无需填写路径；不能直接运行下方示意值：
 
 ```json
 {
@@ -191,11 +191,11 @@ Codex自动化验收可使用[公开App Server协议](https://learn.chatgpt.com/
 
 ## 应用内测试程序
 
-2026-11-17 新增实施契约见[本轮任务](../plan/appearance-mcp-tester-20261117.md)。Agent 接入页启动独立测试弹窗，使用用户选择的已有授权及适配器路径；原生启动真实 stdio 子进程，经过相同 MCP/IPC/共享应用服务链。测试器不增加工具，不获得额外权限，不直接写 Store。
+2026-11-17 新增实施契约见[本轮任务](../plan/appearance-mcp-tester-20261117.md)。Agent 接入页启动独立测试弹窗，使用用户选择的已有授权及应用内置适配器；原生启动真实 stdio 子进程，经过相同 MCP/IPC/共享应用服务链。测试器不增加工具，不获得额外权限，不直接写 Store。
 
 手动调用展示发现的工具/schema、JSON 参数及真实结果。自动只读测试和显式读写测试逐项报告通过/失败/跳过；写入仅触及本轮新建的测试笔记，使用真实版本、UUID 幂等键及操作回执。权限不足不能当作通过。停止、关闭与访问状态改变须释放进程并丢弃迟到结果；超时/断连不能证明写入未提交，界面须保留该区别。
 
-测试器是桌面窗口持有的连接，不增加文档参与者。每窗口最多一个连接，全局最多两个；每连接串行处理，等待队列容量一。原生从当前宿主设置解析 credentialRef/runtimeDir，调用方只能传适配器绝对路径、当前 workspaceId 和 grantId，不能传任意启动参数。启动不经过 shell，清空环境并丢弃 stderr。
+测试器是桌面窗口持有的连接，不增加文档参与者。每窗口最多一个连接，全局最多两个；每连接串行处理，等待队列容量一。原生从当前宿主设置解析 credentialRef/runtimeDir，调用方只能传 connectionId、当前 workspaceId 和 grantId，不能传适配器路径或启动参数。原生端只接受当前应用可执行文件同目录的 cybernote-mcp 普通可执行文件，不搜索 PATH 或旧发布目录。macOS 平台配置通过 Tauri externalBin 将适配器放入 Contents/MacOS；Android 不包含此二进制。启动不经过 shell，清空环境并丢弃 stderr。
 
 stdio 单帧上限 2 MiB，单次响应最多处理32帧；握手整体12秒、普通读调用7秒、写调用22秒。连接每250ms复核宿主/授权，调用与交付结果时再次校验。关闭窗口、撤权、停用接入及退出宿主会终止并回收进程；UI取消后不采纳迟到结果。手动显示的 JSON 单项最多32768字符，逐项结果保留最近100项；只读批量每页至多一条且不展示已有正文。以上限额是测试器约束，不改变适配器或业务工具既有契约。
 

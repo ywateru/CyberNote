@@ -1,4 +1,6 @@
 mod account;
+#[cfg(target_os = "macos")]
+mod agent_adapter;
 pub mod agent_access;
 #[cfg(target_os = "macos")]
 #[path = "agent_host/desktop.rs"]
@@ -173,6 +175,27 @@ async fn agent_revoke_grant(
     }
 }
 #[tauri::command]
+async fn agent_bundled_adapter(
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+) -> std::result::Result<String, String> {
+    #[cfg(target_os = "macos")]
+    {
+        app.state::<AgentState>()
+            .0
+            .settings(&expected, window.label())
+            .await
+            .map_err(|_| "Authority")?;
+        agent_adapter::bundled()
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (expected, window, app);
+        Err("Unavailable".into())
+    }
+}
+#[tauri::command]
 async fn agent_tester_start(
     input: serde_json::Value,
     expected: Token,
@@ -181,7 +204,14 @@ async fn agent_tester_start(
 ) -> std::result::Result<serde_json::Value, String> {
     #[cfg(target_os = "macos")]
     {
-        let input = serde_json::from_value(input).map_err(|_| "Input".to_string())?;
+        let request: agent_adapter::TesterRequest =
+            serde_json::from_value(input).map_err(|_| "Input".to_string())?;
+        let input = agent_tester::Start {
+            connection_id: request.connection_id,
+            binary: agent_adapter::bundled()?,
+            workspace_id: request.workspace_id,
+            grant_id: request.grant_id,
+        };
         let desktop = &app.state::<AgentState>().0;
         return desktop
             .testers
@@ -1109,6 +1139,7 @@ pub fn run() {
         sync_window_reply,
         agent_window_reply,
         agent_settings,
+        agent_bundled_adapter,
         agent_set_enabled,
         agent_create_grant,
         agent_revoke_grant,
@@ -1155,6 +1186,7 @@ pub fn run() {
         sync_window_reply,
         agent_window_reply,
         agent_settings,
+        agent_bundled_adapter,
         agent_set_enabled,
         agent_create_grant,
         agent_revoke_grant,

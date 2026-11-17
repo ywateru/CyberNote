@@ -113,21 +113,16 @@ try {
   const input = (await calls("create"))[1].args;
   assert.deepEqual(input.scopes, ["notes:create"]);
   assert.deepEqual(input.folderIds, ["default"]);
-  assert.equal(await page.locator("pre").count(), 0);
-  const binary = page.getByLabel("适配器可执行文件绝对路径", { exact: true });
-  await binary.fill("cybernote-mcp");
-  assert(await page.getByRole("button", { name: "复制 stdio JSON" }).isDisabled());
-  await binary.fill('/private/Test Folder/适配器"\\.bin');
   await page.locator(".agent-config > details").evaluate(node => { node.open = true; });
   const config = JSON.parse(await page.getByLabel("stdio JSON 配置").innerText());
-  assert.equal(config.command, '/private/Test Folder/适配器"\\.bin');
+  assert.equal(config.command, "/Applications/CyberNote.app/Contents/MacOS/cybernote-mcp");
   assert.deepEqual(config.args, ["--workspace-id", "fixture-workspace", "--credential-ref", "fixture-reference", "--runtime-dir", "/private/fixture-runtime"]);
   await page.getByRole("button", { name: "复制 stdio JSON" }).click();
   assert.deepEqual(JSON.parse(await page.evaluate(() => navigator.clipboard.readText())), config);
   await page.getByRole("button", { name: "复制 TOML" }).click();
   assert.match(await page.evaluate(() => navigator.clipboard.readText()), /^\[mcp_servers.cybernote\]/);
   assert(!(await page.locator("body").innerText()).includes("rawcredential"));
-  checks.push("create-only grant; creation failure retained input; busy prevents duplicate/cancel; explicit path and secret-free escaped config copies");
+  checks.push("create-only grant; creation failure retained input; busy prevents duplicate/cancel; bundled adapter and secret-free config copies");
 
   const persisted = await page.evaluate(() => structuredClone(window.agentFixture.state));
   await page.locator(".agent-settings-scroll > details").first().evaluate(node => { node.open = true; });
@@ -137,7 +132,6 @@ try {
   await copies(page, config.command, config.args);
   await mount({ settings: persisted });
   await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
-  await page.getByLabel("适配器可执行文件绝对路径", { exact: true }).fill(config.command);
   await copies(page, config.command, config.args);
   checks.push("custom runtime stays exact in JSON and TOML clipboard after settings refresh and component remount; no creation-only connection cache");
 
@@ -300,10 +294,9 @@ try {
       await mount({ settings: item.settings, revokedSettings: item.revokedSettings });
       assert.equal(await page.getByRole("switch").getAttribute("aria-checked"), "true");
       assert.equal(await page.locator(".agent-grant dd ul li").count(), item.folderCount);
-      const command = '/private/Agent Tools/mcp"\\binary';
+      const command = "/Applications/CyberNote.app/Contents/MacOS/cybernote-mcp";
       const args = ["--workspace-id", before.workspaceId, "--credential-ref", before.credentialRef, "--runtime-dir", item.settings.runtimeDir];
       await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
-      await page.getByLabel("适配器可执行文件绝对路径", { exact: true }).fill(command);
       await copies(page, command, args);
       await page.locator(".agent-settings-scroll > details").first().evaluate(node => { node.open = true; });
   await page.getByRole("button", { name: "刷新", exact: true }).click();
@@ -312,7 +305,6 @@ try {
       await copies(page, command, args);
       await mount({ settings: item.settings, revokedSettings: item.revokedSettings });
       await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
-      await page.getByLabel("适配器可执行文件绝对路径", { exact: true }).fill(command);
       await copies(page, command, args);
       await page.getByRole("button", { name: `撤销 ${before.clientId}`, exact: true }).click();
       await waitFor(() => document.querySelector(".agent-badge")?.textContent === "已撤销");

@@ -21,7 +21,7 @@ const generatedDirectories = new Set([
 // newly added plugins. Do not exclude other Android sources or arbitrary
 // directories named `generated`: MainActivity and handwritten plugins are inputs.
 const pluginAndroidOutput = /^plugins\/[^/]+\/android\/\.tauri$/;
-const roots = ['src', 'public', 'plugins', 'src-tauri', 'crates', 'vendor', 'index.html', 'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'patches', 'tsconfig.json', 'vite.config.ts', 'scripts/android.mjs', 'scripts/build-info.mjs', 'scripts/versions.mjs', 'scripts/release.mjs', 'scripts/native'];
+const roots = ['src', 'public', 'plugins', 'src-tauri', 'crates', 'vendor', 'index.html', 'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'patches', 'tsconfig.json', 'vite.config.ts', 'scripts/android.mjs', 'scripts/bundle-mcp.mjs', 'scripts/build-info.mjs', 'scripts/versions.mjs', 'scripts/release.mjs', 'scripts/native'];
 export function productFiles(root = projectRoot) {
   const files = [];
   const walk = (path) => {

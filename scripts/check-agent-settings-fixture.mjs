@@ -49,7 +49,7 @@ window.agentFixture = {
       React.createElement("div", { className: "recording-layout", style: { "--ui-scale": 1, "--ui-font-scale": 1, "--interface-hit-min": "28px" } },
         React.createElement("main", { className: "app desktop", style: { display: "block" } },
           React.createElement(AgentSettings, {
-            folders, ...(options.realClient ? {} : { client }), mobile: !!options.mobile,
+            folders, ...(options.realClient ? {} : { client, adapter: async () => "/Applications/CyberNote.app/Contents/MacOS/cybernote-mcp" }), mobile: !!options.mobile,
             returnFocus: document.getElementById("fixture-trigger"),
             onClose: () => { f.closed++; root.unmount(); },
           })))));

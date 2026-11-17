@@ -189,3 +189,6 @@ export const agentClient: AgentClient = {
   },
   revokeGrant: grantId => call("agent_revoke_grant", { grantId: text(grantId) }, parseAgentSettings),
 };
+
+/** Resolve the adapter shipped with the running application; never user input. */
+export const bundledAgentAdapter = () => call("agent_bundled_adapter", {}, runtimeDir);

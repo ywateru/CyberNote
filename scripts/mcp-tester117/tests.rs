@@ -2,6 +2,8 @@
 // Test doubles only for desktop authority; all Registry/Process code is production.
 #[path = "../../src-tauri/src/agent_tester/mod.rs"]
 mod agent_tester;
+#[path = "../../src-tauri/src/agent_adapter.rs"]
+mod agent_adapter;
 #[cfg(test)]
 use agent_tester::process;
 #[path = "../../src-tauri/src/agent_host/types.rs"]

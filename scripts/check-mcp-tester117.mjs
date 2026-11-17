@@ -11,7 +11,7 @@ const root = resolve(import.meta.dirname, "..");
 const temp = await mkdtemp(join(tmpdir(), "mcp-tester117-js-"));
 let checks = 0;
 try {
-  for (const name of ["agent-mcp-tester-client", "agent-mcp-tester-runner"]) {
+  for (const name of ["agent-mcp-tester-client", "agent-mcp-tester-runner", "agent-client"]) {
     const source = await readFile(join(root, `src/${name}.ts`), "utf8");
     const js = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText
       .replaceAll('"@tauri-apps/api/core"', '"./invoke.mjs"').replaceAll('"./bridge"', '"./bridge.mjs"').replaceAll('"./agent-mcp-tester-client"', '"./agent-mcp-tester-client.mjs"');
@@ -95,11 +95,21 @@ try {
   globalThis.testStamp = { generation: 1, sessionId: "window", epoch: 1 };
   const invoked = [];
   globalThis.testInvoke = async (command, args) => { invoked.push({ command, args }); if (command === "agent_tester_start") return { connectionId: args.input.connectionId, tools }; if (command === "agent_tester_call") throw "token=/private/DO-NOT-EXPOSE"; };
-  await mcpTesterClient.connect({ connectionId: id, binary: "/installed/cybernote-mcp", workspaceId: "workspace", grantId: "grant" });
+  await mcpTesterClient.connect({ connectionId: id, workspaceId: "workspace", grantId: "grant" });
+  assert.deepEqual(Object.keys(invoked[0].args.input).sort(), ["connectionId", "grantId", "workspaceId"]); checks++;
   await assert.rejects(() => mcpTesterClient.call(id, "notes_list", {}), e => !e.message.includes("DO-NOT-EXPOSE"));
   globalThis.testStamp.generation++;
   await mcpTesterClient.stop(id);
   assert.equal(invoked.at(-1).command, "agent_tester_stop"); assert.equal(invoked.at(-1).args.expected.epoch, 1); checks++;
+  const { bundledAgentAdapter } = await import(pathToFileURL(join(temp, "agent-client.mjs")));
+  globalThis.testInvoke = async command => { assert.equal(command, "agent_bundled_adapter"); return "/Applications/CyberNote.app/Contents/MacOS/cybernote-mcp"; };
+  assert.equal(await bundledAgentAdapter(), "/Applications/CyberNote.app/Contents/MacOS/cybernote-mcp"); checks++;
+  for (const invalid of ["relative/adapter", "/bad\npath", "", null]) {
+    globalThis.testInvoke = async () => invalid;
+    await assert.rejects(bundledAgentAdapter); checks++;
+  }
+  globalThis.testInvoke = async () => { globalThis.testStamp.generation++; return "/valid/path"; };
+  await assert.rejects(bundledAgentAdapter, error => error.code === "access"); checks++;
   // All three mutations preserve legal ToolError evidence and perform only a
   // read-only recovery lookup. No recovery outcome resumes subsequent writes.
   for (const failedTool of ["notes_create", "notes_append", "notes_update"]) {
