@@ -40,6 +40,7 @@ try {
   const waitFor = async fn => page.waitForFunction(fn);
   const calls = operation => page.evaluate(operation => window.agentFixture.calls.filter(call => call.operation === operation), operation);
   const copies = async (target, command, args) => {
+    await target.locator(".agent-config > details").evaluate(node => { node.open = true; });
     const expected = { command, args };
     assert.deepEqual(JSON.parse(await target.getByLabel("stdio JSON 配置").innerText()), expected);
     await target.getByRole("button", { name: "复制 stdio JSON", exact: true }).click();
@@ -117,6 +118,7 @@ try {
   await binary.fill("cybernote-mcp");
   assert(await page.getByRole("button", { name: "复制 stdio JSON" }).isDisabled());
   await binary.fill('/private/Test Folder/适配器"\\.bin');
+  await page.locator(".agent-config > details").evaluate(node => { node.open = true; });
   const config = JSON.parse(await page.getByLabel("stdio JSON 配置").innerText());
   assert.equal(config.command, '/private/Test Folder/适配器"\\.bin');
   assert.deepEqual(config.args, ["--workspace-id", "fixture-workspace", "--credential-ref", "fixture-reference", "--runtime-dir", "/private/fixture-runtime"]);
@@ -128,8 +130,9 @@ try {
   checks.push("create-only grant; creation failure retained input; busy prevents duplicate/cancel; explicit path and secret-free escaped config copies");
 
   const persisted = await page.evaluate(() => structuredClone(window.agentFixture.state));
+  await page.locator(".agent-settings-scroll > details").first().evaluate(node => { node.open = true; });
   await page.getByRole("button", { name: "刷新", exact: true }).click();
-  await page.locator(".agent-config").waitFor({ state: "detached" });
+  await page.getByText("正在加载 Agent 接入设置…", { exact: true }).waitFor({ state: "hidden" });
   await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
   await copies(page, config.command, config.args);
   await mount({ settings: persisted });
@@ -144,8 +147,8 @@ try {
   assert(await page.getByRole("switch").isDisabled());
   await page.evaluate(() => window.agentFixture.release());
   await waitFor(() => document.querySelector(".agent-badge")?.textContent === "已撤销");
-  assert.equal(await page.locator(".agent-config").count(), 0);
-  checks.push("revoke acknowledged by host DTO removes config and disables revoked grant actions");
+  assert.equal(await page.locator(".agent-config pre").count(), 0);
+  checks.push("revoke acknowledged by host DTO removes generated config while keeping setup visible; revoked grant actions disabled");
 
   for (const [label, scope] of [["读取 notes:read", "notes:read"], ["修改 notes:update", "notes:update"]]) {
     await mount({ settings: { enabled: true } });
@@ -167,8 +170,9 @@ try {
     await page.evaluate(dark => document.documentElement.classList.toggle("dark", dark), dark);
     await mount({ settings: { enabled: true, grants: [sample, { ...sample, grantId: "expired", clientId: "已过期客户端", expiresAt: 1 }], recentOperations: [{ clientId: "Codex", tool: "notes_create", noteId: "note-fixture", at: Date.now(), outcome: "committed" }] } });
     assert.match(await page.locator(".agent-settings").innerText(), /已过期/);
+    await page.locator(".agent-settings-scroll > details").first().evaluate(node => { node.open = true; });
     assert.match(await page.locator(".agent-operations").innerText(), /notes_create · committed/);
-    assert(await page.locator(".agent-settings").evaluate(e => e.scrollHeight > e.clientHeight && e.scrollWidth <= e.clientWidth + 1));
+    assert(await page.locator(".agent-settings-scroll").evaluate(e => e.scrollHeight > e.clientHeight && e.scrollWidth <= e.clientWidth + 1));
     await page.getByRole("button", { name: "创建授权", exact: true }).click();
     assert(await page.getByRole("dialog").evaluate(e => e.scrollWidth <= e.clientWidth + 1 && e.getBoundingClientRect().bottom <= innerHeight));
     await page.getByRole("button", { name: "取消", exact: true }).scrollIntoViewIfNeeded();
@@ -301,8 +305,9 @@ try {
       await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
       await page.getByLabel("适配器可执行文件绝对路径", { exact: true }).fill(command);
       await copies(page, command, args);
-      await page.getByRole("button", { name: "刷新", exact: true }).click();
-      await page.locator(".agent-config").waitFor({ state: "detached" });
+      await page.locator(".agent-settings-scroll > details").first().evaluate(node => { node.open = true; });
+  await page.getByRole("button", { name: "刷新", exact: true }).click();
+      await page.getByText("正在加载 Agent 接入设置…", { exact: true }).waitFor({ state: "hidden" });
       await page.getByRole("button", { name: "查看接入配置", exact: true }).click();
       await copies(page, command, args);
       await mount({ settings: item.settings, revokedSettings: item.revokedSettings });
@@ -311,7 +316,7 @@ try {
       await copies(page, command, args);
       await page.getByRole("button", { name: `撤销 ${before.clientId}`, exact: true }).click();
       await waitFor(() => document.querySelector(".agent-badge")?.textContent === "已撤销");
-      assert.equal(await page.locator(".agent-config").count(), 0);
+      assert.equal(await page.locator(".agent-config pre").count(), 0);
       assert.equal(await page.getByRole("switch").count(), 1);
       assert.deepEqual((await calls("revoke")).map(call => call.args.grantId), [before.grantId]);
       assert(await page.getByRole("button", { name: `撤销 ${before.clientId}`, exact: true }).isDisabled());
@@ -332,7 +337,7 @@ try {
   await chooseCreateOnly();
   await page.getByRole("button", { name: "确认创建", exact: true }).click();
   await page.getByRole("dialog").getByRole("alert").waitFor();
-  assert.equal(await page.locator(".agent-config").count(), 0);
+  assert.equal(await page.locator(".agent-config pre").count(), 0);
   assert.equal(await page.locator(".agent-grant").count(), 0);
   checks.push("creation connection runtime differing from confirmed HostSettings is rejected without adopting grant or config");
   assert.deepEqual(errors, []);
