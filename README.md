@@ -10,6 +10,8 @@ Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android�
 
 Agent 接入界面118已按“允许本机接入 → 授权客户端 → 配置与连接”重整，测试入口固定在页头；条件未完成时可直接打开准备弹窗补齐。已从 `f6e0b6b4b860` 构建并正常重启 Mac，新入口无需先点“查看接入配置”。[界面交付与手测步骤](docs/verification/agent-settings118/README.md) · [使用指南](docs/agent-usage.md)。
 
+MCP119 已改为随 Mac 应用内置交付，删除适配器路径输入。开启接入、选择有效授权即可测试，外部 Agent 配置自动引用包内程序。已从 `515e9f14b34d` 构建并正常重启 Mac；[交付与命令验证](docs/verification/bundled-mcp119/README.md)。
+
 设计与代码依据：[代码现状及改进建议](docs/plan/analysis/project-review-20261116.md) · [Agent MCP 查询/读取/写入契约](docs/architecture/agent-mcp.md) · [多主题与呈现架构](docs/architecture/theme-presentation.md) · [桌面/移动交互方案](docs/ui/adaptive-presentation.md) · [实施路线图](docs/plan/project-evolution-20261116.md)。文档区分原始分析、已实现行为和后续扩展，实际功能与验证范围以本轮交付为准。
 
 服务器维护入口：[服务关系与生产部署记录](docs/server/README.md) · [配置、开发、部署与排障](docs/server/DEPLOYMENT.md)。
@@ -22,16 +24,16 @@ Agent 接入界面118已按“允许本机接入 → 授权客户端 → 配置�
 
 | 平台 | 安装包 | 版本 / 构建时间（UTC） | 源码 |
 | --- | --- | --- | --- |
-| macOS | [CyberNote.app](<artifacts/releases/20261117-agent-settings118/CyberNote.app>) | 0.1.0 / 2026-11-17T09:59:55.864Z | f6e0b6b4b860 + 482b0f5d5ff00fc6 |
+| macOS | [CyberNote.app](<artifacts/releases/20261117-bundled-mcp119/CyberNote.app>) | 0.1.0 / 2026-11-17T10:24:35.188Z | 515e9f14b34d + 61022feac22ae567 |
 | Android | [APK](<artifacts/releases/20261117-feedback117/android/CyberNote-Android-arm64.apk>) | 0.1.0 / 2026-11-17T08:19:34.498Z | c406086d5bbe + 31c8ed9fed41158a |
 
-macOS 已更新 Agent 接入界面118；Android 保持反馈117包，本次桌面设置改版未重打手机包，因此表中源码指纹不同。功能与平台差异见[功能对应表](docs/platform-feature-matrix.md)。本机包不纳入 Git，验证范围见各平台交付 manifest。
+macOS 已更新内置 MCP119；Android 保持反馈117包，本次桌面接入改动未重打手机包，因此表中源码指纹不同。功能与平台差异见[功能对应表](docs/platform-feature-matrix.md)。本机包不纳入 Git，验证范围见各平台交付 manifest。
 
 <!-- latest-installers:end -->
 
-[Mac ZIP（含字体许可与来源说明）](artifacts/releases/20261117-agent-settings118/CyberNote-Mac.zip)；Mac随附字体[OFL许可](artifacts/releases/20261117-agent-settings118/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-agent-settings118/notices/noto-cjk/README.md)。Android分发时请同时保留交付目录内的[OFL许可](artifacts/releases/20261117-feedback117/android/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-feedback117/android/notices/noto-cjk/README.md)；这些是APK旁随文件，裸APK不包含完整许可交付。
+[Mac ZIP（含字体许可与来源说明）](artifacts/releases/20261117-bundled-mcp119/CyberNote-Mac.zip)；Mac随附字体[OFL许可](artifacts/releases/20261117-bundled-mcp119/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-bundled-mcp119/notices/noto-cjk/README.md)。Android分发时请同时保留交付目录内的[OFL许可](artifacts/releases/20261117-feedback117/android/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-feedback117/android/notices/noto-cjk/README.md)；这些是APK旁随文件，裸APK不包含完整许可交付。
 
-Agent适配器（macOS arm64）：[cybernote-mcp](artifacts/releases/20261117-project-evolution/mcp/cybernote-mcp) · [manifest](artifacts/releases/20261117-project-evolution/mcp.json) · [第三方许可](artifacts/releases/20261117-project-evolution/mcp/THIRD_PARTY_NOTICES.md)。设置→Agent接入生成客户端授权与配置；查询/读取/新建/追加/更新见[指南](docs/agent-usage.md)。桌面应用需保持运行，Android通过同步取得内容。Mac为ad-hoc签名未公证，Android为本地Debug证书，均非商店签名。
+Agent 适配器已内置于 Mac 应用（arm64），无需单独下载或填写路径。[包内适配器验证](artifacts/releases/20261117-bundled-mcp119/mcp-bundle.json) · [第三方许可](artifacts/releases/20261117-bundled-mcp119/notices/mcp/THIRD_PARTY_NOTICES.md)。设置 → Agent 接入生成客户端授权与配置；查询/读取/新建/追加/更新见[指南](docs/agent-usage.md)。桌面应用需保持运行，Android通过同步取得内容。Mac为ad-hoc签名未公证，Android为本地Debug证书，均非商店签名。
 
 空间维护：11-17按用户要求清理旧 debug 缓存、过期非 release 候选二进制、隔离 AVD 和打包中间文件，文件原占用合计约33.7 GiB；当前及回退 release、最新历史账户双客户端测试包、资料库和日志保留。下方历史文档中的非 release 安装包路径可能已清理，不能作为当前下载入口；具体清单见[清理记录](docs/verification/feedback117/DEPLOYMENT.md)。
 
