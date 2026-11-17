@@ -1,5 +1,7 @@
 # 文档导航
 
+2026-11-17 新反馈实施：[八套外观、紧凑清单与 MCP 测试程序](plan/appearance-mcp-tester-20261117.md)。保留三套预设并扩展为八套，修正纸感/高对比和双端待办排版；Agent 接入增加真实 stdio 测试入口。UI 由用户验收，命令与单元检查随本轮源码交付；下方旧产物不包含这些新变更。
+
 2026-11-16 项目演进设计，11-17进入实现：[代码梳理与优先级](plan/analysis/project-review-20261116.md) → [MCP 接口](architecture/agent-mcp.md) / [主题与呈现架构](architecture/theme-presentation.md) / [双端交互](ui/adaptive-presentation.md) → [实施路线图与六项任务](plan/project-evolution-20261116.md)。新 MCP 和主题契约以这些文档为准；已实现功能与历史验证仍按下方各自版本读取。
 
 使用者入口：[Agent接入指南](agent-usage.md)说明设置页授权、Codex/DeepSeek harness配置边界及写入失败恢复；最终三产物与命令验证已交付，UI余项交用户手测，实际边界见[交付报告](verification/project-evolution/DELIVERY.md)。

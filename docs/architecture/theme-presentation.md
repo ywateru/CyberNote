@@ -31,7 +31,8 @@ ThemeRegistry 是内置预设的唯一来源；ThemeResolver 只解析和投影�
 ```ts
 type AppearanceV2 = {
   version: 2;
-  themeId: "classic" | "paper" | "high-contrast";
+  themeId: "classic" | "paper" | "high-contrast"
+    | "ocean" | "forest" | "rose" | "lavender" | "graphite";
   schemePreference: "system" | "light" | "dark";
 };
 type PresentationV1 = {
@@ -86,19 +87,26 @@ type PresentationV1 = {
 
 圆角按“组件基础值 × 既有 radiusScale”计算：画廊18px、菜单10px等保留各自基础；圆形录音/播放/色板保持语义形状。不使用统一 `border-radius: ... !important` 抹平组件。层级、遮挡、锁定与启动覆盖仍引用现有 `--layer-*`，主题无权改变它们。
 
-## 首批主题
+## 内置主题
+
+2026-11-17 的八套外观实施见[本轮任务](../plan/appearance-mcp-tester-20261117.md)。以下是本轮目标契约；文末 114 历史实现记录仍按其三套主题的版本理解。增加预设不改变 AppearanceV2 版本，原生归档验证与前端注册表同步扩展。
 
 | ID | 方向 | 约束 |
 | --- | --- | --- |
 | classic | 沿现有 Apple Notes 风格、黄强调、浅灰导航 | 默认预设优先保留现有视觉基线；包含 light/dark |
 | paper | 暖白/暖灰、较柔和边线、适合长文阅读 | light/dark 都给出明确 palette；不改变已保存文字颜色、图片、速绘或纸张 |
-| high-contrast | 更清楚的边线、文字、选中与焦点 | 支持 light/dark；不用颜色单独表达选中/错误，目标普通文字对比度≥4.5:1 |
+| high-contrast | 黑白表面、清楚文字、蓝色选中与焦点 | 支持 light/dark；普通分隔线 1px，避免粗框包围所有组件；不用颜色单独表达选中/错误，目标普通文字对比度≥4.5:1 |
+| ocean | 海蓝表面和深海色文字、蓝色强调 | 正文、导航、工具栏及弹层采用完整浅/深色板 |
+| forest | 苔绿表面和墨绿文字、绿色强调 | 与海洋和经典有明确表面差异；包含 light/dark |
+| rose | 玫瑰灰粉表面、深莓色文字与强调 | 不只更改 accent；包含 light/dark |
+| lavender | 淡紫表面、紫灰文字与紫色强调 | 包含 light/dark，并保留正文可读性 |
+| graphite | 石墨中性表面、冷灰文字层次 | 与黑白高对比和黄强调经典区分；包含 light/dark |
 
 不在第一阶段加入用户可执行主题包。未来自定义主题仅接受版本化有界 token JSON，验证颜色、必填项、对比度、资源限制与来源；导入失败保留旧主题。
 
 实施视觉基线：Classic沿用当前桌面浅色的白正文`#ffffff`、侧栏`#f3f3f6`、正文`#19191c`、次级字`#7d7e88`、强调`#d99300`、选中`#fff1cc`；深色沿当前已定义值。Paper采用笔记纸感的正文`#faf7ef`、侧栏`#eee9dc`、正文`#29271f`、次级字`#6c6659`、强调`#80600f`、选中`#eadba9`，暗变体为暖灰黑表面与浅暖文字。High Contrast浅色采用白底/黑字、清楚的深灰边线、深蓝`#0047ab`动作与淡蓝选中；暗色采用黑底/白字、浅灰边线与浅蓝动作。实现必须逐对检查文字/焦点/选中对比度，必要时微调次级字或强调色而不改文档内容。
 
-字体继续使用现有系统/PingFang/Noto本地fallback，不下载远程字体；Paper的差异主要来自表面与文字层次，不擅自将中文正文换成衬线字体。布局保留左对齐的目录、列表与正文，长文默认阅读宽度有界；三个主题不增加营销式装饰或自动动画。样式实现前后对照Classic同尺寸基线，再看Paper/High Contrast是否覆盖所有真实表面。
+字体继续使用现有系统/PingFang/Noto本地fallback，不下载远程字体；Paper的差异主要来自表面与文字层次，不擅自将中文正文换成衬线字体。布局保留左对齐的目录、列表与正文，长文默认阅读宽度有界；主题不增加装饰或自动动画。纸感工具栏与对应导航/正文表面使用一致的暖纸色系，避免顶部灰白与底部暖纸断层。设置页正常桌面宽度为四列两行预设，窄宽/大字体允许降列。
 
 编辑器 marks 的用户指定颜色是内容，切换主题不重写正文；需要为深色背景提供可读性提示或呈现处理，但不把正文全部强制变成同一种文字颜色。搜索高亮、选区和 tag chip 另用语义 token。
 
