@@ -4,6 +4,11 @@ export const themeOptions = [
   { value: "classic", label: "Classic · 经典" },
   { value: "paper", label: "Paper · 纸感" },
   { value: "high-contrast", label: "High Contrast · 高对比" },
+  { value: "ocean", label: "Ocean · 海洋" },
+  { value: "forest", label: "Forest · 森林" },
+  { value: "rose", label: "Rose · 玫瑰" },
+  { value: "lavender", label: "Lavender · 薰衣草" },
+  { value: "graphite", label: "Graphite · 石墨" },
 ] as const;
 export type ThemeId = typeof themeOptions[number]["value"];
 export type SchemePreference = "system" | "light" | "dark";

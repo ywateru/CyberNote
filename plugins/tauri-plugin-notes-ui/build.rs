@@ -45,6 +45,7 @@ fn main() {
             println!("cargo:rustc-link-lib=framework={framework}");
         }
         println!("cargo:rerun-if-changed=macos/toolbar.m");
+        println!("cargo:rerun-if-changed=macos/theme-palettes.h");
         println!("cargo:rerun-if-changed=macos/format.m");
         println!("cargo:rerun-if-changed=macos/format.h");
         println!("cargo:rerun-if-changed=macos/keyboard.m");

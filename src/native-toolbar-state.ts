@@ -280,5 +280,6 @@ export function toolbarState(input: {
     iconScale: parseInterfaceDetails(settings.interfaceDetails).iconScale / 100,
     hitScale: parseInterfaceDetails(settings.interfaceDetails).desktopHitScale / 100,
     appearance: appearanceOf(settings).schemePreference,
+    themeId: appearanceOf(settings).themeId,
   };
 }

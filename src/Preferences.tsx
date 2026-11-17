@@ -33,7 +33,7 @@ function PreferenceChoices<T extends string>({ label, value, options, onChange, 
   label: string; value: T; options: readonly { value: T; label: string }[];
   onChange: (value: T) => void; disabled: boolean; appearance?: boolean;
 }) {
-  return <div role="radiogroup" aria-label={label} className={appearance ? "preferences-appearance-choices" : "preferences-font-choices"}>
+  return <div role="radiogroup" aria-label={label} className={appearance ? `preferences-appearance-choices${options.length > 3 ? " preferences-theme-choices" : ""}` : "preferences-font-choices"}>
     {options.map((option, index) => <button key={option.value} type="button" role="radio" aria-checked={value === option.value}
       aria-disabled={disabled} tabIndex={value === option.value ? 0 : -1}
       className={appearance ? `preferences-appearance-card preferences-appearance-${option.value}` : "preferences-font-choice"}
@@ -167,7 +167,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
                   {mobile ? <label className="preferences-row"><span>主题</span><select aria-label="主题" value={appearance.themeId} onChange={event => void changeAppearance({ themeId: event.target.value as ThemeId })}>{themeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <PreferenceChoices label="主题" value={appearance.themeId} options={themeOptions} disabled={saving} appearance onChange={themeId => void changeAppearance({ themeId })} />}
                   <h4>外观</h4>
                   {mobile ? <label className="preferences-row"><span>外观</span><select aria-label="外观" value={appearance.schemePreference} onChange={event => void changeAppearance({ schemePreference: event.target.value as SchemePreference })}>{appearanceOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label> : <PreferenceChoices label="外观" value={appearance.schemePreference} options={appearanceOptions} disabled={saving} appearance onChange={schemePreference => void changeAppearance({ schemePreference })} />}
-                  <p className="preferences-help">主题用于应用内界面。macOS 系统菜单与原生工具栏仅支持跟随系统、浅色或深色，不支持自定义主题配色与圆角。</p>
+                  <p className="preferences-help">主题用于整个工作区及 macOS 原生工具栏背景。系统菜单遵循系统明暗样式，圆角由 macOS 管理。</p>
                   <p className="preferences-help" role="status">{saving ? "正在保存外观设置…" : "已保存的外观应用于此设备"}</p>
                 </div>
                 <div className="preferences-group preferences-interface-group">

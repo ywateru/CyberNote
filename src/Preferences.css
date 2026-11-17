@@ -198,12 +198,18 @@
 
 /* Both chosen skin and scheme remain explicit without relying on hue. */
 .preferences-appearance-card { height: auto; min-height: 78px; overflow-wrap: anywhere; }
-.preferences-appearance-card[aria-checked="true"] { outline: 2px solid var(--focus); outline-offset: 2px; font-weight: 650; }
+.preferences-appearance-card[aria-checked="true"] { border-color: var(--focus); background: var(--selection); font-weight: 650; }
 .preferences-appearance-card[aria-checked="true"] > span:last-child::before { content: "✓ "; }
 .preferences-appearance-choices + h4 { margin-top: 20px; }
-.preferences-appearance-card.preferences-appearance-classic { --sample-paper: var(--paper); }
-.preferences-appearance-card.preferences-appearance-paper { --sample-paper: var(--paper); }
-.preferences-appearance-card.preferences-appearance-high-contrast { --sample-paper: var(--paper); border-width: 2px; }
+/* Four themes per row at the normal settings width; em units allow large text
+   and narrow windows to reduce columns without shrinking the labels. */
+.preferences-appearance-group { container-type: inline-size; }
+.preferences-theme-choices { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@container (max-width: 30em) { .preferences-theme-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (max-width: 16em) { .preferences-theme-choices { grid-template-columns: minmax(0, 1fr); } }
+.preferences-theme-choices .preferences-appearance-card { padding: 9px 7px; }
+.preferences-theme-choices .preferences-appearance-card > span:last-child { text-wrap: balance; }
+
 
 .preferences-appearance-sample i { background: var(--sample-sidebar, var(--sidebar)); border: 1px solid var(--line); }
 .preferences-appearance-sample i + i { background: var(--sample-paper, var(--paper)); }

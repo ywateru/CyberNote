@@ -8,7 +8,7 @@
   let leaving = false;
   let finished = false;
   const media = matchMedia("(prefers-color-scheme: dark)");
-  const valid = (v) => v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length === 3 && v.version === 2 && ["classic", "paper", "high-contrast"].includes(v.themeId) && ["system", "light", "dark"].includes(v.schemePreference);
+  const valid = (v) => v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length === 3 && v.version === 2 && ["classic", "paper", "high-contrast", "ocean", "forest", "rose", "lavender", "graphite"].includes(v.themeId) && ["system", "light", "dark"].includes(v.schemePreference);
   let current = { version: 2, themeId: "classic", schemePreference: "system" };
   const apply = () => {
     const dark = current.schemePreference === "dark" || (current.schemePreference === "system" && media.matches);

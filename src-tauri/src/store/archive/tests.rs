@@ -763,7 +763,7 @@ fn appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip() {
     store.action(json!({"type":"settings","settings":{"sort":"title"}})).unwrap();
     assert_eq!(store.workspace().unwrap()["settings"]["appearance"], json!({"version":2,"themeId":"classic","schemePreference":"dark"}));
     let details = json!({"version":1,"iconScale":100,"desktopHitScale":100,"mobileHitScale":100,"menuSpacing":"standard","radiusScale":150});
-    for skin in ["classic", "paper", "high-contrast"] {
+    for skin in ["classic", "paper", "high-contrast", "ocean", "forest", "rose", "lavender", "graphite"] {
         for scheme in ["system", "light", "dark"] {
             let appearance = json!({"version":2,"themeId":skin,"schemePreference":scheme});
             // New authority wins over a stale (but legal) legacy projection.
@@ -784,7 +784,7 @@ fn appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip() {
     }
     store.action(json!({"type":"settings","settings":{"theme":"light"}})).unwrap();
     let good = store.workspace().unwrap()["settings"].clone();
-    assert_eq!(good["appearance"]["themeId"], "high-contrast");
+    assert_eq!(good["appearance"]["themeId"], "graphite");
     assert_eq!(good["appearance"]["schemePreference"], "light");
     assert_eq!(good["interfaceFontSize"], "small");
     assert_eq!(good["editorFontSize"], "huge");

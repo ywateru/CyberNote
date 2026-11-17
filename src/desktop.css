@@ -557,30 +557,17 @@
   line-height: 1.65;
   min-height: 1.65em;
 }
-.desktop .tiptap ul[data-type="taskList"] li {
-  gap: calc(20px * var(--editor-scale, 1));
-  padding: calc(4px * var(--editor-scale, 1)) 0;
-  align-items: center;
+.desktop .tiptap ul[data-type="taskList"] > li {
+  --task-circle: calc(19px * var(--editor-font-scale, 1));
+  gap: calc(6px * var(--editor-font-scale, 1));
+  padding: 2px 0;
+  align-items: flex-start;
 }
-.desktop .tiptap ul[data-type="taskList"] li > label {
-  margin: 0 0 0 calc(3px * var(--editor-scale, 1));
-}
-.desktop .tiptap ul[data-type="taskList"] li > label input {
-  width: calc(24px * var(--editor-scale, 1));
-  height: calc(24px * var(--editor-scale, 1));
-  border-radius: calc(var(--radius-5) * var(--editor-scale, 1));
-  border: 1.4px solid var(--line);
-}
-.desktop .tiptap ul[data-type="taskList"] li > label input:checked {
-  background: var(--accent);
-  border-color: var(--accent);
-}
-.desktop .tiptap ul[data-type="taskList"] li > label input:checked::after {
-  width: calc(10px * var(--editor-scale, 1));
-  height: calc(6px * var(--editor-scale, 1));
-  left: calc(5px * var(--editor-scale, 1));
-  top: calc(5px * var(--editor-scale, 1));
-  border-width: 2px;
+.desktop .tiptap ul[data-type="taskList"] > li > label input:checked::after {
+  width: calc(var(--task-circle) * .42);
+  height: calc(var(--task-circle) * .22);
+  left: calc(var(--task-circle) * .24);
+  top: calc(var(--task-circle) * .24);
 }
 .audio-waveform-row {
   display: none;
