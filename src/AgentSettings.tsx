@@ -7,6 +7,8 @@ import {
   type CreateAgentGrant,
 } from "./agent-client";
 import "./AgentSettings.css";
+import AgentMcpTester from "./AgentMcpTester";
+import type { McpTesterClient } from "./agent-mcp-tester-client";
 
 const scopeLabels: Record<AgentScope, string> = {
   "notes:read": "读取", "notes:create": "新建", "notes:update": "修改",
@@ -23,6 +25,7 @@ export interface AgentSettingsProps {
   folders: readonly Folder[];
   /** Omit in production. Injected clients must still obey the host DTOs. */
   client?: AgentClient;
+  testerClient?: McpTesterClient;
   mobile?: boolean;
   onClose?: () => void;
   returnFocus?: HTMLElement | null;
@@ -101,13 +104,15 @@ function CreateDialog({ folders, busy, error, onCancel, onCreate, trigger }: {
   </div>;
 }
 
-export default function AgentSettings({ folders, client = agentClient, mobile = false, onClose, returnFocus }: AgentSettingsProps) {
+export default function AgentSettings({ folders, client = agentClient, testerClient, mobile = false, onClose, returnFocus }: AgentSettingsProps) {
   const id = useId(), mounted = useRef(false), generation = useRef(0), working = useRef(false);
   const root = useRef<HTMLElement>(null), createTrigger = useRef<HTMLButtonElement>(null);
   const [settings, setSettings] = useState<AgentHostSettings | null>(null);
   const [loading, setLoading] = useState(true), [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState(""), [dialogError, setDialogError] = useState("");
   const [dialog, setDialog] = useState(false);
+  const [tester, setTester] = useState(false);
+  const testerTrigger = useRef<HTMLButtonElement>(null);
   const [configGrant, setConfigGrant] = useState<AgentGrant | null>(null), [binary, setBinary] = useState("");
   const [notice, setNotice] = useState("");
   const [now, setNow] = useState(Date.now);
@@ -126,7 +131,7 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
   useEffect(() => {
     mounted.current = true;
     working.current = false;
-    setBusy(null); setSettings(null); setDialog(false);
+    setBusy(null); setSettings(null); setDialog(false); setTester(false);
     void load();
     const timer = window.setInterval(() => setNow(Date.now()), 30_000);
     return () => {
@@ -179,6 +184,12 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
     root.current?.querySelector<HTMLHeadingElement>("h2")?.focus({ preventScroll: true });
   });
   const availableGrant = configGrant && !configGrant.revoked && configGrant.expiresAt > now ? configGrant : null;
+  useEffect(() => {
+    if (tester && !availableGrant) {
+      setTester(false);
+      queueMicrotask(() => root.current?.querySelector<HTMLHeadingElement>("h2")?.focus({ preventScroll: true }));
+    }
+  }, [tester, availableGrant]);
   let configuration: ReturnType<typeof agentLaunchConfig> | null = null;
   if (availableGrant && settings && binary.trim()) {
     try { configuration = agentLaunchConfig(binary, {
@@ -195,7 +206,7 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
   };
   if (mobile) return <section className="agent-settings"><h2>Agent 接入</h2><p>本机 MCP 接入首版仅支持桌面宿主，移动端不提供运行开关。</p>{onClose && <button type="button" onClick={onClose}>返回设置</button>}</section>;
   return <section ref={root} className="agent-settings" aria-labelledby={`${id}-title`}>
-    <div inert={dialog}>
+    <div inert={dialog || !!(tester && settings && availableGrant)}>
       <header className="agent-page-header"><div><h2 id={`${id}-title`} tabIndex={-1}>Agent 接入</h2><p className="agent-help">允许本机 Agent 在明确授权的目录中访问备忘录。默认关闭；桌面宿主需保持运行。</p></div>{onClose && <button type="button" disabled={!!busy} onClick={onClose}>返回设置</button>}</header>
       {loading && <p role="status">正在加载 Agent 接入设置…</p>}
       {error && <div className="agent-error" role="alert"><p>{error}</p><button type="button" disabled={!!busy || loading} onClick={() => void load()}>重新加载</button></div>}
@@ -217,6 +228,7 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
         {availableGrant && <section className="agent-section agent-config" aria-labelledby={`${id}-config`}>
           <h3 id={`${id}-config`}>{availableGrant.clientId} 的接入配置</h3>
           <label className="agent-field">适配器可执行文件绝对路径<input value={binary} spellCheck={false} autoComplete="off" placeholder="填写已安装的 cybernote-mcp 绝对路径" onChange={e => { setBinary(e.target.value); setNotice(""); }} /></label>
+          <div className="agent-actions"><button ref={testerTrigger} type="button" disabled={!!busy || loading || !settings.enabled || !configuration} onClick={() => setTester(true)}>启动 MCP 测试程序</button></div>
           <p className="agent-help">本页不安装或检测适配器。未安装 cybernote-mcp 时配置不可运行；填写路径也不代表文件已存在。桌面宿主必须保持运行。</p>
           {binary.trim() && !configuration && <p className="agent-error">请输入以 / 开头、不含控制字符的绝对路径。</p>}
           <div className="agent-actions"><button type="button" disabled={!configuration || !!busy} onClick={() => void copy("stdio")}>复制 stdio JSON</button><button type="button" disabled={!configuration || !!busy} onClick={() => void copy("toml")}>复制 TOML</button></div>
@@ -229,6 +241,7 @@ export default function AgentSettings({ folders, client = agentClient, mobile = 
         </section>
       </>}
     </div>
+    {tester && settings && availableGrant && <AgentMcpTester binary={binary.trim()} grant={availableGrant} settings={settings} trigger={testerTrigger.current} client={testerClient} onClose={() => setTester(false)} />}
     {dialog && <CreateDialog folders={physicalFolders} busy={busy === "create"} error={dialogError} onCancel={() => { if (!working.current) setDialog(false); }} onCreate={create} trigger={createTrigger.current} />}
   </section>;
 }

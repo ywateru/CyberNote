@@ -18,6 +18,7 @@ impl WindowHost for Windows {
     }
 }
 pub struct Desktop {
+    pub testers: Arc<crate::agent_tester::Registry>,
     service: Service,
     runtime: PathBuf,
     host: tokio::sync::Mutex<Option<AgentHost>>,
@@ -49,6 +50,7 @@ impl Desktop {
                 .join("Library/Application Support/com.local.notesclone/agent-runtime")
         });
         Arc::new(Self {
+            testers: Arc::new(crate::agent_tester::Registry::default()),
             service: Service::new(shared, Arc::new(Windows(app))),
             runtime,
             host: tokio::sync::Mutex::new(None),
@@ -124,6 +126,10 @@ impl Desktop {
         expected: &Token,
         label: &str,
     ) -> ToolResult<HostSettings> {
+        self.identity(Some((expected, label)))?;
+        if !enabled {
+            self.testers.close_all().await;
+        }
         let mut slot = self.host.lock().await;
         self.ensure(&mut slot, Some((expected, label))).await?;
         let host = slot.as_mut().unwrap();
@@ -197,6 +203,8 @@ impl Desktop {
         self.ensure(&mut slot, Some((expected, label))).await?;
         let result = slot.as_ref().unwrap().revoke_grant(id)?;
         self.identity(Some((expected, label)))?;
+        drop(slot);
+        self.testers.close_all().await;
         Ok(result)
     }
     /// Stop before a maintenance operation; no preference change. The barrier
@@ -231,6 +239,7 @@ impl Desktop {
         self.shutdown().await
     }
     pub async fn shutdown(&self) -> ToolResult<()> {
+        self.testers.close_all().await;
         let mut slot = self.host.lock().await;
         if let Some(host) = slot.as_mut() {
             host.stop().await?;

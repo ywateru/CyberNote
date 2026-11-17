@@ -5,6 +5,8 @@ pub mod agent_access;
 mod agent_desktop;
 pub mod agent_host;
 #[cfg(target_os = "macos")]
+mod agent_tester;
+#[cfg(target_os = "macos")]
 #[path = "agent_host/service.rs"]
 mod agent_service;
 mod apple_notes_import;
@@ -168,6 +170,82 @@ async fn agent_revoke_grant(
             "HOST_UNAVAILABLE",
             "Agent host is available on macOS only",
         ))
+    }
+}
+#[tauri::command]
+async fn agent_tester_start(
+    input: serde_json::Value,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+) -> std::result::Result<serde_json::Value, String> {
+    #[cfg(target_os = "macos")]
+    {
+        let input = serde_json::from_value(input).map_err(|_| "Input".to_string())?;
+        let desktop = &app.state::<AgentState>().0;
+        return desktop
+            .testers
+            .start(desktop, input, expected, window.label().into())
+            .await
+            .and_then(|v| {
+                serde_json::to_value(v).map_err(|_| agent_tester::process::Failure::Protocol)
+            })
+            .map_err(|e| format!("{e:?}"));
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (input, expected, window, app);
+        Err("Unavailable".into())
+    }
+}
+#[tauri::command]
+async fn agent_tester_call(
+    input: serde_json::Value,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+) -> std::result::Result<serde_json::Value, String> {
+    #[cfg(target_os = "macos")]
+    {
+        let input = serde_json::from_value(input).map_err(|_| "Input".to_string())?;
+        return app
+            .state::<AgentState>()
+            .0
+            .testers
+            .call(input, &expected, window.label())
+            .await
+            .and_then(|v| {
+                serde_json::to_value(v).map_err(|_| agent_tester::process::Failure::Protocol)
+            })
+            .map_err(|e| format!("{e:?}"));
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (input, expected, window, app);
+        Err("Unavailable".into())
+    }
+}
+#[tauri::command]
+async fn agent_tester_stop(
+    connection_id: String,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    app: tauri::AppHandle,
+) -> std::result::Result<(), String> {
+    #[cfg(target_os = "macos")]
+    {
+        return app
+            .state::<AgentState>()
+            .0
+            .testers
+            .stop(&connection_id, window.label(), &expected)
+            .await
+            .map_err(|e| format!("{e:?}"));
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (connection_id, expected, window, app);
+        Err("Unavailable".into())
     }
 }
 struct SyncWindows(tauri::AppHandle);
@@ -789,6 +867,10 @@ pub fn run() {
         })
         .on_window_event(|window, event| {
             if matches!(event, tauri::WindowEvent::Destroyed) {
+                #[cfg(target_os = "macos")]
+                if let Some(agent) = window.try_state::<AgentState>() {
+                    agent.0.testers.close_window(window.label());
+                }
                 if let Some(media) = window.try_state::<MediaState>() {
                     media.0.closed(window.label());
                 }
@@ -1030,6 +1112,9 @@ pub fn run() {
         agent_set_enabled,
         agent_create_grant,
         agent_revoke_grant,
+        agent_tester_start,
+        agent_tester_call,
+        agent_tester_stop,
         register_save_intent,
         acknowledge_access,
         read_note_text,
@@ -1073,6 +1158,9 @@ pub fn run() {
         agent_set_enabled,
         agent_create_grant,
         agent_revoke_grant,
+        agent_tester_start,
+        agent_tester_call,
+        agent_tester_stop,
         register_save_intent,
         acknowledge_access,
         read_note_text,
