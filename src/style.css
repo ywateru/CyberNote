@@ -689,6 +689,7 @@ a {
   display: flex;
   align-items: flex-start;
   --task-circle: 17px;
+  --task-line-height: 1.23em;
   gap: 6px;
   margin: 0;
   padding: 2px 0;
@@ -703,7 +704,13 @@ a {
   cursor: pointer;
   min-height: 0;
   height: var(--task-circle);
-  margin: calc((1lh - var(--task-circle)) / 2) 0 0;
+  /* Match the editor's first line even on WebView 91 / older WebKit. */
+  margin: calc((var(--task-line-height) - var(--task-circle)) / 2) 0 0;
+}
+@supports (height: 1lh) {
+  .tiptap ul[data-type="taskList"] > li > label {
+    margin: calc((1lh - var(--task-circle)) / 2) 0 0;
+  }
 }
 .tiptap ul[data-type="taskList"] > li > label input {
   appearance: none;
@@ -2279,6 +2286,7 @@ a {
   }
   .mobile .tiptap ul[data-type="taskList"] > li {
     --task-circle: 21px;
+    --task-line-height: 1.35em;
     gap: 6px;
     padding: 0;
   }
@@ -2288,10 +2296,15 @@ a {
     content: "";
     position: absolute;
     width: 44px;
-    height: min(44px, 1lh);
+    height: min(44px, var(--task-line-height));
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+  }
+  @supports (height: 1lh) {
+    .mobile .tiptap ul[data-type="taskList"] > li > label::before {
+      height: min(44px, 1lh);
+    }
   }
   .mobile .tiptap ul[data-type="taskList"] > li > div > p {
     margin: 0;

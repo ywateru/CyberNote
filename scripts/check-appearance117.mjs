@@ -148,8 +148,13 @@ const require = createRequire(import.meta.url);
 const postcss = createRequire(require.resolve('vite'))('postcss');
 const sheets = await Promise.all(['src/style.css', 'src/desktop.css', 'src/Preferences.css'].map(read));
 const parsed = sheets.map(css => postcss.parse(css));
-const declarations = selector => {
-  const result = {}; for (const css of parsed) css.walkRules(selector, rule => rule.walkDecls(d => { result[d.prop] = d.value; })); return result;
+const declarations = (selector, supportsLH = true) => {
+  const result = {}; for (const css of parsed) css.walkRules(selector, rule => {
+    for (let parent = rule.parent; parent; parent = parent.parent) {
+      if (!supportsLH && parent.type === 'atrule' && parent.name === 'supports' && parent.params === '(height: 1lh)') return;
+    }
+    rule.walkDecls(d => { result[d.prop] = d.value; });
+  }); return result;
 };
 assert.equal(declarations('.desktop .tiptap ul[data-type="taskList"] > li')['align-items'], 'flex-start');
 assert.equal(declarations('.tiptap ul[data-type="taskList"] > li > label input')['border-radius'], '50%');
@@ -161,6 +166,53 @@ const themeColumns = []; parsed[2].walkRules('.preferences-theme-choices', rule 
 assert.deepEqual(themeColumns, ['repeat(4, minmax(0, 1fr))', 'repeat(2, minmax(0, 1fr))', 'minmax(0, 1fr)']);
 assert.equal(declarations('.tiptap ul[data-type="taskList"] > li > label')['min-height'], '0');
 check('CSS retains circles, first-line alignment, compact mobile paragraphs and bounded gutter hit target', true);
+
+// Model an engine that rejects lh: skip the enhancement block, then evaluate
+// the surviving production expressions against the editor's real line metrics.
+const taskSelector = '.tiptap ul[data-type="taskList"] > li';
+const labelSelector = `${taskSelector} > label`;
+const hitSelector = `.mobile ${labelSelector}::before`;
+const fallbackLabel = declarations(labelSelector, false);
+const fallbackHit = declarations(hitSelector, false);
+assert.ok(fallbackLabel.margin && !fallbackLabel.margin.includes('1lh'));
+assert.ok(fallbackHit.height && !fallbackHit.height.includes('1lh'));
+for (const css of parsed) css.walkDecls(decl => {
+  if (!/\blh\b|\d+lh\b/.test(decl.value)) return;
+  let guarded = false;
+  for (let parent = decl.parent; parent; parent = parent.parent) {
+    if (parent.type === 'atrule' && parent.name === 'supports' && parent.params === '(height: 1lh)') guarded = true;
+  }
+  assert.ok(guarded, `lh declaration needs a feature guard: ${decl.toString()}`);
+});
+const length = (value, vars, font) => {
+  const expression = value.replace(/var\((--[\w-]+)(?:,\s*([^()]+))?\)/g, (_, key, fallback) => `(${length(vars[key] ?? fallback, vars, font)})`)
+    .replace(/([\d.]+)em\b/g, (_, n) => `(${Number(n) * font})`).replace(/px\b/g, '')
+    .replace(/calc\(/g, '(').replace(/min\(/g, 'Math.min(');
+  assert.match(expression, /^[\d\s.,()+*/-]+$|^Math\.min\([\d\s.,()+*/-]+\)$/);
+  return vm.runInNewContext(expression, { Math });
+};
+const { fontSizeOptions } = await load('font-size');
+for (const mode of ['base', 'mobile', 'desktop']) {
+  const task = { ...declarations(taskSelector, false), ...(mode === 'base' ? {} : declarations(`.${mode} ${taskSelector}`, false)) };
+  const lineSelector = mode === 'base' ? '.tiptap' : mode === 'mobile' ? '.mobile .tiptap' : '.desktop .note-document .tiptap';
+  const lineHeight = Number(declarations(lineSelector, false)['line-height']);
+  for (const { editor: font } of fontSizeOptions) {
+    const vars = { ...task, '--editor-font-scale': String(font / 18) };
+    const firstLine = lineHeight * font;
+    const circle = length(task['--task-circle'], vars, font);
+    const offset = length(fallbackLabel.margin.replace(/ 0 0$/, ''), vars, font);
+    assert.ok(Math.abs(offset + circle / 2 - firstLine / 2) < 1e-8, `${mode}/${font}: circle centered on first line without lh`);
+    if (mode === 'mobile') {
+      const hit = length(fallbackHit.height, vars, font);
+      const top = offset + circle / 2 - hit / 2;
+      const bottom = top + hit;
+      assert.ok(hit > 0 && hit <= 44 && top >= -1e-8 && bottom <= firstLine + 1e-8, `${font}: gutter target stays inside first line`);
+      assert.equal(fallbackHit.right, '0'); assert.equal(length(fallbackHit.width, vars, font), 44);
+      assert.ok(bottom <= Math.max(firstLine, offset + circle) + 1e-8, `${font}: next compact row cannot overlap`);
+    }
+  }
+}
+check('legacy engines retain first-line circle alignment and nonoverlapping gutter targets at all five font sizes', true);
 
 await writeFile(resolve(out, 'result.json'), JSON.stringify({ checks, contrasts, scope: 'No UI/browser/native runtime; production TS + schema/history + startup VM + native payload/CSS contracts. Rust execution recorded separately.' }, null, 2) + '\n');
 console.log(`PASS ${checks.length} checks (${contrasts.length} contrast pairs); ${relative(process.cwd(), out)}/result.json`);
