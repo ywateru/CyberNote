@@ -2,6 +2,24 @@
 #import <QuartzCore/QuartzCore.h>
 #import "format.h"
 #import "menu.h"
+#import "theme-palettes.h"
+
+typedef NS_ENUM(NSUInteger, NotesThemeRole) {
+    NotesThemeToolbar, NotesThemePaper, NotesThemeLine, NotesThemeInk,
+    NotesThemeSecondary, NotesThemeAction, NotesThemeSelection, NotesThemeFocus, NotesThemeList
+};
+static NSColor *notesThemeColor(NSString *theme, NotesThemeRole role) {
+    NSString *key=theme?:@"classic";
+    return [NSColor colorWithName:[NSString stringWithFormat:@"NotesTheme-%@-%lu",key,(unsigned long)role] dynamicProvider:^NSColor *(NSAppearance *appearance) {
+        BOOL dark=[[appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua,NSAppearanceNameDarkAqua]] isEqualToString:NSAppearanceNameDarkAqua];
+        const NotesThemePalette *palette=&notesThemePalettes[dark?1:0];
+        for(NSUInteger i=0;i<sizeof(notesThemePalettes)/sizeof(notesThemePalettes[0]);i++) {
+            if(notesThemePalettes[i].dark==dark && strcmp(notesThemePalettes[i].theme,key.UTF8String)==0){palette=&notesThemePalettes[i];break;}
+        }
+        unsigned int rgb=palette->colors[role];
+        return [NSColor colorWithSRGBRed:((rgb>>16)&255)/255.0 green:((rgb>>8)&255)/255.0 blue:(rgb&255)/255.0 alpha:1];
+    }];
+}
 
 typedef void (*NotesUIEvent)(void *, const char *);
 typedef void (*NotesUIRelease)(void *);
@@ -54,6 +72,7 @@ static NSColor *sidebarTintColor(void) {
 @interface NotesUIRoot : NSView
 @property BOOL reserveTrafficLights;
 @property BOOL toolbarSurface;
+@property NSString *themeId;
 @property CGFloat density;
 @property CGFloat trafficWidth;
 @property CGFloat sidebarBoundary;
@@ -63,9 +82,8 @@ static NSColor *sidebarTintColor(void) {
 - (BOOL)isFlipped {return YES;}
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];if(!self.toolbarSurface)return;
-    BOOL dark=[[self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua,NSAppearanceNameDarkAqua]] isEqualToString:NSAppearanceNameDarkAqua];
-    [(dark?[NSColor colorWithWhite:0.165 alpha:1]:[NSColor colorWithSRGBRed:0.953 green:0.953 blue:0.965 alpha:1]) setFill];NSRectFill(self.bounds);
-    [(dark?[NSColor colorWithWhite:0.235 alpha:1]:[NSColor colorWithSRGBRed:0.878 green:0.882 blue:0.91 alpha:1]) setFill];
+    [notesThemeColor(self.themeId,NotesThemeToolbar) setFill];NSRectFill(self.bounds);
+    [notesThemeColor(self.themeId,NotesThemeLine) setFill];
     NSRectFill(NSMakeRect(0,NSHeight(self.bounds)-1,NSWidth(self.bounds),1));
     if(self.sidebarBoundary>0)NSRectFill(NSMakeRect(self.sidebarBoundary-1,0,1,NSHeight(self.bounds)));
     for(NSNumber *x in self.separatorPositions)NSRectFill(NSMakeRect(x.doubleValue,(NSHeight(self.bounds)-27*self.density)/2,1,27*self.density));
@@ -155,6 +173,7 @@ static NSPoint contentOffsetFor(NSString *action) {
 // This view alone owns every search border. The field and its field editor
 // never draw an additional, differently-sized AppKit focus-ring capsule.
 @interface NotesUISearchSurface : NSView
+@property NSString *themeId;
 @property BOOL focused;
 @property BOOL hovered;
 @property (weak) NSSearchField *field;
@@ -178,14 +197,11 @@ static NSPoint contentOffsetFor(NSString *action) {
 - (void)viewDidChangeEffectiveAppearance {[super viewDidChangeEffectiveAppearance];self.needsDisplay=YES;}
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-    BOOL dark=[[self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua,NSAppearanceNameDarkAqua]] isEqualToString:NSAppearanceNameDarkAqua];
     CGFloat line=self.focused?2:1,inset=line/2;
     NSRect rect=NSInsetRect(self.bounds,inset,inset);
     NSBezierPath *path=[NSBezierPath bezierPathWithRoundedRect:rect xRadius:NSHeight(rect)/2 yRadius:NSHeight(rect)/2];
-    NSColor *fill=dark?[NSColor colorWithSRGBRed:0.133 green:0.133 blue:0.145 alpha:1]:[NSColor colorWithSRGBRed:0.980 green:0.980 blue:0.992 alpha:1];
-    NSColor *border=self.focused?(dark?[NSColor colorWithSRGBRed:0.929 green:0.675 blue:0.129 alpha:1]:[NSColor colorWithSRGBRed:0.851 green:0.576 blue:0 alpha:1]):
-        self.hovered?(dark?[NSColor colorWithSRGBRed:0.443 green:0.443 blue:0.490 alpha:1]:[NSColor colorWithSRGBRed:0.714 green:0.718 blue:0.761 alpha:1]):
-        dark?[NSColor colorWithSRGBRed:0.235 green:0.235 blue:0.259 alpha:1]:[NSColor colorWithSRGBRed:0.878 green:0.882 blue:0.910 alpha:1];
+    NSColor *fill=notesThemeColor(self.themeId,NotesThemeList);
+    NSColor *border=notesThemeColor(self.themeId,self.focused?NotesThemeFocus:self.hovered?NotesThemeSecondary:NotesThemeLine);
     [fill setFill];[path fill];[border setStroke];path.lineWidth=line;[path stroke];
 }
 @end
@@ -361,7 +377,7 @@ static NSPoint contentOffsetFor(NSString *action) {
     BOOL initial=self.buttons[@"format"].symbolConfiguration==nil;
     CGFloat fontScale=notesFontScale(state), iconScale=notesIconScale(state);
     BOOL scaleChanged=initial || fontScale!=notesFontScale(previous) || iconScale!=notesIconScale(previous);
-    BOOL appearanceChanged=initial || ![state[@"appearance"] isEqual:previous[@"appearance"]];
+    BOOL appearanceChanged=initial || ![state[@"appearance"] isEqual:previous[@"appearance"]] || ![(state[@"themeId"]?:@"classic") isEqual:(previous[@"themeId"]?:@"classic")];
     NSArray *previousActions=[previous[@"actions"] valueForKey:@"action"],*nextActions=[state[@"actions"] valueForKey:@"action"];
     BOOL previousSearch=previous[@"search"] && (id)previous[@"search"]!=NSNull.null;
     BOOL layoutChanged=initial || scaleChanged || notesHitScale(state)!=notesHitScale(previous) || ![state[@"layout"] isEqual:previous[@"layout"]]
@@ -377,6 +393,15 @@ static NSPoint contentOffsetFor(NSString *action) {
     if(appearanceChanged) {
         NSString *appearance=state[@"appearance"];
         self.window.appearance=[appearance isEqual:@"dark"]?[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]:[appearance isEqual:@"light"]?[NSAppearance appearanceNamed:NSAppearanceNameAqua]:nil;
+        NSString *theme=state[@"themeId"]?:@"classic";
+        self.root.themeId=theme;self.root.needsDisplay=YES;
+        self.window.backgroundColor=notesThemeColor(theme,NotesThemePaper);
+        NotesUISearchSurface *surface=(NotesUISearchSurface *)self.groups[@"search"];
+        surface.themeId=theme;surface.needsDisplay=YES;
+        self.title.textColor=notesThemeColor(theme,NotesThemeInk);
+        self.count.textColor=notesThemeColor(theme,NotesThemeSecondary);
+        self.search.textColor=notesThemeColor(theme,NotesThemeInk);
+        if([self.search.currentEditor isKindOfClass:NSTextView.class])((NSTextView *)self.search.currentEditor).textColor=self.search.textColor;
     }
     NSMutableDictionary *nextStates=[NSMutableDictionary dictionary],*nextMenus=[NSMutableDictionary dictionary];
     for(NSDictionary *item in state[@"actions"])nextStates[item[@"action"]]=item;
@@ -410,15 +435,18 @@ static NSPoint contentOffsetFor(NSString *action) {
         }
         NSColor *tint=([action isEqual:@"toggleSidebar"] || ([action isEqual:@"newFolder"] && ![item[@"selected"] boolValue]))?sidebarTintColor():
             ([item[@"selected"] boolValue]?NSColor.systemYellowColor:NSColor.labelColor);
+        if(state[@"themeId"] && ![state[@"themeId"] isEqual:@"classic"])tint=notesThemeColor(state[@"themeId"],[item[@"selected"] boolValue]?NotesThemeAction:NotesThemeInk);
         if(initial || appearanceChanged || [oldActionStates[action][@"selected"] boolValue]!=[item[@"selected"] boolValue])button.contentTintColor=tint;
     }
     if(scaleChanged) {
         self.buttons[@"overflow"].image=[[NSImage imageWithSystemSymbolName:@"ellipsis" accessibilityDescription:@"其他工具"] imageWithSymbolConfiguration:[NSImageSymbolConfiguration configurationWithPointSize:21*fontScale*iconScale weight:NSFontWeightRegular scale:NSImageSymbolScaleMedium]];
-        self.buttons[@"overflow"].contentTintColor=NSColor.labelColor;
         self.title.font=[NSFont systemFontOfSize:18*fontScale weight:NSFontWeightSemibold];self.count.font=[NSFont systemFontOfSize:15*fontScale];
         self.search.font=[NSFont systemFontOfSize:17*fontScale];self.search.density=fontScale*iconScale;
-        self.search.placeholderAttributedString=[[NSAttributedString alloc] initWithString:@"搜索备忘录" attributes:@{NSFontAttributeName:self.search.font,NSForegroundColorAttributeName:NSColor.secondaryLabelColor}];
         if([self.search.currentEditor isKindOfClass:NSTextView.class])((NSTextView *)self.search.currentEditor).font=self.search.font;
+    }
+    if(scaleChanged || appearanceChanged) {
+        self.buttons[@"overflow"].contentTintColor=notesThemeColor(state[@"themeId"],NotesThemeInk);
+        self.search.placeholderAttributedString=[[NSAttributedString alloc] initWithString:@"搜索备忘录" attributes:@{NSFontAttributeName:self.search.font,NSForegroundColorAttributeName:notesThemeColor(state[@"themeId"],NotesThemeSecondary)}];
     }
     if(![self.title.stringValue isEqual:state[@"folderTitle"]]){self.title.stringValue=state[@"folderTitle"];[self.title setAccessibilityLabel:state[@"folderTitle"]];}
     BOOL zeroSearch=[state[@"folderTitle"] isEqual:@"搜索"] && [state[@"folderCount"] unsignedLongLongValue]==0 && hasSearch && [searchState[@"value"] length]>0;

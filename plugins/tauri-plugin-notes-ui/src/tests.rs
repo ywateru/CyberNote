@@ -3,6 +3,26 @@ fn sample() -> ToolbarState {
     serde_json::from_str(include_str!("../examples/state.json")).unwrap()
 }
 #[test]
+fn builtin_theme_ids_are_closed_and_legacy_hosts_default_to_classic() {
+    let mut value = serde_json::to_value(sample()).unwrap();
+    value.as_object_mut().unwrap().remove("themeId");
+    let old: ToolbarState = serde_json::from_value(value.clone()).unwrap();
+    assert!(matches!(old.theme_id, ThemeId::Classic));
+    for theme in ["classic", "paper", "high-contrast", "ocean", "forest", "rose", "lavender", "graphite"] {
+        for scheme in ["system", "light", "dark"] {
+            value["themeId"] = serde_json::json!(theme);
+            value["appearance"] = serde_json::json!(scheme);
+            let state: ToolbarState = serde_json::from_value(value.clone()).unwrap();
+            state.validate().unwrap();
+            assert_eq!(serde_json::to_value(state).unwrap()["themeId"], theme);
+        }
+    }
+    for invalid in [serde_json::Value::Null, serde_json::json!("unknown"), serde_json::json!({"css":"red"})] {
+        value["themeId"] = invalid;
+        assert!(serde_json::from_value::<ToolbarState>(value.clone()).is_err());
+    }
+}
+#[test]
 fn contract_rejects_unknown_variants_fields_and_unbounded_state() {
     let state = sample();
     state.validate().unwrap();

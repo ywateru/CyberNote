@@ -685,51 +685,73 @@ a {
   padding: 0;
   margin: 0;
 }
-.tiptap ul[data-type="taskList"] li {
+.tiptap ul[data-type="taskList"] > li {
   display: flex;
   align-items: flex-start;
-  gap: 9px;
+  --task-circle: 17px;
+  --task-line-height: 1.23em;
+  gap: 6px;
+  margin: 0;
   padding: 2px 0;
   position: relative;
 }
-.tiptap ul[data-type="taskList"] li > label {
+.tiptap ul[data-type="taskList"] > li > label {
   display: flex;
   flex: none;
   user-select: none;
   -webkit-user-select: none;
-  margin-top: 1px;
+  position: relative;
+  cursor: pointer;
+  min-height: 0;
+  height: var(--task-circle);
+  /* Match the editor's first line even on WebView 91 / older WebKit. */
+  margin: calc((var(--task-line-height) - var(--task-circle)) / 2) 0 0;
 }
-.tiptap ul[data-type="taskList"] li > label input {
+@supports (height: 1lh) {
+  .tiptap ul[data-type="taskList"] > li > label {
+    margin: calc((1lh - var(--task-circle)) / 2) 0 0;
+  }
+}
+.tiptap ul[data-type="taskList"] > li > label input {
   appearance: none;
   -webkit-appearance: none;
-  width: 17px;
-  height: 17px;
-  border: 1.4px solid var(--line);
+  width: var(--task-circle);
+  height: var(--task-circle);
+  border: 1px solid var(--secondary);
   border-radius: 50%;
   margin: 0;
   cursor: pointer;
   background: var(--paper);
   position: relative;
 }
-.tiptap ul[data-type="taskList"] li > label input:checked {
+.tiptap ul[data-type="taskList"] > li > label input:checked {
   background: var(--accent);
   border-color: var(--accent);
 }
-.tiptap ul[data-type="taskList"] li > label input:checked:after {
+.tiptap ul[data-type="taskList"] > li > label input:checked:after {
   content: "";
   display: block;
   position: absolute;
   width: 6px;
   height: 3px;
-  border-left: 1.5px solid var(--line);
-  border-bottom: 1.5px solid var(--line);
+  border-left: 1.5px solid var(--accent-ink);
+  border-bottom: 1.5px solid var(--accent-ink);
   transform: rotate(-45deg);
   left: 4px;
   top: 4px;
 }
-.tiptap ul[data-type="taskList"] li > div {
+.tiptap ul[data-type="taskList"] > li > div {
   flex: 1;
   min-width: 0;
+}
+/* Task paragraphs keep the first line's metrics; ordinary prose is untouched. */
+.tiptap ul[data-type="taskList"] > li > div > p {
+  margin: 0;
+  min-height: 0;
+  line-height: inherit;
+}
+.tiptap ul[data-type="taskList"] > li > div > ul[data-type="taskList"] {
+  margin-top: 2px;
 }
 .tiptap table {
   border-collapse: collapse;
@@ -2262,19 +2284,33 @@ a {
   .mobile .tiptap ul[data-type="taskList"] {
     padding: 0;
   }
-  .mobile .tiptap ul[data-type="taskList"] li {
-    gap: 10px;
-    padding: 3px 0;
+  .mobile .tiptap ul[data-type="taskList"] > li {
+    --task-circle: 21px;
+    --task-line-height: 1.35em;
+    gap: 6px;
+    padding: 0;
   }
-  .mobile .tiptap ul[data-type="taskList"] li > label input {
-    width: 21px;
-    height: 21px;
-    border-width: 1.3px;
+  /* Expand toward the gutter, never across editable text. A compact row caps
+     target height at its first line box so adjacent targets cannot overlap. */
+  .mobile .tiptap ul[data-type="taskList"] > li > label::before {
+    content: "";
+    position: absolute;
+    width: 44px;
+    height: min(44px, var(--task-line-height));
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
-  .mobile .tiptap ul[data-type="taskList"] li > label {
-    margin-top: 1px;
+  @supports (height: 1lh) {
+    .mobile .tiptap ul[data-type="taskList"] > li > label::before {
+      height: min(44px, 1lh);
+    }
   }
-  .mobile .tiptap ul[data-type="taskList"] li > label input:checked:after {
+  .mobile .tiptap ul[data-type="taskList"] > li > div > p {
+    margin: 0;
+    min-height: 0;
+  }
+  .mobile .tiptap ul[data-type="taskList"] > li > label input:checked:after {
     width: 8px;
     height: 4px;
     left: 5px;
@@ -3119,11 +3155,11 @@ a {
   position: absolute;
   left: -19px;
 }
-.tiptap ul[data-type="taskList"] li[data-checked="true"] > div {
+.tiptap ul[data-type="taskList"] > li[data-checked="true"] > div {
   text-decoration: none;
   color: inherit;
 }
-.tiptap ul[data-type="taskList"] li > label input:checked {
+.tiptap ul[data-type="taskList"] > li > label input:checked {
   background: var(--accent);
   border-color: var(--accent);
 }

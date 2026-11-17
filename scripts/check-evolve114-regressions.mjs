@@ -151,7 +151,7 @@ export async function runThemeRegressions() {
     check('F1 committed Store replay fixture matches this run actual App patches', true);
 
     const table = { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: '表格可读性' }] }, { type: 'table', content: [{ type: 'tableRow', content: ['必须仍可看见的内容', 'SECOND CELL'].map(text => ({ type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text }] }] })) }] }] };
-    for (const themeId of ['classic', 'paper', 'high-contrast']) for (const scheme of ['light', 'dark']) {
+    for (const themeId of Object.keys(JSON.parse(await readFile('src/themes/palettes.json', 'utf8')))) for (const scheme of ['light', 'dark']) {
       const label = themeId + '-' + scheme;
       await update({ appearance: appearance(themeId, scheme) });
       await api(p, 'folder.open');

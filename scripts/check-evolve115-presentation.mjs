@@ -1,7 +1,7 @@
 // Real App/Editor/Preferences plus controlled IPC/capture boundaries. Captured
 // actual settings patches are replayed separately by production SQLite tests.
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { openRuntime, api, idle, state } from './debug/runtime.mjs';
 import { auditThemeText } from './check-evolve114-contrast.mjs';
@@ -223,7 +223,7 @@ try {
   await p.setViewportSize({ width: 1100, height: 600 }); await idle(p);
   await api(p, 'recording.action', { action: 'toggle' }); await idle(p); await api(p, 'recording.action', { action: 'close' }); await idle(p);
   await p.setViewportSize({ width: 1280, height: 800 }); await prefs({ navigation: 'three-pane' });
-  for (const themeId of ['classic', 'paper', 'high-contrast']) for (const schemePreference of ['light', 'dark']) {
+  for (const themeId of Object.keys(JSON.parse(await readFile('src/themes/palettes.json', 'utf8')))) for (const schemePreference of ['light', 'dark']) {
     await update(p, { appearance: { version: 2, themeId, schemePreference } });
     await p.waitForTimeout(180); // Audit settled theme transitions, not interpolated colors.
     const audit = await auditThemeText(p, `${themeId}/${schemePreference}`, '.presentation-toolbar'); contrasts.push(audit);

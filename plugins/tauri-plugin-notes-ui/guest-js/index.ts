@@ -34,6 +34,8 @@ export interface ToolbarState {
   iconScale?: number;
   hitScale?: number;
   appearance?: "system" | "light" | "dark";
+  /** Built-in palette ID; omitted by older hosts means Classic. */
+  themeId?: "classic" | "paper" | "high-contrast" | "ocean" | "forest" | "rose" | "lavender" | "graphite";
 }
 export type Intent =
   | { kind: 'action'; action: Action }

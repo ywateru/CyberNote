@@ -157,6 +157,22 @@ pub struct ToolbarState {
     pub hit_scale: f64,
     #[serde(default)]
     pub appearance: Appearance,
+    #[serde(default)]
+    pub theme_id: ThemeId,
+}
+/// Closed palette IDs, not untrusted colors or CSS. Older hosts retain Classic.
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum ThemeId {
+    #[default]
+    Classic,
+    Paper,
+    HighContrast,
+    Ocean,
+    Forest,
+    Rose,
+    Lavender,
+    Graphite,
 }
 #[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

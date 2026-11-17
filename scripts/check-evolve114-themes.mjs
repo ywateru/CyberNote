@@ -80,11 +80,11 @@ try{
   await api(p,'settings.open');await api(p,'settings.tab',{tab:'settings'});await idle(p);
   await audit(`${id}-${scheme}-settings`);
   await p.screenshot({path:resolve(out,`${id}-${scheme}-settings.png`)});
-  check(`${id}/${scheme} explicit checked skin and scheme`,await p.getByRole('radiogroup',{name:'主题',exact:true}).getByRole('radio',{checked:true}).textContent().then(t=>t.includes(id==='classic'?'Classic':id==='paper'?'Paper':'High Contrast')));
+  check(`${id}/${scheme} explicit checked skin and scheme`,await p.getByRole('radiogroup',{name:'主题',exact:true}).getByRole('radio',{checked:true}).evaluate((e,id)=>e.classList.contains('preferences-appearance-'+id),id));
   await p.getByRole('button',{name:'关闭设置',exact:true}).click();await idle(p);
  }
  // Actual desktop radio keyboard path, retaining the existing roving focus.
- await api(p,'settings.open');await api(p,'settings.tab',{tab:'settings'});await idle(p);const skinGroup=p.getByRole('radiogroup',{name:'主题',exact:true});await skinGroup.getByRole('radio',{checked:true}).focus();await p.keyboard.press('Home');await idle(p);check('desktop Home changes confirmed skin through real radio handler',(await state(p)).settings.appearance.themeId==='classic');await p.keyboard.press('End');await idle(p);check('desktop End selects High Contrast without replacing Editor',(await state(p)).settings.appearance.themeId==='high-contrast'&&await p.evaluate(()=>window.themeEditorInstance===document.querySelector('.tiptap').editor));await p.getByRole('button',{name:'关闭设置',exact:true}).click();await idle(p);
+ await api(p,'settings.open');await api(p,'settings.tab',{tab:'settings'});await idle(p);const skinGroup=p.getByRole('radiogroup',{name:'主题',exact:true});await skinGroup.getByRole('radio',{checked:true}).focus();await p.keyboard.press('Home');await idle(p);check('desktop Home changes confirmed skin through real radio handler',(await state(p)).settings.appearance.themeId==='classic');await p.keyboard.press('End');await idle(p);check('desktop End selects last registered theme without replacing Editor',(await state(p)).settings.appearance.themeId===Object.keys(palettes).at(-1)&&await p.evaluate(()=>window.themeEditorInstance===document.querySelector('.tiptap').editor));await p.getByRole('button',{name:'关闭设置',exact:true}).click();await idle(p);
  // Save rejection via real Preferences; checked values, page palette and Editor survive.
  await api(p,'settings.open');await api(p,'settings.tab',{tab:'settings'});await idle(p);const confirmed=(await state(p)).settings;
  await p.evaluate(()=>window.__DEBUG_PLATFORM__.configure({fail:{settings:1},delay:{settings:350}}));

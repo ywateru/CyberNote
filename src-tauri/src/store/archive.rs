@@ -266,7 +266,7 @@ pub(super) fn validate_interface_details(value: &Value) -> Result<()> {
 fn validate_appearance(value: &Value) -> Result<()> {
     let a = value.as_object().ok_or_else(|| invalid("外观必须是完整对象"))?;
     if a.len() != 3 || a.get("version") != Some(&json!(2))
-        || !a.get("themeId").and_then(Value::as_str).is_some_and(|s| ["classic", "paper", "high-contrast"].contains(&s))
+        || !a.get("themeId").and_then(Value::as_str).is_some_and(|s| ["classic", "paper", "high-contrast", "ocean", "forest", "rose", "lavender", "graphite"].contains(&s))
         || !a.get("schemePreference").and_then(Value::as_str).is_some_and(|s| ["system", "light", "dark"].contains(&s)) {
         return Err(invalid("外观字段、版本或主题无效"));
     }
