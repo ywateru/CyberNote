@@ -4,7 +4,9 @@ Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android�
 
 当前为可运行开发版，完整原版交互及逐像素一致目标仍在进行。功能是否完成以各次交付的准确版本和验证范围为准，见[文档索引](docs/INDEX.md)。
 
-2026-11-17 已完成共享应用服务、本机MCP、三主题与双端呈现实现。当前入口：[交付与后续建议](docs/verification/project-evolution/DELIVERY.md) · [Agent接入指南](docs/agent-usage.md) · [命令验证状态](docs/verification/project-evolution/README.md)。UI测试由用户接手，未测项见交付清单。
+2026-11-17 前一轮已完成共享应用服务、本机MCP、三主题与双端呈现实现：[交付与后续建议](docs/verification/project-evolution/DELIVERY.md) · [Agent接入指南](docs/agent-usage.md) · [命令验证状态](docs/verification/project-evolution/README.md)。
+
+本轮反馈源码扩展为八套双明暗外观，桌面正常宽度四列两行；优化纸感/高对比和双端待办，并为 Agent 接入增加真实 stdio MCP 测试程序。使用方式、命令验证及手测步骤见[本轮交付](docs/verification/feedback117/README.md)。UI测试由用户完成；本轮未重新生成安装包，下方安装包保持上一轮构建身份，不包含这些新修改。
 
 设计与代码依据：[代码现状及改进建议](docs/plan/analysis/project-review-20261116.md) · [Agent MCP 查询/读取/写入契约](docs/architecture/agent-mcp.md) · [多主题与呈现架构](docs/architecture/theme-presentation.md) · [桌面/移动交互方案](docs/ui/adaptive-presentation.md) · [实施路线图](docs/plan/project-evolution-20261116.md)。文档区分原始分析、已实现行为和后续扩展，实际功能与验证范围以本轮交付为准。
 
