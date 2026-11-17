@@ -1,6 +1,6 @@
 # Agent 接入备忘录
 
-状态：接口实现与原生联调进行中，最终可安装的Mac/MCP产物及其入口尚待116验收。本页说明接入步骤和调用约定；实际完成范围见[验证状态](verification/project-evolution/README.md)，完整参数见[工具契约](architecture/agent-mcp.md)。
+状态：接口实现、命令/单元与真实宿主数据链已验；本机最终Mac/MCP产物位于`artifacts/releases/20261117-project-evolution/`，入口见根README。2026-11-17用户接手UI测试，未测UI项不标通过。本页说明接入步骤和调用约定；实际完成范围见[验证状态](verification/project-evolution/README.md)，完整参数见[工具契约](architecture/agent-mcp.md)。
 
 ## 安装与授权
 

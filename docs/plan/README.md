@@ -1,6 +1,6 @@
 # 交付计划
 
-2026-11-17 当前演进：[项目梳理](analysis/project-review-20261116.md)与[Agent MCP / 多主题 / 双端交互路线图](project-evolution-20261116.md)进入实施；111共享服务/窗口协调、112真实MCP宿主联调、113交互、114三主题、115呈现扩展均已完成模块独审合入和组合检查，116进入准确包构建/双端/agent最终验收。以[当前验证矩阵](../verification/project-evolution/README.md)区分模块通过和原生运行。下方旧“当前”描述按各自日期阅读。
+2026-11-17 当前演进：[项目梳理](analysis/project-review-20261116.md)与[Agent MCP / 多主题 / 双端交互路线图](project-evolution-20261116.md)的111–115实现、独审和组合检查已完成；116已完成准确Mac/Android/MCP产物、命令与真实宿主数据链交付。用户接手UI验收，未测项及NATIVE-BACK-01未修复问题单列，详见[交付报告](../verification/project-evolution/DELIVERY.md)和[验证矩阵](../verification/project-evolution/README.md)。下方旧“当前”描述按各自日期阅读。
 
 2026-11-07 当前：已验收工作整合到本地主分支 `main`，当前 Mac32 / Android21。入口见[根 README](../../README.md)和[文档索引](../INDEX.md)。最新[键盘94](../verification/editor94/DELIVERY.md)、[附件93](../verification/attachments93/DELIVERY.md)、[导入92](../verification/apple-notes-import92/DELIVERY.md)及[同步91](../verification/sync91/DELIVERY.md)均有准确交付记录；旧同步 goal 已完成，下方“active/进行中”等按各自历史时点读取，不代表当前仍在等待这些已交付任务。
 

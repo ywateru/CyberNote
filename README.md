@@ -4,11 +4,13 @@ Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android�
 
 当前为可运行开发版，完整原版交互及逐像素一致目标仍在进行。功能是否完成以各次交付的准确版本和验证范围为准，见[文档索引](docs/INDEX.md)。
 
-2026-11-16 项目梳理与后续方案：[代码现状及改进建议](docs/plan/analysis/project-review-20261116.md) · [Agent MCP 查询/读取/写入契约](docs/architecture/agent-mcp.md) · [多主题与呈现架构](docs/architecture/theme-presentation.md) · [桌面/移动交互方案](docs/ui/adaptive-presentation.md) · [实施路线图](docs/plan/project-evolution-20261116.md)。这些是待实现设计，本轮仅更新文档，不表示已提供 MCP 或新主题，也不改变下方安装包的验证范围。
+2026-11-17 已完成共享应用服务、本机MCP、三主题与双端呈现实现。当前入口：[交付与后续建议](docs/verification/project-evolution/DELIVERY.md) · [Agent接入指南](docs/agent-usage.md) · [命令验证状态](docs/verification/project-evolution/README.md)。UI测试由用户接手，未测项见交付清单。
+
+设计与代码依据：[代码现状及改进建议](docs/plan/analysis/project-review-20261116.md) · [Agent MCP 查询/读取/写入契约](docs/architecture/agent-mcp.md) · [多主题与呈现架构](docs/architecture/theme-presentation.md) · [桌面/移动交互方案](docs/ui/adaptive-presentation.md) · [实施路线图](docs/plan/project-evolution-20261116.md)。文档区分原始分析、已实现行为和后续扩展，实际功能与验证范围以本轮交付为准。
 
 服务器维护入口：[服务关系与生产部署记录](docs/server/README.md) · [配置、开发、部署与排障](docs/server/DEPLOYMENT.md)。
 
-账户同步最新桌面测试包为 `29c87810`，已完成本机两个独立客户端的设备列表、推送、拉取和双向验证。使用[测试端 A](scripts/verification/account110-desktop-a.command)／[测试端 B](scripts/verification/account110-desktop-b.command)启动，步骤与范围见[手动测试指南](docs/verification/account110/MANUAL-TESTING.md)和[结果及保留失败](docs/verification/account110/RESULT-LATEST.md)。[代码归并与空间清理](docs/verification/account110/workspace-cleanup01/README.md)已保留该包及两个测试库。下方安装包表仍是此前双端同源交付版本。
+历史账户同步桌面测试包为 `29c87810`，已完成本机两个独立客户端的设备列表、推送、拉取和双向验证。使用[测试端 A](scripts/verification/account110-desktop-a.command)／[测试端 B](scripts/verification/account110-desktop-b.command)启动，步骤与范围见[手动测试指南](docs/verification/account110/MANUAL-TESTING.md)和[结果及保留失败](docs/verification/account110/RESULT-LATEST.md)。[代码归并与空间清理](docs/verification/account110/workspace-cleanup01/README.md)已保留该包及两个测试库。该历史账户测试不代表本轮新账户三端验收；当前安装包见下表。
 
 ## 最新安装包
 
@@ -16,14 +18,20 @@ Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android�
 
 | 平台 | 安装包 | 版本 / 构建时间（UTC） | 源码 |
 | --- | --- | --- | --- |
-| macOS | [CyberNote.app](<artifacts/releases/20261110-modernization106/CyberNote.app>) | 0.1.0 / 2026-11-10T08:05:59.823Z | bf26dae17f97 + 74c0a8bbe365664d |
-| Android | [APK](<artifacts/releases/20261110-modernization106/android/CyberNote-Android-arm64.apk>) | 0.1.0 / 2026-11-10T08:23:18.611Z | bf26dae17f97 + 74c0a8bbe365664d |
+| macOS | [CyberNote.app](<artifacts/releases/20261117-project-evolution/CyberNote.app>) | 0.1.0 / 2026-11-16T22:36:01.257Z | 96f518ee8d17 + da00809888d9144e |
+| Android | [APK](<artifacts/releases/20261117-project-evolution/android/CyberNote-Android-arm64.apk>) | 0.1.0 / 2026-11-16T22:42:43.454Z | 96f518ee8d17 + da00809888d9144e |
 
 双端源码指纹一致；功能与平台差异见[功能对应表](docs/platform-feature-matrix.md)。本机包不纳入 Git，验证范围见各平台交付 manifest。
 
 <!-- latest-installers:end -->
 
-[Mac ZIP（含字体许可与来源说明）](artifacts/releases/20261110-modernization106/CyberNote-Mac.zip)；Mac随附字体[OFL许可](artifacts/releases/20261110-modernization106/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261110-modernization106/notices/noto-cjk/README.md)。Android分发时请同时保留交付目录内的[OFL许可](artifacts/releases/20261110-modernization106/android/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261110-modernization106/android/notices/noto-cjk/README.md)；这些是APK旁随文件，裸APK不包含完整许可交付。
+[Mac ZIP（含字体许可与来源说明）](artifacts/releases/20261117-project-evolution/CyberNote-Mac.zip)；Mac随附字体[OFL许可](artifacts/releases/20261117-project-evolution/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-project-evolution/notices/noto-cjk/README.md)。Android分发时请同时保留交付目录内的[OFL许可](artifacts/releases/20261117-project-evolution/android/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-project-evolution/android/notices/noto-cjk/README.md)；这些是APK旁随文件，裸APK不包含完整许可交付。
+
+Agent适配器（macOS arm64）：[cybernote-mcp](artifacts/releases/20261117-project-evolution/mcp/cybernote-mcp) · [manifest](artifacts/releases/20261117-project-evolution/mcp.json) · [第三方许可](artifacts/releases/20261117-project-evolution/mcp/THIRD_PARTY_NOTICES.md)。设置→Agent接入生成客户端授权与配置；查询/读取/新建/追加/更新见[指南](docs/agent-usage.md)。桌面应用需保持运行，Android通过同步取得内容。Mac为ad-hoc签名未公证，Android为本地Debug证书，均非商店签名。
+
+## 历史106原生验收记录
+
+以下保留原包/原设备时点，不能作为本批安装包的当前状态；本批范围以[交付报告](docs/verification/project-evolution/DELIVERY.md)为准。
 
 Mac视频最新：[live10有限独核](docs/plan/reviews/app-final106-mac-videos-live10-independent.md)接受faststart视频激活、96秒时长、初段推进及86.8%后段定位。随后正常播放点击被Mac系统锁定拒绝；后段继续播放、明确暂停和tail-metadata视频均未验收。两端剩余原生检查需本人正常解锁后续接；详见[剩余验收前提](docs/verification/modernization101/remaining-native-prerequisites.md)。下方较早记录按各自时点读取。
 
@@ -37,7 +45,7 @@ Mac最新续验：[WAV live09有限独核](docs/plan/reviews/app-final106-mac-wa
 
 “显示选项 → 查看附件”提供图片/视频、音频、文稿和全部附件画廊，支持试听录音、图片浮动预览，以及从附件跳转到所属备忘录并选中、滚动定位。已在此前功能快照中包含附件画廊；本轮新增功能以顶部安装包范围为准。[使用与行为](docs/ui/attachment-gallery.md) / [验证记录](docs/verification/cybernote-desktop/ATTACHMENT-GALLERY.md)。
 
-设置页已分为外观与字号、备忘录、设备同步、存储空间、导入与备份五类。桌面采用左侧分类栏，移动端采用分组首页和子页；打开设置时保留顶部工具栏。详见[设置页规格](docs/ui/preferences.md)与[验证及本机产物](docs/verification/cybernote-desktop/SETTINGS-REDESIGN.md)。
+设置页包含外观与字号、备忘录、设备同步、存储空间、导入与备份；本轮桌面新增“Agent 接入”，移动端不提供本机 MCP 宿主入口。桌面采用左侧分类栏，移动端采用分组首页和子页；打开设置时保留顶部工具栏。当前接入见[Agent 指南](docs/agent-usage.md)，历史设置重构见[设置页规格](docs/ui/preferences.md)与[验证及本机产物](docs/verification/cybernote-desktop/SETTINGS-REDESIGN.md)。
 
 桌面端已按新设计稿重构侧边栏、连续顶部栏、笔记列表和录音卡，并采用方形眼睛的新图标。设置 → 外观与字号提供独立的“界面字体大小”和“编辑器字体大小”，均提供极小、小、中、大、极大五档；默认中档为界面 14px、正文 16px，选择会自动保存，界面文字、图标、行高、间距和原生顶部栏同步缩放，编辑器字号独立控制。搜索栏已统一普通、悬停及聚焦边框。
 

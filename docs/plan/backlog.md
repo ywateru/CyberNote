@@ -1,5 +1,10 @@
 # 差异与待证事项
 
+- 2026-11-17 NATIVE-BACK-01（P2，未修复）：准确本轮Android包在owned API36模拟器320dp列表更多菜单打开时，一次系统Back导致EXIT_SELF/status0、回到Launcher；正常重新启动恢复。仅一次现场观察，未定位，不称崩溃/丢内容。用户接手UI验收后优先复核菜单开/关Back消费；独立记录见`artifacts/releases/20261117-project-evolution/business-verification/independent/review.md`。不把命令交付PASS升级为此项通过。
+
+- 2026-11-17手工同步页已有显示缺陷：Rust last_success为Unix秒，两处lastSyncAt交给JavaScript Date按毫秒格式化，显示1970年。六个相关文件与演进前ce55674c逐字节相同；本轮真实三端数据链通过。后续仅在手工同步显示边界转换单位，不全局更改formatFileTime/邀请/协议时钟。分析见`artifacts/releases/20261117-project-evolution/known-issues/sync-timestamp-baseline-analysis.md`。
+- 2026-11-17用户接手本轮UI验收：五档字号、主题/布局切换中的选区与Undo、实体IME/旋转/分屏、音频owner、格式长按及边缘/表格/绘画手势，按[手测清单](../verification/project-evolution/DELIVERY.md)记录；未测不是通过，也不再阻塞本轮命令交付。
+
 - 2026-11-17演进联调识别的检查入口问题：默认native Clippy在`src-tauri/src/account/transport.rs:1127`的`clippy::never_loop`退出失败。112装配与固定主线`f58efe8c`的同命令、同错误/52 warnings均已留证，不能报告全仓Clippy通过。后续单独整理该select/renewal退出结构及相关取消/授权退役回归，再处理其余诊断；不能靠全局allow或无关改动掩盖。本轮不把它推断为新的同步业务失败，证据见112装配报告的baseline段。
 
 - 78故障注入确认的既有错误提示残差：连续两次正文ACK失败后，侧栏✓重试可以完成录音保存/释放，但全局旧error-banner可能保留。当前真实恢复路径为全局“重试”确认pending正文，再点侧栏✓；78独审与主线已验证，不阻塞本轮活动标识/按钮修复。后续应梳理全局错误与保存操作的身份及清理边界，不能用无条件setError(null)覆盖其他较新错误。见[78独审](reviews/app-recording-indicator78.md)与[开发失败原件](../verification/recording-indicator78/README.md)。

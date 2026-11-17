@@ -2,7 +2,7 @@
 
 2026-11-09。MODULES98已实现、经53a6d4ad独审接受并整合，前置SESSION96已接受。迁移不是重写持久化/授权/同步系统，也不以 App 行数作为唯一验收。最终双端交付范围见[恢复状态](../plan/cybernote-modernization-state.md)。
 
-2026-11-17演进补充：111/112共享应用与真实MCP宿主、114主题、115呈现Shell均已独审合入并通过组合检查；116进入准确包构建与原生联调。下文原有前端owner继续保留，新增真实创建链如下。当前实现与最终包范围以[演进状态](../verification/project-evolution/README.md)为准。
+2026-11-17演进补充：111/112共享应用与真实MCP宿主、114主题、115呈现Shell均已独审合入并通过组合检查；116已完成准确Mac/Android/MCP产物、命令与真实宿主数据链验证，UI余项按用户最新指示交其手测。下文原有前端owner继续保留，新增真实创建链如下。当前实现与最终包范围以[演进状态](../verification/project-evolution/README.md)为准。
 
 ## 新增的共享应用与agent边界
 

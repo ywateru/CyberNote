@@ -2,16 +2,18 @@
 
 此页跟踪[路线图](../../plan/project-evolution-20261116.md)的实际实现与验证。`codex/project-evolution`为集成分支；任何安装包或功能结论须以当前源码、检查结果和具体运行范围为依据。
 
+2026-11-17最终交付：准确Mac/Android/MCP产物已核验；真实Codex九工具、权限/CAS/幂等/重启及手工配对三端完整document/13字段/PNG原字节一致通过。最终adapter命令15项及嵌套stdio16项通过；native19/前端组合按相同产品源码记录引用，不假称全部重跑。用户已接手UI测试，后续未测UI不阻塞本轮命令交付，也不标通过。入口与手测清单见[交付报告](DELIVERY.md)。
+
 ## 当前交付矩阵
 
 | 任务 | 实现状态 | 独立验证 | 最终运行 |
 | --- | --- | --- | --- |
-| 111 应用服务 | done（模块）；原生与窗口前端已独审合入，112同Session真实调用也通过 | 两阶段MODULE_SOURCE_PASS；原native197、window54/38/sync34/nav41及独立12恢复/13空目标组合；112独审另验实际主/子窗ACK及刷新故障恢复 | 实际debug candidate集成通过；最终包/真实IME由116承接 |
-| 112 MCP | done（模块）；真实装配`4ceb15e9`经`a1a69662`独审PASS，已合入`eca35abb` | 独立service11、实际设置双grant/Codex九工具/CAS/重启/撤销/20k/WK/刷新恢复通过；主树编译与17项native定向、376主题/90交互/12组Agent页及17组合UI检查通过 | 实际debug candidate通过；最终准确包及平台边界由116承接 |
-| 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | native-open，强制门槛由116承接 |
-| 114 主题 | done（模块）；主题`39662e7d`与production Store runner`9bbb8562`均已合入 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199通过，实际AgentSettings额外18状态/450文字对/0失败。runner修复`975202a9`经`bd0aaf78`独审通过，主树真实3项Store再次通过 | native-open，116承接 |
-| 115 呈现 | done（模块）；`7e53af80`经三项P2修复`7a5bb3dc`、`b94de7f4`独审PASS后合入`e5e66193` | 合入后App108/9-path、reviewfix9、真实Store2、交互90、主题376、AgentSettings12组、实际Preferences→Agent17及native19全部通过；原失败保留 | native-open，116承接 |
-| 116 整合 | in-progress；全部产品模块及Android执行器/release verifier准备均已独审合入，进入准确包构建/原生联调 | verifier`9878c254`主54项/独审`870d9ba3`；driver修复`c9d0b328`经`e16ff3b6`独审、`5eff3eb0`合入，主driver31+lifecycle2共33项通过；`e5e66193`组合检查通过，仍非最终包/设备验收 | 最终准确包/设备未执行；owned AVD已验证环境Trime，不代表产品IME通过 |
+| 111 应用服务 | done（模块）；原生与窗口前端已独审合入，112同Session真实调用也通过 | 两阶段MODULE_SOURCE_PASS；原native197、window54/38/sync34/nav41及独立12恢复/13空目标组合；112独审另验实际主/子窗ACK及刷新故障恢复 | 最终Mac同Session真实Codex/窗口/数据链通过；全部UI仍按实际范围，余项交用户 |
+| 112 MCP | done（模块）；真实装配`4ceb15e9`经`a1a69662`独审PASS，已合入`eca35abb` | 独立service11、实际设置双grant/Codex九工具/CAS/重启/撤销/20k/WK/刷新恢复通过；主树编译与17项native定向、376主题/90交互/12组Agent页及17组合UI检查通过 | 最终签名Mac/MCP真实Codex九工具/权限/CAS/幂等/重启通过；Android通过手工同步接收数据 |
+| 113 交互 | 前端模块`6309967f`及独审`3f93fbfe`已合入 | SOURCE_PASS；作者90项、独立20项组件检查通过 | 准确双端包已交付；命令/组件回归通过，UI完整验收交用户，NATIVE-BACK-01未修复 |
+| 114 主题 | done（模块）；主题`39662e7d`与production Store runner`9bbb8562`均已合入 | 独审`7767625d` MODULE_SOURCE_PASS；合入后376主题/90交互/12组AgentSettings/core199通过，实际AgentSettings额外18状态/450文字对/0失败。runner修复`975202a9`经`bd0aaf78`独审通过，主树真实3项Store再次通过 | 准确双端包已交付；主题命令/组件检查通过，完整UI验收交用户 |
+| 115 呈现 | done（模块）；`7e53af80`经三项P2修复`7a5bb3dc`、`b94de7f4`独审PASS后合入`e5e66193` | 合入后App108/9-path、reviewfix9、真实Store2、交互90、主题376、AgentSettings12组、实际Preferences→Agent17及native19全部通过；原失败保留 | 准确双端包已交付；resolver/Store/App命令检查通过，完整UI验收交用户 |
+| 116 整合 | done（按用户最新范围：准确三产物、命令/单元/真实宿主数据路径；UI移交） | 最终adapter15＋嵌套stdio16；同产品native19/前端组合记录；独立产物身份与业务证据复核通过，原失败保留 | 最终生产包真实Codex107调用（87成功响应/20预期拒绝），三端公开备份13字段/document/PNG原字节一致，A/B暂停恢复；实际范围及用户手测项见DELIVERY |
 
 ## 分支写入边界
 
@@ -59,3 +61,7 @@ Store runner现直接使用production core harness，尊重独立CARGO_TARGET_DI
 5. 同步：隔离测试资料库间agent改动传播，原有数据/附件保全；未完成的设备或账户验收保持未执行。
 
 所有自动化默认新建隔离资料库，不读取真实agent凭据或覆盖用户已有笔记；设备运行先确认当前现场和目标实例，不能为了出包验收破坏历史未保存内容。
+
+## 本轮结项与后续
+
+111–115维持已独审模块done。116依用户最新指示完成命令/产物交付，不再要求自动执行其原UI矩阵；表中较早native-open说明保留为历史阶段，当前UI余项统一移交用户。新产物源码96f518ee（产品指纹da008098…，1743 inputs），最终文档提交不重标源码身份。Windows/Linux MCP、远程HTTP、daemon、全媒体/物理硬件/账户三端都没有随本轮自动获得验收。

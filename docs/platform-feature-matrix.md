@@ -1,5 +1,9 @@
 # Mac / Android 功能对应表
 
+2026-11-17当前交付：[项目演进报告](verification/project-evolution/DELIVERY.md)。本批源码96f518ee，Mac/Android与MCP产物已核验，真实Codex九工具/权限/CAS/幂等/重启和手工配对三端数据链通过。新增Classic/Paper/High Contrast、桌面三/两栏/专注、双端列表/画廊及独立密度。Android不运行MCP宿主，借助同步取得结果；实际同步拓扑为同机双Mac资料库＋owned模拟器reverse。用户接手UI测试，不把下方历史原生记录升级为新包结论。
+
+下文保留106及更早平台差异/设备验收时点，当前状态优先按本轮报告阅读。
+
 2026-11-11 当前续验：测试机已解锁，不能再以历史锁屏概括当前阻碍。[Android live08/09独核](plan/reviews/app-final106-android-live0809-independent.md)接受新建空笔记时实际完整WeType按键与活动输入连接；设置原图已证明页面曾打开，原“设置无响应”结论及候选点击前“截图精确一致”声明均被RGB复算否定，作者已保留旧派生记录并更正，不能据此证明点击目标、场景切换原因或输入法修复；[Android live11独核](plan/reviews/app-final106-android-live11-independent.md)接受同PID31424/task1294新空笔记→Back隐藏键盘→正文单击→完整WeType键盘恢复；仅此空笔记链通过，非历史原因修复，格式保持尚未复验。旧102失败保留。[Mac live11独核](plan/reviews/app-final106-mac-videos-live11-independent.md)确认faststart定位83.333秒后持续Play/静止，本轮无锁屏错误，后段恢复播放尚未证明；不能沿用live10锁屏原因。[Mac tail live12独核](plan/reviews/app-final106-mac-tail-live12-independent.md)接受附件身份及96秒时长的有限记录，后段播放未通过；附件菜单操作后Pause/00:48与83.333秒帧不一致，原因未明。随后数字正文测试前，前台已变为Chrome/task1296；没有输入/切回，格式分支停止，不改变live11已完成结果。当前不构建、不重装、不改输入法设置；保留用户笔记和附件。下方按各报告历史时点读取。
 
 Mac视频最新：[live10有限独核](plan/reviews/app-final106-mac-videos-live10-independent.md)接受faststart激活、96秒时长、初段推进及86.8%后段定位；后续播放点击再次被Mac系统锁定拒绝，后段推进/明确暂停与tail-metadata视频未验。全部UI停止；Android同一系统认证前提持续，剩余原生验收须本人正常解锁后继续。没有新构建，整体目标未完成。下方为此前时点。

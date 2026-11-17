@@ -1,13 +1,13 @@
 ---
 id: evolve-116
 scope: release-integration
-status: in-progress
+status: done
 depends-on: [evolve-112, evolve-115]
 ---
 
 # Agent与双端最终整合交付
 
-2026-11-17：112/115及执行器准备均已独审合入，`e5e66193`组合检查通过。进入固定源码、准确Mac/Android/MCP构建及真实运行阶段；安装包、原生输入与同步结论仍按实际证据逐项记录，不提前授予完成。
+2026-11-17：完成同源Mac/Android/MCP准确产物、独立身份/业务复核、命令与数据链验收，见[最终交付](../../verification/project-evolution/DELIVERY.md)。用户最新明确UI测试自行完成，本任务本轮门槛据此调整为命令/单元/协议/真实宿主数据与产物交付；原UI矩阵保留作用户手测清单，未测项不标PASS。源码固定96f518ee，后续仅文档收尾。
 
 ## objective
 
@@ -50,3 +50,7 @@ owned serial为`emulator-5580`，每次启动前检查5580/5581/8596端口、磁
 在112/115开发期间可独立准备`evolve116-android-driver`执行器，不代表116产品联调已经开始。它只依赖既有113移动身份和当前调试观察契约，path限于新执行器、其定向身份/清理检查及自身说明，不改产品App、旧Samsung driver或共享构建入口。此准备分支提交并独审后再合入；真实设备执行和最终功能验收仍须等待112/115整合及准确包。
 
 入口必须显式接收adb路径/owned emulator serial/AVD name/package/activity/预期APK摘要及本轮evidence目录，不继承历史设备默认。运行时核对AVD、包与PID/前台/唯一WebView，变更则停止而不重放写操作；只创建并清理精确属于本轮的lease/forward/reverse，邀请串仅经内存传递。提供读取正文/设置/同步状态、可见UI交互及输入/旋转/Back的基础能力；CDP插文仅作数据准备，不能宣称真实IME验收。prepare阶段不boot、不安装、不修改IME，提供可复用机制后等待资源和准确包调度。
+
+## 本轮结项范围调整
+
+用户指示优先于原计划UI门槛：不再继续设备UI/视觉自动化，准确包交给用户手测。命令结果、独立审查、实际同步拓扑、已知1970显示缺陷、Clippy基线失败和未测硬件均在交付报告中列明。Android准备段及原生门槛段保留为历史/手测维度，不代表最终仍未安装产品，也不代表全部已测。

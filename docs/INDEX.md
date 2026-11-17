@@ -2,11 +2,11 @@
 
 2026-11-16 项目演进设计，11-17进入实现：[代码梳理与优先级](plan/analysis/project-review-20261116.md) → [MCP 接口](architecture/agent-mcp.md) / [主题与呈现架构](architecture/theme-presentation.md) / [双端交互](ui/adaptive-presentation.md) → [实施路线图与六项任务](plan/project-evolution-20261116.md)。新 MCP 和主题契约以这些文档为准；已实现功能与历史验证仍按下方各自版本读取。
 
-使用者入口：[Agent接入指南](agent-usage.md)说明设置页授权、Codex/DeepSeek harness配置边界及写入失败恢复；最终产物仍待116交付，不能把配置示例当成已安装接口。
+使用者入口：[Agent接入指南](agent-usage.md)说明设置页授权、Codex/DeepSeek harness配置边界及写入失败恢复；最终三产物与命令验证已交付，UI余项交用户手测，实际边界见[交付报告](verification/project-evolution/DELIVERY.md)。
 
 后续开发已从111原生应用服务、113前端交互和112独立stdio传输模块展开；当前状态以[任务路线图](plan/project-evolution-20261116.md)为准。[本机IPC实现契约](architecture/agent-ipc.md)固定适配器/宿主帧和凭据引用；独立模块通过不代表已完成真实宿主或双端验收。
 
-11-17：111共享服务/窗口协调、112真实宿主/MCP/设置入口、113交互、114三主题及115呈现resolver/专注布局/移动列表均已完成模块独审与合入组合复验，实际Codex九工具→SQLite/真实窗口链通过。116进入准确双端/MCP安装产物及设备/同步组合验收，执行器/核验器准备已合入，新隔离Android环境已验证Trime中文输入但尚未安装产品APK。最新证据分层见[演进验证状态](verification/project-evolution/README.md)，不能用历史包或传输fixture替代本轮最终联调。
+11-17：111共享服务/窗口协调、112真实宿主/MCP/设置入口、113交互、114三主题及115呈现resolver/专注布局/移动列表均已完成模块独审与合入组合复验，实际Codex九工具→SQLite/真实窗口链通过。116已完成准确Mac/Android/MCP产物、真实Codex九工具与手工配对三端正文/13共享字段/PNG原字节一致验证。用户接手UI测试，未测项单列；命令结果与交付入口见[当前报告](verification/project-evolution/DELIVERY.md)。最新证据分层见[演进验证状态](verification/project-evolution/README.md)，不能用历史包或传输fixture替代本轮最终联调。
 
 服务器后续开发与部署从[服务总览与生产记录](server/README.md)、[配置／部署／回滚／排障手册](server/DEPLOYMENT.md)开始；[环境模板](../services/coordinator/.env.example)不含真实凭据。资料依据源码和已有回执整理，未重新查询或变更线上配置。
 
