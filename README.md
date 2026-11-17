@@ -6,7 +6,7 @@ Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android�
 
 2026-11-17 前一轮已完成共享应用服务、本机MCP、三主题与双端呈现实现：[交付与后续建议](docs/verification/project-evolution/DELIVERY.md) · [Agent接入指南](docs/agent-usage.md) · [命令验证状态](docs/verification/project-evolution/README.md)。
 
-本轮反馈源码扩展为八套双明暗外观，桌面正常宽度四列两行；优化纸感/高对比和双端待办，并为 Agent 接入增加真实 stdio MCP 测试程序。使用方式、命令验证及手测步骤见[本轮交付](docs/verification/feedback117/README.md)。UI测试由用户完成；本轮未重新生成安装包，下方安装包保持上一轮构建身份，不包含这些新修改。
+本轮反馈扩展为八套双明暗外观，桌面正常宽度四列两行；优化纸感/高对比和双端待办，并为 Agent 接入增加真实 stdio MCP 测试程序。使用方式、命令验证及手测步骤见[本轮交付](docs/verification/feedback117/README.md)。已从 `c406086d5bbe` 重新构建双端包，正常重启 Mac，并保数据覆盖安装、打开连接的 Samsung 手机；UI测试由用户完成。[安装与空间清理记录](docs/verification/feedback117/DEPLOYMENT.md)列明准确包身份和验证范围。
 
 设计与代码依据：[代码现状及改进建议](docs/plan/analysis/project-review-20261116.md) · [Agent MCP 查询/读取/写入契约](docs/architecture/agent-mcp.md) · [多主题与呈现架构](docs/architecture/theme-presentation.md) · [桌面/移动交互方案](docs/ui/adaptive-presentation.md) · [实施路线图](docs/plan/project-evolution-20261116.md)。文档区分原始分析、已实现行为和后续扩展，实际功能与验证范围以本轮交付为准。
 
@@ -20,16 +20,18 @@ Rust + pnpm 开发的本地备忘录应用，目标平台为 macOS 和 Android�
 
 | 平台 | 安装包 | 版本 / 构建时间（UTC） | 源码 |
 | --- | --- | --- | --- |
-| macOS | [CyberNote.app](<artifacts/releases/20261117-project-evolution/CyberNote.app>) | 0.1.0 / 2026-11-16T22:36:01.257Z | 96f518ee8d17 + da00809888d9144e |
-| Android | [APK](<artifacts/releases/20261117-project-evolution/android/CyberNote-Android-arm64.apk>) | 0.1.0 / 2026-11-16T22:42:43.454Z | 96f518ee8d17 + da00809888d9144e |
+| macOS | [CyberNote.app](<artifacts/releases/20261117-feedback117/CyberNote.app>) | 0.1.0 / 2026-11-17T08:11:22.893Z | c406086d5bbe + 31c8ed9fed41158a |
+| Android | [APK](<artifacts/releases/20261117-feedback117/android/CyberNote-Android-arm64.apk>) | 0.1.0 / 2026-11-17T08:19:34.498Z | c406086d5bbe + 31c8ed9fed41158a |
 
 双端源码指纹一致；功能与平台差异见[功能对应表](docs/platform-feature-matrix.md)。本机包不纳入 Git，验证范围见各平台交付 manifest。
 
 <!-- latest-installers:end -->
 
-[Mac ZIP（含字体许可与来源说明）](artifacts/releases/20261117-project-evolution/CyberNote-Mac.zip)；Mac随附字体[OFL许可](artifacts/releases/20261117-project-evolution/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-project-evolution/notices/noto-cjk/README.md)。Android分发时请同时保留交付目录内的[OFL许可](artifacts/releases/20261117-project-evolution/android/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-project-evolution/android/notices/noto-cjk/README.md)；这些是APK旁随文件，裸APK不包含完整许可交付。
+[Mac ZIP（含字体许可与来源说明）](artifacts/releases/20261117-feedback117/CyberNote-Mac.zip)；Mac随附字体[OFL许可](artifacts/releases/20261117-feedback117/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-feedback117/notices/noto-cjk/README.md)。Android分发时请同时保留交付目录内的[OFL许可](artifacts/releases/20261117-feedback117/android/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-feedback117/android/notices/noto-cjk/README.md)；这些是APK旁随文件，裸APK不包含完整许可交付。
 
 Agent适配器（macOS arm64）：[cybernote-mcp](artifacts/releases/20261117-project-evolution/mcp/cybernote-mcp) · [manifest](artifacts/releases/20261117-project-evolution/mcp.json) · [第三方许可](artifacts/releases/20261117-project-evolution/mcp/THIRD_PARTY_NOTICES.md)。设置→Agent接入生成客户端授权与配置；查询/读取/新建/追加/更新见[指南](docs/agent-usage.md)。桌面应用需保持运行，Android通过同步取得内容。Mac为ad-hoc签名未公证，Android为本地Debug证书，均非商店签名。
+
+空间维护：11-17按用户要求清理旧 debug 缓存、过期非 release 候选二进制、隔离 AVD 和打包中间文件，文件原占用合计约33.7 GiB；当前及回退 release、最新历史账户双客户端测试包、资料库和日志保留。下方历史文档中的非 release 安装包路径可能已清理，不能作为当前下载入口；具体清单见[清理记录](docs/verification/feedback117/DEPLOYMENT.md)。
 
 ## 历史106原生验收记录
 
@@ -63,10 +65,10 @@ Mac最新续验：[WAV live09有限独核](docs/plan/reviews/app-final106-mac-wa
 
 | 平台 | 本机安装包 | 本次状态与证据 |
 | --- | --- | --- |
-| macOS ARM64 · Mac32 | [ZIP](artifacts/editor94/备忘录-Mac32.zip) / [应用](artifacts/editor94/备忘录.app) | 标签回车提交、正文 Tab 插入、附件右键菜单和导入记录内部化；准确构建、独立核包通过。[Mac32 交付](docs/verification/editor94/DELIVERY.md) |
-| Android ARM64 · Android21 | [APK](artifacts/sync91/备忘录-Android21.apk) | 快速画廊首页、本地附件及双向同步；在隔离模拟器完成正文/原文件同步、恢复与图片导出验收。[同步交付](docs/verification/sync91/DELIVERY.md) |
+| macOS ARM64 · Mac32 | [历史 ZIP](artifacts/editor94/备忘录-Mac32.zip)，展开应用已清理 | 标签回车提交、正文 Tab 插入、附件右键菜单和导入记录内部化；准确构建、独立核包通过。[Mac32 交付](docs/verification/editor94/DELIVERY.md) |
+| Android ARM64 · Android21 | 历史 APK 已清理 | 快速画廊首页、本地附件及双向同步；在隔离模拟器完成正文/原文件同步、恢复与图片导出验收。[同步交付](docs/verification/sync91/DELIVERY.md) |
 
-Mac32 为本地 ad-hoc 签名包，未公证；Android21 为 debug 包。Mac32 后续改动没有重新生成 Android 包，两端不能视为相同的完整 UI 版本。旧包、原始失败和原 Android 未保存录音现场保留。
+Mac32 为本地 ad-hoc 签名包，未公证；Android21 为 debug 包。Mac32 后续改动没有重新生成 Android 包，两端不能视为相同的完整 UI 版本。历史失败和设备数据保留，旧安装产物的保留范围以11-17清理记录为准。
 
 近期改动：
 

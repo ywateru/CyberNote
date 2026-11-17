@@ -1,6 +1,6 @@
 # 文档导航
 
-2026-11-17 新反馈已完成源码、独审与组合命令检查：[八套外观、紧凑清单与 MCP 测试程序](verification/feedback117/README.md)。保留三套预设并扩展为八套，修正纸感/高对比和双端待办排版；Agent 接入增加真实 stdio 测试入口。UI 由用户验收；本轮未重打 Mac/APK 包，下方旧产物不包含这些新变更。
+2026-11-17 新反馈已完成源码、独审与组合命令检查：[八套外观、紧凑清单与 MCP 测试程序](verification/feedback117/README.md)。保留三套预设并扩展为八套，修正纸感/高对比和双端待办排版；Agent 接入增加真实 stdio 测试入口。已从 `c406086d5bbe` 构建双端包、正常重启 Mac 并覆盖安装/打开 Samsung 真机；UI 由用户验收。[安装与空间清理](verification/feedback117/DEPLOYMENT.md)记录同源包校验、安装边界和约33.7 GiB旧产物清理；下方历史包不能替代本轮新包。
 
 2026-11-16 项目演进设计，11-17进入实现：[代码梳理与优先级](plan/analysis/project-review-20261116.md) → [MCP 接口](architecture/agent-mcp.md) / [主题与呈现架构](architecture/theme-presentation.md) / [双端交互](ui/adaptive-presentation.md) → [实施路线图与六项任务](plan/project-evolution-20261116.md)。新 MCP 和主题契约以这些文档为准；已实现功能与历史验证仍按下方各自版本读取。
 
