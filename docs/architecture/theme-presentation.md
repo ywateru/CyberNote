@@ -52,7 +52,7 @@ type PresentationV1 = {
 
 `focus` 的已确认偏好可持久化；临时全屏、打开附件画廊、选区、搜索和当前路由不属于该对象。进入focus前记录lastNonFocusNavigation，选择两/三栏时同步更新该字段；冷启动若默认focus，退出时恢复该已保存值。仅在会话内临时进入专注时保留来源和原布局，退出不隐式修改默认偏好。主题不携带自定义脚本、字体 URL、任意 CSS、层级值或布局代码。
 
-新增 `settings.appearance` / `settings.presentation`；`interfaceFontSize`、`editorFontSize`、`interfaceDetails` 保持既有独立字段，不另起同义圆角/命中区设置。新 density 只映射基础 gap/行距/内边距，不再保存一份 menuSpacing。`interfaceDetails` 继续表示用户覆盖值，文档说明优先级，不能用 compact 绕过44px移动/28px桌面最小命中区。
+新增 `settings.appearance` / `settings.presentation`；`interfaceFontSize`、`editorFontSize`、`interfaceDetails` 保持既有独立字段，不另起同义圆角/命中区设置。新 density 只映射基础 gap/行距/内边距，不再保存一份 menuSpacing。`interfaceDetails` 继续表示用户覆盖值，文档说明优先级，不能用 compact 缩小工具栏/菜单的44px移动/28px桌面最小命中区。正文内清单属于文字排版：按本轮用户要求紧凑排列，圆圈点击区域可向左扩展至44px宽，高度限制在本行行盒内，不承诺44px正方形，也不覆盖相邻行或正文选字。
 
 ## 迁移、保存与设备范围
 
@@ -122,7 +122,7 @@ type PresentationV1 = {
 
 ## 原生与首屏
 
-现有 NativeToolbarState 只含 system/light/dark 等有限投影；新增 ThemeRegistry 不意味着 AppKit NSMenu 可任意换肤。首版原生继续使用系统明暗外观和已支持字号/命中区；Web 内容使用主题 palette，系统菜单保留系统样式。若后续需要 accent 或背景扩展，必须更新 typed projection、Rust 校验和 AppKit 实现，声明降级行为。
+本轮扩展 NativeToolbarState：除 system/light/dark 明暗策略外投影内置主题 ID，由同一 `palettes.json` 生成 CSS 与 AppKit 色板。typed projection、Rust 枚举校验和 AppKit 绘制同步更新，使窗口/工具栏与其下方区域使用相应主题表面，搜索与图标采用相同语义色。旧调用方省略主题 ID 时保留 Classic。系统 NSMenu 仍由 AppKit 明暗外观控制，不声称支持任意菜单换肤。该项实际原生显示仍由用户验收；文末 114 的“仅明暗”描述属于历史版本。
 
 启动页、主窗、独立笔记窗、portal 菜单、设置、录音栏和原生/浮动预览必须纳入主题覆盖。首屏可缓存最近一次已确认外观作为启动提示，加载权威设置后校正；缓存不含正文，失败不能隐藏恢复入口。无色块闪白/深浅错配需实际冷启动核验。
 
