@@ -1,7 +1,7 @@
 ---
 id: app-feedback117-integration
 scope: integration and documentation
-status: pending
+status: done
 depends-on: [app-appearance117, app-mcp-tester117]
 ---
 
@@ -22,3 +22,5 @@ depends-on: [app-appearance117, app-mcp-tester117]
 ## verification
 
 运行类型/生产前端构建、主题生成一致、受影响的原生单元测试和 MCP runner/batch 命令测试。缺陷修复回原作者，独审不同人执行。不运行 UI 自动化、不操作原手机；历史包保留原身份，不把源码修改冒充已交付安装包。
+
+产品组合源码 `ef490c77` 已通过主树 schema96 / appearance742 / MCP69 / token一致、`pnpm build` 和原生 `cargo check --locked --offline --lib`；两项作者/独审功能测试及明确未测边界汇总在[最终记录](../../verification/feedback117/README.md)。本轮 worktree/分支已清理，不重新标注旧包。

@@ -1,7 +1,7 @@
 ---
 id: app-mcp-tester117
 scope: agent settings and real stdio test runner
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -25,3 +25,5 @@ depends-on: []
 ## verification
 
 真实 stdio 握手/工具发现/调用，帧大小、错误、超时、取消与子进程回收；授权/过期/访问变化；手动 JSON 和批量结果语义、CAS/幂等键/回执与已有笔记隔离。明确区分受控 protocol fixture、真实适配器和真实宿主证据；不启动用户日常资料库做测试。
+
+已合入，两个 P2 经修复及[窄复审](../reviews/app-mcp-tester117-recheck.md)关闭。69项JS、8项Rust小harness通过；主树组合前端构建和原生编译成功。真实 Session/SQLite 新测试界面与 UI 验收边界见[交付](../../verification/feedback117/README.md)。

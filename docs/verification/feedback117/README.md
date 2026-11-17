@@ -1,6 +1,6 @@
 # 外观、清单与 MCP 测试程序交付
 
-日期：2026-11-17。本轮承接用户截图反馈，契约见[本轮任务](../../plan/appearance-mcp-tester-20261117.md)。状态：实施及独立复核中，最终组合检查尚未完成。
+日期：2026-11-17。本轮承接用户截图反馈，契约见[本轮任务](../../plan/appearance-mcp-tester-20261117.md)。状态：两项实现、独立复审及合并后的组合命令检查已完成；UI 由用户验收。组合产品源码提交 `ef490c77`，其后的收尾提交仅更新文档。
 
 ## 范围
 
@@ -8,11 +8,36 @@
 - 桌面和手机的圆形紧凑待办清单，首行对齐，内部段落不继承额外间距，保留文档/编辑器所有权。
 - Agent 接入中的 MCP 测试对话框：真实 stdio、手动逐工具调用、只读及显式读写批量、停止/关闭与访问变化清理。
 
+八套为经典、纸感、高对比、海洋、森林、玫瑰、薰衣草、石墨，各有浅色/深色。桌面正常宽度四列，窄宽和大字可降列；手机保留完整八选项选择器。Paper 的原生 toolbar/window 采用同源色板，系统菜单/玻璃材质仍由 macOS 控制。清单提供旧 WebView 的 em 首行对齐回退，不依赖新 `lh` 单位才能成立。
+
+测试入口：桌面“设置 → Agent 接入”，开启宿主并选择有效授权、填写真实适配器绝对路径，点击“启动 MCP 测试程序”，再点击“连接”。工具/schema 来自真实 `tools/list`。批量只读不展示已有正文；显式读写仅修改当轮新建测试笔记，笔记会留存。恢复区发送前记录原工具/参数/幂等键，有 operationId 时只读查询；最多100项，重连保留，关闭对话框后不持久化。详情见[接入指南](../../agent-usage.md)。
+
+## 命令与独审结果
+
+| 检查 | 结果 | 实际范围 |
+| --- | --- | --- |
+| `node scripts/check-editor-schema.mjs` | 96 个文档用例通过 | 主树实际编辑器 schema，先生成外观检查所需模块 |
+| `node scripts/check-appearance117.mjs` | 742 项通过，其中720对颜色对比 | 八主题、设置 owner、启动缓存、ProseMirror 勾选撤销/重做、清单与旧引擎回退的有限 CSS/表达式检查；不等于浏览器排版验收 |
+| `node scripts/generate-theme-tokens.mjs --check` | 通过 | CSS 和 AppKit header 均与 palette 源一致 |
+| 原生 Store 外观归档窄测试 | 1 passed / 0 failed | 八主题保存、导出导入、重开、迁移及非法配置原子拒绝；独审实跑，后续修复仅 CSS，不重复 |
+| `node scripts/check-mcp-tester117.mjs` | 69 项通过 | 主树 DTO、批量、原始回调竞态、恢复信息和 handler 接线；无 UI 自动化 |
+| `cargo test --locked --offline --manifest-path scripts/mcp-tester117/Cargo.toml` | 8 passed / 0 failed | 作者及独审实跑；生产 Registry + 替身 Desktop、受控子进程及真实适配器→私有 IPC fixture；扩展在途/排队取消、权限变化、回收和 slot 复用断言 |
+| `pnpm build` | 通过 | 合并后 `tsc -b` + Vite 生产构建，1989模块；保留 >500kB chunk 提示，不是性能验收 |
+| `CARGO_BUILD_JOBS=2 cargo check --locked --offline --manifest-path src-tauri/Cargo.toml --lib` | 通过 | 合并后真实 Tauri/原生插件和命令编译，20.96秒；26条现有警告保留 |
+
+MCP Rust 完整复跑需显式设置 `MCP_TEST_ADAPTER` 为真实适配器路径；本轮使用 `artifacts/releases/20261117-project-evolution/mcp/cybernote-mcp`，并设置 `CARGO_TARGET_DIR` 为现有主缓存 `src-tauri/target`、`CARGO_BUILD_JOBS=2`。省略适配器变量时不能把该项当成真实适配器证据。没有另建 target 或修改旧包。前端检查按表内 schema → appearance 顺序运行，不把未生成的忽略文件当作干净 checkout 自带输入。
+
+独审关闭的问题：外观 `lh` 缺少旧引擎回退；测试器重入 Stop/Close 与迟到收尾竞态；批量错误恢复元数据丢失。原始 blocked 报告保留，最终以[外观复审](../../plan/reviews/app-appearance117-recheck.md)和[测试器复审](../../plan/reviews/app-mcp-tester117-recheck.md)的 PASS 为准。
+
+原始主树输出位于本机 `artifacts/appearance117/result.json`、`artifacts/editor-schema/result.json`、`artifacts/feedback117/{frontend-build,native-check,mcp-tester-check}.log`；视觉作者/独审材料保存在 `artifacts/feedback117/appearance-author-review/`。这些产物不纳入 Git。
+
 ## 验证边界
 
 本轮采用命令与单元/功能测试，没有运行 UI 自动化、启动用户日常资料库或操作原手机。UI 的像素、原生材质叠加、手机触控/输入法实际效果由用户验收。受控 stdio fixture 与真实适配器测试不等于通过新测试界面完成真实用户资料库验收。
 
-`artifacts/releases/20261117-project-evolution/` 是前一轮安装包和适配器，保持原构建身份；不能把本轮源码修改标成已进入该目录的旧 Mac/Android 包。本轮是否产生新安装包以此记录的最终状态为准。
+插件新增 enum 单测因独立锁文件触发额外依赖编译，在磁盘不足前主动中止，未执行到测试，不能计为通过。合并后的真实插件已随原生 `cargo check` 编译通过。测试器本轮尚未通过新界面连接真实 Session/SQLite 验证批量落盘/重启；既有 MCP 宿主的历史数据链证据仍按[前轮报告](../project-evolution/DELIVERY.md)读取。
+
+`artifacts/releases/20261117-project-evolution/` 是前一轮安装包和适配器，保持原构建身份；不能把本轮源码修改标成已进入该目录的旧 Mac/Android 包。本轮没有重新生成 Mac/APK 安装包，`dist/` 为此次生产前端构建，不等于原生安装包。两个本轮 worktree/分支已在合入后清理，历史资料/AVD/产物保持。
 
 ## 用户 UI 验收顺序
 
