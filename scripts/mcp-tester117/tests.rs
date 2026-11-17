@@ -2,6 +2,7 @@
 // Test doubles only for desktop authority; all Registry/Process code is production.
 #[path = "../../src-tauri/src/agent_tester/mod.rs"]
 mod agent_tester;
+#[cfg(test)]
 use agent_tester::process;
 #[path = "../../src-tauri/src/agent_host/types.rs"]
 mod agent_host;
@@ -19,6 +20,7 @@ mod agent_desktop {
         pub testers: std::sync::Arc<agent_tester::Registry>,
         pub settings: std::sync::Mutex<agent_host::HostSettings>,
         pub active: std::sync::atomic::AtomicBool,
+        pub epoch: std::sync::atomic::AtomicU64,
     }
     impl Desktop {
         pub async fn settings(
@@ -27,7 +29,7 @@ mod agent_desktop {
             label: &str,
         ) -> Result<agent_host::HostSettings, ()> {
             if token.session_id != "window-token"
-                || token.epoch != 1
+                || token.epoch != self.epoch.load(std::sync::atomic::Ordering::SeqCst)
                 || label != "main"
                 || !self.active.load(std::sync::atomic::Ordering::SeqCst)
             {
@@ -120,6 +122,7 @@ mod lifecycle {
         Arc::new(agent_desktop::Desktop {
             testers: Arc::new(agent_tester::Registry::default()),
             active: AtomicBool::new(true),
+            epoch: std::sync::atomic::AtomicU64::new(1),
             settings: std::sync::Mutex::new(agent_host::HostSettings {
                 enabled: true,
                 host_session_id: "host".into(),
@@ -252,6 +255,47 @@ mod lifecycle {
         d.testers.stop(&id, "main", &token()).await.unwrap();
         assert!(task.await.unwrap().is_err());
     }
+    async fn event(path: &std::path::Path) {
+        tokio::time::timeout(Duration::from_secs(2), async {
+            while !path.exists() {
+                tokio::time::sleep(Duration::from_millis(5)).await;
+            }
+        })
+        .await
+        .expect("fixture event deadline");
+    }
+    async fn exited(pids: &[i32]) {
+        tokio::time::timeout(Duration::from_secs(2), async {
+            loop {
+                let mut running = false;
+                for pid in pids {
+                    // Own child must be reaped, descendants must no longer run.
+                    if unsafe { libc::kill(*pid, 0) } == 0 {
+                        let status = tokio::process::Command::new("/bin/ps")
+                            .args(["-o", "stat=", "-p", &pid.to_string()])
+                            .output()
+                            .await
+                            .unwrap();
+                        let state = String::from_utf8_lossy(&status.stdout);
+                        if !state.trim().is_empty() && !state.trim().starts_with('Z') {
+                            running = true;
+                        }
+                    }
+                }
+                if !running {
+                    break;
+                }
+                tokio::time::sleep(Duration::from_millis(5)).await;
+            }
+        })
+        .await
+        .expect("fixture process/descendant exit deadline");
+        assert_eq!(
+            unsafe { libc::kill(pids[0], 0) },
+            -1,
+            "direct child must be reaped before stop returns"
+        );
+    }
     #[tokio::test]
     async fn monitor_retires_revocation_host_workspace_expiry_and_window_loss() {
         for change in 0..6 {
@@ -273,6 +317,89 @@ mod lifecycle {
             tokio::time::sleep(Duration::from_millis(330)).await;
             assert!(call(&d, &id, "main", &token()).await.is_err());
             d.testers.close_all().await;
+        }
+        // Gate a real child inside tools/call. Poll the second production call
+        // once to deterministically enqueue it before invalidating the session.
+        for change in 0..8 {
+            let root = tempfile::tempdir_in("/private/tmp").unwrap();
+            let d = desktop("gate");
+            d.settings.lock().unwrap().runtime_dir = root.path().to_str().unwrap().into();
+            let initial = d.settings.lock().unwrap().clone();
+            let start = input("gate");
+            let id = start.connection_id.clone();
+            d.testers
+                .start(&d, start, token(), "main".into())
+                .await
+                .unwrap();
+            let other = d.clone();
+            let first_id = id.clone();
+            let first =
+                tokio::spawn(async move { call(&other, &first_id, "main", &token()).await });
+            event(&root.path().join("entered")).await;
+            let pids: Vec<i32> =
+                serde_json::from_slice(&std::fs::read(root.path().join("pids.json")).unwrap())
+                    .unwrap();
+            let owner = token();
+            let mut queued = Box::pin(call(&d, &id, "main", &owner));
+            std::future::poll_fn(|cx| {
+                assert!(std::future::Future::poll(queued.as_mut(), cx).is_pending());
+                std::task::Poll::Ready(())
+            })
+            .await;
+            assert!(matches!(
+                call(&d, &id, "main", &token()).await,
+                Err(process::Failure::Busy)
+            ));
+            match change {
+                0 => d.testers.stop(&id, "main", &token()).await.unwrap(),
+                1 => d.settings.lock().unwrap().grants[0].revoked = true,
+                2 => d.settings.lock().unwrap().incarnation = "changed".into(),
+                3 => d.settings.lock().unwrap().grants[0]
+                    .folder_ids
+                    .insert("new-folder".into())
+                    .then_some(())
+                    .unwrap(),
+                4 => d.epoch.store(2, Ordering::SeqCst),
+                5 => d.testers.close_window("main"),
+                6 => d.testers.close_all().await,
+                _ => d.settings.lock().unwrap().enabled = false,
+            }
+            assert!(tokio::time::timeout(Duration::from_secs(2), first)
+                .await
+                .unwrap()
+                .unwrap()
+                .is_err());
+            assert!(tokio::time::timeout(Duration::from_secs(2), queued)
+                .await
+                .unwrap()
+                .is_err());
+            d.testers.close_all().await;
+            exited(&pids).await;
+            assert_eq!(
+                std::fs::read_to_string(root.path().join("requests.log"))
+                    .unwrap()
+                    .lines()
+                    .count(),
+                1,
+                "queued request must never reach the child"
+            );
+            *d.settings.lock().unwrap() = initial;
+            d.epoch.store(1, Ordering::SeqCst);
+            // Returning done really releases the slot: a fresh UUID can initialize
+            // and call through a fresh process, without accepting either old result.
+            let next = input("gate");
+            let next_id = next.connection_id.clone();
+            d.testers
+                .start(&d, next, token(), "main".into())
+                .await
+                .unwrap();
+            let next_pids: Vec<i32> =
+                serde_json::from_slice(&std::fs::read(root.path().join("pids.json")).unwrap())
+                    .unwrap();
+            std::fs::write(root.path().join("release"), b"go").unwrap();
+            assert!(call(&d, &next_id, "main", &token()).await.is_ok());
+            d.testers.stop(&next_id, "main", &token()).await.unwrap();
+            exited(&next_pids).await;
         }
     }
     #[tokio::test]

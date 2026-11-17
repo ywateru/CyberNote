@@ -6,6 +6,7 @@ import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { randomUUID } from "node:crypto";
 import ts from "typescript";
+import { checkTesterCallbacks } from "./mcp-tester117/callback-checks.mjs";
 const root = resolve(import.meta.dirname, "..");
 const temp = await mkdtemp(join(tmpdir(), "mcp-tester117-js-"));
 let checks = 0;
@@ -18,8 +19,8 @@ try {
   }
   await writeFile(join(temp, "invoke.mjs"), 'export const invoke = (...args) => globalThis.testInvoke(...args);');
   await writeFile(join(temp, "bridge.mjs"), 'export const native = true; export const accessGate = { stamp: () => ({...globalThis.testStamp}), expected: () => ({sessionId:"window",epoch:1,noteEpoch:null}) };');
-  const { runMcpBatch } = await import(pathToFileURL(join(temp, "agent-mcp-tester-runner.mjs")));
-  const { parseConnected, parseCalled, testerTools, TesterError, mcpTesterClient } = await import(pathToFileURL(join(temp, "agent-mcp-tester-client.mjs")));
+  const { runMcpBatch, queryMcpRecovery, recoveryState } = await import(pathToFileURL(join(temp, "agent-mcp-tester-runner.mjs")));
+  const { parseConnected, parseCalled, testerTools, TesterError, testerErrorMessage, mcpTesterClient } = await import(pathToFileURL(join(temp, "agent-mcp-tester-client.mjs")));
   const tools = testerTools.map(name => ({ name, description: null, inputSchema: { type: "object" }, outputSchema: { type: "object" } }));
   const id = randomUUID();
   assert.equal(parseConnected({ connectionId: id, tools }, id).tools.length, 9);
@@ -28,13 +29,14 @@ try {
   assert.throws(() => parseCalled({ result: { structuredContent: [], isError: false }, elapsedMs: 1 }), TesterError);
   checks += 4;
   const grant = { scopes: ["notes:read", "notes:create", "notes:update"], folderIds: ["folder"] };
-  async function batch({ write = false, scopes = grant.scopes, behavior, abortAt } = {}) {
+  async function batch({ write = false, scopes = grant.scopes, behavior, abortAt, onDispatch } = {}) {
     const rows = [], calls = [], writes = [], receipts = new Map(), keys = new Set(), controller = new AbortController();
     let content = "", version = 0;
     const owned = "this-run-created-note";
     const result = value => ({ result: { structuredContent: value, isError: false }, elapsedMs: 2 });
     const error = code => ({ result: { structuredContent: { code, message: "private text not displayed", retryable: false }, isError: true }, elapsedMs: 1 });
     const options = { workspaceId: "workspace", grant: { ...grant, scopes }, write, signal: controller.signal, uuid: randomUUID, report: row => rows.push(row), call: async (tool, args) => {
+      onDispatch?.(tool, args, rows);
       calls.push({ tool, args: structuredClone(args) });
       if (tool === abortAt) controller.abort();
       const special = behavior?.(tool, args, calls); if (special) return special;
@@ -67,7 +69,7 @@ try {
   assert.equal(ro.calls.find(c => c.tool === "notes_list").args.limit, 1); checks++;
   const rw = await batch({ write: true });
   assert.equal(rw.failure, undefined); assert.deepEqual(rw.writes, ["notes_create", "notes_append", "notes_update"]);
-  assert.ok(rw.rows.every(r => r.status === "pass"));
+  assert.ok(rw.rows.every(r => r.status === "pass" || r.status === "pending"));
   assert.equal(rw.calls.filter(c => c.tool === "notes_get_operation").length, 3);
   assert.ok(rw.rows.some(r => r.detail.includes("留存"))); checks++;
   const limited = await batch({ write: true, scopes: ["notes:read"] });
@@ -87,7 +89,7 @@ try {
   const badRead = await batch({ write: true, behavior: (tool, args) => tool === "notes_read" && args.noteId !== "pre-existing-note" ? { result: { structuredContent: { id: args.noteId, version: "wrong", content: "other", truncated: false } }, elapsedMs: 1 } : null });
   assert.ok(badRead.failure); assert.deepEqual(badRead.writes, ["notes_create"]); checks++;
   const cancelled = await batch({ write: true, abortAt: "notes_create" });
-  assert.ok(cancelled.failure); assert.ok(!cancelled.rows.some(r => r.tool === "notes_create")); assert.ok(!cancelled.calls.some(c => c.tool === "notes_append")); checks++;
+  assert.ok(cancelled.failure); assert.equal(cancelled.rows.filter(r => r.tool === "notes_create").length, 1); assert.ok(cancelled.rows.find(r => r.tool === "notes_create").recovery.idempotencyKey); assert.equal(cancelled.rows.find(r => r.tool === "notes_create").status, "pending"); assert.ok(!cancelled.calls.some(c => c.tool === "notes_append")); checks++;
   const wrongWorkspace = await batch({ write: true, behavior: tool => tool === "notes_get_capabilities" ? { result: { structuredContent: { apiVersion: 1, workspaceId: "other", scopes: grant.scopes } }, elapsedMs: 1 } : null });
   assert.ok(wrongWorkspace.failure); assert.equal(wrongWorkspace.calls.length, 1); checks++;
   globalThis.testStamp = { generation: 1, sessionId: "window", epoch: 1 };
@@ -98,6 +100,78 @@ try {
   globalThis.testStamp.generation++;
   await mcpTesterClient.stop(id);
   assert.equal(invoked.at(-1).command, "agent_tester_stop"); assert.equal(invoked.at(-1).args.expected.epoch, 1); checks++;
+  // All three mutations preserve legal ToolError evidence and perform only a
+  // read-only recovery lookup. No recovery outcome resumes subsequent writes.
+  for (const failedTool of ["notes_create", "notes_append", "notes_update"]) {
+    for (const committed of [true, false, undefined]) {
+      for (const lookup of ["pending", "not_found", "denied", "lost"]) {
+        const operationId = randomUUID();
+        const failed = await batch({ write: true, behavior: (tool, args) => {
+          if (tool === failedTool) return { result: { isError: true, structuredContent: { code: "STORAGE_ERROR", message: "PRIVATE-ERROR-BODY", retryable: false, operationId, ...(committed === undefined ? {} : { committed }) } }, elapsedMs: 3 };
+          if (tool === "notes_get_operation" && args.operationId === operationId) {
+            if (lookup === "lost") throw Error("PRIVATE-TRANSPORT-BODY");
+            return { result: { ...(lookup === "denied" ? { isError: true } : {}), structuredContent: lookup === "denied" ? { code: "FORBIDDEN", message: "PRIVATE-DENIED-BODY" } : { operationId, status: lookup } }, elapsedMs: 1 };
+          }
+        } });
+        const failure = failed.rows.find(r => r.tool === failedTool && r.status === "fail");
+        assert.equal(failure.recovery.operationId, operationId); assert.equal(failure.recovery.committed, committed);
+        assert.equal(failure.recovery.idempotencyKey, failed.calls.find(c => c.tool === failedTool).args.idempotencyKey);
+        assert.deepEqual(failure.recovery.arguments, failed.calls.find(c => c.tool === failedTool).args);
+        assert.equal(failure.recovery.error.committed, committed);
+        const queried = failed.rows.find(r => r.recovery?.operationId === operationId && r.tool === "notes_get_operation");
+        assert.equal(queried.recovery.lookup, lookup === "lost" ? "failed" : lookup);
+        assert.equal(queried.recovery.committed, committed);
+        assert.equal(failed.calls.filter(c => c.tool === failedTool).length, 1);
+        const index = failed.calls.findIndex(c => c.tool === failedTool);
+        assert.ok(failed.calls.slice(index + 1).every(c => c.tool === "notes_get_operation"));
+        assert.ok(!JSON.stringify(failed.rows).includes("PRIVATE-")); checks++;
+      }
+    }
+  }
+  for (const failedTool of ["notes_create", "notes_append", "notes_update"]) {
+    const lost = await batch({ write: true, behavior: tool => { if (tool === failedTool) throw Error("PRIVATE-LOST-RESPONSE"); } });
+    const intent = lost.rows.find(r => r.tool === failedTool && r.status === "pending").recovery;
+    assert.deepEqual(intent.arguments, lost.calls.find(c => c.tool === failedTool).args);
+    assert.equal(intent.operationId, undefined); assert.equal(intent.committed, undefined); assert.ok(lost.failure);
+    assert.ok(!JSON.stringify(lost.rows).includes("PRIVATE-LOST-RESPONSE"));
+    assert.equal(lost.calls.filter(c => c.tool === failedTool).length, 1); checks++;
+  }
+  for (const failedTool of ["notes_create", "notes_append", "notes_update"]) {
+    const operationId = randomUUID(); let captured = false;
+    const recovered = await batch({ write: true,
+      onDispatch: (tool, args, rows) => {
+        if (tool !== failedTool) return;
+        const before = rows.at(-1);
+        assert.equal(before.status, "pending"); assert.deepEqual(before.recovery.arguments, args);
+        assert.equal(before.recovery.idempotencyKey, args.idempotencyKey); captured = true;
+      },
+      behavior: (tool, args) => {
+        if (tool === failedTool) return { result: { isError: true, structuredContent: { code: "STORAGE_ERROR", message: "PRIVATE-ERROR-BODY", retryable: false, operationId, committed: true } }, elapsedMs: 1 };
+        if (tool === "notes_get_operation" && args.operationId === operationId) return { result: { structuredContent: { operationId, noteId: "this-run-created-note", committedRevision: 404, committedVersion: "recovered-version", committed: true, warnings: ["WINDOW_REFRESH_REQUIRED", "PRIVATE-WARNING-BODY"] } }, elapsedMs: 1 };
+      },
+    });
+    assert.equal(captured, true);
+    const saved = recovered.rows.find(r => r.tool === "notes_get_operation" && r.recovery?.operationId === operationId).recovery;
+    assert.equal(saved.lookup, "committed"); assert.equal(saved.receipt.committedVersion, "recovered-version");
+    assert.ok(saved.warnings.includes("WINDOW_REFRESH_REQUIRED")); assert.ok(saved.warnings.includes("OTHER_WARNING"));
+    assert.equal(recovered.calls.filter(c => c.tool === failedTool).length, 1);
+    assert.ok(recovered.calls.slice(recovered.calls.findIndex(c => c.tool === failedTool) + 1).every(c => c.tool === "notes_get_operation"));
+    assert.ok(!JSON.stringify(recovered.rows).includes("PRIVATE-")); checks++;
+  }
+  const malformedEvidence = await batch({ write: true, behavior: tool => tool === "notes_create" ? { result: { isError: true, structuredContent: { code: "STORAGE_ERROR", message: "PRIVATE-MESSAGE", retryable: false, operationId: "PRIVATE-BAD-ID\n", committed: "true", warnings: ["WARNING_PERSIST_FAILED", "PRIVATE-WARNING"], extra: "PRIVATE-BODY" } }, elapsedMs: 1 } : null });
+  const evidence = malformedEvidence.rows.find(r => r.tool === "notes_create" && r.status === "fail").recovery;
+  assert.equal(evidence.operationId, undefined); assert.equal(evidence.committed, undefined);
+  assert.ok(evidence.warnings.includes("WARNING_PERSIST_FAILED"));
+  assert.ok(!JSON.stringify(malformedEvidence.rows).includes("PRIVATE-"));
+  assert.equal(malformedEvidence.calls.filter(c => c.tool === "notes_create").length, 1); checks++;
+  const opaqueId = "opaque-operation-identity";
+  const opaque = await batch({ write: true, behavior: (tool, args) => {
+    if (tool === "notes_create") return { result: { isError: true, structuredContent: { code: "TIMEOUT", message: "PRIVATE-MESSAGE", retryable: false, operationId: opaqueId } }, elapsedMs: 1 };
+    if (tool === "notes_get_operation" && args.operationId === opaqueId) return { result: { structuredContent: { status: "not_found", operationId: opaqueId } }, elapsedMs: 1 };
+  } });
+  assert.equal(opaque.rows.find(r => r.tool === "notes_create" && r.status === "fail").recovery.operationId, opaqueId);
+  assert.equal(opaque.rows.find(r => r.tool === "notes_get_operation").recovery.lookup, "not_found"); checks++;
+  checks += await checkTesterCallbacks(root, { runMcpBatch, queryMcpRecovery, recoveryState, TesterError, testerErrorMessage });
   // Both platform handler arrays must expose all three commands, exactly once each.
   const lib = await readFile(join(root, "src-tauri/src/lib.rs"), "utf8");
   const handlers = [...lib.matchAll(/tauri::generate_handler!\[([\s\S]*?)\]/g)];

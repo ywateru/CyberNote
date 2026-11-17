@@ -1,38 +1,114 @@
 import type { AgentGrant } from "./agent-client";
 import { record, TesterError, testerErrorMessage, type TesterCalled } from "./agent-mcp-tester-client";
-export interface BatchRow { tool: string; status: "pass" | "fail" | "skip"; detail: string; elapsedMs?: number; receipt?: Record<string, unknown> }
+export interface RecoveryIntent {
+  intentId: string; runId: string; workspaceId: string; grantId: string;
+  tool: "notes_create" | "notes_append" | "notes_update";
+  arguments: Record<string, unknown>; idempotencyKey: string;
+  committed?: boolean; operationId?: string; warnings?: string[];
+  error?: { code: string; committed?: boolean; operationId?: string; warnings?: string[] };
+  lookup?: "committed" | "pending" | "not_found" | "denied" | "failed";
+  receipt?: Record<string, unknown>;
+}
+export interface BatchRow { tool: string; status: "pending" | "pass" | "fail" | "skip"; detail: string; elapsedMs?: number; receipt?: Record<string, unknown>; recovery?: RecoveryIntent }
 export interface BatchOptions {
   workspaceId: string; grant: AgentGrant; write: boolean; signal: AbortSignal;
   call(tool: string, args: Record<string, unknown>): Promise<TesterCalled>;
   report(row: BatchRow): void;
   uuid?: () => string;
 }
-class ToolFailure extends Error { constructor(readonly code: string) { super(code); } }
-function string(value: unknown): string { if (typeof value !== "string" || !value || value.length > 8192) throw new TesterError("Protocol"); return value; }
-function receipt(value: Record<string, unknown>) {
-  if (value.committed !== true || !Number.isSafeInteger(value.committedRevision)) throw new TesterError("Protocol");
-  string(value.noteId); string(value.operationId); string(value.committedVersion);
-  return value;
+const writes = ["notes_create", "notes_append", "notes_update"] as const;
+const codes = new Set(["HOST_UNAVAILABLE", "WORKSPACE_UNAVAILABLE", "UNAUTHORIZED", "FORBIDDEN", "NOT_FOUND", "NOTE_BUSY", "BARRIER_BUSY", "REVISION_CONFLICT", "SCHEMA_INVALID", "LOSSY_REPLACEMENT", "CONTENT_TOO_LARGE", "CURSOR_EXPIRED", "IDEMPOTENCY_CONFLICT", "RATE_LIMITED", "TIMEOUT", "STORAGE_ERROR"]);
+const knownWarnings = new Set(["WINDOW_REFRESH_REQUIRED", "WARNING_PERSIST_FAILED"]);
+function warnings(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.slice(0, 32).map(v => typeof v === "string" && knownWarnings.has(v) ? v : "OTHER_WARNING"))];
+}
+function operationId(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 && value.length <= 1024 && !/[\u0000-\u001f\u007f]/u.test(value) ? value : undefined;
+}
+function metadata(value: Record<string, unknown>) {
+  return {
+    ...(operationId(value.operationId) ? { operationId: operationId(value.operationId) } : {}),
+    ...(typeof value.committed === "boolean" ? { committed: value.committed } : {}),
+    ...(Array.isArray(value.warnings) ? { warnings: warnings(value.warnings) } : {}),
+  };
+}
+class ToolFailure extends Error {
+  readonly recovery;
+  constructor(value: Record<string, unknown>) {
+    const code = typeof value.code === "string" && codes.has(value.code) ? value.code : "TOOL_ERROR";
+    super(code); this.recovery = { code, ...metadata(value) };
+  }
+}
+function string(value: unknown): string { if (typeof value !== "string" || !value || value.length > 8192 || /[\u0000-\u001f]/u.test(value)) throw new TesterError("Protocol"); return value; }
+function receipt(value: Record<string, unknown>): Record<string, unknown> {
+  if (value.committed !== true || !Number.isSafeInteger(value.committedRevision) || (value.committedRevision as number) < 0 || !operationId(value.operationId)) throw new TesterError("Protocol");
+  return { operationId: value.operationId, noteId: string(value.noteId), committedRevision: value.committedRevision, committedVersion: string(value.committedVersion), committed: true, warnings: warnings(value.warnings) };
+}
+export function recoveryState(intent: RecoveryIntent): string {
+  return intent.committed === true ? "已提交" : intent.committed === false ? "明确未提交" : "结果未知";
+}
+/** A single read-only lookup. Failed/pending lookups never erase the original evidence. */
+export async function queryMcpRecovery(intent: RecoveryIntent, call: BatchOptions["call"], signal: AbortSignal): Promise<RecoveryIntent> {
+  if (signal.aborted) throw new TesterError("Cancelled");
+  if (!operationId(intent.operationId)) return intent;
+  try {
+    const response = await call("notes_get_operation", { operationId: intent.operationId });
+    if (signal.aborted) throw new TesterError("Cancelled");
+    const value = response.result.structuredContent;
+    if (response.result.isError || typeof value.code === "string") {
+      return { ...intent, lookup: ["FORBIDDEN", "UNAUTHORIZED", "NOT_FOUND"].includes(new ToolFailure(value).recovery.code) ? "denied" : "failed" };
+    }
+    if (value.operationId !== intent.operationId) throw new TesterError("Protocol");
+    if (value.status === "pending" || value.status === "not_found") return { ...intent, lookup: value.status };
+    const saved = receipt(value);
+    if (intent.arguments.noteId !== undefined && saved.noteId !== intent.arguments.noteId) throw new TesterError("Protocol");
+    return { ...intent, committed: true, lookup: "committed", warnings: warnings([...(intent.warnings ?? []), ...(saved.warnings as string[])]), receipt: saved };
+  } catch {
+    if (signal.aborted) throw new TesterError("Cancelled");
+    return { ...intent, lookup: "failed" };
+  }
 }
 /** No write retries or replay. All mutation targets originate in this run's create receipt. */
 export async function runMcpBatch(options: BatchOptions): Promise<void> {
   const { report, signal } = options, uuid = options.uuid ?? (() => crypto.randomUUID());
-  const marker = `MCP 测试笔记 · ${uuid()}`;
+  const runId = uuid(), marker = `MCP 测试笔记 · ${runId}`;
   const check = () => { if (signal.aborted) throw new TesterError("Cancelled"); };
   const skip = (tool: string, detail: string) => report({ tool, status: "skip", detail });
   async function step(tool: string, args: Record<string, unknown>, validate: (v: Record<string, unknown>) => string, isReceipt = false): Promise<Record<string, unknown> | null> {
     check();
+    // This intent is emitted synchronously before dispatch; cancellation may only
+    // suppress later results, never the already recorded original key/arguments.
+    const intent: RecoveryIntent | undefined = writes.includes(tool as typeof writes[number]) ? {
+      intentId: string(args.idempotencyKey), idempotencyKey: string(args.idempotencyKey),
+      runId, workspaceId: options.workspaceId, grantId: options.grant.grantId,
+      tool: tool as RecoveryIntent["tool"], arguments: structuredClone(args),
+    } : undefined;
+    if (intent) report({ tool, status: "pending", detail: "写入意图已登记；提交结果未知。停止/超时不代表未提交，勿自动重试。", recovery: intent });
+    let elapsedMs: number | undefined;
     try {
       const response = await options.call(tool, args); check();
+      elapsedMs = response.elapsedMs;
       const value = response.result.structuredContent;
-      if (response.result.isError || typeof value.code === "string") throw new ToolFailure(typeof value.code === "string" ? value.code : "TOOL_ERROR");
+      if (response.result.isError || typeof value.code === "string") throw new ToolFailure(value);
       const detail = validate(value);
-      report({ tool, status: "pass", detail, elapsedMs: response.elapsedMs, ...(isReceipt ? { receipt: value } : {}) });
+      const saved = isReceipt ? receipt(value) : undefined;
+      report({ tool, status: "pass", detail, elapsedMs, ...(saved ? { receipt: saved } : {}),
+        ...(intent && saved ? { recovery: { ...intent, committed: true, operationId: saved.operationId as string, warnings: saved.warnings as string[], receipt: saved } } : {}) });
       return value;
     } catch (error) {
       check();
-      const denied = error instanceof ToolFailure && ["FORBIDDEN", "UNAUTHORIZED", "NOT_FOUND"].includes(error.code);
-      report({ tool, status: denied ? "skip" : "fail", detail: error instanceof ToolFailure ? `工具返回 ${error.code.replace(/[^A-Z_]/g, "").slice(0, 80)}；未重试。` : testerErrorMessage(error) });
+      const denied = error instanceof ToolFailure && ["FORBIDDEN", "UNAUTHORIZED", "NOT_FOUND"].includes(error.recovery.code);
+      const recovery = intent ? { ...intent, ...(error instanceof ToolFailure ? { ...metadata(error.recovery), error: error.recovery } : {}) } : undefined;
+      report({ tool, status: denied ? "skip" : "fail", elapsedMs,
+        detail: (error instanceof ToolFailure ? `工具返回 ${error.recovery.code}；未重试。` : testerErrorMessage(error)) + (recovery ? ` ${recoveryState(recovery)}；原工具、参数及幂等键已保留。` : ""), ...(recovery ? { recovery } : {}) });
+      if (recovery?.operationId) {
+        const queried = await queryMcpRecovery(recovery, options.call, signal); check();
+        report({ tool: "notes_get_operation", status: queried.lookup === "committed" ? "pass" : queried.lookup === "failed" ? "fail" : "skip",
+          detail: `恢复查询：${queried.lookup}；${recoveryState(queried)}。后续写入停止，不重试原写入。`, recovery: queried, ...(queried.receipt ? { receipt: queried.receipt } : {}) });
+      } else if (recovery) {
+        report({ tool: "notes_get_operation", status: "skip", detail: "未取得有效 operationId；保留原工具、参数及幂等键，不自动重试写入。", recovery });
+      }
       if (!(error instanceof ToolFailure)) throw error;
       return null;
     }
@@ -57,7 +133,7 @@ export async function runMcpBatch(options: BatchOptions): Promise<void> {
   if (Array.isArray(folders?.items)) folderId = folders.items.filter(record).map(f => f.id).find((id): id is string => typeof id === "string" && options.grant.folderIds.includes(id));
   if (!allowed("notes:read") || !allowed("notes:create") || !folderId) { for (const t of ["notes_create", "notes_append", "notes_update", "notes_get_operation"]) skip(t, "需要读取、新建权限及本轮确认的授权物理目录。"); return; }
   const created = await step("notes_create", { folderId, format: "text", content: marker, idempotencyKey: uuid() }, v => { receipt(v); return `已创建本轮测试笔记 ${v.noteId}；无删除工具，笔记将留存。`; }, true);
-  if (!created) { for (const t of ["notes_append", "notes_update", "notes_get_operation"]) skip(t, "本轮新建未取得有效回执；不操作其他笔记，不重试。"); return; }
+  if (!created) { for (const t of ["notes_append", "notes_update"]) skip(t, "本轮新建未取得有效回执；不操作其他笔记，不重试。"); return; }
   const noteId = string(created.noteId);
   async function verifyReceipt(mutation: Record<string, unknown>) {
     return step("notes_get_operation", { operationId: string(mutation.operationId) }, v => {

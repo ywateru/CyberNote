@@ -14,6 +14,7 @@ export interface McpTesterClient {
 export class TesterError extends Error {
   constructor(code: string = "Unavailable") {
     super(({
+      RecoveryCapacity: "恢复记录已达容量上限；请先复制恢复信息，本轮未发送新的写入。",
       Input: "请求无效：请检查绝对路径、工具与 JSON 参数。",
       Authority: "窗口、资料库或授权已改变，请断开后重新连接。",
       Busy: "测试连接或调用已达容量上限，请停止现有连接后重试。",
