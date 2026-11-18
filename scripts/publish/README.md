@@ -95,10 +95,9 @@ hidden components, including `.git` and `.env`, remain rejected by notice stagin
 
 The checker hashes actual committed binary bytes and compares both inventories.
 Only validated exact runtime entries receive a binary exception; the default
-50 MiB per-file cap remains. JNI exceptions are restricted to the single current
-`vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so`
-path. Application-generated JNI directories and adjacent unlisted binaries stay
-excluded. Manifest refresh never automatically updates a runtime pin when its
+50 MiB per-file cap remains. All JNI directories remain excluded. CyberBus uses pinned Cargo git source;
+there are no current runtimeAssets or cloudflared helper exceptions.
+See `notices/cyberbus/NOTICE.md` for source/license and relinking requirements. Manifest refresh never automatically updates a runtime pin when its
 binary changes: a new version/path or an explicitly reviewed pin change is needed.
 New provider metadata schemas require a reviewed validator change.
 
@@ -153,3 +152,22 @@ of the native package. Release stamps compare dirty state and input count too.
 Actions package success is separate from installation, device, login, sync and
 deployment acceptance. No process logs, keys, whole build directories or user
 stores are artifact upload inputs.
+
+## CyberBus integration inventory
+
+The platform branch removes both legacy cloudflared binaries from `files` and
+clears `runtimeAssets`, while preserving legacy source license declarations.
+`notices/cyberbus/` contains texts copied from the fixed git revision and its
+embedded EasyTier license/provenance. `stage-packages.py` rejects an Android APK
+containing `libcloudflared.so`, even when it has the expected arm64 ELF header.
+
+After committing/merging the core and account migration into the reviewed
+platform tree, run `node scripts/publish/cyberbus-manifest.mjs` to review the
+exact native additions/changes, then rerun with `--write`, commit that manifest
+and run `node scripts/publish/export.mjs --ref HEAD`. This finalizer requires
+`crates/notes-cyberbus`, the fixed git revision and an integrated native lockfile,
+rejects production legacy owners, updates only the new adapter and native account
+inputs, and adds the adapter's explicit first-party ownership declaration. It
+reads committed HEAD only. It cannot finalize another agent's uncommitted work,
+and it does not refresh unrelated source pins. Review other agents' changes
+outside those roots explicitly before source export.

@@ -6,9 +6,13 @@ Third-party rights are preserved independently of the private project's license.
   SIL OFL 1.1, original font metadata, source pin and attribution.
 - CyberGrid coordinator: `services/coordinator/LICENSE` and
   `services/coordinator/notices/` preserve upstream and npm dependency notices.
-- CyberGrid Rust SDK and providers: `vendor/cybergrid-sdk/LICENSE`, its root
+- Legacy CyberGrid Rust SDK sources (not production account dependencies): `vendor/cybergrid-sdk/LICENSE`, its root
   `THIRD_PARTY_NOTICES.md` and `licenses/`, plus `provider-assets/` notices retain
   the fixed upstream SDK and provider terms independently.
+- CyberBus fixed git source `359465e83bd74b571a963f3d1fdc238f50169919`:
+  `scripts/publish/notices/cyberbus/` retains MIT, Apache-2.0, LGPL-3.0, GPL-3.0,
+  embedded EasyTier license/provenance and distribution requirements. The combined
+  SDK includes LGPL components. No cloudflared runtime helper is bundled.
 - Native account integration: `scripts/publish/notices/rust/` retains the
   original notices for oauth2 5.0.0 (MIT OR Apache-2.0), openidconnect 4.1.0
   (MIT), tauri-plugin-opener 2.7.3 and tauri-plugin-deep-link 2.6.3

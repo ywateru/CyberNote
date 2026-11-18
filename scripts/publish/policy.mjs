@@ -8,7 +8,7 @@ export function safePath(name, runtimeAsset = false) {
       /(?:^|\/)(?:target|build|node_modules|evidence|verification|local\.properties|tauri\.properties|key\.properties|keystore\.properties)(?:\/|$)/.test(name) ||
       /\.(?:log|jsonl|sqlite\w*|db|key|pem|p12|pfx|jks|keystore|apk|aab|dmg|zip|mp4|wav|webm|tsbuildinfo)$/.test(name) ||
       /(?:tauri\.settings\.gradle|tauri\.build\.gradle\.kts|proguard-tauri\.pro)$/.test(name) ||
-      (/\/jniLibs\//.test(name) && !(runtimeAsset && name === 'vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so')) || /\/app\/src\/main\/assets\//.test(name)) throw Error(`Excluded export path: ${name}`);
+      /\/jniLibs\//.test(name) || /\/app\/src\/main\/assets\//.test(name)) throw Error(`Excluded export path: ${name}`);
   if (name.endsWith('.notesbackup') && !/^src-tauri\/tests\/fixtures\/archive\/[a-z-]+\.notesbackup$/.test(name)) throw Error('Only reviewed synthetic archive fixtures may be exported');
   return name;
 }

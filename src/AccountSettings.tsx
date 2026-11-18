@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { UserRound, Laptop, Smartphone, MonitorSmartphone, RefreshCw, ChevronRight, Pencil, FileText, Check, LoaderCircle } from "lucide-react";
-import { accountCommand, accountConnectionRetry, accountNeedsLogin, accountSuggestsRelogin, accountErrorMessage, accountErrorDetails, accountErrorStateKey, AccountCommandFailure, deviceName, type AccountDevice, type DeviceDirection, type DeviceOperation, type DeviceProgress, type SafeError, type AccountAuthorizationSurface, type AccountCommand, type AccountStatus } from "./account-client";
+import { accountCommand, accountTransportLabel, accountConnectionRetry, accountNeedsLogin, accountSuggestsRelogin, accountErrorMessage, accountErrorDetails, accountErrorStateKey, AccountCommandFailure, deviceName, type AccountDevice, type DeviceDirection, type DeviceOperation, type DeviceProgress, type SafeError, type AccountAuthorizationSurface, type AccountCommand, type AccountStatus } from "./account-client";
 import { formatFileTime } from "./data-management";
 import "./AccountSettings.css";
 
@@ -35,7 +35,7 @@ function ErrorDetails({error}: {error: AccountStatus["error"]}) {
 function DeviceInfo({device, hideStatus = false}: {device: AccountDevice; hideStatus?: boolean}) {
   return <span className="account-device-info">
     <span className="account-device-title"><strong>{device.name || "未命名设备"}</strong>{device.current && <span className="account-current-badge"><Check aria-hidden="true" />此设备</span>}</span>
-    {!hideStatus && <span id={`account-device-status-${device.id}`} className="account-device-status"><span className={`account-status-dot${device.online ? " is-online" : ""}`} aria-hidden="true" /><span>{device.online ? "在线" : "离线"}</span>{device.online && <span className="account-device-availability">{device.syncAvailable ? "可同步" : "同步已暂停或暂不可用"}</span>}</span>}
+    {!hideStatus && <span id={`account-device-status-${device.id}`} className="account-device-status"><span className={`account-status-dot${device.online ? " is-online" : ""}`} aria-hidden="true" /><span>{device.online ? "在线" : "离线"}</span>{accountTransportLabel(device) && <span className="account-device-availability">{accountTransportLabel(device)}</span>}{device.online && <span className="account-device-availability">{device.syncAvailable ? "可同步" : "同步已暂停或暂不可用"}</span>}</span>}
     <span id={`account-device-summary-${device.id}`} className="account-device-summary">{!device.online ? "上线后可查看笔记信息" : !device.summary ? "笔记信息暂不可用" : <><span className="account-device-count"><FileText aria-hidden="true" />{device.summary.noteCount} 篇笔记</span><span>{device.summary.lastNoteUpdatedAt === null ? "暂无笔记更新时间" : `笔记更新于 ${formatFileTime(device.summary.lastNoteUpdatedAt)}`}</span></>}</span>
   </span>;
 }

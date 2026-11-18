@@ -111,7 +111,9 @@ def check(entries, accepted):
         except RuntimeError:
             assert not accepted, 'Valid arm64 library headers rejected'
         else: assert accepted, 'Mislabelled or ambiguous APK libraries accepted'
-check([(entry, elf()), (provider, elf(kind=2))], True)
+check([(entry, elf())], True)
+check([(entry, elf()), ('lib/arm64-v8a/libother.so', elf())], True)
+check([(entry, elf()), (provider, elf(kind=2))], False) # retired helper must never ship
 check([(entry, elf(62))], False) # x86_64 hidden in an arm64 directory
 check([(entry, elf()), (provider, elf(40))], False) # secondary ARM32 provider
 check([(entry, elf()), (provider, b'not an ELF executable')], False)
@@ -232,4 +234,16 @@ with tempfile.TemporaryDirectory() as tmp:
         except subprocess.CalledProcessError: pass
         else: raise AssertionError('aapt2 failure accepted')
 `, fileURLToPath(new URL('./stage-packages.py', import.meta.url))], { stdio: 'pipe' });
+});
+
+test('CyberBus sidecar includes exact retained LGPL/GPL texts even without LICENSE in filename',()=>{
+  execFileSync('python3',['-c',`
+import importlib.util,sys
+sys.dont_write_bytecode=True
+spec=importlib.util.spec_from_file_location('staging',sys.argv[1])
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+paths=['scripts/publish/notices/cyberbus/LGPL-3.0.txt','scripts/publish/notices/cyberbus/GPL-3.0.txt']
+manifest={'files':dict.fromkeys(paths,'a'*64)}
+assert set(paths).issubset(m.notice_paths(manifest))
+`,fileURLToPath(new URL('./stage-packages.py',import.meta.url))],{stdio:'pipe'});
 });

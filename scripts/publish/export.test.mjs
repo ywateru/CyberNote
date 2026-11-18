@@ -83,7 +83,7 @@ test('public smart corpus redirect is exact and idempotent, without changing dev
 
 test('committed SDK runtime extension exports exact binary bytes while project auth retains first-party rights', t => {
   const vendor = 'vendor/cybergrid-sdk', base = vendor + '/provider-assets';
-  const path = base + '/android-arm64/jniLibs/arm64-v8a/libcloudflared.so';
+  const path = base + '/darwin-arm64/fixture-tool';
   const bytes = Buffer.from([127, 69, 76, 70, 0, 1, 2]);
   const license = base + '/LICENSE', source = base + '/manifest.json';
   const pin = '1'.repeat(40), origin = 'https://fixture.example/provider';
@@ -91,13 +91,13 @@ test('committed SDK runtime extension exports exact binary bytes while project a
     firstParty: [{ root: 'crates/account-auth', provenance: 'project-authored', rights: 'reserved', rightsSource: 'scripts/publish/LICENSE.project-reserved.txt' }],
     thirdParty: [{ root: vendor, origin, revision: pin, licenses: [license] }],
     runtimeAssets: [{ path, sha256: digest(bytes), size: bytes.length, licenses: [license],
-      source: { url: origin, revision: pin, version: '1.0' }, provenance: { manifest: source, platform: 'android-arm64' } }],
+      source: { url: origin, revision: pin, version: '1.0' }, provenance: { manifest: source, platform: 'darwin-arm64' } }],
   };
   const { root, parent } = fixture(t, {
     'crates/account-auth/src/lib.rs': '// original project source',
     [path]: bytes, [license]: 'Fixture provider license',
     [source]: JSON.stringify({ schema: 1, repository: origin, commit: pin, version: '1.0', runtimeDownload: false,
-      platforms: { 'android-arm64': { binary: 'android-arm64/jniLibs/arm64-v8a/libcloudflared.so', bytes: bytes.length, sha256: digest(bytes) } } }),
+      platforms: { 'darwin-arm64': { binary: 'darwin-arm64/fixture-tool', bytes: bytes.length, sha256: digest(bytes) } } }),
   }, declarations);
   const target = join(parent, 'runtime-export');
   exportSnapshot({ root, target, expectedTarget: target, apply: true, initialize: true });

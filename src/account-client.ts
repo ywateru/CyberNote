@@ -10,7 +10,7 @@ const networkStages = ["callbackListen", "browserOpen", "callbackReceive", "iden
 type NetworkStage = typeof networkStages[number];
 const identityReasons = ["responseMetadata", "missingIdToken", "issuer", "audience", "expired", "nonce", "signingKey", "signature", "algorithm", "subject", "authorizedParty", "issuedAt", "accessTokenHash", "otherClaims"] as const;
 type IdentityReason = typeof identityReasons[number];
-const providerReasons = ["configuration", "network", "invalidCallback", "invalidIdentity", "identityRejected", "codeExchangeRejected", "tokenResponseInvalid", "missingRefreshToken", "cancelled", "noSession", "ownershipMismatch", "storage", "refreshFailed", "revocationFailed", "busy"] as const;
+const providerReasons = ["configuration", "network", "invalidCallback", "invalidIdentity", "identityRejected", "codeExchangeRejected", "tokenResponseInvalid", "missingRefreshToken", "cancelled", "noSession", "ownershipMismatch", "storage", "refreshFailed", "revocationFailed", "busy", "invalidClaims", "conflict", "deadlineExceeded", "unauthenticated", "reauthRequired", "sessionRevoked", "unknownOutcome", "unavailable", "rollback", "resourceExhausted", "invalidDevice", "unsupported"] as const;
 type ProviderReason = typeof providerReasons[number];
 const tokenOperations = ["codeExchange", "refresh"] as const;
 type TokenOperation = typeof tokenOperations[number];
@@ -27,7 +27,7 @@ const syncReasons = ["io", "invalid_input", "corrupt_identity", "authentication"
 type SyncReason = typeof syncReasons[number];
 const errorCodes = ["account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_sync_adoption_blocked", "account_window_invalid", "account_device_offline", "account_device_incompatible", "account_sync_not_enabled", "account_directory_unavailable", "account_directory_unsupported"];
 export type SafeError = { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number; adoptionStage?: AdoptionStage; adoptionReason?: "timeout"; syncStage?: SyncStage; syncReason?: SyncReason };
-const transportKinds = ["webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
+const transportKinds = ["cyberbus", "webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
 type TransportKind = typeof transportKinds[number];
 type MappingObservation = { generation: number; sample: number; ageMs: number; enrollment: TransportKind; sync: TransportKind };
 const authorizationSurfaces = ["embedded", "browser"] as const;
@@ -37,6 +37,10 @@ export type AccountAuthorizationSurface = typeof authorizationSurfaces[number];
 export const deviceDirections = ["push", "pull", "both"] as const;
 export type DeviceDirection = typeof deviceDirections[number];
 export type AccountDevice = { id: string; name: string; online: boolean; current: boolean; connected: boolean; syncAvailable: boolean; transport?: MappingObservation; summary?: {noteCount: number; lastNoteUpdatedAt: number | null; capturedAt: number} };
+// Only a verified transport kind gets a product label; no direct/relay inference.
+export function accountTransportLabel(device: AccountDevice): string | undefined {
+  return device.online && (device.transport?.sync === "cyberbus" || device.transport?.enrollment === "cyberbus") ? "CyberBus" : undefined;
+}
 const progressStages = ["connecting", "pairing", "inventory", "receiving", "sending", "finishing"] as const;
 export type DeviceProgress = {stage: typeof progressStages[number]; completed: number; total: number; bytesTransferred: number};
 export type DeviceOperation = {deviceId: string; direction: DeviceDirection; phase: "running" | "succeeded" | "failed"; startedAt: number; finishedAt?: number; progress?: DeviceProgress};
@@ -62,12 +66,12 @@ export type AccountCommand =
 
 export function accountNetworkError(error: AccountStatus["error"]): boolean {
   return error?.code === "account_network" ||
-    (error?.code === "account_authentication" && error.stage === "authorizationProvider" && error.providerReason === "network");
+    (error?.code === "account_authentication" && error.stage === "authorizationProvider" && ["network", "unavailable"].includes(error.providerReason || ""));
 }
 export function accountNeedsLogin(error: AccountStatus["error"]): boolean {
   return error?.code === "account_authentication" && (
     (error.stage === "identityRefresh" && error.providerReason === undefined) ||
-    (error.stage === "authorizationProvider" && error.providerReason === "refreshFailed"));
+    (error.stage === "authorizationProvider" && ["refreshFailed", "unauthenticated", "reauthRequired", "sessionRevoked"].includes(error.providerReason || "")));
 }
 // A legacy sync failure carries no evidence of an expired token. Offer an
 // explicit sign-out recovery, without treating it as permission to reauthorize.
@@ -244,6 +248,10 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
       invalidIdentity: "登录身份无效", identityRejected: "登录身份校验被拒绝", codeExchangeRejected: "登录授权码交换被拒绝",
       tokenResponseInvalid: "登录授权响应无效", missingRefreshToken: "缺少可续用的登录授权", cancelled: "登录已取消",
       noSession: "没有可恢复的登录授权，请先退出账户并确认清理，再重新登录", ownershipMismatch: "登录服务返回的身份与本次授权会话不一致，请结束当前登录后重试",
+      invalidClaims: "登录身份未通过校验", conflict: "已有账户操作正在进行", deadlineExceeded: "账户操作超时，请稍后重试",
+      unauthenticated: "尚未登录，请重新登录", reauthRequired: "登录授权需要更新，请重新登录", sessionRevoked: "登录授权已撤销，请重新登录",
+      unknownOutcome: "本次授权结果尚未确认，请先读取账户状态，必要时退出账户完成清理", unavailable: "账户服务暂不可用，请检查网络后重试",
+      rollback: "账户安全记录未通过校验，请检查本机存储", resourceExhausted: "账户操作超出支持的限制", invalidDevice: "设备身份未通过校验", unsupported: "当前版本暂不支持此账户操作",
       storage: "无法读取或保存登录授权", refreshFailed: "登录授权刷新被拒绝，请重新登录", revocationFailed: "登录授权撤销未完成", busy: "已有登录操作正在进行",
     };
     return `${at}${provider[error.providerReason]}。本机备忘录会保留。`;

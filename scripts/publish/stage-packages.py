@@ -37,7 +37,7 @@ def notice_paths(manifest):
             raise RuntimeError('Declared notice is not a retained source input')
         paths.add(name)
     for name in manifest['files']:
-        if any(word in Path(name).name.upper() for word in ['LICENSE', 'COPYING', 'NOTICE', 'OFL']) or name.startswith('services/coordinator/notices/'):
+        if any(word in Path(name).name.upper() for word in ['LICENSE', 'COPYING', 'NOTICE', 'OFL']) or name.startswith('services/coordinator/notices/') or name.startswith('scripts/publish/notices/cyberbus/'):
             paths.add(name)
     for name in paths:
         # Export policy permits this named directory in exact retained inputs.
@@ -91,7 +91,8 @@ def android_native_bytes(archive):
     names = archive.namelist()
     libs = [name for name in names if name.startswith('lib/') and name.endswith('.so')]
     entry = 'lib/arm64-v8a/libnotes_clone_lib.so'
-    if (not libs or len(libs) != len(set(libs)) or entry not in libs
+    if (any(name.rsplit('/', 1)[-1] == 'libcloudflared.so' for name in libs)
+            or not libs or len(libs) != len(set(libs)) or entry not in libs
             or any(len(name.split('/')) != 3 or name.split('/')[1] != 'arm64-v8a' for name in libs)):
         raise RuntimeError('Expected unique arm64-v8a-only APK libraries')
     for name in libs:

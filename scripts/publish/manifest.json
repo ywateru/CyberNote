@@ -19,7 +19,7 @@
     "package.json": "5f0e5086c4d00d7cc6cfa5a06b75d6abe12f49096610bf8a82435eaeb74bb119",
     "patches/prosemirror-view@1.42.9.patch": "d108f8a44a6a15b29cd7c7460f2aa5bd9d7bcb12510acabe6bfa1d159932161d",
     "plugins/tauri-plugin-notes-auth/android/build.gradle.kts": "fcd320956deb9c8d8aa19d217bbfdf14c5918dfd7ced5656e5469e775a84fe98",
-    "plugins/tauri-plugin-notes-auth/android/consumer-rules.pro": "d71843ee17a16d21248beae625a69e5e1e8dbfb60cc90dff41d2d6327c5053cd",
+    "plugins/tauri-plugin-notes-auth/android/consumer-rules.pro": "dce56b5cef855e346829cd94c586b16883c99bd90272000bf5bd2c716171c4de",
     "plugins/tauri-plugin-notes-auth/android/src/main/AndroidManifest.xml": "343d5be1ac17cdd45d1a2f2ddc616c509290e655869125a9422a96d88aa66066",
     "plugins/tauri-plugin-notes-auth/android/src/main/java/com/local/notesauth/NotesAuthPlugin.kt": "394eea2fe3c9179932f595852fe7c09a5c9098293d8cb15b7dfe2605197495ab",
     "plugins/tauri-plugin-notes-auth/build.rs": "d67cce2c0989ac1eead860647aaa29131727a1a4eaa045826dc1edb83e92863a",
@@ -113,7 +113,7 @@
     "scripts/publish/build-info.test.mjs": "8e6f2ea5a577b3978d6409a6eb283d27bf2d49d5a8ba91b3ddee8aa6cada033c",
     "scripts/publish/deploy-metadata.mjs": "23bcec65444955b27270a0c818e7a9a794dfedb3bcfcea53ae544b0fd1365e8b",
     "scripts/publish/export.mjs": "c661e6fccc5b977079b450b30a0e63266c665f7a3a9100345e09b4743eb404cd",
-    "scripts/publish/export.test.mjs": "4556b7dcad61cd1a92498a2a9d020a96730becda1d0b2ee6da576c476f5fa024",
+    "scripts/publish/export.test.mjs": "8aaf146677ca43814c4bf3d5741460a49a99eb9ff74683c1563221c551add570",
     "scripts/publish/generate-fixtures.mjs": "7fe9f62d17ad49007b06106d3d521fc1bda2c78876fec6786dec0ab2811c84d4",
     "scripts/publish/gitignore.public": "57be46ba7542e7d97a82ad4dbef2ef91cc01013dcd025a7238e836b390734d2e",
     "scripts/publish/history.mjs": "9921ec46cf1ac32f8a6e1b1a98016f75b14dce69b83f09b14eecef7586630e98",
@@ -134,13 +134,13 @@
     "scripts/publish/package-identity.mjs": "9102fd8f2e70a7a1633b0bc3c3f02cf08592fe3a87691fb0ae570a5e9184cb2a",
     "scripts/publish/package-identity.test.mjs": "75e6eb0daf9611cb84a07637068ed8c43c9f40a69b853b0b52a3ff23ddc9b842",
     "scripts/publish/package-transform.mjs": "6f1e42c7ec720a5a0de618687d29d69b74733be874754dcb2db3e0c61556950b",
-    "scripts/publish/policy.mjs": "f03c4eb624a32001197b10aeef52b704997a8dc945c46af7bdccea146070e9fd",
-    "scripts/publish/policy.test.mjs": "71dfd8e664bafe384cdb34bbbec5dfab5f0a82ccfe201b53d3f8e10d4ef432d2",
-    "scripts/publish/README.md": "014d91f235dc17e9b0fdbdf20e071b57bff8b8dc9639ee4b8133829e1656cb4c",
-    "scripts/publish/README.public.md": "c13e1dc4b41e0fdf2fae4b849c9d11f04ac0572f1d93ed32fd402ebe07f91557",
-    "scripts/publish/stage-packages.py": "77033b139d7449383262ea8b4180dc072263aa2f4994317d9c44d68d87385fc2",
-    "scripts/publish/stage-packages.test.mjs": "a386ffb06458b7e3bb88d4f45d030065c86f460aeb32cbc957a7d9432031a1d1",
-    "scripts/publish/THIRD_PARTY_NOTICES.md": "82daee706d7dc5ea4986a0ce82df3346169afeae60d5b21ed36cb23ea8a2f113",
+    "scripts/publish/policy.mjs": "fec39298725162b79a0abd037ea05dc52a540bc8f5de8eeea4eb80a7af73b63c",
+    "scripts/publish/policy.test.mjs": "154e18f2361717343c63ec3aafe5419a3d415eb355aec2ac7580c9336992ee38",
+    "scripts/publish/README.md": "5c2316c9121d615fd77da3513a5fdaafdbe6c2d8df072cf03f33471cfe326ba6",
+    "scripts/publish/README.public.md": "6106c1dcdd9f71339f6ca0de3288bb0a5bb8ad2a0e9b5ad00e67ee0325a5d9eb",
+    "scripts/publish/stage-packages.py": "8cefb8b21798976bae4d86c1be1abb24309aeaf17fcd0c24531592de9f682e4a",
+    "scripts/publish/stage-packages.test.mjs": "df3947b754198802f1c0c2923d935256e349046cf52b961c2e42d70c7f9269a1",
+    "scripts/publish/THIRD_PARTY_NOTICES.md": "d0e04b539c12cb7898304a9ad586c8c41f1ef71b0d7f94c3f861c77d97e074e6",
     "scripts/publish/verify.mjs": "fa0ed4ca12d62f33909cdfaa47903f05d0aa02d5244fa6b72b409bd9ab80407b",
     "scripts/release.mjs": "819204f8767499fb6f2654ff824ffb3f2ad4772ab8cb0dbda73d787e5f161812",
     "scripts/sync-network-test/account_directions.rs": "4630b4505a5ba39e88701469a09ce182e5be9ebda3e4660cba239d654bcdda33",
@@ -279,7 +279,7 @@
     "src-tauri/gen/android/.editorconfig": "d22b394a5a140050065207d160273570edb04200480160e0951df3291dd7848f",
     "src-tauri/gen/android/.gitignore": "2d8a4dfb08ea1403e6eab97bc216158328c01ace4027f0dd3b65b2a088994270",
     "src-tauri/gen/android/app/.gitignore": "174bfc72691cfd2146e10c4dc930940ae29af4f9c79b7f3f7d1fe87b32689491",
-    "src-tauri/gen/android/app/build.gradle.kts": "6d30335e50a0f1f13f66c246cfbabc7991f72f38471103ba93cfb2de1b8813d8",
+    "src-tauri/gen/android/app/build.gradle.kts": "cd019e7cba0c2e4c6fef081d3daaa9b2931aca310d00e93f6357f80ea61c497c",
     "src-tauri/gen/android/app/proguard-rules.pro": "56fd960cf225f6ca40f982b13a5dbb0d8bc3dfde13ff76422825c6070d0a1890",
     "src-tauri/gen/android/app/src/debug/res/xml/network_security_config.xml": "9d355a5d73154a72fe8a5ca9f36850e8343d0b074c124015915a35ef68d0bf72",
     "src-tauri/gen/android/app/src/main/AndroidManifest.xml": "e7e9dfaaffe1d0a6430f0dccddd3faa262293e1eae789cc1c54021ab9b361d32",
@@ -482,9 +482,9 @@
     "src-tauri/tests/fixtures/archive/paragraph-inside-table.notesbackup": "24beee2d6a834156657a84f9e7215ec6f5fd55278868f43005fb3b67d2c84542",
     "src-tauri/tests/fixtures/archive/smart-projection09.json": "1af815d99b072a6a10d7d4dbb9ee3cca839f2af3e5fb1422e2a374b9cfe2f763",
     "src/access-client.ts": "2ac79fec3a00ae972f22bac2c6534aa1468b719a8be4b18c7e803549c9d99f98",
-    "src/account-client.ts": "648d6f6c8d055d6583851d4b4a235d664f2ba64bb2b9f556342157b67b7de084",
+    "src/account-client.ts": "46edfa202522579c731a9e97a7ec33ba3d050259a9b4b9b00e85991747ead9a6",
     "src/AccountSettings.css": "26a0baf8ea5427ea2dc750210d7789a8e6da804cd9b2235dc257ce22643b7662",
-    "src/AccountSettings.tsx": "47266107b436c267f3424f230ab68946f5051fd5a2303ab7c496d9a47f112cd3",
+    "src/AccountSettings.tsx": "e3a96f5878914ad20bb4905967969112fa0727385724ada5cb7338d3e66135b0",
     "src/App.tsx": "f3fcadf9f456fe4479a0fdbde88abfc152496141900409e4d23fc76b8468f0ff",
     "src/apple-notes-import.ts": "a0500c7536447482b51c48852ad2b985e82be511d869b208a0ed6c7484dbc649",
     "src/AppleNotesImport.css": "866c17d5080d5cd21d899e3a552d18e8927020d7f08dc479ca5e64be53e4f343",
@@ -1760,11 +1760,9 @@
     "vendor/cybergrid-sdk/licenses/zerovec-derive-0.11.7/SOURCE.json": "16690bc6d177a0dc9e24f48ae3740f195f36b541b90fda49a36df37ef03ae6ed",
     "vendor/cybergrid-sdk/licenses/zmij-1.0.23/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
     "vendor/cybergrid-sdk/licenses/zmij-1.0.23/SOURCE.json": "1f2bc8032c98341a1a75369a153797e21e01f0655a7c96f825180ecc0ec5d304",
-    "vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
     "vendor/cybergrid-sdk/provider-assets/android-build-manifest.json": "aa24e76b3b4f257796259bafe196cdca1bbfc84aadd5b1cc7f1505c34b8412de",
     "vendor/cybergrid-sdk/provider-assets/build-modules-android-arm64.txt": "8d82e177e73c4ac6d9ee83346b91ed9429984f5690869033fe898386a6f9e15f",
     "vendor/cybergrid-sdk/provider-assets/build-modules-darwin-arm64.txt": "fb9d6d14ae079a4238fcf42823ab5d89f4392b93c5958cfbd27540658ea0ef2a",
-    "vendor/cybergrid-sdk/provider-assets/darwin-arm64/cloudflared": "2d67b7315f96799123e19442580ce7c7616d6d7f322686fa829dd4e3fddfe715",
     "vendor/cybergrid-sdk/provider-assets/LICENSE": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
     "vendor/cybergrid-sdk/provider-assets/manifest.json": "c76513f15eeb657ea68ae551bbc93d41b03b4f1592819621b022e10d6d23cc98",
     "vendor/cybergrid-sdk/provider-assets/patches/0001-android-explicit-dns.patch": "c09b6a9264b9fe1bb6014b9a2802da5cdc485eec3d3ad9acd43908749206286d",
@@ -1798,7 +1796,23 @@
     "vendor/cybergrid-sdk/src/types.rs": "859dee4256932de822d4b334ba084b61b07161235f4ea5d07b2ff48a8d57d3e5",
     "vendor/cybergrid-sdk/THIRD_PARTY_NOTICES.md": "65c7cc65c6df6a8579ff5926935611282821b8aa30a1776ac9a285e02d1b963a",
     "vercel.json": "3c15ed543e2ddc9a01a51bc58c88f67e83ae39812c6f3de34f40e089a83ad4e6",
-    "vite.config.ts": "71c90a7f9f4c1343002dc701dc1085d58e8825e9225602674b04be0aa9f25d2a"
+    "vite.config.ts": "71c90a7f9f4c1343002dc701dc1085d58e8825e9225602674b04be0aa9f25d2a",
+    "plugins/tauri-plugin-notes-auth/README.md": "24b5cf71ef4c27b6e14d638a069709830eb0b3f52a373fdada955fd14a8351c7",
+    "plugins/tauri-plugin-notes-auth/account-client.test.mjs": "85cb3862c0836272182258d97807b457112428805be02f43ed885a17fc92956d",
+    "plugins/tauri-plugin-notes-auth/android/src/main/java/com/local/notesauth/CyberBusSecureStore.java": "5d8e8b0d3ea1586f5788860a0ff9f0012209cf31c6e6789fcb05088d9999bc82",
+    "plugins/tauri-plugin-notes-auth/android/src/main/java/com/local/notesauth/SecureVault.java": "a719ae2a4b9e6e2ff11c0dc946e24377821a588d84561afe822181cac263e34f",
+    "plugins/tauri-plugin-notes-auth/android/src/test/java/com/local/notesauth/SecureVaultTest.java": "e8269067a359e0be95ca1160a2f88f0665e5b9324829ae6414aa7768d6c4959a",
+    "plugins/tauri-plugin-notes-auth/secure-store.test.mjs": "b5c06ab1c6a38d233f91882a293601045bee40350ece996cbcb87fc99ed09ff6",
+    "scripts/publish/cyberbus-manifest.mjs": "b6243bf17517055508d4f484c08722ff6e8ed25f5804e2fb6080fff1f4d69286",
+    "scripts/publish/cyberbus-manifest.test.mjs": "44f6cef35ec6a7ea5edf829c6dfe12d48de9b31aaf67566e528040318c3e64a1",
+    "scripts/publish/notices/cyberbus/EasyTier-LICENSE": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118",
+    "scripts/publish/notices/cyberbus/EasyTier-NOTICE.md": "51090041210edc1d83b2f5083ff01ebfe66fd03066beb38aaf072c48e36a1af5",
+    "scripts/publish/notices/cyberbus/GPL-3.0.txt": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+    "scripts/publish/notices/cyberbus/LGPL-3.0.txt": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118",
+    "scripts/publish/notices/cyberbus/LICENSE-APACHE": "f2ff6db400a0cd6fbfd894ba618772abcedb92c301055ad0840d971883730d83",
+    "scripts/publish/notices/cyberbus/LICENSE-MIT": "7eb51676ebba905d1f9e312f16226ac4e6b0fff6eb919c0e6917e52fb6cac39d",
+    "scripts/publish/notices/cyberbus/NOTICE.md": "f640953e541d4380da8c88e23a173c08e98cc3418006fa79aff23009b3e20ee3",
+    "scripts/publish/notices/cyberbus/NOTICE.provenance.json": "76c5204673a1abcb7f9ac47ec32c44206d94c7cd12bbaef044f2cbd3b827f3bb"
   },
   "thirdParty": [
     {
@@ -2971,42 +2985,5 @@
       "rightsSource": "scripts/publish/LICENSE.project-reserved.txt"
     }
   ],
-  "runtimeAssets": [
-    {
-      "path": "vendor/cybergrid-sdk/provider-assets/darwin-arm64/cloudflared",
-      "sha256": "2d67b7315f96799123e19442580ce7c7616d6d7f322686fa829dd4e3fddfe715",
-      "size": 38893120,
-      "source": {
-        "url": "https://github.com/cloudflare/cloudflared",
-        "revision": "b749dfd998f4bced81f48727b9c971cfc3056865",
-        "version": "2026.9.0"
-      },
-      "licenses": [
-        "vendor/cybergrid-sdk/provider-assets/LICENSE",
-        "vendor/cybergrid-sdk/provider-assets/THIRD_PARTY_NOTICES.md"
-      ],
-      "provenance": {
-        "manifest": "vendor/cybergrid-sdk/provider-assets/manifest.json",
-        "platform": "darwin-arm64"
-      }
-    },
-    {
-      "path": "vendor/cybergrid-sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so",
-      "sha256": "c1f6fc493bef37eb530022a1598e689c0d50073680192616aa7aea4e732cdd3c",
-      "size": 28812032,
-      "source": {
-        "url": "https://github.com/cloudflare/cloudflared",
-        "revision": "b749dfd998f4bced81f48727b9c971cfc3056865",
-        "version": "2026.9.0"
-      },
-      "licenses": [
-        "vendor/cybergrid-sdk/provider-assets/LICENSE",
-        "vendor/cybergrid-sdk/provider-assets/THIRD_PARTY_NOTICES.md"
-      ],
-      "provenance": {
-        "manifest": "vendor/cybergrid-sdk/provider-assets/manifest.json",
-        "platform": "android-arm64"
-      }
-    }
-  ]
+  "runtimeAssets": []
 }

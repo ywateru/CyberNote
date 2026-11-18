@@ -6,7 +6,7 @@ import { refreshManifest } from './manifest.mjs';
 const control = 'scripts/publish/manifest.json';
 const rights = 'scripts/publish/LICENSE.project-reserved.txt';
 const root = 'vendor/cybergrid-sdk', provider = root + '/provider-assets';
-const binary = provider + '/android-arm64/jniLibs/arm64-v8a/libcloudflared.so';
+const binary = provider + '/darwin-arm64/fixture-tool';
 const sourcePath = provider + '/manifest.json';
 const license = provider + '/LICENSE';
 const origin = 'https://fixture.example/provider';
@@ -27,12 +27,12 @@ function runtimeCandidate() {
   const bytes = Buffer.from([127, 69, 76, 70, 0, 1, 2, 3]);
   c.add(binary, bytes); c.add(license, 'Fixture provider license');
   const meta = { schema: 1, repository: origin, commit: pin, version: '1.2.3', runtimeDownload: false,
-    platforms: { 'android-arm64': { binary: 'android-arm64/jniLibs/arm64-v8a/libcloudflared.so', bytes: bytes.length, sha256: digest(bytes) } } };
+    platforms: { 'darwin-arm64': { binary: 'darwin-arm64/fixture-tool', bytes: bytes.length, sha256: digest(bytes) } } };
   c.add(sourcePath, JSON.stringify(meta));
   c.manifest.thirdParty.push({ root, origin, revision: pin, licenses: [license] });
   c.manifest.runtimeAssets.push({ path: binary, sha256: digest(bytes), size: bytes.length,
     source: { url: origin, revision: pin, version: '1.2.3' }, licenses: [license],
-    provenance: { manifest: sourcePath, platform: 'android-arm64' } });
+    provenance: { manifest: sourcePath, platform: 'darwin-arm64' } });
   return { ...c, meta };
 }
 
@@ -80,9 +80,9 @@ test('only the reviewed auth plugin accepts reserved first-party ownership, with
 test('runtime exception binds actual bytes, path, source metadata and retained licenses, with no wildcard JNI exemption', () => {
   const good = runtimeCandidate();
   assert.doesNotThrow(() => readInventory(good.manifest, good.read));
-  assert.throws(() => safePath(binary), /Excluded/);
+  assert.doesNotThrow(() => safePath(binary));
   assert.doesNotThrow(() => safePath(binary, true));
-  assert.throws(() => safePath(binary.replace('cybergrid-sdk', 'other-sdk'), true), /Excluded/);
+  assert.throws(() => safePath('vendor/sdk/provider-assets/android-arm64/jniLibs/arm64-v8a/libcloudflared.so', true), /Excluded/);
   assert.throws(() => safePath('src-tauri/gen/android/app/src/main/jniLibs/arm64-v8a/libcloudflared.so', true), /Excluded/);
   for (const mutate of [
     c => { c.manifest.runtimeAssets = []; },
@@ -93,7 +93,7 @@ test('runtime exception binds actual bytes, path, source metadata and retained l
     c => { c.manifest.runtimeAssets[0].source.revision = '2'.repeat(40); },
     c => { c.manifest.runtimeAssets[0].licenses = ['vendor/fixture-sdk/missing/LICENSE']; },
     c => { c.manifest.runtimeAssets.push(structuredClone(c.manifest.runtimeAssets[0])); },
-    c => { c.meta.platforms['android-arm64'].binary = 'other/libcloudflared.so'; c.add(sourcePath, JSON.stringify(c.meta)); },
+    c => { c.meta.platforms['darwin-arm64'].binary = 'other/libcloudflared.so'; c.add(sourcePath, JSON.stringify(c.meta)); },
     c => { c.add(provider + '/adjacent.so', Buffer.from([1, 0, 2])); },
     c => { c.add(binary, Buffer.alloc(50 * 1024 * 1024 + 1)); },
   ]) {

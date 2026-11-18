@@ -1,7 +1,8 @@
 # CyberNote
 
 Private source distribution of a local notes application for macOS and Android,
-with a separate Node coordinator service. Local development history, user stores,
+with CyberBus account/device transport. A legacy Node coordinator service is
+retained as historical source; it is not an application runtime dependency. Local development history, user stores,
 device evidence, credentials and installation packages are not part of this tree.
 
 Repository: [ywateru/CyberNote](https://github.com/ywateru/CyberNote).
@@ -26,7 +27,7 @@ CI does not deploy or modify existing production infrastructure.
 ## Build
 
 Use Node 22, pnpm 10.15.0 and a compatible Rust toolchain (CI pins Rust 1.97.1,
-which is newer than the SDK's Rust 1.91 minimum).
+which is newer than CyberBus's Rust 1.95 minimum).
 
 ```sh
 corepack enable
@@ -42,6 +43,11 @@ actual arm64 macOS runner and builds `aarch64-apple-darwin`. Local `pnpm mac:bui
 creates an app bundle. These CI packages are not notarized or claimed to be
 Developer ID signed.
 
+CyberBus and its embedded EasyTier sources are fetched by Cargo at the exact
+revision in `crates/notes-cyberbus/Cargo.toml`; host `protoc` is required. See
+`scripts/publish/notices/cyberbus/NOTICE.md` for licenses and relinking materials
+required before binary distribution. No CyberGrid cloudflared helper is needed.
+
 Android requires JDK 17, Android SDK 36, NDK 27.2.12479018 and the
 `aarch64-linux-android` Rust target. Set `JAVA_HOME`, `ANDROID_HOME` and `NDK_HOME`
 explicitly on other machines; the local helper has macOS development defaults.
@@ -55,8 +61,9 @@ package scripts; the exporter reports the removed names and checks retained path
 The shared synthetic smart-projection corpus is retained under the fixture
 directory; an exact export-only include rewrite removes its old docs dependency.
 
-## Coordinator and deployment
+## Legacy coordinator and deployment
 
+This separate legacy deployment is not required for native CyberBus accounts.
 The root `vercel.json` builds `services/coordinator/` and routes website/API requests
 through `api/index.ts`. Use Node 22 and install service dependencies with
 `npm --prefix services/coordinator ci --include=dev`. The service's own build/tests
