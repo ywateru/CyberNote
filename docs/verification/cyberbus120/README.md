@@ -5,10 +5,10 @@
 | 范围 | 已取得结果 | 仍需执行 |
 | --- | --- | --- |
 | 迁移前代码与服务调查 | 代码创建链、Logto 1.46.0、JWT 配置、专用 scope、relay TCP 可达已核对；CyberNote 产品最小增量成功，完整读回与预期相等，14 项公开 fixture 通过 | 实际登录签发/刷新、产品隔离网络验证 |
-| core 开发首版 `c3ea6dc7` | 13 模块测试、cargo check；真实 SDK 离线生命周期与受控 TCP 桥测试 | 独立审阅、真实 SDK 双 peer/Data、取消/EOF/期限补测 |
+| core 开发首版 `c3ea6dc7` | 13 模块测试、cargo check；期限补丁模块测试通过；独审发现四项阻塞并保留复现；watch/EOF 已有后续修复 | 新修复独审、bootstrap capability/lock 身份修复、真实 SDK 双 peer/Data |
 | platform 开发首版 `b74eeb63` | 31 平台/发布检查，前端 typecheck/build，Android Java/DEX/auth AAR 编译 | 独立审阅、Android Keystore 真机、Rust JNI、组合 APK |
-| 账户 Runtime | 实施中 | 新登录/设备/SyncService/Session 创建链与全 feature 编译 |
-| 独立 SDK/SQLite 网络工具 | 实施中 | 真实 Logto、双进程完整正文/附件/方向/恢复测试 |
+| 账户 Runtime | `0805281e` 开发检查点已提交，独立审阅开始 | 新登录/设备/SyncService/Session 创建链与全 feature 编译 |
+| 独立 SDK/SQLite 网络工具 | 两进程真实 Logto 登录成功、同账户 workspace 一致、独立安装身份；前两轮发现超时，失败保留 | watch 修复后复测；完整正文/附件/方向/恢复测试 |
 | 最终应用 | 尚未构建 | 准确 Mac/Android 组合包、隔离资料库原生验收 |
 
 设计：[迁移契约](../../architecture/cyberbus-migration-20261118.md)。计划：[实施与恢复入口](../../plan/cyberbus-migration-20261118.md)。逐项用例：[验收矩阵](TEST-CASES.md)。部署：[产品增量回执](logto-product.md)。开发自测详见各模块合入后的 `core.md`、`platform.md` 和后续 account/network 报告。
