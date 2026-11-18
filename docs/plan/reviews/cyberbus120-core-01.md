@@ -180,3 +180,11 @@ user requested this checkpoint; saturation/drain acceptance remains **not comple
 Schema/offline-gate and setup-deadline observation fixtures passed. Logs are temporary host
 outputs (`/tmp/cyberbus120-127a08e2-{baseline,check,fixture-final2}.log`), not portable evidence;
 the committed runner/fixtures retain the reproduction. No follow-up core patch is covered.
+
+Post-checkpoint observation, with no new test launched: the already running refined fixture
+finished **2 pass / 6 fail** (0.68s test time after compilation). Five failures remain F1–F4;
+the saturation diagnostic also exceeded its separate 500ms drain watchdog. Its deliberately
+undrained cfg(test) command wire blocks the test hook's send outside execute_inner's normal
+SDK command timeout, so it does not establish a production deadlock. Treat saturation under
+real SDK command backpressure as **unverified**, retain the diagnostic fixture, and do not
+count it as another blocking defect. Full suite/check passes above remain unchanged.
