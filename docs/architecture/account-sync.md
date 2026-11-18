@@ -1,5 +1,7 @@
 # 账户与跨网络同步
 
+2026-11-18 迁移说明：新实现按 [CyberBus 迁移契约](cyberbus-migration-20261118.md)推进。下述 CyberGrid/coordinator/enrollment 服务链为迁移前基线；本地资料库保全、显式启用、Session/Store 与安全 IPC 规则继续有效。完整代码阅读见[调查](../plan/analysis/cyberbus-code-review-20261118.md)。
+
 2026-11-14 按设备操作重设计中：[设备目录与单次方向同步](account-device-actions.md)取代本文旧的开启后自动全设备双向调度；登录、身份验证、资料库和收据保全契约继续有效。实现与实测状态见[任务](../plan/tasks/app-account110-device-actions.md)。
 
 2026-11-13。新增Logto托管登录/注册，以CyberGrid建立同一账号、同一CyberNote产品的原生端互通；保留现有本地编辑、SQLite、版本向量、冲突、Noise和附件SHA同步链。未登录时可继续完整本地使用。
