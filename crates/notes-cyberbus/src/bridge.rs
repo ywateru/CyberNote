@@ -15,6 +15,9 @@ use tokio::{
 use tokio_util::sync::CancellationToken;
 
 pub type PeerId = [u8; 32];
+/// Aligns the core absolute stream bound with the host's existing device-operation budget.
+/// The host deadline includes setup and must still cancel the mapping at its earlier deadline.
+pub const MAX_STREAM_LIFETIME: Duration = Duration::from_secs(23 * 60);
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, prost::Enumeration)]
 #[repr(i32)]
 pub enum Service {
@@ -43,7 +46,7 @@ impl Default for Limits {
             command_timeout: Duration::from_secs(10),
             open_timeout: Duration::from_secs(10),
             ack_timeout: Duration::from_secs(15),
-            stream_timeout: Duration::from_secs(300),
+            stream_timeout: MAX_STREAM_LIFETIME,
         }
     }
 }
@@ -57,14 +60,11 @@ impl Limits {
             || self.queue_chunks > 16
             || self.max_inflight == 0
             || self.max_inflight > 64
-            || [
-                self.command_timeout,
-                self.open_timeout,
-                self.ack_timeout,
-                self.stream_timeout,
-            ]
-            .iter()
-            .any(|d| d.is_zero() || *d > Duration::from_secs(600))
+            || [self.command_timeout, self.open_timeout, self.ack_timeout]
+                .iter()
+                .any(|d| d.is_zero() || *d > Duration::from_secs(600))
+            || self.stream_timeout.is_zero()
+            || self.stream_timeout > MAX_STREAM_LIFETIME
         {
             return Err(Error::Capacity);
         }
@@ -874,10 +874,16 @@ mod tests {
         }
     }
     async fn pair() -> (Bus, Bus) {
-        let a = Bus::new(
+        pair_with_stream_timeout(MAX_STREAM_LIFETIME).await
+    }
+    async fn pair_with_stream_timeout(stream_timeout: Duration) -> (Bus, Bus) {
+        let mut limits = Limits::default();
+        limits.stream_timeout = stream_timeout;
+        let a = Bus::with_limits(
             config(),
             Box::<cyberbus_auth::MemoryStore>::default(),
             StoreMode::CreateNew,
+            limits,
         )
         .await
         .unwrap();
@@ -1015,5 +1021,43 @@ mod tests {
         assert!(!format!("{snapshot:?}").contains("SECRET_ERROR"));
         a.close().await.unwrap();
         b.close().await.unwrap();
+    }
+    #[test]
+    fn stream_deadline_aligns_with_host_operation_budget_and_keeps_small_ack_budget() {
+        let mut limits = Limits::default();
+        assert_eq!(limits.stream_timeout, Duration::from_secs(23 * 60));
+        assert_eq!(limits.command_timeout, Duration::from_secs(10));
+        assert_eq!(limits.open_timeout, Duration::from_secs(10));
+        assert_eq!(limits.ack_timeout, Duration::from_secs(15));
+        assert!(limits.validate().is_ok());
+        limits.stream_timeout = MAX_STREAM_LIFETIME + Duration::from_millis(1);
+        assert!(limits.validate().is_err());
+        limits.stream_timeout = Duration::ZERO;
+        assert!(limits.validate().is_err());
+        limits.stream_timeout = MAX_STREAM_LIFETIME;
+        limits.ack_timeout = Duration::from_secs(601);
+        assert!(limits.validate().is_err());
+    }
+    #[tokio::test]
+    async fn stream_deadline_still_closes_idle_tcp_at_expiry() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let (a, b) = pair_with_stream_timeout(Duration::from_millis(80)).await;
+            let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+            b.register_endpoint(Service::Sync, listener.local_addr().unwrap())
+                .await
+                .unwrap();
+            let lease = a.map([2; 32], Service::Sync).await.unwrap();
+            let mut client = TcpStream::connect(lease.local_addr()).await.unwrap();
+            let (mut host, _) = listener.accept().await.unwrap();
+            let mut byte = [0u8; 1];
+            assert_eq!(client.read(&mut byte).await.unwrap(), 0);
+            lease.done.cancelled().await;
+            assert!(matches!(lease.result(), Some(Err(Error::Timeout))));
+            assert_eq!(host.read(&mut byte).await.unwrap(), 0);
+            a.close().await.unwrap();
+            b.close().await.unwrap();
+        })
+        .await
+        .unwrap();
     }
 }

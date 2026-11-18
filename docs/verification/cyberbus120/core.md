@@ -62,3 +62,32 @@ Dedicated clock/deadline, EOF-owner failure, simultaneous traffic saturation and
 fault-injection coverage will be added in the same scope after the stage commit; the initial
 13-test result does not claim every failure scenario was exercised. Upstream warnings retained:
 three pre-existing unused helpers (`used`, `emit_data`, `cancel_rpc`).
+
+
+## Deadline integration patch
+
+User requested a narrowly scoped follow-up while independent review continues. README contract
+was updated before implementation: default and maximum `stream_timeout` are now **23 minutes
+(1380 seconds)**, matching the existing device-operation absolute budget. `MAX_STREAM_LIFETIME`
+is public. Command/open defaults remain 10 seconds, processed ACK remains 15 seconds, and their
+hard limits remain 600 seconds. The host's original absolute deadline still includes setup and
+must cancel/drop its mapping lease on expiry; core does not extend that host deadline.
+
+Executed `PROTOC=<same vendored protoc> cargo test --manifest-path
+crates/notes-cyberbus/Cargo.toml stream_deadline`: **2 passed / 0 failed**, 13 filtered out. This
+compiled the updated library and tests in the existing shared dev/test cache. Tests check the
+23-minute default, exact hard cap, zero/over-cap rejection and unchanged short ACK/setup defaults;
+a real loopback TCP fixture with a shortened 80ms stream budget confirms idle sockets still
+close at expiry and settle as Timeout. No real authenticated network or 23-minute wall-clock
+transfer is claimed. Build briefly waited on the shared target lock; no duplicate profile/cache
+was created. `cargo fmt --check` and `git diff --check` also pass for this patch.
+
+Nonblocking work is paused at the user's request, pending independent review. Uncommitted
+post-stage lifecycle work was saved in stash `cyberbus120 post-stage lifecycle fixes pending
+independent review`; it is not part of the deadline patch. That saved work addresses watch
+resubscription after revocation, EOF worker drain, retired stream IDs and lock-file replacement.
+The watch-rebuild/EOF/ACK-timeout additions reached a 16-test green run before stashing; that is
+not substituted for the committed stage's 13 tests plus this patch's two targeted checks.
+A further in-progress test run was cancelled while waiting for the shared build lock when the
+user requested this pause. These identified lifecycle boundaries remain for review and a
+separate integration fix; this patch does not claim they are resolved in the committed tree.

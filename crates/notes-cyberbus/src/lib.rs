@@ -9,7 +9,7 @@ pub mod store;
 pub use bootstrap::{
     read_bootstrap_context, BootstrapContext, BOOTSTRAP_MAGIC, BOOTSTRAP_PRELUDE_LEN,
 };
-pub use bridge::{Limits, MappingLease, PeerId, Service};
+pub use bridge::{Limits, MappingLease, PeerId, Service, MAX_STREAM_LIFETIME};
 pub use bus::{Bus, BusEvent, Snapshot};
 pub use cyberbus::{pb, ClientConfig, SecureStore, StoreMode};
 #[cfg(target_os = "macos")]

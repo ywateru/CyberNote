@@ -93,8 +93,13 @@ absolute stream deadline. Cancellation attempts a bounded Close; unknown effects
 reported as success.
 
 Defaults: <=24 KiB per chunk, 16 global streams, 4 per peer, 4 queued frames per stream, 32
-inflight SDK messages, 128 completion commands, 10s command/open, 15s processed ACK, 300s absolute
-stream lifetime. `Bus::with_limits` accepts smaller/larger values only within hard caps. Timers
+inflight SDK messages, 128 completion commands, 10s command/open, 15s processed ACK, **23 minutes absolute
+stream lifetime** (also the hard stream lifetime cap). This matches the existing device-operation
+absolute budget so slow large attachments are not cut off by an earlier core-only 300s timer.
+The account owner retains its original 23-minute operation deadline, including setup time, and
+must cancel/drop the MappingLease when that deadline or cancellation occurs. This core setting
+does not extend the application deadline. Establishment, command and ACK budgets stay unchanged.
+`MAX_STREAM_LIFETIME` exposes this bound. `Bus::with_limits` accepts values only within hard caps. Timers
 and queued SDK commands may settle with unknown effects; none are silently replayed. SDK send
 acceptance is separate from PROCESSED. Owner validates/enqueues before CompleteData(PROCESSED).
 ACK waits and TCP copies run outside the sole SDK receiver. A bounded completion worker submits
