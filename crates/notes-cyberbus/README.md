@@ -46,7 +46,7 @@ is no automatic replay or remapping.
 
 ## Bootstrap context: required two-step verification
 
-Only incoming **Bootstrap** connections to the registered host endpoint begin with an 80-byte
+Only incoming **Bootstrap** connections to the registered host endpoint begin with a 112-byte
 native-only prelude. Sync receives byte-exact WebSocket data without a prelude.
 
 ```rust,ignore
@@ -59,9 +59,15 @@ bus.claim_bootstrap_context(&context)?;
 ```
 
 `BootstrapContext { peer: [u8;32], stream_id: [u8;16], generation: [u8;16],
-account_generation: u64 }`. Encoding is `b"NCBBOOT1" / peer32 / stream_id16 / generation16 /
-account_generation big-endian u64`. Parsing alone is untrusted. `claim_bootstrap_context` checks
-the current peer/account and live core entry, exact stream/generation/service and one-time claim.
+account_generation: u64, receiver_nonce: [u8;32] }`. Encoding is `b"NCBBOOT2" / peer32 /
+stream_id16 / generation16 / account_generation big-endian u64 / receiver_nonce32`. Version 1
+is rejected. Use the shared reader and length constant instead of a hand-coded parser.
+The receiving core generates a fresh unpredictable nonce for each incoming Bootstrap entry;
+it is delivered only on the host ingress socket, never in SDK Data or to the initiating peer.
+Treat this nonce as a local capability: never log it or send it to a peer.
+Parsing alone is untrusted. `claim_bootstrap_context` checks the current peer/account and
+active incoming core entry, exact stream/generation/service and receiver nonce, then consumes
+the nonce once. Outgoing entries and recreated slots cannot accept a previous slot's context.
 This rejects invented native TCP callers, replay and stale streams. Bootstrap endpoints must be
 owned exclusively by the account runtime. Account owner must check the peer's SDK-authenticated
 profile, protocol UUID and Noise key; the bridge cannot decide Notes identity or grant scope.
@@ -81,8 +87,12 @@ Optional `store::EncryptedFileStore::open(directory, Box<dyn BlobCipher>, mode)`
 private AES-GCM file backend with process-exclusive lock, authenticated marker, fsync + atomic
 replace and corruption/missing fail-closed. `AesGcmCipher::from_provider(&mut dyn KeyProvider,
 mode)` obtains a host-protected key; `BlobCipher::{seal,open}` supports a nonexportable host key.
-The locked file's identity is rechecked during load/replace, so replacing or removing the lock
-path cannot silently create a second store owner. The `test-key` feature explicitly exposes `AesGcmCipher::injected_for_tests([u8;32])` and is only
+The held lock descriptor and current lock pathname must identify the same private regular
+file (device/inode, owner, permissions, one link) on Unix. Identity is checked after locking
+and during load/replace. Removing/replacing the path permanently poisons the old owner on
+detection, even if the original path is later restored. A new owner of a replacement inode
+does not authorize the old owner to load or overwrite the blob. The `test-key` feature
+explicitly exposes `AesGcmCipher::injected_for_tests([u8;32])` and is only
 for tests. No key is generated to plaintext files. Interrupted provisioning leaves a marker and
 requires an explicit external recovery decision; it never regenerates an installation identity.
 

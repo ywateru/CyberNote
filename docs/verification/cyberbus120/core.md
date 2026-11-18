@@ -134,3 +134,58 @@ cause from a finite event trajectory and does not claim this patch resolves that
 failure. Real Logto sessions and user stores were not accessed. The previous pause/stash notes
 above remain historical boundaries for the earlier commits; this section records the restored
 and tested follow-up. Public API, Bootstrap trusted-peer prelude and 23-minute cap are unchanged.
+
+## Blocking review F3/F4 follow-up
+
+Read independent review commits `9afaf422` / `d9e342a5` and their isolated fixtures. No review
+verdict, review source or fixture was edited. Before this patch, exported exact `b1dcdb0a`
+into a private temporary snapshot and included only the two F3 fixtures and the F4 fixture.
+Result: **1 passed / 2 failed**. Both F3 security assertions reproduced (claim without reading
+ingress, then consumed-context replay into a recreated slot). The unchanged F4 fixture passed:
+the previous lifecycle commit already checked held-lock/path device/inode on load/replace.
+
+F3 fix changes the native-only Bootstrap format to **NCBBOOT2, 112 bytes**. BootstrapContext
+adds `receiver_nonce: [u8; 32]`, appended after the previous fields. The receiving core uses
+OsRng to generate a fresh nonce only for incoming Bootstrap entries. That nonce is written
+only to the host ingress socket, never to an SDK envelope or initiating peer. Claim checks
+current peer/account, live incoming entry, stream/service/generation and the nonce, then
+consumes it under the entry lock. A wrong nonce leaves the genuine claim available. Outgoing
+entries have no nonce. Recreated slots receive a fresh nonce independently of the existing
+bounded tombstone policy. Context Debug remains redacted. The shared read/claim signatures are
+unchanged; manual host parsers must adopt the new length/magic, and old format is rejected.
+Host profile/Noise checks remain mandatory. Sync has no prelude and is unchanged.
+
+F4 follow-up factors the existing inode check into a shared Unix validation of held descriptor
+and current pathname: device/inode, regular file, single link, private permissions and owner.
+It is checked immediately after locking and on load/replace. Any identity-check failure now
+permanently poisons that store object, so restoring a pathname cannot resurrect a rejected
+owner. Tests unlink or atomically replace the lock path while the old owner lives, then spawn
+a separate process which reopens and writes through the replacement inode; the old owner
+cannot load or overwrite, and the new ciphertext remains unchanged by its failed replace.
+This is fail-closed detection, not a claim of immunity to arbitrary concurrent filesystem
+mutation by a process with the same user's privileges. macOS KeyringStore remains SDK-owned.
+
+Executed using the existing dev/test target cache and vendored PROTOC:
+
+- `cargo test --locked --offline --manifest-path crates/notes-cyberbus/Cargo.toml`:
+  **27 passed / 0 failed / 0 ignored**, doc tests 0. All three subprocess invocations passed
+  (ordinary exclusive-lock contention, and unlink/replacement reopen). New/extended regression
+  tests cover remote-known Open fields before ingress read, valid one-time claim after forgery,
+  same-ID slot recreation, outgoing/cancelled entry rejection, prelude parsing/version/payload
+  boundary, lock replacement across processes, and sticky rejection after path restoration.
+- `cargo check --locked --offline --manifest-path crates/notes-cyberbus/Cargo.toml`: **PASS**
+  for production configuration, retaining only the same three upstream unused-helper warnings.
+- A second isolated temporary snapshot with the product patch and the three review assertions:
+  **3 passed / 0 failed**, 27 filtered out. The F4 fixture is unchanged. F3 fixtures were adapted
+  only in the temporary export for the new nonce field: legitimate claims read/get the actual
+  receiver-created context, and the ingress fixture keeps the initiator's OpenAck slot alive
+  while reading. Original review files remain byte-for-byte untouched. Temporary execution logs:
+  `/tmp/cyberbus120-f3-f4-before.log`, `/tmp/cyberbus120-f3-f4-after.log`,
+  `/tmp/notes-cyberbus120-f3-f4-test.log`, `/tmp/notes-cyberbus120-f3-f4-check.log`.
+
+These are developer verification results for F3/F4, not a changed independent review verdict.
+No real sessions, vaults, Keychain entries or network login were accessed. User reports that
+the third real harness run after `b1dcdb0a` passed mutual authenticated profile discovery and
+SDK Data/Noise pairing, then failed at push with finite `store` code; that report is external
+evidence, not an independently rerun acceptance here. Its Store boundary remains with the
+harness owner. This patch does not expand SDK network scope or alter the 23-minute stream cap.

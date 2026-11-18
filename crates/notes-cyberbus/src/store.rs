@@ -127,6 +127,8 @@ impl EncryptedFileStore {
         }
         let lock = private_open(&directory.join("exclusive.lock"), true, false)?;
         lock.try_lock_exclusive().map_err(|_| Error::Conflict)?;
+        #[cfg(unix)]
+        check_lock_identity(&lock, &directory.join("exclusive.lock"))?;
         let marker_path = directory.join("marker");
         let blob_path = directory.join("vault.aesgcm");
         // symlinks, including dangling symlinks, count as existing and must not be overwritten.
@@ -174,7 +176,15 @@ impl EncryptedFileStore {
             },
         })
     }
-    fn check(&self) -> Result<()> {
+    fn check(&mut self) -> Result<()> {
+        let result = self.check_identity();
+        if result.is_err() {
+            // Do not resurrect an owner if a removed/replaced path is later restored.
+            self.poisoned = true;
+        }
+        result
+    }
+    fn check_identity(&self) -> Result<()> {
         if self.poisoned {
             return Err(Error::Storage);
         }
@@ -193,18 +203,7 @@ impl EncryptedFileStore {
             }
         }
         #[cfg(unix)]
-        {
-            use std::os::unix::fs::MetadataExt;
-            let held = self._lock.metadata().map_err(|_| Error::Storage)?;
-            let current = fs::symlink_metadata(self.directory.join("exclusive.lock"))
-                .map_err(|_| Error::Storage)?;
-            if (held.dev(), held.ino()) != (current.dev(), current.ino())
-                || !current.is_file()
-                || current.nlink() != 1
-            {
-                return Err(Error::Storage);
-            }
-        }
+        check_lock_identity(&self._lock, &self.directory.join("exclusive.lock"))?;
         if read_private(&self.directory.join("marker"), 24)? != self.marker {
             return Err(Error::Storage);
         }
@@ -264,6 +263,23 @@ impl SecureStore for EncryptedFileStore {
     fn durable(&self) -> bool {
         true
     }
+}
+#[cfg(unix)]
+fn check_lock_identity(lock: &File, path: &Path) -> Result<()> {
+    use std::os::unix::fs::MetadataExt;
+    let held = lock.metadata().map_err(|_| Error::Storage)?;
+    let current = fs::symlink_metadata(path).map_err(|_| Error::Storage)?;
+    if (held.dev(), held.ino()) != (current.dev(), current.ino())
+        || !held.is_file()
+        || !current.is_file()
+        || held.nlink() != 1
+        || current.nlink() != 1
+        || current.mode() & 0o077 != 0
+        || current.uid() != unsafe { libc::geteuid() }
+    {
+        return Err(Error::Storage);
+    }
+    Ok(())
 }
 fn sync_directory(path: &Path) -> Result<()> {
     File::open(path)
@@ -457,5 +473,70 @@ mod tests {
             assert!(s.load().is_err());
             assert!(s.replace(b"repair").is_err());
         }
+    }
+    #[cfg(unix)]
+    #[test]
+    fn unlinked_or_replaced_lock_reopen_cannot_keep_old_owner_usable() {
+        if let Some(path) = std::env::var_os("NOTES_CYBERBUS_REOPEN_LOCK_PATH") {
+            let mut reopened =
+                EncryptedFileStore::open(path, cipher(7), StoreMode::Existing).unwrap();
+            assert_eq!(reopened.load().unwrap().unwrap().expose(), b"original");
+            reopened.replace(b"new owner").unwrap();
+            return;
+        }
+        for unlink in [true, false] {
+            let temp = tempfile::tempdir().unwrap();
+            let path = root(&temp);
+            let lock = path.join("exclusive.lock");
+            let mut first =
+                EncryptedFileStore::open(&path, cipher(7), StoreMode::CreateNew).unwrap();
+            first.replace(b"original").unwrap();
+            if unlink {
+                fs::remove_file(&lock).unwrap();
+            } else {
+                // Atomic replacement leaves the held inode alive at another pathname.
+                fs::rename(&lock, path.join("previous.lock")).unwrap();
+                drop(private_open(&path.join("replacement.lock"), true, true).unwrap());
+                fs::rename(path.join("replacement.lock"), &lock).unwrap();
+            }
+            // The original owner must fail even before another process opens the new path.
+            assert!(matches!(first.load(), Err(Error::Storage)));
+            let status = std::process::Command::new(std::env::current_exe().unwrap())
+                .args([
+                    "--exact",
+                    "store::tests::unlinked_or_replaced_lock_reopen_cannot_keep_old_owner_usable",
+                ])
+                .env("NOTES_CYBERBUS_REOPEN_LOCK_PATH", &path)
+                .status()
+                .unwrap();
+            assert!(status.success());
+            assert!(matches!(first.load(), Err(Error::Storage)));
+            let before = fs::read(path.join("vault.aesgcm")).unwrap();
+            assert!(matches!(
+                first.replace(b"stale overwrite"),
+                Err(Error::Storage)
+            ));
+            assert_eq!(fs::read(path.join("vault.aesgcm")).unwrap(), before);
+            drop(first);
+            let mut reopened =
+                EncryptedFileStore::open(&path, cipher(7), StoreMode::Existing).unwrap();
+            assert_eq!(reopened.load().unwrap().unwrap().expose(), b"new owner");
+        }
+    }
+    #[cfg(unix)]
+    #[test]
+    fn lock_identity_failure_stays_closed_after_path_restoration() {
+        let temp = tempfile::tempdir().unwrap();
+        let path = root(&temp);
+        let mut store = EncryptedFileStore::open(&path, cipher(7), StoreMode::CreateNew).unwrap();
+        store.replace(b"original").unwrap();
+        fs::rename(path.join("exclusive.lock"), path.join("held.lock")).unwrap();
+        assert!(matches!(store.load(), Err(Error::Storage)));
+        fs::rename(path.join("held.lock"), path.join("exclusive.lock")).unwrap();
+        assert!(matches!(store.load(), Err(Error::Storage)));
+        assert!(matches!(store.replace(b"resurrected"), Err(Error::Storage)));
+        drop(store);
+        let mut reopened = EncryptedFileStore::open(&path, cipher(7), StoreMode::Existing).unwrap();
+        assert_eq!(reopened.load().unwrap().unwrap().expose(), b"original");
     }
 }

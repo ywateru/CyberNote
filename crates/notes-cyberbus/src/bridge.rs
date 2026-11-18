@@ -1,6 +1,7 @@
 use crate::{bus::random_id, *};
 use pb::sdk_command::Body as C;
 use prost::Message;
+use rand::RngCore;
 use std::{
     collections::HashMap,
     net::SocketAddr,
@@ -80,7 +81,8 @@ struct Entry {
     ack_pending: bool,
     remote_closed: bool,
     sent: u64,
-    bootstrap_claimed: bool,
+    // Some only for an unclaimed incoming Bootstrap entry. Never sent over SDK Data.
+    receiver_nonce: Option<[u8; 32]>,
     account_generation: u64,
     tx: mpsc::Sender<Envelope>,
     cancel: CancellationToken,
@@ -140,6 +142,15 @@ impl Bridge {
         }
         let (tx, rx) = mpsc::channel(self.limits.queue_chunks);
         let cancel = CancellationToken::new();
+        let receiver_nonce = if service == Service::Bootstrap && !outgoing {
+            let mut nonce = [0u8; 32];
+            rand::rngs::OsRng
+                .try_fill_bytes(&mut nonce)
+                .map_err(|_| Error::Io(std::io::ErrorKind::Other))?;
+            Some(nonce)
+        } else {
+            None
+        };
         entries.insert(
             key,
             Entry {
@@ -149,13 +160,31 @@ impl Bridge {
                 ack_pending: outgoing,
                 remote_closed: false,
                 sent: 0,
-                bootstrap_claimed: false,
+                receiver_nonce,
                 account_generation,
                 tx,
                 cancel: cancel.clone(),
             },
         );
         Ok((rx, cancel))
+    }
+    fn bootstrap_context(&self, key: StreamKey) -> Result<BootstrapContext> {
+        let entries = self.entries.lock().unwrap();
+        let entry = entries.get(&key).ok_or(Error::Protocol)?;
+        if entry.service != Service::Bootstrap || entry.cancel.is_cancelled() {
+            return Err(Error::Protocol);
+        }
+        Ok(BootstrapContext {
+            peer: key.0,
+            stream_id: key.1,
+            generation: entry
+                .generation
+                .as_slice()
+                .try_into()
+                .map_err(|_| Error::Protocol)?,
+            account_generation: entry.account_generation,
+            receiver_nonce: entry.receiver_nonce.ok_or(Error::Protocol)?,
+        })
     }
     fn route(&self, key: StreamKey, frame: Envelope) -> Result<()> {
         let mut entries = self.entries.lock().unwrap();
@@ -333,11 +362,11 @@ impl Bus {
             || entry.generation != context.generation
             || entry.account_generation != context.account_generation
             || entry.cancel.is_cancelled()
-            || entry.bootstrap_claimed
+            || entry.receiver_nonce.as_ref() != Some(&context.receiver_nonce)
         {
             return Err(Error::Protocol);
         }
-        entry.bootstrap_claimed = true;
+        entry.receiver_nonce.take();
         Ok(())
     }
     pub async fn register_endpoint(&self, service: Service, address: SocketAddr) -> Result<()> {
@@ -460,7 +489,7 @@ impl Bus {
                     let open=async {
                         let mut socket=TcpStream::connect(address).await?;
                         if service==Service::Bootstrap {
-                            let context=BootstrapContext{peer,stream_id:id,generation:frame.generation.as_slice().try_into().map_err(|_|Error::Protocol)?,account_generation};
+                            let context=task.inner.bridge.bootstrap_context(key)?;
                             socket.write_all(&context.encode()).await?;
                         }
                         task.send_frame(peer,make_frame(id,&frame.generation,service,0,FrameKind::OpenAck,vec![],CloseCode::Unspecified),&cancel).await?;
@@ -992,10 +1021,29 @@ mod tests {
             let lease = a.map([2; 32], Service::Bootstrap).await.unwrap();
             let mut client = TcpStream::connect(lease.local_addr()).await.unwrap();
             let (mut host, _) = listener.accept().await.unwrap();
+            // The initiating peer knows all Open fields and may cooperate with a local
+            // caller. Those fields must not authorize a claim before reading ingress.
+            let mut remote_known = {
+                let entries = a.inner.bridge.entries.lock().unwrap();
+                let (key, entry) = entries.iter().next().unwrap();
+                assert!(entry.receiver_nonce.is_none());
+                BootstrapContext {
+                    peer: [1; 32],
+                    stream_id: key.1,
+                    generation: entry.generation.as_slice().try_into().unwrap(),
+                    account_generation: b.snapshot().generation,
+                    receiver_nonce: [0; 32],
+                }
+            };
+            assert!(b.claim_bootstrap_context(&remote_known).is_err());
+            remote_known.receiver_nonce = [1; 32];
+            assert!(b.claim_bootstrap_context(&remote_known).is_err());
             let context = read_bootstrap_context(&mut host, Duration::from_secs(1))
                 .await
                 .unwrap();
             assert_eq!(context.peer, [1; 32]);
+            assert_eq!(context.stream_id, remote_known.stream_id);
+            assert_eq!(context.generation, remote_known.generation);
             let mut forged = context.clone();
             forged.peer = [3; 32];
             assert!(b.claim_bootstrap_context(&forged).is_err());
@@ -1017,6 +1065,76 @@ mod tests {
         })
         .await
         .unwrap();
+    }
+    #[tokio::test]
+    async fn bootstrap_nonce_rejects_recreated_slot_outgoing_and_cancelled_entries() {
+        let (a, b) = pair().await;
+        let key = ([1; 32], [81; 16]);
+        let generation = vec![82; 16];
+        let account_generation = b.snapshot().generation;
+        b.inner
+            .bridge
+            .allocate(
+                key,
+                generation.clone(),
+                Service::Bootstrap,
+                false,
+                account_generation,
+            )
+            .unwrap();
+        let previous = b.inner.bridge.bootstrap_context(key).unwrap();
+        b.claim_bootstrap_context(&previous).unwrap();
+
+        // Deliberately bypass retirement to test nonce security independently of tombstones:
+        // recreating exactly the same slot must still invalidate the previous capability.
+        b.inner.bridge.entries.lock().unwrap().remove(&key);
+        b.inner
+            .bridge
+            .allocate(
+                key,
+                generation.clone(),
+                Service::Bootstrap,
+                false,
+                account_generation,
+            )
+            .unwrap();
+        let current = b.inner.bridge.bootstrap_context(key).unwrap();
+        assert_ne!(previous.receiver_nonce, current.receiver_nonce);
+        assert!(b.claim_bootstrap_context(&previous).is_err());
+        b.claim_bootstrap_context(&current).unwrap();
+        assert!(b.claim_bootstrap_context(&current).is_err());
+
+        b.inner.bridge.entries.lock().unwrap().remove(&key);
+        b.inner
+            .bridge
+            .allocate(
+                key,
+                generation.clone(),
+                Service::Bootstrap,
+                true,
+                account_generation,
+            )
+            .unwrap();
+        assert!(b.inner.bridge.bootstrap_context(key).is_err());
+        assert!(b.claim_bootstrap_context(&current).is_err());
+        b.inner.bridge.entries.lock().unwrap().remove(&key);
+        let (_, cancel) = b
+            .inner
+            .bridge
+            .allocate(
+                key,
+                generation,
+                Service::Bootstrap,
+                false,
+                account_generation,
+            )
+            .unwrap();
+        let cancelled = b.inner.bridge.bootstrap_context(key).unwrap();
+        cancel.cancel();
+        assert!(b.claim_bootstrap_context(&cancelled).is_err());
+        b.inner.bridge.entries.lock().unwrap().remove(&key);
+        a.close().await.unwrap();
+        b.close().await.unwrap();
     }
     #[tokio::test]
     async fn mapping_cancel_peer_offline_and_debug_redaction() {
