@@ -192,6 +192,19 @@ impl EncryptedFileStore {
                 return Err(Error::Storage);
             }
         }
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::MetadataExt;
+            let held = self._lock.metadata().map_err(|_| Error::Storage)?;
+            let current = fs::symlink_metadata(self.directory.join("exclusive.lock"))
+                .map_err(|_| Error::Storage)?;
+            if (held.dev(), held.ino()) != (current.dev(), current.ino())
+                || !current.is_file()
+                || current.nlink() != 1
+            {
+                return Err(Error::Storage);
+            }
+        }
         if read_private(&self.directory.join("marker"), 24)? != self.marker {
             return Err(Error::Storage);
         }
@@ -315,6 +328,13 @@ mod tests {
     }
     #[test]
     fn encrypted_restart_and_exclusive_owner() {
+        if let Some(path) = std::env::var_os("NOTES_CYBERBUS_TEST_LOCK_PATH") {
+            assert!(matches!(
+                EncryptedFileStore::open(path, cipher(7), StoreMode::Existing),
+                Err(Error::Conflict)
+            ));
+            return;
+        }
         let temp = tempfile::tempdir().unwrap();
         let path = root(&temp);
         let mut store = EncryptedFileStore::open(&path, cipher(7), StoreMode::CreateNew).unwrap();
@@ -328,6 +348,15 @@ mod tests {
             EncryptedFileStore::open(&path, cipher(7), StoreMode::Existing),
             Err(Error::Conflict)
         ));
+        let status = std::process::Command::new(std::env::current_exe().unwrap())
+            .args([
+                "--exact",
+                "store::tests::encrypted_restart_and_exclusive_owner",
+            ])
+            .env("NOTES_CYBERBUS_TEST_LOCK_PATH", &path)
+            .status()
+            .unwrap();
+        assert!(status.success());
         drop(store);
         let mut restored = EncryptedFileStore::open(&path, cipher(7), StoreMode::Existing).unwrap();
         assert_eq!(
@@ -413,5 +442,20 @@ mod tests {
         );
         fs::set_permissions(&path, fs::Permissions::from_mode(0o755)).unwrap();
         assert!(EncryptedFileStore::open(&path, cipher(1), StoreMode::Existing).is_err());
+    }
+    #[cfg(unix)]
+    #[test]
+    fn replaced_lock_file_and_marker_fail_closed() {
+        for target in ["exclusive.lock", "marker"] {
+            let temp = tempfile::tempdir().unwrap();
+            let path = root(&temp);
+            let mut s = EncryptedFileStore::open(&path, cipher(7), StoreMode::CreateNew).unwrap();
+            s.replace(b"secret").unwrap();
+            fs::rename(path.join(target), path.join("old")).unwrap();
+            let mut replacement = private_open(&path.join(target), true, true).unwrap();
+            replacement.write_all(b"replacement").unwrap();
+            assert!(s.load().is_err());
+            assert!(s.replace(b"repair").is_err());
+        }
     }
 }

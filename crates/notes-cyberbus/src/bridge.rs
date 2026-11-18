@@ -89,6 +89,7 @@ pub(crate) struct Bridge {
     pub limits: Limits,
     entries: Mutex<HashMap<StreamKey, Entry>>,
     endpoints: Mutex<HashMap<Service, SocketAddr>>,
+    retired: Mutex<HashMap<StreamKey, tokio::time::Instant>>,
     pending: Mutex<HashMap<MessageKey, oneshot::Sender<Result<()>>>>,
     inflight: Arc<Semaphore>,
     completions: mpsc::Sender<C>,
@@ -102,6 +103,7 @@ impl Bridge {
                 limits,
                 entries: Mutex::new(HashMap::new()),
                 endpoints: Mutex::new(HashMap::new()),
+                retired: Mutex::new(HashMap::new()),
                 pending: Mutex::new(HashMap::new()),
                 completions,
             },
@@ -117,6 +119,15 @@ impl Bridge {
         account_generation: u64,
     ) -> Result<(mpsc::Receiver<Envelope>, CancellationToken)> {
         let mut entries = self.entries.lock().unwrap();
+        let mut retired = self.retired.lock().unwrap();
+        retired.retain(|_, expires| *expires > tokio::time::Instant::now());
+        if retired.contains_key(&key) {
+            return Err(Error::Protocol);
+        }
+        // Never evict a live tombstone to admit more Opens: fail closed at a finite cap.
+        if retired.len() + entries.len() >= 1024 {
+            return Err(Error::Capacity);
+        }
         // Cancelled entries still count until their tasks have joined; never amplify cancellation into unbounded tasks.
         if entries.contains_key(&key) {
             return Err(Error::Protocol);
@@ -173,6 +184,15 @@ impl Bridge {
         entry.ack_pending = false;
         entry.remote_closed = closing;
         Ok(())
+    }
+    fn retire(&self, key: StreamKey) {
+        let mut entries = self.entries.lock().unwrap();
+        if entries.remove(&key).is_some() {
+            self.retired
+                .lock()
+                .unwrap()
+                .insert(key, tokio::time::Instant::now() + Duration::from_secs(600));
+        }
     }
     pub(crate) fn cancel_all(&self) {
         for e in self.entries.lock().unwrap().values() {
@@ -488,10 +508,22 @@ impl Bus {
             tokio::select! {
                 biased;
                 _=self.inner.stop.cancelled()=>break,
+                _=self.inner.resync.notified()=>{
+                    tokio::select! {
+                        biased;
+                        _=self.inner.stop.cancelled()=>break,
+                        _=self.resync_directory()=>{},
+                    }
+                },
                 value=rx.recv()=>match value {
                     None=>break,
                     Some(command)=>{
-                        if let Err(e)=self.internal(command).await {let _=self.inner.events.send(BusEvent::Fault(e));}
+                        let result=tokio::select! {
+                            biased;
+                            _=self.inner.stop.cancelled()=>break,
+                            result=self.internal(command)=>result,
+                        };
+                        if let Err(e)=result {let _=self.inner.events.send(BusEvent::Fault(e));}
                     }
                 }
             }
@@ -608,7 +640,7 @@ impl Bus {
                 .await;
             }
         }
-        self.inner.bridge.entries.lock().unwrap().remove(&key);
+        self.inner.bridge.retire(key);
     }
     async fn run_stream(
         &self,
@@ -1059,5 +1091,194 @@ mod tests {
         })
         .await
         .unwrap();
+    }
+    #[tokio::test]
+    async fn processed_ack_deadline_inflight_wait_and_cancel_remove_pending() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let mut limits = Limits::default();
+            limits.ack_timeout = Duration::from_millis(50);
+            limits.max_inflight = 1;
+            let bus = Bus::with_limits(
+                config(),
+                Box::<cyberbus_auth::MemoryStore>::default(),
+                StoreMode::CreateNew,
+                limits,
+            )
+            .await
+            .unwrap();
+            let mut updates = bus.watch();
+            while !updates.borrow().directory_valid {
+                updates.changed().await.unwrap()
+            }
+            online(&bus, [2; 32]);
+            let (tx, mut rx) = mpsc::channel(8);
+            *bus.inner.test_wire.lock().unwrap() = Some(tx);
+            let first = bus.clone();
+            let second = bus.clone();
+            let token = CancellationToken::new();
+            let t2 = token.clone();
+            let a = tokio::spawn(async move {
+                first
+                    .send_frame([2; 32], frame([1; 16], 1, FrameKind::Chunk), &token)
+                    .await
+            });
+            if let Some(C::Send(sent)) = rx.recv().await {
+                // ACCEPTED is deliberately not a processed terminal.
+                bus.inner.bridge.status(&pb::DataStatus {
+                    peer_device_id: [2; 32].to_vec(),
+                    message_id: sent.message.unwrap().message_id,
+                    result: Some(pb::data_status::Result::Stage(
+                        pb::AckStage::Accepted as i32,
+                    )),
+                });
+            } else {
+                panic!("missing test Send")
+            }
+            let b = tokio::spawn(async move {
+                second
+                    .send_frame([2; 32], frame([2; 16], 1, FrameKind::Chunk), &t2)
+                    .await
+            });
+            assert!(matches!(a.await.unwrap(), Err(Error::Timeout)));
+            assert!(matches!(b.await.unwrap(), Err(Error::Timeout)));
+            assert!(bus.inner.bridge.pending.lock().unwrap().is_empty());
+            assert_eq!(bus.inner.bridge.inflight.available_permits(), 1);
+            let cancel = CancellationToken::new();
+            cancel.cancel();
+            assert!(matches!(
+                bus.send_frame([2; 32], frame([3; 16], 1, FrameKind::Chunk), &cancel)
+                    .await,
+                Err(Error::Cancelled)
+            ));
+            assert!(bus.inner.bridge.pending.lock().unwrap().is_empty());
+            bus.close().await.unwrap();
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn unused_mapping_listener_has_absolute_open_deadline() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let mut limits = Limits::default();
+            limits.open_timeout = Duration::from_millis(50);
+            let bus = Bus::with_limits(
+                config(),
+                Box::<cyberbus_auth::MemoryStore>::default(),
+                StoreMode::CreateNew,
+                limits,
+            )
+            .await
+            .unwrap();
+            let mut updates = bus.watch();
+            while !updates.borrow().directory_valid {
+                updates.changed().await.unwrap()
+            }
+            online(&bus, [2; 32]);
+            let lease = bus.map([2; 32], Service::Sync).await.unwrap();
+            let address = lease.local_addr();
+            lease.done.cancelled().await;
+            assert!(matches!(lease.result(), Some(Err(Error::Timeout))));
+            assert!(bus.inner.bridge.entries.lock().unwrap().is_empty());
+            assert!(TcpStream::connect(address).await.is_err());
+            bus.close().await.unwrap();
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn sdk_eof_cancels_active_tcp_and_pending_ack_without_host_close() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let (a, b) = pair().await;
+            let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+            b.register_endpoint(Service::Sync, listener.local_addr().unwrap())
+                .await
+                .unwrap();
+            let lease = a.map([2; 32], Service::Sync).await.unwrap();
+            let mut client = TcpStream::connect(lease.local_addr()).await.unwrap();
+            let (mut host, _) = listener.accept().await.unwrap();
+            let mut ready = a.inner.updates.subscribe();
+            // Wait until the open handshake is completed before withholding the next ACK.
+            loop {
+                let pending = a
+                    .inner
+                    .bridge
+                    .entries
+                    .lock()
+                    .unwrap()
+                    .values()
+                    .any(|entry| entry.ack_pending);
+                if !pending {
+                    break;
+                }
+                tokio::task::yield_now().await;
+            }
+            let (blackhole, mut commands) = mpsc::channel(8);
+            *a.inner.test_wire.lock().unwrap() = Some(blackhole);
+            client
+                .write_all(b"waiting for processed ACK")
+                .await
+                .unwrap();
+            assert!(matches!(commands.recv().await, Some(C::Send(_))));
+            assert_eq!(a.inner.bridge.pending.lock().unwrap().len(), 1);
+            let result = a
+                .inner
+                .client
+                .execute(pb::SdkCommand {
+                    command_id: random_id().to_vec(),
+                    body: Some(C::SdkClose(pb::SdkClose {})),
+                })
+                .await;
+            assert!(matches!(
+                result.body,
+                Some(pb::sdk_result::Body::SdkClosed(_))
+            ));
+            a.inner.owner_done.cancelled().await;
+            assert!(a.snapshot().closed);
+            assert!(a.inner.stop.is_cancelled());
+            assert!(a.inner.tasks.is_closed());
+            assert!(a.inner.tasks.is_empty());
+            assert!(a.inner.bridge.entries.lock().unwrap().is_empty());
+            assert!(a.inner.bridge.pending.lock().unwrap().is_empty());
+            assert!(lease.result().unwrap().is_err());
+            let mut byte = [0; 1];
+            assert!(matches!(client.read(&mut byte).await, Ok(0) | Err(_)));
+            assert!(ready.borrow_and_update().closed);
+            // The remote stream is revoked by SDK peer-offline in production. Our offline
+            // switch has no SDK network; explicitly deliver that boundary to the remote side.
+            b.inner.bridge.cancel_peer(&[1; 32]);
+            assert!(matches!(host.read(&mut byte).await, Ok(0) | Err(_)));
+            b.close().await.unwrap();
+            // close is idempotent after spontaneous SDK EOF and is not needed for the assertions.
+            a.close().await.unwrap();
+        })
+        .await
+        .unwrap();
+    }
+    #[test]
+    fn retired_stream_replay_and_tombstone_saturation_fail_closed() {
+        let (bridge, _) = Bridge::new(Limits::default());
+        let first = ([1; 32], [1; 16]);
+        bridge
+            .allocate(first, vec![2; 16], Service::Sync, false, 1)
+            .unwrap();
+        bridge.retire(first);
+        assert!(matches!(
+            bridge.allocate(first, vec![3; 16], Service::Sync, false, 1),
+            Err(Error::Protocol)
+        ));
+        for number in 1..1024u64 {
+            let mut id = [0; 16];
+            id[..8].copy_from_slice(&number.to_be_bytes());
+            let key = ([1; 32], id);
+            bridge
+                .allocate(key, vec![2; 16], Service::Sync, false, 1)
+                .unwrap();
+            bridge.retire(key);
+        }
+        assert_eq!(bridge.retired.lock().unwrap().len(), 1024);
+        assert!(matches!(
+            bridge.allocate(([2; 32], [9; 16]), vec![2; 16], Service::Sync, false, 1),
+            Err(Error::Capacity)
+        ));
     }
 }

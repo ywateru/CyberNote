@@ -91,3 +91,46 @@ not substituted for the committed stage's 13 tests plus this patch's two targete
 A further in-progress test run was cancelled while waiting for the shared build lock when the
 user requested this pause. These identified lifecycle boundaries remain for review and a
 separate integration fix; this patch does not claim they are resolved in the committed tree.
+
+## Lifecycle recovery integration patch
+
+The user explicitly resumed the necessary correctness fixes. Restored only the core lifecycle
+stash, retaining the 23-minute deadline patch and both of its tests. Independent review files
+under `docs/plan/reviews/` were left untouched and are excluded from this commit.
+
+Directory invalidation now requests a coalesced, active `StopWatchDevices` / `WatchDevices`
+rebuild on the control worker, using the reserved core watch ID to receive a fresh SDK snapshot.
+A revision gap preserves the last observed NetworkState instead of synthesizing network failure.
+Reset/runtime changes revoke stream generations. Rebuild command failure leaves the directory
+invalid and emits a finite Fault; this patch does not promise automatic retry after that failure.
+
+SDK EOF now cancels the stop token, closes and drains the tracked business/control tasks within
+the command timeout, then publishes Closed. In-progress SDK control/resync waits also select
+cancellation. The sole receiver owner stays outside TaskTracker, so it never joins itself.
+Retired peer/stream IDs are rejected for 600 seconds with a bounded 1024-entry active/retired
+budget; saturation fails closed. Encrypted file storage also verifies that its held exclusive
+lock still matches the lock pathname before load/replace.
+
+Executed with the same vendored PROTOC and existing `crates/notes-cyberbus/target` cache:
+
+- `cargo test --locked --manifest-path crates/notes-cyberbus/Cargo.toml`: **23 passed, 0 failed,
+  0 ignored**; doc tests 0. The subprocess exclusive-lock fixture also passed its child run.
+- `cargo check --locked --manifest-path crates/notes-cyberbus/Cargo.toml`: **PASS** for the
+  production configuration. Only the same three upstream unused-helper warnings remain.
+
+New fault coverage exercises a skipped directory revision with no spontaneous reset/delta,
+repeated real SDK NetworkStop/watch reconstruction, real SDK EOF with an active TCP stream and
+withheld processed ACK before any host Bus::close, ACK timeout/inflight cancellation, unused
+listener expiry, retired-ID replay/saturation, subprocess lock contention and replaced lock or
+marker failure. EOF assertions include closed/empty TaskTracker, cancelled stop, no active stream
+or pending ACK, and terminated loopback TCP. SDK lifecycle/watch commands are real offline SDK
+operations; bridge traffic/auth fixtures use synthetic authenticated state and a test-only byte
+switch with real loopback sockets. These results do not establish authenticated network recovery.
+
+The harness owner's `real-report-01.json` reports two authenticated independent identities in
+the same verified workspace and relay TCP reachability, followed by invalid directory,
+NetworkState running/reachable false and discovery_deadline. This agent has not established its
+cause from a finite event trajectory and does not claim this patch resolves that real-network
+failure. Real Logto sessions and user stores were not accessed. The previous pause/stash notes
+above remain historical boundaries for the earlier commits; this section records the restored
+and tested follow-up. Public API, Bootstrap trusted-peer prelude and 23-minute cap are unchanged.

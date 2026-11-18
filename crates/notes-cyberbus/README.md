@@ -36,7 +36,10 @@ Broadcast subscribers must handle `RecvError::Lagged` and resynchronize with `sn
 Snapshot and BusEvent Debug output is redacted. Their raw protobuf fields are sensitive native-only
 values: callers must not independently log or serialize raw auth, callback URIs or SDK errors to UI.
 Device history partitioning/persistence and Notes profile validation belong to the account owner.
-`directory_valid=false` forbids mappings. A watch revision gap fails closed until SDK snapshot/reset.
+`directory_valid=false` forbids mappings. Revocation and watch revision gaps actively rebuild the
+reserved watch (`StopWatchDevices` then `WatchDevices`) on the bounded control worker to obtain
+a fresh SDK snapshot; recovery does not wait for a spontaneous reset. Requests are coalesced,
+and a failed/timed-out rebuild remains fail-closed with a finite Fault event.
 Authenticated account, nonexpired validation lease, running/reachable network and current online
 peer are all required. NetworkStop/AuthLogout/auth changes/EOF invalidate existing leases; there
 is no automatic replay or remapping.
@@ -78,7 +81,8 @@ Optional `store::EncryptedFileStore::open(directory, Box<dyn BlobCipher>, mode)`
 private AES-GCM file backend with process-exclusive lock, authenticated marker, fsync + atomic
 replace and corruption/missing fail-closed. `AesGcmCipher::from_provider(&mut dyn KeyProvider,
 mode)` obtains a host-protected key; `BlobCipher::{seal,open}` supports a nonexportable host key.
-The `test-key` feature explicitly exposes `AesGcmCipher::injected_for_tests([u8;32])` and is only
+The locked file's identity is rechecked during load/replace, so replacing or removing the lock
+path cannot silently create a second store owner. The `test-key` feature explicitly exposes `AesGcmCipher::injected_for_tests([u8;32])` and is only
 for tests. No key is generated to plaintext files. Interrupted provisioning leaves a marker and
 requires an explicit external recovery decision; it never regenerates an installation identity.
 
@@ -104,7 +108,13 @@ and queued SDK commands may settle with unknown effects; none are silently repla
 acceptance is separate from PROCESSED. Owner validates/enqueues before CompleteData(PROCESSED).
 ACK waits and TCP copies run outside the sole SDK receiver. A bounded completion worker submits
 CompleteData/CancelData without blocking that receiver. All business tasks belong to one tracker.
-The host must explicitly `Bus::close().await` before releasing its runtime.
+On SDK EOF, the receiver owner revokes the directory/leases, cancels stop, closes the tracker and
+joins control/stream tasks before publishing Closed. The owner itself is outside that tracker,
+so drain cannot await the owner's own completion. In-progress control commands select on stop
+as well as their deadline; a stopped SDK does not strand a worker waiting on command completion.
+The host must still explicitly `Bus::close().await` before releasing its runtime. Closed streams
+retain bounded peer/stream tombstones for 600 seconds (1024 active + retired IDs total); duplicate
+Open and saturation are rejected rather than evicting unexpired replay protection.
 
 Testing boundaries: real SDK lifecycle/storage tests are offline. Byte bridge tests use a
 `cfg(test)` bounded message switch plus actual TCP sockets. No real account, network, relay,

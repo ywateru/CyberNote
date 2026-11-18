@@ -1,10 +1,13 @@
 use crate::{bridge::Bridge, *};
 use pb::{sdk_command::Body as C, sdk_event::Body as E};
 use std::{
-    sync::{Arc, RwLock},
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc, RwLock,
+    },
     time::Duration,
 };
-use tokio::sync::{broadcast, watch};
+use tokio::sync::{broadcast, watch, Notify};
 use tokio_util::{sync::CancellationToken, task::TaskTracker};
 
 #[derive(Clone, Default)]
@@ -53,6 +56,10 @@ pub(crate) struct Inner {
     pub owner_done: CancellationToken,
     pub watch_id: [u8; 16],
     pub subscription_id: [u8; 16],
+    pub resync: Notify,
+    pub resync_pending: AtomicBool,
+    pub initialized: AtomicBool,
+    pub closing: AtomicBool,
     #[cfg(test)]
     pub test_wire: std::sync::Mutex<Option<tokio::sync::mpsc::Sender<C>>>,
 }
@@ -106,11 +113,17 @@ impl Bus {
                 owner_done: CancellationToken::new(),
                 watch_id: random_id(),
                 subscription_id: random_id(),
+                resync: Notify::new(),
+                resync_pending: AtomicBool::new(false),
+                initialized: AtomicBool::new(false),
+                closing: AtomicBool::new(false),
                 #[cfg(test)]
                 test_wire: std::sync::Mutex::new(None),
             }),
         };
         let owner = bus.clone();
+        // The receiver owner is deliberately NOT in inner.tasks: on EOF it must be able to
+        // join every business/control task without waiting on its own completion.
         tokio::spawn(async move {
             let mut ticker = tokio::time::interval(Duration::from_millis(100));
             loop {
@@ -121,13 +134,24 @@ impl Bus {
                     },
                     _=ticker.tick()=>{
                         let state=owner.snapshot();
-                        if state.directory_valid && state.auth.as_ref().is_some_and(|a|a.phase==pb::AuthPhase::Authenticated as i32 && !valid_lease(a)) {
+                        if state.directory_valid && state.network.as_ref().is_some_and(|n|n.running) && state.auth.as_ref().is_some_and(|a|a.phase==pb::AuthPhase::Authenticated as i32 && !valid_lease(a)) {
                             owner.revoke(false);
                         }
                     }
                 }
             }
             owner.revoke(true);
+            owner.inner.stop.cancel();
+            owner.inner.tasks.close();
+            if tokio::time::timeout(
+                owner.inner.bridge.limits.command_timeout,
+                owner.inner.tasks.wait(),
+            )
+            .await
+            .is_err()
+            {
+                let _ = owner.inner.events.send(BusEvent::Fault(Error::Timeout));
+            }
             let _ = owner.inner.events.send(BusEvent::Closed);
             owner.inner.owner_done.cancel();
         });
@@ -152,6 +176,7 @@ impl Bus {
                 watch_id: bus.inner.watch_id.to_vec(),
             }))
             .await?;
+            bus.inner.initialized.store(true, Ordering::Release);
             Ok(())
         }
         .await;
@@ -258,6 +283,7 @@ impl Bus {
         .map_err(|e| Error::Sdk(e.code))
     }
     pub async fn close(&self) -> Result<()> {
+        self.inner.closing.store(true, Ordering::Release);
         self.revoke(false);
         let command = pb::SdkCommand {
             command_id: random_id().to_vec(),
@@ -300,19 +326,59 @@ impl Bus {
         self.inner.updates.send_replace(snapshot.clone());
     }
     pub(crate) fn revoke(&self, closed: bool) {
+        self.invalidate(closed, true);
+    }
+    fn invalidate(&self, closed: bool, network_down: bool) {
         let mut state = self.inner.snapshot.write().unwrap();
         state.generation = state.generation.saturating_add(1);
         state.directory_valid = false;
         state.closed |= closed;
-        if let Some(n) = &mut state.network {
-            n.running = false;
-            n.reachable = false;
+        if network_down {
+            if let Some(n) = &mut state.network {
+                n.running = false;
+                n.reachable = false;
+            }
         }
         for d in &mut state.devices.devices {
             d.presence = pb::DevicePresence::Offline as i32;
         }
         self.inner.bridge.cancel_all();
         self.publish(&state);
+        drop(state);
+        if !closed {
+            self.request_resync();
+        }
+    }
+    fn request_resync(&self) {
+        if self.inner.initialized.load(Ordering::Acquire)
+            && !self.inner.closing.load(Ordering::Acquire)
+            && !self.inner.resync_pending.swap(true, Ordering::AcqRel)
+        {
+            self.inner.resync.notify_one();
+        }
+    }
+    pub(crate) async fn resync_directory(&self) {
+        if !self.inner.resync_pending.swap(false, Ordering::AcqRel)
+            || self.snapshot().closed
+            || self.inner.closing.load(Ordering::Acquire)
+        {
+            return;
+        }
+        let result = async {
+            self.internal(C::StopWatchDevices(pb::StopWatchDevices {
+                watch_id: self.inner.watch_id.to_vec(),
+            }))
+            .await?;
+            self.internal(C::WatchDevices(pb::WatchDevices {
+                watch_id: self.inner.watch_id.to_vec(),
+            }))
+            .await?;
+            Ok(())
+        }
+        .await;
+        if let Err(e) = result {
+            let _ = self.inner.events.send(BusEvent::Fault(e));
+        }
     }
     fn handle_event(&self, event: &pb::SdkEvent) {
         match &event.body {
@@ -342,9 +408,16 @@ impl Bus {
             }
             Some(E::Devices(devices)) if devices.watch_id == self.inner.watch_id => {
                 let mut state = self.inner.snapshot.write().unwrap();
+                if matches!(devices.body, Some(pb::devices_event::Body::Reset(_)))
+                    || (!state.devices.runtime_id.is_empty()
+                        && state.devices.runtime_id != devices.runtime_id)
+                {
+                    state.generation = state.generation.saturating_add(1);
+                    self.inner.bridge.cancel_all();
+                }
                 if apply_devices(&mut state, devices).is_err() {
                     drop(state);
-                    self.revoke(false);
+                    self.invalidate(false, false);
                     let _ = self
                         .inner
                         .events
@@ -619,5 +692,122 @@ pub(crate) mod tests {
         };
         apply_devices(&mut s, &reset).unwrap();
         assert!(s.devices.devices.is_empty());
+    }
+    #[tokio::test]
+    async fn real_sdk_watch_rebuild_and_eof_drain() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let bus = Bus::new(
+                config(),
+                Box::<cyberbus_auth::MemoryStore>::default(),
+                StoreMode::CreateNew,
+            )
+            .await
+            .unwrap();
+            let mut updates = bus.watch();
+            while !updates.borrow().directory_valid {
+                updates.changed().await.unwrap()
+            }
+            let generation = bus.snapshot().generation;
+            bus.revoke(false);
+            while !updates.borrow().directory_valid {
+                updates.changed().await.unwrap()
+            }
+            assert!(bus.snapshot().generation > generation);
+            let result = bus
+                .inner
+                .client
+                .execute(pb::SdkCommand {
+                    command_id: random_id().to_vec(),
+                    body: Some(C::SdkClose(pb::SdkClose {})),
+                })
+                .await;
+            assert!(matches!(
+                result.body,
+                Some(pb::sdk_result::Body::SdkClosed(_))
+            ));
+            bus.inner.owner_done.cancelled().await;
+            assert!(bus.snapshot().closed);
+            assert!(bus.inner.tasks.is_empty());
+            bus.close().await.unwrap();
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn real_sdk_revision_gap_actively_rebuilds_watch_without_reset_event() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let bus = Bus::new(
+                config(),
+                Box::<cyberbus_auth::MemoryStore>::default(),
+                StoreMode::CreateNew,
+            )
+            .await
+            .unwrap();
+            let mut updates = bus.watch();
+            while !updates.borrow().directory_valid {
+                updates.changed().await.unwrap()
+            }
+            let before = bus.snapshot();
+            let generation = before.generation;
+            // Inject a skipped revision into the real owner handler. SDK is offline and idle:
+            // it will never spontaneously send a reset or another directory delta here.
+            let gap = pb::SdkEvent {
+                runtime_id: before.devices.runtime_id.clone(),
+                body: Some(E::Devices(pb::DevicesEvent {
+                    watch_id: bus.inner.watch_id.to_vec(),
+                    runtime_id: before.devices.runtime_id.clone(),
+                    revision: before.devices.revision + 2,
+                    previous_revision: before.devices.revision + 1,
+                    body: Some(pb::devices_event::Body::Removed(pb::DeviceRemoved {
+                        device_id: vec![9; 32],
+                        error: None,
+                    })),
+                })),
+                ..Default::default()
+            };
+            bus.handle_event(&gap);
+            let invalid = bus.snapshot();
+            assert!(!invalid.directory_valid);
+            assert!(invalid.generation > generation);
+            while !updates.borrow().directory_valid {
+                updates.changed().await.unwrap()
+            }
+            let restored = bus.snapshot();
+            assert_eq!(restored.devices.runtime_id, before.devices.runtime_id);
+            assert_eq!(restored.devices.revision, before.devices.revision);
+            assert_eq!(restored.devices.devices, before.devices.devices);
+            assert!(!restored.closed);
+            bus.close().await.unwrap();
+        })
+        .await
+        .unwrap();
+    }
+    #[tokio::test]
+    async fn real_sdk_network_stop_can_rebuild_directory_repeatedly() {
+        tokio::time::timeout(Duration::from_secs(3), async {
+            let bus = Bus::new(
+                config(),
+                Box::<cyberbus_auth::MemoryStore>::default(),
+                StoreMode::CreateNew,
+            )
+            .await
+            .unwrap();
+            let mut updates = bus.watch();
+            while !updates.borrow().directory_valid {
+                updates.changed().await.unwrap()
+            }
+            for _ in 0..3 {
+                let generation = bus.snapshot().generation;
+                bus.cmd(C::NetworkStop(pb::NetworkStop {})).await.unwrap();
+                while !updates.borrow().directory_valid {
+                    updates.changed().await.unwrap()
+                }
+                assert!(bus.snapshot().generation > generation);
+                assert_eq!(bus.snapshot().devices.devices.len(), 1);
+            }
+            bus.close().await.unwrap();
+        })
+        .await
+        .unwrap();
     }
 }
