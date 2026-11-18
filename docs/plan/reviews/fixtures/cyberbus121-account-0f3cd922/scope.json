@@ -1,0 +1,25 @@
+{
+  "baseline": "0f3cd92236cbd60ea7d84b3c133aabe44e8239b7",
+  "parent": "7f2fdc79e94a3d9b03fb4028996f108ff7766052",
+  "review_scope": [
+    "A2",
+    "A3",
+    "A4",
+    "A6"
+  ],
+  "A5": "accepted migration limitation; no legacy grant read/import/restore/revoke claim",
+  "core_tree": "3997526752321402e0096e90555b54c85ec9c003",
+  "vendor_tree": "0055afb270d2aa0d17b80cc5fb53637e03b24c85",
+  "changed_files_in_fix": [
+    "docs/verification/cyberbus120/account.md",
+    "scripts/verification/cyberbus121-account-dto.mjs",
+    "src-tauri/src/account/mod.rs",
+    "src-tauri/src/account/private.rs",
+    "src-tauri/src/account/types.rs",
+    "src-tauri/src/account/worker.rs",
+    "src/account-client.ts"
+  ],
+  "test_input": "detached checkout of exact SHA; node_modules symlink supplies dependencies only",
+  "external_scope": "No native app, UI, real account/device, Keychain, remote config or additional online test. Existing local TCP callback and fixture Store tests run as part of account::.",
+  "vendor_path": "vendor/cyberbus"
+}

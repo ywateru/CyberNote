@@ -1,10 +1,10 @@
 # CyberBus121 account independent review 01
 
-日期：2026-11-18。结论：**BLOCKED / tests incomplete**。
+日期：2026-11-18。最新结论：**PASS，可合并本轮核心与 CLI 范围；真实原生账户链 / UI tests incomplete**。
 
-最新独立复核为下文 [487c8fde + e26ac0d1 收尾复核](#487c8fde--e26ac0d1-收尾复核)：A1 已关闭，A5 按用户确认的新迁移契约接受为限制；A2/A3/A4/A6 在该准确提交仍未关闭。最初 checkpoint 失败证据继续保留。
+最新独立复核为下文 [0f3cd922 有界修复复审](#0f3cd922-有界修复复审)：准确基线 **`0f3cd92236cbd60ea7d84b3c133aabe44e8239b7`**，A2/A3/A4/A6 关闭；A1 已在前轮关闭，A5 按用户确认的新迁移契约接受为限制。独立 CLI 检查全部通过，未发现本轮合并阻断。真实原生登录、云端撤销及 UI 未验证，按用户确定的收敛边界交组合 Mac 包和手动测试补齐，不新增在线或设备门槛。以下历史 checkpoint 的失败证据保留，不作为最新提交仍失败的结论。
 
-本轮唯一审阅基线为 **`0805281ed14775c713de48da02fdd35cabcce141`**（`0805281e`，作者提交标题本身标明 tests incomplete）。不是当前工作区后续 HEAD 的结论，不追认作者此前或后续的绿灯。审阅者未参与账户源码开发。本轮仅写本报告与独立 fixtures；未修改产品、运行用户笔记应用、读取原 notes 库、使用真实账户或修改线上配置。
+最初审阅基线为 **`0805281ed14775c713de48da02fdd35cabcce141`**（`0805281e`，作者提交标题本身标明 tests incomplete）。下方原始 findings 仅对应该历史基线，后续提交分别在文末记录独立结果，不追认未冻结的工作区修改。审阅者未参与账户源码开发。本轮仅写本报告与独立 fixtures；未修改产品、运行用户笔记应用、读取原 notes 库、使用真实账户或修改线上配置。
 
 ## 阻塞摘要
 
@@ -216,3 +216,44 @@ Android 回跳为 `com.local.notesclone.auth://callback`。正式 cybernote 产�
 此时没有冻结的 native headless 可执行包，也没有已执行的真实 app 授权 smoke。本轮没有占用 17897、启动用户应用、创建 Keychain grant 或运行 notes UI 自动化。现 Rust headless 固定 Action 已有 signIn/setEnabled/syncDevice；既有 `scripts/verification/account109-headless-driver.mjs` 的 OPS 尚不接受这些新操作，不能直接拿旧 driver 宣称可运行真登录。若后续执行，须在本轮独立 fixture/私密副本加入相同的固定白名单，并与作者明确唯一端口/进程归属；授权 URL/callback 仍只走本轮 0700 私密目录与 0600 文件，禁止 token 注入。没有为此新增第二套网络 harness。
 
 UI 留给用户的手动记录只需沿用 `docs/verification/cyberbus120/TEST-CASES.md`，在新准确包上记录：两个授权入口/回跳与取消；设备名称、在线/离线与未知/空库摘要；暂停后仍发现设备；显式开启前后的本地资料保全；三方向动作/进度/终态；退出、网络失败恢复与冷启；多窗口保存/附件/冲突/inbox。每例记录包 SHA、起止状态及是否满足预期；未操作不填 PASS。当前没有生成或声明用户可手测的新包。
+
+## 0f3cd922 有界修复复审
+
+2026-11-18，独立复审准确提交 **`0f3cd92236cbd60ea7d84b3c133aabe44e8239b7`**，仅收敛 A2/A3/A4/A6。结论：**PASS，可合并本轮核心与 CLI 范围，没有新增阻断**。A5 保持已接受的明确迁移限制，不追加历史 grant 在线撤销、设备测试或真实原生账户烟测门槛。
+
+### 四项 finding 的关闭依据
+
+| ID | 结论 | 源码及独立执行证据 |
+| --- | --- | --- |
+| A2 | **关闭** | `mod.rs:897–943` 的 `LogoutReceipt` 先要求 SDK `local_closed=true` 且无本地错误，单独保留云失败/未知。`logout_bus` 通过真实 `GetAuthState.refresh_supported` 选择 RevokeGrant/LocalOnly；固定 SDK 中该字段来自内存或 protected vault 是否存在 grant，不是静态能力。`finish_local_logout:613` 在报告云错误前已禁用内容、重播 release、清本地 binding 并保留有限错误。真实离线 SDK 无 grant 的连续两次退出、云失败/未知收据及本地失败拒绝用例全部通过。 |
+| A3 | **关闭** | `worker.rs:374–440` 的生产 `lifecycle_error/worker_phase` 优先投影 reauth、Degraded、persistence pending、关闭和网络失败，paused 不再覆盖错误；worker 每轮调用此函数，再交 `fail`。`mod.rs:414–424` 将显式 SyncNow 的失败写入当前 generation 状态。相同生产投影函数的连续健康→失效→恢复 typed snapshots 测试在 enabled true/false 均通过；内容 admission 的真实 lease / owner 检查保持不变。 |
+| A4 | **关闭** | 实际 Rust `SafeError` 序列化 → 实际 `account-client.ts` 校验/IPC/恢复动作检查通过。SDK code 只接受整数 1–26 且只适用于 `account_sdk_failed`；unknown outcome/deadline 保留类别，额外字段与错误组合仍拒绝；显示使用固定本地文案。5 个真实序列化样本通过，11 个非法组合全部被拒绝，`pnpm typecheck` 通过。 |
+| A6 | **关闭** | `worker.rs:476–530` 对未发布/其他应用类型 profile 保持明确跳过，对本地或 SDK 已认证且声明 Notes 类型的 profile 执行 `profile(d)?`。错误清 catalog 并向 worker/账户传播，不再返回成功空目录。首次损坏、已有历史后版本不兼容、canonical wrapper 内语义损坏 summary 三类测试通过。 |
+
+退出后的后续动作也核对了源码：云撤销失败时，第一次 signOut 仍返回该有限错误，但 binding/profile 已本地清理；再次 signOut 使用无 grant 的 LocalOnly，不再永久卡在 Unsupported。错误会话发起 signIn 若先遇云撤销失败，会先完成本地退出并返回错误；用户再次明确 signIn 可进入 AuthStart，不保留旧 binding 阻断重登。AuthCallback 已提交后的取消也复用同一清理路径。这些完整 Tauri Runtime 动作序列的结论来自源码链路和收据/真实离线 SDK 子路径组合，**没有运行真实云端失败后的原生端到端序列**。
+
+既有精确限制仍保留：旧 worker 已异常结束时，首次 `stop_network` 会在取走并 await 旧任务后返回其错误，本次动作不会宣称退出成功；再次明确操作才能继续 stop/logout。修复没有将该失败伪装为成功。A3 的 typed snapshots 测试直接调用生产投影函数，**不是**向已运行 Tauri Runtime 注入完整 SDK 事件；本轮通过不夸大其覆盖。
+
+### 冻结输入与独立 CLI 结果
+
+被测 detached checkout：
+
+`/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/cyberbus121-review-0f3cd922-kuiqunh8`
+
+本次检查由独立审阅者直接运行。node_modules 链接仅提供现有依赖，Rust/TS/DTO 脚本均读取冻结提交；未使用作者 dirty 源码。每个 subprocess 上限 240s，无 timeout。精确 argv、环境、exit、耗时见 [results.json](fixtures/cyberbus121-account-0f3cd922/results.json)，输入与变更范围见 [scope.json](fixtures/cyberbus121-account-0f3cd922/scope.json)。所有 cargo 命令附带 `--offline --locked --manifest-path src-tauri/Cargo.toml`：
+
+| 检查 | 独立结果 | 耗时（含编译） |
+| --- | --- | --- |
+| `cargo check` | PASS，exit 0 | 12.530s |
+| `cargo check --features sync-e2e` | PASS，exit 0 | 8.784s |
+| `cargo test --features sync-e2e --lib account::` | **35 passed / 0 failed**，exit 0 | 24.261s |
+| `node scripts/verification/cyberbus121-account-dto.mjs` | **5 native fixtures；11 invalid combinations rejected**，exit 0 | 0.982s |
+| `pnpm typecheck` | PASS，exit 0 | 5.125s |
+
+原始日志同目录：`check.log`、`sync-e2e-check.log`、`account-tests.log`、`dto.log`、`typecheck.log`。bundle resources/externalBin 为空的 `TAURI_CONFIG` 仅用于本次构建检查；未验证最终包资源/sidecar。账户测试包含本机 TCP callback 与临时 Store fixtures，没有启动用户应用、访问原 notes、创建真实账户/设备或 Keychain grant、修改线上服务。DTO 脚本再次执行一个选定 Rust fixture 测试，再内存构建真实 TS 校验器，没有 WebView/UI。
+
+该修复只改 7 个作者文件，core tree 仍为 `3997526752321402e0096e90555b54c85ec9c003`，`vendor/cyberbus` tree 仍为 `0055afb270d2aa0d17b80cc5fb53637e03b24c85`，沿用前轮与 core review02 的已核对依赖。未改的方向 3 项、headless 7 项、e2e contract 4 项沿用准确 `487c8fde` 的独立结果，**未在此 SHA 重跑，也不算作新增通过数**。
+
+### 合并结论与未验边界
+
+本轮 A1/A2/A3/A4/A6 无剩余合并阻断，A5 已按用户指定迁移契约接受。**可以合并 `0f3cd922`，不代表真实原生账户链已经交付验收通过。** harness/Store/Noise 或上述 CLI 均不能证明原生 AuthStart→callback→AuthRestore、真实云端撤销及完整多端账户链；这些仍为 **tests incomplete**。按用户本轮边界，不为补齐它们延迟合入，不运行新增在线/设备/UI 自动化；由 Tesla 的组合 Mac 包及用户手动 UI 记录补齐。审阅者仅提交本报告与本轮证据 fixtures，没有合入其他 README 或产品文件。

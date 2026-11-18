@@ -1,0 +1,77 @@
+{
+  "baseline": "0f3cd92236cbd60ea7d84b3c133aabe44e8239b7",
+  "cwd": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/cyberbus121-review-0f3cd922-kuiqunh8",
+  "scope": "No native app, UI, real account/device, Keychain, remote config or additional online test. Existing local TCP callback and fixture Store tests run as part of account::.",
+  "environment": {
+    "CARGO_TARGET_DIR": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "PROTOC": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/protoc-bin-vendored-macos-aarch_64-3.3.0/bin/protoc",
+    "TAURI_CONFIG": "{\"bundle\":{\"resources\":[],\"externalBin\":[]}}"
+  },
+  "checks": [
+    {
+      "name": "check",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml"
+      ],
+      "exit": 0,
+      "seconds": 12.53
+    },
+    {
+      "name": "sync-e2e-check",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--features",
+        "sync-e2e"
+      ],
+      "exit": 0,
+      "seconds": 8.784
+    },
+    {
+      "name": "account-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--features",
+        "sync-e2e",
+        "--lib",
+        "account::"
+      ],
+      "exit": 0,
+      "seconds": 24.261
+    },
+    {
+      "name": "dto",
+      "command": [
+        "node",
+        "scripts/verification/cyberbus121-account-dto.mjs"
+      ],
+      "exit": 0,
+      "seconds": 0.982
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exit": 0,
+      "seconds": 5.125
+    }
+  ]
+}
