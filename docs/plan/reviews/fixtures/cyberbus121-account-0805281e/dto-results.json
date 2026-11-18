@@ -1,0 +1,30 @@
+{
+  "baseline": "0805281ed14775c713de48da02fdd35cabcce141",
+  "scope": "actual frontend validators only; synthetic finite DTOs; no Rust runtime or network",
+  "outcomes": [
+    {
+      "name": "control_known_network_error_roundtrips",
+      "pass": true
+    },
+    {
+      "name": "native_sdk_error_is_accepted_by_status",
+      "pass": false
+    },
+    {
+      "name": "native_sdk_error_is_preserved_by_ipc_error_projection",
+      "pass": false
+    },
+    {
+      "name": "account_unknown_outcome_retains_its_finite_category",
+      "pass": false
+    },
+    {
+      "name": "account_deadline_exceeded_retains_its_finite_category",
+      "pass": false
+    },
+    {
+      "name": "control_empty_summary_remains_distinct_from_missing",
+      "pass": true
+    }
+  ]
+}

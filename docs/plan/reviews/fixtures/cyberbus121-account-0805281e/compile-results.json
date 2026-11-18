@@ -1,0 +1,41 @@
+{
+  "baseline": "0805281ed14775c713de48da02fdd35cabcce141",
+  "checkout": "/private/tmp/cyberbus121-review-0805281e-zfwu_kzv",
+  "env": {
+    "CARGO_TARGET_DIR": "/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "PROTOC": "/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/protoc-bin-vendored-macos-aarch_64-3.3.0/bin/protoc",
+    "TAURI_CONFIG": "{\"bundle\": {\"resources\": [], \"externalBin\": []}}"
+  },
+  "results": [
+    {
+      "name": "default",
+      "cmd": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml"
+      ],
+      "exit": 101,
+      "seconds": 45.811
+    },
+    {
+      "name": "sync-e2e",
+      "cmd": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--features",
+        "sync-e2e"
+      ],
+      "exit": 101,
+      "seconds": 13.049
+    }
+  ]
+}

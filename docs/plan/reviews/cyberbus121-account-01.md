@@ -1,0 +1,161 @@
+# CyberBus121 account independent review 01
+
+日期：2026-11-18。结论：**BLOCKED / tests incomplete**。
+
+本轮唯一审阅基线为 **`0805281ed14775c713de48da02fdd35cabcce141`**（`0805281e`，作者提交标题本身标明 tests incomplete）。不是当前工作区后续 HEAD 的结论，不追认作者此前或后续的绿灯。审阅者未参与账户源码开发。本轮仅写本报告与独立 fixtures；未修改产品、运行用户笔记应用、读取原 notes 库、使用真实账户或修改线上配置。
+
+## 阻塞摘要
+
+| ID | 优先级 | 确定发现 | 证据范围 |
+| --- | --- | --- | --- |
+| A1 | P1 | 默认与 sync-e2e 均因 E0499 无法编译 | 两次独立 cargo check 均 exit 101 |
+| A2 | P1 | 本地 grant 已清除但云端撤销失败后，退出/重新登录可能永久卡住 | 真实离线 SDK + 原样提取 logout 方法验证无 grant 重试分支；失败撤销后的完整 native 场景尚未运行 |
+| A3 | P2 | 已运行 worker 把 SDK ReauthRequired/Degraded 等都投影为 connecting/paused 并清错 | 固定基线源码链路审计 |
+| A4 | P2 | 新 Rust SDK 错误与严格前端 DTO 不兼容，deadline/unknown outcome 类别也丢失 | 实际前端模块独立探针 2 pass / 4 fail |
+| A5 | P2 | 成功 signOut 没有退役旧 `.account/grant.json`，还存在保留它的测试 | 固定基线源码；不读取用户真实 grant |
+| A6 | P2 | 已声明 Notes 类型但不兼容/损坏的已认证 profile 被静默跳过 | 固定基线源码；首次发现可成为空 devices，已有历史则成为离线/无摘要 |
+
+core F1/F2 的 `b1dcdb0a` 及 core F3/F4 修复是组合验证依赖，**不重复列为账户自身 finding**。见下文依赖范围。
+
+## A1 — P1：checkpoint 两种 feature 配置均无法编译
+
+`src-tauri/src/account/transport.rs:336` 创建的 `prepare` future 可变借用 `mappings`，`tokio::pin!` 后其析构作用域仍覆盖 `:370` 的第二次 `mappings.push(sync)`，编译器报 E0499。普通与 `--features sync-e2e` 均复现，分别 45.811s / 13.049s，exit 101。与作者证据最后一次失败一致；作者早于该修改的成功检查不能覆盖此提交。
+
+须收窄 preparation future 的真实存活作用域，同时保持取消后 await、mapping close/join 和 pairing 后新建单次 Sync mapping 的边界，再对新的准确 SHA 重跑两项检查及定向 Rust 测试。此基线没有可供真实 native 账户测试的已验证可执行包。
+
+## A2 — P1：把云端撤销成功作为本地清绑定前提，无法收敛无 grant 的退出
+
+位置：`src-tauri/src/account/mod.rs:606`（logout）、`:492`（signOut）、`:434`（错误会话重登前退出）。
+
+`logout` 即使收到 `local_closed=true` 且 `local_error=None`，仍在任何 `cloud_error` 或非 Succeeded 云端状态下返回错误。signOut 随即通过 `?` 跳过 `set_enabled(false)`、`clear_session` 和状态重置。SDK 的真实行为是：`submit_logout` **先**取走内存及持久 vault grant、保存本地关闭，再执行有预算的云端撤销；云端失败不恢复 grant。之后 RevokeGrant 再执行时已无 grant，返回 Unsupported。账户层仍拒绝完成清理。已有 profile 的错误会话重新登录也必须先过同一 logout，因此无法用正常重登退出这个状态。
+
+独立 fixture 使用真实 `notes-cyberbus::Bus`/固定 SDK、仅内存安装存储及 `.invalid` 配置，没有 NetworkStart、真实授权或 Keychain。runner 从准确 commit **原样提取** `Runtime::logout`，嵌入只提供 `bus()` 的最小宿主；不是完整 Tauri Runtime 测试。无 grant 路径实测：
+
+```json
+{"local_closed":true,"local_error_present":false,"cloud_status":4,"cloud_error_code":10,"account_logout_ok":false,"retry_ok":false}
+```
+
+4=Unsupported cloud status；10=SDK Unsupported error。fixture 正常退出，仅确认此基线方法拒绝已完成本地关闭的重复退出。它未模拟真实 Logto 撤销失败或测得任何真实 grant 撤销结果。该后果由 SDK 先删除 grant 的源码与上述调用链确定。
+
+修复应区分本地关闭收据和云端撤销收据：本地确认关闭后可完成本地禁用/清绑定，独立保留云端失败/未知事实，不能声称远端已经撤销；真实本地清理失败仍须阻塞。不得重新建立旧 AuthClient owner 或用删除资料库解决。至少覆盖无 grant 的幂等退出、云端失败后再次退出/重登、AuthCallback 提交后取消，以及本地持久化失败。
+
+另一个精确限制：`stop_network:376` 在旧 worker 以非 Cancelled 错误终止时提前返回，本次 signOut 尚未发送 AuthLogout。它当前会返回错误，**不是成功退出**；新版本应有明确重试/收敛测试。不要将此路径或进程退出视为云端撤销证据。
+
+## A3 — P2：长期 worker 丢失真实授权失效与恢复错误
+
+位置：`src-tauri/src/account/worker.rs:343`、`:548`、`:626`；`src-tauri/src/account/mod.rs:206`、`:542`。
+
+worker 的 `authenticated/available` 正确拒绝 ReauthRequired、Degraded、过期 lease、persistence pending 等状态，内容授权会 fail closed。但 worker **不检查这些状态的原因/错误**：没有 child 且 enabled 时调用 `set_phase(Connecting)`；未 enabled 则 `set_phase(Paused)`。`set_phase` 无条件清空 status.error。因而登录后发生明确 `reauth_required`、认证撤销或网络退化时，界面只能看到持续“连接中”或正常“暂停”，不能区分需要重新登录与可恢复网络失败。`SyncNow` 中恢复失败直接返回 IPC error，不会把该失败写为长期 worker 状态；普通 polling 不能补回这项事实。
+
+这与 core F1 的 watch 不能恢复是两件事：即使 core 正确重建 watch，账户层仍会吞掉终端 auth 状态。须用有限、前端兼容的错误投影 SDK auth/network 状态：保持 grant/binding 的真实语义，网络失败提供显式恢复；明确 reauth 显示重新登录入口；暂停只表示内容意图，不覆盖认证错误。测试在**已登录且 worker 已启动后**注入真实类型事件/可控 SDK 失败，不能仅测启动 wait_account 或 `authenticated=false`。
+
+## A4 — P2：原生安全错误跨前端边界失败
+
+位置：`src-tauri/src/account/types.rs:191`、`:370`、`:404`、`:513`；`src/account-client.ts:22`、`:135`、`:277`。
+
+Rust 的 `Error::BusCode` 序列化为 `account_sdk_failed` + `cyberbusCode`，例如固定 SDK Internal=26。前端 `record` 不允许 `cyberbusCode`，errorCodes 也不含该新类别：合法 status.error 被拒为无效数据，IPC 错误被 `accountIPCError` 丢为 undefined。`account_unknown_outcome` 和 `account_deadline_exceeded` 无额外字段时会走未知类别降级，丢失原有限错误类别；IPC 也不接受它们。
+
+独立 `dto-probe.mjs` 在内存构建**准确 commit 的真实 account-client.ts** 并调用导出的校验器；没有复制校验实现、启动应用或调用 IPC。2 项控制通过（既有 network error、未知摘要与真实空库摘要区别）；4 项期望契约失败（SDK status、SDK IPC、unknown outcome、deadline）。结果见 fixture JSON。Rust 序列化字段由源码和作者已有 `sdk_errors_are_finite_without_upstream_payload` 测试声明交叉核对；本轮该 Rust 测试因 A1 未运行。
+
+须在维持严格白名单与无原始上游文本的前提下，统一 native/TS 类型、允许组合、有限错误展示与恢复动作；不能简单放开任意字段。新增跨真实 Rust 序列化和实际 TS 校验的契约 fixture 后复审。
+
+## A5 — P2：旧持久 grant 未退役，退出仅覆盖新 owner
+
+位置：`src-tauri/src/account/private.rs:250`、`:377`；`src-tauri/src/account/provider.rs:13`；`src-tauri/src/account/mod.rs:492`。
+
+旧实现 `0805281e^:src-tauri/src/account/mod.rs:147` 使用 `.account/grant.json` 构建 AuthClient。新 provider 只管理 CyberBus 受保护安装/vault，没有导入或退役该文件；clear_session 只记住 paused session、删除 binding、完成 adoption marker。测试 `signout_remembers_paused_device_without_retaining_current_binding_or_touching_grant` 还写入合成旧 grant 并断言清理后字节不变。
+
+迁移要求重新登录是可接受边界；**不自动导入旧 grant 本身不是缺陷**。本 finding 在于：旧刷新/待撤销材料可能保持磁盘原状，新登录及其成功 signOut 没有明确发现、禁用、清除/撤销或报告未退役状态。迁移设计仅写“旧授权材料不自动导入”，没有覆盖其退出后的生命周期。不能把成功新 SDK logout 宣称为旧授权也撤销完成。本轮没有读真实 grant，更没有推断真实旧 token 当前仍有效。
+
+须定义只执行一次、可恢复的旧材料退役策略，明确本地清理与云端撤销失败/未知的收据。不能恢复旧长期 owner、调用旧 coordinator、导入旧 grant 为新 SDK 会话、删除 `.account` 整目录或 notes/附件；旧 noise/session/history 仍有本地恢复用途。若暂不实施，至少精确限制退出声明并把旧授权退役列为未完成，而不是默默留下还能被旧版本恢复的材料。
+
+运行链审计：新 account 目录生产路径未发现 `AuthClient::new`、旧 coordinator 请求或 CyberGrid Session 创建。Cargo 仍保留 `account-auth` 供有限错误枚举/转换使用；存在依赖不等于第二个运行 owner。上述是当前源证据，**不是删除 legacy 授权材料的证明**。
+
+## A6 — P2：损坏 Notes profile 被当作设备不存在
+
+位置：`src-tauri/src/account/worker.rs:374`、`:423`。
+
+`profile(d)` 会把 Notes semantic version、名称、canonical protobuf、JSON schema、summary 或 roster 校验失败归为 DeviceIncompatible；`update_catalog` 对**所有**此类错误统一 `continue`，随后成功 `catalog.replace(rows, roster)`。因此一个 SDK 已认证、声明 Notes PROFILE_TYPE 但内容损坏或版本不兼容的在线 peer，首次发现时不会出现在设备表且无错误；若所有可见 peer 都这样，会给出正常空 devices。已有历史记录时则投影为离线、隐藏摘要，仍没有说明真实的不兼容原因。
+
+Gate 不会因此授权该 peer，这不是跨账户接收或伪造空库数量的问题；问题是目录错误被吞成空/离线成功。未知应用类型或尚未发布 profile 的瞬态可另行规定，但已声明 Notes profile 的无效内容至少要保留有限错误/不兼容状态或明确使目录失败，不能默默忽略所有解析失败。需要 first-discovery、历史设备升级不兼容、损坏 summary 三种用例。
+
+## 已核对的源码链与尚未验证边界
+
+以下为固定基线的源码观察，**不代替运行验收通过**：
+
+- AuthStart/AuthCallback/AuthRestore/AuthLogout 全部走单一 Bus；status 只读，不发起授权或网络。macOS provider 为 KeyringStore，Android 为 JNI CyberBusSecureStore；没有启用生产明文 fallback。本轮未操作真实 Keychain/Android。
+- workspace 为 issuer/subject/product 分域 SHA-256 派生 UUID；client ID/host/时间不进入派生。设备历史路径为 `.account/devices/<workspace>.json`，registry UUID 与 SDK peer32、协议 UUID/Noise key 分开。
+- `worker::authenticated:343` 检查真实 SDK phase、owner、persistence 状态与墙钟 validation lease；`available` 另查 directory_valid、network running/reachable/error。`peer_bound:389` 绑定当前 generation、online、last_authenticated_at 及经过校验的 Notes profile。`enrollment::Gate::authorize:127` 每请求调用该 closure。**没有发现完全缺失 SDK 真实 lease 校验**。
+- Bootstrap `transport.rs:156` 先 read，再 `claim_bootstrap_context`，之后验证 nonce/peer/protocol UUID/Noise pin 并 admit。当前 core claim 的 F3 安全问题尚待其独审修复；本报告不重复算 account finding。
+- `Store::sync_adoption_preflight` / `adoption_projection_check` 明确拒绝旧 inbox、多 head 冲突、未投影版本和内容/附件元数据或字节不一致；最终 transaction 前后重复检查，保留业务 rows 与 managed attachments，再新建 causal tables。未发现 `skipInbox` 清空绕过。遇冲突/inbox 时**显式阻塞迁移**，不是证明可以自动迁移所有冲突；仍需真实恢复旧账户处理后再迁移用例。
+- adapter 使用已有 probe/prepare/adoptionMedia/release，commit 后 Store instance 与 backend epoch 改变，保留 Session/editor token，保留 partial release 重播；没有用 destructive notes-access 替代迁移。实际多窗口 quiet/flush ACK、中文原文、附件 SHA 与冲突保全还未运行。
+- 主动 `Client::cycle(direction)` 与被动 `wire::Handler` 均执行 push/pull/both 权限，账户 mode 不启动长期自动 sync worker；目录/重连不直接重放内容动作。仍需真实方向隔离验证。
+- RequestCancellation 的 23 分钟绝对 deadline 从操作准备前开始；timeout/cancel 请求停止后等待工作拥有的 terminal receipt，mapping close 也 await。blocking_request 保留 Busy 并重试 disconnect 直到确认退役。Rust 借用错误修复后还需故障注入测试；没有验证长期卡住的 shutdown/retirement、blocking 排队后撤销、Store 最终提交时的 lease/fence 竞态，不能仅凭调用前后 Gate 校验宣称所有迟到写任务都拒绝。
+- 摘要发布直接传播 `account_summary()?` 错误，没有将 Store 错误填成零数量；离线或内容未 ready 的 summary=None 表示未知。A6 是 profile 错误被跳过的另一条路径。
+
+## 命令、结果与隔离范围
+
+作者工作区起始 HEAD=0805281e，但 `src-tauri/src/account/transport.rs` 当时已有未提交修改。因此创建 detached 冻结 checkout `/private/tmp/cyberbus121-review-0805281e-zfwu_kzv`，编译与源码判断全部使用该 checkout/`git show 0805281e:path`。本报告写入作者 worktree；后续 HEAD 改变不影响本报告基线，未审查其 dirty 或新增提交。
+
+环境与完整结果见 [compile-results.json](fixtures/cyberbus121-account-0805281e/compile-results.json)。两项精确命令（cwd=冻结 checkout）：
+
+```sh
+cargo check --offline --locked --manifest-path src-tauri/Cargo.toml
+cargo check --offline --locked --manifest-path src-tauri/Cargo.toml --features sync-e2e
+```
+
+```text
+CARGO_TARGET_DIR=/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target
+CARGO_PROFILE_DEV_DEBUG=0
+CARGO_PROFILE_TEST_DEBUG=0
+PROTOC=/Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/protoc-bin-vendored-macos-aarch_64-3.3.0/bin/protoc
+TAURI_CONFIG={"bundle":{"resources":[],"externalBin":[]}}
+```
+
+每项独立 240s subprocess timeout，正常在上述时间返回失败。复用既有缓存；TAURI_CONFIG 仅为冻结 checkout 缺打包 sidecar 的编译检查覆盖，**不验证 sidecar、bundle、发布或新平台构建**。输出 [default-check.log](fixtures/cyberbus121-account-0805281e/default-check.log)、[sync-e2e-check.log](fixtures/cyberbus121-account-0805281e/sync-e2e-check.log)。因共同编译阻塞，没有继续重复运行必然同处失败的全 app 单测。
+
+独立 DTO 命令（fixture 在作者 worktree，输入仍冻结）：
+
+```sh
+node docs/plan/reviews/fixtures/cyberbus121-account-0805281e/dto-probe.mjs \
+  /private/tmp/cyberbus121-review-0805281e-zfwu_kzv \
+  /Users/water/work/2026/Apple-Notes-Clone
+```
+
+exit 1，2 pass / 4 fail，见 [dto-results.json](fixtures/cyberbus121-account-0805281e/dto-results.json)。dependency root 只提供已有 Vite/Tauri API 构建工具；被测源码来自冻结输入，build.write=false。
+
+独立 logout 命令：
+
+```sh
+python3 docs/plan/reviews/fixtures/cyberbus121-account-0805281e/logout-probe.py \
+  --candidate /private/tmp/cyberbus121-review-0805281e-zfwu_kzv \
+  --target-dir /Users/water/work/2026/Apple-Notes-Clone/src-tauri/target \
+  --protoc /Users/water/.cargo/registry/src/mirrors.ustc.edu.cn-38d0e5eb5da2abae/protoc-bin-vendored-macos-aarch_64-3.3.0/bin/protoc
+```
+
+runner 在新临时目录生成独立 Cargo manifest 与提取方法的 host；执行 `cargo run --offline --manifest-path <temporary>/Cargo.toml`，总 subprocess timeout 180s。本轮 exit 0（断言确认基线拒绝重复退出），结果 [logout-results.json](fixtures/cyberbus121-account-0805281e/logout-results.json)。不因该探针正常退出而声称 A2 已修复。编译日志 [logout-stderr.log](fixtures/cyberbus121-account-0805281e/logout-stderr.log)。
+
+## core 集成依赖
+
+当前账户基线包含原 core 与 23 分钟 deadline patch，但未包含用户指定的 F1/F2 修复 `b1dcdb0a`。依赖独审报告位于 core worktree 的 `docs/plan/reviews/cyberbus120-core-01.md`：F1=revocation 后 watch 基线不能主动恢复；F2=SDK EOF 未排空 owner/tasks；F3=Bootstrap claim 缺 receiver-only capability 且 slot 重建后可重放；F4=可选 file-vault lock path 替换后双 owner。F3/F4 正由 core 独审推进。本账户报告没有对后续补丁重新运行或宣称关闭它们；生产 KeyringStore 也不被等同为可选 file backend。
+
+账户后续准确 SHA 须合入经独审的 core 补丁再组合验证。A3 的 auth 状态投影和 A2 的退出收敛属于账户独立责任，不能只靠 core patch 关闭。
+
+## 新 SHA 与真实账户验证准备
+
+收到用户指定的新 SHA 后重新冻结输入，先重跑两种 check 与账户/方向/Session 保全定向测试，再决定可执行包是否满足真实 native 测试前提；目前不接受交付。后续至少覆盖：primary A/B 同账户发现、显式启用、完整中文富文本与 PNG/文件 SHA；push/pull 隔离；离线/重启恢复与暂停不重放；异账户拒绝；并发 head/待应用 inbox 阻止迁移；多窗口保存与 partial release；取消、deadline、退出后无迟到写任务；旧 grant 退役。单独 headless apply 不证明真实 renderer ACK。
+
+复用 Harvey 的真实网络 harness/fixture，不再新增重复独立网络 harness。账户验证只从 app 的 AuthStart→授权 URL 私有文件→浏览器 callback→同次 AuthCallback 交换进入，禁止 token 注入。已有公开输入：
+
+```json
+{"issuer":"https://auth.x.aixgg.com/oidc","client_id":"il4abzwbu1ohjwv5mb667","resource":"https://cyberbus.x.aixgg.com/api","product_id":"cybernote","redirect_uri":"http://127.0.0.1:17897/callback","bootstrap_peers":["tcp://43.155.169.102:11010","udp://43.155.169.102:11010"]}
+```
+
+Android 回跳为 `com.local.notesclone.auth://callback`。正式 cybernote 产品隔离，不复用 sample cyberbus。私密输入只记录路径，不含账户值：
+
+- `cath-w:/home/water/work/codex-work/logto/.cybernote-product-20261118T113336Z/qa-primary/{public-config.json,test-account.json}`
+- 同父目录 `qa-secondary/{public-config.json,test-account.json}`。
+- callback driver：`cath-w:/home/water/work/codex-work/cyberbus/linux-env-002/source/deploy/drive-hosted-login.py`。使用 `--private-dir`、`--authorization-file`、`--callback-file`；不要使用 hardcoded 18765 的 `--deliver-loopback` 或全局改 sample。用本轮 0700 私密副本适配 driver/dispatcher，把 callback 交给本候选 17897 的同次 SDK 交换。
+- native headless 仅 debug+sync-e2e+`NOTES_SYNC_E2E=1`+`NOTES_SYNC_E2E_HEADLESS=1`，授权 URL 仅落 `NOTES_SYNC_E2E_AUTHORIZATION_FILE` 指向的本轮私密文件。stdout/回执不得出现 URL query、凭据、token、grant 或 `.env` 真实内容。
+
+以上 QA 路径来自既有已授权服务调查；本轮未 SSH 重读凭据、创建新账号、发起线上登录、重启或更新服务。
