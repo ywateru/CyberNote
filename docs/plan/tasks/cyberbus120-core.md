@@ -1,7 +1,7 @@
 ---
 id: cyberbus120-core
 scope: crates/notes-cyberbus
-status: ready
+status: verified
 depends-on: []
 ---
 
@@ -23,3 +23,5 @@ depends-on: []
 ## verification
 
 crate cargo check/test，覆盖加密存储的重启、篡改、丢失、独占；SDK 离线真实生命周期；设备与 auth 状态机；桥的分块/顺序/限制/取消/EOF。提供明确公开 API 供账户任务调用，记录真实网络未验边界。独立验证员另行审查。
+
+2026-11-18：产品修复 `2b24104a` 经 [独立复审 02](../reviews/cyberbus120-core-02.md) 通过，27 项产品测试、8 项独立 fixture 及离线编译通过；主工作区已合入。这里只完成 core 模块门槛，不代替账户/原生 UI/真机验收。
