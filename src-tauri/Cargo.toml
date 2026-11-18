@@ -12,7 +12,9 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 [dependencies]
-cybergrid-sdk = { path = "../vendor/cybergrid-sdk" }
+notes-cyberbus = { path = "../crates/notes-cyberbus" }
+prost-types = "0.14"
+prost = "0.14"
 account-auth = { path = "../crates/account-auth" }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 jsonwebtoken = "9"
@@ -56,6 +58,7 @@ resvg = { version = "0.45", default-features = false, features = ["text"] }
 ttf-parser = "0.25.1"
 roxmltree = "0.20"
 [target.'cfg(target_os = "android")'.dependencies]
+cyberbus-auth = { git = "https://github.com/osd-pub/CyberBus.git", rev = "359465e83bd74b571a963f3d1fdc238f50169919" }
 jni = "0.21"
 ndk-context = "0.1"
 [target.'cfg(target_os = "macos")'.dependencies]

@@ -2,7 +2,7 @@
 //! The policy and Noise peers are pinned, but no original data or credentials
 //! are read. Traces contain only fixed backend method names and SyncError.
 use super::*;
-use crate::account::enrollment::{Claims, Gate};
+use crate::account::enrollment::Gate;
 
 struct TracedStore {
     inner: StoreBackend,
@@ -72,24 +72,16 @@ fn backend(store: Store, device: String, staging: NetworkStaging) -> Arc<TracedS
     })
 }
 fn admit(gate: &Gate, identity: &IdentityStore, workspace: &str) {
-    let now = crate::sync::identity::now();
-    gate.renew_local(now + 600);
-    // Synthetic trusted enrollment boundary. The actual Gate still enforces
-    // expiry, exact device/static Noise identity and route throughout the socket.
-    gate.admit(&Claims {
-        iss: "fixture".into(),
-        aud: "fixture".into(),
-        sub: "fixture".into(),
-        account_issuer: "fixture".into(),
-        product_id: "fixture".into(),
-        workspace_id: workspace.into(),
-        device_id: identity.device_id().unwrap(),
-        noise_public_key: identity.public_key().unwrap(),
-        purpose: "fixture".into(),
-        iat: now,
-        exp: now + 600,
-        jti: uuid::Uuid::new_v4().to_string(),
-    });
+    let _ = workspace;
+    let device = identity.device_id().unwrap();
+    let key = identity.public_key().unwrap();
+    gate.bind_lifecycle(Arc::new(|| true));
+    let expected_device = device.clone();
+    let expected_key = key.clone();
+    gate.bind_peers(Arc::new(move |peer, d, k| {
+        *peer == [9; 32] && d == expected_device && k == expected_key
+    }));
+    gate.admit([9; 32], &device, &key).unwrap();
 }
 fn seed(store: &mut Store, text: &str, attachments: &[(&str, &str, &[u8])]) -> String {
     let id = store.action(json!({"type":"createNote"})).unwrap()["id"]
@@ -191,7 +183,8 @@ fn actual_store_transfer(attachment: bool, pull: bool) {
         bservice.pair(&aservice.invitation(&format!("ws://{aa}/")).unwrap())
     } else {
         aservice.pair(&bservice.invitation(&format!("ws://{ba}/")).unwrap())
-    }.unwrap();
+    }
+    .unwrap();
     assert!(paired.ready);
     assert_eq!(abackend.content_calls(), 0, "pair must not cycle content");
     assert_eq!(bbackend.content_calls(), 0, "pair must not cycle content");
@@ -213,7 +206,8 @@ fn actual_store_transfer(attachment: bool, pull: bool) {
             bid.peer_for_device(&ai.device_id).unwrap()
         } else {
             aid.peer_for_device(&bi.device_id).unwrap()
-        }.as_deref(),
+        }
+        .as_deref(),
         Some(paired.peer_id.as_str())
     );
     let agate = Arc::new(Gate::default());

@@ -1,39 +1,11 @@
-use super::types::{Error, Result};
+//! Public deployment pins. Populated only from the server audit, never IPC/env.
+use super::types::Result;
 pub const ISSUER: &str = "https://auth.x.aixgg.com/oidc";
 pub const CLIENT_ID: &str = "il4abzwbu1ohjwv5mb667";
-pub const RESOURCE: &str = "https://cybernote.app/api";
+pub const RESOURCE: &str = "https://cyberbus.x.aixgg.com/api";
+pub const PRODUCT_ID: &str = "cybernote";
 pub const MAC_REDIRECT: &str = "http://127.0.0.1:17897/callback";
 pub const ANDROID_REDIRECT: &str = "com.local.notesclone.auth://callback";
-pub const SYNC_PORT: &str = "cybernote-sync-v1";
-pub const ENROLL_PORT: &str = "cybernote-enroll-v1";
-pub const COORDINATOR_TRANSPORT_ORIGIN: &str = "https://cybernote-sync.aixgg.com";
-// Stable proof identity, independent of the HTTP transport hostname.
-pub const ENROLLMENT_ISSUER: &str = "https://cybernote-sync.vercel.app";
-pub fn origin() -> Result<String> {
-    let raw = COORDINATOR_TRANSPORT_ORIGIN;
-    let url = url::Url::parse(raw).map_err(|_| Error::Configuration)?;
-    if url.scheme() != "https"
-        || url.host_str().is_none()
-        || url[..url::Position::BeforeHost].contains('@')
-        || url.query().is_some()
-        || url.fragment().is_some()
-        || url.path() != "/"
-    {
-        return Err(Error::Configuration);
-    }
-    Ok(url.origin().ascii_serialization())
-}
-pub fn pinned() -> account_auth::PinnedConfig {
-    account_auth::PinnedConfig {
-        issuer: ISSUER.parse().expect("fixed issuer"),
-        client_id: CLIENT_ID.into(),
-        resource: RESOURCE.parse().expect("fixed resource"),
-        redirect_uris: vec![
-            MAC_REDIRECT.parse().expect("fixed callback"),
-            ANDROID_REDIRECT.parse().expect("fixed callback"),
-        ],
-    }
-}
 pub fn redirect() -> url::Url {
     if cfg!(target_os = "android") {
         ANDROID_REDIRECT
@@ -42,4 +14,23 @@ pub fn redirect() -> url::Url {
     }
     .parse()
     .expect("fixed callback")
+}
+pub fn pinned() -> Result<notes_cyberbus::ClientConfig> {
+    Ok(notes_cyberbus::ClientConfig {
+        issuer: ISSUER.into(),
+        client_id: CLIENT_ID.into(),
+        resource: RESOURCE.into(),
+        product_id: PRODUCT_ID.into(),
+        native_clients: std::collections::BTreeMap::from([(CLIENT_ID.into(), PRODUCT_ID.into())]),
+        redirect_uri: redirect().to_string(),
+        bootstrap_peers: vec![
+            "tcp://43.155.169.102:11010".into(),
+            "udp://43.155.169.102:11010".into(),
+        ],
+        listeners: vec![],
+        offline_access: true,
+        persist_grant: true,
+        enable_p2p: true,
+        cloudflare_fallback: None,
+    })
 }

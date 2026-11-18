@@ -1,292 +1,117 @@
+//! Authorization comes exclusively from the CyberBus authenticated account and
+//! peer profile. There is no coordinator JWT or trust in a TCP source address.
 use super::{
-    config,
     private::Binding,
-    types::{Error, NetworkStage, RequestFailure, Result},
+    types::{Error, Result},
 };
 use crate::sync::{
-    identity::{now, SyncError},
+    identity::{IdentityStore, SyncError},
     network::ReplicationPolicy,
 };
-use base64::{engine::general_purpose::URL_SAFE_NO_PAD as B64, Engine};
-use jsonwebtoken::{decode, decode_header, jwk::JwkSet, Algorithm, DecodingKey, Validation};
-use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, sync::Mutex};
-#[derive(Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub(crate) struct Profile {
-    pub schema_version: u8,
-    pub subject: String,
-    pub issuer: String,
-    pub product_id: String,
-    pub workspace_id: String,
+use sha2::{Digest, Sha256};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
+
+/// Domain + length-prefixed UTF-8 issuer, subject and product. UUID version 8
+/// identifies the application SHA-256 derivation; client and installation IDs
+/// intentionally do not participate. Input is an SDK-verified AccountSummary.
+pub(super) fn workspace(issuer: &str, subject: &str, product: &str) -> Result<String> {
+    if [issuer, subject, product]
+        .iter()
+        .any(|s| s.is_empty() || s.len() > 4096 || s.chars().any(char::is_control))
+    {
+        return Err(Error::OwnershipMismatch);
+    }
+    let mut hash = Sha256::new();
+    hash.update(b"cybernote/cyberbus/workspace/v1\0");
+    for field in [issuer, subject, product] {
+        hash.update((field.len() as u32).to_be_bytes());
+        hash.update(field.as_bytes());
+    }
+    let digest = hash.finalize();
+    let mut bytes = [0; 16];
+    bytes.copy_from_slice(&digest[..16]);
+    bytes[6] = (bytes[6] & 0x0f) | 0x80;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    Ok(uuid::Uuid::from_bytes(bytes).to_string())
 }
-#[derive(Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub(crate) struct Claims {
-    pub iss: String,
-    pub aud: String,
-    pub sub: String,
-    pub account_issuer: String,
-    pub product_id: String,
-    pub workspace_id: String,
-    pub device_id: String,
-    pub noise_public_key: String,
-    pub purpose: String,
-    pub iat: u64,
-    pub exp: u64,
-    pub jti: String,
-}
-#[derive(Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-struct Envelope {
-    schema_version: u8,
-    token: String,
-    expires_at: u64,
-}
-/// Constructed only after a signed local enrollment is verified against the
-/// fixed coordinator and authenticated owner. Cannot deserialize from IPC/disk.
+
+/// Native-only capability constructed after matching the verified SDK owner.
 pub(crate) struct VerifiedWorkspace {
     workspace: String,
     device: String,
     noise_key: String,
 }
 impl VerifiedWorkspace {
+    pub(super) fn from_binding(binding: &Binding) -> Result<Self> {
+        if workspace(&binding.issuer, &binding.subject, &binding.product_id)?
+            != binding.workspace_id
+        {
+            return Err(Error::OwnershipMismatch);
+        }
+        Ok(Self {
+            workspace: binding.workspace_id.clone(),
+            device: binding.device_id.clone(),
+            noise_key: binding.noise_public_key.clone(),
+        })
+    }
     pub(crate) fn workspace(&self) -> &str {
         &self.workspace
     }
-    pub(crate) fn matches(&self, identity: &crate::sync::identity::IdentityStore) -> bool {
+    pub(crate) fn matches(&self, identity: &IdentityStore) -> bool {
         identity.device_id().is_ok_and(|id| id == self.device)
             && identity.public_key().is_ok_and(|key| key == self.noise_key)
     }
 }
-pub(crate) struct Enrollment {
-    http: reqwest::Client,
-    transport_origin: String,
-}
-impl Enrollment {
-    pub fn new(transport_origin: String) -> Result<Self> {
-        Ok(Self {
-            transport_origin,
-            http: reqwest::Client::builder()
-                .redirect(reqwest::redirect::Policy::none())
-                .timeout(std::time::Duration::from_secs(15))
-                .build()?,
-        })
-    }
-    async fn json<T: serde::de::DeserializeOwned>(
-        &self,
-        request: reqwest::RequestBuilder,
-        stage: NetworkStage,
-    ) -> Result<T> {
-        let mut response = request.send().await.map_err(|error| {
-            let reason = if error.is_timeout() {
-                RequestFailure::Timeout
-            } else if error.is_connect() {
-                RequestFailure::Connect
-            } else {
-                RequestFailure::Request
-            };
-            Error::RequestAt(stage, reason)
-        })?;
-        if !response.status().is_success() {
-            return Err(Error::RequestAt(
-                stage,
-                RequestFailure::HttpStatus(response.status()),
-            ));
-        }
-        let mut bytes = Vec::new();
-        while let Some(chunk) = response.chunk().await.map_err(|error| {
-            let reason = if error.is_timeout() {
-                RequestFailure::Timeout
-            } else {
-                RequestFailure::ResponseBody
-            };
-            Error::RequestAt(stage, reason)
-        })? {
-            if bytes.len() + chunk.len() > 65536 {
-                return Err(Error::RequestAt(stage, RequestFailure::InvalidResponse));
-            }
-            bytes.extend_from_slice(&chunk)
-        }
-        serde_json::from_slice(&bytes)
-            .map_err(|_| Error::RequestAt(stage, RequestFailure::InvalidResponse))
-    }
-    pub async fn profile(&self, token: &str) -> Result<Profile> {
-        let profile: Profile = self
-            .json(
-                self.http
-                    .get(format!("{}/api/v1/account/profile", self.transport_origin))
-                    .bearer_auth(token),
-                NetworkStage::CoordinatorProfile,
-            )
-            .await?;
-        if profile.schema_version != 1
-            || profile.issuer != config::ISSUER
-            || profile.product_id.is_empty()
-        {
-            return Err(Error::RequestAt(
-                NetworkStage::CoordinatorProfile,
-                RequestFailure::InvalidResponse,
-            ));
-        }
-        uuid::Uuid::parse_str(&profile.workspace_id).map_err(|_| {
-            Error::RequestAt(
-                NetworkStage::CoordinatorProfile,
-                RequestFailure::InvalidResponse,
-            )
-        })?;
-        Ok(profile)
-    }
-    pub async fn issue(
-        &self,
-        access: &str,
-        binding: &Binding,
-    ) -> Result<(String, Claims, VerifiedWorkspace)> {
-        let envelope: Envelope = self
-            .json(
-                self.http
-                    .post(format!("{}/api/v1/account/enrollment", self.transport_origin))
-                    .bearer_auth(access)
-                    .json(&serde_json::json!({"deviceId":binding.device_id,"noisePublicKey":binding.noise_public_key})),
-                NetworkStage::CoordinatorEnrollment,
-            )
-            .await?;
-        if envelope.schema_version != 1 {
-            return Err(Error::RequestAt(
-                NetworkStage::CoordinatorEnrollment,
-                RequestFailure::InvalidResponse,
-            ));
-        }
-        let claims = self.verify(&envelope.token, binding).await?;
-        if claims.device_id != binding.device_id
-            || claims.noise_public_key != binding.noise_public_key
-            || claims.exp != envelope.expires_at
-        {
-            return Err(Error::InvalidProof);
-        }
-        let verified = VerifiedWorkspace {
-            workspace: claims.workspace_id.clone(),
-            device: claims.device_id.clone(),
-            noise_key: claims.noise_public_key.clone(),
-        };
-        Ok((envelope.token, claims, verified))
-    }
-    pub async fn verify(&self, token: &str, binding: &Binding) -> Result<Claims> {
-        // Fixed transport; never follow a JWT jku/x5u or a peer-supplied key URL.
-        let jwks: JwkSet = self
-            .json(
-                self.http
-                    .get(format!("{}/api/v1/account/jwks", self.transport_origin)),
-                NetworkStage::CoordinatorJwks,
-            )
-            .await?;
-        verify(token, &jwks, config::ENROLLMENT_ISSUER, binding)
-    }
-}
-fn canonical_key(value: &str) -> bool {
-    B64.decode(value)
-        .is_ok_and(|bytes| bytes.len() == 32 && B64.encode(bytes) == value)
-}
-pub(crate) fn verify(
-    token: &str,
-    jwks: &JwkSet,
-    enrollment_issuer: &str,
-    binding: &Binding,
-) -> Result<Claims> {
-    if token.len() > 8192 || jwks.keys.len() > 8 {
-        return Err(Error::InvalidProof);
-    }
-    let header = decode_header(token).map_err(|_| Error::InvalidProof)?;
-    if header.alg != Algorithm::ES384 || header.typ.as_deref().is_some_and(|v| v != "JWT") {
-        return Err(Error::InvalidProof);
-    }
-    let kid = header.kid.ok_or(Error::InvalidProof)?;
-    let keys = jwks
-        .keys
-        .iter()
-        .filter(|key| key.common.key_id.as_deref() == Some(&kid))
-        .collect::<Vec<_>>();
-    if keys.len() != 1 {
-        return Err(Error::InvalidProof);
-    }
-    let key = DecodingKey::from_jwk(keys[0]).map_err(|_| Error::InvalidProof)?;
-    let mut validation = Validation::new(Algorithm::ES384);
-    validation.set_issuer(&[enrollment_issuer]);
-    validation.set_audience(&["cybernote-enrollment-v1"]);
-    validation.leeway = 0;
-    validation.set_required_spec_claims(&["exp", "iat", "iss", "aud", "sub"]);
-    let c = decode::<Claims>(token, &key, &validation)
-        .map_err(|_| Error::InvalidProof)?
-        .claims;
-    if c.iss != enrollment_issuer
-        || c.aud != "cybernote-enrollment-v1"
-        || c.sub != binding.subject
-        || c.account_issuer != binding.issuer
-        || c.product_id != binding.product_id
-        || c.workspace_id != binding.workspace_id
-        || c.purpose != "pair"
-        || c.exp <= now()
-        || c.iat > now() + 30
-        || c.exp <= c.iat
-        || c.exp - c.iat > 300
-        || !canonical_key(&c.noise_public_key)
-    {
-        return Err(Error::InvalidProof);
-    }
-    uuid::Uuid::parse_str(&c.device_id).map_err(|_| Error::InvalidProof)?;
-    uuid::Uuid::parse_str(&c.jti).map_err(|_| Error::InvalidProof)?;
-    Ok(c)
-}
+type PeerLease = Arc<dyn Fn(&[u8; 32], &str, &str) -> bool + Send + Sync>;
 #[derive(Default)]
-struct GateState {
+struct State {
     closed: bool,
-    lifecycle: Option<std::sync::Arc<dyn Fn() -> bool + Send + Sync>>,
-    sdk: Option<std::sync::Weak<cybergrid_sdk::Client>>,
-    local_until: u64,
-    peers: HashMap<String, (String, u64)>,
+    lifecycle: Option<Arc<dyn Fn() -> bool + Send + Sync>>,
+    peer_lease: Option<PeerLease>,
+    peers: HashMap<String, ([u8; 32], String)>,
     routes: HashMap<String, String>,
 }
 #[derive(Default)]
-pub(crate) struct Gate(Mutex<GateState>);
+pub(crate) struct Gate(Mutex<State>);
 impl Gate {
-    /// Local adoption must obey the same owner generation as peer admission.
-    /// This checks cancellation only; signed enrollment is checked separately.
+    pub fn bind_lifecycle(&self, active: Arc<dyn Fn() -> bool + Send + Sync>) {
+        if let Ok(mut s) = self.0.lock() {
+            s.lifecycle = Some(active);
+        }
+    }
+    pub(crate) fn bind_peers(&self, active: PeerLease) {
+        if let Ok(mut s) = self.0.lock() {
+            s.peer_lease = Some(active);
+        }
+    }
     pub(crate) fn is_current(&self) -> bool {
         self.0
             .lock()
-            .is_ok_and(|s| !s.closed && s.lifecycle.as_ref().is_none_or(|active| active()))
+            .is_ok_and(|s| !s.closed && s.lifecycle.as_ref().is_some_and(|f| f()))
     }
-    pub fn bind_lifecycle(&self, active: std::sync::Arc<dyn Fn() -> bool + Send + Sync>) {
-        if let Ok(mut state) = self.0.lock() {
-            state.lifecycle = Some(active);
+    pub(crate) fn admit(&self, peer: [u8; 32], device: &str, key: &str) -> Result<()> {
+        let mut s = self.0.lock().map_err(|_| Error::Storage)?;
+        if s.closed
+            || !s.lifecycle.as_ref().is_some_and(|f| f())
+            || !s.peer_lease.as_ref().is_some_and(|f| f(&peer, device, key))
+        {
+            return Err(Error::InvalidProof);
         }
-    }
-    pub fn attach(&self, client: &std::sync::Arc<cybergrid_sdk::Client>) {
-        if let Ok(mut state) = self.0.lock() {
-            state.sdk = Some(std::sync::Arc::downgrade(client));
+        if s.peers
+            .get(device)
+            .is_some_and(|(id, k)| id != &peer || k != key)
+        {
+            return Err(Error::InvalidProof);
         }
-    }
-    pub fn renew_local(&self, until: u64) {
-        if let Ok(mut s) = self.0.lock() {
-            if !s.closed {
-                s.local_until = until;
-            }
-        }
-    }
-    pub fn admit(&self, proof: &Claims) {
-        if let Ok(mut s) = self.0.lock() {
-            if s.closed {
-                return;
-            }
-            s.peers.insert(
-                proof.device_id.clone(),
-                (proof.noise_public_key.clone(), proof.exp),
-            );
-        }
+        s.peers.insert(device.into(), (peer, key.into()));
+        Ok(())
     }
     pub fn route(&self, device: &str, endpoint: String) {
         if let Ok(mut s) = self.0.lock() {
-            if !s.closed {
+            if !s.closed && s.peers.contains_key(device) {
                 s.routes.insert(device.into(), endpoint);
             }
         }
@@ -294,304 +119,90 @@ impl Gate {
     pub fn close(&self) {
         if let Ok(mut s) = self.0.lock() {
             s.closed = true;
-            s.local_until = 0;
             s.peers.clear();
             s.routes.clear();
         }
+    }
+    #[cfg(test)]
+    fn fixture() -> Self {
+        let gate = Self::default();
+        gate.bind_lifecycle(Arc::new(|| true));
+        gate.bind_peers(Arc::new(|_, _, _| true));
+        gate
     }
 }
 impl ReplicationPolicy for Gate {
     fn authorize(&self, device: &str, key: &str) -> crate::sync::identity::Result<()> {
         let s = self.0.lock().map_err(|_| SyncError::Revoked)?;
-        if s.closed || s.lifecycle.as_ref().is_some_and(|active| !active()) {
+        if s.closed || !s.lifecycle.as_ref().is_some_and(|f| f()) {
             return Err(SyncError::Revoked);
         }
-        if let Some(sdk) = &s.sdk {
-            let sdk = sdk.upgrade().ok_or(SyncError::Revoked)?;
-            let snapshot = sdk.snapshot();
-            if !snapshot.remote_enabled
-                || snapshot.coordination.phase != cybergrid_sdk::StatePhase::Ready
-            {
-                return Err(SyncError::Revoked);
-            }
-        }
-        if s.local_until <= now()
-            || !s
-                .peers
-                .get(device)
-                .is_some_and(|(k, exp)| k == key && *exp > now())
-        {
+        let (peer, pinned) = s.peers.get(device).ok_or(SyncError::Revoked)?;
+        if pinned != key || !s.peer_lease.as_ref().is_some_and(|f| f(peer, device, key)) {
             return Err(SyncError::Revoked);
         }
         Ok(())
     }
     fn endpoint(&self, device: &str) -> crate::sync::identity::Result<String> {
-        self.0
-            .lock()
-            .map_err(|_| SyncError::Revoked)?
-            .routes
-            .get(device)
-            .cloned()
-            .ok_or(SyncError::Transport)
+        let (key, endpoint) = {
+            let s = self.0.lock().map_err(|_| SyncError::Revoked)?;
+            (
+                s.peers.get(device).ok_or(SyncError::Revoked)?.1.clone(),
+                s.routes.get(device).cloned().ok_or(SyncError::Transport)?,
+            )
+        };
+        self.authorize(device, &key)?;
+        Ok(endpoint)
     }
 }
 #[cfg(test)]
 mod tests {
+    use super::super::config;
     use super::*;
-    #[tokio::test]
-    async fn http_transport_is_independent_of_pinned_signed_enrollment_issuer() {
-        use tokio::io::{AsyncReadExt, AsyncWriteExt};
-        tokio::time::timeout(std::time::Duration::from_secs(5), async {
-            assert_eq!(config::origin().unwrap(), "https://cybernote-sync.aixgg.com");
-            assert_eq!(config::ENROLLMENT_ISSUER, "https://cybernote-sync.vercel.app");
-            let (binding, jwks, key) = fixture();
-            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
-            let transport_origin = format!("http://{}", listener.local_addr().unwrap());
-            assert_ne!(transport_origin, config::ENROLLMENT_ISSUER);
-            let enrollment = Enrollment::new(transport_origin.clone()).unwrap();
-            let claims = Claims {
-                iss: "https://cybernote-sync.vercel.app".into(),
-                aud: "cybernote-enrollment-v1".into(),
-                sub: binding.subject.clone(),
-                account_issuer: binding.issuer.clone(),
-                product_id: binding.product_id.clone(),
-                workspace_id: binding.workspace_id.clone(),
-                device_id: binding.device_id.clone(),
-                noise_public_key: binding.noise_public_key.clone(),
-                purpose: "pair".into(),
-                iat: now(),
-                exp: now() + 300,
-                jti: uuid::Uuid::new_v4().to_string(),
-            };
-            let sign = |claims: &Claims| {
-                let mut header = jsonwebtoken::Header::new(Algorithm::ES384);
-                header.kid = Some("synthetic-fixture".into());
-                jsonwebtoken::encode(&header, claims, &key).unwrap()
-            };
-            let proof = sign(&claims);
-            let profile = serde_json::json!({
-                "schemaVersion":1,"subject":binding.subject,"issuer":binding.issuer,
-                "productId":binding.product_id,"workspaceId":binding.workspace_id
-            });
-            let envelope = serde_json::json!({"schemaVersion":1,"token":proof,"expiresAt":claims.exp});
-            let public_keys = serde_json::to_value(&jwks).unwrap();
-            let server = tokio::spawn(async move {
-                for (target, body) in [
-                    ("GET /api/v1/account/profile HTTP/1.1", profile),
-                    ("POST /api/v1/account/enrollment HTTP/1.1", envelope),
-                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys.clone()),
-                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys.clone()),
-                    ("GET /api/v1/account/jwks HTTP/1.1", public_keys),
-                ] {
-                    let (mut socket, _) = listener.accept().await.unwrap();
-                    let mut request = Vec::new();
-                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
-                        let mut bytes = [0; 1024];
-                        let n = socket.read(&mut bytes).await.unwrap();
-                        assert!(n > 0 && request.len() < 8192);
-                        request.extend_from_slice(&bytes[..n]);
-                    }
-                    assert_eq!(String::from_utf8(request).unwrap().lines().next(), Some(target));
-                    let body = body.to_string();
-                    socket.write_all(format!("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}", body.len()).as_bytes()).await.unwrap();
-                }
-            });
-            assert_eq!(enrollment.profile("synthetic-access").await.unwrap().workspace_id, binding.workspace_id);
-            let (_, verified_claims, workspace) = enrollment.issue("synthetic-access", &binding).await.unwrap();
-            assert_eq!(verified_claims.iss, config::ENROLLMENT_ISSUER);
-            assert_eq!(workspace.workspace(), binding.workspace_id);
-            assert_eq!(workspace.device, binding.device_id);
-            assert_eq!(workspace.noise_key, binding.noise_public_key);
-            for alias in [transport_origin.as_str(), "https://cybernote-sync.aixgg.com"] {
-                let alias_proof = sign(&Claims { iss: alias.into(), ..claims.clone() });
-                assert!(matches!(enrollment.verify(&alias_proof, &binding).await, Err(Error::InvalidProof)));
-            }
-            server.await.unwrap();
-        }).await.expect("bounded loopback enrollment fixture");
-    }
-
-    #[tokio::test]
-    async fn http_rejections_keep_endpoint_stage_and_never_return_response_details() {
-        use tokio::io::{AsyncReadExt, AsyncWriteExt};
-        let (binding, _, _) = fixture();
-        for (stage, path) in [
-            (NetworkStage::CoordinatorProfile, "/api/v1/account/profile"),
-            (
-                NetworkStage::CoordinatorEnrollment,
-                "/api/v1/account/enrollment",
-            ),
-            (NetworkStage::CoordinatorJwks, "/api/v1/account/jwks"),
+    #[test]
+    fn workspace_is_domain_separated_and_unambiguous() {
+        let base = workspace("https://issuer.test/oidc", "user", "notes").unwrap();
+        assert_eq!(
+            base,
+            workspace("https://issuer.test/oidc", "user", "notes").unwrap()
+        );
+        for args in [
+            ("https://other.test/oidc", "user", "notes"),
+            ("https://issuer.test/oidc", "other", "notes"),
+            ("https://issuer.test/oidc", "user", "other"),
+            ("ab", "c", "d"),
+            ("a", "bc", "d"),
         ] {
-            for status in [401, 403, 302, 408, 429, 500, 503, 200] {
-                let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
-                let enrollment =
-                    Enrollment::new(format!("http://{}", listener.local_addr().unwrap())).unwrap();
-                let server = tokio::spawn(async move {
-                    let (mut socket, _) = listener.accept().await.unwrap();
-                    let mut request = Vec::new();
-                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
-                        let mut bytes = [0; 1024];
-                        let n = socket.read(&mut bytes).await.unwrap();
-                        assert!(n > 0 && request.len() < 8192);
-                        request.extend_from_slice(&bytes[..n]);
-                    }
-                    assert!(String::from_utf8(request)
-                        .unwrap()
-                        .lines()
-                        .next()
-                        .unwrap()
-                        .contains(path));
-                    let body = "private-response-sentinel";
-                    socket.write_all(format!("HTTP/1.1 {status} Test\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}", body.len()).as_bytes()).await.unwrap();
-                });
-                let error = match stage {
-                    NetworkStage::CoordinatorProfile => {
-                        enrollment.profile("synthetic-access").await.err()
-                    }
-                    NetworkStage::CoordinatorEnrollment => {
-                        enrollment.issue("synthetic-access", &binding).await.err()
-                    }
-                    _ => enrollment.verify("synthetic-proof", &binding).await.err(),
-                }
-                .unwrap();
-                server.await.unwrap();
-                assert_eq!(
-                    error,
-                    Error::RequestAt(
-                        stage,
-                        if status == 200 {
-                            RequestFailure::InvalidResponse
-                        } else {
-                            RequestFailure::HttpStatus(
-                                reqwest::StatusCode::from_u16(status).unwrap(),
-                            )
-                        }
-                    )
-                );
-                let safe = serde_json::to_value(error.safe()).unwrap();
-                assert_eq!(
-                    safe["code"],
-                    if matches!(status, 401 | 403) {
-                        "account_authentication"
-                    } else {
-                        "account_network"
-                    }
-                );
-                assert_eq!(
-                    safe["requestReason"],
-                    if status == 200 {
-                        "invalidResponse"
-                    } else {
-                        "httpStatus"
-                    }
-                );
-                if status == 200 {
-                    assert!(safe.get("httpStatus").is_none());
-                } else {
-                    assert_eq!(safe["httpStatus"], status);
-                }
-                let text = safe.to_string();
-                for private in ["private-response-sentinel", "synthetic-access", "127.0.0.1"] {
-                    assert!(!text.contains(private));
-                }
-            }
+            assert_ne!(base, workspace(args.0, args.1, args.2).unwrap());
         }
+        assert_ne!(
+            workspace("ab", "c", "d").unwrap(),
+            workspace("a", "bc", "d").unwrap()
+        );
+        assert!(workspace("", "user", "notes").is_err());
     }
-
-    #[tokio::test]
-    async fn truncated_and_oversized_success_bodies_fail_without_body_or_address_details() {
-        use tokio::io::{AsyncReadExt, AsyncWriteExt};
-        tokio::time::timeout(std::time::Duration::from_secs(5), async {
-            let oversized = "x".repeat(65537);
-            let invalid_schema = serde_json::json!({
-                "schemaVersion": 2, "subject": "synthetic-owner", "issuer": config::ISSUER,
-                "productId": "cybernote", "workspaceId": uuid::Uuid::new_v4().to_string()
-            }).to_string();
-            for (response, expected) in [
-                ("HTTP/1.1 200 OK\r\nContent-Length: 100\r\nConnection: close\r\n\r\nprivate-response-sentinel".to_owned(), RequestFailure::ResponseBody),
-                (format!("HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{oversized}", oversized.len()), RequestFailure::InvalidResponse),
-                (format!("HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{invalid_schema}", invalid_schema.len()), RequestFailure::InvalidResponse),
-            ] {
-                let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
-                let mut enrollment = Enrollment::new(format!("http://{}", listener.local_addr().unwrap())).unwrap();
-                enrollment.http = reqwest::Client::builder().no_proxy()
-                    .timeout(std::time::Duration::from_secs(2)).build().unwrap();
-                let server = tokio::spawn(async move {
-                    let (mut socket, _) = listener.accept().await.unwrap();
-                    let mut request = Vec::new();
-                    while !request.windows(4).any(|v| v == b"\r\n\r\n") {
-                        let mut bytes = [0; 1024];
-                        let n = socket.read(&mut bytes).await.unwrap();
-                        assert!(n > 0 && request.len() < 8192);
-                        request.extend_from_slice(&bytes[..n]);
-                    }
-                    socket.write_all(response.as_bytes()).await.unwrap();
-                });
-                let error = enrollment.profile("synthetic-access").await.err().unwrap();
-                assert_eq!(error, Error::RequestAt(NetworkStage::CoordinatorProfile, expected));
-                let safe = serde_json::to_string(&error.safe()).unwrap();
-                for private in ["private-response-sentinel", "synthetic-access", "127.0.0.1"] {
-                    assert!(!safe.contains(private));
-                }
-                server.await.unwrap();
-            }
-        }).await.expect("bounded synthetic body fixture");
-    }
-
-    #[tokio::test]
-    async fn request_builder_connect_and_timeout_have_distinct_finite_results() {
-        tokio::time::timeout(std::time::Duration::from_secs(5), async {
-            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
-            let origin = format!("http://{}", listener.local_addr().unwrap());
-            let mut enrollment = Enrollment::new(origin).unwrap();
-            enrollment.http = reqwest::Client::builder()
-                .no_proxy()
-                .timeout(std::time::Duration::from_millis(250))
-                .build()
-                .unwrap();
-            let error = enrollment.profile("invalid\nheader").await.err().unwrap();
-            assert_eq!(
-                error,
-                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Request)
-            );
-            // Listening socket intentionally sends no response. No external service.
-            let error = enrollment.profile("synthetic-access").await.err().unwrap();
-            assert_eq!(
-                error,
-                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Timeout)
-            );
-            drop(listener);
-            let error = enrollment.profile("synthetic-access").await.err().unwrap();
-            assert_eq!(
-                error,
-                Error::RequestAt(NetworkStage::CoordinatorProfile, RequestFailure::Connect)
-            );
-        })
-        .await
-        .expect("bounded synthetic request fixture");
-    }
-
-    fn fixture() -> (Binding, JwkSet, jsonwebtoken::EncodingKey) {
-        use p384::{
-            elliptic_curve::sec1::ToEncodedPoint,
-            pkcs8::{EncodePrivateKey, LineEnding},
-            SecretKey,
-        };
-        let secret = SecretKey::random(&mut rand::rngs::OsRng);
-        let point = secret.public_key().to_encoded_point(false);
-        let jwks=serde_json::from_value(serde_json::json!({"keys":[{"kty":"EC","crv":"P-384","kid":"synthetic-fixture","alg":"ES384","use":"sig","x":B64.encode(point.x().unwrap()),"y":B64.encode(point.y().unwrap())}]})).unwrap();
-        let pem = secret.to_pkcs8_pem(LineEnding::LF).unwrap();
-        let key = jsonwebtoken::EncodingKey::from_ec_pem(pem.as_bytes()).unwrap();
-        let binding = Binding {
-            issuer: config::ISSUER.into(),
-            subject: "synthetic-owner".into(),
-            product_id: "cybernote".into(),
-            workspace_id: uuid::Uuid::new_v4().to_string(),
-            device_id: uuid::Uuid::new_v4().to_string(),
-            noise_public_key: B64.encode([1; 32]),
-            enabled: true,
-        };
-        (binding, jwks, key)
+    #[test]
+    fn default_closed_and_profile_replacement_revokes_key_and_route() {
+        use std::sync::atomic::{AtomicBool, Ordering};
+        let live = Arc::new(AtomicBool::new(true));
+        let gate = Gate::default();
+        assert!(!gate.is_current());
+        let current = live.clone();
+        gate.bind_lifecycle(Arc::new(move || current.load(Ordering::Acquire)));
+        gate.bind_peers(Arc::new(|id, device, key| {
+            *id == [7; 32] && device == "device" && key == "key"
+        }));
+        assert!(gate.admit([8; 32], "device", "key").is_err());
+        gate.admit([7; 32], "device", "key").unwrap();
+        gate.route("device", "ws://127.0.0.1:1234/".into());
+        assert!(gate.authorize("device", "key").is_ok());
+        gate.bind_peers(Arc::new(|_, _, _| false));
+        assert!(gate.authorize("device", "key").is_err());
+        assert!(gate.endpoint("device").is_err());
+        live.store(false, Ordering::Release);
+        assert!(!gate.is_current());
+        gate.close();
+        assert!(gate.authorize("device", "key").is_err());
     }
     struct Windows;
     impl crate::sync::adapter::WindowHost for Windows {
@@ -708,7 +319,7 @@ mod tests {
         )
         .unwrap();
         let mut service = runtime
-            .activate_account(&verified, identity, Arc::new(Gate::default()))
+            .activate_account(&verified, identity, Arc::new(Gate::fixture()))
             .unwrap();
         let manual_identity = || {
             crate::sync::identity::IdentityStore::existing_device_id(&dir.path().join(".sync"))
@@ -757,7 +368,9 @@ mod tests {
         for recovery in ["release", "reopen"] {
             let dir = tempfile::tempdir().unwrap();
             let mut store = Store::open(dir.path()).unwrap();
-            store.action(serde_json::json!({"type":"createNote"})).unwrap();
+            store
+                .action(serde_json::json!({"type":"createNote"}))
+                .unwrap();
             let identity = store.sync_enable(None).unwrap();
             store.sync_flush().unwrap();
             let mut session = Session::new(store);
@@ -772,11 +385,16 @@ mod tests {
             assert!(session.pending.is_none());
             assert!(session.sync_has_operation());
             assert_eq!(session.sync_diagnostics()["activePhase"], "probe");
-            let denied = session.sync_adoption_preflight(&next_workspace, &next_device)
+            let denied = session
+                .sync_adoption_preflight(&next_workspace, &next_device)
                 .unwrap_err();
             assert_eq!(denied.code, "sync_adoption_blocked");
-            assert_eq!(denied.message, "本机仍有未完成的保存或同步屏障，请先完成后再开启新账户同步");
-            session.sync_adoption_preflight(&identity.workspace_id, &identity.device_id)
+            assert_eq!(
+                denied.message,
+                "本机仍有未完成的保存或同步屏障，请先完成后再开启新账户同步"
+            );
+            session
+                .sync_adoption_preflight(&identity.workspace_id, &identity.device_id)
                 .unwrap();
             eprintln!("restart fixture: path={recovery} before_retirement pending=false quiet=true phase=probe different_workspace=blocked same_workspace=allowed");
             if recovery == "release" {
@@ -787,7 +405,10 @@ mod tests {
                 assert_eq!(release["outcome"], "abort");
                 assert_eq!(release["operationId"], operation["operationId"]);
                 assert!(access.is_none());
-                assert_eq!(session.sync_diagnostics()["latestAbortReason"], "externalAbort");
+                assert_eq!(
+                    session.sync_diagnostics()["latestAbortReason"],
+                    "externalAbort"
+                );
             } else {
                 drop(session); // closes the real Store/SQLite connection too
                 session = Session::new(Store::open(dir.path()).unwrap());
@@ -795,7 +416,9 @@ mod tests {
             assert!(session.pending.is_none());
             assert!(!session.sync_has_operation());
             assert!(session.sync_diagnostics()["activePhase"].is_null());
-            session.sync_adoption_preflight(&next_workspace, &next_device).unwrap();
+            session
+                .sync_adoption_preflight(&next_workspace, &next_device)
+                .unwrap();
             assert_eq!(session.store.sync_identity().unwrap().unwrap(), identity);
             assert_eq!(session.workspace().unwrap()["notes"], before["notes"]);
             eprintln!("restart fixture: path={recovery} after_retirement pending=false quiet=false phase=none different_workspace=allowed identity_preserved=true notes_preserved=true");
@@ -835,7 +458,7 @@ mod tests {
             noise_key: key.clone(),
         };
         let mut service = runtime
-            .activate_account(&verified, noise, Arc::new(Gate::default()))
+            .activate_account(&verified, noise, Arc::new(Gate::fixture()))
             .unwrap();
         assert_eq!(
             shared.0.lock().unwrap().workspace().unwrap()["notes"],
@@ -851,9 +474,12 @@ mod tests {
             // Shutdown joins the coordinator; it need not consume the last
             // aborted quiet operation before process exit. Observe it, without
             // assuming which side of that scheduling race won this time.
-            eprintln!("restart fixture: stopped_session pending={} quiet={} phase={}",
-                session.pending.is_some(), session.sync_has_operation(),
-                session.sync_diagnostics()["activePhase"]);
+            eprintln!(
+                "restart fixture: stopped_session pending={} quiet={} phase={}",
+                session.pending.is_some(),
+                session.sync_has_operation(),
+                session.sync_diagnostics()["activePhase"]
+            );
         }
         // Simulate an actual process restart: every Arc owner is gone, so the
         // old Session and its Store connection close. Reusing it here raced
@@ -945,7 +571,7 @@ mod tests {
             };
             let private_root = dir.path().join(".account");
             super::super::private::begin_adoption(&private_root).unwrap();
-            let result = runtime.activate_account(&target, identity, Arc::new(Gate::default()));
+            let result = runtime.activate_account(&target, identity, Arc::new(Gate::fixture()));
             if blocked {
                 assert!(result.is_err());
                 assert_eq!(
@@ -987,8 +613,15 @@ mod tests {
     }
     #[test]
     fn workspace_adoption_partial_release_retries_keep_editor_authority_and_terminal_receipt() {
-        use crate::{session::{Session, Token, synchronization::WindowReply}, store::Store, sync::adapter::{Runtime, SharedSession, WindowHost}};
-        use std::{collections::HashSet, sync::{Arc, Condvar, Mutex}};
+        use crate::{
+            session::{synchronization::WindowReply, Session, Token},
+            store::Store,
+            sync::adapter::{Runtime, SharedSession, WindowHost},
+        };
+        use std::{
+            collections::HashSet,
+            sync::{Arc, Condvar, Mutex},
+        };
         struct PartialWindows {
             shared: SharedSession,
             failures: Mutex<u8>,
@@ -1000,19 +633,37 @@ mod tests {
             }
             fn emit(&self, name: &str, value: &serde_json::Value) -> crate::store::Result<()> {
                 for window in ["main", "note-second"] {
-                    if name == "notes-sync" && value["phase"] == "release" && window == "note-second" {
+                    if name == "notes-sync"
+                        && value["phase"] == "release"
+                        && window == "note-second"
+                    {
                         let mut remaining = self.failures.lock().unwrap();
                         if *remaining > 0 {
                             *remaining -= 1;
-                            return Err(crate::store::AppError { code: "fixture_emit_failed".into(), message: "synthetic partial delivery".into(), commit: None });
+                            return Err(crate::store::AppError {
+                                code: "fixture_emit_failed".into(),
+                                message: "synthetic partial delivery".into(),
+                                commit: None,
+                            });
                         }
                     }
-                    self.deliveries.lock().unwrap().push((window.into(), name.into(), value.clone()));
+                    self.deliveries.lock().unwrap().push((
+                        window.into(),
+                        name.into(),
+                        value.clone(),
+                    ));
                     if name == "notes-sync" {
                         let operation = value["operationId"].as_str().unwrap().to_string();
                         let reply = match value["phase"].as_str() {
-                            Some("probe") => WindowReply::Probe { operation_id: operation, protected_note_ids: vec![], blocked: false },
-                            Some("prepare") => WindowReply::Prepare { operation_id: operation, ready: true },
+                            Some("probe") => WindowReply::Probe {
+                                operation_id: operation,
+                                protected_note_ids: vec![],
+                                blocked: false,
+                            },
+                            Some("prepare") => WindowReply::Prepare {
+                                operation_id: operation,
+                                ready: true,
+                            },
                             _ => continue,
                         };
                         let mut s = self.shared.0.lock().unwrap();
@@ -1025,20 +676,45 @@ mod tests {
         }
         let dir = tempfile::tempdir().unwrap();
         let mut store = Store::open(dir.path()).unwrap();
-        let note = store.action(serde_json::json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+        let note = store
+            .action(serde_json::json!({"type":"createNote"}))
+            .unwrap()["id"]
+            .as_str()
+            .unwrap()
+            .to_string();
         store.sync_enable(None).unwrap();
         let shared = Arc::new((Mutex::new(Session::new(store)), Condvar::new()));
         let old_token = shared.0.lock().unwrap().sync_media_token();
-        let host = Arc::new(PartialWindows { shared: shared.clone(), failures: Mutex::new(2), deliveries: Mutex::new(vec![]) });
+        let host = Arc::new(PartialWindows {
+            shared: shared.clone(),
+            failures: Mutex::new(2),
+            deliveries: Mutex::new(vec![]),
+        });
         let runtime = Runtime::new(shared.clone(), dir.path().into(), host.clone()).unwrap();
         runtime.pause_for_account().unwrap();
-        let identity = runtime.account_identity_for(&uuid::Uuid::new_v4().to_string()).unwrap();
-        let target = VerifiedWorkspace { workspace: uuid::Uuid::new_v4().to_string(), device: identity.device_id().unwrap(), noise_key: identity.public_key().unwrap() };
+        let identity = runtime
+            .account_identity_for(&uuid::Uuid::new_v4().to_string())
+            .unwrap();
+        let target = VerifiedWorkspace {
+            workspace: uuid::Uuid::new_v4().to_string(),
+            device: identity.device_id().unwrap(),
+            noise_key: identity.public_key().unwrap(),
+        };
         let private_root = dir.path().join(".account");
         super::super::private::begin_adoption(&private_root).unwrap();
-        assert!(runtime.activate_account(&target, identity.clone(), Arc::new(Gate::default())).is_err());
+        assert!(runtime
+            .activate_account(&target, identity.clone(), Arc::new(Gate::fixture()))
+            .is_err());
         let instance = shared.0.lock().unwrap().store.sync_store_instance();
-        let release = host.deliveries.lock().unwrap().iter().find(|(_, name, value)| name == "notes-sync" && value["phase"] == "release").unwrap().2.clone();
+        let release = host
+            .deliveries
+            .lock()
+            .unwrap()
+            .iter()
+            .find(|(_, name, value)| name == "notes-sync" && value["phase"] == "release")
+            .unwrap()
+            .2
+            .clone();
         assert_eq!(release["sessionId"], old_token.session_id);
         assert_eq!(release["outcome"], "commit");
         assert!(super::super::private::adoption_pending(&private_root).unwrap());
@@ -1046,29 +722,69 @@ mod tests {
             let mut s = shared.0.lock().unwrap();
             // A missed release can query the real terminal with its original
             // Session token; it is not stranded behind a rotated authority.
-            assert_eq!(s.sync_reply("note-second", WindowReply::Prepare { operation_id: release["operationId"].as_str().unwrap().into(), ready: true }, &old_token).unwrap()["outcome"], "commit");
+            assert_eq!(
+                s.sync_reply(
+                    "note-second",
+                    WindowReply::Prepare {
+                        operation_id: release["operationId"].as_str().unwrap().into(),
+                        ready: true
+                    },
+                    &old_token
+                )
+                .unwrap()["outcome"],
+                "commit"
+            );
             let revision = s.store.note(&note).unwrap().revision;
-            let token = Token { note_epoch: Some(0), ..old_token.clone() };
-            s.register_save("main", &note, "post-partial-draft", token).unwrap();
+            let token = Token {
+                note_epoch: Some(0),
+                ..old_token.clone()
+            };
+            s.register_save("main", &note, "post-partial-draft", token)
+                .unwrap();
             s.save("main", serde_json::json!({"type":"saveNote", "id":note, "saveIntent":"post-partial-draft", "revision":revision,
                 "document":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"draft after partial release"}]}]}})).unwrap();
         }
-        assert!(runtime.activate_account(&target, identity.clone(), Arc::new(Gate::default())).is_err());
+        assert!(runtime
+            .activate_account(&target, identity.clone(), Arc::new(Gate::fixture()))
+            .is_err());
         assert!(super::super::private::adoption_pending(&private_root).unwrap());
-        assert_eq!(shared.0.lock().unwrap().store.sync_store_instance(), instance);
-        let mut service = runtime.activate_account(&target, identity, Arc::new(Gate::default())).unwrap();
+        assert_eq!(
+            shared.0.lock().unwrap().store.sync_store_instance(),
+            instance
+        );
+        let mut service = runtime
+            .activate_account(&target, identity, Arc::new(Gate::fixture()))
+            .unwrap();
         assert!(!super::super::private::adoption_pending(&private_root).unwrap());
         {
             let s = shared.0.lock().unwrap();
             assert_eq!(s.store.sync_store_instance(), instance);
             s.check(&old_token, None).unwrap();
-            assert_eq!(s.store.note(&note).unwrap().plain_text, "draft after partial release");
+            assert_eq!(
+                s.store.note(&note).unwrap().plain_text,
+                "draft after partial release"
+            );
         }
         let deliveries = host.deliveries.lock().unwrap();
         assert!(deliveries.iter().all(|(_, name, _)| name != "notes-access"));
-        let releases: Vec<_> = deliveries.iter().filter(|(_, name, value)| name == "notes-sync" && value["phase"] == "release").collect();
-        assert_eq!(releases.iter().filter(|(window, _, _)| window == "main").count(), 3);
-        assert_eq!(releases.iter().filter(|(window, _, _)| window == "note-second").count(), 1);
+        let releases: Vec<_> = deliveries
+            .iter()
+            .filter(|(_, name, value)| name == "notes-sync" && value["phase"] == "release")
+            .collect();
+        assert_eq!(
+            releases
+                .iter()
+                .filter(|(window, _, _)| window == "main")
+                .count(),
+            3
+        );
+        assert_eq!(
+            releases
+                .iter()
+                .filter(|(window, _, _)| window == "note-second")
+                .count(),
+            1
+        );
         assert!(releases.iter().all(|(_, _, value)| value == &release));
         drop(deliveries);
         service.shutdown().unwrap();
@@ -1094,7 +810,7 @@ mod tests {
                 device: identity.device_id().unwrap(),
                 noise_key: identity.public_key().unwrap(),
             };
-            let gate = Arc::new(Gate::default());
+            let gate = Arc::new(Gate::fixture());
             if closed {
                 gate.close();
             } else {
@@ -1111,109 +827,5 @@ mod tests {
                 .is_none());
             runtime.shutdown().unwrap();
         }
-    }
-    #[test]
-    fn signed_proof_rejects_cross_owner_workspace_and_unbound_keys_not_just_jwt_decode() {
-        let (binding, jwks, key) = fixture();
-        let original = Claims {
-            iss: "https://fixed.test".into(),
-            aud: "cybernote-enrollment-v1".into(),
-            sub: binding.subject.clone(),
-            account_issuer: binding.issuer.clone(),
-            product_id: binding.product_id.clone(),
-            workspace_id: binding.workspace_id.clone(),
-            device_id: binding.device_id.clone(),
-            noise_public_key: binding.noise_public_key.clone(),
-            purpose: "pair".into(),
-            iat: now(),
-            exp: now() + 300,
-            jti: uuid::Uuid::new_v4().to_string(),
-        };
-        let sign = |claims: &Claims| {
-            let mut header = jsonwebtoken::Header::new(Algorithm::ES384);
-            header.kid = Some("synthetic-fixture".into());
-            jsonwebtoken::encode(&header, claims, &key).unwrap()
-        };
-        assert!(verify(&sign(&original), &jwks, "https://fixed.test", &binding).is_ok());
-        for field in [
-            "iss",
-            "aud",
-            "sub",
-            "accountIssuer",
-            "productId",
-            "workspaceId",
-            "purpose",
-            "noisePublicKey",
-            "deviceId",
-            "jti",
-        ] {
-            let mut value = serde_json::to_value(&original).unwrap();
-            value[field] = serde_json::json!("wrong");
-            let claims: Claims = serde_json::from_value(value).unwrap();
-            assert!(
-                verify(&sign(&claims), &jwks, "https://fixed.test", &binding).is_err(),
-                "{field}"
-            );
-        }
-        for claims in [
-            Claims {
-                exp: now() - 1,
-                ..original.clone()
-            },
-            Claims {
-                exp: now() + 301,
-                ..original.clone()
-            },
-            Claims {
-                iat: now() + 60,
-                exp: now() + 300,
-                ..original.clone()
-            },
-        ] {
-            assert!(verify(&sign(&claims), &jwks, "https://fixed.test", &binding).is_err());
-        }
-        let (_, other, _) = fixture();
-        assert!(verify(&sign(&original), &other, "https://fixed.test", &binding).is_err());
-        let mut jwt = sign(&original);
-        let index = jwt.len() - 8;
-        let byte = jwt.as_bytes()[index];
-        jwt.replace_range(index..index + 1, if byte == b'A' { "B" } else { "A" });
-        assert!(verify(&jwt, &jwks, "https://fixed.test", &binding).is_err());
-    }
-    #[test]
-    fn close_and_expiry_fail_closed_for_both_directions_and_routes_are_ephemeral() {
-        let gate = Gate::default();
-        let device = uuid::Uuid::new_v4().to_string();
-        let key = B64.encode([1; 32]);
-        let proof = Claims {
-            iss: "https://fixed.test".into(),
-            aud: "cybernote-enrollment-v1".into(),
-            sub: "owner".into(),
-            account_issuer: config::ISSUER.into(),
-            product_id: "p".into(),
-            workspace_id: uuid::Uuid::new_v4().to_string(),
-            device_id: device.clone(),
-            noise_public_key: key.clone(),
-            purpose: "pair".into(),
-            iat: now(),
-            exp: now() + 200,
-            jti: uuid::Uuid::new_v4().to_string(),
-        };
-        gate.admit(&proof);
-        assert!(gate.authorize(&device, &key).is_err());
-        gate.renew_local(now() + 200);
-        assert!(gate.authorize(&device, &key).is_ok());
-        assert!(gate.authorize(&device, &B64.encode([2; 32])).is_err());
-        gate.route(&device, "ws://127.0.0.1:2222/".into());
-        assert!(gate.endpoint(&device).is_ok());
-        gate.close();
-        assert!(gate.authorize(&device, &key).is_err());
-        assert!(gate.endpoint(&device).is_err());
-        gate.renew_local(now() + 200);
-        gate.admit(&Claims {
-            exp: now() - 1,
-            ..proof
-        });
-        assert!(gate.authorize(&device, &key).is_err());
     }
 }

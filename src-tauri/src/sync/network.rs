@@ -64,12 +64,6 @@ pub(crate) fn diagnostic(stage: &'static str, event: &'static str, elapsed_ms: u
     let at = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0);
     eprintln!("CYBERNOTE_SYNC_DIAGNOSTIC {}", serde_json::json!({"at":at,"stage":stage,"event":event,"elapsedMs":elapsed_ms,"error":error}));
 }
-pub(crate) fn sdk_diagnostic(snapshot: &cybergrid_sdk::DiagnosticSnapshot) {
-    static RECORDS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
-    if diagnostics_enabled() && RECORDS.fetch_add(1, std::sync::atomic::Ordering::Relaxed) < 8192 {
-        eprintln!("CYBERNOTE_SDK_DIAGNOSTIC {}", serde_json::to_string(snapshot).unwrap_or_default());
-    }
-}
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum TransferDirection {

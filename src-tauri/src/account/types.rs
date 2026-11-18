@@ -179,8 +179,18 @@ pub(crate) struct MappingObservation {
     pub enrollment: TransportKind,
     pub sync: TransportKind,
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum AuthProviderFailure {
+    RefreshFailed,
+    SessionUnavailable,
+    Storage,
+    Network,
+}
 #[derive(Clone, Serialize)]
 pub(crate) struct SafeError {
+    #[serde(rename = "cyberbusCode", skip_serializing_if = "Option::is_none")]
+    pub cyberbus_code: Option<i32>,
     pub code: String,
     pub message: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -188,7 +198,7 @@ pub(crate) struct SafeError {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<account_auth::IdentityRejection>,
     #[serde(rename = "providerReason", skip_serializing_if = "Option::is_none")]
-    pub provider_reason: Option<cybergrid_sdk::AuthProviderFailure>,
+    pub provider_reason: Option<AuthProviderFailure>,
     #[serde(rename = "tokenOperation", skip_serializing_if = "Option::is_none")]
     pub token_operation: Option<account_auth::TokenOperation>,
     #[serde(rename = "tokenField", skip_serializing_if = "Option::is_none")]
@@ -227,8 +237,7 @@ impl SafeError {
             && ((self.stage == Some(NetworkStage::IdentityRefresh)
                 && self.provider_reason.is_none())
                 || (self.stage == Some(NetworkStage::AuthorizationProvider)
-                    && self.provider_reason
-                        == Some(cybergrid_sdk::AuthProviderFailure::RefreshFailed)))
+                    && self.provider_reason == Some(AuthProviderFailure::RefreshFailed)))
     }
     pub(super) fn initial_authorization_retry(&self) -> bool {
         // This permits begin_authorization only, never replacement logout. A retained
@@ -317,9 +326,12 @@ impl RequestFailure {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Error {
     Configuration,
+    BusCode(i32),
+    UnknownOutcome,
+    Deadline,
     Authentication,
     AuthenticationAt(NetworkStage),
-    ProviderAuthentication(cybergrid_sdk::AuthProviderFailure),
+    ProviderAuthentication(AuthProviderFailure),
     InvalidCallback,
     InvalidIdentity,
     IdentityRejected(account_auth::IdentityRejection),
@@ -356,6 +368,9 @@ impl Error {
     pub fn code(self) -> &'static str {
         match self {
             Self::Configuration => "account_configuration",
+            Self::BusCode(_) => "account_sdk_failed",
+            Self::UnknownOutcome => "account_unknown_outcome",
+            Self::Deadline => "account_deadline_exceeded",
             Self::Authentication | Self::AuthenticationAt(_) | Self::ProviderAuthentication(_) => {
                 "account_authentication"
             }
@@ -402,6 +417,7 @@ impl Error {
             _ => None,
         };
         SafeError {
+            cyberbus_code: match self {Self::BusCode(c)=>Some(c),_=>None},
             code: self.code().into(),
             message: if self == Self::CleanupRequired {
                 "存在待撤销的登录授权，请先退出授权后重新登录。本机备忘录会保留。"
@@ -499,420 +515,57 @@ impl From<crate::sync::identity::SyncError> for Error {
         Self::Sync
     }
 }
-impl From<cybergrid_sdk::Error> for Error {
-    fn from(error: cybergrid_sdk::Error) -> Self {
-        Self::sdk_at(error, NetworkStage::Coordinator)
-    }
-}
-impl Error {
-    pub fn sdk_at(error: cybergrid_sdk::Error, stage: NetworkStage) -> Self {
-        use cybergrid_sdk::Error as S;
+impl From<notes_cyberbus::Error> for Error {
+    fn from(error: notes_cyberbus::Error) -> Self {
+        use notes_cyberbus::{pb::ErrorCode as C, Error as B};
         match error {
-            S::Operation { diagnostic } => match diagnostic.reason {
-                Some(cybergrid_sdk::CloseReason::Cancelled) => Self::Cancelled,
-                Some(cybergrid_sdk::CloseReason::Authentication) => Self::AuthenticationAt(stage),
-                Some(cybergrid_sdk::CloseReason::CoordinationLost) => Self::AuthenticationAt(NetworkStage::CoordinatorSession),
-                _ => Self::NetworkAt(stage),
+            B::Sdk(code) => match C::try_from(code) {
+                Ok(C::Unauthenticated | C::PermissionDenied | C::InvalidClaims) => {
+                    Self::Authentication
+                }
+                Ok(C::LogtoConfiguration) => Self::Configuration,
+                Ok(C::Cancelled) => Self::Cancelled,
+                Ok(C::DeadlineExceeded) => Self::Deadline,
+                Ok(C::UnknownOutcome) => Self::UnknownOutcome,
+                Ok(C::Conflict) => Self::Busy,
+                Ok(C::NetworkNotReady | C::NoRoute | C::Unavailable | C::DeviceUnreachable) => {
+                    Self::Network
+                }
+                Ok(_) => Self::BusCode(code),
+                Err(_) => Self::CoordinationProtocol,
             },
-            S::Config(_) => Self::Configuration,
-            S::Protocol(_) => Self::CoordinationProtocol,
-            S::Credentials(_) => Self::Storage,
-            S::Cancelled => Self::Cancelled,
-            S::IdentityChanged => Self::OwnershipMismatch,
-            S::AuthorizationProvider(reason) => Self::ProviderAuthentication(reason),
-            // Unclassified adapters still report the fixed provider boundary.
-            S::AuthorizationUnavailable => {
-                Self::AuthenticationAt(NetworkStage::AuthorizationProvider)
-            }
-            S::NotLoggedIn => Self::AuthenticationAt(NetworkStage::CoordinatorSession),
-            S::OAuth { .. } => Self::AuthenticationAt(NetworkStage::IdentityProvider),
-            S::Api {
-                status: 401 | 403, ..
-            } => Self::AuthenticationAt(stage),
-            S::RevocationPending => Self::CleanupRequired,
-            _ => Self::NetworkAt(stage),
+            B::Cancelled | B::Closed => Self::Cancelled,
+            B::Timeout => Self::UnknownOutcome,
+            B::PeerUnavailable => Self::DeviceOffline,
+            B::DirectoryReset => Self::DirectoryUnavailable,
+            B::Io(_) => Self::Network,
+            B::Capacity => Self::Busy,
+            _ => Self::CoordinationProtocol,
         }
     }
 }
-
 #[cfg(test)]
-mod tests {
+mod cyberbus_tests {
     use super::*;
     #[test]
-    fn selected_device_sync_diagnostics_are_an_exact_pair_of_finite_fields() {
-        use crate::sync::identity::SyncError as S;
-        let reasons = [
-            (S::Io, "io"), (S::InvalidInput, "invalid_input"),
-            (S::CorruptIdentity, "corrupt_identity"), (S::Authentication, "authentication"),
-            (S::Expired, "expired"), (S::Revoked, "revoked"),
-            (S::WorkspaceMismatch, "workspace_mismatch"), (S::Protocol, "protocol"),
-            (S::Limit, "limit"), (S::Timeout, "timeout"), (S::Stopped, "stopped"),
-            (S::Backend, "backend"), (S::PlanStale, "plan_stale"),
-            (S::Busy, "busy"), (S::Transport, "transport"),
-        ];
-        for (stage, label) in [
-            (SyncStage::Pair, "pair"), (SyncStage::RecoverPairing, "recoverPairing"),
-            (SyncStage::Transfer, "transfer"), (SyncStage::Retirement, "retirement"),
-        ] {
-            for (reason, reason_label) in reasons {
-                let value = serde_json::to_value(Error::SyncAt(stage, reason).safe()).unwrap();
-                assert_eq!(value, serde_json::json!({
-                    "code":"account_sync_failed",
-                    "message":"账户操作未完成，本机备忘录仍会保留。请检查账户状态后重试。",
-                    "syncStage":label, "syncReason":reason_label,
-                }));
-            }
-        }
-        // Other call sites retain their old generic conversion. A task join
-        // failure or native timeout must not invent a network SyncError reason.
-        for (reason, _) in reasons {
-            assert_eq!(Error::from(reason), Error::Sync);
-        }
-        for error in [Error::Sync, Error::Cancelled, Error::Busy, Error::InvalidProof,
-            Error::Network, Error::Storage, Error::OwnershipMismatch,
-            Error::NetworkAt(NetworkStage::Coordinator)] {
-            let value = serde_json::to_value(error.safe()).unwrap();
-            assert!(value.get("syncStage").is_none());
-            assert!(value.get("syncReason").is_none());
-        }
-    }
-    #[test]
-    fn device_commands_reject_unknown_shapes_and_directions() {
-        let id = uuid::Uuid::new_v4().to_string();
-        let valid = serde_json::json!({"type":"syncDevice","deviceId":id,"direction":"push"});
-        assert!(matches!(
-            serde_json::from_value::<Command>(valid.clone()),
-            Ok(Command::SyncDevice {
-                direction: TransferDirection::Push,
-                ..
-            })
-        ));
-        for field in ["direction", "deviceId"] {
-            for bad in [serde_json::Value::Null, serde_json::json!(7)] {
-                let mut value = valid.clone();
-                value[field] = bad;
-                assert!(serde_json::from_value::<Command>(value).is_err());
-            }
-        }
-        for direction in ["Push", "all", "broadcast", ""] {
-            let mut value = valid.clone();
-            value["direction"] = serde_json::json!(direction);
-            assert!(serde_json::from_value::<Command>(value).is_err());
-        }
-        let mut value = valid;
-        value["url"] = serde_json::json!("https://untrusted.invalid");
-        assert!(serde_json::from_value::<Command>(value).is_err());
-        for error in [
-            Error::DeviceOffline,
-            Error::DeviceIncompatible,
-            Error::SyncNotEnabled,
-            Error::DirectoryUnavailable,
-            Error::DirectoryUnsupported,
-        ] {
-            let value = serde_json::to_value(error.safe()).unwrap();
-            assert_eq!(value.as_object().unwrap().len(), 2);
-        }
-    }
-
-    #[test]
-    fn adoption_block_is_a_finite_local_error_without_provider_details() {
-        let error = Error::from(crate::store::AppError {
-            code: "sync_adoption_blocked".into(),
-            message: "untrusted detail".into(),
-            commit: None,
-        });
-        assert_eq!(error, Error::AdoptionBlocked);
-        let value = serde_json::to_value(error.safe()).unwrap();
-        assert_eq!(value["code"], "account_sync_adoption_blocked");
-        assert_eq!(value.as_object().unwrap().len(), 2);
-        assert!(!value.to_string().contains("untrusted detail"));
-    }
-    #[test]
-    fn adoption_timeout_is_an_exact_finite_pair_without_raw_details() {
-        for (code, stage) in [
-            ("sync_adoption_probe_timeout", "probe"),
-            ("sync_adoption_prepare_timeout", "prepare"),
-            ("sync_adoption_media_timeout", "media"),
-        ] {
-            let error = Error::from(crate::store::AppError {
-                code: code.into(),
-                message: "untrusted /path and upstream text".into(),
-                commit: None,
-            });
-            let value = serde_json::to_value(error.safe()).unwrap();
-            assert_eq!(value["code"], "account_sync_adoption_blocked");
-            assert_eq!(value["adoptionStage"], stage);
-            assert_eq!(value["adoptionReason"], "timeout");
-            assert_eq!(value.as_object().unwrap().len(), 4);
-            assert!(!value.to_string().contains("untrusted"));
-        }
-        for code in [
-            "sync_adoption_unknown_timeout",
-            "sync_adoption_media_timeout_extra",
-            "filesystem",
-        ] {
-            let value = serde_json::to_value(
-                Error::from(crate::store::AppError {
-                    code: code.into(),
-                    message: "sync_adoption_media_timeout".into(),
-                    commit: None,
-                })
-                .safe(),
-            )
-            .unwrap();
-            assert_eq!(value["code"], "account_sync_failed");
-            assert!(value.get("adoptionStage").is_none());
-            assert!(value.get("adoptionReason").is_none());
-        }
-    }
-    #[test]
-    fn request_details_are_finite_stage_scoped_and_http_status_is_paired() {
-        for stage in [
-            NetworkStage::CoordinatorProfile,
-            NetworkStage::CoordinatorEnrollment,
-            NetworkStage::CoordinatorJwks,
-        ] {
-            for (failure, label) in [
-                (RequestFailure::Timeout, "timeout"),
-                (RequestFailure::Connect, "connect"),
-                (RequestFailure::Request, "request"),
-                (RequestFailure::ResponseBody, "responseBody"),
-                (RequestFailure::InvalidResponse, "invalidResponse"),
-            ] {
-                let value = serde_json::to_value(Error::RequestAt(stage, failure).safe()).unwrap();
-                assert_eq!(value["code"], "account_network");
-                assert_eq!(value["requestReason"], label);
-                assert!(value.get("httpStatus").is_none());
-                for key in ["reason", "providerReason", "tokenOperation", "tokenField"] {
-                    assert!(value.get(key).is_none());
-                }
-            }
-            for status in [100, 302, 401, 403, 429, 503, 599] {
-                let value = serde_json::to_value(
-                    Error::RequestAt(
-                        stage,
-                        RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap()),
-                    )
-                    .safe(),
-                )
-                .unwrap();
-                assert_eq!(value["requestReason"], "httpStatus");
-                assert_eq!(value["httpStatus"], status);
-                assert_eq!(
-                    value["code"],
-                    if matches!(status, 401 | 403) {
-                        "account_authentication"
-                    } else {
-                        "account_network"
-                    }
-                );
-            }
-            for status in [200, 204, 299, 600, 999] {
-                let value = serde_json::to_value(
-                    Error::RequestAt(
-                        stage,
-                        RequestFailure::HttpStatus(reqwest::StatusCode::from_u16(status).unwrap()),
-                    )
-                    .safe(),
-                )
-                .unwrap();
-                assert_eq!(value["requestReason"], "invalidResponse");
-                assert!(value.get("httpStatus").is_none());
-            }
-        }
-        for error in [
-            Error::Network,
-            Error::Busy,
-            Error::WindowInvalid,
-            Error::RequestAt(NetworkStage::IdentityProvider, RequestFailure::Timeout),
-        ] {
-            let value = serde_json::to_value(error.safe()).unwrap();
-            assert!(value.get("requestReason").is_none());
-            assert!(value.get("httpStatus").is_none());
-        }
-        assert_eq!(Error::WindowInvalid.safe().code, "account_window_invalid");
-    }
-
-    #[test]
-    fn mapping_observation_serializes_finite_paths_and_legacy_status_omits_extension() {
-        let legacy = serde_json::to_value(Status::default()).unwrap();
-        assert!(legacy.get("transportGeneration").is_none());
-        for (kind, label) in [
-            (TransportKind::WebrtcDirect, "webrtc-direct"),
-            (TransportKind::IrohDirect, "iroh-direct"),
-            (TransportKind::CloudflareTunnel, "cloudflare-tunnel"),
-            (TransportKind::Unavailable, "unavailable"),
-            (TransportKind::Unknown, "unknown"),
-        ] {
-            let sample = MappingObservation {
-                generation: 2,
-                sample: 9,
-                age_ms: 10,
-                enrollment: kind,
-                sync: kind,
-            };
-            assert_eq!(
-                serde_json::to_value(sample).unwrap(),
-                serde_json::json!({
-                    "generation": 2, "sample": 9, "ageMs": 10,
-                    "enrollment": label, "sync": label,
-                })
-            );
-        }
-    }
-
-    #[test]
-    fn token_response_diagnostics_preserve_generic_reason_and_exact_finite_details() {
-        use account_auth::{AuthError, TokenOperation as O, TokenResponseField as F};
-        for (operation, label) in [(O::CodeExchange, "codeExchange"), (O::Refresh, "refresh")] {
-            for (field, field_label) in [
-                (F::TokenType, "tokenType"),
-                (F::AccessToken, "accessToken"),
-                (F::ExpiresIn, "expiresIn"),
-                (F::Scope, "scope"),
-            ] {
-                let error = Error::from(AuthError::ResponseMetadata(operation, field));
-                let value = serde_json::to_value(error.safe()).unwrap();
-                assert_eq!(
-                    value,
-                    serde_json::json!({
-                        "code":"account_auth_identity_invalid", "message":error.safe().message,
-                        "reason":"responseMetadata", "tokenOperation":label, "tokenField":field_label
-                    })
-                );
-                assert!(!error.safe().refresh_rejected());
-            }
-        }
-        for error in [
-            Error::InvalidIdentity,
-            Error::IdentityRejected(account_auth::IdentityRejection::ResponseMetadata),
-            Error::IdentityRejected(account_auth::IdentityRejection::Signature),
-            Error::CleanupRequired,
-            Error::Network,
-            Error::TokenResponseInvalid,
-        ] {
-            let value = serde_json::to_value(error.safe()).unwrap();
-            assert!(value.get("tokenOperation").is_none());
-            assert!(value.get("tokenField").is_none());
-        }
-    }
-
-    #[test]
-    fn authentication_diagnostics_preserve_boundaries_without_upstream_details() {
-        use cybergrid_sdk::Error as S;
-        for stage in [
-            NetworkStage::Coordinator,
-            NetworkStage::CoordinatorConfiguration,
-            NetworkStage::CoordinatorRegistration,
-        ] {
-            for status in [401, 403] {
-                let error = Error::sdk_at(
-                    S::Api {
-                        status,
-                        code: "private-response-sentinel https://private.invalid/token".into(),
-                    },
-                    stage,
-                );
-                assert_eq!(error, Error::AuthenticationAt(stage));
-                let value = serde_json::to_value(error.safe()).unwrap();
-                assert_eq!(value["code"], "account_authentication");
-                assert_eq!(value["stage"], serde_json::to_value(stage).unwrap());
-                assert_eq!(value.as_object().unwrap().len(), 3);
-                assert!(!value.to_string().contains("private"));
-            }
-        }
-        for (sdk, stage) in [
-            (
-                S::AuthorizationUnavailable,
-                NetworkStage::AuthorizationProvider,
-            ),
-            (S::NotLoggedIn, NetworkStage::CoordinatorSession),
-            (
-                S::OAuth {
-                    status: 400,
-                    code: "private-response-sentinel".into(),
-                },
-                NetworkStage::IdentityProvider,
-            ),
-        ] {
-            assert_eq!(
-                Error::sdk_at(sdk, NetworkStage::CoordinatorRegistration),
-                Error::AuthenticationAt(stage)
-            );
-        }
-        for (auth, stage) in [
-            (
-                account_auth::AuthError::NoSession,
-                NetworkStage::IdentitySession,
-            ),
-            (
-                account_auth::AuthError::RefreshFailed,
-                NetworkStage::IdentityRefresh,
-            ),
-            (
-                account_auth::AuthError::RevocationFailed,
-                NetworkStage::IdentityRevocation,
-            ),
-        ] {
-            assert_eq!(Error::from(auth), Error::AuthenticationAt(stage));
-        }
-        assert!(serde_json::to_value(Error::Authentication.safe())
-            .unwrap()
-            .get("stage")
-            .is_none());
-        // Classification outside authentication remains unchanged.
-        assert_eq!(Error::from(S::Cancelled), Error::Cancelled);
-        assert_eq!(Error::from(S::IdentityChanged), Error::OwnershipMismatch);
-        assert_eq!(Error::from(S::RevocationPending), Error::CleanupRequired);
+    fn sdk_errors_are_finite_without_upstream_payload() {
+        use notes_cyberbus::{pb::ErrorCode as C, Error as B};
+        assert_eq!(Error::from(B::Timeout), Error::UnknownOutcome);
         assert_eq!(
-            Error::from(S::Credentials("private-response-sentinel".into())),
-            Error::Storage
+            Error::from(B::Sdk(C::UnknownOutcome as i32)),
+            Error::UnknownOutcome
         );
         assert_eq!(
-            Error::from(S::Protocol("private-response-sentinel".into())),
-            Error::CoordinationProtocol
+            Error::from(B::Sdk(C::DeadlineExceeded as i32)),
+            Error::Deadline
         );
         assert_eq!(
-            Error::sdk_at(
-                S::Api {
-                    status: 503,
-                    code: "private-response-sentinel".into()
-                },
-                NetworkStage::CoordinatorRegistration
-            ),
-            Error::NetworkAt(NetworkStage::CoordinatorRegistration)
+            Error::from(B::Sdk(C::Internal as i32)),
+            Error::BusCode(C::Internal as i32)
         );
-    }
-
-    #[test]
-    fn network_diagnostics_keep_safe_code_and_only_fixed_stage_labels() {
-        for (stage, label) in [
-            (NetworkStage::CallbackListen, "callbackListen"),
-            (NetworkStage::BrowserOpen, "browserOpen"),
-            (NetworkStage::CallbackReceive, "callbackReceive"),
-            (NetworkStage::IdentityProvider, "identityProvider"),
-            (NetworkStage::Coordinator, "coordinator"),
-        ] {
-            let value = serde_json::to_value(Error::NetworkAt(stage).safe()).unwrap();
-            assert_eq!(value["code"], "account_network");
-            assert_eq!(value["stage"], label);
-            assert_eq!(value.as_object().unwrap().len(), 3);
-        }
-        assert!(serde_json::to_value(Error::Network.safe())
-            .unwrap()
-            .get("stage")
-            .is_none());
-        assert_eq!(
-            Error::from(account_auth::AuthError::Network),
-            Error::NetworkAt(NetworkStage::IdentityProvider)
-        );
-        assert_eq!(
-            Error::from(account_auth::AuthError::InvalidCallback).code(),
-            "account_auth_callback_invalid"
-        );
-        assert_eq!(
-            Error::from(account_auth::AuthError::InvalidIdentity).code(),
-            "account_auth_identity_invalid"
-        );
+        assert_eq!(Error::from(B::Sdk(999999)), Error::CoordinationProtocol);
+        let safe = serde_json::to_value(Error::BusCode(C::Internal as i32).safe()).unwrap();
+        assert_eq!(safe["cyberbusCode"], C::Internal as i32);
+        assert!(safe["message"].as_str().unwrap().len() < 256);
     }
 }

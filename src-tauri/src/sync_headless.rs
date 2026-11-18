@@ -1,4 +1,4 @@
-//! Fixed native test participant and stdio host. No WebView, authentication input,
+//! Fixed native test participant and stdio host. No WebView, token input,
 //! generic actions, or alternate Store/Session/coordination implementation.
 #![cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 
@@ -178,6 +178,16 @@ enum Action {
     Conflicts {},
     AccountStatus {},
     SignOut {},
+    SignIn {},
+    CancelAccount {},
+    SetEnabled {
+        enabled: bool,
+    },
+    #[serde(rename_all = "camelCase")]
+    SyncDevice {
+        device_id: String,
+        direction: crate::account::types::TransferDirection,
+    },
     Shutdown {},
     #[serde(rename_all = "camelCase")]
     KeepAll {
@@ -384,12 +394,32 @@ fn dispatch(app: &tauri::AppHandle, action: Action) -> Result<Value> {
                 Ok(rows)
             }
         }
-        Action::AccountStatus {} | Action::SignOut {} => {
+        Action::AccountStatus {}
+        | Action::SignOut {}
+        | Action::SignIn {}
+        | Action::CancelAccount {}
+        | Action::SetEnabled { .. }
+        | Action::SyncDevice { .. } => {
             let account = app.state::<crate::AccountState>().0.clone();
-            let command = if matches!(action, Action::SignOut {}) {
-                crate::account::types::Command::SignOut {}
-            } else {
-                crate::account::types::Command::Status {}
+            use crate::account::types::Command as AccountCommand;
+            let command = match action {
+                Action::SignOut {} => AccountCommand::SignOut {},
+                Action::SignIn {} => AccountCommand::SignIn {
+                    surface: crate::account::types::AuthorizationSurface::Browser,
+                },
+                Action::CancelAccount {} => AccountCommand::Cancel {},
+                Action::SetEnabled { enabled } => AccountCommand::SetEnabled { enabled },
+                Action::SyncDevice {
+                    device_id,
+                    direction,
+                } if crate::account::private::registry_id(&device_id) => {
+                    AccountCommand::SyncDevice {
+                        device_id,
+                        direction,
+                    }
+                }
+                Action::AccountStatus {} => AccountCommand::Status {},
+                _ => return Err(failure("invalid_request")),
             };
             tauri::async_runtime::block_on(account.command(command))
                 .map_err(|_| failure("operation_failed"))

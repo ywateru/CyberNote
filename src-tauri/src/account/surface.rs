@@ -75,7 +75,7 @@ pub(super) struct Presentation {
     pub instance: String,
     app: tauri::AppHandle,
     stop: CancellationToken,
-    cancel: account_auth::AuthorizationCancellation,
+    cancel: CancellationToken,
     state: Mutex<State>,
 }
 pub(super) struct Lease(pub Arc<Presentation>);
@@ -91,7 +91,7 @@ impl Presentation {
         generation: u64,
         url: url::Url,
         stop: CancellationToken,
-        cancel: account_auth::AuthorizationCancellation,
+        cancel: CancellationToken,
     ) -> Result<Arc<Self>> {
         if !hosted(&url) || url.path() != "/oidc/auth" {
             return Err(Error::Configuration);

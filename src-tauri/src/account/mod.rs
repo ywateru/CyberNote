@@ -1,12 +1,10 @@
-//! One native account owner per leased data root. Renderer commands expose only
-//! safe status; grants, enrollment proofs, invitations and Noise keys stay native.
+//! One native account lifecycle; CyberBus owns every authentication operation.
 mod callback;
 mod config;
 mod directory;
 pub(crate) mod enrollment;
 pub(crate) mod private;
 mod provider;
-mod recovery;
 #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 pub(crate) mod sdk_diagnostic;
 mod surface;
@@ -14,6 +12,8 @@ mod transport;
 pub(crate) mod types;
 mod worker;
 use crate::sync::adapter;
+use notes_cyberbus::{pb, Bus};
+use pb::sdk_command::Body as C;
 use std::{
     path::{Path, PathBuf},
     sync::{
@@ -28,7 +28,6 @@ use tokio::sync::{oneshot, Mutex as AsyncMutex, OnceCell};
 use tokio_util::sync::CancellationToken;
 use types::{Command, Error, Phase, Profile, Result, Status};
 struct Attempt {
-    cancel: Option<account_auth::AuthorizationCancellation>,
     stop: CancellationToken,
     mac: Option<Arc<callback::Callback>>,
 }
@@ -44,15 +43,15 @@ fn take_android_callback(
 ) -> Option<oneshot::Sender<url::Url>> {
     if !slot
         .as_ref()
-        .is_some_and(|slot| slot.generation == generation && slot.instance == instance)
+        .is_some_and(|s| s.generation == generation && s.instance == instance)
     {
         return None;
     }
-    slot.take().map(|slot| slot.sender)
+    slot.take().map(|s| s.sender)
 }
 struct Network {
     stop: CancellationToken,
-    task: tokio::task::JoinHandle<()>,
+    task: tokio::task::JoinHandle<Result<()>>,
     control: Arc<worker::Control>,
     catalog: Arc<directory::Catalog>,
     requests: tokio::sync::mpsc::Sender<worker::DeviceRequest>,
@@ -67,9 +66,8 @@ pub(crate) struct Runtime {
     app: tauri::AppHandle,
     sync: Arc<adapter::Runtime>,
     root: PathBuf,
-    cache: PathBuf,
     data: Mutex<Data>,
-    auth: OnceCell<Arc<account_auth::AuthClient>>,
+    bus: OnceCell<Bus>,
     lifecycle: AsyncMutex<()>,
     operation: AsyncMutex<()>,
     registry: Mutex<Option<private::Registry>>,
@@ -80,27 +78,26 @@ pub(crate) struct Runtime {
     generation: AtomicU64,
     closing: AtomicBool,
     closed: AtomicBool,
-    observations: Arc<transport::observation::Cache>,
 }
 impl Runtime {
     pub fn new(
         app: tauri::AppHandle,
         sync: Arc<adapter::Runtime>,
         root: &Path,
-        cache: &Path,
+        _cache: &Path,
     ) -> Result<Arc<Self>> {
-        let directory = root.join(".account");
-        let loaded = private::directory(&directory)
-            .and_then(|_| private::read(&directory.join("binding.json")));
+        let root = root.join(".account");
+        let loaded =
+            private::directory(&root).and_then(|_| private::read(&root.join("binding.json")));
         let (binding, mut blocked) = match loaded {
-            Ok(binding) => (binding, None),
-            Err(error) => (None, Some(error)),
+            Ok(b) => (b, None),
+            Err(e) => (None, Some(e)),
         };
         let registry = if blocked.is_none() {
-            match private::registry(&directory) {
-                Ok(value) => Some(value),
-                Err(error) => {
-                    blocked = Some(error);
+            match private::registry(&root) {
+                Ok(r) => Some(r),
+                Err(e) => {
+                    blocked = Some(e);
                     None
                 }
             }
@@ -108,22 +105,21 @@ impl Runtime {
             None
         };
         let mut status = Status::default();
-        if let Some(error) = blocked {
+        if let Some(e) = blocked {
             status.state = Phase::Error;
-            status.error = Some(error.safe());
+            status.error = Some(e.safe());
         }
         Ok(Arc::new(Self {
             blocked,
             app,
             sync,
-            root: directory,
-            cache: cache.join("account-provider"),
+            root,
             data: Mutex::new(Data {
                 status,
                 binding,
                 device_operation_id: None,
             }),
-            auth: OnceCell::new(),
+            bus: OnceCell::new(),
             lifecycle: AsyncMutex::new(()),
             operation: AsyncMutex::new(()),
             registry: Mutex::new(registry),
@@ -134,195 +130,41 @@ impl Runtime {
             generation: AtomicU64::new(0),
             closing: AtomicBool::new(false),
             closed: AtomicBool::new(false),
-            observations: Arc::new(transport::observation::Cache::default()),
         }))
     }
-    async fn auth(&self) -> Result<Arc<account_auth::AuthClient>> {
-        if let Some(error) = self.blocked {
-            return Err(error);
+    async fn bus(&self) -> Result<Bus> {
+        if let Some(e) = self.blocked {
+            return Err(e);
         }
         Ok(self
-            .auth
+            .bus
             .get_or_try_init(|| async {
-                account_auth::AuthClient::new(config::pinned(), self.root.join("grant.json"))
-                    .await
-                    .map(Arc::new)
-                    .map_err(Error::from)
+                let config = config::pinned()?;
+                let (store, mode) = provider::store(&self.app, &self.root)?;
+                Bus::new(config, store, mode).await.map_err(Error::from)
             })
             .await?
             .clone())
     }
     fn mutate(&self, f: impl FnOnce(&mut Data)) {
-        if let Ok(mut data) = self.data.lock() {
-            f(&mut data)
-        }
-    }
-    async fn cleanup_status(&self) {
-        if let Some(auth) = self.auth.get() {
-            if auth.cleanup_required().await {
-                self.fail(Error::CleanupRequired);
-            }
+        if let Ok(mut d) = self.data.lock() {
+            f(&mut d)
         }
     }
     fn fail(&self, error: Error) {
-        self.observations.suspend();
         self.mutate(|d| {
             d.status.state = Phase::Error;
-            d.status.error = Some(error.safe())
+            d.status.error = Some(error.safe());
+            for device in &mut d.status.devices {
+                device.online = false;
+                device.connected = false;
+                device.sync_available = false;
+                device.summary = None;
+            }
         })
     }
-    fn fail_current(&self, generation: u64, error: Error) {
-        self.mutate(|d| {
-            if self.current(generation) {
-                self.observations.suspend();
-                d.status.state = Phase::Error;
-                d.status.error = Some(error.safe());
-            }
-        });
-    }
-    pub fn snapshot(&self) -> Result<Status> {
-        let mut status = self.data.lock().map_err(|_| Error::Storage)?.status.clone();
-        let (pending, conflicts) = self.sync.account_metrics()?;
-        status.authorization_surface = if status.state == Phase::Authorizing {
-            self.presentation.lock().ok().and_then(|p| {
-                p.as_ref()
-                    .filter(|p| self.current(p.generation))
-                    .and_then(|p| p.surface())
-            })
-        } else {
-            None
-        };
-        status.pending_count = pending;
-        status.conflict_count = conflicts;
-        self.observations
-            .overlay(&mut status, self.generation.load(Ordering::Acquire));
-        Ok(status)
-    }
-    fn current(&self, generation: u64) -> bool {
-        !self.closing.load(Ordering::Acquire)
-            && self.generation.load(Ordering::Acquire) == generation
-    }
-    pub fn restore(self: &Arc<Self>) {
-        if self.blocked.is_some() {
-            return;
-        }
-        let this = self.clone();
-        tauri::async_runtime::spawn(async move {
-            let _owner = this.lifecycle.lock().await;
-            let generation = this.generation.load(Ordering::Acquire);
-            let result = async {
-                let auth = this.auth().await?;
-                if let Some(identity) = auth.retained_identity().await {
-                    let cached = this
-                        .data
-                        .lock()
-                        .map_err(|_| Error::Storage)?
-                        .binding
-                        .clone();
-                    if this.current(generation) {
-                        if let Some(binding) =
-                            cached.filter(|b| session_identity_matches(b, &identity))
-                        {
-                            let enabled = binding.enabled
-                                && !private::adoption_pending(&this.root)?
-                                && !this.sync.account_adoption_needed(
-                                    &binding.workspace_id,
-                                    &binding.device_id,
-                                )?;
-                            this.mutate(|d| {
-                                if this.current(generation) {
-                                    present_retained_session(
-                                        &mut d.status,
-                                        &binding,
-                                        &identity,
-                                        enabled,
-                                    )
-                                }
-                            });
-                        }
-                    }
-                }
-                if let Some(identity) = auth.restore().await? {
-                    if let Err(error) = this.bind(&identity, generation, false).await {
-                        // A crash between grant commit and first binding must
-                        // not leave a hidden usable grant blocking SignIn. An
-                        // already bound account keeps its grant when offline.
-                        let unbound = this
-                            .data
-                            .lock()
-                            .map_err(|_| Error::Storage)?
-                            .binding
-                            .is_none();
-                        if unbound {
-                            let _ = auth.logout().await;
-                        }
-                        return Err(error);
-                    }
-                    if this.current(generation) {
-                        this.start_network().await?;
-                    }
-                }
-                Ok::<_, Error>(())
-            }
-            .await;
-            if let Err(error) = result {
-                if this.current(generation) {
-                    this.fail(error);
-                    this.cleanup_status().await;
-                }
-            }
-        });
-    }
-    async fn bind(
-        &self,
-        identity: &account_auth::Identity,
-        generation: u64,
-        fresh_login: bool,
-    ) -> Result<()> {
-        if identity.issuer != config::ISSUER {
-            return Err(Error::OwnershipMismatch);
-        }
-        let old = self
-            .data
-            .lock()
-            .map_err(|_| Error::Storage)?
-            .binding
-            .clone();
-        let auth = self.auth().await?;
-        let token = auth.access_token(Duration::from_secs(60), false).await?;
-        let enrollment = enrollment::Enrollment::new(config::origin()?)?;
-        let profile = enrollment.profile(token.secret()).await?;
-        if profile.subject != identity.subject || profile.issuer != identity.issuer {
-            return Err(Error::OwnershipMismatch);
-        }
-        if !self.current(generation) {
-            return Err(Error::Cancelled);
-        }
-        let binding = prepare_session_binding(
-            &self.sync,
-            &self.root,
-            old.as_ref(),
-            identity,
-            profile,
-            fresh_login,
-        )?;
-        if let Some(old) = &old {
-            private::remember_session(&self.root, old)?;
-        }
-        private::remember_session(&self.root, &binding)?;
-        private::write(&self.root.join("binding.json"), &binding)?;
-        self.mutate(|d| {
-            d.binding = Some(binding.clone());
-            d.status.profile = Some(Profile {
-                subject: identity.subject.clone(),
-                display_name: safe_text(&identity.display_name, 120),
-                username: identity.username.as_ref().map(|v| safe_text(v, 120)),
-            });
-            d.status.enabled = binding.enabled;
-            d.status.state = Phase::Paused;
-            d.status.error = None;
-        });
-        Ok(())
+    fn current(&self, g: u64) -> bool {
+        !self.closing.load(Ordering::Acquire) && self.generation.load(Ordering::Acquire) == g
     }
     fn registry(&self) -> Result<private::Registry> {
         self.registry
@@ -332,106 +174,195 @@ impl Runtime {
             .cloned()
             .ok_or(Error::Storage)
     }
-    fn next_registration(&self) -> Result<private::Registry> {
-        let mut registry = self.registry.lock().map_err(|_| Error::Storage)?;
-        private::next_registration(&self.root, registry.as_mut().ok_or(Error::Storage)?)
+    pub fn snapshot(&self) -> Result<Status> {
+        let mut status = self.data.lock().map_err(|_| Error::Storage)?.status.clone();
+        let (pending, conflicts) = self.sync.account_metrics()?;
+        status.pending_count = pending;
+        status.conflict_count = conflicts;
+        if status.state == Phase::Authorizing {
+            status.authorization_surface = self
+                .presentation
+                .lock()
+                .ok()
+                .and_then(|p| p.as_ref().and_then(|p| p.surface()));
+        }
+        // UI cannot reuse online/sync observations after lease expiry between ticks.
+        let valid = self
+            .bus
+            .get()
+            .zip(self.data.lock().ok().and_then(|d| d.binding.clone()))
+            .is_some_and(|(bus, b)| worker::available(&bus.snapshot(), &b));
+        if !valid {
+            for d in &mut status.devices {
+                d.online = false;
+                d.connected = false;
+                d.sync_available = false;
+                d.summary = None;
+                d.transport = None;
+            }
+        }
+        Ok(status)
     }
-    async fn start_network(self: &Arc<Self>) -> Result<()> {
-        let generation = self.generation.load(Ordering::Acquire);
-        if !self.current(generation) {
+    fn set_phase(&self, g: u64, phase: Phase) {
+        self.mutate(|d| {
+            if self.current(g) {
+                d.status.state = phase;
+                d.status.error = None;
+            }
+        });
+    }
+    fn directory_status(&self, g: u64, catalog: &directory::Catalog) -> Result<()> {
+        let devices = catalog.devices(&self.registry()?.registry_device_id)?;
+        self.mutate(|d| {
+            if self.current(g) {
+                d.status.devices = devices;
+            }
+        });
+        Ok(())
+    }
+    pub fn restore(self: &Arc<Self>) {
+        let this = self.clone();
+        tauri::async_runtime::spawn(async move {
+            let _owner = this.lifecycle.lock().await;
+            let g = this.generation.load(Ordering::Acquire);
+            let result = async {
+                let bus = this.bus().await?;
+                bus.cmd(C::AuthRestore(pb::AuthRestore {
+                    operation_id: uuid::Uuid::new_v4().as_bytes().to_vec(),
+                }))
+                .await?;
+                let account = this
+                    .wait_account(&bus, g, &CancellationToken::new())
+                    .await?;
+                this.bind(&account, g, false)?;
+                this.start_network().await
+            }
+            .await;
+            if let Err(e) = result {
+                if this.current(g) {
+                    if e == Error::Authentication
+                        && this.data.lock().ok().is_some_and(|d| d.binding.is_none())
+                    {
+                        this.mutate(|d| d.status = Status::default());
+                    } else {
+                        this.fail(e);
+                    }
+                }
+            }
+        });
+    }
+    async fn wait_account(
+        &self,
+        bus: &Bus,
+        g: u64,
+        stop: &CancellationToken,
+    ) -> Result<pb::AccountSummary> {
+        let mut watch = bus.watch();
+        let result = bus.cmd(C::GetAuthState(pb::GetAuthState {})).await?;
+        if let Some(pb::sdk_result::Body::AuthState(a)) = result.body {
+            if let Some(account) = verified_account(&a)? {
+                return Ok(account);
+            }
+        }
+        let deadline = tokio::time::Instant::now() + Duration::from_secs(90);
+        loop {
+            if !self.current(g) || stop.is_cancelled() {
+                return Err(Error::Cancelled);
+            }
+            if let Some(a) = bus.snapshot().auth {
+                if let Some(account) = verified_account(&a)? {
+                    return Ok(account);
+                }
+            }
+            tokio::select! {_=stop.cancelled()=>return Err(Error::Cancelled),_ = tokio::time::sleep_until(deadline)=>return Err(Error::UnknownOutcome),r=watch.changed()=>r.map_err(|_|Error::Network)?}
+        }
+    }
+    fn bind(&self, account: &pb::AccountSummary, g: u64, fresh: bool) -> Result<()> {
+        let pins = config::pinned()?;
+        if account.issuer != pins.issuer || account.product_id != pins.product_id {
+            return Err(Error::OwnershipMismatch);
+        }
+        if !self.current(g) {
             return Err(Error::Cancelled);
         }
-        let mut slot = self.network.lock().await;
-        if let Some(network) = slot.as_ref().filter(|n| !n.task.is_finished()) {
-            network.control.refresh.notify_one();
-            return Ok(());
-        }
-        if let Some(old) = slot.take() {
-            old.control.configure(false);
-            old.stop.cancel();
-            let _ = old.task.await;
-        }
-        let binding = self
+        let workspace =
+            enrollment::workspace(&account.issuer, &account.subject, &account.product_id)?;
+        let old = self
             .data
             .lock()
             .map_err(|_| Error::Storage)?
             .binding
-            .clone()
-            .ok_or(Error::Authentication)?;
-        let auth = self.auth().await?;
-        std::fs::create_dir_all(&self.cache)?;
-        private::directory(&self.cache)?;
-        let client = cybergrid_sdk::Client::new(cybergrid_sdk::Config {
-            base_url: config::origin()?,
-            app_id: config::CLIENT_ID.into(),
-            cloudflared: Some(provider::configuration(&self.cache)?),
-            ..Default::default()
-        })?;
-        if crate::sync::network::diagnostics_enabled() {
-            let mut diagnostics = client.subscribe_diagnostics();
-            let owner = Arc::downgrade(&client);
-            tokio::spawn(async move {
-                loop {
-                    match diagnostics.recv().await {
-                        Ok(snapshot) => crate::sync::network::sdk_diagnostic(&snapshot),
-                        Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => {
-                            let Some(client) = owner.upgrade() else { break };
-                            for snapshot in client.diagnostics_snapshot() {
-                                crate::sync::network::sdk_diagnostic(&snapshot);
-                            }
-                        }
-                        Err(tokio::sync::broadcast::error::RecvError::Closed) => break,
+            .clone();
+        let binding = prepare_session_binding(
+            &self.sync,
+            &self.root,
+            old.as_ref(),
+            account,
+            &workspace,
+            fresh,
+        )?;
+        if let Some(old) = old {
+            private::remember_session(&self.root, &old)?;
+        }
+        private::remember_session(&self.root, &binding)?;
+        private::write(&self.root.join("binding.json"), &binding)?;
+        self.mutate(|d| {
+            d.binding = Some(binding.clone());
+            d.status.profile = Some(Profile {
+                subject: account.subject.clone(),
+                display_name: "CyberBus 账户".into(),
+                username: None,
+            });
+            d.status.enabled = binding.enabled;
+            d.status.state = Phase::Paused;
+            d.status.error = None;
+        });
+        Ok(())
+    }
+    async fn start_network(self: &Arc<Self>) -> Result<()> {
+        let mut slot = self.network.lock().await;
+        if slot.as_ref().is_some_and(|n| !n.task.is_finished()) {
+            return Ok(());
+        }
+        if let Some(n) = slot.take() {
+            n.stop.cancel();
+            n.control.configure(false);
+            n.catalog.clear();
+            let _ = n.task.await.map_err(|_| Error::Sync)?;
+        }
+        let bus = self.bus().await?;
+        let (binding, enabled) = {
+            let d = self.data.lock().map_err(|_| Error::Storage)?;
+            (
+                d.binding.clone().ok_or(Error::Authentication)?,
+                d.status.enabled,
+            )
+        };
+        let catalog = Arc::new(directory::Catalog::open(&self.root, &binding.workspace_id)?);
+        let control = Arc::new(worker::Control::default());
+        control.configure(enabled);
+        let stop = CancellationToken::new();
+        let g = self.generation.load(Ordering::Acquire);
+        let (requests, rx) = tokio::sync::mpsc::channel(1);
+        bus.cmd(C::NetworkStart(pb::NetworkStart {
+            private_config: None,
+        }))
+        .await?;
+        let owner = Arc::downgrade(self);
+        let c = control.clone();
+        let history = catalog.clone();
+        let task_stop = stop.clone();
+        let task = tokio::spawn(async move {
+            let result =
+                worker::run(owner.clone(), g, binding, bus, c, history, task_stop, rx).await;
+            if let Err(e) = result {
+                if let Some(o) = owner.upgrade() {
+                    if o.current(g) {
+                        o.fail(e);
                     }
                 }
-            });
-            let mut events = client.subscribe();
-            tokio::spawn(async move {
-                loop {
-                    let event = match events.recv().await {
-                        Ok(event) => event,
-                        Err(tokio::sync::broadcast::error::RecvError::Lagged(_)) => continue,
-                        Err(tokio::sync::broadcast::error::RecvError::Closed) => break,
-                    };
-                    let phase = match event.phase.as_str() {
-                        "multiplexer-ready" => "multiplexer-ready", "mapping-disconnected" => "mapping-disconnected",
-                        "coordination-ready" => "coordination-ready", "recovering" => "recovering",
-                        "provider-failed" => "provider-failed", "provider-restarting" => "provider-restarting",
-                        "direct-attempt" => "direct-attempt", "iroh-attempt" => "iroh-attempt",
-                        "fallback-attempt" => "fallback-attempt", "error" => "error", _ => continue,
-                    };
-                    let transport = match event.transport.as_deref() {
-                        Some("webrtc-direct") => "webrtc-direct", Some("iroh-direct") => "iroh-direct",
-                        Some("cloudflare-tunnel") => "cloudflare-tunnel", _ => "unknown",
-                    };
-                    crate::sync::network::diagnostic(phase, transport, 0, None);
-                }
-            });
-        }
-        let stop = CancellationToken::new();
-        let control = Arc::new(worker::Control::default());
-        control.configure(binding.enabled);
-        let catalog = Arc::new(directory::Catalog::default());
-        let (requests, receiver) = tokio::sync::mpsc::channel(1);
-        let weak = Arc::downgrade(self);
-        let task_stop = stop.clone();
-        let task_control = control.clone();
-        let task_catalog = catalog.clone();
-        let task = tokio::spawn(async move {
-            let result = worker::run(
-                weak.clone(),
-                generation,
-                binding,
-                auth,
-                client,
-                task_control,
-                task_catalog,
-                task_stop,
-                receiver,
-            )
-            .await;
-            if let (Err(error), Some(this)) = (result, weak.upgrade()) {
-                this.fail_current(generation, error);
             }
+            result
         });
         *slot = Some(Network {
             stop,
@@ -442,25 +373,51 @@ impl Runtime {
         });
         Ok(())
     }
-    async fn stop_network(&self) {
-        self.observations.close();
-        if let Some(network) = self.network.lock().await.take() {
-            network.control.configure(false);
-            network.stop.cancel();
-            let _ = network.task.await;
+    async fn stop_network(&self) -> Result<()> {
+        let network = self.network.lock().await.take();
+        if let Some(n) = network {
+            n.control.configure(false);
+            n.stop.cancel();
+            n.catalog.clear();
+            let result = n.task.await.map_err(|_| Error::Sync)?;
+            if let Err(e) = result {
+                if e != Error::Cancelled {
+                    return Err(e);
+                }
+            }
         }
-        self.sync.pause_account();
-        self.mutate(|d| {
-            d.status.devices.clear();
-        });
+        self.sync.pause_for_account()?;
+        if let Some(bus) = self.bus.get() {
+            bus.cmd(C::NetworkStop(pb::NetworkStop {})).await?;
+        }
+        Ok(())
+    }
+    fn set_enabled(&self, enabled: bool) -> Result<()> {
+        let mut d = self.data.lock().map_err(|_| Error::Storage)?;
+        if let Some(mut b) = d.binding.clone() {
+            b.enabled = enabled;
+            private::write(&self.root.join("binding.json"), &b)?;
+            d.binding = Some(b);
+        }
+        d.status.enabled = enabled;
+        Ok(())
+    }
+    async fn cancel_attempt(&self) {
+        self.generation.fetch_add(1, Ordering::AcqRel);
+        if let Some(a) = self.attempt.lock().await.as_ref() {
+            a.stop.cancel();
+            if let Some(m) = &a.mac {
+                m.cancel();
+            }
+        }
     }
     pub async fn command(self: &Arc<Self>, command: Command) -> Result<Status> {
         if self.closing.load(Ordering::Acquire) {
             return Err(Error::Cancelled);
         }
         if !matches!(command, Command::Status {}) {
-            if let Some(error) = self.blocked {
-                return Err(error);
+            if let Some(e) = self.blocked {
+                return Err(e);
             }
         }
         match command {
@@ -470,96 +427,73 @@ impl Runtime {
                 if self.attempt.lock().await.is_some() {
                     return Err(Error::Busy);
                 }
-                let reauthorize =
-                    authorization_mode(&self.data.lock().map_err(|_| Error::Storage)?.status)?;
-                // Never turn an offline retained session into a new login or
-                // change its enable intent before the sole grant owner agrees.
-                if !reauthorize && self.auth().await?.retained_identity().await.is_some() {
+                let status = self.snapshot()?;
+                if status.profile.is_some() && status.state != Phase::Error {
                     return Err(Error::Busy);
                 }
-                self.stop_network().await;
-                self.sync.pause_for_account()?;
-                self.set_enabled(false)?;
-                let generation = self.generation.fetch_add(1, Ordering::AcqRel) + 1;
+                self.stop_network().await?;
+                // An explicit login from a failed authenticated session first
+                // closes that session; never run two grant owners.
+                if status.profile.is_some() {
+                    self.logout().await?;
+                }
+                let g = self.generation.fetch_add(1, Ordering::AcqRel) + 1;
                 let stop = CancellationToken::new();
                 *self.attempt.lock().await = Some(Attempt {
-                    cancel: None,
                     stop: stop.clone(),
                     mac: None,
                 });
                 self.mutate(|d| {
                     d.status.state = Phase::Authorizing;
-                    d.status.profile = None;
-                    d.status.enabled = false;
                     d.status.error = None;
                 });
                 let signup = matches!(command, Command::SignUp { .. });
-                let this = self.clone();
+                let owner = self.clone();
                 tauri::async_runtime::spawn(async move {
-                    let _owner = this.lifecycle.lock().await;
-                    let result = this
-                        .login(signup, reauthorize, surface, generation, stop)
-                        .await;
-                    this.attempt.lock().await.take();
-                    this.android.lock().await.take();
-                    if let Ok(mut p) = this.presentation.lock() {
-                        if p.as_ref().is_some_and(|p| p.generation == generation) {
+                    let _owner = owner.lifecycle.lock().await;
+                    let result = owner.login(signup, surface, g, stop).await;
+                    owner.attempt.lock().await.take();
+                    owner.android.lock().await.take();
+                    if let Ok(mut p) = owner.presentation.lock() {
+                        if p.as_ref().is_some_and(|p| p.generation == g) {
                             p.take();
                         }
                     }
-                    if let Err(error) = result {
-                        if this.current(generation) {
-                            if error == Error::Cancelled {
-                                this.mutate(|d| d.status = Status::default());
-                            } else {
-                                this.fail(error);
-                            }
-                            this.cleanup_status().await;
+                    if owner.current(g) {
+                        if let Err(e) = result {
+                            owner.fail(e);
                         }
                     }
                 });
             }
-            Command::OpenLoginInBrowser {} => {
-                return self.open_login_in_browser(None).await;
-            }
+            Command::OpenLoginInBrowser {} => return self.open_login_in_browser(None).await,
             Command::Cancel {} => {
-                self.generation.fetch_add(1, Ordering::AcqRel);
-                if let Some(attempt) = self.attempt.lock().await.as_ref() {
-                    if let Some(cancel) = &attempt.cancel {
-                        cancel.cancel();
-                    }
-                    attempt.stop.cancel();
-                    if let Some(mac) = &attempt.mac {
-                        mac.cancel();
+                // Content cancellation fences admission and waits for its receipt.
+                if self.attempt.lock().await.is_some() {
+                    self.cancel_attempt().await;
+                    let _owner = self.lifecycle.lock().await;
+                    self.mutate(|d| {
+                        if d.status.profile.is_none() {
+                            d.status = Status::default()
+                        }
+                    });
+                } else {
+                    let control = self
+                        .network
+                        .lock()
+                        .await
+                        .as_ref()
+                        .map(|n| n.control.clone());
+                    if let Some(control) = control {
+                        control.cancel_operation().await?;
                     }
                 }
-                let _owner = self.lifecycle.lock().await;
-                self.stop_network().await;
-                self.mutate(|d| {
-                    if d.status.state == Phase::Authorizing {
-                        d.status = Status::default();
-                    }
-                });
             }
             Command::SignOut {} => {
-                // Seal network first, before a potentially failing remote revoke.
-                self.generation.fetch_add(1, Ordering::AcqRel);
-                if let Some(attempt) = self.attempt.lock().await.as_ref() {
-                    if let Some(cancel) = &attempt.cancel {
-                        cancel.cancel();
-                    }
-                    attempt.stop.cancel();
-                    if let Some(mac) = &attempt.mac {
-                        mac.cancel();
-                    }
-                }
+                self.cancel_attempt().await;
                 let _owner = self.lifecycle.lock().await;
-                self.stop_network().await;
-                if let Err(error) = self.auth().await?.logout().await {
-                    self.fail(error.into());
-                    self.cleanup_status().await;
-                    return self.snapshot();
-                }
+                self.stop_network().await?;
+                self.logout().await?;
                 self.set_enabled(false)?;
                 self.sync.replay_adoption_release()?;
                 private::clear_session(&self.root)?;
@@ -570,37 +504,38 @@ impl Runtime {
             }
             Command::SetEnabled { enabled } => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
-                let binding = {
-                    let d = self.data.lock().map_err(|_| Error::Storage)?;
-                    if d.status.profile.is_none() {
-                        return Err(Error::Authentication);
-                    }
-                    d.binding.clone().ok_or(Error::Authentication)?
-                };
-                // Seal content immediately. Directory/SDK remain owned and alive.
-                if let Some(network) = self.network.lock().await.as_ref() {
-                    network.control.configure(false);
+                let b = self
+                    .data
+                    .lock()
+                    .map_err(|_| Error::Storage)?
+                    .binding
+                    .clone()
+                    .ok_or(Error::Authentication)?;
+                if let Some(control) = self
+                    .network
+                    .lock()
+                    .await
+                    .as_ref()
+                    .map(|n| n.control.clone())
+                {
+                    control.configure(false);
+                    control.wait_retired().await?;
                 }
                 self.sync.pause_for_account()?;
                 self.set_enabled(false)?;
                 if enabled
                     && self
                         .sync
-                        .account_adoption_needed(&binding.workspace_id, &binding.device_id)?
+                        .account_adoption_needed(&b.workspace_id, &b.device_id)?
                 {
-                    if let Err(error) = self
-                        .sync
-                        .account_adoption_preflight(&binding.workspace_id, &binding.device_id)
-                    {
-                        self.fail(error.into());
-                        return self.snapshot();
-                    }
+                    self.sync
+                        .account_adoption_preflight(&b.workspace_id, &b.device_id)?;
                     private::begin_adoption(&self.root)?;
                 }
                 self.set_enabled(enabled)?;
                 self.start_network().await?;
-                if let Some(network) = self.network.lock().await.as_ref() {
-                    network.control.configure(enabled);
+                if let Some(n) = self.network.lock().await.as_ref() {
+                    n.control.configure(enabled);
                 }
                 self.mutate(|d| {
                     d.status.state = if enabled {
@@ -613,177 +548,164 @@ impl Runtime {
             }
             Command::SyncNow {} => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
-                let restore = {
-                    let d = self.data.lock().map_err(|_| Error::Storage)?;
-                    network_recovery(&d.status, d.binding.is_some())
-                };
-                if restore {
-                    let generation = self.generation.fetch_add(1, Ordering::AcqRel) + 1;
-                    self.stop_network().await;
-                    let result = recovery::run(self, generation).await;
-                    if self.current(generation) {
-                        if let Err(error) = result {
-                            self.fail(error);
-                        }
-                    }
-                } else {
-                    if self
-                        .data
-                        .lock()
-                        .map_err(|_| Error::Storage)?
-                        .status
-                        .profile
-                        .is_none()
-                    {
-                        return Err(Error::Authentication);
-                    }
-                    // Refresh metadata only. Never wake replication or restart a live SDK owner.
-                    self.start_network().await?;
-                }
-            }
-            Command::RenameDevice { name } => {
-                let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
                 if self
                     .data
                     .lock()
                     .map_err(|_| Error::Storage)?
-                    .status
-                    .profile
+                    .binding
                     .is_none()
                 {
                     return Err(Error::Authentication);
                 }
-                let renamed = {
+                let bus = self.bus().await?;
+                bus.on_resume().await?;
+                // Recovery revalidates the retained SDK grant; it never creates
+                // a replacement account or opts into content replication.
+                if !self
+                    .data
+                    .lock()
+                    .ok()
+                    .and_then(|d| d.binding.clone())
+                    .is_some_and(|b| worker::authenticated(&bus.snapshot(), &b))
+                {
+                    bus.cmd(C::AuthRestore(pb::AuthRestore {
+                        operation_id: uuid::Uuid::new_v4().as_bytes().to_vec(),
+                    }))
+                    .await?;
+                    let g = self.generation.load(Ordering::Acquire);
+                    let account = self
+                        .wait_account(&bus, g, &CancellationToken::new())
+                        .await?;
+                    self.bind(&account, g, false)?;
+                }
+                self.start_network().await?;
+            }
+            Command::RenameDevice { name } => {
+                let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
+                if self.snapshot()?.profile.is_none() {
+                    return Err(Error::Authentication);
+                }
+                {
                     let mut slot = self.registry.lock().map_err(|_| Error::Storage)?;
-                    let value = slot.as_mut().ok_or(Error::Storage)?;
-                    let mut next = value.clone();
+                    let mut next = slot.clone().ok_or(Error::Storage)?;
                     next.name = private::device_name(&name)?;
                     private::write_registry(&self.root, &next)?;
-                    *value = next;
-                    (value.registry_device_id.clone(), value.name.clone())
-                };
-                self.mutate(|d| {
-                    if let Some(device) = d
-                        .status
-                        .devices
-                        .iter_mut()
-                        .find(|device| device.id == renamed.0)
-                    {
-                        device.name = renamed.1;
-                    }
-                });
-                if let Some(network) = self.network.lock().await.as_ref() {
-                    network.control.refresh.notify_one();
+                    *slot = Some(next);
+                }
+                if let Some(n) = self.network.lock().await.as_ref() {
+                    n.control.refresh.notify_one();
                 }
             }
             Command::SyncDevice {
                 device_id,
                 direction,
-            } => {
-                // Operation ownership is separate from lifecycle: status, disable
-                // and signout remain callable throughout bounded network IO.
-                let _operation = self.operation.try_lock().map_err(|_| Error::Busy)?;
-                let generation = self.generation.load(Ordering::Acquire);
-                let cancellation = Arc::new(worker::RequestCancellation::default());
-                let operation_id = uuid::Uuid::new_v4();
-                let owner = Arc::downgrade(self);
-                cancellation.observe_progress(Arc::new(move |progress| {
-                    if let Some(owner) = owner.upgrade() {
-                        owner.mutate(|d| {
-                            if owner.current(generation) && d.device_operation_id == Some(operation_id) {
-                                if let Some(operation) = &mut d.status.device_operation {
-                                    if operation.phase == types::DeviceOperationPhase::Running {
-                                        operation.progress = Some(progress);
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }));
-                let receiver = {
-                    let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
-                    if !self.data.lock().map_err(|_| Error::Storage)?.status.enabled {
-                        return Err(Error::SyncNotEnabled);
-                    }
-                    let network = self.network.lock().await;
-                    let network = network.as_ref().ok_or(Error::DirectoryUnavailable)?;
-                    if network.control.busy() {
-                        return Err(Error::Busy);
-                    }
-                    if !network.control.ready() {
-                        return Err(Error::SyncNotEnabled);
-                    }
-                    let content_epoch = network.control.epoch()?;
-                    let target = network
-                        .catalog
-                        .target(&device_id, &self.registry()?.registry_device_id)?;
-                    let permit = network.control.reserve(content_epoch, &cancellation)?;
-                    let (done, receiver) = oneshot::channel();
-                    self.mutate(|d| {
-                        d.device_operation_id = Some(operation_id);
-                        d.status.device_operation = Some(types::DeviceOperation {
-                            device_id: device_id.clone(),
-                            direction,
-                            phase: types::DeviceOperationPhase::Running,
-                            started_at: unix_ms(),
-                            finished_at: None,
-                            progress: Some(Default::default()),
-                        });
-                        d.status.error = None;
-                    });
-                    network
-                        .requests
-                        .try_send(worker::DeviceRequest {
-                            target,
-                            direction,
-                            epoch: content_epoch,
-                            _permit: permit,
-                            cancellation: cancellation.clone(),
-                            owner: Arc::downgrade(self),
-                            generation,
-                            operation_id,
-                            done,
-                        })
-                        .map_err(|_| {
-                            self.finish_device_operation(
-                                generation,
-                                operation_id,
-                                Err(Error::Busy),
-                            );
-                            Error::Busy
-                        })?;
-                    receiver
-                };
-                // A runtime-owned waiter keeps both the deadline and receipt alive
-                // when the dialog/settings WebView goes away. UI only starts work.
-                tauri::async_runtime::spawn(async move {
-                    let _ = worker::wait_request(receiver, cancellation).await;
-                });
-            }
+            } => self.start_device(device_id, direction).await?,
         }
-        self.cleanup_status().await;
         self.snapshot()
     }
-    fn finish_device_operation(&self, generation: u64, id: uuid::Uuid, outcome: Result<()>) {
-        self.mutate(|d| {
-            if !self.current(generation) || d.device_operation_id != Some(id) {
-                return;
+    async fn logout(&self) -> Result<()> {
+        let result = self
+            .bus()
+            .await?
+            .cmd(C::AuthLogout(pb::AuthLogout {
+                cloud_policy: Some(pb::CloudLogoutPolicy::RevokeGrant as i32),
+                cloud_budget: None,
+            }))
+            .await?;
+        match result.body {
+            Some(pb::sdk_result::Body::AuthLogout(r))
+                if r.local_closed && r.local_error.is_none() =>
+            {
+                if let Some(e) = r.cloud_error {
+                    return Err(notes_cyberbus::Error::Sdk(e.code).into());
+                }
+                if r.cloud_status != pb::CloudLogoutStatus::Succeeded as i32 {
+                    return Err(Error::UnknownOutcome);
+                }
+                Ok(())
             }
-            complete_device_status(d, id, outcome);
-        });
-    }
-    fn set_enabled(&self, enabled: bool) -> Result<()> {
-        let mut data = self.data.lock().map_err(|_| Error::Storage)?;
-        if let Some(binding) = &mut data.binding {
-            let mut next = binding.clone();
-            next.enabled = enabled;
-            private::write(&self.root.join("binding.json"), &next)?;
-            *binding = next;
-        } else if enabled {
-            return Err(Error::Authentication);
+            Some(pb::sdk_result::Body::AuthLogout(r)) => Err(r
+                .local_error
+                .map(|e| Error::from(notes_cyberbus::Error::Sdk(e.code)))
+                .unwrap_or(Error::CleanupRequired)),
+            _ => Err(Error::CoordinationProtocol),
         }
-        data.status.enabled = enabled;
+    }
+    async fn start_device(
+        self: &Arc<Self>,
+        device_id: String,
+        direction: types::TransferDirection,
+    ) -> Result<()> {
+        let _operation = self.operation.try_lock().map_err(|_| Error::Busy)?;
+        let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
+        if !self.snapshot()?.enabled {
+            return Err(Error::SyncNotEnabled);
+        }
+        let network = self.network.lock().await;
+        let n = network.as_ref().ok_or(Error::DirectoryUnavailable)?;
+        if !n.control.ready() {
+            return Err(Error::SyncNotEnabled);
+        }
+        let g = self.generation.load(Ordering::Acquire);
+        let epoch = n.control.epoch()?;
+        let cancellation = Arc::new(worker::RequestCancellation::default());
+        let id = uuid::Uuid::new_v4();
+        let weak = Arc::downgrade(self);
+        cancellation.observe_progress(Arc::new(move |p| {
+            if let Some(o) = weak.upgrade() {
+                o.mutate(|d| {
+                    if o.current(g) && d.device_operation_id == Some(id) {
+                        if let Some(op) = &mut d.status.device_operation {
+                            op.progress = Some(p);
+                        }
+                    }
+                });
+            }
+        }));
+        let target = n
+            .catalog
+            .target(&device_id, &self.registry()?.registry_device_id)?;
+        let permit = n.control.reserve(epoch, &cancellation)?;
+        let (done, rx) = oneshot::channel();
+        self.mutate(|d| {
+            d.device_operation_id = Some(id);
+            d.status.error = None;
+            d.status.device_operation = Some(types::DeviceOperation {
+                device_id,
+                direction,
+                phase: types::DeviceOperationPhase::Running,
+                started_at: unix_ms(),
+                finished_at: None,
+                progress: Some(Default::default()),
+            });
+        });
+        n.requests
+            .try_send(worker::DeviceRequest {
+                target,
+                direction,
+                epoch,
+                _permit: permit,
+                cancellation: cancellation.clone(),
+                owner: Arc::downgrade(self),
+                generation: g,
+                operation_id: id,
+                done,
+            })
+            .map_err(|_| {
+                self.finish_device_operation(g, id, Err(Error::Busy));
+                Error::Busy
+            })?;
+        tauri::async_runtime::spawn(async move {
+            let _ = worker::wait_request(rx, cancellation).await;
+        });
         Ok(())
+    }
+    fn finish_device_operation(&self, g: u64, id: uuid::Uuid, outcome: Result<()>) {
+        self.mutate(|d| {
+            if self.current(g) {
+                complete_device_status(d, id, outcome);
+            }
+        });
     }
     async fn open_login_in_browser(&self, instance: Option<&str>) -> Result<Status> {
         let presentation = self
@@ -821,133 +743,81 @@ impl Runtime {
     async fn login(
         self: &Arc<Self>,
         signup: bool,
-        reauthorize: bool,
-        requested_surface: types::AuthorizationSurface,
-        generation: u64,
+        requested: types::AuthorizationSurface,
+        g: u64,
         stop: CancellationToken,
     ) -> Result<()> {
-        let auth = self.auth().await?;
-        // Bind the callback before opening the browser. Android uses a single
-        // native deep-link owner and accepts only the registered exact URI.
+        let bus = self.bus().await?;
         #[cfg(not(target_os = "android"))]
         let mac = callback::Callback::start()
             .await
             .map_err(|_| Error::NetworkAt(types::NetworkStage::CallbackListen))?;
         #[cfg(not(target_os = "android"))]
         let _callback_lease = callback::Lease(mac.clone());
-        if reauthorize {
-            // Only an explicit SignIn/SignUp from an error state can replace
-            // an existing grant. The lifecycle owner has already sealed the
-            // network, and a failed revoke must never start a new transaction.
-            auth.logout().await.map_err(|_| Error::CleanupRequired)?;
-        }
-        if !self.current(generation) || stop.is_cancelled() {
-            return Err(Error::Cancelled);
-        }
-        let (transaction, url) = auth
-            .begin_authorization(config::redirect(), signup)
-            .await
-            .map_err(|error| match error {
-                // A retained grant requires an explicit cleanup action, not
-                // a retry loop presenting the same Busy result forever.
-                account_auth::AuthError::Busy => Error::CleanupRequired,
-                error => error.into(),
-            })?;
-        let cancel = transaction.cancellation_handle();
-        if !self.current(generation) || stop.is_cancelled() {
-            cancel.cancel();
-            return Err(Error::Cancelled);
-        }
-        {
-            let mut attempt = self.attempt.lock().await;
-            if let Some(a) = attempt.as_mut() {
-                a.cancel = Some(cancel.clone());
-                #[cfg(not(target_os = "android"))]
+        let result = bus
+            .cmd(C::AuthStart(pb::AuthStart {
+                intent: if signup {
+                    pb::AuthIntent::Register as i32
+                } else {
+                    pb::AuthIntent::Login as i32
+                },
+            }))
+            .await?;
+        let Some(pb::sdk_result::Body::AuthStarted(started)) = result.body else {
+            return Err(Error::CoordinationProtocol);
+        };
+        let op = started.operation_id;
+        let mut callback_submitted = false;
+        let outcome=async {
+            if !self.current(g) || stop.is_cancelled(){return Err(Error::Cancelled);}
+            #[cfg(not(target_os="android"))]
+            if let Some(a)=self.attempt.lock().await.as_mut(){a.mac=Some(mac.clone());}
+            let url=started.authorization_uri.parse().map_err(|_|Error::Configuration)?;
+            let p=surface::Presentation::new(self,requested,g,url,stop.clone(),stop.clone())?;
+            let _lease=surface::Lease(p.clone());*self.presentation.lock().map_err(|_|Error::Storage)?=Some(p.clone());
+            #[cfg(target_os="android")]
+            let receiver={let(tx,rx)=oneshot::channel();*self.android.lock().await=Some(AndroidCallback{generation:g,instance:p.instance.clone(),sender:tx});rx};
+            let deadline=tokio::time::Instant::now()+Duration::from_secs(600);
+            #[cfg(all(feature="sync-e2e",debug_assertions,desktop))]
+            let handed_off=test_authorization_file(&started.authorization_uri)?;
+            #[cfg(not(all(feature="sync-e2e",debug_assertions,desktop)))]
+            let handed_off=false;
+            if !handed_off {
+                tokio::select! {_=stop.cancelled()=>return Err(p.stopped_error()),r=tokio::time::timeout_at(deadline,p.open(self))=>r.map_err(|_|Error::Deadline)??}
+            }
+            let callback=async {
+                #[cfg(not(target_os="android"))]
+                {mac.wait().await.map_err(|_|Error::NetworkAt(types::NetworkStage::CallbackReceive))}
+                #[cfg(target_os="android")]
+                {receiver.await.map(|u|u.to_string()).map_err(|_|Error::Cancelled)}
+            };
+            let value=tokio::select! {_=stop.cancelled()=>return Err(p.stopped_error()),r=tokio::time::timeout_at(deadline,callback)=>r.map_err(|_|Error::Deadline)??};
+            p.completing();
+            // Once dispatched, await the SDK owner even if the surface cancels.
+            // The owner settles rotated credentials before any local logout.
+            callback_submitted=true;
+            bus.cmd(C::AuthCallback(pb::AuthCallback{operation_id:op.clone(),callback_uri:value})).await?;
+            let account=self.wait_account(&bus,g,&stop).await?;
+            self.bind(&account,g,true)?;
+            self.start_network().await
+        }.await;
+        if outcome.is_err() {
+            let cancel = bus
+                .cmd(C::AuthCancel(pb::AuthCancel { operation_id: op }))
+                .await;
+            if !self.current(g) || stop.is_cancelled() || callback_submitted {
+                // Callback may have committed immediately before cancellation.
+                // Seal any grant rather than leaving an unseen logged-in owner.
+                self.stop_network().await?;
+                self.logout().await?;
+            } else if let Err(e) = cancel {
+                if !matches!(e,notes_cyberbus::Error::Sdk(c) if c==pb::ErrorCode::Conflict as i32 || c==pb::ErrorCode::NotFound as i32)
                 {
-                    a.mac = Some(mac.clone());
+                    return Err(e.into());
                 }
             }
         }
-        let presentation = surface::Presentation::new(
-            self,
-            requested_surface,
-            generation,
-            url,
-            stop.clone(),
-            cancel.clone(),
-        )?;
-        let _presentation_lease = surface::Lease(presentation.clone());
-        *self.presentation.lock().map_err(|_| Error::Storage)? = Some(presentation.clone());
-        #[cfg(target_os = "android")]
-        let receiver = {
-            let (tx, rx) = oneshot::channel();
-            *self.android.lock().await = Some(AndroidCallback {
-                generation,
-                instance: presentation.instance.clone(),
-                sender: tx,
-            });
-            rx
-        };
-        let deadline = tokio::time::Instant::now() + Duration::from_secs(600);
-        tokio::select! {
-            biased;
-            _ = stop.cancelled() => return Err(presentation.stopped_error()),
-            result = tokio::time::timeout_at(deadline, presentation.open(self)) => result.map_err(|_| Error::Authentication)??,
-        };
-        let callback = async {
-            #[cfg(not(target_os = "android"))]
-            {
-                mac.wait()
-                    .await
-                    .map_err(|_| Error::NetworkAt(types::NetworkStage::CallbackReceive))?
-                    .parse()
-                    .map_err(|_| Error::Authentication)
-            }
-            #[cfg(target_os = "android")]
-            {
-                receiver.await.map_err(|_| Error::Cancelled)
-            }
-        };
-        let value = tokio::select! {_=stop.cancelled()=>{cancel.cancel();#[cfg(not(target_os="android"))]mac.cancel();return Err(presentation.stopped_error())},result=tokio::time::timeout_at(deadline,callback)=>result.map_err(|_|Error::Authentication)??};
-        presentation.completing();
-        let identity = auth.complete_callback(transaction, value).await?;
-        let outcome = async {
-            if !self.current(generation) || stop.is_cancelled() {
-                return Err(Error::Cancelled);
-            }
-            if let Err(error) = self.bind(&identity, generation, true).await {
-                // Complete_callback committed a grant, but no account was
-                // accepted. Settle revocation before returning the bind error;
-                // failed revocation is surfaced by cleanup_status below.
-                let _ = auth.logout().await;
-                return Err(error);
-            }
-            if !self.current(generation) || stop.is_cancelled() {
-                return Err(Error::Cancelled);
-            }
-            self.start_network().await
-        }
-        .await;
-        if !self.current(generation) || stop.is_cancelled() {
-            self.stop_network().await;
-            if let Err(error) = auth.logout().await {
-                self.mutate(|d| {
-                    d.status.profile = Some(Profile {
-                        subject: identity.subject,
-                        display_name: safe_text(&identity.display_name, 120),
-                        username: None,
-                    });
-                    d.status.state = Phase::Error;
-                    d.status.error = Some(Error::from(error).safe());
-                });
-            } else {
-                self.set_enabled(false)?;
-                self.mutate(|d| d.status = Status::default());
-            }
-            return Err(Error::Cancelled);
-        }
-        outcome?;
-        Ok(())
+        outcome
     }
     pub async fn deep_link(&self, url: url::Url) {
         if url.scheme() != "com.local.notesclone.auth"
@@ -970,7 +840,7 @@ impl Runtime {
             return;
         }
         if let Some(sender) = take_android_callback(&mut slot, p.generation, &p.instance) {
-            let _ = sender.send(url); // full validate_callback remains in AuthClient.
+            let _ = sender.send(url); // The SDK owner validates state/PKCE and the exact callback.
         }
     }
     pub fn foreground(self: &Arc<Self>) {
@@ -983,7 +853,7 @@ impl Runtime {
                 return;
             };
             let enabled = this.data.lock().ok().is_some_and(|d| d.status.enabled);
-            if enabled {
+            if enabled || this.data.lock().ok().is_some_and(|d| d.binding.is_some()) {
                 if this
                     .network
                     .lock()
@@ -1011,91 +881,37 @@ impl Runtime {
         tauri::async_runtime::spawn(async move {
             this.generation.fetch_add(1, Ordering::AcqRel);
             if let Some(a) = this.attempt.lock().await.as_ref() {
-                if let Some(c) = &a.cancel {
-                    c.cancel();
-                }
                 a.stop.cancel();
                 if let Some(mac) = &a.mac {
                     mac.cancel();
                 }
             }
             let _owner = this.lifecycle.lock().await;
-            this.stop_network().await;
+            if let Err(error) = this.stop_network().await {
+                this.fail(error);
+                return;
+            }
+            if let Some(bus) = this.bus.get() {
+                if let Err(error) = bus.close().await {
+                    this.fail(error.into());
+                    return;
+                }
+            }
             this.closed.store(true, Ordering::Release);
             app.exit(0);
         });
     }
 }
-impl recovery::Host for Arc<Runtime> {
-    fn current(&self, generation: u64) -> bool {
-        Runtime::current(self, generation)
-    }
-    async fn restore(&self) -> Result<account_auth::Identity> {
-        self.auth()
-            .await?
-            .restore()
-            .await?
-            .ok_or(Error::AuthenticationAt(
-                types::NetworkStage::IdentitySession,
-            ))
-    }
-    async fn bind(&self, identity: account_auth::Identity, generation: u64) -> Result<bool> {
-        Runtime::bind(self, &identity, generation, false).await?;
-        Ok(self
-            .data
-            .lock()
-            .map_err(|_| Error::Storage)?
-            .binding
-            .as_ref()
-            .ok_or(Error::Authentication)?
-            .enabled)
-    }
-    async fn start(&self) -> Result<()> {
-        self.start_network().await
-    }
-}
-fn unix_ms() -> u64 {
-    std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_millis()
-        .min(types::MAX_SAFE_INTEGER as u128) as u64
-}
-fn session_identity_matches(binding: &private::Binding, identity: &account_auth::Identity) -> bool {
-    identity.issuer == config::ISSUER
-        && binding.issuer == identity.issuer
-        && binding.subject == identity.subject
-}
-fn present_retained_session(
-    status: &mut Status,
-    binding: &private::Binding,
-    identity: &account_auth::Identity,
-    enabled: bool,
-) {
-    if !session_identity_matches(binding, identity) {
-        return;
-    }
-    status.profile = Some(Profile {
-        subject: identity.subject.clone(),
-        display_name: safe_text(&identity.display_name, 120),
-        username: identity.username.as_ref().map(|name| safe_text(name, 120)),
-    });
-    status.enabled = enabled;
-    status.state = Phase::Paused;
-}
-// Shared by real bind and device-free host fixtures; no local workspace check
-// belongs in authentication. Preparation may create only private session keys.
 fn prepare_session_binding(
     sync: &adapter::Runtime,
     root: &Path,
     old: Option<&private::Binding>,
-    identity: &account_auth::Identity,
-    profile: enrollment::Profile,
+    identity: &notes_cyberbus::pb::AccountSummary,
+    workspace: &str,
     fresh_login: bool,
 ) -> Result<private::Binding> {
-    if identity.issuer != config::ISSUER
-        || profile.issuer != identity.issuer
-        || profile.subject != identity.subject
+    if enrollment::workspace(&identity.issuer, &identity.subject, &identity.product_id)?
+        != workspace
     {
         return Err(Error::OwnershipMismatch);
     }
@@ -1105,17 +921,17 @@ fn prepare_session_binding(
         !fresh_login
             && b.issuer == identity.issuer
             && b.subject == identity.subject
-            && b.product_id == profile.product_id
-            && b.workspace_id == profile.workspace_id
+            && b.product_id == identity.product_id
+            && b.workspace_id == workspace
     });
     let store = sync.account_store_identity()?;
     let previous = if let Some(store) = &store {
-        if store.workspace_id == profile.workspace_id {
+        if store.workspace_id == workspace {
             let matches = |b: &private::Binding| {
                 b.device_id == store.device_id
                     && session_identity_matches(b, identity)
-                    && b.product_id == profile.product_id
-                    && b.workspace_id == profile.workspace_id
+                    && b.product_id == identity.product_id
+                    && b.workspace_id == workspace
             };
             match old.filter(|b| matches(b)) {
                 Some(binding) => Some(binding.clone()),
@@ -1141,13 +957,13 @@ fn prepare_session_binding(
     let binding = private::Binding {
         issuer: identity.issuer.clone(),
         subject: identity.subject.clone(),
-        product_id: profile.product_id.clone(),
-        workspace_id: profile.workspace_id.clone(),
+        product_id: identity.product_id.clone(),
+        workspace_id: workspace.to_string(),
         device_id: noise.device_id()?,
         noise_public_key: noise.public_key()?,
         enabled: retained.is_some_and(|b| b.enabled)
             && !private::adoption_pending(root)?
-            && !sync.account_adoption_needed(&profile.workspace_id, &device)?,
+            && !sync.account_adoption_needed(&workspace, &device)?,
     };
     if retained.is_some_and(|b| b.noise_public_key != binding.noise_public_key) {
         return Err(Error::OwnershipMismatch);
@@ -1181,45 +997,32 @@ fn complete_device_status(d: &mut Data, id: uuid::Uuid, outcome: Result<()>) {
     }
 }
 
-fn network_recovery(status: &Status, bound: bool) -> bool {
-    bound
-        && status.state == Phase::Error
-        && status.error.as_ref().is_some_and(|error| {
-            error.code == "account_network"
-                || (error.code == "account_authentication"
-                    && error.stage == Some(types::NetworkStage::AuthorizationProvider)
-                    && error.provider_reason == Some(cybergrid_sdk::AuthProviderFailure::Network))
-        })
+fn unix_ms() -> u64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_millis() as u64)
+        .unwrap_or(0)
 }
-fn authorization_mode(status: &Status) -> Result<bool> {
-    match status.state {
-        Phase::Error
-            if status
-                .error
-                .as_ref()
-                .is_some_and(types::SafeError::refresh_rejected) =>
+fn session_identity_matches(b: &private::Binding, a: &pb::AccountSummary) -> bool {
+    b.issuer == a.issuer && b.subject == a.subject && b.product_id == a.product_id
+}
+fn verified_account(a: &pb::AuthEvent) -> Result<Option<pb::AccountSummary>> {
+    match pb::AuthPhase::try_from(a.phase) {
+        Ok(pb::AuthPhase::Authorizing | pb::AuthPhase::Restoring) => Ok(None),
+        Ok(pb::AuthPhase::Authenticated)
+            if !a.reauth_required && !a.security_state_persistence_pending =>
         {
-            Ok(true)
+            a.account.clone().map(Some).ok_or(Error::InvalidIdentity)
         }
-        Phase::Error
-            if status.profile.is_none()
-                && status
-                    .error
-                    .as_ref()
-                    .is_some_and(types::SafeError::initial_authorization_retry) =>
-        {
-            Ok(false)
-        }
-        Phase::SignedOut if status.profile.is_none() => Ok(false),
-        _ => Err(Error::Busy),
+        Ok(pb::AuthPhase::LoggedOut | pb::AuthPhase::AuthCancelled) => Err(Error::Authentication),
+        Ok(pb::AuthPhase::Degraded) => Err(Error::Network),
+        Ok(pb::AuthPhase::ReauthRequired) => Err(Error::Authentication),
+        _ => Err(a
+            .error
+            .as_ref()
+            .map(|e| Error::from(notes_cyberbus::Error::Sdk(e.code)))
+            .unwrap_or(Error::InvalidIdentity)),
     }
-}
-fn safe_text(value: &str, max: usize) -> String {
-    value
-        .chars()
-        .filter(|c| !c.is_control())
-        .take(max)
-        .collect()
 }
 fn trusted_application_origin(source: &url::Url) -> bool {
     // Custom tauri URLs have opaque Url::origin(); compare their parsed parts
@@ -1228,629 +1031,6 @@ fn trusted_application_origin(source: &url::Url) -> bool {
         && source.port().is_none()
         && ((source.scheme() == "tauri" && source.host_str() == Some("localhost"))
             || (source.scheme() == "http" && source.host_str() == Some("tauri.localhost")))
-}
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn device_receipts_match_operation_identity_and_cancel_never_sets_last_sync() {
-        let old = uuid::Uuid::new_v4();
-        let current = uuid::Uuid::new_v4();
-        let mut data = Data {
-            status: Status::default(),
-            binding: None,
-            device_operation_id: Some(current),
-        };
-        data.status.device_operation = Some(types::DeviceOperation {
-            device_id: uuid::Uuid::new_v4().to_string(),
-            direction: types::TransferDirection::Pull,
-            phase: types::DeviceOperationPhase::Running,
-            started_at: 10,
-            finished_at: None,
-            progress: None,
-        });
-        complete_device_status(&mut data, old, Ok(()));
-        assert!(matches!(
-            data.status.device_operation.as_ref().unwrap().phase,
-            types::DeviceOperationPhase::Running
-        ));
-        assert!(data.status.last_sync_at.is_none());
-        complete_device_status(&mut data, current, Err(Error::Sync));
-        assert!(matches!(
-            data.status.device_operation.as_ref().unwrap().phase,
-            types::DeviceOperationPhase::Failed
-        ));
-        assert!(data.status.last_sync_at.is_none());
-        assert!(data.status.error.is_some());
-        complete_device_status(&mut data, current, Ok(()));
-        assert!(matches!(
-            data.status.device_operation.as_ref().unwrap().phase,
-            types::DeviceOperationPhase::Failed
-        ));
-        assert!(data.status.last_sync_at.is_none());
-    }
-    struct SessionWindows;
-    impl adapter::WindowHost for SessionWindows {
-        fn participants(&self) -> std::collections::HashSet<String> {
-            std::collections::HashSet::from(["main".into()])
-        }
-        fn emit(&self, _: &str, _: &serde_json::Value) -> crate::store::Result<()> {
-            Ok(())
-        }
-    }
-    #[test]
-    fn login_sessions_a_out_b_out_a_preserve_manual_library_and_never_inherit_enable() {
-        use crate::{session::Session, store::Store};
-        let dir = tempfile::tempdir().unwrap();
-        let mut store = Store::open(dir.path()).unwrap();
-        store
-            .action(serde_json::json!({"type":"createNote"}))
-            .unwrap();
-        let shared = Arc::new((Mutex::new(Session::new(store)), std::sync::Condvar::new()));
-        let sync =
-            adapter::Runtime::new(shared.clone(), dir.path().into(), Arc::new(SessionWindows))
-                .unwrap();
-        let token = shared.0.lock().unwrap().sync_media_token();
-        sync.command(
-            adapter::Command::StartHost {
-                device_name: "fixture".into(),
-                port: 0,
-            },
-            "main",
-            &token,
-        )
-        .unwrap();
-        let old_workspace = shared
-            .0
-            .lock()
-            .unwrap()
-            .store
-            .sync_identity()
-            .unwrap()
-            .unwrap();
-        let before = shared.0.lock().unwrap().workspace().unwrap();
-        sync.pause_for_account().unwrap();
-        let root = dir.path().join(".account");
-        private::directory(&root).unwrap();
-        let mut old = None;
-        let mut devices = std::collections::HashSet::new();
-        let mut keys = std::collections::HashSet::new();
-        let mut workspaces = std::collections::HashMap::new();
-        for owner in ["fixture-a", "fixture-b", "fixture-a"] {
-            let identity = account_auth::Identity {
-                issuer: config::ISSUER.into(),
-                subject: owner.into(),
-                display_name: owner.into(),
-                username: None,
-            };
-            let workspace = workspaces
-                .entry(owner)
-                .or_insert_with(|| uuid::Uuid::new_v4().to_string())
-                .clone();
-            let profile = enrollment::Profile {
-                schema_version: 1,
-                subject: owner.into(),
-                issuer: config::ISSUER.into(),
-                product_id: "cybernote".into(),
-                workspace_id: workspace,
-            };
-            let binding =
-                prepare_session_binding(&sync, &root, old.as_ref(), &identity, profile, true)
-                    .unwrap();
-            assert_eq!(binding.subject, owner);
-            assert!(!binding.enabled);
-            assert!(devices.insert(binding.device_id.clone()));
-            assert!(keys.insert(binding.noise_public_key.clone()));
-            private::write(&root.join("binding.json"), &binding).unwrap();
-            // A successful sign-out archives public metadata, not a current owner.
-            private::clear_session(&root).unwrap();
-            old = private::read(&root.join("binding.json")).unwrap();
-            assert!(old.is_none());
-            assert_eq!(
-                shared
-                    .0
-                    .lock()
-                    .unwrap()
-                    .store
-                    .sync_identity()
-                    .unwrap()
-                    .unwrap()
-                    .workspace_id,
-                old_workspace.workspace_id
-            );
-            assert_eq!(
-                shared.0.lock().unwrap().workspace().unwrap()["notes"],
-                before["notes"]
-            );
-        }
-        sync.shutdown().unwrap();
-    }
-    #[test]
-    fn returning_authenticated_account_reuses_only_exact_saved_store_device_and_key() {
-        use crate::{session::Session, store::Store};
-        let dir = tempfile::tempdir().unwrap();
-        let shared = Arc::new((
-            Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
-            std::sync::Condvar::new(),
-        ));
-        let sync =
-            adapter::Runtime::new(shared.clone(), dir.path().into(), Arc::new(SessionWindows))
-                .unwrap();
-        let root = dir.path().join(".account");
-        private::directory(&root).unwrap();
-        let identity = |owner: &str| account_auth::Identity {
-            issuer: config::ISSUER.into(),
-            subject: owner.into(),
-            display_name: owner.into(),
-            username: None,
-        };
-        let workspace = uuid::Uuid::new_v4().to_string();
-        let profile = |owner: &str| enrollment::Profile {
-            schema_version: 1,
-            issuer: config::ISSUER.into(),
-            subject: owner.into(),
-            product_id: "cybernote".into(),
-            workspace_id: workspace.clone(),
-        };
-        let mut a = prepare_session_binding(&sync, &root, None, &identity("a"), profile("a"), true)
-            .unwrap();
-        shared
-            .0
-            .lock()
-            .unwrap()
-            .store
-            .sync_enable_with_device(Some(&workspace), &a.device_id)
-            .unwrap();
-        let mut remote = Store::open(dir.path().join("synthetic-remote")).unwrap();
-        remote.sync_enable(Some(&workspace)).unwrap();
-        remote
-            .action(serde_json::json!({"type":"createNote"}))
-            .unwrap();
-        remote.sync_flush().unwrap();
-        let versions = remote
-            .sync_inventory()
-            .unwrap()
-            .iter()
-            .map(|v| remote.sync_version(&v.digest).unwrap())
-            .collect();
-        shared
-            .0
-            .lock()
-            .unwrap()
-            .store
-            .sync_receive(versions)
-            .unwrap();
-        assert!(shared.0.lock().unwrap().store.sync_pending_count().unwrap() > 0);
-        a.enabled = true;
-        private::write(&root.join("binding.json"), &a).unwrap();
-        private::clear_session(&root).unwrap();
-        // Even a different authenticated subject on the same workspace cannot
-        // borrow A's device. Nor does an unrelated current binding shadow A's record.
-        let b = prepare_session_binding(&sync, &root, None, &identity("b"), profile("b"), true)
-            .unwrap();
-        assert_ne!(b.device_id, a.device_id);
-        private::write(&root.join("binding.json"), &b).unwrap();
-        private::clear_session(&root).unwrap();
-        let returned =
-            prepare_session_binding(&sync, &root, Some(&b), &identity("a"), profile("a"), true)
-                .unwrap();
-        assert_eq!(returned.device_id, a.device_id);
-        assert_eq!(returned.noise_public_key, a.noise_public_key);
-        assert!(!returned.enabled);
-        assert!(!sync
-            .account_adoption_needed(&workspace, &returned.device_id)
-            .unwrap());
-        // An ordinary pending inbox forbids changing namespaces, but must not
-        // force a returning A through adoption instead of its normal apply path.
-        sync.account_adoption_preflight(&workspace, &returned.device_id)
-            .unwrap();
-        assert!(sync
-            .account_adoption_preflight(&workspace, &b.device_id)
-            .is_err());
-        let mut corrupt = a.clone();
-        corrupt.noise_public_key = "not-the-existing-key".into();
-        private::remember_session(&root, &corrupt).unwrap();
-        let denied =
-            prepare_session_binding(&sync, &root, None, &identity("a"), profile("a"), true)
-                .unwrap();
-        assert_ne!(denied.device_id, a.device_id);
-        // A correctly named record must also contain the exact device identity.
-        let path = root.join("sessions").join(format!("{}.json", a.device_id));
-        private::write(&path, &b).unwrap();
-        let denied =
-            prepare_session_binding(&sync, &root, None, &identity("a"), profile("a"), true)
-                .unwrap();
-        assert_ne!(denied.device_id, a.device_id);
-        sync.shutdown().unwrap();
-    }
-    #[test]
-    fn offline_presentation_requires_retained_identity_and_preserves_pause_or_enable_intent() {
-        let identity = account_auth::Identity {
-            issuer: config::ISSUER.into(),
-            subject: "a".into(),
-            display_name: "A".into(),
-            username: None,
-        };
-        let mut binding = private::Binding {
-            issuer: config::ISSUER.into(),
-            subject: "a".into(),
-            workspace_id: uuid::Uuid::new_v4().to_string(),
-            device_id: uuid::Uuid::new_v4().to_string(),
-            product_id: "cybernote".into(),
-            noise_public_key: "fixture".into(),
-            enabled: false,
-        };
-        for enabled in [false, true] {
-            binding.enabled = enabled;
-            let mut status = Status::default();
-            present_retained_session(&mut status, &binding, &identity, enabled);
-            status.state = Phase::Error;
-            status.error = Some(Error::NetworkAt(types::NetworkStage::IdentityRefresh).safe());
-            assert_eq!(status.profile.as_ref().unwrap().subject, "a");
-            assert_eq!(status.enabled, enabled);
-            assert!(network_recovery(&status, true));
-            assert_eq!(authorization_mode(&status), Err(Error::Busy));
-            let mut other = identity.clone();
-            other.subject = "b".into();
-            let mut empty = Status::default();
-            present_retained_session(&mut empty, &binding, &other, enabled);
-            assert!(empty.profile.is_none());
-            assert!(!empty.enabled);
-        }
-    }
-    #[test]
-    fn retained_session_enable_requires_exact_store_identity_and_no_interrupted_adoption() {
-        use crate::{session::Session, store::Store};
-        let dir = tempfile::tempdir().unwrap();
-        let shared = Arc::new((
-            Mutex::new(Session::new(Store::open(dir.path()).unwrap())),
-            std::sync::Condvar::new(),
-        ));
-        let sync =
-            adapter::Runtime::new(shared.clone(), dir.path().into(), Arc::new(SessionWindows))
-                .unwrap();
-        let root = dir.path().join(".account");
-        private::directory(&root).unwrap();
-        let identity = account_auth::Identity {
-            issuer: config::ISSUER.into(),
-            subject: "fixture-a".into(),
-            display_name: "A".into(),
-            username: None,
-        };
-        let workspace = uuid::Uuid::new_v4().to_string();
-        let profile = || enrollment::Profile {
-            schema_version: 1,
-            issuer: config::ISSUER.into(),
-            subject: "fixture-a".into(),
-            product_id: "cybernote".into(),
-            workspace_id: workspace.clone(),
-        };
-        let mut old =
-            prepare_session_binding(&sync, &root, None, &identity, profile(), true).unwrap();
-        old.enabled = true;
-        // Persisted intent alone cannot automatically adopt a different DB.
-        assert!(
-            !prepare_session_binding(&sync, &root, Some(&old), &identity, profile(), false)
-                .unwrap()
-                .enabled
-        );
-        shared
-            .0
-            .lock()
-            .unwrap()
-            .store
-            .sync_enable_with_device(Some(&workspace), &old.device_id)
-            .unwrap();
-        let retained =
-            prepare_session_binding(&sync, &root, Some(&old), &identity, profile(), false).unwrap();
-        assert_eq!(retained.device_id, old.device_id);
-        assert!(retained.enabled);
-        private::begin_adoption(&root).unwrap();
-        assert!(
-            !prepare_session_binding(&sync, &root, Some(&old), &identity, profile(), false)
-                .unwrap()
-                .enabled
-        );
-        private::complete_adoption(&root).unwrap();
-        let mut bad = profile();
-        bad.subject = "other".into();
-        assert!(matches!(
-            prepare_session_binding(&sync, &root, Some(&old), &identity, bad, true),
-            Err(Error::OwnershipMismatch)
-        ));
-        let mut bad = identity.clone();
-        bad.issuer = "https://untrusted.invalid".into();
-        assert!(matches!(
-            prepare_session_binding(&sync, &root, None, &bad, profile(), true),
-            Err(Error::OwnershipMismatch)
-        ));
-        sync.shutdown().unwrap();
-    }
-    #[test]
-    fn explicit_network_recovery_requires_bound_error_and_does_not_select_enable() {
-        for enabled in [false, true] {
-            for error in [
-                Error::NetworkAt(types::NetworkStage::IdentityProvider),
-                Error::ProviderAuthentication(cybergrid_sdk::AuthProviderFailure::Network),
-            ] {
-                let mut status = Status {
-                    state: Phase::Error,
-                    enabled,
-                    error: Some(error.safe()),
-                    ..Status::default()
-                };
-                assert!(network_recovery(&status, true));
-                assert_eq!(status.enabled, enabled);
-                assert!(!network_recovery(&status, false));
-                for phase in [
-                    Phase::Paused,
-                    Phase::Ready,
-                    Phase::SignedOut,
-                    Phase::Authorizing,
-                    Phase::Connecting,
-                ] {
-                    status.state = phase;
-                    assert!(!network_recovery(&status, true));
-                }
-            }
-            for error in [
-                Error::Configuration,
-                Error::Storage,
-                Error::OwnershipMismatch,
-                Error::CleanupRequired,
-                Error::TokenResponseInvalid,
-                Error::CoordinationProtocol,
-                Error::AuthenticationAt(types::NetworkStage::IdentityRefresh),
-            ] {
-                let status = Status {
-                    state: Phase::Error,
-                    enabled,
-                    error: Some(error.safe()),
-                    ..Status::default()
-                };
-                assert!(!network_recovery(&status, true));
-            }
-        }
-    }
-
-    #[test]
-    fn explicit_error_reauthentication_can_cleanup_but_healthy_owner_is_preserved() {
-        assert_eq!(authorization_mode(&Status::default()), Ok(false));
-        for with_profile in [false, true] {
-            let mut status = Status {
-                state: Phase::Error,
-                error: Some(Error::AuthenticationAt(types::NetworkStage::IdentityRefresh).safe()),
-                ..Status::default()
-            };
-            if with_profile {
-                status.profile = Some(Profile {
-                    subject: "synthetic-owner".into(),
-                    display_name: "Synthetic".into(),
-                    username: None,
-                });
-            }
-            assert_eq!(authorization_mode(&status), Ok(true));
-            for phase in [
-                Phase::Ready,
-                Phase::Paused,
-                Phase::Connecting,
-                Phase::Authorizing,
-            ] {
-                status.state = phase;
-                assert_eq!(authorization_mode(&status), Err(Error::Busy));
-            }
-        }
-    }
-    #[test]
-    fn replacement_authorization_rejects_network_unknown_and_local_failures() {
-        for with_profile in [false, true] {
-            for error in [
-                Error::Network,
-                Error::Configuration,
-                Error::Storage,
-                Error::CleanupRequired,
-                Error::CoordinationProtocol,
-                Error::Authentication,
-                Error::AuthenticationAt(types::NetworkStage::Coordinator),
-                Error::ProviderAuthentication(cybergrid_sdk::AuthProviderFailure::Network),
-                Error::ProviderAuthentication(cybergrid_sdk::AuthProviderFailure::IdentityRejected),
-                Error::ProviderAuthentication(
-                    cybergrid_sdk::AuthProviderFailure::TokenResponseInvalid,
-                ),
-            ] {
-                let mut status = Status {
-                    state: Phase::Error,
-                    error: Some(error.safe()),
-                    ..Status::default()
-                };
-                if with_profile {
-                    status.profile = Some(Profile {
-                        subject: "fixture-owner".into(),
-                        display_name: "Fixture".into(),
-                        username: None,
-                    });
-                }
-                assert_eq!(authorization_mode(&status), Err(Error::Busy));
-            }
-        }
-        for error in [
-            Error::NetworkAt(types::NetworkStage::IdentityProvider),
-            Error::InvalidCallback,
-            Error::CodeExchangeRejected,
-            Error::TokenResponseInvalid,
-            Error::InvalidIdentity,
-            Error::Cancelled,
-            Error::OwnershipMismatch,
-        ] {
-            let mut status = Status {
-                state: Phase::Error,
-                error: Some(error.safe()),
-                ..Status::default()
-            };
-            assert_eq!(authorization_mode(&status), Ok(false)); // begin only; no logout
-            status.profile = Some(Profile {
-                subject: "fixture-owner".into(),
-                display_name: "Fixture".into(),
-                username: None,
-            });
-            assert_eq!(authorization_mode(&status), Err(Error::Busy));
-        }
-        let status = Status {
-            state: Phase::Error,
-            error: Some(
-                Error::ProviderAuthentication(cybergrid_sdk::AuthProviderFailure::RefreshFailed)
-                    .safe(),
-            ),
-            ..Status::default()
-        };
-        assert_eq!(authorization_mode(&status), Ok(true));
-        assert_eq!(
-            authorization_mode(&Status {
-                state: Phase::Error,
-                ..Status::default()
-            }),
-            Err(Error::Busy)
-        );
-    }
-    #[test]
-    fn unbound_profile_request_retry_begins_without_replacement_or_enabling() {
-        for enabled in [false, true] {
-            for error in [
-                Error::NetworkAt(types::NetworkStage::CoordinatorProfile),
-                Error::AuthenticationAt(types::NetworkStage::CoordinatorProfile),
-                Error::RequestAt(
-                    types::NetworkStage::CoordinatorProfile,
-                    types::RequestFailure::Timeout,
-                ),
-                Error::RequestAt(
-                    types::NetworkStage::CoordinatorProfile,
-                    types::RequestFailure::HttpStatus(reqwest::StatusCode::UNAUTHORIZED),
-                ),
-            ] {
-                let mut status = Status {
-                    state: Phase::Error,
-                    enabled,
-                    error: Some(error.safe()),
-                    ..Status::default()
-                };
-                assert_eq!(authorization_mode(&status), Ok(false)); // ordinary begin, never logout
-                assert_eq!(status.enabled, enabled);
-                status.profile = Some(Profile {
-                    subject: "synthetic-owner".into(),
-                    display_name: "Synthetic".into(),
-                    username: None,
-                });
-                assert_eq!(authorization_mode(&status), Err(Error::Busy));
-            }
-            for stage in [
-                types::NetworkStage::CoordinatorEnrollment,
-                types::NetworkStage::CoordinatorJwks,
-            ] {
-                let status = Status {
-                    state: Phase::Error,
-                    enabled,
-                    error: Some(Error::RequestAt(stage, types::RequestFailure::Timeout).safe()),
-                    ..Status::default()
-                };
-                assert_eq!(authorization_mode(&status), Err(Error::Busy));
-            }
-        }
-    }
-    #[test]
-    fn native_ipc_trusts_exact_app_origins_and_strict_command_types() {
-        for error in [Error::WindowInvalid, Error::Busy] {
-            let value = serde_json::to_value(error.safe()).unwrap();
-            assert_eq!(value["code"], error.code());
-            assert_eq!(value.as_object().unwrap().len(), 2); // SafeError, no old AppError.commit
-            assert!(value["message"].is_string());
-        }
-        for raw in ["tauri://localhost/index.html", "http://tauri.localhost/"] {
-            assert!(trusted_application_origin(&raw.parse().unwrap()));
-        }
-        for raw in [
-            "about:blank",
-            "evil://localhost/",
-            "tauri://evil/",
-            "http://tauri.localhost.evil/",
-            "http://tauri.localhost:8000/",
-            "tauri://attacker@localhost/",
-        ] {
-            assert!(!trusted_application_origin(&raw.parse().unwrap()), "{raw}");
-        }
-        for value in [
-            serde_json::json!({"type":"status","url":"https://evil.test"}),
-            serde_json::json!({"type":"setEnabled","enabled":"true"}),
-            serde_json::json!({"type":"refreshToken","token":"synthetic"}),
-            serde_json::json!({"type":"signIn","surface":null}),
-            serde_json::json!({"type":"signUp","surface":"customTabs"}),
-            serde_json::json!({"type":"signIn","surface":"embedded","url":"https://evil.test"}),
-            serde_json::json!({"type":"openLoginInBrowser","surface":"browser"}),
-            serde_json::json!({"type":"openLoginInBrowser","url":null}),
-            serde_json::json!({"type":"openLoginInBrowser","generation":1}),
-        ] {
-            assert!(serde_json::from_value::<Command>(value).is_err());
-        }
-        assert!(serde_json::from_value::<Command>(serde_json::json!({"type":"status"})).is_ok());
-        for kind in ["signIn", "signUp"] {
-            let legacy =
-                serde_json::from_value::<Command>(serde_json::json!({"type":kind})).unwrap();
-            assert!(matches!(
-                legacy,
-                Command::SignIn {
-                    surface: types::AuthorizationSurface::Browser
-                } | Command::SignUp {
-                    surface: types::AuthorizationSurface::Browser
-                }
-            ));
-            for surface in ["embedded", "browser"] {
-                assert!(serde_json::from_value::<Command>(
-                    serde_json::json!({"type":kind,"surface":surface})
-                )
-                .is_ok());
-            }
-        }
-        assert!(serde_json::from_value::<Command>(
-            serde_json::json!({"type":"openLoginInBrowser"})
-        )
-        .is_ok());
-    }
-    #[tokio::test]
-    async fn late_embedded_callback_cannot_consume_replacement_receiver() {
-        let (tx, mut receiver) = oneshot::channel();
-        let slot = Arc::new(AsyncMutex::new(Some(AndroidCallback {
-            generation: 2,
-            instance: "new-instance".into(),
-            sender: tx,
-        })));
-        // An old scheduled callback waits on the guard while the next owner
-        // has already installed its receiver. Consumption must recheck identity.
-        let guard = slot.lock().await;
-        let queued = slot.clone();
-        let old = tokio::spawn(async move {
-            let mut guard = queued.lock().await;
-            take_android_callback(&mut guard, 1, "old-instance").is_none()
-        });
-        drop(guard);
-        assert!(old.await.unwrap());
-        assert!(matches!(
-            receiver.try_recv(),
-            Err(oneshot::error::TryRecvError::Empty)
-        ));
-        let mut guard = slot.lock().await;
-        // Generation alone is insufficient: a distinct instance cannot alias it.
-        assert!(take_android_callback(&mut guard, 2, "old-instance").is_none());
-        assert!(matches!(
-            receiver.try_recv(),
-            Err(oneshot::error::TryRecvError::Empty)
-        ));
-        let current = take_android_callback(&mut guard, 2, "new-instance").unwrap();
-        let callback: url::Url = "com.local.notesclone.auth://callback?code=fixture&state=fixture"
-            .parse()
-            .unwrap();
-        current.send(callback.clone()).unwrap();
-        assert_eq!(receiver.await.unwrap(), callback);
-        assert!(guard.is_none());
-    }
 }
 #[tauri::command]
 pub(crate) async fn account_command(
@@ -1871,4 +1051,37 @@ pub(crate) async fn account_command(
         return Err(Error::WindowInvalid.safe());
     }
     runtime.0.command(command).await.map_err(Error::safe)
+}
+
+#[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+fn test_authorization_file(uri: &str) -> Result<bool> {
+    if !crate::sync_headless::enabled() {
+        return Ok(false);
+    }
+    let path = std::env::var_os("NOTES_SYNC_E2E_AUTHORIZATION_FILE")
+        .map(PathBuf::from)
+        .ok_or(Error::Configuration)?;
+    if !path.is_absolute() {
+        return Err(Error::Configuration);
+    }
+    let parent = path.parent().ok_or(Error::Configuration)?;
+    let meta = std::fs::symlink_metadata(parent).map_err(|_| Error::Storage)?;
+    if !meta.is_dir() || meta.file_type().is_symlink() {
+        return Err(Error::Storage);
+    }
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        if meta.mode() & 0o077 != 0 || meta.uid() != unsafe { libc::geteuid() } {
+            return Err(Error::Storage);
+        }
+    }
+    if std::fs::canonicalize(parent).map_err(|_| Error::Storage)? != parent {
+        return Err(Error::Storage);
+    }
+    if std::fs::symlink_metadata(&path).is_ok() {
+        return Err(Error::Storage);
+    }
+    private::atomic_write(&path, uri.as_bytes())?;
+    Ok(true)
 }

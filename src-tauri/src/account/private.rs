@@ -31,6 +31,35 @@ pub fn directory(path: &Path) -> Result<()> {
     }
     Ok(())
 }
+pub(super) fn read_bytes(path: &Path, limit: usize) -> Result<Option<Vec<u8>>> {
+    let m = match fs::symlink_metadata(path) {
+        Ok(m) => m,
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(None),
+        Err(_) => return Err(Error::Storage),
+    };
+    if !m.is_file() || m.file_type().is_symlink() || m.len() > limit as u64 {
+        return Err(Error::Storage);
+    }
+    let mut options = OpenOptions::new();
+    options.read(true);
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
+        if m.mode() & 0o777 != 0o600 || m.uid() != unsafe { libc::geteuid() } || m.nlink() != 1 {
+            return Err(Error::Storage);
+        }
+        options.custom_flags(libc::O_NOFOLLOW);
+    }
+    let mut bytes = Vec::new();
+    options
+        .open(path)?
+        .take(limit as u64 + 1)
+        .read_to_end(&mut bytes)?;
+    if bytes.len() > limit {
+        return Err(Error::Storage);
+    }
+    Ok(Some(bytes))
+}
 pub fn read(path: &Path) -> Result<Option<Binding>> {
     let m = match fs::symlink_metadata(path) {
         Ok(m) => m,
@@ -63,7 +92,7 @@ pub fn write(path: &Path, binding: &Binding) -> Result<()> {
         &serde_json::to_vec(binding).map_err(|_| Error::Storage)?,
     )
 }
-fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
+pub(super) fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
     let dir = path.parent().ok_or(Error::Storage)?;
     directory(dir)?;
     let temp = dir.join(format!(".binding-{}", uuid::Uuid::new_v4()));
