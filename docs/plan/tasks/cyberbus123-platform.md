@@ -1,7 +1,7 @@
 ---
 id: cyberbus123-platform
 scope: frontend/platform-packaging
-status: ready
+status: verified
 depends-on: []
 ---
 

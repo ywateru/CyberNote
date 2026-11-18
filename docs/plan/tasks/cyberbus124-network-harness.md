@@ -1,7 +1,7 @@
 ---
 id: cyberbus124-network-harness
 scope: scripts/cyberbus120-network
-status: ready
+status: verified
 depends-on: [cyberbus120-core]
 ---
 

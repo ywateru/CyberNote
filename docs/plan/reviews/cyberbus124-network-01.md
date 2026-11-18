@@ -4,7 +4,7 @@
 
 ## 基线与范围
 
-- 用户确认 Harvey 最终交付 `4b68a58f7f0a066cf51d18b0b3f3b4a00240fcb4`；实现冻结为 `fe0da47ef7f9b8e8db6ecaf2f5c0f058e7f6c54d`。审阅时 worktree 干净；两提交间只新增 README、执行报告、manifest 和验证文档，没有修改实现。
+- 任务协调者指定 Harvey 最终交付 `4b68a58f7f0a066cf51d18b0b3f3b4a00240fcb4`；实现冻结为 `fe0da47ef7f9b8e8db6ecaf2f5c0f058e7f6c54d`。审阅时 worktree 干净；两提交间只新增 README、执行报告、manifest 和验证文档，没有修改实现。
 - 对照任务 `docs/plan/tasks/cyberbus124-network-harness.md`、架构 `docs/architecture/cyberbus-migration-20261118.md`，审阅 `scripts/cyberbus120-network/**` 和 `docs/verification/cyberbus120/network-harness.md`。
 - 审阅者未参与本 harness/core 开发。本次仅运行本地 Python 契约测试、已有二进制的无网络 fixture probe、离线报告／源码 hash 校验；不重建、不重跑 Logto／SSH／网络、不读取私密安装或账号 fixture、不运行 UI／设备、不修改产品。
 - 写集仅本审阅文件；失败报告 01–04 和原 fixture 均保留。

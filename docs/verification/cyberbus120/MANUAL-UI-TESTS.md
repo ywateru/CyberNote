@@ -2,29 +2,31 @@
 
 本轮按 2026-11-18 的收敛要求交付：命令行检查由开发执行，本页 UI 操作由用户执行。下列复选框初始均为未执行，不能由模块测试或网络工具的结果代填。具体组合构建、命令和已知限制见 [验证状态](README.md)。
 
+本轮已构建 **ARM64 Mac Debug 手测包**，产品源码提交 `c693a748`，内含真实前端资源和 MCP sidecar，经本地 ad-hoc 签名并通过 strict 文件校验。未启动应用；这是本地手测产物，未做 Developer ID 签名/公证。产物与 SHA 详见 [组合构建记录](combined-build.md)。
+
 ## 准备两个独立安装
 
-优先使用两台 Mac 的同版本原生应用；也可在一台 Mac 启动两个独立资料库。不要把浏览器中的 Vite 页面作为账户/同步验收应用。不要复制一个已登录资料库来制造第二台设备，两个安装须分别生成身份、分别登录。
+优先使用两台 Mac 的同版本原生应用；macOS 14+ 也可在一台 Mac 启动两个独立资料库，分别隔离 WebView 登录资料。较旧系统优先使用两台设备。不要把浏览器中的 Vite 页面作为账户/同步验收应用。不要复制一个已登录资料库来制造第二台设备，两个安装须分别生成身份、分别登录。
 
 同机测试使用构建后的真实可执行文件，并显式传入绝对路径。示例中的 `binary` 须指向本轮验证状态记录的构建产物，A、B 资料库应是新目录：
 
 ```sh
-binary='/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-clone'
+binary='/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/bundle/macos/CyberNote.app/Contents/MacOS/notes-clone'
 "$binary" --data-dir "$HOME/Library/Application Support/CyberNote-CyberBus-QA-A"
 ```
 
 在另一终端启动 B：
 
 ```sh
-binary='/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/notes-clone'
+binary='/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/bundle/macos/CyberNote.app/Contents/MacOS/notes-clone'
 "$binary" --data-dir "$HOME/Library/Application Support/CyberNote-CyberBus-QA-B"
 ```
 
-以上产物路径须以最终构建记录为准；若构建未通过，不运行旧二进制冒充本轮。保留两个资料库供问题复现，关闭应用后再备份。首次系统 Keychain 授权提示应按正常应用提示处理；拒绝授权时应用应明确报错，不能悄悄更换设备身份。
+以上路径指向本轮已构建的 Debug `.app` 内程序。保持整个 `.app` 结构，不单独复制主程序，否则资源、sidecar 与签名可能失效。保留两个资料库供问题复现，关闭应用后再备份。首次系统 Keychain 授权提示应按正常应用提示处理；拒绝授权时应用应明确报错，不能悄悄更换设备身份。
 
 桌面 OAuth 回调固定为 `127.0.0.1:17897`，同机两个安装**依次登录**，一个授权事务结束后再在另一端开始。系统浏览器已登录其他账户时，先核对登录页账户；不得把授权 URL、callback、token 或密码贴入问题报告。
 
-准备同一个测试账户供 A、B 使用，另备不同账户 C（可选负例）。准备一张可辨认 PNG 和一个非空文件，保留原件用于比对。打开设置中的「账户与同步」，将 A 命名为 `QA-A`、B 命名为 `QA-B`。
+准备同一个测试账户供 A、B 使用，另备不同账户 C（可选负例）。准备一张可辨认 PNG 和一个非空文件，保留原件用于比对。打开设置中的「账户与同步」。完成 UI-03 双端登录后，分别通过「更改名称」→「保存名称」将 A 命名为 `QA-A`、B 命名为 `QA-B`。
 
 ## 核心必测清单
 

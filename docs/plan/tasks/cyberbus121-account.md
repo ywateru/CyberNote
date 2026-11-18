@@ -1,7 +1,7 @@
 ---
 id: cyberbus121-account
 scope: src-tauri/account
-status: ready
+status: verified
 depends-on: []
 ---
 

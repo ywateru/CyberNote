@@ -2,7 +2,7 @@
 
 日期：2026-11-18。最新结论：**PASS，可合并本轮核心与 CLI 范围；真实原生账户链 / UI tests incomplete**。
 
-最新独立复核为下文 [0f3cd922 有界修复复审](#0f3cd922-有界修复复审)：准确基线 **`0f3cd92236cbd60ea7d84b3c133aabe44e8239b7`**，A2/A3/A4/A6 关闭；A1 已在前轮关闭，A5 按用户确认的新迁移契约接受为限制。独立 CLI 检查全部通过，未发现本轮合并阻断。真实原生登录、云端撤销及 UI 未验证，按用户确定的收敛边界交组合 Mac 包和手动测试补齐，不新增在线或设备门槛。以下历史 checkpoint 的失败证据保留，不作为最新提交仍失败的结论。
+最新独立复核为下文 [0f3cd922 有界修复复审](#0f3cd922-有界修复复审)：准确基线 **`0f3cd92236cbd60ea7d84b3c133aabe44e8239b7`**，A2/A3/A4/A6 关闭；A1 已在前轮关闭，A5 按主设计明确的新迁移契约接受为限制。独立 CLI 检查全部通过，未发现本轮合并阻断。真实原生登录、云端撤销及 UI 未验证，按用户确定的收敛边界交组合 Mac 包和手动测试补齐，不新增在线或设备门槛。以下历史 checkpoint 的失败证据保留，不作为最新提交仍失败的结论。
 
 最初审阅基线为 **`0805281ed14775c713de48da02fdd35cabcce141`**（`0805281e`，作者提交标题本身标明 tests incomplete）。下方原始 findings 仅对应该历史基线，后续提交分别在文末记录独立结果，不追认未冻结的工作区修改。审阅者未参与账户源码开发。本轮仅写本报告与独立 fixtures；未修改产品、运行用户笔记应用、读取原 notes 库、使用真实账户或修改线上配置。
 
@@ -139,13 +139,13 @@ runner 在新临时目录生成独立 Cargo manifest 与提取方法的 host；�
 
 ## core 集成依赖
 
-当前账户基线包含原 core 与 23 分钟 deadline patch，但未包含用户指定的 F1/F2 修复 `b1dcdb0a`。依赖独审报告位于 core worktree 的 `docs/plan/reviews/cyberbus120-core-01.md`：F1=revocation 后 watch 基线不能主动恢复；F2=SDK EOF 未排空 owner/tasks；F3=Bootstrap claim 缺 receiver-only capability 且 slot 重建后可重放；F4=可选 file-vault lock path 替换后双 owner。F3/F4 正由 core 独审推进。本账户报告没有对后续补丁重新运行或宣称关闭它们；生产 KeyringStore 也不被等同为可选 file backend。
+当前账户基线包含原 core 与 23 分钟 deadline patch，但未包含任务协调者指定的 F1/F2 修复 `b1dcdb0a`。依赖独审报告位于 core worktree 的 `docs/plan/reviews/cyberbus120-core-01.md`：F1=revocation 后 watch 基线不能主动恢复；F2=SDK EOF 未排空 owner/tasks；F3=Bootstrap claim 缺 receiver-only capability 且 slot 重建后可重放；F4=可选 file-vault lock path 替换后双 owner。F3/F4 正由 core 独审推进。本账户报告没有对后续补丁重新运行或宣称关闭它们；生产 KeyringStore 也不被等同为可选 file backend。
 
 账户后续准确 SHA 须合入经独审的 core 补丁再组合验证。A3 的 auth 状态投影和 A2 的退出收敛属于账户独立责任，不能只靠 core patch 关闭。
 
 ## 新 SHA 与真实账户验证准备
 
-收到用户指定的新 SHA 后重新冻结输入，先重跑两种 check 与账户/方向/Session 保全定向测试，再决定可执行包是否满足真实 native 测试前提；目前不接受交付。后续至少覆盖：primary A/B 同账户发现、显式启用、完整中文富文本与 PNG/文件 SHA；push/pull 隔离；离线/重启恢复与暂停不重放；异账户拒绝；并发 head/待应用 inbox 阻止迁移；多窗口保存与 partial release；取消、deadline、退出后无迟到写任务；旧 grant 退役。单独 headless apply 不证明真实 renderer ACK。
+收到任务协调者指定的新 SHA 后重新冻结输入，先重跑两种 check 与账户/方向/Session 保全定向测试，再决定可执行包是否满足真实 native 测试前提；目前不接受交付。后续至少覆盖：primary A/B 同账户发现、显式启用、完整中文富文本与 PNG/文件 SHA；push/pull 隔离；离线/重启恢复与暂停不重放；异账户拒绝；并发 head/待应用 inbox 阻止迁移；多窗口保存与 partial release；取消、deadline、退出后无迟到写任务；旧 grant 退役。单独 headless apply 不证明真实 renderer ACK。
 
 复用 Harvey 的真实网络 harness/fixture，不再新增重复独立网络 harness。账户验证只从 app 的 AuthStart→授权 URL 私有文件→浏览器 callback→同次 AuthCallback 交换进入，禁止 token 注入。已有公开输入：
 
@@ -176,7 +176,7 @@ Android 回跳为 `com.local.notesclone.auth://callback`。正式 cybernote 产�
 | A2 本地退出收敛 | **仍阻塞** | mod.rs 与旧基线 blob 相同；无 grant 重试仍走 RevokeGrant→Unsupported；不覆盖作者 dirty 修复 |
 | A3 授权错误投影 | **仍阻塞** | worker 生产部分字节相同，仍清错为 connecting/paused |
 | A4 DTO 错误 | **仍阻塞** | types.rs 与 account-client.ts 均与旧基线 blob 相同，四项独立失败的被测接口未改 |
-| A5 旧 grant | **接受为明确限制，不阻塞本轮** | 用户确认主设计的新最小退出/迁移契约，见下文 |
+| A5 旧 grant | **接受为明确限制，不阻塞本轮** | 主设计已明确新的最小退出/迁移契约，见下文 |
 | A6 profile skip | **仍阻塞** | worker 生产部分字节相同，仍统一跳过 profile 校验失败 |
 | core F1–F4 | **采用 core review02 的已通过结论，不重复阻塞** | core/vendor Git tree 与其独审准确对象一致；调用侧使用共享 read+claim parser |
 
@@ -205,13 +205,13 @@ Android 回跳为 `com.local.notesclone.auth://callback`。正式 cybernote 产�
 
 ### 退出契约与 A5 限制收敛
 
-用户在本轮确认，主设计 `docs/architecture/cyberbus-migration-20261118.md:33` 已补最小退出契约：SDK 确认本地 grant 关闭且旧网/写任务退役即可完成幂等本地退出；云端撤销失败或未知单独保留，不能冒称成功，也不阻塞已完成本地清理后的重复退出；真实本地持久化/关闭失败继续明确失败。
+按照用户收敛范围，任务协调者在主设计 `docs/architecture/cyberbus-migration-20261118.md:33` 已补最小退出契约：SDK 确认本地 grant 关闭且旧网/写任务退役即可完成幂等本地退出；云端撤销失败或未知单独保留，不能冒称成功，也不阻塞已完成本地清理后的重复退出；真实本地持久化/关闭失败继续明确失败。
 
-旧 `.account/grant.json` **不读、不导入、不恢复，不创建旧长期认证 owner**。新退出仅对 CyberBus 授权给收据，不宣称历史授权已全部云撤销；旧授权服务端状态未知，作为用户接受的迁移限制。因此原 A5 不再是本轮阻塞，也不要求扩张在线旧 token 撤销。原 checkpoint 的“文件保留”观察保持准确，改变的是已明确的迁移契约和处置，不是补做了旧云撤销。
+旧 `.account/grant.json` **不读、不导入、不恢复，不创建旧长期认证 owner**。新退出仅对 CyberBus 授权给收据，不宣称历史授权已全部云撤销；旧授权服务端状态未知，作为本轮明确记录的迁移限制。因此原 A5 不再是本轮阻塞，也不要求扩张在线旧 token 撤销。原 checkpoint 的“文件保留”观察保持准确，改变的是已明确的迁移契约和处置，不是补做了旧云撤销。
 
 ### CLI 烟测协作与 UI 手动边界
 
-已获用户授权与 Goodall 协调：其正在修 A2/A3/A4/A6，将另给准确提交。对方报告 dirty 修复/局部测试时，本独审没有读取那些产品修改，也没有把它计为通过；新 SHA 到达后继续快速复核四项。
+任务协调者安排与 Goodall 协作：其正在修 A2/A3/A4/A6，将另给准确提交。对方报告 dirty 修复/局部测试时，本独审没有读取那些产品修改，也没有把它计为通过；新 SHA 到达后继续快速复核四项。
 
 此时没有冻结的 native headless 可执行包，也没有已执行的真实 app 授权 smoke。本轮没有占用 17897、启动用户应用、创建 Keychain grant 或运行 notes UI 自动化。现 Rust headless 固定 Action 已有 signIn/setEnabled/syncDevice；既有 `scripts/verification/account109-headless-driver.mjs` 的 OPS 尚不接受这些新操作，不能直接拿旧 driver 宣称可运行真登录。若后续执行，须在本轮独立 fixture/私密副本加入相同的固定白名单，并与作者明确唯一端口/进程归属；授权 URL/callback 仍只走本轮 0700 私密目录与 0600 文件，禁止 token 注入。没有为此新增第二套网络 harness。
 
@@ -256,4 +256,4 @@ UI 留给用户的手动记录只需沿用 `docs/verification/cyberbus120/TEST-C
 
 ### 合并结论与未验边界
 
-本轮 A1/A2/A3/A4/A6 无剩余合并阻断，A5 已按用户指定迁移契约接受。**可以合并 `0f3cd922`，不代表真实原生账户链已经交付验收通过。** harness/Store/Noise 或上述 CLI 均不能证明原生 AuthStart→callback→AuthRestore、真实云端撤销及完整多端账户链；这些仍为 **tests incomplete**。按用户本轮边界，不为补齐它们延迟合入，不运行新增在线/设备/UI 自动化；由 Tesla 的组合 Mac 包及用户手动 UI 记录补齐。审阅者仅提交本报告与本轮证据 fixtures，没有合入其他 README 或产品文件。
+本轮 A1/A2/A3/A4/A6 无剩余合并阻断，A5 已按主设计明确的迁移契约记录为限制。**可以合并 `0f3cd922`，不代表真实原生账户链已经交付验收通过。** harness/Store/Noise 或上述 CLI 均不能证明原生 AuthStart→callback→AuthRestore、真实云端撤销及完整多端账户链；这些仍为 **tests incomplete**。按用户本轮边界，不为补齐它们延迟合入，不运行新增在线/设备/UI 自动化；由 Tesla 的组合 Mac 包及用户手动 UI 记录补齐。审阅者仅提交本报告与本轮证据 fixtures，没有合入其他 README 或产品文件。
