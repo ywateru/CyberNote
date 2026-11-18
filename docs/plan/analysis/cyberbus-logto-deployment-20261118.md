@@ -1,6 +1,8 @@
 # CyberBus / Logto 服务接入调查
 
-调查日期：2026-11-18，Asia/Shanghai。线上证据采集时间为 19:15–19:26（UTC 11:15–11:26）。状态：只读调查完成；配置复用条件已确认，真实认证与多端业务验收未执行。
+调查日期：2026-11-18，Asia/Shanghai。原只读证据采集时间为 19:15–19:26（UTC 11:15–11:26）。后续经用户明确授权，已于 19:48:39（UTC 11:48:39）完成正式 CyberNote 产品映射增量并通过 Management API 精确读回。真实认证与多端业务验收仍未由本报告执行。
+
+**当前接入配置以[正式产品配置回执](../../verification/cyberbus120/logto-product.md)为准：`product_id=cybernote`、`client_id=il4abzwbu1ohjwv5mb667`、resource `https://cyberbus.x.aixgg.com/api`、scope `network:join`，沿用桌面 `17897` 和 `com.local.notesclone.auth://callback`。原 `cyberbus` sample 产品完整保留。下文的单产品、test-only、旧 client 未获 CyberBus 授权等描述记录的是修改前调查快照，不再作为实施 pins。**
 
 ## 1. 结论与采用方向
 
@@ -10,15 +12,15 @@
 
 关键发现：
 
-1. CyberBus 已有 resource `https://cyberbus.x.aixgg.com/api`、`network:join` scope、专用 Native `s3ny…bhcb` 及唯一产品映射。现项目 Native `il4a…b667` / `https://cybernote.app/api` 为旧 `connect` 配置，不能直接取得 CyberBus 凭证。
+1. 调查时 CyberBus 已有 resource `https://cyberbus.x.aixgg.com/api`、`network:join` scope、专用 Native `s3ny…bhcb` 及唯一产品映射。后续已将原笔记 Native 追加到独立 `cybernote` 产品；原 `https://cybernote.app/api` / `connect` 资源保持不变。
 2. 当前 Logto `jwt.accessToken` 脚本包含本机参考脚本完整文本；`blockIssuanceOnError=true`、运行进程 `DEV_FEATURES_ENABLED=true`。六项 `ET_*` 变量存在；issuer/resource/client/product/config version 与现有 CyberBus 公共配置匹配。
 3. bootstrap pins 为 `tcp://43.155.169.102:11010`、`udp://43.155.169.102:11010`。远端 TCP/UDP listener 均存在，本机 TCP connect 成功；未做 UDP 公网协议探测、EasyTier/Noise 握手或业务发送。
 4. 两份受控测试账户 fixture 及 callback 登录驱动存在。只读数据库核对均为账户存在、未停用、密码配置存在且未过期、拥有 `network:join`；本轮未验证密码正确性或执行登录。
 5. 当前配置明确 `test_only=true`。现有 relay 位于登录 session scope，未证实由常驻服务监管；真实日志脱敏、签发失败阻断、刷新和多端稳定性仍有验收门槛。
 
-完整 client/product 不在本文展开。实现 agent 应从第 3 节指定的现存配置读取，不能把本文的脱敏 ID 当配置值，也不能从产品名称重新推断身份。
+正式 client/product 及各平台可用配置见新的产品回执。第 3 节保留的是 sample 历史配置，不应再用于正式 CyberNote 联调。
 
-## 2. 调查边界与资料基线
+## 2. 原只读调查边界与资料基线
 
 本轮只写本文；未运行、构建、安装、重启或改变用户笔记应用；未改动远端文件、容器、数据库业务数据、Logto 配置、账户、角色、DNS 或 relay。没有发起登录、token 换票、刷新或管理 API 写操作。数据库检查均在 `BEGIN READ ONLY` 事务内，设置 5 秒 statement timeout 后 `ROLLBACK`。
 
@@ -33,9 +35,9 @@
 | CyberBus 文档 | `docs/INDEX.md`、`README.md`、`INTEGRATION.md`、`logto-deployment.md`、`security.md`、`CLOUDFLARE_FALLBACK.md`、`UNRESOLVED.md`、protocol/sdk-api 相关段落、CLI 与跨网络测试说明 |
 | 源码抽查 | CyberBus JWT 参考脚本、ClientConfig、凭证 claim 校验、Auth/Data protobuf；项目 `account/transport.rs` 与 `sync/network/{service,transport}.rs` |
 
-用户只允许写本文，因此没有按通常 docs-sprint 流程更新 INDEX、backlog、任务或独审文件。本文为调查分析，不构成实现、独立审核或线上 E2E 通过记录。
+原调查仅允许写本文，因此没有更新 INDEX、backlog、任务或独审文件。后续用户授权另写 `docs/verification/cyberbus120/logto-product.md` 并更新本文状态与链接。两份文档均不构成应用实现、独立审核或线上 E2E 通过记录。
 
-## 3. 可直接供实现使用的公共 pins
+## 3. 修改前 sample 公共 pins（历史快照）
 
 ### 3.1 可信配置来源
 
@@ -45,7 +47,7 @@
 cath-w:/home/water/work/codex-work/cyberbus/linux-env-002/source/deploy/test-public-config.json
 ```
 
-受限部署目录还保存一份匹配的 `public-config.json`，位置见第 6 节。实际 ID 从现存文件的 `client_id`、`product_id` 读取。当前数据库中的 `ET_PRODUCTS_JSON` 只有一个产品和一个允许 Native；已在内存核对清单中的 client/product 配对与该允许表一致，结果 `true`。
+原受限部署目录还保存一份匹配的 `public-config.json`，位置见第 6 节。调查时数据库中的 `ET_PRODUCTS_JSON` 只有一个产品和一个允许 Native；现已增至保留原产品并追加 `cybernote`。本表仅保留原 sample 配置的调查证据。
 
 | 字段 / 用途 | 已确认配置 |
 | --- | --- |
@@ -78,7 +80,7 @@ cath-w:/home/water/work/codex-work/cyberbus/linux-env-002/source/deploy/test-pub
 | 网络身份来源 | coordinator profile/workspace、enrollment | 已验签的专用 resource JWT claim |
 | 设备发现 | coordinator/Redis 临时与持久目录 | EasyTier 候选 + SDK Noise 认证 + SDK 目录事件 |
 
-旧 Native 不在当前 `ET_PRODUCTS_JSON` 允许表，旧 resource 只有 `connect`。不能仅在宿主声明新 scope 或改 SDK resource 就认为旧 client 已获授权。首轮隔离联调可复用已存在的 CyberBus 测试身份；正式 CyberNote 产品隔离应后续确定，尤其不能把测试产品与其他使用者共享网络的行为当成正式产品隔离。
+调查时旧 Native 不在 `ET_PRODUCTS_JSON` 允许表，旧 resource 只有 `connect`。后续正式产品增量已解决 Native 允许表问题：使用原 Native、独立 `cybernote` 产品和 CyberBus resource 的 `network:join`，不复用 sample 产品网络。旧 connect 资源、scope 与现有授权未变，详见[配置回执](../../verification/cyberbus120/logto-product.md)。
 
 ## 4. 现有 Logto 与公开 OIDC 结果
 
@@ -330,8 +332,8 @@ ORDER BY r.indicator,s.name;
 
 后续脚本比较只定点读取 `key='jwt.accessToken'`。原始配置值未输出，始终由远端 Python 只投影字段名、布尔、公共 URL 与脱敏 ID。用户核对仅对 fixture 的匹配用户聚合：`count(*)`、`bool_and(NOT is_suspended)`、`password_encrypted IS NOT NULL`、`NOT is_password_expired`，再沿 `users_roles → roles_scopes → scopes → resources` 判断目标 resource 的 `network:join`；默认角色检查另限制 `is_default=true AND type='User'`。没有查询全体用户详情或输出 credential 列。
 
-### 9.3 未执行项
+### 9.3 原只读调查未执行项
 
 未执行 `docker compose up/restart`、服务管理写命令、SQL DML、管理 API 写调用、初始化/verify/登录驱动、账户注册/改密/角色变更、root/epoch 轮换、cloudflared 启动、SDK 网络启动、多端传输和笔记应用操作。未进行生产备份恢复或性能验收。
 
-交付判断是“既有服务与隔离接入材料已找到且只读一致性确认”，不是“新账户运行链已实现”或“真实三端同步已通过”。
+原调查交付判断是“既有服务与隔离接入材料已找到且只读一致性确认”。后续已完成正式产品 Management API 增量，但仍不代表新账户运行链已实现或真实三端同步已通过。
