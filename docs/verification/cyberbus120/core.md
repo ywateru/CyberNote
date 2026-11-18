@@ -1,0 +1,64 @@
+# CyberBus120 core verification
+
+2026-11-18, develop scope only. Workspace `/Users/water/work/2026/Apple-Notes-Clone-cyberbus120`,
+branch `codex/cyberbus120-core`. No src-tauri/UI/user library/login sessions changed.
+
+## Stage 1, ready for independent review
+
+Public signatures and account integration are in `crates/notes-cyberbus/README.md` and source.
+Includes Bus::new/cmd/execute/snapshot/watch/subscribe/register_endpoint/unregister_endpoint/map,
+MappingLease, raw SDK auth/device events and Any profile, Bootstrap trusted-peer prelude +
+read_bootstrap_context + one-time Bus::claim_bootstrap_context. Snapshot/BusEvent Debug is
+redacted; Error contains only finite variant, SDK code or I/O kind.
+
+Dependency: fixed public CyberBus commit `359465e83bd74b571a963f3d1fdc238f50169919`. Git dependencies
+build successfully with protoc supplied. Minimal vendor runtime patch is documented in
+`vendor/cyberbus/README.notes.md`: immutable 64 KiB / 32-message Data schema registration without
+an advertised dummy RPC. Other SDK crates and EasyTier remain on the same Git revision. Both
+root licenses and original runtime source/tests are retained. No sibling absolute dependency.
+
+Cache audit: SDK `target` and prior metadata target paths no longer existed; searched existing
+workspace/tmp caches before building. All commands reuse `crates/notes-cyberbus/target`, dev/test
+with debug=0. Stage cache ~1.9 GiB; filesystem free ~52 GiB. No release/mobile profile built.
+
+Executed:
+
+- `cargo check --manifest-path crates/notes-cyberbus/Cargo.toml`: PASS after supplying PROTOC.
+- `PROTOC=<cargo registry vendored macOS aarch64 protoc> cargo test --manifest-path
+  crates/notes-cyberbus/Cargo.toml`: **13 passed, 0 failed**, 0 ignored; doc tests 0.
+- `cargo fmt --manifest-path crates/notes-cyberbus/Cargo.toml`: applied.
+
+Tests cover real SDK offline startup/watch/auth snapshot/profile Any/close, encrypted SDK identity
+restart, independent file store restart/replacement/exclusive lock/corruption/wrong key/missing
+marker or ciphertext/interrupted provisioning/symlink/private-directory enforcement, directory
+revision/reset/gap handling, chunk cap/sequence/peer-generation binding/queue and stream limits,
+ACK stage/peer matching and cancellation guard, mapped actual TCP multichunk transfer with
+half-close and response after EOF, Bootstrap context parsing/claim/replay/forged peer rejection,
+mapping cancellation/peer revocation and Debug redaction. Bridge transport switching is test-only;
+these tests do not establish real CyberBus network interoperability.
+
+Preserved failures and corrections:
+
+1. Initial Git dependency build failed because protoc was absent from PATH. Continued using
+   already downloaded protoc-bin-vendored, no unrelated system installation.
+2. First tests: 5 PASS / 2 FAIL, both startup TYPE_MISMATCH: custom Data types require registration.
+   Fixed by minimal vendor runtime Data schema constructor; no opaque bypass/dummy RPC.
+3. Next tests: 6 PASS / 1 FAIL, then 11 PASS / 1 FAIL: fixture profile omitted SDK-required update
+   field mask and originally used an unqualified profile type name. Fixed the fixture to match
+   SDK raw command contract; production SDK validation remains unchanged.
+4. Test-hook compile failure from accidental duplicate hook in close() was corrected before
+   the green run. No test-only switching exists in a production build.
+
+## Open verification boundaries
+
+Independent code review is pending. Real Logto login/restore/logout, authenticated dual-peer
+network/relay/Noise, actual Notes bootstrap/profile authorization and WebSocket synchronization,
+real network loss/recovery, cross-account rejection and mobile builds remain unverified here.
+No macOS user Keychain entry or real user vault was opened; production KeyringStore integration
+is SDK-native API reuse, not a live Keychain acceptance result. Android Keystore is provided by
+another task via SecureStore/CallbackStore and is not claimed complete.
+
+Dedicated clock/deadline, EOF-owner failure, simultaneous traffic saturation and subprocess lock
+fault-injection coverage will be added in the same scope after the stage commit; the initial
+13-test result does not claim every failure scenario was exercised. Upstream warnings retained:
+three pre-existing unused helpers (`used`, `emit_data`, `cancel_rpc`).
