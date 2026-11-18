@@ -60,6 +60,8 @@ bootstrap 只通过已认证 CyberBus 流交换 nonce、协议身份、公钥与
 
 Logto 主机为用户提供的 `cath-w:/home/water/work/codex-work/logto`，公开域名 `https://auth.x.aixgg.com/` 与 `https://logto.x.aixgg.com/`。优先复用已配置 CyberBus 脚本；只把公开 pins 写入配置，秘密留在服务器。部署调查报告记录实际版本、hook/scope/role/client/relay 和可执行检查路径，不导出秘密。任何必要配置更新先私有备份并保留既有非目标 resource 逻辑。
 
+已读部署存在 `cyberbus` 测试产品，不能让正式 CyberNote 与 sample 共享产品网络。最小增量是在已有 JWT 脚本产品表追加 `cybernote`，允许现有 CyberNote Native `il4abzwbu1ohjwv5mb667`；沿用 `17897` loopback 与 `com.local.notesclone.auth://callback`。SDK resource 固定为 `https://cyberbus.x.aixgg.com/api`，scope 为 `network:join`；旧 `connect` resource 和现有 CyberBus 产品保持配置。管理 API 更新先私有备份，再白名单增量、读回核对，不轮换根密钥/epoch。真实签发与异产品隔离另行验证。公开 bootstrap 为 `tcp://43.155.169.102:11010` 和同址 UDP；当前只确认 TCP 可连，实际认证与业务待验。
+
 源码依赖和 lockfile 固定上述 SDK commit，包含其 EasyTier 源码和许可证；构建/发布清单不能继续要求 cloudflared CyberGrid helper 或缺漏新 crate。不得依赖开发机兄弟目录才能构建。
 
 ## 任务和验证门槛
