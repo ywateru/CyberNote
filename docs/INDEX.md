@@ -1,5 +1,7 @@
 # 文档导航
 
+2026-11-18：账户设备与多设备同步迁移至 CyberBus，先读[迁移设计](architecture/cyberbus-migration-20261118.md)与[实施计划](plan/cyberbus-migration-20261118.md)。当前实施中；下方 CyberGrid 记录属于旧传输版本，不能作为本轮测试通过证据。
+
 2026-11-17 内置 MCP119：[交付与命令验证](verification/bundled-mcp119/README.md)。适配器随 Mac 应用交付，删除路径输入，测试与外部配置自动使用包内程序；已构建、验包并正常重启。63项设置、76项测试器、10项原生和16项最终包 stdio 检查通过；UI由用户验收。
 
 2026-11-17 Agent 接入界面118：[交付与命令检查](verification/agent-settings118/README.md) · [布局与交互](ui/agent-settings.md)。页头固定测试入口，正文按开启/授权/配置组织，未完成条件可在测试准备弹窗中查看和补齐。60项接入/回调检查、69项既有 MCP 检查与生产构建通过；已构建并重启准确 Mac 包，Android 保持117版本，UI由用户验收。

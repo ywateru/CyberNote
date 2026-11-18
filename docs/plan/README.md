@@ -1,5 +1,7 @@
 # 交付计划
 
+2026-11-18：当前新增 [CyberBus 迁移计划](cyberbus-migration-20261118.md)，覆盖登录后设备目录与完整同步替换，按 core → account → 独立验证推进。
+
 2026-11-17 最新源码交付：[外观与 MCP 测试程序](../verification/feedback117/README.md)。视觉和测试器已在隔离 worktree 完成实现、修复、独立复审及合入组合命令检查；用户自行 UI 验收。未重打 Mac/APK 包；本轮 worktree/分支已清理。
 
 2026-11-17 当前演进：[项目梳理](analysis/project-review-20261116.md)与[Agent MCP / 多主题 / 双端交互路线图](project-evolution-20261116.md)的111–115实现、独审和组合检查已完成；116已完成准确Mac/Android/MCP产物、命令与真实宿主数据链交付。用户接手UI验收，未测项及NATIVE-BACK-01未修复问题单列，详见[交付报告](../verification/project-evolution/DELIVERY.md)和[验证矩阵](../verification/project-evolution/README.md)。下方旧“当前”描述按各自日期阅读。
