@@ -1,0 +1,43 @@
+{
+  "source": "https://github.com/osd-pub/CyberBus.git",
+  "revision": "359465e83bd74b571a963f3d1fdc238f50169919",
+  "reviewedPatchCommit": "c3ea6dc7d315ecf750540041edf6dd10083c00b1",
+  "patchRecord": "vendor/cyberbus/README.notes.md",
+  "modifiedUpstreamFiles": [
+    "crates/cyberbus/Cargo.toml",
+    "crates/cyberbus/src/lib.rs",
+    "crates/cyberbus/src/runtime.rs"
+  ],
+  "files": {
+    "vendor/cyberbus/LICENSE-APACHE": "f2ff6db400a0cd6fbfd894ba618772abcedb92c301055ad0840d971883730d83",
+    "vendor/cyberbus/LICENSE-MIT": "7eb51676ebba905d1f9e312f16226ac4e6b0fff6eb919c0e6917e52fb6cac39d",
+    "vendor/cyberbus/README.notes.md": "a6e0b28df2805b2e8d035c0b6921345d5ae517a82265c1d26806bfb2ba30f6d2",
+    "vendor/cyberbus/crates/cyberbus/.gitignore": "07d64eb09a56c853b7853a47276799b38d7d6d25a4314b0c1abc10432c214e17",
+    "vendor/cyberbus/crates/cyberbus/Cargo.toml": "d23e9f942185437d0184f3adde33ce36c391162e929709084d0d0201d21c1e0f",
+    "vendor/cyberbus/crates/cyberbus/README.md": "efe665ac89f34c43f71734a63d5ac69771f433f8c7d608134f9890f81456aeba",
+    "vendor/cyberbus/crates/cyberbus/examples/easytier_probe.rs": "01dc28831e6e150d44a9a9d93d661e3eeda45812a15a11f74f6c90577af9a2ba",
+    "vendor/cyberbus/crates/cyberbus/examples/sdk_lifecycle.rs": "2433430526d6555e563595bffcb99bfe557592412a376ead664095e36f28c63d",
+    "vendor/cyberbus/crates/cyberbus/src/config.rs": "7e711eba6fbe6512594a89f15e8534fa5ef3a1335705e9c7e0eba32c7b500f8d",
+    "vendor/cyberbus/crates/cyberbus/src/directory.rs": "1d3042c1b2a43e676a335f31653e33b4134f2b7fef567c904c284231e2ab3864",
+    "vendor/cyberbus/crates/cyberbus/src/discovery.rs": "b87f9e0b12111a88e1f12dce843233fa1c7951cb969c2035ea57748aa4649197",
+    "vendor/cyberbus/crates/cyberbus/src/discovery/probe_gate.rs": "6b1c3c3ba4a80269dd6c0f45c3960c549226903dd4396d0435391708f5dfbd93",
+    "vendor/cyberbus/crates/cyberbus/src/events.rs": "94bb5f195ef929a77e40276124a5754c67313666e5a41c999e82b31f637789be",
+    "vendor/cyberbus/crates/cyberbus/src/lib.rs": "08bc8b562801326fd93e1db86db747aac58e6878584481ae011419d48c7272fb",
+    "vendor/cyberbus/crates/cyberbus/src/queries.rs": "613656e31d675681f78919998bcaf7fc8317d6e11fbe0fdbb80f81c530842dad",
+    "vendor/cyberbus/crates/cyberbus/src/rpc.rs": "1a6c454a38c133ced38ab04c23c9611b8e4b782caf257f7e812b15b0088212d5",
+    "vendor/cyberbus/crates/cyberbus/src/runtime.rs": "df3d9d9e96ad23cf77f4b973be68cc7615c333e066b6b7e0e0b6d8495f7f89cb",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/auth.rs": "419728173fd687a1004f32670330c5130b25dd99a0d0eb9802b1097b702cf2ff",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/data.rs": "9dd6b8bc422d792325243b0dbe920c71e6ae1100f3bd8b41f7e3aabd78e24baf",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/data/tests.rs": "83822ae110e978bdeff18861685c33c49adfa850fd1514b2d28e82d49c374706",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/directory.rs": "9e11092237d7e11e56d1bc61d1634a4b94b1c587ea5580586f0653dc9a678218",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/handoff_tests.rs": "2028fdc7c585f3e4fc9859a63181ad4b588a9aab698e7ff36f1645077922c698",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/network.rs": "e679d297d4fa7bf98bd2dc8b6cf99595314972bcd8432fda4d80c9c088cd638d",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/profile_tests.rs": "31ae00ebe4ea801f1c63eb2c9a5e5c025faadc250c6ff8ff2081a9819acb6c86",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/rpc.rs": "802042bb54a334dcb0a734b0b8bc8fcca92eddf99c72e8978c5455501c268cb6",
+    "vendor/cyberbus/crates/cyberbus/src/runtime/stream_budget_tests.rs": "0f367052bf742f2250665c79474f4e9e08be40122f4a30739965d8daa6b2b3b4",
+    "vendor/cyberbus/crates/cyberbus/src/session.rs": "966e704cd7e4fcb641a05b33536af5b1c911f52182adddcfc48b898817a4a49f",
+    "vendor/cyberbus/crates/cyberbus/src/session/acquire.rs": "0e9ddace1c5a99a7283b08179ef3fd318b90111080991c1e3053a7fc62e693cb",
+    "vendor/cyberbus/crates/cyberbus/src/session/outbox.rs": "912afa4575c7d14f9d2c306f77c9513d1d6ec675bbe0af62c94397a07b7d4f64",
+    "vendor/cyberbus/crates/cyberbus/tests/facade.rs": "e501acf33ccb82e9485d20d31b81e0f9d5f96bffa43fa0a8157dae326d78afd3"
+  }
+}

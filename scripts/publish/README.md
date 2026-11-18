@@ -165,9 +165,33 @@ After committing/merging the core and account migration into the reviewed
 platform tree, run `node scripts/publish/cyberbus-manifest.mjs` to review the
 exact native additions/changes, then rerun with `--write`, commit that manifest
 and run `node scripts/publish/export.mjs --ref HEAD`. This finalizer requires
-`crates/notes-cyberbus`, the fixed git revision and an integrated native lockfile,
-rejects production legacy owners, updates only the new adapter and native account
-inputs, and adds the adapter's explicit first-party ownership declaration. It
-reads committed HEAD only. It cannot finalize another agent's uncommitted work,
-and it does not refresh unrelated source pins. Review other agents' changes
-outside those roots explicitly before source export.
+`crates/notes-cyberbus`, the reviewed in-tree `vendor/cyberbus/crates/cyberbus` runtime,
+and integrated native/adapter lockfiles. Auth/protocol/transport (including macOS
+platform-keyring auth) and other SDK Git packages must resolve to the exact upstream
+revision. It updates only adapter/vendor/native account inputs and records the adapter
+as first party and the patched runtime as third party under the original upstream licenses.
+`notices/cyberbus/runtime-source.json` pins all 30 retained runtime files, its original
+revision, the reviewed patch commit and the three modified upstream files. The retained
+`vendor/cyberbus/README.notes.md` describes the descriptor-registration patch. Changed,
+added or missing vendor bytes require explicit source review and a new reviewed inventory;
+the finalizer cannot approve them just because they were committed. Vendor input licenses,
+provenance and Cargo pins are checked along with the source bytes. Other SDK/EasyTier
+licenses and provenance remain in `notices/cyberbus/`; Git supplies that source at the pin.
+
+The finalizer rejects legacy CyberGrid production dependencies. `account-auth` may remain
+solely for passive data/error types and cancellation helpers; its dependency name is not
+evidence of a second grant owner. **Production integration must use CyberBus as the sole
+auth owner**: SDK auth start/callback/restore/logout and SecureStore via notes-cyberbus; no
+production construction or restore of `account_auth::AuthClient`, no legacy token provider
+or grant.json owner. Before release, the account reviewer must trace actual runtime startup,
+restore, callback and logout calls (including aliases/wrappers) against that contract. This
+script validates source/dependency inventory, not Rust reachability or ownership semantics;
+passing it alone does not establish that account acceptance gate. Legacy coordinator/source
+may be retained with its licenses but must not occur in the production dependency graph.
+
+It reads committed HEAD only. It cannot finalize another agent's uncommitted work, and it
+does not refresh unrelated source pins. Review other agents' changes outside those roots
+explicitly before source export. Manifest tests use the real reviewed core Cargo/lock/vendor
+inputs, plus clearly synthetic native account files; on a pre-merge checkout their fallback
+requires the reviewed core Git object to be available. A merged source export reads its own
+retained adapter/vendor inputs instead of any sibling checkout.

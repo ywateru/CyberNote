@@ -58,3 +58,10 @@ and a directory sync implementation into that core; the public Android API has
 no test-key or alternate-root option. Host tests do not prove Android Keystore
 or device filesystem behavior. macOS uses the SDK's official KeyringStore in
 the Rust account owner; this plugin does not implement a second macOS vault.
+
+First-install provisioning fsyncs the parent no-backup directory on **every** attempt,
+including retries that find an empty `cyberbus` directory left by an earlier failed fsync.
+The barrier precedes key generation and marker writes. Persistent parent fsync failure stays
+a storage error; it cannot be healed by resetting installation evidence. The retained host
+regression probe and persistent-failure/empty-directory extensions run through
+`public-wrapper-retest.py`; its Android API/Keystore shims are synthetic host tests only.

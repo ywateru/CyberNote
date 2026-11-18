@@ -29,8 +29,10 @@ public final class CyberBusSecureStore implements AutoCloseable {
                 if (!firstInstall) throw new Exception();
                 try { Files.createDirectory(directory, PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"))); }
                 catch (java.nio.file.FileAlreadyExistsException concurrent) { /* lock resolves simultaneous first owners */ }
-                syncDirectory(base.toPath());
             }
+            // A failed first mkdir fsync can leave an empty directory. Every provisioning
+            // attempt must persist its parent entry before generating a key or marker.
+            if (firstInstall) syncDirectory(base.toPath());
             // One fixed app-scoped key, never regenerated when any installation evidence exists.
             final String alias = context.getPackageName() + ".cyberbus.v1";
             final KeyStore store = KeyStore.getInstance("AndroidKeyStore");

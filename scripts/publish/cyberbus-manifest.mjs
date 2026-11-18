@@ -1,37 +1,83 @@
 // Finalize only the migration's committed native inputs after merging its agents.
 // Never import sibling worktrees, uncommitted bytes or refresh unrelated entries.
-import {writeFileSync, realpathSync} from 'node:fs';
+import {writeFileSync, realpathSync, readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
 import {trackedTree, manifestName} from './export.mjs';
 import {digest, safePath, readInventory} from './policy.mjs';
 export const cyberbusRevision = '359465e83bd74b571a963f3d1fdc238f50169919';
-const adapter = 'crates/notes-cyberbus';
+const origin = 'https://github.com/osd-pub/CyberBus.git';
+const adapter = 'crates/notes-cyberbus', vendor = 'vendor/cyberbus';
+// Reviewed exact bytes of the narrow descriptor-registration patch, including provenance
+// and both upstream licenses. Updating this file requires reviewing the SDK patch again.
+const runtimeSource = JSON.parse(readFileSync(new URL('./notices/cyberbus/runtime-source.json',import.meta.url)));
 const fixed = new Set(['src-tauri/Cargo.toml','src-tauri/Cargo.lock','src-tauri/src/lib.rs']);
+const gitSource = `git+${origin}?rev=${cyberbusRevision}#${cyberbusRevision}`;
+function sdkDependencies(cargo, localRuntime = false) {
+  const dependencies = [...cargo.matchAll(/^\s*(cyberbus(?:-auth|-protocol|-transport)?)\s*=\s*\{([^}\n]+)\}\s*(?:#.*)?$/gm)];
+  for (const required of localRuntime ? ['cyberbus','cyberbus-auth'] : ['cyberbus-auth','cyberbus-protocol','cyberbus-transport']) {
+    if (!dependencies.some(m=>m[1]===required)) throw Error(`Missing reviewed SDK dependency: ${required}`);
+  }
+  for (const [,name,body] of dependencies) {
+    if (localRuntime && name==='cyberbus') {
+      if (!/^\s*path\s*=\s*"\.\.\/\.\.\/vendor\/cyberbus\/crates\/cyberbus"\s*,?\s*$/.test(body)) throw Error('SDK runtime must use the reviewed in-tree vendor path');
+    } else if (!new RegExp(`\\bgit\\s*=\\s*"${origin.replaceAll('.','\\.')}"`).test(body) ||
+               !new RegExp(`\\brev\\s*=\\s*"${cyberbusRevision}"`).test(body) || /\b(?:path|branch|tag|package)\s*=/.test(body)) {
+      throw Error('SDK dependencies must use the reviewed exact git revision');
+    }
+  }
+}
+function sdkLock(lock) {
+  const packages = lock.split(/^\[\[package\]\]\s*$/m).slice(1);
+  for (const name of ['cyberbus','cyberbus-auth','cyberbus-protocol','cyberbus-transport']) {
+    const matches = packages.filter(p=>new RegExp(`^name = "${name}"$`,'m').test(p));
+    if (matches.length!==1) throw Error(`Integrated lock must contain one ${name}`);
+    const source = matches[0].match(/^source = "([^"]+)"$/m)?.[1];
+    if (name==='cyberbus' ? source!==undefined : source!==gitSource) throw Error(`Integrated lock has wrong SDK source: ${name}`);
+  }
+  // Also bind EasyTier/other packages originating from this SDK repository.
+  if (packages.some(p=>{const source=p.match(/^source = "([^"]+)"$/m)?.[1];return source?.includes('github.com/osd-pub/CyberBus') && source!==gitSource;})) throw Error('Integrated lock contains an unreviewed SDK git source');
+  if (/^name = "cybergrid-sdk"$/m.test(lock)) throw Error('Remove legacy CyberGrid production lock dependency');
+}
+function reviewedVendor(tree) {
+  if (runtimeSource.source!==origin || runtimeSource.revision!==cyberbusRevision) throw Error('Review runtime source provenance');
+  const expected=Object.keys(runtimeSource.files).sort();
+  const actual=[...tree.entries.keys()].filter(p=>p.startsWith(vendor+'/')).sort();
+  if (JSON.stringify(expected)!==JSON.stringify(actual)) throw Error('Review added or missing SDK vendor inputs');
+  for (const path of expected) if (digest(tree.read(path))!==runtimeSource.files[path]) throw Error(`Review changed SDK vendor input: ${path}`);
+  sdkDependencies(tree.read(vendor+'/crates/cyberbus/Cargo.toml').toString());
+  return expected;
+}
 export function finalizeCyberbusManifest(tree) {
   const manifest = JSON.parse(tree.read(manifestName));
   const changes = [];
   const paths = [...tree.entries.keys()].filter(path => fixed.has(path) || path.startsWith('src-tauri/src/account/') || path.startsWith(adapter + '/')).sort();
   if (!paths.includes(adapter + '/Cargo.toml') || !paths.includes('src-tauri/Cargo.lock')) throw Error('Merge committed core/account migration inputs first');
-  const cargo = tree.read(adapter + '/Cargo.toml').toString();
-  const pins = [...cargo.matchAll(/(?:cyberbus|cyberbus-auth)\s*=\s*\{([^}\n]+)\}/g)];
-  if (pins.length < 2 || pins.some(m => !m[1].includes('git = "https://github.com/osd-pub/CyberBus.git"') || !m[1].includes(`rev = "${cyberbusRevision}"`))) throw Error('SDK dependencies must use the reviewed exact git revision');
+  sdkDependencies(tree.read(adapter + '/Cargo.toml').toString(),true);
+  const vendorPaths=reviewedVendor(tree);
   const native = tree.read('src-tauri/Cargo.toml').toString();
-  if (!/notes-cyberbus\s*=/.test(native) || /cybergrid|crates\/account-auth/.test(native)) throw Error('Production account must depend on notes-cyberbus without legacy owners');
-  const lock = tree.read('src-tauri/Cargo.lock').toString();
-  if (!lock.includes(cyberbusRevision) || /name = "cybergrid-sdk"/.test(lock)) throw Error('Regenerate integrated Cargo lock for the fixed SDK revision');
-  for (const path of paths) {
+  if (!/^notes-cyberbus\s*=\s*\{\s*path\s*=\s*"\.\.\/crates\/notes-cyberbus"\s*,?\s*\}/m.test(native) || /\bcybergrid(?:-sdk)?\s*=/.test(native)) throw Error('Production account must depend on in-tree notes-cyberbus without legacy CyberGrid');
+  // account-auth may remain for Identity/errors/cancellation helpers. Dependency presence
+  // does not prove a second grant owner. Production call-chain review is a separate release
+  // gate documented in README; this inventory check does not claim to parse Rust ownership.
+  sdkLock(tree.read('src-tauri/Cargo.lock').toString());
+  sdkLock(tree.read(adapter+'/Cargo.lock').toString());
+  for (const path of [...paths,...vendorPaths]) {
     safePath(path);
-    // Target output and keys must not become allowlisted by being tracked.
-    if (!(fixed.has(path) || /\.(rs|toml|lock|md)$/.test(path) || path === adapter + '/.gitignore')) throw Error(`Review new migration input: ${path}`);
+    // Vendor bytes are exact allowlisted inputs, including extensionless LICENSE files.
+    if (!vendorPaths.includes(path) && !(fixed.has(path) || /\.(rs|toml|lock|md)$/.test(path) || path === adapter + '/.gitignore')) throw Error(`Review new migration input: ${path}`);
     const hash = digest(tree.read(path));
     if (manifest.files[path] !== hash) { manifest.files[path] = hash; changes.push(path); }
   }
-  // Deleted account modules must not leave dangling source pins.
-  for (const path of Object.keys(manifest.files)) if (path.startsWith('src-tauri/src/account/') && !tree.entries.has(path)) {
+  // Deleted migration modules must not leave dangling source pins.
+  for (const path of Object.keys(manifest.files)) if ([adapter+'/',vendor+'/', 'src-tauri/src/account/'].some(prefix=>path.startsWith(prefix)) && !tree.entries.has(path)) {
     delete manifest.files[path]; changes.push(path);
   }
   if (!manifest.firstParty.some(item => item.root === adapter)) manifest.firstParty.push({root:adapter,provenance:'project-authored',rights:'reserved',rightsSource:'scripts/publish/LICENSE.project-reserved.txt'});
+  const ownership={root:vendor,origin,revision:cyberbusRevision,licenses:[vendor+'/LICENSE-MIT',vendor+'/LICENSE-APACHE']};
+  const previous=manifest.thirdParty.find(item=>item.root===vendor);
+  if (previous && (previous.origin!==origin || previous.revision!==cyberbusRevision || JSON.stringify(previous.licenses)!==JSON.stringify(ownership.licenses))) throw Error('Review conflicting SDK vendor ownership');
+  if (!previous) manifest.thirdParty.push(ownership);
   readInventory(manifest, tree.read);
   return {manifest,changes};
 }

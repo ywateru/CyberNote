@@ -23,3 +23,10 @@ test('JNI class is kept and absent from renderer command surface', () => {
   assert.match(source, /getNoBackupFilesDir/);
   assert.match(readFileSync(root + 'android/consumer-rules.pro', 'utf8'), /-keep class com\.local\.notesauth\.CyberBusSecureStore/);
 });
+
+test('public wrapper retries provisioning parent fsync before any key or marker', () => {
+  const result=execFileSync('python3',[root+'public-wrapper-retest.py'],{encoding:'utf8',timeout:120000});
+  assert.match(result,/F1 observed retry parent fsync count=1/);
+  assert.match(result,/PASS parent fsync retry/);
+  console.log(result.trim());
+});

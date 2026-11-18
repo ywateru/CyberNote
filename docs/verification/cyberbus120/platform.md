@@ -138,3 +138,74 @@ power-loss recovery, app restart restore, macOS Keyring runtime, authenticated
 multi-device transport and all real note/attachment synchronization remain for
 integrated/independent verification. No SDK fixture, host injected key, AAR build
 or UI build is counted as migration end-to-end acceptance.
+
+## Review 01 blocking fixes — 2026-11-18
+
+Input independent review: `94d0dd2565d475c75d2310a9312b780d60398274`,
+`docs/plan/reviews/cyberbus123-platform-01.md`. This follow-up addresses only F1/F2.
+The original report and all independent failure fixtures remain unchanged. The author
+records the following retest results; independent re-review is still required.
+
+F1: every FirstInstall attempt now fsyncs the parent no-backup directory after ensuring
+`cyberbus` exists and before opening Keystore/generating a key or writing a marker. This
+includes an empty directory left after failed mkdir persistence and a competing directory
+creation. No key, marker or existing ciphertext is removed/reset. The retained independent
+PublicWrapperProbe is copied unchanged into host-tests for a portable source test; the new
+host shim driver runs it against actual current product Java and adds persistent parent
+failure (three attempts), pre-existing empty directory, successful retry and Existing reopen.
+The driver bounds compile/run to 60s each and contains all Java temp roots under its owned
+TemporaryDirectory. Original review's baseline probe still targets b74eeb63 and remains red
+by design. Observed successful retry: **parent fsync 1 / child directory fsync 4** (the old
+probe prints total events=5 in its child-count field). Persistent parent failure causes
+only parent events, no replacement key generation and no marker.
+
+F2: the finalizer now accepts the actual reviewed core in-tree runtime path and verifies
+Git pins for adapter auth (including macOS platform-keyring), protocol and all retained
+runtime SDK dependencies. Both adapter and integrated native lockfiles must contain one
+local cyberbus runtime and the exact Git source/revision for auth/protocol/transport; an
+unrelated mention of the revision no longer suffices. `runtime-source.json` records the
+fixed upstream source/revision, core patch commit c3ea6dc7, the three modified upstream
+files and hashes of **all 30 retained vendor files**, including both licenses and
+README.notes.md. The runtime differences from the pinned upstream checkout were limited
+to Cargo.toml, src/lib.rs and src/runtime.rs. Added/missing/changed vendor bytes require
+review; no sibling checkout is imported by the finalizer. It includes that source tree,
+patch record and correct third-party ownership/licenses in the candidate manifest, while
+keeping notes-cyberbus first party.
+
+Native account fixtures explicitly represent integration inventory inputs, not a real
+account implementation. Retaining `account-auth` for passive types/errors/cancellation no
+longer triggers an unsupported double-owner assertion. Publish README states the production
+release contract: CyberBus is the sole auth owner; no production construction/restore of
+legacy AuthClient or token provider. Actual startup/restore/callback/logout call-chain
+review remains an account integration acceptance gate, including aliases/wrappers; this
+script does not claim to prove Rust reachability. Legacy CyberGrid production dependencies
+remain rejected. No native Cargo/lock or account product source was edited.
+
+Executed against these fix bytes:
+
+- `JAVA_HOME=<JDK17> node --test plugins/tauri-plugin-notes-auth/*.test.mjs
+  scripts/publish/*.test.mjs`: **34 passed / 0 failed / 0 skipped**. Includes 21 underlying
+  host vault cases, original public-wrapper security controls and F1 regression/extended
+  retries; actual core Cargo/lock/vendor positive inventory; wrong Git hash/lock source,
+  missing license/patch record, changed/new vendor source and legacy production rejection;
+  preserved unrelated hash enforcement; accepted account-auth helper-only dependency fixture.
+- Isolated Android library build, reusing review's build recipe with current working product
+  bytes instead of its frozen old Git revision: API36 javac, min26 D8, unchanged JNI
+  descriptors, release AAR content/consumer keep checks and offline Gradle
+  `:notes-auth:assembleRelease :notes-auth:lintRelease`: **PASS**, 64 tasks executed in 37s.
+  Gradle 9.6.1, AGP9.3.1, Kotlin2.2.10, JDK17; existing saveFormData deprecation only.
+  Temporary AAR SHA256 `4e1fee6244320a1ab036ee860ebba7dcc6f287bc9d0caf2a3ed2fb7515e26496`,
+  DEX SHA256 `cdb6c1e3aa15d20c107c84e8ba97bab08406fd6b4b19db4fc853b6c7d0c57b67`.
+  Owned build directory was removed. No Tauri init/application APK/install/device use.
+- Scoped manifest update: six existing product/test/doc hashes plus four new host-test/
+  runtime-provenance inputs. No unrelated regeneration. Baseline and candidate both retain
+  the **same 62 mismatches**, no new mismatches. Candidate in-memory hash refresh passes
+  full policy/license/secret scan; this is **not strict source export acceptance**.
+- `git diff --check`: PASS before commit. Frontend bytes are unchanged in this fix; prior
+  typecheck/build pass remains historical evidence rather than a new run.
+
+No Android real Keystore, power-loss, full APK/R8/Rust JNI, real account/grant, dual-peer
+network/relay, user notes or original app was used. The independent device test app remains
+paused at the user's direction. Actual committed integrated source export and its locked
+build remain blocked by the acknowledged 62 baseline hashes and pending core/account merge;
+these fixes do not clear those acceptance gates or replace Carson's re-review.
