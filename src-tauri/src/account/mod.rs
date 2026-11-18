@@ -412,6 +412,17 @@ impl Runtime {
         }
     }
     pub async fn command(self: &Arc<Self>, command: Command) -> Result<Status> {
+        let recovery = matches!(command, Command::SyncNow {});
+        let generation = self.generation.load(Ordering::Acquire);
+        let result = self.command_inner(command).await;
+        if recovery && self.current(generation) {
+            if let Err(error) = &result {
+                self.fail(*error);
+            }
+        }
+        result
+    }
+    async fn command_inner(self: &Arc<Self>, command: Command) -> Result<Status> {
         if self.closing.load(Ordering::Acquire) {
             return Err(Error::Cancelled);
         }
@@ -435,7 +446,7 @@ impl Runtime {
                 // An explicit login from a failed authenticated session first
                 // closes that session; never run two grant owners.
                 if status.profile.is_some() {
-                    self.logout().await?;
+                    self.finish_local_logout(self.logout().await?)?;
                 }
                 let g = self.generation.fetch_add(1, Ordering::AcqRel) + 1;
                 let stop = CancellationToken::new();
@@ -493,14 +504,7 @@ impl Runtime {
                 self.cancel_attempt().await;
                 let _owner = self.lifecycle.lock().await;
                 self.stop_network().await?;
-                self.logout().await?;
-                self.set_enabled(false)?;
-                self.sync.replay_adoption_release()?;
-                private::clear_session(&self.root)?;
-                self.mutate(|d| {
-                    d.binding = None;
-                    d.status = Status::default();
-                });
+                self.finish_local_logout(self.logout().await?)?;
             }
             Command::SetEnabled { enabled } => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
@@ -603,33 +607,19 @@ impl Runtime {
         }
         self.snapshot()
     }
-    async fn logout(&self) -> Result<()> {
-        let result = self
-            .bus()
-            .await?
-            .cmd(C::AuthLogout(pb::AuthLogout {
-                cloud_policy: Some(pb::CloudLogoutPolicy::RevokeGrant as i32),
-                cloud_budget: None,
-            }))
-            .await?;
-        match result.body {
-            Some(pb::sdk_result::Body::AuthLogout(r))
-                if r.local_closed && r.local_error.is_none() =>
-            {
-                if let Some(e) = r.cloud_error {
-                    return Err(notes_cyberbus::Error::Sdk(e.code).into());
-                }
-                if r.cloud_status != pb::CloudLogoutStatus::Succeeded as i32 {
-                    return Err(Error::UnknownOutcome);
-                }
-                Ok(())
-            }
-            Some(pb::sdk_result::Body::AuthLogout(r)) => Err(r
-                .local_error
-                .map(|e| Error::from(notes_cyberbus::Error::Sdk(e.code)))
-                .unwrap_or(Error::CleanupRequired)),
-            _ => Err(Error::CoordinationProtocol),
-        }
+    async fn logout(&self) -> Result<LogoutReceipt> {
+        logout_bus(&self.bus().await?).await
+    }
+    fn finish_local_logout(&self, logout: LogoutReceipt) -> Result<()> {
+        self.set_enabled(false)?;
+        self.sync.replay_adoption_release()?;
+        private::clear_session(&self.root)?;
+        self.mutate(|d| {
+            d.binding = None;
+            d.status = Status::default();
+            d.status.error = logout.cloud_error.map(Error::safe);
+        });
+        logout.cloud_error.map_or(Ok(()), Err)
     }
     async fn start_device(
         self: &Arc<Self>,
@@ -809,7 +799,7 @@ impl Runtime {
                 // Callback may have committed immediately before cancellation.
                 // Seal any grant rather than leaving an unseen logged-in owner.
                 self.stop_network().await?;
-                self.logout().await?;
+                self.finish_local_logout(self.logout().await?)?;
             } else if let Err(e) = cancel {
                 if !matches!(e,notes_cyberbus::Error::Sdk(c) if c==pb::ErrorCode::Conflict as i32 || c==pb::ErrorCode::NotFound as i32)
                 {
@@ -901,6 +891,56 @@ impl Runtime {
             app.exit(0);
         });
     }
+}
+/// Local closure is authoritative even if the independent cloud revocation
+/// failed. Callers must apply local cleanup and still report the cloud failure.
+struct LogoutReceipt {
+    cloud_error: Option<Error>,
+}
+impl LogoutReceipt {
+    fn from_sdk(result: pb::AuthLogoutResult, revoke: bool) -> Result<Self> {
+        if !result.local_closed || result.local_error.is_some() {
+            return Err(result
+                .local_error
+                .map(|e| Error::from(notes_cyberbus::Error::Sdk(e.code)))
+                .unwrap_or(Error::CleanupRequired));
+        }
+        let expected = if revoke {
+            pb::CloudLogoutStatus::Succeeded
+        } else {
+            pb::CloudLogoutStatus::NotRequested
+        } as i32;
+        Ok(Self {
+            cloud_error: result
+                .cloud_error
+                .map(|e| Error::from(notes_cyberbus::Error::Sdk(e.code)))
+                .or_else(|| (result.cloud_status != expected).then_some(Error::UnknownOutcome)),
+        })
+    }
+}
+async fn logout_bus(bus: &Bus) -> Result<LogoutReceipt> {
+    // Query the SDK owner, including its persisted grant, rather than inferring
+    // grant existence from a UI binding or the auth phase. This also makes a
+    // cancelled pre-callback login and repeated signout idempotent locally.
+    let state = bus.cmd(C::GetAuthState(pb::GetAuthState {})).await?;
+    let Some(pb::sdk_result::Body::AuthState(state)) = state.body else {
+        return Err(Error::CoordinationProtocol);
+    };
+    let revoke = state.refresh_supported;
+    let result = bus
+        .cmd(C::AuthLogout(pb::AuthLogout {
+            cloud_policy: Some(if revoke {
+                pb::CloudLogoutPolicy::RevokeGrant
+            } else {
+                pb::CloudLogoutPolicy::LocalOnly
+            } as i32),
+            cloud_budget: None,
+        }))
+        .await?;
+    let Some(pb::sdk_result::Body::AuthLogout(result)) = result.body else {
+        return Err(Error::CoordinationProtocol);
+    };
+    LogoutReceipt::from_sdk(result, revoke)
 }
 fn prepare_session_binding(
     sync: &adapter::Runtime,
@@ -1061,6 +1101,11 @@ fn test_authorization_file(uri: &str) -> Result<bool> {
     let path = std::env::var_os("NOTES_SYNC_E2E_AUTHORIZATION_FILE")
         .map(PathBuf::from)
         .ok_or(Error::Configuration)?;
+    write_test_authorization_file(&path, uri)?;
+    Ok(true)
+}
+#[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+fn write_test_authorization_file(path: &Path, uri: &str) -> Result<()> {
     if !path.is_absolute() {
         return Err(Error::Configuration);
     }
@@ -1079,9 +1124,148 @@ fn test_authorization_file(uri: &str) -> Result<bool> {
     if std::fs::canonicalize(parent).map_err(|_| Error::Storage)? != parent {
         return Err(Error::Storage);
     }
-    if std::fs::symlink_metadata(&path).is_ok() {
+    if std::fs::symlink_metadata(path).is_ok() {
         return Err(Error::Storage);
     }
-    private::atomic_write(&path, uri.as_bytes())?;
-    Ok(true)
+    private::atomic_create(path, uri.as_bytes())
+}
+
+#[cfg(test)]
+mod lifecycle_tests {
+    use super::*;
+
+    #[cfg(all(feature = "sync-e2e", debug_assertions, desktop, unix))]
+    #[test]
+    fn authorization_handoff_requires_private_canonical_directory_and_never_replaces_evidence() {
+        use std::os::unix::fs::{symlink, PermissionsExt};
+        let temporary = tempfile::tempdir().unwrap();
+        let dir = std::fs::canonicalize(temporary.path()).unwrap();
+        std::fs::set_permissions(&dir, std::fs::Permissions::from_mode(0o700)).unwrap();
+        let path = dir.join("authorization");
+        write_test_authorization_file(&path, "fixture-request").unwrap();
+        assert_eq!(
+            std::fs::metadata(&path).unwrap().permissions().mode() & 0o777,
+            0o600
+        );
+        assert!(write_test_authorization_file(&path, "replacement").is_err());
+        assert_eq!(std::fs::read(&path).unwrap(), b"fixture-request");
+        let link = dir.join("link");
+        symlink(&path, &link).unwrap();
+        assert!(write_test_authorization_file(&link, "replacement").is_err());
+        assert!(write_test_authorization_file(Path::new("relative-file"), "fixture").is_err());
+        std::fs::set_permissions(&dir, std::fs::Permissions::from_mode(0o755)).unwrap();
+        assert!(write_test_authorization_file(&dir.join("public"), "fixture").is_err());
+        std::fs::set_permissions(&dir, std::fs::Permissions::from_mode(0o700)).unwrap();
+        let parent_link = dir.join("linked-parent");
+        symlink(&dir, &parent_link).unwrap();
+        assert!(write_test_authorization_file(&parent_link.join("request"), "fixture").is_err());
+    }
+
+    #[test]
+    fn confirmed_local_logout_retains_cloud_failure_and_rejects_uncertain_local_cleanup() {
+        let receipt = LogoutReceipt::from_sdk(
+            pb::AuthLogoutResult {
+                local_closed: true,
+                cloud_status: pb::CloudLogoutStatus::UnknownOutcome as i32,
+                ..Default::default()
+            },
+            true,
+        )
+        .unwrap();
+        assert_eq!(receipt.cloud_error, Some(Error::UnknownOutcome));
+        let receipt = LogoutReceipt::from_sdk(
+            pb::AuthLogoutResult {
+                local_closed: true,
+                cloud_status: pb::CloudLogoutStatus::Failed as i32,
+                cloud_error: Some(pb::ProtocolError {
+                    code: pb::ErrorCode::Unavailable as i32,
+                    ..Default::default()
+                }),
+                ..Default::default()
+            },
+            true,
+        )
+        .unwrap();
+        assert_eq!(
+            receipt.cloud_error,
+            Some(Error::from(notes_cyberbus::Error::Sdk(
+                pb::ErrorCode::Unavailable as i32
+            )))
+        );
+        assert!(LogoutReceipt::from_sdk(
+            pb::AuthLogoutResult {
+                local_closed: false,
+                cloud_status: pb::CloudLogoutStatus::Succeeded as i32,
+                ..Default::default()
+            },
+            true
+        )
+        .is_err());
+        assert!(LogoutReceipt::from_sdk(
+            pb::AuthLogoutResult {
+                local_closed: true,
+                local_error: Some(pb::ProtocolError {
+                    code: pb::ErrorCode::Internal as i32,
+                    ..Default::default()
+                }),
+                cloud_status: pb::CloudLogoutStatus::Succeeded as i32,
+                ..Default::default()
+            },
+            true
+        )
+        .is_err());
+        // A cloud operation omitted despite a known grant must not be success.
+        assert_eq!(
+            LogoutReceipt::from_sdk(
+                pb::AuthLogoutResult {
+                    local_closed: true,
+                    cloud_status: pb::CloudLogoutStatus::NotRequested as i32,
+                    ..Default::default()
+                },
+                true
+            )
+            .unwrap()
+            .cloud_error,
+            Some(Error::UnknownOutcome)
+        );
+    }
+
+    #[tokio::test]
+    async fn actual_sdk_without_grant_closes_locally_and_repeated_signout_is_idempotent() {
+        let bytes = Arc::new(Mutex::new(None::<Vec<u8>>));
+        let load = bytes.clone();
+        let save = bytes;
+        let store = notes_cyberbus::CallbackStore::new(
+            move || {
+                Ok(load
+                    .lock()
+                    .unwrap()
+                    .as_ref()
+                    .map(|b| notes_cyberbus::SecretBytes::new(b.clone())))
+            },
+            move |b: &[u8]| {
+                *save.lock().unwrap() = Some(b.to_vec());
+                Ok(())
+            },
+        );
+        let bus = Bus::new(
+            config::pinned().unwrap(),
+            Box::new(store),
+            notes_cyberbus::StoreMode::CreateNew,
+        )
+        .await
+        .unwrap();
+        for _ in 0..2 {
+            assert!(logout_bus(&bus).await.unwrap().cloud_error.is_none());
+            let result = bus.cmd(C::GetAuthState(pb::GetAuthState {})).await.unwrap();
+            let Some(pb::sdk_result::Body::AuthState(state)) = result.body else {
+                panic!("SDK auth state required")
+            };
+            assert_eq!(state.phase, pb::AuthPhase::LoggedOut as i32);
+            assert!(!state.refresh_supported);
+            assert!(state.account.is_none());
+            assert!(!bus.snapshot().network.is_some_and(|n| n.running));
+        }
+        bus.close().await.unwrap();
+    }
 }

@@ -25,8 +25,8 @@ const syncStages = ["pair", "recoverPairing", "transfer", "retirement"] as const
 type SyncStage = typeof syncStages[number];
 const syncReasons = ["io", "invalid_input", "corrupt_identity", "authentication", "expired", "revoked", "workspace_mismatch", "protocol", "limit", "timeout", "stopped", "backend", "plan_stale", "busy", "transport"] as const;
 type SyncReason = typeof syncReasons[number];
-const errorCodes = ["account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_sync_adoption_blocked", "account_window_invalid", "account_device_offline", "account_device_incompatible", "account_sync_not_enabled", "account_directory_unavailable", "account_directory_unsupported"];
-export type SafeError = { code: string; message: string; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number; adoptionStage?: AdoptionStage; adoptionReason?: "timeout"; syncStage?: SyncStage; syncReason?: SyncReason };
+const errorCodes = ["account_sdk_failed", "account_unknown_outcome", "account_deadline_exceeded", "account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_sync_adoption_blocked", "account_window_invalid", "account_device_offline", "account_device_incompatible", "account_sync_not_enabled", "account_directory_unavailable", "account_directory_unsupported"];
+export type SafeError = { code: string; message: string; cyberbusCode?: number; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number; adoptionStage?: AdoptionStage; adoptionReason?: "timeout"; syncStage?: SyncStage; syncReason?: SyncReason };
 const transportKinds = ["cyberbus", "webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
 type TransportKind = typeof transportKinds[number];
 type MappingObservation = { generation: number; sample: number; ageMs: number; enrollment: TransportKind; sync: TransportKind };
@@ -136,12 +136,18 @@ function deviceDirection(value: unknown): DeviceDirection {
 function bool(value: unknown): boolean { if (typeof value !== "boolean") return invalid(); return value; }
 function count(value: unknown): number { if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) return invalid(); return value; }
 export function validateAccountError(value: unknown): SafeError {
-  const error = record(value, ["code", "message", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason", "syncStage", "syncReason"]);
+  const error = record(value, ["cyberbusCode", "code", "message", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason", "syncStage", "syncReason"]);
   if (!errorCodes.includes(text(error.code))) {
     text(error.message, 1000);
     if (Object.keys(error).some(key => key !== "code" && key !== "message")) return invalid();
     return {code:"unknown",message:"未知错误。账户操作未完成，本机备忘录会保留。"};
   }
+  if (error.code === "account_sdk_failed") {
+    if (!Number.isInteger(error.cyberbusCode) || (error.cyberbusCode as number) < 1 || (error.cyberbusCode as number) > 26 ||
+      Object.keys(error).some(key => !["code", "message", "cyberbusCode"].includes(key))) return invalid();
+  } else if ("cyberbusCode" in error) return invalid();
+  if (["account_unknown_outcome", "account_deadline_exceeded"].includes(error.code as string) &&
+    Object.keys(error).some(key => !["code", "message"].includes(key))) return invalid();
   if ("syncStage" in error || "syncReason" in error) {
     if (error.code !== "account_sync_failed" || !syncStages.includes(error.syncStage as SyncStage) || !syncReasons.includes(error.syncReason as SyncReason) ||
       Object.keys(error).some(key => !["code", "message", "syncStage", "syncReason"].includes(key))) return invalid();
@@ -170,6 +176,7 @@ export function validateAccountError(value: unknown): SafeError {
     else if (error.code !== "account_network") return invalid();
   }
   return { code: error.code as string, message: text(error.message, 1000),
+    ...(error.cyberbusCode === undefined ? {} : {cyberbusCode: error.cyberbusCode as number}),
     ...(error.stage === undefined ? {} : {stage: error.stage as NetworkStage}),
     ...(error.reason === undefined ? {} : {reason: error.reason as IdentityReason}),
     ...(error.providerReason === undefined ? {} : {providerReason: error.providerReason as ProviderReason}),
@@ -219,6 +226,9 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     return `${at}${explanation}（HTTP ${http}）。本机备忘录会保留。`;
   }
   const fixed: Record<string, string> = {
+    account_sdk_failed: "CyberBus 操作未完成，请检查账户连接或更新应用后重试。本机备忘录会保留。",
+    account_unknown_outcome: "操作结果尚未确认。请先检查目标设备和本机状态，再明确决定是否重试；不会自动重复传输。",
+    account_deadline_exceeded: "本次操作已超过期限，请检查连接并重新选择目标设备。未确认的远端更改可能已经发生。",
     account_cleanup_required: "存在待撤销的登录授权，请先退出账户并完成授权清理，再重新登录。本机备忘录会保留。",
     account_owner_workspace_mismatch: "账户服务返回的身份或同步空间与本次登录信息不一致，无法继续账户同步。请重新登录；如仍有未完成的授权，可先退出账户。本机备忘录会保留。",
     account_configuration: "账户配置无效，请检查服务配置或更新应用。本机备忘录会保留。",
@@ -269,7 +279,7 @@ export function accountErrorDetails(error: AccountStatus["error"]): [string, str
   if (!error) return [];
   try {
     const safe = validateAccountError(error);
-    return (["code", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason", "syncStage", "syncReason"] as const)
+    return (["code", "cyberbusCode", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason", "syncStage", "syncReason"] as const)
       .flatMap(key => safe[key] === undefined ? [] : [[key, key === "syncStage" ? syncStageNames[safe.syncStage!] : key === "syncReason" ? syncReasonNames[safe.syncReason!] : key === "code" && safe.code === "unknown" ? "未知错误" : String(safe[key])] as [string, string]]);
   } catch { return []; }
 }

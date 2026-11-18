@@ -93,6 +93,13 @@ pub fn write(path: &Path, binding: &Binding) -> Result<()> {
     )
 }
 pub(super) fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
+    write_atomic(path, bytes, true)
+}
+#[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
+pub(super) fn atomic_create(path: &Path, bytes: &[u8]) -> Result<()> {
+    write_atomic(path, bytes, false)
+}
+fn write_atomic(path: &Path, bytes: &[u8], replace: bool) -> Result<()> {
     let dir = path.parent().ok_or(Error::Storage)?;
     directory(dir)?;
     let temp = dir.join(format!(".binding-{}", uuid::Uuid::new_v4()));
@@ -107,7 +114,14 @@ pub(super) fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
         let mut file = options.open(&temp)?;
         file.write_all(bytes)?;
         file.sync_all()?;
-        fs::rename(&temp, path)?;
+        if replace {
+            fs::rename(&temp, path)?;
+        } else {
+            // Publish complete bytes atomically without replacing a file that
+            // appeared after validation. Both names live in the same directory.
+            fs::hard_link(&temp, path)?;
+            fs::remove_file(&temp)?;
+        }
         File::open(dir)?.sync_all()?;
         Ok(())
     })();

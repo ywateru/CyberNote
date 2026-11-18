@@ -371,6 +371,70 @@ pub(super) fn available(snapshot: &Snapshot, binding: &private::Binding) -> bool
             .as_ref()
             .is_some_and(|n| n.running && n.reachable && n.error.is_none())
 }
+fn lifecycle_error(snapshot: &Snapshot, binding: &private::Binding) -> Option<Error> {
+    if snapshot.closed {
+        return Some(Error::Network);
+    }
+    if let Some(auth) = &snapshot.auth {
+        if auth.reauth_required
+            || matches!(
+                pb::AuthPhase::try_from(auth.phase),
+                Ok(pb::AuthPhase::ReauthRequired
+                    | pb::AuthPhase::LoggedOut
+                    | pb::AuthPhase::AuthCancelled)
+            )
+        {
+            return Some(Error::AuthenticationAt(
+                super::types::NetworkStage::IdentityRefresh,
+            ));
+        }
+        if auth.security_state_persistence_pending {
+            return Some(Error::Storage);
+        }
+        if let Some(error) = &auth.error {
+            return Some(notes_cyberbus::Error::Sdk(error.code).into());
+        }
+        match pb::AuthPhase::try_from(auth.phase) {
+            Ok(pb::AuthPhase::Degraded) => return Some(Error::Network),
+            Ok(pb::AuthPhase::ConfigurationError) => return Some(Error::Configuration),
+            Ok(pb::AuthPhase::Failed) => {
+                return Some(Error::AuthenticationAt(
+                    super::types::NetworkStage::IdentityRefresh,
+                ))
+            }
+            Ok(pb::AuthPhase::Authenticated) if !authenticated(snapshot, binding) => {
+                return Some(Error::AuthenticationAt(
+                    super::types::NetworkStage::IdentityRefresh,
+                ));
+            }
+            _ => {}
+        }
+    }
+    snapshot.network.as_ref().and_then(|network| {
+        network
+            .error
+            .as_ref()
+            .map(|e| notes_cyberbus::Error::Sdk(e.code).into())
+            .or_else(|| (!network.running || !network.reachable).then_some(Error::Network))
+    })
+}
+fn worker_phase(
+    snapshot: &Snapshot,
+    binding: &private::Binding,
+    enabled: bool,
+    ready: bool,
+) -> Result<super::types::Phase> {
+    if let Some(error) = lifecycle_error(snapshot, binding) {
+        return Err(error);
+    }
+    Ok(if !enabled {
+        super::types::Phase::Paused
+    } else if ready {
+        super::types::Phase::Ready
+    } else {
+        super::types::Phase::Connecting
+    })
+}
 pub(super) fn profile(device: &pb::DeviceSnapshot) -> Result<directory::NotesProfile> {
     let profile = device.profile.as_ref().ok_or(Error::DeviceIncompatible)?;
     let any = profile
@@ -421,7 +485,21 @@ fn update_catalog(
     let mut rows = vec![];
     let mut roster = vec![];
     for d in &snapshot.devices.devices {
-        let Ok(p) = profile(d) else { continue };
+        // Other applications and not-yet-published descriptors may coexist in
+        // discovery. A declared Notes profile must validate; never turn its
+        // corruption/incompatibility into a successful empty directory.
+        if !d
+            .profile
+            .as_ref()
+            .and_then(|p| p.public_config.as_ref())
+            .is_some_and(|any| any.type_url == directory::PROFILE_TYPE)
+        {
+            continue;
+        }
+        if !d.is_local && d.last_authenticated_at.is_none() {
+            continue;
+        }
+        let p = profile(d)?;
         let peer: [u8; 32] = d
             .device_id
             .as_slice()
@@ -623,12 +701,9 @@ pub(super) async fn run(
                 });
                 child = Some((content_stop, task, epoch, bus_generation));
             }
-            if child.is_none() && enabled && !valid {
-                owner.set_phase(generation, super::types::Phase::Connecting);
-            } else if !enabled {
-                owner.set_phase(generation, super::types::Phase::Paused);
-            } else if control.ready() {
-                owner.set_phase(generation, super::types::Phase::Ready);
+            match worker_phase(&s, &binding, enabled, control.ready()) {
+                Ok(phase) => owner.set_phase(generation, phase),
+                Err(error) => owner.fail(error),
             }
             if authenticated(&s, &binding) {
                 publish(
@@ -747,8 +822,7 @@ mod cyberbus_tests {
         assert!(!bus.snapshot().network.is_some_and(|n| n.running));
         bus.close().await.unwrap();
     }
-    #[test]
-    fn auth_lease_requires_verified_owner_and_network_and_expires_without_tick() {
+    fn auth_fixture() -> (Snapshot, private::Binding) {
         let b = private::Binding {
             issuer: "https://issuer.test/oidc".into(),
             subject: "subject".into(),
@@ -783,6 +857,11 @@ mod cyberbus_tests {
             reachable: true,
             error: None,
         });
+        (s, b)
+    }
+    #[test]
+    fn auth_lease_requires_verified_owner_and_network_and_expires_without_tick() {
+        let (mut s, b) = auth_fixture();
         assert!(available(&s, &b));
         for phase in [
             pb::AuthPhase::Degraded,
@@ -826,5 +905,126 @@ mod cyberbus_tests {
         assert!(!waiting.is_finished());
         done.send(Ok(())).unwrap();
         assert_eq!(waiting.await.unwrap(), Err(Error::Deadline));
+    }
+    #[test]
+    fn running_worker_projects_later_auth_failures_without_masking_them_as_pause() {
+        use super::super::types::{NetworkStage, Phase};
+        let (healthy, binding) = auth_fixture();
+        for enabled in [false, true] {
+            assert!(worker_phase(&healthy, &binding, enabled, enabled).is_ok());
+            let mut s = healthy.clone();
+            s.auth.as_mut().unwrap().phase = pb::AuthPhase::ReauthRequired as i32;
+            assert_eq!(
+                worker_phase(&s, &binding, enabled, false).err(),
+                Some(Error::AuthenticationAt(NetworkStage::IdentityRefresh))
+            );
+            s.auth.as_mut().unwrap().phase = pb::AuthPhase::Degraded as i32;
+            assert_eq!(
+                worker_phase(&s, &binding, enabled, false).err(),
+                Some(Error::Network)
+            );
+            s = healthy.clone();
+            s.auth.as_mut().unwrap().security_state_persistence_pending = true;
+            assert_eq!(
+                worker_phase(&s, &binding, enabled, false).err(),
+                Some(Error::Storage)
+            );
+            s = healthy.clone();
+            s.network.as_mut().unwrap().reachable = false;
+            assert_eq!(
+                worker_phase(&s, &binding, enabled, false).err(),
+                Some(Error::Network)
+            );
+            s = healthy.clone();
+            s.closed = true;
+            assert_eq!(
+                worker_phase(&s, &binding, enabled, false).err(),
+                Some(Error::Network)
+            );
+            assert!(matches!(
+                worker_phase(&healthy, &binding, enabled, enabled).unwrap(),
+                Phase::Paused | Phase::Ready
+            ));
+        }
+    }
+    #[test]
+    fn declared_notes_corruption_is_an_error_on_first_discovery_and_after_history() {
+        let (mut s, binding) = auth_fixture();
+        let root = tempfile::tempdir().unwrap();
+        let catalog = directory::Catalog::open(root.path(), &binding.workspace_id).unwrap();
+        let notes = directory::NotesProfile {
+            schema_version: 1,
+            registry_id: uuid::Uuid::new_v4().to_string(),
+            protocol_device_id: Some(uuid::Uuid::new_v4().to_string()),
+            noise_public_key: Some(B64.encode([7; 32])),
+            sync_available: true,
+            summary: None,
+            known_devices: vec![],
+        };
+        s.devices.devices.push(pb::DeviceSnapshot {
+            device_id: vec![7; 32],
+            presence: pb::DevicePresence::Online as i32,
+            last_authenticated_at: Some(prost_types::Timestamp {
+                seconds: 1,
+                nanos: 0,
+            }),
+            profile: Some(pb::PublicProfile {
+                device_name: "Test peer".into(),
+                config_semantic_version: "1.0.0".into(),
+                public_config: Some(notes_cyberbus::Any {
+                    type_url: directory::PROFILE_TYPE.into(),
+                    value: b"broken".to_vec(),
+                }),
+                ..Default::default()
+            }),
+            ..Default::default()
+        });
+        assert_eq!(
+            update_catalog(&s, &catalog, &binding),
+            Err(Error::DeviceIncompatible)
+        );
+        s.devices.devices[0]
+            .profile
+            .as_mut()
+            .unwrap()
+            .public_config
+            .as_mut()
+            .unwrap()
+            .value = notes.encode().unwrap();
+        update_catalog(&s, &catalog, &binding).unwrap();
+        assert!(catalog.devices("").unwrap()[0].online);
+        s.devices.devices[0]
+            .profile
+            .as_mut()
+            .unwrap()
+            .config_semantic_version = "2.0.0".into();
+        assert_eq!(
+            update_catalog(&s, &catalog, &binding),
+            Err(Error::DeviceIncompatible)
+        );
+        catalog.clear();
+        assert!(!catalog.devices("").unwrap()[0].online);
+        // A canonical protobuf wrapper carrying an internally inconsistent
+        // summary must fail just as a malformed wrapper does.
+        #[derive(Clone, PartialEq, prost::Message)]
+        struct Envelope {
+            #[prost(uint32, tag = "1")]
+            version: u32,
+            #[prost(bytes = "vec", tag = "2")]
+            json: Vec<u8>,
+        }
+        let mut json = serde_json::to_value(&notes).unwrap();
+        json["summary"] = serde_json::json!({"noteCount":0,"lastNoteUpdatedAt":1,"capturedAt":1});
+        let invalid = prost::Message::encode_to_vec(&Envelope {
+            version: 1,
+            json: serde_json::to_vec(&json).unwrap(),
+        });
+        let profile = s.devices.devices[0].profile.as_mut().unwrap();
+        profile.config_semantic_version = "1.0.0".into();
+        profile.public_config.as_mut().unwrap().value = invalid;
+        assert_eq!(
+            update_catalog(&s, &catalog, &binding),
+            Err(Error::DeviceIncompatible)
+        );
     }
 }

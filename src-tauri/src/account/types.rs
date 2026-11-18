@@ -520,6 +520,7 @@ impl From<notes_cyberbus::Error> for Error {
         use notes_cyberbus::{pb::ErrorCode as C, Error as B};
         match error {
             B::Sdk(code) => match C::try_from(code) {
+                Ok(C::Unspecified) => Self::CoordinationProtocol,
                 Ok(C::Unauthenticated | C::PermissionDenied | C::InvalidClaims) => {
                     Self::Authentication
                 }
@@ -547,6 +548,24 @@ impl From<notes_cyberbus::Error> for Error {
 #[cfg(test)]
 mod cyberbus_tests {
     use super::*;
+    #[test]
+    fn frontend_contract_fixtures() {
+        use notes_cyberbus::pb::ErrorCode as C;
+        let values = [
+            Error::from(notes_cyberbus::Error::Sdk(C::Internal as i32)),
+            Error::UnknownOutcome,
+            Error::Deadline,
+            Error::AuthenticationAt(NetworkStage::IdentityRefresh),
+            Error::Network,
+        ]
+        .map(|error| error.safe());
+        // Synthetic finite metadata only; consumed by the actual TS validator
+        // CLI test. No SDK event, authorization URI or upstream payload.
+        println!(
+            "@@CYBERBUS_ACCOUNT_DTO@@{}",
+            serde_json::to_string(&values).unwrap()
+        );
+    }
     #[test]
     fn sdk_errors_are_finite_without_upstream_payload() {
         use notes_cyberbus::{pb::ErrorCode as C, Error as B};

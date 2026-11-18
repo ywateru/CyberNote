@@ -165,3 +165,62 @@ Subsequent core `e26ac0d1` supplies receiver-only bootstrap claim nonce and file
 The application already calls `read_bootstrap_context` then `claim_bootstrap_context` and
 never hardcodes the prelude size. Revalidation against this new core is recorded separately.
 Build cache is 9.8 GiB with 42 GiB free at this stage; no user data or evidence was deleted.
+
+## Account review A2/A3/A4/A6 fixes
+
+The core receiver-nonce/file-lock update `e26ac0d1` was checked with the application:
+`cargo check --features sync-e2e` PASS and account tests 29/29 PASS. No bootstrap
+prelude size is duplicated in application code.
+
+- A2: SDK local closure is separated from the cloud revocation result. After confirmed
+  local closure, app enable intent, adoption release, binding and current status are
+  cleaned even when the independent cloud receipt fails/is unknown; that error remains
+  in the returned failure/status. Local persistence/retirement failures still block.
+  The SDK owner's GetAuthState.refresh_supported (including its persisted vault grant)
+  selects RevokeGrant or, for no grant, LocalOnly. Cancelled pre-callback login and repeated
+  no-grant signout no longer become Unsupported. Real offline SDK no-grant repeated
+  logout and finite local/cloud receipt classification tests pass. True Logto revocation
+  failure and full Tauri AuthCallback/cancel races remain unverified by this author.
+- A3: the running discovery loop projects current SDK auth/network errors before content
+  paused/ready state. ReauthRequired uses the existing identityRefresh login-recovery
+  category; degraded network, pending persistence and EOF remain finite explicit errors.
+  Explicit SyncNow failure also updates status. Tests call the same production projection
+  through successive typed SDK snapshots for enabled and paused content; they are not
+  full Tauri Runtime/online event-injection evidence.
+- A4: strict TS validation now accepts native SDK errors with only an integer SDK code
+  1..26 and the fixed safe fields. Unknown-outcome/deadline retain their own categories;
+  mixed metadata, invalid SDK values and arbitrary fields still fail closed. Fixed local
+  messages never display upstream SDK text. `scripts/verification/cyberbus121-account-dto.mjs`
+  runs the actual Rust SafeError serialization test then builds/imports the actual TS
+  validator in memory: PASS, 5 native fixtures and 11 rejected invalid combinations.
+  This CLI test starts no browser, UI, Keychain operation or network.
+- A6: an authenticated descriptor declaring the Notes type must pass Notes decoding.
+  Malformed first discovery, incompatible version after cached history, and inconsistent
+  summary now explicitly return DeviceIncompatible and fence directory publication.
+  Unknown app types and not-yet-published descriptors remain outside the Notes catalog.
+
+Latest directed account command (offline + locked, sync-e2e): **35 passed / 0 failed**.
+This includes the existing real SDK profile validation and real Session/Store preservation
+cases. `pnpm typecheck` PASS after TS DTO changes. Default/sync-e2e final check results follow.
+Previous E0499, invalid UUID fixtures, missing import and other failures above are preserved.
+
+### Accepted legacy authorization limitation (A5)
+
+This release neither reads nor restores the legacy `.account/grant.json`, imports it into
+CyberBus, nor starts an old AuthClient/provider to revoke it. New signOut reports only the
+CyberBus owner's local closure and separate cloud receipt. It does **not** prove or claim
+that every historical authorization has been revoked. Legacy cloud authorization retirement
+is unverified and remains outside this implementation; older material is not deleted as a
+side effect of clearing binding. No library, attachment, Noise identity or session history
+is deleted for authorization cleanup. Existing UI exit text does not claim universal cloud
+revocation; the new failure messages likewise make no such claim.
+
+Per the user's scope reduction, no new live Tauri/headless online acceptance gate is added
+for this review. No native binary or real account session was started by this author. UI
+execution is manual using the parent task's test document and composed package. Android
+full target/Keystore and live Auth→bootstrap→Store conclusions remain separate evidence.
+
+Final author checks of these fixes: default `cargo check --offline --locked` PASS (29.06s),
+`cargo check --offline --locked --features sync-e2e` PASS (3.68s), both with the manifest and
+compile-only bundle override documented above; 35 library warnings remain, no errors.
+`git diff --check` PASS. No UI automation or additional live-account run was performed.
