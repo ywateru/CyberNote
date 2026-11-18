@@ -1,0 +1,522 @@
+{
+  "aggregate_algorithm": "SHA256 of sorted UTF-8 relative path + NUL + ASCII file SHA256 + LF",
+  "binary_path": "/Users/water/work/2026/Apple-Notes-Clone-cyberbus120/crates/notes-cyberbus/target/debug/cyberbus120-node",
+  "binary_sha256": "4cda3d9d8f16a8acc5c61d0a18e911d862086eb5e7496aa01ed47f2bba1631b2",
+  "build_command": [
+    "python3",
+    "scripts/cyberbus120-network/build.py",
+    "--target-dir",
+    "/Users/water/work/2026/Apple-Notes-Clone-cyberbus120/crates/notes-cyberbus/target"
+  ],
+  "core_build_baseline": "06fcc177f63a17c615becaf6b55eb91c1f3ba4fb",
+  "core_source_sha256_at_build": "870dc6a7d81f85f3bafc9b8ce9e1e9ad7541e5c323852ff05e36d3e7120314dd",
+  "dependency_lock": "scripts/cyberbus120-network/Cargo.lock",
+  "dependency_note": "Registry checksums and all external Git commits are pinned by Cargo.lock; local core and patched SDK runtime are in source_files.",
+  "harness_crate_source_sha256": "ef37d149dcaf6b57bb8b5300f04f0725d95bb0b9f2943ea1a00f80681ee177ee",
+  "harness_runtime_sources_sha256": "b529256bc9de8251c43e15f9e61c5c0c9812235587c4e71d1f126a39f187060e",
+  "local_source_closure_sha256_embedded": "6630b9299ba6b17f2a5bf2c686849cd1cf2613aba175ba79a8bf1429847789f9",
+  "node_rs_sha256_embedded": "340d3119d273f9a5eb108c46e32f2331ff2b80ffe02da13fbc2486d19b6b4d7f",
+  "production_account_sync_baseline": "ccfd6ca78de7ed6a64627f8ec1302ba132be2faf",
+  "report_path": "scripts/cyberbus120-network/real-report-05.json",
+  "report_sha256": "06ee6f06f226f187f14495999ac54be0869f2a59fec6c609d5d380d7c6ea1d7f",
+  "run_command": [
+    "python3",
+    "scripts/cyberbus120-network/controller.py",
+    "--binary",
+    "/Users/water/work/2026/Apple-Notes-Clone-cyberbus120/crates/notes-cyberbus/target/debug/cyberbus120-node",
+    "--mode",
+    "real",
+    "--driver-sha256",
+    "0eec7c477991cd3e81518d937429af24ff80ca3c45878276c27362ef227a23e3",
+    "--report",
+    "scripts/cyberbus120-network/real-report-05.json"
+  ],
+  "run_command_note": "Executed from repository root with the shown public arguments; SSH authorization/callback never appears in argv.",
+  "schema": 1,
+  "sdk_revision": "359465e83bd74b571a963f3d1fdc238f50169919",
+  "source_checkout_head": "fe0da47ef7f9b8e8db6ecaf2f5c0f058e7f6c54d",
+  "source_closure_sha256": "6630b9299ba6b17f2a5bf2c686849cd1cf2613aba175ba79a8bf1429847789f9",
+  "source_files": [
+    {
+      "bytes": 164467,
+      "path": "crates/notes-cyberbus/Cargo.lock",
+      "sha256": "db75000566a3f16671463d38e13cf3f916c6f55799858025b9950386ee0395fc"
+    },
+    {
+      "bytes": 1083,
+      "path": "crates/notes-cyberbus/Cargo.toml",
+      "sha256": "cad031347b12869b1a6c94353e0dc39a7d8d142146532511cf7187df6a704bfb"
+    },
+    {
+      "bytes": 3686,
+      "path": "crates/notes-cyberbus/src/bootstrap.rs",
+      "sha256": "d5c009320164468e756466e7515a8209de2697644ce6019fc67fdc1c323b0e2f"
+    },
+    {
+      "bytes": 54825,
+      "path": "crates/notes-cyberbus/src/bridge.rs",
+      "sha256": "a0d5ac24aa84ce987be31ea4ec81c0dda1c30c92d471908ee66f458dcb310fc9"
+    },
+    {
+      "bytes": 30241,
+      "path": "crates/notes-cyberbus/src/bus.rs",
+      "sha256": "e9b66fd434e07338f658de38e57a8b5aa75813a4b1e4146f5156b848da190990"
+    },
+    {
+      "bytes": 1752,
+      "path": "crates/notes-cyberbus/src/lib.rs",
+      "sha256": "222ff96f14080c5ef20986ba36c19429a71ad26b1761097e0f4e797e97f72a45"
+    },
+    {
+      "bytes": 8314,
+      "path": "crates/notes-cyberbus/src/protocol.rs",
+      "sha256": "95eac88a1d2c41cb1b361fe286972ed465bcecb2be0ed4b9f63a52d4c6a460e1"
+    },
+    {
+      "bytes": 21153,
+      "path": "crates/notes-cyberbus/src/store.rs",
+      "sha256": "82dcc031eb6c7a2d69eb0671dbce61053a8ddfb687b810f61cf2bf453ac3c953"
+    },
+    {
+      "bytes": 171603,
+      "path": "scripts/cyberbus120-network/Cargo.lock",
+      "sha256": "ebb4919521b3bd8ebe86700b2ded76955030d96f567190ef2fa60bcb91f97cc1"
+    },
+    {
+      "bytes": 1095,
+      "path": "scripts/cyberbus120-network/Cargo.toml",
+      "sha256": "8b6a67a9ea890c58217a185813ccd898fb4d38ec87bf88457f77af918241cd75"
+    },
+    {
+      "bytes": 4958,
+      "path": "scripts/cyberbus120-network/backend.rs",
+      "sha256": "0bba2cf55508c405d1f9dcc7fa8a4b79e841a5507f2f0f244ca5830468b8e25a"
+    },
+    {
+      "bytes": 2544,
+      "path": "scripts/cyberbus120-network/build.py",
+      "sha256": "bf061eaaa14da1d2caa0aa15670e91ebf35ec2e981c8010fffb1e257886021ea"
+    },
+    {
+      "bytes": 25432,
+      "path": "scripts/cyberbus120-network/controller.py",
+      "sha256": "ceae2f570b6fc542e85f5a1824afe39867ce938e5793c6e16c6b12594b2cbe8f"
+    },
+    {
+      "bytes": 6103,
+      "path": "scripts/cyberbus120-network/evidence.py",
+      "sha256": "8effc0c633c0078b0066bc401cf07800066c037fb37d11c4b4e7a55f1bed4168"
+    },
+    {
+      "bytes": 39009,
+      "path": "scripts/cyberbus120-network/node.rs",
+      "sha256": "340d3119d273f9a5eb108c46e32f2331ff2b80ffe02da13fbc2486d19b6b4d7f"
+    },
+    {
+      "bytes": 470,
+      "path": "scripts/cyberbus120-network/public-config.json",
+      "sha256": "4a662a2eeeaa37d6ec8b8e571ac6d6013be792a92dc09ea7bbb19e8dfc9101f6"
+    },
+    {
+      "bytes": 2136,
+      "path": "scripts/cyberbus120-network/remote_login.py",
+      "sha256": "d637b26e9e66240e788fa56b6b701ad9985191b639a8e7d74532ddec302e3624"
+    },
+    {
+      "bytes": 5419,
+      "path": "scripts/cyberbus120-network/test_controller.py",
+      "sha256": "5e3a926315f64df500bca5abffd5b3b148c8082cb696762ac91fd68e30308eaa"
+    },
+    {
+      "bytes": 3245,
+      "path": "src-tauri/src/agent_access/mod.rs",
+      "sha256": "5cfe5dad8be516801e4deb60f2931e22ea0468f4b384c43edd99c0c4acfba278"
+    },
+    {
+      "bytes": 5126,
+      "path": "src-tauri/src/application/admission.rs",
+      "sha256": "78134e5e2245707ae6e2ebf2f823460a1683ab1861adc946c11f8c2f21d26005"
+    },
+    {
+      "bytes": 5045,
+      "path": "src-tauri/src/application/document.rs",
+      "sha256": "41834819ab5c35bf7d44b11f1174c6ac5a095e12948078c17f7a1fc2165c8235"
+    },
+    {
+      "bytes": 5907,
+      "path": "src-tauri/src/application/dto.rs",
+      "sha256": "17a572206263528a5fa4d7d5e377c0afd39e3c067e7c68710c5446312ae327a0"
+    },
+    {
+      "bytes": 399,
+      "path": "src-tauri/src/application/harness/build.rs",
+      "sha256": "a7bbc8b6eff7978be589bdd24d8e817b895439699855d8ba87345c1c79b473d1"
+    },
+    {
+      "bytes": 226,
+      "path": "src-tauri/src/application/harness/src/lib.rs",
+      "sha256": "829a732a8e9cbfb280840fce13e7ce6f2ab0234d4754d22890dd0b4c7feadadc"
+    },
+    {
+      "bytes": 225,
+      "path": "src-tauri/src/application/harness/src/sync.rs",
+      "sha256": "d58f01d596979f32fcba1cdc79b928bf05721071a34635640133f6533216e701"
+    },
+    {
+      "bytes": 7319,
+      "path": "src-tauri/src/application/mod.rs",
+      "sha256": "f0d6f4320a4fff348a915135a55e0b0bcc6110c7686873e85dc51df881e36f49"
+    },
+    {
+      "bytes": 17259,
+      "path": "src-tauri/src/application/query.rs",
+      "sha256": "ff97b291a8a482a6c6cfd0342a6456292a3cc52563038b4c1b7f7798f7ac9303"
+    },
+    {
+      "bytes": 9632,
+      "path": "src-tauri/src/application/tests/native_review.rs",
+      "sha256": "a6830cc9f709b917827943949ee1cfcfe2a0bc061441ad6c654f92f810010d49"
+    },
+    {
+      "bytes": 41337,
+      "path": "src-tauri/src/application/tests.rs",
+      "sha256": "f7d274357d489fb1b81409b37812874aa23f4fbf76b0edfaf12a37c355bf5998"
+    },
+    {
+      "bytes": 20776,
+      "path": "src-tauri/src/session/external.rs",
+      "sha256": "0b4c9adea61ab91a066572ba309b051494f48a47f9f1e8e068638cec50a2baaf"
+    },
+    {
+      "bytes": 13822,
+      "path": "src-tauri/src/session/metadata.rs",
+      "sha256": "cb13ac96bea1d345b48c6aefe6429c7393c4f51e9d3c87960a8d24d8860b497c"
+    },
+    {
+      "bytes": 5644,
+      "path": "src-tauri/src/session/smart_tests.rs",
+      "sha256": "3d0b99daa1842fd45a6f1ec8fe38ab935d7cb8f7590e43eeb7f9fe13dfb4a509"
+    },
+    {
+      "bytes": 84034,
+      "path": "src-tauri/src/session/synchronization.rs",
+      "sha256": "61162dac637a16d5ec59840b0a76798150a01c4f1b69764ea94eda71ab955c99"
+    },
+    {
+      "bytes": 20638,
+      "path": "src-tauri/src/session/tests.rs",
+      "sha256": "e47c13dc71db3d173e90a8140863411d974db4717f1a25372f8f909689b21b83"
+    },
+    {
+      "bytes": 22516,
+      "path": "src-tauri/src/session.rs",
+      "sha256": "91dba47d89258b6c9ad35ae7b278034a85a5c8d07c8531111c03644d8da3faf8"
+    },
+    {
+      "bytes": 3053,
+      "path": "src-tauri/src/store/account_summary.rs",
+      "sha256": "5ce984297b78e745762ceab82ff060d17ba054373e2557a5013d0d0b3e87101f"
+    },
+    {
+      "bytes": 16274,
+      "path": "src-tauri/src/store/apple_import/html.rs",
+      "sha256": "8c5ff8519f395fcb67d85fd677d5a710150026eeae9f00ef38d39493de5307e4"
+    },
+    {
+      "bytes": 22369,
+      "path": "src-tauri/src/store/apple_import/tests.rs",
+      "sha256": "446404b5b864e6b12cc9a91b00e2dae0106f7e2ef308a7e0db1510b4249fd683"
+    },
+    {
+      "bytes": 17986,
+      "path": "src-tauri/src/store/apple_import.rs",
+      "sha256": "2143619f5c04e62ca3bd2438f691a9c341d0482d316ee32836430b8a7704d17b"
+    },
+    {
+      "bytes": 18828,
+      "path": "src-tauri/src/store/application.rs",
+      "sha256": "4174b3dbeb746de86018b06b78f81cc378d7125761e3b22b507a4ec056d9ea5e"
+    },
+    {
+      "bytes": 6253,
+      "path": "src-tauri/src/store/archive/document-schema.json",
+      "sha256": "7cd6c3e442d968ef99019b14fcc48cf037693d7daae0506b0c47a2ec00fb007c"
+    },
+    {
+      "bytes": 13921,
+      "path": "src-tauri/src/store/archive/document.rs",
+      "sha256": "20297f6ff8b229d7c0b904fbda8d2f03c8650ebd26b1da06b48fd894f25f0186"
+    },
+    {
+      "bytes": 47409,
+      "path": "src-tauri/src/store/archive/tests.rs",
+      "sha256": "85d1083458a3cab1fdfe3bf659aede6c7fed213bf46054c9a7a4dee5fdc933c8"
+    },
+    {
+      "bytes": 36926,
+      "path": "src-tauri/src/store/archive.rs",
+      "sha256": "44843b35e1d53d38d44bbb2a9a21c91df4c48b467fa3843a994f488a9e59be16"
+    },
+    {
+      "bytes": 6311,
+      "path": "src-tauri/src/store/attachment_media.rs",
+      "sha256": "933c59b6653ab0ad1e6859c400ce5327fc63a68d55372c44a4d241349d3f15d9"
+    },
+    {
+      "bytes": 21397,
+      "path": "src-tauri/src/store/attachment_operations/tests.rs",
+      "sha256": "f68c4e41dc35d5ee61b2db9e1a20937cef5efdadd2c521c791d81216814452b4"
+    },
+    {
+      "bytes": 17819,
+      "path": "src-tauri/src/store/attachment_operations.rs",
+      "sha256": "92943f23aa259d78343f47d6d216c7e2c7486d2938fea343cdfbe3df02aa30a4"
+    },
+    {
+      "bytes": 1544,
+      "path": "src-tauri/src/store/commits.rs",
+      "sha256": "9fcd33383d4e3bce0a78774863323a04b1bc9b9b5fe5faf074f1a6d3963bb4e3"
+    },
+    {
+      "bytes": 18334,
+      "path": "src-tauri/src/store/data_management.rs",
+      "sha256": "6fef15f863d01f8515f529160982984b761062bf1614fc79513ae96f0a5f64a7"
+    },
+    {
+      "bytes": 3627,
+      "path": "src-tauri/src/store/folder_name_tests.rs",
+      "sha256": "de0598fed3287661d7cf347b981e4c3ea3cc955300eb7a1d2905d3fcfc924da4"
+    },
+    {
+      "bytes": 7954,
+      "path": "src-tauri/src/store/metadata_tests.rs",
+      "sha256": "c9806fc8a1877842c14c11021348d7676f35725a6e17a20439c49a051e8e4ee0"
+    },
+    {
+      "bytes": 9794,
+      "path": "src-tauri/src/store/open.rs",
+      "sha256": "dffa8804c67b1786ac4134e1aef56a5bfa9502b323fe6676117075ea68ce4442"
+    },
+    {
+      "bytes": 16738,
+      "path": "src-tauri/src/store/open_tests.rs",
+      "sha256": "13b2a33a6d4c9329fb9821412b4810f364cf1481a5a3fa378b0bf2ac1d936a07"
+    },
+    {
+      "bytes": 15564,
+      "path": "src-tauri/src/store/recorded_at_tests.rs",
+      "sha256": "b84fba310f4f9aae734661ec409bbda6d40b17cbe12158430f1f797a7610fbf7"
+    },
+    {
+      "bytes": 12817,
+      "path": "src-tauri/src/store/smart.rs",
+      "sha256": "3e952b05c19256f7144287760c287d615e41b7c55a559e80d7fa8cfba12d124e"
+    },
+    {
+      "bytes": 30690,
+      "path": "src-tauri/src/store/smart_tests.rs",
+      "sha256": "a9c8b2a4a11ce143c9f9a42bf6f9c30e2b3845148596e6d58e031469603121dd"
+    },
+    {
+      "bytes": 22353,
+      "path": "src-tauri/src/store/synchronization/blob.rs",
+      "sha256": "16bfed63058785c41e3b3e2e29373877c75f61babe68f3d75b1abb299c006f8c"
+    },
+    {
+      "bytes": 22055,
+      "path": "src-tauri/src/store/synchronization/media.rs",
+      "sha256": "cf4e1923ece6474e3a070325e87c97e36a396178e1843e4aa70c3f069f36ae07"
+    },
+    {
+      "bytes": 15162,
+      "path": "src-tauri/src/store/synchronization/media_tests.rs",
+      "sha256": "94115e2cfd621e798ce359e237e2336398ebcf9d57a8bfc282526c4b0d752599"
+    },
+    {
+      "bytes": 12732,
+      "path": "src-tauri/src/store/synchronization/projection.rs",
+      "sha256": "7bc064f90ab88ffe8de1719a8a59e0ef99a4f0e9115fd6cd664f63378a5e8e04"
+    },
+    {
+      "bytes": 9490,
+      "path": "src-tauri/src/store/synchronization/publication.rs",
+      "sha256": "fa2d2f4d9f00c973fcccf1fa1ada42482194acab67e177556f415a771dbdce8f"
+    },
+    {
+      "bytes": 18410,
+      "path": "src-tauri/src/store/synchronization/schema.rs",
+      "sha256": "94f313524d222ca6210da9d8e4309c810fd7207c75352b95218a5443554af159"
+    },
+    {
+      "bytes": 56849,
+      "path": "src-tauri/src/store/synchronization/tests.rs",
+      "sha256": "ad5beed6c82fe185db7cf221133d6d7a057a9716545bc776b85a85984aaf2679"
+    },
+    {
+      "bytes": 9461,
+      "path": "src-tauri/src/store/synchronization/validation.rs",
+      "sha256": "2d0b0c0403c918a7bdd9f48c2430d07e9435c7f5540a167d5beb9c0ae52e9621"
+    },
+    {
+      "bytes": 41261,
+      "path": "src-tauri/src/store/synchronization.rs",
+      "sha256": "050be19e1b6f33b2551426e61fbb20358f67679c1e4517bf663078bb330db464"
+    },
+    {
+      "bytes": 55422,
+      "path": "src-tauri/src/store.rs",
+      "sha256": "55d0ebe334a695c9d0cadae138b3ff46402c7f14ce4ce079069dcd54b75a51f6"
+    },
+    {
+      "bytes": 26654,
+      "path": "src-tauri/src/sync/identity.rs",
+      "sha256": "7f1028389046c398d79652d9e8ba46372fba835a83a07647d393ee3907020f8b"
+    },
+    {
+      "bytes": 7351,
+      "path": "src-tauri/src/sync/model.rs",
+      "sha256": "ad7a7982efb972d73f1d9f78bd84874182a97c674f592866904f69cc96ba361d"
+    },
+    {
+      "bytes": 58152,
+      "path": "src-tauri/src/sync/network/service.rs",
+      "sha256": "da8868729301edeb1ba392d3da1a9afdbcd1f80f1b2702ba9d9f5dbf541948a2"
+    },
+    {
+      "bytes": 7944,
+      "path": "src-tauri/src/sync/network/staging.rs",
+      "sha256": "e530fe4b3ac5cb626d42b50f6bff8bc3272affb731cc39ddb1d43341e2f0ebc9"
+    },
+    {
+      "bytes": 48234,
+      "path": "src-tauri/src/sync/network/transport.rs",
+      "sha256": "bc583e9d8a066d39d001a83e6c0fc381f48918cce697c73fb5e00f44fbe91f18"
+    },
+    {
+      "bytes": 11314,
+      "path": "src-tauri/src/sync/network/wire.rs",
+      "sha256": "7b9567f56cf8dfda3271359555392af4ef3cc26ff798b0395f38dd3f9c3e37f2"
+    },
+    {
+      "bytes": 10771,
+      "path": "src-tauri/src/sync/network.rs",
+      "sha256": "3a463205248c8aab5eb85bd2a6e98b5e39e82d123f8c4f4e8a9861963b001c35"
+    },
+    {
+      "bytes": 957,
+      "path": "vendor/cyberbus/crates/cyberbus/Cargo.toml",
+      "sha256": "d23e9f942185437d0184f3adde33ce36c391162e929709084d0d0201d21c1e0f"
+    },
+    {
+      "bytes": 6673,
+      "path": "vendor/cyberbus/crates/cyberbus/src/config.rs",
+      "sha256": "7e711eba6fbe6512594a89f15e8534fa5ef3a1335705e9c7e0eba32c7b500f8d"
+    },
+    {
+      "bytes": 5133,
+      "path": "vendor/cyberbus/crates/cyberbus/src/directory.rs",
+      "sha256": "1d3042c1b2a43e676a335f31653e33b4134f2b7fef567c904c284231e2ab3864"
+    },
+    {
+      "bytes": 3345,
+      "path": "vendor/cyberbus/crates/cyberbus/src/discovery/probe_gate.rs",
+      "sha256": "6b1c3c3ba4a80269dd6c0f45c3960c549226903dd4396d0435391708f5dfbd93"
+    },
+    {
+      "bytes": 30648,
+      "path": "vendor/cyberbus/crates/cyberbus/src/discovery.rs",
+      "sha256": "b87f9e0b12111a88e1f12dce843233fa1c7951cb969c2035ea57748aa4649197"
+    },
+    {
+      "bytes": 26638,
+      "path": "vendor/cyberbus/crates/cyberbus/src/events.rs",
+      "sha256": "94bb5f195ef929a77e40276124a5754c67313666e5a41c999e82b31f637789be"
+    },
+    {
+      "bytes": 8264,
+      "path": "vendor/cyberbus/crates/cyberbus/src/lib.rs",
+      "sha256": "08bc8b562801326fd93e1db86db747aac58e6878584481ae011419d48c7272fb"
+    },
+    {
+      "bytes": 1116,
+      "path": "vendor/cyberbus/crates/cyberbus/src/queries.rs",
+      "sha256": "613656e31d675681f78919998bcaf7fc8317d6e11fbe0fdbb80f81c530842dad"
+    },
+    {
+      "bytes": 38831,
+      "path": "vendor/cyberbus/crates/cyberbus/src/rpc.rs",
+      "sha256": "1a6c454a38c133ced38ab04c23c9611b8e4b782caf257f7e812b15b0088212d5"
+    },
+    {
+      "bytes": 10549,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/auth.rs",
+      "sha256": "419728173fd687a1004f32670330c5130b25dd99a0d0eb9802b1097b702cf2ff"
+    },
+    {
+      "bytes": 18714,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/data/tests.rs",
+      "sha256": "83822ae110e978bdeff18861685c33c49adfa850fd1514b2d28e82d49c374706"
+    },
+    {
+      "bytes": 32702,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/data.rs",
+      "sha256": "9dd6b8bc422d792325243b0dbe920c71e6ae1100f3bd8b41f7e3aabd78e24baf"
+    },
+    {
+      "bytes": 30128,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/directory.rs",
+      "sha256": "9e11092237d7e11e56d1bc61d1634a4b94b1c587ea5580586f0653dc9a678218"
+    },
+    {
+      "bytes": 25212,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/handoff_tests.rs",
+      "sha256": "2028fdc7c585f3e4fc9859a63181ad4b588a9aab698e7ff36f1645077922c698"
+    },
+    {
+      "bytes": 22753,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/network.rs",
+      "sha256": "e679d297d4fa7bf98bd2dc8b6cf99595314972bcd8432fda4d80c9c088cd638d"
+    },
+    {
+      "bytes": 39358,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/profile_tests.rs",
+      "sha256": "31ae00ebe4ea801f1c63eb2c9a5e5c025faadc250c6ff8ff2081a9819acb6c86"
+    },
+    {
+      "bytes": 48413,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/rpc.rs",
+      "sha256": "802042bb54a334dcb0a734b0b8bc8fcca92eddf99c72e8978c5455501c268cb6"
+    },
+    {
+      "bytes": 20242,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime/stream_budget_tests.rs",
+      "sha256": "0f367052bf742f2250665c79474f4e9e08be40122f4a30739965d8daa6b2b3b4"
+    },
+    {
+      "bytes": 101486,
+      "path": "vendor/cyberbus/crates/cyberbus/src/runtime.rs",
+      "sha256": "df3d9d9e96ad23cf77f4b973be68cc7615c333e066b6b7e0e0b6d8495f7f89cb"
+    },
+    {
+      "bytes": 6864,
+      "path": "vendor/cyberbus/crates/cyberbus/src/session/acquire.rs",
+      "sha256": "0e9ddace1c5a99a7283b08179ef3fd318b90111080991c1e3053a7fc62e693cb"
+    },
+    {
+      "bytes": 15498,
+      "path": "vendor/cyberbus/crates/cyberbus/src/session/outbox.rs",
+      "sha256": "912afa4575c7d14f9d2c306f77c9513d1d6ec675bbe0af62c94397a07b7d4f64"
+    },
+    {
+      "bytes": 14056,
+      "path": "vendor/cyberbus/crates/cyberbus/src/session.rs",
+      "sha256": "966e704cd7e4fcb641a05b33536af5b1c911f52182adddcfc48b898817a4a49f"
+    }
+  ],
+  "source_files_committed_unchanged": true,
+  "source_scope": "Conservative source superset includes compiled modules and their local tests; no private config, vault, key, identity or fixture account file.",
+  "toolchain": {
+    "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)"
+  }
+}
