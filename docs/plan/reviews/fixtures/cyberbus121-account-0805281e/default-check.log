@@ -1,0 +1,126 @@
+   Compiling objc2-exception-helper v0.1.1
+   Compiling ring v0.17.14
+   Compiling network-interface v2.0.5
+   Compiling tauri-plugin-notes-scan v0.1.0 (/private/tmp/cyberbus121-review-0805281e-zfwu_kzv/plugins/tauri-plugin-notes-scan)
+   Compiling tauri-plugin-notes-ui v0.1.0 (/private/tmp/cyberbus121-review-0805281e-zfwu_kzv/plugins/tauri-plugin-notes-ui)
+   Compiling tauri-plugin-notes-auth v0.1.0 (/private/tmp/cyberbus121-review-0805281e-zfwu_kzv/plugins/tauri-plugin-notes-auth)
+   Compiling tauri-plugin-notes-media v0.1.0 (/private/tmp/cyberbus121-review-0805281e-zfwu_kzv/plugins/tauri-plugin-notes-media)
+   Compiling libsqlite3-sys v0.30.1
+   Compiling notes-clone v0.1.0 (/private/tmp/cyberbus121-review-0805281e-zfwu_kzv/src-tauri)
+   Compiling objc2 v0.6.5
+   Compiling rustls v0.23.46
+   Compiling snow v0.10.0
+    Checking block2 v0.6.2
+    Checking objc2-core-foundation v0.3.2
+    Checking dispatch2 v0.3.1
+    Checking rustls-webpki v0.103.16
+    Checking rcgen v0.14.10
+    Checking jsonwebtoken v9.3.1
+    Checking rusqlite v0.32.1
+    Checking objc2-foundation v0.3.2
+    Checking easytier-core v2.7.1 (https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e8)
+    Checking cyberbus-protocol v0.1.0 (https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e8)
+    Checking objc2-quartz-core v0.3.2
+    Checking tokio-rustls v0.26.6
+    Checking tungstenite v0.29.0
+    Checking hyper-rustls v0.27.10
+    Checking tokio-websockets v0.13.2 (https://github.com/EasyTier/tokio-websockets#dc9771c7)
+    Checking objc2-app-kit v0.3.2
+    Checking reqwest v0.12.28
+    Checking tokio-tungstenite v0.29.0
+    Checking oauth2 v5.0.0
+warning: tauri-plugin-notes-ui@0.1.0: macos/toolbar.m:50:49: warning: unused parameter 'tableFocused' [-Wunused-parameter]
+warning: tauri-plugin-notes-ui@0.1.0:    50 | static NSString *labelFor(NSString *action,BOOL tableFocused) {
+warning: tauri-plugin-notes-ui@0.1.0:       |                                                 ^
+warning: tauri-plugin-notes-ui@0.1.0: 1 warning generated.
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:25:1: warning: writable atomic property 'notesHovered' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    25 | - (void)setNotesHovered:(BOOL)value {_notesHovered=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     8 | @property BOOL notesHovered;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:26:1: warning: writable atomic property 'notesMenuOpen' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    26 | - (void)setNotesMenuOpen:(BOOL)value {_notesMenuOpen=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     9 | @property BOOL notesMenuOpen;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:27:1: warning: writable atomic property 'notesSelected' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    27 | - (void)setNotesSelected:(BOOL)value {_notesSelected=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:    10 | @property BOOL notesSelected;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: 3 warnings generated.
+    Checking openidconnect v4.1.0
+    Checking cyberbus-auth v0.1.0 (https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e8)
+    Checking account-auth v0.1.0 (/private/tmp/cyberbus121-review-0805281e-zfwu_kzv/crates/account-auth)
+    Checking objc2-web-kit v0.3.2
+    Checking tao v0.37.2
+    Checking window-vibrancy v0.8.1
+    Checking muda v0.20.0
+    Checking rfd v0.17.2
+    Checking wry v0.57.1
+    Checking tauri-runtime v2.12.2
+    Checking tauri-runtime-wry v2.12.3
+    Checking tauri v2.12.5
+    Checking tauri-plugin-fs v2.7.1
+    Checking tauri-plugin-deep-link v2.6.3
+    Checking tauri-plugin-opener v2.7.3
+    Checking tauri-plugin-dialog v2.8.4
+    Checking easytier v2.7.1 (https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e8)
+    Checking cyberbus-transport v0.1.0 (https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e8)
+    Checking cyberbus v0.1.0 (/private/tmp/cyberbus121-review-0805281e-zfwu_kzv/vendor/cyberbus/crates/cyberbus)
+warning: method `used` is never used
+  --> /private/tmp/cyberbus121-review-0805281e-zfwu_kzv/vendor/cyberbus/crates/cyberbus/src/rpc.rs:51:12
+   |
+32 | impl ReassemblyBudget {
+   | --------------------- method in this implementation
+...
+51 |     pub fn used(&self) -> usize {
+   |            ^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `emit_data` is never used
+   --> /private/tmp/cyberbus121-review-0805281e-zfwu_kzv/vendor/cyberbus/crates/cyberbus/src/runtime.rs:307:8
+    |
+150 | impl Runtime {
+    | ------------ method in this implementation
+...
+307 |     fn emit_data(&mut self, data: pb::DataReceived) -> PResult<()> {
+    |        ^^^^^^^^^
+
+warning: method `cancel_rpc` is never used
+   --> /private/tmp/cyberbus121-review-0805281e-zfwu_kzv/vendor/cyberbus/crates/cyberbus/src/session/outbox.rs:120:12
+    |
+112 | impl PeerSender {
+    | --------------- method in this implementation
+...
+120 |     pub fn cancel_rpc(&self, call_id: &[u8]) {
+    |            ^^^^^^^^^^
+
+warning: `cyberbus` (lib) generated 3 warnings
+    Checking notes-cyberbus v0.1.0 (/private/tmp/cyberbus121-review-0805281e-zfwu_kzv/crates/notes-cyberbus)
+error[E0499]: cannot borrow `mappings` as mutable more than once at a time
+   --> src/account/transport.rs:370:9
+    |
+336 |         let prepare=async {
+    |                     ----- first mutable borrow occurs here
+337 |             let bootstrap=bus.map(peer,Service::Bootstrap).await?;let address=bootstrap.local_addr();mappings.push(bootstrap);
+    |                                                                                                      -------- first borrow occurs due to use of `mappings` in coroutine
+...
+370 |         mappings.push(sync);
+    |         ^^^^^^^^ second mutable borrow occurs here
+...
+374 |     }.await;
+    |     - first borrow might be used here, when `prepare` is dropped and runs the destructor for coroutine
+
+For more information about this error, try `rustc --explain E0499`.
+error: could not compile `notes-clone` (lib) due to 1 previous error

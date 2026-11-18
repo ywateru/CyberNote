@@ -1,0 +1,102 @@
+{
+  "baseline": "487c8fdec94ba1d95bf607cb8389d12057b9b959",
+  "checkout": "/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/cyberbus121-review-487c8fde-ed2lk3cm",
+  "results": [
+    {
+      "name": "default-check",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml"
+      ],
+      "exit": 0,
+      "seconds": 37.28
+    },
+    {
+      "name": "sync-e2e-check",
+      "command": [
+        "cargo",
+        "check",
+        "--features",
+        "sync-e2e",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml"
+      ],
+      "exit": 0,
+      "seconds": 9.213
+    },
+    {
+      "name": "account-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--features",
+        "sync-e2e",
+        "--lib",
+        "account::",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml"
+      ],
+      "exit": 0,
+      "seconds": 75.121
+    },
+    {
+      "name": "directional-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--features",
+        "sync-e2e",
+        "--lib",
+        "account_policy_real_store"
+      ],
+      "exit": 0,
+      "seconds": 1.424
+    },
+    {
+      "name": "headless-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--features",
+        "sync-e2e",
+        "--lib",
+        "sync_headless::"
+      ],
+      "exit": 0,
+      "seconds": 1.359
+    },
+    {
+      "name": "e2e-contract-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked",
+        "--manifest-path",
+        "src-tauri/Cargo.toml",
+        "--features",
+        "sync-e2e",
+        "--lib",
+        "sync_e2e::"
+      ],
+      "exit": 0,
+      "seconds": 0.498
+    }
+  ]
+}

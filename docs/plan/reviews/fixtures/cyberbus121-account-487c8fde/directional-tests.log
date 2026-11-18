@@ -1,0 +1,314 @@
+warning: tauri-plugin-notes-ui@0.1.0: macos/toolbar.m:50:49: warning: unused parameter 'tableFocused' [-Wunused-parameter]
+warning: tauri-plugin-notes-ui@0.1.0:    50 | static NSString *labelFor(NSString *action,BOOL tableFocused) {
+warning: tauri-plugin-notes-ui@0.1.0:       |                                                 ^
+warning: tauri-plugin-notes-ui@0.1.0: 1 warning generated.
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:25:1: warning: writable atomic property 'notesHovered' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    25 | - (void)setNotesHovered:(BOOL)value {_notesHovered=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     8 | @property BOOL notesHovered;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:8:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:26:1: warning: writable atomic property 'notesMenuOpen' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    26 | - (void)setNotesMenuOpen:(BOOL)value {_notesMenuOpen=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:     9 | @property BOOL notesMenuOpen;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:9:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.m:27:1: warning: writable atomic property 'notesSelected' cannot pair a synthesized getter with a user defined setter [-Watomic-property-with-user-defined-accessor]
+warning: tauri-plugin-notes-ui@0.1.0:    27 | - (void)setNotesSelected:(BOOL)value {_notesSelected=value;self.needsDisplay=YES;}
+warning: tauri-plugin-notes-ui@0.1.0:       | ^
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: setter and getter must both be synthesized, or both be user defined, or the property must be nonatomic
+warning: tauri-plugin-notes-ui@0.1.0:    10 | @property BOOL notesSelected;
+warning: tauri-plugin-notes-ui@0.1.0:       |                ^
+warning: tauri-plugin-notes-ui@0.1.0:       |           (nonatomic)
+warning: tauri-plugin-notes-ui@0.1.0: macos/format.h:10:16: note: property declared here
+warning: tauri-plugin-notes-ui@0.1.0: 3 warnings generated.
+warning: method `used` is never used
+  --> /private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/cyberbus121-review-487c8fde-ed2lk3cm/vendor/cyberbus/crates/cyberbus/src/rpc.rs:51:12
+   |
+32 | impl ReassemblyBudget {
+   | --------------------- method in this implementation
+...
+51 |     pub fn used(&self) -> usize {
+   |            ^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `emit_data` is never used
+   --> /private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/cyberbus121-review-487c8fde-ed2lk3cm/vendor/cyberbus/crates/cyberbus/src/runtime.rs:307:8
+    |
+150 | impl Runtime {
+    | ------------ method in this implementation
+...
+307 |     fn emit_data(&mut self, data: pb::DataReceived) -> PResult<()> {
+    |        ^^^^^^^^^
+
+warning: method `cancel_rpc` is never used
+   --> /private/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/cyberbus121-review-487c8fde-ed2lk3cm/vendor/cyberbus/crates/cyberbus/src/session/outbox.rs:120:12
+    |
+112 | impl PeerSender {
+    | --------------- method in this implementation
+...
+120 |     pub fn cancel_rpc(&self, call_id: &[u8]) {
+    |            ^^^^^^^^^^
+
+warning: `cyberbus` (lib) generated 3 warnings
+warning: fields `generation` and `instance` are never read
+  --> src/account/mod.rs:35:5
+   |
+34 | struct AndroidCallback {
+   |        --------------- fields in this struct
+35 |     generation: u64,
+   |     ^^^^^^^^^^
+36 |     instance: String,
+   |     ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `take_android_callback` is never used
+  --> src/account/mod.rs:39:4
+   |
+39 | fn take_android_callback(
+   |    ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `REDIRECT` is never used
+ --> src/account/callback.rs:9:11
+  |
+9 | pub const REDIRECT: &str = "http://127.0.0.1:17897/callback";
+  |           ^^^^^^^^
+
+warning: method `peer` is never used
+   --> src/account/directory.rs:305:12
+    |
+192 | impl Catalog {
+    | ------------ method in this implementation
+...
+305 |     pub fn peer(&self, peer: &[u8; 32]) -> Result<Row> {
+    |            ^^^^
+
+warning: variants `WebrtcDirect`, `IrohDirect`, `CloudflareTunnel`, `Unavailable`, and `Unknown` are never constructed
+   --> src/account/types.rs:162:5
+    |
+160 | pub(crate) enum TransportKind {
+    |                 ------------- variants in this enum
+161 |     #[serde(rename = "webrtc-direct")]
+162 |     WebrtcDirect,
+    |     ^^^^^^^^^^^^
+163 |     #[serde(rename = "iroh-direct")]
+164 |     IrohDirect,
+    |     ^^^^^^^^^^
+165 |     #[serde(rename = "cloudflare-tunnel")]
+166 |     CloudflareTunnel,
+    |     ^^^^^^^^^^^^^^^^
+167 |     #[serde(rename = "unavailable")]
+168 |     Unavailable,
+    |     ^^^^^^^^^^^
+169 |     #[serde(rename = "unknown")]
+170 |     Unknown,
+    |     ^^^^^^^
+    |
+    = note: `TransportKind` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: variants `RefreshFailed`, `SessionUnavailable`, `Storage`, and `Network` are never constructed
+   --> src/account/types.rs:185:5
+    |
+184 | pub(crate) enum AuthProviderFailure {
+    |                 ------------------- variants in this enum
+185 |     RefreshFailed,
+    |     ^^^^^^^^^^^^^
+186 |     SessionUnavailable,
+    |     ^^^^^^^^^^^^^^^^^^
+187 |     Storage,
+    |     ^^^^^^^
+188 |     Network,
+    |     ^^^^^^^
+    |
+    = note: `AuthProviderFailure` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: methods `refresh_rejected` and `initial_authorization_retry` are never used
+   --> src/account/types.rs:235:19
+    |
+234 | impl SafeError {
+    | -------------- methods in this implementation
+235 |     pub(super) fn refresh_rejected(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^
+...
+242 |     pub(super) fn initial_authorization_retry(&self) -> bool {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: multiple variants are never constructed
+   --> src/account/types.rs:281:5
+    |
+276 | pub(crate) enum NetworkStage {
+    |                 ------------ variants in this enum
+...
+281 |     Coordinator,
+    |     ^^^^^^^^^^^
+282 |     CoordinatorConfiguration,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^
+283 |     CoordinatorRegistration,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^
+284 |     CoordinatorProfile,
+    |     ^^^^^^^^^^^^^^^^^^
+285 |     CoordinatorEnrollment,
+    |     ^^^^^^^^^^^^^^^^^^^^^
+286 |     CoordinatorJwks,
+    |     ^^^^^^^^^^^^^^^
+...
+291 |     CoordinatorSession,
+    |     ^^^^^^^^^^^^^^^^^^
+    |
+    = note: `NetworkStage` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: variants `Timeout`, `Connect`, `Request`, `ResponseBody`, `HttpStatus`, and `InvalidResponse` are never constructed
+   --> src/account/types.rs:305:5
+    |
+304 | pub(crate) enum RequestFailure {
+    |                 -------------- variants in this enum
+305 |     Timeout,
+    |     ^^^^^^^
+306 |     Connect,
+    |     ^^^^^^^
+307 |     Request,
+    |     ^^^^^^^
+308 |     ResponseBody,
+    |     ^^^^^^^^^^^^
+309 |     HttpStatus(reqwest::StatusCode),
+    |     ^^^^^^^^^^
+310 |     InvalidResponse,
+    |     ^^^^^^^^^^^^^^^
+    |
+    = note: `RequestFailure` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: variants `ProviderAuthentication`, `RequestAt`, `Unsupported`, and `DirectoryUnsupported` are never constructed
+   --> src/account/types.rs:334:5
+    |
+327 | pub(crate) enum Error {
+    |                 ----- variants in this enum
+...
+334 |     ProviderAuthentication(AuthProviderFailure),
+    |     ^^^^^^^^^^^^^^^^^^^^^^
+...
+348 |     RequestAt(NetworkStage, RequestFailure),
+    |     ^^^^^^^^^
+...
+353 |     Unsupported,
+    |     ^^^^^^^^^^^
+...
+365 |     DirectoryUnsupported,
+    |     ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `Error` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: method `deadline` is never used
+  --> src/account/worker.rs:61:12
+   |
+60 | impl RequestCancellation {
+   | ------------------------ method in this implementation
+61 |     pub fn deadline(&self) -> tokio::time::Instant {
+   |            ^^^^^^^^
+
+warning: method `shutdown` is never used
+   --> src/attachment_media/http.rs:110:25
+    |
+ 36 | impl MediaServer {
+    | ---------------- method in this implementation
+...
+110 |     pub(crate) async fn shutdown(mut self) {
+    |                         ^^^^^^^^
+
+warning: function `register_recording_window` is never used
+   --> src/recording_window.rs:397:8
+    |
+397 | pub fn register_recording_window(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_context` is never used
+   --> src/recording_window.rs:444:8
+    |
+444 | pub fn recording_window_context(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_message` is never used
+   --> src/recording_window.rs:579:8
+    |
+579 | pub fn recording_window_message(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_finish` is never used
+   --> src/recording_window.rs:639:8
+    |
+639 | pub fn recording_window_finish(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `recording_window_abandon` is never used
+   --> src/recording_window.rs:661:8
+    |
+661 | pub fn recording_window_abandon(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: methods `stage_attachment`, `stage_archive`, and `import_stage` are never used
+   --> src/session.rs:195:19
+    |
+ 65 | impl Session {
+    | ------------ methods in this implementation
+...
+195 |     pub(crate) fn stage_attachment(
+    |                   ^^^^^^^^^^^^^^^^
+...
+204 |     pub(crate) fn stage_archive(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+...
+208 |     pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
+    |                   ^^^^^^^^^^^^
+
+warning: method `stage_archive` is never used
+   --> src/store/archive.rs:710:19
+    |
+529 | impl Store {
+    | ---------- method in this implementation
+...
+710 |     pub(crate) fn stage_archive(&self) -> Result<super::DocumentStage> {
+    |                   ^^^^^^^^^^^^^
+
+warning: method `path` is never used
+  --> src/store/data_management.rs:79:12
+   |
+78 | impl DocumentStage {
+   | ------------------ method in this implementation
+79 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: methods `document_stage` and `stage_attachment` are never used
+   --> src/store/data_management.rs:324:19
+    |
+159 | impl Store {
+    | ---------- methods in this implementation
+...
+324 |     pub(crate) fn document_stage(&self) -> Result<DocumentStage> {
+    |                   ^^^^^^^^^^^^^^
+...
+463 |     pub(crate) fn stage_attachment(&self, id: &str) -> Result<(DocumentStage, AttachmentExport)> {
+    |                   ^^^^^^^^^^^^^^^^
+
+warning: function `prepared_store` is never used
+  --> src/sync/adapter.rs:29:4
+   |
+29 | fn prepared_store<T>(
+   |    ^^^^^^^^^^^^^^
+
+warning: `notes-clone` (lib test) generated 22 warnings
+    Finished `test` profile [unoptimized] target(s) in 0.66s
+     Running unittests src/lib.rs (/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/deps/notes_clone_lib-69d655439592ffa7)
+
+running 3 tests
+test sync::adapter::account_transfer_tests::account_policy_real_store_plain_push_has_durable_directional_receipt ... ok
+test sync::adapter::account_transfer_tests::account_policy_real_store_attachment_pull_has_durable_directional_receipt ... ok
+test sync::adapter::account_transfer_tests::account_policy_real_store_attachment_push_has_durable_directional_receipt ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 366 filtered out; finished in 0.68s
+

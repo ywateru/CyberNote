@@ -2,6 +2,8 @@
 
 日期：2026-11-18。结论：**BLOCKED / tests incomplete**。
 
+最新独立复核为下文 [487c8fde + e26ac0d1 收尾复核](#487c8fde--e26ac0d1-收尾复核)：A1 已关闭，A5 按用户确认的新迁移契约接受为限制；A2/A3/A4/A6 在该准确提交仍未关闭。最初 checkpoint 失败证据继续保留。
+
 本轮唯一审阅基线为 **`0805281ed14775c713de48da02fdd35cabcce141`**（`0805281e`，作者提交标题本身标明 tests incomplete）。不是当前工作区后续 HEAD 的结论，不追认作者此前或后续的绿灯。审阅者未参与账户源码开发。本轮仅写本报告与独立 fixtures；未修改产品、运行用户笔记应用、读取原 notes 库、使用真实账户或修改线上配置。
 
 ## 阻塞摘要
@@ -159,3 +161,58 @@ Android 回跳为 `com.local.notesclone.auth://callback`。正式 cybernote 产�
 - native headless 仅 debug+sync-e2e+`NOTES_SYNC_E2E=1`+`NOTES_SYNC_E2E_HEADLESS=1`，授权 URL 仅落 `NOTES_SYNC_E2E_AUTHORIZATION_FILE` 指向的本轮私密文件。stdout/回执不得出现 URL query、凭据、token、grant 或 `.env` 真实内容。
 
 以上 QA 路径来自既有已授权服务调查；本轮未 SSH 重读凭据、创建新账号、发起线上登录、重启或更新服务。
+
+## 487c8fde + e26ac0d1 收尾复核
+
+2026-11-18，用户要求收敛到核心与 CLI，UI 交用户手动验证。准确账户基线 **`487c8fdec94ba1d95bf607cb8389d12057b9b959`**，已包含 core **`e26ac0d11c764b4e0f06cc644cbf72177b56e78d`**。本次结论：**BLOCKED，A1 已关闭；A2/A3/A4/A6 待已提交修复；A5 接受为迁移限制**。tests incomplete 指完整真实账户链未验，不表示本轮 CLI 没有执行。
+
+### 结果与 finding 处置
+
+| 项目 | 此提交结论 | 独立证据 |
+| --- | --- | --- |
+| A1 E0499 | **关闭** | lexical scope 结束 preparation future；普通与 sync-e2e check 均通过 |
+| workspace cache | **此修复通过** | workspace-v8 与 registry-v4 分别校验；派生 workspace cache/restart/path rejection 用例通过 |
+| bounded profile | **此修复通过** | 64 台长名称 roster 截到 7KiB 内；实际离线 SDK 验证及 canonical protobuf 拒绝用例通过；未扩大输入验证 |
+| A2 本地退出收敛 | **仍阻塞** | mod.rs 与旧基线 blob 相同；无 grant 重试仍走 RevokeGrant→Unsupported；不覆盖作者 dirty 修复 |
+| A3 授权错误投影 | **仍阻塞** | worker 生产部分字节相同，仍清错为 connecting/paused |
+| A4 DTO 错误 | **仍阻塞** | types.rs 与 account-client.ts 均与旧基线 blob 相同，四项独立失败的被测接口未改 |
+| A5 旧 grant | **接受为明确限制，不阻塞本轮** | 用户确认主设计的新最小退出/迁移契约，见下文 |
+| A6 profile skip | **仍阻塞** | worker 生产部分字节相同，仍统一跳过 profile 校验失败 |
+| core F1–F4 | **采用 core review02 的已通过结论，不重复阻塞** | core/vendor Git tree 与其独审准确对象一致；调用侧使用共享 read+claim parser |
+
+源码一致性与 commit/tree 标识保存在 [scope.json](fixtures/cyberbus121-account-487c8fde/scope.json)，不是凭后续未提交工作判断。core e26ac0d1 的 `crates/notes-cyberbus` tree 为 `3997526752321402e0096e90555b54c85ec9c003`，vendor tree 为 `0055afb270d2aa0d17b80cc5fb53637e03b24c85`，分别与独审 `2b24104a` 相同。core review02 在其独立范围完成 27 个原测试、8 个 adversarial 测试和 check，已关闭四项 finding；本账户复核没有再启动重复 core 故障增强。
+
+账户 bootstrap 仍先 `read_bootstrap_context` 再 `claim_bootstrap_context`，没有硬编码旧 80-byte prelude，已适配 core 的 NCBBOOT2/112-byte receiver-only nonce。该结论是源码及类型检查，不把它扩称为真实多账户 bootstrap 已通过。
+
+### 实际 CLI 检查
+
+为排除作者当时已 dirty 的 mod.rs/private.rs 等文件，新建准确 detached checkout：
+
+`/var/folders/ll/s836stz50mg85d4h0g4xc8jm0000gn/T/cyberbus121-review-487c8fde-ed2lk3cm`
+
+使用与前述相同的 target cache、vendored PROTOC、debug=0 和仅用于类型检查的 bundle override。精确命令、exit、耗时见 [results.json](fixtures/cyberbus121-account-487c8fde/results.json)。全部带 `--offline --locked --manifest-path src-tauri/Cargo.toml`：
+
+| 命令/selector | 独立结果 | 耗时（含编译） |
+| --- | --- | --- |
+| `cargo check` | PASS，exit 0 | 37.280s |
+| `cargo check --features sync-e2e` | PASS，exit 0 | 9.213s |
+| `cargo test --features sync-e2e --lib account::` | **29 passed / 0 failed** | 75.121s |
+| `cargo test --features sync-e2e --lib account_policy_real_store` | **3 passed / 0 failed** | 1.424s |
+| `cargo test --features sync-e2e --lib sync_headless::` | **7 passed / 0 failed** | 1.359s |
+| `cargo test --features sync-e2e --lib sync_e2e::` | **4 passed / 0 failed** | 0.498s |
+
+前 3 项 subprocess 上限各 240s，后 3 项各 180s，均未触发 timeout。普通/check 仍有 35 warnings，test 22 warnings，未因 warning 放开验证或改产品。日志在本轮 fixture 目录。`sync_e2e::` 这 4 项是纯 Rust 参数/ready 门控和有限回执函数单测，**没有启动 WebView 或执行 UI 操作**。3 项方向用例使用真实 Store/Session/Noise/SyncService，检查 durable inbox 和附件原字节；使用 fixture Gate，不能替代真实 Logto/SDK profile/Bootstrap 链。
+
+### 退出契约与 A5 限制收敛
+
+用户在本轮确认，主设计 `docs/architecture/cyberbus-migration-20261118.md:33` 已补最小退出契约：SDK 确认本地 grant 关闭且旧网/写任务退役即可完成幂等本地退出；云端撤销失败或未知单独保留，不能冒称成功，也不阻塞已完成本地清理后的重复退出；真实本地持久化/关闭失败继续明确失败。
+
+旧 `.account/grant.json` **不读、不导入、不恢复，不创建旧长期认证 owner**。新退出仅对 CyberBus 授权给收据，不宣称历史授权已全部云撤销；旧授权服务端状态未知，作为用户接受的迁移限制。因此原 A5 不再是本轮阻塞，也不要求扩张在线旧 token 撤销。原 checkpoint 的“文件保留”观察保持准确，改变的是已明确的迁移契约和处置，不是补做了旧云撤销。
+
+### CLI 烟测协作与 UI 手动边界
+
+已获用户授权与 Goodall 协调：其正在修 A2/A3/A4/A6，将另给准确提交。对方报告 dirty 修复/局部测试时，本独审没有读取那些产品修改，也没有把它计为通过；新 SHA 到达后继续快速复核四项。
+
+此时没有冻结的 native headless 可执行包，也没有已执行的真实 app 授权 smoke。本轮没有占用 17897、启动用户应用、创建 Keychain grant 或运行 notes UI 自动化。现 Rust headless 固定 Action 已有 signIn/setEnabled/syncDevice；既有 `scripts/verification/account109-headless-driver.mjs` 的 OPS 尚不接受这些新操作，不能直接拿旧 driver 宣称可运行真登录。若后续执行，须在本轮独立 fixture/私密副本加入相同的固定白名单，并与作者明确唯一端口/进程归属；授权 URL/callback 仍只走本轮 0700 私密目录与 0600 文件，禁止 token 注入。没有为此新增第二套网络 harness。
+
+UI 留给用户的手动记录只需沿用 `docs/verification/cyberbus120/TEST-CASES.md`，在新准确包上记录：两个授权入口/回跳与取消；设备名称、在线/离线与未知/空库摘要；暂停后仍发现设备；显式开启前后的本地资料保全；三方向动作/进度/终态；退出、网络失败恢复与冷启；多窗口保存/附件/冲突/inbox。每例记录包 SHA、起止状态及是否满足预期；未操作不填 PASS。当前没有生成或声明用户可手测的新包。
