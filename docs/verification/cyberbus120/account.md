@@ -123,3 +123,45 @@ passing check of this checkpoint. Typecheck passed. No real account/network vali
 attempted here. Next action: scope the preparation future so its borrow is released before
 adding the transfer lease, rerun check and the directed tests, then validate the Android JNI
 boundary. Checkpoint is intentionally not a completed delivery.
+
+## Post-checkpoint compile and bounded integration tests
+
+On core `71e2c984`, after checkpoint `0805281e`:
+
+- Fixed E0499 by ending the preparation future's lexical scope before inserting the
+  single-use transfer mapping. No mapping reuse or weaker retirement assertion was added.
+- Account test execution first reached 25 passed / 2 failed. Both failures used invalid
+  registry UUID fixtures without the required v4 version/variant bits. Fixtures now generate
+  canonical v4 IDs; production registry validation remains strict.
+- Found and fixed an independent production bug: the account directory incorrectly applied
+  registry-v4 validation to the deterministic workspace-v8 cache path. Cache path validation
+  now accepts canonical RFC v4/v8 UUIDs; actual derived-v8 restart and path-rejection tests pass.
+- Added 64-device long-name roster budget and noncanonical/unknown Protobuf field rejection
+  tests. The actual offline SDK UpdatePublicProfile test submits the bounded roster through
+  the real SDK validation boundary; it does not merely round-trip serde. A missing test-only
+  base64 import caused an intermediate E0425; corrected before the results below.
+
+Exact directed command results (same environment/TAURI_CONFIG override as above):
+
+| Command suffix | Result |
+| --- | --- |
+| `cargo test --offline --manifest-path src-tauri/Cargo.toml --features sync-e2e --lib account::` | PASS: 29 passed, 0 failed |
+| `cargo test --offline --manifest-path src-tauri/Cargo.toml --features sync-e2e --lib account_policy_real_store` | PASS: 3 passed, 0 failed |
+| `cargo test --offline --manifest-path src-tauri/Cargo.toml --features sync-e2e --lib sync_headless::` | PASS: 7 passed, 0 failed |
+| `cargo test --offline --manifest-path src-tauri/Cargo.toml --features sync-e2e --lib sync_e2e::` | PASS: 4 passed, 0 failed |
+| `cargo check --offline --manifest-path src-tauri/Cargo.toml --features sync-e2e` | PASS (35 warnings, no errors) |
+
+Directional tests still use real Store/Session, Noise and SyncService and verify durable
+inbox, no foreground apply, push/pull isolation, and attachment byte equality. Their Gate
+fixtures are not evidence of CyberBus-authenticated bootstrap or a live-account transfer.
+That real chain remains a required network-harness gate; parent reports discovery and
+SDKData/Noise pair now work, but Store push has a classified failure under investigation.
+
+The exact Android JNI module was extracted into a temporary host-only harness and checked
+against pinned SecureStore/JNI types: PASS (45.49s). This validates JNI Rust calls/lifetimes,
+not a full Android-target build, Java integration, Keystore execution, or APK packaging.
+
+Subsequent core `e26ac0d1` supplies receiver-only bootstrap claim nonce and file lock fixes.
+The application already calls `read_bootstrap_context` then `claim_bootstrap_context` and
+never hardcodes the prelude size. Revalidation against this new core is recorded separately.
+Build cache is 9.8 GiB with 42 GiB free at this stage; no user data or evidence was deleted.

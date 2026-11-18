@@ -333,6 +333,7 @@ async fn transfer_target(
     let result=async {
         let (peer,device,key)=target.target("")?;
         if !worker::peer_bound(bus,binding,generation,&peer,device,key){return Err(Error::InvalidProof);}
+        let id={
         let prepare=async {
             let bootstrap=bus.map(peer,Service::Bootstrap).await?;let address=bootstrap.local_addr();mappings.push(bootstrap);
             let sync=bus.map(peer,Service::Sync).await?;let sync_address=sync.local_addr();mappings.push(sync);
@@ -362,7 +363,8 @@ async fn transfer_target(
             identity.peer_for_device(device)?.ok_or(Error::InvalidProof)
         };
         tokio::pin!(prepare);
-        let id=tokio::select! {_=stop.cancelled()=>{let _=prepare.await;return Err(Error::Cancelled);},r=&mut prepare=>r?};
+        tokio::select! {_=stop.cancelled()=>{let _=prepare.await;return Err(Error::Cancelled);},r=&mut prepare=>r?}
+        };
         // The mapping accepts exactly one socket. Pair/recovery has already
         // retired its connection; give the finite cycle a fresh bound lease.
         let sync=bus.map(peer,Service::Sync).await?;

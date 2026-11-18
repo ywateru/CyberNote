@@ -672,6 +672,7 @@ pub(super) async fn run(
 #[cfg(test)]
 mod cyberbus_tests {
     use super::*;
+    use base64::{engine::general_purpose::URL_SAFE_NO_PAD as B64, Engine};
     #[tokio::test]
     async fn actual_sdk_accepts_notes_profile_and_roster_without_auth_or_network() {
         // This is an offline SDK/profile boundary, never a real Keychain/grant.
@@ -705,7 +706,13 @@ mod cyberbus_tests {
             noise_public_key: None,
             sync_available: false,
             summary: None,
-            known_devices: vec![],
+            known_devices: (1..=64)
+                .map(|n| directory::KnownDevice {
+                    registry_id: uuid::Uuid::new_v4().to_string(),
+                    sdk_id: B64.encode([n; 32]),
+                    name: "机".repeat(40),
+                })
+                .collect(),
         };
         let result = bus
             .cmd(C::UpdatePublicProfile(pb::UpdatePublicProfile {
@@ -713,7 +720,7 @@ mod cyberbus_tests {
                     device_name: "Fixture Mac".into(),
                     public_config: Some(notes_cyberbus::Any {
                         type_url: directory::PROFILE_TYPE.into(),
-                        value: notes.encode().unwrap(),
+                        value: notes.clone().encode_with_roster_budget().unwrap(),
                     }),
                     config_semantic_version: "1.0.0".into(),
                     ..Default::default()
@@ -733,12 +740,10 @@ mod cyberbus_tests {
             panic!("SDK must return revisioned profile")
         };
         assert_eq!(p.config_revision, 1);
-        assert_eq!(
-            directory::NotesProfile::decode(&p.public_config.unwrap().value)
-                .unwrap()
-                .registry_id,
-            notes.registry_id
-        );
+        let decoded = directory::NotesProfile::decode(&p.public_config.unwrap().value).unwrap();
+        assert_eq!(decoded.registry_id, notes.registry_id);
+        assert!(!decoded.known_devices.is_empty());
+        assert!(decoded.known_devices.len() < 64);
         assert!(!bus.snapshot().network.is_some_and(|n| n.running));
         bus.close().await.unwrap();
     }

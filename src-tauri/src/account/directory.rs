@@ -191,7 +191,13 @@ pub(super) struct Catalog {
 }
 impl Catalog {
     pub fn open(root: &Path, workspace: &str) -> Result<Self> {
-        if !private::registry_id(workspace) {
+        // Account workspaces are derived UUID v8 values, whereas device
+        // registry IDs are UUID v4. Validate the cache path independently.
+        if !uuid::Uuid::parse_str(workspace).is_ok_and(|id| {
+            id.to_string() == workspace
+                && id.get_variant() == uuid::Variant::RFC4122
+                && matches!(id.get_version_num(), 4 | 8)
+        }) {
             return Err(Error::Storage);
         }
         let dir = root.join("devices");
@@ -345,8 +351,11 @@ impl Catalog {
 mod tests {
     use super::*;
     fn known(n: u8) -> KnownDevice {
+        let mut bytes = [n; 16];
+        bytes[6] = (bytes[6] & 0x0f) | 0x40;
+        bytes[8] = (bytes[8] & 0x3f) | 0x80;
         KnownDevice {
-            registry_id: uuid::Uuid::from_bytes([n; 16]).to_string(),
+            registry_id: uuid::Uuid::from_bytes(bytes).to_string(),
             sdk_id: B64.encode([n; 32]),
             name: format!("Device {n}"),
         }
@@ -362,6 +371,67 @@ mod tests {
             sync_available: true,
             summary: None,
         }
+    }
+    #[test]
+    fn derived_account_workspace_cache_survives_restart_and_rejects_paths() {
+        let dir = tempfile::tempdir().unwrap();
+        let workspace = super::super::enrollment::workspace(
+            "https://issuer.invalid/oidc",
+            "verified-subject",
+            "cybernote",
+        )
+        .unwrap();
+        assert_eq!(
+            uuid::Uuid::parse_str(&workspace).unwrap().get_version_num(),
+            8
+        );
+        let c = Catalog::open(dir.path(), &workspace).unwrap();
+        c.replace(vec![row(1)], vec![known(2)]).unwrap();
+        drop(c);
+        let c = Catalog::open(dir.path(), &workspace).unwrap();
+        assert_eq!(c.devices("").unwrap().len(), 2);
+        assert!(c.devices("").unwrap().iter().all(|d| !d.online));
+        for invalid in ["../outside", "", &workspace.to_uppercase()] {
+            assert!(matches!(
+                Catalog::open(dir.path(), invalid),
+                Err(Error::Storage)
+            ));
+        }
+    }
+    #[test]
+    fn roster_budget_and_canonical_protobuf_are_enforced() {
+        let mut profile = NotesProfile {
+            schema_version: 1,
+            registry_id: known(1).registry_id,
+            protocol_device_id: None,
+            noise_public_key: None,
+            sync_available: false,
+            summary: None,
+            known_devices: (1..=64)
+                .map(|n| {
+                    let mut device = known(n);
+                    device.name = "机".repeat(40);
+                    device
+                })
+                .collect(),
+        };
+        assert!(profile.encode().is_err());
+        let bytes = profile.clone().encode_with_roster_budget().unwrap();
+        assert!(bytes.len() <= MAX_PROFILE);
+        let decoded = NotesProfile::decode(&bytes).unwrap();
+        assert!(!decoded.known_devices.is_empty());
+        assert!(decoded.known_devices.len() < 64);
+        assert_eq!(decoded.known_devices[0].sdk_id, known(1).sdk_id);
+        // Unknown protobuf fields and duplicate known fields are noncanonical.
+        let mut unknown = bytes.clone();
+        unknown.extend_from_slice(&[0x18, 0x01]);
+        assert!(NotesProfile::decode(&unknown).is_err());
+        let mut duplicate = bytes;
+        duplicate.extend_from_slice(&[0x08, 0x01]);
+        assert!(NotesProfile::decode(&duplicate).is_err());
+        profile.known_devices.clear();
+        profile.registry_id = uuid::Uuid::nil().to_string();
+        assert!(profile.encode().is_err());
     }
     #[test]
     fn authenticated_roster_is_offline_only_and_account_partitioned_across_restart() {
