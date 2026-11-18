@@ -1,5 +1,7 @@
 # 服务器开发与运维入口
 
+2026-11-18 正在将账户运行链迁移至 CyberBus：[迁移契约](../architecture/cyberbus-migration-20261118.md)、[Logto/EasyTier 实时调查](../plan/analysis/cyberbus-logto-deployment-20261118.md)。下文 Vercel/Redis/coordinator 是旧客户端运维资料；新链使用 Logto Custom JWT 与 EasyTier，不继续依赖这些账户 API。实际切换与测试状态以迁移计划和新验证报告为准。
+
 更新：2026-11-15。本文依据已提交源码和部署回执整理，本轮没有查询云平台、读取生产环境值或重新部署。后续操作从[部署与排障手册](DEPLOYMENT.md)开始；接口精确字段以源码及链接的契约为准。
 
 ## 服务分工

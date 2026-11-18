@@ -54,6 +54,8 @@ CyberBus 是新账户认证的唯一 owner；不把旧 account-auth 的 access t
 
 bootstrap 只通过已认证 CyberBus 流交换 nonce、协议身份、公钥与一次 Noise 邀请；双方都核对已认证 profile 和当前账户代际，邀请不可发到目录/前端/日志。无需旧 coordinator enrollment JWT；新的 Gate 授权由当前 SDK auth/network lease、已认证 peer 与 Noise key 绑定组成，并在暂停/退出/离线立即关闭。保留 Noise 双重防护和同步层方向权限，不能因 loopback 而接受任意本机调用为同账户。
 
+为把真实 SDK peer 传入 bootstrap handler，core 在 Bootstrap 服务 loopback 字节前写专用 native prelude（magic、peer ID、stream ID、流 generation、账户 generation）。账户读取后必须调用 core 的一次性 `claim_bootstrap_context`，该调用核对仍活跃的真实流、peer 与账户代际并消费 claim；伪造本机 socket、重放和已关闭流拒绝。只有 claim 成功后才从当前认证 profile 取得协议 UUID/Noise 公钥并处理配对。Sync 服务不写 prelude，保持原 WebSocket wire；其准入仍受 Noise 和当前 Gate 双重验证。
+
 单次操作同时最多一项，仍保留总绝对 deadline、进度观察及取消后 join/drain 收据。push/pull/both 同时受主动 cycle 与被动协议限制。未知结果和错误不得变成成功；连接恢复只恢复发现，不自动重放内容任务。同步关闭仍可发现/重命名设备。
 
 ## 部署与交付
