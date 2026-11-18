@@ -30,6 +30,8 @@ CyberBus 是新账户认证的唯一 owner；不把旧 account-auth 的 access t
 
 同账户 workspace 由 SDK 已验证的 `AccountSummary {issuer,subject,product_id}` 作分域 SHA-256 确定性派生 UUID；固定算法和 domain，不依赖 client ID、设备、时间、请求 Host 或 JWT 原文。同账户多 Native client 得到同一 workspace，不同账户/产品隔离。迁移首次采用新 workspace 时必须经过已有显式启用/保存合并屏障，保留原库、所有冲突与待应用内容。旧授权材料不自动导入，不删除旧资料库。
 
+退出以 SDK 确认本地 grant 已关闭、旧网络/任务已退役为本地完成条件；云端撤销失败或未知应单独保留事实，不能阻塞已完成本地清理后的幂等退出，也不能宣称云端撤销成功。本地持久化/关闭失败仍须明确失败。旧 CyberGrid 的 `.account/grant.json` 不由新 SDK 读取或恢复；本轮不引入旧认证 owner 做在线撤销。新账户退出仅对 CyberBus 授权提供收据，旧授权的服务端撤销状态未验证，作为明确迁移限制记录，不能把新退出扩称为历史授权全部撤销。
+
 安装 SecureStore 必须有完整性、机密性、原子替换、进程独占及 corruption fail-closed。不得把 SDK DevelopmentFileStore 作为正式存储。平台密钥能力通过本机受限接口提供；测试可注入仅测试密钥。首次创建与 Existing 明确区分，已有 marker/密文缺失、篡改、key 不匹配不得自动新建设备。AuthRestore 仅在持久 grant 的受保护存储上启用。任何存储降级须显式报错。
 
 ## 设备目录和界面
@@ -73,3 +75,5 @@ Logto 主机为用户提供的 `cath-w:/home/water/work/codex-work/logto`，公�
 3. `cyberbus122-verification`：独立审阅、组合构建与真实 Logto/双独立资料库/多端网络验证；发现阻塞退回修复。至少验证完整中文富文本、PNG/文件原字节、离线/重启、push/pull 隔离、并发/删除、暂停/退出、异账户拒绝、失败与未知收据。
 
 SDK 自身 `docs/UNRESOLVED.md` 明确存在多平台握手超时和网络恢复未验项。必须用本项目真实链路验证并记录失败；不能把 SDK fixture 或原 CyberGrid 历史证据算作迁移通过。完整目标须在替代功能与对应测试实际通过后完成。
+
+2026-11-18 收敛范围：本轮先交付核心账户/设备/定向同步接线及必要命令行验证。原生 UI 验收由用户按 [手动测试用例](../verification/cyberbus120/MANUAL-UI-TESTS.md)执行；Android 真机、第三设备、异网络、完整发布源导出仍分别记录状态，不用扩大范围拖延核心交付，不提前声明完整替代目标完成。
