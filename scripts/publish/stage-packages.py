@@ -77,9 +77,10 @@ def notice_payloads(root, manifest):
     for name in sorted(notice_paths(manifest)):
         source = templates.get(name, name)
         expected = manifest['files'].get(source)
-        if source != name:
-            retained_bytes(root, source, expected)
-        payloads[name] = retained_bytes(root, name, expected)
+        # The development checkout keeps canonical notice templates under
+        # scripts/publish. Sanitized source exports also materialize selected
+        # templates at the repository root; always package the reviewed source.
+        payloads[name] = retained_bytes(root, source, expected)
     return payloads
 
 

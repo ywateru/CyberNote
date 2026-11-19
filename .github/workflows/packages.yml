@@ -1,8 +1,9 @@
-name: Build native arm64 packages
+name: Build and publish native arm64 packages
 on:
   workflow_dispatch:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
 permissions:
   contents: read
@@ -10,7 +11,7 @@ concurrency:
   group: native-packages-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  website-and-source:
+  checks:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -20,19 +21,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check exact source-only inventory
-        run: node scripts/publish/verify.mjs
-      - name: Install locked coordinator dependencies
-        run: npm --prefix services/coordinator ci --include=dev
-      - name: Install isolated Redis test prerequisite
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check versions and source types
         run: |
-          sudo apt-get update
-          sudo apt-get install -y redis-server
-      - name: Test account boundaries and build website
+          pnpm version:check
+          pnpm typecheck
+      - name: Test release tooling and account command boundaries
         run: |
-          npm --prefix services/coordinator test
-          npm --prefix services/coordinator run build:vercel
+          node --test \
+            scripts/publish/package-identity.test.mjs \
+            scripts/publish/policy.test.mjs \
+            scripts/publish/stage-packages.test.mjs \
+            scripts/verification/cyberbus-command.test.mjs \
+            scripts/verification/account109-status-dto.test.mjs \
+            scripts/verification/account109-login-surfaces.test.mjs \
+            scripts/verification/account109-android-files.test.mjs
   macos-arm64:
+    needs: checks
     runs-on: macos-15
     timeout-minutes: 60
     steps:
@@ -49,8 +58,6 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 10.15.0
-      - name: Require sanitized source-only checkout
-        run: node scripts/publish/verify.mjs
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: 1.97.1
@@ -60,7 +67,6 @@ jobs:
       - name: Check retained source and script closure
         run: |
           pnpm version:check
-          pnpm test:publish
           pnpm typecheck
       - name: Test archive import from public fixtures
         run: cargo test --locked --manifest-path src-tauri/Cargo.toml --lib independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads
@@ -79,6 +85,7 @@ jobs:
             release-packages/CyberNote-macos-arm64.json
             release-packages/CyberNote-macos-arm64.sha256
   android-arm64:
+    needs: checks
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -93,8 +100,6 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 10.15.0
-      - name: Require sanitized source-only checkout
-        run: node scripts/publish/verify.mjs
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -115,7 +120,6 @@ jobs:
       - name: Check retained source and script closure
         run: |
           pnpm version:check
-          pnpm test:publish
           pnpm typecheck
       - name: Assemble unsigned release arm64 APK
         run: pnpm exec tauri android build --target aarch64 --apk --ci
@@ -131,3 +135,42 @@ jobs:
             release-packages/CyberNote-android-arm64-notices.zip
             release-packages/CyberNote-android-arm64.json
             release-packages/CyberNote-android-arm64.sha256
+  release:
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    needs: [macos-arm64, android-arm64]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download verified package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+      - name: Validate tag and package inventory
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./package.json').version")"
+          case "$RELEASE_TAG" in
+            "v$version"|"v$version-"*) ;;
+            *) echo "Tag $RELEASE_TAG does not match package version $version"; exit 1 ;;
+          esac
+          test "$(find release-assets -maxdepth 1 -type f | wc -l | tr -d ' ')" = 8
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          prerelease=()
+          case "$RELEASE_TAG" in *-*) prerelease=(--prerelease) ;; esac
+          gh release create "$RELEASE_TAG" release-assets/* \
+            --verify-tag \
+            --title "CyberNote ${RELEASE_TAG#v}" \
+            --notes "Automated arm64 packages built and staged by GitHub Actions. The macOS app is ad-hoc signed and not notarized; the Android APK is unsigned and requires distributor signing before installation. Package identity, SHA-256 receipts and third-party notices are included." \
+            "${prerelease[@]}"
