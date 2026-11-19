@@ -22,12 +22,15 @@ function checkout(t) {
   git(['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'source']);
   return { root, git };
 }
-test('packaging revalidates actual source identity and rejects an old clean stamp after non-product dirt', t => {
+test('packaging revalidates actual source identity across non-product output and rejects product dirt', t => {
   const { root } = checkout(t);
   const info = createBuildInfo({ root, environment: {} }), stamp = releaseStamp(root);
   assert.equal(validatePackageInfo(info, root), info);
   assert.throws(() => validatePackageInfo({ ...info, sourceFingerprint: '0'.repeat(64) }, root), /differs/);
   writeFileSync(join(root, 'untracked-fixture.txt'), 'synthetic non-product dirt');
+  assert.equal(validateStamp(stamp, root), stamp);
+  assert.equal(validatePackageInfo(info, root), info);
+  writeFileSync(join(root, 'src/untracked-fixture.ts'), 'synthetic product dirt');
   assert.throws(() => validateStamp(stamp, root), /stale/);
   assert.throws(() => validatePackageInfo(info, root), /clean source/);
 });
