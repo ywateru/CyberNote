@@ -84,17 +84,18 @@ Android 继续使用平台 Keystore。当前应用能恢复本地登录状态，
 
 | 分支 | 工作树 | 审计结论 |
 | --- | --- | --- |
-| `codex/cyberbus120-core` | `../Apple-Notes-Clone-cyberbus120` | 所有补丁在 `main` 有等价提交；保留分支作为来源历史 |
-| `codex/cyberbus121-account` | `../Apple-Notes-Clone-cyberbus121` | 业务补丁与 `main` 一致；`src/account-client.ts` 的旧错误分类由主分支后续完整分类取代；工作树另有两个只记录临时审阅路径的未跟踪 `checkout.txt` |
-| `codex/cyberbus123-platform` | `../Apple-Notes-Clone-cyberbus123` | 平台 inventory/provenance 补丁在 `main` 有等价提交；保留分支作为来源历史 |
-| `codex/cyberbus124-network` | `../Apple-Notes-Clone-cyberbus124` | 网络 harness 审阅补丁在 `main` 有等价提交；真实网络结论已进入本页和验证 README |
+| `codex/cyberbus120-core` | 已移除 | 所有补丁在 `main` 有等价提交；保留分支作为来源历史 |
+| `codex/cyberbus121-account` | 已移除 | 业务补丁与 `main` 一致；`src/account-client.ts` 的旧错误分类由主分支后续完整分类取代 |
+| `codex/cyberbus123-platform` | 已移除 | 平台 inventory/provenance 补丁在 `main` 有等价提交；保留分支作为来源历史 |
+| `codex/cyberbus124-network` | 已移除 | 网络 harness 审阅补丁在 `main` 有等价提交；真实网络结论已进入本页和验证 README |
 
-这四个分支暂不删除：它们不是 `main` 祖先，而安全清理规则只允许 `git branch -d`，禁止用 `git branch -D` 强制掩盖历史。account 工作树的未跟踪文件也保留；这些文件只含临时 review worktree 路径，不含凭据或笔记内容。
+四个来源分支暂时保留，因为它们不是 `main` 祖先，而安全清理规则只允许 `git branch -d`，禁止用 `git branch -D` 强制掩盖历史。对应的四个 worktree 已全部移除；account worktree 原有的两个未跟踪 `checkout.txt` 只记录已失效的临时 review 路径，已随 worktree 清理。
 
 核心迁移先合入主分支提交 `f0401ebf`。随后完成以下清理：
 
 - 三个 detached account review worktree 的提交均已确认由 `codex/cyberbus121-account` 包含，工作树无未提交改动，已用 `git worktree remove` 删除临时目录。
 - `git branch --merged main` 审计出的 18 个旧 account、sync、archive、project 和 task 分支已用 `git branch -d` 删除。每个分支的 tip 都是 `main` 的祖先，因此没有代码或提交丢失。
-- 四个 CyberBus 功能 worktree 和分支按上表保留；account 工作树的两个未跟踪临时路径文件也未清理。
+- `codex/cyberbus120-core`、`codex/cyberbus121-account`、`codex/cyberbus123-platform` 和 `codex/cyberbus124-network` 的四个 worktree 已移除；对应分支按上表保留。
+- account worktree 的两个未跟踪 `checkout.txt` 仅含临时 review 路径，移除该 worktree 时一并清理。
 - 仓库另有 202 个与本轮 CyberBus 收敛无关的历史非祖先分支。它们包含 `main` 之外的提交，尚未完成逐分支业务归档，因此本轮没有强制删除；后续应先建立来源归档或确认补丁等价，再按需要处置。
 - 本次没有使用 `git branch -D`、`git reset`、`git checkout` 或 `git clean`。
