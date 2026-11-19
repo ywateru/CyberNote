@@ -37,3 +37,4 @@
 - 备份 `185d76cc` 和更新 `cfde3810` 已冻结供独立审查；作者结果不当作独立验收。更新模块21项Rust、10项假应用helper测试及React fixture通过，实际当前App替换未测试；现有unsigned Android只支持检查/下载。
 - 设计审查的身份桥接探针已通过，完整审查及host剩余门槛见[设计审查](../../plan/reviews/settings121-design.md)。实现级barrier、同事务设置、恢复保护与退出lease仍需集成验证。
 - 备份最终 `37111325` 的[独立审查](../../plan/reviews/settings121-backup.md) pass，16项core、1项真实Store定向、6项独立Rust负例通过；已有状态读取失败后的旧值标识为P3非阻塞，宿主条件逐条保留待验。UI修复 `c68ee19b` 正在复审，更新5项独审阻塞尚未关闭。
+- 后续复核：UI `c68ee19b`、更新 `5f060a01`、发行身份 `db73d2d5` 均已通过各自独立复审并接收；历史blocked报告保留，最新结论见各 `*-recheck.md`。云修复 `f57c40bf` 正在模块复审，公共宿主冻结点 `dfc5c841` 的原生编译与actualApp作者证据尚待独立宿主审查关闭，不作为整体交付完成。

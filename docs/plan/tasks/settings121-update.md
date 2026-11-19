@@ -1,7 +1,7 @@
 ---
 id: settings121-update
 scope: release updates
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -20,3 +20,5 @@ depends-on: []
 ## Verification
 
 离线feed/版本比较/平台/坏包/校验失败/安装前提fixture；不得测试时替换现有用户App。报告缺少真实签名或系统安装证据的范围。
+
+模块修复 `5f060a01` 经[独立复审](../reviews/settings121-update-recheck.md) pass，U1–U5已关闭，D5 native版本接点通过。真实宿主退出/ready/安装与最终发行包仍由整合任务单列验收。
