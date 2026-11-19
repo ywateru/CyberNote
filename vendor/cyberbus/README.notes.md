@@ -11,6 +11,12 @@ registered. Notes Data needs its own protobuf descriptor without advertising a f
 The first real-SDK Notes lifecycle tests failed with TYPE_MISMATCH before this patch.
 
 Changes:
+- Discovery's outbound Noise handshake uses the protocol's finite 10-second
+  budget, matching inbound handshakes, instead of a separate 2-second cap. This
+  permits slow Android/relay peers to reach Metadata. Caller-owned business
+  deadlines and security revocation remain enforced. Regressions cover delayed
+  peers in both roles, silent-peer expiry, and authenticated Metadata over three
+  real native EasyTier instances with all P2P disabled (two-hop relay route).
 - Client::new_with_application_schema takes an immutable descriptor set (max 64 KiB / 32
   messages). Existing Client::new delegates with an empty descriptor set.
 - Runtime validates Data type names/payloads against this additional local pool, alongside

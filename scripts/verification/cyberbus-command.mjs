@@ -5,7 +5,7 @@
 import { createHash } from "node:crypto";
 import { isAbsolute, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { NativeApp, delay } from "./sync108-native-driver.mjs";
+import { NativeApp, delay, bounded } from "./sync108-native-driver.mjs";
 
 const ACTIONS = new Set([
   "status",
@@ -258,8 +258,8 @@ function attachmentSemantic(value) {
     id: typeof value.id === "string" ? value.id : null,
     noteId: typeof value.noteId === "string" ? value.noteId : null,
     displayName: typeof value.displayName === "string" ? value.displayName : null,
-    mimeType: typeof value.mimeType === "string" ? value.mimeType : null,
-    byteLength: Number.isSafeInteger(value.byteLength) ? value.byteLength : null,
+    mimeType: typeof value.mime === "string" ? value.mime : null,
+    byteLength: Number.isSafeInteger(value.size) ? value.size : null,
   };
 }
 
@@ -493,21 +493,69 @@ async function macReadAttachment(app, attachmentId) {
   };
 }
 
-async function runMac(config, action) {
-  const app = new NativeApp(config.binary, config.dataDir, {
-    name: config.slot,
+export function macDriverOptions(slot) {
+  return {
+    name: slot,
     env: {
-      NOTES_SYNC_E2E_SLOT: config.slot,
+      ...(["left", "right"].includes(slot) ? { NOTES_SYNC_E2E_SLOT: slot } : {}),
       CYBERNOTE_ACCOUNT_SDK_DIAGNOSTICS: "1",
       CYBERNOTE_SYNC_DIAGNOSTICS: "1",
     },
-  });
+  };
+}
+
+// QA actions use the same production IPC as Android. The UI handler requires
+// an open preferences page and returns its inspect wrapper, not AccountStatus;
+// enable/syncDevice there only open confirmation and do not execute a transfer.
+export function macAccountCommand(app, command, timeoutMs) {
+  const keys = {
+    status: ["type"], syncNow: ["type"], setEnabled: ["type", "enabled"],
+    syncDevice: ["type", "deviceId", "direction"],
+  }[command?.type];
+  if (!keys || Object.keys(command).length !== keys.length ||
+      Object.keys(command).some(key => !keys.includes(key)) ||
+      (command.type === "setEnabled" && typeof command.enabled !== "boolean") ||
+      (command.type === "syncDevice" && (!UUID.test(command.deviceId) || !DIRECTIONS.has(command.direction))))
+    throw commandError("INVALID_ACCOUNT_COMMAND");
+  return app.evaluate("window.__TAURI_INTERNALS__.invoke('account_command',{command:arg})", command, timeoutMs);
+}
+
+export async function waitForDeviceOperation(readStatus, accepted, deviceId, direction, timeoutMs, {
+  now = Date.now, sleep = delay,
+} = {}) {
+  const operation = accepted?.deviceOperation;
+  if (!operation || operation.deviceId !== deviceId || operation.direction !== direction ||
+      !Number.isSafeInteger(operation.startedAt) || operation.startedAt < 0)
+    throw commandError("DEVICE_SYNC_NOT_ACCEPTED");
+  const deadline = now() + timeoutMs;
+  let status = accepted;
+  for (;;) {
+    const current = status.deviceOperation;
+    if (!current || current.deviceId !== deviceId || current.direction !== direction ||
+        current.startedAt !== operation.startedAt || status.profile?.subject !== accepted.profile?.subject)
+      throw commandError("DEVICE_SYNC_RETIRED");
+    if (current.phase === "succeeded") return status;
+    if (current.phase === "failed") throw commandError("DEVICE_SYNC_FAILED", safeCode(status.error?.syncStage));
+    if (current.phase !== "running") throw commandError("INVALID_DEVICE_OPERATION");
+    const remaining = deadline - now();
+    if (remaining <= 0) throw commandError("DEVICE_SYNC_TIMEOUT");
+    await sleep(Math.min(200, remaining));
+    const requestBudget = deadline - now();
+    if (requestBudget <= 0) throw commandError("DEVICE_SYNC_TIMEOUT");
+    const budget = Math.min(requestBudget, 10_000);
+    status = await bounded(readStatus(budget), budget, "DEVICE_SYNC_TIMEOUT");
+  }
+}
+
+async function runMac(config, action) {
+  const requestTimeout = Math.min(config.timeoutMs, 60_000);
+  const app = new NativeApp(config.binary, config.dataDir, macDriverOptions(config.slot));
   try {
-    await app.ready(config.timeoutMs);
+    await app.ready(requestTimeout);
     if (action === "status") {
       return {
         account: compactAccountStatus(
-          await app.execute("account.status", {}, config.timeoutMs),
+          await macAccountCommand(app, { type: "status" }, requestTimeout),
         ),
         workspace: compactWorkspace(await macWorkspace(app)),
       };
@@ -518,63 +566,66 @@ async function runMac(config, action) {
       return compactWorkspace(await macWorkspace(app), { includeIds: true });
     if (action === "diagnostic") {
       const before = compactDiagnostic(
-        await app.request({ op: "accountSdkDiagnostic" }, config.timeoutMs),
+        await app.request({ op: "accountSdkDiagnostic" }, requestTimeout),
       );
       if (!config.watchMs) return { snapshot: before };
       await delay(config.watchMs);
       const after = compactDiagnostic(
-        await app.request({ op: "accountSdkDiagnostic" }, config.timeoutMs),
+        await app.request({ op: "accountSdkDiagnostic" }, requestTimeout),
       );
       return { before, after, delta: diagnosticDelta(before, after) };
     }
     if (action === "enable" || action === "disable") {
-      await app.execute(
-        "account.setEnabled",
-        { enabled: action === "enable" },
-        config.timeoutMs,
+      await macAccountCommand(
+        app,
+        { type: "setEnabled", enabled: action === "enable" },
+        requestTimeout,
       );
       await app.idle();
       return {
         account: compactAccountStatus(
-          await app.execute("account.status", {}, config.timeoutMs),
+          await macAccountCommand(app, { type: "status" }, requestTimeout),
         ),
       };
     }
     if (action === "sync-now") {
-      await app.execute("account.syncNow", {}, config.timeoutMs);
+      await macAccountCommand(app, { type: "syncNow" }, requestTimeout);
       await app.idle();
       return {
         account: compactAccountStatus(
-          await app.execute("account.status", {}, config.timeoutMs),
+          await macAccountCommand(app, { type: "status" }, requestTimeout),
         ),
       };
     }
     if (action === "sync-device") {
-      await app.execute(
-        "account.syncDevice",
-        { deviceId: config.deviceId, direction: config.direction },
-        config.timeoutMs,
+      const accepted = await macAccountCommand(
+        app,
+        { type: "syncDevice", deviceId: config.deviceId, direction: config.direction },
+        requestTimeout,
       );
-      await app.idle();
+      // The native command ACK only starts a background operation. Keep this
+      // owned Mac alive until its durable result; closing it now cancels sync.
+      const completed = await waitForDeviceOperation(
+        budget => macAccountCommand(app, { type: "status" }, budget),
+        accepted, config.deviceId, config.direction, config.timeoutMs,
+      );
       return {
-        account: compactAccountStatus(
-          await app.execute("account.status", {}, config.timeoutMs),
-        ),
+        account: compactAccountStatus(completed),
       };
     }
     if (action === "create-note" || action === "create-fixture-note") {
       const note = await macCreateNote(app, config.title, config.body);
       const attachments = [];
       if (action === "create-fixture-note") {
-        await app.execute("attachment.submit", { files: fixtureFiles() }, config.timeoutMs);
-        await app.execute("app.flush", {}, config.timeoutMs);
+        await app.execute("attachment.submit", { files: fixtureFiles() }, requestTimeout);
+        await app.execute("app.flush", {}, requestTimeout);
         const workspace = await macWorkspace(app);
         for (const attachment of workspace.attachments.filter(
           (entry) => entry.noteId === note.id,
         )) {
           attachments.push({
             ...(await macReadAttachment(app, attachment.id)),
-            mimeType: attachment.mimeType,
+            mimeType: attachment.mime,
             displayName: attachment.displayName,
           });
         }
@@ -628,8 +679,11 @@ async function runAndroid(config, action) {
       return { account: compactAccountStatus(await api.accountStatus()) };
     }
     if (action === "sync-device") {
-      await api.syncDevice(config.deviceId, config.direction);
-      return { account: compactAccountStatus(await api.accountStatus()) };
+      const accepted = await api.syncDevice(config.deviceId, config.direction);
+      const completed = await waitForDeviceOperation(
+        () => api.accountStatus(), accepted, config.deviceId, config.direction, config.timeoutMs,
+      );
+      return { account: compactAccountStatus(completed) };
     }
     if (action === "create-note" || action === "create-fixture-note") {
       let note = await api.createNote({ title: config.title, body: config.body });
@@ -645,7 +699,7 @@ async function runAndroid(config, action) {
             attachmentId: attachment.id,
             byteLength: result.byteLength,
             sha256: result.sha256,
-            mimeType: attachment.mimeType,
+            mimeType: attachment.mime,
             displayName: attachment.displayName,
           });
         }

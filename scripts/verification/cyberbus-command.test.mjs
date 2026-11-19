@@ -7,7 +7,65 @@ import {
   diagnosticDelta,
   documentFor,
   parseArguments,
+  macDriverOptions,
+  macAccountCommand,
+  waitForDeviceOperation,
 } from "./cyberbus-command.mjs";
+
+test("QA labels do not become invalid native window placements", () => {
+  for (const slot of ["cyberbus-command", "qa-a", "live"]) {
+    assert.equal(macDriverOptions(slot).name, slot);
+    assert.equal(macDriverOptions(slot).env.NOTES_SYNC_E2E_SLOT, undefined);
+  }
+  for (const slot of ["left", "right"])
+    assert.equal(macDriverOptions(slot).env.NOTES_SYNC_E2E_SLOT, slot);
+});
+
+test("mac QA executes finite production IPC and receives the native status", async () => {
+  const status = { state: "ready", enabled: true, devices: [] };
+  const calls = [];
+  const app = { evaluate: async (...args) => { calls.push(args); return status; } };
+  const commands = [
+    { type: "status" }, { type: "syncNow" }, { type: "setEnabled", enabled: true },
+    { type: "syncDevice", deviceId: "123e4567-e89b-12d3-a456-426614174000", direction: "both" },
+  ];
+  for (const command of commands)
+    assert.equal(await macAccountCommand(app, command, 15000), status);
+  assert.deepEqual(calls.map(call => call[1]), commands);
+  assert(calls.every(call => call[0] === "window.__TAURI_INTERNALS__.invoke('account_command',{command:arg})" && call[2] === 15000));
+  for (const command of [{ type: "signIn" }, { type: "status", token: "secret" }, { type: "setEnabled", enabled: "true" }, { type: "syncDevice", deviceId: "invalid", direction: "both" }])
+    assert.throws(() => macAccountCommand(app, command), { code: "INVALID_ACCOUNT_COMMAND" });
+  assert.equal(calls.length, commands.length);
+});
+
+test("a sync ACK stays pending until the same native operation succeeds", async () => {
+  const deviceId = "123e4567-e89b-12d3-a456-426614174000";
+  const accepted = { profile: { subject: "fixture-account" }, deviceOperation: { deviceId, direction: "both", startedAt: 1, phase: "running" } };
+  let clock = 0, reads = 0;
+  const completed = await waitForDeviceOperation(async () => {
+    reads++;
+    return { ...accepted, deviceOperation: { ...accepted.deviceOperation, phase: reads === 3 ? "succeeded" : "running" } };
+  }, accepted, deviceId, "both", 1000, { now: () => clock, sleep: async ms => { clock += ms; } });
+  assert.equal(reads, 3);
+  assert.equal(completed.deviceOperation.phase, "succeeded");
+});
+
+test("failed, replaced and expired sync operations cannot become success", async () => {
+  const deviceId = "123e4567-e89b-12d3-a456-426614174000";
+  const accepted = { profile: { subject: "fixture-account" }, deviceOperation: { deviceId, direction: "pull", startedAt: 1, phase: "running" } };
+  for (const [next, code] of [
+    [{ ...accepted, deviceOperation: { ...accepted.deviceOperation, phase: "failed" } }, "DEVICE_SYNC_FAILED"],
+    [{ ...accepted, deviceOperation: { ...accepted.deviceOperation, startedAt: 2, phase: "succeeded" } }, "DEVICE_SYNC_RETIRED"],
+    [{ ...accepted, profile: { subject: "different-fixture-account" } }, "DEVICE_SYNC_RETIRED"],
+  ]) {
+    await assert.rejects(waitForDeviceOperation(async () => next, accepted, deviceId, "pull", 1000, { sleep: async () => {} }), { code });
+  }
+  let clock = 0;
+  await assert.rejects(waitForDeviceOperation(async () => accepted, accepted, deviceId, "pull", 400, {
+    now: () => clock, sleep: async ms => { clock += ms; },
+  }), { code: "DEVICE_SYNC_TIMEOUT" });
+  await assert.rejects(waitForDeviceOperation(async () => accepted, {}, deviceId, "pull", 1000), { code: "DEVICE_SYNC_NOT_ACCEPTED" });
+});
 
 test("mac commands require absolute binary and data directory paths", () => {
   assert.throws(
@@ -158,8 +216,8 @@ test("account and workspace projections never retain identities or content", () 
         id: "123e4567-e89b-12d3-a456-426614174001",
         noteId: "123e4567-e89b-12d3-a456-426614174000",
         displayName: "private.bin",
-        mimeType: "application/octet-stream",
-        byteLength: 4,
+        mime: "application/octet-stream",
+        size: 4,
       },
     ],
     folders: [{ id: "private-folder" }],
@@ -167,6 +225,14 @@ test("account and workspace projections never retain identities or content", () 
   assert.equal(workspace.noteCount, 1);
   assert.equal(workspace.attachmentCount, 1);
   assert.doesNotMatch(JSON.stringify(workspace), /private title|private body|private-folder|private\.bin/);
+});
+
+test("attachment descriptor hashes include production MIME and size fields", () => {
+  const attachment = { id: "fixture-attachment", noteId: "fixture-note", displayName: "fixture.bin", mime: "application/octet-stream", size: 4 };
+  const summary = value => compactWorkspace({ notes: [], folders: [], attachments: [value] }).attachmentDescriptorSha256;
+  assert.notEqual(summary(attachment), summary({ ...attachment, mime: "image/png" }));
+  assert.notEqual(summary(attachment), summary({ ...attachment, size: 8 }));
+  assert.equal(summary(attachment), summary({ ...attachment, relativePath: "device-local-path" }));
 });
 
 test("diagnostics are bounded to known fields and produce counter deltas", () => {

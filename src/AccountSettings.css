@@ -24,9 +24,14 @@
 .account-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .account-actions:empty { display: none; }
 .account-settings button { min-height: max(28px, var(--interface-hit-min, 28px)); min-width: 64px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--line); border-radius: var(--radius-7); background: var(--grouped); white-space: normal; overflow-wrap: anywhere; text-align: center; }
-.account-storage-heading { display: flex; align-items: flex-start; gap: 14px; }
-.account-storage-heading > div { min-width: 0; flex: 1; }
-.account-storage-heading .account-help { margin: 4px 0 0; font-size: .85em; }
+.account-storage-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; min-height: 44px; cursor: pointer; font-size: .9em; font-weight: 500; list-style: none; }
+.account-storage-summary::-webkit-details-marker { display: none; }
+.account-storage-summary::after { content: ""; width: 6px; height: 6px; flex-shrink: 0; border-right: 1.5px solid var(--secondary); border-bottom: 1.5px solid var(--secondary); transform: rotate(45deg); margin: 0 3px 4px; }
+.account-storage-group[open] > .account-storage-summary::after { transform: rotate(225deg); margin-bottom: -3px; }
+.account-storage-current { flex: 1; color: var(--secondary); text-align: end; font-size: .9em; font-weight: 400; }
+.account-storage-summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: var(--radius-5); }
+.account-storage-group > .account-help { font-size: .85em; }
+.account-local-notice { font-size: .85em; }
 .account-storage-options { min-width: 0; margin: 16px 0 0; padding: 0; border: 0; }
 .account-storage-options legend { padding: 0; margin-bottom: 8px; font-weight: 600; }
 .account-storage-options label { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-8); cursor: pointer; }
@@ -98,7 +103,6 @@
 .account-notice:empty { display: none; }
 .preferences-mobile .account-group { padding: 16px; margin-bottom: 18px; border: 0; border-radius: var(--radius-12); background: var(--paper); }
 .preferences-mobile .account-settings button { min-height: 44px; }
-.preferences-mobile .account-storage-heading { gap: 10px; }
 .preferences-mobile .account-storage-options label { padding: 10px; }
 .account-device-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .account-device-heading h4 { margin: 0; }

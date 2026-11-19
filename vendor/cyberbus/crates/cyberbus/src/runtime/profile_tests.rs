@@ -133,6 +133,145 @@ fn profile_command(body: pb::sdk_command::Body) -> pb::SdkCommand {
     }
 }
 
+// A routed relay/slow Android peer can answer after the old outbound-only
+// two-second limit. Discovery must still exchange authenticated Metadata.
+#[tokio::test(start_paused = true)]
+async fn delayed_probe_noise_exchanges_metadata_in_both_roles() {
+    for outbound in [true, false] {
+        let (mut runtime, _events) = runtime();
+        let keys = budget_keys(&mut runtime);
+        let (a, b) = tokio::io::duplex(128 * 1024);
+        let task = tokio::spawn(session::handshake(
+            Box::new(a),
+            std::net::Ipv4Addr::new(10, 0, 0, 2),
+            outbound,
+            keys,
+            runtime.admission.clone(),
+            runtime.incoming.clone(),
+            runtime.stop.clone(),
+            1,
+            0,
+            false,
+            None,
+        ));
+        tokio::task::yield_now().await;
+        tokio::time::advance(Duration::from_secs(3)).await;
+        assert!(!task.is_finished(), "discovery must allow the protocol handshake budget");
+        let config = noise::NoiseConfig::new([42; 32], [9; 32], [8; 32], "1", [8; 16]);
+        let mut remote = if outbound {
+            noise::accept(b, config, |_| Ok(())).await
+        } else {
+            noise::connect(b, config, |_| Ok(())).await
+        }.expect("delayed peer must finish Noise");
+        let up = runtime.inbox.recv().await.unwrap();
+        let Incoming::Up { id, .. } = &up else { panic!("expected authenticated Up") };
+        let id = id.clone();
+        runtime.receive(up).await;
+        assert!(matches!(remote.recv().await.unwrap().body, Some(Body::Metadata(_))));
+        remote.send(metadata("delayed-peer")).await.unwrap();
+        let frame = runtime.inbox.recv().await.unwrap();
+        runtime.receive(frame).await;
+        assert!(runtime.devices.contains_key(&id));
+        assert_eq!(runtime.metadata_valid, 1);
+        runtime.stop.cancel();
+        assert!(task.await.unwrap());
+    }
+}
+
+#[tokio::test(start_paused = true)]
+async fn unanswered_probe_still_has_a_finite_handshake_deadline() {
+    let (mut runtime, _events) = runtime();
+    let keys = budget_keys(&mut runtime);
+    let (a, _silent_peer) = tokio::io::duplex(128 * 1024);
+    let task = tokio::spawn(session::handshake(
+        Box::new(a), std::net::Ipv4Addr::new(10, 0, 0, 2), true, keys,
+        runtime.admission.clone(), runtime.incoming.clone(), runtime.stop.clone(),
+        1, 0, false, None,
+    ));
+    tokio::task::yield_now().await;
+    tokio::time::advance(noise::HANDSHAKE_TIMEOUT + Duration::from_secs(1)).await;
+    assert!(!task.await.unwrap());
+    assert!(runtime.inbox.try_recv().is_err());
+    assert_eq!(runtime.admission.metrics.sessions_established.load(Ordering::Relaxed), 0);
+}
+
+// Three real embedded EasyTier instances; both leaves know only the relay and
+// all P2P/hole-punching is disabled. Exercise Noise + owner Metadata admission
+// on actual smoltcp streams, with a slow responder, rather than a port probe.
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
+async fn delayed_probe_metadata_crosses_native_relay_without_p2p() {
+    use cyberbus_transport::{Transport, TransportConfig};
+    async fn start(id: u8, peers: Vec<String>) -> Transport {
+        let mut config = TransportConfig::new(
+            "cybernote125-relay-public-fixture".into(),
+            "public-test-only-not-a-credential".into(), [id; 32],
+        );
+        config.preferred_ipv4 = Some(std::net::Ipv4Addr::new(10, 144, 5, id));
+        config.enable_p2p = false;
+        config.listeners = vec!["tcp://127.0.0.1:0".into()];
+        config.peers = peers;
+        let transport = Transport::start(config).await.unwrap();
+        transport.wait_ready(tokio::time::Instant::now() + Duration::from_secs(10), &CancellationToken::new()).await.unwrap();
+        transport
+    }
+    tokio::time::timeout(Duration::from_secs(45), async {
+        let relay = start(2, vec![]).await;
+        let endpoint = relay.running_listeners()[0].clone();
+        let left_transport = start(1, vec![endpoint.clone()]).await;
+        let right_transport = start(3, vec![endpoint]).await;
+        loop {
+            if let Some(route) = left_transport.routes().await.unwrap().iter().find(|r| r.ipv4 == right_transport.status().ipv4) {
+                assert_eq!(route.cost, 2);
+                assert_eq!(route.next_hop_peer_id, relay.status().peer_id);
+                break;
+            }
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+        let stop = CancellationToken::new();
+        let mut listener = right_transport.listen(11000).await.unwrap();
+        let (left_io, right_io) = tokio::join!(
+            left_transport.connect(std::net::SocketAddrV4::new(right_transport.status().ipv4, 11000), tokio::time::Instant::now() + Duration::from_secs(10), &stop),
+            listener.accept(&stop),
+        );
+        let (mut left, _left_events) = runtime();
+        let (mut right, _right_events) = runtime();
+        let left_keys = budget_keys(&mut left);
+        let right_keys = budget_keys(&mut right);
+        let left_task = tokio::spawn(session::handshake(
+            left_io.unwrap(), right_transport.status().ipv4, true, left_keys,
+            left.admission.clone(), left.incoming.clone(), left.stop.clone(),
+            1, left_transport.status().generation, false, None,
+        ));
+        tokio::time::sleep(Duration::from_secs(3)).await;
+        let right_task = tokio::spawn(session::handshake(
+            right_io.unwrap().0, left_transport.status().ipv4, false, right_keys,
+            right.admission.clone(), right.incoming.clone(), right.stop.clone(),
+            1, right_transport.status().generation, false, None,
+        ));
+        let left_up = left.inbox.recv().await.unwrap();
+        let right_up = right.inbox.recv().await.unwrap();
+        assert!(matches!(&left_up, Incoming::Up { .. }));
+        assert!(matches!(&right_up, Incoming::Up { .. }));
+        left.receive(left_up).await;
+        right.receive(right_up).await;
+        let left_frame = left.inbox.recv().await.unwrap();
+        let right_frame = right.inbox.recv().await.unwrap();
+        assert!(matches!(&left_frame, Incoming::Frame { body: Body::Metadata(_), .. }));
+        assert!(matches!(&right_frame, Incoming::Frame { body: Body::Metadata(_), .. }));
+        left.receive(left_frame).await;
+        right.receive(right_frame).await;
+        assert_eq!(left.metadata_valid, 1);
+        assert_eq!(right.metadata_valid, 1);
+        left.stop.cancel();
+        right.stop.cancel();
+        assert!(left_task.await.unwrap());
+        assert!(right_task.await.unwrap());
+        left_transport.close().await.unwrap();
+        right_transport.close().await.unwrap();
+        relay.close().await.unwrap();
+    }).await.expect("relayed discovery must finish within a finite budget");
+}
+
 // Uses real Noise, owner installation and the SDK Data/ACK path over duplex IO.
 // A delayed peer reproduces a path that the old outer two-second cap rejected.
 #[tokio::test(start_paused = true)]

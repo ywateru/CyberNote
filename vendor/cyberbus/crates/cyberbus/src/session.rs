@@ -300,7 +300,10 @@ pub(crate) async fn handshake_tracked(
     let deadline = ready
         .as_ref()
         .map(|r| r.deadline)
-        .unwrap_or_else(|| began + Duration::from_secs(if outbound { 2 } else { 10 }));
+        // Discovery uses the same finite Noise budget in both directions. A
+        // shorter initiator deadline drops slow relay/Android handshakes while
+        // the responder is still completing Ready, before Metadata can arrive.
+        .unwrap_or(began + noise::HANDSHAKE_TIMEOUT);
     let mut policy_epoch = None;
     let admit = |bind: &pb::SessionBind| {
         policy_epoch = admission.epoch(&bind.device_id);

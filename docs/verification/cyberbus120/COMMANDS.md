@@ -69,7 +69,9 @@ node scripts/verification/cyberbus-command.mjs \
   --device-id TRANSIENT_TARGET_UUID --direction both
 ```
 
-`sync-device` 的方向只允许 `push`、`pull`、`both`。目标 UUID 从本轮真实状态中一次性取得，命令输出不返回该 ID。`all` 平台可让当前 Mac/Android 同时向同一目标发起指定方向，但两个操作仍分别建立应用并等待结果，不能用一条 Mac 成功代替 Android 成功。
+`sync-device` 的方向只允许 `push`、`pull`、`both`。目标 UUID 从本轮真实状态中一次性取得，命令输出不返回该 ID。命令 ACK 只表示接受后台任务；工具保持 Mac 应用存活，并轮询同一账户、目标、方向及 `startedAt` 的操作，直到 `succeeded` 才返回成功；失败、被替换或超时返回 `DEVICE_SYNC_FAILED`、`DEVICE_SYNC_RETIRED` 或 `DEVICE_SYNC_TIMEOUT`，不能以页面 idle 代替落盘回执。`all` 平台依次执行 Mac 和 Android 的动作，两个操作仍分别等待结果，不能用一条 Mac 成功代替 Android 成功。
+
+Mac 的 `--slot` 为诊断标签，只有 `left` / `right` 会设置双窗口位置；`qa-a` 等任意合法标签不改变原生窗口配置。账户 QA 命令直接调用有限的生产 IPC，正式界面仍要求开启、方向和目标确认。Mac 包须同时包含 `sync-e2e` Rust feature 和 `NODE_ENV=development VITE_NOTES_DEBUG=1` 前端，普通生产包不含这些 UI 驱动。
 
 ## 固定笔记和附件 fixture
 
@@ -89,6 +91,8 @@ node scripts/verification/cyberbus-command.mjs \
 | `cyberbus-command.bin` | `application/octet-stream` | 4096 |
 
 两个 fixture 的字节、名称和 MIME 固定在源码中，调用者不能覆盖。写入英文标题/正文可避免 shell 参数转义成为故障变量；真实中文和富文本由原生 UI 用例覆盖。逐平台输出附件长度和 SHA-256，跨端应相等。
+
+2026-11-19 校正摘要读取字段：工作区实际使用 `mime` / `size`，工具对外投影为 `mimeType` / `byteLength`。旧工具曾错误读取同名输出字段，导致附件摘要忽略 MIME 和长度；新的 `attachmentDescriptorSha256` 与旧工具基线不可直接比较，必须在两端用同一修复版重新采样。它仍不代替逐附件内容 SHA-256。
 
 ## 诊断
 

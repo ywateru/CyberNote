@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { createInterface } from "node:readline";
 import { resolve, isAbsolute } from "node:path";
 import { NativeApp, encodeRequest } from "./sync108-native-driver.mjs";
+import { macDriverOptions } from "./cyberbus-command.mjs";
 
 function options(argv) {
   const result = {};
@@ -28,14 +29,7 @@ function emit(value) {
 }
 
 const opts = options(process.argv.slice(2));
-const app = new NativeApp(resolve(opts.binary), resolve(opts["data-dir"]), {
-  name: opts.slot || "live",
-  env: {
-    ...(opts.slot ? { NOTES_SYNC_E2E_SLOT: opts.slot } : {}),
-    CYBERNOTE_ACCOUNT_SDK_DIAGNOSTICS: "1",
-    CYBERNOTE_SYNC_DIAGNOSTICS: "1",
-  },
-});
+const app = new NativeApp(resolve(opts.binary), resolve(opts["data-dir"]), macDriverOptions(opts.slot || "live"));
 
 let ready;
 try {

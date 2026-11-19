@@ -608,12 +608,15 @@ const openPeer=async(h,id=PEER)=>{const opener=descendants(row(h,id)).find(e=>e.
 const chooseDirection=async(h,direction)=>{const radio=h.all().find(e=>e.localName==='input'&&props(e).name==='account-device-direction'&&props(e).value===direction);await act(async()=>props(radio).onChange());return radio;};
 
 test('device directory survives pause; offline summaries stay hidden and unknown is distinct from an empty library',async t=>{
+ const emptyPeer='10000000-0000-4000-8000-000000000004';
  const h=setup(t,{initial:directory({state:'paused',enabled:false,devices:[
   device(SELF,{summary:{noteCount:0,lastNoteUpdatedAt:null,capturedAt:999}}),
   device(PEER,{online:false,summary:{noteCount:777,lastNoteUpdatedAt:111,capturedAt:999}}),device(OTHER),
+  device(emptyPeer,{summary:{noteCount:0,lastNoteUpdatedAt:null,capturedAt:999}}),
  ]})});await h.mount();
  assert(row(h,SELF).textContent.includes('此设备'));assert(!row(h,SELF).textContent.includes('在线'));
- assert(row(h,SELF).textContent.includes('0 篇笔记'));assert(row(h,SELF).textContent.includes('暂无笔记更新时间'));
+ assert(!row(h,SELF).textContent.includes('篇笔记'),'local card does not repeat the current library summary');
+ assert(row(h,emptyPeer).textContent.includes('0 篇笔记'));assert(row(h,emptyPeer).textContent.includes('暂无笔记更新时间'));
  assert(row(h,PEER).textContent.includes('离线'));assert(!row(h,PEER).textContent.includes('777'));assert(!row(h,PEER).textContent.includes('笔记更新于'));
  assert(row(h,OTHER).textContent.includes('笔记信息暂不可用'));assert(!row(h,OTHER).textContent.includes('0 篇'));
  assert(!h.button('立即同步'));await h.tick();assert(h.calls.every(c=>c.type==='status'));
@@ -731,7 +734,7 @@ test('enabling permission and refreshing never dispatch a peer transfer',async t
  }});await h.mount();const toggle=h.all().find(e=>props(e).id==='account-enabled');
  await act(async()=>props(toggle).onChange({currentTarget:toggle,target:{checked:true}}));assert(h.text().includes('开启本身不会自动传输'));
  await h.click('允许同步');await h.tick();await h.click('刷新设备');await h.tick();
- assert(h.calls.some(c=>c.type==='setEnabled'));assert(!h.calls.some(c=>c.type==='syncDevice'));assert(h.text().includes('开启或刷新不会自动传输'));
+ assert(h.calls.some(c=>c.type==='setEnabled'));assert(!h.calls.some(c=>c.type==='syncDevice'));assert(h.text().includes('选择设备并确认方向后才会传输'));assert(h.text().includes('刷新仅更新设备列表'));
 });
 
 test('IPC constructs only exact rename and target/direction requests; invalid input never reaches native',async t=>{
@@ -792,10 +795,12 @@ test('new-install storage UI presents encrypted file as the default and Keychain
  await h.mount();
  assert(props(h.storageRadio('encryptedFile')).checked);
  assert(props(h.storageRadio('keychain')).checked===false);
- assert(h.text().includes('本机加密文件（默认）'));
- assert(h.text().includes('系统钥匙串（可选）'));
- assert(h.text().includes('AES-GCM'));
- assert(h.text().includes('0600'));
+ assert(h.text().includes('登录与安全'));
+ assert(h.text().includes('默认方式，登录信息加密保存在此设备'));
+ assert(h.text().includes('系统钥匙串'));
+ assert(!h.text().includes('AES-GCM'));
+ assert(!h.text().includes('0600'));
+ assert(!h.button('应用存储方式'),'unchanged storage needs no redundant apply action');
 });
 
 test('credential storage changes are fenced for signed-in, authorizing, busy and cleanup-required states',async t=>{
@@ -808,7 +813,7 @@ test('credential storage changes are fenced for signed-in, authorizing, busy and
  ];
  for(const initial of states) {
   const h=setup(t,{initial});await h.mount();const fieldset=h.all().find(e=>e.localName==='fieldset'&&descendants(e).some(e=>props(e).name==='account-credential-storage'));
-  assert(props(fieldset).disabled);assert(props(h.button('应用存储方式')).disabled);
+  assert(props(fieldset).disabled);assert(!h.button('应用存储方式'));
   const before=h.calls.length;
   await act(async()=>{await h.handle().run({type:'setCredentialStorage',storage:'encryptedFile'});});
   assert.equal(h.handle().inspect().confirmation,false);assert.equal(h.calls.length,before);

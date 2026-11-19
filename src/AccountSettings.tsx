@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { UserRound, Laptop, Smartphone, MonitorSmartphone, RefreshCw, ChevronRight, Pencil, FileText, Check, LoaderCircle, KeyRound, HardDrive } from "lucide-react";
+import { UserRound, Laptop, Smartphone, MonitorSmartphone, RefreshCw, ChevronRight, Pencil, FileText, Check, LoaderCircle } from "lucide-react";
 import { accountCommand, accountTransportLabel, accountConnectionRetry, accountNeedsLogin, accountSuggestsRelogin, accountErrorMessage, accountErrorDetails, accountErrorStateKey, AccountCommandFailure, deviceName, type AccountDevice, type DeviceDirection, type DeviceOperation, type DeviceProgress, type SafeError, type AccountAuthorizationSurface, type AccountCommand, type AccountStatus } from "./account-client";
 import { formatFileTime } from "./data-management";
+import { CredentialStorageSettings } from "./account-settings/CredentialStorageSettings";
 import "./AccountSettings.css";
 
 export type AccountSettingsHandle = {
@@ -32,16 +33,16 @@ function ErrorDetails({error}: {error: AccountStatus["error"]}) {
   return details.length ? <details className="account-error-details"><summary>错误详情</summary><dl>{details.map(([key,value]) => <div key={key}><dt>{key === "syncStage" ? "同步阶段" : key === "syncReason" ? "失败原因" : key}</dt><dd>{value}</dd></div>)}</dl></details> : null;
 }
 
-function DeviceInfo({device, hideStatus = false}: {device: AccountDevice; hideStatus?: boolean}) {
+function DeviceInfo({device, hideStatus = false, hideSummary = false}: {device: AccountDevice; hideStatus?: boolean; hideSummary?: boolean}) {
   return <span className="account-device-info">
     <span className="account-device-title"><strong>{device.name || "未命名设备"}</strong>{device.current && <span className="account-current-badge"><Check aria-hidden="true" />此设备</span>}</span>
     {!hideStatus && <span id={`account-device-status-${device.id}`} className="account-device-status"><span className={`account-status-dot${device.online ? " is-online" : ""}`} aria-hidden="true" /><span>{device.online ? "在线" : "离线"}</span>{accountTransportLabel(device) && <span className="account-device-availability">{accountTransportLabel(device)}</span>}{device.online && <span className="account-device-availability">{device.syncAvailable ? "可同步" : "同步已暂停或暂不可用"}</span>}</span>}
-    <span id={`account-device-summary-${device.id}`} className="account-device-summary">{!device.online ? "上线后可查看笔记信息" : !device.summary ? "笔记信息暂不可用" : <><span className="account-device-count"><FileText aria-hidden="true" />{device.summary.noteCount} 篇笔记</span><span>{device.summary.lastNoteUpdatedAt === null ? "暂无笔记更新时间" : `笔记更新于 ${formatFileTime(device.summary.lastNoteUpdatedAt)}`}</span></>}</span>
+    {!hideSummary && <span id={`account-device-summary-${device.id}`} className="account-device-summary">{!device.online ? "上线后可查看笔记信息" : !device.summary ? "笔记信息暂不可用" : <><span className="account-device-count"><FileText aria-hidden="true" />{device.summary.noteCount} 篇笔记</span><span>{device.summary.lastNoteUpdatedAt === null ? "暂无笔记更新时间" : `笔记更新于 ${formatFileTime(device.summary.lastNoteUpdatedAt)}`}</span></>}</span>}
   </span>;
 }
 
 const progressLabels: Record<DeviceProgress["stage"], string> = {connecting:"正在连接设备",pairing:"正在验证设备",inventory:"正在比较同步内容",receiving:"正在接收内容",sending:"正在发送内容",finishing:"正在确认传输结果"};
-function SyncProgress({operation, deviceName, error, compact = false}: {operation: DeviceOperation; deviceName?: string; error?: SafeError; compact?: boolean}) {
+function SyncProgress({operation, deviceName, compact = false}: {operation: DeviceOperation; deviceName?: string; compact?: boolean}) {
   const running = operation.phase === "running", succeeded = operation.phase === "succeeded";
   const progress = operation.progress;
   const elapsed = Math.max(0, Math.floor(((operation.finishedAt || Date.now()) - operation.startedAt) / 1000));
@@ -55,7 +56,7 @@ function SyncProgress({operation, deviceName, error, compact = false}: {operatio
     {!compact && <p className="account-progress-target">{deviceName ? `与 ${deviceName} · ` : ""}{directionNames[operation.direction]}</p>}
     {(running || determinate) && <progress className="account-progress-bar" aria-label={stage} max={progress?.total || 1} value={succeeded ? (progress?.total || 1) : determinate ? progress?.completed : undefined} />}
     <p className="account-progress-counts">{progress && progress.total > 0 ? `已确认 ${progress.completed} / ${progress.total} 项版本` : succeeded ? "传输结果已确认" : running ? "正在等待设备响应" : "未取得完整传输结果"}{bytes > 0 ? ` · 已传输 ${byteLabel}` : ""}</p>
-    {!compact && <p className="account-help">{running ? "可收起窗口或离开设置，同步会继续，进度保留在“我的设备”中。" : succeeded ? "已保存接收内容；待应用内容和冲突可在本机卡片查看。" : error ? accountErrorMessage(error) : "请确认两台设备保持运行且网络可用，选择设备后重新确认同步。"}</p>}
+    {!compact && (running || succeeded) && <p className="account-help">{running ? "可收起窗口或离开设置，同步会继续，进度保留在“我的设备”中。" : "已保存接收内容；待应用内容和冲突可在本机卡片查看。"}</p>}
   </div>;
 }
 
@@ -310,8 +311,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const refreshing = workingType === "syncNow";
   const currentDevice = status?.devices.find(device => device.current);
   const remoteDevices = status?.devices.filter(device => !device.current) || [];
-  const storageSelection = storageChoice || status?.credentialStorage;
-  const storageChanged = !!storageSelection && storageSelection !== status?.credentialStorage;
+  const storageSelection = signedIn || authorizing ? status?.credentialStorage : storageChoice || status?.credentialStorage;
   useEffect(() => {
     if (status?.credentialStorage) setStorageChoice(status.credentialStorage);
   }, [status?.credentialStorage]);
@@ -328,7 +328,13 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     status?.profile?.subject === target.subject && deviceOperation?.deviceId === target.id ? deviceOperation : undefined;
   const syncing = deviceOperation?.phase === "running";
   const syncingSelected = selectedOperation?.phase === "running" || (confirmation === "syncDevice" && workingType === "syncDevice");
-  const operationDeviceName = status?.devices.find(device => device.id === deviceOperation?.deviceId)?.name || "所选设备";
+  const dialogCommand = confirmation === "enable" ? "setEnabled" : confirmation === "storage" ? "setCredentialStorage" : confirmation;
+  const commandErrorInDialog = active && !!confirmation && commandError?.command === dialogCommand;
+  const statusErrorCovered = !!commandError?.safeError && !!status?.error &&
+    JSON.stringify(accountErrorDetails(commandError.safeError)) === JSON.stringify(accountErrorDetails(status.error));
+  const statusErrorInDialog = active && deviceDialog && !!status?.error && !statusErrorCovered;
+  const operationInDialog = active && confirmation === "syncDevice" && !!selectedOperation;
+  const operationHasDevice = remoteDevices.some(device => device.id === deviceOperation?.deviceId);
   const confirm = () => {
     if (confirmation === "syncDevice" && target) void run({type:"syncDevice", deviceId:target.id, direction}, true).catch(() => {});
     else if (confirmation === "renameDevice") void run({type:"renameDevice", name}, true).catch(() => {});
@@ -343,15 +349,15 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     <h3 className="preferences-page-title">账户与同步</h3>
     <p className="account-intro">在你的设备间同步备忘录</p>
     <span className="account-accessible-state" role="status" aria-live="polite" aria-atomic="true">{status ? states[status.state] : "正在读取账户状态"}</span>
-    {commandError && <div className="account-error account-command-error" role="alert"><h4>{commandSuggestRelogin ? "请退出账户后重新登录" : commandAdoptionTimeout ? "开启同步准备超时" : commandAdoptionBlocked ? "开启同步前需要处理旧同步内容" : `本次${commandNames[commandError.command]}未完成`}</h4><p>{error}</p><ErrorDetails error={commandError.safeError} />
+    {commandError && !commandErrorInDialog && <div className="account-error account-command-error" role="alert"><h4>{commandSuggestRelogin ? "请退出账户后重新登录" : commandAdoptionTimeout ? "开启同步准备超时" : commandAdoptionBlocked ? "开启同步前需要处理旧同步内容" : `本次${commandNames[commandError.command]}未完成`}</h4><p>{error}</p><ErrorDetails error={commandError.safeError} />
       {commandAdoptionBlocked && !!status?.conflictCount && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
-      {commandSuggestRelogin ? <button type="button" disabled={busy || nativeBusy} onClick={event => request({ type: "signOut" }, false, event.currentTarget)}>退出账户以重新登录</button> : <button type="button" disabled={busy} onClick={retryRequest}>{commandAdoptionBlocked ? "读取账户状态" : "重试"}</button>}</div>}
+      {!commandSuggestRelogin && <button type="button" disabled={busy} onClick={retryRequest}>{commandAdoptionBlocked ? "读取账户状态" : "重试"}</button>}</div>}
     {!status && !error && <p className="account-loading" role="status"><LoaderCircle className="account-spinner" aria-hidden="true" />正在读取账户状态…</p>}
     {(status || error) && <>
       <section className={`account-group account-profile-group${signedIn ? " is-signed-in" : ""}`} aria-label="CyberNote 账户">
         <div className="account-profile"><span className="account-avatar" aria-hidden="true"><UserRound /></span><div>
           <h4>{signedIn ? status?.profile?.displayName || "CyberNote 账户" : authorizing ? "正在等待登录" : "登录 CyberNote"}</h4>
-          {signedIn ? <p className="account-identifier">{status?.profile?.username || status?.profile?.subject}</p> : <p>{authorizing ? pendingMessage : "本地备忘录不绑定账户。你可以登录任意账户，用于该账户的多端同步。登录后同步默认暂停。"}</p>}
+          {signedIn ? <p className="account-identifier">{status?.profile?.username || "已登录"}</p> : <p>{authorizing ? pendingMessage : "登录同一账户，在你的设备间收发备忘录。登录后同步默认暂停。"}</p>}
         </div></div>
         {(!signedIn || needsLogin) && !cleanupRequired && <fieldset className="account-login-method" disabled={busy || nativeBusy || !status || authorizing}>
           <legend>登录方式</legend>
@@ -368,36 +374,24 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
               <button type="button" className="account-primary" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signIn", surface: loginSurface })}>登录</button>
               <button type="button" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signUp", surface: loginSurface })}>创建账户</button>
             </>}
-            {canSignOut && <button type="button" disabled={busy} onClick={event => request({ type: "signOut" }, false, event.currentTarget)}>退出账户</button>}
+            {canSignOut && <button type="button" disabled={busy} onClick={event => request({ type: "signOut" }, false, event.currentTarget)}>{suggestRelogin || commandSuggestRelogin ? "退出账户以重新登录" : "退出账户"}</button>}
           </>}
         </div>
         {!signedIn && !authorizing && <p className="account-help">登录用户名区分大小写，请按注册时的写法输入。</p>}
-        {!signedIn && !authorizing && <p className="account-help">登录不会自动开启同步。开启仅允许内容同步；之后还需选择设备并明确确认，才会传输笔记及附件。</p>}
       </section>
-      {status?.credentialStorage && !localMobile && <section className="account-group account-storage-group" aria-label="CyberBus 凭据存储" data-credential-storage={status.credentialStorage}>
-        <div className="account-storage-heading"><span className="account-device-icon" aria-hidden="true"><HardDrive /></span><div><h4>凭据存储</h4><p className="account-help">CyberBus 安装身份和登录授权默认保存在本机加密文件。系统钥匙串是可选项，两种方式使用相互独立的本地身份。</p></div></div>
-        <fieldset className="account-storage-options" disabled={busy || nativeBusy || signedIn || authorizing || cleanupRequired}>
-          <legend>存储方式</legend>
-          <label><input type="radio" name="account-credential-storage" value="encryptedFile" checked={storageSelection === "encryptedFile"} onChange={() => setStorageChoice("encryptedFile")} /><span><HardDrive aria-hidden="true" /><strong>本机加密文件（默认）</strong><small>使用 AES-GCM 加密；本地密钥文件权限为 0600。</small></span></label>
-          <label><input type="radio" name="account-credential-storage" value="keychain" checked={storageSelection === "keychain"} onChange={() => setStorageChoice("keychain")} /><span><KeyRound aria-hidden="true" /><strong>系统钥匙串（可选）</strong><small>由 macOS 保护；开发构建重建后可能要求重新授权。</small></span></label>
-        </fieldset>
-        <div className="account-actions"><button type="button" disabled={busy || nativeBusy || signedIn || authorizing || cleanupRequired || !storageChanged} onClick={event => ask("storage", event.currentTarget)}>应用存储方式</button></div>
-        <p className="account-help">{signedIn || authorizing ? "请先退出账户，再切换凭据存储。" : "切换后需要重新登录。旧存储数据不会删除，可在退出状态切回。"}</p>
-      </section>}
-      {status && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{suggestRelogin ? "请退出账户后重新登录" : adoptionTimeout ? "开启同步准备超时" : adoptionBlocked ? "开启同步前需要处理旧同步内容" : identityMismatch ? "账户身份或同步空间校验失败" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
+      {status && !statusErrorCovered && !statusErrorInDialog && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{suggestRelogin ? "请退出账户后重新登录" : adoptionTimeout ? "开启同步准备超时" : adoptionBlocked ? "开启同步前需要处理旧同步内容" : identityMismatch ? "账户身份或同步空间校验失败" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
         {adoptionBlocked && !commandAdoptionBlocked && status.conflictCount > 0 && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
-        {suggestRelogin && !commandSuggestRelogin && <button type="button" disabled={busy || nativeBusy} onClick={event => request({ type: "signOut" }, false, event.currentTarget)}>退出账户以重新登录</button>}
         {!suggestRelogin && !cleanupRequired && connectionRetry.type !== "status" && <button type="button" disabled={busy || nativeBusy} onClick={() => request(connectionRetry.type === "signIn" || connectionRetry.type === "signUp" ? { type: connectionRetry.type, surface: loginSurface } : connectionRetry)}>{connectionRetry.type === "signIn" ? needsLogin ? "重新登录" : "重试登录" : "重试连接"}</button>}
       </section>}
       {signedIn && status && <>
         <section className="account-group account-device-group" aria-label="账户设备">
-          <div className="account-device-heading"><div><h4>我的设备</h4><p className="account-help">在本机开启同步，再选择其他设备传输</p></div><button type="button" className="account-refresh" aria-busy={refreshing} disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={() => request({type:"syncNow"})}><RefreshCw className={refreshing ? "account-spinner" : undefined} aria-hidden="true" /><span>{refreshing ? "正在刷新…" : "刷新设备"}</span></button></div>
+          <div className="account-device-heading"><div><h4>我的设备</h4></div><button type="button" className="account-refresh" aria-busy={refreshing} disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={() => request({type:"syncNow"})}><RefreshCw className={refreshing ? "account-spinner" : undefined} aria-hidden="true" /><span>{refreshing ? "正在刷新…" : "刷新设备"}</span></button></div>
           <span className="account-accessible-state" role="status" aria-live="polite">{refreshing ? "正在刷新设备列表" : ""}</span>
           <ul className="account-devices" aria-busy={refreshing}>
             <li data-device-id={currentDevice?.id} className="account-device-current">
               <div className="account-local-heading">
                 <span className="account-device-icon" aria-hidden="true">{localMobile ? <Smartphone /> : <Laptop />}</span>
-                {currentDevice ? <DeviceInfo device={currentDevice} hideStatus /> : <span className="account-device-info"><span className="account-device-title"><strong>本机</strong><span className="account-current-badge"><Check aria-hidden="true" />此设备</span></span><span className="account-device-summary">设备信息正在更新</span></span>}
+                {currentDevice ? <DeviceInfo device={currentDevice} hideStatus hideSummary /> : <span className="account-device-info"><span className="account-device-title"><strong>本机</strong><span className="account-current-badge"><Check aria-hidden="true" />此设备</span></span><span className="account-device-summary">设备信息正在更新</span></span>}
                 {currentDevice && <button type="button" className="account-rename" title="更改名称" disabled={busy || nativeBusy || needsLogin || cleanupRequired} onClick={event => ask("renameDevice", event.currentTarget)}><Pencil aria-hidden="true" /><span>更改名称</span></button>}
               </div>
               <div className="account-local-sync">
@@ -406,7 +400,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
                   <p className="account-state"><span className={`account-status-dot${status.state === "ready" ? " is-online" : ""}`} aria-hidden="true" />{states[status.state]}</p>
                   <dl className="account-metrics"><div><dt>待应用</dt><dd>{status.pendingCount} 项</dd></div><div><dt>最近传输</dt><dd>{status.lastSyncAt === undefined ? "暂无记录" : formatFileTime(status.lastSyncAt)}</dd></div></dl>
                 </div>
-                {deviceOperation && <SyncProgress operation={deviceOperation} deviceName={operationDeviceName} error={status.error} />}
+                {deviceOperation && !operationHasDevice && !operationInDialog && <SyncProgress operation={deviceOperation} />}
                 {!adoptionBlocked && !commandAdoptionBlocked && status.conflictCount > 0 && <div className="account-actions"><button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button></div>}
               </div>
             </li>
@@ -414,12 +408,17 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
               <span className="account-device-icon" aria-hidden="true"><MonitorSmartphone /></span>
               <DeviceInfo device={device} />
               <ChevronRight className="account-device-chevron" aria-hidden="true" />
-            </button>{deviceOperation?.deviceId === device.id && <SyncProgress operation={deviceOperation} compact />}</li>)}
+            </button>{deviceOperation?.deviceId === device.id && !operationInDialog && <SyncProgress operation={deviceOperation} compact />}</li>)}
           </ul>
           {!remoteDevices.length && <div className="account-devices-empty"><MonitorSmartphone aria-hidden="true" /><div><strong>连接你的另一台设备</strong><p>在另一台设备登录同一账户，即可在这里选择同步。</p></div></div>}
-          <p className="account-help account-device-footnote">开启或刷新不会自动传输。选择设备并确认方向后才会同步，关闭后仍可在本机编辑。</p>
+          <p className="account-help account-device-footnote">选择设备并确认方向后才会传输。刷新仅更新设备列表。</p>
         </section>
       </>}
+      {status?.credentialStorage && storageSelection && !localMobile && <CredentialStorageSettings
+        storage={status.credentialStorage} selection={storageSelection}
+        disabled={busy || nativeBusy || signedIn || authorizing || cleanupRequired}
+        signedIn={signedIn || authorizing} onSelect={setStorageChoice}
+        onApply={initiator => ask("storage", initiator)} />}
     </>}
     {confirmation && active && <dialog ref={confirmPanel} className="account-confirmation" role="alertdialog" aria-modal="true" aria-labelledby="account-confirmation-title" aria-describedby="account-confirmation-description" aria-busy={busy} tabIndex={-1}
       onCancel={event => { event.preventDefault(); event.stopPropagation(); dismiss(); }}
@@ -445,12 +444,12 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       </fieldset>}
       {confirmation === "renameDevice" && <label className="account-device-name">设备名称<input value={name} disabled={busy || nativeBusy || !!issue} onChange={event => {setName(event.target.value); setFormError("");}} /></label>}
       {!syncingSelected && (issue || formError) && <p className="account-confirmation-error" role="alert">{issue || formError}</p>}
-      {selectedOperation && <SyncProgress operation={selectedOperation} deviceName={target?.name} error={status?.error} />}
-      {deviceDialog && status?.error && !commandError && <div className="account-confirmation-error" role="alert">{!selectedOperation && <p>{accountErrorMessage(status.error)}</p>}<ErrorDetails error={status.error} /></div>}
-      {commandError?.command === (deviceDialog ? confirmation : confirmation === "signOut" ? "signOut" : confirmation === "storage" ? "setCredentialStorage" : "setEnabled") && <><p className="account-confirmation-error" role="alert">{error}</p>{deviceDialog && <ErrorDetails error={commandError.safeError} />}</>}
+      {selectedOperation && <SyncProgress operation={selectedOperation} deviceName={target?.name} />}
+      {deviceDialog && status?.error && !statusErrorCovered && <div className="account-confirmation-error" role="alert"><p>{accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} /></div>}
+      {commandErrorInDialog && <div className="account-confirmation-error" role="alert">{commandAdoptionBlocked && <strong>{commandAdoptionTimeout ? "开启同步准备超时" : "开启同步前需要处理旧同步内容"}</strong>}<p>{error}</p><ErrorDetails error={commandError?.safeError} /></div>}
       <div className="account-actions"><button ref={cancelButton} type="button" disabled={busy && workingType !== "syncDevice"} onClick={dismiss}>{syncingSelected ? "收起，后台继续" : selectedOperation ? "关闭" : "取消"}</button>{!syncingSelected && <button ref={confirmButton} className="account-primary" type="button" disabled={busy || (deviceDialog && (nativeBusy || !!issue || needsLogin || cleanupRequired || identityMismatch))} onClick={confirm}>{confirmation === "signOut" ? "确认退出" : confirmation === "enable" ? "允许同步" : confirmation === "storage" ? "切换并退出当前身份" : confirmation === "renameDevice" ? "保存名称" : selectedOperation?.phase === "failed" ? "重新同步" : "开始同步"}</button>}</div>
     </dialog>}
     <p className="account-notice" role="status">{notice && <Check aria-hidden="true" />}{notice}</p>
-    <p className="account-help">本地使用不需要账户。</p>
+    {!signedIn && <p className="account-help account-local-notice">本地使用不需要账户。</p>}
   </div>;
 }
