@@ -4,6 +4,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, copyFileSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { brotliCompressSync } from 'node:zlib';
 import {
   projectRoot, productFiles, sourceIdentity, releaseStamp, createBuildInfo,
@@ -50,6 +51,14 @@ test('clean local exact tags identify previews and stable; dev and untagged buil
   f.git(['tag', '-d', 'v0.1.0-preview.2']);
   f.git(['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'tag', '-am', 'annotated', 'v0.1.0']);
   assert.equal(f.info().releaseVersion, '0.1.0');
+});
+
+test('library import from node stdin does not execute or realpath the CLI pseudo-entry', t => {
+  const f = fixture(t); f.tag('v0.1.0-preview.2');
+  const script = `const api=await import(${JSON.stringify(pathToFileURL(join(f.root, 'scripts/build-info.mjs')).href)});console.log(api.resolveReleaseVersion(undefined,{environment:{}}));`;
+  const result = spawnSync(process.execPath, ['--input-type=module', '-'], { input: script, cwd: f.root, env: environment, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stdout.trim(), '0.1.0-preview.2');
 });
 
 test('CI explicit tag verifies checkout/root/HEAD and disambiguates exact tags; branch/PR artifacts stay unknown', t => {

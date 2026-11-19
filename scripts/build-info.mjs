@@ -167,7 +167,7 @@ export function buildInfoPlugin(info) {
 }
 // One resolver is used by Vite, Cargo and staging. No duplicated Rust/Python
 // SemVer policy, no frontend-supplied current version, no public feed access.
-if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
+if (process.argv[1] && existsSync(process.argv[1]) && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   const [mode, ...args] = process.argv.slice(2);
   if (mode === '--native-release-identity' && (args.length === 0 || (args.length === 1 && args[0] === '--development'))) {
     const development = args.length === 1;
