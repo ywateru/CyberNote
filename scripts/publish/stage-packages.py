@@ -26,6 +26,17 @@ def sha(path):
     return h.hexdigest()
 
 
+def release_identity(root, info):
+    """Revalidate tag at staging; a self-consistent sidecar is not provenance."""
+    path = root / 'dist/build-info.json'
+    checked = json.loads(subprocess.check_output(
+        ['node', str(root / 'scripts/build-info.mjs'),
+         '--validate-release-build-info', str(path)], text=True, timeout=30))
+    if info.get('releaseVersion') != checked['releaseVersion']:
+        raise RuntimeError('Release identity changed during staging')
+    return checked['releaseVersion']
+
+
 def notice_paths(manifest):
     paths = {'LICENSE', 'THIRD_PARTY_NOTICES.md', 'src-tauri/fonts/README.md'}
     declared = []
@@ -210,6 +221,7 @@ def main():
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
     info = json.loads((root / 'dist/build-info.json').read_text())
+    release_version = release_identity(root, info)
     manifest = json.loads((root / 'scripts/publish/manifest.json').read_text())
     payloads = notice_payloads(root, manifest)
     output = root / 'release-packages'
@@ -265,13 +277,15 @@ def main():
         signing = 'Unsigned release APK; distributor signing is required before installation.'
     if proof['info'] != info or proof['nativeBinarySha256'] != native_sha:
         raise RuntimeError('Package identity changed during staging')
+    if release_identity(root, info) != release_version:
+        raise RuntimeError('Release identity changed during package verification')
     revision = proof['info']['sourceRevision']
     notices = output / f'{stem}-notices.zip'
     with zipfile.ZipFile(notices, 'w', zipfile.ZIP_DEFLATED) as archive:
         for name, data in payloads.items():
             archive.writestr(name, data)
     receipt = {'schema': 1, 'platform': args.platform, 'architecture': 'arm64',
-               'sourceRevision': revision, 'buildInfo': info,
+               'sourceRevision': revision, 'releaseVersion': release_version, 'buildInfo': info,
                'package': package.name, 'packageSha256': sha(package),
                'nativeBinarySha256': native_sha, 'identityVerification': proof, 'notices': notices.name,
                'noticesSha256': sha(notices), 'signingBoundary': signing,

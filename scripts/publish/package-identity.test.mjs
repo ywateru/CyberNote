@@ -24,7 +24,7 @@ function checkout(t) {
 }
 test('packaging revalidates actual source identity and rejects an old clean stamp after non-product dirt', t => {
   const { root } = checkout(t);
-  const info = createBuildInfo({ root }), stamp = releaseStamp(root);
+  const info = createBuildInfo({ root, environment: {} }), stamp = releaseStamp(root);
   assert.equal(validatePackageInfo(info, root), info);
   assert.throws(() => validatePackageInfo({ ...info, sourceFingerprint: '0'.repeat(64) }, root), /differs/);
   writeFileSync(join(root, 'untracked-fixture.txt'), 'synthetic non-product dirt');
@@ -49,7 +49,7 @@ test('packaged-identity CLI finds real Cargo asset files and refuses an older na
   copyFileSync(fileURLToPath(new URL('../build-info.mjs', import.meta.url)), join(root, 'scripts/build-info.mjs'));
   writeFileSync(join(root, '.gitignore'), 'dist/\n');
   git(['add', '.']); git(['-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'build helpers']);
-  const expected = Buffer.from(JSON.stringify(createBuildInfo({ root }), null, 2) + '\n');
+  const expected = Buffer.from(JSON.stringify(createBuildInfo({ root, environment: {} }), null, 2) + '\n');
   mkdirSync(join(root, 'dist')); writeFileSync(join(root, 'dist/build-info.json'), expected);
   const artifacts = mkdtempSync(join(tmpdir(), 'packaged-native-fixture-'));
   t.after(() => rmSync(artifacts, { recursive: true, force: true }));

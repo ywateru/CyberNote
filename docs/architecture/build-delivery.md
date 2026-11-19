@@ -63,3 +63,121 @@ pnpm release publish --manifest artifacts/releases/current/mac.json --manifest a
 原有的 Tauri dependency/path bridge 文件、schemas、assets、jniLibs 与 build/target 等输出排除保持不变。生成目录首次出现、重生成和清理均不应改变产品指纹；手写 Kotlin、Manifest、Gradle、Rust、C/Objective-C 与前端源码变化仍必须使旧 release stamp 失效。此规则不改变版本源或核包算法。
 
 `node scripts/check-build-identity-generated101.mjs --expect-fixed` 使用临时 Git fixture 调用真实 `productFiles/sourceIdentity/validateStamp`，覆盖8类输出的创建/改写/删除、整目录增删和22个手写/近名路径的 stamp 拒绝。`--expect-bug` 用于修复前因果复现；修复后该模式应失败。证据写入 `artifacts/build-identity101/`；不把 fixture 当作 Android 生成、原生打包或设备证明。
+
+## 包内发行身份（settings121 / D5）
+
+产品版本继续由 `package.json` 的稳定三段版本拥有，并通过
+`assertVersions()` 与 Tauri、Cargo/lockfile 同步。它与“此二进制来自哪个
+发行 tag”是两项事实。新构建的 `BuildInfo.releaseVersion?: string | null`
+保存完整、去掉 `v` 的发行版本，例如 `0.1.0-preview.2`；旧包缺少该字段
+视为未知，不能根据 `builtAt`、`releasePreparedAt`、revision/fingerprint、
+包文件名或最后检查到的 feed 推断一个 tag。source stamp 固定产品字节，
+不授予发行身份；stamp 中额外写入 `releaseVersion` 不参与身份来源选择。
+
+发行身份只由 `scripts/build-info.mjs::resolveReleaseVersion()` 解析：
+
+| 构建上下文 | 身份与拒绝规则 |
+| --- | --- |
+| GitHub tag 构建 | 使用明确的 `GITHUB_REF_TYPE=tag` / `GITHUB_REF_NAME`；tag 必须规范、core 等于产品版本、存在于当前 checkout 且 peel 到 HEAD；若存在 `GITHUB_SHA` 也必须等于 HEAD。dirty 拒绝。明确的 CI tag 可在同 commit 多 tag 时选择唯一来源。 |
+| GitHub branch/PR 构建 | `GITHUB_REF_TYPE=branch` 和非空 ref name 返回 `null`，即使该 commit 恰好也有发行 tag；不将分支产物标成发行版。缺失或非法的 CI ref 上下文拒绝。 |
+| 本地生产构建 | 只接受 HEAD 上的 exact tag，不使用 `git describe` 或祖先 tag。所有以 `v` 开头的 exact tag 均需符合本项目规范且匹配 core；多个候选拒绝歧义。存在候选时要求整个 checkout clean，包含非产品路径的 tracked/untracked 修改。没有 exact tag 返回 `null`。 |
+| 开发构建 | 返回 `null`，不声称安装包发行身份；仍执行产品版本同步检查。 |
+| 无 `.git` 的 source export | 返回 `null`；部署 metadata 不能补出 tag。若同时声称 CI tag 则拒绝，因为无法验证 checkout/HEAD。 |
+
+规范 tag 语法是 `v<major>.<minor>.<patch>` 或在后面追加非空 SemVer
+prerelease：点分 ASCII 字母/数字/连字符标识符，纯数字标识符不允许前导
+零；core 不允许前导零。本项目发行 tag 不接受 `+build` metadata、空后缀、
+空标识符、空白或去掉 `v` 的形式。解析器不规范化非法输入，也不改版本。
+
+解析必须位于真实 Git checkout root，支持本项目的 linked worktree `.git`
+文件并核对 Git 管理目录中的反向登记；拒绝 symlink `.git` 或借用另一
+worktree 的 `.git` 文件。Git 查询清除继承的 `GIT_*` 重定向/索引/config
+环境，避免错误读取别的仓库。本项目 pipeline 已提供 GitHub ref 环境，
+无需改 workflow；此改动没有创建/修改 tag、推送或发布任何资产。
+
+### 前端、Rust 与发布回执的一致性
+
+Vite 调用 `createBuildInfo()` 时解析上述身份，将结果编入生产 JS 与
+`dist/build-info.json`。前端开发 fallback 明确包含 `releaseVersion: null`。
+`src/build-info.ts` 同时导出 `releaseIdentityNotice: string | null`，供设置/
+更新 UI 在无身份时显示“按产品版本保守比较，无法判断同一产品版本的
+预发布先后”；不通过前端传递 currentVersion 给 native。
+
+`src-tauri/build.rs` 在 `tauri_build::build()` 前运行同一个 Node 解析器。
+release profile 除校验真实 tag/core 外，还要求现有生产前端 build-info 的
+releaseVersion、产品版本和完整源码身份与当前 checkout 一致；变更 tag
+而未重建前端会拒绝。debug/其他非 release profile 不授予发行身份。
+它设置编译期 `CYBERNOTE_RELEASE_VERSION`：已知身份为完整发行版本，
+未知为**空字符串**，覆盖外部同名环境值，不能直接接受外部版本注入。
+Node 是现有前端工具链，也是该构建步骤的必需工具；缺失/校验失败即失败。
+
+Cargo 对产品输入、`dist/build-info.json`、Git HEAD/index/refs/packed-refs
+及 CI ref 环境设置重跑依赖，以捕获 tag/前端切换。`productFiles` 已包含
+原有 `scripts/build-info.mjs`、`src/build-info.ts`、`src-tauri/build.rs`，新增
+`scripts/publish/stage-packages.py` 作为打包身份输入；dist 生成元数据仍被
+排除，不形成自引用。添加/变更发行身份算法或回执逻辑会使旧 source stamp
+失效。保留现有前端和实际原生入口的嵌入字节核验，不能用 sidecar 代替。
+
+staging 在创建输出前调用同一解析器的 `--validate-release-build-info`
+命令重新验证当前 tag 与 metadata；已知发行 tag 不允许缺失/陈旧/伪造的
+releaseVersion。Mac/Android JSON 回执新增顶层 `releaseVersion`，并与原来
+嵌入原生二进制核验过的 `buildInfo.releaseVersion` 一致；原生 SHA、源码
+指纹、架构/包形状、notices 和 SHA 文件逻辑保持。它是 Git checkout/构建
+来源核验，不构成独立签名清单、Developer ID、公证或 Android 签名保证。
+
+### updater 整合接口与旧包限制
+
+本次仅交付构建身份；不修改被冻结审查的 software_update 模块。
+整合 worker 应在 native 内提供同一个 current-version helper，表达式为：
+
+```rust
+option_env!("CYBERNOTE_RELEASE_VERSION").filter(|v| !v.is_empty()).unwrap_or(env!("CARGO_PKG_VERSION"))
+```
+
+必须复用到以下完整比较边界，不能只改 DTO：
+
+1. `SoftwareUpdater::new/create` 的当前版本及后续 feed/下载降级检查；
+2. macOS `install::mac::stage` 中“候选发行版本必须新于当前发行版本”的
+   完整 SemVer 比较。目前冻结代码这里也直接使用 Cargo core；需改成同一
+   helper，才能让同 core preview.2→preview.3 真正通过安装预检；
+3. 包内 plist/Android manifest、receipt `buildInfo.version` 和运行包版本
+   核验仍比较稳定产品 **core**。新增的 receipt 顶层及
+   `buildInfo.releaseVersion` 若存在，应与候选 GitHub release tag 一致，
+   不要把 full preview 字符串要求为 macOS short version/Android versionName。
+
+前端展示可用 `buildInfo.releaseVersion ?? buildInfo.version`，并在缺失
+发行身份时渲染 `releaseIdentityNotice`；比较授权仍由 native 所有。
+新包 preview.2→preview.3 可正确递增，preview→同 core stable 是升级，
+stable→同 core preview 是降级。旧 preview.1/.2 包编译时只有 Cargo `0.1.0`，
+仍只能保守视为这个产品版本，不能自动判定同 core preview.3 更新；需要
+用户显式安装具备身份的新包，或后续递增产品 core。本变更不事后给旧包
+补 tag，不改变 unsigned APK 无法安装的事实，也不改变 Android versionCode
+仍由产品 core 派生的现状。未来 Android 有兼容签名发行后，同 core preview
+安装顺序还需要另行确定 versionCode/系统包管理策略。
+
+### 独立验证与边界
+
+```sh
+node --test scripts/verification/settings121-release-identity.test.mjs \
+  scripts/publish/build-info.test.mjs scripts/publish/package-identity.test.mjs \
+  scripts/publish/policy.test.mjs scripts/publish/stage-packages.test.mjs
+node scripts/verification/settings121-release-updater-proof.mjs
+node scripts/check-build-identity-generated101.mjs --expect-fixed
+pnpm typecheck
+pnpm version:check
+git diff --check
+```
+
+身份测试用临时 Git checkout/linked worktree 和真实序列化 build-info，覆盖
+CI/local/annotated/dirty/invalid/mismatched/ambiguous/no-tag、错误 Git root、
+版本漂移、stamp 不能授予 tag、发布回执、原生压缩嵌入字节和拒绝旧前端。
+真实 `build.rs` 通过轻量 rustc 及 isolated Cargo 执行；唯一替换的是无操作
+`tauri_build` fixture，不运行实际 Tauri/sidecar。Cargo fixture 验证 tag
+切换触发重跑、旧前端失败、重新生成后 native 的编译身份更新。
+
+跨模块 probe 只读 Git object 中冻结 updater
+`cfde38103f71d0dd1fdf3e60a5c720a63abb2461` 的真实 SemVer 比较器，在临时
+Rust consumer 中验证新 preview 递增与 stable/旧包保守拒绝；可用
+`UPDATE_IDENTITY_PROOF_REVISION` 指定整合后的待验 revision。该 probe 不修改
+冻结工作树，不等于已完成 updater 宿主/安装路径接线。以上验证不建立
+真实发布包、原生 UI/安装重启、Android 系统安装或设备验收；未进行发布。
