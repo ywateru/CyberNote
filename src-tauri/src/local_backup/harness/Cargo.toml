@@ -1,0 +1,38 @@
+[package]
+name = "cybernote-local-backup-tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[workspace]
+
+[features]
+real-store-proof = ["dep:rusqlite", "dep:base64", "dep:unicode-normalization", "dep:html5ever", "dep:url"]
+
+[lib]
+path = "lib.rs"
+doctest = false
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+fs2 = "0.4"
+libc = "0.2"
+uuid = { version = "1", features = ["v4"] }
+aes-gcm = "0.10"
+argon2 = "0.5"
+rand = "0.8"
+rusqlite = { version = "0.32", features = ["bundled", "hooks"], optional = true }
+base64 = { version = "0.22", optional = true }
+unicode-normalization = { version = "0.1", optional = true }
+html5ever = { version = "0.39", optional = true }
+url = { version = "2", optional = true }
+
+[dev-dependencies]
+tempfile = "3"
+tokio = { version = "1", features = ["rt", "macros", "sync", "time", "test-util"] }
+
+[profile.dev]
+debug = 0
+incremental = false

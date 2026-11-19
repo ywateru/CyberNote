@@ -1,0 +1,107 @@
+/* Shared lists, rows, actions and segments are owned by Preferences.css.
+   This file only styles backup-specific expansion and confirmation content. */
+.local-backup-settings {
+  color: var(--settings-fg);
+  font: inherit;
+  min-width: 0;
+}
+.local-backup-settings[hidden] {
+  display: none;
+}
+.local-backup-settings .settings121-label {
+  overflow-wrap: anywhere;
+}
+.local-backup-name {
+  font-weight: 500;
+}
+.local-backup-settings button {
+  cursor: pointer;
+}
+.local-backup-settings button:disabled,
+.local-backup-settings button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: default;
+}
+.local-backup-settings .local-backup-fold {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--settings-fg);
+  padding: 0;
+  min-height: 0;
+  font: inherit;
+  font-weight: 500;
+}
+.local-backup-confirm {
+  padding: 14px 16px;
+  background: var(--settings-editor);
+  border-top: 1px solid var(--settings-divider);
+}
+.local-backup-confirm + .settings121-row,
+.local-backup-apple {
+  border-top: 1px solid var(--settings-divider);
+}
+.local-backup-confirm p {
+  font-size: 0.9em;
+  line-height: 1.5;
+  color: var(--settings-muted);
+  margin: 7px 0;
+}
+.local-backup-confirm label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 12px 0;
+  font-size: 0.9em;
+}
+.local-backup-confirm input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  color: var(--settings-fg);
+  background: var(--settings-card);
+  border: 1px solid var(--settings-line);
+  border-radius: 6px;
+  padding: 8px;
+}
+.local-backup-confirm-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 10px;
+}
+.local-backup-confirm-tools .settings121-text:last-child {
+  color: var(--danger);
+}
+.local-backup-status {
+  margin: 8px 2px;
+  font-size: 0.9em;
+  line-height: 1.5;
+  color: var(--settings-muted);
+  overflow-wrap: anywhere;
+}
+.local-backup-error {
+  color: var(--danger);
+}
+.local-backup-apple {
+  padding: 9px 16px;
+}
+@media (max-width: 600px) {
+  .local-backup-settings .settings121-actions:has(> .settings121-segments) {
+    flex-basis: 100%;
+  }
+  .local-backup-settings button,
+  .local-backup-settings .local-backup-fold {
+    min-height: 44px;
+  }
+  .local-backup-settings .settings121-segments {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .local-backup-settings .settings121-segments > button {
+    height: auto;
+    padding: 4px 6px;
+    flex: 1;
+    white-space: nowrap;
+  }
+}
