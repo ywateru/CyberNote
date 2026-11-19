@@ -36,3 +36,4 @@
 - 云 `189b348e` 作者16项Rust/7组浏览器通过，包含真实Store跨不同workspace八轮往返；尚待独立审查及真实Host窗口屏障装配。
 - 备份 `185d76cc` 和更新 `cfde3810` 已冻结供独立审查；作者结果不当作独立验收。更新模块21项Rust、10项假应用helper测试及React fixture通过，实际当前App替换未测试；现有unsigned Android只支持检查/下载。
 - 设计审查的身份桥接探针已通过，完整审查及host剩余门槛见[设计审查](../../plan/reviews/settings121-design.md)。实现级barrier、同事务设置、恢复保护与退出lease仍需集成验证。
+- 备份最终 `37111325` 的[独立审查](../../plan/reviews/settings121-backup.md) pass，16项core、1项真实Store定向、6项独立Rust负例通过；已有状态读取失败后的旧值标识为P3非阻塞，宿主条件逐条保留待验。UI修复 `c68ee19b` 正在复审，更新5项独审阻塞尚未关闭。

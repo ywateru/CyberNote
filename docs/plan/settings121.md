@@ -7,12 +7,14 @@
 | settings121-ui | Preferences.tsx/css、AccountSettings.tsx/css、PreferencesInterfaceDetails、presentation/PreferencesPresentation，自己的验证脚本 | 无 | in-progress |
 | settings121-cloud | src-tauri/src/cloud_sync/、src/cloud-sync/、必要依赖及自身验证 | 无 | in-progress |
 | settings121-update | src-tauri/src/software_update/、src/software-update/、自身验证 | 无 | in-progress |
-| settings121-backup | src-tauri/src/local_backup/、src/local-backup/、自身验证 | 无 | in-progress |
+| settings121-backup | src-tauri/src/local_backup/、src/local-backup/、自身验证 | 无 | done（模块独审pass，宿主另验） |
 | settings121-integrate | lib.rs、App.tsx、DataManagement、Session/Store必要适配、上述模块注册和生命周期接通、调度装配 | 前四项 | pending |
 | settings121-review | 独立契约/源码/运行检查，docs/plan/reviews/settings121-* | 对应模块或整合 | pending |
 
 各开发工作树从 `f4cc2308` 隔离。主整合分支 `codex/settings121` 保留用户的AGENTS修改。参考项目只读，绝对路径为根仓库 `refs/magpie`；不复制为产品依赖。模块先提交可审查产物，独立审查通过后整合；不得擅自发布/推送/改真实账户数据。
 
 当前提交与审查：UI `e29a7d8c` 独审 `c26e2a83` 为blocked，5项交互/视觉修正正在进行；云模块 `189b348e`、本地备份 `185d76cc`、更新 `cfde3810` 已冻结提交，独立审查进行中。`codex/settings121-integration` 是尚未接受的组合试装分支，先接线以暴露实际接口问题；不会因模块测试通过或试装编译就提前标记交付完成。增加发布标签身份小任务修复预发布包无法识别自身tag的问题，保持package稳定core版本源不变。
+
+后续状态：本地备份最终 `37111325` 经独审 `41309a7a` pass，已接收模块到本分支；UI修复 `c68ee19b` 正在复审。更新独审 `f8662f41` 发现5项阻塞（实际ZIP展开限制、活新进程未ack回滚、安装lease准入、配置失败重试、手机开关触达），修复中。发布身份最终 `13ef2986` 正在独审，云模块 `189b348e` 也在独审。组合试装已接收四模块和UI修复，公共宿主开发与针对性验证进行中。
 
 入口与调用链：Preferences创建/保留各面板 → cloud-sync/software-update客户端 → native invoke注册 → 唯一宿主/Session → Store/受检远端或下载器 → 状态与事实事件 → 设置刷新；每条链需真实现验证。旧sync设置导航转账户，冲突界面保留在账户内。导入导出继续由App的保存/录音保护协调，自动任务亦受同一边界控制。

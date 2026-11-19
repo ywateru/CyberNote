@@ -1,7 +1,7 @@
 ---
 id: settings121-backup
 scope: local backup lifecycle
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -20,3 +20,5 @@ depends-on: []
 ## Verification
 
 临时目录真实写入、原子manifest、checksum损坏、symlink拒绝、保留清理、新备份失败不清理旧版本；整合后录音/权限/重启/恢复屏障验证。
+
+模块最终 `37111325` 经[独立审查](../reviews/settings121-backup.md) pass：16项core、1项真实Store定向、6项独立负例通过。仅模块完成，实际App多窗口屏障/调度/原生选择器由整合任务继续验收。
