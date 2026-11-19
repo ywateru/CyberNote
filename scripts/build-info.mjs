@@ -100,7 +100,14 @@ function checkoutGit(root, args) {
   const env = { ...Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))), GIT_OPTIONAL_LOCKS: '0' };
   // Even git status must remain observational: suppress its optional index
   // refresh writes instead of changing any user's cached state or hint flags.
-  return execFileSync('git', args, { cwd: root, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 15000 }).trim();
+  // This checkout's full 23k-entry index is already >1 MiB. Keep a finite
+  // budget with headroom for paths/index growth, never consume a truncated list.
+  try {
+    return execFileSync('git', args, { cwd: root, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 15000, maxBuffer: 32 * 1024 * 1024 }).trim();
+  } catch (cause) {
+    if (cause?.code === 'ENOBUFS') throw new Error('Git checkout validation exceeds the 32 MiB output limit; clean state is unknown', { cause });
+    throw cause;
+  }
 }
 function checkoutIsDirty(root) {
   // status deliberately trusts index hints and can hide modified tracked bytes.

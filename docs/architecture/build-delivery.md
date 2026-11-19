@@ -104,6 +104,9 @@ clean 判定同时读取 NUL 分隔的 `git ls-files -v -z`，保守拒绝整个
 出现后失效。验证只读 Git，并设置 `GIT_OPTIONAL_LOCKS=0` 禁止 status 的
 可选 index 刷新；不清标记、不 reset，也不更改用户的 index 文件。
 正常 checkout 和有独立干净 index 的合法 linked worktree 继续接受。
+Git 子进程输出预算为每次查询 32 MiB（包含 NUL 分隔的全 index 列表），
+超过时明确报“clean state is unknown”并拒绝，不能截断列表或返回 clean。
+此上限覆盖当前真实仓库约 1.8 MiB 的索引输出；仍保留 15 秒查询期限。
 
 ### 前端、Rust 与发布回执的一致性
 

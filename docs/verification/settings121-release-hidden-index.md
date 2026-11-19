@@ -31,6 +31,17 @@ git diff --check
 没有未解决的本轮测试失败。远程 workflow 尚未运行，不能把本地通过当成
 GitHub Actions 的成功回执。
 
+## RID3 大 index 追补
+
+独立复审 `6ba2d9f3` 指出真实仓库 `ls-files -v -z` 超过 Node 默认
+1 MiB 缓冲。查询现改为显式 32 MiB 有界输出，ENOBUFS 返回明确 unknown
+错误，不截断或吞错；NUL 解析和只读 index 策略不变。新增真实临时 Git
+fixture，提交 12,000 条接近保留依赖目录形状的长路径，保证输出 >1 MiB；
+验证正常源码/开发/发行入口通过，末尾路径设置 skip-worktree 并修改后
+仍被识别为 dirty，前后 index 字节保持不变。无需改 build.rs、CI 或接口。
+干净实际 checkout 的 sourceIdentity/createBuildInfo 开发入口另在提交后
+轻量核验，结果随最终冻结 SHA 报告；不构建真实 App。
+
 新增独立测试共 5 项，用真实临时 Git checkout/index 执行以下边界：
 
 - 对 `src/main.ts` 分别设置 `--assume-unchanged` / `--skip-worktree`，

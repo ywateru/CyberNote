@@ -119,3 +119,28 @@ test('RID1 conservative policy includes non-product flags; ordinary checkout and
   assert.equal(sourceIdentity(linked, { metadataPath: null }).sourceDirty, true);
   assert.throws(() => createBuildInfo({ root: linked, environment: {}, stampPath: undefined }), /clean checkout/);
 });
+
+test('RID3: a real checkout index exceeding 1 MiB validates completely and detects a hidden entry at its end', t => {
+  const f = fixture(t);
+  let last;
+  for (let i = 0; i < 12000; i++) {
+    last = `vendor/retained-library-fixture/src/portable-platform-paths/${String(i).padStart(6, '0')}-${'source-path-'.repeat(5)}.txt`;
+    f.put(last, '');
+  }
+  f.git(['add', '.']);
+  f.git(['-c', 'user.name=Large Index Fixture', '-c', 'user.email=large-index@example.invalid', 'commit', '-qm', 'real shaped source paths']);
+  f.git(['tag', '-f', 'v0.1.0-preview.2']);
+  const raw = execFileSync('git', ['ls-files', '-v', '-z'], { cwd: f.root, env, maxBuffer: 32 * 1024 * 1024 });
+  assert(raw.length > 1024 * 1024, `fixture must exceed default maxBuffer: ${raw.length}`);
+  const index = readFileSync(join(f.root, '.git/index'));
+  assert.equal(sourceIdentity(f.root, { metadataPath: null }).sourceDirty, false);
+  assert.equal(f.info().releaseVersion, '0.1.0-preview.2');
+  assert.equal(createBuildInfo({ root: f.root, development: true, environment: {}, stampPath: undefined }).sourceDirty, false);
+  assert.deepEqual(readFileSync(join(f.root, '.git/index')), index);
+  f.git(['update-index', '--skip-worktree', last]);
+  f.put(last, 'hidden change beyond the default output buffer');
+  const flagged = readFileSync(join(f.root, '.git/index'));
+  assert.equal(sourceIdentity(f.root, { metadataPath: null }).sourceDirty, true);
+  assert.throws(() => f.info(), /clean checkout/);
+  assert.deepEqual(readFileSync(join(f.root, '.git/index')), flagged);
+});
