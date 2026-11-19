@@ -1,0 +1,23 @@
+   Compiling cybernote-cloud-sync-tests v0.1.0 (/Users/water/work/2026/.cybernote-worktrees/settings121-cloud/src-tauri/src/cloud_sync/harness)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.07s
+     Running unittests src/lib.rs (/tmp/cybernote-settings121-cloud-target/debug/deps/cybernote_cloud_sync_tests-0c9b821e1e762731)
+
+running 16 tests
+test cloud_sync::protocol::tests::hashes ... ok
+test cloud_tests::engine_tests::settings_sql_transaction_preserves_unrelated_fields_false_conflicts_and_rollback ... ok
+test cloud_tests::protocol_tests::aws_documentation_sigv4_vector ... ok
+test cloud_tests::engine_tests::private_state_preserves_partial_choices_and_rejects_corruption_links_and_intervening_edits ... ok
+test cloud_tests::protocol_tests::oversized_responses_and_uploads_fail_before_overwrite ... ok
+test cloud_tests::engine_tests::public_status_never_returns_secrets_and_restart_preserves_explicit_off ... ok
+test cloud_tests::engine_tests::causal_restore_and_settings_merge_keep_all_branches_and_reject_equivocation ... ok
+test cloud_tests::protocol_tests::real_protocol_roundtrips_and_cas_refusals ... ok
+test cloud_tests::protocol_tests::status_and_parse_errors_never_become_missing ... ok
+test cloud_tests::protocol_tests::github_large_files_use_raw_same_origin_and_verify_sha ... ok
+test cloud_tests::engine_tests::disabling_cancels_inflight_network_and_preserves_credentials ... ok
+test cloud_tests::engine_tests::changed_encrypted_header_and_ciphertext_are_rejected ... ok
+test cloud_tests::encrypted_roundtrip_and_wrong_password ... ok
+test cloud_tests::engine_tests::password_revocation_stale_preview_and_cas_zero_apply ... ok
+test cloud_tests::engine_tests::real_store_bidirectional_media_conflicts_stable_ids_and_recovery ... ok
+test cloud_tests::engine_tests::account_owned_store_identity_is_never_adopted_or_replaced ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 205 filtered out; finished in 17.57s

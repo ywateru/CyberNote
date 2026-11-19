@@ -1,0 +1,156 @@
+/* Shared list/row/label/actions/text primitives are supplied by Preferences.css. */
+.preferences-workspace .cloud-sync-settings {
+  overflow-wrap: anywhere;
+  font: inherit;
+}
+.preferences-workspace .cloud-sync-settings * {
+  box-sizing: border-box;
+}
+.preferences-workspace .cloud-sync-who > span {
+  display: block;
+}
+.preferences-workspace .cloud-sync-hint,
+.preferences-workspace .cloud-sync-field small {
+  display: block;
+  color: var(--settings-muted);
+  font-size: 0.85em;
+  line-height: 1.5;
+  margin-top: 3px;
+}
+.preferences-workspace .cloud-sync-settings button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.preferences-workspace .cloud-sync-settings :is(input, select) {
+  min-width: 0;
+  max-width: 100%;
+  color: var(--settings-fg);
+  font: inherit;
+}
+.preferences-workspace .cloud-sync-form :is(input, select) {
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 1px solid var(--settings-line);
+  border-radius: 6px;
+  background: var(--settings-card);
+}
+.preferences-workspace .cloud-sync-settings input:not([type="checkbox"]) {
+  width: 100%;
+}
+.preferences-workspace .cloud-sync-settings input[type="checkbox"] {
+  width: 20px;
+  min-height: 20px;
+  height: 20px;
+  accent-color: var(--settings-accent);
+}
+.preferences-workspace .cloud-sync-form,
+.preferences-workspace .cloud-sync-preview {
+  padding: 12px 16px;
+  border-top: 1px solid var(--settings-divider);
+  background: var(--settings-editor);
+}
+.preferences-workspace .cloud-sync-form + .cloud-sync-row {
+  border-top: 1px solid var(--settings-divider);
+}
+.preferences-workspace .cloud-sync-field {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr) minmax(0, 2fr);
+  gap: 12px;
+  align-items: start;
+  padding: 6px 0;
+}
+.preferences-workspace .cloud-sync-field > span:first-child {
+  padding-top: 8px;
+}
+.preferences-workspace .cloud-sync-preview p {
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+.preferences-workspace .cloud-sync-feedback {
+  padding: 0 16px;
+  line-height: 1.6;
+  color: var(--settings-muted);
+}
+.preferences-workspace .cloud-sync-feedback:not(:empty) {
+  border-top: 1px solid var(--settings-divider);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.preferences-workspace .cloud-sync-feedback[role="alert"] {
+  color: var(--danger);
+}
+@media (max-width: 600px) {
+  .preferences-workspace .cloud-sync-settings button,
+  .preferences-workspace .cloud-sync-settings select,
+  .preferences-workspace .cloud-sync-settings input:not([type="checkbox"]) {
+    min-height: 44px;
+  }
+  .preferences-workspace .cloud-sync-tools {
+    justify-content: flex-start;
+  }
+  .preferences-workspace .cloud-sync-field {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .preferences-workspace .cloud-sync-field > span:first-child {
+    padding-top: 2px;
+  }
+  .preferences-workspace .cloud-sync-settings input[type="checkbox"] {
+    margin: 12px 0;
+  }
+}
+.preferences-workspace .cloud-select {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+}
+.preferences-workspace .cloud-select-desktop > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  color: var(--ctl-fg, var(--settings-muted));
+}
+.preferences-workspace .cloud-select-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 4;
+  padding: 4px;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(300px, calc(100vw - 72px));
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--settings-line);
+  border-radius: 9px;
+  background: var(--settings-card);
+  box-shadow: 0 6px 20px #0002;
+}
+.preferences-workspace .cloud-select-menu > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--settings-fg);
+  text-align: left;
+}
+.preferences-workspace .cloud-select-menu > button[data-highlighted="true"] {
+  background: var(--settings-editor);
+}
+.preferences-workspace .cloud-select-mobile {
+  display: none;
+}
+@media (max-width: 600px) {
+  .preferences-workspace .cloud-select-desktop {
+    display: none;
+  }
+  .preferences-workspace .cloud-select-mobile {
+    display: block;
+  }
+}
