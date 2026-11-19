@@ -187,7 +187,7 @@ try {
         await flushFrames();
         assert.equal(fixture.count('local_backup_restore'), before + 1);
         await api(page, 'app.dismissError'); await api(page, 'app.refresh');
-        return { nativeCommits: 1, confirmationConsumed: true, covered }; 
+        return { nativeCommits: 1, confirmationConsumed: true, covered };
       });
       await scenario('archive-handler-error-has-one-visible-surface', async () => {
         await open(); await category('backup'); await backupIdle();
