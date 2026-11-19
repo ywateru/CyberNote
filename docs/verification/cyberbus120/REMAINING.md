@@ -91,4 +91,9 @@ Android 继续使用平台 Keystore。当前应用能恢复本地登录状态，
 
 这四个分支暂不删除：它们不是 `main` 祖先，而安全清理规则只允许 `git branch -d`，禁止用 `git branch -D` 强制掩盖历史。account 工作树的未跟踪文件也保留；这些文件只含临时 review worktree 路径，不含凭据或笔记内容。
 
-三个 detached account review worktree 的提交均已由 `codex/cyberbus121-account` 包含，可在确认工作树干净后用 `git worktree remove` 删除临时目录。其余已经由 `main` 完全包含的旧任务分支按 `git branch --merged main` 审计后，只使用 `git branch -d` 清理；不使用 `git reset`、`git checkout`、`git clean` 或 `git branch -D`。
+核心迁移先合入主分支提交 `f0401ebf`。随后完成以下清理：
+
+- 三个 detached account review worktree 的提交均已确认由 `codex/cyberbus121-account` 包含，工作树无未提交改动，已用 `git worktree remove` 删除临时目录。
+- `git branch --merged main` 审计出的 18 个旧 account、sync、archive、project 和 task 分支已用 `git branch -d` 删除。每个分支的 tip 都是 `main` 的祖先，因此没有代码或提交丢失。
+- 四个 CyberBus 功能 worktree 和分支按上表保留；account 工作树的两个未跟踪临时路径文件也未清理。
+- 本次没有使用 `git branch -D`、`git reset`、`git checkout` 或 `git clean`。
