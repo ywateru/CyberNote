@@ -26,23 +26,23 @@ mod attachment_operations;
 #[path = "store/data_management.rs"]
 mod data_management;
 pub(crate) use data_management::{AttachmentExport, DocumentStage};
-#[path = "store/commits.rs"]
-mod commits;
+#[path = "store/account_summary.rs"]
+mod account_summary;
 #[path = "store/application.rs"]
 mod application;
+#[path = "store/commits.rs"]
+mod commits;
 #[path = "store/open.rs"]
 mod open;
 #[path = "store/smart.rs"]
 mod smart;
-#[path = "store/account_summary.rs"]
-mod account_summary;
 pub(crate) use account_summary::AccountSummary;
 #[path = "store/synchronization.rs"]
 mod synchronization;
-pub(crate) use synchronization::{BlobReader, NetworkStaging};
 pub(crate) use attachment_operations::AttachmentOwner;
 pub(crate) use commits::CommitReceipt;
 pub(crate) use smart::{SmartMembership, SmartQuery};
+pub(crate) use synchronization::{BlobReader, NetworkStaging};
 #[cfg(test)]
 #[path = "store/folder_name_tests.rs"]
 mod folder_name_tests;
@@ -82,17 +82,25 @@ impl From<serde_json::Error> for AppError {
 pub(crate) fn sync_boundary_diagnostic(event: &'static str) {
     use std::sync::atomic::{AtomicUsize, Ordering};
     static COUNT: AtomicUsize = AtomicUsize::new(0);
-    if COUNT.fetch_add(1, Ordering::Relaxed) >= 4096 { return; }
+    if COUNT.fetch_add(1, Ordering::Relaxed) >= 4096 {
+        return;
+    }
     let at = std::panic::Location::caller();
     let message = format!("event={event} boundary={}:{}", at.file(), at.line());
     #[cfg(target_os = "android")]
     {
         #[link(name = "log")]
         extern "C" {
-            fn __android_log_write(priority: i32, tag: *const libc::c_char, text: *const libc::c_char) -> i32;
+            fn __android_log_write(
+                priority: i32,
+                tag: *const libc::c_char,
+                text: *const libc::c_char,
+            ) -> i32;
         }
         if let Ok(text) = std::ffi::CString::new(message) {
-            unsafe { __android_log_write(5, b"CyberNoteSync\0".as_ptr().cast(), text.as_ptr()); }
+            unsafe {
+                __android_log_write(5, b"CyberNoteSync\0".as_ptr().cast(), text.as_ptr());
+            }
         }
     }
     #[cfg(not(target_os = "android"))]
@@ -100,7 +108,9 @@ pub(crate) fn sync_boundary_diagnostic(event: &'static str) {
 }
 #[track_caller]
 fn err(code: &str, message: impl Into<String>) -> AppError {
-    if code == "sync_plan_stale" { sync_boundary_diagnostic("plan_stale"); }
+    if code == "sync_plan_stale" {
+        sync_boundary_diagnostic("plan_stale");
+    }
     AppError {
         code: code.into(),
         message: message.into(),
@@ -747,7 +757,8 @@ impl Store {
                 let old: String =
                     self.db
                         .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
-                let settings = archive::merge_settings(&serde_json::from_str(&old)?, &a["settings"])?;
+                let settings =
+                    archive::merge_settings(&serde_json::from_str(&old)?, &a["settings"])?;
                 self.db.execute(
                     "UPDATE settings SET body=?1 WHERE id=1",
                     [settings.to_string()],
@@ -1363,8 +1374,12 @@ mod tests {
     }
 }
 
-pub(crate) fn application_valid_tag(name: &str) -> bool { archive::valid_tag_name(name) }
+pub(crate) fn application_valid_tag(name: &str) -> bool {
+    archive::valid_tag_name(name)
+}
 
 impl std::fmt::Display for AppError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { write!(f, "{}", self.code) }
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.code)
+    }
 }

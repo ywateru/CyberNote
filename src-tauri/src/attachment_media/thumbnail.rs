@@ -192,7 +192,10 @@ impl ThumbnailCache {
         }
         Ok(())
     }
-    pub(crate) fn with_provider(mut self, provider: Arc<dyn super::provider::ThumbnailProvider>) -> Self {
+    pub(crate) fn with_provider(
+        mut self,
+        provider: Arc<dyn super::provider::ThumbnailProvider>,
+    ) -> Self {
         self.provider = Some(provider);
         self
     }
@@ -315,8 +318,12 @@ impl ThumbnailCache {
             return Err(error("metadata_stale", "附件已改变"));
         }
         let mime = sniff_mime(&input.file, &original.attachment.mime)?;
-        metrics.thumbnail_generation_attempts.fetch_add(1, Ordering::Relaxed);
-        metrics.thumbnail_source_logical_bytes.fetch_add(stamp.bytes, Ordering::Relaxed);
+        metrics
+            .thumbnail_generation_attempts
+            .fetch_add(1, Ordering::Relaxed);
+        metrics
+            .thumbnail_source_logical_bytes
+            .fetch_add(stamp.bytes, Ordering::Relaxed);
         let image = if mime == "image/svg+xml" {
             if stamp.bytes > SVG_MAX_BYTES {
                 return Err(error("unsupported_media", "SVG 超出复杂度限制"));
@@ -330,15 +337,31 @@ impl ThumbnailCache {
             }
             super::svg_text::render(&bytes, pixels)?
         } else if let Some(provider) = &self.provider {
-            let image = match provider.render(&input, &mime, pixels, self.limits.input_pixels, &authorize) {
+            let image = match provider.render(
+                &input,
+                &mime,
+                pixels,
+                self.limits.input_pixels,
+                &authorize,
+            ) {
                 Ok(image) => image,
-                Err(e) if e.code == "unsupported_media" && matches!(mime.as_str(), "image/png" | "image/jpeg" | "image/gif" | "image/webp" | "image/bmp") => {
+                Err(e)
+                    if e.code == "unsupported_media"
+                        && matches!(
+                            mime.as_str(),
+                            "image/png" | "image/jpeg" | "image/gif" | "image/webp" | "image/bmp"
+                        ) =>
+                {
                     authorize()?;
                     decode_raster(&mut input.file, pixels, &self.limits)?
                 }
                 Err(e) => return Err(e),
             };
-            if image.width() == 0 || image.height() == 0 || image.width() > pixels || image.height() > pixels {
+            if image.width() == 0
+                || image.height() == 0
+                || image.width() > pixels
+                || image.height() > pixels
+            {
                 return Err(error("invalid", "平台缩略图尺寸无效"));
             }
             image
@@ -384,7 +407,9 @@ impl ThumbnailCache {
         metrics
             .thumbnail_generations
             .fetch_add(1, Ordering::Relaxed);
-        metrics.thumbnail_output_bytes.fetch_add(output.bytes, Ordering::Relaxed);
+        metrics
+            .thumbnail_output_bytes
+            .fetch_add(output.bytes, Ordering::Relaxed);
         let cached = self.cached(&name, pixels)?;
         if let Err(e) = authorize() {
             self.remove(&mut state, &name)?;

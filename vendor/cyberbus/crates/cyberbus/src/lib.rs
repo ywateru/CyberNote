@@ -53,6 +53,84 @@ pub(crate) enum Request {
         oneshot::Sender<pb::SdkResult>,
     ),
     Resume(oneshot::Sender<Result<(), pb::ProtocolError>>),
+    Diagnostic(oneshot::Sender<Result<DiagnosticSnapshot, pb::ProtocolError>>),
+}
+
+/// Bounded, identifier-free runtime state for native diagnostics.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct DiagnosticSnapshot {
+    pub schema_version: u32,
+    pub transport_running: bool,
+    pub transport_phase: &'static str,
+    pub transport_generation: u64,
+    pub local_ipv4_present: bool,
+    pub route_count: u32,
+    pub remote_route_count: u32,
+    pub indirect_route_count: u32,
+    pub device_count: usize,
+    pub online_device_count: usize,
+    pub devices_with_virtual_ipv4: usize,
+    pub directory_revision: u64,
+    pub live_peer_count: usize,
+    pub live_probe_count: usize,
+    pub active_refresh_count: usize,
+    pub active_profile_query_count: usize,
+    pub metadata_received: u64,
+    pub metadata_valid: u64,
+    pub noise_verified: u64,
+    pub probe_success: u64,
+    pub probe_failure: u64,
+    pub route_fetch_success: u64,
+    pub route_fetch_failure: u64,
+    pub network_unready: bool,
+    pub sessions_established: u64,
+    pub sessions_inbound: u64,
+    pub sessions_outbound: u64,
+    pub probe_sessions_established: u64,
+    pub business_sessions_established: u64,
+    pub up_published: u64,
+    pub up_installed: u64,
+    pub metadata_queued: u64,
+    pub metadata_queue_failed: u64,
+    pub writer_frames_sent: u64,
+    pub writer_metadata_sent: u64,
+    pub writer_send_failed: u64,
+    pub writer_probe_expired: u64,
+    pub frames_received: u64,
+    pub metadata_frames_received: u64,
+    pub reader_errors: u64,
+    pub reader_closed: u64,
+    pub reader_io: u64,
+    pub reader_protocol: u64,
+    pub reader_authentication: u64,
+    pub reader_limit: u64,
+    pub reader_timeout: u64,
+    pub reader_aborted: u64,
+    pub reader_forced_abort: u64,
+    pub reader_prefix_timeout: u64,
+    pub reader_no_frame_exits: u64,
+    pub reader_close_frames: u64,
+    pub reader_admission_closed: u64,
+    pub reader_channel_closed: u64,
+    pub writer_closed: u64,
+    pub writer_io: u64,
+    pub writer_protocol: u64,
+    pub writer_authentication: u64,
+    pub writer_limit: u64,
+    pub writer_timeout: u64,
+    pub writer_shutdown_failed: u64,
+    pub writer_exit_cancel: u64,
+    pub writer_exit_stop: u64,
+    pub writer_exit_queue_closed: u64,
+    pub writer_exit_probe_expired: u64,
+    pub writer_exit_prefix_timeout: u64,
+    pub writer_exit_admission_closed: u64,
+    pub writer_exit_send_failed: u64,
+    pub writer_close_attempted: u64,
+    pub writer_close_sent: u64,
+    pub writer_close_failed: u64,
+    pub local_prefix_ready: u64,
+    pub local_prefix_sent: u64,
 }
 struct Inner {
     closure: Arc<std::sync::Mutex<Option<pb::SdkClosed>>>,
@@ -81,12 +159,23 @@ impl Client {
         descriptor_set: &[u8],
     ) -> Result<Self, pb::ProtocolError> {
         if descriptor_set.len() > 65536 {
-            return Err(error(pb::ErrorCode::ResourceExhausted, "application schema limit"));
+            return Err(error(
+                pb::ErrorCode::ResourceExhausted,
+                "application schema limit",
+            ));
         }
-        let application_schema = prost_reflect::DescriptorPool::decode(descriptor_set)
-            .map_err(|_| error(pb::ErrorCode::TypeMismatch, "invalid application descriptor"))?;
+        let application_schema =
+            prost_reflect::DescriptorPool::decode(descriptor_set).map_err(|_| {
+                error(
+                    pb::ErrorCode::TypeMismatch,
+                    "invalid application descriptor",
+                )
+            })?;
         if application_schema.all_messages().count() > 32 {
-            return Err(error(pb::ErrorCode::ResourceExhausted, "application schema message limit"));
+            return Err(error(
+                pb::ErrorCode::ResourceExhausted,
+                "application schema message limit",
+            ));
         }
         config.validate()?;
         let clock = Arc::new(cyberbus_auth::SystemClock::new().map_err(auth_error)?);
@@ -198,6 +287,17 @@ impl Client {
         self.inner
             .commands
             .send(Request::Resume(tx))
+            .await
+            .map_err(|_| error(pb::ErrorCode::Closed, "runtime closed"))?;
+        rx.await
+            .map_err(|_| error(pb::ErrorCode::Closed, "runtime closed"))?
+    }
+    /// Returns a bounded, identifier-free view of the live native runtime.
+    pub async fn diagnostic(&self) -> Result<DiagnosticSnapshot, pb::ProtocolError> {
+        let (tx, rx) = oneshot::channel();
+        self.inner
+            .commands
+            .send(Request::Diagnostic(tx))
             .await
             .map_err(|_| error(pb::ErrorCode::Closed, "runtime closed"))?;
         rx.await

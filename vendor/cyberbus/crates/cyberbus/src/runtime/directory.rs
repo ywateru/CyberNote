@@ -550,9 +550,25 @@ impl Runtime {
                 return;
             }
         }
-        let _ = send.try_send(Body::Metadata(pb::PeerMetadata {
+        match send.try_send(Body::Metadata(pb::PeerMetadata {
             profile: self.devices[self.local()].profile.clone(),
-        }));
+        })) {
+            Ok(()) => {
+                self.admission
+                    .metrics
+                    .metadata_queued
+                    .fetch_add(1, Ordering::Relaxed);
+            }
+            Err(_) => {
+                self.admission
+                    .metrics
+                    .metadata_queue_failed
+                    .fetch_add(1, Ordering::Relaxed);
+            }
+        }
+        // A reader may observe EOF before this owner processes Up. Pin the local
+        // Metadata FIFO decision before allowing that writer to close.
+        session.progress.local_prefix_ready.cancel();
         // Outbound handshakes request business admission; only promotion grants
         // the persistent lifetime and its separate global stream budget.
         let business = session.business.swap(false, Ordering::AcqRel);
@@ -568,6 +584,10 @@ impl Runtime {
                 pending_profile: None,
             },
         );
+        self.admission
+            .metrics
+            .up_installed
+            .fetch_add(1, Ordering::Relaxed);
         if business && session.live() && self.promote(&id, &session).is_err() {
             session.cancel.cancel();
             self.probes.remove(&session.id);

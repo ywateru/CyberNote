@@ -484,7 +484,12 @@ fn dispatch_once(
             return error(id, "UNAVAILABLE");
         }
         Action::AccountSdkDiagnostic {} => {
-            return match crate::account::sdk_diagnostic::snapshot() {
+            let Some(account) = app.try_state::<crate::AccountState>() else {
+                return error(id, "UNAVAILABLE");
+            };
+            return match tauri::async_runtime::block_on(
+                crate::account::sdk_diagnostic::snapshot(&account.0),
+            ) {
                 Ok(value) => json!({"type":"response","id":request.id,"ok":true,"value":value}),
                 Err(code) => error(id, code),
             };
@@ -633,7 +638,9 @@ fn dispatch_once(
             })
     };
     app.unlisten(listener);
-    if matches!(request.action, Action::StartupDiagnostic {}) && result.get("ok") == Some(&json!(true)) {
+    if matches!(request.action, Action::StartupDiagnostic {})
+        && result.get("ok") == Some(&json!(true))
+    {
         result["value"]["nativeWindow"] = json!({
             "visible":window.is_visible().ok(), "minimized":window.is_minimized().ok(),
             "focused":window.is_focused().ok()
@@ -740,9 +747,18 @@ mod tests {
     fn sdk_diagnostic_is_fixed_native_read_and_requires_ready() {
         let request: Request = serde_json::from_value(json!({
             "id":1,"action":{"op":"accountSdkDiagnostic"}
-        })).unwrap();
+        }))
+        .unwrap();
         assert!(!allowed_before_ready(&request.action));
-        for field in ["expression", "args", "options", "path", "url", "command", "sha256"] {
+        for field in [
+            "expression",
+            "args",
+            "options",
+            "path",
+            "url",
+            "command",
+            "sha256",
+        ] {
             let mut value = json!({"id":1,"action":{"op":"accountSdkDiagnostic"}});
             value["action"][field] = json!("PRIVATE");
             assert!(serde_json::from_value::<Request>(value).is_err());

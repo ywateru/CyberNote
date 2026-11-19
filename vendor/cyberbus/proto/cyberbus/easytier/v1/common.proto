@@ -1,0 +1,115 @@
+syntax = "proto3";
+package cyberbus.easytier.v1;
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+enum ErrorCode {
+  ERROR_CODE_UNSPECIFIED = 0;
+  INVALID_ARGUMENT = 1;
+  UNAUTHENTICATED = 2;
+  PERMISSION_DENIED = 3;
+  NOT_FOUND = 4;
+  CONFLICT = 5;
+  RESOURCE_EXHAUSTED = 6;
+  DEADLINE_EXCEEDED = 7;
+  CANCELLED = 8;
+  UNAVAILABLE = 9;
+  UNSUPPORTED = 10;
+  PROTOCOL_ERROR = 11;
+  TYPE_MISMATCH = 12;
+  METHOD_NOT_EXPOSED = 13;
+  MESSAGE_TOO_LARGE = 14;
+  QUEUE_FULL = 15;
+  CLOSED = 16;
+  UNKNOWN_OUTCOME = 17;
+  INVALID_CLAIMS = 18;
+  LOGTO_CONFIGURATION = 19;
+  CAPACITY_EXCEEDED = 20;
+  NO_ROUTE = 21;
+  DEVICE_UNREACHABLE = 22;
+  NETWORK_NOT_READY = 23;
+  DUPLICATE_DEVICE_ID = 24;
+  STALE_REVISION = 25;
+  INTERNAL = 26;
+}
+message ProtocolError {
+  ErrorCode code = 1;
+  string message = 2;
+  bool retryable = 3;
+  google.protobuf.Duration retry_after = 4;
+}
+enum Permission {
+  PERMISSION_UNSPECIFIED = 0;
+  DISCOVER = 1;
+  READ_PUBLIC_CONFIG = 2;
+  DATA = 3;
+  RPC = 4;
+  PULL_DESCRIPTOR = 5;
+  INTERNAL_FORWARD = 6;
+}
+enum PayloadEncoding { PAYLOAD_ENCODING_UNSPECIFIED = 0; PROTOBUF_MESSAGE = 1; PROTOBUF_ANY = 2; }
+enum AckStage { ACK_STAGE_UNSPECIFIED = 0; RECEIVED = 1; ACCEPTED = 2; PROCESSED = 3; }
+enum RpcStreaming { RPC_STREAMING_UNSPECIFIED = 0; UNARY = 1; BIDI = 2; CLIENT_STREAMING = 3; SERVER_STREAMING = 4; }
+enum RpcDirection { RPC_DIRECTION_UNSPECIFIED = 0; REQUEST = 1; RESPONSE = 2; }
+enum DevicePresence { DEVICE_PRESENCE_UNSPECIFIED = 0; ONLINE = 1; OFFLINE = 2; }
+message Capability {
+  string method_id = 1;
+  string request_type_url = 2;
+  string response_type_url = 3;
+  RpcStreaming streaming = 4;
+  string semantic_version = 5;
+  bytes descriptor_digest = 6;
+}
+message PublicProfile {
+  string device_name = 1;
+  google.protobuf.Any public_config = 2;
+  string config_semantic_version = 3;
+  repeated Capability capabilities = 4;
+  uint64 config_revision = 5;
+}
+message PeerMetadata { PublicProfile profile = 1; }
+message DeviceSnapshot {
+  bytes device_id = 1;
+  bytes installation_public_key = 2;
+  bytes boot_id = 3;
+  bool is_local = 4;
+  DevicePresence presence = 5;
+  PublicProfile profile = 6;
+  google.protobuf.Timestamp last_authenticated_at = 7;
+  bytes virtual_ipv4 = 8;
+}
+message DevicesSnapshot { bytes runtime_id = 1; uint64 revision = 2; repeated DeviceSnapshot devices = 3; }
+message PayloadFragment {
+  string application_type_url = 1;
+  PayloadEncoding encoding = 2;
+  uint32 total_size = 3;
+  uint32 offset = 4;
+  bytes protobuf_bytes = 5;
+}
+message DataMessage {
+  bytes message_id = 1;
+  bytes in_reply_to = 2;
+  AckStage requested_ack = 3;
+  google.protobuf.Duration timeout = 4;
+  PayloadFragment fragment = 5;
+}
+message DataAck { bytes message_id = 1; AckStage stage = 2; }
+message DataError { bytes message_id = 1; ProtocolError error = 2; }
+message DataCancel { bytes message_id = 1; }
+message RpcRequest {
+  bytes call_id = 1;
+  string method_id = 2;
+  string request_type_url = 3;
+  string response_type_url = 4;
+  RpcStreaming streaming = 5;
+  string semantic_version = 6;
+  google.protobuf.Duration timeout = 7;
+}
+message RpcChunk { bytes call_id = 1; RpcDirection direction = 2; uint64 item_sequence = 3; PayloadFragment fragment = 4; }
+message RpcEnd { bytes call_id = 1; RpcDirection direction = 2; uint64 item_count = 3; ProtocolError error = 4; }
+message RpcCancel { bytes call_id = 1; ProtocolError error = 2; }
+message RpcWindow { bytes call_id = 1; RpcDirection direction = 2; uint32 byte_credit = 3; uint32 item_credit = 4; }
+message DescriptorQuery { bytes query_id = 1; bytes digest = 2; google.protobuf.Duration timeout = 3; }
+message DescriptorChunk { bytes query_id = 1; bytes digest = 2; uint32 total_size = 3; uint32 offset = 4; bytes protobuf_bytes = 5; }
+message DescriptorError { bytes query_id = 1; ProtocolError error = 2; }

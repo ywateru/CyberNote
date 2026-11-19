@@ -1,0 +1,53 @@
+syntax = "proto3";
+package cyberbus.easytier.v1;
+import "cyberbus/easytier/v1/common.proto";
+
+message ProtocolHello { uint32 major = 1; uint32 minor = 2; bytes nonce = 3; string suite = 4; }
+message PreSessionRecord { oneof body { ProtocolHello hello = 1; bytes noise = 2; } }
+message ReceiveLimits {
+  uint32 max_message_bytes = 1;
+  uint32 max_fragment_bytes = 2;
+  uint32 max_data_in_flight = 3;
+  uint32 max_rpc_in_flight = 4;
+  uint32 rpc_byte_window = 5;
+  uint32 rpc_item_window = 6;
+  uint32 max_descriptor_bytes = 7;
+}
+message SessionBind {
+  bytes device_id = 1;
+  bytes installation_public_key = 2;
+  bytes binding_id = 3;
+  bytes boot_id = 4;
+  uint32 max_devices = 5;
+  ReceiveLimits receive_limits = 6;
+  repeated Permission requested_permissions = 7;
+}
+message SessionReady { repeated Permission granted_permissions = 1; }
+message SessionClose { ProtocolError error = 1; }
+message Ping { bytes nonce = 1; }
+message Pong { bytes nonce = 1; }
+// Only these peer messages are reachable. Local controls and auth stay in sdk.proto.
+message WireEnvelope {
+  bytes session_id = 1;
+  uint64 sequence = 2;
+  oneof body {
+    SessionBind bind = 10;
+    SessionReady ready = 11;
+    SessionClose close = 12;
+    PeerMetadata metadata = 13;
+    Ping ping = 14;
+    Pong pong = 15;
+    DataMessage data = 16;
+    DataAck data_ack = 17;
+    DataError data_error = 18;
+    DataCancel data_cancel = 19;
+    RpcRequest rpc_request = 20;
+    RpcChunk rpc_chunk = 21;
+    RpcEnd rpc_end = 22;
+    RpcCancel rpc_cancel = 23;
+    RpcWindow rpc_window = 24;
+    DescriptorQuery descriptor_query = 25;
+    DescriptorChunk descriptor_chunk = 26;
+    DescriptorError descriptor_error = 27;
+  }
+}

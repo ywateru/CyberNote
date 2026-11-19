@@ -22,6 +22,44 @@ const MAX_BLOB: usize = 4 * 1024 * 1024;
 pub trait KeyProvider: Send {
     fn key(&mut self, mode: StoreMode) -> Result<Zeroizing<[u8; 32]>>;
 }
+/// Local 0600 key file for the optional encrypted-file store. The key is only
+/// created by an explicit CreateNew decision; Existing never repairs or
+/// replaces a missing/corrupt key.
+pub struct LocalFileKeyProvider {
+    path: PathBuf,
+}
+impl LocalFileKeyProvider {
+    pub fn new(path: impl Into<PathBuf>) -> Self {
+        Self { path: path.into() }
+    }
+}
+impl KeyProvider for LocalFileKeyProvider {
+    fn key(&mut self, mode: StoreMode) -> Result<Zeroizing<[u8; 32]>> {
+        match mode {
+            StoreMode::Existing => {
+                let bytes = read_private(&self.path, 32)?;
+                if bytes.len() != 32 {
+                    return Err(Error::Storage);
+                }
+                let mut key = Zeroizing::new([0_u8; 32]);
+                key.copy_from_slice(&bytes);
+                Ok(key)
+            }
+            StoreMode::CreateNew => {
+                let mut key = Zeroizing::new([0_u8; 32]);
+                rand::rngs::OsRng
+                    .try_fill_bytes(key.as_mut())
+                    .map_err(|_| Error::Storage)?;
+                let mut file = private_open(&self.path, true, true)?;
+                file.write_all(key.as_ref())
+                    .and_then(|_| file.sync_all())
+                    .map_err(|_| Error::Storage)?;
+                sync_directory(self.path.parent().ok_or(Error::Storage)?)?;
+                Ok(key)
+            }
+        }
+    }
+}
 /// Synchronous authenticated-encryption callbacks; errors must fail closed. Implementations
 /// must authenticate both AAD and ciphertext and use fresh nonces for each seal.
 pub trait BlobCipher: Send {
@@ -341,6 +379,130 @@ mod tests {
     }
     fn root(temp: &tempfile::TempDir) -> PathBuf {
         temp.path().join("secure")
+    }
+    #[test]
+    fn local_file_key_is_created_once_with_private_permissions_and_reopens() {
+        let temp = tempfile::tempdir().unwrap();
+        let path = temp.path().join("local-key");
+        let mut provider = LocalFileKeyProvider::new(&path);
+        let created = provider.key(StoreMode::CreateNew).unwrap();
+        assert_eq!(created.as_ref().len(), 32);
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            assert_eq!(
+                fs::metadata(&path).unwrap().permissions().mode() & 0o777,
+                0o600
+            );
+        }
+        let before = fs::read(&path).unwrap();
+        assert_eq!(before.as_slice(), created.as_ref());
+        assert!(provider.key(StoreMode::CreateNew).is_err());
+        drop(provider);
+        let mut reopened = LocalFileKeyProvider::new(&path);
+        let restored = reopened.key(StoreMode::Existing).unwrap();
+        assert_eq!(restored.as_ref(), created.as_ref());
+        assert_eq!(fs::read(&path).unwrap(), before);
+    }
+    #[test]
+    fn local_file_key_reopens_the_original_vault() {
+        let temp = tempfile::tempdir().unwrap();
+        let key_path = temp.path().join("local-key");
+        let store_path = root(&temp);
+        let mut provider = LocalFileKeyProvider::new(&key_path);
+        let cipher = AesGcmCipher::from_provider(&mut provider, StoreMode::CreateNew).unwrap();
+        let mut store =
+            EncryptedFileStore::open(&store_path, Box::new(cipher), StoreMode::CreateNew).unwrap();
+        store.replace(b"persistent identity").unwrap();
+        drop(store);
+        drop(provider);
+        let mut provider = LocalFileKeyProvider::new(&key_path);
+        let cipher = AesGcmCipher::from_provider(&mut provider, StoreMode::Existing).unwrap();
+        let mut restored =
+            EncryptedFileStore::open(&store_path, Box::new(cipher), StoreMode::Existing).unwrap();
+        assert_eq!(
+            restored.load().unwrap().unwrap().expose(),
+            b"persistent identity"
+        );
+    }
+    #[cfg(unix)]
+    #[test]
+    fn local_file_key_missing_short_public_or_symlink_fails_closed() {
+        use std::os::unix::fs::{symlink, PermissionsExt};
+        let temp = tempfile::tempdir().unwrap();
+        let missing = temp.path().join("missing");
+        assert!(LocalFileKeyProvider::new(&missing)
+            .key(StoreMode::Existing)
+            .is_err());
+        for (name, length, mode) in [
+            ("short", 31, 0o600),
+            ("public", 32, 0o644),
+            ("wrong-owner-readable", 32, 0o640),
+        ] {
+            let path = temp.path().join(name);
+            fs::write(&path, vec![7; length]).unwrap();
+            fs::set_permissions(&path, fs::Permissions::from_mode(mode)).unwrap();
+            assert!(LocalFileKeyProvider::new(&path)
+                .key(StoreMode::Existing)
+                .is_err());
+        }
+        let real = temp.path().join("real-key");
+        fs::write(&real, [9; 32]).unwrap();
+        fs::set_permissions(&real, fs::Permissions::from_mode(0o600)).unwrap();
+        let linked = temp.path().join("linked-key");
+        symlink(&real, &linked).unwrap();
+        assert!(LocalFileKeyProvider::new(&linked)
+            .key(StoreMode::Existing)
+            .is_err());
+    }
+    #[test]
+    fn wrong_or_corrupt_local_file_key_never_repairs_or_replaces_the_vault() {
+        let temp = tempfile::tempdir().unwrap();
+        let key_path = temp.path().join("local-key");
+        let store_path = root(&temp);
+        let mut provider = LocalFileKeyProvider::new(&key_path);
+        let cipher = AesGcmCipher::from_provider(&mut provider, StoreMode::CreateNew).unwrap();
+        let mut store =
+            EncryptedFileStore::open(&store_path, Box::new(cipher), StoreMode::CreateNew).unwrap();
+        store.replace(b"original").unwrap();
+        drop(store);
+        drop(provider);
+        let original_key = fs::read(&key_path).unwrap();
+        let original_vault = fs::read(store_path.join("vault.aesgcm")).unwrap();
+        fs::write(&key_path, [8; 32]).unwrap();
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            fs::set_permissions(&key_path, fs::Permissions::from_mode(0o600)).unwrap();
+        }
+        let wrong_key = fs::read(&key_path).unwrap();
+        let mut provider = LocalFileKeyProvider::new(&key_path);
+        let cipher = AesGcmCipher::from_provider(&mut provider, StoreMode::Existing).unwrap();
+        let mut store =
+            EncryptedFileStore::open(&store_path, Box::new(cipher), StoreMode::Existing).unwrap();
+        assert!(store.load().is_err());
+        assert!(store.replace(b"replacement").is_err());
+        drop(store);
+        assert_eq!(fs::read(&key_path).unwrap(), wrong_key);
+        assert_eq!(
+            fs::read(store_path.join("vault.aesgcm")).unwrap(),
+            original_vault
+        );
+        fs::write(&key_path, &original_key[..31]).unwrap();
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            fs::set_permissions(&key_path, fs::Permissions::from_mode(0o600)).unwrap();
+        }
+        let corrupt_key = fs::read(&key_path).unwrap();
+        assert!(LocalFileKeyProvider::new(&key_path)
+            .key(StoreMode::Existing)
+            .is_err());
+        assert_eq!(fs::read(&key_path).unwrap(), corrupt_key);
+        assert_eq!(
+            fs::read(store_path.join("vault.aesgcm")).unwrap(),
+            original_vault
+        );
     }
     #[test]
     fn encrypted_restart_and_exclusive_owner() {

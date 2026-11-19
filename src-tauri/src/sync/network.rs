@@ -57,12 +57,27 @@ pub(crate) type ProgressObserver = Arc<dyn Fn(TransferProgress) + Send + Sync>;
 pub(crate) fn diagnostics_enabled() -> bool {
     cfg!(debug_assertions) && std::env::var("CYBERNOTE_SYNC_DIAGNOSTICS").as_deref() == Ok("1")
 }
-pub(crate) fn diagnostic(stage: &'static str, event: &'static str, elapsed_ms: u64, error: Option<SyncError>) {
-    if !diagnostics_enabled() { return; }
+pub(crate) fn diagnostic(
+    stage: &'static str,
+    event: &'static str,
+    elapsed_ms: u64,
+    error: Option<SyncError>,
+) {
+    if !diagnostics_enabled() {
+        return;
+    }
     static RECORDS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
-    if RECORDS.fetch_add(1, std::sync::atomic::Ordering::Relaxed) >= 8192 { return; }
-    let at = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0);
-    eprintln!("CYBERNOTE_SYNC_DIAGNOSTIC {}", serde_json::json!({"at":at,"stage":stage,"event":event,"elapsedMs":elapsed_ms,"error":error}));
+    if RECORDS.fetch_add(1, std::sync::atomic::Ordering::Relaxed) >= 8192 {
+        return;
+    }
+    let at = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_millis() as u64)
+        .unwrap_or(0);
+    eprintln!(
+        "CYBERNOTE_SYNC_DIAGNOSTIC {}",
+        serde_json::json!({"at":at,"stage":stage,"event":event,"elapsedMs":elapsed_ms,"error":error})
+    );
 }
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
@@ -182,8 +197,10 @@ impl Shared {
         operation: impl FnOnce(&Shared) -> Result<T> + Send + 'static,
     ) -> Result<T> {
         let owner = self.clone();
-        self.blocking.spawn_blocking(move || operation(&owner))
-            .await.map_err(|_| SyncError::Backend)?
+        self.blocking
+            .spawn_blocking(move || operation(&owner))
+            .await
+            .map_err(|_| SyncError::Backend)?
     }
     fn reserve_account_operation(&self) -> Result<Option<AccountPermit>> {
         if self.policy.is_none() {

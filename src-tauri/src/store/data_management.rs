@@ -399,7 +399,10 @@ impl Store {
         }
         result
     }
-    pub(crate) fn attachment_export_bytes(&self, attachment_id: &str) -> Result<(AttachmentExport, Vec<u8>)> {
+    pub(crate) fn attachment_export_bytes(
+        &self,
+        attachment_id: &str,
+    ) -> Result<(AttachmentExport, Vec<u8>)> {
         let attachment = self
             .attachments()?
             .into_iter()

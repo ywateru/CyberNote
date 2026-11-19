@@ -11,7 +11,7 @@ pub use bootstrap::{
 };
 pub use bridge::{Limits, MappingLease, PeerId, Service, MAX_STREAM_LIFETIME};
 pub use bus::{Bus, BusEvent, Snapshot};
-pub use cyberbus::{pb, ClientConfig, SecureStore, StoreMode};
+pub use cyberbus::{pb, ClientConfig, DiagnosticSnapshot, SecureStore, StoreMode};
 #[cfg(target_os = "macos")]
 pub use cyberbus_auth::KeyringStore;
 pub use cyberbus_auth::{CallbackStore, SecretBytes};

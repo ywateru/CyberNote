@@ -236,7 +236,10 @@ impl AdoptionStage {
             Self::Prepare => "sync_adoption_prepare_timeout",
             Self::Media => "sync_adoption_media_timeout",
         };
-        AppError { code: code.into(), ..adoption_blocked() }
+        AppError {
+            code: code.into(),
+            ..adoption_blocked()
+        }
     }
 }
 struct Quiet {
@@ -272,7 +275,11 @@ impl Quiet {
         }
     }
     fn expired(&self, now: Instant) -> bool {
-        let seconds = if self.adoption_stage() == Some(AdoptionStage::Media) { 60 } else { 5 };
+        let seconds = if self.adoption_stage() == Some(AdoptionStage::Media) {
+            60
+        } else {
+            5
+        };
         now.saturating_duration_since(self.started) >= Duration::from_secs(seconds)
     }
 }
@@ -286,7 +293,9 @@ fn adoption_blocked() -> AppError {
 impl Session {
     fn sync_now(&self) -> Instant {
         #[cfg(test)]
-        if let Some(now) = self.quiet.clock { return now; }
+        if let Some(now) = self.quiet.clock {
+            return now;
+        }
         Instant::now()
     }
     #[cfg(test)]
@@ -294,15 +303,25 @@ impl Session {
         self.quiet.clock = Some(self.sync_now() + elapsed);
     }
     pub(crate) fn sync_has_workspace_adoption(&self) -> bool {
-        self.quiet.current.as_ref().is_some_and(|q| q.adoption.is_some())
+        self.quiet
+            .current
+            .as_ref()
+            .is_some_and(|q| q.adoption.is_some())
     }
     /// The adopting caller can advance its own barrier while an older ordinary
     /// coordinator snapshot is still verifying outside Session. No old apply
     /// plan/media is needed, and a replacement operation is never advanced.
     pub(crate) fn sync_tick_workspace_adoption(
-        &mut self, operation: &str, live: &HashSet<String>,
+        &mut self,
+        operation: &str,
+        live: &HashSet<String>,
     ) -> Result<Option<Value>> {
-        if !self.quiet.current.as_ref().is_some_and(|q| q.id == operation && q.adoption.is_some()) {
+        if !self
+            .quiet
+            .current
+            .as_ref()
+            .is_some_and(|q| q.id == operation && q.adoption.is_some())
+        {
             return Ok(None);
         }
         Ok(self.sync_tick(live)?.map(|(event, access)| {
@@ -313,15 +332,30 @@ impl Session {
     /// Retain a finite timeout even if the coordinator has already released
     /// this operation. Never borrow a newer operation's failure or deadline.
     pub(crate) fn sync_workspace_adoption_error(&self, operation: &str) -> AppError {
-        self.sync_workspace_adoption_timeout_error(operation).unwrap_or_else(adoption_blocked)
+        self.sync_workspace_adoption_timeout_error(operation)
+            .unwrap_or_else(adoption_blocked)
     }
-    pub(crate) fn sync_workspace_adoption_timeout_error(&self, operation: &str) -> Option<AppError> {
-        let stage = self.quiet.completed.iter().find(|t| t.id == operation)
+    pub(crate) fn sync_workspace_adoption_timeout_error(
+        &self,
+        operation: &str,
+    ) -> Option<AppError> {
+        let stage = self
+            .quiet
+            .completed
+            .iter()
+            .find(|t| t.id == operation)
             .and_then(|t| t.adoption_timeout)
-            .or_else(|| self.quiet.current.as_ref().filter(|q| q.id == operation)
-                .filter(|q| q.abort_reason == Some(AbortReason::Timeout)
-                    || (!q.aborted && q.expired(self.sync_now())))
-                .and_then(Quiet::adoption_stage));
+            .or_else(|| {
+                self.quiet
+                    .current
+                    .as_ref()
+                    .filter(|q| q.id == operation)
+                    .filter(|q| {
+                        q.abort_reason == Some(AbortReason::Timeout)
+                            || (!q.aborted && q.expired(self.sync_now()))
+                    })
+                    .and_then(Quiet::adoption_stage)
+            });
         stage.map(AdoptionStage::timeout)
     }
     /// Explicit recovery of this Store's existing workspace, through the same
@@ -341,7 +375,9 @@ impl Session {
         live: HashSet<String>,
     ) -> Result<Value> {
         self.sync_adoption_preflight(workspace, device)?;
-        let event = self.sync_begin(live, None).map_err(|_| adoption_blocked())?;
+        let event = self
+            .sync_begin(live, None)
+            .map_err(|_| adoption_blocked())?;
         self.quiet.current.as_mut().unwrap().adoption = Some(WorkspaceAdoption {
             workspace: workspace.into(),
             device: device.into(),
@@ -393,15 +429,28 @@ impl Session {
     }
 
     fn sync_adoption_ready_for(
-        &self, operation: &str, workspace: &str, device: &str,
-        live: &HashSet<String>, phase: &str,
+        &self,
+        operation: &str,
+        workspace: &str,
+        device: &str,
+        live: &HashSet<String>,
+        phase: &str,
     ) -> Result<bool> {
         let failure = || self.sync_workspace_adoption_error(operation);
-        let q = self.quiet.current.as_ref().filter(|q| q.id == operation).ok_or_else(failure)?;
+        let q = self
+            .quiet
+            .current
+            .as_ref()
+            .filter(|q| q.id == operation)
+            .ok_or_else(failure)?;
         let adoption = q.adoption.as_ref().ok_or_else(failure)?;
-        if adoption.workspace != workspace || adoption.device != device
-            || q.store_instance != self.store.sync_store_instance() || q.epoch != self.epoch
-            || q.participants != *live || q.aborted || self.pending.is_some()
+        if adoption.workspace != workspace
+            || adoption.device != device
+            || q.store_instance != self.store.sync_store_instance()
+            || q.epoch != self.epoch
+            || q.participants != *live
+            || q.aborted
+            || self.pending.is_some()
             || q.expired(self.sync_now())
         {
             return Err(failure());
@@ -416,7 +465,9 @@ impl Session {
         self.store.sync_adoption_preflight(workspace, device)?;
         // Store inspection is read-only but can itself consume the remaining
         // budget. Never admit a transaction on a lease that expired in it.
-        if q.expired(self.sync_now()) { return Err(failure()); }
+        if q.expired(self.sync_now()) {
+            return Err(failure());
+        }
         Ok(true)
     }
 
@@ -428,23 +479,30 @@ impl Session {
         operation: &str,
         committed: bool,
     ) -> Result<Option<Value>> {
-        let Some(q) = self.quiet.current.as_ref() else { return Ok(None); };
+        let Some(q) = self.quiet.current.as_ref() else {
+            return Ok(None);
+        };
         if q.id != operation {
             if self.quiet.completed.iter().any(|t| t.id == operation) {
                 return Ok(None);
             }
             return Err(adoption_blocked());
         }
-        if q.adoption.is_none() || (committed && (q.phase != "adoptionMedia"
-            || q.replies != q.participants || q.aborted
-            || q.store_instance == self.store.sync_store_instance()))
+        if q.adoption.is_none()
+            || (committed
+                && (q.phase != "adoptionMedia"
+                    || q.replies != q.participants
+                    || q.aborted
+                    || q.store_instance == self.store.sync_store_instance()))
         {
             return Err(adoption_blocked());
         }
         if !committed {
             let reason = if !q.aborted && q.expired(self.sync_now()) {
                 AbortReason::Timeout
-            } else { AbortReason::ExternalAbort };
+            } else {
+                AbortReason::ExternalAbort
+            };
             self.sync_note_abort_reason(reason);
         }
         self.sync_release(if committed { "commit" } else { "abort" }, None)
@@ -457,7 +515,12 @@ impl Session {
         let same = self.store.sync_identity()?.is_some_and(|identity| {
             identity.workspace_id == workspace && identity.device_id == device_id
         });
-        if !same && (self.pending.is_some() || !self.intents.is_empty() || self.quiet.current.is_some() || self.external_has_operation()) {
+        if !same
+            && (self.pending.is_some()
+                || !self.intents.is_empty()
+                || self.quiet.current.is_some()
+                || self.external_has_operation())
+        {
             return Err(crate::store::AppError {
                 code: "sync_adoption_blocked".into(),
                 message: "本机仍有未完成的保存或同步屏障，请先完成后再开启新账户同步".into(),
@@ -475,7 +538,10 @@ impl Session {
         }
     }
     pub(crate) fn sync_media_keep_all(&self) -> Option<&str> {
-        self.quiet.current.as_ref().and_then(|q| q.resolution.as_ref())
+        self.quiet
+            .current
+            .as_ref()
+            .and_then(|q| q.resolution.as_ref())
             .filter(|r| r.keep_all && r.kind == EntityKind::Note)
             .map(|r| r.entity_id.as_str())
     }
@@ -581,7 +647,8 @@ impl Session {
                 }
             }
             WindowReply::Prepare { ready, .. }
-                if q.phase == "prepare" || (q.phase == "adoptionMedia" && !ready) => {
+                if q.phase == "prepare" || (q.phase == "adoptionMedia" && !ready) =>
+            {
                 // A participant may cancel after its ready ACK. The same Session
                 // gate linearizes this cancellation against the Store commit.
                 if ready && !q.replies.insert(window.into()) {
@@ -704,7 +771,9 @@ impl Session {
                 // Every note is a target. Protected editors/recordings cannot
                 // be excluded during a workspace-wide authority change.
                 if !q.protected.is_empty() {
-                    return self.sync_release_abort(AbortReason::ProtectedTarget).map(Some);
+                    return self
+                        .sync_release_abort(AbortReason::ProtectedTarget)
+                        .map(Some);
                 }
                 let mut targets: Vec<_> = self.store.notes()?.into_iter().map(|n| n.id).collect();
                 targets.sort();
@@ -714,8 +783,11 @@ impl Session {
                 q.phase = "prepare";
                 q.replies.clear();
                 q.started = now;
-                return Ok(Some((json!({"phase":"prepare","operationId":q.id,
-                    "sessionId":self.id,"noteIds":targets}), None)));
+                return Ok(Some((
+                    json!({"phase":"prepare","operationId":q.id,
+                    "sessionId":self.id,"noteIds":targets}),
+                    None,
+                )));
             }
             // Store adoption, never old inbox application, is the sole commit
             // path for this purpose. Keep the renderer frozen until release.
@@ -886,7 +958,8 @@ impl Session {
             None
         };
         let adoption_timeout = (q.abort_reason == Some(AbortReason::Timeout))
-            .then(|| q.adoption_stage()).flatten();
+            .then(|| q.adoption_stage())
+            .flatten();
         self.quiet.completed.push_back(Terminal {
             id: q.id,
             participants: q.participants,
@@ -944,14 +1017,20 @@ mod tests {
                 // Synthetic interrupted projection: durable head already exists,
                 // no inbox remains, and the business row differs from that head.
                 let db = rusqlite::Connection::open(root.path().join("notes.sqlite3")).unwrap();
-                db.execute("UPDATE sync_identity SET capture=0", []).unwrap();
-                db.execute("UPDATE notes SET body=json_set(body,'$.pinned',json('true')) WHERE id=?1", [&note]).unwrap();
+                db.execute("UPDATE sync_identity SET capture=0", [])
+                    .unwrap();
+                db.execute(
+                    "UPDATE notes SET body=json_set(body,'$.pinned',json('true')) WHERE id=?1",
+                    [&note],
+                )
+                .unwrap();
                 db.execute(
                     "DELETE FROM sync_projection WHERE kind='note' AND entity_id=?1",
                     [&note],
                 )
                 .unwrap();
-                db.execute("UPDATE sync_identity SET capture=1", []).unwrap();
+                db.execute("UPDATE sync_identity SET capture=1", [])
+                    .unwrap();
                 assert!(s.store.note(&note).unwrap().pinned);
             }
             assert_eq!(s.store.sync_pending_count().unwrap(), 0);
@@ -1018,7 +1097,10 @@ mod tests {
                 s.store.sync_plan_apply(&[]).unwrap().changes.is_empty(),
                 matches!(scenario, "commit" | "empty")
             );
-            assert_eq!(s.store.note(&note).unwrap().pinned, !matches!(scenario, "commit" | "empty"));
+            assert_eq!(
+                s.store.note(&note).unwrap().pinned,
+                !matches!(scenario, "commit" | "empty")
+            );
         }
     }
     #[test]
@@ -1026,38 +1108,63 @@ mod tests {
         for scenario in ["intent", "barrier", "quiet"] {
             let (_root, mut s) = session();
             let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
-                .as_str().unwrap().to_string();
+                .as_str()
+                .unwrap()
+                .to_string();
             s.store.sync_flush().unwrap();
             let t = token(&s);
             match scenario {
                 "intent" => {
-                    let note_token = Token { note_epoch: Some(s.note_epoch(&note)), ..t.clone() };
-                    s.register_save("main", &note, "pending-local-save", note_token).unwrap();
+                    let note_token = Token {
+                        note_epoch: Some(s.note_epoch(&note)),
+                        ..t.clone()
+                    };
+                    s.register_save("main", &note, "pending-local-save", note_token)
+                        .unwrap();
                 }
                 "barrier" => {
-                    s.begin(json!({"type":"deleteNote","id":note}), HashSet::from(["main".into()]), &t).unwrap();
+                    s.begin(
+                        json!({"type":"deleteNote","id":note}),
+                        HashSet::from(["main".into()]),
+                        &t,
+                    )
+                    .unwrap();
                 }
-                "quiet" => { begin(&mut s); }
+                "quiet" => {
+                    begin(&mut s);
+                }
                 _ => unreachable!(),
             }
             let before = s.snapshot().unwrap();
             let instance = s.store.sync_store_instance();
             let identity = s.store.sync_identity().unwrap().unwrap();
-            assert_eq!(s.sync_adoption_preflight(&Uuid::new_v4().to_string(), &Uuid::new_v4().to_string())
-                .unwrap_err().code, "sync_adoption_blocked", "{scenario}");
+            assert_eq!(
+                s.sync_adoption_preflight(&Uuid::new_v4().to_string(), &Uuid::new_v4().to_string())
+                    .unwrap_err()
+                    .code,
+                "sync_adoption_blocked",
+                "{scenario}"
+            );
             assert_eq!(s.snapshot().unwrap(), before);
             assert_eq!(s.store.sync_store_instance(), instance);
             assert_eq!(s.store.sync_identity().unwrap().unwrap(), identity);
             // The exact existing pair needs no migration and no token rotation.
-            s.sync_adoption_preflight(&identity.workspace_id, &identity.device_id).unwrap();
+            s.sync_adoption_preflight(&identity.workspace_id, &identity.device_id)
+                .unwrap();
         }
     }
     #[test]
     fn workspace_adoption_preserves_local_authority_but_rejects_old_protocol_plans_and_media() {
         let (_root, mut s) = session();
-        let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+        let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
+            .as_str()
+            .unwrap()
+            .to_string();
         let global = token(&s);
-        let note_token = Token { note_epoch: Some(s.note_epoch(&note)), ..global.clone() };
+        let note_token = Token {
+            note_epoch: Some(s.note_epoch(&note)),
+            ..global.clone()
+        };
         let media_token = s.sync_media_token();
         let owner = s.attachment_owner("main").unwrap();
         let original = s.store.note(&note).unwrap();
@@ -1067,7 +1174,12 @@ mod tests {
         let mut instances = HashSet::new();
         for next in [Uuid::new_v4().to_string(), workspace] {
             let plan = s.store.sync_plan_apply(&[]).unwrap();
-            let media = s.store.sync_media_snapshot(&[], true).unwrap().verify().unwrap();
+            let media = s
+                .store
+                .sync_media_snapshot(&[], true)
+                .unwrap()
+                .verify()
+                .unwrap();
             let instance = s.store.sync_store_instance();
             assert!(instances.insert(instance));
             let device = Uuid::new_v4().to_string();
@@ -1075,8 +1187,14 @@ mod tests {
             s.store.sync_adopt_workspace(&next, &device).unwrap();
             assert_ne!(s.store.sync_store_instance(), instance);
             assert!(!instances.contains(&s.store.sync_store_instance()));
-            assert_eq!(s.store.sync_apply_plan(&plan).unwrap_err().code, "sync_plan_stale");
-            assert_eq!(s.store.sync_begin_media(media).unwrap_err().code, "sync_plan_stale");
+            assert_eq!(
+                s.store.sync_apply_plan(&plan).unwrap_err().code,
+                "sync_plan_stale"
+            );
+            assert_eq!(
+                s.store.sync_begin_media(media).unwrap_err().code,
+                "sync_plan_stale"
+            );
             s.check(&global, None).unwrap();
             s.check(&note_token, Some(&note)).unwrap();
             s.check(&media_token, None).unwrap();
@@ -1084,9 +1202,15 @@ mod tests {
             assert_eq!(current.session, owner.session);
             assert_eq!(current.window, owner.window);
             assert_eq!(current.incarnation, owner.incarnation);
-            assert_eq!(s.metadata_event, Some(json!({"fixture":"retained-metadata"})));
+            assert_eq!(
+                s.metadata_event,
+                Some(json!({"fixture":"retained-metadata"}))
+            );
             assert_eq!(s.last_commit, Some(json!({"fixture":"retained-commit"})));
-            assert_eq!(serde_json::to_value(s.store.note(&note).unwrap()).unwrap(), serde_json::to_value(&original).unwrap());
+            assert_eq!(
+                serde_json::to_value(s.store.note(&note).unwrap()).unwrap(),
+                serde_json::to_value(&original).unwrap()
+            );
             let instance = s.store.sync_store_instance();
             s.store.sync_adopt_workspace(&next, &device).unwrap();
             assert_eq!(s.store.sync_store_instance(), instance);
@@ -1096,84 +1220,207 @@ mod tests {
         let workspace = Uuid::new_v4().to_string();
         let device = Uuid::new_v4().to_string();
         let live = HashSet::from(["main".into(), "note-test".into()]);
-        let event = s.sync_begin_workspace_adoption(&workspace, &device, live.clone()).unwrap();
+        let event = s
+            .sync_begin_workspace_adoption(&workspace, &device, live.clone())
+            .unwrap();
         let operation = event["operationId"].as_str().unwrap().to_string();
         let t = token(s);
         for window in &live {
-            s.sync_reply(window, WindowReply::Probe { operation_id: operation.clone(),
-                protected_note_ids: vec![], blocked: false }, &t).unwrap();
+            s.sync_reply(
+                window,
+                WindowReply::Probe {
+                    operation_id: operation.clone(),
+                    protected_note_ids: vec![],
+                    blocked: false,
+                },
+                &t,
+            )
+            .unwrap();
         }
         let prepare = s.sync_tick(&live).unwrap().unwrap().0;
         assert_eq!(prepare["phase"], "prepare");
         let expected: HashSet<_> = s.store.notes().unwrap().into_iter().map(|n| n.id).collect();
-        let actual: HashSet<_> = prepare["noteIds"].as_array().unwrap().iter()
-            .map(|id| id.as_str().unwrap().to_string()).collect();
+        let actual: HashSet<_> = prepare["noteIds"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|id| id.as_str().unwrap().to_string())
+            .collect();
         assert_eq!(actual, expected);
-        assert!(!s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live).unwrap());
+        assert!(!s
+            .sync_workspace_adoption_ready(&operation, &workspace, &device, &live)
+            .unwrap());
         (operation, workspace, device, live)
     }
     fn adoption_ack(s: &mut Session, operation: &str, live: &HashSet<String>) {
         let t = token(s);
         for window in live {
-            s.sync_reply(window, WindowReply::Prepare { operation_id: operation.into(), ready: true }, &t).unwrap();
+            s.sync_reply(
+                window,
+                WindowReply::Prepare {
+                    operation_id: operation.into(),
+                    ready: true,
+                },
+                &t,
+            )
+            .unwrap();
         }
     }
     #[test]
     fn workspace_adoption_barrier_freezes_all_notes_without_a_remote_apply_plan() {
         let (_root, mut s) = session();
-        for _ in 0..2 { s.store.action(json!({"type":"createNote"})).unwrap(); }
+        for _ in 0..2 {
+            s.store.action(json!({"type":"createNote"})).unwrap();
+        }
         let instance = s.store.sync_store_instance();
         let (operation, workspace, device, live) = adoption_prepared(&mut s);
         adoption_ack(&mut s, &operation, &live);
         assert!(s.sync_tick(&live).unwrap().is_none()); // NoEligiblePlan must not abort this purpose.
-        assert!(s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live).unwrap());
-        let media = s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).unwrap();
-        assert_eq!(media, json!({"phase":"adoptionMedia", "operationId":operation, "sessionId":s.id}));
-        assert!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap());
+        assert!(s
+            .sync_workspace_adoption_ready(&operation, &workspace, &device, &live)
+            .unwrap());
+        let media = s
+            .sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live)
+            .unwrap();
+        assert_eq!(
+            media,
+            json!({"phase":"adoptionMedia", "operationId":operation, "sessionId":s.id})
+        );
+        assert!(s
+            .sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live)
+            .unwrap());
         s.store.sync_adopt_workspace(&workspace, &device).unwrap();
         // Once the same-lock transaction commits, a timer cannot turn its real
         // result into an abort, even if commit work crossed the lease deadline.
         s.sync_advance_clock(Duration::from_secs(61));
-        let release = s.sync_release_workspace_adoption(&operation, true).unwrap().unwrap();
+        let release = s
+            .sync_release_workspace_adoption(&operation, true)
+            .unwrap()
+            .unwrap();
         assert_eq!(release["phase"], "release");
         assert_eq!(release["outcome"], "commit");
         assert_eq!(release["sessionId"], s.id);
         assert_ne!(s.store.sync_store_instance(), instance);
         let t = token(&s);
-        assert_eq!(s.sync_reply("main", WindowReply::Prepare { operation_id: operation.clone(), ready: true }, &t).unwrap()["outcome"], "commit");
+        assert_eq!(
+            s.sync_reply(
+                "main",
+                WindowReply::Prepare {
+                    operation_id: operation.clone(),
+                    ready: true
+                },
+                &t
+            )
+            .unwrap()["outcome"],
+            "commit"
+        );
         // Retaining the local Session does not authorize an old resolution read
         // across the Store instance boundary.
-        assert!(s.sync_check_committed_resolution(&operation, &t.session_id, "main", &live).is_err());
-        assert!(s.sync_release_workspace_adoption(&operation, false).unwrap().is_none());
+        assert!(s
+            .sync_check_committed_resolution(&operation, &t.session_id, "main", &live)
+            .is_err());
+        assert!(s
+            .sync_release_workspace_adoption(&operation, false)
+            .unwrap()
+            .is_none());
     }
     #[test]
     fn workspace_adoption_barrier_rechecks_every_final_authority_and_save_fence() {
-        for scenario in ["ackMissing", "cancel", "participant", "timeout", "store", "epoch", "newNote", "intent", "pending", "workspace", "device"] {
+        for scenario in [
+            "ackMissing",
+            "cancel",
+            "participant",
+            "timeout",
+            "store",
+            "epoch",
+            "newNote",
+            "intent",
+            "pending",
+            "workspace",
+            "device",
+        ] {
             let (_root, mut s) = session();
             let replacement_root = tempfile::tempdir().unwrap();
-            let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+            let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
+                .as_str()
+                .unwrap()
+                .to_string();
             let (operation, mut workspace, mut device, mut live) = adoption_prepared(&mut s);
-            if scenario != "ackMissing" { adoption_ack(&mut s, &operation, &live); }
+            if scenario != "ackMissing" {
+                adoption_ack(&mut s, &operation, &live);
+            }
             let t = token(&s);
             match scenario {
                 "ackMissing" => {}
-                "cancel" => { s.sync_reply("main", WindowReply::Prepare { operation_id: operation.clone(), ready: false }, &t).unwrap(); }
-                "participant" => { live.remove("note-test"); }
-                "timeout" => { s.quiet.current.as_mut().unwrap().started = Instant::now() - Duration::from_secs(6); }
-                "store" => { s.store = Store::open(replacement_root.path()).unwrap(); }
-                "epoch" => { s.epoch += 1; }
-                "newNote" => { s.store.action(json!({"type":"createNote"})).unwrap(); }
-                "intent" => { s.register_save("main", &note, "late-save", Token { note_epoch: Some(s.note_epoch(&note)), ..t }).unwrap(); }
-                "pending" => { s.begin(json!({"type":"deleteNote","id":note}), live.clone(), &t).unwrap(); }
-                "workspace" => { workspace = Uuid::new_v4().to_string(); }
-                "device" => { device = Uuid::new_v4().to_string(); }
+                "cancel" => {
+                    s.sync_reply(
+                        "main",
+                        WindowReply::Prepare {
+                            operation_id: operation.clone(),
+                            ready: false,
+                        },
+                        &t,
+                    )
+                    .unwrap();
+                }
+                "participant" => {
+                    live.remove("note-test");
+                }
+                "timeout" => {
+                    s.quiet.current.as_mut().unwrap().started =
+                        Instant::now() - Duration::from_secs(6);
+                }
+                "store" => {
+                    s.store = Store::open(replacement_root.path()).unwrap();
+                }
+                "epoch" => {
+                    s.epoch += 1;
+                }
+                "newNote" => {
+                    s.store.action(json!({"type":"createNote"})).unwrap();
+                }
+                "intent" => {
+                    s.register_save(
+                        "main",
+                        &note,
+                        "late-save",
+                        Token {
+                            note_epoch: Some(s.note_epoch(&note)),
+                            ..t
+                        },
+                    )
+                    .unwrap();
+                }
+                "pending" => {
+                    s.begin(json!({"type":"deleteNote","id":note}), live.clone(), &t)
+                        .unwrap();
+                }
+                "workspace" => {
+                    workspace = Uuid::new_v4().to_string();
+                }
+                "device" => {
+                    device = Uuid::new_v4().to_string();
+                }
                 _ => unreachable!(),
             }
             let ready = s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live);
-            if scenario == "ackMissing" { assert!(!ready.unwrap()); }
-            else { assert_eq!(ready.unwrap_err().code,
-                if scenario == "timeout" { "sync_adoption_prepare_timeout" } else { "sync_adoption_blocked" }, "{scenario}"); }
-            let release = s.sync_release_workspace_adoption(&operation, false).unwrap().unwrap();
+            if scenario == "ackMissing" {
+                assert!(!ready.unwrap());
+            } else {
+                assert_eq!(
+                    ready.unwrap_err().code,
+                    if scenario == "timeout" {
+                        "sync_adoption_prepare_timeout"
+                    } else {
+                        "sync_adoption_blocked"
+                    },
+                    "{scenario}"
+                );
+            }
+            let release = s
+                .sync_release_workspace_adoption(&operation, false)
+                .unwrap()
+                .unwrap();
             assert_eq!(release["outcome"], "abort");
         }
     }
@@ -1183,35 +1430,68 @@ mod tests {
         s.sync_advance_clock(Duration::ZERO);
         let (operation, workspace, device, live) = adoption_prepared(&mut s);
         // An incomplete prepare cannot start or extend the media lease.
-        assert!(s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).is_err());
+        assert!(s
+            .sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live)
+            .is_err());
         adoption_ack(&mut s, &operation, &live);
-        s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).unwrap();
+        s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live)
+            .unwrap();
         s.sync_advance_clock(Duration::from_millis(25_766));
         assert!(s.sync_tick(&live).unwrap().is_none());
-        assert!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap());
-        assert!(s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).is_err());
+        assert!(s
+            .sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live)
+            .unwrap());
+        assert!(s
+            .sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live)
+            .is_err());
         // A duplicate transition did not restart the 60-second media clock.
         s.sync_advance_clock(Duration::from_millis(34_234));
-        assert_eq!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap_err().code,
-            "sync_adoption_media_timeout");
+        assert_eq!(
+            s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live)
+                .unwrap_err()
+                .code,
+            "sync_adoption_media_timeout"
+        );
         assert_eq!(s.sync_tick(&live).unwrap().unwrap().0["outcome"], "abort");
-        assert_eq!(s.sync_workspace_adoption_error(&operation).code, "sync_adoption_media_timeout");
-        assert!(s.sync_release_workspace_adoption(&operation, false).unwrap().is_none());
-        assert_eq!(s.sync_workspace_adoption_error(&operation).code, "sync_adoption_media_timeout");
+        assert_eq!(
+            s.sync_workspace_adoption_error(&operation).code,
+            "sync_adoption_media_timeout"
+        );
+        assert!(s
+            .sync_release_workspace_adoption(&operation, false)
+            .unwrap()
+            .is_none());
+        assert_eq!(
+            s.sync_workspace_adoption_error(&operation).code,
+            "sync_adoption_media_timeout"
+        );
         // A late verifier cannot authorize this released operation or a replacement.
         s.sync_advance_clock(Duration::from_secs(3));
-        let next = s.sync_begin_workspace_adoption(&workspace, &device, live.clone()).unwrap();
-        assert_eq!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap_err().code,
-            "sync_adoption_media_timeout");
+        let next = s
+            .sync_begin_workspace_adoption(&workspace, &device, live.clone())
+            .unwrap();
+        assert_eq!(
+            s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live)
+                .unwrap_err()
+                .code,
+            "sync_adoption_media_timeout"
+        );
         assert_ne!(next["operationId"], operation);
         assert_eq!(s.quiet.current.as_ref().unwrap().phase, "probe");
-        assert_eq!(s.sync_workspace_adoption_error("unrelated").code, "sync_adoption_blocked");
+        assert_eq!(
+            s.sync_workspace_adoption_error("unrelated").code,
+            "sync_adoption_blocked"
+        );
         let next = next["operationId"].as_str().unwrap();
         s.sync_release_workspace_adoption(next, false).unwrap();
         s.sync_advance_clock(Duration::from_secs(3));
         s.sync_begin(live.clone(), None).unwrap();
-        assert_eq!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap_err().code,
-            "sync_adoption_media_timeout");
+        assert_eq!(
+            s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live)
+                .unwrap_err()
+                .code,
+            "sync_adoption_media_timeout"
+        );
     }
     #[test]
     fn workspace_adoption_probe_prepare_timeouts_remain_five_seconds_and_are_typed() {
@@ -1223,7 +1503,13 @@ mod tests {
                 (id, live)
             } else {
                 let live = HashSet::from(["main".into()]);
-                let event = s.sync_begin_workspace_adoption(&Uuid::new_v4().to_string(), &Uuid::new_v4().to_string(), live.clone()).unwrap();
+                let event = s
+                    .sync_begin_workspace_adoption(
+                        &Uuid::new_v4().to_string(),
+                        &Uuid::new_v4().to_string(),
+                        live.clone(),
+                    )
+                    .unwrap();
                 (event["operationId"].as_str().unwrap().to_string(), live)
             };
             s.sync_advance_clock(Duration::from_secs(5));
@@ -1236,48 +1522,130 @@ mod tests {
         s.sync_advance_clock(Duration::ZERO);
         let operation = begin(&mut s);
         s.sync_advance_clock(Duration::from_secs(5));
-        assert_eq!(s.sync_tick(&HashSet::from(["main".into()])).unwrap().unwrap().0["outcome"], "abort");
-        assert_eq!(s.sync_workspace_adoption_error(&operation).code, "sync_adoption_blocked");
+        assert_eq!(
+            s.sync_tick(&HashSet::from(["main".into()]))
+                .unwrap()
+                .unwrap()
+                .0["outcome"],
+            "abort"
+        );
+        assert_eq!(
+            s.sync_workspace_adoption_error(&operation).code,
+            "sync_adoption_blocked"
+        );
         assert_eq!(s.sync_diagnostics()["latestAbortReason"], "timeout");
     }
     #[test]
     fn workspace_adoption_media_rechecks_fences_and_accepts_renderer_cancellation() {
-        for scenario in ["participant", "epoch", "intent", "pending", "cancel", "note", "store"] {
+        for scenario in [
+            "participant",
+            "epoch",
+            "intent",
+            "pending",
+            "cancel",
+            "note",
+            "store",
+        ] {
             let (_root, mut s) = session();
             let replacement = tempfile::tempdir().unwrap();
-            let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+            let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
+                .as_str()
+                .unwrap()
+                .to_string();
             let (operation, workspace, device, mut live) = adoption_prepared(&mut s);
             adoption_ack(&mut s, &operation, &live);
-            s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live).unwrap();
+            s.sync_begin_workspace_adoption_media(&operation, &workspace, &device, &live)
+                .unwrap();
             let t = token(&s);
             match scenario {
-                "participant" => { live.remove("note-test"); }
-                "epoch" => { s.epoch += 1; }
-                "intent" => { s.register_save("main", &note, "media-save", Token { note_epoch: Some(s.note_epoch(&note)), ..t }).unwrap(); }
-                "pending" => { s.begin(json!({"type":"deleteNote", "id":note}), live.clone(), &t).unwrap(); }
-                "cancel" => { s.sync_reply("main", WindowReply::Prepare { operation_id: operation.clone(), ready: false }, &t).unwrap(); }
-                "note" => { s.store.action(json!({"type":"createNote"})).unwrap(); }
-                "store" => { s.store = Store::open(replacement.path()).unwrap(); }
+                "participant" => {
+                    live.remove("note-test");
+                }
+                "epoch" => {
+                    s.epoch += 1;
+                }
+                "intent" => {
+                    s.register_save(
+                        "main",
+                        &note,
+                        "media-save",
+                        Token {
+                            note_epoch: Some(s.note_epoch(&note)),
+                            ..t
+                        },
+                    )
+                    .unwrap();
+                }
+                "pending" => {
+                    s.begin(json!({"type":"deleteNote", "id":note}), live.clone(), &t)
+                        .unwrap();
+                }
+                "cancel" => {
+                    s.sync_reply(
+                        "main",
+                        WindowReply::Prepare {
+                            operation_id: operation.clone(),
+                            ready: false,
+                        },
+                        &t,
+                    )
+                    .unwrap();
+                }
+                "note" => {
+                    s.store.action(json!({"type":"createNote"})).unwrap();
+                }
+                "store" => {
+                    s.store = Store::open(replacement.path()).unwrap();
+                }
                 _ => unreachable!(),
             }
-            assert_eq!(s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live).unwrap_err().code,
-                "sync_adoption_blocked", "{scenario}");
-            s.sync_release_workspace_adoption(&operation, false).unwrap();
-            assert_eq!(s.sync_workspace_adoption_error(&operation).code, "sync_adoption_blocked", "{scenario}");
+            assert_eq!(
+                s.sync_workspace_adoption_commit_ready(&operation, &workspace, &device, &live)
+                    .unwrap_err()
+                    .code,
+                "sync_adoption_blocked",
+                "{scenario}"
+            );
+            s.sync_release_workspace_adoption(&operation, false)
+                .unwrap();
+            assert_eq!(
+                s.sync_workspace_adoption_error(&operation).code,
+                "sync_adoption_blocked",
+                "{scenario}"
+            );
         }
     }
     #[test]
     fn workspace_adoption_barrier_rejects_protected_notes_and_never_applies_late_inbox() {
         let (_root, mut s) = session();
-        let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"].as_str().unwrap().to_string();
+        let note = s.store.action(json!({"type":"createNote"})).unwrap()["id"]
+            .as_str()
+            .unwrap()
+            .to_string();
         let workspace = Uuid::new_v4().to_string();
         let device = Uuid::new_v4().to_string();
         let live = HashSet::from(["main".into()]);
-        let operation = s.sync_begin_workspace_adoption(&workspace, &device, live.clone()).unwrap()["operationId"].as_str().unwrap().to_string();
-        s.sync_reply("main", WindowReply::Probe { operation_id: operation.clone(),
-            protected_note_ids: vec![note.clone()], blocked: false }, &token(&s)).unwrap();
+        let operation = s
+            .sync_begin_workspace_adoption(&workspace, &device, live.clone())
+            .unwrap()["operationId"]
+            .as_str()
+            .unwrap()
+            .to_string();
+        s.sync_reply(
+            "main",
+            WindowReply::Probe {
+                operation_id: operation.clone(),
+                protected_note_ids: vec![note.clone()],
+                blocked: false,
+            },
+            &token(&s),
+        )
+        .unwrap();
         assert_eq!(s.sync_tick(&live).unwrap().unwrap().0["outcome"], "abort");
-        assert!(s.sync_release_workspace_adoption(&operation, false).unwrap().is_none());
+        assert!(s
+            .sync_release_workspace_adoption(&operation, false)
+            .unwrap()
+            .is_none());
         s.quiet.retry_after = None;
         let (operation, workspace, device, live) = adoption_prepared(&mut s);
         let incoming = incoming(&mut s);
@@ -1285,8 +1653,14 @@ mod tests {
         assert!(s.sync_tick(&live).unwrap().is_none());
         assert!(s.store.note(&incoming).is_err());
         assert_eq!(s.store.sync_pending_count().unwrap(), 1);
-        assert_eq!(s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live).unwrap_err().code, "sync_adoption_blocked");
-        s.sync_release_workspace_adoption(&operation, false).unwrap();
+        assert_eq!(
+            s.sync_workspace_adoption_ready(&operation, &workspace, &device, &live)
+                .unwrap_err()
+                .code,
+            "sync_adoption_blocked"
+        );
+        s.sync_release_workspace_adoption(&operation, false)
+            .unwrap();
         assert!(s.store.note(&incoming).is_err());
     }
     #[test]
@@ -1294,18 +1668,34 @@ mod tests {
         let (_root, mut s) = session();
         let workspace = Uuid::new_v4().to_string();
         let device = Uuid::new_v4().to_string();
-        assert_eq!(s.sync_begin_workspace_adoption(&workspace, &device, HashSet::new()).unwrap_err().code, "sync_adoption_blocked");
+        assert_eq!(
+            s.sync_begin_workspace_adoption(&workspace, &device, HashSet::new())
+                .unwrap_err()
+                .code,
+            "sync_adoption_blocked"
+        );
         assert!(!s.sync_has_operation());
         let (old, _, _, live) = adoption_prepared(&mut s);
         s.quiet.current.as_mut().unwrap().started = Instant::now() - Duration::from_secs(6);
         assert_eq!(s.sync_tick(&live).unwrap().unwrap().0["outcome"], "abort");
         s.quiet.retry_after = None;
-        let replacement = s.sync_begin_workspace_adoption(&workspace, &device, live).unwrap()["operationId"].as_str().unwrap().to_string();
-        assert!(s.sync_release_workspace_adoption(&old, false).unwrap().is_none());
+        let replacement = s
+            .sync_begin_workspace_adoption(&workspace, &device, live)
+            .unwrap()["operationId"]
+            .as_str()
+            .unwrap()
+            .to_string();
+        assert!(s
+            .sync_release_workspace_adoption(&old, false)
+            .unwrap()
+            .is_none());
         assert_eq!(s.quiet.current.as_ref().unwrap().id, replacement);
-        assert!(s.sync_release_workspace_adoption(&Uuid::new_v4().to_string(), false).is_err());
+        assert!(s
+            .sync_release_workspace_adoption(&Uuid::new_v4().to_string(), false)
+            .is_err());
         assert_eq!(s.quiet.current.as_ref().unwrap().id, replacement);
-        s.sync_release_workspace_adoption(&replacement, false).unwrap();
+        s.sync_release_workspace_adoption(&replacement, false)
+            .unwrap();
     }
     #[test]
     fn strict_replies_real_window_phase_token_and_cancellation_receipt() {

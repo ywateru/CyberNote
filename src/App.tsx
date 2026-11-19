@@ -3623,7 +3623,7 @@ function App() {
         },
         "image.info": () => {const button=document.querySelector<HTMLButtonElement>('.image-preview [aria-label="图片信息"]');if(!button)throw Error("图片预览尚未打开");button.click();},
         "image.close": () => setImagePreview(null),
-        ...Object.fromEntries(["status", "signIn", "signUp", "openLoginInBrowser", "cancel", "signOut", "syncNow", "setEnabled", "renameDevice", "syncDevice"].map(type => [`account.${type}`, async (args: Record<string, unknown>) => {
+        ...Object.fromEntries(["status", "signIn", "signUp", "openLoginInBrowser", "cancel", "signOut", "syncNow", "setEnabled", "renameDevice", "syncDevice", "setCredentialStorage"].map(type => [`account.${type}`, async (args: Record<string, unknown>) => {
           if (!accountUIAvailable || modal !== "preferences" || preferencesTab !== "account" || !accountSettingsHandle.current) throw Error("请先打开账户与同步");
           await accountSettingsHandle.current.run({ ...args, type } as AccountCommand);
           return accountSettingsHandle.current?.inspect();

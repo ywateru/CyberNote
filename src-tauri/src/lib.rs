@@ -1,16 +1,16 @@
 mod account;
+pub mod agent_access;
 #[cfg(target_os = "macos")]
 mod agent_adapter;
-pub mod agent_access;
 #[cfg(target_os = "macos")]
 #[path = "agent_host/desktop.rs"]
 mod agent_desktop;
 pub mod agent_host;
 #[cfg(target_os = "macos")]
-mod agent_tester;
-#[cfg(target_os = "macos")]
 #[path = "agent_host/service.rs"]
 mod agent_service;
+#[cfg(target_os = "macos")]
+mod agent_tester;
 mod apple_notes_import;
 pub mod application;
 mod attachment_desktop;
@@ -19,13 +19,13 @@ mod media_permission;
 mod recording_window;
 mod session;
 mod startup;
-mod webview_profile;
 mod store;
 mod sync;
 #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 mod sync_e2e;
 #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 mod sync_headless;
+mod webview_profile;
 use application::NotesApplicationService;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use serde_json::{json, Value};
@@ -439,7 +439,7 @@ fn failure(message: impl Into<String>) -> AppError {
     }
 }
 fn ui_session<T>(state: &AppState, operation: impl FnOnce(&mut Session) -> Result<T>) -> Result<T> {
-    let mut session = state.0.0.lock().map_err(|_| failure("数据锁错误"))?;
+    let mut session = state.0 .0.lock().map_err(|_| failure("数据锁错误"))?;
     NotesApplicationService::new(&mut session).ui(operation)
 }
 #[tauri::command]
@@ -448,17 +448,27 @@ fn load_workspace(state: State<AppState>) -> Result<Value> {
 }
 #[tauri::command]
 fn register_save_intent(
-    note_id: String, intent: String, expected: Token,
-    window: tauri::WebviewWindow, state: State<AppState>,
+    note_id: String,
+    intent: String,
+    expected: Token,
+    window: tauri::WebviewWindow,
+    state: State<AppState>,
 ) -> Result<()> {
-    ui_session(&state, |session| session.register_save(window.label(), &note_id, &intent, expected))
+    ui_session(&state, |session| {
+        session.register_save(window.label(), &note_id, &intent, expected)
+    })
 }
 #[tauri::command]
 fn acknowledge_access(
-    operation_id: String, success: bool, window: tauri::WebviewWindow, state: State<AppState>,
+    operation_id: String,
+    success: bool,
+    window: tauri::WebviewWindow,
+    state: State<AppState>,
 ) -> Result<()> {
-    let result = ui_session(&state, |session| session.acknowledge(&operation_id, window.label(), success));
-    state.0.1.notify_all();
+    let result = ui_session(&state, |session| {
+        session.acknowledge(&operation_id, window.label(), success)
+    });
+    state.0 .1.notify_all();
     result
 }
 async fn mutate(
@@ -755,26 +765,46 @@ async fn export_attachment(
 }
 #[tauri::command]
 async fn export_drawing(
-    note_id: String, svg: String, path: String, expected: Token, app: tauri::AppHandle,
+    note_id: String,
+    svg: String,
+    path: String,
+    expected: Token,
+    app: tauri::AppHandle,
 ) -> Result<()> {
     tauri::async_runtime::spawn_blocking(move || {
         let state = app.state::<AppState>();
         ui_session(&state, |session| {
             session.sensitive(&note_id, &expected)?;
-            if svg.len() > 16 * 1024 * 1024 || !svg.starts_with("<svg xmlns=\"http://www.w3.org/2000/svg\"") || !svg.ends_with("</svg>") {
+            if svg.len() > 16 * 1024 * 1024
+                || !svg.starts_with("<svg xmlns=\"http://www.w3.org/2000/svg\"")
+                || !svg.ends_with("</svg>")
+            {
                 return Err(failure("速绘导出数据无效"));
             }
             #[cfg(target_os = "android")]
             if path.starts_with("content://") {
                 let stage = session.store.document_stage()?;
                 std::fs::write(stage.path(), svg.as_bytes())?;
-                copy_document(&app, &path, &stage, "write", 16 * 1024 * 1024, Some(svg.len() as u64))?;
+                copy_document(
+                    &app,
+                    &path,
+                    &stage,
+                    "write",
+                    16 * 1024 * 1024,
+                    Some(svg.len() as u64),
+                )?;
                 return Ok(());
             }
-            if path.contains("://") { return Err(failure("此平台不支持该导出地址")); }
-            session.store.publish_export(&PathBuf::from(path), svg.as_bytes())
+            if path.contains("://") {
+                return Err(failure("此平台不支持该导出地址"));
+            }
+            session
+                .store
+                .publish_export(&PathBuf::from(path), svg.as_bytes())
         })
-    }).await.map_err(|e| failure(e.to_string()))?
+    })
+    .await
+    .map_err(|e| failure(e.to_string()))?
 }
 #[tauri::command]
 async fn export_archive(path: String, expected: Token, app: tauri::AppHandle) -> Result<()> {
@@ -853,10 +883,11 @@ async fn import_archive(
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     #[cfg(desktop)]
-    let mut options = startup::Options::parse(std::env::args_os().skip(1)).unwrap_or_else(|error| {
-        eprintln!("CyberNote startup rejected: {error}");
-        std::process::exit(2);
-    });
+    let mut options =
+        startup::Options::parse(std::env::args_os().skip(1)).unwrap_or_else(|error| {
+            eprintln!("CyberNote startup rejected: {error}");
+            std::process::exit(2);
+        });
     #[cfg(mobile)]
     let mut options = startup::Options::default();
     let mut context = tauri::generate_context!();
@@ -1133,6 +1164,7 @@ pub fn run() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         webview_profile::open_note_window,
         account::account_command,
+        account::account_sdk_diagnostic,
         load_workspace,
         sync_command,
         sync_diagnostics,
@@ -1180,6 +1212,7 @@ pub fn run() {
     let builder = builder.invoke_handler(tauri::generate_handler![
         webview_profile::open_note_window,
         account::account_command,
+        account::account_sdk_diagnostic,
         load_workspace,
         sync_command,
         sync_diagnostics,

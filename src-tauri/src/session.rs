@@ -13,10 +13,10 @@ fn denied(message: &str) -> AppError {
     }
 }
 
-#[path = "session/metadata.rs"]
-mod metadata;
 #[path = "session/external.rs"]
 pub(crate) mod external;
+#[path = "session/metadata.rs"]
+mod metadata;
 #[cfg(test)]
 #[path = "session/smart_tests.rs"]
 mod smart_tests;
@@ -175,7 +175,8 @@ impl Session {
     ) -> Result<Value> {
         self.prepare_metadata(true)?;
         self.apple_import_access(token)?;
-        let result = self.apply_store(|store| Ok(json!({"results":store.append_apple_notes(batch)?})));
+        let result =
+            self.apply_store(|store| Ok(json!({"results":store.append_apple_notes(batch)?})));
         self.finish_value(result)
     }
     pub(crate) fn data_management(&self, token: &Token) -> Result<Value> {
@@ -408,7 +409,9 @@ impl Session {
             return Err(denied("此操作需要所有窗口确认保存"));
         }
         let unlock = action["type"] == "unlockNote";
-        if let Some(note) = action["id"].as_str() { self.external_local_write(note); }
+        if let Some(note) = action["id"].as_str() {
+            self.external_local_write(note);
+        }
         let id = action["id"].as_str().unwrap_or_default().to_string();
         if action["type"] == "recoverConflictCopy" {
             self.sensitive(&id, token)?;

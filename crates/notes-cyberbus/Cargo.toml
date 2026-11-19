@@ -29,7 +29,7 @@ libc = "0.2"
 cyberbus-auth = { git = "https://github.com/osd-pub/CyberBus.git", rev = "359465e83bd74b571a963f3d1fdc238f50169919", features = ["platform-keyring"] }
 
 [dev-dependencies]
-cyberbus-protocol = { git = "https://github.com/osd-pub/CyberBus.git", rev = "359465e83bd74b571a963f3d1fdc238f50169919" }
+cyberbus-protocol = { path = "../../vendor/cyberbus/crates/cyberbus-protocol" }
 prost-reflect = "0.16"
 tempfile = "3"
 serde_json = "1"

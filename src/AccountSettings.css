@@ -24,6 +24,20 @@
 .account-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .account-actions:empty { display: none; }
 .account-settings button { min-height: max(28px, var(--interface-hit-min, 28px)); min-width: 64px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--line); border-radius: var(--radius-7); background: var(--grouped); white-space: normal; overflow-wrap: anywhere; text-align: center; }
+.account-storage-heading { display: flex; align-items: flex-start; gap: 14px; }
+.account-storage-heading > div { min-width: 0; flex: 1; }
+.account-storage-heading .account-help { margin: 4px 0 0; font-size: .85em; }
+.account-storage-options { min-width: 0; margin: 16px 0 0; padding: 0; border: 0; }
+.account-storage-options legend { padding: 0; margin-bottom: 8px; font-weight: 600; }
+.account-storage-options label { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-8); cursor: pointer; }
+.account-storage-options label + label { margin-top: 8px; }
+.account-storage-options input { flex-shrink: 0; width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); }
+.account-storage-options label > span { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: center; gap: 2px 8px; min-width: 0; }
+.account-storage-options svg { grid-row: 1 / span 2; width: 18px; height: 18px; color: var(--secondary); }
+.account-storage-options strong { font-weight: 600; }
+.account-storage-options small { color: var(--secondary); line-height: 1.45; }
+.account-storage-options label:has(input:checked) { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); background: color-mix(in srgb, var(--accent) 5%, var(--paper)); }
+.account-storage-options:disabled label { color: var(--secondary); cursor: default; }
 .account-settings .account-primary { background: var(--selection); color: var(--action-ink); border-color: transparent; }
 .account-help { color: var(--secondary); font-size: .9em; margin: 10px 0; }
 .account-toggle { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -84,6 +98,8 @@
 .account-notice:empty { display: none; }
 .preferences-mobile .account-group { padding: 16px; margin-bottom: 18px; border: 0; border-radius: var(--radius-12); background: var(--paper); }
 .preferences-mobile .account-settings button { min-height: 44px; }
+.preferences-mobile .account-storage-heading { gap: 10px; }
+.preferences-mobile .account-storage-options label { padding: 10px; }
 .account-device-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .account-device-heading h4 { margin: 0; }
 .account-device-heading .account-help { margin: 4px 0 0; font-size: .85em; }

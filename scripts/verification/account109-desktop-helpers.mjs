@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {until} from './sync108-native-driver.mjs';
 
 const states=['signedOut','authorizing','connecting','ready','paused','error'];
-const codes=['account_configuration','account_authentication','account_auth_callback_invalid','account_auth_identity_invalid','account_auth_code_rejected','account_auth_token_response_invalid','account_auth_refresh_missing','account_owner_workspace_mismatch','account_network','account_enrollment_invalid','account_storage','account_cancelled','account_busy','account_platform_unsupported','account_cleanup_required','account_sync_failed','account_sync_protocol','account_window_invalid'];
+const codes=['account_sdk_failed','account_unknown_outcome','account_deadline_exceeded','account_configuration','account_authentication','account_auth_callback_invalid','account_auth_identity_invalid','account_auth_code_rejected','account_auth_token_response_invalid','account_auth_refresh_missing','account_owner_workspace_mismatch','account_network','account_enrollment_invalid','account_storage','account_cancelled','account_busy','account_platform_unsupported','account_cleanup_required','account_sync_failed','account_sync_protocol','account_sync_adoption_blocked','account_window_invalid','account_device_offline','account_device_incompatible','account_sync_not_enabled','account_directory_unavailable','account_directory_unsupported'];
+const sdkStages=['init','authStart','authCallback','authState','authRestore','authCancel','authLogout','publishProfile','networkStart','networkStop'];
 // Includes the endpoint/provider diagnostics from account109 coordination work.
 const stages=['callbackListen','browserOpen','callbackReceive','identityProvider','coordinator','coordinatorConfiguration','coordinatorRegistration','coordinatorProfile','coordinatorEnrollment','coordinatorJwks','authorizationProvider','identitySession','identityRefresh','identityRevocation','coordinatorSession'];
 const reasons=['responseMetadata','missingIdToken','issuer','audience','expired','nonce','signingKey','signature','algorithm','subject','authorizedParty','issuedAt','accessTokenHash','otherClaims'];
@@ -17,7 +18,7 @@ function safeRequestDiagnostic(e){
   if(e.requestReason==='httpStatus')return Number.isInteger(e.httpStatus)&&e.httpStatus>=100&&e.httpStatus<=599&&!(e.httpStatus>=200&&e.httpStatus<300)&&(e.code==='account_authentication')===(e.httpStatus===401||e.httpStatus===403)?{requestReason:e.requestReason,httpStatus:e.httpStatus}:{};
   return 'httpStatus' in e||e.code!=='account_network'?{}:{requestReason:e.requestReason};
 }
-const transportKinds=['webrtc-direct','iroh-direct','cloudflare-tunnel','unavailable','unknown'];
+const transportKinds=['cyberbus','webrtc-direct','iroh-direct','cloudflare-tunnel','unavailable','unknown'];
 const positive=value=>Number.isSafeInteger(value)&&value>0;
 export function safeMappingObservation(t,generation){
   if(!t||!positive(generation)||t.generation!==generation||!positive(t.sample)||count(t.ageMs)===undefined||t.ageMs>3000||!transportKinds.includes(t.enrollment)||!transportKinds.includes(t.sync))return undefined;
@@ -28,12 +29,15 @@ const count=value=>Number.isSafeInteger(value)&&value>=0?value:undefined;
 export const fail=code=>Object.assign(new Error(code),{code});
 export function safeStatus(s){
   const e=s?.error;
+  const sdkDiagnostic=e?.code==='account_sdk_failed'&&Number.isInteger(e.cyberbusCode)&&e.cyberbusCode>=1&&e.cyberbusCode<=26&&(!('sdkStage' in e)||sdkStages.includes(e.sdkStage))
+    ?{cyberbusCode:e.cyberbusCode,...(e.sdkStage===undefined?{}:{sdkStage:e.sdkStage})}:{};
   const tokenDiagnostic=e?.code==='account_auth_identity_invalid'&&e.reason==='responseMetadata'&&e.stage===undefined&&e.providerReason===undefined&&!('requestReason' in e)&&!('httpStatus' in e)&&tokenOperations.includes(e.tokenOperation)&&tokenFields.includes(e.tokenField)
     ?{tokenOperation:e.tokenOperation,tokenField:e.tokenField}:{};
   const generation=s?.state==='ready'&&s.enabled===true&&!s.error&&positive(s.transportGeneration)?s.transportGeneration:undefined;
   return {state:label(s?.state,states),enabled:s?.enabled===true,hasProfile:!!s?.profile,
     identityCheck:s?.profile?.username===undefined?'unverified':s.profile.username==='cybernoteqa20261113a'?'expectedSyntheticUser':'differentUser',
-    error:s?.error?{code:label(s.error.code,codes),...(s.error.stage===undefined?{}:{stage:label(s.error.stage,stages)}),...(s.error.reason===undefined?{}:{reason:label(s.error.reason,reasons)}),...(s.error.providerReason===undefined?{}:{providerReason:label(s.error.providerReason,providerReasons)}),...tokenDiagnostic,...safeRequestDiagnostic(e)}:undefined,
+    error:s?.error?{code:label(s.error.code,codes),...sdkDiagnostic,...(s.error.stage===undefined?{}:{stage:label(s.error.stage,stages)}),...(s.error.reason===undefined?{}:{reason:label(s.error.reason,reasons)}),...(s.error.providerReason===undefined?{}:{providerReason:label(s.error.providerReason,providerReasons)}),...tokenDiagnostic,...safeRequestDiagnostic(e)}:undefined,
+    ...(['keychain','encryptedFile'].includes(s?.credentialStorage)?{credentialStorage:s.credentialStorage}:{}),
     ...(generation===undefined?{}:{transportGeneration:generation}),
     devices:Array.isArray(s?.devices)?s.devices.slice(0,256).map(d=>{
       const transport=d?.online===true&&d.current===false?safeMappingObservation(d.transport,generation):undefined;
@@ -78,11 +82,12 @@ export function statusObserver(report,getPhase){
 }
 // Explicit commands only: no arbitrary account command, token, grant or URL payload.
 export async function nativeAccount(app,type,args={}){
-  assert(['status','signIn','signOut','syncNow','setEnabled'].includes(type),'Unsupported runner account command');
+  assert(['status','signIn','signOut','syncNow','setEnabled','setCredentialStorage'].includes(type),'Unsupported runner account command');
   assert(args&&Object.getPrototypeOf(args)===Object.prototype,'Invalid account arguments');
-  assert(Object.keys(args).every(k=>type==='setEnabled'&&k==='enabled'),'Unexpected account arguments');
+  assert(Object.keys(args).every(k=>(type==='setEnabled'&&k==='enabled')||(type==='setCredentialStorage'&&k==='storage')),'Unexpected account arguments');
   if(type==='setEnabled')assert.equal(typeof args.enabled,'boolean');
-  const command=type==='setEnabled'?{type,enabled:args.enabled}:{type};
+  if(type==='setCredentialStorage')assert(['keychain','encryptedFile'].includes(args.storage));
+  const command=type==='setEnabled'?{type,enabled:args.enabled}:type==='setCredentialStorage'?{type,storage:args.storage}:{type};
   return app.evaluate("window.__TAURI_INTERNALS__.invoke('account_command',{command:arg})",command);
 }
 export function signedOut(s){return s.state==='signedOut'&&!s.profile&&!s.enabled&&!s.error&&!s.devices.some(d=>d.connected);}

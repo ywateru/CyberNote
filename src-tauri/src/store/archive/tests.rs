@@ -182,7 +182,10 @@ fn invalid_archive_graphs_and_metadata_never_mutate_existing_workspace() {
     let valid = read_json(&f.archive);
     type Mutation = (&'static str, Box<dyn Fn(&mut Value)>);
     let cases: Vec<Mutation> = vec![
-        ("unsupported version", Box::new(|v| v["version"] = json!(99))),
+        (
+            "unsupported version",
+            Box::new(|v| v["version"] = json!(99)),
+        ),
         (
             "duplicate folder",
             Box::new(|v| {
@@ -651,9 +654,18 @@ fn seven_papers_and_dash_lists_preserve_drawings_through_save_reopen_and_archive
 #[test]
 fn independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads() {
     let invalid = [
-        ("inline-at-doc-root", include_str!("../../../tests/fixtures/archive/inline-at-doc-root.notesbackup")),
-        ("block-inside-paragraph", include_str!("../../../tests/fixtures/archive/block-inside-paragraph.notesbackup")),
-        ("paragraph-inside-table", include_str!("../../../tests/fixtures/archive/paragraph-inside-table.notesbackup")),
+        (
+            "inline-at-doc-root",
+            include_str!("../../../tests/fixtures/archive/inline-at-doc-root.notesbackup"),
+        ),
+        (
+            "block-inside-paragraph",
+            include_str!("../../../tests/fixtures/archive/block-inside-paragraph.notesbackup"),
+        ),
+        (
+            "paragraph-inside-table",
+            include_str!("../../../tests/fixtures/archive/paragraph-inside-table.notesbackup"),
+        ),
     ];
     let f = fixture();
     let mut store = populate_local(&f.root);
@@ -671,9 +683,7 @@ fn independent_schema_fixtures_are_rejected_and_legacy_archive_still_loads() {
     }
     drop(store);
     assert_eq!(snapshot(&Store::open(&f.root).unwrap()), before);
-    let legacy = include_str!(
-        "../../../tests/fixtures/archive/legacy-valid.notesbackup"
-    );
+    let legacy = include_str!("../../../tests/fixtures/archive/legacy-valid.notesbackup");
     let path = f._temp.path().join("legacy.notesbackup");
     fs::write(&path, legacy).unwrap();
     let mut store = Store::open(f._temp.path().join("legacy")).unwrap();
@@ -728,28 +738,83 @@ fn interface_details_settings_and_archive_are_strict_and_atomic() {
     target.import_archive(&archive).unwrap();
     assert_eq!(target.workspace().unwrap()["settings"], good["settings"]);
     let mut bad_values = vec![Value::Null, json!([]), json!({})];
-    for (key, value) in [("version",json!(2)),("version",json!("1")),("iconScale",json!(79)),("iconScale",json!(121)),("iconScale",json!(100.5)),("desktopHitScale",json!(99)),("desktopHitScale",json!(131)),("mobileHitScale",json!(99)),("mobileHitScale",json!(121)),("radiusScale",json!(-1)),("radiusScale",json!(151)),("menuSpacing",json!("anything"))] {
-        let mut bad = valid.clone(); bad[key] = value; bad_values.push(bad);
+    for (key, value) in [
+        ("version", json!(2)),
+        ("version", json!("1")),
+        ("iconScale", json!(79)),
+        ("iconScale", json!(121)),
+        ("iconScale", json!(100.5)),
+        ("desktopHitScale", json!(99)),
+        ("desktopHitScale", json!(131)),
+        ("mobileHitScale", json!(99)),
+        ("mobileHitScale", json!(121)),
+        ("radiusScale", json!(-1)),
+        ("radiusScale", json!(151)),
+        ("menuSpacing", json!("anything")),
+    ] {
+        let mut bad = valid.clone();
+        bad[key] = value;
+        bad_values.push(bad);
     }
-    let mut extra = valid.clone(); extra["css"] = json!("position:fixed"); bad_values.push(extra);
-    let mut missing = valid.clone(); missing.as_object_mut().unwrap().remove("radiusScale"); bad_values.push(missing);
+    let mut extra = valid.clone();
+    extra["css"] = json!("position:fixed");
+    bad_values.push(extra);
+    let mut missing = valid.clone();
+    missing.as_object_mut().unwrap().remove("radiusScale");
+    bad_values.push(missing);
     for (i, bad) in bad_values.iter().enumerate() {
-        assert!(store.action(json!({"type":"settings","settings":{"theme":"light","interfaceDetails":bad}})).is_err(), "accepted update {i}");
-        assert_eq!(store.workspace().unwrap()["settings"], good["settings"], "partially saved update {i}");
-        let mut invalid = encoded.clone(); invalid["settings"]["interfaceDetails"] = bad.clone();
-        let bad_path = temp.path().join(format!("bad-{i}.notesbackup")); write_json(&bad_path, &invalid);
+        assert!(
+            store
+                .action(
+                    json!({"type":"settings","settings":{"theme":"light","interfaceDetails":bad}})
+                )
+                .is_err(),
+            "accepted update {i}"
+        );
+        assert_eq!(
+            store.workspace().unwrap()["settings"],
+            good["settings"],
+            "partially saved update {i}"
+        );
+        let mut invalid = encoded.clone();
+        invalid["settings"]["interfaceDetails"] = bad.clone();
+        let bad_path = temp.path().join(format!("bad-{i}.notesbackup"));
+        write_json(&bad_path, &invalid);
         let before = target.workspace().unwrap();
-        assert!(target.import_archive(&bad_path).is_err(), "accepted import {i}");
-        assert_eq!(target.workspace().unwrap(), before, "partially imported {i}");
+        assert!(
+            target.import_archive(&bad_path).is_err(),
+            "accepted import {i}"
+        );
+        assert_eq!(
+            target.workspace().unwrap(),
+            before,
+            "partially imported {i}"
+        );
     }
     let defaults = json!({"version":1,"iconScale":100,"desktopHitScale":100,"mobileHitScale":100,"menuSpacing":"standard","radiusScale":100});
-    store.action(json!({"type":"settings","settings":{"interfaceDetails":defaults}})).unwrap();
+    store
+        .action(json!({"type":"settings","settings":{"interfaceDetails":defaults}}))
+        .unwrap();
     let reset = store.workspace().unwrap();
-    for key in ["theme","interfaceFontSize","editorFontSize","customSetting"] { assert_eq!(reset["settings"][key], good["settings"][key]); }
-    let mut legacy = encoded; legacy["settings"].as_object_mut().unwrap().remove("interfaceDetails");
-    let legacy_path = temp.path().join("legacy.notesbackup"); write_json(&legacy_path, &legacy);
+    for key in [
+        "theme",
+        "interfaceFontSize",
+        "editorFontSize",
+        "customSetting",
+    ] {
+        assert_eq!(reset["settings"][key], good["settings"][key]);
+    }
+    let mut legacy = encoded;
+    legacy["settings"]
+        .as_object_mut()
+        .unwrap()
+        .remove("interfaceDetails");
+    let legacy_path = temp.path().join("legacy.notesbackup");
+    write_json(&legacy_path, &legacy);
     target.import_archive(&legacy_path).unwrap();
-    assert!(target.workspace().unwrap()["settings"].get("interfaceDetails").is_none());
+    assert!(target.workspace().unwrap()["settings"]
+        .get("interfaceDetails")
+        .is_none());
 }
 
 #[test]
@@ -759,11 +824,27 @@ fn appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip() {
     let mut store = Store::open(&root).unwrap();
     // Emulate a real pre-V2 database: reads must not silently rewrite it.
     store.db.execute("UPDATE settings SET body=?1 WHERE id=1", [json!({"theme":"dark","interfaceFontSize":"small","editorFontSize":"huge","extension":{"retained":true}}).to_string()]).unwrap();
-    assert!(store.workspace().unwrap()["settings"].get("appearance").is_none());
-    store.action(json!({"type":"settings","settings":{"sort":"title"}})).unwrap();
-    assert_eq!(store.workspace().unwrap()["settings"]["appearance"], json!({"version":2,"themeId":"classic","schemePreference":"dark"}));
+    assert!(store.workspace().unwrap()["settings"]
+        .get("appearance")
+        .is_none());
+    store
+        .action(json!({"type":"settings","settings":{"sort":"title"}}))
+        .unwrap();
+    assert_eq!(
+        store.workspace().unwrap()["settings"]["appearance"],
+        json!({"version":2,"themeId":"classic","schemePreference":"dark"})
+    );
     let details = json!({"version":1,"iconScale":100,"desktopHitScale":100,"mobileHitScale":100,"menuSpacing":"standard","radiusScale":150});
-    for skin in ["classic", "paper", "high-contrast", "ocean", "forest", "rose", "lavender", "graphite"] {
+    for skin in [
+        "classic",
+        "paper",
+        "high-contrast",
+        "ocean",
+        "forest",
+        "rose",
+        "lavender",
+        "graphite",
+    ] {
         for scheme in ["system", "light", "dark"] {
             let appearance = json!({"version":2,"themeId":skin,"schemePreference":scheme});
             // New authority wins over a stale (but legal) legacy projection.
@@ -782,7 +863,9 @@ fn appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip() {
             assert_eq!(target.workspace().unwrap()["settings"], good);
         }
     }
-    store.action(json!({"type":"settings","settings":{"theme":"light"}})).unwrap();
+    store
+        .action(json!({"type":"settings","settings":{"theme":"light"}}))
+        .unwrap();
     let good = store.workspace().unwrap()["settings"].clone();
     assert_eq!(good["appearance"]["themeId"], "graphite");
     assert_eq!(good["appearance"]["schemePreference"], "light");
@@ -791,32 +874,64 @@ fn appearance_v2_settings_and_archive_are_strict_atomic_and_roundtrip() {
     assert_eq!(good["extension"]["retained"], true);
     let valid = good["appearance"].clone();
     let mut invalid = vec![Value::Null, json!([]), json!({}), json!("dark")];
-    for (key, value) in [("version",json!(1)),("version",json!(2.0)),("version",json!("2")),("themeId",json!("deleted-theme")),("schemePreference",json!("sepia")),("css",json!("red"))] {
-        let mut bad = valid.clone(); bad[key] = value; invalid.push(bad);
+    for (key, value) in [
+        ("version", json!(1)),
+        ("version", json!(2.0)),
+        ("version", json!("2")),
+        ("themeId", json!("deleted-theme")),
+        ("schemePreference", json!("sepia")),
+        ("css", json!("red")),
+    ] {
+        let mut bad = valid.clone();
+        bad[key] = value;
+        invalid.push(bad);
     }
-    for key in ["version", "themeId", "schemePreference"] { let mut bad = valid.clone(); bad.as_object_mut().unwrap().remove(key); invalid.push(bad); }
-    let archive = temp.path().join("valid.notesbackup"); store.export_archive(&archive).unwrap();
+    for key in ["version", "themeId", "schemePreference"] {
+        let mut bad = valid.clone();
+        bad.as_object_mut().unwrap().remove(key);
+        invalid.push(bad);
+    }
+    let archive = temp.path().join("valid.notesbackup");
+    store.export_archive(&archive).unwrap();
     let encoded = read_json(&archive);
     for (i, bad) in invalid.iter().enumerate() {
         assert!(store.action(json!({"type":"settings","settings":{"appearance":bad,"theme":"dark","sort":"created"}})).is_err(), "accepted {i}");
         assert_eq!(store.workspace().unwrap()["settings"], good);
-        let mut corrupted = encoded.clone(); corrupted["settings"]["appearance"] = bad.clone();
-        let path = temp.path().join(format!("bad-{i}.notesbackup")); write_json(&path, &corrupted);
+        let mut corrupted = encoded.clone();
+        corrupted["settings"]["appearance"] = bad.clone();
+        let path = temp.path().join(format!("bad-{i}.notesbackup"));
+        write_json(&path, &corrupted);
         let before = store.workspace().unwrap();
         assert!(store.import_archive(&path).is_err(), "imported {i}");
         assert_eq!(store.workspace().unwrap(), before);
     }
     // Archive import corrects a stale projection atomically, without new wire.
-    let mut stale = encoded.clone(); stale["settings"]["theme"] = json!("dark");
-    let path = temp.path().join("stale.notesbackup"); write_json(&path, &stale);
+    let mut stale = encoded.clone();
+    stale["settings"]["theme"] = json!("dark");
+    let path = temp.path().join("stale.notesbackup");
+    write_json(&path, &stale);
     store.import_archive(&path).unwrap();
     assert_eq!(store.workspace().unwrap()["settings"]["theme"], "light");
     // Legacy archive remains legacy until its first write, with the old scheme.
-    let mut legacy = encoded; legacy["settings"].as_object_mut().unwrap().remove("appearance"); legacy["settings"]["theme"] = json!("system");
-    let path = temp.path().join("legacy.notesbackup"); write_json(&path, &legacy); store.import_archive(&path).unwrap();
-    assert!(store.workspace().unwrap()["settings"].get("appearance").is_none());
-    store.action(json!({"type":"settings","settings":{"groupDates":true}})).unwrap();
-    assert_eq!(store.workspace().unwrap()["settings"]["appearance"],json!({"version":2,"themeId":"classic","schemePreference":"system"}));
+    let mut legacy = encoded;
+    legacy["settings"]
+        .as_object_mut()
+        .unwrap()
+        .remove("appearance");
+    legacy["settings"]["theme"] = json!("system");
+    let path = temp.path().join("legacy.notesbackup");
+    write_json(&path, &legacy);
+    store.import_archive(&path).unwrap();
+    assert!(store.workspace().unwrap()["settings"]
+        .get("appearance")
+        .is_none());
+    store
+        .action(json!({"type":"settings","settings":{"groupDates":true}}))
+        .unwrap();
+    assert_eq!(
+        store.workspace().unwrap()["settings"]["appearance"],
+        json!({"version":2,"themeId":"classic","schemePreference":"system"})
+    );
     drop(store);
     let store = Store::open(&root).unwrap();
     assert_eq!(store.workspace().unwrap()["settings"]["theme"], "system");
@@ -837,24 +952,43 @@ fn appearance_recovery_settings_and_archive_are_strict_with_real_app_patches() {
     for (index, row) in rows.as_array().unwrap().iter().enumerate() {
         let root = temp.path().join(format!("app-patch-{index}"));
         let mut store = Store::open(&root).unwrap();
-        store.db.execute("UPDATE settings SET body=?1 WHERE id=1", [row["initial"].to_string()]).unwrap();
+        store
+            .db
+            .execute(
+                "UPDATE settings SET body=?1 WHERE id=1",
+                [row["initial"].to_string()],
+            )
+            .unwrap();
         let patches = row["patches"].as_array().unwrap();
         let last = patches.last().unwrap();
-        assert!(last.get("appearance").is_none(), "partial intent became an appearance overwrite: {index}");
+        assert!(
+            last.get("appearance").is_none(),
+            "partial intent became an appearance overwrite: {index}"
+        );
         for patch in patches {
-            store.action(json!({"type":"settings","settings":patch})).unwrap();
+            store
+                .action(json!({"type":"settings","settings":patch}))
+                .unwrap();
             // Simulate a successful ACK whose confirmation cannot be read:
             // close/reopen before the next intent; the committed skin survives.
             drop(store);
             store = Store::open(&root).unwrap();
             let confirmed = store.workspace().unwrap()["settings"].clone();
-            assert_eq!(confirmed["appearance"]["themeId"], "paper", "lost committed skin: {index}");
-            assert_eq!(confirmed["theme"], confirmed["appearance"]["schemePreference"]);
+            assert_eq!(
+                confirmed["appearance"]["themeId"], "paper",
+                "lost committed skin: {index}"
+            );
+            assert_eq!(
+                confirmed["theme"],
+                confirmed["appearance"]["schemePreference"]
+            );
         }
         let actual = store.workspace().unwrap()["settings"].clone();
         assert_eq!(actual["appearance"], row["expected"]["appearance"]);
         assert_eq!(actual["theme"], row["expected"]["theme"]);
-        if let Some(sort) = row["following"].get("sort") { assert_eq!(&actual["sort"], sort); }
+        if let Some(sort) = row["following"].get("sort") {
+            assert_eq!(&actual["sort"], sort);
+        }
         let path = temp.path().join(format!("app-patch-{index}.notesbackup"));
         store.export_archive(&path).unwrap();
         let target_root = temp.path().join(format!("app-patch-import-{index}"));
@@ -871,14 +1005,40 @@ fn evolve115_presentation_is_strict_atomic_and_roundtrips() {
     let root = temp.path().join("presentation-source");
     let mut store = Store::open(&root).unwrap();
     let legacy = json!({"view":"gallery","macSidebarVisible":false,"theme":"dark","extension":{"kept":true}});
-    store.db.execute("UPDATE settings SET body=?1 WHERE id=1", [legacy.to_string()]).unwrap();
-    assert!(store.workspace().unwrap()["settings"].get("presentation").is_none());
-    assert_eq!(store.db.query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get::<_, String>(0)).unwrap(), legacy.to_string());
-    store.action(json!({"type":"settings","settings":{"sort":"title"}})).unwrap();
+    store
+        .db
+        .execute(
+            "UPDATE settings SET body=?1 WHERE id=1",
+            [legacy.to_string()],
+        )
+        .unwrap();
+    assert!(store.workspace().unwrap()["settings"]
+        .get("presentation")
+        .is_none());
+    assert_eq!(
+        store
+            .db
+            .query_row("SELECT body FROM settings WHERE id=1", [], |r| r
+                .get::<_, String>(0))
+            .unwrap(),
+        legacy.to_string()
+    );
+    store
+        .action(json!({"type":"settings","settings":{"sort":"title"}}))
+        .unwrap();
     let migrated = store.workspace().unwrap()["settings"].clone();
-    assert_eq!(migrated["presentation"]["desktop"]["navigation"], "two-pane");
-    assert_eq!(migrated["presentation"]["desktop"]["collectionView"], "gallery");
-    assert_eq!(migrated["presentation"]["mobile"]["collectionView"], "gallery");
+    assert_eq!(
+        migrated["presentation"]["desktop"]["navigation"],
+        "two-pane"
+    );
+    assert_eq!(
+        migrated["presentation"]["desktop"]["collectionView"],
+        "gallery"
+    );
+    assert_eq!(
+        migrated["presentation"]["mobile"]["collectionView"],
+        "gallery"
+    );
     let p = json!({"version":1,"desktop":{"navigation":"focus","lastNonFocusNavigation":"two-pane","collectionView":"list","density":"compact"},"mobile":{"collectionView":"list","density":"comfortable"}});
     store.action(json!({"type":"settings","settings":{"presentation":p,"view":"gallery","macSidebarVisible":true}})).unwrap();
     let good = store.workspace().unwrap()["settings"].clone();
@@ -887,24 +1047,52 @@ fn evolve115_presentation_is_strict_atomic_and_roundtrips() {
     assert_eq!(good["macSidebarVisible"], false);
     for (patch, nav, last, view) in [
         (json!({"view":"gallery"}), "focus", "two-pane", "gallery"),
-        (json!({"macSidebarVisible":true}), "three-pane", "three-pane", "list"),
-        (json!({"macSidebarVisible":false}), "two-pane", "two-pane", "list"),
-        (json!({"view":"gallery","macSidebarVisible":true}), "three-pane", "three-pane", "gallery"),
+        (
+            json!({"macSidebarVisible":true}),
+            "three-pane",
+            "three-pane",
+            "list",
+        ),
+        (
+            json!({"macSidebarVisible":false}),
+            "two-pane",
+            "two-pane",
+            "list",
+        ),
+        (
+            json!({"view":"gallery","macSidebarVisible":true}),
+            "three-pane",
+            "three-pane",
+            "gallery",
+        ),
         (json!({"sort":"updated"}), "focus", "two-pane", "list"),
     ] {
-        store.action(json!({"type":"settings","settings":{"presentation":p}})).unwrap();
-        store.action(json!({"type":"settings","settings":patch})).unwrap();
+        store
+            .action(json!({"type":"settings","settings":{"presentation":p}}))
+            .unwrap();
+        store
+            .action(json!({"type":"settings","settings":patch}))
+            .unwrap();
         let next = store.workspace().unwrap()["settings"].clone();
         assert_eq!(next["presentation"]["desktop"]["navigation"], nav);
-        assert_eq!(next["presentation"]["desktop"]["lastNonFocusNavigation"], last);
+        assert_eq!(
+            next["presentation"]["desktop"]["lastNonFocusNavigation"],
+            last
+        );
         assert_eq!(next["view"], view);
         assert_eq!(next["presentation"]["mobile"], p["mobile"]);
         assert_eq!(next["appearance"], good["appearance"]);
         assert_eq!(next["extension"], legacy["extension"]);
     }
-    let mut invalid = vec![Value::Null, json!([]), json!({}), json!({"version":2,"desktop":p["desktop"],"mobile":p["mobile"]})];
+    let mut invalid = vec![
+        Value::Null,
+        json!([]),
+        json!({}),
+        json!({"version":2,"desktop":p["desktop"],"mobile":p["mobile"]}),
+    ];
     for (path, value) in [
-        (vec!["extra"], json!(true)), (vec!["version"], json!(1.0)),
+        (vec!["extra"], json!(true)),
+        (vec!["version"], json!(1.0)),
         (vec!["desktop", "navigation"], json!("unknown")),
         (vec!["desktop", "lastNonFocusNavigation"], json!("focus")),
         (vec!["desktop", "collectionView"], json!("table")),
@@ -913,48 +1101,91 @@ fn evolve115_presentation_is_strict_atomic_and_roundtrips() {
         (vec!["mobile", "extra"], json!(true)),
     ] {
         let mut bad = p.clone();
-        if path.len() == 1 { bad[path[0]] = value; } else { bad[path[0]][path[1]] = value; }
+        if path.len() == 1 {
+            bad[path[0]] = value;
+        } else {
+            bad[path[0]][path[1]] = value;
+        }
         invalid.push(bad);
     }
-    let mut bad = p.clone(); bad["mobile"].as_object_mut().unwrap().remove("collectionView"); invalid.push(bad);
+    let mut bad = p.clone();
+    bad["mobile"]
+        .as_object_mut()
+        .unwrap()
+        .remove("collectionView");
+    invalid.push(bad);
     let archive = temp.path().join("presentation.notesbackup");
     let target_root = temp.path().join("presentation-import");
     let mut target = Store::open(&target_root).unwrap();
-    for nav in ["three-pane", "two-pane", "focus"] { for desktop_view in ["list", "gallery"] { for mobile_view in ["list", "gallery"] { for density in ["compact", "standard", "comfortable"] {
-        let mut value = p.clone(); value["desktop"]["navigation"] = json!(nav); value["desktop"]["collectionView"] = json!(desktop_view); value["desktop"]["density"] = json!(density); value["mobile"]["collectionView"] = json!(mobile_view);
-        store.action(json!({"type":"settings","settings":{"presentation":value}})).unwrap();
-        store.export_archive(&archive).unwrap();
-        target.import_archive(&archive).unwrap();
-        drop(target); target = Store::open(&target_root).unwrap();
-        assert_eq!(target.workspace().unwrap()["settings"]["presentation"], value);
-    }}}}
+    for nav in ["three-pane", "two-pane", "focus"] {
+        for desktop_view in ["list", "gallery"] {
+            for mobile_view in ["list", "gallery"] {
+                for density in ["compact", "standard", "comfortable"] {
+                    let mut value = p.clone();
+                    value["desktop"]["navigation"] = json!(nav);
+                    value["desktop"]["collectionView"] = json!(desktop_view);
+                    value["desktop"]["density"] = json!(density);
+                    value["mobile"]["collectionView"] = json!(mobile_view);
+                    store
+                        .action(json!({"type":"settings","settings":{"presentation":value}}))
+                        .unwrap();
+                    store.export_archive(&archive).unwrap();
+                    target.import_archive(&archive).unwrap();
+                    drop(target);
+                    target = Store::open(&target_root).unwrap();
+                    assert_eq!(
+                        target.workspace().unwrap()["settings"]["presentation"],
+                        value
+                    );
+                }
+            }
+        }
+    }
     let encoded: Value = serde_json::from_slice(&std::fs::read(&archive).unwrap()).unwrap();
     for bad in invalid {
         let before = store.workspace().unwrap();
-        assert!(store.action(json!({"type":"settings","settings":{"presentation":bad,"view":"list"}})).is_err());
+        assert!(store
+            .action(json!({"type":"settings","settings":{"presentation":bad,"view":"list"}}))
+            .is_err());
         assert_eq!(store.workspace().unwrap(), before);
-        let mut corrupt = encoded.clone(); corrupt["settings"]["presentation"] = bad;
-        let path = temp.path().join("invalid.notesbackup"); write_json(&path, &corrupt);
+        let mut corrupt = encoded.clone();
+        corrupt["settings"]["presentation"] = bad;
+        let path = temp.path().join("invalid.notesbackup");
+        write_json(&path, &corrupt);
         let previous = target.workspace().unwrap();
-        assert!(target.import_archive(&path).is_err()); assert_eq!(target.workspace().unwrap(), previous);
+        assert!(target.import_archive(&path).is_err());
+        assert_eq!(target.workspace().unwrap(), previous);
     }
     let before = store.workspace().unwrap();
     assert_ne!(before["settings"]["presentation"], p);
     store.db.execute_batch("CREATE TEMP TRIGGER fail_presentation BEFORE UPDATE ON settings BEGIN SELECT RAISE(FAIL, 'controlled disk failure'); END;").unwrap();
-    assert!(store.action(json!({"type":"settings","settings":{"presentation":p,"view":"gallery"}})).is_err());
+    assert!(store
+        .action(json!({"type":"settings","settings":{"presentation":p,"view":"gallery"}}))
+        .is_err());
     assert_eq!(store.workspace().unwrap(), before);
-    store.db.execute_batch("DROP TRIGGER fail_presentation;").unwrap();
+    store
+        .db
+        .execute_batch("DROP TRIGGER fail_presentation;")
+        .unwrap();
     // A rejected candidate must not hitchhike on the next unrelated intent.
     // Exercise real SQLite failure/retry/reopen, with full-state comparison.
-    store.action(json!({"type":"settings","settings":{"sort":"created"}})).unwrap();
+    store
+        .action(json!({"type":"settings","settings":{"sort":"created"}}))
+        .unwrap();
     let mut expected = before;
     expected["settings"]["sort"] = json!("created");
     assert_eq!(store.workspace().unwrap(), expected);
-    drop(store); let reopened = Store::open(&root).unwrap(); assert_eq!(reopened.workspace().unwrap(), expected);
+    drop(store);
+    let reopened = Store::open(&root).unwrap();
+    assert_eq!(reopened.workspace().unwrap(), expected);
     reopened.export_archive(&archive).unwrap();
     target.import_archive(&archive).unwrap();
-    drop(target); let target = Store::open(&target_root).unwrap();
-    assert_eq!(target.workspace().unwrap()["settings"], expected["settings"]);
+    drop(target);
+    let target = Store::open(&target_root).unwrap();
+    assert_eq!(
+        target.workspace().unwrap()["settings"],
+        expected["settings"]
+    );
 }
 
 #[test]
@@ -964,9 +1195,11 @@ fn evolve115_actual_app_patches_reopen_and_archive() {
         Err(_) => include_str!("../../../tests/evolve115-presentation-replays.json").to_owned(),
     };
     let paths: Value = serde_json::from_str(&text).unwrap();
-    let paths = paths.as_array().unwrap(); assert_eq!(paths.len(), 9);
+    let paths = paths.as_array().unwrap();
+    assert_eq!(paths.len(), 9);
     for row in paths {
-        let temp = tempfile::tempdir().unwrap(); let root = temp.path().join("actual-app");
+        let temp = tempfile::tempdir().unwrap();
+        let root = temp.path().join("actual-app");
         let mut store = Store::open(&root).unwrap();
         // The App capture selects a real fixture note. Materialize that note
         // in SQLite too: archive correctly clears selections of absent notes.
@@ -974,16 +1207,36 @@ fn evolve115_actual_app_patches_reopen_and_archive() {
         let mut note = store.note(created["id"].as_str().unwrap()).unwrap();
         note.id = row["initial"]["selectedNote"].as_str().unwrap().to_owned();
         store.put_note(&note).unwrap();
-        store.db.execute("UPDATE settings SET body=?1 WHERE id=1", [row["initial"].to_string()]).unwrap();
+        store
+            .db
+            .execute(
+                "UPDATE settings SET body=?1 WHERE id=1",
+                [row["initial"].to_string()],
+            )
+            .unwrap();
         for patch in row["patches"].as_array().unwrap() {
-            store.action(json!({"type":"settings","settings":patch})).unwrap();
-            drop(store); store = Store::open(&root).unwrap();
+            store
+                .action(json!({"type":"settings","settings":patch}))
+                .unwrap();
+            drop(store);
+            store = Store::open(&root).unwrap();
         }
         let settings = store.workspace().unwrap()["settings"].clone();
-        for (key, value) in row["expected"].as_object().unwrap() { assert_eq!(&settings[key], value, "{} {key}", row["scenario"]); }
-        let archive = temp.path().join("actual.notesbackup"); store.export_archive(&archive).unwrap();
-        let target_root = temp.path().join("restored"); let mut target = Store::open(&target_root).unwrap();
-        target.import_archive(&archive).unwrap(); drop(target); let target = Store::open(&target_root).unwrap();
-        assert_eq!(target.workspace().unwrap()["settings"], settings, "{}", row["scenario"]);
+        for (key, value) in row["expected"].as_object().unwrap() {
+            assert_eq!(&settings[key], value, "{} {key}", row["scenario"]);
+        }
+        let archive = temp.path().join("actual.notesbackup");
+        store.export_archive(&archive).unwrap();
+        let target_root = temp.path().join("restored");
+        let mut target = Store::open(&target_root).unwrap();
+        target.import_archive(&archive).unwrap();
+        drop(target);
+        let target = Store::open(&target_root).unwrap();
+        assert_eq!(
+            target.workspace().unwrap()["settings"],
+            settings,
+            "{}",
+            row["scenario"]
+        );
     }
 }

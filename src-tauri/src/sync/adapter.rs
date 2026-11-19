@@ -60,13 +60,18 @@ fn prepared_store_rechecked<T>(
     for attempt in 0..=retries {
         let snapshot = {
             let s = shared.0.lock().map_err(|_| error("sync_internal"))?;
-            s.check(&authority, None).map_err(|_| error("sync_plan_stale"))?;
+            s.check(&authority, None)
+                .map_err(|_| error("sync_plan_stale"))?;
             validate(&s)?;
             if s.store.sync_store_instance() != instance {
                 return Err(error("sync_plan_stale"));
             }
             let snapshot = s.store.sync_media_snapshot(incoming, bootstrap)?;
-            if receipt_only { snapshot.receipt_only() } else { snapshot }
+            if receipt_only {
+                snapshot.receipt_only()
+            } else {
+                snapshot
+            }
         };
         let media = match snapshot.verify() {
             Err(e) if e.code == "sync_plan_stale" && attempt < retries => {
@@ -76,7 +81,8 @@ fn prepared_store_rechecked<T>(
             result => result?,
         };
         let mut s = shared.0.lock().map_err(|_| error("sync_internal"))?;
-        s.check(&authority, None).map_err(|_| error("sync_plan_stale"))?;
+        s.check(&authority, None)
+            .map_err(|_| error("sync_plan_stale"))?;
         validate(&s)?;
         if s.store.sync_store_instance() != instance {
             return Err(error("sync_plan_stale"));
@@ -103,7 +109,9 @@ pub(crate) trait WindowHost: Send + Sync + 'static {
 }
 #[track_caller]
 fn error(code: &str) -> AppError {
-    if code == "sync_plan_stale" { crate::store::sync_boundary_diagnostic("plan_stale"); }
+    if code == "sync_plan_stale" {
+        crate::store::sync_boundary_diagnostic("plan_stale");
+    }
     AppError {
         code: code.into(),
         message: match code {
@@ -274,7 +282,9 @@ impl SyncBackend for StoreBackend {
                 ))
             })
             .map_err(|e| {
-                if e.code == "sync_plan_stale" { crate::store::sync_boundary_diagnostic("required_blobs_failed"); }
+                if e.code == "sync_plan_stale" {
+                    crate::store::sync_boundary_diagnostic("required_blobs_failed");
+                }
                 backend_error(e)
             })?;
         // Actual cache/disk checks do not keep the Session locked. Receive and
@@ -305,12 +315,27 @@ impl SyncBackend for StoreBackend {
         }
         let storage = self.with(|s| s.store.sync_blob_storage())?;
         let mut outgoing = self.outgoing.lock().map_err(|_| SyncError::Backend)?;
-        if offset == 0 || !outgoing.as_ref().is_some_and(|r| r.matches(&b.sha256, b.size)) {
+        if offset == 0
+            || !outgoing
+                .as_ref()
+                .is_some_and(|r| r.matches(&b.sha256, b.size))
+        {
             *outgoing = None;
-            *outgoing = Some(storage.open_reader(&b.sha256, b.size).map_err(backend_error)?);
+            *outgoing = Some(
+                storage
+                    .open_reader(&b.sha256, b.size)
+                    .map_err(backend_error)?,
+            );
         }
-        let result = outgoing.as_ref().unwrap().read(offset, max).map_err(backend_error);
-        if result.as_ref().map_or(true, |bytes| offset + bytes.len() as u64 == b.size) {
+        let result = outgoing
+            .as_ref()
+            .unwrap()
+            .read(offset, max)
+            .map_err(backend_error);
+        if result
+            .as_ref()
+            .map_or(true, |bytes| offset + bytes.len() as u64 == b.size)
+        {
             *outgoing = None;
         }
         result
@@ -331,7 +356,9 @@ impl SyncBackend for StoreBackend {
             })
         })
         .map_err(|e| {
-            if e.code == "sync_plan_stale" { crate::store::sync_boundary_diagnostic("receive_head_failed"); }
+            if e.code == "sync_plan_stale" {
+                crate::store::sync_boundary_diagnostic("receive_head_failed");
+            }
             backend_error(e)
         })
     }
@@ -799,7 +826,9 @@ impl Runtime {
                     let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
                     s.sync_tick_workspace_adoption(&operation, &self.host.participants())?
                 };
-                if let Some(event) = event { self.host.emit("notes-sync", &event)?; }
+                if let Some(event) = event {
+                    self.host.emit("notes-sync", &event)?;
+                }
                 let ready = {
                     let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
                     s.sync_workspace_adoption_ready(
@@ -838,14 +867,18 @@ impl Runtime {
             // media work; a lost event leaves the renderer's old cancel timer.
             self.host.emit("notes-sync", &media_event)?;
             #[cfg(test)]
-            if let Some(work) = self.before_adoption_verify.lock().unwrap().take() { work(); }
+            if let Some(work) = self.before_adoption_verify.lock().unwrap().take() {
+                work();
+            }
             let media = match snapshot.verify() {
                 Ok(media) => media,
                 Err(failure) => {
                     // A released/expired media lease takes precedence over a
                     // late verifier failure for this exact operation only.
                     let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
-                    return Err(s.sync_workspace_adoption_timeout_error(&operation).unwrap_or(failure));
+                    return Err(s
+                        .sync_workspace_adoption_timeout_error(&operation)
+                        .unwrap_or(failure));
                 }
             };
             {
@@ -874,7 +907,10 @@ impl Runtime {
                 // Protocol adoption leaves the local editor Session untouched.
                 // Preserve the original release before any fallible broadcast;
                 // partial delivery is safe to retry without clearing editors.
-                *self.pending_adoption_release.lock().map_err(|_| error("sync_internal"))? = release;
+                *self
+                    .pending_adoption_release
+                    .lock()
+                    .map_err(|_| error("sync_internal"))? = release;
             }
             self.replay_adoption_release()?;
             Ok(())
@@ -895,7 +931,10 @@ impl Runtime {
         result
     }
     pub(crate) fn replay_adoption_release(&self) -> Result<()> {
-        let mut pending = self.pending_adoption_release.lock().map_err(|_| error("sync_internal"))?;
+        let mut pending = self
+            .pending_adoption_release
+            .lock()
+            .map_err(|_| error("sync_internal"))?;
         if let Some(release) = pending.as_ref() {
             // The existing renderer quiet protocol consumes release idempotently
             // by original operation/Session. Never broadcast destructive access.
@@ -934,11 +973,16 @@ impl Runtime {
         let summary = crate::account::types::DeviceSummary {
             note_count: summary.note_count,
             last_note_updated_at: summary.last_note_updated_at,
-            captured_at: std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH)
-                .map_err(|_| error("sync_internal"))?.as_millis().try_into()
+            captured_at: std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map_err(|_| error("sync_internal"))?
+                .as_millis()
+                .try_into()
                 .map_err(|_| error("sync_internal"))?,
         };
-        if !summary.valid() { return Err(error("sync_internal")); }
+        if !summary.valid() {
+            return Err(error("sync_internal"));
+        }
         Ok(summary)
     }
     pub(crate) fn command(
@@ -1309,7 +1353,8 @@ impl Runtime {
             // Adoption has no old apply plan. Its probe/prepare must advance
             // without cold-file hashing; the adopter owns its complete media
             // verification under the distinct, bounded media lease.
-            if !s.sync_has_workspace_adoption() && s.store.sync_identity()?.is_some()
+            if !s.sync_has_workspace_adoption()
+                && s.store.sync_identity()?.is_some()
                 && (s.sync_has_operation()
                     || (self.active.load(Ordering::Acquire) && s.store.sync_pending_count()? > 0))
             {
@@ -1333,26 +1378,30 @@ impl Runtime {
             let live = self.host.participants();
             // A snapshot started before adoption must not install an old apply
             // scope or abort the adoption due to that obsolete preparation.
-            let installed = if s.sync_has_workspace_adoption() { false } else { match preparation {
-                Ok(Some((media, authority))) if s.check(&authority, None).is_ok() => {
-                    match s.store.sync_begin_media(media) {
-                        Ok(()) => true,
-                        Err(_) => {
-                            s.sync_abort_reason(AbortReason::MediaInstallError);
-                            false
+            let installed = if s.sync_has_workspace_adoption() {
+                false
+            } else {
+                match preparation {
+                    Ok(Some((media, authority))) if s.check(&authority, None).is_ok() => {
+                        match s.store.sync_begin_media(media) {
+                            Ok(()) => true,
+                            Err(_) => {
+                                s.sync_abort_reason(AbortReason::MediaInstallError);
+                                false
+                            }
                         }
                     }
+                    Err(_) => {
+                        s.sync_abort_reason(AbortReason::MediaPrepareError);
+                        false
+                    }
+                    Ok(Some(_)) => {
+                        s.sync_abort_reason(AbortReason::MediaAuthorityChanged);
+                        false
+                    }
+                    Ok(None) => false,
                 }
-                Err(_) => {
-                    s.sync_abort_reason(AbortReason::MediaPrepareError);
-                    false
-                }
-                Ok(Some(_)) => {
-                    s.sync_abort_reason(AbortReason::MediaAuthorityChanged);
-                    false
-                }
-                Ok(None) => false,
-            }};
+            };
             let outcome = (|| -> Result<_> {
                 let tick = s.sync_tick(&live);
                 if tick.is_err() {
@@ -1503,34 +1552,61 @@ mod tests {
         session.0.lock().unwrap().store.sync_enable(None).unwrap();
         let validations = Cell::new(0);
         let calls = Cell::new(0);
-        prepared_store_rechecked(&session, &[], false, |_| {
-            validations.set(validations.get() + 1);
-            if validations.get() == 3 {
-                // Simulate a content commit after verification, while retaining
-                // the same Session, Store instance and account authority.
-                Store::open(d.path())?.action(json!({"type":"createNote"}))?;
-            }
-            Ok(())
-        }, 2, false, |store| {
-            calls.set(calls.get() + 1);
-            store.sync_flush()
-        }).unwrap();
+        prepared_store_rechecked(
+            &session,
+            &[],
+            false,
+            |_| {
+                validations.set(validations.get() + 1);
+                if validations.get() == 3 {
+                    // Simulate a content commit after verification, while retaining
+                    // the same Session, Store instance and account authority.
+                    Store::open(d.path())?.action(json!({"type":"createNote"}))?;
+                }
+                Ok(())
+            },
+            2,
+            false,
+            |store| {
+                calls.set(calls.get() + 1);
+                store.sync_flush()
+            },
+        )
+        .unwrap();
         assert!(validations.get() >= 5, "fresh content snapshot required");
         assert_eq!(calls.get(), 1);
         assert!(!session.0.lock().unwrap().store.sync_has_dirty().unwrap());
 
-        let result: Result<()> = prepared_store_rechecked(&session, &[], false, |_| Ok(()), 2, false, |_| {
-            calls.set(calls.get() + 1);
-            Err(error("sync_plan_stale"))
-        });
+        let result: Result<()> = prepared_store_rechecked(
+            &session,
+            &[],
+            false,
+            |_| Ok(()),
+            2,
+            false,
+            |_| {
+                calls.set(calls.get() + 1);
+                Err(error("sync_plan_stale"))
+            },
+        );
         assert_eq!(result.unwrap_err().code, "sync_plan_stale");
         assert_eq!(calls.get(), 2, "transaction result must never be replayed");
 
         let valid = Cell::new(true);
-        let result: Result<()> = prepared_store_rechecked(&session, &[], false, |_| {
-            if !valid.replace(false) { return Err(error("sync_plan_stale")); }
-            Ok(())
-        }, 2, false, |_| { panic!("revoked backend must not reach transaction") });
+        let result: Result<()> = prepared_store_rechecked(
+            &session,
+            &[],
+            false,
+            |_| {
+                if !valid.replace(false) {
+                    return Err(error("sync_plan_stale"));
+                }
+                Ok(())
+            },
+            2,
+            false,
+            |_| panic!("revoked backend must not reach transaction"),
+        );
         assert_eq!(result.unwrap_err().code, "sync_plan_stale");
     }
     #[test]
@@ -1867,19 +1943,28 @@ mod tests {
         );
         assert!(backend.outgoing.lock().unwrap().is_some());
         assert_eq!(
-            backend.read_blob_chunk(&b, network::CHUNK as u64, network::CHUNK).unwrap(),
+            backend
+                .read_blob_chunk(&b, network::CHUNK as u64, network::CHUNK)
+                .unwrap(),
             bytes[network::CHUNK..2 * network::CHUNK]
         );
         // An in-place mutation invalidates the pinned proof, even with the same
         // file length. Failed readers are discarded and a later retry rehashes.
-        let blob_path = d.path().join(".sync/blobs").join(format!("{}.blob", b.sha256));
+        let blob_path = d
+            .path()
+            .join(".sync/blobs")
+            .join(format!("{}.blob", b.sha256));
         fs::write(&blob_path, vec![8; bytes.len()]).unwrap();
-        assert!(backend.read_blob_chunk(&b, 2 * network::CHUNK as u64, network::CHUNK).is_err());
+        assert!(backend
+            .read_blob_chunk(&b, 2 * network::CHUNK as u64, network::CHUNK)
+            .is_err());
         assert!(backend.outgoing.lock().unwrap().is_none());
         assert!(backend.read_blob_chunk(&b, 0, network::CHUNK).is_err());
         fs::write(&blob_path, &bytes).unwrap();
         assert_eq!(
-            backend.read_blob_chunk(&b, 2 * network::CHUNK as u64, network::CHUNK).unwrap(),
+            backend
+                .read_blob_chunk(&b, 2 * network::CHUNK as u64, network::CHUNK)
+                .unwrap(),
             bytes[2 * network::CHUNK..]
         );
         assert!(backend.outgoing.lock().unwrap().is_none());

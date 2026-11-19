@@ -1,0 +1,20 @@
+syntax = "proto3";
+package cyberbus.example.v1;
+// Register type.googleapis.com/cyberbus.example.v1.EchoRequest and EchoReply.
+message EchoRequest { string text = 1; }
+message EchoReply { string text = 1; }
+message PublicConfig { string application_version = 1; }
+// Only the sample's SDK-accepted public declaration, never deployment/private config.
+message GetPublicConfigRequest { bytes request_id = 1; }
+message GetPublicConfigReply {
+  bytes request_id = 1;
+  PublicConfig public_config = 2;
+  string device_name = 3;
+  string config_semantic_version = 4;
+  uint64 config_revision = 5;
+}
+service Echo {
+  rpc Unary(EchoRequest) returns (EchoReply);
+  rpc Chat(stream EchoRequest) returns (stream EchoReply);
+  rpc GetPublicConfig(GetPublicConfigRequest) returns (GetPublicConfigReply);
+}

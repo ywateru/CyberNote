@@ -27,6 +27,9 @@ pub(crate) enum Command {
     RenameDevice {
         name: String,
     },
+    SetCredentialStorage {
+        storage: CredentialStorage,
+    },
     SyncDevice {
         #[serde(deserialize_with = "device_id")]
         device_id: String,
@@ -48,6 +51,8 @@ pub(crate) struct Status {
     pub pending_count: u64,
     pub conflict_count: u64,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub credential_storage: Option<CredentialStorage>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<SafeError>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport_generation: Option<u64>,
@@ -60,6 +65,13 @@ pub(crate) enum AuthorizationSurface {
     Embedded,
     #[default]
     Browser,
+}
+#[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum CredentialStorage {
+    Keychain,
+    #[default]
+    EncryptedFile,
 }
 #[derive(Clone, Serialize, Default, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
@@ -191,6 +203,8 @@ pub(crate) enum AuthProviderFailure {
 pub(crate) struct SafeError {
     #[serde(rename = "cyberbusCode", skip_serializing_if = "Option::is_none")]
     pub cyberbus_code: Option<i32>,
+    #[serde(rename = "sdkStage", skip_serializing_if = "Option::is_none")]
+    pub sdk_stage: Option<SdkStage>,
     pub code: String,
     pub message: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -230,6 +244,22 @@ pub(crate) enum SyncStage {
 #[serde(rename_all = "camelCase")]
 pub(crate) enum AdoptionReason {
     Timeout,
+}
+/// Finite CyberBus command boundaries. SDK error text and request payloads are
+/// intentionally absent from this DTO.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum SdkStage {
+    Init,
+    AuthStart,
+    AuthCallback,
+    AuthState,
+    AuthRestore,
+    AuthCancel,
+    AuthLogout,
+    PublishProfile,
+    NetworkStart,
+    NetworkStop,
 }
 impl SafeError {
     pub(super) fn refresh_rejected(&self) -> bool {
@@ -327,9 +357,11 @@ impl RequestFailure {
 pub(crate) enum Error {
     Configuration,
     BusCode(i32),
+    BusAt(SdkStage, i32),
     UnknownOutcome,
     Deadline,
     Authentication,
+    AuthenticationAtSdk(SdkStage),
     AuthenticationAt(NetworkStage),
     ProviderAuthentication(AuthProviderFailure),
     InvalidCallback,
@@ -368,12 +400,13 @@ impl Error {
     pub fn code(self) -> &'static str {
         match self {
             Self::Configuration => "account_configuration",
-            Self::BusCode(_) => "account_sdk_failed",
+            Self::BusCode(_) | Self::BusAt(_, _) => "account_sdk_failed",
             Self::UnknownOutcome => "account_unknown_outcome",
             Self::Deadline => "account_deadline_exceeded",
-            Self::Authentication | Self::AuthenticationAt(_) | Self::ProviderAuthentication(_) => {
-                "account_authentication"
-            }
+            Self::Authentication
+            | Self::AuthenticationAtSdk(_)
+            | Self::AuthenticationAt(_)
+            | Self::ProviderAuthentication(_) => "account_authentication",
             Self::InvalidCallback => "account_auth_callback_invalid",
             Self::InvalidIdentity | Self::IdentityRejected(_) | Self::ResponseMetadata(_, _) => {
                 "account_auth_identity_invalid"
@@ -417,7 +450,11 @@ impl Error {
             _ => None,
         };
         SafeError {
-            cyberbus_code: match self {Self::BusCode(c)=>Some(c),_=>None},
+            cyberbus_code: match self {Self::BusCode(c)|Self::BusAt(_,c)=>Some(c),_=>None},
+            sdk_stage: match self {
+                Self::BusAt(stage, _) | Self::AuthenticationAtSdk(stage) => Some(stage),
+                _ => None,
+            },
             code: self.code().into(),
             message: if self == Self::CleanupRequired {
                 "存在待撤销的登录授权，请先退出授权后重新登录。本机备忘录会保留。"
@@ -545,6 +582,23 @@ impl From<notes_cyberbus::Error> for Error {
         }
     }
 }
+impl Error {
+    pub(crate) fn at_sdk(stage: SdkStage, error: notes_cyberbus::Error) -> Self {
+        use notes_cyberbus::{pb::ErrorCode as C, Error as B};
+        // CyberBus reports secure-store open/load failures as Internal during
+        // initialization. Preserve the finite stage and classify this one
+        // actionable boundary as local storage; later Internal errors remain
+        // generic SDK failures.
+        if stage == SdkStage::Init && matches!(error, B::Sdk(code) if code == C::Internal as i32) {
+            return Self::Storage;
+        }
+        match Self::from(error) {
+            Self::BusCode(code) => Self::BusAt(stage, code),
+            Self::Authentication => Self::AuthenticationAtSdk(stage),
+            other => other,
+        }
+    }
+}
 #[cfg(test)]
 mod cyberbus_tests {
     use super::*;
@@ -557,6 +611,7 @@ mod cyberbus_tests {
             Error::Deadline,
             Error::AuthenticationAt(NetworkStage::IdentityRefresh),
             Error::Network,
+            Error::BusAt(SdkStage::NetworkStart, C::InvalidArgument as i32),
         ]
         .map(|error| error.safe());
         // Synthetic finite metadata only; consumed by the actual TS validator
@@ -586,5 +641,19 @@ mod cyberbus_tests {
         let safe = serde_json::to_value(Error::BusCode(C::Internal as i32).safe()).unwrap();
         assert_eq!(safe["cyberbusCode"], C::Internal as i32);
         assert!(safe["message"].as_str().unwrap().len() < 256);
+        let staged = serde_json::to_value(
+            Error::at_sdk(SdkStage::AuthStart, B::Sdk(C::InvalidArgument as i32)).safe(),
+        )
+        .unwrap();
+        assert_eq!(staged["sdkStage"], "authStart");
+        assert_eq!(staged["cyberbusCode"], C::InvalidArgument as i32);
+        assert_eq!(
+            Error::at_sdk(SdkStage::Init, B::Sdk(C::Internal as i32)),
+            Error::Storage
+        );
+        assert_eq!(
+            Error::at_sdk(SdkStage::NetworkStart, B::Sdk(C::Internal as i32)),
+            Error::BusAt(SdkStage::NetworkStart, C::Internal as i32)
+        );
     }
 }

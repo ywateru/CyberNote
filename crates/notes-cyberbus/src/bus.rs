@@ -195,6 +195,13 @@ impl Bus {
     pub fn subscribe(&self) -> broadcast::Receiver<BusEvent> {
         self.inner.events.subscribe()
     }
+    pub async fn diagnostic(&self) -> Result<DiagnosticSnapshot> {
+        self.inner
+            .client
+            .diagnostic()
+            .await
+            .map_err(|e| Error::Sdk(e.code))
+    }
     pub async fn cmd(&self, body: C) -> Result<pb::SdkResult> {
         self.execute(pb::SdkCommand {
             command_id: random_id().to_vec(),
@@ -605,6 +612,63 @@ pub(crate) mod tests {
             bus.cmd(C::GetAuthState(pb::GetAuthState {})).await,
             Err(Error::Closed)
         ));
+    }
+    #[tokio::test]
+    async fn network_start_requires_a_profile_published_first() {
+        let bus = Bus::new(
+            config(),
+            Box::<cyberbus_auth::MemoryStore>::default(),
+            StoreMode::CreateNew,
+        )
+        .await
+        .unwrap();
+        let mut updates = bus.watch();
+        tokio::time::timeout(Duration::from_secs(2), async {
+            while !updates.borrow_and_update().directory_valid {
+                updates.changed().await.unwrap()
+            }
+        })
+        .await
+        .unwrap();
+
+        assert!(matches!(
+            bus.cmd(C::NetworkStart(pb::NetworkStart {
+                private_config: None
+            }))
+            .await,
+            Err(Error::Sdk(code)) if code == pb::ErrorCode::InvalidArgument as i32
+        ));
+        bus.cmd(C::UpdatePublicProfile(pb::UpdatePublicProfile {
+            profile: Some(pb::PublicProfile {
+                device_name: "Offline profile".into(),
+                public_config: Some(Any {
+                    type_url: "type.notes.test/notes.test.Profile".into(),
+                    value: vec![8, 1],
+                }),
+                config_semantic_version: "1.0.0".into(),
+                ..Default::default()
+            }),
+            expected_revision: 0,
+            update_mask: Some(prost_types::FieldMask {
+                paths: vec![
+                    "device_name".into(),
+                    "public_config".into(),
+                    "config_semantic_version".into(),
+                ],
+            }),
+        }))
+        .await
+        .unwrap();
+        // The offline test installation has no grant, so startup advances past
+        // the profile precondition and fails at authentication instead.
+        assert!(matches!(
+            bus.cmd(C::NetworkStart(pb::NetworkStart {
+                private_config: None
+            }))
+            .await,
+            Err(Error::Sdk(code)) if code != pb::ErrorCode::InvalidArgument as i32
+        ));
+        bus.close().await.unwrap();
     }
     #[tokio::test]
     async fn real_sdk_encrypted_identity_restart() {

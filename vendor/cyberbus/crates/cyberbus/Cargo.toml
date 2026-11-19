@@ -9,8 +9,8 @@ cloudflared = ["cyberbus-transport/cloudflared"]
 
 [dependencies]
 cyberbus-auth = { git = "https://github.com/osd-pub/CyberBus.git", rev = "359465e83bd74b571a963f3d1fdc238f50169919" }
-cyberbus-protocol = { git = "https://github.com/osd-pub/CyberBus.git", rev = "359465e83bd74b571a963f3d1fdc238f50169919" }
-cyberbus-transport = { git = "https://github.com/osd-pub/CyberBus.git", rev = "359465e83bd74b571a963f3d1fdc238f50169919", features = ["websocket"] }
+cyberbus-protocol = { path = "../cyberbus-protocol" }
+cyberbus-transport = { path = "../cyberbus-transport", features = ["websocket"] }
 prost = "0.14"
 prost-types = "0.14"
 prost-reflect = "0.16"

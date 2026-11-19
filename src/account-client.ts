@@ -25,13 +25,17 @@ const syncStages = ["pair", "recoverPairing", "transfer", "retirement"] as const
 type SyncStage = typeof syncStages[number];
 const syncReasons = ["io", "invalid_input", "corrupt_identity", "authentication", "expired", "revoked", "workspace_mismatch", "protocol", "limit", "timeout", "stopped", "backend", "plan_stale", "busy", "transport"] as const;
 type SyncReason = typeof syncReasons[number];
+const sdkStages = ["init", "authStart", "authCallback", "authState", "authRestore", "authCancel", "authLogout", "publishProfile", "networkStart", "networkStop"] as const;
+type SdkStage = typeof sdkStages[number];
 const errorCodes = ["account_sdk_failed", "account_unknown_outcome", "account_deadline_exceeded", "account_configuration", "account_authentication", "account_auth_callback_invalid", "account_auth_identity_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_refresh_missing", "account_owner_workspace_mismatch", "account_network", "account_enrollment_invalid", "account_storage", "account_cancelled", "account_busy", "account_platform_unsupported", "account_cleanup_required", "account_sync_failed", "account_sync_protocol", "account_sync_adoption_blocked", "account_window_invalid", "account_device_offline", "account_device_incompatible", "account_sync_not_enabled", "account_directory_unavailable", "account_directory_unsupported"];
-export type SafeError = { code: string; message: string; cyberbusCode?: number; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number; adoptionStage?: AdoptionStage; adoptionReason?: "timeout"; syncStage?: SyncStage; syncReason?: SyncReason };
+export type SafeError = { code: string; message: string; cyberbusCode?: number; sdkStage?: SdkStage; stage?: NetworkStage; reason?: IdentityReason; providerReason?: ProviderReason; tokenOperation?: TokenOperation; tokenField?: TokenField; requestReason?: RequestReason; httpStatus?: number; adoptionStage?: AdoptionStage; adoptionReason?: "timeout"; syncStage?: SyncStage; syncReason?: SyncReason };
 const transportKinds = ["cyberbus", "webrtc-direct", "iroh-direct", "cloudflare-tunnel", "unavailable", "unknown"] as const;
 type TransportKind = typeof transportKinds[number];
 type MappingObservation = { generation: number; sample: number; ageMs: number; enrollment: TransportKind; sync: TransportKind };
 const authorizationSurfaces = ["embedded", "browser"] as const;
 export type AccountAuthorizationSurface = typeof authorizationSurfaces[number];
+const credentialStorages = ["keychain", "encryptedFile"] as const;
+export type CredentialStorage = typeof credentialStorages[number];
 
 // Frozen account110 DTO. The native singleton owns authorization and networking.
 export const deviceDirections = ["push", "pull", "both"] as const;
@@ -55,11 +59,13 @@ export type AccountStatus = {
   lastSyncAt?: number;
   pendingCount: number;
   conflictCount: number;
+  credentialStorage?: CredentialStorage;
   error?: SafeError;
 };
 export type AccountCommand =
   | { type: "signIn" | "signUp"; surface?: AccountAuthorizationSurface }
   | { type: "status" | "openLoginInBrowser" | "cancel" | "signOut" | "syncNow" }
+  | { type: "setCredentialStorage"; storage: CredentialStorage }
   | { type: "setEnabled"; enabled: boolean }
   | { type: "renameDevice"; name: string }
   | { type: "syncDevice"; deviceId: string; direction: DeviceDirection };
@@ -136,7 +142,7 @@ function deviceDirection(value: unknown): DeviceDirection {
 function bool(value: unknown): boolean { if (typeof value !== "boolean") return invalid(); return value; }
 function count(value: unknown): number { if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) return invalid(); return value; }
 export function validateAccountError(value: unknown): SafeError {
-  const error = record(value, ["cyberbusCode", "code", "message", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason", "syncStage", "syncReason"]);
+  const error = record(value, ["cyberbusCode", "sdkStage", "code", "message", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason", "syncStage", "syncReason"]);
   if (!errorCodes.includes(text(error.code))) {
     text(error.message, 1000);
     if (Object.keys(error).some(key => key !== "code" && key !== "message")) return invalid();
@@ -144,8 +150,9 @@ export function validateAccountError(value: unknown): SafeError {
   }
   if (error.code === "account_sdk_failed") {
     if (!Number.isInteger(error.cyberbusCode) || (error.cyberbusCode as number) < 1 || (error.cyberbusCode as number) > 26 ||
-      Object.keys(error).some(key => !["code", "message", "cyberbusCode"].includes(key))) return invalid();
-  } else if ("cyberbusCode" in error) return invalid();
+      (error.sdkStage !== undefined && !sdkStages.includes(error.sdkStage as SdkStage)) ||
+      Object.keys(error).some(key => !["code", "message", "cyberbusCode", "sdkStage"].includes(key))) return invalid();
+  } else if ("cyberbusCode" in error || "sdkStage" in error) return invalid();
   if (["account_unknown_outcome", "account_deadline_exceeded"].includes(error.code as string) &&
     Object.keys(error).some(key => !["code", "message"].includes(key))) return invalid();
   if ("syncStage" in error || "syncReason" in error) {
@@ -177,6 +184,7 @@ export function validateAccountError(value: unknown): SafeError {
   }
   return { code: error.code as string, message: text(error.message, 1000),
     ...(error.cyberbusCode === undefined ? {} : {cyberbusCode: error.cyberbusCode as number}),
+    ...(error.sdkStage === undefined ? {} : {sdkStage: error.sdkStage as SdkStage}),
     ...(error.stage === undefined ? {} : {stage: error.stage as NetworkStage}),
     ...(error.reason === undefined ? {} : {reason: error.reason as IdentityReason}),
     ...(error.providerReason === undefined ? {} : {providerReason: error.providerReason as ProviderReason}),
@@ -232,7 +240,7 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     account_cleanup_required: "存在待撤销的登录授权，请先退出账户并完成授权清理，再重新登录。本机备忘录会保留。",
     account_owner_workspace_mismatch: "账户服务返回的身份或同步空间与本次登录信息不一致，无法继续账户同步。请重新登录；如仍有未完成的授权，可先退出账户。本机备忘录会保留。",
     account_configuration: "账户配置无效，请检查服务配置或更新应用。本机备忘录会保留。",
-    account_storage: "无法安全读取或保存账户授权，请检查本机存储。本机备忘录会保留。",
+    account_storage: "无法安全读取或保存账户授权。请检查本机存储；若系统钥匙串不可用，可在退出账户后改用本机加密文件。本机备忘录会保留。",
     account_cancelled: "登录已取消，你可以继续使用本地备忘录。",
     account_busy: "已有账户操作正在进行，请等待该操作结束后再重试。本机备忘录会保留。",
     account_window_invalid: "当前窗口不能管理账户，请回到应用主窗口后重试。本机备忘录会保留。",
@@ -279,13 +287,13 @@ export function accountErrorDetails(error: AccountStatus["error"]): [string, str
   if (!error) return [];
   try {
     const safe = validateAccountError(error);
-    return (["code", "cyberbusCode", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason", "syncStage", "syncReason"] as const)
+    return (["code", "cyberbusCode", "sdkStage", "stage", "reason", "providerReason", "tokenOperation", "tokenField", "requestReason", "httpStatus", "adoptionStage", "adoptionReason", "syncStage", "syncReason"] as const)
       .flatMap(key => safe[key] === undefined ? [] : [[key, key === "syncStage" ? syncStageNames[safe.syncStage!] : key === "syncReason" ? syncReasonNames[safe.syncReason!] : key === "code" && safe.code === "unknown" ? "未知错误" : String(safe[key])] as [string, string]]);
   } catch { return []; }
 }
 // Ignore metric/device polling churn; only account state or safe error changes retire an immediate failure.
 export function accountErrorStateKey(status: AccountStatus | null): string {
-  return JSON.stringify(status ? {state:status.state,enabled:status.enabled,hasProfile:!!status.profile,surface:status.authorizationSurface,error:accountErrorDetails(status.error)} : null);
+  return JSON.stringify(status ? {state:status.state,enabled:status.enabled,hasProfile:!!status.profile,surface:status.authorizationSurface,credentialStorage:status.credentialStorage,error:accountErrorDetails(status.error)} : null);
 }
 export class AccountCommandFailure extends Error {
   constructor(readonly safeError?: SafeError, kind: "unknown" | "invalidData" | "cancelPending" | "signOutPending" = "unknown") {
@@ -306,9 +314,10 @@ export function accountIPCError(cause: unknown): SafeError | undefined {
   } catch { return undefined; }
 }
 export function validateAccountStatus(value: unknown): AccountStatus {
-  const s = record(value, ["state", "authorizationSurface", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "error", "transportGeneration", "deviceOperation"]);
+  const s = record(value, ["state", "authorizationSurface", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "credentialStorage", "error", "transportGeneration", "deviceOperation"]);
   if (!["signedOut", "authorizing", "connecting", "ready", "paused", "error"].includes(s.state as string)) return invalid();
   if ("authorizationSurface" in s && (s.state !== "authorizing" || !authorizationSurfaces.includes(s.authorizationSurface as AccountAuthorizationSurface))) return invalid();
+  if (s.credentialStorage !== undefined && !credentialStorages.includes(s.credentialStorage as CredentialStorage)) return invalid();
   if (!Array.isArray(s.devices) || s.devices.length > 64) return invalid();
   const profile = s.profile === undefined ? undefined : record(s.profile, ["subject", "displayName", "username"]);
   const error = s.error === undefined ? undefined : validateAccountError(s.error);
@@ -360,6 +369,7 @@ export function validateAccountStatus(value: unknown): AccountStatus {
       return { id, name: text(d.name, 512), online: bool(d.online), current: bool(d.current), connected: bool(d.connected), syncAvailable: bool(d.syncAvailable), ...(summary === undefined ? {} : {summary}), ...(transport === undefined ? {} : {transport}) };
     }),
     lastSyncAt: s.lastSyncAt === undefined ? undefined : count(s.lastSyncAt),
+    ...(s.credentialStorage === undefined ? {} : {credentialStorage: s.credentialStorage as CredentialStorage}),
     ...(generation === undefined ? {} : {transportGeneration: generation}),
     pendingCount: count(s.pendingCount), conflictCount: count(s.conflictCount),
     error,
@@ -387,6 +397,10 @@ export async function accountCommand(command: AccountCommand): Promise<AccountSt
     case "setEnabled":
       record(command, ["type", "enabled"]);
       request = { type: "setEnabled", enabled: bool(command.enabled) }; break;
+    case "setCredentialStorage":
+      record(command, ["type", "storage"]);
+      if (!credentialStorages.includes(command.storage)) return invalid();
+      request = { type: "setCredentialStorage", storage: command.storage }; break;
     case "status": case "openLoginInBrowser": case "cancel": case "signOut": case "syncNow":
       record(command, ["type"]);
       request = { type: command.type }; break;

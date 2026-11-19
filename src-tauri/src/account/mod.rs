@@ -5,7 +5,6 @@ mod directory;
 pub(crate) mod enrollment;
 pub(crate) mod private;
 mod provider;
-#[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 pub(crate) mod sdk_diagnostic;
 mod surface;
 mod transport;
@@ -24,9 +23,9 @@ use std::{
 };
 use tauri::Manager;
 use tauri_plugin_opener::OpenerExt;
-use tokio::sync::{oneshot, Mutex as AsyncMutex, OnceCell};
+use tokio::sync::{oneshot, Mutex as AsyncMutex};
 use tokio_util::sync::CancellationToken;
-use types::{Command, Error, Phase, Profile, Result, Status};
+use types::{Command, CredentialStorage, Error, Phase, Profile, Result, SdkStage, Status};
 struct Attempt {
     stop: CancellationToken,
     mac: Option<Arc<callback::Callback>>,
@@ -60,6 +59,7 @@ struct Data {
     status: Status,
     binding: Option<private::Binding>,
     device_operation_id: Option<uuid::Uuid>,
+    credential_storage: Option<CredentialStorage>,
 }
 pub(crate) struct Runtime {
     blocked: Option<Error>,
@@ -67,7 +67,7 @@ pub(crate) struct Runtime {
     sync: Arc<adapter::Runtime>,
     root: PathBuf,
     data: Mutex<Data>,
-    bus: OnceCell<Bus>,
+    bus: Mutex<Option<Bus>>,
     lifecycle: AsyncMutex<()>,
     operation: AsyncMutex<()>,
     registry: Mutex<Option<private::Registry>>,
@@ -92,6 +92,13 @@ impl Runtime {
         let (binding, mut blocked) = match loaded {
             Ok(b) => (b, None),
             Err(e) => (None, Some(e)),
+        };
+        let credential_storage = match provider::selected_storage(&root) {
+            Ok(storage) => storage,
+            Err(e) => {
+                blocked.get_or_insert(e);
+                None
+            }
         };
         let registry = if blocked.is_none() {
             match private::registry(&root) {
@@ -118,8 +125,9 @@ impl Runtime {
                 status,
                 binding,
                 device_operation_id: None,
+                credential_storage,
             }),
-            bus: OnceCell::new(),
+            bus: Mutex::new(None),
             lifecycle: AsyncMutex::new(()),
             operation: AsyncMutex::new(()),
             registry: Mutex::new(registry),
@@ -132,19 +140,52 @@ impl Runtime {
             closed: AtomicBool::new(false),
         }))
     }
+    fn bus_current(&self) -> Result<Option<Bus>> {
+        Ok(self.bus.lock().map_err(|_| Error::Storage)?.clone())
+    }
     async fn bus(&self) -> Result<Bus> {
         if let Some(e) = self.blocked {
             return Err(e);
         }
-        Ok(self
-            .bus
-            .get_or_try_init(|| async {
-                let config = config::pinned()?;
-                let (store, mode) = provider::store(&self.app, &self.root)?;
-                Bus::new(config, store, mode).await.map_err(Error::from)
-            })
-            .await?
-            .clone())
+        if let Some(bus) = self.bus_current()? {
+            return Ok(bus);
+        }
+        let config = config::pinned()?;
+        let storage = provider::selected_storage(&self.root)?.ok_or(Error::Unsupported)?;
+        let (store, mode) = provider::store(&self.app, &self.root, storage)?;
+        let candidate = Bus::new(config, store, mode)
+            .await
+            .map_err(|error| Error::at_sdk(SdkStage::Init, error))?;
+        let existing = {
+            let mut slot = self.bus.lock().map_err(|_| Error::Storage)?;
+            if let Some(existing) = slot.as_ref().cloned() {
+                Some(existing)
+            } else {
+                *slot = Some(candidate.clone());
+                None
+            }
+        };
+        if let Some(existing) = existing {
+            let _ = candidate.close().await;
+            Ok(existing)
+        } else {
+            Ok(candidate)
+        }
+    }
+    pub(crate) async fn cyberbus_diagnostic(
+        &self,
+    ) -> std::result::Result<notes_cyberbus::DiagnosticSnapshot, &'static str> {
+        let bus = self.bus().await.map_err(|_| "UNAVAILABLE")?;
+        bus.diagnostic().await.map_err(|_| "UNAVAILABLE")
+    }
+    async fn close_bus(&self) -> Result<()> {
+        let bus = self.bus.lock().map_err(|_| Error::Storage)?.take();
+        if let Some(bus) = bus {
+            bus.close()
+                .await
+                .map_err(|error| Error::at_sdk(SdkStage::Init, error))?;
+        }
+        Ok(())
     }
     fn mutate(&self, f: impl FnOnce(&mut Data)) {
         if let Ok(mut d) = self.data.lock() {
@@ -176,6 +217,11 @@ impl Runtime {
     }
     pub fn snapshot(&self) -> Result<Status> {
         let mut status = self.data.lock().map_err(|_| Error::Storage)?.status.clone();
+        status.credential_storage = self
+            .data
+            .lock()
+            .map_err(|_| Error::Storage)?
+            .credential_storage;
         let (pending, conflicts) = self.sync.account_metrics()?;
         status.pending_count = pending;
         status.conflict_count = conflicts;
@@ -188,8 +234,7 @@ impl Runtime {
         }
         // UI cannot reuse online/sync observations after lease expiry between ticks.
         let valid = self
-            .bus
-            .get()
+            .bus_current()?
             .zip(self.data.lock().ok().and_then(|d| d.binding.clone()))
             .is_some_and(|(bus, b)| worker::available(&bus.snapshot(), &b));
         if !valid {
@@ -230,7 +275,8 @@ impl Runtime {
                 bus.cmd(C::AuthRestore(pb::AuthRestore {
                     operation_id: uuid::Uuid::new_v4().as_bytes().to_vec(),
                 }))
-                .await?;
+                .await
+                .map_err(|error| Error::at_sdk(SdkStage::AuthRestore, error))?;
                 let account = this
                     .wait_account(&bus, g, &CancellationToken::new())
                     .await?;
@@ -258,7 +304,10 @@ impl Runtime {
         stop: &CancellationToken,
     ) -> Result<pb::AccountSummary> {
         let mut watch = bus.watch();
-        let result = bus.cmd(C::GetAuthState(pb::GetAuthState {})).await?;
+        let result = bus
+            .cmd(C::GetAuthState(pb::GetAuthState {}))
+            .await
+            .map_err(|error| Error::at_sdk(SdkStage::AuthState, error))?;
         if let Some(pb::sdk_result::Body::AuthState(a)) = result.body {
             if let Some(account) = verified_account(&a)? {
                 return Ok(account);
@@ -344,17 +393,34 @@ impl Runtime {
         let stop = CancellationToken::new();
         let g = self.generation.load(Ordering::Acquire);
         let (requests, rx) = tokio::sync::mpsc::channel(1);
+        // CyberBus requires the local profile to exist before it will start
+        // transport. Publish while still offline, then hand the same revision
+        // baseline to the worker so its first online observation does not race
+        // or repeat the write.
+        let mut publication = worker::Publication::default();
+        worker::publish(self, &bus, &binding, &catalog, false, &mut publication).await?;
         bus.cmd(C::NetworkStart(pb::NetworkStart {
             private_config: None,
         }))
-        .await?;
+        .await
+        .map_err(|error| Error::at_sdk(SdkStage::NetworkStart, error))?;
         let owner = Arc::downgrade(self);
         let c = control.clone();
         let history = catalog.clone();
         let task_stop = stop.clone();
         let task = tokio::spawn(async move {
-            let result =
-                worker::run(owner.clone(), g, binding, bus, c, history, task_stop, rx).await;
+            let result = worker::run(
+                owner.clone(),
+                g,
+                binding,
+                bus,
+                c,
+                history,
+                task_stop,
+                rx,
+                publication,
+            )
+            .await;
             if let Err(e) = result {
                 if let Some(o) = owner.upgrade() {
                     if o.current(g) {
@@ -387,8 +453,10 @@ impl Runtime {
             }
         }
         self.sync.pause_for_account()?;
-        if let Some(bus) = self.bus.get() {
-            bus.cmd(C::NetworkStop(pb::NetworkStop {})).await?;
+        if let Some(bus) = self.bus_current()? {
+            bus.cmd(C::NetworkStop(pb::NetworkStop {}))
+                .await
+                .map_err(|error| Error::at_sdk(SdkStage::NetworkStop, error))?;
         }
         Ok(())
     }
@@ -575,7 +643,8 @@ impl Runtime {
                     bus.cmd(C::AuthRestore(pb::AuthRestore {
                         operation_id: uuid::Uuid::new_v4().as_bytes().to_vec(),
                     }))
-                    .await?;
+                    .await
+                    .map_err(|error| Error::at_sdk(SdkStage::AuthRestore, error))?;
                     let g = self.generation.load(Ordering::Acquire);
                     let account = self
                         .wait_account(&bus, g, &CancellationToken::new())
@@ -599,6 +668,51 @@ impl Runtime {
                 if let Some(n) = self.network.lock().await.as_ref() {
                     n.control.refresh.notify_one();
                 }
+            }
+            Command::SetCredentialStorage { storage } => {
+                let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
+                if provider::available_storage().is_none() {
+                    return Err(Error::Unsupported);
+                }
+                if self
+                    .data
+                    .lock()
+                    .map_err(|_| Error::Storage)?
+                    .credential_storage
+                    == Some(storage)
+                {
+                    return self.snapshot();
+                }
+                {
+                    let data = self.data.lock().map_err(|_| Error::Storage)?;
+                    let blocked_error = data.status.error.as_ref().is_some_and(|error| {
+                        error.code == "account_busy" || error.code == "account_cleanup_required"
+                    });
+                    if data.binding.is_some()
+                        || data.status.profile.is_some()
+                        || data.status.state == Phase::Authorizing
+                        || data
+                            .status
+                            .device_operation
+                            .as_ref()
+                            .is_some_and(|operation| {
+                                operation.phase == types::DeviceOperationPhase::Running
+                            })
+                        || blocked_error
+                    {
+                        return Err(Error::Busy);
+                    }
+                }
+                if self.network.lock().await.is_some() || self.attempt.lock().await.is_some() {
+                    return Err(Error::Busy);
+                }
+                self.close_bus().await?;
+                provider::set_selected_storage(&self.root, storage)?;
+                self.generation.fetch_add(1, Ordering::AcqRel);
+                self.mutate(|data| {
+                    data.credential_storage = Some(storage);
+                    data.status = Status::default();
+                });
             }
             Command::SyncDevice {
                 device_id,
@@ -752,7 +866,8 @@ impl Runtime {
                     pb::AuthIntent::Login as i32
                 },
             }))
-            .await?;
+            .await
+            .map_err(|error| Error::at_sdk(SdkStage::AuthStart, error))?;
         let Some(pb::sdk_result::Body::AuthStarted(started)) = result.body else {
             return Err(Error::CoordinationProtocol);
         };
@@ -786,7 +901,9 @@ impl Runtime {
             // Once dispatched, await the SDK owner even if the surface cancels.
             // The owner settles rotated credentials before any local logout.
             callback_submitted=true;
-            bus.cmd(C::AuthCallback(pb::AuthCallback{operation_id:op.clone(),callback_uri:value})).await?;
+            bus.cmd(C::AuthCallback(pb::AuthCallback{operation_id:op.clone(),callback_uri:value}))
+                .await
+                .map_err(|error| Error::at_sdk(SdkStage::AuthCallback, error))?;
             let account=self.wait_account(&bus,g,&stop).await?;
             self.bind(&account,g,true)?;
             self.start_network().await
@@ -794,16 +911,20 @@ impl Runtime {
         if outcome.is_err() {
             let cancel = bus
                 .cmd(C::AuthCancel(pb::AuthCancel { operation_id: op }))
-                .await;
+                .await
+                .map_err(|error| Error::at_sdk(SdkStage::AuthCancel, error));
             if !self.current(g) || stop.is_cancelled() || callback_submitted {
                 // Callback may have committed immediately before cancellation.
                 // Seal any grant rather than leaving an unseen logged-in owner.
                 self.stop_network().await?;
                 self.finish_local_logout(self.logout().await?)?;
             } else if let Err(e) = cancel {
-                if !matches!(e,notes_cyberbus::Error::Sdk(c) if c==pb::ErrorCode::Conflict as i32 || c==pb::ErrorCode::NotFound as i32)
+                if !matches!(e, Error::BusAt(
+                    SdkStage::AuthCancel,
+                    code
+                ) if code == pb::ErrorCode::Conflict as i32 || code == pb::ErrorCode::NotFound as i32)
                 {
-                    return Err(e.into());
+                    return Err(e);
                 }
             }
         }
@@ -881,11 +1002,9 @@ impl Runtime {
                 this.fail(error);
                 return;
             }
-            if let Some(bus) = this.bus.get() {
-                if let Err(error) = bus.close().await {
-                    this.fail(error.into());
-                    return;
-                }
+            if let Err(error) = this.close_bus().await {
+                this.fail(error);
+                return;
             }
             this.closed.store(true, Ordering::Release);
             app.exit(0);
@@ -922,7 +1041,10 @@ async fn logout_bus(bus: &Bus) -> Result<LogoutReceipt> {
     // Query the SDK owner, including its persisted grant, rather than inferring
     // grant existence from a UI binding or the auth phase. This also makes a
     // cancelled pre-callback login and repeated signout idempotent locally.
-    let state = bus.cmd(C::GetAuthState(pb::GetAuthState {})).await?;
+    let state = bus
+        .cmd(C::GetAuthState(pb::GetAuthState {}))
+        .await
+        .map_err(|error| Error::at_sdk(SdkStage::AuthState, error))?;
     let Some(pb::sdk_result::Body::AuthState(state)) = state.body else {
         return Err(Error::CoordinationProtocol);
     };
@@ -936,7 +1058,8 @@ async fn logout_bus(bus: &Bus) -> Result<LogoutReceipt> {
             } as i32),
             cloud_budget: None,
         }))
-        .await?;
+        .await
+        .map_err(|error| Error::at_sdk(SdkStage::AuthLogout, error))?;
     let Some(pb::sdk_result::Body::AuthLogout(result)) = result.body else {
         return Err(Error::CoordinationProtocol);
     };
@@ -1048,13 +1171,20 @@ fn session_identity_matches(b: &private::Binding, a: &pb::AccountSummary) -> boo
 }
 fn verified_account(a: &pb::AuthEvent) -> Result<Option<pb::AccountSummary>> {
     match pb::AuthPhase::try_from(a.phase) {
-        Ok(pb::AuthPhase::Authorizing | pb::AuthPhase::Restoring) => Ok(None),
+        // AuthRestore is acknowledged before the SDK publishes its first
+        // Restoring event. The initial owner snapshot can therefore still be
+        // LoggedOut even though restoration is already in flight. Treat only
+        // explicit terminal phases as failures; the operation event that
+        // follows will report Authenticated, ReauthRequired, or Failed.
+        Ok(pb::AuthPhase::LoggedOut | pb::AuthPhase::Authorizing | pb::AuthPhase::Restoring) => {
+            Ok(None)
+        }
         Ok(pb::AuthPhase::Authenticated)
             if !a.reauth_required && !a.security_state_persistence_pending =>
         {
             a.account.clone().map(Some).ok_or(Error::InvalidIdentity)
         }
-        Ok(pb::AuthPhase::LoggedOut | pb::AuthPhase::AuthCancelled) => Err(Error::Authentication),
+        Ok(pb::AuthPhase::AuthCancelled) => Err(Error::Authentication),
         Ok(pb::AuthPhase::Degraded) => Err(Error::Network),
         Ok(pb::AuthPhase::ReauthRequired) => Err(Error::Authentication),
         _ => Err(a
@@ -1091,6 +1221,32 @@ pub(crate) async fn account_command(
         return Err(Error::WindowInvalid.safe());
     }
     runtime.0.command(command).await.map_err(Error::safe)
+}
+
+#[tauri::command]
+pub(crate) async fn account_sdk_diagnostic(
+    window: tauri::WebviewWindow,
+    runtime: tauri::State<'_, crate::AccountState>,
+) -> std::result::Result<serde_json::Value, String> {
+    // Keep the fixed, identifier-free diagnostic behind the same trusted-main
+    // window boundary as account mutations. The snapshot itself is debug-only
+    // unless its explicit desktop environment switches are enabled.
+    let source = window
+        .url()
+        .map_err(|_| "WINDOW_INVALID".to_string())?;
+    let mut allowed = trusted_application_origin(&source);
+    #[cfg(debug_assertions)]
+    {
+        if let Some(dev) = &window.app_handle().config().build.dev_url {
+            allowed |= dev.origin() == source.origin();
+        }
+    }
+    if window.label() != "main" || !allowed {
+        return Err("WINDOW_INVALID".into());
+    }
+    sdk_diagnostic::snapshot(&runtime.0)
+        .await
+        .map_err(str::to_owned)
 }
 
 #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
@@ -1133,6 +1289,20 @@ fn write_test_authorization_file(path: &Path, uri: &str) -> Result<()> {
 #[cfg(test)]
 mod lifecycle_tests {
     use super::*;
+
+    #[test]
+    fn auth_restore_does_not_treat_the_preoperation_logged_out_snapshot_as_failure() {
+        let event = pb::AuthEvent {
+            phase: pb::AuthPhase::LoggedOut as i32,
+            ..Default::default()
+        };
+        assert_eq!(verified_account(&event), Ok(None));
+        let cancelled = pb::AuthEvent {
+            phase: pb::AuthPhase::AuthCancelled as i32,
+            ..Default::default()
+        };
+        assert_eq!(verified_account(&cancelled), Err(Error::Authentication));
+    }
 
     #[cfg(all(feature = "sync-e2e", debug_assertions, desktop, unix))]
     #[test]

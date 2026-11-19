@@ -12,7 +12,7 @@ test('typed sync failure accepts every frozen stage/reason pair with local-only 
  for(const [syncStage,stage] of Object.entries(syncStageLabels))for(const [syncReason,reason] of Object.entries(syncReasonLabels)) {
   const error={code:'account_sync_failed',message:'private-response-sentinel',syncStage,syncReason};
   assert.deepEqual(validateAccountStatus(status(error)).error,error);
-  const message=`设备同步在${stage}阶段未完成：${reason}。本地更改仍保存在此设备。`;
+  const message=`设备同步在${stage}阶段未完成：${reason}。${syncReason==='timeout'?'请确认两台设备保持运行且网络可用，再选择此设备重试。已接收的内容会保留。':'本地更改仍保存在此设备。'}`;
   assert.equal(accountErrorMessage(error),message);
   assert.deepEqual(accountErrorDetails(error),[['code','account_sync_failed'],['syncStage',stage],['syncReason',reason]]);
   const ipc=accountIPCError(error);assert.deepEqual(ipc,{...error,message});
@@ -207,6 +207,40 @@ test('provider diagnostics preserve finite auth categories in their strict conte
  for(const providerReason of ['configuration','network','invalidCallback','invalidIdentity','identityRejected','codeExchangeRejected','tokenResponseInvalid','missingRefreshToken','cancelled','noSession','ownershipMismatch','storage','refreshFailed','revocationFailed','busy']) {
   const error = {code:'account_authentication',message:'safe',stage:'authorizationProvider',providerReason};
   assert.deepEqual(validateAccountStatus(status(error)).error,error);
+ }
+});
+test('credential storage is an optional finite status field',()=>{
+ for(const credentialStorage of ['keychain','encryptedFile']) {
+  const parsed=validateAccountStatus({...status(undefined),credentialStorage});
+  assert.equal(parsed.credentialStorage,credentialStorage);
+ }
+ assert.equal(validateAccountStatus(status(undefined)).credentialStorage,undefined);
+ for(const credentialStorage of [null,'keychainFile','encrypted_file','',0,false,{},[]])
+  assert.throws(()=>validateAccountStatus({...status(undefined),credentialStorage}),/无效数据/);
+});
+test('SDK failures preserve every finite stage and reject cross-branch diagnostics',()=>{
+ const stages=['init','authStart','authCallback','authState','authRestore','authCancel','authLogout','publishProfile','networkStart','networkStop'];
+ for(const sdkStage of stages) {
+  const error={code:'account_sdk_failed',message:'safe',cyberbusCode:1,sdkStage};
+  const parsed=validateAccountStatus(status(error));
+  assert.deepEqual(parsed.error,error);
+  assert.deepEqual(accountErrorDetails(error),[['code','account_sdk_failed'],['cyberbusCode','1'],['sdkStage',sdkStage]]);
+  assert.deepEqual(accountIPCError(error),{...error,message:accountErrorMessage(error)});
+ }
+ const legacy={code:'account_sdk_failed',message:'safe',cyberbusCode:1};
+ assert.deepEqual(validateAccountStatus(status(legacy)).error,legacy);
+ const valid={...legacy,sdkStage:'networkStart'};
+ for(const error of [
+  {...legacy,cyberbusCode:undefined},{...legacy,cyberbusCode:0},{...legacy,cyberbusCode:27},
+  {...legacy,cyberbusCode:'1'},{...valid,sdkStage:'network_start'},
+  ...['stage','reason','providerReason','requestReason','httpStatus','adoptionStage','adoptionReason','syncStage','syncReason','url','token']
+   .flatMap(key=>[{...valid,[key]:undefined},{...valid,[key]:'private-response-sentinel'}]),
+  {code:'account_network',message:'safe',sdkStage:'networkStart'},
+  {code:'account_auth_identity_invalid',message:'safe',reason:'responseMetadata',sdkStage:'authCallback'},
+ ]) {
+  assert.throws(()=>validateAccountStatus(status(error)),/无效数据/);
+  assert.equal(accountIPCError(error),undefined);
+  assert.deepEqual(accountErrorDetails(error),[]);
  }
 });
 test('authentication diagnostics preserve only the finite native operation stages',()=>{

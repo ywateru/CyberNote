@@ -120,6 +120,7 @@ mod tests {
             policy: Default::default(),
             local: vec![0; 32],
             output_budget: Default::default(),
+            metrics: Default::default(),
         });
         let (io, _held_remote) = tokio::io::duplex(128 * 1024);
         let (incoming, mut inbox) = mpsc::channel(8);

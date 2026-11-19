@@ -95,7 +95,6 @@ pub fn write(path: &Path, binding: &Binding) -> Result<()> {
 pub(super) fn atomic_write(path: &Path, bytes: &[u8]) -> Result<()> {
     write_atomic(path, bytes, true)
 }
-#[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
 pub(super) fn atomic_create(path: &Path, bytes: &[u8]) -> Result<()> {
     write_atomic(path, bytes, false)
 }

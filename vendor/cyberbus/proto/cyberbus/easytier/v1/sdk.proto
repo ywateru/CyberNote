@@ -1,0 +1,150 @@
+syntax = "proto3";
+package cyberbus.easytier.v1;
+import public "cyberbus/easytier/v1/common.proto";
+import public "cyberbus/easytier/v1/wire.proto";
+import public "google/protobuf/descriptor.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/empty.proto";
+
+enum AuthIntent { AUTH_INTENT_UNSPECIFIED = 0; LOGIN = 1; REGISTER = 2; }
+enum AuthPhase {
+  AUTH_PHASE_UNSPECIFIED = 0; LOGGED_OUT = 1; AUTHORIZING = 2; RESTORING = 3;
+  AUTHENTICATED = 4; DEGRADED = 5; REAUTH_REQUIRED = 6; FAILED = 7; AUTH_CANCELLED = 8;
+  CONFIGURATION_ERROR = 9;
+}
+enum ReauthReason { REAUTH_REASON_UNSPECIFIED = 0; CREDENTIALS_CHANGED = 1; SESSION_REVOKED = 2; VALIDATION_LEASE_EXPIRED = 3; }
+enum CloudLogoutPolicy { CLOUD_LOGOUT_POLICY_UNSPECIFIED = 0; LOCAL_ONLY = 1; REVOKE_GRANT = 2; END_SESSION = 3; REVOKE_AND_END_SESSION = 4; }
+message AccountSummary { string issuer = 1; string subject = 2; string product_id = 3; }
+message AuthStart { AuthIntent intent = 1; }
+message AuthStarted { bytes operation_id = 1; string authorization_uri = 2; google.protobuf.Timestamp expires_at = 3; }
+message AuthCallback { bytes operation_id = 1; string callback_uri = 2; }
+message AuthCancel { bytes operation_id = 1; }
+message AuthRestore { bytes operation_id = 1; }
+message GetAuthState {}
+enum CloudLogoutStatus { CLOUD_LOGOUT_STATUS_UNSPECIFIED = 0; CLOUD_LOGOUT_STATUS_NOT_REQUESTED = 1; CLOUD_LOGOUT_STATUS_SUCCEEDED = 2; CLOUD_LOGOUT_STATUS_FAILED = 3; CLOUD_LOGOUT_STATUS_UNSUPPORTED = 4; CLOUD_LOGOUT_STATUS_UNKNOWN_OUTCOME = 5; }
+message AuthLogout { optional CloudLogoutPolicy cloud_policy = 1; google.protobuf.Duration cloud_budget = 2; }
+message AuthLogoutResult { bool local_closed = 1; CloudLogoutStatus cloud_status = 2; reserved 3; ProtocolError local_error = 4; ProtocolError cloud_error = 5; }
+message SdkClose {}
+message SdkClosed { bool closed = 1; ProtocolError cleanup_error = 2; }
+message AuthEvent {
+  bytes operation_id = 1;
+  AuthPhase phase = 2;
+  bool reauth_required = 3;
+  ReauthReason reason = 4;
+  uint64 state_revision = 5;
+  bool refresh_supported = 6;
+  bool interaction_recommended = 7;
+  bool refresh_grant_frozen = 8;
+  bool security_state_persistence_pending = 9;
+  google.protobuf.Timestamp last_online_validation_at = 10;
+  google.protobuf.Timestamp validation_request_started_at = 11;
+  google.protobuf.Timestamp validation_lease_expires_at = 12;
+  google.protobuf.Timestamp access_token_expires_at = 13;
+  AccountSummary account = 14;
+  ProtocolError error = 15;
+}
+message NetworkStart { google.protobuf.Any private_config = 1; }
+message NetworkStop {}
+message NetworkState { bool running = 1; bool reachable = 2; ProtocolError error = 3; }
+message WatchDevices { bytes watch_id = 1; }
+message StopWatchDevices { bytes watch_id = 1; }
+message GetDevices { bytes query_id = 1; }
+message RefreshDevices { bytes query_id = 1; google.protobuf.Duration budget = 2; }
+message GetDeviceDescriptor { bytes query_id = 1; bytes peer_device_id = 2; optional uint64 conditional_revision = 3; }
+message DevicesQueryResult { bytes query_id = 1; oneof result { DevicesSnapshot snapshot = 2; ProtocolError error = 3; } }
+message RefreshDevicesResult { bytes query_id = 1; uint32 attempted = 2; uint32 verified = 3; uint32 deferred = 4; uint64 revision = 5; bool partial = 6; ProtocolError error = 7; }
+message DeviceDescriptorResult {
+  bytes query_id = 1; bytes peer_device_id = 2; bool from_cache = 3;
+  google.protobuf.Timestamp authenticated_at = 4;
+  oneof result { PublicProfile profile = 5; uint64 unchanged = 6; ProtocolError error = 7; }
+}
+message DeviceAdded { DeviceSnapshot device = 1; }
+message DeviceUpdated { DeviceSnapshot device = 1; google.protobuf.FieldMask changed_fields = 2; }
+message DeviceOffline { DeviceSnapshot device = 1; }
+message DeviceRemoved { bytes device_id = 1; ProtocolError error = 2; }
+enum ResetReason { RESET_REASON_UNSPECIFIED = 0; OVERFLOW = 1; RUNTIME_CHANGED = 2; RESYNC = 3; }
+message DevicesReset { DevicesSnapshot snapshot = 1; ResetReason reason = 2; }
+message DevicesEvent {
+  bytes watch_id = 1; bytes runtime_id = 2; uint64 revision = 3; uint64 previous_revision = 4;
+  oneof body { DevicesSnapshot snapshot = 10; DeviceAdded added = 11; DeviceUpdated updated = 12; DeviceOffline offline = 13; DeviceRemoved removed = 14; DevicesReset reset = 15; }
+}
+message UpdatePublicProfile { PublicProfile profile = 1; uint64 expected_revision = 2; google.protobuf.FieldMask update_mask = 3; }
+message SubscribeData { bytes subscription_id = 1; repeated string type_urls = 2; }
+message UnsubscribeData { bytes subscription_id = 1; }
+message Send { bytes peer_device_id = 1; DataMessage message = 2; }
+message CancelData { bytes peer_device_id = 1; bytes message_id = 2; }
+message CompleteData { bytes peer_device_id = 1; bytes message_id = 2; oneof result { AckStage stage = 3; ProtocolError error = 4; } }
+message DataReceived { bytes subscription_id = 1; bytes peer_device_id = 2; DataMessage message = 3; }
+message PeerDataCancel { bytes peer_device_id = 1; bytes message_id = 2; }
+message DataStatus { bytes peer_device_id = 1; bytes message_id = 2; oneof result { AckStage stage = 3; ProtocolError error = 4; } }
+message RegisterHandler { bytes handler_id = 1; Capability capability = 2; bytes descriptor_set = 3; }
+message UnregisterHandler { bytes handler_id = 1; }
+message InvokeRpc { bytes peer_device_id = 1; RpcRequest request = 2; }
+message SendRpcChunk { bytes peer_device_id = 1; RpcChunk chunk = 2; }
+message EndRpc { bytes peer_device_id = 1; RpcEnd end = 2; }
+message CancelRpc { bytes peer_device_id = 1; RpcCancel cancel = 2; }
+message GrantRpcWindow { bytes peer_device_id = 1; RpcWindow window = 2; }
+message RpcEvent {
+  bytes peer_device_id = 1;
+  // Local-only admission binding. Inbound calls retain the original handler across
+  // replacement/unregistration; events for locally initiated calls leave this empty.
+  bytes handler_id = 2;
+  oneof body { RpcRequest request = 10; RpcChunk chunk = 11; RpcEnd end = 12; RpcCancel cancel = 13; RpcWindow window = 14; }
+}
+message PullDescriptor { bytes query_id = 1; bytes peer_device_id = 2; bytes digest = 3; google.protobuf.Duration timeout = 4; }
+message DescriptorResult { bytes query_id = 1; bytes digest = 2; oneof result { bytes descriptor_set = 3; ProtocolError error = 4; } }
+message BlockDevice { bytes peer_device_id = 1; }
+message UnblockDevice { bytes peer_device_id = 1; }
+message GetBlockedDevices { bytes query_id = 1; optional bytes peer_device_id = 2; }
+message BlockScope { string issuer = 1; string subject = 2; string product_id = 3; }
+message DeviceBlockState { bytes device_id = 1; bool blocked = 2; bool persisted_blocked = 3; bool persistence_pending = 4; }
+message DeviceBlockResult { BlockScope scope = 1; DeviceBlockState state = 2; uint64 revision = 3; uint64 state_revision = 4; }
+message BlockedDevicesSnapshot { BlockScope scope = 1; repeated DeviceBlockState devices = 2; uint64 revision = 3; uint64 state_revision = 4; }
+message BlockedDevicesQueryResult { bytes query_id = 1; oneof result { BlockedDevicesSnapshot snapshot = 2; ProtocolError error = 3; } }
+
+message SdkCommand {
+  bytes command_id = 1;
+  oneof body {
+    AuthStart auth_start = 10; AuthCallback auth_callback = 11; AuthCancel auth_cancel = 12;
+    AuthLogout auth_logout = 13; NetworkStart network_start = 14; NetworkStop network_stop = 15;
+    WatchDevices watch_devices = 16; StopWatchDevices stop_watch_devices = 17;
+    SubscribeData subscribe_data = 18; UnsubscribeData unsubscribe_data = 19;
+    Send send = 20; CancelData cancel_data = 21; CompleteData complete_data = 22;
+    RegisterHandler register_handler = 23; UnregisterHandler unregister_handler = 24;
+    InvokeRpc rpc_request = 25; SendRpcChunk rpc_chunk = 26; EndRpc rpc_end = 27;
+    CancelRpc rpc_cancel = 28; GrantRpcWindow rpc_window = 29;
+    UpdatePublicProfile update_public_profile = 30; PullDescriptor pull_descriptor = 31;
+    AuthRestore auth_restore = 32; SdkClose sdk_close = 33; GetDevices get_devices = 34;
+    RefreshDevices refresh_devices = 35; GetDeviceDescriptor get_device_descriptor = 36;
+    BlockDevice block_device = 37; UnblockDevice unblock_device = 38;
+    GetBlockedDevices get_blocked_devices = 39; GetAuthState get_auth_state = 40;
+  }
+}
+message SdkResult {
+  bytes command_id = 1;
+  reserved 14;
+  reserved "devices_snapshot";
+  oneof body {
+    google.protobuf.Empty ok = 10; ProtocolError error = 11; AuthStarted auth_started = 12;
+    PublicProfile public_profile = 13; AuthLogoutResult auth_logout = 15; SdkClosed sdk_closed = 16;
+    DeviceBlockResult device_block = 17; AuthEvent auth_state = 18;
+  }
+}
+message SdkEvent {
+  uint64 event_sequence = 1; bytes runtime_id = 2;
+  oneof body {
+    AuthEvent auth = 10; NetworkState network = 11; DevicesEvent devices = 12;
+    DataReceived data_received = 13; DataStatus data_status = 14; PeerDataCancel peer_data_cancel = 15;
+    RpcEvent rpc = 16; DescriptorResult descriptor = 17; DevicesQueryResult devices_query = 18;
+    RefreshDevicesResult refresh_devices = 19; DeviceDescriptorResult device_descriptor = 20;
+    DeviceBlockResult device_block_changed = 21; BlockedDevicesQueryResult blocked_devices = 22;
+  }
+}
+// A code-generation contract only; this crate opens no gRPC or HTTP listener.
+service cyberbusSdkControl {
+  rpc Execute(SdkCommand) returns (SdkResult);
+  rpc SubscribeEvents(google.protobuf.Empty) returns (stream SdkEvent);
+}

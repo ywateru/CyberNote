@@ -100,18 +100,29 @@ impl Store {
 
     fn adoption_projection_check(&self, db: &Connection, allow_dirty: bool) -> Result<()> {
         let blocked = |message: &str| err("sync_adoption_blocked", message);
-        let inbox: bool = db.query_row("SELECT EXISTS(SELECT 1 FROM sync_inbox)", [], |r| r.get(0))?;
+        let inbox: bool =
+            db.query_row("SELECT EXISTS(SELECT 1 FROM sync_inbox)", [], |r| r.get(0))?;
         if inbox {
-            return Err(blocked("旧同步空间仍有未应用的收件版本，请先处理后再开启新账户同步"));
+            return Err(blocked(
+                "旧同步空间仍有未应用的收件版本，请先处理后再开启新账户同步",
+            ));
         }
         let mut dirty_query = db.prepare("SELECT kind,entity_id FROM sync_dirty")?;
-        let dirty = dirty_query.query_map([], |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)))?
+        let dirty = dirty_query
+            .query_map([], |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)))?
             .collect::<std::result::Result<HashSet<_>, _>>()?;
         if !allow_dirty && !dirty.is_empty() {
             return Err(blocked("旧同步空间的本地更改尚未完整固化"));
         }
-        let mut projection_query = db.prepare("SELECT kind,entity_id,digest,vector FROM sync_projection")?;
-        let projections = projection_query.query_map([], |r| Ok(((r.get::<_, String>(0)?, r.get::<_, String>(1)?), (r.get::<_, String>(2)?, r.get::<_, String>(3)?))))?
+        let mut projection_query =
+            db.prepare("SELECT kind,entity_id,digest,vector FROM sync_projection")?;
+        let projections = projection_query
+            .query_map([], |r| {
+                Ok((
+                    (r.get::<_, String>(0)?, r.get::<_, String>(1)?),
+                    (r.get::<_, String>(2)?, r.get::<_, String>(3)?),
+                ))
+            })?
             .collect::<std::result::Result<BTreeMap<_, _>, _>>()?;
         let mut covered = HashSet::new();
         let local_attachments = self.attachments()?;
@@ -146,20 +157,33 @@ impl Store {
                 },
                 EntityKind::Note => match self.note(&wire.entity_id) {
                     Ok(note) => {
-                        let media = wire.payload.as_ref().map(validation::note_payload).transpose()?
-                            .map(|(_, media)| media).unwrap_or_default();
+                        let media = wire
+                            .payload
+                            .as_ref()
+                            .map(validation::note_payload)
+                            .transpose()?
+                            .map(|(_, media)| media)
+                            .unwrap_or_default();
                         for expected in &media {
-                            let local = local_attachments.iter().find(|a| a.id == expected.id)
+                            let local = local_attachments
+                                .iter()
+                                .find(|a| a.id == expected.id)
                                 .ok_or_else(|| blocked("旧同步投影缺少本机附件，不能切换"))?;
-                            if local.note_id != expected.note_id || local.kind != expected.kind
-                                || local.mime != expected.mime || local.display_name != expected.display_name
-                                || local.size != expected.size || local.recorded_at != expected.recorded_at
+                            if local.note_id != expected.note_id
+                                || local.kind != expected.kind
+                                || local.mime != expected.mime
+                                || local.display_name != expected.display_name
+                                || local.size != expected.size
+                                || local.recorded_at != expected.recorded_at
                             {
                                 return Err(blocked("旧同步投影与本机附件元数据不一致"));
                             }
                             // The read-only preflight checks metadata only. The
                             // transactional final check also checks prepared bytes.
-                            if !allow_dirty && self.sync_local_hash(local)? != (expected.sha256.clone(), expected.size) {
+                            if !allow_dirty
+                                && self.sync_local_hash(local)?
+                                    != (expected.sha256.clone(), expected.size)
+                            {
                                 return Err(blocked("旧同步投影与本机附件原字节不一致"));
                             }
                         }
@@ -176,9 +200,16 @@ impl Store {
         if projections.keys().any(|key| !covered.contains(key)) {
             return Err(blocked("旧同步空间存在失配的投影记录"));
         }
-        for key in self.notes()?.into_iter().map(|note| ("note".to_string(), note.id))
-            .chain(self.folders()?.into_iter().filter(|folder| !["default", "quick", "trash"].contains(&folder.id.as_str()))
-                .map(|folder| ("folder".to_string(), folder.id)))
+        for key in self
+            .notes()?
+            .into_iter()
+            .map(|note| ("note".to_string(), note.id))
+            .chain(
+                self.folders()?
+                    .into_iter()
+                    .filter(|folder| !["default", "quick", "trash"].contains(&folder.id.as_str()))
+                    .map(|folder| ("folder".to_string(), folder.id)),
+            )
         {
             if !covered.contains(&key) && !(allow_dirty && dirty.contains(&key)) {
                 return Err(blocked("本机内容尚未纳入旧同步投影，请先固化更改"));
@@ -189,7 +220,11 @@ impl Store {
 
     /// Called only after the adapter seals and joins old transports and verifies
     /// the new workspace. Business rows and managed attachment files are untouched.
-    pub fn sync_adopt_workspace(&mut self, workspace: &str, device_id: &str) -> Result<SyncIdentity> {
+    pub fn sync_adopt_workspace(
+        &mut self,
+        workspace: &str,
+        device_id: &str,
+    ) -> Result<SyncIdentity> {
         self.sync_adoption_preflight(workspace, device_id)?;
         let current = self.sync_identity()?;
         if let Some(current) = &current {
@@ -202,7 +237,11 @@ impl Store {
             self.instance_id = Uuid::new_v4();
             return Ok(identity);
         }
-        let adopted = SyncIdentity { version: 1, workspace_id: workspace.into(), device_id: device_id.into() };
+        let adopted = SyncIdentity {
+            version: 1,
+            workspace_id: workspace.into(),
+            device_id: device_id.into(),
+        };
         let tx = self.db.unchecked_transaction()?;
         // Do not let flush conceal an unapplied remote head beneath a dirty save.
         self.adoption_projection_check(&tx, true)?;
@@ -219,9 +258,14 @@ impl Store {
                 tx.execute_batch(&format!("DROP TABLE {name}"))?;
             }
         }
-        for (_, sql) in objects { tx.execute_batch(&sql)?; }
+        for (_, sql) in objects {
+            tx.execute_batch(&sql)?;
+        }
         tx.execute("INSERT INTO sync_identity(singleton,version,workspace_id,device_id,counter,capture)VALUES(1,1,?1,?2,0,1)", params![workspace,device_id])?;
-        tx.execute("INSERT INTO sync_dirty(kind,entity_id)SELECT 'note',id FROM notes", [])?;
+        tx.execute(
+            "INSERT INTO sync_dirty(kind,entity_id)SELECT 'note',id FROM notes",
+            [],
+        )?;
         tx.execute("INSERT INTO sync_dirty(kind,entity_id)SELECT 'folder',id FROM folders WHERE id NOT IN ('default','quick','trash')", [])?;
         self.flush_in(&tx)?;
         tx.commit()?;

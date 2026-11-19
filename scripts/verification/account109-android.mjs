@@ -13,7 +13,7 @@ import os from 'node:os';
 import { acquireDriverLease, guardDriverMethods } from './sync108-android-lifecycle.mjs';
 
 export const SERIAL = '98895a3147304c3132';
-export const PACKAGE = 'com.local.notesclone.account109';
+export const PACKAGE = process.env.CYBERNOTE_ANDROID_PACKAGE || 'com.local.notesclone.account109';
 export const ACTIVITY = `${PACKAGE}/com.local.notesclone.MainActivity`;
 const sdkOverride = typeof process === 'object' ? process.env?.ANDROID_HOME : undefined;
 const adb = path.join(sdkOverride || `${os.homedir()}/Library/Android/sdk`, 'platform-tools/adb');
@@ -156,6 +156,16 @@ export function accountSyncControls(invoke) {
     async syncNow(...args) {
       if (args.length) throw Error('ANDROID_INVALID_ACCOUNT_ARGUMENTS');
       return invoke({ type: 'syncNow' });
+    },
+    async syncDevice(...args) {
+      const [deviceId, direction] = args;
+      if (args.length !== 2 ||
+          typeof deviceId !== 'string' ||
+          !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(deviceId) ||
+          !['push', 'pull', 'both'].includes(direction)) {
+        throw Error('ANDROID_INVALID_ACCOUNT_ARGUMENTS');
+      }
+      return invoke({ type: 'syncDevice', deviceId, direction });
     },
   };
 }
@@ -372,6 +382,11 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
         diagnostics.phase = `account.${command.type}`; diagnostics.selector = null;
         return evaluate(`window.__TAURI_INTERNALS__.invoke('account_command',${quote({ command })})`);
       }),
+      async sdkDiagnostic() {
+        assertPid();
+        diagnostics.phase = 'account.sdkDiagnostic'; diagnostics.selector = null;
+        return evaluate(`window.__TAURI_INTERNALS__.invoke('account_sdk_diagnostic')`);
+      },
       async artifactIdentity() {
         assertPid();
         const apkPath=installedApkPath(run('shell', 'pm', 'path', PACKAGE));

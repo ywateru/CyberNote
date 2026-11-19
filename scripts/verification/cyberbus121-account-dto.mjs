@@ -21,6 +21,7 @@ for (const error of fixtures) {
   const ipc = api.accountIPCError(error);
   assert.equal(ipc.code,error.code);
   assert.equal(ipc.cyberbusCode,error.cyberbusCode);
+  assert.equal(ipc.sdkStage,error.sdkStage);
 }
 assert.equal(api.accountConnectionRetry({...status(fixtures[3]), profile:{subject:"fixture",displayName:"CyberBus 账户"}}).type,"signIn");
 assert.equal(api.accountConnectionRetry({...status(fixtures[4]), profile:{subject:"fixture",displayName:"CyberBus 账户"}}).type,"syncNow");

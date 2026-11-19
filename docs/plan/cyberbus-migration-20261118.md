@@ -8,7 +8,7 @@
 | cyberbus121-account | 账户 Runtime、登录、设备列表、SyncService 接线 | core（按接口并行开发，合入后组合验证） | 核心独审通过，已合入 |
 | cyberbus123-platform | 账户前端、Android Keystore、构建与发布配置 | account（接口联动） | 模块独审通过，已合入 |
 | cyberbus124-network-harness | 双独立 SDK/SQLite 真实传输与数据测试工具 | core | 真实双端 CLI 通过，独立离线复核通过，已合入 |
-| cyberbus122-verification | 独立审阅、组合回归、真实 Logto 与多资料库/多端验收 | account | 本轮核心/CLI 完成：组合 49 Rust、前端/平台检查及 Mac Debug 包通过；UI 交用户手动，完整多端验收待续 |
+| cyberbus122-verification | 独立审阅、组合回归、真实 Logto 与多资料库/多端验收 | account | macOS 双端 UI-03～UI-11 通过；Android 登录/本地状态通过但 Mac↔Android 业务会话建立前失败。完成状态、命令和剩余项见 [收敛文档](../verification/cyberbus120/REMAINING.md) |
 
 服务调查：[Logto/CyberBus 部署](analysis/cyberbus-logto-deployment-20261118.md)。[验收矩阵](../verification/cyberbus120/TEST-CASES.md)覆盖 AUTH/STORE/DEVICE/BRIDGE/SYNC/SESSION/BUILD/NETWORK。运行及结果后续写入 `docs/verification/cyberbus120/`，失败保留，模块测试与真实网络分列。
 
@@ -21,6 +21,6 @@
 | platform | `codex/cyberbus123-platform` | `/Users/water/work/2026/Apple-Notes-Clone-cyberbus123` |
 | network harness | `codex/cyberbus124-network` | `/Users/water/work/2026/Apple-Notes-Clone-cyberbus124` |
 
-主工作区管理设计、部署调查与合入。实现写集分离，core 公共接口和 Android Keystore JNI 签名明确后由账户模块接线；单独分支测试不能替代合入组合检查。实现提交后交不同验证员独立审查，通过后合入；core 先合，再将其准确提交同步到账户工作树完成编译。独立网络工具只验证 SDK/SyncService/Store 数据组合，不能替代 Tauri 账户与 Session 接线验收。
+主工作区管理设计、部署调查与合入。实现写集分离，core 公共接口和 Android Keystore JNI 签名明确后由账户模块接线；单独分支测试不能替代合入组合检查。实现提交后交不同验证员独立审查，通过后合入；core 先合，再将其准确提交同步到账户工作树完成编译。四个恢复工作树仍含各自独有提交或验证证据，不能按分支名称直接删除；主分支合入后的提交树审计和保留原因记录在 [剩余工作](../verification/cyberbus120/REMAINING.md)。独立网络工具只验证 SDK/SyncService/Store 数据组合，不能替代 Tauri 账户与 Session 接线验收。
 
 远端调查及 CyberNote 产品最小配置增量已完成，正式 pins 以 [部署读回报告](../verification/cyberbus120/logto-product.md)为准。测试密码/管理凭据不进入本计划。分层测试结果以 [验证状态](../verification/cyberbus120/README.md)为准，模块或工具通过不能替代原生手测。

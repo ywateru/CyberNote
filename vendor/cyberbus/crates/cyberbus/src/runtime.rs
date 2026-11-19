@@ -7,7 +7,7 @@ mod rpc;
 use crate::{
     auth_error, error, pb,
     session::{self, Admission, Body, Incoming, Keys, Session},
-    ClientConfig, Request,
+    ClientConfig, DiagnosticSnapshot, Request,
 };
 use cyberbus_auth::{
     AuthManager, AuthMode, Clock, CloudLogout, LogoutPolicy, OperationId, Phase, ReauthReason,
@@ -98,6 +98,13 @@ pub(crate) struct Runtime {
     rpc_peers: BTreeMap<Vec<u8>, tokio::time::Instant>,
     transport_generation: Option<u64>,
     network_unready: bool,
+    metadata_received: u64,
+    metadata_valid: u64,
+    noise_verified: u64,
+    probe_success: u64,
+    probe_failure: u64,
+    route_fetch_success: u64,
+    route_fetch_failure: u64,
     transport: Option<Arc<Transport>>,
     stop: CancellationToken,
     generation: Option<u64>,
@@ -189,6 +196,7 @@ impl Runtime {
             policy: Mutex::new(Default::default()),
             local: local.clone(),
             output_budget: session::OutputBudget::default(),
+            metrics: Default::default(),
         });
         let gate_stop = Arc::new(Mutex::new(CancellationToken::new()));
         let gate = admission.clone();
@@ -243,6 +251,13 @@ impl Runtime {
             rpc_peers: BTreeMap::new(),
             transport_generation: None,
             network_unready: false,
+            metadata_received: 0,
+            metadata_valid: 0,
+            noise_verified: 0,
+            probe_success: 0,
+            probe_failure: 0,
+            route_fetch_success: 0,
+            route_fetch_failure: 0,
             transport: None,
             stop: CancellationToken::new(),
             generation: None,
@@ -609,7 +624,7 @@ impl Runtime {
                 break;
             }
             tokio::select! {
-                command=commands.recv()=>match command{None=>break,Some(Request::Resume(reply))=>{let result=self.resume().await;let _=reply.send(result);},Some(Request::Execute(command,submitted,reply))=>self.execute_command(command,submitted,reply).await},
+                command=commands.recv()=>match command{None=>break,Some(Request::Resume(reply))=>{let result=self.resume().await;let _=reply.send(result);},Some(Request::Diagnostic(reply))=>{let result=self.diagnostic().await;let _=reply.send(result);},Some(Request::Execute(command,submitted,reply))=>self.execute_command(command,submitted,reply).await},
                 incoming=self.inbox.recv()=>if let Some(incoming)=incoming{self.receive(incoming).await;},
                 _=tick.tick()=>{if tokio::time::Instant::now()>=maintenance {self.maintenance().await;maintenance=tokio::time::Instant::now()+Duration::from_millis(100);}}
             }
@@ -731,6 +746,288 @@ impl Runtime {
         }
         self.auth_changed(vec![]);
         r.map(|_| ())
+    }
+    async fn diagnostic(&mut self) -> PResult<DiagnosticSnapshot> {
+        let (transport_running, transport_phase, transport_generation, local_ipv4_present) =
+            if let Some(transport) = &self.transport {
+                let status = transport.status();
+                let phase = match status.phase {
+                    cyberbus_transport::AddressPhase::Tentative => "tentative",
+                    cyberbus_transport::AddressPhase::Ready => "ready",
+                    cyberbus_transport::AddressPhase::Changing => "changing",
+                    cyberbus_transport::AddressPhase::Conflict => "conflict",
+                    cyberbus_transport::AddressPhase::Failed => "failed",
+                    cyberbus_transport::AddressPhase::Closed => "closed",
+                };
+                (
+                    true,
+                    phase,
+                    status.generation,
+                    !status.ipv4.is_unspecified(),
+                )
+            } else {
+                (false, "stopped", 0, false)
+            };
+        let (route_count, remote_route_count, indirect_route_count) =
+            if let Some(transport) = &self.transport {
+                match tokio::time::timeout(Duration::from_secs(2), transport.routes()).await {
+                    Ok(Ok(routes)) => {
+                        self.route_fetch_success = self.route_fetch_success.saturating_add(1);
+                        let local_ipv4 = transport.status().ipv4;
+                        (
+                            u32::try_from(routes.len()).unwrap_or(u32::MAX),
+                            u32::try_from(routes.iter().filter(|r| r.ipv4 != local_ipv4).count())
+                                .unwrap_or(u32::MAX),
+                            u32::try_from(routes.iter().filter(|r| r.cost > 1).count())
+                                .unwrap_or(u32::MAX),
+                        )
+                    }
+                    _ => {
+                        self.route_fetch_failure = self.route_fetch_failure.saturating_add(1);
+                        (0, 0, 0)
+                    }
+                }
+            } else {
+                (0, 0, 0)
+            };
+        Ok(DiagnosticSnapshot {
+            schema_version: 3,
+            transport_running,
+            transport_phase,
+            transport_generation,
+            local_ipv4_present,
+            route_count,
+            remote_route_count,
+            indirect_route_count,
+            device_count: self.devices.len(),
+            online_device_count: self
+                .devices
+                .values()
+                .filter(|d| d.presence == pb::DevicePresence::Online as i32)
+                .count(),
+            devices_with_virtual_ipv4: self
+                .devices
+                .values()
+                .filter(|d| d.virtual_ipv4.len() == 4)
+                .count(),
+            directory_revision: self.revision,
+            live_peer_count: self.peers.values().filter(|p| p.session.live()).count(),
+            live_probe_count: self.probes.values().filter(|p| p.session.live()).count(),
+            active_refresh_count: self.refreshes.len(),
+            active_profile_query_count: self.profile_queries.len(),
+            metadata_received: self.metadata_received,
+            metadata_valid: self.metadata_valid,
+            noise_verified: self.noise_verified,
+            probe_success: self.probe_success,
+            probe_failure: self.probe_failure,
+            route_fetch_success: self.route_fetch_success,
+            route_fetch_failure: self.route_fetch_failure,
+            network_unready: self.network_unready,
+            sessions_established: self
+                .admission
+                .metrics
+                .sessions_established
+                .load(Ordering::Relaxed),
+            sessions_inbound: self
+                .admission
+                .metrics
+                .sessions_inbound
+                .load(Ordering::Relaxed),
+            sessions_outbound: self
+                .admission
+                .metrics
+                .sessions_outbound
+                .load(Ordering::Relaxed),
+            probe_sessions_established: self
+                .admission
+                .metrics
+                .probe_sessions_established
+                .load(Ordering::Relaxed),
+            business_sessions_established: self
+                .admission
+                .metrics
+                .business_sessions_established
+                .load(Ordering::Relaxed),
+            up_published: self.admission.metrics.up_published.load(Ordering::Relaxed),
+            up_installed: self.admission.metrics.up_installed.load(Ordering::Relaxed),
+            metadata_queued: self
+                .admission
+                .metrics
+                .metadata_queued
+                .load(Ordering::Relaxed),
+            metadata_queue_failed: self
+                .admission
+                .metrics
+                .metadata_queue_failed
+                .load(Ordering::Relaxed),
+            writer_frames_sent: self
+                .admission
+                .metrics
+                .writer_frames_sent
+                .load(Ordering::Relaxed),
+            writer_metadata_sent: self
+                .admission
+                .metrics
+                .writer_metadata_sent
+                .load(Ordering::Relaxed),
+            writer_send_failed: self
+                .admission
+                .metrics
+                .writer_send_failed
+                .load(Ordering::Relaxed),
+            writer_probe_expired: self
+                .admission
+                .metrics
+                .writer_probe_expired
+                .load(Ordering::Relaxed),
+            frames_received: self
+                .admission
+                .metrics
+                .frames_received
+                .load(Ordering::Relaxed),
+            metadata_frames_received: self
+                .admission
+                .metrics
+                .metadata_frames_received
+                .load(Ordering::Relaxed),
+            reader_errors: self.admission.metrics.reader_errors.load(Ordering::Relaxed),
+            reader_closed: self.admission.metrics.reader_closed.load(Ordering::Relaxed),
+            reader_io: self.admission.metrics.reader_io.load(Ordering::Relaxed),
+            reader_protocol: self
+                .admission
+                .metrics
+                .reader_protocol
+                .load(Ordering::Relaxed),
+            reader_authentication: self
+                .admission
+                .metrics
+                .reader_authentication
+                .load(Ordering::Relaxed),
+            reader_limit: self.admission.metrics.reader_limit.load(Ordering::Relaxed),
+            reader_timeout: self
+                .admission
+                .metrics
+                .reader_timeout
+                .load(Ordering::Relaxed),
+            reader_aborted: self
+                .admission
+                .metrics
+                .reader_aborted
+                .load(Ordering::Relaxed),
+            reader_forced_abort: self
+                .admission
+                .metrics
+                .reader_forced_abort
+                .load(Ordering::Relaxed),
+            reader_prefix_timeout: self
+                .admission
+                .metrics
+                .reader_prefix_timeout
+                .load(Ordering::Relaxed),
+            reader_no_frame_exits: self
+                .admission
+                .metrics
+                .reader_no_frame_exits
+                .load(Ordering::Relaxed),
+            reader_close_frames: self
+                .admission
+                .metrics
+                .reader_close_frames
+                .load(Ordering::Relaxed),
+            reader_admission_closed: self
+                .admission
+                .metrics
+                .reader_admission_closed
+                .load(Ordering::Relaxed),
+            reader_channel_closed: self
+                .admission
+                .metrics
+                .reader_channel_closed
+                .load(Ordering::Relaxed),
+            writer_closed: self.admission.metrics.writer_closed.load(Ordering::Relaxed),
+            writer_io: self.admission.metrics.writer_io.load(Ordering::Relaxed),
+            writer_protocol: self
+                .admission
+                .metrics
+                .writer_protocol
+                .load(Ordering::Relaxed),
+            writer_authentication: self
+                .admission
+                .metrics
+                .writer_authentication
+                .load(Ordering::Relaxed),
+            writer_limit: self.admission.metrics.writer_limit.load(Ordering::Relaxed),
+            writer_timeout: self
+                .admission
+                .metrics
+                .writer_timeout
+                .load(Ordering::Relaxed),
+            writer_shutdown_failed: self
+                .admission
+                .metrics
+                .writer_shutdown_failed
+                .load(Ordering::Relaxed),
+            writer_exit_cancel: self
+                .admission
+                .metrics
+                .writer_exit_cancel
+                .load(Ordering::Relaxed),
+            writer_exit_stop: self
+                .admission
+                .metrics
+                .writer_exit_stop
+                .load(Ordering::Relaxed),
+            writer_exit_queue_closed: self
+                .admission
+                .metrics
+                .writer_exit_queue_closed
+                .load(Ordering::Relaxed),
+            writer_exit_probe_expired: self
+                .admission
+                .metrics
+                .writer_exit_probe_expired
+                .load(Ordering::Relaxed),
+            writer_exit_prefix_timeout: self
+                .admission
+                .metrics
+                .writer_exit_prefix_timeout
+                .load(Ordering::Relaxed),
+            writer_exit_admission_closed: self
+                .admission
+                .metrics
+                .writer_exit_admission_closed
+                .load(Ordering::Relaxed),
+            writer_exit_send_failed: self
+                .admission
+                .metrics
+                .writer_exit_send_failed
+                .load(Ordering::Relaxed),
+            writer_close_attempted: self
+                .admission
+                .metrics
+                .writer_close_attempted
+                .load(Ordering::Relaxed),
+            writer_close_sent: self
+                .admission
+                .metrics
+                .writer_close_sent
+                .load(Ordering::Relaxed),
+            writer_close_failed: self
+                .admission
+                .metrics
+                .writer_close_failed
+                .load(Ordering::Relaxed),
+            local_prefix_ready: self
+                .admission
+                .metrics
+                .local_prefix_ready
+                .load(Ordering::Relaxed),
+            local_prefix_sent: self
+                .admission
+                .metrics
+                .local_prefix_sent
+                .load(Ordering::Relaxed),
+        })
     }
     async fn dispatch(&mut self, command: pb::SdkCommand) -> PResult<ResultBody> {
         let query = crate::queries::command_id(&command).map(<[u8]>::to_vec);
@@ -1085,7 +1382,9 @@ impl Runtime {
     fn validate_type(&self, ty: &str) -> PResult<()> {
         let name = ty.rsplit('/').next().unwrap_or("");
         let pool = cyberbus_protocol::validation::descriptor_pool();
-        if pool.get_message_by_name(name).is_some() || self.application_schema.get_message_by_name(name).is_some() {
+        if pool.get_message_by_name(name).is_some()
+            || self.application_schema.get_message_by_name(name).is_some()
+        {
             return Ok(());
         }
         for h in self.handlers.values() {
@@ -1100,7 +1399,9 @@ impl Runtime {
     fn validate_payload(&self, f: &pb::PayloadFragment) -> PResult<()> {
         let name = f.application_type_url.rsplit('/').next().unwrap_or("");
         let pool = cyberbus_protocol::validation::descriptor_pool();
-        let mut desc = pool.get_message_by_name(name).or_else(|| self.application_schema.get_message_by_name(name));
+        let mut desc = pool
+            .get_message_by_name(name)
+            .or_else(|| self.application_schema.get_message_by_name(name));
         for h in self.handlers.values() {
             if desc.is_none() {
                 if let Ok(p) = prost_reflect::DescriptorPool::decode(h.descriptor_set.as_slice()) {
@@ -1268,7 +1569,10 @@ impl Runtime {
                     _ => {}
                 }
             }
-            up @ Incoming::Up { .. } => self.receive_up(up),
+            up @ Incoming::Up { .. } => {
+                self.noise_verified = self.noise_verified.saturating_add(1);
+                self.receive_up(up);
+            }
             Incoming::RefreshFinished {
                 generation,
                 mut result,
@@ -1286,6 +1590,11 @@ impl Runtime {
                 round,
                 verified,
             } => {
+                if verified {
+                    self.probe_success = self.probe_success.saturating_add(1);
+                } else if count_failure {
+                    self.probe_failure = self.probe_failure.saturating_add(1);
+                }
                 if self.generation == Some(generation)
                     && self.transport.as_ref().is_some_and(|t| {
                         t.status().phase == cyberbus_transport::AddressPhase::Ready
@@ -1398,6 +1707,7 @@ impl Runtime {
                 }
                 match body {
                     Body::Metadata(m) => {
+                        self.metadata_received = self.metadata_received.saturating_add(1);
                         if codec::encode(&m).is_err() {
                             return;
                         }
@@ -1488,6 +1798,7 @@ impl Runtime {
                         self.profile_fetched
                             .insert(id.clone(), tokio::time::Instant::now());
                         self.devices.insert(id.clone(), d);
+                        self.metadata_valid = self.metadata_valid.saturating_add(1);
                         session.progress.metadata.store(true, Ordering::Release);
                         if changed {
                             self.changed(&id, added);
@@ -2101,6 +2412,7 @@ mod lifecycle_tests {
             policy: Mutex::new(Default::default()),
             local: diagnostic.device_id.clone(),
             output_budget: session::OutputBudget::default(),
+            metrics: Default::default(),
         });
         runtime
             .devices

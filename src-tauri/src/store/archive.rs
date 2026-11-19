@@ -249,42 +249,106 @@ fn validate_folders(folders: &[Folder]) -> Result<()> {
     Ok(())
 }
 pub(super) fn validate_interface_details(value: &Value) -> Result<()> {
-    let object = value.as_object().ok_or_else(|| invalid("界面细节必须是完整配置对象"))?;
-    const KEYS: [&str; 6] = ["version", "iconScale", "desktopHitScale", "mobileHitScale", "menuSpacing", "radiusScale"];
-    if object.len() != KEYS.len() || object.keys().any(|key| !KEYS.contains(&key.as_str())) || KEYS.iter().any(|key| !object.contains_key(*key)) {
+    let object = value
+        .as_object()
+        .ok_or_else(|| invalid("界面细节必须是完整配置对象"))?;
+    const KEYS: [&str; 6] = [
+        "version",
+        "iconScale",
+        "desktopHitScale",
+        "mobileHitScale",
+        "menuSpacing",
+        "radiusScale",
+    ];
+    if object.len() != KEYS.len()
+        || object.keys().any(|key| !KEYS.contains(&key.as_str()))
+        || KEYS.iter().any(|key| !object.contains_key(*key))
+    {
         return Err(invalid("界面细节包含未知或缺失字段"));
     }
-    if object["version"].as_f64() != Some(1.0) { return Err(invalid("不支持此界面细节版本")); }
-    for (key, min, max) in [("iconScale", 80, 120), ("desktopHitScale", 100, 130), ("mobileHitScale", 100, 120), ("radiusScale", 0, 150)] {
-        if !object[key].as_f64().is_some_and(|n| n.is_finite() && n.fract() == 0.0 && n >= min as f64 && n <= max as f64) { return Err(invalid(format!("界面细节 {key} 必须是 {min}–{max} 的整数百分比"))); }
+    if object["version"].as_f64() != Some(1.0) {
+        return Err(invalid("不支持此界面细节版本"));
     }
-    if !["compact", "standard", "comfortable"].contains(&object["menuSpacing"].as_str().unwrap_or("")) { return Err(invalid("菜单间距无效")); }
+    for (key, min, max) in [
+        ("iconScale", 80, 120),
+        ("desktopHitScale", 100, 130),
+        ("mobileHitScale", 100, 120),
+        ("radiusScale", 0, 150),
+    ] {
+        if !object[key].as_f64().is_some_and(|n| {
+            n.is_finite() && n.fract() == 0.0 && n >= min as f64 && n <= max as f64
+        }) {
+            return Err(invalid(format!(
+                "界面细节 {key} 必须是 {min}–{max} 的整数百分比"
+            )));
+        }
+    }
+    if !["compact", "standard", "comfortable"]
+        .contains(&object["menuSpacing"].as_str().unwrap_or(""))
+    {
+        return Err(invalid("菜单间距无效"));
+    }
     Ok(())
 }
 /// Appearance is local settings, never a sync protocol field. Unknown versions
 /// and nested fields fail before any transaction or archive publication.
 fn validate_appearance(value: &Value) -> Result<()> {
-    let a = value.as_object().ok_or_else(|| invalid("外观必须是完整对象"))?;
-    if a.len() != 3 || a.get("version") != Some(&json!(2))
-        || !a.get("themeId").and_then(Value::as_str).is_some_and(|s| ["classic", "paper", "high-contrast", "ocean", "forest", "rose", "lavender", "graphite"].contains(&s))
-        || !a.get("schemePreference").and_then(Value::as_str).is_some_and(|s| ["system", "light", "dark"].contains(&s)) {
+    let a = value
+        .as_object()
+        .ok_or_else(|| invalid("外观必须是完整对象"))?;
+    if a.len() != 3
+        || a.get("version") != Some(&json!(2))
+        || !a.get("themeId").and_then(Value::as_str).is_some_and(|s| {
+            [
+                "classic",
+                "paper",
+                "high-contrast",
+                "ocean",
+                "forest",
+                "rose",
+                "lavender",
+                "graphite",
+            ]
+            .contains(&s)
+        })
+        || !a
+            .get("schemePreference")
+            .and_then(Value::as_str)
+            .is_some_and(|s| ["system", "light", "dark"].contains(&s))
+    {
         return Err(invalid("外观字段、版本或主题无效"));
     }
     Ok(())
 }
 /// Read/import authority prefers AppearanceV2. Absence remains legacy on read.
 fn validate_presentation(value: &Value) -> Result<()> {
-    let p = value.as_object().ok_or_else(|| invalid("呈现必须是完整对象"))?;
-    let d = p.get("desktop").and_then(Value::as_object).ok_or_else(|| invalid("桌面呈现必须是完整对象"))?;
-    let m = p.get("mobile").and_then(Value::as_object).ok_or_else(|| invalid("移动呈现必须是完整对象"))?;
-    let choice = |o: &serde_json::Map<String, Value>, key: &str, values: &[&str]| o.get(key).and_then(Value::as_str).is_some_and(|s| values.contains(&s));
-    if p.len() != 3 || p.get("version") != Some(&json!(1)) || d.len() != 4 || m.len() != 2
+    let p = value
+        .as_object()
+        .ok_or_else(|| invalid("呈现必须是完整对象"))?;
+    let d = p
+        .get("desktop")
+        .and_then(Value::as_object)
+        .ok_or_else(|| invalid("桌面呈现必须是完整对象"))?;
+    let m = p
+        .get("mobile")
+        .and_then(Value::as_object)
+        .ok_or_else(|| invalid("移动呈现必须是完整对象"))?;
+    let choice = |o: &serde_json::Map<String, Value>, key: &str, values: &[&str]| {
+        o.get(key)
+            .and_then(Value::as_str)
+            .is_some_and(|s| values.contains(&s))
+    };
+    if p.len() != 3
+        || p.get("version") != Some(&json!(1))
+        || d.len() != 4
+        || m.len() != 2
         || !choice(d, "navigation", &["three-pane", "two-pane", "focus"])
         || !choice(d, "lastNonFocusNavigation", &["three-pane", "two-pane"])
         || !choice(d, "collectionView", &["list", "gallery"])
         || !choice(d, "density", &["compact", "standard", "comfortable"])
         || !choice(m, "collectionView", &["list", "gallery"])
-        || !choice(m, "density", &["standard", "comfortable"]) {
+        || !choice(m, "density", &["standard", "comfortable"])
+    {
         return Err(invalid("呈现字段、版本或选项无效"));
     }
     Ok(())
@@ -299,7 +363,11 @@ fn project_presentation(settings: &mut Value) {
     if let Some(p) = settings.get("presentation").cloned() {
         let d = &p["desktop"];
         settings["view"] = d["collectionView"].clone();
-        let nav = if d["navigation"] == "focus" { &d["lastNonFocusNavigation"] } else { &d["navigation"] };
+        let nav = if d["navigation"] == "focus" {
+            &d["lastNonFocusNavigation"]
+        } else {
+            &d["navigation"]
+        };
         settings["macSidebarVisible"] = json!(nav == "three-pane");
     }
 }
@@ -322,14 +390,22 @@ pub(super) fn merge_settings(settings: &Value, patch: &Value) -> Result<Value> {
     }
     if patch.get("appearance").is_none() {
         let mut appearance = settings.get("appearance").cloned().unwrap_or_else(|| json!({"version":2,"themeId":"classic","schemePreference":settings.get("theme").cloned().unwrap_or(json!("system"))}));
-        if let Some(theme) = patch.get("theme") { appearance["schemePreference"] = theme.clone(); }
+        if let Some(theme) = patch.get("theme") {
+            appearance["schemePreference"] = theme.clone();
+        }
         next["appearance"] = appearance;
     }
     if patch.get("presentation").is_none() {
         let mut presentation = presentation_of(settings);
-        if let Some(view) = patch.get("view") { presentation["desktop"]["collectionView"] = view.clone(); }
+        if let Some(view) = patch.get("view") {
+            presentation["desktop"]["collectionView"] = view.clone();
+        }
         if let Some(visible) = patch.get("macSidebarVisible") {
-            let nav = if visible == true { "three-pane" } else { "two-pane" };
+            let nav = if visible == true {
+                "three-pane"
+            } else {
+                "two-pane"
+            };
             presentation["desktop"]["navigation"] = json!(nav);
             presentation["desktop"]["lastNonFocusNavigation"] = json!(nav);
         }
@@ -342,10 +418,21 @@ pub(super) fn validate_settings(settings: &Value) -> Result<()> {
     let object = settings
         .as_object()
         .ok_or_else(|| invalid("归档设置必须是对象"))?;
-    if let Some(appearance) = object.get("appearance") { validate_appearance(appearance)?; }
-    if let Some(presentation) = object.get("presentation") { validate_presentation(presentation)?; }
-    if object.get("macSidebarVisible").is_some_and(|v| !v.is_boolean()) { return Err(invalid("目录显隐设置无效")); }
-    if let Some(details) = object.get("interfaceDetails") { validate_interface_details(details)?; }
+    if let Some(appearance) = object.get("appearance") {
+        validate_appearance(appearance)?;
+    }
+    if let Some(presentation) = object.get("presentation") {
+        validate_presentation(presentation)?;
+    }
+    if object
+        .get("macSidebarVisible")
+        .is_some_and(|v| !v.is_boolean())
+    {
+        return Err(invalid("目录显隐设置无效"));
+    }
+    if let Some(details) = object.get("interfaceDetails") {
+        validate_interface_details(details)?;
+    }
     for (key, choices) in [
         ("theme", &["system", "light", "dark"][..]),
         ("view", &["list", "gallery"][..]),

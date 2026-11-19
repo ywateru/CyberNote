@@ -124,7 +124,11 @@ fn tls_connector() -> Result<tokio_tungstenite::Connector> {
     Ok(tokio_tungstenite::Connector::Rustls(Arc::new(config)))
 }
 pub(super) async fn client(s: &Shared, invite: &PairingInvite) -> Result<(SecureSocket, String)> {
-    let io_budget = if s.policy.is_some() { ACCOUNT_IO_TIMEOUT } else { NETWORK_TIMEOUT };
+    let io_budget = if s.policy.is_some() {
+        ACCOUNT_IO_TIMEOUT
+    } else {
+        NETWORK_TIMEOUT
+    };
     super::super::identity::endpoint(&invite.endpoint)?;
     let (mut ws, _) = timeout(
         io_budget,
@@ -199,7 +203,11 @@ pub(super) async fn server(
     s: &Shared,
     tcp: TcpStream,
 ) -> Result<(SecureSocket, String, String, String)> {
-    let io_budget = if s.policy.is_some() { ACCOUNT_IO_TIMEOUT } else { NETWORK_TIMEOUT };
+    let io_budget = if s.policy.is_some() {
+        ACCOUNT_IO_TIMEOUT
+    } else {
+        NETWORK_TIMEOUT
+    };
     let mut ws = timeout(
         io_budget,
         tokio_tungstenite::accept_async_with_config(MaybeTlsStream::Plain(tcp), Some(config())),
@@ -274,9 +282,12 @@ impl SecureSocket {
         self.transferred = self.transferred.saturating_add(bytes as u64);
         if self.frames > 65536
             || self.transferred > 1024 * 1024 * 1024
-            || self.started.elapsed() > if self.io_budget == ACCOUNT_IO_TIMEOUT {
-                ACCOUNT_TRANSFER_TIMEOUT
-            } else { Duration::from_secs(600) }
+            || self.started.elapsed()
+                > if self.io_budget == ACCOUNT_IO_TIMEOUT {
+                    ACCOUNT_TRANSFER_TIMEOUT
+                } else {
+                    Duration::from_secs(600)
+                }
         {
             return Err(SyncError::Transport);
         }
@@ -340,7 +351,12 @@ pub(super) async fn serve(
         Duration::from_millis(200),
     )
     .await;
-    diagnostic("server", "closed", began.elapsed().as_millis() as u64, result.as_ref().err().copied());
+    diagnostic(
+        "server",
+        "closed",
+        began.elapsed().as_millis() as u64,
+        result.as_ref().err().copied(),
+    );
     result
 }
 pub(super) async fn serve_with_limits(
@@ -361,7 +377,12 @@ pub(super) async fn serve_with_limits(
     let started = Instant::now();
     loop {
         if s.policy.is_some() && started.elapsed() >= elapsed_budget {
-            diagnostic("server", "sessionDeadline", started.elapsed().as_millis() as u64, Some(SyncError::Timeout));
+            diagnostic(
+                "server",
+                "sessionDeadline",
+                started.elapsed().as_millis() as u64,
+                Some(SyncError::Timeout),
+            );
             return Err(SyncError::Timeout);
         }
         s.authorize(&device, &key)?;
@@ -373,18 +394,28 @@ pub(super) async fn serve_with_limits(
         let request = tokio::select! {r=socket.recv::<wire::Request>()=>Some(r?),_=stop.changed()=>return Err(SyncError::Stopped),_=tokio::time::sleep(poll)=>None};
         let Some(request) = request else {
             if last.elapsed() > idle_budget {
-                diagnostic("server", "idleDeadline", last.elapsed().as_millis() as u64, Some(SyncError::Timeout));
+                diagnostic(
+                    "server",
+                    "idleDeadline",
+                    last.elapsed().as_millis() as u64,
+                    Some(SyncError::Timeout),
+                );
                 return Err(SyncError::Timeout);
             }
             continue;
         };
         last = Instant::now();
         let kind = match &request {
-            wire::Request::BeginTransfer {..} => "beginTransfer", wire::Request::FinishTransfer => "finishTransfer",
-            wire::Request::Inventory {..} => "inventory", wire::Request::Head {..} => "head",
-            wire::Request::Blob {..} => "blob", wire::Request::PutHead {..} => "putHead",
-            wire::Request::PutBlob {..} => "putBlob", wire::Request::BlobOffset {..} => "blobOffset",
-            wire::Request::CommitHead {..} => "commitHead", wire::Request::Status => "status",
+            wire::Request::BeginTransfer { .. } => "beginTransfer",
+            wire::Request::FinishTransfer => "finishTransfer",
+            wire::Request::Inventory { .. } => "inventory",
+            wire::Request::Head { .. } => "head",
+            wire::Request::Blob { .. } => "blob",
+            wire::Request::PutHead { .. } => "putHead",
+            wire::Request::PutBlob { .. } => "putBlob",
+            wire::Request::BlobOffset { .. } => "blobOffset",
+            wire::Request::CommitHead { .. } => "commitHead",
+            wire::Request::Status => "status",
         };
         diagnostic(kind, "received", 0, None);
         s.authorize(&device, &key)?;
@@ -393,10 +424,12 @@ pub(super) async fn serve_with_limits(
         // Disk verification / SQLite must not block the networking runtime.
         // Move Handler with its admission permit into the tracked job, so a
         // cancellation never releases Busy while a write is still running.
-        let (next_handler, result) = s.local(move |shared| {
-            let response = handler.handle(shared, request);
-            Ok((handler, response))
-        }).await?;
+        let (next_handler, result) = s
+            .local(move |shared| {
+                let response = handler.handle(shared, request);
+                Ok((handler, response))
+            })
+            .await?;
         handler = next_handler;
         let response = match result {
             Ok(r) => r,
@@ -421,7 +454,12 @@ pub(super) async fn serve_with_limits(
             }
         );
         let sent = tokio::select! {r=socket.send(&response)=>r,_=stop.changed()=>return Err(SyncError::Stopped)};
-        diagnostic(kind, "sent", last.elapsed().as_millis() as u64, sent.as_ref().err().copied());
+        diagnostic(
+            kind,
+            "sent",
+            last.elapsed().as_millis() as u64,
+            sent.as_ref().err().copied(),
+        );
         sent?;
         if busy {
             return Err(SyncError::Busy);

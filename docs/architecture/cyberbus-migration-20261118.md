@@ -1,6 +1,6 @@
 # CyberBus 账户设备与同步迁移
 
-状态：设计与实施中。2026-11-18 用户授权先读代码和文档、形成方案，再替换并测试。本文取代账户链路中的 CyberGrid/coordinator 传输契约；既有 Store、Session、版本向量、冲突和附件规则继续适用。未完成的验证不得写成通过。
+状态：核心迁移已接通；真实双 Mac 原生 UI 增量同步已通过，Android 真机双向同步及完整生命周期验收待完成。2026-11-18 用户授权先读代码和文档、形成方案，再替换并测试。本文取代账户链路中的 CyberGrid/coordinator 传输契约；既有 Store、Session、版本向量、冲突和附件规则继续适用。未完成的验证不得写成通过。
 
 ## 基线与目标
 
@@ -32,7 +32,7 @@ CyberBus 是新账户认证的唯一 owner；不把旧 account-auth 的 access t
 
 退出以 SDK 确认本地 grant 已关闭、旧网络/任务已退役为本地完成条件；云端撤销失败或未知应单独保留事实，不能阻塞已完成本地清理后的幂等退出，也不能宣称云端撤销成功。本地持久化/关闭失败仍须明确失败。旧 CyberGrid 的 `.account/grant.json` 不由新 SDK 读取或恢复；本轮不引入旧认证 owner 做在线撤销。新账户退出仅对 CyberBus 授权提供收据，旧授权的服务端撤销状态未验证，作为明确迁移限制记录，不能把新退出扩称为历史授权全部撤销。
 
-安装 SecureStore 必须有完整性、机密性、原子替换、进程独占及 corruption fail-closed。不得把 SDK DevelopmentFileStore 作为正式存储。平台密钥能力通过本机受限接口提供；测试可注入仅测试密钥。首次创建与 Existing 明确区分，已有 marker/密文缺失、篡改、key 不匹配不得自动新建设备。AuthRestore 仅在持久 grant 的受保护存储上启用。任何存储降级须显式报错。
+安装凭据存储提供两种显式模式。桌面端默认使用 CyberBus `EncryptedFileStore`：AES-GCM 密文、本机密钥文件、原子替换、进程独占及 corruption fail-closed；密钥文件权限为 `0600`，完整性和可用性依赖当前 OS 账户与本地文件系统。系统钥匙串是桌面端可选模式，由 macOS KeyringStore 提供；开发构建重建、授权拒绝或钥匙串不可用时，用户可退出账户后切回本机加密文件。两种模式使用相互独立的安装身份，切换后重新登录，旧存储材料保留，不能静默迁移或复用身份。Android 继续使用平台 Keystore 支持的 `CyberBusSecureStore`，不让用户选择绕过平台密钥保护。所有模式都必须区分首次创建与 Existing，已有 marker、密文或 key 缺失、篡改、不匹配时不得自动新建设备；AuthRestore 只在所选持久存储通过完整性检查后启用。
 
 ## 设备目录和界面
 
@@ -77,3 +77,13 @@ Logto 主机为用户提供的 `cath-w:/home/water/work/codex-work/logto`，公�
 SDK 自身 `docs/UNRESOLVED.md` 明确存在多平台握手超时和网络恢复未验项。必须用本项目真实链路验证并记录失败；不能把 SDK fixture 或原 CyberGrid 历史证据算作迁移通过。完整目标须在替代功能与对应测试实际通过后完成。
 
 2026-11-18 收敛范围：本轮先交付核心账户/设备/定向同步接线及必要命令行验证。原生 UI 验收由用户按 [手动测试用例](../verification/cyberbus120/MANUAL-UI-TESTS.md)执行；Android 真机、第三设备、异网络、完整发布源导出仍分别记录状态，不用扩大范围拖延核心交付，不提前声明完整替代目标完成。
+
+## 2026-11-19 真实原生 UI 进展
+
+两个独立 macOS 资料库分别生成安装身份并登录同一测试账户后，真实应用 UI 均发现两台设备并显示在线状态。A 端通过设备确认框选择“双向同步”，同步前设备目录摘要为两台各 3 条笔记。A 端新建一条包含中文、Emoji、粗体和斜体的增量笔记，并通过真实 macOS 文件选择器加入 70-byte PNG 与 262144-byte 二进制文件；确认框最终显示本次传输 `3 / 3`、`261.8 KB`，诊断状态的实际已传输字节为 `268085`。
+
+B 端实际收到新增笔记、富文本和两个附件。数据库核对显示 A/B 的 canonical `document`、`plainText`、标题和更新时间一致；两端 `revision` 与附件 `relativePath` 不同，属于设备本地字段，不参与内容等价判断。两个附件的源文件与 A/B `.sync/blobs` 内容寻址副本 SHA-256 完全一致，两端 6 个 `sync_attachments` 描述符也逐项一致。二进制附件在本轮两个 macOS 端均记录为 `application/macbinary`，没有出现跨端 MIME 漂移；Android 的 MIME 和打开方式仍须真机验证。
+
+同一次传输发生期间，真实应用诊断状态出现 `businessSessionsEstablished=1`、`livePeerCount=1`、`sessionsOutbound>0`、`metadataFramesReceived>0` 和 `metadataValid>0`。因此双 Mac 结果不以设备“在线”或 SDK fixture 代替，而是以新增笔记和附件实际落盘、字节哈希一致为完成条件。
+
+Android QA 安装已安装并启动，应用状态可达 `ready`，账户存储为 `encryptedFile`，设备目录可见。进一步只读诊断发现 Mac↔Android 的 Noise 会话反复建立，但业务会话建立数为 0：远端在读取首个 metadata frame 前关闭，读取侧持续出现无帧退出。该故障使 push、pull、both、正文/附件落盘和强停恢复均不通过，不能由登录状态、设备在线、Noise 握手或双 Mac 结果代填。失败计数和待定位边界记录在 [剩余工作](../verification/cyberbus120/REMAINING.md)。

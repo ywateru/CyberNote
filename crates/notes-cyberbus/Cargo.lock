@@ -1115,7 +1115,6 @@ dependencies = [
 [[package]]
 name = "cyberbus-protocol"
 version = "0.1.0"
-source = "git+https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e83bd74b571a963f3d1fdc238f50169919"
 dependencies = [
  "bytes",
  "prost",
@@ -1134,7 +1133,6 @@ dependencies = [
 [[package]]
 name = "cyberbus-transport"
 version = "0.1.0"
-source = "git+https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e83bd74b571a963f3d1fdc238f50169919"
 dependencies = [
  "cidr",
  "easytier",
@@ -1419,7 +1417,6 @@ checksum = "d0881ea181b1df73ff77ffaaf9c7544ecc11e82fba9b5f27b262a3c73a332555"
 [[package]]
 name = "easytier"
 version = "2.7.1"
-source = "git+https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e83bd74b571a963f3d1fdc238f50169919"
 dependencies = [
  "anyhow",
  "arc-swap",
@@ -1497,7 +1494,6 @@ dependencies = [
 [[package]]
 name = "easytier-core"
 version = "2.7.1"
-source = "git+https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e83bd74b571a963f3d1fdc238f50169919"
 dependencies = [
  "aes-gcm",
  "anyhow",
@@ -1558,7 +1554,6 @@ dependencies = [
 [[package]]
 name = "easytier-proto"
 version = "2.7.1"
-source = "git+https://github.com/osd-pub/CyberBus.git?rev=359465e83bd74b571a963f3d1fdc238f50169919#359465e83bd74b571a963f3d1fdc238f50169919"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1580,6 +1575,7 @@ dependencies = [
  "prost-build",
  "prost-reflect",
  "prost-types",
+ "protoc-bin-vendored",
  "quote",
  "reqwest 0.13.5",
  "serde",

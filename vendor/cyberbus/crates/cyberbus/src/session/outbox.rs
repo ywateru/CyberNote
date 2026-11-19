@@ -297,15 +297,22 @@ impl Queued {
     }
 }
 impl PeerOutput {
+    pub fn is_empty(&self) -> bool {
+        self.control.is_empty() && self.business.is_empty()
+    }
     pub async fn recv_queued(&mut self) -> Option<Queued> {
         tokio::select! {biased;v=self.control.recv()=>match v{Some(v)=>Some(v),None=>self.business.recv().await},v=self.business.recv()=>match v{Some(v)=>Some(v),None=>self.control.recv().await}}
     }
+    pub fn try_recv_queued(&mut self) -> Result<Queued, mpsc::error::TryRecvError> {
+        match self.control.try_recv() {
+            Ok(v) => Ok(v),
+            Err(mpsc::error::TryRecvError::Empty) => self.business.try_recv(),
+            Err(mpsc::error::TryRecvError::Disconnected) => self.business.try_recv(),
+        }
+    }
     #[cfg(test)]
     pub fn try_recv(&mut self) -> Result<Body, mpsc::error::TryRecvError> {
-        let mut q = match self.control.try_recv() {
-            Ok(v) => v,
-            Err(_) => self.business.try_recv()?,
-        };
+        let mut q = self.try_recv_queued()?;
         Ok(q.body.take().unwrap())
     }
 }

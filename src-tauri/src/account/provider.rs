@@ -1,10 +1,79 @@
 //! Production secure installation storage. CyberBus is the sole grant owner.
 use super::{
     private,
-    types::{Error, Result},
+    types::{CredentialStorage, Error, Result},
 };
-use notes_cyberbus::{SecureStore, StoreMode};
+use notes_cyberbus::{
+    store::{AesGcmCipher, EncryptedFileStore, LocalFileKeyProvider},
+    SecureStore, StoreMode,
+};
 use std::path::Path;
+
+const STORAGE_PREFERENCE: &str = "cyberbus-storage-v1";
+const FILE_MARKER: &str = "cyberbus-file-installation-v1";
+const FILE_MARKER_BYTES: &[u8] = b"cyberbus-file-installation-v1\n";
+const FILE_KEY: &str = "cyberbus-file-key-v1";
+const FILE_VAULT: &str = "cyberbus-file-vault-v1";
+
+pub(super) fn available_storage() -> Option<CredentialStorage> {
+    #[cfg(target_os = "macos")]
+    return Some(CredentialStorage::Keychain);
+    #[cfg(not(target_os = "macos"))]
+    None
+}
+
+pub(super) fn selected_storage(root: &Path) -> Result<Option<CredentialStorage>> {
+    #[cfg(target_os = "android")]
+    {
+        let _ = root;
+        // Android uses the platform-backed CyberBusSecureStore. Keep the
+        // status model populated so account startup does not fail before the
+        // Android store is opened.
+        return Ok(Some(CredentialStorage::EncryptedFile));
+    }
+    #[cfg(target_os = "macos")]
+    {
+        private::directory(root)?;
+        return match private::read_bytes(&root.join(STORAGE_PREFERENCE), 32)? {
+            // Existing installations keep the storage they already used.
+            // New installations use the encrypted local file so Keychain
+            // remains an explicit, optional choice.
+            None if private::read_bytes(&root.join("cyberbus-installation-v1"), 64)?.is_some() => {
+                Ok(Some(CredentialStorage::Keychain))
+            }
+            None if private::read_bytes(&root.join(FILE_MARKER), 64)?.is_some() => {
+                Ok(Some(CredentialStorage::EncryptedFile))
+            }
+            None => Ok(Some(CredentialStorage::EncryptedFile)),
+            Some(bytes) if bytes == b"keychain\n" => Ok(Some(CredentialStorage::Keychain)),
+            Some(bytes) if bytes == b"encrypted-file\n" => {
+                Ok(Some(CredentialStorage::EncryptedFile))
+            }
+            Some(_) => Err(Error::Storage),
+        };
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "android")))]
+    {
+        let _ = root;
+        Ok(None)
+    }
+}
+
+pub(super) fn set_selected_storage(root: &Path, storage: CredentialStorage) -> Result<()> {
+    #[cfg(target_os = "macos")]
+    {
+        let bytes = match storage {
+            CredentialStorage::Keychain => b"keychain\n".as_slice(),
+            CredentialStorage::EncryptedFile => b"encrypted-file\n".as_slice(),
+        };
+        return private::atomic_write(&root.join(STORAGE_PREFERENCE), bytes);
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = (root, storage);
+        Err(Error::Unsupported)
+    }
+}
 
 /// The nonsecret provision marker is written BEFORE the SDK creates its vault.
 /// Interruption after this point requires recovery; a missing grant/installation
@@ -12,12 +81,20 @@ use std::path::Path;
 pub(super) fn store(
     app: &tauri::AppHandle,
     root: &Path,
+    storage: CredentialStorage,
 ) -> Result<(Box<dyn SecureStore>, StoreMode)> {
     #[cfg(target_os = "android")]
-    return android::open();
+    {
+        let _ = storage;
+        return android::open();
+    }
     #[cfg(not(target_os = "android"))]
     let _ = app;
     private::directory(root)?;
+    #[cfg(target_os = "macos")]
+    if storage == CredentialStorage::EncryptedFile {
+        return encrypted_file_store(root);
+    }
     let marker = root.join("cyberbus-installation-v1");
     let mode = match private::read_bytes(&marker, 64)? {
         Some(bytes) if bytes == b"cyberbus-installation-v1\n" => StoreMode::Existing,
@@ -52,6 +129,117 @@ pub(super) fn store(
             private::atomic_write(&marker, b"cyberbus-installation-v1\n")?;
         }
         Ok((store, mode))
+    }
+}
+
+#[cfg(target_os = "macos")]
+fn encrypted_file_store(root: &Path) -> Result<(Box<dyn SecureStore>, StoreMode)> {
+    let marker = root.join(FILE_MARKER);
+    let mode = match private::read_bytes(&marker, 64)? {
+        Some(bytes) if bytes == FILE_MARKER_BYTES => StoreMode::Existing,
+        Some(_) => return Err(Error::Storage),
+        None => StoreMode::CreateNew,
+    };
+    if matches!(mode, StoreMode::CreateNew) {
+        // Publish the nonsecret marker before either the local key or the SDK
+        // vault. An interruption from this point onward must fail closed.
+        private::atomic_create(&marker, FILE_MARKER_BYTES)?;
+    }
+    let mut provider = LocalFileKeyProvider::new(root.join(FILE_KEY));
+    let cipher = AesGcmCipher::from_provider(&mut provider, mode).map_err(|_| Error::Storage)?;
+    let store = EncryptedFileStore::open(root.join(FILE_VAULT), Box::new(cipher), mode)
+        .map_err(|_| Error::Storage)?;
+    Ok((Box::new(store), mode))
+}
+
+#[cfg(all(test, target_os = "macos"))]
+mod tests {
+    use super::*;
+    use std::fs;
+
+    fn root() -> tempfile::TempDir {
+        tempfile::tempdir().unwrap()
+    }
+
+    fn marker(path: &Path, bytes: &[u8]) {
+        private::atomic_write(path, bytes).unwrap();
+    }
+
+    #[test]
+    fn new_install_defaults_to_encrypted_file() {
+        let dir = root();
+        assert_eq!(
+            selected_storage(dir.path()).unwrap(),
+            Some(CredentialStorage::EncryptedFile)
+        );
+    }
+
+    #[test]
+    fn legacy_keychain_marker_preserves_existing_installation() {
+        let dir = root();
+        marker(
+            &dir.path().join("cyberbus-installation-v1"),
+            b"cyberbus-installation-v1\n",
+        );
+        assert_eq!(
+            selected_storage(dir.path()).unwrap(),
+            Some(CredentialStorage::Keychain)
+        );
+    }
+
+    #[test]
+    fn encrypted_file_marker_restores_interrupted_selection() {
+        let dir = root();
+        marker(&dir.path().join(FILE_MARKER), FILE_MARKER_BYTES);
+        assert_eq!(
+            selected_storage(dir.path()).unwrap(),
+            Some(CredentialStorage::EncryptedFile)
+        );
+    }
+
+    #[test]
+    fn explicit_storage_preference_wins_over_installation_markers() {
+        let dir = root();
+        marker(
+            &dir.path().join("cyberbus-installation-v1"),
+            b"cyberbus-installation-v1\n",
+        );
+        marker(&dir.path().join(FILE_MARKER), FILE_MARKER_BYTES);
+        marker(&dir.path().join(STORAGE_PREFERENCE), b"encrypted-file\n");
+        assert_eq!(
+            selected_storage(dir.path()).unwrap(),
+            Some(CredentialStorage::EncryptedFile)
+        );
+        set_selected_storage(dir.path(), CredentialStorage::Keychain).unwrap();
+        assert_eq!(
+            selected_storage(dir.path()).unwrap(),
+            Some(CredentialStorage::Keychain)
+        );
+    }
+
+    #[test]
+    fn invalid_preference_fails_closed_and_markers_remain_presence_signals() {
+        let dir = root();
+        marker(&dir.path().join(STORAGE_PREFERENCE), b"unknown\n");
+        assert_eq!(selected_storage(dir.path()), Err(Error::Storage));
+        fs::remove_file(dir.path().join(STORAGE_PREFERENCE)).unwrap();
+        marker(
+            &dir.path().join("cyberbus-installation-v1"),
+            b"unexpected\n",
+        );
+        // The legacy marker's bytes are validated when opening that store.
+        assert_eq!(
+            selected_storage(dir.path()).unwrap(),
+            Some(CredentialStorage::Keychain)
+        );
+        marker(&dir.path().join(FILE_MARKER), b"unexpected\n");
+        fs::remove_file(dir.path().join("cyberbus-installation-v1")).unwrap();
+        // Likewise, a malformed file marker is a valid presence signal here;
+        // encrypted_file_store rejects it before opening credentials.
+        assert_eq!(
+            selected_storage(dir.path()).unwrap(),
+            Some(CredentialStorage::EncryptedFile)
+        );
     }
 }
 #[cfg(target_os = "android")]

@@ -532,14 +532,25 @@ fn update_catalog(
     }
     catalog.replace(rows, roster)
 }
-async fn publish(
+pub(super) struct Publication {
+    last: Option<(String, Vec<u8>)>,
+    revision: u64,
+}
+impl Default for Publication {
+    fn default() -> Self {
+        Self {
+            last: None,
+            revision: 0,
+        }
+    }
+}
+pub(super) async fn publish(
     owner: &Arc<Runtime>,
     bus: &Bus,
     binding: &private::Binding,
     catalog: &directory::Catalog,
     ready: bool,
-    last: &mut Option<(String, Vec<u8>)>,
-    revision: &mut u64,
+    publication: &mut Publication,
 ) -> Result<()> {
     let registry = owner.registry()?;
     let p = directory::NotesProfile {
@@ -556,7 +567,8 @@ async fn publish(
         known_devices: catalog.roster()?,
     };
     let bytes = p.encode_with_roster_budget()?;
-    if last
+    if publication
+        .last
         .as_ref()
         .is_some_and(|v| v.0 == registry.name && v.1 == bytes)
     {
@@ -570,7 +582,7 @@ async fn publish(
         .find(|d| d.is_local)
         .and_then(|d| d.profile.as_ref())
         .map_or(0, |p| p.config_revision);
-    *revision = (*revision).max(local_revision);
+    publication.revision = publication.revision.max(local_revision);
     let result = bus
         .cmd(C::UpdatePublicProfile(pb::UpdatePublicProfile {
             profile: Some(pb::PublicProfile {
@@ -582,7 +594,7 @@ async fn publish(
                 config_semantic_version: "1.0.0".into(),
                 ..Default::default()
             }),
-            expected_revision: *revision,
+            expected_revision: publication.revision,
             update_mask: Some(prost_types::FieldMask {
                 paths: vec![
                     "device_name".into(),
@@ -591,12 +603,13 @@ async fn publish(
                 ],
             }),
         }))
-        .await?;
+        .await
+        .map_err(|error| Error::at_sdk(super::types::SdkStage::PublishProfile, error))?;
     let Some(pb::sdk_result::Body::PublicProfile(published)) = result.body else {
         return Err(Error::CoordinationProtocol);
     };
-    *revision = published.config_revision;
-    *last = Some((registry.name, bytes));
+    publication.revision = published.config_revision;
+    publication.last = Some((registry.name, bytes));
     Ok(())
 }
 pub(super) async fn run(
@@ -608,6 +621,7 @@ pub(super) async fn run(
     catalog: Arc<directory::Catalog>,
     stop: CancellationToken,
     requests: mpsc::Receiver<DeviceRequest>,
+    mut publication: Publication,
 ) -> Result<()> {
     let requests = Arc::new(tokio::sync::Mutex::new(requests));
     let mut watch = bus.watch();
@@ -617,8 +631,6 @@ pub(super) async fn run(
         u64,
         u64,
     )> = None;
-    let mut last = None;
-    let mut revision = 0;
     let mut tick = tokio::time::interval(Duration::from_secs(1));
     tick.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
     let result = async {
@@ -712,8 +724,7 @@ pub(super) async fn run(
                     &binding,
                     &catalog,
                     control.ready(),
-                    &mut last,
-                    &mut revision,
+                    &mut publication,
                 )
                 .await?;
             }

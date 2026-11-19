@@ -27,7 +27,7 @@ android {
     namespace = "com.local.notesclone"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "false"
-        applicationId = "com.local.notesclone"
+        applicationId = "com.local.notesclone.cyberbusqa"
         minSdk = 26
         targetSdk = 36
         versionCode = cyberNoteVersionCode
@@ -35,6 +35,7 @@ android {
     }
     // CyberBus is linked into the Rust library; no external provider executable.
     packaging.jniLibs.excludes.add("**/libcloudflared.so")
+    packaging.jniLibs.useLegacyPackaging = true
     buildTypes {
         getByName("debug") {
             manifestPlaceholders["usesCleartextTraffic"] = "true"

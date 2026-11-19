@@ -2,10 +2,10 @@
 //! window destruction / access-prepare events. No IPC or default-allow policy.
 //! HTTP URLs are bearer capabilities, not per-request WebView authentication.
 mod http;
-pub(crate) mod runtime;
-mod thumbnail;
-mod svg_text;
 pub(crate) mod provider;
+pub(crate) mod runtime;
+mod svg_text;
+mod thumbnail;
 
 use crate::store::attachment_media::{FileStamp, ManagedAttachment, VerifiedFile};
 use crate::{

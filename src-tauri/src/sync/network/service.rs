@@ -355,14 +355,21 @@ impl SyncService {
     pub fn transfer_once(&self, id: &str, direction: TransferDirection) -> Result<()> {
         self.transfer_once_with_progress(id, direction, None)
     }
-    pub(crate) fn transfer_once_with_progress(&self, id: &str, direction: TransferDirection, progress: Option<ProgressObserver>) -> Result<()> {
+    pub(crate) fn transfer_once_with_progress(
+        &self,
+        id: &str,
+        direction: TransferDirection,
+        progress: Option<ProgressObserver>,
+    ) -> Result<()> {
         self.active()?;
         if self.shared.policy.is_none() {
             return Err(SyncError::InvalidInput);
         }
         let peer = self.shared.identity.peer(id)?;
         self.account_action(id, ACCOUNT_TRANSFER_TIMEOUT, move |s| async move {
-            if let Some(observer) = &progress { observer(TransferProgress::default()); }
+            if let Some(observer) = &progress {
+                observer(TransferProgress::default());
+            }
             let socket = account_socket(&s, &peer).await?;
             let mut client = Client {
                 shared: s.clone(),
@@ -655,7 +662,8 @@ impl Client {
         &mut self,
         operation: impl FnOnce(&Shared) -> Result<T> + Send + 'static,
     ) -> Result<T> {
-        self.local_preparation_with_interval(operation, Duration::from_secs(5)).await
+        self.local_preparation_with_interval(operation, Duration::from_secs(5))
+            .await
     }
     async fn local_preparation_with_interval<T: Send + 'static>(
         &mut self,
@@ -678,7 +686,9 @@ impl Client {
     }
     fn report(&mut self, stage: ProgressStage) {
         self.counts.stage = stage;
-        if let Some(observer) = &self.progress { observer(self.counts.clone()); }
+        if let Some(observer) = &self.progress {
+            observer(self.counts.clone());
+        }
     }
     fn transferred(&mut self, bytes: u64) {
         self.counts.bytes_transferred += bytes;
@@ -929,8 +939,15 @@ impl Client {
         self.authorized()?;
         let remote = self.inventory().await?;
         let mut local = self.local_preparation(local_inventory).await?;
-        self.counts.total = (if direction.receives() { remote.difference(&local).count() } else { 0 }
-            + if direction.sends() { local.difference(&remote).count() } else { 0 }) as u64;
+        self.counts.total = (if direction.receives() {
+            remote.difference(&local).count()
+        } else {
+            0
+        } + if direction.sends() {
+            local.difference(&remote).count()
+        } else {
+            0
+        }) as u64;
         self.report(ProgressStage::Inventory);
         if direction.receives() {
             self.report(ProgressStage::Receiving);
@@ -943,7 +960,11 @@ impl Client {
                         self.get_blob(&b).await?;
                     }
                 }
-                if !self.local_preparation(move |s| s.backend.receive_head(v)).await?.durable {
+                if !self
+                    .local_preparation(move |s| s.backend.receive_head(v))
+                    .await?
+                    .durable
+                {
                     return Err(SyncError::Backend);
                 }
                 self.counts.completed += 1;
@@ -957,7 +978,9 @@ impl Client {
             self.report(ProgressStage::Sending);
             for id in local.difference(&remote) {
                 let digest = id.clone();
-                let v = self.local_preparation(move |s| s.backend.version(&digest)).await?;
+                let v = self
+                    .local_preparation(move |s| s.backend.version(&digest))
+                    .await?;
                 check_json(&v)?;
                 let head = v.clone();
                 let refs = self.local_preparation(move |s| blobs(s, &head)).await?;
@@ -1135,30 +1158,75 @@ mod channel_tests {
                     Arc::new(UnusedBackend(device.clone(), workspace.clone())),
                     Arc::new(IdentityStore::open(&root.path().join(name), &device).unwrap()),
                     root.path().join(format!("{name}-stage")),
-                ).unwrap()
+                )
+                .unwrap()
             };
             let host = service("host");
             let client = service("client");
             let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
-            let invite = host.shared.identity.invite(&workspace, &format!("ws://{}/", listener.local_addr().unwrap())).unwrap();
+            let invite = host
+                .shared
+                .identity
+                .invite(
+                    &workspace,
+                    &format!("ws://{}/", listener.local_addr().unwrap()),
+                )
+                .unwrap();
             let (stop_tx, stop) = watch::channel(false);
             let server_shared = host.shared.clone();
             let server = tokio::spawn(async move {
                 let (tcp, _) = listener.accept().await.unwrap();
-                transport::serve_with_limits(server_shared, tcp, stop,
-                    Duration::from_secs(2), Duration::from_millis(150), Duration::from_millis(5)).await
+                transport::serve_with_limits(
+                    server_shared,
+                    tcp,
+                    stop,
+                    Duration::from_secs(2),
+                    Duration::from_millis(150),
+                    Duration::from_millis(5),
+                )
+                .await
             });
             let (socket, device) = transport::client(&client.shared, &invite).await.unwrap();
-            let peer = client.shared.identity.remember_peer(&invite, &device).unwrap();
-            let peer = client.shared.identity.commit_pairing(&peer.invitation_id).unwrap();
-            let mut connection = Client { shared: client.shared.clone(), peer, socket, progress: None, counts: TransferProgress::default() };
-            assert_eq!(connection.local_preparation_with_interval(|_| {
-                thread::sleep(Duration::from_millis(450));
-                Ok(7)
-            }, if keepalive { Duration::from_millis(30) } else { Duration::from_secs(1) }).await.unwrap(), 7);
+            let peer = client
+                .shared
+                .identity
+                .remember_peer(&invite, &device)
+                .unwrap();
+            let peer = client
+                .shared
+                .identity
+                .commit_pairing(&peer.invitation_id)
+                .unwrap();
+            let mut connection = Client {
+                shared: client.shared.clone(),
+                peer,
+                socket,
+                progress: None,
+                counts: TransferProgress::default(),
+            };
+            assert_eq!(
+                connection
+                    .local_preparation_with_interval(
+                        |_| {
+                            thread::sleep(Duration::from_millis(450));
+                            Ok(7)
+                        },
+                        if keepalive {
+                            Duration::from_millis(30)
+                        } else {
+                            Duration::from_secs(1)
+                        }
+                    )
+                    .await
+                    .unwrap(),
+                7
+            );
             let response = connection.rpc(wire::Request::Status).await;
             if keepalive {
-                assert!(matches!(response, Ok(wire::Response::Status { version: 1 })));
+                assert!(matches!(
+                    response,
+                    Ok(wire::Response::Status { version: 1 })
+                ));
                 stop_tx.send(true).unwrap();
                 assert_eq!(server.await.unwrap(), Err(SyncError::Stopped));
             } else {
@@ -1418,8 +1486,11 @@ mod channel_tests {
         });
         entered.recv_timeout(Duration::from_secs(2)).unwrap();
         let (alive_tx, alive_rx) = mpsc::channel();
-        service.handle.spawn(async move { let _ = alive_tx.send(()); });
-        alive_rx.recv_timeout(Duration::from_secs(1))
+        service.handle.spawn(async move {
+            let _ = alive_tx.send(());
+        });
+        alive_rx
+            .recv_timeout(Duration::from_secs(1))
             .expect("backend work blocked network scheduling");
         if disconnect {
             assert_eq!(

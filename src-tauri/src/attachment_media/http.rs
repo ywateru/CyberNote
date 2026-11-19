@@ -1,7 +1,7 @@
 //! Standard HTTP parser + demand-polled bodies. A no-Range GET is a complete
 //! 200 response, never a complete in-memory file. HTTP capabilities are bearer
 //! URLs: Host/Origin hardening cannot authenticate an individual WebView.
-use super::{Source, cancelled, error, Lease, MediaCore};
+use super::{cancelled, error, Lease, MediaCore, Source};
 use crate::store::{attachment_media::FileStamp, Result};
 use bytes::Bytes;
 use futures_util::stream;

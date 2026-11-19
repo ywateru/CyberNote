@@ -23,11 +23,13 @@ test('RELAY-02 requires separate explicit opt-in and declared network topology',
 });
 test('fixed Android account methods reject extra arguments and injection',async()=>{
   const calls=[],controls=accountSyncControls(async command=>{calls.push(command);return {state:'paused'};});
-  await controls.setEnabled(false);await controls.setEnabled(true);await controls.syncNow();
-  assert.deepEqual(calls,[{type:'setEnabled',enabled:false},{type:'setEnabled',enabled:true},{type:'syncNow'}]);
+  const target='11111111-1111-4111-8111-111111111111';
+  await controls.setEnabled(false);await controls.setEnabled(true);await controls.syncNow();await controls.syncDevice(target,'both');
+  assert.deepEqual(calls,[{type:'setEnabled',enabled:false},{type:'setEnabled',enabled:true},{type:'syncNow'},{type:'syncDevice',deviceId:target,direction:'both'}]);
   for(const args of [[],['true'],[{enabled:true,token:'secret'}],[true,{url:'https://private.invalid'}]])await assert.rejects(controls.setEnabled(...args));
   for(const args of [[{}],[{type:'signIn'}],['https://private.invalid']])await assert.rejects(controls.syncNow(...args));
-  assert.equal(calls.length,3);assert.deepEqual(Object.keys(controls),['setEnabled','syncNow']);
+  for(const args of [[],[target],[target,'broadcast'],[target,'both',{token:'secret'}],['http://private.invalid','both']])await assert.rejects(controls.syncDevice(...args));
+  assert.equal(calls.length,4);assert.deepEqual(Object.keys(controls),['setEnabled','syncNow','syncDevice']);
 });
 test('installed APK lookup accepts only one safe base APK path',()=>{
   const apk=`/data/app/${PACKAGE}-abc_12==/base.apk`;

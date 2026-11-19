@@ -198,11 +198,17 @@ fn different_peer_stales_preparation_and_sql_failure_preserves_inbox_for_retry()
     // Durable reception needs verified bytes, but must not copy attachments
     // into live-publication stages. Only the later quiet apply owns that work.
     let stages_before = stage_paths(&s);
-    let receipt_media = s.sync_media_snapshot(std::slice::from_ref(&wire), false)
-        .unwrap().receipt_only().verify().unwrap();
+    let receipt_media = s
+        .sync_media_snapshot(std::slice::from_ref(&wire), false)
+        .unwrap()
+        .receipt_only()
+        .verify()
+        .unwrap();
     assert!(receipt_media.staged.borrow().is_empty());
     assert_eq!(stage_paths(&s), stages_before);
-    let receipt = s.sync_with_media(receipt_media, |s| s.sync_receive(vec![wire])).unwrap();
+    let receipt = s
+        .sync_with_media(receipt_media, |s| s.sync_receive(vec![wire]))
+        .unwrap();
     assert!(receipt.durable && !receipt.applied);
     assert!(s.note(&id).is_err());
     assert!(!s.attachment_path(&a.relative_path).unwrap().exists());

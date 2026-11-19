@@ -52,7 +52,8 @@ document.createElementNS=(_ns,name)=>new HostElement(name);
 document.createTextNode=value=>new HostText(value);
 document.visibilityState='visible';document.body=document.appendChild(new HostElement('body'));document.activeElement=document.body;
 const intervals=new Map();let timerId=0;
-const window={document,HTMLElement:HostElement,HTMLIFrameElement:class {},addEventListener(){},removeEventListener(){},
+const fixtureNavigator={userAgent:'Fixture Mac'};
+const window={document,navigator:fixtureNavigator,HTMLElement:HostElement,HTMLIFrameElement:class {},addEventListener(){},removeEventListener(){},
   setInterval(fn){const id=++timerId;intervals.set(id,fn);return id;},clearInterval(id){intervals.delete(id);}};
 document.defaultView=window;
 Object.assign(globalThis,{window,document,HTMLElement:HostElement,IS_REACT_ACT_ENVIRONMENT:true});
@@ -70,7 +71,7 @@ const built=await build({stdin:{contents:`export {default as AccountSettings} fr
     b.onResolve({filter:/^\.\/data-management$/},()=>({path:'time',namespace:'fixture'}));
     b.onLoad({filter:/.*/,namespace:'fixture'},({path})=>({contents:path==='ipc'
       ? 'export const isTauri=()=>true; export const invoke=(name,args)=>globalThis.__invoke(name,args);'
-      : path==='icons'?'export const UserRound=()=>null,Laptop=()=>null,Smartphone=()=>null;'
+      : path==='icons'?'export const UserRound=()=>null,Laptop=()=>null,Smartphone=()=>null,MonitorSmartphone=()=>null,RefreshCw=()=>null,ChevronRight=()=>null,Pencil=()=>null,FileText=()=>null,Check=()=>null,LoaderCircle=()=>null,KeyRound=()=>null,HardDrive=()=>null;'
       : 'export const formatFileTime=()=>"Fixture time";'}));
   }}]});
 
@@ -93,7 +94,7 @@ const appAccountMap=ts.transpileModule('('+accountMaps[0].getText(appAST)+')',{c
 
 function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
   let native=structuredClone(initial),handle;
-  const calls=[],context=vm.createContext({module:{exports:{}},require,window,document,HTMLElement:HostElement,queueMicrotask,structuredClone,requestAnimationFrame:callback=>{queueMicrotask(()=>callback(0));return 1;},
+  const calls=[],context=vm.createContext({module:{exports:{}},require,window,document,navigator:fixtureNavigator,HTMLElement:HostElement,queueMicrotask,structuredClone,requestAnimationFrame:callback=>{queueMicrotask(()=>callback(0));return 1;},
     __invoke:async(name,{command})=>{
       assert.equal(name,'account_command');calls.push(structuredClone(command));
       if(reply){const result=reply(command,{get:()=>native,set:s=>{native=structuredClone(s);}});if(result!==undefined)return result;}
@@ -122,11 +123,13 @@ function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
     all,handle:()=>handle,text:()=>container.textContent,
     panel:()=>all().find(e=>props(e).className==='account-settings'),
     radio:value=>all().find(e=>e.localName==='input'&&props(e).name==='account-login-surface'&&props(e).value===value),
+    storageRadio:value=>all().find(e=>e.localName==='input'&&props(e).name==='account-credential-storage'&&props(e).value===value),
     buttons:()=>all().filter(e=>e.localName==='button'),
     button:label=>all().find(e=>e.localName==='button'&&e.textContent===label),
     actionLabels:()=>{const section=all().find(e=>props(e)['aria-label']==='CyberNote 账户');return descendants(section).filter(e=>e.localName==='button').map(e=>e.textContent);},
     async click(label){const button=h.button(label);assert(button,`Missing ${label}`);assert(!props(button).disabled);const modal=all().find(e=>e.localName==='dialog'&&e.open);assert(!modal||modal.contains(button),'host actions must respect native modal isolation');await act(async()=>{props(button).onClick({currentTarget:button});});},
     async choose(value){const radio=h.radio(value);assert(radio);const fieldset=all().find(e=>e.localName==='fieldset');assert(!props(fieldset).disabled);await act(async()=>{props(radio).onChange();});},
+    async chooseStorage(value){const radio=h.storageRadio(value);assert(radio);const fieldset=all().find(e=>e.localName==='fieldset'&&descendants(e).includes(radio));assert(!props(fieldset).disabled);await act(async()=>{props(radio).onChange();});},
     async poll(){await act(async()=>{await handle.run({type:'status'});});},
     async tick(){await act(async()=>{for(const fn of intervals.values())fn();});},
   };
@@ -152,6 +155,7 @@ test('IPC preserves omitted browser compatibility and only fixed optional surfac
 test('real account UI defaults embedded; both radios and both buttons share explicit choice',async t=>{
  for(const type of ['signIn','signUp'])for(const surface of ['embedded','browser']){
   const h=setup(t);await h.mount();assert.deepEqual(h.actionLabels(),['登录','创建账户']);assert(props(h.radio('embedded')).checked);
+  assert(h.text().includes('登录用户名区分大小写，请按注册时的写法输入。'));
   const before=h.calls.length;await h.choose(surface);assert.equal(h.calls.length,before,'radio selection has no IPC');
   await h.click(type==='signIn'?'登录':'创建账户');assert.deepEqual(h.calls.at(-1),{type,surface});
   assert.deepEqual(h.actionLabels(),surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录']);
@@ -270,6 +274,7 @@ test('connection login retry uses selection; retained network retry remains sync
 test('unbound profile failure shows fixed stage/request details; polling never restarts login',async t=>{
  const h=setup(t,{initial:{...signedOutAccount(),state:'error',error:{code:'account_network',stage:'coordinatorProfile',requestReason:'timeout',message:'private-response-sentinel'}}});
  await h.mount();assert(h.text().includes('读取账户资料时请求超时'));assert(!h.text().includes('private-response-sentinel'));
+ assert.deepEqual(h.actionLabels(),['登录','创建账户'],'a signed-out restore error must not offer authenticated sign-out');
  const details=h.all().find(e=>e.localName==='details');assert(details);assert(!props(details).open);assert(details.textContent.includes('requestReasontimeout'));
  await h.tick();await h.tick();assert(h.calls.every(c=>c.type==='status'));
  await h.choose('browser');await h.click('重试登录');assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'browser'});assert(!h.calls.some(c=>c.type==='setEnabled'||c.type==='signOut'));
@@ -374,7 +379,7 @@ test('switch opens a labelled native modal without enabling; local Tab/Escape ha
  await h.mount();const toggle=h.all().find(e=>e.localName==='input'&&props(e).id==='account-enabled');
  assert.equal(props(toggle).type,'checkbox');assert.equal(props(toggle).role,'switch');
  assert.equal(props(toggle).checked,false);assert.equal(props(toggle).disabled,false);
- assert(h.all().some(e=>e.localName==='label'&&props(e).htmlFor==='account-enabled'&&e.textContent==='同步此设备'));
+ assert(h.all().some(e=>e.localName==='label'&&props(e).htmlFor==='account-enabled'&&e.textContent==='允许此设备同步'));
  assert.equal(props(toggle).onKeyDown,undefined,'native checkbox retains its Space behavior');
  toggle.focus();await act(async()=>props(toggle).onChange({target:{checked:true}}));
  const modal=h.all().find(e=>e.localName==='dialog');assert(modal);assert.equal(modal.open,true);assert.equal(modal.modalShows,1);
@@ -607,7 +612,8 @@ test('device directory survives pause; offline summaries stay hidden and unknown
   device(SELF,{summary:{noteCount:0,lastNoteUpdatedAt:null,capturedAt:999}}),
   device(PEER,{online:false,summary:{noteCount:777,lastNoteUpdatedAt:111,capturedAt:999}}),device(OTHER),
  ]})});await h.mount();
- assert(row(h,SELF).textContent.includes('此设备 · 在线'));assert(row(h,SELF).textContent.includes('0 篇笔记 · 暂无笔记更新时间'));
+ assert(row(h,SELF).textContent.includes('此设备'));assert(!row(h,SELF).textContent.includes('在线'));
+ assert(row(h,SELF).textContent.includes('0 篇笔记'));assert(row(h,SELF).textContent.includes('暂无笔记更新时间'));
  assert(row(h,PEER).textContent.includes('离线'));assert(!row(h,PEER).textContent.includes('777'));assert(!row(h,PEER).textContent.includes('笔记更新于'));
  assert(row(h,OTHER).textContent.includes('笔记信息暂不可用'));assert(!row(h,OTHER).textContent.includes('0 篇'));
  assert(!h.button('立即同步'));await h.tick();assert(h.calls.every(c=>c.type==='status'));
@@ -644,14 +650,16 @@ test('device action latches invalidation for offline, missing, paused, account a
 test('in-flight device transfer observes status but rejects repeat confirm; durable receipt remains separate from application/conflicts',async t=>{
  const pending=deferred(),initial=directory();
  const h=setup(t,{initial,reply:command=>command.type==='syncDevice'?pending.promise:undefined});await h.mount();await openPeer(h);await h.click('开始同步');
- assert(props(h.button('开始同步')).disabled);assert(props(h.button('取消')).disabled);
- await act(async()=>props(h.button('开始同步')).onClick());assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);
+ assert(!h.button('开始同步'),'a running transfer hides the duplicate confirm action');
+ assert(h.button('收起，后台继续'));assert(!props(h.button('收起，后台继续')).disabled);
+ await act(async()=>{await h.handle().run({type:'syncDevice',deviceId:PEER,direction:'both'});});
+ assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);
  const running={...initial,deviceOperation:{deviceId:PEER,direction:'both',phase:'running',startedAt:100}};h.setNative(running);await h.tick();
- assert(h.text().includes('正在执行本次传输'));assert(h.text().includes('方向：双向同步'));
+ assert(h.text().includes('正在连接设备'));assert(h.text().includes('与 同名设备 · 双向同步'));
  const succeeded={...initial,pendingCount:3,conflictCount:2,deviceOperation:{...running.deviceOperation,phase:'succeeded',finishedAt:200}};
- await act(async()=>pending.resolve(succeeded));assert(h.text().includes('本次传输完成'));assert(h.text().includes('持久传输收据'));
+ await act(async()=>pending.resolve(succeeded));assert(h.text().includes('本次传输完成'));assert(h.text().includes('已保存接收内容'));
  assert(h.text().includes('待应用'));assert(h.text().includes('查看冲突（2）'));assert(!h.text().includes('全部笔记已应用'));
- await h.click('取消');await h.tick();assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);
+ await h.click('关闭');await h.tick();assert.equal(h.calls.filter(c=>c.type==='syncDevice').length,1);
 });
 
 test('prior or mismatched operation receipts never claim this dialog completed; retry keeps target and direction explicit',async t=>{
@@ -659,8 +667,10 @@ test('prior or mismatched operation receipts never claim this dialog completed; 
   {deviceId:PEER,direction:'both',phase:'succeeded',startedAt:100,finishedAt:200},
   {deviceId:OTHER,direction:'pull',phase:'succeeded',startedAt:100,finishedAt:200},
  ]) {
-  const h=setup(t,{initial:directory({deviceOperation:receipt})});await h.mount();await openPeer(h);assert(!h.text().includes('本次传输完成'));
-  await h.click('开始同步');assert(!h.text().includes('本次传输完成'));await h.click('取消');
+  const h=setup(t,{initial:directory({deviceOperation:receipt})});await h.mount();await openPeer(h);
+  const modal=h.all().find(e=>e.localName==='dialog');
+  assert(!modal.textContent.includes('本次传输完成'));
+  await h.click('开始同步');assert(!modal.textContent.includes('本次传输完成'));await h.click('取消');
  }
  const h=setup(t,{initial:directory(),reply:command=>{if(command.type==='syncDevice')throw {code:'account_sync_failed',message:'private-peer-error'};}});
  await h.mount();await openPeer(h);await chooseDirection(h,'pull');await h.click('开始同步');assert(h.text().includes('同步未完成'));assert(!h.text().includes('private-peer-error'));
@@ -721,7 +731,7 @@ test('enabling permission and refreshing never dispatch a peer transfer',async t
  }});await h.mount();const toggle=h.all().find(e=>props(e).id==='account-enabled');
  await act(async()=>props(toggle).onChange({currentTarget:toggle,target:{checked:true}}));assert(h.text().includes('开启本身不会自动传输'));
  await h.click('允许同步');await h.tick();await h.click('刷新设备');await h.tick();
- assert(h.calls.some(c=>c.type==='setEnabled'));assert(!h.calls.some(c=>c.type==='syncDevice'));assert(h.text().includes('开启后不会自动传输'));
+ assert(h.calls.some(c=>c.type==='setEnabled'));assert(!h.calls.some(c=>c.type==='syncDevice'));assert(h.text().includes('开启或刷新不会自动传输'));
 });
 
 test('IPC constructs only exact rename and target/direction requests; invalid input never reaches native',async t=>{
@@ -737,6 +747,72 @@ test('IPC constructs only exact rename and target/direction requests; invalid in
   {type:'syncDevice',deviceId:PEER,direction:'both',owner:'another-account'},
  ]) await assert.rejects(h.client.accountCommand(command),/无效数据/);
  assert.equal(h.calls.length,before);
+});
+
+test('credential storage IPC accepts only the two finite values and exact command shape',async t=>{
+ const h=setup(t,{initial:{...signedOutAccount(),credentialStorage:'keychain'}});
+ for(const storage of ['keychain','encryptedFile']) {
+  await h.client.accountCommand({type:'setCredentialStorage',storage});
+  assert.deepEqual(h.calls.at(-1),{type:'setCredentialStorage',storage});
+ }
+ const before=h.calls.length;
+ for(const command of [
+  {type:'setCredentialStorage'},
+  {type:'setCredentialStorage',storage:'keychainFile'},
+  {type:'setCredentialStorage',storage:'encrypted_file'},
+  {type:'setCredentialStorage',storage:null},
+  {type:'setCredentialStorage',storage:'encryptedFile',confirmed:true},
+  {type:'setCredentialStorage',storage:'encryptedFile',path:'/private/vault'},
+ ]) await assert.rejects(h.client.accountCommand(command),/无效数据/);
+ assert.equal(h.calls.length,before);
+});
+
+test('credential storage UI requires confirmation, sends one exact IPC and reflects the authoritative selection',async t=>{
+ const initial={...signedOutAccount(),credentialStorage:'keychain'};
+ const h=setup(t,{initial,reply:(command,model)=>{
+  if(command.type==='setCredentialStorage'){const next={...model.get(),credentialStorage:command.storage};model.set(next);return next;}
+ }});
+ await h.mount();assert(props(h.storageRadio('keychain')).checked);assert(props(h.storageRadio('encryptedFile')).checked===false);
+ await h.chooseStorage('encryptedFile');assert(h.calls.every(c=>c.type==='status'));
+ await h.click('应用存储方式');
+ assert(h.handle().inspect().confirmation);assert(h.calls.every(c=>c.type==='status'));
+ assert(h.text().includes('切换凭据存储'));
+ assert(h.text().includes('新方式使用独立的 CyberBus 安装身份'));
+ await h.click('取消');assert.equal(h.handle().inspect().status.credentialStorage,'keychain');assert(h.calls.every(c=>c.type==='status'));
+ await h.click('应用存储方式');await h.click('切换并退出当前身份');
+ assert.deepEqual(h.calls.filter(c=>c.type==='setCredentialStorage'),[{type:'setCredentialStorage',storage:'encryptedFile'}]);
+ assert.equal(h.handle().inspect().status.credentialStorage,'encryptedFile');
+ assert(props(h.storageRadio('encryptedFile')).checked);
+ assert(h.text().includes('凭据存储已切换为本机加密文件'));
+ assert(h.text().includes('原存储数据已保留'));
+});
+
+test('new-install storage UI presents encrypted file as the default and Keychain as optional',async t=>{
+ const h=setup(t,{initial:{...signedOutAccount(),credentialStorage:'encryptedFile'}});
+ await h.mount();
+ assert(props(h.storageRadio('encryptedFile')).checked);
+ assert(props(h.storageRadio('keychain')).checked===false);
+ assert(h.text().includes('本机加密文件（默认）'));
+ assert(h.text().includes('系统钥匙串（可选）'));
+ assert(h.text().includes('AES-GCM'));
+ assert(h.text().includes('0600'));
+});
+
+test('credential storage changes are fenced for signed-in, authorizing, busy and cleanup-required states',async t=>{
+ const base={...signedOutAccount(),credentialStorage:'keychain'};
+ const states=[
+  {...base,state:'paused',profile:{subject:'fixture-owner',displayName:'Fixture'}},
+  {...base,state:'authorizing',authorizationSurface:'embedded'},
+  {...base,state:'error',error:{code:'account_busy',message:'safe'}},
+  {...base,state:'error',error:{code:'account_cleanup_required',message:'safe'}},
+ ];
+ for(const initial of states) {
+  const h=setup(t,{initial});await h.mount();const fieldset=h.all().find(e=>e.localName==='fieldset'&&descendants(e).some(e=>props(e).name==='account-credential-storage'));
+  assert(props(fieldset).disabled);assert(props(h.button('应用存储方式')).disabled);
+  const before=h.calls.length;
+  await act(async()=>{await h.handle().run({type:'setCredentialStorage',storage:'encryptedFile'});});
+  assert.equal(h.handle().inspect().confirmation,false);assert.equal(h.calls.length,before);
+ }
 });
 
 test('late device receipt after an observed account change cannot overwrite new-account status or claim success',async t=>{
@@ -767,15 +843,39 @@ test('JS device fixture renames only the local row and never invents a transfer 
  await assert.rejects(accountFixture(backend,{type:'syncDevice',deviceId:PEER,direction:'broadcast'}));
 });
 
+test('JS credential fixture validates exact input and rejects every active identity state',async()=>{
+ const backend={account:{...signedOutAccount(),credentialStorage:'keychain'},async boundary(){}};
+ await accountFixture(backend,{type:'setCredentialStorage',storage:'encryptedFile'});
+ assert.equal(backend.account.state,'signedOut');assert.equal(backend.account.credentialStorage,'encryptedFile');
+ for(const command of [
+  {type:'setCredentialStorage'},
+  {type:'setCredentialStorage',storage:'keychainFile'},
+  {type:'setCredentialStorage',storage:'encryptedFile',confirmed:true},
+  {type:'setCredentialStorage',storage:'encryptedFile',path:'/private/vault'},
+ ]) await assert.rejects(accountFixture(backend,command));
+ for(const account of [
+  directory({credentialStorage:'keychain'}),
+  {...signedOutAccount(),credentialStorage:'keychain',state:'authorizing',authorizationSurface:'embedded'},
+  {...signedOutAccount(),credentialStorage:'keychain',state:'error',error:{code:'account_busy',message:'safe'}},
+  {...signedOutAccount(),credentialStorage:'keychain',state:'error',error:{code:'account_cleanup_required',message:'safe'}},
+ ]) {
+  backend.account=account;
+  await assert.rejects(accountFixture(backend,{type:'setCredentialStorage',storage:'encryptedFile'}));
+  assert.equal(backend.account.credentialStorage,'keychain');
+ }
+});
+
 test('an older matching receipt after confirm is not new success, and invalidated dialogs cannot regain success by polling',async t=>{
  const receipt={deviceId:PEER,direction:'both',phase:'succeeded',startedAt:100,finishedAt:200};
  const h=setup(t,{initial:directory({deviceOperation:receipt}),reply:command=>command.type==='syncDevice'?directory({deviceOperation:{...receipt,startedAt:90}}):undefined});
- await h.mount();await openPeer(h);await h.click('开始同步');assert(!h.text().includes('本次传输完成'));
+ await h.mount();await openPeer(h);await h.click('开始同步');
+ const modal=h.all().find(e=>e.localName==='dialog');
+ assert(!modal.textContent.includes('本次传输完成'));
  for(const change of [s=>{s.profile.subject='fixture-B';},s=>{s.devices[0].id='20000000-0000-4000-8000-000000000001';}]) {
   await h.click('取消');h.setNative(directory());await h.tick();await openPeer(h);await h.click('开始同步');
   const changed=directory();change(changed);h.setNative(changed);await h.tick();assert(props(h.button('开始同步')).disabled);
   h.setNative(directory({deviceOperation:{...receipt,startedAt:300,finishedAt:400}}));await h.tick();
-  assert(!h.text().includes('本次传输完成'));assert(props(h.button('开始同步')).disabled);
+  assert(!h.all().find(e=>e.localName==='dialog').textContent.includes('本次传输完成'));assert(props(h.button('开始同步')).disabled);
  }
 });
 
@@ -824,4 +924,30 @@ test('debug rename pre-fills the requested local name and cannot save before exp
  await h.click('取消');assert(!h.calls.some(c=>c.type==='renameDevice'));
  await act(async()=>{await api.execute('account.renameDevice',{name:'  CLI Mac  '});});await h.click('保存名称');
  assert.deepEqual(h.calls.at(-1),{type:'renameDevice',name:'CLI Mac'});assert(h.getNative().devices.slice(1).every(d=>d.name==='同名设备'));
+});
+
+test('debug credential storage uses the real confirmation gate and never dispatches while active',async t=>{
+ const initial={...signedOutAccount(),credentialStorage:'keychain'};
+ const h=setup(t,{initial,reply:(command,model)=>{
+  if(command.type==='setCredentialStorage'){const next={...model.get(),credentialStorage:command.storage};model.set(next);return next;}
+ }});await h.mount();const api=h.debug();
+ const descriptor=api.list().find(c=>c.id==='account.setCredentialStorage');
+ assert(descriptor);assert.equal(descriptor.available,true);assert.equal(descriptor.mode,'semantic');
+ assert.deepEqual(Object.keys(descriptor.args),['storage']);assert(descriptor.args.storage.required);
+ assert.deepEqual(Array.from(descriptor.args.storage.enum),['keychain','encryptedFile']);
+ const before=h.calls.length;
+ for(const args of [{},{storage:'keychainFile'},{storage:'encrypted_file'},{storage:'encryptedFile',confirmed:true}])
+  await assert.rejects(api.execute('account.setCredentialStorage',args),e=>e.code==='INVALID_ARGUMENT');
+ assert.equal(h.calls.length,before);assert.equal(h.handle().inspect().confirmation,false);
+ await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'encryptedFile'});});
+ assert(h.handle().inspect().confirmation);assert.equal(h.calls.length,before);
+ await h.click('取消');assert.equal(h.calls.length,before);
+ await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'encryptedFile'});});
+ await h.click('切换并退出当前身份');
+ await h.tick();
+ assert.deepEqual(h.calls.slice(before).filter(c=>c.type==='setCredentialStorage'),[{type:'setCredentialStorage',storage:'encryptedFile'}]);
+ h.setNative({...initial,state:'paused',profile:{subject:'fixture-owner',displayName:'Fixture'}});await h.poll();
+ const pausedCalls=h.calls.length;
+ await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'keychain'});});
+ assert.equal(h.handle().inspect().confirmation,false);assert.equal(h.calls.length,pausedCalls);
 });

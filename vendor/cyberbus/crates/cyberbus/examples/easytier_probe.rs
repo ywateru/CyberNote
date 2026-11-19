@@ -206,6 +206,93 @@ async fn encrypted(io: BoxStream, listen: bool, budget: Duration) -> Result<()> 
     .await
 }
 
+async fn exchange_crossed(
+    accepted: cyberbus_protocol::noise::SecureStream<cyberbus_transport::BoxStream>,
+    connected: cyberbus_protocol::noise::SecureStream<cyberbus_transport::BoxStream>,
+    frames: u32,
+) -> Result<()> {
+    use pb::wire_envelope::Body;
+    let (mut incoming_reader, _incoming_writer, _) = accepted.into_split();
+    let (_outgoing_reader, mut outgoing_writer, _) = connected.into_split();
+    for sequence in 0..frames {
+        let nonce = vec![(sequence & 0xff) as u8; 16];
+        outgoing_writer
+            .send(Body::Ping(pb::Ping {
+                nonce: nonce.clone(),
+            }))
+            .await?;
+        let frame = incoming_reader.recv().await?;
+        if frame.body
+            != Some(Body::Ping(pb::Ping {
+                nonce: nonce.clone(),
+            }))
+        {
+            return Err(format!("crossed frame {sequence} mismatch").into());
+        }
+    }
+    outgoing_writer.shutdown().await?;
+    Ok(())
+}
+
+async fn crossed(t: &Transport, remote: Ipv4Addr, budget: Duration, frames: u32) -> Result<()> {
+    use cyberbus_protocol::noise::NoiseConfig;
+    let cancel = CancellationToken::new();
+    bounded("address_ready", Duration::from_secs(20), async {
+        t.wait_ready(Instant::now() + Duration::from_secs(20), &cancel)
+            .await?;
+        Ok(())
+    })
+    .await?;
+    let mut listener = t.listen(11000).await?;
+    bounded("remote_route", Duration::from_secs(45), async {
+        loop {
+            if t.routes().await?.iter().any(|route| route.ipv4 == remote) {
+                return Ok(());
+            }
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+    })
+    .await?;
+    let (accepted_io, connected_io) = tokio::try_join!(
+        async { Ok::<_, cyberbus_transport::Error>(listener.accept(&cancel).await?.0) },
+        t.connect(
+            SocketAddrV4::new(remote, 11000),
+            Instant::now() + Duration::from_secs(15),
+            &cancel,
+        ),
+    )?;
+    record("crossed_transport_streams_ready", Instant::now(), json!({}));
+    let config = |private| NoiseConfig::new(private, [9; 32], [8; 32], "1", [7; 16]);
+    let (accepted, connected) = tokio::try_join!(
+        async {
+            Ok::<_, cyberbus_protocol::Error>(
+                noise::accept(accepted_io, config([42; 32]), |_| Ok(())).await?,
+            )
+        },
+        async {
+            Ok::<_, cyberbus_protocol::Error>(
+                noise::connect(connected_io, config([41; 32]), |_| Ok(())).await?,
+            )
+        },
+    )?;
+    record("crossed_noise_sessions_ready", Instant::now(), json!({}));
+    bounded("crossed_concurrent_frames", budget, async {
+        tokio::try_join!(exchange_crossed(accepted, connected, frames), async {
+            // The two halves above belong to one role. The second role runs
+            // symmetrically in the remote process and exchanges both streams.
+            Ok(())
+        },)?;
+        Ok(())
+    })
+    .await?;
+    record(
+        "crossed_complete",
+        Instant::now(),
+        json!({"frames_each_direction":frames}),
+    );
+    Ok(())
+}
+
 async fn probe(
     t: &Transport,
     listen: bool,
@@ -221,6 +308,9 @@ async fn probe(
         Ok(())
     })
     .await?;
+    if mode == "noise-crossed" {
+        return crossed(t, remote, budget, rounds.saturating_mul(5)).await;
+    }
     // Bind before announcing readiness. Retain listener throughout accepted IO.
     let mut listener = t.listen(11000).await?;
     record(
@@ -289,14 +379,14 @@ async fn main() -> Result<()> {
         .try_init();
     let args: Vec<_> = std::env::args().collect();
     if !(6..=8).contains(&args.len()) {
-        return Err("usage: easytier_probe listen|connect tcp://relay:port public-run-id raw|noise handshake-ms [rounds=1] [relay|p2p]".into());
+        return Err("usage: easytier_probe listen|connect tcp://relay:port public-run-id raw|noise|noise-crossed handshake-ms [rounds=1] [relay|p2p]".into());
     }
     let listen = match args[1].as_str() {
         "listen" => true,
         "connect" => false,
         _ => return Err("unknown role".into()),
     };
-    if !matches!(args[4].as_str(), "raw" | "noise") {
+    if !matches!(args[4].as_str(), "raw" | "noise" | "noise-crossed") {
         return Err("unknown mode".into());
     }
     let millis: u64 = args[5].parse()?;

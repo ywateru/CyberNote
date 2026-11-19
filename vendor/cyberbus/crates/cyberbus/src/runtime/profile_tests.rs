@@ -1,3 +1,131 @@
+use std::{
+    pin::Pin,
+    task::{Context, Poll, Waker},
+};
+use tokio::io::{AsyncRead, AsyncWrite, ReadBuf};
+
+struct TcpShutdownCounter {
+    inner: tokio::net::TcpStream,
+    shutdowns: Arc<std::sync::atomic::AtomicUsize>,
+}
+
+impl AsyncRead for TcpShutdownCounter {
+    fn poll_read(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &mut ReadBuf<'_>,
+    ) -> Poll<std::io::Result<()>> {
+        Pin::new(&mut self.inner).poll_read(cx, buf)
+    }
+}
+
+impl AsyncWrite for TcpShutdownCounter {
+    fn poll_write(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &[u8],
+    ) -> Poll<std::io::Result<usize>> {
+        Pin::new(&mut self.inner).poll_write(cx, buf)
+    }
+
+    fn poll_flush(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<std::io::Result<()>> {
+        Pin::new(&mut self.inner).poll_flush(cx)
+    }
+
+    fn poll_shutdown(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<std::io::Result<()>> {
+        self.shutdowns
+            .fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        Pin::new(&mut self.inner).poll_shutdown(cx)
+    }
+}
+
+struct ReaderGate {
+    eof: AtomicBool,
+    waker: Mutex<Option<Waker>>,
+}
+
+struct WriteGate {
+    blocked: AtomicBool,
+    waker: Mutex<Option<Waker>>,
+}
+
+impl WriteGate {
+    fn unblock(&self) {
+        self.blocked.store(false, Ordering::Release);
+        if let Some(waker) = self.waker.lock().unwrap().take() {
+            waker.wake();
+        }
+    }
+}
+
+impl ReaderGate {
+    fn close(&self) {
+        self.eof.store(true, Ordering::Release);
+        if let Some(waker) = self.waker.lock().unwrap().take() {
+            waker.wake();
+        }
+    }
+}
+
+struct ReaderEof {
+    inner: tokio::io::DuplexStream,
+    gate: Arc<ReaderGate>,
+    write_gate: Option<Arc<WriteGate>>,
+}
+
+impl AsyncRead for ReaderEof {
+    fn poll_read(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &mut ReadBuf<'_>,
+    ) -> Poll<std::io::Result<()>> {
+        if self.gate.eof.load(Ordering::Acquire) {
+            return Poll::Ready(Ok(()));
+        }
+        let result = Pin::new(&mut self.inner).poll_read(cx, buf);
+        if result.is_pending() {
+            *self.gate.waker.lock().unwrap() = Some(cx.waker().clone());
+        }
+        result
+    }
+}
+
+impl AsyncWrite for ReaderEof {
+    fn poll_write(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+        buf: &[u8],
+    ) -> Poll<std::io::Result<usize>> {
+        if let Some(gate) = &self.write_gate {
+            if gate.blocked.load(Ordering::Acquire) {
+                *gate.waker.lock().unwrap() = Some(cx.waker().clone());
+                return Poll::Pending;
+            }
+        }
+        Pin::new(&mut self.inner).poll_write(cx, buf)
+    }
+
+    fn poll_flush(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<std::io::Result<()>> {
+        Pin::new(&mut self.inner).poll_flush(cx)
+    }
+
+    fn poll_shutdown(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<std::io::Result<()>> {
+        Pin::new(&mut self.inner).poll_shutdown(cx)
+    }
+}
+
 fn profile_command(body: pb::sdk_command::Body) -> pb::SdkCommand {
     pb::SdkCommand {
         command_id: noise::random_bytes::<16>().unwrap().to_vec(),
@@ -466,6 +594,7 @@ async fn probe_metadata_prefix_survives_eof_and_original_deadline() {
             } else {
                 if ending == "remote_eof" {
                     drop(remote);
+                    tokio::time::advance(Duration::from_secs(2)).await;
                 } else {
                     // No CPU burn or real sleep: represent the owner not running
                     // until the unchanged five-second probe budget has expired.
@@ -495,6 +624,242 @@ async fn probe_metadata_prefix_survives_eof_and_original_deadline() {
                       runtime.devices.contains_key(&id), decoded_at.elapsed().as_millis());
         }
     }
+}
+
+#[tokio::test(start_paused = true)]
+async fn reader_eof_is_held_until_local_metadata_prefix_is_sent() {
+    let (mut runtime, _events) = runtime();
+    let keys = budget_keys(&mut runtime);
+    let progress = Arc::<session::Progress>::default();
+    let (a, b) = tokio::io::duplex(128 * 1024);
+    let reader_gate = Arc::new(ReaderGate {
+        eof: AtomicBool::new(false),
+        waker: Mutex::new(None),
+    });
+    let task = tokio::spawn(session::handshake_tracked(
+        Box::new(ReaderEof {
+            inner: a,
+            gate: reader_gate.clone(),
+            write_gate: None,
+        }),
+        std::net::Ipv4Addr::new(10, 0, 0, 2),
+        false,
+        keys,
+        runtime.admission.clone(),
+        runtime.incoming.clone(),
+        runtime.stop.clone(),
+        1,
+        0,
+        session::BusinessFlag::default(),
+        None,
+        progress.clone(),
+    ));
+    let mut remote = noise::connect(
+        b,
+        noise::NoiseConfig::new([42; 32], [9; 32], [8; 32], "1", [8; 16]),
+        |_| Ok(()),
+    )
+    .await
+    .unwrap();
+    let up = runtime.inbox.recv().await.unwrap();
+    assert!(matches!(&up, Incoming::Up { .. }));
+    // The remote Noise endpoint stays open for reads. Only the local reader
+    // observes completion, reproducing the real read/write completion race.
+    reader_gate.close();
+    assert!(
+        !progress.io_ended.is_cancelled(),
+        "the reader must not poison the Noise stream before Up is installed"
+    );
+    assert!(
+        !progress.local_prefix_ready.is_cancelled(),
+        "negative control: the owner has not installed Up yet"
+    );
+
+    runtime.receive(up).await;
+    assert!(progress.local_prefix_ready.is_cancelled());
+    let frame = remote.recv().await.unwrap();
+    assert!(
+        matches!(frame.body, Some(Body::Metadata(_))),
+        "queued local Metadata must cross the real Noise stream after EOF"
+    );
+    assert_eq!(
+        runtime
+            .admission
+            .metrics
+            .writer_metadata_sent
+            .load(Ordering::Relaxed),
+        1
+    );
+    for _ in 0..32 {
+        if progress.io_ended.is_cancelled() {
+            break;
+        }
+        tokio::task::yield_now().await;
+    }
+    assert!(
+        progress.io_ended.is_cancelled(),
+        "the reader must observe completion after the local prefix is sent"
+    );
+    let down = runtime.inbox.recv().await.unwrap();
+    assert!(matches!(down, Incoming::Down { .. }));
+    runtime.receive(down).await;
+    assert!(task.await.unwrap());
+}
+
+#[tokio::test(start_paused = true)]
+async fn io_end_notice_does_not_cancel_a_pending_noise_reader() {
+    let (mut runtime, _events) = runtime();
+    let keys = budget_keys(&mut runtime);
+    let progress = Arc::<session::Progress>::default();
+    let (a, b) = tokio::io::duplex(128 * 1024);
+    let reader_gate = Arc::new(ReaderGate {
+        eof: AtomicBool::new(false),
+        waker: Mutex::new(None),
+    });
+    let write_gate = Arc::new(WriteGate {
+        blocked: AtomicBool::new(false),
+        waker: Mutex::new(None),
+    });
+    let task = tokio::spawn(session::handshake_tracked(
+        Box::new(ReaderEof {
+            inner: a,
+            gate: reader_gate.clone(),
+            write_gate: Some(write_gate.clone()),
+        }),
+        std::net::Ipv4Addr::new(10, 0, 0, 2),
+        true,
+        keys,
+        runtime.admission.clone(),
+        runtime.incoming.clone(),
+        runtime.stop.clone(),
+        1,
+        0,
+        session::BusinessFlag::default(),
+        None,
+        progress.clone(),
+    ));
+    let mut remote = noise::accept(
+        b,
+        noise::NoiseConfig::new([42; 32], [9; 32], [8; 32], "1", [8; 16]),
+        |_| Ok(()),
+    )
+    .await
+    .unwrap();
+    let up = runtime.inbox.recv().await.unwrap();
+    let Incoming::Up { session, send, .. } = &up else {
+        panic!("expected Up")
+    };
+    let current = session.clone();
+    let sender = send.clone();
+    runtime.receive(up).await;
+
+    assert!(matches!(
+        remote.recv().await.unwrap().body,
+        Some(Body::Metadata(_))
+    ));
+    assert_eq!(
+        runtime
+            .admission
+            .metrics
+            .writer_metadata_sent
+            .load(Ordering::Relaxed),
+        1
+    );
+
+    for _ in 0..32 {
+        if reader_gate.waker.lock().unwrap().is_some() {
+            break;
+        }
+        tokio::task::yield_now().await;
+    }
+    assert!(
+        reader_gate.waker.lock().unwrap().is_some(),
+        "the Noise reader must be pending before the IO end notice"
+    );
+
+    write_gate.blocked.store(true, Ordering::Release);
+    sender.try_send(metadata("second")).unwrap();
+    sender.try_send(metadata("queued-after-io-end")).unwrap();
+    for _ in 0..32 {
+        if write_gate.waker.lock().unwrap().is_some() {
+            break;
+        }
+        tokio::task::yield_now().await;
+    }
+    assert!(
+        write_gate.waker.lock().unwrap().is_some(),
+        "the writer must be blocked while the reader is pending"
+    );
+
+    current.progress.io_ended.cancel();
+    for _ in 0..8 {
+        tokio::task::yield_now().await;
+    }
+    write_gate.unblock();
+    let second = tokio::time::timeout(Duration::from_secs(1), remote.recv())
+        .await
+        .unwrap_or_else(|_| {
+            panic!(
+                "local writer timed out: send_failed={} reader_errors={} cancel={}",
+                runtime
+                    .admission
+                    .metrics
+                    .writer_send_failed
+                    .load(Ordering::Relaxed),
+                runtime
+                    .admission
+                    .metrics
+                    .reader_errors
+                    .load(Ordering::Relaxed),
+                current.cancel.is_cancelled(),
+            )
+        })
+        .unwrap_or_else(|error| {
+            panic!(
+                "local writer closed the peer: send_failed={} reader_errors={} cancel={}: {error}",
+                runtime
+                    .admission
+                    .metrics
+                    .writer_send_failed
+                    .load(Ordering::Relaxed),
+                runtime
+                    .admission
+                    .metrics
+                    .reader_errors
+                    .load(Ordering::Relaxed),
+                current.cancel.is_cancelled(),
+            )
+        });
+    assert!(
+        matches!(second.body, Some(Body::Metadata(_))),
+        "the admitted local prefix must finish after the IO end notice"
+    );
+    let third = tokio::time::timeout(Duration::from_secs(1), remote.recv())
+        .await
+        .expect("the shared Noise writer must remain usable for every admitted frame")
+        .unwrap();
+    assert!(matches!(third.body, Some(Body::Metadata(_))));
+    assert_eq!(
+        runtime
+            .admission
+            .metrics
+            .writer_metadata_sent
+            .load(Ordering::Relaxed),
+        3
+    );
+    assert_eq!(
+        runtime
+            .admission
+            .metrics
+            .writer_send_failed
+            .load(Ordering::Relaxed),
+        0
+    );
+
+    let down = runtime.inbox.recv().await.unwrap();
+    assert!(matches!(down, Incoming::Down { .. }));
+    runtime.receive(down).await;
+    assert!(task.await.unwrap());
 }
 
 #[tokio::test(start_paused = true)]
@@ -715,14 +1080,283 @@ async fn two_runtime_normal_probe_close_commits_both_metadata_prefixes() {
         right.devices.contains_key(&left_id),
         "normal peer close preserves the authenticated FIFO prefix"
     );
-    let left_down = left.inbox.recv().await.unwrap();
-    let right_down = right.inbox.recv().await.unwrap();
+    let mut left_down = left.inbox.recv().await.unwrap();
+    while !matches!(left_down, Incoming::Down { .. }) {
+        assert!(matches!(
+            &left_down,
+            Incoming::Frame {
+                body: Body::Close(_),
+                ..
+            }
+        ));
+        left.receive(left_down).await;
+        left_down = left.inbox.recv().await.unwrap();
+    }
+    let mut right_down = right.inbox.recv().await.unwrap();
+    while !matches!(right_down, Incoming::Down { .. }) {
+        assert!(matches!(
+            &right_down,
+            Incoming::Frame {
+                body: Body::Close(_),
+                ..
+            }
+        ));
+        right.receive(right_down).await;
+        right_down = right.inbox.recv().await.unwrap();
+    }
     assert!(matches!(left_down, Incoming::Down { .. }));
     assert!(matches!(right_down, Incoming::Down { .. }));
     left.receive(left_down).await;
     right.receive(right_down).await;
     assert!(left.probes.is_empty() && right.probes.is_empty());
     eprintln!("metadata diagnosis: two_production_endpoints=true valid_metadata_queued_both=true elapsed_ms=0 outbound_directory=true inbound_directory=true noise_verified_both=true");
+}
+
+#[tokio::test]
+async fn loopback_tcp_probe_close_preserves_metadata_without_aborting_io() {
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+        .await
+        .unwrap();
+    let address = listener.local_addr().unwrap();
+    let connecting = tokio::spawn(tokio::net::TcpStream::connect(address));
+    let (accepted, _) = listener.accept().await.unwrap();
+    let connected = connecting.await.unwrap().unwrap();
+
+    let (mut left, _left_events) = runtime();
+    let (mut right, _right_events) = runtime();
+    let left_shutdowns = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let right_shutdowns = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let left_task = tokio::spawn(session::handshake_tracked(
+        Box::new(TcpShutdownCounter {
+            inner: connected,
+            shutdowns: left_shutdowns.clone(),
+        }),
+        std::net::Ipv4Addr::new(10, 0, 0, 2),
+        true,
+        budget_keys(&mut left),
+        left.admission.clone(),
+        left.incoming.clone(),
+        left.stop.clone(),
+        1,
+        0,
+        session::BusinessFlag::default(),
+        None,
+        Arc::default(),
+    ));
+    let right_task = tokio::spawn(session::handshake_tracked(
+        Box::new(TcpShutdownCounter {
+            inner: accepted,
+            shutdowns: right_shutdowns.clone(),
+        }),
+        std::net::Ipv4Addr::new(10, 0, 0, 1),
+        false,
+        budget_keys(&mut right),
+        right.admission.clone(),
+        right.incoming.clone(),
+        right.stop.clone(),
+        1,
+        0,
+        session::BusinessFlag::default(),
+        None,
+        Arc::default(),
+    ));
+
+    let left_up = left.inbox.recv().await.unwrap();
+    let right_up = right.inbox.recv().await.unwrap();
+    left.receive(left_up).await;
+    right.receive(right_up).await;
+    let left_frame = left.inbox.recv().await.unwrap();
+    let right_frame = right.inbox.recv().await.unwrap();
+    assert!(matches!(
+        &left_frame,
+        Incoming::Frame {
+            body: Body::Metadata(_),
+            ..
+        }
+    ));
+    assert!(matches!(
+        &right_frame,
+        Incoming::Frame {
+            body: Body::Metadata(_),
+            ..
+        }
+    ));
+
+    // Outbound Metadata handling starts the normal probe close while the
+    // inbound side's Metadata is still waiting in the owner FIFO.
+    left.receive(left_frame).await;
+    tokio::time::timeout(Duration::from_secs(3), async {
+        left_task.await.unwrap();
+        right_task.await.unwrap();
+    })
+    .await
+    .expect("normal TCP probe close must finish without a linger timeout");
+    assert_eq!(
+        left_shutdowns.load(std::sync::atomic::Ordering::Relaxed),
+        0,
+        "normal completion must not half-close through the shared Noise stream"
+    );
+    assert_eq!(
+        right_shutdowns.load(std::sync::atomic::Ordering::Relaxed),
+        0,
+        "receiving the authenticated Close must retire the peer without aborting reads"
+    );
+
+    right.receive(right_frame).await;
+    assert!(left.admission.metrics.metadata_frames_received.load(Ordering::Relaxed) >= 1);
+    assert!(right.admission.metrics.metadata_frames_received.load(Ordering::Relaxed) >= 1);
+    assert_eq!(
+        left.admission.metrics.writer_send_failed.load(Ordering::Relaxed),
+        0
+    );
+    assert_eq!(
+        right.admission.metrics.writer_send_failed.load(Ordering::Relaxed),
+        0
+    );
+}
+
+#[tokio::test]
+async fn two_runtime_crossed_probe_streams_commit_both_metadata_prefixes() {
+    let (mut left, _left_events) = runtime();
+    let (mut right, _right_events) = runtime();
+    let left_keys = budget_keys(&mut left);
+    let right_keys = budget_keys(&mut right);
+
+    // Production discovery may establish one stream in each direction before
+    // either owner has processed the other's Up. Keep both Noise sessions and
+    // both independent shared states alive; a failure on one must not erase the
+    // authenticated Metadata already travelling on the other.
+    let (left_out, right_in) = tokio::io::duplex(128 * 1024);
+    let left_out_task = tokio::spawn(session::handshake_tracked(
+        Box::new(left_out),
+        std::net::Ipv4Addr::new(10, 0, 0, 2),
+        true,
+        left_keys.clone(),
+        left.admission.clone(),
+        left.incoming.clone(),
+        left.stop.clone(),
+        1,
+        0,
+        session::BusinessFlag::default(),
+        None,
+        Arc::default(),
+    ));
+    let right_in_task = tokio::spawn(session::handshake_tracked(
+        Box::new(right_in),
+        std::net::Ipv4Addr::new(10, 0, 0, 1),
+        false,
+        right_keys.clone(),
+        right.admission.clone(),
+        right.incoming.clone(),
+        right.stop.clone(),
+        1,
+        0,
+        session::BusinessFlag::default(),
+        None,
+        Arc::default(),
+    ));
+    let (right_out, left_in) = tokio::io::duplex(128 * 1024);
+    let right_out_task = tokio::spawn(session::handshake_tracked(
+        Box::new(right_out),
+        std::net::Ipv4Addr::new(10, 0, 0, 1),
+        true,
+        right_keys,
+        right.admission.clone(),
+        right.incoming.clone(),
+        right.stop.clone(),
+        1,
+        0,
+        session::BusinessFlag::default(),
+        None,
+        Arc::default(),
+    ));
+    let left_in_task = tokio::spawn(session::handshake_tracked(
+        Box::new(left_in),
+        std::net::Ipv4Addr::new(10, 0, 0, 2),
+        false,
+        left_keys,
+        left.admission.clone(),
+        left.incoming.clone(),
+        left.stop.clone(),
+        1,
+        0,
+        session::BusinessFlag::default(),
+        None,
+        Arc::default(),
+    ));
+
+    let mut left_ups = Vec::new();
+    let mut right_ups = Vec::new();
+    for _ in 0..2 {
+        left_ups.push(left.inbox.recv().await.unwrap());
+        right_ups.push(right.inbox.recv().await.unwrap());
+    }
+    let left_peer = left.local().to_vec();
+    let right_peer = right.local().to_vec();
+    assert!(left_ups.iter().all(|u| matches!(u, Incoming::Up { .. })));
+    assert!(right_ups.iter().all(|u| matches!(u, Incoming::Up { .. })));
+    for up in left_ups {
+        left.receive(up).await;
+    }
+    for up in right_ups {
+        right.receive(up).await;
+    }
+
+    let mut left_metadata = 0;
+    let mut right_metadata = 0;
+    let mut left_down = 0;
+    let mut right_down = 0;
+    for _ in 0..8 {
+        let (left_incoming, right_incoming) =
+            tokio::join!(left.inbox.recv(), right.inbox.recv());
+        if let Some(incoming) = left_incoming {
+            left_metadata += usize::from(matches!(
+                &incoming,
+                Incoming::Frame {
+                    body: Body::Metadata(_),
+                    ..
+                }
+            ));
+            left_down += usize::from(matches!(&incoming, Incoming::Down { .. }));
+            left.receive(incoming).await;
+        }
+        if let Some(incoming) = right_incoming {
+            right_metadata += usize::from(matches!(
+                &incoming,
+                Incoming::Frame {
+                    body: Body::Metadata(_),
+                    ..
+                }
+            ));
+            right_down += usize::from(matches!(&incoming, Incoming::Down { .. }));
+            right.receive(incoming).await;
+        }
+        if left.devices.contains_key(&left_peer)
+            && right.devices.contains_key(&right_peer)
+        {
+            break;
+        }
+    }
+
+    assert!(
+        left.devices.contains_key(&left_peer),
+        "left runtime did not commit crossed peer Metadata: left_metadata={left_metadata} left_down={left_down}"
+    );
+    assert!(
+        right.devices.contains_key(&right_peer),
+        "right runtime did not commit crossed peer Metadata: right_metadata={right_metadata} right_down={right_down}"
+    );
+    assert!(left_metadata >= 1 && right_metadata >= 1);
+    eprintln!(
+        "metadata diagnosis: crossed_production_endpoints=true left_metadata={left_metadata} right_metadata={right_metadata} left_down={left_down} right_down={right_down}"
+    );
+
+    left.stop.cancel();
+    right.stop.cancel();
+    assert!(left_out_task.await.unwrap());
+    assert!(right_in_task.await.unwrap());
+    assert!(right_out_task.await.unwrap());
+    assert!(left_in_task.await.unwrap());
 }
 
 struct EndedProbePrefix {
@@ -744,7 +1378,7 @@ async fn ended_probe_prefix(business: bool) -> EndedProbePrefix {
     let expected = noise::device_id(&noise::static_public_key(&[42; 32]).unwrap()).to_vec();
     let (reply, ready) = tokio::sync::oneshot::channel();
     let ready_reply = business.then_some(session::BusinessReady {
-        deadline: tokio::time::Instant::now() + Duration::from_secs(2),
+        deadline: tokio::time::Instant::now() + Duration::from_secs(5),
         expected,
         reply,
     });
@@ -786,6 +1420,7 @@ async fn ended_probe_prefix(business: bool) -> EndedProbePrefix {
         }
     ));
     drop(remote);
+    tokio::time::advance(Duration::from_secs(2)).await;
     assert!(task.await.unwrap());
     let down = runtime.inbox.recv().await.unwrap();
     assert!(matches!(down, Incoming::Down { .. }));
@@ -1015,6 +1650,10 @@ async fn full_owner_inbox_cannot_deadlock_normal_down_publication_on_shutdown() 
         )
         .await
         .unwrap();
+        // This fixture deliberately never polls the owner. Once the bounded
+        // local-prefix hold expires, the real reader fills the unchanged inbox.
+        tokio::time::advance(Duration::from_secs(2)).await;
+        tokio::task::yield_now().await;
         // Fill the actual unchanged128 inbox with its real Up plus127 encrypted
         // Metadata frames. The owner never polls any of this authenticated prefix.
         for _ in 0..127 {

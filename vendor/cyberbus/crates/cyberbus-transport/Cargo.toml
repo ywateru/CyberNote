@@ -1,0 +1,38 @@
+[package]
+name = "cyberbus-transport"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "LGPL-3.0-or-later"
+description = "Embedded EasyTier no-TUN user-space byte streams for CyberBus"
+
+[features]
+default = []
+websocket = ["easytier/websocket"]
+cloudflared = ["websocket", "tokio/process"]
+
+[dependencies]
+easytier = { path = "../../vendor/easytier/easytier", default-features = false, features = ["smoltcp", "aes-gcm"] }
+easytier-core = { path = "../../vendor/easytier/easytier-core", default-features = false, features = ["config-write"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "io-util", "sync", "time"] }
+tokio-util = { version = "0.7", features = ["rt"] }
+thiserror = "2"
+sha2 = "0.10"
+rand = "0.8"
+url = "2"
+uuid = { version = "1", features = ["v4"] }
+cidr = "0.3"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["process", "io-std"] }
+anyhow = "1"
+rcgen = "0.14"
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12"] }
+
+[[example]]
+name = "ws_relay"
+required-features = ["websocket"]
+
+[[example]]
+name = "cloudflare_relay"
+required-features = ["cloudflared"]
