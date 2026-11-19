@@ -1,4 +1,4 @@
-use super::install::{self, InstallGuard};
+use super::install::{self, InstallGuard, InstallLease};
 use super::{
     feed::{self, GithubRelease, Receipt, Release, Target},
     network::Network,
@@ -53,6 +53,9 @@ pub struct SoftwareUpdater {
     target: Target,
     network: Network,
     pub(crate) guard: Arc<dyn InstallGuard>,
+    // A successful exit request is asynchronous. Retain the host barrier until
+    // actual process exit or the helper reports it cancelled/left unchanged.
+    install_lease: Mutex<Option<Box<dyn InstallLease>>>,
 }
 struct Operation<'a> {
     owner: &'a SoftwareUpdater,
@@ -101,6 +104,7 @@ impl SoftwareUpdater {
             target,
             network,
             guard,
+            install_lease: Mutex::new(None),
             busy: AtomicBool::new(false),
             inner: Mutex::new(Inner {
                 file,
@@ -145,6 +149,8 @@ impl SoftwareUpdater {
                     status.phase = "error".into();
                     status.error = Some("installation_failed_or_cancelled".into());
                     status.retry = Some("install".into());
+                    let lease = self.install_lease.lock().unwrap().take();
+                    drop(lease);
                 }
             }
             Err(e) => {
@@ -392,7 +398,9 @@ impl SoftwareUpdater {
             // Guard MUST confirm natively and hold an edit/recording barrier until exit.
             let mut lease = self.guard.prepare_install(&plan.release).await?;
             self.phase("restarting");
-            install::launch(plan, &mut *lease).await
+            install::launch(plan, &mut *lease).await?;
+            *self.install_lease.lock().unwrap() = Some(lease);
+            Ok(())
         }
         .await;
         if let Err(e) = &result {

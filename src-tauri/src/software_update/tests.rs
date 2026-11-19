@@ -669,3 +669,43 @@ fn unreadable_install_transaction_exits_restarting_ui_without_claiming_success()
         b"{corrupt"
     );
 }
+
+#[cfg(target_os = "macos")]
+#[test]
+fn asynchronous_exit_barrier_is_retained_until_helper_cancels() {
+    struct Lease(Arc<AtomicBool>);
+    impl InstallLease for Lease {
+        fn exit(&mut self) -> Result<(), String> {
+            Ok(())
+        }
+    }
+    impl Drop for Lease {
+        fn drop(&mut self) {
+            self.0.store(true, Ordering::SeqCst);
+        }
+    }
+    let d = tempfile::tempdir().unwrap();
+    let base = fs::canonicalize(d.path()).unwrap();
+    let u = SoftwareUpdater::create(
+        base.clone(),
+        Arc::new(DenyInstall),
+        Network::production().unwrap(),
+        mac(),
+        "0.1.0".into(),
+    )
+    .unwrap();
+    let work = base.join(format!(".CyberNote-update-{}", uuid::Uuid::new_v4()));
+    fs::create_dir(&work).unwrap();
+    let p = serde_json::json!({"target":base.join("CyberNote.app"),"backup":base.join("old.app"),"executable":"fixture","native_hash":"a".repeat(64),"ack":work.join("ack"),"work":work});
+    fs::write(base.join("pending.json"), serde_json::to_vec(&p).unwrap()).unwrap();
+    let released = Arc::new(AtomicBool::new(false));
+    *u.install_lease.lock().unwrap() = Some(Box::new(Lease(released.clone())));
+    u.inner.lock().unwrap().status.phase = "restarting".into();
+    fs::write(work.join("phase"), b"waiting_exit\n").unwrap();
+    assert_eq!(u.status().phase, "restarting");
+    assert!(!released.load(Ordering::SeqCst));
+    fs::write(work.join("phase"), b"cancelled\n").unwrap();
+    assert_eq!(u.status().phase, "error");
+    assert!(released.load(Ordering::SeqCst));
+    assert!(u.install_lease.lock().unwrap().is_none());
+}
