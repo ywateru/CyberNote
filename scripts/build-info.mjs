@@ -5,7 +5,7 @@ import { resolve, relative, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const projectRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
-const excluded = new Set(['target', 'node_modules', '.git', '.gradle', '.kotlin', 'build', 'dist', 'artifacts', '.DS_Store', 'local.properties', 'tauri.properties']);
+const excluded = new Set(['target', 'node_modules', '.git', '.gradle', 'build', 'dist', 'artifacts', '.DS_Store', 'local.properties', 'tauri.properties']);
 // Tauri writes these dependency/path bridges during Android compilation. They
 // are outputs; the package locks and actual plugin/native sources are inputs.
 const generatedFiles = new Set(['src-tauri/gen/android/tauri.settings.gradle', 'src-tauri/gen/android/app/tauri.build.gradle.kts', 'src-tauri/gen/android/app/proguard-tauri.pro']);
@@ -21,11 +21,12 @@ const generatedDirectories = new Set([
 // newly added plugins. Do not exclude other Android sources or arbitrary
 // directories named `generated`: MainActivity and handwritten plugins are inputs.
 const pluginAndroidOutput = /^plugins\/[^/]+\/android\/\.tauri$/;
+const androidKotlinCache = /^src-tauri\/gen\/android\/(?:.+\/)?\.kotlin(?:\/|$)/;
 const roots = ['src', 'public', 'plugins', 'src-tauri', 'crates', 'vendor', 'index.html', 'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'patches', 'tsconfig.json', 'vite.config.ts', 'scripts/android.mjs', 'scripts/bundle-mcp.mjs', 'scripts/build-info.mjs', 'scripts/versions.mjs', 'scripts/release.mjs', 'scripts/native', 'scripts/publish/stage-packages.py'];
 function excludedProductPath(name) {
   const generated = generatedFiles.has(name) ||
     [...generatedDirectories].some(directory => name === directory || name.startsWith(directory + '/'));
-  return generated || pluginAndroidOutput.test(name) ||
+  return generated || pluginAndroidOutput.test(name) || androidKotlinCache.test(name) ||
     name.split('/').some(segment => excluded.has(segment)) || /\.(log|tsbuildinfo)$/.test(name);
 }
 function isProductPath(name) {
