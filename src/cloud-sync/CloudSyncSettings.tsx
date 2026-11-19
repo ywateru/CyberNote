@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useLayoutEffect, useId, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { cloudError, cloudSyncClient } from "./client";
 import type {
@@ -104,13 +104,20 @@ export function CloudSyncSettings({
   const [failure, setFailure] = useState("");
   const generation = useRef(0);
   const mounted = useRef(false);
-  const inFlight = useRef(false);
+  const inFlight = useRef<{
+    generation: number;
+    id: number;
+    confirming: boolean;
+  } | null>(null);
+  const sequence = useRef(0);
   const request = useRef({ ports, client });
   request.current = { ports, client };
   const setupButton = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     mounted.current = active;
     const current = ++generation.current;
+    inFlight.current = null;
+    setStatus(undefined);
     setPreview(undefined);
     setDrafts({});
     setPassphrase("");
@@ -122,12 +129,32 @@ export function CloudSyncSettings({
       return;
     }
     setBusy(true);
+    const owner = {
+      generation: current,
+      id: ++sequence.current,
+      confirming: false,
+    };
+    inFlight.current = owner;
     const { ports: p, client: c } = request.current;
     void p
       .context()
-      .then((ctx) => c(ctx, { type: "status" }))
+      .then((ctx) => {
+        if (
+          !mounted.current ||
+          current !== generation.current ||
+          inFlight.current !== owner
+        )
+          return undefined;
+        return c(ctx, { type: "status" });
+      })
       .then((reply) => {
-        if (!mounted.current || current !== generation.current) return;
+        if (
+          !reply ||
+          !mounted.current ||
+          current !== generation.current ||
+          inFlight.current !== owner
+        )
+          return;
         setStatus(reply.status);
         setProvider(reply.status.selected);
         setEnabled(reply.status.enabled);
@@ -137,39 +164,67 @@ export function CloudSyncSettings({
           setFailure(cloudError(e).message);
       })
       .finally(() => {
-        if (mounted.current && current === generation.current) setBusy(false);
+        if (inFlight.current === owner) {
+          inFlight.current = null;
+          if (mounted.current && current === generation.current) setBusy(false);
+        }
       });
     return () => {
       mounted.current = false;
       ++generation.current;
+      if (inFlight.current === owner) inFlight.current = null;
     };
   }, [active]);
   const run = async (
     command: CloudCommand,
+    confirmation?: string,
   ): Promise<CloudReply | undefined> => {
-    if (!active || inFlight.current) return;
-    inFlight.current = true;
+    if (!active || !mounted.current || inFlight.current) return;
     const current = generation.current;
+    const owner = {
+      generation: current,
+      id: ++sequence.current,
+      confirming: confirmation !== undefined,
+    };
+    inFlight.current = owner;
+    const valid = () =>
+      mounted.current &&
+      current === generation.current &&
+      inFlight.current === owner;
     setBusy(true);
     setFailure("");
     setMessage("");
     try {
+      if (confirmation !== undefined) {
+        let accepted: boolean;
+        try {
+          accepted = await request.current.ports.confirm(confirmation);
+        } catch {
+          throw {
+            code: "confirmation",
+            message: "无法打开确认对话框，请重试此次操作",
+          };
+        }
+        if (!accepted || !valid()) return;
+        owner.confirming = false;
+      }
       const ctx = await request.current.ports.context();
-      if (!mounted.current || current !== generation.current) return;
+      if (!valid()) return;
       const reply = await request.current.client(ctx, command);
-      if (!mounted.current || current !== generation.current) return;
+      if (!valid()) return;
       setStatus(reply.status);
       setMessage(reply.message || "");
       setPreview(reply.preview);
       if (reply.result) await request.current.ports.onCommitted?.(reply.result);
-      if (!mounted.current || current !== generation.current) return;
+      if (!valid()) return;
       return reply;
     } catch (e) {
-      if (mounted.current && current === generation.current)
-        setFailure(cloudError(e).message);
+      if (valid()) setFailure(cloudError(e).message);
     } finally {
-      inFlight.current = false;
-      if (mounted.current && current === generation.current) setBusy(false);
+      if (inFlight.current === owner) {
+        inFlight.current = null;
+        if (mounted.current && current === generation.current) setBusy(false);
+      }
     }
   };
   const close = () => {
@@ -218,18 +273,11 @@ export function CloudSyncSettings({
   };
   const apply = async (mode: "sync" | "restore") => {
     if (!preview || busy) return;
-    const current = generation.current;
     const question =
       mode === "restore"
         ? `恢复所选 ${preview.versions} 个版本及 ${preview.attachments} 个附件？当前本机内容会先加密保留；恢复保留稳定 ID 和并发分支。`
         : `同步本机 ${preview.localNotes} 条笔记与${preview.remoteExists ? `远端 ${preview.versions} 个版本` : "新的空远端"}？本机与远端的并发版本都会保留。`;
-    if (
-      !(await request.current.ports.confirm(question)) ||
-      !mounted.current ||
-      current !== generation.current
-    )
-      return;
-    await run({ type: mode, previewId: preview.id });
+    await run({ type: mode, previewId: preview.id }, question);
   };
   if (!active) return null;
   return (
@@ -241,6 +289,10 @@ export function CloudSyncSettings({
         if (e.key === "Escape" && (open || preview)) {
           e.stopPropagation();
           e.preventDefault();
+          if (inFlight.current?.confirming) {
+            inFlight.current = null;
+            setBusy(false);
+          }
           if (preview) setPreview(undefined);
           else close();
         }
@@ -349,7 +401,7 @@ export function CloudSyncSettings({
             />
           </label>
           <p className="cloud-sync-hint">
-            各服务配置分别保留；保存配置不会开始同步。支持笔记、附件与主题、视图、排序、日期分组；账户授权不上传。
+            各服务配置分别保留；保存配置不会开始同步。支持笔记、附件与明暗偏好、桌面列表/画廊、排序、日期分组；皮肤、导航、密度、手机显示、窗口和调度配置留在本机，账户授权不上传。
           </p>
           <div className="settings121-actions cloud-sync-tools">
             <button
@@ -503,6 +555,11 @@ export function CloudSyncSettings({
           </div>
         </div>
       )}
+      <p className="cloud-sync-hint cloud-sync-limits">
+        单次同步上限：明文 JSON 32 MiB、加密文件 48 MiB、单附件原字节 16
+        MiB；Base64 编码及 JSON 开销计入总量。最多 1024 个笔记/文件夹版本、128
+        个设置头；超出时拒绝，不截断。GitHub 同样受这些更小上限限制。
+      </p>
       <div
         className="cloud-sync-feedback"
         role={failure ? "alert" : "status"}

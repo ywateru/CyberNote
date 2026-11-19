@@ -123,8 +123,12 @@ impl Host {
         .unwrap()
     }
 }
-fn binding(host: &Host, c: &Context, lease: &Lease, bundle: Option<&Bundle>) -> Result<()> {
-    let f = lease.binding()?;
+fn binding(
+    host: &Host,
+    c: &Context,
+    f: &crate::cloud_sync::runtime::CloudFence,
+    bundle: Option<&Bundle>,
+) -> Result<()> {
     let identity = host.store.lock().unwrap().sync_identity().map_err(err)?;
     if &f.context != c
         || identity.as_ref().map(|i| &i.workspace_id) != f.store_workspace_id.as_ref()
@@ -166,10 +170,10 @@ impl CloudHost for Host {
     }
     fn capture(&self, c: &Context, w: &str, _initialize: bool, lease: Lease) -> Result<Capture> {
         self.check(c)?;
-        binding(self, c, &lease, None)?;
-        let _guard = lease.enter()?;
+        let guard = lease.enter()?;
+        binding(self, c, guard.binding()?, None)?;
         self.captures.fetch_add(1, Ordering::SeqCst);
-        lease.check_workspace(w)?;
+        guard.check_workspace(w)?;
         let mut b = self.snapshot();
         b.versions = b
             .versions
@@ -186,7 +190,7 @@ impl CloudHost for Host {
     fn validate(&self, c: &Context, b: &Bundle, lease: Lease) -> Result<()> {
         self.check(c)?;
         lease.check_workspace(&b.workspace_id)?;
-        binding(self, c, &lease, Some(b))?;
+        binding(self, c, lease.binding()?, Some(b))?;
         let mut s = self.store.lock().unwrap();
         let local = store_port::local_versions(&s, b)?;
         scope(&mut s, &local, |s| store_port::validate(s, b))
@@ -194,8 +198,8 @@ impl CloudHost for Host {
     fn commit(&self, c: &Context, b: Bundle, expected: &str, lease: Lease) -> Result<CommitReport> {
         self.check(c)?;
         lease.check_workspace(&b.workspace_id)?;
-        binding(self, c, &lease, Some(&b))?;
-        let _guard = lease.enter()?;
+        let guard = lease.enter()?;
+        binding(self, c, guard.binding()?, Some(&b))?;
         let mut s = self.store.lock().unwrap();
         let local = store_port::local_versions(&s, &b)?;
         if generation(&mut s)? != expected {

@@ -35,3 +35,43 @@
 已接受的共享inbox是持久库事实，关闭云只阻止新传输/新收件；跨workspace冲突的可见分支可不同，UI明确显示冲突并要求显式解决。保护版本最多30，保守保留未知/损坏/旧口令文件而不是自动覆盖；超过预算明确失败。统一32MiB明文/48MiB密文/16MiB单blob预算是本版本能力限制，不宣称无限库容量。
 
 开发中已修复的验证问题：测试驱动初稿调用不存在的renameNote、fixture accepted socket的nonblocking/大包读取、S3加号URI编码、浏览器虚拟入口和表单可访问名称；修复后执行上述最终完整cloud筛选与浏览器检查，无剩余失败。对测试harness的修复不外推到原生平台。
+
+## C1–C6 修复冻结（2026-11-19）
+
+本节记录对独立审查 `85873a61` 的开发修复；上文 inputs.json、rust-tests.txt、
+result.json 和提交内截图属于原 `189b348e` 历史证据，不用它们冒称修复后结果。
+最终冻结 SHA 见交付消息，独立复审仍由 Faraday 负责。行为契约只在原生模块
+README 维护，本节仅记录检查证据：
+
+- 最终 Cloud 筛选 **23 pass / 0 fail / 205 filtered**，未运行无关 Store/Session
+  全套或 Tauri。新增 C1 bounded 子进程使用真实 CloudRuntime Save writer，
+  证明 final guard accessor 不重取锁、Save 在 gate 释放前不能改变 epoch，
+  释放后 Save 能完成、旧 lease 失效；子进程有八秒超时并 kill/wait 清理。
+- C2 真实 Store.action → SQLite SettingsPort → Store.action 的回归读取实际
+  AppearanceV2/PresentationV1 owner，验证远端明暗/桌面视图生效，本机 siblings
+  保留，后续无关保存不会产生反向旧值；补了并发 heads 与未知 key 回滚。
+- C3 覆盖丢失 control、capture=0、未知 owner 版本、apply 期间控制行丢失、
+  精确旧 triggers 的事务迁移/rollback/重开；错误均保留证据，不自动补控制行。
+- React Chrome 回归 **10 组通过**，page errors/external requests 均空；包括
+  C4 native confirm rejection、双击单 owner、取消/Escape/hide 后旧确认失效，
+  C5 context/client 延迟、hide/reopen、新请求发送、旧 finally 不清新 owner，
+  C6 正确32/48/16 MiB及1024/128预算说明。浅暗/390px原回归保留。
+- `old-regressions.mjs` 在临时 harness 读取冻结 `189b348e` 的实际 settings_port
+  与 React 文件，证明相同 C2/C3 行为断言失败、C4 有 native dialog unhandled
+  rejection、C5 启用按钮不发请求。产品工作树不被替换；临时 Rust/浏览器
+  进程均清理。结果 `/tmp/settings121-cloud-old-regressions/result.json`。
+- 修复后浏览器结果与源码 hashes：`/tmp/settings121-cloud-fix-browser/result.json`。
+  `pnpm typecheck`、`pnpm version:check`、`git diff --check` 均通过。
+
+复现命令（已有本机 Playwright/Chrome，不安装或操作真实用户资料）：
+
+```sh
+CARGO_TARGET_DIR=/tmp/cybernote-settings121-cloud-fix-target cargo test \
+  --manifest-path src-tauri/src/cloud_sync/harness/Cargo.toml --lib --offline --locked cloud
+node scripts/verification/settings121-cloud/browser.mjs /tmp/settings121-cloud-fix-browser
+node scripts/verification/settings121-cloud/old-regressions.mjs /tmp/settings121-cloud-old-regressions
+```
+
+未改 App/lib/公共 Store/宿主实现、AGENTS、identity 或冻结 update 树。最终
+notes+settings 事务、原生窗口 ACK/录音/IME、Tauri 注册、真实用户云服务和
+WebKit/WebView/实体设备仍由整合与平台验收负责；模块测试不关闭这些边界。

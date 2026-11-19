@@ -5,6 +5,7 @@ pub mod model;
 pub mod persistence;
 pub mod protocol;
 pub mod runtime;
+mod settings_owner;
 pub mod settings_port;
 pub mod store_port;
 pub use engine::{CloudHost, Context, LocalInfo};

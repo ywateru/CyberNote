@@ -6,6 +6,7 @@ import { createServer } from "node:http";
 import { createServer as createViteServer } from "vite";
 import react from "@vitejs/plugin-react";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 const output = resolve(process.argv[2] || "/tmp/settings121-cloud-ui");
 await mkdir(output, { recursive: true });
 const { chromium } = await import(
@@ -15,27 +16,43 @@ const { chromium } = await import(
   )
 );
 const entry = `import React from 'react';import{createRoot}from'react-dom/client';import{CloudSyncSettings}from'/src/cloud-sync/index.ts';import'/src/style.css';import'/__settings-ui.css';
-const h=window.fixture={commands:[],confirms:[],commits:[],active:true,fail:false,context:{window:'fixture',session:'fixture-session',token:{epoch:1},storeInstance:'fixture-store'},status:{revision:0,enabled:true,selected:'webdav',minutes:0,providers:{webdav:{fields:{endpoint:'https://dav.example.com',username:'fixture-user'},credentialsSet:{password:true}}},passphraseSet:true,lastSuccess:null,lastError:null,recoveries:['aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa']}};
-const root=createRoot(document.querySelector('#root'));const client=async(ctx,c)=>{h.commands.push({ctx,c});if(h.fail)throw{code:'network',message:'无法连接存储服务，请检查网络后重试'};if(c.type==='save'){Object.assign(h.status,{...c.patch,revision:h.status.revision+1});}return{status:{...h.status},...(c.type==='preview'?{preview:{id:'preview-fixture',source:c.recovery?'recovery:'+c.recovery:'remote',remoteExists:true,workspaceId:'fixture-workspace',localNotes:3,versions:5,attachments:2,bytes:20000,conflicts:1}}:{}),...(['sync','restore'].includes(c.type)?{result:{applied:true,pending:0,conflicts:1},message:'同步完成；并发版本已保留'}:{}),...(c.type==='test'?{message:'连接成功；未写入远端或笔记'}:{})};};
-h.render=()=>root.render(<CloudSyncSettings active={h.active} client={client} ports={{context:async()=>h.context,confirm:async text=>{h.confirms.push(text);return true},onCommitted:r=>h.commits.push(r)}}/>);h.render();`;
+const h=window.fixture={commands:[],confirms:[],commits:[],active:true,fail:false,confirmFail:false,confirmDelay:false,confirmResolvers:[],clientDelay:false,clientResolvers:[],contextDelay:false,contextResolvers:[],context:{window:'fixture',session:'fixture-session',token:{epoch:1},storeInstance:'fixture-store'},status:{revision:0,enabled:true,selected:'webdav',minutes:0,providers:{webdav:{fields:{endpoint:'https://dav.example.com',username:'fixture-user'},credentialsSet:{password:true}}},passphraseSet:true,lastSuccess:null,lastError:null,recoveries:['aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa']}};
+const root=createRoot(document.querySelector('#root'));const client=async(ctx,c)=>{h.commands.push({ctx,c});if(h.clientDelay && c.type!=='status')await new Promise(resolve=>h.clientResolvers.push(resolve));if(h.fail)throw{code:'network',message:'无法连接存储服务，请检查网络后重试'};if(c.type==='save'){Object.assign(h.status,{...c.patch,revision:h.status.revision+1});}return{status:{...h.status},...(c.type==='preview'?{preview:{id:'preview-fixture',source:c.recovery?'recovery:'+c.recovery:'remote',remoteExists:true,workspaceId:'fixture-workspace',localNotes:3,versions:5,attachments:2,bytes:20000,conflicts:1}}:{}),...(['sync','restore'].includes(c.type)?{result:{applied:true,pending:0,conflicts:1},message:'同步完成；并发版本已保留'}:{}),...(c.type==='test'?{message:'连接成功；未写入远端或笔记'}:{})};};
+h.render=()=>root.render(<CloudSyncSettings active={h.active} client={client} ports={{context:async()=>{if(h.contextDelay)await new Promise(resolve=>h.contextResolvers.push(resolve));return h.context},confirm:async text=>{h.confirms.push(text);if(h.confirmFail)throw Error('native dialog failed');if(h.confirmDelay)return new Promise(resolve=>h.confirmResolvers.push(resolve));return true},onCommitted:r=>h.commits.push(r)}}/>);h.render();`;
 const localCss = await readFile("src/Preferences.css", "utf8");
 const sharedCssPath = localCss.includes(".settings121-list")
   ? resolve("src/Preferences.css")
   : "/Users/water/work/2026/.cybernote-worktrees/settings121-ui/src/Preferences.css";
 const sharedCss = await readFile(sharedCssPath, "utf8");
+const oldRevision = process.env.CLOUD_COMPONENT_REVISION;
+if (oldRevision && !/^[a-f0-9]{40}$/.test(oldRevision))
+  throw Error("Expected exact old component revision");
+const oldComponent = oldRevision
+  ? execFileSync(
+      "git",
+      ["show", `${oldRevision}:src/cloud-sync/CloudSyncSettings.tsx`],
+      { encoding: "utf8" },
+    )
+  : null;
 const vite = await createViteServer({
   configFile: false,
   plugins: [
     {
       name: "cloud-fixture-entry",
+      enforce: "pre",
       resolveId: (id) =>
         ["/__cloud_entry.jsx", "/__settings-ui.css"].includes(id) ? id : null,
       load: (id) =>
-        id === "/__cloud_entry.jsx"
-          ? entry
-          : id === "/__settings-ui.css"
-            ? sharedCss
-            : null,
+        oldComponent &&
+        id
+          .replaceAll("\\", "/")
+          .endsWith("/src/cloud-sync/CloudSyncSettings.tsx")
+          ? oldComponent
+          : id === "/__cloud_entry.jsx"
+            ? entry
+            : id === "/__settings-ui.css"
+              ? sharedCss
+              : null,
     },
     react(),
   ],
@@ -80,6 +97,7 @@ try {
     headless: true,
   });
   const page = await browser.newPage();
+  page.setDefaultTimeout(8000);
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.route("**/*", (route) => {
     const u = route.request().url();
@@ -180,6 +198,203 @@ try {
   checks.push(
     "preview and native-confirm port precede sync; committed receipt reaches host",
   );
+  const button = (name) => page.getByRole("button", { name, exact: true });
+  const reopen = async () => {
+    await page.evaluate(() => {
+      fixture.active = false;
+      fixture.render();
+    });
+    await page.waitForFunction(
+      () => !document.querySelector(".cloud-sync-settings"),
+    );
+    await page.evaluate(() => {
+      fixture.active = true;
+      fixture.render();
+    });
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector(".cloud-sync-settings")
+          ?.getAttribute("aria-busy") === "false",
+    );
+  };
+  await button("预览").click();
+  await page.getByRole("region", { name: "同步预览" }).waitFor();
+  const committedBefore = await page.evaluate(() => fixture.commits.length);
+  if (process.env.CLOUD_REGRESSION_ONLY !== "c5") {
+    await page.evaluate(() => {
+      fixture.confirmFail = true;
+    });
+    await button("确认同步…").click();
+    await page
+      .getByRole("alert")
+      .filter({ hasText: "无法打开确认对话框" })
+      .waitFor();
+    assert.equal(
+      await page.evaluate(() => fixture.commits.length),
+      committedBefore,
+    );
+    assert.equal(await page.getByRole("alert").count(), 1);
+    await page.evaluate(() => {
+      fixture.confirmFail = false;
+      fixture.confirmDelay = true;
+    });
+    const confirmsBefore = await page.evaluate(() => fixture.confirms.length);
+    // Synchronous repeated DOM clicks exercise the owner before React disables.
+    await button("确认同步…").evaluate((el) => {
+      el.click();
+      el.click();
+    });
+    await page.waitForFunction(() => fixture.confirmResolvers.length === 1);
+    assert.equal(
+      await page.evaluate(() => fixture.confirms.length),
+      confirmsBefore + 1,
+    );
+    assert.equal(await button("确认同步…").isDisabled(), true);
+    await page.evaluate(() => {
+      fixture.confirmDelay = false;
+      fixture.confirmResolvers.shift()(false);
+    });
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector(".cloud-sync-settings")
+          .getAttribute("aria-busy") === "false",
+    );
+    assert.equal(
+      await page.evaluate(() => fixture.commits.length),
+      committedBefore,
+    );
+    checks.push(
+      "C4 confirmation rejection is one safe alert; pending confirmation owns single action before dialog resolves; cancel does not sync",
+    );
+  }
+
+  if (process.env.CLOUD_REGRESSION_ONLY !== "c5") {
+    await page.evaluate(() => {
+      fixture.confirmDelay = true;
+    });
+    await button("确认同步…").click();
+    await page.waitForFunction(() => fixture.confirmResolvers.length === 1);
+    await page.getByRole("region", { name: "同步预览" }).evaluate((el) => {
+      el.tabIndex = -1;
+      el.focus();
+    });
+    await page.keyboard.press("Escape");
+    await page.waitForFunction(
+      () => !document.querySelector(".cloud-sync-preview"),
+    );
+    await page.evaluate(() => {
+      fixture.confirmDelay = false;
+      fixture.confirmResolvers.shift()(true);
+    });
+    assert.equal(
+      await page.evaluate(() => fixture.commits.length),
+      committedBefore,
+      "Escape invalidates pending native confirmation",
+    );
+    await button("预览").click();
+    await page.getByRole("region", { name: "同步预览" }).waitFor();
+  }
+  // Late native confirmation after reactivation cannot sync its consumed view.
+  await page.evaluate(() => {
+    fixture.confirmDelay = true;
+  });
+  await button("确认同步…").click();
+  await page.waitForFunction(() => fixture.confirmResolvers.length === 1);
+  await reopen();
+  await page.evaluate(() => {
+    fixture.confirmDelay = false;
+    fixture.confirmResolvers.shift()(true);
+  });
+  assert.equal(
+    await page.evaluate(() => fixture.commits.length),
+    committedBefore,
+  );
+
+  // Old request remains a native responsibility, but its old UI owner cannot
+  // disable or clear a new generation's owner/status/message.
+  await page.evaluate(() => {
+    fixture.clientDelay = true;
+  });
+  await button("测试连接").click();
+  await page.waitForFunction(() => fixture.clientResolvers.length === 1);
+  await reopen();
+  const previewsBefore = await page.evaluate(
+    () => fixture.commands.filter((x) => x.c.type === "preview").length,
+  );
+  await button("预览").click();
+  await page.waitForFunction(() => fixture.clientResolvers.length === 2);
+  assert.equal(
+    await page.evaluate(
+      () => fixture.commands.filter((x) => x.c.type === "preview").length,
+    ),
+    previewsBefore + 1,
+    "enabled click must invoke or report native busy, never silently ignore",
+  );
+  await page.evaluate(() => fixture.clientResolvers.shift()());
+  await page.waitForTimeout(50);
+  assert.equal(
+    await button("预览").isDisabled(),
+    true,
+    "old finally cannot release new operation",
+  );
+  assert.equal(
+    await page.getByText("连接成功；未写入远端或笔记", { exact: true }).count(),
+    0,
+  );
+  await page.evaluate(() => {
+    fixture.clientDelay = false;
+    fixture.clientResolvers.shift()();
+  });
+  await page.getByRole("region", { name: "同步预览" }).waitFor();
+  checks.push(
+    "C5 hide/reopen releases old UI owner, enabled action sends real request, old result/finally cannot clobber newer pending action",
+  );
+
+  // Context requests are fenced before issuing any client invocation too.
+  await page.evaluate(() => {
+    fixture.contextDelay = true;
+  });
+  await button("测试连接").click();
+  await page.waitForFunction(() => fixture.contextResolvers.length === 1);
+  await page.evaluate(() => {
+    fixture.active = false;
+    fixture.render();
+  });
+  await page.waitForFunction(
+    () => !document.querySelector(".cloud-sync-settings"),
+  );
+  await page.evaluate(() => {
+    fixture.contextDelay = false;
+    fixture.active = true;
+    fixture.render();
+  });
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector(".cloud-sync-settings")
+        ?.getAttribute("aria-busy") === "false",
+  );
+  const testCalls = await page.evaluate(
+    () => fixture.commands.filter((x) => x.c.type === "test").length,
+  );
+  await page.evaluate(() => fixture.contextResolvers.shift()());
+  await page.waitForTimeout(50);
+  assert.equal(
+    await page.evaluate(
+      () => fixture.commands.filter((x) => x.c.type === "test").length,
+    ),
+    testCalls,
+    "late context cannot issue hidden-generation client work",
+  );
+  const limits = await page.locator(".cloud-sync-limits").innerText();
+  for (const text of ["32 MiB", "48 MiB", "16 MiB", "1024", "128", "不截断"])
+    assert(limits.includes(text));
+  checks.push(
+    "C5 delayed context does not invoke after hide; C6 exact plaintext/ciphertext/attachment/entity budgets are visible",
+  );
+
   await page.evaluate(() => (fixture.fail = true));
   await page.getByRole("button", { name: "测试连接", exact: true }).click();
   await page.getByRole("alert").waitFor();
@@ -221,6 +436,20 @@ try {
     JSON.stringify(result, null, 2) + "\n",
   );
   console.log(JSON.stringify(result));
+} catch (error) {
+  await writeFile(
+    resolve(output, "failure.json"),
+    JSON.stringify(
+      { error: String(error), errors, external, oldRevision },
+      null,
+      2,
+    ),
+  );
+  await browser
+    ?.contexts()[0]
+    ?.pages()[0]
+    ?.screenshot({ path: resolve(output, "failure.png"), fullPage: true });
+  throw error;
 } finally {
   await browser?.close();
   await new Promise((r) => server.close(r));

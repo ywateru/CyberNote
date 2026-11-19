@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::{
     collections::BTreeMap,
     path::Path,
-    sync::{Arc, Mutex, RwLock, RwLockReadGuard},
+    sync::{Arc, Mutex, RwLock, RwLockReadGuard, TryLockError},
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 use tokio_util::sync::CancellationToken;
@@ -34,6 +34,31 @@ pub struct Lease {
     workspace: Option<String>,
     fence: Option<CloudFence>,
 }
+/// One entered final gate. Accessors inspect this held guard, never reacquire
+/// epoch (a queued Save writer must wait for this complete transaction).
+pub struct CheckedLease<'a> {
+    lease: &'a Lease,
+    epoch: RwLockReadGuard<'a, u64>,
+}
+impl CheckedLease<'_> {
+    pub fn check(&self) -> Result<()> {
+        if self.lease.cancel.is_cancelled() || *self.epoch != self.lease.expected {
+            return Err(error("permission"));
+        }
+        Ok(())
+    }
+    pub fn binding(&self) -> Result<&CloudFence> {
+        self.check()?;
+        self.lease.fence.as_ref().ok_or_else(|| error("permission"))
+    }
+    pub fn check_workspace(&self, workspace: &str) -> Result<()> {
+        self.check()?;
+        if self.lease.workspace.as_deref() != Some(workspace) {
+            return Err(error("workspace"));
+        }
+        Ok(())
+    }
+}
 impl Lease {
     pub fn check_workspace(&self, workspace: &str) -> Result<()> {
         self.check()?;
@@ -50,15 +75,26 @@ impl Lease {
         self.workspace = Some(workspace);
         self
     }
-    pub fn enter(&self) -> Result<RwLockReadGuard<'_, u64>> {
+    pub fn enter(&self) -> Result<CheckedLease<'_>> {
         let guard = self.epoch.read().map_err(|_| error("state"))?;
         if self.cancel.is_cancelled() || *guard != self.expected {
             return Err(error("permission"));
         }
-        Ok(guard)
+        Ok(CheckedLease {
+            lease: self,
+            epoch: guard,
+        })
     }
     pub fn check(&self) -> Result<()> {
-        drop(self.enter()?);
+        // This also makes accidental legacy access under an entered gate fail
+        // promptly if a Save writer is queued, rather than recursively deadlock.
+        let guard = self.epoch.try_read().map_err(|e| match e {
+            TryLockError::WouldBlock => error("busy"),
+            TryLockError::Poisoned(_) => error("state"),
+        })?;
+        if self.cancel.is_cancelled() || *guard != self.expected {
+            return Err(error("permission"));
+        }
         Ok(())
     }
 }
@@ -597,3 +633,7 @@ impl CloudRuntime {
         Ok(())
     }
 }
+
+#[cfg(test)]
+#[path = "lease_tests.rs"]
+mod lease_tests;

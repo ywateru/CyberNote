@@ -20,3 +20,5 @@ mod engine_tests;
 mod fixture;
 #[path = "protocol_tests.rs"]
 mod protocol_tests;
+#[path = "settings_regressions.rs"]
+mod settings_regressions;

@@ -27,9 +27,9 @@ pub fn error(code: &str) -> CloudError {
             "timeout" => "云同步超时，请重试",
             "conflict" => "远端已被另一设备修改，已保留本机内容，请重新预览",
             "password" => "加密密码错误或远端密文已损坏，未写入任何内容",
-            "limit" => "数据超过云同步大小或数量限制",
+            "limit" => "超过云同步预算：明文 JSON 32 MiB、密文 48 MiB、单附件 16 MiB（编码开销计入总量），或版本/设置头数量超限；未截断内容",
             "github_limit" => {
-                "加密文件超过 GitHub Contents API 的 100 MiB 文件限制，请改用其他存储"
+                "超过 GitHub 文件限制；本客户端仍受明文 32 MiB、密文 48 MiB 与单附件 16 MiB 的更小预算限制"
             }
             "invalid" => "云同步数据或配置格式无效",
             "private_repository" => "请选择已有的 GitHub 私有仓库与分支",
@@ -203,15 +203,17 @@ impl SettingVersion {
             .unwrap(),
         )
     }
-    pub fn validate(&self) -> Result<()> {
-        let valid = match self.key.as_str() {
-            "theme" => ["system", "light", "dark"].contains(&self.value.as_str().unwrap_or("")),
-            "view" => ["list", "gallery"].contains(&self.value.as_str().unwrap_or("")),
-            "sort" => ["updated", "created", "title"].contains(&self.value.as_str().unwrap_or("")),
-            "groupDates" => self.value.is_boolean(),
+    pub(crate) fn valid_value(key: &str, value: &Value) -> bool {
+        match key {
+            "theme" => ["system", "light", "dark"].contains(&value.as_str().unwrap_or("")),
+            "view" => ["list", "gallery"].contains(&value.as_str().unwrap_or("")),
+            "sort" => ["updated", "created", "title"].contains(&value.as_str().unwrap_or("")),
+            "groupDates" => value.is_boolean(),
             _ => false,
-        };
-        if !valid
+        }
+    }
+    pub fn validate(&self) -> Result<()> {
+        if !Self::valid_value(&self.key, &self.value)
             || self.vector.is_empty()
             || self.vector.len() > 64
             || self

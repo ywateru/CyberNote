@@ -83,7 +83,25 @@ SettingVersion { key: String, vector: Vector, value: Value, digest: String }
 
 generation 需要包含：Store 实例、原 identity tuple、业务 notes/folders/attachment rows、dirty/head/inbox/projection/seen/frontier/counter（复用 synchronization.rs 现有 generation）以及 settings_port generation。**不应把 sync_plan_apply 当作纯 inspect**，它会 flush。请由 Store 所属 `synchronization.rs` 暴露 `cloud_generation()`：已启用时复用其只读 generation；未启用时按 media.rs 的未启用分支取业务行与实例摘要；再纳入已安装的 setting heads/frontiers/dirty/白名单值（未安装时只纳入白名单值）。需要一个公开给宿主的只读 accessor，不需要新 Store。
 
-`Lease::check_workspace(cloud_uuid)` 校验配置代次、操作取消及当前逻辑空间；capture/validate/commit 都必须调用。`Lease::enter()` 的读 guard 只覆盖**最终短 gate 的授权重验+SQL事务**；先取 lease guard、再取 Session，避免与配置取消锁形成反序。网络、hash/copy、窗口 ACK 等待期间不得持有 Session guard 或 lease guard。超时/关闭配置会取消 lease；正在运行的阻塞方法须在最终写前 enter，不能只在开始时 check。
+`Lease::check_workspace(cloud_uuid)` 校验配置代次、操作取消及当前逻辑空间；capture/validate/commit 都必须调用。`Lease::enter()` 现在返回 `CheckedLease<'_>`，持有一次读锁，只覆盖**最终短 gate 的授权重验+SQL事务**；先取 lease guard、再取 Session，避免与配置取消锁形成反序。
+
+最终 gate 的固定用法（Pasteur 的 CloudHost 适配须遵守）：
+
+```rust
+let gate = lease.enter()?;
+gate.check_workspace(&bundle.workspace_id)?;
+let binding = gate.binding()?; // 不再取锁
+// 此处再取原 Session，核对 binding.context / Store instance / identity /
+// generation / payload hash，并保留 gate 直到该短事务提交完成。
+```
+
+持有 gate 时不能再调用 `lease.enter/check/binding/check_workspace`，也不能取
+CloudRuntime.state（Save 的顺序是 state→epoch writer）；只使用 gate accessors。
+`gate.check()` 及其两个 accessors 只读已持有的 epoch 与 immutable fence，不会
+重取 RwLock。未入门的 Lease 查询使用 try_read，writer 已排队时返回 busy，
+不会在递归读等待中死锁。Save 仍须在整个最终事务之后才能改变配置 epoch，
+并不是删除配置锁或把最终核验提前后释放。超时/关闭配置时取消检查保留。
+网络、hash/copy、窗口 ACK 等待期间不得持有 Session guard 或 lease guard。超时/关闭配置会取消 lease；正在运行的阻塞方法须在最终写前 enter，不能只在开始时 check。
 
 ### capture 的调用顺序
 
@@ -103,7 +121,23 @@ commit 在远端 PUT 后仍须重验 expected_generation、身份和 lease。先
 
 ## 可移植设置 SQL（已实现，宿主传现有事务）
 
-`settings_port.rs` 不 open 数据库，不拥有连接。仅支持 `theme/view/sort/groupDates`，拒绝其他 key/错误值，缺失值不覆盖本机；false 保持。接口：
+`settings_port.rs` 不 open 数据库，不拥有连接。wire 便携设置 schema v1 仍为四个独立因果键 `theme/view/sort/groupDates`，兼容已存 digest/vector；拒绝整行 appearance/presentation、未知键和错误值，缺失保留、false 保持。精确定义：
+
+| Wire key | 实际本机 owner / 范围 |
+|---|---|
+| theme | AppearanceV2.schemePreference，仅 system/light/dark；不包含 themeId 皮肤 |
+| view | PresentationV1.desktop.collectionView，仅 list/gallery；不是整个 per-platform presentation |
+| sort | 顶层 updated/created/title |
+| groupDates | 顶层 boolean，false 是有效值 |
+
+捕获/dirty trigger/generation 优先读取真实 owner，有 owner 时不把旧 theme/view
+投影视为当前值。apply 更新相应 owner 的最小字段并同步 legacy projection；
+保留 themeId、desktop navigation/lastNonFocusNavigation/density、mobile 全部字段、
+窗口/选中项/账号/MCP/私有目录和所有云/备份/更新调度配置。legacy 缺 owner 时
+只在该便携字段实际应用时，按现有 AppearanceV2/PresentationV1 默认结构迁移。
+`settings_owner.rs` 是此四键的窄投影适配，不新增 Store/保存队列；严格核对实际
+owner 版本、字段与枚举，未知 owner 版本/结构按 state 失败。真实 Store 普通
+settings 动作之后不能把已应用值反向重写成旧投影。接口签名保持：
 
 ```rust
 install(db: &rusqlite::Connection) -> Result<()>;
@@ -113,7 +147,16 @@ apply(db: &Connection, incoming: &[SettingVersion]) -> Result<usize>; // 冲突�
 generation(db: &Connection) -> Result<String>;
 ```
 
-install/capture/apply 要求现有事务，任何失败必须 rollback。install 校验自身 7 张表+4 个 settings UPDATE triggers 的准确 schema，残缺/被改动拒绝而不覆盖。初次确认才安装；既有 settings 的白名单值进入 dirty。后续 settings UPDATE 同事务标记 dirty，普通设置命令无须第二次补写。capture 沿当前投影向量继续本机分支，旧分支编辑必要时分配 branch actor，保留其他冲突。heads/seen/frontiers 保持完整版本事实，apply 仅投影白名单键，保留选中笔记、布局、MCP、账号与所有无关设置。deterministic digest 选头，其他头可恢复；不能将设置冲突计数隐去。
+install/capture/apply 要求现有事务，任何失败必须 rollback。install 校验自身 7 张表+4 个 settings UPDATE triggers 的准确 schema，以及
+control 必须唯一存在 `(singleton=1,capture=1)`。heads/capture/apply/generation
+均重复准入核验，不能把丢行或 capture=0 当作空状态；apply 两次切换 capture
+和 settings 更新必须准确命中一行，任何失败调用方 rollback，不自动补控制行。
+
+仅准确完整匹配上一版 7+4 DDL 且控制行/owner 有效时，install 在调用方事务内
+迁移四个 triggers 为 owner-aware 表达式，保留全部因果表并标记有效便携字段
+dirty，再经 capture 形成真实当前 owner 的后继；transaction rollback 同时撤销
+迁移与 head 变化。混合/部分/陌生 DDL 或损坏控制行一律拒绝，保留证据。初次
+确认才安装；有效 settings 白名单值进入 dirty。后续 settings UPDATE 同事务标记 dirty，普通设置命令无须第二次补写。capture 沿当前投影向量继续本机分支，旧分支编辑必要时分配 branch actor，保留其他冲突。heads/seen/frontiers 保持完整版本事实，apply 仅投影白名单键，保留选中笔记、布局、MCP、账号与所有无关设置。deterministic digest 选头，其他头可恢复；不能将设置冲突计数隐去。
 
 ## 协议、预算与保护版本
 
@@ -133,7 +176,12 @@ WebDAV：Basic over HTTPS、PROPFIND Depth:0 验证服务根、GET、最多17级
 }} />
 ```
 
-导出位于 `src/cloud-sync/index.ts`；插入 `Preferences.cloudSync`，不依赖 CyberBus 登录。组件只调用 cloud_sync_command，ports 类型见 types.ts。复用 settings121-list/row/label/actions/text 与 --settings-*，宿主 `.preferences-workspace` 提供共享样式和浅暗 tokens。active=false 时卸载内容、清除秘密草稿和预览；丢弃旧代次异步回包，内层 Escape 收起并恢复设置按钮焦点。无 UI 自动 timer。
+导出位于 `src/cloud-sync/index.ts`；插入 `Preferences.cloudSync`，不依赖 CyberBus 登录。组件只调用 cloud_sync_command，ports 类型见 types.ts。复用 settings121-list/row/label/actions/text 与 --settings-*，宿主 `.preferences-workspace` 提供共享样式和浅暗 tokens。active=false 时卸载内容、清除秘密草稿和预览；丢弃旧代次异步回包，内层 Escape 收起并恢复设置按钮焦点。
+原生确认在弹出前占用单操作 owner，reject 显示固定安全错误；取消不调用同步。
+每次 active 代次分别拥有 status/context/command/confirmation，重进立即释放旧
+UI owner并重新读取状态；旧 promise finally 不能清新 owner。已发出的原生任务
+仍由宿主负责串行/取消，新请求如遇 native busy 应明确显示，不能点击无声。
+密码草稿/预览在离开时清理，旧确认即使随后接受也不得发起同步。无 UI 自动 timer。
 
 `CloudRuntime::automatic(fresh_context)` 是**宿主唯一前台调度器**调用的有界入口，内置周期判断（关闭/3/15/30/60分钟，默认0）。例如已有宿主前台 tick 每30秒检查一次，不因打开设置或读取状态调用 transfer。仅 enabled、周期到期、曾确认相同云UUID且实时权限有效才执行；远端消失或云UUID改变要求重新预览。退出/Session替换/库切换时取消并 join 调度器，调用 shutdown；前台 tick 不得复用历史 Token，也不要求 CyberBus grant。运行时不创建 timer/thread，网络断开不持有 Session 锁。本模块不实现自动本地备份调度。
 
