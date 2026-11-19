@@ -5,7 +5,7 @@ import { resolve, relative, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const projectRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
-const excluded = new Set(['target', 'node_modules', '.git', '.gradle', 'build', 'dist', 'artifacts', '.DS_Store', 'local.properties', 'tauri.properties']);
+const excluded = new Set(['target', 'node_modules', '.git', '.gradle', '.kotlin', 'build', 'dist', 'artifacts', '.DS_Store', 'local.properties', 'tauri.properties']);
 // Tauri writes these dependency/path bridges during Android compilation. They
 // are outputs; the package locks and actual plugin/native sources are inputs.
 const generatedFiles = new Set(['src-tauri/gen/android/tauri.settings.gradle', 'src-tauri/gen/android/app/tauri.build.gradle.kts', 'src-tauri/gen/android/app/proguard-tauri.pro']);
@@ -26,7 +26,7 @@ function excludedProductPath(name) {
   const generated = generatedFiles.has(name) ||
     [...generatedDirectories].some(directory => name === directory || name.startsWith(directory + '/'));
   return generated || pluginAndroidOutput.test(name) ||
-    excluded.has(name.split('/').at(-1)) || /\.(log|tsbuildinfo)$/.test(name);
+    name.split('/').some(segment => excluded.has(segment)) || /\.(log|tsbuildinfo)$/.test(name);
 }
 function isProductPath(name) {
   const normalized = name.split('\\').join('/');

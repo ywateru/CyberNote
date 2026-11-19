@@ -96,7 +96,13 @@ test('dirty tracked/untracked production cannot claim a tag; dirty development s
     assert.equal(dev.releaseVersion, null); assert.equal(dev.builtAt, null); assert.equal(dev.sourceDirty, true);
     if (path === 'src/main.ts') f.git(['restore', path]); else rmSync(join(f.root, path));
   }
-  for (const path of ['README.md', 'untracked.txt', 'dist/build-info.json', 'src-tauri/gen/android/app/src/main/jniLibs/libnotes.so']) {
+  for (const path of [
+    'README.md',
+    'untracked.txt',
+    'dist/build-info.json',
+    'src-tauri/gen/android/app/src/main/jniLibs/libnotes.so',
+    'src-tauri/gen/android/buildSrc/.kotlin/sessions/kotlin-compiler-fixture.salive',
+  ]) {
     f.put(path, 'build output');
     assert.equal(f.info().releaseVersion, '0.1.0-preview.2', path);
     assert.equal(f.info({ development: true }).sourceDirty, false, path);
