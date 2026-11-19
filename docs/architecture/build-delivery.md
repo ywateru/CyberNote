@@ -93,7 +93,17 @@ prerelease：点分 ASCII 字母/数字/连字符标识符，纯数字标识符�
 文件并核对 Git 管理目录中的反向登记；拒绝 symlink `.git` 或借用另一
 worktree 的 `.git` 文件。Git 查询清除继承的 `GIT_*` 重定向/索引/config
 环境，避免错误读取别的仓库。本项目 pipeline 已提供 GitHub ref 环境，
-无需改 workflow；此改动没有创建/修改 tag、推送或发布任何资产。
+无需额外传入 tag；此改动没有创建/修改 tag、推送或发布任何资产。
+
+clean 判定同时读取 NUL 分隔的 `git ls-files -v -z`，保守拒绝整个 index
+中的 `assume-unchanged` / `skip-worktree` 标记，包括非产品路径或尚未改变
+字节的条目。普通 `git status` 会信任这些标记，不能独立证明 tag 对应的
+源码未被修改。`sourceIdentity.sourceDirty` 与发行 resolver 共用这一判定：
+有标记时源码显示 dirty，开发/branch/未知身份仍为 null；exact tag 的生产
+构建明确拒绝。原始产品字节仍用于 fingerprint，旧 clean stamp 在标记
+出现后失效。验证只读 Git，并设置 `GIT_OPTIONAL_LOCKS=0` 禁止 status 的
+可选 index 刷新；不清标记、不 reset，也不更改用户的 index 文件。
+正常 checkout 和有独立干净 index 的合法 linked worktree 继续接受。
 
 ### 前端、Rust 与发布回执的一致性
 
@@ -171,6 +181,13 @@ git diff --check
 身份测试用临时 Git checkout/linked worktree 和真实序列化 build-info，覆盖
 CI/local/annotated/dirty/invalid/mismatched/ambiguous/no-tag、错误 Git root、
 版本漂移、stamp 不能授予 tag、发布回执、原生压缩嵌入字节和拒绝旧前端。
+`settings121-release-hidden-index.test.mjs` 另用真实临时 Git 设置两种 index
+标记并修改产品字节，覆盖 sourceDirty、stamp、local/CI resolver、实际
+`build.rs` Cargo 编译、staging 使用的 identity CLI，以及 Python stage
+身份复核路径；核对 index 原字节不变。检查 job 显式安装无附加 target 的
+Rust 工具链，运行该测试及原发行身份/build-info 回归，不构建 Tauri。
+针对性证据见[隐藏 index 标记修复验证](../verification/settings121-release-hidden-index.md)。
+
 真实 `build.rs` 通过轻量 rustc 及 isolated Cargo 执行；唯一替换的是无操作
 `tauri_build` fixture，不运行实际 Tauri/sidecar。Cargo fixture 验证 tag
 切换触发重跑、旧前端失败、重新生成后 native 的编译身份更新。

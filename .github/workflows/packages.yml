@@ -30,9 +30,16 @@ jobs:
         run: |
           pnpm version:check
           pnpm typecheck
+      - name: Install Rust for isolated build-identity fixtures
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.97.1
       - name: Test release tooling and account command boundaries
         run: |
           node --test \
+            scripts/publish/build-info.test.mjs \
+            scripts/verification/settings121-release-identity.test.mjs \
+            scripts/verification/settings121-release-hidden-index.test.mjs \
             scripts/publish/package-identity.test.mjs \
             scripts/publish/policy.test.mjs \
             scripts/publish/stage-packages.test.mjs \

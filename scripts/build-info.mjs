@@ -56,7 +56,7 @@ export function sourceIdentity(root = projectRoot, { metadataPath = process.env.
     const top = checkoutGit(root, ['rev-parse', '--show-toplevel']);
     if (realpathSync(top) !== realpathSync(root)) throw Error('Build root is not the Git checkout root');
     const revision = checkoutGit(root, ['rev-parse', 'HEAD']);
-    const dirty = !!checkoutGit(root, ['status', '--porcelain', '--untracked-files=normal']);
+    const dirty = checkoutIsDirty(root);
     if (metadata && (metadata.sourceRevision !== revision || metadata.sourceDirty !== dirty)) throw Error('Deployment metadata disagrees with checkout');
     return { sourceRevision: revision, sourceFingerprint: fingerprint, sourceDirty: dirty, inputCount: files.length };
   }
@@ -97,8 +97,21 @@ export function releaseVersionFromTag(tag, core) {
 function checkoutGit(root, args) {
   // A caller's GIT_DIR/INDEX_FILE/config injection must not redirect validation
   // away from the supplied checkout or hide worktree modifications.
-  const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_')));
+  const env = { ...Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith('GIT_'))), GIT_OPTIONAL_LOCKS: '0' };
+  // Even git status must remain observational: suppress its optional index
+  // refresh writes instead of changing any user's cached state or hint flags.
   return execFileSync('git', args, { cwd: root, env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 15000 }).trim();
+}
+function checkoutIsDirty(root) {
+  // status deliberately trusts index hints and can hide modified tracked bytes.
+  // -v lowercases assume-unchanged entries; S/s marks skip-worktree. Refuse all
+  // such entries, including unchanged/non-product ones, rather than clearing
+  // user flags or pretending to prove a clean checkout. NUL separates paths so
+  // whitespace/newline filenames cannot forge another entry's status letter.
+  const entries = checkoutGit(root, ['ls-files', '-v', '-z']).split('\0');
+  const hidden = entries.some(entry => /^[a-zS] /.test(entry));
+  const modified = !!checkoutGit(root, ['status', '--porcelain', '--untracked-files=normal']);
+  return hidden || modified;
 }
 export function resolveReleaseVersion(root = projectRoot, { development = false, environment = process.env } = {}) {
   const core = assertVersions(root);
@@ -138,7 +151,7 @@ export function resolveReleaseVersion(root = projectRoot, { development = false,
   if (!tag) return null;
   const tagged = checkoutGit(root, ['rev-parse', '--verify', `refs/tags/${tag}^{commit}`]);
   if (tagged !== head) throw Error('Release tag does not point at checkout HEAD');
-  if (checkoutGit(root, ['status', '--porcelain', '--untracked-files=normal'])) throw Error('Release identity requires a clean checkout');
+  if (checkoutIsDirty(root)) throw Error('Release identity requires a clean checkout without assume-unchanged or skip-worktree index flags');
   return releaseVersionFromTag(tag, core);
 }
 export function validateBuildReleaseIdentity(info, root = projectRoot, options = {}) {
