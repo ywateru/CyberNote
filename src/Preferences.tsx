@@ -1,9 +1,11 @@
 import { appearanceOf, themeOptions, type ThemeId, type SchemePreference } from "./themes/appearance";
 import { useLayoutEffect, useEffect, useRef, useState, type ReactNode } from "react";
-import { Database, X, ChevronLeft, ChevronRight, Type, Notebook, Archive, Search, Download, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound, Bot } from "lucide-react";
+import { Database, X, ChevronLeft, ChevronRight, Type, Notebook, Archive, Search, ArrowUp, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound, Bot } from "lucide-react";
 import { fontSizeOptions, fontSizeOption, type FontSize } from "./font-size";
 import type { Settings } from "./types";
 import "./Preferences.css";
+import { PreferenceSelect } from "./preferences-menu/PreferenceSelect";
+import { dismissInnermostMenu } from "./Menu";
 import PreferencesInterfaceDetails from "./PreferencesInterfaceDetails";
 import PreferencesPresentation from "./presentation/PreferencesPresentation";
 import { accountUIAvailable } from "./account-client";
@@ -112,7 +114,27 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   const searchActive = useRef(false);
   const updateTrigger = useRef<HTMLButtonElement>(null);
   const searchInput = useRef<HTMLInputElement>(null);
-  const pendingTarget = useRef<string | null>(null);
+  const [pendingTarget, setPendingTarget] = useState<{ page: PreferencesTab; selector: string; id: number; expires: number } | null>(null);
+  const targetSerial = useRef(0), targetOwner = useRef(pendingTarget);
+  targetOwner.current = pendingTarget;
+  const [searchMessage, setSearchMessage] = useState("");
+  const [accountAvailability, setAccountAvailability] = useState("unknown");
+  const localMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+  const updateActive = useRef(updateOpen); updateActive.current = updateOpen;
+  const cancelTarget = () => { targetSerial.current++; targetOwner.current = null; setPendingTarget(null); setSearchMessage(""); };
+  const setSearchQuery = (value: string) => { cancelTarget(); setQuery(value); };
+  useLayoutEffect(() => {
+    const element = root.current;
+    if (!element) return;
+    const read = () => {
+      const account = element.querySelector<HTMLElement>("[data-settings-account-search]");
+      if (account) setAccountAvailability(account.dataset.settingsAccountSearch || "unknown");
+    };
+    read();
+    const observer = new MutationObserver(read);
+    observer.observe(element, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-settings-account-search"] });
+    return () => observer.disconnect();
+  }, []);
   useEffect(() => {
     if (tab === "sync") { setConflictsOpen(true); onTab("account"); }
   }, [tab]);
@@ -120,12 +142,13 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   const results = settingsSearch.filter(([page, title, words]) =>
     preferencePages.some(item => item.id === page) &&
     (title !== "云端同步" || cloudSync != null) && (title !== "自动备份" || automaticBackup != null) &&
+    (title !== "登录与安全" || !localMobile) && (title !== "我的设备" || accountAvailability !== "signedOut") &&
     (title !== "软件更新" || softwareUpdate != null) && (title !== "同步冲突" || syncConflicts != null) &&
     searchTerms.every(term => `${title} ${words} ${preferencePages.find(item => item.id === page)?.label}`.toLocaleLowerCase().includes(term)));
   const searching = searchTerms.length > 0;
   searchActive.current = searching;
   const jumpTo = (page: PreferencesTab, selector: string) => {
-    pendingTarget.current = selector; setQuery(""); setUpdateOpen(selector === '[data-settings-slot="update"]'); onTab(page);
+    const intent = { page, selector, id: ++targetSerial.current, expires: Date.now() + 5000 }; targetOwner.current = intent; setPendingTarget(intent); setSearchMessage("正在定位设置…"); setQuery(""); setUpdateOpen(selector === '[data-settings-slot="update"]'); onTab(page);
     if (selector === '.preferences-conflicts > summary') setConflictsOpen(true);
   };
   const [saving, setSaving] = useState(false), [error, setError] = useState("");
@@ -149,6 +172,9 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
       if (event.defaultPrevented || !live.current || !element?.isConnected || element.hidden || !element.getClientRects().length || getComputedStyle(element).visibility === "hidden") return;
       if (event.key === "Escape") {
         event.preventDefault(); event.stopPropagation();
+        if (dismissInnermostMenu()) return;
+        if (updateActive.current && !searchActive.current) { setUpdateOpen(false); updateTrigger.current?.focus({ preventScroll: true }); return; }
+        if (targetOwner.current) { cancelTarget(); searchInput.current?.focus(); return; }
         if (searchActive.current) { setQuery(""); searchInput.current?.focus(); } else backHandler.current();
         return;
       }
@@ -183,17 +209,63 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
     }
   }, [tab, mobile]);
   useLayoutEffect(() => {
-    if (!pendingTarget.current || searching) return;
-    const target = root.current?.querySelector<HTMLElement>(pendingTarget.current);
-    pendingTarget.current = null;
-    if (!target) return;
-    for (let parent = target.parentElement; parent && parent !== root.current; parent = parent.parentElement) {
-      if (parent instanceof HTMLDetailsElement) parent.open = true;
-    }
-    if (target.matches('[aria-expanded="false"]')) target.click();
-    if (!target.matches('button,input,select,summary,[tabindex]')) target.tabIndex = -1;
-    target.scrollIntoView({ block: "center" }); target.focus({ preventScroll: true });
-  }, [activeTab, searching]);
+    if (!pendingTarget) return;
+    const intent = pendingTarget;
+    const timer = window.setTimeout(() => {
+      if (!live.current || targetOwner.current?.id !== intent.id) return;
+      targetOwner.current = null; setPendingTarget(null);
+      setSearchMessage("设置尚未加载完成，请检查当前页面的加载状态后重新查找。");
+    }, Math.max(0, intent.expires - Date.now()));
+    return () => window.clearTimeout(timer);
+  }, [pendingTarget]);
+  useLayoutEffect(() => {
+    const intent = pendingTarget, element = root.current;
+    if (!intent || !element || searching || activeTab !== intent.page) return;
+    const current = () => live.current && targetOwner.current?.id === intent.id && targetSerial.current === intent.id;
+    const finish = (target: HTMLElement, notice = "") => {
+      if (!current()) return;
+      for (let parent = target.parentElement; parent && parent !== element; parent = parent.parentElement) {
+        if (parent instanceof HTMLDetailsElement) parent.open = true;
+      }
+      if (target.matches('[aria-expanded="false"]:not([aria-haspopup])')) target.click();
+      if (!target.matches('button,input,select,summary,[tabindex]')) target.tabIndex = -1;
+      target.scrollIntoView({ block: "center" }); target.focus({ preventScroll: true });
+      targetOwner.current = null; setPendingTarget(null); setSearchMessage(notice);
+    };
+    const probe = () => {
+      if (!current()) return;
+      const target = element.querySelector<HTMLElement>(intent.selector);
+      if (target && !target.matches(":disabled") && !target.closest("[hidden],[inert]") && target.getClientRects().length) { finish(target); return; }
+      const account = element.querySelector<HTMLElement>("[data-settings-account-search]");
+      if (intent.page === "account" && account) {
+        const state = account.dataset.settingsAccountSearch;
+        if (state === "error") {
+          finish(account, "账户状态读取失败，未能定位设置。请在账户页重试读取后重新查找。");
+        } else if (state === "signedOut" && intent.selector === ".account-device-group") {
+          const login = account.querySelector<HTMLElement>(".account-primary");
+          finish(login || account, "请先登录账户，再查看我的设备。");
+        } else if (state === "signedIn" || state === "signedOut") {
+          // Credentials/other state-dependent targets may be unavailable even
+          // after a successful account status read. Never wait forever for one.
+          finish(account, "此账户状态下该设置暂不可用，请查看当前账户操作。");
+        }
+      }
+    };
+    const observer = new MutationObserver(probe);
+    observer.observe(element, { subtree: true, childList: true, attributes: true, attributeFilter: ["hidden", "inert", "disabled", "data-settings-account-search"] });
+    const interrupt = (event: Event) => {
+      if (event.type === "pointerdown" || (event instanceof KeyboardEvent && event.key === "Tab")) cancelTarget();
+    };
+    element.addEventListener("pointerdown", interrupt, true);
+    element.addEventListener("keydown", interrupt, true);
+    probe();
+    return () => { observer.disconnect(); element.removeEventListener("pointerdown", interrupt, true); element.removeEventListener("keydown", interrupt, true); };
+  }, [pendingTarget, activeTab, searching]);
+  const targetTab = useRef(activeTab);
+  useLayoutEffect(() => {
+    if (targetTab.current !== activeTab && targetOwner.current && targetTab.current === targetOwner.current.page) cancelTarget();
+    targetTab.current = activeTab;
+  }, [activeTab]);
   const apply = async (action: () => Promise<unknown>) => {
     if (working.current) return;
     saveFocus.current = document.activeElement instanceof HTMLElement ? { element: document.activeElement, tab } : null;
@@ -217,11 +289,11 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
           {(!mobile || home) && <nav className="preferences-navigation" aria-label="设置分类" role={mobile ? undefined : "tablist"} aria-orientation={mobile ? undefined : "vertical"}>
             {preferencePages.map(({ id, label, icon, desktopIcon }, index) => <button key={id} id={`preferences-tab-${id}`} type="button" role={mobile ? undefined : "tab"} data-preferences-page={id}
               aria-selected={mobile ? undefined : activeTab === id} aria-controls={mobile ? undefined : id === "backup" ? "preferences-panel-data" : `preferences-panel-${id}`}
-              tabIndex={mobile || activeTab === id ? 0 : -1} onClick={() => { setQuery(""); setUpdateOpen(false); onTab(id); }} onKeyDown={event => {
+              tabIndex={mobile || activeTab === id ? 0 : -1} onClick={() => { cancelTarget(); setQuery(""); setUpdateOpen(false); onTab(id); }} onKeyDown={event => {
                 if (mobile) return;
                 const next = event.key === "ArrowDown" || event.key === "ArrowRight" ? (index + 1) % preferencePages.length : event.key === "ArrowUp" || event.key === "ArrowLeft" ? (index + preferencePages.length - 1) % preferencePages.length : event.key === "Home" ? 0 : event.key === "End" ? preferencePages.length - 1 : -1;
                 if (next < 0) return;
-                event.preventDefault(); setQuery(""); setUpdateOpen(false); onTab(preferencePages[next].id);
+                event.preventDefault(); cancelTarget(); setQuery(""); setUpdateOpen(false); onTab(preferencePages[next].id);
                 root.current?.querySelector<HTMLButtonElement>(`#preferences-tab-${preferencePages[next].id}`)?.focus();
               }}>{(() => { const Icon = mobile ? icon : desktopIcon; return <Icon size={20} />; })()}<span>{label}</span>{mobile && <><small>{summary(id)}</small><ChevronRight size={17} /></>}</button>)}
             <p className="preferences-navigation-note">{mobile ? "备忘录和附件保存在此设备中。" : "CyberNote"}</p>
@@ -229,13 +301,14 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
           <div className={`preferences-workspace${home ? " is-home" : ""}`}>
             <div className="preferences-toolbar">
               {!mobile && <div className="preferences-breadcrumb" aria-label="当前位置"><span>设置</span><ChevronRight size={14} aria-hidden="true" /><span>{current?.label || "外观与字号"}</span></div>}
-              <div className="preferences-search"><Search size={15} aria-hidden="true" /><input ref={searchInput} type="search" aria-label="查找设置" placeholder="查找设置" value={query} onChange={event => setQuery(event.target.value)} onKeyDown={event => {
+              <div className="preferences-search"><Search size={15} aria-hidden="true" /><input ref={searchInput} type="search" aria-label="查找设置" placeholder="查找设置" value={query} onChange={event => setSearchQuery(event.target.value)} onKeyDown={event => {
                 if (event.key === "Escape" && query) { event.preventDefault(); event.stopPropagation(); setQuery(""); }
                 if (event.key === "Enter" && searching && results[0]) { event.preventDefault(); jumpTo(results[0][0], results[0][3]); }
               }} />{query && <button type="button" aria-label="清除查找" onClick={() => { setQuery(""); searchInput.current?.focus(); }}><X size={14} /></button>}</div>
-              {softwareUpdate != null && <button ref={updateTrigger} type="button" className="preferences-update-action" aria-expanded={updateOpen} aria-controls="preferences-update-pane" onClick={() => { setQuery(""); setUpdateOpen(!updateOpen); }}><Download size={14} aria-hidden="true" /><span>{softwareUpdateBadge ?? "更新"}</span></button>}
+              {softwareUpdate != null && <button ref={updateTrigger} type="button" className="preferences-update-action" aria-expanded={updateOpen} aria-controls="preferences-update-pane" onClick={() => { cancelTarget(); setQuery(""); setUpdateOpen(!updateOpen); }}><span className="preferences-update-pill"><ArrowUp size={12} aria-hidden="true" /><span>{softwareUpdateBadge ?? "更新"}</span></span></button>}
             </div>
-            {searching && <section className="preferences-search-results" aria-label="设置查找结果"><p role="status">{results.length ? `找到 ${results.length} 项设置` : "未找到设置，请尝试其他关键词。"}</p><div className="preferences-list">{results.map(([page, title, , selector]) => <button type="button" key={title} onClick={() => jumpTo(page, selector)}><span>{title}<small>{preferencePages.find(item => item.id === page)?.label}</small></span><ChevronRight size={16} aria-hidden="true" /></button>)}</div></section>}
+            {searchMessage && <p className="preferences-search-notice" role="status">{searchMessage}</p>}
+            {searching && <section className="preferences-search-results" aria-label="设置查找结果"><p role="status">{results.length ? `找到 ${results.length} 项设置` : "未找到设置，请尝试其他关键词。"}</p><div className="preferences-list">{results.map(([page, title, , selector]) => <button type="button" key={title} onClick={() => jumpTo(page, selector)}><span>{title}<small>{title === "我的设备" && accountAvailability !== "signedIn" ? "登录后查看 · 打开账户确认当前状态" : preferencePages.find(item => item.id === page)?.label}</small></span><ChevronRight size={16} aria-hidden="true" /></button>)}</div></section>}
             {softwareUpdate != null && <section id="preferences-update-pane" data-settings-slot="update" className="preferences-update-pane" aria-label="软件更新" hidden={!updateOpen || searching} inert={!updateOpen || searching} onKeyDown={event => {
               if (event.key === "Escape" && !event.defaultPrevented) { event.preventDefault(); event.stopPropagation(); setUpdateOpen(false); updateTrigger.current?.focus(); }
             }}><div className="preferences-pane-heading"><span>软件更新</span><button type="button" onClick={() => { setUpdateOpen(false); updateTrigger.current?.focus(); }}>收起</button></div>{updateOpen && softwareUpdate}</section>}
@@ -244,7 +317,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
             <div id="preferences-panel-settings" className="preferences-panel preferences-settings" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "外观与字号" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-settings"} hidden={activeTab !== "settings"} inert={activeTab !== "settings"}>
               <fieldset disabled={mobile && saving} aria-busy={saving} className="preferences-form">
                 <div className="preferences-group">
-                  <label className="preferences-row"><span>主题<small>用于整个工作区及原生工具栏背景</small></span><select aria-label="主题" disabled={saving} value={appearance.themeId} onChange={event => void changeAppearance({ themeId: event.target.value as ThemeId })}>{themeOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>
+                  <label className="preferences-row"><span>主题<small>用于整个工作区及原生工具栏背景</small></span><PreferenceSelect label="主题" mobile={mobile} disabled={saving} value={appearance.themeId} options={themeOptions} onChange={themeId => void changeAppearance({ themeId: themeId as ThemeId })} /></label>
                   <div className="preferences-row"><span>外观<small>系统菜单遵循系统明暗样式</small></span>{mobile ? <select aria-label="外观" value={appearance.schemePreference} onChange={event => void changeAppearance({ schemePreference: event.target.value as SchemePreference })}>{appearanceOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : <PreferenceChoices label="外观" value={appearance.schemePreference} options={appearanceOptions} disabled={saving} onChange={schemePreference => void changeAppearance({ schemePreference })} />}</div>
                 </div>
                 <div className="preferences-group">
@@ -267,9 +340,9 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
             <div id="preferences-panel-notes" className="preferences-panel preferences-settings" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "备忘录" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-notes"} hidden={activeTab !== "notes"} inert={activeTab !== "notes"}>
               <fieldset disabled={saving} className="preferences-form">
                 <div className="preferences-group"><h4>列表</h4>
-                  <label className="preferences-row"><span>排序方式</span><select aria-label="排序方式" value={settings.sort || "updated"} onChange={event => void apply(() => onSettings({ sort: event.target.value as Settings["sort"] }))}><option value="updated">编辑日期</option><option value="created">创建日期</option><option value="title">标题</option></select></label>
+                  <label className="preferences-row"><span>排序方式</span><PreferenceSelect label="排序方式" mobile={mobile} disabled={saving} value={settings.sort || "updated"} options={[{value:"updated",label:"编辑日期"},{value:"created",label:"创建日期"},{value:"title",label:"标题"}]} onChange={sort => void apply(() => onSettings({ sort: sort as Settings["sort"] }))} /></label>
                 </div>
-                <PreferencesPresentation settings={settings} save={patch => void apply(() => onSettings(patch))} />
+                <PreferencesPresentation settings={settings} mobile={mobile} disabled={saving} save={patch => void apply(() => onSettings(patch))} />
                 <div className="preferences-group"><h4>桌面列表</h4>
                   <label className="preferences-row preferences-check"><span>{mobile ? "桌面按日期分组" : "按日期分组"}</span><input type="checkbox" checked={settings.groupDates !== false} onChange={event => void apply(() => onSettings({ groupDates: event.target.checked }))} /></label>
                 </div>

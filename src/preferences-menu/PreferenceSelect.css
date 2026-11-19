@@ -1,0 +1,81 @@
+.preferences-picker {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  margin-left: auto;
+}
+.preferences-row > .preferences-picker {
+  flex: 0 1 auto;
+}
+.preferences-workspace .preferences-select-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 32px;
+  padding: 4px 6px;
+  color: var(--settings-accent);
+  font: inherit;
+}
+.preferences-select-trigger > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.preferences-select-trigger > svg {
+  flex-shrink: 0;
+  color: var(--settings-muted);
+}
+/* Inline in the workspace: no body portal, no copied/global palette, and the
+   Preferences focus boundary includes every item. MenuSurface owns placement. */
+.preferences-workspace .preferences-select-menu.unified-menu.popover {
+  z-index: var(--layer-modal-menu, 60);
+  width: max-content;
+  min-width: min(200px, calc(100vw - 16px));
+  max-width: calc(100vw - 16px);
+  max-height: calc(100dvh - 80px);
+  border: 1px solid var(--settings-line);
+  border-radius: 11px;
+  padding: 5px;
+  background: var(--settings-card);
+  color: var(--settings-fg);
+  font: inherit;
+  box-shadow:
+    0 8px 28px #0002,
+    0 0 0 0.5px #0001;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.preferences-workspace .preferences-select-menu .menu-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  color: var(--settings-fg);
+  font: inherit;
+}
+.preferences-select-check {
+  display: inline-flex;
+  flex: 0 0 14px;
+  width: 14px;
+  justify-content: center;
+  color: var(--settings-accent);
+}
+.preferences-select-check > svg {
+  width: 13px;
+  height: 13px;
+}
+.preferences-workspace .preferences-select-menu .menu-row[aria-checked="true"] {
+  background: var(--settings-accent-soft);
+}
+.preferences-workspace
+  .preferences-select-menu
+  .menu-row:not(:disabled):is(:hover, :focus-visible) {
+  color: var(--settings-fg);
+  background: var(--settings-pill);
+  outline: none;
+}

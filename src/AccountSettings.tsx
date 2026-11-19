@@ -341,7 +341,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     else if (confirmation === "storage" && storageSelection) void run({type:"setCredentialStorage", storage:storageSelection}, true).catch(() => {});
     else void run(confirmation === "signOut" ? {type:"signOut"} : {type:"setEnabled",enabled:true}, true).catch(() => {});
   };
-  return <div ref={panel} className="account-settings" data-account-state={status?.state || "loading"} data-account-authorization-surface={status?.authorizationSurface} onFocusCapture={event => {
+  return <div ref={panel} className="account-settings" data-settings-account-search={status ? signedIn ? "signedIn" : "signedOut" : commandError ? "error" : "loading"} data-account-state={status?.state || "loading"} data-account-authorization-surface={status?.authorizationSurface} onFocusCapture={event => {
     if (event.target instanceof HTMLElement) focused.current = event.target;
   }} onKeyDown={event => {
     if (event.key === "Escape" && dismiss()) { event.preventDefault(); event.stopPropagation(); }

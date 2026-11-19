@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useId, useRef, useState } from "react";
 import { ChevronDown, Folder, MoreHorizontal, RotateCcw } from "lucide-react";
+import { PreferenceSelect } from "./preferences-menu/PreferenceSelect";
 import type { Settings } from "./types";
 import {
   defaultInterfaceDetails,
@@ -190,18 +191,10 @@ export default function PreferencesInterfaceDetails({
         {percent(mobile ? "mobileHitScale" : "desktopHitScale", "操作区域")}
         <label className="preferences-detail-control">
           <span>菜单间距</span>
-          <select
-            aria-label="菜单间距"
-            value={confirmed?.menuSpacing ?? "standard"}
+          <PreferenceSelect label="菜单间距" mobile={mobile} value={confirmed?.menuSpacing ?? "standard"}
             disabled={disabled || saving || !confirmed}
-            onChange={(event) =>
-              void save({ ...confirmed, menuSpacing: event.target.value })
-            }
-          >
-            <option value="compact">紧凑</option>
-            <option value="standard">标准</option>
-            <option value="comfortable">宽松</option>
-          </select>
+            options={[{value:"compact",label:"紧凑"},{value:"standard",label:"标准"},{value:"comfortable",label:"宽松"}]}
+            onChange={menuSpacing => void save({ ...confirmed, menuSpacing })} />
         </label>
         {percent("radiusScale", "圆角")}
         {preview && (
