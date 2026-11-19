@@ -1,0 +1,121 @@
+{
+  "results": [
+    {
+      "baseline": true,
+      "staleRetry": null,
+      "calls": [
+        "configure:{\"automaticChecks\":false}",
+        "check"
+      ],
+      "enabled": true,
+      "switches": [
+        {
+          "label": "启动时检查",
+          "width": 30,
+          "height": 18,
+          "labels": 0
+        },
+        {
+          "label": "定时检查",
+          "width": 30,
+          "height": 18,
+          "labels": 0
+        },
+        {
+          "label": "显示更新徽标",
+          "width": 30,
+          "height": 18,
+          "labels": 0
+        }
+      ]
+    },
+    {
+      "baseline": false,
+      "staleRetry": null,
+      "calls": [
+        "configure:{\"automaticChecks\":false}",
+        "configure:{\"automaticChecks\":false}"
+      ],
+      "enabled": false,
+      "switches": [
+        {
+          "label": "启动时检查",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        },
+        {
+          "label": "定时检查",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        },
+        {
+          "label": "显示更新徽标",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        }
+      ]
+    },
+    {
+      "baseline": false,
+      "staleRetry": "download",
+      "calls": [
+        "configure:{\"automaticChecks\":false}",
+        "configure:{\"automaticChecks\":false}"
+      ],
+      "enabled": false,
+      "switches": [
+        {
+          "label": "启动时检查",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        },
+        {
+          "label": "定时检查",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        },
+        {
+          "label": "显示更新徽标",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        }
+      ]
+    },
+    {
+      "baseline": false,
+      "staleRetry": "install",
+      "calls": [
+        "configure:{\"automaticChecks\":false}",
+        "configure:{\"automaticChecks\":false}"
+      ],
+      "enabled": false,
+      "switches": [
+        {
+          "label": "启动时检查",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        },
+        {
+          "label": "定时检查",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        },
+        {
+          "label": "显示更新徽标",
+          "width": 44,
+          "height": 44,
+          "labels": 1
+        }
+      ]
+    }
+  ],
+  "boundary": "Actual frozen/current React source and controlled native client. Chromium with shared CSS and mobile wrapper; no real app/service."
+}

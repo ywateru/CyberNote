@@ -38,6 +38,7 @@ struct Inner {
     status: Status,
     file: PreferenceFile,
     verified: Option<Verified>,
+    observed_terminal: Option<String>,
 }
 #[derive(Clone)]
 pub(crate) struct Verified {
@@ -55,7 +56,11 @@ pub struct SoftwareUpdater {
     pub(crate) guard: Arc<dyn InstallGuard>,
     // A successful exit request is asynchronous. Retain the host barrier until
     // actual process exit or the helper reports it cancelled/left unchanged.
-    install_lease: Mutex<Option<Box<dyn InstallLease>>>,
+    install_lease: Mutex<Option<HeldInstall>>,
+}
+struct HeldInstall {
+    _lease: Box<dyn InstallLease>,
+    transaction: String,
 }
 struct Operation<'a> {
     owner: &'a SoftwareUpdater,
@@ -84,7 +89,7 @@ impl SoftwareUpdater {
             guard,
             Network::production()?,
             Target::current(),
-            env!("CARGO_PKG_VERSION").into(),
+            super::version::current_version().into(),
         )
     }
     fn create(
@@ -109,6 +114,7 @@ impl SoftwareUpdater {
             inner: Mutex::new(Inner {
                 file,
                 verified: None,
+                observed_terminal: None,
                 status: Status {
                     current_version: current,
                     preferences,
@@ -127,42 +133,85 @@ impl SoftwareUpdater {
         }))
     }
     fn operation(&self) -> Result<Operation<'_>, String> {
+        // Reconcile a completed helper transaction before admitting new work.
+        // Display phase is not an ownership or admission signal.
+        let _ = self.status();
         self.busy
             .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
             .map_err(|_| "update_busy")?;
+        if self.install_lease.lock().map_err(storage::err)?.is_some() {
+            self.busy.store(false, Ordering::Release);
+            return Err("update_busy".into());
+        }
         Ok(Operation {
             owner: self,
             done: false,
         })
     }
     pub fn status(&self) -> Status {
-        let mut status = self
-            .inner
-            .lock()
-            .expect("update state poisoned")
-            .status
-            .clone();
-        match install::report(&self.dir) {
-            Ok(Some((report, failed))) => {
-                status.install_report = Some(report);
-                if failed && status.phase == "restarting" {
-                    status.phase = "error".into();
-                    status.error = Some("installation_failed_or_cancelled".into());
-                    status.retry = Some("install".into());
-                    let lease = self.install_lease.lock().unwrap().take();
-                    drop(lease);
+        let mut inner = self.inner.lock().expect("update state poisoned");
+        let mut held = self.install_lease.lock().expect("update lease poisoned");
+        let report = install::report(&self.dir);
+        let mut release = None;
+        match report {
+            Ok(Some(report)) => {
+                let matches = held
+                    .as_ref()
+                    .is_some_and(|h| h.transaction == report.identity);
+                inner.status.install_report = Some(report.message);
+                if held.is_some() && !matches {
+                    inner.status.phase = "error".into();
+                    inner.status.error =
+                        Some("pending_install_identity_changed_requires_recovery".into());
+                    inner.status.retry = None;
+                } else {
+                    if report.failed
+                        && (matches || inner.observed_terminal.as_ref() != Some(&report.identity))
+                    {
+                        inner.status.phase = "error".into();
+                        inner.status.error = Some(
+                            if report.release_lease {
+                                "installation_failed_or_cancelled"
+                            } else {
+                                "pending_install_requires_recovery"
+                            }
+                            .into(),
+                        );
+                        inner.status.retry = if report.release_lease {
+                            Some("install".into())
+                        } else {
+                            None
+                        };
+                        inner.observed_terminal = Some(report.identity.clone());
+                    }
+                    if matches && report.release_lease {
+                        release = held.take();
+                        if !report.failed {
+                            inner.status.phase = "idle".into();
+                        }
+                    } else if matches && !report.failed {
+                        inner.status.phase = "restarting".into();
+                    }
                 }
             }
             Err(e) => {
-                status.install_report = Some(format!("安装记录无法读取：{e}"));
-                if status.phase == "restarting" {
-                    status.phase = "error".into();
-                    status.error = Some(format!("pending_install_requires_recovery: {e}"));
-                    status.retry = None;
-                }
+                inner.status.install_report = Some(format!("安装记录无法读取：{e}"));
+                inner.status.phase = "error".into();
+                inner.status.error = Some(format!("pending_install_requires_recovery: {e}"));
+                inner.status.retry = None;
+            }
+            Ok(None) if held.is_some() => {
+                inner.status.phase = "error".into();
+                inner.status.error = Some("pending_install_missing_requires_recovery".into());
+                inner.status.retry = None;
             }
             Ok(None) => (),
         }
+        let status = inner.status.clone();
+        drop(held);
+        drop(inner);
+        // Host lease destruction can call its coordinator: never drop under our locks.
+        drop(release);
         status
     }
     pub fn configure(&self, patch: PreferencePatch) -> Result<Status, String> {
@@ -398,8 +447,12 @@ impl SoftwareUpdater {
             // Guard MUST confirm natively and hold an edit/recording barrier until exit.
             let mut lease = self.guard.prepare_install(&plan.release).await?;
             self.phase("restarting");
+            let transaction = install::pending_identity(&self.dir)?;
             install::launch(plan, &mut *lease).await?;
-            *self.install_lease.lock().unwrap() = Some(lease);
+            *self.install_lease.lock().unwrap() = Some(HeldInstall {
+                _lease: lease,
+                transaction,
+            });
             Ok(())
         }
         .await;

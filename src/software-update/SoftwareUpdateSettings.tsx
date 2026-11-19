@@ -84,14 +84,17 @@ function Toggle({
   change(value: boolean): void;
 }) {
   return (
-    <input
-      type="checkbox"
-      role="switch"
-      aria-label={label}
-      checked={checked}
-      disabled={disabled}
-      onChange={(e) => change(e.target.checked)}
-    />
+    <label className="software-update-toggle">
+      <input
+        type="checkbox"
+        role="switch"
+        aria-label={label}
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => change(e.target.checked)}
+      />
+      <span className="software-update-toggle-track" aria-hidden="true" />
+    </label>
   );
 }
 export function SoftwareUpdateSettings() {
@@ -108,13 +111,7 @@ export function SoftwareUpdateSettings() {
       </div>
     );
   const p = s.preferences;
-  const retry = () =>
-    s.retry === "download"
-      ? u.download()
-      : s.retry === "install"
-        ? u.install()
-        : u.check();
-  const error = s.error ?? u.error;
+  const error = u.error ?? s.error;
   return (
     <section
       className="settings121-list software-update-settings"
@@ -289,7 +286,7 @@ export function SoftwareUpdateSettings() {
             className="settings121-text"
             type="button"
             disabled={u.busy}
-            onClick={() => void retry()}
+            onClick={() => void u.retry()}
           >
             重试
           </button>

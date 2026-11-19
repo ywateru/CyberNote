@@ -31,10 +31,14 @@ rollback() {
   phase rollback_failed; exit 1
 }
 phase awaiting_ack || rollback
-"$opener" -n "$target" || rollback
+# An opener can create a process and still return an error. After attempting
+# launch, neither its exit code nor a missing ACK proves that host has stopped.
+# Leave both bundles and the transaction intact; never start a second host.
+"$opener" -n "$target" || { phase recovery_required; exit 1; }
 n=0
 while [ "$n" -lt 90 ]; do
   if [ -f "$work/ack" ] && [ ! -L "$work/ack" ]; then phase complete; exit 0; fi
   n=$((n + 1)); sleep 1
 done
-rollback
+phase recovery_required
+exit 1

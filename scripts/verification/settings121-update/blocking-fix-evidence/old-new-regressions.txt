@@ -1,0 +1,25 @@
+cfde3810: test regression_zip64_extra ... FAILED
+cfde3810: test regression_zip_actual_expansion ... FAILED
+cfde3810: test service::blocking_admission_regression::regression_install_native_admission ... FAILED
+cfde3810: test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.02s
+current: test regression_zip64_extra ... ok
+current: test regression_zip_actual_expansion ... ok
+current: test service::blocking_admission_regression::regression_install_native_admission ... ok
+current: test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 29 filtered out; finished in 0.00s
+{
+  "results": [
+    {
+      "source": "cfde3810",
+      "exit": 101,
+      "expected": "3 behavior regressions fail on frozen source",
+      "tests": "test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.02s"
+    },
+    {
+      "source": "current",
+      "exit": 0,
+      "expected": "3 behavior regressions pass on fix",
+      "tests": "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 29 filtered out; finished in 0.00s"
+    }
+  ],
+  "boundary": "Temporary source mirrors and synthesized ZIPs/transactions; no app build or installed bundle."
+}

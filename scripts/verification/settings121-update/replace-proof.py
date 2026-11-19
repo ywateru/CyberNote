@@ -68,7 +68,12 @@ os.execv('/bin/mv',['mv']+sys.argv[1:])
             assert result.returncode == 0 and phase == 'complete'
             assert (target / 'Contents/MacOS/fixture').read_bytes() == b'new fixture'
             assert (backup / 'Contents/MacOS/fixture').read_bytes() == b'old fixture'
-        elif case in ['open_failure', 'ack_timeout', 'stage_move_failure']:
+        elif case in ['open_failure', 'ack_timeout']:
+            assert result.returncode != 0 and phase == 'recovery_required', (case,phase,result.stderr)
+            assert (target / 'Contents/MacOS/fixture').read_bytes() == b'new fixture'
+            assert (backup / 'Contents/MacOS/fixture').read_bytes() == b'old fixture'
+            assert (work/'opens').read_bytes() == b'new fixture\n'
+        elif case == 'stage_move_failure':
             assert result.returncode != 0 and phase == 'rolled_back', (case, phase, result.stderr)
             assert (target / 'Contents/MacOS/fixture').read_bytes() == b'old fixture'
             if case != 'stage_move_failure':

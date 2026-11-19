@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "case": "success",
+      "phase": "complete"
+    },
+    {
+      "case": "open_failure",
+      "phase": "recovery_required"
+    },
+    {
+      "case": "ack_timeout",
+      "phase": "recovery_required"
+    },
+    {
+      "case": "stage_move_failure",
+      "phase": "rolled_back"
+    },
+    {
+      "case": "rollback_failure",
+      "phase": "rollback_failed"
+    },
+    {
+      "case": "changed_live",
+      "phase": "unchanged"
+    },
+    {
+      "case": "changed_stage",
+      "phase": "unchanged"
+    },
+    {
+      "case": "abort",
+      "phase": "unchanged"
+    },
+    {
+      "case": "symlink_target",
+      "phase": "unchanged"
+    },
+    {
+      "case": "exit_veto",
+      "phase": "cancelled"
+    }
+  ],
+  "boundary": "Temporary fake bundles and inert opener only; no installed application was replaced."
+}

@@ -4,7 +4,7 @@ Implementation for the update section of
 [`settings121.md`](../../../docs/architecture/settings121.md).
 This directory owns the fixed release client, preferences, downloads, scheduling
 and macOS installation transaction. It does not open CyberNote stores/accounts.
-It adds no Cargo or frontend dependency. The integration worker owns `lib.rs`,
+It directly uses the already locked flate2 and crc32fast crates for bounded ZIP32 inflation and CRC validation; it adds no frontend dependency. The integration worker owns `lib.rs`,
 App/Preferences, readiness and the existing save/recording/quit coordinator.
 
 ## Mandatory host integration
@@ -87,7 +87,7 @@ closing the IPC awaiter does not abandon an in-flight blocking validator.
    A replacement that never reaches this boundary is rolled back after 90
    seconds. Do not acknowledge merely because a window was created. If the
    previous/current build lacks this integration, the helper cannot receive
-   acknowledgement and will restore the old bundle. Surface errors and
+   acknowledgement and will preserve the candidate and backup for manual recovery. Surface errors and
    `Status.installReport`; do not clear an unknown/corrupt transaction.
 
 5. Retain the scheduler owner until application exit. In `RunEvent::Exit`, take
@@ -126,6 +126,15 @@ stored keys survive updates; invalid JSON/types/intervals are errors. Config
 writes compare original bytes, skip unchanged contents, fsync a private temp
 file and atomically rename. No session/account preferences are modified.
 Concurrent check/download/install/configure operations reject `update_busy`.
+After helper handoff, native admission also rejects these operations while the
+transaction-owned InstallLease exists, even though the initial async method has
+returned or any display phase has changed. `status()` reconciles the pending
+transaction hash and helper phase into authoritative state. Only a matching
+safe terminal (`cancelled`, `unchanged`, `rolled_back`, `complete`) releases the
+lease, once and outside service locks. Missing/corrupt/replaced transaction,
+`rollback_failed` or `recovery_required` retain admission and the barrier for
+explicit recovery. Host shutdown still owns final teardown; phase text is not
+an authorization token.
 
 The serialized `Status` shape is mirrored in `src/software-update/types.ts`.
 `phase` differentiates `no_release` (no eligible channel release at all),
@@ -152,7 +161,17 @@ A newer release missing these assets reports `missing_asset`; it does not
 silently offer an older release. Downloads are limited to 1 GiB, exact published
 size, and SHA-256. Partial/cancelled files are removed; verified downloads are
 not restored across launches and their orphan cache is cleared. A live host
-retains at most one verified download. Current version is `CARGO_PKG_VERSION`.
+retains at most one verified download. Current version comes from one helper: nonempty
+`option_env!("CYBERNOTE_RELEASE_VERSION")`, otherwise `CARGO_PKG_VERSION`.
+The integration build owns setting that environment value; absent/empty old
+build identities conservatively retain stable-version semantics. The same full
+version is parsed during construction and compared when staging a macOS
+candidate; the installed plist and receipt core still match package version.
+Optional top-level receipt `releaseVersion` and `buildInfo.releaseVersion`, when
+present, must each be a nonempty valid full tag matching the candidate (a leading
+`v` is accepted); null/wrong types and different preview/build identities reject.
+Legacy receipts lacking both fields retain core validation. No build.rs or feed
+version policy is replaced by this module.
 
 SemVer prerelease/build ordering is implemented explicitly. A stable `0.1.0`
 never updates to `0.1.0-preview.N`, including on preview channel. Stable channel
@@ -161,27 +180,46 @@ error. Today's release pipeline keeps `package.json`/Cargo/plist versions stable
 while release tags may add a preview suffix; receipt/plist identity compares the
 tag's **core**, and upgrade eligibility compares the full SemVer tag.
 
-macOS rehashes the verified ZIP before staging. ZIP central/local names, paths,
-entry types, duplicates, overlaps, counts and total expanded bytes are checked
-before `ditto`. Links, ZIP64, multipart and encrypted packages fail closed.
-A private stage is made beside the installed bundle (same filesystem), extracted
-without following archive links, then checked for `com.local.notesclone`, exact
-executable name, expected short version, arm64-only Mach-O, receipt's native
-binary hash, and `codesign --verify --deep --strict`. This proves package identity
-and ad-hoc integrity; it does NOT prove Developer ID, same signer or notarization.
-Translocated/disk-image/development/non-writable locations are rejected.
+macOS ZIP32 validation checks central/local names, metadata, extra fields,
+entry types, duplicates, overlap, descriptors, count and advertised expansion.
+It then reads every stored/deflated stream with bounded input/output buffers,
+counts **actual** output (2 GiB total and exact entry size), validates CRC32,
+stream termination and compressed byte consumption, and applies a 90-second
+work deadline. Deflate uses incremental `Decompress` steps so even zero-output
+blocks are checked against the deadline; budget violations fail before a chunk
+is written. ZIP64 sentinel values and 0x0001 extras in either header, multipart,
+encrypted/link/device entries fail closed. There is no `ditto` extraction.
+
+Staging copies the package once through a 1 GiB budget and published SHA-256 into
+a private 0600 file inside the private adjacent stage, immediately unlinks its
+name, and uses that same retained descriptor for full validation and extraction.
+A download path replacement or in-place mutation cannot substitute unchecked
+extraction input: the snapshot hash must match. Extraction repeats actual-byte
+bounds and CRC, creates files exclusively with openat/no-follow, traverses only
+retained directory descriptors and never restores archive links or AppleDouble
+metadata. No unchecked system extractor or post-extraction walk supplies the
+budget. The existing walk remains a defense in depth, and the extracted native
+Mach-O hash, exact executable, com.local.notesclone/core version, arm64 and
+codesign --deep --strict checks remain mandatory. Failure cleans the unhanded
+off private stage. This proves package identity/ad-hoc integrity, not Developer
+ID, same signer, notarization or real package acceptance. Translocated,
+disk-image/development/non-writable locations remain rejected.
 
 After the guard, a private helper waits for the old PID to exit, rechecks live
-and staged native hashes, renames old bundle to a unique adjacent backup, moves
-the stage into place and invokes `/usr/bin/open -n`. An opener failure or missing
-startup acknowledgement restores the backup and retains the failed bundle.
-The old backup, transaction receipt and helper log remain for recovery; they
-are never recursively deleted after handoff. Failed rollback is explicit.
-There is no privilege escalation. Power loss/SIGKILL between the two directory
-renames may require manual restoration from the adjacent `.CyberNote-rollback-*`
-bundle using the retained `pending.json` transaction; this is not a filesystem
-atomic exchange. The helper's success means the new host reached readiness,
-not a device/content-sync acceptance result.
+and staged native hashes, renames the old bundle to its unique adjacent backup,
+and moves the candidate into place. A stage rename failure **before attempting
+launch** may restore/reopen the old bundle. Once the opener has been attempted,
+its error or a missing ACK does not prove that a new process stopped: the helper
+never automatically rolls back or starts an old host. It records
+`recovery_required`, retains candidate/backup/transaction/report, and tells the
+user to safely stop the application before manual restoration. A late ACK does
+not change this terminal state; acknowledge_launch refuses it. No guessed PID
+is killed, and a second host is never opened by this failure path. A valid ready
+ACK within the wait records complete. The backup, receipt and log remain;
+there is no recursive deletion after handoff or privilege escalation. Power
+loss/SIGKILL between directory renames also requires recovery from the retained
+`.CyberNote-rollback-*`/pending.json; this is not an atomic filesystem exchange.
+Helper success only means host readiness, not content-sync/device acceptance.
 
 Android currently supports real bounded download, package SHA/receipt matching
 and ZIP header validation **only**. Actions publishes an unsigned APK; no system
@@ -201,8 +239,10 @@ magpie's ed25519, Sigstore, same-team or notarization claims.
 Run from the assigned checkout:
 
 ```sh
-python3 scripts/verification/settings121-update/verify.py --commands
+python3 scripts/verification/settings121-update/verify.py --commands --identity-fixtures
 python3 scripts/verification/settings121-update/replace-proof.py
+python3 scripts/verification/settings121-update/helper-blocking-proof.py
+node scripts/verification/settings121-update/ui-blocking-proof.mjs
 pnpm typecheck
 pnpm version:check
 git diff --check
@@ -228,3 +268,34 @@ These checks establish module/fixture behavior. They do not establish the final
 host's two-handler registration, real quit barriers, a running application
 replacement/relaunch, macOS WebKit, Android WebView/device installation, or sync
 acceptance. The integration worker must finish those boundaries before release.
+
+## Blocking-fix handoff (U1–U5 and D5 native identity)
+
+The frozen review input is cfde38103f71d0dd1fdf3e60a5c720a63abb2461;
+its independent review is docs/plan/reviews/settings121-update.md. The fix keeps
+that document unchanged. `native-blocking-proof.py` runs actual frozen/current
+source mirrors and demonstrates the same U1 central-size/ZIP64 and U3 native
+admission assertions fail on the old source and pass on the fix.
+`helper-blocking-proof.py` demonstrates the old host-reopen failure with a live
+replacement child, then verifies no-ACK/opener-error/late-ACK retention and valid
+ACK completion; every synthetic child is terminated and waited. The current
+helper intentionally has no unsafe automatic post-launch rollback.
+`ui-blocking-proof.mjs` loads frozen/current React code and controlled clients:
+old configure retry invokes check and old controls measure30×18/no label; fixed
+retry retains the original patch even with stale download/install retry state,
+and switches measure44×44 with labels, edge/disabled/keyboard behavior.
+
+D5 adds no build.rs change: the integration owner supplies
+CYBERNOTE_RELEASE_VERSION. The identity fixtures compile the actual helper with
+unset/empty/preview env, verify conservative fallback versus preview upgrade,
+reject same/older tags and mismatched installed core. Optional receipt full-tag
+checks are exercised in both top-level and buildInfo locations, including
+mismatch, malformed, null and legacy omission. Confucius should include these
+small D5 native changes in the U1–U5 fix review; they do not replace the release
+metadata worker's build-time/publication tests.
+
+All checks remain module/harness evidence. No actual release ZIP/bundle is
+installed, no installed application is replaced, no user service or account is
+contacted, and no full Tauri/sidecar build is performed. Real bundle support
+(including any AppleDouble/resource-fork expectations), all-window quit lease,
+readiness timing and package/platform acceptance still need integration proof.

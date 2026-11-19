@@ -58,3 +58,17 @@ injected client is never imported by this production module. Native tests use
 real loopback HTTP/downloads; browser fixtures establish React presentation and
 interaction only. Final Preferences/header placement, macOS WebKit and Android
 WebView/device evidence belong to integration.
+
+
+Failed actions retain their actual operation identity in the Provider. In
+particular configure failure owns a copy of its patch; Retry replays that patch,
+independent of a stale native download/install retry field. A polling/check
+success is not used as a substitute for retrying configuration. Action errors
+have priority over stale native errors. External-file CAS failures may continue
+to reject: the user must reopen/reload the application before reapplying, rather
+than silently overwriting intervening preferences.
+
+Switch inputs and associated labels have real 44×44px hit areas, retaining a
+30×18 visual track; edge clicks, disabled states, label association and keyboard
+focus are covered by the blocking regression fixture. Native recovery_required
+retains both bundles; no missing-ready failure claims safe automatic rollback.

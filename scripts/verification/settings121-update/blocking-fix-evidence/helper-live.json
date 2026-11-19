@@ -1,0 +1,50 @@
+{
+  "baselineUnsafeBehavior": {
+    "case": "no_ack",
+    "phase": "rolled_back",
+    "oldReopened": true,
+    "target": "old",
+    "backupRetained": false,
+    "liveProcess": true,
+    "exit": 1
+  },
+  "fixed": [
+    {
+      "case": "no_ack",
+      "phase": "recovery_required",
+      "oldReopened": false,
+      "target": "new",
+      "backupRetained": true,
+      "liveProcess": true,
+      "exit": 1
+    },
+    {
+      "case": "open_error_live",
+      "phase": "recovery_required",
+      "oldReopened": false,
+      "target": "new",
+      "backupRetained": true,
+      "liveProcess": true,
+      "exit": 1
+    },
+    {
+      "case": "late_ack",
+      "phase": "recovery_required",
+      "oldReopened": false,
+      "target": "new",
+      "backupRetained": true,
+      "liveProcess": true,
+      "exit": 1
+    },
+    {
+      "case": "success",
+      "phase": "complete",
+      "oldReopened": false,
+      "target": "new",
+      "backupRetained": true,
+      "liveProcess": true,
+      "exit": 0
+    }
+  ],
+  "children": "All test-owned subprocesses terminated and waited; no user application or library touched."
+}

@@ -22,6 +22,9 @@ export const busyPhases = new Set([
   "awaiting_confirmation",
   "restarting",
 ]);
+type RetryAction =
+  | { type: "check" | "download" | "install" }
+  | { type: "configure"; patch: Partial<UpdatePreferences> };
 type UpdateContext = {
   status: UpdateStatus | null;
   error: string | null;
@@ -30,6 +33,7 @@ type UpdateContext = {
   download(): Promise<void>;
   install(): Promise<void>;
   configure(patch: Partial<UpdatePreferences>): Promise<void>;
+  retry(): Promise<void>;
 };
 const Context = createContext<UpdateContext | null>(null);
 /** One provider at the main-window root, outside conditional Preferences mounting.
@@ -45,6 +49,7 @@ export function SoftwareUpdateProvider({
   const [status, setStatus] = useState<UpdateStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [failedAction, setFailedAction] = useState<RetryAction | null>(null);
   const life = useRef(0);
   const sequence = useRef(0);
   const action = useRef<number | null>(null);
@@ -58,6 +63,7 @@ export function SoftwareUpdateProvider({
     setPending(false);
     setStatus(null);
     setError(null);
+    setFailedAction(null);
     errorSource.current = null;
     let timer: ReturnType<typeof setTimeout>;
     async function poll() {
@@ -96,7 +102,16 @@ export function SoftwareUpdateProvider({
     };
   }, [client]);
   const run = useCallback(
-    async (operation: () => Promise<UpdateStatus>) => {
+    async (intent: RetryAction) => {
+      // Own the exact attempted patch, independent of native status.retry or a caller mutation.
+      const attempted: RetryAction =
+        intent.type === "configure"
+          ? { type: "configure", patch: { ...intent.patch } }
+          : { ...intent };
+      const operation = () =>
+        attempted.type === "configure"
+          ? client.configure(attempted.patch)
+          : client[attempted.type]();
       if (action.current !== null) return;
       const generation = life.current;
       const request = ++sequence.current;
@@ -109,11 +124,13 @@ export function SoftwareUpdateProvider({
         if (life.current === generation && request === sequence.current) {
           ++sequence.current;
           setStatus(next);
+          setFailedAction(null);
         }
       } catch (err) {
         if (life.current === generation && request === sequence.current) {
           ++sequence.current;
           errorSource.current = "action";
+          setFailedAction(attempted);
           setError(String(err));
           try {
             const next = await client.status();
@@ -164,12 +181,23 @@ export function SoftwareUpdateProvider({
       status,
       error,
       busy: pending || busyPhases.has(status?.phase ?? ""),
-      check: () => run(() => client.check()),
-      download: () => run(() => client.download()),
-      install: () => run(() => client.install()),
-      configure: (patch) => run(() => client.configure(patch)),
+      check: () => run({ type: "check" }),
+      download: () => run({ type: "download" }),
+      install: () => run({ type: "install" }),
+      configure: (patch) => run({ type: "configure", patch }),
+      retry: () =>
+        run(
+          failedAction ?? {
+            type:
+              status?.retry === "download"
+                ? "download"
+                : status?.retry === "install"
+                  ? "install"
+                  : "check",
+          },
+        ),
     }),
-    [client, run, status, error, pending],
+    [run, status, error, pending, failedAction],
   );
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }

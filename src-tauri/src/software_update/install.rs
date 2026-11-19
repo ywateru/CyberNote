@@ -37,7 +37,7 @@ pub fn capability(t: &Target) -> (String, String) {
         return ("unsupported".into(), "当前发布没有此架构的安装包".into());
     }
     match t.platform.as_str() {
-        "macos"=>("replace_restart".into(),"ad-hoc 签名，未公证；校验并确认后替换，保留旧包，启动失败自动回滚。保存或录音未结束时不能退出。".into()),
+        "macos"=>("replace_restart".into(),"ad-hoc 签名，未公证；校验并确认后替换，保留旧包，启动未确认时保留事务与备份，不自动回滚或重开；请先安全退出再恢复。保存或录音未结束时不能退出。".into()),
         "android"=>("download_only".into(),"Actions 发布 APK 未签名，Android 系统安装器不能安装。可下载并校验；需要发布者提供兼容签名的 APK，不能绕过系统签名检查。".into()),
         _=>("unsupported".into(),"当前发布不支持此平台".into()),
     }
@@ -83,7 +83,19 @@ pub fn acknowledge(dir: &Path) -> Result<Option<String>, String> {
         Ok(None)
     }
 }
-pub(crate) fn report(dir: &Path) -> Result<Option<(String, bool)>, String> {
+pub(crate) struct InstallReport {
+    pub message: String,
+    pub failed: bool,
+    pub release_lease: bool,
+    pub identity: String,
+}
+pub(crate) fn pending_identity(dir: &Path) -> Result<String, String> {
+    use sha2::{Digest, Sha256};
+    let bytes =
+        storage::read(&dir.join("pending.json"))?.ok_or("pending_install_requires_recovery")?;
+    Ok(format!("{:x}", Sha256::digest(bytes)))
+}
+pub(crate) fn report(dir: &Path) -> Result<Option<InstallReport>, String> {
     #[cfg(target_os = "macos")]
     {
         mac::report(dir)
@@ -101,7 +113,7 @@ pub const REPLACE_SCRIPT: &str = include_str!("replace.sh");
 #[cfg(target_os = "macos")]
 mod mac {
     use super::super::{
-        archive::validate_zip, feed::IDENTITY, service::hash_file, version::Version,
+        archive::extract_verified, feed::IDENTITY, service::hash_file, version::Version,
     };
     use super::*;
     use serde::{Deserialize, Serialize};
@@ -277,15 +289,11 @@ mod mac {
             return Err("checksum_mismatch".into());
         }
         v.receipt.validate(&v.release, &v.hash)?;
-        validate_zip(&v.path)?;
         let target = bundle()?;
-        let live_version = Version::parse(&field(&target, "CFBundleShortVersionString")?)?;
-        // Preview tags share the stable package core in today's release pipeline.
-        if live_version.core != Version::parse(env!("CARGO_PKG_VERSION"))?.core
-            || Version::parse(&v.release.version)? <= Version::parse(env!("CARGO_PKG_VERSION"))?
-        {
-            return Err("downgrade_or_running_version_mismatch".into());
-        }
+        super::super::version::validate_install_version(
+            &v.release.version,
+            &field(&target, "CFBundleShortVersionString")?,
+        )?;
         let executable = field(&target, "CFBundleExecutable")?;
         if executable.is_empty()
             || Path::new(&executable)
@@ -310,15 +318,7 @@ mod mac {
             dir: dir.to_path_buf(),
             handed_off: false,
         };
-        run(
-            "/usr/bin/ditto",
-            &[
-                "-x".as_ref(),
-                "-k".as_ref(),
-                v.path.as_os_str(),
-                p.work.as_os_str(),
-            ],
-        )?;
+        extract_verified(&v.path, &v.hash, &p.work)?;
         walk(&p.work)?;
         validate_bundle(&p.stage, &v.release, &v.receipt, Some(&p.executable))?;
         // This checks integrity, never Developer ID/team equivalence/notarization.
@@ -423,9 +423,9 @@ mod mac {
         } else {
             return Err("pending_install_requires_recovery".into());
         }
-        Ok(report.map(|(message, _)| message))
+        Ok(report.map(|r| r.message))
     }
-    pub(super) fn report(dir: &Path) -> Result<Option<(String, bool)>, String> {
+    pub(super) fn report(dir: &Path) -> Result<Option<InstallReport>, String> {
         let Some(bytes) = storage::read(&dir.join("pending.json"))? else {
             return Ok(None);
         };
@@ -456,6 +456,10 @@ mod mac {
                 "自动恢复失败，旧包仍保留在 {}，请手动恢复。",
                 p.backup.display()
             ),
+            b"recovery_required\n" => format!(
+                "新版本尚未确认就绪，无法确认其进程已停止；未自动回滚或再次启动。新包及旧包备份 {} 已保留，请先安全退出应用再人工恢复。",
+                p.backup.display()
+            ),
             b"cancelled\n" => "退出被取消或超时，应用未替换。".to_string(),
             b"unchanged\n" => "安装条件发生变化，应用未替换。".to_string(),
             b"" => "安装事务已暂存，等待用户确认。".to_string(),
@@ -463,9 +467,23 @@ mod mac {
         };
         let failed = matches!(
             phase.as_slice(),
-            b"rolled_back\n" | b"rollback_failed\n" | b"cancelled\n" | b"unchanged\n"
+            b"rolled_back\n"
+                | b"rollback_failed\n"
+                | b"recovery_required\n"
+                | b"cancelled\n"
+                | b"unchanged\n"
         );
-        Ok(Some((message, failed)))
+        use sha2::{Digest, Sha256};
+        let release_lease = matches!(
+            phase.as_slice(),
+            b"complete\n" | b"rolled_back\n" | b"cancelled\n" | b"unchanged\n"
+        );
+        Ok(Some(InstallReport {
+            message,
+            failed,
+            release_lease,
+            identity: format!("{:x}", Sha256::digest(&bytes)),
+        }))
     }
     #[cfg(test)]
     mod tests {
@@ -494,10 +512,11 @@ mod mac {
                 ("complete\n", false),
                 ("rolled_back\n", true),
                 ("rollback_failed\n", true),
+                ("recovery_required\n", true),
                 ("cancelled\n", true),
             ] {
                 fs::write(work.join("phase"), phase).unwrap();
-                assert_eq!(report(d.path()).unwrap().unwrap().1, failed);
+                assert_eq!(report(d.path()).unwrap().unwrap().failed, failed);
             }
             fs::write(work.join("phase"), "unknown").unwrap();
             assert!(report(d.path()).is_err());
@@ -555,6 +574,7 @@ mod mac {
                 package: r.package.clone(),
                 package_sha256: "a".repeat(64),
                 native_binary_sha256: hash_file(&native).unwrap(),
+                release_version: None,
                 build_info: serde_json::json!({"version":"0.2.0","mode":"production"}),
             };
             validate_bundle(&app, &r, &receipt, Some("fixture")).unwrap();

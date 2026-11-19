@@ -627,6 +627,7 @@ fn android_selection_requires_exact_unsigned_payload_and_receipt_identity() {
         package: r.package.clone(),
         package_sha256: hash.clone(),
         native_binary_sha256: "b".repeat(64),
+        release_version: None,
         build_info: serde_json::json!({"version":"0.2.0","mode":"production"}),
     };
     receipt.validate(&r, &hash).unwrap();
@@ -699,7 +700,10 @@ fn asynchronous_exit_barrier_is_retained_until_helper_cancels() {
     let p = serde_json::json!({"target":base.join("CyberNote.app"),"backup":base.join("old.app"),"executable":"fixture","native_hash":"a".repeat(64),"ack":work.join("ack"),"work":work});
     fs::write(base.join("pending.json"), serde_json::to_vec(&p).unwrap()).unwrap();
     let released = Arc::new(AtomicBool::new(false));
-    *u.install_lease.lock().unwrap() = Some(Box::new(Lease(released.clone())));
+    *u.install_lease.lock().unwrap() = Some(HeldInstall {
+        _lease: Box::new(Lease(released.clone())),
+        transaction: install::pending_identity(&u.dir).unwrap(),
+    });
     u.inner.lock().unwrap().status.phase = "restarting".into();
     fs::write(work.join("phase"), b"waiting_exit\n").unwrap();
     assert_eq!(u.status().phase, "restarting");
@@ -708,4 +712,182 @@ fn asynchronous_exit_barrier_is_retained_until_helper_cancels() {
     assert_eq!(u.status().phase, "error");
     assert!(released.load(Ordering::SeqCst));
     assert!(u.install_lease.lock().unwrap().is_none());
+}
+
+#[cfg(target_os = "macos")]
+fn held_install_fixture() -> (
+    tempfile::TempDir,
+    Arc<SoftwareUpdater>,
+    PathBuf,
+    Arc<AtomicUsize>,
+) {
+    struct Lease(Arc<AtomicUsize>);
+    impl InstallLease for Lease {
+        fn exit(&mut self) -> Result<(), String> {
+            Ok(())
+        }
+    }
+    impl Drop for Lease {
+        fn drop(&mut self) {
+            self.0.fetch_add(1, Ordering::SeqCst);
+        }
+    }
+    let tmp = tempfile::tempdir().unwrap();
+    let base = fs::canonicalize(tmp.path()).unwrap();
+    let updater = SoftwareUpdater::create(
+        base.clone(),
+        Arc::new(DenyInstall),
+        Network::production().unwrap(),
+        mac(),
+        "0.1.0".into(),
+    )
+    .unwrap();
+    let work = base.join(format!(".CyberNote-update-{}", uuid::Uuid::new_v4()));
+    fs::create_dir(&work).unwrap();
+    let pending = serde_json::json!({"target":base.join("CyberNote.app"),"backup":base.join("old.app"),"executable":"fixture","native_hash":"a".repeat(64),"ack":work.join("ack"),"work":work});
+    fs::write(
+        base.join("pending.json"),
+        serde_json::to_vec(&pending).unwrap(),
+    )
+    .unwrap();
+    let drops = Arc::new(AtomicUsize::new(0));
+    *updater.install_lease.lock().unwrap() = Some(HeldInstall {
+        _lease: Box::new(Lease(drops.clone())),
+        transaction: install::pending_identity(&base).unwrap(),
+    });
+    fs::write(work.join("phase"), "waiting_exit\n").unwrap();
+    (tmp, updater, work, drops)
+}
+#[cfg(target_os = "macos")]
+#[tokio::test]
+async fn held_install_blocks_every_native_operation_despite_display_phase_and_releases_once() {
+    let (_tmp, u, work, drops) = held_install_fixture();
+    // The old negative changed the display phase to idle through configure.
+    u.inner.lock().unwrap().status.phase = "idle".into();
+    assert_eq!(
+        u.configure(PreferencePatch {
+            channel: Some(Channel::Preview),
+            ..Default::default()
+        })
+        .unwrap_err(),
+        "update_busy"
+    );
+    assert_eq!(u.check().await.unwrap_err(), "update_busy");
+    assert_eq!(u.download().await.unwrap_err(), "update_busy");
+    assert_eq!(u.install().await.unwrap_err(), "update_busy");
+    assert_eq!(u.status().preferences.channel, Channel::Stable);
+    assert_eq!(u.status().phase, "restarting");
+    assert_eq!(drops.load(Ordering::SeqCst), 0);
+    fs::write(work.join("phase"), "cancelled\n").unwrap();
+    let mut readers = vec![];
+    for _ in 0..8 {
+        let u = u.clone();
+        readers.push(thread::spawn(move || u.status()));
+    }
+    for reader in readers {
+        let s = reader.join().unwrap();
+        assert_eq!(s.phase, "error");
+        assert_eq!(s.error.as_deref(), Some("installation_failed_or_cancelled"));
+        assert!(s.install_report.unwrap().contains("取消"));
+    }
+    assert_eq!(drops.load(Ordering::SeqCst), 1);
+    assert!(u.install_lease.lock().unwrap().is_none());
+    assert_eq!(u.inner.lock().unwrap().status.phase, "error");
+    u.configure(PreferencePatch {
+        channel: Some(Channel::Preview),
+        ..Default::default()
+    })
+    .unwrap();
+    assert_eq!(u.status().preferences.channel, Channel::Preview);
+}
+#[cfg(target_os = "macos")]
+#[test]
+fn mismatched_or_unreadable_transaction_never_releases_someone_elses_lease() {
+    let (tmp, u, work, drops) = held_install_fixture();
+    let pending = tmp.path().join("pending.json");
+    let original = fs::read(&pending).unwrap();
+    let mut changed: serde_json::Value = serde_json::from_slice(&original).unwrap();
+    changed["native_hash"] = serde_json::json!("b".repeat(64));
+    fs::write(&pending, serde_json::to_vec(&changed).unwrap()).unwrap();
+    fs::write(work.join("phase"), "cancelled\n").unwrap();
+    assert_eq!(u.status().phase, "error");
+    assert_eq!(drops.load(Ordering::SeqCst), 0);
+    assert_eq!(
+        u.configure(PreferencePatch::default()).unwrap_err(),
+        "update_busy"
+    );
+    fs::write(&pending, b"{corrupt").unwrap();
+    assert!(u.status().error.unwrap().contains("recovery"));
+    assert_eq!(drops.load(Ordering::SeqCst), 0);
+    fs::write(pending, original).unwrap();
+    assert_eq!(u.status().phase, "error");
+    assert_eq!(drops.load(Ordering::SeqCst), 1);
+}
+
+#[test]
+fn receipt_optional_full_release_identity_binds_both_locations_and_preserves_legacy() {
+    let r = feed::select(
+        vec![release("v0.2.0-preview.2", true)],
+        "0.1.0",
+        true,
+        &mac(),
+    )
+    .unwrap()
+    .unwrap();
+    let hash = "a".repeat(64);
+    let base = serde_json::json!({"schema":1,"platform":"macos","architecture":"arm64","package":r.package,"packageSha256":hash,"nativeBinarySha256":"b".repeat(64),"buildInfo":{"version":"0.2.0","mode":"production"}});
+    serde_json::from_value::<Receipt>(base.clone())
+        .unwrap()
+        .validate(&r, &hash)
+        .unwrap();
+    for nested in [false, true] {
+        for (value, valid) in [
+            (serde_json::json!("0.2.0-preview.2"), true),
+            (serde_json::json!("v0.2.0-preview.2"), true),
+            (serde_json::json!("0.2.0-preview.1"), false),
+            (serde_json::json!("0.2.0"), false),
+            (serde_json::json!(""), false),
+            (serde_json::Value::Null, false),
+            (serde_json::json!(42), false),
+        ] {
+            let mut receipt = base.clone();
+            if nested {
+                receipt["buildInfo"]["releaseVersion"] = value;
+            } else {
+                receipt["releaseVersion"] = value;
+            }
+            let checked = serde_json::from_value::<Receipt>(receipt)
+                .map_err(|_| "decode".to_string())
+                .and_then(|receipt| receipt.validate(&r, &hash));
+            assert_eq!(checked.is_ok(), valid);
+        }
+    }
+    let mut inconsistent = base;
+    inconsistent["releaseVersion"] = serde_json::json!("0.2.0-preview.2");
+    inconsistent["buildInfo"]["releaseVersion"] = serde_json::json!("0.2.0-preview.1");
+    assert!(serde_json::from_value::<Receipt>(inconsistent)
+        .unwrap()
+        .validate(&r, &hash)
+        .is_err());
+}
+
+#[cfg(target_os = "macos")]
+#[test]
+fn uncertain_new_host_keeps_lease_and_explicit_recovery_report() {
+    let (_tmp, u, work, drops) = held_install_fixture();
+    fs::write(work.join("phase"), "recovery_required\n").unwrap();
+    let status = u.status();
+    assert_eq!(status.phase, "error");
+    assert_eq!(
+        status.error.as_deref(),
+        Some("pending_install_requires_recovery")
+    );
+    assert!(status.retry.is_none());
+    let report = status.install_report.unwrap();
+    assert!(report.contains("未自动回滚或再次启动"));
+    assert_eq!(drops.load(Ordering::SeqCst), 0);
+    assert_eq!(
+        u.configure(PreferencePatch::default()).unwrap_err(),
+        "update_busy"
+    );
 }

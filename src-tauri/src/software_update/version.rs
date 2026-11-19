@@ -1,3 +1,17 @@
+/// Build-provided full publication identity; unknown/old builds remain conservative.
+pub(crate) fn current_version() -> &'static str {
+    option_env!("CYBERNOTE_RELEASE_VERSION")
+        .filter(|v| !v.is_empty())
+        .unwrap_or(env!("CARGO_PKG_VERSION"))
+}
+pub(crate) fn validate_install_version(candidate: &str, live_core: &str) -> Result<(), String> {
+    let installed = Version::parse(current_version())?;
+    if Version::parse(live_core)?.core != installed.core || Version::parse(candidate)? <= installed
+    {
+        return Err("downgrade_or_running_version_mismatch".into());
+    }
+    Ok(())
+}
 use std::cmp::Ordering;
 
 /// SemVer 2 precedence; build metadata never affects upgrade ordering.

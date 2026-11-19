@@ -48,17 +48,29 @@ const base: UpdateStatus = {
   installReason:
     mode === "android"
       ? "Actions 发布 APK 未签名，Android 系统安装器不能安装。需要兼容签名的 APK，不绕过系统签名检查。"
-      : "ad-hoc 签名，未公证；确认后替换并重启，保留旧包，启动失败自动回滚。",
+      : "ad-hoc 签名，未公证；确认后替换并重启，保留旧包，启动未确认时保留旧包及记录，需安全退出后恢复。",
 };
 let state = structuredClone(base);
 const calls: string[] = [];
 Object.assign(window, { fixtureCalls: calls });
 const clone = () => structuredClone(state);
 let attempts = 0;
+let configureAttempts = 0;
 const client: SoftwareUpdateClient = {
   status: async () => clone(),
   configure: async (patch) => {
     calls.push(`configure:${JSON.stringify(patch)}`);
+    if (mode.startsWith("configure-error") && configureAttempts++ === 0) {
+      state.retry = mode.endsWith("download")
+        ? "download"
+        : mode.endsWith("install")
+          ? "install"
+          : null;
+      state.error = state.retry ? "checksum_mismatch" : null;
+      throw Error("preferences_changed_externally");
+    }
+    state.error = null;
+    state.retry = null;
     state.preferences = { ...state.preferences, ...patch };
     return clone();
   },

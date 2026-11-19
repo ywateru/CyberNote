@@ -161,10 +161,33 @@ pub struct Receipt {
     pub package_sha256: String,
     pub native_binary_sha256: String,
     pub build_info: serde_json::Value,
+    #[serde(default, deserialize_with = "optional_release_identity")]
+    pub release_version: Option<String>,
+}
+fn optional_release_identity<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> Result<Option<String>, D::Error> {
+    String::deserialize(deserializer).map(Some)
+}
+fn matches_release_identity(value: &str, candidate: &str) -> bool {
+    Version::parse(value).is_ok()
+        && value.strip_prefix('v').unwrap_or(value)
+            == candidate.strip_prefix('v').unwrap_or(candidate)
 }
 impl Receipt {
     pub fn validate(&self, r: &Release, hash: &str) -> Result<(), String> {
         let version = Version::parse(&r.version)?.package_version();
+        if self
+            .release_version
+            .as_ref()
+            .is_some_and(|v| !matches_release_identity(v, &r.version))
+            || self.build_info.get("releaseVersion").is_some_and(|v| {
+                v.as_str()
+                    .is_none_or(|s| !matches_release_identity(s, &r.version))
+            })
+        {
+            return Err("package_release_identity_mismatch".into());
+        }
         if self.schema != 1
             || self.platform != r.platform
             || self.architecture != r.architecture
