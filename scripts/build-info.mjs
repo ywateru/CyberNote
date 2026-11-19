@@ -22,12 +22,21 @@ const generatedDirectories = new Set([
 // directories named `generated`: MainActivity and handwritten plugins are inputs.
 const pluginAndroidOutput = /^plugins\/[^/]+\/android\/\.tauri$/;
 const roots = ['src', 'public', 'plugins', 'src-tauri', 'crates', 'vendor', 'index.html', 'package.json', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'patches', 'tsconfig.json', 'vite.config.ts', 'scripts/android.mjs', 'scripts/bundle-mcp.mjs', 'scripts/build-info.mjs', 'scripts/versions.mjs', 'scripts/release.mjs', 'scripts/native', 'scripts/publish/stage-packages.py'];
+function excludedProductPath(name) {
+  const generated = generatedFiles.has(name) ||
+    [...generatedDirectories].some(directory => name === directory || name.startsWith(directory + '/'));
+  return generated || pluginAndroidOutput.test(name) ||
+    excluded.has(name.split('/').at(-1)) || /\.(log|tsbuildinfo)$/.test(name);
+}
+function isProductPath(name) {
+  const normalized = name.split('\\').join('/');
+  return roots.some(entry => normalized === entry || normalized.startsWith(entry + '/')) && !excludedProductPath(normalized);
+}
 export function productFiles(root = projectRoot) {
   const files = [];
   const walk = (path) => {
     const name = relative(root, path).split('\\').join('/');
-    if (generatedFiles.has(name) || generatedDirectories.has(name) || pluginAndroidOutput.test(name)) return;
-    if (excluded.has(name.split('/').at(-1)) || /\.(log|tsbuildinfo)$/.test(name)) return;
+    if (excludedProductPath(name)) return;
     const stat = statSync(path, { throwIfNoEntry: false });
     if (!stat) return;
     if (stat.isDirectory()) for (const child of readdirSync(path).sort()) walk(join(path, child));
@@ -117,7 +126,14 @@ function checkoutIsDirty(root) {
   // whitespace/newline filenames cannot forge another entry's status letter.
   const entries = checkoutGit(root, ['ls-files', '-v', '-z']).split('\0');
   const hidden = entries.some(entry => /^[a-zS] /.test(entry));
-  const modified = !!checkoutGit(root, ['status', '--porcelain', '--untracked-files=normal']);
+  // Build tools create ignored/generated files before the native release build.
+  // Only product inputs determine source dirtiness; package caches, Gradle
+  // outputs and documentation changes cannot rewrite release identity.
+  const changed = [
+    ...checkoutGit(root, ['diff', '--name-only', '-z', 'HEAD', '--']).split('\0'),
+    ...checkoutGit(root, ['ls-files', '--others', '--exclude-standard', '-z']).split('\0'),
+  ].filter(Boolean);
+  const modified = changed.some(isProductPath);
   return hidden || modified;
 }
 export function resolveReleaseVersion(root = projectRoot, { development = false, environment = process.env } = {}) {
