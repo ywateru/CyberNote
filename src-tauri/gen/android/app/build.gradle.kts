@@ -22,12 +22,20 @@ val cyberNoteVersionCode = cyberNoteParts[0] * 1_000_000 + cyberNoteParts[1] * 1
 require(cyberNoteParts[1] < 1000 && cyberNoteParts[2] < 1000 && cyberNoteVersionCode > 0) { "Version cannot be encoded as an Android versionCode" }
 require(tauriProperties.getProperty("tauri.android.versionName", cyberNoteVersion) == cyberNoteVersion) { "Tauri Android version differs from package.json" }
 
+val cyberNoteApplicationId =
+  System.getenv("CYBERNOTE_ANDROID_APPLICATION_ID")
+    ?.takeIf { it.isNotBlank() }
+    ?: "com.local.notesclone.cyberbusqa"
+require(cyberNoteApplicationId in setOf("com.local.notesclone", "com.local.notesclone.cyberbusqa")) {
+  "Unsupported CyberNote Android application ID"
+}
+
 android {
     compileSdk = 36
     namespace = "com.local.notesclone"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "false"
-        applicationId = "com.local.notesclone.cyberbusqa"
+        applicationId = cyberNoteApplicationId
         minSdk = 26
         targetSdk = 36
         versionCode = cyberNoteVersionCode
