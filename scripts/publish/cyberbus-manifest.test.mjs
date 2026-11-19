@@ -75,10 +75,8 @@ test('reviewed vendor, auth pins and actual SDK lock sources fail closed on chan
   ]) {const tree=fixture();mutate(tree);assert.throws(()=>finalizeCyberbusManifest(tree));}
 });
 
-test('account-auth type and cancellation dependency alone is compatible; no ownership inference',()=>{
+test('legacy account-auth dependency is rejected after the CyberBus ownership migration',()=>{
   const tree=fixture();
   tree.files.set('src-tauri/Cargo.toml',Buffer.from(tree.read('src-tauri/Cargo.toml').toString()+'\naccount-auth = {path="../crates/account-auth"}'));
-  tree.files.set('src-tauri/src/account/mod.rs',Buffer.from('// fixture types only\nuse account_auth::{Identity, AuthorizationCancellation};'));
-  const result=finalizeCyberbusManifest(tree);
-  assert(result.changes.includes('src-tauri/src/account/mod.rs'));
+  assert.throws(()=>finalizeCyberbusManifest(tree),/without legacy CyberGrid or account-auth/);
 });

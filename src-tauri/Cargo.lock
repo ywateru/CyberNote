@@ -3,23 +3,6 @@
 version = 4
 
 [[package]]
-name = "account-auth"
-version = "0.1.0"
-dependencies = [
- "fs2",
- "libc",
- "oauth2",
- "openidconnect",
- "reqwest 0.12.28",
- "serde",
- "serde_json",
- "subtle",
- "tokio",
- "url",
- "zeroize",
-]
-
-[[package]]
 name = "adler2"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4416,7 +4399,6 @@ dependencies = [
 name = "notes-clone"
 version = "0.1.0"
 dependencies = [
- "account-auth",
  "aes-gcm",
  "argon2",
  "base64 0.22.1",
@@ -4614,7 +4596,6 @@ dependencies = [
  "getrandom 0.2.17",
  "http",
  "rand 0.8.8",
- "reqwest 0.12.28",
  "serde",
  "serde_json",
  "serde_path_to_error",

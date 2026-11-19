@@ -5,7 +5,7 @@ import { refreshManifest } from './manifest.mjs';
 
 const control = 'scripts/publish/manifest.json';
 const rights = 'scripts/publish/LICENSE.project-reserved.txt';
-const root = 'vendor/cybergrid-sdk', provider = root + '/provider-assets';
+const root = 'vendor/fixture-sdk', provider = root + '/provider-assets';
 const binary = provider + '/darwin-arm64/fixture-tool';
 const sourcePath = provider + '/manifest.json';
 const license = provider + '/LICENSE';
@@ -37,8 +37,8 @@ function runtimeCandidate() {
 }
 
 test('project-authored crates require exact first-party roots and reserved project rights, never vendor reclassification', () => {
-  const c = candidate(); c.add('crates/account-auth/src/lib.rs', '// project code');
-  const declaration = { root: 'crates/account-auth', provenance: 'project-authored', rights: 'reserved', rightsSource: rights };
+  const c = candidate(); c.add('crates/fixture-auth/src/lib.rs', '// project code');
+  const declaration = { root: 'crates/fixture-auth', provenance: 'project-authored', rights: 'reserved', rightsSource: rights };
   assert.throws(() => readInventory(c.manifest, c.read), /explicit ownership/);
   c.manifest.firstParty.push(declaration);
   assert.doesNotThrow(() => readInventory(c.manifest, c.read));
@@ -104,14 +104,14 @@ test('runtime exception binds actual bytes, path, source metadata and retained l
 
 test('reviewed extension admits ownership and runtime declarations atomically; refresh cannot repin changed binary bytes', () => {
   const all = runtimeCandidate();
-  all.add('crates/account-auth/src/lib.rs', '// owned auth');
+  all.add('crates/fixture-auth/src/lib.rs', '// owned auth');
   const base = candidate();
   const extension = { files: {}, thirdParty: all.manifest.thirdParty, runtimeAssets: all.manifest.runtimeAssets,
-    firstParty: [{ root: 'crates/account-auth', provenance: 'project-authored', rights: 'reserved', rightsSource: rights }] };
+    firstParty: [{ root: 'crates/fixture-auth', provenance: 'project-authored', rights: 'reserved', rightsSource: rights }] };
   for (const [path, hash] of Object.entries(all.manifest.files)) if (!(path in base.manifest.files)) extension.files[path] = hash;
   const tree = { read: path => path === control ? Buffer.from(JSON.stringify(base.manifest)) : all.read(path) };
   const result = refreshManifest(tree, extension);
-  assert.equal(result.manifest.firstParty[0].root, 'crates/account-auth');
+  assert.equal(result.manifest.firstParty[0].root, 'crates/fixture-auth');
   assert.equal(result.manifest.runtimeAssets[0].path, binary);
   assert.equal(result.changes.length, Object.keys(extension.files).length);
   assert.throws(() => refreshManifest(tree, { ...extension, permitVendorBinaries: true }), /Unknown/);

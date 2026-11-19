@@ -4,11 +4,6 @@ Third-party rights are preserved independently of the private project's license.
 
 - Noto Sans CJK SC: `src-tauri/fonts/OFL.txt` and the adjacent font README preserve
   SIL OFL 1.1, original font metadata, source pin and attribution.
-- CyberGrid coordinator: `services/coordinator/LICENSE` and
-  `services/coordinator/notices/` preserve upstream and npm dependency notices.
-- Legacy CyberGrid Rust SDK sources (not production account dependencies): `vendor/cybergrid-sdk/LICENSE`, its root
-  `THIRD_PARTY_NOTICES.md` and `licenses/`, plus `provider-assets/` notices retain
-  the fixed upstream SDK and provider terms independently.
 - CyberBus fixed git source `359465e83bd74b571a963f3d1fdc238f50169919`:
   `scripts/publish/notices/cyberbus/` retains MIT, Apache-2.0, LGPL-3.0, GPL-3.0,
   embedded EasyTier license/provenance and distribution requirements. The combined

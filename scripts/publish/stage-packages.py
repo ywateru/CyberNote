@@ -37,7 +37,7 @@ def notice_paths(manifest):
             raise RuntimeError('Declared notice is not a retained source input')
         paths.add(name)
     for name in manifest['files']:
-        if any(word in Path(name).name.upper() for word in ['LICENSE', 'COPYING', 'NOTICE', 'OFL']) or name.startswith('services/coordinator/notices/') or name.startswith('scripts/publish/notices/cyberbus/'):
+        if any(word in Path(name).name.upper() for word in ['LICENSE', 'COPYING', 'NOTICE', 'OFL']) or name.startswith('scripts/publish/notices/cyberbus/'):
             paths.add(name)
     for name in paths:
         # Export policy permits this named directory in exact retained inputs.

@@ -52,7 +52,7 @@ export function planExport(root, ref = 'HEAD') {
   const tree = trackedTree(root, ref), manifest = JSON.parse(tree.read(manifestName));
   const files = readInventory(manifest, tree.read), modes = new Map();
   for (const name of files.keys()) modes.set(name, tree.entries.get(name).mode);
-  for (const required of ['src-tauri/fonts/OFL.txt', 'src-tauri/fonts/NotoSansCJKsc-Regular.otf', 'services/coordinator/LICENSE', 'pnpm-workspace.yaml', 'patches/prosemirror-view@1.42.9.patch']) if (!files.has(required)) throw Error(`Required license/build input missing: ${required}`);
+  for (const required of ['src-tauri/fonts/OFL.txt', 'src-tauri/fonts/NotoSansCJKsc-Regular.otf', 'pnpm-workspace.yaml', 'patches/prosemirror-view@1.42.9.patch']) if (!files.has(required)) throw Error(`Required license/build input missing: ${required}`);
   const transformed = transformPackage(files.get('package.json'));
   files.set('package.json', transformed.bytes);
   const smartTest = 'src-tauri/src/store/smart_tests.rs';

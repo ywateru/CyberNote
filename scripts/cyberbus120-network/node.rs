@@ -19,13 +19,6 @@ mod sync {
 }
 mod backend;
 
-// The current production network.rs retains one unused legacy diagnostic signature.
-// A compile-only type satisfies that signature without linking/running the old provider.
-// No transport, Backend, Store, wire or merge implementation is replaced here.
-extern crate self as cybergrid_sdk;
-#[derive(serde::Serialize)]
-pub struct DiagnosticSnapshot;
-
 use backend::Backend;
 use identity::{IdentityStore, SyncError};
 use network::{ReplicationPolicy, SyncBackend, SyncService, TransferDirection};

@@ -16,9 +16,11 @@
 
 11-17：111共享服务/窗口协调、112真实宿主/MCP/设置入口、113交互、114三主题及115呈现resolver/专注布局/移动列表均已完成模块独审与合入组合复验，实际Codex九工具→SQLite/真实窗口链通过。116已完成准确Mac/Android/MCP产物、真实Codex九工具与手工配对三端正文/13共享字段/PNG原字节一致验证。用户接手UI测试，未测项单列；命令结果与交付入口见[当前报告](verification/project-evolution/DELIVERY.md)。最新证据分层见[演进验证状态](verification/project-evolution/README.md)，不能用历史包或传输fixture替代本轮最终联调。
 
-服务器后续开发与部署从[服务总览与生产记录](server/README.md)、[配置／部署／回滚／排障手册](server/DEPLOYMENT.md)开始；[环境模板](../services/coordinator/.env.example)不含真实凭据。资料依据源码和已有回执整理，未重新查询或变更线上配置。
+旧 Vercel、Redis、CyberGrid coordinator 服务、部署手册和环境模板已随
+CyberBus 迁移移除。当前客户端账户资料入口为
+[CyberBus 迁移设计](architecture/cyberbus-migration-20261118.md)；服务端旧文档不再提供运行入口。
 
-2026-11-16：账户页已将同步开关与后台进度合入本机设备卡片，更新 CyberGrid Rust SDK 0.4.0。最新调查与修复见[SDK 接入后的同步根因](architecture/cybergrid-sdk04-integration-20261116.md)，前期建连调查见[同步连通性报告](architecture/cybergrid-sync-connectivity-20261116.md)。Mac 客户端与 Android 测试 APK 已交付；定向回归通过，最终包的完整资料库同步尚待真机验收。安装与构建回执保存在本地 `artifacts/account-sync-sdk04-20261116/rootfix-handoff.json`。
+2026-11-16 的 CyberGrid SDK 与 coordinator 架构资料已移除，仅保留在历史提交中。当前账户与传输实现使用 CyberBus，未通过项见 [CyberBus 验证状态](verification/cyberbus120/README.md)。
 
 2026-11-15 历史验收：账户页[持久设备列表与单次推送／拉取／双向同步](architecture/account-device-actions.md)已完成当轮本机双客户端验收。[当轮结果与保留失败](verification/account110/RESULT-LATEST.md)、[双客户端启动／手动指南](verification/account110/MANUAL-TESTING.md)、[测试用例](verification/account110/TEST-CASES.md)记录该版本结果。准确包为`29c87810`；原fresh-run驱动超时仍保留，独立续验及GUI核对通过。下述account109为各自时点记录。
 

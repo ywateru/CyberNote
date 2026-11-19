@@ -15,6 +15,9 @@ changing account, synchronization, native packaging, or GitHub Actions code.
   data directories, logs, stores, or packaged build artifacts. Use the active
   `gh` login or Git credential helper without copying secret values into files
   or command output.
+- CyberGrid, its Rust SDK, Vercel coordinator, `api/` wrapper, provider assets,
+  and the legacy `account-auth` crate have been removed. Do not restore them or
+  add them as compatibility dependencies.
 - Keep `main` clean and push only verified commits when the user requests a
   remote update.
 

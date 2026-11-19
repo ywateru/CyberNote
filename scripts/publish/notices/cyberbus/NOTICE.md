@@ -23,11 +23,11 @@ Some SDK manifests omit license inheritance. The combined application must not
 be described as exclusively MIT/Apache. These files do not change SDK licenses
 or supply a project-wide license grant.
 
-Source exports fetch the fixed git revision through Cargo. The old
-vendor/cybergrid-sdk and services/coordinator may remain as historical source;
-they are not production account dependencies. No cloudflared helper is bundled
-or downloaded by this integration. SDK optional cloudflared experiment/features
-must stay disabled in the application dependency graph.
+Source exports fetch the fixed git revision through Cargo. Legacy CyberGrid
+sources, coordinator deployment and helper assets are not part of the
+application source tree. No cloudflared helper is bundled or downloaded by this
+integration. SDK optional cloudflared experiment/features must stay disabled in
+the application dependency graph.
 
 Before distributing a statically linked native application, provide exact
 corresponding SDK/EasyTier/dependency sources (including modifications), dependency

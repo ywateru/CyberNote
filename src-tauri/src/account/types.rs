@@ -199,6 +199,42 @@ pub(crate) enum AuthProviderFailure {
     Storage,
     Network,
 }
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum IdentityRejection {
+    ResponseMetadata,
+    MissingIdToken,
+    Issuer,
+    Audience,
+    Expired,
+    Nonce,
+    SigningKey,
+    Signature,
+    Algorithm,
+    Subject,
+    AuthorizedParty,
+    IssuedAt,
+    AccessTokenHash,
+    OtherClaims,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum TokenOperation {
+    CodeExchange,
+    Refresh,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) enum TokenResponseField {
+    TokenType,
+    AccessToken,
+    ExpiresIn,
+    Scope,
+}
+
 #[derive(Clone, Serialize)]
 pub(crate) struct SafeError {
     #[serde(rename = "cyberbusCode", skip_serializing_if = "Option::is_none")]
@@ -210,13 +246,13 @@ pub(crate) struct SafeError {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage: Option<NetworkStage>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reason: Option<account_auth::IdentityRejection>,
+    pub reason: Option<IdentityRejection>,
     #[serde(rename = "providerReason", skip_serializing_if = "Option::is_none")]
     pub provider_reason: Option<AuthProviderFailure>,
     #[serde(rename = "tokenOperation", skip_serializing_if = "Option::is_none")]
-    pub token_operation: Option<account_auth::TokenOperation>,
+    pub token_operation: Option<TokenOperation>,
     #[serde(rename = "tokenField", skip_serializing_if = "Option::is_none")]
-    pub token_field: Option<account_auth::TokenResponseField>,
+    pub token_field: Option<TokenResponseField>,
     #[serde(rename = "requestReason", skip_serializing_if = "Option::is_none")]
     pub request_reason: Option<RequestReason>,
     #[serde(rename = "httpStatus", skip_serializing_if = "Option::is_none")]
@@ -366,11 +402,8 @@ pub(crate) enum Error {
     ProviderAuthentication(AuthProviderFailure),
     InvalidCallback,
     InvalidIdentity,
-    IdentityRejected(account_auth::IdentityRejection),
-    ResponseMetadata(
-        account_auth::TokenOperation,
-        account_auth::TokenResponseField,
-    ),
+    IdentityRejected(IdentityRejection),
+    ResponseMetadata(TokenOperation, TokenResponseField),
     CodeExchangeRejected,
     TokenResponseInvalid,
     MissingRefreshToken,
@@ -476,7 +509,7 @@ impl Error {
             reason: match self {
                 Self::IdentityRejected(reason) => Some(reason),
                 Self::ResponseMetadata(_, _) => {
-                    Some(account_auth::IdentityRejection::ResponseMetadata)
+                    Some(IdentityRejection::ResponseMetadata)
                 }
                 _ => None,
             },
@@ -510,29 +543,6 @@ impl From<std::io::Error> for Error {
 impl From<reqwest::Error> for Error {
     fn from(_: reqwest::Error) -> Self {
         Self::Network
-    }
-}
-impl From<account_auth::AuthError> for Error {
-    fn from(value: account_auth::AuthError) -> Self {
-        use account_auth::AuthError as A;
-        match value {
-            A::Configuration => Self::Configuration,
-            A::Network => Self::NetworkAt(NetworkStage::IdentityProvider),
-            A::Cancelled => Self::Cancelled,
-            A::OwnershipMismatch => Self::OwnershipMismatch,
-            A::Busy => Self::Busy,
-            A::Storage => Self::Storage,
-            A::InvalidCallback => Self::InvalidCallback,
-            A::InvalidIdentity => Self::InvalidIdentity,
-            A::IdentityRejected(reason) => Self::IdentityRejected(reason),
-            A::ResponseMetadata(operation, field) => Self::ResponseMetadata(operation, field),
-            A::CodeExchangeRejected => Self::CodeExchangeRejected,
-            A::TokenResponseInvalid => Self::TokenResponseInvalid,
-            A::MissingRefreshToken => Self::MissingRefreshToken,
-            A::NoSession => Self::AuthenticationAt(NetworkStage::IdentitySession),
-            A::RefreshFailed => Self::AuthenticationAt(NetworkStage::IdentityRefresh),
-            A::RevocationFailed => Self::AuthenticationAt(NetworkStage::IdentityRevocation),
-        }
     }
 }
 impl From<crate::store::AppError> for Error {

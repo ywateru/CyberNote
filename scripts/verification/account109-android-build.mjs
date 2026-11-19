@@ -12,22 +12,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const toolRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const sha256 = data => createHash('sha256').update(data).digest('hex');
-const pin = 'f2a3961536e5c69b13c7dbc661953d9243becbae';
 const git = (root, ...args) => execFileSync('git', ['-C', root, ...args], { encoding: 'utf8' }).trim();
 
 export async function prepareCandidate({ root = toolRoot, expectedSource, gradleHome = '/private/tmp/cybernote-account109-gradle', targetDir = '/private/tmp/cybernote-account109-target' }) {
   if (!/^[0-9a-f]{40}$/.test(expectedSource || '')) throw Error('A full exact source SHA is required');
   if (git(root, 'rev-parse', 'HEAD') !== expectedSource) throw Error('Candidate source differs from requested SHA');
   if (git(root, 'status', '--porcelain', '--untracked-files=normal')) throw Error('Candidate worktree must be clean');
-  const receipt = JSON.parse(readFileSync(path.join(root, 'docs/verification/account109/native/sdk-license-closure.json')));
-  if (receipt.sourceRevision !== pin || receipt.fileCount !== 1139 || receipt.files.length !== receipt.fileCount) {
-    throw Error('Pinned SDK license receipt is missing or unexpected');
-  }
-  for (const file of receipt.files) {
-    if (!file.destination.startsWith('vendor/cybergrid-sdk/') || file.destination.split('/').includes('..')) throw Error('Invalid license receipt path');
-    const bytes = readFileSync(path.join(root, file.destination));
-    if (bytes.length !== file.bytes || sha256(bytes) !== file.sha256) throw Error(`SDK license mismatch: ${file.destination}`);
-  }
   if (!existsSync(path.join(root, 'node_modules'))) throw Error('Prepare node_modules before building');
   if (!path.isAbsolute(targetDir) || (existsSync(targetDir) && lstatSync(targetDir).isSymbolicLink())) {
     throw Error('Candidate target must be an absolute non-symlink directory');
@@ -64,12 +54,11 @@ export async function prepareCandidate({ root = toolRoot, expectedSource, gradle
     toolCommit: git(toolRoot, 'rev-parse', 'HEAD'),
     toolSha256: sha256(readFileSync(fileURLToPath(import.meta.url))), initScriptSha256: sha256(readFileSync(init)),
     packageId: 'com.local.notesclone.account109', activity: 'com.local.notesclone.MainActivity',
-    displayName: 'CyberNote Account Test', sdkSource: pin, licenseFiles: receipt.fileCount,
+    displayName: 'CyberNote Account Test', sdkSource: 'CyberBus',
     gradleHome, target: env.CARGO_TARGET_DIR,
     removedEnvironmentFlags: ['VITE_NOTES_ACCOUNT_NATIVE', 'VITE_NOTES_ACCOUNT_UI'],
     accountCapability: 'default-native',
-    lockfiles: Object.fromEntries(['pnpm-lock.yaml', 'src-tauri/Cargo.lock',
-      'crates/account-auth/Cargo.lock', 'services/coordinator/package-lock.json'].map(name =>
+    lockfiles: Object.fromEntries(['pnpm-lock.yaml', 'src-tauri/Cargo.lock'].map(name =>
         [name, sha256(readFileSync(path.join(root, name)))])),
     buildFlags: Object.fromEntries(['NODE_ENV', 'VITE_NOTES_DEBUG',
       'CARGO_TARGET_DIR', 'CARGO_BUILD_JOBS', 'CARGO_PROFILE_DEV_DEBUG', 'CARGO_PROFILE_TEST_DEBUG',

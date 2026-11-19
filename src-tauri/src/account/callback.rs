@@ -1,4 +1,4 @@
-//! Adapted from CyberGrid f2a39615 RAM sample, with original-source owner authorization.
+//! Original-source owner authorization and callback validation.
 use std::{sync::Arc, time::Duration};
 use tokio::{
     io::{AsyncReadExt, AsyncWriteExt},

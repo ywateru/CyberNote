@@ -63,7 +63,7 @@ external origin or a third-party license:
 ```json
 {
   "firstParty": [{
-    "root": "crates/account-auth",
+  "root": "crates/notes-cyberbus",
     "provenance": "project-authored",
     "rights": "reserved",
     "rightsSource": "scripts/publish/LICENSE.project-reserved.txt"
@@ -178,16 +178,15 @@ the finalizer cannot approve them just because they were committed. Vendor input
 provenance and Cargo pins are checked along with the source bytes. Other SDK/EasyTier
 licenses and provenance remain in `notices/cyberbus/`; Git supplies that source at the pin.
 
-The finalizer rejects legacy CyberGrid production dependencies. `account-auth` may remain
-solely for passive data/error types and cancellation helpers; its dependency name is not
-evidence of a second grant owner. **Production integration must use CyberBus as the sole
-auth owner**: SDK auth start/callback/restore/logout and SecureStore via notes-cyberbus; no
-production construction or restore of `account_auth::AuthClient`, no legacy token provider
-or grant.json owner. Before release, the account reviewer must trace actual runtime startup,
-restore, callback and logout calls (including aliases/wrappers) against that contract. This
-script validates source/dependency inventory, not Rust reachability or ownership semantics;
-passing it alone does not establish that account acceptance gate. Legacy coordinator/source
-may be retained with its licenses but must not occur in the production dependency graph.
+The finalizer rejects legacy CyberGrid and `account-auth` production dependencies.
+**Production integration uses CyberBus as the sole auth owner**: SDK auth
+start/callback/restore/logout and SecureStore run through `notes-cyberbus`; the
+source tree does not retain a second token provider, grant owner, coordinator
+or legacy SDK. Before release, the account reviewer must trace actual runtime
+startup, restore, callback and logout calls (including aliases/wrappers) against
+that contract. This script validates source/dependency inventory, not Rust
+reachability or ownership semantics; passing it alone does not establish that
+account acceptance gate.
 
 It reads committed HEAD only. It cannot finalize another agent's uncommitted work, and it
 does not refresh unrelated source pins. Review other agents' changes outside those roots

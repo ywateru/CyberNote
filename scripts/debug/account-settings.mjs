@@ -182,5 +182,5 @@ export async function runAccountSettings(runtime, { command, check, output }) {
   });
   check("Ordinary browser has no fake account fallback", browser.includes("已安装"));
   await runAccountMatrix(runtime, { command, check, output });
-  await saveJSON(resolve(output, "account-boundary.json"), { real: "React App, account-command wrapper, actual UI handlers and DOM", fixture: "JS account_command status and ACK only; no Logto/Vercel/Redis/CyberGrid/native-runtime/device proof", scope: runtime.metadata, incomplete: "Native callback validation, native lifetime/authentication and actual two-desktop automatic sync remain unverified; UI delayed-IPC and all-font matrices use explicit fixtures." });
+  await saveJSON(resolve(output, "account-boundary.json"), { real: "React App, account-command wrapper, actual UI handlers and DOM", fixture: "JS account_command status and ACK only; no Logto/CyberBus/native-runtime/device proof", scope: runtime.metadata, incomplete: "Native callback validation, native lifetime/authentication and actual two-desktop automatic sync remain unverified; UI delayed-IPC and all-font matrices use explicit fixtures." });
 }

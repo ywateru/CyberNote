@@ -1,28 +1,15 @@
 # CyberNote
 
 Private source distribution of a local notes application for macOS and Android,
-with CyberBus account/device transport. A legacy Node coordinator service is
-retained as historical source; it is not an application runtime dependency. Local development history, user stores,
-device evidence, credentials and installation packages are not part of this tree.
+with CyberBus account/device transport. Legacy CyberGrid and coordinator sources
+are not retained. Local development history, user stores, device evidence,
+credentials and installation packages are not part of this tree.
 
 Repository: [ywateru/CyberNote](https://github.com/ywateru/CyberNote).
 Download narrowly staged build artifacts from [GitHub Actions](https://github.com/ywateru/CyberNote/actions/workflows/packages.yml)
 after the packaging jobs succeed. Repository access is required while private.
 The macOS ZIP is not notarized; the Android release APK is unsigned and needs
 your own signing before installation. No signing keys are included in source or artifacts.
-
-## Product website and account
-
-`services/coordinator/public/` contains the responsive CyberNote product homepage
-and account/device console. Product, source and build links are real. Account
-login uses the existing same-origin OIDC/PKCE console flow; the site does not
-store passwords or expose a cloud note editor. The website design, routes,
-account states and deployment requirements are described in
-[WEBSITE.md](services/coordinator/WEBSITE.md).
-
-Run the coordinator with a dedicated configured environment to serve the website
-and API together. Website/account tests and the Vercel build also run in Actions.
-CI does not deploy or modify existing production infrastructure.
 
 ## Build
 
@@ -61,18 +48,11 @@ package scripts; the exporter reports the removed names and checks retained path
 The shared synthetic smart-projection corpus is retained under the fixture
 directory; an exact export-only include rewrite removes its old docs dependency.
 
-## Legacy coordinator and deployment
+## Deployment boundaries
 
-This separate legacy deployment is not required for native CyberBus accounts.
-The root `vercel.json` builds `services/coordinator/` and routes website/API requests
-through `api/index.ts`. Use Node 22 and install service dependencies with
-`npm --prefix services/coordinator ci --include=dev`. The service's own build/tests
-are separate from desktop and Android builds.
-
-Supply secrets only in a protected server/CI environment. Never prefix a secret
-with `VITE_` or `TAURI_ENV_`, which make values available to frontend code. Public
-client IDs/issuer/resource identifiers are distinct from secrets. Do not commit
-real `.env` files, signing keys, tokens, databases, backups or user media.
+Native accounts and devices use CyberBus. Do not deploy or restore the removed
+CyberGrid coordinator. Never commit real `.env` files, signing keys, tokens,
+databases, backups or user media.
 
 For a source archive without `.git`, a trusted clean checkout can first run:
 
@@ -115,6 +95,6 @@ executable, including the locked Tauri Brotli asset form, before writing a recei
 ## License
 
 No general project license grant is made; see `LICENSE`. Third-party component
-licenses remain effective. See `THIRD_PARTY_NOTICES.md`, the font OFL and coordinator
-notices. A repository owner may choose a project license separately without
-removing third-party notices.
+licenses remain effective. See `THIRD_PARTY_NOTICES.md`, the font OFL and
+CyberBus notices. A repository owner may choose a project license separately
+without removing third-party notices.
