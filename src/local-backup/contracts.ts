@@ -18,6 +18,7 @@ export type BackupVersion = {
   manifest: {
     format: "cybernote-local-backup";
     version: 1;
+    scope: "currentBusinessProjection";
     id: string;
     appVersion: string;
     libraryId: string;
@@ -37,6 +38,7 @@ export type BackupStatus = {
   automaticSuspended: boolean;
   lastError: { code: string; message: string } | null;
   nextDueAtMs: number | null;
+  directoryMode: "privateOnly" | "selectableFilesystem";
 };
 export type ArchivePreview = {
   notes: number;
@@ -49,8 +51,23 @@ export type RestorePreview = {
   archive: ArchivePreview;
   confirmation: string;
   expiresAtMs: number;
+  targetStore: TargetStoreFence;
 };
-export type RestoreResult = { recovery: BackupVersion; delivery: unknown };
+export type TargetStoreFence = {
+  instance: string;
+  generation: string;
+  settingsSha256: string;
+};
+export type ImportCommitted = {
+  outcome: "committed";
+  /** Post-commit failure is a warning, never a retryable import rejection. */
+  maintenanceError: { code: string; message: string } | null;
+  refreshError?: string;
+};
+export type RestoreResult = ImportCommitted & {
+  recovery: BackupVersion;
+  delivery: unknown;
+};
 
 /** Host methods use the shared App save/recording guards. No UI value grants access.
  * restore must apply/hydrate the native mutation delivery before resolving. */
@@ -60,7 +77,8 @@ export interface LocalBackupHost {
   backupNow(): Promise<BackupVersion>;
   prepareRestore(name: string): Promise<RestorePreview>;
   restore(confirmation: string): Promise<RestoreResult>;
-  chooseDirectory(): Promise<string | null>;
+  /** Desktop-only. Omit on Android/private-only hosts. */
+  chooseDirectory?(): Promise<string | null>;
   revealDirectory?(directory: string): Promise<void>;
 }
 
@@ -68,6 +86,8 @@ export type EncryptedImportPreview = {
   confirmation: string;
   archive: ArchivePreview;
   expiresAtMs: number;
+  targetStore: TargetStoreFence;
+  payloadSha256: string;
 };
 /** File selection, cancel+flush, recording checks, full archive validation and
  * barrier commit belong to App. Passwords remain ephemeral, never preferences.
@@ -76,7 +96,7 @@ export type EncryptedImportPreview = {
 export interface EncryptedArchiveHost {
   export(password: string): Promise<ArchiveResult>;
   prepareImport(password: string): Promise<EncryptedImportPreview | null>;
-  confirmImport(confirmation: string): Promise<ArchiveResult>;
+  confirmImport(confirmation: string): Promise<ImportCommitted>;
   discardImport(confirmation: string): Promise<void>;
 }
 export type LocalBackupSettingsProps = {

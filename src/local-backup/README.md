@@ -41,8 +41,13 @@ Create one stable, memoized host with `createLocalBackupClient(options)`:
   The host must keep native operation serialization/recording checks in effect
   for the whole actual operation, including after a picker or acknowledgement.
 - `afterRestore(delivery)` performs App's existing import delivery
-  hydrate/fallback and selection/metadata refresh before resolving.
-- `chooseDirectory()` uses the native directory picker; return null on cancel.
+  hydrate/fallback and selection/metadata refresh. The client catches failure
+  after native `outcome: "committed"` into `refreshError`; the UI consumes the
+  confirmation and displays a committed warning without repeating import.
+- `chooseDirectory?()` is desktop-only and uses the native directory picker;
+  return null on cancel. `status.directoryMode` comes from the native runtime.
+  Private-only hosts (Android this round) omit chooser/default controls and show
+  the actual app-private path plus the uninstall/device-loss limitation.
   `revealDirectory` is optional and is omitted when unsupported. These ports
   should restrict opening to actual displayed directories. No data-folder move
   action is supplied.
@@ -87,3 +92,16 @@ action error persistence, stale picker/read generations, blocked controls,
 desktop/narrow layouts, light/dark colors and 390px touch sizes/overflow. Browser
 screenshots establish Chromium fixture behavior only; actual WebKit, WebView,
 native dialogs/IME, recording and installation acceptance remain host checks.
+
+The preview binds `targetStore: {instance, generation, settingsSha256}` and the
+verified immutable payload hash (version.manifest.sha256). The native host must
+recheck the same target fence after save acknowledgements. Encrypted previews
+bind `payloadSha256` and that same target fence too. `confirmImport` returns an
+`ImportCommitted`, not a generic success/error archive result; after commit it
+must never reject solely because maintenance/hydration failed. Pre-commit errors
+may reject and require a fresh preview.
+
+Restoration is additive: preserve existing content, create copies on ID collision,
+and apply archive settings. The pre-import protection is only a current business
+projection snapshot, not all historical heads/inbox/tombstones. Existing conflicts
+and deletion knowledge must remain untouched; no in-place rollback is offered.

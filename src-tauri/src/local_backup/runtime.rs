@@ -44,11 +44,22 @@ pub enum BackupIntent {
     Automatic,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TargetStoreFence {
+    pub instance: String,
+    /// Complete opaque Store/content generation, including heads/inbox/tombstones.
+    /// Session epoch and application_generation alone are insufficient.
+    pub generation: String,
+    /// Settings are not covered by the existing sync generation.
+    pub settings_sha256: String,
+}
 /// An authorization receipt, NOT an authority the module can renew itself.
 #[derive(Debug, Clone)]
 pub struct CheckedAuthority {
     pub library_id: String,
     pub session: ExpectedSession,
+    pub target_store: TargetStoreFence,
 }
 #[derive(Debug)]
 pub struct ExportSnapshot {
@@ -71,11 +82,20 @@ pub struct RestorePreview {
     pub archive: ArchivePreview,
     pub confirmation: String,
     pub expires_at_ms: u64,
+    pub target_store: TargetStoreFence,
 }
 pub struct CheckedRestore {
     pub authority: CheckedAuthority,
     pub archive: Vec<u8>,
     pub preview: ArchivePreview,
+    pub payload_sha256: String,
+}
+
+/// Err from restore_checked is reserved for known pre-commit failures.
+/// Once committed, maintenance failure must not turn the operation into a retry.
+pub struct CommittedRestore {
+    pub delivery: serde_json::Value,
+    pub maintenance_error: Option<BackupError>,
 }
 
 /// Implement with the existing application Session and archive pipeline. All
@@ -89,8 +109,9 @@ pub trait BackupPorts: Send + Sync + 'static {
         caller: &'a BackupCaller,
         intent: BackupIntent,
     ) -> PortFuture<'a, CheckedAuthority>;
-    /// Flush editor saves using the host's existing quiet/save protocol; export
-    /// through Session, excluding account files, grants and local credentials.
+    /// Drain body AND settings saves with the shared all-window quiet protocol.
+    /// Capture with Session::stage_archive -> bounded bytes, never export_archive
+    /// to a backup directory inside Store root. Exclude private account/grant files.
     fn export_checked<'a>(
         &'a self,
         authority: &'a CheckedAuthority,
@@ -102,15 +123,17 @@ pub trait BackupPorts: Send + Sync + 'static {
         authority: &'a CheckedAuthority,
         archive: &'a [u8],
     ) -> PortFuture<'a, ArchivePreview>;
-    /// Within ONE existing importArchive save barrier: validate authority/library,
+    /// Within ONE existing importArchive save barrier: validate authority/library/
+    /// target_store (including settings) and payload_sha256 at the commit gate,
     /// quiesce all windows, export current bytes, call protection.write(snapshot),
     /// then commit via Session (not Store). Abort if protection.write fails.
-    /// Return the existing mutation delivery for the host frontend to hydrate.
+    /// Preserve conflict/inbox/tombstone state; only additive import is permitted.
+    /// Return CommittedRestore after DB commit even if maintenance/refresh fails.
     fn restore_checked<'a>(
         &'a self,
         request: CheckedRestore,
         protection: RecoveryWriter,
-    ) -> PortFuture<'a, serde_json::Value>;
+    ) -> PortFuture<'a, CommittedRestore>;
 }
 
 /// A one-shot protection sink, scoped to the configured directory and library.
@@ -147,8 +170,23 @@ impl RecoveryWriter {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RestoreResult {
+    pub outcome: RestoreOutcome,
     pub recovery: BackupVersion,
     pub delivery: serde_json::Value,
+    pub maintenance_error: Option<BackupError>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum RestoreOutcome {
+    Committed,
+}
+
+/// Native host capability, never accepted from invoke arguments.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum BackupDirectoryMode {
+    PrivateOnly,
+    SelectableFilesystem,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -162,6 +200,7 @@ pub struct BackupStatus {
     pub automatic_suspended: bool,
     pub last_error: Option<BackupError>,
     pub next_due_at_ms: Option<u64>,
+    pub directory_mode: BackupDirectoryMode,
 }
 
 struct Prepared {
@@ -172,6 +211,7 @@ struct Prepared {
     directory: PathBuf,
     name: String,
     manifest: BackupManifest,
+    target_store: TargetStoreFence,
     confirmation: String,
     expires: u64,
     preview: ArchivePreview,
@@ -188,6 +228,7 @@ pub struct BackupRuntime {
     data_directory: PathBuf,
     app_version: String,
     ports: Arc<dyn BackupPorts>,
+    directory_mode: BackupDirectoryMode,
     state: Mutex<RuntimeState>,
     busy: AtomicBool,
 }
@@ -218,9 +259,23 @@ impl BackupRuntime {
             data_directory,
             app_version,
             ports,
+            directory_mode: BackupDirectoryMode::PrivateOnly,
             state: Mutex::new(RuntimeState::default()),
             busy: AtomicBool::new(false),
         })
+    }
+    /// Desktop opt-in. Android remains private-only because the current native
+    /// file picker provides single documents, not a persistent SAF tree owner.
+    pub fn with_selectable_directory(self) -> Self {
+        #[cfg(not(target_os = "android"))]
+        {
+            return Self {
+                directory_mode: BackupDirectoryMode::SelectableFilesystem,
+                ..self
+            };
+        }
+        #[cfg(target_os = "android")]
+        self
     }
     fn state(&self) -> Result<std::sync::MutexGuard<'_, RuntimeState>> {
         self.state
@@ -234,7 +289,14 @@ impl BackupRuntime {
         Ok(Operation(&self.busy))
     }
     fn config(&self) -> Result<BackupConfig> {
-        files::load_config(&Directory::open(&self.config_root, false)?).map(|(config, _)| config)
+        let config = files::load_config(&Directory::open(&self.config_root, false)?)?.0;
+        if self.directory_mode == BackupDirectoryMode::PrivateOnly && !config.directory.is_empty() {
+            return Err(failure(
+                "backup_directory_unsupported",
+                "此平台仅支持应用私有备份目录；外部目录配置未被覆盖",
+            ));
+        }
+        Ok(config)
     }
     fn directory(&self, config: &BackupConfig) -> Result<Directory> {
         Directory::open(&config.directory(&self.default_directory), true)
@@ -268,6 +330,7 @@ impl BackupRuntime {
             automatic_suspended: state.suspended,
             last_error: state.error.clone(),
             next_due_at_ms: next,
+            directory_mode: self.directory_mode,
         })
     }
     pub async fn status(&self, caller: BackupCaller, now: u64) -> Result<BackupStatus> {
@@ -287,6 +350,13 @@ impl BackupRuntime {
             .authorize(&caller, BackupIntent::Configure)
             .await?;
         let explicit = patch.hours.is_some() || patch.keep.is_some() || patch.directory.is_some();
+        if self.directory_mode == BackupDirectoryMode::PrivateOnly && patch.directory.is_some() {
+            return Err(failure(
+                "backup_directory_unsupported",
+                "此平台仅支持应用私有备份目录，不能更改备份文件夹",
+            ));
+        }
+        self.config()?;
         files::configure(
             &Directory::open(&self.config_root, false)?,
             patch,
@@ -381,6 +451,8 @@ impl BackupRuntime {
             return Err(failure("backup_identity", "此备份属于另一个资料库"));
         }
         let archive = self.ports.preview_checked(&authority, &bytes).await?;
+        validate_fence(&authority.target_store)?;
+        let target_store = authority.target_store.clone();
         let confirmation = uuid::Uuid::new_v4().to_string();
         let expires = now.saturating_add(5 * 60_000);
         self.state()?.prepared = Some(Prepared {
@@ -391,6 +463,7 @@ impl BackupRuntime {
             directory: config.directory(&self.default_directory),
             name,
             manifest: version.manifest.clone(),
+            target_store: target_store.clone(),
             confirmation: confirmation.clone(),
             expires,
             preview: archive.clone(),
@@ -400,6 +473,7 @@ impl BackupRuntime {
             archive,
             confirmation,
             expires_at_ms: expires,
+            target_store,
         })
     }
     pub async fn restore(
@@ -426,6 +500,7 @@ impl BackupRuntime {
             || authority.library_id != prepared.library
             || authority.session.session_id != prepared.session_id
             || authority.session.epoch != prepared.epoch
+            || authority.target_store != prepared.target_store
             || config.directory(&self.default_directory) != prepared.directory
         {
             return Err(failure(
@@ -447,13 +522,14 @@ impl BackupRuntime {
             keep: config.keep,
             receipt: receipt.clone(),
         };
-        let delivery = self
+        let committed = self
             .ports
             .restore_checked(
                 CheckedRestore {
                     authority,
                     archive,
                     preview: prepared.preview,
+                    payload_sha256: prepared.manifest.sha256,
                 },
                 protection,
             )
@@ -463,6 +539,27 @@ impl BackupRuntime {
             .map_err(|_| failure("backup_internal", "保护备份状态不可读"))?
             .clone()
             .ok_or_else(|| failure("backup_host_contract", "宿主未写入恢复保护备份"))?;
-        Ok(RestoreResult { recovery, delivery })
+        Ok(RestoreResult {
+            outcome: RestoreOutcome::Committed,
+            recovery,
+            delivery: committed.delivery,
+            maintenance_error: committed.maintenance_error,
+        })
     }
+}
+
+fn validate_fence(fence: &TargetStoreFence) -> Result<()> {
+    if fence.instance.is_empty()
+        || fence.instance.len() > 256
+        || fence.generation.is_empty()
+        || fence.generation.len() > 4096
+        || fence.settings_sha256.len() != 64
+        || !fence.settings_sha256.bytes().all(|b| b.is_ascii_hexdigit())
+    {
+        return Err(failure(
+            "backup_host_contract",
+            "宿主未提供有效的目标资料库代次与设置指纹",
+        ));
+    }
+    Ok(())
 }

@@ -12,6 +12,7 @@ import type {
   BackupKeep,
   BackupStatus,
   EncryptedImportPreview,
+  ImportCommitted,
   LocalBackupSettingsProps,
   RestorePreview,
 } from "./contracts";
@@ -299,6 +300,16 @@ export function LocalBackupSettings({
     setPasswordAgain("");
     encryptedTrigger.current?.focus();
   };
+  const committedWarning = (result: ImportCommitted) => {
+    const issues = [
+      result.maintenanceError?.message,
+      result.refreshError,
+    ].filter(Boolean);
+    if (issues.length)
+      setError(
+        `导入已提交，但后续维护或界面刷新未完成：${issues.join("；")}。请重新读取或重新打开界面查看，勿重复导入。`,
+      );
+  };
   const encrypted = () =>
     run("encrypted", async (ticket) => {
       if (!encryptedArchive || !encryptedMode) return;
@@ -306,9 +317,12 @@ export function LocalBackupSettings({
         const result = await encryptedArchive.confirmImport(
           encryptedPreview.confirmation,
         );
-        if (result.status === "error") throw Error(result.message);
-        if (valid(ticket)) closeEncrypted();
-        return result.status === "success" ? "加密备份已导入" : undefined;
+        if (valid(ticket)) {
+          encryptedOwned.current = null;
+          closeEncrypted();
+          committedWarning(result);
+        }
+        return "加密备份已导入";
       }
       if (!password) throw Error("请输入备份密码");
       if (encryptedMode === "export" && password !== passwordAgain)
@@ -354,7 +368,7 @@ export function LocalBackupSettings({
           {showArchiveControls && (
             <Row
               label="导入与导出"
-              detail="完整备忘录、附件原文件和可移植设置；不含账户或 Agent 授权凭据。"
+              detail="当前备忘录、附件原文件及归档设置；不含账户或 Agent 授权文件。"
             >
               <button
                 className="settings121-text"
@@ -433,7 +447,7 @@ export function LocalBackupSettings({
                   <p>
                     {encryptedPreview.archive.notes} 条备忘录 ·{" "}
                     {encryptedPreview.archive.attachments}{" "}
-                    个附件。当前库先保留可恢复快照，再按现有导入规则导入。
+                    个附件。先保存当前业务投影快照，再新增副本并应用归档设置。
                   </p>
                 </>
               ) : (
@@ -538,25 +552,28 @@ export function LocalBackupSettings({
           label="备份文件夹"
           detail={status?.directory || "读取后显示备份位置"}
         >
-          <button
-            className="settings121-text"
-            type="button"
-            disabled={disabled || !status}
-            onClick={() =>
-              void run("directory", async (ticket) => {
-                const path = await host.chooseDirectory();
-                if (path !== null && valid(ticket)) {
-                  const value = await host.configure({ directory: path });
-                  if (valid(ticket)) {
-                    setStatus(value);
-                    setRestore(null);
-                  }
+          {status?.directoryMode === "selectableFilesystem" &&
+            host.chooseDirectory && (
+              <button
+                className="settings121-text"
+                type="button"
+                disabled={disabled || !status}
+                onClick={() =>
+                  void run("directory", async (ticket) => {
+                    const path = await host.chooseDirectory!();
+                    if (path !== null && valid(ticket)) {
+                      const value = await host.configure({ directory: path });
+                      if (valid(ticket)) {
+                        setStatus(value);
+                        setRestore(null);
+                      }
+                    }
+                  })
                 }
-              })
-            }
-          >
-            更改…
-          </button>
+              >
+                更改…
+              </button>
+            )}
           {host.revealDirectory && status && (
             <button
               className="settings121-text"
@@ -571,17 +588,24 @@ export function LocalBackupSettings({
               显示
             </button>
           )}
-          {status?.config.directory && (
-            <button
-              className="settings121-text"
-              type="button"
-              disabled={disabled}
-              onClick={() => void configure({ directory: "" })}
-            >
-              默认
-            </button>
-          )}
+          {status?.directoryMode === "selectableFilesystem" &&
+            host.chooseDirectory &&
+            status.config.directory && (
+              <button
+                className="settings121-text"
+                type="button"
+                disabled={disabled}
+                onClick={() => void configure({ directory: "" })}
+              >
+                默认
+              </button>
+            )}
         </Row>
+        {status?.directoryMode === "privateOnly" && (
+          <p className="local-backup-status local-backup-private">
+            备份保存在应用私有目录。卸载应用或丢失设备可能一并丢失备份，请使用单文件导出另存；此平台暂不支持外部备份文件夹。
+          </p>
+        )}
         <Row
           label={
             <button
@@ -622,7 +646,7 @@ export function LocalBackupSettings({
             <Row
               key={version.name}
               label={when(version.manifest.createdAtMs)}
-              detail={`${version.manifest.reason === "beforeRestore" ? "恢复前的本机内容 · " : ""}${formatFileSize(version.manifest.archiveBytes)} · v${version.manifest.appVersion}`}
+              detail={`${version.manifest.reason === "beforeRestore" ? "恢复前的业务投影 · " : ""}${formatFileSize(version.manifest.archiveBytes)} · v${version.manifest.appVersion}`}
             >
               <button
                 className="settings121-text"
@@ -662,8 +686,8 @@ export function LocalBackupSettings({
             </p>
             <p>{restore.archive.summary}</p>
             <p>
-              先保存当前库的可恢复快照，再导入备份。ID
-              冲突时创建副本，设置按备份更新。
+              先保存当前业务投影快照，再沿现有导入规则新增副本并应用设置，不会原位回退。快照不含全部历史版本或待应用收件；现有冲突与删除记录必须保留。导入会更新应用身份，已有
+              Agent 授权上下文失效。
             </p>
             <div className="local-backup-confirm-tools">
               <button
@@ -681,9 +705,12 @@ export function LocalBackupSettings({
                 disabled={disabled}
                 onClick={() =>
                   void run("restore", async (ticket) => {
-                    await host.restore(restore.confirmation);
-                    if (valid(ticket)) closeRestore();
-                    return "备份已导入；恢复前的本机快照已保留";
+                    const result = await host.restore(restore.confirmation);
+                    if (valid(ticket)) {
+                      closeRestore();
+                      committedWarning(result);
+                    }
+                    return "备份已导入；恢复前的业务投影快照已保留";
                   })
                 }
               >

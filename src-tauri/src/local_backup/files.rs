@@ -75,11 +75,20 @@ pub enum BackupReason {
     Automatic,
     BeforeRestore,
 }
+/// Current entities/settings/original bytes, not historical heads/inbox/purges.
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum BackupScope {
+    #[default]
+    CurrentBusinessProjection,
+}
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BackupManifest {
     pub format: String,
     pub version: u8,
+    #[serde(default)]
+    pub scope: BackupScope,
     pub id: String,
     pub app_version: String,
     pub library_id: String,
@@ -532,6 +541,7 @@ pub(crate) fn publish(
     let manifest = BackupManifest {
         format: "cybernote-local-backup".into(),
         version: 1,
+        scope: BackupScope::CurrentBusinessProjection,
         id,
         app_version: app_version.into(),
         library_id: library.into(),

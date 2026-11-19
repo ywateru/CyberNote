@@ -36,6 +36,17 @@ fn local_backup_store_roundtrip_settings_documents_original_bytes_and_barrier_im
     let exported = root.join("export.notesbackup");
     source.export_archive(&exported, &token(&source)).unwrap();
     let bytes = fs::read(&exported).unwrap();
+    let stage = source.stage_archive(&token(&source)).unwrap();
+    assert_eq!(fs::read(stage.path()).unwrap(), bytes);
+    let private_backups = root.join("source/backups");
+    fs::create_dir_all(&private_backups).unwrap();
+    // Ordinary user export stays protected, including this owned backup folder.
+    assert!(source
+        .export_archive(
+            &private_backups.join("forbidden.notesbackup"),
+            &token(&source)
+        )
+        .is_err());
     // Real archive is an allowlisted logical export, not a directory copy.
     let parsed: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
     let mut keys = parsed
@@ -63,8 +74,7 @@ fn local_backup_store_roundtrip_settings_documents_original_bytes_and_barrier_im
         bytes
     );
     // Put the actual Store-exported bytes through the production backup codec.
-    let directory =
-        crate::local_backup::files::Directory::open(&root.join("backups"), true).unwrap();
+    let directory = crate::local_backup::files::Directory::open(&private_backups, true).unwrap();
     let version = crate::local_backup::files::publish(
         &directory,
         &bytes,

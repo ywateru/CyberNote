@@ -20,7 +20,7 @@ export type LocalBackupClientOptions = {
   beforeOperation(): Promise<void>;
   /** Apply the existing importArchive delivery with App's hydrate/fallback path. */
   afterRestore(delivery: unknown): Promise<void>;
-  chooseDirectory(): Promise<string | null>;
+  chooseDirectory?(): Promise<string | null>;
   revealDirectory?(directory: string): Promise<void>;
 };
 
@@ -61,7 +61,19 @@ export function createLocalBackupClient(
       const result = await guarded<RestoreResult>("local_backup_restore", {
         confirmation,
       });
-      await options.afterRestore(result.delivery);
+      // A hydration failure cannot erase the native commit or trigger an import
+      // retry. The UI consumes the confirmation and offers read-only refresh.
+      try {
+        await options.afterRestore(result.delivery);
+      } catch (cause) {
+        return {
+          ...result,
+          refreshError:
+            cause && typeof cause === "object" && "message" in cause
+              ? String(cause.message)
+              : String(cause),
+        };
+      }
       return result;
     },
     chooseDirectory: options.chooseDirectory,

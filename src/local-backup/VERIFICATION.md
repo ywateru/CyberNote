@@ -8,15 +8,15 @@ the final message gives its exact SHA. This receipt does not certify host wiring
 
 ## Completed evidence
 
-| Check | Result and boundary |
-| --- | --- |
-| Core Rust harness, offline/locked | 12 tests passed; actual production local_backup code, temporary directories, serialized bytes, no Tauri |
-| `--features real-store-proof local_backup_store` | 1 selected test passed; real Store/Session logical export, backup encode/decode, settings/body/attachment original bytes, acknowledged import barrier and preserved local entity |
-| `pnpm typecheck` | Passed for this tree including the new exported frontend contracts |
-| `pnpm version:check` | Passed; product remains 0.1.0 |
-| React/Vite/Chrome fixture | Passed; controls, radio keyboard behavior, archive handler route, confirmation, focus/Escape, password lifecycle, errors, stale picker/read, access blocking, optional archive-row suppression |
-| Layout screenshots | 960px and 390px, light and dark; no horizontal overflow; active phone buttons >=44px |
-| Whitespace diff | `git diff --check` passed |
+| Check                                            | Result and boundary                                                                                                                                                                            |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Core Rust harness, offline/locked                | 12 tests passed; actual production local_backup code, temporary directories, serialized bytes, no Tauri                                                                                        |
+| `--features real-store-proof local_backup_store` | 1 selected test passed; real Store/Session logical export, backup encode/decode, settings/body/attachment original bytes, acknowledged import barrier and preserved local entity               |
+| `pnpm typecheck`                                 | Passed for this tree including the new exported frontend contracts                                                                                                                             |
+| `pnpm version:check`                             | Passed; product remains 0.1.0                                                                                                                                                                  |
+| React/Vite/Chrome fixture                        | Passed; controls, radio keyboard behavior, archive handler route, confirmation, focus/Escape, password lifecycle, errors, stale picker/read, access blocking, optional archive-row suppression |
+| Layout screenshots                               | 960px and 390px, light and dark; no horizontal overflow; active phone buttons >=44px                                                                                                           |
+| Whitespace diff                                  | `git diff --check` passed                                                                                                                                                                      |
 
 The 12 core tests include missing/partial/explicit-off config, preserved fields,
 0600 and unchanged writes, corrupt/unsupported config refusal, actual payload
@@ -70,3 +70,21 @@ listed checks pass; no unresolved test failure is hidden.
 No real user library, backup directory, account store or running app was accessed.
 Only local file changes and a commit in the authorized isolated tree were made;
 there is no push, deployment or release claim.
+
+## D2/D3/D7/D8 follow-up freeze
+
+The follow-up commit (SHA in worker delivery) strengthens the host contract with
+TargetStoreFence instance/full generation/settings hash, immutable manifest hash
+binding, explicit committed maintenance results and client refresh-error handling.
+It declares currentBusinessProjection scope, preserves manual additive settings
+semantics and private module config, defaults native directory capability to
+privateOnly, and omits unsupported chooser controls. The desktop opt-in is native
+only. This supersedes the earlier "12 tests" count: 16 core tests are selected,
+including generation/instance/settings stale previews, a delayed final host gate,
+committed maintenance failure without duplicate import and private-only override
+rejection. The real Store proof additionally exercises Session stage bytes to a
+backup folder inside app root while ordinary user export to that folder remains
+rejected. React checks additionally cover committed refresh warning with consumed
+confirmation/no repeat, and private-only directory controls. These are module and
+fixture evidence; the real shared host barriers and preservation of full existing
+conflict/inbox/tombstone state still require integration verification.

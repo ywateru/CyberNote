@@ -24,11 +24,19 @@ setup and manage `local_backup_commands::LocalBackupState(runtime.clone())`.
 Constructor arguments, in order:
 
 1. A private application-owned configuration directory, outside logical archives.
-2. Default backup directory, outside Store-owned attachment/import directories.
+2. Default app-private backup directory (for example Store root/backups), owned by this module and separate from attachment/import staging directories.
 3. The existing Store root, obtained from `data_management.rootPath` or its current
    data method. This is for display; no public Store field is needed.
 4. Application version from the native package version.
 5. `Arc<dyn BackupPorts>`.
+
+Runtime construction defaults to `BackupDirectoryMode::PrivateOnly`. The desktop
+host may opt in with `.with_selectable_directory()`; Android remains private-only,
+including when that method is called. `BackupStatus.directoryMode` exposes the
+native capability. In private-only mode a directory patch is rejected and any
+existing unsupported directory override is reported without being overwritten.
+The UI omits change/default controls even if a chooser was accidentally supplied.
+Android retains existing single-document import/export; no SAF tree claim is made.
 
 All paths must be canonical absolute POSIX paths without symlink components. The
 host establishes directory/library identity and rejects unsafe destinations. On
@@ -61,7 +69,7 @@ compilation remains an integration check.
 
 The precise signatures and exported DTOs are in `runtime.rs`:
 
-- `authorize(caller, intent)` returns `CheckedAuthority { library_id, session }`.
+- `authorize(caller, intent)` returns `CheckedAuthority { library_id, session, target_store }`.
   Check the actual calling window, current Token/session/library and application
   lifecycle. For write/automatic intents, check all native recording owners and
   competing archive/quit/access operations. The scheduler caller is a Rust-only
@@ -69,9 +77,17 @@ The precise signatures and exported DTOs are in `runtime.rs`:
   Use the existing stable workspace/library ID for `library_id`, not a new ID per
   export and not an import incarnation; otherwise history would disappear after
   each restore. Incarnation/epoch/save-version validation remains the host's
-  separate authority fence.
+  separate authority fence. `TargetStoreFence` contains the exact Store `instance`,
+  complete opaque content/sync `generation` and `settings_sha256`. The generation
+  must cover sync-only heads/inbox/tombstone changes, not just application rows or
+  Session epoch. Preview and confirmation bind this fence; the final barrier gate
+  must compare it again after asynchronous saves. A mismatch requires a new
+  preview, not an automatically updated fence or an unconfirmed reimport.
 - `export_checked(authority)` runs the existing editor save/quiet protection and
-  exports via Session. Revalidate after asynchronous work and return the same
+  captures with `Session::stage_archive`, reads the bounded original bytes, then
+  returns those bytes for the backup owner to publish. Never call ordinary
+  `export_archive` with root/backups: its existing target restriction correctly
+  rejects the entire app root and must remain unchanged. Revalidate after asynchronous work and return the same
   library identity with the logical archive's original bytes. Do not export
   account files, MCP grants, passwords, local backup configuration or credentials.
 - `preview_checked(authority, archive)` performs full existing archive/attachment
@@ -81,7 +97,14 @@ The precise signatures and exported DTOs are in `runtime.rs`:
   `importArchive` save barrier. After all participants' saves have drained, obtain
   the current logical archive and call `RecoveryWriter::write(ExportSnapshot)`.
   Abort on any protection failure; only then commit via Session and return the
-  normal mutation delivery. The host must revalidate authority/library/version
+  normal mutation delivery in `CommittedRestore { delivery, maintenance_error }`.
+  `Err` is reserved for known pre-commit failure. Once the DB import commits,
+  maintenance failure is an explicit committed outcome, never an import failure
+  suitable for retry. `RestoreResult.outcome` is `committed`; the frontend adapter
+  catches subsequent hydrate failures as `refreshError`, closes the confirmation,
+  and never repeats import. The same committed-result contract applies to
+  encrypted `confirmImport`. Host IPC-loss recovery must use the existing commit
+  receipt/operation status; never infer "not committed" from a lost response. The host must revalidate authority/library/version
   after awaits, follow existing facts/metadata publication, and hydrate through
   the existing frontend path. Port futures must be cancellation safe: no detached
   mutation may outlive its Session operation owner. Hold no Session mutex while
@@ -100,7 +123,14 @@ This change is outside this worker's allowed files and has been reported early.
 The existing archive import retains local entities, remaps colliding IDs and
 updates portable settings. Restore here deliberately uses that explicit import
 semantics. A recovery version is an importable snapshot of the prior library;
-this implementation does not claim destructive in-place rollback.
+this implementation does not claim destructive in-place rollback. Both ordinary
+and pre-restore snapshots capture only the current business projection, not every
+historical head, pending inbox version or purge tombstone. Existing conflicts,
+inbox, frontiers and tombstones must survive additive import; no sync reset,
+workspace adoption, destructive SQL or restoration of old sync tables is allowed.
+The current protection snapshot is retained by the publication that creates it.
+MCP maintenance pause, incarnation invalidation and commit receipts remain owned
+by the existing host import path.
 
 ### Scheduler lifetime
 
@@ -135,7 +165,7 @@ filesystem CAS against an arbitrary writer that ignores it.
 Each `cybernote-<uuid>.cyberbackup` contains `CYBNBK01`, a little-endian u32 header
 length, a bounded JSON manifest, and the original logical archive bytes. Manifest
 contains format/version, ID, application version, library ID, milliseconds,
-reason, byte length and SHA-256. Files are 0600, created directories 0700. All
+reason, scope (`currentBusinessProjection`), byte length and SHA-256. Earlier v1 manifests without scope are read as this same projection-only scope. Files are 0600, created directories 0700. All
 traversal and file operations use pinned directory descriptors and no-follow
 opens; linked/non-regular/multiply-linked/foreign-owned files are refused.
 Listings stream-hash each backup, expose corrupt/unreadable candidates as issues,
@@ -153,7 +183,7 @@ evidence; arbitrary temporary files are not swept. The hash is corruption
 detection, not an authenticity signature against the filesystem owner.
 
 Restore previews expire after five minutes, bind window/session epoch/library/
-directory/name/hash, and their confirmation is consumed on the first attempted
+target Store instance + full generation + settings hash/directory/name/manifest, and their confirmation is consumed on the first attempted
 commit. Commit rereads and checks bytes. A changed file, wrong window/library,
 expired/revoked Token or failed barrier does not call the import commit.
 
@@ -199,3 +229,16 @@ does not implement or certify the new host recovery staging hook, installed
 native scheduling, macOS WebKit, Android WebView/SAF or physical device behavior.
 Do not run the remaining application tests just because they compile into this
 test executable; only `local_backup_store` is selected for this proof.
+
+
+## Settings boundary (D7)
+
+This module uses the existing explicit manual archive settings semantics: archive
+settings are applied by the existing additive import path. They are not advertised
+as a newly defined cloud-portable settings DTO or a complete machine backup.
+`local-backup.json` is separate app-private configuration and never part of the
+logical archive; import cannot restore another machine's backup path, interval or
+retention choice. Private account/MCP authorization files are not archive inputs.
+Do not add those fields to Store.settings. Any shared portable-settings whitelist
+or credential projection is owned by the canonical archive/host contract, not by a
+second settings merge in this module.

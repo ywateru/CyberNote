@@ -70,6 +70,11 @@ fn authority() -> CheckedAuthority {
     CheckedAuthority {
         library_id: "library-a".into(),
         session: token(),
+        target_store: TargetStoreFence {
+            instance: "store-0".into(),
+            generation: "generation-0".into(),
+            settings_sha256: files::digest(b"settings-0"),
+        },
     }
 }
 #[derive(Default)]
@@ -82,11 +87,34 @@ struct Ports {
     fail_preview: AtomicBool,
     fail_restore: AtomicBool,
     wrong_recovery_identity: AtomicBool,
+    store_generation: AtomicUsize,
+    store_instance: AtomicUsize,
+    settings_version: AtomicUsize,
+    maintenance_failed: AtomicBool,
+    delay_restore: AtomicBool,
+    restore_started: tokio::sync::Notify,
+    restore_continue: tokio::sync::Notify,
     export_started: tokio::sync::Notify,
     export_continue: tokio::sync::Notify,
     delay_export: AtomicBool,
     imported: Mutex<Vec<u8>>,
     events: Mutex<Vec<&'static str>>,
+}
+impl Ports {
+    fn current_authority(&self) -> CheckedAuthority {
+        let mut authority = authority();
+        authority.target_store = TargetStoreFence {
+            instance: format!("store-{}", self.store_instance.load(Ordering::SeqCst)),
+            generation: format!(
+                "generation-{}",
+                self.store_generation.load(Ordering::SeqCst)
+            ),
+            settings_sha256: files::digest(
+                format!("settings-{}", self.settings_version.load(Ordering::SeqCst)).as_bytes(),
+            ),
+        };
+        authority
+    }
 }
 impl BackupPorts for Ports {
     fn authorize<'a>(
@@ -106,7 +134,7 @@ impl BackupPorts for Ports {
                     return Err(failure("access_stale", "Token 已过期"));
                 }
             }
-            Ok(authority())
+            Ok(self.current_authority())
         })
     }
     fn export_checked<'a>(&'a self, _: &'a CheckedAuthority) -> PortFuture<'a, ExportSnapshot> {
@@ -148,9 +176,21 @@ impl BackupPorts for Ports {
         &'a self,
         request: CheckedRestore,
         protection: RecoveryWriter,
-    ) -> PortFuture<'a, serde_json::Value> {
+    ) -> PortFuture<'a, CommittedRestore> {
         Box::pin(async move {
             self.events.lock().unwrap().push("barrier-flushed");
+            if self.delay_restore.load(Ordering::SeqCst) {
+                self.restore_started.notify_one();
+                self.restore_continue.notified().await;
+            }
+            if request.authority.target_store != self.current_authority().target_store
+                || request.payload_sha256 != files::digest(&request.archive)
+            {
+                return Err(failure(
+                    "backup_stale",
+                    "资料库在确认后发生变化，请重新预览",
+                ));
+            }
             if self.fail_restore.load(Ordering::SeqCst) {
                 return Err(failure("barrier_failed", "窗口保存失败"));
             }
@@ -167,7 +207,13 @@ impl BackupPorts for Ports {
             self.imports.fetch_add(1, Ordering::SeqCst);
             *self.imported.lock().unwrap() = request.archive;
             self.events.lock().unwrap().push("session-import");
-            Ok(json!({"value":{"fixture":"workspace"}}))
+            Ok(CommittedRestore {
+                delivery: json!({"value":{"fixture":"workspace"}}),
+                maintenance_error: self
+                    .maintenance_failed
+                    .load(Ordering::SeqCst)
+                    .then(|| failure("maintenance", "已提交，但投影刷新失败")),
+            })
         })
     }
 }
@@ -685,4 +731,114 @@ async fn recovery_identity_failure_and_foreign_library_never_import_and_disabled
         .unwrap();
     assert!(runtime.tick(7).await.unwrap().is_none());
     assert!(f.backups.join(v.name).exists());
+}
+
+#[tokio::test]
+async fn preview_binds_store_instance_generation_and_settings_not_just_session_epoch() {
+    let f = Fixture::new();
+    let runtime = f.runtime();
+    let v = runtime.backup_now(caller(), 1).await.unwrap();
+    for field in [
+        &f.ports.store_generation,
+        &f.ports.store_instance,
+        &f.ports.settings_version,
+    ] {
+        let preview = runtime
+            .prepare_restore(caller(), v.name.clone(), 2)
+            .await
+            .unwrap();
+        field.fetch_add(1, Ordering::SeqCst);
+        assert_eq!(
+            runtime
+                .restore(caller(), preview.confirmation, 3)
+                .await
+                .unwrap_err()
+                .code,
+            "backup_stale"
+        );
+    }
+    assert_eq!(f.ports.imports.load(Ordering::SeqCst), 0);
+}
+#[tokio::test]
+async fn final_host_gate_rejects_generation_changed_during_barrier() {
+    let f = Fixture::new();
+    let runtime = Arc::new(f.runtime());
+    let v = runtime.backup_now(caller(), 1).await.unwrap();
+    let p = runtime.prepare_restore(caller(), v.name, 2).await.unwrap();
+    f.ports.delay_restore.store(true, Ordering::SeqCst);
+    let task = {
+        let runtime = runtime.clone();
+        tokio::spawn(async move { runtime.restore(caller(), p.confirmation, 3).await })
+    };
+    f.ports.restore_started.notified().await;
+    f.ports.store_generation.fetch_add(1, Ordering::SeqCst);
+    f.ports.restore_continue.notify_one();
+    assert_eq!(task.await.unwrap().unwrap_err().code, "backup_stale");
+    assert_eq!(f.ports.imports.load(Ordering::SeqCst), 0);
+}
+#[tokio::test]
+async fn committed_maintenance_failure_stays_committed_and_cannot_import_twice() {
+    let f = Fixture::new();
+    let runtime = f.runtime();
+    let v = runtime.backup_now(caller(), 1).await.unwrap();
+    let p = runtime.prepare_restore(caller(), v.name, 2).await.unwrap();
+    f.ports.maintenance_failed.store(true, Ordering::SeqCst);
+    let result = runtime
+        .restore(caller(), p.confirmation.clone(), 3)
+        .await
+        .unwrap();
+    assert!(matches!(result.outcome, RestoreOutcome::Committed));
+    assert!(result.maintenance_error.is_some());
+    assert!(runtime.restore(caller(), p.confirmation, 4).await.is_err());
+    assert_eq!(f.ports.imports.load(Ordering::SeqCst), 1);
+    assert_eq!(
+        result.recovery.manifest.scope,
+        BackupScope::CurrentBusinessProjection
+    );
+    assert!(f.backups.join(result.recovery.name).exists());
+}
+#[tokio::test]
+async fn private_directory_capability_rejects_renderer_override_without_rewriting_config() {
+    let f = Fixture::new();
+    let runtime = f.runtime();
+    let status = runtime.status(caller(), 1).await.unwrap();
+    assert_eq!(status.directory_mode, BackupDirectoryMode::PrivateOnly);
+    for path in [
+        String::new(),
+        f.root.join("external").to_str().unwrap().to_string(),
+        "content://tree/unsupported".into(),
+    ] {
+        assert_eq!(
+            runtime
+                .configure(
+                    caller(),
+                    ConfigPatch {
+                        directory: Some(path),
+                        ..Default::default()
+                    },
+                    2
+                )
+                .await
+                .unwrap_err()
+                .code,
+            "backup_directory_unsupported"
+        );
+    }
+    assert!(!f.root.join("config/local-backup.json").exists());
+    let desktop = f.runtime().with_selectable_directory();
+    desktop
+        .configure(
+            caller(),
+            ConfigPatch {
+                directory: Some(f.root.join("desktop-external").to_str().unwrap().into()),
+                ..Default::default()
+            },
+            3,
+        )
+        .await
+        .unwrap();
+    assert_eq!(
+        runtime.status(caller(), 4).await.unwrap_err().code,
+        "backup_directory_unsupported"
+    );
 }

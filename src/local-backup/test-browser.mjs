@@ -30,18 +30,18 @@ import{LocalBackupSettings}from'/src/local-backup/LocalBackupSettings.tsx';
 import'/src/themes/tokens.css';
 import'/__settings.css';
 const root=createRoot(document.getElementById('root'));
-const version={name:'cybernote-11d01c98-af23-4687-86d7-0cf11b6fe19f.cyberbackup',manifest:{format:'cybernote-local-backup',version:1,id:'11d01c98-af23-4687-86d7-0cf11b6fe19f',appVersion:'0.1.0',libraryId:'library-fixture',createdAtMs:1795046400000,reason:'manual',archiveBytes:102400,sha256:'a'.repeat(64)}};
-const base=()=>({config:{version:1,hours:0,keep:7,directory:''},directory:'/Users/fixture/CyberNote/backups',dataDirectory:'/Users/fixture/CyberNote/library',libraryId:'library-fixture',versions:[version],issues:[],automaticSuspended:false,lastError:null,nextDueAtMs:null});
+const version={name:'cybernote-11d01c98-af23-4687-86d7-0cf11b6fe19f.cyberbackup',manifest:{format:'cybernote-local-backup',version:1,scope:'currentBusinessProjection',id:'11d01c98-af23-4687-86d7-0cf11b6fe19f',appVersion:'0.1.0',libraryId:'library-fixture',createdAtMs:1795046400000,reason:'manual',archiveBytes:102400,sha256:'a'.repeat(64)}};
+const base=()=>({config:{version:1,hours:0,keep:7,directory:''},directory:'/Users/fixture/CyberNote/backups',dataDirectory:'/Users/fixture/CyberNote/library',libraryId:'library-fixture',versions:[version],issues:[],automaticSuspended:false,lastError:null,nextDueAtMs:null,directoryMode:window.fixture?.privateOnly?'privateOnly':'selectableFilesystem'});
 let status=base(),props={active:true,blocked:false,accessKey:'one'};
-window.fixture={calls:[],delayRead:false,delayChoose:false,delayBackup:false,readResolvers:[],chooseResolvers:[],backupResolvers:[],errorBackup:false};
+window.fixture={calls:[],delayRead:false,delayChoose:false,delayBackup:false,readResolvers:[],chooseResolvers:[],backupResolvers:[],errorBackup:false,privateOnly:false,refreshFailed:false};
 const f=window.fixture;
 const host={status:async()=>{f.calls.push(['status']);return f.delayRead?new Promise(resolve=>f.readResolvers.push(resolve)):structuredClone(status);},
 configure:async patch=>{f.calls.push(['configure',patch]);status.config={...status.config,...patch};status.directory=status.config.directory||'/Users/fixture/CyberNote/backups';return structuredClone(status);},
 backupNow:async()=>{f.calls.push(['backup']);if(f.delayBackup)await new Promise(resolve=>f.backupResolvers.push(resolve));if(f.errorBackup)throw Error('fixture: disk full');return version;},
 prepareRestore:async name=>{f.calls.push(['preview',name]);return{version,archive:{notes:12,folders:3,attachments:4,summary:'导入时保留本机内容，ID 冲突创建副本并更新设置。'},confirmation:'single-use',expiresAtMs:Date.now()+300000};},
-restore:async confirmation=>{f.calls.push(['restore',confirmation]);return{recovery:{...version,manifest:{...version.manifest,reason:'beforeRestore'}},delivery:{value:{}}};},
+restore:async confirmation=>{f.calls.push(['restore',confirmation]);return{outcome:'committed',maintenanceError:null,refreshError:f.refreshFailed?'fixture refresh failed':undefined,recovery:{...version,manifest:{...version.manifest,reason:'beforeRestore'}},delivery:{value:{}}};},
 chooseDirectory:async()=>{f.calls.push(['choose']);return f.delayChoose?new Promise(resolve=>f.chooseResolvers.push(resolve)):'/Volumes/Fixture/Backup';},revealDirectory:async directory=>f.calls.push(['reveal',directory])};
-const encrypted={export:async password=>{f.calls.push(['encrypted-export',password.length]);return{status:'success'};},prepareImport:async password=>{f.calls.push(['encrypted-preview',password.length]);return{confirmation:'encrypted-once',archive:{notes:2,folders:1,attachments:1,summary:'已解密并验证'},expiresAtMs:Date.now()+300000};},confirmImport:async confirmation=>{f.calls.push(['encrypted-import',confirmation]);return{status:'success'};},discardImport:async confirmation=>{f.calls.push(['encrypted-discard',confirmation]);}};
+const encrypted={export:async password=>{f.calls.push(['encrypted-export',password.length]);return{status:'success'};},prepareImport:async password=>{f.calls.push(['encrypted-preview',password.length]);return{confirmation:'encrypted-once',archive:{notes:2,folders:1,attachments:1,summary:'已解密并验证'},expiresAtMs:Date.now()+300000};},confirmImport:async confirmation=>{f.calls.push(['encrypted-import',confirmation]);return{outcome:'committed',maintenanceError:null};},discardImport:async confirmation=>{f.calls.push(['encrypted-discard',confirmation]);}};
 f.render=(patch={})=>{props={...props,...patch};root.render(<div className="preferences" style={{width:'100%',height:'auto',border:0,boxShadow:'none'}}><div className="preferences-workspace"><LocalBackupSettings {...props} host={host} encryptedArchive={encrypted} onArchive={async mode=>{f.calls.push(['archive',mode]);return{status:'success'};}}/></div></div>);};
 f.reset=()=>{status=base();f.calls=[];f.errorBackup=false;f.delayRead=false;f.delayChoose=false;f.delayBackup=false;f.render({active:true,blocked:false,accessKey:Math.random().toString()});};
 f.resolveReads=label=>{f.delayRead=false;const next=base();next.directory=label;for(const resolve of f.readResolvers.splice(0))resolve(next);};
@@ -142,12 +142,31 @@ try {
   await button("恢复…").click();
   await button("确认恢复").click();
   await page
-    .getByText("备份已导入；恢复前的本机快照已保留", { exact: true })
+    .getByText("备份已导入；恢复前的业务投影快照已保留", { exact: true })
     .waitFor();
   assert.deepEqual(
     (await calls()).find((c) => c[0] === "restore"),
     ["restore", "single-use"],
   );
+
+  await page.evaluate(() => {
+    window.fixture.refreshFailed = true;
+  });
+  await button("恢复…").click();
+  await button("确认恢复").click();
+  await page.getByRole("alert").filter({ hasText: "导入已提交" }).waitFor();
+  assert.equal(await button("确认恢复").count(), 0);
+  const committedCount = (await calls()).filter(
+    (c) => c[0] === "restore",
+  ).length;
+  await button("重新读取").click();
+  assert.equal(
+    (await calls()).filter((c) => c[0] === "restore").length,
+    committedCount,
+  );
+  await page.evaluate(() => {
+    window.fixture.refreshFailed = false;
+  });
 
   await page.evaluate(() => {
     window.fixture.errorBackup = true;
@@ -256,6 +275,19 @@ try {
   await page.waitForFunction(
     () => !document.querySelector('[aria-busy="true"]'),
   );
+
+  await page.evaluate(() => {
+    window.fixture.privateOnly = true;
+    window.fixture.reset();
+  });
+  await page.getByText("备份保存在应用私有目录。", { exact: false }).waitFor();
+  assert.equal(await button("更改…").count(), 0);
+  assert.equal(await button("默认").count(), 0);
+  await page.evaluate(() => {
+    window.fixture.privateOnly = false;
+    window.fixture.reset();
+  });
+  await button("更改…").waitFor();
 
   for (const [width, scheme] of [
     [960, "light"],
