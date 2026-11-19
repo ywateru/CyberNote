@@ -209,3 +209,73 @@
 .preferences-mobile .account-sync-progress .account-help { font-size: .78em; }
 @keyframes account-progress-wait { to { background-position: -200% 0; } }
 @media (prefers-reduced-motion: reduce) { .account-progress-bar:indeterminate { animation: none; } }
+
+/* Settings121: account rows share the right pane's reference list structure.
+   Native dialogs and all authorization handlers retain their own lifecycle. */
+.preferences-workspace .account-group {
+  padding: 0; margin: 0 0 12px; border: 1px solid var(--settings-line);
+  border-radius: 12px; background: var(--settings-card);
+}
+.preferences-workspace .account-profile-group,
+.preferences-mobile .preferences-workspace .account-profile-group.is-signed-in {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 0;
+}
+.preferences-workspace .account-profile { padding: 12px 16px; gap: 10px; min-width: 0; }
+.preferences-workspace .account-profile h4 { margin: 0 0 2px; font-weight: 500; }
+.preferences-workspace .account-profile p { font-size: .85em; }
+.preferences-workspace .account-avatar { width: 30px; height: 30px; border-radius: 8px; background: var(--settings-editor); color: var(--settings-muted); }
+.preferences-workspace .account-avatar svg { width: 18px; height: 18px; }
+.preferences-workspace .account-profile-group > .account-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px; margin: 0; padding: 8px 12px 8px 0; max-width: 180px; }
+.preferences-workspace .account-settings button:not(.account-device-open) { min-width: 0; border: 0; background: transparent; color: var(--settings-accent); padding: 6px 8px; }
+.preferences-workspace .account-settings .account-primary { background: transparent; color: var(--settings-accent); }
+.preferences-workspace .account-login-method { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; grid-column: 1 / -1; margin: 0; padding: 10px 16px; min-height: 56px; border-top: 1px solid var(--settings-divider); }
+.preferences-workspace .account-login-method legend { float: left; font-weight: 400; margin: 0 12px 0 0; }
+.preferences-workspace .account-login-options { gap: 4px 12px; }
+.preferences-workspace .account-login-options label { font-size: .9em; }
+.preferences-workspace .account-login-options input { accent-color: var(--settings-accent); width: 16px; height: 16px; }
+.preferences-workspace .account-profile-group > .account-help { grid-column: 1 / -1; padding: 8px 16px; margin: 0; font-size: .8em; border-top: 1px solid var(--settings-divider); }
+.preferences-workspace .account-device-heading { min-height: 56px; padding: 10px 16px; margin: 0; gap: 8px; }
+.preferences-workspace .account-device-heading h4 { font-weight: 500; }
+.preferences-workspace .account-settings .account-refresh { font-size: .9em; min-width: 0; }
+.preferences-workspace .account-devices .account-device-current { padding: 0; margin: 0; border: 0; border-radius: 0; background: transparent; }
+.preferences-workspace .account-local-heading { padding: 12px 16px; border-top: 1px solid var(--settings-divider); gap: 10px; }
+.preferences-workspace .account-device-icon { width: 30px; height: 30px; border-radius: 7px; background: var(--settings-editor); color: var(--settings-muted); }
+.preferences-workspace .account-device-icon svg { width: 20px; height: 20px; }
+.preferences-workspace .account-current-badge { background: var(--settings-editor); color: var(--settings-muted); font-size: .75em; }
+.preferences-workspace .account-devices strong { font-weight: 500; }
+.preferences-workspace .account-local-sync { border-top: 1px solid var(--settings-divider); margin: 0; padding: 0; }
+.preferences-workspace .account-toggle { padding: 8px 16px; min-height: 56px; gap: 12px; }
+.preferences-workspace .account-toggle label { font-weight: 400; }
+.preferences-workspace .account-local-sync .account-help { font-size: .85em; }
+.preferences-workspace .account-local-footer { display: block; margin: 0; }
+.preferences-workspace .account-local-footer .account-state { padding: 12px 16px; margin: 0; border-top: 1px solid var(--settings-divider); font-size: .9em; }
+.preferences-workspace .account-local-footer .account-metrics { display: block; font-size: .85em; }
+.preferences-workspace .account-local-footer .account-metrics > div { display: flex; justify-content: space-between; padding: 10px 16px; border-top: 1px solid var(--settings-divider); margin: 0; }
+.preferences-workspace .account-local-sync > .account-actions { margin: 0; padding: 6px 8px; border-top: 1px solid var(--settings-divider); }
+.preferences-workspace .account-device-open { padding: 12px 14px; gap: 14px; color: var(--settings-fg); }
+.preferences-workspace .account-device-remote { border-top: 1px solid var(--settings-divider); border-bottom: 0; border-radius: 0; background: transparent; }
+.preferences-workspace .account-device-status, .preferences-workspace .account-device-summary { font-size: .85em; margin-top: 3px; }
+.preferences-workspace .account-device-footnote { padding: 10px 16px; margin: 0; border-top: 1px solid var(--settings-divider); }
+.preferences-workspace .account-devices-empty { border-top: 1px solid var(--settings-divider); padding: 12px 16px; background: transparent; border-radius: 0; }
+.preferences-workspace .account-devices-empty > svg { width: 24px; height: 24px; }
+.preferences-workspace .account-storage-group { padding: 0 16px; }
+.preferences-workspace .account-storage-summary { min-height: 56px; font-size: 1em; font-weight: 400; }
+.preferences-workspace .account-storage-options label { border: 0; border-radius: 0; border-top: 1px solid var(--settings-divider); padding: 12px 0; background: transparent; margin: 0; }
+.preferences-workspace .account-storage-options label:has(input:checked) { background: transparent; }
+.preferences-workspace .account-error { margin: 0 0 12px; border: 0; border-left: 2px solid var(--danger); border-radius: 0; padding: 10px 14px; }
+.preferences-workspace .account-error h4 { font-weight: 500; }
+.preferences-workspace .account-error p { margin-bottom: 4px; font-size: .9em; }
+.preferences-workspace .account-notice { background: transparent; padding: 8px 2px; }
+.preferences-workspace .account-sync-progress { margin: 0; padding: 12px 16px; }
+.preferences-workspace .account-sync-progress.is-compact { margin: 0 16px 12px 56px; padding: 0; }
+.preferences-workspace .account-confirmation .account-sync-progress { margin-top: 16px; padding: 12px 0 0; }
+.preferences-workspace .account-confirmation .account-primary { background: var(--selection); }
+.preferences-mobile .preferences-workspace .account-local-heading { display: flex; align-items: center; }
+.preferences-mobile .preferences-workspace .account-device-current .account-device-icon { width: 30px; height: 30px; }
+.preferences-mobile .preferences-workspace .account-local-heading .account-device-summary { margin-right: 0; }
+.preferences-mobile .preferences-workspace .account-profile-group > .account-actions { max-width: 112px; }
+.preferences-mobile .preferences-workspace .account-profile-group > .account-actions > button { font-size: .9em; color: var(--settings-accent); }
+.preferences-mobile .preferences-workspace .account-device-heading { padding: 6px 16px; }
+.preferences-mobile .preferences-workspace .account-device-current .account-rename { margin: 0; min-width: 44px; }
+.preferences-mobile .preferences-workspace .account-local-sync { margin: 0; padding: 0; }
+.preferences-mobile .preferences-workspace .account-metrics { font-size: .85em; }

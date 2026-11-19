@@ -160,15 +160,16 @@ export default function PreferencesInterfaceDetails({
     );
   };
   return (
-    <section className="preferences-interface-details" aria-label="界面细节">
+    <section className="preferences-interface-details preferences-list" aria-label="界面细节">
       <button
         type="button"
         className="preferences-details-toggle"
+        aria-label="界面细节"
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen(!open)}
       >
-        <span>界面细节</span>
+        <span>界面细节<small>图标、操作区域与菜单</small></span>
         <ChevronDown aria-hidden="true" />
       </button>
       <div

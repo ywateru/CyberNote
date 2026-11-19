@@ -346,8 +346,6 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   }} onKeyDown={event => {
     if (event.key === "Escape" && dismiss()) { event.preventDefault(); event.stopPropagation(); }
   }}>
-    <h3 className="preferences-page-title">账户与同步</h3>
-    <p className="account-intro">在你的设备间同步备忘录</p>
     <span className="account-accessible-state" role="status" aria-live="polite" aria-atomic="true">{status ? states[status.state] : "正在读取账户状态"}</span>
     {commandError && !commandErrorInDialog && <div className="account-error account-command-error" role="alert"><h4>{commandSuggestRelogin ? "请退出账户后重新登录" : commandAdoptionTimeout ? "开启同步准备超时" : commandAdoptionBlocked ? "开启同步前需要处理旧同步内容" : `本次${commandNames[commandError.command]}未完成`}</h4><p>{error}</p><ErrorDetails error={commandError.safeError} />
       {commandAdoptionBlocked && !!status?.conflictCount && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
@@ -359,13 +357,6 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
           <h4>{signedIn ? status?.profile?.displayName || "CyberNote 账户" : authorizing ? "正在等待登录" : "登录 CyberNote"}</h4>
           {signedIn ? <p className="account-identifier">{status?.profile?.username || "已登录"}</p> : <p>{authorizing ? pendingMessage : "登录同一账户，在你的设备间收发备忘录。登录后同步默认暂停。"}</p>}
         </div></div>
-        {(!signedIn || needsLogin) && !cleanupRequired && <fieldset className="account-login-method" disabled={busy || nativeBusy || !status || authorizing}>
-          <legend>登录方式</legend>
-          <div className="account-login-options">
-            <label><input type="radio" name="account-login-surface" value="embedded" checked={loginSurface === "embedded"} onChange={() => setLoginSurface("embedded")} />应用内登录</label>
-            <label><input type="radio" name="account-login-surface" value="browser" checked={loginSurface === "browser"} onChange={() => setLoginSurface("browser")} />系统浏览器</label>
-          </div>
-        </fieldset>}
         <div className="account-actions">
           {authorizing ? <><button type="button" disabled={workingType === "cancel"} onClick={() => request({ type: "cancel" })}>取消登录</button>
             {status?.authorizationSurface === "embedded" && <button type="button" disabled={!!workingType && workingType !== "signIn" && workingType !== "signUp"} onClick={() => request({ type: "openLoginInBrowser" })}>在浏览器中继续</button>}
@@ -377,6 +368,13 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
             {canSignOut && <button type="button" disabled={busy} onClick={event => request({ type: "signOut" }, false, event.currentTarget)}>{suggestRelogin || commandSuggestRelogin ? "退出账户以重新登录" : "退出账户"}</button>}
           </>}
         </div>
+        {(!signedIn || needsLogin) && !cleanupRequired && <fieldset className="account-login-method" disabled={busy || nativeBusy || !status || authorizing}>
+          <legend>登录方式</legend>
+          <div className="account-login-options">
+            <label><input type="radio" name="account-login-surface" value="embedded" checked={loginSurface === "embedded"} onChange={() => setLoginSurface("embedded")} />应用内登录</label>
+            <label><input type="radio" name="account-login-surface" value="browser" checked={loginSurface === "browser"} onChange={() => setLoginSurface("browser")} />系统浏览器</label>
+          </div>
+        </fieldset>}
         {!signedIn && !authorizing && <p className="account-help">登录用户名区分大小写，请按注册时的写法输入。</p>}
       </section>
       {status && !statusErrorCovered && !statusErrorInDialog && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{suggestRelogin ? "请退出账户后重新登录" : adoptionTimeout ? "开启同步准备超时" : adoptionBlocked ? "开启同步前需要处理旧同步内容" : identityMismatch ? "账户身份或同步空间校验失败" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
