@@ -127,6 +127,7 @@ export function LocalBackupSettings({
   showArchiveControls = true,
 }: LocalBackupSettingsProps) {
   const [status, setStatus] = useState<BackupStatus | null>(null);
+  const [statusUnconfirmed, setStatusUnconfirmed] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -162,6 +163,7 @@ export function LocalBackupSettings({
     current.current.active &&
     !current.current.blocked;
   const disabled = !active || blocked || !!operation || loading;
+  const statusDisabled = disabled || statusUnconfirmed;
   const discardEncrypted = () => {
     const owned = encryptedOwned.current;
     encryptedOwned.current = null;
@@ -176,10 +178,14 @@ export function LocalBackupSettings({
       const value = await host.status();
       if (valid(ticket)) {
         setStatus(value);
+        setStatusUnconfirmed(false);
         if (clearError) setError("");
       }
     } catch (cause) {
-      if (valid(ticket)) setError(message(cause));
+      if (valid(ticket)) {
+        setStatusUnconfirmed(true);
+        setError(message(cause));
+      }
     } finally {
       if (reading.current === ticket) reading.current = null;
       if (valid(ticket)) setLoading(false);
@@ -194,6 +200,7 @@ export function LocalBackupSettings({
     mounted.current = true;
     generation.current++;
     setStatus(null);
+    setStatusUnconfirmed(false);
     setError("");
     setNotice("");
     setLoading(false);
@@ -359,6 +366,7 @@ export function LocalBackupSettings({
   return (
     <section
       className="local-backup-settings"
+      data-backup-state={blocked ? "blocked" : statusUnconfirmed ? "unconfirmed" : status ? "ready" : "loading"}
       aria-label="导入与备份"
       hidden={!active}
       inert={!active}
@@ -532,7 +540,7 @@ export function LocalBackupSettings({
             label="自动备份间隔"
             value={status?.config.hours}
             options={hours}
-            disabled={disabled || !status}
+            disabled={statusDisabled || !status}
             onChange={(hours) => void configure({ hours })}
           />
         </Row>
@@ -544,7 +552,7 @@ export function LocalBackupSettings({
             label="保留备份份数"
             value={status?.config.keep}
             options={keeps.map((keep) => [keep, String(keep)] as const)}
-            disabled={disabled || !status}
+            disabled={statusDisabled || !status}
             onChange={(keep) => void configure({ keep })}
           />
         </Row>
@@ -557,7 +565,7 @@ export function LocalBackupSettings({
               <button
                 className="settings121-text"
                 type="button"
-                disabled={disabled || !status}
+                disabled={statusDisabled || !status}
                 onClick={() =>
                   void run("directory", async (ticket) => {
                     const path = await host.chooseDirectory!();
@@ -578,7 +586,7 @@ export function LocalBackupSettings({
             <button
               className="settings121-text"
               type="button"
-              disabled={disabled}
+              disabled={statusDisabled}
               onClick={() =>
                 void run("reveal", async () => {
                   await host.revealDirectory!(status.directory);
@@ -594,7 +602,7 @@ export function LocalBackupSettings({
               <button
                 className="settings121-text"
                 type="button"
-                disabled={disabled}
+                disabled={statusDisabled}
                 onClick={() => void configure({ directory: "" })}
               >
                 默认
@@ -630,7 +638,7 @@ export function LocalBackupSettings({
           <button
             className="settings121-text"
             type="button"
-            disabled={disabled || !status}
+            disabled={statusDisabled || !status}
             onClick={() =>
               void run("backup", async () => {
                 await host.backupNow();
@@ -651,7 +659,7 @@ export function LocalBackupSettings({
               <button
                 className="settings121-text"
                 type="button"
-                disabled={disabled}
+                disabled={statusDisabled}
                 onClick={(event) => {
                   restoreTrigger.current = event.currentTarget;
                   void run("preview", async (ticket) => {
@@ -702,7 +710,7 @@ export function LocalBackupSettings({
               <button
                 className="settings121-text"
                 type="button"
-                disabled={disabled}
+                disabled={statusDisabled}
                 onClick={() =>
                   void run("restore", async (ticket) => {
                     const result = await host.restore(restore.confirmation);
@@ -727,7 +735,7 @@ export function LocalBackupSettings({
             <button
               className="settings121-text"
               type="button"
-              disabled={disabled}
+              disabled={statusDisabled}
               onClick={() =>
                 void run("reveal-data", async () => {
                   await host.revealDirectory!(status.dataDirectory);
@@ -739,6 +747,9 @@ export function LocalBackupSettings({
           )}
         </Row>
       </div>
+      {statusUnconfirmed && status && (
+        <p className="local-backup-status" role="status">当前状态未确认，显示上次读取结果</p>
+      )}
       {blocked && (
         <p className="local-backup-status" role="status">
           请先完成录音或当前数据操作，并确认资料库访问权限。
@@ -755,7 +766,7 @@ export function LocalBackupSettings({
           <button
             className="settings121-text"
             type="button"
-            disabled={disabled}
+            disabled={statusDisabled}
             onClick={() => void configure({ hours: status.config.hours })}
           >
             重新启用

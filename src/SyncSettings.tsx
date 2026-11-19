@@ -33,8 +33,10 @@ type Confirmation = Extract<SyncCommand, { type: "revoke" | "resolve" }>;
 export default function SyncSettings({
   active,
   onHandle,
+  conflictsOnly = false,
 }: {
   active: boolean;
+  conflictsOnly?: boolean;
   onHandle: (handle: SyncSettingsHandle | null) => void;
 }) {
   const [status, setStatus] = useState<SyncStatus | null>(null),
@@ -110,6 +112,7 @@ export default function SyncSettings({
     confirmed = false,
     background = false,
   ) => {
+    if (conflictsOnly && !["status", "conflicts", "resolve"].includes(command.type)) throw Error("此入口仅处理同步冲突");
     if (!activeRef.current || !alive.current)
       throw Error("请先打开设备同步");
     if (command.type === "status" && (working.current || reading.current))
@@ -183,7 +186,7 @@ export default function SyncSettings({
             !working.current &&
             !reading.current
           )
-            request({ type: "status" }, true);
+            request({ type: conflictsOnly ? "conflicts" : "status" }, true);
         });
     }
   };
@@ -191,7 +194,7 @@ export default function SyncSettings({
     void run(command, false, background).catch(() => {});
   useEffect(() => {
     if (!active) return;
-    if (!working.current && !reading.current) request({ type: "status" }, true);
+    if (!working.current && !reading.current) request({ type: conflictsOnly ? "conflicts" : "status" }, true);
     const interval = window.setInterval(() => {
       if (
         activeRef.current &&
@@ -199,7 +202,7 @@ export default function SyncSettings({
         !reading.current &&
         document.visibilityState !== "hidden"
       )
-        request({ type: "status" }, true);
+        request({ type: conflictsOnly ? "conflicts" : "status" }, true);
     }, 5000);
     return () => window.clearInterval(interval);
   }, [active]);
@@ -239,7 +242,7 @@ export default function SyncSettings({
       aria-busy={busy}
     >
       <header className="sync-heading">
-        <h3 id="sync-settings-title">设备同步</h3>
+        <h3 id="sync-settings-title">{conflictsOnly ? "同步冲突" : "设备同步"}</h3>
         <span className={`sync-state sync-state-${status?.state || "unknown"}`}>
           {status?.pendingCount
             ? "等待应用"
@@ -258,9 +261,9 @@ export default function SyncSettings({
           <RefreshCw size={16} />
         </button>
       </header>
-      <p className="sync-description">
+      {!conflictsOnly && <p className="sync-description">
         在你的设备间同步本地备忘录。可使用局域网、虚拟内网或隧道服务地址。
-      </p>
+      </p>}
       <div className="sync-live" role="status" aria-live="polite">
         {status?.pendingCount
           ? `已接收 ${status.pendingCount} 项，等待安全应用`
@@ -281,6 +284,7 @@ export default function SyncSettings({
           </button>
         </p>
       )}
+      {!conflictsOnly && <>
       <div className="sync-group">
         <label className="sync-field">
           <span>本机名称</span>
@@ -484,7 +488,8 @@ export default function SyncSettings({
           )}
         </div>
       )}
-      {enabled && (
+      </>}
+      {(conflictsOnly || enabled) && (
         <div className="sync-group">
           <button
             className="sync-conflict-link"
@@ -493,7 +498,7 @@ export default function SyncSettings({
             onClick={() => request({ type: "conflicts" })}
           >
             <span>冲突版本</span>
-            <span>{status.conflictCount} 项</span>
+            <span>{status?.conflictCount || 0} 项</span>
             <ChevronRight size={17} />
           </button>
           {conflicts &&

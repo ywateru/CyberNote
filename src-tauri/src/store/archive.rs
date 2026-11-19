@@ -163,6 +163,12 @@ struct ImportPlan {
     archive: Archive,
     files: Vec<Vec<u8>>,
 }
+/// Native-only validated immutable import. It owns the exact decoded payload,
+/// collision mappings and attachment bytes; committing never reopens an input path.
+pub(crate) struct PreparedArchive {
+    transaction_id: String,
+    plan: ImportPlan,
+}
 fn invalid(message: impl Into<String>) -> AppError {
     err("archive_invalid", message)
 }
@@ -790,6 +796,19 @@ impl Store {
         validate_json_budget(&bytes)?;
         Ok(bytes)
     }
+    pub(crate) fn settings_preview(&self, bytes: &[u8]) -> Result<(usize, usize, usize)> {
+        if bytes.len() as u64 > MAX_ARCHIVE {
+            return Err(limit("归档超过大小限制"));
+        }
+        validate_json_budget(bytes)?;
+        let archive: Archive = serde_json::from_slice(bytes)?;
+        let plan = self.prepare_archive(archive, &id())?;
+        Ok((
+            plan.archive.notes.len(),
+            plan.archive.folders.len(),
+            plan.archive.attachments.len(),
+        ))
+    }
     pub fn export_archive(&self, path: &Path) -> Result<()> {
         self.validate_export_target(path)?;
         self.publish_export(path, &self.archive_bytes()?)
@@ -813,9 +832,42 @@ impl Store {
         self.commit_archive(archive, true)
     }
 
+    pub(crate) fn settings_prepare_archive(&self, bytes: &[u8]) -> Result<PreparedArchive> {
+        if bytes.len() as u64 > MAX_ARCHIVE {
+            return Err(limit("归档超过大小限制"));
+        }
+        validate_json_budget(bytes)?;
+        let archive: Archive = serde_json::from_slice(bytes)?;
+        let transaction_id = id();
+        let plan = self.prepare_archive(archive, &transaction_id)?;
+        Ok(PreparedArchive {
+            transaction_id,
+            plan,
+        })
+    }
     fn commit_archive(&mut self, archive: Archive, append_only: bool) -> Result<()> {
         let transaction_id = id();
         let plan = self.prepare_archive(archive, &transaction_id)?;
+        self.commit_prepared_archive(
+            PreparedArchive {
+                transaction_id,
+                plan,
+            },
+            append_only,
+        )
+    }
+    pub(crate) fn settings_commit_archive(&mut self, prepared: PreparedArchive) -> Result<()> {
+        self.commit_prepared_archive(prepared, false)
+    }
+    fn commit_prepared_archive(
+        &mut self,
+        prepared: PreparedArchive,
+        append_only: bool,
+    ) -> Result<()> {
+        let PreparedArchive {
+            transaction_id,
+            plan,
+        } = prepared;
         self.recover_imports()?;
         let imports = self.root.join(".imports");
         fs::create_dir_all(&imports)?;

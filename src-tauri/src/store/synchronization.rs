@@ -803,6 +803,13 @@ impl Store {
         Ok(plan)
     }
     pub fn sync_apply_plan(&mut self, plan: &SyncApplyPlan) -> Result<SyncApplyReport> {
+        self.sync_apply_plan_with_cloud_settings(plan, None)
+    }
+    pub(crate) fn sync_apply_plan_with_cloud_settings(
+        &mut self,
+        plan: &SyncApplyPlan,
+        settings: Option<&[crate::cloud_sync::model::SettingVersion]>,
+    ) -> Result<SyncApplyReport> {
         let access_before = self.sync_access_states()?;
         if !enabled(&self.db)? {
             return Err(err("sync_disabled", "尚未开启同步"));
@@ -827,7 +834,25 @@ impl Store {
             tx.execute("DELETE FROM sync_inbox WHERE digest=?1", [digest])?;
         }
         tx.execute("UPDATE sync_identity SET capture=1 WHERE singleton=1", [])?;
+        let mut settings_changed = false;
+        let settings_conflicts = if let Some(settings) = settings {
+            let before: String =
+                tx.query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
+            let conflicts =
+                crate::cloud_sync::settings_port::apply(&tx, settings).map_err(cloud_error)?;
+            let after: String =
+                tx.query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
+            // settings_port is the sole portable owner projection. It updates
+            // AppearanceV2 / PresentationV1 siblings while preserving local fields.
+            settings_changed = before != after;
+            conflicts
+        } else {
+            0
+        };
         tx.commit()?;
+        if settings_changed {
+            self.committed("settings", "portable", None);
+        }
         self.sync_revoke_changed_keys(&access_before)?;
         for change in &changes {
             let revision = if change.kind == EntityKind::Note {
@@ -841,7 +866,9 @@ impl Store {
             };
             self.committed(change.kind.as_str(), &change.entity_id, revision);
         }
-        self.report(true, changes)
+        let mut report = self.report(true, changes)?;
+        report.conflicts += settings_conflicts;
+        Ok(report)
     }
     pub fn sync_apply_pending(&mut self) -> Result<SyncApplyReport> {
         let plan = self.sync_plan_apply(&[])?;
@@ -1001,5 +1028,105 @@ impl Store {
             self.committed(change.kind.as_str(), &change.entity_id, revision);
         }
         self.report(true, changes)
+    }
+}
+
+fn cloud_error(e: crate::cloud_sync::CloudError) -> AppError {
+    err(&e.code, e.message)
+}
+impl Store {
+    pub(crate) fn validate_cloud_schema(&self) -> Result<()> {
+        let count: usize = self.db.query_row(
+            "SELECT count(*) FROM sqlite_schema WHERE name GLOB 'cloud_setting_*'",
+            [],
+            |r| r.get(0),
+        )?;
+        if count == 0 {
+            return Ok(());
+        }
+        if count != 11 {
+            return Err(err(
+                "cloud_schema_invalid",
+                "云设置扩展结构不完整，未修改资料库",
+            ));
+        }
+        let tx = self.db.unchecked_transaction()?;
+        // The module accepts only its exact complete legacy schema; persist
+        // that validated migration atomically so subsequent read-only generation
+        // sees the current owner triggers. Missing/corrupt control never repairs.
+        crate::cloud_sync::settings_port::install(&tx).map_err(cloud_error)?;
+        tx.commit()?;
+        Ok(())
+    }
+    pub(crate) fn settings_hash(&self) -> Result<String> {
+        let body: String = self
+            .db
+            .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
+        Ok(sha256(body.as_bytes()))
+    }
+    pub(crate) fn cloud_generation(&self) -> Result<String> {
+        let base = self.media_generation()?;
+        let installed: bool = self.db.query_row(
+            "SELECT EXISTS(SELECT 1 FROM sqlite_schema WHERE name='cloud_setting_control')",
+            [],
+            |r| r.get(0),
+        )?;
+        let settings = if installed {
+            crate::cloud_sync::settings_port::generation(&self.db).map_err(cloud_error)?
+        } else {
+            let body: String =
+                self.db
+                    .query_row("SELECT body FROM settings WHERE id=1", [], |r| r.get(0))?;
+            let body: Value = serde_json::from_str(&body)?;
+            serde_json::to_string(
+                &["theme", "view", "sort", "groupDates"].map(|k| (k, body.get(k))),
+            )?
+        };
+        Ok(sha256(&serde_json::to_vec(&(base, settings))?))
+    }
+    pub(crate) fn cloud_capture_settings(
+        &mut self,
+    ) -> Result<Vec<crate::cloud_sync::model::SettingVersion>> {
+        let device = self
+            .sync_identity()?
+            .ok_or_else(|| err("sync_disabled", "尚未初始化版本"))?
+            .device_id;
+        let tx = self.db.unchecked_transaction()?;
+        crate::cloud_sync::settings_port::install(&tx).map_err(cloud_error)?;
+        let result =
+            crate::cloud_sync::settings_port::capture(&tx, &device).map_err(cloud_error)?;
+        tx.commit()?;
+        Ok(result)
+    }
+    pub(crate) fn cloud_settings_conflicts(&self) -> Result<usize> {
+        let count: usize = self.db.query_row(
+            "SELECT count(*) FROM sqlite_schema WHERE name='cloud_setting_control'",
+            [],
+            |r| r.get(0),
+        )?;
+        if count == 0 {
+            return Ok(0);
+        }
+        let heads = crate::cloud_sync::settings_port::heads(&self.db).map_err(cloud_error)?;
+        let mut keys = std::collections::BTreeMap::new();
+        for head in heads {
+            *keys.entry(head.key).or_insert(0usize) += 1;
+        }
+        Ok(keys.values().filter(|n| **n > 1).count())
+    }
+    pub(crate) fn cloud_validate_settings(
+        &self,
+        settings: &[crate::cloud_sync::model::SettingVersion],
+    ) -> Result<()> {
+        let device = self
+            .sync_identity()?
+            .ok_or_else(|| err("sync_disabled", "尚未初始化版本"))?
+            .device_id;
+        let tx = self.db.unchecked_transaction()?;
+        crate::cloud_sync::settings_port::install(&tx).map_err(cloud_error)?;
+        crate::cloud_sync::settings_port::capture(&tx, &device).map_err(cloud_error)?;
+        crate::cloud_sync::settings_port::apply(&tx, settings).map_err(cloud_error)?;
+        tx.rollback()?;
+        Ok(())
     }
 }

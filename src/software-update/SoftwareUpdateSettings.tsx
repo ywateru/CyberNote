@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { PreferenceSelect } from "../preferences-menu/PreferenceSelect";
+import { useMobileInteraction } from "../platform/interaction";
 import { useSoftwareUpdate } from "./useSoftwareUpdate";
 import type { UpdateStatus } from "./types";
 import "./software-update.css";
@@ -11,7 +13,9 @@ export function updateMessage(s: UpdateStatus): string {
     case "no_release":
       return s.preferences.channel === "stable"
         ? "尚无稳定版发布"
-        : "尚无可用发布";
+        : s.preferences.channel === "daily"
+          ? "尚无每日版发布"
+          : "尚无尝鲜版发布";
     case "up_to_date":
       return "此频道没有比当前版本更新的发布";
     case "available":
@@ -98,6 +102,7 @@ function Toggle({
   );
 }
 export function SoftwareUpdateSettings() {
+  const mobile = useMobileInteraction();
   const u = useSoftwareUpdate();
   const s = u.status;
   if (!s)
@@ -158,35 +163,27 @@ export function SoftwareUpdateSettings() {
         title="检查频率"
         detail={p.automaticChecks ? "自动检查的间隔" : "开启定时检查后生效"}
       >
-        <select
-          aria-label="检查频率"
-          value={p.intervalMinutes}
+        <PreferenceSelect
+          label="检查频率" mobile={mobile} value={String(p.intervalMinutes)}
           disabled={u.busy || !p.automaticChecks}
-          onChange={(e) =>
-            void u.configure({ intervalMinutes: Number(e.target.value) })
-          }
-        >
-          {[15, 30, 60, 360, 720, 1440].map((n) => (
-            <option key={n} value={n}>
-              {n < 60 ? `${n} 分钟` : `${n / 60} 小时`}
-            </option>
-          ))}
-        </select>
+          options={[15, 30, 60, 360, 720, 1440].map(n => ({value:String(n),label:n < 60 ? `${n} 分钟` : `${n / 60} 小时`}))}
+          onChange={value => void u.configure({intervalMinutes:Number(value)})}
+        />
       </Row>
       <Row title="更新频道" detail="只提供比当前版本新的发布，不支持降级">
-        <select
-          aria-label="更新频道"
-          value={p.channel}
-          disabled={u.busy}
-          onChange={(e) =>
+        <PreferenceSelect
+          label="更新频道" mobile={mobile} value={p.channel} disabled={u.busy}
+          options={[
+            { value: "stable", label: "稳定版" },
+            { value: "preview", label: "尝鲜版" },
+            { value: "daily", label: "每日版" },
+          ]}
+          onChange={channel =>
             void u.configure({
-              channel: e.target.value as "stable" | "preview",
+              channel: channel as "stable" | "preview" | "daily",
             })
           }
-        >
-          <option value="stable">稳定版</option>
-          <option value="preview">包含预发布</option>
-        </select>
+        />
       </Row>
       <Row
         title="更新徽标"

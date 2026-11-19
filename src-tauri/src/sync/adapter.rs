@@ -1348,6 +1348,15 @@ impl Runtime {
     fn coordinate(&self) {
         // No runtime lock is required while waiting for renderers. A network
         // pair command can remain in flight while stdin/IPC processes replies.
+        if self
+            .shared
+            .0
+            .lock()
+            .map(|s| s.settings_owned() || s.settings_exit)
+            .unwrap_or(true)
+        {
+            return;
+        }
         let preparation = (|| -> Result<_> {
             let s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
             // Adoption has no old apply plan. Its probe/prepare must advance
@@ -1375,6 +1384,9 @@ impl Runtime {
         });
         let result = (|| -> Result<_> {
             let mut s = self.shared.0.lock().map_err(|_| error("sync_internal"))?;
+            if s.settings_owned() || s.settings_exit {
+                return Ok(Vec::new());
+            }
             let live = self.host.participants();
             // A snapshot started before adoption must not install an old apply
             // scope or abort the adoption due to that obsolete preparation.

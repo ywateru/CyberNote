@@ -57,6 +57,9 @@ impl Version {
     pub fn prerelease(&self) -> bool {
         !self.pre.is_empty()
     }
+    pub fn daily(&self) -> bool {
+        self.pre.iter().any(|part| part == "daily")
+    }
     pub fn package_version(&self) -> String {
         format!("{}.{}.{}", self.core[0], self.core[1], self.core[2])
     }

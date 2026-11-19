@@ -60,7 +60,7 @@ function Fixture(){
  conflictsOpen={conflictsOpen} onConflictsOpenChange={setConflictsOpen}
  cloudSync={<div className='preferences-list'><details><summary className='preferences-row'>WebDAV / S3 / GitHub 同步</summary><label className='preferences-row'>服务器地址<input aria-label='fixture云地址'/></label></details></div>}
  automaticBackup={<div className='preferences-group'><div className='settings121-row'><span className='settings121-label'>共享行</span><button type='button' className='settings121-text'>共享常规操作</button></div><label className='preferences-row'><span>自动备份</span><select aria-label='fixture备份频率'><option>关闭</option><option>1 小时</option></select></label></div>}
- softwareUpdate={<div className='preferences-group'><div className='preferences-row'><span>当前版本</span><span>0.1.0</span></div><div className='preferences-row'><span>检查更新</span><button onClick={()=>{f.updateChecks=(f.updateChecks||0)+1}}>重新检查</button><PreferenceSelect label='fixture更新通道' value='stable' mobile={mobile} options={[{value:'stable',label:'稳定版'},{value:'preview',label:'预发布'},{value:'unavailable',label:'不可用项',disabled:true}]} onChange={()=>{}}/></div></div>}
+ softwareUpdate={<div className='preferences-group'><div className='preferences-row'><span>当前版本</span><span>0.1.0</span></div><div className='preferences-row'><span>检查更新</span><button onClick={()=>{f.updateChecks=(f.updateChecks||0)+1}}>重新检查</button><PreferenceSelect label='fixture更新通道' value='stable' mobile={mobile} options={[{value:'stable',label:'稳定版'},{value:'preview',label:'尝鲜版'},{value:'daily',label:'每日版'},{value:'unavailable',label:'不可用项',disabled:true}]} onChange={()=>{}}/></div></div>}
  softwareUpdateBadge={<span>更新 <small>1</small></span>}/></NativeMenuContext.Provider>:null
 }createRoot(document.getElementById('root')).render(<Fixture/>);`;
 const dataPort = `export const clearAttachmentMediaCache=async()=>{};export const getDataManagement=async()=>({version:1,capturedAt:1800000000000,rootPath:'/fixture/CyberNote',files:[{relativePath:'notes.db',category:'database',size:4096,modifiedAt:1800000000000,exists:true,status:'file'}],totals:{databaseBytes:4096,auxiliaryBytes:0,attachmentBytes:0,otherBytes:0,totalBytes:4096,declaredAttachmentBytes:0},counts:{notes:12,folders:3,attachments:0,physicalFiles:1,missingAttachments:0},warnings:[]});`;
@@ -122,7 +122,7 @@ try{
  }
  await page.getByRole('button',{name:/更新.*1/}).click();
  await page.getByRole('button',{name:'fixture更新通道',exact:true}).click();
- await page.keyboard.press('End');assert.equal(await page.evaluate(()=>document.activeElement.textContent),'预发布');
+ await page.keyboard.press('End');assert.equal(await page.evaluate(()=>document.activeElement.textContent),'每日版');
  assert.equal(await page.getByRole('menuitemradio',{name:'不可用项'}).isDisabled(),true);
  await page.keyboard.press('Escape');assert.equal(await page.getByRole('menu').count(),0);assert.equal(await page.locator('.preferences-update-pane:visible').count(),1);assert.equal(await page.getByRole('dialog').count(),1);
  await page.keyboard.press('Escape');assert.equal(await page.locator('.preferences-update-pane:visible').count(),0);assert.equal(await page.getByRole('dialog').count(),1);

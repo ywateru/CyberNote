@@ -258,6 +258,9 @@ struct Quiet {
     resolution: Option<Resolution>,
     adoption: Option<WorkspaceAdoption>,
     local_recovery: bool,
+    host_owned: bool,
+    host_finalizing: bool,
+    cloud_settings: Option<Vec<crate::cloud_sync::model::SettingVersion>>,
 }
 struct WorkspaceAdoption {
     workspace: String,
@@ -592,6 +595,9 @@ impl Session {
             resolution,
             adoption: None,
             local_recovery: false,
+            host_owned: false,
+            host_finalizing: false,
+            cloud_settings: None,
         });
         Ok(json!({"phase":"probe","operationId":id,"sessionId":self.id}))
     }
@@ -733,6 +739,188 @@ impl Session {
             "activePhase":self.quiet.current.as_ref().map(|q|q.phase),
             "latestApplyError":d.latest_apply_error,"applyErrors":apply_errors})
     }
+    pub(crate) fn settings_begin(&mut self, live: HashSet<String>) -> Result<Value> {
+        let event = self.sync_begin(live, None)?;
+        self.quiet.current.as_mut().unwrap().host_owned = true;
+        Ok(event)
+    }
+    pub(crate) fn settings_owned(&self) -> bool {
+        self.quiet.current.as_ref().is_some_and(|q| q.host_owned)
+    }
+    pub(crate) fn settings_ready(
+        &self,
+        operation: &str,
+        live: &HashSet<String>,
+        token: &Token,
+    ) -> Result<()> {
+        self.check(token, None)?;
+        let q = self
+            .quiet
+            .current
+            .as_ref()
+            .ok_or_else(|| denied("设置保存屏障已结束"))?;
+        if !q.host_owned
+            || q.id != operation
+            || q.aborted
+            || q.epoch != self.epoch
+            || q.store_instance != self.store.sync_store_instance()
+            || q.participants != *live
+            || q.phase != "prepare"
+            || q.replies != q.participants
+            || q.expired(self.sync_now())
+            || self.pending.is_some()
+            || self
+                .intents
+                .values()
+                .any(|i| q.participants.contains(&i.window))
+        {
+            return Err(denied("设置保存屏障尚未就绪或已失效"));
+        }
+        Ok(())
+    }
+    pub(crate) fn settings_hold_media(
+        &mut self,
+        operation: &str,
+        live: &HashSet<String>,
+        token: &Token,
+    ) -> Result<Value> {
+        self.settings_ready(operation, live, token)?;
+        let now = self.sync_now();
+        let q = self.quiet.current.as_mut().unwrap();
+        // The renderer already supports this bounded held-media stage.
+        q.adoption = Some(WorkspaceAdoption {
+            workspace: String::new(),
+            device: String::new(),
+            targets: HashSet::new(),
+        });
+        q.phase = "adoptionMedia";
+        q.started = now;
+        Ok(json!({"phase":"adoptionMedia","operationId":q.id,"sessionId":self.id}))
+    }
+    pub(crate) fn settings_check_held(
+        &self,
+        operation: &str,
+        live: &HashSet<String>,
+        token: &Token,
+    ) -> Result<()> {
+        self.check(token, None)?;
+        let q = self
+            .quiet
+            .current
+            .as_ref()
+            .ok_or_else(|| denied("设置保存屏障已结束"))?;
+        if !q.host_owned
+            || q.id != operation
+            || q.aborted
+            || q.epoch != self.epoch
+            || q.store_instance != self.store.sync_store_instance()
+            || q.participants != *live
+            || q.replies != q.participants
+            || q.expired(self.sync_now())
+            || self.pending.is_some()
+            || self
+                .intents
+                .values()
+                .any(|i| q.participants.contains(&i.window))
+        {
+            return Err(denied("设置保存屏障已变化"));
+        }
+        Ok(())
+    }
+    /// Transfer the already ACKed quiet save fence into import without a thaw,
+    /// another renderer save queue, or reopening a mutable payload path.
+    pub(crate) fn settings_begin_import(
+        &mut self,
+        operation: &str,
+        live: &HashSet<String>,
+        token: &Token,
+        archive: crate::store::PreparedArchive,
+    ) -> Result<()> {
+        self.settings_check_held(operation, live, token)?;
+        self.prepare_metadata(true)?;
+        let q = self.quiet.current.as_ref().unwrap();
+        self.pending = Some(Pending {
+            id: operation.into(),
+            targets: self.store.notes()?.into_iter().map(|n| n.id).collect(),
+            participants: q.participants.clone(),
+            acknowledged: q.replies.clone(),
+            allowed_saves: HashSet::new(),
+            failure: None,
+            action: json!({"type":"importArchive"}),
+            prepared_archive: Some(archive),
+        });
+        Ok(())
+    }
+    pub(crate) fn settings_check_import(
+        &self,
+        operation: &str,
+        live: &HashSet<String>,
+        token: &Token,
+    ) -> Result<()> {
+        self.check(token, None)?;
+        let q = self
+            .quiet
+            .current
+            .as_ref()
+            .ok_or_else(|| denied("恢复冻结已结束"))?;
+        let p = self
+            .pending
+            .as_ref()
+            .ok_or_else(|| denied("恢复提交屏障已结束"))?;
+        if !q.host_owned
+            || q.id != operation
+            || q.aborted
+            || q.epoch != self.epoch
+            || q.store_instance != self.store.sync_store_instance()
+            || q.participants != *live
+            || q.replies != q.participants
+            || q.expired(self.sync_now())
+            || p.id != operation
+            || p.prepared_archive.is_none()
+            || p.failure.is_some()
+            || p.participants != *live
+            || p.acknowledged != p.participants
+            || !self.intents.is_empty()
+        {
+            return Err(denied("恢复屏障、保存状态或资料库已变化"));
+        }
+        Ok(())
+    }
+    pub(crate) fn settings_release(&mut self, operation: &str, committed: bool) -> Result<Value> {
+        if !self
+            .quiet
+            .current
+            .as_ref()
+            .is_some_and(|q| q.id == operation && q.host_owned)
+        {
+            return Err(denied("设置保存屏障已结束"));
+        }
+        let event = self
+            .sync_release(if committed { "commit" } else { "abort" }, None)?
+            .0;
+        self.quiet.retry_after = None;
+        Ok(event)
+    }
+    pub(crate) fn settings_apply_cloud(
+        &mut self,
+        operation: &str,
+        live: &HashSet<String>,
+        token: &Token,
+        settings: Vec<crate::cloud_sync::model::SettingVersion>,
+    ) -> Result<(Value, Option<Value>)> {
+        self.settings_check_held(operation, live, token)?;
+        let plan = self.store.sync_plan_apply(&[])?;
+        let now = self.sync_now();
+        let q = self.quiet.current.as_mut().unwrap();
+        q.adoption = None;
+        q.host_finalizing = true;
+        q.cloud_settings = Some(settings);
+        q.started = now;
+        q.plan = Some(plan);
+        q.phase = "prepare";
+        self.sync_tick(live)?
+            .ok_or_else(|| denied("云端提交未完成"))
+    }
     pub(crate) fn sync_tick(
         &mut self,
         live: &HashSet<String>,
@@ -766,7 +954,7 @@ impl Session {
         if q.replies != q.participants {
             return Ok(None);
         }
-        if q.adoption.is_some() {
+        if q.adoption.is_some() || (q.host_owned && !q.host_finalizing) {
             if q.phase == "probe" {
                 // Every note is a target. Protected editors/recordings cannot
                 // be excluded during a workspace-wide authority change.
@@ -779,7 +967,9 @@ impl Session {
                 targets.sort();
                 let now = self.sync_now();
                 let q = self.quiet.current.as_mut().unwrap();
-                q.adoption.as_mut().unwrap().targets = targets.iter().cloned().collect();
+                if let Some(adoption) = q.adoption.as_mut() {
+                    adoption.targets = targets.iter().cloned().collect();
+                }
                 q.phase = "prepare";
                 q.replies.clear();
                 q.started = now;
@@ -848,6 +1038,7 @@ impl Session {
         }
         let plan = q.plan.clone().unwrap();
         let resolution = q.resolution.clone();
+        let cloud_settings = q.cloud_settings.clone();
         // Flush/recompute under the same final gate as intents and participant
         // validation. A registered save during prepare makes generation stale.
         if self
@@ -875,7 +1066,7 @@ impl Session {
             let report = if let Some(r) = resolution {
                 store.sync_resolve(r.kind, &r.entity_id, &r.digest, r.keep_all)?
             } else {
-                store.sync_apply_plan(&plan)?
+                store.sync_apply_plan_with_cloud_settings(&plan, cloud_settings.as_deref())?
             };
             Ok(serde_json::to_value(report)?)
         });
@@ -926,7 +1117,7 @@ impl Session {
         };
         self.sync_release("commit", access).map(Some)
     }
-    fn sync_release(
+    pub(super) fn sync_release(
         &mut self,
         outcome: &'static str,
         access: Option<Value>,

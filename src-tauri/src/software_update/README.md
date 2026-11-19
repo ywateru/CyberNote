@@ -119,7 +119,8 @@ version, or frontend-provided guard approval.
 | `software_update_install` | none | `Status` (exit requested, not installation success) |
 
 `PreferencePatch` accepts only optional `checkOnStartup`, `automaticChecks`,
-`intervalMinutes` (15/30/60/360/720/1440), `channel` (`stable`/`preview`),
+`intervalMinutes` (15/30/60/360/720/1440), `channel`
+(`stable`/`preview`/`daily`),
 `showBadge`, `quietUntil` (Unix seconds; zero shows immediately). Missing
 values preserve current settings; explicit false/zero are respected. Unknown
 stored keys survive updates; invalid JSON/types/intervals are errors. Config
@@ -173,7 +174,10 @@ present, must each be a nonempty valid full tag matching the candidate (a leadin
 Legacy receipts lacking both fields retain core validation. No build.rs or feed
 version policy is replaced by this module.
 
-SemVer prerelease/build ordering is implemented explicitly. A stable `0.1.0`
+SemVer prerelease/build ordering is implemented explicitly. Stable accepts only
+formal releases, Preview accepts prereleases and formal releases, and Daily
+accepts newer prereleases whose identifiers include `daily` (for example
+`v0.1.0-preview.3.daily.20261119`). A stable `0.1.0`
 never updates to `0.1.0-preview.N`, including on preview channel. Stable channel
 with only preview.1/.2 releases reports no stable publication, not a network
 error. Today's release pipeline keeps `package.json`/Cargo/plist versions stable

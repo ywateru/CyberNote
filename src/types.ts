@@ -87,7 +87,7 @@ export interface MetadataState {
   sequence: number;
 }
 export interface CommittedChange {
-  kind: "note" | "folder" | "attachment";
+  kind: "note" | "folder" | "attachment" | "settings";
   id: string;
   revision?: number;
 }
@@ -108,6 +108,8 @@ export interface ActionDelivery<T> {
 }
 export interface AccessState {
   sessionId: string;
+  /** Native Store incarnation for renderer-owned ephemeral operation lifetimes. */
+  storeInstance?: string;
   epoch: number;
   notes: Record<string, { epoch: number; authorized: boolean }>;
   suspended: string[];

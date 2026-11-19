@@ -82,13 +82,10 @@ const pageSize = 20;
 export default function DataManagement({
   active,
   onHandle,
-  onArchive,
   backupBlocked,
-  archiveBusy,
   accessKey,
   accessBlocked,
   section = "storage",
-  appleImport,
 }: {
   active: boolean;
   section?: "storage" | "backup";
@@ -192,27 +189,6 @@ export default function DataManagement({
         setOperation("");
         await refresh().catch(() => {});
       }
-    }
-  };
-  const archive = async (mode: "export" | "import") => {
-    assertActive();
-    if (working.current || archiveBusy || backupBlocked || accessBlocked)
-      return;
-    working.current = true;
-    setOperation(mode);
-    setActionError("");
-    setNotice("");
-    try {
-      const result = await onArchive(mode);
-      if (alive.current) {
-        if (result.status === "success")
-          setNotice(mode === "import" ? "本地备份已导入" : "完整备份已导出");
-        if (result.status === "error") setActionError(result.message);
-        if (result.status !== "cancelled") await refresh().catch(() => {});
-      }
-    } finally {
-      working.current = false;
-      if (alive.current) setOperation("");
     }
   };
   const navigate = (next: StorageView) => {
@@ -385,6 +361,8 @@ export default function DataManagement({
     <section
       ref={panel}
       className="data-management"
+      hidden={!active}
+      inert={!active}
       data-storage-view={view}
       aria-label="本地数据管理"
     >
@@ -679,38 +657,6 @@ export default function DataManagement({
             </nav>
           </>
         ) : null}
-      </div>
-      <div className="data-management-scroll data-backup-scroll" hidden={section !== "backup"} inert={section !== "backup"}>
-        {section === "backup" && actionError && <p className="data-error" role="alert">{actionError}</p>}
-        {section === "backup" && notice && <p className="data-notice" role="status">{notice}</p>}
-        {section === "backup" && backupBlocked && <p className="data-warning" role="status">请先完成录音，再导入或导出备份；内存中的录音尚未备份。</p>}
-            {appleImport}
-            <section className="data-backup-section" aria-label="本地备份">
-              <h3>本地备份</h3>
-              <div className="data-backup-actions">
-                <button
-                  type="button"
-                  disabled={
-                    backupBlocked || archiveBusy || !!operation || accessBlocked
-                  }
-                  onClick={() => void archive("import")}
-                >
-                  {operation === "import" ? "导入中…" : "导入备份…"}
-                </button>
-                <button
-                  type="button"
-                  disabled={
-                    backupBlocked || archiveBusy || !!operation || accessBlocked
-                  }
-                  onClick={() => void archive("export")}
-                >
-                  {operation === "export" ? "导出中…" : "导出完整备份…"}
-                </button>
-              </div>
-              <p className="data-explanation">
-                包含已保存的备忘录、文件夹、设置和全部登记附件原文件，其他窗口未提交的草稿不在备份中。合并导入，冲突保留为副本，并应用备份设置。
-              </p>
-            </section>
       </div>
     </section>
   );

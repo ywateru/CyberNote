@@ -278,13 +278,16 @@ impl SoftwareUpdater {
         if !exhausted {
             return Err("release_feed_limit".into());
         }
-        let preview = before.preferences.channel == Channel::Preview;
+        let channel = before.preferences.channel;
         let has_channel = all.iter().any(|r| {
             !r.draft
-                && Version::parse(&r.tag_name)
-                    .is_ok_and(|v| preview || (!r.prerelease && !v.prerelease()))
+                && Version::parse(&r.tag_name).is_ok_and(|v| match channel {
+                    Channel::Stable => !r.prerelease && !v.prerelease(),
+                    Channel::Preview => true,
+                    Channel::Daily => r.prerelease && v.daily(),
+                })
         });
-        let release = feed::select(all, &before.current_version, preview, &self.target)?;
+        let release = feed::select(all, &before.current_version, channel, &self.target)?;
         let mut i = self.inner.lock().unwrap();
         // Retain a completed download only when it still describes the selected asset.
         let same = i.verified.as_ref().is_some_and(|v| {

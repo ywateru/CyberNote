@@ -1,4 +1,4 @@
-use super::version::Version;
+use super::{storage::Channel, version::Version};
 use serde::{Deserialize, Serialize};
 
 pub const FEED: &str = "https://api.github.com/repos/ywateru/CyberNote/releases";
@@ -78,7 +78,7 @@ impl Target {
 pub fn select(
     releases: Vec<GithubRelease>,
     current: &str,
-    preview: bool,
+    channel: Channel,
     target: &Target,
 ) -> Result<Option<Release>, String> {
     let current = Version::parse(current)?;
@@ -90,7 +90,12 @@ pub fn select(
         let Ok(v) = Version::parse(&r.tag_name) else {
             continue;
         };
-        if v <= current || (!preview && (r.prerelease || v.prerelease())) {
+        let allowed = match channel {
+            Channel::Stable => !r.prerelease && !v.prerelease(),
+            Channel::Preview => true,
+            Channel::Daily => r.prerelease && v.daily(),
+        };
+        if v <= current || !allowed {
             continue;
         }
         eligible.push((v, r));

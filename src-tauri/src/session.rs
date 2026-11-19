@@ -46,9 +46,11 @@ pub struct Pending {
     allowed_saves: HashSet<String>,
     pub failure: Option<String>,
     action: Value,
+    prepared_archive: Option<crate::store::PreparedArchive>,
 }
 pub struct Session {
     pub store: Store,
+    pub(crate) settings_exit: bool,
     id: String,
     epoch: u64,
     note_epochs: HashMap<String, u64>,
@@ -66,6 +68,7 @@ impl Session {
     pub fn new(store: Store) -> Self {
         Self {
             store,
+            settings_exit: false,
             id: Uuid::new_v4().to_string(),
             epoch: 1,
             note_epochs: HashMap::new(),
@@ -109,7 +112,7 @@ impl Session {
             );
         }
         Ok(
-            json!({"sessionId":self.id,"epoch":self.epoch,"notes":notes,"suspended":self.pending.as_ref().map(|p|p.targets.clone()).unwrap_or_default(),"operationId":self.pending.as_ref().map(|p|p.id.clone())}),
+            json!({"sessionId":self.id,"storeInstance":self.store.sync_store_instance().to_string(),"epoch":self.epoch,"notes":notes,"suspended":self.pending.as_ref().map(|p|p.targets.clone()).unwrap_or_default(),"operationId":self.pending.as_ref().map(|p|p.id.clone())}),
         )
     }
     pub fn tagged(&self, value: Value) -> Result<Value> {
@@ -142,6 +145,43 @@ impl Session {
     }
     pub fn workspace(&self) -> Result<Value> {
         self.tagged(self.store.workspace()?)
+    }
+    pub(crate) fn settings_seal_exit(&mut self, token: &Token) -> Result<()> {
+        self.check(token, None)?;
+        if self.pending.is_some()
+            || self.sync_has_operation()
+            || self.external_has_operation()
+            || !self.intents.is_empty()
+        {
+            return Err(denied("仍有保存、同步或外部写操作，安装已取消"));
+        }
+        self.settings_exit = true;
+        Ok(())
+    }
+    pub(crate) fn settings_recovery_stage(
+        &self,
+        operation: &str,
+        live: &HashSet<String>,
+        token: &Token,
+    ) -> Result<crate::store::DocumentStage> {
+        self.check(token, None)?;
+        let p = self
+            .pending
+            .as_ref()
+            .ok_or_else(|| denied("导入屏障已结束"))?;
+        if p.id != operation
+            || p.action["type"] != "importArchive"
+            || p.failure.is_some()
+            || p.participants != *live
+            || p.participants != p.acknowledged
+            || self
+                .intents
+                .values()
+                .any(|i| p.participants.contains(&i.window))
+        {
+            return Err(denied("导入保存确认尚未完成或已变化"));
+        }
+        self.store.stage_archive()
     }
     pub fn export_archive(&self, path: &std::path::Path, token: &Token) -> Result<()> {
         self.check(token, None)?;
@@ -452,7 +492,7 @@ impl Session {
                     .iter()
                     .map(|(id, epoch)| (id.clone(), json!({"epoch":epoch,"authorized":false})))
                     .collect();
-                json!({"sessionId":self.id,"epoch":self.epoch,"notes":notes,"suspended":[],"operationId":null})
+                json!({"sessionId":self.id,"storeInstance":self.store.sync_store_instance().to_string(),"epoch":self.epoch,"notes":notes,"suspended":[],"operationId":null})
             }
         };
         Ok(
@@ -514,6 +554,7 @@ impl Session {
             allowed_saves,
             failure: None,
             action,
+            prepared_archive: None,
         });
         self.event("prepare", &id, &targets)
     }
@@ -573,10 +614,14 @@ impl Session {
         let importing = p.action["type"] == "importArchive";
         let result = self.apply_store(|store| {
             if importing {
-                let path = p.action["path"]
-                    .as_str()
-                    .ok_or_else(|| denied("缺少归档路径"))?;
-                store.import_archive(std::path::Path::new(path))?;
+                if let Some(prepared) = p.prepared_archive {
+                    store.settings_commit_archive(prepared)?;
+                } else {
+                    let path = p.action["path"]
+                        .as_str()
+                        .ok_or_else(|| denied("缺少归档路径"))?;
+                    store.import_archive(std::path::Path::new(path))?;
+                }
                 store.workspace()
             } else {
                 store.action(p.action)

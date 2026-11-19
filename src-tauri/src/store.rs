@@ -19,6 +19,7 @@ use uuid::Uuid;
 pub(crate) mod apple_import;
 #[path = "store/archive.rs"]
 mod archive;
+pub(crate) use archive::PreparedArchive;
 #[path = "store/attachment_media.rs"]
 pub(crate) mod attachment_media;
 #[path = "store/attachment_operations.rs"]
@@ -238,6 +239,7 @@ impl Store {
         };
         s.validate_application_schema()?;
         s.validate_sync_schema()?;
+        s.validate_cloud_schema()?;
         s.initialize_storage()?;
         s.initialize_application_storage()?;
         s.db.execute_batch(

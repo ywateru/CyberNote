@@ -1,40 +1,42 @@
 # Settings121 验证记录
 
-日期：2026-11-19。状态：实施中。以下是验收清单，所有结果尚待本轮准确源码验证；未填写结果不表示通过。
+日期：2026-11-19。状态：源码和隔离运行验证完成；真实外部服务与设备边界待验。
 
 设计入口：[设置重构契约](../../architecture/settings121.md)。任务：[实施计划](../../plan/settings121.md)。保留历史CyberBus验收范围，不将云存储测试外推为设备同步验收。
 
 | 边界 | 必须证明的行为 | 当前证据 |
 | --- | --- | --- |
-| AGENTS | 文件保留本项目工程规范，不包含参考项目名称或链接 | 待最终核对 |
-| 桌面结构 | 左栏原尺寸/样式；无设备同步条目；右侧面包屑/查找/分隔列表 | 待浏览器截图与DOM |
-| 视觉 | 参考的浅暗tokens、圆角、行高、分段/文字操作；无旧大标题表单 | 待同尺寸核对 |
-| 可达性 | Tab/Shift-Tab约束、内层Escape、手机返回、关闭恢复入口焦点 | 待运行 |
-| 原功能 | 主题/字号/notes/Agent/存储/Apple导入继续接实际handler | 待针对性回归 |
-| 账户 | CyberBus登录/退出/许可/设备动作守卫和单错误面不回退 | 待账户边界回归 |
-| 冲突 | 入口迁到账户内，查询/选择/解决保留，旧配对界面不复活 | 待真实路径核对 |
-| WebDAV | 认证、读写、目录、ETag条件、404/401/网络区别 | 待本地HTTP fixture |
-| S3 | SigV4路径/查询/编码、endpoint/region、临时凭据、条件写入 | 待固定签名与HTTP fixture |
-| GitHub | repo/branch/prefix、Contents API、blob SHA、并发拒绝/限制 | 待本地API fixture |
-| 云端密文 | 随机盐/nonce、错误密码/篡改零写入、秘密不出status/日志 | 待加密负例 |
-| 内容同步 | 稳定ID、双端独有内容、同项修改/冲突、墓碑及附件原字节 | 待真实Store往返 |
-| 首次/恢复 | 显式预览确认、保存屏障、当前内容保护、失败可恢复 | 待宿主集成 |
-| 本地备份 | 默认关闭、间隔/保留、原子manifest、目录、版本/恢复 | 待临时目录测试 |
-| 调度 | 应用运行/有效权限/无录音；不重复启动；退出清理 | 待生命周期测试 |
-| 导入导出 | 原生文件选择、取消/密码错误/坏文件/内容附件往返 | 待Store与界面测试 |
-| 检查更新 | stable/preview语义、平台架构、无发布/网络/错误区分 | 待feed fixture |
-| 下载更新 | 有界进度、SHA256/身份、坏包拒绝、重试、失败清理 | 待包fixture |
-| 安装更新 | 用户确认、保存/录音退出守卫、系统签名限制及回滚 | 待受控原生路径核验 |
-| 移动/窄屏 | 390px/极大字号/浅暗无横向溢出；44px触达 | 待浏览器截图 |
-| 组合 | 版本一致性、typecheck/build、命令注册、文档/产品输入 | 待整合检查 |
+| AGENTS | 文件保留本项目工程规范，不包含参考项目名称或链接 | 独立审查pass；全文无相关名称/URL |
+| 桌面结构 | 左栏原尺寸/样式；无设备同步条目；右侧面包屑/查找/分隔列表 | 真实React、实际App桌面/手机fixture pass |
+| 视觉 | 参考的浅暗tokens、圆角、行高、分段/文字操作；无旧大标题表单 | 独立复审及48组菜单布局、浅暗/窄屏截图pass |
+| 可达性 | Tab/Shift-Tab约束、内层Escape、手机返回、关闭恢复入口焦点 | 独立负例pass；程序化焦点跨兄弟层仍有P3边界 |
+| 原功能 | 主题/字号/notes/Agent/存储/Apple导入继续接实际handler | 实际App fixture与账户82项边界回归pass |
+| 账户 | CyberBus登录/退出/许可/设备动作守卫和单错误面不回退 | 账户边界回归pass；真实CyberBus三端未在本轮重验 |
+| 冲突 | 入口迁到账户内，查询/选择/解决保留，旧配对界面不复活 | 实际App callback→query→确认→resolve→Back pass |
+| WebDAV | 认证、读写、目录、ETag条件、404/401/网络区别 | 本地HTTP fixture pass |
+| S3 | SigV4路径/查询/编码、endpoint/region、临时凭据、条件写入 | AWS向量、固定签名与HTTP fixture pass |
+| GitHub | repo/branch/prefix、Contents API、blob SHA、并发拒绝/限制 | 本地API/大文件raw/CAS fixture pass |
+| 云端密文 | 随机盐/nonce、错误密码/篡改零写入、秘密不出status/日志 | 加密与秘密不回传回归pass |
+| 内容同步 | 稳定ID、双端独有内容、同项修改/冲突、墓碑及附件原字节 | 真实Store跨不同workspace、媒体与冲突回归pass |
+| 首次/恢复 | 显式预览确认、保存屏障、当前内容保护、失败可恢复 | 全窗quiet、不可变归档、录音阻断与committed receipt pass |
+| 本地备份 | 默认关闭、间隔/保留、原子manifest、目录、版本/恢复 | 16项运行时测试与React fixture pass |
+| 调度 | 应用运行/有效权限/无录音；不重复启动；退出清理 | 宿主定向测试pass；真实长期驻留未验 |
+| 导入导出 | 原生文件选择、取消/密码错误/坏文件/内容附件往返 | 实际App adapter与Store/加密回归pass |
+| 检查更新 | stable/preview/daily语义、平台架构、无发布/网络/错误区分 | 30项更新器、身份与React测试pass |
+| 下载更新 | 有界进度、SHA256/身份、坏包拒绝、重试、失败清理 | 实际解压/CRC/包fixture pass |
+| 安装更新 | 用户确认、保存/录音退出守卫、系统签名限制及回滚 | 假bundle/活进程/lease测试pass；真实安装替换未执行 |
+| 移动/窄屏 | 390px/极大字号/浅暗无横向溢出；44px触达 | Chrome/Android UA fixture pass；真实WebView未验 |
+| 组合 | 版本一致性、typecheck/build、命令注册、文档/产品输入 | typecheck/version/build/Rust check/native dev build pass |
 
 本轮不使用用户真实云端凭据、笔记库或正在运行安装包进行破坏性测试。真实WebDAV/S3/GitHub服务、系统安装器及手机功能如未运行，在交付中明确列为未验收；本地fixture不代替这些证据。
 
-## 进行中的模块证据
+## 本轮命令证据
 
-- UI `e29a7d8c` 已有真实React浅暗/窄屏产物和180种布局组合独核；独审发现更新Escape优先级、异步搜索焦点、桌面菜单和操作/徽标视觉5项阻塞，尚未关闭。模块harness不能代替实际App入口和原生接线。
-- 云 `189b348e` 作者16项Rust/7组浏览器通过，包含真实Store跨不同workspace八轮往返；尚待独立审查及真实Host窗口屏障装配。
-- 备份 `185d76cc` 和更新 `cfde3810` 已冻结供独立审查；作者结果不当作独立验收。更新模块21项Rust、10项假应用helper测试及React fixture通过，实际当前App替换未测试；现有unsigned Android只支持检查/下载。
-- 设计审查的身份桥接探针已通过，完整审查及host剩余门槛见[设计审查](../../plan/reviews/settings121-design.md)。实现级barrier、同事务设置、恢复保护与退出lease仍需集成验证。
-- 备份最终 `37111325` 的[独立审查](../../plan/reviews/settings121-backup.md) pass，16项core、1项真实Store定向、6项独立Rust负例通过；已有状态读取失败后的旧值标识为P3非阻塞，宿主条件逐条保留待验。UI修复 `c68ee19b` 正在复审，更新5项独审阻塞尚未关闭。
-- 后续复核：UI `c68ee19b`、更新 `5f060a01`、发行身份 `db73d2d5` 均已通过各自独立复审并接收；历史blocked报告保留，最新结论见各 `*-recheck.md`。云修复 `f57c40bf` 正在模块复审，公共宿主冻结点 `dfc5c841` 的原生编译与actualApp作者证据尚待独立宿主审查关闭，不作为整体交付完成。
+- `pnpm typecheck`、`pnpm version:check`、`pnpm build`、`git diff --check` 通过；生产前端构建2009 modules。
+- 宿主定向测试9/9、本地备份16/16、云端23/23、更新器29/29通过；另有恢复活动录音阻断和不可变归档两项独立负例通过。
+- 最终只读复核确认恢复的两项原始 P1 已关闭；其新增失败路径回归还证明云端最终应用错误会释放保存冻结并可重新建立 barrier。复核最终结论为 pass，宿主定向测试为10/10。
+- 实际App 1280px桌面与390px手机fixture通过；覆盖云端预览/确认与外观投影、账户冲突resolve、备份/加密导入、更新入口、ready ack、访问代次清理和committed warning。
+- 设置、云、备份、更新React/Chrome回归通过；浅暗、320/390/520px、44px触达、菜单键盘与单错误面通过。
+- `cargo check --lib` 和完整 `cargo build` 通过，使用真实sidecar；Rust仍有既存/未使用警告，无编译或链接错误。
+
+未运行：真实WebDAV/S3/GitHub账户、CyberBus Android/Mac三端传输、macOS已安装包替换、Android unsigned APK系统安装、WebKit（本机Playwright WebKit缺失）、Android WebView/实体设备、真实IME/麦克风/文件选择器。Chrome/Android UA和本地HTTP/临时Store证据不外推为这些验收。

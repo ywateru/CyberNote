@@ -68,8 +68,14 @@ try {
   await page.getByRole("switch", { name: "定时检查", exact: true }).uncheck();
   assert(await page.getByLabel("检查频率", { exact: true }).isDisabled());
   await page.getByRole("switch", { name: "定时检查", exact: true }).check();
-  await page.getByLabel("检查频率", { exact: true }).selectOption("15");
-  await page.getByLabel("更新频道", { exact: true }).selectOption("preview");
+  await page.getByLabel("检查频率", { exact: true }).click();
+  await page
+    .getByRole("menuitemradio", { name: "15 分钟", exact: true })
+    .click();
+  await page.getByLabel("更新频道", { exact: true }).click();
+  await page
+    .getByRole("menuitemradio", { name: "每日版", exact: true })
+    .click();
   await page.getByRole("switch", { name: "启动时检查", exact: true }).focus();
   await page.keyboard.press("Space");
   assert.equal(

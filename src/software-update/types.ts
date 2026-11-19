@@ -2,7 +2,7 @@ export type UpdatePreferences = {
   checkOnStartup: boolean;
   automaticChecks: boolean;
   intervalMinutes: number;
-  channel: "stable" | "preview";
+  channel: "stable" | "preview" | "daily";
   showBadge: boolean;
   quietUntil: number;
 };

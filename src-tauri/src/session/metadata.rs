@@ -6,6 +6,9 @@ impl Session {
         json!({"sessionId":self.id,"sequence":self.metadata_sequence})
     }
     pub(super) fn prepare_metadata(&mut self, changes_facts: bool) -> Result<()> {
+        if self.settings_exit {
+            return Err(denied("更新安装已封存编辑，请等待退出或取消安装"));
+        }
         self.metadata_event = None;
         self.last_commit = None;
         if changes_facts && self.metadata_sequence >= MAX_SEQUENCE {

@@ -1,3 +1,8 @@
+import { buildInfo, releaseIdentityNotice } from "./build-info";
+import { SoftwareUpdateProvider, SoftwareUpdateSettings, UpdateBadge } from "./software-update";
+import { LocalBackupSettings, createLocalBackupClient } from "./local-backup";
+import type { EncryptedArchiveHost, EncryptedImportPreview, ImportCommitted } from "./local-backup/contracts";
+import { CloudSyncSettings } from "./cloud-sync";
 import { appearanceOf, applyAppearance } from "./themes/appearance";
 import { AttachmentMetadataContext } from "./use-attachment-media";
 import { attachmentSourcePool } from "./attachment-source-pool";
@@ -42,6 +47,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -104,7 +110,7 @@ import {
 } from "./attachment-target";
 import { exit } from "@tauri-apps/api/app";
 import { getCurrentWindow, type CloseRequestedEvent } from "@tauri-apps/api/window";
-import { open, save } from "@tauri-apps/plugin-dialog";
+import { open, save, confirm } from "@tauri-apps/plugin-dialog";
 import {
   ChevronDown,
   ChevronLeft,
@@ -147,8 +153,6 @@ import {
   queryAttachmentOperation,
   cancelAttachmentOperation,
   readNoteText,
-  exportArchive,
-  importArchive,
   registerSaveIntent,
   acknowledgeAccess,
   subscribeAccess,
@@ -339,6 +343,8 @@ function App() {
   const [modal, setModal] = useState<string | null>(null);
   const [modalValue, setModalValue] = useState("");
   const [preferencesTab, setPreferencesTab] = useState<PreferencesTab>("settings");
+  const [conflictsOpen, setConflictsOpen] = useState(false);
+  const [settingsCoordinationReady,setSettingsCoordinationReady]=useState(0);
   const preferencesTrigger = useRef<HTMLElement | null>(null);
   const [contextNote, setContextNote] = useState<string | null>(null);
   const [noteMenuPoint, setNoteMenuPoint] = useState<{
@@ -462,7 +468,6 @@ function App() {
   const dataManagementHandle = useRef<DataManagementHandle | null>(null);
   const appleNotesImportHandle = useRef<AppleNotesImportHandle | null>(null);
   const accountSettingsHandle = useRef<AccountSettingsHandle | null>(null);
-  const accountConflictsRequested = useRef(false);
   const syncSettingsHandle = useRef<SyncSettingsHandle | null>(null);
   const [archiveBusy, setArchiveBusy] = useState(false);
   const archiveRunning = useRef(false);
@@ -1124,6 +1129,7 @@ function App() {
       updateQuietWindow(value => value + 1);
       return {
         flush: async () => {
+          await settingsOwner.flush();
           for (;;) {
             const jobs = ids.map(id => queues.current.get(id));
             await Promise.all(jobs);
@@ -1215,7 +1221,7 @@ function App() {
     let disposed = false;
     let unlisten: (() => void) | undefined;
     void subscribeNetworkSync(event => { void networkSync.receive(event).catch(quietHost.current.error); }, error => quietHost.current.error(error)).then(release => {
-      if (disposed) release(); else unlisten = release;
+      if (disposed) release(); else { unlisten = release; setSettingsCoordinationReady(value=>value|1); }
     }).catch(quietHost.current.error);
     // User navigation must wait for the cancellation's linearized terminal
     // receipt. A click in an unrelated writable editor remains independent.
@@ -1551,6 +1557,7 @@ function App() {
     }
   };
   const handleCloseRequested = async (event: CloseRequestedEvent) => {
+          if (quitState.current) { event.preventDefault(); return; }
           if (windowWrites.frozen()) {
             event.preventDefault();
             await windowWrites.cancel();
@@ -1621,6 +1628,12 @@ function App() {
     if (!native) return;
     const releases: (() => void)[] = [];
     let live = true;
+    let installed=0;
+    const registered=(release:()=>void)=>{
+      if (!live) { release(); return; }
+      releases.push(release);
+      if (++installed===6) setSettingsCoordinationReady(value=>value|2);
+    };
     const ready = new Map<
       string,
       { resolve: () => void; reject: (error: Error) => void }
@@ -1663,17 +1676,15 @@ function App() {
           ready.get(payload.id)?.resolve();
       })
       .then((release) => {
-        if (live) releases.push(release);
-        else release();
+        registered(release);
       });
-    void getCurrentWindow()
-      .listen<{ id: string }>("notes-recording-quit", async ({ payload }) => {
-        await windowWrites.cancel();
+    const onQuit = (settingsQuit: boolean) => async ({ payload }: { payload: { id: string } }) => {
         if (quitState.current) return;
         // Seal user/native entry synchronously, before close/flush can yield.
         const held = { id: payload.id, editors: new Map<Editor, boolean>() };
         quitState.current = held;
         try {
+          await windowWrites.cancel();
           if (createFlight.current) {cancelCreateFocus();throw Error("正在创建备忘录，退出已取消；请完成后重试。");}
           if (
             [...editorsRef.current.values()].some(
@@ -1696,22 +1707,22 @@ function App() {
             ready.set(payload.id, { resolve, reject }),
           );
           void sealed.catch(() => {});
-          await invoke("recording_quit_sealed", { id: payload.id });
+          await invoke(settingsQuit ? "settings_quit_ack" : "recording_quit_sealed", settingsQuit ? { id: payload.id, sealed: true, success: true } : { id: payload.id });
           await sealed;
           ready.delete(payload.id);
           if (quitState.current !== held) throw Error("本次退出已取消");
           const recordingClosing = recordingLifecycle.current.close();
           const ocrClosing = ocrLifecycle.current.close();
           await Promise.all([recordingClosing, ocrClosing]);
-          await settingsOwner.flush();
-          await flush();
+          do { await settingsOwner.flush(); await flush(); } while (settingsOwner.needsConfirmation);
           if (quitState.current !== held)
             throw Error("本次退出已取消，请重新执行。");
-          await invoke("recording_quit_ack", { id: payload.id, success: true });
+          await invoke(settingsQuit ? "settings_quit_ack" : "recording_quit_ack", { id: payload.id, success: true, ...(settingsQuit ? { sealed: false } : {}) });
         } catch (e) {
           fail(e);
-          await invoke("recording_quit_ack", {
+          await invoke(settingsQuit ? "settings_quit_ack" : "recording_quit_ack", {
             id: payload.id,
+            ...(settingsQuit ? { sealed: false } : {}),
             success: false,
           })
             .then(() => resume(payload.id))
@@ -1720,11 +1731,15 @@ function App() {
             .show()
             .catch(() => {});
         }
-      })
-      .then((release) => {
-        if (live) releases.push(release);
-        else release();
-      });
+      };
+    for (const [name, settingsQuit] of [["notes-recording-quit", false], ["notes-settings-quit", true]] as const) {
+      void getCurrentWindow().listen<{ id: string }>(name, onQuit(settingsQuit)).then(release => { registered(release); });
+    }
+    void getCurrentWindow().listen<{ id: string }>("notes-settings-quit-ready", ({payload}) => {
+      if (quitState.current?.id === payload.id) ready.get(payload.id)?.resolve();
+    }).then(release => { registered(release); });
+    void getCurrentWindow().listen<{ id: string }>("notes-settings-quit-cancelled", ({payload}) => resume(payload.id))
+      .then(release => { registered(release); });
     void getCurrentWindow()
       .listen<{ id: string }>(
         "notes-recording-quit-cancelled",
@@ -1736,8 +1751,7 @@ function App() {
         },
       )
       .then((release) => {
-        if (live) releases.push(release);
-        else release();
+        registered(release);
       });
     return () => {
       live = false;
@@ -1747,6 +1761,12 @@ function App() {
       releases.forEach((release) => release());
     };
   }, [flush, fail, settingsOwner]);
+  useEffect(() => {
+    if (!native || settingsCoordinationReady!==3 || !workspaceLoaded || !quietMounted.current || !accessGate.state || synchronizingRef.current) return;
+    let disposed = false;
+    void invoke("settings_host_ready", { expected: accessGate.expected() }).catch(error => { if (!disposed) fail(error); });
+    return () => { disposed = true; };
+  }, [workspaceLoaded, ws.access?.sessionId, settingsCoordinationReady]);
   clearSensitive.current = (ids) => {
     if (!ids.length) return;
     attachmentSourcePool.revoke(ids);
@@ -2117,7 +2137,7 @@ function App() {
   const preferencesBack = () => {
     if (appleNotesImportHandle.current?.inspect().open) { void appleNotesImportHandle.current.close().catch(fail); return; }
     if (preferencesTab === "account" && accountSettingsHandle.current?.dismiss()) return;
-    if (preferencesTab === "sync" && syncSettingsHandle.current?.dismiss()) return;
+    if (preferencesTab === "account" && conflictsOpen) { if (syncSettingsHandle.current?.dismiss()) return; setConflictsOpen(false); return; }
     if (preferencesTab === "data" && dataManagementHandle.current?.inspect().view !== "overview" && dataManagementHandle.current) { dataManagementHandle.current.navigate("overview"); return; }
     if (mobile && preferencesTab !== "home") setPreferencesTab("home");
     else setModal(null);
@@ -2201,19 +2221,24 @@ function App() {
         if (typeof path !== "string") return { status: "cancelled" };
         if (recordingTicket.current || record) throw Error("请先完成录音，再操作备份");
         await flush();
+        archiveRunning.current = false;
         if (mode === "export") {
-          await exportArchive(path);
+          await invoke("settings_archive", { expected: accessGate.expected(), request: { operation: "export", path } });
           setNotice("本地备份已导出");
         } else {
-          const imported = await importArchive(path);
-          if (imported.value && hydrate(imported.value)) {
-            restoreSelection(imported.value);
-          } else {
+          const preview = await invoke<EncryptedImportPreview>("settings_archive", { expected: accessGate.expected(), request: { operation: "preview", path } });
+          if (!await confirm(`${preview.archive.summary}\n${preview.archive.notes} 条备忘录，${preview.archive.attachments} 个附件。先保留当前内容的保护备份。`, { title: "确认合并导入", kind: "warning" })) {
+            await invoke("settings_archive", { expected: accessGate.expected(), request: { operation: "discard", confirmation: preview.confirmation } });
+            return { status: "cancelled" };
+          }
+          const imported = await invoke<{ delivery: Workspace; maintenanceError?: { message: string } }>("settings_archive", { expected: accessGate.expected(), request: { operation: "confirm", confirmation: preview.confirmation } });
+          // A committed import is never replayed because its trusted refresh failed.
+          try {
             const synced = await synchronizeRef.current();
             if (!synced.success) throw synced.error;
             if (!synchronization.current(synced)) throw new MetadataStale();
             restoreSelection(synced.snapshot);
-          }
+          } catch (error) { fail(error); setNotice("本地备份已导入；正文刷新待重试，请勿重复导入。"); return {status:"success"}; }
           if (imported.maintenanceError) fail(imported.maintenanceError);
           setNotice("本地备份已导入");
         }
@@ -3607,7 +3632,7 @@ function App() {
         "settings.tab": ({ tab }) => {
           if (modal !== "preferences") throw Error("设置尚未打开");
           if (!isPreferencesTab(tab)) throw Error("未知设置分类");
-          setPreferencesTab(tab === "home" && !mobile ? "settings" : tab);
+          if (tab === "sync") { setPreferencesTab("account"); setConflictsOpen(true); } else setPreferencesTab(tab === "home" && !mobile ? "settings" : tab);
         },
         "data.open": () => openModal("data"),
         "image.preview": ({ id }) => {
@@ -3633,7 +3658,7 @@ function App() {
           ["sync.pair", "pair"], ["sync.now", "syncNow"], ["sync.stop", "stop"], ["sync.resume", "resume"],
           ["sync.revoke", "revoke"], ["sync.conflicts", "conflicts"], ["sync.resolve", "resolve"],
         ].map(([id, type]) => [id, async (args: Record<string, unknown>) => {
-          if (modal !== "preferences" || preferencesTab !== "sync" || !syncSettingsHandle.current) throw Error("请先打开设备同步");
+          if (modal !== "preferences" || (preferencesTab !== "account" || !conflictsOpen) || !syncSettingsHandle.current) throw Error("请先展开同步冲突");
           await syncSettingsHandle.current.run({ ...args, type } as SyncCommand);
           return syncSettingsHandle.current?.inspect();
         }])),
@@ -4101,6 +4126,55 @@ function App() {
     if (!startupReady) return;
     return startup.scheduleReady();
   }, [startupReady, loading, workspaceLoaded, syncError, error]);
+  const settingsBeforeOperation = async () => {
+    if (recordingTicket.current || quitState.current || archiveRunning.current) throw Error("请先完成录音或当前数据操作");
+    await windowWrites.cancel(); await settingsOwner.flush(); await flush();
+  };
+  const settingsAfterRestore = async (delivery: unknown) => {
+    void delivery; // Native receipt establishes commit; the shared bridge revalidates authority.
+    const synced = await synchronizeRef.current();
+    if (!synced.success) throw synced.error;
+    if (!synchronization.current(synced)) throw new MetadataStale();
+    restoreSelection(synced.snapshot);
+  };
+  const settingsCallbacks=useRef({before:settingsBeforeOperation, after:settingsAfterRestore});
+  settingsCallbacks.current={before:settingsBeforeOperation, after:settingsAfterRestore};
+  const backupClient = useMemo(() => createLocalBackupClient({ expected: () => accessGate.expected(), beforeOperation: () => settingsCallbacks.current.before(),
+    afterRestore: delivery => settingsCallbacks.current.after(delivery),
+    ...(macNative ? { chooseDirectory: async () => { const directory = await open({directory:true,multiple:false}); return typeof directory === "string" ? directory : null; },
+      revealDirectory: async (directory: string) => { await invoke("settings_directory",{directory,expected:accessGate.expected()}); } } : {}) }), [macNative]);
+  const encryptedArchive: EncryptedArchiveHost = {
+    export: async passphrase => {
+      await settingsBeforeOperation();
+      const path=await save({defaultPath:"备忘录.cyberenc",filters:[{name:"加密备份",extensions:["cyberenc"]}]});
+      if (!path) return {status:"cancelled"};
+      await invoke("settings_archive",{expected:accessGate.expected(),request:{operation:"export",path,passphrase}});
+      return {status:"success"};
+    },
+    prepareImport: async passphrase => {
+      await settingsBeforeOperation(); const path=await open({multiple:false,filters:[{name:"加密备份",extensions:["cyberenc"]}]});
+      if (typeof path!=="string") return null;
+      return invoke<EncryptedImportPreview>("settings_archive",{expected:accessGate.expected(),request:{operation:"preview",path,passphrase}});
+    },
+    confirmImport: async confirmation => {
+      await settingsBeforeOperation();
+      const committed=await invoke<ImportCommitted & {delivery:unknown}>("settings_archive",{expected:accessGate.expected(),request:{operation:"confirm",confirmation}});
+      if (committed.outcome !== "committed") throw Error("导入结果尚未确认，请先重新读取资料库，勿重复导入");
+      const result: ImportCommitted={...committed};
+      try { await settingsAfterRestore(committed.delivery); }
+      catch(error) { result.refreshError=[committed.refreshError,errText(error)].filter(Boolean).join("；"); }
+      return result;
+    },
+    discardImport: async confirmation => {await invoke("settings_archive",{expected:accessGate.expected(),request:{operation:"discard",confirmation}});},
+  };
+  const encryptedCurrent=useRef(encryptedArchive); encryptedCurrent.current=encryptedArchive;
+  const stableEncrypted=useMemo<EncryptedArchiveHost>(()=>({
+    export: pass=>encryptedCurrent.current.export(pass),prepareImport:pass=>encryptedCurrent.current.prepareImport(pass),
+    confirmImport:key=>encryptedCurrent.current.confirmImport(key),discardImport:key=>encryptedCurrent.current.discardImport(key),
+  }),[]);
+  const cloudAccess=accessGate.state || ws.access;
+  const cloudAccessKey=JSON.stringify([cloudAccess?.sessionId,cloudAccess?.epoch,cloudAccess?.storeInstance,cloudAccess?.operationId]);
+  const cloudBlocked=!workspaceLoaded || loading || synchronizing || syncCover || quitPending || !!cloudAccess?.operationId || !!accessSuspended.length;
   return (
     <PresentationContext.Provider value={resolved}>
     <MobileInteractionContext.Provider value={mobile}>
@@ -4971,29 +5045,32 @@ function App() {
           onClose={() => setModal(null)}
           onBack={preferencesBack}
           agent={<AgentSettings folders={ws.folders} mobile={mobile} />}
-          account={accountUIAvailable && <AccountSettings active={preferencesTab === "account"} onHandle={handle => { accountSettingsHandle.current = handle; }} onConflicts={() => { accountConflictsRequested.current = true; setPreferencesTab("sync"); }} />}
-          synchronization={<SyncSettings active={preferencesTab === "sync"} onHandle={handle => {
-            syncSettingsHandle.current = handle;
-            if (handle && preferencesTab === "sync" && accountConflictsRequested.current) {
-              accountConflictsRequested.current = false;
-              queueMicrotask(() => { void handle.run({ type: "conflicts" }).catch(fail); });
-            }
-          }} />}
+          account={accountUIAvailable && <AccountSettings active={preferencesTab === "account"} onHandle={handle => { accountSettingsHandle.current = handle; }} onConflicts={() => { setConflictsOpen(true); setPreferencesTab("account"); }} />}
+          conflictsOpen={conflictsOpen}
+          onConflictsOpenChange={setConflictsOpen}
+          syncConflicts={<SyncSettings conflictsOnly active={preferencesTab === "account" && conflictsOpen} onHandle={handle => { syncSettingsHandle.current=handle; }} />}
+          softwareUpdate={<><SoftwareUpdateSettings /><div className="settings121-list"><div className="settings121-row"><div className="settings121-label">发行身份<small>{buildInfo.releaseVersion || `产品版本 ${buildInfo.version}`}</small>{releaseIdentityNotice && <small>{releaseIdentityNotice}</small>}</div></div></div></>}
+          softwareUpdateBadge={<UpdateBadge />}
+          cloudSync={<><CloudSyncSettings key={cloudAccessKey} active={!cloudBlocked && preferencesTab === "account"} ports={{
+            context: () => invoke("settings_host_context"),
+            confirm: message => confirm(message,{title:"云端同步",kind:"warning"}),
+            onCommitted: async result => { if (result.applied) await settingsAfterRestore(null); },
+          }} /></>}
+          automaticBackup={<LocalBackupSettings active={preferencesTab === "backup"}
+            blocked={!!recordingTicket.current || record || !!quitState.current || archiveBusy || !!accessSuspended.length || !!accessGate.state?.operationId}
+            accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}:${ws.access?.storeInstance || ""}`} host={backupClient}
+            onArchive={archive} encryptedArchive={stableEncrypted}
+            appleImport={native && macNative && !separate ? <AppleNotesImport active={preferencesTab === "backup"}
+              blocked={archiveBusy || !!recordingTicket.current || record || !!accessSuspended.length || !!accessGate.state?.operationId}
+              accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}`} onPrepare={prepareAppleImport} onFinish={finishAppleImport}
+              onHandle={handle => {appleNotesImportHandle.current=handle;}} /> : undefined} />}
           settings={settings}
           onSettings={patch => updateSettings(patch, true)}
           onCloseLocks={() => patch({type: "closeLocks"})}
           returnFocus={preferencesTrigger.current}
           data={<DataManagement
-            active={preferencesTab === "data" || preferencesTab === "backup"}
+            active={preferencesTab === "data"}
             section={preferencesTab === "backup" ? "backup" : "storage"}
-            appleImport={native && macNative && !separate ? <AppleNotesImport
-              active={preferencesTab === "backup"}
-              blocked={archiveBusy || !!recordingTicket.current || record || !!accessSuspended.length || !!accessGate.state?.operationId}
-              accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}:${ws.access?.operationId || ""}`}
-              onPrepare={prepareAppleImport}
-              onFinish={finishAppleImport}
-              onHandle={(handle) => { appleNotesImportHandle.current = handle; }}
-            /> : undefined}
             onHandle={(handle) => { dataManagementHandle.current = handle; }}
             onArchive={archive}
             backupBlocked={!!recordingTicket.current || record}
@@ -5351,4 +5428,4 @@ function ResizeHandle({
   );
 }
 
-export default App;
+export default function SettingsIntegratedApp() { return native && getCurrentWindow().label !== "main" ? <App /> : <SoftwareUpdateProvider><App /></SoftwareUpdateProvider>; }

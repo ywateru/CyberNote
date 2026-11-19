@@ -50,7 +50,8 @@ const settingsSearch = [
   ["account", "云端同步", "WebDAV S3 GitHub 远端", '[data-settings-slot="cloud"]'],
   ["agent", "Agent 接入", "MCP 本机接入 授权客户端 配置 连接 诊断", '.agent-page-header'],
   ["data", "存储空间", "本地占用 类型 全部文件 附件 搜索 数据位置", '.data-management-header'],
-  ["backup", "导入与备份", "导出 备份文件 Apple 备忘录 导入", '.data-backup-section'],
+  ["backup", "导入与备份", "导出 备份文件 导入 加密", '.local-backup-settings'],
+  ["backup", "Apple 备忘录导入", "Apple 苹果 备忘录 导入", '.local-backup-apple'],
   ["backup", "自动备份", "备份文件夹 版本列表 保留份数 立即备份", '[data-settings-slot="backup"]'],
   ["settings", "软件更新", "检查更新 版本 下载 预发布", '[data-settings-slot="update"]'],
 ] as const;
@@ -235,6 +236,16 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
     const probe = () => {
       if (!current()) return;
       const target = element.querySelector<HTMLElement>(intent.selector);
+      if (intent.page === "backup") {
+        const backup = element.querySelector<HTMLElement>(".local-backup-settings");
+        if (backup && !backup.closest("[hidden],[inert]")) {
+          const state = backup.dataset.backupState;
+          if (state === "blocked") { finish(backup, "请先完成录音或当前数据操作，并确认资料库访问权限，再操作导入与备份。"); return; }
+          if (state === "unconfirmed") { finish(backup, "当前备份状态未确认，请先重新读取；显示的是上次读取结果。"); return; }
+          if (state === "loading") return;
+          if (!target && intent.selector === ".local-backup-apple") { finish(backup, "此平台暂不支持 Apple 备忘录导入，请在 Mac 主窗口操作。"); return; }
+        }
+      }
       if (target && !target.matches(":disabled") && !target.closest("[hidden],[inert]") && target.getClientRects().length) { finish(target); return; }
       const account = element.querySelector<HTMLElement>("[data-settings-account-search]");
       if (intent.page === "account" && account) {
@@ -252,7 +263,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
       }
     };
     const observer = new MutationObserver(probe);
-    observer.observe(element, { subtree: true, childList: true, attributes: true, attributeFilter: ["hidden", "inert", "disabled", "data-settings-account-search"] });
+    observer.observe(element, { subtree: true, childList: true, attributes: true, attributeFilter: ["hidden", "inert", "disabled", "data-settings-account-search", "data-backup-state"] });
     const interrupt = (event: Event) => {
       if (event.type === "pointerdown" || (event instanceof KeyboardEvent && event.key === "Tab")) cancelTarget();
     };
@@ -310,7 +321,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
             {searchMessage && <p className="preferences-search-notice" role="status">{searchMessage}</p>}
             {searching && <section className="preferences-search-results" aria-label="设置查找结果"><p role="status">{results.length ? `找到 ${results.length} 项设置` : "未找到设置，请尝试其他关键词。"}</p><div className="preferences-list">{results.map(([page, title, , selector]) => <button type="button" key={title} onClick={() => jumpTo(page, selector)}><span>{title}<small>{title === "我的设备" && accountAvailability !== "signedIn" ? "登录后查看 · 打开账户确认当前状态" : preferencePages.find(item => item.id === page)?.label}</small></span><ChevronRight size={16} aria-hidden="true" /></button>)}</div></section>}
             {softwareUpdate != null && <section id="preferences-update-pane" data-settings-slot="update" className="preferences-update-pane" aria-label="软件更新" hidden={!updateOpen || searching} inert={!updateOpen || searching} onKeyDown={event => {
-              if (event.key === "Escape" && !event.defaultPrevented) { event.preventDefault(); event.stopPropagation(); setUpdateOpen(false); updateTrigger.current?.focus(); }
+              if (event.key === "Escape" && !event.defaultPrevented) { event.preventDefault(); event.stopPropagation(); if (dismissInnermostMenu()) return; setUpdateOpen(false); updateTrigger.current?.focus(); }
             }}><div className="preferences-pane-heading"><span>软件更新</span><button type="button" onClick={() => { setUpdateOpen(false); updateTrigger.current?.focus(); }}>收起</button></div>{updateOpen && softwareUpdate}</section>}
           <div className="preferences-content" hidden={home || searching || updateOpen} inert={home || searching || updateOpen}>
             {error && <p className="preferences-error" role="alert">{error}</p>}

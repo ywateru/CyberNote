@@ -445,3 +445,31 @@
     gap: 10px;
   }
 }
+
+/* Settings121 storage uses the same divided-list surface as its siblings. */
+.preferences-workspace .data-management { background: transparent; border: 0; box-shadow: none; }
+.preferences-workspace .data-management-header { padding: 0 0 12px; border: 0; background: transparent; }
+.preferences-workspace .data-management-header h2 { font-size: 13px; font-weight: 600; }
+.preferences-workspace .data-management .storage-summary,
+.preferences-workspace .data-management .storage-category-list,
+.preferences-workspace .data-management .data-storage-details {
+  border: 1px solid var(--settings-line); border-radius: 12px;
+  background: var(--settings-card); box-shadow: none; margin: 0 0 12px;
+}
+.preferences-workspace .data-management .storage-summary { padding: 12px 14px; }
+.preferences-workspace .data-management .storage-summary h3 { font-size: 13px; }
+.preferences-workspace .data-management .storage-category-list { overflow: hidden; gap: 0; }
+.preferences-workspace .data-management .storage-category {
+  min-height: 48px; padding: 12px 12px 12px 14px; border: 0;
+  border-bottom: 1px solid var(--settings-divider); border-radius: 0;
+  background: transparent; box-shadow: none; font-size: 13px;
+}
+.preferences-workspace .data-management .storage-category:last-child { border-bottom: 0; }
+.preferences-workspace .data-management .data-storage-details { padding: 12px 14px; }
+.preferences-workspace .data-management button { min-height: 32px; }
+.preferences-workspace .data-management button:focus-visible { outline: 2px solid var(--settings-accent); outline-offset: -2px; }
+.preferences-mobile .preferences-workspace .data-management button { min-height: 44px; }
+
+/* Backup now occupies its one module slot; the retained inventory owner is hidden. */
+.preferences-workspace .data-management[hidden] { display: none; }
+.preferences-workspace .preferences-backup-slot { flex: 1; min-height: 0; max-height: none; }

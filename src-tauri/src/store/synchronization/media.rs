@@ -116,7 +116,7 @@ pub(crate) struct VerifiedMedia {
     staged: RefCell<BTreeMap<String, Vec<super::publication::Staged>>>,
 }
 impl Store {
-    fn media_generation(&self) -> Result<String> {
+    pub(super) fn media_generation(&self) -> Result<String> {
         if enabled(&self.db)? {
             return self.generation(&self.db);
         }

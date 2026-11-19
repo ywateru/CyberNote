@@ -15,9 +15,17 @@ mod apple_notes_import;
 pub mod application;
 mod attachment_desktop;
 mod attachment_media;
+mod cloud_sync;
+#[path = "cloud_sync/commands.rs"]
+mod cloud_sync_commands;
+mod local_backup;
+#[path = "local_backup/commands.rs"]
+mod local_backup_commands;
 mod media_permission;
 mod recording_window;
 mod session;
+mod settings_host;
+mod software_update;
 mod startup;
 mod store;
 mod sync;
@@ -918,6 +926,11 @@ pub fn run() {
         .manage(recording_window::Recordings::default())
         .manage(apple_notes_import::Imports::default())
         .on_page_load(|webview, _payload| {
+            if matches!(_payload.event(), tauri::webview::PageLoadEvent::Started) {
+                if let Some(host) = webview.try_state::<settings_host::SettingsHost>() {
+                    host.0.window_loading(webview.label());
+                }
+            }
             #[cfg(all(feature = "sync-e2e", debug_assertions, desktop))]
             sync_e2e::page_load(webview.label(), _payload);
             if let Some(media) = webview.try_state::<MediaState>() {
@@ -928,6 +941,9 @@ pub fn run() {
         })
         .on_window_event(|window, event| {
             if matches!(event, tauri::WindowEvent::Destroyed) {
+                if let Some(host) = window.try_state::<settings_host::SettingsHost>() {
+                    host.0.window_loading(window.label());
+                }
                 #[cfg(target_os = "macos")]
                 if let Some(agent) = window.try_state::<AgentState>() {
                     agent.0.testers.close_window(window.label());
@@ -1048,6 +1064,53 @@ pub fn run() {
                 });
             }
             account.restore();
+            let settings = settings_host::Host::new(app.handle().clone(), root.clone());
+            app.manage(settings_host::SettingsHost(settings.clone()));
+            let updater = software_update::SoftwareUpdater::new(
+                selected.media_cache.join("software-update"),
+                Arc::new(settings.clone()),
+            );
+            if let Ok(updater) = updater {
+                app.manage(updater.clone());
+                let scheduler = tauri::async_runtime::block_on(async {
+                    software_update::UpdateScheduler::start(updater)
+                });
+                app.manage(Mutex::new(Some(scheduler)));
+            } else {
+                eprintln!("Software updater unavailable; private state retained");
+            }
+            let backup = local_backup::BackupRuntime::new(
+                root.join(".local-backup"),
+                root.join("backups"),
+                root.clone(),
+                env!("CARGO_PKG_VERSION").into(),
+                Arc::new(settings.clone()),
+            );
+            let cloud = cloud_sync::CloudRuntime::new(&root, settings.clone());
+            if let Ok(cloud) = &cloud {
+                app.manage(cloud.clone());
+            } else {
+                eprintln!("Cloud settings unavailable; private state retained");
+            }
+            if let Ok(backup) = backup {
+                #[cfg(desktop)]
+                let backup = backup.with_selectable_directory();
+                let backup = Arc::new(backup);
+                app.manage(local_backup_commands::LocalBackupState(backup.clone()));
+                app.manage(settings_host::SettingsTasks::start(
+                    settings.clone(),
+                    Some(backup),
+                    cloud.ok(),
+                ));
+            } else {
+                eprintln!("Local backups unavailable; private state retained");
+                app.manage(settings_host::SettingsTasks::start(
+                    settings,
+                    None,
+                    cloud.ok(),
+                ));
+            }
+
             #[cfg(desktop)]
             {
                 use tauri::menu::{
@@ -1168,6 +1231,22 @@ pub fn run() {
         load_workspace,
         sync_command,
         sync_diagnostics,
+        settings_host::settings_host_context,
+        settings_host::settings_host_ready,
+        settings_host::files::settings_archive,
+        settings_host::files::settings_directory,
+        settings_host::lifecycle::settings_quit_ack,
+        cloud_sync_commands::cloud_sync_command,
+        local_backup_commands::local_backup_status,
+        local_backup_commands::local_backup_configure,
+        local_backup_commands::local_backup_now,
+        local_backup_commands::local_backup_prepare_restore,
+        local_backup_commands::local_backup_restore,
+        software_update::commands::software_update_status,
+        software_update::commands::software_update_configure,
+        software_update::commands::software_update_check,
+        software_update::commands::software_update_download,
+        software_update::commands::software_update_install,
         sync_window_reply,
         agent_window_reply,
         agent_settings,
@@ -1216,6 +1295,22 @@ pub fn run() {
         load_workspace,
         sync_command,
         sync_diagnostics,
+        settings_host::settings_host_context,
+        settings_host::settings_host_ready,
+        settings_host::files::settings_archive,
+        settings_host::files::settings_directory,
+        settings_host::lifecycle::settings_quit_ack,
+        cloud_sync_commands::cloud_sync_command,
+        local_backup_commands::local_backup_status,
+        local_backup_commands::local_backup_configure,
+        local_backup_commands::local_backup_now,
+        local_backup_commands::local_backup_prepare_restore,
+        local_backup_commands::local_backup_restore,
+        software_update::commands::software_update_status,
+        software_update::commands::software_update_configure,
+        software_update::commands::software_update_check,
+        software_update::commands::software_update_download,
+        software_update::commands::software_update_install,
         sync_window_reply,
         agent_window_reply,
         agent_settings,
@@ -1278,6 +1373,22 @@ pub fn run() {
     workspace.set(selected).expect("workspace initialized once");
     app.run(|app, event| match event {
         tauri::RunEvent::Exit => {
+            if let Some(host) = app.try_state::<settings_host::SettingsHost>() {
+                host.0.stop();
+            }
+            if let Some(cloud) = app.try_state::<Arc<cloud_sync::CloudRuntime>>() {
+                let _ = cloud.shutdown();
+            }
+            if let Some(tasks) = app.try_state::<settings_host::SettingsTasks>() {
+                tauri::async_runtime::block_on(tasks.shutdown());
+            }
+            let scheduler = app
+                .try_state::<Mutex<Option<software_update::UpdateScheduler>>>()
+                .and_then(|s| s.lock().ok().and_then(|mut s| s.take()));
+            if let Some(scheduler) = scheduler {
+                tauri::async_runtime::block_on(scheduler.shutdown());
+            }
+
             #[cfg(target_os = "macos")]
             if let Some(agent) = app.try_state::<AgentState>() {
                 let _ = tauri::async_runtime::block_on(agent.0.quit());

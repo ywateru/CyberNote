@@ -24,6 +24,7 @@ pub enum Channel {
     #[default]
     Stable,
     Preview,
+    Daily,
 }
 impl Default for Preferences {
     fn default() -> Self {

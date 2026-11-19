@@ -81,14 +81,14 @@ fn semver_order_and_metadata() {
 }
 #[test]
 fn current_stable_never_downgrades_to_same_core_preview() {
-    for preview in [true, false] {
+    for channel in [Channel::Preview, Channel::Stable] {
         assert!(feed::select(
             vec![
                 release("v0.1.0-preview.2", true),
                 release("v0.1.0-preview.1", true)
             ],
             "0.1.0",
-            preview,
+            channel,
             &mac()
         )
         .unwrap()
@@ -101,7 +101,7 @@ fn channel_platform_and_newest_missing_asset() {
         feed::select(
             vec![release("v0.3.0-preview.2", true), release("v0.2.0", false)],
             "0.1.0",
-            false,
+            Channel::Stable,
             &mac()
         )
         .unwrap()
@@ -113,7 +113,7 @@ fn channel_platform_and_newest_missing_asset() {
         feed::select(
             vec![release("v0.3.0-preview.2", true), release("v0.2.0", false)],
             "0.1.0",
-            true,
+            Channel::Preview,
             &mac()
         )
         .unwrap()
@@ -123,15 +123,18 @@ fn channel_platform_and_newest_missing_asset() {
     );
     let mut r = release("v0.3.0", false);
     r.assets.remove(0);
-    assert!(
-        feed::select(vec![r, release("v0.2.0", false)], "0.1.0", false, &mac())
-            .unwrap_err()
-            .contains("missing_asset")
-    );
+    assert!(feed::select(
+        vec![r, release("v0.2.0", false)],
+        "0.1.0",
+        Channel::Stable,
+        &mac(),
+    )
+    .unwrap_err()
+    .contains("missing_asset"));
     assert!(feed::select(
         vec![release("v0.2.0", false)],
         "0.1.0",
-        false,
+        Channel::Stable,
         &Target {
             platform: "macos".into(),
             architecture: "x86_64".into()
@@ -141,9 +144,33 @@ fn channel_platform_and_newest_missing_asset() {
     .contains("unsupported_platform"));
     let mut r = release("v0.2.0", false);
     r.assets.push(r.assets[0].clone());
-    assert!(feed::select(vec![r], "0.1.0", false, &mac())
+    assert!(feed::select(vec![r], "0.1.0", Channel::Stable, &mac())
         .unwrap_err()
         .contains("ambiguous"));
+}
+
+#[test]
+fn daily_channel_selects_only_newer_daily_prereleases() {
+    let releases = vec![
+        release("v0.2.0", false),
+        release("v0.1.0-preview.9", true),
+        release("v0.1.0-preview.3.daily.20261119", true),
+        release("v0.1.0-preview.2.daily.20261118", true),
+    ];
+    assert_eq!(
+        feed::select(releases.clone(), "0.1.0-preview.2", Channel::Daily, &mac())
+            .unwrap()
+            .unwrap()
+            .version,
+        "0.1.0-preview.3.daily.20261119"
+    );
+    assert_eq!(
+        feed::select(releases, "0.1.0-preview.2", Channel::Preview, &mac())
+            .unwrap()
+            .unwrap()
+            .version,
+        "0.2.0"
+    );
 }
 #[test]
 fn checksum_names_notices_and_duplicate() {
@@ -617,7 +644,9 @@ fn android_selection_requires_exact_unsigned_payload_and_receipt_identity() {
         asset("CyberNote-android-arm64.sha256", 205),
         asset("CyberNote-android-arm64-notices.zip", 500),
     ];
-    let r = feed::select(vec![r], "0.1.0", true, &t).unwrap().unwrap();
+    let r = feed::select(vec![r], "0.1.0", Channel::Preview, &t)
+        .unwrap()
+        .unwrap();
     assert_eq!(r.package, "CyberNote-android-arm64-unsigned.apk");
     let hash = "a".repeat(64);
     let receipt = Receipt {
@@ -829,7 +858,7 @@ fn receipt_optional_full_release_identity_binds_both_locations_and_preserves_leg
     let r = feed::select(
         vec![release("v0.2.0-preview.2", true)],
         "0.1.0",
-        true,
+        Channel::Preview,
         &mac(),
     )
     .unwrap()

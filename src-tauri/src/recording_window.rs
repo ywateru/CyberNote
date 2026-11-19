@@ -47,6 +47,43 @@ struct Registry {
     exit_allowed: bool,
 }
 
+/// Update installation holds this existing native recording admission boundary
+/// after every document owner has finished its final recording acknowledgement.
+/// It does not finish, move or reassign any active recording.
+pub(crate) struct InstallRecordingLease(tauri::AppHandle);
+impl Drop for InstallRecordingLease {
+    fn drop(&mut self) {
+        if let Ok(mut registry) = self.0.state::<Recordings>().0.lock() {
+            registry.exit_allowed = false;
+        }
+    }
+}
+pub(crate) fn ensure_snapshot_idle(app: &tauri::AppHandle) -> Result<(), String> {
+    let state = app.state::<Recordings>();
+    let registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
+    if !registry.entries.is_empty()
+        || !registry.local.is_empty()
+        || registry.quit.is_some()
+        || registry.exit_allowed
+    {
+        return Err("活动录音或退出操作尚未完成，请稍后重试".into());
+    }
+    Ok(())
+}
+pub(crate) fn seal_for_install(app: &tauri::AppHandle) -> Result<InstallRecordingLease, String> {
+    let state = app.state::<Recordings>();
+    let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
+    if !registry.entries.is_empty()
+        || !registry.local.is_empty()
+        || registry.quit.is_some()
+        || registry.exit_allowed
+    {
+        return Err("仍有未确认录音或退出操作，安装已取消".into());
+    }
+    registry.exit_allowed = true;
+    Ok(InstallRecordingLease(app.clone()))
+}
+
 fn canonical_uuid(value: &str) -> bool {
     uuid::Uuid::parse_str(value).is_ok_and(|id| id.hyphenated().to_string() == value)
 }
@@ -407,7 +444,7 @@ pub fn register_recording_window(
         return Err("录音窗口身份无效".into());
     }
     let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
-    if registry.quit.is_some() {
+    if registry.quit.is_some() || registry.exit_allowed {
         return Err("应用正在完成录音并退出，请稍候".into());
     }
     if registry.entries.contains_key(&session_id)
