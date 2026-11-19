@@ -118,7 +118,7 @@ function checkoutGit(root, args) {
     throw cause;
   }
 }
-function checkoutIsDirty(root) {
+function checkoutDirt(root) {
   // status deliberately trusts index hints and can hide modified tracked bytes.
   // -v lowercases assume-unchanged entries; S/s marks skip-worktree. Refuse all
   // such entries, including unchanged/non-product ones, rather than clearing
@@ -133,8 +133,11 @@ function checkoutIsDirty(root) {
     ...checkoutGit(root, ['diff', '--name-only', '-z', 'HEAD', '--']).split('\0'),
     ...checkoutGit(root, ['ls-files', '--others', '--exclude-standard', '-z']).split('\0'),
   ].filter(Boolean);
-  const modified = changed.some(isProductPath);
-  return hidden || modified;
+  return { hidden, modified: changed.filter(isProductPath) };
+}
+function checkoutIsDirty(root) {
+  const dirt = checkoutDirt(root);
+  return dirt.hidden || dirt.modified.length > 0;
 }
 export function resolveReleaseVersion(root = projectRoot, { development = false, environment = process.env } = {}) {
   const core = assertVersions(root);
@@ -174,7 +177,11 @@ export function resolveReleaseVersion(root = projectRoot, { development = false,
   if (!tag) return null;
   const tagged = checkoutGit(root, ['rev-parse', '--verify', `refs/tags/${tag}^{commit}`]);
   if (tagged !== head) throw Error('Release tag does not point at checkout HEAD');
-  if (checkoutIsDirty(root)) throw Error('Release identity requires a clean checkout without assume-unchanged or skip-worktree index flags');
+  const dirt = checkoutDirt(root);
+  if (dirt.hidden || dirt.modified.length > 0) {
+    const paths = dirt.modified.length > 0 ? `; product paths: ${dirt.modified.slice(0, 8).join(', ')}` : '';
+    throw Error(`Release identity requires a clean checkout without assume-unchanged or skip-worktree index flags${paths}`);
+  }
   return releaseVersionFromTag(tag, core);
 }
 export function validateBuildReleaseIdentity(info, root = projectRoot, options = {}) {
