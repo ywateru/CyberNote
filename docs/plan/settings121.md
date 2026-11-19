@@ -4,7 +4,7 @@
 
 | 任务 | 写入范围 | 依赖 | 状态 |
 | --- | --- | --- | --- |
-| settings121-ui | Preferences.tsx/css、AccountSettings.tsx/css、PreferencesInterfaceDetails、presentation/PreferencesPresentation，自己的验证脚本 | 无 | in-progress |
+| settings121-ui | Preferences.tsx/css、AccountSettings.tsx/css、PreferencesInterfaceDetails、presentation/PreferencesPresentation，自己的验证脚本 | 无 | done（模块修复独审pass，实际App另验） |
 | settings121-cloud | src-tauri/src/cloud_sync/、src/cloud-sync/、必要依赖及自身验证 | 无 | in-progress |
 | settings121-update | src-tauri/src/software_update/、src/software-update/、自身验证 | 无 | in-progress |
 | settings121-backup | src-tauri/src/local_backup/、src/local-backup/、自身验证 | 无 | done（模块独审pass，宿主另验） |
@@ -16,5 +16,7 @@
 当前提交与审查：UI `e29a7d8c` 独审 `c26e2a83` 为blocked，5项交互/视觉修正正在进行；云模块 `189b348e`、本地备份 `185d76cc`、更新 `cfde3810` 已冻结提交，独立审查进行中。`codex/settings121-integration` 是尚未接受的组合试装分支，先接线以暴露实际接口问题；不会因模块测试通过或试装编译就提前标记交付完成。增加发布标签身份小任务修复预发布包无法识别自身tag的问题，保持package稳定core版本源不变。
 
 后续状态：本地备份最终 `37111325` 经独审 `41309a7a` pass，已接收模块到本分支；UI修复 `c68ee19b` 正在复审。更新独审 `f8662f41` 发现5项阻塞（实际ZIP展开限制、活新进程未ack回滚、安装lease准入、配置失败重试、手机开关触达），修复中。发布身份最终 `13ef2986` 正在独审，云模块 `189b348e` 也在独审。组合试装已接收四模块和UI修复，公共宿主开发与针对性验证进行中。
+
+最新进展：UI `c68ee19b` 经 `0a464235` 复审pass，已接收；更新修复 `5f060a01` 正在复审。云独审 `85873a61` 发现锁重入、设置owner投影、control行缺失和前端确认/在途状态5项阻塞，修复中。发布身份 `0031b581` 关闭隐藏index问题，但复审发现真实大index输出ENOBUFS回归，继续修复。公共Host `6a0e3de1` 已在组合试装分支提交，实际App验证与数据面板收尾进行中，尚未独审验收。
 
 入口与调用链：Preferences创建/保留各面板 → cloud-sync/software-update客户端 → native invoke注册 → 唯一宿主/Session → Store/受检远端或下载器 → 状态与事实事件 → 设置刷新；每条链需真实现验证。旧sync设置导航转账户，冲突界面保留在账户内。导入导出继续由App的保存/录音保护协调，自动任务亦受同一边界控制。

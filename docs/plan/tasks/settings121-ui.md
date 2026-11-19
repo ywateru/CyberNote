@@ -1,7 +1,7 @@
 ---
 id: settings121-ui
 scope: settings presentation
-status: in-progress
+status: done
 depends-on: []
 ---
 
@@ -20,3 +20,5 @@ depends-on: []
 ## Verification
 
 Typecheck、真实React桌面/手机浅暗截图、导航/查找/焦点/权限失败/旧入口移除检查；集成后由独立验证者复核。
+
+模块修复最终 `c68ee19b` 经[独立复审](../reviews/settings121-ui-recheck.md) pass。普通菜单、更新Escape、异步搜索和视觉五项blocking已关闭；实际App账户冲突与新增模块接线不在组件验收内，继续由整合任务验证。
