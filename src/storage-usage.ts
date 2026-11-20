@@ -11,6 +11,11 @@ export const storageCategories = [
 ] as const;
 export type StorageCategory = (typeof storageCategories)[number]["id"];
 export type StorageView = "overview" | "all" | StorageCategory;
+export function storageViewLabel(view: StorageView) {
+  if (view === "overview") return "存储空间";
+  if (view === "all") return "全部文件";
+  return storageCategories.find(category => category.id === view)!.label;
+}
 export type StorageGroup = (typeof storageCategories)[number] & {
   files: ManagedFile[];
   bytes: number;

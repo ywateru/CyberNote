@@ -210,7 +210,7 @@ export default function SyncSettings({
     onHandle({
       dismiss: () => {
         if (confirmation) { setConfirmation(null); return true; }
-        if (joining || invitation || conflicts) { setJoining(false); setPairing(""); setInvitation(""); setConflicts(null); return true; }
+        if (!conflictsOnly && (joining || invitation || conflicts)) { setJoining(false); setPairing(""); setInvitation(""); setConflicts(null); return true; }
         return false;
       },
       run: (command) => run(command),
@@ -236,13 +236,14 @@ export default function SyncSettings({
   const enabled = status && status.state !== "disabled";
   return (
     <section
-      className="sync-settings"
-      aria-labelledby="sync-settings-title"
+      className={`sync-settings${conflictsOnly ? " sync-conflicts-only" : ""}`}
+      aria-label={conflictsOnly ? "冲突列表" : undefined}
+      aria-labelledby={conflictsOnly ? undefined : "sync-settings-title"}
       data-sync-state={status?.state || "unknown"}
       aria-busy={busy}
     >
-      <header className="sync-heading">
-        <h3 id="sync-settings-title">{conflictsOnly ? "同步冲突" : "设备同步"}</h3>
+      {!conflictsOnly && <><header className="sync-heading">
+        <h3 id="sync-settings-title">设备同步</h3>
         <span className={`sync-state sync-state-${status?.state || "unknown"}`}>
           {status?.pendingCount
             ? "等待应用"
@@ -261,9 +262,9 @@ export default function SyncSettings({
           <RefreshCw size={16} />
         </button>
       </header>
-      {!conflictsOnly && <p className="sync-description">
+      <p className="sync-description">
         在你的设备间同步本地备忘录。可使用局域网、虚拟内网或隧道服务地址。
-      </p>}
+      </p>
       <div className="sync-live" role="status" aria-live="polite">
         {status?.pendingCount
           ? `已接收 ${status.pendingCount} 项，等待安全应用`
@@ -271,14 +272,14 @@ export default function SyncSettings({
             (status?.lastSyncAt
               ? `最近传输：${formatFileTime(status.lastSyncAt)}`
               : "尚无成功同步记录")}
-      </div>
-      {(error || status?.state === "error") && (
+      </div></>}
+      {(error || (!conflictsOnly && status?.state === "error")) && (
         <p className="sync-error" role="alert">
           {error || "连接失败，请检查网络与服务地址后重试"}
           <button
             type="button"
             disabled={busy}
-            onClick={() => request({ type: "status" })}
+            onClick={() => request({ type: conflictsOnly ? "conflicts" : "status" })}
           >
             重试
           </button>
@@ -490,8 +491,11 @@ export default function SyncSettings({
       )}
       </>}
       {(conflictsOnly || enabled) && (
-        <div className="sync-group">
-          <button
+        <div className={conflictsOnly ? "sync-conflict-results" : "sync-group"}>
+          {conflictsOnly ? <div className="sync-conflict-summary">
+            <p role="status">{conflicts ? conflicts.length ? `${conflicts.length} 项冲突待处理` : "没有需要处理的冲突版本。" : error ? "冲突状态未确认。" : "正在读取冲突…"}</p>
+            <button type="button" disabled={busy} onClick={() => request({ type: "conflicts" })}><RefreshCw size={15} aria-hidden="true" />刷新冲突</button>
+          </div> : <button
             className="sync-conflict-link"
             type="button"
             disabled={busy}
@@ -500,7 +504,7 @@ export default function SyncSettings({
             <span>冲突版本</span>
             <span>{status?.conflictCount || 0} 项</span>
             <ChevronRight size={17} />
-          </button>
+          </button>}
           {conflicts &&
             (conflicts.length ? (
               conflicts.map((conflict) => (
@@ -563,7 +567,7 @@ export default function SyncSettings({
                   ))}
                 </article>
               ))
-            ) : (
+            ) : !conflictsOnly && (
               <p className="sync-description">没有需要处理的冲突版本。</p>
             ))}
         </div>

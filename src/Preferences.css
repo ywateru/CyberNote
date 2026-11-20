@@ -108,6 +108,9 @@
 .preferences-breadcrumb { display: flex; align-items: center; gap: 7px; min-width: 0; margin-right: auto; font-size: .93em; }
 .preferences-breadcrumb > :first-child, .preferences-breadcrumb > svg { color: var(--settings-muted); }
 .preferences-breadcrumb > span:last-child { overflow-wrap: anywhere; }
+.preferences-breadcrumb > svg { flex-shrink: 0; }
+.preferences-breadcrumb > button { color: var(--settings-accent); margin: -3px -4px; padding: 3px 4px; white-space: nowrap; font: inherit; }
+.preferences-storage-refresh { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; white-space: nowrap; }
 .preferences-search { display: flex; align-items: center; gap: 6px; width: 150px; max-width: 100%; min-width: 110px; min-height: 30px; border: 1px solid var(--settings-line); border-radius: 7px; padding: 0 7px; background: var(--settings-card); color: var(--settings-muted); }
 .preferences-search > svg { flex-shrink: 0; }
 .preferences-search input { min-width: 0; width: 100%; border: 0; outline: none; padding: 4px 0; background: transparent; color: var(--settings-fg); font-size: .9em; }
@@ -196,7 +199,7 @@
 .preferences-conflicts > summary > span { color: var(--settings-muted); font-size: .85em; margin-left: auto; }
 .preferences-conflicts > summary > svg { flex-shrink: 0; color: var(--settings-muted); }
 .preferences-conflicts[open] > summary > svg { transform: rotate(90deg); }
-.preferences-conflict-slot { padding: 12px 16px; background: var(--settings-editor); border-top: 1px solid var(--settings-divider); border-radius: 0 0 12px 12px; }
+.preferences-conflict-slot { padding: 8px 14px; border-top: 1px solid var(--settings-divider); }
 .preferences-module-slot { min-width: 0; margin: 12px 0; }
 /* Host adapters flatten the existing Agent/data pages, preserving their
    commands, error surfaces, dialogs and retained storage instance. */
@@ -219,8 +222,6 @@
 .preferences-workspace .agent-field > select { width: auto; max-width: 100%; }
 .preferences-workspace .agent-dialog .agent-field { flex-direction: column; align-items: stretch; }
 .preferences-workspace .data-management { font: inherit; }
-.preferences-workspace .data-management-header { padding: 8px 20px; min-height: 48px; flex-wrap: wrap; border-bottom: 1px solid var(--settings-divider); }
-.preferences-workspace .data-management-header h2 { font-size: 1em; font-weight: 500; }
 .preferences-workspace .data-management-scroll { padding: 12px 20px 24px; }
 .preferences-workspace .storage-summary, .preferences-workspace .storage-category-list, .preferences-workspace .data-backup-section { padding: 14px 16px; border: 1px solid var(--settings-line); border-radius: 12px; background: var(--settings-card); margin: 0 0 12px; }
 .preferences-workspace .storage-summary-heading { margin-bottom: 12px; }
@@ -260,7 +261,6 @@
 .preferences-mobile .preferences-conflicts > summary > svg { margin-left: auto; }
 .preferences-mobile .agent-settings-mobile { padding: 16px; }
 .preferences-mobile .agent-settings-mobile > h2 { font-size: 1em; }
-.preferences-mobile .preferences-workspace .data-management-header { padding: 8px 16px; }
 .preferences-mobile .preferences-workspace .data-management-scroll { padding: 12px 16px 24px; }
 @media (max-width: 850px) {
   .preferences-desktop { padding: 14px; }

@@ -89,10 +89,10 @@ try {
         const el = document.querySelector('.local-backup-settings');
         return el && !el.querySelector('[aria-busy="true"]');
       });
-      await scenario('actual-entry-six-categories-and-read-only-mount', async () => {
+      await scenario('actual-entry-seven-categories-and-read-only-mount', async () => {
         await open();
         assert.deepEqual(await page.locator('[data-preferences-page]').evaluateAll(nodes =>
-          nodes.map(n => n.dataset.preferencesPage)), ['account', 'settings', 'notes', 'agent', 'data', 'backup']);
+          nodes.map(n => n.dataset.preferencesPage)), ['account', 'settings', 'notes', 'agent', 'data', 'backup', 'about']);
         for (const id of ['settings', 'notes', 'agent', 'data', 'backup', 'account']) await category(id);
         await page.locator('.cloud-sync-settings').waitFor();
         assert(fixture.count('cloud_sync_command.status') > 0);
@@ -100,7 +100,36 @@ try {
         assert.equal(fixture.count('cloud_sync_command.sync'), 0);
         assert.equal(fixture.count('local_backup_now'), 0);
         assert.equal(fixture.count('software_update_install'), 0);
-        return { categories: 6, source: 'main.tsx/App, synthetic invoke only' };
+        return { categories: 7, source: 'main.tsx/App, synthetic invoke only' };
+      });
+      await scenario('storage-shared-breadcrumb-and-expand-long-file', async () => {
+        const fileName = '文件名'.repeat(40) + '.png';
+        const relativePath = 'attachments/' + 'ab12'.repeat(55) + '.blob';
+        backend.dataExtras = [{relativePath, category:'attachment', size:2048, modifiedAt:1795046400000, exists:true, status:'file',
+          attachment:{id:'long-file-entry',noteId:'note-a',kind:'image',mime:'image/png',displayName:fileName,declaredSize:2048,referenced:true,exportable:true}}];
+        await open(); await category('data');
+        for (const width of mobile ? [320, 390] : [800, 1280]) for (const scheme of ['light','dark']) {
+          await page.setViewportSize({width,height:840});
+          await page.evaluate(scheme => document.documentElement.dataset.scheme = scheme, scheme);
+          await page.locator('[data-storage-category="image"]').click();
+          const title = page.locator(mobile ? '#preferences-title' : '.preferences-breadcrumb [aria-current="page"]');
+          assert.equal(await title.innerText(),'图片');
+          assert(await page.locator('.preferences-toolbar').getByRole('button',{name:'刷新数据管理'}).isVisible());
+          assert.equal(await page.locator('.data-management-header').count(),0);
+          const file = page.locator('.data-file').filter({hasText:fileName});
+          const summary = file.locator('summary');
+          assert.equal(await summary.locator('.data-file-labels').innerText(),fileName + '\n' + relativePath);
+          assert(await summary.locator('strong').evaluate(el => el.scrollWidth > el.clientWidth && getComputedStyle(el).textOverflow === 'ellipsis'));
+          assert(await file.locator('.data-export').evaluate(el => getComputedStyle(el).whiteSpace === 'nowrap' && el.scrollWidth <= el.clientWidth));
+          await summary.focus(); await page.keyboard.press('Enter');
+          await file.locator('details[open]').waitFor();
+          assert(await summary.locator('strong').evaluate(el => el.scrollWidth <= el.clientWidth && getComputedStyle(el).whiteSpace === 'normal'));
+          assert(await summary.locator('.data-file-path').evaluate(el => el.scrollWidth <= el.clientWidth));
+          const back = b('返回数据管理总览');
+          await back.click();
+          await page.waitForFunction(() => document.activeElement?.getAttribute('data-storage-category') === 'image');
+        }
+        return { fileNameLength: fileName.length, relativePathLength: relativePath.length, cases: 4 };
       });
       await scenario('actual-account-conflict-callback-query-resolve-cancel-and-back', async () => {
         await open(); await category('account');
@@ -110,6 +139,15 @@ try {
         assert(fixture.count('sync_command.conflicts') > queries, 'Account callback must query, not merely expand');
         assert.equal(await page.locator('.preferences').getAttribute('data-preferences-tab'), 'account');
         assert.equal(await page.getByText('加入同步', { exact: true }).count(), 0);
+        const section = page.getByRole('region', { name: '冲突列表' });
+        await section.waitFor();
+        assert.equal(await section.getByRole('heading', {name:'同步冲突', exact:true}).count(), 0);
+        assert.equal(await section.getByText('尚无成功同步记录', {exact:true}).count(), 0);
+        const beforeRefresh = fixture.count('sync_command.conflicts');
+        await b('刷新冲突').click();
+        await b('刷新冲突').waitFor();
+        await page.waitForFunction(() => !document.querySelector('.sync-conflict-summary button')?.disabled);
+        assert(fixture.count('sync_command.conflicts') > beforeRefresh);
         const resolves = fixture.count('sync_command.resolve');
         await b('保留此版本').first().click();
         await page.getByRole('group', { name: '确认同步操作' }).waitFor();
@@ -124,8 +162,8 @@ try {
         assert.equal(fixture.count('sync_command.resolve'), resolves + 1);
         const row = fixture.calls.filter(x => x.key === 'sync_command.resolve').at(-1);
         assert.equal(row.entityId, 'note-a'); assert.equal(row.digest, 'a'.repeat(64));
-        // One back dismisses the inner conflict result; next closes disclosure.
-        await api(page, 'app.back'); await api(page, 'app.back');
+        // Back closes the single disclosure when no confirmation is open.
+        await api(page, 'app.back');
         assert.equal(await page.locator('.preferences-conflicts[open]').count(), 0);
         assert.equal(await page.locator('.preferences').count(), 1);
         return row;

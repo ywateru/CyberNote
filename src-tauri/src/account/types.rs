@@ -326,6 +326,7 @@ impl SafeError {
                     Some(
                         NetworkStage::CallbackListen
                             | NetworkStage::BrowserOpen
+                            | NetworkStage::EmbeddedOpen
                             | NetworkStage::CallbackReceive
                             | NetworkStage::IdentityProvider
                     )
@@ -342,6 +343,7 @@ impl SafeError {
 pub(crate) enum NetworkStage {
     CallbackListen,
     BrowserOpen,
+    EmbeddedOpen,
     CallbackReceive,
     IdentityProvider,
     Coordinator,

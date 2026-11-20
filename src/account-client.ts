@@ -6,7 +6,7 @@ export const accountUIAvailable =
   (import.meta.env.VITE_NOTES_ACCOUNT_NATIVE !== "0" && isTauri()) ||
   (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1" && import.meta.env.VITE_NOTES_ACCOUNT_UI === "1");
 
-const networkStages = ["callbackListen", "browserOpen", "callbackReceive", "identityProvider", "coordinator", "coordinatorConfiguration", "coordinatorRegistration", "coordinatorProfile", "coordinatorEnrollment", "coordinatorJwks", "authorizationProvider", "identitySession", "identityRefresh", "identityRevocation", "coordinatorSession"] as const;
+const networkStages = ["callbackListen", "browserOpen", "embeddedOpen", "callbackReceive", "identityProvider", "coordinator", "coordinatorConfiguration", "coordinatorRegistration", "coordinatorProfile", "coordinatorEnrollment", "coordinatorJwks", "authorizationProvider", "identitySession", "identityRefresh", "identityRevocation", "coordinatorSession"] as const;
 type NetworkStage = typeof networkStages[number];
 const identityReasons = ["responseMetadata", "missingIdToken", "issuer", "audience", "expired", "nonce", "signingKey", "signature", "algorithm", "subject", "authorizedParty", "issuedAt", "accessTokenHash", "otherClaims"] as const;
 type IdentityReason = typeof identityReasons[number];
@@ -65,7 +65,7 @@ export type AccountStatus = {
 export type AccountCommand =
   | { type: "signIn" | "signUp"; surface?: AccountAuthorizationSurface }
   | { type: "status" | "openLoginInBrowser" | "cancel" | "signOut" | "syncNow" }
-  | { type: "setCredentialStorage"; storage: CredentialStorage }
+  | { type: "setCredentialStorage"; storage: "encryptedFile" }
   | { type: "setEnabled"; enabled: boolean }
   | { type: "renameDevice"; name: string }
   | { type: "syncDevice"; deviceId: string; direction: DeviceDirection };
@@ -101,7 +101,7 @@ function initialAuthorizationRetry(error: AccountStatus["error"]): boolean {
   if (!error || error.providerReason !== undefined) return false;
   return ["account_auth_callback_invalid", "account_auth_code_rejected", "account_auth_token_response_invalid", "account_auth_identity_invalid", "account_owner_workspace_mismatch", "account_cancelled"].includes(error.code) ||
     (["account_network", "account_authentication"].includes(error.code) && error.stage === "coordinatorProfile") ||
-    (error.code === "account_network" && ["callbackListen", "browserOpen", "callbackReceive", "identityProvider"].includes(error.stage || "")) ||
+    (error.code === "account_network" && ["callbackListen", "browserOpen", "embeddedOpen", "callbackReceive", "identityProvider"].includes(error.stage || "")) ||
     (error.code === "account_authentication" && error.stage === "identitySession");
 }
 // Polling remains status-only. This chooses an action solely for an explicit retry.
@@ -199,7 +199,7 @@ export function validateAccountError(value: unknown): SafeError {
 // Only fixed labels are rendered. Neither status nor IPC message text is used as user copy.
 const stageNames: Record<NetworkStage, string> = {
   callbackListen: "建立登录回跳监听", browserOpen: "打开登录页面", callbackReceive: "接收登录回跳",
-  identityProvider: "连接登录服务", coordinator: "连接协调服务", coordinatorConfiguration: "读取协调服务配置",
+  embeddedOpen: "打开应用内登录窗口", identityProvider: "连接登录服务", coordinator: "连接协调服务", coordinatorConfiguration: "读取协调服务配置",
   coordinatorRegistration: "注册账户设备", coordinatorProfile: "读取账户资料", coordinatorEnrollment: "取得设备授权凭证",
   coordinatorJwks: "读取授权公钥", authorizationProvider: "处理登录服务授权", identitySession: "恢复登录授权",
   identityRefresh: "刷新登录授权", identityRevocation: "撤销登录授权", coordinatorSession: "建立协调服务会话",
@@ -240,7 +240,7 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     account_cleanup_required: "存在待撤销的登录授权，请先退出账户并完成授权清理，再重新登录。本机备忘录会保留。",
     account_owner_workspace_mismatch: "账户服务返回的身份或同步空间与本次登录信息不一致，无法继续账户同步。请重新登录；如仍有未完成的授权，可先退出账户。本机备忘录会保留。",
     account_configuration: "账户配置无效，请检查服务配置或更新应用。本机备忘录会保留。",
-    account_storage: "无法安全读取或保存账户授权。请检查本机存储；若系统钥匙串不可用，可在退出账户后改用本机加密文件。本机备忘录会保留。",
+    account_storage: "无法安全读取或保存账户授权。请检查本机存储后重试。本机备忘录会保留。",
     account_cancelled: "登录已取消，你可以继续使用本地备忘录。",
     account_busy: "已有账户操作正在进行，请等待该操作结束后再重试。本机备忘录会保留。",
     account_window_invalid: "当前窗口不能管理账户，请回到应用主窗口后重试。本机备忘录会保留。",
@@ -279,6 +279,7 @@ export function accountErrorMessage(error: AccountStatus["error"]): string {
     return `登录身份响应${error.reason ? `的${reason[error.reason]}` : ""}未通过校验，请检查服务或更新应用。本机备忘录会保留。`;
   }
   if (accountNeedsLogin(error)) return `${at}登录授权已失效或未完成，请重新登录。本机备忘录会保留。`;
+  if (error.code === "account_network" && error.stage === "embeddedOpen") return "应用内登录窗口未能打开。请重试，或选择系统浏览器登录。本机备忘录会保留。";
   if (error.code === "account_network") return `${at}网络请求未完成，请重试。本机备忘录会保留。`;
   if (error.code === "account_authentication") return `${at}账户授权未被接受，请查看账户状态后重试。本机备忘录会保留。`;
   return "账户操作未完成，具体原因尚未确认。请读取账户状态后重试。本机备忘录会保留。";
@@ -399,7 +400,7 @@ export async function accountCommand(command: AccountCommand): Promise<AccountSt
       request = { type: "setEnabled", enabled: bool(command.enabled) }; break;
     case "setCredentialStorage":
       record(command, ["type", "storage"]);
-      if (!credentialStorages.includes(command.storage)) return invalid();
+      if (command.storage !== "encryptedFile") return invalid();
       request = { type: "setCredentialStorage", storage: command.storage }; break;
     case "status": case "openLoginInBrowser": case "cancel": case "signOut": case "syncNow":
       record(command, ["type"]);

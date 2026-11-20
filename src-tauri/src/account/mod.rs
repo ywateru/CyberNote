@@ -68,6 +68,7 @@ pub(crate) struct Runtime {
     root: PathBuf,
     data: Mutex<Data>,
     bus: Mutex<Option<Bus>>,
+    legacy_storage_failed: AtomicBool,
     lifecycle: AsyncMutex<()>,
     operation: AsyncMutex<()>,
     registry: Mutex<Option<private::Registry>>,
@@ -128,6 +129,7 @@ impl Runtime {
                 credential_storage,
             }),
             bus: Mutex::new(None),
+            legacy_storage_failed: AtomicBool::new(false),
             lifecycle: AsyncMutex::new(()),
             operation: AsyncMutex::new(()),
             registry: Mutex::new(registry),
@@ -152,10 +154,18 @@ impl Runtime {
         }
         let config = config::pinned()?;
         let storage = provider::selected_storage(&self.root)?.ok_or(Error::Unsupported)?;
-        let (store, mode) = provider::store(&self.app, &self.root, storage)?;
-        let candidate = Bus::new(config, store, mode)
-            .await
-            .map_err(|error| Error::at_sdk(SdkStage::Init, error))?;
+        let opened = async {
+            let (store, mode) = provider::store(&self.app, &self.root, storage)?;
+            Bus::new(config, store, mode)
+                .await
+                .map_err(|error| Error::at_sdk(SdkStage::Init, error))
+        }
+        .await;
+        if storage == CredentialStorage::Keychain {
+            self.legacy_storage_failed
+                .store(matches!(opened, Err(Error::Storage)), Ordering::Release);
+        }
+        let candidate = opened?;
         let existing = {
             let mut slot = self.bus.lock().map_err(|_| Error::Storage)?;
             if let Some(existing) = slot.as_ref().cloned() {
@@ -671,7 +681,7 @@ impl Runtime {
             }
             Command::SetCredentialStorage { storage } => {
                 let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
-                if provider::available_storage().is_none() {
+                if !cfg!(target_os = "macos") || storage != CredentialStorage::EncryptedFile {
                     return Err(Error::Unsupported);
                 }
                 if self
@@ -683,12 +693,14 @@ impl Runtime {
                 {
                     return self.snapshot();
                 }
+                let recovering = self.legacy_storage_failed.load(Ordering::Acquire)
+                    && self.bus_current()?.is_none();
                 {
                     let data = self.data.lock().map_err(|_| Error::Storage)?;
                     let blocked_error = data.status.error.as_ref().is_some_and(|error| {
                         error.code == "account_busy" || error.code == "account_cleanup_required"
                     });
-                    if data.binding.is_some()
+                    if (data.binding.is_some() && !recovering)
                         || data.status.profile.is_some()
                         || data.status.state == Phase::Authorizing
                         || data
@@ -706,6 +718,10 @@ impl Runtime {
                 if self.network.lock().await.is_some() || self.attempt.lock().await.is_some() {
                     return Err(Error::Busy);
                 }
+                // An unreadable legacy grant cannot be revoked or copied. Keep its
+                // binding and vault, and persist the pause before switching stores.
+                // A fresh login can reuse the device for the same verified owner.
+                self.set_enabled(false)?;
                 self.close_bus().await?;
                 provider::set_selected_storage(&self.root, storage)?;
                 self.generation.fetch_add(1, Ordering::AcqRel);
@@ -878,7 +894,7 @@ impl Runtime {
             #[cfg(not(target_os="android"))]
             if let Some(a)=self.attempt.lock().await.as_mut(){a.mac=Some(mac.clone());}
             let url=started.authorization_uri.parse().map_err(|_|Error::Configuration)?;
-            let p=surface::Presentation::new(self,requested,g,url,stop.clone(),stop.clone())?;
+            let p=surface::Presentation::new(self,requested,g,url,stop.clone())?;
             let _lease=surface::Lease(p.clone());*self.presentation.lock().map_err(|_|Error::Storage)?=Some(p.clone());
             #[cfg(target_os="android")]
             let receiver={let(tx,rx)=oneshot::channel();*self.android.lock().await=Some(AndroidCallback{generation:g,instance:p.instance.clone(),sender:tx});rx};
@@ -913,7 +929,7 @@ impl Runtime {
                 .cmd(C::AuthCancel(pb::AuthCancel { operation_id: op }))
                 .await
                 .map_err(|error| Error::at_sdk(SdkStage::AuthCancel, error));
-            if !self.current(g) || stop.is_cancelled() || callback_submitted {
+            if callback_submitted {
                 // Callback may have committed immediately before cancellation.
                 // Seal any grant rather than leaving an unseen logged-in owner.
                 self.stop_network().await?;

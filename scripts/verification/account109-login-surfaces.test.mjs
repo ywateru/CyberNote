@@ -72,7 +72,7 @@ const built=await build({stdin:{contents:`export {default as AccountSettings} fr
     b.onResolve({filter:/^\.\/data-management$/},()=>({path:'time',namespace:'fixture'}));
     b.onLoad({filter:/.*/,namespace:'fixture'},({path})=>({contents:path==='ipc'
       ? 'export const isTauri=()=>true; export const invoke=(name,args)=>globalThis.__invoke(name,args);'
-      : path==='icons'?'export const UserRound=()=>null,Laptop=()=>null,Smartphone=()=>null,MonitorSmartphone=()=>null,RefreshCw=()=>null,ChevronRight=()=>null,Pencil=()=>null,FileText=()=>null,Check=()=>null,LoaderCircle=()=>null,KeyRound=()=>null,HardDrive=()=>null;'
+      : path==='icons'?'export const UserRound=()=>null,Laptop=()=>null,Smartphone=()=>null,MonitorSmartphone=()=>null,RefreshCw=()=>null,ChevronRight=()=>null,ChevronDown=()=>null,Pencil=()=>null,FileText=()=>null,Check=()=>null,LoaderCircle=()=>null,KeyRound=()=>null,HardDrive=()=>null;'
       : 'export const formatFileTime=()=>"Fixture time";'}));
   }}]});
 
@@ -124,13 +124,11 @@ function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
     all,handle:()=>handle,text:()=>container.textContent,
     panel:()=>all().find(e=>props(e).className==='account-settings'),
     radio:value=>all().find(e=>props(e).role==='radio'&&props(e).value===value),
-    storageRadio:value=>all().find(e=>props(e).role==='radio'&&e.textContent===(value==='encryptedFile'?'本机加密文件':'系统钥匙串')),
     buttons:()=>all().filter(e=>e.localName==='button'),
     button:label=>all().find(e=>e.localName==='button'&&e.textContent===label),
     actionLabels:()=>{const section=all().find(e=>props(e)['aria-label']==='CyberNote 账户');return descendants(section).filter(e=>e.localName==='button'&&props(e).role!=='radio').map(e=>e.textContent);},
     async click(label){const button=h.button(label);assert(button,`Missing ${label}`);assert(!props(button).disabled);const modal=all().find(e=>e.localName==='dialog'&&e.open);assert(!modal||modal.contains(button),'host actions must respect native modal isolation');await act(async()=>{props(button).onClick({currentTarget:button});});},
     async choose(value){const radio=h.radio(value);assert(radio);assert(!props(radio)['aria-disabled']);await act(async()=>{props(radio).onClick();});},
-    async chooseStorage(value){const radio=h.storageRadio(value);assert(radio);assert(!props(radio)['aria-disabled']);await act(async()=>{props(radio).onClick();});},
     async poll(){await act(async()=>{await handle.run({type:'status'});});},
     async tick(){await act(async()=>{for(const fn of intervals.values())fn();});},
   };
@@ -168,7 +166,7 @@ test('waiting text/data follow only native surface; missing legacy field stays u
  for(const surface of [undefined,'embedded','browser']){
   const h=setup(t,{initial:authorizing(surface)});await h.mount();
   assert.equal(h.panel().getAttribute('data-account-authorization-surface'),surface??null);
-  assert(h.text().includes(surface==='embedded'?'请在应用内登录窗口中完成授权':surface==='browser'?'请在系统浏览器中完成授权':'请完成登录授权'));
+  assert(h.text().includes(surface==='embedded'?'请在应用内登录窗口中完成授权':surface==='browser'?'请在系统浏览器中完成授权':'正在准备授权并打开登录页面'));
   assert.deepEqual(h.actionLabels(),surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录']);
   await h.tick();assert(h.calls.every(c=>c.type==='status'),'polling never opens or transfers authorization');
  }
@@ -276,7 +274,7 @@ test('unbound profile failure shows fixed stage/request details; polling never r
  const h=setup(t,{initial:{...signedOutAccount(),state:'error',error:{code:'account_network',stage:'coordinatorProfile',requestReason:'timeout',message:'private-response-sentinel'}}});
  await h.mount();assert(h.text().includes('读取账户资料时请求超时'));assert(!h.text().includes('private-response-sentinel'));
  assert.deepEqual(h.actionLabels(),['登录','创建账户'],'a signed-out restore error must not offer authenticated sign-out');
- const details=h.all().find(e=>e.localName==='details');assert(details);assert(!props(details).open);assert(details.textContent.includes('requestReasontimeout'));
+ const details=h.all().find(e=>e.localName==='details');assert(details);assert(!props(details).open);assert(details.textContent.includes('请求原因timeout'));
  await h.tick();await h.tick();assert(h.calls.every(c=>c.type==='status'));
  await h.choose('browser');await h.click('重试登录');assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'browser'});assert(!h.calls.some(c=>c.type==='setEnabled'||c.type==='signOut'));
 });
@@ -534,7 +532,7 @@ test('explicit adoption timeouts show stage and retry guidance without claiming 
    await h.click('取消');
   }
   assert(h.text().includes('开启同步准备超时'));assert(h.text().includes(`${label}超时`));
-  assert(h.text().includes('请稍后重新确认开启同步'));assert(h.text().includes(`adoptionStage${adoptionStage}adoptionReasontimeout`));
+  assert(h.text().includes('请稍后重新确认开启同步'));assert(h.text().includes(`同步准备阶段${adoptionStage}同步准备原因timeout`));
   assert(!h.text().includes('开启同步前需要处理旧同步内容'));assert(!h.text().includes('未解决冲突'));assert(!h.text().includes('private-response-sentinel'));
   await h.tick();if(mode==='IPC')await h.click('读取账户状态');
   assert.equal(h.calls.filter(c=>c.type==='setEnabled').length,mode==='IPC'?1:0);
@@ -753,55 +751,52 @@ test('IPC constructs only exact rename and target/direction requests; invalid in
  assert.equal(h.calls.length,before);
 });
 
-test('credential storage IPC accepts only the two finite values and exact command shape',async t=>{
+test('credential storage IPC accepts only encryptedFile and the exact command shape',async t=>{
  const h=setup(t,{initial:{...signedOutAccount(),credentialStorage:'keychain'}});
- for(const storage of ['keychain','encryptedFile']) {
-  await h.client.accountCommand({type:'setCredentialStorage',storage});
-  assert.deepEqual(h.calls.at(-1),{type:'setCredentialStorage',storage});
- }
+ const request={type:'setCredentialStorage',storage:'encryptedFile'};
+ await h.client.accountCommand(request);
+ assert.deepEqual(h.calls.at(-1),request);
  const before=h.calls.length;
  for(const command of [
   {type:'setCredentialStorage'},
-  {type:'setCredentialStorage',storage:'keychainFile'},
+  {type:'setCredentialStorage',storage:'keychain'},
   {type:'setCredentialStorage',storage:'encrypted_file'},
   {type:'setCredentialStorage',storage:null},
-  {type:'setCredentialStorage',storage:'encryptedFile',confirmed:true},
-  {type:'setCredentialStorage',storage:'encryptedFile',path:'/private/vault'},
+  {...request,confirmed:true}, {...request,path:'/private/vault'},
  ]) await assert.rejects(h.client.accountCommand(command),/无效数据/);
  assert.equal(h.calls.length,before);
 });
 
-test('credential storage UI requires confirmation, sends one exact IPC and reflects the authoritative selection',async t=>{
- const initial={...signedOutAccount(),credentialStorage:'keychain'};
+test('an unreadable legacy vault offers a confirmed switch and then starts a fresh embedded login',async t=>{
+ const initial={...signedOutAccount(),credentialStorage:'keychain',state:'error',error:{code:'account_storage',message:'Fixture legacy storage unavailable'}};
  const h=setup(t,{initial,reply:(command,model)=>{
-  if(command.type==='setCredentialStorage'){const next={...model.get(),credentialStorage:command.storage};model.set(next);return next;}
+  if(command.type==='setCredentialStorage'){const next={...signedOutAccount(),credentialStorage:command.storage};model.set(next);return next;}
  }});
- await h.mount();assert(props(h.storageRadio('keychain'))['aria-checked']);assert(props(h.storageRadio('encryptedFile'))['aria-checked']===false);
- await h.chooseStorage('encryptedFile');assert(h.calls.every(c=>c.type==='status'));
- await h.click('应用存储方式');
+ await h.mount();
+ assert(h.text().includes('无法读取旧版账户凭据'));
+ assert(h.text().includes('错误代码'));
+ assert(h.text().includes('account_storage'));
+ await h.click('改用本机加密文件');
  assert(h.handle().inspect().confirmation);assert(h.calls.every(c=>c.type==='status'));
- assert(h.text().includes('切换凭据存储'));
- assert(h.text().includes('新方式使用独立的 CyberBus 安装身份'));
+ assert(h.text().includes('同步保持暂停'));
  await h.click('取消');assert.equal(h.handle().inspect().status.credentialStorage,'keychain');assert(h.calls.every(c=>c.type==='status'));
- await h.click('应用存储方式');await h.click('切换并退出当前身份');
+ await h.click('改用本机加密文件');await h.click('确认切换');
  assert.deepEqual(h.calls.filter(c=>c.type==='setCredentialStorage'),[{type:'setCredentialStorage',storage:'encryptedFile'}]);
  assert.equal(h.handle().inspect().status.credentialStorage,'encryptedFile');
- assert(props(h.storageRadio('encryptedFile'))['aria-checked']);
- assert(h.text().includes('凭据存储已切换为本机加密文件'));
- assert(h.text().includes('原存储数据已保留'));
+ assert(!h.button('改用本机加密文件'));
+ assert(h.text().includes('旧凭据与本机备忘录均已保留'));
+ await h.click('登录');
+ assert.deepEqual(h.calls.find(c=>c.type==='signIn'),{type:'signIn',surface:'embedded'});
 });
 
-test('new-install storage UI presents encrypted file as the default and Keychain as optional',async t=>{
+test('new installation shows local encrypted storage without a Keychain selector',async t=>{
  const h=setup(t,{initial:{...signedOutAccount(),credentialStorage:'encryptedFile'}});
  await h.mount();
- assert(props(h.storageRadio('encryptedFile'))['aria-checked']);
- assert(props(h.storageRadio('keychain'))['aria-checked']===false);
  assert(h.text().includes('凭据存储'));
- assert(h.text().includes('登录信息加密保存在此设备'));
- assert(h.text().includes('系统钥匙串'));
- assert(!h.text().includes('AES-GCM'));
- assert(!h.text().includes('0600'));
- assert(!h.button('应用存储方式'),'unchanged storage needs no redundant apply action');
+ assert(h.text().includes('登录凭据加密保存在此设备'));
+ assert(h.text().includes('本机加密文件'));
+ assert(!h.text().includes('钥匙串'));
+ assert(!h.button('改用本机加密文件'));
 });
 
 test('credential storage changes are fenced for signed-in, authorizing, busy and cleanup-required states',async t=>{
@@ -814,7 +809,7 @@ test('credential storage changes are fenced for signed-in, authorizing, busy and
  ];
  for(const initial of states) {
   const h=setup(t,{initial});await h.mount();
-  assert(props(h.storageRadio('encryptedFile'))['aria-disabled']);assert(!h.button('应用存储方式'));
+  assert(props(h.button('改用本机加密文件')).disabled);
   const before=h.calls.length;
   await act(async()=>{await h.handle().run({type:'setCredentialStorage',storage:'encryptedFile'});});
   assert.equal(h.handle().inspect().confirmation,false);assert.equal(h.calls.length,before);
@@ -939,7 +934,7 @@ test('debug credential storage uses the real confirmation gate and never dispatc
  const descriptor=api.list().find(c=>c.id==='account.setCredentialStorage');
  assert(descriptor);assert.equal(descriptor.available,true);assert.equal(descriptor.mode,'semantic');
  assert.deepEqual(Object.keys(descriptor.args),['storage']);assert(descriptor.args.storage.required);
- assert.deepEqual(Array.from(descriptor.args.storage.enum),['keychain','encryptedFile']);
+ assert.deepEqual(Array.from(descriptor.args.storage.enum),['encryptedFile']);
  const before=h.calls.length;
  for(const args of [{},{storage:'keychainFile'},{storage:'encrypted_file'},{storage:'encryptedFile',confirmed:true}])
   await assert.rejects(api.execute('account.setCredentialStorage',args),e=>e.code==='INVALID_ARGUMENT');
@@ -948,11 +943,11 @@ test('debug credential storage uses the real confirmation gate and never dispatc
  assert(h.handle().inspect().confirmation);assert.equal(h.calls.length,before);
  await h.click('取消');assert.equal(h.calls.length,before);
  await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'encryptedFile'});});
- await h.click('切换并退出当前身份');
+ await h.click('确认切换');
  await h.tick();
  assert.deepEqual(h.calls.slice(before).filter(c=>c.type==='setCredentialStorage'),[{type:'setCredentialStorage',storage:'encryptedFile'}]);
  h.setNative({...initial,state:'paused',profile:{subject:'fixture-owner',displayName:'Fixture'}});await h.poll();
  const pausedCalls=h.calls.length;
- await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'keychain'});});
+ await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'encryptedFile'});});
  assert.equal(h.handle().inspect().confirmation,false);assert.equal(h.calls.length,pausedCalls);
 });

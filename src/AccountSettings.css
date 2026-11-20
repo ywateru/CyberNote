@@ -62,9 +62,13 @@
 .account-device-remote:focus-within { outline: 2px solid var(--focus); outline-offset: -2px; border-radius: var(--radius-8); }
 .account-error { margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-9); color: var(--danger); }
 .account-error p { margin: 0 0 12px; }
-.account-error-details { margin: 12px 0; color: var(--secondary); font-size: .9em; }
-.account-error-details summary { cursor: pointer; min-height: var(--interface-hit-min, 28px); }
-.account-error-details dl { margin: 8px 0; user-select: text; }
+.account-error-details { margin: 4px 0 0; color: var(--secondary); font-size: .9em; }
+.account-error-details summary { display: inline-flex; align-items: center; gap: 6px; padding: 2px 6px; border-radius: 6px; color: var(--settings-muted); cursor: pointer; list-style: none; min-height: var(--interface-hit-min, 28px); }
+.account-error-details summary::-webkit-details-marker { display: none; }
+.account-error-details summary:hover { background: var(--settings-pill); }
+.account-error-details summary svg { flex: none; transform: rotate(-90deg); }
+.account-error-details[open] summary svg { transform: none; }
+.account-error-details dl { margin: 6px 0 0; padding: 4px 8px; border-inline-start: 1px solid var(--settings-divider); user-select: text; }
 .account-error-details dl > div { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0; }
 .account-error-details dt { font-weight: 500; }
 .account-error-details dd { margin: 0; overflow-wrap: anywhere; }
@@ -244,7 +248,7 @@
 .preferences-workspace .account-avatar { background: var(--settings-accent-soft); color: var(--settings-accent); }
 .preferences-workspace .account-settings button.account-primary { background: var(--settings-accent-soft); color: var(--settings-accent); }
 .preferences-workspace .account-settings button.account-primary:hover:not(:disabled) { box-shadow: inset 0 0 0 1px var(--settings-accent); }
-.preferences-workspace .account-storage-change { background: var(--settings-editor); border-radius: 0 0 12px 12px; }
+.account-storage-group .settings121-value { color: var(--settings-muted); }
 .account-device-directions { margin: 16px 0; padding: 8px 12px; border-radius: var(--radius-7); background: var(--settings-editor); }
 .account-device-directions .settings121-row { padding: 0; min-height: 32px; }
 .account-device-directions .account-help { margin: 6px 0 0; overflow-wrap: anywhere; }

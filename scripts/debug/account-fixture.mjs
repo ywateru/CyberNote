@@ -10,7 +10,7 @@ export async function accountFixture(backend, command) {
   if (command.type === "setEnabled" && typeof command.enabled !== "boolean") throw Error("Invalid account fixture enabled");
   if (command.type === "renameDevice" && (typeof command.name !== "string" || !command.name.trim() || [...command.name.trim()].length > 96 || /[\u0000-\u001f\u007f-\u009f]/.test(command.name))) throw Error("Invalid fixture device name");
   if (command.type === "syncDevice" && (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(command.deviceId) || !["push", "pull", "both"].includes(command.direction))) throw Error("Invalid fixture device action");
-  if (command.type === "setCredentialStorage" && !["keychain", "encryptedFile"].includes(command.storage)) throw Error("Invalid fixture credential storage");
+  if (command.type === "setCredentialStorage" && command.storage !== "encryptedFile") throw Error("Invalid fixture credential storage");
   backend.account ||= signedOutAccount();
   if (command.type === "openLoginInBrowser") {
     if (backend.account.state !== "authorizing" || backend.account.authorizationSurface !== "embedded") throw Error("No embedded fixture authorization");

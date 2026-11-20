@@ -1,6 +1,6 @@
 import { appearanceOf, themeOptions, type ThemeId, type SchemePreference } from "./themes/appearance";
 import { useLayoutEffect, useEffect, useRef, useState, type ReactNode } from "react";
-import { Database, X, ChevronLeft, ChevronRight, Type, Notebook, Archive, Search, Info, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound, Bot } from "lucide-react";
+import { Database, X, ChevronLeft, ChevronRight, RefreshCw, Type, Notebook, Archive, Search, Info, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound, Bot } from "lucide-react";
 import { fontSizeOptions, fontSizeOption, type FontSize } from "./font-size";
 import type { Settings } from "./types";
 import "./Preferences.css";
@@ -10,6 +10,7 @@ import { dismissInnermostMenu } from "./Menu";
 import PreferencesInterfaceDetails from "./PreferencesInterfaceDetails";
 import PreferencesPresentation from "./presentation/PreferencesPresentation";
 import { accountUIAvailable } from "./account-client";
+import { storageViewLabel, type StorageView } from "./storage-usage";
 import { buildInfo, displayVersion, releaseIdentityNotice } from "./build-info";
 
 const allPreferencePages = [
@@ -47,11 +48,11 @@ const settingsSearch = [
   ["notes", "锁定备忘录", "关闭所有已锁定 重新锁定", '.preferences-lock-action'],
   ["account", "CyberNote 账户", "登录 创建账户 退出账户 登录方式 系统浏览器", '.account-profile-group'],
   ["account", "我的设备", "允许此设备同步 刷新设备 更改名称 传输状态", '.account-device-group'],
-  ["account", "凭据存储", "登录与安全 钥匙串 本机加密文件", '.account-storage-group [role="radiogroup"]'],
+  ["account", "凭据存储", "登录与安全 钥匙串 本机加密文件", '.account-storage-group'],
   ["account", "同步冲突", "冲突版本 解决 保留版本", '.preferences-conflicts > summary'],
   ["account", "云端同步", "WebDAV S3 GitHub 远端", '[data-settings-slot="cloud"]'],
   ["agent", "Agent 接入", "MCP 本机接入 授权客户端 配置 连接 诊断", '.agent-page-header'],
-  ["data", "存储空间", "本地占用 类型 全部文件 附件 搜索 数据位置", '.data-management-header'],
+  ["data", "存储空间", "本地占用 类型 全部文件 附件 搜索 数据位置", '.data-management'],
   ["backup", "导入与备份", "导出 备份文件 导入 加密", '.local-backup-settings'],
   ["backup", "Apple 备忘录导入", "Apple 苹果 备忘录 导入", '.local-backup-apple'],
   ["backup", "自动备份", "备份文件夹 版本列表 保留份数 立即备份", '[data-settings-slot="backup"]'],
@@ -68,6 +69,9 @@ export type PreferencesProps = {
   onCloseLocks: () => Promise<unknown>;
   returnFocus: HTMLElement | null;
   data: ReactNode;
+  storageView?: StorageView;
+  onStorageRefresh?: () => void;
+  storageRefreshDisabled?: boolean;
   /** Deprecated compatibility slot: deliberately never rendered. Pass conflictsOnly UI to syncConflicts. */
   synchronization?: ReactNode;
   account: ReactNode;
@@ -84,7 +88,7 @@ export type PreferencesProps = {
   onConflictsOpenChange?: (open: boolean) => void;
 };
 
-export default function Preferences({ tab, onTab, onClose, onBack, settings, onSettings, onCloseLocks, returnFocus, data, account, agent, mobile, cloudSync, softwareUpdate, softwareUpdateBadge, automaticBackup, syncConflicts, conflictsOpen: controlledConflictsOpen, onConflictsOpenChange }: PreferencesProps) {
+export default function Preferences({ tab, onTab, onClose, onBack, settings, onSettings, onCloseLocks, returnFocus, data, storageView = "overview", onStorageRefresh, storageRefreshDisabled, account, agent, mobile, cloudSync, softwareUpdate, softwareUpdateBadge, automaticBackup, syncConflicts, conflictsOpen: controlledConflictsOpen, onConflictsOpenChange }: PreferencesProps) {
   const root = useRef<HTMLElement>(null), close = useRef<HTMLButtonElement>(null), heading = useRef<HTMLHeadingElement>(null);
   const live = useRef(false), backHandler = useRef(onBack), working = useRef(false);
   backHandler.current = onBack;
@@ -143,6 +147,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   const [saveError, setSaveError] = useState<{ tab: PreferencesTab; message: string } | null>(null);
   const current = preferencePages.find(page => page.id === activeTab);
   const home = mobile && activeTab === "home";
+  const storageDetail = activeTab === "data" && storageView !== "overview" ? storageViewLabel(storageView) : null;
   useEffect(() => {
     if (tab === "data" || tab === "backup") setVisitedData(true);
   }, [tab]);
@@ -274,8 +279,8 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
     <div className={`preferences-backdrop ${mobile ? "preferences-mobile" : "preferences-desktop"}`}>
       <section ref={root} className="preferences" role="dialog" aria-modal="true" aria-labelledby="preferences-title" data-preferences-tab={activeTab}>
         <header className="preferences-header">
-          {mobile && !home && <button type="button" className="preferences-back" aria-label="返回设置" onClick={onBack}><ChevronLeft /><span>设置</span></button>}
-          <h2 ref={heading} tabIndex={-1} id="preferences-title">{mobile && !home ? current?.label : "设置"}</h2>
+          {mobile && !home && <button type="button" className="preferences-back" aria-label={storageDetail ? "返回数据管理总览" : "返回设置"} onClick={onBack}><ChevronLeft /><span>{storageDetail ? "存储空间" : "设置"}</span></button>}
+          <h2 ref={heading} tabIndex={-1} id="preferences-title">{mobile && !home ? storageDetail ?? current?.label : "设置"}</h2>
           <button ref={close} className="preferences-close" type="button" aria-label="关闭设置" onClick={onClose}>{mobile ? "完成" : <X size={19} />}</button>
         </header>
         <div className="preferences-body">
@@ -293,11 +298,14 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
           </nav>}
           <div className={`preferences-workspace${home ? " is-home" : ""}`}>
             <div className="preferences-toolbar">
-              {!mobile && <div className="preferences-breadcrumb" aria-label="当前位置"><span>设置</span><ChevronRight size={14} aria-hidden="true" /><span>{current?.label || "外观与字号"}</span></div>}
+              {!mobile && <nav className="preferences-breadcrumb" aria-label="当前位置"><span>设置</span><ChevronRight size={14} aria-hidden="true" />
+                {storageDetail ? <><button type="button" onClick={onBack} aria-label="返回数据管理总览">存储空间</button><ChevronRight size={14} aria-hidden="true" /><span aria-current="page">{storageDetail}</span></> : <span aria-current="page">{current?.label || "外观与字号"}</span>}
+              </nav>}
               <div className="preferences-search"><Search size={15} aria-hidden="true" /><input ref={searchInput} type="search" aria-label="查找设置" placeholder="查找设置" value={query} onChange={event => setSearchQuery(event.target.value)} onKeyDown={event => {
                 if (event.key === "Escape" && query) { event.preventDefault(); event.stopPropagation(); setQuery(""); }
                 if (event.key === "Enter" && searching && results[0]) { event.preventDefault(); jumpTo(results[0][0], results[0][3]); }
               }} />{query && <button type="button" aria-label="清除查找" onClick={() => { setQuery(""); searchInput.current?.focus(); }}><X size={14} /></button>}</div>
+              {activeTab === "data" && !searching && onStorageRefresh && <button type="button" className="preferences-storage-refresh" aria-label="刷新数据管理" disabled={storageRefreshDisabled} onClick={onStorageRefresh}><RefreshCw size={15} aria-hidden="true" /><span>刷新</span></button>}
               {softwareUpdateBadge?.(openAbout)}
             </div>
             {searchMessage && <p className="preferences-search-notice" role="status">{searchMessage}</p>}

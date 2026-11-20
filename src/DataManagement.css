@@ -8,22 +8,6 @@
   color: var(--ink);
   font-size: 13px;
 }
-.data-management-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  padding: 16px 22px;
-  border-bottom: 1px solid var(--line);
-}
-.data-management h2 {
-  flex: 1;
-  min-width: 0;
-  font-size: 18px;
-  line-height: 1.3;
-  margin: 0;
-  font-weight: 600;
-}
 .data-management h3 {
   font-size: 15px;
   font-weight: 600;
@@ -51,19 +35,6 @@
 .data-management summary:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
-}
-.data-management .data-back {
-  gap: 1px;
-  padding-left: 1px;
-  background: transparent;
-}
-.data-management .data-close {
-  padding: 6px;
-  background: transparent;
-  color: var(--secondary);
-}
-.data-management .data-refresh {
-  background: transparent;
 }
 .data-management-scroll {
   min-height: 0;
@@ -233,7 +204,7 @@
 .data-explanation,
 .data-file small,
 .data-file time,
-.data-file-name > span {
+.data-file-path {
   color: var(--secondary);
   font-size: 12px;
 }
@@ -315,7 +286,7 @@
 }
 .data-file-columns {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 174px 58px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 11em) minmax(6em, auto);
   gap: 12px;
   padding: 8px 0;
   font-size: 11px;
@@ -327,7 +298,7 @@
 }
 .data-file {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 174px 58px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 11em) minmax(6em, auto);
   gap: 12px;
   align-items: center;
   padding: 12px 0;
@@ -340,9 +311,17 @@
   gap: 5px;
   overflow-wrap: anywhere;
 }
-.data-file-name strong {
-  font-weight: 500;
-}
+.data-file-name strong { font-weight: 500; }
+.data-file-identity summary { display: flex; align-items: flex-start; gap: 6px; cursor: pointer; list-style: none; border-radius: 5px; }
+.data-file-identity summary::-webkit-details-marker { display: none; }
+.data-file-identity summary svg { flex: none; margin-top: 2px; color: var(--secondary); }
+.data-file-identity:not([open]) summary svg { transform: rotate(-90deg); }
+.data-file-labels { min-width: 0; }
+.data-file-labels > * { display: block; }
+.data-file-identity:not([open]) .data-file-labels > * { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.data-file-identity[open] .data-file-labels { overflow-wrap: anywhere; user-select: text; -webkit-user-select: text; }
+.data-export { justify-self: end; white-space: nowrap; }
+.data-export svg { flex-shrink: 0; }
 .data-file-stat {
   min-width: 0;
   display: flex;
@@ -373,20 +352,6 @@
   color: var(--secondary);
 }
 @media (max-width: 699px) {
-  .data-management-header {
-    padding: 14px 12px;
-    gap: 6px;
-  }
-  .data-management h2 {
-    font-size: 17px;
-  }
-  .data-management .data-back {
-    padding: 6px 0;
-  }
-  .data-back span,
-  .data-refresh span {
-    display: none;
-  }
   .data-management-scroll {
     padding: 16px;
     scrollbar-gutter: auto;
@@ -448,8 +413,6 @@
 
 /* Settings121 storage uses the same divided-list surface as its siblings. */
 .preferences-workspace .data-management { background: transparent; border: 0; box-shadow: none; }
-.preferences-workspace .data-management-header { padding: 0 0 12px; border: 0; background: transparent; }
-.preferences-workspace .data-management-header h2 { font-size: 13px; font-weight: 600; }
 .preferences-workspace .data-management .storage-summary,
 .preferences-workspace .data-management .storage-category-list,
 .preferences-workspace .data-management .data-storage-details {

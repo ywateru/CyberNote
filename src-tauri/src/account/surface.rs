@@ -4,9 +4,13 @@ use super::{
     types::{AuthorizationSurface as Surface, Error, NetworkStage, Result},
     Runtime,
 };
-use std::sync::{Arc, Mutex};
+use std::{
+    sync::{Arc, Mutex},
+    time::Duration,
+};
 use tauri_plugin_notes_auth::{Event, NativeAuthExt};
 use tauri_plugin_opener::OpenerExt;
+use tokio::sync::Notify;
 use tokio_util::sync::CancellationToken;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -23,7 +27,7 @@ struct State {
     mode: Mode,
     url: Option<url::Url>,
     native: bool,
-    failed: bool,
+    failure: Option<NetworkStage>,
 }
 impl State {
     fn new(requested: Surface, url: url::Url) -> Self {
@@ -32,7 +36,7 @@ impl State {
             mode: Mode::Starting,
             url: Some(url),
             native: false,
-            failed: false,
+            failure: None,
         }
     }
     fn surface(&self) -> Option<Surface> {
@@ -69,14 +73,25 @@ impl State {
         self.url = None;
         std::mem::take(&mut self.native)
     }
+    fn ended_by_host(&mut self, failed: bool) -> bool {
+        if !self.native || !matches!(self.mode, Mode::Starting | Mode::Embedded | Mode::Switching) {
+            return false;
+        }
+        self.failure = failed.then_some(if self.mode == Mode::Starting {
+            NetworkStage::EmbeddedOpen
+        } else {
+            NetworkStage::IdentityProvider
+        });
+        self.disarm(Mode::Retired)
+    }
 }
 pub(super) struct Presentation {
     pub generation: u64,
     pub instance: String,
     app: tauri::AppHandle,
     stop: CancellationToken,
-    cancel: CancellationToken,
     state: Mutex<State>,
+    opened: Notify,
 }
 pub(super) struct Lease(pub Arc<Presentation>);
 impl Drop for Lease {
@@ -91,7 +106,6 @@ impl Presentation {
         generation: u64,
         url: url::Url,
         stop: CancellationToken,
-        cancel: CancellationToken,
     ) -> Result<Arc<Self>> {
         if !hosted(&url) || url.path() != "/oidc/auth" {
             return Err(Error::Configuration);
@@ -101,8 +115,8 @@ impl Presentation {
             instance: format!("account-auth-{}", uuid::Uuid::new_v4()),
             app: runtime.app.clone(),
             stop,
-            cancel,
             state: Mutex::new(State::new(surface, url)),
+            opened: Notify::new(),
         }))
     }
     pub(super) fn native_active(&self) -> bool {
@@ -142,60 +156,72 @@ impl Presentation {
             Surface::Embedded => {
                 let presentation = self.clone();
                 let owner = Arc::downgrade(runtime);
-                self.app
-                    .native_auth()
-                    .open(
-                        &self.app,
-                        &self.instance,
-                        self.generation,
-                        url.as_str(),
-                        Arc::new(move |event| {
-                            let Some(runtime) = owner.upgrade() else {
-                                presentation.retire();
-                                return;
-                            };
-                            if !runtime.current(presentation.generation)
-                                || !presentation.native_active()
-                            {
-                                return;
-                            }
-                            match event {
-                                Event::Opened => {
-                                    if let Ok(mut s) = presentation.state.lock() {
-                                        if s.mode == Mode::Starting {
-                                            s.mode = Mode::Embedded;
+                // A queued platform call is not evidence that a window exists.
+                // Budget both the dispatch and the window acknowledgement.
+                let opening = async {
+                    self.app
+                        .native_auth()
+                        .open(
+                            &self.app,
+                            &self.instance,
+                            self.generation,
+                            url.as_str(),
+                            Arc::new(move |event| {
+                                let Some(runtime) = owner.upgrade() else {
+                                    presentation.retire();
+                                    return;
+                                };
+                                if !runtime.current(presentation.generation)
+                                    || !presentation.native_active()
+                                {
+                                    return;
+                                }
+                                match event {
+                                    Event::Opened => {
+                                        if let Ok(mut s) = presentation.state.lock() {
+                                            if s.mode == Mode::Starting {
+                                                s.mode = Mode::Embedded;
+                                                presentation.opened.notify_one();
+                                            }
                                         }
                                     }
-                                }
-                                Event::Closed => presentation.user_closed(),
-                                Event::Destroyed => presentation.host_destroyed(),
-                                Event::Failed => presentation.failed(),
-                                Event::Continue => {
-                                    let instance = presentation.instance.clone();
-                                    tauri::async_runtime::spawn(async move {
-                                        let _ =
-                                            runtime.open_login_in_browser(Some(&instance)).await;
-                                    });
-                                }
-                                Event::Callback(raw) => {
-                                    // A private native callback, never a renderer-supplied URL.
-                                    #[cfg(target_os = "android")]
-                                    {
-                                        let p = presentation.clone();
+                                    Event::Closed => presentation.close_embedded(false),
+                                    Event::Destroyed | Event::Failed => {
+                                        presentation.close_embedded(true)
+                                    }
+                                    Event::Continue => {
+                                        let instance = presentation.instance.clone();
                                         tauri::async_runtime::spawn(async move {
-                                            if let Ok(url) = raw.parse() {
-                                                runtime.embedded_callback(&p, url).await;
-                                            }
+                                            let _ = runtime
+                                                .open_login_in_browser(Some(&instance))
+                                                .await;
                                         });
                                     }
-                                    #[cfg(not(target_os = "android"))]
-                                    let _ = raw; // Desktop keeps its exact HTTP loopback receiver.
+                                    Event::Callback(raw) => {
+                                        // A private native callback, never a renderer-supplied URL.
+                                        #[cfg(target_os = "android")]
+                                        {
+                                            let p = presentation.clone();
+                                            tauri::async_runtime::spawn(async move {
+                                                if let Ok(url) = raw.parse() {
+                                                    runtime.embedded_callback(&p, url).await;
+                                                }
+                                            });
+                                        }
+                                        #[cfg(not(target_os = "android"))]
+                                        let _ = raw; // Desktop keeps its exact HTTP loopback receiver.
+                                    }
                                 }
-                            }
-                        }),
-                    )
+                            }),
+                        )
+                        .await
+                        .map_err(|_| Error::NetworkAt(NetworkStage::EmbeddedOpen))?;
+                    self.opened.notified().await;
+                    Ok::<(), Error>(())
+                };
+                tokio::time::timeout(Duration::from_secs(15), opening)
                     .await
-                    .map_err(|_| Error::NetworkAt(NetworkStage::BrowserOpen))?;
+                    .map_err(|_| Error::NetworkAt(NetworkStage::EmbeddedOpen))??;
             }
         }
         Ok(())
@@ -227,43 +253,24 @@ impl Presentation {
             .native_auth()
             .close(&self.app, &self.instance, self.generation);
     }
-    fn user_closed(&self) {
-        self.cancel_embedded();
-    }
-    fn cancel_embedded(&self) {
-        let close = {
+    fn close_embedded(&self, failed: bool) {
+        {
             let Ok(mut s) = self.state.lock() else {
                 return;
             };
-            if !matches!(s.mode, Mode::Starting | Mode::Embedded | Mode::Switching) {
+            if !s.ended_by_host(failed) {
                 return;
             }
-            self.cancel.cancel();
             self.stop.cancel();
-            s.disarm(Mode::Retired)
-        };
-        if close {
-            self.close_native();
         }
-    }
-    fn host_destroyed(&self) {
-        // A lost native host cannot retain an in-flight embedded transaction.
-        // It is distinct from a user-close signal; a transferred browser owner
-        // has native=false and is fenced out before reaching this path.
-        self.cancel_embedded();
-    }
-    fn failed(&self) {
-        if let Ok(mut s) = self.state.lock() {
-            s.failed = true;
-        }
-        self.user_closed();
+        self.close_native();
     }
     pub fn stopped_error(&self) -> Error {
-        if self.state.lock().is_ok_and(|s| s.failed) {
-            Error::NetworkAt(NetworkStage::IdentityProvider)
-        } else {
-            Error::Cancelled
-        }
+        self.state
+            .lock()
+            .ok()
+            .and_then(|s| s.failure)
+            .map_or(Error::Cancelled, Error::NetworkAt)
     }
     pub fn completing(&self) {
         self.disarm(Mode::Completing);
@@ -338,6 +345,22 @@ mod tests {
             assert!(!old.disarm(Mode::Retired));
             assert!(replacement.native);
         }
+    }
+    #[test]
+    fn a_failed_window_is_distinct_from_user_close_and_cannot_cancel_a_transferred_owner() {
+        let mut starting = embedded();
+        starting.mode = Mode::Starting;
+        assert!(starting.ended_by_host(true));
+        assert_eq!(starting.failure, Some(NetworkStage::EmbeddedOpen));
+        assert!(!starting.ended_by_host(false));
+        let mut closed = embedded();
+        assert!(closed.ended_by_host(false));
+        assert_eq!(closed.failure, None);
+        let mut transferred = embedded();
+        transferred.switch().unwrap();
+        assert!(transferred.switched(true));
+        assert!(!transferred.ended_by_host(true));
+        assert_eq!(transferred.surface(), Some(Surface::Browser));
     }
     #[test]
     fn native_host_policy_rejects_other_schemes_hosts_ports_and_credentials() {

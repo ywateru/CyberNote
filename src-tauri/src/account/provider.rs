@@ -15,13 +15,6 @@ const FILE_MARKER_BYTES: &[u8] = b"cyberbus-file-installation-v1\n";
 const FILE_KEY: &str = "cyberbus-file-key-v1";
 const FILE_VAULT: &str = "cyberbus-file-vault-v1";
 
-pub(super) fn available_storage() -> Option<CredentialStorage> {
-    #[cfg(target_os = "macos")]
-    return Some(CredentialStorage::Keychain);
-    #[cfg(not(target_os = "macos"))]
-    None
-}
-
 pub(super) fn selected_storage(root: &Path) -> Result<Option<CredentialStorage>> {
     #[cfg(target_os = "android")]
     {
@@ -35,9 +28,8 @@ pub(super) fn selected_storage(root: &Path) -> Result<Option<CredentialStorage>>
     {
         private::directory(root)?;
         return match private::read_bytes(&root.join(STORAGE_PREFERENCE), 32)? {
-            // Existing installations keep the storage they already used.
-            // New installations use the encrypted local file so Keychain
-            // remains an explicit, optional choice.
+            // Preserve legacy vaults for existing users. New installations and
+            // explicit recovery use the encrypted file without Keychain access.
             None if private::read_bytes(&root.join("cyberbus-installation-v1"), 64)?.is_some() => {
                 Ok(Some(CredentialStorage::Keychain))
             }
@@ -62,11 +54,10 @@ pub(super) fn selected_storage(root: &Path) -> Result<Option<CredentialStorage>>
 pub(super) fn set_selected_storage(root: &Path, storage: CredentialStorage) -> Result<()> {
     #[cfg(target_os = "macos")]
     {
-        let bytes = match storage {
-            CredentialStorage::Keychain => b"keychain\n".as_slice(),
-            CredentialStorage::EncryptedFile => b"encrypted-file\n".as_slice(),
-        };
-        return private::atomic_write(&root.join(STORAGE_PREFERENCE), bytes);
+        if storage != CredentialStorage::EncryptedFile {
+            return Err(Error::Unsupported);
+        }
+        return private::atomic_write(&root.join(STORAGE_PREFERENCE), b"encrypted-file\n");
     }
     #[cfg(not(target_os = "macos"))]
     {
@@ -210,10 +201,23 @@ mod tests {
             selected_storage(dir.path()).unwrap(),
             Some(CredentialStorage::EncryptedFile)
         );
-        set_selected_storage(dir.path(), CredentialStorage::Keychain).unwrap();
+        marker(&dir.path().join(STORAGE_PREFERENCE), b"keychain\n");
         assert_eq!(
             selected_storage(dir.path()).unwrap(),
             Some(CredentialStorage::Keychain)
+        );
+        assert_eq!(
+            set_selected_storage(dir.path(), CredentialStorage::Keychain),
+            Err(Error::Unsupported)
+        );
+        set_selected_storage(dir.path(), CredentialStorage::EncryptedFile).unwrap();
+        assert_eq!(
+            selected_storage(dir.path()).unwrap(),
+            Some(CredentialStorage::EncryptedFile)
+        );
+        assert_eq!(
+            fs::read(dir.path().join("cyberbus-installation-v1")).unwrap(),
+            b"cyberbus-installation-v1\n"
         );
     }
 

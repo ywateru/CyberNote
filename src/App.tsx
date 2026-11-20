@@ -26,7 +26,7 @@ import DesktopToolbar, { type DesktopToolbarAction } from "./DesktopToolbar";
 import { fontScales } from "./font-size";
 import { interfaceDetailVariables, parseInterfaceDetails } from "./interface-details";
 import { ConfirmedSettings } from "./confirmed-settings";
-import { isStorageView } from "./storage-usage";
+import { isStorageView, type StorageView } from "./storage-usage";
 import { AttachmentMenuProvider } from "./AttachmentContextMenu";
 import { AttachmentTransferContext } from "./attachment-clipboard";
 import { ImagePreview, ImagePreviewContext } from "./ImagePreview";
@@ -342,6 +342,8 @@ function App() {
   const [modal, setModal] = useState<string | null>(null);
   const [modalValue, setModalValue] = useState("");
   const [preferencesTab, setPreferencesTab] = useState<PreferencesTab>("settings");
+  const [storageView, setStorageView] = useState<StorageView>("overview");
+  useEffect(() => { if (modal !== "preferences") setStorageView("overview"); }, [modal]);
   const [conflictsOpen, setConflictsOpen] = useState(false);
   const [settingsCoordinationReady,setSettingsCoordinationReady]=useState(0);
   const preferencesTrigger = useRef<HTMLElement | null>(null);
@@ -5043,6 +5045,9 @@ function App() {
           onTab={setPreferencesTab}
           onClose={() => setModal(null)}
           onBack={preferencesBack}
+          storageView={storageView}
+          onStorageRefresh={() => void dataManagementHandle.current?.refresh().catch(() => {})}
+          storageRefreshDisabled={!!accessSuspended.length || !!accessGate.state?.operationId}
           agent={<AgentSettings folders={ws.folders} mobile={mobile} />}
           account={accountUIAvailable && <AccountSettings active={preferencesTab === "account"} onHandle={handle => { accountSettingsHandle.current = handle; }} onConflicts={() => { setConflictsOpen(true); setPreferencesTab("account"); }} />}
           conflictsOpen={conflictsOpen}
@@ -5068,6 +5073,8 @@ function App() {
           onCloseLocks={() => patch({type: "closeLocks"})}
           returnFocus={preferencesTrigger.current}
           data={<DataManagement
+            view={storageView}
+            onViewChange={setStorageView}
             active={preferencesTab === "data"}
             section={preferencesTab === "backup" ? "backup" : "storage"}
             onHandle={(handle) => { dataManagementHandle.current = handle; }}

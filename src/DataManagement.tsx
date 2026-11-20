@@ -10,8 +10,7 @@ import {
 } from "react";
 import {
   Download,
-  RefreshCw,
-  ChevronLeft,
+  ChevronDown,
   ChevronRight,
   Image,
   Mic,
@@ -35,7 +34,7 @@ import {
   isStorageView,
   legacyStorageViews,
   storageUsage,
-  type StorageCategory,
+  storageViewLabel,
   type StorageView,
 } from "./storage-usage";
 import "./DataManagement.css";
@@ -81,6 +80,8 @@ const emptyFilter: DetailFilter = { query: "", page: 0 };
 const pageSize = 20;
 export default function DataManagement({
   active,
+  view,
+  onViewChange,
   onHandle,
   backupBlocked,
   accessKey,
@@ -88,6 +89,8 @@ export default function DataManagement({
   section = "storage",
 }: {
   active: boolean;
+  view: StorageView;
+  onViewChange: (view: StorageView) => void;
   section?: "storage" | "backup";
   appleImport?: ReactNode;
   onHandle: (handle: DataManagementHandle | null) => void;
@@ -103,12 +106,10 @@ export default function DataManagement({
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
   const [operation, setOperation] = useState("");
-  const [view, setView] = useState<StorageView>("overview");
   const [filters, setFilters] = useState<
     Partial<Record<StorageView, DetailFilter>>
   >({});
-  const panel = useRef<HTMLElement>(null),
-    backButton = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLElement>(null);
   const activeRef = useRef(active),
     authorityGeneration = useRef(0);
   activeRef.current = active;
@@ -152,6 +153,7 @@ export default function DataManagement({
   };
   const requestRefresh = async () => {
     assertActive();
+    if (accessBlocked || loadingRef.current) return;
     return refresh();
   };
   const clearMediaCache=async()=>{
@@ -194,7 +196,15 @@ export default function DataManagement({
   const navigate = (next: StorageView) => {
     assertActive();
     if (!isStorageView(next)) throw Error("未知存储类别");
-    setView(next);
+    if (next === view) return;
+    onViewChange(next);
+    requestAnimationFrame(() => {
+      if (!canFocus()) return;
+      const target = next === "overview"
+        ? panel.current?.querySelector<HTMLElement>(`[data-storage-category="${view}"]`)
+        : panel.current?.querySelector<HTMLElement>(".storage-detail-heading h3");
+      (target || panel.current)?.focus({ preventScroll: true });
+    });
   };
   const filter = (value: Filter) => {
     assertActive();
@@ -216,7 +226,7 @@ export default function DataManagement({
           ? "all"
           : view
         : legacyStorageViews[value.kind];
-    setView(next);
+    onViewChange(next);
     setFilters((previous) => {
       const saved = previous[next] || emptyFilter;
       return {
@@ -281,30 +291,7 @@ export default function DataManagement({
   );
   const pages = Math.max(1, Math.ceil(matches.length / pageSize)),
     currentPage = Math.min(page, pages - 1);
-  const title =
-    view === "overview"
-      ? "存储空间"
-      : view === "all"
-        ? "全部文件"
-        : selectedGroup?.label || "文件详情";
-  const back = () => {
-    navigate("overview");
-    requestAnimationFrame(() =>
-      canFocus()
-        ? panel.current
-            ?.querySelector<HTMLButtonElement>(
-              `[data-storage-category="${view}"]`,
-            )
-            ?.focus()
-        : undefined,
-    );
-  };
-  const openCategory = (category: StorageCategory | "all") => {
-    navigate(category);
-    requestAnimationFrame(() => {
-      if (canFocus()) backButton.current?.focus();
-    });
-  };
+  const title = storageViewLabel(view);
   const fileRow = (file: ManagedFile, index: number) => (
     <article
       className="data-file"
@@ -312,8 +299,12 @@ export default function DataManagement({
       data-file-path={file.relativePath}
     >
       <div className="data-file-name">
-        <strong>{file.attachment?.displayName || file.relativePath}</strong>
-        {file.attachment?.displayName && <span>{file.relativePath}</span>}
+        <details className="data-file-identity">
+          <summary><span className="data-file-labels">
+            <strong>{file.attachment?.displayName || file.relativePath}</strong>
+            {file.attachment?.displayName && <span className="data-file-path">{file.relativePath}</span>}
+          </span><ChevronDown size={14} aria-hidden="true" /></summary>
+        </details>
         <small>
           {file.attachment
             ? kinds[file.attachment.kind] || file.attachment.kind
@@ -365,32 +356,8 @@ export default function DataManagement({
       inert={!active}
       data-storage-view={view}
       aria-label="本地数据管理"
+      tabIndex={-1}
     >
-      <header className="data-management-header">
-        {section === "storage" && view !== "overview" && (
-          <button
-            ref={backButton}
-            type="button"
-            className="data-back"
-            aria-label="返回数据管理总览"
-            onClick={back}
-          >
-            <ChevronLeft size={20} />
-            <span>数据管理</span>
-          </button>
-        )}
-        <h2 id="data-management-title">{section === "backup" ? "导入与备份" : title}</h2>
-        {section === "storage" && <button
-          type="button"
-          className="data-refresh"
-          aria-label="刷新数据管理"
-          disabled={accessBlocked}
-          onClick={() => void requestRefresh().catch(() => {})}
-        >
-          <RefreshCw size={16} />
-          <span>刷新</span>
-        </button>}
-      </header>
       <div className="data-management-scroll" key={view} hidden={section !== "storage"} inert={section !== "storage"}>
         {loading && (
           <p className="data-loading" role="status">
@@ -469,7 +436,7 @@ export default function DataManagement({
                       <button
                         key={group.id}
                         type="button"
-                        onClick={() => openCategory(group.id)}
+                        onClick={() => navigate(group.id)}
                         aria-label={`查看${group.label}，${formatFileSize(group.bytes)}，${group.files.length} 项`}
                       >
                         <i style={{ backgroundColor: group.color }} />
@@ -503,7 +470,7 @@ export default function DataManagement({
                         type="button"
                         className="storage-category"
                         data-storage-category={group.id}
-                        onClick={() => openCategory(group.id)}
+                        onClick={() => navigate(group.id)}
                         style={
                           { "--storage-color": group.color } as CSSProperties
                         }
@@ -534,7 +501,7 @@ export default function DataManagement({
                     type="button"
                     className="storage-all-files"
                     data-storage-category="all"
-                    onClick={() => openCategory("all")}
+                    onClick={() => navigate("all")}
                   >
                     <span>查看全部文件</span>
                     <span>{data.files.length} 项</span>
@@ -590,7 +557,7 @@ export default function DataManagement({
         ) : data && usage ? (
           <>
             <div className="storage-detail-heading">
-              <h3>{title}</h3>
+              <h3 tabIndex={-1}>{title}</h3>
               <p>
                 <strong>
                   {formatFileSize(
