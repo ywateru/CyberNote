@@ -28,17 +28,17 @@ changing account, synchronization, native packaging, or GitHub Actions code.
   frontend, Tauri, Cargo, and lockfile versions agree.
 - Product source identity is derived from tracked product inputs, not ignored
   build directories. Do not hand-edit generated build identity.
-- The macOS app is ad-hoc signed and not notarized. Android release packages
-  from Actions are unsigned. Do not describe either package as a signed store
-  release.
+- The macOS app is ad-hoc signed and not notarized. GitHub Releases include an
+  APK signed by CyberNote's Android distribution certificate.
 
 ## Release Workflow
 
 - `.github/workflows/packages.yml` runs on pull requests, `main`, manual
   dispatch, and tags matching `v*`.
 - A `v*` tag runs release-profile macOS arm64 and Android arm64 builds. After
-  both package jobs and staging checks succeed, the workflow creates a GitHub
-  Release and uploads the app, APK, notices, JSON receipts, and SHA-256 files.
+  both jobs succeed, finalize the signed Android artifact locally and publish it
+  with the macOS ZIP and DMG. Include both platforms' notices, JSON receipts and
+  SHA-256 files. See [package finalization](scripts/publish/README.md#release-finalization).
 - Release tags must match the stable package version:
   `v<major>.<minor>.<patch>` or `v<major>.<minor>.<patch>-<suffix>`.
   Tags containing `-` create prereleases.

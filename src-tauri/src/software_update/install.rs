@@ -38,7 +38,7 @@ pub fn capability(t: &Target) -> (String, String) {
     }
     match t.platform.as_str() {
         "macos"=>("replace_restart".into(),"ad-hoc 签名，未公证；校验并确认后替换，保留旧包，启动未确认时保留事务与备份，不自动回滚或重开；请先安全退出再恢复。保存或录音未结束时不能退出。".into()),
-        "android"=>("download_only".into(),"Actions 发布 APK 未签名，Android 系统安装器不能安装。可下载并校验；需要发布者提供兼容签名的 APK，不能绕过系统签名检查。".into()),
+        "android"=>("download_only".into(),"应用可下载并校验更新包。如需安装，请从发布页下载签名 APK 并用系统安装器打开。覆盖安装需要签名一致。".into()),
         _=>("unsupported".into(),"当前发布不支持此平台".into()),
     }
 }

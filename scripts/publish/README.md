@@ -129,8 +129,9 @@ while fingerprint and file count are always recomputed from actual local bytes.
 
 The workflow requires a real arm64 macOS runner and an explicit Android arm64
 toolchain. No `--all-features` build is used. Package staging validates package
-architecture and writes only the named package, notices, identity receipt and
-checksums. Android output is unsigned; macOS signing/notarization is not asserted.
+architecture and writes the named packages, notices, identity receipts and
+checksums. Actions produces an unsigned Android artifact for local signing and
+a macOS DMG and ZIP containing the same app. The macOS app uses ad-hoc signing.
 Android staging checks every packaged native library's ELF64/AArch64 header,
 rejects duplicate library entries and signing material (including APK signing
 blocks outside ZIP entries), and requires the pinned apksigner's specific
@@ -152,6 +153,31 @@ of the native package. Release stamps compare dirty state and input count too.
 Actions package success is separate from installation, device, login, sync and
 deployment acceptance. No process logs, keys, whole build directories or user
 stores are artifact upload inputs.
+
+## Release finalization
+
+Wait for both package jobs on the intended tag to succeed. Download their
+artifacts from that exact run. From a clean checkout of the tag, use Android
+SDK Build Tools 36.0.0 and the CyberNote release keystore to finalize the APK:
+
+```sh
+python3 scripts/publish/stage-packages.py --sign-android \
+  --artifacts /path/to/android-artifact --output /path/to/new-signed-directory \
+  --keystore /path/to/android-release.p12 --credentials /path/to/signing.json \
+  --revision "$(git rev-parse "$tag^{commit}")" --release-version "${tag#v}"
+```
+
+The local credentials JSON contains `alias`, `store_password` and `key_password`.
+Keep it and the keystore outside the source tree. The signing step verifies the
+input receipt, expected certificate, APK signature and alignment, then writes
+the signed package and its new receipt and checksums. Preserve the same release
+key for future APKs so Android can update existing installations.
+
+Verify both platform checksum files and their tag/commit receipts. Publish the
+four files in the signed output and the five files in the macOS artifact with
+`gh release create --verify-tag`, using `--prerelease` for a tag with a suffix.
+Keep the ZIP asset name for existing macOS updaters. The DMG is for manual
+installation. Check the public release and updater feed after publishing.
 
 ## CyberBus integration inventory
 

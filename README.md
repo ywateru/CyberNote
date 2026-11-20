@@ -20,7 +20,7 @@ MCP119 已改为随 Mac 应用内置交付，删除适配器路径输入。开�
 
 ## 最新安装包
 
-GitHub Actions 会在推送 `v*` 标签时构建 arm64 macOS 和 Android 包、校验包结构、构建身份与 SHA-256，并创建 GitHub Release。手动运行 `Packages` 工作流只保留 Actions artifact，不创建 Release。macOS 包为 ad-hoc 签名且未公证，Android APK 未签名，分发前需要平台签名。
+推送 `v*` 标签后，GitHub Actions 构建并校验 arm64 安装包。发布时在本机完成 Android APK 签名，再把签名 APK、macOS DMG 和供应用内更新使用的 ZIP 发到 GitHub Releases。macOS 包使用 ad-hoc 签名，尚未公证。Android 覆盖安装需要与设备上的应用签名一致。
 
 <!-- latest-installers:start -->
 

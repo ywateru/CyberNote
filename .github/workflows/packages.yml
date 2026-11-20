@@ -1,4 +1,4 @@
-name: Build and publish native arm64 packages
+name: Build native arm64 packages
 on:
   workflow_dispatch:
   push:
@@ -86,6 +86,7 @@ jobs:
           retention-days: 14
           path: |
             release-packages/CyberNote-macos-arm64.zip
+            release-packages/CyberNote-macos-arm64.dmg
             release-packages/CyberNote-macos-arm64-notices.zip
             release-packages/CyberNote-macos-arm64.json
             release-packages/CyberNote-macos-arm64.sha256
@@ -142,42 +143,3 @@ jobs:
             release-packages/CyberNote-android-arm64-notices.zip
             release-packages/CyberNote-android-arm64.json
             release-packages/CyberNote-android-arm64.sha256
-  release:
-    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
-    needs: [macos-arm64, android-arm64]
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - name: Download verified package artifacts
-        uses: actions/download-artifact@v8
-        with:
-          path: release-assets
-          merge-multiple: true
-      - name: Validate tag and package inventory
-        env:
-          RELEASE_TAG: ${{ github.ref_name }}
-        run: |
-          set -euo pipefail
-          version="$(node -p "require('./package.json').version")"
-          case "$RELEASE_TAG" in
-            "v$version"|"v$version-"*) ;;
-            *) echo "Tag $RELEASE_TAG does not match package version $version"; exit 1 ;;
-          esac
-          test "$(find release-assets -maxdepth 1 -type f | wc -l | tr -d ' ')" = 8
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.ref_name }}
-        run: |
-          set -euo pipefail
-          prerelease=()
-          case "$RELEASE_TAG" in *-*) prerelease=(--prerelease) ;; esac
-          gh release create "$RELEASE_TAG" release-assets/* \
-            --verify-tag \
-            --title "CyberNote ${RELEASE_TAG#v}" \
-            --notes "Automated arm64 packages built and staged by GitHub Actions. The macOS app is ad-hoc signed and not notarized; the Android APK is unsigned and requires distributor signing before installation. Package identity, SHA-256 receipts and third-party notices are included." \
-            "${prerelease[@]}"

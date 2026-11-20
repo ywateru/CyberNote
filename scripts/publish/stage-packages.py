@@ -17,6 +17,9 @@ import subprocess
 import zipfile
 from pathlib import Path
 
+ANDROID_STEM = 'CyberNote-android-arm64'
+ANDROID_CERTIFICATE = '4f324fad25f5b165c02ff4b6ebf9e0009263292ce0d8359e2ff8d28d9aa99e12'
+
 
 def sha(path):
     h = hashlib.sha256()
@@ -215,10 +218,77 @@ def require_android_release_manifest(package, tools, expected_package, expected_
             raise RuntimeError('Expected a non-debuggable, non-test-only Android release')
 
 
+def sign_android(artifacts, output, keystore, credentials, revision, version):
+    tools = Path(os.environ['ANDROID_HOME']) / 'build-tools/36.0.0'
+    unsigned = artifacts / f'{ANDROID_STEM}-unsigned.apk'
+    notices = artifacts / f'{ANDROID_STEM}-notices.zip'
+    receipt_name = f'{ANDROID_STEM}.json'
+    receipt = json.loads((artifacts / receipt_name).read_text())
+    info = receipt['buildInfo']
+    expected = {'schema': 1, 'platform': 'android', 'architecture': 'arm64',
+                'sourceRevision': revision, 'releaseVersion': version,
+                'package': unsigned.name, 'packageSha256': sha(unsigned),
+                'notices': notices.name, 'noticesSha256': sha(notices)}
+    if (any(receipt.get(k) != v for k, v in expected.items())
+            or info.get('sourceRevision') != revision or info.get('releaseVersion') != version
+            or info.get('sourceDirty') is not False or info.get('mode') != 'production'):
+        raise RuntimeError('Unsigned artifact does not match the tag and package receipt')
+    require_unsigned_apk(unsigned, tools)
+    secrets = json.loads(credentials.read_text())
+    signer_env = {**os.environ, 'CYBERNOTE_STORE_PASS': secrets['store_password'],
+                  'CYBERNOTE_KEY_PASS': secrets['key_password']}
+    if output.exists():
+        raise RuntimeError('Signing output must be a new directory')
+    with tempfile.TemporaryDirectory(prefix='cybernote-sign-', dir=output.parent) as directory:
+        temp = Path(directory)
+        aligned = temp / 'aligned.apk'
+        staged = temp / 'release'
+        staged.mkdir()
+        signed = staged / f'{ANDROID_STEM}.apk'
+        subprocess.run([str(tools / 'zipalign'), '-P', '16', '-f', '4', unsigned, aligned], check=True)
+        subprocess.run([str(tools / 'apksigner'), 'sign', '--ks', keystore,
+                        '--ks-key-alias', secrets['alias'], '--ks-pass', 'env:CYBERNOTE_STORE_PASS',
+                        '--key-pass', 'env:CYBERNOTE_KEY_PASS', '--v4-signing-enabled', 'false',
+                        '--out', signed, aligned], env=signer_env, check=True)
+        verification = subprocess.check_output([str(tools / 'apksigner'), 'verify', '--verbose',
+                                                '--print-certs', signed], text=True)
+        signers = re.findall(r'^Signer #\d+ certificate SHA-256 digest: ([0-9a-f]+)$', verification, re.M)
+        if signers != [ANDROID_CERTIFICATE] or 'Verified using v2 scheme (APK Signature Scheme v2): true' not in verification.splitlines():
+            raise RuntimeError('Expected the CyberNote release certificate and a valid APK v2 signature')
+        subprocess.run([str(tools / 'zipalign'), '-c', '-P', '16', '4', signed], check=True)
+        require_android_release_manifest(signed, tools, 'com.local.notesclone', info['version'])
+        with zipfile.ZipFile(signed) as archive:
+            if hashlib.sha256(android_native_bytes(archive)).hexdigest() != receipt['nativeBinarySha256']:
+                raise RuntimeError('Signing changed the verified Android native executable')
+        shutil.copyfile(notices, staged / notices.name)
+        receipt.update(package=signed.name, packageSha256=sha(signed),
+                       signingCertificateSha256=ANDROID_CERTIFICATE,
+                       signingBoundary='APK signature verified with the CyberNote release certificate.')
+        (staged / receipt_name).write_text(json.dumps(receipt, indent=2) + '\n')
+        (staged / f'{ANDROID_STEM}.sha256').write_text(
+            f"{receipt['packageSha256']}  {signed.name}\n{receipt['noticesSha256']}  {notices.name}\n")
+        staged.rename(output)
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--platform', required=True, choices=['macos', 'android'])
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--platform', choices=['macos', 'android'])
+    mode.add_argument('--sign-android', action='store_true')
+    parser.add_argument('--artifacts', type=Path)
+    parser.add_argument('--output', type=Path)
+    parser.add_argument('--keystore', type=Path)
+    parser.add_argument('--credentials', type=Path)
+    parser.add_argument('--revision')
+    parser.add_argument('--release-version')
     args = parser.parse_args()
+    if args.sign_android:
+        if not all((args.artifacts, args.output, args.keystore, args.credentials,
+                    args.revision, args.release_version)):
+            parser.error('--sign-android requires artifacts, output, keystore, credentials, revision and release version')
+        sign_android(args.artifacts, args.output, args.keystore, args.credentials,
+                     args.revision, args.release_version)
+        return
     root = Path(__file__).resolve().parents[2]
     info = json.loads((root / 'dist/build-info.json').read_text())
     release_version = release_identity(root, info)
@@ -228,6 +298,7 @@ def main():
     output.mkdir(exist_ok=False)
     target = Path(os.environ.get('CARGO_TARGET_DIR', root / 'src-tauri/target'))
     stem = f'CyberNote-{args.platform}-arm64'
+    additional_packages = []
     if args.platform == 'macos':
         if platform.system() != 'Darwin' or platform.machine() != 'arm64':
             raise RuntimeError('macOS package requires a real arm64 Mac runner')
@@ -252,6 +323,19 @@ def main():
             if arch != 'arm64':
                 raise RuntimeError('Expected an arm64-only packaged executable')
             proof = package_identity(root, Path(native.name), target / 'aarch64-apple-darwin/release/build')
+        dmg = output / f'{stem}.dmg'
+        with tempfile.TemporaryDirectory(prefix='cybernote-dmg-') as directory:
+            contents = Path(directory) / 'volume'
+            contents.mkdir()
+            subprocess.run(['ditto', str(app), str(contents / app.name)], check=True)
+            subprocess.run(['codesign', '--verify', '--deep', '--strict', str(contents / app.name)], check=True)
+            if sha(contents / app.name / 'Contents/MacOS' / executable) != native_sha:
+                raise RuntimeError('DMG app differs from the staged ZIP')
+            (contents / 'Applications').symlink_to('/Applications')
+            subprocess.run(['hdiutil', 'create', '-srcfolder', str(contents), '-volname', 'CyberNote',
+                            '-fs', 'HFS+', '-format', 'UDZO', str(dmg)], check=True)
+        subprocess.run(['hdiutil', 'verify', str(dmg)], check=True)
+        additional_packages.append(dmg)
         signing = 'No Developer ID signature or notarization acceptance is asserted.'
     else:
         apkroot = root / 'src-tauri/gen/android/app/build/outputs/apk'
@@ -290,8 +374,10 @@ def main():
                'nativeBinarySha256': native_sha, 'identityVerification': proof, 'notices': notices.name,
                'noticesSha256': sha(notices), 'signingBoundary': signing,
                'validation': 'Build and package shape only; no device, account, sync or deployment acceptance claim.'}
+    if additional_packages:
+        receipt['additionalPackages'] = {p.name: sha(p) for p in additional_packages}
     (output / f'{stem}.json').write_text(json.dumps(receipt, indent=2) + '\n')
-    (output / f'{stem}.sha256').write_text(''.join(f'{sha(p)}  {p.name}\n' for p in [package, notices]))
+    (output / f'{stem}.sha256').write_text(''.join(f'{sha(p)}  {p.name}\n' for p in [package, *additional_packages, notices]))
 
 
 if __name__ == '__main__':

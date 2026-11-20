@@ -632,7 +632,7 @@ async fn frequency_change_and_shutdown_use_owned_scheduler_clock() {
 }
 
 #[test]
-fn android_selection_requires_exact_unsigned_payload_and_receipt_identity() {
+fn android_selection_prefers_signed_apk_and_keeps_legacy_unsigned_compatibility() {
     let t = Target {
         platform: "android".into(),
         architecture: "arm64".into(),
@@ -644,10 +644,19 @@ fn android_selection_requires_exact_unsigned_payload_and_receipt_identity() {
         asset("CyberNote-android-arm64.sha256", 205),
         asset("CyberNote-android-arm64-notices.zip", 500),
     ];
-    let r = feed::select(vec![r], "0.1.0", Channel::Preview, &t)
+    let legacy = feed::select(vec![r.clone()], "0.1.0", Channel::Preview, &t)
         .unwrap()
         .unwrap();
-    assert_eq!(r.package, "CyberNote-android-arm64-unsigned.apk");
+    assert_eq!(legacy.package, "CyberNote-android-arm64-unsigned.apk");
+    let signed = asset("CyberNote-android-arm64.apk", 110);
+    r.assets.push(signed.clone());
+    let selected = feed::select(vec![r.clone()], "0.1.0", Channel::Preview, &t)
+        .unwrap()
+        .unwrap();
+    assert_eq!(selected.package, signed.name);
+    r.assets.push(signed);
+    assert!(feed::select(vec![r], "0.1.0", Channel::Preview, &t).is_err());
+    let r = selected;
     let hash = "a".repeat(64);
     let receipt = Receipt {
         schema: 1,

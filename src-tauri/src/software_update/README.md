@@ -153,7 +153,8 @@ There is no environment/feed override in production. Loopback feeds exist only
 in Rust `cfg(test)`. Only exact current arm64 asset names are accepted:
 
 - `CyberNote-macos-arm64.zip`, `.json`, `.sha256`.
-- `CyberNote-android-arm64-unsigned.apk`, `CyberNote-android-arm64.json`, `.sha256`.
+- `CyberNote-android-arm64.apk`, `CyberNote-android-arm64.json`, `.sha256`.
+  Older releases may instead provide `CyberNote-android-arm64-unsigned.apk`.
 
 The `.sha256` file lists both package and notices; selection requires exactly
 one checksum line for the selected package. The receipt must match the package
@@ -225,14 +226,11 @@ loss/SIGKILL between directory renames also requires recovery from the retained
 `.CyberNote-rollback-*`/pending.json; this is not an atomic filesystem exchange.
 Helper success only means host readiness, not content-sync/device acceptance.
 
-Android currently supports real bounded download, package SHA/receipt matching
-and ZIP header validation **only**. Actions publishes an unsigned APK; no system
-installer can accept it as an installable compatible update. UI explicitly says
-this and offers no install button. No signing bypass, fabricated installation,
-manifest/device acceptance, or arbitrary system opener is implemented. Download
-stays in private app cache; no external-file export is claimed. A future signed
-pipeline needs actual package-manager manifest/signature checks plus a scoped
-FileProvider/installer integration before enabling installation.
+Android checks package SHA-256, the release receipt and the ZIP header before
+keeping the download in its private cache. For manual installation, get the
+signed APK from the release page and open it with the system installer. Android
+enforces signer continuity for updates. The app has no direct installer or
+external-file export integration.
 
 Release checksum/receipt publication is trusted through GitHub HTTPS. There is
 no project-signed checksum manifest/attestation key today. UI does not import

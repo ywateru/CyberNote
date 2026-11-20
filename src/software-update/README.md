@@ -44,7 +44,8 @@ Download button names the release version, with platform/arch/size and plain
 text release notes beside it. Downloads never install automatically. Only the
 explicit `安装并重新启动…` action calls native install; the host must present
 native confirmation and hold its existing durable-save/recording exit barrier.
-Android unsigned releases show a download-only reason and no install action.
+Android downloads and verifies the APK. Users open signed APKs with the system
+installer. Older unsigned APKs cannot be installed.
 `installReport` reflects helper confirmation or rollback, never inferred success.
 
 Commands: `software_update_status`, `software_update_configure` (`{patch}`),

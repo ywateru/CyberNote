@@ -62,7 +62,7 @@ impl Target {
         }
         match self.platform.as_str() {
             "macos" => Ok(format!("{}.zip", self.stem())),
-            "android" => Ok(format!("{}-unsigned.apk", self.stem())),
+            "android" => Ok(format!("{}.apk", self.stem())),
             _ => Err("unsupported_platform".into()),
         }
     }
@@ -104,7 +104,10 @@ pub fn select(
     let Some((_, r)) = eligible.into_iter().next() else {
         return Ok(None);
     };
-    let package = target.package()?;
+    let mut package = target.package()?;
+    if target.platform == "android" && !r.assets.iter().any(|asset| asset.name == package) {
+        package = format!("{}-unsigned.apk", target.stem());
+    }
     let asset = unique(&r.assets, &package)?;
     if asset.size == 0 || asset.size > MAX_PACKAGE {
         return Err("invalid_package_size".into());

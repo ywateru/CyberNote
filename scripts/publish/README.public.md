@@ -6,10 +6,10 @@ are not retained. Local development history, user stores, device evidence,
 credentials and installation packages are not part of this tree.
 
 Repository: [ywateru/CyberNote](https://github.com/ywateru/CyberNote).
-Download narrowly staged build artifacts from [GitHub Actions](https://github.com/ywateru/CyberNote/actions/workflows/packages.yml)
-after the packaging jobs succeed. Repository access is required while private.
-The macOS ZIP is not notarized; the Android release APK is unsigned and needs
-your own signing before installation. No signing keys are included in source or artifacts.
+Download the macOS DMG or signed Android APK from
+[GitHub Releases](https://github.com/ywateru/CyberNote/releases). The macOS app
+uses ad-hoc signing and is not notarized. GitHub Actions artifacts include an
+unsigned intermediate APK for the release maintainer to sign locally.
 
 ## Build
 
