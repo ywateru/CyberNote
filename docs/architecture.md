@@ -206,7 +206,9 @@ Renderer区分observed和实际hydrate后的applied，先无副作用验证acces
 
 ## 兼容与当前限制
 
-Android 11 自带 Chrome 91 缺少 Array.findLast；Tiptap 3 的事务分发使用此方法。入口在载入编辑器前引入 core-js 对应补全，CSS 根高度提供 100vh→100dvh fallback，Vite 目标 chrome90。原生 MainActivity 统一设置 WebView 容器的 systemBars / IME 避让：底部取两者 inset 的最大值，并扣除已处理的 inset 后传给子视图；保持 adjustResize 配置，避免旧 WebView 在 edge-to-edge 下仅被键盘覆盖而不缩小布局。前端只使用该实际布局高度的 resize，不再叠加键盘 offset。系统 Back 经 Tauri onBackButtonPress 进入同一 React 导航。Android11 / Chrome91 原生坐标触摸的键盘→格式→X / Back 回归见 `docs/verification/app-001-fix-01-ime/`，待独立复验。
+Android 11 自带 Chrome 91 缺少 Array.findLast；Tiptap 3 的事务分发使用此方法。入口在载入编辑器前引入 core-js 对应补全，CSS 根高度提供 100vh→100dvh fallback，Vite 目标 chrome90。原生 MainActivity 统一设置 WebView 容器的 systemBars / IME 避让：底部取两者 inset 的最大值，并扣除已处理的 inset 后传给子视图；保持 adjustResize 配置，避免旧 WebView 在 edge-to-edge 下仅被键盘覆盖而不缩小布局。前端只使用该实际布局高度的 resize，不再叠加键盘 offset。系统 Back 经 Tauri onBackButtonPress 进入同一 React 导航。Android 11 / Chrome91 原生坐标触摸的键盘→格式→X / Back 回归见 `docs/verification/app-001-fix-01-ime/`，待独立复验。
+
+Android 系统栏颜色由页面相邻表面投影，而不是由单一 `theme-color` 或启动主题决定：前端 `src/platform/system-bars.ts` 按当前页面/弹层解析上下颜色与图标明暗，经 `NotesSystemBars` bridge 交给 `MainActivity`。Android 10+ 使用 edge-to-edge，`EdgeSurfaceDrawable` 绘制系统栏条带并由同一份 bars inset 避让 WebView；Android 8–9 因浅色系统栏遮罩改用平台 `statusBarColor`/`navigationBarColor`，由平台 inset 布局内容。两条分支共享同一份前端投影和 `WindowInsetsController` 图标明暗决定。bridge 延迟注入时有界重试，`.app` 挂载后启动脚本停止覆盖 React 页面。页面、主题、格式面板和设置变化必须重新投影；浏览器 bridge 证据不替代真实 Android 安装包验收。Android 9 调试包真机采样见 [UI 质量审查](ui/ui-quality-audit-20261120.md#android-9-真机系统栏采样)。
 
 Android WebView 91 即使处于安全上下文也缺少 `crypto.randomUUID`，但支持 `getRandomValues`。保存intent、客户端演示实体与可选proof请求ID统一由 `secureId` 生成：优先原生randomUUID，否则使用平台getRandomValues填充16字节并设置RFC4122 v4版本/variant位。两种安全随机源均不可用时明确拒绝，保存队列保留pending内容；禁止Math.random或可预测计数器降级。Rust仍生成正式实体ID，授权协议和revision基线不变。
 

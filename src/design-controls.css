@@ -35,6 +35,9 @@
   justify-content: center;
   padding: 4px;
 }
+.recording-layout :is(.desktop-tool, .format-button, .toolbar-labeled-button, .note-card-more) {
+  border-radius: var(--interface-radius-button) !important;
+}
 .recording-layout .unified-menu .menu-row {
   min-height: calc(var(--interface-menu-min) + 2 * var(--interface-menu-extra)) !important;
   padding-block: calc(3px + var(--interface-menu-extra));
@@ -59,6 +62,10 @@
 .recording-layout .tag-chips { gap: 5px; }
 .recording-layout .tag-chips button { padding: 4px 8px; }
 .recording-layout .desktop-toolbar-actions { flex-shrink: 0; }
+.recording-layout .desktop .gallery-entry .note-row.selected,
+.recording-layout .desktop .gallery-entry .note-row.selected:hover {
+  box-shadow: none !important;
+}
 .recording-layout .desktop-search { flex-shrink: 1; min-width: 0; }
 .recording-layout .desktop-search .search-box { max-width: 100%; }
 .recording-layout .desktop-search .search-box button { flex-shrink: 0; }

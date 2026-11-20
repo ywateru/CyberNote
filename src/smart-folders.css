@@ -49,8 +49,8 @@
   color: inherit;
 }
 .smart-form input:focus {
-  outline: 3px solid var(--focus);
-  outline-offset: 1px;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 .smart-make {
   margin: 13px 0;
@@ -150,7 +150,8 @@
   padding: 2px 4px;
 }
 .smart-token-input:focus-within {
-  outline: 3px solid var(--focus);
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 .smart-token-input input {
   font: inherit;

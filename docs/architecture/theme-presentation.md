@@ -1,6 +1,6 @@
 # 多主题与呈现架构
 
-日期：2026-11-17。114 已实现 AppearanceV2；115 已接入严格 PresentationV1、唯一呈现解析、专注布局和移动列表。开发定向检查与独立复核已完成；准确产物与命令验证见[116交付](../verification/project-evolution/DELIVERY.md)。2026-11-17用户接手UI验收，实际设备/视觉未测项单列，不冒充通过。
+日期：2026-11-17，2026-11-20 补充 Android 系统栏投影。114 已实现 AppearanceV2；115 已接入严格 PresentationV1、唯一呈现解析、专注布局和移动列表。开发定向检查与独立复核已完成；准确产物与命令验证见[116交付](../verification/project-evolution/DELIVERY.md)。2026-11-17 用户接手 UI 验收，实际设备/视觉未测项单列，不冒充通过。2026-11-20 的系统栏源码、浏览器投影和 Android 9 调试包真机采样见 [UI 质量审查](../ui/ui-quality-audit-20261120.md#android-9-真机系统栏采样)；发布包、三键导航、IME 与其余主题仍待验。
 
 ## 职责与关系
 
@@ -87,6 +87,38 @@ type PresentationV1 = {
 
 圆角按“组件基础值 × 既有 radiusScale”计算：画廊18px、菜单10px等保留各自基础；圆形录音/播放/色板保持语义形状。不使用统一 `border-radius: ... !important` 抹平组件。层级、遮挡、锁定与启动覆盖仍引用现有 `--layer-*`，主题无权改变它们。
 
+## Android 系统栏表面投影（2026-11-20 真机验证）
+
+Android 页面内容与状态栏/导航栏区域必须共享相邻表面事实。单一 `meta[name="theme-color"]` 只能提供全局提示色，不能表达集合、编辑、设置和格式面板的不同表面，因此仅保留为没有宿主 bridge 时的回退，不作为系统栏真源。Android 10+ 使用 edge-to-edge 条带绘制；Android 8–9 使用平台系统栏底色，因为这两个版本在浅色图标标志下会对透明 edge-to-edge 区域叠加白色系统遮罩。
+
+```text
+启动页 / 当前页面 / 弹层 / 格式面板 / 主题变化
+                    │
+      实际可见表面 computed background
+                    │  失败时回退语义 token
+                    ▼
+       topColor / bottomColor + 各自亮度
+                    │
+          NotesSystemBars JS bridge
+             ┌──────┴──────┐
+             │             │
+   API 29+ edge-to-edge   API 28 及以下
+   EdgeSurfaceDrawable    平台 status/navigationBarColor
+             │             │
+             └──────┬──────┘
+                    │
+        WindowInsetsController 设置图标明暗
+```
+
+- **取色所有权。** `src/platform/system-bars.ts` 的 `projectAndroidSystemBars` 只读取当前可见元素背景或语义 token；不读取正文、图片、用户指定文字颜色或任意 CSS。顶部与底部分别解析，允许同一页面使用不同颜色。
+- **页面映射。** 集合页读取 `.notes-pane` 与 `--grouped`；目录页读取 `.sidebar`、`.folder-footer` 与 `--sidebar`；编辑页读取 `.editor-header`、`.editor-tools` 与 `--paper`，格式面板打开时底部改为 `.mobile-format-panel`；设置弹层顶部读取 `.preferences`（页头纸面），底部读取 `.preferences-body`（分组内容表面），分别回退到 `--paper` / `--grouped`。
+- **启动页映射。** `public/startup.js` 在 React 入口之前读取 `.startup` 的实际纸面并调用同一 `NotesSystemBars` bridge；顶部与底部都使用启动页 `--paper`，切换系统明暗后重新投影。`.app` 挂载后启动脚本停止投影，避免把启动纸面色覆盖回 React 的页面表面。这样启动阶段不会退回窗口默认色或旧的 `theme-color` 粉白色带。
+- **图标明暗。** 以实际表面相对亮度决定深色/浅色图标；浅色表面使用深色图标，深色表面使用浅色图标。不能仅按 `schemePreference` 推断，因为同一主题不同区域可能不同。
+- **原生绘制分支。** API 29+ 的 `MainActivity` 使用 `EdgeSurfaceDrawable` 只绘制顶部和底部系统栏条带；WebView 容器仍由同一 `WindowInsetsCompat` listener 处理 systemBars/IME 避让。API 28 及以下不启用 edge-to-edge，直接把投影颜色写入平台 `statusBarColor` / `navigationBarColor`，由平台 inset 布局内容；这是为了避免 Android 8–9 的浅色系统栏遮罩。两条分支共享同一份前端投影和图标明暗决定。JS 尚未接管前，原生使用日/夜纸面 `system_bar_fallback` 作为首帧回退。
+- **桥接时序。** bridge 可能晚于首轮 React effect 注入。App 以有界 50ms 重试等待 `NotesSystemBars`，只在成功调用后记录去重键；启动脚本以 `.app` 挂载作为所有权交接点，交接后不再写系统栏。页面切换后不得保留旧颜色。
+- **生命周期。** 启动页、页面、设置弹层、格式面板、主题/明暗、窗口宽度和高度变化触发重新投影；`MutationObserver` 监听根元素的 `class`、`data-scheme`、`data-theme-id`，同一投影去重。
+- **验收边界。** 浏览器注入 bridge 只能证明前端取色与调用顺序；Kotlin 编译只能证明源码可编译。2026-11-20 已在 Samsung SM-G9500 / Android 9 / 1080×2220 的 debug APK 上验证首页、编辑、设置、格式面板和深色设置的真实像素；三键导航、彩色主题、IME、横屏、冷启动和发布签名包仍未完成。详细采样见 [UI 质量审查](../ui/ui-quality-audit-20261120.md#android-9-真机系统栏采样)。
+
 ## 内置主题
 
 2026-11-17 的八套外观实施见[本轮任务](../plan/appearance-mcp-tester-20261117.md)。以下是本轮目标契约；文末 114 历史实现记录仍按其三套主题的版本理解。增加预设不改变 AppearanceV2 版本，原生归档验证与前端注册表同步扩展。
@@ -152,7 +184,7 @@ type PresentationV1 = {
 ## 115 实现边界与可重复检查
 
 - `presentation/model.ts` 严格校验完整对象及嵌套键，缺失时只内存迁移旧 view/sidebar。`ConfirmedSettings` 延续 FIFO、确认后发布和权威读取恢复；显式对象入队时复制并附兼容投影，legacy/unrelated patch 保持部分更新。它也接管 App 原 sidebar 队列的 pending/flush 关闭等待，不新增保存 owner。Rust `archive::merge_settings` 在当前持久设置上迁移、合并、投影，一次 SQL UPDATE 落盘；读取旧库不写回，备份沿用同一校验与投影。
-- `presentation/resolver.ts` 是交互身份、有效导航、集合、密度、列数、有效栏宽和工具栏策略的唯一解析位置；旧 `createMobileLayout` 仅委托其身份函数。`useMobileInteraction` 优先消费 PresentationContext，独立表面回退也走同一规则。既有 interfaceMetrics 保留为栏宽几何函数。录音 dock 占用空间使三栏暂时降为两栏，不写回偏好；Web699/700 与 Android 稳定身份保留。
+- `presentation/resolver.ts` 是交互身份、有效导航、集合、密度、列数、有效栏宽和工具栏策略的唯一解析位置；旧 `createMobileLayout` 仅委托其身份函数。`useMobileInteraction` 优先消费 PresentationContext，独立表面回退也走同一规则。既有 interfaceMetrics 保留为栏宽几何函数。录音 dock 占用空间先按两栏最低 `600px` 复核：满足时三栏降两栏，不足时继续降专注，不写回偏好；Web699/700 与 Android 稳定身份保留。
 - `WorkspaceShell` 永久承载同一组 sidebar/collection/editor 子槽；DesktopShell 只添加布局控制，MobileShell 只抽取集合表头。没有条件切换两个 Editor 父树，没有修改 Editor key 或为布局 setContent。EditorSession、保存/附件、访问屏障和录音仍归既有 owner。
 - Navigation 只新增 `temporaryFocus`，不保存副本路由。临时专注保留当前来源/搜索/集合滚动，退出恢复触发焦点；默认专注持久化，冷开退出用 lastNonFocusNavigation。两栏目录抽屉支持 Tab 环、Escape、遮罩、路由改变关闭和焦点回触发器；内层菜单/对话优先处理 Escape。
 - 密度通过 `--presentation-spacing` 和有效画廊列数投影基础几何；字号、interfaceDetails 仍独立。桌面 list/folder 和移动 card 分别消费留白倍率，命中区保持已有 desktop/mobile 下限；圆角仍按组件基础 × radiusScale。手机列表/画廊单独保存，默认手机画廊不跟随旧桌面 view。仅改密度不会退出已打开的桌面画廊正文。

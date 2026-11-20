@@ -33,8 +33,8 @@
 .data-management button:focus-visible,
 .data-management input:focus-visible,
 .data-management summary:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 3px;
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 .data-management-scroll {
   min-height: 0;
@@ -430,7 +430,7 @@
 .preferences-workspace .data-management .storage-category:last-child { border-bottom: 0; }
 .preferences-workspace .data-management .data-storage-details { padding: 12px 14px; }
 .preferences-workspace .data-management button { min-height: 32px; }
-.preferences-workspace .data-management button:focus-visible { outline: 2px solid var(--settings-accent); outline-offset: -2px; }
+.preferences-workspace .data-management button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
 .preferences-mobile .preferences-workspace .data-management button { min-height: 44px; }
 
 /* Backup now occupies its one module slot; the retained inventory owner is hidden. */

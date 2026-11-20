@@ -72,6 +72,7 @@ type ViewProps = {
   view: "list" | "gallery";
   sort: Settings["sort"];
   settings: Settings;
+  mobile: boolean;
   separate: boolean;
   chooseView(view: "list" | "gallery"): void;
   attachments(): void;
@@ -429,6 +430,7 @@ function ViewMenu({
   view,
   sort,
   settings,
+  mobile,
   separate,
   chooseView,
   attachments,
@@ -493,16 +495,18 @@ function ViewMenu({
       >
         按日期分组
       </MenuRow>
-      <div className="menu-divider" />
-      <MenuRow icon={<SettingsIcon size={18} />} onClick={() => modal("data")}>
-        数据管理
-      </MenuRow>
-      <MenuRow
-        icon={<SettingsIcon size={18} />}
-        onClick={() => modal("settings")}
-      >
-        设置
-      </MenuRow>
+      {!mobile && <>
+        <div className="menu-divider" />
+        <MenuRow icon={<SettingsIcon size={18} />} onClick={() => modal("data")}>
+          数据管理
+        </MenuRow>
+        <MenuRow
+          icon={<SettingsIcon size={18} />}
+          onClick={() => modal("settings")}
+        >
+          设置
+        </MenuRow>
+      </>}
     </>
   );
 }

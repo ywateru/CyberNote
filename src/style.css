@@ -41,7 +41,10 @@ button:disabled {
   cursor: default;
 }
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -321,18 +324,72 @@ a {
   padding-bottom: 8px;
 }
 .search-zero-section {
-  height: 40px;
-  padding: 10px 16px 0;
-  border-bottom: 0.5px solid var(--line);
-  font-size: 15px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 48px 24px 96px;
+  text-align: center;
+  color: var(--secondary);
+}
+.search-zero-section > svg,
+.collection-empty > svg {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 4px;
+  color: var(--secondary);
+  stroke-width: 1.4;
+}
+.search-zero-section h2,
+.collection-empty h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.35;
   font-weight: 600;
-  line-height: 20px;
+}
+.search-zero-section p,
+.collection-empty p {
+  max-width: 40ch;
+  margin: 0;
+  color: var(--secondary);
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.search-zero-section button,
+.collection-empty button {
+  min-height: 34px;
+  margin-top: 10px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-8);
+  background: var(--paper);
+  color: var(--action-ink);
+  font-size: 13px;
+  font-weight: 550;
+}
+.search-zero-section button:hover,
+.collection-empty button:hover {
+  background: var(--hover);
+}
+.collection-empty {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 48px 24px 96px;
+  text-align: center;
+  color: var(--secondary);
 }
 /* Only the measured Mac zero-result list with its sidebar visible. */
 .desktop.native-toolbar:not(.sidebar-hidden):not(.gallery-browse):not(.gallery-edit):not(.separate)
   .search-zero-section {
-  padding-top: 9px;
-  font-weight: 700;
+  padding-top: 48px;
 }
 .date-section {
   font-size: 16px;
@@ -1029,8 +1086,8 @@ a {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius-gallery);
-  padding: 9px;
-  font-size: 9px;
+  padding: 10px;
+  font-size: 10px;
   text-align: left;
   overflow: hidden;
   position: relative;
@@ -1038,16 +1095,21 @@ a {
   box-shadow: 0 1px 3px var(--shadow);
 }
 .gallery-preview strong {
-  font-size: 10px;
-  margin-bottom: 12px;
-  line-height: 1.3;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 12px;
+  margin-bottom: 8px;
+  line-height: 1.35;
 }
 .gallery-preview p {
-  font-size: 8px;
+  font-size: 10px;
   white-space: pre-wrap;
-  line-height: 1.3;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
   text-overflow: clip;
-  max-height: 100px;
+  max-height: 98px;
   overflow: hidden;
 }
 .gallery-entry .note-row.selected .gallery-preview {
@@ -1618,7 +1680,7 @@ a {
   height: 22px;
   border-radius: 50%;
   border: 2px solid var(--paper);
-  outline: 1px solid #ccc;
+  outline: 1px solid var(--line);
 }
 .drawing-colors button.selected {
   outline: 2px solid var(--focus);
@@ -1868,6 +1930,11 @@ a {
     background: var(--grouped);
     font-size: calc(17px * var(--mobile-ui-font-scale, 1));
   }
+  /* The editor pane slides in from the right. Keep the exposed underlay on the
+     same paper surface so the transition never shows a grouped-grey strip. */
+  .app.mobile.page-editor {
+    background: var(--paper);
+  }
   .mobile .sidebar,
   .mobile .notes-pane,
   .mobile .editor-pane {
@@ -2019,8 +2086,9 @@ a {
     font-weight: 650;
   }
   .mobile .folder-footer {
-    height: 52px;
-    padding: 0 17px env(safe-area-inset-bottom, 0);
+    min-height: 60px;
+    height: auto;
+    padding: 8px 12px max(8px, env(safe-area-inset-bottom, 0px));
     background: var(--sidebar);
     flex-shrink: 0;
   }
@@ -2039,8 +2107,8 @@ a {
     inset: 0 -10px 0 0;
   }
   .mobile .folder-footer .icon-button {
-    height: 35px;
-    width: 30px;
+    height: 44px;
+    width: 44px;
   }
   .mobile .folder-footer svg {
     height: 24px;
@@ -2052,10 +2120,14 @@ a {
     padding-top: env(safe-area-inset-top, 0);
   }
   .mobile .notes-header {
-    height: 42px;
-    padding: 0 16px 0 8px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-height: 64px;
+    height: auto;
+    padding: 8px 12px 8px 8px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: initial;
+    gap: 4px;
   }
   :where(.mobile) .back-button {
     display: flex;
@@ -2091,11 +2163,16 @@ a {
   :where(.mobile) .notes-large-title {
     display: block;
     font-size: calc(34px * var(--mobile-ui-font-scale, 1));
-    line-height: 41px;
-    margin: 2px 16px 8px;
+    line-height: 1.12;
+    margin: 0;
     font-weight: 700;
     letter-spacing: 0.3px;
-    flex-shrink: 0;
+    min-width: 0;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
   :where(.mobile) .mobile-list-search {
     margin-bottom: 12px;
@@ -3312,6 +3389,11 @@ a {
     padding-bottom: min(var(--format-height), 48vh);
   }
   .mobile .mobile-format-panel {
+    --format-control-surface: color-mix(
+      in srgb,
+      var(--ink) 8%,
+      var(--sidebar)
+    );
     position: absolute;
     left: 0;
     right: 0;
@@ -3347,6 +3429,7 @@ a {
   }
   :where(.mobile) .format-panel-header button {
     background: var(--grouped);
+    background: var(--format-control-surface, var(--grouped));
     color: var(--secondary);
     width: 27px;
     height: 27px;
@@ -3361,9 +3444,16 @@ a {
     margin: 0 0 14px;
     padding: 0;
     border: 0;
-    gap: 1px;
+    flex-wrap: wrap;
+    gap: 6px 0;
+  }
+  @media (min-width: 341px) {
+    .mobile .type-styles {
+      column-gap: 1px;
+    }
   }
   .mobile .format-style {
+    flex: 0 0 auto;
     width: auto;
     padding: 9px 10px;
     min-height: 43px;
@@ -3401,6 +3491,7 @@ a {
   }
   .mobile .format-control-group {
     background: var(--grouped);
+    background: var(--format-control-surface, var(--grouped));
     border-radius: var(--radius-8);
     flex-direction: row;
   }
@@ -3460,6 +3551,7 @@ a {
   }
   .mobile .format-list-row > .icon-button {
     background: var(--grouped);
+    background: var(--format-control-surface, var(--grouped));
     flex: 0.9;
   }
   .mobile .format-list-row svg {
@@ -3468,6 +3560,9 @@ a {
   }
   .mobile .format-control-group .active {
     color: var(--action-ink);
+    background: var(--hover);
+  }
+  .mobile .mobile-format-panel .format-list-row > .icon-button.active {
     background: var(--hover);
   }
   .mobile .paper-check {
@@ -3492,7 +3587,8 @@ a {
     background: var(--sidebar);
   }
   .dark :where(.mobile) .format-control-group {
-    background: var(--sidebar);
+    background: var(--grouped);
+    background: var(--format-control-surface, var(--grouped));
   }
 }
 
@@ -3511,6 +3607,7 @@ a {
   }
   .format-panel-header button {
     background: var(--grouped);
+    background: var(--format-control-surface, var(--grouped));
     color: var(--secondary);
     width: 27px;
     height: 27px;
@@ -3522,7 +3619,8 @@ a {
     background: var(--sidebar);
   }
   .dark .format-control-group {
-    background: var(--sidebar);
+    background: var(--grouped);
+    background: var(--format-control-surface, var(--grouped));
   }
 }
 .app.access-sync > :not(.access-cover) {
@@ -3579,23 +3677,26 @@ a {
 /* Mobile layout follows the platform identity, including native Android landscape. */
 @media all {
   .mobile .notes-pane { position: relative; }
-  .mobile .notes-header { min-height: 64px; height: 64px; padding: 6px 12px 6px 16px; gap: 4px; }
-  .mobile .notes-header > .back-button { flex: 0 0 36px; min-height: 44px; justify-content: center; }
+  .mobile .notes-header { min-height: 64px; height: auto; padding: 8px 12px 8px 8px; gap: 4px; }
+  .mobile .notes-header > .back-button { flex: none; min-height: 44px; padding: 0 4px; justify-content: flex-start; }
+  .mobile .notes-header > .mobile-folder-navigation { width: 44px; height: 44px; }
   .mobile .notes-header .icon-button { width: 44px; height: 44px; border: 0; color: var(--ink); padding: 10px; }
   .mobile .notes-header .icon-button svg { width: 25px; height: 25px; stroke-width: 1.7; }
-  .mobile .notes-header .notes-large-title { flex: 1; min-width: 0; font-size: calc(34px * var(--mobile-ui-font-scale, 1)); margin: 0; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mobile .notes-header .notes-large-title { min-width: 0; font-size: calc(34px * var(--mobile-ui-font-scale, 1)); margin: 0 4px; line-height: 1.12; overflow: hidden; overflow-wrap: anywhere; white-space: normal; }
   .mobile .mobile-list-search { margin-bottom: 16px; }
-  .mobile .notes-scroll.mobile-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; align-items: start; gap: 12px; padding: 0 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
-  :where(.mobile) .mobile-gallery > .empty-state { grid-column: 1 / -1; padding: 48px 8px; }
-  .mobile .mobile-gallery .note-entry { min-width: 0; }
-  .mobile .mobile-gallery .note-row-wrap { width: 100%; border-radius: var(--radius-18); overflow: hidden; }
+  .mobile .notes-scroll.mobile-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; align-items: stretch; gap: 12px; padding: 0 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
+  :where(.mobile) .mobile-gallery > :is(.empty-state, .search-zero-section, .collection-empty) { grid-column: 1 / -1; padding: 48px 8px; }
+  :where(.mobile) .search-zero-section button,
+  :where(.mobile) .collection-empty button { min-height: 44px; }
+  .mobile .mobile-gallery .note-entry { min-width: 0; height: 100%; }
+  .mobile .mobile-gallery .note-row-wrap { width: 100%; height: 100%; border-radius: var(--radius-18); overflow: hidden; }
   .mobile .mobile-gallery .note-row-wrap::after { display: none; }
-  .mobile .mobile-gallery .note-row { min-height: 144px; width: 100%; padding: 16px; border-radius: var(--radius-18); text-align: left; }
-  :where(.mobile) .mobile-note-card { min-width: 0; width: 100%; }
-  .mobile .mobile-note-card strong { font-size: calc(18px * var(--mobile-ui-font-scale, 1)); line-height: 1.35; font-weight: 650; white-space: normal; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .mobile .mobile-gallery .note-row { min-height: 148px; width: 100%; height: 100%; padding: 16px; border-radius: var(--radius-18); text-align: left; display: flex; }
+  :where(.mobile) .mobile-note-card { min-width: 0; width: 100%; min-height: 0; display: flex; flex-direction: column; }
+  .mobile .mobile-note-card strong { min-height: 0; padding-right: 36px; font-size: calc(18px * var(--mobile-ui-font-scale, 1)); line-height: 1.35; font-weight: 650; white-space: normal; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
   :where(.mobile) .mobile-note-card strong svg { margin-right: 4px; color: var(--action-ink); }
-  :where(.mobile) .mobile-note-card p { font-size: calc(14px * var(--mobile-ui-font-scale, 1)); line-height: 1.45; color: var(--secondary); margin: 12px 0 15px; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
-  :where(.mobile) .mobile-card-date { display: flex; align-items: center; gap: 6px; font-size: calc(12px * var(--mobile-ui-font-scale, 1)); color: var(--secondary); }
+  :where(.mobile) .mobile-note-card p { flex: 1 1 auto; font-size: calc(14px * var(--mobile-ui-font-scale, 1)); line-height: 1.45; color: var(--secondary); margin: 8px 0 10px; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+  :where(.mobile) .mobile-card-date { display: flex; align-items: center; gap: 6px; margin-top: auto; font-size: calc(12px * var(--mobile-ui-font-scale, 1)); color: var(--secondary); }
   :where(.mobile) .mobile-card-date svg { color: var(--action-ink); }
   :where(.mobile) .mobile-add-note { position: absolute; z-index: var(--layer-editor); right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); box-shadow: 0 3px 12px var(--shadow); }
   :where(.mobile) .mobile-add-note svg { width: 31px; height: 31px; stroke-width: 2; }
@@ -3611,28 +3712,11 @@ a {
   .mobile .bottom-tools { justify-content: space-around; }
   .mobile .editor-tools > .icon-button,
   .mobile .editor-tools .format-button { min-width: 44px; width: 44px; height: 44px; }
-}
-/* Keep the original shared narrow-window styles for desktop/separate windows. */
-@media (max-width: 699px) {
-  .mobile-gallery > .empty-state { grid-column: 1 / -1; padding: 48px 8px; }
-  .mobile-note-card { min-width: 0; width: 100%; }
-  .mobile-note-card strong svg { margin-right: 4px; color: var(--action-ink); }
-  .mobile-note-card p { font-size: calc(14px * var(--mobile-ui-font-scale, 1)); line-height: 1.45; color: var(--secondary); margin: 12px 0 15px; overflow-wrap: anywhere; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
-  .mobile-card-date { display: flex; align-items: center; gap: 6px; font-size: calc(12px * var(--mobile-ui-font-scale, 1)); color: var(--secondary); }
-  .mobile-card-date svg { color: var(--action-ink); }
-  .mobile-add-note { position: absolute; z-index: var(--layer-editor); right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); box-shadow: 0 3px 12px var(--shadow); }
-  .mobile-add-note svg { width: 31px; height: 31px; stroke-width: 2; }
-  .mobile-add-note:disabled { opacity: .5; }
-  .mobile-add-note:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-}
-/* Mobile layout follows the platform identity, including native Android landscape. */
-@media all {
-  .mobile .mobile-gallery .note-entry .note-row-wrap { border-radius: var(--radius-18); }
+  .mobile .mobile-gallery.single-column { grid-template-columns: minmax(0, 1fr); }
   .mobile .mobile-gallery .swipe-actions { visibility: hidden; }
   .mobile .mobile-gallery.single-column .note-row-wrap.swiped .swipe-actions { visibility: visible; }
   .mobile .mobile-list-search .search-box { border-radius: var(--radius-22); height: 44px; }
 }
-
 /* Shared attachment actions reuse the application's native-like menu material. */
 .attachment-context-menu { position: fixed; }
 .attachment-menu-reason {
@@ -3663,12 +3747,10 @@ a {
 .attachment-info dd { margin: 3px 0 0; overflow-wrap: anywhere; }
 
 /* Collection actions belong to each card; two columns never expose a swipe tray. */
-.mobile .mobile-gallery.single-column { grid-template-columns: minmax(0, 1fr); }
-.mobile .mobile-gallery .note-row { padding-bottom: 52px; }
 .mobile .note-card-more {
-  position: absolute; right: 4px; bottom: 4px; z-index: var(--layer-content-overlay);
+  position: absolute; right: 2px; top: 2px; z-index: var(--layer-content-overlay);
   display: grid; place-items: center; min-width: 44px; min-height: 44px;
-  color: var(--secondary); border: 0; background: transparent;
+  color: var(--secondary); border: 0; border-radius: var(--radius-10); background: transparent;
 }
 .mobile .note-row-wrap.swiped .note-card-more { visibility: hidden; }
 .resize-handle:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }

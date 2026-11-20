@@ -18,15 +18,24 @@ export function resolvePresentation(input: {
   const mobile = mode === "mobile";
   const availableWidth = input.contentWidth ?? width;
   const preferredNavigation = platform.separate ? "focus" : input.temporaryFocus ? "focus" : preference.desktop.navigation;
-  const effectiveNavigation = !mobile && preferredNavigation === "three-pane" && availableWidth < 700 ? "two-pane" : preferredNavigation;
+  const minimums = interfaceMetrics(settings, availableWidth, true);
+  const threePaneMinimum = minimums.sidebarMin + minimums.listMin + minimums.editorMin;
+  const twoPaneMinimum = minimums.listMin + minimums.editorMin;
+  const effectiveNavigation = mobile ? preferredNavigation
+    : preferredNavigation === "three-pane"
+      ? availableWidth >= threePaneMinimum
+        ? "three-pane"
+        : availableWidth >= twoPaneMinimum
+          ? "two-pane"
+          : "focus"
+      : preferredNavigation === "two-pane"
+        ? availableWidth >= twoPaneMinimum
+          ? "two-pane"
+          : "focus"
+        : preferredNavigation;
   const density = (mobile ? preference.mobile : preference.desktop).density;
   const spacingScale = density === "compact" ? 0.85 : density === "comfortable" ? 1.2 : 1;
   const metrics = interfaceMetrics(settings, availableWidth, effectiveNavigation === "three-pane");
-  if (!mobile && availableWidth < 700) {
-    metrics.listMin = Math.min(280, Math.max(160, availableWidth - 200));
-    metrics.listMax = Math.max(metrics.listMin, availableWidth - 200);
-    metrics.listWidth = Math.max(metrics.listMin, Math.min(metrics.listMax, settings.listWidth ?? 390));
-  }
   const collectionView = (mobile ? preference.mobile : preference.desktop).collectionView;
   const font = fontSizeOption(settings.interfaceFontSize).interface;
   const effectiveColumns = collectionView === "list" ? 1 : mobile

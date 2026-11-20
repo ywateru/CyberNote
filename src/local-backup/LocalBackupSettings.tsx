@@ -109,6 +109,8 @@ export function LocalBackupSettings({
     ticket === generation.current &&
     current.current.active &&
     !current.current.blocked;
+  const live = (ticket: number) =>
+    ticket === generation.current && current.current.active;
   const disabled = !active || blocked || !!operation || loading;
   const statusDisabled = disabled || statusUnconfirmed;
   const discardEncrypted = () => {
@@ -163,7 +165,7 @@ export function LocalBackupSettings({
       generation.current++;
       discardEncrypted();
     };
-  }, [active, blocked, accessKey, host, encryptedArchive]);
+  }, [active, accessKey, host, encryptedArchive]);
   useEffect(() => {
     if (!active || blocked) return;
     const ticket = generation.current;
@@ -216,9 +218,11 @@ export function LocalBackupSettings({
     setNotice("");
     try {
       const text = await action(ticket);
-      if (valid(ticket) && text) setNotice(text);
+      if (live(ticket) && text) setNotice(text);
     } catch (cause) {
-      if (valid(ticket)) setError(message(cause));
+      // The parent can become "blocked" because this operation set its shared
+      // archive guard. Keep the result visible to the owner that started it.
+      if (live(ticket)) setError(message(cause));
     } finally {
       working.current = false;
       if (mounted.current) {

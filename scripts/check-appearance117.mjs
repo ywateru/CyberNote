@@ -84,7 +84,7 @@ assert.deepEqual(variants, ids);
 const archive = await read('src-tauri/src/store/archive.rs');
 const guest = await read('plugins/tauri-plugin-notes-ui/guest-js/index.ts');
 assert.deepEqual([...guest.match(/themeId\?: ([^;]+);/)[1].matchAll(/"([^"]+)"/g)].map(m => m[1]), ids);
-const accepted = JSON.parse(archive.match(/a\.get\("themeId"\)[^\n]+?(\[[^\]]+\])\.contains/)[1]);
+const accepted = JSON.parse(archive.match(/a\.get\("themeId"\)[\s\S]*?(\[[\s\S]*?\])\s*\.contains/)[1].replace(/,\s*\]/g, "]"));
 assert.deepEqual(accepted, ids);
 check('AppKit payload, Rust enum, archive whitelist and registry agree on every theme', true);
 
@@ -146,7 +146,7 @@ check('checkbox transaction undo/redo keeps wrapped/nested task structure', stat
 // regressions. This is a source contract, not rendered geometry evidence.
 const require = createRequire(import.meta.url);
 const postcss = createRequire(require.resolve('vite'))('postcss');
-const sheets = await Promise.all(['src/style.css', 'src/desktop.css', 'src/Preferences.css'].map(read));
+const sheets = await Promise.all(['src/style.css', 'src/desktop.css', 'src/Preferences.css', 'src/preferences-menu/PreferenceSelect.css'].map(read));
 const parsed = sheets.map(css => postcss.parse(css));
 const declarations = (selector, supportsLH = true) => {
   const result = {}; for (const css of parsed) css.walkRules(selector, rule => {
@@ -162,8 +162,8 @@ assert.equal(declarations('.mobile .tiptap ul[data-type="taskList"] > li > div >
 assert.equal(declarations('.mobile .tiptap ul[data-type="taskList"] > li')['min-height'], undefined);
 const target = declarations('.mobile .tiptap ul[data-type="taskList"] > li > label::before');
 assert.equal(target.right, '0'); assert.equal(target.height, 'min(44px, 1lh)');
-const themeColumns = []; parsed[2].walkRules('.preferences-theme-choices', rule => { themeColumns.push(rule.nodes.find(d => d.prop === 'grid-template-columns')?.value); });
-assert.deepEqual(themeColumns, ['repeat(4, minmax(0, 1fr))', 'repeat(2, minmax(0, 1fr))', 'minmax(0, 1fr)']);
+assert.equal(declarations('.preferences-picker')['display'], 'inline-flex');
+assert.equal(declarations('.preferences-row > .preferences-picker')['flex'], '0 1 auto');
 assert.equal(declarations('.tiptap ul[data-type="taskList"] > li > label')['min-height'], '0');
 check('CSS retains circles, first-line alignment, compact mobile paragraphs and bounded gutter hit target', true);
 

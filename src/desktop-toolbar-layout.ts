@@ -10,6 +10,23 @@ export type DesktopTool =
   | "share"
   | "more"
   | "viewOptions";
+export type DesktopToolGroup = "create" | "edit" | "insert" | "share" | "more";
+export function desktopToolGroup(tool: DesktopTool): DesktopToolGroup {
+  switch (tool) {
+    case "newNote":
+      return "create";
+    case "recordAudio":
+    case "insertTag":
+      return "insert";
+    case "share":
+      return "share";
+    case "more":
+    case "viewOptions":
+      return "more";
+    default:
+      return "edit";
+  }
+}
 export const desktopToolOrder: DesktopTool[] = [
   "format",
   "checklist",
@@ -32,12 +49,25 @@ export function desktopToolbarLayout(
   const slot = Math.max(42 * scale * hitScale, hitMin, 25 * scale * iconScale + 12);
   const settings = slot;
   const gap = 12 * scale;
+  const groupGap = 10 * scale;
   const searchMin = (width < 420 * scale ? 110 : 140) * scale;
   const searchMax = 254 * scale;
   const itemWidth = (id: DesktopTool, labels: boolean) =>
     Math.max((id === "format" ? (labels ? 60 : 48) : labels ? 54 : 42) * scale * hitScale, slot);
+  const groupGaps = (items: DesktopTool[], overflow: boolean) =>
+    items.reduce(
+      (sum, id, index) =>
+        sum +
+        (index > 0 &&
+        desktopToolGroup(items[index - 1]) !== desktopToolGroup(id)
+          ? groupGap
+          : 0),
+      0,
+    ) +
+    (overflow && items.length > 0 ? groupGap : 0);
   const needed = (items: DesktopTool[], labels: boolean, overflow: boolean) =>
     items.reduce((sum, id) => sum + itemWidth(id, labels), 0) +
+    groupGaps(items, overflow) +
     (overflow ? slot : 0) +
     (search ? searchMin + gap : 0) +
     settings +
@@ -65,6 +95,7 @@ export function desktopToolbarLayout(
   }
   const toolsWidth =
     visible.reduce((sum, id) => sum + itemWidth(id, labels), 0) +
+    groupGaps(visible, overflow.length > 0) +
     (overflow.length ? slot : 0);
   return {
     labels,

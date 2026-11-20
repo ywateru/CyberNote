@@ -1,7 +1,7 @@
 .app .presentation-toolbar { position: absolute; right: 12px; bottom: 10px; z-index: var(--layer-content-overlay); display: flex; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: var(--interface-radius-button); background: var(--paper); color: var(--ink); }
 .app .presentation-toolbar button { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; min-height: max(28px, var(--interface-hit-min)); border-radius: var(--interface-radius-button); }
 .app .presentation-toolbar button[hidden] { display: none; }
-.app .presentation-toolbar button:focus-visible, .app .mobile-collection-choice:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.app .presentation-toolbar button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .app .directory-scrim { position: absolute; inset: 0; background: var(--scrim); z-index: var(--layer-content-overlay); }
 .app.desktop[data-presentation="two-pane"][data-drawer="open"] > .sidebar { display: flex; position: absolute; left: 0; top: var(--native-top, 0px); bottom: 0; width: min(340px, calc(100% - 40px)); height: auto; z-index: var(--layer-menu); }
 .app.desktop[data-presentation="focus"] { grid-template-columns: minmax(0, 1fr); }
@@ -16,7 +16,6 @@
 .app.mobile[data-collection="list"] .mobile-note-card { min-height: 0; height: auto; padding: calc(14px * var(--presentation-spacing)) 16px; }
 .app.mobile[data-collection="list"] .mobile-card-body { max-height: 3.4em; overflow: hidden; }
 .app.mobile[data-collection="list"] .note-thumbnail { display: none; }
-.app.mobile .mobile-collection-choice { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; flex: 0 0 auto; color: var(--action-ink); }
 .app.mobile .mobile-home-actions { flex-wrap: wrap; justify-content: flex-end; }
 .app.desktop[data-density]:not([data-density="standard"]) .notes-scroll:not(.gallery) .note-row { min-height: max(var(--interface-hit-min), calc(90px * var(--ui-scale) * var(--presentation-spacing))); padding-block: calc(17px * var(--ui-scale) * var(--presentation-spacing)); }
 .app.desktop[data-density]:not([data-density="standard"]) .folder-row { height: auto; min-height: max(var(--interface-hit-min), calc(44px * var(--ui-scale) * var(--presentation-spacing))); }

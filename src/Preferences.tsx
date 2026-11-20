@@ -343,7 +343,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
                 <div className="preferences-group"><h4>列表</h4>
                   <div className="preferences-row"><span>排序方式</span><PreferenceSegments label="排序方式" disabled={saving} value={settings.sort || "updated"} options={[{value:"updated",label:"编辑日期"},{value:"created",label:"创建日期"},{value:"title",label:"标题"}]} onChange={sort => void apply(() => onSettings({ sort }))} /></div>
                 </div>
-                <PreferencesPresentation settings={settings} disabled={saving} save={patch => void apply(() => onSettings(patch))} />
+                <PreferencesPresentation settings={settings} mobile={mobile} disabled={saving} save={patch => void apply(() => onSettings(patch))} />
                 <div className="preferences-group"><h4>桌面列表</h4>
                   <div className="preferences-row"><span>{mobile ? "桌面按日期分组" : "按日期分组"}</span><PreferenceSegments label="按日期分组" value={settings.groupDates === false ? "off" : "on"} options={offOnOptions} disabled={saving} onChange={value => void apply(() => onSettings({ groupDates: value === "on" }))} /></div>
                 </div>

@@ -36,6 +36,10 @@ const observations = {screenshotCapture:'CDP Page.captureScreenshot', fontWait:'
 const check = (name, value) => { assert.ok(value, name); checks.push(name); };
 const runtime = await openRuntime({bundleDebug:true, nativeToolbar:true});
 const {page, backend} = runtime;
+await page.addInitScript(() => {
+  window.__startupSystemBars = [];
+  window.NotesSystemBars = { apply(...args) { window.__startupSystemBars.push(args); } };
+});
 let desktopResult = {passed:false, checks, scope:runtime.metadata, observations};
 const ready = async () => {
   await page.waitForSelector('#startup', {state:'detached'});
@@ -53,6 +57,17 @@ try {
   await page.reload({waitUntil:'commit'});
   await page.locator('.startup-logo').waitFor();
   await page.waitForFunction(() => !!window.__CYBERNOTE_STARTUP__);
+  const startupBars = await page.evaluate(() => {
+    const hex = (value) => {
+      const match = value.match(/^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+      return match ? '#' + match.slice(1, 4).map(n => Number(n).toString(16).padStart(2, '0')).join('') : null;
+    };
+    return {
+      calls: window.__startupSystemBars.slice(),
+      surface: hex(getComputedStyle(document.querySelector('#startup')).backgroundColor),
+    };
+  });
+  check('Startup splash projects its paper surface to both Android system bars before React', startupBars.calls.length > 0 && startupBars.calls[0][0] === startupBars.surface && startupBars.calls[0][1] === startupBars.surface && startupBars.calls[0][2] === startupBars.calls[0][3]);
   await page.waitForFunction(() => document.fonts.status === 'loaded', null, {timeout:5000,polling:'raf'});
   // Require two further painted frames while the module remains gated. The
   // explicit deadline also bounds rAF if the page stops rendering.
@@ -75,10 +90,12 @@ try {
   }
   await page.emulateMedia({colorScheme:'dark'});
   await page.evaluate(() => window.__CYBERNOTE_STARTUP__.theme('system'));
+  const darkBars = await page.evaluate(() => window.__startupSystemBars.at(-1));
+  check('Startup appearance changes re-project dark system bars before React', darkBars[0] === darkBars[1] && darkBars[2] === false && darkBars[3] === false && darkBars[0] !== startupBars.calls[0][0]);
   await screenshot(page,resolve(output,'loading-dark.png'));
-  check('System appearance follows dark mode', await page.locator('#startup').evaluate(n=>getComputedStyle(n).backgroundColor)==='rgb(28, 28, 30)');
+  check('System appearance follows dark mode', await page.locator('#startup').evaluate(n=>getComputedStyle(n).backgroundColor)==='rgb(30, 30, 32)');
   await page.evaluate(() => window.__CYBERNOTE_STARTUP__.theme('light'));
-  check('Explicit light appearance overrides dark system appearance', await page.locator('#startup').evaluate(n=>getComputedStyle(n).backgroundColor)==='rgb(247, 247, 249)');
+  check('Explicit light appearance overrides dark system appearance', await page.locator('#startup').evaluate(n=>getComputedStyle(n).backgroundColor)==='rgb(255, 255, 255)');
   await page.emulateMedia({reducedMotion:'reduce'});
   check('Reduced motion disables both SVG animations', await page.locator('.startup-trace').evaluate(n=>getComputedStyle(n).animationName)==='none' && await page.locator('.startup-eyes').evaluate(n=>getComputedStyle(n).animationName)==='none');
   await page.emulateMedia({reducedMotion:'no-preference',colorScheme:'light'});

@@ -68,11 +68,13 @@ export async function runQuickHome(runtime, { command, check, output }) {
       !(await page.evaluate(() => document.activeElement?.matches(".tiptap"))),
   );
   check(
-    "Home has one visible create action, view/folder/settings and no old count footer or fake microphone",
+    "Home has one visible create action, one folder entry and one display-options entry",
     (await page
       .getByRole("button", { name: "新建备忘录", exact: true })
       .count()) === 1 &&
-      (await page.locator(".mobile-home-actions button").count()) === 3 &&
+      (await page.locator(".mobile-folder-navigation").count()) === 1 &&
+      (await page.locator(".mobile-home-actions button").count()) === 1 &&
+      (await page.getByRole("button", { name: "显示选项", exact: true }).count()) === 1 &&
       (await page.locator(".notes-footer:visible").count()) === 0 &&
       (await page.locator(".mobile-list-search svg.lucide-mic").count()) === 0,
   );
@@ -398,6 +400,8 @@ export async function runQuickHome(runtime, { command, check, output }) {
         "已锁定",
       ),
   );
+  await page.locator(".mobile-folder-navigation").click();
+  await idle(page);
   await page.locator(".mobile-home-settings").click();
   await idle(page);
   check(
@@ -410,7 +414,7 @@ export async function runQuickHome(runtime, { command, check, output }) {
   check(
     "Mobile appearance page remains reachable from quick home",
     (await state(page)).preferences.tab === "settings" &&
-      (await page.getByRole("combobox", { name: "界面字体大小", exact: true }).count()) === 1,
+      (await page.getByRole("radiogroup", { name: "界面字体大小", exact: true }).count()) === 1,
   );
   await page.getByRole("button", { name: "返回设置", exact: true }).click();
   await page.getByRole("button", { name: "存储空间", exact: false }).click();
@@ -422,10 +426,83 @@ export async function runQuickHome(runtime, { command, check, output }) {
   await page.getByRole("button", { name: "关闭设置", exact: true }).click();
   await idle(page);
   check(
-    "Settings close restores actual visible home gear",
+    "Settings close restores the folder-footer settings entry",
     await page
       .locator(".mobile-home-settings")
       .evaluate((n) => n === document.activeElement),
+  );
+  await command("folder.select", { id: "all" });
+  await idle(page);
+  await command("search.set", { query: "不存在的长查询-83-用于检查手机空态换行与清除动作" });
+  await idle(page);
+  const queryEmpty = await page.evaluate(() => ({
+    title: document.querySelector(".notes-large-title")?.textContent,
+    heading: document.querySelector(".collection-empty h2")?.textContent,
+    action: document.querySelector(".collection-empty button")?.textContent,
+    overflow:
+      document.querySelector(".collection-empty")?.scrollWidth >
+      document.querySelector(".collection-empty")?.clientWidth,
+    hit: document
+      .querySelector(".collection-empty button")
+      ?.getBoundingClientRect().height,
+  }));
+  check(
+    "Mobile query empty state names the query scope and offers a real clear-search action",
+    queryEmpty.title === "搜索结果" &&
+      queryEmpty.heading === "没有找到匹配的备忘录" &&
+      queryEmpty.action === "清除搜索" &&
+      !queryEmpty.overflow &&
+      queryEmpty.hit >= 44,
+  );
+  await capture("quick-home83-query-empty-390");
+  await page.setViewportSize({ width: 320, height: 844 });
+  await idle(page);
+  const narrowQueryEmpty = await page.evaluate(() => ({
+    overflow:
+      document.querySelector(".collection-empty")?.scrollWidth >
+      document.querySelector(".collection-empty")?.clientWidth,
+    hit: document
+      .querySelector(".collection-empty button")
+      ?.getBoundingClientRect().height,
+    right: document
+      .querySelector(".collection-empty button")
+      ?.getBoundingClientRect().right,
+  }));
+  check(
+    "320px long query empty state keeps the clear action reachable without horizontal overflow",
+    !narrowQueryEmpty.overflow &&
+      narrowQueryEmpty.hit >= 44 &&
+      narrowQueryEmpty.right <= 320,
+  );
+  await capture("quick-home83-query-empty-320");
+  await page.setViewportSize(runtime.viewport);
+  await idle(page);
+  await page.locator(".collection-empty button").click();
+  await idle(page);
+  check(
+    "Mobile clear search restores the source gallery",
+    (await state(page)).selection.query === "" &&
+      (await page.locator(".mobile-gallery .note-entry").count()) > 0,
+  );
+  await command("tag.select", { name: "不存在的标签-83" });
+  await idle(page);
+  const tagEmpty = await page.evaluate(() => ({
+    title: document.querySelector(".notes-large-title")?.textContent,
+    heading: document.querySelector(".collection-empty h2")?.textContent,
+    action: document.querySelector(".collection-empty button")?.textContent,
+  }));
+  check(
+    "Mobile tag-only empty state keeps the tag title and filter wording",
+    tagEmpty.title === "#不存在的标签-83" &&
+      tagEmpty.heading === "没有符合筛选条件的备忘录" &&
+      tagEmpty.action === "清除筛选",
+  );
+  await page.locator(".collection-empty button").click();
+  await idle(page);
+  check(
+    "Mobile clear filter removes the tag scope instead of leaving an unexplained empty folder",
+    (await state(page)).selection.tagFilter === undefined &&
+      (await page.locator(".mobile-gallery .note-entry").count()) > 0,
   );
   await reset();
   await command("note.select", { id: "note-a" });
@@ -524,15 +601,37 @@ export async function runQuickHome(runtime, { command, check, output }) {
           value.cards.every(
             (n) => n.titles === 1 && n.dates === 1 && n.right <= width + 1,
           ) &&
-          (width < 700
-            ? value.mobile &&
-              value.columns.split(" ").length === 2 &&
-              value.plus.width >= 48
-            : !value.mobile) &&
-          !backend.workspace.settings.view,
+          value.mobile &&
+          value.columns.split(" ").length === (width <= 430 ? 2 : 4) &&
+          value.plus.width >= 48,
       );
       if (width === 390 && theme === "light")
         await capture("quick-home83-390-final");
+      if (width === 390 && theme === "light") {
+        const rows = await page.evaluate(() => {
+          const grouped = [];
+          for (const entry of document.querySelectorAll(
+            ".mobile-gallery .note-entry",
+          )) {
+            const rect = entry.getBoundingClientRect();
+            const row = grouped.find(
+              (candidate) => Math.abs(candidate.top - rect.top) < 2,
+            );
+            if (row) row.heights.push(rect.height);
+            else grouped.push({ top: rect.top, heights: [rect.height] });
+          }
+          return grouped.map((row) => row.heights);
+        });
+        check(
+          "Gallery cards in the same row share one visual height",
+          rows
+            .filter((heights) => heights.length > 1)
+            .every(
+              (heights) =>
+                Math.max(...heights) - Math.min(...heights) <= 1.5,
+            ),
+        );
+      }
     }
   await page.setViewportSize({ width: 320, height: 360 });
   await idle(page);

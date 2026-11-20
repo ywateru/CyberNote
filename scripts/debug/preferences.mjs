@@ -5,14 +5,17 @@ export async function runPreferences(runtime, { command, check, output }) {
   const { page, backend } = runtime;
   const mobile = runtime.mobile;
   const accountUI = runtime.accountUI;
-  const categoryCount = accountUI ? 6 : 5;
-  const labels = {system:"跟随系统",light:"浅色",dark:"深色",tiny:"极小",small:"小",medium:"中",large:"大",huge:"极大"};
+  const categoryCount = accountUI ? 7 : 6;
+  const labels = {system:"跟随系统",light:"浅色",dark:"深色",tiny:"极小",small:"小",medium:"中",large:"大",huge:"极大",updated:"编辑日期",created:"创建日期",title:"标题",gallery:"画廊",list:"列表",compact:"紧凑",standard:"标准",comfortable:"舒适",on:"开启",off:"关闭"};
   const choose = async (name,value) => {
-    if (mobile) await page.getByRole("combobox",{name,exact:true}).selectOption(value);
-    else await page.getByRole("radiogroup",{name,exact:true}).getByRole("radio",{name:labels[value],exact:true}).click();
+    if (mobile && await page.getByRole("combobox",{name,exact:true}).count()) {
+      await page.getByRole("combobox",{name,exact:true}).selectOption(value);
+    } else {
+      await page.getByRole("radiogroup",{name,exact:true}).getByRole("radio",{name:labels[value],exact:true}).click();
+    }
   };
   const choice = async name => {
-    if (mobile) return page.getByRole("combobox",{name,exact:true}).inputValue();
+    if (mobile && await page.getByRole("combobox",{name,exact:true}).count()) return page.getByRole("combobox",{name,exact:true}).inputValue();
     const label = await page.getByRole("radiogroup",{name,exact:true}).getByRole("radio",{checked:true}).innerText();
     return Object.keys(labels).find(value=>labels[value]===label);
   };
@@ -23,12 +26,44 @@ export async function runPreferences(runtime, { command, check, output }) {
   const inventories = () => backend.calls.filter(row => row.command === "get_data_management").length;
   const notesBefore = JSON.stringify(backend.workspace.notes.map(note => note.document));
   if (mobile) {
+    await page.evaluate(() => {
+      window.__systemBarCalls = [];
+      window.NotesSystemBars = {
+        apply(...args) {
+          window.__systemBarCalls.push(args);
+        },
+      };
+    });
     await command("note.select", {id:"note-a"});
     await command("app.back");
+    await page.locator(".mobile-folder-navigation").click();
     await page.locator(".mobile-home-settings").click();
   } else await page.locator('.desktop-settings').click();
   await idle(page);
   check("Actual settings entry opens the platform-specific initial page", await selected(mobile ? "home" : "settings"));
+  if (mobile) {
+    await page.waitForFunction(() => window.__systemBarCalls?.length > 0);
+    const projected = await page.evaluate(() => {
+      const hex = (value) => {
+        const match = value.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+        return match
+          ? "#" + match.slice(1, 4).map((part) => Number(part).toString(16).padStart(2, "0")).join("")
+          : null;
+      };
+      const last = window.__systemBarCalls.at(-1);
+      return {
+        last,
+        header: hex(getComputedStyle(document.querySelector(".preferences")).backgroundColor),
+        body: hex(getComputedStyle(document.querySelector(".preferences-body")).backgroundColor),
+      };
+    });
+    check(
+      "Android settings projects the header and grouped content as separate surfaces",
+      projected.last?.[0] === projected.header &&
+        projected.last?.[1] === projected.body &&
+        projected.header !== projected.body,
+    );
+  }
   check("Appearance-only visits do not mount data or synchronization", inventories() === 0 && await page.locator(".data-management,.sync-settings").count() === 0);
   check("Default backend has no account UI or account IPC", accountUI || (await page.locator("[data-preferences-page=account]").count() === 0 && !backend.calls.some(row => row.command === "account_command")));
   const names = ["外观与字号", "备忘录", "设备同步", "存储空间", "导入与备份"];
@@ -41,7 +76,7 @@ export async function runPreferences(runtime, { command, check, output }) {
     await page.keyboard.press("ArrowDown");
     check("Desktop arrow keys switch and focus the next category", await selected("notes") && await page.getByRole("tab",{name:"备忘录",exact:true}).evaluate(n=>n===document.activeElement));
     await page.keyboard.press("End");
-    check("Desktop End selects backup", await selected("backup"));
+    check("Desktop End selects the final available category", await selected("about"));
     await page.keyboard.press("Home");
     check("Desktop Home returns to first available category", await selected(accountUI ? "account" : "settings"));
     await select("settings");
@@ -53,15 +88,16 @@ export async function runPreferences(runtime, { command, check, output }) {
     check(`Interface ${value} persists independently`, backend.workspace.settings.interfaceFontSize===value && backend.workspace.settings.editorFontSize===editorBefore);
   }
   await choose("编辑器字体大小","small"); await idle(page);
-  check("Both font previews and separate five-step controls are available", await page.locator('.preferences-interface-preview,.preferences-editor-preview').count()===2 && (mobile ? await page.getByRole('combobox',{name:'编辑器字体大小',exact:true}).locator('option').count() : await page.getByRole('radiogroup',{name:'编辑器字体大小',exact:true}).getByRole('radio').count())===5);
+  check("Both font previews and separate five-step controls are available", await page.locator('.preferences-interface-preview,.preferences-editor-preview').count()===2 && await page.getByRole('radiogroup',{name:'编辑器字体大小',exact:true}).getByRole('radio').count()===5);
   await select("notes");
-  for (const [label,value] of [["排序方式","created"],[mobile?"桌面显示方式":"显示方式","gallery"]]) {
-    await page.getByRole("combobox",{name:label,exact:true}).selectOption(value); await idle(page);
+  if (mobile) await page.locator(".preferences-device-disclosure > summary").click();
+  for (const [label,value] of [["排序方式","created"],["桌面显示方式","gallery"]]) {
+    await choose(label,value); await idle(page);
   }
   // Controlled settings persist asynchronously; assert after the real save settles.
-  await page.getByRole("checkbox",{name:mobile?"桌面按日期分组":"按日期分组"}).click(); await idle(page);
-  check("Date grouping control reflects persisted unchecked state", !await page.getByRole("checkbox",{name:mobile?"桌面按日期分组":"按日期分组"}).isChecked());
-  await page.getByRole("button",{name:"关闭所有已锁定的备忘录",exact:true}).click(); await idle(page);
+  await choose("按日期分组","off"); await idle(page);
+  check("Date grouping control reflects persisted unchecked state", await page.getByRole("radio",{name:"关闭",exact:true}).isChecked());
+  await page.getByRole("button",{name:"全部关闭",exact:true}).click(); await idle(page);
   check("Existing appearance, note ordering, list and lock actions remain connected", backend.workspace.settings.theme==="dark" && backend.workspace.settings.sort==="created" && backend.workspace.settings.view==="gallery" && backend.workspace.settings.groupDates===false && backend.calls.some(row=>row.command==="workspace_action"&&row.type==="closeLocks"));
   await select("settings");
   backend.configure({fail:{settings:1}});
@@ -74,13 +110,13 @@ export async function runPreferences(runtime, { command, check, output }) {
   check("Appearance and font choices survive renderer reload", await choice("外观")==="dark" && await choice("界面字体大小")==="huge" && await choice("编辑器字体大小")==="small");
   backend.dataExtras=Array.from({length:48},(_,i)=>({relativePath:`other/entry-${i}-`+"很长的本地文件名".repeat(10),category:"other",size:i,modifiedAt:1760000000000,exists:true,status:"file"}));
   await select("data"); await page.waitForSelector(".storage-summary");
-  check("Storage and backup have distinct surfaces", await page.locator(".storage-summary").isVisible() && !await page.getByRole("button",{name:"导入备份…",exact:true}).isVisible());
+  check("Storage and backup have distinct surfaces", await page.locator(".storage-summary").isVisible() && !await page.getByRole("button",{name:"导入…",exact:true}).isVisible());
   await page.evaluate(()=>{window.__preferencesData=document.querySelector('.data-management');window.__preferencesShell=document.querySelector('.preferences');});
   await command("data.navigate",{view:"all"}); await command("data.filter",{query:"entry",page:1});
   await page.locator('.data-management-scroll:not([hidden])').evaluate(n=>{n.scrollTop=90;window.__preferencesScroll=n.scrollTop;});
   const count=inventories();
   await select("backup");
-  check("Backup uses the retained module and no new inventory request", await page.getByRole("button",{name:"导出完整备份…",exact:true}).isVisible() && inventories()===count && await page.evaluate(()=>window.__preferencesData===document.querySelector('.data-management')));
+  check("Backup uses the retained module and no new inventory request", await page.getByRole("button",{name:"导出…",exact:true}).isVisible() && inventories()===count && await page.evaluate(()=>window.__preferencesData===document.querySelector('.data-management')));
   await select("settings");
   for(const id of ["data.refresh","data.navigate","data.filter"]) {
     let code;try{await api(page,id,id==="data.navigate"?{view:"all"}:id==="data.filter"?{query:"wrong"}:{});}catch(e){code=e.code;}
@@ -92,24 +128,24 @@ export async function runPreferences(runtime, { command, check, output }) {
   check("Back from storage details returns to overview first", await selected("data") && await page.locator('.storage-summary').isVisible());
   await select("backup");
   await page.evaluate(()=>window.__DEBUG_PLATFORM__.configure({dialog:{save:[null]}}));
-  await page.getByRole("button",{name:"导出完整备份…",exact:true}).click();await idle(page);
-  check("Cancelled backup stays in settings without success notice", await selected("backup") && !(await page.locator('.data-backup-scroll').innerText()).includes("完整备份已导出"));
+  await page.getByRole("button",{name:"导出…",exact:true}).click();await idle(page);
+  check("Cancelled backup stays in settings without success notice", await selected("backup") && !(await page.locator('.local-backup-settings').innerText()).includes("本地备份已导出"));
   backend.configure({fail:{archive:1}});
-  await page.getByRole("button",{name:"导出完整备份…",exact:true}).click();await idle(page).catch(()=>{});
-  check("Backup errors remain visible on the backup page", (await page.locator('.data-backup-scroll .data-error').innerText()).includes("Controlled archive"));
+  await page.getByRole("button",{name:"导出…",exact:true}).click();await idle(page).catch(()=>{});
+  check("Backup errors remain visible on the backup page", (await page.locator('.local-backup-settings .local-backup-error').innerText()).includes("Controlled archive"));
   await command("app.dismissError");
   const original=backend.call.bind(backend);let release,started;
   const began=new Promise(r=>started=r);
-  backend.call=async(id,args)=>{if(id==="export_archive"){started();await new Promise(r=>release=r);}return original(id,args);};
+  backend.call=async(id,args)=>{if(id==="settings_archive"&&args.request?.operation==="export"){started();await new Promise(r=>release=r);}return original(id,args);};
   try {
-    await page.getByRole("button",{name:"导出完整备份…",exact:true}).click();await began;
+    await page.getByRole("button",{name:"导出…",exact:true}).click();await began;
     await api(page,"settings.tab",{tab:"settings"});await page.waitForSelector('.preferences[data-preferences-tab="settings"]');release();await idle(page);
     check("In-flight backup completes without replacing the settings shell", await selected("settings") && await page.evaluate(()=>window.__preferencesShell===document.querySelector('.preferences')));
   } finally {release?.();backend.call=original;}
   await select("backup");
-  check("Completed backup feedback survives navigation", (await page.locator('.data-backup-scroll .data-notice').innerText()).includes("完整备份已导出"));
-  await page.getByRole("button",{name:"导入备份…",exact:true}).click();await idle(page);
-  check("Backup import retains the selected page", await selected("backup") && (await page.locator('.data-backup-scroll .data-notice').innerText()).includes("本地备份已导入"));
+  check("Completed backup feedback survives navigation", (await page.locator('.toast').innerText()).includes("本地备份已导出"));
+  await page.getByRole("button",{name:"导入…",exact:true}).click();await idle(page);
+  check("Backup import retains the selected page", await selected("backup") && (await page.locator('.toast').innerText()).includes("本地备份已导入"));
   await select("sync");await page.waitForSelector('.sync-settings');
   check("Synchronization is an independent category", await page.locator('.sync-settings').isVisible() && !await page.locator('.data-management').isVisible());
   await select("settings");let syncCode;try{await api(page,"sync.status");}catch(e){syncCode=e.code;}
@@ -143,7 +179,7 @@ export async function runPreferences(runtime, { command, check, output }) {
   await runtime.reset();backend.configure({fail:{inventory:100}});await command('data.open');
   check("Failed inventory has a retry action",await page.getByRole('button',{name:'重试读取',exact:true}).count()===1);
   await select('backup');
-  check("Backup recovery remains available when storage sampling fails",await page.getByRole('button',{name:'导入备份…',exact:true}).isEnabled() && await page.getByRole('button',{name:'导出完整备份…',exact:true}).isEnabled());
+  check("Backup recovery remains available when storage sampling fails",await page.getByRole('button',{name:'导入…',exact:true}).isEnabled() && await page.getByRole('button',{name:'导出…',exact:true}).isEnabled());
   backend.configure({fail:{inventory:0}});await close();
   const metrics=[];
   for(const width of mobile?[320,390]:[800,1280]) for(const theme of ['light','dark']) for(const font of ['tiny','small','medium','large','huge']) {
@@ -166,7 +202,7 @@ export async function runPreferences(runtime, { command, check, output }) {
     check('Desktop reference uses three theme cards and two five-step segmented controls',await page.getByRole('radiogroup').count()===3&&await page.getByRole('radio').count()===13);
     const geometry=await page.locator('.preferences').boundingBox();
     check('Desktop reference panel uses the target 920 by 660 geometry',Math.abs(geometry.width-920)<1&&Math.abs(geometry.height-660)<1&&Math.abs(geometry.x-260)<1&&Math.abs(geometry.y-170)<1);
-    await page.locator('.preferences-page-title').first().click();
+    await page.evaluate(() => document.activeElement?.blur());
     await page.waitForFunction(()=>!document.querySelector('[data-button-activated]'));
     await page.screenshot({path:resolve(output,'settings-reference-1440.png')});
     await page.getByRole('radiogroup',{name:'界面字体大小',exact:true}).getByRole('radio',{checked:true}).focus();

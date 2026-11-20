@@ -30,7 +30,10 @@ export function interfaceMetrics(settings: Settings, width: number, sidebar = tr
   const scale = fontScales(settings).interface;
   const details = parseInterfaceDetails(settings.interfaceDetails);
   const hit = details.desktopHitScale / 100;
-  const editorMin = Math.min(320, Math.max(200, width - 500));
+  // A fixed content minimum keeps the editor usable instead of deriving it
+  // from the same width that is already too small. The resolver decides
+  // whether three panes fit before this helper projects column widths.
+  const editorMin = 320;
   const sidebarMin = 220;
   const listMin = 280;
   const sidebarMax = Math.max(sidebarMin, Math.min(360, width - editorMin - listMin));
@@ -39,7 +42,7 @@ export function interfaceMetrics(settings: Settings, width: number, sidebar = tr
   return {
     scale,
     toolbarHeight: Math.ceil(Math.max(68 * scale, 42 * scale * hit + 12, 28 * hit + 12)),
-    sidebarMin, sidebarMax, listMin, listMax,
+    editorMin, sidebarMin, sidebarMax, listMin, listMax,
     sidebarWidth,
     listWidth: Math.round(Math.max(listMin, Math.min(listMax, settings.listWidth || 390))),
   };

@@ -23,7 +23,7 @@ export function seededWorkspace() {
 }
 export class FakeBackend {
   kind = 'isolated-js-protocol-fixture';
-  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.account = null; this.sync = null; this.syncConflicts = []; this.mediaLeases=new Map();this.mediaReads=[];this.mediaOrigin=null; }
+  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.account = null; this.sync = null; this.syncConflicts = []; this.mediaLeases=new Map();this.mediaReads=[];this.mediaOrigin=null; this.backupConfig={version:1,hours:0,keep:7,directory:''}; this.backupVersions=[]; this.settingsArchivePrepared=null; }
   reset() { const mediaOrigin=this.mediaOrigin;Object.assign(this, new FakeBackend(this.directory));this.mediaOrigin=mediaOrigin; }
   // Functional transport fixture only: a real HTTP URL and Range path exercise
   // browser loading. This is not a native provider/Rust or performance proof.
@@ -49,10 +49,60 @@ export class FakeBackend {
     try {
       if (command === 'load_workspace') { await this.boundary('load'); value = this.state(); }
       else if (command === 'register_save_intent' || command === 'acknowledge_access') value = null;
+      else if (command === 'settings_host_ready') value = null;
+      else if (command === 'settings_host_context') value = { window: 'main', session: this.sessionId, token: { sessionId: this.sessionId, epoch: this.accessEpoch }, storeInstance: 'synthetic-fixture' };
+      else if (command === 'local_backup_status') { await this.boundary('backupStatus'); value = this.backupStatus(); }
+      else if (command === 'local_backup_configure') {
+        await this.boundary('backupConfigure');
+        const patch = args.patch || {};
+        for (const key of ['hours', 'keep', 'directory']) if (Object.hasOwn(patch, key)) this.backupConfig[key] = patch[key];
+        value = this.backupStatus();
+      }
+      else if (command === 'local_backup_now') { await this.boundary('backupNow'); value = this.createBackupVersion('manual'); }
+      else if (command === 'local_backup_prepare_restore') {
+        await this.boundary('backupPrepareRestore');
+        const version = this.backupVersions.find(item => item.name === args.name);
+        if (!version) throw failure('Backup version absent');
+        value = this.backupPreview(version);
+      }
+      else if (command === 'local_backup_restore') {
+        await this.boundary('backupRestore');
+        const saved = JSON.parse(await readFile(this.directory + '/fixture-export.json', 'utf8'));
+        this.workspace = saved.workspace; this.files = new Map(saved.files); this.sequence++;
+        value = { outcome: 'committed', maintenanceError: null, recovery: this.createBackupVersion('beforeRestore'), delivery: this.state() };
+      }
       else if (command === 'read_note_text') { const note = this.assertNote(args.id); value = this.tagged({ title: note.title, text: note.plainText }); }
       else if (command === 'workspace_action') value = await this.action(args.action || {});
       else if (command === 'account_command') value = await accountFixture(this, args.command);
       else if (command === 'sync_command') { if (args.expected?.sessionId !== this.sessionId || args.expected?.epoch !== this.accessEpoch) throw failure('Stale local sync authority', 'access_changed'); value = await this.syncCommand(args.command); }
+      else if (command === 'settings_archive') {
+        const request = args.request || {};
+        await this.boundary('archive');
+        if (request.operation === 'export') {
+          await writeFile(this.directory + '/fixture-export.json', JSON.stringify({ workspace: this.workspace, files: [...this.files] }));
+          this.exports.push({ path: request.path });
+          value = null;
+        } else if (request.operation === 'preview') {
+          const version = this.createBackupVersion('manual', false);
+          this.settingsArchivePrepared = { confirmation: 'synthetic-settings-archive-preview', version };
+          value = {
+            confirmation: 'synthetic-settings-archive-preview',
+            archive: this.archivePreview(),
+            expiresAtMs: Date.now() + 300000,
+            targetStore: { instance: 'synthetic-fixture', generation: String(this.sequence), settingsSha256: '0'.repeat(64) },
+            payloadSha256: '1'.repeat(64),
+          };
+        } else if (request.operation === 'confirm') {
+          if (!this.settingsArchivePrepared || request.confirmation !== this.settingsArchivePrepared.confirmation) throw failure('Archive preview is stale');
+          const saved = JSON.parse(await readFile(this.directory + '/fixture-export.json', 'utf8'));
+          this.workspace = saved.workspace; this.files = new Map(saved.files); this.sequence++;
+          this.settingsArchivePrepared = null;
+          value = { outcome: 'committed', maintenanceError: null, delivery: this.state() };
+        } else if (request.operation === 'discard') {
+          if (this.settingsArchivePrepared?.confirmation === request.confirmation) this.settingsArchivePrepared = null;
+          value = null;
+        } else throw failure('Unknown settings archive operation');
+      }
       else if (command === 'store_attachment' || command === 'store_attachment_operation') {
         this.assertNote(args.noteId); await this.boundary('store');
         if (command === 'store_attachment_operation' && this.journal.has(args.operationId)) value = this.tagged(this.journal.get(args.operationId));
@@ -103,6 +153,50 @@ export class FakeBackend {
       if (before !== this.sequence) events.push({ name: 'notes-metadata', payload: { metadata: this.state().metadata,changes:[...this.workspace.attachments.filter(a=>beforeAttachments.get(a.id)!==JSON.stringify(a)).map(a=>({kind:'attachment',id:a.id})),...Array.from(beforeAttachments.keys()).filter(id=>!this.workspace.attachments.some(a=>a.id===id)).map(id=>({kind:'attachment',id})),...(args.action?.id?[{kind:'note',id:args.action.id}]:[])] } });
       return { ok: true, value, events };
     } catch (error) { return { ok: false, error: { code: error.code || 'fixture_error', message: error.message }, events }; }
+  }
+  archivePreview() {
+    return {
+      notes: this.workspace.notes.filter(note => !note.deletedAt).length,
+      folders: this.workspace.folders.filter(folder => !['trash'].includes(folder.kind)).length,
+      attachments: this.workspace.attachments.length,
+      summary: '合成资料库归档预览；不含账户、凭据或本机授权。',
+    };
+  }
+  backupStatus() {
+    return {
+      config: clone(this.backupConfig),
+      directory: '/synthetic-fixture/local-data/backups',
+      dataDirectory: '/synthetic-fixture/local-data',
+      libraryId: 'synthetic-fixture-library',
+      versions: clone(this.backupVersions),
+      issues: [],
+      automaticSuspended: false,
+      lastError: null,
+      nextDueAtMs: this.backupConfig.hours ? Date.now() + this.backupConfig.hours * 3600000 : null,
+      directoryMode: 'privateOnly',
+    };
+  }
+  createBackupVersion(reason, publish = true) {
+    const createdAtMs = Date.now();
+    const version = {
+      name: `cybernote-synthetic-${this.backupVersions.length + 1}.cyberbackup`,
+      manifest: {
+        format: 'cybernote-local-backup', version: 1, scope: 'currentBusinessProjection',
+        id: randomUUID(), appVersion: '0.2.2', libraryId: 'synthetic-fixture-library',
+        createdAtMs, reason, archiveBytes: 32768, sha256: '2'.repeat(64),
+      },
+    };
+    if (publish) this.backupVersions = [version, ...this.backupVersions];
+    return clone(version);
+  }
+  backupPreview(version) {
+    return {
+      version: clone(version),
+      archive: this.archivePreview(),
+      confirmation: 'synthetic-local-backup-preview',
+      expiresAtMs: Date.now() + 300000,
+      targetStore: { instance: 'synthetic-fixture', generation: String(this.sequence), settingsSha256: '0'.repeat(64) },
+    };
   }
   // Explicit UI-only synchronization fixture. No network, Store, pairing or
   // causal merge is implemented here; production sync is never replaced.
@@ -204,6 +298,7 @@ export function installBrowserPlatform({ mobile = false, nativeToolbar = false }
       if (command === 'plugin:event|unlisten') { for (const [name, ids] of listeners) listeners.set(name, ids.filter((id) => id !== args.eventId)); return; }
       if (command === 'plugin:event|emit' || command === 'plugin:event|emit_to') { control.emit(args.event, args.payload); return; }
       if (command === 'plugin:dialog|save' || command === 'plugin:dialog|open') { if (control.dialogDelay) await new Promise(done=>setTimeout(done,control.dialogDelay)); const kind=command.endsWith('|save')?'save':'open'; return control.dialogResults[kind].length ? control.dialogResults[kind].shift() : '/synthetic-fixture/fixture-export.json'; }
+      if (command === 'plugin:dialog|message') return 'Ok';
       if (nativeToolbar && command.startsWith('plugin:notes-ui|')) {
         if (command.endsWith('|keyboard_navigation')) return {enabled:true};
         if (command.endsWith('|unbind')) return null;

@@ -2,7 +2,7 @@
 
 2026-11-07 实现于当前源码，未重新生成 macOS / Android 安装包。
 
-首屏直接显示现有 SVG Logo，保留方形双眼。金色细线沿六边形轮廓匀速游走，双眼边缘轻微呼吸，周期 2.8 秒。Logo 下显示 CyberNote 与“正在打开备忘录…”。浅色背景为 #f7f7f9，深色背景为 #1c1c1e。桌面 Logo 为 104px，移动端为 88px。
+首屏直接显示现有 SVG Logo，保留方形双眼。金色细线沿六边形轮廓匀速游走，双眼边缘轻微呼吸，周期 2.8 秒。Logo 下显示 CyberNote 与“正在打开备忘录…”。背景直接消费当前主题 `--paper`；Classic 浅色为 `#ffffff`、深色为 `#1e1e20`，不再维护独立启动色。桌面 Logo 为 104px，移动端为 88px。
 
 ## 启动与交接
 
@@ -20,12 +20,12 @@
 
 ## 验证
 
-`pnpm build` 通过。`pnpm test:startup` 在隔离合成工作区运行，桌面 16 项、移动 4 项通过，覆盖脚本等待前首屏、SVG 实际动画、原生工具栏投影、工作区慢加载、错误与重新加载、空工作区、笔记切换、设置、深浅外观及减少动态效果。
+`pnpm build` 通过。`pnpm test:startup` 在隔离合成工作区运行，桌面 19 项、移动 4 项通过，覆盖脚本等待前首屏、SVG 实际动画、React 之前的 Android 系统栏投影、原生工具栏投影、工作区慢加载、错误与重新加载、空工作区、笔记切换、设置、深浅外观及减少动态效果。Android 9 调试包真机已确认启动后首页上下系统栏为 `#f2f2f7`，编辑页为 `#ffffff`；启动脚本在 `.app` 挂载后停止投影，避免覆盖 React 页面。
 
 证据位于 `artifacts/startup/`。原生工具栏验证使用模拟 IPC，不代表重新构建或运行了 AppKit / Android 安装包。
 
 ## evolve114 外观首屏
 
-head 在应用入口之前加载注册色板生成的 `src/themes/tokens.css`，启动表面直接使用 `--paper/--ink/--secondary/--accent`，不再有一套独立明暗色值。`public/startup.js` 独立校验三字段 AppearanceV2 缓存，设置 `data-theme-id` / `data-theme` / `data-scheme` 和兼容 `.dark`；跟随系统时订阅 media 变化。入口失败仍显示相同主题的重载入口，root 保持 inert。
+head 在应用入口之前加载注册色板生成的 `src/themes/tokens.css`，启动表面直接使用 `--paper/--ink/--secondary/--accent`，不再有一套独立明暗色值。`public/startup.js` 独立校验三字段 AppearanceV2 缓存，设置 `data-theme-id` / `data-theme` / `data-scheme` 和兼容 `.dark`；跟随系统时订阅 media 变化。入口失败仍显示相同主题的重载入口，root 保持 inert。启动脚本同时把 `.startup` 的实际纸面投影到 Android 顶部状态栏和底部导航/手势区；React 接管后由页面投影重新取色，启动脚本检测到 `.app` 后停止投影，避免把纸面色写回已进入的页面。宿主尚未收到 JS 投影时，`MainActivity` 使用日/夜纸面 `system_bar_fallback` 覆盖首帧，避免窗口默认粉白色带。
 
-缓存键 `cybernote.startup-appearance-v2` 只保存已确认外观，无正文/账号资料；仅无新缓存时兼容旧明暗缓存。非法缓存不会破坏启动，回退 Classic/system。App 等 workspace 权威设置加载完成后校正缓存；设置保存失败不提前应用或缓存。原生安装包冷启动的实际色块闪变在 116 验收，浏览器阻断入口的恢复截图只证明 Web shell。
+缓存键 `cybernote.startup-appearance-v2` 只保存已确认外观，无正文/账号资料；仅无新缓存时兼容旧明暗缓存。非法缓存不会破坏启动，回退 Classic/system。App 等 workspace 权威设置加载完成后校正缓存；设置保存失败不提前应用或缓存。浏览器 bridge 调用只能证明启动页取色与调用顺序；Android 9 调试包已确认启动后页面系统栏采样，原生发布包冷启动首帧、系统图标和三键导航仍须在准确 Android 设备上验收。

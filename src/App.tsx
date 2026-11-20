@@ -9,6 +9,7 @@ import { useSystemEvents } from "./platform/system-events";
 import { createMobileLayout } from "./platform/layout";
 import { MobileInteractionContext } from "./platform/interaction";
 import { useNativePlatform } from "./platform/native-platform";
+import { applyAndroidSystemBars, projectAndroidSystemBars } from "./platform/system-bars";
 import { useAttachmentPresentation } from "./attachment-operations/presentation";
 import { useAttachmentOperations } from "./attachment-operations/operations";
 import type { PickerTarget, RecordingTicket, LocalRecordingIdentity } from "./attachment-operations/contracts";
@@ -506,6 +507,7 @@ function App() {
   const [windowSpace, setWindowSpace] = useState({ width: window.innerWidth, height: window.innerHeight, ime: 0 });
   const windowWidth = windowSpace.width;
   const identity = useRef(platformIdentity(native, navigator.userAgent, !!separate)).current;
+  const android = identity.android || /Android/i.test(navigator.userAgent);
   const temporaryFocus = navigationState.temporaryFocus;
   const setTemporaryFocus = navigation.setTemporaryFocus;
   const focusReturn = useRef<HTMLElement | null>(null);
@@ -601,6 +603,46 @@ function App() {
   useEffect(() => { setSwiped(null); }, [mobileSingleColumn]);
   const { themeId, schemePreference } = appearanceOf(settings);
   const view = resolved.collectionView;
+  useLayoutEffect(() => {
+    if (!android || !mobile) return;
+    const preferencesOpen = modal === "preferences";
+    const topSelector = preferencesOpen ? ".preferences"
+      : page === "editor" ? ".editor-header"
+      : page === "folders" ? ".sidebar"
+      : ".notes-pane";
+    const bottomSelector = preferencesOpen ? ".preferences-body"
+      : page === "editor" ? (formatOpen ? ".mobile-format-panel" : ".editor-tools")
+      : page === "folders" ? ".folder-footer"
+      : ".notes-pane";
+    const topToken = preferencesOpen || page === "editor" ? "--paper" : "--grouped";
+    const bottomToken = preferencesOpen ? "--grouped"
+      : page === "editor" ? "--paper"
+      : page === "folders" ? "--sidebar"
+      : "--grouped";
+    let frame = 0;
+    let retry: ReturnType<typeof setTimeout> | undefined;
+    let retries = 0;
+    const project = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const projection = projectAndroidSystemBars({ topSelector, bottomSelector, topToken, bottomToken });
+        if (!projection) return;
+        if (!applyAndroidSystemBars(projection) && retries++ < 100)
+          retry = setTimeout(project, 50);
+      });
+    };
+    project();
+    const observer = new MutationObserver(project);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-scheme", "data-theme-id"],
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      if (retry) clearTimeout(retry);
+      observer.disconnect();
+    };
+  }, [android, mobile, modal, page, formatOpen, windowWidth, windowSpace.height]);
   // The gallery editor is a desktop navigation intent. A breakpoint choosing
   // the independent mobile preference must not turn that route into browse.
   const desktopCollection = presentationOf(settings).desktop.collectionView;
@@ -652,9 +694,15 @@ function App() {
     sort,
   );
   const desktopSearch = !separate && (contentSearch || !!smartFolder);
+  const collectionEmptyKind =
+    query && !filter && tagFilter === undefined
+      ? "search"
+      : filter || tagFilter !== undefined
+        ? "filter"
+        : "first-use";
   const desktopSearchZero =
     desktopSearch &&
-    !!query &&
+    collectionEmptyKind === "search" &&
     !mobile &&
     view === "list" &&
     workspaceLoaded &&
@@ -664,6 +712,15 @@ function App() {
     !accessSuspended.length &&
     !accessGate.state?.operationId &&
     listed.length === 0;
+  const confirmedEmptyQuery =
+    !separate &&
+    collectionEmptyKind === "search" &&
+    workspaceLoaded &&
+    !loading &&
+    !synchronizing &&
+    !syncError &&
+    !accessSuspended.length &&
+    !accessGate.state?.operationId;
   const projectedNoteId =
     mobile && page === "editor" && mobileCreatedEditor === baseNoteId
       ? baseNoteId
@@ -3420,7 +3477,7 @@ function App() {
     note={{ selected, folders: ws.folders, unlocked, mobile, menu: menuType || "", patch, modal: openModal, separate: openSeparate,
       find: () => setShowFind(true), attachments: openAttachmentBrowser, flush, notice: setNotice, fail, share: shareNote,
       deleted: () => {setNoteId(null);if(mobile)setPage("notes");}, close: () => setMenu(null) }}
-    view={{ attachmentBrowser, view, sort, settings, separate: !!separate, chooseView: view => {setAttachmentBrowser(false);chooseCollection(view);}, attachments: openAttachmentBrowser, update: updateSettings, modal: openModal, close: () => setMenu(null) }}
+    view={{ attachmentBrowser, view, sort, settings, mobile, separate: !!separate, chooseView: view => {setAttachmentBrowser(false);chooseCollection(view);}, attachments: openAttachmentBrowser, update: updateSettings, modal: openModal, close: () => setMenu(null) }}
     folder={{ folder: ws.folders.find(folder=>folder.id===contextFolder), modal: openModal }}
     app={{ archiveBusy, recording: !!recordingTicket.current || record, archive: mode => {void archive(mode);}, modal: openModal }}
   />;
@@ -4434,13 +4491,11 @@ function App() {
             </button>
           )}
           <IconButton
-            label={mobile ? "新建备忘录" : "设置"}
-            disabled={mobile && creatingNote}
-            onClick={
-              mobile ? newNote : () => openModal("settings")
-            }
+            label="设置"
+            className={mobile ? "mobile-home-settings" : undefined}
+            onClick={() => openModal("settings")}
           >
-            {mobile ? <SquarePen /> : <SettingsIcon />}
+            <SettingsIcon />
           </IconButton>
         </div>
       </aside>
@@ -4465,9 +4520,9 @@ function App() {
             data-tauri-drag-region={native && !mobile ? "deep" : undefined}
           >
             {mobile ? (
-              <MobileShell view={view} choose={chooseCollection} title={filter ? "搜索结果" : folderId === "all" ? "笔记" : folderLabel}
+              <MobileShell title={filter || query ? "搜索结果" : tagFilter === undefined && folderId === "all" ? "笔记" : folderLabel}
                 back={folderId !== "all" ? () => chooseFolder("all") : undefined}
-                folders={openFolders} settings={() => openModal("settings")} options={() => setMenu(menu === "view" ? null : "view")} />
+                folders={openFolders} options={() => setMenu(menu === "view" ? null : "view")} />
             ) : (
               <>
                 {!sidebar && !resolved.capabilities.directoryDrawer && (
@@ -4489,7 +4544,9 @@ function App() {
                   <MoreHorizontal />
                 </IconButton>
                 <span className="toolbar-divider" aria-hidden="true" />
-                <IconButton label="新建备忘录" className="list-new-note" onClick={newNote} disabled={creatingNote}><SquarePen /></IconButton>
+                {(loading || listed.length > 0 || desktopSearchZero) && (
+                  <IconButton label="新建备忘录" className="list-new-note" onClick={newNote} disabled={creatingNote}><SquarePen /></IconButton>
+                )}
                 {attachmentBrowser && <div className="gallery-header-search">{searchBox}</div>}
               </>
             )}
@@ -4532,10 +4589,64 @@ function App() {
           {loading ? (
             <div className="empty-state">正在打开备忘录…</div>
           ) : desktopSearchZero ? (
-            <div className="search-zero-section">备忘录</div>
+            <div className="search-zero-section" role="status">
+              <Search aria-hidden="true" />
+              <h2>没有找到匹配的备忘录</h2>
+              <p>已在“{folderLabel}”中搜索“{query}”。可清除搜索后返回当前目录。</p>
+              <button
+                type="button"
+                onClick={() => {
+                  void afterQuiet(() => {
+                    setSearching(false);
+                    setQuery("");
+                    setFilter("");
+                    setTagFilter(undefined);
+                  }).catch(fail);
+                }}
+              >
+                清除搜索
+              </button>
+            </div>
           ) : listed.length === 0 ? (
-            <div className="empty-state">
-              {query || filter ? "未找到备忘录" : mobile ? "点击＋，记下第一条笔记" : "无备忘录"}
+            <div className={`collection-empty ${collectionEmptyKind === "first-use" ? "is-first-use" : "is-search-empty"}`} role="status">
+              {collectionEmptyKind === "first-use" ? <NotebookPen aria-hidden="true" /> : <Search aria-hidden="true" />}
+              <h2>
+                {confirmedEmptyQuery
+                  ? "没有找到匹配的备忘录"
+                  : collectionEmptyKind !== "first-use"
+                    ? "没有符合筛选条件的备忘录"
+                    : mobile
+                      ? "记下第一条笔记"
+                      : "这个文件夹还没有备忘录"}
+              </h2>
+              <p>
+                {confirmedEmptyQuery
+                  ? `已在“${folderId === "all" ? "全部备忘录" : currentFolder?.name || "备忘录"}”中搜索“${query}”。可清除搜索后继续浏览。`
+                  : collectionEmptyKind !== "first-use"
+                    ? "清除筛选后可以继续浏览当前目录。"
+                    : mobile
+                      ? "使用右下角的新建按钮开始记录。"
+                      : "新建后会立即保存在此设备上。"}
+              </p>
+              {collectionEmptyKind !== "first-use" ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    void afterQuiet(() => {
+                      setSearching(false);
+                      setQuery("");
+                      setFilter("");
+                      setTagFilter(undefined);
+                    }).catch(fail);
+                  }}
+                >
+                  {confirmedEmptyQuery ? "清除搜索" : "清除筛选"}
+                </button>
+              ) : !mobile ? (
+                <button type="button" onClick={newNote} disabled={creatingNote || loading || !workspaceLoaded}>
+                  新建备忘录
+                </button>
+              ) : null}
             </div>
           ) : (
             listed.map((n, index) => {
@@ -4774,9 +4885,6 @@ function App() {
         </div>}
         {mobile ? <button type="button" className="mobile-add-note" aria-label="新建备忘录" aria-busy={creatingNote} onClick={newNote} disabled={creatingNote || loading || !workspaceLoaded}><Plus aria-hidden="true" /></button> : <div className="notes-footer">
           <span>{listed.length}个备忘录</span>
-          <IconButton label="新建备忘录" onClick={newNote}>
-            <SquarePen />
-          </IconButton>
         </div>}
       </section>
       {resolved.capabilities.resizeCollection && (
@@ -4869,13 +4977,15 @@ function App() {
                     <ChevronLeft />
                   </IconButton>
                 )}
-                <IconButton
-                  label="新建备忘录"
-                  className={`new-note-top glass-button ${!separate && view === "list" ? "toolbar-duplicate-compose" : ""}` }
-                  onClick={newNote}
-                >
-                  <SquarePen />
-                </IconButton>
+                {(!!separate || resolved.effectiveNavigation === "focus" || (!separate && view === "gallery" && galleryEditor)) && (
+                  <IconButton
+                    label="新建备忘录"
+                    className="new-note-top glass-button"
+                    onClick={newNote}
+                  >
+                    <SquarePen />
+                  </IconButton>
+                )}
                 <DesktopToolbar
                   hitScale={parseInterfaceDetails(settings.interfaceDetails).desktopHitScale / 100}
                   iconScale={parseInterfaceDetails(settings.interfaceDetails).iconScale / 100}

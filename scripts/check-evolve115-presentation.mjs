@@ -69,7 +69,12 @@ try {
       const x = resolvePresentation({ platform: platformIdentity(android, 'Android', false), width, height: 800, settings: { presentation: p0 }, imeHeight: 200 });
       return { width, android, mode: x.interactionMode, columns: x.effectiveColumns, availableHeight: x.availableHeight };
     }));
-    return { migrated, legacy, rejected, invalidCount: invalid.length, invalidReadPreserved, rows, writes, mutationSafe: queue.snapshot().presentation.mobile.collectionView !== 'bad', lateRejected: !queue.observe({}, ticket), resolver };
+    const threePane = m.withNavigation(migrated, 'three-pane');
+    const budgets = [820, 819, 600, 599].map(contentWidth => {
+      const x = resolvePresentation({ platform: platformIdentity(false, 'Macintosh', false), width: 1280, height: 800, contentWidth, settings: { presentation: threePane } });
+      return { contentWidth, navigation: x.effectiveNavigation, editorMin: x.effectiveWidths.editorMin };
+    });
+    return { migrated, legacy, rejected, invalidCount: invalid.length, invalidReadPreserved, rows, writes, mutationSafe: queue.snapshot().presentation.mobile.collectionView !== 'bad', lateRejected: !queue.observe({}, ticket), resolver, budgets };
   });
   check('strict exact PresentationV1 rejects every invalid object', contract.rejected === contract.invalidCount);
   check('invalid read keeps confirmed settings', contract.invalidReadPreserved);
@@ -81,6 +86,12 @@ try {
     check('legacy keeps authoritative mobile/appearance: ' + JSON.stringify(row.following), row.final.presentation.mobile.collectionView === 'list' && row.final.appearance.themeId === 'paper');
   }
   check('all Android widths stay mobile; Web 699/700 remains compatible', contract.resolver.every(x => x.mode === (x.android || x.width < 700 ? 'mobile' : 'desktop') && x.availableHeight === 600));
+  check('three-pane auto-downgrade rechecks the two-pane content budget',
+    contract.budgets[0].navigation === 'three-pane' &&
+    contract.budgets[1].navigation === 'two-pane' &&
+    contract.budgets[2].navigation === 'two-pane' &&
+    contract.budgets[3].navigation === 'focus' &&
+    contract.budgets.every(row => row.editorMin === 320));
   await writeFile(resolve(out, 'contract.json'), JSON.stringify(contract, null, 2));
 
   await api(p, 'note.select', { id: 'note-a' }); await idle(p);
@@ -116,6 +127,18 @@ try {
   }
   check('desktop gallery density scales cards and vertical spacing monotonically', galleryDensity.compact.width < galleryDensity.standard.width && galleryDensity.standard.width < galleryDensity.comfortable.width && galleryDensity.compact.margin < galleryDensity.standard.margin && galleryDensity.standard.margin < galleryDensity.comfortable.margin && Object.values(galleryDensity).every(v => v.gap === 0));
   await writeFile(resolve(out, 'gallery-density.json'), JSON.stringify(galleryDensity, null, 2));
+  const gallerySelection = await p.evaluate(() => {
+    const row = document.querySelector('.gallery-entry .note-row.selected');
+    const preview = row?.querySelector('.gallery-preview');
+    const body = preview?.querySelector('p');
+    const title = preview?.querySelector('strong');
+    return {
+      bodyFont: body ? parseFloat(getComputedStyle(body).fontSize) : 0,
+      titleFont: title ? parseFloat(getComputedStyle(title).fontSize) : 0,
+      shadow: row ? getComputedStyle(row).boxShadow : null,
+    };
+  });
+  check('desktop gallery preview keeps readable text and selection on the preview card', gallerySelection.bodyFont >= 10 && gallerySelection.titleFont >= 11 && gallerySelection.shadow === 'none');
   for (const width of [700, 1100, 1280]) {
     await p.setViewportSize({ width, height: 800 }); await idle(p);
     check('desktop gallery consumes resolver columns at ' + width, await p.locator('.notes-scroll.gallery').evaluate(e => getComputedStyle(e).gridTemplateColumns.split(' ').length === Number(getComputedStyle(document.querySelector('.app')).getPropertyValue('--presentation-columns'))));
@@ -150,16 +173,18 @@ try {
   await p.locator('.tiptap').dispatchEvent('compositionend', { data: '中' });
 
   await api(p, 'settings.open'); await idle(p); await api(p, 'settings.tab', { tab: 'notes' }); await idle(p);
-  const layoutChoice = p.getByRole('combobox', { name: '桌面导航布局', exact: true });
-  await layoutChoice.focus();
+  const layoutGroup = p.getByRole('radiogroup', { name: '桌面导航布局', exact: true });
+  const focusChoice = layoutGroup.getByRole('radio', { name: '专注', exact: true });
+  const twoPaneChoice = layoutGroup.getByRole('radio', { name: '两栏', exact: true });
+  await focusChoice.focus();
   await p.evaluate(() => window.__DEBUG_PLATFORM__.configure({ fail: { settings: 1 } }));
-  await layoutChoice.selectOption('focus'); await idle(p).catch(error => assert.match(error.message, /Controlled settings failure/));
-  check('actual Preferences save failure retains confirmed layout/value/focus', await layoutChoice.inputValue() === 'two-pane' && await layoutChoice.evaluate(e => document.activeElement === e) && (await state(p)).settings.presentation.desktop.navigation === 'two-pane' && await p.getByRole('alert').count() > 0);
+  await focusChoice.click(); await idle(p).catch(error => assert.match(error.message, /Controlled settings failure/));
+  check('actual Preferences save failure retains confirmed layout/value/focus', await twoPaneChoice.isChecked() && await focusChoice.evaluate(e => document.activeElement === e) && (await state(p)).settings.presentation.desktop.navigation === 'two-pane' && await p.getByRole('alert').count() > 0);
   await api(p, 'app.back'); await closeError(p); await idle(p);
   await api(p, 'settings.open'); await idle(p); await api(p, 'settings.tab', { tab: 'notes' }); await idle(p);
   await p.evaluate(() => window.__DEBUG_PLATFORM__.configure({ delay: { settings: 300 } }));
-  await layoutChoice.selectOption('focus');
-  check('actual Preferences save is visibly busy and controls disabled', await layoutChoice.isDisabled());
+  await focusChoice.click();
+  check('actual Preferences save is visibly busy and controls disabled', await focusChoice.getAttribute('aria-disabled') === 'true' && await twoPaneChoice.getAttribute('aria-disabled') === 'true');
   await idle(p); await p.evaluate(() => window.__DEBUG_PLATFORM__.configure({ delay: { settings: 0 } }));
   check('Preferences publishes only acknowledged layout', (await state(p)).settings.presentation.desktop.navigation === 'focus' && await sameOwner());
   await api(p, 'app.back'); await idle(p); await closeError(p);
@@ -210,6 +235,19 @@ try {
   await p.setViewportSize({ width: 1100, height: 600 }); await idle(p);
   await api(p, 'recording.open'); await idle(p); await api(p, 'recording.action', { action: 'toggle' }); await idle(p);
   const recording = await state(p);
+  await prefs({ navigation: 'three-pane', density: 'standard' });
+  for (const width of [880, 820, 700]) {
+    await p.setViewportSize({ width, height: 600 }); await idle(p);
+    const g = await p.evaluate(() => {
+      const rect = selector => document.querySelector(selector)?.getBoundingClientRect();
+      const editor = rect('.editor-pane'), body = rect('.tiptap');
+      return { presentation: document.querySelector('.app')?.dataset.presentation, editor: editor?.width, body: body?.width, scrollWidth: document.documentElement.scrollWidth };
+    });
+    check('recording content budget at ' + width + ' never squeezes the editor',
+      g.scrollWidth === width && g.editor >= 320 && g.body >= 270 &&
+      (width === 880 ? g.presentation === 'two-pane' : g.presentation === 'focus') && await sameOwner());
+  }
+  await p.setViewportSize({ width: 1100, height: 600 }); await idle(p);
   await p.evaluate(() => { window.layoutRecording = document.querySelector('.recording-dock'); });
   await p.getByRole('button', { name: '收起录音面板', exact: true }).click(); await idle(p);
   await prefs({ navigation: 'focus', density: 'comfortable' });
@@ -280,7 +318,8 @@ const mobile = await openRuntime({ mobile: true, ownedBrowser: true });
 try {
   const p = mobile.page;
   check('mobile defaults gallery independently', (await state(p)).settings.presentation.mobile.collectionView === 'gallery');
-  await p.getByRole('button', { name: '切换为手机列表', exact: true }).click(); await idle(p);
+  await p.getByRole('button', { name: '显示选项', exact: true }).click();
+  await p.getByRole('menuitem', { name: '列表', exact: true }).click(); await idle(p);
   check('mobile quick choice persists only mobile view', (await state(p)).settings.presentation.mobile.collectionView === 'list' && (await state(p)).settings.view === 'list');
   for (const width of [320, 390, 430, 700, 1100]) {
     await p.setViewportSize({ width, height: width > 700 ? 390 : 844 }); await idle(p);
@@ -289,6 +328,11 @@ try {
   }
   await p.setViewportSize({ width: 320, height: 568 });
   await api(p, 'note.select', { id: 'note-a' }); await idle(p);
+  const transition = await p.evaluate(() => ({
+    app: getComputedStyle(document.querySelector('.app')).backgroundColor,
+    pane: getComputedStyle(document.querySelector('.editor-pane')).backgroundColor,
+  }));
+  check('mobile page transition exposes the editor paper underlay', transition.app === transition.pane);
   await p.evaluate(() => { window.mobileLayoutDOM = document.querySelector('.tiptap'); window.mobileLayoutEditor = window.mobileLayoutDOM.editor; });
   const selected = await state(p);
   await update(p, { interfaceFontSize: 'huge', presentation: { ...selected.settings.presentation, mobile: { collectionView: 'list', density: 'comfortable' } } });
@@ -296,6 +340,34 @@ try {
     await p.setViewportSize({ width, height }); await idle(p);
     check('Android rotation/IME keeps same Editor ' + width + '/' + height, await p.evaluate(() => window.mobileLayoutDOM === document.querySelector('.tiptap') && window.mobileLayoutEditor === document.querySelector('.tiptap').editor));
   }
+  for (const theme of ['light', 'dark']) {
+    await update(p, { theme }); await idle(p);
+    await p.locator('.editor-tools:visible [aria-label="格式"]').click(); await idle(p); await p.waitForTimeout(150);
+    const surface = await p.locator('.mobile-format-panel').evaluate(e => {
+      const color = selector => getComputedStyle(e.querySelector(selector)).backgroundColor;
+      return { panel: getComputedStyle(e).backgroundColor, group: color('.format-control-group'), close: color('.format-panel-header button'), quote: color('.format-list-row > .icon-button') };
+    });
+    check(`mobile format controls share one themed surface in ${theme}`, surface.group !== surface.panel && surface.close === surface.group && surface.quote === surface.group);
+    await p.keyboard.press('Escape'); await idle(p);
+  }
+  await p.setViewportSize({ width: 320, height: 568 }); await idle(p);
+  await p.locator('.editor-tools:visible [aria-label="格式"]').click(); await idle(p); await p.waitForTimeout(150);
+  const typeRow = await p.locator('.type-styles').evaluate(e => {
+    const panel = e.closest('.mobile-format-panel');
+    return {
+      scrollWidth: e.scrollWidth,
+      clientWidth: e.clientWidth,
+      panelScrollHeight: panel.scrollHeight,
+      panelClientHeight: panel.clientHeight,
+      children: [...e.children].map(child => ({ scrollWidth: child.scrollWidth, clientWidth: child.clientWidth })),
+    };
+  });
+  check('320 huge format style labels wrap without clipping',
+    typeRow.scrollWidth <= typeRow.clientWidth &&
+    typeRow.children.every(child => child.scrollWidth <= child.clientWidth + 1) &&
+    typeRow.panelScrollHeight - typeRow.panelClientHeight <= 48);
+  await p.screenshot({ path: resolve(out, 'mobile-format-320-huge.png') });
+  await p.keyboard.press('Escape'); await idle(p);
   await api(p, 'app.back'); await idle(p); await p.setViewportSize({ width: 320, height: 568 });
   await p.waitForTimeout(300); // Finish page-in before geometry/screenshot evidence.
   const bounds = await p.evaluate(() => {
@@ -308,7 +380,7 @@ try {
   await writeFile(resolve(out, 'mobile-bounds.json'), JSON.stringify(bounds, null, 2));
   await p.screenshot({ path: resolve(out, 'mobile-list-huge.png') });
   await api(p, 'settings.open'); await idle(p); await api(p, 'settings.tab', { tab: 'notes' }); await idle(p);
-  const choice = p.getByRole('combobox', { name: '手机显示方式', exact: true }); await choice.selectOption('gallery'); await idle(p);
+  await p.getByRole('radiogroup', { name: '手机显示方式', exact: true }).getByRole('radio', { name: '画廊', exact: true }).click(); await idle(p);
   check('real Preferences changes mobile independently', (await state(p)).settings.presentation.mobile.collectionView === 'gallery' && (await state(p)).settings.presentation.desktop.collectionView === 'list');
   await p.screenshot({ path: resolve(out, 'mobile-preferences.png') });
   check('no mobile runtime errors', mobile.errors.length === 0);

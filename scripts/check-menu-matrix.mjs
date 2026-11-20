@@ -9,12 +9,21 @@ await mkdir(output, { recursive: true });
 const runtime = await openRuntime();
 const { page, backend } = runtime;
 const checks = [];
-const sample = async () =>
-  page.locator(".unified-menu:visible").evaluate((e) => {
+const sample = async () => {
+  await page.waitForTimeout(120);
+  return page.locator(".unified-menu:visible").evaluate((e) => {
     const row = e.querySelector('[role="menuitem"]'),
       m = getComputedStyle(e),
       r = getComputedStyle(row),
-      b = e.getBoundingClientRect();
+      b = e.getBoundingClientRect(),
+      color = value => {
+        const probe = document.createElement("i");
+        probe.style.color = value;
+        document.body.append(probe);
+        const resolved = getComputedStyle(probe).color;
+        probe.remove();
+        return resolved;
+      };
     return {
       radius: m.borderRadius,
       background: m.backgroundColor,
@@ -23,6 +32,10 @@ const sample = async () =>
       rowHeight: r.minHeight,
       padding: r.padding,
       border: r.borderRadius,
+      rowBackground: r.backgroundColor,
+      hoverBackground: color(getComputedStyle(document.documentElement).getPropertyValue("--hover")),
+      focused: row.matches(":focus-visible"),
+      active: document.activeElement === row,
       inside:
         b.left >= 0 &&
         b.top >= 0 &&
@@ -30,6 +43,7 @@ const sample = async () =>
         b.bottom <= innerHeight,
     };
   });
+};
 try {
   await chooseFiles(page, [
     {
@@ -57,6 +71,13 @@ try {
       await idle(page);
       await api(page, "menu.open", { menu: "media" });
       const toolbar = await sample();
+      await page.keyboard.press("ArrowDown");
+      await page.keyboard.press("Home");
+      const keyboardMenu = await sample();
+      assert(
+        keyboardMenu.active && keyboardMenu.focused && keyboardMenu.rowBackground === keyboardMenu.hoverBackground,
+        "keyboard menu focus must use the shared hover surface and focus ring",
+      );
       await page.keyboard.press("Escape");
       await page
         .locator(`[data-attachment-id="${image.id}"]:visible`)
@@ -76,13 +97,30 @@ try {
       await page.keyboard.press("Escape");
       await page.locator(".tiptap td p").first().click();
       await page.getByRole("button", { name: "选择行", exact: true }).click();
-      await page.getByRole("button", { name: "行操作", exact: true }).click();
+      const rowAction = page.getByRole("button", { name: "行操作", exact: true });
+      if (await rowAction.getAttribute("aria-expanded") !== "true")
+        await rowAction.click();
       const table = await sample();
       for (const value of [toolbar, attachment, note, table])
         assert(value.inside);
-      assert.deepEqual(attachment, toolbar);
-      assert.deepEqual(note, toolbar);
-      assert.deepEqual(table, toolbar);
+      const geometry = value => ({
+        radius: value.radius,
+        background: value.background,
+        shadow: value.shadow,
+        font: value.font,
+        rowHeight: value.rowHeight,
+        padding: value.padding,
+        border: value.border,
+        inside: value.inside,
+      });
+      assert.deepEqual(geometry(attachment), geometry(toolbar));
+      assert.deepEqual(geometry(note), geometry(toolbar));
+      assert.deepEqual(geometry(table), geometry(toolbar));
+      for (const [name, menu] of [["toolbar", toolbar], ["attachment", attachment], ["note", note], ["table", table]])
+        assert(
+          !menu.active || menu.rowBackground === (menu.focused ? menu.hoverBackground : "rgba(0, 0, 0, 0)"),
+          `${name} menu row must not look selected without keyboard focus: ${JSON.stringify(menu)}`,
+        );
       if (size === "small")
         await page.screenshot({
           path: resolve(output, `${theme}-small-table-menu.png`),

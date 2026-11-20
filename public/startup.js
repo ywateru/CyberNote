@@ -10,6 +10,40 @@
   const media = matchMedia("(prefers-color-scheme: dark)");
   const valid = (v) => v && typeof v === "object" && !Array.isArray(v) && Object.keys(v).length === 3 && v.version === 2 && ["classic", "paper", "high-contrast", "ocean", "forest", "rose", "lavender", "graphite"].includes(v.themeId) && ["system", "light", "dark"].includes(v.schemePreference);
   let current = { version: 2, themeId: "classic", schemePreference: "system" };
+  const color = (value) => {
+    if (!value) return null;
+    const hex = value.match(/^#([0-9a-f]{6})$/i);
+    if (hex) return `#${hex[1].toLowerCase()}`;
+    const match = value.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:\s*[/,]\s*([\d.]+))?\s*\)$/);
+    if (!match || Number(match[4] ?? 1) === 0) return null;
+    const channel = (index) => Math.max(0, Math.min(255, Math.round(Number(match[index])))).toString(16).padStart(2, "0");
+    return `#${channel(1)}${channel(2)}${channel(3)}`;
+  };
+  const luminance = (value) => {
+    const channel = (offset) => {
+      const n = parseInt(value.slice(offset, offset + 2), 16) / 255;
+      return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
+    };
+    return 0.2126 * channel(1) + 0.7152 * channel(3) + 0.0722 * channel(5);
+  };
+  let systemBarTimer = 0;
+  let systemBarAttempts = 0;
+  const projectSystemBars = () => {
+    clearTimeout(systemBarTimer);
+    if (leaving || document.querySelector(".app")) return;
+    const bridge = window.NotesSystemBars;
+    if (!bridge || typeof bridge.apply !== "function") {
+      if (systemBarAttempts++ < 100) systemBarTimer = setTimeout(projectSystemBars, 50);
+      return;
+    }
+    systemBarAttempts = 0;
+    if (typeof getComputedStyle !== "function") return;
+    const paper = color(getComputedStyle(surface).backgroundColor)
+      ?? color(getComputedStyle(document.documentElement).getPropertyValue("--paper").trim());
+    if (!paper) return;
+    const lightIcons = luminance(paper) >= 0.5;
+    try { bridge.apply(paper, paper, lightIcons, lightIcons); } catch { /* The host bridge is optional in browsers. */ }
+  };
   const apply = () => {
     const dark = current.schemePreference === "dark" || (current.schemePreference === "system" && media.matches);
     const html = document.documentElement;
@@ -19,6 +53,7 @@
     html.dataset.startupTheme = current.schemePreference;
     html.classList.toggle("dark", dark);
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", getComputedStyle(html).getPropertyValue("--paper").trim());
+    projectSystemBars();
   };
   const appearance = (value) => {
     if (!valid(value)) return;
@@ -58,6 +93,7 @@
     ready() {
       if (leaving || finished) return;
       leaving = true;
+      clearTimeout(systemBarTimer);
       clearTimeout(slow);
       window.removeEventListener("error", onError, true);
       surface.dataset.state = "leaving";

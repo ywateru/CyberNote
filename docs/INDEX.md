@@ -1,5 +1,7 @@
 # 文档导航
 
+2026-11-20 [UI 质量审查与改进路线](ui/ui-quality-audit-20261120.md)记录桌面与手机布局、组件一致性、Android 系统栏相邻表面投影、本轮源码改进及双端验收门槛；含 Samsung SM-G9500 / Android 9 调试包的真机像素采样，发布包与其余平台场景仍待验。
+
 2026-11-19：设置页面重构、WebDAV/S3/GitHub同步、本地备份和版本更新正在实施。目标契约见[设置与同步重构](architecture/settings121.md)，任务和状态见[实施计划](plan/settings121.md)。本轮尚未交付，不能将设计说明作为功能通过证据。
 
 2026-11-18：账户设备与多设备同步迁移至 CyberBus，先读[迁移设计](architecture/cyberbus-migration-20261118.md)与[实施计划](plan/cyberbus-migration-20261118.md)。本轮收敛核心功能与命令行检查，结果见[验证状态](verification/cyberbus120/README.md)，UI 交用户按[手动用例](verification/cyberbus120/MANUAL-UI-TESTS.md)验收。下方 CyberGrid 记录属于旧传输版本，不能作为本轮测试通过证据。
