@@ -10,6 +10,7 @@ src-tauri/gen/android/build/
 src-tauri/gen/android/local.properties
 artifacts/
 release-packages/
+/refs/
 *.tsbuildinfo
 src-tauri/gen/android/app/src/main/jniLibs/
 src-tauri/gen/android/app/src/main/assets/
@@ -19,6 +20,7 @@ src-tauri/gen/schemas/
 # Tauri/Gradle outputs owned by Android plugins, including new local plugins.
 plugins/*/android/build/
 plugins/*/android/.gradle/
+plugins/*/android/.kotlin/
 plugins/*/android/.tauri/
 src-tauri/gen/android/.tauri/
 

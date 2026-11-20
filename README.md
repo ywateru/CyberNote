@@ -20,22 +20,19 @@ MCP119 已改为随 Mac 应用内置交付，删除适配器路径输入。开�
 
 ## 最新安装包
 
-推送 `v*` 标签后，GitHub Actions 构建并校验 arm64 安装包。发布时在本机完成 Android APK 签名，再把签名 APK、macOS DMG 和供应用内更新使用的 ZIP 发到 GitHub Releases。macOS 包使用 ad-hoc 签名，尚未公证。Android 覆盖安装需要与设备上的应用签名一致。
+从 [GitHub Releases](https://github.com/ywateru/CyberNote/releases) 下载当前版本。发布页提供 macOS Apple Silicon DMG、应用内更新 ZIP、Android arm64 签名 APK，以及第三方许可和 SHA-256 校验文件。macOS 应用使用 ad-hoc 签名，尚未公证。Android 覆盖安装需要与设备上的应用签名一致。
+
+当前预发行版为 [v0.1.0-preview.4](https://github.com/ywateru/CyberNote/releases/tag/v0.1.0-preview.4)。[macOS DMG](https://github.com/ywateru/CyberNote/releases/download/v0.1.0-preview.4/CyberNote-macos-arm64.dmg) · [Android APK](https://github.com/ywateru/CyberNote/releases/download/v0.1.0-preview.4/CyberNote-android-arm64.apk)。
+
+Agent 适配器已内置于 Mac 应用（arm64）。在「设置 → Agent 接入」生成客户端授权与配置。使用方法见 [Agent 接入指南](docs/agent-usage.md)。
+
+### 本地构建记录
 
 <!-- latest-installers:start -->
 
-| 平台 | 安装包 | 版本 / 构建时间（UTC） | 源码 |
-| --- | --- | --- | --- |
-| macOS | [CyberNote.app](<artifacts/releases/20261117-bundled-mcp119/CyberNote.app>) | 0.1.0 / 2026-11-17T10:24:35.188Z | 515e9f14b34d + 61022feac22ae567 |
-| Android | [APK](<artifacts/releases/20261117-feedback117/android/CyberNote-Android-arm64.apk>) | 0.1.0 / 2026-11-17T08:19:34.498Z | c406086d5bbe + 31c8ed9fed41158a |
-
-macOS 已更新内置 MCP119；Android 保持反馈117包，本次桌面接入改动未重打手机包，因此表中源码指纹不同。功能与平台差异见[功能对应表](docs/platform-feature-matrix.md)。本机包不纳入 Git，验证范围见各平台交付 manifest。
+本地构建产物由发布工具记录，历史验证范围见[文档索引](docs/INDEX.md)。
 
 <!-- latest-installers:end -->
-
-[Mac ZIP（含字体许可与来源说明）](artifacts/releases/20261117-bundled-mcp119/CyberNote-Mac.zip)；Mac随附字体[OFL许可](artifacts/releases/20261117-bundled-mcp119/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-bundled-mcp119/notices/noto-cjk/README.md)。Android分发时请同时保留交付目录内的[OFL许可](artifacts/releases/20261117-feedback117/android/notices/noto-cjk/OFL.txt)与[来源说明](artifacts/releases/20261117-feedback117/android/notices/noto-cjk/README.md)；这些是APK旁随文件，裸APK不包含完整许可交付。
-
-Agent 适配器已内置于 Mac 应用（arm64），无需单独下载或填写路径。[包内适配器验证](artifacts/releases/20261117-bundled-mcp119/mcp-bundle.json) · [第三方许可](artifacts/releases/20261117-bundled-mcp119/notices/mcp/THIRD_PARTY_NOTICES.md)。设置 → Agent 接入生成客户端授权与配置；查询/读取/新建/追加/更新见[指南](docs/agent-usage.md)。桌面应用需保持运行，Android通过同步取得内容。Mac为ad-hoc签名未公证，Android为本地Debug证书，均非商店签名。
 
 空间维护：11-17按用户要求清理旧 debug 缓存、过期非 release 候选二进制、隔离 AVD 和打包中间文件，文件原占用合计约33.7 GiB；当前及回退 release、最新历史账户双客户端测试包、资料库和日志保留。下方历史文档中的非 release 安装包路径可能已清理，不能作为当前下载入口；具体清单见[清理记录](docs/verification/feedback117/DEPLOYMENT.md)。
 
