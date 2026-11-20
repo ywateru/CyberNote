@@ -304,6 +304,11 @@ def main():
             raise RuntimeError('macOS package requires a real arm64 Mac runner')
         app = target / 'aarch64-apple-darwin/release/bundle/macos/CyberNote.app'
         import plistlib
+        # The linker signs the Mach-O but does not seal the app's resources.
+        # Sign the bundle before deriving either distribution format.
+        subprocess.run(['codesign', '--force', '--sign', '-', '--entitlements',
+                        str(root / 'src-tauri/Entitlements.plist'), str(app)], check=True)
+        subprocess.run(['codesign', '--verify', '--deep', '--strict', str(app)], check=True)
         package = output / f'{stem}.zip'
         subprocess.run(['ditto', '-c', '-k', '--sequesterRsrc', '--keepParent', str(app), str(package)], check=True)
         with zipfile.ZipFile(package) as archive:
