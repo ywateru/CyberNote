@@ -38,6 +38,7 @@ jobs:
         run: |
           node --test \
             scripts/publish/build-info.test.mjs \
+            scripts/publish/build-counter.test.mjs \
             scripts/verification/settings121-release-identity.test.mjs \
             scripts/verification/settings121-release-hidden-index.test.mjs \
             scripts/publish/package-identity.test.mjs \

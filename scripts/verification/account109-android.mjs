@@ -366,8 +366,8 @@ export async function connectAndroid({ WebSocketImpl = globalThis.WebSocket, lau
       return evaluate(phoneFileSubmission(id));
     }});
     const login=loginControls({open:openAccount,status:accountStatus,wait,
-      radios:()=>evaluate(`Array.from(document.querySelectorAll('.account-settings input[name="account-login-surface"]')).map(r=>({value:r.value,label:r.closest('label')?.textContent.trim(),disabled:r.matches(':disabled'),visible:r.getClientRects().length>0}))`),
-      select:async surface=>{await click(`.account-settings input[name="account-login-surface"][value="${surface}"]`);if(!await evaluate(`document.querySelector('.account-settings input[name="account-login-surface"][value="${surface}"]')?.checked===true`))throw loginFailure('ANDROID_LOGIN_RADIO_NOT_SELECTED');},
+      radios:()=>evaluate(`Array.from(document.querySelectorAll('.account-settings [aria-label="登录方式"] [role="radio"]')).map(r=>({value:r.value,label:r.textContent.trim(),disabled:r.getAttribute('aria-disabled')==='true',visible:r.getClientRects().length>0}))`),
+      select:async surface=>{await click(`.account-settings [aria-label="登录方式"] [role="radio"][value="${surface}"]`);if(!await evaluate(`document.querySelector('.account-settings [aria-label="登录方式"] [role="radio"][value="${surface}"]')?.getAttribute('aria-checked')==='true'`))throw loginFailure('ANDROID_LOGIN_RADIO_NOT_SELECTED');},
       clickLogin:()=>click('.account-settings .account-primary','登录')});
     const nativeLogin=nativeLoginControls({guard:()=>{assertPid();assertInteractive();},capture:()=>run('shell','-tt','uiautomator','dump','/dev/tty'),back:()=>run('shell','input','keyevent','KEYCODE_BACK'),tap:(x,y)=>run('shell','input','tap',String(x),String(y))});
     const api = {

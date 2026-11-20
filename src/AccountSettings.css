@@ -15,23 +15,9 @@
 .account-avatar { display: grid; place-items: center; width: 46px; height: 46px; flex-shrink: 0; background: var(--account-highlight); border-radius: 50%; color: var(--action-ink); }
 .account-avatar svg { width: 25px; height: 25px; }
 .account-identifier { user-select: text; -webkit-user-select: text; }
-.account-login-method { min-width: 0; margin: 16px 0 0; padding: 0; border: 0; }
-.account-login-method legend { padding: 0; font-weight: 600; }
-.account-login-options { display: flex; flex-wrap: wrap; gap: 4px 18px; }
-.account-login-options label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; }
-.account-login-options input { flex-shrink: 0; width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
-.account-login-method:disabled label { color: var(--secondary); cursor: default; }
 .account-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .account-actions:empty { display: none; }
 .account-settings button:not(.preferences-segments > button) { min-height: max(28px, var(--interface-hit-min, 28px)); min-width: 64px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--line); border-radius: var(--radius-7); background: var(--grouped); white-space: normal; overflow-wrap: anywhere; text-align: center; }
-.account-storage-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; min-height: 44px; cursor: pointer; font-size: .9em; font-weight: 500; list-style: none; }
-.account-storage-summary::-webkit-details-marker { display: none; }
-.account-storage-summary::after { content: ""; width: 6px; height: 6px; flex-shrink: 0; border-right: 1.5px solid var(--secondary); border-bottom: 1.5px solid var(--secondary); transform: rotate(45deg); margin: 0 3px 4px; }
-.account-storage-group[open] > .account-storage-summary::after { transform: rotate(225deg); margin-bottom: -3px; }
-.account-storage-current { flex: 1; color: var(--secondary); text-align: end; font-size: .9em; font-weight: 400; }
-.account-storage-summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: var(--radius-5); }
-.account-storage-editor > .account-help { font-size: .85em; }
-.account-local-notice { font-size: .85em; }
 .account-settings .account-primary { background: var(--selection); color: var(--action-ink); border-color: transparent; }
 .account-help { color: var(--secondary); font-size: .9em; margin: 10px 0; }
 .account-toggle { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -111,16 +97,9 @@
 .account-device-footnote { margin: 16px 0 0; font-size: .8em; }
 .account-device-info { display: block; flex: 1; min-width: 0; }
 .account-settings .account-device-open { display: flex; align-items: center; gap: 14px; width: 100%; min-width: 0; padding: 18px 14px; border: 0; border-radius: 0; background: transparent; text-align: start; }
-.account-device-directions { border: 0; padding: 0; margin: 16px 0; min-width: 0; }
-.account-device-directions legend { font-weight: 600; margin-bottom: 6px; }
-.account-device-directions label { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
-.account-device-directions input { width: 18px; height: 18px; margin: 0; flex-shrink: 0; accent-color: var(--accent); }
-.account-device-directions small { display: block; color: var(--secondary); line-height: 1.5; }
-.account-device-directions:disabled label { color: var(--secondary); cursor: default; }
 .account-device-name { display: grid; gap: 8px; margin-top: 16px; }
 .account-device-name input { box-sizing: border-box; min-width: 0; width: 100%; min-height: 44px; padding: 8px; border: 1px solid var(--line); border-radius: var(--radius-7); background: var(--paper); color: var(--ink); font: inherit; }
 .account-operation { margin-top: 14px !important; color: var(--secondary); }
-.account-device-open:focus-visible, .account-device-name input:focus-visible, .account-device-directions input:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .preferences-mobile .account-intro { display: none; }
 .preferences-mobile .account-group { margin-bottom: 16px; }
 .preferences-mobile .account-profile-group.is-signed-in { flex-wrap: wrap; gap: 12px; }
@@ -208,21 +187,16 @@
 .preferences-mobile .preferences-workspace .account-profile-group.is-signed-in {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 0;
 }
-.preferences-workspace .account-profile { padding: 12px 16px; gap: 10px; min-width: 0; }
+.preferences-workspace .account-profile { grid-area: 1 / 1; padding: 12px 16px; gap: 10px; min-width: 0; }
 .preferences-workspace .account-profile h4 { margin: 0 0 2px; font-weight: 500; }
 .preferences-workspace .account-profile p { font-size: .85em; }
 .preferences-workspace .account-avatar { width: 30px; height: 30px; border-radius: 8px; background: var(--settings-editor); color: var(--settings-muted); }
 .preferences-workspace .account-avatar svg { width: 18px; height: 18px; }
-.preferences-workspace .account-profile-group > .account-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px; margin: 0; padding: 8px 12px 8px 0; max-width: 180px; }
+.preferences-workspace .account-profile-group > .account-actions { grid-area: 1 / 2; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px; margin: 0; padding: 8px 12px 8px 0; max-width: 180px; }
 .preferences-workspace .account-settings button:not(.account-device-open, .preferences-segments > button) { min-width: 0; border: 0; border-radius: 6px; background: transparent; color: var(--settings-control); padding: 3px 7px; font-size: calc(12px * var(--settings-font-scale)); }
 .preferences-workspace .account-settings button:not(.account-device-open, .preferences-segments > button):hover:not(:disabled) { background: var(--settings-pill); color: var(--settings-fg); }
 .preferences-workspace .account-settings button.account-primary { background: transparent; color: var(--settings-accent); }
 .preferences-workspace .account-settings button.account-primary:hover:not(:disabled) { background: var(--settings-accent-soft); color: var(--settings-accent); }
-.preferences-workspace .account-login-method { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; grid-column: 1 / -1; margin: 0; padding: 10px 16px; min-height: 56px; border-top: 1px solid var(--settings-divider); }
-.preferences-workspace .account-login-method legend { float: left; font-weight: 400; margin: 0 12px 0 0; }
-.preferences-workspace .account-login-options { gap: 4px 12px; }
-.preferences-workspace .account-login-options label { font-size: .9em; }
-.preferences-workspace .account-login-options input { accent-color: var(--settings-accent); width: 16px; height: 16px; }
 .preferences-workspace .account-profile-group > .account-help { grid-column: 1 / -1; padding: 8px 16px; margin: 0; font-size: .8em; border-top: 1px solid var(--settings-divider); }
 .preferences-workspace .account-device-heading { min-height: 56px; padding: 10px 16px; margin: 0; gap: 8px; }
 .preferences-workspace .account-device-heading h4 { font-weight: 500; }
@@ -237,10 +211,10 @@
 .preferences-workspace .account-toggle { padding: 8px 16px; min-height: 56px; gap: 12px; }
 .preferences-workspace .account-toggle label { font-weight: 400; }
 .preferences-workspace .account-local-sync .account-help { font-size: .85em; }
-.preferences-workspace .account-local-footer { display: block; margin: 0; }
-.preferences-workspace .account-local-footer .account-state { padding: 12px 16px; margin: 0; border-top: 1px solid var(--settings-divider); font-size: .9em; }
-.preferences-workspace .account-local-footer .account-metrics { display: block; font-size: .85em; }
-.preferences-workspace .account-local-footer .account-metrics > div { display: flex; justify-content: space-between; padding: 10px 16px; border-top: 1px solid var(--settings-divider); margin: 0; }
+.preferences-workspace .account-local-footer { display: flex; flex-wrap: wrap; align-items: center; column-gap: 14px; row-gap: 6px; margin: 0; padding: 10px 16px; border-top: 1px solid var(--settings-divider); }
+.preferences-workspace .account-local-footer .account-state { margin: 0; font-size: .9em; }
+.preferences-workspace .account-local-footer .account-metrics { display: flex; flex-wrap: wrap; column-gap: 14px; row-gap: 4px; font-size: .85em; }
+.preferences-workspace .account-local-footer .account-metrics > div { display: flex; gap: 5px; margin: 0; }
 .preferences-workspace .account-local-sync > .account-actions { margin: 0; padding: 6px 8px; border-top: 1px solid var(--settings-divider); }
 .preferences-workspace .account-device-open { padding: 12px 14px; gap: 14px; color: var(--settings-fg); }
 .preferences-workspace .account-device-remote { border-top: 1px solid var(--settings-divider); border-bottom: 0; border-radius: 0; background: transparent; }
@@ -248,11 +222,6 @@
 .preferences-workspace .account-device-footnote { padding: 10px 16px; margin: 0; border-top: 1px solid var(--settings-divider); }
 .preferences-workspace .account-devices-empty { border-top: 1px solid var(--settings-divider); padding: 12px 16px; background: transparent; border-radius: 0; }
 .preferences-workspace .account-devices-empty > svg { width: 24px; height: 24px; }
-.preferences-workspace .account-storage-summary { font-size: 1em; font-weight: 500; border-radius: 12px; }
-.preferences-workspace .account-storage-group[open] > summary { border-radius: 12px 12px 0 0; }
-.preferences-workspace .account-storage-editor { border-top: 1px solid var(--settings-divider); }
-.preferences-workspace .account-storage-editor > .account-help { margin: 0; padding: 0 14px 12px; }
-.preferences-workspace .account-storage-editor > .account-actions { justify-content: flex-end; margin: 0; padding: 4px 12px 10px; }
 .preferences-workspace .account-error { margin: 0 0 12px; background: var(--settings-card); border: 1px solid var(--settings-line); border-radius: 12px; padding: 10px 14px; }
 .preferences-workspace .account-error h4 { font-weight: 500; }
 .preferences-workspace .account-error p { margin-bottom: 4px; font-size: .9em; }
@@ -270,3 +239,16 @@
 .preferences-mobile .preferences-workspace .account-device-current .account-rename { margin: 0; min-width: 44px; }
 .preferences-mobile .preferences-workspace .account-local-sync { margin: 0; padding: 0; }
 .preferences-mobile .preferences-workspace .account-metrics { font-size: .85em; }
+
+.preferences-workspace .account-login-method { grid-column: 1 / -1; border-top: 1px solid var(--settings-divider); }
+.preferences-workspace .account-avatar { background: var(--settings-accent-soft); color: var(--settings-accent); }
+.preferences-workspace .account-settings button.account-primary { background: var(--settings-accent-soft); color: var(--settings-accent); }
+.preferences-workspace .account-settings button.account-primary:hover:not(:disabled) { box-shadow: inset 0 0 0 1px var(--settings-accent); }
+.preferences-workspace .account-storage-change { background: var(--settings-editor); border-radius: 0 0 12px 12px; }
+.account-device-directions { margin: 16px 0; padding: 8px 12px; border-radius: var(--radius-7); background: var(--settings-editor); }
+.account-device-directions .settings121-row { padding: 0; min-height: 32px; }
+.account-device-directions .account-help { margin: 6px 0 0; overflow-wrap: anywhere; }
+.account-device-name input:focus-visible, .account-device-open:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.preferences-mobile .preferences-workspace .account-profile-group { grid-template-columns: minmax(0, 1fr); }
+.preferences-mobile .preferences-workspace .account-profile-group > .account-actions { grid-area: auto / 1; justify-content: flex-start; padding: 0 14px 6px; max-width: none; }
+.preferences-mobile .preferences-workspace .account-settings button:not(.account-device-open, .preferences-segments > button) { min-height: 44px; }

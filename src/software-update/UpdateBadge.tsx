@@ -1,3 +1,4 @@
+import { displayVersion } from "../build-info";
 import { ArrowUp, X } from "lucide-react";
 import { updateMessage } from "./SoftwareUpdateSettings";
 import { useSoftwareUpdate } from "./useSoftwareUpdate";
@@ -15,7 +16,7 @@ export function UpdateBadge({ openAbout }: { openAbout: () => void }) {
     void update.configure({ quietUntil: Math.floor(Date.now() / 1000) + 3 * 86400 });
   };
   return <div className="preferences-update-badge">
-    <button type="button" className="preferences-update-action" title={`${status.release.version} · ${updateMessage(status)}`}
+    <button type="button" className="preferences-update-action" title={`${displayVersion(status.release.version)} · ${updateMessage(status)}`}
       onClick={() => {
         openAbout();
         if (update.busy) return;

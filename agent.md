@@ -26,6 +26,12 @@ changing account, synchronization, native packaging, or GitHub Actions code.
 - `package.json` owns the product version.
 - Run `pnpm version:sync` after changing it. `pnpm version:check` verifies the
   frontend, Tauri, Cargo, and lockfile versions agree.
+- The `0.2` series displays four digits (`0.2.0001`) while package versions and
+  tags omit leading zeros (`0.2.1`, `v0.2.1`) for existing updaters. The local
+  `pnpm build`, `pnpm mac:build`, and `pnpm android:build` commands reserve the
+  next number before compiling. For a GitHub build, run `pnpm version:next`
+  before committing/tagging; tag CI, prepared builds and CI retries
+  reuse that number. See [build version policy](docs/architecture/build-delivery.md#版本编号).
 - Product source identity is derived from tracked product inputs, not ignored
   build directories. Do not hand-edit generated build identity.
 - The macOS app is ad-hoc signed and not notarized. GitHub Releases include an
@@ -44,15 +50,16 @@ changing account, synchronization, native packaging, or GitHub Actions code.
   Tags containing `-` create prereleases.
 - Manual or branch runs produce Actions artifacts only; they do not create a
   GitHub Release.
-- To publish a new preview after a code change:
+- To build a new tagged release after a code change, allocate the next number
+  once and use it for the commit and tag (example: build `0002`):
 
 ```sh
+pnpm version:next
 pnpm version:check
 pnpm typecheck
-git commit -m "docs: describe the change"
-git push origin main
-git tag -a v0.1.0-preview.N -m "CyberNote 0.1.0 Preview N"
-git push origin v0.1.0-preview.N
+git commit -am "Prepare CyberNote 0.2.0002"
+git tag -a v0.2.2 -m "CyberNote 0.2.0002"
+git push --atomic origin main v0.2.2
 ```
 
 - Never reuse a tag that already has a published Release. For a failed run with

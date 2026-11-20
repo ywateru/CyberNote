@@ -9,7 +9,7 @@ export function PreferenceSegments<T extends string | number>({ label, value, op
 }) {
   const group = useRef<HTMLDivElement>(null);
   return <div ref={group} role="radiogroup" aria-label={label} className="preferences-segments">
-    {options.map((option, index) => <button key={option.value} type="button" role="radio"
+    {options.map((option, index) => <button key={option.value} type="button" role="radio" value={option.value}
       aria-checked={value === option.value} aria-disabled={disabled}
       tabIndex={value === option.value ? 0 : -1}
       onClick={() => { if (!disabled && value !== option.value) onChange(option.value); }}
@@ -24,7 +24,7 @@ export function PreferenceSegments<T extends string | number>({ label, value, op
         }
         event.preventDefault();
         if (disabled) return;
-        (group.current?.children[next] as HTMLElement | undefined)?.focus();
+        (group.current?.children[next] as HTMLElement | undefined)?.focus({ preventScroll: true });
         if (value !== options[next].value) onChange(options[next].value);
       }}>{option.label}</button>)}
   </div>;

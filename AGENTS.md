@@ -71,6 +71,8 @@ repository, release, validation, account, and synchronization constraints.
    selectors, or breakpoint changes require checking their consumers. Browser
    checks must account for macOS WebKit and Android WebView differences;
    native IME, clipboard, and window behavior still need platform evidence.
+   For settings, follow `docs/ui/preferences.md` for controls, theme, and save
+   behavior.
 
 10. **Report completed evidence at an exact revision.** Describe the trigger
     and observable before/after behavior, name the source/build tested, and

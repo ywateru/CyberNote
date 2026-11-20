@@ -61,33 +61,30 @@ test('complete document assertion catches same-plainText mark/structure loss, mi
   const expected=fixture(false);assertDocument(ws(),id,expected);
   for(const mutate of [s=>s.notes[0].document.content[1].content[0].marks=[],s=>s.notes[0].document.content[0].type='paragraph',s=>s.notes[0].document.content.pop(),s=>s.notes[0].plainText+='lost',s=>s.notes[0].id='other',s=>s.notes.pop(),s=>s.attachments.push({id:'unexpected'})]){const actual=ws();mutate(actual);assert.throws(()=>assertDocument(actual,id,expected));}
 });
-test('UI actions require exact surface, ordered labels/count, target visibility and frozen radios',()=>{
+test('UI actions require exact surface, ordered labels/count, target visibility and correct login choices',()=>{
   for(const [kind,surface] of [['signIn','browser'],['signIn','embedded'],['cancel','browser'],['cancel','embedded'],['openLoginInBrowser','embedded']]){
     const labels=kind==='signIn'?['登录','创建账户']:surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录'];
-    const p={state:kind==='signIn'?'signedOut':'authorizing',authorizationSurface:kind==='signIn'?undefined:surface,count:labels.length,labels,label:kind==='openLoginInBrowser'?labels[1]:labels[0],enabled:true,visible:true,radioValues:['embedded','browser'],radioDisabled:[kind!=='signIn',kind!=='signIn']};assert(actionShown(p,kind,surface));
-    for(const change of [{state:'error'},{count:0},{count:3},{labels:labels.slice().reverse().concat('extra')},{label:'重试'},{enabled:false},{visible:false},{authorizationSurface:'unknown'},{radioValues:['browser','embedded']},{radioDisabled:[false,true]},{radioDisabled:[]}])assert.equal(actionShown({...p,...change},kind,surface),false);
+    const p={state:kind==='signIn'?'signedOut':'authorizing',authorizationSurface:kind==='signIn'?undefined:surface,count:labels.length,labels,label:kind==='openLoginInBrowser'?labels[1]:labels[0],enabled:true,visible:true,radioValues:kind==='signIn'?['embedded','browser']:[],radioDisabled:kind==='signIn'?[false,false]:[]};assert(actionShown(p,kind,surface));
+    for(const change of [{state:'error'},{count:0},{count:3},{labels:labels.slice().reverse().concat('extra')},{label:'重试'},{enabled:false},{visible:false},{authorizationSurface:'unknown'},{radioValues:['browser','embedded']},{radioDisabled:[false,true]},{radioDisabled:[true,true]}])assert.equal(actionShown({...p,...change},kind,surface),false);
     if(kind!=='signIn')assert.equal(actionShown({...p,authorizationSurface:undefined},kind,surface),false);
   }
   assert.equal(actionShown({},'openLoginInBrowser','browser'),false);
   assert.throws(()=>actionShown({},'signOut'));
 });
-test('fixed DOM projection reads effective fieldset-disabled radios rather than their own disabled attributes',()=>{
-  // Device-free DOM API fixture: input.disabled is false while :disabled reflects
-  // the disabled ancestor fieldset. Execute the same fixed expression as native.
+test('fixed DOM projection requires selectable segments before login and hides them while authorizing',()=>{
   for(const surface of ['embedded','browser']){
-    const fieldset={disabled:true},seen=[];
-    const radios=['embedded','browser'].map(value=>({value,disabled:false,matches(selector){assert.equal(selector,':disabled');seen.push(value);return this.disabled||fieldset.disabled;}}));
+    let blocked=false;
+    const radios=['embedded','browser'].map(value=>({value,getAttribute(key){assert.equal(key,'aria-disabled');return String(blocked);}}));
     const labels=surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录'];
     const buttons=labels.map(textContent=>({textContent,disabled:false,getClientRects:()=>[{}]}));
-    const panel={dataset:{accountState:'authorizing',accountAuthorizationSurface:surface},querySelectorAll(selector){if(selector==='input[name="account-login-surface"]')return radios;assert.equal(selector,'.account-group[aria-label="CyberNote 账户"] .account-actions button');return buttons;}};
+    const panel={dataset:{accountState:'authorizing',accountAuthorizationSurface:surface},querySelectorAll(selector){if(selector==='[aria-label="登录方式"] [role="radio"]')return this.dataset.accountState==='signedOut'?radios:[];assert.equal(selector,'.account-group[aria-label="CyberNote 账户"] .account-actions button');return buttons;}};
     const document={querySelector(selector){assert.equal(selector,'.account-settings');return panel;}};
     const project=kind=>structuredClone(runInNewContext(ACTION_PROJECTION,{document,arg:kind}));
-    assert.deepEqual(radios.map(r=>r.disabled),[false,false]);assert(actionShown(project('cancel'),'cancel',surface));assert.deepEqual(seen,['embedded','browser']);
+    assert(actionShown(project('cancel'),'cancel',surface));
     if(surface==='embedded')assert(actionShown(project('openLoginInBrowser'),'openLoginInBrowser',surface));
-    fieldset.disabled=false;assert.equal(actionShown(project('cancel'),'cancel',surface),false);
     panel.dataset={accountState:'signedOut'};buttons.splice(0,buttons.length,...['登录','创建账户'].map(textContent=>({textContent,disabled:false,getClientRects:()=>[{}]})));
     assert(actionShown(project('signIn'),'signIn',surface));
-    radios[0].disabled=true;assert.equal(actionShown(project('signIn'),'signIn',surface),false);
+    blocked=true;assert.equal(actionShown(project('signIn'),'signIn',surface),false);
   }
 });
 test('postcancel window uses repeated status plus full body samples and checks the 3s boundary',async()=>{

@@ -1053,7 +1053,7 @@ function App() {
     window.visualViewport?.addEventListener("resize", resize);
     return () => { window.removeEventListener("resize", resize); window.visualViewport?.removeEventListener("resize", resize); };
   }, []);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!workspaceLoaded) return; // Keep the validated first-paint cache until authority loads.
     const appearance = { version: 2 as const, themeId, schemePreference };
     const release = applyAppearance(appearance);
@@ -1261,14 +1261,14 @@ function App() {
     [flush, hydrate, refresh],
   );
   const updateSettings = useCallback(
-    (patch: Settings, throwOnFailure = false) => afterQuiet(() => {
+    (patch: Settings, throwOnFailure = false, reportInWorkspace = true) => afterQuiet(() => {
       const work = Promise.resolve().then(() => settingsOwner.write(patch,
         settings => action({ type: "settings", settings }),
         async () => (await loadWorkspace()).settings,
       )).then(() => {
         if (Object.hasOwn(patch, "macSidebarVisible")) setTemporaryFocus(false);
       }).catch(cause => {
-        fail(cause);
+        if (reportInWorkspace) fail(cause);
         if (throwOnFailure) throw cause;
       });
       if (import.meta.env.DEV && import.meta.env.VITE_NOTES_DEBUG === "1") {
@@ -5064,7 +5064,7 @@ function App() {
               accessKey={`${ws.access?.sessionId || ""}:${ws.access?.epoch || 0}`} onPrepare={prepareAppleImport} onFinish={finishAppleImport}
               onHandle={handle => {appleNotesImportHandle.current=handle;}} /> : undefined} />}
           settings={settings}
-          onSettings={patch => updateSettings(patch, true)}
+          onSettings={patch => updateSettings(patch, true, false)}
           onCloseLocks={() => patch({type: "closeLocks"})}
           returnFocus={preferencesTrigger.current}
           data={<DataManagement

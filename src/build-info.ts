@@ -19,7 +19,12 @@ export const buildInfo: BuildInfo = typeof __CYBERNOTE_BUILD_INFO__ === 'undefin
   ? { schema: 1, version: packageInfo.version, releaseVersion: null, mode: 'development', builtAt: null, target: 'web', sourceRevision: 'unavailable', sourceFingerprint: 'unavailable', sourceDirty: true, inputCount: 0, releasePreparedAt: null }
   : __CYBERNOTE_BUILD_INFO__;
 
+/** Keep SemVer unchanged on the wire and pad only for display. */
+export function displayVersion(version: string): string {
+  return version.replace(/^0\.2\.([1-9]\d{0,3})(?=$|-)/, (_, build: string) => `0.2.${build.padStart(4, "0")}`);
+}
+
 /** Integrating settings/updater UI should show this for old or untagged builds. */
 export const releaseIdentityNotice: string | null = buildInfo.releaseVersion
   ? null
-  : `当前构建没有可验证的发行标签，更新检查将按产品版本 ${buildInfo.version} 保守比较，无法判断同一产品版本的预发布先后。`;
+  : `当前构建没有可验证的发行标签，更新检查将按产品版本 ${displayVersion(buildInfo.version)} 保守比较，无法判断同一产品版本的预发布先后。`;

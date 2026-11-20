@@ -8,20 +8,35 @@ import argparse
 import os
 from pathlib import Path
 import subprocess
-import shutil
 import tempfile
 import json
 
 args = argparse.ArgumentParser()
 args.add_argument('--commands', action='store_true')
 args.add_argument('--identity-fixtures', action='store_true')
+args.add_argument('--source-ref', help='Compile updater modules from this exact Git revision')
+args.add_argument('--live-download', action='store_true', help='Download and verify the live package in a temporary directory')
 args.add_argument('--live-release', nargs=2, metavar=('INSTALLED', 'EXPECTED'))
 opt = args.parse_args()
+if opt.live_download and not opt.live_release:
+    args.error('--live-download requires --live-release')
 root = Path(__file__).resolve().parents[3]
 source = root / 'src-tauri/src/software_update'
-version = json.loads((root / 'package.json').read_text())['version']
+def source_file(path):
+    if opt.source_ref:
+        return subprocess.check_output(['git', 'show', '--end-of-options', f'{opt.source_ref}:{path}'], cwd=root)
+    return (root / path).read_bytes()
+
+version = json.loads(source_file('package.json'))['version']
 with tempfile.TemporaryDirectory(prefix='cybernote-update-proof-') as name:
     directory = Path(name)
+    if opt.source_ref:
+        source = directory / 'software_update'
+        source.mkdir()
+        revision = subprocess.check_output(['git', 'rev-parse', '--verify', '--end-of-options', opt.source_ref + '^{commit}'], cwd=root, text=True).strip()
+        entries = subprocess.check_output(['git', 'ls-tree', '--name-only', revision, 'src-tauri/src/software_update/'], cwd=root, text=True)
+        for path in entries.splitlines():
+            (source / Path(path).name).write_bytes(source_file(path))
     dependencies = '''serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
@@ -62,24 +77,34 @@ async fn production_release_check() {{
     let directory = tempfile::tempdir().unwrap();
     let updater = SoftwareUpdater::new(directory.path().join("update"), std::sync::Arc::new(DenyInstall)).unwrap();
     assert_eq!(updater.status().current_version, {installed});
-    updater.configure(PreferencePatch {{ channel: Some(storage::Channel::Preview), ..Default::default() }}).unwrap();
-    let status = updater.check().await.unwrap();
-    assert_eq!(status.phase, "available");
-    assert_eq!(status.downloaded, 0);
-    let release = status.release.unwrap();
-    assert_eq!(release.version, {expected});
-    println!("production feed: {{}} → {{}} ({{}}, {{}} bytes)", status.current_version, release.version, release.package, release.size);
+    let mut channels = vec![storage::Channel::Preview];
+    if !{expected}.contains('-') {{ channels.push(storage::Channel::Stable); }}
+    for channel in channels {{
+        updater.configure(PreferencePatch {{ channel: Some(channel), ..Default::default() }}).unwrap();
+        let status = updater.check().await.unwrap();
+        assert_eq!(status.phase, "available");
+        assert_eq!(status.downloaded, 0);
+        let release = status.release.unwrap();
+        assert_eq!(release.version, {expected});
+        println!("production feed: {{}} → {{}} ({{}}, {{}} bytes)", status.current_version, release.version, release.package, release.size);
+    }}
+    if {str(opt.live_download).lower()} {{
+        let status = updater.download().await.unwrap();
+        assert_eq!(status.phase, "ready");
+        println!("production package: {{}} bytes downloaded and verified", status.downloaded);
+    }}
 }}
 '''
     (directory / 'proof.rs').write_text(text)
-    shutil.copyfile(root / 'src-tauri/Cargo.lock', directory / 'Cargo.lock')
+    (directory / 'Cargo.lock').write_bytes(source_file('src-tauri/Cargo.lock'))
     env = dict(os.environ, CARGO_TARGET_DIR='/tmp/cybernote-settings121-update-target')
     if opt.live_release:
         env['CYBERNOTE_RELEASE_VERSION'] = opt.live_release[0]
     # Adapt the copied root lock to the tiny harness using only this host target.
     # Full metadata walks unrelated platform packages that may not be cached.
     subprocess.run(['cargo', 'test', '--offline', '--no-run', '--manifest-path', str(directory / 'Cargo.toml')], env=env, check=True)
-    subprocess.run(['cargo', 'test', '--offline', '--locked', '--manifest-path', str(directory / 'Cargo.toml'), '--', '--test-threads=1', '--nocapture'], env=env, check=True)
+    tests = ['production_release_check'] if opt.live_release else []
+    subprocess.run(['cargo', 'test', '--offline', '--locked', '--manifest-path', str(directory / 'Cargo.toml'), *tests, '--', '--test-threads=1', '--nocapture'], env=env, check=True)
 
 if opt.identity_fixtures:
     # A tiny actual-source harness compiles each option_env variant without rebuilding the app.

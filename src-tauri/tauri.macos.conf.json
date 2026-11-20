@@ -1,7 +1,7 @@
 {
   "build": {
     "beforeDevCommand": "node scripts/bundle-mcp.mjs --dev && pnpm dev",
-    "beforeBuildCommand": "node scripts/bundle-mcp.mjs && pnpm build"
+    "beforeBuildCommand": "node scripts/bundle-mcp.mjs && pnpm build:frontend"
   },
   "bundle": {
     "externalBin": ["../artifacts/bundled-mcp/cybernote-mcp"]

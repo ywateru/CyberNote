@@ -12,6 +12,7 @@ fn main() {
         "CYBERNOTE_DEPLOY_METADATA",
         "CYBERNOTE_RELEASE_STAMP",
         "CYBERNOTE_RELEASE_VERSION",
+        "CYBERNOTE_UNTAGGED_BUILD",
     ] {
         println!("cargo:rerun-if-env-changed={name}");
     }

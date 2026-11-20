@@ -36,6 +36,7 @@ class HostElement extends HostNode {
   getAttribute(key) {return this.attributes[key]??null;}
   setAttributeNS(_ns,key,value) {this.setAttribute(key,value);}
   removeAttributeNS(_ns,key) {this.removeAttribute(key);}
+  get tabIndex() {return Number(this.getAttribute('tabindex') ?? (['button','input','summary'].includes(this.localName) ? 0 : -1));}
   focus() {document.activeElement=this;}
   scrollIntoView() {throw Error('account confirmation must not scroll inline');}
   matches(selector) {return selector===':disabled'&&!!this.disabled;}
@@ -122,13 +123,13 @@ function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
     },
     all,handle:()=>handle,text:()=>container.textContent,
     panel:()=>all().find(e=>props(e).className==='account-settings'),
-    radio:value=>all().find(e=>e.localName==='input'&&props(e).name==='account-login-surface'&&props(e).value===value),
+    radio:value=>all().find(e=>props(e).role==='radio'&&props(e).value===value),
     storageRadio:value=>all().find(e=>props(e).role==='radio'&&e.textContent===(value==='encryptedFile'?'本机加密文件':'系统钥匙串')),
     buttons:()=>all().filter(e=>e.localName==='button'),
     button:label=>all().find(e=>e.localName==='button'&&e.textContent===label),
-    actionLabels:()=>{const section=all().find(e=>props(e)['aria-label']==='CyberNote 账户');return descendants(section).filter(e=>e.localName==='button').map(e=>e.textContent);},
+    actionLabels:()=>{const section=all().find(e=>props(e)['aria-label']==='CyberNote 账户');return descendants(section).filter(e=>e.localName==='button'&&props(e).role!=='radio').map(e=>e.textContent);},
     async click(label){const button=h.button(label);assert(button,`Missing ${label}`);assert(!props(button).disabled);const modal=all().find(e=>e.localName==='dialog'&&e.open);assert(!modal||modal.contains(button),'host actions must respect native modal isolation');await act(async()=>{props(button).onClick({currentTarget:button});});},
-    async choose(value){const radio=h.radio(value);assert(radio);const fieldset=all().find(e=>e.localName==='fieldset');assert(!props(fieldset).disabled);await act(async()=>{props(radio).onChange();});},
+    async choose(value){const radio=h.radio(value);assert(radio);assert(!props(radio)['aria-disabled']);await act(async()=>{props(radio).onClick();});},
     async chooseStorage(value){const radio=h.storageRadio(value);assert(radio);assert(!props(radio)['aria-disabled']);await act(async()=>{props(radio).onClick();});},
     async poll(){await act(async()=>{await handle.run({type:'status'});});},
     async tick(){await act(async()=>{for(const fn of intervals.values())fn();});},
@@ -154,12 +155,12 @@ test('IPC preserves omitted browser compatibility and only fixed optional surfac
 
 test('real account UI defaults embedded; both radios and both buttons share explicit choice',async t=>{
  for(const type of ['signIn','signUp'])for(const surface of ['embedded','browser']){
-  const h=setup(t);await h.mount();assert.deepEqual(h.actionLabels(),['登录','创建账户']);assert(props(h.radio('embedded')).checked);
+  const h=setup(t);await h.mount();assert.deepEqual(h.actionLabels(),['登录','创建账户']);assert(props(h.radio('embedded'))['aria-checked']);
   assert(h.text().includes('登录用户名区分大小写，请按注册时的写法输入。'));
   const before=h.calls.length;await h.choose(surface);assert.equal(h.calls.length,before,'radio selection has no IPC');
   await h.click(type==='signIn'?'登录':'创建账户');assert.deepEqual(h.calls.at(-1),{type,surface});
   assert.deepEqual(h.actionLabels(),surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录']);
-  assert(props(h.all().find(e=>e.localName==='fieldset')).disabled);
+  assert.equal(h.radio('embedded'),undefined,'pending authorization has no editable surface');
  }
 });
 
@@ -605,7 +606,7 @@ const device=(id,extra={})=>({id,name:id===SELF?'本机名称':'同名设备',on
 const directory=(extra={})=>({...signedOutAccount(),state:'ready',enabled:true,profile:{subject:'fixture-A',displayName:'A'},devices:[device(SELF),device(PEER),device(OTHER)],...extra});
 const row=(h,id)=>h.all().find(e=>props(e)['data-device-id']===id);
 const openPeer=async(h,id=PEER)=>{const opener=descendants(row(h,id)).find(e=>e.localName==='button');await act(async()=>props(opener).onClick({currentTarget:opener}));return opener;};
-const chooseDirection=async(h,direction)=>{const radio=h.all().find(e=>e.localName==='input'&&props(e).name==='account-device-direction'&&props(e).value===direction);await act(async()=>props(radio).onChange());return radio;};
+const chooseDirection=async(h,direction)=>{const radio=h.all().find(e=>props(e).role==='radio'&&props(e).value===direction);await act(async()=>props(radio).onClick());return radio;};
 
 test('device directory survives pause; offline summaries stay hidden and unknown is distinct from an empty library',async t=>{
  const emptyPeer='10000000-0000-4000-8000-000000000004';
@@ -629,7 +630,7 @@ test('each direction confirms exactly one stable target despite duplicate names;
  for(const direction of ['push','pull','both']) {
   const h=setup(t,{initial:directory()});await h.mount();const opener=await openPeer(h,OTHER);
   assert.equal(document.activeElement,h.button('取消'));assert(h.calls.every(c=>c.type==='status'));
-  const defaultRadio=h.all().find(e=>props(e).name==='account-device-direction'&&props(e).value==='both');assert(props(defaultRadio).checked);
+  const defaultRadio=h.all().find(e=>props(e).role==='radio'&&props(e).value==='both');assert(props(defaultRadio)['aria-checked']);
   await chooseDirection(h,direction);await h.click('取消');assert.equal(document.activeElement,opener);assert(h.calls.every(c=>c.type==='status'));
   await openPeer(h,OTHER);await chooseDirection(h,direction);await h.click('开始同步');
   assert.deepEqual(h.calls.filter(c=>c.type==='syncDevice'),[{type:'syncDevice',deviceId:OTHER,direction}]);
@@ -795,8 +796,8 @@ test('new-install storage UI presents encrypted file as the default and Keychain
  await h.mount();
  assert(props(h.storageRadio('encryptedFile'))['aria-checked']);
  assert(props(h.storageRadio('keychain'))['aria-checked']===false);
- assert(h.text().includes('登录与安全'));
- assert(h.text().includes('默认方式，登录信息加密保存在此设备'));
+ assert(h.text().includes('凭据存储'));
+ assert(h.text().includes('登录信息加密保存在此设备'));
  assert(h.text().includes('系统钥匙串'));
  assert(!h.text().includes('AES-GCM'));
  assert(!h.text().includes('0600'));
@@ -830,11 +831,10 @@ test('late device receipt after an observed account change cannot overwrite new-
 
 test('device direction controls join the modal Tab loop and Escape restores the exact remote opener',async t=>{
  const h=setup(t,{initial:directory()});await h.mount();const opener=await openPeer(h,OTHER),modal=h.all().find(e=>e.localName==='dialog');
- const push=h.all().find(e=>props(e).name==='account-device-direction'&&props(e).value==='push');
- const both=h.all().find(e=>props(e).name==='account-device-direction'&&props(e).value==='both');
+ const both=h.all().find(e=>props(e).role==='radio'&&props(e).value==='both');
  const key=async(key,shiftKey=false)=>{let stopped=false;await act(async()=>props(modal).onKeyDown({key,shiftKey,preventDefault(){},stopPropagation(){stopped=true;}}));assert(stopped);};
  await key('Tab',true);assert(document.activeElement===both);await key('Tab');assert(document.activeElement===h.button('取消'));
- await key('Tab');assert(document.activeElement===h.button('开始同步'));await key('Tab');assert(document.activeElement===push);
+ await key('Tab');assert(document.activeElement===h.button('开始同步'));await key('Tab');assert(document.activeElement===both);
  await key('Escape');assert(document.activeElement===opener);assert(h.calls.every(c=>c.type==='status'));
 });
 
@@ -914,7 +914,7 @@ test('registered debug account actions validate exact parameters before dispatch
  api.setPage('settings');await assert.rejects(api.execute('account.syncDevice',{deviceId:OTHER,direction:'push'}),e=>e.code==='APP_ERROR');
  assert.equal(h.calls.length,before);api.setPage('account');
  await act(async()=>{await api.execute('account.syncDevice',{deviceId:OTHER,direction:'pull'});});
- assert(h.handle().inspect().confirmation);assert(h.all().some(e=>props(e).name==='account-device-direction'&&props(e).value==='pull'&&props(e).checked));
+ assert(h.handle().inspect().confirmation);assert(h.all().some(e=>props(e).role==='radio'&&props(e).value==='pull'&&props(e)['aria-checked']));
  assert.equal(h.calls.length,before);await h.click('取消');assert.equal(h.calls.length,before);
  await act(async()=>{await api.execute('account.syncDevice',{deviceId:OTHER,direction:'push'});});await h.click('开始同步');
  assert.deepEqual(h.calls.at(-1),{type:'syncDevice',deviceId:OTHER,direction:'push'});await h.click('取消');

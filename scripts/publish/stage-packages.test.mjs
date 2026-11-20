@@ -200,10 +200,10 @@ with tempfile.TemporaryDirectory() as tmp:
     def make(manifest=True):
         with zipfile.ZipFile(package, 'w') as out:
             out.writestr('AndroidManifest.xml' if manifest else 'other', b'fixture')
-    def check(text, accepted):
+    def check(text, accepted, version='0.1.0'):
         result = subprocess.CompletedProcess([], 0, text, '')
         with patch.object(module.subprocess, 'run', return_value=result):
-            try: module.require_android_release_manifest(package, Path(tmp), 'com.local.notesclone', '0.1.0')
+            try: module.require_android_release_manifest(package, Path(tmp), 'com.local.notesclone', version)
             except RuntimeError:
                 assert not accepted, 'Production manifest rejected'
             else: assert accepted, 'Non-production or undecodable manifest accepted'
@@ -223,6 +223,11 @@ with tempfile.TemporaryDirectory() as tmp:
     check(tree.replace('0.1.0', '0.2.0'), False)
     check(tree.replace('=1000', '=2000'), False)
     check(tree.replace('=1000', '=0x000003e8'), True)
+    for counter in (1, 1000, 9999):
+        version = f'0.2.{counter}'
+        numbered = tree.replace('0.1.0', version).replace('=1000', f'={20000+counter}')
+        check(numbered, True, version)
+        check(numbered.replace(f'={20000+counter}', '=1000'), False, version)
     check(tree.replace('=false', '=@0x7f100000'), False)
     check(tree + '      E: application (line=10)\\n', False)
     check('', False)

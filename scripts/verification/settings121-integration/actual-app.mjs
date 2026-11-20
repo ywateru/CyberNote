@@ -25,7 +25,7 @@ for(const mobile of [false,true]){
      if(command.startsWith('software_update_')){
       if(command.endsWith('_check')){
        status.phase='available';
-       status.release={version:'0.1.1',notes:'测试发行说明',url:'https://github.com/ywateru/CyberNote/releases/tag/v0.1.1',package:'CyberNote.zip',size:2048,platform:'macos',architecture:'arm64'};
+       status.release={version:'0.2.1',notes:'测试发行说明',url:'https://github.com/ywateru/CyberNote/releases/tag/v0.2.1',package:'CyberNote.zip',size:2048,platform:'macos',architecture:'arm64'};
       }
       if(command.endsWith('_download')){status.phase='ready';status.downloaded=status.release.size;}
       return structuredClone(status);
@@ -190,6 +190,7 @@ for(const mobile of [false,true]){
   await page.getByRole('button',{name:'检查更新',exact:true}).click();
   await page.waitForFunction(()=>window.__SETTINGS121_CALLS__.some(c=>c.command==='software_update_check'));
   await page.getByRole('button',{name:'更新',exact:true}).waitFor();
+  await page.getByText('发现新版本 0.2.0001',{exact:true}).waitFor();
   assert.equal(await page.evaluate(()=>window.__SETTINGS121_CALLS__.filter(c=>c.command==='software_update_download').length),0);
   await tab('notes');
   await page.getByRole('button',{name:'更新',exact:true}).click();

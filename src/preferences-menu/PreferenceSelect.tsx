@@ -75,8 +75,8 @@ export function PreferenceSelect<T extends string>({
       <select
         aria-label={label}
         value={value}
-        disabled={disabled}
-        onChange={(event) => onChange(event.target.value as T)}
+        aria-disabled={disabled}
+        onChange={(event) => { if (!disabled) onChange(event.target.value as T); }}
       >
         {options.map((option) => (
           <option
@@ -99,12 +99,12 @@ export function PreferenceSelect<T extends string>({
         aria-haspopup="menu"
         aria-controls={open ? id : undefined}
         aria-expanded={open}
-        disabled={disabled}
-        onClick={() => setOpen(!open)}
+        aria-disabled={disabled}
+        onClick={() => { if (!disabled) setOpen(!open); }}
         onKeyDown={(event) => {
           if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
             event.preventDefault();
-            setOpen(true);
+            if (!disabled) setOpen(true);
           }
         }}
       >

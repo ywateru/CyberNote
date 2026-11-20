@@ -53,6 +53,14 @@ test('clean local exact tags identify previews and stable; dev and untagged buil
   assert.equal(f.info().releaseVersion, '0.1.0');
 });
 
+test('local numbered builds can omit an old tag; tag CI cannot bypass verification', t => {
+  const f = fixture(t);
+  f.tag('v0.1.0');
+  f.put('src/main.ts', 'new numbered build');
+  assert.equal(f.info({ environment: { CYBERNOTE_UNTAGGED_BUILD: '1' } }).releaseVersion, null);
+  assert.throws(() => f.info({ environment: { ...f.ci('v0.1.0'), CYBERNOTE_UNTAGGED_BUILD: '1' } }), /clean checkout/);
+});
+
 test('library import from node stdin does not execute or realpath the CLI pseudo-entry', t => {
   const f = fixture(t); f.tag('v0.1.0-preview.2');
   const script = `const api=await import(${JSON.stringify(pathToFileURL(join(f.root, 'scripts/build-info.mjs')).href)});console.log(api.resolveReleaseVersion(undefined,{environment:{}}));`;

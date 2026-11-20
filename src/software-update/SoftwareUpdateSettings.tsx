@@ -1,3 +1,4 @@
+import { displayVersion } from "../build-info";
 import type { ReactNode } from "react";
 import { PreferenceSegments, offOnOptions } from "../preferences-menu/PreferenceSegments";
 import { useSoftwareUpdate } from "./useSoftwareUpdate";
@@ -19,7 +20,7 @@ export function updateMessage(s: UpdateStatus): string {
     case "up_to_date":
       return "此频道没有比当前版本更新的发布";
     case "available":
-      return `发现新版本 ${s.release?.version ?? ""}`;
+      return `发现新版本 ${displayVersion(s.release?.version ?? "")}`;
     case "downloading":
       return `正在下载… ${s.total ? Math.min(100, Math.floor((s.downloaded / s.total) * 100)) + "%" : ""}`;
     case "verifying":
@@ -121,7 +122,7 @@ export function SoftwareUpdateSettings() {
           </span>
         }
       >
-        <code>{s.currentVersion}</code>
+        <code>{displayVersion(s.currentVersion)}</code>
         <button
           className="settings121-text"
           type="button"
@@ -197,7 +198,7 @@ export function SoftwareUpdateSettings() {
       {s.release && (
         <>
           <Row
-            title={`新版本 ${s.release.version}`}
+            title={`新版本 ${displayVersion(s.release.version)}`}
             detail={`${s.release.platform} · ${s.release.architecture} · ${(s.release.size / 1e6).toFixed(1)} MB`}
           >
             {s.phase !== "ready" && (
@@ -207,7 +208,7 @@ export function SoftwareUpdateSettings() {
                 disabled={u.busy}
                 onClick={() => void u.download()}
               >
-                下载 {s.release.version}
+                下载 {displayVersion(s.release.version)}
               </button>
             )}
             {s.phase === "ready" && s.installMode === "replace_restart" && (
@@ -227,7 +228,7 @@ export function SoftwareUpdateSettings() {
           <details className="software-update-notes">
             <summary className="settings121-row">
               <span className="settings121-label">
-                版本说明 · {s.release.version}
+                版本说明 · {displayVersion(s.release.version)}
               </span>
             </summary>
             <pre>{s.release.notes || "发布者未提供版本说明。"}</pre>

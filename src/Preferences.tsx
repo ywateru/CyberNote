@@ -10,7 +10,7 @@ import { dismissInnermostMenu } from "./Menu";
 import PreferencesInterfaceDetails from "./PreferencesInterfaceDetails";
 import PreferencesPresentation from "./presentation/PreferencesPresentation";
 import { accountUIAvailable } from "./account-client";
-import { buildInfo, releaseIdentityNotice } from "./build-info";
+import { buildInfo, displayVersion, releaseIdentityNotice } from "./build-info";
 
 const allPreferencePages = [
   { id: "account", label: "账户与同步", icon: UserRound, desktopIcon: UserRound },
@@ -47,7 +47,7 @@ const settingsSearch = [
   ["notes", "锁定备忘录", "关闭所有已锁定 重新锁定", '.preferences-lock-action'],
   ["account", "CyberNote 账户", "登录 创建账户 退出账户 登录方式 系统浏览器", '.account-profile-group'],
   ["account", "我的设备", "允许此设备同步 刷新设备 更改名称 传输状态", '.account-device-group'],
-  ["account", "登录与安全", "凭据存储 钥匙串 本机加密文件", '.account-storage-summary'],
+  ["account", "凭据存储", "登录与安全 钥匙串 本机加密文件", '.account-storage-group [role="radiogroup"]'],
   ["account", "同步冲突", "冲突版本 解决 保留版本", '.preferences-conflicts > summary'],
   ["account", "云端同步", "WebDAV S3 GitHub 远端", '[data-settings-slot="cloud"]'],
   ["agent", "Agent 接入", "MCP 本机接入 授权客户端 配置 连接 诊断", '.agent-page-header'],
@@ -123,7 +123,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   const results = settingsSearch.filter(([page, title, words]) =>
     preferencePages.some(item => item.id === page) &&
     (title !== "云端同步" || cloudSync != null) && (title !== "自动备份" || automaticBackup != null) &&
-    (title !== "登录与安全" || !localMobile) && (title !== "我的设备" || accountAvailability !== "signedOut") &&
+    (title !== "凭据存储" || !localMobile) && (title !== "我的设备" || accountAvailability !== "signedOut") &&
     (title !== "软件更新" || softwareUpdate != null) && (title !== "同步冲突" || syncConflicts != null) &&
     searchTerms.every(term => `${title} ${words} ${preferencePages.find(item => item.id === page)?.label}`.toLocaleLowerCase().includes(term)));
   const searching = searchTerms.length > 0;
@@ -139,14 +139,8 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
     const intent = { page, selector, id: ++targetSerial.current, expires: Date.now() + 5000 }; targetOwner.current = intent; setPendingTarget(intent); setSearchMessage("正在定位设置…"); setQuery(""); onTab(page);
     if (selector === '.preferences-conflicts > summary') setConflictsOpen(true);
   };
-  const [saving, setSaving] = useState(false), [error, setError] = useState("");
-  const saveFocus = useRef<{ element: HTMLElement; tab: PreferencesTab } | null>(null);
-  useLayoutEffect(() => {
-    if (saving || !saveFocus.current) return;
-    const target = saveFocus.current; saveFocus.current = null;
-    if (target.tab === tab && live.current && root.current?.contains(target.element) && !target.element.matches(":disabled") &&
-        (document.activeElement === document.body || document.activeElement === target.element)) target.element.focus({ preventScroll: true });
-  }, [saving, tab]);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<{ tab: PreferencesTab; message: string } | null>(null);
   const current = preferencePages.find(page => page.id === activeTab);
   const home = mobile && activeTab === "home";
   useEffect(() => {
@@ -268,10 +262,9 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   }, [activeTab]);
   const apply = async (action: () => Promise<unknown>) => {
     if (working.current) return;
-    saveFocus.current = document.activeElement instanceof HTMLElement ? { element: document.activeElement, tab } : null;
-    working.current = true; setSaving(true); setError("");
+    working.current = true; setSaving(true); setSaveError(null);
     try { await action(); }
-    catch (cause) { if (live.current) setError(cause && typeof cause === "object" && "message" in cause ? String(cause.message) : "更改未保存，请重试"); }
+    catch (cause) { if (live.current) setSaveError({ tab, message: cause && typeof cause === "object" && "message" in cause ? String(cause.message) : "更改未保存，请重试" }); }
     finally { working.current = false; if (live.current) setSaving(false); }
   };
   const appearance = appearanceOf(settings);
@@ -310,9 +303,9 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
             {searchMessage && <p className="preferences-search-notice" role="status">{searchMessage}</p>}
             {searching && <section className="preferences-search-results" aria-label="设置查找结果"><p role="status">{results.length ? `找到 ${results.length} 项设置` : "未找到设置，请尝试其他关键词。"}</p><div className="preferences-list">{results.map(([page, title, , selector]) => <button type="button" key={title} onClick={() => jumpTo(page, selector)}><span>{title}<small>{title === "我的设备" && accountAvailability !== "signedIn" ? "登录后查看 · 打开账户确认当前状态" : preferencePages.find(item => item.id === page)?.label}</small></span><ChevronRight size={16} aria-hidden="true" /></button>)}</div></section>}
           <div className="preferences-content" hidden={home || searching} inert={home || searching}>
-            {error && <p className="preferences-error" role="alert">{error}</p>}
+            {saveError?.tab === tab && <div className="preferences-error"><span role="alert">{saveError.message}</span><button type="button" onClick={() => setSaveError(null)}>关闭提示</button></div>}
             <div id="preferences-panel-settings" className="preferences-panel preferences-settings" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "外观与字号" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-settings"} hidden={activeTab !== "settings"} inert={activeTab !== "settings"}>
-              <fieldset disabled={mobile && saving} aria-busy={saving} className="preferences-form">
+              <div aria-busy={saving} className="preferences-form">
                 <div className="preferences-group">
                   <label className="preferences-row"><span>主题<small>用于整个工作区及原生工具栏背景</small></span><PreferenceSelect label="主题" mobile={mobile} disabled={saving} value={appearance.themeId} options={themeOptions} onChange={themeId => void changeAppearance({ themeId: themeId as ThemeId })} /></label>
                   <div className="preferences-row"><span>外观<small>系统菜单遵循系统明暗样式</small></span><PreferenceSegments label="外观" value={appearance.schemePreference} options={appearanceOptions} disabled={saving} onChange={schemePreference => void changeAppearance({ schemePreference: schemePreference as SchemePreference })} /></div>
@@ -322,7 +315,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
                   <div className="preferences-row"><span>编辑器字体大小<small>仅调整备忘录正文</small></span><PreferenceSegments label="编辑器字体大小" value={fontSizeOption(settings.editorFontSize).value} options={fontSizeOptions} disabled={saving} onChange={editorFontSize => void apply(() => onSettings({ editorFontSize: editorFontSize as FontSize }))} /></div>
                   <details className="preferences-preview"><summary>字号预览</summary><div className="preferences-interface-preview" aria-label="界面字号预览"><span>工作项目</span><small>12 个备忘录</small></div><div className="preferences-editor-preview" style={{ fontSize: fontSizeOption(settings.editorFontSize).editor }} aria-label="编辑器字号预览"><strong>让记录更自然</strong><p>把想法写下来，留给下一次灵感。</p></div></details>
                 </div>
-              </fieldset>
+              </div>
               <PreferencesInterfaceDetails value={settings.interfaceDetails} mobile={mobile} disabled={saving} onSettings={onSettings} />
               <p className="preferences-footnote" role="status">{saving ? "正在保存…" : "更改保存后立即生效"}</p>
             </div>
@@ -331,14 +324,14 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
               <section className="preferences-build-info" aria-label="版本信息">
                 <h4>版本信息</h4>
                 <dl>
-                  <div><dt>发行版本</dt><dd>CyberNote {buildInfo.releaseVersion || buildInfo.version}{buildInfo.mode === "development" ? " · 开发预览" : ""}{releaseIdentityNotice && <small>{releaseIdentityNotice}</small>}</dd></div>
+                  <div><dt>发行版本</dt><dd>CyberNote {displayVersion(buildInfo.releaseVersion || buildInfo.version)}{buildInfo.mode === "development" ? " · 开发预览" : ""}{releaseIdentityNotice && <small>{releaseIdentityNotice}</small>}</dd></div>
                   <div><dt>构建时间</dt><dd>{buildInfo.builtAt ? <time dateTime={buildInfo.builtAt}>{buildInfo.builtAt.replace("T", " ").replace("Z", " UTC")}</time> : "开发预览（未生成安装包）"}</dd></div>
                   <div><dt>源码版本</dt><dd title={`${buildInfo.sourceRevision} · ${buildInfo.sourceFingerprint}`}>{buildInfo.sourceRevision === "unavailable" ? "独立预览环境，未注入构建标识" : <><code>{buildInfo.sourceRevision.slice(0, 12)}{buildInfo.sourceDirty ? "+modified" : ""}</code><code>SHA256 {buildInfo.sourceFingerprint}</code></>}</dd></div>
                 </dl>
               </section>
             </div>
             <div id="preferences-panel-notes" className="preferences-panel preferences-settings" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "备忘录" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-notes"} hidden={activeTab !== "notes"} inert={activeTab !== "notes"}>
-              <fieldset disabled={saving} className="preferences-form">
+              <div aria-busy={saving} className="preferences-form">
                 <div className="preferences-group"><h4>列表</h4>
                   <div className="preferences-row"><span>排序方式</span><PreferenceSegments label="排序方式" disabled={saving} value={settings.sort || "updated"} options={[{value:"updated",label:"编辑日期"},{value:"created",label:"创建日期"},{value:"title",label:"标题"}]} onChange={sort => void apply(() => onSettings({ sort }))} /></div>
                 </div>
@@ -346,11 +339,11 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
                 <div className="preferences-group"><h4>桌面列表</h4>
                   <div className="preferences-row"><span>{mobile ? "桌面按日期分组" : "按日期分组"}</span><PreferenceSegments label="按日期分组" value={settings.groupDates === false ? "off" : "on"} options={offOnOptions} disabled={saving} onChange={value => void apply(() => onSettings({ groupDates: value === "on" }))} /></div>
                 </div>
-                <div className="preferences-group"><div className="preferences-row"><span>锁定备忘录<small>重新锁定所有已打开的锁定备忘录</small></span><button className="preferences-lock-action" type="button" onClick={() => void apply(onCloseLocks)}>全部关闭</button></div></div>
-              </fieldset>
+                <div className="preferences-group"><div className="preferences-row"><span>锁定备忘录<small>重新锁定所有已打开的锁定备忘录</small></span><button className="preferences-lock-action" type="button" aria-disabled={saving} onClick={() => void apply(onCloseLocks)}>全部关闭</button></div></div>
+              </div>
               <p className="preferences-footnote" role="status">{saving ? "正在保存…" : "更改保存后立即生效"}</p>
             </div>
-            <div id="preferences-panel-account" className="preferences-panel preferences-settings" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "账户与同步" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-account"} hidden={activeTab !== "account"} inert={activeTab !== "account"}>
+            <div id="preferences-panel-account" className="preferences-panel preferences-settings preferences-account" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "账户与同步" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-account"} hidden={activeTab !== "account"} inert={activeTab !== "account"}>
               {accountUIAvailable && activeTab === "account" && account}
               {syncConflicts != null && <details className="preferences-conflicts preferences-list" open={conflictsOpen} onToggle={event => { const open = event.currentTarget.open; if (open !== conflictsOpen) setConflictsOpen(open); }}><summary>同步冲突<span>查看与解决版本冲突</span><ChevronRight size={16} aria-hidden="true" /></summary>{activeTab === "account" && conflictsOpen && <div className="preferences-conflict-slot">{syncConflicts}</div>}</details>}
               {activeTab === "account" && cloudSync != null && <section data-settings-slot="cloud" className="preferences-module-slot" aria-label="云端同步">{cloudSync}</section>}

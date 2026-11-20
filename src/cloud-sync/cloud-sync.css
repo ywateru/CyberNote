@@ -61,8 +61,8 @@
 .preferences-workspace .cloud-sync-field input::placeholder { color: var(--settings-muted); opacity: .8; }
 .preferences-workspace .cloud-sync-form > .cloud-sync-tools { border-top: 1px solid var(--settings-divider); margin-top: 10px; padding-top: 10px; }
 .preferences-workspace .cloud-sync-form .cloud-sync-disable { margin-right: auto; color: var(--danger); }
-.preferences-workspace .cloud-sync-form .cloud-sync-primary { background: var(--settings-accent); color: var(--settings-card); }
-.preferences-workspace .cloud-sync-form .cloud-sync-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--settings-accent), var(--settings-fg) 12%); color: var(--settings-card); }
+.preferences-workspace .cloud-sync-form .cloud-sync-primary { background: var(--accent); color: var(--accent-ink); }
+.preferences-workspace .cloud-sync-form .cloud-sync-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--accent), var(--accent-ink) 10%); color: var(--accent-ink); }
 .preferences-workspace .cloud-sync-advanced > summary { width: fit-content; margin-left: calc(8em + 12px); padding: 6px 0; color: var(--settings-control); cursor: pointer; }
 .preferences-workspace .cloud-sync-preview p {
   margin: 0 0 10px;

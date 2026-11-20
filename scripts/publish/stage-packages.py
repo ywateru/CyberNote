@@ -206,10 +206,12 @@ def require_android_release_manifest(package, tools, expected_package, expected_
     if not re.fullmatch(r'\d+\.\d+\.\d+', expected_version):
         raise RuntimeError('Unsupported Android release version')
     major, minor, patch = map(int, expected_version.split('.'))
-    expected_code = major * 1000000 + minor * 1000 + patch
+    numbered_build = (major, minor) == (0, 2)
+    expected_code = 20_000 + patch if numbered_build else major * 1000000 + minor * 1000 + patch
+    valid_patch = 1 <= patch <= 9999 if numbered_build else patch < 1000
     codes = framework_values(manifests[0]['attributes'], 'versionCode', 0x0101021b)
     code = re.fullmatch(r'(0x[0-9a-fA-F]+|\d+)', codes[0]) if len(codes) == 1 else None
-    if (minor >= 1000 or patch >= 1000 or expected_code <= 0 or code is None
+    if (minor >= 1000 or not valid_patch or expected_code <= 0 or code is None
             or int(code[1], 16 if code[1].startswith('0x') else 10) != expected_code):
         raise RuntimeError('Android versionCode differs from package.json')
     for flag, resource_id in (('debuggable', 0x0101000f), ('testOnly', 0x01010272)):

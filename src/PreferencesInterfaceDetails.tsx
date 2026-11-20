@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useId, useRef, useState } from "react";
 import { ChevronDown, Folder, MoreHorizontal, RotateCcw } from "lucide-react";
-import { PreferenceSelect } from "./preferences-menu/PreferenceSelect";
+import { PreferenceSegments } from "./preferences-menu/PreferenceSegments";
 import type { Settings } from "./types";
 import {
   defaultInterfaceDetails,
@@ -149,7 +149,8 @@ export default function PreferencesInterfaceDetails({
           max={range.max}
           step="1"
           value={confirmed?.[key] ?? range.min}
-          disabled={disabled || saving || !confirmed}
+          disabled={!confirmed}
+          aria-disabled={disabled || saving || !confirmed}
           onChange={(event) =>
             void save({ ...confirmed, [key]: Number(event.target.value) })
           }
@@ -189,13 +190,13 @@ export default function PreferencesInterfaceDetails({
         )}
         {percent("iconScale", "图标大小")}
         {percent(mobile ? "mobileHitScale" : "desktopHitScale", "操作区域")}
-        <label className="preferences-detail-control">
+        <div className="preferences-detail-control">
           <span>菜单间距</span>
-          <PreferenceSelect label="菜单间距" mobile={mobile} value={confirmed?.menuSpacing ?? "standard"}
+          <PreferenceSegments label="菜单间距" value={confirmed?.menuSpacing ?? "standard"}
             disabled={disabled || saving || !confirmed}
             options={[{value:"compact",label:"紧凑"},{value:"standard",label:"标准"},{value:"comfortable",label:"宽松"}]}
             onChange={menuSpacing => void save({ ...confirmed, menuSpacing })} />
-        </label>
+        </div>
         {percent("radiusScale", "圆角")}
         {preview && (
           <div
@@ -228,13 +229,13 @@ export default function PreferencesInterfaceDetails({
         <button
           type="button"
           className="preferences-details-reset"
-          disabled={disabled || saving}
+          aria-disabled={disabled || saving}
           onClick={() => void save(defaultInterfaceDetails)}
         >
           <RotateCcw />
           恢复界面细节默认值
         </button>
-        <p role="status" className="preferences-help">
+        <p role="status" className="preferences-help preferences-details-save-status">
           {saving ? "正在保存…" : ""}
         </p>
       </div>

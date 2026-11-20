@@ -15,6 +15,12 @@
     源码：<git revision> + <内容指纹>
 ```
 
+## 版本编号
+
+从 `0.2.0001` 起，`0.2` 固定，四位构建号每次分配加一，到 `9999` 停止并报错。产品界面和 Release 标题补零；`package.json`、Tauri、Cargo、发行回执及 Git 标签使用无前导零的 SemVer（例如 `0.2.1`、`v0.2.1`）。因此旧更新器可以继续比较版本。Android 应用 ID 和签名延续上版，`0.2` 的 `versionCode` 为 `20000 + 构建号`（首版为 `20001`，旧 `0.1.0` 为 `1000`）。
+
+未固定源码的 `pnpm build`、`pnpm mac:build`、`pnpm android:build` 每次进入构建前保留一个新编号，失败也不回退；版本写入源码，构建期间禁止在同一工作树另开分配。`pnpm version:next` 用于在提交并打标签前分配一次；同一发布的多平台构建、重试、带 stamp 构建与 CI 均复用已检入的编号。内部 `pnpm build:frontend` 只编译既定编号，供 Tauri 和本地验证使用；开发服务器和类型检查不消耗编号。
+
 ## 构建与发布
 
 - 单一应用版本源同步前端、Tauri/Cargo 和 Android versionName/versionCode，避免包外名称与设置显示冲突。

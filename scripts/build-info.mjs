@@ -148,6 +148,8 @@ export function resolveReleaseVersion(root = projectRoot, { development = false,
   if (ci && !['tag', 'branch'].includes(type)) throw Error('Incomplete or invalid GitHub release ref context');
   if (ci && !name) throw Error('Missing GitHub ref name');
   if (type === 'branch') return null; // CI branch/PR artifacts are not tagged releases.
+  // Local numbered builds can start on an older exact tag, but cannot claim it.
+  if (!ci && environment.CYBERNOTE_UNTAGGED_BUILD === '1') return null;
   if (!existsSync(resolve(root, '.git'))) {
     if (type === 'tag') throw Error('Release tag requires its verified Git checkout');
     return null; // Archive metadata cannot assert an installed release tag.

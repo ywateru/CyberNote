@@ -1,12 +1,12 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "CyberNote",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "identifier": "com.local.notesclone",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm build:frontend",
     "frontendDist": "../dist"
   },
   "app": {
