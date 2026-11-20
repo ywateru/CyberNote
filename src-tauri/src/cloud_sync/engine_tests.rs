@@ -265,6 +265,62 @@ async fn sync(r: &CloudRuntime, h: &Host) -> Result<crate::cloud_sync::runtime::
         .await
 }
 #[tokio::test]
+async fn setup_preview_reads_remote_without_enabling_or_authorizing_transfer() {
+    let directory = tempfile::tempdir().unwrap();
+    let workspace = uuid::Uuid::new_v4().to_string();
+    let remote = Fixture::new(Provider::Webdav);
+    let sender_path = directory.path().join("sender");
+    let sender = Host::new(&sender_path, &workspace);
+    sender.note("Remote preview note", false);
+    let runtime = configured(&sender_path, sender.clone(), &remote, "fixture-password").await;
+    sync(&runtime, &sender).await.unwrap();
+
+    let receiver_path = directory.path().join("receiver");
+    let receiver = Host::new(&receiver_path, &workspace);
+    let runtime = CloudRuntime::fixture(
+        &receiver_path.canonicalize().unwrap(),
+        receiver.clone(),
+        &remote.url,
+    )
+    .unwrap();
+    let config = remote.config(Provider::Webdav);
+    let reply = runtime
+        .command(
+            receiver.context.clone(),
+            CloudCommand::PreviewSetup {
+                patch: ConfigPatch {
+                    provider: Some(Provider::Webdav),
+                    fields: Some(config.fields),
+                    secrets: Some(config.secrets),
+                    passphrase: Some("fixture-password".into()),
+                    ..Default::default()
+                },
+            },
+        )
+        .await
+        .unwrap();
+    assert!(!reply.status.enabled);
+    assert_eq!(reply.status.revision, 0);
+    assert!(reply.status.providers.is_empty());
+    assert!(!reply.status.passphrase_set);
+    let preview = reply.preview.unwrap();
+    assert_eq!(preview.source, "setup");
+    assert!(preview.remote_exists);
+    assert!(preview.versions > 0);
+    assert_eq!(preview.local_notes, 0);
+    assert!(runtime
+        .command(
+            receiver.context.clone(),
+            CloudCommand::Sync {
+                preview_id: preview.id,
+            },
+        )
+        .await
+        .is_err());
+    assert_eq!(receiver.captures.load(Ordering::SeqCst), 0);
+    assert!(receiver.snapshot().versions.is_empty());
+}
+#[tokio::test]
 async fn real_store_bidirectional_media_conflicts_stable_ids_and_recovery() {
     let d = tempfile::tempdir().unwrap();
     let w = uuid::Uuid::new_v4().to_string();

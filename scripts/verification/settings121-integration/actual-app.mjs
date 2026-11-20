@@ -22,7 +22,14 @@ for(const mobile of [false,true]){
    window.__TAURI_INTERNALS__.invoke=async(command,args={})=>{
     if(command.startsWith('software_update_')||command.startsWith('local_backup_')||command.startsWith('settings_')||command==='cloud_sync_command'){
      calls.push({command,args:JSON.parse(JSON.stringify(args))});
-     if(command.startsWith('software_update_')){if(command.endsWith('_check'))status.phase='up_to_date';return structuredClone(status);}
+     if(command.startsWith('software_update_')){
+      if(command.endsWith('_check')){
+       status.phase='available';
+       status.release={version:'0.1.1',notes:'测试发行说明',url:'https://github.com/ywateru/CyberNote/releases/tag/v0.1.1',package:'CyberNote.zip',size:2048,platform:'macos',architecture:'arm64'};
+      }
+      if(command.endsWith('_download')){status.phase='ready';status.downloaded=status.release.size;}
+      return structuredClone(status);
+     }
      if(command==='settings_host_ready')return;
      if(command==='settings_quit_ack'){
       if(args.sealed && args.success) queueMicrotask(()=>void window.__DEBUG_PLATFORM__.emit('notes-settings-quit-ready',{id:args.id}));
@@ -99,24 +106,24 @@ for(const mobile of [false,true]){
     await page.waitForFunction(()=>document.querySelector('.cloud-sync-settings button') && !document.querySelector('.cloud-sync-settings button').disabled);
   };
   await page.evaluate(()=>{window.__CLOUD_HOLD__=true;});
-  await page.getByRole('button',{name:'预览',exact:true}).click();
+  await page.getByRole('button',{name:'立即同步…',exact:true}).click();
   await page.waitForFunction(()=>window.__CLOUD_HOLD_STARTED__);
   await accessPrepare('cloud-preview-revoked');
   await page.evaluate(()=>{window.__CLOUD_HOLD__=false;window.__CLOUD_RELEASE__();});
   assert.equal(await page.locator('.cloud-sync-preview').count(),0);
   await accessRestore('cloud-preview-revoked');
   assert.equal(await page.locator('.cloud-sync-preview').count(),0);
-  await page.locator('.cloud-sync-settings').getByRole('button',{name:'设置…',exact:true}).click();
+  await page.locator('.cloud-sync-settings').getByRole('button',{name:'设置',exact:true}).click();
   await page.getByLabel('加密密码',{exact:true}).fill('ephemeral-fixture-only');
   await accessPrepare('cloud-draft-revoked');await accessRestore('cloud-draft-revoked');
   assert.equal(await page.getByLabel('加密密码',{exact:true}).count(),0);
-  await page.locator('.cloud-sync-settings').getByRole('button',{name:'设置…',exact:true}).click();
+  await page.locator('.cloud-sync-settings').getByRole('button',{name:'设置',exact:true}).click();
   assert.equal(await page.getByLabel('加密密码',{exact:true}).inputValue(),'');
   // Same session+epoch, but a different actual Store incarnation still clears drafts.
   await page.getByLabel('加密密码',{exact:true}).fill('ephemeral-store-fixture');
   storeInstance='synthetic-store-replaced';await api(page,'app.refresh');
   assert.equal(await page.getByLabel('加密密码',{exact:true}).count(),0);
-  await page.getByRole('button',{name:'预览',exact:true}).click();await page.waitForSelector('.cloud-sync-preview');
+  await page.getByRole('button',{name:'立即同步…',exact:true}).click();await page.waitForSelector('.cloud-sync-preview');
   const syncBefore=await page.evaluate(()=>window.__SETTINGS121_CALLS__.filter(c=>c.command==='cloud_sync_command' && c.args.command.type==='sync').length);
   await page.evaluate(()=>{window.__DIALOG_HOLD__=true;});
   await page.getByRole('button',{name:'确认同步…',exact:true}).click();await page.waitForFunction(()=>window.__DIALOG_HOLD_STARTED__);
@@ -177,9 +184,19 @@ for(const mobile of [false,true]){
   }
   await page.screenshot({path:resolve(out,mobile?'mobile-backup.png':'desktop-backup.png')});
   await tab('settings');
-  await page.getByRole('button',{name:'更新',exact:true}).click();
+  assert.equal(await page.getByRole('button',{name:'更新',exact:true}).count(),0);
+  await tab('about');
+  await page.getByRole('region',{name:'版本信息'}).waitFor();
   await page.getByRole('button',{name:'检查更新',exact:true}).click();
   await page.waitForFunction(()=>window.__SETTINGS121_CALLS__.some(c=>c.command==='software_update_check'));
+  await page.getByRole('button',{name:'更新',exact:true}).waitFor();
+  assert.equal(await page.evaluate(()=>window.__SETTINGS121_CALLS__.filter(c=>c.command==='software_update_download').length),0);
+  await tab('notes');
+  await page.getByRole('button',{name:'更新',exact:true}).click();
+  await page.locator('#preferences-panel-about').waitFor();
+  await page.getByText('下载校验完成',{exact:true}).waitFor();
+  assert.equal(await page.evaluate(()=>window.__SETTINGS121_CALLS__.filter(c=>c.command==='software_update_download').length),1);
+  assert.equal(await page.evaluate(()=>window.__SETTINGS121_CALLS__.filter(c=>c.command==='software_update_install').length),0);
   assert.match(await page.locator('.preferences').innerText(),/当前构建没有可验证的发行标签/);
   if(mobile)assert.equal(await page.getByRole('button',{name:/安装并重新启动/}).count(),0);
   await page.screenshot({path:resolve(out,mobile?'mobile-update.png':'desktop-update.png')});

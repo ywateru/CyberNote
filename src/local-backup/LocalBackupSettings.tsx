@@ -7,6 +7,7 @@ import {
 } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { formatFileSize } from "../data-management";
+import { PreferenceSegments } from "../preferences-menu/PreferenceSegments";
 import type {
   BackupHours,
   BackupKeep,
@@ -58,60 +59,6 @@ function Row({
         {detail && <small>{detail}</small>}
       </div>
       <div className="settings121-actions">{children}</div>
-    </div>
-  );
-}
-
-function Segments<T extends number>({
-  label,
-  value,
-  options,
-  disabled,
-  onChange,
-}: {
-  label: string;
-  value: T | undefined;
-  options: readonly (readonly [T, string])[];
-  disabled: boolean;
-  onChange(value: T): void;
-}) {
-  return (
-    <div className="settings121-segments" role="radiogroup" aria-label={label}>
-      {options.map(([option, text], index) => (
-        <button
-          type="button"
-          role="radio"
-          key={option}
-          aria-checked={value === option}
-          aria-disabled={disabled}
-          tabIndex={value === option ? 0 : -1}
-          onClick={() => {
-            if (!disabled) onChange(option);
-          }}
-          onKeyDown={(event) => {
-            const next =
-              event.key === "ArrowRight" || event.key === "ArrowDown"
-                ? (index + 1) % options.length
-                : event.key === "ArrowLeft" || event.key === "ArrowUp"
-                  ? (index + options.length - 1) % options.length
-                  : event.key === "Home"
-                    ? 0
-                    : event.key === "End"
-                      ? options.length - 1
-                      : -1;
-            if (next < 0) return;
-            event.preventDefault();
-            if (disabled) return;
-            (
-              event.currentTarget.parentElement?.children[next] as
-                HTMLElement | undefined
-            )?.focus();
-            onChange(options[next][0]);
-          }}
-        >
-          {text}
-        </button>
-      ))}
     </div>
   );
 }
@@ -536,10 +483,10 @@ export function LocalBackupSettings({
               : "读取后显示自动备份状态"
           }
         >
-          <Segments
+          <PreferenceSegments
             label="自动备份间隔"
             value={status?.config.hours}
-            options={hours}
+            options={hours.map(([value, label]) => ({ value, label }))}
             disabled={statusDisabled || !status}
             onChange={(hours) => void configure({ hours })}
           />
@@ -548,10 +495,10 @@ export function LocalBackupSettings({
           label="保留份数"
           detail="新备份写入并校验成功后，才清理此资料库已验证的旧版本。"
         >
-          <Segments
+          <PreferenceSegments
             label="保留备份份数"
             value={status?.config.keep}
-            options={keeps.map((keep) => [keep, String(keep)] as const)}
+            options={keeps.map((value) => ({ value, label: String(value) }))}
             disabled={statusDisabled || !status}
             onChange={(keep) => void configure({ keep })}
           />

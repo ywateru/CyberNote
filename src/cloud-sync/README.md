@@ -11,6 +11,9 @@
 
 可移植设置严格限定为明暗偏好、桌面 collectionView、sort、groupDates；皮肤、
 导航/密度/mobile 呈现、窗口/选中项和私有任务配置不发送。具体 wire 兼容和
-owner 投影由后端 README 统一规定。组件始终显示实际能力预算：JSON 32 MiB、
+owner 投影由后端 README 统一规定。组件在「高级」显示实际能力预算：JSON 32 MiB、
 密文 48 MiB、单 blob 原字节 16 MiB（编码计入总量）、1024 版本/128 设置头。
 GitHub 上游的 100 MiB 限额不代表本客户端能绕过更小预算。
+
+编辑器的 `previewSetup` 使用未保存的服务草稿，只读远端摘要，响应标记为
+`setup`。它不发放同步或恢复票据。实际传输使用已保存配置重新预览并确认。

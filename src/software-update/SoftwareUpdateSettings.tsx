@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import { PreferenceSelect } from "../preferences-menu/PreferenceSelect";
-import { useMobileInteraction } from "../platform/interaction";
+import { PreferenceSegments, offOnOptions } from "../preferences-menu/PreferenceSegments";
 import { useSoftwareUpdate } from "./useSoftwareUpdate";
 import type { UpdateStatus } from "./types";
 import "./software-update.css";
+const checkIntervals = [30, 60, 360, 1440];
 export function updateMessage(s: UpdateStatus): string {
   switch (s.phase) {
     case "idle":
@@ -87,22 +87,10 @@ function Toggle({
   disabled: boolean;
   change(value: boolean): void;
 }) {
-  return (
-    <label className="software-update-toggle">
-      <input
-        type="checkbox"
-        role="switch"
-        aria-label={label}
-        checked={checked}
-        disabled={disabled}
-        onChange={(e) => change(e.target.checked)}
-      />
-      <span className="software-update-toggle-track" aria-hidden="true" />
-    </label>
-  );
+  return <PreferenceSegments label={label} value={checked ? "on" : "off"}
+    options={offOnOptions} disabled={disabled} onChange={value => change(value === "on")} />;
 }
 export function SoftwareUpdateSettings() {
-  const mobile = useMobileInteraction();
   const u = useSoftwareUpdate();
   const s = u.status;
   if (!s)
@@ -117,6 +105,9 @@ export function SoftwareUpdateSettings() {
     );
   const p = s.preferences;
   const error = u.error ?? s.error;
+  const intervals = checkIntervals.includes(p.intervalMinutes)
+    ? checkIntervals
+    : [...checkIntervals, p.intervalMinutes].sort((left, right) => left - right);
   return (
     <section
       className="settings121-list software-update-settings"
@@ -140,9 +131,6 @@ export function SoftwareUpdateSettings() {
           检查更新
         </button>
       </Row>
-      <Row title="更新来源" detail="固定使用本项目 GitHub Releases">
-        <span>ywateru/CyberNote</span>
-      </Row>
       <Row title="启动时检查" detail="仅检查发布信息，安装始终需要手动确认">
         <Toggle
           label="启动时检查"
@@ -163,26 +151,22 @@ export function SoftwareUpdateSettings() {
         title="检查频率"
         detail={p.automaticChecks ? "自动检查的间隔" : "开启定时检查后生效"}
       >
-        <PreferenceSelect
-          label="检查频率" mobile={mobile} value={String(p.intervalMinutes)}
+        <PreferenceSegments
+          label="检查频率" value={p.intervalMinutes}
           disabled={u.busy || !p.automaticChecks}
-          options={[15, 30, 60, 360, 720, 1440].map(n => ({value:String(n),label:n < 60 ? `${n} 分钟` : `${n / 60} 小时`}))}
-          onChange={value => void u.configure({intervalMinutes:Number(value)})}
+          options={intervals.map(value => ({ value, label: value < 60 ? `${value} 分钟` : `${value / 60} 小时` }))}
+          onChange={intervalMinutes => void u.configure({ intervalMinutes })}
         />
       </Row>
       <Row title="更新频道" detail="只提供比当前版本新的发布，不支持降级">
-        <PreferenceSelect
-          label="更新频道" mobile={mobile} value={p.channel} disabled={u.busy}
+        <PreferenceSegments
+          label="更新频道" value={p.channel} disabled={u.busy}
           options={[
             { value: "stable", label: "稳定版" },
             { value: "preview", label: "尝鲜版" },
             { value: "daily", label: "每日版" },
           ]}
-          onChange={channel =>
-            void u.configure({
-              channel: channel as "stable" | "preview" | "daily",
-            })
-          }
+          onChange={channel => void u.configure({ channel })}
         />
       </Row>
       <Row
@@ -193,20 +177,6 @@ export function SoftwareUpdateSettings() {
             : "有新版本时在标题栏显示"
         }
       >
-        {s.release && p.showBadge && p.quietUntil <= Date.now() / 1000 && (
-          <button
-            className="settings121-text"
-            type="button"
-            disabled={u.busy}
-            onClick={() =>
-              void u.configure({
-                quietUntil: Math.floor(Date.now() / 1000) + 3 * 86400,
-              })
-            }
-          >
-            隐藏更新徽标三天
-          </button>
-        )}
         {p.quietUntil > Date.now() / 1000 && (
           <button
             className="settings121-text"

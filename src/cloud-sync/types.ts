@@ -50,6 +50,7 @@ export type CloudCommand =
   | { type: "status" | "test" }
   | { type: "save"; patch: ConfigPatch }
   | { type: "preview"; recovery?: string }
+  | { type: "previewSetup"; patch: ConfigPatch }
   | { type: "sync" | "restore"; previewId: string };
 export type CloudReply = {
   status: CloudStatus;

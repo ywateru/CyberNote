@@ -55,7 +55,7 @@ Mac最新续验：[WAV live09有限独核](docs/plan/reviews/app-final106-mac-wa
 
 “显示选项 → 查看附件”提供图片/视频、音频、文稿和全部附件画廊，支持试听录音、图片浮动预览，以及从附件跳转到所属备忘录并选中、滚动定位。已在此前功能快照中包含附件画廊；本轮新增功能以顶部安装包范围为准。[使用与行为](docs/ui/attachment-gallery.md) / [验证记录](docs/verification/cybernote-desktop/ATTACHMENT-GALLERY.md)。
 
-设置页包含外观与字号、备忘录、设备同步、存储空间、导入与备份；本轮桌面新增“Agent 接入”，移动端不提供本机 MCP 宿主入口。桌面采用左侧分类栏，移动端采用分组首页和子页；打开设置时保留顶部工具栏。当前接入见[Agent 指南](docs/agent-usage.md)，历史设置重构见[设置页规格](docs/ui/preferences.md)与[验证及本机产物](docs/verification/cybernote-desktop/SETTINGS-REDESIGN.md)。
+设置页包含账户与同步、外观与字号、备忘录、Agent 接入、存储空间、导入与备份、关于。账户与同步支持 WebDAV、S3 和 GitHub。关于集中提供版本信息、更新检查和下载偏好。详见[设置页规格](docs/ui/preferences.md)和[Agent 指南](docs/agent-usage.md)。
 
 桌面端已按新设计稿重构侧边栏、连续顶部栏、笔记列表和录音卡，并采用方形眼睛的新图标。设置 → 外观与字号提供独立的“界面字体大小”和“编辑器字体大小”，均提供极小、小、中、大、极大五档；默认中档为界面 14px、正文 16px，选择会自动保存，界面文字、图标、行高、间距和原生顶部栏同步缩放，编辑器字号独立控制。搜索栏已统一普通、悬停及聚焦边框。
 
@@ -109,7 +109,7 @@ pnpm android:build           # release，正式分发需配置签名
 
 ## 版本与同源交付
 
-应用版本以 `package.json` 为源；变更后运行 `pnpm version:sync` 同步 Tauri/Cargo，Android 直接读取该版本并生成 versionCode。`pnpm build` 会检查版本一致性，并把真实 UTC 构建时间、Git revision 与产品输入 SHA256 注入设置 → 外观与字号 → 版本信息。开发预览明确显示“开发预览”，不伪造安装包时间。
+应用版本以 `package.json` 为源。变更后运行 `pnpm version:sync` 同步 Tauri 和 Cargo，Android 直接读取该版本并生成 versionCode。`pnpm build` 会检查版本一致性，并把实际 UTC 构建时间、Git 修订和产品输入 SHA-256 注入设置 → 关于 → 版本信息。开发预览显示“开发预览”。
 
 ```sh
 pnpm version:check

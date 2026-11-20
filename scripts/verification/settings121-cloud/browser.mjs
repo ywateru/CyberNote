@@ -17,7 +17,7 @@ const { chromium } = await import(
 );
 const entry = `import React from 'react';import{createRoot}from'react-dom/client';import{CloudSyncSettings}from'/src/cloud-sync/index.ts';import'/src/style.css';import'/__settings-ui.css';
 const h=window.fixture={commands:[],confirms:[],commits:[],active:true,fail:false,confirmFail:false,confirmDelay:false,confirmResolvers:[],clientDelay:false,clientResolvers:[],contextDelay:false,contextResolvers:[],context:{window:'fixture',session:'fixture-session',token:{epoch:1},storeInstance:'fixture-store'},status:{revision:0,enabled:true,selected:'webdav',minutes:0,providers:{webdav:{fields:{endpoint:'https://dav.example.com',username:'fixture-user'},credentialsSet:{password:true}}},passphraseSet:true,lastSuccess:null,lastError:null,recoveries:['aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa']}};
-const root=createRoot(document.querySelector('#root'));const client=async(ctx,c)=>{h.commands.push({ctx,c});if(h.clientDelay && c.type!=='status')await new Promise(resolve=>h.clientResolvers.push(resolve));if(h.fail)throw{code:'network',message:'无法连接存储服务，请检查网络后重试'};if(c.type==='save'){Object.assign(h.status,{...c.patch,revision:h.status.revision+1});}return{status:{...h.status},...(c.type==='preview'?{preview:{id:'preview-fixture',source:c.recovery?'recovery:'+c.recovery:'remote',remoteExists:true,workspaceId:'fixture-workspace',localNotes:3,versions:5,attachments:2,bytes:20000,conflicts:1}}:{}),...(['sync','restore'].includes(c.type)?{result:{applied:true,pending:0,conflicts:1},message:'同步完成；并发版本已保留'}:{}),...(c.type==='test'?{message:'连接成功；未写入远端或笔记'}:{})};};
+const root=createRoot(document.querySelector('#root'));const client=async(ctx,c)=>{h.commands.push({ctx,c});if(h.clientDelay && c.type!=='status')await new Promise(resolve=>h.clientResolvers.push(resolve));if(h.fail)throw{code:'network',message:'无法连接存储服务，请检查网络后重试'};if(c.type==='save'){Object.assign(h.status,{...c.patch,revision:h.status.revision+1});}return{status:{...h.status},...(['preview','previewSetup'].includes(c.type)?{preview:{id:'preview-fixture',source:c.type==='previewSetup'?'setup':c.recovery?'recovery:'+c.recovery:'remote',remoteExists:true,workspaceId:'fixture-workspace',localNotes:3,versions:5,attachments:2,bytes:20000,conflicts:1}}:{}),...(['sync','restore'].includes(c.type)?{result:{applied:true,pending:0,conflicts:1},message:'同步完成；并发版本已保留'}:{}),...(c.type==='test'?{message:'连接成功；未写入远端或笔记'}:{})};};
 h.render=()=>root.render(<CloudSyncSettings active={h.active} client={client} ports={{context:async()=>{if(h.contextDelay)await new Promise(resolve=>h.contextResolvers.push(resolve));return h.context},confirm:async text=>{h.confirms.push(text);if(h.confirmFail)throw Error('native dialog failed');if(h.confirmDelay)return new Promise(resolve=>h.confirmResolvers.push(resolve));return true},onCommitted:r=>h.commits.push(r)}}/>);h.render();`;
 const localCss = await readFile("src/Preferences.css", "utf8");
 const sharedCssPath = localCss.includes(".settings121-list")
@@ -106,47 +106,42 @@ try {
     return route.abort();
   });
   await page.goto(origin + "/__cloud");
-  await page.getByRole("button", { name: "设置…", exact: true }).waitFor();
+  const setup = page.getByRole("button", { name: "设置", exact: true });
+  const provider = (name) => page.getByRole("radiogroup", { name: "同步到" }).getByRole("radio", { name, exact: true });
+  await setup.waitFor();
   assert.deepEqual(
     await page.evaluate(() => fixture.commands.map((x) => x.c.type)),
     ["status"],
   );
   checks.push("mount only reads status");
-  await page.getByRole("button", { name: "设置…", exact: true }).click();
-  await page.getByLabel("用户名", { exact: true }).fill("draft-user");
-  await page.getByRole("button", { name: "存储服务", exact: true }).click();
-  await page.getByRole("option", { name: "S3 兼容存储", exact: true }).click();
+  await setup.click();
+  await page.getByLabel("用户", { exact: true }).fill("draft-user");
+  await provider("WebDAV").focus();
+  await page.keyboard.press("ArrowRight");
+  assert.equal(await provider("S3").getAttribute("aria-checked"), "true");
   await page
     .getByLabel("Endpoint", { exact: true })
     .fill("https://minio.example.com");
-  await page.getByRole("button", { name: "存储服务", exact: true }).click();
-  await page.getByRole("option", { name: "WebDAV", exact: true }).click();
+  await provider("WebDAV").click();
   assert.equal(
-    await page.getByLabel("用户名", { exact: true }).inputValue(),
+    await page.getByLabel("用户", { exact: true }).inputValue(),
     "draft-user",
   );
   assert.equal(
-    await page.getByLabel("密码或应用密码", { exact: true }).inputValue(),
+    await page.getByLabel("密码", { exact: true }).inputValue(),
     "",
   );
   checks.push(
     "provider drafts survive switch; credentials never returned to inputs",
   );
-  const providerButton = page.getByRole("button", {
-    name: "存储服务",
-    exact: true,
-  });
-  await providerButton.focus();
-  await page.keyboard.press("ArrowDown");
-  await page.keyboard.press("Escape");
-  assert.equal(await providerButton.getAttribute("aria-expanded"), "false");
-  assert.equal(
-    await page.getByLabel("用户名", { exact: true }).isVisible(),
-    true,
-  );
-  checks.push(
-    "desktop owned dropdown keyboard navigation and inner Escape preserve the form",
-  );
+  await page.getByRole("button", { name: "预览", exact: true }).click();
+  await page.getByText(/配置预览/).waitFor();
+  const previewCommand = await page.evaluate(() => fixture.commands.at(-1).c);
+  assert.equal(previewCommand.type, "previewSetup");
+  assert.equal(previewCommand.patch.fields.username, "draft-user");
+  assert.equal(await page.getByRole("button", { name: "确认同步…" }).count(), 0);
+  await page.getByRole("button", { name: "关闭预览" }).click();
+  checks.push("provider segments support arrows and preview draft without saving or transfer actions");
   for (const [width, appearance] of [
     [1200, "light"],
     [1200, "dark"],
@@ -172,18 +167,18 @@ try {
   checks.push(
     "desktop/narrow light/dark screenshots and no horizontal overflow",
   );
-  await page.getByLabel("用户名", { exact: true }).focus();
+  await page.getByLabel("用户", { exact: true }).focus();
   await page.keyboard.press("Escape");
   assert.equal(
     await page
-      .getByRole("button", { name: "设置…", exact: true })
+      .locator(".cloud-sync-row button[aria-expanded=false]")
       .evaluate((e) => e === document.activeElement),
     true,
   );
   checks.push("Escape collapses inline form and restores focus");
   await page.getByRole("button", { name: "测试连接", exact: true }).click();
   await page.getByText("连接成功；未写入远端或笔记", { exact: true }).waitFor();
-  await page.getByRole("button", { name: "预览", exact: true }).click();
+  await page.getByRole("button", { name: "立即同步…", exact: true }).click();
   await page.getByRole("region", { name: "同步预览" }).waitFor();
   assert.equal(
     await page.evaluate(
@@ -218,7 +213,7 @@ try {
           ?.getAttribute("aria-busy") === "false",
     );
   };
-  await button("预览").click();
+  await button("立即同步…").click();
   await page.getByRole("region", { name: "同步预览" }).waitFor();
   const committedBefore = await page.evaluate(() => fixture.commits.length);
   if (process.env.CLOUD_REGRESSION_ONLY !== "c5") {
@@ -293,7 +288,7 @@ try {
       committedBefore,
       "Escape invalidates pending native confirmation",
     );
-    await button("预览").click();
+    await button("立即同步…").click();
     await page.getByRole("region", { name: "同步预览" }).waitFor();
   }
   // Late native confirmation after reactivation cannot sync its consumed view.
@@ -323,7 +318,7 @@ try {
   const previewsBefore = await page.evaluate(
     () => fixture.commands.filter((x) => x.c.type === "preview").length,
   );
-  await button("预览").click();
+  await button("立即同步…").click();
   await page.waitForFunction(() => fixture.clientResolvers.length === 2);
   assert.equal(
     await page.evaluate(
@@ -335,7 +330,7 @@ try {
   await page.evaluate(() => fixture.clientResolvers.shift()());
   await page.waitForTimeout(50);
   assert.equal(
-    await button("预览").isDisabled(),
+    await button("立即同步…").isDisabled(),
     true,
     "old finally cannot release new operation",
   );
@@ -388,6 +383,8 @@ try {
     testCalls,
     "late context cannot issue hidden-generation client work",
   );
+  await setup.click();
+  await page.getByText("高级", { exact: true }).click();
   const limits = await page.locator(".cloud-sync-limits").innerText();
   for (const text of ["32 MiB", "48 MiB", "16 MiB", "1024", "128", "不截断"])
     assert(limits.includes(text));
@@ -395,6 +392,7 @@ try {
     "C5 delayed context does not invoke after hide; C6 exact plaintext/ciphertext/attachment/entity budgets are visible",
   );
 
+  await page.getByRole("button", { name: "取消", exact: true }).click();
   await page.evaluate(() => (fixture.fail = true));
   await page.getByRole("button", { name: "测试连接", exact: true }).click();
   await page.getByRole("alert").waitFor();
@@ -410,7 +408,8 @@ try {
   assert.deepEqual(errors, []);
   assert.deepEqual(external, []);
   const sourceFiles = [
-    "src/cloud-sync/CloudSelect.tsx",
+    "src/preferences-menu/PreferenceSegments.tsx",
+    "src/preferences-menu/PreferenceSelect.tsx",
     "src/cloud-sync/CloudSyncSettings.tsx",
     "src/cloud-sync/cloud-sync.css",
     "src/cloud-sync/client.ts",

@@ -114,13 +114,7 @@ createRoot(document.getElementById("root")!).render(
         <style>{`body{margin:0;padding:24px;background:var(--grouped);color:var(--ink);font:14px -apple-system,BlinkMacSystemFont,sans-serif}main{max-width:680px;margin:auto;background:var(--paper);padding:0 20px}header{max-width:720px;margin:0 auto 10px;display:flex;justify-content:space-between;align-items:center}h1{font-size:20px}*{box-sizing:border-box}@media(max-width:520px){body{padding:12px}main{padding:0 12px}}`}</style>
         <header>
           <h1>软件更新</h1>
-          <button
-            type="button"
-            aria-label="打开更新设置"
-            onClick={() => document.querySelector("section")?.scrollIntoView()}
-          >
-            <UpdateBadge />
-          </button>
+          <UpdateBadge openAbout={() => document.querySelector("section")?.scrollIntoView()} />
         </header>
         <main>
           <SoftwareUpdateSettings />

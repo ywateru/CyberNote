@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 const { chromium } = await import(
   pathToFileURL(
@@ -14,6 +14,7 @@ const origin = process.env.UPDATE_PROOF_ORIGIN ?? "http://127.0.0.1:1457";
 const css = execFileSync("git", ["show", "e29a7d8c:src/Preferences.css"], {
   encoding: "utf8",
 });
+const currentCss = await readFile("src/Preferences.css", "utf8");
 const browser = await chromium.launch({
   executablePath:
     process.env.CHROME_PATH ??
@@ -42,7 +43,7 @@ async function scenario(baseline, staleRetry) {
         ["SoftwareUpdateSettings.tsx", "text/tsx"],
         ["software-update.css", "text/css"],
       ]) {
-        await page.route(`**/src/software-update/${name}`, async (route) => {
+        await page.route(url => url.pathname === `/src/software-update/${name}`, async (route) => {
           const source = execFileSync(
             "git",
             ["show", `cfde3810:src/software-update/${name}`],
@@ -90,8 +91,12 @@ async function scenario(baseline, staleRetry) {
         "/scripts/verification/settings121-update/ui.html?mode=configure-error-" +
         (staleRetry ?? "none"),
     );
-    await page.addStyleTag({ content: css });
-    await page.getByRole("switch", { name: "定时检查", exact: true }).waitFor();
+    await page.addStyleTag({ content: baseline ? css : currentCss });
+    const toggle = (name) => page.getByRole("switch", { name, exact: true });
+    const option = (name, label) => page.getByRole("radiogroup", { name, exact: true }).getByRole("radio", { name: label, exact: true });
+    const checked = (name) => baseline ? toggle(name).isChecked() : option(name, "开启").isChecked();
+    const automaticOff = baseline ? toggle("定时检查") : option("定时检查", "关闭");
+    await automaticOff.waitFor();
     await page.evaluate(() => {
       const mobile = document.createElement("div");
       mobile.className = "preferences-mobile";
@@ -100,28 +105,22 @@ async function scenario(baseline, staleRetry) {
       mobile.append(host);
     });
     const switches = await page
-      .getByRole("switch")
+      .getByRole(baseline ? "switch" : "radio")
       .evaluateAll((nodes) =>
         nodes.map((el) => ({
           label: el.getAttribute("aria-label"),
           width: el.getBoundingClientRect().width,
           height: el.getBoundingClientRect().height,
-          labels: el.labels.length,
+          labels: el.closest('[role="radiogroup"][aria-label]') ? 1 : (el.labels?.length ?? 0),
         })),
       );
-    await page.getByRole("switch", { name: "定时检查", exact: true }).click();
+    await automaticOff.click();
     await page.getByRole("alert").waitFor();
-    assert(
-      await page
-        .getByRole("switch", { name: "定时检查", exact: true })
-        .isChecked(),
-    );
+    assert(await checked("定时检查"));
     await page.getByRole("button", { name: "重试", exact: true }).click();
     await page.getByRole("alert").waitFor({ state: "hidden" });
     const calls = await page.evaluate(() => window.fixtureCalls);
-    const enabled = await page
-      .getByRole("switch", { name: "定时检查", exact: true })
-      .isChecked();
+    const enabled = await checked("定时检查");
     if (baseline) {
       assert.deepEqual(calls, [
         'configure:{"automaticChecks":false}',
@@ -140,35 +139,24 @@ async function scenario(baseline, staleRetry) {
       assert(
         switches.every((s) => s.width >= 44 && s.height >= 44 && s.labels > 0),
       );
-      // Real input includes the entire 44px target, not just an inert visual wrapper.
-      const startup = page.getByRole("switch", {
-        name: "启动时检查",
-        exact: true,
-      });
+      const startup = option("启动时检查", "关闭");
       await startup.click({ position: { x: 1, y: 1 } });
       await page.waitForFunction(() => window.fixtureCalls.length === 3);
-      assert(!(await startup.isChecked()));
-      await page
-        .getByRole("switch", { name: "显示更新徽标", exact: true })
-        .focus();
+      assert(await startup.isChecked());
+      await option("显示更新徽标", "关闭").focus();
       await page.keyboard.press("Space");
       await page.waitForFunction(() => window.fixtureCalls.length === 4);
-      assert(
-        !(await page
-          .getByRole("switch", { name: "显示更新徽标", exact: true })
-          .isChecked()),
-      );
+      assert(!await checked("显示更新徽标"));
       // During a native operation the edge of the target cannot toggle.
       await page
         .getByRole("button", { name: "下载 0.2.0", exact: true })
         .click();
-      await page
-        .getByRole("switch", { name: "启动时检查", exact: true })
-        .waitFor({ state: "attached" });
-      assert(await startup.isDisabled());
-      const b = await startup.boundingBox();
+      const startupOn = option("启动时检查", "开启");
+      await startupOn.waitFor({ state: "attached" });
+      assert(await startupOn.isDisabled());
+      const b = await startupOn.boundingBox();
       await page.mouse.click(b.x + 1, b.y + 1);
-      assert(!(await startup.isChecked()));
+      assert(!await checked("启动时检查"));
     }
     assert.deepEqual(errors, []);
     await page.screenshot({

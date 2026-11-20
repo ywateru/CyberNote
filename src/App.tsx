@@ -1,4 +1,3 @@
-import { buildInfo, releaseIdentityNotice } from "./build-info";
 import { SoftwareUpdateProvider, SoftwareUpdateSettings, UpdateBadge } from "./software-update";
 import { LocalBackupSettings, createLocalBackupClient } from "./local-backup";
 import type { EncryptedArchiveHost, EncryptedImportPreview, ImportCommitted } from "./local-backup/contracts";
@@ -5049,8 +5048,8 @@ function App() {
           conflictsOpen={conflictsOpen}
           onConflictsOpenChange={setConflictsOpen}
           syncConflicts={<SyncSettings conflictsOnly active={preferencesTab === "account" && conflictsOpen} onHandle={handle => { syncSettingsHandle.current=handle; }} />}
-          softwareUpdate={<><SoftwareUpdateSettings /><div className="settings121-list"><div className="settings121-row"><div className="settings121-label">发行身份<small>{buildInfo.releaseVersion || `产品版本 ${buildInfo.version}`}</small>{releaseIdentityNotice && <small>{releaseIdentityNotice}</small>}</div></div></div></>}
-          softwareUpdateBadge={<UpdateBadge />}
+          softwareUpdate={<SoftwareUpdateSettings />}
+          softwareUpdateBadge={openAbout => <UpdateBadge openAbout={openAbout} />}
           cloudSync={<><CloudSyncSettings key={cloudAccessKey} active={!cloudBlocked && preferencesTab === "account"} ports={{
             context: () => invoke("settings_host_context"),
             confirm: message => confirm(message,{title:"云端同步",kind:"warning"}),

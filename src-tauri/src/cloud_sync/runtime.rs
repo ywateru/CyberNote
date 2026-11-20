@@ -110,6 +110,9 @@ pub enum CloudCommand {
         #[serde(default)]
         recovery: Option<String>,
     },
+    PreviewSetup {
+        patch: ConfigPatch,
+    },
     Sync {
         #[serde(rename = "previewId")]
         preview_id: String,
@@ -291,6 +294,7 @@ impl CloudRuntime {
             return self.reply();
         }
         let _operation = self.operation.try_lock().map_err(|_| error("busy"))?;
+        let setup_preview = matches!(command, CloudCommand::PreviewSetup { .. });
         let (config, cancel, lease) = {
             let s = self.state()?;
             if self.files.read("state.json", 64 * 1024)?.as_deref() != s.raw.as_deref() {
@@ -315,7 +319,7 @@ impl CloudRuntime {
         if let Err(e) = &result {
             cancel.cancel();
             let mut s = self.state()?;
-            if s.config.revision == config.revision {
+            if !setup_preview && s.config.revision == config.revision {
                 s.last_error = Some(e.clone());
             }
         }
@@ -328,6 +332,30 @@ impl CloudRuntime {
         c: &Config,
         lease: Lease,
     ) -> Result<Reply> {
+        let command = match command {
+            CloudCommand::PreviewSetup { mut patch } => {
+                patch.enabled = Some(true);
+                let draft = c.patch(patch)?;
+                let remote = self.remote(&draft)?;
+                let (bundle, revision, bytes) = engine::read(&remote, &draft.passphrase).await?;
+                lease.check()?;
+                let preview = engine::preview(
+                    self.host.clone(),
+                    context,
+                    &draft,
+                    bundle,
+                    revision,
+                    bytes,
+                    "setup".into(),
+                )
+                .await?;
+                lease.check()?;
+                let mut reply = self.reply()?;
+                reply.preview = Some(preview.preview);
+                return Ok(reply);
+            }
+            command => command,
+        };
         let remote = self.remote(c)?;
         match command {
             CloudCommand::Test => {

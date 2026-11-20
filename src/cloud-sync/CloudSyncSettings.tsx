@@ -9,20 +9,35 @@ import type {
   CloudReply,
   CloudStatus,
   CloudSyncPorts,
+  ConfigPatch,
 } from "./types";
 import "./cloud-sync.css";
-import { CloudSelect } from "./CloudSelect";
+import { PreferenceSegments } from "../preferences-menu/PreferenceSegments";
+import { PreferenceSelect } from "../preferences-menu/PreferenceSelect";
+import { useMobileInteraction } from "../platform/interaction";
 const names = {
   webdav: "WebDAV",
-  s3: "S3 兼容存储",
-  github: "GitHub 私有仓库",
+  s3: "S3",
+  github: "GitHub",
 };
+const providers = [
+  { value: "webdav", label: names.webdav },
+  { value: "s3", label: names.s3 },
+  { value: "github", label: names.github },
+] as const;
+const intervals = [
+  { value: "0", label: "关闭" }, { value: "3", label: "3 分钟" },
+  { value: "15", label: "15 分钟" }, { value: "30", label: "30 分钟" },
+  { value: "60", label: "1 小时" },
+] as const;
 const fields: Record<
   CloudProvider,
   {
     key: string;
     label: string;
     hint?: string;
+    detail?: string;
+    advanced?: boolean;
     secret?: boolean;
     required?: boolean;
   }[]
@@ -30,13 +45,14 @@ const fields: Record<
   webdav: [
     {
       key: "endpoint",
-      label: "HTTPS 地址",
-      hint: "https://dav.example.com/dav/",
+      label: "地址",
+      hint: "https://dav.jianguoyun.com/dav/",
+      detail: "输入 WebDAV 服务的 HTTPS 地址。",
       required: true,
     },
-    { key: "directory", label: "目录", hint: "可留空" },
-    { key: "username", label: "用户名" },
-    { key: "password", label: "密码或应用密码", secret: true, required: true },
+    { key: "directory", label: "目录", hint: "可留空", advanced: true },
+    { key: "username", label: "用户", hint: "用户名" },
+    { key: "password", label: "密码", hint: "密码或应用密码", secret: true, required: true },
   ],
   s3: [
     {
@@ -55,21 +71,23 @@ const fields: Record<
     {
       key: "prefix",
       label: "Prefix",
-      hint: "可留空；使用路径风格，兼容 MinIO / R2",
+      hint: "可留空",
+      detail: "使用路径风格，兼容 MinIO 和 R2。",
+      advanced: true,
     },
     { key: "accessKey", label: "Access key", secret: true, required: true },
     { key: "secretKey", label: "Secret key", secret: true, required: true },
-    { key: "sessionToken", label: "Session token", secret: true },
+    { key: "sessionToken", label: "Session token", secret: true, advanced: true },
   ],
   github: [
     { key: "owner", label: "仓库所有者", required: true },
     { key: "repo", label: "私有仓库名称", required: true },
     { key: "branch", label: "已有分支", hint: "main", required: true },
-    { key: "prefix", label: "目录", hint: "可留空" },
+    { key: "prefix", label: "目录", hint: "可留空", advanced: true },
     {
       key: "token",
       label: "访问令牌",
-      hint: "需要此仓库的 Contents 读写权限",
+      detail: "需要此私有仓库的 Contents 读写权限。",
       secret: true,
       required: true,
     },
@@ -90,10 +108,11 @@ export function CloudSyncSettings({
   client = cloudSyncClient,
 }: CloudSyncSettingsProps) {
   const id = useId();
+  const mobile = useMobileInteraction();
   const [status, setStatus] = useState<CloudStatus>();
   const [open, setOpen] = useState(false);
   const [provider, setProvider] = useState<CloudProvider>("webdav");
-  const [enabled, setEnabled] = useState(false);
+  const [minutes, setMinutes] = useState<CloudStatus["minutes"]>(0);
   const [drafts, setDrafts] = useState<Partial<Record<CloudProvider, Draft>>>(
     {},
   );
@@ -113,6 +132,13 @@ export function CloudSyncSettings({
   const request = useRef({ ports, client });
   request.current = { ports, client };
   const setupButton = useRef<HTMLButtonElement>(null);
+  const restoreSetupFocus = useRef(false);
+  useLayoutEffect(() => {
+    if (!active) restoreSetupFocus.current = false;
+    if (open || busy || !restoreSetupFocus.current) return;
+    restoreSetupFocus.current = false;
+    setupButton.current?.focus({ preventScroll: true });
+  }, [active, open, busy]);
   useLayoutEffect(() => {
     mounted.current = active;
     const current = ++generation.current;
@@ -157,7 +183,6 @@ export function CloudSyncSettings({
           return;
         setStatus(reply.status);
         setProvider(reply.status.selected);
-        setEnabled(reply.status.enabled);
       })
       .catch((e) => {
         if (mounted.current && current === generation.current)
@@ -228,10 +253,11 @@ export function CloudSyncSettings({
     }
   };
   const close = () => {
+    restoreSetupFocus.current = true;
     setOpen(false);
+    setPreview(undefined);
     setDrafts({});
     setPassphrase("");
-    setupButton.current?.focus();
   };
   const draft = drafts[provider];
   const value = (key: string) =>
@@ -250,26 +276,19 @@ export function CloudSyncSettings({
         },
       },
     }));
-  const save = async (event: FormEvent) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!status) return;
-    const result = await run({
-      type: "save",
-      patch: {
-        expectedRevision: status.revision,
-        enabled,
-        selected: provider,
-        provider,
-        fields: draft?.values,
-        secrets: draft?.secrets,
-        ...(passphrase ? { passphrase } : {}),
-      },
-    });
-    if (result) {
-      setPassphrase("");
-      setDrafts({});
-      close();
-    }
+    const patch: ConfigPatch = {
+      expectedRevision: status.revision, enabled: true, selected: provider,
+      provider, minutes, fields: draft?.values, secrets: draft?.secrets,
+      ...(passphrase ? { passphrase } : {}),
+    };
+    const submitter = (event.nativeEvent as SubmitEvent).submitter;
+    if (!(submitter instanceof HTMLButtonElement)) return;
+    if (submitter.value === "preview") {
+      await run({ type: "previewSetup", patch });
+    } else if (await run({ type: "save", patch })) close();
   };
   const apply = async (mode: "sync" | "restore") => {
     if (!preview || busy) return;
@@ -278,6 +297,21 @@ export function CloudSyncSettings({
         ? `恢复所选 ${preview.versions} 个版本及 ${preview.attachments} 个附件？当前本机内容会先加密保留；恢复保留稳定 ID 和并发分支。`
         : `同步本机 ${preview.localNotes} 条笔记与${preview.remoteExists ? `远端 ${preview.versions} 个版本` : "新的空远端"}？本机与远端的并发版本都会保留。`;
     await run({ type: mode, previewId: preview.id }, question);
+  };
+  const field = (f: typeof fields[CloudProvider][number]) => {
+    const saved = f.secret && status?.providers[provider]?.credentialsSet[f.key];
+    return <label className="cloud-sync-field" key={`${provider}-${f.key}`}>
+      <span>{f.label}</span>
+      <span>
+        <input aria-label={f.label} type={f.secret ? "password" : "text"}
+          value={f.secret ? (draft?.secrets[f.key] ?? "") : value(f.key)}
+          placeholder={saved ? "已保存，输入新值可替换" : f.hint}
+          autoComplete={f.secret ? "new-password" : "off"} spellCheck={false}
+          disabled={busy} required={f.required && !saved}
+          onChange={event => update(f.key, event.target.value, !!f.secret)} />
+        {f.detail && <small>{f.detail}</small>}
+      </span>
+    </label>;
   };
   if (!active) return null;
   return (
@@ -316,61 +350,31 @@ export function CloudSyncSettings({
           disabled={busy || !status}
           aria-expanded={open}
           aria-controls={`${id}-form`}
-          onClick={() => (open ? close() : setOpen(true))}
+          onClick={() => {
+            if (open) close();
+            else if (status) {
+              setProvider(status.selected);
+              setMinutes(status.minutes);
+              setPreview(undefined);
+              setOpen(true);
+            }
+          }}
         >
-          {open ? "收起" : "设置…"}
+          {open ? "关闭" : "设置"}
         </button>
       </div>
       {open && status && (
-        <form id={`${id}-form`} className="cloud-sync-form" onSubmit={save}>
+        <form id={`${id}-form`} className="cloud-sync-form" onSubmit={submit} onChange={() => setPreview(undefined)}>
           <div className="cloud-sync-field">
-            <span>存储服务</span>
-            <CloudSelect
-              label="存储服务"
-              value={provider}
-              disabled={busy}
-              onChange={(v) => setProvider(v as CloudProvider)}
-              options={Object.entries(names).map(([value, label]) => ({
-                value,
-                label,
-              }))}
-            />
+            <span>同步到</span>
+            <div><PreferenceSegments label="同步到" value={provider} options={providers} disabled={busy}
+              onChange={next => { setProvider(next); setPreview(undefined); }} />
+              {status.enabled && <small>{provider === status.selected ? "当前正同步到这里。" : `当前使用 ${names[status.selected]}，保存后会切换服务。`}</small>}
+            </div>
           </div>
-          {fields[provider].map((f) => (
-            <label className="cloud-sync-field" key={`${provider}-${f.key}`}>
-              <span>{f.label}</span>
-              <span>
-                <input
-                  aria-label={f.label}
-                  type={f.secret ? "password" : "text"}
-                  value={
-                    f.secret ? (draft?.secrets[f.key] ?? "") : value(f.key)
-                  }
-                  placeholder={
-                    f.secret &&
-                    status.providers[provider]?.credentialsSet[f.key]
-                      ? "已保存；输入新值以替换"
-                      : f.hint
-                  }
-                  autoComplete="off"
-                  spellCheck={false}
-                  disabled={busy}
-                  required={
-                    enabled &&
-                    f.required &&
-                    !(
-                      f.secret &&
-                      status.providers[provider]?.credentialsSet[f.key]
-                    )
-                  }
-                  onChange={(e) => update(f.key, e.target.value, !!f.secret)}
-                />
-                {f.hint && <small>{f.hint}</small>}
-              </span>
-            </label>
-          ))}
+          {fields[provider].filter(option => !option.advanced).map(field)}
           <label className="cloud-sync-field">
-            <span>加密密码</span>
+            <span>口令</span>
             <span>
               <input
                 aria-label="加密密码"
@@ -379,7 +383,7 @@ export function CloudSyncSettings({
                 autoComplete="new-password"
                 minLength={8}
                 maxLength={1024}
-                required={enabled && !status.passphraseSet}
+                required={!status.passphraseSet}
                 disabled={busy}
                 placeholder={
                   status.passphraseSet
@@ -388,22 +392,28 @@ export function CloudSyncSettings({
                 }
                 onChange={(e) => setPassphrase(e.target.value)}
               />
-              <small>请妥善保管。远端仅保存密文，凭据只保存在本机。</small>
+              <small>文件在本机加密，远端只保存密文。请保管好口令，其他设备需要它才能打开文件。</small>
             </span>
           </label>
-          <label className="cloud-sync-field">
-            <span>启用所选服务</span>
-            <input
-              type="checkbox"
-              checked={enabled}
-              disabled={busy}
-              onChange={(e) => setEnabled(e.target.checked)}
-            />
-          </label>
-          <p className="cloud-sync-hint">
-            各服务配置分别保留；保存配置不会开始同步。支持笔记、附件与明暗偏好、桌面列表/画廊、排序、日期分组；皮肤、导航、密度、手机显示、窗口和调度配置留在本机，账户授权不上传。
-          </p>
+          <div className="cloud-sync-field">
+            <span>同步内容</span>
+            <div>文件夹、备忘录及附件<br />外观明暗、桌面显示方式、排序和日期分组
+              <small>账户授权、凭据和设备专属设置保留在本机。</small>
+            </div>
+          </div>
+          <details className="cloud-sync-advanced">
+            <summary>高级</summary>
+            {fields[provider].filter(option => option.advanced).map(field)}
+            <div className="cloud-sync-field"><span>自动同步</span><div>
+              <PreferenceSegments label="自动同步" value={String(minutes)} options={intervals} disabled={busy}
+                onChange={value => setMinutes(Number(value) as CloudStatus["minutes"])} />
+              <small>仅在应用运行且权限有效时执行。</small>
+            </div></div>
+            <p className="cloud-sync-hint cloud-sync-limits">单次上限为明文 32 MiB、密文 48 MiB、单附件 16 MiB、1024 个笔记或文件夹版本及 128 个设置头。超出时拒绝同步，不截断。</p>
+          </details>
           <div className="settings121-actions cloud-sync-tools">
+            {status.enabled && <button className="settings121-text cloud-sync-disable" type="button" disabled={busy}
+              onClick={async () => { if (await run({ type: "save", patch: { expectedRevision: status.revision, enabled: false } })) close(); }}>关闭同步</button>}
             <button
               className="settings121-text"
               type="button"
@@ -412,13 +422,14 @@ export function CloudSyncSettings({
             >
               取消
             </button>
-            <button className="settings121-text" type="submit" disabled={busy}>
-              保存配置
+            <button className="settings121-text" type="submit" value="preview" disabled={busy}>预览</button>
+            <button className="settings121-text cloud-sync-primary" type="submit" value="save" disabled={busy}>
+              {!status.enabled ? "开启" : status.selected === provider ? "保存" : `切换到 ${names[provider]}`}
             </button>
           </div>
         </form>
       )}
-      <div className="settings121-row cloud-sync-row">
+      {!open && status?.enabled && <><div className="settings121-row cloud-sync-row">
         <div className="settings121-label cloud-sync-who">
           <span>同步状态</span>
           <small>
@@ -442,45 +453,7 @@ export function CloudSyncSettings({
           >
             立即同步…
           </button>
-          <button
-            className="settings121-text"
-            disabled={busy || !status?.enabled}
-            onClick={() => void run({ type: "preview" })}
-          >
-            预览
-          </button>
         </div>
-      </div>
-      <div className="settings121-row cloud-sync-row">
-        <div className="settings121-label cloud-sync-who">
-          <span>自动同步</span>
-          <small>仅在应用运行且权限有效时执行</small>
-        </div>
-        <CloudSelect
-          label="自动同步"
-          disabled={busy || !status}
-          value={String(status?.minutes ?? 0)}
-          options={[
-            [0, "关闭"],
-            [3, "3 分钟"],
-            [15, "15 分钟"],
-            [30, "30 分钟"],
-            [60, "60 分钟"],
-          ].map(([value, label]) => ({
-            value: String(value),
-            label: String(label),
-          }))}
-          onChange={(v) =>
-            status &&
-            void run({
-              type: "save",
-              patch: {
-                expectedRevision: status.revision,
-                minutes: Number(v) as CloudStatus["minutes"],
-              },
-            })
-          }
-        />
       </div>
       <div className="settings121-row cloud-sync-row">
         <div className="settings121-label cloud-sync-who">
@@ -496,7 +469,8 @@ export function CloudSyncSettings({
             从远端恢复…
           </button>
           {!!status?.recoveries.length && (
-            <CloudSelect
+            <PreferenceSelect
+              mobile={mobile}
               label="预览本机保护版本"
               value=""
               disabled={busy}
@@ -514,17 +488,17 @@ export function CloudSyncSettings({
             />
           )}
         </div>
-      </div>
+      </div></>}
       {preview && (
         <div className="cloud-sync-preview" role="region" aria-label="同步预览">
           <p>
-            {preview.source === "remote" ? "远端预览" : "本机保护版本"}：
+            {preview.source === "setup" ? "配置预览" : preview.source === "remote" ? "远端预览" : "本机保护版本"}：
             {preview.versions} 个版本 · {preview.attachments} 个附件 ·{" "}
             {(preview.bytes / 1024).toFixed(1)} KiB
           </p>
           <p>
             本机 {preview.localNotes} 条笔记；远端含 {preview.conflicts}{" "}
-            组冲突。并发分支保留，恢复会产生可同步的新版本。
+            组冲突。{preview.source === "setup" ? "此预览没有保存配置或同步内容。" : "并发分支保留，恢复会产生可同步的新版本。"}
           </p>
           <div className="settings121-actions cloud-sync-tools">
             <button
@@ -534,7 +508,7 @@ export function CloudSyncSettings({
             >
               关闭预览
             </button>
-            {preview.remoteExists && (
+            {preview.source !== "setup" && preview.remoteExists && (
               <button
                 className="settings121-text"
                 disabled={busy}
@@ -555,11 +529,6 @@ export function CloudSyncSettings({
           </div>
         </div>
       )}
-      <p className="cloud-sync-hint cloud-sync-limits">
-        单次同步上限：明文 JSON 32 MiB、加密文件 48 MiB、单附件原字节 16
-        MiB；Base64 编码及 JSON 开销计入总量。最多 1024 个笔记/文件夹版本、128
-        个设置头；超出时拒绝，不截断。GitHub 同样受这些更小上限限制。
-      </p>
       <div
         className="cloud-sync-feedback"
         role={failure ? "alert" : "status"}

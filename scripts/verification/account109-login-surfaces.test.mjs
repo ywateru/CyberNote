@@ -123,13 +123,13 @@ function setup(t,{initial=signedOutAccount(),reply,onConflicts=()=>{}}={}) {
     all,handle:()=>handle,text:()=>container.textContent,
     panel:()=>all().find(e=>props(e).className==='account-settings'),
     radio:value=>all().find(e=>e.localName==='input'&&props(e).name==='account-login-surface'&&props(e).value===value),
-    storageRadio:value=>all().find(e=>e.localName==='input'&&props(e).name==='account-credential-storage'&&props(e).value===value),
+    storageRadio:value=>all().find(e=>props(e).role==='radio'&&e.textContent===(value==='encryptedFile'?'本机加密文件':'系统钥匙串')),
     buttons:()=>all().filter(e=>e.localName==='button'),
     button:label=>all().find(e=>e.localName==='button'&&e.textContent===label),
     actionLabels:()=>{const section=all().find(e=>props(e)['aria-label']==='CyberNote 账户');return descendants(section).filter(e=>e.localName==='button').map(e=>e.textContent);},
     async click(label){const button=h.button(label);assert(button,`Missing ${label}`);assert(!props(button).disabled);const modal=all().find(e=>e.localName==='dialog'&&e.open);assert(!modal||modal.contains(button),'host actions must respect native modal isolation');await act(async()=>{props(button).onClick({currentTarget:button});});},
     async choose(value){const radio=h.radio(value);assert(radio);const fieldset=all().find(e=>e.localName==='fieldset');assert(!props(fieldset).disabled);await act(async()=>{props(radio).onChange();});},
-    async chooseStorage(value){const radio=h.storageRadio(value);assert(radio);const fieldset=all().find(e=>e.localName==='fieldset'&&descendants(e).includes(radio));assert(!props(fieldset).disabled);await act(async()=>{props(radio).onChange();});},
+    async chooseStorage(value){const radio=h.storageRadio(value);assert(radio);assert(!props(radio)['aria-disabled']);await act(async()=>{props(radio).onClick();});},
     async poll(){await act(async()=>{await handle.run({type:'status'});});},
     async tick(){await act(async()=>{for(const fn of intervals.values())fn();});},
   };
@@ -775,7 +775,7 @@ test('credential storage UI requires confirmation, sends one exact IPC and refle
  const h=setup(t,{initial,reply:(command,model)=>{
   if(command.type==='setCredentialStorage'){const next={...model.get(),credentialStorage:command.storage};model.set(next);return next;}
  }});
- await h.mount();assert(props(h.storageRadio('keychain')).checked);assert(props(h.storageRadio('encryptedFile')).checked===false);
+ await h.mount();assert(props(h.storageRadio('keychain'))['aria-checked']);assert(props(h.storageRadio('encryptedFile'))['aria-checked']===false);
  await h.chooseStorage('encryptedFile');assert(h.calls.every(c=>c.type==='status'));
  await h.click('应用存储方式');
  assert(h.handle().inspect().confirmation);assert(h.calls.every(c=>c.type==='status'));
@@ -785,7 +785,7 @@ test('credential storage UI requires confirmation, sends one exact IPC and refle
  await h.click('应用存储方式');await h.click('切换并退出当前身份');
  assert.deepEqual(h.calls.filter(c=>c.type==='setCredentialStorage'),[{type:'setCredentialStorage',storage:'encryptedFile'}]);
  assert.equal(h.handle().inspect().status.credentialStorage,'encryptedFile');
- assert(props(h.storageRadio('encryptedFile')).checked);
+ assert(props(h.storageRadio('encryptedFile'))['aria-checked']);
  assert(h.text().includes('凭据存储已切换为本机加密文件'));
  assert(h.text().includes('原存储数据已保留'));
 });
@@ -793,8 +793,8 @@ test('credential storage UI requires confirmation, sends one exact IPC and refle
 test('new-install storage UI presents encrypted file as the default and Keychain as optional',async t=>{
  const h=setup(t,{initial:{...signedOutAccount(),credentialStorage:'encryptedFile'}});
  await h.mount();
- assert(props(h.storageRadio('encryptedFile')).checked);
- assert(props(h.storageRadio('keychain')).checked===false);
+ assert(props(h.storageRadio('encryptedFile'))['aria-checked']);
+ assert(props(h.storageRadio('keychain'))['aria-checked']===false);
  assert(h.text().includes('登录与安全'));
  assert(h.text().includes('默认方式，登录信息加密保存在此设备'));
  assert(h.text().includes('系统钥匙串'));
@@ -812,8 +812,8 @@ test('credential storage changes are fenced for signed-in, authorizing, busy and
   {...base,state:'error',error:{code:'account_cleanup_required',message:'safe'}},
  ];
  for(const initial of states) {
-  const h=setup(t,{initial});await h.mount();const fieldset=h.all().find(e=>e.localName==='fieldset'&&descendants(e).some(e=>props(e).name==='account-credential-storage'));
-  assert(props(fieldset).disabled);assert(!h.button('应用存储方式'));
+  const h=setup(t,{initial});await h.mount();
+  assert(props(h.storageRadio('encryptedFile'))['aria-disabled']);assert(!h.button('应用存储方式'));
   const before=h.calls.length;
   await act(async()=>{await h.handle().run({type:'setCredentialStorage',storage:'encryptedFile'});});
   assert.equal(h.handle().inspect().confirmation,false);assert.equal(h.calls.length,before);

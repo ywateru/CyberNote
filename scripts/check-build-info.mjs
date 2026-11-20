@@ -62,12 +62,18 @@ for (const mobile of [false,true]) {
   try {
     const {page}=runtime;
     await page.getByRole('button',{name:'设置',exact:true}).click();
-    if(mobile) await page.getByRole('button',{name:/外观与字号/}).click();
+    const category=async name=>{
+      if(mobile && await page.getByRole('button',{name:'返回设置',exact:true}).isVisible()) await page.getByRole('button',{name:'返回设置',exact:true}).click();
+      await page.getByRole(mobile?'button':'tab',{name,exact:!mobile}).click();
+    };
+    await category('关于');
     const panel=page.getByRole('region',{name:'版本信息',exact:true}); await panel.scrollIntoViewIfNeeded();
     check(`${mobile?'Android layout':'Mac layout'} shows actual version, timestamp and complete source identity`, (await panel.innerText()).includes(info.version) && (await panel.innerText()).includes(info.builtAt.replace('T',' ').replace('Z',' UTC')) && (await panel.innerText()).includes(info.sourceFingerprint));
     for (const theme of ['light','dark']) {
-      if(mobile) await page.getByRole('combobox',{name:'外观',exact:true}).selectOption(theme);
-      else await page.getByRole('radio',{name:theme==='dark'?'深色':'浅色',exact:true}).click();
+      await category('外观与字号');
+      await page.getByRole('radio',{name:theme==='dark'?'深色':'浅色',exact:true}).click();
+      await page.waitForFunction(scheme => document.documentElement.classList.contains('dark') === (scheme === 'dark'), theme);
+      await category('关于');
       await panel.scrollIntoViewIfNeeded();
       check(`${mobile?'390px mobile':'desktop'} ${theme} build identity fits without horizontal overflow`,await panel.evaluate(el=>el.scrollWidth<=el.clientWidth && el.getBoundingClientRect().left>=0 && el.getBoundingClientRect().right<=innerWidth));
       await page.screenshot({path:resolve(output,`${mobile?'mobile':'desktop'}-${theme}.png`)});

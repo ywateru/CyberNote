@@ -23,26 +23,15 @@
 .account-login-method:disabled label { color: var(--secondary); cursor: default; }
 .account-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .account-actions:empty { display: none; }
-.account-settings button { min-height: max(28px, var(--interface-hit-min, 28px)); min-width: 64px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--line); border-radius: var(--radius-7); background: var(--grouped); white-space: normal; overflow-wrap: anywhere; text-align: center; }
+.account-settings button:not(.preferences-segments > button) { min-height: max(28px, var(--interface-hit-min, 28px)); min-width: 64px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--line); border-radius: var(--radius-7); background: var(--grouped); white-space: normal; overflow-wrap: anywhere; text-align: center; }
 .account-storage-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; min-height: 44px; cursor: pointer; font-size: .9em; font-weight: 500; list-style: none; }
 .account-storage-summary::-webkit-details-marker { display: none; }
 .account-storage-summary::after { content: ""; width: 6px; height: 6px; flex-shrink: 0; border-right: 1.5px solid var(--secondary); border-bottom: 1.5px solid var(--secondary); transform: rotate(45deg); margin: 0 3px 4px; }
 .account-storage-group[open] > .account-storage-summary::after { transform: rotate(225deg); margin-bottom: -3px; }
 .account-storage-current { flex: 1; color: var(--secondary); text-align: end; font-size: .9em; font-weight: 400; }
 .account-storage-summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: var(--radius-5); }
-.account-storage-group > .account-help { font-size: .85em; }
+.account-storage-editor > .account-help { font-size: .85em; }
 .account-local-notice { font-size: .85em; }
-.account-storage-options { min-width: 0; margin: 16px 0 0; padding: 0; border: 0; }
-.account-storage-options legend { padding: 0; margin-bottom: 8px; font-weight: 600; }
-.account-storage-options label { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-8); cursor: pointer; }
-.account-storage-options label + label { margin-top: 8px; }
-.account-storage-options input { flex-shrink: 0; width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); }
-.account-storage-options label > span { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: center; gap: 2px 8px; min-width: 0; }
-.account-storage-options svg { grid-row: 1 / span 2; width: 18px; height: 18px; color: var(--secondary); }
-.account-storage-options strong { font-weight: 600; }
-.account-storage-options small { color: var(--secondary); line-height: 1.45; }
-.account-storage-options label:has(input:checked) { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); background: color-mix(in srgb, var(--accent) 5%, var(--paper)); }
-.account-storage-options:disabled label { color: var(--secondary); cursor: default; }
 .account-settings .account-primary { background: var(--selection); color: var(--action-ink); border-color: transparent; }
 .account-help { color: var(--secondary); font-size: .9em; margin: 10px 0; }
 .account-toggle { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -103,7 +92,6 @@
 .account-notice:empty { display: none; }
 .preferences-mobile .account-group { padding: 16px; margin-bottom: 18px; border: 0; border-radius: var(--radius-12); background: var(--paper); }
 .preferences-mobile .account-settings button { min-height: 44px; }
-.preferences-mobile .account-storage-options label { padding: 10px; }
 .account-device-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .account-device-heading h4 { margin: 0; }
 .account-device-heading .account-help { margin: 4px 0 0; font-size: .85em; }
@@ -226,8 +214,8 @@
 .preferences-workspace .account-avatar { width: 30px; height: 30px; border-radius: 8px; background: var(--settings-editor); color: var(--settings-muted); }
 .preferences-workspace .account-avatar svg { width: 18px; height: 18px; }
 .preferences-workspace .account-profile-group > .account-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 2px; margin: 0; padding: 8px 12px 8px 0; max-width: 180px; }
-.preferences-workspace .account-settings button:not(.account-device-open) { min-width: 0; border: 0; border-radius: 6px; background: transparent; color: var(--settings-control); padding: 3px 7px; font-size: calc(12px * var(--settings-font-scale)); }
-.preferences-workspace .account-settings button:not(.account-device-open):hover:not(:disabled) { background: var(--settings-pill); color: var(--settings-fg); }
+.preferences-workspace .account-settings button:not(.account-device-open, .preferences-segments > button) { min-width: 0; border: 0; border-radius: 6px; background: transparent; color: var(--settings-control); padding: 3px 7px; font-size: calc(12px * var(--settings-font-scale)); }
+.preferences-workspace .account-settings button:not(.account-device-open, .preferences-segments > button):hover:not(:disabled) { background: var(--settings-pill); color: var(--settings-fg); }
 .preferences-workspace .account-settings button.account-primary { background: transparent; color: var(--settings-accent); }
 .preferences-workspace .account-settings button.account-primary:hover:not(:disabled) { background: var(--settings-accent-soft); color: var(--settings-accent); }
 .preferences-workspace .account-login-method { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; grid-column: 1 / -1; margin: 0; padding: 10px 16px; min-height: 56px; border-top: 1px solid var(--settings-divider); }
@@ -260,11 +248,12 @@
 .preferences-workspace .account-device-footnote { padding: 10px 16px; margin: 0; border-top: 1px solid var(--settings-divider); }
 .preferences-workspace .account-devices-empty { border-top: 1px solid var(--settings-divider); padding: 12px 16px; background: transparent; border-radius: 0; }
 .preferences-workspace .account-devices-empty > svg { width: 24px; height: 24px; }
-.preferences-workspace .account-storage-group { padding: 0 16px; }
-.preferences-workspace .account-storage-summary { min-height: 56px; font-size: 1em; font-weight: 400; }
-.preferences-workspace .account-storage-options label { border: 0; border-radius: 0; border-top: 1px solid var(--settings-divider); padding: 12px 0; background: transparent; margin: 0; }
-.preferences-workspace .account-storage-options label:has(input:checked) { background: transparent; }
-.preferences-workspace .account-error { margin: 0 0 12px; border: 0; border-left: 2px solid var(--danger); border-radius: 0; padding: 10px 14px; }
+.preferences-workspace .account-storage-summary { font-size: 1em; font-weight: 500; border-radius: 12px; }
+.preferences-workspace .account-storage-group[open] > summary { border-radius: 12px 12px 0 0; }
+.preferences-workspace .account-storage-editor { border-top: 1px solid var(--settings-divider); }
+.preferences-workspace .account-storage-editor > .account-help { margin: 0; padding: 0 14px 12px; }
+.preferences-workspace .account-storage-editor > .account-actions { justify-content: flex-end; margin: 0; padding: 4px 12px 10px; }
+.preferences-workspace .account-error { margin: 0 0 12px; background: var(--settings-card); border: 1px solid var(--settings-line); border-radius: 12px; padding: 10px 14px; }
 .preferences-workspace .account-error h4 { font-weight: 500; }
 .preferences-workspace .account-error p { margin-bottom: 4px; font-size: .9em; }
 .preferences-workspace .account-notice { background: transparent; padding: 8px 2px; }

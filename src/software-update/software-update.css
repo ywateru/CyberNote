@@ -14,71 +14,7 @@
 .software-update-value code {
   font-size: 0.95em;
 }
-.software-update-settings button,
-.software-update-settings select {
-  font: inherit;
-}
-.software-update-settings .settings121-text {
-  color: #63636b;
-  font-size: 12px;
-  padding: 3px 7px;
-  border-radius: 6px;
-}
-.dark .software-update-settings .settings121-text {
-  color: #a1a1aa;
-}
-.software-update-settings button:disabled,
-.software-update-settings select:disabled {
-  opacity: 0.5;
-}
-.software-update-toggle {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.software-update-toggle input[role="switch"] {
-  position: absolute;
-  inset: 0;
-  width: 44px;
-  height: 44px;
-  margin: 0;
-  opacity: 0;
-  cursor: inherit;
-}
-.software-update-toggle-track {
-  width: 30px;
-  height: 18px;
-  border-radius: 999px;
-  background: var(--settings-muted, var(--secondary));
-  pointer-events: none;
-}
-.software-update-toggle-track::before {
-  content: "";
-  display: block;
-  width: 14px;
-  height: 14px;
-  margin: 2px;
-  border-radius: 50%;
-  background: var(--settings-card, var(--paper));
-}
-.software-update-toggle input:checked + .software-update-toggle-track {
-  background: var(--settings-accent, var(--accent));
-}
-.software-update-toggle input:checked + .software-update-toggle-track::before {
-  transform: translateX(12px);
-}
-.software-update-toggle input:focus-visible + .software-update-toggle-track {
-  outline: 2px solid var(--settings-accent, var(--focus));
-  outline-offset: 3px;
-}
-.software-update-toggle input:disabled {
-  cursor: default;
-}
-.software-update-toggle input:disabled + .software-update-toggle-track {
+.software-update-settings button:disabled {
   opacity: 0.5;
 }
 .software-update-settings :is(button, select, input, summary):focus-visible {
@@ -135,9 +71,6 @@
   color: var(--settings-muted, var(--secondary));
   font-size: 0.85em;
   line-height: 1.55;
-}
-.software-update-badge {
-  color: inherit;
 }
 @media (max-width: 520px) {
   .software-update-settings .settings121-text,

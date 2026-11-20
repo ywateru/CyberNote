@@ -124,10 +124,17 @@
 .preferences-update-pill > svg { width: 12px; height: 12px; flex-shrink: 0; }
 .preferences-update-action:hover .preferences-update-pill { background: color-mix(in srgb, var(--settings-accent-soft), var(--settings-accent) 10%); }
 .preferences-mobile .preferences-update-action { min-height: 44px; min-width: 44px; }
+.preferences-update-badge { display: flex; align-items: center; flex-shrink: 0; gap: 2px; }
+.preferences-workspace .preferences-update-hide { display: grid; place-items: center; padding: 0; width: 22px; height: 22px; color: var(--settings-control); }
+@media (hover: hover) {
+  .preferences-desktop .preferences-update-hide { opacity: 0; }
+  .preferences-desktop .preferences-update-badge:hover .preferences-update-hide,
+  .preferences-desktop .preferences-update-hide:focus-visible { opacity: 1; }
+}
+.preferences-mobile .preferences-workspace .preferences-update-hide { width: 44px; }
 .preferences-search-notice { flex-shrink: 0; margin: 0; padding: 8px 20px; font-size: .9em; color: var(--settings-control); }
-.preferences-search-results, .preferences-update-pane { overflow-y: auto; min-height: 0; padding: 16px 20px 24px; overscroll-behavior: contain; }
+.preferences-search-results { overflow-y: auto; min-height: 0; padding: 16px 20px 24px; overscroll-behavior: contain; }
 .preferences-search-results > p { color: var(--settings-muted); margin: 0 0 12px; font-size: .9em; }
-.preferences-pane-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .preferences-content { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; }
 .preferences-panel { flex: 1; min-width: 0; min-height: 0; }
 .preferences-settings { overflow-y: auto; overscroll-behavior: contain; padding: 20px; }
@@ -140,11 +147,10 @@
 .preferences-row small, .preferences-details-toggle small, .settings121-label > small { display: block; color: var(--settings-muted); font-size: .85em; font-weight: 400; margin-top: 2px; line-height: 1.45; }
 .preferences-row select, .settings121-row select { width: auto; max-width: 100%; min-width: 0; min-height: 32px; padding: 4px 6px; border: 0; border-radius: 6px; background: transparent; color: var(--settings-accent); text-align: right; margin-left: auto; }
 .preferences-row select option, .settings121-row select option { background: var(--settings-card); color: var(--settings-fg); }
-.preferences-segments, .settings121-segments { display: flex; flex-wrap: wrap; margin-left: auto; padding: 2px; gap: 2px; border-radius: 7px; background: var(--settings-bg); max-width: 100%; }
-.preferences-segments > button, .settings121-segments > button { color: var(--settings-muted); padding: 0 10px; height: 22px; min-height: 22px; border-radius: 5px; font-size: calc(12px * var(--settings-font-scale)); }
-.preferences-segments > button[aria-checked="true"], .settings121-segments > button[aria-checked="true"] { background: var(--settings-card); color: var(--settings-fg); box-shadow: 0 1px 3px #0001; font-weight: 500; }
-.preferences-segments > button[aria-disabled="true"], .settings121-segments > button[aria-disabled="true"] { opacity: .5; cursor: default; }
-.preferences-check input { width: 18px; height: 18px; margin: 0; accent-color: var(--settings-accent); }
+.preferences-segments { display: flex; flex-wrap: wrap; margin-left: auto; padding: 2px; gap: 2px; border-radius: 7px; background: var(--settings-bg); max-width: 100%; }
+.preferences-segments > button { color: var(--settings-muted); padding: 0 10px; height: 22px; min-height: 22px; border-radius: 5px; font-size: calc(12px * var(--settings-font-scale)); }
+.preferences-segments > button[aria-checked="true"] { background: var(--settings-card); color: var(--settings-fg); box-shadow: 0 1px 3px #0001; font-weight: 500; }
+.preferences-segments > button[aria-disabled="true"] { opacity: .5; cursor: default; }
 .preferences-help, .preferences-footnote { font-size: .85em; color: var(--settings-muted); line-height: 1.55; margin: 8px 16px 12px; }
 .preferences-footnote { margin: 10px 2px 16px; }
 .preferences-error { flex-shrink: 0; margin: 0; padding: 10px 20px; color: var(--danger); overflow-wrap: anywhere; }
@@ -162,6 +168,7 @@
 .preferences-build-info dt { color: var(--settings-muted); }
 .preferences-build-info dt, .preferences-build-info dd { margin: 0; min-width: 0; font-size: .88em; }
 .preferences-build-info dd { overflow-wrap: anywhere; user-select: text; -webkit-user-select: text; }
+.preferences-build-info dd small { display: block; color: var(--settings-muted); }
 .preferences-build-info code { display: block; font-size: .95em; }
 .preferences-interface-details { margin-bottom: 12px; }
 .preferences-details-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 48px; text-align: left; padding: 12px 12px 12px 14px !important; color: var(--settings-fg) !important; font: inherit !important; }
@@ -238,7 +245,8 @@
 .preferences-mobile .preferences-search input { min-height: 42px; }
 .preferences-mobile .preferences-search button { min-width: 44px; min-height: 44px; margin-right: -7px; }
 .preferences-mobile .preferences-workspace :is(button, select, summary) { min-height: 44px; }
-.preferences-mobile .preferences-settings, .preferences-mobile .preferences-update-pane, .preferences-mobile .preferences-search-results { padding: 12px 16px 24px; }
+.preferences-mobile .preferences-segments > button { min-width: 44px; }
+.preferences-mobile .preferences-settings, .preferences-mobile .preferences-search-results { padding: 12px 16px 24px; }
 .preferences-mobile .preferences-row { padding: 12px 14px; }
 .preferences-mobile .preferences-row > span { flex-basis: 45%; }
 .preferences-mobile .preferences-row > select { max-width: 53%; }

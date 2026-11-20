@@ -1,6 +1,5 @@
-import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 // Override for another machine. This is a dev verification dependency only.
 const runtime =
@@ -20,9 +19,7 @@ const browser = await (useWebkit ? webkit : chromium).launch(
           "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
       },
 );
-const hostCss = execFileSync("git", ["show", "e29a7d8c:src/Preferences.css"], {
-  encoding: "utf8",
-});
+const hostCss = await readFile("src/Preferences.css", "utf8");
 const checks = [],
   errors = [];
 const origin = process.env.UPDATE_PROOF_ORIGIN ?? "http://127.0.0.1:1431";
@@ -64,28 +61,24 @@ try {
   await page.setViewportSize({ width: 900, height: 950 });
   await visit("empty");
   await page.getByText("尚无稳定版发布", { exact: true }).waitFor();
+  assert.equal(await page.getByRole("button", { name: "更新", exact: true }).count(), 0);
   assert.equal(await page.getByRole("button", { name: /下载/ }).count(), 0);
-  await page.getByRole("switch", { name: "定时检查", exact: true }).uncheck();
-  assert(await page.getByLabel("检查频率", { exact: true }).isDisabled());
-  await page.getByRole("switch", { name: "定时检查", exact: true }).check();
-  await page.getByLabel("检查频率", { exact: true }).click();
-  await page
-    .getByRole("menuitemradio", { name: "15 分钟", exact: true })
-    .click();
-  await page.getByLabel("更新频道", { exact: true }).click();
-  await page
-    .getByRole("menuitemradio", { name: "每日版", exact: true })
-    .click();
-  await page.getByRole("switch", { name: "启动时检查", exact: true }).focus();
-  await page.keyboard.press("Space");
+  const segments = (label) => page.getByRole("radiogroup", { name: label, exact: true });
+  const option = (label, name) => segments(label).getByRole("radio", { name, exact: true });
+  await option("定时检查", "关闭").click();
+  assert.equal(await option("检查频率", "30 分钟").getAttribute("aria-disabled"), "true");
+  await option("定时检查", "开启").click();
+  await option("检查频率", "30 分钟").click();
+  await option("更新频道", "每日版").click();
+  await option("启动时检查", "开启").focus();
+  await page.keyboard.press("ArrowLeft");
   assert.equal(
-    await page
-      .getByRole("switch", { name: "启动时检查", exact: true })
-      .isChecked(),
-    false,
+    await option("启动时检查", "关闭").getAttribute("aria-checked"),
+    "true",
   );
   await visit("error");
-  await page.getByRole("button", { name: "下载 0.2.0", exact: true }).click();
+  assert.deepEqual(await page.evaluate(() => window.fixtureCalls), []);
+  await page.getByRole("button", { name: "更新", exact: true }).click();
   await page.getByRole("progressbar", { name: "更新下载进度" }).waitFor();
   await page
     .getByText("SHA-256 校验失败，请重新下载", { exact: true })
@@ -135,7 +128,7 @@ try {
   );
   assert.equal(
     await page
-      .locator(".software-update-badge :is(button,input,a,select)")
+      .locator(".preferences-update-badge")
       .count(),
     0,
   );

@@ -80,3 +80,8 @@ repository, release, validation, account, and synchronization constraints.
     recurring failures into a short actionable rule or a check near the work
     that repeatedly misses it. CyberNote's release and synchronization acceptance
     rules remain in `agent.md`.
+
+11. **Use shared controls in settings.** Use segmented choices for short, fixed
+    options and a dropdown for long labels or variable lists. Follow the
+    [settings control rules](docs/ui/preferences.md#控件选择规则) for layout,
+    keyboard interaction, and confirmation.

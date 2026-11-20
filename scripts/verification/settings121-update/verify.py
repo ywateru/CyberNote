@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Compile the actual updater modules in an isolated crate (no app/store access).
 --commands also typechecks Tauri handlers and real generate_handler registration.
-No updater is constructed against production directories; no live feed is used.
+No updater is constructed against production directories. --live-release
+additionally checks the public feed using the production HTTP client on this host.
 """
 import argparse
 import os
@@ -14,6 +15,7 @@ import json
 args = argparse.ArgumentParser()
 args.add_argument('--commands', action='store_true')
 args.add_argument('--identity-fixtures', action='store_true')
+args.add_argument('--live-release', nargs=2, metavar=('INSTALLED', 'EXPECTED'))
 opt = args.parse_args()
 root = Path(__file__).resolve().parents[3]
 source = root / 'src-tauri/src/software_update'
@@ -52,13 +54,32 @@ tempfile = "3"
  builder.invoke_handler(tauri::generate_handler![commands::software_update_status,commands::software_update_configure,commands::software_update_check,commands::software_update_download,commands::software_update_install])
 }
 '''
+    if opt.live_release:
+        installed, expected = (json.dumps(v) for v in opt.live_release)
+        text += f'''
+#[tokio::test]
+async fn production_release_check() {{
+    let directory = tempfile::tempdir().unwrap();
+    let updater = SoftwareUpdater::new(directory.path().join("update"), std::sync::Arc::new(DenyInstall)).unwrap();
+    assert_eq!(updater.status().current_version, {installed});
+    updater.configure(PreferencePatch {{ channel: Some(storage::Channel::Preview), ..Default::default() }}).unwrap();
+    let status = updater.check().await.unwrap();
+    assert_eq!(status.phase, "available");
+    assert_eq!(status.downloaded, 0);
+    let release = status.release.unwrap();
+    assert_eq!(release.version, {expected});
+    println!("production feed: {{}} → {{}} ({{}}, {{}} bytes)", status.current_version, release.version, release.package, release.size);
+}}
+'''
     (directory / 'proof.rs').write_text(text)
     shutil.copyfile(root / 'src-tauri/Cargo.lock', directory / 'Cargo.lock')
     env = dict(os.environ, CARGO_TARGET_DIR='/tmp/cybernote-settings121-update-target')
+    if opt.live_release:
+        env['CYBERNOTE_RELEASE_VERSION'] = opt.live_release[0]
     # Adapt the copied root lock to the tiny harness using only this host target.
     # Full metadata walks unrelated platform packages that may not be cached.
     subprocess.run(['cargo', 'test', '--offline', '--no-run', '--manifest-path', str(directory / 'Cargo.toml')], env=env, check=True)
-    subprocess.run(['cargo', 'test', '--offline', '--locked', '--manifest-path', str(directory / 'Cargo.toml'), '--', '--test-threads=1'], env=env, check=True)
+    subprocess.run(['cargo', 'test', '--offline', '--locked', '--manifest-path', str(directory / 'Cargo.toml'), '--', '--test-threads=1', '--nocapture'], env=env, check=True)
 
 if opt.identity_fixtures:
     # A tiny actual-source harness compiles each option_env variant without rebuilding the app.

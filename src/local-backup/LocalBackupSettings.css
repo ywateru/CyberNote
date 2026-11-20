@@ -87,18 +87,18 @@
   padding: 9px 16px;
 }
 @media (max-width: 600px) {
-  .local-backup-settings .settings121-actions:has(> .settings121-segments) {
+  .local-backup-settings .settings121-actions:has(> .preferences-segments) {
     flex-basis: 100%;
   }
   .local-backup-settings button,
   .local-backup-settings .local-backup-fold {
     min-height: 44px;
   }
-  .local-backup-settings .settings121-segments {
+  .local-backup-settings .preferences-segments {
     width: 100%;
     justify-content: space-between;
   }
-  .local-backup-settings .settings121-segments > button {
+  .local-backup-settings .preferences-segments > button {
     height: auto;
     padding: 4px 6px;
     flex: 1;

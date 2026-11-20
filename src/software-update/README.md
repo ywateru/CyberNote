@@ -12,7 +12,7 @@ import { SoftwareUpdateProvider, SoftwareUpdateSettings, UpdateBadge }
   <Preferences
     {...existingPreferencesProps}
     softwareUpdate={<SoftwareUpdateSettings />}
-    softwareUpdateBadge={<UpdateBadge />}
+    softwareUpdateBadge={openAbout => <UpdateBadge openAbout={openAbout} />}
   />
 </SoftwareUpdateProvider>
 ```
@@ -22,13 +22,13 @@ Public props:
 - `SoftwareUpdateProvider({ children: ReactNode, client?: SoftwareUpdateClient })`:
   one main-window root instance, preserved while Preferences is closed.
   `client` is dependency injection for isolated fixtures only; omit in production.
-- `SoftwareUpdateSettings()` has no props. Uses compact rows, native form
-  controls, localized Chinese copy, the shared `.settings121-list/row/label/actions/text` primitives, scoped
+- `SoftwareUpdateSettings()` has no props. Uses compact rows and shared segmented
+  controls in About. Uses `.settings121-list/row/label/actions/text` primitives, scoped
   `.software-update-*` CSS and `--settings-*` tokens in `.preferences-workspace`. It owns no modal/focus trap or global Preferences styling.
-- `UpdateBadge()` has no props and renders a non-interactive span inside the
-  host update button. Preferences owns navigation/focus. The settings panel
-  owns three-day dismissal/restoration using `quietUntil`. When suppressed, the
-  badge keeps the generic 更新 label so the host button stays accessible.
+- `UpdateBadge({ openAbout })` renders only when there is a newer release and
+  the badge is enabled. It opens About and starts an available download or
+  requests confirmation for a ready macOS package. Its dismiss action sets
+  `quietUntil` for three days. About can restore the badge.
 - `useSoftwareUpdate()` returns `status: UpdateStatus | null`, `error: string |
   null`, `busy: boolean`, and async `check()`, `download()`, `install()`,
   `configure(patch: Partial<UpdatePreferences>)`. Methods expose native state and
@@ -68,7 +68,5 @@ have priority over stale native errors. External-file CAS failures may continue
 to reject: the user must reopen/reload the application before reapplying, rather
 than silently overwriting intervening preferences.
 
-Switch inputs and associated labels have real 44×44px hit areas, retaining a
-30×18 visual track; edge clicks, disabled states, label association and keyboard
-focus are covered by the blocking regression fixture. Native recovery_required
-retains both bundles; no missing-ready failure claims safe automatic rollback.
+Mobile segmented choices keep a minimum 44px hit height. Native recovery_required
+retains both bundles until recovery is confirmed.
