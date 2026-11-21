@@ -1,11 +1,160 @@
 import { Extension, Mark, mergeAttributes } from "@tiptap/core";
 import { Plugin, PluginKey, type EditorState } from "@tiptap/pm/state";
+import type { Transaction } from "@tiptap/pm/state";
 import type { Node as PMNode } from "@tiptap/pm/model";
 import type { EditorView } from "@tiptap/pm/view";
 import { Mapping } from "@tiptap/pm/transform";
 import { validTagName } from "./note-tags";
 
 const key = new PluginKey("notesCommittedTags");
+
+type Range = { from: number; to: number };
+type RangeStep = {
+  from?: number;
+  to?: number;
+  pos?: number;
+  gapFrom?: number;
+  gapTo?: number;
+};
+
+function clampRange(range: Range, size: number): Range {
+  const from = Math.max(0, Math.min(range.from, size));
+  const to = Math.max(0, Math.min(range.to, size));
+  return from <= to ? { from, to } : { from: to, to: from };
+}
+
+function mergeRanges(ranges: readonly Range[], size: number): Range[] {
+  const ordered = ranges
+    .map((range) => clampRange(range, size))
+    .sort((a, b) => a.from - b.from || a.to - b.to);
+  const merged: Range[] = [];
+  for (const range of ordered) {
+    const last = merged.at(-1);
+    if (last && range.from <= last.to + 1) last.to = Math.max(last.to, range.to);
+    else merged.push({ ...range });
+  }
+  return merged;
+}
+
+/** Map prior dirty ranges and collect only the steps' actual edit ranges. */
+function dirtyRanges(
+  transactions: readonly Transaction[],
+  previous: readonly Range[],
+): Range[] {
+  let ranges = [...previous];
+  for (const transaction of transactions) {
+    ranges = ranges.map((range) => ({
+      from: transaction.mapping.map(range.from, -1),
+      to: transaction.mapping.map(range.to, 1),
+    }));
+    transaction.steps.forEach((step, index) => {
+      const source = step as RangeStep;
+      const positions = [
+        source.from,
+        source.to,
+        source.gapFrom,
+        source.gapTo,
+        source.pos,
+      ].filter(
+        (position): position is number =>
+          typeof position === "number" && Number.isSafeInteger(position),
+      );
+      if (!positions.length) {
+        ranges.push({ from: 0, to: transaction.doc.content.size });
+        return;
+      }
+      const mapping = transaction.mapping.slice(index);
+      ranges.push({
+        from: mapping.map(Math.min(...positions), -1),
+        to: mapping.map(Math.max(...positions), 1),
+      });
+    });
+  }
+  return mergeRanges(ranges, transactions.at(-1)?.doc.content.size ?? 0);
+}
+
+/** The complete text blocks touched by a set of document ranges. */
+export function tagTextblocks(
+  doc: PMNode,
+  ranges: readonly Range[],
+): { from: number; to: number }[] {
+  const blocks = new Map<number, { from: number; to: number }>();
+  const addAt = (position: number) => {
+    let pos = Math.max(0, Math.min(position, doc.content.size));
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const $pos = doc.resolve(pos);
+      for (let depth = $pos.depth; depth > 0; depth--) {
+        const node = $pos.node(depth);
+        if (!node.isTextblock) continue;
+        const from = $pos.before(depth);
+        blocks.set(from, { from, to: from + node.nodeSize });
+        return;
+      }
+      if (!pos) return;
+      pos--;
+    }
+  };
+  for (const range of mergeRanges(ranges, doc.content.size)) {
+    addAt(range.from);
+    addAt(range.to);
+    if (range.from === range.to) continue;
+    doc.nodesBetween(range.from, range.to, (node, pos) => {
+      if (!node.isTextblock) return true;
+      blocks.set(pos, { from: pos, to: pos + node.nodeSize });
+      return false;
+    });
+  }
+  return [...blocks.values()].sort((a, b) => a.from - b.from);
+}
+
+function cleanTagsInRanges(
+  state: EditorState,
+  ranges: readonly Range[],
+  transaction: Transaction,
+) {
+  for (const block of tagTextblocks(state.doc, ranges)) {
+    const parent = state.doc.nodeAt(block.from);
+    if (!parent?.inlineContent) continue;
+    let name: unknown,
+      text = "",
+      start = 0,
+      end = 0,
+      legal = true;
+    const finish = () => {
+      if (
+        end > start &&
+        (!legal || !validTagName(name) || text !== `#${name}`)
+      )
+        transaction.removeMark(
+          start,
+          end,
+          state.schema.marks.noteTag,
+        );
+      name = undefined;
+      text = "";
+      start = end = 0;
+      legal = true;
+    };
+    parent.forEach((child: PMNode, offset) => {
+      const tag = child.marks.find((mark) => mark.type.name === "noteTag");
+      if (!child.isText || !tag || tag.attrs.name !== name) finish();
+      if (tag) {
+        if (!end) start = block.from + 1 + offset;
+        end = block.from + 1 + offset + child.nodeSize;
+        name = tag.attrs.name;
+        text += child.text || "";
+        legal =
+          legal &&
+          child.isText &&
+          !parent.type.spec.code &&
+          !child.marks.some((mark) =>
+            ["link", "code"].includes(mark.type.name),
+          );
+      }
+    });
+    finish();
+  }
+}
 
 // Only the token immediately before the cursor is eligible. Never search old
 // uncommitted text elsewhere in the document.
@@ -86,6 +235,12 @@ const NoteTagInput = Extension.create({
       state: EditorState;
     };
     let entering: EnterCandidate | undefined;
+    // Validate the loaded document once. After that, transactions only dirty
+    // the blocks they actually changed. While composition is active, ranges
+    // accumulate and are mapped forward for the real post-composition pass.
+    let dirty: Range[] = [
+      { from: 0, to: editor.state.doc.content.size },
+    ];
     const enterCandidate = (view: EditorView) =>
       allowCommit && writable() && !view.composing && view.state.selection.empty
         ? candidateAt(view.state.doc, view.state.selection.from)
@@ -186,6 +341,7 @@ const NoteTagInput = Extension.create({
         },
       },
       appendTransaction(transactions, old, state) {
+        dirty = dirtyRanges(transactions, dirty);
         const candidate = entering;
         // Tiptap's unsuccessful list commands can dispatch empty transactions
         // before the base keymap splits. Keep the candidate only across those
@@ -234,46 +390,10 @@ const NoteTagInput = Extension.create({
               state.schema.marks.noteTag.create({ name: candidate.name }),
             );
         }
-        state.doc.descendants((parent, pos) => {
-          if (!parent.inlineContent) return;
-          let name: unknown,
-            text = "",
-            start = 0,
-            end = 0,
-            legal = true;
-          const finish = () => {
-            if (
-              end > start &&
-              (!legal || !validTagName(name) || text !== `#${name}`)
-            )
-              tr.removeMark(start, end, state.schema.marks.noteTag);
-            name = undefined;
-            text = "";
-            start = end = 0;
-            legal = true;
-          };
-          parent.forEach((child: PMNode, offset) => {
-            const tag = child.marks.find(
-              (mark) => mark.type.name === "noteTag",
-            );
-            if (!child.isText || !tag || tag.attrs.name !== name) finish();
-            if (tag) {
-              if (!end) start = pos + 1 + offset;
-              end = pos + 1 + offset + child.nodeSize;
-              name = tag.attrs.name;
-              text += child.text || "";
-              legal =
-                legal &&
-                child.isText &&
-                !parent.type.spec.code &&
-                !child.marks.some((mark) =>
-                  ["link", "code"].includes(mark.type.name),
-                );
-            }
-          });
-          finish();
-          return false;
-        });
+        if (!dirty.length)
+          dirty = [{ from: state.selection.from, to: state.selection.to }];
+        cleanTagsInRanges(state, dirty, tr);
+        dirty = [];
         return tr.steps.length ? tr : null;
       },
     });

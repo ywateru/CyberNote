@@ -1,5 +1,7 @@
 # 文档导航
 
+2026-11-21 [编辑器输入性能与安装包体积改进方案](plan/analysis/editor-performance-package-size-20261121.md)记录输入事务与保存链路调查、macOS 和 Android 包体基线、实施顺序及验证标准。编辑器第一阶段已实现并通过源码/浏览器回归；安装包瘦身、真机性能基线和按资料库规模进一步投影增量化待实施。
+
 2026-11-21 [UI 质量审查与改进路线](ui/ui-quality-audit-20261121.md)记录画廊媒体布局、原生登录窗口、凭据存储收敛和 Android 顶部/底部系统栏规则；包含本轮已实现项、P1/P2 设计语言建议、真实设备证据和发布验收矩阵。
 
 2026-11-20 [UI 质量审查与改进路线](ui/ui-quality-audit-20261120.md)记录桌面与手机布局、组件一致性、Android 系统栏相邻表面投影、本轮源码改进及双端验收门槛；含 Samsung SM-G9500 / Android 9 调试包的真机像素采样，发布包与其余平台场景仍待验。
@@ -202,6 +204,7 @@ Mac WAV最新：[live09有限独核](plan/reviews/app-final106-mac-wav-live09-in
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)
 - [参考资料与调研](research/README.md)
+- [多网盘登录与同步调研及改进方案](research/cloud-drive-sync-20261121.md)
 - [本地标签、智能文件夹、数学、链接与格式接入分析](research/local-feature-integration.md)
 - [智能文件夹存储、归档、查询与访问边界准备审计](research/smart-folder-readiness-20261104-01.md)
 - [原版智能文件夹实际保存、求值与导航补证任务](plan/tasks/ref-smart-folders-runtime-01.md)

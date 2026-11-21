@@ -1,6 +1,11 @@
 import type { JSONContent } from "@tiptap/core";
 import type { Workspace } from "./types";
 
+// Documents are treated as immutable snapshots: App replaces the object when
+// content changes. Keeping the per-document result avoids rescanning every
+// unchanged note on each keystroke, tag filter or smart-folder projection.
+const tagsByDocument = new WeakMap<JSONContent, string[]>();
+
 export function validTagName(name: unknown): name is string {
   return (
     typeof name === "string" &&
@@ -54,11 +59,15 @@ export function visitTagSpans(
 }
 
 export function documentTags(doc: JSONContent): string[] {
+  const cached = tagsByDocument.get(doc);
+  if (cached) return cached;
   const names = new Set<string>();
   visitTagSpans(doc, (_nodes, name, legal) => {
     if (legal && typeof name === "string") names.add(name);
   });
-  return [...names].sort();
+  const result = [...names].sort();
+  tagsByDocument.set(doc, result);
+  return result;
 }
 
 export function projectTags(

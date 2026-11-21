@@ -8,6 +8,13 @@ import { visitTagSpans } from "./note-tags";
  * Never use this to repair external documents, IPC, imports or ciphertext.
  */
 export function editorSaveSnapshot(document: JSONContent): JSONContent {
+  let invalid = false;
+  visitTagSpans(document, (_nodes, _name, legal) => {
+    if (!legal) invalid = true;
+  });
+  // getJSON already returns a fresh tree. Most keystrokes leave every tag
+  // legal, so avoid cloning the whole document on the save hot path.
+  if (!invalid) return document;
   const snapshot = structuredClone(document);
   visitTagSpans(snapshot, (nodes, _name, legal) => {
     if (legal) return;

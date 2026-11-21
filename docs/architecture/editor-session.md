@@ -44,7 +44,7 @@
 
 - 用显式事件与状态转换维护不变量，React hook 负责订阅和生命周期；浏览器/Android 键盘桥/原生焦点放入平台适配。
 - 面板关闭原因须明确（确认/取消/返回/导航/撤权），集中决定键盘、焦点和是否恢复选区，禁止散落 setEditing/keyboard/blur 拼接。
-- 内容编辑门禁继续依赖 SearchEditorGate、accessGate、networkSync 与保存队列。会话控制器不得替代授权，不能为恢复 UI 调用 setEditable(true) 绕过门禁。
+- 内容编辑门禁继续依赖 SearchEditorGate、accessGate、networkSync、正文保存合并调度器与精确保存队列。会话控制器不得替代授权，不能为恢复 UI 调用 setEditable(true) 绕过门禁。
 - 独立录音 owner、附件异步 owner 和浏览搜索停车策略保持既有契约；菜单、面板的可视状态与业务进行状态分开。
 - 迁移按创建/普通编辑、格式、速绘、菜单、录音、导航/屏障顺序执行，每阶段检查真实 App 行为，最终从 App 移除重复状态来源。
 

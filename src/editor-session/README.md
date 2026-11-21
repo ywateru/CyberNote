@@ -17,7 +17,7 @@ App 的有效 noteId / Editor / owner / 授权与屏障
 
 ## 边界
 
-- App 继续持有文档、Undo/Redo、保存队列、访问门禁、SearchEditorGate、录音控制器及捕获 owner。会话不调用 `setEditable`，也不执行附件或录音保存事务。
+- App 继续持有文档、Undo/Redo、正文保存合并调度器、精确保存队列、访问门禁、SearchEditorGate、录音控制器及捕获 owner。会话不调用 `setEditable`，也不执行附件或录音保存事务。
 - App 每次渲染传入当前上下文；导航、撤权、同步、模态遮挡还在事件入口同步 `invalidate(reason)`。任何旧焦点代次都不能在后续创建/flush 完成时恢复。
 - 新建收据请求可等待新 noteId 对应 Editor 挂载，但必须匹配代次、连接状态、注册 owner、可写授权和可见性。平台适配在 focus 前后再次检查有效性。
 - 格式面板捕获并随真实 ProseMirror 事务映射书签；正文选择文字会更新命令目标。打开普通菜单不关闭格式。确认关闭恢复正文/手机键盘，Back、Escape、外部关闭保持浏览。

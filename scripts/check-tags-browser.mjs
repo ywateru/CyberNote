@@ -82,7 +82,7 @@ const vite = await createViteServer({
         return {
           code: code.replace(
             needle,
-            "  window.__taskApp={ws:()=>wsRef.current,refresh:()=>metadataRefreshRef.current(),external:externalVersions.current,pending:pendingDocs.current};\n" +
+            "  window.__taskApp={ws:()=>wsRef.current,refresh:()=>metadataRefreshRef.current(),external:externalVersions.current,pending:pendingDocs.current,scheduler:()=>saveScheduler.current?.hasPending()};\n" +
               needle,
           ),
           map: null,
@@ -696,7 +696,10 @@ try {
           .notes.find((candidate) => candidate.id === "task-a")
           .document.content[0].content.map((node) => node.attrs.checked),
         external: app.external.get("task-a") || 0,
+        // The coalescing scheduler deliberately keeps the live IME body
+        // pending during a quiet metadata refresh; hydration must overlay it.
         pending: app.pending.has("task-a"),
+        scheduler: app.scheduler(),
       };
     });
     assert.deepEqual(compositionHydration, {
@@ -706,7 +709,8 @@ try {
       editorChecked: [false, true],
       workspaceChecked: [false, true],
       external: 0,
-      pending: false,
+      pending: true,
+      scheduler: true,
     });
     await taskAppCdp.send("Input.insertText", { text: "bian" });
     await taskAppCdp.detach();

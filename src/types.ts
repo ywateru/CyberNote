@@ -131,7 +131,12 @@ export const blankDoc: JSONContent = {
   type: "doc",
   content: [{ type: "heading", attrs: { level: 1 } }],
 };
+// Documents are immutable snapshots at this boundary. Reuse the extracted
+// plain text for hydration, optimistic updates and search projections.
+const textByDocument = new WeakMap<JSONContent, string>();
 export function documentText(doc: JSONContent): string {
+  const cached = textByDocument.get(doc);
+  if (cached !== undefined) return cached;
   let s = "";
   function walk(n: JSONContent) {
     if (n.text) s += n.text;
@@ -144,5 +149,7 @@ export function documentText(doc: JSONContent): string {
       s += "\n";
   }
   walk(doc);
-  return s.trimEnd();
+  const result = s.trimEnd();
+  textByDocument.set(doc, result);
+  return result;
 }

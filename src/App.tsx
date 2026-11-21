@@ -44,6 +44,7 @@ import {
 } from "./recording-replacement";
 import type { RecordingRevision } from "./recording-metadata";
 import {
+  startTransition,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -75,15 +76,14 @@ import { draftQuery, type FolderDraft } from "./smart-draft";
 import {
   isPhysicalOwner,
   matchesSmart,
-  projectFolders,
-  sortNotes,
 } from "./smart-folders";
 import {
   documentTags,
-  projectTags,
   tagSelectionAfterAccess,
 } from "./note-tags";
 import { SaveRevisions } from "./save-revisions";
+import { EditorSaveScheduler } from "./editor-save-scheduler";
+import { projectWorkspace } from "./workspace-projection";
 import { presentationOf, parsePresentation, withNavigation, type CollectionView } from "./presentation/model";
 import { platformIdentity, resolvePresentation } from "./presentation/resolver";
 import { PresentationContext } from "./presentation/context";
@@ -530,6 +530,7 @@ function App() {
   const desktopListWidth = metrics.listWidth;
   const mobileMode = useRef(!!initialMobile);
   const queues = useRef(new Map<string, Promise<SaveOutcome>>());
+  const saveScheduler = useRef<EditorSaveScheduler | null>(null);
   const revisions = useRef(new SaveRevisions());
   const externalVersions = useRef(new Map<string, number>());
   const pendingDocs = useRef(new Map<string, JSONContent>());
@@ -652,46 +653,63 @@ function App() {
     confirmedCollection.current = desktopCollection;
   }, [desktopCollection]);
   const sort = settings.sort || "updated";
-  const tags = projectTags(ws, accessSuspended);
+  const projection = useMemo(
+    () => projectWorkspace(ws, accessSuspended, sort),
+    [ws, accessSuspended, sort],
+  );
+  const tags = projection.tags;
   const currentFolder = ws.folders.find((f) => f.id === folderId);
   const smartFolder =
     currentFolder?.kind === "smart" ? currentFolder : undefined;
-  const folderProjection = projectFolders(ws, accessSuspended, sort);
+  const folderProjection = projection.folders;
   const currentProjection = folderProjection.get(folderId);
   const contentSearch =
     !separate && (!!query || !!filter || tagFilter !== undefined);
-  const folderMembers = new Set(currentProjection?.ids || []);
-  const listed = sortNotes(
-    ws.notes.filter((n) => {
-      if (query || filter || tagFilter !== undefined) {
-        if (n.deletedAt) return false;
-      } else if (!folderMembers.has(n.id)) return false;
-      if (
-        query &&
-        !`${n.title}\n${n.plainText}\n${attachmentBrowser ? ws.attachments.filter(a => a.noteId === n.id && !a.internal).map(a => a.displayName).join("\n") : ""}`
-          .toLocaleLowerCase()
-          .includes(query.toLocaleLowerCase())
-      )
-        return false;
-      if (filter === "locked" && !n.locked) return false;
-      if (
-        filter === "checklist" &&
-        !JSON.stringify(n.document).includes("taskItem")
-      )
-        return false;
-      const names = tags.notes.get(n.id) || [];
-      if ((filter === "tags" || tagFilter !== undefined) && !names.length)
-        return false;
-      if (typeof tagFilter === "string" && !names.includes(tagFilter))
-        return false;
-      if (
-        ["audio", "image", "file", "video"].includes(filter) &&
-        !ws.attachments.some((a) => !a.internal && a.noteId === n.id && a.kind === filter)
-      )
-        return false;
-      return true;
-    }),
-    sort,
+  const folderMembers = useMemo(
+    () => new Set(currentProjection?.ids || []),
+    [currentProjection],
+  );
+  const listed = useMemo(
+    () =>
+      projection.ordered.filter((n) => {
+        if (query || filter || tagFilter !== undefined) {
+          if (n.deletedAt) return false;
+        } else if (!folderMembers.has(n.id)) return false;
+        if (
+          query &&
+          !`${n.title}\n${n.plainText}\n${attachmentBrowser ? ws.attachments.filter(a => a.noteId === n.id && !a.internal).map(a => a.displayName).join("\n") : ""}`
+            .toLocaleLowerCase()
+            .includes(query.toLocaleLowerCase())
+        )
+          return false;
+        if (filter === "locked" && !n.locked) return false;
+        if (
+          filter === "checklist" &&
+          !JSON.stringify(n.document).includes("taskItem")
+        )
+          return false;
+        const names = tags.notes.get(n.id) || [];
+        if ((filter === "tags" || tagFilter !== undefined) && !names.length)
+          return false;
+        if (typeof tagFilter === "string" && !names.includes(tagFilter))
+          return false;
+        if (
+          ["audio", "image", "file", "video"].includes(filter) &&
+          !ws.attachments.some((a) => !a.internal && a.noteId === n.id && a.kind === filter)
+        )
+          return false;
+        return true;
+      }),
+    [
+      projection.ordered,
+      tags.notes,
+      folderMembers,
+      query,
+      filter,
+      tagFilter,
+      attachmentBrowser,
+      ws.attachments,
+    ],
   );
   const desktopSearch = !separate && (contentSearch || !!smartFolder);
   const collectionEmptyKind =
@@ -1136,11 +1154,23 @@ function App() {
     return release;
   }, [themeId, schemePreference, workspaceLoaded]);
   const flush = useCallback(async () => {
-    await Promise.all([...queues.current.values()]);
-    if (pendingDocs.current.size || saveFailures.current.size)
-      throw Error(
-        "还有未确认保存的更改；锁定未执行，请保持窗口打开并重试编辑保存。",
-      );
+    for (;;) {
+      await saveScheduler.current?.flush();
+      const jobs = [...queues.current.values()];
+      await Promise.all(jobs);
+      if (saveScheduler.current?.hasPending()) continue;
+      const currentJobs = [...queues.current.values()];
+      if (
+        currentJobs.length !== jobs.length ||
+        currentJobs.some((job, index) => job !== jobs[index])
+      )
+        continue;
+      if (pendingDocs.current.size || saveFailures.current.size)
+        throw Error(
+          "还有未确认保存的更改；锁定未执行，请保持窗口打开并重试编辑保存。",
+        );
+      return;
+    }
   }, []);
   const refresh = useCallback(async () => {
     await flush();
@@ -1205,9 +1235,14 @@ function App() {
         flush: async () => {
           await settingsOwner.flush();
           for (;;) {
+            await saveScheduler.current?.flush(ids);
             const jobs = ids.map(id => queues.current.get(id));
             await Promise.all(jobs);
-            if (ids.some((id, index) => queues.current.get(id) !== jobs[index])) continue;
+            if (
+              saveScheduler.current?.hasPending(ids) ||
+              ids.some((id, index) => queues.current.get(id) !== jobs[index])
+            )
+              continue;
             if (ids.some(id => pendingDocs.current.has(id) || saveFailures.current.has(id))) throw Error("同步等待本地更改确认保存");
             return;
           }
@@ -1396,39 +1431,40 @@ function App() {
     baseNoteId,
     updateSettings,
   ]);
-  const saveDoc = useCallback(
-    (id: string, doc: JSONContent) => {
-      if (windowWrites.frozen(id)) return Promise.resolve<SaveOutcome>({ saved: false, error: Error("备忘录正在更新，请稍候") });
-      if (blockedNotes.current.has(id)) {
-        const error = Error("备忘录正在同步锁定状态");
-        fail(error);
-        return Promise.resolve<SaveOutcome>({ saved: false, error });
-      }
-      savingNotes.current.set(id, (savingNotes.current.get(id) || 0) + 1);
-      const ticket = registerSaveIntent(id);
-      void ticket.catch(() => {}); // The queued save handles and retains registration failures.
-      pendingDocs.current.set(id, doc);
-      const text = documentText(doc);
-      const updatedAt = Date.now();
-      const optimistic = (prev: Workspace): Workspace => ({
-        ...prev,
-        notes: prev.notes.map((n) =>
-          n.id === id
-            ? {
-                ...n,
-                document: doc,
-                plainText: text,
-                title: text.split("\n")[0] || "新备忘录",
-                updatedAt,
-              }
-            : n,
-        ),
-      });
-      // A fast local/IPC ACK may precede React's render. Hydration must compare
-      // against this own submitted body rather than invent an external change.
-      wsRef.current = optimistic(wsRef.current);
-      setWs(optimistic);
-      setSaving((v) => v + 1);
+  const adjustSaving = useCallback((id: string, delta: 1 | -1) => {
+    const count = (savingNotes.current.get(id) || 0) + delta;
+    if (count > 0) savingNotes.current.set(id, count);
+    else savingNotes.current.delete(id);
+    setSaving((value) => Math.max(0, value + delta));
+  }, []);
+  const publishDoc = useCallback((id: string, doc: JSONContent) => {
+    pendingDocs.current.set(id, doc);
+    const text = documentText(doc);
+    const updatedAt = Date.now();
+    const optimistic = (prev: Workspace): Workspace => ({
+      ...prev,
+      notes: prev.notes.map((n) =>
+        n.id === id
+          ? {
+              ...n,
+              document: doc,
+              plainText: text,
+              title: text.split("\n")[0] || "新备忘录",
+              updatedAt,
+            }
+          : n,
+      ),
+    });
+    // A fast local/IPC ACK may precede React's render. Hydration must compare
+    // against this own submitted body rather than invent an external change.
+    wsRef.current = optimistic(wsRef.current);
+    // Projection/list work is not on the text-input critical path. Keep the
+    // synchronous workspace reference authoritative while React renders the
+    // non-urgent update at a lower priority.
+    startTransition(() => setWs(optimistic));
+  }, []);
+  const enqueueDocSave = useCallback(
+    (id: string, doc: JSONContent, ticket: Promise<string>) => {
       const next = enqueueSave(
         queues.current.get(id),
         async () => {
@@ -1476,30 +1512,96 @@ function App() {
             );
           else fail(e);
         },
-        () => {
-          const count = (savingNotes.current.get(id) || 1) - 1;
-          if (count) savingNotes.current.set(id, count); else savingNotes.current.delete(id);
-          setSaving(v => Math.max(0, v - 1));
-        },
+        () => {},
       );
       queues.current.set(id, next);
       return next;
     },
     [fail],
   );
+  const schedulerHooks = useRef({
+    publish: (_id: string, _doc: JSONContent) => {},
+    save: (_id: string, _doc: JSONContent, _ticket: Promise<string>) =>
+      Promise.resolve<SaveOutcome>({ saved: true }),
+    blocked: (_id: string): unknown => undefined,
+    failure: (_id: string, _error: unknown) => {},
+    busy: (_id: string, _busy: boolean) => {},
+  });
+  schedulerHooks.current = {
+    publish: publishDoc,
+    save: enqueueDocSave,
+    blocked: (id) =>
+      blockedNotes.current.has(id)
+        ? Error("备忘录正在同步锁定状态")
+        : undefined,
+    failure: (_id, error) => fail(error),
+    busy: (id, busy) => adjustSaving(id, busy ? 1 : -1),
+  };
+  if (!saveScheduler.current)
+    saveScheduler.current = new EditorSaveScheduler({
+      register: registerSaveIntent,
+      publish: (id, doc) => schedulerHooks.current.publish(id, doc),
+      save: (id, doc, ticket) => schedulerHooks.current.save(id, doc, ticket),
+      blocked: (id) => schedulerHooks.current.blocked(id),
+      onFailure: (id, error) => schedulerHooks.current.failure(id, error),
+      onBusyChange: (id, busy) => schedulerHooks.current.busy(id, busy),
+    });
+  const saveDoc = useCallback(
+    async (id: string, doc: JSONContent) => {
+      if (windowWrites.frozen(id))
+        return {
+          saved: false as const,
+          error: Error("备忘录正在更新，请稍候"),
+        };
+      if (blockedNotes.current.has(id)) {
+        const error = Error("备忘录正在同步锁定状态");
+        fail(error);
+        return { saved: false as const, error };
+      }
+      // Drain a debounced/coalesced body before the exact attachment, OCR or
+      // recording body. The queue then keeps this exact body last.
+      await saveScheduler.current?.flush([id]);
+      if (windowWrites.frozen(id)) {
+        return {
+          saved: false as const,
+          error: Error("备忘录正在更新，请稍候"),
+        };
+      }
+      if (blockedNotes.current.has(id)) {
+        const error = Error("备忘录正在同步锁定状态");
+        fail(error);
+        return { saved: false as const, error };
+      }
+      const ticket = registerSaveIntent(id);
+      void ticket.catch(() => {});
+      adjustSaving(id, 1);
+      publishDoc(id, doc);
+      const next = enqueueDocSave(id, doc, ticket);
+      void next.finally(() => adjustSaving(id, -1));
+      return next;
+    },
+    [adjustSaving, enqueueDocSave, fail, publishDoc],
+  );
   const saveEditorDoc = (id: string, doc: JSONContent) => {
+    if (windowWrites.frozen(id)) return;
     const composition = tagCompositions.current.get(id);
     const instance = composition?.editor;
-    const names = documentTags(doc);
-    const lostTagMatch =
-      smartFolder && !contentSearch
-        ? !matchesSmart(smartFolder.query, {
-            eligible: true,
-            pinned: current?.pinned ?? false,
-            tags: names,
-          })
-        : !names.length ||
-          (typeof tagFilter === "string" && !names.includes(tagFilter));
+    let lostTagMatch = false;
+    if (
+      desktopSearch &&
+      (filter === "tags" || tagFilter !== undefined || !!smartFolder)
+    ) {
+      const names = documentTags(doc);
+      lostTagMatch =
+        smartFolder && !contentSearch
+          ? !matchesSmart(smartFolder.query, {
+              eligible: true,
+              pinned: current?.pinned ?? false,
+              tags: names,
+            })
+          : !names.length ||
+            (typeof tagFilter === "string" && !names.includes(tagFilter));
+    }
     if (
       !tagCompositionTarget.current &&
       tagNavigation === tagCompositionNavigation.current &&
@@ -1527,7 +1629,7 @@ function App() {
         stamp: accessGate.stamp(id),
       };
     }
-    return saveDoc(id, doc);
+    saveScheduler.current?.schedule(id, doc);
   };
   tagCompositionSettled.current = (id, composition, cycle) => {
     const target = tagCompositionTarget.current;
@@ -1573,6 +1675,7 @@ function App() {
     quietWrites.current++;
     try {
       await windowWrites.cancel();
+      await saveScheduler.current?.flush([id]);
       await queues.current.get(id);
       const doc = pendingDocs.current.get(id);
       const source = wsRef.current.notes.find((n) => n.id === id);
@@ -2496,6 +2599,7 @@ function App() {
     await invoke("recording_local_validate", ticket.local!.identity);
     if (!owned()) throw Error("原录音会话已失效，音频仍保留");
     for (let attempt = 0; attempt < 4; attempt++) {
+      await saveScheduler.current?.flush([target.noteId]);
       const queue = queues.current.get(target.noteId);
       await queue;
       if (
@@ -2524,6 +2628,7 @@ function App() {
       }
       if (
         queues.current.get(target.noteId) !== queue ||
+        saveScheduler.current?.hasPending([target.noteId]) ||
         pendingDocs.current.has(target.noteId)
       )
         continue;
@@ -2581,6 +2686,7 @@ function App() {
     operation: AttachmentSubmission<PickerTarget>,
     target: PickerTarget,
   ) => {
+    await saveScheduler.current?.flush([target.noteId]);
     await queues.current.get(target.noteId);
     if (!operation.documentAck) {
       const pending = pendingDocs.current.get(target.noteId);
@@ -3248,6 +3354,7 @@ function App() {
     finishOcr(operation);
   };
   const awaitOcrDocumentAck = async (operation: OcrHost<PickerTarget>) => {
+    await saveScheduler.current?.flush([operation.target.noteId]);
     await queues.current.get(operation.target.noteId);
     if (operation.documentAck) return;
     await validatePickerTarget(operation.target, undefined, true, operation);

@@ -30,6 +30,13 @@ jobs:
         run: |
           pnpm version:check
           pnpm typecheck
+      - name: Test editor performance regressions
+        run: |
+          pnpm test:schema
+          pnpm test:editor
+          pnpm test:editor-hot-path
+          pnpm test:save-scheduler
+          pnpm test:workspace-projection
       - name: Install Rust for isolated build-identity fixtures
         uses: dtolnay/rust-toolchain@stable
         with:
