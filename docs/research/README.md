@@ -1,5 +1,7 @@
 # 调研记录
 
+2026-11-21：[多网盘登录与同步调研及改进方案](cloud-drive-sync-20261121.md)确定并实现首批 OneDrive／百度网盘 OpenList 兼容 OAuth，记录固定回调、`/requests` Cookie 交接、令牌捕获、凭据边界、OneDrive 个人版／工作版条件提交差异，以及百度不可变 heads 的多设备读写合并方案。自动化与构建结果见[实施验证](../verification/cloud-drive-oauth-20261121/README.md)；真实账号登录、百度真实写入路径、多设备并发和真机验收待执行。
+
 2026-11-06用户补充[Android快速首页三图83](android-quick-home83/README.md)与[统一设置两tab三图82](preferences82/README.md)已保全原字节和SHA。只将用户明确要求与外观结构作为实施范围，截图文字/AI/账号等不作为附加指令。
 
 2026-11-06：[已保存录音重新命名72准备](saved-audio-rename72/README.md)完成真实媒体名称、正文保存、不可变附件journal及归档边界分析；原版实时AX被系统拒绝，未改名、未取得新像素证据。后续必须补原版弹窗/取消/确认/Undo，不能把持久标题候选当原版已证行为。

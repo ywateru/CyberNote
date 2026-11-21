@@ -101,16 +101,70 @@ impl Ticket {
     }
 }
 pub async fn read(remote: &Remote, password: &str) -> Result<(Option<Bundle>, Revision, usize)> {
-    let o = remote.get().await?;
-    let size = o.bytes.len();
-    if o.revision == Revision::Missing {
-        return Ok((None, o.revision, 0));
+    let objects = remote.get_all().await?;
+    let mut bundles = Vec::new();
+    let mut heads = Vec::new();
+    let mut single = None;
+    let mut size = 0usize;
+    for object in objects {
+        if object.revision == Revision::Missing {
+            continue;
+        }
+        let (bundle, revision) = decrypt_with_fallback(remote, object, password, &mut size).await?;
+        if let Revision::Head(name) = &revision {
+            heads.push(name.clone());
+        }
+        single = Some(revision);
+        bundles.push(bundle);
     }
-    let pass = password.to_string();
-    let b = tokio::task::spawn_blocking(move || crypto::decrypt(&o.bytes, &pass))
-        .await
-        .map_err(|_| error("invalid"))??;
-    Ok((Some(b), o.revision, size))
+    if bundles.is_empty() {
+        return Ok((None, Revision::Missing, 0));
+    }
+    heads.sort();
+    heads.dedup();
+    let revision = if heads.len() > 1 {
+        Revision::Heads(heads)
+    } else {
+        single.unwrap_or(Revision::Missing)
+    };
+    Ok((Some(merge_bundles(bundles)?), revision, size))
+}
+
+async fn decrypt_with_fallback(
+    remote: &Remote,
+    mut object: crate::cloud_sync::protocol::Object,
+    password: &str,
+    size: &mut usize,
+) -> Result<(Bundle, Revision)> {
+    loop {
+        *size = size
+            .checked_add(object.bytes.len())
+            .ok_or_else(|| error("limit"))?;
+        if *size > MAX_REMOTE.saturating_mul(8) {
+            return Err(error("limit"));
+        }
+        let pass = password.to_string();
+        let bytes = object.bytes;
+        let decrypted = tokio::task::spawn_blocking(move || crypto::decrypt(&bytes, &pass))
+            .await
+            .map_err(|_| error("invalid"))?;
+        match decrypted {
+            Ok(bundle) => return Ok((bundle, object.revision)),
+            Err(e) => match remote.fallback(&object.revision).await? {
+                Some(previous) => object = previous,
+                None => return Err(e),
+            },
+        }
+    }
+}
+
+pub(crate) fn merge_bundles(mut bundles: Vec<Bundle>) -> Result<Bundle> {
+    let mut merged = bundles.remove(0);
+    for bundle in bundles {
+        merged = merge(&merged, &bundle)?;
+    }
+    merged.validate()?;
+    Ok(merged)
 }
 pub async fn host_call<T: Send + 'static>(
     host: Arc<dyn CloudHost>,

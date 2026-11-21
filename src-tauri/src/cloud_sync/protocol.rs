@@ -1,4 +1,5 @@
 //! Bounded HTTP protocol implementations. Redirects never forward credentials.
+use super::auth::oauth::SharedOAuth;
 use super::model::*;
 use base64::{engine::general_purpose::STANDARD as B64, Engine};
 use reqwest::{
@@ -8,11 +9,22 @@ use reqwest::{
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, time::Duration};
+use tokio::sync::OnceCell;
+
+#[path = "remote/onedrive.rs"]
+mod onedrive;
+#[path = "remote/baidu.rs"]
+mod baidu;
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Revision {
     Missing,
     Etag(String),
     Sha(String),
+    Head(String),
+    /// Baidu immutable-head layout: one revision covers every head that was
+    /// merged into the returned bundle. Names are sorted for stable equality.
+    Heads(Vec<String>),
 }
 pub struct Object {
     pub bytes: Vec<u8>,
@@ -23,6 +35,12 @@ pub struct Remote {
     config: ProviderConfig,
     client: Client,
     api: Url,
+    oauth: Option<SharedOAuth>,
+    credential_id: Option<String>,
+    driver: Option<String>,
+    mode: DriveMode,
+    writer_id: Option<String>,
+    drive_type: OnceCell<String>,
 }
 fn network(e: reqwest::Error) -> CloudError {
     error(if e.is_timeout() { "timeout" } else { "network" })
@@ -77,23 +95,100 @@ fn endpoint(s: &str, fixture: bool) -> Result<Url> {
 }
 impl Remote {
     pub fn new(kind: Provider, config: ProviderConfig) -> Result<Self> {
-        Self::build(kind, config, None)
+        Self::build(kind, config, None, None, None, None, None, None)
     }
     #[cfg(test)]
     pub fn fixture(kind: Provider, config: ProviderConfig, api: &str) -> Result<Self> {
-        Self::build(kind, config, Some(api))
+        Self::build(kind, config, Some(api), None, None, None, None, None)
     }
-    fn build(kind: Provider, config: ProviderConfig, fixture: Option<&str>) -> Result<Self> {
+    pub fn oauth(
+        kind: Provider,
+        config: ProviderConfig,
+        oauth: SharedOAuth,
+        credential_id: String,
+        driver: String,
+        mode: DriveMode,
+        writer_id: Option<String>,
+        drive_type: Option<String>,
+    ) -> Result<Self> {
+        Self::build(
+            kind,
+            config,
+            None,
+            Some(oauth),
+            Some(credential_id),
+            Some(driver),
+            Some(mode),
+            drive_type,
+        )
+        .map(|mut r| {
+            if let Some(v) = writer_id {
+                r.writer_id = Some(v);
+            }
+            r
+        })
+    }
+    #[cfg(test)]
+    pub fn oauth_fixture(
+        kind: Provider,
+        config: ProviderConfig,
+        api: &str,
+        oauth: SharedOAuth,
+        credential_id: String,
+        driver: String,
+        mode: DriveMode,
+        writer_id: Option<String>,
+    ) -> Result<Self> {
+        let mut r = Self::build(
+            kind,
+            config,
+            Some(api),
+            Some(oauth),
+            Some(credential_id),
+            Some(driver),
+            Some(mode),
+            None,
+        )?;
+        r.writer_id = writer_id;
+        Ok(r)
+    }
+    fn build(
+        kind: Provider,
+        config: ProviderConfig,
+        fixture: Option<&str>,
+        oauth: Option<SharedOAuth>,
+        credential_id: Option<String>,
+        driver: Option<String>,
+        mode: Option<DriveMode>,
+        drive_type: Option<String>,
+    ) -> Result<Self> {
+        // Baidu's file APIs and signed download links reject requests without
+        // this fixed User-Agent. Other providers keep the product identity.
+        let user_agent = if kind == Provider::Baidu {
+            "pan.baidu.com"
+        } else {
+            "CyberNote-cloud/1"
+        };
         let client = Client::builder()
             .redirect(reqwest::redirect::Policy::none())
             .connect_timeout(Duration::from_secs(8))
             .timeout(Duration::from_secs(30))
-            .user_agent("CyberNote-cloud/1")
+            .user_agent(user_agent)
             .build()
             .map_err(network)?;
         let api = if kind == Provider::Github {
             endpoint(
                 fixture.unwrap_or("https://api.github.com"),
+                fixture.is_some(),
+            )?
+        } else if kind == Provider::Onedrive {
+            endpoint(
+                fixture.unwrap_or("https://graph.microsoft.com/v1.0"),
+                fixture.is_some(),
+            )?
+        } else if kind == Provider::Baidu {
+            endpoint(
+                fixture.unwrap_or("https://pan.baidu.com"),
                 fixture.is_some(),
             )?
         } else {
@@ -103,6 +198,7 @@ impl Remote {
             Provider::Webdav => &[],
             Provider::S3 => &["region", "bucket"],
             Provider::Github => &["owner", "repo", "branch"],
+            Provider::Onedrive | Provider::Baidu => &[],
         };
         if required.iter().any(|k| field(&config, k).is_empty()) {
             return Err(error("invalid"));
@@ -128,16 +224,97 @@ impl Remote {
             Provider::Webdav => &["password"],
             Provider::S3 => &["accessKey", "secretKey"],
             Provider::Github => &["token"],
+            Provider::Onedrive | Provider::Baidu => &[],
         };
         if credentials.iter().any(|k| secret(&config, k).is_empty()) {
             return Err(error("authentication"));
+        }
+        if kind.is_oauth() && (oauth.is_none() || credential_id.is_none() || driver.is_none()) {
+            return Err(error("authentication"));
+        }
+        let drive = OnceCell::new();
+        if let Some(value) = drive_type {
+            let _ = drive.set(value);
         }
         Ok(Self {
             kind,
             config,
             client,
             api,
+            oauth,
+            credential_id,
+            driver,
+            mode: mode.unwrap_or(DriveMode::TwoWay),
+            writer_id: None,
+            drive_type: drive,
         })
+    }
+    async fn bearer(&self) -> Result<String> {
+        let id = self.credential_id.as_deref().ok_or_else(|| error("authentication"))?;
+        self.oauth
+            .as_ref()
+            .ok_or_else(|| error("authentication"))?
+            .access_token(id)
+            .await
+    }
+    async fn drive_type(&self) -> Result<&str> {
+        if let Some(v) = self.drive_type.get() {
+            return Ok(v.as_str());
+        }
+        let token = self.bearer().await?;
+        let mut u = self.api.clone();
+        u.path_segments_mut()
+            .map_err(|_| error("invalid"))?
+            .extend(["me", "drive"]);
+        let (status, _, value) = self
+            .bounded_json(reqwest::Method::GET, u, Some(&token))
+            .await?;
+        if !status.is_success() {
+            return Err(error("authentication"));
+        }
+        let value = value
+            .get("driveType")
+            .and_then(Value::as_str)
+            .ok_or_else(|| error("invalid"))?
+            .to_string();
+        let _ = self.drive_type.set(value);
+        self.drive_type
+            .get()
+            .map(String::as_str)
+            .ok_or_else(|| error("state"))
+    }
+    async fn bounded_json(
+        &self,
+        method: Method,
+        url: Url,
+        bearer: Option<&str>,
+    ) -> Result<(StatusCode, HeaderMap, Value)> {
+        let mut req = self.client.request(method, url).header("accept", "application/json");
+        if let Some(token) = bearer {
+            req = req.bearer_auth(token);
+        }
+        let mut res = req.send().await.map_err(network)?;
+        let status = res.status();
+        let headers = res.headers().clone();
+        if res.content_length().is_some_and(|n| n > 512 * 1024) {
+            return Err(error("limit"));
+        }
+        let mut bytes = Vec::new();
+        while let Some(chunk) = res.chunk().await.map_err(network)? {
+            if bytes.len() + chunk.len() > 512 * 1024 {
+                return Err(error("limit"));
+            }
+            bytes.extend_from_slice(&chunk);
+        }
+        if status == StatusCode::UNAUTHORIZED || status == StatusCode::FORBIDDEN {
+            return Err(error("authentication"));
+        }
+        let value = if bytes.is_empty() {
+            Value::Null
+        } else {
+            serde_json::from_slice(&bytes).map_err(|_| error("invalid"))?
+        };
+        Ok((status, headers, value))
     }
     fn repo(&self) -> Result<Url> {
         append(
@@ -155,6 +332,7 @@ impl Remote {
             Provider::Webdav => self.api.clone(),
             Provider::S3 => append(self.api.clone(), &[field(c, "bucket")])?,
             Provider::Github => append(self.repo()?, &["contents"])?,
+            Provider::Onedrive | Provider::Baidu => return Err(error("invalid")),
         };
         let path = components(field(
             c,
@@ -209,6 +387,7 @@ impl Remote {
                 let date = utc_now()?;
                 sign_s3(&method, &url, &body, &self.config, &date, &mut headers)?;
             }
+            Provider::Onedrive | Provider::Baidu => {}
         }
         let mut res = req
             .headers(headers)
@@ -238,6 +417,11 @@ impl Remote {
     }
     /// Read-only authentication/existence probe. An object 404 is not by itself a valid empty library.
     async fn probe(&self) -> Result<()> {
+        match self.kind {
+            Provider::Onedrive => return onedrive::probe(self).await,
+            Provider::Baidu => return baidu::probe(self).await,
+            _ => {}
+        }
         let (method, url, headers) = match self.kind {
             Provider::Webdav => {
                 let mut h = HeaderMap::new();
@@ -257,6 +441,7 @@ impl Remote {
                 (Method::GET, u, HeaderMap::new())
             }
             Provider::Github => (Method::GET, self.repo()?, HeaderMap::new()),
+            Provider::Onedrive | Provider::Baidu => unreachable!(),
         };
         let (s, _, bytes) = self
             .request(method, url, vec![], headers, 128 * 1024)
@@ -296,6 +481,11 @@ impl Remote {
         Ok(())
     }
     pub async fn get(&self) -> Result<Object> {
+        match self.kind {
+            Provider::Onedrive => return onedrive::get(self).await,
+            Provider::Baidu => return baidu::get(self).await,
+            _ => {}
+        }
         self.probe().await?;
         let (s, h, b) = self
             .request(
@@ -384,6 +574,22 @@ impl Remote {
             })
         }
     }
+    /// Read every independent head for providers that publish immutable
+    /// objects. Other providers keep the single-object contract.
+    pub async fn get_all(&self) -> Result<Vec<Object>> {
+        if self.kind == Provider::Baidu {
+            return baidu::get_all(self).await;
+        }
+        Ok(vec![self.get().await?])
+    }
+    /// Fetch the previous immutable head only after the newest one downloaded
+    /// but could not be decrypted. Other providers have no fallback object.
+    pub async fn fallback(&self, revision: &Revision) -> Result<Option<Object>> {
+        if self.kind == Provider::Baidu {
+            return baidu::fallback(self, revision).await;
+        }
+        Ok(None)
+    }
     async fn mkdir(&self) -> Result<()> {
         let mut parts = components(field(&self.config, "directory"))?;
         parts.push("cybernote");
@@ -406,6 +612,11 @@ impl Remote {
         Ok(())
     }
     pub async fn put(&self, bytes: Vec<u8>, expected: &Revision) -> Result<()> {
+        match self.kind {
+            Provider::Onedrive => return onedrive::put(self, bytes, expected).await,
+            Provider::Baidu => return baidu::put(self, bytes, expected).await,
+            _ => {}
+        }
         if bytes.len() > MAX_REMOTE {
             return Err(error("limit"));
         }

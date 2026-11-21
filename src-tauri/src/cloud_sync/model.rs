@@ -53,6 +53,45 @@ pub enum Provider {
     Webdav,
     S3,
     Github,
+    Onedrive,
+    Baidu,
+}
+impl Provider {
+    pub fn is_oauth(self) -> bool {
+        matches!(self, Self::Onedrive | Self::Baidu)
+    }
+}
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub enum DriveMode {
+    ReadOnly,
+    SingleWriter,
+    TwoWay,
+}
+/// Connection metadata only. The refresh/access tokens live in the encrypted
+/// credential vault and are referenced by `credential_id`.
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ConnectionMeta {
+    pub credential_id: String,
+    pub driver: String,
+    pub account_id: String,
+    pub display_name: String,
+    pub sync_root: String,
+    pub mode: DriveMode,
+    #[serde(default)]
+    pub drive_type: Option<String>,
+    #[serde(default)]
+    pub writer_id: Option<String>,
+    pub created_at: i64,
+    #[serde(default)]
+    pub last_verified_at: Option<i64>,
+    #[serde(default)]
+    pub reauth_required: bool,
+    #[serde(default)]
+    pub quota_total: Option<u64>,
+    #[serde(default)]
+    pub quota_used: Option<u64>,
 }
 #[derive(Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -71,6 +110,8 @@ pub struct Config {
     pub selected: Provider,
     pub minutes: u16,
     pub providers: BTreeMap<Provider, ProviderConfig>,
+    #[serde(default)]
+    pub connections: BTreeMap<Provider, ConnectionMeta>,
     pub passphrase: String,
     #[serde(default)]
     pub approved_workspace: Option<String>,
@@ -84,6 +125,7 @@ impl Default for Config {
             selected: Provider::Webdav,
             minutes: 0,
             providers: BTreeMap::new(),
+            connections: BTreeMap::new(),
             passphrase: String::new(),
             approved_workspace: None,
         }
@@ -144,7 +186,8 @@ impl Config {
         if self.version != 1
             || ![0, 3, 15, 30, 60].contains(&self.minutes)
             || self.passphrase.len() > 1024
-            || self.providers.len() > 3
+            || self.providers.len() > 5
+            || self.connections.len() > 5
             || self
                 .approved_workspace
                 .as_ref()
@@ -160,6 +203,7 @@ impl Config {
                     &["accessKey", "secretKey", "sessionToken"],
                 ),
                 Provider::Github => (&["owner", "repo", "branch", "prefix"], &["token"]),
+                Provider::Onedrive | Provider::Baidu => (&[], &[]),
             };
             if p.fields.iter().any(|(k, v)| {
                 !fields.contains(&k.as_str()) || v.len() > 2048 || v.chars().any(char::is_control)
@@ -169,8 +213,35 @@ impl Config {
                 return Err(error("invalid"));
             }
         }
+        for (k, c) in &self.connections {
+            let valid = match (k, c.driver.as_str(), c.mode) {
+                (Provider::Onedrive, "onedrive_pr", DriveMode::TwoWay) => true,
+                (Provider::Onedrive, "onedrive_go", DriveMode::ReadOnly) => true,
+                (Provider::Baidu, "baiduyun_go", DriveMode::ReadOnly) => c.writer_id.is_none(),
+                (Provider::Baidu, "baiduyun_go", DriveMode::SingleWriter) => c.writer_id.is_some(),
+                (Provider::Baidu, "baiduyun_go", DriveMode::TwoWay) => c.writer_id.is_some(),
+                _ => false,
+            };
+            if !valid
+                || !valid_uuid(&c.credential_id)
+                || c.account_id.len() > 512
+                || c.display_name.len() > 512
+                || c.sync_root.is_empty()
+                || c.sync_root.len() > 512
+                || !c.sync_root.starts_with('/')
+                || c.sync_root.contains(['\r', '\n', '\0'])
+                || c
+                    .writer_id
+                    .as_ref()
+                    .is_some_and(|w| w.is_empty() || w.len() > 128 || !valid_uuid(w))
+            {
+                return Err(error("invalid"));
+            }
+        }
         if self.enabled
-            && (self.passphrase.len() < 8 || !self.providers.contains_key(&self.selected))
+            && (self.passphrase.len() < 8
+                || (!self.providers.contains_key(&self.selected)
+                    && !self.connections.contains_key(&self.selected)))
         {
             return Err(error("invalid"));
         }

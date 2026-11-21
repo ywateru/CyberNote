@@ -36,6 +36,26 @@ invoke('cloud_sync_command', {
 
 响应类型为 `runtime::Reply { status, preview?, result?, message? }`。错误 `{ code, message }` 固定中文摘要，不能回显 reqwest URL、服务错误正文、口令或笔记。`result.applied`/`pending` 区分持久接收与已应用；只有 applied 且 pending=0 更新上次完成时间。状态只含 provider 公共字段、各凭据是否已保存、周期/开关、版本 ID，不回传任何 secret。`lastSuccess` 是本次应用运行期间的完成时间。
 
+## OneDrive／百度网盘 OAuth 命令
+
+在原有命令上增加以下原生闭环；授权 URL、Cookie、token 和回调 fragment 都不进入 renderer：
+
+| type | 额外字段 | 结果 / 写入边界 |
+|---|---|---|
+| `beginConnect` | `provider`、可选 `driver`、可选 `mode` | 原生调用 OpenList `/requests`，把 `driver_txt`／`server_use` Cookie 注入受控 WebView；只返回状态，不返回授权 URL 或 token |
+| `connectStatus` | 无 | 只读 attempt 状态；不重新发起授权 |
+| `connectionInfo` | 可选 `provider` | 用指定连接（省略时为当前选中项）已保存的 refresh token 刷新并读取账号／配额；不列举笔记目录、不写远端 |
+| `disconnect` | `provider` | 先撤销配置引用，再删除本机凭据；保留本机笔记和远端密文 |
+| `cancelConnect` | 无 | 关闭原生窗口并废弃 attempt；迟到回调不能复活 |
+
+`driver` 只允许 `onedrive_pr`、`onedrive_go`、`baiduyun_go`。OneDrive 个人版写入模式为 `twoWay`，工作／学校版为 `readOnly`；百度默认 `twoWay`，也允许 `readOnly`／`singleWriter`。`Status` 额外返回 `connections`、`connection`、`connect` 和每个连接的 `capabilities`；UI 必须按能力而不是 provider 名称决定按钮。
+
+凭据由 `auth/vault.rs` 独立加密保存到 `.cloud-sync/credentials.enc`，密钥为同目录 `credentials.key`（0600）。配置只保存 `credentialId`。该目录不在本地备份、云快照或 renderer 白名单内；损坏记录按 `state` 拒绝，不当作空 vault。macOS 使用非持久 `WKWebsiteDataStore` 并在加载前等待 Cookie 写入；Android 使用 `CookieManager`，登录串行并在结束清理两个 auth-state Cookie。
+
+百度远端当前使用 `/CyberNote/heads/` 不可变 head，`create`／`precreate` 与 OpenList 一致使用 `rtype=3`，并发送整文件 MD5、首 256 KiB MD5 和分块 MD5。百度开放平台文档的 `/apps/{appname}` 限制与 OpenList 应用名仍需真实账号验证；若根路径被拒绝，百度写入必须降级为只读或迁移到用户可配置的合法根目录。读取时按 writer 取最新 head，下载、大小校验或解密失败时回退上一份，解密后合并多个 bundle；revision 为排序后的 head 名单。每次写入创建新 head，不覆盖旧对象；当前不自动清理旧 head。
+
+原生登录窗口在 `Failed` 时先记录固定 `network` 错误再关闭；`Closed`／`Destroyed` 和 `openCloud` 失败都会调用 `closeCloud` 移除 handler。迟到回调、重复回调或已取消的 attempt 不能保存第二条凭据或复活连接。
+
 `ConfigPatch` 的 `expectedRevision` 必须提供；`enabled/selected/minutes/provider/fields/secrets/passphrase` 均可省略。缺失保留，布尔 false 和周期 0 真实生效，fields/secrets 中显式空字符串清空该字段；不允许 enabled 且密码/所选服务缺失。三种 provider 配置分别保留，只有 selected 且 enabled 的配置运行。fields/secrets 键名定义在 `Config::validate` 与前端 types/表单中。生产仅 HTTPS；HTTP 入口仅在 Rust `cfg(test)` fixture 中存在。
 
 ## 云逻辑身份与账户 Store 身份

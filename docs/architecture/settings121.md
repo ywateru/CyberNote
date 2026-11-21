@@ -14,7 +14,7 @@
 │ 备忘录                │ │同步此设备                      开/关│ │
 │ Agent 接入            │ │设备与传输状态 / 冲突           查看…│ │
 │ 存储空间              │ └────────────────────────────────────┘ │
-│ 导入与备份            │ ┌WebDAV / S3 / GitHub 同步       设置…┐ │
+│ 导入与备份            │ ┌网盘 / WebDAV / S3 / GitHub 同步  设置…┐ │
 │                       │ │当前状态 / 立即同步 / 预览 / 恢复    │ │
 │                       │ └────────────────────────────────────┘ │
 └───────────────────────┴──────────────────────────────────────────┘
@@ -30,7 +30,7 @@
 
 ## 云端同步
 
-WebDAV（用户原文 webdev 按 WebDAV 实现）、S3兼容存储、GitHub私有仓库为用户自选云存储，与 CyberBus 的账号/设备认证分别呈现；不能要求用户登录 CyberNote 才配置自己的存储。CyberBus仍是应用账户和设备传输唯一所有者。三种存储配置可分别保留，只有显式选中并启用的配置运行。
+WebDAV（用户原文 webdev 按 WebDAV 实现）、S3兼容存储、GitHub私有仓库，以及 OneDrive／百度网盘，为用户自选云存储，与 CyberBus 的账号/设备认证分别呈现；不能要求用户登录 CyberNote 才配置自己的存储。CyberBus仍是应用账户和设备传输唯一所有者。各存储配置可分别保留，只有显式选中并启用的配置运行。
 
 - WebDAV：HTTPS地址、目录、用户名、密码；GET/PUT以及有界目录创建；ETag条件写入。
 - S3：endpoint、region、bucket、prefix、access key、secret、可选session token；AWS SigV4；ETag条件写入。支持用户配置的兼容服务。
@@ -41,6 +41,19 @@ WebDAV（用户原文 webdev 按 WebDAV 实现）、S3兼容存储、GitHub私�
 - 云端逻辑资料库身份与Store本机/账户同步身份分别固定。云端身份用于配置/密文/确认票据绑定；Store身份用于本机版本向量及当前库校验，两者不要求UUID相同。不得静默替换CyberBus已拥有的账户workspace、设备身份或grant，也不能仅因两端既有本机/P2P/账户workspace不同便拒绝用户明确确认的云端合并。复用底层同步版本时保留账户隔离；独立快照合并也须固定实体ID与并发版本，不能用导入复制规避冲突。测试覆盖两个既有不同同步身份的本机云端往返后，各自原Store身份不变。
 - 首次拉取、恢复、覆盖远端均需明确确认与预览；当前本机内容先保留可恢复版本。远端冲突不丢弃本地分支。下载时不持Session锁，提交前重新核验Token/库身份和版本；窗口活动保存不被旧快照覆盖。
 - 自动同步可选关闭/3/15/30/60分钟，只在应用运行、显式启用且权限有效时执行；默认关闭。不因仅打开设置、发现设备或读取状态开始内容传输。
+
+### 首批网盘 OAuth（已实现，待真实账号验收）
+
+OneDrive 和百度网盘通过 OpenList 兼容授权取得 refresh token，不使用 CyberNote 自有厂商开放平台应用。该兼容桥的端点、令牌捕获、风险披露和验收见[多网盘登录与同步调研](../research/cloud-drive-sync-20261121.md)。
+
+- 授权：用户在应用内受控 WebView 登录，原生拦截 OpenList 固定回调的 URL fragment，校验 `driver_txt` 后保存 refresh token。授权对象是 OpenList 应用，不是 CyberNote；OneDrive 权限为 `Files.ReadWrite.All`，百度为 `basic,netdisk`，设置页必须在打开登录前明确披露。
+- 授权窗口：`/requests` 会设置 `driver_txt`／`server_use` Cookie；原生必须把它们注入专用 WebView 数据存储后再打开厂商页。OneDrive 回调还要求 `server_use=true`；百度 OAuth 回调不返回该字段，只校验 `driver_txt=baiduyun_go`。Cookie 缺失、值不匹配或 issuer 不一致时失败，不打开登录页。
+- 凭据：新 OAuth 凭据使用云同步专属加密记录，与 CyberBus grant、账户库、Store 身份和保存队列分离。配置只引用 `credential_id`，令牌不进入日志、备份、云快照或 renderer。
+- OneDrive：个人版使用 Graph 显式提交上传会话，最终 `PUT` 以 `If-Match`（更新）和 `If-None-Match: *`（创建候选）裁决并发；工作／学校版文档化完成方式是零长度 `POST`，最终条件实测通过前只读。个人版代码按双向能力发布，真实账号并发实测仍是验收门槛。
+- 百度：没有可用的内容条件提交，默认使用不可变 heads 提供多设备读写；读取每个 writer 的最新 head（下载、大小校验或解密失败时回退上一份），解密后合并，再写新的 head，不覆盖旧对象。`ReadOnly`／`SingleWriter` 仍可选；并发编辑保留为冲突，真实多设备并发待验收。heads 使用 `writer_id`／`seq` 可信排序；`create`／`precreate` 使用 `rtype=3` 与 MD5 元数据。当前固定 `/CyberNote`，但开放平台文档的 `/apps/{appname}` 限制和 OpenList 应用名尚未经真实账号确认；若被拒绝，必须改为可配置根目录或暂停百度写入。
+- 失败：授权过期进入重新连接；网络失败保留连接；原生登录窗口失败或关闭时移除 handler，失败状态可重试；断开只清本机凭据，保留本机笔记和远端密文。OpenList 服务不可用时暂停受影响网盘，不静默切换 issuer 或删除数据。
+
+实现位置：OpenList 契约与回调解析在 `src-tauri/src/cloud_sync/auth/openlist.rs`，凭据加密在 `auth/vault.rs`，连接状态机和命令在 `runtime.rs`／`commands.rs`，OneDrive／百度读写分别在 `remote/onedrive.rs`／`remote/baidu.rs`。`connectionInfo` 可指定 provider，设置页刷新当前展示的连接。macOS 与 Android 的原生窗口在 `plugins/tauri-plugin-notes-auth` 的 `openCloud`／`closeCloud`，不新增 renderer 可调用的原生接口。当前 OneDrive 个人版按双向能力发布，工作／学校版固定只读；百度默认多设备读写，只读／单写者可选。真实账号并发、百度真实写入路径和真机行为仍待验收，不能把自动化 fixture 当作完成证据。
 
 跨命名空间桥接先验证原始WireVersion及digest，再保持实体ID、vector、payload，转换传输副本到云规范UUID并重新seal；入本地Store时同样验证后转换回当前Store workspace，不调用adoption。相同逻辑版本往返必须相等。跨workspace的digest排序可能导致并发冲突在各端投影不同正文，双方完整保留heads并显示冲突；用户显式解决后传播收敛，不以自动选中某分支宣称无冲突。收件的持久接受点在有效确认及fence复验之后；关闭云停止新接收/发送，已提交共享inbox的版本按既有安全屏障继续恢复，不能承诺撤回已接受内容。
 

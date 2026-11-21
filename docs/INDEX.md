@@ -204,7 +204,7 @@ Mac WAV最新：[live09有限独核](plan/reviews/app-final106-mac-wav-live09-in
 - [需求与验收](requirements.md)
 - [架构与数据契约](architecture.md)
 - [参考资料与调研](research/README.md)
-- [多网盘登录与同步调研及改进方案](research/cloud-drive-sync-20261121.md)
+- [多网盘登录与同步调研及改进方案](research/cloud-drive-sync-20261121.md)：首批 OneDrive／百度网盘 OpenList 兼容 OAuth 已实现，记录 Cookie 交接、授权、凭据、OneDrive 账号类型条件写入差异、百度不可变 heads 多设备读写合并、登录空白输入修复和手动登录验收步骤；自动化、构建和待真实账号验证项见[实施验证](verification/cloud-drive-oauth-20261121/README.md)。
 - [本地标签、智能文件夹、数学、链接与格式接入分析](research/local-feature-integration.md)
 - [智能文件夹存储、归档、查询与访问边界准备审计](research/smart-folder-readiness-20261104-01.md)
 - [原版智能文件夹实际保存、求值与导航补证任务](plan/tasks/ref-smart-folders-runtime-01.md)

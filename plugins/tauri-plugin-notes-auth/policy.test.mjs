@@ -43,3 +43,12 @@ test('loopback exception requires the fixed port and exact callback path plus qu
     'http://127.0.0.1:17898/callback?code=fixture', 'http://localhost:17897/callback?code=fixture',
   ]) assert.equal(blocked(url), true, 'not the exact callback shape');
 });
+test('cloud wildcard rules escape hosts through Foundation before JSON serialization', () => {
+  const block = source.match(/static NSString \*cloudRules\([\s\S]*?\n\}/)?.[0];
+  assert.ok(block, 'cloudRules present');
+  assert.match(block, /escapedPatternForString/);
+  assert.ok(
+    !block.includes('stringByReplacingOccurrencesOfString'),
+    'manual regex escaping silently doubles the backslash in JSON',
+  );
+});

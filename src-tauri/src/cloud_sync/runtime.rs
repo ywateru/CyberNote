@@ -1,4 +1,10 @@
 use super::{
+    auth::{
+        openlist::{AuthCookie, TokenPayload},
+        oauth::{OAuth, SharedOAuth},
+        vault::Credential,
+        ISSUER,
+    },
     crypto,
     engine::{self, CloudHost, CommitReport, Context, Preview, Ticket},
     model::*,
@@ -13,6 +19,12 @@ use std::{
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 use tokio_util::sync::CancellationToken;
+fn unix_now() -> i64 {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_secs() as i64)
+        .unwrap_or(0)
+}
 /// Immutable, native-only operation binding. Never accepted from renderer or deserialized.
 #[derive(Clone)]
 pub struct CloudFence {
@@ -102,6 +114,22 @@ impl Lease {
 #[serde(tag = "type", rename_all = "camelCase", deny_unknown_fields)]
 pub enum CloudCommand {
     Status,
+    ConnectStatus,
+    BeginConnect {
+        provider: Provider,
+        #[serde(default)]
+        driver: Option<String>,
+        #[serde(default)]
+        mode: Option<DriveMode>,
+    },
+    ConnectionInfo {
+        #[serde(default)]
+        provider: Option<Provider>,
+    },
+    Disconnect {
+        provider: Provider,
+    },
+    CancelConnect,
     Save {
         patch: ConfigPatch,
     },
@@ -128,6 +156,45 @@ pub struct PublicProvider {
     pub fields: BTreeMap<String, String>,
     pub credentials_set: BTreeMap<String, bool>,
 }
+#[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Capabilities {
+    pub read: bool,
+    pub restore: bool,
+    pub write: bool,
+    pub conditional_create: bool,
+    pub conditional_update: bool,
+    pub immutable_heads: bool,
+    pub automatic: bool,
+}
+#[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PublicConnection {
+    pub provider: Provider,
+    pub driver: String,
+    pub account_id: String,
+    pub display_name: String,
+    pub sync_root: String,
+    pub mode: DriveMode,
+    pub drive_type: Option<String>,
+    pub quota_total: Option<u64>,
+    pub quota_used: Option<u64>,
+    pub created_at: i64,
+    pub last_verified_at: Option<i64>,
+    pub reauth_required: bool,
+    pub capabilities: Capabilities,
+}
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ConnectPublic {
+    pub state: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider: Option<Provider>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attempt_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<CloudError>,
+}
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Status {
@@ -140,6 +207,9 @@ pub struct Status {
     pub last_success: Option<u64>,
     pub last_error: Option<CloudError>,
     pub recoveries: Vec<String>,
+    pub connection: Option<PublicConnection>,
+    pub connections: BTreeMap<Provider, PublicConnection>,
+    pub connect: ConnectPublic,
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -151,6 +221,33 @@ pub struct Reply {
     pub result: Option<CommitReport>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection: Option<PublicConnection>,
+}
+#[derive(Clone)]
+struct Attempt {
+    id: String,
+    instance: String,
+    generation: u64,
+    provider: Provider,
+    driver: String,
+    context: Context,
+    cookies: Vec<AuthCookie>,
+    mode: DriveMode,
+    writer_id: Option<String>,
+    payload: Option<TokenPayload>,
+    completing: bool,
+    error: Option<CloudError>,
+    started: Instant,
+}
+pub struct ConnectStart {
+    pub instance: String,
+    pub generation: u64,
+    pub url: String,
+    pub title: String,
+    pub allowed_hosts: Vec<String>,
+    pub callback_prefix: String,
+    pub cookies: Vec<AuthCookie>,
 }
 struct State {
     config: Config,
@@ -160,6 +257,9 @@ struct State {
     last_error: Option<CloudError>,
     cancel: CancellationToken,
     next_auto: Instant,
+    attempt: Option<Attempt>,
+    auth_generation: u64,
+    last_connect: Option<(Provider, CloudError)>,
 }
 pub struct CloudRuntime {
     host: Arc<dyn CloudHost>,
@@ -167,12 +267,91 @@ pub struct CloudRuntime {
     state: Mutex<State>,
     operation: tokio::sync::Mutex<()>,
     epoch: Arc<RwLock<u64>>,
+    oauth: SharedOAuth,
     #[cfg(test)]
     fixture: Option<String>,
+}
+fn capabilities(provider: Provider, meta: &ConnectionMeta) -> Capabilities {
+    match provider {
+        Provider::Onedrive => {
+            let personal = meta.mode == DriveMode::TwoWay
+                && meta
+                    .drive_type
+                    .as_deref()
+                    .is_some_and(|kind| kind.eq_ignore_ascii_case("personal"));
+            Capabilities {
+                read: true,
+                restore: true,
+                write: personal,
+                conditional_create: personal,
+                conditional_update: personal,
+                immutable_heads: false,
+                automatic: personal,
+            }
+        }
+        Provider::Baidu => {
+            let writable = meta.mode != DriveMode::ReadOnly && meta.writer_id.is_some();
+            Capabilities {
+                read: true,
+                restore: true,
+                write: writable,
+                conditional_create: false,
+                conditional_update: false,
+                immutable_heads: true,
+                automatic: writable,
+            }
+        }
+        _ => Capabilities {
+            read: true,
+            restore: true,
+            write: true,
+            conditional_create: true,
+            conditional_update: true,
+            immutable_heads: false,
+            automatic: true,
+        },
+    }
+}
+fn writer_identity(
+    provider: Provider,
+    driver: &str,
+    mode: DriveMode,
+    previous: Option<&ConnectionMeta>,
+) -> Option<String> {
+    if provider != Provider::Baidu || !matches!(mode, DriveMode::SingleWriter | DriveMode::TwoWay) {
+        return None;
+    }
+    // Reconnecting must keep the writer identity that already owns this
+    // device's immutable heads. A new id would look like another writer.
+    previous
+        .filter(|meta| {
+            meta.driver == driver
+                && matches!(meta.mode, DriveMode::SingleWriter | DriveMode::TwoWay)
+        })
+        .and_then(|meta| meta.writer_id.clone())
+        .or_else(|| Some(uuid::Uuid::new_v4().to_string()))
+}
+fn public_connection(provider: Provider, meta: &ConnectionMeta) -> PublicConnection {
+    PublicConnection {
+        provider,
+        driver: meta.driver.clone(),
+        account_id: meta.account_id.clone(),
+        display_name: meta.display_name.clone(),
+        sync_root: meta.sync_root.clone(),
+        mode: meta.mode,
+        drive_type: meta.drive_type.clone(),
+        quota_total: meta.quota_total,
+        quota_used: meta.quota_used,
+        created_at: meta.created_at,
+        last_verified_at: meta.last_verified_at,
+        reauth_required: meta.reauth_required,
+        capabilities: capabilities(provider, meta),
+    }
 }
 impl CloudRuntime {
     pub fn new(root: &Path, host: Arc<dyn CloudHost>) -> Result<Arc<Self>> {
         let files = PrivateFiles::open(root)?;
+        let oauth = Arc::new(OAuth::new(root)?);
         let raw = files.read("state.json", 64 * 1024)?;
         let config: Config = match &raw {
             Some(b) => serde_json::from_slice(b).map_err(|_| error("state"))?,
@@ -191,8 +370,12 @@ impl CloudRuntime {
                 last_error: None,
                 cancel: CancellationToken::new(),
                 next_auto: Instant::now() + delay,
+                attempt: None,
+                auth_generation: 0,
+                last_connect: None,
             }),
             operation: tokio::sync::Mutex::new(()),
+            oauth,
             #[cfg(test)]
             fixture: None,
             epoch: Arc::new(RwLock::new(0)),
@@ -209,6 +392,40 @@ impl CloudRuntime {
     }
     pub fn status(&self) -> Result<Status> {
         let s = self.state()?;
+        let connection = s.config.selected.is_oauth().then(|| {
+            s.config
+                .connections
+                .get(&s.config.selected)
+                .map(|meta| public_connection(s.config.selected, meta))
+        }).flatten();
+        let connect = match &s.attempt {
+            None => match &s.last_connect {
+                Some((provider, error)) => ConnectPublic {
+                    state: "failed".into(),
+                    provider: Some(*provider),
+                    attempt_id: None,
+                    error: Some(error.clone()),
+                },
+                None => ConnectPublic {
+                    state: "idle".into(),
+                    provider: None,
+                    attempt_id: None,
+                    error: None,
+                },
+            },
+            Some(a) => ConnectPublic {
+                state: if a.error.is_some() {
+                    "failed".into()
+                } else if a.payload.is_some() {
+                    "verifying".into()
+                } else {
+                    "authorizing".into()
+                },
+                provider: Some(a.provider),
+                attempt_id: Some(a.id.clone()),
+                error: a.error.clone(),
+            },
+        };
         Ok(Status {
             revision: s.config.revision,
             enabled: s.config.enabled,
@@ -236,6 +453,14 @@ impl CloudRuntime {
             last_success: s.last_success,
             last_error: s.last_error.clone(),
             recoveries: self.files.recoveries()?,
+            connection,
+            connections: s
+                .config
+                .connections
+                .iter()
+                .map(|(p, m)| (*p, public_connection(*p, m)))
+                .collect(),
+            connect,
         })
     }
     fn persist(&self, s: &mut State, c: Config) -> Result<()> {
@@ -245,15 +470,33 @@ impl CloudRuntime {
         s.config = c;
         Ok(())
     }
-    fn reply(&self) -> Result<Reply> {
+    pub fn reply(&self) -> Result<Reply> {
         Ok(Reply {
             status: self.status()?,
             preview: None,
             result: None,
             message: None,
+            connection: None,
         })
     }
-    fn remote(&self, c: &Config) -> Result<Remote> {
+    fn validate_remote_config(&self, c: &Config) -> Result<()> {
+        if !c.enabled {
+            return Err(error("disabled"));
+        }
+        if c.selected.is_oauth() {
+            let meta = c
+                .connections
+                .get(&c.selected)
+                .ok_or_else(|| error("authentication"))?;
+            if meta.reauth_required {
+                return Err(error("authentication"));
+            }
+        } else if !c.providers.contains_key(&c.selected) {
+            return Err(error("invalid"));
+        }
+        Ok(())
+    }
+    async fn remote(&self, c: &Config) -> Result<Remote> {
         if !c.enabled {
             return Err(error("disabled"));
         }
@@ -261,7 +504,42 @@ impl CloudRuntime {
             .providers
             .get(&c.selected)
             .cloned()
-            .ok_or_else(|| error("invalid"))?;
+            .unwrap_or_default();
+        if c.selected.is_oauth() {
+            let meta = c
+                .connections
+                .get(&c.selected)
+                .ok_or_else(|| error("authentication"))?;
+            if meta.reauth_required {
+                return Err(error("authentication"));
+            }
+            #[cfg(test)]
+            if let Some(api) = &self.fixture {
+                return Remote::oauth_fixture(
+                    c.selected,
+                    config,
+                    api,
+                    self.oauth.clone(),
+                    meta.credential_id.clone(),
+                    meta.driver.clone(),
+                    meta.mode,
+                    meta.writer_id.clone(),
+                );
+            }
+            return Remote::oauth(
+                c.selected,
+                config,
+                self.oauth.clone(),
+                meta.credential_id.clone(),
+                meta.driver.clone(),
+                meta.mode,
+                meta.writer_id.clone(),
+                meta.drive_type.clone(),
+            );
+        }
+        if !c.providers.contains_key(&c.selected) {
+            return Err(error("invalid"));
+        }
         #[cfg(test)]
         if let Some(api) = &self.fixture {
             return Remote::fixture(c.selected, config, api);
@@ -274,11 +552,28 @@ impl CloudRuntime {
         if matches!(command, CloudCommand::Status) {
             return self.reply();
         }
+        if matches!(command, CloudCommand::ConnectStatus) {
+            return self.reply();
+        }
+        if let CloudCommand::ConnectionInfo { provider } = command {
+            return self.connection_info(context, provider).await;
+        }
+        if let CloudCommand::Disconnect { provider } = command {
+            return self.disconnect(provider).await;
+        }
+        if let CloudCommand::CancelConnect = command {
+            self.cancel_connect(None);
+            self.dismiss_connect();
+            return self.reply();
+        }
+        if let CloudCommand::BeginConnect { .. } = command {
+            return Err(error("invalid"));
+        }
         if let CloudCommand::Save { patch } = command {
             let mut s = self.state()?;
             let c = s.config.patch(patch)?;
             if c.enabled {
-                self.remote(&c)?;
+                self.validate_remote_config(&c)?;
             }
             let mut epoch = self.epoch.write().map_err(|_| error("state"))?;
             self.persist(&mut s, c)?;
@@ -318,6 +613,9 @@ impl CloudRuntime {
         let result = tokio::select! {biased;_=cancel.cancelled()=>Err(error("permission")),result=tokio::time::timeout(Duration::from_secs(120),self.execute(context,command,&config,lease))=>result.map_err(|_|error("timeout")).and_then(|r|r)};
         if let Err(e) = &result {
             cancel.cancel();
+            if e.code == "authentication" && config.selected.is_oauth() {
+                self.mark_reauth(config.selected);
+            }
             let mut s = self.state()?;
             if !setup_preview && s.config.revision == config.revision {
                 s.last_error = Some(e.clone());
@@ -336,7 +634,7 @@ impl CloudRuntime {
             CloudCommand::PreviewSetup { mut patch } => {
                 patch.enabled = Some(true);
                 let draft = c.patch(patch)?;
-                let remote = self.remote(&draft)?;
+                let remote = self.remote(&draft).await?;
                 let (bundle, revision, bytes) = engine::read(&remote, &draft.passphrase).await?;
                 lease.check()?;
                 let preview = engine::preview(
@@ -356,7 +654,7 @@ impl CloudRuntime {
             }
             command => command,
         };
-        let remote = self.remote(c)?;
+        let remote = self.remote(c).await?;
         match command {
             CloudCommand::Test => {
                 let _ = engine::read(&remote, &c.passphrase).await?;
@@ -398,7 +696,14 @@ impl CloudRuntime {
                 self.transfer(context, c, remote, preview_id, true, lease)
                     .await
             }
-            _ => Err(error("invalid")),
+            CloudCommand::Status
+            | CloudCommand::ConnectStatus
+            | CloudCommand::BeginConnect { .. }
+            | CloudCommand::ConnectionInfo { .. }
+            | CloudCommand::Disconnect { .. }
+            | CloudCommand::CancelConnect
+            | CloudCommand::Save { .. }
+            | CloudCommand::PreviewSetup { .. } => Err(error("invalid")),
         }
     }
     async fn recovery(&self, id: &str, password: &str) -> Result<Bundle> {
@@ -469,6 +774,15 @@ impl CloudRuntime {
         }
         if !restore && ticket.preview.source != "remote" {
             return Err(error("confirmation"));
+        }
+        if !restore && c.selected.is_oauth() {
+            let meta = c
+                .connections
+                .get(&c.selected)
+                .ok_or_else(|| error("permission"))?;
+            if !capabilities(c.selected, meta).write {
+                return Err(error("permission"));
+            }
         }
         // Re-read before any local initialization: wrong passwords and changes have zero local writes.
         if ticket.preview.source == "remote" {
@@ -627,12 +941,508 @@ impl CloudRuntime {
         }
         Ok(r)
     }
+    pub async fn begin_connect(
+        &self,
+        context: Context,
+        provider: Provider,
+        driver: Option<String>,
+        mode: Option<DriveMode>,
+    ) -> Result<ConnectStart> {
+        if !provider.is_oauth() {
+            return Err(error("invalid"));
+        }
+        let ctx = context.clone();
+        engine::host_call(self.host.clone(), move |h| h.check(&ctx)).await?;
+        if self.operation.try_lock().is_err() {
+            return Err(error("busy"));
+        }
+        if self.state()?.attempt.is_some() {
+            return Err(error("busy"));
+        }
+        let driver = driver.unwrap_or_else(|| match provider {
+            Provider::Onedrive => "onedrive_pr".into(),
+            Provider::Baidu => "baiduyun_go".into(),
+            _ => String::new(),
+        });
+        let valid_driver = match provider {
+            Provider::Onedrive => matches!(driver.as_str(), "onedrive_pr" | "onedrive_go"),
+            Provider::Baidu => driver == "baiduyun_go",
+            _ => false,
+        };
+        if !valid_driver {
+            return Err(error("invalid"));
+        }
+        let mode = match provider {
+            Provider::Onedrive => {
+                if driver == "onedrive_pr" {
+                    DriveMode::TwoWay
+                } else {
+                    DriveMode::ReadOnly
+                }
+            }
+            Provider::Baidu => match mode.unwrap_or(DriveMode::TwoWay) {
+                DriveMode::ReadOnly => DriveMode::ReadOnly,
+                DriveMode::SingleWriter => DriveMode::SingleWriter,
+                DriveMode::TwoWay => DriveMode::TwoWay,
+            },
+            _ => return Err(error("invalid")),
+        };
+        let writer_id = {
+            let state = self.state()?;
+            writer_identity(
+                provider,
+                &driver,
+                mode,
+                state.config.connections.get(&provider),
+            )
+        };
+        let id = uuid::Uuid::new_v4().to_string();
+        let instance = format!("cloud-auth-{id}");
+        let generation = {
+            let mut s = self.state()?;
+            if s.attempt.is_some() {
+                return Err(error("busy"));
+            }
+            s.last_connect = None;
+            s.auth_generation = s
+                .auth_generation
+                .checked_add(1)
+                .ok_or_else(|| error("limit"))?;
+            let generation = s.auth_generation;
+            s.attempt = Some(Attempt {
+                id,
+                instance: instance.clone(),
+                generation,
+                provider,
+                driver: driver.clone(),
+                context,
+                cookies: vec![],
+                mode,
+                writer_id,
+                payload: None,
+                completing: false,
+                error: None,
+                started: Instant::now(),
+            });
+            generation
+        };
+        // Reserve the attempt above, then release the state lock before network
+        // I/O. A concurrent begin sees `attempt` and fails busy; cancel/close
+        // can still retire this attempt while `/requests` is in flight.
+        let request = match self.oauth.requests(&driver).await {
+            Ok(request) => request,
+            Err(e) => {
+                self.fail_attempt(&instance, e.clone());
+                return Err(e);
+            }
+        };
+        {
+            let mut s = self.state()?;
+            let active = s
+                .attempt
+                .as_ref()
+                .is_some_and(|a| a.instance == instance && a.generation == generation);
+            if !active {
+                return Err(error("stale"));
+            }
+            if let Some(a) = s.attempt.as_mut() {
+                a.cookies = request.cookies.clone();
+            }
+        }
+        Ok(ConnectStart {
+            instance,
+            generation,
+            url: request.authorization_url,
+            title: match provider {
+                Provider::Onedrive => "登录 OneDrive",
+                Provider::Baidu => "登录百度网盘",
+                _ => "登录网盘",
+            }
+            .into(),
+            allowed_hosts: super::auth::openlist::authorization_hosts(&driver),
+            callback_prefix: super::auth::openlist::callback_prefix().into(),
+            cookies: request.cookies,
+        })
+    }
+    /// Retire a failed attempt and retain only its safe provider/error pair for
+    /// the status surface. A retry must be able to begin immediately.
+    fn fail_attempt(&self, instance: &str, e: CloudError) -> Option<(String, u64)> {
+        let mut s = self.state().ok()?;
+        let a = s.attempt.as_ref()?;
+        if a.instance != instance {
+            return None;
+        }
+        let out = (a.instance.clone(), a.generation);
+        let provider = a.provider;
+        s.attempt = None;
+        s.last_connect = Some((provider, e));
+        Some(out)
+    }
+    pub async fn complete_connect(
+        &self,
+        context: &Context,
+        instance: &str,
+        raw: &str,
+    ) -> Result<Reply> {
+        let ctx = context.clone();
+        engine::host_call(self.host.clone(), move |h| h.check(&ctx)).await?;
+        let attempt = {
+            let mut s = self.state()?;
+            let a = s.attempt.as_mut().ok_or_else(|| error("stale"))?;
+            if a.instance != instance
+                || &a.context != context
+                || a.started.elapsed() > Duration::from_secs(600)
+                || a.completing
+            {
+                return Err(error("stale"));
+            }
+            // Claim the callback exactly once. Android may report the same
+            // final URL from onPageStarted and onPageFinished, and a duplicate
+            // completion must not create a second credential/connection.
+            a.completing = true;
+            a.clone()
+        };
+        let payload = match self.oauth.parse_callback(raw, &attempt.driver) {
+            Ok(p) => p,
+            Err(e) => {
+                self.fail_attempt(instance, e.clone());
+                return Err(e);
+            }
+        };
+        if let Ok(mut s) = self.state() {
+            if let Some(a) = s.attempt.as_mut().filter(|a| a.instance == instance) {
+                a.payload = Some(payload.clone());
+            }
+        }
+        let mut refresh_for_save = payload.refresh_token.clone();
+        let token = match payload.access_token.clone() {
+            Some(token) => token,
+            None => {
+                match self
+                    .oauth
+                    .renew(attempt.provider, &attempt.driver, &payload.refresh_token)
+                    .await
+                {
+                    Ok(r) => {
+                        if let Some(refresh) = r.refresh_token {
+                            refresh_for_save = refresh;
+                        }
+                        r.access_token
+                    }
+                    Err(e) => {
+                        self.fail_attempt(instance, e.clone());
+                        return Err(e);
+                    }
+                }
+            }
+        };
+        let account = match self.oauth.account(attempt.provider, &token).await {
+            Ok(a) => a,
+            Err(e) if e.code == "authentication" => {
+                match self
+                    .oauth
+                    .renew(attempt.provider, &attempt.driver, &payload.refresh_token)
+                    .await
+                {
+                    Ok(r) => {
+                        if let Some(refresh) = r.refresh_token {
+                            refresh_for_save = refresh;
+                        }
+                        match self.oauth.account(attempt.provider, &r.access_token).await {
+                            Ok(a) => a,
+                            Err(e) => {
+                                self.fail_attempt(instance, e.clone());
+                                return Err(e);
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        self.fail_attempt(instance, e.clone());
+                        return Err(e);
+                    }
+                }
+            }
+            Err(e) => {
+                self.fail_attempt(instance, e.clone());
+                return Err(e);
+            }
+        };
+        {
+            let s = self.state()?;
+            let active = s
+                .attempt
+                .as_ref()
+                .is_some_and(|a| a.instance == instance && &a.context == context);
+            if !active {
+                return Err(error("stale"));
+            }
+        }
+        // Account verification is network-bound, but persisting a new
+        // connection must not race a sync that is already using the old
+        // config. Do not hold this lock across the network calls above.
+        let _operation = match self.operation.try_lock() {
+            Ok(operation) => operation,
+            Err(_) => {
+                self.fail_attempt(instance, error("busy"));
+                return Err(error("busy"));
+            }
+        };
+        let credential_id = uuid::Uuid::new_v4().to_string();
+        let now = unix_now();
+        let scope = match attempt.provider {
+            Provider::Onedrive => "offline_access Files.ReadWrite.All",
+            Provider::Baidu => "basic,netdisk",
+            _ => "",
+        };
+        if let Err(e) = self.oauth.save(Credential {
+            version: 1,
+            connection_id: credential_id.clone(),
+            provider: attempt.provider,
+            issuer: ISSUER.into(),
+            driver: attempt.driver.clone(),
+            refresh_token: refresh_for_save,
+            access_token: Some(token),
+            // OpenList may return `expires_in`; otherwise keep the callback
+            // token short-lived so the next operation refreshes it.
+            expires_at: payload.expires_at.or(Some(now + 3000)),
+            scope: scope.into(),
+            account_id: account.account_id.clone(),
+            display_name: account.display_name.clone(),
+        }) {
+            self.fail_attempt(instance, e.clone());
+            return Err(e);
+        }
+        let mut s = self.state()?;
+        let active = s
+            .attempt
+            .as_ref()
+            .is_some_and(|a| a.instance == instance && &a.context == context);
+        if !active {
+            drop(s);
+            let _ = self.oauth.remove(&credential_id);
+            return Err(error("stale"));
+        }
+        let mut config = s.config.clone();
+        let old_credential = config
+            .connections
+            .get(&attempt.provider)
+            .map(|m| m.credential_id.clone());
+        config
+            .providers
+            .entry(attempt.provider)
+            .or_default();
+        config.connections.insert(
+            attempt.provider,
+            ConnectionMeta {
+                credential_id: credential_id.clone(),
+                driver: attempt.driver.clone(),
+                account_id: account.account_id,
+                display_name: account.display_name,
+                sync_root: match attempt.provider {
+                    Provider::Onedrive => "/CyberNote/notes.bundle",
+                    Provider::Baidu => "/CyberNote/heads",
+                    _ => "/CyberNote",
+                }
+                .into(),
+                mode: attempt.mode,
+                drive_type: account.drive_type,
+                writer_id: attempt.writer_id,
+                created_at: now,
+                last_verified_at: Some(now),
+                reauth_required: false,
+                quota_total: account.quota_total,
+                quota_used: account.quota_used,
+            },
+        );
+        config.selected = attempt.provider;
+        // Connecting or reconnecting never starts content transfer. The user
+        // must enter the passphrase, preview and explicitly enable sync.
+        config.enabled = false;
+        config.revision = config.revision.checked_add(1).ok_or_else(|| error("limit"))?;
+        config.approved_workspace = None;
+        if let Err(e) = config.validate() {
+            drop(s);
+            let _ = self.oauth.remove(&credential_id);
+            self.fail_attempt(instance, e.clone());
+            return Err(e);
+        }
+        if let Err(e) = self.persist(&mut s, config) {
+            let _ = self.oauth.remove(&credential_id);
+            drop(s);
+            self.fail_attempt(instance, e.clone());
+            return Err(e);
+        }
+        s.attempt = None;
+        s.last_connect = None;
+        drop(s);
+        if let Some(old) = old_credential.filter(|old| old != &credential_id) {
+            let _ = self.oauth.remove(&old);
+        }
+        let mut r = self.reply()?;
+        r.message = Some("已连接；输入加密口令并预览后才会开始同步".into());
+        Ok(r)
+    }
+    pub fn cancel_connect(&self, instance: Option<&str>) -> Option<(String, u64)> {
+        let mut s = self.state().ok()?;
+        let a = s.attempt.as_ref()?;
+        if instance.is_some_and(|i| i != a.instance) {
+            return None;
+        }
+        let out = (a.instance.clone(), a.generation);
+        let failed = a.error.is_some();
+        s.attempt = None;
+        if !failed {
+            s.last_connect = None;
+        }
+        Some(out)
+    }
+    /// Record a native window failure before retiring the attempt. Keeping the
+    /// fixed error in `last_connect` lets the UI show a retryable failure while
+    /// allowing the next `beginConnect` to replace this attempt.
+    pub fn abort_connect(&self, instance: &str, e: CloudError) -> Option<(String, u64)> {
+        self.fail_attempt(instance, e)
+    }
+    pub fn cancel_connect_for(&self, provider: Provider) -> Option<(String, u64)> {
+        let mut s = self.state().ok()?;
+        let a = s.attempt.as_ref()?;
+        if a.provider != provider {
+            return None;
+        }
+        let out = (a.instance.clone(), a.generation);
+        s.attempt = None;
+        s.last_connect = None;
+        Some(out)
+    }
+    pub fn dismiss_connect(&self) {
+        if let Ok(mut s) = self.state() {
+            s.attempt = None;
+            s.last_connect = None;
+        }
+    }
+    fn mark_reauth(&self, provider: Provider) {
+        let Ok(mut s) = self.state() else { return };
+        let mut config = s.config.clone();
+        let Some(meta) = config.connections.get_mut(&provider) else {
+            return;
+        };
+        if meta.reauth_required {
+            return;
+        }
+        meta.reauth_required = true;
+        config.revision = match config.revision.checked_add(1) {
+            Some(v) => v,
+            None => return,
+        };
+        if config.validate().is_ok() {
+            let _ = self.persist(&mut s, config);
+        }
+    }
+    pub async fn connection_info(
+        &self,
+        context: Context,
+        requested: Option<Provider>,
+    ) -> Result<Reply> {
+        let ctx = context.clone();
+        engine::host_call(self.host.clone(), move |h| h.check(&ctx)).await?;
+        let (provider, id) = {
+            let s = self.state()?;
+            let provider = requested.unwrap_or(s.config.selected);
+            if !provider.is_oauth() {
+                return Err(error(if requested.is_some() { "invalid" } else { "missing" }));
+            }
+            let meta = s
+                .config
+                .connections
+                .get(&provider)
+                .ok_or_else(|| error("missing"))?;
+            (provider, meta.credential_id.clone())
+        };
+        let (_, account) = match self.oauth.verified_account(&id).await {
+            Ok(v) => v,
+            Err(e) if e.code == "authentication" => {
+                self.mark_reauth(provider);
+                return Err(e);
+            }
+            Err(e) => return Err(e),
+        };
+        let mut s = self.state()?;
+        let mut config = s.config.clone();
+        let meta = config
+            .connections
+            .get_mut(&provider)
+            .ok_or_else(|| error("missing"))?;
+        meta.account_id = account.account_id;
+        meta.display_name = account.display_name;
+        // Drive type is a write capability gate: an unavailable value must
+        // remain unknown and keep OneDrive read-only. Quota is informational,
+        // so retain the last known numbers when that endpoint alone fails.
+        meta.drive_type = account.drive_type;
+        if account.quota_total.is_some() {
+            meta.quota_total = account.quota_total;
+        }
+        if account.quota_used.is_some() {
+            meta.quota_used = account.quota_used;
+        }
+        meta.last_verified_at = Some(unix_now());
+        meta.reauth_required = false;
+        let public = public_connection(provider, meta);
+        config.revision = config.revision.checked_add(1).ok_or_else(|| error("limit"))?;
+        config.validate()?;
+        self.persist(&mut s, config)?;
+        drop(s);
+        let mut r = self.reply()?;
+        r.connection = Some(public);
+        Ok(r)
+    }
+    pub async fn disconnect(&self, provider: Provider) -> Result<Reply> {
+        if !provider.is_oauth() {
+            return Err(error("invalid"));
+        }
+        let mut s = self.state()?;
+        let mut config = s.config.clone();
+        let meta = config.connections.remove(&provider);
+        config.providers.remove(&provider);
+        if config.selected == provider {
+            config.enabled = false;
+        }
+        config.revision = config.revision.checked_add(1).ok_or_else(|| error("limit"))?;
+        config.approved_workspace = None;
+        config.validate()?;
+        let mut epoch = self.epoch.write().map_err(|_| error("state"))?;
+        self.persist(&mut s, config)?;
+        *epoch = epoch.checked_add(1).ok_or_else(|| error("limit"))?;
+        s.cancel.cancel();
+        s.cancel = CancellationToken::new();
+        s.ticket = None;
+        if s.attempt.as_ref().is_some_and(|a| a.provider == provider) {
+            s.attempt = None;
+        }
+        if s.last_connect.as_ref().is_some_and(|(p, _)| *p == provider) {
+            s.last_connect = None;
+        }
+        drop(epoch);
+        drop(s);
+        if let Some(meta) = meta {
+            let _ = self.oauth.remove(&meta.credential_id);
+        }
+        let mut r = self.reply()?;
+        r.message = Some("已断开连接；本机笔记和远端密文均保留".into());
+        Ok(r)
+    }
     /// Host calls from ONE owned foreground timer. Never create a timer from status or UI mount.
     /// `context` must be freshly authorized; no stale window Token may be cached by the scheduler.
     pub async fn automatic(&self, context: Context) -> Result<Option<Reply>> {
         {
             let mut s = self.state()?;
-            if !s.config.enabled || s.config.minutes == 0 || Instant::now() < s.next_auto {
+            let automatic = !s.config.selected.is_oauth()
+                || s.config.connections.get(&s.config.selected).is_some_and(|m| {
+                    !m.reauth_required && capabilities(s.config.selected, m).automatic
+                });
+            if !s.config.enabled
+                || s.config.minutes == 0
+                || Instant::now() < s.next_auto
+                || !automatic
+            {
                 return Ok(None);
             }
             s.next_auto = Instant::now() + Duration::from_secs(u64::from(s.config.minutes) * 60);
@@ -665,3 +1475,260 @@ impl CloudRuntime {
 #[cfg(test)]
 #[path = "lease_tests.rs"]
 mod lease_tests;
+
+#[cfg(test)]
+mod command_tests {
+    use super::*;
+
+    fn connection(
+        driver: &str,
+        mode: DriveMode,
+        drive_type: Option<&str>,
+        writer_id: Option<String>,
+    ) -> ConnectionMeta {
+        ConnectionMeta {
+            credential_id: uuid::Uuid::new_v4().to_string(),
+            driver: driver.into(),
+            account_id: "account".into(),
+            display_name: "Test".into(),
+            sync_root: "/CyberNote".into(),
+            mode,
+            drive_type: drive_type.map(str::to_string),
+            writer_id,
+            created_at: 1,
+            last_verified_at: None,
+            reauth_required: false,
+            quota_total: None,
+            quota_used: None,
+        }
+    }
+
+    #[test]
+    fn connection_info_binds_the_requested_provider() {
+        let command: CloudCommand = serde_json::from_str(
+            r#"{"type":"connectionInfo","provider":"onedrive"}"#,
+        )
+        .unwrap();
+        assert!(matches!(
+            command,
+            CloudCommand::ConnectionInfo {
+                provider: Some(Provider::Onedrive)
+            }
+        ));
+        let legacy: CloudCommand = serde_json::from_str(r#"{"type":"connectionInfo"}"#).unwrap();
+        assert!(matches!(
+            legacy,
+            CloudCommand::ConnectionInfo { provider: None }
+        ));
+    }
+
+    #[test]
+    fn write_capabilities_are_conservative_for_oauth_connections() {
+        let personal = capabilities(
+            Provider::Onedrive,
+            &connection("onedrive_pr", DriveMode::TwoWay, Some("personal"), None),
+        );
+        assert!(personal.write);
+        assert!(personal.automatic);
+
+        let unknown = capabilities(
+            Provider::Onedrive,
+            &connection("onedrive_pr", DriveMode::TwoWay, None, None),
+        );
+        assert!(!unknown.write);
+        assert!(!unknown.automatic);
+
+        let business = capabilities(
+            Provider::Onedrive,
+            &connection("onedrive_pr", DriveMode::TwoWay, Some("business"), None),
+        );
+        assert!(!business.write);
+
+        let baidu_read = capabilities(
+            Provider::Baidu,
+            &connection("baiduyun_go", DriveMode::ReadOnly, Some("baidu"), None),
+        );
+        assert!(!baidu_read.write);
+
+        let baidu_write = capabilities(
+            Provider::Baidu,
+            &connection(
+                "baiduyun_go",
+                DriveMode::SingleWriter,
+                Some("baidu"),
+                Some(uuid::Uuid::new_v4().to_string()),
+            ),
+        );
+        assert!(baidu_write.write);
+        assert!(baidu_write.automatic);
+
+        let baidu_two_way = capabilities(
+            Provider::Baidu,
+            &connection(
+                "baiduyun_go",
+                DriveMode::TwoWay,
+                Some("baidu"),
+                Some(uuid::Uuid::new_v4().to_string()),
+            ),
+        );
+        assert!(baidu_two_way.write);
+        assert!(baidu_two_way.automatic);
+        assert!(baidu_two_way.immutable_heads);
+    }
+
+    #[test]
+    fn config_rejects_unpaired_modes_and_writer_ids() {
+        let mut config = Config::default();
+        config.connections.insert(
+            Provider::Onedrive,
+            connection("onedrive_go", DriveMode::TwoWay, Some("business"), None),
+        );
+        assert_eq!(config.validate().unwrap_err().code, "invalid");
+
+        config.connections.insert(
+            Provider::Onedrive,
+            connection("onedrive_pr", DriveMode::TwoWay, Some("personal"), None),
+        );
+        assert!(config.validate().is_ok());
+
+        config.connections.insert(
+            Provider::Baidu,
+            connection("baiduyun_go", DriveMode::SingleWriter, Some("baidu"), None),
+        );
+        assert_eq!(config.validate().unwrap_err().code, "invalid");
+
+        config.connections.insert(
+            Provider::Baidu,
+            connection(
+                "baiduyun_go",
+                DriveMode::TwoWay,
+                Some("baidu"),
+                Some(uuid::Uuid::new_v4().to_string()),
+            ),
+        );
+        assert!(config.validate().is_ok());
+
+        config.connections.insert(
+            Provider::Baidu,
+            connection("baiduyun_go", DriveMode::TwoWay, Some("baidu"), None),
+        );
+        assert_eq!(config.validate().unwrap_err().code, "invalid");
+    }
+
+    #[test]
+    fn baidu_reconnect_keeps_the_writer_identity() {
+        let writer = uuid::Uuid::new_v4().to_string();
+        let previous = connection(
+            "baiduyun_go",
+            DriveMode::SingleWriter,
+            Some("baidu"),
+            Some(writer.clone()),
+        );
+        assert_eq!(
+            writer_identity(
+                Provider::Baidu,
+                "baiduyun_go",
+                DriveMode::SingleWriter,
+                Some(&previous),
+            )
+            .as_deref(),
+            Some(writer.as_str())
+        );
+        assert_eq!(
+            writer_identity(
+                Provider::Baidu,
+                "baiduyun_go",
+                DriveMode::TwoWay,
+                Some(&previous),
+            )
+            .as_deref(),
+            Some(writer.as_str())
+        );
+        assert!(writer_identity(
+            Provider::Baidu,
+            "baiduyun_go",
+            DriveMode::ReadOnly,
+            Some(&previous),
+        )
+        .is_none());
+        assert!(
+            writer_identity(Provider::Onedrive, "onedrive_pr", DriveMode::TwoWay, None).is_none()
+        );
+        let fresh =
+            writer_identity(Provider::Baidu, "baiduyun_go", DriveMode::TwoWay, None).unwrap();
+        assert_ne!(fresh, writer);
+        assert!(crate::sync::model::valid_uuid(&fresh));
+    }
+
+    struct CheckOnly;
+    impl engine::CloudHost for CheckOnly {
+        fn check(&self, _: &Context) -> Result<()> {
+            Ok(())
+        }
+        fn inspect(&self, _: &Context) -> Result<engine::LocalInfo> {
+            panic!("not used")
+        }
+        fn capture(
+            &self,
+            _: &Context,
+            _: &str,
+            _: bool,
+            _: Lease,
+        ) -> Result<engine::Capture> {
+            panic!("not used")
+        }
+        fn validate(&self, _: &Context, _: &Bundle, _: Lease) -> Result<()> {
+            panic!("not used")
+        }
+        fn commit(
+            &self,
+            _: &Context,
+            _: Bundle,
+            _: &str,
+            _: Lease,
+        ) -> Result<engine::CommitReport> {
+            panic!("not used")
+        }
+    }
+
+    #[test]
+    fn failed_attempt_is_retired_with_a_safe_status() {
+        let dir = tempfile::tempdir().unwrap();
+        let runtime = CloudRuntime::new(
+            &dir.path().canonicalize().unwrap(),
+            Arc::new(CheckOnly),
+        )
+        .unwrap();
+        let instance = "cloud-auth-test".to_string();
+        runtime.state.lock().unwrap().attempt = Some(Attempt {
+            id: uuid::Uuid::new_v4().to_string(),
+            instance: instance.clone(),
+            generation: 7,
+            provider: Provider::Onedrive,
+            driver: "onedrive_pr".into(),
+            context: Context {
+                window: "main".into(),
+                session: "session".into(),
+                token: serde_json::json!({"epoch": 1}),
+                store_instance: "store".into(),
+            },
+            cookies: vec![],
+            mode: DriveMode::TwoWay,
+            writer_id: None,
+            payload: None,
+            completing: false,
+            error: None,
+            started: Instant::now(),
+        });
+        assert_eq!(
+            runtime.fail_attempt(&instance, error("network")),
+            Some((instance.clone(), 7))
+        );
+        let status = runtime.status().unwrap();
+        assert!(status.connections.is_empty());
+        assert_eq!(status.connect.state, "failed");
+        assert_eq!(status.connect.provider, Some(Provider::Onedrive));
+        assert_eq!(status.connect.error.unwrap().code, "network");
+        assert!(runtime.state.lock().unwrap().attempt.is_none());
+    }
+}

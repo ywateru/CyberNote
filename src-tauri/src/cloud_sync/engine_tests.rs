@@ -540,6 +540,41 @@ fn causal_restore_and_settings_merge_keep_all_branches_and_reject_equivocation()
     right.settings[0] = right.settings[0].clone().seal();
     assert_eq!(merge(&left, &right).err().unwrap().code, "invalid");
 }
+
+#[test]
+fn multiple_remote_heads_merge_without_dropping_branches() {
+    let workspace = uuid::Uuid::new_v4().to_string();
+    let mut left = Bundle::empty(workspace.clone());
+    left.settings.push(
+        SettingVersion {
+            key: "theme".into(),
+            value: json!("dark"),
+            vector: BTreeMap::from([(uuid::Uuid::new_v4().to_string(), 1)]),
+            digest: String::new(),
+        }
+        .seal(),
+    );
+    let mut right = Bundle::empty(workspace.clone());
+    right.settings.push(
+        SettingVersion {
+            key: "view".into(),
+            value: json!("gallery"),
+            vector: BTreeMap::from([(uuid::Uuid::new_v4().to_string(), 1)]),
+            digest: String::new(),
+        }
+        .seal(),
+    );
+    let merged = merge_bundles(vec![left, right]).unwrap();
+    assert_eq!(merged.settings.len(), 2);
+    assert_eq!(merged.workspace_id, workspace);
+
+    let other = Bundle::empty(uuid::Uuid::new_v4().to_string());
+    assert_eq!(
+        merge_bundles(vec![merged, other]).err().unwrap().code,
+        "workspace"
+    );
+}
+
 #[tokio::test]
 async fn account_owned_store_identity_is_never_adopted_or_replaced() {
     let d = tempfile::tempdir().unwrap();

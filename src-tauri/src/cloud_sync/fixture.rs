@@ -105,6 +105,9 @@ impl Fixture {
                 c.secrets
                     .insert("token".into(), "fixture-github-token".into());
             }
+            Provider::Onedrive | Provider::Baidu => {
+                c.fields.remove("endpoint");
+            }
         }
         c
     }

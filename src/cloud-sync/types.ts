@@ -1,4 +1,40 @@
-export type CloudProvider = "webdav" | "s3" | "github";
+export type CloudProvider =
+  | "webdav"
+  | "s3"
+  | "github"
+  | "onedrive"
+  | "baidu";
+export type DriveMode = "readOnly" | "singleWriter" | "twoWay";
+export type CloudCapabilities = {
+  read: boolean;
+  restore: boolean;
+  write: boolean;
+  conditionalCreate: boolean;
+  conditionalUpdate: boolean;
+  immutableHeads: boolean;
+  automatic: boolean;
+};
+export type CloudConnection = {
+  provider: CloudProvider;
+  driver: string;
+  accountId: string;
+  displayName: string;
+  syncRoot: string;
+  mode: DriveMode;
+  driveType: string | null;
+  quotaTotal: number | null;
+  quotaUsed: number | null;
+  createdAt: number;
+  lastVerifiedAt: number | null;
+  reauthRequired: boolean;
+  capabilities: CloudCapabilities;
+};
+export type CloudConnectState = {
+  state: "idle" | "authorizing" | "verifying" | "failed";
+  provider?: CloudProvider;
+  attemptId?: string;
+  error?: CloudError;
+};
 export type CloudContext = {
   window: string;
   session: string;
@@ -24,6 +60,9 @@ export type CloudStatus = {
   lastSuccess: number | null;
   lastError: CloudError | null;
   recoveries: string[];
+  connection?: CloudConnection | null;
+  connections: Partial<Record<CloudProvider, CloudConnection>>;
+  connect: CloudConnectState;
 };
 export type CloudPreview = {
   id: string;
@@ -47,7 +86,16 @@ export type ConfigPatch = {
   passphrase?: string;
 };
 export type CloudCommand =
-  | { type: "status" | "test" }
+  | { type: "status" | "test" | "connectStatus" }
+  | { type: "connectionInfo"; provider?: CloudProvider }
+  | {
+      type: "beginConnect";
+      provider: CloudProvider;
+      driver?: string;
+      mode?: DriveMode;
+    }
+  | { type: "disconnect"; provider: CloudProvider }
+  | { type: "cancelConnect" }
   | { type: "save"; patch: ConfigPatch }
   | { type: "preview"; recovery?: string }
   | { type: "previewSetup"; patch: ConfigPatch }
@@ -57,6 +105,7 @@ export type CloudReply = {
   preview?: CloudPreview;
   result?: { applied: boolean; pending: number; conflicts: number };
   message?: string;
+  connection?: CloudConnection;
 };
 export type CloudClient = (
   context: CloudContext,

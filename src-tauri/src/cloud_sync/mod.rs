@@ -1,4 +1,5 @@
 //! User-owned encrypted cloud transport. Does not own account grants or a Store.
+pub mod auth;
 pub mod crypto;
 pub mod engine;
 pub mod model;
