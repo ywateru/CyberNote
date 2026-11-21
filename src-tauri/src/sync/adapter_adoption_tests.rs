@@ -70,6 +70,11 @@ fn pair() -> (String, String) {
         uuid::Uuid::new_v4().to_string(),
     )
 }
+fn gate() -> Gate {
+    let gate = Gate::default();
+    gate.bind_lifecycle(Arc::new(|| true));
+    gate
+}
 fn tiny_attachment(runtime: &Runtime, note: &str) -> PathBuf {
     let mut s = runtime.shared.0.lock().unwrap();
     let attachment = s
@@ -97,7 +102,7 @@ fn workspace_adoption_actual_commit_accepts_25766ms_media_without_old_apply_work
         s.sync_advance_clock(Duration::from_millis(25_766));
     }));
     runtime
-        .adopt_account_store(&workspace, &device, &Gate::default())
+        .adopt_account_store(&workspace, &device, &gate())
         .unwrap();
     let s = runtime.shared.0.lock().unwrap();
     let identity = s.store.sync_identity().unwrap().unwrap();
@@ -147,7 +152,7 @@ fn workspace_adoption_late_verifier_never_commits_and_timeout_survives_coordinat
             }
         }));
         let error = runtime
-            .adopt_account_store(&workspace, &device, &Gate::default())
+            .adopt_account_store(&workspace, &device, &gate())
             .unwrap_err();
         assert_eq!(error.code, "sync_adoption_media_timeout");
         let safe = serde_json::to_value(crate::account::types::Error::from(error).safe()).unwrap();
@@ -192,7 +197,7 @@ fn workspace_adoption_retained_timeout_precedes_late_verifier_failure_only_for_e
         }));
         let (workspace, device) = pair();
         let failure = runtime
-            .adopt_account_store(&workspace, &device, &Gate::default())
+            .adopt_account_store(&workspace, &device, &gate())
             .unwrap_err();
         assert_eq!(
             failure.code,
@@ -235,7 +240,7 @@ fn workspace_adoption_media_rechecks_real_gate_window_intent_and_media_generatio
             .unwrap()
             .unwrap();
         let (workspace, device) = pair();
-        let gate = Arc::new(Gate::default());
+        let gate = Arc::new(gate());
         let controlled_gate = gate.clone();
         let shared = runtime.shared.clone();
         let windows = host.clone();
@@ -333,7 +338,7 @@ fn workspace_adoption_media_event_failure_aborts_before_verifier() {
     let (workspace, device) = pair();
     assert_eq!(
         runtime
-            .adopt_account_store(&workspace, &device, &Gate::default())
+                .adopt_account_store(&workspace, &device, &gate())
             .unwrap_err()
             .code,
         "synthetic_emit_failure"
