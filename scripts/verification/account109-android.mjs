@@ -67,21 +67,20 @@ function nativeAuthTree(xml) {
   }
   if(stack.length||!nodes.length)throw loginFailure('ANDROID_NATIVE_XML_INVALID');
   const nativeButton=label=>nodes.filter(n=>!n.inWeb&&n.shown&&n.attrs.package===PACKAGE&&n.attrs.class==='android.widget.Button'&&n.attrs.text===label&&n.attrs.enabled==='true'&&n.attrs.clickable==='true');
-  const continuing=nativeButton('在浏览器中继续'),cancel=nativeButton('取消登录');
   const web=nodes.filter(n=>!n.inWeb&&n.shown&&n.attrs.class==='android.webkit.WebView'&&n.attrs.package===PACKAGE);
+  const retiredToolbar=nativeButton('在浏览器中继续').length+nativeButton('取消登录').length;
   const ownFormNode=n=>web.length===1&&n.webOwner===web[0]&&n.ownedWebPath&&n.shown;
   const editable=nodes.some(n=>ownFormNode(n)&&n.attrs.class==='android.widget.EditText');
   const formAction=nodes.some(n=>ownFormNode(n)&&['Sign in','Continue','Next','登录','继续','下一步'].includes(n.attrs.text)&&n.attrs.enabled==='true'&&n.attrs.clickable==='true');
-  const safe={dialog:continuing.length===1&&cancel.length===1,webView:web.length===1,hostedForm:editable&&formAction};
-  return {safe,continuing};
+  const safe={dialog:web.length===1&&retiredToolbar===0,webView:web.length===1,hostedForm:editable&&formAction};
+  return {safe};
 }
 export function nativeLoginProjection(xml){return nativeAuthTree(xml).safe;}
-export function nativeLoginControls({capture,guard,back,tap}) {
+export function nativeLoginControls({capture,guard,back}) {
   async function checked(){await guard();const tree=nativeAuthTree(await capture());await guard();if(!Object.values(tree.safe).every(v=>v===true))throw loginFailure('ANDROID_NATIVE_LOGIN_FORM_REQUIRED');return tree;}
   return {
     async nativeLoginPresentation(){await guard();const result=nativeAuthTree(await capture()).safe;await guard();return result;},
-    async closeNativeLogin(){await checked();await guard();await back();return {action:'native-back',ownedDialog:true};},
-    async continueNativeLogin(){const t=await checked(),[x1,y1,x2,y2]=t.continuing[0].bounds;await guard();await tap(Math.floor((x1+x2)/2),Math.floor((y1+y2)/2));return {action:'native-toolbar-continue',ownedDialog:true};}
+    async closeNativeLogin(){await checked();await guard();await back();return {action:'native-back',ownedDialog:true};}
   };
 }
 

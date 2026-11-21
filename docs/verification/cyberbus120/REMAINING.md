@@ -73,11 +73,14 @@ blobs     5bd82417347ce853d9a9ffc208045d6bc727054983a35a3ec701be912404a320
 
 ## 凭据存储
 
-桌面默认 `credentialStorage=encryptedFile`，本地密钥文件权限为 `0600`；系统 Keychain 是设置中的可选模式。macOS A/B 的登录、重启恢复和同步均已在默认加密文件模式通过。Keychain 模式的授权、拒绝、重建签名失效和切回加密文件仍未做本轮 UI 验收。
+2026-11-21 起产品只支持本地加密文件，设置页不再显示凭据存储选项：
 
-曾观察到早于当前应用生命周期的旧 `probe_store` Keychain 授权提示；当前没有该进程，普通 `encryptedFile` 登录与同步未受影响。该提示不能作为当前 Keychain 模式通过的证据，也不要点击“始终允许”。
+- macOS 使用 `EncryptedFileStore`，本地密钥文件权限为 `0600`，AES-GCM 密文、原子替换、进程独占和完整性校验。
+- Android 使用 Keystore 保护的本地加密文件；Keystore 是内部保护机制，不是用户可选的“系统密钥”模式。
+- 旧 Keychain 项不读取、不删除。发现旧版 Keychain 偏好或安装标记时，先归档当前绑定到私有会话记录，再清除活动绑定并要求重新登录；备忘录、附件和旧 Keychain 项保留。
+- 状态 DTO、IPC、调试命令和 UI 不再包含 `credentialStorage` / `setCredentialStorage`；`platform-keyring` feature 已移除。
 
-Android 继续使用平台 Keystore。当前应用能恢复本地登录状态，但 Mac↔Android 传输阻断发生在业务会话建立前，不能据此推断 Keystore 强停恢复已通过。
+macOS A/B 的登录、重启恢复和同步已在本地加密文件模式通过。旧 Keychain 安装的实际升级迁移、Android 强停恢复和发布签名包仍未取得通过证据；Mac↔Android 传输阻断发生在业务会话建立前，不能据此推断 Android Keystore 强停恢复已通过。
 
 ## 正式交付边界
 

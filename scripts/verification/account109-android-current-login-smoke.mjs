@@ -16,7 +16,7 @@ export const CURRENT=Object.freeze({
   snapshot:'/private/tmp/account109-android-preserving-upgrade-live01/before.private.json',
   snapshotSha256:'df83265e2b527804bdfa88cc673ba82b6edb38a2d2b4e0acb1423b3d5339fa18',
 });
-const cases=['embedded-back','embedded-browser','browser'];
+const cases=['embedded-back','browser'];
 export function receiptGate(r){
   assert.equal(r.schema,1);assert.equal(r.scope,'account109-android-current-data-preserving-upgrade');
   assert.equal(r.status,'pass-data-preservation-only');assert.equal(r.serial,SERIAL);assert.equal(r.package,PACKAGE);

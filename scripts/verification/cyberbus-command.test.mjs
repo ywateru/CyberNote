@@ -194,7 +194,6 @@ test("account and workspace projections never retain identities or content", () 
     ],
     pendingCount: 0,
     conflictCount: 0,
-    credentialStorage: "encryptedFile",
     error: null,
   });
   assert.equal(account.signedIn, true);

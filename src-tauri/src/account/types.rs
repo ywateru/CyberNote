@@ -27,9 +27,6 @@ pub(crate) enum Command {
     RenameDevice {
         name: String,
     },
-    SetCredentialStorage {
-        storage: CredentialStorage,
-    },
     SyncDevice {
         #[serde(deserialize_with = "device_id")]
         device_id: String,
@@ -51,8 +48,6 @@ pub(crate) struct Status {
     pub pending_count: u64,
     pub conflict_count: u64,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub credential_storage: Option<CredentialStorage>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<SafeError>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport_generation: Option<u64>,
@@ -65,13 +60,6 @@ pub(crate) enum AuthorizationSurface {
     Embedded,
     #[default]
     Browser,
-}
-#[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
-#[serde(rename_all = "camelCase")]
-pub(crate) enum CredentialStorage {
-    Keychain,
-    #[default]
-    EncryptedFile,
 }
 #[derive(Clone, Serialize, Default, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]

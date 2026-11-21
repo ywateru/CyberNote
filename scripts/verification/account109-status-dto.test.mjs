@@ -209,13 +209,8 @@ test('provider diagnostics preserve finite auth categories in their strict conte
   assert.deepEqual(validateAccountStatus(status(error)).error,error);
  }
 });
-test('credential storage is an optional finite status field',()=>{
- for(const credentialStorage of ['keychain','encryptedFile']) {
-  const parsed=validateAccountStatus({...status(undefined),credentialStorage});
-  assert.equal(parsed.credentialStorage,credentialStorage);
- }
- assert.equal(validateAccountStatus(status(undefined)).credentialStorage,undefined);
- for(const credentialStorage of [null,'keychainFile','encrypted_file','',0,false,{},[]])
+test('retired credential storage is not part of the status DTO',()=>{
+ for(const credentialStorage of ['keychain','encryptedFile',null,'',0,false,{},[]])
   assert.throws(()=>validateAccountStatus({...status(undefined),credentialStorage}),/无效数据/);
 });
 test('SDK failures preserve every finite stage and reject cross-branch diagnostics',()=>{

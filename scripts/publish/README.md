@@ -192,9 +192,8 @@ platform tree, run `node scripts/publish/cyberbus-manifest.mjs` to review the
 exact native additions/changes, then rerun with `--write`, commit that manifest
 and run `node scripts/publish/export.mjs --ref HEAD`. This finalizer requires
 `crates/notes-cyberbus`, the reviewed in-tree `vendor/cyberbus/crates/cyberbus` runtime,
-and integrated native/adapter lockfiles. Auth/protocol/transport (including macOS
-platform-keyring auth) and other SDK Git packages must resolve to the exact upstream
-revision. It updates only adapter/vendor/native account inputs and records the adapter
+and integrated native/adapter lockfiles. Auth/protocol/transport and other SDK Git packages
+must resolve to the exact upstream revision. It updates only adapter/vendor/native account inputs and records the adapter
 as first party and the patched runtime as third party under the original upstream licenses.
 `notices/cyberbus/runtime-source.json` pins all 30 retained runtime files, its original
 revision, the reviewed patch commit and the three modified upstream files. The retained

@@ -8,7 +8,6 @@ import android.net.http.SslError
 import android.os.Message
 import android.view.ViewGroup
 import android.webkit.*
-import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import app.tauri.annotation.Command
@@ -143,10 +142,6 @@ class NotesAuthPlugin(private val activity: Activity) : Plugin(activity) {
                     }
                 }
                 val root = LinearLayout(activity).apply { orientation = LinearLayout.VERTICAL }
-                val controls = LinearLayout(activity)
-                controls.addView(Button(activity).apply { text = "在浏览器中继续"; setOnClickListener { send(e, "continue") } })
-                controls.addView(Button(activity).apply { text = "取消登录"; setOnClickListener { dispose(e, true) } })
-                root.addView(controls)
                 root.addView(web, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
                 dialog.setTitle("登录 CyberNote"); dialog.setContentView(root)
                 dialog.setCanceledOnTouchOutside(false)

@@ -1,6 +1,6 @@
-//! Optional encrypted-file store for host integrations. macOS production should normally use
-//! the re-exported SDK KeyringStore. Android production protection is supplied by the host's
-//! Keystore SecureStore/CallbackStore; this module does not implement Android Keystore.
+//! Encrypted-file store for host integrations. macOS uses this backend with a private local
+//! key file. Android production protection is supplied by the host's Keystore
+//! SecureStore/CallbackStore; this module does not implement Android Keystore.
 use aes_gcm::{
     aead::{Aead, Payload},
     Aes256Gcm, KeyInit, Nonce,

@@ -34,8 +34,6 @@ type TransportKind = typeof transportKinds[number];
 type MappingObservation = { generation: number; sample: number; ageMs: number; enrollment: TransportKind; sync: TransportKind };
 const authorizationSurfaces = ["embedded", "browser"] as const;
 export type AccountAuthorizationSurface = typeof authorizationSurfaces[number];
-const credentialStorages = ["keychain", "encryptedFile"] as const;
-export type CredentialStorage = typeof credentialStorages[number];
 
 // Frozen account110 DTO. The native singleton owns authorization and networking.
 export const deviceDirections = ["push", "pull", "both"] as const;
@@ -59,13 +57,11 @@ export type AccountStatus = {
   lastSyncAt?: number;
   pendingCount: number;
   conflictCount: number;
-  credentialStorage?: CredentialStorage;
   error?: SafeError;
 };
 export type AccountCommand =
   | { type: "signIn" | "signUp"; surface?: AccountAuthorizationSurface }
   | { type: "status" | "openLoginInBrowser" | "cancel" | "signOut" | "syncNow" }
-  | { type: "setCredentialStorage"; storage: "encryptedFile" }
   | { type: "setEnabled"; enabled: boolean }
   | { type: "renameDevice"; name: string }
   | { type: "syncDevice"; deviceId: string; direction: DeviceDirection };
@@ -294,7 +290,7 @@ export function accountErrorDetails(error: AccountStatus["error"]): [string, str
 }
 // Ignore metric/device polling churn; only account state or safe error changes retire an immediate failure.
 export function accountErrorStateKey(status: AccountStatus | null): string {
-  return JSON.stringify(status ? {state:status.state,enabled:status.enabled,hasProfile:!!status.profile,surface:status.authorizationSurface,credentialStorage:status.credentialStorage,error:accountErrorDetails(status.error)} : null);
+  return JSON.stringify(status ? {state:status.state,enabled:status.enabled,hasProfile:!!status.profile,surface:status.authorizationSurface,error:accountErrorDetails(status.error)} : null);
 }
 export class AccountCommandFailure extends Error {
   constructor(readonly safeError?: SafeError, kind: "unknown" | "invalidData" | "cancelPending" | "signOutPending" = "unknown") {
@@ -315,10 +311,9 @@ export function accountIPCError(cause: unknown): SafeError | undefined {
   } catch { return undefined; }
 }
 export function validateAccountStatus(value: unknown): AccountStatus {
-  const s = record(value, ["state", "authorizationSurface", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "credentialStorage", "error", "transportGeneration", "deviceOperation"]);
+  const s = record(value, ["state", "authorizationSurface", "enabled", "profile", "devices", "lastSyncAt", "pendingCount", "conflictCount", "error", "transportGeneration", "deviceOperation"]);
   if (!["signedOut", "authorizing", "connecting", "ready", "paused", "error"].includes(s.state as string)) return invalid();
   if ("authorizationSurface" in s && (s.state !== "authorizing" || !authorizationSurfaces.includes(s.authorizationSurface as AccountAuthorizationSurface))) return invalid();
-  if (s.credentialStorage !== undefined && !credentialStorages.includes(s.credentialStorage as CredentialStorage)) return invalid();
   if (!Array.isArray(s.devices) || s.devices.length > 64) return invalid();
   const profile = s.profile === undefined ? undefined : record(s.profile, ["subject", "displayName", "username"]);
   const error = s.error === undefined ? undefined : validateAccountError(s.error);
@@ -370,7 +365,6 @@ export function validateAccountStatus(value: unknown): AccountStatus {
       return { id, name: text(d.name, 512), online: bool(d.online), current: bool(d.current), connected: bool(d.connected), syncAvailable: bool(d.syncAvailable), ...(summary === undefined ? {} : {summary}), ...(transport === undefined ? {} : {transport}) };
     }),
     lastSyncAt: s.lastSyncAt === undefined ? undefined : count(s.lastSyncAt),
-    ...(s.credentialStorage === undefined ? {} : {credentialStorage: s.credentialStorage as CredentialStorage}),
     ...(generation === undefined ? {} : {transportGeneration: generation}),
     pendingCount: count(s.pendingCount), conflictCount: count(s.conflictCount),
     error,
@@ -398,10 +392,6 @@ export async function accountCommand(command: AccountCommand): Promise<AccountSt
     case "setEnabled":
       record(command, ["type", "enabled"]);
       request = { type: "setEnabled", enabled: bool(command.enabled) }; break;
-    case "setCredentialStorage":
-      record(command, ["type", "storage"]);
-      if (command.storage !== "encryptedFile") return invalid();
-      request = { type: "setCredentialStorage", storage: command.storage }; break;
     case "status": case "openLoginInBrowser": case "cancel": case "signOut": case "syncNow":
       record(command, ["type"]);
       request = { type: command.type }; break;

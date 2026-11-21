@@ -3706,7 +3706,7 @@ function App() {
         },
         "image.info": () => {const button=document.querySelector<HTMLButtonElement>('.image-preview [aria-label="图片信息"]');if(!button)throw Error("图片预览尚未打开");button.click();},
         "image.close": () => setImagePreview(null),
-        ...Object.fromEntries(["status", "signIn", "signUp", "openLoginInBrowser", "cancel", "signOut", "syncNow", "setEnabled", "renameDevice", "syncDevice", "setCredentialStorage"].map(type => [`account.${type}`, async (args: Record<string, unknown>) => {
+        ...Object.fromEntries(["status", "signIn", "signUp", "openLoginInBrowser", "cancel", "signOut", "syncNow", "setEnabled", "renameDevice", "syncDevice"].map(type => [`account.${type}`, async (args: Record<string, unknown>) => {
           if (!accountUIAvailable || modal !== "preferences" || preferencesTab !== "account" || !accountSettingsHandle.current) throw Error("请先打开账户与同步");
           await accountSettingsHandle.current.run({ ...args, type } as AccountCommand);
           return accountSettingsHandle.current?.inspect();
@@ -4790,22 +4790,29 @@ function App() {
                         <div className="mobile-card-date"><time dateTime={new Date(n.updatedAt).toISOString()}>{new Date(n.updatedAt).toLocaleDateString("zh-CN",{month:"long",day:"numeric"})}</time>{recordingIndicator?.phase === "recording" && recordingIndicator.owner === n.id && <Mic size={14} aria-label="正在录音" />}</div>
                       </div> : <>
                       {view === "gallery" && (
-                        <div className="gallery-preview">
-                          <strong>
-                            {searchListText(n.title, highlightQuery)}
-                          </strong>
-                          <p>
-                            {n.locked ? (
-                              <Lock size={26} />
-                            ) : (
-                              searchListText(listPreview, highlightQuery)
+                        <div className={`gallery-preview${thumbnail ? " has-media" : ""}`}>
+                          <div className="gallery-preview-copy">
+                            <strong>
+                              {searchListText(n.title, highlightQuery)}
+                            </strong>
+                            <p>
+                              {n.locked ? (
+                                <Lock size={26} />
+                              ) : (
+                                searchListText(listPreview, highlightQuery)
+                              )}
+                            </p>
+                            {JSON.stringify(n.document).includes("table") && (
+                              <div className="preview-table" />
                             )}
-                          </p>
-                          {JSON.stringify(n.document).includes("table") && (
-                            <div className="preview-table" />
-                          )}
-                          {JSON.stringify(n.document).includes("drawing") && (
-                            <PenTool size={38} />
+                            {JSON.stringify(n.document).includes("drawing") && (
+                              <PenTool size={38} />
+                            )}
+                          </div>
+                          {thumbnail && (
+                            <div className="gallery-preview-media">
+                              <NoteThumbnail key={`${thumbnail.id}:${imageAuthority(n.id)}`} id={thumbnail.id} kind={thumbnail.kind} />
+                            </div>
                           )}
                         </div>
                       )}
@@ -4870,7 +4877,7 @@ function App() {
                           </span>
                         )}
                       </div>
-                      {thumbnail && <NoteThumbnail key={`${thumbnail.id}:${imageAuthority(n.id)}`} id={thumbnail.id} kind={thumbnail.kind} />}
+                      {view !== "gallery" && thumbnail && <NoteThumbnail key={`${thumbnail.id}:${imageAuthority(n.id)}`} id={thumbnail.id} kind={thumbnail.kind} />}
                       </>}
                     </button>
                     {mobile && <button className="note-card-more" aria-label={`更多操作：${n.title}`} aria-haspopup="menu"

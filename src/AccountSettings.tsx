@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { UserRound, Laptop, Smartphone, MonitorSmartphone, RefreshCw, ChevronRight, Pencil, FileText, Check, LoaderCircle, ChevronDown } from "lucide-react";
 import { accountCommand, accountTransportLabel, accountConnectionRetry, accountNeedsLogin, accountSuggestsRelogin, accountErrorMessage, accountErrorDetails, accountErrorStateKey, AccountCommandFailure, deviceName, type AccountDevice, type DeviceDirection, type DeviceOperation, type DeviceProgress, type SafeError, type AccountAuthorizationSurface, type AccountCommand, type AccountStatus } from "./account-client";
 import { formatFileTime } from "./data-management";
-import { CredentialStorageSettings } from "./account-settings/CredentialStorageSettings";
 import { PreferenceSegments } from "./preferences-menu/PreferenceSegments";
 import "./AccountSettings.css";
 
@@ -15,7 +14,7 @@ const states: Record<AccountStatus["state"], string> = {
   signedOut: "未登录", authorizing: "正在等待登录", connecting: "正在连接账户设备",
   ready: "账户连接可用", paused: "同步已暂停", error: "账户或同步需要处理",
 };
-const commandNames: Record<AccountCommand["type"], string> = {status:"读取账户状态",signIn:"登录",signUp:"创建账户",openLoginInBrowser:"在浏览器中继续",cancel:"取消登录",signOut:"退出账户",syncNow:"刷新设备",setCredentialStorage:"更改凭据存储",setEnabled:"更改同步设置",renameDevice:"更改设备名称",syncDevice:"设备同步"};
+const commandNames: Record<AccountCommand["type"], string> = {status:"读取账户状态",signIn:"登录",signUp:"创建账户",openLoginInBrowser:"在浏览器中继续",cancel:"取消登录",signOut:"退出账户",syncNow:"刷新设备",setEnabled:"更改同步设置",renameDevice:"更改设备名称",syncDevice:"设备同步"};
 type CommandError = {command:AccountCommand["type"];message:string;safeError?:SafeError;stateKey:string};
 type DeviceTarget = {subject: string; localId: string; id: string; name: string};
 const directionNames: Record<DeviceDirection, string> = {push:"推送到此设备",pull:"从此设备拉取",both:"双向同步"};
@@ -85,7 +84,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const latestStatus = useRef<AccountStatus | null>(null), latestError = useRef<CommandError | null>(null);
   const clearError = () => { latestError.current = null; setCommandError(null); };
   const [loginSurface, setLoginSurface] = useState<AccountAuthorizationSurface>("embedded");
-  const [confirmation, setConfirmation] = useState<"signOut" | "enable" | "storage" | "syncDevice" | "renameDevice" | null>(null);
+  const [confirmation, setConfirmation] = useState<"signOut" | "enable" | "syncDevice" | "renameDevice" | null>(null);
   const [target, setTarget] = useState<DeviceTarget | null>(null), [targetInvalid, setTargetInvalid] = useState("");
   const [direction, setDirection] = useState<DeviceDirection>("both"), [name, setName] = useState("");
   const [formError, setFormError] = useState("");
@@ -107,7 +106,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     setConfirmation(null);
     return true;
   };
-  const ask = (kind: "signOut" | "enable" | "storage" | "syncDevice" | "renameDevice", initiator?: HTMLElement, deviceId?: string) => {
+  const ask = (kind: "signOut" | "enable" | "syncDevice" | "renameDevice", initiator?: HTMLElement, deviceId?: string) => {
     if (kind === "syncDevice" || kind === "renameDevice") {
       const current = latestStatus.current, device = current?.devices.find(d => kind === "renameDevice" ? d.current : d.id === deviceId);
       const local = current?.devices.find(d => d.current);
@@ -129,30 +128,17 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     if (!alive.current || !visible.current) throw Error("请先打开账户与同步");
     const query = command.type === "status";
     const authorization = command.type === "signIn" || command.type === "signUp";
-    const transfer = command.type === "openLoginInBrowser";
     const startingAuthorization = working.current === "signIn" || working.current === "signUp";
     if (authorization && (status?.state === "authorizing" || status?.error?.code === "account_cleanup_required" ||
       status?.error?.code === "account_busy" || status?.error?.providerReason === "busy")) return;
-    // Read-only status, explicit transfer and cancel stay available while the
-    // original opener IPC is pending. They never start a second authorization.
-    if (authorizationPending.current && !query && command.type !== "cancel" && !transfer) return;
+    // Read-only status and cancel stay available while the original opener IPC
+    // is pending. They never start a second authorization.
+    if (authorizationPending.current && !query && command.type !== "cancel") return;
     if (query && (reading.current || (working.current && !startingAuthorization && working.current !== "syncDevice"))) return;
     if (!query && working.current &&
-      !(command.type === "cancel" && (startingAuthorization || working.current === "openLoginInBrowser")) &&
-      !(transfer && startingAuthorization)) return;
-    if (transfer && (status?.state !== "authorizing" || status.authorizationSurface !== "embedded"))
-      throw Error("当前没有可在浏览器中继续的应用内登录，请先读取账户状态。");
-    if (command.type === "setCredentialStorage" &&
-      (command.storage !== "encryptedFile" || latestStatus.current?.credentialStorage !== "keychain" ||
-        latestStatus.current?.profile || latestStatus.current?.state === "authorizing" ||
-        latestStatus.current?.error?.code === "account_cleanup_required" ||
-        latestStatus.current?.error?.code === "account_busy" ||
-        latestStatus.current?.error?.providerReason === "busy" ||
-        latestStatus.current?.deviceOperation?.phase === "running")) {
-      setFormError("结束当前账户操作后，才能改用本机加密文件。"); return;
-    }
-    if (!confirmed && (command.type === "signOut" || command.type === "setCredentialStorage" || (command.type === "setEnabled" && command.enabled))) {
-      ask(command.type === "signOut" ? "signOut" : command.type === "setCredentialStorage" ? "storage" : "enable", initiator); return;
+      !(command.type === "cancel" && startingAuthorization)) return;
+    if (!confirmed && (command.type === "signOut" || (command.type === "setEnabled" && command.enabled))) {
+      ask(command.type === "signOut" ? "signOut" : "enable", initiator); return;
     }
     if (command.type === "syncDevice" || command.type === "renameDevice") {
       if (!confirmed) {
@@ -204,10 +190,6 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         if (next.devices.find(d => d.current)?.name === command.name) { setConfirmation(null); setNotice("本机设备名称已更新。"); }
         else setFormError("尚未确认设备名称已保存，请刷新状态后再检查。");
       }
-      if (command.type === "setCredentialStorage" && !next.error && next.credentialStorage === command.storage) {
-        setConfirmation(null);
-        setNotice("已改用本机加密文件，可以重新登录。旧凭据与本机备忘录均已保留。");
-      }
       if (command.type === "cancel") setNotice("登录已取消。本地备忘录仍可继续编辑。");
       if (command.type === "signOut") setNotice("已退出账户，本机备忘录及附件已保留。你可以登录其他账户；同步需另行确认开启。");
     } catch (cause) {
@@ -254,8 +236,6 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       (status?.state === "authorizing" || (status?.profile && !status.error) || (rejectedBusy && !canRetryLogin))) {
       request({ type: "status" });
     } else if ((failed.type === "cancel" || failed.type === "signOut") && status?.state === "signedOut" && !status.profile) {
-      request({ type: "status" });
-    } else if (failed.type === "openLoginInBrowser" && (status?.state !== "authorizing" || status.authorizationSurface !== "embedded")) {
       request({ type: "status" });
     } else request(failed.type === "signIn" || failed.type === "signUp" ? { type: failed.type, surface: loginSurface } : failed);
   };
@@ -325,12 +305,10 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const currentDevice = status?.devices.find(device => device.current);
   const remoteDevices = status?.devices.filter(device => !device.current) || [];
   const localMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
-  const legacyStorageError = status?.credentialStorage === "keychain" && status.error?.code === "account_storage";
-  const storageDisabled = busy || nativeBusy || signedIn || authorizing || cleanupRequired;
   const browserOpenFailed = status?.state === "authorizing" && status.authorizationSurface === "embedded" &&
     status.error?.code === "account_network" && status.error.stage === "browserOpen";
   const pendingMessage = status?.authorizationSurface === "embedded"
-    ? "请在应用内登录窗口中完成授权。返回后会自动更新账户状态。"
+    ? "请在应用内登录窗口中完成授权。关闭窗口即取消登录，返回后会自动更新账户状态。"
     : status?.authorizationSurface === "browser" ? "请在系统浏览器中完成授权。返回后会自动更新账户状态。"
     : "正在准备授权并打开登录页面…";
   const deviceOperation = status?.deviceOperation;
@@ -339,7 +317,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
     status?.profile?.subject === target.subject && deviceOperation?.deviceId === target.id ? deviceOperation : undefined;
   const syncing = deviceOperation?.phase === "running";
   const syncingSelected = selectedOperation?.phase === "running" || (confirmation === "syncDevice" && workingType === "syncDevice");
-  const dialogCommand = confirmation === "enable" ? "setEnabled" : confirmation === "storage" ? "setCredentialStorage" : confirmation;
+  const dialogCommand = confirmation === "enable" ? "setEnabled" : confirmation;
   const commandErrorInDialog = active && !!confirmation && commandError?.command === dialogCommand;
   const statusErrorCovered = !!commandError?.safeError && !!status?.error &&
     JSON.stringify(accountErrorDetails(commandError.safeError)) === JSON.stringify(accountErrorDetails(status.error));
@@ -349,7 +327,6 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
   const confirm = () => {
     if (confirmation === "syncDevice" && target) void run({type:"syncDevice", deviceId:target.id, direction}, true).catch(() => {});
     else if (confirmation === "renameDevice") void run({type:"renameDevice", name}, true).catch(() => {});
-    else if (confirmation === "storage") void run({type:"setCredentialStorage", storage:"encryptedFile"}, true).catch(() => {});
     else void run(confirmation === "signOut" ? {type:"signOut"} : {type:"setEnabled",enabled:true}, true).catch(() => {});
   };
   return <div ref={panel} className="account-settings" data-settings-account-search={status ? signedIn ? "signedIn" : "signedOut" : commandError ? "error" : "loading"} data-account-state={status?.state || "loading"} data-account-authorization-surface={status?.authorizationSurface} onFocusCapture={event => {
@@ -373,9 +350,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
           <PreferenceSegments label="登录方式" value={loginSurface} options={loginOptions} disabled={busy || nativeBusy || !status} onChange={setLoginSurface} />
         </div>}
         <div className="account-actions">
-          {authorizing ? <><button type="button" disabled={workingType === "cancel"} onClick={() => request({ type: "cancel" })}>取消登录</button>
-            {status?.authorizationSurface === "embedded" && <button type="button" disabled={!!workingType && workingType !== "signIn" && workingType !== "signUp"} onClick={() => request({ type: "openLoginInBrowser" })}>在浏览器中继续</button>}
-          </> : <>
+          {authorizing ? <button type="button" disabled={workingType === "cancel"} onClick={() => request({ type: "cancel" })}>取消登录</button> : <>
             {!signedIn && !cleanupRequired && <>
               <button type="button" className="account-primary" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signIn", surface: loginSurface })}>登录</button>
               <button type="button" disabled={busy || nativeBusy || !status} onClick={() => request({ type: "signUp", surface: loginSurface })}>创建账户</button>
@@ -385,7 +360,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
         </div>
         {!signedIn && !authorizing && <p className="account-help">登录用户名区分大小写，请按注册时的写法输入。</p>}
       </section>
-      {status && !statusErrorCovered && !statusErrorInDialog && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{suggestRelogin ? "请退出账户后重新登录" : adoptionTimeout ? "开启同步准备超时" : adoptionBlocked ? "开启同步前需要处理旧同步内容" : identityMismatch ? "账户身份或同步空间校验失败" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "你仍可在应用内登录窗口完成授权，或再次选择在浏览器中继续。" : legacyStorageError ? "无法读取旧版账户凭据。改用本机加密文件后，可重新登录。备忘录、附件和旧凭据都会保留。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
+      {status && !statusErrorCovered && !statusErrorInDialog && (status.state === "error" || status.error) && <section className="account-error" role="alert"><h4>{suggestRelogin ? "请退出账户后重新登录" : adoptionTimeout ? "开启同步准备超时" : adoptionBlocked ? "开启同步前需要处理旧同步内容" : identityMismatch ? "账户身份或同步空间校验失败" : browserOpenFailed ? "未能打开系统浏览器" : "账户状态需要处理"}</h4><p>{browserOpenFailed ? "应用内登录窗口未能打开。请重新选择应用内登录或系统浏览器。" : accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} />
         {adoptionBlocked && !commandAdoptionBlocked && status.conflictCount > 0 && <button type="button" onClick={onConflicts}>查看冲突（{status.conflictCount}）</button>}
         {!suggestRelogin && !cleanupRequired && connectionRetry.type !== "status" && <button type="button" disabled={busy || nativeBusy} onClick={() => request(connectionRetry.type === "signIn" || connectionRetry.type === "signUp" ? { type: connectionRetry.type, surface: loginSurface } : connectionRetry)}>{connectionRetry.type === "signIn" ? needsLogin ? "重新登录" : "重试登录" : "重试连接"}</button>}
       </section>}
@@ -420,9 +395,6 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
           <p className="account-help account-device-footnote">选择设备并确认方向后才会传输。刷新仅更新设备列表。</p>
         </section>
       </>}
-      {status?.credentialStorage && !localMobile && <CredentialStorageSettings
-        storage={status.credentialStorage} disabled={storageDisabled} signedIn={signedIn}
-        onApply={initiator => request({ type: "setCredentialStorage", storage: "encryptedFile" }, false, initiator)} />}
     </>}
     {confirmation && active && <dialog ref={confirmPanel} className="account-confirmation" role="alertdialog" aria-modal="true" aria-labelledby="account-confirmation-title" aria-describedby="account-confirmation-description" aria-busy={busy} tabIndex={-1}
       onCancel={event => { event.preventDefault(); event.stopPropagation(); dismiss(); }}
@@ -440,8 +412,8 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
           (buttons[next] || confirmPanel.current)?.focus({ preventScroll: true });
         }
       }}>
-      <h4 id="account-confirmation-title">{confirmation === "signOut" ? "退出账户？" : confirmation === "enable" ? "开启账户同步？" : confirmation === "storage" ? "切换凭据存储？" : confirmation === "renameDevice" ? "更改本机设备名称" : `与“${target?.name || "未命名设备"}”同步`}</h4>
-      <p id="account-confirmation-description">{confirmation === "signOut" ? "本库全部备忘录及附件会保留。此设备将停止账户同步，并移除本机登录授权。退出后可登录其他账户，登录不会自动开启同步。" : confirmation === "enable" ? "允许本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）与当前账户选定设备合并。开启本身不会自动传输；之后需选择设备与方向，并明确确认。" : confirmation === "storage" ? "此后登录凭据将加密保存在本机。切换后需重新登录，同步保持暂停。旧凭据、备忘录及附件都会保留。" : confirmation === "renameDevice" ? "修改此设备在当前账户目录中的名称，其他设备名称不受影响。名称限 1–96 个字符，不含控制字符。" : "仅本机与选定设备收发，合并笔记和附件，保留各端独有内容；冲突按既有规则处理，不覆盖整库。"}</p>
+      <h4 id="account-confirmation-title">{confirmation === "signOut" ? "退出账户？" : confirmation === "enable" ? "开启账户同步？" : confirmation === "renameDevice" ? "更改本机设备名称" : `与“${target?.name || "未命名设备"}”同步`}</h4>
+      <p id="account-confirmation-description">{confirmation === "signOut" ? "本库全部备忘录及附件会保留。此设备将停止账户同步，并移除本机登录授权。退出后可登录其他账户，登录不会自动开启同步。" : confirmation === "enable" ? "允许本库当前已有的全部备忘录及附件（包括先前同步后保留的内容）与当前账户选定设备合并。开启本身不会自动传输；之后需选择设备与方向，并明确确认。" : confirmation === "renameDevice" ? "修改此设备在当前账户目录中的名称，其他设备名称不受影响。名称限 1–96 个字符，不含控制字符。" : "仅本机与选定设备收发，合并笔记和附件，保留各端独有内容；冲突按既有规则处理，不覆盖整库。"}</p>
       {confirmation === "syncDevice" && !syncingSelected && <div className="account-device-directions">
         <div className="settings121-row">
           <span className="settings121-label">本次同步方向</span>
@@ -454,7 +426,7 @@ export default function AccountSettings({ active, onHandle, onConflicts }: {
       {selectedOperation && <SyncProgress operation={selectedOperation} deviceName={target?.name} />}
       {deviceDialog && status?.error && !statusErrorCovered && <div className="account-confirmation-error" role="alert"><p>{accountErrorMessage(status.error)}</p><ErrorDetails error={status.error} /></div>}
       {commandErrorInDialog && <div className="account-confirmation-error" role="alert">{commandAdoptionBlocked && <strong>{commandAdoptionTimeout ? "开启同步准备超时" : "开启同步前需要处理旧同步内容"}</strong>}<p>{error}</p><ErrorDetails error={commandError?.safeError} /></div>}
-      <div className="account-actions"><button ref={cancelButton} type="button" disabled={busy && workingType !== "syncDevice"} onClick={dismiss}>{syncingSelected ? "收起，后台继续" : selectedOperation ? "关闭" : "取消"}</button>{!syncingSelected && <button ref={confirmButton} className="account-primary" type="button" disabled={busy || (deviceDialog && (nativeBusy || !!issue || needsLogin || cleanupRequired || identityMismatch))} onClick={confirm}>{confirmation === "signOut" ? "确认退出" : confirmation === "enable" ? "允许同步" : confirmation === "storage" ? "确认切换" : confirmation === "renameDevice" ? "保存名称" : selectedOperation?.phase === "failed" ? "重新同步" : "开始同步"}</button>}</div>
+      <div className="account-actions"><button ref={cancelButton} type="button" disabled={busy && workingType !== "syncDevice"} onClick={dismiss}>{syncingSelected ? "收起，后台继续" : selectedOperation ? "关闭" : "取消"}</button>{!syncingSelected && <button ref={confirmButton} className="account-primary" type="button" disabled={busy || (deviceDialog && (nativeBusy || !!issue || needsLogin || cleanupRequired || identityMismatch))} onClick={confirm}>{confirmation === "signOut" ? "确认退出" : confirmation === "enable" ? "允许同步" : confirmation === "renameDevice" ? "保存名称" : selectedOperation?.phase === "failed" ? "重新同步" : "开始同步"}</button>}</div>
     </dialog>}
     <p className="account-notice" role="status">{notice && <Check aria-hidden="true" />}{notice}</p>
   </div>;

@@ -54,16 +54,15 @@ export async function stableLocal(peer,baseline,{now=Date.now,sleep:wait=sleep,c
   }
 }
 export async function exercise({peer,baseline,scenario='embedded-back',reopen,record,clock={},capture=snapshot}){
-  assert(['embedded-back','embedded-browser','browser'].includes(scenario));cleanSignedOut(await peer.accountStatus());assert.deepEqual(await capture(peer),baseline);
+  assert(['embedded-back','browser'].includes(scenario));cleanSignedOut(await peer.accountStatus());assert.deepEqual(await capture(peer),baseline);
   await record('baseline-preserved',await stableLocal(peer,baseline,{...clock,capture}));
   const surface=scenario==='browser'?'browser':'embedded';let initial=await peer.signIn(surface);pending(initial,surface,true);
   await bounded('actual surface',async()=>pending(await peer.accountStatus(),surface,true),30000,clock);
   if(surface==='embedded'){
     const form=await bounded('native hosted form',async()=>{const s=await peer.accountStatus();pending(s,'embedded');const p=await peer.nativeLoginPresentation();return p.dialog&&p.webView&&p.hostedForm?p:false;},60000,clock);assert.deepEqual(form,{dialog:true,webView:true,hostedForm:true});await record('native-form',{...form,originProof:'production-native-host-policy; not independently established by accessibility'});
-    if(scenario==='embedded-back'){await peer.closeNativeLogin();await bounded('native Back signedOut',async()=>{const s=await peer.accountStatus();if(s.state==='authorizing'){pending(s,'embedded');return false;}return cleanSignedOut(s);},15000,clock);}
-    else{await peer.continueNativeLogin();await bounded('native continue browser',async()=>{const s=await peer.accountStatus();pending(s,['embedded','browser'].includes(s.authorizationSurface)?s.authorizationSurface:'browser');return s.authorizationSurface==='browser';},30000,clock);}
+    await peer.closeNativeLogin();await bounded('native Back signedOut',async()=>{const s=await peer.accountStatus();if(s.state==='authorizing'){pending(s,'embedded');return false;}return cleanSignedOut(s);},15000,clock);
   }
-  if(scenario!=='embedded-back'){
+  if(scenario==='browser'){
     await bounded('external browser activity',async()=>{pending(await peer.accountStatus(),'browser');const a=await peer.externalLoginActivity();return a.browser&&!a.owned;},15000,clock);await record('external-browser',{observed:true});await peer.returnFromLoginBrowser();pending(await peer.accountStatus(),'browser');await peer.cancelLogin();
   }
   await record('cancelled-preserved',await stableLocal(peer,baseline,{...clock,capture}));
@@ -73,7 +72,7 @@ export async function exercise({peer,baseline,scenario='embedded-back',reopen,re
 export function options(args){
   const o={};for(let i=0;i<args.length;i++){const k=args[i];assert(['--output','--baseline','--case','--export-baseline'].includes(k)&&!Object.hasOwn(o,k));if(k==='--export-baseline')o[k]=true;else{assert(args[i+1]&&!args[i+1].startsWith('--'));o[k]=args[++i];}}
   const output=o['--output'];assert(isAbsolute(output||'')&&resolve(output)===output&&dirname(output)==='/private/tmp'&&/^account109-android-login-surfaces-[\w-]+$/.test(basename(output)));
-  if(o['--export-baseline'])assert.equal(Object.keys(o).length,2);else{assert.equal(Object.keys(o).length,3);assert(isAbsolute(o['--baseline']||'')&&resolve(o['--baseline'])===o['--baseline']);assert(['embedded-back','embedded-browser','browser'].includes(o['--case']));}
+  if(o['--export-baseline'])assert.equal(Object.keys(o).length,2);else{assert.equal(Object.keys(o).length,3);assert(isAbsolute(o['--baseline']||'')&&resolve(o['--baseline'])===o['--baseline']);assert(['embedded-back','browser'].includes(o['--case']));}
   return {output,exportBaseline:o['--export-baseline']===true,baseline:o['--baseline'],scenario:o['--case']};
 }
 export async function run(args=process.argv.slice(2)){

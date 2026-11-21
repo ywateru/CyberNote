@@ -1,5 +1,7 @@
 # CyberBus121 native account migration — author evidence
 
+> 2026-11-21 后续变更：macOS 已移除 Keychain/KeyringStore 后端和凭据存储设置，只使用本地加密文件。本页描述 11-18 的迁移时点；旧 Keychain 项现在不读取、不删除，相关历史引用不能作为当前产品行为。
+
 2026-11-18. Develop scope: `/Users/water/work/2026/Apple-Notes-Clone-cyberbus121`,
 `codex/cyberbus121-account`. This is a stage for independent review, not production acceptance.
 No original Notes library or real App session was opened or changed.

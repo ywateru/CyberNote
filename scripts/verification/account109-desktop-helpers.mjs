@@ -37,7 +37,6 @@ export function safeStatus(s){
   return {state:label(s?.state,states),enabled:s?.enabled===true,hasProfile:!!s?.profile,
     identityCheck:s?.profile?.username===undefined?'unverified':s.profile.username==='cybernoteqa20261113a'?'expectedSyntheticUser':'differentUser',
     error:s?.error?{code:label(s.error.code,codes),...sdkDiagnostic,...(s.error.stage===undefined?{}:{stage:label(s.error.stage,stages)}),...(s.error.reason===undefined?{}:{reason:label(s.error.reason,reasons)}),...(s.error.providerReason===undefined?{}:{providerReason:label(s.error.providerReason,providerReasons)}),...tokenDiagnostic,...safeRequestDiagnostic(e)}:undefined,
-    ...(['keychain','encryptedFile'].includes(s?.credentialStorage)?{credentialStorage:s.credentialStorage}:{}),
     ...(generation===undefined?{}:{transportGeneration:generation}),
     devices:Array.isArray(s?.devices)?s.devices.slice(0,256).map(d=>{
       const transport=d?.online===true&&d.current===false?safeMappingObservation(d.transport,generation):undefined;
@@ -82,12 +81,11 @@ export function statusObserver(report,getPhase){
 }
 // Explicit commands only: no arbitrary account command, token, grant or URL payload.
 export async function nativeAccount(app,type,args={}){
-  assert(['status','signIn','signOut','syncNow','setEnabled','setCredentialStorage'].includes(type),'Unsupported runner account command');
+  assert(['status','signIn','signOut','syncNow','setEnabled'].includes(type),'Unsupported runner account command');
   assert(args&&Object.getPrototypeOf(args)===Object.prototype,'Invalid account arguments');
-  assert(Object.keys(args).every(k=>(type==='setEnabled'&&k==='enabled')||(type==='setCredentialStorage'&&k==='storage')),'Unexpected account arguments');
+  assert(Object.keys(args).every(k=>type==='setEnabled'&&k==='enabled'),'Unexpected account arguments');
   if(type==='setEnabled')assert.equal(typeof args.enabled,'boolean');
-  if(type==='setCredentialStorage')assert(['keychain','encryptedFile'].includes(args.storage));
-  const command=type==='setEnabled'?{type,enabled:args.enabled}:type==='setCredentialStorage'?{type,storage:args.storage}:{type};
+  const command=type==='setEnabled'?{type,enabled:args.enabled}:{type};
   return app.evaluate("window.__TAURI_INTERNALS__.invoke('account_command',{command:arg})",command);
 }
 export function signedOut(s){return s.state==='signedOut'&&!s.profile&&!s.enabled&&!s.error&&!s.devices.some(d=>d.connected);}

@@ -48,7 +48,6 @@ const settingsSearch = [
   ["notes", "锁定备忘录", "关闭所有已锁定 重新锁定", '.preferences-lock-action'],
   ["account", "CyberNote 账户", "登录 创建账户 退出账户 登录方式 系统浏览器", '.account-profile-group'],
   ["account", "我的设备", "允许此设备同步 刷新设备 更改名称 传输状态", '.account-device-group'],
-  ["account", "凭据存储", "登录与安全 钥匙串 本机加密文件", '.account-storage-group'],
   ["account", "同步冲突", "冲突版本 解决 保留版本", '.preferences-conflicts > summary'],
   ["account", "云端同步", "WebDAV S3 GitHub 远端", '[data-settings-slot="cloud"]'],
   ["agent", "Agent 接入", "MCP 本机接入 授权客户端 配置 连接 诊断", '.agent-page-header'],
@@ -105,7 +104,6 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   targetOwner.current = pendingTarget;
   const [searchMessage, setSearchMessage] = useState("");
   const [accountAvailability, setAccountAvailability] = useState("unknown");
-  const localMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
   const cancelTarget = () => { targetSerial.current++; targetOwner.current = null; setPendingTarget(null); setSearchMessage(""); };
   const setSearchQuery = (value: string) => { cancelTarget(); setQuery(value); };
   useLayoutEffect(() => {
@@ -127,7 +125,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
   const results = settingsSearch.filter(([page, title, words]) =>
     preferencePages.some(item => item.id === page) &&
     (title !== "云端同步" || cloudSync != null) && (title !== "自动备份" || automaticBackup != null) &&
-    (title !== "凭据存储" || !localMobile) && (title !== "我的设备" || accountAvailability !== "signedOut") &&
+    (title !== "我的设备" || accountAvailability !== "signedOut") &&
     (title !== "软件更新" || softwareUpdate != null) && (title !== "同步冲突" || syncConflicts != null) &&
     searchTerms.every(term => `${title} ${words} ${preferencePages.find(item => item.id === page)?.label}`.toLocaleLowerCase().includes(term)));
   const searching = searchTerms.length > 0;

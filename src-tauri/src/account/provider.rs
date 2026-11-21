@@ -1,130 +1,94 @@
 //! Production secure installation storage. CyberBus is the sole grant owner.
 use super::{
     private,
-    types::{CredentialStorage, Error, Result},
+    types::{Error, Result},
 };
 use notes_cyberbus::{
     store::{AesGcmCipher, EncryptedFileStore, LocalFileKeyProvider},
     SecureStore, StoreMode,
 };
-use std::path::Path;
+use std::{
+    fs::{self, File},
+    path::Path,
+};
 
-const STORAGE_PREFERENCE: &str = "cyberbus-storage-v1";
+const LEGACY_KEYCHAIN_MARKER: &str = "cyberbus-installation-v1";
+const LEGACY_STORAGE_PREFERENCE: &str = "cyberbus-storage-v1";
 const FILE_MARKER: &str = "cyberbus-file-installation-v1";
 const FILE_MARKER_BYTES: &[u8] = b"cyberbus-file-installation-v1\n";
 const FILE_KEY: &str = "cyberbus-file-key-v1";
 const FILE_VAULT: &str = "cyberbus-file-vault-v1";
 
-pub(super) fn selected_storage(root: &Path) -> Result<Option<CredentialStorage>> {
-    #[cfg(target_os = "android")]
-    {
-        let _ = root;
-        // Android uses the platform-backed CyberBusSecureStore. Keep the
-        // status model populated so account startup does not fail before the
-        // Android store is opened.
-        return Ok(Some(CredentialStorage::EncryptedFile));
-    }
+/// One-way local migration for installations that still point at the retired
+/// macOS Keychain backend. The old Keychain item is never read or removed.
+/// Its current binding is archived so a fresh local-file login can reuse the
+/// same verified device identity without silently restoring an old grant.
+pub(super) fn migrate_legacy_keychain(root: &Path) -> Result<()> {
     #[cfg(target_os = "macos")]
     {
         private::directory(root)?;
-        return match private::read_bytes(&root.join(STORAGE_PREFERENCE), 32)? {
-            // Preserve legacy vaults for existing users. New installations and
-            // explicit recovery use the encrypted file without Keychain access.
-            None if private::read_bytes(&root.join("cyberbus-installation-v1"), 64)?.is_some() => {
-                Ok(Some(CredentialStorage::Keychain))
-            }
-            None if private::read_bytes(&root.join(FILE_MARKER), 64)?.is_some() => {
-                Ok(Some(CredentialStorage::EncryptedFile))
-            }
-            None => Ok(Some(CredentialStorage::EncryptedFile)),
-            Some(bytes) if bytes == b"keychain\n" => Ok(Some(CredentialStorage::Keychain)),
-            Some(bytes) if bytes == b"encrypted-file\n" => {
-                Ok(Some(CredentialStorage::EncryptedFile))
-            }
-            Some(_) => Err(Error::Storage),
+        let preference = private::read_bytes(&root.join(LEGACY_STORAGE_PREFERENCE), 32)?;
+        let marker = private::read_bytes(&root.join(LEGACY_KEYCHAIN_MARKER), 64)?.is_some();
+        let legacy = match preference.as_deref() {
+            None => marker,
+            Some(b"keychain\n") => true,
+            Some(b"encrypted-file\n") => false,
+            Some(_) => return Err(Error::Storage),
         };
+        if !legacy {
+            return Ok(());
+        }
+        private::clear_session(root)?;
+        remove_private_file(&root.join(LEGACY_KEYCHAIN_MARKER))?;
+        remove_private_file(&root.join(LEGACY_STORAGE_PREFERENCE))?;
+        File::open(root)?.sync_all()?;
+        return Ok(());
     }
     #[cfg(not(any(target_os = "macos", target_os = "android")))]
     {
         let _ = root;
-        Ok(None)
+        Ok(())
+    }
+    #[cfg(target_os = "android")]
+    {
+        let _ = root;
+        Ok(())
     }
 }
 
-pub(super) fn set_selected_storage(root: &Path, storage: CredentialStorage) -> Result<()> {
-    #[cfg(target_os = "macos")]
-    {
-        if storage != CredentialStorage::EncryptedFile {
-            return Err(Error::Unsupported);
+#[cfg(target_os = "macos")]
+fn remove_private_file(path: &Path) -> Result<()> {
+    match fs::symlink_metadata(path) {
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(()),
+        Ok(metadata) if metadata.is_file() && !metadata.file_type().is_symlink() => {
+            fs::remove_file(path)?;
+            Ok(())
         }
-        return private::atomic_write(&root.join(STORAGE_PREFERENCE), b"encrypted-file\n");
-    }
-    #[cfg(not(target_os = "macos"))]
-    {
-        let _ = (root, storage);
-        Err(Error::Unsupported)
+        _ => Err(Error::Storage),
     }
 }
 
 /// The nonsecret provision marker is written BEFORE the SDK creates its vault.
 /// Interruption after this point requires recovery; a missing grant/installation
 /// blob on subsequent launch can never silently create a replacement identity.
-pub(super) fn store(
-    app: &tauri::AppHandle,
-    root: &Path,
-    storage: CredentialStorage,
-) -> Result<(Box<dyn SecureStore>, StoreMode)> {
+pub(super) fn store(root: &Path) -> Result<(Box<dyn SecureStore>, StoreMode)> {
     #[cfg(target_os = "android")]
     {
-        let _ = storage;
+        let _ = root;
         return android::open();
     }
-    #[cfg(not(target_os = "android"))]
-    let _ = app;
-    private::directory(root)?;
     #[cfg(target_os = "macos")]
-    if storage == CredentialStorage::EncryptedFile {
-        return encrypted_file_store(root);
-    }
-    let marker = root.join("cyberbus-installation-v1");
-    let mode = match private::read_bytes(&marker, 64)? {
-        Some(bytes) if bytes == b"cyberbus-installation-v1\n" => StoreMode::Existing,
-        Some(_) => return Err(Error::Storage),
-        None => StoreMode::CreateNew,
-    };
-    #[cfg(target_os = "macos")]
-    let mut store: Box<dyn SecureStore> = {
-        use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
-        use sha2::{Digest, Sha256};
-        let canonical = std::fs::canonicalize(root).map_err(|_| Error::Storage)?;
-        let account =
-            URL_SAFE_NO_PAD.encode(Sha256::digest(canonical.as_os_str().as_encoded_bytes()));
-        Box::new(
-            notes_cyberbus::KeyringStore::open(
-                "com.local.notesclone.cyberbus.v1",
-                &account,
-                &root.join("cyberbus.lock"),
-            )
-            .map_err(|_| Error::Storage)?,
-        )
-    };
-
+    return encrypted_file_store(root);
     #[cfg(not(any(target_os = "macos", target_os = "android")))]
-    return Err(Error::Unsupported);
-    #[cfg(target_os = "macos")]
     {
-        if matches!(mode, StoreMode::CreateNew) {
-            if store.load().map_err(|_| Error::Storage)?.is_some() {
-                return Err(Error::Storage);
-            }
-            private::atomic_write(&marker, b"cyberbus-installation-v1\n")?;
-        }
-        Ok((store, mode))
+        let _ = root;
+        Err(Error::Unsupported)
     }
 }
 
 #[cfg(target_os = "macos")]
 fn encrypted_file_store(root: &Path) -> Result<(Box<dyn SecureStore>, StoreMode)> {
+    private::directory(root)?;
     let marker = root.join(FILE_MARKER);
     let mode = match private::read_bytes(&marker, 64)? {
         Some(bytes) if bytes == FILE_MARKER_BYTES => StoreMode::Existing,
@@ -156,94 +120,95 @@ mod tests {
         private::atomic_write(path, bytes).unwrap();
     }
 
-    #[test]
-    fn new_install_defaults_to_encrypted_file() {
-        let dir = root();
-        assert_eq!(
-            selected_storage(dir.path()).unwrap(),
-            Some(CredentialStorage::EncryptedFile)
-        );
+    fn binding() -> private::Binding {
+        private::Binding {
+            issuer: super::super::config::ISSUER.into(),
+            subject: "test-subject".into(),
+            product_id: super::super::config::PRODUCT_ID.into(),
+            workspace_id: uuid::Uuid::new_v4().to_string(),
+            device_id: uuid::Uuid::new_v4().to_string(),
+            noise_public_key: "test-noise-key".into(),
+            enabled: true,
+        }
     }
 
     #[test]
-    fn legacy_keychain_marker_preserves_existing_installation() {
+    fn new_install_uses_local_encrypted_file_without_keychain_marker() {
         let dir = root();
+        let (_store, mode) = store(dir.path()).unwrap();
+        assert!(matches!(mode, StoreMode::CreateNew));
+        assert_eq!(
+            fs::read(dir.path().join(FILE_MARKER)).unwrap(),
+            FILE_MARKER_BYTES
+        );
+        assert!(!dir.path().join(LEGACY_KEYCHAIN_MARKER).exists());
+    }
+
+    #[test]
+    fn legacy_keychain_migration_archives_binding_and_removes_markers() {
+        let dir = root();
+        let binding = binding();
+        private::write(&dir.path().join("binding.json"), &binding).unwrap();
         marker(
-            &dir.path().join("cyberbus-installation-v1"),
+            &dir.path().join(LEGACY_KEYCHAIN_MARKER),
             b"cyberbus-installation-v1\n",
         );
+        migrate_legacy_keychain(dir.path()).unwrap();
+        assert!(!dir.path().join("binding.json").exists());
         assert_eq!(
-            selected_storage(dir.path()).unwrap(),
-            Some(CredentialStorage::Keychain)
+            private::remembered_session(dir.path(), &binding.device_id)
+                .unwrap()
+                .unwrap()
+                .enabled,
+            false
         );
+        assert!(!dir.path().join(LEGACY_KEYCHAIN_MARKER).exists());
     }
 
     #[test]
-    fn encrypted_file_marker_restores_interrupted_selection() {
+    fn explicit_local_file_preference_keeps_current_binding() {
         let dir = root();
-        marker(&dir.path().join(FILE_MARKER), FILE_MARKER_BYTES);
-        assert_eq!(
-            selected_storage(dir.path()).unwrap(),
-            Some(CredentialStorage::EncryptedFile)
+        let binding = binding();
+        private::write(&dir.path().join("binding.json"), &binding).unwrap();
+        marker(
+            &dir.path().join(LEGACY_KEYCHAIN_MARKER),
+            b"cyberbus-installation-v1\n",
         );
+        marker(
+            &dir.path().join(LEGACY_STORAGE_PREFERENCE),
+            b"encrypted-file\n",
+        );
+        migrate_legacy_keychain(dir.path()).unwrap();
+        assert!(dir.path().join("binding.json").exists());
     }
 
     #[test]
-    fn explicit_storage_preference_wins_over_installation_markers() {
+    fn keychain_preference_migrates_even_when_both_markers_exist() {
         let dir = root();
         marker(
-            &dir.path().join("cyberbus-installation-v1"),
+            &dir.path().join(LEGACY_KEYCHAIN_MARKER),
             b"cyberbus-installation-v1\n",
         );
         marker(&dir.path().join(FILE_MARKER), FILE_MARKER_BYTES);
-        marker(&dir.path().join(STORAGE_PREFERENCE), b"encrypted-file\n");
-        assert_eq!(
-            selected_storage(dir.path()).unwrap(),
-            Some(CredentialStorage::EncryptedFile)
-        );
-        marker(&dir.path().join(STORAGE_PREFERENCE), b"keychain\n");
-        assert_eq!(
-            selected_storage(dir.path()).unwrap(),
-            Some(CredentialStorage::Keychain)
-        );
-        assert_eq!(
-            set_selected_storage(dir.path(), CredentialStorage::Keychain),
-            Err(Error::Unsupported)
-        );
-        set_selected_storage(dir.path(), CredentialStorage::EncryptedFile).unwrap();
-        assert_eq!(
-            selected_storage(dir.path()).unwrap(),
-            Some(CredentialStorage::EncryptedFile)
-        );
-        assert_eq!(
-            fs::read(dir.path().join("cyberbus-installation-v1")).unwrap(),
-            b"cyberbus-installation-v1\n"
-        );
+        marker(&dir.path().join(LEGACY_STORAGE_PREFERENCE), b"keychain\n");
+        migrate_legacy_keychain(dir.path()).unwrap();
+        assert!(!dir.path().join(LEGACY_KEYCHAIN_MARKER).exists());
+        assert!(!dir.path().join(LEGACY_STORAGE_PREFERENCE).exists());
+        assert!(dir.path().join(FILE_MARKER).exists());
     }
 
     #[test]
-    fn invalid_preference_fails_closed_and_markers_remain_presence_signals() {
+    fn invalid_preference_fails_closed() {
         let dir = root();
-        marker(&dir.path().join(STORAGE_PREFERENCE), b"unknown\n");
-        assert_eq!(selected_storage(dir.path()), Err(Error::Storage));
-        fs::remove_file(dir.path().join(STORAGE_PREFERENCE)).unwrap();
-        marker(
-            &dir.path().join("cyberbus-installation-v1"),
-            b"unexpected\n",
-        );
-        // The legacy marker's bytes are validated when opening that store.
-        assert_eq!(
-            selected_storage(dir.path()).unwrap(),
-            Some(CredentialStorage::Keychain)
-        );
+        marker(&dir.path().join(LEGACY_STORAGE_PREFERENCE), b"unknown\n");
+        assert_eq!(migrate_legacy_keychain(dir.path()), Err(Error::Storage));
+    }
+
+    #[test]
+    fn malformed_file_marker_fails_before_creating_credentials() {
+        let dir = root();
         marker(&dir.path().join(FILE_MARKER), b"unexpected\n");
-        fs::remove_file(dir.path().join("cyberbus-installation-v1")).unwrap();
-        // Likewise, a malformed file marker is a valid presence signal here;
-        // encrypted_file_store rejects it before opening credentials.
-        assert_eq!(
-            selected_storage(dir.path()).unwrap(),
-            Some(CredentialStorage::EncryptedFile)
-        );
+        assert_eq!(store(dir.path()).err(), Some(Error::Storage));
     }
 }
 #[cfg(target_os = "android")]

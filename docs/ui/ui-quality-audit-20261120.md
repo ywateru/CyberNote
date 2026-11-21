@@ -2,6 +2,8 @@
 
 2026-11-20 · 审查基线源码修订 `4348a29acbc77d80b36f5f573e53c81958acb892` · 发布版本 `0.2.3`
 
+> 2026-11-21 的当前审查、画廊媒体修复、原生登录窗口收敛、凭据存储移除和 Android 系统栏验收矩阵见[最新 UI 质量审查](ui-quality-audit-20261121.md)。本页保留 11-20 时点的证据和历史建议。
+
 本页记录本轮对桌面、手机和 Android 系统表面的审查结论、已经落地的源码改进，以及尚未完成的设备验收。目标不是把所有界面做成同一套视觉，而是让每个页面在内容预算、层级、主操作、焦点、空态和平台表面上遵循同一套产品规则。实现行为与后续建议分开标注；浏览器 fixture、Kotlin 编译和真实 Android 安装包验收是三种不同证据。
 
 相关契约：[双端呈现](adaptive-presentation.md) · [设计规则](design-rules.md) · [设置规格](preferences.md) · [Android 快速首页](android-quick-home.md) · [主题与呈现架构](../architecture/theme-presentation.md)

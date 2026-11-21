@@ -1,5 +1,7 @@
 # CyberBus120 core verification
 
+> 2026-11-21 后续变更：macOS KeyringStore 和 `platform-keyring` feature 已从产品依赖中移除，桌面只使用本地加密文件。本页中 KeyringStore 的 API/测试描述属于 11-18 历史时点。
+
 2026-11-18, develop scope only. Workspace `/Users/water/work/2026/Apple-Notes-Clone-cyberbus120`,
 branch `codex/cyberbus120-core`. No src-tauri/UI/user library/login sessions changed.
 

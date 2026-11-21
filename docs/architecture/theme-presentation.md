@@ -117,7 +117,7 @@ Android 页面内容与状态栏/导航栏区域必须共享相邻表面事实�
 - **原生绘制分支。** API 29+ 的 `MainActivity` 使用 `EdgeSurfaceDrawable` 只绘制顶部和底部系统栏条带；WebView 容器仍由同一 `WindowInsetsCompat` listener 处理 systemBars/IME 避让。API 28 及以下不启用 edge-to-edge，直接把投影颜色写入平台 `statusBarColor` / `navigationBarColor`，由平台 inset 布局内容；这是为了避免 Android 8–9 的浅色系统栏遮罩。两条分支共享同一份前端投影和图标明暗决定。JS 尚未接管前，原生使用日/夜纸面 `system_bar_fallback` 作为首帧回退。
 - **桥接时序。** bridge 可能晚于首轮 React effect 注入。App 以有界 50ms 重试等待 `NotesSystemBars`，只在成功调用后记录去重键；启动脚本以 `.app` 挂载作为所有权交接点，交接后不再写系统栏。页面切换后不得保留旧颜色。
 - **生命周期。** 启动页、页面、设置弹层、格式面板、主题/明暗、窗口宽度和高度变化触发重新投影；`MutationObserver` 监听根元素的 `class`、`data-scheme`、`data-theme-id`，同一投影去重。
-- **验收边界。** 浏览器注入 bridge 只能证明前端取色与调用顺序；Kotlin 编译只能证明源码可编译。2026-11-20 已在 Samsung SM-G9500 / Android 9 / 1080×2220 的 debug APK 上验证首页、编辑、设置、格式面板和深色设置的真实像素；三键导航、彩色主题、IME、横屏、冷启动和发布签名包仍未完成。详细采样见 [UI 质量审查](../ui/ui-quality-audit-20261120.md#android-9-真机系统栏采样)。
+- **验收边界。** 浏览器注入 bridge 只能证明前端取色与调用顺序；Kotlin 编译只能证明源码可编译。2026-11-20 已在 Samsung SM-G9500 / Android 9 / 1080×2220 的 debug APK 上验证首页、编辑、设置、格式面板和深色设置的真实像素；三键导航、彩色主题、IME、横屏、冷启动和发布签名包仍未完成。详细采样见 [UI 质量审查](../ui/ui-quality-audit-20261121.md#android-顶部状态栏与底部操作区)。
 
 ## 内置主题
 

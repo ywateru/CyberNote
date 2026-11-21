@@ -13,7 +13,7 @@ test('fixed upgrade receipt must prove complete preservation and retain the hist
   for(const patch of [{status:'running'},{source:'other'},{apkSha256:'other'},{certificateSha256:'other'},{privateSnapshotSha256:'other'},{postReadSamples:1},{cleanupComplete:false},{allCurrentDataPreserved:false},{historicalBaselineAccepted:true},{attachmentOriginExplained:true},{accountMutationSent:true},{failure:{}},{accountAfter:{...signedOut(),hasProfile:true}}])assert.throws(()=>receiptGate({...receipt(),...patch}));
 });
 test('CLI offers only the three independent cases and fresh private-output namespace',()=>{
-  for(const scenario of ['embedded-back','embedded-browser','browser'])assert.equal(options(['--case',scenario,'--output','/private/tmp/account109-android-current-login-smoke-unit01']).scenario,scenario);
+  for(const scenario of ['embedded-back','browser'])assert.equal(options(['--case',scenario,'--output','/private/tmp/account109-android-current-login-smoke-unit01']).scenario,scenario);
   for(const args of [['--case','all','--output','/private/tmp/account109-android-current-login-smoke-unit01'],['--case','browser','--baseline','arbitrary'],['--case','browser','--output','/private/tmp/original'],['--case','browser','--output','/private/tmp/account109-android-current-login-smoke-unit01','--source','other']])assert.throws(()=>options(args));
 });
 function fixture(){
@@ -24,18 +24,17 @@ function fixture(){
     signIn:async surface=>{calls.push('signIn:'+surface);state={...signedOut(),state:'authorizing',authorizationSurface:surface};return structuredClone(state);},
     nativeLoginPresentation:async()=>({dialog:true,webView:true,hostedForm:true}),
     closeNativeLogin:async()=>{calls.push('native-back');state=signedOut();},
-    continueNativeLogin:async()=>{calls.push('native-continue');state.authorizationSurface='browser';},
     externalLoginActivity:async()=>({owned:false,browser:true}),returnFromLoginBrowser:async()=>{calls.push('return-owned');},
     cancelLogin:async()=>{calls.push('cancel');state=signedOut();},closeSettings:async()=>{},
     reclaimSignedOut:async()=>{calls.push('reclaim');return {forceStop:false,oldPid:101};},close:async()=>{calls.push('close');}};
   return {peer,expected,calls,records,scenario:'embedded-back',read:async()=>structuredClone(expected),
     clock:{now:()=>now,sleep:async ms=>{now+=ms;}},reopen:async()=>{calls.push('reopen');return peer;},record:async(kind,proof)=>{records.push({kind,...proof});},setState:s=>{state=s;}};
 }
-for(const scenario of ['embedded-back','embedded-browser','browser'])test(`${scenario} reuses real exercise with full current capture and three 3-second signedOut windows`,async()=>{
+for(const scenario of ['embedded-back','browser'])test(`${scenario} reuses real exercise with full current capture and three 3-second signedOut windows`,async()=>{
   const f=fixture();await exerciseCurrent({...f,scenario});
   assert.equal(f.calls.filter(x=>x.startsWith('signIn:')).length,1);
   assert.equal(f.calls.filter(x=>x==='cancel').length,scenario==='embedded-back'?0:1);
-  assert.equal(f.calls.includes('native-back'),scenario==='embedded-back');assert.equal(f.calls.includes('native-continue'),scenario==='embedded-browser');
+  assert.equal(f.calls.includes('native-back'),scenario==='embedded-back');
   assert(f.calls.includes('reclaim')&&f.calls.includes('reopen'));
   for(const kind of ['baseline-preserved','cancelled-preserved','restarted-preserved']){const r=f.records.find(r=>r.kind===kind);assert(r.samples>=3);assert(r.durationMs>=3000);}
 });

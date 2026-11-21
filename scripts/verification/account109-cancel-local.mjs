@@ -12,12 +12,11 @@ export const SOURCE='72513d1296df4526a08834db65a3427957d3fb50';
 export const BINARY_SHA='187cf39d9143b66436b5ea260793f1700f346ac2c6d24cc391be629e96705459';
 const checks=['localSave','authorizing','cancelledWindow','localEdit','restartWindow'];
 // UI contract f048fd15; candidate pins change only after a new reviewed build.
-export function surfacePolicy({surface='browser',continueInBrowser=false,cancelViaWindow=false,...extra}={}){
+export function surfacePolicy({surface='browser',cancelViaWindow=false,...extra}={}){
   assert.equal(Object.keys(extra).length,0,'No authorization endpoint or extra parameters');
   assert(['embedded','browser'].includes(surface),'Fixed authorization surface required');
-  assert.equal(typeof continueInBrowser,'boolean');assert(!continueInBrowser||surface==='embedded','Browser continuation requires embedded start');
-  assert.equal(typeof cancelViaWindow,'boolean');assert(!cancelViaWindow||(surface==='embedded'&&!continueInBrowser),'Window cancellation requires embedded without browser continuation');
-  return {surface,continueInBrowser,cancelViaWindow};
+  assert.equal(typeof cancelViaWindow,'boolean');assert(!cancelViaWindow||surface==='embedded','Window cancellation requires embedded start');
+  return {surface,cancelViaWindow};
 }
 export function authorizationSurface(s,{pendingSurface=false}={}){
   if(s.state==='authorizing')assert((pendingSurface&&s.authorizationSurface===undefined)||['embedded','browser'].includes(s.authorizationSurface),'Authorizing requires a finite actual surface');
@@ -25,9 +24,8 @@ export function authorizationSurface(s,{pendingSurface=false}={}){
   return s.authorizationSurface;
 }
 export async function beginAuthorization(peer,mode,{poll=boundedPoll,now=Date.now}={}){
-  const {surface,continueInBrowser}=surfacePolicy(mode);
+  const {surface}=surfacePolicy(mode);
   await peer.enterAccount();await peer.inspectAction('signIn',surface);await peer.action('signIn',{surface});
-  // Transfer shares the original authorizing budget; it cannot reset the clock.
   const deadline=now()+30000;
   await poll('one SignIn authorizing',async()=>{
     // Native publishes authorizing before asynchronous window/browser opening.
@@ -37,19 +35,13 @@ export async function beginAuthorization(peer,mode,{poll=boundedPoll,now=Date.no
     disconnected(s,{pendingSurface:true});const actual=s.authorizationSurface;assert(['signedOut','authorizing'].includes(s.state));
     if(s.state==='signedOut'||actual===undefined)return false;assert.equal(actual,surface,'Requested/actual authorization surface mismatch');return true;
   },30000);
-  if(continueInBrowser){
-    await peer.inspectAction('openLoginInBrowser','embedded');await peer.action('openLoginInBrowser');
-    await poll('same authorization continues in browser',async()=>{
-      const s=await peer.status();if(now()>=deadline)throw Object.assign(Error('Authorization deadline expired'),{code:'CONDITION_TIMEOUT:same authorization continues in browser'});disconnected(s);const actual=authorizationSurface(s);assert.equal(s.state,'authorizing','Transfer must retain pending authorization');return actual==='browser';
-    },Math.max(0,deadline-now()));
-  }
-  return {requestedSurface:surface,authorizationSurface:continueInBrowser?'browser':surface,browserContinuation:continueInBrowser,uiHandler:'account.signIn',...(continueInBrowser?{continuationUiHandler:'account.openLoginInBrowser'}:{}),physicalInput:false};
+  return {requestedSurface:surface,authorizationSurface:surface,uiHandler:'account.signIn',physicalInput:false};
 }
 export function options(argv){
   const o={};
-  for(let i=0;i<argv.length;i++){const k=argv[i];assert(['--binary','--store','--output','--surface','--continue-in-browser','--cancel-via-window'].includes(k)&&!Object.hasOwn(o,k),'Only fixed runner inputs allowed');if(k==='--continue-in-browser'||k==='--cancel-via-window')o[k]=true;else{assert(typeof argv[i+1]==='string'&&!argv[i+1].startsWith('--'),'Missing fixed input value');o[k]=argv[++i];}}
-  assert.equal(Object.keys(o).length,3+Number(Object.hasOwn(o,'--surface'))+Number(Object.hasOwn(o,'--continue-in-browser'))+Number(Object.hasOwn(o,'--cancel-via-window')));
-  const mode=surfacePolicy({surface:Object.hasOwn(o,'--surface')?o['--surface']:'browser',continueInBrowser:o['--continue-in-browser']===true,cancelViaWindow:o['--cancel-via-window']===true});
+  for(let i=0;i<argv.length;i++){const k=argv[i];assert(['--binary','--store','--output','--surface','--cancel-via-window'].includes(k)&&!Object.hasOwn(o,k),'Only fixed runner inputs allowed');if(k==='--cancel-via-window')o[k]=true;else{assert(typeof argv[i+1]==='string'&&!argv[i+1].startsWith('--'),'Missing fixed input value');o[k]=argv[++i];}}
+  assert.equal(Object.keys(o).length,3+Number(Object.hasOwn(o,'--surface'))+Number(Object.hasOwn(o,'--cancel-via-window')));
+  const mode=surfacePolicy({surface:Object.hasOwn(o,'--surface')?o['--surface']:'browser',cancelViaWindow:o['--cancel-via-window']===true});
   for(const k of ['--binary','--store','--output'])assert(isAbsolute(o[k]||'')&&resolve(o[k])===o[k],'Canonical absolute paths required');
   for(const k of ['--store','--output'])assert(dirname(o[k])==='/private/tmp'&&/^account109-cancel-local-[A-Za-z0-9_-]+$/.test(basename(o[k])),'Fresh dedicated /private/tmp names required');
   assert.notEqual(o['--store'],o['--output']);return {binary:o['--binary'],store:o['--store'],output:o['--output'],...mode};
@@ -85,21 +77,20 @@ export function assertNatural(peer){
   const l=peer.lifecycle;assert.equal(l.naturalExit,true);assert.deepEqual(l.exit,{code:0,signal:null});assert.deepEqual(l.close,{code:0,signal:null});assert.deepEqual(l.forcedSignals,[]);assert.equal(peer.pidAbsent,true,'Owned process must be gone');
 }
 export function actionShown(p,kind,surface='browser'){
-  assert(['signIn','cancel','openLoginInBrowser'].includes(kind));assert(['embedded','browser'].includes(surface));
-  if(kind==='openLoginInBrowser'&&surface!=='embedded')return false;
-  const labels=kind==='signIn'?['登录','创建账户']:surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录'];
-  return p.state===(kind==='signIn'?'signedOut':'authorizing')&&p.authorizationSurface===(kind==='signIn'?undefined:surface)&&p.count===labels.length&&JSON.stringify(p.labels)===JSON.stringify(labels)&&p.label===(kind==='signIn'?'登录':kind==='cancel'?'取消登录':'在浏览器中继续')&&p.enabled===true&&p.visible===true&&JSON.stringify(p.radioValues)===JSON.stringify(kind==='signIn'?['embedded','browser']:[])&&JSON.stringify(p.radioDisabled)===JSON.stringify(kind==='signIn'?[false,false]:[]);
+  assert(['signIn','cancel'].includes(kind));assert(['embedded','browser'].includes(surface));
+  const labels=kind==='signIn'?['登录','创建账户']:['取消登录'];
+  return p.state===(kind==='signIn'?'signedOut':'authorizing')&&p.authorizationSurface===(kind==='signIn'?undefined:surface)&&p.count===labels.length&&JSON.stringify(p.labels)===JSON.stringify(labels)&&p.label===(kind==='signIn'?'登录':'取消登录')&&p.enabled===true&&p.visible===true&&JSON.stringify(p.radioValues)===JSON.stringify(kind==='signIn'?['embedded','browser']:[])&&JSON.stringify(p.radioDisabled)===JSON.stringify(kind==='signIn'?[false,false]:[]);
 }
 // Fixed read-only projection of segmented choices.
-export const ACTION_PROJECTION="(()=>{const p=document.querySelector('.account-settings'),bs=Array.from(p?.querySelectorAll('.account-group[aria-label=\"CyberNote 账户\"] .account-actions button')||[]),b=bs[arg==='openLoginInBrowser'?1:0],rs=Array.from(p?.querySelectorAll('[aria-label=\"登录方式\"] [role=\"radio\"]')||[]);return {state:p?.dataset.accountState,authorizationSurface:p?.dataset.accountAuthorizationSurface,count:bs.length,labels:bs.map(b=>b.textContent),label:b?.textContent,enabled:!!b&&!b.disabled,visible:!!b&&b.getClientRects().length>0,radioValues:rs.map(r=>r.value),radioDisabled:rs.map(r=>r.getAttribute('aria-disabled')==='true')};})()";
-export async function exercise({open,record,checkpoint,poll=boundedPoll,clock,surface='browser',continueInBrowser=false,cancelViaWindow=false}){
-  surfacePolicy({surface,continueInBrowser,cancelViaWindow});
+export const ACTION_PROJECTION="(()=>{const p=document.querySelector('.account-settings'),bs=Array.from(p?.querySelectorAll('.account-group[aria-label=\"CyberNote 账户\"] .account-actions button')||[]),b=bs[0],rs=Array.from(p?.querySelectorAll('[aria-label=\"登录方式\"] [role=\"radio\"]')||[]);return {state:p?.dataset.accountState,authorizationSurface:p?.dataset.accountAuthorizationSurface,count:bs.length,labels:bs.map(b=>b.textContent),label:b?.textContent,enabled:!!b&&!b.disabled,visible:!!b&&b.getClientRects().length>0,radioValues:rs.map(r=>r.value),radioDisabled:rs.map(r=>r.getAttribute('aria-disabled')==='true')};})()";
+export async function exercise({open,record,checkpoint,poll=boundedPoll,clock,surface='browser',cancelViaWindow=false,...extra}){
+  surfacePolicy({surface,cancelViaWindow,...extra});
   const initial=fixture(false),edited=fixture(true),first=await open();
   await checkpoint('localSave');strictSignedOut(await first.status());
   const empty=await first.workspace();assert.equal(empty.notes.length,0);assert.equal(empty.attachments.length,0);
   const id=await first.create(initial.document);assert(/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(id));assertDocument(await first.workspace(),id,initial);
   await record('localSave',{noteId:id,documentAndPlainTextSha256:hash(JSON.stringify(initial))});
-  await checkpoint('authorizing');const proof=await beginAuthorization(first,{surface,continueInBrowser},{poll,now:clock?.now??Date.now});await record('authorizing',proof);
+  await checkpoint('authorizing');const proof=await beginAuthorization(first,{surface},{poll,now:clock?.now??Date.now});await record('authorizing',proof);
   if(cancelViaWindow)await checkpoint('awaitingNativeWindowClose',{event:'awaiting-native-window-close',authorizationSurface:'embedded',timeoutMs:60000,readOnlyWait:true});
   else{await checkpoint('cancelledWindow');await first.inspectAction('cancel',proof.authorizationSurface);await first.action('cancel');}
   // The window deadline starts after checkpoint persistence. A status request
@@ -121,15 +112,15 @@ export async function finish(report,peers,save){
   report.status=!report.failure&&!report.cleanupFailure&&peers.length===2&&checks.every(k=>report.checks.some(c=>c.name===k&&c.status==='pass'))?'pass':'fail';
   report.finishedAt=new Date().toISOString();await save();
 }
-const operations=['ready','state','idle','account.status','account.signIn','account.cancel','account.openLoginInBrowser','settings.open','settings.tab','app.back','folder.select','note.create','note.select','editor.setContent','app.flush','action.inspect','close'];
+const operations=['ready','state','idle','account.status','account.signIn','account.cancel','settings.open','settings.tab','app.back','folder.select','note.create','note.select','editor.setContent','app.flush','action.inspect','close'];
 export async function run(argv=process.argv.slice(2)){
   const o=options(argv);await preflight(o);await mkdir(o.output,{mode:0o700});
-  const report={schema:1,kind:'account109-fresh-gui-cancel-local',status:'running',phase:'prepare',startedAt:new Date().toISOString(),surface:o.surface,continueInBrowser:o.continueInBrowser,cancelViaWindow:o.cancelViaWindow,binary:{sha256:BINARY_SHA,sourceRevision:SOURCE,candidateKind:'debug-e2e'},checks:[],observations:[],tools:{},limitations:[
+  const report={schema:1,kind:'account109-fresh-gui-cancel-local',status:'running',phase:'prepare',startedAt:new Date().toISOString(),surface:o.surface,cancelViaWindow:o.cancelViaWindow,binary:{sha256:BINARY_SHA,sourceRevision:SOURCE,candidateKind:'debug-e2e'},checks:[],observations:[],tools:{},limitations:[
     'Fresh synthetic store only; no original/default store, DB, grant or binding is read by the runner. Product functions use normal GUI Store/Session and the pinned native account Runtime.',
     'SignIn and automatic cancel use existing account UI handlers after checking visible enabled buttons. Window cancellation mode sends no account.cancel command. Editor commands use debug/e2e UI handlers, not physical input. No form credentials, URLs, callbacks, port changes, process-name kills, authorization retries or headless mode.',
     'Window cancellation mode records an awaitingNativeWindowClose checkpoint then only polls native account status for up to 60 seconds. cancelOrigin identifies the expected window-close observation flow; signedOut alone proves neither a physical action, a specific closing method nor hosted Logto form rendering. Those observations require separate parent CUA evidence.',
     'No browser content is inspected or saved. Authorizing alone does not prove a browser page opened or identity was validated. Bind/SignIn errors fail without changing fixed callback port 17897 or interfering with other Apps.',
-    'The explicit fixed surface goes through the real UI handler, not physical radio input. Embedded-to-browser continuation uses one openLoginInBrowser after one SignIn; same-transaction ownership is a native contract, not independently proved by surface labels. No transaction secret or remote window content is inspected.',
+    'The explicit fixed surface goes through the real UI handler, not physical radio input. Closing the embedded window is the only cancellation path there; no transaction secret or remote window content is inspected.',
     'Cancellation is sampled with full document preservation before and after natural restart. No valid old callback is submitted: late-callback rejection, QA re-login, account switching and three-peer/relay acceptance are not proved.',
     'Fresh store/output are retained on success and failure. Only parent may clean this run after finite evidence is archived and checked.'
   ]};
@@ -157,7 +148,7 @@ export async function run(argv=process.argv.slice(2)){
         leaveAccount:async()=>{for(let i=0;i<3&&(await state()).preferences.open;i++)await command('app.back');assert(!(await state()).preferences.open);},
         requireSettingsClosed:async()=>assert(!(await state()).preferences.open,'Settings must be closed on restart'),
         inspectAction:async(kind,surface='browser')=>{
-          assert(['signIn','cancel','openLoginInBrowser'].includes(kind));
+          assert(['signIn','cancel'].includes(kind));
           await boundedPoll('visible '+kind+' action',async()=>{
             const s=await peer.status();if(kind==='signIn')strictSignedOut(s);else{disconnected(s);assert.equal(s.state,'authorizing');assert.equal(s.authorizationSurface,surface);}
             const p=await step(app,'action.inspect',()=>app.evaluate(ACTION_PROJECTION,kind));
@@ -165,7 +156,7 @@ export async function run(argv=process.argv.slice(2)){
           },5000);
         },
         action:async(kind,args)=>{
-          assert(['signIn','cancel','openLoginInBrowser'].includes(kind));
+          assert(['signIn','cancel'].includes(kind));
           if(kind==='signIn'){assert(args&&Object.keys(args).length===1&&Object.hasOwn(args,'surface'));surfacePolicy(args);await command('account.signIn',{surface:args.surface});}
           else{assert.equal(args,undefined);await command('account.'+kind);}
         },
@@ -175,7 +166,7 @@ export async function run(argv=process.argv.slice(2)){
       };
       peers.push(peer);const ready=await step(app,'ready',()=>app.ready(45000));report.observations.push({kind:'ready',device:app.name,interactive:ready.interactive,startupDetached:ready.startupDetached});await save();return peer;
     }
-    await exercise({open,surface:o.surface,continueInBrowser:o.continueInBrowser,cancelViaWindow:o.cancelViaWindow,checkpoint:async(phase,proof)=>{report.phase=phase;if(proof)report.observations.push({kind:'checkpoint',phase,at:new Date().toISOString(),...proof});await save();},record:async(name,proof)=>{assert(checks.includes(name));report.checks.push({name,status:'pass'});report.observations.push({kind:name,...proof});await save();}});
+    await exercise({open,surface:o.surface,cancelViaWindow:o.cancelViaWindow,checkpoint:async(phase,proof)=>{report.phase=phase;if(proof)report.observations.push({kind:'checkpoint',phase,at:new Date().toISOString(),...proof});await save();},record:async(name,proof)=>{assert(checks.includes(name));report.checks.push({name,status:'pass'});report.observations.push({kind:name,...proof});await save();}});
   }catch(e){report.failure={phase:report.phase,code:failureCode(e),lastOperation:report.lastOperation};}
   finally{report.phase='cleanup';try{await finish(report,peers,save);}finally{process.off('SIGINT',onSignal);process.off('SIGTERM',onSignal);}}
   console.log(JSON.stringify({status:report.status,result:resolve(o.output,'result.json')}));return report;

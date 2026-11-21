@@ -23,6 +23,6 @@
 
 真实 SDK 网络工具的 Store backend 只能证明传输和数据算法组合，不能代替 App 账户或 Session quiet 屏障。Android AAR/DEX 只证明编译，不证明 Keystore 运行。生产 release/source-export 必须再核对全部固定源码、git pin、对应源码/许可证和实际包。
 
-旧 CyberGrid `.account/grant.json` 不由新实现读取或恢复；本轮未验证它的云端撤销。新退出仅提供 CyberBus 的本地关闭与独立云端撤销收据。桌面新安装默认使用本机加密文件，系统钥匙串为可选项；两种模式使用独立安装身份。既有发布 inventory 的 62 项基线差异保留，未通过完整 source-export，不影响本轮隔离资料库的本地核心手测包范围。
+旧 CyberGrid `.account/grant.json` 不由新实现读取或恢复；本轮未验证它的云端撤销。新退出仅提供 CyberBus 的本地关闭与独立云端撤销收据。桌面只使用本机加密文件，Android 只使用 Keystore 保护的本地加密文件；系统钥匙串不是可选项。旧 Keychain 项不读取、不删除，升级后归档活动绑定并要求重新登录。既有发布 inventory 的 62 项基线差异保留，未通过完整 source-export，不影响本轮隔离资料库的本地核心手测包范围。
 
 本轮应用入口：`src-tauri/target/debug/bundle/macos/CyberNote.app`。两个隔离资料库的准确启动命令、12 个核心 UI 用例、7 个第二轮回归用例和 2026-11-19 实际结果均在 [手动测试文档](MANUAL-UI-TESTS.md)。测试未访问用户原资料库；CLI 结果不能代填 Android 传输失败样本、异网络或可选第二轮 UI 项。

@@ -13,7 +13,6 @@ pub use bridge::{Limits, MappingLease, PeerId, Service, MAX_STREAM_LIFETIME};
 pub use bus::{Bus, BusEvent, Snapshot};
 pub use cyberbus::{pb, ClientConfig, DiagnosticSnapshot, SecureStore, StoreMode};
 #[cfg(target_os = "macos")]
-pub use cyberbus_auth::KeyringStore;
 pub use cyberbus_auth::{CallbackStore, SecretBytes};
 pub use prost_types::Any;
 pub use protocol::{CloseCode, Envelope, FrameKind, MAX_CHUNK, TYPE_URL};

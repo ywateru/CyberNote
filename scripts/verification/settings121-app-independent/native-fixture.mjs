@@ -69,7 +69,7 @@ export class NativeFixture {
       profile: { subject: 'independent-synthetic-subject', displayName: '独立合成账户', username: 'independent' },
       devices: [{ id: '22222222-2222-4222-8222-222222222222', name: '独立合成本机',
         current: true, online: true, connected: true, syncAvailable: false }],
-      pendingCount: 0, conflictCount: 1, credentialStorage: 'encryptedFile' };
+      pendingCount: 0, conflictCount: 1 };
     backend.sync = { state: 'paused', deviceName: '独立合成本机', peers: [],
       pendingCount: 0, conflictCount: 1 };
     backend.syncConflicts = [conflict()];

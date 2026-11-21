@@ -151,13 +151,14 @@ test('IPC preserves omitted browser compatibility and only fixed optional surfac
  assert.equal(h.calls.length,7,'invalid requests never reach invoke');
 });
 
-test('real account UI defaults embedded; both radios and both buttons share explicit choice',async t=>{
+test('real account UI defaults embedded and pending login exposes only cancel',async t=>{
  for(const type of ['signIn','signUp'])for(const surface of ['embedded','browser']){
   const h=setup(t);await h.mount();assert.deepEqual(h.actionLabels(),['登录','创建账户']);assert(props(h.radio('embedded'))['aria-checked']);
   assert(h.text().includes('登录用户名区分大小写，请按注册时的写法输入。'));
   const before=h.calls.length;await h.choose(surface);assert.equal(h.calls.length,before,'radio selection has no IPC');
   await h.click(type==='signIn'?'登录':'创建账户');assert.deepEqual(h.calls.at(-1),{type,surface});
-  assert.deepEqual(h.actionLabels(),surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录']);
+  assert.deepEqual(h.actionLabels(),['取消登录']);
+  assert(!h.button('在浏览器中继续'));
   assert.equal(h.radio('embedded'),undefined,'pending authorization has no editable surface');
  }
 });
@@ -167,77 +168,37 @@ test('waiting text/data follow only native surface; missing legacy field stays u
   const h=setup(t,{initial:authorizing(surface)});await h.mount();
   assert.equal(h.panel().getAttribute('data-account-authorization-surface'),surface??null);
   assert(h.text().includes(surface==='embedded'?'请在应用内登录窗口中完成授权':surface==='browser'?'请在系统浏览器中完成授权':'正在准备授权并打开登录页面'));
-  assert.deepEqual(h.actionLabels(),surface==='embedded'?['取消登录','在浏览器中继续']:['取消登录']);
+  if(surface==='embedded')assert(h.text().includes('关闭窗口即取消登录'));
+  assert.deepEqual(h.actionLabels(),['取消登录']);
   await h.tick();assert(h.calls.every(c=>c.type==='status'),'polling never opens or transfers authorization');
  }
 });
 
-test('transfer failure retains embedded owner/status and explicit retry never starts another signIn',async t=>{
- let fail=true;
- const h=setup(t,{initial:authorizing('embedded'),reply:(command,model)=>{
-  if(command.type==='openLoginInBrowser'&&fail){fail=false;const s={...authorizing('embedded'),error:{code:'account_network',stage:'browserOpen',message:'safe'}};model.set(s);return s;}
- }});await h.mount();await h.click('在浏览器中继续');
- assert(h.text().includes('未能打开系统浏览器'));assert(h.text().includes('你仍可在应用内登录窗口完成授权'));
- assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');
- assert.deepEqual(h.actionLabels(),['取消登录','在浏览器中继续']);
- await h.tick();assert.equal(h.calls.filter(c=>c.type==='openLoginInBrowser').length,1);
- await h.click('在浏览器中继续');assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'browser');
- assert(!h.text().includes('未能打开系统浏览器'));assert.deepEqual(h.actionLabels(),['取消登录']);
- assert.equal(h.calls.filter(c=>c.type==='signIn'||c.type==='signUp').length,0);
-});
-
-test('pending original opener allows status and transfer; its late response cannot undo browser surface',async t=>{
+test('pending original opener allows status and cancel; its late response cannot restore the canceled login',async t=>{
  const opener=deferred();
  const h=setup(t,{reply:(command,model)=>{
   if(command.type==='signIn'){model.set(authorizing('embedded'));return opener.promise;}
  }});await h.mount();await h.click('登录');await h.tick();
  assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');
- assert(!props(h.button('在浏览器中继续')).disabled);await h.click('在浏览器中继续');
- assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'browser');
+ assert(!props(h.button('取消登录')).disabled);
+ await h.click('取消登录');assert(h.calls.some(c=>c.type==='cancel'));
  await act(async()=>opener.resolve(authorizing('embedded')));
- assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'browser');
- assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);await h.click('取消登录');assert.deepEqual(h.actionLabels(),['登录','创建账户']);
-});
-
-test('cancel during transfer permits a new generation; late old transfer cannot overwrite it',async t=>{
- const transfer=deferred();
- const h=setup(t,{initial:authorizing('embedded'),reply:command=>command.type==='openLoginInBrowser'?transfer.promise:undefined});
- await h.mount();await h.click('在浏览器中继续');assert(!props(h.button('取消登录')).disabled);
- await h.click('取消登录');await h.click('登录');
- await act(async()=>transfer.resolve(authorizing('browser')));
- assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');
- assert.deepEqual(h.actionLabels(),['取消登录','在浏览器中继续']);
+ assert.equal(h.panel().getAttribute('data-account-state'),'signedOut');
+ assert.deepEqual(h.actionLabels(),['登录','创建账户']);
  assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
-});
-
-test('transfer IPC rejection retains embedded; late original reply cannot release transfer operation gate',async t=>{
- const opener=deferred(),transfer=deferred();let firstTransfer=true;
- const h=setup(t,{reply:(command,model)=>{
-  if(command.type==='signIn'){model.set(authorizing('embedded'));return opener.promise;}
-  if(command.type==='openLoginInBrowser'&&firstTransfer){firstTransfer=false;return transfer.promise;}
- }});await h.mount();await h.click('登录');await h.tick();await h.click('在浏览器中继续');
- await act(async()=>opener.resolve(authorizing('embedded')));
- assert(props(h.button('在浏览器中继续')).disabled,'old signIn completion must not clear current transfer busy');
- await act(async()=>{await h.handle().run({type:'signIn',surface:'browser'});});
- assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
- await act(async()=>transfer.reject(Error('unexported opener sentinel')));
- assert(!h.text().includes('unexported opener sentinel'));assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'embedded');
- assert(!props(h.button('在浏览器中继续')).disabled);assert(!props(h.button('取消登录')).disabled);
- await h.click('重试');assert.equal(h.panel().getAttribute('data-account-authorization-surface'),'browser');
- assert.equal(h.calls.filter(c=>c.type==='openLoginInBrowser').length,2);await h.click('取消登录');
 });
 
 test('cancel before original signIn reply fences that late reply and keeps single pending authorization',async t=>{
  const opener=deferred();let first=true;
  const h=setup(t,{reply:(command,model)=>{
   if(command.type==='signIn'&&first){first=false;model.set(authorizing('embedded'));return opener.promise;}
- }});await h.mount();await h.click('登录');await h.tick();await h.click('在浏览器中继续');await h.click('取消登录');
+ }});await h.mount();await h.click('登录');await h.tick();await h.click('取消登录');
  assert.equal(h.panel().getAttribute('data-account-state'),'signedOut');
  await act(async()=>{await h.handle().run({type:'signIn',surface:'embedded'});});
  assert.equal(h.calls.filter(c=>c.type==='signIn').length,1);
  await act(async()=>opener.resolve(authorizing('embedded')));
  assert.equal(h.panel().getAttribute('data-account-state'),'signedOut');assert.equal(h.panel().getAttribute('data-account-authorization-surface'),null);
- await h.click('登录');assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'browser'});
+ await h.click('登录');assert.deepEqual(h.calls.at(-1),{type:'signIn',surface:'embedded'});
 });
 
 test('failed cancel never unlocks a second authorization, before or after the original IPC completes',async t=>{
@@ -751,69 +712,20 @@ test('IPC constructs only exact rename and target/direction requests; invalid in
  assert.equal(h.calls.length,before);
 });
 
-test('credential storage IPC accepts only encryptedFile and the exact command shape',async t=>{
- const h=setup(t,{initial:{...signedOutAccount(),credentialStorage:'keychain'}});
- const request={type:'setCredentialStorage',storage:'encryptedFile'};
- await h.client.accountCommand(request);
- assert.deepEqual(h.calls.at(-1),request);
+test('credential storage is not a user setting or IPC command',async t=>{
+ const h=setup(t,{initial:signedOutAccount()});
+ await h.mount();
+ assert(!h.text().includes('凭据存储'));
+ assert(!h.text().includes('钥匙串'));
+ assert(!h.text().includes('本机加密文件'));
  const before=h.calls.length;
  for(const command of [
   {type:'setCredentialStorage'},
   {type:'setCredentialStorage',storage:'keychain'},
-  {type:'setCredentialStorage',storage:'encrypted_file'},
-  {type:'setCredentialStorage',storage:null},
-  {...request,confirmed:true}, {...request,path:'/private/vault'},
- ]) await assert.rejects(h.client.accountCommand(command),/无效数据/);
+  {type:'setCredentialStorage',storage:'encryptedFile'},
+ ]) await assert.rejects(h.client.accountCommand(command),/未知账户指令|无效数据/);
  assert.equal(h.calls.length,before);
-});
-
-test('an unreadable legacy vault offers a confirmed switch and then starts a fresh embedded login',async t=>{
- const initial={...signedOutAccount(),credentialStorage:'keychain',state:'error',error:{code:'account_storage',message:'Fixture legacy storage unavailable'}};
- const h=setup(t,{initial,reply:(command,model)=>{
-  if(command.type==='setCredentialStorage'){const next={...signedOutAccount(),credentialStorage:command.storage};model.set(next);return next;}
- }});
- await h.mount();
- assert(h.text().includes('无法读取旧版账户凭据'));
- assert(h.text().includes('错误代码'));
- assert(h.text().includes('account_storage'));
- await h.click('改用本机加密文件');
- assert(h.handle().inspect().confirmation);assert(h.calls.every(c=>c.type==='status'));
- assert(h.text().includes('同步保持暂停'));
- await h.click('取消');assert.equal(h.handle().inspect().status.credentialStorage,'keychain');assert(h.calls.every(c=>c.type==='status'));
- await h.click('改用本机加密文件');await h.click('确认切换');
- assert.deepEqual(h.calls.filter(c=>c.type==='setCredentialStorage'),[{type:'setCredentialStorage',storage:'encryptedFile'}]);
- assert.equal(h.handle().inspect().status.credentialStorage,'encryptedFile');
- assert(!h.button('改用本机加密文件'));
- assert(h.text().includes('旧凭据与本机备忘录均已保留'));
- await h.click('登录');
- assert.deepEqual(h.calls.find(c=>c.type==='signIn'),{type:'signIn',surface:'embedded'});
-});
-
-test('new installation shows local encrypted storage without a Keychain selector',async t=>{
- const h=setup(t,{initial:{...signedOutAccount(),credentialStorage:'encryptedFile'}});
- await h.mount();
- assert(h.text().includes('凭据存储'));
- assert(h.text().includes('登录凭据加密保存在此设备'));
- assert(h.text().includes('本机加密文件'));
- assert(!h.text().includes('钥匙串'));
- assert(!h.button('改用本机加密文件'));
-});
-
-test('credential storage changes are fenced for signed-in, authorizing, busy and cleanup-required states',async t=>{
- const base={...signedOutAccount(),credentialStorage:'keychain'};
- const states=[
-  {...base,state:'paused',profile:{subject:'fixture-owner',displayName:'Fixture'}},
-  {...base,state:'authorizing',authorizationSurface:'embedded'},
-  {...base,state:'error',error:{code:'account_busy',message:'safe'}},
-  {...base,state:'error',error:{code:'account_cleanup_required',message:'safe'}},
- ];
- for(const initial of states) {
-  const h=setup(t,{initial});await h.mount();
-  assert(props(h.button('改用本机加密文件')).disabled);
-  const before=h.calls.length;
-  await act(async()=>{await h.handle().run({type:'setCredentialStorage',storage:'encryptedFile'});});
-  assert.equal(h.handle().inspect().confirmation,false);assert.equal(h.calls.length,before);
- }
+ assert.equal(h.client.catalog.find(item=>item.id==='account.setCredentialStorage'),undefined);
 });
 
 test('late device receipt after an observed account change cannot overwrite new-account status or claim success',async t=>{
@@ -841,28 +753,6 @@ test('JS device fixture renames only the local row and never invents a transfer 
  await accountFixture(backend,{type:'syncDevice',deviceId:PEER,direction:'pull'});assert.deepEqual(backend.account,before);assert.equal(backend.account.deviceOperation,undefined);
  await assert.rejects(accountFixture(backend,{type:'renameDevice',name:'valid',deviceId:PEER}));
  await assert.rejects(accountFixture(backend,{type:'syncDevice',deviceId:PEER,direction:'broadcast'}));
-});
-
-test('JS credential fixture validates exact input and rejects every active identity state',async()=>{
- const backend={account:{...signedOutAccount(),credentialStorage:'keychain'},async boundary(){}};
- await accountFixture(backend,{type:'setCredentialStorage',storage:'encryptedFile'});
- assert.equal(backend.account.state,'signedOut');assert.equal(backend.account.credentialStorage,'encryptedFile');
- for(const command of [
-  {type:'setCredentialStorage'},
-  {type:'setCredentialStorage',storage:'keychainFile'},
-  {type:'setCredentialStorage',storage:'encryptedFile',confirmed:true},
-  {type:'setCredentialStorage',storage:'encryptedFile',path:'/private/vault'},
- ]) await assert.rejects(accountFixture(backend,command));
- for(const account of [
-  directory({credentialStorage:'keychain'}),
-  {...signedOutAccount(),credentialStorage:'keychain',state:'authorizing',authorizationSurface:'embedded'},
-  {...signedOutAccount(),credentialStorage:'keychain',state:'error',error:{code:'account_busy',message:'safe'}},
-  {...signedOutAccount(),credentialStorage:'keychain',state:'error',error:{code:'account_cleanup_required',message:'safe'}},
- ]) {
-  backend.account=account;
-  await assert.rejects(accountFixture(backend,{type:'setCredentialStorage',storage:'encryptedFile'}));
-  assert.equal(backend.account.credentialStorage,'keychain');
- }
 });
 
 test('an older matching receipt after confirm is not new success, and invalidated dialogs cannot regain success by polling',async t=>{
@@ -924,30 +814,4 @@ test('debug rename pre-fills the requested local name and cannot save before exp
  await h.click('取消');assert(!h.calls.some(c=>c.type==='renameDevice'));
  await act(async()=>{await api.execute('account.renameDevice',{name:'  CLI Mac  '});});await h.click('保存名称');
  assert.deepEqual(h.calls.at(-1),{type:'renameDevice',name:'CLI Mac'});assert(h.getNative().devices.slice(1).every(d=>d.name==='同名设备'));
-});
-
-test('debug credential storage uses the real confirmation gate and never dispatches while active',async t=>{
- const initial={...signedOutAccount(),credentialStorage:'keychain'};
- const h=setup(t,{initial,reply:(command,model)=>{
-  if(command.type==='setCredentialStorage'){const next={...model.get(),credentialStorage:command.storage};model.set(next);return next;}
- }});await h.mount();const api=h.debug();
- const descriptor=api.list().find(c=>c.id==='account.setCredentialStorage');
- assert(descriptor);assert.equal(descriptor.available,true);assert.equal(descriptor.mode,'semantic');
- assert.deepEqual(Object.keys(descriptor.args),['storage']);assert(descriptor.args.storage.required);
- assert.deepEqual(Array.from(descriptor.args.storage.enum),['encryptedFile']);
- const before=h.calls.length;
- for(const args of [{},{storage:'keychainFile'},{storage:'encrypted_file'},{storage:'encryptedFile',confirmed:true}])
-  await assert.rejects(api.execute('account.setCredentialStorage',args),e=>e.code==='INVALID_ARGUMENT');
- assert.equal(h.calls.length,before);assert.equal(h.handle().inspect().confirmation,false);
- await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'encryptedFile'});});
- assert(h.handle().inspect().confirmation);assert.equal(h.calls.length,before);
- await h.click('取消');assert.equal(h.calls.length,before);
- await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'encryptedFile'});});
- await h.click('确认切换');
- await h.tick();
- assert.deepEqual(h.calls.slice(before).filter(c=>c.type==='setCredentialStorage'),[{type:'setCredentialStorage',storage:'encryptedFile'}]);
- h.setNative({...initial,state:'paused',profile:{subject:'fixture-owner',displayName:'Fixture'}});await h.poll();
- const pausedCalls=h.calls.length;
- await act(async()=>{await api.execute('account.setCredentialStorage',{storage:'encryptedFile'});});
- assert.equal(h.handle().inspect().confirmation,false);assert.equal(h.calls.length,pausedCalls);
 });

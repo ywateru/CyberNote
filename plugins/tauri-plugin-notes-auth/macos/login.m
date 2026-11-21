@@ -46,8 +46,6 @@ static void dispose(NotesLogin *entry, BOOL user) {
 }
 @implementation NotesLogin
 - (void)windowWillClose:(NSNotification *)notification { dispose(self, YES); }
-- (void)cancel:(id)sender { dispose(self, YES); }
-- (void)continueInBrowser:(id)sender { emit(self, 2); }
 - (void)webView:(WKWebView *)web decidePolicyForNavigationAction:(WKNavigationAction *)action decisionHandler:(void (^)(WKNavigationActionPolicy))decision {
   // No target=_blank, arbitrary schemes, file/local app documents or federation.
   BOOL allowed = self.active && action.targetFrame &&
@@ -106,17 +104,12 @@ int notes_auth_open(const char *rawInstance, uint64_t generation, const char *ra
       configuration.preferences.javaScriptCanOpenWindowsAutomatically = NO;
       NSWindow *window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 620, 760) styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer:NO];
       window.title = @"登录 CyberNote"; window.identifier = instance;
+      window.contentMinSize = NSMakeSize(420, 560);
       window.releasedWhenClosed = NO; window.delegate = entry;
-      WKWebView *web = [[WKWebView alloc] initWithFrame:NSMakeRect(0, 0, 620, 712) configuration:configuration];
+      WKWebView *web = [[WKWebView alloc] initWithFrame:window.contentView.bounds configuration:configuration];
       web.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
       web.navigationDelegate = entry; web.UIDelegate = entry;
-      NSButton *continueButton = [NSButton buttonWithTitle:@"在浏览器中继续" target:entry action:@selector(continueInBrowser:)];
-      continueButton.frame = NSMakeRect(16, 722, 180, 28);
-      continueButton.autoresizingMask = NSViewMinYMargin | NSViewMaxXMargin;
-      NSButton *cancelButton = [NSButton buttonWithTitle:@"取消登录" target:entry action:@selector(cancel:)];
-      cancelButton.frame = NSMakeRect(500, 722, 104, 28);
-      cancelButton.autoresizingMask = NSViewMinYMargin | NSViewMinXMargin;
-      [window.contentView addSubview:web]; [window.contentView addSubview:continueButton]; [window.contentView addSubview:cancelButton];
+      [window.contentView addSubview:web];
       entry.window = window; entry.web = web;
       [window center]; [window makeKeyAndOrderFront:nil];
       [web loadRequest:[NSURLRequest requestWithURL:entry.initialURL]];

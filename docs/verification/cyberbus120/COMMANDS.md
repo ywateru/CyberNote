@@ -47,7 +47,7 @@ node scripts/verification/cyberbus-command.mjs \
   --attachment-id TRANSIENT_UUID
 ```
 
-`status` 会输出去敏后的 `state`、`enabled`、凭据存储方式、设备总数、在线/连接/可同步设备数、待处理/冲突计数和最近操作方向/阶段。它不输设备 ID、名称、endpoint、token、subject 或笔记内容。
+`status` 会输出去敏后的 `state`、`enabled`、设备总数、在线/连接/可同步设备数、待处理/冲突计数和最近操作方向/阶段。它不输出凭据存储方式，也不输设备 ID、名称、endpoint、token、subject 或笔记内容。
 
 ## 开关、目录刷新和内容同步
 
@@ -132,5 +132,5 @@ node scripts/verification/cyberbus-ui-live.mjs \
 - 只在 `CyberNote-CyberBus-*` 隔离数据目录和现有 Android QA 包运行。
 - 不记录密码、token、subject、设备 ID、endpoint、密钥、私有路径或笔记正文。
 - 不自动解除 Android 锁屏，不清包、不清数据，不删除 QA 数据库或附件。
-- 旧 `probe_store` 的 Keychain 授权框不是当前应用入口；不要点击“始终允许”。桌面默认使用 `encryptedFile`，系统 Keychain 是可选模式。
+- 产品只使用本地加密文件：桌面为本机 AES-GCM 文件，Android 为 Keystore 保护的本地加密文件。旧 `probe_store` 的 Keychain 授权框不是当前应用入口；不要点击“始终允许”。旧 Keychain 项不会被当前实现读取或删除。
 - 失败时保留首个错误和前后诊断计数；不能用重新登录、重建身份或清库掩盖失败。

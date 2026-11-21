@@ -25,7 +25,7 @@ use tauri::Manager;
 use tauri_plugin_opener::OpenerExt;
 use tokio::sync::{oneshot, Mutex as AsyncMutex};
 use tokio_util::sync::CancellationToken;
-use types::{Command, CredentialStorage, Error, Phase, Profile, Result, SdkStage, Status};
+use types::{Command, Error, Phase, Profile, Result, SdkStage, Status};
 struct Attempt {
     stop: CancellationToken,
     mac: Option<Arc<callback::Callback>>,
@@ -59,7 +59,6 @@ struct Data {
     status: Status,
     binding: Option<private::Binding>,
     device_operation_id: Option<uuid::Uuid>,
-    credential_storage: Option<CredentialStorage>,
 }
 pub(crate) struct Runtime {
     blocked: Option<Error>,
@@ -68,7 +67,6 @@ pub(crate) struct Runtime {
     root: PathBuf,
     data: Mutex<Data>,
     bus: Mutex<Option<Bus>>,
-    legacy_storage_failed: AtomicBool,
     lifecycle: AsyncMutex<()>,
     operation: AsyncMutex<()>,
     registry: Mutex<Option<private::Registry>>,
@@ -88,18 +86,25 @@ impl Runtime {
         _cache: &Path,
     ) -> Result<Arc<Self>> {
         let root = root.join(".account");
-        let loaded =
-            private::directory(&root).and_then(|_| private::read(&root.join("binding.json")));
-        let (binding, mut blocked) = match loaded {
-            Ok(b) => (b, None),
-            Err(e) => (None, Some(e)),
-        };
-        let credential_storage = match provider::selected_storage(&root) {
-            Ok(storage) => storage,
-            Err(e) => {
-                blocked.get_or_insert(e);
-                None
+        let mut blocked = None;
+        if let Err(e) = private::directory(&root) {
+            blocked = Some(e);
+        }
+        if blocked.is_none() {
+            if let Err(e) = provider::migrate_legacy_keychain(&root) {
+                blocked = Some(e);
             }
+        }
+        let binding = if blocked.is_none() {
+            match private::read(&root.join("binding.json")) {
+                Ok(binding) => binding,
+                Err(e) => {
+                    blocked = Some(e);
+                    None
+                }
+            }
+        } else {
+            None
         };
         let registry = if blocked.is_none() {
             match private::registry(&root) {
@@ -126,10 +131,8 @@ impl Runtime {
                 status,
                 binding,
                 device_operation_id: None,
-                credential_storage,
             }),
             bus: Mutex::new(None),
-            legacy_storage_failed: AtomicBool::new(false),
             lifecycle: AsyncMutex::new(()),
             operation: AsyncMutex::new(()),
             registry: Mutex::new(registry),
@@ -153,18 +156,13 @@ impl Runtime {
             return Ok(bus);
         }
         let config = config::pinned()?;
-        let storage = provider::selected_storage(&self.root)?.ok_or(Error::Unsupported)?;
         let opened = async {
-            let (store, mode) = provider::store(&self.app, &self.root, storage)?;
+            let (store, mode) = provider::store(&self.root)?;
             Bus::new(config, store, mode)
                 .await
                 .map_err(|error| Error::at_sdk(SdkStage::Init, error))
         }
         .await;
-        if storage == CredentialStorage::Keychain {
-            self.legacy_storage_failed
-                .store(matches!(opened, Err(Error::Storage)), Ordering::Release);
-        }
         let candidate = opened?;
         let existing = {
             let mut slot = self.bus.lock().map_err(|_| Error::Storage)?;
@@ -227,11 +225,6 @@ impl Runtime {
     }
     pub fn snapshot(&self) -> Result<Status> {
         let mut status = self.data.lock().map_err(|_| Error::Storage)?.status.clone();
-        status.credential_storage = self
-            .data
-            .lock()
-            .map_err(|_| Error::Storage)?
-            .credential_storage;
         let (pending, conflicts) = self.sync.account_metrics()?;
         status.pending_count = pending;
         status.conflict_count = conflicts;
@@ -678,57 +671,6 @@ impl Runtime {
                 if let Some(n) = self.network.lock().await.as_ref() {
                     n.control.refresh.notify_one();
                 }
-            }
-            Command::SetCredentialStorage { storage } => {
-                let _owner = self.lifecycle.try_lock().map_err(|_| Error::Busy)?;
-                if !cfg!(target_os = "macos") || storage != CredentialStorage::EncryptedFile {
-                    return Err(Error::Unsupported);
-                }
-                if self
-                    .data
-                    .lock()
-                    .map_err(|_| Error::Storage)?
-                    .credential_storage
-                    == Some(storage)
-                {
-                    return self.snapshot();
-                }
-                let recovering = self.legacy_storage_failed.load(Ordering::Acquire)
-                    && self.bus_current()?.is_none();
-                {
-                    let data = self.data.lock().map_err(|_| Error::Storage)?;
-                    let blocked_error = data.status.error.as_ref().is_some_and(|error| {
-                        error.code == "account_busy" || error.code == "account_cleanup_required"
-                    });
-                    if (data.binding.is_some() && !recovering)
-                        || data.status.profile.is_some()
-                        || data.status.state == Phase::Authorizing
-                        || data
-                            .status
-                            .device_operation
-                            .as_ref()
-                            .is_some_and(|operation| {
-                                operation.phase == types::DeviceOperationPhase::Running
-                            })
-                        || blocked_error
-                    {
-                        return Err(Error::Busy);
-                    }
-                }
-                if self.network.lock().await.is_some() || self.attempt.lock().await.is_some() {
-                    return Err(Error::Busy);
-                }
-                // An unreadable legacy grant cannot be revoked or copied. Keep its
-                // binding and vault, and persist the pause before switching stores.
-                // A fresh login can reuse the device for the same verified owner.
-                self.set_enabled(false)?;
-                self.close_bus().await?;
-                provider::set_selected_storage(&self.root, storage)?;
-                self.generation.fetch_add(1, Ordering::AcqRel);
-                self.mutate(|data| {
-                    data.credential_storage = Some(storage);
-                    data.status = Status::default();
-                });
             }
             Command::SyncDevice {
                 device_id,

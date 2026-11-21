@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | AUTH-01 | 同账户两个安装分别通过真实 Logto 登录 | SDK 验证账户一致、安装 ID 不同、workspace 一致 | 真实授权/SDK |
 | AUTH-02 | 取消、错 state、迟到 callback | 原事务终止；不能提交到下一代 owner | 原生/SDK |
-| AUTH-03 | 关闭并重开安装 | Keychain/Keystore grant 恢复、设备 ID 不变、暂停意图保持 | 持久存储/原生 |
+| AUTH-03 | 关闭并重开安装 | 本地加密文件（macOS）/ Keystore 保护的本地文件（Android）恢复、设备 ID 不变、暂停意图保持；旧 Keychain 不被读取或删除 | 持久存储/原生 |
 | AUTH-04 | 退出或切换账户 | 旧网、流与在途写退役；本地全文/附件保持；另一账户默认暂停 | 真实原生/Store |
 | AUTH-05 | 不同账户/产品 | 设备不互见，不能借 profile/loopback 伪造内容授权 | 真实网络与负例 |
 | STORE-01 | vault 被修改、丢失、密钥错误、重复 owner | 明确失败；不创建新身份，不泄露 plaintext/密钥 | 存储 |

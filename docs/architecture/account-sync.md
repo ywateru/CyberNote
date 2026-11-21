@@ -18,7 +18,7 @@
 
 ## 原生认证与设备授权契约
 
-授权采用成熟 Rust OpenID Connect/OAuth2 库实现 Code + PKCE 和 ID token 校验，所有平台使用同一个 Rust grant owner；不将 refresh token 交给 WebView。系统浏览器由平台 opener 打开，Mac 使用精确 `http://127.0.0.1:17897/callback` loopback 回跳，Android 使用独立 `com.local.notesclone.auth://callback` deep link。owner 串行刷新并在每次 rotation 后先原子保存私有凭据，再启动依赖新 grant 的网络请求。私有 0600 regular 文件不等于 OS Keychain/Keystore；不作系统钥匙串存储声明。
+授权采用成熟 Rust OpenID Connect/OAuth2 库实现 Code + PKCE 和 ID token 校验，所有平台使用同一个 Rust grant owner；不将 refresh token 交给 WebView。系统浏览器由平台 opener 打开，Mac 使用精确 `http://127.0.0.1:17897/callback` loopback 回跳，Android 使用独立 `com.local.notesclone.auth://callback` deep link。owner 串行刷新并在每次 rotation 后先原子保存私有凭据，再启动依赖新 grant 的网络请求。macOS 只使用私有 AES-GCM 加密文件，Android 只使用 Keystore 保护的本地加密文件；不提供系统钥匙串存储选项，也不把私有 0600 regular 文件称为 OS Keychain。
 
 CyberGrid 将 peer stream 接入本机 TCP 后，业务 listener 不能从 `127.0.0.1` 判断对端账户。自动配对必须额外验证服务签发的短期设备凭证：
 
@@ -52,7 +52,7 @@ CyberGrid 将 peer stream 接入本机 TCP 后，业务 listener 不能从 `127.
 
 ## 原生IPC与前端契约
 
-单一`account_command`，请求deny_unknown_fields，操作为`status`、`signIn`、`signUp`、`openLoginInBrowser`、`cancel`、`signOut`、`syncNow`、`setEnabled`。`signIn/signUp` 可传 `surface: 'embedded'|'browser'`；`openLoginInBrowser` 只接续当前内置授权。不得提供任意URL/token注入的生产IPC。下列为状态摘要，完整字段及严格验证以 `src/account-client.ts` 为准：
+单一`account_command`，请求deny_unknown_fields，操作为`status`、`signIn`、`signUp`、`openLoginInBrowser`、`cancel`、`signOut`、`syncNow`、`setEnabled`。`signIn/signUp` 可传 `surface: 'embedded'|'browser'`；`openLoginInBrowser` 只为兼容既有调用方保留，当前产品界面不显示该动作。不得提供任意URL/token注入的生产IPC。状态 DTO 不包含凭据存储字段，也不接受 `setCredentialStorage`。下列为状态摘要，完整字段及严格验证以 `src/account-client.ts` 为准：
 
 ```typescript
 type AccountStatus = {

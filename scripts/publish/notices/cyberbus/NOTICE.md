@@ -4,9 +4,10 @@ Source: https://github.com/osd-pub/CyberBus.git
 Commit: 359465e83bd74b571a963f3d1fdc238f50169919
 
 The application adapter `crates/notes-cyberbus` uses Cargo git dependencies for
-`cyberbus` and `cyberbus-auth`, with the same exact revision, including macOS
-`platform-keyring`. Cargo resolves embedded EasyTier path dependencies from that
-same git checkout; there is no dependency on a developer's sibling directory.
+`cyberbus` and `cyberbus-auth`, with the same exact revision. The macOS
+`platform-keyring` feature is not enabled; CyberNote uses its local encrypted-file
+store. Cargo resolves embedded EasyTier path dependencies from that same git
+checkout; there is no dependency on a developer's sibling directory.
 The SDK needs Rust 1.95 or later and host protoc for EasyTier code generation.
 Cargo.lock is the resolved source/checksum inventory; keep it with source.
 

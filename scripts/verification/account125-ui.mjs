@@ -10,7 +10,7 @@ await mkdir(output, { recursive: true });
 const localId = "11111111-1111-4111-8111-111111111111";
 const remoteId = "22222222-2222-4222-8222-222222222222";
 const ready = () => ({
-  state: "ready", enabled: true, credentialStorage: "encryptedFile",
+  state: "ready", enabled: true,
   profile: { subject: "fixture-private-subject", displayName: "测试账户", username: "UI fixture" },
   devices: [
     { id: localId, name: "本机 Mac", current: true, online: true, connected: false, syncAvailable: true },
@@ -25,21 +25,12 @@ for (const mobile of [false, true]) {
   const command = (name, args) => api(page, name, args);
   const refresh = () => command("account.status");
   try {
-    backend.account = { state: "signedOut", enabled: false, credentialStorage: "encryptedFile", devices: [], pendingCount: 0, conflictCount: 0 };
+    backend.account = { state: "signedOut", enabled: false, devices: [], pendingCount: 0, conflictCount: 0 };
     await command("settings.open");
     await command("settings.tab", { tab: "account" });
     await page.waitForSelector('[data-account-state="signedOut"]');
-    if (!mobile) {
-      assert.equal(await root.locator(".account-storage-group[open]").count(), 0);
-      assert.equal(await root.getByRole("radio", { name: /本机加密文件/ }).isVisible(), false);
-      await root.locator(".account-storage-summary").click();
-      await root.getByRole("radio", { name: /系统钥匙串/ }).check();
-      await root.getByRole("button", { name: "应用存储方式", exact: true }).click();
-      assert.equal(await root.locator("dialog[open]").count(), 1);
-      await root.getByRole("button", { name: "取消", exact: true }).click();
-      assert.equal(backend.account.credentialStorage, "encryptedFile");
-      await root.locator(".account-storage-summary").click();
-    } else assert.equal(await root.locator(".account-storage-group").count(), 0);
+    assert.equal(await root.locator(".account-storage-group").count(), 0);
+    assert.equal(await root.getByText("凭据存储", { exact: false }).count(), 0);
 
     backend.account = ready();
     delete backend.account.profile.username;

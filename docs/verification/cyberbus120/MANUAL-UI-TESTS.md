@@ -22,7 +22,7 @@ binary='/Users/water/work/2026/Apple-Notes-Clone/src-tauri/target/debug/bundle/m
 "$binary" --data-dir "$HOME/Library/Application Support/CyberNote-CyberBus-QA-B"
 ```
 
-以上路径指向本轮已构建的 Debug `.app` 内程序。保持整个 `.app` 结构，不单独复制主程序，否则资源、sidecar 与签名可能失效。保留两个资料库供问题复现，关闭应用后再备份。新安装默认选择“本机加密文件”，登录不要求系统 Keychain 授权。需要验证可选 Keychain 模式时，先退出账户，再切换存储方式并重新登录；拒绝授权或开发构建重建导致授权失效后，应允许退出并切回本机加密文件，不能阻塞普通登录。
+以上路径指向本轮已构建的 Debug `.app` 内程序。保持整个 `.app` 结构，不单独复制主程序，否则资源、sidecar 与签名可能失效。保留两个资料库供问题复现，关闭应用后再备份。新安装和既有安装都只使用本机加密文件，登录不要求系统 Keychain 授权，也没有凭据存储切换。旧 Keychain 项不会被读取或删除；升级后活动绑定会归档并要求重新登录，备忘录和附件保留。
 
 桌面 OAuth 回调固定为 `127.0.0.1:17897`，同机两个安装**依次登录**，一个授权事务结束后再在另一端开始。系统浏览器已登录其他账户时，先核对登录页账户；不得把授权 URL、callback、token 或密码贴入问题报告。
 
@@ -104,7 +104,7 @@ A、B 系统与网络：
 | 数据快照 | PASS | A/B 均为 4 篇笔记、6 个附件、3 个文件夹，`pendingCount=0`、`conflictCount=0`、`state=ready`、4 个同步 head、`sync_inbox=0`；笔记语义摘要、附件描述符摘要和 `.sync/blobs` 聚合摘要逐项一致。 |
 | CyberBus 传输计数 | PASS | 传输期间观察到业务会话建立、`livePeerCount=1`、`sessionsOutbound>0`、`metadataFramesReceived>0`、`metadataValid>0`。 |
 | 登录错误定位 | PASS | 原 `account_sdk_failed` / `cyberbusCode 1` 已由重建 SDK 消除。随后真实 Logto 表单拒绝登录，根因是测试账号实际大小写与用户输入不一致，且当时密码与 Logto 中的测试值不一致；修正测试账户后，真实系统浏览器登录成功。CLI harness 使用独立 QA fixture 直接构造授权账户，绕过真实浏览器表单和凭据校验，因此此前没有覆盖该问题。 |
-| 凭据存储 | PASS | A/B 均运行在本机加密文件模式，密钥文件权限为 `0600`，未启用 Keychain 模式。观察到早于本轮应用生命周期的旧 `probe_store` Keychain 授权提示；当前无该进程，普通登录、重启恢复与同步均未受影响。 |
+| 凭据存储 | PASS（历史） | 2026-11-19 A/B 均运行在本机加密文件模式，密钥文件权限为 `0600`，未启用 Keychain 模式。2026-11-21 起设置项和 Keychain 后端已移除；旧 Keychain 项不读取、不删除，升级后归档绑定并要求重新登录。该历史结果不能代替旧安装迁移和发布包验收。 |
 | UI-18 Android | FAIL | QA APK 能进入 `ready`、完成本地登录状态恢复，账户存储为 `encryptedFile`，设备目录可见；但 Mac↔Android 未建立业务会话。累计诊断快照为 `sessionsEstablished=1471`、`sessionsInbound=1471`、`sessionsOutbound=0`、`businessSessionsEstablished=0`、`metadataQueued=1471`、`writerMetadataSent=2920`、`writerSendFailed=1451`、`writerExitSendFailed=1451`、`framesReceived=0`、`metadataFramesReceived=0`、`metadataValid=0`、`readerErrors=1471`、`readerNoFrameExits=1471`、`livePeerCount=0`。Noise 会话通常建立，但读取首帧前远端关闭。正文、附件、MIME、强停重启和 Keystore 恢复均未取得通过证据；保留应用数据和 QA 数据库供定位。 |
 
 MIME 观察：`.bin` 在本轮两个 macOS 端都记录为 `application/macbinary`，双 Mac 没有漂移。Android 端的文件选择、MIME 分类和打开方式仍须纳入 UI-18；若 Android 重分类，必须记录描述符差异并继续以 SHA-256 验证字节。

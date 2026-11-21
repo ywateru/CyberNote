@@ -48,16 +48,15 @@ test('coordinator request diagnostics retain exact finite native categories with
  assert.equal(safeStatus(status({error:{code:'account_window_invalid'}})).error.code,'account_window_invalid');
 });
 
-test('SDK stage and optional credential storage diagnostics remain bounded in reports',()=>{
+test('SDK stage diagnostics remain bounded in reports',()=>{
  for(const sdkStage of ['init','authStart','authCallback','authState','authRestore','authCancel','authLogout','publishProfile','networkStart','networkStop']) {
   const error={code:'account_sdk_failed',message:'private-response-sentinel',cyberbusCode:1,sdkStage,token:'private'};
-  const safe=safeStatus(status({state:'error',error,credentialStorage:'encryptedFile'}));
+  const safe=safeStatus(status({state:'error',error}));
   assert.deepEqual(safe.error,{code:'account_sdk_failed',cyberbusCode:1,sdkStage});
-  assert.equal(safe.credentialStorage,'encryptedFile');assert(!JSON.stringify(safe).includes('private-'));
+  assert(!JSON.stringify(safe).includes('private-'));
  }
  const invalid={code:'account_sdk_failed',message:'private-response-sentinel',cyberbusCode:27,sdkStage:'network_start'};
- assert.deepEqual(safeStatus(status({state:'error',error:invalid,credentialStorage:'private-storage'})).error,{code:'account_sdk_failed'});
- assert.equal(safeStatus(status({credentialStorage:'private-storage'})).credentialStorage,undefined);
+ assert.deepEqual(safeStatus(status({state:'error',error:invalid})).error,{code:'account_sdk_failed'});
 });
 
 test('request report refuses partial, mismatched, mixed and legacy-stage diagnostics without guessing',()=>{
@@ -235,11 +234,10 @@ test('native account path constructs only existing command payloads and rejects 
   const calls=[];const app={evaluate:async(expression,arg)=>{calls.push({expression,arg});return out();}};
   for(const type of ['status','signIn','signOut','syncNow'])await nativeAccount(app,type);
   await nativeAccount(app,'setEnabled',{enabled:false});await nativeAccount(app,'setEnabled',{enabled:true});
-  await nativeAccount(app,'setCredentialStorage',{storage:'keychain'});await nativeAccount(app,'setCredentialStorage',{storage:'encryptedFile'});
-  assert.deepEqual(calls.map(c=>c.arg),[{type:'status'},{type:'signIn'},{type:'signOut'},{type:'syncNow'},{type:'setEnabled',enabled:false},{type:'setEnabled',enabled:true},{type:'setCredentialStorage',storage:'keychain'},{type:'setCredentialStorage',storage:'encryptedFile'}]);
+  assert.deepEqual(calls.map(c=>c.arg),[{type:'status'},{type:'signIn'},{type:'signOut'},{type:'syncNow'},{type:'setEnabled',enabled:false},{type:'setEnabled',enabled:true}]);
   assert(calls.every(c=>c.expression==="window.__TAURI_INTERNALS__.invoke('account_command',{command:arg})"));
-  for(const [type,args] of [['grant',{}],['signIn',{url:'https://x.invalid'}],['status',{token:'secret'}],['setEnabled',{enabled:true,grant:'secret'}],['setEnabled',{}],['setEnabled',{enabled:'true'}],['setCredentialStorage',{}],['setCredentialStorage',{storage:'keychainFile'}],['setCredentialStorage',{storage:'encryptedFile',path:'/private/vault'}]])await assert.rejects(nativeAccount(app,type,args));
-  assert.equal(calls.length,8);
+  for(const [type,args] of [['grant',{}],['signIn',{url:'https://x.invalid'}],['status',{token:'secret'}],['setEnabled',{enabled:true,grant:'secret'}],['setEnabled',{}],['setEnabled',{enabled:'true'}]])await assert.rejects(nativeAccount(app,type,args));
+  assert.equal(calls.length,6);
 });
 
 function logoutCallbacks({notes=()=>[local],account=out}={}){

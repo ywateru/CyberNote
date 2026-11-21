@@ -74,10 +74,8 @@ profile, protocol UUID and Noise key; the bridge cannot decide Notes identity or
 
 ## Storage
 
-macOS production: pass SDK `KeyringStore::open(service, account, lock_path)` (re-exported); its
-whole vault is in Keychain and its private lock path must be stable across processes. SDK uses
-native keyring/security-framework APIs, never shell argv. Host explicitly chooses CreateNew or
-Existing; never retry Existing errors as CreateNew.
+macOS production: use `EncryptedFileStore` with a private `0600` local key file. The host
+explicitly chooses CreateNew or Existing; never retry Existing errors as CreateNew.
 
 Android: inject host `Box<dyn SecureStore>` (Keystore JNI / whole-blob CallbackStore). Android
 production protection is **not implemented or verified by this crate**. CallbackStore and

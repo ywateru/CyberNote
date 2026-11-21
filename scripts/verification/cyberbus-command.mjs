@@ -225,7 +225,6 @@ export function compactAccountStatus(value) {
     state: safeCode(value.state),
     enabled: value.enabled === true,
     signedIn: !!profile,
-    credentialStorage: safeCode(value.credentialStorage),
     authorizationSurface: safeCode(value.authorizationSurface),
     deviceCount: devices.length,
     onlineDeviceCount: devices.filter((device) => isObject(device) && device.online === true).length,

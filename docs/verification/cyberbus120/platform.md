@@ -1,5 +1,7 @@
 # CyberBus platform author verification
 
+> 2026-11-21 后续变更：macOS `platform-keyring` feature 已移除，产品只使用本地加密文件；Android 继续使用 Keystore 保护的本地文件。本页中关于 KeyringStore 和 finalizer 可选 Keychain 的描述属于 11-18 历史时点。
+
 2026-11-18. Develop agent, worktree `Apple-Notes-Clone-cyberbus123`, branch
 `codex/cyberbus123-platform`, starting revision `728cac38`. No subagents, device
 connections, installations, real account login, user notes or original app use.

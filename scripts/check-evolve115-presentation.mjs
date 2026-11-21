@@ -139,6 +139,51 @@ try {
     };
   });
   check('desktop gallery preview keeps readable text and selection on the preview card', gallerySelection.bodyFont >= 10 && gallerySelection.titleFont >= 11 && gallerySelection.shadow === 'none');
+  const galleryRuntime = await openRuntime({ ownedBrowser: true });
+  try {
+    const mediaPage = galleryRuntime.page;
+    const initial = (await state(mediaPage)).settings.presentation;
+    await api(mediaPage, 'settings.update', { settings: { presentation: { ...initial, desktop: { ...initial.desktop, collectionView: 'gallery' } } } });
+    await idle(mediaPage);
+    await api(mediaPage, 'note.select', { id: 'note-a' }); await idle(mediaPage);
+    await api(mediaPage, 'attachment.submit', { files: [{ name: 'gallery-thumbnail.png', mime: 'image/png', base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Zl1sAAAAASUVORK5CYII=' }] });
+    await idle(mediaPage);
+    if (await mediaPage.locator('.notes-pane').isHidden()) { await api(mediaPage, 'app.back'); await idle(mediaPage); }
+    const galleryMedia = await mediaPage.evaluate(() => {
+      const preview = document.querySelector('.gallery-preview.has-media');
+      const copy = preview?.querySelector('.gallery-preview-copy');
+      const media = preview?.querySelector('.gallery-preview-media');
+      const thumbnail = media?.querySelector('.note-thumbnail');
+      if (!preview || !copy || !media || !thumbnail) return null;
+      const box = element => {
+        const rect = element.getBoundingClientRect();
+        return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height };
+      };
+      const previewBox = box(preview), copyBox = box(copy), mediaBox = box(media);
+      return {
+        preview: previewBox, copy: copyBox, media: mediaBox,
+        position: getComputedStyle(media).position,
+        thumbnailPosition: getComputedStyle(thumbnail).position,
+        overlap: copyBox.right > mediaBox.left && copyBox.left < mediaBox.right && copyBox.bottom > mediaBox.top && copyBox.top < mediaBox.bottom,
+        contained: mediaBox.left >= previewBox.left && mediaBox.right <= previewBox.right && mediaBox.top >= previewBox.top && mediaBox.bottom <= previewBox.bottom,
+        square: mediaBox.width > 0 && Math.abs(mediaBox.width - mediaBox.height) <= 1,
+      };
+    });
+    check('gallery media is a contained square beside, not over, preview text',
+      !!galleryMedia && !galleryMedia.overlap && galleryMedia.contained && galleryMedia.square &&
+      galleryMedia.position === 'static' && galleryMedia.thumbnailPosition === 'static');
+    const unselected = mediaPage.locator('.gallery-entry .note-row:not(.selected) .gallery-preview').first();
+    const hoverBefore = await unselected.evaluate(e => {
+      const s = getComputedStyle(e);
+      return { background: s.backgroundColor, border: s.borderColor, shadow: s.boxShadow };
+    });
+    await unselected.hover(); await mediaPage.waitForTimeout(180);
+    const hoverAfter = await unselected.evaluate(e => {
+      const s = getComputedStyle(e);
+      return { background: s.backgroundColor, border: s.borderColor, shadow: s.boxShadow };
+    });
+    check('gallery hover stays a restrained surface change', hoverBefore.background !== hoverAfter.background && hoverBefore.border !== hoverAfter.border && hoverBefore.shadow !== hoverAfter.shadow);
+  } finally { await galleryRuntime.cleanup(); }
   for (const width of [700, 1100, 1280]) {
     await p.setViewportSize({ width, height: 800 }); await idle(p);
     check('desktop gallery consumes resolver columns at ' + width, await p.locator('.notes-scroll.gallery').evaluate(e => getComputedStyle(e).gridTemplateColumns.split(' ').length === Number(getComputedStyle(document.querySelector('.app')).getPropertyValue('--presentation-columns'))));

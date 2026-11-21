@@ -186,7 +186,6 @@ for (const type of ["signIn", "signUp"])
 add("account", "account.setEnabled", "Confirm first merge or pause through actual account handler", { enabled: { type: "boolean", required: true } });
 add("account", "account.renameDevice", "Open actual local device rename confirmation; does not save until confirmed", { name: s(true) });
 add("account", "account.syncDevice", "Open actual selected-device transfer confirmation; does not transfer until confirmed", { deviceId: s(true), direction: e(["push", "pull", "both"]) });
-add("account", "account.setCredentialStorage", "Confirm moving legacy credentials to the local encrypted store", { storage: e(["encryptedFile"]) });
 add("settings", "sidebar.toggle", "Use sidebar preference handler");
 add("data", "data.open", "Open actual local data management page");
 add("data", "data.refresh", "Refresh real data-management bridge snapshot");
