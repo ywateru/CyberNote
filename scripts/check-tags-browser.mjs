@@ -73,6 +73,21 @@ const vite = await createViteServer({
       load(id) {
         if (id === "/__tags.tsx") return entry;
       },
+      transform(code, id) {
+        if (!id.endsWith("/src/App.tsx")) return;
+        const needle =
+          "  const newNote = useCallback(() => createNote(), [createNote]);";
+        if (!code.includes(needle))
+          throw Error("App observation insertion point changed");
+        return {
+          code: code.replace(
+            needle,
+            "  window.__taskApp={ws:()=>wsRef.current,refresh:()=>metadataRefreshRef.current(),external:externalVersions.current,pending:pendingDocs.current};\n" +
+              needle,
+          ),
+          map: null,
+        };
+      },
     },
   ],
   server: { middlewareMode: true, hmr: false },
@@ -134,6 +149,36 @@ const tagDoc = {
           ],
         },
         { type: "text", text: " " },
+      ],
+    },
+  ],
+};
+const taskDoc = {
+  type: "doc",
+  content: [
+    {
+      type: "taskList",
+      content: [
+        {
+          type: "taskItem",
+          attrs: { checked: false },
+          content: [
+            {
+              type: "paragraph",
+              content: [{ type: "text", text: "第一项" }],
+            },
+          ],
+        },
+        {
+          type: "taskItem",
+          attrs: { checked: true },
+          content: [
+            {
+              type: "paragraph",
+              content: [{ type: "text", text: "第二项" }],
+            },
+          ],
+        },
       ],
     },
   ],
@@ -201,6 +246,7 @@ try {
     await page.evaluate(() => window.editors.a.commands.redo());
     assert.deepEqual((await snapshot()).tags, ["UI对照"]);
     results.push({ name: "undo-redo", ok: true });
+    await mount([{ ...note("a"), document: tagDoc }, note("b")]);
     await page.evaluate(() => {
       let e = window.editors.a;
       e.view.dispatch(e.state.tr.insertText("x", 4));
@@ -422,8 +468,252 @@ try {
       name: "authorized-projection-access-barrier",
       ...projection,
     });
+    await mount([{ ...note("a"), document: taskDoc }]);
+    await page.evaluate(() => {
+      const dom = document.querySelector(".tiptap");
+      const text = document.querySelector(
+        '.tiptap li[data-type="taskItem"] p',
+      ).firstChild;
+      const range = document.createRange();
+      range.setStart(text, 3);
+      range.collapse(true);
+      const selection = getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      dom.focus();
+    });
+    const taskState = () =>
+      page.evaluate(() => {
+        const editor = window.editors.a;
+        const rows = [
+          ...document.querySelectorAll('.tiptap li[data-type="taskItem"]'),
+        ];
+        return {
+          json: editor
+            .getJSON()
+            .content[0].content.map((node) => node.attrs.checked),
+          dom: rows.map((row) => ({
+            checked: row.dataset.checked,
+            input: row.querySelector("input").checked,
+          })),
+          changes: window.changes.at(-1)?.doc.content[0].content.map(
+            (node) => node.attrs.checked,
+          ),
+        };
+      });
+    const cdp = await page.context().newCDPSession(page);
+    for (const text of ["b", "bi", "bia", "bian"])
+      await cdp.send("Input.imeSetComposition", {
+        text,
+        selectionStart: text.length,
+        selectionEnd: text.length,
+      });
+    await cdp.send("Input.dispatchKeyEvent", {
+      type: "keyDown",
+      key: " ",
+      code: "Space",
+      windowsVirtualKeyCode: 32,
+      nativeVirtualKeyCode: 49,
+      text: " ",
+      unmodifiedText: " ",
+    });
+    await cdp.send("Input.dispatchKeyEvent", {
+      type: "keyUp",
+      key: " ",
+      code: "Space",
+      windowsVirtualKeyCode: 32,
+      nativeVirtualKeyCode: 49,
+    });
+    await page.waitForTimeout(150);
+    assert.deepEqual((await taskState()).json, [false, true]);
+    assert.deepEqual((await taskState()).dom, [
+      { checked: "false", input: false },
+      { checked: "true", input: true },
+    ]);
+    assert.deepEqual((await taskState()).changes, [false, true]);
+    results.push({
+      name: "task-checked-attrs-survive-real-ime-commit-and-space",
+      ...(await taskState()),
+    });
+
+    await page.locator('.tiptap li[data-type="taskItem"] input').first().click();
+    assert.deepEqual((await taskState()).json, [true, true]);
+    assert.deepEqual((await taskState()).dom, [
+      { checked: "true", input: true },
+      { checked: "true", input: true },
+    ]);
+    results.push({
+      name: "task-checkbox-publishes-json-and-dom-together",
+      ...(await taskState()),
+    });
+
+    await page.evaluate(() => {
+      const dom = document.querySelector(".tiptap");
+      const text = document.querySelectorAll(
+        '.tiptap li[data-type="taskItem"] p',
+      )[1].firstChild;
+      const range = document.createRange();
+      range.setStart(text, 3);
+      range.collapse(true);
+      const selection = getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      dom.focus();
+    });
+    await cdp.send("Input.imeSetComposition", {
+      text: "bian",
+      selectionStart: 4,
+      selectionEnd: 4,
+    });
+    await page.waitForTimeout(50);
+    assert.equal(
+      await page.evaluate(() => window.editors.a.view.composing),
+      true,
+    );
+    await page.evaluate(() => {
+      const editor = window.editors.a;
+      const current = editor.state.doc.nodeAt(1);
+      editor.view.dispatch(
+        editor.state.tr.setNodeMarkup(1, undefined, {
+          ...current.attrs,
+          checked: false,
+        }),
+      );
+    });
+    assert.deepEqual((await taskState()).json, [false, true]);
+    assert.deepEqual((await taskState()).dom, [
+      { checked: "false", input: false },
+      { checked: "true", input: true },
+    ]);
+    await cdp.send("Input.insertText", { text: "bian" });
+    await page.waitForTimeout(100);
+    assert.deepEqual((await taskState()).json, [false, true]);
+    assert.deepEqual((await taskState()).dom, [
+      { checked: "false", input: false },
+      { checked: "true", input: true },
+    ]);
+    await cdp.detach();
+    results.push({
+      name: "task-nodeview-updates-during-composition-without-lying",
+      ...(await taskState()),
+    });
     // Real App renders local workspace, uses real optimistic saves and filters.
     await page.evaluate(() => window.unmount());
+    const taskAppNote = {
+      ...note("task-a"),
+      document: taskDoc,
+      plainText: "第一项\n第二项",
+      title: "第一项",
+    };
+    await page.evaluate(
+      (workspace) =>
+        localStorage.setItem(
+          "notes-browser-preview",
+          JSON.stringify(workspace),
+        ),
+      {
+        notes: [taskAppNote],
+        attachments: [],
+        folders: [
+          {
+            id: "default",
+            name: "备忘录",
+            kind: "default",
+            parentId: null,
+            sortOrder: 0,
+            createdAt: 1,
+          },
+          {
+            id: "trash",
+            name: "最近删除",
+            kind: "trash",
+            parentId: null,
+            sortOrder: 9,
+            createdAt: 1,
+          },
+        ],
+        settings: { selectedFolder: "default", selectedNote: "task-a" },
+      },
+    );
+    await page.reload();
+    await page.waitForFunction(() => window.mountApp);
+    await page.evaluate(() => window.mountApp());
+    await page.waitForFunction(
+      () =>
+        !!document.querySelector(".tiptap") &&
+        !!window.__taskApp &&
+        window.__taskApp.ws().notes.some((note) => note.id === "task-a"),
+    );
+    await page.evaluate(() => {
+      const dom = document.querySelector(".tiptap");
+      const text = document.querySelector(
+        '.tiptap li[data-type="taskItem"] p',
+      ).firstChild;
+      const range = document.createRange();
+      range.setStart(text, 3);
+      range.collapse(true);
+      const selection = getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      dom.focus();
+      window.__taskDom = dom;
+      window.__taskEditor = dom.editor;
+    });
+    const taskAppCdp = await page.context().newCDPSession(page);
+    await taskAppCdp.send("Input.imeSetComposition", {
+      text: "bian",
+      selectionStart: 4,
+      selectionEnd: 4,
+    });
+    await page.waitForTimeout(50);
+    assert.equal(
+      await page.evaluate(() => window.__taskEditor.view.composing),
+      true,
+    );
+    const compositionHydration = await page.evaluate(async () => {
+      const app = window.__taskApp;
+      const note = app.ws().notes.find((candidate) => candidate.id === "task-a");
+      const remote = structuredClone(note.document);
+      remote.content[0].content[1].attrs.checked = false;
+      remote.content[0].content[1].content[0].content[0].text = "远端";
+      await window.action({
+        type: "saveNote",
+        id: note.id,
+        revision: note.revision,
+        document: remote,
+      });
+      await app.refresh();
+      return {
+        sameDom: window.__taskDom === document.querySelector(".tiptap"),
+        sameEditor:
+          window.__taskEditor === document.querySelector(".tiptap")?.editor,
+        composing: window.__taskEditor.view.composing,
+        editorChecked: window.__taskEditor
+          .getJSON()
+          .content[0].content.map((node) => node.attrs.checked),
+        workspaceChecked: app
+          .ws()
+          .notes.find((candidate) => candidate.id === "task-a")
+          .document.content[0].content.map((node) => node.attrs.checked),
+        external: app.external.get("task-a") || 0,
+        pending: app.pending.has("task-a"),
+      };
+    });
+    assert.deepEqual(compositionHydration, {
+      sameDom: true,
+      sameEditor: true,
+      composing: true,
+      editorChecked: [false, true],
+      workspaceChecked: [false, true],
+      external: 0,
+      pending: false,
+    });
+    await taskAppCdp.send("Input.insertText", { text: "bian" });
+    await taskAppCdp.detach();
+    results.push({
+      name: "app-hydration-keeps-live-ime-editor-and-task-state",
+      ...compositionHydration,
+    });
     const appNotes = [
       {
         ...note("tag-a"),

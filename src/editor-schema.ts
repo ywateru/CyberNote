@@ -8,12 +8,12 @@ import { tablePointerLifecycle } from "./table-pointer-lifecycle";
 import { NoteTag } from "./note-tag-extension";
 import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
-import TaskItem from "@tiptap/extension-task-item";
 import { TableKit } from "@tiptap/extension-table";
 import Highlight from "@tiptap/extension-highlight";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Plugin, TextSelection } from "@tiptap/pm/state";
+import { StableTaskItem } from "./task-item";
 
 const TablePointerLifecycle = Extension.create({
   name: "notesTablePointerLifecycle",
@@ -130,7 +130,7 @@ export function createEditorExtensions(
     LiteralTab,
     ListStyle,
     TaskList,
-    TaskItem.configure({ nested: true }),
+    StableTaskItem.configure({ nested: true }),
     TableKit.configure({ table: { resizable: true } }),
     TablePointerLifecycle,
     Highlight.configure({ multicolor: true }),

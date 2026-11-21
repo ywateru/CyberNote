@@ -954,7 +954,23 @@ function App() {
       .map((n) => n.id);
     if (changed.length) clearSensitive.current(changed);
     const notes = data.notes.map((n) => {
-      const pending = pendingDocs.current.get(n.id);
+      // An IME can be active before ProseMirror has produced a local
+      // transaction. Treat that live document like pending local work so a
+      // metadata refresh cannot remount the editor and discard the composition
+      // or its task checked state. The revision baseline stays unchanged, so a
+      // later save still reports a real conflict instead of overwriting a peer.
+      const instance = editorsRef.current.get(n.id);
+      const composing =
+        !changed.includes(n.id) &&
+        data.access?.notes[n.id]?.authorized &&
+        !!instance &&
+        !instance.isDestroyed &&
+        instance.isEditable &&
+        (instance.view.composing ||
+          !!tagCompositions.current.get(n.id)?.pending);
+      const pending =
+        pendingDocs.current.get(n.id) ??
+        (composing && instance ? instance.getJSON() : undefined);
       revisions.current.observe(n.id, n.revision, !!pending);
       const old = previous.notes.find((old) => old.id === n.id);
       if (!pending && old && !documentsEqual(old.document, n.document))

@@ -160,12 +160,16 @@ assert.equal(declarations('.desktop .tiptap ul[data-type="taskList"] > li')['ali
 assert.equal(declarations('.tiptap ul[data-type="taskList"] > li > label input')['border-radius'], '50%');
 assert.equal(declarations('.mobile .tiptap ul[data-type="taskList"] > li > div > p')['min-height'], '0');
 assert.equal(declarations('.mobile .tiptap ul[data-type="taskList"] > li')['min-height'], undefined);
+assert.equal(declarations('.mobile .tiptap ul[data-type="taskList"] > li')['padding'], '4px 0');
+assert.equal(declarations('.mobile .tiptap ul[data-type="taskList"] > li')['line-height'], 'var(--task-line-height)');
+assert.equal(declarations('.mobile .tiptap ul[data-type="taskList"] > li')['--task-line-height'], 'max(1.35em, var(--task-circle))');
+assert.equal(declarations('.mobile .tiptap ul[data-type="taskList"] > li > div > p')['line-height'], 'var(--task-line-height)');
 const target = declarations('.mobile .tiptap ul[data-type="taskList"] > li > label::before');
 assert.equal(target.right, '0'); assert.equal(target.height, 'min(44px, 1lh)');
 assert.equal(declarations('.preferences-picker')['display'], 'inline-flex');
 assert.equal(declarations('.preferences-row > .preferences-picker')['flex'], '0 1 auto');
 assert.equal(declarations('.tiptap ul[data-type="taskList"] > li > label')['min-height'], '0');
-check('CSS retains circles, first-line alignment, compact mobile paragraphs and bounded gutter hit target', true);
+check('CSS retains circles, first-line alignment, mobile row breathing room and bounded gutter hit target', true);
 
 // Model an engine that rejects lh: skip the enhancement block, then evaluate
 // the surviving production expressions against the editor's real line metrics.
@@ -187,18 +191,16 @@ for (const css of parsed) css.walkDecls(decl => {
 const length = (value, vars, font) => {
   const expression = value.replace(/var\((--[\w-]+)(?:,\s*([^()]+))?\)/g, (_, key, fallback) => `(${length(vars[key] ?? fallback, vars, font)})`)
     .replace(/([\d.]+)em\b/g, (_, n) => `(${Number(n) * font})`).replace(/px\b/g, '')
-    .replace(/calc\(/g, '(').replace(/min\(/g, 'Math.min(');
-  assert.match(expression, /^[\d\s.,()+*/-]+$|^Math\.min\([\d\s.,()+*/-]+\)$/);
+    .replace(/calc\(/g, '(').replace(/min\(/g, 'Math.min(').replace(/max\(/g, 'Math.max(');
+  assert.match(expression, /^(?:[\d\s.,()+*/-]|Math\.(?:min|max)\()*$/);
   return vm.runInNewContext(expression, { Math });
 };
 const { fontSizeOptions } = await load('font-size');
 for (const mode of ['base', 'mobile', 'desktop']) {
   const task = { ...declarations(taskSelector, false), ...(mode === 'base' ? {} : declarations(`.${mode} ${taskSelector}`, false)) };
-  const lineSelector = mode === 'base' ? '.tiptap' : mode === 'mobile' ? '.mobile .tiptap' : '.desktop .note-document .tiptap';
-  const lineHeight = Number(declarations(lineSelector, false)['line-height']);
   for (const { editor: font } of fontSizeOptions) {
     const vars = { ...task, '--editor-font-scale': String(font / 18) };
-    const firstLine = lineHeight * font;
+    const firstLine = length(task['--task-line-height'], vars, font);
     const circle = length(task['--task-circle'], vars, font);
     const offset = length(fallbackLabel.margin.replace(/ 0 0$/, ''), vars, font);
     assert.ok(Math.abs(offset + circle / 2 - firstLine / 2) < 1e-8, `${mode}/${font}: circle centered on first line without lh`);
@@ -206,6 +208,7 @@ for (const mode of ['base', 'mobile', 'desktop']) {
       const hit = length(fallbackHit.height, vars, font);
       const top = offset + circle / 2 - hit / 2;
       const bottom = top + hit;
+      assert.ok(firstLine >= circle, `${font}: mobile task line contains the circle`);
       assert.ok(hit > 0 && hit <= 44 && top >= -1e-8 && bottom <= firstLine + 1e-8, `${font}: gutter target stays inside first line`);
       assert.equal(fallbackHit.right, '0'); assert.equal(length(fallbackHit.width, vars, font), 44);
       assert.ok(bottom <= Math.max(firstLine, offset + circle) + 1e-8, `${font}: next compact row cannot overlap`);
