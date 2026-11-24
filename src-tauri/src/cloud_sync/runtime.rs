@@ -37,6 +37,32 @@ pub struct CloudFence {
     pub confirmed_remote_payload_hash: Option<String>,
     pub incoming_payload_hash: Option<String>,
 }
+impl CloudFence {
+    fn validate(&self) -> Result<()> {
+        let revision = match &self.remote_revision {
+            Revision::Missing => true,
+            Revision::Etag(v) | Revision::Sha(v) | Revision::Head(v) => !v.is_empty(),
+            Revision::Heads(v) => !v.is_empty() && v.iter().all(|s| !s.is_empty()),
+        };
+        let hash = |value: &Option<String>| {
+            value.as_ref().is_none_or(|v| {
+                v.len() == 64 && v.bytes().all(|b| b.is_ascii_hexdigit() && !b.is_ascii_uppercase())
+            })
+        };
+        if self.context.window.is_empty()
+            || self.context.session.is_empty()
+            || self.context.store_instance.is_empty()
+            || self.config_revision > 9_007_199_254_740_991
+            || self.cloud_workspace.is_empty()
+            || !revision
+            || !hash(&self.confirmed_remote_payload_hash)
+            || !hash(&self.incoming_payload_hash)
+        {
+            return Err(error("state"));
+        }
+        Ok(())
+    }
+}
 /// Host retains `enter()` only around its FINAL short authority+Store transaction.
 #[derive(Clone)]
 pub struct Lease {
@@ -61,7 +87,9 @@ impl CheckedLease<'_> {
     }
     pub fn binding(&self) -> Result<&CloudFence> {
         self.check()?;
-        self.lease.fence.as_ref().ok_or_else(|| error("permission"))
+        let fence = self.lease.fence.as_ref().ok_or_else(|| error("permission"))?;
+        fence.validate()?;
+        Ok(fence)
     }
     pub fn check_workspace(&self, workspace: &str) -> Result<()> {
         self.check()?;
@@ -81,7 +109,9 @@ impl Lease {
     }
     pub fn binding(&self) -> Result<&CloudFence> {
         self.check()?;
-        self.fence.as_ref().ok_or_else(|| error("permission"))
+        let fence = self.fence.as_ref().ok_or_else(|| error("permission"))?;
+        fence.validate()?;
+        Ok(fence)
     }
     fn bind(mut self, workspace: String) -> Self {
         self.workspace = Some(workspace);
@@ -382,6 +412,7 @@ impl CloudRuntime {
         }))
     }
     #[cfg(test)]
+    #[allow(dead_code)]
     pub(crate) fn fixture(root: &Path, host: Arc<dyn CloudHost>, api: &str) -> Result<Arc<Self>> {
         let mut r = Self::new(root, host)?;
         Arc::get_mut(&mut r).unwrap().fixture = Some(api.into());

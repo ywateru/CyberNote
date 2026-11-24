@@ -100,6 +100,7 @@ impl NotesProfile {
         }
         Ok(())
     }
+    #[cfg(test)]
     pub fn encode(&self) -> Result<Vec<u8>> {
         self.validate()?;
         let json_payload = serde_json::to_vec(self).map_err(|_| Error::DeviceIncompatible)?;
@@ -301,17 +302,6 @@ impl Catalog {
             .ok_or(Error::DeviceOffline)?;
         row.target(current)?;
         Ok(row.clone())
-    }
-    pub fn peer(&self, peer: &[u8; 32]) -> Result<Row> {
-        let s = self.state.lock().map_err(|_| Error::Storage)?;
-        if !s.available {
-            return Err(Error::DirectoryUnavailable);
-        }
-        s.live
-            .iter()
-            .find(|r| &r.peer == peer && r.online && r.sync_available)
-            .cloned()
-            .ok_or(Error::DeviceOffline)
     }
     pub fn devices(&self, current: &str) -> Result<Vec<Device>> {
         let s = self.state.lock().map_err(|_| Error::Storage)?;

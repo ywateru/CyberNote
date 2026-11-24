@@ -5,9 +5,9 @@
 @interface NotesUIFeedbackButtonCell : NSButtonCell
 @end
 @interface NotesUIFeedbackButton : NSButton
-@property BOOL notesHovered;
-@property BOOL notesMenuOpen;
-@property BOOL notesSelected;
+@property (nonatomic) BOOL notesHovered;
+@property (nonatomic) BOOL notesMenuOpen;
+@property (nonatomic) BOOL notesSelected;
 @property CGFloat notesFeedbackScale;
 - (NSString *)notesFeedbackState;
 @end

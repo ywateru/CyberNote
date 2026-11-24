@@ -23,6 +23,7 @@ pub trait InstallLease: Send {
     /// dropping this lease must release it. Never claim success without exit.
     fn exit(&mut self) -> Result<(), String>;
 }
+#[allow(dead_code)]
 pub struct DenyInstall;
 impl InstallGuard for DenyInstall {
     fn prepare_install<'a>(

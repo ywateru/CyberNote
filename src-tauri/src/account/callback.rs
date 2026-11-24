@@ -6,7 +6,6 @@ use tokio::{
     sync::{Mutex, Notify},
 };
 use tokio_util::sync::CancellationToken;
-pub const REDIRECT: &str = "http://127.0.0.1:17897/callback";
 /// Releases the bound port even if discovery/opening/exchange returns early.
 pub struct Lease(pub Arc<Callback>);
 impl Drop for Lease {

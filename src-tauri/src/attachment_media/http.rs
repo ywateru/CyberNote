@@ -107,6 +107,8 @@ impl MediaServer {
     pub(crate) fn is_running(&self) -> bool {
         !*self.stop.borrow() && self.task.as_ref().is_some_and(|task| !task.is_finished())
     }
+    // Kept for the native-free harness, which owns and explicitly stops servers.
+    #[allow(dead_code)]
     pub(crate) async fn shutdown(mut self) {
         self.core.revoke_all();
         self.stop.send_replace(true);

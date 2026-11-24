@@ -319,6 +319,7 @@ impl Runtime {
             }
         }
     }
+    #[allow(dead_code)] // Upstream event API retained for runtime extensions.
     fn emit_data(&mut self, data: pb::DataReceived) -> PResult<()> {
         self.sequence += 1;
         self.events

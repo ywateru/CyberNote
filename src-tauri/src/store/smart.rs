@@ -242,6 +242,7 @@ struct Delete {
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
+#[cfg(test)]
 pub(crate) struct SmartMembership {
     pub definition_revision: u64,
     pub ids: Vec<String>,
@@ -311,6 +312,7 @@ impl Store {
         }
         Ok(folder)
     }
+    #[cfg(test)]
     pub(crate) fn evaluate_smart_folder(
         &self,
         id: &str,

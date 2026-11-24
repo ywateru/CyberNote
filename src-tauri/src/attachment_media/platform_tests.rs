@@ -54,10 +54,11 @@ impl App {
             .unwrap()
             .to_owned();
         let shared = Arc::new((Mutex::new(session), Condvar::new()));
-        let runtime = MediaRuntime::start(
+        let runtime = MediaRuntime::start_with_provider(
             shared.clone(),
             dir.path().join("cache"),
             HashSet::from(["http://tauri.localhost".into()]),
+            None,
         )
         .await
         .unwrap();
@@ -362,10 +363,11 @@ pub async fn platform_stopped_and_invalid_start_are_explicit_errors() {
     assert!(TcpStream::connect(("127.0.0.1", url.port().unwrap()))
         .await
         .is_err());
-    let invalid = MediaRuntime::start(
+    let invalid = MediaRuntime::start_with_provider(
         app.shared.clone(),
         app._dir.path().join("bad-cache"),
         HashSet::from(["null".into()]),
+        None,
     )
     .await;
     assert_eq!(invalid.err().unwrap().code, "invalid");

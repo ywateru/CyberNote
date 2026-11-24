@@ -38,8 +38,6 @@ pub struct RequestStart {
 pub struct TokenPayload {
     pub access_token: Option<String>,
     pub refresh_token: String,
-    pub scope: String,
-    pub driver: String,
     pub expires_at: Option<i64>,
 }
 
@@ -371,20 +369,11 @@ impl OpenList {
             .and_then(Value::as_str)
             .filter(|t| !t.is_empty() && t.len() <= 16_384 && !t.chars().any(char::is_control))
             .map(str::to_string);
-        let scope = value
-            .get("scope")
-            .and_then(Value::as_str)
-            .unwrap_or("")
-            .chars()
-            .take(1024)
-            .collect();
         let expires_at = integer(&value, "expires_at")
             .or_else(|| integer(&value, "expires_in").map(|s| now() + s));
         Ok(TokenPayload {
             access_token,
             refresh_token,
-            scope,
-            driver: driver.into(),
             expires_at,
         })
     }

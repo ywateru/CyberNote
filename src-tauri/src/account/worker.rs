@@ -58,9 +58,6 @@ impl Default for RequestCancellation {
     }
 }
 impl RequestCancellation {
-    pub fn deadline(&self) -> tokio::time::Instant {
-        self.deadline
-    }
     pub fn new(budget: Duration) -> Self {
         Self {
             stop: CancellationToken::new(),

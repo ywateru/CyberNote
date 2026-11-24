@@ -1049,6 +1049,7 @@ pub fn run() {
                 account::Runtime::new(app.handle().clone(), sync, &root, &selected.media_cache)
                     .map_err(|_| std::io::Error::other("account private state invalid"))?;
             app.manage(AccountState(account.clone()));
+            #[cfg(target_os = "android")]
             {
                 use tauri_plugin_deep_link::DeepLinkExt;
                 let weak = Arc::downgrade(&account);

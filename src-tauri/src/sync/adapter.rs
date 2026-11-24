@@ -26,14 +26,6 @@ use std::{
     time::{Duration, Instant},
 };
 pub(crate) type SharedSession = Arc<(Mutex<Session>, Condvar)>;
-fn prepared_store<T>(
-    shared: &SharedSession,
-    incoming: &[WireVersion],
-    bootstrap: bool,
-    operation: impl FnOnce(&mut Store) -> Result<T>,
-) -> Result<T> {
-    prepared_store_checked(shared, incoming, bootstrap, |_| Ok(()), operation)
-}
 fn prepared_store_checked<T>(
     shared: &SharedSession,
     incoming: &[WireVersion],

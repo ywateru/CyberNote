@@ -6,8 +6,7 @@ mod runtime;
 
 pub use crypto::{open_encrypted_archive, seal_archive, MAX_ENCRYPTED_ARCHIVE_BYTES};
 pub use files::{
-    BackupConfig, BackupIssue, BackupManifest, BackupReason, BackupScope, BackupVersion,
-    ConfigPatch,
+    BackupConfig, BackupIssue, BackupManifest, BackupReason, BackupVersion, ConfigPatch,
 };
 pub use runtime::*;
 

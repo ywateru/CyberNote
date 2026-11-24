@@ -28,13 +28,6 @@ pub(crate) struct MediaRuntime {
     stopped: AtomicBool,
 }
 impl MediaRuntime {
-    pub(crate) async fn start(
-        session: Arc<(Mutex<Session>, Condvar)>,
-        cache_root: PathBuf,
-        origins: HashSet<String>,
-    ) -> Result<Arc<Self>> {
-        Self::start_with_provider(session, cache_root, origins, None).await
-    }
     pub(crate) async fn start_with_provider(
         session: Arc<(Mutex<Session>, Condvar)>,
         cache_root: PathBuf,

@@ -30,11 +30,13 @@ struct Attempt {
     stop: CancellationToken,
     mac: Option<Arc<callback::Callback>>,
 }
+#[cfg(target_os = "android")]
 struct AndroidCallback {
     generation: u64,
     instance: String,
     sender: oneshot::Sender<url::Url>,
 }
+#[cfg(target_os = "android")]
 fn take_android_callback(
     slot: &mut Option<AndroidCallback>,
     generation: u64,
@@ -72,6 +74,7 @@ pub(crate) struct Runtime {
     registry: Mutex<Option<private::Registry>>,
     attempt: AsyncMutex<Option<Attempt>>,
     presentation: Mutex<Option<Arc<surface::Presentation>>>,
+    #[cfg(target_os = "android")]
     android: AsyncMutex<Option<AndroidCallback>>,
     network: AsyncMutex<Option<Network>>,
     generation: AtomicU64,
@@ -138,6 +141,7 @@ impl Runtime {
             registry: Mutex::new(registry),
             attempt: AsyncMutex::new(None),
             presentation: Mutex::new(None),
+            #[cfg(target_os = "android")]
             android: AsyncMutex::new(None),
             network: AsyncMutex::new(None),
             generation: AtomicU64::new(0),
@@ -535,6 +539,7 @@ impl Runtime {
                     let _owner = owner.lifecycle.lock().await;
                     let result = owner.login(signup, surface, g, stop).await;
                     owner.attempt.lock().await.take();
+                    #[cfg(target_os = "android")]
                     owner.android.lock().await.take();
                     if let Ok(mut p) = owner.presentation.lock() {
                         if p.as_ref().is_some_and(|p| p.generation == g) {
@@ -888,6 +893,7 @@ impl Runtime {
         }
         outcome
     }
+    #[cfg(target_os = "android")]
     pub async fn deep_link(&self, url: url::Url) {
         if url.scheme() != "com.local.notesclone.auth"
             || url.host_str() != Some("callback")

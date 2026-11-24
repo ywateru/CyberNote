@@ -87,7 +87,6 @@ pub struct RestorePreview {
 pub struct CheckedRestore {
     pub authority: CheckedAuthority,
     pub archive: Vec<u8>,
-    pub preview: ArchivePreview,
     pub payload_sha256: String,
 }
 
@@ -214,7 +213,6 @@ struct Prepared {
     target_store: TargetStoreFence,
     confirmation: String,
     expires: u64,
-    preview: ArchivePreview,
 }
 #[derive(Default)]
 struct RuntimeState {
@@ -466,7 +464,6 @@ impl BackupRuntime {
             target_store: target_store.clone(),
             confirmation: confirmation.clone(),
             expires,
-            preview: archive.clone(),
         });
         Ok(RestorePreview {
             version,
@@ -528,7 +525,6 @@ impl BackupRuntime {
                 CheckedRestore {
                     authority,
                     archive,
-                    preview: prepared.preview,
                     payload_sha256: prepared.manifest.sha256,
                 },
                 protection,

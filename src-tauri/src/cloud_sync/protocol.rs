@@ -37,7 +37,6 @@ pub struct Remote {
     api: Url,
     oauth: Option<SharedOAuth>,
     credential_id: Option<String>,
-    driver: Option<String>,
     mode: DriveMode,
     writer_id: Option<String>,
     drive_type: OnceCell<String>,
@@ -243,7 +242,6 @@ impl Remote {
             api,
             oauth,
             credential_id,
-            driver,
             mode: mode.unwrap_or(DriveMode::TwoWay),
             writer_id: None,
             drive_type: drive,
@@ -612,6 +610,9 @@ impl Remote {
         Ok(())
     }
     pub async fn put(&self, bytes: Vec<u8>, expected: &Revision) -> Result<()> {
+        if self.mode == DriveMode::ReadOnly {
+            return Err(error("permission"));
+        }
         match self.kind {
             Provider::Onedrive => return onedrive::put(self, bytes, expected).await,
             Provider::Baidu => return baidu::put(self, bytes, expected).await,

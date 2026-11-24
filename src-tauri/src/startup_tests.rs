@@ -394,10 +394,11 @@ async fn custom_workspaces_serve_real_registered_media_and_isolate_caches() {
             .unwrap()
             .to_owned();
         let runtime = Running(
-            MediaRuntime::start(
+            MediaRuntime::start_with_provider(
                 Arc::new((Mutex::new(session), Condvar::new())),
                 selected.media_cache.clone(),
                 HashSet::from(["tauri://localhost".into()]),
+                None,
             )
             .await
             .unwrap(),

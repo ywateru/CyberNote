@@ -220,6 +220,7 @@ fn valid_registry(value: &Registry) -> bool {
             .decode(&value.registry_key)
             .is_ok_and(|key| key.len() == 32 && B64.encode(&key) == value.registry_key)
 }
+#[cfg(test)]
 pub(crate) fn next_registration(root: &Path, registry: &mut Registry) -> Result<Registry> {
     let mut next = registry.clone();
     next.revision = next

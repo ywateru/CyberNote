@@ -99,6 +99,7 @@ impl Session {
                 error
             })
     }
+    #[cfg(test)]
     pub(crate) fn smart_projection(&self, id: &str, token: &Token) -> Result<Value> {
         self.check_core(token, None)?;
         if self.pending.is_some() {

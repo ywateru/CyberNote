@@ -3,7 +3,6 @@
 use super::{
     openlist::{AccountInfo, OpenList, Renewed},
     vault::{Credential, Vault},
-    ISSUER,
 };
 use crate::cloud_sync::model::*;
 use std::{path::Path, sync::Arc, time::{SystemTime, UNIX_EPOCH}};
@@ -59,9 +58,6 @@ impl OAuth {
     }
     pub fn remove(&self, id: &str) -> Result<()> {
         self.vault.remove(id)
-    }
-    pub fn get(&self, id: &str) -> Result<Credential> {
-        self.vault.get(id)
     }
     pub async fn access_token(&self, id: &str) -> Result<String> {
         let c = self.vault.get(id)?;
@@ -141,9 +137,6 @@ impl OAuth {
             Err(e) => Err(e),
         }
     }
-    pub fn issuer(&self) -> &'static str {
-        ISSUER
-    }
 }
 
 pub type SharedOAuth = Arc<OAuth>;
@@ -151,6 +144,7 @@ pub type SharedOAuth = Arc<OAuth>;
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::cloud_sync::auth::ISSUER;
     use std::{
         io::{Read, Write},
         net::TcpListener,

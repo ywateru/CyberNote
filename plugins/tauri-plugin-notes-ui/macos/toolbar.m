@@ -48,6 +48,7 @@ static NSDictionary *decode(const char *json) {
     return [NSJSONSerialization JSONObjectWithData:[NSData dataWithBytes:json length:strlen(json)] options:0 error:nil];
 }
 static NSString *labelFor(NSString *action,BOOL tableFocused) {
+    (void)tableFocused;
     NSDictionary *labels=@{@"newFolder":@"新建文件夹",@"toggleSidebar":@"显示或隐藏文件夹",@"viewOptions":@"文件夹显示选项",
         @"backToGallery":@"返回画廊",@"newNote":@"新建备忘录",@"format":@"格式",@"checklist":@"核对清单",
         @"table":@"表格",@"attachment":@"添加附件",@"share":@"共享备忘录",@"more":@"更多备忘录操作",@"settings":@"设置",@"recordAudio":@"录音",@"insertTag":@"标签"};

@@ -33,6 +33,7 @@ impl Source for SystemSource {
 impl OwnedStage {
     // Only the explicit development transport implements a synthetic Source;
     // production always uses SystemSource and cannot accept injected payloads.
+    #[allow(dead_code)]
     pub(crate) fn export_path(&self, index: usize) -> Result<&std::path::Path> {
         self.exports
             .get(index)
@@ -781,6 +782,7 @@ impl OwnedStage {
         }
         true
     }
+    #[cfg(test)]
     pub(crate) fn read_export(&self, index: usize) -> Result<Vec<u8>> {
         self.read_export_bounded(index, 100 * 1024 * 1024)
     }

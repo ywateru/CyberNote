@@ -48,6 +48,7 @@ impl ReassemblyBudget {
             size,
         })))
     }
+    #[cfg(test)]
     pub fn used(&self) -> usize {
         self.0.load(std::sync::atomic::Ordering::Acquire)
     }

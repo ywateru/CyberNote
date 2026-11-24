@@ -42,7 +42,9 @@ pub(crate) use account_summary::AccountSummary;
 mod synchronization;
 pub(crate) use attachment_operations::AttachmentOwner;
 pub(crate) use commits::CommitReceipt;
-pub(crate) use smart::{SmartMembership, SmartQuery};
+pub(crate) use smart::SmartQuery;
+#[cfg(test)]
+pub(crate) use smart::SmartMembership;
 pub(crate) use synchronization::{BlobReader, NetworkStaging};
 #[cfg(test)]
 #[path = "store/folder_name_tests.rs"]

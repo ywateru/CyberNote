@@ -463,6 +463,8 @@ impl Store {
         self.publish_export(path, &bytes)?;
         Ok(info)
     }
+    // Reached through Session's Android/debug staging path.
+    #[cfg_attr(not(target_os = "android"), allow(dead_code))]
     pub(crate) fn stage_attachment(&self, id: &str) -> Result<(DocumentStage, AttachmentExport)> {
         let (info, bytes) = self.attachment_export_bytes(id)?;
         let stage = self.document_stage()?;

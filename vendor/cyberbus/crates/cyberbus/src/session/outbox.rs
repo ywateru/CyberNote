@@ -117,6 +117,7 @@ impl PeerSender {
             flag.store(true, Ordering::Release);
         }
     }
+    #[allow(dead_code)] // Compatibility wrapper for the upstream cancellation API.
     pub fn cancel_rpc(&self, call_id: &[u8]) {
         self.fence_rpc(call_id);
     }

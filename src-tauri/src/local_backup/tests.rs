@@ -1,4 +1,4 @@
-use super::files::{self, Directory};
+use super::files::{self, BackupScope, Directory};
 use super::*;
 use serde_json::json;
 use std::{

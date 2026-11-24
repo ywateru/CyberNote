@@ -60,10 +60,11 @@ pub async fn independent_two_note_quiet_prepare_and_window_isolation() {
     let session = Session::new(store);
     let tokens: Vec<_> = notes.iter().map(|n| token(&session, n)).collect();
     let shared = Arc::new((Mutex::new(session), Condvar::new()));
-    let runtime = MediaRuntime::start(
+    let runtime = MediaRuntime::start_with_provider(
         shared.clone(),
         dir.path().join("cache"),
         HashSet::from(["tauri://localhost".into()]),
+        None,
     )
     .await
     .unwrap();

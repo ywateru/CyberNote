@@ -233,6 +233,8 @@ impl Session {
         self.sensitive(&owner, token)?;
         self.store.export_attachment(id, path)
     }
+    // Android SAF export and the explicit debug transport use this staging path.
+    #[cfg_attr(not(target_os = "android"), allow(dead_code))]
     pub(crate) fn stage_attachment(
         &self,
         id: &str,
@@ -246,6 +248,8 @@ impl Session {
         self.require_global_document_access(token)?;
         self.store.stage_archive()
     }
+    // Android SAF import and the explicit debug transport use this staging path.
+    #[cfg_attr(not(target_os = "android"), allow(dead_code))]
     pub(crate) fn import_stage(&self, token: &Token) -> Result<crate::store::DocumentStage> {
         self.require_global_document_access(token)?;
         self.store.document_stage()

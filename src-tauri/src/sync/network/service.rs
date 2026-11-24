@@ -352,6 +352,8 @@ impl SyncService {
     /// Account-only, selected pinned peer, one finite exchange. Success means durable
     /// version/blob receipts, never foreground application. No retry or retained worker.
     /// Call outside account lifecycle/Store locks; disconnect/shutdown cancels the action.
+    // Kept as the direct one-shot entry used by account transfer fixtures.
+    #[allow(dead_code)]
     pub fn transfer_once(&self, id: &str, direction: TransferDirection) -> Result<()> {
         self.transfer_once_with_progress(id, direction, None)
     }

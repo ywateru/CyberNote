@@ -11,4 +11,4 @@ pub mod settings_port;
 pub mod store_port;
 pub use engine::{CloudHost, Context, LocalInfo};
 pub use model::{CloudError, Result};
-pub use runtime::{CloudCommand, CloudRuntime};
+pub use runtime::CloudRuntime;

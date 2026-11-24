@@ -156,6 +156,7 @@ pub(crate) enum DeviceOperationPhase {
     Failed,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 pub(crate) enum TransportKind {
     #[serde(rename = "webrtc-direct")]
@@ -179,6 +180,7 @@ pub(crate) struct MappingObservation {
     pub enrollment: TransportKind,
     pub sync: TransportKind,
 }
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) enum AuthProviderFailure {
@@ -188,6 +190,7 @@ pub(crate) enum AuthProviderFailure {
     Network,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) enum IdentityRejection {
@@ -207,6 +210,7 @@ pub(crate) enum IdentityRejection {
     OtherClaims,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) enum TokenOperation {
@@ -214,6 +218,7 @@ pub(crate) enum TokenOperation {
     Refresh,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) enum TokenResponseField {
@@ -285,47 +290,9 @@ pub(crate) enum SdkStage {
     NetworkStart,
     NetworkStop,
 }
-impl SafeError {
-    pub(super) fn refresh_rejected(&self) -> bool {
-        self.code == "account_authentication"
-            && ((self.stage == Some(NetworkStage::IdentityRefresh)
-                && self.provider_reason.is_none())
-                || (self.stage == Some(NetworkStage::AuthorizationProvider)
-                    && self.provider_reason == Some(AuthProviderFailure::RefreshFailed)))
-    }
-    pub(super) fn initial_authorization_retry(&self) -> bool {
-        // This permits begin_authorization only, never replacement logout. A retained
-        // grant will still be rejected as Busy by the sole auth owner.
-        self.provider_reason.is_none()
-            && match self.code.as_str() {
-                "account_auth_callback_invalid"
-                | "account_auth_code_rejected"
-                | "account_auth_token_response_invalid"
-                | "account_auth_identity_invalid"
-                | "account_cancelled"
-                | "account_owner_workspace_mismatch" => true,
-                "account_network" | "account_authentication"
-                    if self.stage == Some(NetworkStage::CoordinatorProfile) =>
-                {
-                    true
-                }
-                "account_network" => matches!(
-                    self.stage,
-                    Some(
-                        NetworkStage::CallbackListen
-                            | NetworkStage::BrowserOpen
-                            | NetworkStage::EmbeddedOpen
-                            | NetworkStage::CallbackReceive
-                            | NetworkStage::IdentityProvider
-                    )
-                ),
-                "account_authentication" => self.stage == Some(NetworkStage::IdentitySession),
-                _ => false,
-            }
-    }
-}
 /// Fixed operation labels for network and authentication failures only;
 /// never serialize upstream errors, URLs or credentials.
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) enum NetworkStage {
@@ -356,6 +323,7 @@ pub(crate) enum RequestReason {
     HttpStatus,
     InvalidResponse,
 }
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum RequestFailure {
     Timeout,
@@ -379,6 +347,7 @@ impl RequestFailure {
         }
     }
 }
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Error {
     Configuration,

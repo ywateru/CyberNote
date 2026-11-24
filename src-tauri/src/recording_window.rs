@@ -20,9 +20,12 @@ pub struct Identity {
 struct Entry {
     identity: Identity,
     owner_alive: bool,
+    #[cfg(test)]
     started: bool,
     terminal: bool,
+    #[cfg(test)]
     revision: Option<(u64, bool)>,
+    #[cfg(test)]
     checkpoint_revision: u64,
     child_destroyed: bool,
     docked: bool,
@@ -123,6 +126,7 @@ fn envelope(entry: &Entry, from: &str, message: Value) -> Value {
     value["message"] = message;
     value
 }
+#[cfg(test)]
 fn entry<'a>(
     registry: &'a mut Registry,
     session: &str,
@@ -430,70 +434,9 @@ pub fn recording_quit_sealed(
     Ok(())
 }
 
-#[tauri::command]
-pub fn register_recording_window(
-    session_id: String,
-    operation_id: String,
-    window: tauri::WebviewWindow,
-    state: State<Recordings>,
-) -> Result<Identity, String> {
-    if !document_window(window.label())
-        || !canonical_uuid(&session_id)
-        || !canonical_uuid(&operation_id)
-    {
-        return Err("录音窗口身份无效".into());
-    }
-    let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
-    if registry.quit.is_some() || registry.exit_allowed {
-        return Err("应用正在完成录音并退出，请稍候".into());
-    }
-    if registry.entries.contains_key(&session_id)
-        || registry
-            .entries
-            .values()
-            .any(|entry| entry.identity.owner == window.label())
-    {
-        return Err("原窗口已有未完成录音".into());
-    }
-    let identity = Identity {
-        child: format!("recording-{session_id}"),
-        session_id: session_id.clone(),
-        operation_id,
-        owner: window.label().into(),
-    };
-    registry.entries.insert(
-        session_id,
-        Entry {
-            identity: identity.clone(),
-            owner_alive: true,
-            started: false,
-            terminal: false,
-            revision: None,
-            checkpoint_revision: 0,
-            child_destroyed: false,
-            docked: false,
-        },
-    );
-    Ok(identity)
-}
-
-#[tauri::command]
-pub fn recording_window_context(
-    session_id: String,
-    operation_id: String,
-    window: tauri::WebviewWindow,
-    state: State<Recordings>,
-) -> Result<Identity, String> {
-    let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
-    let entry = entry(&mut registry, &session_id, &operation_id)?;
-    if entry.identity.child != window.label() || !entry.owner_alive {
-        return Err("原录音窗口身份或连接已失效".into());
-    }
-    Ok(entry.identity.clone())
-}
-
 // Keep routing and lifecycle transitions together so the actual invoking owner
 // is still authenticated before a late terminal ACK can release a tombstone.
+#[cfg(test)]
 fn route_message(
     registry: &mut Registry,
     session_id: &str,
@@ -592,6 +535,7 @@ fn route_message(
     Ok((destination, value, settled))
 }
 
+#[cfg(test)]
 fn visibility_target(
     registry: &mut Registry,
     session_id: &str,
@@ -610,108 +554,6 @@ fn visibility_target(
         _ => return Err("录音显示目标无效".into()),
     };
     Ok((target, visible, child))
-}
-
-#[tauri::command]
-pub fn recording_window_message(
-    session_id: String,
-    operation_id: String,
-    message: Value,
-    window: tauri::WebviewWindow,
-    app: tauri::AppHandle,
-    state: State<Recordings>,
-) -> Result<(), String> {
-    let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
-    // Visibility is a dedicated, authenticated operation on the fixed pair.
-    // It never broadcasts, adopts another label or changes capture ownership.
-    if message["kind"] == "visibility" {
-        let (target, visible, child) = visibility_target(
-            &mut registry,
-            &session_id,
-            &operation_id,
-            &message,
-            window.label(),
-        )?;
-        drop(registry);
-        let target = app.get_webview_window(&target).ok_or("原录音窗口不可用")?;
-        if visible {
-            target.show().map_err(|_| "无法显示原录音窗口")?;
-            #[cfg(desktop)]
-            target.unminimize().map_err(|_| "无法恢复原录音窗口")?;
-            target.set_focus().map_err(|_| "无法激活原录音窗口")?;
-        } else {
-            target.hide().map_err(|_| "无法隐藏浮动录音窗口")?;
-        }
-        if child {
-            if let Ok(mut registry) = state.0.lock() {
-                if let Ok(recording) = entry(&mut registry, &session_id, &operation_id) {
-                    recording.docked = !visible;
-                }
-            }
-        }
-        return Ok(());
-    }
-    let (destination, value, settled_destroyed) = route_message(
-        &mut registry,
-        &session_id,
-        &operation_id,
-        message,
-        window.label(),
-    )?;
-    drop(registry);
-    if settled_destroyed {
-        // The authenticated owner ACK has settled a child that no longer has
-        // a renderer. There is no recipient to notify or second Destroyed.
-        return Ok(());
-    }
-    app.emit_to(
-        tauri::EventTarget::Window { label: destination },
-        "notes-recording",
-        value,
-    )
-    .map_err(|_| "无法通知原录音窗口，请保持窗口打开".into())
-}
-
-#[tauri::command]
-pub fn recording_window_finish(
-    session_id: String,
-    revision: Option<u64>,
-    operation_id: String,
-    window: tauri::WebviewWindow,
-    state: State<Recordings>,
-) -> Result<(), String> {
-    let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
-    let entry = entry(&mut registry, &session_id, &operation_id)?;
-    if window.label() != entry.identity.child
-        || !entry.terminal
-        || entry
-            .revision
-            .is_some_and(|(current, final_intent)| !final_intent || revision != Some(current))
-    {
-        return Err("原笔记尚未确认录音保存，请保持录音窗口打开".into());
-    }
-    Ok(())
-}
-
-/// Only for an unsuccessful WebviewWindow construction, before any capture.
-#[tauri::command]
-pub fn recording_window_abandon(
-    session_id: String,
-    operation_id: String,
-    window: tauri::WebviewWindow,
-    app: tauri::AppHandle,
-    state: State<Recordings>,
-) -> Result<(), String> {
-    let mut registry = state.0.lock().map_err(|_| "录音会话锁错误")?;
-    let entry = entry(&mut registry, &session_id, &operation_id)?;
-    if window.label() != entry.identity.owner
-        || entry.started
-        || app.get_webview_window(&entry.identity.child).is_some()
-    {
-        return Err("录音窗口仍在使用，不能丢弃会话".into());
-    }
-    registry.entries.remove(&session_id);
-    Ok(())
 }
 
 fn seal_quit_participant(
