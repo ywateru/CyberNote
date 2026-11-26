@@ -428,7 +428,7 @@ fn materialize_plugin_archive(
     app.notes_scan()
         .copy_document(
             path,
-            stage.to_string_lossy().as_ref(),
+            &stage,
             "read",
             plugin_runtime::MAX_ARCHIVE_BYTES,
             None,
