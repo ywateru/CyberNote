@@ -67,12 +67,16 @@ export function AttachmentMenuProvider({
   permission,
   onError,
   topInset = 0,
+  showInfo = true,
+  infoConfig = { showByteCount: true, showRecordedAt: true },
 }: {
   children: ReactNode;
   scope: string;
   permission: (request: AttachmentMenuRequest) => AttachmentMenuPermission;
   topInset?: number;
   onError: (error: unknown) => void;
+  showInfo?: boolean;
+  infoConfig?: { showByteCount: boolean; showRecordedAt: boolean };
 }) {
   const transfer = useAttachmentTransfer();
   const desktopFiles = native && /Mac/.test(navigator.platform);
@@ -112,6 +116,9 @@ export function AttachmentMenuProvider({
     setMenu(null);
     setInfo(null);
   }, [scope]);
+  useLayoutEffect(() => {
+    if (!showInfo) setInfo(null);
+  }, [showInfo]);
   useLayoutEffect(() => {
     const temporary = (event: Event) =>
       open((event as CustomEvent<AttachmentMenuRequest>).detail);
@@ -397,19 +404,21 @@ export function AttachmentMenuProvider({
               </span>
               <Download size={17} />
             </MenuItem>
-            <MenuItem
-              role="menuitem"
-              className="menu-row"
-              disabled={!!menu.request.temporary}
-              onClick={() =>
-                run((r) =>
-                  setInfo({ request: r, scope: current.current.scope }),
-                )
-              }
-            >
-              <span>显示信息</span>
-              <FileText size={17} />
-            </MenuItem>
+            {showInfo && (
+              <MenuItem
+                role="menuitem"
+                className="menu-row"
+                disabled={!!menu.request.temporary}
+                onClick={() =>
+                  run((r) =>
+                    setInfo({ request: r, scope: current.current.scope }),
+                  )
+                }
+              >
+                <span>显示信息</span>
+                <FileText size={17} />
+              </MenuItem>
+            )}
             <div className="menu-divider" />
             <MenuItem
               role="menuitem"
@@ -459,10 +468,12 @@ export function AttachmentMenuProvider({
               <dt>原始大小</dt>
               <dd>
                 {formatFileSize(info.request.bytes ?? null)}
-                {info.request.bytes !== undefined &&
+                {infoConfig.showByteCount &&
+                  info.request.bytes !== undefined &&
                   `（${info.request.bytes.toLocaleString()} 字节）`}
               </dd>
-              {info.request.recordedAt !== undefined && (
+              {infoConfig.showRecordedAt &&
+                info.request.recordedAt !== undefined && (
                 <>
                   <dt>录音时间</dt>
                   <dd>{recordingDate(info.request.recordedAt)}</dd>

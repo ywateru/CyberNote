@@ -76,6 +76,7 @@
 .preferences-mobile .preferences-navigation > button[data-preferences-page="settings"] { border-radius: var(--radius-10) var(--radius-10) 0 0; }
 .preferences-mobile .preferences-navigation > button[data-preferences-page="notes"],.preferences-mobile .preferences-navigation > button[data-preferences-page="backup"] { border-radius: 0 0 var(--radius-10) var(--radius-10); border-bottom: 0; }
 .preferences-mobile .preferences-navigation > button[data-preferences-page="agent"] { margin-top: 24px; border-radius: var(--radius-10) var(--radius-10) 0 0; }
+.preferences-mobile .preferences-navigation > button[data-preferences-page="plugins"] { border-radius: 0; }
 .preferences-mobile .preferences-navigation small { margin-left: auto; color: var(--secondary); font-size: .85em; white-space: nowrap; }
 .preferences-mobile .preferences-navigation > button > svg:last-child { width: 16px; flex-basis: 16px; color: var(--secondary); }
 .preferences-mobile .preferences-navigation-note { margin: 0 8px; padding-top: 20px; }
@@ -224,7 +225,7 @@
 .preferences-module-slot { min-width: 0; margin: 12px 0; }
 /* Host adapters flatten the existing Agent/data pages, preserving their
    commands, error surfaces, dialogs and retained storage instance. */
-.preferences-agent, .preferences-data { display: flex; flex-direction: column; overflow: hidden; }
+.preferences-agent, .preferences-plugins, .preferences-data { display: flex; flex-direction: column; overflow: hidden; }
 .preferences-workspace .agent-settings { background: transparent; font: inherit; }
 .preferences-workspace .agent-page-header { padding: 12px 20px; border-bottom: 1px solid var(--settings-divider); }
 .preferences-workspace .agent-page-header h2 { font-size: 1em; font-weight: 500; margin: 0; }

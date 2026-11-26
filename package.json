@@ -1,6 +1,6 @@
 {
   "name": "cybernote",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.15.0",
@@ -51,7 +51,8 @@
     "version:next": "node scripts/versions.mjs --next",
     "version:sync": "node scripts/versions.mjs",
     "release": "node scripts/release.mjs",
-    "test:build-info": "node scripts/check-build-info.mjs"
+    "test:build-info": "node scripts/check-build-info.mjs",
+    "plugin:package": "python3 scripts/package-plugin.py --source examples/plugins/cybernote.sample --output release-packages/cybernote-sample-plugin.zip"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.9.0",

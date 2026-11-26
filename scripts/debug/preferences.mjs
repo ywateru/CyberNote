@@ -5,7 +5,7 @@ export async function runPreferences(runtime, { command, check, output }) {
   const { page, backend } = runtime;
   const mobile = runtime.mobile;
   const accountUI = runtime.accountUI;
-  const categoryCount = accountUI ? 7 : 6;
+  const categoryCount = accountUI ? 8 : 7;
   const labels = {system:"跟随系统",light:"浅色",dark:"深色",tiny:"极小",small:"小",medium:"中",large:"大",huge:"极大",updated:"编辑日期",created:"创建日期",title:"标题",gallery:"画廊",list:"列表",compact:"紧凑",standard:"标准",comfortable:"舒适",on:"开启",off:"关闭"};
   const choose = async (name,value) => {
     if (mobile && await page.getByRole("combobox",{name,exact:true}).count()) {
@@ -66,6 +66,53 @@ export async function runPreferences(runtime, { command, check, output }) {
   }
   check("Appearance-only visits do not mount data or synchronization", inventories() === 0 && await page.locator(".data-management,.sync-settings").count() === 0);
   check("Default backend has no account UI or account IPC", accountUI || (await page.locator("[data-preferences-page=account]").count() === 0 && !backend.calls.some(row => row.command === "account_command")));
+  await select("plugins");
+  await page.waitForSelector(".plugin-center");
+  check("Plugin center lists the built-in attachment inspector", await page.getByRole("button", {name:"附件详情详情", exact:true}).count() === 1);
+  if (mobile) await page.getByRole("button", {name:"附件详情详情", exact:true}).click();
+  check("Plugin detail exposes reserved smart-pen and recording-device capabilities", await page.getByText("智能笔点读与手写", {exact:true}).count() === 1 && await page.getByText("未启用", {exact:true}).count() >= 3);
+  await page.locator(".plugin-detail-pane .plugin-switch").click();
+  await idle(page);
+  check("Disabling a plugin persists through the native plugin update contract", backend.pluginState.plugins["cybernote.attachments.inspector"]?.enabled === false && await page.locator(".plugin-detail-pane .plugin-switch").getAttribute("aria-checked") === "false");
+  await page.locator(".plugin-detail-pane .plugin-switch").click();
+  await idle(page);
+  check("Re-enabling a plugin restores its enabled state", backend.pluginState.plugins["cybernote.attachments.inspector"]?.enabled === true && await page.locator(".plugin-detail-pane .plugin-switch").getAttribute("aria-checked") === "true");
+  await page.getByRole("radiogroup",{name:"显示精确字节数",exact:true}).getByRole("radio",{name:"关闭",exact:true}).click();
+  await idle(page);
+  check("Generated plugin settings use the existing confirmed settings controls", backend.pluginState.plugins["cybernote.attachments.inspector"]?.config?.showByteCount === false);
+  await page.getByRole("radiogroup",{name:"显示精确字节数",exact:true}).getByRole("radio",{name:"开启",exact:true}).click();
+  await idle(page);
+  if (mobile) await page.getByRole("button",{name:"插件列表",exact:true}).click();
+  await page.getByRole("button",{name:/从 GitHub 安装/}).click();
+  const installDialog = page.getByRole("dialog", {name:"安装插件"});
+  await installDialog.getByRole("textbox").fill("https://github.com/ywateru/CyberNote/tree/main/examples/plugins/cybernote.sample");
+  await installDialog.getByRole("button",{name:"检查仓库"}).click();
+  await page.waitForSelector(".plugin-install-preview");
+  check("GitHub install preview shows the declarative sample before commit", await installDialog.getByText("示例插件",{exact:true}).count() >= 1 && await installDialog.getByText("1 个宿主渲染区块",{exact:true}).count() === 1);
+  await installDialog.getByRole("button",{name:"安装并保持关闭"}).click();
+  await page.waitForSelector(".plugin-install-dialog", {state:"detached"});
+  await idle(page);
+  check("Installing a declarative plugin adds it disabled and opens its detail", !!backend.pluginState.external["cybernote.sample"] && (mobile || await page.getByRole("button",{name:"示例插件详情",exact:true}).count() === 1) && await page.locator(".plugin-detail-pane").getAttribute("aria-label") === "示例插件详情" && await page.locator(".plugin-detail-pane .plugin-switch").getAttribute("aria-checked") === "false");
+  await page.locator(".plugin-detail-pane .plugin-switch").click();
+  await page.waitForSelector(".plugin-ui-sections");
+  check("Enabling the sample renders only the host-owned declarative section", await page.getByText("示例插件已加载",{exact:true}).count() === 1 && await page.getByText("Synthetic host-rendered text.",{exact:true}).count() === 1);
+  await page.getByRole("radiogroup",{name:"显示示例面板",exact:true}).getByRole("radio",{name:"关闭",exact:true}).click();
+  await idle(page);
+  check("Sample visibility setting hides the host-rendered section without disabling the plugin", await page.getByText("Synthetic host-rendered text.",{exact:true}).count() === 0 && await page.getByText("插件界面已被关联的设置隐藏。",{exact:true}).count() === 1);
+  await page.getByRole("radiogroup",{name:"显示示例面板",exact:true}).getByRole("radio",{name:"开启",exact:true}).click();
+  await idle(page);
+  await page.getByRole("button",{name:"卸载插件",exact:true}).click();
+  await idle(page);
+  check("Uninstalling removes the external plugin and its settings", !backend.pluginState.external["cybernote.sample"] && await page.getByRole("button",{name:"示例插件详情",exact:true}).count() === 0);
+  await select("settings");
+  await page.getByRole("searchbox",{name:"查找设置",exact:true}).fill("智能笔");
+  await page.waitForSelector(".preferences-search-results");
+  await page.locator(".preferences-search-results button").filter({hasText:"插件"}).click();
+  await page.waitForSelector(".plugin-center");
+  await idle(page);
+  check("Settings search locates the plugin center through the real navigation path", await selected("plugins") && await page.locator(".plugin-center").isVisible());
+  if (mobile) await select("home");
+  else await select("settings");
   const names = ["外观与字号", "备忘录", "设备同步", "存储空间", "导入与备份"];
   if (mobile) {
     check("Mobile uses expected category rows instead of desktop tabs", await page.locator(".preferences-navigation > button").count() === categoryCount && await page.getByRole("tablist").count() === 0);
@@ -184,7 +231,7 @@ export async function runPreferences(runtime, { command, check, output }) {
   const metrics=[];
   for(const width of mobile?[320,390]:[800,1280]) for(const theme of ['light','dark']) for(const font of ['tiny','small','medium','large','huge']) {
     await page.setViewportSize({width,height:mobile?844:800});await command('settings.update',{settings:{theme,interfaceFontSize:font,editorFontSize:font}});await command('settings.open');
-    for(const tab of mobile?['home','settings','notes','sync','data','backup']:['settings','notes','sync','data','backup']) {
+    for(const tab of mobile?['home','settings','notes','sync','plugins','data','backup']:['settings','notes','sync','plugins','data','backup']) {
       await select(tab);
       const geometry=await page.locator('.preferences').evaluate(n=>{const r=n.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,overflow:[...n.querySelectorAll('*')].filter(x=>!x.closest('[hidden]')&&x.getClientRects().length&&getComputedStyle(x).visibility!=='hidden'&&(x.getBoundingClientRect().right>innerWidth+1||x.getBoundingClientRect().left< -1)).map(x=>String(x.className))};});
       metrics.push({width,theme,font,tab,geometry});

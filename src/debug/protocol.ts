@@ -92,7 +92,7 @@ export type DebugCommandArguments = {
   "sync.pair": { invitation: string; deviceName: string };
   "sync.revoke": { peerId: string };
   "sync.resolve": { kind: "note" | "folder"; entityId: string; digest: string; keepAll: boolean };
-  "settings.tab": { tab: "settings" | "notes" | "sync" | "data" | "backup" | "home" };
+  "settings.tab": { tab: "account" | "settings" | "notes" | "agent" | "plugins" | "sync" | "data" | "backup" | "home" };
   "data.navigate": { view: StorageView };
   "data.filter": {
     query?: string;

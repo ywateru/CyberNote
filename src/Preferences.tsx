@@ -1,6 +1,6 @@
 import { appearanceOf, themeOptions, type ThemeId, type SchemePreference } from "./themes/appearance";
 import { useLayoutEffect, useEffect, useRef, useState, type ReactNode } from "react";
-import { Database, X, ChevronLeft, ChevronRight, RefreshCw, Type, Notebook, Archive, Search, Info, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound, Bot } from "lucide-react";
+import { Database, X, ChevronLeft, ChevronRight, RefreshCw, Type, Notebook, Archive, Search, Info, PanelsTopLeft, NotebookText, HardDrive, Upload, UserRound, Bot, Puzzle } from "lucide-react";
 import { fontSizeOptions, fontSizeOption, type FontSize } from "./font-size";
 import type { Settings } from "./types";
 import "./Preferences.css";
@@ -18,6 +18,7 @@ const allPreferencePages = [
   { id: "settings", label: "外观与字号", icon: Type, desktopIcon: PanelsTopLeft },
   { id: "notes", label: "备忘录", icon: Notebook, desktopIcon: NotebookText },
   { id: "agent", label: "Agent 接入", icon: Bot, desktopIcon: Bot },
+  { id: "plugins", label: "插件", icon: Puzzle, desktopIcon: Puzzle },
   { id: "data", label: "存储空间", icon: Database, desktopIcon: HardDrive },
   { id: "backup", label: "导入与备份", icon: Archive, desktopIcon: Upload },
   { id: "about", label: "关于", icon: Info, desktopIcon: Info },
@@ -51,6 +52,7 @@ const settingsSearch = [
   ["account", "同步冲突", "冲突版本 解决 保留版本", '.preferences-conflicts > summary'],
   ["account", "云端同步", "WebDAV S3 GitHub 远端", '[data-settings-slot="cloud"]'],
   ["agent", "Agent 接入", "MCP 本机接入 授权客户端 配置 连接 诊断", '.agent-page-header'],
+  ["plugins", "插件", "插件中心 内置 启用 关闭 权限 设备 蓝牙 智能笔 录音", '.plugin-center'],
   ["data", "存储空间", "本地占用 类型 全部文件 附件 搜索 数据位置", '.data-management'],
   ["backup", "导入与备份", "导出 备份文件 导入 加密", '.local-backup-settings'],
   ["backup", "Apple 备忘录导入", "Apple 苹果 备忘录 导入", '.local-backup-apple'],
@@ -75,6 +77,7 @@ export type PreferencesProps = {
   synchronization?: ReactNode;
   account: ReactNode;
   agent?: ReactNode;
+  plugins?: ReactNode;
   mobile: boolean;
   /** Modules own their handlers, confirmations and active/visible lifecycle. */
   cloudSync?: ReactNode;
@@ -87,7 +90,7 @@ export type PreferencesProps = {
   onConflictsOpenChange?: (open: boolean) => void;
 };
 
-export default function Preferences({ tab, onTab, onClose, onBack, settings, onSettings, onCloseLocks, returnFocus, data, storageView = "overview", onStorageRefresh, storageRefreshDisabled, account, agent, mobile, cloudSync, softwareUpdate, softwareUpdateBadge, automaticBackup, syncConflicts, conflictsOpen: controlledConflictsOpen, onConflictsOpenChange }: PreferencesProps) {
+export default function Preferences({ tab, onTab, onClose, onBack, settings, onSettings, onCloseLocks, returnFocus, data, storageView = "overview", onStorageRefresh, storageRefreshDisabled, account, agent, plugins, mobile, cloudSync, softwareUpdate, softwareUpdateBadge, automaticBackup, syncConflicts, conflictsOpen: controlledConflictsOpen, onConflictsOpenChange }: PreferencesProps) {
   const root = useRef<HTMLElement>(null), close = useRef<HTMLButtonElement>(null), heading = useRef<HTMLHeadingElement>(null);
   const live = useRef(false), backHandler = useRef(onBack), working = useRef(false);
   backHandler.current = onBack;
@@ -355,6 +358,7 @@ export default function Preferences({ tab, onTab, onClose, onBack, settings, onS
               {activeTab === "account" && cloudSync != null && <section data-settings-slot="cloud" className="preferences-module-slot" aria-label="云端同步">{cloudSync}</section>}
             </div>
             <div id="preferences-panel-agent" className="preferences-panel preferences-agent" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "Agent 接入" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-agent"} hidden={activeTab !== "agent"} inert={activeTab !== "agent"}>{tab === "agent" && agent}</div>
+            <div id="preferences-panel-plugins" className="preferences-panel preferences-plugins" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? "插件" : undefined} aria-labelledby={mobile ? undefined : "preferences-tab-plugins"} hidden={activeTab !== "plugins"} inert={activeTab !== "plugins"}>{activeTab === "plugins" && plugins}</div>
             <div id="preferences-panel-data" className="preferences-panel preferences-data" role={mobile ? "region" : "tabpanel"} aria-label={mobile ? current?.label : undefined} aria-labelledby={mobile ? undefined : `preferences-tab-${activeTab === "backup" ? "backup" : "data"}`} hidden={activeTab !== "data" && activeTab !== "backup"} inert={activeTab !== "data" && activeTab !== "backup"}>{(visitedData || tab === "data" || tab === "backup") && data}{activeTab === "backup" && automaticBackup != null && <section data-settings-slot="backup" className="preferences-module-slot preferences-backup-slot" aria-label="自动备份">{automaticBackup}</section>}</div>
           </div>
           </div>

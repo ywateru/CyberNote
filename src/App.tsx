@@ -29,6 +29,9 @@ import { interfaceDetailVariables, parseInterfaceDetails } from "./interface-det
 import { ConfirmedSettings } from "./confirmed-settings";
 import { isStorageView, type StorageView } from "./storage-usage";
 import { AttachmentMenuProvider } from "./AttachmentContextMenu";
+import PluginCenter from "./PluginCenter";
+import { usePluginRegistry } from "./plugins/use-plugin-registry";
+import { pluginById } from "./plugins/types";
 import { AttachmentTransferContext } from "./attachment-clipboard";
 import { ImagePreview, ImagePreviewContext } from "./ImagePreview";
 import type { DebugAdapter } from "./debug/protocol";
@@ -320,6 +323,20 @@ function App() {
   const [ws, setWs] = useState<Workspace>(empty);
   const wsRef = useRef(ws);
   wsRef.current = ws;
+  const pluginRegistry = usePluginRegistry();
+  const attachmentInfoPlugin = pluginById(
+    pluginRegistry.registry,
+    "cybernote.attachments.inspector",
+  );
+  const attachmentInfoEnabled = pluginRegistry.registry
+    ? !!(
+        attachmentInfoPlugin?.available && attachmentInfoPlugin.enabled
+      )
+    : !pluginRegistry.error;
+  const attachmentInfoConfig = {
+    showByteCount: attachmentInfoPlugin?.configValues.showByteCount !== false,
+    showRecordedAt: attachmentInfoPlugin?.configValues.showRecordedAt !== false,
+  };
   const [loading, setLoading] = useState(true);
   const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
   const [error, setError] = useState("");
@@ -4364,10 +4381,12 @@ function App() {
     <ImagePreviewContext.Provider value={{open:openImagePreview, closeSource:closePreviewSource}}>
     <AttachmentTransferContext.Provider value={{paste:pasteAttachments}}>
     <AttachmentMenuProvider
-      scope={JSON.stringify([nativeScope, page, previewAuthority, loading, synchronizing, accessSuspended, modal, folderForm, !!draw, quitPending, menu, imagePreviewOpen, windowWrites.frozen(noteId)])}
+      scope={JSON.stringify([nativeScope, page, previewAuthority, loading, synchronizing, accessSuspended, modal, folderForm, !!draw, quitPending, menu, imagePreviewOpen, windowWrites.frozen(noteId), attachmentInfoEnabled, attachmentInfoConfig.showByteCount, attachmentInfoConfig.showRecordedAt])}
       topInset={nativeTop ? nativeInfo?.native.reservedTop || 0 : 0}
       onError={fail}
       permission={presentation.permission}
+      showInfo={attachmentInfoEnabled}
+      infoConfig={attachmentInfoConfig}
     >
     <div className={`recording-layout ${mobile ? "mobile-controls" : "desktop-controls"} ${recordingCollapsed ? "recording-collapsed" : ""}`} style={{
       ...interfaceDetailVariables(settings.interfaceDetails, mobile),
@@ -5289,6 +5308,21 @@ function App() {
           onStorageRefresh={() => void dataManagementHandle.current?.refresh().catch(() => {})}
           storageRefreshDisabled={!!accessSuspended.length || !!accessGate.state?.operationId}
           agent={<AgentSettings folders={ws.folders} mobile={mobile} />}
+          plugins={<PluginCenter
+            registry={pluginRegistry.registry}
+            loading={pluginRegistry.loading}
+            error={pluginRegistry.error}
+            mobile={mobile}
+            active={preferencesTab === "plugins"}
+            onReload={pluginRegistry.reload}
+            onSetEnabled={pluginRegistry.setEnabled}
+            onUpdateConfig={pluginRegistry.updateConfig}
+            onPreviewArchive={pluginRegistry.previewArchive}
+            onInstallArchive={pluginRegistry.installArchive}
+            onPreviewGithub={pluginRegistry.previewGithub}
+            onInstallGithub={pluginRegistry.installGithub}
+            onUninstall={pluginRegistry.uninstall}
+          />}
           account={accountUIAvailable && <AccountSettings active={preferencesTab === "account"} onHandle={handle => { accountSettingsHandle.current = handle; }} onConflicts={() => { setConflictsOpen(true); setPreferencesTab("account"); }} />}
           conflictsOpen={conflictsOpen}
           onConflictsOpenChange={setConflictsOpen}

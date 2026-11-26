@@ -5,6 +5,23 @@ import { randomUUID } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 export { rustBackend } from './rust-backend.mjs';
 
+const pluginCatalog = JSON.parse(await readFile(new URL('../../src/plugins/catalog.json', import.meta.url), 'utf8'));
+const syntheticPlugin = {
+  id: 'cybernote.sample',
+  name: '示例插件',
+  description: 'Synthetic declarative package for browser interaction coverage.',
+  version: '1.0.0',
+  builtin: false,
+  defaultEnabled: false,
+  platforms: ['macos', 'android', 'web'],
+  permissions: [],
+  contributes: { commands: ['sample.greeting'], panels: ['sample.panel'], themes: [], devices: [] },
+  config: [{ key: 'showPanel', type: 'boolean', title: '显示示例面板', description: 'Synthetic setting.', default: true }],
+  ui: {
+    visibilityConfig: 'showPanel',
+    sections: [{ slot: 'plugin.detail', title: '示例插件已加载', body: 'Synthetic host-rendered text.' }],
+  },
+};
 const document = (text) => ({ type: 'doc', content: [{ type: 'paragraph', content: text ? [{ type: 'text', text }] : [] }] });
 const textOf = (doc) => (doc?.content || []).map((node) => node.text ?? textOf(node)).join(doc?.type === 'doc' ? '\n' : '');
 const clone = (value) => structuredClone(value);
@@ -23,7 +40,7 @@ export function seededWorkspace() {
 }
 export class FakeBackend {
   kind = 'isolated-js-protocol-fixture';
-  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.account = null; this.sync = null; this.syncConflicts = []; this.mediaLeases=new Map();this.mediaReads=[];this.mediaOrigin=null; this.backupConfig={version:1,hours:0,keep:7,directory:''}; this.backupVersions=[]; this.settingsArchivePrepared=null; }
+  constructor(directory) { this.directory = directory; this.workspace = seededWorkspace(); this.sequence = 0; this.sessionId = 'debug70-' + randomUUID(); this.journal = new Map(); this.files = new Map(); this.passwords = new Map(); this.unlocked = new Set(); this.scan = new Map(); this.controls = { fail: {}, delay: {} }; this.calls = []; this.local = null; this.revision = 0; this.quit = null; this.exports = []; this.dataExtras = []; this.accessEpoch = 1; this.noteEpochs = {}; this.suspended = []; this.operationId = null; this.account = null; this.sync = null; this.syncConflicts = []; this.mediaLeases=new Map();this.mediaReads=[];this.mediaOrigin=null; this.backupConfig={version:1,hours:0,keep:7,directory:''}; this.backupVersions=[]; this.settingsArchivePrepared=null; this.pluginState={version:2,plugins:{},external:{}};this.pluginRevision=1; }
   reset() { const mediaOrigin=this.mediaOrigin;Object.assign(this, new FakeBackend(this.directory));this.mediaOrigin=mediaOrigin; }
   // Functional transport fixture only: a real HTTP URL and Range path exercise
   // browser loading. This is not a native provider/Rust or performance proof.
@@ -51,6 +68,66 @@ export class FakeBackend {
       else if (command === 'register_save_intent' || command === 'acknowledge_access') value = null;
       else if (command === 'settings_host_ready') value = null;
       else if (command === 'settings_host_context') value = { window: 'main', session: this.sessionId, token: { sessionId: this.sessionId, epoch: this.accessEpoch }, storeInstance: 'synthetic-fixture' };
+      else if (command === 'plugin_registry') value = this.pluginRegistry();
+      else if (command === 'plugin_update') {
+        await this.boundary('plugin');
+        const request = args.request || {};
+        const manifest = [...pluginCatalog.plugins, ...Object.values(this.pluginState.external)].find(plugin => plugin.id === request.id);
+        if (!manifest) throw failure('Unknown plugin');
+        if (request.enabled !== undefined && typeof request.enabled !== 'boolean') throw failure('Plugin enabled must be boolean');
+        if (request.config !== undefined && (!request.config || typeof request.config !== 'object' || Array.isArray(request.config))) throw failure('Plugin config must be an object');
+        const previous = this.pluginState.plugins[manifest.id] || {};
+        const next = { ...previous };
+        if (request.enabled !== undefined) next.enabled = request.enabled;
+        if (request.config) {
+          const merged = { ...(previous.config || {}) };
+          for (const [key, setting] of Object.entries(request.config)) {
+            const field = (manifest.config || []).find(item => item.key === key);
+            if (!field) throw failure('Unknown plugin setting');
+            if (field.type === 'boolean' && typeof setting !== 'boolean') throw failure('Plugin setting must be boolean');
+            if (field.type === 'select' && (typeof setting !== 'string' || !(field.options || []).some(option => option.value === setting))) throw failure('Plugin setting is not a valid option');
+            merged[key] = setting;
+          }
+          next.config = merged;
+        }
+        const plugins = { ...this.pluginState.plugins };
+        if (next.enabled === undefined && next.config === undefined) delete plugins[manifest.id];
+        else plugins[manifest.id] = next;
+        this.pluginState = { ...this.pluginState, plugins };
+        this.pluginRevision++;
+        value = this.pluginRegistry();
+        events.push({ name: 'notes-plugins', payload: value });
+      }
+      else if (command === 'plugin_preview_archive' || command === 'plugin_preview_github') {
+        await this.boundary('plugin');
+        value = this.pluginPreview(command === 'plugin_preview_archive' ? 'zip' : 'github', args.request?.path || args.request?.url || 'synthetic');
+      }
+      else if (command === 'plugin_install_archive' || command === 'plugin_install_github') {
+        await this.boundary('plugin');
+        const request = args.request || {};
+        if (request.expectedId !== syntheticPlugin.id || request.expectedVersion !== syntheticPlugin.version) throw failure('Synthetic plugin preview changed');
+        const kind = command === 'plugin_install_archive' ? 'zip' : 'github';
+        const reference = request.path || request.url || 'synthetic';
+        this.pluginState = {
+          ...this.pluginState,
+          external: { [syntheticPlugin.id]: { ...syntheticPlugin, sourceKind: kind, sourceRef: reference, installedAt: Math.floor(Date.now() / 1000) } },
+          plugins: { ...this.pluginState.plugins, [syntheticPlugin.id]: { enabled: false } },
+        };
+        this.pluginRevision++;
+        value = this.pluginRegistry();
+        events.push({ name: 'notes-plugins', payload: value });
+      }
+      else if (command === 'plugin_uninstall') {
+        await this.boundary('plugin');
+        const id = args.request?.id;
+        if (!this.pluginState.external[id]) throw failure('Unknown external plugin');
+        const external = { ...this.pluginState.external }; delete external[id];
+        const plugins = { ...this.pluginState.plugins }; delete plugins[id];
+        this.pluginState = { ...this.pluginState, external, plugins };
+        this.pluginRevision++;
+        value = this.pluginRegistry();
+        events.push({ name: 'notes-plugins', payload: value });
+      }
       else if (command === 'local_backup_status') { await this.boundary('backupStatus'); value = this.backupStatus(); }
       else if (command === 'local_backup_configure') {
         await this.boundary('backupConfigure');
@@ -160,6 +237,72 @@ export class FakeBackend {
       folders: this.workspace.folders.filter(folder => !['trash'].includes(folder.kind)).length,
       attachments: this.workspace.attachments.length,
       summary: '合成资料库归档预览；不含账户、凭据或本机授权。',
+    };
+  }
+  pluginRegistry() {
+    const manifests = [...pluginCatalog.plugins, ...Object.values(this.pluginState.external)];
+    return {
+      version: pluginCatalog.version,
+      apiVersion: pluginCatalog.apiVersion,
+      revision: this.pluginRevision,
+      stateError: null,
+      installErrors: [],
+      plugins: manifests.map(manifest => {
+        const stored = this.pluginState.plugins[manifest.id] || {};
+        const fields = manifest.config || [];
+        const external = !manifest.builtin;
+        return {
+          id: manifest.id,
+          name: manifest.name,
+          description: manifest.description,
+          version: manifest.version,
+          builtin: manifest.builtin,
+          defaultEnabled: manifest.defaultEnabled,
+          platforms: manifest.platforms,
+          available: true,
+          enabled: stored.enabled ?? (external ? false : manifest.defaultEnabled),
+          permissions: manifest.permissions || [],
+          contributes: {
+            commands: manifest.contributes?.commands || [],
+            panels: manifest.contributes?.panels || [],
+            themes: manifest.contributes?.themes || [],
+            devices: manifest.contributes?.devices || [],
+          },
+          config: fields.map(field => ({
+            key: field.key,
+            type: field.type,
+            title: field.title,
+            description: field.description || '',
+            default: field.default,
+            options: field.options || [],
+          })),
+          configValues: Object.fromEntries(fields.map(field => [field.key, stored.config?.[field.key] ?? field.default])),
+          source: external
+            ? { kind: manifest.sourceKind || 'zip', reference: manifest.sourceRef || 'synthetic', installedAt: manifest.installedAt || null }
+            : { kind: 'builtin', reference: 'CyberNote', installedAt: null },
+          removable: external,
+          ui: manifest.ui || { sections: [], visibilityConfig: null },
+        };
+      }),
+      devices: { bluetooth: false, smartPen: false, recordingDevice: false },
+    };
+  }
+  pluginPreview(kind, reference) {
+    return {
+      id: syntheticPlugin.id,
+      name: syntheticPlugin.name,
+      description: syntheticPlugin.description,
+      version: syntheticPlugin.version,
+      platforms: syntheticPlugin.platforms,
+      available: true,
+      permissions: [],
+      contributes: syntheticPlugin.contributes,
+      config: syntheticPlugin.config,
+      ui: syntheticPlugin.ui,
+      source: { kind, reference },
+      manifestSha256: '0'.repeat(64),
+      archiveSha256: '1'.repeat(64),
+      conflict: this.pluginState.external[syntheticPlugin.id] ? { kind: 'same', version: syntheticPlugin.version } : null,
     };
   }
   backupStatus() {

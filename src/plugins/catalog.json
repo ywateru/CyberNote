@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "apiVersion": "1.0.0",
+  "plugins": [
+    {
+      "id": "cybernote.attachments.inspector",
+      "name": "附件详情",
+      "description": "在附件菜单中显示只读的附件信息，包括类型、大小和录音时间。",
+      "version": "1.0.0",
+      "builtin": true,
+      "defaultEnabled": true,
+      "platforms": ["macos", "android", "web"],
+      "permissions": [],
+      "contributes": {
+        "commands": ["attachment.info"],
+        "panels": ["attachment.inspector"],
+        "themes": [],
+        "devices": []
+      },
+      "config": [
+        {
+          "key": "showByteCount",
+          "type": "boolean",
+          "title": "显示精确字节数",
+          "description": "在格式化大小后显示原始字节数。",
+          "default": true
+        },
+        {
+          "key": "showRecordedAt",
+          "type": "boolean",
+          "title": "显示录音时间",
+          "description": "为录音附件显示录制时间。",
+          "default": true
+        }
+      ]
+    }
+  ]
+}

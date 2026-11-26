@@ -178,7 +178,7 @@ add("settings", "settings.update", "Persist application settings", {
   settings: o(),
 });
 add("settings", "settings.open", "Open actual unified preferences on settings tab");
-add("settings", "settings.tab", "Select actual preferences tab", { tab: e(["account", "settings", "notes", "sync", "data", "backup", "home"]) });
+add("settings", "settings.tab", "Select actual preferences tab", { tab: e(["account", "settings", "notes", "agent", "plugins", "sync", "data", "backup", "home"]) });
 for (const type of ["status", "openLoginInBrowser", "cancel", "signOut", "syncNow"])
   add("account", `account.${type}`, "Actual account UI handler; JS IPC fixture only");
 for (const type of ["signIn", "signUp"])

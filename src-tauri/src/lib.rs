@@ -22,6 +22,7 @@ mod local_backup;
 #[path = "local_backup/commands.rs"]
 mod local_backup_commands;
 mod media_permission;
+mod plugin_runtime;
 mod recording_window;
 mod session;
 mod settings_host;
@@ -361,6 +362,190 @@ fn sync_diagnostics(
     state: State<SyncState>,
 ) -> Result<Value> {
     state.0.diagnostics(window.label(), &expected)
+}
+fn plugin_window_allowed(window: &tauri::WebviewWindow) -> bool {
+    if !(window.label() == "main" || window.label().starts_with("note-")) {
+        return false;
+    }
+    let Ok(source) = window.url() else {
+        return false;
+    };
+    let mut allowed = account::trusted_application_origin(&source);
+    #[cfg(debug_assertions)]
+    {
+        if let Some(dev) = &window.app_handle().config().build.dev_url {
+            allowed |= dev.origin() == source.origin();
+        }
+    }
+    allowed
+}
+#[tauri::command]
+fn plugin_registry(
+    window: tauri::WebviewWindow,
+    runtime: State<'_, plugin_runtime::PluginRuntime>,
+) -> Result<Value> {
+    if !plugin_window_allowed(&window) {
+        return Err(AppError {
+            code: "permission".into(),
+            message: "插件状态仅对应用窗口可用".into(),
+            commit: None,
+        });
+    }
+    Ok(runtime.snapshot())
+}
+#[tauri::command]
+fn plugin_update(
+    request: plugin_runtime::UpdateRequest,
+    window: tauri::WebviewWindow,
+    runtime: State<'_, plugin_runtime::PluginRuntime>,
+    app: tauri::AppHandle,
+) -> Result<Value> {
+    if !plugin_window_allowed(&window) {
+        return Err(AppError {
+            code: "permission".into(),
+            message: "插件设置仅对应用窗口可用".into(),
+            commit: None,
+        });
+    }
+    let snapshot = runtime.update(request)?;
+    // The state file is already committed. A failed notification must not turn
+    // a successful update into an apparent rollback; other windows can refresh
+    // the registry on their next settings open or native reply.
+    let _ = app.emit("notes-plugins", snapshot.clone());
+    Ok(snapshot)
+}
+#[cfg(target_os = "android")]
+fn materialize_plugin_archive(
+    app: &tauri::AppHandle,
+    runtime: &plugin_runtime::PluginRuntime,
+    path: &str,
+) -> Result<(std::path::PathBuf, bool)> {
+    if !path.starts_with("content://") {
+        return Ok((std::path::PathBuf::from(path), false));
+    }
+    use tauri_plugin_notes_scan::NotesScanExt;
+    let stage = runtime.staging_path("zip")?;
+    app.notes_scan()
+        .copy_document(
+            path,
+            stage.to_string_lossy().as_ref(),
+            "read",
+            plugin_runtime::MAX_ARCHIVE_BYTES,
+            None,
+        )
+        .map_err(|error| AppError {
+            code: error.code,
+            message: format!("插件包读取失败：{}", error.message),
+            commit: None,
+        })?;
+    Ok((stage, true))
+}
+#[cfg(not(target_os = "android"))]
+fn materialize_plugin_archive(
+    _app: &tauri::AppHandle,
+    _runtime: &plugin_runtime::PluginRuntime,
+    path: &str,
+) -> Result<(std::path::PathBuf, bool)> {
+    Ok((std::path::PathBuf::from(path), false))
+}
+#[tauri::command]
+async fn plugin_preview_archive(
+    request: plugin_runtime::ArchiveRequest,
+    window: tauri::WebviewWindow,
+    runtime: State<'_, plugin_runtime::PluginRuntime>,
+    app: tauri::AppHandle,
+) -> Result<Value> {
+    if !plugin_window_allowed(&window) {
+        return Err(AppError {
+            code: "permission".into(),
+            message: "插件安装仅对应用窗口可用".into(),
+            commit: None,
+        });
+    }
+    let (path, cleanup) = materialize_plugin_archive(&app, &runtime, &request.path)?;
+    let result = runtime.preview_archive(path.to_string_lossy().as_ref());
+    if cleanup {
+        let _ = std::fs::remove_file(path);
+    }
+    result
+}
+#[tauri::command]
+async fn plugin_install_archive(
+    request: plugin_runtime::ArchiveRequest,
+    window: tauri::WebviewWindow,
+    runtime: State<'_, plugin_runtime::PluginRuntime>,
+    app: tauri::AppHandle,
+) -> Result<Value> {
+    if !plugin_window_allowed(&window) {
+        return Err(AppError {
+            code: "permission".into(),
+            message: "插件安装仅对应用窗口可用".into(),
+            commit: None,
+        });
+    }
+    let (path, cleanup) = materialize_plugin_archive(&app, &runtime, &request.path)?;
+    let result = runtime.install_archive(plugin_runtime::ArchiveRequest {
+        path: path.to_string_lossy().into_owned(),
+        expected_id: request.expected_id,
+        expected_version: request.expected_version,
+    });
+    if cleanup {
+        let _ = std::fs::remove_file(path);
+    }
+    let snapshot = result?;
+    let _ = app.emit("notes-plugins", snapshot.clone());
+    Ok(snapshot)
+}
+#[tauri::command]
+async fn plugin_preview_github(
+    request: plugin_runtime::GithubRequest,
+    window: tauri::WebviewWindow,
+    runtime: State<'_, plugin_runtime::PluginRuntime>,
+) -> Result<Value> {
+    if !plugin_window_allowed(&window) {
+        return Err(AppError {
+            code: "permission".into(),
+            message: "插件安装仅对应用窗口可用".into(),
+            commit: None,
+        });
+    }
+    runtime.preview_github(&request.url).await
+}
+#[tauri::command]
+async fn plugin_install_github(
+    request: plugin_runtime::GithubRequest,
+    window: tauri::WebviewWindow,
+    runtime: State<'_, plugin_runtime::PluginRuntime>,
+    app: tauri::AppHandle,
+) -> Result<Value> {
+    if !plugin_window_allowed(&window) {
+        return Err(AppError {
+            code: "permission".into(),
+            message: "插件安装仅对应用窗口可用".into(),
+            commit: None,
+        });
+    }
+    let snapshot = runtime.install_github(request).await?;
+    let _ = app.emit("notes-plugins", snapshot.clone());
+    Ok(snapshot)
+}
+#[tauri::command]
+fn plugin_uninstall(
+    request: plugin_runtime::UninstallRequest,
+    window: tauri::WebviewWindow,
+    runtime: State<'_, plugin_runtime::PluginRuntime>,
+    app: tauri::AppHandle,
+) -> Result<Value> {
+    if !plugin_window_allowed(&window) {
+        return Err(AppError {
+            code: "permission".into(),
+            message: "插件卸载仅对应用窗口可用".into(),
+            commit: None,
+        });
+    }
+    let snapshot = runtime.uninstall(request)?;
+    let _ = app.emit("notes-plugins", snapshot.clone());
+    Ok(snapshot)
 }
 #[tauri::command]
 fn sync_window_reply(
@@ -1067,6 +1252,7 @@ pub fn run() {
             account.restore();
             let settings = settings_host::Host::new(app.handle().clone(), root.clone());
             app.manage(settings_host::SettingsHost(settings.clone()));
+            app.manage(plugin_runtime::PluginRuntime::new(&root));
             let updater = software_update::SoftwareUpdater::new(
                 selected.media_cache.join("software-update"),
                 Arc::new(settings.clone()),
@@ -1232,6 +1418,13 @@ pub fn run() {
         load_workspace,
         sync_command,
         sync_diagnostics,
+        plugin_registry,
+        plugin_update,
+        plugin_preview_archive,
+        plugin_install_archive,
+        plugin_preview_github,
+        plugin_install_github,
+        plugin_uninstall,
         settings_host::settings_host_context,
         settings_host::settings_host_ready,
         settings_host::files::settings_archive,
@@ -1296,6 +1489,13 @@ pub fn run() {
         load_workspace,
         sync_command,
         sync_diagnostics,
+        plugin_registry,
+        plugin_update,
+        plugin_preview_archive,
+        plugin_install_archive,
+        plugin_preview_github,
+        plugin_install_github,
+        plugin_uninstall,
         settings_host::settings_host_context,
         settings_host::settings_host_ready,
         settings_host::files::settings_archive,

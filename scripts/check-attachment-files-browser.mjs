@@ -88,6 +88,31 @@ try {
     "generic-MIME SVG becomes a decoded image; original bytes retained; document stores references",
   );
   const menu = page.getByRole("menu", { name: "附件菜单", exact: true });
+  const info = page.getByRole("dialog", { name: "附件信息", exact: true });
+  const pluginEvents = () =>
+    page.evaluate(
+      () =>
+        window.__DEBUG_PLATFORM__.events.filter(
+          event => event === "notes-plugins",
+        ).length,
+    );
+  const updateAttachmentInspector = async update => {
+    const before = await pluginEvents();
+    await page.evaluate(
+      async request => {
+        await window.__TAURI_INTERNALS__.invoke("plugin_update", { request });
+      },
+      { id: "cybernote.attachments.inspector", ...update },
+    );
+    await page.waitForFunction(
+      before =>
+        window.__DEBUG_PLATFORM__.events.filter(
+          event => event === "notes-plugins",
+        ).length > before,
+      before,
+    );
+    await idle(page);
+  };
   const open = async (id) => {
     await card(id).scrollIntoViewIfNeeded();
     await card(id).click({ button: "right" });
@@ -193,6 +218,76 @@ try {
       await menu.getByRole("menuitem", { name, exact: true }).isEnabled(),
       name,
     );
+  await menu
+    .getByRole("menuitem", { name: "显示信息", exact: true })
+    .click();
+  await info.waitFor();
+  assert.match(await info.innerText(), /（[\d,]+ 字节）/);
+  await info.getByRole("button", { name: "关闭", exact: true }).click();
+  await info.waitFor({ state: "hidden" });
+  await updateAttachmentInspector({
+    config: { showByteCount: false, showRecordedAt: true },
+  });
+  await open(original.id);
+  await menu
+    .getByRole("menuitem", { name: "显示信息", exact: true })
+    .click();
+  await info.waitFor();
+  assert.doesNotMatch(await info.innerText(), /（[\d,]+ 字节）/);
+  await info.getByRole("button", { name: "关闭", exact: true }).click();
+  await info.waitFor({ state: "hidden" });
+  await updateAttachmentInspector({
+    config: { showByteCount: true, showRecordedAt: true },
+  });
+  await open(original.id);
+  await menu
+    .getByRole("menuitem", { name: "显示信息", exact: true })
+    .click();
+  await info.waitFor();
+  assert.match(await info.innerText(), /（[\d,]+ 字节）/);
+  await info.getByRole("button", { name: "关闭", exact: true }).click();
+  await info.waitFor({ state: "hidden" });
+  await updateAttachmentInspector({ enabled: false });
+  await open(original.id);
+  assert.equal(
+    await menu.getByRole("menuitem", { name: "显示信息", exact: true }).count(),
+    0,
+  );
+  assert(
+    await menu
+      .getByRole("menuitem", { name: "快速查看附件", exact: true })
+      .isEnabled(),
+  );
+  await page.keyboard.press("Escape");
+  await menu.waitFor({ state: "hidden" });
+  await updateAttachmentInspector({ enabled: true });
+  await open(original.id);
+  assert.equal(
+    await menu.getByRole("menuitem", { name: "显示信息", exact: true }).count(),
+    1,
+  );
+  await menu
+    .getByRole("menuitem", { name: "显示信息", exact: true })
+    .click();
+  await info.waitFor();
+  await updateAttachmentInspector({ enabled: false });
+  await info.waitFor({ state: "hidden" });
+  await updateAttachmentInspector({ enabled: true });
+  await open(original.id);
+  assert.equal(
+    await menu.getByRole("menuitem", { name: "显示信息", exact: true }).count(),
+    1,
+  );
+  await menu
+    .getByRole("menuitem", { name: "显示信息", exact: true })
+    .click();
+  await info.waitFor();
+  await info.getByRole("button", { name: "关闭", exact: true }).click();
+  await info.waitFor({ state: "hidden" });
+  checks.push(
+    "attachment inspector plugin owns menu entry and live info panel; disabling removes the entry and closes an open panel, re-enabling restores it, and generated settings change displayed fields",
+  );
+  await open(original.id);
   await page.screenshot({ path: resolve(output, "attachment-menu.png") });
   await menu
     .getByRole("menuitem", { name: "快速查看附件", exact: true })
@@ -463,6 +558,34 @@ try {
   await card(audio.id).locator(".audio-play-toggle").click();
   checks.push(
     "audio/video remain playable components backed by original WAV/MP4 files and leased streaming URLs",
+  );
+  audio.recordedAt = Date.UTC(2026, 0, 2, 3, 4);
+  await api(page, "app.refresh");
+  await idle(page);
+  await updateAttachmentInspector({
+    config: { showByteCount: true, showRecordedAt: false },
+  });
+  await open(audio.id);
+  await menu
+    .getByRole("menuitem", { name: "显示信息", exact: true })
+    .click();
+  await info.waitFor();
+  assert.doesNotMatch(await info.innerText(), /录音时间/);
+  await info.getByRole("button", { name: "关闭", exact: true }).click();
+  await info.waitFor({ state: "hidden" });
+  await updateAttachmentInspector({
+    config: { showByteCount: true, showRecordedAt: true },
+  });
+  await open(audio.id);
+  await menu
+    .getByRole("menuitem", { name: "显示信息", exact: true })
+    .click();
+  await info.waitFor();
+  assert.match(await info.innerText(), /录音时间/);
+  await info.getByRole("button", { name: "关闭", exact: true }).click();
+  await info.waitFor({ state: "hidden" });
+  checks.push(
+    "attachment inspector recording-time setting applies to the existing audio info panel",
   );
   // A late clipboard response must never insert into the newly selected note.
   await open(png.id);

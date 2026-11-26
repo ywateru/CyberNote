@@ -1158,7 +1158,7 @@ fn verified_account(a: &pb::AuthEvent) -> Result<Option<pb::AccountSummary>> {
             .unwrap_or(Error::InvalidIdentity)),
     }
 }
-fn trusted_application_origin(source: &url::Url) -> bool {
+pub(crate) fn trusted_application_origin(source: &url::Url) -> bool {
     // Custom tauri URLs have opaque Url::origin(); compare their parsed parts
     // instead of either rejecting production macOS or trusting any opaque URL.
     !source[..url::Position::BeforeHost].contains('@')

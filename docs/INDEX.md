@@ -1,5 +1,7 @@
 # 文档导航
 
+2026-11-26 插件机制：[重构与评审稿](plan/plugin-platform-20261126.md) · [架构、Magpie 对照与迁移路线](architecture/plugin-platform.md) · [插件中心与工作区扩展 UI](ui/plugin-center.md) · [硬件设备插件预留](architecture/plugin-devices.md)。已实现共享内置清单、原生注册表、损坏状态失败关闭、插件中心、版本化事件、附件详情迁移，以及声明式外部包的 ZIP/GitHub 安装、预览、升级、卸载和加载失败隔离；示例见 [`examples/plugins/cybernote.sample`](../examples/plugins/cybernote.sample/README.md)。第三方可执行页面、同步/模型/Agent 适配器及蓝牙/智能笔/录音设备接入仍为提案。硬件设计参考本地 SmartPen 原型，覆盖受控蓝牙、点读码触发、实时手写与外部录音接入。
+
 2026-11-21 [编辑器输入性能与安装包体积改进方案](plan/analysis/editor-performance-package-size-20261121.md)记录输入事务与保存链路调查、macOS 和 Android 包体基线、实施顺序及验证标准。编辑器第一阶段已实现并通过源码/浏览器回归；安装包瘦身、真机性能基线和按资料库规模进一步投影增量化待实施。
 
 2026-11-21 [UI 质量审查与改进路线](ui/ui-quality-audit-20261121.md)记录画廊媒体布局、原生登录窗口、凭据存储收敛和 Android 顶部/底部系统栏规则；包含本轮已实现项、P1/P2 设计语言建议、真实设备证据和发布验收矩阵。
